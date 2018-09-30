@@ -13,6 +13,7 @@ import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -20,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -30,7 +32,7 @@ import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 
-public abstract class EntitySpiritTreeFace extends EntityWallFace {
+public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMob {
 	public static final byte EVENT_ATTACKED = 2;
 	public static final byte EVENT_DEATH = 3;
 	public static final byte EVENT_EMERGE_SOUND = 81;
@@ -123,7 +125,16 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 	@Override
 	public boolean canMoveFaceInto(BlockPos pos) {
-		return this.world.isAirBlock(pos);
+		IBlockState state = this.world.getBlockState(pos);
+		if(state.getMaterial().isLiquid() || state.getBlock().isAir(state, this.world, pos)) {
+			return true;
+		}
+		if(state.getBlock().isLeaves(state, this.world, pos)) {
+			return false;
+		}
+		List<AxisAlignedBB> collisionBoxes = new ArrayList<>();
+		state.addCollisionBoxToList(this.world, pos, new AxisAlignedBB(pos), collisionBoxes, this, false);
+		return collisionBoxes.isEmpty();
 	}
 
 	@Override
@@ -250,7 +261,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 		List<BlockPos> blocks = new ArrayList<>();
 		MutableBlockPos pos = new MutableBlockPos();
 		for (int dx = -radius; dx <= radius; dx++) {
-			for (int dy = -radius / 2; dy <= radius; dy++) {
+			for (int dy = -radius; dy <= radius; dy++) {
 				for (int dz = -radius; dz <= radius; dz++) {
 					pos.setPos(center.getX() + dx, center.getY() + dy, center.getZ() + dz);
 					IBlockState state = this.world.getBlockState(pos);
@@ -410,7 +421,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 		@Override
 		public boolean shouldExecute() {
-			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null;
+			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
 		}
 
 		@Override
@@ -421,7 +432,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 		@Override
 		public void updateTask() {
 			if(!this.entity.isAttacking()) {
-				if(this.cooldown <= 0 && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget())) {
+				if(this.cooldown <= 0) {
 					this.cooldown = 50 + this.entity.rand.nextInt(120);
 					this.entity.startSpit();
 				}

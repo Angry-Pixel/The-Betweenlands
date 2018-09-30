@@ -22,6 +22,17 @@
           "weight": 1
         }
       ]
+    },
+    {
+      "name": "spirit_tree_sapling",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:sapling_spirit_tree",
+          "weight": 1
+        }
+      ]
     }
   ]
 }

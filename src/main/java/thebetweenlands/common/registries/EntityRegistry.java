@@ -78,6 +78,7 @@ public class EntityRegistry {
 		//registerEntity(EntityGreebling.class, "greebling", 0xD9D7A7, 0xD99830);
 		registerEntity(EntitySpiritTreeFaceSmall.class, "spirit_tree_face_small", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntitySpiritTreeFaceLarge.class, "spirit_tree_face_large", 0x3A2F0B, 0x5F4C0B);
+		registerEntity(EntityTamedSpiritTreeFace.class, "tamed_spirit_tree_face", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntitySapSpit.class, "sap_spit", 64, 20, true);
 		registerEntity(EntitySpikeWave.class, "spike_wave");
 		registerEntity(EntityRootGrabber.class, "root_grabber");

@@ -8,7 +8,6 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -30,7 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 
-public abstract class EntityWallFace extends EntityCreature implements IMob, IEntityBL {
+public abstract class EntityWallFace extends EntityCreature implements  IEntityBL {
 	private static final DataParameter<EnumFacing> FACING = EntityDataManager.createKey(EntityWallFace.class, DataSerializers.FACING);
 	private static final DataParameter<EnumFacing> FACING_UP = EntityDataManager.createKey(EntityWallFace.class, DataSerializers.FACING);
 	private static final DataParameter<BlockPos> ANCHOR = EntityDataManager.createKey(EntityWallFace.class, DataSerializers.BLOCK_POS);
@@ -183,33 +182,33 @@ public abstract class EntityWallFace extends EntityCreature implements IMob, IEn
 			return 0;
 		}
 	}
-	
+
 	@Override
 	public EntityItem entityDropItem(ItemStack stack, float offsetY) {
 		if (stack.isEmpty()) {
-            return null;
-        } else {
-            EntityItem entityItem = new EntityItem(this.world, this.posX, this.posY + (double)offsetY, this.posZ, stack);
-            
-            EnumFacing facing = this.getFacing();
-        	Vec3d dropPos = this.getFrontCenter().addVector(facing.getFrontOffsetX() * entityItem.width, facing.getFrontOffsetY() * entityItem.height, facing.getFrontOffsetZ() * entityItem.width);
-            
-        	entityItem.setPosition(dropPos.x, dropPos.y, dropPos.z);
-        	
-            entityItem.setDefaultPickupDelay();
-            if(this.captureDrops) {
-                this.capturedDrops.add(entityItem);
-            } else {
-                this.world.spawnEntity(entityItem);
-            }
-            return entityItem;
-        }
+			return null;
+		} else {
+			EntityItem entityItem = new EntityItem(this.world, this.posX, this.posY + (double)offsetY, this.posZ, stack);
+
+			EnumFacing facing = this.getFacing();
+			Vec3d dropPos = this.getFrontCenter().addVector(facing.getFrontOffsetX() * entityItem.width, facing.getFrontOffsetY() * entityItem.height, facing.getFrontOffsetZ() * entityItem.width);
+
+			entityItem.setPosition(dropPos.x, dropPos.y, dropPos.z);
+
+			entityItem.setDefaultPickupDelay();
+			if(this.captureDrops) {
+				this.capturedDrops.add(entityItem);
+			} else {
+				this.world.spawnEntity(entityItem);
+			}
+			return entityItem;
+		}
 	}
 
 	@Override
 	public boolean canEntityBeSeen(Entity entity) {
-		EnumFacing facing = this.getFacing();
-		return this.world.rayTraceBlocks(new Vec3d(this.posX + facing.getFrontOffsetX() * this.width / 2, this.posY + this.height / 2 + facing.getFrontOffsetY() * this.height / 2, this.posZ + facing.getFrontOffsetZ() * this.width / 2), new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight(), entity.posZ), false, true, false) == null;
+		Vec3d frontCenter = this.getFrontCenter();
+		return this.world.rayTraceBlocks(frontCenter, new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight(), entity.posZ), false, true, false) == null;
 	}
 
 	@Override
