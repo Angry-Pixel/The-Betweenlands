@@ -4,9 +4,12 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.armor.ModelSpiritTreeFaceMaskLarge;
@@ -47,5 +50,10 @@ public class ItemSpiritTreeFaceMaskLarge extends ItemSpiritTreeFaceMask {
 	@Override
 	protected ResourceLocation getOverlaySideTexture(ItemStack stack, EntityPlayer player, float partialTicks, boolean left) {
 		return OVERLAY_SIDE_TEXTURE;
+	}
+	
+	@Override
+	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
+		player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 5, 0, true, false));
 	}
 }
