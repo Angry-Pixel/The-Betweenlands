@@ -3,38 +3,39 @@ package thebetweenlands.common.world.gen.layer;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
-import net.minecraft.world.gen.layer.GenLayerFuzzyZoom;
-import net.minecraft.world.gen.layer.GenLayerIsland;
-import net.minecraft.world.gen.layer.GenLayerVoronoiZoom;
-import net.minecraft.world.gen.layer.GenLayerZoom;
 import thebetweenlands.common.registries.BiomeRegistry;
 
 public abstract class GenLayerBetweenlands extends GenLayer {
-	public GenLayerBetweenlands(long seed) {
+	protected final InstancedIntCache cache;
+
+	public GenLayerBetweenlands(InstancedIntCache cache, long seed) {
 		super(seed);
+		this.cache = cache;
 	}
 
 	public static GenLayer[] initializeAllBiomeGenerators(long seed, WorldType worldType) {
 		int biomeSize = getModdedBiomeSize(worldType, (worldType == WorldType.LARGE_BIOMES ? 6 : 4));
 
-		GenLayer genLayer = new GenLayerIsland(1L);
-		genLayer = new GenLayerFuzzyZoom(2000L, genLayer);
+		final InstancedIntCache cache = new InstancedIntCache();
 
-		genLayer = new GenLayerBetweenlandsBiome(100L, genLayer);
-		genLayer = GenLayerZoom.magnify(2000L, genLayer, 2);
+		GenLayer genLayer = new GenLayerBetweenlandsBiome(cache, 100L);
 
-		GenLayer swamplandsClearingLayer = new GenLayerSurrounded(102L, genLayer, BiomeRegistry.SWAMPLANDS, BiomeRegistry.SWAMPLANDS_CLEARING, 1, 1);
-		swamplandsClearingLayer = new GenLayerMask(swamplandsClearingLayer, Biome.getIdForBiome(BiomeRegistry.SWAMPLANDS_CLEARING), Biome.getIdForBiome(BiomeRegistry.SWAMPLANDS_CLEARING));
-		swamplandsClearingLayer = GenLayerThinMask.thin(105L, swamplandsClearingLayer, Biome.getIdForBiome(BiomeRegistry.SWAMPLANDS_CLEARING), 3, 0.25f, 10);
+		genLayer = GenLayerZoomIncrement.magnify(cache, 2000L, genLayer, false, 2);
 
-		genLayer = GenLayerZoom.magnify(2345L, genLayer, biomeSize);
-		swamplandsClearingLayer = GenLayerZoomIncrementMask.magnify(2345L, swamplandsClearingLayer, biomeSize);
+		GenLayer swamplandsClearingLayer = new GenLayerSurrounded(cache, 102L, genLayer, BiomeRegistry.SWAMPLANDS, BiomeRegistry.SWAMPLANDS_CLEARING, 1, 1);
+		swamplandsClearingLayer = new GenLayerMask(cache, swamplandsClearingLayer, Biome.getIdForBiome(BiomeRegistry.SWAMPLANDS_CLEARING), Biome.getIdForBiome(BiomeRegistry.SWAMPLANDS_CLEARING));
+		swamplandsClearingLayer = GenLayerThinMask.thin(cache, 105L, swamplandsClearingLayer, Biome.getIdForBiome(BiomeRegistry.SWAMPLANDS_CLEARING), 3, 0.25f, 10);
 
-		swamplandsClearingLayer = new GenLayerCircleMask(103L, swamplandsClearingLayer, Biome.getIdForBiome(BiomeRegistry.SWAMPLANDS_CLEARING), 10);
+		genLayer = GenLayerZoomIncrement.magnify(cache, 2345L, genLayer, false, biomeSize);
+		swamplandsClearingLayer = GenLayerZoomIncrement.magnify(cache, 2345L, swamplandsClearingLayer, true, biomeSize);
 
-		genLayer = new GenLayerMixMask(genLayer, swamplandsClearingLayer);
+		swamplandsClearingLayer = new GenLayerCircleMask(cache, 103L, swamplandsClearingLayer, Biome.getIdForBiome(BiomeRegistry.SWAMPLANDS_CLEARING), 10);
 
-		GenLayer indexLayer = new GenLayerVoronoiZoom(10L, genLayer);
+		genLayer = new GenLayerMixMask(cache, genLayer, swamplandsClearingLayer);
+
+		GenLayer indexLayer = new GenLayerResetCache(cache, new GenLayerVoronoiZoomInstanced(cache, 10L, genLayer));
+		genLayer = new GenLayerResetCache(cache, genLayer);
+
 		indexLayer.initWorldGenSeed(seed);
 		genLayer.initWorldGenSeed(seed);
 

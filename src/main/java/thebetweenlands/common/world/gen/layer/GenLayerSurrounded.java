@@ -2,15 +2,14 @@ package thebetweenlands.common.world.gen.layer;
 
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.layer.GenLayer;
-import net.minecraft.world.gen.layer.IntCache;
 
 public class GenLayerSurrounded extends GenLayerBetweenlands {
 	private final int checkRange;
 	private final float spawnChance;
 	private final int surrounding, biome;
 
-	public GenLayerSurrounded(long seed, GenLayer parentGenLayer, Biome surrounding, Biome biome, int checkRange, float spawnChance) {
-		super(seed);
+	public GenLayerSurrounded(InstancedIntCache cache, long seed, GenLayer parentGenLayer, Biome surrounding, Biome biome, int checkRange, float spawnChance) {
+		super(cache, seed);
 		this.parent = parentGenLayer;
 		this.checkRange = checkRange;
 		this.spawnChance = spawnChance;
@@ -21,7 +20,7 @@ public class GenLayerSurrounded extends GenLayerBetweenlands {
 	@Override
 	public int[] getInts(int areaX, int areaZ, int sizeX, int sizeZ) {
 		int[] currentBiomeInts = this.parent.getInts(areaX - this.checkRange, areaZ - this.checkRange, sizeX + this.checkRange * 2, sizeZ + this.checkRange * 2);
-		int[] biomeInts = IntCache.getIntCache(sizeX * sizeZ);
+		int[] biomeInts = this.cache.getIntCache(sizeX * sizeZ);
 
 		for (int zz = 0; zz < sizeZ; ++zz) {
 			for (int xx = 0; xx < sizeX; ++xx) {

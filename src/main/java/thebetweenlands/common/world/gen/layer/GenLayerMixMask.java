@@ -1,13 +1,12 @@
 package thebetweenlands.common.world.gen.layer;
 
 import net.minecraft.world.gen.layer.GenLayer;
-import net.minecraft.world.gen.layer.IntCache;
 
 public class GenLayerMixMask extends GenLayerBetweenlands {
 	private final GenLayer mask;
 
-	public GenLayerMixMask(GenLayer parent, GenLayer maskLayer) {
-		super(0L);
+	public GenLayerMixMask(InstancedIntCache cache, GenLayer parent, GenLayer maskLayer) {
+		super(cache, 0L);
 		this.parent = parent;
 		this.mask = maskLayer;
 	}
@@ -22,7 +21,7 @@ public class GenLayerMixMask extends GenLayerBetweenlands {
 	public int[] getInts(int areaX, int areaY, int sizeX, int sizeZ) {
 		int[] parentInts = this.parent.getInts(areaX, areaY, sizeX, sizeZ);
 		int[] maskInts = this.mask.getInts(areaX, areaY, sizeX, sizeZ);
-		int[] mixedInts = IntCache.getIntCache(sizeX * sizeZ);
+		int[] mixedInts = this.cache.getIntCache(sizeX * sizeZ);
 
 		for (int i = 0; i < sizeX * sizeZ; ++i) {
 			int mask = maskInts[i];

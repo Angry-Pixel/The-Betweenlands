@@ -1,14 +1,13 @@
 package thebetweenlands.common.world.gen.layer;
 
 import net.minecraft.world.gen.layer.GenLayer;
-import net.minecraft.world.gen.layer.IntCache;
 
 public class GenLayerCircleMask extends GenLayerBetweenlands {
 	private final int id;
 	private final int radius;
 
-	public GenLayerCircleMask(long seed, GenLayer parentGenLayer, int id, int radius) {
-		super(seed);
+	public GenLayerCircleMask(InstancedIntCache cache, long seed, GenLayer parentGenLayer, int id, int radius) {
+		super(cache, seed);
 		this.parent = parentGenLayer;
 		this.id = id;
 		this.radius = radius;
@@ -17,7 +16,7 @@ public class GenLayerCircleMask extends GenLayerBetweenlands {
 	@Override
 	public int[] getInts(int areaX, int areaZ, int sizeX, int sizeZ) {
 		int[] currentInts = this.parent.getInts(areaX - this.radius, areaZ - this.radius, sizeX + this.radius * 2, sizeZ + this.radius * 2);
-		int[] maskInts = IntCache.getIntCache(sizeX * sizeZ);
+		int[] maskInts = this.cache.getIntCache(sizeX * sizeZ);
 
 		for (int zz = 0; zz < sizeZ; ++zz) {
 			for (int xx = 0; xx < sizeX; ++xx) {

@@ -1,21 +1,20 @@
 package thebetweenlands.common.world.gen.layer;
 
 import net.minecraft.world.gen.layer.GenLayer;
-import net.minecraft.world.gen.layer.IntCache;
 
 public class GenLayerSubBiomes extends GenLayerBetweenlands {
 
 	private static final byte[] offsetX = new byte[] { 0, 1, -1, 0, 0 }, offsetZ = new byte[] { 0, 0, 0, 1, -1 };
 
-	public GenLayerSubBiomes(long seed, GenLayer parentGenLayer) {
-		super(seed);
+	public GenLayerSubBiomes(InstancedIntCache cache, long seed, GenLayer parentGenLayer) {
+		super(cache, seed);
 		parent = parentGenLayer;
 	}
 
 	@Override
 	public int[] getInts(int x, int z, int sizeX, int sizeZ) {
 		int[] currentBiomeInts = parent.getInts(x - 2, z - 2, sizeX + 4, sizeZ + 4);
-		int[] biomeInts = IntCache.getIntCache(sizeX * sizeZ);
+		int[] biomeInts = this.cache.getIntCache(sizeX * sizeZ);
 
 		for (int zz = 0; zz < sizeZ; ++zz) {
 			for (int xx = 0; xx < sizeX; ++xx) {
