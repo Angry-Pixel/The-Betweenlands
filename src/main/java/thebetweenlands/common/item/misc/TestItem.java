@@ -1,11 +1,10 @@
 package thebetweenlands.common.item.misc;
 
-<<<<<<< HEAD
 import java.util.Random;
 
-=======
+
 import net.minecraft.block.state.IBlockState;
->>>>>>> 1.12-dev
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
@@ -13,10 +12,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-<<<<<<< HEAD
+
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
-=======
+
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
@@ -24,7 +23,7 @@ import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallPortal;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallRuins;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
->>>>>>> 1.12-dev
+
 
 //MINE!!
 public class TestItem extends Item {
@@ -35,12 +34,13 @@ public class TestItem extends Item {
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!worldIn.isRemote) {
-			IBlockState state = worldIn.getBlockState(pos);
+			if (!worldIn.isRemote) {
+		/*	IBlockState state = worldIn.getBlockState(pos);
 			if (state.getBlock() instanceof BlockGenericDugSoil) {
 				TileEntityDugSoil te = (TileEntityDugSoil) worldIn.getTileEntity(pos);
 				te.setDecay(20);
 			}
+		/*	
 		/*
 			WorldGenTarPoolDungeon gen = new WorldGenTarPoolDungeon();
 			gen.generate(worldIn, itemRand, pos.up());

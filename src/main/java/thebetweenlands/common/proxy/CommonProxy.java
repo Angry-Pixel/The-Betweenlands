@@ -196,12 +196,10 @@ public class CommonProxy implements IGuiHandler {
     public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
 
     }
-<<<<<<< HEAD
 
 	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
 		
 	}
-=======
     
     public boolean isSingleplayer() {
     	return false;
@@ -215,5 +213,4 @@ public class CommonProxy implements IGuiHandler {
     public List<RiftVariant> getRiftVariants() {
     	return Collections.emptyList();
     }
->>>>>>> 1.12-dev
 }

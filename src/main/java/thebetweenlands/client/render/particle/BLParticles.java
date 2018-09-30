@@ -12,9 +12,7 @@ import net.minecraft.client.particle.ParticleSplash;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-<<<<<<< HEAD
 import thebetweenlands.client.render.particle.entity.*;
-=======
 import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
 import thebetweenlands.client.render.particle.entity.ParticleAnimated;
 import thebetweenlands.client.render.particle.entity.ParticleAnimator;
@@ -35,7 +33,7 @@ import thebetweenlands.client.render.particle.entity.ParticleThem;
 import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.particle.entity.ParticleXPPieces;
->>>>>>> 1.12-dev
+
 
 public enum BLParticles {
 

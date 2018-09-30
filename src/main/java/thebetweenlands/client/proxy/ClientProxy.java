@@ -36,11 +36,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-<<<<<<< HEAD
 import net.minecraft.util.EnumParticleTypes;
-=======
 import net.minecraft.util.JsonUtils;
->>>>>>> 1.12-dev
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -81,7 +78,6 @@ import thebetweenlands.client.handler.ThemHandler;
 import thebetweenlands.client.handler.WeedwoodRowboatHandler;
 import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
-<<<<<<< HEAD
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderAngryPebble;
 import thebetweenlands.client.render.entity.RenderBLArrow;
@@ -130,9 +126,7 @@ import thebetweenlands.client.render.entity.RenderThrownTarminion;
 import thebetweenlands.client.render.entity.RenderVolatileSoul;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
 import thebetweenlands.client.render.entity.RenderWight;
-=======
 import thebetweenlands.client.render.entity.*;
->>>>>>> 1.12-dev
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
@@ -165,12 +159,9 @@ import thebetweenlands.client.render.tile.RenderTarLootPot3;
 import thebetweenlands.client.render.tile.RenderWeedwoodSign;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
 import thebetweenlands.client.render.tile.RenderWisp;
-<<<<<<< HEAD
 import thebetweenlands.client.render.tile.RenderWormDungeonDoorWood;
 import thebetweenlands.client.render.tile.TileEntityPuffshroomRenderer;
-=======
 import thebetweenlands.common.TheBetweenlands;
->>>>>>> 1.12-dev
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
@@ -179,7 +170,6 @@ import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySwordEnergy;
-<<<<<<< HEAD
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
@@ -217,9 +207,7 @@ import thebetweenlands.common.entity.mobs.EntityTarminion;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWight;
-=======
 import thebetweenlands.common.entity.mobs.*;
->>>>>>> 1.12-dev
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
@@ -483,14 +471,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         RenderingRegistry.registerEntityRenderingHandler(EntityDreadfulMummy.class, RenderDreadfulMummy::new);
         RenderingRegistry.registerEntityRenderingHandler(EntitySludgeBall.class, RenderSludgeBall::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityDarkLight.class, RenderDarkLight::new);
-<<<<<<< HEAD
         RenderingRegistry.registerEntityRenderingHandler(EntitySporeJet.class, RenderSporeJet::new);
- 
-=======
 		RenderingRegistry.registerEntityRenderingHandler(EntitySmollSludge.class, RenderSmollSludge::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreebling.class, RenderGreebling::new);
-
->>>>>>> 1.12-dev
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
 		resourceManager.registerReloadListener(new FoodSickness.ResourceReloadListener());
@@ -606,14 +589,11 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(pixelLove);
 		HLEntryRegistry.init();
 
-<<<<<<< HEAD
 		//WeedwoodRowboatHandler.INSTANCE.init();
-=======
 		WeedwoodRowboatHandler.INSTANCE.init();
 		
 		this.loadRiftVariants();
-		
->>>>>>> 1.12-dev
+
 		//Turn dirt background in menus into temple bricks
 		//Disabled for now as it was test, could be used if it's suitable
 		/*
@@ -701,8 +681,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
         WeedwoodRowboatHandler.INSTANCE.onPilotExitWeedwoodRowboat(rowboat, pilot);
     }
-    
-<<<<<<< HEAD
+
 	@Override
 	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
 		Particle fx = null;
@@ -712,7 +691,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 
 		if (fx != null)
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
-=======
+	}
+
     @Override
     public Proxy getNetProxy() {
     	return Minecraft.getMinecraft().getProxy();
@@ -773,6 +753,5 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 	@Override
 	public List<RiftVariant> getRiftVariants() {
 		return Collections.unmodifiableList(this.riftVariants);
->>>>>>> 1.12-dev
 	}
 }

@@ -9,7 +9,6 @@ import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySwordEnergy;
-<<<<<<< HEAD
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
@@ -47,9 +46,7 @@ import thebetweenlands.common.entity.mobs.EntityTarminion;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWight;
-=======
 import thebetweenlands.common.entity.mobs.*;
->>>>>>> 1.12-dev
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
@@ -109,14 +106,11 @@ public class EntityRegistry {
 		registerEntity(EntityElixir.class, "bl_elexir", 64, 20, true);
 		registerEntity(EntityDreadfulMummy.class, "dreadful_mummy", 0x000000, 0x591E08, 64, 1, true);
 		registerEntity(EntitySludgeBall.class, "sludge_ball", 64, 20, true);
-<<<<<<< HEAD
 		registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
 		registerEntity(EntitySporeJet.class, "spore_jet", 64, 1, true);
-=======
 		//registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
 		registerEntity(EntitySmollSludge.class, "smoll_sludge", 0x3A2F0B, 0x5F4C0B);
 		//registerEntity(EntityGreebling.class, "greebling", 0xD9D7A7, 0xD99830);
->>>>>>> 1.12-dev
 	}
 
 	private static int id = 0;
