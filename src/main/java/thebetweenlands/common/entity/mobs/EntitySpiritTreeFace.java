@@ -164,6 +164,11 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 	}
 
 	@Override
+	public boolean isEntityInvulnerable(DamageSource source) {
+		return source == DamageSource.DROWN || source == DamageSource.LAVA || super.isEntityInvulnerable(source);
+	}
+	
+	@Override
 	public boolean getIsInvulnerable() {
 		return super.getIsInvulnerable() || !this.isActive();
 	}
