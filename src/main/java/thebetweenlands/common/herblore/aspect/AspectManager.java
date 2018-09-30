@@ -37,7 +37,7 @@ public class AspectManager {
 	}
 
 	public static enum AspectGroup {
-		HERB(0), GEM_BYRGINAZ(1), GEM_FIRNALAZ(2), GEM_FERGALAZ(3), SPIRIT_FRUIT(4);
+		HERB(0), GEM_BYRGINAZ(1), GEM_FIRNALAZ(2), GEM_FERGALAZ(3), SAP_SPIT(4);
 
 		public final int id;
 

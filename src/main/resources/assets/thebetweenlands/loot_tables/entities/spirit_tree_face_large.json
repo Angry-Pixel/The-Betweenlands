@@ -1,10 +1,27 @@
 {
   "pools": [
     {
-      "name": "spirit_tree_face_large",
-      "rolls": 0,
-      "conditions": [],
-      "entries": []
+      "name": "spirit_tree_face_large_mask",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "strength",
+              "min": 1.4
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:spirit_tree_face_large_mask",
+          "weight": 1
+        }
+      ]
     }
   ]
 }

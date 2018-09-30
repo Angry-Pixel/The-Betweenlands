@@ -58,10 +58,10 @@ public class EntityPropertyLootModifier implements EntityProperty {
 		@Override
 		public EntityPropertyLootModifier deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
 			JsonObject obj = JsonUtils.getJsonObject(element, this.getName().getResourcePath());
-			float min = JsonUtils.getFloat(obj.get("min"), "min");
-			float max = JsonUtils.getFloat(obj.get("max"), "max");
+			float min = obj.has("min") ? JsonUtils.getFloat(obj.get("min"), "min") : -Float.MAX_VALUE;
+			float max = obj.has("max") ? JsonUtils.getFloat(obj.get("max"), "max") : Float.MAX_VALUE;
 			String key = JsonUtils.getString(obj.get("key"), "key");
-			boolean invert = JsonUtils.getBoolean(obj.get("invert"), "invert");
+			boolean invert = obj.has("invert") ? JsonUtils.getBoolean(obj.get("invert"), "invert") : false;
 			return new EntityPropertyLootModifier(key, min, max, invert);
 		}
 	}

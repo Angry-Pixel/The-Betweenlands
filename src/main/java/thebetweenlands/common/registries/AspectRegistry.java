@@ -132,8 +132,8 @@ public class AspectRegistry {
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_CRIMSON_MIDDLE_GEM.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 	AspectTier.UNCOMMON, AspectGroup.GEM_FIRNALAZ, 1.75F, 0.25F);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_AQUA_MIDDLE_GEM.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 		AspectTier.UNCOMMON, AspectGroup.GEM_BYRGINAZ, 1.75F, 0.25F);
 	
-		//Spirit Fruit
-		AspectManager.addStaticAspectsToItem(new ItemStack(ItemRegistry.SPIRIT_FRUIT), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.UNCOMMON, AspectGroup.SPIRIT_FRUIT, 1.0F, 0.1F, 2);
+		//Sap spit
+		AspectManager.addStaticAspectsToItem(new ItemStack(ItemRegistry.SAP_SPIT), DefaultItemStackMatchers.ITEM_DAMAGE, 					AspectTier.UNCOMMON, AspectGroup.SAP_SPIT, 1.0F, 0.1F, 2);
 	}
 
 	private static void registerAspects() {
@@ -157,8 +157,8 @@ public class AspectRegistry {
 		AspectManager.registerAspect(AspectRegistry.FERGALAZ, 	AspectTier.UNCOMMON, 	AspectGroup.GEM_FERGALAZ, Amounts.MEDIUM);
 		AspectManager.registerAspect(AspectRegistry.FIRNALAZ, 	AspectTier.UNCOMMON, 	AspectGroup.GEM_FIRNALAZ, Amounts.MEDIUM);
 		
-		//Spirit Fruit
-		AspectManager.registerAspect(AspectRegistry.YEOWYNN, 	AspectTier.UNCOMMON, 	AspectGroup.SPIRIT_FRUIT, Amounts.HIGH);
-		AspectManager.registerAspect(AspectRegistry.ORDANIIS, 	AspectTier.UNCOMMON, 	AspectGroup.SPIRIT_FRUIT, Amounts.HIGH);
+		//Sap spit
+		AspectManager.registerAspect(AspectRegistry.YEOWYNN, 	AspectTier.UNCOMMON, 	AspectGroup.SAP_SPIT, Amounts.HIGH);
+		AspectManager.registerAspect(AspectRegistry.ORDANIIS, 	AspectTier.UNCOMMON, 	AspectGroup.SAP_SPIT, Amounts.HIGH);
 	}
 }

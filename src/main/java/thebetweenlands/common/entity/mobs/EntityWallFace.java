@@ -7,7 +7,9 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -180,6 +182,28 @@ public abstract class EntityWallFace extends EntityCreature implements IMob, IEn
 		} else {
 			return 0;
 		}
+	}
+	
+	@Override
+	public EntityItem entityDropItem(ItemStack stack, float offsetY) {
+		if (stack.isEmpty()) {
+            return null;
+        } else {
+            EntityItem entityItem = new EntityItem(this.world, this.posX, this.posY + (double)offsetY, this.posZ, stack);
+            
+            EnumFacing facing = this.getFacing();
+        	Vec3d dropPos = this.getFrontCenter().addVector(facing.getFrontOffsetX() * entityItem.width, facing.getFrontOffsetY() * entityItem.height, facing.getFrontOffsetZ() * entityItem.width);
+            
+        	entityItem.setPosition(dropPos.x, dropPos.y, dropPos.z);
+        	
+            entityItem.setDefaultPickupDelay();
+            if(this.captureDrops) {
+                this.capturedDrops.add(entityItem);
+            } else {
+                this.world.spawnEntity(entityItem);
+            }
+            return entityItem;
+        }
 	}
 
 	@Override

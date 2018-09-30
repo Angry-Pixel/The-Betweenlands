@@ -3,6 +3,7 @@ package thebetweenlands.common.item.armor;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -14,6 +15,8 @@ import thebetweenlands.common.lib.ModInfo;
 
 public class ItemSpiritTreeFaceMaskSmall extends ItemSpiritTreeFaceMask {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/spirit_tree_face_small.png");
+	public static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/spirit_tree_face_small_mask_overlay.png");
+	public static final ResourceLocation OVERLAY_SIDE_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/spirit_tree_face_small_mask_overlay_side.png");
 
 	@SideOnly(Side.CLIENT)
 	private static ModelBiped model;
@@ -34,5 +37,15 @@ public class ItemSpiritTreeFaceMaskSmall extends ItemSpiritTreeFaceMask {
 			model = new ModelSpiritTreeFaceMaskSmall();
 		}
 		return model;
+	}
+
+	@Override
+	protected ResourceLocation getOverlayTexture(ItemStack stack, EntityPlayer player, float partialTicks) {
+		return OVERLAY_TEXTURE;
+	}
+
+	@Override
+	protected ResourceLocation getOverlaySideTexture(ItemStack stack, EntityPlayer player, float partialTicks, boolean left) {
+		return OVERLAY_SIDE_TEXTURE;
 	}
 }

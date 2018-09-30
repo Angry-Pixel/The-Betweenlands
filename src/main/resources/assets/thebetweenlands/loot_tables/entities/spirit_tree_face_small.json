@@ -1,19 +1,14 @@
 {
 	"pools": [
 		{
-			"name": "spirit_tree_face_small",
+			"name": "sap_spit",
 			"rolls": 1,
-			"conditions": [
-				{
-					"condition": "killed_by_player"
-				}
-			],
 			"entries": [
 				{
 					"type": "empty",
 					"name": "nothing",
 					"functions": [],
-					"weight": 3
+					"weight": 2
 				},
 				{
 					"type": "item",
@@ -27,6 +22,23 @@
 							}
 						}
 					],
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "spirit_tree_face_small_mask",
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "empty",
+					"name": "nothing",
+					"functions": [],
+					"weight": 10
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:spirit_tree_face_small_mask",
 					"weight": 1
 				}
 			]
