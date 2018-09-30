@@ -28,6 +28,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import thebetweenlands.common.entity.mobs.EntityWallFace.AnchorChecks;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
@@ -243,7 +244,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 	}
 
 	@Override
-	protected void fixUnsuitablePosition() {
+	protected void fixUnsuitablePosition(int violatedChecks) {
 		if(this.ticksExisted % 5 == 0) {
 			for(int i = 0; i < 50; i++) {
 				float rx = this.world.rand.nextFloat() * 2 - 1;
@@ -251,7 +252,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 				float rz = this.world.rand.nextFloat() * 2 - 1;
 				BlockPos rndPos = new BlockPos(this.posX + this.world.rand.nextInt(8) - 4, this.posY + this.height / 2 + this.world.rand.nextInt(8) - 4, this.posZ + this.world.rand.nextInt(8) - 4);
 				Vec3d pos = new Vec3d(rndPos.getX() + 0.5D, rndPos.getY() + 0.5D, rndPos.getZ() + 0.5D);
-				if(this.canAnchorAt(pos, new Vec3d(rx, ry, rz))) {
+				if(this.checkAnchorAt(pos, new Vec3d(rx, ry, rz), AnchorChecks.ALL) == 0) {
 					this.lookHelper.setLookDirection(rx, ry, rz);
 					this.moveHelper.setMoveTo(pos.x, pos.y, pos.z, 1);
 					break;
@@ -333,7 +334,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 		@Override
 		public boolean shouldExecute() {
-			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && !this.isTargetVisibleAndInRange();
+			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && !this.isTargetVisibleAndInRange();
 		}
 
 		@Override
@@ -367,7 +368,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 							EnumFacing facing = EnumFacing.getFacingFromVector((float)lookDir.x, (float)lookDir.y, (float)lookDir.z);
 
-							if(this.canSeeFrom(pos, facing, this.entity.getAttackTarget()) && this.entity.canAnchorAt(center, lookDir)) {
+							if(this.canSeeFrom(pos, facing, this.entity.getAttackTarget()) && this.entity.checkAnchorAt(center, lookDir, AnchorChecks.ALL) == 0) {
 								this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
 								this.entity.lookHelper.setLookDirection(facing.getFrontOffsetX(), facing.getFrontOffsetY(), facing.getFrontOffsetZ());
 								break;
@@ -376,7 +377,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 									if(otherFacing != facing) {
 										lookDir = new Vec3d(otherFacing.getFrontOffsetX(), 0, otherFacing.getFrontOffsetZ());
 
-										if(this.canSeeFrom(pos, otherFacing, this.entity.getAttackTarget()) && this.entity.canAnchorAt(center, lookDir)) {
+										if(this.canSeeFrom(pos, otherFacing, this.entity.getAttackTarget()) && this.entity.checkAnchorAt(center, lookDir, AnchorChecks.ALL) == 0) {
 											this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
 											this.entity.lookHelper.setLookDirection(otherFacing.getFrontOffsetX(), otherFacing.getFrontOffsetY(), otherFacing.getFrontOffsetZ());
 											break;
@@ -399,7 +400,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return !this.entity.isMoving() && this.entity.getAttackTarget() != null && !this.isTargetVisibleAndInRange();
+			return !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && !this.isTargetVisibleAndInRange();
 		}
 	}
 
@@ -426,7 +427,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 		@Override
 		public boolean shouldExecute() {
-			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
+			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
 		}
 
 		@Override

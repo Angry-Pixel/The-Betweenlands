@@ -21,6 +21,7 @@ import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFace;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
+import thebetweenlands.common.entity.mobs.EntityWallFace.AnchorChecks;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -110,7 +111,7 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 			facings.addAll(Arrays.asList(EnumFacing.HORIZONTALS));
 			Collections.shuffle(facings, rand);
 			for(EnumFacing facing : facings) {
-				if(face.canAnchorAt(anchor, facing, EnumFacing.UP)) {
+				if(face.checkAnchorAt(anchor, facing, EnumFacing.UP, AnchorChecks.ALL) == 0) {
 					faceAnchor = anchor;
 					faceFacing = facing;
 					break largeFaceLoop;

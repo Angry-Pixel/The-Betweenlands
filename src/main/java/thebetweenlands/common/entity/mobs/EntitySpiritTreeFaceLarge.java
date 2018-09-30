@@ -44,6 +44,7 @@ import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
+import thebetweenlands.common.entity.mobs.EntityWallFace.AnchorChecks;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -700,7 +701,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 						for(EnumFacing facing : facings) {
 							EnumFacing facingUp = facing.getAxis().isVertical() ? EnumFacing.HORIZONTALS[this.entity.rand.nextInt(EnumFacing.HORIZONTALS.length)] : EnumFacing.UP;
-							if(face.canAnchorAt(anchor, facing, facingUp)) {
+							if(face.checkAnchorAt(anchor, facing, facingUp, AnchorChecks.ALL) == 0) {
 								face.onInitialSpawn(this.entity.world.getDifficultyForLocation(anchor), null);
 								face.setPositionToAnchor(anchor, facing, facingUp);
 								this.entity.world.spawnEntity(face);
