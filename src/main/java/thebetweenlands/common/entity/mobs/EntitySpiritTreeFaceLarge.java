@@ -44,7 +44,6 @@ import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
-import thebetweenlands.common.entity.mobs.EntityWallFace.AnchorChecks;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -77,6 +76,8 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	private float crawlingWaveAngle = 0;
 	private int crawlingWaveTicks = 0;
 
+	protected static final int DEFAULT_XP_DROPPED = 300;
+
 	protected static final int DEFAULT_SPIT_DELAY = 10;
 	protected static final int DEFAULT_BLOW_DELAY = 30;
 	protected static final int DEFAULT_ROTATING_WAVE_DELAY = 40;
@@ -90,6 +91,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	public EntitySpiritTreeFaceLarge(World world) {
 		super(world);
 		this.setSize(1.8F, 1.8F);
+		this.experienceValue = DEFAULT_XP_DROPPED;
 	}
 
 	@Override
@@ -301,9 +303,16 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 				this.updateWispStrengthModifier();
 			}
 
+			float strengthModifier = this.getWispStrengthModifier();
+			if(strengthModifier <= 1.0F) {
+				this.experienceValue = (int) (DEFAULT_XP_DROPPED * strengthModifier);
+			} else {
+				this.experienceValue = (int) (DEFAULT_XP_DROPPED * (1 + (strengthModifier - 1) * 6));
+			}
+
 			IAttributeInstance attackAttribute = this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 			attackAttribute.removeModifier(STRENGTH_MULTIPLIER_ATTRIBUTE_UUID);
-			attackAttribute.applyModifier(new AttributeModifier(STRENGTH_MULTIPLIER_ATTRIBUTE_UUID, "Wisp strength modifier", this.getWispStrengthModifier() - 1.0F, 2));
+			attackAttribute.applyModifier(new AttributeModifier(STRENGTH_MULTIPLIER_ATTRIBUTE_UUID, "Wisp strength modifier", strengthModifier - 1.0F, 2));
 
 			if(this.blowTicks > 0) {
 				if(this.blowTicks > 20 + this.blowDelay) {
@@ -581,7 +590,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 					if(validPos) {
 						EntityRootGrabber grabber = new EntityRootGrabber(this.world);
-						grabber.setPosition(pos, 60);
+						grabber.setPosition(pos, (int)(40 / this.getWispStrengthModifier()));
 						this.world.spawnEntity(grabber);
 						return true;
 					}

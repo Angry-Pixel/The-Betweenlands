@@ -1,9 +1,12 @@
 package thebetweenlands.common.entity.mobs;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
@@ -251,6 +254,32 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		this.updatePositioning();
 
 		this.updateMovement();
+	}
+
+	@Override
+	public void move(MoverType type, double x, double y, double z) {
+		this.collided = this.collidedHorizontally = this.collidedVertically = true;
+	}
+
+	@Override
+	public void moveToBlockPosAndAngles(BlockPos pos, float rotationYawIn, float rotationPitchIn) { }
+
+	@Override
+	public void moveRelative(float strafe, float up, float forward, float friction) { }
+
+	@Override
+	protected boolean canTriggerWalking() {
+		return false;
+	}
+
+	@Override
+	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+		this.fallDistance = 0;
+	}
+
+	@Override
+	public boolean canTrample(World world, Block block, BlockPos pos, float fallDistance) {
+		return false;
 	}
 
 	protected void updatePositioning() {

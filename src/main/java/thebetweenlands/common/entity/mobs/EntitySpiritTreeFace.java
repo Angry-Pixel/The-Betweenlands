@@ -28,7 +28,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.common.entity.mobs.EntityWallFace.AnchorChecks;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
@@ -50,6 +49,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 	public EntitySpiritTreeFace(World world) {
 		super(world);
+		this.experienceValue = 4;
 	}
 
 	@Override
@@ -168,7 +168,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 	public boolean isEntityInvulnerable(DamageSource source) {
 		return source == DamageSource.DROWN || source == DamageSource.LAVA || super.isEntityInvulnerable(source);
 	}
-	
+
 	@Override
 	public boolean getIsInvulnerable() {
 		return super.getIsInvulnerable() || !this.isActive();
