@@ -29,6 +29,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -65,6 +66,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	private static final DataParameter<Integer> ROTATING_WAVE_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> CRAWLING_WAVE_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 	private static final DataParameter<Float> WISP_STRENGTH_MODIFIER = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.FLOAT);
+	private static final DataParameter<BlockPos> LAST_LOCKED_WISP = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.BLOCK_POS);
 
 	private int blowTicks = 0;
 
@@ -120,6 +122,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		this.dataManager.register(ROTATING_WAVE_STATE, 0);
 		this.dataManager.register(CRAWLING_WAVE_STATE, 0);
 		this.dataManager.register(WISP_STRENGTH_MODIFIER, 1.0F);
+		this.dataManager.register(LAST_LOCKED_WISP, BlockPos.ORIGIN);
 	}
 
 	@Override
@@ -229,7 +232,16 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 				List<EntitySpiritTreeFaceSmall> smallFaces = this.world.getEntitiesWithinAABB(EntitySpiritTreeFaceSmall.class, location.getEnclosingBounds());
 				for(EntitySpiritTreeFaceSmall face : smallFaces) {
 					face.setDropItemsWhenDead(false);
-					face.onKillCommand();
+					face.setDead();
+				}
+
+				List<BlockPos> wispPositions = new ArrayList<>();
+				wispPositions.addAll(location.getGeneratedWispPositions());
+				wispPositions.addAll(location.getNotGeneratedWispPositions());
+				for(BlockPos wisp : wispPositions) {
+					if(this.world.getBlockState(wisp).getBlock() == BlockRegistry.WISP) {
+						this.world.setBlockToAir(wisp);
+					}
 				}
 
 				List<BlockPos> positions = location.getLargeFacePositions();
@@ -291,6 +303,25 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	}
 
 	@Override
+	public void notifyDataManagerChange(DataParameter<?> key) {
+		super.notifyDataManagerChange(key);
+
+		if(LAST_LOCKED_WISP.equals(key) && this.world.isRemote) {
+			this.wispLockEffect(this.dataManager.get(LAST_LOCKED_WISP));
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected void wispLockEffect(BlockPos pos) {
+		for(int i = 0; i < 64; i++) {
+			Vec3d dir = new Vec3d(this.rand.nextFloat() - 0.5F, this.rand.nextFloat() - 0.5F + 0.25F, this.rand.nextFloat() - 0.5F);
+			dir = dir.normalize().scale(2);
+			BLParticles.CORRUPTED.spawn(this.world, pos.getX() + 0.5D + this.rand.nextFloat() / 2.0F - 0.25F, pos.getY() + 0.5D + this.rand.nextFloat() / 2.0F - 0.25F, pos.getZ() + 0.5D + this.rand.nextFloat() / 2.0F - 0.25F, ParticleArgs.get().withMotion(dir.x, dir.y, dir.z));
+		}
+		this.world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.DAMAGE_REDUCTION, SoundCategory.HOSTILE, 0.65F, 0.5F, false);
+	}
+
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 
@@ -299,8 +330,33 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		}
 
 		if(!this.world.isRemote) {
-			if(this.isActive() && this.getAttackTarget() != null && this.ticksExisted % 20 == 0) {
-				this.updateWispStrengthModifier();
+			if(this.isActive() && this.isEntityAlive() && this.getAttackTarget() != null) {
+				if(this.ticksExisted % 20 == 0) {
+					this.updateWispStrengthModifier();
+				}
+
+				if(this.ticksExisted % 10 == 0) {
+					List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
+					if(!locations.isEmpty()) {
+						LocationSpiritTree location = locations.get(0);
+
+						List<BlockPos> wispPositions = new ArrayList<>();
+
+						wispPositions.addAll(location.getNotGeneratedWispPositions());
+
+						if(this.getHealth() < this.getMaxHealth() / 2) {
+							wispPositions.addAll(location.getGeneratedWispPositions());
+						}
+
+						for(BlockPos wispPosition : wispPositions) {
+							if(!location.getGuard().isGuarded(this.world, null, wispPosition) && this.world.getBlockState(wispPosition).getBlock() == BlockRegistry.WISP) {
+								location.getGuard().setGuarded(this.world, wispPosition, true);
+								this.dataManager.set(LAST_LOCKED_WISP, wispPosition);
+								break;
+							}
+						}
+					}
+				}
 			}
 
 			float strengthModifier = this.getWispStrengthModifier();

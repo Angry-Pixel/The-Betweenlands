@@ -117,7 +117,8 @@ public enum BLParticles {
 	EMBER_3(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_3"))),
 	XP_PIECES(new ParticleXPPieces.Factory()),
 	DAMAGE_REDUCTION(new ParticleDamageReduction.Factory()),
-	ROOT_SPIKE(new ParticleRootSpike.Factory());
+	ROOT_SPIKE(new ParticleRootSpike.Factory()),
+	CORRUPTED(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/corrupted")).getBaseArgsBuilder().withDataBuilder().setData(2, 1.0F).buildData().buildBaseArgs());
 
 
 

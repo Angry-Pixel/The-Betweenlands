@@ -159,10 +159,11 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 					this.setBlock(world, wall, BlockRegistry.MOSSY_BETWEENSTONE_BRICK_WALL.getDefaultState(), location);
 				}
 				BlockPos wisp = pos.up(height);
-				location.addWispPosition(wisp);
-				if(rand.nextInt(3) == 0) {
+				if(rand.nextInt(4) == 0) {
 					this.setBlock(world, wisp, BlockRegistry.WISP.getDefaultState(), location);
 					location.addGeneratedWispPosition(wisp);
+				} else {
+					location.addNotGeneratedWispPosition(wisp);
 				}
 			}
 		}
