@@ -97,6 +97,7 @@ import thebetweenlands.common.item.misc.ItemDentrothystShard;
 import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemGlue;
+import thebetweenlands.common.item.misc.ItemHealthOrb;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.item.misc.ItemLoreScrap;
 import thebetweenlands.common.item.misc.ItemMisc;
@@ -366,6 +367,7 @@ public class ItemRegistry {
     public static final ItemOctineIngot OCTINE_INGOT = new ItemOctineIngot();
     public static final Item MUMMY_BAIT = new ItemMummyBait();
     public static final Item SAP_SPIT = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
+    public static final Item HEALTH_ORB = new ItemHealthOrb();
     
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
