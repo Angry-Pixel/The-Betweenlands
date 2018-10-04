@@ -52,8 +52,8 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 
 	protected final LookHelper lookHelper;
 
-	private float lastMoveTicks = 0;
-	private float moveTicks = 0;
+	private float lastMoveProgress = 0;
+	private float moveProgress = 0;
 
 	protected float peek = 0.25F;
 
@@ -89,11 +89,6 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-	}
-
-	@Override
-	public SoundCategory getSoundCategory() {
-		return SoundCategory.HOSTILE;
 	}
 
 	@Override
@@ -340,7 +335,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	}
 
 	protected void updateMovement() {
-		this.lastMoveTicks = this.moveTicks;
+		this.lastMoveProgress = this.moveProgress;
 
 		if(this.isMoving()) {
 			float movementProgress = this.getMovementProgress(1);
@@ -362,14 +357,14 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 					this.setPositionAndUpdate(this.posX, this.posY, this.posZ);
 				}
 			}
-			if(this.moveTicks >= 1.0F) {
+			if(this.moveProgress >= 1.0F) {
 				this.dataManager.set(MOVING, false);
-				this.lastMoveTicks = this.moveTicks = 0;
+				this.lastMoveProgress = this.moveProgress = 0;
 			} else {
-				this.moveTicks += 0.05F * (this.getAIMoveSpeed() + 0.05F);
+				this.moveProgress += 0.05F * (this.getAIMoveSpeed() + 0.05F);
 			}
 		} else {
-			this.moveTicks = this.lastMoveTicks = 0;
+			this.moveProgress = this.lastMoveProgress = 0;
 		}
 	}
 
@@ -389,7 +384,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	}
 
 	public float getMovementProgress(float partialTicks) {
-		return MathHelper.clamp(this.lastMoveTicks + (this.moveTicks - this.lastMoveTicks) * partialTicks, 0, 1);
+		return MathHelper.clamp(this.lastMoveProgress + (this.moveProgress - this.lastMoveProgress) * partialTicks, 0, 1);
 	}
 
 	public Vec3d getOffset(float movementProgress) {
@@ -449,7 +444,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		this.dataManager.set(FACING_UP, facingUp);
 
 		this.dataManager.set(MOVING, false);
-		this.lastMoveTicks = this.moveTicks = 0;
+		this.lastMoveProgress = this.moveProgress = 0;
 
 		this.updatePositioning();
 	}

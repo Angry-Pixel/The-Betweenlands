@@ -77,6 +77,16 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 	}
 
 	@Override
+	public SoundCategory getSoundCategory() {
+		return SoundCategory.HOSTILE;
+	}
+
+	@Override
+	public boolean isSilent() {
+		return super.isSilent() || !this.isActive();
+	}
+
+	@Override
 	protected SoundEvent getDeathSound() {
 		return null;
 	}
