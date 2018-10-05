@@ -8,6 +8,7 @@ import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.common.tile.TileEntityAspectrusCrop;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
+import thebetweenlands.common.tile.TileEntityBeamLens;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
@@ -77,6 +78,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityPresent.class, "present");
 		registerTileEntity(TileEntityPuffshroom.class, "puffshroom");
 		registerTileEntity(TileEntityWormDungeonDoorWood.class, "worm_dungeon_door_wood");
+		registerTileEntity(TileEntityBeamLens.class, "beam_lens");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

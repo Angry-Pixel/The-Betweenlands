@@ -115,6 +115,7 @@ import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.plant.BlockWaterWeeds;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeepingBlue;
+import thebetweenlands.common.block.structure.BlockBeamLens;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockChipPath;
@@ -126,10 +127,10 @@ import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.block.structure.BlockFenceGateBetweenlands;
 import thebetweenlands.common.block.structure.BlockItemCage;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
-import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockMudBrickRoof;
 import thebetweenlands.common.block.structure.BlockMudBrickShingleSlab;
 import thebetweenlands.common.block.structure.BlockMudBricks;
+import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.block.structure.BlockPuffshroom;
@@ -508,6 +509,7 @@ public class BlockRegistry {
     public static final Block MUD_BRICK_SLAB_DECAY_2 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_2).getBlock());
     public static final Block MUD_BRICK_SLAB_DECAY_3 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3).getBlock());
     public static final Block WORM_DUNGEON_DOOR_WOOD = new BlockWormDungeonDoorWood();
+    public static final Block BETWEENSTONE_BRICKS_LENS = new BlockBeamLens();
     
     public static final Block PRESENT = new BlockPresent();
     
