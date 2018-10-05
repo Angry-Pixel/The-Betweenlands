@@ -4,8 +4,6 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -15,11 +13,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.structure.BlockBeamLens;
+import thebetweenlands.common.block.structure.BlockEnergyBarrier;
 
 public class TileEntityBeamLens extends TileEntity implements ITickable {
 
@@ -40,18 +38,13 @@ public class TileEntityBeamLens extends TileEntity implements ITickable {
 					setActive(true);
 				activateBlock();
 			}
-		//check collision with inactive block and if so set blocks powered state to true
-
-		
 		
 		if (!getWorld().getBlockState(getPos()).getValue(BlockBeamLens.POWERED)) {
 			if (active)
 				setActive(false);
 			deactivateBlock();
 		} 
-	//check collision with inactive block and if so set blocks powered state to true
 	}
-		
 		
 		if (!getWorld().isRemote)
 			setAABBWithModifiers();
@@ -75,57 +68,57 @@ public class TileEntityBeamLens extends TileEntity implements ITickable {
 		int distance;
 		for (distance = 1; distance < 12; distance++) {
 			IBlockState state2 = getWorld().getBlockState(getPos().offset(facing, distance));
-			if (state2 != Blocks.AIR.getDefaultState())
+			if (state2 != Blocks.AIR.getDefaultState() && !(state2.getBlock() instanceof BlockEnergyBarrier))
 				break;
 		}
 
 		if (facing == EnumFacing.UP) {
 			yPos = distance;
 			yNeg = -1;
-			xPos = 0;
-			xNeg = 0;
-			zPos = 0;
-			zNeg = 0;
+			xPos = -0.375F;
+			xNeg = -0.375F;
+			zPos = -0.375F;
+			zNeg = -0.375F;
 		}
 		if (facing == EnumFacing.DOWN) {
 			yNeg = distance;
 			yPos = -1;
-			xPos = 0;
-			xNeg = 0;
-			zPos = 0;
-			zNeg = 0;
+			xPos = -0.375F;
+			xNeg = -0.375F;
+			zPos = -0.375F;
+			zNeg = -0.375F;
 		}
 		if (facing == EnumFacing.WEST) {
 			xNeg = distance;
 			xPos = -1;
-			zPos = 0;
-			zNeg = 0;
-			yPos = 0;
-			yNeg = 0;
+			zPos = -0.375F;
+			zNeg = -0.375F;
+			yPos = -0.375F;
+			yNeg = -0.375F;
 		}
 		if (facing == EnumFacing.EAST) {
 			xPos = distance;
 			xNeg = -1;
-			zPos = 0;
-			zNeg = 0;
-			yPos = 0;
-			yNeg = 0;
+			zPos = -0.375F;
+			zNeg = -0.375F;
+			yPos = -0.375F;
+			yNeg = -0.375F;
 		}
 		if (facing == EnumFacing.NORTH) {
 			zNeg = distance;
 			zPos = -1;
-			xPos = 0;
-			xNeg = 0;
-			yPos = 0;
-			yNeg = 0;
+			xPos = -0.375F;
+			xNeg = -0.375F;
+			yPos = -0.375F;
+			yNeg = -0.375F;
 		}
 		if (facing == EnumFacing.SOUTH) {
 			zPos = distance;
 			zNeg = -1;
-			xPos = 0;
-			xNeg = 0;
-			yPos = 0;
-			yNeg = 0;
+			xPos = -0.375F;
+			xNeg = -0.375F;
+			yPos = -0.375F;
+			yNeg = -0.375F;
 		}
 		getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 	}

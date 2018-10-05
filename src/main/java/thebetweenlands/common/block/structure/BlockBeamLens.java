@@ -114,7 +114,10 @@ public class BlockBeamLens extends BlockDirectional implements ITileEntityProvid
 			return true;
 		state = state.cycleProperty(FACING);
 		world.setBlockState(pos, state, 3);
-		if (world.getTileEntity(pos) instanceof TileEntityBeamLens);
+		if (world.getTileEntity(pos) instanceof TileEntityBeamLens) {
+			TileEntityBeamLens tile = (TileEntityBeamLens) world.getTileEntity(pos);
+			//do something here
+		}
 			
 		return true;
 	}
