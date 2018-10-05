@@ -27,8 +27,10 @@ public class EntityBoulderSprite extends EntityMob {
 	protected EnumFacing hideoutEntrance = null;
 	protected BlockPos hideout = null;
 
+	private float prevRollAnimationInAirWeight = 0.0F;
 	private float prevRollAnimation = 0.0F;
 	private float prevRollAnimationWeight = 0.0F;
+	private float rollAnimationInAirWeight = 0.0F;
 	private float rollAnimationSpeed = 0.0F;
 	private float rollAnimation = 0.0F;
 	private float rollAnimationWeight = 0.0F;
@@ -124,10 +126,17 @@ public class EntityBoulderSprite extends EntityMob {
 	}
 
 	protected void updateRollAnimationState() {
+		this.prevRollAnimationInAirWeight = this.rollAnimationInAirWeight;
 		this.prevRollAnimation = this.rollAnimation;
 		this.prevRollAnimationWeight = this.rollAnimationWeight;
 
 		if(this.rollAnimationSpeed > 0) {
+			if(!this.onGround) {
+				this.rollAnimationInAirWeight = Math.min(1, this.rollAnimationInAirWeight + 0.2F);
+			} else {
+				this.rollAnimationInAirWeight = Math.max(0, this.rollAnimationInAirWeight - 0.2F);
+			}
+
 			if(this.rollAnimationSpeed < 0.04F) {
 				double p = this.rollAnimation % 1;
 				double incr = Math.pow((1 - (this.rollAnimation % 1)) * this.rollAnimationSpeed, 0.65D);
@@ -137,6 +146,7 @@ public class EntityBoulderSprite extends EntityMob {
 					this.prevRollAnimation = this.rollAnimation = 0;
 					this.prevRollAnimationWeight = this.rollAnimationWeight = 0;
 					this.rollAnimationSpeed = 0;
+					this.rollAnimationInAirWeight = 0;
 				}
 			} else {
 				this.rollAnimation += this.rollAnimationSpeed;
@@ -152,6 +162,10 @@ public class EntityBoulderSprite extends EntityMob {
 
 	public float getRollAnimationWeight(float partialTicks) {
 		return this.prevRollAnimationWeight + (this.rollAnimationWeight - this.prevRollAnimationWeight) * partialTicks;
+	}
+
+	public float getRollAnimationInAirWeight(float partialTicks) {
+		return this.prevRollAnimationInAirWeight + (this.rollAnimationInAirWeight - this.prevRollAnimationInAirWeight) * partialTicks;
 	}
 
 	public void setHideout(@Nullable BlockPos pos) {

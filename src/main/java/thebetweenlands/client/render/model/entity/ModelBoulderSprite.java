@@ -185,11 +185,12 @@ public class ModelBoulderSprite extends MowzieModelBase {
 		walk(this.block_main, globalSpeed * 0.5f, globalDegree * 0.15f, false, 0.2f, 0.0f, limbSwing * 1.1F, limbSwingAngle);
 
 		float rollAnimationWeight = entity.getRollAnimationWeight(partialTickTime);
+		float bobWeight = rollAnimationWeight * (1.0F - entity.getRollAnimationInAirWeight(partialTickTime));
 		float rollAnimation = 0.415F + entity.getRollAnimation(partialTickTime);
 
-		this.block_main.offsetY = (-(float)Math.abs(Math.sin((rollAnimation + 0.6F) * Math.PI)) * 0.8F + 0.3F) * rollAnimationWeight;
+		this.block_main.offsetY = (-(float)Math.abs(Math.sin((rollAnimation + 0.6F) * Math.PI)) * 0.8F + 0.3F) * bobWeight;
 		float rollRotX = (float)((rollAnimation + ((Math.sin((rollAnimation + 0.5F) * Math.PI * 2) + 1) * 0.05F + 0.5F) * 1.1F) * Math.PI * 2) % ((float)Math.PI * 2);
-		this.block_main.rotateAngleX = rollRotX - 0.045553093477052F * (1 - rollAnimationWeight);
+		this.block_main.rotateAngleX = rollRotX - 0.045553093477052F * (1 - bobWeight);
 	}
 
 	/**
