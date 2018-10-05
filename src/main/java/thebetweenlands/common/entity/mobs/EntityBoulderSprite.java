@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.monster.EntityMob;
@@ -34,8 +35,6 @@ public class EntityBoulderSprite extends EntityMob {
 	private float rollAnimationSpeed = 0.0F;
 	private float rollAnimation = 0.0F;
 	private float rollAnimationWeight = 0.0F;
-
-	protected boolean charging = false;
 
 	public EntityBoulderSprite(World worldIn) {
 		super(worldIn);
@@ -75,6 +74,9 @@ public class EntityBoulderSprite extends EntityMob {
 
 	@Override
 	public void onUpdate() {
+		double prevMotionX = this.motionX;
+		double prevMotionZ = this.motionZ;
+
 		super.onUpdate();
 
 		if(!this.world.isRemote) {
@@ -93,32 +95,63 @@ public class EntityBoulderSprite extends EntityMob {
 				this.dataManager.set(ROLL_SPEED, 0.0F);
 			}
 
+			if(this.collidedHorizontally && this.isRolling()) {
+				boolean pg = this.onGround;
+				double pmx = this.motionX;
+				double pmy = this.motionY;
+				double pmz = this.motionZ;
+				double px = this.posX;
+				double py = this.posY;
+				double pz = this.posZ;
+
+				this.move(MoverType.SELF, prevMotionX, 0, 0);
+
+				boolean rx = Math.abs(this.posX - px) < Math.abs(prevMotionX) / 2.0D;
+
+				this.onGround = pg;
+				this.motionX = pmx;
+				this.motionY = pmy;
+				this.motionZ = pmz;
+				this.posX = px;
+				this.posY = py;
+				this.posZ = pz;
+
+				this.move(MoverType.SELF, 0, 0, prevMotionZ);
+
+				boolean rz = Math.abs(this.posZ - pz) < Math.abs(prevMotionZ) / 2.0D;
+
+				this.onGround = pg;
+				this.motionX = pmx;
+				this.motionY = pmy;
+				this.motionZ = pmz;
+				this.posX = px;
+				this.posY = py;
+				this.posZ = pz;
+
+				if(this.onGround) this.motionY += Math.min(Math.sqrt(prevMotionX * prevMotionX + prevMotionZ * prevMotionZ) * 3, 0.7F);
+				if(rx) this.motionX -= prevMotionX * 6;
+				if(rz) this.motionZ -= prevMotionZ * 6;
+				if(this.onGround || rx || rz) this.velocityChanged = true;
+
+				//TODO
+				/*if(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ) <= 0.1D) {
+					//Stop rolling
+				}*/
+			}
+
+			//TODO
 			this.getMoveHelper().setMoveTo(this.posX + 1, this.posY, this.posZ, (Math.sin(this.ticksExisted / 40.0D) + 1.0D) * 0.8D + 0.8D);
 		} else {
-			if(this.isEntityAlive() && this.dataManager.get(ROLL_SPEED) > 0.04F) {
+			if(this.isEntityAlive() && this.isRolling()) {
 				this.setRollSpeed(this.dataManager.get(ROLL_SPEED));
 			}
 
 			this.updateRollAnimationState();
 		}
-
-		/*if(this.ticksExisted % 200 < 100 && this.world.isRemote) {
-			this.rollAnimationSpeed = 0.1F;
-		}*/
-
-		if(this.collidedHorizontally) {
-			this.motionY += 0.6D;
-			this.motionX -= 1.4D;
-			this.velocityChanged = true;
-		}
 	}
 
-	public void setCharging(boolean charging) {
-		this.charging = charging;
-	}
-
-	public boolean isCharging() {
-		return this.charging;
+	public boolean isRolling() {
+		return this.dataManager.get(ROLL_SPEED) > 0.04F;
 	}
 
 	public void setRollSpeed(float speed) {
