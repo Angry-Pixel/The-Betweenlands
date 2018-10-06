@@ -1024,6 +1024,7 @@ entity.thebetweenlands.frog.name=Frog
 entity.thebetweenlands.gas_cloud.name=Shallowbreath
 entity.thebetweenlands.weedwood_rowboat.name=Weedwood Rowboat
 entity.thebetweenlands.bl_arrow.name=Arrow
+entity.thebetweenlands.boulder_sprite.name=Boulder Sprite
 
 
 # Equipment
