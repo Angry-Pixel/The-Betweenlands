@@ -64,6 +64,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	protected double rollingSpeed = 0;
 	protected int rollingTicks = 0;
 	protected int rollingAccelerationTime = 0;
+	protected int rollingDecelerationTime = 0;
 	protected int rollingDuration = 0;
 	protected Vec3d rollingDir = null;
 
@@ -124,6 +125,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		nbt.setDouble("rollingSpeed", this.rollingSpeed);
 		nbt.setInteger("rollingTicks", this.rollingTicks);
 		nbt.setInteger("rollingAccelerationTime", this.rollingAccelerationTime);
+		nbt.setInteger("rollingDecelerationTime", this.rollingDecelerationTime);
 		nbt.setInteger("rollingDuration", this.rollingDuration);
 
 		if(this.rollingDir != null) {
@@ -148,6 +150,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		this.rollingSpeed = nbt.getDouble("rollingSpeed");
 		this.rollingTicks = nbt.getInteger("rollingTicks");
 		this.rollingAccelerationTime = nbt.getInteger("rollingAccelerationTime");
+		this.rollingDecelerationTime = nbt.getInteger("rollingDecelerationTime");
 		this.rollingDuration = nbt.getInteger("rollingDuration");
 
 		if(nbt.hasKey("rollingDirX", Constants.NBT.TAG_DOUBLE) && nbt.hasKey("rollingDirY", Constants.NBT.TAG_DOUBLE) && nbt.hasKey("rollingDirZ", Constants.NBT.TAG_DOUBLE)) {
@@ -295,8 +298,8 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 				double speed;
 				if(this.rollingDuration - this.rollingTicks < this.rollingAccelerationTime) {
 					speed = 0.5D + (this.rollingSpeed - 0.5D) / this.rollingAccelerationTime * (this.rollingDuration - this.rollingTicks);
-				} else if(this.rollingTicks < this.rollingAccelerationTime) {
-					speed = 0.5D + (this.rollingSpeed - 0.5D) / this.rollingAccelerationTime * this.rollingTicks;
+				} else if(this.rollingTicks < this.rollingDecelerationTime) {
+					speed = 0.5D + (this.rollingSpeed - 0.5D) / this.rollingDecelerationTime * this.rollingTicks;
 				} else {
 					speed = this.rollingSpeed;
 				}
@@ -353,9 +356,10 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		this.stopRolling();
 	}
 
-	public void startRolling(int duration, int accelerationTime, Vec3d dir, double rollingSpeed) {
+	public void startRolling(int duration, int accelerationTime, int decelerationTime, Vec3d dir, double rollingSpeed) {
 		this.rollingTicks = duration;
 		this.rollingAccelerationTime = accelerationTime;
+		this.rollingDecelerationTime = decelerationTime;
 		this.rollingDuration = duration;
 		this.rollingDir = dir;
 		this.rollingSpeed = rollingSpeed + 1.5D;
@@ -366,7 +370,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	}
 
 	public void stopRolling() {
-		this.rollingTicks = Math.min(this.rollingAccelerationTime, this.rollingTicks);
+		this.rollingTicks = Math.min(this.rollingDecelerationTime, this.rollingTicks);
 	}
 
 	public boolean isRolling() {
@@ -469,7 +473,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		public void startExecuting() {
 			Entity target = this.entity.getAttackTarget();
 			this.rollDir = new Vec3d(target.posX - this.entity.posX, 0, target.posZ - this.entity.posZ).normalize();
-			this.entity.startRolling(160, 35, this.rollDir, 1.8D);
+			this.entity.startRolling(160, 35, 15, this.rollDir, 1.8D);
 		}
 
 		@Override
@@ -731,7 +735,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 					this.finished = true;
 				} else {
 					this.rollDir = new Vec3d(target.posX - this.entity.posX, 0, target.posZ - this.entity.posZ).normalize();
-					this.entity.startRolling(80, 10, this.rollDir, this.rollSpeed);
+					this.entity.startRolling(80, 10, 10, this.rollDir, this.rollSpeed);
 					this.entity.isAiHiding = false;
 					this.entity.setHideout(null);
 				}
