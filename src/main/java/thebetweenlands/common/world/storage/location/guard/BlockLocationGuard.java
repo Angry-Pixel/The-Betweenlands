@@ -180,6 +180,7 @@ public class BlockLocationGuard implements ILocationGuard {
 			for(int i = 0; i < this.data.length; i++) {
 				this.data[i] = 0;
 			}
+			this.blockRefCount = 0;
 		}
 
 		public void loadData(byte[] arr) {

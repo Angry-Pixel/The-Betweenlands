@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
@@ -27,7 +28,7 @@ public class ButtonWidget extends ManualWidgetBase {
     int currentItem;
     boolean renderSomething = true;
     boolean doMathWithIndexPages = true;
-    private ArrayList<ItemStack> items = new ArrayList<>();
+    private List<ItemStack> items = NonNullList.create();
     private IAspectType aspect;
     private TextContainer textContainer;
     private ResourceLocation resourceLocation;

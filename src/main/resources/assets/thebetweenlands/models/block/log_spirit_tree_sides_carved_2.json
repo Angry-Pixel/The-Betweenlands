@@ -1,0 +1,21 @@
+{
+    "parent": "block/block",
+    "textures": {
+        "log": "thebetweenlands:blocks/log_spirit_tree",
+        "carved": "thebetweenlands:blocks/log_spirit_tree_carved_2",
+        "particle": "thebetweenlands:blocks/log_spirit_tree"
+    },
+    "elements": [
+        {   
+            "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "faces": {
+                "north": { "texture": "#carved", "cullface": "north" },
+                "east": { "texture": "#log", "cullface": "east" },
+                "south": { "texture": "#log", "cullface": "south" },
+                "west": { "texture": "#log", "cullface": "west" }
+            }
+        }
+    ]
+	
+}

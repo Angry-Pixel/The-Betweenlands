@@ -1,6 +1,7 @@
 package thebetweenlands.common.herblore.book;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
@@ -158,13 +159,16 @@ public class PageCreators {
      * @param manualType the type of manual they are in
      * @return an array for the entry
      */
-    public static ArrayList<Page> AspectItemPages(AspectItem item, Item manualType) {
-        ArrayList<Page> newPages = new ArrayList<>();
+    public static List<Page> AspectItemPages(AspectItem item, Item manualType) {
+        List<Page> newPages = new ArrayList<>();
         int height = 0;
         ItemStack itemStack = item.getOriginal();
-        ArrayList<ManualWidgetBase> widgets = new ArrayList<>();
+        ItemStack pestleAndMortarInput = PestleAndMortarRecipe.getInput(itemStack);
+        List<ManualWidgetBase> widgets = new ArrayList<>();
         widgets.add(new ItemWidget(18, 12, itemStack, 1f));
-        widgets.add(new ItemWidget(118, 12, getStacks(PestleAndMortarRecipe.getInput(itemStack)), 1f));
+        if(!pestleAndMortarInput.isEmpty()) {
+        	widgets.add(new ItemWidget(118, 12, getStacks(pestleAndMortarInput), 1f));
+        }
         widgets.add((new TextWidget(38, 16, itemStack.getDisplayName(), true)).setWidth(70));
         height += 28;
         widgets.add(new TextWidget(18, 12 + height, "manual." + itemStack.getUnlocalizedName() + ".description"));
@@ -174,12 +178,16 @@ public class PageCreators {
         widgets.add(new TextWidget(18, 12 + height, "manual.has.aspects"));
         height += 18;
         widgets.add(new AspectSlideShowWidget(18, 12 + height, itemStack));
-        newPages.add(new Page(itemStack.getUnlocalizedName().toLowerCase().replace(" ", ""), widgets, true, manualType).setParent().addItem(itemStack).addItems(getStacks(PestleAndMortarRecipe.getInput(itemStack))).setLocalizedPageName(itemStack.getDisplayName()));
+        Page itemPage = new Page(itemStack.getUnlocalizedName().toLowerCase().replace(" ", ""), widgets, true, manualType).setParent().addItem(itemStack).setLocalizedPageName(itemStack.getDisplayName());
+        if(!pestleAndMortarInput.isEmpty()) {
+        	itemPage.addItems(getStacks(pestleAndMortarInput));
+        }
+        newPages.add(itemPage);
         return newPages;
     }
 
-    private static ArrayList<ItemStack> getStacks(ItemStack input) {
-        ArrayList<ItemStack> stacks = new ArrayList<>();
+    private static List<ItemStack> getStacks(ItemStack input) {
+        List<ItemStack> stacks = NonNullList.create();
         if (input != null && !input.isEmpty() && input.getMetadata() == OreDictionary.WILDCARD_VALUE) {
             NonNullList<ItemStack> list = NonNullList.create();
             input.getItem().getSubItems(CreativeTabs.SEARCH, list);

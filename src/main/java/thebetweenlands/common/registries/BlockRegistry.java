@@ -106,6 +106,7 @@ import thebetweenlands.common.block.plant.BlockPlant;
 import thebetweenlands.common.block.plant.BlockPlantUnderwater;
 import thebetweenlands.common.block.plant.BlockPoisonIvy;
 import thebetweenlands.common.block.plant.BlockSaplingBetweenlands;
+import thebetweenlands.common.block.plant.BlockSaplingSpiritTree;
 import thebetweenlands.common.block.plant.BlockSundew;
 import thebetweenlands.common.block.plant.BlockSwampKelp;
 import thebetweenlands.common.block.plant.BlockSwampReed;
@@ -152,6 +153,7 @@ import thebetweenlands.common.block.terrain.BlockGenericStone;
 import thebetweenlands.common.block.terrain.BlockGiantRoot;
 import thebetweenlands.common.block.terrain.BlockHanger;
 import thebetweenlands.common.block.terrain.BlockHearthgroveLog;
+import thebetweenlands.common.block.terrain.BlockLeavesSpiritTree;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLogSap;
@@ -167,6 +169,9 @@ import thebetweenlands.common.block.terrain.BlockSilt;
 import thebetweenlands.common.block.terrain.BlockSlimyGrass;
 import thebetweenlands.common.block.terrain.BlockSludgyDirt;
 import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
+import thebetweenlands.common.block.terrain.BlockSpreadingRottenLog;
+import thebetweenlands.common.block.terrain.BlockSpreadingSludgyDirt;
+import thebetweenlands.common.block.terrain.BlockSpreadingDeath;
 import thebetweenlands.common.block.terrain.BlockStagnantWater;
 import thebetweenlands.common.block.terrain.BlockStalactite;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
@@ -179,6 +184,7 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.world.gen.feature.WorldGenSmallSpiritTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenRubberTree;
@@ -208,6 +214,7 @@ public class BlockRegistry {
     public static final Block MUD = new BlockMud();
     public static final Block PEAT = new BlockPeat();
     public static final Block SLUDGY_DIRT = new BlockSludgyDirt();
+    public static final Block SPREADING_SLUDGY_DIRT = new BlockSpreadingSludgyDirt();
     public static final Block SLIMY_DIRT = new BasicBlock(Material.GROUND)
             .setDefaultCreativeTab()
             .setHarvestLevel2("shovel", 0)
@@ -279,9 +286,11 @@ public class BlockRegistry {
     //TREES
     public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
     public static final Block LOG_ROTTEN_BARK = new BlockRottenLog();
+    public static final Block LOG_SPREADING_ROTTEN_BARK = new BlockSpreadingRottenLog();
     public static final Block LOG_RUBBER = new BlockRubberLog();
     public static final Block LOG_HEARTHGROVE = new BlockHearthgroveLog();
     public static final Block LOG_NIBBLETWIG = new BlockLogBetweenlands();
+    public static final Block LOG_SPIRIT_TREE = new BlockLogBetweenlands();
     public static final Block WEEDWOOD = new BasicBlock(Material.WOOD).setHarvestLevel2("axe", 0).setSoundType2(SoundType.WOOD).setHardness(2.0F);
     public static final Block LOG_SAP = new BlockLogSap();
     public static final Block SAPLING_WEEDWOOD = new BlockSaplingBetweenlands(new WorldGenWeedwoodTree());
@@ -289,6 +298,7 @@ public class BlockRegistry {
     public static final Block SAPLING_RUBBER = new BlockSaplingBetweenlands(new WorldGenRubberTree());
     public static final Block SAPLING_HEARTHGROVE = new BlockSaplingBetweenlands(new WorldGenHearthgroveTree());
     public static final Block SAPLING_NIBBLETWIG = new BlockSaplingBetweenlands(new WorldGenNibbletwigTree());
+    public static final Block SAPLING_SPIRIT_TREE = new BlockSaplingSpiritTree();
     public static final Block LEAVES_WEEDWOOD_TREE = new BlockTintedLeaves() {
     	@Override
     	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
@@ -319,6 +329,9 @@ public class BlockRegistry {
     		return Item.getItemFromBlock(BlockRegistry.SAPLING_NIBBLETWIG);
     	}
     };
+    public static final Block LEAVES_SPIRIT_TREE_TOP = new BlockLeavesSpiritTree(BlockLeavesSpiritTree.Type.TOP);
+    public static final Block LEAVES_SPIRIT_TREE_MIDDLE = new BlockLeavesSpiritTree(BlockLeavesSpiritTree.Type.MIDDLE);
+    public static final Block LEAVES_SPIRIT_TREE_BOTTOM = new BlockLeavesSpiritTree(BlockLeavesSpiritTree.Type.BOTTOM);
     //STRUCTURE
     public static final Block WEEDWOOD_PLANKS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(2.0F).setResistance(5.0F);
     public static final Block RUBBER_TREE_PLANKS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);

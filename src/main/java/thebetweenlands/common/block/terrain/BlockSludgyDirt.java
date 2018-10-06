@@ -71,6 +71,6 @@ public class BlockSludgyDirt extends Block {
 	@Override
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess iblockaccess, BlockPos pos, EnumFacing side) {
 		Block block = iblockaccess.getBlockState(pos.offset(side)).getBlock();
-		return block != BlockRegistry.SLUDGY_DIRT;
+		return block instanceof BlockSludgyDirt == false && block instanceof BlockSpreadingSludgyDirt == false;
 	}
 }

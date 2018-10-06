@@ -2,6 +2,7 @@ package thebetweenlands.common.herblore.book;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.translation.I18n;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.book.widgets.ManualWidgetBase;
@@ -9,11 +10,12 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class Page {
     public int pageNumber;
-    public ArrayList<ItemStack> pageItems = new ArrayList<>();
-    public ArrayList<IAspectType> pageAspects = new ArrayList<>();
+    public List<ItemStack> pageItems = NonNullList.create();
+    public List<IAspectType> pageAspects = new ArrayList<>();
 
     public String resourceLocation;
     public int xStartTexture = 0;
@@ -29,7 +31,7 @@ public class Page {
     public String unlocalizedPageName;
     public String localizedPageName;
 
-    public ArrayList<ManualWidgetBase> widgets = new ArrayList<>();
+    public List<ManualWidgetBase> widgets = new ArrayList<>();
     public boolean rightPage = false;
     public ManualCategory parentCategory;
     public boolean isParent = false;
@@ -42,7 +44,7 @@ public class Page {
      * @param isHidden   whether or not it should be shown without unlocking it
      * @param manualType the type of manual it is in. Either manualHL or manualGuideBook
      */
-    public Page(String pageName, ArrayList<ManualWidgetBase> widgets, boolean isHidden, Item manualType) {
+    public Page(String pageName, List<ManualWidgetBase> widgets, boolean isHidden, Item manualType) {
         this.widgets = widgets;
         this.pageName = I18n.translateToLocal("manual." + pageName + ".title");
         this.unlocalizedPageName = pageName;
@@ -98,7 +100,7 @@ public class Page {
      * @param items the items the page contains
      * @return this page
      */
-    public Page addItems(ArrayList<ItemStack> items) {
+    public Page addItems(List<ItemStack> items) {
         pageItems.addAll(items);
         return this;
     }

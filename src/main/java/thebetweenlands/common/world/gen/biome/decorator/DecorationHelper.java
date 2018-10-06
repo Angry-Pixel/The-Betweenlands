@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.terrain.BlockWisp;
+import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
@@ -45,10 +46,11 @@ import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTreeDead;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenRubberTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
 import thebetweenlands.util.CubicBezier;
 
 public class DecorationHelper {
@@ -115,7 +117,8 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_DEAD_TRUNK = new WorldGenGiantTreeDead();
 	public static final WorldGenerator GEN_MUD_STRUCTURES = new WorldGenMudStructures();
 	public static final WorldGenerator GEN_TAR_POOL_DUNGEON = new WorldGenTarPoolDungeon();
-
+	public static final WorldGenerator GEN_SPIRIT_TREE_STRUCTURE = new WorldGenSpiritTreeStructure();
+	
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
 	private static final CubicBezier THORNS_Y_CDF = new CubicBezier(1, 0.5F, 1, -0.25F);
@@ -854,6 +857,36 @@ public class DecorationHelper {
 		BlockPos pos = decorator.getRandomPos(10);
 		if(decorator.getWorld().isAirBlock(pos) && decorator.getWorld().getBlockState(pos.down()).getBlock() == BlockRegistry.MUD) {
 			return GEN_MUD_STRUCTURES.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+	
+	public static boolean generateSwamplandsClearingSpiritTree(DecoratorPositionProvider decorator) {
+		MutableBlockPos pos = new MutableBlockPos();
+		int checkRadius = 36;
+		for(int xo = 0; xo < 32; xo += 4) {
+			for(int zo = 0; zo < 32; zo += 4) {
+				Biome biomeN = decorator.getWorld().getBiome(pos.setPos(decorator.getX() + xo, decorator.getY(), decorator.getZ() + zo - checkRadius));
+				Biome biomeE = decorator.getWorld().getBiome(pos.setPos(decorator.getX() + xo + checkRadius, decorator.getY(), decorator.getZ() + zo));
+				Biome biomeS = decorator.getWorld().getBiome(pos.setPos(decorator.getX() + xo, decorator.getY(), decorator.getZ() + zo + checkRadius));
+				Biome biomeW = decorator.getWorld().getBiome(pos.setPos(decorator.getX() + xo - checkRadius, decorator.getY(), decorator.getZ() + zo));
+				if(biomeN == BiomeRegistry.SWAMPLANDS_CLEARING && biomeE == BiomeRegistry.SWAMPLANDS_CLEARING && biomeS == BiomeRegistry.SWAMPLANDS_CLEARING
+						&& biomeW == BiomeRegistry.SWAMPLANDS_CLEARING) {
+					pos.setPos(decorator.getX() + xo, decorator.getY(), decorator.getZ() + zo);
+					pos.setY(decorator.getWorld().getChunkFromBlockCoords(pos).getHeightValue(pos.getX() & 15, pos.getY() & 15));
+					BlockPos genPos = null;
+					for(int i = 0; i > -8; i--) {
+						if(SurfaceType.MIXED_GROUND.matches(decorator.getWorld().getBlockState(pos))) {
+							genPos = pos.toImmutable().up();
+							break;
+						}
+						pos.setY(pos.getY() - 1);
+					}
+					if(genPos != null) {
+						return GEN_SPIRIT_TREE_STRUCTURE.generate(decorator.getWorld(), decorator.getRand(), genPos);
+					}
+				}
+			}
 		}
 		return false;
 	}

@@ -36,8 +36,10 @@ import thebetweenlands.common.loot.EntityPropertyEventActive;
 import thebetweenlands.common.loot.EntityPropertyFrogType;
 import thebetweenlands.common.loot.EntityPropertyHasItem;
 import thebetweenlands.common.loot.EntityPropertyIsBossPeatMummy;
+import thebetweenlands.common.loot.EntityPropertyLootModifier;
 import thebetweenlands.common.loot.EntityPropertyPeatMummyShimmerstone;
 import thebetweenlands.common.loot.EntityPropertyPyradCharging;
+import thebetweenlands.common.loot.LootConditionKilledLootModifier;
 import thebetweenlands.common.loot.LootConditionEventActive;
 import thebetweenlands.common.loot.LootConditionOr;
 import thebetweenlands.util.FakeClientWorld;
@@ -79,7 +81,9 @@ public class LootTableRegistry {
     public static final ResourceLocation TERMITE = register("entities/termite");
     public static final ResourceLocation TOAD = register("entities/toad");
     public static final ResourceLocation WIGHT = register("entities/wight");
-
+    public static final ResourceLocation SPIRIT_TREE_FACE_SMALL = register("entities/spirit_tree_face_small");
+    public static final ResourceLocation SPIRIT_TREE_FACE_LARGE = register("entities/spirit_tree_face_large");
+    
     //BOSSES
     public static final ResourceLocation FORTRESS_BOSS = register("entities/fortress_boss");
     public static final ResourceLocation DREADFUL_PEAT_MUMMY = register("entities/dreadful_peat_mummy");
@@ -91,10 +95,12 @@ public class LootTableRegistry {
     public static final ResourceLocation ENTITY_PROPERTY_HAS_ITEM = register(new EntityPropertyHasItem.Serializer());
     public static final ResourceLocation ENTITY_PROPERTY_IS_BOSS_MUMMY = register(new EntityPropertyIsBossPeatMummy.Serializer());
     public static final ResourceLocation ENTITY_PROPERTY_IS_EVENT_ACTIVE = register(new EntityPropertyEventActive.Serializer());
-
+    public static final ResourceLocation ENTITY_PROPERTY_LOOT_MODIFIER = register(new EntityPropertyLootModifier.Serializer());
+    
     //LOOT CONDITIONS
     public static final ResourceLocation LOOT_CONDITION_OR = register(new LootConditionOr.Serializer());
     public static final ResourceLocation LOOT_CONDITION_EVENT_ACTIVE = register(new LootConditionEventActive.Serializer());
+    public static final ResourceLocation LOOT_CONDITION_ENTITY_LOOT_MODIFIER = register(new LootConditionKilledLootModifier.Serializer());
     
     public static void preInit() {
     	if(BetweenlandsConfig.DEBUG.debug) {

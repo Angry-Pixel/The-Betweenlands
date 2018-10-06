@@ -558,6 +558,56 @@
       "thebetweenlands:gas_cloud_death"
     ]
   },
+  "spirit_tree_face_large_spit": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_spit"
+    ]
+  },
+  "spirit_tree_face_small_spit": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_spit"
+    ]
+  },
+  "spirit_tree_face_large_emerge": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_large_emerge"
+    ]
+  },
+  "spirit_tree_face_small_emerge": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_small_emerge"
+    ]
+  },
+  "spirit_tree_face_suck": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_suck"
+    ]
+  },
+  "spirit_tree_face_spit_root_spikes": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_spit_root_spikes"
+    ]
+  },
+  "spirit_tree_spikes": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_spikes"
+    ]
+  },
+  "spirit_tree_spike_trap": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_spikes"
+    ]
+  },
+  "spirit_tree_spike_trap_emerge": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_spike_trap_emerge"
+    ]
+  },
+  "root_spike_particle_hit": {
+    "sounds": [
+      "thebetweenlands:root_spike_particle_hit"
+    ]
+  },
   "sorry": {
     "sounds": [
       "thebetweenlands:sorry"

@@ -26,7 +26,9 @@ import thebetweenlands.client.render.particle.entity.ParticleFish;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.client.render.particle.entity.ParticleLeafSwirl;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
+import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
 import thebetweenlands.client.render.particle.entity.ParticleSimple;
+import thebetweenlands.client.render.particle.entity.ParticleSpiritButterfly;
 import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
 import thebetweenlands.client.render.particle.entity.ParticleThem;
 import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
@@ -68,6 +70,7 @@ public enum BLParticles {
 	FLY(new ParticleBug.FlyFactory()),
 	MOTH(new ParticleMoth.Factory()),
 	MOSQUITO(new ParticleBug.MosquitoFactory()),
+	SPIRIT_BUTTERFLY(new ParticleSpiritButterfly.Factory()),
 	WATER_BUG(new ParticleBug.WaterBugFactory()),
 	FISH(new ParticleFish.Factory()),
 	WISP(new ParticleWisp.Factory()),
@@ -96,6 +99,7 @@ public enum BLParticles {
 			.getBaseArgsBuilder()
 			.withColor(0, 0, 0, 1.0F)
 			.buildBaseArgs()),
+	MOTION_ITEM_BREAKING(new ParticleBreakingBL.MotionFactory()),
 	TAR_BEAST_DRIP(new ParticleTarBeastDrip.Factory().getBaseArgsBuilder().withColor(0, 0, 0, 1).buildBaseArgs()),
 	CAVE_WATER_DRIP(new ParticleCaveWaterDrip.Factory()),
 	STEAM_PURIFIER(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
@@ -112,7 +116,9 @@ public enum BLParticles {
 	EMBER_2(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_2"))),
 	EMBER_3(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_3"))),
 	XP_PIECES(new ParticleXPPieces.Factory()),
-	DAMAGE_REDUCTION(new ParticleDamageReduction.Factory());
+	DAMAGE_REDUCTION(new ParticleDamageReduction.Factory()),
+	ROOT_SPIKE(new ParticleRootSpike.Factory()),
+	CORRUPTED(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/corrupted")).getBaseArgsBuilder().withDataBuilder().setData(2, 1.0F).buildData().buildBaseArgs());
 
 
 

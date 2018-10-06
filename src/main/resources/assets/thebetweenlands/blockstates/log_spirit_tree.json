@@ -1,0 +1,247 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "axis=y": [
+            {
+                "weight": 5,
+                "model": "thebetweenlands:log_spirit_tree"
+            },
+            {
+                "weight": 1,
+                "model": "thebetweenlands:log_spirit_tree_ends",
+                "submodel": {
+                    "rand": [
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1"
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1",
+                            "y": 90
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1",
+                            "y": 180
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1",
+                            "y": 270
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2"
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2",
+                            "y": 90
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2",
+                            "y": 180
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2",
+                            "y": 270
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3"
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3",
+                            "y": 90
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3",
+                            "y": 180
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3",
+                            "y": 270
+                        }
+                    ]
+                }
+            }
+        ],
+        "axis=z": [
+            {
+                "weight": 5,
+                "model": "thebetweenlands:log_spirit_tree",
+                "x": 90
+            },
+            {
+                "weight": 1,
+                "model": "thebetweenlands:log_spirit_tree_ends",
+                "submodel": {
+                    "rand": [
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1"
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1",
+                            "y": 90
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1",
+                            "y": 180
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1",
+                            "y": 270
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2"
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2",
+                            "y": 90
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2",
+                            "y": 180
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2",
+                            "y": 270
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3"
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3",
+                            "y": 90
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3",
+                            "y": 180
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3",
+                            "y": 270
+                        }
+                    ]
+                },
+                "x": 90
+            }
+        ],
+        "axis=x": [
+            {
+                "weight": 5,
+                "model": "thebetweenlands:log_spirit_tree",
+                "x": 90,
+                "y": 90
+            },
+            {
+                "weight": 1,
+                "model": "thebetweenlands:log_spirit_tree_ends",
+                "submodel": {
+                    "rand": [
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1"
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1",
+                            "y": 90
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1",
+                            "y": 180
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1",
+                            "y": 270
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2"
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2",
+                            "y": 90
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2",
+                            "y": 180
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2",
+                            "y": 270
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3"
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3",
+                            "y": 90
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3",
+                            "y": 180
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3",
+                            "y": 270
+                        }
+                    ]
+                },
+                "x": 90,
+                "y": 90
+            }
+        ],
+        "axis=none": [
+            {
+                "weight": 5,
+                "model": "thebetweenlands:log_spirit_tree"
+            },
+            {
+                "weight": 1,
+                "model": "thebetweenlands:log_spirit_tree_ends",
+                "submodel": {
+                    "rand": [
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1"
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1",
+                            "y": 90
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1",
+                            "y": 180
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_1",
+                            "y": 270
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2"
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2",
+                            "y": 90
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2",
+                            "y": 180
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_2",
+                            "y": 270
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3"
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3",
+                            "y": 90
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3",
+                            "y": 180
+                        },
+                        {
+                            "model": "thebetweenlands:log_spirit_tree_sides_carved_3",
+                            "y": 270
+                        }
+                    ]
+                }
+            }
+        ]
+	}
+}
