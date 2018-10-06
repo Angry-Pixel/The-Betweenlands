@@ -30,62 +30,66 @@ public class RenderRootGrabber extends Render<EntityRootGrabber> {
 	}
 
 	public void renderRoots(EntityRootGrabber entity, double x, double y, double z, float yaw, float partialTicks) {
-		GlStateManager.pushMatrix();
+		entity.initRootModels();
 
-		GlStateManager.disableCull();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
-		GlStateManager.translate(x, y + 1, z);
-
-		for(RootPart part : entity.modelParts) {
+		if(entity.modelParts != null) {
 			GlStateManager.pushMatrix();
 
-			this.bindEntityTexture(entity);
+			GlStateManager.disableCull();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-			GlStateManager.translate(part.x, part.y, part.z);
+			GlStateManager.translate(x, y + 1, z);
 
-			GlStateManager.rotate(part.yaw - 90, 0, 1, 0);
-			GlStateManager.rotate(part.pitch, 1, 0, 0);
-
-			GlStateManager.translate(0, entity.getRootYOffset(partialTicks), 0);
-
-			float animationTicks = entity.ticksExisted + partialTicks;
-			GlStateManager.rotate((float)Math.cos(animationTicks / 4) * 0.5F, 0, 0, 1);
-			GlStateManager.rotate((float)Math.sin(animationTicks / 5) * 0.8F, 1, 0, 0);
-
-			part.renderer.render();
-
-			int damage = MathHelper.ceil(entity.getDamage() * 10.0F);
-			if(damage > 0 && damage <= 10) {
-				this.bindTexture(DESTROY_STAGES[damage - 1]);
-
-				TextureAtlasSprite sprite = part.renderer.getSprite();
-
-				this.preRenderDamagedBlocks();
-
-				GlStateManager.matrixMode(GL11.GL_TEXTURE);
+			for(RootPart part : entity.modelParts) {
 				GlStateManager.pushMatrix();
-				GlStateManager.loadIdentity();
-				GlStateManager.scale(1.0F / (sprite.getMaxU() - sprite.getMinU()), 1.0F / (sprite.getMaxV() - sprite.getMinV()), 0);
-				GlStateManager.translate(-sprite.getMinU(), -sprite.getMinV(), 0);
-				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+
+				this.bindEntityTexture(entity);
+
+				GlStateManager.translate(part.x, part.y, part.z);
+
+				GlStateManager.rotate(part.yaw - 90, 0, 1, 0);
+				GlStateManager.rotate(part.pitch, 1, 0, 0);
+
+				GlStateManager.translate(0, entity.getRootYOffset(partialTicks), 0);
+
+				float animationTicks = entity.ticksExisted + partialTicks;
+				GlStateManager.rotate((float)Math.cos(animationTicks / 4) * 0.5F, 0, 0, 1);
+				GlStateManager.rotate((float)Math.sin(animationTicks / 5) * 0.8F, 1, 0, 0);
 
 				part.renderer.render();
 
-				GlStateManager.matrixMode(GL11.GL_TEXTURE);
-				GlStateManager.popMatrix();
-				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+				int damage = MathHelper.ceil(entity.getDamage() * 10.0F);
+				if(damage > 0 && damage <= 10) {
+					this.bindTexture(DESTROY_STAGES[damage - 1]);
 
-				this.postRenderDamagedBlocks();
+					TextureAtlasSprite sprite = part.renderer.getSprite();
+
+					this.preRenderDamagedBlocks();
+
+					GlStateManager.matrixMode(GL11.GL_TEXTURE);
+					GlStateManager.pushMatrix();
+					GlStateManager.loadIdentity();
+					GlStateManager.scale(1.0F / (sprite.getMaxU() - sprite.getMinU()), 1.0F / (sprite.getMaxV() - sprite.getMinV()), 0);
+					GlStateManager.translate(-sprite.getMinU(), -sprite.getMinV(), 0);
+					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+
+					part.renderer.render();
+
+					GlStateManager.matrixMode(GL11.GL_TEXTURE);
+					GlStateManager.popMatrix();
+					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+
+					this.postRenderDamagedBlocks();
+				}
+
+				GlStateManager.popMatrix();
 			}
 
+			GlStateManager.enableCull();
 			GlStateManager.popMatrix();
 		}
-
-		GlStateManager.enableCull();
-		GlStateManager.popMatrix();
 	}
 
 	private void preRenderDamagedBlocks() {

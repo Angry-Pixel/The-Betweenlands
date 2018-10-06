@@ -29,10 +29,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.SpikeRenderer;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
-import thebetweenlands.client.render.particle.entity.ParticleRootSpike.RootRenderer;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -57,16 +57,17 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 
 	protected boolean emergeSound = true;
 	protected boolean retractSound = true;
-	
+
 	@Nullable
 	protected EntityLivingBase grabbedEntity = null;
 
+	@Nullable
 	@SideOnly(Side.CLIENT)
 	public List<RootPart> modelParts;
 
 	@SideOnly(Side.CLIENT)
 	public static class RootPart {
-		public RootRenderer renderer;
+		public SpikeRenderer renderer;
 		public float x, y, z;
 		public float yaw, pitch;
 	}
@@ -75,11 +76,6 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		super(world);
 		this.setSize(2, 2);
 		this.noClip = true;
-
-		if(world.isRemote) {
-			this.modelParts = new ArrayList<>();
-			this.addRootModels();
-		}
 	}
 
 	@Override
@@ -112,26 +108,30 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	@SideOnly(Side.CLIENT)
-	protected void addRootModels() {
-		int rings = 2 + this.world.rand.nextInt(2);
+	public void initRootModels() {
+		if(this.modelParts == null) {
+			this.modelParts = new ArrayList<>();
 
-		for(int j = 0; j < rings; j++) {
-			float radius = (this.width - 0.5F) / rings * j;
-			int roots = 5 + this.world.rand.nextInt(5);
+			int rings = 2 + this.world.rand.nextInt(2);
 
-			for(int i = 0; i < roots; i++) {
-				float scale = 0.6F + this.rand.nextFloat() * 0.2F;
-				double angle = i * Math.PI * 2 / roots;
-				Vec3d offset = new Vec3d(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
-				RootRenderer renderer = new RootRenderer(3, scale * 0.5F, scale, this.rand.nextLong(), -scale * 0.5F * 1.5F, 0, -scale * 0.5F * 1.5F).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(ParticleRootSpike.TEXTURE.toString()));
-				RootPart part = new RootPart();
-				part.renderer = renderer;
-				part.x = (float)offset.x;
-				part.y = (float)offset.y;
-				part.z = (float)offset.z;
-				part.yaw = -(float)Math.toDegrees(angle);
-				part.pitch = 30.0F;
-				this.modelParts.add(part);
+			for(int j = 0; j < rings; j++) {
+				float radius = (this.width - 0.5F) / rings * j;
+				int roots = 5 + this.world.rand.nextInt(5);
+
+				for(int i = 0; i < roots; i++) {
+					float scale = 0.6F + this.rand.nextFloat() * 0.2F;
+					double angle = i * Math.PI * 2 / roots;
+					Vec3d offset = new Vec3d(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+					SpikeRenderer renderer = new SpikeRenderer(3, scale * 0.5F, scale, 1, this.rand.nextLong(), -scale * 0.5F * 1.5F, 0, -scale * 0.5F * 1.5F).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(ParticleRootSpike.SPRITE.toString()));
+					RootPart part = new RootPart();
+					part.renderer = renderer;
+					part.x = (float)offset.x;
+					part.y = (float)offset.y;
+					part.z = (float)offset.z;
+					part.yaw = -(float)Math.toDegrees(angle);
+					part.pitch = 30.0F;
+					this.modelParts.add(part);
+				}
 			}
 		}
 	}
@@ -231,7 +231,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		}
 
 		boolean retracting = this.dataManager.get(RETRACT);
-		
+
 		if(this.world.isRemote && (this.attackTicks <= 5 || retracting)) {
 			this.spawnBlockDust();
 			if(this.emergeSound && !retracting) {

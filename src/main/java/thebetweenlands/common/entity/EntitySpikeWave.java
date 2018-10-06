@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -29,10 +31,10 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.SpikeRenderer;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
-import thebetweenlands.client.render.particle.entity.ParticleRootSpike.RootRenderer;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnData {
@@ -44,21 +46,18 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 	public BlockPos origin;
 	public int delay;
 
+	@Nullable
 	@SideOnly(Side.CLIENT)
-	public Map<BlockPos, List<RootRenderer>> modelParts;
+	public Map<BlockPos, List<SpikeRenderer>> modelParts;
 
 	protected float attackDamage = 10.0F;
-	
+
 	public EntitySpikeWave(World world) {
 		super(world);
 		this.setSize(1, 1);
 		this.noClip = true;
-
-		if(world.isRemote) {
-			this.modelParts = new HashMap<>();
-		}
 	}
-	
+
 	public void setAttackDamage(float damage) {
 		this.attackDamage = damage;
 	}
@@ -81,27 +80,30 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 			this.blockEnclosingBounds = this.blockEnclosingBounds.union(aabb);
 		}
 		this.renderingBounds = this.blockEnclosingBounds.offset(this.posX - (this.origin.getX() + 0.5D), this.posY - this.origin.getY(), this.posZ - (this.origin.getZ() + 0.5D));
-
-		if(this.world.isRemote) {
-			this.addRootModels(pos);
-		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	protected void addRootModels(BlockPos pos) {
-		int models = 1 + this.rand.nextInt(2);
-		List<RootRenderer> renderers = new ArrayList<>();
-		for(int i = 0; i < models; i++) {
-			Vec3d offset = new Vec3d(
-					pos.getX() + this.rand.nextDouble() * 0.6D - 0.3D - this.posX,
-					pos.getY() + 0.25D - this.posY,
-					pos.getZ() + this.rand.nextDouble() * 0.6D - 0.3D - this.posZ
-					);
-			float scale = 0.4F + this.rand.nextFloat() * 0.2F;
-			RootRenderer renderer = new RootRenderer(2, scale * 0.5F, scale, this.rand.nextLong(), offset.x, offset.y, offset.z).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(ParticleRootSpike.TEXTURE.toString()));
-			renderers.add(renderer);
+	public void initRootModels() {
+		if(this.modelParts == null) {
+			this.modelParts = new HashMap<>();
+
+			for(BlockPos pos : this.positions) {
+				int models = 1 + this.rand.nextInt(2);
+				List<SpikeRenderer> renderers = new ArrayList<>();
+				for(int i = 0; i < models; i++) {
+					Vec3d offset = new Vec3d(
+							pos.getX() + this.rand.nextDouble() * 0.6D - 0.3D - this.posX,
+							pos.getY() + 0.25D - this.posY,
+							pos.getZ() + this.rand.nextDouble() * 0.6D - 0.3D - this.posZ
+							);
+					float scale = 0.4F + this.rand.nextFloat() * 0.2F;
+					SpikeRenderer renderer = new SpikeRenderer(2, scale * 0.5F, scale, 1, this.rand.nextLong(), offset.x, offset.y, offset.z).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(ParticleRootSpike.SPRITE.toString()));
+					renderers.add(renderer);
+				}
+
+				this.modelParts.put(pos, renderers);
+			}
 		}
-		this.modelParts.put(pos, renderers);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -248,7 +250,6 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 	public void readSpawnData(ByteBuf data) {
 		this.origin = BlockPos.fromLong(data.readLong());
 
-		this.modelParts.clear();
 		this.blockEnclosingBounds = null;
 		this.positions.clear();
 		int size = data.readInt();
@@ -277,7 +278,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 		if(this.positions.isEmpty()) {
 			this.addPosition(this.origin);
 		}
-		
+
 		this.attackDamage = nbt.getFloat("attackDamage");
 	}
 
@@ -291,7 +292,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 			blocks.appendTag(new NBTTagLong(pos.toLong()));
 		}
 		nbt.setTag("positions", blocks);
-		
+
 		nbt.setFloat("attackDamage", this.attackDamage);
 	}
 

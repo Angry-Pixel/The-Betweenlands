@@ -1,29 +1,91 @@
 package thebetweenlands.client.render.model.entity;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.ResourceLocation;
+import thebetweenlands.client.render.entity.RenderBoulderSprite;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
+import thebetweenlands.client.render.model.SpikeRenderer;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
+import thebetweenlands.common.lib.ModInfo;
 
 /**
  * BLBoulderSprite - TripleHeadedSheep
  * Created using Tabula 7.0.0
  */
 public class ModelBoulderSprite extends MowzieModelBase {
-	private static class StalactitesModel extends MowzieModelRenderer {
+	public static class StalactitesModel extends MowzieModelRenderer {
+		public static final ResourceLocation SPRITE_BOTTOM = new ResourceLocation(ModInfo.ID, "blocks/stalactite_bottom");
+		public static final ResourceLocation SPRITE_MID = new ResourceLocation(ModInfo.ID, "blocks/stalactite_middle");
+
+		private List<SpikeRenderer> stalactites;
+		private ResourceLocation texture;
+		private ResourceLocation prevTexture;
+
 		public StalactitesModel(ModelBase modelBase) {
 			super(modelBase);
 		}
 
+		public void setStalactites(@Nullable ResourceLocation texture, @Nullable List<SpikeRenderer> stalactites, @Nullable ResourceLocation prevTexture) {
+			this.texture = texture;
+			this.stalactites = stalactites;
+			this.prevTexture = prevTexture;
+		}
+
 		@Override
 		public void render(float scale) {
+			this.renderStalactites();
 		}
 
 		@Override
 		public void renderWithRotation(float scale) {
+			this.renderStalactites();
+		}
+
+		private void renderStalactites() {
+			if(this.stalactites != null && !this.stalactites.isEmpty()) {
+				Minecraft mc = Minecraft.getMinecraft();
+				TextureManager textureManager = mc.getTextureManager();
+
+				if(this.texture != null) {
+					textureManager.bindTexture(this.texture);
+				}
+
+				GlStateManager.pushMatrix();
+				GlStateManager.scale(-1, -1, 1);
+
+				Tessellator tessellator = Tessellator.getInstance();
+				BufferBuilder buffer = tessellator.getBuffer();
+
+				buffer.begin(GL11.GL_QUADS, this.stalactites.get(0).getFormat());
+
+				for(SpikeRenderer spike : this.stalactites) {
+					spike.upload(buffer);
+				}
+
+				tessellator.draw();
+
+				GlStateManager.popMatrix();
+
+				if(this.prevTexture != null) {
+					textureManager.bindTexture(this.prevTexture);
+				}
+			}
 		}
 	}
 
@@ -180,7 +242,12 @@ public class ModelBoulderSprite extends MowzieModelBase {
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+		EntityBoulderSprite sprite = (EntityBoulderSprite) entity;
+
+		sprite.initStalactiteModels();
+		this.stalactites.setStalactites(TextureMap.LOCATION_BLOCKS_TEXTURE, sprite.stalactites, RenderBoulderSprite.TEXTURE);
+
 		this.block_main.render(f5);
 	}
 

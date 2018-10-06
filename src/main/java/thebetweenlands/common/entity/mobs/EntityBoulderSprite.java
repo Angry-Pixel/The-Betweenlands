@@ -3,12 +3,17 @@ package thebetweenlands.common.entity.mobs;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -43,16 +48,19 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityCustomBlockCollisions;
+import thebetweenlands.client.render.model.SpikeRenderer;
+import thebetweenlands.client.render.model.entity.ModelBoulderSprite;
 import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler;
 import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler.BlockCollisionPredicate;
 import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler.EntityCollisionPredicate;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
-public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlockCollisions {
+public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlockCollisions, IEntityAdditionalSpawnData {
 	protected static final UUID ROLLING_ATTACK_MODIFIER_ATTRIBUTE_UUID = UUID.fromString("6c403225-c522-4d69-aa2c-e7c67463a8c7");
 
 	protected static final DataParameter<Float> ROLL_SPEED = EntityDataManager.createKey(EntityBoulderSprite.class, DataSerializers.FLOAT);
@@ -77,9 +85,16 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	protected int rollingDuration = 0;
 	protected Vec3d rollingDir = null;
 
+	protected long stalactitesSeed = 0;
+
+	@Nullable
+	@SideOnly(Side.CLIENT)
+	public List<SpikeRenderer> stalactites;
+
 	public EntityBoulderSprite(World worldIn) {
 		super(worldIn);
 		this.setSize(0.9F, 1.2F);
+		this.stalactitesSeed = worldIn.rand.nextLong();
 	}
 
 	@Override
@@ -121,6 +136,37 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		this.tasks.addTask(7, new AIFindRandomHideout(this, 8, 20));
 	}
 
+	@SideOnly(Side.CLIENT)
+	public void initStalactiteModels() {
+		if(this.stalactites == null) {
+			this.stalactites = new ArrayList<>();
+
+			Random seededRng = new Random();
+			seededRng.setSeed(this.stalactitesSeed);
+
+			TextureMap altas = Minecraft.getMinecraft().getTextureMapBlocks();
+
+			int models = 2 + seededRng.nextInt(5);
+			for(int i = 0; i < models; i++) {
+				Vec3d offset = new Vec3d(-0.08D + seededRng.nextDouble() * 0.5D - 0.25D, 0.5D, -0.15D + seededRng.nextDouble() * 0.5D - 0.25D);
+				float scale = (0.2F + seededRng.nextFloat() * 0.4F) * 0.6F;
+				SpikeRenderer renderer = new SpikeRenderer(1 + seededRng.nextInt(3), scale, scale, scale, seededRng.nextLong(), offset.x, offset.y, offset.z)
+						.build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, altas.getAtlasSprite(ModelBoulderSprite.StalactitesModel.SPRITE_BOTTOM.toString()), altas.getAtlasSprite(ModelBoulderSprite.StalactitesModel.SPRITE_MID.toString()));
+				this.stalactites.add(renderer);
+			}
+		}
+	}
+
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		buffer.writeLong(this.stalactitesSeed);
+	}
+
+	@Override
+	public void readSpawnData(ByteBuf buffer) {
+		this.stalactitesSeed = buffer.readLong();
+	}
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
@@ -144,6 +190,8 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 			nbt.setDouble("rollingDirY", this.rollingDir.y);
 			nbt.setDouble("rollingDirZ", this.rollingDir.z);
 		}
+
+		nbt.setLong("stalactitesSeed", this.stalactitesSeed);
 	}
 
 	@Override
@@ -167,6 +215,8 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		if(nbt.hasKey("rollingDirX", Constants.NBT.TAG_DOUBLE) && nbt.hasKey("rollingDirY", Constants.NBT.TAG_DOUBLE) && nbt.hasKey("rollingDirZ", Constants.NBT.TAG_DOUBLE)) {
 			this.rollingDir = new Vec3d(nbt.getDouble("rollingDirX"), nbt.getDouble("rollingDirY"), nbt.getDouble("rollingDirZ"));
 		}
+
+		this.stalactitesSeed = nbt.getLong("stalactitesSeed");
 	}
 
 	@Override

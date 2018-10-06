@@ -16,7 +16,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.particle.entity.ParticleRootSpike.RootRenderer;
+import thebetweenlands.client.render.model.SpikeRenderer;
 import thebetweenlands.common.entity.EntitySpikeWave;
 
 @SideOnly(Side.CLIENT)
@@ -33,30 +33,34 @@ public class RenderSpikeWave extends Render<EntitySpikeWave> {
 	}
 
 	public void renderSpikes(EntitySpikeWave entity, double x, double y, double z, float yaw, float partialTicks) {
-		this.bindEntityTexture(entity);
+		entity.initRootModels();
 
-		GlStateManager.pushMatrix();
+		if(entity.modelParts != null) {
+			this.bindEntityTexture(entity);
 
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.pushMatrix();
 
-		GlStateManager.translate(x, y, z);
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-		Tessellator tessellator = Tessellator.getInstance();
-		BufferBuilder buffer = tessellator.getBuffer();
+			GlStateManager.translate(x, y, z);
 
-		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
+			Tessellator tessellator = Tessellator.getInstance();
+			BufferBuilder buffer = tessellator.getBuffer();
 
-		for(List<RootRenderer> renderers : entity.modelParts.values()) {
-			for(RootRenderer renderer : renderers) {
-				renderer.upload(buffer);
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
+
+			for(List<SpikeRenderer> renderers : entity.modelParts.values()) {
+				for(SpikeRenderer renderer : renderers) {
+					renderer.upload(buffer);
+				}
 			}
+
+			tessellator.draw();
+
+			GlStateManager.popMatrix();
 		}
-
-		tessellator.draw();
-
-		GlStateManager.popMatrix();
 	}
 
 	@Override
