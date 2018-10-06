@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -19,18 +20,28 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.api.entity.IEntityCustomBlockCollisions;
+import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler;
+import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler.BlockCollisionPredicate;
+import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler.EntityCollisionPredicate;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
-public class EntityBoulderSprite extends EntityMob {
+public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlockCollisions {
 	protected static final DataParameter<Float> ROLL_SPEED = EntityDataManager.createKey(EntityBoulderSprite.class, DataSerializers.FLOAT);
 
+	//TODO Save
 	protected EnumFacing hideoutEntrance = null;
 	protected BlockPos hideout = null;
+
+	protected boolean isAiHiding = false;
 
 	private float prevRollAnimationInAirWeight = 0.0F;
 	private float prevRollAnimation = 0.0F;
@@ -40,6 +51,7 @@ public class EntityBoulderSprite extends EntityMob {
 	private float rollAnimation = 0.0F;
 	private float rollAnimationWeight = 0.0F;
 
+	//TODO Save
 	protected double rollingSpeed = 0;
 	protected int rollingTicks = 0;
 	protected int rollingAccelerationTime = 0;
@@ -65,16 +77,20 @@ public class EntityBoulderSprite extends EntityMob {
 
 	@Override
 	protected void initEntityAI() {
-		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
+		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
 
 		//TODO
-		this.tasks.addTask(0, new AIRollTowardsTarget(this));
-		this.tasks.addTask(1, new EntityAIAttackMelee(this, 1, false));
-		//this.tasks.addTask(0, new AIMoveToHideout(this, 1.0D));
+		this.tasks.addTask(0, new AIRollTowardsTargetFromHideout(this, 1.2D));
+		this.tasks.addTask(1, new AIRollTowardsTarget(this));
+		this.tasks.addTask(2, new EntityAIAttackMelee(this, 1, false));
+		this.tasks.addTask(3, new AIMoveToHideout(this, 1.0D));
+		this.tasks.addTask(4, new AIHide(this, 0.8D));
 	}
 
 	@Override
-	public void knockBack(Entity entityIn, float strength, double xRatio, double zRatio) { }
+	public void knockBack(Entity entityIn, float strength, double xRatio, double zRatio) {
+		super.knockBack(entityIn, strength, xRatio, zRatio);
+	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox() {
@@ -87,6 +103,23 @@ public class EntityBoulderSprite extends EntityMob {
 	}
 
 	@Override
+	public void getCustomCollisionBoxes(AxisAlignedBB aabb, List<AxisAlignedBB> collisionBoxes) {
+		collisionBoxes.clear();
+		final int floor = MathHelper.floor(aabb.minY) + 1;
+		CustomEntityBlockCollisionsHandler.getCollisionBoxes(this, aabb, EntityCollisionPredicate.ALL, new BlockCollisionPredicate() {
+			@Override
+			public boolean isColliding(Entity entity, AxisAlignedBB aabb, MutableBlockPos pos, IBlockState state) {
+				return !EntityBoulderSprite.this.isHiddenOrInWall() || pos.getY() < floor || !EntityBoulderSprite.this.isValidHideoutBlock(pos);
+			}
+		}, collisionBoxes);
+	}
+
+	@Override
+	public boolean isEntityInvulnerable(DamageSource source) {
+		return source == DamageSource.IN_WALL || super.isEntityInvulnerable(source);
+	}
+
+	@Override
 	public void onUpdate() {
 		double prevMotionX = this.motionX;
 		double prevMotionZ = this.motionZ;
@@ -94,14 +127,14 @@ public class EntityBoulderSprite extends EntityMob {
 		super.onUpdate();
 
 		if(!this.world.isRemote) {
+			//TODO
 			BlockPos checkPos = this.getPosition().add(this.rand.nextInt(12) - 6, 0, this.rand.nextInt(12) - 6);
 			if(this.getHideout() == null && !this.world.isAirBlock(checkPos)) {
 				this.setHideout(checkPos);
 			}
-
-			if(this.getHideout() != null && this.getHideout().distanceSqToCenter(this.posX, this.posY, this.posZ) <= 1.5) {
+			/*if(this.getHideout() != null && this.getHideout().distanceSqToCenter(this.posX, this.posY, this.posZ) <= 1.5) {
 				this.setHideout(null);
-			}
+			}*/
 
 			if(this.getAIMoveSpeed() > 0.3F && this.moveForward != 0) {
 				this.dataManager.set(ROLL_SPEED, 0.05F + (this.getAIMoveSpeed() - 0.3F) / 3.0F);
@@ -244,6 +277,10 @@ public class EntityBoulderSprite extends EntityMob {
 		return this.prevRollAnimationInAirWeight + (this.rollAnimationInAirWeight - this.prevRollAnimationInAirWeight) * partialTicks;
 	}
 
+	public boolean isHiddenOrInWall() {
+		return this.isAiHiding || this.isEntityInsideOpaqueBlock();
+	}
+
 	public void setHideout(@Nullable BlockPos pos) {
 		this.hideout = pos;
 	}
@@ -262,7 +299,7 @@ public class EntityBoulderSprite extends EntityMob {
 		return this.hideoutEntrance;
 	}
 
-	protected boolean isValidHideout(BlockPos pos) {
+	protected boolean isValidHideoutBlock(BlockPos pos) {
 		return SurfaceType.UNDERGROUND.matches(this.world.getBlockState(pos));
 	}
 
@@ -280,7 +317,7 @@ public class EntityBoulderSprite extends EntityMob {
 		@Override
 		public boolean shouldExecute() {
 			if(this.cooldown-- <= 0) {
-				return this.entity.getAttackTarget() != null && this.entity.getRollingTicks() <= 0 && this.entity.onGround && this.entity.getAttackTarget().isEntityAlive() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
+				return this.entity.isEntityAlive() && this.entity.getAttackTarget() != null && this.entity.getRollingTicks() <= 0 && this.entity.onGround && this.entity.getAttackTarget().isEntityAlive() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
 			}
 			return false;
 		}
@@ -289,7 +326,7 @@ public class EntityBoulderSprite extends EntityMob {
 		public void startExecuting() {
 			Entity target = this.entity.getAttackTarget();
 			this.rollDir = new Vec3d(target.posX - this.entity.posX, 0, target.posZ - this.entity.posZ).normalize();
-			this.entity.startRolling(160, 30, this.rollDir, 1.5D);
+			this.entity.startRolling(160, 35, this.rollDir, 1.8D);
 		}
 
 		@Override
@@ -344,7 +381,7 @@ public class EntityBoulderSprite extends EntityMob {
 
 		@Override
 		public boolean shouldExecute() {
-			if(this.entity.isEntityAlive() && this.entity.getHideout() != null) {
+			if(this.entity.isEntityAlive() && this.entity.getHideout() != null && !this.entity.isHiddenOrInWall()) {
 				EnumFacing entrance;
 				if(this.entity.getHideoutEntrance() == null) {
 					if(this.potentialEntrances.isEmpty()) {
@@ -466,6 +503,104 @@ public class EntityBoulderSprite extends EntityMob {
 		@Override
 		public boolean shouldContinueExecuting() {
 			return this.entity.isEntityAlive() && this.entity.getHideout() != null && this.targetHideout != null && this.targetHideout.equals(this.entity.getHideout()) && this.pathingFails < 3 && !this.finished;
+		}
+	}
+
+	protected static class AIHide extends EntityAIBase {
+		protected final EntityBoulderSprite entity;
+		protected double speed;
+
+		protected BlockPos hideout;
+		protected EnumFacing entrance;
+
+		public AIHide(EntityBoulderSprite entity, double speed) {
+			this.entity = entity;
+			this.speed = speed;
+			this.setMutexBits(3);
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			if(this.entity.isEntityAlive() && this.entity.getHideout() != null && this.entity.getHideoutEntrance() != null && this.entity.isValidHideoutBlock(this.entity.getHideout())) {
+				BlockPos entrance = this.entity.getHideout().offset(this.entity.getHideoutEntrance());
+				if(entrance.distanceSqToCenter(this.entity.posX, this.entity.posY, this.entity.posZ) <= 0.33D) {
+					this.hideout = this.entity.getHideout();
+					this.entrance = this.entity.getHideoutEntrance();
+					return true;
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public void updateTask() {
+			this.entity.isAiHiding = true;
+			BlockPos hideoutPos = this.hideout.offset(this.entrance.getOpposite());
+			double dstSq = hideoutPos.distanceSqToCenter(this.entity.posX, this.entity.posY, this.entity.posZ);
+			if(dstSq >= 0.5D) {
+				this.entity.getMoveHelper().setMoveTo(hideoutPos.getX() + 0.5D, hideoutPos.getY(), hideoutPos.getZ() + 0.5D, this.speed);
+			}
+		}
+
+		@Override
+		public void resetTask() {
+			this.entity.isAiHiding = false;
+			this.entity.setHideout(null);
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return this.entity.isEntityAlive() && this.entity.getHideout() == this.hideout && this.hideout.getY() >= MathHelper.floor(this.entity.posY) && this.entity.isValidHideoutBlock(this.hideout);
+		}
+	}
+
+	protected static class AIRollTowardsTargetFromHideout extends EntityAIBase {
+		protected final EntityBoulderSprite entity;
+
+		protected double rollSpeed;
+		protected Vec3d rollDir;
+		protected boolean finished = false;
+
+		public AIRollTowardsTargetFromHideout(EntityBoulderSprite entity, double rollSpeed) {
+			this.entity = entity;
+			this.rollSpeed = rollSpeed;
+			this.setMutexBits(3);
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return this.entity.isHiddenOrInWall() && this.entity.isEntityAlive() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && Math.abs(this.entity.posY - this.entity.getAttackTarget().posY) <= 2;
+		}
+
+		@Override
+		public void startExecuting() {
+			this.finished = false;
+		}
+
+		@Override
+		public void updateTask() {
+			System.out.println("UPDATE " + this.entity.getRollingTicks()); //TODO
+
+			Entity target = this.entity.getAttackTarget();
+
+			if(this.entity.getRollingTicks() <= 0) {
+				if(!this.shouldExecute()) {
+					this.finished = true;
+				} else {
+					this.rollDir = new Vec3d(target.posX - this.entity.posX, 0, target.posZ - this.entity.posZ).normalize();
+					this.entity.startRolling(80, 10, this.rollDir, this.rollSpeed);
+				}
+			} else if(this.rollDir != null) {
+				double overshoot = this.rollDir.dotProduct(new Vec3d(this.entity.posX - target.posX, 0, this.entity.posZ - target.posZ));
+				if(overshoot >= 2) {
+					this.entity.stopRolling();
+				}
+			}
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return !this.finished;
 		}
 	}
 }
