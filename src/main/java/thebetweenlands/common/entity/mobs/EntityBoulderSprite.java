@@ -9,8 +9,11 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -19,6 +22,7 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
@@ -35,6 +39,12 @@ public class EntityBoulderSprite extends EntityMob {
 	private float rollAnimationSpeed = 0.0F;
 	private float rollAnimation = 0.0F;
 	private float rollAnimationWeight = 0.0F;
+
+	protected double rollingSpeed = 0;
+	protected int rollingTicks = 0;
+	protected int rollingAccelerationTime = 0;
+	protected int rollingDuration = 0;
+	protected Vec3d rollingDir = null;
 
 	public EntityBoulderSprite(World worldIn) {
 		super(worldIn);
@@ -55,8 +65,12 @@ public class EntityBoulderSprite extends EntityMob {
 
 	@Override
 	protected void initEntityAI() {
+		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
+
 		//TODO
-		this.tasks.addTask(0, new AIMoveToHideout(this, 1.0D));
+		this.tasks.addTask(0, new AIRollTowardsTarget(this));
+		this.tasks.addTask(1, new EntityAIAttackMelee(this, 1, false));
+		//this.tasks.addTask(0, new AIMoveToHideout(this, 1.0D));
 	}
 
 	@Override
@@ -64,12 +78,12 @@ public class EntityBoulderSprite extends EntityMob {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox() {
-		return this.getEntityBoundingBox();
+		return this.isRolling() ? null : this.getEntityBoundingBox();
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entityIn) {
-		return this.getEntityBoundingBox();
+		return this.isRolling() ? null : this.getEntityBoundingBox();
 	}
 
 	@Override
@@ -89,7 +103,7 @@ public class EntityBoulderSprite extends EntityMob {
 				this.setHideout(null);
 			}
 
-			if(this.getAIMoveSpeed() > 0.3F) {
+			if(this.getAIMoveSpeed() > 0.3F && this.moveForward != 0) {
 				this.dataManager.set(ROLL_SPEED, 0.05F + (this.getAIMoveSpeed() - 0.3F) / 3.0F);
 			} else {
 				this.dataManager.set(ROLL_SPEED, 0.0F);
@@ -106,7 +120,7 @@ public class EntityBoulderSprite extends EntityMob {
 
 				this.move(MoverType.SELF, prevMotionX, 0, 0);
 
-				boolean rx = Math.abs(this.posX - px) < Math.abs(prevMotionX) / 2.0D;
+				boolean cx = Math.abs(this.posX - px) < Math.abs(prevMotionX) / 2.0D;
 
 				this.onGround = pg;
 				this.motionX = pmx;
@@ -118,7 +132,7 @@ public class EntityBoulderSprite extends EntityMob {
 
 				this.move(MoverType.SELF, 0, 0, prevMotionZ);
 
-				boolean rz = Math.abs(this.posZ - pz) < Math.abs(prevMotionZ) / 2.0D;
+				boolean cz = Math.abs(this.posZ - pz) < Math.abs(prevMotionZ) / 2.0D;
 
 				this.onGround = pg;
 				this.motionX = pmx;
@@ -128,19 +142,23 @@ public class EntityBoulderSprite extends EntityMob {
 				this.posY = py;
 				this.posZ = pz;
 
-				if(this.onGround) this.motionY += Math.min(Math.sqrt(prevMotionX * prevMotionX + prevMotionZ * prevMotionZ) * 3, 0.7F);
-				if(rx) this.motionX -= prevMotionX * 6;
-				if(rz) this.motionZ -= prevMotionZ * 6;
-				if(this.onGround || rx || rz) this.velocityChanged = true;
-
-				//TODO
-				/*if(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ) <= 0.1D) {
-					//Stop rolling
-				}*/
+				this.onRollIntoWall(cx, cz, prevMotionX, prevMotionZ);
 			}
 
-			//TODO
-			this.getMoveHelper().setMoveTo(this.posX + 1, this.posY, this.posZ, (Math.sin(this.ticksExisted / 40.0D) + 1.0D) * 0.8D + 0.8D);
+			if(this.rollingTicks > 0 && this.rollingDir != null) {
+				double speed;
+				if(this.rollingDuration - this.rollingTicks < this.rollingAccelerationTime) {
+					speed = 0.5D + (this.rollingSpeed - 0.5D) / this.rollingAccelerationTime * (this.rollingDuration - this.rollingTicks);
+				} else if(this.rollingTicks < this.rollingAccelerationTime) {
+					speed = 0.5D + (this.rollingSpeed - 0.5D) / this.rollingAccelerationTime * this.rollingTicks;
+				} else {
+					speed = this.rollingSpeed;
+				}
+
+				this.getMoveHelper().setMoveTo(this.posX + this.rollingDir.x, this.posY, this.posZ + this.rollingDir.z, speed);
+
+				this.rollingTicks--;
+			}
 		} else {
 			if(this.isEntityAlive() && this.isRolling()) {
 				this.setRollSpeed(this.dataManager.get(ROLL_SPEED));
@@ -148,6 +166,31 @@ public class EntityBoulderSprite extends EntityMob {
 
 			this.updateRollAnimationState();
 		}
+	}
+
+	protected void onRollIntoWall(boolean cx, boolean cz, double mx, double mz) {
+		if(this.onGround) this.motionY += Math.min(Math.sqrt(mx * mx + mz * mz) * 3, 0.7F);
+		if(cx) this.motionX -= mx * 4;
+		if(cz) this.motionZ -= mz * 4;
+		if(this.onGround || cx || cz) this.velocityChanged = true;
+
+		this.stopRolling();
+	}
+
+	public void startRolling(int duration, int accelerationTime, Vec3d dir, double rollingSpeed) {
+		this.rollingTicks = duration;
+		this.rollingAccelerationTime = accelerationTime;
+		this.rollingDuration = duration;
+		this.rollingDir = dir;
+		this.rollingSpeed = rollingSpeed + 1.5D;
+	}
+
+	public int getRollingTicks() {
+		return this.rollingTicks;
+	}
+
+	public void stopRolling() {
+		this.rollingTicks = Math.min(this.rollingAccelerationTime, this.rollingTicks);
 	}
 
 	public boolean isRolling() {
@@ -221,6 +264,54 @@ public class EntityBoulderSprite extends EntityMob {
 
 	protected boolean isValidHideout(BlockPos pos) {
 		return SurfaceType.UNDERGROUND.matches(this.world.getBlockState(pos));
+	}
+
+	protected static class AIRollTowardsTarget extends EntityAIBase {
+		protected final EntityBoulderSprite entity;
+
+		protected int cooldown = 18;
+		protected Vec3d rollDir;
+
+		public AIRollTowardsTarget(EntityBoulderSprite entity) {
+			this.entity = entity;
+			this.setMutexBits(3);
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			if(this.cooldown-- <= 0) {
+				return this.entity.getAttackTarget() != null && this.entity.getRollingTicks() <= 0 && this.entity.onGround && this.entity.getAttackTarget().isEntityAlive() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
+			}
+			return false;
+		}
+
+		@Override
+		public void startExecuting() {
+			Entity target = this.entity.getAttackTarget();
+			this.rollDir = new Vec3d(target.posX - this.entity.posX, 0, target.posZ - this.entity.posZ).normalize();
+			this.entity.startRolling(160, 30, this.rollDir, 1.5D);
+		}
+
+		@Override
+		public void resetTask() {
+			this.cooldown = 20 + this.entity.getRNG().nextInt(26);
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			//Keep task active while rolling to block other movement tasks
+			if(this.entity.getRollingTicks() > 0) {
+				Entity target = this.entity.getAttackTarget();
+				if(target != null) {
+					double overshoot = this.rollDir.dotProduct(new Vec3d(this.entity.posX - target.posX, 0, this.entity.posZ - target.posZ));
+					if(overshoot >= 2) {
+						this.entity.stopRolling();
+					}
+				}
+				return true;
+			}
+			return false;
+		}
 	}
 
 	protected static class AIMoveToHideout extends EntityAIBase {
