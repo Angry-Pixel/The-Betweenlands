@@ -3,12 +3,14 @@ package thebetweenlands.common.entity.mobs;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -16,9 +18,13 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemPickaxe;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -26,6 +32,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
@@ -46,6 +53,8 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
 public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlockCollisions {
+	protected static final UUID ROLLING_ATTACK_MODIFIER_ATTRIBUTE_UUID = UUID.fromString("6c403225-c522-4d69-aa2c-e7c67463a8c7");
+
 	protected static final DataParameter<Float> ROLL_SPEED = EntityDataManager.createKey(EntityBoulderSprite.class, DataSerializers.FLOAT);
 
 	protected EnumFacing hideoutEntrance = null;
@@ -82,8 +91,10 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(28);
+		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4);
 	}
 
 	@Override
@@ -244,6 +255,18 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	}
 
 	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		EntityLivingBase attacker = source.getImmediateSource() instanceof EntityLivingBase ? (EntityLivingBase)source.getImmediateSource() : null;
+		if(attacker != null && attacker.getActiveHand() != null) {
+			ItemStack item = attacker.getHeldItem(attacker.getActiveHand());
+			if(!item.isEmpty() && item.getItem() instanceof ItemPickaxe) {
+				amount *= 3.0F;
+			}
+		}
+		return super.attackEntityFrom(source, amount);
+	}
+
+	@Override
 	public boolean isEntityInvulnerable(DamageSource source) {
 		return source == DamageSource.IN_WALL || super.isEntityInvulnerable(source);
 	}
@@ -256,42 +279,68 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		super.onUpdate();
 
 		if(!this.world.isRemote) {
+			if(this.getHideout() != null && !this.isValidHideoutBlock(this.getHideout())) {
+				this.setHideout(null);
+			}
+
 			if(this.getAIMoveSpeed() > 0.3F && this.moveForward != 0) {
 				this.dataManager.set(ROLL_SPEED, 0.05F + (this.getAIMoveSpeed() - 0.3F) / 3.0F);
 			} else {
 				this.dataManager.set(ROLL_SPEED, 0.0F);
 			}
 
-			if(this.collidedHorizontally && this.isRolling()) {
-				boolean pg = this.onGround;
-				double pmx = this.motionX;
-				double pmy = this.motionY;
-				double pmz = this.motionZ;
-				double px = this.posX;
-				double py = this.posY;
-				double pz = this.posZ;
+			IAttributeInstance attackAttribute = this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 
-				this.move(MoverType.SELF, MathHelper.clamp(prevMotionX, -4, 4), 0, 0);
+			if(this.isRolling()) {
+				if(this.collidedHorizontally) {
+					boolean pg = this.onGround;
+					double pmx = this.motionX;
+					double pmy = this.motionY;
+					double pmz = this.motionZ;
+					double px = this.posX;
+					double py = this.posY;
+					double pz = this.posZ;
 
-				boolean cx = Math.abs(this.posX - px) < Math.abs(MathHelper.clamp(prevMotionX, -4, 4)) / 2.0D;
+					this.move(MoverType.SELF, MathHelper.clamp(prevMotionX, -4, 4), 0, 0);
 
-				this.onGround = pg;
-				this.motionX = pmx;
-				this.motionY = pmy;
-				this.motionZ = pmz;
-				this.setPosition(px, py, pz);
+					boolean cx = Math.abs(this.posX - px) < Math.abs(MathHelper.clamp(prevMotionX, -4, 4)) / 2.0D;
 
-				this.move(MoverType.SELF, 0, 0, MathHelper.clamp(prevMotionZ, -4, 4));
+					this.onGround = pg;
+					this.motionX = pmx;
+					this.motionY = pmy;
+					this.motionZ = pmz;
+					this.setPosition(px, py, pz);
 
-				boolean cz = Math.abs(this.posZ - pz) < Math.abs(MathHelper.clamp(prevMotionZ, -4, 4)) / 2.0D;
+					this.move(MoverType.SELF, 0, 0, MathHelper.clamp(prevMotionZ, -4, 4));
 
-				this.onGround = pg;
-				this.motionX = pmx;
-				this.motionY = pmy;
-				this.motionZ = pmz;
-				this.setPosition(px, py, pz);
+					boolean cz = Math.abs(this.posZ - pz) < Math.abs(MathHelper.clamp(prevMotionZ, -4, 4)) / 2.0D;
 
-				this.onRollIntoWall(cx, cz, MathHelper.clamp(prevMotionX, -4, 4), MathHelper.clamp(prevMotionZ, -4, 4));
+					this.onGround = pg;
+					this.motionX = pmx;
+					this.motionY = pmy;
+					this.motionZ = pmz;
+					this.setPosition(px, py, pz);
+
+					this.onRollIntoWall(cx, cz, MathHelper.clamp(prevMotionX, -4, 4), MathHelper.clamp(prevMotionZ, -4, 4));
+				}
+
+				attackAttribute.removeModifier(ROLLING_ATTACK_MODIFIER_ATTRIBUTE_UUID);
+				attackAttribute.applyModifier(new AttributeModifier(ROLLING_ATTACK_MODIFIER_ATTRIBUTE_UUID, "Rolling attack modifier", Math.min(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ) * 20.0F, 10.0F), 0));
+
+				Vec3d motionDir = new Vec3d(this.motionX, 0, this.motionZ).normalize();
+				List<Entity> collidingEntities = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.35D, 0, 0.35D), EntitySelectors.getTeamCollisionPredicate(this));
+				for(Entity collidingEntity : collidingEntities) {
+					if(collidingEntity.hurtResistantTime <= 0) {
+						double dot = motionDir.dotProduct(collidingEntity.getPositionVector().subtract(this.getPositionVector()));
+						if(dot >= -0.5D && dot <= Math.sqrt(this.width * this.width) * 0.5D) {
+							if(this.attackEntityAsMob(collidingEntity) && collidingEntity instanceof EntityLivingBase) {
+								((EntityLivingBase) collidingEntity).knockBack(this, (float) Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ) * 3.0F, -this.motionX, -this.motionZ);
+							}
+						}
+					}
+				}
+			} else {
+				attackAttribute.removeModifier(ROLLING_ATTACK_MODIFIER_ATTRIBUTE_UUID);
 			}
 
 			if(this.rollingTicks > 0 && this.rollingDir != null) {
@@ -318,17 +367,21 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 			if(this.onGround) {
 				double particleTiming = 0.75D;
 				if(this.prevRollAnimation % 1 < particleTiming && this.rollAnimation % 1 >= particleTiming) {
-					int stateId = Block.getStateId(this.world.getBlockState(this.getPosition().down()));
-					int betweenstoneId = Block.getStateId(BlockRegistry.BETWEENSTONE.getDefaultState());
-					for(int i = 0; i < 28; i++) {
-						double dx = this.rand.nextDouble() - 0.5D;
-						double dz = this.rand.nextDouble() - 0.5D;
-						this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + this.motionX + dx, this.posY - 0.2D, this.posZ + this.motionZ + dz, dx * 0.3D, 0.3D, dz * 0.3D, stateId);
-					}
-					for(int i = 0; i < 12; i++) {
-						double dx = this.rand.nextDouble() - 0.5D;
-						double dz = this.rand.nextDouble() - 0.5D;
-						this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + this.motionX + dx, this.posY - 0.2D, this.posZ + this.motionZ + dz, dx * 0.3D, 0.3D, dz * 0.3D, betweenstoneId);
+					BlockPos posBelow = this.getPosition().down();
+					IBlockState stateBelow = this.world.getBlockState(posBelow);
+					if(!stateBelow.getBlock().isAir(stateBelow, this.world, posBelow)) {
+						int stateId = Block.getStateId(stateBelow);
+						int betweenstoneId = Block.getStateId(BlockRegistry.BETWEENSTONE.getDefaultState());
+						for(int i = 0; i < 28; i++) {
+							double dx = this.rand.nextDouble() - 0.5D;
+							double dz = this.rand.nextDouble() - 0.5D;
+							this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + this.motionX + dx, this.posY - 0.2D, this.posZ + this.motionZ + dz, dx * 0.3D, 0.3D, dz * 0.3D, stateId);
+						}
+						for(int i = 0; i < 12; i++) {
+							double dx = this.rand.nextDouble() - 0.5D;
+							double dz = this.rand.nextDouble() - 0.5D;
+							this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + this.motionX + dx, this.posY - 0.2D, this.posZ + this.motionZ + dz, dx * 0.3D, 0.3D, dz * 0.3D, betweenstoneId);
+						}
 					}
 				}
 			}
@@ -351,9 +404,33 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 				this.motionZ -= mz * 4;
 				this.velocityChanged = true;
 			}
+
+			if(cx) {
+				this.bumpWall(EnumFacing.getFacingFromVector((float) mx, 0, 0));
+			}
+
+			if(cz) {
+				this.bumpWall(EnumFacing.getFacingFromVector(0, 0, (float) mz));
+			}
 		}
 
 		this.stopRolling();
+	}
+
+	protected void bumpWall(EnumFacing dir) {
+		for(int so = -1; so <= 1; so++) {
+			for(int yo = 0; yo <= 1; yo++) {
+				BlockPos pos = this.getPosition().offset(dir).add(dir.getFrontOffsetX() == 0 ? so : 0, yo, dir.getFrontOffsetZ() == 0 ? so : 0);
+				if(this.world.isAirBlock(pos.offset(dir.getOpposite()))) {
+					IBlockState hitState = this.world.getBlockState(pos);
+					float hardness = hitState.getBlockHardness(this.world, pos);
+					if(!hitState.getBlock().isAir(hitState, this.world, pos) && hardness >= 0 && hardness <= 2.5F && this.rand.nextInt(yo + so + 2) == 0) {
+						this.world.playEvent(2001, pos, Block.getStateId(hitState));
+						this.world.setBlockToAir(pos);
+					}
+				}
+			}
+		}
 	}
 
 	public void startRolling(int duration, int accelerationTime, int decelerationTime, Vec3d dir, double rollingSpeed) {
@@ -765,7 +842,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 			this.entity = entity;
 			this.range = range;
 			this.chance = chance;
-			this.setMutexBits(3 | 0b10000);
+			this.setMutexBits(0b10000);
 		}
 
 		@Override

@@ -1,5 +1,6 @@
 package thebetweenlands.client.render.model.entity;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,6 +13,20 @@ import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
  * Created using Tabula 7.0.0
  */
 public class ModelBoulderSprite extends MowzieModelBase {
+	private static class StalactitesModel extends MowzieModelRenderer {
+		public StalactitesModel(ModelBase modelBase) {
+			super(modelBase);
+		}
+
+		@Override
+		public void render(float scale) {
+		}
+
+		@Override
+		public void renderWithRotation(float scale) {
+		}
+	}
+
 	public MowzieModelRenderer block_main;
 	public MowzieModelRenderer brow1;
 	public MowzieModelRenderer nosebridge;
@@ -32,6 +47,8 @@ public class ModelBoulderSprite extends MowzieModelBase {
 	public MowzieModelRenderer lebushybeard_sideright;
 	public MowzieModelRenderer actualbush;
 	public MowzieModelRenderer extrabush;
+
+	public StalactitesModel stalactites;
 
 	public ModelBoulderSprite() {
 		this.textureWidth = 128;
@@ -132,9 +149,11 @@ public class ModelBoulderSprite extends MowzieModelBase {
 		this.lebushybeard.addChild(this.lebushybeard_sideright);
 		this.block_main.addChild(this.brow1);
 
-
+		this.stalactites = new StalactitesModel(this);
+		this.block_main.addChild(stalactites);
 
 		parts = new MowzieModelRenderer[]{
+				stalactites,
 				block_main,
 				brow1,
 				nosebridge,
