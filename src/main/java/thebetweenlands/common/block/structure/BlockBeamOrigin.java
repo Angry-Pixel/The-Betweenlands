@@ -112,13 +112,12 @@ public class BlockBeamOrigin extends BlockDirectional implements ITileEntityProv
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (world.isRemote)
 			return true;
-		state = state.cycleProperty(FACING);
-		world.setBlockState(pos, state, 3);
 		if (world.getTileEntity(pos) instanceof TileEntityBeamOrigin) {
 			TileEntityBeamOrigin tile = (TileEntityBeamOrigin) world.getTileEntity(pos);
-			//do something here
+			tile.deactivateBlock();
 		}
-			
+		state = state.cycleProperty(FACING);
+		world.setBlockState(pos, state, 3);
 		return true;
 	}
 

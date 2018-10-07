@@ -17,13 +17,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockEnergyBarrier;
-import thebetweenlands.util.AABBDerpHelper;
 
 public class TileEntityBeamRelay extends TileEntity implements ITickable {
 	public boolean active;
 	public boolean showRenderBox;
 	float xPos, yPos, zPos;
 	float xNeg, yNeg, zNeg;
+	public boolean in_down, in_up, in_north, in_south, in_west, in_east;
+
 
 	public TileEntityBeamRelay() {
 		super();
@@ -44,10 +45,85 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 		}
 
 		if (!getWorld().isRemote) {
-			checkBlockPower();
-			//if (active)
-			//	setAABBWithModifiers();
+			setAABBWithModifiers();
+			if (active)
+				activateBlock();
+			else
+				deactivateBlock();
 		}
+	}
+
+	public void activateBlock() {
+		IBlockState state = getWorld().getBlockState(getPos());
+		EnumFacing facing = state.getValue(BlockBeamRelay.FACING);
+		List<AxisAlignedBB> list = getWorld().getCollisionBoxes(null, getAABBWithModifiers());
+		for (int i = 0; i < list.size(); i++) {
+			AxisAlignedBB targetbox = list.get(i);
+			if (targetbox != null) {
+				BlockPos targetPos = new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ);
+				IBlockState stateofTarget = getWorld().getBlockState(targetPos);
+				if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
+					if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {
+						TileEntityBeamRelay targetTile = (TileEntityBeamRelay) getWorld().getTileEntity(targetPos);
+						targetTile.setTargetIncomingBeam(facing.getOpposite(), true);
+						if (!getWorld().getBlockState(targetPos).getValue(BlockBeamRelay.POWERED)) {
+							stateofTarget = stateofTarget.cycleProperty(BlockBeamRelay.POWERED);
+							getWorld().setBlockState(targetPos, stateofTarget, 3);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public void deactivateBlock() {
+		IBlockState state = getWorld().getBlockState(getPos());
+		EnumFacing facing = state.getValue(BlockBeamRelay.FACING);
+		List<AxisAlignedBB> list = getWorld().getCollisionBoxes(null, getAABBWithModifiers());
+		for (int i = 0; i < list.size(); i++) {
+			AxisAlignedBB targetbox = list.get(i);
+			if (targetbox != null) {
+				BlockPos targetPos = new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ);
+				IBlockState stateofTarget = getWorld().getBlockState(targetPos);
+				if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
+					if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {
+						TileEntityBeamRelay targetTile = (TileEntityBeamRelay) getWorld().getTileEntity(targetPos);
+						targetTile.setTargetIncomingBeam(facing.getOpposite(), false);
+						if (!targetTile.isGettingBeamed())
+							if (getWorld().getBlockState(targetPos).getValue(BlockBeamRelay.POWERED)) {
+								stateofTarget = stateofTarget.cycleProperty(BlockBeamRelay.POWERED);
+								getWorld().setBlockState(targetPos, stateofTarget, 3);
+							}
+					}
+				}
+			}
+		}
+	}
+
+	public void setTargetIncomingBeam(EnumFacing facing, boolean state) {
+		switch (facing) {
+		case DOWN:
+			in_down = state;
+			break;
+		case EAST:
+			in_east = state;
+			break;
+		case NORTH:
+			in_north = state;
+			break;
+		case SOUTH:
+			in_south = state;
+			break;
+		case UP:
+			in_up = state;
+			break;
+		case WEST:
+			in_west = state;
+			break;
+		default:
+			break;
+		}
+		
 	}
 
 	@Override
@@ -60,7 +136,7 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 		showRenderBox = isActive;
 		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
 	}
-/*
+
 	public void setAABBWithModifiers() {
 		IBlockState state = getWorld().getBlockState(getPos());
 		EnumFacing facing = state.getValue(BlockBeamRelay.FACING);
@@ -137,36 +213,9 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(getPos().getX() - xNeg, getPos().getY() - yNeg, getPos().getZ() - zNeg, getPos().getX() + 1D + xPos, getPos().getY() + 1D + yPos, getPos().getZ() + 1D + zPos);
 	}
-*/
-	public void checkBlockPower() {
-		IBlockState state = getWorld().getBlockState(getPos());
-		AxisAlignedBB thisBox = state.getCollisionBoundingBox(getWorld(), getPos()).offset(getPos());
-		// EnumFacing facing = state.getValue(BlockBeamRelay.FACING); 
-		List<AxisAlignedBB> list = getWorld().getCollisionBoxes(null, thisBox);
-		for (int i = 0; i < list.size(); i++) {
-			AxisAlignedBB targetbox = list.get(i);
-			/*System.out.println("Target Box" + targetbox);
-				if (targetbox == null || !(targetbox instanceof AABBDerpHelper)) {
-					if (state.getBlock() instanceof BlockBeamRelay) {
-						if (state.getValue(BlockBeamRelay.POWERED)) {
-							System.out.println("nope!");
-							state = state.cycleProperty(BlockBeamRelay.POWERED);
-							getWorld().setBlockState(getPos(), state, 3);
-						}
-					}
-				}
-*/
-				if (targetbox != null && targetbox instanceof AABBDerpHelper) {
-					if (state.getBlock() instanceof BlockBeamRelay) {
-						if (!state.getValue(BlockBeamRelay.POWERED)) {
-							System.out.println("yup!");
-							state = state.cycleProperty(BlockBeamRelay.POWERED);
-							getWorld().setBlockState(getPos(), state, 3);
 
-						}
-					}
-				}
-		}
+	public boolean isGettingBeamed() {
+		return in_up ? true : in_down ? true : in_north ? true : in_south ? true : in_west ? true : in_east ? true : false ;
 	}
 
 	@Override
@@ -180,6 +229,12 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 		nbt.setFloat("xNeg", xNeg);
 		nbt.setFloat("yNeg", yNeg);
 		nbt.setFloat("zNeg", zNeg);
+		nbt.setBoolean("in_down", in_down);
+		nbt.setBoolean("in_up", in_up);
+		nbt.setBoolean("in_north", in_north);
+		nbt.setBoolean("in_south", in_south);
+		nbt.setBoolean("in_west)", in_west);
+		nbt.setBoolean("in_east", in_east);
 		return nbt;
 	}
 
@@ -194,6 +249,12 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 		xNeg = nbt.getFloat("xNeg");
 		yNeg = nbt.getFloat("yNeg");
 		zNeg = nbt.getFloat("zNeg");
+		in_down = nbt.getBoolean("in_down");
+		in_up = nbt.getBoolean("in_up");
+		in_north = nbt.getBoolean("in_north");
+		in_south = nbt.getBoolean("in_south");
+		in_west = nbt.getBoolean("in_west)");
+		in_east = nbt.getBoolean("in_east");
 	}
 
 	@Override

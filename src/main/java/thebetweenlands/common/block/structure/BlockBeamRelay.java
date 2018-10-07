@@ -1,8 +1,5 @@
 package thebetweenlands.common.block.structure;
 
-import java.util.Random;
-
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -112,13 +109,12 @@ public class BlockBeamRelay extends BlockDirectional implements ITileEntityProvi
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (world.isRemote)
 			return true;
-		state = state.cycleProperty(FACING);
-		world.setBlockState(pos, state, 3);
 		if (world.getTileEntity(pos) instanceof TileEntityBeamRelay) {
 			TileEntityBeamRelay tile = (TileEntityBeamRelay) world.getTileEntity(pos);
-			//do something here
+			tile.deactivateBlock();
 		}
-			
+		state = state.cycleProperty(FACING);
+		world.setBlockState(pos, state, 3);
 		return true;
 	}
 }

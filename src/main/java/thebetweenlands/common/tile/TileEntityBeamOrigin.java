@@ -2,7 +2,6 @@ package thebetweenlands.common.tile;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,7 +18,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.structure.BlockBeamOrigin;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockEnergyBarrier;
-import thebetweenlands.util.AABBDerpHelper;
 
 public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 
@@ -50,23 +48,53 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 			setAABBWithModifiers();
 			if (active)
 				activateBlock();
+			else
+				deactivateBlock();
 		}
 	}
-	
+
 	public void activateBlock() {
-		//IBlockState state = getWorld().getBlockState(getPos());
-		//EnumFacing facing = state.getValue(BlockBeamLens.FACING);
+		IBlockState state = getWorld().getBlockState(getPos());
+		EnumFacing facing = state.getValue(BlockBeamOrigin.FACING);
 		List<AxisAlignedBB> list = getWorld().getCollisionBoxes(null, getAABBWithModifiers());
 		for (int i = 0; i < list.size(); i++) {
 			AxisAlignedBB targetbox = list.get(i);
 			if (targetbox != null) {
-				IBlockState stateofTarget = getWorld().getBlockState(new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ));
+				BlockPos targetPos = new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ);
+				IBlockState stateofTarget = getWorld().getBlockState(targetPos);
 				if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
-					//if (!getWorld().getBlockState(new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ)).getValue(BlockBeamLens.POWERED)) {
-					//	System.out.println("Main beam is deffo hitting relay");
-					//	stateofTarget = stateofTarget.cycleProperty(BlockBeamLens.POWERED);
-					//	getWorld().setBlockState(new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ), stateofTarget, 3);
-					//}
+					if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {
+						TileEntityBeamRelay targetTile = (TileEntityBeamRelay) getWorld().getTileEntity(targetPos);
+						targetTile.setTargetIncomingBeam(facing.getOpposite(), true);
+						if (!getWorld().getBlockState(targetPos).getValue(BlockBeamRelay.POWERED)) {
+							stateofTarget = stateofTarget.cycleProperty(BlockBeamRelay.POWERED);
+							getWorld().setBlockState(targetPos, stateofTarget, 3);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public void deactivateBlock() {
+		IBlockState state = getWorld().getBlockState(getPos());
+		EnumFacing facing = state.getValue(BlockBeamOrigin.FACING);
+		List<AxisAlignedBB> list = getWorld().getCollisionBoxes(null, getAABBWithModifiers());
+		for (int i = 0; i < list.size(); i++) {
+			AxisAlignedBB targetbox = list.get(i);
+			if (targetbox != null) {
+				BlockPos targetPos = new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ);
+				IBlockState stateofTarget = getWorld().getBlockState(targetPos);
+				if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
+					if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {
+						TileEntityBeamRelay targetTile = (TileEntityBeamRelay) getWorld().getTileEntity(targetPos);
+						targetTile.setTargetIncomingBeam(facing.getOpposite(), false);
+						if (!targetTile.isGettingBeamed())
+							if (getWorld().getBlockState(targetPos).getValue(BlockBeamRelay.POWERED)) {
+								stateofTarget = stateofTarget.cycleProperty(BlockBeamRelay.POWERED);
+								getWorld().setBlockState(targetPos, stateofTarget, 3);
+							}
+					}
 				}
 			}
 		}
@@ -144,8 +172,8 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 		getWorld().notifyBlockUpdate(getPos(), state, state, 8);
 	}
 
-	public AABBDerpHelper getAABBWithModifiers() {
-		return new AABBDerpHelper(getPos().getX() - xNeg, getPos().getY() - yNeg, getPos().getZ() - zNeg, getPos().getX() + 1D + xPos, getPos().getY() + 1D + yPos, getPos().getZ() + 1D + zPos);
+	public AxisAlignedBB getAABBWithModifiers() {
+		return new AxisAlignedBB(getPos().getX() - xNeg, getPos().getY() - yNeg, getPos().getZ() - zNeg, getPos().getX() + 1D + xPos, getPos().getY() + 1D + yPos, getPos().getZ() + 1D + zPos);
 	}
 
 	@SideOnly(Side.CLIENT)

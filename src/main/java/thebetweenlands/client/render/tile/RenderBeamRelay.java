@@ -28,7 +28,7 @@ public class RenderBeamRelay extends TileEntitySpecialRenderer<TileEntityBeamRel
 			return;
 
 		EnumFacing facing = state.getValue(BlockBeamRelay.FACING);
-/*
+
 		double now = 0;
 		if (tile.getWorld() != null)
 			now = (tile.getWorld().getTotalWorldTime() % Short.MAX_VALUE) + partialTicks;
@@ -61,7 +61,7 @@ public class RenderBeamRelay extends TileEntitySpecialRenderer<TileEntityBeamRel
 		GlStateManager.disableBlend();
 		GlStateManager.depthMask(true);
 		GlStateManager.popMatrix();
-		GlStateManager.popMatrix();*/
+		GlStateManager.popMatrix();
 	}
 
 }
