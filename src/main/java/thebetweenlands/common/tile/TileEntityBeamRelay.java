@@ -146,7 +146,7 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 		for (int i = 0; i < list.size(); i++) {
 			AxisAlignedBB targetbox = list.get(i);
 			/*System.out.println("Target Box" + targetbox);
-				if (targetbox != null || !(targetbox instanceof AABBDerpHelper)) {
+				if (targetbox == null || !(targetbox instanceof AABBDerpHelper)) {
 					if (state.getBlock() instanceof BlockBeamRelay) {
 						if (state.getValue(BlockBeamRelay.POWERED)) {
 							System.out.println("nope!");
