@@ -1,0 +1,249 @@
+{
+  "pools": [
+    {
+      "name": "1_stalactite",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "stalactite_blocks",
+              "min": 2
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:stalactite",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "2_stalactites",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "stalactite_blocks",
+              "min": 4
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:stalactite",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "3_stalactites",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "stalactite_blocks",
+              "min": 6
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:stalactite",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "4_stalactites",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "stalactite_blocks",
+              "min": 8
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:stalactite",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "5_stalactites",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "stalactite_blocks",
+              "min": 10
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:stalactite",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "6_stalactites",
+      "rolls": 6,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "stalactite_blocks",
+              "min": 12
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:stalactite",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "7_stalactites",
+      "rolls": 7,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "stalactite_blocks",
+              "min": 14
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:stalactite",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "8_stalactites",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "stalactite_blocks",
+              "min": 16
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:stalactite",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "angry_pebble",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "empty",
+          "name": "nothing",
+          "functions": [],
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:angry_pebble",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "ores",
+      "rolls": {
+        "min": 1,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:betweenstone",
+          "weight": 14
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:sulfur_ore",
+          "weight": 12
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:slimy_bone_ore",
+          "weight": 12
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:syrmorite_ore",
+          "weight": 10
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:octine_ore",
+          "weight": 7
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:scabyst_ore",
+          "weight": 4
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:valonite_ore",
+          "weight": 2
+        }
+      ]
+    }
+  ]
+}

@@ -83,6 +83,7 @@ public class LootTableRegistry {
     public static final ResourceLocation WIGHT = register("entities/wight");
     public static final ResourceLocation SPIRIT_TREE_FACE_SMALL = register("entities/spirit_tree_face_small");
     public static final ResourceLocation SPIRIT_TREE_FACE_LARGE = register("entities/spirit_tree_face_large");
+    public static final ResourceLocation BOULDER_SPRITE = register("entities/boulder_sprite");
     
     //BOSSES
     public static final ResourceLocation FORTRESS_BOSS = register("entities/fortress_boss");

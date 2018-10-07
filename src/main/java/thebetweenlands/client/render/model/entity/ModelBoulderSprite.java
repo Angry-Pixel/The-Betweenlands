@@ -29,7 +29,7 @@ import thebetweenlands.common.lib.ModInfo;
  * Created using Tabula 7.0.0
  */
 public class ModelBoulderSprite extends MowzieModelBase {
-	public static class StalactitesModel extends MowzieModelRenderer {
+	public static class StalactitesModelRenderer extends MowzieModelRenderer {
 		public static final ResourceLocation SPRITE_BOTTOM = new ResourceLocation(ModInfo.ID, "blocks/stalactite_bottom");
 		public static final ResourceLocation SPRITE_MID = new ResourceLocation(ModInfo.ID, "blocks/stalactite_middle");
 
@@ -37,7 +37,7 @@ public class ModelBoulderSprite extends MowzieModelBase {
 		private ResourceLocation texture;
 		private ResourceLocation prevTexture;
 
-		public StalactitesModel(ModelBase modelBase) {
+		public StalactitesModelRenderer(ModelBase modelBase) {
 			super(modelBase);
 		}
 
@@ -110,7 +110,7 @@ public class ModelBoulderSprite extends MowzieModelBase {
 	public MowzieModelRenderer actualbush;
 	public MowzieModelRenderer extrabush;
 
-	public StalactitesModel stalactites;
+	public StalactitesModelRenderer stalactites;
 
 	public ModelBoulderSprite() {
 		this.textureWidth = 128;
@@ -211,7 +211,7 @@ public class ModelBoulderSprite extends MowzieModelBase {
 		this.lebushybeard.addChild(this.lebushybeard_sideright);
 		this.block_main.addChild(this.brow1);
 
-		this.stalactites = new StalactitesModel(this);
+		this.stalactites = new StalactitesModelRenderer(this);
 		this.block_main.addChild(stalactites);
 
 		parts = new MowzieModelRenderer[]{

@@ -1303,6 +1303,8 @@ advancements.thebetweenlands.adventurer.winter_is_coming.title=Winter Is Coming
 advancements.thebetweenlands.adventurer.winter_is_coming.description=Experience the Winter event
 advancements.thebetweenlands.adventurer.santa_wight.title=Santa Wight
 advancements.thebetweenlands.adventurer.santa_wight.description=Break a present
+advancements.thebetweenlands.adventurer.bouldery_bois.title=Bouldery Bois
+advancements.thebetweenlands.adventurer.bouldery_bois.description=Get rolled over by a Boulder Sprite
 
 # Fighter
 advancements.thebetweenlands.fighter.root.title=Fighter
@@ -1339,6 +1341,8 @@ advancements.thebetweenlands.fighter.do_the_wave.title=Do the Wave!
 advancements.thebetweenlands.fighter.do_the_wave.description=Slay three enemies using a shockwave
 advancements.thebetweenlands.fighter.staring_contest.title=Staring Contest
 advancements.thebetweenlands.fighter.staring_contest.description=Defeat the Primordial Malevolence
+advancements.thebetweenlands.fighter.illegal_logging.title=Illegal Logging
+advancements.thebetweenlands.fighter.illegal_logging.description=Defeat a Spirit Tree
 
 # Farmer
 advancements.thebetweenlands.farmer.root.title=Farmer
