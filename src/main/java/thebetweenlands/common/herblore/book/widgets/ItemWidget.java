@@ -19,7 +19,7 @@ public class ItemWidget extends ManualWidgetBase {
     public int height;
 
 
-    public ArrayList<ItemStack> stacks = new ArrayList<>();
+    public List<ItemStack> stacks = new ArrayList<>();
     public float scale = 1f;
     private int currentDisplayItem = 0;
 
@@ -32,7 +32,7 @@ public class ItemWidget extends ManualWidgetBase {
         height = (int) (16 * scale);
     }
 
-    public ItemWidget(int xStart, int yStart, ArrayList<ItemStack> stacks, float scale) {
+    public ItemWidget(int xStart, int yStart, List<ItemStack> stacks, float scale) {
         super(xStart, yStart);
         this.stacks = stacks;
         this.scale = scale;

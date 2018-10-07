@@ -17,7 +17,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.WorldRenderHandler;
-import thebetweenlands.client.render.entity.layer.LayerGlow;
+import thebetweenlands.client.render.entity.layer.LayerOverlay;
 import thebetweenlands.client.render.model.entity.ModelFirefly;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
@@ -31,11 +31,11 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 
 	protected static final Random RANDOM = new Random();
 
-	protected final LayerGlow<EntityFirefly> glow;
+	protected final LayerOverlay<EntityFirefly> glow;
 
 	public RenderFirefly(RenderManager renderManager) {
 		super(renderManager, new ModelFirefly(), 0.0F);
-		this.addLayer(this.glow = new LayerGlow<EntityFirefly>(this, TEXTURE_OVERLAY));
+		this.addLayer(this.glow = new LayerOverlay<EntityFirefly>(this, TEXTURE_OVERLAY).setGlow(true));
 	}
 
 	@Override

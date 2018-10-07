@@ -1,5 +1,6 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
@@ -23,15 +24,17 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
+import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.tile.TileEntityWisp;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
+import thebetweenlands.common.world.storage.location.LocationGuarded;
+import thebetweenlands.common.world.storage.location.LocationSpiritTree;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
 public class BlockWisp extends BlockContainer implements IStateMappedBlock {
@@ -55,7 +58,9 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 		if(!worldStorage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
 			return true;
 		}
-
+		if(!worldStorage.getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
+			return true;
+		}
 		return false;
 	}
 

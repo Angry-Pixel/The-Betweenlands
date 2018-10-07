@@ -1,0 +1,6 @@
+{
+	"variants": {
+			"inactive=false":    { "model": "thebetweenlands:log_rotten_bark" },
+			"inactive=true":    { "model": "thebetweenlands:log_rotten_bark" }
+	}
+}

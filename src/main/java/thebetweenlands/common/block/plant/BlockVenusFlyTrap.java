@@ -24,7 +24,7 @@ public class BlockVenusFlyTrap extends BlockPlant {
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(worldIn, pos, state, rand);
 		if(rand.nextInt(300) == 0) {
-			if(!worldIn.getBlockState(pos).getValue(BLOOMING)) {
+			if(!state.getValue(BLOOMING)) {
 				if(rand.nextInt(3) == 0)
 					worldIn.setBlockState(pos, this.getDefaultState().withProperty(BLOOMING, true));
 			} else {

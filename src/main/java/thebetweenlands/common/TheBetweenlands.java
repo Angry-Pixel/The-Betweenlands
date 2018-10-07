@@ -41,6 +41,7 @@ import thebetweenlands.common.handler.ArmorHandler;
 import thebetweenlands.common.handler.AspectSyncHandler;
 import thebetweenlands.common.handler.AttackDamageHandler;
 import thebetweenlands.common.handler.BlockBreakHandler;
+import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler;
 import thebetweenlands.common.handler.ElixirCommonHandler;
 import thebetweenlands.common.handler.EntitySpawnHandler;
 import thebetweenlands.common.handler.EnvironmentEventHandler;
@@ -57,6 +58,7 @@ import thebetweenlands.common.handler.PlayerRespawnHandler;
 import thebetweenlands.common.handler.PuppetHandler;
 import thebetweenlands.common.handler.WorldEventHandler;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.herblore.elixir.PotionRootBound;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.shields.ItemDentrothystShield;
 import thebetweenlands.common.item.tools.ItemBLShield;
@@ -236,5 +238,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(FuelHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerJoinWorldHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerRespawnHandler.class);
+		MinecraftForge.EVENT_BUS.register(CustomEntityBlockCollisionsHandler.class);
+		MinecraftForge.EVENT_BUS.register(PotionRootBound.class);
 	}
 }

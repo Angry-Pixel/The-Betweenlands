@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.entity.layer.LayerGlow;
+import thebetweenlands.client.render.entity.layer.LayerOverlay;
 import thebetweenlands.client.render.model.entity.ModelAngler;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
@@ -19,7 +19,7 @@ public class RenderAngler extends RenderLiving<EntityAngler> {
 
 	public RenderAngler(RenderManager manager) {
 		super(manager, new ModelAngler(), 0.5F);
-		this.addLayer(new LayerGlow<EntityAngler>(this, new ResourceLocation("thebetweenlands:textures/entity/angler_glow.png")));
+		this.addLayer(new LayerOverlay<EntityAngler>(this, new ResourceLocation("thebetweenlands:textures/entity/angler_glow.png")).setGlow(true));
 	}
 
 	@Override

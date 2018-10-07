@@ -5,9 +5,12 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
+import thebetweenlands.common.entity.EntitySpikeWave;
+import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
@@ -49,6 +52,7 @@ import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
+import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
@@ -111,6 +115,14 @@ public class EntityRegistry {
 		//registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
 		registerEntity(EntitySmollSludge.class, "smoll_sludge", 0x3A2F0B, 0x5F4C0B);
 		//registerEntity(EntityGreebling.class, "greebling", 0xD9D7A7, 0xD99830);
+		registerEntity(EntityBoulderSprite.class, "boulder_sprite", 0x6f7784, 0x535559);
+		registerEntity(EntitySpiritTreeFaceSmall.class, "spirit_tree_face_small");
+		registerEntity(EntitySpiritTreeFaceLarge.class, "spirit_tree_face_large");
+		registerEntity(EntityTamedSpiritTreeFace.class, "tamed_spirit_tree_face");
+		registerEntity(EntitySapSpit.class, "sap_spit", 64, 20, true);
+		registerEntity(EntitySpikeWave.class, "spike_wave");
+		registerEntity(EntityRootGrabber.class, "root_grabber");
+		registerEntity(EntitySpiritTreeFaceMask.class, "spirit_tree_face_mask", 64, 20, false);
 	}
 
 	private static int id = 0;

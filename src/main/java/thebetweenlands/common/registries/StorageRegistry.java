@@ -17,6 +17,7 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationPortal;
+import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class StorageRegistry {
@@ -32,6 +33,7 @@ public class StorageRegistry {
 		register(new ResourceLocation(ModInfo.ID, "cragrock_tower"), LocationCragrockTower.class, LocationCragrockTower::new);
 		register(new ResourceLocation(ModInfo.ID, "location_guarded"), LocationGuarded.class, LocationGuarded::new);
 		register(new ResourceLocation(ModInfo.ID, "portal"), LocationPortal.class, LocationPortal::new);
+		register(new ResourceLocation(ModInfo.ID, "spirit_tree"), LocationSpiritTree.class, LocationSpiritTree::new);
 	}
 
 	/**

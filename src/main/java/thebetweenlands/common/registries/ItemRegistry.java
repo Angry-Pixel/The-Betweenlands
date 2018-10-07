@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,9 +23,8 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
-import thebetweenlands.common.capability.circlegem.CircleGemHelper;
+import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
@@ -46,6 +44,8 @@ import thebetweenlands.common.item.armor.ItemLurkerSkinArmor;
 import thebetweenlands.common.item.armor.ItemMarshRunnerBoots;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.item.armor.ItemSkullMask;
+import thebetweenlands.common.item.armor.ItemSpiritTreeFaceMaskLarge;
+import thebetweenlands.common.item.armor.ItemSpiritTreeFaceMaskSmall;
 import thebetweenlands.common.item.armor.ItemSyrmoriteArmor;
 import thebetweenlands.common.item.armor.ItemValoniteArmor;
 import thebetweenlands.common.item.equipment.ItemAmulet;
@@ -77,6 +77,7 @@ import thebetweenlands.common.item.food.ItemNibblestick;
 import thebetweenlands.common.item.food.ItemRottenFood;
 import thebetweenlands.common.item.food.ItemSapBall;
 import thebetweenlands.common.item.food.ItemSapJello;
+import thebetweenlands.common.item.food.ItemSpiritFruit;
 import thebetweenlands.common.item.food.ItemTaintedPotion;
 import thebetweenlands.common.item.food.ItemTangledRoot;
 import thebetweenlands.common.item.food.ItemWeepingBluePetal;
@@ -96,6 +97,7 @@ import thebetweenlands.common.item.misc.ItemDentrothystShard;
 import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemGlue;
+import thebetweenlands.common.item.misc.ItemHealthOrb;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.item.misc.ItemLoreScrap;
 import thebetweenlands.common.item.misc.ItemMisc;
@@ -205,6 +207,7 @@ public class ItemRegistry {
     public static final Item MIRE_SCRAMBLE = new ItemMireScramble();
     public static final Item WEEPING_BLUE_PETAL_SALAD = new ItemWeepingBluePetalSalad();
     public static final Item NIBBLESTICK = new ItemNibblestick();
+    public static final Item SPIRIT_FRUIT = new ItemSpiritFruit();
     
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);
@@ -227,6 +230,8 @@ public class ItemRegistry {
     public static final Item MARSH_RUNNER_BOOTS = new ItemMarshRunnerBoots();
     public static final Item SKULL_MASK = new ItemSkullMask();
     public static final Item EXPLORERS_HAT = new ItemExplorersHat();
+    public static final Item SPIRIT_TREE_FACE_LARGE_MASK = new ItemSpiritTreeFaceMaskLarge();
+    public static final Item SPIRIT_TREE_FACE_SMALL_MASK = new ItemSpiritTreeFaceMaskSmall();
     //TOOLS
     public static final Item WEEDWOOD_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item WEEDWOOD_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
@@ -361,6 +366,9 @@ public class ItemRegistry {
     public static final ItemTaintedPotion TAINTED_POTION = new ItemTaintedPotion();
     public static final ItemOctineIngot OCTINE_INGOT = new ItemOctineIngot();
     public static final Item MUMMY_BAIT = new ItemMummyBait();
+    public static final Item SAP_SPIT = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
+    public static final Item HEALTH_ORB = new ItemHealthOrb();
+    
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
 
@@ -443,7 +451,10 @@ public class ItemRegistry {
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_RUBBER_TREE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_HEARTHGROVE_TREE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_NIBBLETWIG_TREE));
-
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_SPIRIT_TREE_TOP));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_SPIRIT_TREE_MIDDLE));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_SPIRIT_TREE_BOTTOM));
+		
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_WEEDWOOD));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_SAP));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_RUBBER));
@@ -471,6 +482,7 @@ public class ItemRegistry {
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.GIANT_ROOT, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_HEARTHGROVE, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_NIBBLETWIG, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_SPIRIT_TREE, 1, OreDictionary.WILDCARD_VALUE));
 
 		OreDictionary.registerOre("stickWood", EnumItemMisc.WEEDWOOD_STICK.create(1));
 		
