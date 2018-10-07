@@ -83,6 +83,7 @@ import thebetweenlands.client.render.entity.RenderAngryPebble;
 import thebetweenlands.client.render.entity.RenderBLArrow;
 import thebetweenlands.client.render.entity.RenderBlindCaveFish;
 import thebetweenlands.client.render.entity.RenderBloodSnail;
+import thebetweenlands.client.render.entity.RenderBoulderSprite;
 import thebetweenlands.client.render.entity.RenderChiromaw;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderDarkLight;
@@ -109,7 +110,9 @@ import thebetweenlands.client.render.entity.RenderMummyArm;
 import thebetweenlands.client.render.entity.RenderPeatMummy;
 import thebetweenlands.client.render.entity.RenderPyrad;
 import thebetweenlands.client.render.entity.RenderPyradFlame;
+import thebetweenlands.client.render.entity.RenderRootGrabber;
 import thebetweenlands.client.render.entity.RenderRopeNode;
+import thebetweenlands.client.render.entity.RenderSapSpit;
 import thebetweenlands.client.render.entity.RenderShockwaveBlock;
 import thebetweenlands.client.render.entity.RenderShockwaveSwordItem;
 import thebetweenlands.client.render.entity.RenderSiltCrab;
@@ -117,6 +120,10 @@ import thebetweenlands.client.render.entity.RenderSludge;
 import thebetweenlands.client.render.entity.RenderSludgeBall;
 import thebetweenlands.client.render.entity.RenderSmollSludge;
 import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
+import thebetweenlands.client.render.entity.RenderSpikeWave;
+import thebetweenlands.client.render.entity.RenderSpiritTreeFaceLarge;
+import thebetweenlands.client.render.entity.RenderSpiritTreeFaceMask;
+import thebetweenlands.client.render.entity.RenderSpiritTreeFaceSmall;
 import thebetweenlands.client.render.entity.RenderSporeJet;
 import thebetweenlands.client.render.entity.RenderSporeling;
 import thebetweenlands.client.render.entity.RenderSwampHag;
@@ -179,6 +186,7 @@ import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
 import thebetweenlands.common.entity.mobs.EntityDarkLight;
@@ -207,9 +215,12 @@ import thebetweenlands.common.entity.mobs.EntityPyradFlame;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
 import thebetweenlands.common.entity.mobs.EntitySporeJet;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityTamedSpiritTreeFace;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.entity.mobs.EntityTarminion;
 import thebetweenlands.common.entity.mobs.EntityTermite;
@@ -485,8 +496,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         RenderingRegistry.registerEntityRenderingHandler(EntitySporeJet.class, RenderSporeJet::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySmollSludge.class, RenderSmollSludge::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreebling.class, RenderGreebling::new);
-<<<<<<< HEAD
-=======
+
 		RenderingRegistry.registerEntityRenderingHandler(EntityBoulderSprite.class, RenderBoulderSprite::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceSmall.class, RenderSpiritTreeFaceSmall::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceLarge.class, RenderSpiritTreeFaceLarge::new);
@@ -496,7 +506,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityRootGrabber.class, RenderRootGrabber::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceMask.class, RenderSpiritTreeFaceMask::new);
 		
->>>>>>> 1.12-dev
+
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
 		resourceManager.registerReloadListener(new FoodSickness.ResourceReloadListener());
