@@ -139,7 +139,8 @@ import thebetweenlands.client.render.tile.RenderAlembic;
 import thebetweenlands.client.render.tile.RenderAnimator;
 import thebetweenlands.client.render.tile.RenderAspectVial;
 import thebetweenlands.client.render.tile.RenderAspectrusCrop;
-import thebetweenlands.client.render.tile.RenderBeamLens;
+import thebetweenlands.client.render.tile.RenderBeamOrigin;
+import thebetweenlands.client.render.tile.RenderBeamRelay;
 import thebetweenlands.client.render.tile.RenderChestBetweenlands;
 import thebetweenlands.client.render.tile.RenderCompostBin;
 import thebetweenlands.client.render.tile.RenderDruidAltar;
@@ -237,7 +238,8 @@ import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.common.tile.TileEntityAspectrusCrop;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
-import thebetweenlands.common.tile.TileEntityBeamLens;
+import thebetweenlands.common.tile.TileEntityBeamOrigin;
+import thebetweenlands.common.tile.TileEntityBeamRelay;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
@@ -540,7 +542,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRepeller.class, new RenderRepeller());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPuffshroom.class, new TileEntityPuffshroomRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWormDungeonDoorWood.class, new RenderWormDungeonDoorWood());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBeamLens.class, new RenderBeamLens());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBeamOrigin.class, new RenderBeamOrigin());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBeamRelay.class, new RenderBeamRelay());
 
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);

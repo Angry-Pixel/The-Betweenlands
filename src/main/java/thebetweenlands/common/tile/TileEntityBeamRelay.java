@@ -2,7 +2,6 @@ package thebetweenlands.common.tile;
 
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,38 +15,39 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.block.structure.BlockBeamLens;
+import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockEnergyBarrier;
+import thebetweenlands.util.AABBDerpHelper;
 
-public class TileEntityBeamLens extends TileEntity implements ITickable {
-
+public class TileEntityBeamRelay extends TileEntity implements ITickable {
 	public boolean active;
 	public boolean showRenderBox;
 	float xPos, yPos, zPos;
 	float xNeg, yNeg, zNeg;
 
-	public TileEntityBeamLens() {
+	public TileEntityBeamRelay() {
 		super();
 	}
 
 	@Override
 	public void update() {
 		if (getWorld().getBlockState(getPos()).getBlock() != null) {
-			if (getWorld().getBlockState(getPos()).getValue(BlockBeamLens.POWERED)) {
+			if (getWorld().getBlockState(getPos()).getValue(BlockBeamRelay.POWERED)) {
 				if (!active)
 					setActive(true);
-				activateBlock();
 			}
-		
-		if (!getWorld().getBlockState(getPos()).getValue(BlockBeamLens.POWERED)) {
-			if (active)
-				setActive(false);
-			deactivateBlock();
-		} 
-	}
-		
-		if (!getWorld().isRemote)
-			setAABBWithModifiers();
+
+			if (!getWorld().getBlockState(getPos()).getValue(BlockBeamRelay.POWERED)) {
+				if (active)
+					setActive(false);
+			}
+		}
+
+		if (!getWorld().isRemote) {
+			checkBlockPower();
+			//if (active)
+			//	setAABBWithModifiers();
+		}
 	}
 
 	@Override
@@ -60,10 +60,10 @@ public class TileEntityBeamLens extends TileEntity implements ITickable {
 		showRenderBox = isActive;
 		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
 	}
-
+/*
 	public void setAABBWithModifiers() {
 		IBlockState state = getWorld().getBlockState(getPos());
-		EnumFacing facing = state.getValue(BlockBeamLens.FACING);
+		EnumFacing facing = state.getValue(BlockBeamRelay.FACING);
 
 		int distance;
 		for (distance = 1; distance < 12; distance++) {
@@ -137,47 +137,36 @@ public class TileEntityBeamLens extends TileEntity implements ITickable {
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(getPos().getX() - xNeg, getPos().getY() - yNeg, getPos().getZ() - zNeg, getPos().getX() + 1D + xPos, getPos().getY() + 1D + yPos, getPos().getZ() + 1D + zPos);
 	}
+*/
+	public void checkBlockPower() {
+		IBlockState state = getWorld().getBlockState(getPos());
+		AxisAlignedBB thisBox = state.getCollisionBoundingBox(getWorld(), getPos()).offset(getPos());
+		// EnumFacing facing = state.getValue(BlockBeamRelay.FACING); 
+		List<AxisAlignedBB> list = getWorld().getCollisionBoxes(null, thisBox);
+		for (int i = 0; i < list.size(); i++) {
+			AxisAlignedBB targetbox = list.get(i);
+			/*System.out.println("Target Box" + targetbox);
+				if (targetbox != null || !(targetbox instanceof AABBDerpHelper)) {
+					if (state.getBlock() instanceof BlockBeamRelay) {
+						if (state.getValue(BlockBeamRelay.POWERED)) {
+							System.out.println("nope!");
+							state = state.cycleProperty(BlockBeamRelay.POWERED);
+							getWorld().setBlockState(getPos(), state, 3);
+						}
+					}
+				}
+*/
+				if (targetbox != null && targetbox instanceof AABBDerpHelper) {
+					if (state.getBlock() instanceof BlockBeamRelay) {
+						if (!state.getValue(BlockBeamRelay.POWERED)) {
+							System.out.println("yup!");
+							state = state.cycleProperty(BlockBeamRelay.POWERED);
+							getWorld().setBlockState(getPos(), state, 3);
 
-	@SuppressWarnings("unchecked")
-	protected Block activateBlock() {
-		//IBlockState state = getWorld().getBlockState(getPos());
-		//EnumFacing facing = state.getValue(BlockBeamLens.FACING);
-		List<AxisAlignedBB> list = getWorld().getCollisionBoxes(null, getAABBWithModifiers());
-		for (int i = 0; i < list.size(); i++) {
-			AxisAlignedBB targetbox = list.get(i);
-			if (targetbox != null) {
-				IBlockState stateofTarget = getWorld().getBlockState(new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ));
-				if (stateofTarget.getBlock() instanceof BlockBeamLens) {
-					if (!getWorld().getBlockState(new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ)).getValue(BlockBeamLens.POWERED)) {
-						System.out.println("Yup!");
-						stateofTarget = stateofTarget.cycleProperty(BlockBeamLens.POWERED);
-						getWorld().setBlockState(new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ), stateofTarget, 3);
+						}
 					}
 				}
-			}
 		}
-		return null;
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected Block deactivateBlock() {
-		//IBlockState state = getWorld().getBlockState(getPos());
-		//EnumFacing facing = state.getValue(BlockBeamLens.FACING);
-		List<AxisAlignedBB> list = getWorld().getCollisionBoxes(null, getAABBWithModifiers());
-		for (int i = 0; i < list.size(); i++) {
-			AxisAlignedBB targetbox = list.get(i);
-			if (targetbox != null) {
-				IBlockState stateofTarget = getWorld().getBlockState(new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ));
-				if (stateofTarget.getBlock() instanceof BlockBeamLens) {
-					if (getWorld().getBlockState(new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ)).getValue(BlockBeamLens.POWERED)) {
-						System.out.println("Nope!");
-						stateofTarget = stateofTarget.cycleProperty(BlockBeamLens.POWERED);
-						getWorld().setBlockState(new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ), stateofTarget, 3);
-					}
-				}
-			}
-		}
-		return null;
 	}
 
 	@Override
@@ -225,12 +214,4 @@ public class TileEntityBeamLens extends TileEntity implements ITickable {
 		readFromNBT(packet.getNbtCompound());
 	}
 
-	public void onContentsChanged() {
-		if (this != null && !getWorld().isRemote) {
-			final IBlockState state = getWorld().getBlockState(getPos());
-			setAABBWithModifiers();
-			getWorld().notifyBlockUpdate(getPos(), state, state, 8);
-			markDirty();
-		}
-	}
 }

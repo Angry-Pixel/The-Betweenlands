@@ -115,7 +115,8 @@ import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.plant.BlockWaterWeeds;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeepingBlue;
-import thebetweenlands.common.block.structure.BlockBeamLens;
+import thebetweenlands.common.block.structure.BlockBeamOrigin;
+import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockChipPath;
@@ -509,7 +510,8 @@ public class BlockRegistry {
     public static final Block MUD_BRICK_SLAB_DECAY_2 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_2).getBlock());
     public static final Block MUD_BRICK_SLAB_DECAY_3 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3).getBlock());
     public static final Block WORM_DUNGEON_DOOR_WOOD = new BlockWormDungeonDoorWood();
-    public static final Block BETWEENSTONE_BRICKS_LENS = new BlockBeamLens();
+    public static final Block BETWEENSTONE_BRICKS_BEAM_ORIGIN = new BlockBeamOrigin();
+    public static final Block BETWEENSTONE_BRICKS_BEAM_RELAY = new BlockBeamRelay();
     
     public static final Block PRESENT = new BlockPresent();
     

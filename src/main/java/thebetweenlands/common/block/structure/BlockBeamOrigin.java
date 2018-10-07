@@ -26,12 +26,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.tile.TileEntityBeamLens;
+import thebetweenlands.common.tile.TileEntityBeamOrigin;
 
-public class BlockBeamLens extends BlockDirectional implements ITileEntityProvider {
+public class BlockBeamOrigin extends BlockDirectional implements ITileEntityProvider {
 	public static final PropertyBool POWERED = PropertyBool.create("powered");
 
-	public BlockBeamLens() {
+	public BlockBeamOrigin() {
 		super(Material.ROCK);
 		setDefaultState(this.getBlockState().getBaseState().withProperty(POWERED, false));
 		setHardness(10.0F);
@@ -58,7 +58,7 @@ public class BlockBeamLens extends BlockDirectional implements ITileEntityProvid
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityBeamLens();
+		return new TileEntityBeamOrigin();
 	}
 
 	@Override
@@ -114,8 +114,8 @@ public class BlockBeamLens extends BlockDirectional implements ITileEntityProvid
 			return true;
 		state = state.cycleProperty(FACING);
 		world.setBlockState(pos, state, 3);
-		if (world.getTileEntity(pos) instanceof TileEntityBeamLens) {
-			TileEntityBeamLens tile = (TileEntityBeamLens) world.getTileEntity(pos);
+		if (world.getTileEntity(pos) instanceof TileEntityBeamOrigin) {
+			TileEntityBeamOrigin tile = (TileEntityBeamOrigin) world.getTileEntity(pos);
 			//do something here
 		}
 			

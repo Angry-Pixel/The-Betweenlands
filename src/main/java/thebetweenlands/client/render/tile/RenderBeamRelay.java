@@ -8,27 +8,27 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.block.structure.BlockBeamLens;
+import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.tile.TileEntityBeamLens;
+import thebetweenlands.common.tile.TileEntityBeamRelay;
 
 @SideOnly(Side.CLIENT)
-public class RenderBeamLens extends TileEntitySpecialRenderer<TileEntityBeamLens> {
+public class RenderBeamRelay extends TileEntitySpecialRenderer<TileEntityBeamRelay> {
 	@Override
-	public void render(TileEntityBeamLens tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileEntityBeamRelay tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		IBlockState state = tile.getWorld().getBlockState(tile.getPos());
 
 		if (tile == null || !tile.hasWorld())
 			return;
 
-		if (state == null || state.getBlock() != BlockRegistry.BETWEENSTONE_BRICKS_LENS)
+		if (state == null || state.getBlock() != BlockRegistry.BETWEENSTONE_BRICKS_BEAM_RELAY)
 			return;
 
 		if (!tile.showRenderBox)
 			return;
 
-		EnumFacing facing = state.getValue(BlockBeamLens.FACING);
-
+		EnumFacing facing = state.getValue(BlockBeamRelay.FACING);
+/*
 		double now = 0;
 		if (tile.getWorld() != null)
 			now = (tile.getWorld().getTotalWorldTime() % Short.MAX_VALUE) + partialTicks;
@@ -61,7 +61,7 @@ public class RenderBeamLens extends TileEntitySpecialRenderer<TileEntityBeamLens
 		GlStateManager.disableBlend();
 		GlStateManager.depthMask(true);
 		GlStateManager.popMatrix();
-		GlStateManager.popMatrix();
+		GlStateManager.popMatrix();*/
 	}
 
 }
