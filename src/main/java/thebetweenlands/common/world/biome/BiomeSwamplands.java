@@ -9,6 +9,7 @@ import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityFrog;
@@ -23,6 +24,7 @@ import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.biome.spawning.spawners.BetweenstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SporelingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
@@ -90,5 +92,6 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		entries.add(new SurfaceSpawnEntry(16, EntityBloodSnail.class, (short) 25).setHostile(true).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
 		entries.add(new SurfaceSpawnEntry(17, EntityChiromaw.class, (short) 40).setHostile(true).setSpawnCheckRadius(30.0D));
 		entries.add(new CaveSpawnEntry(18, EntityChiromaw.class, (short) 60).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
+		entries.add(new BetweenstoneCaveSpawnEntry(19, EntityBoulderSprite.class, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
 	}
 }

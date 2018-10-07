@@ -114,7 +114,12 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 	@Override
 	protected void initEntityAI() {
-		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
+		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, false) {
+			@Override
+			public double getTargetDistance() {
+				return 12.0D;
+			}
+		});
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true) {
 			@Override
 			public void startExecuting() {
@@ -126,14 +131,14 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 			}
 		});
 
-		this.tasks.addTask(0, new AIRollTowardsTargetFromHideout(this, 12, 1.2D));
+		this.tasks.addTask(0, new AIRollTowardsTargetFromHideout(this, 8, 1.2D));
 		this.tasks.addTask(1, new AIMoveToHideout(this, 1.5D));
 		this.tasks.addTask(2, new AIHide(this, 0.8D));
 		this.tasks.addTask(3, new AIFindRandomHideoutFlee(this, 8));
 		this.tasks.addTask(4, new AIRollTowardsTarget(this));
-		this.tasks.addTask(5, new EntityAIAttackMelee(this, 1, false));
+		this.tasks.addTask(5, new EntityAIAttackMelee(this, 1, true));
 		this.tasks.addTask(6, new EntityAIWander(this, 0.9D));
-		this.tasks.addTask(7, new AIFindRandomHideout(this, 8, 20));
+		this.tasks.addTask(7, new AIFindRandomHideout(this, 8, 10));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -845,7 +850,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 		@Override
 		public boolean shouldExecute() {
-			return this.entity.isHiddenOrInWall() && this.entity.isEntityAlive() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && Math.abs(this.entity.posY - this.entity.getAttackTarget().posY) <= 2 && this.entity.getRNG().nextInt(this.chance) == 0;
+			return this.entity.isHiddenOrInWall() && this.entity.isEntityAlive() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && Math.abs(this.entity.posY - this.entity.getAttackTarget().posY) <= 3 && this.entity.getRNG().nextInt(this.chance) == 0;
 		}
 
 		@Override
@@ -892,7 +897,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 			this.entity = entity;
 			this.range = range;
 			this.chance = chance;
-			this.setMutexBits(0b10000);
+			this.setMutexBits(3 | 0b10000);
 		}
 
 		@Override
@@ -905,10 +910,19 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 			MutableBlockPos pos = new MutableBlockPos();
 			for(int i = 0; i < 32; i++) {
 				pos.setPos(this.entity.posX + this.entity.getRNG().nextInt(this.range * 2) - this.range, this.entity.posY, this.entity.posZ + this.entity.getRNG().nextInt(this.range * 2) - this.range);
-				if(this.entity.isValidHideoutBlock(pos)) {
-					this.entity.setHideout(pos.toImmutable());
-					this.entity.setHideoutEntrance(null);
-					break;
+				if(this.entity.isValidHideoutBlock(pos) && (!this.entity.world.isAirBlock(pos.up()) || this.entity.getRNG().nextInt(10) == 0)) {
+					boolean hasPotentialEntrance = false;
+					for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+						if(this.entity.world.isAirBlock(pos.offset(facing))) {
+							hasPotentialEntrance = true;
+							break;
+						}
+					}
+					if(hasPotentialEntrance) {
+						this.entity.setHideout(pos.toImmutable());
+						this.entity.setHideoutEntrance(null);
+						break;
+					}
 				}
 			}
 		}
@@ -921,7 +935,8 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 	protected static class AIFindRandomHideoutFlee extends AIFindRandomHideout {
 		public AIFindRandomHideoutFlee(EntityBoulderSprite entity, int range) {
-			super(entity, range, 3);
+			super(entity, range, 2);
+			this.setMutexBits(0b10000);
 		}
 
 		@Override

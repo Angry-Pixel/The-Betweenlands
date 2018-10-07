@@ -8,6 +8,7 @@ import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
@@ -19,6 +20,7 @@ import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.biome.spawning.spawners.BetweenstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SporelingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
@@ -70,5 +72,6 @@ public class BiomeCoarseIslands extends BiomeBetweenlands {
 		entries.add(new CaveSpawnEntry(12, EntityWight.class, (short) 20).setHostile(true).setSpawnCheckRadius(64.0D));
 		entries.add(new SurfaceSpawnEntry(13, EntityChiromaw.class, (short) 40).setHostile(true).setSpawnCheckRadius(30.0D));
 		entries.add(new CaveSpawnEntry(14, EntityChiromaw.class, (short) 60).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
+		entries.add(new BetweenstoneCaveSpawnEntry(15, EntityBoulderSprite.class, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
 	}
 }
