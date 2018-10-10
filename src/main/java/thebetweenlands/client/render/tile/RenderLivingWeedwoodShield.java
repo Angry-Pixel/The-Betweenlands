@@ -3,6 +3,8 @@ package thebetweenlands.client.render.tile;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -36,7 +38,16 @@ public class RenderLivingWeedwoodShield extends TileEntityItemStackRenderer {
 		GlStateManager.pushMatrix();
 
 		GlStateManager.translate(0.5D, 0.5D, 0.5D);
+
+
+		ITextureObject atlas = Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
+		//Need to restore before rendering item because item renderer restores too
+		atlas.restoreLastBlurMipmap();
+
 		Minecraft.getMinecraft().getRenderItem().renderItem(this.normalShield, TransformType.NONE);
+
+		atlas.setBlurMipmap(false, false);
 
 		Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
 

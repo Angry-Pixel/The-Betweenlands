@@ -584,6 +584,20 @@
       "thebetweenlands:spirit_tree_face_spit"
     ]
   },
+  "spirit_tree_face_large_death": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_large_death"
+    ]
+  },
+  "spirit_tree_face_large_living": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_large_living_1",
+      "thebetweenlands:spirit_tree_face_large_living_2",
+      "thebetweenlands:spirit_tree_face_large_living_3",
+      "thebetweenlands:spirit_tree_face_large_living_4",
+      "thebetweenlands:spirit_tree_face_large_living_5"
+    ]
+  },
   "spirit_tree_face_large_emerge": {
     "sounds": [
       "thebetweenlands:spirit_tree_face_large_emerge"

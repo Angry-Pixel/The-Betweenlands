@@ -131,6 +131,8 @@ public class SoundRegistry {
     public static final BLSoundEvent BOULDER_SPRITE_ROLL = reg("bounder_sprite_roll");
     public static final BLSoundEvent SPIRIT_TREE_FACE_SMALL_SPIT = reg("spirit_tree_face_small_spit");
     public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_SPIT = reg("spirit_tree_face_large_spit");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_DEATH = reg("spirit_tree_face_large_death");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_LIVING = reg("spirit_tree_face_large_living");
     public static final BLSoundEvent SPIRIT_TREE_FACE_SMALL_EMERGE = reg("spirit_tree_face_small_emerge");
     public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_EMERGE = reg("spirit_tree_face_large_emerge");
     public static final BLSoundEvent SPIRIT_TREE_FACE_SUCK = reg("spirit_tree_face_suck");

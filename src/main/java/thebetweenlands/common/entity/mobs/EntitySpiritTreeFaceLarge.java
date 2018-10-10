@@ -30,6 +30,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -170,6 +171,16 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			}
 		}
 		return super.findNearbyWoodBlocks();
+	}
+	
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.SPIRIT_TREE_FACE_LARGE_DEATH;
+	}
+	
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundRegistry.SPIRIT_TREE_FACE_LARGE_LIVING;
 	}
 
 	@SideOnly(Side.CLIENT)
