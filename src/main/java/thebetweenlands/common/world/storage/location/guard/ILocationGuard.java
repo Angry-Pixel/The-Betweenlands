@@ -14,8 +14,9 @@ public interface ILocationGuard {
 	 * @param world World
 	 * @param pos Position
 	 * @param guarded Whether the block is guarded
+	 * @return true if the the guard state was successfully changed
 	 */
-	public void setGuarded(World world, BlockPos pos, boolean guarded);
+	public boolean setGuarded(World world, BlockPos pos, boolean guarded);
 
 	/**
 	 * Returns whether the location is guarded at the specified position.
