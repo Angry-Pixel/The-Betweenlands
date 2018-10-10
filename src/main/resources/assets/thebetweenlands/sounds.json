@@ -558,6 +558,22 @@
       "thebetweenlands:gas_cloud_death"
     ]
   },
+  "boulder_sprite_hurt": {
+    "sounds": [
+      "thebetweenlands:boulder_sprite_hurt_1",
+      "thebetweenlands:boulder_sprite_hurt_2"
+    ]
+  },
+  "bounder_sprite_death": {
+    "sounds": [
+      "thebetweenlands:boulder_sprite_death"
+    ]
+  },
+  "bounder_sprite_roll": {
+    "sounds": [
+      "thebetweenlands:boulder_sprite_roll"
+    ]
+  },
   "spirit_tree_face_large_spit": {
     "sounds": [
       "thebetweenlands:spirit_tree_face_spit"
