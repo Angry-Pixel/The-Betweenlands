@@ -50,4 +50,8 @@ public class ModelSpiritTreeFaceSmall2 extends ModelBase {
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
+    
+    public void renderOnShield() {
+    	this.head_base.render(0.0625f);
+    }
 }

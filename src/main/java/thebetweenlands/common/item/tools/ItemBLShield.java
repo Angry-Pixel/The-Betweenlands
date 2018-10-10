@@ -86,7 +86,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 	public boolean isShield(ItemStack stack, EntityLivingBase entity) {
 		return true;
 	}
-	
+
 	/**
 	 * Returns the blocking cooldown
 	 * @param stack
@@ -183,6 +183,23 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Called when the shield breaks
+	 * @param stack
+	 * @param attacked
+	 */
+	protected void onShieldBreak(ItemStack stack, EntityLivingBase attacked, EnumHand hand, DamageSource source) {
+		EnumHand enumhand = attacked.getActiveHand();
+		if(attacked instanceof EntityPlayer)
+			net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((EntityPlayer)attacked, stack, enumhand);
+		if (enumhand == EnumHand.MAIN_HAND)
+			attacked.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
+		else
+			attacked.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+		//Shield break sound effect
+		attacked.world.setEntityState(attacked, (byte)30);
 	}
 
 	public static enum EventHandler {
@@ -304,15 +321,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 							stack.damageItem(itemDamage, attacked);
 							//Shield broke
 							if (stack.getCount() <= 0) {
-								EnumHand enumhand = attacked.getActiveHand();
-								if(attacked instanceof EntityPlayer)
-									net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((EntityPlayer)attacked, stack, enumhand);
-								if (enumhand == EnumHand.MAIN_HAND)
-									attacked.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
-								else
-									attacked.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
-								//Shield break sound effect
-								attacked.world.setEntityState(attacked, (byte)30);
+								shield.onShieldBreak(stack, attacked, hand, source);
 							}
 						}
 
@@ -323,7 +332,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 			this.ignoreEvent = false;
 		}
 	}
-	
+
 	@Override
 	public int getMinRepairFuelCost(ItemStack stack) {
 		return BLMaterialRegistry.getMinRepairFuelCost(this.material);

@@ -116,6 +116,7 @@ import thebetweenlands.common.item.misc.ItemWeedwoodSign;
 import thebetweenlands.common.item.misc.LocationDebugItem;
 import thebetweenlands.common.item.misc.TestItem;
 import thebetweenlands.common.item.shields.ItemDentrothystShield;
+import thebetweenlands.common.item.shields.ItemLivingWeedwoodShield;
 import thebetweenlands.common.item.shields.ItemOctineShield;
 import thebetweenlands.common.item.shields.ItemSyrmoriteShield;
 import thebetweenlands.common.item.shields.ItemValoniteShield;
@@ -252,6 +253,7 @@ public class ItemRegistry {
     public static final Item OCTINE_SHIELD = new ItemOctineShield();
     public static final Item VALONITE_SHIELD = new ItemValoniteShield();
     public static final Item WEEDWOOD_SHIELD = new ItemWeedwoodShield();
+    public static final Item LIVING_WEEDWOOD_SHIELD = new ItemLivingWeedwoodShield();
     public static final Item SYRMORITE_SHIELD = new ItemSyrmoriteShield();
     public static final Item BONE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_BONE);
     public static final Item DENTROTHYST_SHIELD_GREEN = new ItemDentrothystShield(true);
