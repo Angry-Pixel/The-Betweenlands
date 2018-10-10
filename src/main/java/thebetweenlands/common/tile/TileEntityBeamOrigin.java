@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.structure.BlockBeamOrigin;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
-import thebetweenlands.common.block.structure.BlockEnergyBarrier;
+import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 
 public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 
@@ -117,7 +117,7 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 		int distance;
 		for (distance = 1; distance < 12; distance++) {
 			IBlockState state2 = getWorld().getBlockState(getPos().offset(facing, distance));
-			if (state2 != Blocks.AIR.getDefaultState() && !(state2.getBlock() instanceof BlockEnergyBarrier))
+			if (state2 != Blocks.AIR.getDefaultState() && !(state2.getBlock() instanceof BlockDiagonalEnergyBarrier))
 				break;
 		}
 

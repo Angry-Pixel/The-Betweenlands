@@ -117,4 +117,12 @@ public class BlockBeamRelay extends BlockDirectional implements ITileEntityProvi
 		world.setBlockState(pos, state, 3);
 		return true;
 	}
+
+	@Override
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+		if (world.getTileEntity(pos) instanceof TileEntityBeamRelay) {
+			TileEntityBeamRelay tile = (TileEntityBeamRelay) world.getTileEntity(pos);
+			tile.deactivateBlock();
+		}
+    }
 }

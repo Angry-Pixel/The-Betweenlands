@@ -122,6 +122,14 @@ public class BlockBeamOrigin extends BlockDirectional implements ITileEntityProv
 	}
 
 	@Override
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+		if (world.getTileEntity(pos) instanceof TileEntityBeamOrigin) {
+			TileEntityBeamOrigin tile = (TileEntityBeamOrigin) world.getTileEntity(pos);
+			tile.deactivateBlock();
+		}
+    }
+
+	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (!world.isRemote) {
 			if (((Boolean) state.getValue(POWERED)).booleanValue() && !world.isBlockPowered(pos))
