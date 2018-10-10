@@ -1,0 +1,6 @@
+{
+  "variants": { 
+        "flipped=false": { "model": "thebetweenlands:diagonal_energy_barrier"},
+        "flipped=true": { "model": "thebetweenlands:diagonal_energy_barrier", "y": 90 }
+  } 
+}

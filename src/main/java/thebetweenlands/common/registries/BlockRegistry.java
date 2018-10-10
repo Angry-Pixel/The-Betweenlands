@@ -121,6 +121,7 @@ import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockChipPath;
+import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockDrippingMud;
 import thebetweenlands.common.block.structure.BlockDruidStone;
@@ -180,7 +181,6 @@ import thebetweenlands.common.block.terrain.BlockSludgyDirt;
 import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
 import thebetweenlands.common.block.terrain.BlockSpreadingRottenLog;
 import thebetweenlands.common.block.terrain.BlockSpreadingSludgyDirt;
-import thebetweenlands.common.block.terrain.BlockSpreadingDeath;
 import thebetweenlands.common.block.terrain.BlockStagnantWater;
 import thebetweenlands.common.block.terrain.BlockStalactite;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
@@ -193,7 +193,6 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.world.gen.feature.WorldGenSmallSpiritTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenRubberTree;
@@ -525,6 +524,7 @@ public class BlockRegistry {
     public static final Block WORM_DUNGEON_DOOR_WOOD = new BlockWormDungeonDoorWood();
     public static final Block BETWEENSTONE_BRICKS_BEAM_ORIGIN = new BlockBeamOrigin();
     public static final Block BETWEENSTONE_BRICKS_BEAM_RELAY = new BlockBeamRelay();
+    public static final Block DIAGONAL_ENERGY_BARRIER = new BlockDiagonalEnergyBarrier();
     
     public static final Block PRESENT = new BlockPresent();
     
