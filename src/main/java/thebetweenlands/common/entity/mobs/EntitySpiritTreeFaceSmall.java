@@ -10,6 +10,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -108,5 +109,19 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 	@Override
 	protected void playEmergeSound() {
 		this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SMALL_EMERGE, 1, 0.8F + this.rand.nextFloat() * 0.3F);
+	}
+
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundRegistry.SPIRIT_TREE_FACE_SMALL_LIVING;
+	}
+
+	@Override
+	public void playLivingSound() {
+		SoundEvent sound = this.getAmbientSound();
+
+		if(sound != null) {
+			this.playSound(sound, this.getSoundVolume() * 0.5F, this.getSoundPitch() * 1.3F);
+		}
 	}
 }
