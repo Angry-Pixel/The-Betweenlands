@@ -26,7 +26,7 @@ public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 
 		this.tasks.addTask(0, new AITrackTarget(this, true, 16.0D));
 		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
-		this.tasks.addTask(2, new AISpit(this));
+		this.tasks.addTask(2, new AISpit(this, 30, 70));
 		this.tasks.addTask(3, new AIWander(this, 8, 0.33D, 200));
 		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F) {
 			@Override

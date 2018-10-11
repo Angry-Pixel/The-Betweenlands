@@ -427,11 +427,19 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 	public static class AISpit extends EntityAIBase {
 		protected final EntitySpiritTreeFace entity;
-
+		protected int minCooldown;
+		protected int maxCooldown;
+		
 		protected int cooldown = 0;
 
 		public AISpit(EntitySpiritTreeFace entity) {
+			this(entity, 50, 170);
+		}
+		
+		public AISpit(EntitySpiritTreeFace entity, int minCooldown, int maxCooldown) {
 			this.entity = entity;
+			this.minCooldown = minCooldown;
+			this.maxCooldown = maxCooldown;
 			this.setMutexBits(0);
 		}
 
@@ -449,7 +457,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 		public void updateTask() {
 			if(!this.entity.isAttacking()) {
 				if(this.cooldown <= 0) {
-					this.cooldown = 50 + this.entity.rand.nextInt(120);
+					this.cooldown = this.minCooldown + this.entity.rand.nextInt(this.maxCooldown - this.minCooldown + 1);
 					this.entity.startSpit();
 				}
 				this.cooldown--;
