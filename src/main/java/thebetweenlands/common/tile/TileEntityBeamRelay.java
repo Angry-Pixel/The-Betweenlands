@@ -142,7 +142,7 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 		EnumFacing facing = state.getValue(BlockBeamRelay.FACING);
 
 		int distance;
-		for (distance = 1; distance < 12; distance++) {
+		for (distance = 1; distance < 14; distance++) {
 			IBlockState state2 = getWorld().getBlockState(getPos().offset(facing, distance));
 			if (state2 != Blocks.AIR.getDefaultState() && !(state2.getBlock() instanceof BlockDiagonalEnergyBarrier))
 				break;
