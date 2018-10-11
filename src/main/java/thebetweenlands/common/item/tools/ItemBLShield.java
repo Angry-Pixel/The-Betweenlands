@@ -25,6 +25,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -105,22 +106,26 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 	 * @param source
 	 */
 	public void onAttackBlocked(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
-		if(!attacked.world.isRemote && source.getTrueSource() instanceof EntityLivingBase) {
-			EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
-			ItemStack attackerItem = attacker.getHeldItemMainhand();
-			if(!attackerItem.isEmpty() && attackerItem.getItem().canDisableShield(attackerItem, stack, attacked, attacker)) {
-				float attackStrength = attacker instanceof EntityPlayer ? ((EntityPlayer)attacker).getCooledAttackStrength(0.5F) : 1.0F;
-				float criticalChance = 0.25F + (float)EnchantmentHelper.getEfficiencyModifier(attacker) * 0.05F;
-				if(attacker.isSprinting() && attackStrength > 0.9F) {
-					criticalChance += 0.75F;
-				}
-				if (attacked.world.rand.nextFloat() < criticalChance) {
-					if(attacked instanceof EntityPlayer) {
-						((EntityPlayer)attacked).getCooldownTracker().setCooldown(this, 100);
-						attacked.stopActiveHand();
+		if(!attacked.world.isRemote) {
+			damage = CircleGemHelper.handleAttack(source, attacked, damage);
+			
+			if(source.getTrueSource() instanceof EntityLivingBase) {
+				EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
+				ItemStack attackerItem = attacker.getHeldItemMainhand();
+				if(!attackerItem.isEmpty() && attackerItem.getItem().canDisableShield(attackerItem, stack, attacked, attacker)) {
+					float attackStrength = attacker instanceof EntityPlayer ? ((EntityPlayer)attacker).getCooledAttackStrength(0.5F) : 1.0F;
+					float criticalChance = 0.25F + (float)EnchantmentHelper.getEfficiencyModifier(attacker) * 0.05F;
+					if(attacker.isSprinting() && attackStrength > 0.9F) {
+						criticalChance += 0.75F;
 					}
-					//Shield break sound effect
-					attacked.world.setEntityState(attacked, (byte)30);
+					if (attacked.world.rand.nextFloat() < criticalChance) {
+						if(attacked instanceof EntityPlayer) {
+							((EntityPlayer)attacked).getCooldownTracker().setCooldown(this, 100);
+							attacked.stopActiveHand();
+						}
+						//Shield break sound effect
+						attacked.world.setEntityState(attacked, (byte)30);
+					}
 				}
 			}
 		}

@@ -2,16 +2,16 @@ package thebetweenlands.common.handler;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,13 +33,6 @@ public class AttackDamageHandler {
 	public static final float DAMAGE_REDUCTION = 0.3F;
 
 	@SubscribeEvent
-	public static void onEntityKilled(LivingDeathEvent event) {
-		if (!(event.getEntityLiving() instanceof EntityPlayer)) {
-
-		}
-	}
-
-	@SubscribeEvent
 	public static void onEntityKnockback(LivingKnockBackEvent event) {
 		EntityLivingBase attackedEntity = event.getEntityLiving();
 		Entity attacker = event.getAttacker();
@@ -52,6 +45,36 @@ public class AttackDamageHandler {
 				event.setStrength(event.getStrength() * 0.3F);
 			}
 		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void onEntityAttack(LivingAttackEvent event) {
+		EntityLivingBase attackedEntity = event.getEntityLiving();
+		DamageSource source = event.getSource();
+
+		//Handle circle gem for blocking
+		//For BL shields this is handled in ItemBLShield#onAttackBlocked
+		if(canBlockDamageSource(attackedEntity, source)) {
+			CircleGemHelper.handleAttack(source, attackedEntity, event.getAmount());
+		}
+	}
+
+	private static boolean canBlockDamageSource(EntityLivingBase entity, DamageSource source) {
+		if(!source.isUnblockable() && entity.isActiveItemStackBlocking()) {
+			Vec3d location = source.getDamageLocation();
+
+			if(location != null) {
+				Vec3d look = entity.getLook(1.0F);
+				Vec3d diff = location.subtractReverse(new Vec3d(entity.posX, entity.posY, entity.posZ)).normalize();
+				diff = new Vec3d(diff.x, 0.0D, diff.z);
+
+				if(diff.dotProduct(look) < 0.0D) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	@SubscribeEvent
