@@ -40,6 +40,10 @@ public class ItemLivingWeedwoodShield extends ItemWeedwoodShield {
 					} else {
 						this.setSpitCooldown(stack, spitCooldown - 1);
 					}
+
+					if(worldIn.rand.nextInt(60) == 0) {
+						worldIn.playSound(null, entityIn.posX, entityIn.posY + entityIn.height / 2, entityIn.posZ, SoundRegistry.SPIRIT_TREE_FACE_SMALL_LIVING, SoundCategory.PLAYERS, 0.35F, 1.4F);
+					}
 				}
 			} else {
 				int spitTicks = this.getSpitTicks(stack);
