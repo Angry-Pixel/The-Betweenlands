@@ -115,9 +115,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
 		//conditions blah, blah...
-		makeTreeStructure(world, rand, pos);
+		//makeTreeStructure(world, rand, pos);
 		//makeBarrow(world, rand, pos);
-		//makeMaze(world, rand, pos);
+		makeMaze(world, rand, pos);
 		return true;
 	}
 
