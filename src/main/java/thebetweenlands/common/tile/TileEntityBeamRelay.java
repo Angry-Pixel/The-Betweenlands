@@ -12,11 +12,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
+import thebetweenlands.common.network.clientbound.PacketParticle;
+import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 
 public class TileEntityBeamRelay extends TileEntity implements ITickable {
 	public boolean active;
@@ -52,6 +56,42 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 				deactivateBlock();
 		}
 	}
+	
+	private void sendParticleMessage(BlockPos pos, BlockPos targetPos, EnumFacing facing) {
+		int dim = world.provider.getDimension();
+		float distance = 0;
+		
+		switch (facing) {
+		case DOWN:
+			distance = yNeg;
+			break;
+		case EAST:
+			distance = xPos;
+			break;
+		case NORTH:
+			distance = zNeg;
+			break;
+		case SOUTH:
+			distance = zPos;
+			break;
+		case UP:
+			distance = yPos;
+			break;
+		case WEST:
+			distance = xNeg;
+			break;
+		default:
+			break;
+		}
+		targetPos = pos.offset(facing, (int) distance);
+		Vec3d  vector = new Vec3d((targetPos.getX() + 0.5D) - (pos.getX() + 0.5D), (targetPos.getY() + 0.5D) - (pos.getY() + 0.5D), (targetPos.getZ() + 0.5D) - (pos.getZ() + 0.5D));
+		vector = vector.normalize();
+		for(float i = 0; i < distance; i+= 0.125F)
+		{
+			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.FLAME, pos.getX() + 0.5F + ((float)vector.x * i),  pos.getY()+ 0.5F + ((float)vector.y * i), pos.getZ()+ 0.5F + ((float)vector.z * i)));
+		}
+		//TheBetweenlands.networkWrapper.sendToAllAround(new MessageBeamFX(posX, posY, posZ, getDataManager().get(value) / 1.75f, this.getRed(), this.getGreen(), this.getBlue()), new NetworkRegistry.TargetPoint(dim, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 64D));
+	}
 
 	public void activateBlock() {
 		IBlockState state = getWorld().getBlockState(getPos());
@@ -62,6 +102,8 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 			if (targetbox != null) {
 				BlockPos targetPos = new BlockPos(targetbox.minX, targetbox.minY, targetbox.minZ);
 				IBlockState stateofTarget = getWorld().getBlockState(targetPos);
+				if(getWorld().getTotalWorldTime()%10 == 0)
+					sendParticleMessage(getPos(), targetPos, facing);
 				if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
 					if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {
 						TileEntityBeamRelay targetTile = (TileEntityBeamRelay) getWorld().getTileEntity(targetPos);
@@ -133,7 +175,7 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 
 	public void setActive(boolean isActive) {
 		active = isActive;
-		showRenderBox = isActive;
+		showRenderBox = false;
 		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
 	}
 

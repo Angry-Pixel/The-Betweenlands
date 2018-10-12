@@ -12,7 +12,8 @@ import thebetweenlands.common.TheBetweenlands;
 public class PacketParticle implements IMessage, IMessageHandler<PacketParticle, IMessage> {
 
 	public static enum ParticleType {
-		SPORE_JET;
+		SPORE_JET,
+		FLAME;
 
 		static final ParticleType[] values = values();
 	}
@@ -74,6 +75,9 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 						TheBetweenlands.proxy.spawnCustomParticle("spell", world, d3, d1, d4, 0.0D, 0.05D, 0.0D);
 						TheBetweenlands.proxy.spawnCustomParticle("spell", world, d5, d6, d7, 0.0D, 0.05D, 0.0D);
 					}
+					break;
+				case FLAME:
+						TheBetweenlands.proxy.spawnCustomParticle("flame", world, message.posX, message.posY, message.posZ, 0.0D, 0.00D, 0.0D);
 					break;
 				default:
 			}
