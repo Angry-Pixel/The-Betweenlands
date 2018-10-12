@@ -106,7 +106,12 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 		this.tasks.addTask(0, new AITrackTarget(this));
 		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
-		this.tasks.addTask(2, new AISpit(this));
+		this.tasks.addTask(2, new AISpit(this, 4.5F) {
+			@Override
+			protected float getSpitDamage() {
+				return (float) EntitySpiritTreeFaceLarge.this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() / 3.0F;
+			}
+		});
 		this.tasks.addTask(3, new AIBlowAttack(this));
 		this.tasks.addTask(4, new AIRotatingWaveAttack(this));
 		this.tasks.addTask(5, new AICrawlingWaveAttack(this));
@@ -669,8 +674,8 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	}
 
 	@Override
-	public void startSpit() {
-		super.startSpit();
+	public void startSpit(float spitDamage) {
+		super.startSpit(spitDamage);
 		if(this.getWispStrengthModifier() > 1.0F) {
 			this.spitDelay = (int)(DEFAULT_SPIT_DELAY / (1.0F + (this.getWispStrengthModifier() - 1.0F) * 2.0F));
 		} else {

@@ -3,6 +3,7 @@ package thebetweenlands.common.entity.projectiles;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
@@ -14,12 +15,15 @@ import thebetweenlands.common.entity.mobs.EntitySpiritTreeFace;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntitySapSpit extends EntityThrowable {
+	protected float damage;
+
 	public EntitySapSpit(World worldIn) {
 		super(worldIn);
 	}
 
-	public EntitySapSpit(World worldIn, EntityLivingBase throwerIn) {
+	public EntitySapSpit(World worldIn, EntityLivingBase throwerIn, float damage) {
 		super(worldIn, throwerIn);
+		this.damage = damage;
 	}
 
 	@Override
@@ -43,15 +47,27 @@ public class EntitySapSpit extends EntityThrowable {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if(result.entityHit instanceof EntitySpiritTreeFace == false && result.entityHit instanceof EntityRootGrabber == false) {
+		if(!this.world.isRemote && result.entityHit instanceof EntitySpiritTreeFace == false && result.entityHit instanceof EntityRootGrabber == false) {
 			if(result.entityHit != null) {
-				result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), 3.0F);
+				result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.damage);
 			}
-
-			if(!this.world.isRemote) {
-				this.world.setEntityState(this, (byte)3);
-				this.setDead();
-			}
+			
+			this.world.setEntityState(this, (byte)3);
+			this.setDead();
 		}
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+
+		nbt.setFloat("damage", this.damage);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+
+		this.damage = nbt.getFloat("damage");
 	}
 }
