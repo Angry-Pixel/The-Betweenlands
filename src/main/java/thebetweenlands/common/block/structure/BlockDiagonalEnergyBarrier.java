@@ -17,15 +17,22 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.IConnectedTextureBlock;
+import thebetweenlands.common.block.IConnectedTextureBlock.IConnectionRules;
 
-public class BlockDiagonalEnergyBarrier extends Block {
+public class BlockDiagonalEnergyBarrier extends Block implements IConnectedTextureBlock {
 	public static final PropertyBool FLIPPED = PropertyBool.create("flipped");
 
 	public BlockDiagonalEnergyBarrier() {
@@ -111,7 +118,23 @@ public class BlockDiagonalEnergyBarrier extends Block {
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { FLIPPED });
+		return this.getConnectedTextureBlockStateContainer(new ExtendedBlockState(this, new IProperty[] { FLIPPED }, new IUnlistedProperty[0]));
+	}
+	
+	@Override
+	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+		final boolean flipped = state.getValue(FLIPPED);
+		return this.getExtendedConnectedTextureState((IExtendedBlockState) state, world, pos, p -> {
+			int xzSteps = Math.abs(p.getX() - pos.getX()) + Math.abs(p.getZ() - pos.getZ());
+			IBlockState otherState = world.getBlockState(p);
+			
+			//Only connect up/down or diagonals
+			if((p.getY() != pos.getY() && xzSteps == 0) || xzSteps > 1) {
+				return otherState.getBlock() instanceof BlockDiagonalEnergyBarrier && otherState.getValue(FLIPPED) == flipped;
+			}
+			
+			return false;
+		}, false);
 	}
 
     public static final AxisAlignedBB CORNER_NW_AABB = new AxisAlignedBB(0D, 0D, 0D, 0.25D, 1D, 0.25D);

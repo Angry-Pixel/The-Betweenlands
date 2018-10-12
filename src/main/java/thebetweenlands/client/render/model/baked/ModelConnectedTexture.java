@@ -71,16 +71,22 @@ public class ModelConnectedTexture implements IModel {
 		protected final Vertex[] verts;
 		protected final EnumFacing cullFace;
 		protected final int tintIndex;
+		protected final float minU, minV, maxU, maxV;
 
 		protected final BakedQuad[][] quads;
 
-		protected ConnectedTextureQuad(ResourceLocation[] textures, String[] indices, Vertex[] verts, EnumFacing cullFace, int tintIndex) {
+		protected ConnectedTextureQuad(ResourceLocation[] textures, String[] indices, Vertex[] verts, EnumFacing cullFace, int tintIndex,
+				float minU, float minV, float maxU, float maxV) {
 			this.textures = textures;
 			this.indices = indices;
 			this.verts = verts;
 			this.cullFace = cullFace;
 			this.tintIndex = tintIndex;
 			this.quads = new BakedQuad[4][this.textures.length];
+			this.minU = minU;
+			this.minV = minV;
+			this.maxU = maxU;
+			this.maxV = maxV;
 		}
 
 		public BakedQuad[][] getQuads() {
@@ -95,10 +101,10 @@ public class ModelConnectedTexture implements IModel {
 			Vertex d23 = this.verts[3].subtract(this.verts[2]);
 			Vertex d30 = this.verts[0].subtract(this.verts[3]);
 
-			float e01 = this.extrapolateClamp(this.verts[0].uv.y, this.verts[1].uv.y, 0.5F);
-			float e12 = this.extrapolateClamp(this.verts[1].uv.x, this.verts[2].uv.x, 0.5F);
-			float e23 = this.extrapolateClamp(this.verts[2].uv.y, this.verts[3].uv.y, 0.5F);
-			float e30 = this.extrapolateClamp(this.verts[3].uv.x, this.verts[0].uv.x, 0.5F);
+			float e01 = this.extrapolateClamp(this.verts[0].uv.y, this.verts[1].uv.y, (this.maxV + this.minV) / 2.0F);
+			float e12 = this.extrapolateClamp(this.verts[1].uv.x, this.verts[2].uv.x, (this.maxU + this.minU) / 2.0F);
+			float e23 = this.extrapolateClamp(this.verts[2].uv.y, this.verts[3].uv.y, (this.maxV + this.minV) / 2.0F);
+			float e30 = this.extrapolateClamp(this.verts[3].uv.x, this.verts[0].uv.x, (this.maxU + this.minU) / 2.0F);
 
 			Vertex p01 = this.verts[0].add(d01.scale(e01));
 			Vertex p12 = this.verts[1].add(d12.scale(e12));
@@ -107,7 +113,7 @@ public class ModelConnectedTexture implements IModel {
 
 			Vertex d0123 = p23.subtract(p01);
 
-			float ecp = this.extrapolateClamp(this.verts[0].uv.x + (this.verts[1].uv.x - this.verts[0].uv.x) * e01, this.verts[2].uv.x + (this.verts[3].uv.x - this.verts[2].uv.x) * e23, 0.5F);
+			float ecp = this.extrapolateClamp(this.verts[0].uv.x + (this.verts[1].uv.x - this.verts[0].uv.x) * e01, this.verts[2].uv.x + (this.verts[3].uv.x - this.verts[2].uv.x) * e23, (this.maxU + this.minU) / 2.0F);
 
 			Vertex cp = p01.add(d0123.scale(ecp));
 
@@ -345,7 +351,22 @@ public class ModelConnectedTexture implements IModel {
 					cullFace = EnumFacing.byName(ctJson.get("cullface").getAsString());
 				}
 
-				connectedTextures.add(new ConnectedTextureQuad(textures, indices, vertices, cullFace, tintIndex));
+				float minU = 0, minV = 0, maxU = 1, maxV = 1;
+				if(ctJson.has("minU")) {
+					minU = ctJson.get("minU").getAsFloat();
+				}
+				if(ctJson.has("minV")) {
+					minV = ctJson.get("minV").getAsFloat();
+				}
+				if(ctJson.has("maxU")) {
+					maxU = ctJson.get("maxU").getAsFloat();
+				}
+				if(ctJson.has("maxV")) {
+					maxV = ctJson.get("maxV").getAsFloat();
+				}
+
+				connectedTextures.add(new ConnectedTextureQuad(textures, indices, vertices, cullFace, tintIndex,
+						minU, minV, maxU, maxV));
 			}
 		}
 
