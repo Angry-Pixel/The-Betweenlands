@@ -1,5 +1,8 @@
 package thebetweenlands.common.network.clientbound;
+import java.util.Random;
+
 import io.netty.buffer.ByteBuf;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -7,13 +10,16 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.proxy.ClientProxy;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.monkeytest.ParticlePuzzleBeam;
 
 public class PacketParticle implements IMessage, IMessageHandler<PacketParticle, IMessage> {
 
 	public static enum ParticleType {
 		SPORE_JET,
-		FLAME;
+		FLAME,
+		BEAM;
 
 		static final ParticleType[] values = values();
 	}
@@ -22,6 +28,8 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 	public float posX;
 	public float posY;
 	public float posZ;
+	private static Random rand = new Random();
+	private static int counter = 0;
 
 	public PacketParticle() {
 	}
@@ -79,6 +87,12 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 				case FLAME:
 						TheBetweenlands.proxy.spawnCustomParticle("flame", world, message.posX, message.posY, message.posZ, 0.0D, 0.00D, 0.0D);
 					break;
+				case BEAM:
+					  counter += rand.nextInt(3);
+					    if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0)
+					      ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, message.posX, message.posY, message.posZ, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 57F, 255F, 56F, 1F, 4F, 24));
+					//TheBetweenlands.proxy.spawnCustomParticle("flame", world, message.posX, message.posY, message.posZ, 0.0D, 0.00D, 0.0D);
+				break;
 				default:
 			}
 		}

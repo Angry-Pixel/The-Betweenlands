@@ -25,11 +25,14 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelLoaderRegistry.LoaderException;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
 import thebetweenlands.client.render.sprite.TextureFromData;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.monkeytest.ParticlePuzzleBeam;
 
 public class TextureStitchHandler {
 	public static final TextureStitchHandler INSTANCE = new TextureStitchHandler();
@@ -293,4 +296,11 @@ public class TextureStitchHandler {
 			return this.duration;
 		}
 	}
+	//TEMP
+	  @SideOnly(Side.CLIENT)
+	  @SubscribeEvent
+	  public void onTextureStitch(TextureStitchEvent event) {
+		  System.out.println("*****PARTICLE BEAM TEXTURE REGISTERED HERE*****");
+	    event.getMap().registerSprite(ParticlePuzzleBeam.texture);
+	  }
 }
