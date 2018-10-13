@@ -90,7 +90,7 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 				case BEAM:
 					  counter += rand.nextInt(3);
 					    if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0);
-					      ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, message.posX, message.posY, message.posZ, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 57F, 255F, 56F, 1F, 3F, 40));
+					      ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, message.posX, message.posY, message.posZ, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 57F, 255F, 56F, 1F, 3F, 60));
 					//TheBetweenlands.proxy.spawnCustomParticle("flame", world, message.posX, message.posY, message.posZ, 0.0D, 0.00D, 0.0D);
 				break;
 				default:
