@@ -64,7 +64,7 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 
 		BlockPos targetPos = getPos().offset(facing, getDistanceToObstruction(facing));
 		IBlockState stateofTarget = getWorld().getBlockState(targetPos);
-		if (getWorld().getTotalWorldTime() % 10 == 0)
+		if (getWorld().getTotalWorldTime() % 5 == 0)
 			sendParticleMessage(facing);
 		if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
 			if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {

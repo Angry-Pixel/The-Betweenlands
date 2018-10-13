@@ -1,14 +1,11 @@
 package thebetweenlands.common;
 
-import java.io.File;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -80,6 +77,7 @@ import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
 import thebetweenlands.compat.tmg.TMGEquipmentInventory;
 import thebetweenlands.core.TheBetweenlandsPreconditions;
+import thebetweenlands.monkeytest.EventManager;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = ModInfo.MC_VERSIONS, certificateFingerprint = "${fingerprint}", dependencies = ModInfo.DEPENDENCIES, serverSideOnly = ModInfo.SERVER_ONLY)
 public class TheBetweenlands {
@@ -132,7 +130,7 @@ public class TheBetweenlands {
 
 		// Temp packet
 		networkWrapper.registerMessage(PacketParticle.class, PacketParticle.class, 100, Side.CLIENT); //ID 100 until added
-
+		MinecraftForge.EVENT_BUS.register(new EventManager());
 		//Renderers
 		proxy.registerItemAndBlockRenderers();
 		proxy.preInit();
