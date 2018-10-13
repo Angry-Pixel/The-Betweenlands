@@ -273,10 +273,13 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 		PacketBuffer buf = new PacketBuffer(Unpooled.buffer());
 		try {
 			entry.serializer.serialize(buf, (T) entry.value);
+			copy.serializedData = new byte[buf.readableBytes()];
+			buf.readBytes(copy.serializedData);
 		} catch(IOException ex) {
-			throw new RuntimeException(ex);
+			throw new DecoderException("Failed serializing data with custom serializer " + entry.serializer.getClass().getName(), ex);
+		} finally {
+			buf.release();
 		}
-		copy.serializedData = buf;
 	}
 
 	@Override
@@ -356,12 +359,10 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 
 		if(entry.serializedData != null) {
 			buf.writeBoolean(true);
-			buf.writeVarInt(entry.serializedData.readableBytes());
 
 			synchronized(entry.serializedData) {
-				entry.serializedData.markReaderIndex();
+				buf.writeVarInt(entry.serializedData.length);
 				buf.writeBytes(entry.serializedData);
-				entry.serializedData.resetReaderIndex();
 			}
 		} else {
 			buf.writeBoolean(false);
@@ -387,10 +388,11 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 
 			DataSerializer<?> serializer;
 			Object value = null;
-			ByteBuf serializedData = null;
+			byte[] serializedData = null;
 
 			if(buf.readBoolean()) {
-				serializedData = new PacketBuffer(buf.readBytes(buf.readVarInt()));
+				serializedData = new byte[buf.readVarInt()];
+				buf.readBytes(serializedData);
 				serializer = new CustomSerializer(null, null);
 			} else {
 				int serializerId = buf.readVarInt();
@@ -424,11 +426,17 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 				if(entry instanceof GenericDataManager.DataEntry<?>) {
 					GenericDataManager.DataEntry<?> newGenericEntry = (GenericDataManager.DataEntry<?>) newEntry;
 					if(entry.deserializer != null) {
-						try {
-							newValue = entry.deserializer.deserialize(new PacketBuffer(newGenericEntry.serializedData));
-						} catch(IOException ex) {
-							throw new RuntimeException(ex);
+						if(entry.deserializedValue == null) {
+							ByteBuf buf = Unpooled.wrappedBuffer(newGenericEntry.serializedData);
+							try {
+								entry.deserializedValue = entry.deserializer.deserialize(new PacketBuffer(buf));
+							} catch(IOException ex) {
+								throw new DecoderException("Failed deserializing data with custom deserializer " + entry.deserializer.getClass().getName(), ex);
+							} finally {
+								buf.release();
+							}
 						}
+						newValue = entry.deserializedValue;
 					} else {
 						newValue = newEntry.getValue();
 					}
@@ -529,7 +537,8 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 		private int trackingTimer;
 		private EntryAccess<T> access;
 
-		private ByteBuf serializedData;
+		private byte[] serializedData;
+		private Object deserializedValue;
 		private Serializer<T> serializer;
 		private Deserializer<T> deserializer;
 
