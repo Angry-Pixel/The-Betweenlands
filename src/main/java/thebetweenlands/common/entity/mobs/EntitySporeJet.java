@@ -28,7 +28,7 @@ public class EntitySporeJet extends EntityLiving {
 			if (ticksExisted > 20)
 				setDead();
 			if (ticksExisted == 1)
-				TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.SPORE_JET, (float) posX, (float)posY +0.5F, (float)posZ));
+				TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.SPORE_JET, (float) posX, (float)posY +0.5F, (float)posZ, 0F));
 		}
 	}
 
