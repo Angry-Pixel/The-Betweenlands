@@ -570,19 +570,6 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(ItemHealthOrb.class);
 	}
 
-	@Override
-	public void updateWispParticles(TileEntityWisp te) {
-		Iterator<Object> it = te.particleList.iterator();
-		while (it.hasNext()) {
-			ParticleWisp wisp = (ParticleWisp) it.next();
-			if (!wisp.isAlive()) {
-				it.remove();
-			} else {
-				wisp.onUpdate();
-			}
-		}
-	}
-
 	private static FontRenderer pixelLove;
 
 	@Override

@@ -26,6 +26,8 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
@@ -38,8 +40,6 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 	public static final IAttribute GAS_CLOUD_COLOR_G = (new RangedAttribute(null, "bl.gasCloudColorGreen", 196, 0, 255)).setDescription("Gas cloud color green component").setShouldWatch(true);
 	public static final IAttribute GAS_CLOUD_COLOR_B = (new RangedAttribute(null, "bl.gasCloudColorBlue", 179, 0, 255)).setDescription("Gas cloud color blue component").setShouldWatch(true);
 	public static final IAttribute GAS_CLOUD_COLOR_A = (new RangedAttribute(null, "bl.gasCloudColorAlpha", 170, 0, 255)).setDescription("Gas cloud color alpha component").setShouldWatch(true);
-
-	public List<Object> gasParticles = new ArrayList<>();
 
 	protected double aboveLayer = 6.0D;
 	protected int targetBlockedTicks = 0;
@@ -214,19 +214,14 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 			double my = this.motionY + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
 			double mz = this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
 			int[] color = this.getGasColor();
+			
 			ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
 					.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
+							.withData(this)
 							.withMotion(mx, my, mz)
 							.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
-			this.gasParticles.add(particle);
-
-			for (int i = 0; i < this.gasParticles.size(); i++) {
-				Particle gasParticle = (Particle)this.gasParticles.get(i);
-				gasParticle.onUpdate();
-				if (!gasParticle.isAlive()) {
-					this.gasParticles.remove(i);
-				}
-			}
+			
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS, particle);
 		}
 
 		if (this.isInWater()) {
@@ -284,11 +279,14 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 				double y = this.posY + this.height / 2.0D + this.motionY + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
 				double z = this.posZ + this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
 				int[] color = this.getGasColor();
+				
 				ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
 						.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
+								.withData(this)
 								.withMotion((this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F)
 								.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
-				this.gasParticles.add(particle);
+				
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS, particle);
 			}
 		}
 

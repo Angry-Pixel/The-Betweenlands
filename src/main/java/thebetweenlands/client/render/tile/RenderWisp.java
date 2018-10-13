@@ -13,6 +13,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.common.block.terrain.BlockWisp;
@@ -23,11 +25,6 @@ import thebetweenlands.util.TileEntityHelper;
 public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 	@Override
 	public void render(TileEntityWisp tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-
-		WorldRenderHandler.WISP_TILE_LIST.add(Pair.of(Pair.of(this, tileEntity), new Vec3d(x, y, z)));
-
-		List<Object> particleList = tileEntity.particleList;
-
 		double renderViewX = Minecraft.getMinecraft().getRenderManager().viewerPosX;
 		double renderViewY = Minecraft.getMinecraft().getRenderManager().viewerPosY;
 		double renderViewZ = Minecraft.getMinecraft().getRenderManager().viewerPosZ;
@@ -41,7 +38,7 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 			}
 		}
 
-		if(particleList.size() < 1000 && !Minecraft.getMinecraft().isGamePaused()) {
+		if(!Minecraft.getMinecraft().isGamePaused()) {
 			if(System.nanoTime() - ((TileEntityWisp)tileEntity).lastSpawn >= (500f - 500.0f * BetweenlandsConfig.RENDERING.wispQuality / 150.0f) * 1000000L) {
 				((TileEntityWisp)tileEntity).lastSpawn = System.nanoTime();
 
@@ -51,8 +48,8 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 				float r = (color >> 16 & 0xFF) / 255F;
 				float g = (color >> 8 & 0xFF) / 255F;
 				float b = (color & 0xFF) / 255F;
-
-				particleList.add(BLParticles.WISP.create(tileEntity.getWorld(), 
+				
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.WISPS, BLParticles.WISP.create(tileEntity.getWorld(), 
 						x + 0.5 + renderViewX, 
 						y + 0.5 + renderViewY, 
 						z + 0.5 + renderViewZ, 
@@ -63,42 +60,11 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 				g = (color >> 8 & 0xFF) / 255F;
 				b = (color & 0xFF) / 255F;
 
-				particleList.add(BLParticles.WISP.create(tileEntity.getWorld(), 
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.WISPS, BLParticles.WISP.create(tileEntity.getWorld(), 
 						x + 0.5 + renderViewX, 
 						y + 0.5 + renderViewY, 
 						z + 0.5 + renderViewZ, 
 						ParticleArgs.get().withColor(r, g, b, 1.0F).withScale(2.0F)));
-			}
-		}
-	}
-
-	/**
-	 * Renders the wisp particles
-	 * @param tileEntity
-	 * @param x
-	 * @param y
-	 * @param z
-	 * @param partialTicks
-	 */
-	public void renderWispParticles(BufferBuilder vertexBuffer, TileEntityWisp tileEntity, double x, double y, double z, float partialTicks) {
-		List<Object> particleList = tileEntity.particleList;
-
-		Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
-
-		if(viewer != null) {
-			Particle.interpPosX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * (double)partialTicks;
-			Particle.interpPosY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * (double)partialTicks;
-			Particle.interpPosZ = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * (double)partialTicks;
-			Particle.cameraViewDir = viewer.getLook(partialTicks);
-
-			for(Object particle : particleList){
-				ParticleWisp wisp = (ParticleWisp) particle;
-				wisp.renderParticle(vertexBuffer, viewer, partialTicks, 
-						ActiveRenderInfo.getRotationX(),
-						ActiveRenderInfo.getRotationXZ(),
-						ActiveRenderInfo.getRotationZ(),
-						ActiveRenderInfo.getRotationYZ(),
-						ActiveRenderInfo.getRotationXY());
 			}
 		}
 	}
