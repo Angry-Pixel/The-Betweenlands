@@ -54,8 +54,8 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 		Vec3d vector = new Vec3d((targetPos.getX() + 0.5D) - (getPos().getX() + 0.5D), (targetPos.getY() + 0.5D) - (getPos().getY() + 0.5D), (targetPos.getZ() + 0.5D) - (getPos().getZ() + 0.5D));
 		vector = vector.normalize();
 		for (float i = 0; i < distance; i += 0.25F) {
-			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.BEAM, getPos().getX() + 0.5F + ((float) vector.x * i), getPos().getY() + 0.5F + ((float) vector.y * i), getPos().getZ() + 0.5F + ((float) vector.z * i), i * 0.5F));
-			//TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.BEAM, getPos().getX() + 0.5F + ((float) vector.x * i), getPos().getY() + 0.5F + ((float) vector.y * i), getPos().getZ() + 0.5F + ((float) vector.z * i), 3.75F));
+			//TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.BEAM, getPos().getX() + 0.5F + ((float) vector.x * i), getPos().getY() + 0.5F + ((float) vector.y * i), getPos().getZ() + 0.5F + ((float) vector.z * i), i * 0.5F));
+			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.BEAM, getPos().getX() + 0.5F + ((float) vector.x * i), getPos().getY() + 0.5F + ((float) vector.y * i), getPos().getZ() + 0.5F + ((float) vector.z * i), 3.75F));
 		}
 	}
 
@@ -65,7 +65,7 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 
 		BlockPos targetPos = getPos().offset(facing, getDistanceToObstruction(facing));
 		IBlockState stateofTarget = getWorld().getBlockState(targetPos);
-		if (getWorld().getTotalWorldTime()%20 == 0)
+		if (getWorld().getTotalWorldTime()%10 == 0)
 			sendParticleMessage(facing);
 		if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
 			if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {
