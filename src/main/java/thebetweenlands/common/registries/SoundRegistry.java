@@ -161,6 +161,9 @@ public class SoundRegistry {
     public static final BLSoundEvent SPORELING_HURT = reg("sporeling_hurt");
     public static final BLSoundEvent SPORELING_LIVING = reg("sporeling_living");
     public static final BLSoundEvent TERMITE_LIVING = reg("termite_living");
+    public static final BLSoundEvent ROOT_SPRITE_DEATH = reg("root_sprite_death");
+    public static final BLSoundEvent ROOT_SPRITE_LIVING = reg("root_sprite_living");
+    public static final BLSoundEvent ROOT_SPRITE_HURT = reg("root_sprite_hurt");
     // Items
     public static final BLSoundEvent ROWBOAT_ROW_STARBOARD = reg("rowboat_row_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_PORT = reg("rowboat_row_port");

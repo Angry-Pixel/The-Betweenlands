@@ -1038,16 +1038,17 @@ entity.thebetweenlands.frog.name=Frog
 entity.thebetweenlands.gas_cloud.name=Shallowbreath
 entity.thebetweenlands.weedwood_rowboat.name=Weedwood Rowboat
 entity.thebetweenlands.bl_arrow.name=Arrow
-<<<<<<< HEAD
 entity.thebetweenlands.boulder_sprite.name=Boulder Sprite
-=======
 entity.thebetweenlands.sludge_ball.name=Sludge Ball
 entity.thebetweenlands.smoll_sludge.name=Smoll Sludge
 entity.thebetweenlands.spirit_tree_face_small.name=Small Spirit Tree Face
 entity.thebetweenlands.spirit_tree_face_large.name=Large Spirit Tree Face
 entity.thebetweenlands.tamed_spirit_tree_face.name=Tamed Spirit Tree Face
 entity.thebetweenlands.sap_spit.name=Sap Spit
->>>>>>> 1.12-dev
+entity.thebetweenlands.spike_wave.name=Root Wave
+entity.thebetweenlands.root_grabber.name=Root Grabber
+entity.thebetweenlands.spirit_tree_face_mask.name=Spirit Tree Face Mask
+entity.thebetweenlands.root_sprite.name=Root Sprite
 
 
 # Equipment

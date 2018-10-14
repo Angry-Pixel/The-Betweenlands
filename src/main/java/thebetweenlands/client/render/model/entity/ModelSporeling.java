@@ -123,8 +123,8 @@ public class ModelSporeling extends ModelBase {
     @Override
     public void setRotationAngles(float limbSwing, float prevLimbSwing, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
         super.setRotationAngles(limbSwing, prevLimbSwing, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-        armleft.rotateAngleX = MathHelper.cos(limbSwing * 1.5F + (float) Math.PI) * 2.0F * prevLimbSwing * 0.5F;
-        armright.rotateAngleX = MathHelper.cos(limbSwing * 1.5F) * 2.0F * prevLimbSwing * 0.5F;
+        armleft.rotateAngleX = MathHelper.cos(limbSwing * 1.5F + (float) Math.PI) * 2.0F * prevLimbSwing * 0.5F - (MathHelper.cos(entityTickTime / 10.0F) + 0.7F) / 2.0F * 0.3F;
+        armright.rotateAngleX = MathHelper.cos(limbSwing * 1.5F) * 2.0F * prevLimbSwing * 0.5F - (MathHelper.cos(entityTickTime / 11.0F) + 0.7F) / 2.0F * 0.3F;
 
         if(!entity.isRiding()) {
 	        legleft2.rotateAngleX = MathHelper.cos(limbSwing * 1.5F) * 1.4F * prevLimbSwing;

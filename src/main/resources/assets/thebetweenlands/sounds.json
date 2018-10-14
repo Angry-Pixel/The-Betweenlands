@@ -645,6 +645,25 @@
       "thebetweenlands:root_spike_particle_hit"
     ]
   },
+  "root_sprite_death": {
+    "sounds": [
+      "thebetweenlands:root_sprite_death"
+    ]
+  },
+  "root_sprite_hurt": {
+    "sounds": [
+      "thebetweenlands:root_sprite_hurt_1",
+      "thebetweenlands:root_sprite_hurt_2",
+      "thebetweenlands:root_sprite_hurt_3"
+    ]
+  },
+  "root_sprite_living": {
+    "sounds": [
+      "thebetweenlands:root_sprite_living_1",
+      "thebetweenlands:root_sprite_living_2",
+      "thebetweenlands:root_sprite_living_3"
+    ]
+  },
   "sorry": {
     "sounds": [
       "thebetweenlands:sorry"
