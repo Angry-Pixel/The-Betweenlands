@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"stage=0": { "model": "thebetweenlands:root_pod" },
+		"stage=1": { "model": "thebetweenlands:root_pod" }
+	}
+}

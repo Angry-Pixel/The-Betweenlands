@@ -184,6 +184,7 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.world.gen.feature.WorldGenRootPodRoots;
 import thebetweenlands.common.world.gen.feature.WorldGenSmallSpiritTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
@@ -299,6 +300,7 @@ public class BlockRegistry {
     public static final Block SAPLING_HEARTHGROVE = new BlockSaplingBetweenlands(new WorldGenHearthgroveTree());
     public static final Block SAPLING_NIBBLETWIG = new BlockSaplingBetweenlands(new WorldGenNibbletwigTree());
     public static final Block SAPLING_SPIRIT_TREE = new BlockSaplingSpiritTree();
+    public static final Block ROOT_POD = new BlockSaplingBetweenlands(new WorldGenRootPodRoots());
     public static final Block LEAVES_WEEDWOOD_TREE = new BlockTintedLeaves() {
     	@Override
     	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
