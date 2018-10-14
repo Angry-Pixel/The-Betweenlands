@@ -123,6 +123,7 @@ public class EntityRegistry {
 		registerEntity(EntitySpikeWave.class, "spike_wave");
 		registerEntity(EntityRootGrabber.class, "root_grabber");
 		registerEntity(EntitySpiritTreeFaceMask.class, "spirit_tree_face_mask", 64, 20, false);
+		registerEntity(EntityRootSprite.class, "root_sprite", 0x686868, 0x9fe530);
 	}
 
 	private static int id = 0;

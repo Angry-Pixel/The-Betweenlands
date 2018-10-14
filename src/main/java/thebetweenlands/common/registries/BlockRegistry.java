@@ -556,8 +556,8 @@ public class BlockRegistry {
     public static final Block ALGAE = new BlockAlgae().setSickleDrop(EnumItemPlantDrop.ALGAE_ITEM.create(1));
     public static final Block POISON_IVY = new BlockPoisonIvy();
     public static final Block ROOT = new BlockRoot();
-    public static final Block GIANT_ROOT = new BlockGiantRoot();
     public static final Block ROOT_UNDERWATER = new BlockRootUnderwater();
+    public static final Block GIANT_ROOT = new BlockGiantRoot();
     public static final Block ARROW_ARUM = new BlockPlant().setSickleDrop(EnumItemPlantDrop.ARROW_ARUM_LEAF.create(1));
     public static final Block BLUE_EYED_GRASS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.BLUE_EYED_GRASS_FLOWERS.create(1));
     public static final Block BLUE_IRIS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.BLUE_IRIS_PETAL.create(1));

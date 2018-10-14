@@ -1,7 +1,9 @@
 package thebetweenlands.common.item.equipment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -48,6 +50,7 @@ import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
+import thebetweenlands.common.entity.mobs.EntityTamedSpiritTreeFace;
 import thebetweenlands.common.entity.mobs.EntityTarminion;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -56,11 +59,12 @@ import thebetweenlands.util.LightingUtil;
 import thebetweenlands.util.NBTHelper;
 
 public class ItemAmulet extends Item implements IEquippable {
-	public static final List<Class<? extends EntityLivingBase>> SUPPORTED_ENTITIES = new ArrayList<Class<? extends EntityLivingBase>>();
+	public static final Set<Class<? extends EntityLivingBase>> SUPPORTED_ENTITIES = new HashSet<Class<? extends EntityLivingBase>>();
 
 	static {
 		SUPPORTED_ENTITIES.add(EntityTarminion.class);
 		SUPPORTED_ENTITIES.add(EntityGiantToad.class);
+		SUPPORTED_ENTITIES.add(EntityTamedSpiritTreeFace.class);
 	}
 
 	public ItemAmulet() {

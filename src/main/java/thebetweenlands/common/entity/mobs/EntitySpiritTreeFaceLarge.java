@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.Block;
@@ -21,6 +22,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -30,14 +32,19 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.BossType;
+import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.api.entity.IEntityWithLootModifier;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -55,7 +62,9 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.util.BlockShapeUtils;
 
-public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements IEntityWithLootModifier {
+public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements IEntityWithLootModifier, IBLBoss {
+	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
+
 	public static final byte EVENT_BLOW_ATTACK = 40;
 
 	protected static final UUID STRENGTH_MULTIPLIER_ATTRIBUTE_UUID = UUID.fromString("8a8dccae-273d-445d-b581-81d4a8a979a5");
@@ -67,6 +76,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	private static final DataParameter<Integer> CRAWLING_WAVE_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 	private static final DataParameter<Float> WISP_STRENGTH_MODIFIER = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.FLOAT);
 	private static final DataParameter<BlockPos> LAST_LOCKED_WISP = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<Optional<UUID>> BOSSINFO_ID = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 	private int blowTicks = 0;
 
@@ -105,7 +115,12 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 		this.tasks.addTask(0, new AITrackTarget(this));
 		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
-		this.tasks.addTask(2, new AISpit(this));
+		this.tasks.addTask(2, new AISpit(this, 4.5F) {
+			@Override
+			protected float getSpitDamage() {
+				return (float) EntitySpiritTreeFaceLarge.this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() / 3.0F;
+			}
+		});
 		this.tasks.addTask(3, new AIBlowAttack(this));
 		this.tasks.addTask(4, new AIRotatingWaveAttack(this));
 		this.tasks.addTask(5, new AICrawlingWaveAttack(this));
@@ -123,6 +138,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		this.dataManager.register(CRAWLING_WAVE_STATE, 0);
 		this.dataManager.register(WISP_STRENGTH_MODIFIER, 1.0F);
 		this.dataManager.register(LAST_LOCKED_WISP, BlockPos.ORIGIN);
+		this.dataManager.register(BOSSINFO_ID, Optional.absent());
 	}
 
 	@Override
@@ -170,6 +186,16 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			}
 		}
 		return super.findNearbyWoodBlocks();
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.SPIRIT_TREE_FACE_LARGE_DEATH;
+	}
+
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundRegistry.SPIRIT_TREE_FACE_LARGE_LIVING;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -319,6 +345,45 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			BLParticles.CORRUPTED.spawn(this.world, pos.getX() + 0.5D + this.rand.nextFloat() / 2.0F - 0.25F, pos.getY() + 0.5D + this.rand.nextFloat() / 2.0F - 0.25F, pos.getZ() + 0.5D + this.rand.nextFloat() / 2.0F - 0.25F, ParticleArgs.get().withMotion(dir.x, dir.y, dir.z));
 		}
 		this.world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.DAMAGE_REDUCTION, SoundCategory.HOSTILE, 0.65F, 0.5F, false);
+	}
+
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+
+		if (!this.world.isRemote) {
+			this.dataManager.set(BOSSINFO_ID, Optional.of(this.bossInfo.getUniqueId()));
+		}
+	}
+
+	@Override
+	protected void updateAITasks() {
+		super.updateAITasks();
+		this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+	}
+
+	@Override
+	protected void onDeathUpdate() {
+		super.onDeathUpdate();
+		this.bossInfo.setPercent(0);
+	}
+
+	@Override
+	public void setCustomNameTag(String name) {
+		super.setCustomNameTag(name);
+		this.bossInfo.setName(this.getDisplayName());
+	}
+
+	@Override
+	public void addTrackingPlayer(EntityPlayerMP player) {
+		super.addTrackingPlayer(player);
+		this.bossInfo.addPlayer(player);
+	}
+
+	@Override
+	public void removeTrackingPlayer(EntityPlayerMP player) {
+		super.removeTrackingPlayer(player);
+		this.bossInfo.removePlayer(player);
 	}
 
 	@Override
@@ -527,6 +592,10 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		super.readEntityFromNBT(nbt);
 
 		this.dataManager.set(WISP_STRENGTH_MODIFIER, nbt.getFloat("wispStrengthModifier"));
+
+		if(this.hasCustomName()) {
+			this.bossInfo.setName(this.getDisplayName());
+		}
 	}
 
 	@Nullable
@@ -658,8 +727,8 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	}
 
 	@Override
-	public void startSpit() {
-		super.startSpit();
+	public void startSpit(float spitDamage) {
+		super.startSpit(spitDamage);
 		if(this.getWispStrengthModifier() > 1.0F) {
 			this.spitDelay = (int)(DEFAULT_SPIT_DELAY / (1.0F + (this.getWispStrengthModifier() - 1.0F) * 2.0F));
 		} else {
@@ -710,6 +779,21 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		return this.dataManager.get(WISP_STRENGTH_MODIFIER);
 	}
 
+	@Override
+	public UUID getBossInfoUuid() {
+		return this.dataManager.get(BOSSINFO_ID).or(new UUID(0, 0));
+	}
+	
+	@Override
+	public BossType getBossType() {
+		return BossType.MINI_BOSS;
+	}
+	
+	@Override
+	public Vec3d getMiniBossTagOffset(float partialTicks) {
+		return new Vec3d(this.getFacing().getFrontOffsetX() * (this.width / 2), this.height + 0.5D, this.getFacing().getFrontOffsetZ() * (this.width / 2));
+	}
+
 	public static class AIRespawnSmallFaces extends EntityAIBase {
 		protected final EntitySpiritTreeFaceLarge entity;
 
@@ -733,7 +817,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 		@Override
 		public boolean shouldExecute() {
-			if(this.entity.isActive()) {
+			if(this.entity.isEntityAlive() && this.entity.isActive()) {
 				if(this.executeCheckCooldown <= 0) {
 					this.executeCheckCooldown = 20 + this.entity.rand.nextInt(20);
 					return !this.hasEnoughSmallFaces();

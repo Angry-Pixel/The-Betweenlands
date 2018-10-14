@@ -106,7 +106,6 @@ public class EntityCapabilityHandler {
 		ID_CAPABILITY_MAP.put(capability.getID(), capability);
 	}
 
-	@SuppressWarnings("deprecation")
 	@SubscribeEvent
 	public static void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
 		Entity entity = event.getObject();

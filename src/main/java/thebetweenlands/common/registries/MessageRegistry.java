@@ -18,6 +18,7 @@ import thebetweenlands.common.network.clientbound.MessageDamageReductionParticle
 import thebetweenlands.common.network.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.network.clientbound.MessageDruidTeleportParticles;
 import thebetweenlands.common.network.clientbound.MessageGemProc;
+import thebetweenlands.common.network.clientbound.MessageLivingWeedwoodShieldSpit;
 import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
 import thebetweenlands.common.network.clientbound.MessagePlayEntityIdle;
 import thebetweenlands.common.network.clientbound.MessagePowerRingParticles;
@@ -71,6 +72,7 @@ public class MessageRegistry {
 		registerMessage(MessageShowFoodSicknessLine.class, Side.CLIENT);
 		registerMessage(MessageDamageReductionParticle.class, Side.CLIENT);
 		registerMessage(MessageRiftSound.class, Side.CLIENT);
+		registerMessage(MessageLivingWeedwoodShieldSpit.class, Side.CLIENT);
 		
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);

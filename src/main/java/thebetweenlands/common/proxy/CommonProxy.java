@@ -181,10 +181,6 @@ public class CommonProxy implements IGuiHandler {
 
 	}
 
-	public void updateWispParticles(TileEntityWisp te) {
-
-	}
-
 	public FontRenderer getCustomFontRenderer() {
 		return null;
 	}

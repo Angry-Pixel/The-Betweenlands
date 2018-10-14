@@ -46,6 +46,7 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -69,6 +70,7 @@ import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler.EntityC
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
 public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlockCollisions, IEntityAdditionalSpawnData, IEntityWithLootModifier, IEntityBL {
@@ -90,6 +92,8 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	private float rollAnimationSpeed = 0.0F;
 	private float rollAnimation = 0.0F;
 	private float rollAnimationWeight = 0.0F;
+
+	protected boolean rollSoundPlayed = false;
 
 	protected double rollingSpeed = 0;
 	protected int rollingTicks = 0;
@@ -270,12 +274,16 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.BLOCK_STONE_BREAK;
+		return SoundRegistry.BOULDER_SPRITE_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.BLOCK_STONE_BREAK;
+		return SoundRegistry.BOULDER_SPRITE_DEATH;
+	}
+
+	protected void playRollSound() {
+		this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.BOULDER_SPRITE_ROLL, SoundCategory.HOSTILE, this.getSoundVolume(), this.getSoundPitch());
 	}
 
 	@Override
@@ -441,8 +449,13 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 			if(this.getAIMoveSpeed() > 0.3F && this.moveForward != 0) {
 				this.dataManager.set(ROLL_SPEED, 0.05F + (this.getAIMoveSpeed() - 0.3F) / 3.0F);
+				if(!this.rollSoundPlayed) {
+					this.playRollSound();
+				}
+				this.rollSoundPlayed = true;
 			} else {
 				this.dataManager.set(ROLL_SPEED, 0.0F);
+				this.rollSoundPlayed = false;
 			}
 
 			IAttributeInstance attackAttribute = this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);

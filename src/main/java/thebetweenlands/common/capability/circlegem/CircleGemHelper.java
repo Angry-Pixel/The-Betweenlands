@@ -14,6 +14,7 @@ import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBow;
+import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
@@ -46,7 +47,7 @@ public class CircleGemHelper {
 	 * @return
 	 */
 	public static boolean isApplicable(Item item) {
-		return item instanceof ItemAmulet || item instanceof ItemArmor || item instanceof ItemSword || item instanceof ItemBow || item instanceof ItemTool;
+		return item instanceof ItemAmulet || item instanceof ItemArmor || item instanceof ItemSword || item instanceof ItemBow || item instanceof ItemTool || item instanceof ItemShield;
 	}
 
 	/**
@@ -175,8 +176,8 @@ public class CircleGemHelper {
 				//At this point either userGem or attackerItemGem are set because either there's a user shooting a (non-living) projectile (user != attacker) or the user is attacking directly (user == attacker)
 				List<CircleGem> attackedGems = CircleGemHelper.getGems(attackedEntity); 
 				CircleGemType attackedBlockingItemGem = CircleGemType.NONE;
-				if(attacker instanceof EntityPlayer) {
-					EntityPlayer player = (EntityPlayer) attacker;
+				if(attackedEntity instanceof EntityPlayer) {
+					EntityPlayer player = (EntityPlayer) attackedEntity;
 					ItemStack heldItem = player.getActiveItemStack();
 					if(!heldItem.isEmpty() && player.isActiveItemStackBlocking()) {
 						attackedBlockingItemGem = CircleGemHelper.getGem(heldItem);
@@ -232,6 +233,7 @@ public class CircleGemHelper {
 				if(gemDamageVariation != 0.0F) {
 					damage = Math.max(damage + gemDamageVariation, 1.0F);
 				}
+				damage = Math.max(0, damage);
 
 				boolean attackerProc = attacker.world.rand.nextFloat() <= (source == attacker && !attacker.onGround && attacker.motionY < 0 ? GEM_PROC_CHANCE * 1.33F : GEM_PROC_CHANCE);
 				boolean defenderProc = attacker.world.rand.nextFloat() <= GEM_PROC_CHANCE;

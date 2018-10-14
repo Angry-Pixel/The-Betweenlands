@@ -3,13 +3,11 @@ package thebetweenlands.client.handler;
 import java.util.List;
 import java.util.Random;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.BossInfoClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
@@ -19,24 +17,21 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -49,7 +44,6 @@ import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IPortalCapability;
-import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -76,7 +70,6 @@ public class ScreenRenderHandler extends Gui {
 	public static ScreenRenderHandler INSTANCE = new ScreenRenderHandler();
 
 	private static final ResourceLocation DECAY_BAR_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/decay_bar.png");
-	private static final ResourceLocation BOSS_BAR_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/boss_health_bar.png");
 
 	private Random random = new Random();
 	private int updateCounter;
@@ -497,71 +490,6 @@ public class ScreenRenderHandler extends Gui {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 	
-	@SubscribeEvent
-	public void onBossBarRender(RenderGameOverlayEvent.BossInfo event) {
-		boolean foundBoss = false;
-		Minecraft mc = Minecraft.getMinecraft();
-		for(Entity entity : mc.world.loadedEntityList) {
-			if(entity instanceof IBLBoss) {
-				if(event.getBossInfo().getUniqueId().equals(((IBLBoss) entity).getBossInfoUuid())) {
-					foundBoss = true;
-					break;
-				}
-			}
-		}
-		if(foundBoss) {
-			event.setCanceled(true);
-
-			BossInfoClient info = event.getBossInfo();
-			float percent = info.getPercent();
-			ITextComponent name = info.getName();
-
-			int texWidth = 256;
-			int texHeight = 32/2;
-			event.setIncrement(texHeight + 2);
-			double renderWidth = 250;
-			double renderHeight = (double)texHeight / (double)texWidth * renderWidth;
-			double renderHealth  = (renderWidth - 16.0F / texWidth * renderWidth - (renderWidth - 16.0F / texWidth * renderWidth) * percent);
-
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			GlStateManager.enableBlend();
-			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			mc.getTextureManager().bindTexture(BOSS_BAR_TEXTURE);
-			//Old rendering code
-			GlStateManager.enableBlend();
-
-			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(event.getResolution().getScaledWidth() / 2 - renderWidth / 2.0D, event.getY() - 2, 0);
-			GlStateManager.glBegin(GL11.GL_QUADS);
-			//Background
-			GlStateManager.glTexCoord2f(0, 0);
-			GL11.glVertex2d(0, 0);
-			GlStateManager.glTexCoord2f(0, 0.5F);
-			GL11.glVertex2d(0, renderHeight);
-			GlStateManager.glTexCoord2f(1, 0.5F);
-			GL11.glVertex2d(renderWidth, renderHeight);
-			GlStateManager.glTexCoord2f(1, 0);
-			GL11.glVertex2d(renderWidth, 0);
-			//Foreground
-			if (percent > 0) {
-				GlStateManager.glTexCoord2f(0, 0.5F);
-				GL11.glVertex2d(0, 0);
-				GlStateManager.glTexCoord2f(0, 1.0F);
-				GL11.glVertex2d(0, renderHeight);
-				GlStateManager.glTexCoord2f(16.0F / texWidth + (1.0F - 16.0F / texWidth) * percent, 1.0F);
-				GL11.glVertex2d(renderWidth - renderHealth, renderHeight);
-				GlStateManager.glTexCoord2f(16.0F / texWidth + (1.0F - 16.0F / texWidth) * percent, 0.5F);
-				GL11.glVertex2d(renderWidth - renderHealth, 0);
-			}
-			GlStateManager.glEnd();
-			GlStateManager.popMatrix();
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			int strWidth = TheBetweenlands.proxy.getCustomFontRenderer().getStringWidth(name.getFormattedText());
-			TheBetweenlands.proxy.getCustomFontRenderer().drawString(name.getFormattedText(), event.getResolution().getScaledWidth() / 2 - strWidth / 2, event.getY() + 1, 0xFFFFFFFF);
-		}
-	}
-
 	private void renderTexturedRect(BufferBuilder buffer, double x, double y, double x2, double y2, double umin, double umax, double vmin, double vmax) {
 		buffer.pos(x, y2, 0.0D).tex(umin, vmax).endVertex();
 		buffer.pos(x2, y2, 0.0D).tex(umax, vmax).endVertex();

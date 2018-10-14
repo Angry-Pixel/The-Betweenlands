@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.ai;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 import net.minecraft.block.material.Material;
@@ -15,6 +16,30 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityAIFollowTarget extends EntityAIBase {
+	public static class FollowClosest implements Supplier<EntityLivingBase> {
+		private double range;
+		private Class<? extends EntityLivingBase> type;
+		private final EntityLiving taskOwner;
+
+		public FollowClosest(EntityLiving taskOwner, Class<? extends EntityLivingBase> type, double range) {
+			this.taskOwner = taskOwner;
+			this.type = type;
+			this.range = range;
+		}
+
+		@Override
+		public EntityLivingBase get() {
+			List<EntityLivingBase> entities = this.taskOwner.world.getEntitiesWithinAABB(this.type, this.taskOwner.getEntityBoundingBox().grow(this.range));
+			EntityLivingBase closest = null;
+			for(EntityLivingBase entity : entities) {
+				if(closest == null || entity.getDistanceSq(this.taskOwner) < closest.getDistanceSq(this.taskOwner)) {
+					closest = entity;
+				}
+			}
+			return closest;
+		}
+	}
+
 	protected final EntityLiving taskOwner;
 	protected final Supplier<EntityLivingBase> target;
 	protected World theWorld;
@@ -24,8 +49,9 @@ public class EntityAIFollowTarget extends EntityAIBase {
 	protected float maxDist;
 	protected float minDist;
 	protected float oldWaterCost;
+	protected boolean teleport;
 
-	public EntityAIFollowTarget(EntityLiving taskOwner, Supplier<EntityLivingBase> target, double speed, float minDist, float maxDist) {
+	public EntityAIFollowTarget(EntityLiving taskOwner, Supplier<EntityLivingBase> target, double speed, float minDist, float maxDist, boolean teleport) {
 		this.taskOwner = taskOwner;
 		this.theWorld = taskOwner.world;
 		this.target = target;
@@ -33,6 +59,8 @@ public class EntityAIFollowTarget extends EntityAIBase {
 		this.navigator = taskOwner.getNavigator();
 		this.minDist = minDist;
 		this.maxDist = maxDist;
+		this.teleport = teleport;
+		this.setMutexBits(3);
 	}
 
 	@Override
@@ -84,7 +112,7 @@ public class EntityAIFollowTarget extends EntityAIBase {
 			if (--this.timeToRecalcPath <= 0) {
 				this.timeToRecalcPath = 10;
 
-				if (!this.navigator.tryMoveToEntityLiving(target, this.speed)) {
+				if (!this.navigator.tryMoveToEntityLiving(target, this.speed) && this.teleport) {
 					if (!this.taskOwner.getLeashed()) {
 						if (this.taskOwner.getDistanceSq(target) >= 144.0D) {
 							int i = MathHelper.floor(target.posX) - 2;

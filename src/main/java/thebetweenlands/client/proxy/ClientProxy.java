@@ -5,7 +5,6 @@ import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -112,6 +111,7 @@ import thebetweenlands.client.render.entity.RenderPeatMummy;
 import thebetweenlands.client.render.entity.RenderPyrad;
 import thebetweenlands.client.render.entity.RenderPyradFlame;
 import thebetweenlands.client.render.entity.RenderRootGrabber;
+import thebetweenlands.client.render.entity.RenderRootSprite;
 import thebetweenlands.client.render.entity.RenderRopeNode;
 import thebetweenlands.client.render.entity.RenderSapSpit;
 import thebetweenlands.client.render.entity.RenderShockwaveBlock;
@@ -139,7 +139,6 @@ import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
-import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.client.render.sky.RiftVariant;
@@ -154,6 +153,8 @@ import thebetweenlands.client.render.tile.RenderGeckoCage;
 import thebetweenlands.client.render.tile.RenderInfuser;
 import thebetweenlands.client.render.tile.RenderItemCage;
 import thebetweenlands.client.render.tile.RenderItemShelf;
+import thebetweenlands.client.render.tile.RenderItemStackAsTileEntity;
+import thebetweenlands.client.render.tile.RenderLivingWeedwoodShield;
 import thebetweenlands.client.render.tile.RenderLootPot;
 import thebetweenlands.client.render.tile.RenderMudFlowerPot;
 import thebetweenlands.client.render.tile.RenderPestleAndMortar;
@@ -211,6 +212,7 @@ import thebetweenlands.common.entity.mobs.EntityMummyArm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntityPyradFlame;
+import thebetweenlands.common.entity.mobs.EntityRootSprite;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
@@ -505,6 +507,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpikeWave.class, RenderSpikeWave::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRootGrabber.class, RenderRootGrabber::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceMask.class, RenderSpiritTreeFaceMask::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityRootSprite.class, RenderRootSprite::new);
 		
 
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
@@ -597,6 +600,30 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT), EnumLootPot.POT_2.getMetadata(facing), TileEntityTarLootPot2.class);
 			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT), EnumLootPot.POT_3.getMetadata(facing), TileEntityTarLootPot3.class);
 		}
+
+		Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityDruidAltar.class));
+		Item.getItemFromBlock(BlockRegistry.COMPOST_BIN).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCompostBin.class));
+		Item.getItemFromBlock(BlockRegistry.PURIFIER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityPurifier.class));
+		Item.getItemFromBlock(BlockRegistry.MOB_SPAWNER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityMobSpawnerBetweenlands.class));
+		Item.getItemFromBlock(BlockRegistry.SPIKE_TRAP).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntitySpikeTrap.class));
+		Item.getItemFromBlock(BlockRegistry.POSSESSED_BLOCK).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityPossessedBlock.class));
+		Item.getItemFromBlock(BlockRegistry.ITEM_CAGE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityItemCage.class));
+		Item.getItemFromBlock(BlockRegistry.GECKO_CAGE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityGeckoCage.class));
+		Item.getItemFromBlock(BlockRegistry.INFUSER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityInfuser.class));
+		Item.getItemFromBlock(BlockRegistry.MORTAR).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityMortar.class));
+		Item.getItemFromBlock(BlockRegistry.ANIMATOR).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityAnimator.class));
+		Item.getItemFromBlock(BlockRegistry.ALEMBIC).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityAlembic.class));
+		Item.getItemFromBlock(BlockRegistry.ITEM_SHELF).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityItemShelf.class));
+		Item.getItemFromBlock(BlockRegistry.REPELLER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityRepeller.class));
+		Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(renderer -> {
+			for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+				renderer.add(EnumLootPot.POT_1.getMetadata(facing), TileEntityTarLootPot1.class);
+				renderer.add(EnumLootPot.POT_2.getMetadata(facing), TileEntityTarLootPot2.class);
+				renderer.add(EnumLootPot.POT_3.getMetadata(facing), TileEntityTarLootPot3.class);
+			}
+		}));
+		ItemRegistry.LIVING_WEEDWOOD_SHIELD.setTileEntityItemStackRenderer(new RenderLivingWeedwoodShield());
+
 		
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
@@ -684,19 +711,6 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(ArmSwingSpeedHandler.class);
         MinecraftForge.EVENT_BUS.register(BLSkyRenderer.class);
         MinecraftForge.EVENT_BUS.register(ItemHealthOrb.class);
-	}
-
-	@Override
-	public void updateWispParticles(TileEntityWisp te) {
-		Iterator<Object> it = te.particleList.iterator();
-		while (it.hasNext()) {
-			ParticleWisp wisp = (ParticleWisp) it.next();
-			if (!wisp.isAlive()) {
-				it.remove();
-			} else {
-				wisp.onUpdate();
-			}
-		}
 	}
 
 	private static FontRenderer pixelLove;

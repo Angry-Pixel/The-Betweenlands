@@ -26,7 +26,12 @@ public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 
 		this.tasks.addTask(0, new AITrackTarget(this, true, 16.0D));
 		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
-		this.tasks.addTask(2, new AISpit(this));
+		this.tasks.addTask(2, new AISpit(this, 5.0F, 30, 70) {
+			@Override
+			protected float getSpitDamage() {
+				return (float) EntityTamedSpiritTreeFace.this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+			}
+		});
 		this.tasks.addTask(3, new AIWander(this, 8, 0.33D, 200));
 		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F) {
 			@Override
@@ -49,7 +54,7 @@ public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
 	}
 
 	@Override

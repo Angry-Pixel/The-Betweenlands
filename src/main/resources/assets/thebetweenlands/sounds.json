@@ -558,6 +558,22 @@
       "thebetweenlands:gas_cloud_death"
     ]
   },
+  "boulder_sprite_hurt": {
+    "sounds": [
+      "thebetweenlands:boulder_sprite_hurt_1",
+      "thebetweenlands:boulder_sprite_hurt_2"
+    ]
+  },
+  "bounder_sprite_death": {
+    "sounds": [
+      "thebetweenlands:boulder_sprite_death"
+    ]
+  },
+  "bounder_sprite_roll": {
+    "sounds": [
+      "thebetweenlands:boulder_sprite_roll"
+    ]
+  },
   "spirit_tree_face_large_spit": {
     "sounds": [
       "thebetweenlands:spirit_tree_face_spit"
@@ -566,6 +582,27 @@
   "spirit_tree_face_small_spit": {
     "sounds": [
       "thebetweenlands:spirit_tree_face_spit"
+    ]
+  },
+  "spirit_tree_face_small_living": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_large_living_1",
+      "thebetweenlands:spirit_tree_face_large_living_2",
+      "thebetweenlands:spirit_tree_face_large_living_3",
+      "thebetweenlands:spirit_tree_face_large_living_4"
+    ]
+  },
+  "spirit_tree_face_large_death": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_large_death"
+    ]
+  },
+  "spirit_tree_face_large_living": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_large_living_1",
+      "thebetweenlands:spirit_tree_face_large_living_2",
+      "thebetweenlands:spirit_tree_face_large_living_3",
+      "thebetweenlands:spirit_tree_face_large_living_4"
     ]
   },
   "spirit_tree_face_large_emerge": {
@@ -606,6 +643,25 @@
   "root_spike_particle_hit": {
     "sounds": [
       "thebetweenlands:root_spike_particle_hit"
+    ]
+  },
+  "root_sprite_death": {
+    "sounds": [
+      "thebetweenlands:root_sprite_death"
+    ]
+  },
+  "root_sprite_hurt": {
+    "sounds": [
+      "thebetweenlands:root_sprite_hurt_1",
+      "thebetweenlands:root_sprite_hurt_2",
+      "thebetweenlands:root_sprite_hurt_3"
+    ]
+  },
+  "root_sprite_living": {
+    "sounds": [
+      "thebetweenlands:root_sprite_living_1",
+      "thebetweenlands:root_sprite_living_2",
+      "thebetweenlands:root_sprite_living_3"
     ]
   },
   "sorry": {

@@ -126,8 +126,14 @@ public class SoundRegistry {
     public static final BLSoundEvent GAS_CLOUD_LIVING = reg("gas_cloud_living");
     public static final BLSoundEvent GAS_CLOUD_HURT = reg("gas_cloud_hurt");
     public static final BLSoundEvent GAS_CLOUD_DEATH = reg("gas_cloud_death");
+    public static final BLSoundEvent BOULDER_SPRITE_HURT = reg("boulder_sprite_hurt");
+    public static final BLSoundEvent BOULDER_SPRITE_DEATH = reg("bounder_sprite_death");
+    public static final BLSoundEvent BOULDER_SPRITE_ROLL = reg("bounder_sprite_roll");
     public static final BLSoundEvent SPIRIT_TREE_FACE_SMALL_SPIT = reg("spirit_tree_face_small_spit");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_SMALL_LIVING = reg("spirit_tree_face_small_living");
     public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_SPIT = reg("spirit_tree_face_large_spit");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_DEATH = reg("spirit_tree_face_large_death");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_LIVING = reg("spirit_tree_face_large_living");
     public static final BLSoundEvent SPIRIT_TREE_FACE_SMALL_EMERGE = reg("spirit_tree_face_small_emerge");
     public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_EMERGE = reg("spirit_tree_face_large_emerge");
     public static final BLSoundEvent SPIRIT_TREE_FACE_SUCK = reg("spirit_tree_face_suck");
@@ -155,6 +161,9 @@ public class SoundRegistry {
     public static final BLSoundEvent SPORELING_HURT = reg("sporeling_hurt");
     public static final BLSoundEvent SPORELING_LIVING = reg("sporeling_living");
     public static final BLSoundEvent TERMITE_LIVING = reg("termite_living");
+    public static final BLSoundEvent ROOT_SPRITE_DEATH = reg("root_sprite_death");
+    public static final BLSoundEvent ROOT_SPRITE_LIVING = reg("root_sprite_living");
+    public static final BLSoundEvent ROOT_SPRITE_HURT = reg("root_sprite_hurt");
     // Items
     public static final BLSoundEvent ROWBOAT_ROW_STARBOARD = reg("rowboat_row_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_PORT = reg("rowboat_row_port");

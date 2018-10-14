@@ -44,7 +44,7 @@ public class BlockLocationGuard implements ILocationGuard {
 	}
 
 	@Override
-	public void setGuarded(World world, BlockPos pos, boolean guarded) {
+	public boolean setGuarded(World world, BlockPos pos, boolean guarded) {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -54,10 +54,11 @@ public class BlockLocationGuard implements ILocationGuard {
 			if(chunk == null) {
 				this.chunkMap.put(id, chunk = new GuardChunk(x / 16, z / 16));
 			}
-			chunk.setGuarded(x & 15, y, z & 15, true);
+			return chunk.setGuarded(x & 15, y, z & 15, true);
 		} else if(chunk != null) {
-			chunk.setGuarded(x & 15, y, z & 15, false);
+			return chunk.setGuarded(x & 15, y, z & 15, false);
 		}
+		return false;
 	}
 
 	@Override
@@ -150,7 +151,7 @@ public class BlockLocationGuard implements ILocationGuard {
 			return this.blockRefCount;
 		}
 
-		public void setGuarded(int x, int y, int z, boolean guarded) {
+		public boolean setGuarded(int x, int y, int z, boolean guarded) {
 			int byteIndex = this.getByteIndex(x, y, z);
 			byte mask = (byte)(1 << (x & 7));
 			byte data = this.data[byteIndex];
@@ -163,7 +164,11 @@ public class BlockLocationGuard implements ILocationGuard {
 				} else {
 					this.blockRefCount--;
 				}
+				
+				return true;
 			}
+			
+			return false;
 		}
 
 		public boolean isGuarded(int x, int y, int z) {
@@ -206,21 +211,25 @@ public class BlockLocationGuard implements ILocationGuard {
 			return this.sections[y >> 4];
 		}
 
-		public void setGuarded(int x, int y, int z, boolean guarded) {
+		public boolean setGuarded(int x, int y, int z, boolean guarded) {
 			if(y >= 0 && y < 256) {
+				boolean changed = false;
 				GuardChunkSection section = this.sections[y >> 4];
 				if(guarded) {
 					if(section == null) {
 						this.sections[y >> 4] = section = new GuardChunkSection();
 					}
-					section.setGuarded(x, y & 15, z, true);
+					changed = section.setGuarded(x, y & 15, z, true);
 				} else if(section != null) {
-					section.setGuarded(x, y & 15, z, false);
+					changed = section.setGuarded(x, y & 15, z, false);
 					if(section.isEmpty()) {
 						this.sections[y >> 4] = null;
 					}
 				}
+				return changed;
 			}
+			
+			return false;
 		}
 
 		public boolean isGuarded(int x, int y, int z) {

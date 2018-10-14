@@ -40,6 +40,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 	public static final byte EVENT_SPIT = 83;
 
 	protected int spitTicks = 0;
+	protected float spitDamage;
 
 	private boolean emergeSound = false;
 
@@ -294,8 +295,9 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 		return this.spitTicks > 0;
 	}
 
-	public void startSpit() {
+	public void startSpit(float spitDamage) {
 		this.spitTicks = 1;
+		this.spitDamage = spitDamage;
 	}
 
 	public void doSpitAttack() {
@@ -303,7 +305,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 		if(target != null) {
 			EnumFacing facing = this.getFacing();
 
-			EntitySapSpit spit = new EntitySapSpit(this.world, this);
+			EntitySapSpit spit = new EntitySapSpit(this.world, this, this.spitDamage);
 			spit.setPosition(this.posX + facing.getFrontOffsetX() * (this.width / 2 + 0.1F), this.posY + this.height / 2.0F + facing.getFrontOffsetY() * (this.height / 2 + 0.1F), this.posZ + facing.getFrontOffsetZ() * (this.width / 2 + 0.1F));
 
 			double dx = target.posX - spit.posX;
@@ -427,11 +429,22 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 	public static class AISpit extends EntityAIBase {
 		protected final EntitySpiritTreeFace entity;
-
+		protected int minCooldown;
+		protected int maxCooldown;
+		
 		protected int cooldown = 0;
+		
+		protected float spitDamage;
 
-		public AISpit(EntitySpiritTreeFace entity) {
+		public AISpit(EntitySpiritTreeFace entity, float spitDamage) {
+			this(entity, spitDamage, 50, 170);
+		}
+		
+		public AISpit(EntitySpiritTreeFace entity, float spitDamage, int minCooldown, int maxCooldown) {
 			this.entity = entity;
+			this.minCooldown = minCooldown;
+			this.maxCooldown = maxCooldown;
+			this.spitDamage = spitDamage;
 			this.setMutexBits(0);
 		}
 
@@ -449,8 +462,8 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 		public void updateTask() {
 			if(!this.entity.isAttacking()) {
 				if(this.cooldown <= 0) {
-					this.cooldown = 50 + this.entity.rand.nextInt(120);
-					this.entity.startSpit();
+					this.cooldown = this.minCooldown + this.entity.rand.nextInt(this.maxCooldown - this.minCooldown + 1);
+					this.entity.startSpit(this.getSpitDamage());
 				}
 				this.cooldown--;
 			}
@@ -459,6 +472,10 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 		@Override
 		public boolean shouldContinueExecuting() {
 			return this.shouldExecute();
+		}
+		
+		protected float getSpitDamage() {
+			return this.spitDamage;
 		}
 	}
 }

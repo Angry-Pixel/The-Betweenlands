@@ -38,6 +38,7 @@ import thebetweenlands.common.handler.ArmorHandler;
 import thebetweenlands.common.handler.AspectSyncHandler;
 import thebetweenlands.common.handler.AttackDamageHandler;
 import thebetweenlands.common.handler.BlockBreakHandler;
+import thebetweenlands.common.handler.BossHandler;
 import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler;
 import thebetweenlands.common.handler.ElixirCommonHandler;
 import thebetweenlands.common.handler.EntitySpawnHandler;
@@ -238,5 +239,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(PlayerRespawnHandler.class);
 		MinecraftForge.EVENT_BUS.register(CustomEntityBlockCollisionsHandler.class);
 		MinecraftForge.EVENT_BUS.register(PotionRootBound.class);
+		MinecraftForge.EVENT_BUS.register(BossHandler.class);
 	}
 }

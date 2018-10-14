@@ -26,6 +26,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.BLMaterialRegistry;
@@ -40,10 +41,18 @@ public class ItemWeedwoodShield extends ItemBLShield {
 			@Override
 			@SideOnly(Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				NBTTagCompound tag = stack.getTagCompound();
-				return tag != null && tag.hasKey("burningTicks") && tag.getInteger("burningTicks") > 0 ? 1.0F : 0.0F;
+				return ((ItemWeedwoodShield)stack.getItem()).getBurningTicks(stack) > 0 ? 1.0F : 0.0F;
 			}
 		});
+	}
+
+	public void setBurningTicks(ItemStack stack, int ticks) {
+		stack.setTagInfo("burningTicks", new NBTTagInt(ticks));
+	}
+
+	public int getBurningTicks(ItemStack stack) {
+		NBTTagCompound tag = stack.getTagCompound();
+		return tag != null && tag.hasKey("burningTicks", Constants.NBT.TAG_INT) ? tag.getInteger("burningTicks") : 0;
 	}
 
 	@Override
@@ -57,7 +66,7 @@ public class ItemWeedwoodShield extends ItemBLShield {
 				attacker = source.getTrueSource();
 			}
 			if((attacker.isBurning() || attacker instanceof EntitySmallFireball) && attacked.world.rand.nextFloat() < 0.5F) {
-				stack.setTagInfo("burningTicks", new NBTTagInt(80));
+				this.setBurningTicks(stack, 80);
 			} else if(attacker instanceof EntityLivingBase && attacked.world.rand.nextFloat() < 0.25F) {
 				ItemStack activeItem = ((EntityLivingBase)attacker).getActiveItemStack();
 				if(!activeItem.isEmpty()) {
@@ -72,11 +81,10 @@ public class ItemWeedwoodShield extends ItemBLShield {
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		NBTTagCompound nbt = stack.getTagCompound();
-		if(!worldIn.isRemote && entityIn != null && nbt != null && nbt.hasKey("burningTicks")) {
-			int burningTicks = nbt.getInteger("burningTicks");
+		if(!worldIn.isRemote && entityIn != null) {
+			int burningTicks = this.getBurningTicks(stack);
 			if(burningTicks > 0) {
-				nbt.setInteger("burningTicks", burningTicks - 1);
+				this.setBurningTicks(stack, burningTicks - 1);
 				if(burningTicks % 5 == 0)
 					worldIn.playSound((EntityPlayer)null, (double)((float)entityIn.posX), (double)((float)entityIn.posY + entityIn.getEyeHeight()), (double)((float)entityIn.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + worldIn.rand.nextFloat(), worldIn.rand.nextFloat() * 0.7F + 0.3F);
 				if(burningTicks % 10 == 0 && worldIn.rand.nextFloat() < 0.3F)
@@ -98,11 +106,10 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem) {
 		ItemStack stack = entityItem.getItem();
-		NBTTagCompound nbt = stack.getTagCompound();
-		if(!entityItem.world.isRemote && nbt != null && nbt.hasKey("burningTicks")) {
-			int burningTicks = nbt.getInteger("burningTicks");
+		if(!entityItem.world.isRemote) {
+			int burningTicks = this.getBurningTicks(stack);
 			if(burningTicks > 0) {
-				nbt.setInteger("burningTicks", burningTicks - 1);
+				this.setBurningTicks(stack, burningTicks - 1);
 				if(burningTicks % 5 == 0)
 					entityItem.world.playSound((EntityPlayer)null, (double)((float)entityItem.posX), (double)((float)entityItem.posY + entityItem.height / 2.0F), (double)((float)entityItem.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + entityItem.world.rand.nextFloat(), entityItem.world.rand.nextFloat() * 0.7F + 0.3F);
 				if(burningTicks % 3 == 0) {
@@ -124,8 +131,8 @@ public class ItemWeedwoodShield extends ItemBLShield {
 
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-		boolean wasBurning = oldStack.getTagCompound() != null && oldStack.getTagCompound().getInteger("burningTicks") > 0;
-		boolean isBurning = newStack.getTagCompound() != null && newStack.getTagCompound().getInteger("burningTicks") > 0;
+		boolean wasBurning = ((ItemWeedwoodShield)oldStack.getItem()).getBurningTicks(oldStack) > 0;
+		boolean isBurning = newStack.getItem() instanceof ItemWeedwoodShield ? ((ItemWeedwoodShield)newStack.getItem()).getBurningTicks(newStack) > 0 : false;
 		return (super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged) && !isBurning || isBurning != wasBurning) || !NBTHelper.areItemStackTagsEqual(oldStack, newStack, STACK_NBT_EXCLUSIONS);
 	}
 
@@ -140,7 +147,7 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		ItemStack itemStackIn = playerIn.getHeldItem(hand);
-		boolean isBurning = itemStackIn.getTagCompound() != null && itemStackIn.getTagCompound().getInteger("burningTicks") > 0;
+		boolean isBurning = ((ItemWeedwoodShield)itemStackIn.getItem()).getBurningTicks(itemStackIn) > 0;
 		return isBurning ? new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn) : super.onItemRightClick(worldIn, playerIn, hand);
 	}
 }
