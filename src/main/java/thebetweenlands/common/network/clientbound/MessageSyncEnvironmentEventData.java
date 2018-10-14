@@ -41,10 +41,6 @@ public class MessageSyncEnvironmentEventData extends MessageBase {
 	public void serialize(PacketBuffer buffer) throws IOException {
 		TheBetweenlands.logger.info("------- Sync Write --------");
 		
-		long id = new Random().nextLong();
-		TheBetweenlands.logger.info("PktID: " + id);
-		buffer.writeLong(id); //TODO
-		
 		buffer.writeString(this.eventName.toString());
 		
 		TheBetweenlands.logger.info("Event: " + this.eventName.toString());
@@ -57,9 +53,6 @@ public class MessageSyncEnvironmentEventData extends MessageBase {
 	@Override
 	public void deserialize(PacketBuffer buffer) throws IOException {
 		TheBetweenlands.logger.info("------- Sync Read --------");
-		
-		long id = buffer.readLong(); //TODO
-		TheBetweenlands.logger.info("PktID: " + id);
 		
 		this.eventName = new ResourceLocation(buffer.readString(128));
 		
