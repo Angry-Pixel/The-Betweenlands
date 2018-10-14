@@ -23,12 +23,12 @@
               ]
             }
           ],
-          "weight": 10
+          "weight": 16
         },
         {
           "type": "item",
           "name": "thebetweenlands:middle_fruit_bush_seeds",
-          "weight": 6
+          "weight": 4
         },
         {
           "type": "item",
