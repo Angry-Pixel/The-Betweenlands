@@ -817,7 +817,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 		@Override
 		public boolean shouldExecute() {
-			if(this.entity.isActive()) {
+			if(this.entity.isEntityAlive() && this.entity.isActive()) {
 				if(this.executeCheckCooldown <= 0) {
 					this.executeCheckCooldown = 20 + this.entity.rand.nextInt(20);
 					return !this.hasEnoughSmallFaces();
