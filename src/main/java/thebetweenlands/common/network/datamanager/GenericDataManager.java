@@ -352,9 +352,9 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 	}
 
 	public static void writeEntries(List<? extends IDataEntry<?>> entriesIn, PacketBuffer buf) throws IOException {
-		TheBetweenlands.logger.info("  ------- Entries Write --------");
+		//TheBetweenlands.logger.info("  ------- Entries Write --------");
 
-		int dumpIndex = buf.writerIndex();
+		//int dumpIndex = buf.writerIndex();
 		
 		if (entriesIn != null) {
 			int i = 0;
@@ -367,8 +367,8 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 
 		buf.writeByte(255);
 
-		TheBetweenlands.logger.info("  Dump: " + dump(buf, 128, dumpIndex));
-		TheBetweenlands.logger.info("  ------- End Entries Write --------");
+		//TheBetweenlands.logger.info("  Dump: " + dump(buf, 128, dumpIndex));
+		//TheBetweenlands.logger.info("  ------- End Entries Write --------");
 	}
 	
 	private static String dump(ByteBuf buf, int len, int pos) {
@@ -385,31 +385,31 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 	}
 
 	private static <T> void writeEntry(PacketBuffer buf, GenericDataManager.DataEntry<T> entry) throws IOException {
-		TheBetweenlands.logger.info("    ---- Entry Write -----");
+		//TheBetweenlands.logger.info("    ---- Entry Write -----");
 		
 		DataParameter<T> parameter = entry.getKey();
 
-		TheBetweenlands.logger.info("    KeyID: " + parameter.getId());
+		//TheBetweenlands.logger.info("    KeyID: " + parameter.getId());
 		buf.writeByte(parameter.getId());
 
-		int dataIndex;
+		//int dataIndex;
 		
 		if(entry.serializedData != null) {
-			TheBetweenlands.logger.info("    Serializer: custom");
+			//TheBetweenlands.logger.info("    Serializer: custom");
 			
 			buf.writeBoolean(true);
 
 			synchronized(entry.serializedData) {
-				TheBetweenlands.logger.info("    DataLength: " + entry.serializedData.length);
+				//TheBetweenlands.logger.info("    DataLength: " + entry.serializedData.length);
 			
 				buf.writeVarInt(entry.serializedData.length);
 				
-				dataIndex = buf.writerIndex();
+				//dataIndex = buf.writerIndex();
 				
 				buf.writeBytes(entry.serializedData);
 			}
 		} else {
-			TheBetweenlands.logger.info("    Serializer: normal");
+			//TheBetweenlands.logger.info("    Serializer: normal");
 			
 			buf.writeBoolean(false);
 			int i = DataSerializers.getSerializerId(parameter.getSerializer());
@@ -417,36 +417,36 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 				throw new EncoderException("Unknown serializer type " + parameter.getSerializer());
 			}
 			
-			TheBetweenlands.logger.info("    SID: " + i);
+			//TheBetweenlands.logger.info("    SID: " + i);
 			
-			TheBetweenlands.logger.info("    S/DCls: " + parameter.getSerializer().getClass().getName());
+			//TheBetweenlands.logger.info("    S/DCls: " + parameter.getSerializer().getClass().getName());
 			
 			buf.writeVarInt(i);
 			
-			dataIndex = buf.writerIndex();
+			//dataIndex = buf.writerIndex();
 			
 			parameter.getSerializer().write(buf, entry.getValue());
 		}
 		
-		TheBetweenlands.logger.info("    EntryDump: " + dump(buf, 128, dataIndex));
+		//TheBetweenlands.logger.info("    EntryDump: " + dump(buf, 128, dataIndex));
 		
-		TheBetweenlands.logger.info("    ---- End Entry Write -----");
+		//TheBetweenlands.logger.info("    ---- End Entry Write -----");
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Nullable
 	public static List<IDataEntry<?>> readEntries(PacketBuffer buf) throws IOException {
-		TheBetweenlands.logger.info("  ------- Entries Read --------");
+		//TheBetweenlands.logger.info("  ------- Entries Read --------");
 
-		TheBetweenlands.logger.info("  Dump: " + dump(buf, 128, buf.readerIndex()));
+		//TheBetweenlands.logger.info("  Dump: " + dump(buf, 128, buf.readerIndex()));
 		
 		List<IDataEntry<?>> list = null;
 		int key;
 
 		while ((key = buf.readUnsignedByte()) != 255) {
-			TheBetweenlands.logger.info("    ---- Entry Read -----");
+			//TheBetweenlands.logger.info("    ---- Entry Read -----");
 			
-			TheBetweenlands.logger.info("    KeyID: " + key);
+			//TheBetweenlands.logger.info("    KeyID: " + key);
 			
 			if (list == null) {
 				list = new ArrayList<>();
@@ -457,32 +457,32 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 			byte[] serializedData = null;
 
 			if(buf.readBoolean()) {
-				TheBetweenlands.logger.info("    Serializer: custom");
+				//TheBetweenlands.logger.info("    Serializer: custom");
 				
 				serializedData = new byte[buf.readVarInt()];
 				
-				TheBetweenlands.logger.info("    DataLength: " + serializedData.length);
+				//TheBetweenlands.logger.info("    DataLength: " + serializedData.length);
 				
-				TheBetweenlands.logger.info("    EntryDump: " + dump(buf, 128, buf.readerIndex()));
+				//TheBetweenlands.logger.info("    EntryDump: " + dump(buf, 128, buf.readerIndex()));
 				
 				buf.readBytes(serializedData);
 				
 				serializer = new CustomSerializer(null, null);
 			} else {
-				TheBetweenlands.logger.info("    Serializer: normal");
+				//TheBetweenlands.logger.info("    Serializer: normal");
 				
 				int serializerId = buf.readVarInt();
 				
-				TheBetweenlands.logger.info("    SID: " + serializerId);
+				//TheBetweenlands.logger.info("    SID: " + serializerId);
 				
 				serializer = DataSerializers.getSerializer(serializerId);
 				if (serializer == null) {
 					throw new DecoderException("Unknown serializer type " + serializerId);
 				}
 				
-				TheBetweenlands.logger.info("    S/DCls: " + serializer.getClass().getName());
+				//TheBetweenlands.logger.info("    S/DCls: " + serializer.getClass().getName());
 				
-				TheBetweenlands.logger.info("    EntryDump: " + dump(buf, 128, buf.readerIndex()));
+				//TheBetweenlands.logger.info("    EntryDump: " + dump(buf, 128, buf.readerIndex()));
 				
 				value = serializer.read(buf);
 			}
@@ -493,10 +493,10 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 
 			list.add(entry);
 			
-			TheBetweenlands.logger.info("    ---- End Entry Read -----");
+			//TheBetweenlands.logger.info("    ---- End Entry Read -----");
 		}
 		
-		TheBetweenlands.logger.info("  ------- End Entries Read --------");
+		//TheBetweenlands.logger.info("  ------- End Entries Read --------");
 		
 		return list;
 	}

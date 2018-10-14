@@ -39,28 +39,28 @@ public class MessageSyncEnvironmentEventData extends MessageBase {
 
 	@Override
 	public void serialize(PacketBuffer buffer) throws IOException {
-		TheBetweenlands.logger.info("------- Sync Write --------");
+		//TheBetweenlands.logger.info("------- Sync Write --------");
 		
 		buffer.writeString(this.eventName.toString());
 		
-		TheBetweenlands.logger.info("Event: " + this.eventName.toString());
+		//TheBetweenlands.logger.info("Event: " + this.eventName.toString());
 		
 		GenericDataManager.writeEntries(this.dataManagerEntries, buffer);
 		
-		TheBetweenlands.logger.info("------- End Sync Write --------");
+		//TheBetweenlands.logger.info("------- End Sync Write --------");
 	}
 
 	@Override
 	public void deserialize(PacketBuffer buffer) throws IOException {
-		TheBetweenlands.logger.info("------- Sync Read --------");
+		//TheBetweenlands.logger.info("------- Sync Read --------");
 		
 		this.eventName = new ResourceLocation(buffer.readString(128));
 		
-		TheBetweenlands.logger.info("Event: " + this.eventName);
+		//TheBetweenlands.logger.info("Event: " + this.eventName);
 		
 		this.dataManagerEntries = GenericDataManager.readEntries(buffer);
 		
-		TheBetweenlands.logger.info("------- End Sync Read --------");
+		//TheBetweenlands.logger.info("------- End Sync Read --------");
 	}
 
 	@Override
