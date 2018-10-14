@@ -2,6 +2,7 @@ package thebetweenlands.common.network.clientbound;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
@@ -13,6 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
@@ -37,14 +39,35 @@ public class MessageSyncEnvironmentEventData extends MessageBase {
 
 	@Override
 	public void serialize(PacketBuffer buffer) throws IOException {
+		TheBetweenlands.logger.info("------- Sync Write --------");
+		
+		long id = new Random().nextLong();
+		TheBetweenlands.logger.info("PktID: " + id);
+		buffer.writeLong(id); //TODO
+		
 		buffer.writeString(this.eventName.toString());
+		
+		TheBetweenlands.logger.info("Event: " + this.eventName.toString());
+		
 		GenericDataManager.writeEntries(this.dataManagerEntries, buffer);
+		
+		TheBetweenlands.logger.info("------- End Sync Write --------");
 	}
 
 	@Override
 	public void deserialize(PacketBuffer buffer) throws IOException {
+		TheBetweenlands.logger.info("------- Sync Read --------");
+		
+		long id = buffer.readLong(); //TODO
+		TheBetweenlands.logger.info("PktID: " + id);
+		
 		this.eventName = new ResourceLocation(buffer.readString(128));
+		
+		TheBetweenlands.logger.info("Event: " + this.eventName);
+		
 		this.dataManagerEntries = GenericDataManager.readEntries(buffer);
+		
+		TheBetweenlands.logger.info("------- End Sync Read --------");
 	}
 
 	@Override
