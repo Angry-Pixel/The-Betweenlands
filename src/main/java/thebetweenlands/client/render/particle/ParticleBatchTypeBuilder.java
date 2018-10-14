@@ -3,6 +3,7 @@ package thebetweenlands.client.render.particle;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -11,6 +12,7 @@ import org.lwjgl.opengl.GL11;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -139,6 +141,7 @@ public class ParticleBatchTypeBuilder {
 
 	private List<Pass> passes = new ArrayList<>();
 	private Pass mainPass;
+	private Predicate<Particle> filter;
 
 	public Pass pass() {
 		return this.pass(true);
@@ -153,10 +156,23 @@ public class ParticleBatchTypeBuilder {
 		return pass;
 	}
 
+	public ParticleBatchTypeBuilder filter(@Nullable Predicate<Particle> filter) {
+		this.filter = filter;
+		return this;
+	}
+
 	public BatchedParticleRenderer.ParticleBatchType build() {
 		Preconditions.checkNotNull(this.mainPass, "Particle batch type requires at least one pass");
 
 		final BatchedParticleRenderer.ParticleBatchType type = new BatchedParticleRenderer.ParticleBatchType() {
+			@Override
+			public boolean filter(Particle particle) {
+				if(filter != null) {
+					return filter.test(particle);
+				}
+				return true;
+			}
+
 			protected void preSetup(Pass pass) {
 				if(pass.cull) {
 					GlStateManager.enableCull();

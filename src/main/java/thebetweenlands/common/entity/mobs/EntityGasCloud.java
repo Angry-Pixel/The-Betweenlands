@@ -1,11 +1,9 @@
 package thebetweenlands.common.entity.mobs;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -19,11 +17,13 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
@@ -207,21 +207,7 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 		}
 
 		if (this.world.isRemote) {
-			double x = this.posX + this.motionX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-			double y = this.posY + this.height / 2.0D + this.motionY + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-			double z = this.posZ + this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-			double mx = this.motionX + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
-			double my = this.motionY + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
-			double mz = this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
-			int[] color = this.getGasColor();
-			
-			ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
-					.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
-							.withData(this)
-							.withMotion(mx, my, mz)
-							.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
-			
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS, particle);
+			this.spawnCloudParticle(false);
 		}
 
 		if (this.isInWater()) {
@@ -241,6 +227,40 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 						target.attackEntityFrom(damageSourceSuffocation, (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 				}
 			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void spawnCloudParticle(boolean strongMotion) {
+		if(strongMotion) {
+			double x = this.posX + this.motionX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+			double y = this.posY + this.height / 2.0D + this.motionY + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+			double z = this.posZ + this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+			int[] color = this.getGasColor();
+
+			ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
+					.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
+							.withData(this)
+							.withMotion((this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F)
+							.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
+
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS, particle);
+		} else {
+			double x = this.posX + this.motionX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+			double y = this.posY + this.height / 2.0D + this.motionY + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+			double z = this.posZ + this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+			double mx = this.motionX + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
+			double my = this.motionY + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
+			double mz = this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
+			int[] color = this.getGasColor();
+
+			ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
+					.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
+							.withData(this)
+							.withMotion(mx, my, mz)
+							.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
+
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS, particle);
 		}
 	}
 
@@ -275,18 +295,7 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 
 		if(this.world.isRemote) {
 			for(int i = 0; i < 6; i++) {
-				double x = this.posX + this.motionX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-				double y = this.posY + this.height / 2.0D + this.motionY + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-				double z = this.posZ + this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-				int[] color = this.getGasColor();
-				
-				ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
-						.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
-								.withData(this)
-								.withMotion((this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F)
-								.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
-				
-				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS, particle);
+				this.spawnCloudParticle(true);
 			}
 		}
 
@@ -309,14 +318,14 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.GAS_CLOUD;
 	}
-	
-	@Override
-    public float getBlockPathWeight(BlockPos pos) {
-        return 0.5F;
-    }
 
-    @Override
-    protected boolean isValidLightLevel() {
-    	return true;
-    }
+	@Override
+	public float getBlockPathWeight(BlockPos pos) {
+		return 0.5F;
+	}
+
+	@Override
+	protected boolean isValidLightLevel() {
+		return true;
+	}
 }

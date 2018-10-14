@@ -36,6 +36,10 @@ public class BatchedParticleRenderer {
 			return this.maxParticles();
 		}
 
+		public boolean filter(Particle particle) {
+			return true;
+		}
+
 		protected void render(Iterable<Particle> particles, Tessellator tessellator, Entity entity, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 			BufferBuilder buffer = tessellator.getBuffer();
 
@@ -101,8 +105,12 @@ public class BatchedParticleRenderer {
 		return batch;
 	}
 
-	public void addParticle(ParticleBatch batch, Particle particle) {
-		batch.queue.add(particle);
+	public boolean addParticle(ParticleBatch batch, Particle particle) {
+		if(batch.type.filter(particle)) {
+			batch.queue.add(particle);
+			return true;
+		}
+		return false;
 	}
 
 	public void update() {
@@ -142,66 +150,68 @@ public class BatchedParticleRenderer {
 	}
 
 	public void renderBatchType(ParticleBatchType batchType, Collection<Particle> particles, Entity entity, float partialTicks) {
-		float rx = ActiveRenderInfo.getRotationX();
-		float rz = ActiveRenderInfo.getRotationZ();
-		float ryz = ActiveRenderInfo.getRotationYZ();
-		float rxy = ActiveRenderInfo.getRotationXY();
-		float rxz = ActiveRenderInfo.getRotationXZ();
+		if(!particles.isEmpty()) {
+			float rx = ActiveRenderInfo.getRotationX();
+			float rz = ActiveRenderInfo.getRotationZ();
+			float ryz = ActiveRenderInfo.getRotationYZ();
+			float rxy = ActiveRenderInfo.getRotationXY();
+			float rxz = ActiveRenderInfo.getRotationXZ();
 
-		Particle.interpPosX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)partialTicks;
-		Particle.interpPosY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)partialTicks;
-		Particle.interpPosZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)partialTicks;
-		Particle.cameraViewDir = entity.getLook(partialTicks);
+			Particle.interpPosX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)partialTicks;
+			Particle.interpPosY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)partialTicks;
+			Particle.interpPosZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)partialTicks;
+			Particle.cameraViewDir = entity.getLook(partialTicks);
 
-		Tessellator tessellator = Tessellator.getInstance();
+			Tessellator tessellator = Tessellator.getInstance();
 
-		GlStateManager.pushMatrix();
-		GlStateManager.enableDepth();
-		GlStateManager.enableBlend();
-		GlStateManager.depthMask(true);
-		GlStateManager.enableLighting();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.004F);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.pushMatrix();
+			GlStateManager.enableDepth();
+			GlStateManager.enableBlend();
+			GlStateManager.depthMask(true);
+			GlStateManager.enableLighting();
+			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.004F);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-		final int batchSize = batchType.batchSize();
-		final int batches = particles.size() / batchSize + 1;
+			final int batchSize = batchType.batchSize();
+			final int batches = particles.size() / batchSize + 1;
 
-		final Iterator<Particle> it = particles.iterator();
+			final Iterator<Particle> it = particles.iterator();
 
-		for(int i = 0; i < batches; i++) {
-			final Iterable<Particle> batchView = new Iterable<Particle>() {
-				private int counter = 0;
+			for(int i = 0; i < batches; i++) {
+				final Iterable<Particle> batchView = new Iterable<Particle>() {
+					private int counter = 0;
 
-				@Override
-				public Iterator<Particle> iterator() {
-					return new Iterator<Particle>() {
-						@Override
-						public boolean hasNext() {
-							return counter < batchSize && it.hasNext();
-						}
+					@Override
+					public Iterator<Particle> iterator() {
+						return new Iterator<Particle>() {
+							@Override
+							public boolean hasNext() {
+								return counter < batchSize && it.hasNext();
+							}
 
-						@Override
-						public Particle next() {
-							counter++;
-							return it.next();
-						}
-					};
-				}
-			};
+							@Override
+							public Particle next() {
+								counter++;
+								return it.next();
+							}
+						};
+					}
+				};
 
-			batchType.preRender(tessellator, entity, partialTicks, rx, rxz, rz, ryz, rxy);
-			batchType.render(batchView, tessellator, entity, partialTicks, rx, rxz, rz, ryz, rxy);
-			batchType.postRender(tessellator, entity, partialTicks, rx, rxz, rz, ryz, rxy);
+				batchType.preRender(tessellator, entity, partialTicks, rx, rxz, rz, ryz, rxy);
+				batchType.render(batchView, tessellator, entity, partialTicks, rx, rxz, rz, ryz, rxy);
+				batchType.postRender(tessellator, entity, partialTicks, rx, rxz, rz, ryz, rxy);
+			}
+
+			GlStateManager.enableDepth();
+			GlStateManager.colorMask(true, true, true, true);
+			GlStateManager.depthMask(true);
+			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			GlStateManager.disableBlend();
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			GlStateManager.disableLighting();
+			GlStateManager.popMatrix();
 		}
-
-		GlStateManager.enableDepth();
-		GlStateManager.colorMask(true, true, true, true);
-		GlStateManager.depthMask(true);
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		GlStateManager.disableBlend();
-		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-		GlStateManager.disableLighting();
-		GlStateManager.popMatrix();
 	}
 }

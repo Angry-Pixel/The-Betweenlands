@@ -151,7 +151,11 @@ public class WorldRenderHandler {
 			BatchedParticleRenderer.INSTANCE.renderAll(MC.getRenderViewEntity(), event.getPartialTicks());
 		}
 
-		//Gas clouds
+		if(ShaderHelper.INSTANCE.isWorldShaderActive() && (!DefaultParticleBatches.HEAT_HAZE_PARTICLE_ATLAS.isEmpty() || !DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS.isEmpty())) {
+			ShaderHelper.INSTANCE.require();
+		}
+		
+		//Gas clouds/Heat haze
 		if(ShaderHelper.INSTANCE.isWorldShaderActive() && MC.getRenderViewEntity() != null) {
 			GeometryBuffer fbo = ShaderHelper.INSTANCE.getWorldShader().getGasParticleBuffer();
 			if(fbo != null) {
@@ -162,6 +166,14 @@ public class WorldRenderHandler {
 					MC.getTextureManager().bindTexture(RenderGasCloud.TEXTURE);
 
 					BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.GAS_CLOUDS, MC.getRenderViewEntity(), event.getPartialTicks());
+				}
+				
+				if(!DefaultParticleBatches.HEAT_HAZE_PARTICLE_ATLAS.isEmpty()) {
+					BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.HEAT_HAZE_PARTICLE_ATLAS, MC.getRenderViewEntity(), event.getPartialTicks());
+				}
+				
+				if(!DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS.isEmpty()) {
+					BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS, MC.getRenderViewEntity(), event.getPartialTicks());
 				}
 
 				//Update gas particles depth buffer
