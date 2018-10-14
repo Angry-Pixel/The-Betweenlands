@@ -133,6 +133,7 @@ import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.block.structure.BlockMudBrickRoof;
 import thebetweenlands.common.block.structure.BlockMudBrickShingleSlab;
 import thebetweenlands.common.block.structure.BlockMudBricks;
+import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
@@ -525,6 +526,7 @@ public class BlockRegistry {
     public static final Block BETWEENSTONE_BRICKS_BEAM_ORIGIN = new BlockBeamOrigin();
     public static final Block BETWEENSTONE_BRICKS_BEAM_RELAY = new BlockBeamRelay();
     public static final Block DIAGONAL_ENERGY_BARRIER = new BlockDiagonalEnergyBarrier();
+    public static final Block MUD_BRICKS_SPAWNER_HOLE = new BlockMudBricksSpawnerHole();
     
     public static final Block PRESENT = new BlockPresent();
     

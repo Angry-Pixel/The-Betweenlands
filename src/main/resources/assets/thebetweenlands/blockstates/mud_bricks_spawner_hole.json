@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "facing=down": { "model": "thebetweenlands:mud_bricks_spawner_hole", "x": 180 },
+        "facing=up": { "model": "thebetweenlands:mud_bricks_spawner_hole" },
+        "facing=north": { "model": "thebetweenlands:mud_bricks_spawner_hole", "x": 270, "y": 180 },
+        "facing=south": { "model": "thebetweenlands:mud_bricks_spawner_hole", "x": 270 },
+        "facing=west":  { "model": "thebetweenlands:mud_bricks_spawner_hole", "x": 270, "y": 90},
+        "facing=east":  { "model": "thebetweenlands:mud_bricks_spawner_hole", "x": 270, "y": 270 }
+    }
+}
