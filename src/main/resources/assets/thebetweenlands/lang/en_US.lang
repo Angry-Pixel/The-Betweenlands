@@ -281,6 +281,7 @@ tile.thebetweenlands.rubber_tree_plank_trapdoor.name=Rubber Tree Plank Trapdoor
 tile.thebetweenlands.syrmorite_trapdoor.name=Syrmorite Trapdoor
 tile.thebetweenlands.hearthgrove_plank_trapdoor.name=Hearthgrove Plank Trapdoor
 tile.thebetweenlands.nibbletwig_plank_trapdoor.name=Nibbletwig Plank Trapdoor
+tile.thebetweenlands.scabyst_trapdoor.name=Scabyst Trapdoor
 tile.thebetweenlands.syrmorite_hopper.name=Syrmorite Hopper
 tile.thebetweenlands.mud_flower_pot.name=Mud Brick Flower Pot
 tile.thebetweenlands.gecko_cage.name=Gecko Cage
@@ -352,6 +353,16 @@ tile.thebetweenlands.amate_paper_pane_1.name=Connected Amate Paper Pane
 tile.thebetweenlands.amate_paper_pane_2.name=Squared Amate Paper Pane
 tile.thebetweenlands.amate_paper_pane_3.name=Rounded Amate Paper Pane
 tile.thebetweenlands.root_pod.name=Root Pod
+tile.thebetweenlands.scabyst_block.name=Block of Scabyst
+tile.thebetweenlands.scabyst_chiseled_1.name=Chiseled Scabyst
+tile.thebetweenlands.scabyst_chiseled_2.name=Chiseled Scabyst
+tile.thebetweenlands.scabyst_chiseled_3.name=Chiseled Scabyst
+tile.thebetweenlands.scabyst_bricks.name=Scabyst Bricks
+tile.thebetweenlands.scabyst_brick_wall.name=Scabyst Brick Wall
+tile.thebetweenlands.scabyst_brick_stairs.name=Scabyst Brick Stairs
+tile.thebetweenlands.scabyst_brick_slab.name=Scabyst Brick Slab
+tile.thebetweenlands.scabyst_pitstone_dotted.name=Scabyst Lined Pitstone
+tile.thebetweenlands.scabyst_pitstone_horizontal.name=Scabyst Lined Pitstone
 
 # Items
 
@@ -599,6 +610,7 @@ item.thebetweenlands.rubber_tree_plank_door_item.name=Rubber Tree Plank Door
 item.thebetweenlands.giant_root_plank_door_item.name=Giant Root Plank Door
 item.thebetweenlands.hearthgrove_plank_door_item.name=Hearthgrove Plank Door
 item.thebetweenlands.nibbletwig_plank_door_item.name=Nibbletwig Plank Door
+item.thebetweenlands.scabyst_door_item.name=Scabyst Door
 item.thebetweenlands.moss_bed_item.name=Moss Bed
 item.thebetweenlands.lore_scrap.them.name=Lurking Shadows
 item.thebetweenlands.lore_scrap.mutants.name=Mutants of Terror

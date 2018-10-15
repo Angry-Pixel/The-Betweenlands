@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:items_misc",
+      "data": 39
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:scabyst_trapdoor",
+    "count": 2
+  }
+}

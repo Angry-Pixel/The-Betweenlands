@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:scabyst_bricks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:scabyst_brick_wall",
+    "count": 6
+  }
+}
