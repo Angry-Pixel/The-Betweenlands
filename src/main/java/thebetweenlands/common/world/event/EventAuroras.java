@@ -3,17 +3,17 @@ package thebetweenlands.common.world.event;
 import java.util.Random;
 
 import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.network.datamanager.CustomDataSerializers;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 
 public class EventAuroras extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "auroras");
 
-	protected static final DataParameter<Short> AURORA_TYPE = GenericDataManager.createKey(EventAuroras.class, CustomDataSerializers.SHORT);
+	protected static final DataParameter<Integer> AURORA_TYPE = GenericDataManager.createKey(EventAuroras.class, DataSerializers.VARINT);
 
 	public EventAuroras(BLEnvironmentEventRegistry registry) {
 		super(registry);
@@ -22,7 +22,7 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	@Override
 	protected void initDataParameters() {
 		super.initDataParameters();
-		this.dataManager.register(AURORA_TYPE, (short)0);
+		this.dataManager.register(AURORA_TYPE, 0);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class EventAuroras extends TimedEnvironmentEvent {
 		if((active && this.canBeActive()) || !active) {
 			super.setActive(active);
 			if(active && !this.getWorld().isRemote) {
-				this.dataManager.set(AURORA_TYPE, (short)this.getWorld().rand.nextInt(3));
+				this.dataManager.set(AURORA_TYPE, this.getWorld().rand.nextInt(3));
 			}
 		}
 	}
@@ -67,11 +67,11 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	@Override
 	public void loadEventData() {
 		super.loadEventData();
-		this.dataManager.set(AURORA_TYPE, this.getData().getShort("auroraType"));
+		this.dataManager.set(AURORA_TYPE, (int)this.getData().getShort("auroraType"));
 	}
 
 	public short getAuroraType() {
-		return this.dataManager.get(AURORA_TYPE);
+		return (short)this.dataManager.get(AURORA_TYPE).intValue();
 	}
 
 	protected boolean canBeActive() {
