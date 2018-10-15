@@ -59,6 +59,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.SpiritTreeKillToken;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.util.BlockShapeUtils;
 
@@ -251,6 +252,12 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		super.onDeath(cause);
 
 		if(!this.world.isRemote) {
+			List<SpiritTreeKillToken> killTokens = BetweenlandsWorldStorage.forWorld(this.world).getSpiritTreeKillTokens();
+			if(killTokens.size() > 32) {
+				killTokens.remove(0);
+			}
+			killTokens.add(new SpiritTreeKillToken(this.getPosition(), this.getWispStrengthModifier()));
+
 			List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
 			if(!locations.isEmpty()) {
 				LocationSpiritTree location = locations.get(0);
@@ -783,12 +790,12 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	public UUID getBossInfoUuid() {
 		return this.dataManager.get(BOSSINFO_ID).or(new UUID(0, 0));
 	}
-	
+
 	@Override
 	public BossType getBossType() {
 		return BossType.MINI_BOSS;
 	}
-	
+
 	@Override
 	public Vec3d getMiniBossTagOffset(float partialTicks) {
 		return new Vec3d(this.getFacing().getFrontOffsetX() * (this.width / 2), this.height + 0.5D, this.getFacing().getFrontOffsetZ() * (this.width / 2));
