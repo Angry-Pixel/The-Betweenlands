@@ -351,6 +351,7 @@ tile.thebetweenlands.nibbletwig_plank_fence_gate.name=奇趣枝栅栏门
 tile.thebetweenlands.amate_paper_pane_1.name=纸窗
 tile.thebetweenlands.amate_paper_pane_2.name=方形窗格纸窗
 tile.thebetweenlands.amate_paper_pane_3.name=圆形窗格纸窗
+tile.thebetweenlands.root_pod.name=根须荚果
 
 # Items
 
@@ -585,6 +586,7 @@ item.thebetweenlands.weedwood_pickaxe.name=杂草木镐
 item.thebetweenlands.weedwood_rowboat.name=杂草木船
 item.thebetweenlands.weedwood_rowboat.tarred.name=涂油的杂草木船
 item.thebetweenlands.weedwood_shield.name=杂草木盾
+item.thebetweenlands.living_weedwood_shield.name=活木盾
 item.thebetweenlands.weedwood_shovel.name=杂草木锹
 item.thebetweenlands.weedwood_stick.name=杂草木棍
 item.thebetweenlands.weedwood_sword.name=杂草木剑
@@ -1043,6 +1045,10 @@ entity.thebetweenlands.spirit_tree_face_small.name=小型灵魂树脸
 entity.thebetweenlands.spirit_tree_face_large.name=大型灵魂树脸
 entity.thebetweenlands.tamed_spirit_tree_face.name=驯服的灵魂树脸
 entity.thebetweenlands.sap_spit.name=凝胶液
+entity.thebetweenlands.spike_wave.name=根须冲击波
+entity.thebetweenlands.root_grabber.name=根须抓手
+entity.thebetweenlands.spirit_tree_face_mask.name=灵树面罩
+entity.thebetweenlands.root_sprite.name=根须精灵
 
 # Equipment
 equipment.menu.equip=佩戴%s
