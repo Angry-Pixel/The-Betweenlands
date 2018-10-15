@@ -281,6 +281,7 @@ tile.thebetweenlands.rubber_tree_plank_trapdoor.name=橡胶木板活板门
 tile.thebetweenlands.syrmorite_trapdoor.name=赛摩铜活板门
 tile.thebetweenlands.hearthgrove_plank_trapdoor.name=火树木板活板门
 tile.thebetweenlands.nibbletwig_plank_trapdoor.name=奇趣枝活板门
+tile.thebetweenlands.scabyst_trapdoor.name=痂壳晶活板门
 tile.thebetweenlands.syrmorite_hopper.name=赛摩铜漏斗
 tile.thebetweenlands.mud_flower_pot.name=泥砖花盆
 tile.thebetweenlands.gecko_cage.name=壁虎笼子
@@ -352,6 +353,16 @@ tile.thebetweenlands.amate_paper_pane_1.name=纸窗
 tile.thebetweenlands.amate_paper_pane_2.name=方形窗格纸窗
 tile.thebetweenlands.amate_paper_pane_3.name=圆形窗格纸窗
 tile.thebetweenlands.root_pod.name=根须荚果
+tile.thebetweenlands.scabyst_block.name=痂壳晶块
+tile.thebetweenlands.scabyst_chiseled_1.name=錾制痂壳晶块
+tile.thebetweenlands.scabyst_chiseled_2.name=錾制痂壳晶块
+tile.thebetweenlands.scabyst_chiseled_3.name=錾制痂壳晶块
+tile.thebetweenlands.scabyst_bricks.name=痂壳晶砖
+tile.thebetweenlands.scabyst_brick_wall.name=痂壳晶砖墙
+tile.thebetweenlands.scabyst_brick_stairs.name=痂壳晶砖楼梯
+tile.thebetweenlands.scabyst_brick_slab.name=痂壳晶砖台阶
+tile.thebetweenlands.scabyst_pitstone_dotted.name=痂壳晶斑点麻纹石
+tile.thebetweenlands.scabyst_pitstone_horizontal.name=痂壳晶条纹麻纹石
 
 # Items
 
@@ -599,6 +610,7 @@ item.thebetweenlands.rubber_tree_plank_door_item.name=橡胶木门
 item.thebetweenlands.giant_root_plank_door_item.name=巨型树根木板门
 item.thebetweenlands.hearthgrove_plank_door_item.name=火树木门
 item.thebetweenlands.nibbletwig_plank_door_item.name=奇趣枝木门
+item.thebetweenlands.scabyst_door_item.name=痂壳晶门
 item.thebetweenlands.moss_bed_item.name=苔藓床
 item.thebetweenlands.lore_scrap.them.name=知识碎片 - 它们来了
 item.thebetweenlands.lore_scrap.mutants.name=知识碎片 - 变异的魔怪
