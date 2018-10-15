@@ -119,6 +119,7 @@ import thebetweenlands.client.render.entity.RenderShockwaveSwordItem;
 import thebetweenlands.client.render.entity.RenderSiltCrab;
 import thebetweenlands.client.render.entity.RenderSludge;
 import thebetweenlands.client.render.entity.RenderSludgeBall;
+import thebetweenlands.client.render.entity.RenderSmolSludgeWorm;
 import thebetweenlands.client.render.entity.RenderSmollSludge;
 import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
 import thebetweenlands.client.render.entity.RenderSpikeWave;
@@ -215,6 +216,7 @@ import thebetweenlands.common.entity.mobs.EntityPyradFlame;
 import thebetweenlands.common.entity.mobs.EntityRootSprite;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
+import thebetweenlands.common.entity.mobs.EntitySmolSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
@@ -508,6 +510,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityRootGrabber.class, RenderRootGrabber::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceMask.class, RenderSpiritTreeFaceMask::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRootSprite.class, RenderRootSprite::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySmolSludgeWorm.class, RenderSmolSludgeWorm::new);
 		
 
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
