@@ -1,7 +1,9 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.tile.TileEntityAlembic;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityAspectVial;
@@ -76,6 +78,6 @@ public class TileEntityRegistry {
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
-		GameRegistry.registerTileEntity(cls, "tile.thebetweenlands." + baseName);
+		GameRegistry.registerTileEntity(cls, new ResourceLocation(ModInfo.ID, baseName));
 	}
 }

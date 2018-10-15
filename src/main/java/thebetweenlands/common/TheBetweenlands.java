@@ -161,6 +161,8 @@ public class TheBetweenlands {
 
 		GameRegistry.registerWorldGenerator(new WorldGenDruidCircle(), 0);
 
+		BLDataFixers.register();
+		
 		if (Loader.isModLoaded("tombmanygraves2api")) {
 			new TMGEquipmentInventory();
 		}
