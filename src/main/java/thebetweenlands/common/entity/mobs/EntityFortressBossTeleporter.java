@@ -12,6 +12,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
@@ -27,7 +28,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 	protected static final DataParameter<Integer> TARGET_ID = EntityDataManager.<Integer>createKey(EntityFortressBossTeleporter.class, DataSerializers.VARINT);
 
 	private Vec3d teleportDestination = Vec3d.ZERO;
-	private Vec3d bossSpawnPosition = Vec3d.ZERO;
+	private BlockPos bossSpawnPosition = BlockPos.ORIGIN;
 
 	private EntityPlayer target = null;
 
@@ -214,7 +215,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 		double sx = nbt.getDouble("bossSpawnX");
 		double sy = nbt.getDouble("bossSpawnY");
 		double sz = nbt.getDouble("bossSpawnZ");
-		this.bossSpawnPosition = new Vec3d(sx, sy, sz);
+		this.bossSpawnPosition = new BlockPos(sx, sy, sz);
 		this.spawnedBoss = nbt.getBoolean("spawnedBoss");
 	}
 
@@ -226,9 +227,9 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 			nbt.setDouble("destinationZ", this.teleportDestination.z);
 		}
 		if(this.bossSpawnPosition != null) {
-			nbt.setDouble("bossSpawnX", this.bossSpawnPosition.x);
-			nbt.setDouble("bossSpawnY", this.bossSpawnPosition.y);
-			nbt.setDouble("bossSpawnZ", this.bossSpawnPosition.z);
+			nbt.setDouble("bossSpawnX", this.bossSpawnPosition.getX());
+			nbt.setDouble("bossSpawnY", this.bossSpawnPosition.getY());
+			nbt.setDouble("bossSpawnZ", this.bossSpawnPosition.getZ());
 		}
 		nbt.setBoolean("spawnedBoss", this.spawnedBoss);
 	}
@@ -241,17 +242,17 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 		return this.teleportDestination;
 	}
 
-	public void setBossSpawnPosition(Vec3d position) {
+	public void setBossSpawnPosition(BlockPos position) {
 		this.bossSpawnPosition = position;
 	}
 
-	public Vec3d getBossSpawnPosition() {
+	public BlockPos getBossSpawnPosition() {
 		return this.bossSpawnPosition;
 	}
 
 	protected void spawnBoss() {
 		EntityFortressBoss boss = new EntityFortressBoss(this.world);
-		boss.setPosition(this.bossSpawnPosition.x, this.bossSpawnPosition.y, this.bossSpawnPosition.z);
+		boss.setPosition(this.bossSpawnPosition.getX() + 0.5D, this.bossSpawnPosition.getY() + 0.5D, this.bossSpawnPosition.getZ() + 0.5D);
 		boss.setAnchor(this.bossSpawnPosition, 6.0D);
 		this.world.spawnEntity(boss);
 	}
