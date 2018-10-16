@@ -60,7 +60,7 @@ public class ItemLivingWeedwoodShield extends ItemWeedwoodShield {
 		super.onShieldBreak(stack, attacked, hand, source);
 
 		if(this.getBurningTicks(stack) == 0) {
-			attacked.setHeldItem(hand, new ItemStack(ItemRegistry.SPIRIT_TREE_FACE_SMALL_MASK_ANIMATED));
+			attacked.setHeldItem(hand, new ItemStack(ItemRegistry.SPIRIT_TREE_FACE_SMALL_MASK));
 		}
 	}
 
