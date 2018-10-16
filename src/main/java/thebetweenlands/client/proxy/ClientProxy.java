@@ -321,6 +321,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		for(Entry<Integer, ResourceLocation> entry : map.entrySet()) {
 			ModelLoader.setCustomModelResourceLocation(item, entry.getKey(), (ModelResourceLocation) entry.getValue());
 		}
+		if (item instanceof ItemRegistry.ICustomMeshCallback) {
+			ModelLoader.setCustomMeshDefinition(item, ((ItemRegistry.ICustomMeshCallback) item).getMeshDefinition());
+		}
 	}
 	
 	@Override
