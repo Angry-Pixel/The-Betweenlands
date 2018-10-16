@@ -34,7 +34,7 @@ public class ItemSpiritTreeFaceMaskSmall extends ItemSpiritTreeFaceMask {
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
 		if(model == null) {
-			model = new ModelSpiritTreeFaceMaskSmall();
+			model = new ModelSpiritTreeFaceMaskSmall(true);
 		}
 		return model;
 	}

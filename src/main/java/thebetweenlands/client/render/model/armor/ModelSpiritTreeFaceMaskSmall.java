@@ -13,7 +13,11 @@ public class ModelSpiritTreeFaceMaskSmall extends ModelBodyAttachment {
 	public ModelRenderer nose1;
 	public ModelRenderer nose2;
 
-	public ModelSpiritTreeFaceMaskSmall() {
+	private boolean isAttachment;
+	
+	public ModelSpiritTreeFaceMaskSmall(boolean isAttachment) {
+		this.isAttachment = isAttachment;
+		
 		this.textureWidth = 64;
 		this.textureHeight = 64;
 		this.nose1 = new ModelRenderer(this, 0, 18);
@@ -40,10 +44,17 @@ public class ModelSpiritTreeFaceMaskSmall extends ModelBodyAttachment {
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		this.head_base.rotationPointY = -4;
-		this.head_base.rotationPointZ = -4;
-		
-		super.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		if(this.isAttachment) {
+			this.head_base.rotationPointY = -4;
+			this.head_base.rotationPointZ = -4;
+			
+			super.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		} else {
+			this.head_base.rotationPointY = 16.5F;
+			this.head_base.rotationPointZ = 8;
+			
+			this.head_base.render(scale);
+		}
 	}
 	
 	/**
