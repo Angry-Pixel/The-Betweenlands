@@ -1,17 +1,21 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
+    "###",
+    "#T#",
     "###"
   ],
   "key": {
     "#": {
       "item": "thebetweenlands:items_misc",
-      "data": 13
+      "data": 32
+    },
+    "T": {
+      "item": "thebetweenlands:swamp_talisman",
+      "data": 0
     }
   },
   "result": {
-    "item": "thebetweenlands:items_misc",
-    "data": 32,
-    "count": 9
+    "item": "thebetweenlands:empty_amate_map"
   }
 }
