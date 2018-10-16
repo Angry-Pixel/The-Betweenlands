@@ -32,6 +32,7 @@ import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
 import thebetweenlands.common.tile.TileEntityTarLootPot3;
+import thebetweenlands.common.tile.TileEntityWaystone;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
@@ -75,6 +76,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityAspectrusCrop.class, "aspectrus_crop");
 		registerTileEntity(TileEntityRepeller.class, "repeller");
 		registerTileEntity(TileEntityPresent.class, "present");
+		registerTileEntity(TileEntityWaystone.class, "waystone");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
