@@ -645,6 +645,7 @@ item.thebetweenlands.crimson_middle_gem.name=Crimson Middle Gem
 item.thebetweenlands.skull_mask.name=Skull Mask
 item.thebetweenlands.spirit_tree_face_large_mask.name=Large Spirit Tree Face Mask
 item.thebetweenlands.spirit_tree_face_small_mask.name=Small Spirit Tree Face Mask
+item.thebetweenlands.spirit_tree_face_small_mask_animated.name=Small Animated Spirit Tree Face Mask
 item.thebetweenlands.bl_bucket_syrmorite.name=Syrmorite Bucket
 item.thebetweenlands.bl_bucket_weedwood.name=Weedwood Bucket
 item.thebetweenlands.bl_bucket_syrmorite.filled.name=Syrmorite Bucket (%s)

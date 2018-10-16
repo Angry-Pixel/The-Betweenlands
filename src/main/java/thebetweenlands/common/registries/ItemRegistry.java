@@ -109,6 +109,7 @@ import thebetweenlands.common.item.misc.ItemOctineIngot;
 import thebetweenlands.common.item.misc.ItemPyradFlame;
 import thebetweenlands.common.item.misc.ItemRope;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
+import thebetweenlands.common.item.misc.ItemSpiritTreeFaceMaskSmallAnimated;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.ItemTarminion;
 import thebetweenlands.common.item.misc.ItemWeedwoodRowboat;
@@ -233,6 +234,7 @@ public class ItemRegistry {
     public static final Item EXPLORERS_HAT = new ItemExplorersHat();
     public static final Item SPIRIT_TREE_FACE_LARGE_MASK = new ItemSpiritTreeFaceMaskLarge();
     public static final Item SPIRIT_TREE_FACE_SMALL_MASK = new ItemSpiritTreeFaceMaskSmall();
+    public static final Item SPIRIT_TREE_FACE_SMALL_MASK_ANIMATED = new ItemSpiritTreeFaceMaskSmallAnimated();
     //TOOLS
     public static final Item WEEDWOOD_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item WEEDWOOD_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);

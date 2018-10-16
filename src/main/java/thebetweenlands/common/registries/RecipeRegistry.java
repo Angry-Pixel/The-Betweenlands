@@ -476,7 +476,8 @@ public class RecipeRegistry {
 		}
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPORES), 8, 4, EntitySporeling.class).setRenderEntity(new ResourceLocation("thebetweenlands:sporeling")));
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BlockRegistry.ROOT_POD), 10, 6, EntityRootSprite.class).setRenderEntity(new ResourceLocation("thebetweenlands:root_sprite")));
-
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPIRIT_TREE_FACE_SMALL_MASK), 24, 24, new ItemStack(ItemRegistry.SPIRIT_TREE_FACE_SMALL_MASK_ANIMATED)));
+		
 		for(Item item : ItemRegistry.ITEMS) {
 			if(item instanceof IAnimatorRepairable) {
 				AnimatorRecipe.addRecipe(new ToolRepairAnimatorRecipe((IAnimatorRepairable)item));
