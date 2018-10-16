@@ -82,6 +82,11 @@ public class BlockLocationGuard implements ILocationGuard {
 	}
 
 	@Override
+	public boolean isClear(World world) {
+		return this.chunkMap.isEmpty();
+	}
+
+	@Override
 	public void handleExplosion(World world, Explosion explosion) {
 		/*Iterator<BlockPos> posIT = explosion.getAffectedBlockPositions().iterator();
 		while(posIT.hasNext()) {

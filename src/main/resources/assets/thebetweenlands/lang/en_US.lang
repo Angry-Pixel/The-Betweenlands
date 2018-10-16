@@ -696,6 +696,8 @@ item.thebetweenlands.nibblestick.name=Nibblestick
 item.thebetweenlands.bl.elixir.name=%s
 item.thebetweenlands.spirit_fruit.name=Spirit Fruit
 item.thebetweenlands.sap_spit.name=Sap Spit
+item.thebetweenlands.empty_amate_map.name=Empty Amate Map
+item.thebetweenlands.amate_map.name=Amate Map
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -943,6 +945,7 @@ chat.event.spook=You feel a chill in the air... the haunting season has begun!
 chat.event.winter=You hear the sound of sleigh bells in the distance...
 
 chat.repeller.shimmerstone_missing=The repeller needs a Shimmerstone to run
+chat.amate_map.invalid=Can't create an amate map outside of The Betweenlands
 
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath

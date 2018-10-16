@@ -30,9 +30,15 @@ public interface ILocationGuard {
 	/**
 	 * Clears all guards
 	 * @param world
-	 * @param guarded
 	 */
 	public void clear(World world);
+
+	/**
+	 * Returns if the location is cleared
+	 * @param world World
+	 * @return
+	 */
+	public boolean isClear(World world);
 
 	/**
 	 * Handles explosions that affect the location
