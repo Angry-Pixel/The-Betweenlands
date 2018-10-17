@@ -92,49 +92,87 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
 
     @Override
     public void updateMapData(World world, Entity viewer, MapData data) {
-        if (world.provider.getDimension() == data.dimension && viewer instanceof EntityPlayer) {
-            int biomesPerPixel = 4;
+        if (world.provider.getDimension() == data.dimension && viewer instanceof EntityPlayer && viewer.ticksExisted % 3 == 0) {
             int blocksPerPixel = 16;
             int centerX = data.xCenter;
             int centerZ = data.zCenter;
-            int viewerX = MathHelper.floor(viewer.posX - (double) centerX) / blocksPerPixel + 64;
-            int viewerZ = MathHelper.floor(viewer.posZ - (double) centerZ) / blocksPerPixel + 64;
+            int viewerBlockX = MathHelper.floor((viewer.posX) / blocksPerPixel) * blocksPerPixel;
+            int viewerBlockZ = MathHelper.floor((viewer.posZ) / blocksPerPixel) * blocksPerPixel;
+            int viewerOffsetX = viewerBlockX - MathHelper.floor(centerX / blocksPerPixel) * blocksPerPixel;
+            int viewerOffsetZ = viewerBlockZ - MathHelper.floor(centerZ / blocksPerPixel) * blocksPerPixel;
+            int viewerPixelX = viewerOffsetX / blocksPerPixel + 64;
+            int viewerPixelZ = viewerOffsetZ / blocksPerPixel + 64;
             int viewRadiusPixels = 256 / blocksPerPixel;
 
             MapData.MapInfo mapInfo = data.getMapInfo((EntityPlayer)viewer);
             ++mapInfo.step;
-            boolean flag = false;
+            
+            boolean terrainChanged = false;
 
-            // use the generation map, which is larger scale than the other biome map
-            int startX = (centerX / blocksPerPixel - 64) * biomesPerPixel;
-            int startZ = (centerZ / blocksPerPixel - 64) * biomesPerPixel;
-            Biome[] biomes = world.getBiomeProvider().getBiomesForGeneration(null, startX, startZ, 128 * biomesPerPixel, 128 * biomesPerPixel);
-
+            final int biomeViewRange = viewRadiusPixels * blocksPerPixel / 4 * 2 + 1;
+            
+            int updatedColumns = 0;
+            
+            int prevXPixel = 0;
+            
+            Biome[][] biomes = new Biome[2][];
+            biomes[0] = new Biome[biomeViewRange];
+            biomes[1] = new Biome[biomeViewRange];
+            
             Map<Integer, List<Integer>> checkedChunks = new HashMap<>();
-            for (int xPixel = viewerX - viewRadiusPixels + 1; xPixel < viewerX + viewRadiusPixels; ++xPixel) {
-                if ((xPixel & 15) == (mapInfo.step & 15) || flag) {
-                    flag = false;
-                    for (int zPixel = viewerZ - viewRadiusPixels - 1; zPixel < viewerZ + viewRadiusPixels; ++zPixel) {
+            for (int xPixel = viewerPixelX - viewRadiusPixels + 1; xPixel < viewerPixelX + viewRadiusPixels; ++xPixel) {
+                if ((xPixel & 15) == (mapInfo.step & 15) || terrainChanged) {
+                    terrainChanged = false;
+                    
+                    final int primaryBiomesArray = updatedColumns % 2;
+                    final int previousBiomesArray = (updatedColumns + 1) % 2;
+                    
+                    biomes[primaryBiomesArray] = world.getBiomeProvider().getBiomesForGeneration(biomes[primaryBiomesArray], (viewerBlockX + (xPixel - viewerPixelX) * blocksPerPixel) / 4, (viewerBlockZ - (viewRadiusPixels - 1) * blocksPerPixel) / 4, 1, biomeViewRange);
+                    
+                    if(updatedColumns == 0 || xPixel - prevXPixel != 1) {
+                    	biomes[previousBiomesArray] = world.getBiomeProvider().getBiomesForGeneration(biomes[previousBiomesArray], (viewerBlockX + (xPixel - viewerPixelX - 1) * blocksPerPixel) / 4, (viewerBlockZ - (viewRadiusPixels - 1) * blocksPerPixel) / 4, 1, biomeViewRange);
+                    }
+                    
+                    for (int zPixel = viewerPixelZ - viewRadiusPixels - 1; zPixel < viewerPixelZ + viewRadiusPixels; ++zPixel) {
                         if (xPixel >= 0 && zPixel >= 0 && xPixel < 128 && zPixel < 128) {
-                            int xPixelDist = xPixel - viewerX;
-                            int zPixelDist = zPixel - viewerZ;
+                            int xPixelDist = xPixel - viewerPixelX;
+                            int zPixelDist = zPixel - viewerPixelZ;
                             boolean shouldFuzz = xPixelDist * xPixelDist + zPixelDist * zPixelDist > (viewRadiusPixels - 2) * (viewRadiusPixels - 2);
 
-                            Biome biome = biomes[xPixel * biomesPerPixel + zPixel * biomesPerPixel * 128 * biomesPerPixel];
-
-                            BiomeColor colorBrightness = this.getMapColorPerBiome(world, biome);
-
+                            int biomeIndex = (zPixel - viewerPixelZ + viewRadiusPixels + 1) * blocksPerPixel / 4;
+                            Biome primaryBiome = biomes[primaryBiomesArray][biomeIndex];
+                            
+                            boolean isEdge = false;
+                            
+                            if(biomeIndex >= blocksPerPixel / 4) {
+                            	Biome biomeUp = biomes[primaryBiomesArray][biomeIndex - blocksPerPixel / 4];
+                                if(biomeUp != primaryBiome) {
+                              		isEdge = true;
+                                }
+                            }
+                            
+                        	Biome biomeLeft = biomes[previousBiomesArray][biomeIndex];
+                            if(biomeLeft != primaryBiome) {
+                          		isEdge = true;
+                            }
+                            
+                            BiomeColor colorBrightness = this.getMapColorPerBiome(world, primaryBiome);
+                            
                             MapColor mapcolor = colorBrightness.color;
                             int brightness = colorBrightness.brightness;
 
                             if (zPixel >= 0 && xPixelDist * xPixelDist + zPixelDist * zPixelDist < viewRadiusPixels * viewRadiusPixels && (!shouldFuzz || (xPixel + zPixel & 1) != 0)) {
-                                byte orgPixel = data.colors[xPixel + zPixel * 128];
-                                byte ourPixel = (byte) (mapcolor.colorIndex * 4 + brightness);
+                                byte oldPixel = data.colors[xPixel + zPixel * 128];
+                                byte newPixel = (byte) (mapcolor.colorIndex * 4 + brightness);
 
-                                if (orgPixel != ourPixel) {
-                                    data.colors[xPixel + zPixel * 128] = ourPixel;
+                                if(isEdge) {
+                                	newPixel = (byte)(29 * 4);
+                                }
+                                
+                                if (oldPixel != newPixel) {
+                                    data.colors[xPixel + zPixel * 128] = newPixel;
                                     data.updateMapData(xPixel, zPixel);
-                                    flag = true;
+                                    terrainChanged = true;
                                 }
 
                                 int worldX = (centerX / blocksPerPixel + xPixel - 64) * blocksPerPixel;
@@ -147,8 +185,12 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
                             }
                         }
                     }
+                    
+                    updatedColumns++;
+                    prevXPixel = xPixel;
                 }
             }
+            
             locateBLLocations(world, checkedChunks, centerX, centerZ, blocksPerPixel, data);
         }
     }

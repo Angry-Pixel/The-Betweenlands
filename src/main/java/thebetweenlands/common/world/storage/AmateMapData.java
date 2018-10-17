@@ -102,7 +102,7 @@ public class AmateMapData extends MapData {
             byte mapZ = arr[i * 3 + 2];
             byte mapRotation = 8;
 
-            addDecoration(new BLMapDecoration(BLMapDecoration.Location.values()[id], mapX, mapZ, mapRotation));
+            addDecoration(new BLMapDecoration(BLMapDecoration.Location.byId(id), mapX, mapZ, mapRotation));
         }
     }
 
@@ -111,7 +111,7 @@ public class AmateMapData extends MapData {
 
         int i = 0;
         for (BLMapDecoration location : blDecorations) {
-            storage[i * 3] = (byte) location.location.ordinal();
+            storage[i * 3] = location.location.id;
             storage[i * 3 + 1] = location.getX();
             storage[i * 3 + 2] = location.getY();
             i++;
@@ -120,7 +120,7 @@ public class AmateMapData extends MapData {
         return storage;
     }
 
-    public static class BLMapDecoration extends MapDecoration implements Comparable {
+    public static class BLMapDecoration extends MapDecoration implements Comparable<BLMapDecoration> {
 
         private static final ResourceLocation MAP_ICONS = new ResourceLocation(ModInfo.ID, "textures/gui/map_icon_sheet.png");
         private final Location location;
@@ -180,34 +180,46 @@ public class AmateMapData extends MapData {
         }
 
         @Override
-        public int compareTo(Object o) {
-            return this.location == Location.CHECK ? 1: o instanceof BLMapDecoration && ((BLMapDecoration) o).location != Location.CHECK ? Integer.compare(this.location.ordinal(), ((BLMapDecoration) o).location.ordinal()): -1;
+        public int compareTo(BLMapDecoration o) {
+            return this.location == Location.CHECK ? 1 : o.location != Location.CHECK ? Integer.compare(this.location.id, ((BLMapDecoration) o).location.id) : -1;
         }
 
         public enum Location {
-            NONE(0, 0, 0, 0),
-            PORTAL(0, 0, 16, 16),
-            SPAWN(17, 0, 16, 16),
-            SHRINE(34, 0, 16, 16),
-            GIANT_TREE(51, 0, 16, 16),
-            RUINS(68, 0, 16, 16),
-            TOWER(85, 0, 16, 16),
-            IDOL(102, 0, 16, 16),
-            BURIAL_MOUND(0, 16, 16, 16),
-            FORTRESS(5, 100, 22, 24),
+            NONE(0, 0, 0, 0, 0),
+            PORTAL(1, 0, 0, 16, 16),
+            SPAWN(2, 17, 0, 16, 16),
+            SHRINE(3, 34, 0, 16, 16),
+            GIANT_TREE(4, 51, 0, 16, 16),
+            RUINS(5, 68, 0, 16, 16),
+            TOWER(6, 85, 0, 16, 16),
+            IDOL(7, 102, 0, 16, 16),
+            BURIAL_MOUND(8, 0, 16, 16, 16),
+            FORTRESS(9, 5, 100, 22, 24),
 
-            CHECK(0, 33, 16, 16);
+            CHECK(10, 0, 33, 16, 16);
 
             private float x;
             private float y;
             private float x2;
             private float y2;
+            
+            private final byte id;
 
-            Location(int x, int y, int width, int height) {
+            Location(int id, int x, int y, int width, int height) {
+            	this.id = (byte) id;
                 this.x = MathUtils.linearTransformf(x, 0, 128, 0, 1);
                 this.y = MathUtils.linearTransformf(y, 0, 128, 0, 1);
                 this.x2 = MathUtils.linearTransformf(width + x, 0, 128, 0, 1);
                 this.y2 = MathUtils.linearTransformf(height + y, 0, 128, 0, 1);
+            }
+            
+            public static Location byId(int id) {
+            	for(Location location : values()) {
+            		if(location.id == id) {
+            			return location;
+            		}
+            	}
+            	return NONE;
             }
 
             public static Location getLocation(LocationStorage storage) {
