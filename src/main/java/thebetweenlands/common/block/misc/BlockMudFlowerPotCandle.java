@@ -23,7 +23,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockMudFlowerPotCandle extends Block {
-	protected static final AxisAlignedBB FLOWER_POT_AABB = new AxisAlignedBB(0.3125D, 0.0D, 0.3125D, 0.6875D, 0.375D, 0.6875D);
+	protected static final AxisAlignedBB CANDLE_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 0.8D, 0.6D);
 
 	public BlockMudFlowerPotCandle() {
 		super(Material.CIRCUITS);
@@ -36,7 +36,7 @@ public class BlockMudFlowerPotCandle extends Block {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 0.8D, 0.6D);
+		return CANDLE_AABB;
 	}
 
 	@Override
