@@ -1,6 +1,10 @@
 package thebetweenlands.common.world.storage;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
+import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.MapItemRenderer;
@@ -22,30 +26,35 @@ import thebetweenlands.util.MathUtils;
 import java.util.*;
 
 public class AmateMapData extends MapData {
-    public Set<BLMapDecoration> blDecorations = new TreeSet<>();
-    private Int2ObjectArrayMap<BLMapDecoration.Location> usedSpaces = new Int2ObjectArrayMap<>();
-
+	public final Int2ObjectMap<BLMapDecoration> decorations = new Int2ObjectOpenHashMap<>();
+	private final IntSet occupiedSpots = new IntOpenHashSet();
+	
     public AmateMapData(String mapname) {
         super(mapname);
-        usedSpaces.defaultReturnValue(BLMapDecoration.Location.NONE);
     }
 
     public void addDecoration(BLMapDecoration deco) {
-        int x = deco.getX();
+    	int x = deco.getX();
         int y = deco.getY();
-        Int2ObjectArrayMap<BLMapDecoration.Location> tmp = new Int2ObjectArrayMap<>();
-        int area = 5;
-        for (int i = -area; i <= area; i++) {
-            for (int j = -area; j <= area; j++) {
-                int index = (x + i) + (y + j) * 128;
-                tmp.put(index, deco.location);
-                if (usedSpaces.get(index) == deco.location) {
-                    return;
+    	int index = ((x + y * 128) << 8) | deco.location.id;
+    	
+    	if(!this.decorations.containsKey(index)) {
+    		int gridSize = 3; //Check for occupied spots at a larger scale
+    		int area = 24 >> gridSize;
+    		for (int i = -area; i <= area; i++) {
+                for (int j = -area; j <= area; j++) {
+                	if(i*i + j*j <= area*area) {
+	                    int offsetIndex = ((((x >> gridSize) + i) + ((y >> gridSize) + j) * (128 >> gridSize)) << 8) | deco.location.id;
+	                    if(this.occupiedSpots.contains(offsetIndex)) {
+	                        return;
+	                    }
+                	}
                 }
             }
-        }
-        usedSpaces.putAll(tmp);
-        blDecorations.add(deco);
+    		
+    		this.occupiedSpots.add((((x >> gridSize) + (y >> gridSize) * (128 >> gridSize)) << 8) | deco.location.id);
+    		this.decorations.put(index, deco);
+    	}
     }
 
     public void updateMapTexture() {
@@ -86,7 +95,7 @@ public class AmateMapData extends MapData {
     public NBTTagCompound writeToNBT(NBTTagCompound compound) {
         compound = super.writeToNBT(compound);
 
-        if (blDecorations.size() > 0) {
+        if (this.decorations.size() > 0) {
             compound.setByteArray("locations", serializeLocations());
         }
 
@@ -94,8 +103,8 @@ public class AmateMapData extends MapData {
     }
 
     public void deserializeLocations(byte[] arr) {
-        this.blDecorations.clear();
-        this.usedSpaces.clear();
+    	this.decorations.clear();
+    	this.occupiedSpots.clear();
 
         for (int i = 0; i < arr.length / 3; ++i) {
             byte id = arr[i * 3];
@@ -108,10 +117,10 @@ public class AmateMapData extends MapData {
     }
 
     public byte[] serializeLocations() {
-        byte[] storage = new byte[this.blDecorations.size() * 3];
+        byte[] storage = new byte[this.decorations.size() * 3];
 
         int i = 0;
-        for (BLMapDecoration location : blDecorations) {
+        for (BLMapDecoration location : this.decorations.values()) {
             storage[i * 3] = location.location.id;
             storage[i * 3 + 1] = location.getX();
             storage[i * 3 + 2] = location.getY();
@@ -138,15 +147,14 @@ public class AmateMapData extends MapData {
             GlStateManager.translate(0.0F + getX() / 2.0F + 64.0F, 0.0F + getY() / 2.0F + 64.0F, -0.02F);
             GlStateManager.rotate((float) (getRotation() * 360) / 16.0F, 0.0F, 0.0F, 1.0F);
             if (location == Location.FORTRESS) {
-                GlStateManager.scale(5.0F, 5.0F, 4.0F);
-            } else if (location == Location.CHECK) {
-                GlStateManager.scale(2.5F, 2.5F, 2.5F);
-                GlStateManager.translate(0.0F, -0.6F, 0.0F);
+                GlStateManager.scale(5.0F, 5.0F, 1.0F);
             } else {
-                GlStateManager.scale(4.0F, 4.0F, 3.0F);
+            	GlStateManager.scale(4.0F, 4.0F, 1.0F);
             }
-            GlStateManager.translate(-0.125F, 0.125F, 0.0F);
 
+            //We don't care about depth, just the rendering order which is already sorted out
+            GlStateManager.depthMask(false);
+            
             float f1 = location.x;
             float f2 = location.y;
             float f3 = location.x2;
@@ -154,12 +162,16 @@ public class AmateMapData extends MapData {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
             bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-            bufferbuilder.pos(-1.0D, 1.0D, (float) index * -0.001F).tex((double) f1, (double) f2).endVertex();
-            bufferbuilder.pos(1.0D, 1.0D, (float) index * -0.001F).tex((double) f3, (double) f2).endVertex();
-            bufferbuilder.pos(1.0D, -1.0D, (float) index * -0.001F).tex((double) f3, (double) f4).endVertex();
-            bufferbuilder.pos(-1.0D, -1.0D, (float) index * -0.001F).tex((double) f1, (double) f4).endVertex();
+            bufferbuilder.pos(-1.0D, 1.0D, 0).tex((double) f3, (double) f2).endVertex();
+            bufferbuilder.pos(1.0D, 1.0D, 0).tex((double) f1, (double) f2).endVertex();
+            bufferbuilder.pos(1.0D, -1.0D, 0).tex((double) f1, (double) f4).endVertex();
+            bufferbuilder.pos(-1.0D, -1.0D, 0).tex((double) f3, (double) f4).endVertex();
             tessellator.draw();
+            
+            GlStateManager.depthMask(true);
+            
             GlStateManager.popMatrix();
+            
             return true;
         }
 
@@ -182,7 +194,7 @@ public class AmateMapData extends MapData {
 
         @Override
         public int compareTo(BLMapDecoration o) {
-            return this.location == Location.CHECK ? 1 : o.location != Location.CHECK ? Integer.compare(this.location.id, ((BLMapDecoration) o).location.id) : -1;
+            return Integer.compare(this.location.ordinal(), o.location.ordinal());
         }
 
         public enum Location {
@@ -199,7 +211,7 @@ public class AmateMapData extends MapData {
             SPIRIT_TREE(10, 16, 16, 16, 16),
             FORTRESS(11, 0, 104, 22, 24),
 
-            CHECK(12, 0, 32, 16, 16);
+            CHECK(127, 0, 32, 16, 16);
 
             private float x;
             private float y;

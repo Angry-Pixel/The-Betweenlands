@@ -14,8 +14,13 @@ import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.world.storage.AmateMapData;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class MessageAmateMap extends MessageBase {
     private int mapId;
@@ -81,10 +86,14 @@ public class MessageAmateMap extends MessageBase {
         Map<String, MapDecoration> vanilla = mapData.mapDecorations;
         mapData.mapDecorations = new LinkedHashMap<>();
 
-        for (AmateMapData.BLMapDecoration decor : mapData.blDecorations) {
+        List<AmateMapData.BLMapDecoration> decorations = new ArrayList<>(mapData.decorations.values());
+        decorations.addAll(mapData.decorations.values());
+        Collections.sort(decorations);
+        
+        for (AmateMapData.BLMapDecoration decor : decorations) {
             mapData.mapDecorations.put(decor.toString(), decor);
         }
-
+        
         mapData.mapDecorations.putAll(vanilla);
         mapData.updateMapTexture();
 

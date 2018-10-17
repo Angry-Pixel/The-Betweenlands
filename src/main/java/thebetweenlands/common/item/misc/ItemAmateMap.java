@@ -228,7 +228,7 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
                                 }
                             }
                             if (done) {
-                                amateMapData.addDecoration(new AmateMapData.BLMapDecoration(Location.CHECK, mapX, (byte)(mapZ + 1), (byte) 8));
+                                amateMapData.addDecoration(new AmateMapData.BLMapDecoration(Location.CHECK, mapX, mapZ, (byte) 8));
                             }
                         }
                     }
