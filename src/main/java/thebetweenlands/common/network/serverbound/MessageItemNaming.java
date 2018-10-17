@@ -6,16 +6,16 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import thebetweenlands.api.item.IRenamableItem;
 import thebetweenlands.common.network.MessageBase;
-import thebetweenlands.common.registries.ItemRegistry;
 
-public class MessagePouchNaming extends MessageBase {
+public class MessageItemNaming extends MessageBase {
 	private String name;
 	private EnumHand hand;
 
-	public MessagePouchNaming() { }
+	public MessageItemNaming() { }
 
-	public MessagePouchNaming(String name, EnumHand hand) {
+	public MessageItemNaming(String name, EnumHand hand) {
 		this.name = name;
 		this.hand = hand;
 	}
@@ -37,11 +37,11 @@ public class MessagePouchNaming extends MessageBase {
 		if(ctx.getServerHandler() != null) {
 			EntityPlayer player = ctx.getServerHandler().player;
 			ItemStack heldItem = player.getHeldItem(this.hand);
-			if(!heldItem.isEmpty() && heldItem.getItem() == ItemRegistry.LURKER_SKIN_POUCH && this.name != null) {
+			if(this.name != null && !heldItem.isEmpty() && heldItem.getItem() instanceof IRenamableItem && ((IRenamableItem) heldItem.getItem()).canRename(player, this.hand, heldItem, this.name)) {
 				if(this.name.length() == 0) {
-					heldItem.clearCustomName();
+					((IRenamableItem) heldItem.getItem()).clearRename(player, this.hand, heldItem, this.name);
 				} else {
-					heldItem.setStackDisplayName(this.name);
+					((IRenamableItem) heldItem.getItem()).setRename(player, this.hand, heldItem, this.name);
 				}
 			}
 		}

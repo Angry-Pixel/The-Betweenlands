@@ -15,17 +15,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.ContainerPouch;
-import thebetweenlands.common.network.serverbound.MessagePouchNaming;
+import thebetweenlands.common.network.serverbound.MessageItemNaming;
 
 
-public class GuiPouchNaming extends GuiContainer {
-	public static final ResourceLocation GUI_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/lurker_pouch_naming.png");
-	
+public class GuiItemNaming extends GuiContainer {
+	public static final ResourceLocation GUI_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/item_renaming.png");
+
 	private GuiTextField textFieldName;
 	private EntityPlayer player;
 	private EnumHand hand;
 
-	public GuiPouchNaming(EntityPlayer player, EnumHand hand) {
+	public GuiItemNaming(EntityPlayer player, EnumHand hand) {
 		super(new ContainerPouch(player, player.inventory, null));
 		this.xSize = 181;
 		this.ySize = 55;
@@ -51,7 +51,7 @@ public class GuiPouchNaming extends GuiContainer {
 		this.buttonList.clear();
 		int xOffSet = (width - xSize) / 2;
 		int yOffSet = (height - ySize) / 2;
-		this.buttonList.add(new GuiPouchNamingButton(1, xOffSet, yOffSet - 18, 46, 18, I18n.format("container.lurker_skin_pouch.naming.save")));
+		this.buttonList.add(new GuiItemNamingButton(1, xOffSet, yOffSet - 18, 46, 18, I18n.format("container.lurker_skin_pouch.naming.save")));
 	}
 
 	@Override
@@ -82,12 +82,12 @@ public class GuiPouchNaming extends GuiContainer {
 
 	@Override
 	protected void actionPerformed(GuiButton button) {
-		if (button instanceof GuiPouchNamingButton) {
+		if (button instanceof GuiItemNamingButton) {
 			if (button.id == 1) {
 				if (StringUtils.isNullOrEmpty(this.textFieldName.getText())) {
-					TheBetweenlands.networkWrapper.sendToServer(new MessagePouchNaming("", this.hand));
+					TheBetweenlands.networkWrapper.sendToServer(new MessageItemNaming("", this.hand));
 				} else {
-					TheBetweenlands.networkWrapper.sendToServer(new MessagePouchNaming(this.textFieldName.getText(), this.hand));
+					TheBetweenlands.networkWrapper.sendToServer(new MessageItemNaming(this.textFieldName.getText(), this.hand));
 				}
 
 				this.player.closeScreen();

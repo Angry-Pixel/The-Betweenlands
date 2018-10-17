@@ -5,8 +5,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
 
-public class GuiPouchNamingButton extends GuiButton {
-    public GuiPouchNamingButton(int id, int x, int y, int width, int height, String text) {
+public class GuiItemNamingButton extends GuiButton {
+    public GuiItemNamingButton(int id, int x, int y, int width, int height, String text) {
         super(id, x, y, width, height, text);
     }
 
@@ -14,7 +14,7 @@ public class GuiPouchNamingButton extends GuiButton {
     public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
             FontRenderer fontrenderer = mc.fontRenderer;
-            mc.getTextureManager().bindTexture(GuiPouchNaming.GUI_TEXTURE);
+            mc.getTextureManager().bindTexture(GuiItemNaming.GUI_TEXTURE);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             GlStateManager.enableBlend();

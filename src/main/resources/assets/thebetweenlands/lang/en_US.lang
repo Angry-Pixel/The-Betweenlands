@@ -699,6 +699,7 @@ item.thebetweenlands.spirit_fruit.name=Spirit Fruit
 item.thebetweenlands.sap_spit.name=Sap Spit
 item.thebetweenlands.empty_amate_map.name=Empty Amate Map
 item.thebetweenlands.amate_map.name=Amate Map
+item.thebetweenlands.bone_wayfinder.name=Bone Wayfinder
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -814,6 +815,8 @@ tooltip.swamp_talisman_linked=Linked to portal\nX: %s\nY: %s\nZ: %s
 tooltip.infusion.time=§aInfusion time:§r %s
 tooltip.infusion.ingredients=§aIngredients:
 tooltip.infusion.empty=Empty
+tooltip.bone_wayfinder=Must be linked to a Menhir
+tooltip.bone_wayfinder_linked=Requires sufficient XP to use.\nLinked to Menhir\nX: %s\nY: %s\nZ: %s
 
 tooltip.bl.elixir.potency=§9Potency: %s
 tooltip.bl.elixir.duration=§9Duration: %s (%s)

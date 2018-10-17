@@ -74,7 +74,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 							//Get and set a suitable position for (re-)spawning
 							BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
-							pos = PlayerRespawnHandler.getRespawnPointNearPos(this.toWorld, pos);
+							pos = PlayerRespawnHandler.getRespawnPointNearPos(this.toWorld, pos, 64);
 							pos = this.setDefaultPlayerSpawnLocation(pos, entity);
 
 							this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
@@ -650,7 +650,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 		BlockPos coords = player.getBedLocation(BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 
 		if (coords == null) {
-			coords = PlayerRespawnHandler.getRespawnPointNearPos(this.toWorld, portalPos);
+			coords = PlayerRespawnHandler.getRespawnPointNearPos(this.toWorld, portalPos, 64);
 			player.setSpawnChunk(coords, true, BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 		}
 

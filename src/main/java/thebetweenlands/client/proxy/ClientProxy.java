@@ -45,7 +45,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import thebetweenlands.client.gui.GuiLorePage;
-import thebetweenlands.client.gui.GuiPouchNaming;
+import thebetweenlands.client.gui.GuiItemNaming;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
@@ -258,9 +258,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			}
 		}
 
-		case GUI_LURKER_POUCH_NAMING:
+		case GUI_ITEM_RENAMING:
 			if(!player.getHeldItemMainhand().isEmpty()) {
-				return new GuiPouchNaming(player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+				return new GuiItemNaming(player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
 			}
 			break;
 

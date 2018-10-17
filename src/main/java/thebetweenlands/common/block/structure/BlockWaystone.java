@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -92,13 +93,13 @@ public class BlockWaystone extends BlockContainer {
 	}
 
 	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
-		if(!this.canBlockStay(worldIn, pos, state)) {
+		if(!this.isValidWaystone(worldIn, pos, state)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
 			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		}
 	}
 
-	protected boolean canBlockStay(World world, BlockPos pos, IBlockState state) {
+	public boolean isValidWaystone(World world, BlockPos pos, IBlockState state) {
 		switch(state.getValue(PART)) {
 		case TOP: {
 			IBlockState down1 = world.getBlockState(pos.down());
@@ -169,6 +170,14 @@ public class BlockWaystone extends BlockContainer {
 	@Override
 	public int getLightValue(IBlockState state) {
 		return state.getValue(ACTIVE) ? 8 : 0;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		for(int i = 0; i < 16; i++) {
+			worldIn.spawnParticle(EnumParticleTypes.SUSPENDED_DEPTH, pos.getX() + 0.5D + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 2) * 16, pos.getY() + 0.5D + rand.nextFloat() * 6 - 3, pos.getZ() + 0.5D + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 2) * 16, 0, 0.2D, 0);
+		}
 	}
 
 	public static enum Part implements IStringSerializable {

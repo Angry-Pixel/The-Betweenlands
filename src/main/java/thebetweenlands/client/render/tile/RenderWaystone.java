@@ -90,14 +90,14 @@ public class RenderWaystone extends TileEntitySpecialRenderer<TileEntityWaystone
 					double py = pos.getY();
 					double pz = pos.getZ() + 0.5D;
 
-					EntityPlayer closestPlayer = te.getWorld().getClosestPlayer(px, py, pz, 8.0D, false);
+					EntityPlayer closestPlayer = te.getWorld().getClosestPlayer(px, py, pz, 4.0D, false);
 
 					if(closestPlayer != null) {
 						ShaderHelper.INSTANCE.require();
 
-						float brightness = 3.0F * (float)(1.0D - closestPlayer.getDistance(px, py, pz) / 8.0D);
+						float brightness = 3.0F * (float)(1.0D - closestPlayer.getDistance(px, py, pz) / 4.0D);
 
-						ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(px, py, pz, 16F, 0.44f * brightness, 0.8f * brightness, 1.0f * brightness));
+						ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(px, py, pz, 8F, 0.44f * brightness, 0.8f * brightness, 1.0f * brightness));
 					}
 				}
 			}

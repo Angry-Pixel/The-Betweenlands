@@ -41,6 +41,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
+import thebetweenlands.api.item.IRenamableItem;
 import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
@@ -51,7 +52,7 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 
-public class ItemLurkerSkinPouch extends Item implements IEquippable {
+public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamableItem {
     public ItemLurkerSkinPouch() {
         this.setMaxStackSize(1);
         this.setCreativeTab(BLCreativeTabs.ITEMS);
@@ -149,7 +150,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
             if (!player.isSneaking()) {
                 player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH, world, 0, 0, 0);
             } else {
-                player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH_NAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
+                player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ITEM_RENAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
             }
         }
 
