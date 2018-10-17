@@ -62,6 +62,16 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
         this.setMaxDamage(0);
         this.setCreativeTab(BLCreativeTabs.GEARS);
     }
+    
+    @Override
+    public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
+    	NBTTagCompound nbt = stack.getTagCompound();
+    	if(nbt == null) {
+    		nbt = new NBTTagCompound();
+    	}
+        nbt.setTag(FluidHandlerItemStackSimple.FLUID_NBT_KEY, new NBTTagCompound());
+        stack.setTagCompound(nbt);
+    }
 
     @Override
     public Map<Integer, ResourceLocation> getModels() {
