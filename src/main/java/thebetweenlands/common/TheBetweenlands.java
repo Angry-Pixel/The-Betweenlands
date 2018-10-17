@@ -75,6 +75,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenWaystone;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
 import thebetweenlands.compat.tmg.TMGEquipmentInventory;
@@ -160,7 +161,8 @@ public class TheBetweenlands {
 		this.registerEventHandlers();
 
 		GameRegistry.registerWorldGenerator(new WorldGenDruidCircle(), 0);
-
+		GameRegistry.registerWorldGenerator(new WorldGenWaystone(), 0);
+		
 		BLDataFixers.register();
 		
 		if (Loader.isModLoaded("tombmanygraves2api")) {

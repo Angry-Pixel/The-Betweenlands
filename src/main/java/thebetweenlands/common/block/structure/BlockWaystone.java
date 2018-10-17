@@ -1,5 +1,6 @@
 package thebetweenlands.common.block.structure;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -22,13 +23,18 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.tile.TileEntityWaystone;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class BlockWaystone extends BlockContainer {
 	public static final PropertyEnum<Part> PART = PropertyEnum.create("part", Part.class);
@@ -78,6 +84,17 @@ public class BlockWaystone extends BlockContainer {
 
 			worldIn.setBlockState(pos.up(2), stateTop, 3);
 			worldIn.setBlockState(pos.up(), stateMiddle, 3);
+		}
+	}
+
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		super.breakBlock(worldIn, pos, state);
+
+		ILocalStorageHandler localStorageHandler = BetweenlandsWorldStorage.forWorld(worldIn).getLocalStorageHandler();
+		List<LocationStorage> waystoneLocations = localStorageHandler.getLocalStorages(LocationStorage.class, new AxisAlignedBB(pos), storage -> storage.getType() == EnumLocationType.WAYSTONE);
+		for(LocationStorage waystoneLocation : waystoneLocations) {
+			localStorageHandler.removeLocalStorage(waystoneLocation);
 		}
 	}
 

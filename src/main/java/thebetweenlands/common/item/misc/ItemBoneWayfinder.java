@@ -24,6 +24,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -45,6 +46,9 @@ import thebetweenlands.common.item.equipment.ItemRing;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimatorRepairable {
 	public ItemBoneWayfinder() {
@@ -67,7 +71,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 		ItemStack stack = player.getHeldItem(hand);
 		if(this.getBoundWaystone(stack) == null && stack.getItemDamage() < stack.getMaxDamage()) {
 			IBlockState state = world.getBlockState(pos);
-			if(state.getBlock() == BlockRegistry.WAYSTONE && this.activateWaystone(world, pos, state)) {
+			if(state.getBlock() == BlockRegistry.WAYSTONE && this.activateWaystone(world, pos, state, stack)) {
 				if(!world.isRemote) {
 					this.setBoundWaystone(stack, pos);
 				}
@@ -100,7 +104,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 		if(stack.getItemDamage() < stack.getMaxDamage()) {
 			BlockPos waystone = this.getBoundWaystone(stack);
 			if(waystone != null) {
-				BlockPos spawnPoint = PlayerRespawnHandler.getRespawnPointNearPos(worldIn, waystone, 12);
+				BlockPos spawnPoint = PlayerRespawnHandler.getRespawnPointNearPos(worldIn, waystone, 8);
 
 				if(entity.getDistanceSq(spawnPoint) > 24) {
 					this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
@@ -162,7 +166,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 				entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
 			}
 
-			if(entity instanceof EntityPlayer && count < 60 && entity.ticksExisted % 3 == 0) {
+			if(entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative() && count < 60 && entity.ticksExisted % 3 == 0) {
 				int removed = ItemRing.removeXp((EntityPlayer) entity, 1);
 				if(removed == 0) {
 					entity.stopActiveHand();
@@ -186,7 +190,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 		world.playSound(null, x, y, z, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.PLAYERS, 0.75F, 0.75F);
 	}
 
-	protected boolean activateWaystone(World world, BlockPos pos, IBlockState state) {
+	protected boolean activateWaystone(World world, BlockPos pos, IBlockState state, ItemStack stack) {
 		BlockWaystone block = (BlockWaystone) state.getBlock();
 		if(block.isValidWaystone(world, pos, state)) {
 			BlockWaystone.Part part = state.getValue(BlockWaystone.PART);
@@ -200,6 +204,22 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 				}
 
 				this.playThunderSounds(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+
+				List<LocationStorage> waystoneLocations = BetweenlandsWorldStorage.forWorld(world).getLocalStorageHandler()
+						.getLocalStorages(LocationStorage.class, new AxisAlignedBB(pos.getX(), pos.getY() + startY, pos.getZ(), pos.getX() + 1, pos.getY() + startY + 3, pos.getZ() + 1), storage -> storage.getType() == EnumLocationType.WAYSTONE);
+				if(!waystoneLocations.isEmpty()) {
+					LocationStorage location = waystoneLocations.get(0);
+
+					if(stack.hasDisplayName()) {
+						location.setName(stack.getDisplayName());
+						location.setVisible(true);
+						location.markDirty();
+					} else {
+						location.setName("waystone");
+						location.setVisible(false);
+						location.markDirty();
+					}
+				}
 			} else {
 				this.spawnWaystoneParticles(world, pos, part);
 			}
@@ -222,7 +242,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 	}
 
 	@Nullable
-	protected BlockPos getBoundWaystone(ItemStack stack) {
+	public BlockPos getBoundWaystone(ItemStack stack) {
 		if(stack.hasTagCompound()) {
 			NBTTagCompound nbt = stack.getTagCompound();
 			if(nbt.hasKey("link", Constants.NBT.TAG_LONG)) {
@@ -232,13 +252,20 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 		return null;
 	}
 
-	protected void setBoundWaystone(ItemStack stack, BlockPos pos) {
+	public void setBoundWaystone(ItemStack stack, @Nullable BlockPos pos) {
 		NBTTagCompound nbt = stack.getTagCompound();
-		if(nbt == null) {
-			nbt = new NBTTagCompound();
+		if(pos == null) {
+			if(nbt != null) {
+				nbt.removeTag("link");
+				stack.setTagCompound(nbt);
+			}
+		} else {
+			if(nbt == null) {
+				nbt = new NBTTagCompound();
+			}
+			nbt.setLong("link", pos.toLong());
+			stack.setTagCompound(nbt);
 		}
-		nbt.setLong("link", pos.toLong());
-		stack.setTagCompound(nbt);
 	}
 
 	@Override

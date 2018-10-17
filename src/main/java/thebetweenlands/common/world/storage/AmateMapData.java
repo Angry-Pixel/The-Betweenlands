@@ -14,6 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.storage.MapData;
 import net.minecraft.world.storage.MapDecoration;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.MathUtils;
@@ -227,6 +228,9 @@ public class AmateMapData extends MapData {
             public static Location getLocation(LocationStorage storage) {
                 if (storage instanceof LocationPortal) {
                     return PORTAL;
+                }
+                if(storage.getType() == EnumLocationType.WAYSTONE) {
+                	return WAYSTONE;
                 }
                 String name = storage.getName();
                 switch (name) {
