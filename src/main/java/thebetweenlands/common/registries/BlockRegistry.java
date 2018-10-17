@@ -71,6 +71,7 @@ import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
 import thebetweenlands.common.block.misc.BlockLeverBetweenlands;
 import thebetweenlands.common.block.misc.BlockMossBed;
 import thebetweenlands.common.block.misc.BlockMudFlowerPot;
+import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
 import thebetweenlands.common.block.misc.BlockOctine;
 import thebetweenlands.common.block.misc.BlockPaneBetweenlands;
 import thebetweenlands.common.block.misc.BlockPolishedDentrothyst;
@@ -686,6 +687,7 @@ public class BlockRegistry {
     public static final Block SCABYST_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.IRON).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
     public static final Block SYRMORITE_HOPPER = new BlockHopperBetweenlands();
     public static final Block MUD_FLOWER_POT = new BlockMudFlowerPot();
+    public static final Block MUD_FLOWER_POT_CANDLE = new BlockMudFlowerPotCandle();
     public static final Block GECKO_CAGE = new BlockGeckoCage();
     public static final Block INFUSER = new BlockInfuser();
     public static final Block ASPECT_VIAL_BLOCK = new BlockAspectVial();
