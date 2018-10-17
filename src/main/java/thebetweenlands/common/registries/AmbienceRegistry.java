@@ -35,7 +35,7 @@ public class AmbienceRegistry {
 				return super.isActive() && !this.getAmbience().getLocation().getName().equals("wight_tower_boss");
 			}
 		});
-		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, null) { //Silences the other ambient tracks
+		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, SoundRegistry.AMBIENT_WIGHT_FORTRESS) { //Silences the other ambient tracks
 			@Override
 			public boolean isActive() {
 				return super.isActive() && this.getAmbience().getLocation().getName().equals("wight_tower_boss");
