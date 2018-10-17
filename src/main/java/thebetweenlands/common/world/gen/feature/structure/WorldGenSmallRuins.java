@@ -66,36 +66,38 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			x = position.getX() + random.nextInt(16) - 8;
 			z = position.getZ() + random.nextInt(16) - 8;
 			y = position.getY() + random.nextInt(8) - 3;
-			int randomInt = random.nextInt(7);
-			switch (randomInt) {
-			case 0:
-				if (structure1(world, random, x, y, z, false, locationStorage))
-					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
-				break;
-			case 1:
-				if (structure2(world, random, x, y, z, false, locationStorage))
-					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
-				break;
-			case 2:
-				if (structure3(world, random, x, y, z, false, locationStorage))
-					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
-				break;
-			case 3:
-				if (structure4(world, random, x, y, z, false, locationStorage))
-					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
-				break;
-			case 4:
-				if (structure5(world, random, x, y, z, false, locationStorage))
-					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
-				break;
-			case 5:
-				if (structure6(world, random, x, y, z, false, locationStorage))
-					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
-				break;
-			case 6:
-				if (structure7(world, random, x, y, z, false, locationStorage))
-					ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
-				break;
+			if(random.nextInt(30) == 0) {
+				if (structure7(world, random, x, y, z, false, locationStorage)) {
+					ruinLocations.add(new RuinLocation(world, random, x, y, z, 6));
+				}
+			} else {
+				int randomInt = random.nextInt(6);
+				switch (randomInt) {
+				case 0:
+					if (structure1(world, random, x, y, z, false, locationStorage))
+						ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
+					break;
+				case 1:
+					if (structure2(world, random, x, y, z, false, locationStorage))
+						ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
+					break;
+				case 2:
+					if (structure3(world, random, x, y, z, false, locationStorage))
+						ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
+					break;
+				case 3:
+					if (structure4(world, random, x, y, z, false, locationStorage))
+						ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
+					break;
+				case 4:
+					if (structure5(world, random, x, y, z, false, locationStorage))
+						ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
+					break;
+				case 5:
+					if (structure6(world, random, x, y, z, false, locationStorage))
+						ruinLocations.add(new RuinLocation(world, random, x, y, z, randomInt));
+					break;
+				}
 			}
 			attempts--;
 		}
