@@ -187,16 +187,18 @@ public class AmateMapData extends MapData {
         public enum Location {
             NONE(0, 0, 0, 0),
             PORTAL(0, 0, 16, 16),
-            SPAWN(17, 0, 16, 16),
-            SHRINE(34, 0, 16, 16),
-            GIANT_TREE(51, 0, 16, 16),
-            RUINS(68, 0, 16, 16),
-            TOWER(85, 0, 16, 16),
-            IDOL(102, 0, 16, 16),
+            SPAWN(16, 0, 16, 16),
+            SHRINE(32, 0, 16, 16),
+            GIANT_TREE(48, 0, 16, 16),
+            RUINS(64, 0, 16, 16),
+            TOWER(80, 0, 16, 16),
+            IDOL(96, 0, 16, 16),
+            WAYSTONE(112, 0, 16, 16),
             BURIAL_MOUND(0, 16, 16, 16),
-            FORTRESS(5, 100, 22, 24),
+            SPIRIT_TREE(16, 16, 16, 16),
+            FORTRESS(0, 104, 22, 24),
 
-            CHECK(0, 33, 16, 16);
+            CHECK(0, 32, 16, 16);
 
             private float x;
             private float y;
@@ -229,6 +231,8 @@ public class AmateMapData extends MapData {
                         return IDOL;
                     case "wight_tower":
                         return FORTRESS;
+                    case "spirit_tree":
+                        return SPIRIT_TREE;
                 }
                 return NONE;
             }

@@ -29,6 +29,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.network.clientbound.MessageAmateMap;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -39,6 +40,7 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.LocalStorageHandlerImpl;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
+import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 import javax.annotation.Nullable;
@@ -92,7 +94,7 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
 
     @Override
     public void updateMapData(World world, Entity viewer, MapData data) {
-        if (world.provider.getDimension() == data.dimension && viewer instanceof EntityPlayer) {
+        if (world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.provider.getDimension() == data.dimension && viewer instanceof EntityPlayer) {
             int biomesPerPixel = 4;
             int blocksPerPixel = 16;
             int centerX = data.xCenter;
@@ -108,11 +110,14 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
             // use the generation map, which is larger scale than the other biome map
             int startX = (centerX / blocksPerPixel - 64) * biomesPerPixel;
             int startZ = (centerZ / blocksPerPixel - 64) * biomesPerPixel;
-            Biome[] biomes = world.getBiomeProvider().getBiomesForGeneration(null, startX, startZ, 128 * biomesPerPixel, 128 * biomesPerPixel);
+            Biome[] biomes = null;
 
             Map<Integer, List<Integer>> checkedChunks = new HashMap<>();
             for (int xPixel = viewerX - viewRadiusPixels + 1; xPixel < viewerX + viewRadiusPixels; ++xPixel) {
                 if ((xPixel & 15) == (mapInfo.step & 15) || flag) {
+                    if (biomes == null) {
+                        biomes = world.getBiomeProvider().getBiomesForGeneration(null, startX, startZ, 128 * biomesPerPixel, 128 * biomesPerPixel);
+                    }
                     flag = false;
                     for (int zPixel = viewerZ - viewRadiusPixels - 1; zPixel < viewerZ + viewRadiusPixels; ++zPixel) {
                         if (xPixel >= 0 && zPixel >= 0 && xPixel < 128 && zPixel < 128) {
@@ -153,8 +158,6 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
         }
     }
 
-
-
     private void locateBLLocations(World world, Map<Integer, List<Integer>> posList, int centerX, int centerZ, int blocksPerPixel, MapData data) {
         BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
         ILocalStorageHandler handler = worldStorage.getLocalStorageHandler();
@@ -179,7 +182,7 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
                                 if (tower.isTopConquered()) {
                                     done = true;
                                 }
-                            } else if (location == Location.FORTRESS) {
+                            } else if (location == Location.FORTRESS || location == Location.SPIRIT_TREE) {
                                 LocationGuarded guarded = (LocationGuarded) storage;
                                 if (guarded.getGuard().isClear(world)) {
                                     done = true;
