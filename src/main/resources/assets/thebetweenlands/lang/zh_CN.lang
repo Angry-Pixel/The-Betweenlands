@@ -284,6 +284,7 @@ tile.thebetweenlands.nibbletwig_plank_trapdoor.name=奇趣枝活板门
 tile.thebetweenlands.scabyst_trapdoor.name=痂壳晶活板门
 tile.thebetweenlands.syrmorite_hopper.name=赛摩铜漏斗
 tile.thebetweenlands.mud_flower_pot.name=泥砖花盆
+tile.thebetweenlands.mud_flower_pot_candle.name=插蜡烛的泥砖花盆
 tile.thebetweenlands.gecko_cage.name=壁虎笼子
 tile.thebetweenlands.infuser.name=炼药器
 tile.thebetweenlands.animator.name=活化器
@@ -327,7 +328,7 @@ tile.thebetweenlands.walkway.name=走道
 tile.thebetweenlands.wood_chip_path.name=木片小径
 tile.thebetweenlands.thatch_roof.name=茅草屋顶
 tile.thebetweenlands.thatch.name=茅草块
-tile.thebetweenlands.mud_brick_roof.name=泥砖屋顶
+tile.thebetweenlands.mud_brick_roof.name=泥瓦屋顶
 tile.thebetweenlands.repeller.name=驱魔器
 tile.thebetweenlands.black_ice.name=黑冰
 tile.thebetweenlands.snow.name=雪
@@ -699,6 +700,7 @@ item.thebetweenlands.spirit_fruit.name=灵魂之果
 item.thebetweenlands.sap_spit.name=凝胶液
 item.thebetweenlands.empty_amate_map.name=空树皮纸地图
 item.thebetweenlands.amate_map.name=树皮纸地图
+item.thebetweenlands.bone_wayfinder.name=寻路之骨
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=绿色木晶药瓶
@@ -814,6 +816,8 @@ tooltip.swamp_talisman_linked=与位于坐标\nX: %s\nY: %s\nZ: %s\n的传送门
 tooltip.infusion.time=§a炼药时间:§r %s
 tooltip.infusion.ingredients=§a原料:
 tooltip.infusion.empty=空
+tooltip.bone_wayfinder=必须与巨石柱链接才能使用。
+tooltip.bone_wayfinder_linked=需要充足的经验值才能使用。\n链接到此处的巨石柱：\nX: %s\nY: %s\nZ: %s
 
 tooltip.bl.elixir.potency=§9效果: %s
 tooltip.bl.elixir.duration=§9时长: %s (%s)
