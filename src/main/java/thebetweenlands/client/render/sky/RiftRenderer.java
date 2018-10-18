@@ -68,7 +68,7 @@ public class RiftRenderer implements IRiftRenderer {
 		if(OpenGlHelper.isFramebufferEnabled()) {
 			EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
 
-			if(rift.getActiveTicks() > 0 && rift.getVisibility(partialTicks) > 0) {
+			if(rift.getActivationTicks() > 0 && rift.getVisibility(partialTicks) > 0) {
 				int parentFboId = RenderUtils.getBoundFramebuffer();
 
 				Framebuffer mcFbo = mc.getFramebuffer();

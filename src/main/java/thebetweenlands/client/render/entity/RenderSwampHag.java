@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.entity.layer.LayerGlow;
+import thebetweenlands.client.render.entity.layer.LayerOverlay;
 import thebetweenlands.client.render.model.entity.ModelSwampHag;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 
@@ -16,7 +16,7 @@ public class RenderSwampHag extends RenderLiving<EntitySwampHag> {
 
 	public RenderSwampHag(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelSwampHag(), 0.5F);
-		this.addLayer(new LayerGlow<EntitySwampHag>(this, new ResourceLocation("thebetweenlands:textures/entity/swamp_hag_eyes.png")));
+		this.addLayer(new LayerOverlay<EntitySwampHag>(this, new ResourceLocation("thebetweenlands:textures/entity/swamp_hag_eyes.png")).setGlow(true));
 	}
 
 	@Override

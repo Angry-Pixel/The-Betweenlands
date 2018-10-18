@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:hearthgrove_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:hearthgrove_plank_door_item",
+    "count": 3
+  }
+}

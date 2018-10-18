@@ -189,7 +189,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 			try {
 				ChunkStorageImpl storage = new BetweenlandsChunkStorage(this, chunk);
 				storage.init();
-				storage.readFromNBT(nbt);
+				storage.readFromNBT(nbt, false);
 				this.storageMap.put(chunk.getPos(), storage);
 
 				if(storage instanceof ITickable) {
@@ -221,7 +221,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 		} else {
 			try {
 				ChunkStorageImpl storage = this.storageMap.get(chunk.getPos());
-				NBTTagCompound nbt = storage.writeToNBT(new NBTTagCompound());
+				NBTTagCompound nbt = storage.writeToNBT(new NBTTagCompound(), false);
 				storage.setDirty(false);
 				return nbt;
 			} catch(Exception ex) {
@@ -259,7 +259,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 
 	@Override
 	public void tick() {
-		this.localStorageHandler.tick();
+		this.localStorageHandler.update();
 
 		for(int i = 0; i < this.tickableStorages.size(); i++) {
 			ITickable tickable = this.tickableStorages.get(i);

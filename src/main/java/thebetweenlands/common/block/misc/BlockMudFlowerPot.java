@@ -121,16 +121,29 @@ public class BlockMudFlowerPot extends BlockContainer {
 
 			if (itemstack1.isEmpty()) {
 				if (this.getPlantBlockStateFromItem(heldItem) != null) {
-					te.setItemStack(heldItem);
-					playerIn.addStat(StatList.FLOWER_POTTED);
-
-					if (!playerIn.capabilities.isCreativeMode) {
-						heldItem.shrink(1);
+					if(!worldIn.isRemote) {
+						te.setItemStack(heldItem);
+						playerIn.addStat(StatList.FLOWER_POTTED);
+	
+						if (!playerIn.capabilities.isCreativeMode) {
+							heldItem.shrink(1);
+						}
 					}
+				} else if(Block.getBlockFromItem(heldItem.getItem()) == BlockRegistry.SULFUR_TORCH) {
+					if(!worldIn.isRemote) {
+						worldIn.setBlockState(pos, BlockRegistry.MUD_FLOWER_POT_CANDLE.getDefaultState());
+						
+						worldIn.playSound(null, pos, SoundType.WOOD.getPlaceSound(), SoundCategory.BLOCKS, (SoundType.WOOD.getVolume() + 1.0F) / 2.0F, SoundType.WOOD.getPitch() * 0.8F);
+						
+						if(!playerIn.isCreative()) {
+							heldItem.shrink(1);
+						}
+					}
+					return true;
 				} else {
 					return false;
 				}
-			} else {
+			} else if(!worldIn.isRemote) {
 				if (heldItem.isEmpty()) {
 					playerIn.setHeldItem(hand, itemstack1);
 				} else if (!playerIn.addItemStackToInventory(itemstack1)) {
@@ -139,8 +152,12 @@ public class BlockMudFlowerPot extends BlockContainer {
 
 				te.setItemStack(ItemStack.EMPTY);
 			}
-			te.markDirty();
-			worldIn.notifyBlockUpdate(pos, state, state, 3);
+			
+			if(!worldIn.isRemote) {
+				te.markDirty();
+				worldIn.notifyBlockUpdate(pos, state, state, 3);
+			}
+			
 			return true;
 		}
 	}

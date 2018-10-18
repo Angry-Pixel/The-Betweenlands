@@ -38,12 +38,6 @@ public class ItemPestle extends Item implements IAnimatorRepairable {
     }
 
     @Override
-    public boolean showDurabilityBar(ItemStack stack) {
-        return false;
-    }
-
-
-    @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int tick, boolean map) {
         if (!stack.hasTagCompound())
             stack.setTagCompound(new NBTTagCompound());

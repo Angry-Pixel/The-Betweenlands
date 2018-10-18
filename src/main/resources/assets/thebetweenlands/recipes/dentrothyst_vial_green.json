@@ -7,8 +7,7 @@
   ],
   "key": {
     "X": {
-      "item": "thebetweenlands:dentrothyst",
-      "data": 0
+      "item": "thebetweenlands:dentrothyst_shard_green"
     },
     "I": {
       "item": "thebetweenlands:items_misc",
@@ -18,6 +17,6 @@
   "result": {
     "item": "thebetweenlands:dentrothyst_vial",
     "data": 0,
-    "count": 3
+    "count": 1
   }
 }

@@ -96,7 +96,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
     protected void generateOres() {
 		this.generateOre(22, 12, OreGens.SULFUR, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
 		this.generateOre(6, 12, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT + 40, WorldProviderBetweenlands.CAVE_START - 5);
-		this.generateOre(10, 12, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
+		this.generateOre(5, 12, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
 		this.generateOre(4.5F, 12, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 40);
 		this.generateOre(4, 12, OreGens.SWAMP_DIRT, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(0.2F, 12, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);

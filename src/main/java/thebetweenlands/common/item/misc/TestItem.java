@@ -10,10 +10,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.tile.TileEntityDugSoil;
+import thebetweenlands.common.world.gen.feature.WorldGenSmallSpiritTree;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallPortal;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallRuins;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 
 //MINE!!
 public class TestItem extends Item {
@@ -50,6 +54,10 @@ public class TestItem extends Item {
 			fortress.generate(worldIn, itemRand, pos.up());
 		*/
 		/*
+			WorldGenSmallRuins ruins = new WorldGenSmallRuins();
+			ruins.generate(worldIn, itemRand, pos.up());
+		*/
+		/*
 			if(player.isSneaking()) {
 				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(worldIn);
 				List<SharedStorage> storages = worldStorage.getSharedStorageAt(SharedStorage.class, (storage) -> {
@@ -81,12 +89,12 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
-		
+		/*
 			WorldGenCragrockTower tower = new WorldGenCragrockTower();
 			if(tower.generate(worldIn, itemRand, pos.up(8).add(8, 0, 0))) {
 				//playerIn.setHeldItem(hand, null);
 			}
-		
+		*/
 		/*
 			WorldGenNibbletwigTree tree = new WorldGenNibbletwigTree();
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
@@ -99,6 +107,18 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
+		/*
+			WorldGenSmallSpiritTree tree = new WorldGenSmallSpiritTree();
+			if(tree.generate(worldIn, itemRand, pos.up(1))) {
+				//playerIn.setHeldItem(hand, null);
+			}
+		*/
+		
+			WorldGenSpiritTreeStructure tree = new WorldGenSpiritTreeStructure();
+			if(tree.generate(worldIn, itemRand, pos.up(1))) {
+				//playerIn.setHeldItem(hand, null);
+			}
+		
 		/*
 			ItemStack stack = player.getHeldItem(hand);
 			NBTTagCompound nbt = stack.getOrCreateSubCompound("pos");

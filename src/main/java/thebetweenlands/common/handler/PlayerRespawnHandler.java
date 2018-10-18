@@ -103,7 +103,7 @@ public class PlayerRespawnHandler {
 	}
 
 	public static void respawnNearPos(Entity entity, BlockPos pos) {
-		BlockPos newSpawn = getRespawnPointNearPos(entity.world, pos);
+		BlockPos newSpawn = getRespawnPointNearPos(entity.world, pos, 64);
 
 		entity.setLocationAndAngles(newSpawn.getX() + 0.5D, newSpawn.getY(), newSpawn.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
 
@@ -125,8 +125,8 @@ public class PlayerRespawnHandler {
 		}
 	}
 
-	public static BlockPos getRespawnPointNearPos(World world, BlockPos pos) {
-		int spawnFuzz = 64;
+	public static BlockPos getRespawnPointNearPos(World world, BlockPos pos, int fuzz) {
+		int spawnFuzz = fuzz;
 		int spawnFuzzHalf = spawnFuzz / 2;
 
 		class WeightedPos implements IWeightProvider {

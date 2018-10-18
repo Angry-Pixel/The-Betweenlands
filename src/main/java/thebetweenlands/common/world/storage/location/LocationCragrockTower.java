@@ -19,8 +19,9 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -29,16 +30,18 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.terrain.BlockWisp;
+import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class LocationCragrockTower extends LocationGuarded implements ITickable {
+public class LocationCragrockTower extends LocationGuarded {
 	private List<BlockPos> glowingCragrockBlocks = new ArrayList<BlockPos>();
 	private List<BlockPos> wisps = new ArrayList<BlockPos>();
 	private List<BlockPos> inactiveWisps = new ArrayList<BlockPos>();
@@ -54,11 +57,13 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 
 	private final int[][] levelYBounds = { {-5, 9}, {10, 18}, {19, 27}, {28, 36}, {37, 45}, {46, 56} };
 
-	private boolean crumbling = false;
-	private int crumblingTicks = 0;
+	protected static final DataParameter<Boolean> CRUMBLING = GenericDataManager.createKey(LocationCragrockTower.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Integer> CRUMBLING_TICKS = GenericDataManager.createKey(LocationCragrockTower.class, DataSerializers.VARINT);
 
 	public LocationCragrockTower(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		super(worldStorage, id, region, "cragrock_tower", EnumLocationType.DUNGEON);
+		this.dataManager.register(CRUMBLING, false);
+		this.dataManager.register(CRUMBLING_TICKS, 20, 0);
 	}
 
 	/**
@@ -276,7 +281,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	 * @return
 	 */
 	public boolean isCrumbling() {
-		return this.crumbling;
+		return this.dataManager.get(CRUMBLING);
 	}
 
 	/**
@@ -284,7 +289,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	 * @param crumbling
 	 */
 	public void setCrumbling(boolean crumbling) {
-		this.crumbling = crumbling;
+		this.dataManager.set(CRUMBLING, crumbling);
 		this.setDirty(true);
 	}
 
@@ -293,7 +298,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	 * @return
 	 */
 	public int getCrumblingTicks() {
-		return this.crumblingTicks;
+		return this.dataManager.get(CRUMBLING_TICKS);
 	}
 
 	/**
@@ -301,7 +306,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	 * @param ticks
 	 */
 	public void setCrumblingTicks(int ticks) {
-		this.crumblingTicks = ticks;
+		this.dataManager.set(CRUMBLING_TICKS, ticks);
 		this.setDirty(true);
 	}
 
@@ -391,8 +396,8 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 		for(int i = 0; i < 5; i++) {
 			this.spawners[i] = nbt.getBoolean("spawner." + i);
 		}
-		this.crumbling = nbt.getBoolean("crumbling");
-		this.crumblingTicks = nbt.getInteger("crumblingTicks");
+		this.setCrumbling(nbt.getBoolean("crumbling"));
+		this.setCrumblingTicks(nbt.getInteger("crumblingTicks"));
 		this.topSpawners = nbt.getInteger("topSpawners");
 	}
 
@@ -416,8 +421,8 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 		for(int i = 0; i < 5; i++) {
 			nbt.setBoolean("spawner." + i, this.spawners[i]);
 		}
-		nbt.setBoolean("crumbling", this.crumbling);
-		nbt.setInteger("crumblingTicks", this.crumblingTicks);
+		nbt.setBoolean("crumbling", this.isCrumbling());
+		nbt.setInteger("crumblingTicks", this.getCrumblingTicks());
 		nbt.setInteger("topSpawners", this.topSpawners);
 		return nbt;
 	}
@@ -446,16 +451,16 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 		World world = this.getWorldStorage().getWorld();
 
 		if(this.isCrumbling()) {
-			this.crumblingTicks++;
+			this.dataManager.set(CRUMBLING_TICKS, this.getCrumblingTicks() + 1);
 
 			if(!world.isRemote) {
-				if(this.crumblingTicks > 1200) {
-					this.crumblingTicks = -1;
+				if(this.getCrumblingTicks() > 1200) {
+					this.dataManager.set(CRUMBLING_TICKS, -1).syncImmediately();
 					this.setCrumbling(false);
 					this.destroyBlockade(4);
 					this.getGuard().clear(world);
 				} else {
-					this.setDirty(true, world.getTotalWorldTime() % 20 == 0 /*meh? dunno*/);
+					this.setDirty(true);
 				}
 			}
 		}
@@ -536,7 +541,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 			}
 
 			if(this.isCrumbling()) {
-				for(int i = 0; i < Math.min(Math.pow(this.crumblingTicks / 400.0f, 4) * 30.0f, 30) + 1; i++) {
+				for(int i = 0; i < Math.min(Math.pow(this.getCrumblingTicks() / 400.0f, 4) * 30.0f, 30) + 1; i++) {
 					BlockPos pos = this.getRandomPosInTower();
 					IBlockState blockState = world.getBlockState(pos);
 

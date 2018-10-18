@@ -42,7 +42,7 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 
 		if (!world.isRemote) {
 			if(this.isActive() && !this.getRegistry().heavyRain.isActive()) {
-				this.setActive(false, true);
+				this.setActive(false);
 			}
 
 			if(this.isActive() && world.provider instanceof WorldProviderBetweenlands && world instanceof WorldServer) {

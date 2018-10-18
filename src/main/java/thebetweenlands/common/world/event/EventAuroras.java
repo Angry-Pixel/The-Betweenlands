@@ -2,20 +2,28 @@ package thebetweenlands.common.world.event;
 
 import java.util.Random;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.network.datamanager.GenericDataManager;
 
 public class EventAuroras extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "auroras");
-	
+
+	protected static final DataParameter<Integer> AURORA_TYPE = GenericDataManager.createKey(EventAuroras.class, DataSerializers.VARINT);
+
 	public EventAuroras(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 
-	private short auroraType = 0;
+	@Override
+	protected void initDataParameters() {
+		super.initDataParameters();
+		this.dataManager.register(AURORA_TYPE, 0);
+	}
 
 	@Override
 	public ResourceLocation getEventName() {
@@ -33,11 +41,11 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public void setActive(boolean active, boolean markDirty) {
+	public void setActive(boolean active) {
 		if((active && this.canBeActive()) || !active) {
-			super.setActive(active, markDirty);
+			super.setActive(active);
 			if(active && !this.getWorld().isRemote) {
-				this.auroraType = (short)this.getWorld().rand.nextInt(3);
+				this.dataManager.set(AURORA_TYPE, this.getWorld().rand.nextInt(3));
 			}
 		}
 	}
@@ -45,40 +53,27 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	@Override
 	public void update(World world) {
 		super.update(world);
-		if(!world.isRemote && !this.canBeActive() && this.ticks > 500) {
-			this.ticks = 500; //Start fading out
-			this.setDirty(true);
+		if(!world.isRemote && !this.canBeActive() && this.getTicks() > 500) {
+			this.dataManager.set(TICKS, 500).syncImmediately(); //Start fading out
 		}
 	}
 
 	@Override
 	public void saveEventData() {
 		super.saveEventData();
-		this.getData().setShort("auroraType", this.auroraType);
+		this.getData().setShort("auroraType", this.getAuroraType());
 	}
 
 	@Override
 	public void loadEventData() {
 		super.loadEventData();
-		this.auroraType = this.getData().getShort("auroraType");
-	}
-
-	@Override
-	public void loadEventPacket(NBTTagCompound nbt) {
-		super.loadEventPacket(nbt);
-		this.auroraType = nbt.getShort("auroraType");
-	}
-
-	@Override
-	public void sendEventPacket(NBTTagCompound nbt) { 
-		super.sendEventPacket(nbt);
-		nbt.setShort("auroraType", this.auroraType);
+		this.dataManager.set(AURORA_TYPE, (int)this.getData().getShort("auroraType"));
 	}
 
 	public short getAuroraType() {
-		return this.auroraType;
+		return (short)this.dataManager.get(AURORA_TYPE).intValue();
 	}
-	
+
 	protected boolean canBeActive() {
 		for(IEnvironmentEvent event : this.getRegistry().getEventsOfState(true)) {
 			if(event != this && event.getClass() != EventWinter.class && event.getClass() != EventSnowfall.class &&

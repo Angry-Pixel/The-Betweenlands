@@ -13,7 +13,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.network.MessageBase;
-import thebetweenlands.common.world.storage.BetweenlandsLocalStorage;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.guard.BlockLocationGuard.GuardChunkSection;
@@ -25,7 +24,7 @@ public class MessageBlockGuardSectionChange extends MessageBase {
 
 	public MessageBlockGuardSectionChange() {}
 
-	public MessageBlockGuardSectionChange(BetweenlandsLocalStorage storage, BlockPos pos, @Nullable GuardChunkSection section) {
+	public MessageBlockGuardSectionChange(LocationGuarded storage, BlockPos pos, @Nullable GuardChunkSection section) {
 		this.id = storage.getID().getStringID();
 		this.pos = pos;
 		if(section != null && section.getBlockRefCount() > 0) {

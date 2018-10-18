@@ -456,8 +456,8 @@ public class QuadBuilder {
 	}
 
 	private BakedQuad createQuad(VertexFormat format, Vertex vert1, Vertex vert2, Vertex vert3, Vertex vert4, @Nullable Consumer<UnpackedBakedQuad.Builder> quadConsumer) {
-		Vec3d quadNormal = null;
-		if(vert1.normal == null || vert2.normal == null || vert3.normal == null || vert4.normal == null) {
+		Vec3d quadNormal = vert4.normal;
+		if(quadNormal == null) {
 			//Find 3 vertices that aren't at the exact same position to calculate the quad normal
 			Vec3d[] verts = new Vec3d[] {vert1.pos, vert2.pos, vert3.pos, vert4.pos};
 			for(int i = 0; i < 4; i++) {

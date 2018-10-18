@@ -10,6 +10,7 @@ import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.biome.spawning.spawners.BetweenstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SwampHagCaveSpawnEntry;
@@ -64,5 +65,6 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 		entries.add(new CaveSpawnEntry(10, EntityChiromaw.class, (short) 60).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
 		entries.add(new CaveSpawnEntry(11, EntityAngler.class, (short) 45).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
 		entries.add(new SurfaceSpawnEntry(12, EntitySmollSludge.class, (short) 48).setHostile(true).setGroupSize(1, 3).setGroupSpawnRadius(4.0D));
+		entries.add(new BetweenstoneCaveSpawnEntry(13, EntityBoulderSprite.class, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
 	}
 }

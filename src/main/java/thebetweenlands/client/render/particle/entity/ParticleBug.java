@@ -2,7 +2,6 @@ package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.entity.MoverType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -130,7 +129,7 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 			args.withScale(0.4F * world.rand.nextFloat() + 0.1F);
 		}
 	}
-
+	
 	public static final class WaterBugFactory extends ParticleFactory<WaterBugFactory, ParticleBug> {
 		public WaterBugFactory() {
 			super(ParticleBug.class, ParticleTextureStitcher.create(ParticleBug.class, new ResourceLocation("thebetweenlands:particle/water_bug")).setSplitAnimations(true));

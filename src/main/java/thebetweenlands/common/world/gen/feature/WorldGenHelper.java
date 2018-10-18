@@ -1,5 +1,8 @@
 package thebetweenlands.common.world.gen.feature;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -47,10 +50,10 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	}
 
 
-	public int width;
-	public int height;
-	public int depth;
-	public IBlockState[] replaceable;
+	protected int width;
+	protected int height;
+	protected int depth;
+	protected List<Predicate<IBlockState>> replaceable = new ArrayList<>();
 
 	private MutableBlockPos checkPos = new MutableBlockPos();
 
@@ -71,12 +74,16 @@ public abstract class WorldGenHelper extends WorldGenerator {
 		this.width = width;
 		this.height = height;
 		this.depth = depth;
-		this.replaceable = replaceable;
+		for(IBlockState state : replaceable) {
+			this.replaceable.add(s -> s == state);
+		}
 	}
 
 	public WorldGenHelper(IBlockState... replaceable) {
 		this(false);
-		this.replaceable = replaceable;
+		for(IBlockState state : replaceable) {
+			this.replaceable.add(s -> s == state);
+		}
 	}
 	
 	public WorldGenHelper() {
@@ -351,16 +358,25 @@ public abstract class WorldGenHelper extends WorldGenerator {
 		switch (rotation) {
 		case 0:
 			pos = this.getCheckPos(x + offsetX, y + offsetY, z + offsetZ);
-			return world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos)));
+			return world.isBlockLoaded(pos) && (world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && checkReplaceablePredicates(world.getBlockState(pos))));
 		case 1:
 			pos = this.getCheckPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1);
-			return world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos)));
+			return world.isBlockLoaded(pos) && (world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && checkReplaceablePredicates(world.getBlockState(pos))));
 		case 2:
 			pos = this.getCheckPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1);
-			return world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos)));
+			return world.isBlockLoaded(pos) && (world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && checkReplaceablePredicates(world.getBlockState(pos))));
 		case 3:
 			pos = this.getCheckPos(x + width - offsetZ - 1, y + offsetY, z + offsetX);
-			return world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos)));
+			return world.isBlockLoaded(pos) && (world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && checkReplaceablePredicates(world.getBlockState(pos))));
+		}
+		return false;
+	}
+	
+	private boolean checkReplaceablePredicates(IBlockState state) {
+		for(Predicate<IBlockState> replaceable : this.replaceable) {
+			if(replaceable.test(state)) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -555,7 +571,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
 				for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
 					for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++) {
-						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
+						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !isReplaceable(world, xx, yy, zz, 0, 0, 0, 0))
 							return true;
 					}
 			break;
@@ -563,7 +579,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
 				for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
 					for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++) {
-						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
+						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !isReplaceable(world, xx, yy, zz, 0, 0, 0, 0))
 							return true;
 					}
 			break;
@@ -571,7 +587,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
 				for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
 					for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--) {
-						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
+						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !isReplaceable(world, xx, yy, zz, 0, 0, 0, 0))
 							return true;
 					}
 			break;
@@ -579,7 +595,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
 				for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
 					for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--) {
-						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
+						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !isReplaceable(world, xx, yy, zz, 0, 0, 0, 0))
 							return true;
 					}
 			break;
@@ -654,20 +670,6 @@ public abstract class WorldGenHelper extends WorldGenerator {
 		default:
 			return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, BlockLootPot.EnumLootPot.POT_3).withProperty(BlockLootPot.FACING, EnumFacing.getFront(randDirection));
 		}
-	}
-
-	/**
-	 * Checks if the list contains the block state (usefull for blacklists)
-	 *
-	 * @param list  the list of blockstates
-	 * @param block a blockstate
-	 * @return if the list contains the block
-	 */
-	public boolean arrayContainsBlock(IBlockState[] list, IBlockState block) {
-		for (IBlockState block1 : list)
-			if (block == block1)
-				return true;
-		return false;
 	}
 
 	@Override

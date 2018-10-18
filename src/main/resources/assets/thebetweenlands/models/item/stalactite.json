@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:blocks/stalactite_bottom"
+    "layer0": "thebetweenlands:items/stalactite"
   }
 }

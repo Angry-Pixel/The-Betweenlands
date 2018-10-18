@@ -26,10 +26,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
+import thebetweenlands.common.entity.ai.EntityAIJumpRandomly;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySporeling extends EntityCreature implements IEntityBL {
+	private float jumpHeightOverride = -1;
+	
 	protected static final DataParameter<Boolean> IS_FALLING = EntityDataManager.<Boolean>createKey(EntitySporeling.class, DataSerializers.BOOLEAN);
 
 	protected float prevFloatingRotationTicks = 0;
@@ -39,7 +43,8 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 		super(world);
 		setSize(0.3F, 0.6F);
 		stepHeight = 1.0F;
-
+		this.experienceValue = 1;
+		
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
 	}
 
@@ -53,11 +58,19 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	protected void initEntityAI() {
 		super.initEntityAI();
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAvoidEntity<EntityLivingBase>(this, EntityLivingBase.class, entity -> entity instanceof EntityMob || entity instanceof IMob || (entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative()), 10.0F, 1.0D, 0.5D));
-		tasks.addTask(2, new EntityAIPanic(this, 1.0D));
-		tasks.addTask(3, new EntityAIWander(this, 0.6D));
-		tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-		tasks.addTask(5, new EntityAILookIdle(this));
+		tasks.addTask(1, new EntityAIPanic(this, 1.0D));
+		tasks.addTask(2, new EntityAIAvoidEntity<EntityLivingBase>(this, EntityLivingBase.class, entity -> entity instanceof EntityMob || entity instanceof IMob || (entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative()), 10.0F, 0.5D, 1.0D));
+		tasks.addTask(3, new EntityAIFollowTarget(this, new EntityAIFollowTarget.FollowClosest(this, EntityRootSprite.class, 10), 0.65D, 0.5F, 10.0F, false));
+		tasks.addTask(4, new EntityAIJumpRandomly(this, 10, () -> !EntitySporeling.this.world.getEntitiesWithinAABB(EntityRootSprite.class, this.getEntityBoundingBox().grow(1)).isEmpty()) {
+			@Override
+			public void startExecuting() {
+				EntitySporeling.this.setJumpHeightOverride(0.2F);
+				EntitySporeling.this.getJumpHelper().setJumping();
+			}
+		});
+		tasks.addTask(5, new EntityAIWander(this, 0.6D));
+		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+		tasks.addTask(7, new EntityAILookIdle(this));
 	}
 
 	@Override
@@ -171,5 +184,19 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.SPORELING;
+	}
+	
+	public void setJumpHeightOverride(float jumpHeightOverride) {
+		this.jumpHeightOverride = jumpHeightOverride;
+	}
+	
+	@Override
+	protected float getJumpUpwardsMotion() {
+		if(this.jumpHeightOverride > 0) {
+			float height = this.jumpHeightOverride;
+			this.jumpHeightOverride = -1;
+			return height;
+		}
+		return super.getJumpUpwardsMotion();
 	}
 }

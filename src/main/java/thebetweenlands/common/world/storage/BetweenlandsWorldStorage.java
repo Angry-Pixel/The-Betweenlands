@@ -1,7 +1,9 @@
 package thebetweenlands.common.world.storage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
@@ -15,6 +17,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -44,11 +47,11 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	private Map<BiomeBetweenlands, BiomeSpawnEntriesData> biomeSpawnEntriesData = new HashMap<>();
 
-	private int environmentEventSyncTicks;
-
 	protected final Set<ChunkPos> previousCheckedAmbientChunks = new HashSet<>();
 	protected int ambienceTicks;
 	protected int updateLCG = (new Random()).nextInt();
+
+	protected List<SpiritTreeKillToken> spiritTreeKillTokens = new ArrayList<>();
 
 	public BLEnvironmentEventRegistry getEnvironmentEventRegistry() {
 		return this.environmentEventRegistry;
@@ -106,6 +109,12 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 					}
 				}
 			}
+
+			this.spiritTreeKillTokens.clear();
+			NBTTagList spiritTreeKillTokensNbt = nbt.getTagList("spiritTreeKillTokens", Constants.NBT.TAG_COMPOUND);
+			for(int i = 0; i < spiritTreeKillTokensNbt.tagCount(); i++) {
+				this.spiritTreeKillTokens.add(SpiritTreeKillToken.readFromNBT(spiritTreeKillTokensNbt.getCompoundTagAt(i)));
+			}
 		}
 	}
 
@@ -127,6 +136,12 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 				biomesNbt.setTag(biome.getRegistryName().toString(), biomeSpawnEntriesNbt);
 			}
 			nbt.setTag("biomeData", biomesNbt);
+
+			NBTTagList spiritTreeKillTokensNbt = new NBTTagList();
+			for(SpiritTreeKillToken token : this.spiritTreeKillTokens) {
+				spiritTreeKillTokensNbt.appendTag(token.writeToNBT());
+			}
+			nbt.setTag("spiritTreeKillTokens", spiritTreeKillTokensNbt);
 		}
 	}
 
@@ -223,7 +238,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		}
 		return storage;
 	}
-	
+
 	@Nullable
 	public static BetweenlandsWorldStorage forWorldNullable(World world) {
 		if(world.hasCapability(CAPABILITY_INSTANCE, null)) {
@@ -233,6 +248,10 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 			}
 		}
 		return null;
+	}
+
+	public List<SpiritTreeKillToken> getSpiritTreeKillTokens() {
+		return this.spiritTreeKillTokens;
 	}
 
 	public static class BiomeSpawnEntriesData implements IBiomeSpawnEntriesData {
@@ -279,15 +298,5 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 				}
 			}
 		}
-	}
-
-	@Override
-	public void setEnvironmentEventSyncTicks(int ticks) {
-		this.environmentEventSyncTicks = ticks;
-	}
-
-	@Override
-	public int getEnvironmentEventSyncTicks() {
-		return this.environmentEventSyncTicks;
 	}
 }

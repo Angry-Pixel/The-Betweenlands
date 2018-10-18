@@ -208,22 +208,55 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				this.infusionColorGradientTicks = 0;
 				updateBlock = true;
 			}
-			if (this.world.isRemote && this.infusionColorGradientTicks > 0) {
-				if (this.world.isRemote && this.currentInfusionState == 2) {
+			if (this.world.isRemote && this.infusionColorGradientTicks > 0 && this.currentInfusionState == 2) {
+				for (int i = 0; i < 10; i++) {
+					double x = pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F;
+					double z = pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F;
+					BLParticles.STEAM_PURIFIER.spawn(this.world, x, pos.getY() + 1.0D - this.world.rand.nextFloat() * 0.2F, z);
+				}
+			}
+		} else {
+			if (this.currentInfusionState != 0)
+				updateBlock = true;
+			
+			this.infusionTime = 0;
+			
+			if(this.hasIngredients() && this.temp >= 100) {
+				if (this.infusionColorGradientTicks > 0) {
+					this.infusionColorGradientTicks++;
+				}
+				
+				if (!this.world.isRemote && this.infusionColorGradientTicks == 0 && this.currentInfusionState == 0 && this.stirProgress == 89) {
+					//start gradient animation
+					this.infusionColorGradientTicks = 1;
+					this.currentInfusionState = 1;
+					this.world.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.INFUSER_FINISHED, SoundCategory.BLOCKS, 1, 1);
+					updateBlock = true;
+				}
+				
+				if (!this.world.isRemote && this.infusionColorGradientTicks > 30) {
+					this.infusionColorGradientTicks = 0;
+					this.currentInfusionState = 2;
+					updateBlock = true;
+				}
+				
+				if(this.world.isRemote && (this.infusionColorGradientTicks > 0 || this.currentInfusionState == 2)) {
+					this.prevInfusionColor = new float[]{0.2F, 0.6F, 0.4F, 1.0F};
+					this.currentInfusionColor = new float[]{0.8F, 0.0F, 0.8F, 1.0F};
+				}
+				
+				if (this.world.isRemote && this.infusionColorGradientTicks > 0) {
 					for (int i = 0; i < 10; i++) {
 						double x = pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F;
 						double z = pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F;
 						BLParticles.STEAM_PURIFIER.spawn(this.world, x, pos.getY() + 1.0D - this.world.rand.nextFloat() * 0.2F, z);
 					}
 				}
+			} else {
+				this.currentInfusionState = 0;
+				this.currentInfusionColor = new float[]{0.2F, 0.6F, 0.4F, 1.0F};
+				this.prevInfusionColor = this.currentInfusionColor;
 			}
-		} else {
-			if (this.currentInfusionState != 0)
-				updateBlock = true;
-			this.currentInfusionState = 0;
-			this.infusionTime = 0;
-			this.currentInfusionColor = new float[]{0.2F, 0.6F, 0.4F, 1.0F};
-			this.prevInfusionColor = this.currentInfusionColor;
 		}
 		if (!this.world.isRemote && updateBlock) {
 			this.markForUpdate();
@@ -296,7 +329,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			this.markForUpdate();
 		}
 		if (isValidCrystalInstalled()) {
-			if (temp >= 100 && evaporation >= 400 && stirProgress >= 90 && hasInfusion && this.infusingRecipe != null && this.infusionTime < this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
+			if (temp >= 100 && evaporation >= 400 && stirProgress >= 90 && this.hasIngredients()) {
 				inventory.get(MAX_INGREDIENTS + 1).setItemDamage(inventory.get(MAX_INGREDIENTS + 1).getItemDamage() + 1);
 				stirProgress = 0;
 			}
@@ -432,6 +465,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		NBTTagCompound nbt = pkt.getNbtCompound();
+		this.readInventoryNBT(nbt);
 		waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
 		stirProgress = nbt.getInteger("stirProgress");
 		evaporation = nbt.getInteger("evaporation");
@@ -439,13 +473,6 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		infusionTime = nbt.getInteger("infusionTime");
 		hasInfusion = nbt.getBoolean("hasInfusion");
 		hasCrystal = nbt.getBoolean("hasCrystal");
-		for (int i = 0; i < getSizeInventory(); i++) {
-			NBTTagCompound itemStackCompound = nbt.getCompoundTag("slotItem" + i);
-			if (itemStackCompound != null && !itemStackCompound.getString("id").isEmpty())
-				inventory.set(i, new ItemStack(itemStackCompound));
-			else
-				inventory.set(i, ItemStack.EMPTY);
-		}
 		currentInfusionState = nbt.getInteger("infusionState");
 		infusionColorGradientTicks = nbt.getInteger("infusionColorGradientTicks");
 		this.updateInfusingRecipe();
@@ -454,6 +481,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound nbt = super.getUpdateTag();
+		this.writeInventoryNBT(nbt);
 		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
 		nbt.setInteger("stirProgress", stirProgress);
 		nbt.setInteger("evaporation", evaporation);
@@ -461,13 +489,6 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setInteger("infusionTime", infusionTime);
 		nbt.setBoolean("hasInfusion", hasInfusion);
 		nbt.setBoolean("hasCrystal", hasCrystal);
-		for (int i = 0; i < getSizeInventory(); i++) {
-			NBTTagCompound itemStackCompound = new NBTTagCompound();
-			if (!inventory.get(i).isEmpty()) {
-				inventory.get(i).writeToNBT(itemStackCompound);
-			}
-			nbt.setTag("slotItem" + i, itemStackCompound);
-		}
 		nbt.setInteger("infusionState", this.currentInfusionState);
 		nbt.setInteger("infusionColorGradientTicks", this.infusionColorGradientTicks);
 		return nbt;

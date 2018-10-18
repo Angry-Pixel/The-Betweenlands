@@ -11,6 +11,7 @@ import thebetweenlands.client.audio.ambience.list.FrostyAmbienceType;
 import thebetweenlands.client.audio.ambience.list.LocationAmbienceType;
 import thebetweenlands.client.audio.ambience.list.PresentAmbienceType;
 import thebetweenlands.client.audio.ambience.list.SnowFallAmbienceType;
+import thebetweenlands.client.audio.ambience.list.SpiritTreeAmbienceType;
 import thebetweenlands.client.audio.ambience.list.SurfaceAmbienceType;
 import thebetweenlands.client.audio.ambience.list.WaterAmbienceType;
 import thebetweenlands.common.world.event.EventBloodSky;
@@ -45,6 +46,7 @@ public class AmbienceRegistry {
 				return 0.0F;
 			}
 		});
+		AmbienceManager.INSTANCE.registerAmbience(new SpiritTreeAmbienceType());
 
 		//Events
 		AmbienceManager.INSTANCE.registerAmbience(new EventAmbienceType(EventSpoopy.class, SoundRegistry.AMBIENT_SPOOPY, 0));

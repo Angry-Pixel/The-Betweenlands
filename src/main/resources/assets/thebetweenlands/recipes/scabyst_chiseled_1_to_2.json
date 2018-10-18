@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:scabyst_chiseled_1"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:scabyst_chiseled_2"
+  }
+}

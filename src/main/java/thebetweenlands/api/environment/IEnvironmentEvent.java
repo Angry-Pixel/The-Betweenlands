@@ -1,8 +1,11 @@
 package thebetweenlands.api.environment;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.api.network.IGenericDataManagerAccess;
 
 public interface IEnvironmentEvent {
 	/**
@@ -37,27 +40,10 @@ public interface IEnvironmentEvent {
 	public void resetActiveState();
 
 	/**
-	 * Marks this event as dirty, indicating that something has changed. Forces the server to send a packet to the client.
+	 * Activates or deactivates the event.
+	 * @param active Whether the event should be activated or deactivated
 	 */
-	public void markDirty();
-
-	/**
-	 * Marks the event as dirty or clean.
-	 * @param dirty
-	 */
-	public void setDirty(boolean dirty);
-
-	/**
-	 * Returns whether this event is marked as dirty.
-	 * @return
-	 */
-	public boolean isDirty();
-
-	/**
-	 * Activates or deactivates the event. Marks the event as dirty.
-	 * @param active
-	 */
-	public void setActive(boolean active, boolean markDirty);
+	public void setActive(boolean active);
 
 	/**
 	 * Sets the event data to be loaded
@@ -104,18 +90,6 @@ public interface IEnvironmentEvent {
 	public void loadEventData();
 
 	/**
-	 * Loads event data from the sync packet.
-	 * @param buffer
-	 */
-	public void loadEventPacket(NBTTagCompound nbt);
-
-	/**
-	 * Saves event data to the sync packet.
-	 * @param buffer
-	 */
-	public void sendEventPacket(NBTTagCompound nbt);
-
-	/**
 	 * Returns whether the data of this event has already been loaded.
 	 * @return
 	 */
@@ -138,4 +112,11 @@ public interface IEnvironmentEvent {
 	 * @return
 	 */
 	public IEnvironmentEventRegistry getRegistry();
+	
+	/**
+	 * Returns the data manager used to sync data
+	 * @return
+	 */
+	@Nullable
+	public IGenericDataManagerAccess getDataManager();
 }

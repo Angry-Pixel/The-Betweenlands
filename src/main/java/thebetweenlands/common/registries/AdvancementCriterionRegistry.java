@@ -31,6 +31,7 @@ public class AdvancementCriterionRegistry {
     public static final NoCriteriaTrigger DROP_SHIMMERSTONE = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "drop_shimmerstone")));
     public static final NoCriteriaTrigger FLUX_ADDED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "flux_added")));
     public static final NoCriteriaTrigger DAMP_TORCH_PLACED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "damp_torch_placed")));
+    public static final NoCriteriaTrigger ROLLED_OVER_BY_BOULDER_SPRITE = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "rolled_over_by_boulder_sprite")));
 
     public static void preInit() { }
 }

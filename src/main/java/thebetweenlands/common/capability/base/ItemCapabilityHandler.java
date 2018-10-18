@@ -48,12 +48,11 @@ public class ItemCapabilityHandler {
 		CapabilityManager.INSTANCE.register(capability.getCapabilityClass(), new IStorage<T>() {
 			@Override
 			public final NBTBase writeNBT(Capability<T> capability, T instance, EnumFacing side) {
+				NBTTagCompound nbt = new NBTTagCompound();
 				if(instance instanceof ISerializableCapability) {
-					NBTTagCompound nbt = new NBTTagCompound();
 					((ISerializableCapability)instance).writeToNBT(nbt);
-					return nbt;
 				}
-				return null;
+				return nbt;
 			}
 
 			@Override
@@ -73,7 +72,6 @@ public class ItemCapabilityHandler {
 
 	@SubscribeEvent
 	public static void onAttachCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
-		@SuppressWarnings("deprecation")
 		Item item = event.getObject().getItem(); //I don't know what to use... getItemStack returns a stack with a null item...
 
 		for(ItemCapability<?, ?> itemCapability : REGISTERED_CAPABILITIES) {

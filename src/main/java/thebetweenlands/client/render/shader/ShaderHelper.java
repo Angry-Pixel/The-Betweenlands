@@ -139,9 +139,9 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	}
 
 	/**
-	 * Updates and initializes the main shader if necessary
+	 * initializes the main shader if necessary
 	 */
-	public void updateShaders(float partialTicks) {
+	public void initShaders() {
 		if(this.canUseShaders()) {
 			try {
 				if(this.worldShader == null) {
@@ -153,7 +153,19 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 				if(this.toneMappingShader == null && this.isHDRActive()) {
 					this.toneMappingShader = new Tonemapper().init();
 				}
-
+			} catch(Exception ex) {
+				this.shaderError = ex;
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Updates the main shader
+	 */
+	public void updateShaders(float partialTicks) {
+		if(this.canUseShaders()) {
+			try {
 				if(this.isRequired()) {
 					this.worldShader.updateDepthBuffer();
 					this.worldShader.updateMatrices();
@@ -304,11 +316,14 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	}
 
 	private boolean isRequired() {
+		if(this.required) {
+			return true;
+		}
 		Minecraft mc = Minecraft.getMinecraft();
 		if(mc.player != null && mc.player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null) && mc.player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null).isInPortal()) {
 			return true;
 		}
-		return this.required || (mc.world != null && mc.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
+		return mc.world != null && mc.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
 	}
 
 	@Override

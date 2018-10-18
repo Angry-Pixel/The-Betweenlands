@@ -1,7 +1,9 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.tile.TileEntityAlembic;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityAspectVial;
@@ -30,6 +32,7 @@ import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
 import thebetweenlands.common.tile.TileEntityTarLootPot3;
+import thebetweenlands.common.tile.TileEntityWaystone;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
@@ -73,9 +76,10 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityAspectrusCrop.class, "aspectrus_crop");
 		registerTileEntity(TileEntityRepeller.class, "repeller");
 		registerTileEntity(TileEntityPresent.class, "present");
+		registerTileEntity(TileEntityWaystone.class, "waystone");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
-		GameRegistry.registerTileEntity(cls, "tile.thebetweenlands." + baseName);
+		GameRegistry.registerTileEntity(cls, new ResourceLocation(ModInfo.ID, baseName));
 	}
 }

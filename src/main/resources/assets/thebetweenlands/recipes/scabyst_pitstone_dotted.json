@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xsx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:pitstone_bricks"
+    },
+    "s": {
+      "item": "thebetweenlands:items_misc",
+      "data": 39
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:scabyst_pitstone_dotted",
+    "count": 4
+  }
+}

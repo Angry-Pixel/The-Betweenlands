@@ -25,6 +25,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.handler.FogHandler;
+import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.render.shader.DepthBuffer;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.LightSource;
@@ -230,7 +231,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		this.uploadSampler(this.repellerDepthUniformID, this.repellerShieldBuffer.getDepthTexture(), 3);
 		this.uploadSampler(this.gasParticlesDiffuseUniformID, this.gasParticlesBuffer.getDiffuseTexture(), 4);
 		this.uploadSampler(this.gasParticlesDepthUniformID, this.gasParticlesBuffer.getDepthTexture(), 5);
-
+		
 		this.uploadMatrix4f(this.invMVPUniformID, this.invertedModelviewProjectionMatrix);
 		this.uploadInt(this.fogModeUniformID, FogHandler.getCurrentFogMode());
 
@@ -644,9 +645,6 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
 			.render(partialTicks);
 		}
-
-		//Update gas particles depth buffer
-		this.gasParticlesBuffer.updateDepthBuffer();
 	}
 
 	private void updateStarfieldTexture(float partialTicks) {
@@ -659,21 +657,5 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		.setRenderDimensions(BetweenlandsConfig.RENDERING.skyResolution, BetweenlandsConfig.RENDERING.skyResolution)
 		.render(partialTicks);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-	}
-
-	@Override
-	public void postRender(float partialTicks) {
-		//Clear gas particles buffer after rendering the shader for the next frame
-		Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
-		int parentFboId = -1;
-		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
-			parentFboId = RenderUtils.getBoundFramebuffer();
-		}
-		if(parentFboId == -1) {
-			parentFboId = mainFramebuffer.framebufferObject;
-		}
-		this.gasParticlesBuffer.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
-		this.gasParticlesBuffer.clear(0, 0, 0, 0, 1);
-		OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
 	}
 }

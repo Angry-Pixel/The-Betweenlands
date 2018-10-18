@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
@@ -98,14 +99,20 @@ public class MessageEquipItem extends MessageEntity {
 						if(!sender.capabilities.isCreativeMode) {
 							sender.inventory.setInventorySlotContents(this.sourceSlot, result);
 						}
+						if(result.isEmpty() || result.getCount() != stack.getCount()) {
+							sender.sendStatusMessage(new TextComponentTranslation("chat.equipment.equipped", new TextComponentTranslation(stack.getUnlocalizedName() + ".name")), true);
+						}
 					}
 					break;
 				case 1:
 					//Unequip
 					if(this.sourceSlot >= 0) {
 						ItemStack stack = EquipmentHelper.unequipItem(sender, target, this.inventory, this.sourceSlot, false);
-						if(stack != null && !sender.inventory.addItemStackToInventory(stack)) {
-							target.entityDropItem(stack, target.getEyeHeight());
+						if(!stack.isEmpty()) {
+							sender.sendStatusMessage(new TextComponentTranslation("chat.equipment.unequipped", new TextComponentTranslation(stack.getUnlocalizedName() + ".name")), true);
+							if(!sender.inventory.addItemStackToInventory(stack)) {
+								target.entityDropItem(stack, target.getEyeHeight());
+							}
 						}
 					}
 					break;

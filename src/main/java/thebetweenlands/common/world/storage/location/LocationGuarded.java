@@ -22,16 +22,21 @@ import thebetweenlands.common.world.storage.location.guard.BlockLocationGuard.Gu
 public class LocationGuarded extends LocationStorage {
 	private BlockLocationGuard guard = new BlockLocationGuard() {
 		@Override
-		public void setGuarded(World world, BlockPos pos, boolean guarded) {
-			super.setGuarded(world, pos, guarded);
-			if(!LocationGuarded.this.getWatchers().isEmpty()) {
-				LocationGuarded.this.queuedChanges.add(new BlockPos(pos.getX() / 16, pos.getY() / 16, pos.getZ() / 16));
+		public boolean setGuarded(World world, BlockPos pos, boolean guarded) {
+			if(super.setGuarded(world, pos, guarded)) {
+				LocationGuarded.this.setDirty(true);
+				if(!LocationGuarded.this.getWatchers().isEmpty()) {
+					LocationGuarded.this.queuedChanges.add(new BlockPos(pos.getX() / 16, pos.getY() / 16, pos.getZ() / 16));
+				}
+				return true;
 			}
+			return false;
 		}
 
 		@Override
 		public void clear(World world) {
 			super.clear(world);
+			LocationGuarded.this.setDirty(true);
 			if(!LocationGuarded.this.getWatchers().isEmpty()) {
 				LocationGuarded.this.queuedChanges.clear();
 				LocationGuarded.this.queuedClear = true;
@@ -65,13 +70,6 @@ public class LocationGuarded extends LocationStorage {
 	}
 
 	@Override
-	public void readFromPacketNBT(NBTTagCompound nbt) {
-		this.readWriteGuardData = false;
-		this.readFromNBT(nbt);
-		this.readWriteGuardData = true;
-	}
-
-	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		if(this.readWriteGuardData) {
@@ -81,7 +79,14 @@ public class LocationGuarded extends LocationStorage {
 	}
 
 	@Override
-	public NBTTagCompound writeToPacketNBT(NBTTagCompound nbt) {
+	public void readInitialPacket(NBTTagCompound nbt) {
+		this.readWriteGuardData = false;
+		this.readFromNBT(nbt);
+		this.readWriteGuardData = true;
+	}
+
+	@Override
+	public NBTTagCompound writeInitialPacket(NBTTagCompound nbt) {
 		this.readWriteGuardData = false;
 		nbt = this.writeToNBT(nbt);
 		this.readWriteGuardData = true;
@@ -96,8 +101,8 @@ public class LocationGuarded extends LocationStorage {
 	}
 
 	@Override
-	protected void updateTracker() {
-		super.updateTracker();
+	public void update() {
+		super.update();
 
 		if(this.queuedClear) {
 			MessageClearBlockGuard message = new MessageClearBlockGuard(this); 

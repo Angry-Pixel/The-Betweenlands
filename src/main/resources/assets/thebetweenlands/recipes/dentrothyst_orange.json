@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:dentrothyst_shard_orange"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:dentrothyst",
+    "data": 1,
+    "count": 1
+  }
+}
