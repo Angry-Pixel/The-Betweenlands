@@ -144,6 +144,7 @@ import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
 import thebetweenlands.common.block.structure.BlockWaystone;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockBlackIce;
+import thebetweenlands.common.block.terrain.BlockCircleGem;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDeadGrass;
 import thebetweenlands.common.block.terrain.BlockDentrothyst;
@@ -182,6 +183,7 @@ import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.block.terrain.BlockTar;
 import thebetweenlands.common.block.terrain.BlockTintedLeaves;
 import thebetweenlands.common.block.terrain.BlockWisp;
+import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -273,9 +275,9 @@ public class BlockRegistry {
         }
     }.setXP(4, 10).setHarvestLevel2("pickaxe", 2);
     public static final Block SYRMORITE_ORE = new BlockGenericOre(Material.ROCK).setHarvestLevel2("pickaxe", 1);
-    public static final Block AQUA_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setHarvestLevel2("pickaxe", 1).setLightLevel(0.8F);
-    public static final Block CRIMSON_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setHarvestLevel2("pickaxe", 1).setLightLevel(0.8F);
-    public static final Block GREEN_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setHarvestLevel2("pickaxe", 1).setLightLevel(0.8F);
+    public static final Block AQUA_MIDDLE_GEM_ORE = new BlockCircleGem(CircleGemType.AQUA);
+    public static final Block CRIMSON_MIDDLE_GEM_ORE = new BlockCircleGem(CircleGemType.CRIMSON);
+    public static final Block GREEN_MIDDLE_GEM_ORE = new BlockCircleGem(CircleGemType.GREEN);
     public static final Block LIFE_CRYSTAL_STALACTITE = new BlockLifeCrystalStalactite(FluidRegistry.SWAMP_WATER, Material.WATER);
     public static final Block STALACTITE = new BlockStalactite();
     public static final Block SILT = new BlockSilt();

@@ -98,7 +98,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void readFromNBT(NBTTagCompound nbt, boolean packet) {
 		if(this.capabilities != null && nbt.hasKey("ForgeCaps")) {
 			this.capabilities.deserializeNBT(nbt.getCompoundTag("ForgeCaps"));
 		}
@@ -136,7 +136,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt, boolean packet) {
 		if(this.capabilities != null) {
 			NBTTagCompound caps = this.capabilities.serializeNBT();
 			if(caps.getSize() > 0) {

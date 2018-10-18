@@ -51,6 +51,7 @@ public class MessageRegistry {
 		registerMessage(MessageRiftSound.class, Side.CLIENT);
 		registerMessage(MessageLivingWeedwoodShieldSpit.class, Side.CLIENT);
 		registerMessage(MessageAmateMap.class, Side.CLIENT);
+		registerMessage(MessageSoundRipple.class, Side.CLIENT);
 
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);

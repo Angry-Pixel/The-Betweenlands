@@ -24,6 +24,7 @@ import thebetweenlands.client.render.particle.entity.ParticleDamageReduction;
 import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
 import thebetweenlands.client.render.particle.entity.ParticleFish;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
+import thebetweenlands.client.render.particle.entity.ParticleSoundRipple;
 import thebetweenlands.client.render.particle.entity.ParticleLeafSwirl;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
 import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
@@ -118,7 +119,8 @@ public enum BLParticles {
 	XP_PIECES(new ParticleXPPieces.Factory()),
 	DAMAGE_REDUCTION(new ParticleDamageReduction.Factory()),
 	ROOT_SPIKE(new ParticleRootSpike.Factory()),
-	CORRUPTED(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/corrupted")).getBaseArgsBuilder().withDataBuilder().setData(2, 1.0F).buildData().buildBaseArgs());
+	CORRUPTED(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/corrupted")).getBaseArgsBuilder().withDataBuilder().setData(2, 1.0F).buildData().buildBaseArgs()),
+	SOUND_RIPPLE(new ParticleSoundRipple.Factory());
 
 
 

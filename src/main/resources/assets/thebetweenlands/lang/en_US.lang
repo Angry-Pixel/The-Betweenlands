@@ -702,6 +702,7 @@ item.thebetweenlands.empty_amate_map.name=Empty Amate Map
 item.thebetweenlands.amate_map.name=Amate Map
 item.thebetweenlands.bone_wayfinder.name=Bone Wayfinder
 item.thebetweenlands.magic_item_magnet.name=Magic Item Magnet
+item.thebetweenlands.gem_singer.name=Gem Singer
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial

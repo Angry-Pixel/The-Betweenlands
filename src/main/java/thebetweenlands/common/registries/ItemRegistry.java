@@ -316,6 +316,7 @@ public class ItemRegistry {
     public static final Item AMATE_MAP = new ItemAmateMap();
     public static final Item BONE_WAYFINDER = new ItemBoneWayfinder();
     public static final Item MAGIC_ITEM_MAGNET = new ItemMagicItemMagnet();
+    public static final Item GEM_SINGER = new ItemGemSinger();
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
