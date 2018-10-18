@@ -32,6 +32,14 @@
                 {
                     "conditions": [],
                     "type": "item",
+                    "name": "thebetweenlands:magic_item_magnet",
+                    "functions": [],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
                     "name": "thebetweenlands:swift_pick",
                     "functions": [],
                     "weight": 20,
