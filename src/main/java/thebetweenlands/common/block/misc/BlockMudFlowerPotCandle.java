@@ -13,6 +13,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -53,6 +54,9 @@ public class BlockMudFlowerPotCandle extends Block {
 	public void onBlockClicked(World worldIn, BlockPos pos, EntityPlayer playerIn) {
 		if(!worldIn.isRemote) {
 			worldIn.setBlockState(pos, BlockRegistry.MUD_FLOWER_POT.getDefaultState());
+			
+			worldIn.playSound(null, pos, SoundType.WOOD.getBreakSound(), SoundCategory.BLOCKS, (SoundType.WOOD.getVolume() + 1.0F) / 2.0F, SoundType.WOOD.getPitch() * 0.8F);
+			
 			spawnAsEntity(worldIn, pos, new ItemStack(BlockRegistry.SULFUR_TORCH));
 		}
 	}

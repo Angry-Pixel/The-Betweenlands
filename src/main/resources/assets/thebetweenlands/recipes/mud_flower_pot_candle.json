@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:mud_flower_pot"
+    },
+    {
+      "item": "thebetweenlands:sulfur_torch"
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:mud_flower_pot_candle"
+  }
+}

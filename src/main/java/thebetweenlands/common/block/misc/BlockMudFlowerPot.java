@@ -132,7 +132,12 @@ public class BlockMudFlowerPot extends BlockContainer {
 				} else if(Block.getBlockFromItem(heldItem.getItem()) == BlockRegistry.SULFUR_TORCH) {
 					if(!worldIn.isRemote) {
 						worldIn.setBlockState(pos, BlockRegistry.MUD_FLOWER_POT_CANDLE.getDefaultState());
-						if(!playerIn.isCreative()) heldItem.shrink(1);
+						
+						worldIn.playSound(null, pos, SoundType.WOOD.getPlaceSound(), SoundCategory.BLOCKS, (SoundType.WOOD.getVolume() + 1.0F) / 2.0F, SoundType.WOOD.getPitch() * 0.8F);
+						
+						if(!playerIn.isCreative()) {
+							heldItem.shrink(1);
+						}
 					}
 					return true;
 				} else {
