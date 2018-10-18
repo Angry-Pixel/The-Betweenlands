@@ -701,6 +701,8 @@ item.thebetweenlands.sap_spit.name=凝胶液
 item.thebetweenlands.empty_amate_map.name=空树皮纸地图
 item.thebetweenlands.amate_map.name=树皮纸地图
 item.thebetweenlands.bone_wayfinder.name=寻路之骨
+item.thebetweenlands.magic_item_magnet.name=魔法物品磁铁
+item.thebetweenlands.gem_singer.name=宝石颂唱者
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=绿色木晶药瓶
@@ -951,6 +953,9 @@ chat.event.winter=雪橇和铃铛的声音从远处飘来...
 
 chat.repeller.shimmerstone_missing=这个驱魔器还需要一块闪光石才能使用。
 chat.amate_map.invalid=你不能在交错次元之外制作树皮地图。
+
+chat.equipment.equipped=穿上了 %s
+chat.equipment.unequipped=卸下了 %s
 
 # Damage Source
 death.attack.suffocation=沼泽之息将 %s 窒息至死 
