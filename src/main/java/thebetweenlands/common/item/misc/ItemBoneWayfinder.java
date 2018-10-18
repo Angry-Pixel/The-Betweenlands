@@ -54,6 +54,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 	public ItemBoneWayfinder() {
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 		this.setMaxDamage(10);
+		this.setMaxStackSize(1);
 	}
 
 	@Override

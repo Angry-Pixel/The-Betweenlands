@@ -60,6 +60,7 @@ import thebetweenlands.common.handler.WorldEventHandler;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.PotionRootBound;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
+import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
 import thebetweenlands.common.item.shields.ItemDentrothystShield;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
@@ -241,5 +242,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(CustomEntityBlockCollisionsHandler.class);
 		MinecraftForge.EVENT_BUS.register(PotionRootBound.class);
 		MinecraftForge.EVENT_BUS.register(BossHandler.class);
+		MinecraftForge.EVENT_BUS.register(ItemMagicItemMagnet.class);
 	}
 }
