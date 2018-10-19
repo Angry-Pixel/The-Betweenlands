@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -193,7 +194,11 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x, y + 1.0D, z);
-				GlStateManager.rotate(90 - (player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks), 0, 1, 0);
+				if(Minecraft.getMinecraft().currentScreen instanceof GuiInventory && player == Minecraft.getMinecraft().player) {
+					GlStateManager.rotate(90 - player.renderYawOffset, 0, 1, 0);
+				} else {
+					GlStateManager.rotate(90 - (player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks), 0, 1, 0);
+				}
 				GlStateManager.translate(player.isSneaking() ? 0.25D : 0.0D, (player.isSneaking() ? -0.15D : 0) - 0.2D, -0.25D);
 				float limbSwingAmount = player.prevLimbSwingAmount + (player.limbSwingAmount - player.prevLimbSwingAmount) * partialTicks;
 				float swing = (float)Math.sin((player.limbSwing - limbSwingAmount * (1.0F - partialTicks)) / 1.4F) * limbSwingAmount;
