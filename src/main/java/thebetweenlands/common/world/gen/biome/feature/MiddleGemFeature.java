@@ -37,7 +37,7 @@ public class MiddleGemFeature extends BiomeFeature {
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
 			float biomeWeight = biomeWeights.get(x, z);
-			if(biomeWeight >= 1.0F && this.rand.nextInt(60) == 0) {
+			if(biomeWeight >= 1.0F && this.rand.nextInt(180) == 0) {
 				int y = 255;
 				for(;y > 1; y--) {
 					IBlockState state = chunkPrimer.getBlockState(x, y, z);

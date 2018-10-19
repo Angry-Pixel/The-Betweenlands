@@ -41,19 +41,27 @@ public class AmateMapData extends MapData {
     	if(!this.decorations.containsKey(index)) {
     		int gridSize = 3; //Check for occupied spots at a larger scale
     		int area = 24 >> gridSize;
+    	
+    		boolean occupied = false;
+    	
     		for (int i = -area; i <= area; i++) {
                 for (int j = -area; j <= area; j++) {
                 	if(i*i + j*j <= area*area) {
 	                    int offsetIndex = ((((x >> gridSize) + i) + ((y >> gridSize) + j) * (128 >> gridSize)) << 8) | deco.location.id;
 	                    if(this.occupiedSpots.contains(offsetIndex)) {
-	                        return;
+	                    	occupied = true;
+	                    	break;
 	                    }
                 	}
                 }
             }
     		
-    		this.occupiedSpots.add((((x >> gridSize) + (y >> gridSize) * (128 >> gridSize)) << 8) | deco.location.id);
-    		this.decorations.put(index, deco);
+    		if(!occupied) {
+	    		this.occupiedSpots.add((((x >> gridSize) + (y >> gridSize) * (128 >> gridSize)) << 8) | deco.location.id);
+	    		this.decorations.put(index, deco);
+    		} else {
+    			this.decorations.put(index, new BLMapDecoration(BLMapDecoration.Location.SMALL_MARKER, deco.getX(), deco.getY(), deco.getRotation()));
+    		}
     	}
     }
 
@@ -199,6 +207,7 @@ public class AmateMapData extends MapData {
 
         public enum Location {
             NONE(0, 0, 0, 0, 0),
+            SMALL_MARKER(12, 32, 16, 16, 16),
             PORTAL(1, 0, 0, 16, 16),
             SPAWN(2, 16, 0, 16, 16),
             SHRINE(3, 32, 0, 16, 16),
