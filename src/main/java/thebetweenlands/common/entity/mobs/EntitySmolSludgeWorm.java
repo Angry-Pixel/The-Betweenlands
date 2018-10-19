@@ -18,7 +18,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.client.render.particle.BLParticles;
 
 public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart, IMob, IEntityBL {
 
@@ -43,7 +46,7 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		isImmuneToFire = true;
 		maxHurtResistantTime = 40;
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackMelee(this, 1D, false));
+		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
 		sludge_worm_Array = new MultiPartEntityPart[] {
 				sludge_worm_1 = new MultiPartEntityPart(this, "part1", 0.4375F, 0.3125F),
 				sludge_worm_2 = new MultiPartEntityPart(this, "part2", 0.3125F, 0.3125F),
@@ -55,7 +58,7 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 				sludge_worm_8 = new MultiPartEntityPart(this, "part8", 0.3125F, 0.3125F),
 				sludge_worm_9 = new MultiPartEntityPart(this, "part9", 0.3125F, 0.3125F) };
 		// tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
-		tasks.addTask(3, new EntityAIWander(this, 1D, 1));
+		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
 		targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLivingBase.class, true));
@@ -67,7 +70,7 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D);
 	}
 
@@ -85,6 +88,24 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		super.onLivingUpdate();
 		setMoveForward(0.2F);
 		setHitBoxes();
+	}
+
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		if(this.world.isRemote && this.ticksExisted % 10 == 0) {
+			this.spawnParticles(this.world, this.posX, this.posY, this.posZ, this.rand);
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void spawnParticles(World world, double x, double y, double z, Random rand) {
+		for (int count = 0; count < 10; ++count) {
+			double a = Math.toRadians(renderYawOffset);
+			double offSetX = -Math.sin(a) * 0D + rand.nextDouble() * 0.3D - rand.nextDouble() * 0.3D;
+			double offSetZ = Math.cos(a) * 0D + rand.nextDouble() * 0.3D - rand.nextDouble() * 0.3D;
+			BLParticles.TAR_BEAST_DRIP.spawn(world , x + offSetX, y + 0.1D, z + offSetZ).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+		}
 	}
 
 	// can be set to any part(s) - dunno if we want this either
@@ -124,25 +145,25 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 	private void setHitBoxes() {
 
 		if (ticksExisted == 1) {
-			sludge_worm_2.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0);
-			sludge_worm_3.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0);
-			sludge_worm_4.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0);
-			sludge_worm_5.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0);
-			sludge_worm_6.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0);
-			sludge_worm_7.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0);
-			sludge_worm_8.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0);
-			sludge_worm_9.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0);
+			sludge_worm_2.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
+			sludge_worm_3.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
+			sludge_worm_4.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
+			sludge_worm_5.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
+			sludge_worm_6.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
+			sludge_worm_7.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
+			sludge_worm_8.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
+			sludge_worm_9.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
 		}
 
 		sludge_worm_1.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0);
-		movePiecePos(sludge_worm_2, sludge_worm_1, 2.75F, 4);
-		movePiecePos(sludge_worm_3, sludge_worm_2, 2.75F, 4);
-		movePiecePos(sludge_worm_4, sludge_worm_3, 2.75F, 4);
-		movePiecePos(sludge_worm_5, sludge_worm_4, 2.75F, 4);
-		movePiecePos(sludge_worm_6, sludge_worm_5, 2.75F, 4);
-		movePiecePos(sludge_worm_7, sludge_worm_6, 2.75F, 4);
-		movePiecePos(sludge_worm_8, sludge_worm_7, 2.75F, 3);
-		movePiecePos(sludge_worm_9, sludge_worm_8, 2.75F, 3);
+		movePiecePos(sludge_worm_2, sludge_worm_1, 4.5F, 4F);
+		movePiecePos(sludge_worm_3, sludge_worm_2, 4.5F, 4F);
+		movePiecePos(sludge_worm_4, sludge_worm_3, 4.5F, 4F);
+		movePiecePos(sludge_worm_5, sludge_worm_4, 4.5F, 4F);
+		movePiecePos(sludge_worm_6, sludge_worm_5, 4.5F, 4F);
+		movePiecePos(sludge_worm_7, sludge_worm_6, 4.5F, 4F);
+		movePiecePos(sludge_worm_8, sludge_worm_7, 4.5F, 3F);
+		movePiecePos(sludge_worm_9, sludge_worm_8, 4.5F, 3F);
 	}
 
 	public static void movePiecePos(MultiPartEntityPart targetPart, MultiPartEntityPart destinationPart, float speed, float yawSpeed) {
