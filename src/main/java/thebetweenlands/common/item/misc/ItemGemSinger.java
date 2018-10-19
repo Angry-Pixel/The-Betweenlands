@@ -69,6 +69,7 @@ public class ItemGemSinger extends Item {
 	public ItemGemSinger() {
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 		this.setMaxStackSize(1);
+		this.setMaxDamage(64);
 	}
 
 	@Override
@@ -143,15 +144,15 @@ public class ItemGemSinger extends Item {
 				}
 
 				stack.damageItem(1, playerIn);
-				
+
 				playerIn.getCooldownTracker().setCooldown(stack.getItem(), 60);
 			}
 		}
 
-		if(worldIn.isRemote) {
+		if(worldIn.isRemote && !playerIn.isSneaking()) {
 			worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundRegistry.GEM_SINGER, SoundCategory.PLAYERS, 2, 1);
 		}
-		
+
 		playerIn.swingArm(handIn);
 
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
