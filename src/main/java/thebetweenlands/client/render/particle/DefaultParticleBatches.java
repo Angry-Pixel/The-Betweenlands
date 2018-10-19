@@ -5,9 +5,12 @@ import java.util.function.Predicate;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer.ParticleBatch;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer.ParticleBatchType;
 import thebetweenlands.client.render.shader.ShaderHelper;
 
 public class DefaultParticleBatches {
@@ -25,6 +28,14 @@ public class DefaultParticleBatches {
 			.texture(BLOCK_ATLAS)
 			.blur(true)
 			.end().build());
+
+	public static final ParticleBatch UNBATCHED = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchType() {
+		@Override
+		protected void postRender(Tessellator tessellator, Entity entity, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) { }
+
+		@Override
+		protected void preRender(Tessellator tessellator, Entity entity, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) { }
+	});
 
 	//Specific batches (might be rendered from somewhere else than the main particle renderer)
 	public static final ParticleBatch WISPS = BatchedParticleRenderer.INSTANCE.registerBatchType(TRANSLUCENT_GLOWING.type());
