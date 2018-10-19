@@ -71,7 +71,7 @@ public class WorldGenWaystone extends WorldGenerator implements IWorldGenerator 
 			int blockX = (regionX << (gridSizePower2 + 4)) + gridBlockSize / 4 + seededRandom.nextInt(gridBlockSize / 2 + 1);
 			int blockZ = (regionZ << (gridSizePower2 + 4)) + gridBlockSize / 4 + seededRandom.nextInt(gridBlockSize / 2 + 1);
 
-			if(blockX >> 4 == chunkX && blockZ >> 4 == chunkZ) {
+			if(blockX > chunkX * 16 + 5 && blockZ > chunkZ * 16 + 5 && blockX < (chunkX + 2) * 16 - 5 && blockZ < (chunkZ + 2) * 16 - 5) {
 				int height = world.getHeight(blockX, blockZ);
 				this.generate(world, random, new BlockPos(blockX, height, blockZ));
 			}
