@@ -160,6 +160,11 @@ public class BlockWaystone extends BlockContainer {
 		return BlockFaceShape.UNDEFINED;
 	}
 
+	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return false;
+	}
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean hasCustomBreakingProgress(IBlockState state) {

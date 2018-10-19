@@ -34,7 +34,7 @@
                     "type": "item",
                     "name": "thebetweenlands:magic_item_magnet",
                     "functions": [],
-                    "weight": 20,
+                    "weight": 10,
                     "quality": 0
                 },
                 {
@@ -42,7 +42,7 @@
                     "type": "item",
                     "name": "thebetweenlands:swift_pick",
                     "functions": [],
-                    "weight": 20,
+                    "weight": 10,
                     "quality": 0
                 },
                 {
