@@ -29,7 +29,7 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 	public ItemMagicItemMagnet() {
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 		this.setMaxStackSize(1);
-		this.setMaxDamage(512);
+		this.setMaxDamage(2048);
 	}
 
 	@Override
