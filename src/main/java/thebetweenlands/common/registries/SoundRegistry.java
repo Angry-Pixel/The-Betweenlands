@@ -170,6 +170,8 @@ public class SoundRegistry {
     public static final BLSoundEvent ROWBOAT_ROW_START_STARBOARD = reg("rowboat_row_start_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_START_PORT = reg("rowboat_row_start_port");
     public static final BLSoundEvent VOODOO_DOLL = reg("voodoo_doll");
+    public static final BLSoundEvent GEM_SINGER = reg("gem_singer");
+    public static final BLSoundEvent GEM_SINGER_ECHO = reg("gem_singer_echo");
     // Blocks
     public static final BLSoundEvent GRIND = reg("grind");
     public static final BLSoundEvent INFUSER_FINISHED = reg("infuser_finished");

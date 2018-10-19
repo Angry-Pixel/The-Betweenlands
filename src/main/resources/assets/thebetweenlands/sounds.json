@@ -767,6 +767,16 @@
       "thebetweenlands:voodoo_doll"
     ]
   },
+  "gem_singer": {
+    "sounds": [
+      "thebetweenlands:gem_singer"
+    ]
+  },
+  "gem_singer_echo": {
+    "sounds": [
+      "thebetweenlands:gem_singer_echo"
+    ]
+  },
   "rejected": {
     "sounds": [
       "thebetweenlands:rejected"
