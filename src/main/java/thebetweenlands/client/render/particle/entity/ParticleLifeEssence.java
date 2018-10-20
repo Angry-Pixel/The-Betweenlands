@@ -33,7 +33,7 @@ public class ParticleLifeEssence extends Particle implements IParticleSpriteRece
 		this.offsetZ = offsetZ;
 		this.radius = radius;
 		this.entity = entity;
-		this.particles = MathHelper.ceil(entity.getHealth() / entity.getMaxHealth() * MAX_PARTICLES);
+		this.particles = MathHelper.clamp(MathHelper.ceil(entity.getHealth() / entity.getMaxHealth() * MAX_PARTICLES), 0, MAX_PARTICLES);
 		this.rotationTicks = rotationTicks;
 		this.particleMaxAge = 60;
 		this.canCollide = false;
@@ -70,7 +70,7 @@ public class ParticleLifeEssence extends Particle implements IParticleSpriteRece
 
 		this.rotationTicks++;
 
-		for(int i = 0; i < MAX_PARTICLES; i++) {
+		for(int i = 0; i < this.particles; i++) {
 			this.animations[i].update();
 		}
 
@@ -137,13 +137,11 @@ public class ParticleLifeEssence extends Particle implements IParticleSpriteRece
 			this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
 			this.particleAlpha = prevAlpha;
 
-			TextureAnimation animation = this.animations[i];
-
 			this.prevPosY = ppy + prevYo;
 			this.posY = py + yo;
 
 			this.particleScale = scale;
-			this.particleTexture = animation.getCurrentSprite();
+			this.particleTexture = this.animations[i].getCurrentSprite();
 
 			super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
 		}
