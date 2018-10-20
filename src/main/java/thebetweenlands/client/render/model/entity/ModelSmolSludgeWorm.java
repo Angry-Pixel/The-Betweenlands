@@ -3,7 +3,6 @@ package thebetweenlands.client.render.model.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -50,32 +49,22 @@ public class ModelSmolSludgeWorm extends ModelBase {
 		body1 = new ModelRenderer(this, 0, 0);
 		body1.setRotationPoint(0.0F, 21.5F, 0.0F);
 		body1.addBox(-2.5F, -2.5F, -2.5F, 5, 5, 5, 0.0F);
-
 	}
 
-    @Override
-    public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
-        super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
-        setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-        head1.render(unitPixel);
-    }
-
-	//public void renderHead() {
-	//	head1.render(0.0625F);
-	//}
+	public void renderHead(EntitySmolSludgeWorm worm, int frame, float partialTicks) {
+		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
+		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F;
+		GlStateManager.translate(0F, - 0.0625F - wibble * 0.5F, 0F + wibble * 2F);
+		head1.render(0.0625F);
+		head1.rotateAngleX = worm.rotationPitch / (180F / (float) Math.PI);
+	}
 
 	public void renderBody(EntitySmolSludgeWorm worm, int frame, float partialTicks) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
 		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F;
-		GlStateManager.translate(0F, 0F - wibble, 0F);
-		GlStateManager.scale(1F + wibble * 2F, 1F + wibble, 1F);
+		GlStateManager.translate(0F, 0F - wibble, 0F - wibble * 2F);
+		GlStateManager.scale(1F + wibble * 2F, 1F + wibble, 1.25F - wibble * 1.5F);
 		body1.render(0.0625F);
-	}
-	
-	@Override
-	public void setRotationAngles(float limbSwing, float prevLimbSwing, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
-		head1.rotateAngleY = rotationYaw / (180F / (float) Math.PI);
-		head1.rotateAngleX = rotationPitch / (180F / (float) Math.PI);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
