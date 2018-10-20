@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -64,6 +65,7 @@ import thebetweenlands.common.block.farming.BlockMiddleFruitBush;
 import thebetweenlands.common.block.misc.BlockAmatePaperPane;
 import thebetweenlands.common.block.misc.BlockBouncyBetweenlands;
 import thebetweenlands.common.block.misc.BlockButtonBetweenlands;
+import thebetweenlands.common.block.misc.BlockCavingRopeLight;
 import thebetweenlands.common.block.misc.BlockDampTorch;
 import thebetweenlands.common.block.misc.BlockDentrothystPane;
 import thebetweenlands.common.block.misc.BlockGlassBetweenlands;
@@ -705,6 +707,7 @@ public class BlockRegistry {
     public static final Block MUD_BRICK_ROOF = new BlockMudBrickRoof();
     public static final Block REPELLER = new BlockRepeller();
     public static final Block WAYSTONE = new BlockWaystone();
+    public static final Block CAVING_ROPE_LIGHT = new BlockCavingRopeLight();
     
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
@@ -736,13 +739,15 @@ public class BlockRegistry {
         BLOCKS.add(block);
         block.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.ID + "." + name);
 
-        ItemBlock item;
-        if (block instanceof ICustomItemBlock && ((ICustomItemBlock) block).getItemBlock() != null)
+        ItemBlock item = null;
+        if (block instanceof ICustomItemBlock)
             item = ((ICustomItemBlock) block).getItemBlock();
         else
             item = new ItemBlock(block);
-        ITEM_BLOCKS.add(item);
-        item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.ID + "." + name);
+        if(item != null) {
+        	ITEM_BLOCKS.add(item);
+        	item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.ID + "." + name);
+        }
     }
 
     @SideOnly(Side.CLIENT)
@@ -754,26 +759,31 @@ public class BlockRegistry {
                 ((IStateMappedBlock) block).setStateMapper(builder);
                 ModelLoader.setCustomStateMapper(block, builder.build());
             }
-            if (block instanceof ICustomItemBlock) {
-                ICustomItemBlock customItemBlock = (ICustomItemBlock) block;
-                ItemStack renderedItem = customItemBlock.getRenderedItem();
-                if (!renderedItem.isEmpty()) {
-                	Map<Integer, ResourceLocation> map = TheBetweenlands.proxy.getItemModelMap(renderedItem.getItem());
-                	ModelResourceLocation model = (ModelResourceLocation) map.get(renderedItem.getMetadata());
-                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, model);
-                    continue;
-                }
-            }
-            ResourceLocation name = block.getRegistryName();
-            if (block instanceof ISubtypeItemBlockModelDefinition) {
-                ISubtypeItemBlockModelDefinition subtypeBlock = (ISubtypeItemBlockModelDefinition) block;
-                for (int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
-                    int meta = subtypeBlock.getSubtypeMeta(i);
-                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(name.getResourceDomain() + ":" + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
-                }
-            } else {
-                ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(name, "inventory"));
-            }
+            
+            Item item = Item.getItemFromBlock(block);
+            
+            if(item != Items.AIR) {
+	            if (block instanceof ICustomItemBlock) {
+	                ICustomItemBlock customItemBlock = (ICustomItemBlock) block;
+	                ItemStack renderedItem = customItemBlock.getRenderedItem();
+	                if (!renderedItem.isEmpty()) {
+	                	Map<Integer, ResourceLocation> map = TheBetweenlands.proxy.getItemModelMap(renderedItem.getItem());
+	                	ModelResourceLocation model = (ModelResourceLocation) map.get(renderedItem.getMetadata());
+	                    ModelLoader.setCustomModelResourceLocation(item, 0, model);
+	                    continue;
+	                }
+	            }
+	            ResourceLocation name = block.getRegistryName();
+	            if (block instanceof ISubtypeItemBlockModelDefinition) {
+	                ISubtypeItemBlockModelDefinition subtypeBlock = (ISubtypeItemBlockModelDefinition) block;
+	                for (int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
+	                    int meta = subtypeBlock.getSubtypeMeta(i);
+	                    ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(name.getResourceDomain() + ":" + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
+	                }
+	            } else {
+	                ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(name, "inventory"));
+	            }
+        	}
         }
     }
 
@@ -783,7 +793,7 @@ public class BlockRegistry {
          *
          * @return
          */
-        @Nonnull
+        @Nullable
         default ItemBlock getItemBlock() {
             if (Item.getItemFromBlock((Block) this) != Items.AIR)
                 return (ItemBlock) Item.getItemFromBlock((Block) this);

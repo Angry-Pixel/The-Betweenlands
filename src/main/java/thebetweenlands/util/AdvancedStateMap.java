@@ -31,7 +31,8 @@ public class AdvancedStateMap extends StateMapperBase {
 	private final Map<IProperty<?>, Function<?, String>> suffixProperties;
 	private final List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> suffixExclusions;
 	private final List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> propertyExclusions;
-
+	private final boolean empty;
+	
 	private AdvancedStateMap(@Nullable Function<PropertiesMap, String> nameMapper, @Nullable String suffix, List<IProperty<?>> ignored, Map<IProperty<?>, Function<?, String>> suffixProperties,
 			List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> suffixExclusions, List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> propertyExclusions) {
 		this.nameMapper = nameMapper;
@@ -40,8 +41,27 @@ public class AdvancedStateMap extends StateMapperBase {
 		this.suffixProperties = suffixProperties;
 		this.suffixExclusions = suffixExclusions;
 		this.propertyExclusions = propertyExclusions;
+		this.empty = false;
+	}
+	
+	private AdvancedStateMap() {
+		this.nameMapper = null;
+		this.suffix = null;
+		this.ignored = Collections.emptyList();
+		this.suffixProperties = Collections.emptyMap();
+		this.suffixExclusions = Collections.emptyList();
+		this.propertyExclusions = Collections.emptyList();
+		this.empty = true;
 	}
 
+	@Override
+	public Map<IBlockState, ModelResourceLocation> putStateModelLocations(Block blockIn) {
+		if(this.empty) {
+			return Collections.emptyMap();
+		}
+		return super.putStateModelLocations(blockIn);
+	}
+	
 	@Override
 	protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
 		Map<IProperty<?>, Comparable<?>> propertiesMap = Maps.newLinkedHashMap(state.getProperties());
@@ -119,7 +139,8 @@ public class AdvancedStateMap extends StateMapperBase {
 		private final Map<IProperty<?>, Function<?, String>> suffixProperties = new HashMap<>();
 		private final List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> suffixExclusions = new ArrayList<>();
 		private final List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> propertyExclusions = new ArrayList<>();
-
+		private boolean empty = false;
+		
 		/**
 		 * Sets the state mapper to use the value of the specified property as name
 		 * @param builderPropertyIn
@@ -224,7 +245,20 @@ public class AdvancedStateMap extends StateMapperBase {
 			return this;
 		}
 
+		/**
+		 * Whether the state map should be empty, i.e. no state should be mapped at all
+		 * @param empty
+		 * @return
+		 */
+		public AdvancedStateMap.Builder empty(boolean empty) {
+			this.empty = empty;
+			return this;
+		}
+		
 		public AdvancedStateMap build() {
+			if(this.empty) {
+				return new AdvancedStateMap();
+			}
 			return new AdvancedStateMap(this.nameMapper, this.suffix, this.ignored, this.suffixProperties, this.suffixExclusions, this.propertyExclusions);
 		}
 	}
