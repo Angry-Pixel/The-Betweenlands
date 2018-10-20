@@ -94,16 +94,20 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 				if(!item.hasNoGravity()) {
 					item.motionY += 0.03999999910593033D;
 				}
-
+				
 				double dx = entity.posX - item.posX;
 				double dy = entity.posY + entity.height / 2 - (item.posY + item.height / 2);
 				double dz = entity.posZ - item.posZ;
 				double len = Math.sqrt(dx*dx + dy*dy + dz*dz);
 
 				if(!entity.world.isRemote) {
-					item.motionX += dx / len * 0.01D;
-					item.motionY += dy / len * 0.01D;
-					item.motionZ += dz / len * 0.01D;
+					item.motionX += dx / len * 0.015D;
+					if(item.onGround) {
+						item.motionY += 0.015D;
+					} else {
+						item.motionY += dy / len * 0.015D;
+					}
+					item.motionZ += dz / len * 0.015D;
 					item.velocityChanged = true;
 				} else {
 					this.spawnParticles(item);

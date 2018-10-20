@@ -28,6 +28,13 @@ public class DefaultParticleBatches {
 			.texture(BLOCK_ATLAS)
 			.blur(true)
 			.end().build());
+	
+	public static final ParticleBatch TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass()
+			.blend(SourceFactor.SRC_ALPHA, DestFactor.ONE)
+			.blur(false)
+			.depthMask(false)
+			.texture(BLOCK_ATLAS)
+			.end().build());
 
 	public static final ParticleBatch UNBATCHED = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchType() {
 		@Override
