@@ -22,7 +22,9 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.capability.equipment.EquipmentHelper;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.NBTHelper;
 
 public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorRepairable {
@@ -30,6 +32,7 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 		this.setMaxStackSize(1);
 		this.setMaxDamage(2048);
+		IEquippable.addEquippedPropertyOverrides(this);
 	}
 
 	@Override
@@ -54,7 +57,7 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 
 	@Override
 	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
-		return getMagnetInEquipment(player).isEmpty();
+		return EquipmentHelper.getEquipment(player, ItemRegistry.MAGIC_ITEM_MAGNET).isEmpty();
 	}
 
 	@Override
@@ -146,25 +149,10 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 		return 38;
 	}
 
-	protected static ItemStack getMagnetInEquipment(Entity entity) {
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-			IInventory mainInv = cap.getInventory(EnumEquipmentInventory.DEFAULT);
-			for(int i = 0; i < mainInv.getSizeInventory(); i++) {
-				ItemStack stack = mainInv.getStackInSlot(i);
-				if(!stack.isEmpty() && stack.getItem() instanceof ItemMagicItemMagnet) {
-					return stack;
-				}
-			}
-		}
-
-		return ItemStack.EMPTY;
-	}
-
 	@SubscribeEvent
 	public static void onItemPickup(ItemPickupEvent event) {
 		if(!event.player.world.isRemote) {
-			ItemStack magnet = getMagnetInEquipment(event.player);
+			ItemStack magnet = EquipmentHelper.getEquipment(event.player, ItemRegistry.MAGIC_ITEM_MAGNET);
 			if(!magnet.isEmpty()) {
 				//Damage magnet on pickup
 				magnet.damageItem(1, event.player);

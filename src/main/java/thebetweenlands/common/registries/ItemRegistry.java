@@ -311,7 +311,7 @@ public class ItemRegistry {
     public static final ItemOctineIngot OCTINE_INGOT = new ItemOctineIngot();
     public static final Item MUMMY_BAIT = new ItemMummyBait();
     public static final Item SAP_SPIT = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
-    public static final Item HEALTH_ORB = new ItemHealthOrb();
+    public static final Item BARK_AMULET = new ItemBarkAmulet();
     public static final Item EMPTY_AMATE_MAP = new ItemEmptyAmateMap();
     public static final Item AMATE_MAP = new ItemAmateMap();
     public static final Item BONE_WAYFINDER = new ItemBoneWayfinder();
