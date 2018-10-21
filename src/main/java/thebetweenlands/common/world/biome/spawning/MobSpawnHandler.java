@@ -475,11 +475,7 @@ public class MobSpawnHandler {
 						lastSpawn = spawnEntriesData.getLastSpawn(spawnEntry);
 					}
 
-					if(!ignoreRestrictions) {
-						if(spawnEntriesData != null && lastSpawn == -1) {
-							spawnEntriesData.setLastSpawn(spawnEntry, world.getTotalWorldTime());
-							continue;
-						}
+					if(!ignoreRestrictions && lastSpawn >= 0) {
 						//Adjust intervals for MP when there are multiple players and the loaded area is bigger -> smaller intervals
 						int adjustedInterval = (int)(spawnEntry.getSpawningInterval() / loadedAreas);
 						if(spawnEntriesData != null && world.getTotalWorldTime() - lastSpawn < adjustedInterval) {
@@ -487,7 +483,7 @@ public class MobSpawnHandler {
 							continue;
 						}
 					}
-
+					
 					IEntityLivingData groupData = null;
 
 					while(groupSpawnAttempts++ < maxGroupSpawnAttempts && groupSpawnedEntities < desiredGroupSize) {

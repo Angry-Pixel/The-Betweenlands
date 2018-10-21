@@ -24,6 +24,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.BetweenstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.GreeblingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SporelingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SwampHagCaveSpawnEntry;
@@ -65,7 +66,8 @@ public class BiomeCoarseIslands extends BiomeBetweenlands {
 		entries.add(new CaveSpawnEntry(4, EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
 		entries.add(new SporelingSpawnEntry(5, EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(16, EntityRootSprite.class, (short) 70).setSurfacePredicate(state -> state.getBlock() == BlockRegistry.GIANT_ROOT).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(200));
-
+		entries.add(new GreeblingSpawnEntry(17, (short) 30).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setGroupSpawnRadius(4).setSpawningInterval(3000));
+		
 		entries.add(new SurfaceSpawnEntry(6, EntityLurker.class, (short) 32).setCanSpawnInWater(true).setHostile(true).setSpawnCheckRadius(16.0D));
 		entries.add(new SurfaceSpawnEntry(7, EntityAngler.class, (short) 42).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
 		entries.add(new CaveSpawnEntry(8, EntityAngler.class, (short) 45).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));

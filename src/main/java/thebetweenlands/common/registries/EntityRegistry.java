@@ -75,7 +75,7 @@ public class EntityRegistry {
 		registerEntity(EntitySludgeBall.class, "sludge_ball", 64, 20, true);
 		//registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
 		registerEntity(EntitySmollSludge.class, "smoll_sludge", 0x3A2F0B, 0x5F4C0B);
-		//registerEntity(EntityGreebling.class, "greebling", 0xD9D7A7, 0xD99830);
+		registerEntity(EntityGreebling.class, "greebling", 0xD9D7A7, 0xD99830);
 		registerEntity(EntityBoulderSprite.class, "boulder_sprite", 0x6f7784, 0x535559);
 		registerEntity(EntitySpiritTreeFaceSmall.class, "spirit_tree_face_small");
 		registerEntity(EntitySpiritTreeFaceLarge.class, "spirit_tree_face_large");

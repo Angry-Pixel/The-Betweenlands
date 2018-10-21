@@ -43,6 +43,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityMusic;
+import thebetweenlands.client.audio.EntityMusicLayers;
 import thebetweenlands.client.audio.FortressBossIdleSound;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -906,6 +907,11 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 	@Override
 	public boolean isMusicActive(EntityPlayer listener) {
 		return this.isEntityAlive();
+	}
+	
+	@Override
+	public int getMusicLayer(EntityPlayer listener) {
+		return EntityMusicLayers.BOSS;
 	}
 
 	@Override

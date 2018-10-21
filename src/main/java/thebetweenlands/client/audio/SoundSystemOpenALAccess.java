@@ -26,6 +26,10 @@ import paulscode.sound.libraries.LibraryLWJGLOpenAL;
 import paulscode.sound.libraries.SourceLWJGLOpenAL;
 
 public class SoundSystemOpenALAccess {
+	/**
+	 * Thrown when an error occurs that causes the OpenAL access to go uninitialized
+	 * and enter the errored state
+	 */
 	public static final class OpenALAccessInitException extends Exception {
 		private static final long serialVersionUID = -8924694992857474053L;
 
@@ -74,6 +78,10 @@ public class SoundSystemOpenALAccess {
 		}
 	}
 
+	/**
+	 * Initializes the OpenAL access for the specified sound manager
+	 * @param soundManager
+	 */
 	public synchronized void init(SoundManager soundManager) {
 		this.cleanup();
 
@@ -102,6 +110,10 @@ public class SoundSystemOpenALAccess {
 		}
 	}
 
+	/**
+	 * Cleans up any resources claimed by this
+	 * object
+	 */
 	public synchronized void cleanup() {
 		this.errored = false;
 		this.initialized = false;
@@ -115,6 +127,11 @@ public class SoundSystemOpenALAccess {
 		}
 	}
 
+	/**
+	 * Submits a task to be executed for the sound system, handles synchronization
+	 * @param task
+	 * @return
+	 */
 	@Nullable
 	public synchronized <T> Future<T> submitToSoundSystem(Callable<T> task) {
 		return this.service != null ? this.service.submit(() -> {
@@ -126,14 +143,30 @@ public class SoundSystemOpenALAccess {
 		}) : null;
 	}
 
+	/**
+	 * Returns whether the OpenAL access is initialized and ready to be used
+	 * @return
+	 */
 	public boolean isInitialized() {
 		return this.initialized;
 	}
 
+	/**
+	 * Returns whether an error has occurred such that the OpenAL access
+	 * can't be used
+	 * @return
+	 */
 	public boolean isErrored() {
 		return this.errored;
 	}
 
+	/**
+	 * Returns the {@link SourceLWJGLOpenAL} for the specified sound, or null if none is found.
+	 * Not synchronized -> must only be called through {@link #submitToSoundSystem(Callable)}
+	 * @param sound
+	 * @return
+	 * @throws OpenALAccessInitException
+	 */
 	@Nullable
 	public SourceLWJGLOpenAL getSourceAsync(ISound sound) throws OpenALAccessInitException {
 		if(!this.initialized) {
@@ -160,6 +193,12 @@ public class SoundSystemOpenALAccess {
 		}
 	}
 
+	/**
+	 * Returns the {@link ChannelLWJGLOpenAL} for the specified sound, or null if none is found.
+	 * Not synchronized -> must only be called through {@link #submitToSoundSystem(Callable)}
+	 * @param sound
+	 * @return
+	 */
 	@Nullable
 	public ChannelLWJGLOpenAL getChannelAsync(ISound sound) {
 		try {
@@ -175,12 +214,19 @@ public class SoundSystemOpenALAccess {
 		return null;
 	}
 
+	/**
+	 * Sets the current offset (i.e. time since start) for the specified sound.
+	 * <b>Only works for non-streamed sounds!</b>
+	 * @param sound
+	 * @param seconds
+	 * @return
+	 */
 	@Nullable
-	public Future<Boolean> setOffset(ISound sound, float seconds) {
+	public Future<Boolean> setOffsetSeconds(ISound sound, float seconds) {
 		return this.submitToSoundSystem(() -> {
 			ChannelLWJGLOpenAL channel = this.getChannelAsync(sound);
 
-			if(channel != null && channel.ALSource != null) {
+			if(channel != null && channel.ALSource != null && channel.attachedSource != null) {
 				int sourceId = channel.ALSource.get(0);
 				if(sourceId >= 0) {
 					AL10.alSourcef(sourceId, AL11.AL_SEC_OFFSET, seconds);
@@ -189,6 +235,28 @@ public class SoundSystemOpenALAccess {
 			}
 
 			return false;
+		});
+	}
+
+	/**
+	 * Returns the current offset (i.e. time since start) for the specified sound.
+	 * <b>Only works for non-streamed sounds!</b>
+	 * @param sound
+	 * @return
+	 */
+	@Nullable
+	public Future<Float> getOffsetSeconds(ISound sound) {
+		return this.submitToSoundSystem(() -> {
+			ChannelLWJGLOpenAL channel = this.getChannelAsync(sound);
+
+			if(channel != null && channel.ALSource != null) {
+				int sourceId = channel.ALSource.get(0);
+				if(sourceId >= 0) {
+					return AL10.alGetSourcef(sourceId, AL11.AL_SEC_OFFSET);
+				}
+			}
+
+			return -1.0f;
 		});
 	}
 }

@@ -664,6 +664,11 @@
       "thebetweenlands:root_sprite_living_3"
     ]
   },
+  "greebling_vanish": {
+    "sounds": [
+      "thebetweenlands:greebling_vanish"
+    ]
+  },
   "sorry": {
     "sounds": [
       "thebetweenlands:sorry"
@@ -901,6 +906,22 @@
       {
         "name": "thebetweenlands:music/the_other_world",
         "stream": true
+      }
+    ]
+  },
+  "greebling_music_1": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:music/greebling_music_1",
+        "preload": true
+      }
+    ]
+  },
+  "greebling_music_2": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:music/greebling_music_2",
+        "preload": true
       }
     ]
   },

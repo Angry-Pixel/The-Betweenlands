@@ -48,6 +48,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityCameraOffset;
 import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.api.entity.IEntityScreenShake;
+import thebetweenlands.client.audio.EntityMusicLayers;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
@@ -610,6 +611,11 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		return isEntityAlive();
 	}
 
+	@Override
+	public int getMusicLayer(EntityPlayer listener) {
+		return EntityMusicLayers.BOSS;
+	}
+	
 	@Override
 	public UUID getBossInfoUuid() {
 		return dataManager.get(BOSSINFO_ID).or(new UUID(0, 0));
