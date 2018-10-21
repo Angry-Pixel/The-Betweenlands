@@ -13,7 +13,7 @@ public class EntityMusicSound<T extends Entity> extends EntitySound<T> {
 	public final IEntityMusic music;
 	public final float originalVolume;
 
-	private boolean mustFadeOut = false;
+	protected boolean mustFadeOut = false;
 	
 	public EntityMusicSound(SoundEvent sound, SoundCategory category, T entity, float volume, AttenuationType attenuationType) {
 		super(sound, category, entity, e -> true);

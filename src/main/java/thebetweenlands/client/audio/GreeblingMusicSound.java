@@ -5,7 +5,9 @@ import java.util.concurrent.Future;
 
 import org.lwjgl.openal.AL10;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
 import paulscode.sound.libraries.ChannelLWJGLOpenAL;
 import thebetweenlands.api.audio.IEntitySound;
 import thebetweenlands.client.handler.MusicHandler;
@@ -24,7 +26,7 @@ public class GreeblingMusicSound extends EntityMusicSound<EntityGreebling> {
 	private volatile boolean isSoundReady = false;
 
 	public GreeblingMusicSound(int type, EntityGreebling entity, float volume) {
-		super(type == 0 ? SoundRegistry.GREEBLING_MUSIC_1 : SoundRegistry.GREEBLING_MUSIC_2, SoundCategory.NEUTRAL, entity, volume, AttenuationType.LINEAR);
+		super(type == 0 ? SoundRegistry.GREEBLING_MUSIC_1 : SoundRegistry.GREEBLING_MUSIC_2, SoundCategory.NEUTRAL, entity, volume, AttenuationType.NONE);
 		this.type = type;
 	}
 
@@ -72,5 +74,12 @@ public class GreeblingMusicSound extends EntityMusicSound<EntityGreebling> {
 		this.ticksPlayed++;
 
 		super.update();
+
+		if(!this.mustFadeOut && !this.fadeOut) {
+			EntityPlayer player = MusicHandler.INSTANCE.getPlayer();
+			if(player != null) {
+				this.volume = (float) MathHelper.clamp(this.originalVolume * (1.0D - player.getDistance(this.xPosF, this.yPosF, this.zPosF) / ((EntityGreebling) this.getMusicEntity()).getMusicRange(player)), 0, 1);
+			}
+		}
 	}
 }

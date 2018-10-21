@@ -295,7 +295,8 @@ public class MusicHandler {
 		}
 	}
 
-	private EntityPlayer getPlayer() {
+	@Nullable
+	public EntityPlayer getPlayer() {
 		return this.mc.player;
 	}
 	

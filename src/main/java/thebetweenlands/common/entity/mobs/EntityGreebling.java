@@ -177,7 +177,7 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 
 	@Override
 	public double getMusicRange(EntityPlayer listener) {
-		return 16.0D;
+		return 40.0D;
 	}
 
 	@Override
