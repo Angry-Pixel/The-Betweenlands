@@ -442,23 +442,19 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 
 				if (entry != null) {
 					Object newValue;
-					if(entry instanceof GenericDataManager.DataEntry<?>) {
+					if(newEntry instanceof GenericDataManager.DataEntry<?> && entry.deserializer != null) {
 						GenericDataManager.DataEntry<?> newGenericEntry = (GenericDataManager.DataEntry<?>) newEntry;
-						if(entry.deserializer != null) {
-							if(entry.deserializedValue == null) {
-								ByteBuf buf = Unpooled.wrappedBuffer(newGenericEntry.serializedData);
-								try {
-									entry.deserializedValue = entry.deserializer.deserialize(new PacketBuffer(buf));
-								} catch(Exception ex) {
-									throw new DecoderException("Failed deserializing data with custom deserializer " + entry.deserializer.getClass().getName(), ex);
-								} finally {
-									buf.release();
-								}
+						if(newGenericEntry.deserializedValue == null) {
+							ByteBuf buf = Unpooled.wrappedBuffer(newGenericEntry.serializedData);
+							try {
+								newGenericEntry.deserializedValue = entry.deserializer.deserialize(new PacketBuffer(buf));
+							} catch(Exception ex) {
+								throw new DecoderException("Failed deserializing data with custom deserializer " + entry.deserializer.getClass().getName(), ex);
+							} finally {
+								buf.release();
 							}
-							newValue = entry.deserializedValue;
-						} else {
-							newValue = newEntry.getValue();
 						}
+						newValue = newGenericEntry.deserializedValue;
 					} else {
 						newValue = newEntry.getValue();
 					}
