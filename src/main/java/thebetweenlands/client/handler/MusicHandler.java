@@ -7,13 +7,13 @@ import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.client.audio.ISoundEventAccessor;
 import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.Sound;
 import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
-import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiWinGame;
 import net.minecraft.entity.Entity;
@@ -24,12 +24,15 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.client.event.sound.SoundLoadEvent;
+import net.minecraftforge.client.event.sound.SoundSetupEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.client.audio.EntityMusicSound;
+import thebetweenlands.client.audio.SoundSystemOpenALAccess;
 import thebetweenlands.client.gui.menu.GuiBLMainMenu;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -40,6 +43,8 @@ public class MusicHandler {
 
 	private MusicHandler() { }
 
+	public static final SoundSystemOpenALAccess OPEN_AL_ACCESS = new SoundSystemOpenALAccess();
+	
 	private static final int MIN_WAIT = 3000;
 	private static final int MAX_WAIT = 6000;
 	private static final int MIN_WAIT_MENU = 20;
@@ -57,6 +62,11 @@ public class MusicHandler {
 	private boolean hasBlMainMenu = false;
 	private boolean isInBlMainMenu = false;
 	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void onSoundSystemLoad(SoundLoadEvent event) {
+		OPEN_AL_ACCESS.cleanup();
+	}
+	
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onGuiOpen(GuiOpenEvent event) {
 		if(event.getGui() != null && event.getGui().getClass() == GuiMainMenu.class) {
@@ -67,6 +77,11 @@ public class MusicHandler {
 	@SubscribeEvent
 	public void onTick(ClientTickEvent event) {
 		if(event.phase == TickEvent.Phase.START) {
+			if(this.mc.getSoundHandler() != null && !OPEN_AL_ACCESS.isErrored() && !OPEN_AL_ACCESS.isInitialized()) {
+				//Needs to be done here because during SoundLoadEvent and SoundSetupEvent the system isn't fully set up yet
+				OPEN_AL_ACCESS.init(this.mc.getSoundHandler().sndManager);
+			}
+			
 			EntityPlayer player = getPlayer();
 
 			boolean isInMainMenu = (!(mc.currentScreen instanceof GuiWinGame) && mc.player == null) && BetweenlandsConfig.GENERAL.blMainMenu;
