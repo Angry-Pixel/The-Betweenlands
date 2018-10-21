@@ -1,8 +1,5 @@
 package thebetweenlands.client.audio;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import org.lwjgl.openal.AL10;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,26 +30,26 @@ public class GreeblingMusicSound extends EntityMusicSound<EntityGreebling> {
 	@Override
 	public void update() {
 		if(!this.synced) {
+			final SoundSystemOpenALAccess openALAccess = MusicHandler.INSTANCE.getOpenALAccess();
+
 			if(this.isSoundReady) {
-				IEntitySound otherSound = MusicHandler.INSTANCE.getEntityMusic(this.type == 0 ? EntityMusicLayers.GREEBLING_2 : EntityMusicLayers.GREEBLING_1);
+				final IEntitySound otherSound = MusicHandler.INSTANCE.getEntityMusic(this.type == 0 ? EntityMusicLayers.GREEBLING_2 : EntityMusicLayers.GREEBLING_1);
 
 				if(otherSound instanceof GreeblingMusicSound) {
-					try {
-						Future<Float> secondsFuture = MusicHandler.INSTANCE.getOpenALAccess().getOffsetSeconds(otherSound);
-						if(secondsFuture != null) {
-							MusicHandler.INSTANCE.getOpenALAccess().setOffsetSeconds(this, secondsFuture.get());
+					openALAccess.submitToSoundSystem(() -> {
+						float otherSeconds = openALAccess.getOffsetSecondsAsync(otherSound);
+						if(otherSeconds >= 0.0f) {
+							openALAccess.setOffsetSecondsAsync(this, otherSeconds);
 						}
-					} catch (InterruptedException | ExecutionException ex) {
-						//Don't care, if it fails just play without sync
-					}
+						return null;
+					});
 				}
 
 				this.synced = true;
 			} else {
 				if(this.syncTimer % 10 == 0) {
-					final SoundSystemOpenALAccess openALAcess = MusicHandler.INSTANCE.getOpenALAccess();
-					openALAcess.submitToSoundSystem(() -> {
-						ChannelLWJGLOpenAL channel = openALAcess.getChannelAsync(this);
+					openALAccess.submitToSoundSystem(() -> {
+						ChannelLWJGLOpenAL channel = openALAccess.getChannelAsync(this);
 
 						if(channel != null && channel.ALSource != null) {
 							int sourceId = channel.ALSource.get(0);

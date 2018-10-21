@@ -172,7 +172,7 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 
 	@Override
 	public IEntitySound getMusicSound(EntityPlayer listener) {
-		return new GreeblingMusicSound(this.getType(), this, 1.0f);
+		return new GreeblingMusicSound(this.getType(), this, 0.75f);
 	}
 
 	@Override

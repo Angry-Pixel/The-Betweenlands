@@ -216,6 +216,49 @@ public class SoundSystemOpenALAccess {
 
 	/**
 	 * Sets the current offset (i.e. time since start) for the specified sound.
+	 * Not synchronized -> must only be called through {@link #submitToSoundSystem(Callable)}.
+	 * <b>Only works for non-streamed sounds!</b>
+	 * @param sound
+	 * @param seconds
+	 * @return
+	 */
+	public boolean setOffsetSecondsAsync(ISound sound, float seconds) {
+		ChannelLWJGLOpenAL channel = this.getChannelAsync(sound);
+
+		if(channel != null && channel.ALSource != null && channel.attachedSource != null) {
+			int sourceId = channel.ALSource.get(0);
+			if(sourceId >= 0) {
+				AL10.alSourcef(sourceId, AL11.AL_SEC_OFFSET, seconds);
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Returns the current offset (i.e. time since start) for the specified sound, or -1 if the
+	 * sound is not playing.
+	 * Not synchronized -> must only be called through {@link #submitToSoundSystem(Callable)}.
+	 * <b>Only works for non-streamed sounds!</b>
+	 * @param sound
+	 * @return
+	 */
+	public float getOffsetSecondsAsync(ISound sound) {
+		ChannelLWJGLOpenAL channel = this.getChannelAsync(sound);
+
+		if(channel != null && channel.ALSource != null) {
+			int sourceId = channel.ALSource.get(0);
+			if(sourceId >= 0) {
+				return AL10.alGetSourcef(sourceId, AL11.AL_SEC_OFFSET);
+			}
+		}
+
+		return -1.0f;
+	}
+
+	/**
+	 * Sets the current offset (i.e. time since start) for the specified sound.
 	 * <b>Only works for non-streamed sounds!</b>
 	 * @param sound
 	 * @param seconds
@@ -223,19 +266,7 @@ public class SoundSystemOpenALAccess {
 	 */
 	@Nullable
 	public Future<Boolean> setOffsetSeconds(ISound sound, float seconds) {
-		return this.submitToSoundSystem(() -> {
-			ChannelLWJGLOpenAL channel = this.getChannelAsync(sound);
-
-			if(channel != null && channel.ALSource != null && channel.attachedSource != null) {
-				int sourceId = channel.ALSource.get(0);
-				if(sourceId >= 0) {
-					AL10.alSourcef(sourceId, AL11.AL_SEC_OFFSET, seconds);
-					return true;
-				}
-			}
-
-			return false;
-		});
+		return this.submitToSoundSystem(() -> this.setOffsetSecondsAsync(sound, seconds));
 	}
 
 	/**
@@ -246,17 +277,6 @@ public class SoundSystemOpenALAccess {
 	 */
 	@Nullable
 	public Future<Float> getOffsetSeconds(ISound sound) {
-		return this.submitToSoundSystem(() -> {
-			ChannelLWJGLOpenAL channel = this.getChannelAsync(sound);
-
-			if(channel != null && channel.ALSource != null) {
-				int sourceId = channel.ALSource.get(0);
-				if(sourceId >= 0) {
-					return AL10.alGetSourcef(sourceId, AL11.AL_SEC_OFFSET);
-				}
-			}
-
-			return -1.0f;
-		});
+		return this.submitToSoundSystem(() -> this.getOffsetSecondsAsync(sound));
 	}
 }

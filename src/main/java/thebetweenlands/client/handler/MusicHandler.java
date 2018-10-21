@@ -99,7 +99,7 @@ public class MusicHandler {
 			
 			isInBlMainMenu = isInMainMenu && hasBlMainMenu;
 			
-			if ((isInBlMainMenu || (player != null && player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)) && this.mc.gameSettings.getSoundLevel(SoundCategory.MUSIC) > 0.0F) {
+			if ((isInBlMainMenu || (player != null && player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId))) {
 
 				Int2ObjectMap<IEntityMusic> closestMusicEntityMap = new Int2ObjectOpenHashMap<>();
 				
@@ -156,7 +156,7 @@ public class MusicHandler {
 						this.currentSound = null;
 						this.timeUntilMusic = Math.min(MathHelper.getInt(this.RNG, MIN_WAIT, MAX_WAIT), this.timeUntilMusic);
 					}
-				} else {
+				} else if(this.mc.gameSettings.getSoundLevel(SoundCategory.MUSIC) > 0.0F) {
 					if (this.currentSound != null) {
 
 						if ((!isInBlMainMenu && SoundRegistry.BL_MUSIC_MENU.getSoundName().equals(this.currentSound.getSoundLocation())) || (isInBlMainMenu && SoundRegistry.BL_MUSIC_DIMENSION.getSoundName().equals(this.currentSound.getSoundLocation()))) {
