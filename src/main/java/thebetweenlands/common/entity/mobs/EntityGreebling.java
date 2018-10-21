@@ -16,6 +16,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.audio.IEntitySound;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityMusic;
@@ -170,6 +172,7 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 		return null;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public IEntitySound getMusicSound(EntityPlayer listener) {
 		return new GreeblingMusicSound(this.getType(), this, 0.75f);

@@ -6,6 +6,8 @@ import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.audio.IEntitySound;
 import thebetweenlands.client.audio.EntityMusicSound;
 import thebetweenlands.common.sound.BLSoundEvent;
@@ -19,6 +21,7 @@ public interface IEntityMusic {
 
 	public boolean isMusicActive(EntityPlayer listener);
 
+	@SideOnly(Side.CLIENT)
 	@Nullable
 	public default IEntitySound getMusicSound(EntityPlayer listener) {
 		BLSoundEvent sound = this.getMusicFile(listener);
