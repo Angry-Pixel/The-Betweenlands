@@ -96,6 +96,9 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		if(this.world.isRemote && this.ticksExisted % 10 == 0) {
 			this.spawnParticles(this.world, this.posX, this.posY, this.posZ, this.rand);
 		}
+		//if (motionY < -0.0784000015258789D) {
+		//	motionY *= 0.5F;
+		//}
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -166,7 +169,7 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		movePiecePos(sludge_worm_9, sludge_worm_8, 4.5F, 3F);
 	}
 
-	public static void movePiecePos(MultiPartEntityPart targetPart, MultiPartEntityPart destinationPart, float speed, float yawSpeed) {
+	public void movePiecePos(MultiPartEntityPart targetPart, MultiPartEntityPart destinationPart, float speed, float yawSpeed) {
 		targetPart.posX += ((destinationPart.posX - targetPart.posX) / speed);
 		targetPart.posY += ((destinationPart.posY - targetPart.posY) / speed);
 		targetPart.posZ += ((destinationPart.posZ - targetPart.posZ) / speed);

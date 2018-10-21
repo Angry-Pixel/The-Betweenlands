@@ -39,7 +39,7 @@ public class RenderSmolSludgeWorm extends RenderLiving<EntitySmolSludgeWorm> {
 		renderBodyPart(entity, 5, x + entity.sludge_worm_6.posX - entity.posX, y + 1.5F + entity.sludge_worm_6.posY - entity.posY, z + entity.sludge_worm_6.posZ - entity.posZ, entity.sludge_worm_6.rotationYaw, partialTicks);
 		renderBodyPart(entity, 4, x + entity.sludge_worm_7.posX - entity.posX, y + 1.5F + entity.sludge_worm_7.posY - entity.posY, z + entity.sludge_worm_7.posZ - entity.posZ, entity.sludge_worm_7.rotationYaw, partialTicks);
 		renderBodyPart(entity, 3, x + entity.sludge_worm_8.posX - entity.posX, y + 1.5F + entity.sludge_worm_8.posY - entity.posY, z + entity.sludge_worm_8.posZ - entity.posZ, entity.sludge_worm_8.rotationYaw, partialTicks);
-		renderBodyPart(entity, 2, x + entity.sludge_worm_9.posX - entity.posX, y + 1.5F + entity.sludge_worm_9.posY - entity.posY, z + entity.sludge_worm_9.posZ - entity.posZ, entity.sludge_worm_9.rotationYaw, partialTicks);
+		renderTailPart(entity, 2, x + entity.sludge_worm_9.posX - entity.posX, y + 1.5F + entity.sludge_worm_9.posY - entity.posY, z + entity.sludge_worm_9.posZ - entity.posZ, entity.sludge_worm_9.rotationYaw, partialTicks);
 		GlStateManager.popMatrix();
 
 	}
@@ -61,6 +61,16 @@ public class RenderSmolSludgeWorm extends RenderLiving<EntitySmolSludgeWorm> {
 		//GlStateManager.scale(-1F, -1F, 1F);
 		GlStateManager.rotate(- yaw, 0, 1F, 0);
 		model.renderBody(entity, frame, partialTicks);
+		GlStateManager.popMatrix();
+	}
+
+	private void renderTailPart(EntitySmolSludgeWorm entity, int frame, double x, double y, double z, float yaw, float partialTicks) {
+		bindTexture(TEXTURE_BODY);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x, y, z);
+		GlStateManager.scale(-1F, -1F, 1F);
+		GlStateManager.rotate(180F + yaw, 0, 1F, 0);
+		model.renderTail(entity, frame, partialTicks);
 		GlStateManager.popMatrix();
 	}
 

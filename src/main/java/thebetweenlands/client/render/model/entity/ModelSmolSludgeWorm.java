@@ -54,9 +54,14 @@ public class ModelSmolSludgeWorm extends ModelBase {
 	public void renderHead(EntitySmolSludgeWorm worm, int frame, float partialTicks) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
 		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F;
+		float jaw_wibble = MathHelper.sin(1F + (smoothedTicks) * 0.5F) * 0.5F;
 		GlStateManager.translate(0F, - 0.0625F - wibble * 0.5F, 0F + wibble * 2F);
 		head1.render(0.0625F);
 		head1.rotateAngleX = worm.rotationPitch / (180F / (float) Math.PI);
+	    jaw_bottom_left.rotateAngleY =  0F - jaw_wibble;
+	    jaw_bottom_right.rotateAngleY = 0F + jaw_wibble;
+	    mouth_bottom.rotateAngleY =  0F - jaw_wibble;
+	    mouth_left.rotateAngleY = 0F + jaw_wibble;
 	}
 
 	public void renderBody(EntitySmolSludgeWorm worm, int frame, float partialTicks) {
@@ -64,6 +69,13 @@ public class ModelSmolSludgeWorm extends ModelBase {
 		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F;
 		GlStateManager.translate(0F, 0F - wibble, 0F - wibble * 2F);
 		GlStateManager.scale(1F + wibble * 2F, 1F + wibble, 1.25F - wibble * 1.5F);
+		body1.render(0.0625F);
+	}
+	
+	public void renderTail(EntitySmolSludgeWorm worm, int frame, float partialTicks) {
+		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
+		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F;
+		GlStateManager.translate(0F, - 0.0625F - wibble * 0.5F, 0F + wibble * 2F);
 		body1.render(0.0625F);
 	}
 
