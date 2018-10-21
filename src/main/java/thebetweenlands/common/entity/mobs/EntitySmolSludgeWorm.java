@@ -42,7 +42,7 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 
 	public EntitySmolSludgeWorm(World world) {
 		super(world);
-		setSize(0.3125F, 0.3125F);
+		setSize(0.4375F, 0.3125F);
 		isImmuneToFire = true;
 		maxHurtResistantTime = 40;
 		tasks.addTask(0, new EntityAISwimming(this));
@@ -96,9 +96,9 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		if(this.world.isRemote && this.ticksExisted % 10 == 0) {
 			this.spawnParticles(this.world, this.posX, this.posY, this.posZ, this.rand);
 		}
-		//if (motionY < -0.0784000015258789D) {
-		//	motionY *= 0.5F;
-		//}
+		if (ticksExisted < 20) {
+			motionY *= 0.65F;
+		}
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -114,7 +114,7 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 	// can be set to any part(s) - dunno if we want this either
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float dmg) {
-		if (part == sludge_worm_5) {
+		if (part != sludge_worm_1) {
 			damageWorm(source, dmg);
 			return true;
 		} else {
@@ -170,6 +170,9 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 	}
 
 	public void movePiecePos(MultiPartEntityPart targetPart, MultiPartEntityPart destinationPart, float speed, float yawSpeed) {
+		//TODO make this better and use the parent entities motionY 
+		if (destinationPart.posY - targetPart.posY < -0.5D)
+			speed = 1.5F; 
 		targetPart.posX += ((destinationPart.posX - targetPart.posX) / speed);
 		targetPart.posY += ((destinationPart.posY - targetPart.posY) / speed);
 		targetPart.posZ += ((destinationPart.posZ - targetPart.posZ) / speed);
