@@ -27,6 +27,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -76,6 +77,9 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     private EntityMoveHelper moveHelperWater;
     private EntityMoveHelper moveHelperLand;
 
+    private PathNavigateGround pathNavigatorGround;
+    private PathNavigateSwimmer pathNavigatorWater;
+    
     public EntityLurker(World world) {
         super(world);
 
@@ -84,14 +88,13 @@ public class EntityLurker extends EntityMob implements IEntityBL {
         this.moveHelperWater = new EntityLurker.LurkerMoveHelper(this);
         this.moveHelperLand = new EntityMoveHelper(this);
 
-        if (this.isInWater()) {
-            this.moveHelper = this.moveHelperWater;
-        } else {
-            this.moveHelper = this.moveHelperLand;
-        }
+        this.pathNavigatorGround = new PathNavigateGround(this, this.world);
+        this.pathNavigatorGround.setCanSwim(true);
+        
+        this.pathNavigatorWater = new PathNavigateSwimmer(this, this.world);
 
-        ((PathNavigateGround)this.getNavigator()).setCanSwim(true);
-
+        this.updateMovementAndPathfinding();
+        
         setSize(1.6F, 0.9F);
     }
 
@@ -119,7 +122,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.5);
+        getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.5);
         getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16);
         getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
         getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
@@ -134,11 +137,6 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     @Override
     public boolean isInWater() {
         return getEntityWorld().handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this);
-    }
-
-    @Override
-    public PathNavigate getNavigator() {
-        return this.navigator;
     }
 
     private Block getRelativeBlock(int offsetY) {
@@ -243,13 +241,23 @@ public class EntityLurker extends EntityMob implements IEntityBL {
         return 0xFFFFFFFF;
     }
 
-    @Override
-    public void onUpdate() {
-        if (this.isInWater()) {
+    protected void updateMovementAndPathfinding() {
+    	if (this.isInWater()) {
             this.moveHelper = this.moveHelperWater;
         } else {
             this.moveHelper = this.moveHelperLand;
         }
+        
+        if (this.isInWater() && !this.world.isAirBlock(new BlockPos(this.posX, this.getEntityBoundingBox().maxY + 1, this.posZ))) {
+        	this.navigator = this.pathNavigatorWater;
+        } else {
+        	this.navigator = this.pathNavigatorGround;
+        }
+    }
+    
+    @Override
+    public void onUpdate() {
+        this.updateMovementAndPathfinding();
 
         if (!this.getEntityWorld().isRemote) {
             Entity target = this.getAttackTarget();
@@ -394,11 +402,11 @@ public class EntityLurker extends EntityMob implements IEntityBL {
             motionZ += distanceZ / magnitude * 0.8;
         }
 
-        if (attackTime <= 0 && distance < 3.2D && entityIn.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && entityIn.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
+        if (attackTime <= 0 && distance < 3.5D && entityIn.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && entityIn.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
             setShouldMouthBeOpen(true);
             setMouthMoveSpeed(10);
             ticksUntilBiteDamage = 10;
-            attackTime = 20;
+            attackTime = 10;
             entityBeingBit = entityIn;
         }
         return true;
