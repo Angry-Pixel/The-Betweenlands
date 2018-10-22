@@ -5,7 +5,6 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -33,7 +32,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -158,6 +159,20 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 
+    private static boolean isRenderingWorld;
+    
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void onFogColors(EntityViewRenderEvent.FogColors event) {
+        isRenderingWorld = true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void onRenderWorldLast(RenderWorldLastEvent event) {
+        isRenderingWorld = false;
+    }
+    
 	@SideOnly(Side.CLIENT)
     @SubscribeEvent
 	public static void onRenderPlayer(RenderLivingEvent.Specials.Post<EntityLivingBase> event) {
@@ -194,7 +209,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x, y + 1.0D, z);
-				if(Minecraft.getMinecraft().currentScreen instanceof GuiInventory && player == Minecraft.getMinecraft().player) {
+				if(!isRenderingWorld) {
 					GlStateManager.rotate(90 - player.renderYawOffset, 0, 1, 0);
 				} else {
 					GlStateManager.rotate(90 - (player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks), 0, 1, 0);
