@@ -9,6 +9,6 @@ public class BlockLeverBetweenlands extends BlockLever {
 		super();
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setHardness(0.5F);
-		this.setSoundType(SoundType.STONE);
+		this.setSoundType(SoundType.WOOD);
 	}
 }
