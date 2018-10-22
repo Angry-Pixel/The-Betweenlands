@@ -1,12 +1,14 @@
 package thebetweenlands.common.block.structure;
 
 import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -18,8 +20,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.tile.spawner.TileEntityMudBricksSpawnerHole;
 
-public class BlockMudBricksSpawnerHole extends BlockDirectional {// implements ITileEntityProvider {
+public class BlockMudBricksSpawnerHole extends BlockDirectional implements ITileEntityProvider {
 
 	public BlockMudBricksSpawnerHole() {
 		super(Material.ROCK);
@@ -45,12 +48,12 @@ public class BlockMudBricksSpawnerHole extends BlockDirectional {// implements I
 	public boolean isOpaqueCube(IBlockState state) {
 		return true;
 	}
-/*
+
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityMudBricksSpawnerHole();
 	}
-*/
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
