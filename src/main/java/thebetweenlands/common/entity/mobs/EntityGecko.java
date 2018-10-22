@@ -8,21 +8,27 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.WeedWoodBushUncollidableEntity;
@@ -31,6 +37,7 @@ import thebetweenlands.common.entity.ai.gecko.EntityAIAvoidEntityGecko;
 import thebetweenlands.common.entity.ai.gecko.EntityAIGeckoHideFromRain;
 import thebetweenlands.common.network.clientbound.MessageWeedwoodBushRustle;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -57,12 +64,13 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIPanic(this, 1.0D));
-		this.tasks.addTask(2, new EntityAIAvoidEntityGecko(this, EntityPlayer.class, PLAYER_MIN_DISTANCE, 0.65, 1));
-		this.tasks.addTask(3, new EntityAIGeckoHideFromRain(this, 0.65));
-		this.tasks.addTask(4, new EntityAISeekRainShelter(this, 0.65));
-		this.tasks.addTask(5, new EntityAIWander(this, 0.6D));
-		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6));
-		this.tasks.addTask(7, new EntityAILookIdle(this));
+		this.tasks.addTask(2, new EntityAITempt(this, 0.5D, ItemRegistry.SAP_SPIT, true));
+		this.tasks.addTask(3, new EntityAIAvoidEntityGecko(this, EntityPlayer.class, PLAYER_MIN_DISTANCE, 0.65, 1));
+		this.tasks.addTask(4, new EntityAIGeckoHideFromRain(this, 0.65));
+		this.tasks.addTask(5, new EntityAISeekRainShelter(this, 0.65));
+		this.tasks.addTask(6, new EntityAIWander(this, 0.6D));
+		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6));
+		this.tasks.addTask(8, new EntityAILookIdle(this));
 	}
 
 	@Override
@@ -165,7 +173,32 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 			}
 		}
 	}
+	
+	@Override
+	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
+		if(!stack.isEmpty() && stack.getItem() == ItemRegistry.SAP_SPIT && this.getHealth() < this.getMaxHealth()) {
+			if(!this.world.isRemote) {
+				this.heal(this.getMaxHealth());
+			} else {
+				this.spawnHeartParticles();
+			}
+			player.swingArm(hand);
+			return true;
+		}
+		return false;
+	}
 
+	@SideOnly(Side.CLIENT)
+	protected void spawnHeartParticles() {
+		for (int i = 0; i < 7; ++i) {
+			double d0 = this.rand.nextGaussian() * 0.02D;
+			double d1 = this.rand.nextGaussian() * 0.02D;
+			double d2 = this.rand.nextGaussian() * 0.02D;
+			this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2, new int[0]);
+		}
+	}
+	
 	@Override
 	public boolean isAIDisabled() {
 		return false;

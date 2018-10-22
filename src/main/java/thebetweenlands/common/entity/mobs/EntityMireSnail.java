@@ -45,6 +45,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 		tasks.addTask(1, new EntityAIPanic(this, 1.2D));
 		tasks.addTask(2, new EntityAIMate(this, 1.0D));
 		tasks.addTask(3, new EntityAITempt(this, 1.0D, ItemRegistry.SLUDGE_BALL, false));
+		tasks.addTask(3, new EntityAITempt(this, 1.0D, ItemRegistry.SAP_SPIT, false));
 		tasks.addTask(5, new EntityAIWander(this, 0.85D));	
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(7, new EntityAILookIdle(this));
@@ -122,7 +123,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 	@Override
 	public boolean isBreedingItem(ItemStack is) {
-		return is != null && is.getItem() == ItemRegistry.SLUDGE_BALL;
+		return is != null && (is.getItem() == ItemRegistry.SLUDGE_BALL || is.getItem() == ItemRegistry.SAP_SPIT);
 	}
 
 	@Override

@@ -60,6 +60,7 @@ import thebetweenlands.common.recipe.misc.RecipeClearBoneWayfinder;
 import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
 import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
 import thebetweenlands.common.recipe.misc.RecipeMummyBait;
+import thebetweenlands.common.recipe.misc.RecipeSapSpitCleanTool;
 import thebetweenlands.common.recipe.misc.RecipesAspectVials;
 import thebetweenlands.common.recipe.misc.RecipesCircleGems;
 import thebetweenlands.common.recipe.misc.RecipesCoating;
@@ -83,6 +84,7 @@ public class RecipeRegistry {
 	public static final ResourceLocation BOOK_MERGE = new ResourceLocation(ModInfo.ID, "recipe_book_merge");
 	public static final ResourceLocation HEARTHGROVE_LOG_TARRING = new ResourceLocation(ModInfo.ID, "hearthgrove_log_tarring");
 	public static final ResourceLocation CLEAR_BONE_WAYFINDER = new ResourceLocation(ModInfo.ID, "clear_bone_wayfinder");
+	public static final ResourceLocation SAP_SPIT_CLEAN_TOOL = new ResourceLocation(ModInfo.ID, "sap_spit_clean_tool");
 	
 	private RecipeRegistry() { }
 
@@ -207,6 +209,7 @@ public class RecipeRegistry {
 		registry.register(new BookMergeRecipe().setRegistryName(BOOK_MERGE));
 		registry.register(new HearthgroveTarringRecipe().setRegistryName(HEARTHGROVE_LOG_TARRING));
 		registry.register(new RecipeClearBoneWayfinder().setRegistryName(CLEAR_BONE_WAYFINDER));
+		registry.register(new RecipeSapSpitCleanTool().setRegistryName(SAP_SPIT_CLEAN_TOOL));
 	}
 
 	private static void registerSmelting() {
