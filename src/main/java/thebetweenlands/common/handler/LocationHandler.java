@@ -3,6 +3,8 @@ package thebetweenlands.common.handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.block.Block;
@@ -17,6 +19,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.BlockSnapshot;
+import net.minecraftforge.event.entity.living.LivingDestroyBlockEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
@@ -186,5 +189,22 @@ public class LocationHandler {
 				}
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public static void onLivingDestroyBlock(LivingDestroyBlockEvent event) {
+		if(isProtected(event.getEntityLiving().world, event.getEntityLiving(), event.getPos())) {
+			event.setCanceled(true);
+		}
+	}
+	
+	public static boolean isProtected(World world, @Nullable Entity entity, BlockPos pos) {
+		List<LocationStorage> locations = LocationStorage.getLocations(world, new Vec3d(pos));
+		for(LocationStorage location : locations) {
+			if(location != null && location.getGuard() != null && location.getGuard().isGuarded(world, entity, pos)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

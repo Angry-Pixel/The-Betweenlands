@@ -599,7 +599,9 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 					if(this.world.isAirBlock(pos.offset(dir.getOpposite()))) {
 						IBlockState hitState = this.world.getBlockState(pos);
 						float hardness = hitState.getBlockHardness(this.world, pos);
-						if(!hitState.getBlock().isAir(hitState, this.world, pos) && hardness >= 0 && hardness <= 2.5F && this.rand.nextInt(yo + so + 2) == 0 && hitState.getBlock().canEntityDestroy(hitState, this.world, pos, this)) {
+						if(!hitState.getBlock().isAir(hitState, this.world, pos) && hardness >= 0 && hardness <= 2.5F && this.rand.nextInt(yo + so + 2) == 0
+								&& hitState.getBlock().canEntityDestroy(hitState, this.world, pos, this)
+								&& ForgeEventFactory.onEntityDestroyBlock(this, pos, hitState)) {
 							this.world.playEvent(2001, pos, Block.getStateId(hitState));
 							this.world.setBlockToAir(pos);
 						}
