@@ -47,7 +47,7 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 
 	@Override
 	public EnumEquipmentInventory getEquipmentCategory(ItemStack stack) {
-		return EnumEquipmentInventory.DEFAULT;
+		return EnumEquipmentInventory.MISC;
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 
 	@Override
 	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
-		return EquipmentHelper.getEquipment(player, ItemRegistry.MAGIC_ITEM_MAGNET).isEmpty();
+		return player == target && EquipmentHelper.getEquipment(EnumEquipmentInventory.MISC, target, this).isEmpty();
 	}
 
 	@Override
@@ -156,7 +156,7 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 	@SubscribeEvent
 	public static void onItemPickup(ItemPickupEvent event) {
 		if(!event.player.world.isRemote) {
-			ItemStack magnet = EquipmentHelper.getEquipment(event.player, ItemRegistry.MAGIC_ITEM_MAGNET);
+			ItemStack magnet = EquipmentHelper.getEquipment(EnumEquipmentInventory.MISC, event.player, ItemRegistry.MAGIC_ITEM_MAGNET);
 			if(!magnet.isEmpty()) {
 				//Damage magnet on pickup
 				magnet.damageItem(1, event.player);

@@ -71,7 +71,7 @@ public class ContainerPouch extends Container {
 		//Check if pouch is in equipment
 		if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
             IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-            IInventory inv = cap.getInventory(EnumEquipmentInventory.POUCH);
+            IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
 
             for (int i = 0; i < inv.getSizeInventory(); i++) {
                 if (inv.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {

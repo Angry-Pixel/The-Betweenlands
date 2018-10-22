@@ -48,6 +48,7 @@ import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.capability.equipment.EquipmentHelper;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.CapabilityRegistry;
@@ -78,7 +79,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
     public static ItemStack getFirstPouch(EntityPlayer player) {
         if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
             IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-            IInventory inv = cap.getInventory(EnumEquipmentInventory.POUCH);
+            IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
 
             for (int i = 0; i < inv.getSizeInventory(); i++) {
                 ItemStack stack = inv.getStackInSlot(i);
@@ -185,7 +186,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 	private static void renderPouch(EntityPlayer player, double x, double y, double z, float partialTicks) {
 		if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 			IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-			IInventory inv = cap.getInventory(EnumEquipmentInventory.POUCH);
+			IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
 
 			ItemStack pouch = null;
 
@@ -248,7 +249,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 
     @Override
     public EnumEquipmentInventory getEquipmentCategory(ItemStack stack) {
-        return EnumEquipmentInventory.POUCH;
+        return EnumEquipmentInventory.MISC;
     }
 
     @Override
@@ -258,7 +259,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 
     @Override
     public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
-        return target == player;
+        return target == player && EquipmentHelper.getEquipment(EnumEquipmentInventory.MISC, target, this).isEmpty();
     }
 
     @Override

@@ -25,10 +25,10 @@ public class EquipmentHelper {
 	 * @param item
 	 * @return
 	 */
-	public static ItemStack getEquipment(Entity entity, Item item) {
+	public static ItemStack getEquipment(EnumEquipmentInventory inventory, Entity entity, Item item) {
 		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-			IInventory mainInv = cap.getInventory(EnumEquipmentInventory.DEFAULT);
+			IInventory mainInv = cap.getInventory(inventory);
 			for(int i = 0; i < mainInv.getSizeInventory(); i++) {
 				ItemStack stack = mainInv.getStackInSlot(i);
 				if(!stack.isEmpty() && stack.getItem() == item) {

@@ -39,7 +39,7 @@ public class ItemBarkAmulet extends Item implements IEquippable {
 
 	@Override
 	public EnumEquipmentInventory getEquipmentCategory(ItemStack stack) {
-		return EnumEquipmentInventory.DEFAULT;
+		return EnumEquipmentInventory.MISC;
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class ItemBarkAmulet extends Item implements IEquippable {
 
 	@Override
 	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
-		return EquipmentHelper.getEquipment(player, ItemRegistry.BARK_AMULET).isEmpty();
+		return player == target && EquipmentHelper.getEquipment(EnumEquipmentInventory.MISC, target, this).isEmpty();
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class ItemBarkAmulet extends Item implements IEquippable {
 		if(!Minecraft.getMinecraft().isGamePaused()) {
 			Entity view = Minecraft.getMinecraft().getRenderViewEntity();
 			if(view != null) {
-				if(!EquipmentHelper.getEquipment(view, ItemRegistry.BARK_AMULET).isEmpty()) {
+				if(!EquipmentHelper.getEquipment(EnumEquipmentInventory.MISC, view, ItemRegistry.BARK_AMULET).isEmpty()) {
 					final float range = 12.0F;
 
 					List<EntityLivingBase> entities = view.world.getEntitiesWithinAABB(EntityLivingBase.class, view.getEntityBoundingBox().grow(range), e -> e.getDistanceSq(view) <= range * range);
