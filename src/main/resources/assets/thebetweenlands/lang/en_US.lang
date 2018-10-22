@@ -1519,6 +1519,8 @@ config.thebetweenlands.torch_whitelist=Torch Whitelist
 config.thebetweenlands.torch_blacklist=Torch Blacklist
 config.thebetweenlands.pouch_blacklist=Lurker Skin Pouch Blacklist
 config.thebetweenlands.caving_rope_despawn_time=Caving Rope Despawn Time
+config.thebetweenlands.equipment_hotbar_side=Equipment Hotbar Side
+config.thebetweenlands.equipment_visible=Show Equipment on HUD
 
 config.thebetweenlands.mob_spawning=Mob Spawning
 config.thebetweenlands.max_entities_per_loaded_area=Max. entities per loaded area
