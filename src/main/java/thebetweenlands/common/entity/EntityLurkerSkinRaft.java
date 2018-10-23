@@ -81,11 +81,9 @@ public class EntityLurkerSkinRaft extends EntityBoat {
 				}
 			}
 
-			if(!itemReturned) {
-				this.entityDropItem(drop, 0);
+			if(itemReturned) {
+				this.setDead();
 			}
-
-			this.setDead();
 		}
 
 		super.removePassenger(passenger);

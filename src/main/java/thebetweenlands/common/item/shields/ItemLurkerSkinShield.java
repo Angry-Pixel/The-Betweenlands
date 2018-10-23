@@ -67,6 +67,10 @@ public class ItemLurkerSkinShield extends ItemBLShield {
 				if(worldIn.getCollisionBoxes(boat, boat.getEntityBoundingBox().grow(-0.1D)).isEmpty()) {
 					if(!worldIn.isRemote) {
 						worldIn.spawnEntity(boat);
+						
+						if(!playerIn.isSneaking()) {
+							playerIn.startRiding(boat);
+						}
 					}
 
 					if(!playerIn.capabilities.isCreativeMode) {
