@@ -23,7 +23,7 @@ import javax.annotation.Nullable;
 public class ItemManualHL extends Item implements IDiscoveryProvider<ItemStack>{
     public ItemManualHL() {
         setMaxStackSize(1);
-        this.setCreativeTab(BLCreativeTabs.HERBLORE);
+        this.setCreativeTab(BLCreativeTabs.ITEMS);
     }
     
     @Override

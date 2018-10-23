@@ -66,7 +66,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			x = position.getX() + random.nextInt(16) - 8;
 			z = position.getZ() + random.nextInt(16) - 8;
 			y = position.getY() + random.nextInt(8) - 3;
-			if(random.nextInt(30) == 0) {
+			if(random.nextInt(50) == 0) {
 				if (structure7(world, random, x, y, z, false, locationStorage)) {
 					ruinLocations.add(new RuinLocation(world, random, x, y, z, 6));
 				}
