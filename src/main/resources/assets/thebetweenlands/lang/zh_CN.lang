@@ -1076,7 +1076,7 @@ entity.thebetweenlands.spike_wave.name=根须冲击波
 entity.thebetweenlands.root_grabber.name=根须抓手
 entity.thebetweenlands.spirit_tree_face_mask.name=灵树面罩
 entity.thebetweenlands.root_sprite.name=根须精灵
-entity.thebetweenlands.greebling.name=Greebling
+entity.thebetweenlands.greebling.name=地精矮人
 
 # Equipment
 equipment.menu.equip=佩戴%s
@@ -1568,6 +1568,10 @@ config.thebetweenlands.pouch_blacklist=鳄皮物品袋黑名单
 config.thebetweenlands.pouch_blacklist.tooltip=名单里的物品不能放入鳄皮物品袋。语法是"模组ID:物品名:meta"，meta允许使用"*"作通配符，不写则默认为0
 config.thebetweenlands.caving_rope_despawn_time=洞穴引路绳保留时间(秒)
 config.thebetweenlands.caving_rope_despawn_time.tooltip=与玩家断开的洞穴引路绳会保留这么长的时间，单位为秒
+config.thebetweenlands.equipment_hotbar_side=特殊装备栏与快捷栏的相对位置
+config.thebetweenlands.equipment_hotbar_side.tooltip=将这个改为0或1，即可调整装备显示在快捷栏的哪一侧
+config.thebetweenlands.equipment_visible=在游戏界面上显示特殊装备栏
+config.thebetweenlands.equipment_visible.tooltip=是否在游戏界面上显示特殊装备栏
 
 config.thebetweenlands.mob_spawning=生物生成
 config.thebetweenlands.mob_spawning.tooltip=与生物生成机制有关的选项
