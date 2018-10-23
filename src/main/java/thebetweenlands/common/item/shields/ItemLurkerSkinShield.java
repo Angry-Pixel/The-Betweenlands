@@ -3,6 +3,8 @@ package thebetweenlands.common.item.shields;
 import java.util.List;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +18,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.tools.ItemBLShield;
@@ -23,6 +28,12 @@ import thebetweenlands.common.item.tools.ItemBLShield;
 public class ItemLurkerSkinShield extends ItemBLShield {
 	public ItemLurkerSkinShield() {
 		super(BLMaterialRegistry.TOOL_LURKER_SKIN);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.lurker_skin_shield"), 0));
 	}
 
 	@Override
@@ -61,25 +72,27 @@ public class ItemLurkerSkinShield extends ItemBLShield {
 
 			if(!entityColliding && rayTrace.typeOfHit == RayTraceResult.Type.BLOCK) {
 				boolean isWater = worldIn.getBlockState(rayTrace.getBlockPos()).getMaterial() == Material.WATER;
-				EntityBoat boat = new EntityLurkerSkinRaft(worldIn, rayTrace.hitVec.x, isWater ? rayTrace.hitVec.y - 0.12D : rayTrace.hitVec.y, rayTrace.hitVec.z, stack);
-				boat.rotationYaw = playerIn.rotationYaw;
+				if(isWater) {
+					EntityBoat boat = new EntityLurkerSkinRaft(worldIn, rayTrace.hitVec.x, rayTrace.hitVec.y - 0.12D, rayTrace.hitVec.z, stack);
+					boat.rotationYaw = playerIn.rotationYaw;
 
-				if(worldIn.getCollisionBoxes(boat, boat.getEntityBoundingBox().grow(-0.1D)).isEmpty()) {
-					if(!worldIn.isRemote) {
-						worldIn.spawnEntity(boat);
-						
-						if(!playerIn.isSneaking()) {
-							playerIn.startRiding(boat);
+					if(worldIn.getCollisionBoxes(boat, boat.getEntityBoundingBox().grow(-0.1D)).isEmpty()) {
+						if(!worldIn.isRemote) {
+							worldIn.spawnEntity(boat);
+
+							if(!playerIn.isSneaking()) {
+								playerIn.startRiding(boat);
+							}
 						}
+
+						if(!playerIn.capabilities.isCreativeMode) {
+							stack.shrink(1);
+						}
+
+						playerIn.addStat(StatList.getObjectUseStats(this));
+
+						return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 					}
-
-					if(!playerIn.capabilities.isCreativeMode) {
-						stack.shrink(1);
-					}
-
-					playerIn.addStat(StatList.getObjectUseStats(this));
-
-					return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 				}
 			}
 		}

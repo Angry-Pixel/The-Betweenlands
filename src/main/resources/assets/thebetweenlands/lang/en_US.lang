@@ -821,6 +821,7 @@ tooltip.infusion.ingredients=§aIngredients:
 tooltip.infusion.empty=Empty
 tooltip.bone_wayfinder=Must be linked to a Menhir
 tooltip.bone_wayfinder_linked=Requires sufficient XP to use.\nLinked to Menhir\nX: %s\nY: %s\nZ: %s
+tooltip.lurker_skin_shield=Can also be used as a raft
 
 tooltip.bl.elixir.potency=§9Potency: %s
 tooltip.bl.elixir.duration=§9Duration: %s (%s)
