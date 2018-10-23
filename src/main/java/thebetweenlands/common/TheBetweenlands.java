@@ -34,6 +34,7 @@ import thebetweenlands.common.command.CommandReloadRecipes;
 import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.config.ConfigHelper;
+import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.handler.AdvancementHandler;
 import thebetweenlands.common.handler.AnvilEventHandler;
 import thebetweenlands.common.handler.ArmorHandler;
@@ -243,5 +244,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(PotionRootBound.class);
 		MinecraftForge.EVENT_BUS.register(BossHandler.class);
 		MinecraftForge.EVENT_BUS.register(ItemMagicItemMagnet.class);
+		MinecraftForge.EVENT_BUS.register(EntityWeedwoodRowboat.class);
 	}
 }

@@ -9,6 +9,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,7 +31,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -1016,5 +1019,17 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     private RuntimeException ohnoes() {
         return new UnsupportedOperationException("OH NOES!");
+    }
+    
+    @SubscribeEvent
+    public static void onLivingAttacked(LivingAttackEvent event) {
+    	EntityLivingBase entity = event.getEntityLiving();
+    	Vec3d location = event.getSource().getDamageLocation();
+    	Entity attacker = event.getSource().getImmediateSource();
+    	Entity ridingEntity = entity.getRidingEntity();
+    	if(ridingEntity instanceof EntityWeedwoodRowboat && location != null && location.y + (attacker != null ? attacker.getEyeHeight() : 0) < ridingEntity.posY + ridingEntity.height / 2) {
+    		//Cancel any damage dealt from below the boat
+    		event.setCanceled(true);
+    	}
     }
 }
