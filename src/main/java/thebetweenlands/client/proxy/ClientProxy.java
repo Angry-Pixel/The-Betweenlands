@@ -117,6 +117,7 @@ import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
@@ -403,6 +404,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityRootGrabber.class, RenderRootGrabber::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceMask.class, RenderSpiritTreeFaceMask::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRootSprite.class, RenderRootSprite::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityLurkerSkinRaft.class, RenderLurkerSkinRaft::new);
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);

@@ -52,6 +52,7 @@ import thebetweenlands.common.item.misc.LocationDebugItem;
 import thebetweenlands.common.item.misc.TestItem;
 import thebetweenlands.common.item.shields.ItemDentrothystShield;
 import thebetweenlands.common.item.shields.ItemLivingWeedwoodShield;
+import thebetweenlands.common.item.shields.ItemLurkerSkinShield;
 import thebetweenlands.common.item.shields.ItemOctineShield;
 import thebetweenlands.common.item.shields.ItemSyrmoriteShield;
 import thebetweenlands.common.item.shields.ItemValoniteShield;
@@ -196,7 +197,7 @@ public class ItemRegistry {
     public static final Item DENTROTHYST_SHIELD_GREEN_POLISHED = new ItemDentrothystShield(true);
     public static final Item DENTROTHYST_SHIELD_ORANGE = new ItemDentrothystShield(false);
     public static final Item DENTROTHYST_SHIELD_ORANGE_POLISHED = new ItemDentrothystShield(false);
-    public static final Item LURKER_SKIN_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_LURKER_SKIN);
+    public static final Item LURKER_SKIN_SHIELD = new ItemLurkerSkinShield();
     public static final Item MANUAL_HL = new ItemManualHL();
     public static final Item SYRMORITE_SHEARS = new ItemSyrmoriteShears();
     public static final Item SICKLE = new ItemSickle();

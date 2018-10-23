@@ -71,7 +71,7 @@ public class BiomePatchyIslands extends BiomeBetweenlands {
 		entries.add(new CaveSpawnEntry(4, EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(5, EntityGecko.class, (short) 40).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(600));
 		entries.add(new SporelingSpawnEntry(6, EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
-		entries.add(new GreeblingSpawnEntry(20, (short) 30).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setGroupSpawnRadius(4).setSpawningInterval(3000));
+		entries.add(new GreeblingSpawnEntry(20, (short) 20).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setGroupSpawnRadius(4).setSpawningInterval(24000));
 		
 		entries.add(new SurfaceSpawnEntry(7, EntityLurker.class, (short) 35).setCanSpawnInWater(true).setHostile(true).setSpawnCheckRadius(16.0D));
 		entries.add(new SurfaceSpawnEntry(8, EntityAngler.class, (short) 45).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));

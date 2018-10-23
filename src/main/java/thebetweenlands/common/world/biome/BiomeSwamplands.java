@@ -81,7 +81,7 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		entries.add(new SporelingSpawnEntry(5, EntitySporeling.class, (short) 120).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(6, EntityGiantToad.class, (short) 12).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
 		entries.add(new CaveSpawnEntry(7, EntityGiantToad.class, (short) 8).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
-		entries.add(new GreeblingSpawnEntry(20, (short) 30).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setGroupSpawnRadius(4).setSpawningInterval(3000));
+		entries.add(new GreeblingSpawnEntry(20, (short) 20).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setGroupSpawnRadius(4).setSpawningInterval(24000));
 		
 		entries.add(new TarSpawnEntry(8, EntityTarBeast.class, (short) 80).setHostile(true));
 		entries.add(new SurfaceSpawnEntry(9, EntityLeech.class, (short) 35).setHostile(true).setSpawnCheckRadius(24.0D).setSpawningInterval(1000));
