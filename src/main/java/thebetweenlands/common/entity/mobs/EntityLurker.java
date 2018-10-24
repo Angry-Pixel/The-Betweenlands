@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -14,11 +15,13 @@ import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,16 +37,18 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.MathUtils;
 
-public class EntityLurker extends EntityMob implements IEntityBL {
+public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(EntityLurker.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Boolean> SHOULD_MOUTH_BE_OPEN = EntityDataManager.createKey(EntityLurker.class, DataSerializers.BOOLEAN);
     private static final DataParameter<Float> MOUTH_MOVE_SPEED = EntityDataManager.createKey(EntityLurker.class, DataSerializers.FLOAT);
@@ -82,6 +87,8 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     
     public EntityLurker(World world) {
         super(world);
+        
+        this.experienceValue = 5;
 
         this.setPathPriority(PathNodeType.WATER, 30);
 
@@ -100,11 +107,17 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
     @Override
     protected void initEntityAI() {
-        tasks.addTask(0, new EntityAIAttackMelee(this, 1.0D, false));
-        tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.8D));
-        tasks.addTask(2, new EntityAIWander(this, 0.7D, 80));
-        tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        tasks.addTask(4, new EntityAILookIdle(this));
+    	tasks.addTask(0, new EntityAIPanic(this, 1.5D) {
+    		@Override
+    		public boolean shouldExecute() {
+    			return super.shouldExecute() && EntityLurker.this.world.getDifficulty() == EnumDifficulty.PEACEFUL;
+    		}
+    	});
+        tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));
+        tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 0.8D));
+        tasks.addTask(3, new EntityAIWander(this, 0.7D, 80));
+        tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        tasks.addTask(5, new EntityAILookIdle(this));
 
         targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
         targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityDragonFly.class, true));
@@ -122,13 +135,21 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
+        
+        getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+        
         getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.5);
         getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16);
         getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
         getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
         getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(55);
     }
-
+    
+    @Override
+    protected boolean canDropLoot() {
+        return true;
+    }
+    
     @Override
     public boolean isNotColliding() {
         return this.getEntityWorld().getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.getEntityWorld().checkNoEntityCollision(this.getEntityBoundingBox(), this);
@@ -256,6 +277,14 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     }
     
     @Override
+    public void setAttackTarget(EntityLivingBase entity) {
+    	if(entity instanceof EntityPlayer && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+    		return;
+    	}
+    	super.setAttackTarget(entity);
+    }
+    
+    @Override
     public void onUpdate() {
         this.updateMovementAndPathfinding();
 
@@ -322,7 +351,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
                 setShouldMouthBeOpen(false);
                 if (entityBeingBit != null) {
                     if (!entityBeingBit.isDead) {
-                        super.attackEntityAsMob(entityBeingBit);
+                    	EntityAIAttackOnCollide.useStandardAttack(this, entityBeingBit);
                         if (getRidingEntity() == entityBeingBit) {
                             getRidingEntity().attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) entityBeingBit).getMaxHealth());
                         }
@@ -574,10 +603,5 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     @Override
     public float getBlockPathWeight(BlockPos pos) {
         return 0.5F;
-    }
-
-    @Override
-    protected boolean isValidLightLevel() {
-    	return true;
     }
 }
