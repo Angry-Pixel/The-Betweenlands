@@ -242,6 +242,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 
 				GlStateManager.popMatrix();
 
+				textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				texture.restoreLastBlurMipmap();
 			}
 		}
