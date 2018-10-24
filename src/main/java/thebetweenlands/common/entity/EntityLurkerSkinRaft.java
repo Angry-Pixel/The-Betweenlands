@@ -70,11 +70,11 @@ public class EntityLurkerSkinRaft extends EntityBoat {
 			if(passenger instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) passenger;
 
-				if(player.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
-					player.setHeldItem(EnumHand.MAIN_HAND, drop);
-					itemReturned = true;
-				} else if(player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
+				if(player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
 					player.setHeldItem(EnumHand.OFF_HAND, drop);
+					itemReturned = true;
+				} else if(player.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
+					player.setHeldItem(EnumHand.MAIN_HAND, drop);
 					itemReturned = true;
 				} else {
 					itemReturned = player.inventory.addItemStackToInventory(drop);

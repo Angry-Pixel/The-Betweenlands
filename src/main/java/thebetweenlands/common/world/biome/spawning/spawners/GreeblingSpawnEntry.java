@@ -30,7 +30,7 @@ public class GreeblingSpawnEntry extends SurfaceSpawnEntry {
 
 			for(EnumFacing facing : facings) {
 				BlockPos offset = pos.offset(facing);
-				if(world.isBlockLoaded(offset) && world.isAirBlock(offset.down())) {
+				if(world.isBlockLoaded(offset) && world.isAirBlock(offset) && world.isAirBlock(offset.down())) {
 					this.facing = facing;
 					return true;
 				}
