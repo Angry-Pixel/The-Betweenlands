@@ -821,6 +821,7 @@ tooltip.infusion.ingredients=§a原料:
 tooltip.infusion.empty=空
 tooltip.bone_wayfinder=必须与巨石柱链接才能使用。
 tooltip.bone_wayfinder_linked=需要充足的经验值才能使用。\n链接到此处的巨石柱：\nX: %s\nY: %s\nZ: %s
+tooltip.lurker_skin_shield=可以当做船使用！
 
 tooltip.bl.elixir.potency=§9效果: %s
 tooltip.bl.elixir.duration=§9时长: %s (%s)
@@ -958,6 +959,8 @@ chat.amate_map.invalid=你不能在交错次元之外制作树皮地图。
 chat.equipment.equipped=穿上了 %s
 chat.equipment.unequipped=卸下了 %s
 
+chat.waystone.obstructed=你与巨石柱的链接被阻断了。
+
 # Damage Source
 death.attack.suffocation=沼泽之息将 %s 窒息至死 
 
@@ -1077,6 +1080,7 @@ entity.thebetweenlands.root_grabber.name=根须抓手
 entity.thebetweenlands.spirit_tree_face_mask.name=灵树面罩
 entity.thebetweenlands.root_sprite.name=根须精灵
 entity.thebetweenlands.greebling.name=地精矮人
+entity.thebetweenlands.lurker_skin_raft.name=鳄皮筏子
 
 # Equipment
 equipment.menu.equip=佩戴%s
