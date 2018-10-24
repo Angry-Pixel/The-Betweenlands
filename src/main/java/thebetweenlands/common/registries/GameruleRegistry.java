@@ -1,13 +1,30 @@
 package thebetweenlands.common.registries;
 
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.event.GameRuleChangeEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.network.clientbound.MessageSyncGameRules;
 
-public class GameruleRegistry {
+public final class GameruleRegistry {
+	private GameruleRegistry() { }
+	
 	public static final GameruleRegistry INSTANCE = new GameruleRegistry();
 
+	private final Set<String> gamerules = new HashSet<>();
+	
 	public static final String BL_FOOD_SICKNESS = "blFoodSickness";
 	public static final String BL_ROTTEN_FOOD = "blRottenFood";
 	public static final String BL_DECAY = "blDecay";
@@ -35,12 +52,19 @@ public class GameruleRegistry {
 		if(!gameRules.hasRule(name)) {
 			gameRules.addGameRule(name, value, type);
 		}
+		this.gamerules.add(name);
 	}
 
+	@Nullable
 	public static GameRules getGameRules() {
-		WorldServer world = DimensionManager.getWorld(0);
-		if(world != null) {
-			return world.getGameRules();
+		WorldServer serverWorld = DimensionManager.getWorld(0);
+		if(serverWorld != null) {
+			return serverWorld.getGameRules();
+		} else {
+			World clientWorld = TheBetweenlands.proxy.getClientWorld();
+			if(clientWorld != null) {
+				return clientWorld.getGameRules();
+			}
 		}
 		return null;
 	}
@@ -53,4 +77,17 @@ public class GameruleRegistry {
 		return getGameRules() != null ? getGameRules().getString(name) : "";
 	}
 
+	@SubscribeEvent
+	public static void onEntityJoin(EntityJoinWorldEvent event) {
+		if(!event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerMP) {
+			TheBetweenlands.networkWrapper.sendTo(new MessageSyncGameRules(GameruleRegistry.INSTANCE.gamerules), (EntityPlayerMP) event.getEntity());
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onGameruleChange(GameRuleChangeEvent event) {
+		if(GameruleRegistry.INSTANCE.gamerules.contains(event.getRuleName())) {
+			TheBetweenlands.networkWrapper.sendToAll(new MessageSyncGameRules(Collections.singleton(event.getRuleName())));
+		}
+	}
 }

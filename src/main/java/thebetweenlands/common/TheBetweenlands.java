@@ -245,5 +245,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(BossHandler.class);
 		MinecraftForge.EVENT_BUS.register(ItemMagicItemMagnet.class);
 		MinecraftForge.EVENT_BUS.register(EntityWeedwoodRowboat.class);
+		MinecraftForge.EVENT_BUS.register(GameruleRegistry.class);
 	}
 }

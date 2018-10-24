@@ -210,7 +210,8 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		return vec;
 	}
 
-	private boolean causesDownwardCurrent(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	@Override
+	protected boolean causesDownwardCurrent(IBlockAccess world, BlockPos pos, EnumFacing side) {
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
         Material material = state.getMaterial();
