@@ -17,6 +17,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -27,8 +28,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 
-public class BlockRope extends Block {
+public class BlockRope extends Block implements ICustomItemBlock {
 	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.4375f, 0f, 0.4375f, 0.5625f, 1f, 0.5625f);
 
 	public static final PropertyEnum<EnumRopeVariant> VARIANT = PropertyEnum.<EnumRopeVariant>create("variant", EnumRopeVariant.class);
@@ -184,4 +186,9 @@ public class BlockRope extends Block {
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
+	}
 }

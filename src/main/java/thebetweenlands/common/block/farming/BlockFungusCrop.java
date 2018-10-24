@@ -78,9 +78,7 @@ public class BlockFungusCrop extends BlockGenericCrop implements ICustomItemBloc
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	@Nullable
-	public ItemStack getRenderedItem() {
-		return new ItemStack(ItemRegistry.SPORES);
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }

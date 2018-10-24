@@ -81,27 +81,6 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
 
         IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
         //Hiding blocks/items that don't have to show in JEI
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.MIDDLE_FRUIT_BUSH).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.FUNGUS_CROP).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.WEEDWOOD_DOOR).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.RUBBER_TREE_PLANK_DOOR).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.SYRMORITE_DOOR).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.SCABYST_DOOR).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.GIANT_ROOT_PLANK_DOOR).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.STANDING_WEEDWOOD_SIGN).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.WALL_WEEDWOOD_SIGN).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.MOSS_BED).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.ASPECT_VIAL_BLOCK).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.ASPECTRUS_CROP.getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SWAMP_KELP));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SWAMP_REED));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SWAMP_REED_UNDERWATER));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SULFUR_FURNACE_ACTIVE));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SULFUR_FURNACE_DUAL_ACTIVE));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.ROPE));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.WEEDWOOD_RUBBER_TAP));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SYRMORITE_RUBBER_TAP));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.TREE_PORTAL));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.GLUE));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TAINTED_POTION));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.ROTTEN_FOOD));

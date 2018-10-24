@@ -723,11 +723,6 @@ public class BlockRegistry {
                     Block block = (Block) obj;
                     String name = field.getName().toLowerCase(Locale.ENGLISH);
                     registerBlock(name, block);
-
-                    if (BetweenlandsConfig.DEBUG.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-                        if (block.getCreativeTabToDisplayOn() == null)
-                            TheBetweenlands.logger.warn(String.format("Block %s doesn't have a creative tab", block.getUnlocalizedName()));
-                    }
                 }
             }
         } catch (IllegalAccessException e) {
@@ -747,6 +742,11 @@ public class BlockRegistry {
         if(item != null) {
         	ITEM_BLOCKS.add(item);
         	item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.ID + "." + name);
+        	
+        	if (BetweenlandsConfig.DEBUG.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+                if (block.getCreativeTabToDisplayOn() == null)
+                    TheBetweenlands.logger.warn(String.format("Block %s doesn't have a creative tab", block.getUnlocalizedName()));
+            }
         }
     }
 
@@ -795,10 +795,19 @@ public class BlockRegistry {
          */
         @Nullable
         default ItemBlock getItemBlock() {
-            if (Item.getItemFromBlock((Block) this) != Items.AIR)
-                return (ItemBlock) Item.getItemFromBlock((Block) this);
+            return getDefaultItemBlock((Block) this);
+        }
+        
+        /**
+         * Returns the default item for the specified block
+         * @param block
+         * @return
+         */
+        static ItemBlock getDefaultItemBlock(Block block) {
+        	if (Item.getItemFromBlock(block) != Items.AIR)
+                return (ItemBlock) Item.getItemFromBlock(block);
             else
-                return new ItemBlock((Block)this);
+                return new ItemBlock(block);
         }
 
         /**

@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -91,9 +92,8 @@ public class BlockMossBed extends BlockBed implements IStateMappedBlock, ICustom
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
-	public ItemStack getRenderedItem() {
-		return new ItemStack(ItemRegistry.MOSS_BED_ITEM);
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 
 	@Override

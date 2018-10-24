@@ -8,6 +8,7 @@ import net.minecraft.block.BlockStandingSign;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -42,12 +43,6 @@ public class BlockStandingWeedwoodSign extends BlockStandingSign implements ICus
 		return new ItemStack(this.getSignItem());
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ItemStack getRenderedItem() {
-		return new ItemStack(this.getSignItem());
-	}
-
 	protected Item getSignItem() {
 		return ItemRegistry.WEEDWOOD_SIGN_ITEM;
 	}
@@ -56,5 +51,10 @@ public class BlockStandingWeedwoodSign extends BlockStandingSign implements ICus
 	@SideOnly(Side.CLIENT)
 	public void setStateMapper(Builder builder) {
 		builder.ignore(ROTATION);
+	}
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }
