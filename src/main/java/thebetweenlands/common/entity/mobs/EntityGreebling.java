@@ -32,6 +32,9 @@ import thebetweenlands.common.sound.BLSoundEvent;
  * Created by Josh on 8/19/2018.
  */
 public class EntityGreebling extends EntityCreature implements IEntityBL, IEntityMusic {
+	protected static final byte EVENT_START_DISAPPEARING = 40;
+	protected static final byte EVENT_DISAPPEAR = 41;
+	
 	private static final DataParameter<Integer> TYPE = EntityDataManager.createKey(EntityGreebling.class, DataSerializers.VARINT);
 	private static final DataParameter<EnumFacing> FACING = EntityDataManager.createKey(EntityGreebling.class, DataSerializers.FACING);
 
@@ -108,16 +111,33 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 		this.prevRotationYaw = this.rotationYaw = this.dataManager.get(FACING).getHorizontalAngle();
 		this.prevRenderYawOffset = this.renderYawOffset = this.dataManager.get(FACING).getHorizontalAngle();
 
-		if (disappearTimer > 0) disappearTimer++;
-		if (disappearTimer == 5) doLeafEffects();
-		if (disappearTimer > 8) setDead();
-		List<EntityPlayer> nearPlayers = world.getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().grow(4.5, 5, 4.5), e -> !e.capabilities.isCreativeMode && !e.isInvisible());
-		if (disappearTimer == 0 && !nearPlayers.isEmpty()) {
-			disappearTimer++;
-			this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.GREEBLING_VANISH, SoundCategory.NEUTRAL, 1, 1);
+		if (disappearTimer > 0 && disappearTimer < 8) disappearTimer++;
+		
+		if(!this.world.isRemote) {
+			if (disappearTimer == 5) this.world.setEntityState(this, EVENT_DISAPPEAR);
+			if (disappearTimer >= 8) setDead();
+			
+			List<EntityPlayer> nearPlayers = world.getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().grow(4.5, 5, 4.5), e -> !e.capabilities.isCreativeMode && !e.isInvisible());
+			if (disappearTimer == 0 && !nearPlayers.isEmpty()) {
+				disappearTimer++;
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.GREEBLING_VANISH, SoundCategory.NEUTRAL, 1, 1);
+				this.world.setEntityState(this, EVENT_START_DISAPPEARING);
+			}
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+		
+		if(id == EVENT_START_DISAPPEARING) {
+			disappearTimer = 1;
+		} else if(id == EVENT_DISAPPEAR) {
+			doLeafEffects();
+		}
+	}
+	
 	private void doLeafEffects() {
 		if(world.isRemote) {
 			int leafCount = 40;
