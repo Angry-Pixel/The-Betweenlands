@@ -69,7 +69,7 @@ public class ItemGemSinger extends Item {
 	public ItemGemSinger() {
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 		this.setMaxStackSize(1);
-		this.setMaxDamage(64);
+		this.setMaxDamage(32);
 	}
 
 	@Override
