@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -92,7 +93,19 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 
 			for(EntityItem item : entities) {
 				if(!item.hasNoGravity()) {
-					item.motionY += 0.03999999910593033D;
+					NBTTagCompound nbt = item.getEntityData();
+					
+					boolean isGravityCompensated = false;
+					
+					if(nbt.hasKey("thebetweenlands.item_magnet_last_gravity_update", Constants.NBT.TAG_INT) && nbt.getInteger("thebetweenlands.item_magnet_last_gravity_update") == item.ticksExisted) {
+						isGravityCompensated = true;
+					}
+					
+					nbt.setInteger("thebetweenlands.item_magnet_last_gravity_update", item.ticksExisted);
+					
+					if(!isGravityCompensated) {
+						item.motionY += 0.03999999910593033D;
+					}
 				}
 				
 				double dx = entity.posX - item.posX;
