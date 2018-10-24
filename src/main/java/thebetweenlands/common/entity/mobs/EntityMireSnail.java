@@ -58,11 +58,6 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
-	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.18D);

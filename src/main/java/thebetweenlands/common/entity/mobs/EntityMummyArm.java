@@ -50,11 +50,6 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
-	@Override
 	protected void entityInit() {
 		super.entityInit();
 		this.getDataManager().register(OWNER_ID, -1);

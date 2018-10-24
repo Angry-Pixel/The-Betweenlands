@@ -75,11 +75,6 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
-	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundRegistry.SNAIL_LIVING;
 	}

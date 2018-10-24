@@ -96,11 +96,6 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 	}
 
 	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
-	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAIFlyRandomly<EntityGasCloud>(this) {
 			@Override

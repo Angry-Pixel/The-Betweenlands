@@ -55,11 +55,6 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	}
 
 	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
-	@Override
 	public int getMaxSpawnedInChunk() {
 		return 2;
 	}

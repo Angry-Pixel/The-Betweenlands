@@ -116,11 +116,6 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
-	@Override
 	public void onUpdate() {
 		prevOnGround = onGround;
 

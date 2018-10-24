@@ -74,12 +74,6 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 		this.moveHelper = new FlightMoveHelper(this);
 	}
 
-
-	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
 	@Override
 	protected void entityInit() {
 		super.entityInit();
