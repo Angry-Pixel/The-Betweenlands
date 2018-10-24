@@ -28,6 +28,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -102,26 +103,30 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entity) {
-		if(stack.getItemDamage() < stack.getMaxDamage()) {
+		if(!worldIn.isRemote && stack.getItemDamage() < stack.getMaxDamage()) {
 			BlockPos waystone = this.getBoundWaystone(stack);
 			if(waystone != null) {
-				BlockPos spawnPoint = PlayerRespawnHandler.getRespawnPointNearPos(worldIn, waystone, 8);
+				BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos(worldIn, waystone, 8, false, 4, 0);
 
-				if(entity.getDistanceSq(spawnPoint) > 24) {
+				if(spawnPoint != null) {
+					if(entity.getDistanceSq(spawnPoint) > 24) {
+						this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
+					}
+
+					entity.setLocationAndAngles(spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+
+					if(entity instanceof EntityPlayerMP) {
+						((EntityPlayerMP) entity).connection.setPlayerLocation(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+					}
+
 					this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
+
+					entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 1));
+
+					stack.damageItem(1, entity);
+				} else if(entity instanceof EntityPlayerMP) {
+					((EntityPlayerMP) entity).sendStatusMessage(new TextComponentTranslation("chat.waystone.obstructed"), true);
 				}
-
-				entity.setLocationAndAngles(spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
-
-				if(entity instanceof EntityPlayerMP) {
-					((EntityPlayerMP) entity).connection.setPlayerLocation(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
-				}
-
-				this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
-
-				entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 1));
-
-				stack.damageItem(1, entity);
 			}
 		}
 		return stack;

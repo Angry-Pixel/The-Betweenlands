@@ -2,6 +2,8 @@ package thebetweenlands.common.handler;
 
 import java.util.Collections;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketSpawnPosition;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -24,28 +27,28 @@ import thebetweenlands.util.WeightedList;
 
 public class PlayerRespawnHandler {
 	public static final String RESPAWN_IN_BL_NBT = "thebetweenlands.respawn_in_bl";
-	
+
 	@SubscribeEvent
 	public static void onPlayerDeath(LivingDeathEvent event) {
 		if(event.getEntityLiving() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-			
+
 			NBTTagCompound dataNbt = player.getEntityData();
 			NBTTagCompound persistentNbt = dataNbt.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-			
+
 			BlockPos spawnPos = player.getBedLocation(player.dimension);
 
 			BlockPos adjustedSpawnPos = spawnPos == null ? null : EntityPlayer.getBedSpawnLocation(player.world, spawnPos, player.isSpawnForced(player.dimension));
-			
+
 			boolean respawnInBL = BetweenlandsConfig.WORLD_AND_DIMENSION.startInBetweenlands && (!player.world.provider.canRespawnHere() || adjustedSpawnPos == null);
-			
+
 			persistentNbt.setBoolean(RESPAWN_IN_BL_NBT, respawnInBL);
-			
+
 			dataNbt.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentNbt);
 		}
 	}
-	
-	
+
+
 	@SubscribeEvent
 	public static void onRespawn(PlayerRespawnEvent event) {
 		if(!event.player.world.isRemote) {
@@ -55,21 +58,21 @@ public class PlayerRespawnHandler {
 
 			NBTTagCompound dataNbt = event.player.getEntityData();
 			NBTTagCompound persistentNbt = dataNbt.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-			
+
 			boolean shouldTeleportToBL = (BetweenlandsConfig.WORLD_AND_DIMENSION.startInBetweenlands && event.isEndConquered()) || persistentNbt.getBoolean(RESPAWN_IN_BL_NBT);
-			
+
 			if(shouldTeleportToBL && event.player.world instanceof WorldServer) {
 				WorldServer blWorld = ((WorldServer) event.player.world).getMinecraftServer().getWorld(BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
-				
+
 				TeleporterHandler.transferToDim(event.player, blWorld, false, false);
-				
+
 				spawnPos = event.player.getBedLocation(event.player.dimension);
 
 				adjustedSpawnPos = spawnPos == null ? null : EntityPlayer.getBedSpawnLocation(event.player.world, spawnPos, event.player.isSpawnForced(event.player.dimension));
-				
+
 				if(adjustedSpawnPos != null) {
 					event.player.setPosition(adjustedSpawnPos.getX() + 0.5D, adjustedSpawnPos.getY(), adjustedSpawnPos.getZ() + 0.5D);
-					
+
 					if(event.player instanceof EntityPlayerMP) {
 						EntityPlayerMP playerMP = (EntityPlayerMP) event.player;
 
@@ -78,7 +81,7 @@ public class PlayerRespawnHandler {
 					}
 				}
 			}
-			
+
 			if(shouldTeleportToBL || event.player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 				boolean newRespawn = false;
 				if(adjustedSpawnPos == null) {
@@ -126,6 +129,19 @@ public class PlayerRespawnHandler {
 	}
 
 	public static BlockPos getRespawnPointNearPos(World world, BlockPos pos, int fuzz) {
+		BlockPos result = getSpawnPointNearPos(world, pos, fuzz, true, 16, 3);
+		if(result == null) {
+			int spawnFuzz = fuzz;
+			int spawnFuzzHalf = spawnFuzz / 2;
+			result = world.getTopSolidOrLiquidBlock(pos.add(world.rand.nextInt(spawnFuzz) - spawnFuzzHalf, 0, world.rand.nextInt(spawnFuzz) - spawnFuzzHalf));
+		}
+		return result;
+	}
+
+	@Nullable
+	public static BlockPos getSpawnPointNearPos(World world, BlockPos pos, int fuzz, boolean surface, int yRange, int xzSkip) {
+		xzSkip = Math.max(xzSkip, 1);
+		
 		int spawnFuzz = fuzz;
 		int spawnFuzzHalf = spawnFuzz / 2;
 
@@ -147,18 +163,36 @@ public class PlayerRespawnHandler {
 
 		WeightedList<WeightedPos> spawnCandidates = new WeightedList<>();
 
-		for(int xo = -spawnFuzzHalf; xo <= spawnFuzzHalf; xo += 1 + world.rand.nextInt(3)) {
-			for(int zo = -spawnFuzzHalf; zo <= spawnFuzzHalf; zo += 1 + world.rand.nextInt(3)) {
-				BlockPos newPos = pos.add(xo, 0, zo);
-				Chunk chunk = world.getChunkFromBlockCoords(newPos);
-				newPos = new BlockPos(newPos.getX(), chunk.getHeight(newPos), newPos.getZ());
-				if(Math.abs(newPos.getY() - pos.getY()) <= 16 && EntityPlayer.getBedSpawnLocation(world, newPos, true) != null) {
-					IBlockState stateDown = chunk.getBlockState(newPos.down());
-					if(stateDown.getMaterial().blocksMovement() && !stateDown.getBlock().isLeaves(stateDown, world, newPos.down()) && !stateDown.getBlock().isFoliage(world, newPos.down())) {
-						WeightedPos p = new WeightedPos(newPos);
-						p.weight = (short) Math.abs(newPos.getY() - pos.getY());
-						maxWeight = (short)Math.max(maxWeight, p.weight);
-						spawnCandidates.add(p);
+		MutableBlockPos checkPos = new MutableBlockPos();
+
+		for(int xo = -spawnFuzzHalf; xo <= spawnFuzzHalf; xo += 1 + world.rand.nextInt(xzSkip)) {
+			for(int zo = -spawnFuzzHalf; zo <= spawnFuzzHalf; zo += 1 + world.rand.nextInt(xzSkip)) {
+				checkPos.setPos(pos.getX() + xo, 0, pos.getZ() + zo);
+
+				Chunk chunk = world.getChunkFromBlockCoords(checkPos);
+
+				for(int yo = yRange; surface || yo >= -yRange; yo--) {
+					if(surface) {
+						checkPos.setPos(checkPos.getX(), chunk.getHeight(checkPos), checkPos.getZ());
+					} else {
+						checkPos.setPos(checkPos.getX(), pos.getY() + yo, checkPos.getZ());
+					}
+
+					if(Math.abs(checkPos.getY() - pos.getY()) <= yRange && EntityPlayer.getBedSpawnLocation(world, checkPos, true) != null) {
+						checkPos.setY(checkPos.getY() - 1);
+
+						IBlockState stateDown = chunk.getBlockState(checkPos);
+						if(stateDown.getMaterial().blocksMovement() && !stateDown.getBlock().isLeaves(stateDown, world, checkPos) && !stateDown.getBlock().isFoliage(world, checkPos)) {
+							BlockPos newPos = checkPos.up();
+							WeightedPos p = new WeightedPos(newPos);
+							p.weight = (short)Math.abs(newPos.getY() - pos.getY());
+							maxWeight = (short)Math.max(maxWeight, p.weight);
+							spawnCandidates.add(p);
+						}
+					}
+
+					if(surface) {
+						break;
 					}
 				}
 			}
@@ -177,6 +211,6 @@ public class PlayerRespawnHandler {
 			return spawnCandidates.getRandomItem(world.rand).pos;
 		}
 
-		return world.getTopSolidOrLiquidBlock(pos.add(world.rand.nextInt(spawnFuzz) - spawnFuzzHalf, 0, world.rand.nextInt(spawnFuzz) - spawnFuzzHalf));
+		return null;
 	}
 }

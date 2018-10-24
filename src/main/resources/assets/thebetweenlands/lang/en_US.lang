@@ -959,6 +959,8 @@ chat.amate_map.invalid=Can't create an amate map outside of The Betweenlands
 chat.equipment.equipped=Equipped %s
 chat.equipment.unequipped=Unequipped %s
 
+chat.waystone.obstructed=Menhir is obstructed
+
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
 
