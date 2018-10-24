@@ -248,7 +248,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
             this.moveHelper = this.moveHelperLand;
         }
         
-        if (this.isInWater() && !this.world.isAirBlock(new BlockPos(this.posX, this.getEntityBoundingBox().maxY + 1, this.posZ))) {
+        if (this.isInWater() && !this.world.isAirBlock(new BlockPos(this.posX, this.getEntityBoundingBox().maxY + 0.25D, this.posZ))) {
         	this.navigator = this.pathNavigatorWater;
         } else {
         	this.navigator = this.pathNavigatorGround;
