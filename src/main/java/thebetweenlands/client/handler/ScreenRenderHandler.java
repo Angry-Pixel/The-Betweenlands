@@ -29,6 +29,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -281,7 +282,7 @@ public class ScreenRenderHandler extends Gui {
 			}
 		} else if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
 			if(player != null && !player.isSpectator()) {
-				if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+				if (BetweenlandsConfig.GENERAL.equipmentVisible && player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 					IEquipmentCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 
 					EnumHandSide offhand = player.getPrimaryHand().opposite();
@@ -291,11 +292,20 @@ public class ScreenRenderHandler extends Gui {
 					for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
 						IInventory inv = capability.getInventory(type);
 
+						boolean isOnOppositeSide = BetweenlandsConfig.GENERAL.equipmentHotbarSide == 1;
+						boolean showOnRightSide = (offhand == EnumHandSide.LEFT) != isOnOppositeSide;
+						
 						int posX;
-						if(offhand == EnumHandSide.LEFT) {
+						if(showOnRightSide) {
 							posX = width / 2 + 93;
+							if(isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
+								posX += 30;
+							}
 						} else {
 							posX = width / 2 - 93 - 16;
+							if(isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
+								posX -= 30;
+							}
 						}
 						int posY = height + yOffset - 19;
 
@@ -327,7 +337,7 @@ public class ScreenRenderHandler extends Gui {
 								GlStateManager.color(1, 1, 1, 1);
 								GlStateManager.popMatrix();
 
-								if(offhand == EnumHandSide.LEFT) {
+								if(showOnRightSide) {
 									posX += 8;
 								} else {
 									posX -= 8;

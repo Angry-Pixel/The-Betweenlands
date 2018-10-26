@@ -13,6 +13,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -92,11 +93,10 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
         return new BlockStateContainer(this, TYPE, RANDOM_POSITION);
     }
 
-    @Nullable
     @Override
-    public ItemStack getRenderedItem() {
-        return new ItemStack(ItemRegistry.ASPECT_VIAL);
-    }
+	public ItemBlock getItemBlock() {
+		return null;
+	}
 
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

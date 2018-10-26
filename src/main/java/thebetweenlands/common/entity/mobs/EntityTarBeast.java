@@ -434,12 +434,6 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		this.getDataManager().set(SUCKING_STATE_DW, (byte)2);
 	}
 
-
-	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
 	@Override
     public float getBlockPathWeight(BlockPos pos) {
         return 0.5F;

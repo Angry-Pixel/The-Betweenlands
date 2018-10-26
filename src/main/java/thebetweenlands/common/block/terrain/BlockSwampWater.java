@@ -14,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -30,11 +31,12 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.item.armor.ItemMarshRunnerBoots;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.AdvancedStateMap;
 
-public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBlock, ITintedBlock {
+public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBlock, ITintedBlock, ICustomItemBlock {
 	private static final int DEEP_COLOR_R = 19;
 	private static final int DEEP_COLOR_G = 24;
 	private static final int DEEP_COLOR_B = 68;
@@ -49,6 +51,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		return this;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
 		if(entityIn instanceof EntityPlayer && ItemMarshRunnerBoots.checkPlayerWalkOnWater((EntityPlayer) entityIn)) {
@@ -210,7 +213,8 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		return vec;
 	}
 
-	private boolean causesDownwardCurrent(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	@Override
+	protected boolean causesDownwardCurrent(IBlockAccess world, BlockPos pos, EnumFacing side) {
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
         Material material = state.getMaterial();
@@ -499,5 +503,10 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	@Override
 	public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
 		return 100;
+	}
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }

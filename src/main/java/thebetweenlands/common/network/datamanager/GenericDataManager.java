@@ -201,27 +201,33 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 		}
 
 		this.lock.writeLock().lock();
-		this.entries.put(Integer.valueOf(key.getId()), entry);
-		this.empty = false;
-		this.lock.writeLock().unlock();
+		try {
+			this.entries.put(Integer.valueOf(key.getId()), entry);
+			this.empty = false;
+		} finally {
+			this.lock.writeLock().unlock();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private <T> GenericDataManager.DataEntry<T> getEntry(DataParameter<T> key) {
 		this.lock.readLock().lock();
-		GenericDataManager.DataEntry<T> entry;
-
 		try {
-			entry = (GenericDataManager.DataEntry<T>) this.entries.get(Integer.valueOf(key.getId()));
-		} catch (Throwable throwable) {
-			CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Getting synced " + this.owner.getClass().getName() + " data");
-			CrashReportCategory crashreportcategory = crashreport.makeCategory("Synced " + this.owner.getClass().getName() + " data");
-			crashreportcategory.addCrashSection("Data ID", key);
-			throw new ReportedException(crashreport);
-		}
+			GenericDataManager.DataEntry<T> entry;
 
-		this.lock.readLock().unlock();
-		return entry;
+			try {
+				entry = (GenericDataManager.DataEntry<T>) this.entries.get(Integer.valueOf(key.getId()));
+			} catch (Throwable throwable) {
+				CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Getting synced " + this.owner.getClass().getName() + " data");
+				CrashReportCategory crashreportcategory = crashreport.makeCategory("Synced " + this.owner.getClass().getName() + " data");
+				crashreportcategory.addCrashSection("Data ID", key);
+				throw new ReportedException(crashreport);
+			}
+
+			return entry;
+		} finally {
+			this.lock.readLock().unlock();
+		}
 	}
 
 	@Override
@@ -273,10 +279,13 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 		PacketBuffer buf = new PacketBuffer(Unpooled.buffer());
 		try {
 			entry.serializer.serialize(buf, (T) entry.value);
-		} catch(IOException ex) {
-			throw new RuntimeException(ex);
+			copy.serializedData = new byte[buf.readableBytes()];
+			buf.readBytes(copy.serializedData);
+		} catch(Exception ex) {
+			throw new DecoderException("Failed serializing data with custom serializer " + entry.serializer.getClass().getName(), ex);
+		} finally {
+			buf.release();
 		}
-		copy.serializedData = buf;
 	}
 
 	@Override
@@ -287,25 +296,27 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 		if (this.dirty) {
 			this.lock.readLock().lock();
 
-			for (GenericDataManager.DataEntry<?> entry : this.entries.valueCollection()) {
-				if (entry.isDirty()) {
-					entry.setDirty(false);
+			try {
+				for (GenericDataManager.DataEntry<?> entry : this.entries.valueCollection()) {
+					if (entry.isDirty()) {
+						entry.setDirty(false);
 
-					if (list == null) {
-						list = new ArrayList<>();
-					}
+						if (list == null) {
+							list = new ArrayList<>();
+						}
 
-					DataEntry<?> copy = entry.copy();
+						DataEntry<?> copy = entry.copy();
 
-					list.add(copy);
+						list.add(copy);
 
-					if(entry.serializer != null) {
-						this.serializeEntry(entry, copy);
+						if(entry.serializer != null) {
+							this.serializeEntry(entry, copy);
+						}
 					}
 				}
+			} finally {
+				this.lock.readLock().unlock();
 			}
-
-			this.lock.readLock().unlock();
 		}
 
 		this.dirty = false;
@@ -318,21 +329,24 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 		List<IDataEntry<?>> list = null;
 		this.lock.readLock().lock();
 
-		for (GenericDataManager.DataEntry<?> entry : this.entries.valueCollection()) {
-			if (list == null) {
-				list = new ArrayList<>();
+		try {
+			for (GenericDataManager.DataEntry<?> entry : this.entries.valueCollection()) {
+				if (list == null) {
+					list = new ArrayList<>();
+				}
+
+				DataEntry<?> copy = entry.copy();
+
+				list.add(copy);
+
+				if(entry.serializer != null) {
+					this.serializeEntry(entry, copy);
+				}
 			}
-
-			DataEntry<?> copy = entry.copy();
-
-			list.add(copy);
-
-			if(entry.serializer != null) {
-				this.serializeEntry(entry, copy);
-			}
+		} finally {
+			this.lock.readLock().unlock();
 		}
 
-		this.lock.readLock().unlock();
 		return list;
 	}
 
@@ -356,20 +370,21 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 
 		if(entry.serializedData != null) {
 			buf.writeBoolean(true);
-			buf.writeVarInt(entry.serializedData.readableBytes());
 
 			synchronized(entry.serializedData) {
-				entry.serializedData.markReaderIndex();
+				buf.writeVarInt(entry.serializedData.length);
 				buf.writeBytes(entry.serializedData);
-				entry.serializedData.resetReaderIndex();
 			}
 		} else {
 			buf.writeBoolean(false);
+
 			int i = DataSerializers.getSerializerId(parameter.getSerializer());
 			if (i < 0) {
 				throw new EncoderException("Unknown serializer type " + parameter.getSerializer());
 			}
+
 			buf.writeVarInt(i);
+
 			parameter.getSerializer().write(buf, entry.getValue());
 		}
 	}
@@ -387,17 +402,22 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 
 			DataSerializer<?> serializer;
 			Object value = null;
-			ByteBuf serializedData = null;
+			byte[] serializedData = null;
 
 			if(buf.readBoolean()) {
-				serializedData = new PacketBuffer(buf.readBytes(buf.readVarInt()));
+				serializedData = new byte[buf.readVarInt()];
+
+				buf.readBytes(serializedData);
+
 				serializer = new CustomSerializer(null, null);
 			} else {
 				int serializerId = buf.readVarInt();
+
 				serializer = DataSerializers.getSerializer(serializerId);
 				if (serializer == null) {
 					throw new DecoderException("Unknown serializer type " + serializerId);
 				}
+
 				value = serializer.read(buf);
 			}
 
@@ -416,32 +436,37 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 	public void setValuesFromPacket(List<? extends IDataEntry<?>> newEntries) {
 		this.lock.writeLock().lock();
 
-		for (IDataEntry<?> newEntry : newEntries) {
-			GenericDataManager.DataEntry<?> entry = this.entries.get(Integer.valueOf(newEntry.getKey().getId()));
+		try {
+			for (IDataEntry<?> newEntry : newEntries) {
+				GenericDataManager.DataEntry<?> entry = this.entries.get(Integer.valueOf(newEntry.getKey().getId()));
 
-			if (entry != null) {
-				Object newValue;
-				if(entry instanceof GenericDataManager.DataEntry<?>) {
-					GenericDataManager.DataEntry<?> newGenericEntry = (GenericDataManager.DataEntry<?>) newEntry;
-					if(entry.deserializer != null) {
-						try {
-							newValue = entry.deserializer.deserialize(new PacketBuffer(newGenericEntry.serializedData));
-						} catch(IOException ex) {
-							throw new RuntimeException(ex);
+				if (entry != null) {
+					Object newValue;
+					if(newEntry instanceof GenericDataManager.DataEntry<?> && entry.deserializer != null) {
+						GenericDataManager.DataEntry<?> newGenericEntry = (GenericDataManager.DataEntry<?>) newEntry;
+						if(newGenericEntry.deserializedValue == null) {
+							ByteBuf buf = Unpooled.wrappedBuffer(newGenericEntry.serializedData);
+							try {
+								newGenericEntry.deserializedValue = entry.deserializer.deserialize(new PacketBuffer(buf));
+							} catch(Exception ex) {
+								throw new DecoderException("Failed deserializing data with custom deserializer " + entry.deserializer.getClass().getName(), ex);
+							} finally {
+								buf.release();
+							}
 						}
+						newValue = newGenericEntry.deserializedValue;
 					} else {
 						newValue = newEntry.getValue();
 					}
-				} else {
-					newValue = newEntry.getValue();
-				}
-				if(this.owner instanceof IDataManagedObject == false || !((IDataManagedObject)this.owner).onParameterChange(entry.getKey(), newValue, true)) {
-					this.setEntryValue(entry, newValue);
+					if(this.owner instanceof IDataManagedObject == false || !((IDataManagedObject)this.owner).onParameterChange(entry.getKey(), newValue, true)) {
+						this.setEntryValue(entry, newValue);
+					}
 				}
 			}
+		} finally {
+			this.lock.writeLock().unlock();
 		}
 
-		this.lock.writeLock().unlock();
 		this.dirty = true;
 	}
 
@@ -460,12 +485,13 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 	public void setClean() {
 		this.dirty = false;
 		this.lock.readLock().lock();
-
-		for (GenericDataManager.DataEntry<?> dataentry : this.entries.valueCollection()) {
-			dataentry.setDirty(false);
+		try {
+			for (GenericDataManager.DataEntry<?> dataentry : this.entries.valueCollection()) {
+				dataentry.setDirty(false);
+			}
+		} finally {
+			this.lock.readLock().unlock();
 		}
-
-		this.lock.readLock().unlock();
 	}
 
 	@Override
@@ -529,7 +555,8 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 		private int trackingTimer;
 		private EntryAccess<T> access;
 
-		private ByteBuf serializedData;
+		private byte[] serializedData;
+		private Object deserializedValue;
 		private Serializer<T> serializer;
 		private Deserializer<T> deserializer;
 

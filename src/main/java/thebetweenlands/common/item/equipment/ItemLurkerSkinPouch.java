@@ -32,7 +32,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -41,17 +43,19 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
+import thebetweenlands.api.item.IRenamableItem;
 import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.capability.equipment.EquipmentHelper;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 
-public class ItemLurkerSkinPouch extends Item implements IEquippable {
+public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamableItem {
     public ItemLurkerSkinPouch() {
         this.setMaxStackSize(1);
         this.setCreativeTab(BLCreativeTabs.ITEMS);
@@ -75,7 +79,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
     public static ItemStack getFirstPouch(EntityPlayer player) {
         if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
             IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-            IInventory inv = cap.getInventory(EnumEquipmentInventory.POUCH);
+            IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
 
             for (int i = 0; i < inv.getSizeInventory(); i++) {
                 ItemStack stack = inv.getStackInSlot(i);
@@ -149,13 +153,27 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
             if (!player.isSneaking()) {
                 player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH, world, 0, 0, 0);
             } else {
-                player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH_NAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
+                player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ITEM_RENAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
             }
         }
 
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 
+    private static boolean isRenderingWorld;
+    
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void onFogColors(EntityViewRenderEvent.FogColors event) {
+        isRenderingWorld = true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void onRenderWorldLast(RenderWorldLastEvent event) {
+        isRenderingWorld = false;
+    }
+    
 	@SideOnly(Side.CLIENT)
     @SubscribeEvent
 	public static void onRenderPlayer(RenderLivingEvent.Specials.Post<EntityLivingBase> event) {
@@ -168,7 +186,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 	private static void renderPouch(EntityPlayer player, double x, double y, double z, float partialTicks) {
 		if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 			IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-			IInventory inv = cap.getInventory(EnumEquipmentInventory.POUCH);
+			IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
 
 			ItemStack pouch = null;
 
@@ -192,7 +210,11 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x, y + 1.0D, z);
-				GlStateManager.rotate(90 - (player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks), 0, 1, 0);
+				if(!isRenderingWorld) {
+					GlStateManager.rotate(90 - player.renderYawOffset, 0, 1, 0);
+				} else {
+					GlStateManager.rotate(90 - (player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks), 0, 1, 0);
+				}
 				GlStateManager.translate(player.isSneaking() ? 0.25D : 0.0D, (player.isSneaking() ? -0.15D : 0) - 0.2D, -0.25D);
 				float limbSwingAmount = player.prevLimbSwingAmount + (player.limbSwingAmount - player.prevLimbSwingAmount) * partialTicks;
 				float swing = (float)Math.sin((player.limbSwing - limbSwingAmount * (1.0F - partialTicks)) / 1.4F) * limbSwingAmount;
@@ -220,6 +242,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 
 				GlStateManager.popMatrix();
 
+				textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				texture.restoreLastBlurMipmap();
 			}
 		}
@@ -227,7 +250,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 
     @Override
     public EnumEquipmentInventory getEquipmentCategory(ItemStack stack) {
-        return EnumEquipmentInventory.POUCH;
+        return EnumEquipmentInventory.MISC;
     }
 
     @Override
@@ -237,7 +260,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 
     @Override
     public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
-        return target == player;
+        return target == player && EquipmentHelper.getEquipment(EnumEquipmentInventory.MISC, target, this).isEmpty();
     }
 
     @Override

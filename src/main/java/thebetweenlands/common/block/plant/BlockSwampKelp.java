@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -15,6 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 
 public class BlockSwampKelp extends BlockStackablePlantUnderwater {
 	public BlockSwampKelp() {
@@ -50,5 +52,10 @@ public class BlockSwampKelp extends BlockStackablePlantUnderwater {
 		if (world.rand.nextInt(400) == 0) {
 			BLParticles.WATER_BUG.spawn(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 		}
+	}
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }

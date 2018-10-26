@@ -281,8 +281,10 @@ tile.thebetweenlands.rubber_tree_plank_trapdoor.name=Rubber Tree Plank Trapdoor
 tile.thebetweenlands.syrmorite_trapdoor.name=Syrmorite Trapdoor
 tile.thebetweenlands.hearthgrove_plank_trapdoor.name=Hearthgrove Plank Trapdoor
 tile.thebetweenlands.nibbletwig_plank_trapdoor.name=Nibbletwig Plank Trapdoor
+tile.thebetweenlands.scabyst_trapdoor.name=Scabyst Trapdoor
 tile.thebetweenlands.syrmorite_hopper.name=Syrmorite Hopper
 tile.thebetweenlands.mud_flower_pot.name=Mud Brick Flower Pot
+tile.thebetweenlands.mud_flower_pot_candle.name=Mud Brick Flower Pot With Candle
 tile.thebetweenlands.gecko_cage.name=Gecko Cage
 tile.thebetweenlands.infuser.name=Infuser
 tile.thebetweenlands.animator.name=Animator
@@ -326,7 +328,7 @@ tile.thebetweenlands.walkway.name=Weedwood Walkway
 tile.thebetweenlands.wood_chip_path.name=Weedwood Chip Path
 tile.thebetweenlands.thatch_roof.name=Thatch Roof
 tile.thebetweenlands.thatch.name=Thatch
-tile.thebetweenlands.mud_brick_roof.name=Mud Brick Roof
+tile.thebetweenlands.mud_brick_roof.name=Mud Brick Shingle Roof
 tile.thebetweenlands.repeller.name=Repeller
 tile.thebetweenlands.black_ice.name=Black Ice
 tile.thebetweenlands.snow.name=Snow
@@ -351,6 +353,18 @@ tile.thebetweenlands.nibbletwig_plank_fence_gate.name=Nibbletwig Plank Fence Gat
 tile.thebetweenlands.amate_paper_pane_1.name=Connected Amate Paper Pane
 tile.thebetweenlands.amate_paper_pane_2.name=Squared Amate Paper Pane
 tile.thebetweenlands.amate_paper_pane_3.name=Rounded Amate Paper Pane
+tile.thebetweenlands.root_pod.name=Root Pod
+tile.thebetweenlands.scabyst_block.name=Block of Scabyst
+tile.thebetweenlands.scabyst_chiseled_1.name=Chiseled Scabyst
+tile.thebetweenlands.scabyst_chiseled_2.name=Chiseled Scabyst
+tile.thebetweenlands.scabyst_chiseled_3.name=Chiseled Scabyst
+tile.thebetweenlands.scabyst_bricks.name=Scabyst Bricks
+tile.thebetweenlands.scabyst_brick_wall.name=Scabyst Brick Wall
+tile.thebetweenlands.scabyst_brick_stairs.name=Scabyst Brick Stairs
+tile.thebetweenlands.scabyst_brick_slab.name=Scabyst Brick Slab
+tile.thebetweenlands.scabyst_pitstone_dotted.name=Scabyst Lined Pitstone
+tile.thebetweenlands.scabyst_pitstone_horizontal.name=Scabyst Lined Pitstone
+tile.thebetweenlands.waystone.name=Menhir
 
 # Items
 
@@ -598,6 +612,7 @@ item.thebetweenlands.rubber_tree_plank_door_item.name=Rubber Tree Plank Door
 item.thebetweenlands.giant_root_plank_door_item.name=Giant Root Plank Door
 item.thebetweenlands.hearthgrove_plank_door_item.name=Hearthgrove Plank Door
 item.thebetweenlands.nibbletwig_plank_door_item.name=Nibbletwig Plank Door
+item.thebetweenlands.scabyst_door_item.name=Scabyst Door
 item.thebetweenlands.moss_bed_item.name=Moss Bed
 item.thebetweenlands.lore_scrap.them.name=Lurking Shadows
 item.thebetweenlands.lore_scrap.mutants.name=Mutants of Terror
@@ -632,6 +647,7 @@ item.thebetweenlands.crimson_middle_gem.name=Crimson Middle Gem
 item.thebetweenlands.skull_mask.name=Skull Mask
 item.thebetweenlands.spirit_tree_face_large_mask.name=Large Spirit Tree Face Mask
 item.thebetweenlands.spirit_tree_face_small_mask.name=Small Spirit Tree Face Mask
+item.thebetweenlands.spirit_tree_face_small_mask_animated.name=Small Animated Spirit Tree Face Mask
 item.thebetweenlands.bl_bucket_syrmorite.name=Syrmorite Bucket
 item.thebetweenlands.bl_bucket_weedwood.name=Weedwood Bucket
 item.thebetweenlands.bl_bucket_syrmorite.filled.name=Syrmorite Bucket (%s)
@@ -682,6 +698,12 @@ item.thebetweenlands.nibblestick.name=Nibblestick
 item.thebetweenlands.bl.elixir.name=%s
 item.thebetweenlands.spirit_fruit.name=Spirit Fruit
 item.thebetweenlands.sap_spit.name=Sap Spit
+item.thebetweenlands.empty_amate_map.name=Empty Amate Map
+item.thebetweenlands.amate_map.name=Amate Map
+item.thebetweenlands.bone_wayfinder.name=Bone Wayfinder
+item.thebetweenlands.magic_item_magnet.name=Magic Item Magnet
+item.thebetweenlands.gem_singer.name=Gem Singer
+item.thebetweenlands.bark_amulet.name=Bark Amulet
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -797,6 +819,9 @@ tooltip.swamp_talisman_linked=Linked to portal\nX: %s\nY: %s\nZ: %s
 tooltip.infusion.time=§aInfusion time:§r %s
 tooltip.infusion.ingredients=§aIngredients:
 tooltip.infusion.empty=Empty
+tooltip.bone_wayfinder=Must be linked to a Menhir
+tooltip.bone_wayfinder_linked=Requires sufficient XP to use.\nLinked to Menhir\nX: %s\nY: %s\nZ: %s
+tooltip.lurker_skin_shield=Can also be used as a raft
 
 tooltip.bl.elixir.potency=§9Potency: %s
 tooltip.bl.elixir.duration=§9Duration: %s (%s)
@@ -929,6 +954,12 @@ chat.event.spook=You feel a chill in the air... the haunting season has begun!
 chat.event.winter=You hear the sound of sleigh bells in the distance...
 
 chat.repeller.shimmerstone_missing=The repeller needs a Shimmerstone to run
+chat.amate_map.invalid=Can't create an amate map outside of The Betweenlands
+
+chat.equipment.equipped=Equipped %s
+chat.equipment.unequipped=Unequipped %s
+
+chat.waystone.obstructed=Menhir is obstructed
 
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
@@ -1001,7 +1032,7 @@ entity.thebetweenlands.swamp_hag.name=Swamp Hag
 entity.thebetweenlands.tar_beast.name=Tar Beast
 entity.thebetweenlands.wight.name=Wight
 entity.thebetweenlands.volatile_soul.name=Volatile Soul
-entity.thebetweenlands.firefly.name=Fire Fly
+entity.thebetweenlands.firefly.name=Firefly
 entity.thebetweenlands.sporeling.name=Sporeling
 entity.thebetweenlands.leech.name=Leech
 entity.thebetweenlands.dragonfly.name=Dragonfly
@@ -1049,6 +1080,8 @@ entity.thebetweenlands.spike_wave.name=Root Wave
 entity.thebetweenlands.root_grabber.name=Root Grabber
 entity.thebetweenlands.spirit_tree_face_mask.name=Spirit Tree Face Mask
 entity.thebetweenlands.root_sprite.name=Root Sprite
+entity.thebetweenlands.greebling.name=Greebling
+entity.thebetweenlands.lurker_skin_raft.name=Lurker Skin Raft
 
 
 # Equipment
@@ -1490,6 +1523,8 @@ config.thebetweenlands.torch_whitelist=Torch Whitelist
 config.thebetweenlands.torch_blacklist=Torch Blacklist
 config.thebetweenlands.pouch_blacklist=Lurker Skin Pouch Blacklist
 config.thebetweenlands.caving_rope_despawn_time=Caving Rope Despawn Time
+config.thebetweenlands.equipment_hotbar_side=Equipment Hotbar Side
+config.thebetweenlands.equipment_visible=Show Equipment on HUD
 
 config.thebetweenlands.mob_spawning=Mob Spawning
 config.thebetweenlands.max_entities_per_loaded_area=Max. entities per loaded area

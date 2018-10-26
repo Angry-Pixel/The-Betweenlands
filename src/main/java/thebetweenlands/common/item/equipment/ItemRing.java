@@ -99,7 +99,7 @@ public class ItemRing extends Item implements IEquippable {
 
 	@Override
 	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
-		return target instanceof EntityPlayer;
+		return player == target;
 	}
 
 	@Override

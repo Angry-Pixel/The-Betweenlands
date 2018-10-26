@@ -26,6 +26,7 @@ import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.common.inventory.container.ContainerBLFurnace;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
+import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
@@ -52,7 +53,7 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_HL = 9;
 	public static final int GUI_LORE = 10;
 	public static final int GUI_LURKER_POUCH = 11;
-	public static final int GUI_LURKER_POUCH_NAMING = 13;
+	public static final int GUI_ITEM_RENAMING = 13;
 	public static final int GUI_LURKER_POUCH_KEYBIND = 14;
 
 	@Override
@@ -121,8 +122,8 @@ public class CommonProxy implements IGuiHandler {
 			}
 		}
 
-		case GUI_LURKER_POUCH_NAMING:
-			return new ContainerPouch(player, player.inventory, null);
+		case GUI_ITEM_RENAMING:
+			return new ContainerItemNaming();
 
 		}
 		return null;

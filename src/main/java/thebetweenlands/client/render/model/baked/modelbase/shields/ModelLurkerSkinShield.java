@@ -2,6 +2,7 @@ package thebetweenlands.client.render.model.baked.modelbase.shields;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 
 /**
@@ -156,6 +157,13 @@ public class ModelLurkerSkinShield extends ModelBase {
 		this.handle.render(f5);
 	}
 
+	public void renderAsRaft(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+		GlStateManager.pushMatrix();
+		GlStateManager.rotate(90, 1, 0, 0);
+		this.shield_main.render(f5);
+		GlStateManager.popMatrix();
+	}
+	
 	/**
 	 * This is a helper function from Tabula to set the rotation of model parts
 	 */

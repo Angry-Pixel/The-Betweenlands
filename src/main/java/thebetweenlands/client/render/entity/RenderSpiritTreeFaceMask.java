@@ -7,6 +7,8 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.armor.ModelSpiritTreeFaceMaskLarge;
+import thebetweenlands.client.render.model.armor.ModelSpiritTreeFaceMaskSmall;
 import thebetweenlands.client.render.model.entity.ModelSpiritTreeFaceLarge;
 import thebetweenlands.client.render.model.entity.ModelSpiritTreeFaceSmall2;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
@@ -17,8 +19,8 @@ public class RenderSpiritTreeFaceMask extends Render<EntitySpiritTreeFaceMask> {
 	private static final ResourceLocation TEXTURE_LARGE = new ResourceLocation(ModInfo.ID, "textures/entity/spirit_tree_face_large.png");
 	private static final ResourceLocation TEXTURE_SMALL = new ResourceLocation(ModInfo.ID, "textures/entity/spirit_tree_face_small.png");
 
-	private static final ModelSpiritTreeFaceLarge MODEL_LARGE = new ModelSpiritTreeFaceLarge();
-	private static final ModelSpiritTreeFaceSmall2 MODEL_SMALL = new ModelSpiritTreeFaceSmall2();
+	private static final ModelSpiritTreeFaceMaskLarge MODEL_LARGE = new ModelSpiritTreeFaceMaskLarge(false);
+	private static final ModelSpiritTreeFaceMaskSmall MODEL_SMALL = new ModelSpiritTreeFaceMaskSmall(false);
 
 	public RenderSpiritTreeFaceMask(RenderManager renderManager) {
 		super(renderManager);

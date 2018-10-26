@@ -39,9 +39,10 @@ public interface IChunkStorage extends ICapabilityProvider {
 
 	/**
 	 * Reads the chunk storage data from NBT
-	 * @param nbt
+	 * @param nbt NBT
+	 * @param packet Whether the NBT is being read from a packet
 	 */
-	public void readFromNBT(NBTTagCompound nbt);
+	public void readFromNBT(NBTTagCompound nbt, boolean packet);
 	
 	/**
 	 * Reads the local storage references from NBT
@@ -52,10 +53,11 @@ public interface IChunkStorage extends ICapabilityProvider {
 
 	/**
 	 * Writes the chunk storage data to NBT
-	 * @param nbt
+	 * @param nbt NBT
+	 * @param packet Whether the NBT is being written to a packet
 	 * @return
 	 */
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt);
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt, boolean packet);
 	
 	/**
 	 * Writes the local storage references to NBT

@@ -1,0 +1,16 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "lit": {
+      "true": {
+        "model": "thebetweenlands:internal/mud_flower_pot_candle"
+      },
+      "false": {
+        "model": "thebetweenlands:internal/mud_flower_pot_candle",
+        "custom": {
+          "texture": "thebetweenlands:blocks/mud_flower_pot_candle_unlit"
+        }
+      }
+    }
+  }
+}

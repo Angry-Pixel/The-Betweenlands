@@ -38,6 +38,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop4;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop4Decayed;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMossBed;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPot;
+import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPotCandle;
 import thebetweenlands.client.render.model.baked.modelbase.ModelPitcherPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelPresent;
 import thebetweenlands.client.render.model.baked.modelbase.ModelRubberTapPouring;
@@ -149,6 +150,7 @@ public class ModelRegistry {
 	public static final IModel WEEDWOOD_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/weedwood_rubber_tap"));
 	public static final IModel SYRMORITE_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/syrmorite_rubber_tap"));
 	public static final IModel MUD_FLOWER_POT_BASE = new ModelFromModelBase(new ModelMudFlowerPot(), new ResourceLocation("thebetweenlands:blocks/mud_flower_pot"), 32, 32);
+	public static final IModel MUD_FLOWER_POT_CANDLE = new ModelFromModelBase(new ModelMudFlowerPotCandle(), new ResourceLocation("thebetweenlands:blocks/mud_flower_pot_candle"), 32, 32);
 	public static final IModel MOSS_BED = new ModelFromModelBase(new ModelMossBed(), new ResourceLocation("thebetweenlands:blocks/moss_bed"), 128, 128);
 	public static final IModel WALKWAY = new ModelWalkway(true);
 	public static final IModel WALKWAY_NO_STANDS = new ModelWalkway(false);

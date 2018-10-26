@@ -16,6 +16,8 @@ public class SoundRegistry {
     // Music
     public static final BLSoundEvent BL_MUSIC_MENU = reg("bl_menu");
     public static final BLSoundEvent BL_MUSIC_DIMENSION = reg("bl_dimension");
+    public static final BLSoundEvent GREEBLING_MUSIC_1 = reg("greebling_music_1");
+    public static final BLSoundEvent GREEBLING_MUSIC_2 = reg("greebling_music_2");
     // Records
     public static final BLSoundEvent _16612 = reg("16612");
     public static final BLSoundEvent ACIENT = reg("ancient");
@@ -164,12 +166,15 @@ public class SoundRegistry {
     public static final BLSoundEvent ROOT_SPRITE_DEATH = reg("root_sprite_death");
     public static final BLSoundEvent ROOT_SPRITE_LIVING = reg("root_sprite_living");
     public static final BLSoundEvent ROOT_SPRITE_HURT = reg("root_sprite_hurt");
+    public static final BLSoundEvent GREEBLING_VANISH = reg("greebling_vanish");
     // Items
     public static final BLSoundEvent ROWBOAT_ROW_STARBOARD = reg("rowboat_row_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_PORT = reg("rowboat_row_port");
     public static final BLSoundEvent ROWBOAT_ROW_START_STARBOARD = reg("rowboat_row_start_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_START_PORT = reg("rowboat_row_start_port");
     public static final BLSoundEvent VOODOO_DOLL = reg("voodoo_doll");
+    public static final BLSoundEvent GEM_SINGER = reg("gem_singer");
+    public static final BLSoundEvent GEM_SINGER_ECHO = reg("gem_singer_echo");
     // Blocks
     public static final BLSoundEvent GRIND = reg("grind");
     public static final BLSoundEvent INFUSER_FINISHED = reg("infuser_finished");

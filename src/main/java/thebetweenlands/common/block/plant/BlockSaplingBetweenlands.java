@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenRubberTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
@@ -52,7 +53,7 @@ public class BlockSaplingBetweenlands extends BlockSapling implements IStateMapp
 
 	@Override
 	protected boolean canSustainBush(IBlockState state) {
-		return state.getBlock() == BlockRegistry.SWAMP_DIRT || state.getBlock() == BlockRegistry.SWAMP_GRASS || state.getBlock() == BlockRegistry.DEAD_GRASS || super.canSustainBush(state);
+		return SurfaceType.PLANT_DECORATION_SOIL.matches(state) || super.canSustainBush(state);
 	}
 
 	@Override

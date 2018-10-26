@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#T#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:items_misc",
+      "data": 26
+    },
+    "T": {
+      "item": "thebetweenlands:wight_heart"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:items_misc",
+    "data": 24
+  }
+}

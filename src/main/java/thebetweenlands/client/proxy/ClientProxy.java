@@ -46,8 +46,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import thebetweenlands.client.gui.GuiItemNaming;
 import thebetweenlands.client.gui.GuiLorePage;
-import thebetweenlands.client.gui.GuiPouchNaming;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
@@ -104,6 +104,7 @@ import thebetweenlands.client.render.entity.RenderGiantToad;
 import thebetweenlands.client.render.entity.RenderGreebling;
 import thebetweenlands.client.render.entity.RenderLeech;
 import thebetweenlands.client.render.entity.RenderLurker;
+import thebetweenlands.client.render.entity.RenderLurkerSkinRaft;
 import thebetweenlands.client.render.entity.RenderMireSnail;
 import thebetweenlands.client.render.entity.RenderMireSnailEgg;
 import thebetweenlands.client.render.entity.RenderMummyArm;
@@ -167,6 +168,7 @@ import thebetweenlands.client.render.tile.RenderSpikeTrap;
 import thebetweenlands.client.render.tile.RenderTarLootPot1;
 import thebetweenlands.client.render.tile.RenderTarLootPot2;
 import thebetweenlands.client.render.tile.RenderTarLootPot3;
+import thebetweenlands.client.render.tile.RenderWaystone;
 import thebetweenlands.client.render.tile.RenderWeedwoodSign;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
 import thebetweenlands.client.render.tile.RenderWisp;
@@ -177,6 +179,7 @@ import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
@@ -243,7 +246,7 @@ import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
-import thebetweenlands.common.item.misc.ItemHealthOrb;
+import thebetweenlands.common.item.misc.ItemBarkAmulet;
 import thebetweenlands.common.item.shields.ItemSwatShield;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.lib.ModInfo;
@@ -275,6 +278,7 @@ import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
 import thebetweenlands.common.tile.TileEntityTarLootPot3;
+import thebetweenlands.common.tile.TileEntityWaystone;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
@@ -366,9 +370,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			}
 		}
 
-		case GUI_LURKER_POUCH_NAMING:
+		case GUI_ITEM_RENAMING:
 			if(!player.getHeldItemMainhand().isEmpty()) {
-				return new GuiPouchNaming(player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
+				return new GuiItemNaming(player, x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
 			}
 			break;
 
@@ -428,6 +432,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		Map<Integer, ResourceLocation> map = this.getItemModelMap(item);
 		for(Entry<Integer, ResourceLocation> entry : map.entrySet()) {
 			ModelLoader.setCustomModelResourceLocation(item, entry.getKey(), (ModelResourceLocation) entry.getValue());
+		}
+		if (item instanceof ItemRegistry.ICustomMeshCallback) {
+			ModelLoader.setCustomMeshDefinition(item, ((ItemRegistry.ICustomMeshCallback) item).getMeshDefinition());
 		}
 	}
 	
@@ -511,7 +518,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceMask.class, RenderSpiritTreeFaceMask::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRootSprite.class, RenderRootSprite::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySmolSludgeWorm.class, RenderSmolSludgeWorm::new);
-		
+		RenderingRegistry.registerEntityRenderingHandler(EntityLurkerSkinRaft.class, RenderLurkerSkinRaft::new);
 
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
@@ -575,6 +582,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRepeller.class, new RenderRepeller());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPuffshroom.class, new TileEntityPuffshroomRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWormDungeonDoorWood.class, new RenderWormDungeonDoorWood());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWaystone.class, new RenderWaystone());
 
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
@@ -626,7 +634,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			}
 		}));
 		ItemRegistry.LIVING_WEEDWOOD_SHIELD.setTileEntityItemStackRenderer(new RenderLivingWeedwoodShield());
-
+		Item.getItemFromBlock(BlockRegistry.WAYSTONE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityWaystone.class));
 		
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
@@ -713,7 +721,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(EventSpoopy.class);
         MinecraftForge.EVENT_BUS.register(ArmSwingSpeedHandler.class);
         MinecraftForge.EVENT_BUS.register(BLSkyRenderer.class);
-        MinecraftForge.EVENT_BUS.register(ItemHealthOrb.class);
+        MinecraftForge.EVENT_BUS.register(ItemBarkAmulet.class);
 	}
 
 	private static FontRenderer pixelLove;

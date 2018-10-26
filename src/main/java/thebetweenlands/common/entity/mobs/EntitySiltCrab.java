@@ -37,12 +37,6 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
-
-	@Override
 	protected void initEntityAI() {
 		this.aiAttack = new EntityAIAttackMelee(this, 1.0D, true);
 		this.aiRunAway = new EntityAIAvoidEntity<EntityPlayer>(this, EntityPlayer.class, 10.0F, 0.7D, 0.7D);

@@ -28,6 +28,7 @@ public class ItemSpiritTreeFaceMask extends ItemBLArmor {
 
 	public ItemSpiritTreeFaceMask(String armorName, EntityFactory factory) {
 		super(BLMaterialRegistry.ARMOR_BONE, 2, EntityEquipmentSlot.HEAD, armorName);
+		this.setMaxDamage(0);
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 		this.factory = factory;
 	}

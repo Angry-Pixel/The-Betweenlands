@@ -72,6 +72,13 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		return this.geckoUsages > 0;
 	}
 
+	public void setGeckoUsages(int usages) {
+		this.geckoUsages = usages;
+		this.markDirty();
+		IBlockState state = this.world.getBlockState(this.pos);
+		this.world.notifyBlockUpdate(this.pos, state, state, 3);
+	}
+	
 	public int getGeckoUsages() {
 		return this.geckoUsages;
 	}
@@ -85,6 +92,7 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		this.geckoUsages = usages;
 		this.geckoName = name;
 		this.ticks = 0;
+		this.markDirty();
 		IBlockState state = this.world.getBlockState(this.pos);
 		this.world.notifyBlockUpdate(this.pos, state, state, 3);
 	}

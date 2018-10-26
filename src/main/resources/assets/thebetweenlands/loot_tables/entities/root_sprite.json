@@ -1,13 +1,39 @@
 {
   "pools": [
     {
-      "name": "root_sprite",
+      "name": "root_pods_1",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:root_pod",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "root_pods_2",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "empty",
+          "weight": 2
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:root_pod",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "plant_drops",
       "rolls": 1,
       "conditions": [],
       "entries": [
         {
           "type": "empty",
-          "weight": 8
+          "weight": 14
         },
         {
           "type": "item",
@@ -23,7 +49,7 @@
               ]
             }
           ],
-          "weight": 16
+          "weight": 14
         },
         {
           "type": "item",

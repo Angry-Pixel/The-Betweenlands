@@ -316,11 +316,14 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	}
 
 	private boolean isRequired() {
+		if(this.required) {
+			return true;
+		}
 		Minecraft mc = Minecraft.getMinecraft();
 		if(mc.player != null && mc.player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null) && mc.player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null).isInPortal()) {
 			return true;
 		}
-		return this.required || (mc.world != null && mc.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
+		return mc.world != null && mc.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
 	}
 
 	@Override

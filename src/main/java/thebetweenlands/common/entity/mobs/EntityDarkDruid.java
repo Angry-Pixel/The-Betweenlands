@@ -279,11 +279,6 @@ public class EntityDarkDruid extends EntityMob {
     }
 
     @Override
-    public boolean isAIDisabled() {
-        return false;
-    }
-
-    @Override
     public boolean getCanSpawnHere() {
         return super.getCanSpawnHere() && !this.world.containsAnyLiquid(this.getEntityBoundingBox());
     }

@@ -7,16 +7,39 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
+import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class EquipmentHelper {
+	/**
+	 * Returns the first item stack of the specified item, or empty if none is found
+	 * @param entity
+	 * @param item
+	 * @return
+	 */
+	public static ItemStack getEquipment(EnumEquipmentInventory inventory, Entity entity, Item item) {
+		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+			IInventory mainInv = cap.getInventory(inventory);
+			for(int i = 0; i < mainInv.getSizeInventory(); i++) {
+				ItemStack stack = mainInv.getStackInSlot(i);
+				if(!stack.isEmpty() && stack.getItem() == item) {
+					return stack;
+				}
+			}
+		}
+
+		return ItemStack.EMPTY;
+	}
+	
 	/**
 	 * Tries to equip the specified item, returns the leftover stack
 	 * @param player

@@ -12,6 +12,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
@@ -29,10 +30,11 @@ import thebetweenlands.common.block.terrain.BlockRubberLog;
 import thebetweenlands.common.item.tools.ItemBLBucket;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.tile.TileEntityRubberTap;
 import thebetweenlands.util.TileEntityHelper;
 
-public abstract class BlockRubberTap extends BlockHorizontal implements ITileEntityProvider {
+public abstract class BlockRubberTap extends BlockHorizontal implements ITileEntityProvider, ICustomItemBlock {
 	public static final PropertyInteger AMOUNT = PropertyInteger.create("amount", 0, 15);
 
 	protected static final AxisAlignedBB TAP_WEST_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.15D, 1.0D, 1.0D, 0.85D);
@@ -245,4 +247,9 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 	}
 
 	protected abstract ItemStack getBucket(boolean withRubber);
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
+	}
 }

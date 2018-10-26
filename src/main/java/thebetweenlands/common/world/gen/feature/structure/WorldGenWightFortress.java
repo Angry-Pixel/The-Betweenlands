@@ -1104,7 +1104,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		EntityFortressBossTeleporter tp = new EntityFortressBossTeleporter(world);
 		tp.setLocationAndAngles(pos.getX() + 16, pos.getY() + 30, pos.getZ() + 16, 0, 0);
 		tp.setTeleportDestination(new Vec3d(pos.getX() + 16, pos.getY() + 17 + 19.2D, pos.getZ() + 16));
-		tp.setBossSpawnPosition(new Vec3d(pos.getX() + 16, pos.getY() + 17 + 19 + 5.2D, pos.getZ() + 16));
+		tp.setBossSpawnPosition(new BlockPos(pos.getX() + 16, pos.getY() + 17 + 19 + 5.2D, pos.getZ() + 16));
 		world.spawnEntity(tp);
 		 
 		//floor3 (Boss fight Floor)

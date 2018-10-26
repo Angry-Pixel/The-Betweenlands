@@ -24,6 +24,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.BetweenstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.GreeblingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SporelingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SwampHagCaveSpawnEntry;
@@ -64,7 +65,8 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, (short) 65).setCanSpawnOnWater(true).setSpawnCheckRadius(32.0D));
 		entries.add(new SporelingSpawnEntry(1, EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
 		entries.add(new CaveSpawnEntry(2, EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
-
+		entries.add(new GreeblingSpawnEntry(12, (short) 10).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setGroupSpawnRadius(4).setSpawningInterval(24000));
+		
 		entries.add(new SurfaceSpawnEntry(3, EntityWight.class, (short) 5).setHostile(true).setSpawnCheckRadius(64.0D).setSpawningInterval(4000));
 		entries.add(new CaveSpawnEntry(4, EntityWight.class, (short) 16).setHostile(true).setSpawnCheckRadius(64.0D));
 		entries.add(new SurfaceSpawnEntry(5, EntityPeatMummy.class, (short) 12).setHostile(true).setSpawnCheckRadius(64.0D));

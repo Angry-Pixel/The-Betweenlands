@@ -13,6 +13,8 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -30,6 +32,7 @@ import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.LocalStorageImpl;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
@@ -37,20 +40,21 @@ import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 public class LocationStorage extends LocalStorageImpl implements ITickable {
 	private List<AxisAlignedBB> boundingBoxes = new ArrayList<>();
 	private AxisAlignedBB enclosingBoundingBox;
-	private String name;
 	private EnumLocationType type;
 	private int layer;
 	private LocationAmbience ambience = null;
-	private boolean visible = true;
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
 
+	protected GenericDataManager dataManager;
+
 	private TObjectIntMap<Entity> titleDisplayCooldowns = new TObjectIntHashMap<Entity>();
 
+	protected static final DataParameter<String> NAME = GenericDataManager.createKey(LocationStorage.class, DataSerializers.STRING);
+	protected static final DataParameter<Boolean> VISIBLE = GenericDataManager.createKey(LocationStorage.class, DataSerializers.BOOLEAN);
+
 	public LocationStorage(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
-		super(worldStorage, id, region);
-		this.name = "";
-		this.type = EnumLocationType.NONE;
+		this(worldStorage, id, region, "", EnumLocationType.NONE);
 	}
 
 	/**
@@ -60,10 +64,22 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public LocationStorage(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region, String name, EnumLocationType type) {
 		super(worldStorage, id, region);
-		this.name = name;
-		if(type == null)
+
+		this.dataManager = new GenericDataManager(this);
+
+		this.dataManager.register(NAME, name);
+		this.dataManager.register(VISIBLE, false);
+
+		if(type == null) {
 			type = EnumLocationType.NONE;
+		}
+
 		this.type = type;
+	}
+
+	@Override
+	public IGenericDataManagerAccess getDataManager() {
+		return this.dataManager;
 	}
 
 	/**
@@ -188,7 +204,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 * @return
 	 */
 	public LocationStorage setVisible(boolean visible) {
-		this.visible = visible;
+		this.dataManager.set(VISIBLE, visible);
 		return this;
 	}
 
@@ -235,19 +251,19 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 * @return
 	 */
 	public String getLocalizedName() {
-		return I18n.translateToLocal("location." + this.name + ".name");
+		return I18n.translateToLocal("location." + this.dataManager.get(NAME) + ".name");
 	}
 
 	public boolean hasLocalizedName() {
-		return I18n.canTranslate("location." + this.name + ".name");
+		return I18n.canTranslate("location." + this.dataManager.get(NAME) + ".name");
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		this.name = nbt.getString("name");
-		if(this.name.startsWith("translate:")) {
-			this.name = this.name.replaceFirst("translate:", "");
+		this.dataManager.set(NAME, nbt.getString("name"));
+		if(this.dataManager.get(NAME).startsWith("translate:")) {
+			this.dataManager.set(NAME, this.dataManager.get(NAME).replaceFirst("translate:", ""));
 			this.setDirty(true);
 		}
 		this.boundingBoxes.clear();
@@ -269,7 +285,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 			NBTTagCompound ambienceTag = nbt.getCompoundTag("ambience");
 			this.ambience = LocationAmbience.readFromNBT(this, ambienceTag);
 		}
-		this.visible = nbt.getBoolean("visible");
+		this.dataManager.set(VISIBLE, nbt.getBoolean("visible"));
 		this.locationSeed = nbt.getLong("seed");
 	}
 
@@ -286,7 +302,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setString("name", this.name);
+		nbt.setString("name", this.dataManager.get(NAME));
 		NBTTagList boundingBoxes = new NBTTagList();
 		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
 			NBTTagCompound boxNbt = new NBTTagCompound();
@@ -306,7 +322,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 			this.ambience.writeToNBT(ambienceTag);
 			nbt.setTag("ambience", ambienceTag);
 		}
-		nbt.setBoolean("visible", this.visible);
+		nbt.setBoolean("visible", this.dataManager.get(VISIBLE));
 		nbt.setLong("seed", this.locationSeed);
 		return nbt;
 	}
@@ -399,7 +415,15 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 * @return
 	 */
 	public String getName() {
-		return this.name;
+		return this.dataManager.get(NAME);
+	}
+
+	/**
+	 * Sets the location's name
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.dataManager.set(NAME, name);
 	}
 
 	/**
@@ -416,7 +440,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 * @return
 	 */
 	public boolean isVisible(Entity entity) {
-		return this.visible;
+		return this.dataManager.get(VISIBLE);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -435,10 +459,14 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 			Iterator<Entity> it = this.titleDisplayCooldowns.keySet().iterator();
 			while(it.hasNext()) {
 				Entity entity = it.next();
-				if(this.titleDisplayCooldowns.adjustValue(entity, -1)) {
-					if(this.titleDisplayCooldowns.get(entity) <= 0) {
-						it.remove();
+				if(this.isVisible(entity)) {
+					if(this.titleDisplayCooldowns.adjustValue(entity, -1)) {
+						if(this.titleDisplayCooldowns.get(entity) <= 0) {
+							it.remove();
+						}
 					}
+				} else {
+					it.remove();
 				}
 			}
 		}
@@ -585,10 +613,5 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public void onBreakBlock(BreakEvent event) {
 
-	}
-
-	@Override
-	public IGenericDataManagerAccess getDataManager() {
-		return null;
 	}
 }

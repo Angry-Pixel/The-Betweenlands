@@ -84,11 +84,6 @@ public class EntityDarkLight extends EntityFlyingMob implements IEntityBL {
 	}
 
 	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
-	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAIFlyRandomly<EntityDarkLight>(this) {
 			@Override

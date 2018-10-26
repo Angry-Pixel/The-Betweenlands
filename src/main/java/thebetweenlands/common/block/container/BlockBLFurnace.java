@@ -20,6 +20,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -42,9 +43,11 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.IParticleCollidable;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 
-public class BlockBLFurnace extends BlockContainer implements IParticleCollidable {
+public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock, IParticleCollidable {
+
 	private final boolean isBurning;
 	private static boolean keepInventory;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
@@ -271,4 +274,12 @@ public class BlockBLFurnace extends BlockContainer implements IParticleCollidabl
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return face == EnumFacing.UP ? BlockFaceShape.CENTER_SMALL : BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		if(this.isBurning) {
+			return null;
+		}
+		return ICustomItemBlock.getDefaultItemBlock(this);
+	}
 }

@@ -9,6 +9,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -100,38 +101,74 @@ public class ItemEquipmentHandler {
 
 	@SubscribeEvent
 	public static void onItemUse(PlayerInteractEvent event) {
-		if(event instanceof PlayerInteractEvent.RightClickBlock || event instanceof PlayerInteractEvent.RightClickEmpty) {
-			EntityPlayer player = event.getEntityPlayer();
-			ItemStack heldItem = event.getItemStack();
-
-			if(event instanceof PlayerInteractEvent.RightClickEmpty) {
-				heldItem = player.getHeldItemMainhand();
+		EntityPlayer player = event.getEntityPlayer();
+		if(event instanceof PlayerInteractEvent.RightClickBlock) {
+			tryEquip(player, event.getHand(), false);
+		} else if(event instanceof PlayerInteractEvent.RightClickEmpty) {
+			if(!tryEquip(player, EnumHand.MAIN_HAND, true)) {
+				tryEquip(player, EnumHand.OFF_HAND, true);
 			}
+		}
+	}
 
-			if(player != null && !heldItem.isEmpty() && heldItem.getItem() instanceof IEquippable) {
-				IEquippable equippable = (IEquippable) heldItem.getItem();
+	private static boolean tryEquip(EntityPlayer player, EnumHand hand, boolean packet) {
+		ItemStack heldItem = player.getHeldItem(hand);
 
-				if(equippable.canEquipOnRightClick(heldItem, player, player)) {
-					if(event instanceof PlayerInteractEvent.RightClickEmpty) {
-						//RightClickEmpty is client side only, must send packet
-						int slot = player.inventory.getSlotFor(heldItem);
-						if(slot >= 0) {
-							TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(player.inventory.currentItem, player));
+		if(player != null && !heldItem.isEmpty() && heldItem.getItem() instanceof IEquippable) {
+			IEquippable equippable = (IEquippable) heldItem.getItem();
+
+			if(equippable.canEquipOnRightClick(heldItem, player, player)) {
+				if(packet) {
+					if(player.world.isRemote) {
+						ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, true);
+
+						if(result.isEmpty() || result.getCount() != heldItem.getCount()) {
+							if(hand == EnumHand.OFF_HAND) {
+								TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(-1, player));
+
+								player.swingArm(hand);
+
+								return true;
+							} else {
+								int slot = player.inventory.getSlotFor(heldItem);
+								if(slot >= 0) {
+									TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(slot, player));
+
+									player.swingArm(hand);
+
+									return true;
+								}
+							}
+						}
+					}
+				} else {
+					if(player.world.isRemote) {
+						ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, true);
+
+						if(result.isEmpty() || result.getCount() != heldItem.getCount()) {
+							player.swingArm(hand);
+							return true;
 						}
 					} else {
 						ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, false);
 
 						if(result.isEmpty() || result.getCount() != heldItem.getCount()) {
 							if(!player.capabilities.isCreativeMode) {
-								player.setHeldItem(event.getHand(), result);
+								player.setHeldItem(hand, result);
 							}
 
-							player.swingArm(event.getHand());
+							player.swingArm(hand);
+
+							player.sendStatusMessage(new TextComponentTranslation("chat.equipment.equipped", new TextComponentTranslation(heldItem.getUnlocalizedName() + ".name")), true);
+
+							return true;
 						}
 					}
 				}
 			}
 		}
+
+		return false;
 	}
 
 	@SubscribeEvent

@@ -39,7 +39,7 @@ public class ParticleSimple extends Particle implements IParticleSpriteReceiver 
 
 	public static final class GenericFactory extends ParticleFactory<GenericFactory, ParticleSimple> {
 		public GenericFactory(ResourceLocation texture) {
-			super(ParticleSimple.class, ParticleTextureStitcher.create(ParticleSimple.class, texture).setSplitAnimations(true));
+			super(ParticleSimple.class, ParticleTextureStitcher.create(ParticleSimple.class, texture));
 		}
 
 		@Override

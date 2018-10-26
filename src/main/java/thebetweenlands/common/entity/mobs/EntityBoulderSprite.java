@@ -56,6 +56,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -591,15 +592,19 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	}
 
 	protected void bumpWall(EnumFacing dir) {
-		for(int so = -1; so <= 1; so++) {
-			for(int yo = 0; yo <= 1; yo++) {
-				BlockPos pos = this.getPosition().offset(dir).add(dir.getFrontOffsetX() == 0 ? so : 0, yo, dir.getFrontOffsetZ() == 0 ? so : 0);
-				if(this.world.isAirBlock(pos.offset(dir.getOpposite()))) {
-					IBlockState hitState = this.world.getBlockState(pos);
-					float hardness = hitState.getBlockHardness(this.world, pos);
-					if(!hitState.getBlock().isAir(hitState, this.world, pos) && hardness >= 0 && hardness <= 2.5F && this.rand.nextInt(yo + so + 2) == 0) {
-						this.world.playEvent(2001, pos, Block.getStateId(hitState));
-						this.world.setBlockToAir(pos);
+		if(ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
+			for(int so = -1; so <= 1; so++) {
+				for(int yo = 0; yo <= 1; yo++) {
+					BlockPos pos = this.getPosition().offset(dir).add(dir.getFrontOffsetX() == 0 ? so : 0, yo, dir.getFrontOffsetZ() == 0 ? so : 0);
+					if(this.world.isAirBlock(pos.offset(dir.getOpposite()))) {
+						IBlockState hitState = this.world.getBlockState(pos);
+						float hardness = hitState.getBlockHardness(this.world, pos);
+						if(!hitState.getBlock().isAir(hitState, this.world, pos) && hardness >= 0 && hardness <= 2.5F && this.rand.nextInt(yo + so + 2) == 0
+								&& hitState.getBlock().canEntityDestroy(hitState, this.world, pos, this)
+								&& ForgeEventFactory.onEntityDestroyBlock(this, pos, hitState)) {
+							this.world.playEvent(2001, pos, Block.getStateId(hitState));
+							this.world.setBlockToAir(pos);
+						}
 					}
 				}
 			}
