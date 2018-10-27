@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -20,6 +21,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -163,6 +165,28 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		}
 
 		sludge_worm_1.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0);
+		
+		for(MultiPartEntityPart part : this.sludge_worm_Array) {
+			part.prevRotationYaw = part.rotationYaw;
+			part.prevRotationPitch = part.rotationPitch;
+			
+			if(part != this.sludge_worm_1) {
+				part.prevPosX = part.lastTickPosX = part.posX;
+				part.prevPosY = part.lastTickPosY = part.posY;
+				part.prevPosZ = part.lastTickPosZ = part.posZ;
+				
+				if(part.posY < this.posY && this.world.collidesWithAnyBlock(part.getEntityBoundingBox())) {
+					part.move(MoverType.SELF, 0, 0.1D, 0);
+					part.motionY = 0.0D;
+				} else if(this.onGround) {
+					part.motionY -= 0.08D;
+				}
+				
+				part.motionY *= 0.98;
+				part.move(MoverType.SELF, 0, part.motionY, 0);
+			}
+		}
+		
 		movePiecePos(sludge_worm_2, sludge_worm_1, 4.5F, 4F);
 		movePiecePos(sludge_worm_3, sludge_worm_2, 4.5F, 4F);
 		movePiecePos(sludge_worm_4, sludge_worm_3, 4.5F, 4F);
@@ -178,15 +202,18 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		if (destinationPart.posY - targetPart.posY < -0.5D)
 			speed = 1.5F;
 		
-		targetPart.prevPosX = targetPart.lastTickPosX = targetPart.posX;
-		targetPart.prevPosY = targetPart.lastTickPosY = targetPart.posY;
-		targetPart.prevPosZ = targetPart.lastTickPosZ = targetPart.posZ;
-		targetPart.prevRotationYaw = targetPart.rotationYaw;
-		targetPart.prevRotationPitch = targetPart.rotationPitch;
+		Vec3d diff = destinationPart.getPositionVector().subtract(targetPart.getPositionVector());
+		double len = diff.lengthVector();
 		
-		targetPart.posX += ((destinationPart.posX - targetPart.posX) / speed);
-		targetPart.posY += ((destinationPart.posY - targetPart.posY) / speed);
-		targetPart.posZ += ((destinationPart.posZ - targetPart.posZ) / speed);
+		double maxDst = 0.3D;
+		
+		if(len > maxDst) {
+			Vec3d correction = diff.scale(1.0D / len * (len - maxDst));
+			targetPart.posX += correction.x;
+			targetPart.posY += correction.y;
+			targetPart.posZ += correction.z;
+		}
+		
 		targetPart.rotationYaw += ((destinationPart.rotationYaw - targetPart.rotationYaw) / yawSpeed);
 		targetPart.rotationPitch = 0;
 		
