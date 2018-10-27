@@ -64,13 +64,15 @@ public class RenderSmolSludgeWorm extends RenderLiving<EntitySmolSludgeWorm> {
         double ry = ey - y;
         double rz = ez - z;
         
-		renderBodyPart(entity, entity.sludge_worm_2, entity.sludge_worm_1, rx, ry, rz, 1, avgWibbleStrength, partialTicks);
-		renderBodyPart(entity, entity.sludge_worm_3, entity.sludge_worm_2, rx, ry, rz, 2, avgWibbleStrength, partialTicks);
-		renderBodyPart(entity, entity.sludge_worm_4, entity.sludge_worm_3, rx, ry, rz, 3, avgWibbleStrength, partialTicks);
-		renderBodyPart(entity, entity.sludge_worm_5, entity.sludge_worm_4, rx, ry, rz, 4, avgWibbleStrength, partialTicks);
-		renderBodyPart(entity, entity.sludge_worm_6, entity.sludge_worm_5, rx, ry, rz, 5, avgWibbleStrength, partialTicks);
-		renderBodyPart(entity, entity.sludge_worm_7, entity.sludge_worm_6, rx, ry, rz, 4, avgWibbleStrength, partialTicks);
-		renderBodyPart(entity, entity.sludge_worm_8, entity.sludge_worm_7, rx, ry, rz, 3, avgWibbleStrength, partialTicks);
+        float zOffset = 0;
+        
+		renderBodyPart(entity, entity.sludge_worm_2, entity.sludge_worm_1, rx, ry, rz, 1, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
+		renderBodyPart(entity, entity.sludge_worm_3, entity.sludge_worm_2, rx, ry, rz, 2, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
+		renderBodyPart(entity, entity.sludge_worm_4, entity.sludge_worm_3, rx, ry, rz, 3, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
+		renderBodyPart(entity, entity.sludge_worm_5, entity.sludge_worm_4, rx, ry, rz, 4, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
+		renderBodyPart(entity, entity.sludge_worm_6, entity.sludge_worm_5, rx, ry, rz, 5, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
+		renderBodyPart(entity, entity.sludge_worm_7, entity.sludge_worm_6, rx, ry, rz, 4, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
+		renderBodyPart(entity, entity.sludge_worm_8, entity.sludge_worm_7, rx, ry, rz, 3, avgWibbleStrength, zOffset -= 0.001F, partialTicks);
 		renderTailPart(entity, entity.sludge_worm_9, entity.sludge_worm_8, rx, ry, rz, 2, avgWibbleStrength,  partialTicks);
 		
 		GlStateManager.popMatrix();
@@ -91,7 +93,7 @@ public class RenderSmolSludgeWorm extends RenderLiving<EntitySmolSludgeWorm> {
 		GlStateManager.popMatrix();
 	}
 
-	private void renderBodyPart(EntitySmolSludgeWorm entity, MultiPartEntityPart part, MultiPartEntityPart prevPart, double rx, double ry, double rz, int frame, float avgWibbleStrength, float partialTicks) {
+	private void renderBodyPart(EntitySmolSludgeWorm entity, MultiPartEntityPart part, MultiPartEntityPart prevPart, double rx, double ry, double rz, int frame, float avgWibbleStrength, float zOffset, float partialTicks) {
 		bindTexture(TEXTURE_BODY);
 		
 		double x = part.lastTickPosX + (part.posX - part.lastTickPosX) * (double)partialTicks - rx;
@@ -105,7 +107,7 @@ public class RenderSmolSludgeWorm extends RenderLiving<EntitySmolSludgeWorm> {
         float wibbleStrength = Math.min(avgWibbleStrength, MathHelper.clamp(1.0F - (float)Math.abs(yawInterpolant) / 60.0F, 0, 1));
         
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y - 1.125f, z);// GlStateManager.translate(x, y, z);
+		GlStateManager.translate(x, y - 1.125f + zOffset, z);// GlStateManager.translate(x, y, z);
 		//GlStateManager.scale(-1F, -1F, 1F);
 		GlStateManager.rotate(-yaw, 0, 1F, 0);
 		model.renderBody(entity, frame, wibbleStrength, partialTicks);
