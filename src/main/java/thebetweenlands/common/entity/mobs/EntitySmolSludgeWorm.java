@@ -20,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -47,6 +48,8 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 
 	Random rand = new Random();
 
+	private AxisAlignedBB renderBoundingBox;
+	
 	public EntitySmolSludgeWorm(World world) {
 		super(world);
 		setSize(0.4375F, 0.3125F);
@@ -69,7 +72,8 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
 		targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityLivingBase.class, true));
-
+		
+		this.renderBoundingBox = this.getEntityBoundingBox();
 	}
 
 	protected void applyEntityAttributes() {
@@ -105,6 +109,11 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		}
 		if (ticksExisted < 20) {
 			motionY *= 0.65F;
+		}
+		
+		this.renderBoundingBox = this.getEntityBoundingBox();
+		for(MultiPartEntityPart part : this.sludge_worm_Array) {
+			this.renderBoundingBox = this.renderBoundingBox.union(part.getEntityBoundingBox());
 		}
 	}
 	
@@ -284,4 +293,9 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
        playSound(SoundRegistry.SNAIL_LIVING, 0.5F, 1F);
     }
 
+	@SideOnly(Side.CLIENT)
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return this.renderBoundingBox;
+	}
 }

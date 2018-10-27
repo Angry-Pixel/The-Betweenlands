@@ -64,8 +64,6 @@ public class RenderSmolSludgeWorm extends RenderLiving<EntitySmolSludgeWorm> {
         double ry = ey - y;
         double rz = ez - z;
         
-		GlStateManager.pushMatrix();
-		
 		renderBodyPart(entity, entity.sludge_worm_2, entity.sludge_worm_1, rx, ry, rz, 1, avgWibbleStrength, partialTicks);
 		renderBodyPart(entity, entity.sludge_worm_3, entity.sludge_worm_2, rx, ry, rz, 2, avgWibbleStrength, partialTicks);
 		renderBodyPart(entity, entity.sludge_worm_4, entity.sludge_worm_3, rx, ry, rz, 3, avgWibbleStrength, partialTicks);
@@ -74,11 +72,8 @@ public class RenderSmolSludgeWorm extends RenderLiving<EntitySmolSludgeWorm> {
 		renderBodyPart(entity, entity.sludge_worm_7, entity.sludge_worm_6, rx, ry, rz, 4, avgWibbleStrength, partialTicks);
 		renderBodyPart(entity, entity.sludge_worm_8, entity.sludge_worm_7, rx, ry, rz, 3, avgWibbleStrength, partialTicks);
 		renderTailPart(entity, entity.sludge_worm_9, entity.sludge_worm_8, rx, ry, rz, 2, avgWibbleStrength,  partialTicks);
-                                                    
-		GlStateManager.popMatrix();
 		
 		GlStateManager.popMatrix();
-
 	}
 
 	private void renderHead(EntitySmolSludgeWorm entity, int frame, double x, double y, double z, float yaw, float avgWibbleStrength, float partialTicks) {
