@@ -101,15 +101,22 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		setHitBoxes();
 	}
 
+	protected float getHeadMotionYMultiplier() {
+		return this.ticksExisted < 20 ? 0.65F : 1.0F;
+	}
+	
+	protected float getTailMotionYMultiplier() {
+		return this.ticksExisted < 20 ? 0.0F : 1.0F;
+	}
+	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		if(this.world.isRemote && this.ticksExisted % 10 == 0) {
 			this.spawnParticles(this.world, this.posX, this.posY, this.posZ, this.rand);
 		}
-		if (ticksExisted < 20) {
-			motionY *= 0.65F;
-		}
+		
+		motionY *= this.getHeadMotionYMultiplier();
 		
 		this.renderBoundingBox = this.getEntityBoundingBox();
 		for(MultiPartEntityPart part : this.sludge_worm_Array) {
@@ -188,12 +195,12 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 				if(part.posY < this.posY && this.world.collidesWithAnyBlock(part.getEntityBoundingBox())) {
 					part.move(MoverType.SELF, 0, 0.1D, 0);
 					part.motionY = 0.0D;
-				} else if(this.onGround) {
-					part.motionY -= 0.08D;
 				}
 				
-				part.motionY *= 0.98;
 				part.move(MoverType.SELF, 0, part.motionY, 0);
+				
+				part.motionY -= 0.08D;
+				part.motionY *= 0.98D * this.getTailMotionYMultiplier();
 			}
 		}
 		
