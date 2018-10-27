@@ -203,18 +203,49 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		if (destinationPart.posY - targetPart.posY < -0.5D)
 			speed = 1.5F;
 		
-		Vec3d diff = destinationPart.getPositionVector().subtract(targetPart.getPositionVector());
-		double len = diff.lengthVector();
+		double movementTolerance = 0.05D;
+		double maxDist = 0.3D;
 		
-		double maxDst = 0.3D;
+		boolean correctY = false;
 		
-		if(len > maxDst) {
-			Vec3d correction = diff.scale(1.0D / len * (len - maxDst));
-			targetPart.posX += correction.x;
-			targetPart.posY += correction.y;
-			targetPart.posZ += correction.z;
+		for(int i = 0; i < 5; i++) {
+			Vec3d diff = destinationPart.getPositionVector().subtract(targetPart.getPositionVector());
+			double len = diff.lengthVector();
+			
+			if(len > maxDist) {
+				Vec3d correction = diff.scale(1.0D / len * (len - maxDist));
+				targetPart.posX += correction.x;
+				targetPart.posZ += correction.z;
+				
+				targetPart.setPosition(targetPart.posX, targetPart.posY, targetPart.posZ);
+				
+				double cy = targetPart.posY;
+				
+				targetPart.move(MoverType.SELF, 0, correction.y, 0);
+				
+				if(Math.abs((targetPart.posY - cy) - correction.y) <= movementTolerance) {
+					correctY = true;
+					break;
+				}
+			}
 		}
 		
+		//Welp, failed to move smoothly along Y, just clip
+		if(!correctY) {
+			Vec3d diff = destinationPart.getPositionVector().subtract(targetPart.getPositionVector());
+			double len = diff.lengthVector();
+				
+			if(len > maxDist) {
+				Vec3d correction = diff.scale(1.0D / len * (len - maxDist));
+				
+				targetPart.posX += correction.x;
+				targetPart.posY += correction.y;
+				targetPart.posZ += correction.z;
+			}
+		}
+		
+		
+		Vec3d diff = new Vec3d(destinationPart.posX, 0, destinationPart.posZ).subtract(new Vec3d(targetPart.posX, 0, targetPart.posZ));
 		float destYaw = (float)Math.toDegrees(Math.atan2(diff.z, diff.x)) - 90;
 		
 		double yawDiff = (destYaw - targetPart.rotationYaw) % 360.0F;
@@ -224,7 +255,6 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		
 		targetPart.rotationPitch = 0;
 		
-		//Use setPosition because setLocationAndAngles overrides prev pos/rot
 		targetPart.setPosition(targetPart.posX, targetPart.posY, targetPart.posZ);
 	}
 
