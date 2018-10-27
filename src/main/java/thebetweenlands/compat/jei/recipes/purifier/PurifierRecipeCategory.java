@@ -3,13 +3,12 @@ package thebetweenlands.compat.jei.recipes.purifier;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
 import thebetweenlands.util.TranslationHelper;
@@ -66,10 +65,10 @@ public class PurifierRecipeCategory implements IRecipeCategory {
         recipeLayout.getItemStacks().init(2, false, 84, 21);
         recipeLayout.getFluidStacks().init(3, true, 1, 1, 10, 58, Fluid.BUCKET_VOLUME * 16, true, tank);
 
-        recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
-        recipeLayout.getItemStacks().set(1, ingredients.getInputs(ItemStack.class).get(1));
-        recipeLayout.getItemStacks().set(2, ingredients.getOutputs(ItemStack.class).get(0));
-        recipeLayout.getFluidStacks().set(3, ingredients.getInputs(FluidStack.class).get(0));
+        recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        recipeLayout.getItemStacks().set(1, ingredients.getInputs(VanillaTypes.ITEM).get(1));
+        recipeLayout.getItemStacks().set(2, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
+        recipeLayout.getFluidStacks().set(3, ingredients.getInputs(VanillaTypes.FLUID).get(0));
     }
 
     @Override

@@ -1,7 +1,7 @@
 package thebetweenlands.compat.jei.recipes.druid_altar;
 
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
@@ -18,7 +18,7 @@ public class DruidAltarRecipeJEI implements IRecipeWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setInputs(ItemStack.class, inputs);
-        ingredients.setOutput(ItemStack.class, output);
+        ingredients.setInputs(VanillaTypes.ITEM, inputs);
+        ingredients.setOutput(VanillaTypes.ITEM, output);
     }
 }

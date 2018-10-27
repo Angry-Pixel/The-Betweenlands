@@ -1,6 +1,7 @@
 package thebetweenlands.compat.jei.recipes.misc;
 
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -36,7 +37,7 @@ public class MarshRunnerBootsRecipeJEI implements ICraftingRecipeWrapper {
         inputLists.add(NonNullList.from(ItemStack.EMPTY, new ItemStack(ItemRegistry.RUBBER_BOOTS)));
         inputLists.add(vials);
 
-        ingredients.setInputLists(ItemStack.class, inputLists);
-        ingredients.setOutput(ItemStack.class, new ItemStack(ItemRegistry.MARSH_RUNNER_BOOTS));
+        ingredients.setInputLists(VanillaTypes.ITEM, inputLists);
+        ingredients.setOutput(VanillaTypes.ITEM, new ItemStack(ItemRegistry.MARSH_RUNNER_BOOTS));
     }
 }

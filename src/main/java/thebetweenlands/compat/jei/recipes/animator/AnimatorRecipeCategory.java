@@ -4,6 +4,7 @@ import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IGuiIngredientGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -62,15 +63,15 @@ public class AnimatorRecipeCategory implements IRecipeCategory {
 
         recipeLayout.getItemStacks().init(3, false, 45, 15);
 
-        IGuiIngredientGroup<ItemStack> ingredientsGroup = recipeLayout.getIngredientsGroup(ItemStack.class);
+        IGuiIngredientGroup<ItemStack> ingredientsGroup = recipeLayout.getIngredientsGroup(VanillaTypes.ITEM);
         if (recipeLayout.getFocus() != null && recipeLayout.getFocus().getMode() == IFocus.Mode.INPUT)
             ingredientsGroup.setOverrideDisplayFocus(null);
 
-        recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
-        recipeLayout.getItemStacks().set(1, ingredients.getInputs(ItemStack.class).get(1));
-        recipeLayout.getItemStacks().set(2, ingredients.getInputs(ItemStack.class).get(2));
-        if (ingredients.getOutputs(ItemStack.class).size() > 0) {
-            recipeLayout.getItemStacks().set(3, ingredients.getOutputs(ItemStack.class).get (0));
+        recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        recipeLayout.getItemStacks().set(1, ingredients.getInputs(VanillaTypes.ITEM).get(1));
+        recipeLayout.getItemStacks().set(2, ingredients.getInputs(VanillaTypes.ITEM).get(2));
+        if (ingredients.getOutputs(VanillaTypes.ITEM).size() > 0) {
+            recipeLayout.getItemStacks().set(3, ingredients.getOutputs(VanillaTypes.ITEM).get (0));
         }
 
         if (recipeWrapper instanceof AnimatorRecipeJEI)
@@ -86,6 +87,6 @@ public class AnimatorRecipeCategory implements IRecipeCategory {
 
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 }
