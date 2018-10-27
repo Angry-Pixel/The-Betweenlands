@@ -14,6 +14,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -190,7 +191,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
             if (slotIndex == ouputIndex) {
                 boolean showAdvanced = Minecraft.getMinecraft().gameSettings.advancedItemTooltips || GuiScreen.isShiftKeyDown();
                 if (showAdvanced) {
-                    tooltip.add(TextFormatting.GRAY + registryName.getResourcePath());
+                    tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocalFormatted("jei.tooltip.recipe.id", registryName.toString()));
                 }
             }
         });

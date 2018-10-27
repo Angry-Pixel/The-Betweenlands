@@ -37,7 +37,7 @@ public class CircleGemsRecipeJEI implements ICraftingRecipeWrapper, ICustomCraft
 
     public static void updateApplicableItems() {
         applicableItems.clear();
-        for (ItemStack stack: BetweenlandsJEIPlugin.ingredientRegistry.getAllIngredients(ItemStack.class)) {
+        for (ItemStack stack: BetweenlandsJEIPlugin.ingredientRegistry.getAllIngredients(VanillaTypes.ITEM)) {
             if (!stack.isEmpty() && CircleGemHelper.isApplicable(stack.getItem()) && (BetweenlandsConfig.COMPATIBILITY.showNonBLGemRecipes || ModInfo.ID.equals(stack.getItem().getRegistryName().getResourceDomain())))
                 applicableItems.add(stack);
         }
