@@ -2,6 +2,7 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
@@ -17,11 +18,14 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart, IMob, IEntityBL {
 
@@ -107,7 +111,7 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 			double a = Math.toRadians(renderYawOffset);
 			double offSetX = -Math.sin(a) * 0D + rand.nextDouble() * 0.3D - rand.nextDouble() * 0.3D;
 			double offSetZ = Math.cos(a) * 0D + rand.nextDouble() * 0.3D - rand.nextDouble() * 0.3D;
-			BLParticles.TAR_BEAST_DRIP.spawn(world , x + offSetX, y + 0.1D, z + offSetZ).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+			BLParticles.TAR_BEAST_DRIP.spawn(world , x + offSetX, y, z + offSetZ).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
 		}
 	}
 
@@ -118,7 +122,7 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 			damageWorm(source, dmg);
 			return true;
 		} else {
-			dmg = 0;
+			dmg *= 0.5F;
 			return false;
 		}
 	}
@@ -185,5 +189,26 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 	public World getWorld() {
 		return getEntityWorld();
 	}
+
+	// temp Sounds until we have proper ones
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundRegistry.SNAIL_LIVING;
+	}
+
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
+		return SoundRegistry.SNAIL_HURT;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.SNAIL_DEATH;
+	}
+
+	@Override
+    protected void playStepSound(BlockPos pos, Block blockIn) {
+       playSound(SoundRegistry.SNAIL_LIVING, 0.5F, 1F);
+    }
 
 }

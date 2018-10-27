@@ -70,7 +70,9 @@ public class RenderSmolSludgeWorm extends RenderLiving<EntitySmolSludgeWorm> {
 		GlStateManager.translate(x, y, z);
 		GlStateManager.scale(-1F, -1F, 1F);
 		GlStateManager.rotate(180F + yaw, 0, 1F, 0);
+		GlStateManager.disableCull();
 		model.renderTail(entity, frame, partialTicks);
+		GlStateManager.enableCull();
 		GlStateManager.popMatrix();
 	}
 

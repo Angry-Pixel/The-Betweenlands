@@ -16,6 +16,9 @@ public class ModelSmolSludgeWorm extends ModelBase {
 	public ModelRenderer mouth_bottom;
 	public ModelRenderer jaw_bottom_left;
 	public ModelRenderer jaw_bottom_right;
+	public ModelRenderer butt;
+    public ModelRenderer pincer_thingy_i_guess_a;
+    public ModelRenderer pincer_thingy_i_guess_b;
 
 	public ModelRenderer body1;
 
@@ -46,9 +49,23 @@ public class ModelSmolSludgeWorm extends ModelBase {
 		head1.addChild(jaw_bottom_left);
 		head1.addChild(mouth_bottom);
 
-		body1 = new ModelRenderer(this, 0, 0);
+		body1 = new ModelRenderer(this, 0, 15);
 		body1.setRotationPoint(0.0F, 21.5F, 0.0F);
 		body1.addBox(-2.5F, -2.5F, -2.5F, 5, 5, 5, 0.0F);
+
+		pincer_thingy_i_guess_b = new ModelRenderer(this, 7, 9);
+        pincer_thingy_i_guess_b.setRotationPoint(0.0F, 2.0F, 2.0F);
+        pincer_thingy_i_guess_b.addBox(-0.5F, -2.0F, 0.0F, 1, 2, 3, 0.0F);
+        setRotation(pincer_thingy_i_guess_b, 0.18203784098300857F, 0.0F, 0.0F);
+        butt = new ModelRenderer(this, 0, 0);
+        butt.setRotationPoint(0.0F, 21.5F, 0.0F);
+        butt.addBox(-2.0F, -1.5F, -1.5F, 4, 4, 4, 0.0F);
+        pincer_thingy_i_guess_a = new ModelRenderer(this, 0, 9);
+        pincer_thingy_i_guess_a.setRotationPoint(0.0F, -0.2F, 2.5F);
+        pincer_thingy_i_guess_a.addBox(-0.5F, 0.0F, 0.0F, 1, 2, 2, 0.0F);
+        setRotation(pincer_thingy_i_guess_a, -0.22759093446006054F, 0.0F, 0.0F);
+        pincer_thingy_i_guess_a.addChild(pincer_thingy_i_guess_b);
+        butt.addChild(pincer_thingy_i_guess_a);
 	}
 
 	public void renderHead(EntitySmolSludgeWorm worm, int frame, float partialTicks) {
@@ -75,8 +92,8 @@ public class ModelSmolSludgeWorm extends ModelBase {
 	public void renderTail(EntitySmolSludgeWorm worm, int frame, float partialTicks) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
 		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F;
-		GlStateManager.translate(0F, - 0.0625F - wibble * 0.5F, 0F + wibble * 2F);
-		body1.render(0.0625F);
+		GlStateManager.translate(0F, - 0.0625F - wibble * 0.5F, - 0.0625F + wibble * 2F);
+		butt.render(0.0625F);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
