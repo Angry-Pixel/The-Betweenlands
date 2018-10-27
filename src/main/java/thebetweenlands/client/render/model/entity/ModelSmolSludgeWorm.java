@@ -68,9 +68,9 @@ public class ModelSmolSludgeWorm extends ModelBase {
         butt.addChild(pincer_thingy_i_guess_a);
 	}
 
-	public void renderHead(EntitySmolSludgeWorm worm, int frame, float partialTicks) {
+	public void renderHead(EntitySmolSludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
-		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F;
+		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength;
 		float jaw_wibble = MathHelper.sin(1F + (smoothedTicks) * 0.5F) * 0.5F;
 		GlStateManager.translate(0F, - 0.0625F - wibble * 0.5F, 0F + wibble * 2F);
 		head1.render(0.0625F);
@@ -81,17 +81,17 @@ public class ModelSmolSludgeWorm extends ModelBase {
 	    mouth_left.rotateAngleY = 0F + jaw_wibble;
 	}
 
-	public void renderBody(EntitySmolSludgeWorm worm, int frame, float partialTicks) {
+	public void renderBody(EntitySmolSludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
-		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F;
+		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength;
 		GlStateManager.translate(0F, 0F - wibble, 0F - wibble * 2F);
 		GlStateManager.scale(1F + wibble * 2F, 1F + wibble, 1.25F - wibble * 1.5F);
 		body1.render(0.0625F);
 	}
 	
-	public void renderTail(EntitySmolSludgeWorm worm, int frame, float partialTicks) {
+	public void renderTail(EntitySmolSludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
-		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F;
+		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength;
 		GlStateManager.translate(0F, - 0.0625F - wibble * 0.5F, - 0.0625F + wibble * 2F);
 		butt.render(0.0625F);
 	}

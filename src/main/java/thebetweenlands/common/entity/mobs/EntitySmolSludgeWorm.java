@@ -21,6 +21,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -187,14 +188,14 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 			}
 		}
 		
-		movePiecePos(sludge_worm_2, sludge_worm_1, 4.5F, 4F);
-		movePiecePos(sludge_worm_3, sludge_worm_2, 4.5F, 4F);
-		movePiecePos(sludge_worm_4, sludge_worm_3, 4.5F, 4F);
-		movePiecePos(sludge_worm_5, sludge_worm_4, 4.5F, 4F);
-		movePiecePos(sludge_worm_6, sludge_worm_5, 4.5F, 4F);
-		movePiecePos(sludge_worm_7, sludge_worm_6, 4.5F, 4F);
-		movePiecePos(sludge_worm_8, sludge_worm_7, 4.5F, 3F);
-		movePiecePos(sludge_worm_9, sludge_worm_8, 4.5F, 3F);
+		movePiecePos(sludge_worm_2, sludge_worm_1, 4.5F, 2F);
+		movePiecePos(sludge_worm_3, sludge_worm_2, 4.5F, 2F);
+		movePiecePos(sludge_worm_4, sludge_worm_3, 4.5F, 2F);
+		movePiecePos(sludge_worm_5, sludge_worm_4, 4.5F, 2F);
+		movePiecePos(sludge_worm_6, sludge_worm_5, 4.5F, 2F);
+		movePiecePos(sludge_worm_7, sludge_worm_6, 4.5F, 2F);
+		movePiecePos(sludge_worm_8, sludge_worm_7, 4.5F, 2F);
+		movePiecePos(sludge_worm_9, sludge_worm_8, 4.5F, 2F);
 	}
 
 	public void movePiecePos(MultiPartEntityPart targetPart, MultiPartEntityPart destinationPart, float speed, float yawSpeed) {
@@ -214,7 +215,13 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 			targetPart.posZ += correction.z;
 		}
 		
-		targetPart.rotationYaw += ((destinationPart.rotationYaw - targetPart.rotationYaw) / yawSpeed);
+		float destYaw = (float)Math.toDegrees(Math.atan2(diff.z, diff.x)) - 90;
+		
+		double yawDiff = (destYaw - targetPart.rotationYaw) % 360.0F;
+		double yawInterpolant = 2 * yawDiff % 360.0F - yawDiff;
+		
+		targetPart.rotationYaw += yawInterpolant / yawSpeed;
+		
 		targetPart.rotationPitch = 0;
 		
 		//Use setPosition because setLocationAndAngles overrides prev pos/rot
