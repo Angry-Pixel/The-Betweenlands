@@ -50,6 +50,7 @@ import thebetweenlands.common.block.container.BlockInfuser;
 import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockMortar;
+import thebetweenlands.common.block.container.BlockMudBricksAlcove;
 import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockRepeller;
@@ -544,6 +545,7 @@ public class BlockRegistry {
     public static final Block BETWEENSTONE_BRICKS_BEAM_RELAY = new BlockBeamRelay();
     public static final Block DIAGONAL_ENERGY_BARRIER = new BlockDiagonalEnergyBarrier();
     public static final Block MUD_BRICKS_SPAWNER_HOLE = new BlockMudBricksSpawnerHole();
+    public static final Block MUD_BRICKS_ALCOVE = new BlockMudBricksAlcove();
     
     public static final Block PRESENT = new BlockPresent();
     
