@@ -22,6 +22,7 @@ import thebetweenlands.common.tile.TileEntityInfuser;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityItemShelf;
 import thebetweenlands.common.tile.TileEntityLootPot;
+import thebetweenlands.common.tile.TileEntityLootUrn;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMossBed;
 import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
@@ -89,6 +90,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityMudBricksSpawnerHole.class, "mud_bricks_spawner_hole");
 		registerTileEntity(TileEntityWaystone.class, "waystone");
 		registerTileEntity(TileEntityMudBricksAlcove.class, "mud_bricks_alcove");
+		registerTileEntity(TileEntityLootUrn.class, "loot_urn");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

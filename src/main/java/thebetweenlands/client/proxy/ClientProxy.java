@@ -158,6 +158,7 @@ import thebetweenlands.client.render.tile.RenderItemShelf;
 import thebetweenlands.client.render.tile.RenderItemStackAsTileEntity;
 import thebetweenlands.client.render.tile.RenderLivingWeedwoodShield;
 import thebetweenlands.client.render.tile.RenderLootPot;
+import thebetweenlands.client.render.tile.RenderLootUrn;
 import thebetweenlands.client.render.tile.RenderMudBricksAlcove;
 import thebetweenlands.client.render.tile.RenderMudFlowerPot;
 import thebetweenlands.client.render.tile.RenderPestleAndMortar;
@@ -178,6 +179,7 @@ import thebetweenlands.client.render.tile.TileEntityPuffshroomRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
+import thebetweenlands.common.block.container.BlockLootUrn.EnumLootUrn;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.entity.EntityAngryPebble;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
@@ -269,6 +271,7 @@ import thebetweenlands.common.tile.TileEntityInfuser;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityItemShelf;
 import thebetweenlands.common.tile.TileEntityLootPot;
+import thebetweenlands.common.tile.TileEntityLootUrn;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
@@ -586,6 +589,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWormDungeonDoorWood.class, new RenderWormDungeonDoorWood());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWaystone.class, new RenderWaystone());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudBricksAlcove.class, new RenderMudBricksAlcove());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootUrn.class, new RenderLootUrn());
 
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
@@ -638,9 +642,15 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		}));
 		ItemRegistry.LIVING_WEEDWOOD_SHIELD.setTileEntityItemStackRenderer(new RenderLivingWeedwoodShield());
 		Item.getItemFromBlock(BlockRegistry.WAYSTONE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityWaystone.class));
-		
+
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MUD_BRICKS_ALCOVE), 0, TileEntityMudBricksAlcove.class);
-		
+
+		for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_URN), EnumLootUrn.URN_1.getMetadata(facing), TileEntityLootUrn.class);
+			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_URN), EnumLootUrn.URN_2.getMetadata(facing), TileEntityLootUrn.class);
+			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_URN), EnumLootUrn.URN_3.getMetadata(facing), TileEntityLootUrn.class);
+		}
+
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
 			if (block instanceof ITintedBlock) {
