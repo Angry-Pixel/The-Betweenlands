@@ -2,17 +2,21 @@ package thebetweenlands.common.loot.shared;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
+import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableManager;
 import thebetweenlands.api.loot.ISharedLootPool;
+import thebetweenlands.api.loot.LootTableView;
 
 public class SharedLootPool implements ISharedLootPool {
 	protected final ResourceLocation lootTableLocation;
@@ -22,7 +26,9 @@ public class SharedLootPool implements ISharedLootPool {
 
 	protected LootTable view;
 
-	protected final Object2IntMap<String> removedEntries = new Object2IntOpenHashMap<>();
+	protected final Object2IntMap<String> removedItems = new Object2IntOpenHashMap<>();
+	protected final Object2LongMap<String> poolSeeds = new Object2LongOpenHashMap<>();
+	protected final Object2LongMap<String> entrySeeds = new Object2LongOpenHashMap<>();
 
 	private SharedLootPool(ISharedLootPool pool1, ISharedLootPool pool2, ResourceLocation lootTableLocation) {
 		this.lootTableLocation = lootTableLocation;
@@ -34,7 +40,7 @@ public class SharedLootPool implements ISharedLootPool {
 		this(null, null, lootTableLocation);
 	}
 
-	public SharedLootPool(ISharedLootPool pool1, ISharedLootPool pool2) {
+	private SharedLootPool(ISharedLootPool pool1, ISharedLootPool pool2) {
 		this(pool1, pool2, null);
 	}
 
@@ -52,22 +58,22 @@ public class SharedLootPool implements ISharedLootPool {
 	}
 
 	@Override
-	public LootTable getLootTableView(int maxRolls) {
-		List<LootTable> views = new ArrayList<>();
+	public LootTableView getLootTableView(int maxRolls, int maxSlots, int maxItems) {
+		List<LootTableView> views = new ArrayList<>();
 
 		if(this.pool1 == null && this.pool2 == null) {
-			views.add(new SharedLootTableView(this, maxRolls));
+			views.add(new SharedLootTableView(this, maxRolls, maxSlots, maxItems));
 		}
 
 		if(this.pool1 != null) {
-			views.add(this.pool1.getLootTableView(maxRolls));
+			views.add(this.pool1.getLootTableView(maxRolls, maxSlots, maxItems));
 		}
 
 		if(this.pool2 != null) {
-			views.add(this.pool2.getLootTableView(maxRolls));
+			views.add(this.pool2.getLootTableView(maxRolls, maxSlots, maxItems));
 		}
 
-		return new SharedLootTableView(views, maxRolls);
+		return new SharedLootTableView(views, maxRolls, maxSlots, maxItems);
 	}
 
 	@Override
@@ -77,17 +83,45 @@ public class SharedLootPool implements ISharedLootPool {
 
 	@Override
 	public void regenerate() {
-		this.removedEntries.clear();
+		this.removedItems.clear();
+		this.entrySeeds.clear();
+		this.poolSeeds.clear();
 	}
 
-	int getRemovedEntries(LootPool pool, LootEntry entry) {
-		//TODO Is poolName#entryName a sensible key?
-		return this.removedEntries.getInt(String.format("%s#%s", pool.getName(), entry.getEntryName()));
+	@Override
+	public int getRemovedItems(LootPool pool, int poolRoll, LootEntry entry) {
+		//TODO Is poolName#poolRoll#entryName a sensible key?
+		return this.removedItems.getInt(String.format("%s#%d#%s", pool.getName(), poolRoll, entry.getEntryName()));
 	}
 
-	void setRemovedEntries(LootPool pool, LootEntry entry, int number) {
-		this.removedEntries.put(String.format("%s#%s", pool.getName(), entry.getEntryName()), number);
+	@Override
+	public void setRemovedItems(LootPool pool, int poolRoll, LootEntry entry, int number) {
+		this.removedItems.put(String.format("%s#%d#%s", pool.getName(), poolRoll, entry.getEntryName()), number);
 	}
 
-	//TODO Saving/Loading NBT
+	@Override
+	public long getLootPoolSeed(Random rand, LootPool pool, int poolRoll) {
+		String key = String.format("%s#%d", pool.getName(), poolRoll);
+		long seed;
+		if(this.poolSeeds.containsKey(key)) {
+			seed = this.poolSeeds.get(key);
+		} else {
+			this.poolSeeds.put(key, seed = rand.nextLong());
+		}
+		return seed;
+	}
+
+	@Override
+	public long getLootEntrySeed(Random rand, LootPool pool, int poolRoll, LootEntry entry) {
+		String key = String.format("%s#%d#%s", pool.getName(), poolRoll, entry.getEntryName());
+		long seed;
+		if(this.entrySeeds.containsKey(key)) {
+			seed = this.entrySeeds.get(key);
+		} else {
+			this.entrySeeds.put(key, seed = rand.nextLong());
+		}
+		return seed;
+	}
+
+	//TODO Saving/Loading removedItems, poolSeeds, entrySeeds, seed NBT
 }
