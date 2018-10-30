@@ -3,8 +3,11 @@ package thebetweenlands.common.world.storage.location;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -16,6 +19,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -28,10 +32,12 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.loot.ISharedLootPool;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.loot.shared.SharedLootPool;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.LocalStorageImpl;
@@ -45,6 +51,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	private LocationAmbience ambience = null;
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
+	private Map<ResourceLocation, SharedLootPool> sharedLootPools = new HashMap<>();
 
 	protected GenericDataManager dataManager;
 
@@ -261,6 +268,22 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
+		
+		this.readSharedNbt(nbt);
+		
+		this.sharedLootPools.clear();
+		NBTTagList sharedLootPoolsNbt = nbt.getTagList("sharedLootPools", Constants.NBT.TAG_COMPOUND);
+		
+		for(int i = 0; i < sharedLootPoolsNbt.tagCount(); i++) {
+			SharedLootPool sharedLootPool = new SharedLootPool(sharedLootPoolsNbt.getCompoundTagAt(i));
+			ResourceLocation lootTable = sharedLootPool.getLootTable();
+			if(lootTable != null) {
+				this.sharedLootPools.put(lootTable, sharedLootPool);
+			}
+		}
+	}
+	
+	protected void readSharedNbt(NBTTagCompound nbt) {
 		this.dataManager.set(NAME, nbt.getString("name"));
 		if(this.dataManager.get(NAME).startsWith("translate:")) {
 			this.dataManager.set(NAME, this.dataManager.get(NAME).replaceFirst("translate:", ""));
@@ -302,6 +325,23 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
+		
+		this.writeSharedNbt(nbt);
+		
+		if(!this.sharedLootPools.isEmpty()) {
+			NBTTagList sharedLootPoolsNbt = new NBTTagList();
+			
+			for(SharedLootPool sharedLootPool : this.sharedLootPools.values()) {
+				sharedLootPoolsNbt.appendTag(sharedLootPool.writeToNBT(new NBTTagCompound()));
+			}
+			
+			nbt.setTag("sharedLootPools", sharedLootPoolsNbt);
+		}
+		
+		return nbt;
+	}
+
+	protected void writeSharedNbt(NBTTagCompound nbt) {
 		nbt.setString("name", this.dataManager.get(NAME));
 		NBTTagList boundingBoxes = new NBTTagList();
 		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
@@ -324,9 +364,8 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		}
 		nbt.setBoolean("visible", this.dataManager.get(VISIBLE));
 		nbt.setLong("seed", this.locationSeed);
-		return nbt;
 	}
-
+	
 	/**
 	 * Writes the guard data to NBT
 	 * @param nbt
@@ -341,12 +380,13 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 
 	@Override
 	public void readInitialPacket(NBTTagCompound nbt) {
-		this.readFromNBT(nbt);
+		this.readSharedNbt(nbt);
 	}
 
 	@Override
 	public NBTTagCompound writeInitialPacket(NBTTagCompound nbt) {
-		return this.writeToNBT(nbt);
+		this.writeSharedNbt(nbt);
+		return nbt;
 	}
 
 	/**
@@ -613,5 +653,26 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public void onBreakBlock(BreakEvent event) {
 
+	}
+	
+	@Nullable
+	public ISharedLootPool getSharedLootPool(ResourceLocation lootTable) {
+		return this.sharedLootPools.get(lootTable);
+	}
+	
+	@Nullable
+	public ISharedLootPool removeSharedLootPool(ResourceLocation lootTable) {
+		return this.sharedLootPools.remove(lootTable);
+	}
+	
+	public Set<ResourceLocation> getSharedLootPoolKeys() {
+		return this.sharedLootPools.keySet();
+	}
+	
+	public boolean addSharedLootPool(ResourceLocation lootTable) {
+		if(!this.sharedLootPools.containsKey(lootTable)) {
+			this.sharedLootPools.put(lootTable, new SharedLootPool(lootTable));
+		}
+		return false;
 	}
 }
