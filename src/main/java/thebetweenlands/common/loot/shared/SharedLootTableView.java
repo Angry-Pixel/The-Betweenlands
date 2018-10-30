@@ -45,22 +45,20 @@ public class SharedLootTableView extends LootTableView {
 
 	protected final ISharedLootPool primarySharedPool;
 	protected final List<LootTableView> sharedPoolViews = new ArrayList<>();
-	protected final int maxRolls, maxSlots, maxItems;
+	protected final int maxRolls, maxItems;
 
-	public SharedLootTableView(ISharedLootPool primarySharedPool, int maxRolls, int maxSlots, int maxItems) {
+	public SharedLootTableView(ISharedLootPool primarySharedPool, int maxRolls, int maxItems) {
 		Preconditions.checkNotNull(primarySharedPool);
 
 		this.primarySharedPool = primarySharedPool;
 		this.maxRolls = maxRolls;
-		this.maxSlots = maxSlots;
 		this.maxItems = maxItems;
 	}
 
-	public SharedLootTableView(List<LootTableView> sharedPoolViews, int maxRolls, int maxSlots, int maxItems) {
+	public SharedLootTableView(List<LootTableView> sharedPoolViews, int maxRolls, int maxItems) {
 		this.primarySharedPool = sharedPoolViews.get(0).getPrimarySharedLootPool();
 		this.sharedPoolViews.addAll(sharedPoolViews);
 		this.maxRolls = maxRolls;
-		this.maxSlots = maxSlots;
 		this.maxItems = maxItems;
 	}
 
@@ -72,16 +70,19 @@ public class SharedLootTableView extends LootTableView {
 	protected List<ItemStack> generateLootFromSharedPool(Random rand, LootContext context) {
 		List<ItemStack> stacks = new ArrayList<>();
 
-		int rollsLeft = this.maxRolls;
+		LootGenerationConstraints constraints = new LootGenerationConstraints();
+
+		constraints.rollsLeft = this.maxRolls;
+		constraints.itemsLeft = this.maxItems;
 
 		List<Tuple<LootTableView, LootPool>> pools = this.getPools(context.getLootTableManager());
 
 		Collections.shuffle(pools, rand);
 
 		for(Tuple<LootTableView, LootPool> pool : pools) {
-			rollsLeft = this.generateLootForPoolFromSharedPool(stacks, rand, context, pool.getFirst(), pool.getSecond(), rollsLeft);
+			this.generateLootForPoolFromSharedPool(stacks, rand, context, pool.getFirst(), pool.getSecond(), constraints);
 
-			if(rollsLeft <= 0) {
+			if(constraints.rollsLeft <= 0 || constraints.itemsLeft <= 0) {
 				break;
 			}
 		}
@@ -89,22 +90,20 @@ public class SharedLootTableView extends LootTableView {
 		return stacks;
 	}
 
-	protected int generateLootForPoolFromSharedPool(Collection<ItemStack> stacks, Random rand, LootContext context, LootTableView lootTable, LootPool pool, int rollsLeft) {
+	protected void generateLootForPoolFromSharedPool(Collection<ItemStack> stacks, Random rand, LootContext context, LootTableView lootTable, LootPool pool, LootGenerationConstraints constraints) {
 		//TODO Implement maxSlots and maxItems
 
 		if(context.addLootTable(lootTable)) {
-			rollsLeft = this.generateLootFromSharedPool(stacks, rand, context, lootTable, pool, rollsLeft);
+			this.generateLootFromSharedPool(stacks, rand, context, lootTable, pool, constraints);
 
 			context.removeLootTable(lootTable);
 		} else {
 			TheBetweenlands.logger.warn("Detected infinite loop in loot tables");
 		}
-
-		return rollsLeft;
 	}
 
 	@SuppressWarnings("unchecked")
-	protected int generateLootFromSharedPool(Collection<ItemStack> stacks, Random rand, LootContext context, LootTableView lootTable, LootPool pool, int rollsLeft) {
+	protected void generateLootFromSharedPool(Collection<ItemStack> stacks, Random rand, LootContext context, LootTableView lootTable, LootPool pool, LootGenerationConstraints constraints) {
 		List<LootCondition> poolConditions;
 		try {
 			poolConditions = (List<LootCondition>) f_LootPool_poolConditions.get(pool);
@@ -121,19 +120,20 @@ public class SharedLootTableView extends LootTableView {
 			int count = rolls.generateInt(poolRand) + MathHelper.floor(bonusRolls.generateFloat(poolRand) * context.getLuck());
 
 			for(int i = 0; i < count; ++i) {
-				if(this.createLootRollFromSharedPool(stacks, rand, context, lootTable, pool, i)) {
-					if(--rollsLeft <= 0) {
+				if(this.createLootRollFromSharedPool(stacks, rand, context, lootTable, pool, i, constraints)) {
+					if(--constraints.rollsLeft <= 0) {
 						break;
 					}
 				}
+				if(constraints.itemsLeft <= 0) {
+					break;
+				}
 			}
 		}
-
-		return rollsLeft;
 	}
 
 	@SuppressWarnings("unchecked")
-	protected boolean createLootRollFromSharedPool(Collection<ItemStack> stacks, Random rand, LootContext context, LootTableView lootTable, LootPool pool, int poolRoll) {
+	protected boolean createLootRollFromSharedPool(Collection<ItemStack> stacks, Random rand, LootContext context, LootTableView lootTable, LootPool pool, int poolRoll, LootGenerationConstraints constraints) {
 		int totalWeights = 0;
 
 		List<LootEntry> lootEntries;
@@ -187,27 +187,21 @@ public class SharedLootTableView extends LootTableView {
 					boolean isLootEntryStillAvailable;
 
 					if(!loot.isEmpty()) {
-						//TODO Optimize this
-						for(int i = 0; i < removedItems; i++) {
-							if(loot.isEmpty()) {
-								break;
-							}
+						//Not empty entry
 
-							int randStack = rand.nextInt(loot.size());
-							ItemStack stack = loot.get(randStack);
-
-							stack.shrink(1);
-
-							if(stack.isEmpty()) {
-								loot.remove(randStack);
-							}
-						}
+						this.removeRandomItems(rand, loot, removedItems);
 
 						if(!loot.isEmpty()) {
 							int count = 0;
 							for(ItemStack stack : loot) {
 								count += stack.getCount();
 							}
+
+							if(count > constraints.itemsLeft) {
+								count -= this.removeRandomItems(rand, loot, count - constraints.itemsLeft);
+							}
+
+							constraints.itemsLeft -= count;
 
 							lootTable.getPrimarySharedLootPool().setRemovedItems(pool, poolRoll, lootEntry, removedItems + count);
 
@@ -217,6 +211,7 @@ public class SharedLootTableView extends LootTableView {
 						}
 					} else {
 						//Empty entry
+
 						if(removedItems <= 0) {
 							lootTable.getPrimarySharedLootPool().setRemovedItems(pool, poolRoll, lootEntry, removedItems + 1);
 							isLootEntryStillAvailable = true;
@@ -236,6 +231,29 @@ public class SharedLootTableView extends LootTableView {
 		}
 
 		return false;
+	}
+
+	protected int removeRandomItems(Random rand, List<ItemStack> loot, int count) {
+		if(loot.isEmpty()) {
+			return 0;
+		}
+
+		for(int i = 0; i < count; i++) {
+			int randStack = rand.nextInt(loot.size());
+			ItemStack stack = loot.get(randStack);
+
+			stack.shrink(1);
+
+			if(stack.isEmpty()) {
+				loot.remove(randStack);
+			}
+
+			if(loot.isEmpty()) {
+				return i;
+			}
+		}
+
+		return count;
 	}
 
 	@Nullable
@@ -278,5 +296,10 @@ public class SharedLootTableView extends LootTableView {
 	@Override
 	public ISharedLootPool getPrimarySharedLootPool() {
 		return this.primarySharedPool;
+	}
+
+	protected static class LootGenerationConstraints {
+		protected int rollsLeft;
+		protected int itemsLeft;
 	}
 }

@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Lists;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -18,6 +19,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.ILootContainer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import thebetweenlands.common.TheBetweenlands;
 
 public class TileEntityLootInventory extends TileEntityBasicInventory implements ILootContainer {
@@ -48,72 +51,76 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 
 			List<ItemStack> loot = lootTable.generateLootForPools(random, lootBuilder.build());
 
-			///// Nothing to see here, does the same as lootTable.fillInventory but fixes a vanilla bug /////
-
-			//Get empty slots
-			List<Integer> emptySlots = Lists.<Integer>newArrayList();
-			for (int i = 0; i < this.inventoryHandler.getSlots(); ++i) {
-				if (this.inventoryHandler.getStackInSlot(i).isEmpty()) {
-					emptySlots.add(Integer.valueOf(i));
-				}
-			}
-			Collections.shuffle(emptySlots, random);
-
-			//Split and shuffle items
-			List<ItemStack> splittableStacks = Lists.<ItemStack>newArrayList();
-			Iterator<ItemStack> iterator = loot.iterator();
-			while (iterator.hasNext()) {
-				ItemStack itemstack = (ItemStack)iterator.next();
-
-				if (itemstack.getCount() <= 0) {
-					iterator.remove();
-				} else if (itemstack.getCount() > 1) {
-					splittableStacks.add(itemstack);
-					iterator.remove();
-				}
-			}
-			int emptySlotCount = emptySlots.size();
-
-			emptySlotCount = emptySlotCount - loot.size() - splittableStacks.size();
-
-			while (emptySlotCount > 0 && ((List<ItemStack>)splittableStacks).size() > 0) {
-				ItemStack itemstack2 = (ItemStack)splittableStacks.remove(MathHelper.getInt(random, 0, splittableStacks.size() - 1));
-				int i = MathHelper.getInt(random, 1, itemstack2.getCount() / 2);
-				itemstack2.shrink( i);
-				ItemStack itemstack1 = itemstack2.copy();
-				itemstack1.setCount(i);
-
-				emptySlotCount--;
-				
-				if (emptySlotCount > 0 && itemstack2.getCount() > 1 && random.nextBoolean()) {
-					splittableStacks.add(itemstack2);
-				} else {
-					loot.add(itemstack2);
-				}
-
-				if (emptySlotCount > 0 && itemstack1.getCount() > 1 && random.nextBoolean()) {
-					splittableStacks.add(itemstack1);
-				} else {
-					loot.add(itemstack1);
-				}
-			}
-			loot.addAll(splittableStacks);
-			Collections.shuffle(loot, random);
-
-			//Fill inventory
-			for (ItemStack itemstack : loot) {
-				if (!itemstack.isEmpty() && emptySlots.isEmpty()) {
-					TheBetweenlands.logger.info("Tried to over-fill a container");
-					return;
-				}
-
-				if (itemstack.isEmpty()) {
-					this.inventoryHandler.setStackInSlot(((Integer)emptySlots.remove(emptySlots.size() - 1)).intValue(), ItemStack.EMPTY);
-				} else {
-					this.inventoryHandler.setStackInSlot(((Integer)emptySlots.remove(emptySlots.size() - 1)).intValue(), itemstack);
-				}
+			fillInventoryRandomly(random, loot, this);
+		}
+	}
+	
+	public static boolean fillInventoryRandomly(Random random, List<ItemStack> loot, IInventory itemHandler)  {
+		//Get empty slots
+		List<Integer> emptySlots = Lists.<Integer>newArrayList();
+		for (int i = 0; i < itemHandler.getSizeInventory(); ++i) {
+			if (itemHandler.getStackInSlot(i).isEmpty()) {
+				emptySlots.add(Integer.valueOf(i));
 			}
 		}
+		Collections.shuffle(emptySlots, random);
+
+		//Split and shuffle items
+		List<ItemStack> splittableStacks = Lists.<ItemStack>newArrayList();
+		Iterator<ItemStack> iterator = loot.iterator();
+		while (iterator.hasNext()) {
+			ItemStack itemstack = (ItemStack)iterator.next();
+
+			if (itemstack.getCount() <= 0) {
+				iterator.remove();
+			} else if (itemstack.getCount() > 1) {
+				splittableStacks.add(itemstack);
+				iterator.remove();
+			}
+		}
+		int emptySlotCount = emptySlots.size();
+
+		emptySlotCount = emptySlotCount - loot.size() - splittableStacks.size();
+
+		while (emptySlotCount > 0 && ((List<ItemStack>)splittableStacks).size() > 0) {
+			ItemStack itemstack2 = (ItemStack)splittableStacks.remove(MathHelper.getInt(random, 0, splittableStacks.size() - 1));
+			int i = MathHelper.getInt(random, 1, itemstack2.getCount() / 2);
+			itemstack2.shrink( i);
+			ItemStack itemstack1 = itemstack2.copy();
+			itemstack1.setCount(i);
+
+			emptySlotCount--;
+			
+			if (emptySlotCount > 0 && itemstack2.getCount() > 1 && random.nextBoolean()) {
+				splittableStacks.add(itemstack2);
+			} else {
+				loot.add(itemstack2);
+			}
+
+			if (emptySlotCount > 0 && itemstack1.getCount() > 1 && random.nextBoolean()) {
+				splittableStacks.add(itemstack1);
+			} else {
+				loot.add(itemstack1);
+			}
+		}
+		loot.addAll(splittableStacks);
+		Collections.shuffle(loot, random);
+
+		//Fill inventory
+		for (ItemStack itemstack : loot) {
+			if (!itemstack.isEmpty() && emptySlots.isEmpty()) {
+				TheBetweenlands.logger.info("Tried to over-fill a container");
+				return false;
+			}
+
+			if (itemstack.isEmpty()) {
+				itemHandler.setInventorySlotContents(((Integer)emptySlots.remove(emptySlots.size() - 1)).intValue(), ItemStack.EMPTY);
+			} else {
+				itemHandler.setInventorySlotContents(((Integer)emptySlots.remove(emptySlots.size() - 1)).intValue(), itemstack);
+			}
+		}
+		
+		return true;
 	}
 
 	public void setLootTable(ResourceLocation lootTable, long lootTableSeed) {

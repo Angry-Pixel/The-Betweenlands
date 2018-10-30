@@ -1,11 +1,13 @@
 package thebetweenlands.common.tile;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -31,12 +33,16 @@ public class TileEntityChestBetweenlands extends TileEntityChest {
 	
 	private boolean filled = false;
 	
+	private ISharedLootPool sharedPool1;
+	private ISharedLootPool sharedPool2;
+	private ISharedLootPool sharedPool3;
+	
 	private ISharedLootPool sharedPool;
 	
 	//TODO Test, remove
 	@Override
 	public void fillWithLoot(@Nullable EntityPlayer player) {
-		if(this.filled || this.sharedPool == null) {
+		if(this.filled || this.sharedPool == null || this.sharedPool1 == null || this.sharedPool2 == null || this.sharedPool3 == null) {
 			return;
 		}
 		
@@ -44,7 +50,7 @@ public class TileEntityChestBetweenlands extends TileEntityChest {
 		
 		this.filled = true;
 		
-        LootTable lootTable = this.sharedPool.getLootTableView(3, Integer.MAX_VALUE, Integer.MAX_VALUE);
+        LootTable lootTable = this.sharedPool.getLootTableView(Integer.MAX_VALUE, Integer.MAX_VALUE);
         
         Random random;
 
@@ -64,7 +70,9 @@ public class TileEntityChestBetweenlands extends TileEntityChest {
             lootcontext$builder.withLuck(player.getLuck()).withPlayer(player); // Forge: add player to LootContext
         }
 
-        lootTable.fillInventory(this, random, lootcontext$builder.build());
+        List<ItemStack> loot = lootTable.generateLootForPools(random, lootcontext$builder.build());
+        
+        TileEntityLootInventory.fillInventoryRandomly(random, loot, this);
     }
 	
 	@Override
@@ -72,11 +80,11 @@ public class TileEntityChestBetweenlands extends TileEntityChest {
 		super.openInventory(player);
 		
 		if(player.isSneaking() || this.sharedPool == null) {
-			ISharedLootPool sharedLootPool1 = new SharedLootPool(LootTableRegistry.DUNGEON_CHEST_LOOT);
-			ISharedLootPool sharedLootPool2 = new SharedLootPool(LootTableRegistry.MIRE_SNAIL);
-			ISharedLootPool sharedLootPool3 = new SharedLootPool(LootTableRegistry.CHIROMAW);
+			this.sharedPool1 = new SharedLootPool(LootTableRegistry.DUNGEON_CHEST_LOOT);
+			this.sharedPool2 = new SharedLootPool(LootTableRegistry.MIRE_SNAIL);
+			this.sharedPool3 = new SharedLootPool(LootTableRegistry.CHIROMAW);
 			
-			this.sharedPool = sharedLootPool1.combine(sharedLootPool2).combine(sharedLootPool3);
+			this.sharedPool = sharedPool1.combine(sharedPool2).combine(sharedPool3);
 		}
 		
 		this.filled = false;

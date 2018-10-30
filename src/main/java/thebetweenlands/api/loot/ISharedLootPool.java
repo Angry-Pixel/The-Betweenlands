@@ -27,11 +27,10 @@ public interface ISharedLootPool {
 	 * is generated from this loot table it is removed from
 	 * the shared pool!
 	 * @param maxRolls The maximum number of rolls
-	 * @param maxSlots The maximum number of slots to fill
 	 * @param maxItems The maximum number of items to generate
 	 * @return
 	 */
-	public LootTableView getLootTableView(int maxRolls, int maxSlots, int maxItems);
+	public LootTableView getLootTableView(int maxRolls, int maxItems);
 
 	/**
 	 * Returns how many items of the specified loot entry in the
@@ -75,7 +74,7 @@ public interface ISharedLootPool {
 
 	/**
 	 * Combines this shared loot pool with another shared loot pool
-	 * and returns a new shared loot pool view that combines both
+	 * and returns a new <b>unmodifiable shared loot pool view</b> that combines both
 	 * shared loot pools.
 	 * @param other Other shared loot pool to combine with this shared loot pool
 	 * @return
@@ -83,7 +82,16 @@ public interface ISharedLootPool {
 	public ISharedLootPool combine(ISharedLootPool other);
 
 	/**
-	 * Regenerates the shared loot pool
+	 * Regenerates the shared loot pool and discards
+	 * any loot seeds, i.e. the new loot will not be
+	 * the same anymore
 	 */
 	public void regenerate();
+
+	/**
+	 * Refills the shared loot pool without discarding
+	 * any loot seeds, i.e. the loot will be the same
+	 * but is completely refilled
+	 */
+	public void refill();
 }

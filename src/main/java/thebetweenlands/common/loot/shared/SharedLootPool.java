@@ -47,22 +47,22 @@ public class SharedLootPool implements ISharedLootPool {
 	}
 
 	@Override
-	public LootTableView getLootTableView(int maxRolls, int maxSlots, int maxItems) {
+	public LootTableView getLootTableView(int maxRolls, int maxItems) {
 		List<LootTableView> views = new ArrayList<>();
 
 		if(this.pool1 == null && this.pool2 == null) {
-			views.add(new SharedLootTableView(this, maxRolls, maxSlots, maxItems));
+			views.add(new SharedLootTableView(this, maxRolls, maxItems));
 		}
 
 		if(this.pool1 != null) {
-			views.add(this.pool1.getLootTableView(maxRolls, maxSlots, maxItems));
+			views.add(this.pool1.getLootTableView(maxRolls, maxItems));
 		}
 
 		if(this.pool2 != null) {
-			views.add(this.pool2.getLootTableView(maxRolls, maxSlots, maxItems));
+			views.add(this.pool2.getLootTableView(maxRolls, maxItems));
 		}
 
-		return new SharedLootTableView(views, maxRolls, maxSlots, maxItems);
+		return new SharedLootTableView(views, maxRolls, maxItems);
 	}
 
 	@Override
@@ -78,8 +78,12 @@ public class SharedLootPool implements ISharedLootPool {
 	}
 
 	@Override
+	public void refill() {
+		this.removedItems.clear();
+	}
+
+	@Override
 	public int getRemovedItems(LootPool pool, int poolRoll, LootEntry entry) {
-		//TODO Is poolName#poolRoll#entryName a sensible key?
 		return this.removedItems.getInt(String.format("%s#%d#%s", pool.getName(), poolRoll, entry.getEntryName()));
 	}
 
