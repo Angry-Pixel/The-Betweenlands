@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
@@ -16,9 +18,12 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.loot.ISharedLootPool;
 import thebetweenlands.api.loot.LootTableView;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class SharedLootPool implements ISharedLootPool {
 	protected ResourceLocation lootTableLocation;
+
+	protected LocationStorage location;
 
 	protected final ISharedLootPool pool1;
 	protected final ISharedLootPool pool2;
@@ -35,12 +40,14 @@ public class SharedLootPool implements ISharedLootPool {
 		this.pool2 = pool2;
 	}
 
-	public SharedLootPool(ResourceLocation lootTableLocation) {
+	public SharedLootPool(ResourceLocation lootTableLocation, @Nullable LocationStorage location) {
 		this(null, null, lootTableLocation);
+		this.location = location;
 	}
 
-	public SharedLootPool(NBTTagCompound nbt) {
+	public SharedLootPool(NBTTagCompound nbt, @Nullable LocationStorage location) {
 		this(null, null, null);
+		this.location = location;
 		this.readFromNBT(nbt);
 	}
 
@@ -82,11 +89,15 @@ public class SharedLootPool implements ISharedLootPool {
 		this.removedItems.clear();
 		this.entrySeeds.clear();
 		this.poolSeeds.clear();
+
+		this.setLocationDirty();
 	}
 
 	@Override
 	public void refill() {
 		this.removedItems.clear();
+
+		this.setLocationDirty();
 	}
 
 	@Override
@@ -97,6 +108,8 @@ public class SharedLootPool implements ISharedLootPool {
 	@Override
 	public void setRemovedItems(LootPool pool, int poolRoll, LootEntry entry, int count) {
 		this.removedItems.put(String.format("%s#%d#%s", pool.getName(), poolRoll, entry.getEntryName()), count);
+
+		this.setLocationDirty();
 	}
 
 	@Override
@@ -107,6 +120,8 @@ public class SharedLootPool implements ISharedLootPool {
 			seed = this.poolSeeds.get(key);
 		} else {
 			this.poolSeeds.put(key, seed = rand.nextLong());
+
+			this.setLocationDirty();
 		}
 		return seed;
 	}
@@ -119,8 +134,16 @@ public class SharedLootPool implements ISharedLootPool {
 			seed = this.entrySeeds.get(key);
 		} else {
 			this.entrySeeds.put(key, seed = rand.nextLong());
+
+			this.setLocationDirty();
 		}
 		return seed;
+	}
+
+	protected void setLocationDirty() {
+		if(this.location != null) {
+			this.location.markDirty();
+		}
 	}
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {

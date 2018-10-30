@@ -81,9 +81,9 @@ public class TileEntityChestBetweenlands extends TileEntityChest {
 		super.openInventory(player);
 		
 		if(player.isSneaking() || this.sharedPool == null) {
-			this.sharedPool1 = new SharedLootPool(LootTableRegistry.DUNGEON_CHEST_LOOT);
-			this.sharedPool2 = new SharedLootPool(LootTableRegistry.MIRE_SNAIL);
-			this.sharedPool3 = new SharedLootPool(LootTableRegistry.CHIROMAW);
+			this.sharedPool1 = new SharedLootPool(LootTableRegistry.DUNGEON_CHEST_LOOT, null);
+			this.sharedPool2 = new SharedLootPool(LootTableRegistry.MIRE_SNAIL, null);
+			this.sharedPool3 = new SharedLootPool(LootTableRegistry.CHIROMAW, null);
 			
 			this.sharedPool = sharedPool1.combine(sharedPool2).combine(sharedPool3);
 		}
@@ -103,9 +103,9 @@ public class TileEntityChestBetweenlands extends TileEntityChest {
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
 		
-		this.sharedPool1 = new SharedLootPool(compound.getCompoundTag("sharedPool1"));
-		this.sharedPool2 = new SharedLootPool(compound.getCompoundTag("sharedPool2"));
-		this.sharedPool3 = new SharedLootPool(compound.getCompoundTag("sharedPool3"));
+		this.sharedPool1 = new SharedLootPool(compound.getCompoundTag("sharedPool1"), null);
+		this.sharedPool2 = new SharedLootPool(compound.getCompoundTag("sharedPool2"), null);
+		this.sharedPool3 = new SharedLootPool(compound.getCompoundTag("sharedPool3"), null);
 		
 		this.sharedPool = sharedPool1.combine(sharedPool2).combine(sharedPool3);
 	}

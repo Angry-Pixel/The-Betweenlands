@@ -199,11 +199,15 @@ public class SharedLootTableView extends LootTableView {
 								count -= this.removeRandomItems(rand, loot, count - constraints.itemsLeft);
 							}
 
-							constraints.itemsLeft -= count;
-
-							lootTable.getPrimarySharedLootPool().setRemovedItems(pool, poolRoll, lootEntry, removedItems + count);
-
-							isLootEntryStillAvailable = true;
+							if(count > 0) {
+								constraints.itemsLeft -= count;
+	
+								lootTable.getPrimarySharedLootPool().setRemovedItems(pool, poolRoll, lootEntry, removedItems + count);
+	
+								isLootEntryStillAvailable = true;
+							} else {
+								isLootEntryStillAvailable = false;
+							}
 						} else {
 							isLootEntryStillAvailable = false;
 						}

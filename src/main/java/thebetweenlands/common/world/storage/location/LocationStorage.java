@@ -275,7 +275,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		NBTTagList sharedLootPoolsNbt = nbt.getTagList("sharedLootPools", Constants.NBT.TAG_COMPOUND);
 		
 		for(int i = 0; i < sharedLootPoolsNbt.tagCount(); i++) {
-			SharedLootPool sharedLootPool = new SharedLootPool(sharedLootPoolsNbt.getCompoundTagAt(i));
+			SharedLootPool sharedLootPool = new SharedLootPool(sharedLootPoolsNbt.getCompoundTagAt(i), this);
 			ResourceLocation lootTable = sharedLootPool.getLootTable();
 			if(lootTable != null) {
 				this.sharedLootPools.put(lootTable, sharedLootPool);
@@ -671,7 +671,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	
 	public boolean addSharedLootPool(ResourceLocation lootTable) {
 		if(!this.sharedLootPools.containsKey(lootTable)) {
-			this.sharedLootPools.put(lootTable, new SharedLootPool(lootTable));
+			this.sharedLootPools.put(lootTable, new SharedLootPool(lootTable, this));
 		}
 		return false;
 	}
