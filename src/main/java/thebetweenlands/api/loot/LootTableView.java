@@ -20,8 +20,8 @@ public abstract class LootTableView extends LootTable {
 	public abstract List<Tuple<LootTableView, LootPool>> getPools(LootTableManager manager);
 
 	/**
-	 * Returns the shared loot pool this view belongs to
+	 * Returns the primary shared loot pool this view belongs to
 	 * @return
 	 */
-	public abstract ISharedLootPool getSharedLootPool();
+	public abstract ISharedLootPool getPrimarySharedLootPool();
 }

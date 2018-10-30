@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
@@ -14,7 +12,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
-import net.minecraft.world.storage.loot.LootTableManager;
 import thebetweenlands.api.loot.ISharedLootPool;
 import thebetweenlands.api.loot.LootTableView;
 
@@ -47,14 +44,6 @@ public class SharedLootPool implements ISharedLootPool {
 	@Override
 	public ResourceLocation getLootTable() {
 		return this.lootTableLocation;
-	}
-
-	@Nullable
-	public LootTable getSharedLootTableInstance(LootTableManager manager) {
-		if(this.lootTableLocation != null) {
-			return manager.getLootTableFromLocation(this.lootTableLocation);
-		}
-		return null;
 	}
 
 	@Override
@@ -95,8 +84,8 @@ public class SharedLootPool implements ISharedLootPool {
 	}
 
 	@Override
-	public void setRemovedItems(LootPool pool, int poolRoll, LootEntry entry, int number) {
-		this.removedItems.put(String.format("%s#%d#%s", pool.getName(), poolRoll, entry.getEntryName()), number);
+	public void setRemovedItems(LootPool pool, int poolRoll, LootEntry entry, int count) {
+		this.removedItems.put(String.format("%s#%d#%s", pool.getName(), poolRoll, entry.getEntryName()), count);
 	}
 
 	@Override

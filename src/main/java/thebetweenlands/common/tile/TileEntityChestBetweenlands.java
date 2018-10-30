@@ -74,8 +74,9 @@ public class TileEntityChestBetweenlands extends TileEntityChest {
 		if(player.isSneaking() || this.sharedPool == null) {
 			ISharedLootPool sharedLootPool1 = new SharedLootPool(LootTableRegistry.DUNGEON_CHEST_LOOT);
 			ISharedLootPool sharedLootPool2 = new SharedLootPool(LootTableRegistry.MIRE_SNAIL);
+			ISharedLootPool sharedLootPool3 = new SharedLootPool(LootTableRegistry.CHIROMAW);
 			
-			this.sharedPool = sharedLootPool1.combine(sharedLootPool2);
+			this.sharedPool = sharedLootPool1.combine(sharedLootPool2).combine(sharedLootPool3);
 		}
 		
 		this.filled = false;

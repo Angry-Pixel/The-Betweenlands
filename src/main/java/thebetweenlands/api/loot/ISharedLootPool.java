@@ -49,9 +49,9 @@ public interface ISharedLootPool {
 	 * @param pool The loot pool
 	 * @param poolRoll The pool roll
 	 * @param entry The loot entry
-	 * @param number How many items have already been removed
+	 * @param count How many items have already been removed
 	 */
-	public void setRemovedItems(LootPool pool, int poolRoll, LootEntry entry, int number);
+	public void setRemovedItems(LootPool pool, int poolRoll, LootEntry entry, int count);
 
 	/**
 	 * Returns a seed for the specified loot pool and roll
