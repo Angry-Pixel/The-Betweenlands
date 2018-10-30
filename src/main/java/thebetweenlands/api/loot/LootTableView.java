@@ -8,8 +8,13 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableManager;
 
 public abstract class LootTableView extends LootTable {
-	public LootTableView(LootPool[] pools) {
-		super(pools);
+	public LootTableView() {
+		super(new LootPool[0]);
+	}
+
+	@Override
+	public final boolean isFrozen() {
+		return true;
 	}
 
 	/**

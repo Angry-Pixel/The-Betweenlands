@@ -48,8 +48,6 @@ public class SharedLootTableView extends LootTableView {
 	protected final int maxRolls, maxSlots, maxItems;
 
 	public SharedLootTableView(ISharedLootPool primarySharedPool, int maxRolls, int maxSlots, int maxItems) {
-		super(new LootPool[0]);
-
 		Preconditions.checkNotNull(primarySharedPool);
 
 		this.primarySharedPool = primarySharedPool;
@@ -59,18 +57,11 @@ public class SharedLootTableView extends LootTableView {
 	}
 
 	public SharedLootTableView(List<LootTableView> sharedPoolViews, int maxRolls, int maxSlots, int maxItems) {
-		super(new LootPool[0]);
-
 		this.primarySharedPool = sharedPoolViews.get(0).getPrimarySharedLootPool();
 		this.sharedPoolViews.addAll(sharedPoolViews);
 		this.maxRolls = maxRolls;
 		this.maxSlots = maxSlots;
 		this.maxItems = maxItems;
-	}
-
-	@Override
-	public boolean isFrozen() {
-		return true;
 	}
 
 	@Override
@@ -191,13 +182,13 @@ public class SharedLootTableView extends LootTableView {
 				if(randomWeight < 0) {
 					List<ItemStack> loot = potentialEntry.getValue();
 
+					int removedItems = lootTable.getPrimarySharedLootPool().getRemovedItems(pool, poolRoll, lootEntry);
+
 					boolean isLootEntryStillAvailable;
 
 					if(!loot.isEmpty()) {
-						int removedEntries = lootTable.getPrimarySharedLootPool().getRemovedItems(pool, poolRoll, lootEntry);
-
 						//TODO Optimize this
-						for(int i = 0; i < removedEntries; i++) {
+						for(int i = 0; i < removedItems; i++) {
 							if(loot.isEmpty()) {
 								break;
 							}
@@ -218,7 +209,7 @@ public class SharedLootTableView extends LootTableView {
 								count += stack.getCount();
 							}
 
-							lootTable.getPrimarySharedLootPool().setRemovedItems(pool, poolRoll, lootEntry, lootTable.getPrimarySharedLootPool().getRemovedItems(pool, poolRoll, lootEntry) + count);
+							lootTable.getPrimarySharedLootPool().setRemovedItems(pool, poolRoll, lootEntry, removedItems + count);
 
 							isLootEntryStillAvailable = true;
 						} else {
@@ -226,9 +217,8 @@ public class SharedLootTableView extends LootTableView {
 						}
 					} else {
 						//Empty entry
-						int removedEntries = lootTable.getPrimarySharedLootPool().getRemovedItems(pool, poolRoll, lootEntry);
-						if(removedEntries <= 0) {
-							lootTable.getPrimarySharedLootPool().setRemovedItems(pool, poolRoll, lootEntry, lootTable.getPrimarySharedLootPool().getRemovedItems(pool, poolRoll, lootEntry) + 1);
+						if(removedItems <= 0) {
+							lootTable.getPrimarySharedLootPool().setRemovedItems(pool, poolRoll, lootEntry, removedItems + 1);
 							isLootEntryStillAvailable = true;
 						} else {
 							isLootEntryStillAvailable = false;
