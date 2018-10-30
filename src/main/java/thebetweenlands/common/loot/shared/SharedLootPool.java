@@ -8,15 +8,17 @@ import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.loot.ISharedLootPool;
 import thebetweenlands.api.loot.LootTableView;
 
 public class SharedLootPool implements ISharedLootPool {
-	protected final ResourceLocation lootTableLocation;
+	protected ResourceLocation lootTableLocation;
 
 	protected final ISharedLootPool pool1;
 	protected final ISharedLootPool pool2;
@@ -35,6 +37,11 @@ public class SharedLootPool implements ISharedLootPool {
 
 	public SharedLootPool(ResourceLocation lootTableLocation) {
 		this(null, null, lootTableLocation);
+	}
+
+	public SharedLootPool(NBTTagCompound nbt) {
+		this(null, null, null);
+		this.readFromNBT(nbt);
 	}
 
 	private SharedLootPool(ISharedLootPool pool1, ISharedLootPool pool2) {
@@ -116,5 +123,60 @@ public class SharedLootPool implements ISharedLootPool {
 		return seed;
 	}
 
-	//TODO Saving/Loading removedItems, poolSeeds, entrySeeds, seed NBT
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		if(!this.removedItems.isEmpty()) {
+			NBTTagCompound removedItemsNbt = new NBTTagCompound();
+			for(Object2IntMap.Entry<String> entry : this.removedItems.object2IntEntrySet()) {
+				removedItemsNbt.setInteger(entry.getKey(), entry.getIntValue());
+			}
+			nbt.setTag("removedItems", removedItemsNbt);
+		}
+
+		if(!this.poolSeeds.isEmpty()) {
+			NBTTagCompound poolSeedsNbt = new NBTTagCompound();
+			for(Object2LongMap.Entry<String> entry : this.poolSeeds.object2LongEntrySet()) {
+				poolSeedsNbt.setLong(entry.getKey(), entry.getLongValue());
+			}
+			nbt.setTag("poolSeeds", poolSeedsNbt);
+		}
+
+		if(!this.entrySeeds.isEmpty()) {
+			NBTTagCompound entrySeedsNbt = new NBTTagCompound();
+			for(Object2LongMap.Entry<String> entry : this.entrySeeds.object2LongEntrySet()) {
+				entrySeedsNbt.setLong(entry.getKey(), entry.getLongValue());
+			}
+			nbt.setTag("entrySeeds", entrySeedsNbt);
+		}
+
+		if(this.lootTableLocation != null) {
+			nbt.setString("lootTable", this.lootTableLocation.toString());
+		}
+
+		return nbt;
+	}
+
+	public void readFromNBT(NBTTagCompound nbt) {
+		this.removedItems.clear();
+		NBTTagCompound removedItemsNbt = nbt.getCompoundTag("removedItems");
+		for(String key : removedItemsNbt.getKeySet()) {
+			this.removedItems.put(key, removedItemsNbt.getInteger(key));
+		}
+
+		this.poolSeeds.clear();
+		NBTTagCompound poolSeedsNbt = nbt.getCompoundTag("poolSeeds");
+		for(String key : poolSeedsNbt.getKeySet()) {
+			this.poolSeeds.put(key, poolSeedsNbt.getLong(key));
+		}
+
+		this.entrySeeds.clear();
+		NBTTagCompound entrySeedsNbt = nbt.getCompoundTag("entrySeeds");
+		for(String key : entrySeedsNbt.getKeySet()) {
+			this.entrySeeds.put(key, entrySeedsNbt.getLong(key));
+		}
+
+		this.lootTableLocation = null;
+		if(nbt.hasKey("lootTable", Constants.NBT.TAG_STRING)) {
+			this.lootTableLocation = new ResourceLocation(nbt.getString("lootTable"));
+		}
+	}
 }

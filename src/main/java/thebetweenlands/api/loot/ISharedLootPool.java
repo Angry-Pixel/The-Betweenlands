@@ -75,7 +75,8 @@ public interface ISharedLootPool {
 	/**
 	 * Combines this shared loot pool with another shared loot pool
 	 * and returns a new <b>unmodifiable shared loot pool view</b> that combines both
-	 * shared loot pools.
+	 * shared loot pools. The returned shared loot pool does not hold any information
+	 * itself.
 	 * @param other Other shared loot pool to combine with this shared loot pool
 	 * @return
 	 */

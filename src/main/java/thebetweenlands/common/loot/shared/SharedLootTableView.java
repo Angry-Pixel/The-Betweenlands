@@ -91,8 +91,6 @@ public class SharedLootTableView extends LootTableView {
 	}
 
 	protected void generateLootForPoolFromSharedPool(Collection<ItemStack> stacks, Random rand, LootContext context, LootTableView lootTable, LootPool pool, LootGenerationConstraints constraints) {
-		//TODO Implement maxSlots and maxItems
-
 		if(context.addLootTable(lootTable)) {
 			this.generateLootFromSharedPool(stacks, rand, context, lootTable, pool, constraints);
 

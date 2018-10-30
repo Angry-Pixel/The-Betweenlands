@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -33,9 +34,9 @@ public class TileEntityChestBetweenlands extends TileEntityChest {
 	
 	private boolean filled = false;
 	
-	private ISharedLootPool sharedPool1;
-	private ISharedLootPool sharedPool2;
-	private ISharedLootPool sharedPool3;
+	private SharedLootPool sharedPool1;
+	private SharedLootPool sharedPool2;
+	private SharedLootPool sharedPool3;
 	
 	private ISharedLootPool sharedPool;
 	
@@ -88,5 +89,24 @@ public class TileEntityChestBetweenlands extends TileEntityChest {
 		}
 		
 		this.filled = false;
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+		if(this.sharedPool1 != null) compound.setTag("sharedPool1", this.sharedPool1.writeToNBT(new NBTTagCompound()));
+		if(this.sharedPool2 != null) compound.setTag("sharedPool2", this.sharedPool2.writeToNBT(new NBTTagCompound()));
+		if(this.sharedPool3 != null) compound.setTag("sharedPool3", this.sharedPool3.writeToNBT(new NBTTagCompound()));
+		return super.writeToNBT(compound);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound compound) {
+		super.readFromNBT(compound);
+		
+		this.sharedPool1 = new SharedLootPool(compound.getCompoundTag("sharedPool1"));
+		this.sharedPool2 = new SharedLootPool(compound.getCompoundTag("sharedPool2"));
+		this.sharedPool3 = new SharedLootPool(compound.getCompoundTag("sharedPool3"));
+		
+		this.sharedPool = sharedPool1.combine(sharedPool2).combine(sharedPool3);
 	}
 }
