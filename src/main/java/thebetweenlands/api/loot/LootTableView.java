@@ -18,11 +18,11 @@ public abstract class LootTableView extends LootTable {
 	}
 
 	/**
-	 * Returns all loot pools in this view
+	 * Generates the loot table, i.e. all loot pools in this view
 	 * @param manager
 	 * @return
 	 */
-	public abstract List<Tuple<LootTableView, LootPool>> getPools(LootTableManager manager);
+	public abstract List<Tuple<LootTableView, LootPool>> createLootTable(LootTableManager manager);
 
 	/**
 	 * Returns the primary shared loot pool this view belongs to

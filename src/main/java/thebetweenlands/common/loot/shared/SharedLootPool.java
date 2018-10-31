@@ -32,6 +32,8 @@ public class SharedLootPool implements ISharedLootPool {
 	protected final Object2LongMap<String> poolSeeds = new Object2LongOpenHashMap<>();
 	protected final Object2LongMap<String> entrySeeds = new Object2LongOpenHashMap<>();
 
+	protected int guaranteeCounter;
+
 	private SharedLootPool(ISharedLootPool pool1, ISharedLootPool pool2, ResourceLocation lootTableLocation) {
 		this.lootTableLocation = lootTableLocation;
 		this.pool1 = pool1;
@@ -87,6 +89,7 @@ public class SharedLootPool implements ISharedLootPool {
 		this.removedItems.clear();
 		this.entrySeeds.clear();
 		this.poolSeeds.clear();
+		this.guaranteeCounter = 0;
 
 		this.setLocationDirty();
 	}
@@ -94,6 +97,7 @@ public class SharedLootPool implements ISharedLootPool {
 	@Override
 	public void refill() {
 		this.removedItems.clear();
+		this.guaranteeCounter = 0;
 
 		this.setLocationDirty();
 	}
@@ -138,6 +142,23 @@ public class SharedLootPool implements ISharedLootPool {
 		return seed;
 	}
 
+	@Override
+	public int getGuaranteeCounter() {
+		return this.guaranteeCounter;
+	}
+
+	@Override
+	public void incrementGuaranteeCounter() {
+		this.guaranteeCounter++;
+		this.setLocationDirty();
+	}
+
+	@Override
+	public float getGuaranteePercentage() {
+		int lootInventories = this.location != null ? this.location.getLootInventories() : 0;
+		return lootInventories <= 0 ? 1.0F : Math.min((float)this.getGuaranteeCounter() / (float)lootInventories, 1.0F);
+	}
+
 	protected void setLocationDirty() {
 		if(this.location != null) {
 			this.location.markDirty();
@@ -173,6 +194,8 @@ public class SharedLootPool implements ISharedLootPool {
 			nbt.setString("lootTable", this.lootTableLocation.toString());
 		}
 
+		nbt.setInteger("generatedLootTables", this.guaranteeCounter);
+
 		return nbt;
 	}
 
@@ -199,5 +222,7 @@ public class SharedLootPool implements ISharedLootPool {
 		if(nbt.hasKey("lootTable", Constants.NBT.TAG_STRING)) {
 			this.lootTableLocation = new ResourceLocation(nbt.getString("lootTable"));
 		}
+
+		this.guaranteeCounter = nbt.getInteger("generatedLootTables");
 	}
 }

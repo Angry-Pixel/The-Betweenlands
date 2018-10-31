@@ -31,10 +31,20 @@
         {
         	"name": "gem_singers_per_chest_from_shared_pool",
         	"entries": [
+        		{
+        			"type": "empty",
+        			"weight": 3
+        		},
                 {
-                    "conditions": [{ "condition": "thebetweenlands:from_shared_pool" }],
+                    "conditions": [
+                    	{
+                    		"condition": "thebetweenlands:from_shared_pool",
+                    		"guaranteed_after": 4
+                    	}
+                    ],
                     "type": "item",
-                    "name": "thebetweenlands:gem_singer"
+                    "name": "thebetweenlands:gem_singer",
+                    "weight": 1
                 }
             ],
             "rolls": 1

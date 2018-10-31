@@ -51,7 +51,9 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	private LocationAmbience ambience = null;
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
+	
 	private Map<ResourceLocation, SharedLootPool> sharedLootPools = new HashMap<>();
+	private int lootInventories = 0;
 
 	protected GenericDataManager dataManager;
 
@@ -97,6 +99,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	public LocationStorage addBounds(AxisAlignedBB... boundingBoxes) {
 		for(AxisAlignedBB boundingBox : boundingBoxes) {
 			this.boundingBoxes.add(boundingBox);
+			this.markDirty();
 		}
 		this.updateEnclosingBounds();
 		return this;
@@ -117,6 +120,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	public void removeBounds(AxisAlignedBB... boundingBoxes) {
 		for(AxisAlignedBB boundingBox : boundingBoxes) {
 			this.boundingBoxes.remove(boundingBox);
+			this.markDirty();
 		}
 		this.updateEnclosingBounds();
 	}
@@ -183,6 +187,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public LocationStorage setSeed(long seed) {
 		this.locationSeed = seed;
+		this.markDirty();
 		return this;
 	}
 
@@ -202,6 +207,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	public LocationStorage setInheritAmbience(boolean inherit) {
 		this.inheritAmbience = inherit;
 		this.ambience = null;
+		this.markDirty();
 		return this;
 	}
 
@@ -212,6 +218,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public LocationStorage setVisible(boolean visible) {
 		this.dataManager.set(VISIBLE, visible);
+		this.markDirty();
 		return this;
 	}
 
@@ -222,6 +229,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public LocationStorage setLayer(int layer) {
 		this.layer = layer;
+		this.markDirty();
 		return this;
 	}
 
@@ -242,6 +250,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		this.inheritAmbience = false;
 		this.ambience = ambience;
 		ambience.setLocation(this);
+		this.markDirty();
 		return this;
 	}
 
@@ -464,6 +473,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public void setName(String name) {
 		this.dataManager.set(NAME, name);
+		this.markDirty();
 	}
 
 	/**
@@ -655,6 +665,15 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 
 	}
 	
+	public int getLootInventories() {
+		return this.lootInventories;
+	}
+	
+	public void setLootInventories(int inventories) {
+		this.lootInventories = inventories;
+		this.markDirty();
+	}
+	
 	@Nullable
 	public ISharedLootPool getSharedLootPool(ResourceLocation lootTable) {
 		return this.sharedLootPools.get(lootTable);
@@ -662,6 +681,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	
 	@Nullable
 	public ISharedLootPool removeSharedLootPool(ResourceLocation lootTable) {
+		this.markDirty();
 		return this.sharedLootPools.remove(lootTable);
 	}
 	
@@ -672,6 +692,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	public boolean addSharedLootPool(ResourceLocation lootTable) {
 		if(!this.sharedLootPools.containsKey(lootTable)) {
 			this.sharedLootPools.put(lootTable, new SharedLootPool(lootTable, this));
+			this.markDirty();
 		}
 		return false;
 	}

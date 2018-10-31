@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootTable;
 
 public interface ISharedLootPool {
 	/**
@@ -77,6 +78,27 @@ public interface ISharedLootPool {
 	 * @return
 	 */
 	public ISharedLootPool combine(ISharedLootPool other);
+
+	/**
+	 * Returns the guarantee counter that is used to guarantee certain
+	 * loot. Automatically incremented when {@link LootTable#generateLootForPools(Random, net.minecraft.world.storage.loot.LootContext)}
+	 * is called on any loot table view (see {@link #getLootTableView()}) of this shared loot pool.
+	 * @return
+	 */
+	public int getGuaranteeCounter();
+
+	/**
+	 * Increments the the guarantee counter, see {@link #getGuaranteeCounter()}.
+	 * @see #getGuaranteeCounter()
+	 */
+	public void incrementGuaranteeCounter();
+
+	/**
+	 * Returns the guarantee percentage based on the value of the
+	 * {@link #getGuaranteeCounter()}.
+	 * @return
+	 */
+	public float getGuaranteePercentage();
 
 	/**
 	 * Regenerates the shared loot pool and discards

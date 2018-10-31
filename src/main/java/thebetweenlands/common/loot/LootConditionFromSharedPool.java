@@ -3,6 +3,8 @@ package thebetweenlands.common.loot;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
@@ -16,9 +18,13 @@ import thebetweenlands.common.lib.ModInfo;
 
 public class LootConditionFromSharedPool implements LootCondition {
 	private final LootCondition[] conditions;
+	private final float guaranteedAfterPercentage;
+	private final float guaranteedAfter;
 
-	public LootConditionFromSharedPool(LootCondition[] conditions) {
+	public LootConditionFromSharedPool(LootCondition[] conditions, float guaranteedAfterPercentage, int guaranteedAfter) {
 		this.conditions = conditions;
+		this.guaranteedAfterPercentage = guaranteedAfterPercentage;
+		this.guaranteedAfter = guaranteedAfter;
 	}
 
 	@Override
@@ -26,6 +32,10 @@ public class LootConditionFromSharedPool implements LootCondition {
 		//Returns false if the conditions are met because then the loot entry should
 		//not be used in normal non shared loot tables
 		return !LootConditionManager.testAllConditions(this.conditions, rand, context);
+	}
+
+	public boolean isGuaranteed(float guaranteePercentage, int guaranteeCounter) {
+		return (this.guaranteedAfterPercentage >= 0 && this.guaranteedAfterPercentage <= guaranteePercentage) || (this.guaranteedAfter >= 0 && this.guaranteedAfter <= guaranteeCounter);
 	}
 
 	/**
@@ -37,13 +47,18 @@ public class LootConditionFromSharedPool implements LootCondition {
 	 * @return
 	 */
 	public static boolean isFromSharedPool(Random rand, LootContext context, List<LootCondition> conditions) {
+		return getCondition(rand, context, conditions) != null;
+	}
+
+	@Nullable
+	public static LootConditionFromSharedPool getCondition(Random rand, LootContext context, List<LootCondition> conditions) {
 		for(LootCondition condition : conditions) {
 			if(condition instanceof LootConditionFromSharedPool && LootConditionManager.testAllConditions(((LootConditionFromSharedPool) condition).conditions, rand, context)) {
-				return true;
+				return (LootConditionFromSharedPool) condition;
 			}
 		}
 
-		return false;
+		return null;
 	}
 
 	public static class Serializer extends LootCondition.Serializer<LootConditionFromSharedPool> {
@@ -68,7 +83,19 @@ public class LootConditionFromSharedPool implements LootCondition {
 				conditions = new LootCondition[0];
 			}
 
-			return new LootConditionFromSharedPool(conditions);
+			float guaranteedAfterPercentage = -1;
+
+			if(json.has("guaranteed_after_percentage")) {
+				guaranteedAfterPercentage = JsonUtils.getFloat(json, "guaranteed_after_percentage");
+			}
+
+			int guaranteedAfter = -1;
+
+			if(json.has("guaranteed_after")) {
+				guaranteedAfter = JsonUtils.getInt(json, "guaranteed_after");
+			}
+
+			return new LootConditionFromSharedPool(conditions, guaranteedAfterPercentage, guaranteedAfter);
 		}
 	}
 }
