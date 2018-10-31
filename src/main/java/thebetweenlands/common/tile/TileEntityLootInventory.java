@@ -13,48 +13,83 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.loot.ILootContainer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
+import thebetweenlands.api.loot.ISharedLootContainer;
+import thebetweenlands.api.loot.ISharedLootPool;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
-public class TileEntityLootInventory extends TileEntityBasicInventory implements ILootContainer {
+public abstract class TileEntityLootInventory extends TileEntityBasicInventory implements ISharedLootContainer {
 	protected ResourceLocation lootTable;
 	protected long lootTableSeed;
+	protected boolean isSharedLootTable;
 
 	public TileEntityLootInventory(int invtSize, String name) {
 		super(invtSize, name);
 	}
 
-	public void fillWithLoot(@Nullable EntityPlayer player) {
-		if (this.lootTable != null) {
-			LootTable lootTable = this.world.getLootTableManager().getLootTableFromLocation(this.lootTable);
-			this.lootTable = null;
-			Random random;
-
-			if (this.lootTableSeed == 0L) {
-				random = new Random();
-			} else {
-				random = new Random(this.lootTableSeed);
-			}
-
-			LootContext.Builder lootBuilder = new LootContext.Builder((WorldServer) this.world);
-
-			if (player != null) {
-				lootBuilder.withLuck(player.getLuck());
-			}
-
-			List<ItemStack> loot = lootTable.generateLootForPools(random, lootBuilder.build());
-
-			fillInventoryRandomly(random, loot, this);
-		}
+	@Override
+	public boolean fillWithLoot(@Nullable EntityPlayer player) {
+		return fillInventoryWithLoot(this, player, this.lootTableSeed);
 	}
-	
+
+	public static boolean fillInventoryWithLoot(ISharedLootContainer inventory, @Nullable EntityPlayer player, long seed) {
+		ResourceLocation lootTableLocation = inventory.getLootTable();
+
+		if(lootTableLocation != null && inventory instanceof TileEntity) {
+			TileEntity tile = (TileEntity) inventory;
+
+			if(tile.getWorld() instanceof WorldServer) {
+				LootTable lootTable = null;
+
+				if(inventory.isSharedLootTable()) {
+					List<LocationStorage> locations = LocationStorage.getLocations(tile.getWorld(), new AxisAlignedBB(tile.getPos()));
+
+					for(LocationStorage location : locations) {
+						ISharedLootPool sharedLootPool = location.getSharedLootPool(lootTableLocation);
+
+						if(sharedLootPool != null) {
+							lootTable = sharedLootPool.getLootTableView(inventory.getMaxSharedLootRolls(), inventory.getMaxSharedLootItems());
+							break;
+						}
+					}
+				} else {
+					lootTable = tile.getWorld().getLootTableManager().getLootTableFromLocation(lootTableLocation);
+				}
+
+				if(lootTable != null) {
+					Random random;
+
+					if(seed == 0L) {
+						random = new Random();
+					} else {
+						random = new Random(seed);
+					}
+
+					LootContext.Builder lootBuilder = new LootContext.Builder((WorldServer) tile.getWorld());
+
+					if(player != null) {
+						lootBuilder.withLuck(player.getLuck());
+					}
+
+					List<ItemStack> loot = lootTable.generateLootForPools(random, lootBuilder.build());
+
+					fillInventoryRandomly(random, loot, inventory);
+
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	public static boolean fillInventoryRandomly(Random random, List<ItemStack> loot, IInventory itemHandler)  {
 		//Get empty slots
 		List<Integer> emptySlots = Lists.<Integer>newArrayList();
@@ -90,7 +125,7 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 			itemstack1.setCount(i);
 
 			emptySlotCount--;
-			
+
 			if (emptySlotCount > 0 && itemstack2.getCount() > 1 && random.nextBoolean()) {
 				splittableStacks.add(itemstack2);
 			} else {
@@ -119,13 +154,22 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 				itemHandler.setInventorySlotContents(((Integer)emptySlots.remove(emptySlots.size() - 1)).intValue(), itemstack);
 			}
 		}
-		
+
 		return true;
 	}
 
 	public void setLootTable(ResourceLocation lootTable, long lootTableSeed) {
 		this.lootTable = lootTable;
 		this.lootTableSeed = lootTableSeed;
+		this.isSharedLootTable = false;
+		this.markDirty();
+	}
+
+	public void setSharedLootTable(ResourceLocation lootTable) {
+		this.lootTable = lootTable;
+		this.lootTableSeed = 0;
+		this.isSharedLootTable = true;
+		this.markDirty();
 	}
 
 	@Override
@@ -156,6 +200,7 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 		if (compound.hasKey("LootTable", 8)) {
 			this.lootTable = new ResourceLocation(compound.getString("LootTable"));
 			this.lootTableSeed = compound.getLong("LootTableSeed");
+			this.isSharedLootTable = compound.getBoolean("SharedLootTable");
 			return true;
 		} else {
 			return false;
@@ -175,6 +220,8 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 				compound.setLong("LootTableSeed", this.lootTableSeed);
 			}
 
+			compound.setBoolean("SharedLootTable", this.isSharedLootTable);
+
 			return true;
 		} else {
 			return false;
@@ -183,12 +230,33 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 
 	@Override
 	protected void accessSlot(int slot) {
-		this.fillWithLoot(null);
+		if(fillInventoryWithLoot(this, null, this.lootTableSeed)) {
+			this.lootTable = null;
+			this.markDirty();
+		}
 	}
 
 	@Override
 	public void clear() {
-		this.fillWithLoot(null);
+		if(fillInventoryWithLoot(this, null, this.lootTableSeed)) {
+			this.lootTable = null;
+			this.markDirty();
+		}
 		super.clear();
+	}
+
+	@Override
+	public boolean isSharedLootTable() {
+		return this.isSharedLootTable;
+	}
+
+	@Override
+	public int getMaxSharedLootRolls() {
+		return this.getSizeInventory();
+	}
+
+	@Override
+	public int getMaxSharedLootItems() {
+		return Integer.MAX_VALUE;
 	}
 }

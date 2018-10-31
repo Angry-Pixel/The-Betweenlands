@@ -201,9 +201,9 @@ public class SharedLootTableView extends LootTableView {
 
 							if(count > 0) {
 								constraints.itemsLeft -= count;
-	
+
 								lootTable.getPrimarySharedLootPool().setRemovedItems(pool, poolRoll, lootEntry, removedItems + count);
-	
+
 								isLootEntryStillAvailable = true;
 							} else {
 								isLootEntryStillAvailable = false;

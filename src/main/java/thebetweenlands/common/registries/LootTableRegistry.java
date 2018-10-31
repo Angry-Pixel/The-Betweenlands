@@ -40,9 +40,10 @@ import thebetweenlands.common.loot.EntityPropertyIsBossPeatMummy;
 import thebetweenlands.common.loot.EntityPropertyLootModifier;
 import thebetweenlands.common.loot.EntityPropertyPeatMummyShimmerstone;
 import thebetweenlands.common.loot.EntityPropertyPyradCharging;
-import thebetweenlands.common.loot.LootConditionKilledLootModifier;
 import thebetweenlands.common.loot.LootConditionEventActive;
+import thebetweenlands.common.loot.LootConditionKilledLootModifier;
 import thebetweenlands.common.loot.LootConditionOr;
+import thebetweenlands.common.loot.LootConditionSharedPool;
 import thebetweenlands.common.loot.LootFunctionSetMetaFromArray;
 import thebetweenlands.util.FakeClientWorld;
 
@@ -105,6 +106,7 @@ public class LootTableRegistry {
     public static final ResourceLocation LOOT_CONDITION_OR = register(new LootConditionOr.Serializer());
     public static final ResourceLocation LOOT_CONDITION_EVENT_ACTIVE = register(new LootConditionEventActive.Serializer());
     public static final ResourceLocation LOOT_CONDITION_ENTITY_LOOT_MODIFIER = register(new LootConditionKilledLootModifier.Serializer());
+    public static final ResourceLocation LOOT_CONDITION_SHARED_POOL = register(new LootConditionSharedPool.Serializer());
     
     //LOOT FUNCTIONS
     public static final ResourceLocation LOOT_FUNCTION_SET_META_FROM_ARRAY = register(new LootFunctionSetMetaFromArray.Serializer());
