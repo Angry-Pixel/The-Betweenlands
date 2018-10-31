@@ -5,8 +5,6 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootEntry;
-import net.minecraft.world.storage.loot.LootPool;
 
 public interface ISharedLootPool {
 	/**
@@ -26,11 +24,9 @@ public interface ISharedLootPool {
 	 * not have any pools. Also keep in mind that every time loot
 	 * is generated from this loot table it is removed from
 	 * the shared pool!
-	 * @param maxRolls The maximum number of rolls
-	 * @param maxItems The maximum number of items to generate
 	 * @return
 	 */
-	public LootTableView getLootTableView(int maxRolls, int maxItems);
+	public LootTableView getLootTableView();
 
 	/**
 	 * Returns how many items of the specified loot entry in the
@@ -40,7 +36,7 @@ public interface ISharedLootPool {
 	 * @param entry The loot entry
 	 * @return
 	 */
-	public int getRemovedItems(LootPool pool, int poolRoll, LootEntry entry);
+	public int getRemovedItems(String pool, int poolRoll, String entry);
 
 	/**
 	 * Sets how many items of the specified loot entry in the
@@ -50,7 +46,7 @@ public interface ISharedLootPool {
 	 * @param entry The loot entry
 	 * @param count How many items have already been removed
 	 */
-	public void setRemovedItems(LootPool pool, int poolRoll, LootEntry entry, int count);
+	public void setRemovedItems(String pool, int poolRoll, String entry, int count);
 
 	/**
 	 * Returns a seed for the specified loot pool and roll
@@ -60,7 +56,7 @@ public interface ISharedLootPool {
 	 * that aren't for pool rolls but only for the pool
 	 * @return
 	 */
-	public long getLootPoolSeed(Random rand, LootPool pool, int poolRoll);
+	public long getLootPoolSeed(Random rand, String pool, int poolRoll);
 
 	/**
 	 * Returns a see for the specified loot entry in the specified loot pool and roll
@@ -70,7 +66,7 @@ public interface ISharedLootPool {
 	 * @param entry The loot entry
 	 * @return
 	 */
-	public long getLootEntrySeed(Random rand, LootPool pool, int poolRoll, LootEntry entry);
+	public long getLootEntrySeed(Random rand, String pool, int poolRoll, String entry);
 
 	/**
 	 * Combines this shared loot pool with another shared loot pool

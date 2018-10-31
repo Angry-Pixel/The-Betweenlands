@@ -55,7 +55,7 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 						ISharedLootPool sharedLootPool = location.getSharedLootPool(lootTableLocation);
 
 						if(sharedLootPool != null) {
-							lootTable = sharedLootPool.getLootTableView(inventory.getMaxSharedLootRolls(), inventory.getMaxSharedLootItems());
+							lootTable = sharedLootPool.getLootTableView();
 							break;
 						}
 					}
@@ -248,15 +248,5 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 	@Override
 	public boolean isSharedLootTable() {
 		return this.isSharedLootTable;
-	}
-
-	@Override
-	public int getMaxSharedLootRolls() {
-		return this.getSizeInventory();
-	}
-
-	@Override
-	public int getMaxSharedLootItems() {
-		return Integer.MAX_VALUE;
 	}
 }

@@ -12,8 +12,6 @@ import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import it.unimi.dsi.fastutil.objects.Object2LongOpenHashMap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootEntry;
-import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.loot.ISharedLootPool;
@@ -61,22 +59,22 @@ public class SharedLootPool implements ISharedLootPool {
 	}
 
 	@Override
-	public LootTableView getLootTableView(int maxRolls, int maxItems) {
+	public LootTableView getLootTableView() {
 		List<LootTableView> views = new ArrayList<>();
 
 		if(this.pool1 == null && this.pool2 == null) {
-			views.add(new SharedLootTableView(this, maxRolls, maxItems));
+			views.add(new SharedLootTableView(this));
 		}
 
 		if(this.pool1 != null) {
-			views.add(this.pool1.getLootTableView(maxRolls, maxItems));
+			views.add(this.pool1.getLootTableView());
 		}
 
 		if(this.pool2 != null) {
-			views.add(this.pool2.getLootTableView(maxRolls, maxItems));
+			views.add(this.pool2.getLootTableView());
 		}
 
-		return new SharedLootTableView(views, maxRolls, maxItems);
+		return new SharedLootTableView(views);
 	}
 
 	@Override
@@ -101,20 +99,20 @@ public class SharedLootPool implements ISharedLootPool {
 	}
 
 	@Override
-	public int getRemovedItems(LootPool pool, int poolRoll, LootEntry entry) {
-		return this.removedItems.getInt(String.format("%s#%d#%s", pool.getName(), poolRoll, entry.getEntryName()));
+	public int getRemovedItems(String pool, int poolRoll, String entry) {
+		return this.removedItems.getInt(String.format("%s#%d#%s", pool, poolRoll, entry));
 	}
 
 	@Override
-	public void setRemovedItems(LootPool pool, int poolRoll, LootEntry entry, int count) {
-		this.removedItems.put(String.format("%s#%d#%s", pool.getName(), poolRoll, entry.getEntryName()), count);
+	public void setRemovedItems(String pool, int poolRoll, String entry, int count) {
+		this.removedItems.put(String.format("%s#%d#%s", pool, poolRoll, entry), count);
 
 		this.setLocationDirty();
 	}
 
 	@Override
-	public long getLootPoolSeed(Random rand, LootPool pool, int poolRoll) {
-		String key = String.format("%s#%d", pool.getName(), poolRoll);
+	public long getLootPoolSeed(Random rand, String pool, int poolRoll) {
+		String key = String.format("%s#%d", pool, poolRoll);
 		long seed;
 		if(this.poolSeeds.containsKey(key)) {
 			seed = this.poolSeeds.get(key);
@@ -127,8 +125,8 @@ public class SharedLootPool implements ISharedLootPool {
 	}
 
 	@Override
-	public long getLootEntrySeed(Random rand, LootPool pool, int poolRoll, LootEntry entry) {
-		String key = String.format("%s#%d#%s", pool.getName(), poolRoll, entry.getEntryName());
+	public long getLootEntrySeed(Random rand, String pool, int poolRoll, String entry) {
+		String key = String.format("%s#%d#%s", pool, poolRoll, entry);
 		long seed;
 		if(this.entrySeeds.containsKey(key)) {
 			seed = this.entrySeeds.get(key);

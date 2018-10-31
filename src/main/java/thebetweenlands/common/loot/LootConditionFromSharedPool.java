@@ -14,30 +14,31 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import thebetweenlands.common.lib.ModInfo;
 
-public class LootConditionSharedPool implements LootCondition {
+public class LootConditionFromSharedPool implements LootCondition {
 	private final LootCondition[] conditions;
 
-	public LootConditionSharedPool(LootCondition[] conditions) {
+	public LootConditionFromSharedPool(LootCondition[] conditions) {
 		this.conditions = conditions;
 	}
 
 	@Override
 	public boolean testCondition(Random rand, LootContext context) {
-		//Returns false if the conditions are met because then the loot pool should
+		//Returns false if the conditions are met because then the loot entry should
 		//not be used in normal non shared loot tables
 		return !LootConditionManager.testAllConditions(this.conditions, rand, context);
 	}
 
 	/**
-	 * Returns whether the pool with the specified loot conditions belongs to a shared pool
+	 * Returns whether the loot entry with the specified loot conditions gets items from the shared
+	 * pool
 	 * @param rand
 	 * @param context
 	 * @param conditions
 	 * @return
 	 */
-	public static boolean isSharedPool(Random rand, LootContext context, List<LootCondition> conditions) {
+	public static boolean isFromSharedPool(Random rand, LootContext context, List<LootCondition> conditions) {
 		for(LootCondition condition : conditions) {
-			if(condition instanceof LootConditionSharedPool && LootConditionManager.testAllConditions(((LootConditionSharedPool) condition).conditions, rand, context)) {
+			if(condition instanceof LootConditionFromSharedPool && LootConditionManager.testAllConditions(((LootConditionFromSharedPool) condition).conditions, rand, context)) {
 				return true;
 			}
 		}
@@ -45,20 +46,20 @@ public class LootConditionSharedPool implements LootCondition {
 		return false;
 	}
 
-	public static class Serializer extends LootCondition.Serializer<LootConditionSharedPool> {
+	public static class Serializer extends LootCondition.Serializer<LootConditionFromSharedPool> {
 		public Serializer() {
-			super(new ResourceLocation(ModInfo.ID, "shared_pool"), LootConditionSharedPool.class);
+			super(new ResourceLocation(ModInfo.ID, "from_shared_pool"), LootConditionFromSharedPool.class);
 		}
 
 		@Override
-		public void serialize(JsonObject json, LootConditionSharedPool value, JsonSerializationContext context) {
+		public void serialize(JsonObject json, LootConditionFromSharedPool value, JsonSerializationContext context) {
 			if(value.conditions.length > 0) {
 				json.add("conditions", context.serialize(value.conditions));
 			}
 		}
 
 		@Override
-		public LootConditionSharedPool deserialize(JsonObject json, JsonDeserializationContext context) {
+		public LootConditionFromSharedPool deserialize(JsonObject json, JsonDeserializationContext context) {
 			LootCondition[] conditions;
 
 			if(json.has("conditions")) {
@@ -67,7 +68,7 @@ public class LootConditionSharedPool implements LootCondition {
 				conditions = new LootCondition[0];
 			}
 
-			return new LootConditionSharedPool(conditions);
+			return new LootConditionFromSharedPool(conditions);
 		}
 	}
 }

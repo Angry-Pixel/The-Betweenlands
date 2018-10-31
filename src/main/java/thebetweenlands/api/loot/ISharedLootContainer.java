@@ -8,10 +8,6 @@ import net.minecraft.world.storage.loot.ILootContainer;
 
 public interface ISharedLootContainer extends ILootContainer, IInventory {
 	public boolean isSharedLootTable();
-	
-	public int getMaxSharedLootRolls();
-	
-	public int getMaxSharedLootItems();
-	
+
 	public boolean fillWithLoot(@Nullable EntityPlayer player);
 }
