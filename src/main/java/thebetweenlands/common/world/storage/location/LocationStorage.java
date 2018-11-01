@@ -51,9 +51,10 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	private LocationAmbience ambience = null;
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
-	
+
 	private Map<ResourceLocation, SharedLootPool> sharedLootPools = new HashMap<>();
 	private int lootInventories = 0;
+	private boolean hasSharedLootPools = true;
 
 	protected GenericDataManager dataManager;
 
@@ -277,12 +278,14 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		
+
 		this.readSharedNbt(nbt);
-		
+
+		this.hasSharedLootPools = nbt.getBoolean("hasSharedLootPools");
+
 		this.sharedLootPools.clear();
 		NBTTagList sharedLootPoolsNbt = nbt.getTagList("sharedLootPools", Constants.NBT.TAG_COMPOUND);
-		
+
 		for(int i = 0; i < sharedLootPoolsNbt.tagCount(); i++) {
 			SharedLootPool sharedLootPool = new SharedLootPool(sharedLootPoolsNbt.getCompoundTagAt(i), this);
 			ResourceLocation lootTable = sharedLootPool.getLootTable();
@@ -291,7 +294,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 			}
 		}
 	}
-	
+
 	protected void readSharedNbt(NBTTagCompound nbt) {
 		this.dataManager.set(NAME, nbt.getString("name"));
 		if(this.dataManager.get(NAME).startsWith("translate:")) {
@@ -334,19 +337,21 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		
+
 		this.writeSharedNbt(nbt);
-		
+
+		nbt.setBoolean("hasSharedLootPools", this.hasSharedLootPools);
+
 		if(!this.sharedLootPools.isEmpty()) {
 			NBTTagList sharedLootPoolsNbt = new NBTTagList();
-			
+
 			for(SharedLootPool sharedLootPool : this.sharedLootPools.values()) {
 				sharedLootPoolsNbt.appendTag(sharedLootPool.writeToNBT(new NBTTagCompound()));
 			}
-			
+
 			nbt.setTag("sharedLootPools", sharedLootPoolsNbt);
 		}
-		
+
 		return nbt;
 	}
 
@@ -374,7 +379,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		nbt.setBoolean("visible", this.dataManager.get(VISIBLE));
 		nbt.setLong("seed", this.locationSeed);
 	}
-	
+
 	/**
 	 * Writes the guard data to NBT
 	 * @param nbt
@@ -664,36 +669,66 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	public void onBreakBlock(BreakEvent event) {
 
 	}
-	
+
 	public int getLootInventories() {
 		return this.lootInventories;
 	}
-	
+
 	public void setLootInventories(int inventories) {
 		this.lootInventories = inventories;
 		this.markDirty();
 	}
-	
+
 	@Nullable
 	public ISharedLootPool getSharedLootPool(ResourceLocation lootTable) {
+		if(!this.hasSharedLootPools) {
+			return null;
+		}
+
 		return this.sharedLootPools.get(lootTable);
 	}
-	
+
+	@Nullable
+	public ISharedLootPool getOrCreateSharedLootPool(ResourceLocation lootTable) {
+		if(!this.hasSharedLootPools) {
+			return null;
+		}
+
+		ISharedLootPool pool = this.getSharedLootPool(lootTable);
+
+		if(pool != null) {
+			return pool;
+		}
+
+		SharedLootPool newPool = new SharedLootPool(lootTable, this.locationSeed, this);
+		this.sharedLootPools.put(lootTable, newPool);
+		this.markDirty();
+
+		return newPool;
+	}
+
 	@Nullable
 	public ISharedLootPool removeSharedLootPool(ResourceLocation lootTable) {
-		this.markDirty();
-		return this.sharedLootPools.remove(lootTable);
+		if(!this.hasSharedLootPools) {
+			return null;
+		}
+
+		ISharedLootPool pool = this.sharedLootPools.remove(lootTable);
+		if(pool != null)
+			this.markDirty();
+
+		return pool;
 	}
-	
+
 	public Set<ResourceLocation> getSharedLootPoolKeys() {
 		return this.sharedLootPools.keySet();
 	}
-	
-	public boolean addSharedLootPool(ResourceLocation lootTable) {
-		if(!this.sharedLootPools.containsKey(lootTable)) {
-			this.sharedLootPools.put(lootTable, new SharedLootPool(lootTable, this));
-			this.markDirty();
+
+	public void setHasSharedLootPools(boolean hasSharedLootPools) {
+		this.hasSharedLootPools = hasSharedLootPools;
+		if(!hasSharedLootPools) {
+			this.sharedLootPools.clear();
 		}
-		return false;
+		this.markDirty();
 	}
 }

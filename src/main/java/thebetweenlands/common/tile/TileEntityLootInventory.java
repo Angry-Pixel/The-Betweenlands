@@ -28,6 +28,7 @@ import thebetweenlands.common.world.storage.location.LocationStorage;
 public abstract class TileEntityLootInventory extends TileEntityBasicInventory implements ISharedLootContainer {
 	protected ResourceLocation lootTable;
 	protected long lootTableSeed;
+	protected long sharedLootTableSeed;
 	protected boolean isSharedLootTable;
 
 	public TileEntityLootInventory(int invtSize, String name) {
@@ -35,7 +36,7 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 	}
 
 	@Override
-	public boolean fillWithLoot(@Nullable EntityPlayer player) {
+	public boolean fillInventoryWithLoot(@Nullable EntityPlayer player) {
 		return fillInventoryWithLoot(this, player, this.lootTableSeed);
 	}
 
@@ -52,8 +53,7 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 					List<LocationStorage> locations = LocationStorage.getLocations(tile.getWorld(), new AxisAlignedBB(tile.getPos()));
 
 					for(LocationStorage location : locations) {
-						ISharedLootPool sharedLootPool = location.getSharedLootPool(lootTableLocation);
-
+						ISharedLootPool sharedLootPool = location.getOrCreateSharedLootPool(lootTableLocation);
 						if(sharedLootPool != null) {
 							lootTable = sharedLootPool.getLootTableView();
 							break;
@@ -64,8 +64,8 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 				}
 
 				if(lootTable != null) {
-					inventory.setLootTable(null, 0);
-					
+					inventory.removeLootTable();
+
 					Random random;
 
 					if(seed == 0L) {
@@ -160,7 +160,6 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 		return true;
 	}
 
-	@Override
 	public void setLootTable(@Nullable ResourceLocation lootTable, long lootTableSeed) {
 		this.lootTable = lootTable;
 		this.lootTableSeed = lootTableSeed;
@@ -168,16 +167,24 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 		this.markDirty();
 	}
 
-	public void setSharedLootTable(ResourceLocation lootTable) {
+	public void setSharedLootTable(ResourceLocation lootTable, long lootTableSeed) {
 		this.lootTable = lootTable;
-		this.lootTableSeed = 0;
+		this.lootTableSeed = lootTableSeed;
 		this.isSharedLootTable = true;
 		this.markDirty();
 	}
 
 	@Override
+	public void removeLootTable() {
+		if(this.lootTable != null) {
+			this.lootTable = null;
+			this.markDirty();
+		}
+	}
+
+	@Override
 	public ResourceLocation getLootTable() {
-		return lootTable;
+		return this.lootTable;
 	}
 
 	@Override

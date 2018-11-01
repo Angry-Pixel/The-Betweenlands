@@ -19,6 +19,16 @@ public interface ISharedLootPool {
 	public ResourceLocation getLootTable();
 
 	/**
+	 * Returns the seed that is used to generate the shared
+	 * loot pool's items (<i>not</i> the seed used to generate
+	 * the individual loot tables generated from {@link #getLootTableView()}!).
+	 * If <code>0</code> is returned then the RNG from {@link LootTable#generateLootForPools(Random, net.minecraft.world.storage.loot.LootContext)}
+	 * of {@link #getLootTableView()} is used to generate the shared loot pool's items.
+	 * @return
+	 */
+	public long getLootTableSeed();
+
+	/**
 	 * Returns a loot table view of this shared loot pool
 	 * that allows retrieving items from the shared loot pool.
 	 * Note that the loot table view will always be frozen and
@@ -70,28 +80,12 @@ public interface ISharedLootPool {
 	public long getLootEntrySeed(Random rand, String pool, int poolRoll, String entry);
 
 	/**
-	 * Combines this shared loot pool with another shared loot pool
-	 * and returns a new <b>unmodifiable shared loot pool view</b> that combines both
-	 * shared loot pools. The returned shared loot pool does not hold any information
-	 * itself.
-	 * @param other Other shared loot pool to combine with this shared loot pool
-	 * @return
-	 */
-	public ISharedLootPool combine(ISharedLootPool other);
-
-	/**
 	 * Returns the guarantee counter that is used to guarantee certain
-	 * loot. Automatically incremented when {@link LootTable#generateLootForPools(Random, net.minecraft.world.storage.loot.LootContext)}
+	 * loot. Usually incremented when {@link LootTable#generateLootForPools(Random, net.minecraft.world.storage.loot.LootContext)}
 	 * is called on any loot table view (see {@link #getLootTableView()}) of this shared loot pool.
 	 * @return
 	 */
 	public int getGuaranteeCounter();
-
-	/**
-	 * Increments the the guarantee counter, see {@link #getGuaranteeCounter()}.
-	 * @see #getGuaranteeCounter()
-	 */
-	public void incrementGuaranteeCounter();
 
 	/**
 	 * Returns the guarantee percentage based on the value of the

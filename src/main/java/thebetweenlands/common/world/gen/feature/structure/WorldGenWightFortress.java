@@ -40,6 +40,7 @@ import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
@@ -201,6 +202,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		puzzleLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 20, pos.getY() + 17, pos.getZ() - 10 + 20, pos.getX() + 42 - 20, pos.getY() + 17 + 6, pos.getZ() + 42 - 20));
 		puzzleLocation.linkChunks();
 		puzzleLocation.setLayer(1);
+		puzzleLocation.setHasSharedLootPools(false);
 		puzzleLocation.setDirty(true);
 		puzzleLocation.setSeed(locationSeed);
 
@@ -208,6 +210,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		teleporterLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 23, pos.getY() + 17 + 12, pos.getZ() - 10 + 23, pos.getX() + 42 - 23, pos.getY() + 17 + 6 + 11, pos.getZ() + 42 - 23));
 		teleporterLocation.linkChunks();
 		teleporterLocation.setLayer(2);
+		teleporterLocation.setHasSharedLootPools(false);
 		teleporterLocation.setDirty(true);
 		teleporterLocation.setSeed(locationSeed);
 
@@ -216,6 +219,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		bossLocation.linkChunks();
 		bossLocation.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F));
 		bossLocation.setLayer(3);
+		bossLocation.setHasSharedLootPools(false);
 		bossLocation.setDirty(true);
 		bossLocation.setSeed(locationSeed);
 
@@ -1147,8 +1151,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private void placeChest(World world, Random rand, BlockPos pos, int blockMeta) {
 		this.setBlockAndNotifyAdequately(world, pos, getWeedWoodChestRotations(chest, blockMeta));
 		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileEntityChest) {
-			((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, rand.nextLong());
+		if (tile instanceof TileEntityChestBetweenlands) {
+			//TODO Make proper shared loot tables
+			//TODO Also keep track of inventories -> LocationStorage.setLootInventories(...)
+			((TileEntityChestBetweenlands) tile).setSharedLootTable(LootTableRegistry.SHARED_LOOT_POOL_TEST, rand.nextLong());
 		}
 	}
 
@@ -1159,6 +1165,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			this.setBlockAndNotifyAdequately(world, pos, getLootPotRotations(blockType, blockMeta));
 			TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, pos);
 			if (lootPot != null) {
+				//TODO Make proper shared loot tables
 				lootPot.setLootTable(LootTableRegistry.DUNGEON_POT_LOOT, rand.nextLong());
 				lootPot.setModelRotationOffset(world.rand.nextInt(41) - 20);
 				world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);

@@ -1,7 +1,5 @@
 package thebetweenlands.common.loot.shared;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -23,36 +21,30 @@ public class SharedLootPool implements ISharedLootPool {
 
 	protected LocationStorage location;
 
-	protected final ISharedLootPool pool1;
-	protected final ISharedLootPool pool2;
-
 	protected LootTable view;
 
 	protected final Object2IntMap<String> removedItems = new Object2IntOpenHashMap<>();
 	protected final Object2LongMap<String> poolSeeds = new Object2LongOpenHashMap<>();
 	protected final Object2LongMap<String> entrySeeds = new Object2LongOpenHashMap<>();
 
+	protected long sharedLootSeed;
+
 	protected int guaranteeCounter;
 
-	private SharedLootPool(ISharedLootPool pool1, ISharedLootPool pool2, ResourceLocation lootTableLocation) {
+	private SharedLootPool(ResourceLocation lootTableLocation, long seed) {
 		this.lootTableLocation = lootTableLocation;
-		this.pool1 = pool1;
-		this.pool2 = pool2;
+		this.sharedLootSeed = seed;
 	}
 
-	public SharedLootPool(ResourceLocation lootTableLocation, @Nullable LocationStorage location) {
-		this(null, null, lootTableLocation);
+	public SharedLootPool(ResourceLocation lootTableLocation, long seed, @Nullable LocationStorage location) {
+		this(lootTableLocation, seed);
 		this.location = location;
 	}
 
 	public SharedLootPool(NBTTagCompound nbt, @Nullable LocationStorage location) {
-		this(null, null, null);
+		this(null, 0);
 		this.location = location;
 		this.readFromNBT(nbt);
-	}
-
-	private SharedLootPool(ISharedLootPool pool1, ISharedLootPool pool2) {
-		this(pool1, pool2, null);
 	}
 
 	@Override
@@ -62,26 +54,7 @@ public class SharedLootPool implements ISharedLootPool {
 
 	@Override
 	public LootTableView getLootTableView() {
-		List<LootTableView> views = new ArrayList<>();
-
-		if(this.pool1 == null && this.pool2 == null) {
-			views.add(new SharedLootTableView(this));
-		}
-
-		if(this.pool1 != null) {
-			views.add(this.pool1.getLootTableView());
-		}
-
-		if(this.pool2 != null) {
-			views.add(this.pool2.getLootTableView());
-		}
-
-		return new SharedLootTableView(views);
-	}
-
-	@Override
-	public ISharedLootPool combine(ISharedLootPool other) {
-		return new SharedLootPool(this, other);
+		return new SharedLootTableView(this);
 	}
 
 	@Override
@@ -147,8 +120,7 @@ public class SharedLootPool implements ISharedLootPool {
 		return this.guaranteeCounter;
 	}
 
-	@Override
-	public void incrementGuaranteeCounter() {
+	void incrementGuaranteeCounter() {
 		this.guaranteeCounter++;
 		this.setLocationDirty();
 	}
@@ -196,6 +168,8 @@ public class SharedLootPool implements ISharedLootPool {
 
 		nbt.setInteger("generatedLootTables", this.guaranteeCounter);
 
+		nbt.setLong("sharedLootSeed", this.sharedLootSeed);
+
 		return nbt;
 	}
 
@@ -224,5 +198,12 @@ public class SharedLootPool implements ISharedLootPool {
 		}
 
 		this.guaranteeCounter = nbt.getInteger("generatedLootTables");
+
+		this.sharedLootSeed = nbt.getLong("sharedLootSeed");
+	}
+
+	@Override
+	public long getLootTableSeed() {
+		return this.sharedLootSeed;
 	}
 }
