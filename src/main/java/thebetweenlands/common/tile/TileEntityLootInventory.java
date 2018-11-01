@@ -64,6 +64,8 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 				}
 
 				if(lootTable != null) {
+					inventory.setLootTable(null, 0);
+					
 					Random random;
 
 					if(seed == 0L) {
@@ -158,7 +160,8 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 		return true;
 	}
 
-	public void setLootTable(ResourceLocation lootTable, long lootTableSeed) {
+	@Override
+	public void setLootTable(@Nullable ResourceLocation lootTable, long lootTableSeed) {
 		this.lootTable = lootTable;
 		this.lootTableSeed = lootTableSeed;
 		this.isSharedLootTable = false;
@@ -231,7 +234,6 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 	@Override
 	protected void accessSlot(int slot) {
 		if(fillInventoryWithLoot(this, null, this.lootTableSeed)) {
-			this.lootTable = null;
 			this.markDirty();
 		}
 	}
@@ -239,7 +241,6 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 	@Override
 	public void clear() {
 		if(fillInventoryWithLoot(this, null, this.lootTableSeed)) {
-			this.lootTable = null;
 			this.markDirty();
 		}
 		super.clear();
