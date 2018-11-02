@@ -5,6 +5,7 @@ import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
@@ -21,7 +22,9 @@ import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class CircleGemsRecipeJEI implements ICraftingRecipeWrapper, ICustomCraftingRecipeWrapper {
 
@@ -34,7 +37,7 @@ public class CircleGemsRecipeJEI implements ICraftingRecipeWrapper, ICustomCraft
 
     public static void updateApplicableItems() {
         applicableItems.clear();
-        for (ItemStack stack: BetweenlandsJEIPlugin.ingredientRegistry.getAllIngredients(ItemStack.class)) {
+        for (ItemStack stack: BetweenlandsJEIPlugin.ingredientRegistry.getAllIngredients(VanillaTypes.ITEM)) {
             if (!stack.isEmpty() && CircleGemHelper.isApplicable(stack.getItem()) && (BetweenlandsConfig.COMPATIBILITY.showNonBLGemRecipes || ModInfo.ID.equals(stack.getItem().getRegistryName().getResourceDomain())))
                 applicableItems.add(stack);
         }
@@ -72,8 +75,8 @@ public class CircleGemsRecipeJEI implements ICraftingRecipeWrapper, ICustomCraft
         inputLists.add(gemInputs);
         outputLists.add(outputs);
 
-        ingredients.setInputLists(ItemStack.class, inputLists);
-        ingredients.setOutputLists(ItemStack.class, outputLists);
+        ingredients.setInputLists(VanillaTypes.ITEM, inputLists);
+        ingredients.setOutputLists(VanillaTypes.ITEM, outputLists);
     }
 
     @Override
@@ -82,8 +85,8 @@ public class CircleGemsRecipeJEI implements ICraftingRecipeWrapper, ICustomCraft
 
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
         IFocus focus = recipeLayout.getFocus();
-        List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
-        List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
+        List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
+        List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 
         if (focus != null && focus.getValue() instanceof ItemStack && (CircleGemHelper.isApplicable(((ItemStack) focus.getValue()).getItem()) || ((ItemStack) focus.getValue()).getItem() instanceof ItemGem)) {
             if (focus.getMode() == IFocus.Mode.INPUT) {

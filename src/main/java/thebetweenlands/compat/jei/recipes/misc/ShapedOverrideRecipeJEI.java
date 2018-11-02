@@ -1,18 +1,8 @@
 package thebetweenlands.compat.jei.recipes.misc;
 
 import mezz.jei.api.IJeiHelpers;
-import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.IStackHelper;
-import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe.ShapedOverrideDummyRecipe;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ShapedOverrideRecipeJEI extends ShapelessOverrideRecipeJEI implements IShapedCraftingRecipeWrapper {
 

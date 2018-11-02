@@ -1,7 +1,7 @@
 package thebetweenlands.compat.jei.recipes.purifier;
 
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -27,8 +27,8 @@ public class PurifierRecipeJEI implements IRecipeWrapper {
         ArrayList<ItemStack> inputs = new ArrayList<>();
         inputs.add(input);
         inputs.add(ItemMisc.EnumItemMisc.SULFUR.create(1));
-        ingredients.setInputs(ItemStack.class, inputs);
-        ingredients.setOutput(ItemStack.class, output);
-        ingredients.setInput(FluidStack.class, new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
+        ingredients.setInputs(VanillaTypes.ITEM, inputs);
+        ingredients.setOutput(VanillaTypes.ITEM, output);
+        ingredients.setInput(VanillaTypes.FLUID, new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
     }
 }

@@ -1,9 +1,6 @@
 package thebetweenlands.compat.jei.recipes.animator;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;

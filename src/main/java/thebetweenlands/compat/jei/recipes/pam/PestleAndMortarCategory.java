@@ -3,6 +3,7 @@ package thebetweenlands.compat.jei.recipes.pam;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
@@ -60,13 +61,13 @@ public class PestleAndMortarCategory implements IRecipeCategory {
         recipeLayout.getItemStacks().init(1, true, 44, 6);
         recipeLayout.getItemStacks().init(2, false, 88, 6);
 
-        ItemStack pestle = ingredients.getInputs(ItemStack.class).get(1).get(0);
+        ItemStack pestle = ingredients.getInputs(VanillaTypes.ITEM).get(1).get(0);
         NBTTagCompound compound = new NBTTagCompound();
         compound.setBoolean("active", true);
         pestle.setTagCompound(compound);
-        recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
+        recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
         recipeLayout.getItemStacks().set(1, pestle);
-        recipeLayout.getItemStacks().set(2, ingredients.getOutputs(ItemStack.class).get(0));
+        recipeLayout.getItemStacks().set(2, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
     }
 
     @Override

@@ -2,9 +2,9 @@ package thebetweenlands.compat.jei.recipes.misc;
 
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IStackHelper;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
-import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
@@ -30,8 +30,8 @@ public class ShapelessOverrideRecipeJEI implements ICraftingRecipeWrapper {
 
         try {
             List<List<ItemStack>> inputLists = stackHelper.expandRecipeItemStackInputs(recipe.getIngredients());
-            ingredients.setInputLists(ItemStack.class, inputLists);
-            ingredients.setOutput(ItemStack.class, recipeOutput);
+            ingredients.setInputLists(VanillaTypes.ITEM, inputLists);
+            ingredients.setOutput(VanillaTypes.ITEM, recipeOutput);
         } catch (RuntimeException e) {
             TheBetweenlands.logger.error("Problem showing recipe in JEI for: " + recipe.getIngredients(), e);
         }
