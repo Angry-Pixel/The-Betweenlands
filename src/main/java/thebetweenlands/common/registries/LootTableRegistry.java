@@ -40,9 +40,11 @@ import thebetweenlands.common.loot.EntityPropertyIsBossPeatMummy;
 import thebetweenlands.common.loot.EntityPropertyLootModifier;
 import thebetweenlands.common.loot.EntityPropertyPeatMummyShimmerstone;
 import thebetweenlands.common.loot.EntityPropertyPyradCharging;
-import thebetweenlands.common.loot.LootConditionKilledLootModifier;
 import thebetweenlands.common.loot.LootConditionEventActive;
+import thebetweenlands.common.loot.LootConditionFromSharedPool;
+import thebetweenlands.common.loot.LootConditionKilledLootModifier;
 import thebetweenlands.common.loot.LootConditionOr;
+import thebetweenlands.common.loot.LootConditionSharedPool;
 import thebetweenlands.common.loot.LootFunctionSetMetaFromArray;
 import thebetweenlands.util.FakeClientWorld;
 
@@ -56,6 +58,8 @@ public class LootTableRegistry {
     public static final ResourceLocation MUSIC_DISC = register("loot/music_disc");
     public static final ResourceLocation ANIMATOR_SCROLL = register("animator/scroll");
     public static final ResourceLocation PRESENT = register("loot/present_loot");
+    
+    public static final ResourceLocation SHARED_LOOT_POOL_TEST = register("loot/shared_loot_pool_test");
     
     //MOBS
     public static final ResourceLocation ANGLER = register("entities/angler");
@@ -105,6 +109,8 @@ public class LootTableRegistry {
     public static final ResourceLocation LOOT_CONDITION_OR = register(new LootConditionOr.Serializer());
     public static final ResourceLocation LOOT_CONDITION_EVENT_ACTIVE = register(new LootConditionEventActive.Serializer());
     public static final ResourceLocation LOOT_CONDITION_ENTITY_LOOT_MODIFIER = register(new LootConditionKilledLootModifier.Serializer());
+    public static final ResourceLocation LOOT_CONDITION_SHARED_POOL = register(new LootConditionSharedPool.Serializer());
+    public static final ResourceLocation LOOT_CONDITION_FROM_SHARED_POOL = register(new LootConditionFromSharedPool.Serializer());
     
     //LOOT FUNCTIONS
     public static final ResourceLocation LOOT_FUNCTION_SET_META_FROM_ARRAY = register(new LootFunctionSetMetaFromArray.Serializer());

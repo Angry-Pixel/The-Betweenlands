@@ -172,7 +172,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 		super.harvestBlock(worldIn, player, pos, state, te, stack);
 		IInventory tile = (IInventory) worldIn.getTileEntity(pos);
 		if (tile != null) {
-			((TileEntityLootInventory) tile).fillWithLoot(player);
+			((TileEntityLootInventory) tile).fillInventoryWithLoot(player);
 		}
 	}
 
