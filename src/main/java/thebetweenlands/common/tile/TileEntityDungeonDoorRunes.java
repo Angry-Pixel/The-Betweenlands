@@ -8,7 +8,7 @@ import net.minecraft.util.ITickable;
 
 public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable {
 
-	public int top_code = 0, mid_code = 0, bottom_code = 0;
+	public int top_code = -1, mid_code = -1, bottom_code = -1;
 	public int top_state = 0, mid_state = 0, bottom_state = 0;
 	public int top_state_prev = 0, mid_state_prev = 0, bottom_state_prev = 0;
 	public int top_rotate = 0, mid_rotate = 0, bottom_rotate = 0;
@@ -40,6 +40,12 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 			if (bottom_rotate > 90) {
 				bottom_rotate = 0;
 				bottom_state_prev = bottom_state;
+			}
+		}
+		if (!getWorld().isRemote) {
+			if (top_state == top_code && mid_state == mid_code && bottom_state == bottom_code) {
+				getWorld().destroyBlock(getPos().down(), false);
+				getWorld().destroyBlock(getPos(), false);
 			}
 		}
 	}

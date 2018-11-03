@@ -152,6 +152,7 @@ import thebetweenlands.client.render.tile.RenderAspectrusCrop;
 import thebetweenlands.client.render.tile.RenderChestBetweenlands;
 import thebetweenlands.client.render.tile.RenderCompostBin;
 import thebetweenlands.client.render.tile.RenderDruidAltar;
+import thebetweenlands.client.render.tile.RenderDungeonDoorCombination;
 import thebetweenlands.client.render.tile.RenderDungeonDoorRunes;
 import thebetweenlands.client.render.tile.RenderGeckoCage;
 import thebetweenlands.client.render.tile.RenderInfuser;
@@ -268,6 +269,7 @@ import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.common.tile.TileEntityInfuser;
@@ -594,6 +596,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudBricksAlcove.class, new RenderMudBricksAlcove());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootUrn.class, new RenderLootUrn());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDungeonDoorRunes.class, new RenderDungeonDoorRunes());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDungeonDoorCombination.class, new RenderDungeonDoorCombination());
 
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
@@ -656,6 +659,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		}
 
 		Item.getItemFromBlock(BlockRegistry.DUNGEON_DOOR_RUNES).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityDungeonDoorRunes.class));
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DUNGEON_DOOR_COMBINATION), 0, TileEntityDungeonDoorCombination.class);
 
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
