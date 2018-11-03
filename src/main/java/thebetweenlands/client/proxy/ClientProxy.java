@@ -30,6 +30,7 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -660,7 +661,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		for (Block block : BlockRegistry.BLOCKS) {
 			if (block instanceof ITintedBlock) {
 				final ITintedBlock tintedBlock = (ITintedBlock) block;
-				Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> tintedBlock.getColorMultiplier(((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()), null, null, tintIndex), block);
+				if (Item.getItemFromBlock(block) != Items.AIR) {
+					Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> tintedBlock.getColorMultiplier(((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()), null, null, tintIndex), block);
+				}
 				Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(tintedBlock::getColorMultiplier, block);
 			}
 		}
