@@ -8,10 +8,12 @@ import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 
 @SideOnly(Side.CLIENT)
 public class ModelDungeonDoorRunes extends ModelBase {
-    public ModelRenderer bottom;
-    public ModelRenderer mid;
-    public ModelRenderer top;
+
     public ModelRenderer main;
+    public ModelRenderer top;
+    public ModelRenderer mid;
+    public ModelRenderer bottom;
+
 
     public ModelDungeonDoorRunes() {
         textureWidth = 64;
@@ -19,12 +21,12 @@ public class ModelDungeonDoorRunes extends ModelBase {
         main = new ModelRenderer(this, 0, 0);
         main.setRotationPoint(0.0F, 16.0F, 0.0F);
         main.addBox(-8.0F, -8.0F, -7.0F, 16, 16, 15, 0.0F);
-        mid = new ModelRenderer(this, 0, 43);
-        mid.setRotationPoint(0.0F, 16.0F, -6.0F);
-        mid.addBox(-7.0F, -2.0F, -2.0F, 14, 4, 4, 0.0F);
         top = new ModelRenderer(this, 0, 32);
         top.setRotationPoint(0.0F, 11.5F, -5.5F);
         top.addBox(-7.0F, -2.5F, -2.5F, 14, 5, 5, 0.0F);
+        mid = new ModelRenderer(this, 0, 43);
+        mid.setRotationPoint(0.0F, 16.0F, -6.0F);
+        mid.addBox(-7.0F, -2.0F, -2.0F, 14, 4, 4, 0.0F);
         bottom = new ModelRenderer(this, 0, 52);
         bottom.setRotationPoint(0.0F, 20.5F, -5.5F);
         bottom.addBox(-7.0F, -2.5F, -2.5F, 14, 5, 5, 0.0F);

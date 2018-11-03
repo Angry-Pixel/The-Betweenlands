@@ -7,11 +7,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.model.tile.ModelLootUrn1;
-import thebetweenlands.client.render.model.tile.ModelLootUrn2;
-import thebetweenlands.client.render.model.tile.ModelLootUrn3;
 import thebetweenlands.client.render.model.tile.ModelDungeonDoorRunes;
-import thebetweenlands.common.block.container.BlockMudBricksAlcove;
+import thebetweenlands.client.render.model.tile.ModelDungeonDoorRunesLayer;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -21,7 +18,17 @@ import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 public class RenderDungeonDoorRunes extends TileEntitySpecialRenderer<TileEntityDungeonDoorRunes> {
 
 	private static final ModelDungeonDoorRunes RUNE_BLOCK = new ModelDungeonDoorRunes();
+	private static final ModelDungeonDoorRunesLayer RUNE_BLOCK_LAYER = new ModelDungeonDoorRunesLayer();
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/tiles/dungeon_door_runes.png");
+
+	private static final ResourceLocation TEXTURE_1 = new ResourceLocation(ModInfo.ID, "textures/tiles/rune_overlay_1.png");
+	private static final ResourceLocation TEXTURE_2 = new ResourceLocation(ModInfo.ID, "textures/tiles/rune_overlay_2.png");
+	private static final ResourceLocation TEXTURE_3 = new ResourceLocation(ModInfo.ID, "textures/tiles/rune_overlay_3.png");
+	private static final ResourceLocation TEXTURE_4 = new ResourceLocation(ModInfo.ID, "textures/tiles/rune_overlay_4.png");
+	private static final ResourceLocation TEXTURE_5 = new ResourceLocation(ModInfo.ID, "textures/tiles/rune_overlay_5.png");
+	private static final ResourceLocation TEXTURE_6 = new ResourceLocation(ModInfo.ID, "textures/tiles/rune_overlay_6.png");
+	private static final ResourceLocation TEXTURE_7 = new ResourceLocation(ModInfo.ID, "textures/tiles/rune_overlay_7.png");
+	private static final ResourceLocation TEXTURE_8 = new ResourceLocation(ModInfo.ID, "textures/tiles/rune_overlay_8.png");
 
 	public void renderTile(TileEntityDungeonDoorRunes tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
 		IBlockState state = tile.getWorld().getBlockState(tile.getPos());
@@ -49,6 +56,20 @@ public class RenderDungeonDoorRunes extends TileEntitySpecialRenderer<TileEntity
 			break;
 		}
 		RUNE_BLOCK.render(tile, 0.0625F);
+
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+		bindTexture(getTextureFromRotationIndex(tile.top_state_prev));
+		RUNE_BLOCK_LAYER.renderTopOverlay(tile, 0.0625F);
+
+		bindTexture(getTextureFromRotationIndex(tile.mid_state_prev));
+		RUNE_BLOCK_LAYER.renderMidOverlay(tile, 0.0625F);
+
+		bindTexture(getTextureFromRotationIndex(tile.bottom_state_prev));
+		RUNE_BLOCK_LAYER.renderBottomOverlay(tile, 0.0625F);
+
+		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
 	}
 
@@ -68,5 +89,27 @@ public class RenderDungeonDoorRunes extends TileEntitySpecialRenderer<TileEntity
 		GlStateManager.scale(-1, -1, 1);
 		RUNE_BLOCK.renderItem(0.0625F);
 		GlStateManager.popMatrix();
+	}
+
+    public ResourceLocation getTextureFromRotationIndex(int index) {
+		switch (index) {
+		case 0 :
+			return TEXTURE_1;
+		case 1 :
+			return TEXTURE_2;
+		case 2 :
+			return TEXTURE_3;
+		case 3 :
+			return TEXTURE_4;
+		case 4 :
+			return TEXTURE_5;
+		case 5 :
+			return TEXTURE_6;
+		case 6 :
+			return TEXTURE_7;
+		case 7 :
+			return TEXTURE_8;
+		}
+		return TEXTURE_1;
 	}
 }
