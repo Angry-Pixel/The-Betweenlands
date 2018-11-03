@@ -36,33 +36,48 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 		if (tile instanceof TileEntityDungeonDoorRunes) {
 			TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
 			top_overlay.rotateAngleX = 0F + tileDoor.top_rotate / (180F / (float) Math.PI);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0F, -1.001F, -0.001F);
+			top_overlay.render(scale);
+			GlStateManager.popMatrix();
+		} else {
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0F, -0.001F, -0.001F);
+			top_overlay.render(scale);
+			GlStateManager.popMatrix();
 		}
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(0F, -0.001F, -0.001F);
-		top_overlay.render(scale);
-		GlStateManager.popMatrix();
 	}
 
 	public void renderMidOverlay(TileEntity tile, float scale) {
 		if (tile instanceof TileEntityDungeonDoorRunes) {
 			TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
 			mid_overlay.rotateAngleX = 0F + tileDoor.mid_rotate / (180F / (float) Math.PI);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0F, -1.001F, -0.001F);
+			mid_overlay.render(scale);
+			GlStateManager.popMatrix();
+		} else {
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0F, -0.001F, -0.001F);
+			mid_overlay.render(scale);
+			GlStateManager.popMatrix();
 		}
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(0F, -0.001F, -0.001F);
-		mid_overlay.render(scale);
-		GlStateManager.popMatrix();
 	}
 
 	public void renderBottomOverlay(TileEntity tile, float scale) {
 		if (tile instanceof TileEntityDungeonDoorRunes) {
 			TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
 			bottom_overlay.rotateAngleX = 0F + tileDoor.bottom_rotate / (180F / (float) Math.PI);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0F, -1.001F, -0.001F);
+			bottom_overlay.render(scale);
+			GlStateManager.popMatrix();
+		} else {
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0F, -0.001F, -0.001F);
+			bottom_overlay.render(scale);
+			GlStateManager.popMatrix();
 		}
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(0F, -0.001F, -0.001F);
-		bottom_overlay.render(scale);
-		GlStateManager.popMatrix();
 	}
 
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

@@ -37,7 +37,7 @@ public class RenderDungeonDoorRunes extends TileEntitySpecialRenderer<TileEntity
 		EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
+		GlStateManager.translate((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);
 		switch (facing) {
 		case UP:
