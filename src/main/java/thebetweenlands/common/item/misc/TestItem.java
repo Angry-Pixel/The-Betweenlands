@@ -61,10 +61,10 @@ public class TestItem extends Item {
             WorldGenSpawnerStructure smallRuins = new WorldGenSpawnerStructure();
             smallRuins.generate(worldIn, itemRand, pos.up());
 		*/
-		
+		/*
 			WorldGenWightFortress fortress = new WorldGenWightFortress();
 			fortress.generate(worldIn, itemRand, pos.up());
-		
+		*/
 		/*
 			WorldGenSmallRuins ruins = new WorldGenSmallRuins();
 			ruins.generate(worldIn, itemRand, pos.up());
@@ -138,12 +138,8 @@ public class TestItem extends Item {
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
 				//playerIn.setHeldItem(hand, null);
 			}
-<<<<<<< HEAD
-		 */
+
 		
-=======
-		*/
->>>>>>> 1.12-dev
 		/*
 			ItemStack stack = player.getHeldItem(hand);
 			NBTTagCompound nbt = stack.getOrCreateSubCompound("pos");
