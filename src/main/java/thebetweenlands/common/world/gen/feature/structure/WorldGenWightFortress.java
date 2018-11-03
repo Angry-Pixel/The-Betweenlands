@@ -1154,7 +1154,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 		if (tile instanceof TileEntityChestBetweenlands) {
 			//TODO Make proper shared loot tables
 			//TODO Also keep track of inventories -> LocationStorage.setLootInventories(...)
-			((TileEntityChestBetweenlands) tile).setSharedLootTable(LootTableRegistry.SHARED_LOOT_POOL_TEST, rand.nextLong());
+			//((TileEntityChestBetweenlands) tile).setSharedLootTable(LootTableRegistry.SHARED_LOOT_POOL_TEST, rand.nextLong());
+			((TileEntityChestBetweenlands) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, rand.nextLong());
 		}
 	}
 
