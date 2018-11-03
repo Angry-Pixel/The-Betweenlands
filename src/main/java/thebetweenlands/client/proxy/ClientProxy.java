@@ -151,6 +151,7 @@ import thebetweenlands.client.render.tile.RenderAspectrusCrop;
 import thebetweenlands.client.render.tile.RenderChestBetweenlands;
 import thebetweenlands.client.render.tile.RenderCompostBin;
 import thebetweenlands.client.render.tile.RenderDruidAltar;
+import thebetweenlands.client.render.tile.RenderDungeonDoorRunes;
 import thebetweenlands.client.render.tile.RenderGeckoCage;
 import thebetweenlands.client.render.tile.RenderInfuser;
 import thebetweenlands.client.render.tile.RenderItemCage;
@@ -266,6 +267,7 @@ import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.common.tile.TileEntityInfuser;
 import thebetweenlands.common.tile.TileEntityItemCage;
@@ -590,6 +592,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWaystone.class, new RenderWaystone());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudBricksAlcove.class, new RenderMudBricksAlcove());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootUrn.class, new RenderLootUrn());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDungeonDoorRunes.class, new RenderDungeonDoorRunes());
 
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
@@ -650,6 +653,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_URN), EnumLootUrn.URN_2.getMetadata(facing), TileEntityLootUrn.class);
 			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_URN), EnumLootUrn.URN_3.getMetadata(facing), TileEntityLootUrn.class);
 		}
+
+		Item.getItemFromBlock(BlockRegistry.DUNGEON_DOOR_RUNES).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityDungeonDoorRunes.class));
 
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {

@@ -129,6 +129,7 @@ import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockDrippingMud;
 import thebetweenlands.common.block.structure.BlockDruidStone;
+import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.block.structure.BlockEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.block.structure.BlockFenceGateBetweenlands;
@@ -548,7 +549,7 @@ public class BlockRegistry {
     public static final Block MUD_BRICKS_SPAWNER_HOLE = new BlockMudBricksSpawnerHole();
     public static final Block MUD_BRICKS_ALCOVE = new BlockMudBricksAlcove();
     public static final Block LOOT_URN = new BlockLootUrn();
-    
+	public static final Block DUNGEON_DOOR_RUNES = new BlockDungeonDoorRunes();
     public static final Block PRESENT = new BlockPresent();
     
     //Plants

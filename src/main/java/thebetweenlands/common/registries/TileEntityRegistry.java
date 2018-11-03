@@ -16,6 +16,7 @@ import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityDugSoil;
+import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.common.tile.TileEntityHopperBetweenlands;
 import thebetweenlands.common.tile.TileEntityInfuser;
@@ -91,6 +92,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityWaystone.class, "waystone");
 		registerTileEntity(TileEntityMudBricksAlcove.class, "mud_bricks_alcove");
 		registerTileEntity(TileEntityLootUrn.class, "loot_urn");
+		registerTileEntity(TileEntityDungeonDoorRunes.class, "dungeon_door_runes");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
