@@ -2,6 +2,8 @@ package thebetweenlands.client.render.model.tile;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
@@ -30,19 +32,37 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 		bottom_overlay.addBox(-7.0F, -2.5F, -2.5F, 14, 5, 5, 0.0F);
 	}
 
-	public void renderTopOverlay(TileEntityDungeonDoorRunes tile, float scale) {
-		top_overlay.rotateAngleX = 0F + tile.top_rotate / (180F / (float) Math.PI);
+	public void renderTopOverlay(TileEntity tile, float scale) {
+		if (tile instanceof TileEntityDungeonDoorRunes) {
+			TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
+			top_overlay.rotateAngleX = 0F + tileDoor.top_rotate / (180F / (float) Math.PI);
+		}
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0F, -0.001F, -0.001F);
 		top_overlay.render(scale);
+		GlStateManager.popMatrix();
 	}
 
-	public void renderMidOverlay(TileEntityDungeonDoorRunes tile, float scale) {
-		mid_overlay.rotateAngleX = 0F + tile.mid_rotate / (180F / (float) Math.PI);
+	public void renderMidOverlay(TileEntity tile, float scale) {
+		if (tile instanceof TileEntityDungeonDoorRunes) {
+			TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
+			mid_overlay.rotateAngleX = 0F + tileDoor.mid_rotate / (180F / (float) Math.PI);
+		}
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0F, -0.001F, -0.001F);
 		mid_overlay.render(scale);
+		GlStateManager.popMatrix();
 	}
 
-	public void renderBottomOverlay(TileEntityDungeonDoorRunes tile, float scale) {
-		bottom_overlay.rotateAngleX = 0F + tile.bottom_rotate / (180F / (float) Math.PI);
+	public void renderBottomOverlay(TileEntity tile, float scale) {
+		if (tile instanceof TileEntityDungeonDoorRunes) {
+			TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
+			bottom_overlay.rotateAngleX = 0F + tileDoor.bottom_rotate / (180F / (float) Math.PI);
+		}
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0F, -0.001F, -0.001F);
 		bottom_overlay.render(scale);
+		GlStateManager.popMatrix();
 	}
 
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

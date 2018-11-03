@@ -61,13 +61,13 @@ public class RenderDungeonDoorRunes extends TileEntitySpecialRenderer<TileEntity
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
 		bindTexture(getTextureFromRotationIndex(tile.top_state_prev));
-		RUNE_BLOCK_LAYER.renderTopOverlay(tile, 0.0625F);
+		RUNE_BLOCK_LAYER.renderTopOverlay(tile, 0.06255F);
 
 		bindTexture(getTextureFromRotationIndex(tile.mid_state_prev));
-		RUNE_BLOCK_LAYER.renderMidOverlay(tile, 0.0625F);
+		RUNE_BLOCK_LAYER.renderMidOverlay(tile, 0.06255F);
 
 		bindTexture(getTextureFromRotationIndex(tile.bottom_state_prev));
-		RUNE_BLOCK_LAYER.renderBottomOverlay(tile, 0.0625F);
+		RUNE_BLOCK_LAYER.renderBottomOverlay(tile, 0.06255F);
 
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
