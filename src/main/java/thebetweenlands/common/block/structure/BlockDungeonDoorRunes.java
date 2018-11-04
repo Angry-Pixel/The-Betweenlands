@@ -30,15 +30,16 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
 	public BlockDungeonDoorRunes() {
-		this(Material.GLASS);
+		this(Material.ROCK);
 	}
 
 	public BlockDungeonDoorRunes(Material material) {
 		super(material);
-		setHardness(0.4f);
-		setSoundType(SoundType.GLASS);
+		setHardness(0.4F);
+		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		setLightLevel(0.6F);
 	}
 	
 	@Nullable

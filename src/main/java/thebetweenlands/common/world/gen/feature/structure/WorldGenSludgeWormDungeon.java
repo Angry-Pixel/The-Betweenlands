@@ -297,11 +297,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			for (int j = 0; j < w; j++)
 				if ((maze[j][i] & 1) == 0) {
 
-					if(layer == 1) {
-						if (rand.nextInt(100) == 0)
-							placeChest(world, pos.add(1 + j * 4, 0, 1 + i * 4), CHEST_SOUTH, rand);
+					if (layer == 1) {
+						if (rand.nextInt(100) == 0) {
+							if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 1 + i * 4))))
+								placeChest(world, pos.add(1 + j * 4, 0, 1 + i * 4), CHEST_SOUTH, rand);
+						}
 						else if (rand.nextInt(3) == 0)
-							setRandomRoot(world, pos.add(1 + j * 4, 0, 1 + rand.nextInt(2) + i * 4), rand);
+								setRandomRoot(world, pos.add(1 + j * 4, 0, 1 + rand.nextInt(2) + i * 4), rand);
 					}
 
 					if(layer == 2) {
@@ -342,7 +344,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 					if(layer == 1) {
 						if (rand.nextInt(100) == 0)
-							placeChest(world, pos.add(1 + j * 4, 0, 2 + i * 4), CHEST_EAST, rand);
+							if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 2 + i * 4))))
+								placeChest(world, pos.add(1 + j * 4, 0, 2 + i * 4), CHEST_EAST, rand);
 					}
 
 					if(layer == 2) {
@@ -373,7 +376,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 					if(layer == 1) {
 						if (rand.nextInt(100) == 0)
-							placeChest(world, pos.add(3 + j * 4, 0, 2 + i * 4), CHEST_WEST, rand);
+							if (!isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, 0, 2 + i * 4))))
+								placeChest(world, pos.add(3 + j * 4, 0, 2 + i * 4), CHEST_WEST, rand);
 					}
 
 					if(layer == 2) {
@@ -404,7 +408,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 					if(layer == 1) {
 						if (rand.nextInt(100) == 0)
-							placeChest(world, pos.add(2 + j * 4, 0, 3 + i * 4), CHEST_NORTH, rand);
+							if (!isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, 0, 3 + i * 4))))
+								placeChest(world, pos.add(2 + j * 4, 0, 3 + i * 4), CHEST_NORTH, rand);
 					}
 
 					if(layer == 2) {
@@ -480,9 +485,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				world.setBlockToAir(pos.add(1, 3, 3));
 				world.setBlockToAir(pos.add(2, 4, 3));
 				world.setBlockToAir(pos.add(2, 3, 3));
-				world.setBlockState(pos.add(1, 6, 1), Blocks.WEB.getDefaultState());
-				world.setBlockState(pos.add(1, 6, 2), Blocks.WEB.getDefaultState()); //lock
-				world.setBlockState(pos.add(1, 6, 3), Blocks.WEB.getDefaultState());
+				world.setBlockState(pos.add(1, 6, 1), getTilesForLevel(rand, level));
+				world.setBlockState(pos.add(1, 6, 2), getTilesForLevel(rand, level)); //lock
+				world.setBlockState(pos.add(1, 6, 3), getTilesForLevel(rand, level));
 			} else if (level == 0 || level == 2 || level == 4 || level == 6) {
 				world.setBlockToAir(pos.add(27, 5, 27));
 				world.setBlockToAir(pos.add(27, 5, 26));
@@ -493,9 +498,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				world.setBlockToAir(pos.add(26, 4, 25));
 				world.setBlockToAir(pos.add(26, 3, 25));
 				if(level != 0) {
-				world.setBlockState(pos.add(27, 6, 27), Blocks.WEB.getDefaultState());
-				world.setBlockState(pos.add(27, 6, 26), Blocks.WEB.getDefaultState()); //lock
-				world.setBlockState(pos.add(27, 6, 25), Blocks.WEB.getDefaultState());
+				world.setBlockState(pos.add(27, 6, 27), getTilesForLevel(rand, level));
+				world.setBlockState(pos.add(27, 6, 26), getTilesForLevel(rand, level)); //lock
+				world.setBlockState(pos.add(27, 6, 25), getTilesForLevel(rand, level));
 				}
 			}
 	}
@@ -831,21 +836,23 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	}
 
 	public void setRandomRoot(World world, BlockPos pos, Random rand) {
-		int rnd = rand.nextInt(30);
-		if(rnd < 10) {
-			world.setBlockState(pos, ROOT);
-		} else if(rnd < 20) {
-			world.setBlockState(pos, ROOT);
-			world.setBlockState(pos.up(1), ROOT);
-		} else if(rnd < 25){
-			world.setBlockState(pos, ROOT);
-			world.setBlockState(pos.up(1), ROOT);
-			world.setBlockState(pos.up(2), ROOT);																				
-		} else {
-			world.setBlockState(pos, ROOT);
-			world.setBlockState(pos.up(1), ROOT);
-			world.setBlockState(pos.up(2), ROOT);
-			world.setBlockState(pos.up(3), ROOT);
+		if (!isSolidStructureBlock(world.getBlockState(pos))) {
+			int rnd = rand.nextInt(30);
+			if (rnd < 10) {
+				world.setBlockState(pos, ROOT);
+			} else if (rnd < 20) {
+				world.setBlockState(pos, ROOT);
+				world.setBlockState(pos.up(1), ROOT);
+			} else if (rnd < 25) {
+				world.setBlockState(pos, ROOT);
+				world.setBlockState(pos.up(1), ROOT);
+				world.setBlockState(pos.up(2), ROOT);
+			} else {
+				world.setBlockState(pos, ROOT);
+				world.setBlockState(pos.up(1), ROOT);
+				world.setBlockState(pos.up(2), ROOT);
+				world.setBlockState(pos.up(3), ROOT);
+			}
 		}
 	}
 
