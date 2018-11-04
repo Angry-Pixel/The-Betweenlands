@@ -20,7 +20,6 @@ import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
-import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockMudTiles.EnumMudTileType;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
@@ -35,10 +34,10 @@ import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGener
 
 public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
-	private IBlockState spawner = BlockRegistry.MOB_SPAWNER.getDefaultState();
-	private IBlockState mushroomBlackHat = BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState();
-	private IBlockState mushroomBulbCapped = BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState();
-	private IBlockState mushroomflatHead = BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState();
+	private IBlockState MOB_SPAWNER = BlockRegistry.MOB_SPAWNER.getDefaultState();
+	private IBlockState BLACK_HAT_MUSHROOM = BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState();
+	private IBlockState BULB_CAPPED_MUSHROOM = BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState();
+	private IBlockState FLAT_HEAD_MUSHROOM = BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState();
 
 	private IBlockState STAGNANT_WATER = BlockRegistry.STAGNANT_WATER.getDefaultState();
 	private IBlockState TRAP_1 = Blocks.SLIME_BLOCK.getDefaultState();
@@ -104,7 +103,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 	private IBlockState ROOT = BlockRegistry.ROOT.getDefaultState();
 
-	
 	private final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
 	public WorldGenSludgeWormDungeon() {
@@ -115,23 +113,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
 		//conditions blah, blah...
-		//makeTreeStructure(world, rand, pos);
-		//makeBarrow(world, rand, pos);
 		makeMaze(world, rand, pos);
 		return true;
 	}
 
-	public void makeTreeStructure(World world, Random rand, BlockPos pos) {
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		generateMainDome(world, pos.up());
-		//WorldGenStoneTree tree = new WorldGenStoneTree();
-		//tree.generateTree(world, rand, pos.add(0,16,0));
-		
-	}
-
-	private void generateMainDome(World world, BlockPos pos) {
+	private void generateDecayPit(World world, BlockPos pos) {
 		for (int xx = - 16; xx <= 16; xx++) {
 			for (int zz = - 16; zz <= 16; zz++) {
 				for (int yy = 0; yy > -16; yy--) {
@@ -151,18 +137,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		}
 	}
 
-	public void makeBarrow(World world, Random rand, BlockPos pos) {
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		
-	}
-	
 	public void makeMaze(World world, Random rand, BlockPos pos) {
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		
 		for (int level = 0; level <= 7; level++) {
 			int yy = -6 -(level * 6);
 			if (level == 7) {
@@ -216,10 +191,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					buildBeams(world, pos.add(0, yy + 4, 0), 7, 7, rand, level);
 				stairsAir(world, rand, pos.add(0, yy, 0), level);
 			}
-			System.out.println("Y height is: " + (y + yy) + " level: " + level);
+		//	System.out.println("Y height is: " + (pos.getY() + yy) + " level: " + level);
 		}
-		
-		
 	}
 
 	// Maze generation layers
@@ -264,7 +237,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			}
 	//	System.out.println("Generated Maze At: X: " + pos.getX() + " Y: " + pos.getY() + " Z: " + pos.getZ());
 	}
-	
+
 	// Levels
 	private void buildLevel(World world, BlockPos pos, Random rand, int w, int h, int[][] maze, int level, int layer) {
 		for (int i = 0; i < h; i++) {
@@ -326,16 +299,16 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 								int randOffset = rand.nextInt(2);
 								world.setBlockState(pos.add(1 + j * 4, - randOffset, i * 4), TRAP_1, 2);
 							}
-						else if (rand.nextInt(10) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, 0, 2 + i * 4)))) {
+						/*else if (rand.nextInt(10) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, 0, 2 + i * 4)))) {
 							if (rand.nextBoolean()) {
-								world.setBlockState(pos.add(2 + j * 4, 0, 2 + i * 4), spawner);
+								world.setBlockState(pos.add(2 + j * 4, 0, 2 + i * 4), MOB_SPAWNER);
 								BlockMobSpawnerBetweenlands.setMob(world, pos.add(2 + j * 4, 0, 2 + i * 4), "thebetweenlands:chiromaw", logic -> logic.setSpawnRange(2));
 							}
 							else {
-								world.setBlockState(pos.add(2 + j * 4, 0, 2 + i * 4), spawner);
+								world.setBlockState(pos.add(2 + j * 4, 0, 2 + i * 4), MOB_SPAWNER);
 								BlockMobSpawnerBetweenlands.setMob(world, pos.add(2 + j * 4, 0, 2 + i * 4), "thebetweenlands:termite");
 							}
-						}
+						}*/
 					}
 
 					if(layer == 3) {
@@ -477,7 +450,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				}
 			}
 	}
-	
+
 	// Air gap for maze
 	private void createAir(World world, BlockPos pos, Random rand, int w, int h, int level) {
 		for (int i = 0; i < h * 4; i++)
@@ -510,7 +483,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					}
 				}
 	}
-	
+
 	// Roof
 	private void buildRoof(World world, BlockPos pos, Random rand, int w, int h, int level) {
 		for (int i = 0; i <= h * 4; i++)
@@ -518,7 +491,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				//if (world.isAirBlock(pos.add(j, 0, i)))
 					world.setBlockState(pos.add(j, 0, i), DRIPPING_MUD, 2);
 	}
-	
+
 	// Wooden Beams
 	private void buildBeams(World world, BlockPos pos, int w, int h, Random rand, int level) {
 		for (int i = 0; i <= h * 4; i++)
@@ -538,7 +511,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						world.setBlockState(pos.add(j, 0, i), ROTTEN_BARK, 2);
 					if(level == 6)
 						world.setBlockState(pos.add(j, 0, i), ROTTEN_BARK, 2);
-					
 				}
 				else if(world.isAirBlock(pos.add(j, 0, i)) && !isSolidStructureBlock(world.getBlockState(pos.add(j, 0, i)))) {
 					if(level == 0)
@@ -684,7 +656,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		}
 		return WORM_DUNGEON_PILLAR;
 	}
-	
+
 	public @Nullable IBlockState getTilesForLevel(Random rand, int level) {
 		int type = rand.nextInt(8);
 		switch (level) {
@@ -746,7 +718,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		}
 		return MUD_BRICKS;//betweenstoneBricks;
 	}
-	
+
 	public @Nullable IBlockState getStairsForLevel(Random rand, int level, EnumFacing facing, EnumHalf half) {
 		IBlockState state = MUD_BRICK_STAIRS;
 		int type = rand.nextInt(3);
@@ -801,11 +773,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	public IBlockState getRandomMushroom(Random rand) {
 		int rnd = rand.nextInt(30);
 		if(rnd < 14) {
-			return mushroomflatHead;
+			return FLAT_HEAD_MUSHROOM;
 		} else if(rnd < 28) {
-			return mushroomBlackHat;
+			return BLACK_HAT_MUSHROOM;
 		} else {
-			return mushroomBulbCapped;
+			return BULB_CAPPED_MUSHROOM;
 		}
 	}
 
