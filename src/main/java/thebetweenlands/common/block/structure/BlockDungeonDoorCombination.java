@@ -13,20 +13,16 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
-import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 
 public class BlockDungeonDoorCombination extends BasicBlock implements ITileEntityProvider {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -108,22 +104,8 @@ public class BlockDungeonDoorCombination extends BasicBlock implements ITileEnti
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
 		TileEntityDungeonDoorCombination tile = getTileEntity(world, pos);
 		if (tile instanceof TileEntityDungeonDoorCombination) {
-			//add random code setting here and test block placement
-			tile.top_code = world.rand.nextInt(8);
-			tile.mid_code = world.rand.nextInt(8);
-			tile.bottom_code = world.rand.nextInt(8);
-
-			world.setBlockState(pos.up(), BlockRegistry.DUNGEON_DOOR_RUNES.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, (EnumFacing) state.getValue(FACING)));
-			TileEntity tileUp = world.getTileEntity(pos.up());
-			if (tileUp instanceof TileEntityDungeonDoorRunes) {
-				TileEntityDungeonDoorRunes tileLock = (TileEntityDungeonDoorRunes) tileUp;
-				tileLock.top_code = tile.top_code;
-				tileLock.mid_code = tile.mid_code;
-				tileLock.bottom_code = tile.bottom_code;
-			}
 		}
 		world.notifyBlockUpdate(pos, state, state, 3);
-		world.notifyBlockUpdate(pos.up(), state, state, 3);
 	}
 
 	@Override

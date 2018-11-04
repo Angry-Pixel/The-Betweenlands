@@ -20,6 +20,8 @@ import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
+import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
+import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockMudTiles.EnumMudTileType;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
@@ -29,6 +31,8 @@ import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar.EnumWormPillarType;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
+import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
 
@@ -102,6 +106,12 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private IBlockState ROTTEN_BARK = BlockRegistry.LOG_ROTTEN_BARK.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, EnumAxis.NONE);
 
 	private IBlockState ROOT = BlockRegistry.ROOT.getDefaultState();
+	
+	private IBlockState DUNGEON_DOOR_COMBINATION_EAST = BlockRegistry.DUNGEON_DOOR_COMBINATION.getDefaultState().withProperty(BlockDungeonDoorCombination.FACING, EnumFacing.EAST);
+	private IBlockState DUNGEON_DOOR_COMBINATION_WEST = BlockRegistry.DUNGEON_DOOR_COMBINATION.getDefaultState().withProperty(BlockDungeonDoorCombination.FACING, EnumFacing.WEST);
+
+	private IBlockState DUNGEON_DOOR_EAST = BlockRegistry.DUNGEON_DOOR_RUNES.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.EAST);
+	private IBlockState DUNGEON_DOOR_WEST = BlockRegistry.DUNGEON_DOOR_RUNES.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.WEST);
 
 	private final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
@@ -169,7 +179,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					world.setBlockState(pos.add(1, yy + 4, 1), getStairsForLevel(rand, level, EnumFacing.NORTH, EnumHalf.BOTTOM), 2);
 					if (world.isAirBlock(pos.add(1, yy + 1, 2)))
 						world.setBlockState(pos.add(1, yy + 1, 2), getMudBricksForLevel(rand, level, 1));
-					world.setBlockState(pos.add(1, yy + 2, 2), getMudBricksForLevel(rand, level, 2));
+					placeRuneCombination(world, pos.add(0, yy + 2, 0), level, rand);
+					//world.setBlockState(pos.add(1, yy + 2, 2), getMudBricksForLevel(rand, level, 2));//this is the combo I think
 					world.setBlockState(pos.add(1, yy + 3, 2), getStairsForLevel(rand, level, EnumFacing.NORTH, EnumHalf.BOTTOM), 2);
 					world.setBlockState(pos.add(1, yy + 2, 3), getStairsForLevel(rand, level, EnumFacing.WEST, EnumHalf.BOTTOM), 2);
 					world.setBlockState(pos.add(1, yy + 1, 3), getMudBricksForLevel(rand, level, 1));
@@ -181,7 +192,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					world.setBlockState(pos.add(27, yy + 4, 27), getStairsForLevel(rand, level, EnumFacing.SOUTH, EnumHalf.BOTTOM), 2);
 					if (world.isAirBlock(pos.add(27, yy + 1, 26)))
 						world.setBlockState(pos.add(27, yy + 1, 26), getMudBricksForLevel(rand, level, 1));
-					world.setBlockState(pos.add(27, yy + 2, 26), getMudBricksForLevel(rand, level, 2));
+					placeRuneCombination(world, pos.add(0, yy + 2, 0), level, rand);
+					//world.setBlockState(pos.add(27, yy + 2, 26), getMudBricksForLevel(rand, level, 2));//this is the combo I think
 					world.setBlockState(pos.add(27, yy + 3, 26), getStairsForLevel(rand, level, EnumFacing.SOUTH, EnumHalf.BOTTOM), 2);
 					world.setBlockState(pos.add(27, yy + 2, 25), getStairsForLevel(rand, level, EnumFacing.EAST, EnumHalf.BOTTOM), 2);
 					world.setBlockState(pos.add(27, yy + 1, 25), getMudBricksForLevel(rand, level, 1));
@@ -418,6 +430,43 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					}
 				}
 		}
+	}
+
+	// Block Selection and conditions
+	private void placeRuneCombination(World world, BlockPos pos, int level, Random rand) {
+		if (level <= 6) {
+			if (level == 1 || level == 3 || level == 5) {
+				world.setBlockState(pos.add(1, 0, 2), DUNGEON_DOOR_COMBINATION_EAST, 2);
+				world.setBlockState(pos.add(27, 0, 26), DUNGEON_DOOR_WEST, 2);
+				setRandomCombinations(world, pos.add(1, 0, 2), pos.add(27, 0, 26), rand);
+			} else {
+				world.setBlockState(pos.add(27, 0, 26), DUNGEON_DOOR_COMBINATION_WEST, 2);
+				world.setBlockState(pos.add(1, 0, 2), DUNGEON_DOOR_EAST, 2);
+				setRandomCombinations(world, pos.add(27, 0, 26), pos.add(1, 0, 2), rand);
+			}
+		}
+		if (level == 7)
+			world.setBlockState(pos.add(1, 0, 2), getMudBricksForLevel(rand, level, 2));
+	}
+
+	public void setRandomCombinations(World world, BlockPos codePos, BlockPos lockPos, Random rand) {
+		IBlockState codeState = world.getBlockState(codePos);
+		IBlockState lockState = world.getBlockState(lockPos);
+		TileEntityDungeonDoorCombination tileCode = (TileEntityDungeonDoorCombination) world.getTileEntity(codePos);
+		if (tileCode instanceof TileEntityDungeonDoorCombination) {
+			// add random code setting here and test block placement
+			tileCode.top_code = world.rand.nextInt(8);
+			tileCode.mid_code = world.rand.nextInt(8);
+			tileCode.bottom_code = world.rand.nextInt(8);
+			TileEntityDungeonDoorRunes tileLock = (TileEntityDungeonDoorRunes) world.getTileEntity(lockPos);
+			if (tileLock instanceof TileEntityDungeonDoorRunes) {
+				tileLock.top_code = tileCode.top_code;
+				tileLock.mid_code = tileCode.mid_code;
+				tileLock.bottom_code = tileCode.bottom_code;
+			}
+		}
+		world.notifyBlockUpdate(codePos, codeState, codeState, 3);
+		world.notifyBlockUpdate(lockPos, lockState, lockState, 3);
 	}
 
 	//Air Gaps for Stairs and barrier placements
@@ -849,6 +898,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED, true);
 			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED_DECAY, true);
 			STRUCTURE_BLOCKS.put(ROOT, true);
+			STRUCTURE_BLOCKS.put(DUNGEON_DOOR_COMBINATION_EAST, true);
+			STRUCTURE_BLOCKS.put(DUNGEON_DOOR_COMBINATION_WEST, true);
+			STRUCTURE_BLOCKS.put(DUNGEON_DOOR_EAST, true);
+			STRUCTURE_BLOCKS.put(DUNGEON_DOOR_WEST, true);
 		}
 	}
 }

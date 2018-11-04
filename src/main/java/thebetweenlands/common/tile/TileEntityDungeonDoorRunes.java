@@ -44,7 +44,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 		}
 		if (!getWorld().isRemote) {
 			if (top_state_prev == top_code && mid_state_prev == mid_code && bottom_state_prev == bottom_code) {
-				getWorld().destroyBlock(getPos().down(), false);
+				getWorld().destroyBlock(getPos().down(2), false); //temp breaking code
 				getWorld().destroyBlock(getPos(), false);
 			}
 		}
