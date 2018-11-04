@@ -2,6 +2,8 @@ package thebetweenlands.common.block.structure;
 
 import java.util.Locale;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -11,6 +13,7 @@ import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -100,6 +103,13 @@ public class BlockMudTiles extends Block implements ICustomItemBlock, ISubtypeIt
     				return false; 
     	}
         return (stateConnection == null) ? false : stateConnection.getBlock() == this;
+    }
+
+	@Override
+    public float getSlipperiness(IBlockState state, IBlockAccess world, BlockPos pos, @Nullable Entity entity) {
+		if(state.getValue(VARIANT) == EnumMudTileType.MUD_TILES_DECAY || state.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED_DECAY)
+			return 0.98F;
+		return 0.6F;
     }
 
 	public static enum EnumMudTileType implements IStringSerializable {
