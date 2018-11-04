@@ -31,13 +31,11 @@ public class TileEntityMudBricksSpawnerHole extends TileEntity implements ITicka
 	public void update() {
 
 		if (isActivated()) {
-
-
 			if (getWorld().isRemote) {
 				double d3 = (double) ((float) getPos().getX() + getWorld().rand.nextFloat());
 				double d4 = (double) ((float) getPos().getY() + getWorld().rand.nextFloat());
 				double d5 = (double) ((float) getPos().getZ() + getWorld().rand.nextFloat());
-				BLParticles.CAVE_WATER_DRIP.spawn(world ,d3, d4, d5).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+				BLParticles.CAVE_WATER_DRIP.spawn(getWorld(), d3, d4, d5).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
 
 				if (spawnDelay > 0)
 					--spawnDelay;
