@@ -2,6 +2,7 @@ package thebetweenlands.client.render.model.tile;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
@@ -24,6 +25,7 @@ public class ModelDungeonDoorRunes extends ModelBase {
 	public ModelRenderer slate3b;
 	public ModelRenderer slate3c;
 	public ModelRenderer slate3d;
+	public ModelRenderer behind;
 
 	public ModelDungeonDoorRunes() {
 		textureWidth = 256;
@@ -75,6 +77,10 @@ public class ModelDungeonDoorRunes extends ModelBase {
 		slate3d = new ModelRenderer(this, 158, 0);
 		slate3d.setRotationPoint(0.0F, 0.0F, 0.0F);
 		slate3d.addBox(-3.0F, -40.0F, 0.0F, 11, 4, 2, 0.0F);
+		behind = new ModelRenderer(this, 81, 46);
+        behind.setRotationPoint(0.0F, 0.0F, 0.0F);
+        behind.addBox(-24.0F, -24.0F, -1.0F, 48, 48, 9, 0.0F);
+
 		slate2.addChild(slate2b);
 		slate3.addChild(slate3c);
 		slate2.addChild(slate2c);
@@ -96,6 +102,10 @@ public class ModelDungeonDoorRunes extends ModelBase {
 		top.render(scale);
 		mid.render(scale);
 		bottom.render(scale);
+		GlStateManager.pushMatrix();
+		GlStateManager.scale(0.99F, 1F, 1F);
+		behind.render(scale);
+		GlStateManager.popMatrix();
 	}
 
 	public void renderItem(float scale) {
@@ -109,6 +119,7 @@ public class ModelDungeonDoorRunes extends ModelBase {
 		mid.render(scale);
 		top.render(scale);
 		bottom.render(scale);
+		behind.render(scale);
 	}
 
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
