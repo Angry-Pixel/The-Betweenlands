@@ -1,10 +1,16 @@
 package thebetweenlands.common.tile;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 
 public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable {
 
@@ -18,56 +24,79 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getRenderBoundingBox() {
+		return new AxisAlignedBB(getPos()).grow(1D);
+	}
+
+	@Override
 	public void update() {
-		if(top_state_prev != top_state) {
-			top_rotate+=4;
+		if (top_state_prev != top_state) {
+			top_rotate += 4;
 			if (top_rotate > 90) {
 				top_rotate = 0;
 				top_state_prev = top_state;
 			}
 		}
-		
-		if(mid_state_prev != mid_state) {
-			mid_rotate+=4;
+
+		if (mid_state_prev != mid_state) {
+			mid_rotate += 4;
 			if (mid_rotate > 90) {
 				mid_rotate = 0;
 				mid_state_prev = mid_state;
 			}
 		}
-		
-		if(bottom_state_prev != bottom_state) {
-			bottom_rotate+=4;
+
+		if (bottom_state_prev != bottom_state) {
+			bottom_rotate += 4;
 			if (bottom_rotate > 90) {
 				bottom_rotate = 0;
 				bottom_state_prev = bottom_state;
 			}
 		}
+
 		if (!getWorld().isRemote) {
 			if (top_state_prev == top_code && mid_state_prev == mid_code && bottom_state_prev == bottom_code) {
-				getWorld().destroyBlock(getPos().down(2), false); //temp breaking code
-				getWorld().destroyBlock(getPos(), false);
+				breakAllDoorBlocks(true);
 			}
 		}
 	}
-	
+
+	public void breakAllDoorBlocks(boolean breakFloorBelow) {
+		IBlockState state = getWorld().getBlockState(getPos());
+		EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
+
+		if (facing == EnumFacing.WEST || facing == EnumFacing.EAST) {
+			for (int z = -1; z <= 1; z++)
+				for (int y = breakFloorBelow ? -2 : -1; y <= 1; y++)
+					getWorld().destroyBlock(getPos().add(0, y, z), false);
+		}
+
+		if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH) {
+			for (int x = -1; x <= 1; x++)
+				for (int y = breakFloorBelow ? -2 : -1; y <= 1; y++)
+					getWorld().destroyBlock(getPos().add(x, y, 0), false);
+		}
+	}
+
 	public void cycleTopState() {
 		top_state_prev = top_state;
 		top_state++;
-		if(top_state > 7)
+		if (top_state > 7)
 			top_state = 0;
 	}
-	
+
 	public void cycleMidState() {
 		mid_state_prev = mid_state;
 		mid_state++;
-		if(mid_state > 7)
+		if (mid_state > 7)
 			mid_state = 0;
 	}
 
 	public void cycleBottomState() {
 		bottom_state_prev = bottom_state;
 		bottom_state++;
-		if(bottom_state > 7)
+		if (bottom_state > 7)
 			bottom_state = 0;
 	}
 
@@ -102,10 +131,10 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 	}
 
 	@Override
-    public NBTTagCompound getUpdateTag() {
+	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound nbt = new NBTTagCompound();
-        return writeToNBT(nbt);
-    }
+		return writeToNBT(nbt);
+	}
 
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {

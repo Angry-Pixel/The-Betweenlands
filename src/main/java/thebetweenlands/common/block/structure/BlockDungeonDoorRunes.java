@@ -8,6 +8,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -24,10 +25,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
+import thebetweenlands.util.AdvancedStateMap.Builder;
 
-public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProvider {
-	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProvider, IStateMappedBlock {
+	public static final PropertyDirection FACING = PropertyDirection.create("facing");
+	public static final PropertyBool INVISIBLE = PropertyBool.create("invisible");
 
 	public BlockDungeonDoorRunes() {
 		this(Material.ROCK);
@@ -38,7 +42,7 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 		setHardness(0.4F);
 		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
-		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(INVISIBLE, false));
 		setLightLevel(0.6F);
 	}
 	
@@ -63,24 +67,28 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityDungeonDoorRunes();
+		if(!getStateFromMeta(meta).getValue(INVISIBLE))
+			return new TileEntityDungeonDoorRunes();
+		return null;
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
+		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta)).withProperty(INVISIBLE, Boolean.valueOf((meta & 8) > 0));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
 		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();
+		if (((Boolean) state.getValue(INVISIBLE)).booleanValue())
+			meta |= 8;
 		return meta;
 	}
 
 	@Override
 	 public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		return getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+		return getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite()).withProperty(INVISIBLE, false);
 	}
 
 	@Override
@@ -95,7 +103,7 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {FACING});
+		return new BlockStateContainer(this, new IProperty[] {FACING, INVISIBLE});
 	}
 
 	@Override
@@ -105,16 +113,28 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-		TileEntityDungeonDoorRunes tile = getTileEntity(world, pos);
-		if (tile instanceof TileEntityDungeonDoorRunes) {
-			
+		IBlockState invisiBlock = getDefaultState().withProperty(INVISIBLE, true);
+		if (!state.getValue(INVISIBLE)) {
+			if (state.getValue(FACING) == EnumFacing.WEST || state.getValue(FACING) == EnumFacing.EAST) {
+				for (int z = -1; z <= 1; z++)
+					for (int y = -1; y <= 1; y++)
+						if(pos.add(0, y, z) != pos)
+							world.setBlockState(pos.add(0, y, z), invisiBlock.withProperty(FACING, state.getValue(FACING)));
 			}
+			if (state.getValue(FACING) == EnumFacing.NORTH || state.getValue(FACING) == EnumFacing.SOUTH) {
+				for (int x = -1; x <= 1; x++)
+					for (int y = -1; y <= 1; y++) {
+						if(pos.add(x, y, 0) != pos)
+							world.setBlockState(pos.add(x, y, 0), invisiBlock.withProperty(FACING, state.getValue(FACING)));
+					}
+			}
+		}
 		world.notifyBlockUpdate(pos, state, state, 3);
 	}
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote) {
+		if (!world.isRemote && !state.getValue(INVISIBLE)) {
 			TileEntityDungeonDoorRunes tile = getTileEntity(world, pos);
 			if (tile instanceof TileEntityDungeonDoorRunes) {
 				if (facing == state.getValue(FACING)) {
@@ -147,4 +167,10 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
     public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+
+	@Override
+	public void setStateMapper(Builder builder) {
+		builder.ignore(new IProperty[] {INVISIBLE}).build();
+		
+	}
 }

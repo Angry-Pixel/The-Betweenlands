@@ -35,6 +35,9 @@ public class RenderDungeonDoorRunes extends TileEntitySpecialRenderer<TileEntity
 		if (state == null || state.getBlock() != BlockRegistry.DUNGEON_DOOR_RUNES)
 			return;
 		EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
+		boolean invisiBlock = state.getValue(BlockDungeonDoorRunes.INVISIBLE);
+		if (invisiBlock)
+			return;
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
