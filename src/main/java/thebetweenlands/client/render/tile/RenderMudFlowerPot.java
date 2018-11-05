@@ -50,7 +50,7 @@ public class RenderMudFlowerPot extends TileEntitySpecialRenderer<TileEntityMudF
             }
 
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x + 0.325F, y + 0.39F, z + 0.325F);
+			GlStateManager.translate(x + 0.325F, y + 0.4F, z + 0.325F);
 			GlStateManager.scale(0.35F, 0.35F, 0.35F);
 
 			vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);

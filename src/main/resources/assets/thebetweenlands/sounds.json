@@ -558,6 +558,13 @@
       "thebetweenlands:gas_cloud_death"
     ]
   },
+  "boulder_sprite_living": {
+    "sounds": [
+      "thebetweenlands:boulder_sprite_living_1",
+      "thebetweenlands:boulder_sprite_living_2",
+      "thebetweenlands:boulder_sprite_living_3"
+    ]
+  },
   "boulder_sprite_hurt": {
     "sounds": [
       "thebetweenlands:boulder_sprite_hurt_1",

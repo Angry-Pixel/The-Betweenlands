@@ -234,17 +234,18 @@ public class ModelConnectedTexture implements IModel {
 				for(ConnectedTextureQuad tex : connectedTextures) {
 					int[] indices = new int[4];
 
-					for(Entry<IUnlistedProperty<?>, Optional<?>> entry : properties.entrySet()) {
+					findIndices: for(Entry<IUnlistedProperty<?>, Optional<?>> entry : properties.entrySet()) {
 						String property = entry.getKey().getName();
 
-						if(tex.indices[0].equals(property)) {
-							indices[0] = (Integer) entry.getValue().get();
-						} else if(tex.indices[1].equals(property)) {
-							indices[1] = (Integer) entry.getValue().get();
-						} else if(tex.indices[2].equals(property)) {
-							indices[2] = (Integer) entry.getValue().get();
-						} else if(tex.indices[3].equals(property)) {
-							indices[3] = (Integer) entry.getValue().get();
+						for(int i = 0; i < 4; i++) {
+							if(tex.indices[i].equals(property)) {
+								if(entry.getValue().isPresent()) {
+									indices[i] = (Integer) entry.getValue().get();
+								} else {
+									indices[0] = indices[1] = indices[2] = indices[3] = 0;
+									break findIndices;
+								}
+							}
 						}
 					}
 
