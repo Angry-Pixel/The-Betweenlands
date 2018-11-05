@@ -57,15 +57,14 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 
 		if (!getWorld().isRemote) {
 			if (top_state_prev == top_code && mid_state_prev == mid_code && bottom_state_prev == bottom_code) {
-				breakAllDoorBlocks(true);
+				IBlockState state = getWorld().getBlockState(getPos());
+				EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
+				breakAllDoorBlocks(state, facing, true);
 			}
 		}
 	}
 
-	public void breakAllDoorBlocks(boolean breakFloorBelow) {
-		IBlockState state = getWorld().getBlockState(getPos());
-		EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
-
+	public void breakAllDoorBlocks(IBlockState state, EnumFacing facing,  boolean breakFloorBelow) {
 		if (facing == EnumFacing.WEST || facing == EnumFacing.EAST) {
 			for (int z = -1; z <= 1; z++)
 				for (int y = breakFloorBelow ? -2 : -1; y <= 1; y++)

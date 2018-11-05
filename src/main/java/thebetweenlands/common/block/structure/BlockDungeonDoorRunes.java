@@ -1,7 +1,5 @@
 package thebetweenlands.common.block.structure;
 
-import java.util.Random;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.block.ITileEntityProvider;
@@ -107,8 +105,14 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
-		return 0;
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		if (!state.getValue(INVISIBLE)) {
+			TileEntityDungeonDoorRunes tile = getTileEntity(world, pos);
+			if (tile instanceof TileEntityDungeonDoorRunes) {
+				tile.breakAllDoorBlocks(state, state.getValue(FACING), false);
+			}
+		}
+		super.breakBlock(world, pos, state);
 	}
 
 	@Override
