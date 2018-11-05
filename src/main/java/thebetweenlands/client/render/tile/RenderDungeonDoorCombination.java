@@ -60,13 +60,13 @@ public class RenderDungeonDoorCombination extends TileEntitySpecialRenderer<Tile
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
 		bindTexture(getTextureFromRotationIndex(tile.top_code));
-		RUNE_BLOCK_LAYER.renderTopOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.0625F, partialTick);
+		RUNE_BLOCK_LAYER.renderTopOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.062505F, partialTick);
 
 		bindTexture(getTextureFromRotationIndex(tile.mid_code));
-		RUNE_BLOCK_LAYER.renderMidOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.0625F, partialTick);
+		RUNE_BLOCK_LAYER.renderMidOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.062505F, partialTick);
 
 		bindTexture(getTextureFromRotationIndex(tile.bottom_code));
-		RUNE_BLOCK_LAYER.renderBottomOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.0625F, partialTick);
+		RUNE_BLOCK_LAYER.renderBottomOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.062505F, partialTick);
 
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
