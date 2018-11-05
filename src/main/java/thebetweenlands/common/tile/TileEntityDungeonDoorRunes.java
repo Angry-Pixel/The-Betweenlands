@@ -18,7 +18,9 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 	public int top_state = 0, mid_state = 0, bottom_state = 0;
 	public int top_state_prev = 0, mid_state_prev = 0, bottom_state_prev = 0;
 	public int top_rotate = 0, mid_rotate = 0, bottom_rotate = 0;
-
+	public int lastTickTopRotate = 0, lastTickMidRotate = 0, lastTickBottomRotate = 0;
+	public int renderTicks = 0;
+	
 	public TileEntityDungeonDoorRunes() {
 		super();
 	}
@@ -31,10 +33,16 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 
 	@Override
 	public void update() {
+		this.renderTicks++;
+		
+		this.lastTickTopRotate = this.top_rotate;
+		this.lastTickMidRotate = this.mid_rotate;
+		this.lastTickBottomRotate = this.bottom_rotate;
+		
 		if (top_state_prev != top_state) {
 			top_rotate += 4;
 			if (top_rotate > 90) {
-				top_rotate = 0;
+				this.lastTickTopRotate = top_rotate = 0;
 				top_state_prev = top_state;
 			}
 		}
@@ -42,7 +50,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 		if (mid_state_prev != mid_state) {
 			mid_rotate += 4;
 			if (mid_rotate > 90) {
-				mid_rotate = 0;
+				this.lastTickMidRotate = mid_rotate = 0;
 				mid_state_prev = mid_state;
 			}
 		}
@@ -50,7 +58,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 		if (bottom_state_prev != bottom_state) {
 			bottom_rotate += 4;
 			if (bottom_rotate > 90) {
-				bottom_rotate = 0;
+				this.lastTickBottomRotate = bottom_rotate = 0;
 				bottom_state_prev = bottom_state;
 			}
 		}

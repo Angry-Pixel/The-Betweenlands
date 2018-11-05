@@ -88,10 +88,10 @@ public class ModelDungeonDoorRunes extends ModelBase {
 		slate3.addChild(slate3d);
 	}
 
-	public void render(TileEntityDungeonDoorRunes tile, float scale) {
-		top.rotateAngleX = 0F + tile.top_rotate / (180F / (float) Math.PI);
-		mid.rotateAngleX = 0F + tile.mid_rotate / (180F / (float) Math.PI);
-		bottom.rotateAngleX = 0F + tile.bottom_rotate / (180F / (float) Math.PI);
+	public void render(TileEntityDungeonDoorRunes tile, float scale, float partialTicks) {
+		top.rotateAngleX = 0F + (tile.lastTickTopRotate + (tile.top_rotate - tile.lastTickTopRotate) * partialTicks) / (180F / (float) Math.PI);
+		mid.rotateAngleX = 0F + (tile.lastTickMidRotate + (tile.mid_rotate - tile.lastTickMidRotate) * partialTicks) / (180F / (float) Math.PI);
+		bottom.rotateAngleX = 0F + (tile.lastTickBottomRotate + (tile.bottom_rotate - tile.lastTickBottomRotate) * partialTicks) / (180F / (float) Math.PI);
 		slate2.render(scale);
 		slate1.render(scale);
 		slate3.render(scale);

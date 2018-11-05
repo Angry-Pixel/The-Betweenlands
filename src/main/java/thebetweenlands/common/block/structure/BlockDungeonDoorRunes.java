@@ -41,7 +41,6 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(INVISIBLE, false));
-		setLightLevel(0.6F);
 	}
 	
 	@Nullable
@@ -141,16 +140,17 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 		if (!world.isRemote && !state.getValue(INVISIBLE)) {
 			TileEntityDungeonDoorRunes tile = getTileEntity(world, pos);
 			if (tile instanceof TileEntityDungeonDoorRunes) {
+				TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
 				if (facing == state.getValue(FACING)) {
-					if(hitY >= 0.0625F && hitY < 0.375F) {
+					if(hitY >= 0.0625F && hitY < 0.375F && tileDoor.bottom_rotate == 0) {
 						//System.out.println("Bottom Hit");
 						tile.cycleBottomState();
 					}
-					if(hitY >= 0.375F && hitY < 0.625F) {
+					if(hitY >= 0.375F && hitY < 0.625F && tileDoor.mid_rotate == 0) {
 						//System.out.println("Mid Hit");
 						tile.cycleMidState();
 					}
-					if(hitY >= 0.625F && hitY <= 0.9375F) {
+					if(hitY >= 0.625F && hitY <= 0.9375F && tile.top_rotate == 0) {
 						//System.out.println("Top Hit");
 						tile.cycleTopState();
 					}
