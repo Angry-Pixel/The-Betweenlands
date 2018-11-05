@@ -56,11 +56,34 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 		}
 
 		if (!getWorld().isRemote) {
+			IBlockState state = getWorld().getBlockState(getPos());
+			EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
 			if (top_state_prev == top_code && mid_state_prev == mid_code && bottom_state_prev == bottom_code) {
-				IBlockState state = getWorld().getBlockState(getPos());
-				EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
 				breakAllDoorBlocks(state, facing, true);
 			}
+
+			if(getWorld().getTotalWorldTime()%5 == 0)
+				checkComplete(state, facing);
+		}
+	}
+
+	private void checkComplete(IBlockState state, EnumFacing facing) {
+		if (facing == EnumFacing.WEST || facing == EnumFacing.EAST) {
+			for (int z = -1; z <= 1; z++)
+				for (int y = -1; y <= 1; y++)
+					if(getPos().add(0, y, z) != getPos()) {
+						if (!(getWorld().getBlockState(getPos().add(0, y, z)).getBlock() instanceof BlockDungeonDoorRunes))
+							breakAllDoorBlocks(state, facing, false);
+					}
+		}
+
+		if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH) {
+			for (int x = -1; x <= 1; x++)
+				for (int y = -1; y <= 1; y++)
+					if(getPos().add(x, y, 0) != getPos()) {
+						if (!(getWorld().getBlockState(getPos().add(x, y, 0)).getBlock() instanceof BlockDungeonDoorRunes))
+							breakAllDoorBlocks(state, facing, false);
+					}
 		}
 	}
 
