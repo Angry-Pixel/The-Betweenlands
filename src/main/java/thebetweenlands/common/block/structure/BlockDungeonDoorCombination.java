@@ -37,7 +37,6 @@ public class BlockDungeonDoorCombination extends BasicBlock implements ITileEnti
 		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-		setLightLevel(0.6F);
 	}
 	
 	@Nullable

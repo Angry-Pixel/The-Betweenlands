@@ -27,7 +27,8 @@ public class RenderDungeonDoorCombination extends TileEntitySpecialRenderer<Tile
 	private static final ResourceLocation TEXTURE_7 = new ResourceLocation(ModInfo.ID, "textures/tiles/rune_overlay_7.png");
 	private static final ResourceLocation TEXTURE_8 = new ResourceLocation(ModInfo.ID, "textures/tiles/rune_overlay_8.png");
 
-
+	private static final ResourceLocation TEXTURE_RUNE_GLOW = new ResourceLocation(ModInfo.ID, "textures/tiles/dungeon_runes_glow.png");
+	
     @Override
     public void render (TileEntityDungeonDoorCombination tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
 		IBlockState state = tile.getWorld().getBlockState(tile.getPos());
@@ -36,7 +37,7 @@ public class RenderDungeonDoorCombination extends TileEntitySpecialRenderer<Tile
 		EnumFacing facing = state.getValue(BlockDungeonDoorCombination.FACING);
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
+		GlStateManager.translate((float) x + 0.5F, (float) y + 0.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);
 		switch (facing) {
 		case UP:
@@ -59,13 +60,13 @@ public class RenderDungeonDoorCombination extends TileEntitySpecialRenderer<Tile
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
 		bindTexture(getTextureFromRotationIndex(tile.top_code));
-		RUNE_BLOCK_LAYER.renderTopOverlay(tile, 0.06255F);
+		RUNE_BLOCK_LAYER.renderTopOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.062505F, partialTick);
 
 		bindTexture(getTextureFromRotationIndex(tile.mid_code));
-		RUNE_BLOCK_LAYER.renderMidOverlay(tile, 0.06255F);
+		RUNE_BLOCK_LAYER.renderMidOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.062505F, partialTick);
 
 		bindTexture(getTextureFromRotationIndex(tile.bottom_code));
-		RUNE_BLOCK_LAYER.renderBottomOverlay(tile, 0.06255F);
+		RUNE_BLOCK_LAYER.renderBottomOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.062505F, partialTick);
 
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
