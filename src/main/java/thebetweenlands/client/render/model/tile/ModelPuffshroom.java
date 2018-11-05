@@ -68,9 +68,9 @@ public class ModelPuffshroom extends ModelBase {
 			GlStateManager.translate(0F, 0F - 0.5F, 0F);
 		if (animationTicks > 1) {
 			if (animationTicks > 8 && animationTicks < 12)
-				GlStateManager.scale(1 + (1F * 0.125F * interAnimationTicks * 0.25F), 1F, 1 + (1F * 0.125F * interAnimationTicks * 0.25F));
+				GlStateManager.scale(1 + (1F * 0.0625F * interAnimationTicks * 0.25F), 1F, 1 + (1F * 0.0625F * interAnimationTicks * 0.25F));
 			if (animationTicks >= 12)
-				GlStateManager.scale(1 - (1F * 0.125F * interAnimationTicks * 0.25F), 1F, 1 - (1F * 0.125F * interAnimationTicks * 0.25F));
+				GlStateManager.scale(1 - (1F * 0.0625F * interAnimationTicks * 0.25F), 1F, 1 - (1F * 0.0625F * interAnimationTicks * 0.25F));
 			base.render(0.0625F);
 		}
 		GlStateManager.popMatrix();
