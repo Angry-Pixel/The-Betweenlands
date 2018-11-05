@@ -3,7 +3,7 @@
   "defaults": {
     "model": "thebetweenlands:internal/blank",
     "custom": {
-      "particle_texture": "thebetweenlands:tiles/loot_urn_1_particle"
+      "particle_texture": "thebetweenlands:items/loot_urn_1"
     }
   },
   "variants": {
