@@ -39,9 +39,7 @@ public class EntitySporeJet extends EntityLiving {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (source.equals(DamageSource.IN_WALL) || source.equals(DamageSource.DROWN))
-			return false;
-		return super.attackEntityFrom(source, damage);
+		return false;
 	}
 
 	@Override
