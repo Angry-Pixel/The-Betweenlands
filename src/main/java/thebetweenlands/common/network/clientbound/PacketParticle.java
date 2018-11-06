@@ -80,23 +80,12 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 						double d5 = message.posX;
 						double d6 = yy + 0.25F;
 						double d7 = message.posZ;
-						//TheBetweenlands.proxy.spawnCustomParticle("spell", world, d0, d1, d2, 0.0D, 0.05D, 0.0D);
-						//TheBetweenlands.proxy.spawnCustomParticle("spell", world, d0, d1, d4, 0.0D, 0.05D, 0.0D);
-						//TheBetweenlands.proxy.spawnCustomParticle("spell", world, d3, d1, d2, 0.0D, 0.05D, 0.0D);
-						//TheBetweenlands.proxy.spawnCustomParticle("spell", world, d3, d1, d4, 0.0D, 0.05D, 0.0D);
-						//TheBetweenlands.proxy.spawnCustomParticle("spell", world, d5, d6, d7, 0.0D, 0.05D, 0.0D);
-						 ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, d0, d1, d2, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 105F, 70F, 40F, 1F, 1.5F, 100));
-						 ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, d0, d1, d4, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 105F, 70F, 40F, 1F, 1.5F, 100));
-						 ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, d3, d1, d2, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 105F, 70F, 40F, 1F, 1.5F, 100));
-						 ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, d3, d1, d4, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 105F, 70F, 40F, 1F, 1.5F, 100));
-						 ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, d0, d1, d2, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 105F, 70F, 40F, 1F, 1.5F, 100));
-						 ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, d5, d6, d7, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 105F, 70F, 40F, 1F, 1.5F, 100));
-						 
-						 
-						 
-						 
-						 
-						 
+						ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, d0, d1, d2, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 105F, 70F, 40F, 1F, 1.5F, 100));
+						ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, d0, d1, d4, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 105F, 70F, 40F, 1F, 1.5F, 100));
+						ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, d3, d1, d2, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 105F, 70F, 40F, 1F, 1.5F, 100));
+						ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, d3, d1, d4, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 105F, 70F, 40F, 1F, 1.5F, 100));
+						ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, d0, d1, d2, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 105F, 70F, 40F, 1F, 1.5F, 100));
+						ClientProxy.particleRenderer.addParticle(new ParticlePuzzleBeam(world, d5, d6, d7, 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 105F, 70F, 40F, 1F, 1.5F, 100));
 					}
 					break;
 				case FLAME:
