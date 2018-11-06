@@ -184,6 +184,7 @@ public class SoundRegistry {
     public static final BLSoundEvent PORTAL_ACTIVATE = reg("portal_activate");
     public static final BLSoundEvent PORTAL_TRAVEL = reg("portal_travel");
     public static final BLSoundEvent PORTAL_TRIGGER = reg("portal_trigger");
+    public static final BLSoundEvent PUFF_SHROOM = reg("puff_shroom");
     private SoundRegistry() {
     }
 

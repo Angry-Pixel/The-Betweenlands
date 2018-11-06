@@ -1071,5 +1071,10 @@
     "sounds": [
       "thebetweenlands:damage_reduction"
     ]
+  },
+  "puff_shroom": {
+    "sounds": [
+      "thebetweenlands:puff_shroom"
+    ]
   }
 }
