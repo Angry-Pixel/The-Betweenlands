@@ -120,13 +120,16 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 			Minecraft.getMinecraft().getTextureManager().bindTexture(glow);
 			this.renderRuneGlow(box, ticks, scale, partialTicks);
 			
-			MinecraftForgeClient.releaseStencilBit(stencilBit);
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
 			
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		} else {
 			//No fancy runes for toasters
 			box.render(scale);
+		}
+		
+		if(stencilBit >= 0) {
+			MinecraftForgeClient.releaseStencilBit(stencilBit);
 		}
 		
 		GlStateManager.disablePolygonOffset();
