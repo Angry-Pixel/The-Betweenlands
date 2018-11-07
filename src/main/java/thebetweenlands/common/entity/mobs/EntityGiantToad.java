@@ -308,7 +308,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		if (holdsEquipment)
 			return true;
 		boolean holdsWings = EnumItemMisc.DRAGONFLY_WING.isItemOf(player.getHeldItem(hand));
-		if (!this.isBeingRidden() && this.isTamed() && (!holdsWings || this.getHealth() >= this.getMaxHealth())) {
+		if (!this.isBeingRidden() && this.isTamed() && (!holdsWings || this.getHealth() >= this.getMaxHealth()) && !player.isSneaking() && !this.world.isRemote) {
 			player.startRiding(this);
 			return true;
 		} else if (holdsWings) {
