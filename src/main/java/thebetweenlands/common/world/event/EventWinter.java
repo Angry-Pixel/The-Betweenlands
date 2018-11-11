@@ -3,14 +3,12 @@ package thebetweenlands.common.world.event;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
-import java.util.concurrent.TimeUnit;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -31,7 +29,6 @@ import thebetweenlands.api.misc.FogState;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
-import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -39,24 +36,24 @@ import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.tile.TileEntityPresent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
-public class EventWinter extends BLEnvironmentEvent {
+public class EventWinter extends SeasonalEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "winter");
 
 	private static final long WINTER_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 11, 1, 0, 0).getTime().getTime();
-
-	private World world;
-	private World lastWorld;
-	private boolean chatSent = false;
 
 	public EventWinter(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 
-	public long getDayDiff() {
-		return TimeUnit.DAYS.convert(Calendar.getInstance().getTime().getTime() - WINTER_DATE, TimeUnit.MILLISECONDS);
+	@Override
+	public long getStartDateInMs() {
+		return WINTER_DATE;
 	}
 
-	private boolean wasSet = false;
+	@Override
+	public int getDurationInDays() {
+		return 31;
+	}
 
 	public static boolean isFroooosty(World world) {
 		if(world != null) {
@@ -75,11 +72,6 @@ public class EventWinter extends BLEnvironmentEvent {
 
 	@Override
 	public void setActive(boolean active) {
-		if(active && TheBetweenlands.proxy.getClientWorld() != null && (!this.isActive() || this.lastWorld != TheBetweenlands.proxy.getClientWorld()) && TheBetweenlands.proxy.getClientPlayer() != null && this.world != null && this.world.isRemote) {
-			this.lastWorld = TheBetweenlands.proxy.getClientWorld();
-			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
-			player.sendStatusMessage(new TextComponentTranslation("chat.event.winter"), true);
-		}
 		//Mark blocks in range for render update to update block textures
 		if(active != this.isActive() && TheBetweenlands.proxy.getClientWorld() != null && TheBetweenlands.proxy.getClientPlayer() != null) {
 			updateModelActiveState(active);
@@ -90,6 +82,7 @@ public class EventWinter extends BLEnvironmentEvent {
 			int pz = MathHelper.floor(player.posZ) - 256;
 			TheBetweenlands.proxy.getClientWorld().markBlockRangeForRenderUpdate(px, py, pz, px + 512, py + 512, pz + 512);
 		}
+
 		super.setActive(active);
 	}
 
@@ -97,65 +90,48 @@ public class EventWinter extends BLEnvironmentEvent {
 	public void update(World world) {
 		super.update(world);
 
-		this.world = world;
-
-		if(!world.isRemote) {
-			if (BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
-				long dayDiff = this.getDayDiff();
-				if (dayDiff >= 0 && dayDiff <= 31) {
-					if (!this.isActive() && !this.wasSet) {
-						this.setActive(true);
-						this.wasSet = true;
-					}
-				} else if (this.wasSet) {
-					this.wasSet = false;
-					this.setActive(false);
-				}
-			}
-
-			if(this.isActive()) {
-				if(world.provider instanceof WorldProviderBetweenlands && world instanceof WorldServer && world.rand.nextInt(10) == 0) {
-					WorldServer worldServer = (WorldServer)world;
-					for (Iterator<Chunk> iterator = worldServer.getPersistentChunkIterable(worldServer.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
-						Chunk chunk = iterator.next();
-						int cbx = world.rand.nextInt(16);
-						int cbz = world.rand.nextInt(16);
-						BlockPos pos = chunk.getPrecipitationHeight(new BlockPos(chunk.getPos().getXStart() + cbx, -999, chunk.getPos().getZStart() + cbz)).down();
-						if(world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock() == BlockRegistry.SWAMP_WATER) {
-							if(world.rand.nextInt(3) == 0) {
-								boolean hasSuitableNeighbourBlock = false;
-								PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
-								for(EnumFacing dir : EnumFacing.HORIZONTALS) {
-									checkPos.setPos(pos.getX() + dir.getFrontOffsetX(), pos.getY(), pos.getZ() + dir.getFrontOffsetZ());
-									if(world.isBlockLoaded(checkPos)) {
-										if(!hasSuitableNeighbourBlock) {
-											IBlockState neighourState = world.getBlockState(checkPos);
-											if(neighourState.getBlock() == BlockRegistry.BLACK_ICE || neighourState.isSideSolid(world, checkPos, dir.getOpposite())) {
-												hasSuitableNeighbourBlock = true;
-											}
+		if(!world.isRemote && this.isActive()) {
+			if(world.provider instanceof WorldProviderBetweenlands && world instanceof WorldServer && world.rand.nextInt(10) == 0) {
+				WorldServer worldServer = (WorldServer)world;
+				for (Iterator<Chunk> iterator = worldServer.getPersistentChunkIterable(worldServer.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
+					Chunk chunk = iterator.next();
+					int cbx = world.rand.nextInt(16);
+					int cbz = world.rand.nextInt(16);
+					BlockPos pos = chunk.getPrecipitationHeight(new BlockPos(chunk.getPos().getXStart() + cbx, -999, chunk.getPos().getZStart() + cbz)).down();
+					if(world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock() == BlockRegistry.SWAMP_WATER) {
+						if(world.rand.nextInt(3) == 0) {
+							boolean hasSuitableNeighbourBlock = false;
+							PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
+							for(EnumFacing dir : EnumFacing.HORIZONTALS) {
+								checkPos.setPos(pos.getX() + dir.getFrontOffsetX(), pos.getY(), pos.getZ() + dir.getFrontOffsetZ());
+								if(world.isBlockLoaded(checkPos)) {
+									if(!hasSuitableNeighbourBlock) {
+										IBlockState neighourState = world.getBlockState(checkPos);
+										if(neighourState.getBlock() == BlockRegistry.BLACK_ICE || neighourState.isSideSolid(world, checkPos, dir.getOpposite())) {
+											hasSuitableNeighbourBlock = true;
 										}
-									} else {
-										hasSuitableNeighbourBlock = false;
-										break;
 									}
-								}
-								checkPos.release();
-								if(hasSuitableNeighbourBlock) {
-									world.setBlockState(pos, BlockRegistry.BLACK_ICE.getDefaultState());
+								} else {
+									hasSuitableNeighbourBlock = false;
+									break;
 								}
 							}
+							checkPos.release();
+							if(hasSuitableNeighbourBlock) {
+								world.setBlockState(pos, BlockRegistry.BLACK_ICE.getDefaultState());
+							}
 						}
+					}
 
-						if(world.rand.nextInt(3000) == 0 && world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 64.0D, false) == null) {
-							if(world.isSideSolid(pos, EnumFacing.UP)) {
-								IBlockState stateAbove = world.getBlockState(pos.up());
-								if(stateAbove.getBlock() == Blocks.AIR || (stateAbove.getBlock() instanceof BlockSnowBetweenlands && stateAbove.getValue(BlockSnowBetweenlands.LAYERS) <= 5)) {
-									world.setBlockState(pos.up(), BlockRegistry.PRESENT.getDefaultState().withProperty(BlockPresent.COLOR, EnumDyeColor.values()[world.rand.nextInt(EnumDyeColor.values().length)]));
-									TileEntityPresent tile = BlockPresent.getTileEntity(world, pos.up());
-									if (tile != null) {
-										tile.setLootTable(LootTableRegistry.PRESENT, world.rand.nextLong());
-										tile.markDirty();
-									}
+					if(world.rand.nextInt(3000) == 0 && world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 64.0D, false) == null) {
+						if(world.isSideSolid(pos, EnumFacing.UP)) {
+							IBlockState stateAbove = world.getBlockState(pos.up());
+							if(stateAbove.getBlock() == Blocks.AIR || (stateAbove.getBlock() instanceof BlockSnowBetweenlands && stateAbove.getValue(BlockSnowBetweenlands.LAYERS) <= 5)) {
+								world.setBlockState(pos.up(), BlockRegistry.PRESENT.getDefaultState().withProperty(BlockPresent.COLOR, EnumDyeColor.values()[world.rand.nextInt(EnumDyeColor.values().length)]));
+								TileEntityPresent tile = BlockPresent.getTileEntity(world, pos.up());
+								if (tile != null) {
+									tile.setLootTable(LootTableRegistry.PRESENT, world.rand.nextLong());
+									tile.markDirty();
 								}
 							}
 						}
@@ -166,33 +142,8 @@ public class EventWinter extends BLEnvironmentEvent {
 	}
 
 	@Override
-	public void resetActiveState() {
-		long dayDiff = this.getDayDiff();
-		if (dayDiff >= 0 && dayDiff <= 31 && BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
-			if (!this.isActive()) {
-				this.setActive(true);
-			}
-			this.wasSet = true;
-		} else {
-			if(this.isActive()) {
-				this.setActive(false);
-			}
-			this.wasSet = false;
-		}
-	}
-
-	@Override
-	public void saveEventData() { 
-		super.saveEventData();
-		NBTTagCompound nbt = this.getData();
-		nbt.setBoolean("wasSet", this.wasSet);
-	}
-
-	@Override
-	public void loadEventData() { 
-		super.loadEventData();
-		NBTTagCompound nbt = this.getData();
-		this.wasSet = nbt.getBoolean("wasSet");
+	protected void showStatusMessage(EntityPlayer player) {
+		player.sendStatusMessage(new TextComponentTranslation("chat.event.winter"), true);
 	}
 
 	@SubscribeEvent
