@@ -9,10 +9,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nonnull;
@@ -199,37 +201,40 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 
 	}
 
-	protected IItemHandler handlerUp = new SidedInvWrapper(this, EnumFacing.UP);
-	protected IItemHandler handlerDown = new SidedInvWrapper(this, EnumFacing.DOWN);
-	protected IItemHandler handlerNorth = new SidedInvWrapper(this, EnumFacing.NORTH);
-	protected IItemHandler handlerSouth = new SidedInvWrapper(this, EnumFacing.SOUTH);
-	protected IItemHandler handlerEast = new SidedInvWrapper(this, EnumFacing.EAST);
-	protected IItemHandler handlerWest = new SidedInvWrapper(this, EnumFacing.WEST);
+	private IItemHandler handlerUp = new SidedInvWrapper(this, EnumFacing.UP);
+	private IItemHandler handlerDown = new SidedInvWrapper(this, EnumFacing.DOWN);
+	private IItemHandler handlerNorth = new SidedInvWrapper(this, EnumFacing.NORTH);
+	private IItemHandler handlerSouth = new SidedInvWrapper(this, EnumFacing.SOUTH);
+	private IItemHandler handlerEast = new SidedInvWrapper(this, EnumFacing.EAST);
+	private IItemHandler handlerWest = new SidedInvWrapper(this, EnumFacing.WEST);
+	private IItemHandler handlerNull = new InvWrapper(this);
 
 	@Override
-	public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, net.minecraft.util.EnumFacing facing) {
-		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return true;
-		}
-		return super.hasCapability(capability, facing);
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, net.minecraft.util.EnumFacing facing) {
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			if (facing == EnumFacing.UP)
-				return (T) this.handlerUp;
-			else if (facing == EnumFacing.DOWN)
-				return (T) this.handlerDown;
-			else if (facing == EnumFacing.NORTH)
-				return (T) this.handlerNorth;
-			else if (facing == EnumFacing.SOUTH)
-				return (T) this.handlerSouth;
-			else if (facing == EnumFacing.EAST)
-				return (T) this.handlerEast;
-			else if (facing == EnumFacing.WEST)
-				return (T) this.handlerWest;
+			if (facing == null) {
+				return (T) handlerNull;
+			}
+			switch (facing) {
+				case DOWN:
+					return (T) this.handlerDown;
+				case UP:
+					return (T) this.handlerUp;
+				case NORTH:
+					return (T) this.handlerNorth;
+				case SOUTH:
+					return (T) this.handlerSouth;
+				case WEST:
+					return (T) this.handlerWest;
+				case EAST:
+					return (T) this.handlerEast;
+			}
 		}
 		return super.getCapability(capability, facing);
 	}
