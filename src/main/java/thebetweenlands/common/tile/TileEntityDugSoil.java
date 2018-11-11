@@ -13,18 +13,21 @@ import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 public class TileEntityDugSoil extends TileEntity {
 	private int compost = 0;
 	private int decay = 0;
+	private int purifiedHarvests = 0;
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.decay = nbt.getInteger("decay");
 		this.compost = nbt.getInteger("compost");
+		this.purifiedHarvests = nbt.getInteger("purifiedHarvests");
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("compost", this.compost);
 		nbt.setInteger("decay", this.decay);
+		nbt.setInteger("purifiedHarvests", this.purifiedHarvests);
 		return super.writeToNBT(nbt);
 	}
 
@@ -54,6 +57,34 @@ public class TileEntityDugSoil extends TileEntity {
 		return oldState.getBlock() != newSate.getBlock();
 	}
 
+	public void copy(TileEntityDugSoil other) {
+		this.setDecay(other.decay);
+		this.setCompost(other.compost);
+	}
+
+	public void setPurifiedHarvests(int harvests) {
+		IBlockState blockState = this.world.getBlockState(this.pos);
+		BlockGenericDugSoil soil = ((BlockGenericDugSoil)blockState.getBlock());
+		if(soil.isPurified(this.world, this.pos, blockState)) {
+			if(harvests < 0) {
+				harvests = 0;
+			}
+			int maxHarvests = soil.getPurifiedHarvests(this.world, this.pos, blockState);
+			this.purifiedHarvests = harvests;
+			if(this.purifiedHarvests >= maxHarvests) {
+				this.world.setBlockState(this.pos, soil.getUnpurifiedDugSoil(this.world, this.pos, blockState), 3);
+				BlockGenericDugSoil.copy(this.world, this.pos, this);
+			}
+		} else {
+			this.purifiedHarvests = 0;
+		}
+		this.markDirty();
+	}
+
+	public int getPurifiedHarvests() {
+		return this.purifiedHarvests;
+	}
+
 	public void setCompost(int compost) {
 		if(compost < 0) {
 			compost = 0;
@@ -71,6 +102,7 @@ public class TileEntityDugSoil extends TileEntity {
 			IBlockState state = this.world.getBlockState(this.pos);
 			this.world.notifyBlockUpdate(this.pos, state, state, 3);
 		}
+		this.markDirty();
 	}
 
 	public int getCompost() {
@@ -117,6 +149,7 @@ public class TileEntityDugSoil extends TileEntity {
 			IBlockState state = this.world.getBlockState(this.pos);
 			this.world.notifyBlockUpdate(this.pos, state, state, 3);
 		}
+		this.markDirty();
 	}
 
 	public int getDecay() {

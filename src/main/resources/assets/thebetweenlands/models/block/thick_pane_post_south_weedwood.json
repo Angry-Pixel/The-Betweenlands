@@ -1,0 +1,6 @@
+{
+    "parent": "thebetweenlands:block/thick_pane_post_south",
+    "textures": {
+        "pane": "thebetweenlands:blocks/weedwood_planks"
+    }
+}

@@ -1,5 +1,7 @@
 package thebetweenlands.common.capability.circlegem;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,18 +9,26 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
+import thebetweenlands.common.item.misc.ItemGemSinger;
 
 public enum CircleGemType {
-	AQUA("aqua", 1), CRIMSON("crimson", 2), GREEN("green", 3), NONE("none", 0);
+	AQUA("aqua", 1, ItemGemSinger.GemSingerTarget.AQUA_MIDDLE_GEM),
+	CRIMSON("crimson", 2, ItemGemSinger.GemSingerTarget.CRIMSON_MIDDLE_GEM),
+	GREEN("green", 3, ItemGemSinger.GemSingerTarget.GREEN_MIDDLE_GEM),
+	NONE("none", 0, null);
 
 	public final String name;
 	public final int id;
+	
+	@Nullable
+	public final ItemGemSinger.GemSingerTarget gemSingerTarget;
 
 	public static final CircleGemType[] TYPES = CircleGemType.values();
 
-	private CircleGemType(String name, int id) {
+	private CircleGemType(String name, int id, ItemGemSinger.GemSingerTarget gemSingerTarget) {
 		this.name = name;
 		this.id = id;
+		this.gemSingerTarget = gemSingerTarget;
 	}
 
 	/**

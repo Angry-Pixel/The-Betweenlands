@@ -16,6 +16,8 @@ public class SoundRegistry {
     // Music
     public static final BLSoundEvent BL_MUSIC_MENU = reg("bl_menu");
     public static final BLSoundEvent BL_MUSIC_DIMENSION = reg("bl_dimension");
+    public static final BLSoundEvent GREEBLING_MUSIC_1 = reg("greebling_music_1");
+    public static final BLSoundEvent GREEBLING_MUSIC_2 = reg("greebling_music_2");
     // Records
     public static final BLSoundEvent _16612 = reg("16612");
     public static final BLSoundEvent ACIENT = reg("ancient");
@@ -128,6 +130,23 @@ public class SoundRegistry {
     public static final BLSoundEvent GAS_CLOUD_LIVING = reg("gas_cloud_living");
     public static final BLSoundEvent GAS_CLOUD_HURT = reg("gas_cloud_hurt");
     public static final BLSoundEvent GAS_CLOUD_DEATH = reg("gas_cloud_death");
+    public static final BLSoundEvent BOULDER_SPRITE_LIVING = reg("boulder_sprite_living");
+    public static final BLSoundEvent BOULDER_SPRITE_HURT = reg("boulder_sprite_hurt");
+    public static final BLSoundEvent BOULDER_SPRITE_DEATH = reg("bounder_sprite_death");
+    public static final BLSoundEvent BOULDER_SPRITE_ROLL = reg("bounder_sprite_roll");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_SMALL_SPIT = reg("spirit_tree_face_small_spit");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_SMALL_LIVING = reg("spirit_tree_face_small_living");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_SPIT = reg("spirit_tree_face_large_spit");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_DEATH = reg("spirit_tree_face_large_death");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_LIVING = reg("spirit_tree_face_large_living");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_SMALL_EMERGE = reg("spirit_tree_face_small_emerge");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_EMERGE = reg("spirit_tree_face_large_emerge");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_SUCK = reg("spirit_tree_face_suck");
+    public static final BLSoundEvent SPIRIT_TREE_FACE_SPIT_ROOT_SPIKES = reg("spirit_tree_face_spit_root_spikes");
+    public static final BLSoundEvent SPIRIT_TREE_SPIKE_TRAP = reg("spirit_tree_spike_trap");
+    public static final BLSoundEvent SPIRIT_TREE_SPIKE_TRAP_EMERGE = reg("spirit_tree_spike_trap_emerge");
+    public static final BLSoundEvent SPIRIT_TREE_SPIKES = reg("spirit_tree_spikes");
+    public static final BLSoundEvent ROOT_SPIKE_PARTICLE_HIT = reg("root_spike_particle_hit");
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");
@@ -147,12 +166,18 @@ public class SoundRegistry {
     public static final BLSoundEvent SPORELING_HURT = reg("sporeling_hurt");
     public static final BLSoundEvent SPORELING_LIVING = reg("sporeling_living");
     public static final BLSoundEvent TERMITE_LIVING = reg("termite_living");
+    public static final BLSoundEvent ROOT_SPRITE_DEATH = reg("root_sprite_death");
+    public static final BLSoundEvent ROOT_SPRITE_LIVING = reg("root_sprite_living");
+    public static final BLSoundEvent ROOT_SPRITE_HURT = reg("root_sprite_hurt");
+    public static final BLSoundEvent GREEBLING_VANISH = reg("greebling_vanish");
     // Items
     public static final BLSoundEvent ROWBOAT_ROW_STARBOARD = reg("rowboat_row_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_PORT = reg("rowboat_row_port");
     public static final BLSoundEvent ROWBOAT_ROW_START_STARBOARD = reg("rowboat_row_start_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_START_PORT = reg("rowboat_row_start_port");
     public static final BLSoundEvent VOODOO_DOLL = reg("voodoo_doll");
+    public static final BLSoundEvent GEM_SINGER = reg("gem_singer");
+    public static final BLSoundEvent GEM_SINGER_ECHO = reg("gem_singer_echo");
     // Blocks
     public static final BLSoundEvent GRIND = reg("grind");
     public static final BLSoundEvent INFUSER_FINISHED = reg("infuser_finished");

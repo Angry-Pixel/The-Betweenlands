@@ -14,6 +14,12 @@ public class BlockPaneBetweenlands extends BlockPane {
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setSoundType(SoundType.GLASS);
 	}
+	
+	public BlockPaneBetweenlands(Material materialIn, boolean canDrop) {
+		super(materialIn, canDrop);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		this.setSoundType(SoundType.GLASS);
+	}
 
 	@SideOnly(Side.CLIENT)
 	@Override

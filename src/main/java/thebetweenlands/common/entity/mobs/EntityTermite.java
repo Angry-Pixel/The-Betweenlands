@@ -99,12 +99,6 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 		return LootTableRegistry.TERMITE;
 	}
 
-
-	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
 	@Override
     public float getBlockPathWeight(BlockPos pos) {
         return 0.5F;

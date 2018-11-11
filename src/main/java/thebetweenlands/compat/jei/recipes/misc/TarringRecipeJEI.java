@@ -5,14 +5,13 @@ import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.common.block.terrain.BlockHearthgroveLog;
-import thebetweenlands.common.item.tools.ItemBLBucket;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -82,8 +81,8 @@ public class TarringRecipeJEI implements ICraftingRecipeWrapper, ICustomCrafting
             outBlock.grow(1);
         }
 
-        ingredients.setInputLists(ItemStack.class, inputLists);
-        ingredients.setOutputLists(ItemStack.class, outputLists);
+        ingredients.setInputLists(VanillaTypes.ITEM, inputLists);
+        ingredients.setOutputLists(VanillaTypes.ITEM, outputLists);
     }
 
     @Override
@@ -91,8 +90,8 @@ public class TarringRecipeJEI implements ICraftingRecipeWrapper, ICustomCrafting
         recipeLayout.setShapeless();
 
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-        List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
-        List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
+        List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
+        List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 
         guiItemStacks.setOverrideDisplayFocus(null);
         craftingGridHelper.setInputs(guiItemStacks, inputs);

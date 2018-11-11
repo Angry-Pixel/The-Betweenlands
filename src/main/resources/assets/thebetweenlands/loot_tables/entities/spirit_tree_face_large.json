@@ -1,0 +1,194 @@
+{
+  "pools": [
+    {
+      "name": "bark_amulet",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:bark_amulet",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "spirit_tree_face_large_mask",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "strength",
+              "min": 1.4
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:spirit_tree_face_large_mask",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "spirit_tree_sapling",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:sapling_spirit_tree",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "extra_spirit_tree_sapling_1",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "strength",
+              "min": 1.2
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:sapling_spirit_tree",
+          "weight": 1
+        },
+        {
+          "type": "empty",
+          "name": "nothing",
+          "functions": [],
+          "weight": 5
+        }
+      ]
+    },
+    {
+      "name": "extra_spirit_tree_sapling_2",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "strength",
+              "min": 1.4
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:sapling_spirit_tree",
+          "weight": 1
+        },
+        {
+          "type": "empty",
+          "name": "nothing",
+          "functions": [],
+          "weight": 4
+        }
+      ]
+    },
+    {
+      "name": "extra_spirit_tree_sapling_3",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "strength",
+              "min": 1.6
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:sapling_spirit_tree",
+          "weight": 1
+        },
+        {
+          "type": "empty",
+          "name": "nothing",
+          "functions": [],
+          "weight": 3
+        }
+      ]
+    },
+    {
+      "name": "extra_spirit_tree_sapling_4",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "strength",
+              "min": 1.8
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:sapling_spirit_tree",
+          "weight": 1
+        },
+        {
+          "type": "empty",
+          "name": "nothing",
+          "functions": [],
+          "weight": 2
+        }
+      ]
+    },
+    {
+      "name": "extra_spirit_tree_sapling_5",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:loot_modifier": {
+              "key": "strength",
+              "min": 1.95
+            }
+           }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:sapling_spirit_tree",
+          "weight": 1
+        },
+        {
+          "type": "empty",
+          "name": "nothing",
+          "functions": [],
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

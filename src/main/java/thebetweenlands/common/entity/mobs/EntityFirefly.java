@@ -162,4 +162,9 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	public float getGlowTicks(float partialTicks) {
 		return this.prevGlowTicks + (this.glowTicks - this.prevGlowTicks) * partialTicks;
 	}
+	
+	@Override
+	public boolean shouldRenderInPass(int pass) {
+		return pass == 0 || pass == 1;
+	}
 }

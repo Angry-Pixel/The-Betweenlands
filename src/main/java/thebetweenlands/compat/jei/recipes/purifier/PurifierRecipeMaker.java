@@ -1,7 +1,6 @@
 package thebetweenlands.compat.jei.recipes.purifier;
 
 import thebetweenlands.api.recipes.IPurifierRecipe;
-import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.recipe.purifier.PurifierRecipeStandard;
 

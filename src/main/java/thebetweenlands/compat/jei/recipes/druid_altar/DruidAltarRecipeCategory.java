@@ -3,10 +3,10 @@ package thebetweenlands.compat.jei.recipes.druid_altar;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
@@ -62,11 +62,11 @@ public class DruidAltarRecipeCategory implements IRecipeCategory {
 
         recipeLayout.getItemStacks().init(4, false, 28, 28);
 
-        recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
-        recipeLayout.getItemStacks().set(1, ingredients.getInputs(ItemStack.class).get(1));
-        recipeLayout.getItemStacks().set(2, ingredients.getInputs(ItemStack.class).get(2));
-        recipeLayout.getItemStacks().set(3, ingredients.getInputs(ItemStack.class).get(3));
-        recipeLayout.getItemStacks().set(4, ingredients.getOutputs(ItemStack.class).get(0));
+        recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
+        recipeLayout.getItemStacks().set(1, ingredients.getInputs(VanillaTypes.ITEM).get(1));
+        recipeLayout.getItemStacks().set(2, ingredients.getInputs(VanillaTypes.ITEM).get(2));
+        recipeLayout.getItemStacks().set(3, ingredients.getInputs(VanillaTypes.ITEM).get(3));
+        recipeLayout.getItemStacks().set(4, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
     }
 
     @Override

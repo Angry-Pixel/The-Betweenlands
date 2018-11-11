@@ -10,6 +10,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -33,7 +34,7 @@ public class BlockMiddleFruitBush extends BlockGenericCrop implements ICustomIte
 			if(!world.isRemote) {
 				this.dropBlockAsItem(world, pos, state, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, playerIn.getHeldItem(hand)));
 				world.setBlockState(pos, state.withProperty(AGE, 8));
-				this.consumeCompost(world, pos, 10);
+				this.harvestAndUpdateSoil(world, pos, 10);
 			}
 			return true;
 		}
@@ -75,9 +76,7 @@ public class BlockMiddleFruitBush extends BlockGenericCrop implements ICustomIte
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	@Nullable
-	public ItemStack getRenderedItem() {
-		return new ItemStack(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS);
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }

@@ -9,6 +9,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -30,12 +31,6 @@ public abstract class BlockDoorBetweenlands extends BlockDoor implements ICustom
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ItemStack getRenderedItem() {
-		return this.getDoorItem();
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(POWERED);
 	}
@@ -52,4 +47,9 @@ public abstract class BlockDoorBetweenlands extends BlockDoor implements ICustom
 	}
 
 	protected abstract ItemStack getDoorItem();
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
+	}
 }

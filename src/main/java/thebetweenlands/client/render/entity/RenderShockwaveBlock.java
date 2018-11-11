@@ -3,6 +3,8 @@ package thebetweenlands.client.render.entity;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;
@@ -55,7 +57,7 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x - 0.5F, (float) y, (float) z - 0.5F);
 		//Lighting is already handled in the block renderer
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		@SuppressWarnings("deprecation")
@@ -80,7 +82,7 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 
 			tessellator.draw();
 		}
-		GL11.glEnable(GL11.GL_LIGHTING);
+		GlStateManager.enableLighting();
 		GL11.glPopMatrix();
 	}
 

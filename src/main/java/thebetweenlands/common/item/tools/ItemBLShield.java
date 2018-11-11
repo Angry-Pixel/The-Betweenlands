@@ -25,6 +25,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -86,7 +87,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 	public boolean isShield(ItemStack stack, EntityLivingBase entity) {
 		return true;
 	}
-	
+
 	/**
 	 * Returns the blocking cooldown
 	 * @param stack
@@ -105,22 +106,26 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 	 * @param source
 	 */
 	public void onAttackBlocked(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
-		if(!attacked.world.isRemote && source.getTrueSource() instanceof EntityLivingBase) {
-			EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
-			ItemStack attackerItem = attacker.getHeldItemMainhand();
-			if(!attackerItem.isEmpty() && attackerItem.getItem().canDisableShield(attackerItem, stack, attacked, attacker)) {
-				float attackStrength = attacker instanceof EntityPlayer ? ((EntityPlayer)attacker).getCooledAttackStrength(0.5F) : 1.0F;
-				float criticalChance = 0.25F + (float)EnchantmentHelper.getEfficiencyModifier(attacker) * 0.05F;
-				if(attacker.isSprinting() && attackStrength > 0.9F) {
-					criticalChance += 0.75F;
-				}
-				if (attacked.world.rand.nextFloat() < criticalChance) {
-					if(attacked instanceof EntityPlayer) {
-						((EntityPlayer)attacked).getCooldownTracker().setCooldown(this, 100);
-						attacked.stopActiveHand();
+		if(!attacked.world.isRemote) {
+			damage = CircleGemHelper.handleAttack(source, attacked, damage);
+			
+			if(source.getTrueSource() instanceof EntityLivingBase) {
+				EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
+				ItemStack attackerItem = attacker.getHeldItemMainhand();
+				if(!attackerItem.isEmpty() && attackerItem.getItem().canDisableShield(attackerItem, stack, attacked, attacker)) {
+					float attackStrength = attacker instanceof EntityPlayer ? ((EntityPlayer)attacker).getCooledAttackStrength(0.5F) : 1.0F;
+					float criticalChance = 0.25F + (float)EnchantmentHelper.getEfficiencyModifier(attacker) * 0.05F;
+					if(attacker.isSprinting() && attackStrength > 0.9F) {
+						criticalChance += 0.75F;
 					}
-					//Shield break sound effect
-					attacked.world.setEntityState(attacked, (byte)30);
+					if (attacked.world.rand.nextFloat() < criticalChance) {
+						if(attacked instanceof EntityPlayer) {
+							((EntityPlayer)attacked).getCooldownTracker().setCooldown(this, 100);
+							attacked.stopActiveHand();
+						}
+						//Shield break sound effect
+						attacked.world.setEntityState(attacked, (byte)30);
+					}
 				}
 			}
 		}
@@ -183,6 +188,23 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Called when the shield breaks
+	 * @param stack
+	 * @param attacked
+	 */
+	protected void onShieldBreak(ItemStack stack, EntityLivingBase attacked, EnumHand hand, DamageSource source) {
+		EnumHand enumhand = attacked.getActiveHand();
+		if(attacked instanceof EntityPlayer)
+			net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((EntityPlayer)attacked, stack, enumhand);
+		if (enumhand == EnumHand.MAIN_HAND)
+			attacked.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
+		else
+			attacked.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+		//Shield break sound effect
+		attacked.world.setEntityState(attacked, (byte)30);
 	}
 
 	public static enum EventHandler {
@@ -304,15 +326,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 							stack.damageItem(itemDamage, attacked);
 							//Shield broke
 							if (stack.getCount() <= 0) {
-								EnumHand enumhand = attacked.getActiveHand();
-								if(attacked instanceof EntityPlayer)
-									net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((EntityPlayer)attacked, stack, enumhand);
-								if (enumhand == EnumHand.MAIN_HAND)
-									attacked.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
-								else
-									attacked.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
-								//Shield break sound effect
-								attacked.world.setEntityState(attacked, (byte)30);
+								shield.onShieldBreak(stack, attacked, hand, source);
 							}
 						}
 
@@ -323,7 +337,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 			this.ignoreEvent = false;
 		}
 	}
-	
+
 	@Override
 	public int getMinRepairFuelCost(ItemStack stack) {
 		return BLMaterialRegistry.getMinRepairFuelCost(this.material);

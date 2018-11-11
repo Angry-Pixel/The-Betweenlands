@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "#T#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:items_misc",
+      "data": 32
+    },
+    "T": {
+      "item": "thebetweenlands:aqua_middle_gem"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:empty_amate_map"
+  }
+}

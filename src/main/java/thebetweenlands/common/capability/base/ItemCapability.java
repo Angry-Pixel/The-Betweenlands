@@ -17,7 +17,6 @@ import net.minecraftforge.common.capabilities.Capability;
  * @param <F> The default implementation of the capability
  * @param <T> The capability
  */
-@Deprecated
 public abstract class ItemCapability<F extends ItemCapability<F, T>, T> extends AbstractCapability<F, T, Item> {
 	private ItemStack stack;
 

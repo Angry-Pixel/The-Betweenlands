@@ -1,0 +1,47 @@
+{
+	"pools": [
+		{
+			"name": "sap_spit",
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "empty",
+					"name": "nothing",
+					"functions": [],
+					"weight": 2
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:sap_spit",
+					"functions": [
+						{
+							"function": "looting_enchant",
+							"count": {
+								"min": 0,
+								"max": 1
+							}
+						}
+					],
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "spirit_tree_face_small_mask",
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "empty",
+					"name": "nothing",
+					"functions": [],
+					"weight": 8
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:spirit_tree_face_small_mask",
+					"weight": 1
+				}
+			]
+		}
+	]
+}

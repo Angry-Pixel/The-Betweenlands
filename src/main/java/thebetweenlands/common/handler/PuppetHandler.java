@@ -114,7 +114,7 @@ public class PuppetHandler {
 									return (EntityLivingBase) puppeteer;
 								}
 								return null;
-							}, 1.2D, 10.0F, 2.0F);
+							}, 1.2D, 10.0F, 2.0F, true);
 							aiFollow.setMutexBits(1);
 
 							EntityAIPuppet.addPuppetAI(() -> cap.getPuppeteer(), living, living.tasks,

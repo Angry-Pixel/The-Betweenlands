@@ -232,7 +232,22 @@
                     "type": "loot_table",
                     "name": "thebetweenlands:loot/music_disc",
                     "functions": [],
-                    "weight": 2,
+                    "weight": 4,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:bone_wayfinder",
+                    "weight": 5,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:gem_singer",
+                    "functions": [],
+                    "weight": 3,
                     "quality": 0
                 }
             ],
@@ -302,7 +317,7 @@
                     "type": "item",
                     "name": "thebetweenlands:swift_pick",
                     "functions": [],
-                    "weight": 8,
+                    "weight": 4,
                     "quality": 0
                 },
                 {
@@ -343,6 +358,14 @@
                     "name": "thebetweenlands:skull_mask",
                     "functions": [],
                     "weight": 8,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:gem_singer",
+                    "functions": [],
+                    "weight": 10,
                     "quality": 0
                 }
             ],

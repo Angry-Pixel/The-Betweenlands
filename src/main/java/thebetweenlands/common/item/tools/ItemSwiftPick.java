@@ -2,6 +2,7 @@ package thebetweenlands.common.item.tools;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -37,5 +38,10 @@ public class ItemSwiftPick extends ItemBLPickaxe {
 	@Override
 	public boolean isRepairableByAnimator(ItemStack stack) {
 		return false;
+	}
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.EPIC;
 	}
 }

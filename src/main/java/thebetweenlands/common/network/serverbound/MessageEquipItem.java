@@ -4,6 +4,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
@@ -92,11 +94,18 @@ public class MessageEquipItem extends MessageEntity {
 				default:
 				case 0:
 					//Equip
-					if(this.sourceSlot >= 0 && this.sourceSlot < sender.inventory.getSizeInventory()) {
-						ItemStack stack = sender.inventory.getStackInSlot(this.sourceSlot);
+					if(this.sourceSlot >= -1 && this.sourceSlot < sender.inventory.getSizeInventory()) {
+						ItemStack stack = this.sourceSlot == -1 ? sender.getHeldItem(EnumHand.OFF_HAND) : sender.inventory.getStackInSlot(this.sourceSlot);
 						ItemStack result = EquipmentHelper.equipItem(sender, target, stack, false);
 						if(!sender.capabilities.isCreativeMode) {
-							sender.inventory.setInventorySlotContents(this.sourceSlot, result);
+							if(this.sourceSlot == -1) {
+								sender.setHeldItem(EnumHand.OFF_HAND, result);
+							} else {
+								sender.inventory.setInventorySlotContents(this.sourceSlot, result);
+							}
+						}
+						if(result.isEmpty() || result.getCount() != stack.getCount()) {
+							sender.sendStatusMessage(new TextComponentTranslation("chat.equipment.equipped", new TextComponentTranslation(stack.getUnlocalizedName() + ".name")), true);
 						}
 					}
 					break;
@@ -104,8 +113,11 @@ public class MessageEquipItem extends MessageEntity {
 					//Unequip
 					if(this.sourceSlot >= 0) {
 						ItemStack stack = EquipmentHelper.unequipItem(sender, target, this.inventory, this.sourceSlot, false);
-						if(stack != null && !sender.inventory.addItemStackToInventory(stack)) {
-							target.entityDropItem(stack, target.getEyeHeight());
+						if(!stack.isEmpty()) {
+							sender.sendStatusMessage(new TextComponentTranslation("chat.equipment.unequipped", new TextComponentTranslation(stack.getUnlocalizedName() + ".name")), true);
+							if(!sender.inventory.addItemStackToInventory(stack)) {
+								target.entityDropItem(stack, target.getEyeHeight());
+							}
 						}
 					}
 					break;

@@ -21,7 +21,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
 public class BlockPolishedDentrothyst extends BlockGlassBetweenlands implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeItemBlockModelDefinition, BlockRegistry.IStateMappedBlock {
-	public static PropertyEnum<EnumDentrothyst> TYPE = PropertyEnum.create("type", EnumDentrothyst.class);
+	public static final PropertyEnum<EnumDentrothyst> TYPE = PropertyEnum.create("type", EnumDentrothyst.class);
 
 	public BlockPolishedDentrothyst() {
 		super(Material.GLASS);
@@ -57,6 +57,11 @@ public class BlockPolishedDentrothyst extends BlockGlassBetweenlands implements 
 		return "%s_" + EnumDentrothyst.values()[meta].getName();
 	}
 
+	@Override
+    public int damageDropped(IBlockState state) {
+        return getMetaFromState(state);
+    }
+	
 	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
 		items.add(new ItemStack(this, 1, EnumDentrothyst.GREEN.getMeta()));

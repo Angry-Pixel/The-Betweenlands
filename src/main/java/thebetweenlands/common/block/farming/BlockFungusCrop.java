@@ -39,7 +39,7 @@ public class BlockFungusCrop extends BlockGenericCrop implements ICustomItemBloc
 				sporeling.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, rand.nextFloat() * 360.0F, 0.0F);
 				worldIn.spawnEntity(sporeling);
 				worldIn.setBlockToAir(pos);
-				this.consumeCompost(worldIn, pos, 5);
+				this.harvestAndUpdateSoil(worldIn, pos, 5);
 
 				for (EntityPlayerMP playerMP : worldIn.getEntitiesWithinAABB(EntityPlayerMP.class, new AxisAlignedBB(pos, pos).grow(10.0D, 5.0D, 10.0D))) {
 					AdvancementCriterionRegistry.SPORELING_HATCH.trigger(playerMP);
@@ -78,9 +78,7 @@ public class BlockFungusCrop extends BlockGenericCrop implements ICustomItemBloc
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	@Nullable
-	public ItemStack getRenderedItem() {
-		return new ItemStack(ItemRegistry.SPORES);
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }

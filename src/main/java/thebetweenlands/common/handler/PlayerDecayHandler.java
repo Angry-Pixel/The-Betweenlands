@@ -21,11 +21,16 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.common.capability.decay.DecayStats;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.GameruleRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class PlayerDecayHandler {
+	public static boolean isDecayEnabled() {
+		return GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_DECAY) && BetweenlandsConfig.GENERAL.useDecay;
+	}
+	
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		EntityPlayer player = event.player;
@@ -104,8 +109,11 @@ public class PlayerDecayHandler {
 					}
 				}
 
-				if(GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_DECAY)) {
-					capability.getDecayStats().onUpdate(player);
+				if(isDecayEnabled()) {
+					stats.onUpdate(player);
+				} else {
+					stats.setDecayLevel(0);
+					stats.setDecaySaturationLevel(1);
 				}
 			}
 		}

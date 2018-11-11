@@ -17,8 +17,8 @@ import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
  * Mostly used for hostile entities.
  */
 public class CaveSpawnEntry extends BLSpawnEntry {
-	private boolean canSpawnOnWater = false;
-	private boolean canSpawnInWater = false;
+	protected boolean canSpawnOnWater = false;
+	protected boolean canSpawnInWater = false;
 
 	public CaveSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
 		super(id, entityType);

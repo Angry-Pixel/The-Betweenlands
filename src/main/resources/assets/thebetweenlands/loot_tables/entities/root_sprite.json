@@ -1,0 +1,67 @@
+{
+  "pools": [
+    {
+      "name": "root_pods_1",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:root_pod",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "root_pods_2",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "empty",
+          "weight": 2
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:root_pod",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "plant_drops",
+      "rolls": 1,
+      "conditions": [],
+      "entries": [
+        {
+          "type": "empty",
+          "weight": 14
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:items_plant_drop",
+          "functions": [
+            {
+              "function": "thebetweenlands:set_meta_from_array",
+              "data": [
+                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12,
+                13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23,
+                24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34,
+                35, 36, 37, 38, 39, 40
+              ]
+            }
+          ],
+          "weight": 14
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:middle_fruit_bush_seeds",
+          "weight": 4
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:aspectrus_seeds",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

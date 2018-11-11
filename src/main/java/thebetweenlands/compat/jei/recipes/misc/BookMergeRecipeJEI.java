@@ -5,6 +5,7 @@ import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
@@ -64,8 +65,8 @@ public class BookMergeRecipeJEI implements ICraftingRecipeWrapper, ICustomCrafti
             outBook.grow(1);
         }
 
-        ingredients.setInputLists(ItemStack.class, inputLists);
-        ingredients.setOutputLists(ItemStack.class, outputLists);
+        ingredients.setInputLists(VanillaTypes.ITEM, inputLists);
+        ingredients.setOutputLists(VanillaTypes.ITEM, outputLists);
     }
 
     @Override
@@ -73,8 +74,8 @@ public class BookMergeRecipeJEI implements ICraftingRecipeWrapper, ICustomCrafti
         recipeLayout.setShapeless();
 
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-        List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
-        List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
+        List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
+        List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 
         guiItemStacks.setOverrideDisplayFocus(null);
         craftingGridHelper.setInputs(guiItemStacks, inputs);

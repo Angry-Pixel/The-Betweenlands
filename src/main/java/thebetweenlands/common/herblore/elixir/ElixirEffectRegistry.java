@@ -62,6 +62,9 @@ public class ElixirEffectRegistry {
 	public static final ElixirEffect EFFECT_PETRIFY = new ElixirPetrify(34, "bl.elixir.petrify", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png"));
 	private static final List<ElixirEffect> EFFECTS = new ArrayList<ElixirEffect>();
 
+	//Potions
+	public static final Potion ROOT_BOUND = new PotionRootBound();
+	
 	static {
 		//Add elixirs to list
 		try {
@@ -81,6 +84,8 @@ public class ElixirEffectRegistry {
 		for(ElixirEffect e : EFFECTS) {
 			event.getRegistry().register(e.getPotionEffect());
 		}
+		
+		event.getRegistry().register(ROOT_BOUND);
 	}
 
 	private static void register(ElixirEffect effect, String fieldName) {

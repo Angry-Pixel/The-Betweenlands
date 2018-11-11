@@ -373,8 +373,10 @@ public class ModelGreebling extends MowzieModelBase{
         setToInitPose();
         float frame = greebling.ticksExisted + partialRenderTicks;
 
-        float swaySpeed = 0.12f;
+        float swaySpeed = 0.06f;
 
+        float strokeSpeed = swaySpeed * 0.33f;
+        
         flap(body_base_1, swaySpeed, 0.15f, false, 0, 0, frame, 1f);
         flap(legleft1_1, swaySpeed, 0.15f, true, 0, 0, frame, 1f);
         flap(legright1_1, swaySpeed, 0.15f, true, 0, 0, frame, 1f);
@@ -386,9 +388,9 @@ public class ModelGreebling extends MowzieModelBase{
         flap(legright1_0, swaySpeed, 0.15f, true, 0, 0, frame, 1f);
         chest_0.rotationPointY += Math.sin((frame - 3) * swaySpeed * 2) * 0.25;
         flap(head1_0, swaySpeed * 4, 0.075f, false, 0, 0, frame, 1f);
-        swing(armright1_0, swaySpeed * 4, 0.3f, false, 0, 0, frame, 1f);
-        walk(strokestick_0, swaySpeed * 4, 0.2f, false, 0, 0, frame, 1f);
-        flap(strokestick_0, swaySpeed * 4, 0.4f, true, 0, 0, frame, 1f);
+        swing(armright1_0, strokeSpeed * 4, 0.3f, false, 0, 0, frame, 1f);
+        walk(strokestick_0, strokeSpeed * 4, 0.2f, false, 0, 0, frame, 1f);
+        flap(strokestick_0, strokeSpeed * 4, 0.4f, true, 0, 0, frame, 1f);
 
         float disappearFrame = greebling.disappearTimer > 0 ? greebling.disappearTimer + partialRenderTicks : 0;
 

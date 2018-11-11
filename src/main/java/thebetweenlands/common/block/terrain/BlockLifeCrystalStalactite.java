@@ -1,6 +1,5 @@
 package thebetweenlands.common.block.terrain;
 
-import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -35,9 +34,11 @@ import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.property.PropertyBoolUnlisted;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 import thebetweenlands.common.item.ItemBlockEnum;
+import thebetweenlands.common.item.misc.ItemGemSinger;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockLifeCrystalStalactite extends BlockSwampWater implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeItemBlockModelDefinition, IStateMappedBlock {
@@ -239,5 +240,23 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 	@Override
 	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return (int)((state.getValue(VARIANT) == EnumLifeCrystalType.ORE ? 0.4F : 0.0F) * 15.0F);
+	}
+	
+	@Override
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+		super.onBlockAdded(worldIn, pos, state);
+
+		if(state.getValue(VARIANT) == EnumLifeCrystalType.ORE) {
+			BetweenlandsChunkStorage.markGem(worldIn, pos, ItemGemSinger.GemSingerTarget.LIFE_CRYSTAL);
+		}
+	}
+
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		super.breakBlock(worldIn, pos, state);
+
+		if(state.getValue(VARIANT) == EnumLifeCrystalType.ORE) {
+			BetweenlandsChunkStorage.unmarkGem(worldIn, pos, ItemGemSinger.GemSingerTarget.LIFE_CRYSTAL);
+		}
 	}
 }

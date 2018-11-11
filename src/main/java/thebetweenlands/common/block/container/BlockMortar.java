@@ -36,7 +36,7 @@ public class BlockMortar extends BlockContainer {
 		super(Material.ROCK);
 		setHardness(2.0F);
 		setResistance(5.0F);
-		setCreativeTab(BLCreativeTabs.HERBLORE);
+		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
 

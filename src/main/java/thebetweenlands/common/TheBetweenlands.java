@@ -34,12 +34,15 @@ import thebetweenlands.common.command.CommandReloadRecipes;
 import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.config.ConfigHelper;
+import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.handler.AdvancementHandler;
 import thebetweenlands.common.handler.AnvilEventHandler;
 import thebetweenlands.common.handler.ArmorHandler;
 import thebetweenlands.common.handler.AspectSyncHandler;
 import thebetweenlands.common.handler.AttackDamageHandler;
 import thebetweenlands.common.handler.BlockBreakHandler;
+import thebetweenlands.common.handler.BossHandler;
+import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler;
 import thebetweenlands.common.handler.ElixirCommonHandler;
 import thebetweenlands.common.handler.EntitySpawnHandler;
 import thebetweenlands.common.handler.EnvironmentEventHandler;
@@ -56,7 +59,9 @@ import thebetweenlands.common.handler.PlayerRespawnHandler;
 import thebetweenlands.common.handler.PuppetHandler;
 import thebetweenlands.common.handler.WorldEventHandler;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.herblore.elixir.PotionRootBound;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
+import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
 import thebetweenlands.common.item.shields.ItemDentrothystShield;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
@@ -72,6 +77,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenWaystone;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
 import thebetweenlands.compat.tmg.TMGEquipmentInventory;
@@ -157,7 +163,10 @@ public class TheBetweenlands {
 		this.registerEventHandlers();
 
 		GameRegistry.registerWorldGenerator(new WorldGenDruidCircle(), 0);
-
+		GameRegistry.registerWorldGenerator(new WorldGenWaystone(), 0);
+		
+		BLDataFixers.register();
+		
 		if (Loader.isModLoaded("tombmanygraves2api")) {
 			new TMGEquipmentInventory();
 		}
@@ -231,5 +240,11 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(FuelHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerJoinWorldHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerRespawnHandler.class);
+		MinecraftForge.EVENT_BUS.register(CustomEntityBlockCollisionsHandler.class);
+		MinecraftForge.EVENT_BUS.register(PotionRootBound.class);
+		MinecraftForge.EVENT_BUS.register(BossHandler.class);
+		MinecraftForge.EVENT_BUS.register(ItemMagicItemMagnet.class);
+		MinecraftForge.EVENT_BUS.register(EntityWeedwoodRowboat.class);
+		MinecraftForge.EVENT_BUS.register(GameruleRegistry.class);
 	}
 }

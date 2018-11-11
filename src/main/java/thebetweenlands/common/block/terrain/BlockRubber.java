@@ -4,6 +4,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
@@ -12,11 +13,12 @@ import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.BLMaterialRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
-public class BlockRubber extends BlockFluidClassic implements IStateMappedBlock {
+public class BlockRubber extends BlockFluidClassic implements IStateMappedBlock, ICustomItemBlock {
 	public BlockRubber() {
 		super(FluidRegistry.RUBBER, BLMaterialRegistry.RUBBER);
 	}
@@ -68,5 +70,10 @@ public class BlockRubber extends BlockFluidClassic implements IStateMappedBlock 
 	@SideOnly(Side.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(BlockRubber.LEVEL);
+	}
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }

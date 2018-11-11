@@ -208,17 +208,21 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 	@Override
 	public ILocalStorage loadLocalStorage(LocalStorageReference reference) {
-		ILocalStorage storage = this.createLocalStorageFromFile(reference);
-		if(storage != null) {
-			this.addLocalStorage(storage);
-			storage.onLoaded();
-
-			if(storage.getRegion() != null) {
-				LocalRegionData data = this.regionCache.getOrCreateRegion(reference.getRegion());
-				data.incrRefCounter();
+		try {
+			ILocalStorage storage = this.createLocalStorageFromFile(reference);
+			if(storage != null) {
+				this.addLocalStorage(storage);
+				storage.onLoaded();
+	
+				if(storage.getRegion() != null) {
+					LocalRegionData data = this.regionCache.getOrCreateRegion(reference.getRegion());
+					data.incrRefCounter();
+				}
+	
+				return storage;
 			}
-
-			return storage;
+		} catch(Exception ex) {
+			TheBetweenlands.logger.error(String.format("Failed loading local storage with ID %s at %s", reference.getID().getStringID(), "[x=" + reference.getChunk().x + ", z=" + reference.getChunk().z + "]"), ex);
 		}
 		return null;
 	}

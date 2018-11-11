@@ -96,7 +96,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
     protected void generateOres() {
 		this.generateOre(22, 12, OreGens.SULFUR, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
 		this.generateOre(6, 12, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT + 40, WorldProviderBetweenlands.CAVE_START - 5);
-		this.generateOre(10, 12, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
+		this.generateOre(5, 12, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
 		this.generateOre(4.5F, 12, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 40);
 		this.generateOre(4, 12, OreGens.SWAMP_DIRT, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(0.2F, 12, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
@@ -108,8 +108,8 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
         World world = this.getWorld();
 
         //Generate middle gems
-        int cycles = 1 + (rand.nextBoolean() ? rand.nextInt(2) : 0);
-        for (int i = 0; i < cycles; i++) {
+        int cycles = rand.nextInt(4) == 0 ? (1 + rand.nextInt(3)) : 0;
+        gems: for (int i = 0; i < cycles; i++) {
             if (rand.nextInt(9 / cycles + 1) == 0) {
                 int xx = this.getX() + this.offsetXZ();
                 int zz = this.getZ() + this.offsetXZ();
@@ -126,13 +126,13 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
                     switch (rand.nextInt(3)) {
                         case 0:
                             world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.AQUA_MIDDLE_GEM_ORE.getDefaultState());
-                            break;
+                            break gems;
                         case 1:
                             world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.CRIMSON_MIDDLE_GEM_ORE.getDefaultState());
-                            break;
+                            break gems;
                         case 2:
                             world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.GREEN_MIDDLE_GEM_ORE.getDefaultState());
-                            break;
+                            break gems;
                     }
                 }
             }

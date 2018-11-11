@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,7 +24,8 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.capability.circlegem.CircleGemHelper;
+import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
+import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
@@ -102,6 +103,14 @@ import thebetweenlands.common.item.misc.ItemGlue;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.item.misc.ItemLoreScrap;
 import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.item.BLMaterialRegistry;
+import thebetweenlands.common.item.armor.*;
+import thebetweenlands.common.item.equipment.*;
+import thebetweenlands.common.item.farming.*;
+import thebetweenlands.common.item.food.*;
+import thebetweenlands.common.item.herblore.*;
+import thebetweenlands.common.item.misc.*;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMossBed;
@@ -117,6 +126,8 @@ import thebetweenlands.common.item.misc.ItemWeedwoodSign;
 import thebetweenlands.common.item.misc.LocationDebugItem;
 import thebetweenlands.common.item.misc.TestItem;
 import thebetweenlands.common.item.shields.ItemDentrothystShield;
+import thebetweenlands.common.item.shields.ItemLivingWeedwoodShield;
+import thebetweenlands.common.item.shields.ItemLurkerSkinShield;
 import thebetweenlands.common.item.shields.ItemOctineShield;
 import thebetweenlands.common.item.shields.ItemSyrmoriteShield;
 import thebetweenlands.common.item.shields.ItemValoniteShield;
@@ -156,6 +167,8 @@ public class ItemRegistry {
     public static final Item ITEMS_PLANT_DROP = new ItemPlantDrop().setCreativeTab(BLCreativeTabs.HERBLORE);
     public static final Item SWAMP_TALISMAN = new ItemSwampTalisman().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final Item WEEDWOOD_ROWBOAT = new ItemWeedwoodRowboat();
+    public static final Item DENTROTHYST_SHARD_ORANGE = new ItemDentrothystShard(EnumDentrothyst.ORANGE);
+    public static final Item DENTROTHYST_SHARD_GREEN = new ItemDentrothystShard(EnumDentrothyst.GREEN);
     //food
     public static final Item SAP_BALL = new ItemSapBall();
     public static final ItemRottenFood ROTTEN_FOOD = (ItemRottenFood) new ItemRottenFood().setAlwaysEdible();
@@ -206,6 +219,7 @@ public class ItemRegistry {
     public static final Item MIRE_SCRAMBLE = new ItemMireScramble();
     public static final Item WEEPING_BLUE_PETAL_SALAD = new ItemWeepingBluePetalSalad();
     public static final Item NIBBLESTICK = new ItemNibblestick();
+    public static final Item SPIRIT_FRUIT = new ItemSpiritFruit();
     
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);
@@ -228,6 +242,9 @@ public class ItemRegistry {
     public static final Item MARSH_RUNNER_BOOTS = new ItemMarshRunnerBoots();
     public static final Item SKULL_MASK = new ItemSkullMask();
     public static final Item EXPLORERS_HAT = new ItemExplorersHat();
+    public static final Item SPIRIT_TREE_FACE_LARGE_MASK = new ItemSpiritTreeFaceMaskLarge();
+    public static final Item SPIRIT_TREE_FACE_SMALL_MASK = new ItemSpiritTreeFaceMaskSmall();
+    public static final Item SPIRIT_TREE_FACE_SMALL_MASK_ANIMATED = new ItemSpiritTreeFaceMaskSmallAnimated();
     //TOOLS
     public static final Item WEEDWOOD_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item WEEDWOOD_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
@@ -248,13 +265,14 @@ public class ItemRegistry {
     public static final Item OCTINE_SHIELD = new ItemOctineShield();
     public static final Item VALONITE_SHIELD = new ItemValoniteShield();
     public static final Item WEEDWOOD_SHIELD = new ItemWeedwoodShield();
+    public static final Item LIVING_WEEDWOOD_SHIELD = new ItemLivingWeedwoodShield();
     public static final Item SYRMORITE_SHIELD = new ItemSyrmoriteShield();
     public static final Item BONE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_BONE);
     public static final Item DENTROTHYST_SHIELD_GREEN = new ItemDentrothystShield(true);
     public static final Item DENTROTHYST_SHIELD_GREEN_POLISHED = new ItemDentrothystShield(true);
     public static final Item DENTROTHYST_SHIELD_ORANGE = new ItemDentrothystShield(false);
     public static final Item DENTROTHYST_SHIELD_ORANGE_POLISHED = new ItemDentrothystShield(false);
-    public static final Item LURKER_SKIN_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_LURKER_SKIN);
+    public static final Item LURKER_SKIN_SHIELD = new ItemLurkerSkinShield();
     public static final Item MANUAL_HL = new ItemManualHL();
     public static final Item SYRMORITE_SHEARS = new ItemSyrmoriteShears();
     public static final Item SICKLE = new ItemSickle();
@@ -316,6 +334,24 @@ public class ItemRegistry {
             return BlockRegistry.GIANT_ROOT_PLANK_DOOR;
         }
     };
+    public static final Item HEARTHGROVE_PLANK_DOOR_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.HEARTHGROVE_PLANK_DOOR;
+        }
+    };
+    public static final Item NIBBLETWIG_PLANK_DOOR_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.NIBBLETWIG_PLANK_DOOR;
+        }
+    };
+    public static final Item SCABYST_DOOR_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.SCABYST_DOOR;
+        }
+    };
     public static final Item WEEDWOOD_SIGN_ITEM = new ItemWeedwoodSign();
     public static final Item CRIMSON_MIDDLE_GEM = new ItemGem(CircleGemType.CRIMSON);
     public static final Item AQUA_MIDDLE_GEM = new ItemGem(CircleGemType.AQUA);
@@ -350,6 +386,14 @@ public class ItemRegistry {
     public static final ItemTaintedPotion TAINTED_POTION = new ItemTaintedPotion();
     public static final ItemOctineIngot OCTINE_INGOT = new ItemOctineIngot();
     public static final Item MUMMY_BAIT = new ItemMummyBait();
+    public static final Item SAP_SPIT = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
+    public static final Item BARK_AMULET = new ItemBarkAmulet();
+    public static final Item EMPTY_AMATE_MAP = new ItemEmptyAmateMap();
+    public static final Item AMATE_MAP = new ItemAmateMap();
+    public static final Item BONE_WAYFINDER = new ItemBoneWayfinder();
+    public static final Item MAGIC_ITEM_MAGNET = new ItemMagicItemMagnet();
+    public static final Item GEM_SINGER = new ItemGemSinger();
+
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
 
@@ -411,8 +455,9 @@ public class ItemRegistry {
 		OreDictionary.registerOre("oreAquaMiddleGem", new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_ORE));
 		OreDictionary.registerOre("oreGreenMiddleGem", new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
 		OreDictionary.registerOre("oreCrimsonMiddleGem", new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE));
-		OreDictionary.registerOre("oreLifeCrystal", new ItemStack(BlockRegistry.LIFE_CRYSTAL_STALACTITE));
-
+		OreDictionary.registerOre("oreLifeCrystal", new ItemStack(BlockRegistry.LIFE_CRYSTAL_STALACTITE, 1, BlockLifeCrystalStalactite.EnumLifeCrystalType.ORE.getMetadata()));
+		OreDictionary.registerOre("oreScabyst", new ItemStack(BlockRegistry.SCABYST_ORE));
+		
 		OreDictionary.registerOre("blockSulfur", new ItemStack(BlockRegistry.SULFUR_BLOCK));
 		OreDictionary.registerOre("blockSyrmorite", new ItemStack(BlockRegistry.SYRMORITE_BLOCK));
 		OreDictionary.registerOre("blockBone", new ItemStack(BlockRegistry.SLIMY_BONE_BLOCK));
@@ -437,7 +482,10 @@ public class ItemRegistry {
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_RUBBER_TREE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_HEARTHGROVE_TREE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_NIBBLETWIG_TREE));
-
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_SPIRIT_TREE_TOP));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_SPIRIT_TREE_MIDDLE));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_SPIRIT_TREE_BOTTOM));
+		
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_WEEDWOOD));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_SAP));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_RUBBER));
@@ -455,7 +503,8 @@ public class ItemRegistry {
 		OreDictionary.registerOre("gemAquaMiddleGem", new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM));
 		OreDictionary.registerOre("gemCrimsonMiddleGem", new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM));
 		OreDictionary.registerOre("gemGreenMiddleGem", new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM));
-		OreDictionary.registerOre("gemLifeCrystal", new ItemStack(ItemRegistry.LIFE_CRYSTAL));
+		OreDictionary.registerOre("gemLifeCrystal", new ItemStack(ItemRegistry.LIFE_CRYSTAL, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("gemScabyst", EnumItemMisc.SCABYST.create(1));
 
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));
         OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));
@@ -464,28 +513,42 @@ public class ItemRegistry {
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.GIANT_ROOT, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_HEARTHGROVE, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_NIBBLETWIG, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_SPIRIT_TREE, 1, OreDictionary.WILDCARD_VALUE));
 
-		//Recipes that use and creates these conflicts with vanilla recipes because of ore dict
 		OreDictionary.registerOre("stickWood", EnumItemMisc.WEEDWOOD_STICK.create(1));
+		
 		OreDictionary.registerOre("plankWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-
 		OreDictionary.registerOre("plankWood", new ItemStack(BlockRegistry.RUBBER_TREE_PLANKS));
 		OreDictionary.registerOre("plankWood", new ItemStack(BlockRegistry.GIANT_ROOT_PLANKS));
-
+		OreDictionary.registerOre("plankWood", new ItemStack(BlockRegistry.HEARTHGROVE_PLANKS));
+		OreDictionary.registerOre("plankWood", new ItemStack(BlockRegistry.NIBBLETWIG_PLANKS));
+		
 		OreDictionary.registerOre("slabWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANK_SLAB));
 		OreDictionary.registerOre("slabWood", new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_SLAB));
 		OreDictionary.registerOre("slabWood", new ItemStack(BlockRegistry.GIANT_ROOT_PLANK_SLAB));
-
+		OreDictionary.registerOre("slabWood", new ItemStack(BlockRegistry.HEARTHGROVE_PLANK_SLAB));
+		OreDictionary.registerOre("slabWood", new ItemStack(BlockRegistry.NIBBLETWIG_PLANK_SLAB));
+		
 		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE));
 		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.WEEDWOOD_LOG_FENCE));
 		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_FENCE));
 		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.GIANT_ROOT_PLANK_FENCE));
-
+		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.HEARTHGROVE_PLANK_FENCE));
+		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.NIBBLETWIG_PLANK_FENCE));
+		
 		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE_GATE));
 		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.WEEDWOOD_LOG_FENCE_GATE));
 		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_FENCE_GATE));
 		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.GIANT_ROOT_PLANK_FENCE_GATE));
-
+		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.HEARTHGROVE_PLANK_FENCE_GATE));
+		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.NIBBLETWIG_PLANK_FENCE_GATE));
+		
+		OreDictionary.registerOre("stairWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANK_STAIRS));
+		OreDictionary.registerOre("stairWood", new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_STAIRS));
+		OreDictionary.registerOre("stairWood", new ItemStack(BlockRegistry.GIANT_ROOT_PLANK_STAIRS));
+		OreDictionary.registerOre("stairWood", new ItemStack(BlockRegistry.HEARTHGROVE_PLANK_STAIRS));
+		OreDictionary.registerOre("stairWood", new ItemStack(BlockRegistry.NIBBLETWIG_PLANK_STAIRS));
+		
 		OreDictionary.registerOre("torch", new ItemStack(BlockRegistry.SULFUR_TORCH));
 
 		OreDictionary.registerOre("bone", EnumItemMisc.SLIMY_BONE.create(1));
@@ -581,5 +644,16 @@ public class ItemRegistry {
     	 */
     	@SideOnly(Side.CLIENT)
         Map<Integer, String> getVariants();
+    }
+
+    public interface ICustomMeshCallback {
+
+        /**
+         * A callback to get a custom mesh definition
+         * @return
+         */
+        @SideOnly(Side.CLIENT)
+        ItemMeshDefinition getMeshDefinition();
+
     }
 }

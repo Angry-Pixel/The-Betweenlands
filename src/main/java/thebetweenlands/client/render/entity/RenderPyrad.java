@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.entity.layer.LayerGlow;
+import thebetweenlands.client.render.entity.layer.LayerOverlay;
 import thebetweenlands.client.render.model.entity.ModelPyrad;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
@@ -16,11 +16,11 @@ import thebetweenlands.common.entity.mobs.EntityPyrad;
 public class RenderPyrad extends RenderLiving<EntityPyrad> {
 	public final static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/pyrad.png");
 
-	protected final LayerGlow<EntityPyrad> glow;
+	protected final LayerOverlay<EntityPyrad> glow;
 
 	public RenderPyrad(RenderManager manager) {
 		super(manager, new ModelPyrad(), 0.5F);
-		this.addLayer(this.glow = new LayerGlow<EntityPyrad>(this, new ResourceLocation("thebetweenlands:textures/entity/pyrad_glow.png")));
+		this.addLayer(this.glow = new LayerOverlay<EntityPyrad>(this, new ResourceLocation("thebetweenlands:textures/entity/pyrad_glow.png")).setGlow(true));
 	}
 
 	@Override

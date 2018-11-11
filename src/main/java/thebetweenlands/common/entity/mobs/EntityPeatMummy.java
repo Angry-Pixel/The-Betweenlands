@@ -100,11 +100,6 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	}
 
 	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
-	@Override
 	public void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIApproachItem(this, ItemRegistry.SHIMMER_STONE, 80, 64, 1.9F, 1.5F) {

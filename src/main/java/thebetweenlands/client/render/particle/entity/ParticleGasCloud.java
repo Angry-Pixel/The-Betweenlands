@@ -9,12 +9,19 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
+import thebetweenlands.common.entity.mobs.EntityGasCloud;
 
 public class ParticleGasCloud extends Particle implements ParticleTextureStitcher.IParticleSpriteReceiver {
 	protected boolean rotateReversed = false;
+	protected EntityGasCloud cloud;
 
 	protected ParticleGasCloud(World world, double x, double y, double z, double vecX, double vecY, double vecZ, float startRotation, float scale) {
+		this(world, null, x, y,  z, vecX, vecY, vecZ, startRotation, scale);
+	}
+	
+	protected ParticleGasCloud(World world, EntityGasCloud cloud, double x, double y, double z, double vecX, double vecY, double vecZ, float startRotation, float scale) {
 		super(world, x, y, z, vecX, vecY, vecZ);
+		this.cloud = cloud;
 		motionX = motionX * 0.01D + vecX;
 		motionY = motionY * 0.01D + vecY;
 		motionZ = motionZ * 0.01D + vecZ;
@@ -36,8 +43,16 @@ public class ParticleGasCloud extends Particle implements ParticleTextureStitche
 	/**
 	 * Renders this particle with the UVs [0, 0] to [1, 1]
 	 */
-	public void renderParticleFullTexture(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
+	@Override
+	public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
 	{
+		if(this.cloud != null && !this.cloud.isEntityAlive()) {
+			int[] gasColor = this.cloud.getGasColor();
+			float fade = (1.0F - (this.cloud.deathTime / 80.0F));
+			this.setAlphaF((float)Math.pow(fade, 2) * gasColor[3] / 255.0F);
+			this.setRBGColorF(gasColor[0] / 255.0F * fade, gasColor[1] / 255.0F * fade, gasColor[2] / 255.0F * fade);
+		}
+		
 		float minU = 0.0F;
 		float maxU = 1.0F;
 		float minV = 0.0F;
@@ -102,12 +117,12 @@ public class ParticleGasCloud extends Particle implements ParticleTextureStitche
 
 		@Override
 		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs<?> args) { 
-			args.withData((world.rand.nextFloat() * 2.0F * (float)Math.PI) * 2.0F - 2.0F * (float)Math.PI).withScale((world.rand.nextFloat() * 0.75F + 0.6F) * 10.0F);
+			args.withData(null, (world.rand.nextFloat() * 2.0F * (float)Math.PI) * 2.0F - 2.0F * (float)Math.PI).withScale((world.rand.nextFloat() * 0.75F + 0.6F) * 10.0F);
 		}
 
 		@Override
 		public ParticleGasCloud createParticle(ImmutableParticleArgs args) {
-			return new ParticleGasCloud(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getFloat(0), args.scale);
+			return new ParticleGasCloud(args.world, args.data.getObject(EntityGasCloud.class, 0), args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getFloat(1), args.scale);
 		}
 	}
 }

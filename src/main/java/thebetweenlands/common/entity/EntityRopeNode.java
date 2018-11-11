@@ -3,9 +3,6 @@ package thebetweenlands.common.entity;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
-import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
@@ -20,15 +17,18 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityRopeNode extends Entity {
@@ -51,6 +51,8 @@ public class EntityRopeNode extends Entity {
 	private Entity cachedNextNodeEntity;
 	private Entity cachedPrevNodeEntity;
 
+	private BlockPos lightBlock = null;
+	
 	public EntityRopeNode(World world) {
 		super(world);
 		this.setSize(0.1F, 0.1F);
@@ -71,6 +73,11 @@ public class EntityRopeNode extends Entity {
 		this.pickUp = nbt.getBoolean("pickUp");
 		this.canExtend = nbt.getBoolean("canExtend");
 		this.despawnTimer = nbt.getInteger("despawnTimer");
+		if(nbt.hasKey("lightBlock", Constants.NBT.TAG_LONG)) {
+			this.lightBlock = BlockPos.fromLong(nbt.getLong("lightBlock"));
+		} else {
+			this.lightBlock = null;
+		}
 	}
 
 	@Override
@@ -84,6 +91,9 @@ public class EntityRopeNode extends Entity {
 		nbt.setBoolean("pickUp", this.pickUp);
 		nbt.setBoolean("canExtend", this.canExtend);
 		nbt.setInteger("despawnTimer", this.despawnTimer);
+		if(this.lightBlock != null) {
+			nbt.setLong("lightBlock", this.lightBlock.toLong());
+		}
 	}
 
 	@Override
@@ -127,6 +137,33 @@ public class EntityRopeNode extends Entity {
 			} else if(prevNode == null && this.cachedPrevNodeDW != -1) {
 				this.getDataManager().set(DW_PREV_NODE, -1);
 				this.cachedPrevNodeDW = -1;
+			}
+			
+			if(this.isEntityAlive()) {
+				if(attached) {
+					BlockPos pos = this.getPosition();
+					
+					if(this.lightBlock != null && (this.lightBlock.getX() != pos.getX() || this.lightBlock.getY() != pos.getY() || this.lightBlock.getZ() != pos.getZ())) {
+						if(this.world.isBlockLoaded(this.lightBlock) && this.world.getBlockState(this.lightBlock).getBlock() == BlockRegistry.CAVING_ROPE_LIGHT) {
+							this.world.setBlockToAir(this.lightBlock);
+						}
+						
+						this.lightBlock = null;
+					}
+					
+					if(this.lightBlock == null) {
+						if(this.world.isAirBlock(pos)) {
+							this.world.setBlockState(pos, BlockRegistry.CAVING_ROPE_LIGHT.getDefaultState());
+							this.lightBlock = pos;
+						}
+					}
+				} else if(this.lightBlock != null) {
+					if(this.world.isBlockLoaded(this.lightBlock) && this.world.getBlockState(this.lightBlock).getBlock() == BlockRegistry.CAVING_ROPE_LIGHT) {
+						this.world.setBlockToAir(this.lightBlock);
+					}
+					
+					this.lightBlock = null;
+				}
 			}
 		} else {
 			nextNode = this.getNextNode();
@@ -349,6 +386,17 @@ public class EntityRopeNode extends Entity {
 	@Override
 	public boolean canBeCollidedWith() {
 		return true;
+	}
+	
+	@Override
+	public void setDead() {
+		super.setDead();
+		
+		if(this.lightBlock != null && this.world.isBlockLoaded(this.lightBlock) && this.world.getBlockState(this.lightBlock).getBlock() == BlockRegistry.CAVING_ROPE_LIGHT) {
+			this.world.setBlockToAir(this.lightBlock);
+		}
+		
+		this.lightBlock = null;
 	}
 
 	@Override

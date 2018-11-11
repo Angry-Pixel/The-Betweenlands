@@ -9,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -18,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockGoldenClubStalk extends BlockStackablePlantUnderwater {
@@ -82,5 +84,10 @@ public class BlockGoldenClubStalk extends BlockStackablePlantUnderwater {
 		if(world.getBlockState(pos.up()).getBlock() == BlockRegistry.GOLDEN_CLUB_FLOWER) {
 			world.setBlockToAir(pos.up());
 		}
+	}
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }

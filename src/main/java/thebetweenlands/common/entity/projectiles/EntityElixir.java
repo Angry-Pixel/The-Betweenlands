@@ -21,6 +21,8 @@ import net.minecraft.entity.projectile.EntityThrowable;
 
 import net.minecraft.nbt.NBTTagCompound;
 import thebetweenlands.api.event.SplashPotionEvent;
+import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityElixir extends EntityThrowable {
@@ -58,11 +60,11 @@ public class EntityElixir extends EntityThrowable {
     protected void onImpact(RayTraceResult result) {
         if (!this.world.isRemote) {
             AxisAlignedBB hitBB = this.getEntityBoundingBox().grow(4.0D, 2.0D, 4.0D);
-            List hitEntities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, hitBB);
+            List<EntityLivingBase> hitEntities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, hitBB);
             if (!hitEntities.isEmpty()) {
-                Iterator hitEntitiesIT = hitEntities.iterator();
+                Iterator<EntityLivingBase> hitEntitiesIT = hitEntities.iterator();
                 while (hitEntitiesIT.hasNext()) {
-                    EntityLivingBase affectedEntity = (EntityLivingBase)hitEntitiesIT.next();
+                    EntityLivingBase affectedEntity = hitEntitiesIT.next();
                     double entityDst = this.getDistanceSq(affectedEntity);
                     if (entityDst < 16.0D) {
                         double modifier = 1.0D - Math.sqrt(entityDst) / 4.0D;
@@ -79,6 +81,9 @@ public class EntityElixir extends EntityThrowable {
                 }
             }
             this.world.playEvent(2002, new BlockPos(this), ItemRegistry.ELIXIR.getColorMultiplier(getElixirStack(), 0));
+            this.entityDropItem(new ItemStack(ItemRegistry.ELIXIR.getDentrothystType(getElixirStack()) == EnumDentrothyst.GREEN ? ItemRegistry.DENTROTHYST_SHARD_GREEN : ItemRegistry.DENTROTHYST_SHARD_ORANGE,
+            		this.world.rand.nextInt(2) + 2), this.height / 2);
+            if(this.world.rand.nextInt(2) == 0) this.entityDropItem(EnumItemMisc.RUBBER_BALL.create(1), this.height / 2);
             this.setDead();
         }
     }

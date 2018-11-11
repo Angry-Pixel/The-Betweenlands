@@ -24,7 +24,7 @@ public class MessageSyncChunkStorage extends MessageBase {
 	public MessageSyncChunkStorage() {}
 
 	public MessageSyncChunkStorage(IChunkStorage storage) {
-		this.nbt = storage.writeToNBT(new NBTTagCompound());
+		this.nbt = storage.writeToNBT(new NBTTagCompound(), true);
 		this.pos = storage.getChunk().getPos();
 	}
 	
@@ -66,7 +66,7 @@ public class MessageSyncChunkStorage extends MessageBase {
 			if(chunk != null) {
 				IWorldStorage worldStorage = WorldStorageImpl.getCapability(world);
 				IChunkStorage chunkStorage = worldStorage.getChunkStorage(chunk);
-				chunkStorage.readFromNBT(this.nbt);
+				chunkStorage.readFromNBT(this.nbt, true);
 			}
 		}
 	}

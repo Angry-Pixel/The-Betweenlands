@@ -3,6 +3,7 @@ package thebetweenlands.compat.jei.recipes.animator;
 import mezz.jei.api.gui.IGuiIngredient;
 import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -87,12 +88,12 @@ public class AnimatorRecipeJEI implements IRecipeWrapper {
         }
         l.add(Collections.singletonList(new ItemStack(ItemRegistry.LIFE_CRYSTAL)));
         l.add(Collections.singletonList(ItemMisc.EnumItemMisc.SULFUR.create(1)));
-        ingredients.setInputLists(ItemStack.class, l);
+        ingredients.setInputLists(VanillaTypes.ITEM, l);
 
         if (result != null)
-            ingredients.setOutput(ItemStack.class, result);
+            ingredients.setOutput(VanillaTypes.ITEM, result);
         if (lootTableName != null){
-            ingredients.setOutputLists(ItemStack.class, Collections.singletonList(LootTableRegistry.getItemsFromTable(lootTableName, Minecraft.getMinecraft().world, true)));
+            ingredients.setOutputLists(VanillaTypes.ITEM, Collections.singletonList(LootTableRegistry.getItemsFromTable(lootTableName, Minecraft.getMinecraft().world, true)));
         }
     }
 

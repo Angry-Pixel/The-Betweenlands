@@ -1,10 +1,9 @@
 package thebetweenlands.compat.jei.recipes.compost;
 
 import mezz.jei.api.ingredients.IIngredients;
-import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -31,8 +30,8 @@ public class CompostRecipeJEI implements IRecipeWrapper {
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ingredients.setInput(ItemStack.class, input);
-        ingredients.setOutput(ItemStack.class, new ItemStack(ItemRegistry.ITEMS_MISC, 1, ItemMisc.EnumItemMisc.COMPOST.getID()));
+        ingredients.setInput(VanillaTypes.ITEM, input);
+        ingredients.setOutput(VanillaTypes.ITEM, new ItemStack(ItemRegistry.ITEMS_MISC, 1, ItemMisc.EnumItemMisc.COMPOST.getID()));
     }
 
     @Nullable

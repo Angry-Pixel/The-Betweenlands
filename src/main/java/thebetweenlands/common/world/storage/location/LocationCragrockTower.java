@@ -60,18 +60,10 @@ public class LocationCragrockTower extends LocationGuarded {
 	protected static final DataParameter<Boolean> CRUMBLING = GenericDataManager.createKey(LocationCragrockTower.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> CRUMBLING_TICKS = GenericDataManager.createKey(LocationCragrockTower.class, DataSerializers.VARINT);
 
-	protected GenericDataManager dataManager;
-
 	public LocationCragrockTower(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		super(worldStorage, id, region, "cragrock_tower", EnumLocationType.DUNGEON);
-		this.dataManager = new GenericDataManager(this);
 		this.dataManager.register(CRUMBLING, false);
 		this.dataManager.register(CRUMBLING_TICKS, 20, 0);
-	}
-
-	@Override
-	public IGenericDataManagerAccess getDataManager() {
-		return this.dataManager;
 	}
 
 	/**

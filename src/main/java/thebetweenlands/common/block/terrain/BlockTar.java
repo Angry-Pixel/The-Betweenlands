@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
@@ -21,13 +22,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
 import javax.annotation.Nonnull;
 
-public class BlockTar extends BlockFluidClassic implements IStateMappedBlock {
+public class BlockTar extends BlockFluidClassic implements IStateMappedBlock, ICustomItemBlock {
 	public BlockTar() {
 		super(FluidRegistry.TAR, BLMaterialRegistry.TAR);
 	}
@@ -144,5 +146,10 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock {
 			entityIn.motionZ *= 0.6D;
 		}
 		return new Vec3d(0, 0, 0);
+	}
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }

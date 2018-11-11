@@ -7,9 +7,10 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.audio.IEntitySound;
 
 @SideOnly(Side.CLIENT)
-public class EntitySound<T extends Entity> extends SafeStreamSound {
+public class EntitySound<T extends Entity> extends SafeStreamSound implements IEntitySound {
 	public final T entity;
 	public final Predicate<T> isPlaying;
 
@@ -76,5 +77,15 @@ public class EntitySound<T extends Entity> extends SafeStreamSound {
 	 */
 	public boolean isStopping() {
 		return this.donePlaying || this.fadeOut;
+	}
+
+	@Override
+	public Entity getMusicEntity() {
+		return this.entity;
+	}
+
+	@Override
+	public void stopEntityMusic() {
+		this.stop();
 	}
 }

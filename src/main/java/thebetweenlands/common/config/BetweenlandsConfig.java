@@ -187,6 +187,41 @@ public class BetweenlandsConfig {
 		@Comment("Whether food from the overworld should rot when going into the dimension")
 		public boolean useRottenFood = true;
 
+		@Name("use_decay")
+		@LangKey(LANG_PREFIX + "use_decay")
+		@Comment("Whether the player decay mechanics should be active in the dimension")
+		public boolean useDecay = true;
+		
+		@Name("use_corrosion")
+		@LangKey(LANG_PREFIX + "use_corrosion")
+		@Comment("Whether the tool corrosion mechanics should be active in the dimension")
+		public boolean useCorrosion = true;
+		
+		@Name("use_tool_weakness")
+		@LangKey(LANG_PREFIX + "use_tool_weakness")
+		@Comment("Whether overworld tools should be weakened in the dimension")
+		public boolean useToolWeakness = true;
+		
+		@Name("use_torch_blacklist")
+		@LangKey(LANG_PREFIX + "use_torch_blacklist")
+		@Comment("Whether torches should turn into damp torches in the dimension")
+		public boolean useTorchBlacklist = true;
+		
+		@Name("use_fire_tool_blacklist")
+		@LangKey(LANG_PREFIX + "use_fire_tool_blacklist")
+		@Comment("Whether fire tools (e.g. Flint and Steel) should be blacklisted from working in the dimension")
+		public boolean useFireToolBlacklist = true;
+		
+		@Name("use_potion_blacklist")
+		@LangKey(LANG_PREFIX + "use_potion_blacklist")
+		@Comment("Whether potions should turn into tainted potions in the dimension")
+		public boolean usePotionBlacklist = true;
+		
+		@Name("use_fertilizer_blacklist")
+		@LangKey(LANG_PREFIX + "use_fertilizer_blacklist")
+		@Comment("Whether fertilizers (e.g. Bonemeal) should be blacklisted from working in the dimension")
+		public boolean useFertilizerBlacklist = true;
+		
 		@Name("caving_rope_indicator")
 		@LangKey(LANG_PREFIX + "caving_rope_indicator")
 		@Comment("Adds an indicator next to the crosshair that shows whether the player is connected to the caving rope and how much rope is left")
@@ -300,6 +335,17 @@ public class BetweenlandsConfig {
 		@Comment("After how many seconds caving rope should despawn after the player is no longer connected")
 		@RangeInt(min = 0, max = Integer.MAX_VALUE / 20)
 		public int cavingRopeDespawnTime = 1200;
+		
+		@Name("equipment_hotbar_side")
+		@LangKey(LANG_PREFIX + "equipment_hotbar_side")
+		@Comment("Change this to 1 or 0 to change on which side of the hotbar the equipment is shown")
+		@RangeInt(min = 0, max = 1)
+		public int equipmentHotbarSide = 0;
+		
+		@Name("equipment_visible")
+		@LangKey(LANG_PREFIX + "equipment_visible")
+		@Comment("Whether equipment should be shown on the HUD")
+		public boolean equipmentVisible = true;
 	}
 
 	@Name("mob_spawning")

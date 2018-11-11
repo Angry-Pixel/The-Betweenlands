@@ -3,8 +3,11 @@ package thebetweenlands.common.world.storage.location;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -13,7 +16,10 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -26,10 +32,13 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.loot.ISharedLootPool;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.loot.shared.SharedLootPool;
+import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.LocalStorageImpl;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
@@ -37,20 +46,25 @@ import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 public class LocationStorage extends LocalStorageImpl implements ITickable {
 	private List<AxisAlignedBB> boundingBoxes = new ArrayList<>();
 	private AxisAlignedBB enclosingBoundingBox;
-	private String name;
 	private EnumLocationType type;
 	private int layer;
 	private LocationAmbience ambience = null;
-	private boolean visible = true;
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
 
+	private Map<ResourceLocation, SharedLootPool> sharedLootPools = new HashMap<>();
+	private int lootInventories = 0;
+	private boolean hasSharedLootPools = true;
+
+	protected GenericDataManager dataManager;
+
 	private TObjectIntMap<Entity> titleDisplayCooldowns = new TObjectIntHashMap<Entity>();
 
+	protected static final DataParameter<String> NAME = GenericDataManager.createKey(LocationStorage.class, DataSerializers.STRING);
+	protected static final DataParameter<Boolean> VISIBLE = GenericDataManager.createKey(LocationStorage.class, DataSerializers.BOOLEAN);
+
 	public LocationStorage(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
-		super(worldStorage, id, region);
-		this.name = "";
-		this.type = EnumLocationType.NONE;
+		this(worldStorage, id, region, "", EnumLocationType.NONE);
 	}
 
 	/**
@@ -60,10 +74,22 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public LocationStorage(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region, String name, EnumLocationType type) {
 		super(worldStorage, id, region);
-		this.name = name;
-		if(type == null)
+
+		this.dataManager = new GenericDataManager(this);
+
+		this.dataManager.register(NAME, name);
+		this.dataManager.register(VISIBLE, false);
+
+		if(type == null) {
 			type = EnumLocationType.NONE;
+		}
+
 		this.type = type;
+	}
+
+	@Override
+	public IGenericDataManagerAccess getDataManager() {
+		return this.dataManager;
 	}
 
 	/**
@@ -74,6 +100,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	public LocationStorage addBounds(AxisAlignedBB... boundingBoxes) {
 		for(AxisAlignedBB boundingBox : boundingBoxes) {
 			this.boundingBoxes.add(boundingBox);
+			this.markDirty();
 		}
 		this.updateEnclosingBounds();
 		return this;
@@ -94,6 +121,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	public void removeBounds(AxisAlignedBB... boundingBoxes) {
 		for(AxisAlignedBB boundingBox : boundingBoxes) {
 			this.boundingBoxes.remove(boundingBox);
+			this.markDirty();
 		}
 		this.updateEnclosingBounds();
 	}
@@ -160,6 +188,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public LocationStorage setSeed(long seed) {
 		this.locationSeed = seed;
+		this.markDirty();
 		return this;
 	}
 
@@ -179,6 +208,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	public LocationStorage setInheritAmbience(boolean inherit) {
 		this.inheritAmbience = inherit;
 		this.ambience = null;
+		this.markDirty();
 		return this;
 	}
 
@@ -188,7 +218,8 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 * @return
 	 */
 	public LocationStorage setVisible(boolean visible) {
-		this.visible = visible;
+		this.dataManager.set(VISIBLE, visible);
+		this.markDirty();
 		return this;
 	}
 
@@ -199,6 +230,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public LocationStorage setLayer(int layer) {
 		this.layer = layer;
+		this.markDirty();
 		return this;
 	}
 
@@ -219,6 +251,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		this.inheritAmbience = false;
 		this.ambience = ambience;
 		ambience.setLocation(this);
+		this.markDirty();
 		return this;
 	}
 
@@ -235,19 +268,37 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 * @return
 	 */
 	public String getLocalizedName() {
-		return I18n.translateToLocal("location." + this.name + ".name");
+		return I18n.translateToLocal("location." + this.dataManager.get(NAME) + ".name");
 	}
 
 	public boolean hasLocalizedName() {
-		return I18n.canTranslate("location." + this.name + ".name");
+		return I18n.canTranslate("location." + this.dataManager.get(NAME) + ".name");
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		this.name = nbt.getString("name");
-		if(this.name.startsWith("translate:")) {
-			this.name = this.name.replaceFirst("translate:", "");
+
+		this.readSharedNbt(nbt);
+
+		this.hasSharedLootPools = nbt.getBoolean("hasSharedLootPools");
+
+		this.sharedLootPools.clear();
+		NBTTagList sharedLootPoolsNbt = nbt.getTagList("sharedLootPools", Constants.NBT.TAG_COMPOUND);
+
+		for(int i = 0; i < sharedLootPoolsNbt.tagCount(); i++) {
+			SharedLootPool sharedLootPool = new SharedLootPool(sharedLootPoolsNbt.getCompoundTagAt(i), this);
+			ResourceLocation lootTable = sharedLootPool.getLootTable();
+			if(lootTable != null) {
+				this.sharedLootPools.put(lootTable, sharedLootPool);
+			}
+		}
+	}
+
+	protected void readSharedNbt(NBTTagCompound nbt) {
+		this.dataManager.set(NAME, nbt.getString("name"));
+		if(this.dataManager.get(NAME).startsWith("translate:")) {
+			this.dataManager.set(NAME, this.dataManager.get(NAME).replaceFirst("translate:", ""));
 			this.setDirty(true);
 		}
 		this.boundingBoxes.clear();
@@ -269,7 +320,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 			NBTTagCompound ambienceTag = nbt.getCompoundTag("ambience");
 			this.ambience = LocationAmbience.readFromNBT(this, ambienceTag);
 		}
-		this.visible = nbt.getBoolean("visible");
+		this.dataManager.set(VISIBLE, nbt.getBoolean("visible"));
 		this.locationSeed = nbt.getLong("seed");
 	}
 
@@ -286,7 +337,26 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setString("name", this.name);
+
+		this.writeSharedNbt(nbt);
+
+		nbt.setBoolean("hasSharedLootPools", this.hasSharedLootPools);
+
+		if(!this.sharedLootPools.isEmpty()) {
+			NBTTagList sharedLootPoolsNbt = new NBTTagList();
+
+			for(SharedLootPool sharedLootPool : this.sharedLootPools.values()) {
+				sharedLootPoolsNbt.appendTag(sharedLootPool.writeToNBT(new NBTTagCompound()));
+			}
+
+			nbt.setTag("sharedLootPools", sharedLootPoolsNbt);
+		}
+
+		return nbt;
+	}
+
+	protected void writeSharedNbt(NBTTagCompound nbt) {
+		nbt.setString("name", this.dataManager.get(NAME));
 		NBTTagList boundingBoxes = new NBTTagList();
 		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
 			NBTTagCompound boxNbt = new NBTTagCompound();
@@ -306,9 +376,8 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 			this.ambience.writeToNBT(ambienceTag);
 			nbt.setTag("ambience", ambienceTag);
 		}
-		nbt.setBoolean("visible", this.visible);
+		nbt.setBoolean("visible", this.dataManager.get(VISIBLE));
 		nbt.setLong("seed", this.locationSeed);
-		return nbt;
 	}
 
 	/**
@@ -325,12 +394,13 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 
 	@Override
 	public void readInitialPacket(NBTTagCompound nbt) {
-		this.readFromNBT(nbt);
+		this.readSharedNbt(nbt);
 	}
 
 	@Override
 	public NBTTagCompound writeInitialPacket(NBTTagCompound nbt) {
-		return this.writeToNBT(nbt);
+		this.writeSharedNbt(nbt);
+		return nbt;
 	}
 
 	/**
@@ -399,7 +469,16 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 * @return
 	 */
 	public String getName() {
-		return this.name;
+		return this.dataManager.get(NAME);
+	}
+
+	/**
+	 * Sets the location's name
+	 * @param name
+	 */
+	public void setName(String name) {
+		this.dataManager.set(NAME, name);
+		this.markDirty();
 	}
 
 	/**
@@ -416,7 +495,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 * @return
 	 */
 	public boolean isVisible(Entity entity) {
-		return this.visible;
+		return this.dataManager.get(VISIBLE);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -435,10 +514,14 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 			Iterator<Entity> it = this.titleDisplayCooldowns.keySet().iterator();
 			while(it.hasNext()) {
 				Entity entity = it.next();
-				if(this.titleDisplayCooldowns.adjustValue(entity, -1)) {
-					if(this.titleDisplayCooldowns.get(entity) <= 0) {
-						it.remove();
+				if(this.isVisible(entity)) {
+					if(this.titleDisplayCooldowns.adjustValue(entity, -1)) {
+						if(this.titleDisplayCooldowns.get(entity) <= 0) {
+							it.remove();
+						}
 					}
+				} else {
+					it.remove();
 				}
 			}
 		}
@@ -587,8 +670,65 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 
 	}
 
-	@Override
-	public IGenericDataManagerAccess getDataManager() {
-		return null;
+	public int getLootInventories() {
+		return this.lootInventories;
+	}
+
+	public void setLootInventories(int inventories) {
+		this.lootInventories = inventories;
+		this.markDirty();
+	}
+
+	@Nullable
+	public ISharedLootPool getSharedLootPool(ResourceLocation lootTable) {
+		if(!this.hasSharedLootPools) {
+			return null;
+		}
+
+		return this.sharedLootPools.get(lootTable);
+	}
+
+	@Nullable
+	public ISharedLootPool getOrCreateSharedLootPool(ResourceLocation lootTable) {
+		if(!this.hasSharedLootPools) {
+			return null;
+		}
+
+		ISharedLootPool pool = this.getSharedLootPool(lootTable);
+
+		if(pool != null) {
+			return pool;
+		}
+
+		SharedLootPool newPool = new SharedLootPool(lootTable, this.locationSeed, this);
+		this.sharedLootPools.put(lootTable, newPool);
+		this.markDirty();
+
+		return newPool;
+	}
+
+	@Nullable
+	public ISharedLootPool removeSharedLootPool(ResourceLocation lootTable) {
+		if(!this.hasSharedLootPools) {
+			return null;
+		}
+
+		ISharedLootPool pool = this.sharedLootPools.remove(lootTable);
+		if(pool != null)
+			this.markDirty();
+
+		return pool;
+	}
+
+	public Set<ResourceLocation> getSharedLootPoolKeys() {
+		return this.sharedLootPools.keySet();
+	}
+
+	public void setHasSharedLootPools(boolean hasSharedLootPools) {
+		this.hasSharedLootPools = hasSharedLootPools;
+		if(!hasSharedLootPools) {
+			this.sharedLootPools.clear();
+		}
+		this.markDirty();
 	}
 }

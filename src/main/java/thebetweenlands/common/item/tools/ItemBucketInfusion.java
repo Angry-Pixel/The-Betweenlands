@@ -81,7 +81,7 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 					int count = stackCount.getValue();
 					if (!ingredient.isEmpty()) {
 						list.add((count > 1 ? (count + "x ") : "") + ingredient.getDisplayName());
-						List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), DiscoveryContainer.getMergedDiscoveryContainer(FMLClientHandler.instance().getClientPlayerEntity()));
+						List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredStaticAspects(AspectManager.getAspectItem(ingredient), DiscoveryContainer.getMergedDiscoveryContainer(FMLClientHandler.instance().getClientPlayerEntity()));
 						if (ingredientAspects.size() >= 1) {
 							if (GuiScreen.isShiftKeyDown()) {
 								for (Aspect aspect : ingredientAspects) {
