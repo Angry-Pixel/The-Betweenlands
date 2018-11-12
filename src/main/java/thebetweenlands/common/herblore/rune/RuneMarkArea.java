@@ -15,7 +15,7 @@ import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.OutputPort;
-import thebetweenlands.api.rune.impl.RuneChain.RuneExecutionContext;
+import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {

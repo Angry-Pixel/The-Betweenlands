@@ -13,8 +13,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.rune.IRuneUser;
-import thebetweenlands.api.rune.impl.RuneChain;
-import thebetweenlands.api.rune.impl.RuneChain.IAspectBuffer;
+import thebetweenlands.api.rune.impl.RuneChainComposition;
+import thebetweenlands.api.rune.impl.RuneChainComposition.IAspectBuffer;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.herblore.rune.RuneDestroyBlock;
 import thebetweenlands.common.herblore.rune.RuneMarkArea;
@@ -30,7 +30,7 @@ public class ItemRuneChain extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if(!world.isRemote) {
-			RuneChain.Blueprint bp = new RuneChain.Blueprint();
+			RuneChainComposition.Blueprint bp = new RuneChainComposition.Blueprint();
 
 			bp.addNodeBlueprint(0, new RuneMarkArea.Blueprint());
 			//bp.addNodeBlueprint(1, new NodeDestroyBlocks.Blueprint());
@@ -42,7 +42,7 @@ public class ItemRuneChain extends Item {
 			System.out.println("Link mark -> destroy 1: " + bp.link(2, 0, 0, 0));
 			System.out.println("Link mark -> destroy 2: " + bp.link(2, 1, 0, 1));
 
-			final RuneChain composition = bp.create();
+			final RuneChainComposition composition = bp.create();
 
 			final AspectContainer aspects = new AspectContainer();
 

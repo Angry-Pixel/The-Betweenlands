@@ -18,6 +18,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
@@ -225,6 +226,17 @@ public class GuiRuneChainAltar extends GuiContainer {
 				}
 			}
 		}
+		
+		if(this.container.getSelectedSlot() >= 0) {
+			ItemStack stack = this.container.getSlot(this.container.getSelectedSlot()).getStack();
+			
+			if(!stack.isEmpty()) {
+				this.drawSubMenu(this.guiLeft - 185, this.container.getSelectedSlot(), stack, partialTickTime);
+				
+				//TODO use correct slot & stack
+				this.drawSubMenu(this.guiLeft + this.xSize + 19, this.container.getSelectedSlot(), stack, partialTickTime);
+			}
+		}
 	}
 
 	@Override
@@ -268,6 +280,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 							int relX = mouseX - (this.guiLeft + slot.xPos + 2);
 							int relY = mouseY - (this.guiTop + slot.yPos - 9);
 							if(relX >= 0 && relX <= 13 && relY >= 0 && relY <= 7) {
+								this.container.shift(slotIndex, false);
 								TheBetweenlands.networkWrapper.sendToServer(new MessageShiftRuneChainAltarSlot(slotIndex, false));
 								this.mc.getSoundHandler().playSound(PositionedSoundRecord.getRecord(SoundRegistry.RUNE_SLOT_SHIFT, rand.nextFloat() * 0.066F + 0.933F, 1.0F));
 								return;
@@ -278,6 +291,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 							int relX = mouseX - (this.guiLeft + slot.xPos + 2);
 							int relY = mouseY - (this.guiTop + slot.yPos + 9 + 9);
 							if(relX >= 0 && relX <= 13 && relY >= 0 && relY <= 7) {
+								this.container.shift(slotIndex, true);
 								TheBetweenlands.networkWrapper.sendToServer(new MessageShiftRuneChainAltarSlot(slotIndex, true));
 								this.mc.getSoundHandler().playSound(PositionedSoundRecord.getRecord(SoundRegistry.RUNE_SLOT_SHIFT, rand.nextFloat() * 0.066F + 0.933F, 1.0F));
 								return;
@@ -313,6 +327,45 @@ public class GuiRuneChainAltar extends GuiContainer {
 				this.swapAnimationTicks++;
 			}
 		}
+	}
+	
+	//TODO
+	protected void drawSubMenu(int x, int runeSlot, ItemStack stack, float partialTicks) {
+		int width = 160;
+		int height = 210;
+		
+		int y = this.guiTop + 60 - height / 2;
+		
+		this.drawSubMenuBackground(x, y, width, height);
+		
+		ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, x + 4, y + 4, 1, 1, 1, 1);
+		
+		this.fontRenderer.drawString(TextFormatting.UNDERLINE + "Rune name", x + 24, y + 8, 0xFF000000);
+		
+		GlStateManager.color(1, 1, 1, 1);
+		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
+	}
+	
+	protected void drawSubMenuBackground(float x, float y, int width, int height) {
+		//Top left corner
+		this.drawTexturedModalRect512(x, y, 212, 94, 3, 3);
+		//Top bar
+		this.drawTexturedModalRect512(x + 3, y, 215, 94, width, 3);
+		//Top right corner
+		this.drawTexturedModalRect512(x + 3 + width, y, 383, 94, 3, 3);
+		//Right bar
+		this.drawTexturedModalRect512(x + 3 + width, y + 3, 383, 97, 3, height);
+		//Bottom right corner
+		this.drawTexturedModalRect512(x + 3 + width, y + 3 + height, 383, 313, 3, 3);
+		//Bottom bar
+		this.drawTexturedModalRect512(x + 3, y + 3 + height, 215, 313, width, 3);
+		//Bottom left corner
+		this.drawTexturedModalRect512(x, y + 3 + height, 212, 313, 3, 3);
+		//Left bar
+		this.drawTexturedModalRect512(x, y + 3, 212, 97, 3, height);
+		
+		//Background
+		this.drawTexturedModalRect512(x + 3, y + 3, 215, 97, width, height);
 	}
 
 	protected void drawSlotCoverStone(float x, float y) {

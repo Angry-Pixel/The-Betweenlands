@@ -30,9 +30,9 @@ import thebetweenlands.api.rune.INodeConfiguration.IConfigurationInput;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 import thebetweenlands.api.rune.INodeConfiguration.IType;
 import thebetweenlands.api.rune.IRuneUser;
-import thebetweenlands.api.rune.impl.RuneChain.RuneExecutionContext;
+import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 
-public class RuneChain implements INodeComposition<RuneExecutionContext> {
+public class RuneChainComposition implements INodeComposition<RuneExecutionContext> {
 	public static final class Blueprint implements INodeCompositionBlueprint<RuneExecutionContext> {
 		private List<NodeSlot> slots = new ArrayList<>();
 
@@ -148,8 +148,8 @@ public class RuneChain implements INodeComposition<RuneExecutionContext> {
 		}
 
 		@Override
-		public RuneChain create() {
-			return new RuneChain(this);
+		public RuneChainComposition create() {
+			return new RuneChainComposition(this);
 		}
 
 		/**
@@ -409,9 +409,9 @@ public class RuneChain implements INodeComposition<RuneExecutionContext> {
 			this.branchingAllowed = false;
 			// TODO Type check?
 			if(obj instanceof Collection) {
-				RuneChain.this.outputValues.set(output, (Collection<Object>) obj);
+				RuneChainComposition.this.outputValues.set(output, (Collection<Object>) obj);
 			} else {
-				RuneChain.this.outputValues.set(output, Collections.singletonList(obj));
+				RuneChainComposition.this.outputValues.set(output, Collections.singletonList(obj));
 			}
 		}
 
@@ -420,7 +420,7 @@ public class RuneChain implements INodeComposition<RuneExecutionContext> {
 			this.branchingAllowed = false;
 			if(!this.failed) {
 				this.failed = true;
-				this.blueprint.fail(this.node, RuneChain.this.context);
+				this.blueprint.fail(this.node, RuneChainComposition.this.context);
 			} else {
 				this.failed = true;
 			}
@@ -450,7 +450,7 @@ public class RuneChain implements INodeComposition<RuneExecutionContext> {
 		@Override
 		public Object get(int input) {
 			// TODO Type check?
-			return RuneChain.this.combination[input];
+			return RuneChainComposition.this.combination[input];
 		}
 
 		@Override
@@ -503,7 +503,7 @@ public class RuneChain implements INodeComposition<RuneExecutionContext> {
 				nodeValues.addAll(parentValues);
 				this.outputValues.put(node, nodeValues);
 			} else {
-				int slots = RuneChain.this.nodes.get(node).getConfiguration().getInputs().size();
+				int slots = RuneChainComposition.this.nodes.get(node).getConfiguration().getInputs().size();
 				nodeValues = new ArrayList<>(slots);
 				for(int i = 0; i < slots; i++) {
 					nodeValues.add(Collections.emptyList());
@@ -557,7 +557,7 @@ public class RuneChain implements INodeComposition<RuneExecutionContext> {
 		 * @return the aspect buffer that provides the runes with aspect
 		 */
 		public IAspectBuffer getAspectBuffer() {
-			return RuneChain.this.aspectBuffer;
+			return RuneChainComposition.this.aspectBuffer;
 		}
 		
 		/**
@@ -597,7 +597,7 @@ public class RuneChain implements INodeComposition<RuneExecutionContext> {
 		 * @return the currently activating rune index
 		 */
 		public int getRune() {
-			return RuneChain.this.currentNode;
+			return RuneChainComposition.this.currentNode;
 		}
 	}
 
@@ -646,7 +646,7 @@ public class RuneChain implements INodeComposition<RuneExecutionContext> {
 
 	private ISchedulerTask scheduledTask;
 
-	private RuneChain(Blueprint blueprint) {
+	private RuneChainComposition(Blueprint blueprint) {
 		this.blueprint = blueprint;
 		this.nodes = new ArrayList<>(this.blueprint.getNodeBlueprints());
 

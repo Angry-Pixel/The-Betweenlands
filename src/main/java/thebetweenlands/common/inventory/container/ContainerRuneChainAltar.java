@@ -3,16 +3,22 @@ package thebetweenlands.common.inventory.container;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.rune.INodeBlueprint;
+import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotRune;
+import thebetweenlands.common.item.herblore.ItemRune;
 import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 
 
@@ -49,6 +55,8 @@ public class ContainerRuneChainAltar extends Container {
 
 	private Page currentPage;
 	private final List<Page> pages;
+
+	private int selectedSlot;
 
 	public ContainerRuneChainAltar(InventoryPlayer playerInventory, TileEntityRuneChainAltar tile) {
 		super();
@@ -121,8 +129,8 @@ public class ContainerRuneChainAltar extends Container {
 	}
 
 	public void shift(int slotIndex, boolean back) {
-		//TODO Also shift links!!
 		int hole = this.getShiftHoleSlot(slotIndex, back);
+
 		if(hole >= 0) {
 			if(back) {
 				for(int i = hole; i <= slotIndex - 1; ++i) {
@@ -130,6 +138,12 @@ public class ContainerRuneChainAltar extends Container {
 					Slot nextSlot = this.getSlot(i + 1);
 					slot.putStack(nextSlot.getStack());
 					nextSlot.putStack(ItemStack.EMPTY);
+
+					this.altar.getLinks().move(i + 1, i);
+
+					if(i + 1 == this.selectedSlot) {
+						this.selectedSlot--;
+					}
 				}
 			} else {
 				for(int i = hole; i >= slotIndex + 1; --i) {
@@ -137,9 +151,24 @@ public class ContainerRuneChainAltar extends Container {
 					Slot prevSlot = this.getSlot(i - 1);
 					slot.putStack(prevSlot.getStack());
 					prevSlot.putStack(ItemStack.EMPTY);
+
+					this.altar.getLinks().move(i - 1, i);
+
+					if(i - 1 == this.selectedSlot) {
+						this.selectedSlot++;
+					}
 				}
 			}
 		}
+	}
+
+	@Nullable
+	public INodeBlueprint<?, RuneExecutionContext> getRuneBlueprint(int slotIndex) {
+		ItemStack stack = this.inventorySlots.get(slotIndex).getStack();
+		if(!stack.isEmpty() && stack.getItem() instanceof ItemRune) {
+			return ((ItemRune) stack.getItem()).getRuneBlueprint(stack);
+		}
+		return null;
 	}
 
 	@Override
@@ -167,6 +196,31 @@ public class ContainerRuneChainAltar extends Container {
 		}
 
 		return itemstack;
+	}
+
+	@Override
+	public ItemStack slotClick(int slotId, int dragType, ClickType clickType, EntityPlayer player) {
+		if(slotId > 0 && slotId < this.altar.getMaxChainLength() + 1 && clickType == ClickType.PICKUP && dragType == 1) {
+			if(this.selectedSlot == slotId) {
+				this.setSelectedSlot(-1);
+			} else {
+				this.setSelectedSlot(slotId);
+			}
+			return ItemStack.EMPTY;
+		}
+		return super.slotClick(slotId, dragType, clickType, player);
+	}
+
+	public void setSelectedSlot(int slot) {
+		if(slot >= 0 && slot < this.inventorySlots.size()) {
+			this.selectedSlot = slot;
+		} else {
+			this.selectedSlot = -1;
+		}
+	}
+
+	public int getSelectedSlot() {
+		return this.selectedSlot;
 	}
 
 	//TODO See ContainerAnimator

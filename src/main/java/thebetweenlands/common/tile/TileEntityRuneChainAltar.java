@@ -15,13 +15,17 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import thebetweenlands.common.inventory.container.RuneChainLinkInfo;
 import thebetweenlands.common.item.herblore.ItemRune;
 
 public class TileEntityRuneChainAltar extends TileEntity implements ISidedInventory {
 	private final String name;
+	
 	protected NonNullList<ItemStack> inventory;
 	protected final ItemStackHandler inventoryHandler;
 
+	protected RuneChainLinkInfo links = new RuneChainLinkInfo();
+	
 	public static final int OUTPUT_SLOT = 0;
 	public static final int NON_INPUT_SLOTS = 1;
 	
@@ -244,5 +248,9 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 
 	public int getMaxChainLength() {
 		return this.inventory.size() - NON_INPUT_SLOTS;
+	}
+	
+	public RuneChainLinkInfo getLinks() {
+		return this.links; //TODO Save
 	}
 }

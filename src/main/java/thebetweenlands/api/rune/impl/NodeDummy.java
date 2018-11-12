@@ -8,7 +8,7 @@ import thebetweenlands.api.rune.INode;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.impl.RuneChain.RuneExecutionContext;
+import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 
 public final class NodeDummy implements INode<NodeDummy, RuneExecutionContext> {
 
