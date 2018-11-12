@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -44,6 +43,8 @@ public class GuiRuneChainAltar extends GuiContainer {
 	private int swapAnimationTicks = 0;
 	private int newPage = 0;
 
+	private int updateCounter;
+	
 	private static final int[][] CORD_PIECE_SLOT_UVs = new int[][] {
 		{10, 251}, {36, 266}, {60, 261}, {84, 260}, {108, 260}, {132, 261}, {156, 266},
 		{180, 274},
@@ -228,13 +229,20 @@ public class GuiRuneChainAltar extends GuiContainer {
 		}
 		
 		if(this.container.getSelectedSlot() >= 0) {
-			ItemStack stack = this.container.getSlot(this.container.getSelectedSlot()).getStack();
+			Slot selectedSlot = this.container.getSlot(this.container.getSelectedSlot());
+			ItemStack selectedStack = selectedSlot.getStack();
 			
-			if(!stack.isEmpty()) {
-				this.drawSubMenu(this.guiLeft - 185, this.container.getSelectedSlot(), stack, partialTickTime);
+			if(!selectedStack.isEmpty() && selectedSlot instanceof SlotRune) {
+				if(((SlotRune) selectedSlot).getPage().isCurrent()) {
+					this.preRenderSlab();
+					this.drawSelectedSlotArrow(selectedSlot);
+					this.postRenderSlab();
+				}
+				
+				this.drawSubMenu(this.guiLeft - 185, this.container.getSelectedSlot(), selectedStack);
 				
 				//TODO use correct slot & stack
-				this.drawSubMenu(this.guiLeft + this.xSize + 19, this.container.getSelectedSlot(), stack, partialTickTime);
+				this.drawSubMenu(this.guiLeft + this.xSize + 19, this.container.getSelectedSlot(), selectedStack);
 			}
 		}
 	}
@@ -309,6 +317,8 @@ public class GuiRuneChainAltar extends GuiContainer {
 	public void updateScreen() {
 		super.updateScreen();
 
+		this.updateCounter++;
+		
 		this.lastSwapAnimationTicks = this.swapAnimationTicks;
 		if(this.swapAnimationTicks > 0) {
 			if(this.swapAnimationTicks == 1) {
@@ -329,8 +339,12 @@ public class GuiRuneChainAltar extends GuiContainer {
 		}
 	}
 	
+	protected void drawSelectedSlotArrow(Slot slot) {
+		this.drawTexturedModalRect512(this.guiLeft + slot.xPos, this.guiTop + slot.yPos - 25, 389, 168, 15, 22);
+	}
+	
 	//TODO
-	protected void drawSubMenu(int x, int runeSlot, ItemStack stack, float partialTicks) {
+	protected void drawSubMenu(int x, int runeSlot, ItemStack stack) {
 		int width = 160;
 		int height = 210;
 		
