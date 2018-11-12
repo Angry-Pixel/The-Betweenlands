@@ -26,7 +26,8 @@ public final class RuneDestroyBlock extends AbstractRune<RuneDestroyBlock> {
 		}
 
 		private static final INodeConfiguration CONFIGURATION_1;
-
+		private static final INodeConfiguration CONFIGURATION_2;
+		
 		private static final InputPort<Entity> IN_ENTITY;
 		private static final InputPort<BlockPos> IN_POSITION;
 
@@ -37,11 +38,16 @@ public final class RuneDestroyBlock extends AbstractRune<RuneDestroyBlock> {
 			IN_ENTITY = builder.in(Entity.class);
 
 			CONFIGURATION_1 = builder.build();
+			
+			builder.in(BlockPos.class);
+			builder.out(Entity.class);
+			
+			CONFIGURATION_2 = builder.build();
 		}
 
 		@Override
 		public Set<INodeConfiguration> getConfigurations() {
-			return ImmutableSet.of(CONFIGURATION_1);
+			return ImmutableSet.of(CONFIGURATION_1, CONFIGURATION_2);
 		}
 
 		@Override

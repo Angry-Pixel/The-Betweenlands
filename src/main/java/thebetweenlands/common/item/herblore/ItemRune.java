@@ -19,11 +19,6 @@ public class ItemRune extends Item {
 		return this.blueprint;
 	}
 	
-	@Override
-	public boolean hasEffect(ItemStack stack) {
-		return true;
-	}
-	
 	/*@Override
 	public boolean showDurabilityBar(ItemStack stack) {
 		return true;

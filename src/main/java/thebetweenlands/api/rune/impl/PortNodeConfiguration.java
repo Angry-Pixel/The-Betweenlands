@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.INodeBlueprint.INodeIO;
+import thebetweenlands.api.rune.INodeConfiguration;
 
 /**
  * This port based node configuration allows for easy creation of configurations
@@ -18,6 +18,8 @@ public class PortNodeConfiguration implements INodeConfiguration {
 	public static final class Builder {
 		private int inIndices = 0;
 		private int outIndices = 0;
+
+		private int id = 0;
 
 		private final List<InputPort<?>> inputPorts = new ArrayList<>();
 		private final List<OutputPort<?>> outputPorts = new ArrayList<>();
@@ -156,7 +158,12 @@ public class PortNodeConfiguration implements INodeConfiguration {
 				});
 			}
 
-			return new PortNodeConfiguration(inputTypes.build(), outputTypes.build());
+			this.inIndices = 0;
+			this.outIndices = 0;
+			this.inputPorts.clear();
+			this.outputPorts.clear();
+
+			return new PortNodeConfiguration(inputTypes.build(), outputTypes.build(), this.id++);
 		}
 	}
 
@@ -240,10 +247,12 @@ public class PortNodeConfiguration implements INodeConfiguration {
 
 	private final List<IConfigurationInput> inputTypes;
 	private final List<IConfigurationOutput> outputTypes;
+	private final int id;
 
-	private PortNodeConfiguration(List<IConfigurationInput> inputTypes, List<IConfigurationOutput> outputTypes) {
+	private PortNodeConfiguration(List<IConfigurationInput> inputTypes, List<IConfigurationOutput> outputTypes, int id) {
 		this.inputTypes = inputTypes;
 		this.outputTypes = outputTypes;
+		this.id = id;
 	}
 
 	public static Builder builder() {
@@ -258,5 +267,10 @@ public class PortNodeConfiguration implements INodeConfiguration {
 	@Override
 	public List<IConfigurationOutput> getOutputs() {
 		return this.outputTypes;
+	}
+
+	@Override
+	public int getId() {
+		return this.id;
 	}
 }

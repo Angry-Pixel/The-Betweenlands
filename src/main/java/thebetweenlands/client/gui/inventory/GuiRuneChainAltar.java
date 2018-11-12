@@ -20,9 +20,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.rune.INodeBlueprint;
+import thebetweenlands.api.rune.INodeConfiguration;
+import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.ContainerRuneChainAltar;
 import thebetweenlands.common.inventory.slot.SlotRune;
+import thebetweenlands.common.item.herblore.ItemRune;
 import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarPage;
 import thebetweenlands.common.network.serverbound.MessageShiftRuneChainAltarSlot;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -354,7 +358,16 @@ public class GuiRuneChainAltar extends GuiContainer {
 		
 		ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, x + 4, y + 4, 1, 1, 1, 1);
 		
-		this.fontRenderer.drawString(TextFormatting.UNDERLINE + "Rune name", x + 24, y + 8, 0xFF000000);
+		this.fontRenderer.drawString(TextFormatting.UNDERLINE + "Rune name", x + 24, y + 8, 0xFF404040);
+		
+		INodeBlueprint<?, RuneExecutionContext> bp = ((ItemRune)stack.getItem()).getRuneBlueprint(stack);
+		
+		this.fontRenderer.drawString("Configs: " + bp.getConfigurations().size(), x + 4, y + 22, 0xFF404040);
+		int i = 1;
+		for(INodeConfiguration config : bp.getConfigurations()) {
+			this.fontRenderer.drawString(" " + config.getId() + ") Marks: " + config.getInputs().size() + "/" + config.getOutputs().size(), x + 4, y + 22 + i * 10, 0xFF404040);
+			i++;
+		}
 		
 		GlStateManager.color(1, 1, 1, 1);
 		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);

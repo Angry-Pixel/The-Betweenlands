@@ -11,7 +11,7 @@ public interface INodeConfiguration {
 		 * @return class of the type
 		 */
 		public Class<?> getTypeClass();
-		
+
 		/**
 		 * Returns the generic types of the type. These are optional and if not
 		 * specified no generic type checks will be done by {@link IConfigurationInput#test(IType)}.
@@ -19,7 +19,7 @@ public interface INodeConfiguration {
 		 */
 		public List<IType> getTypeGenerics();
 	}
-	
+
 	public static interface IConfigurationInput extends Predicate<IType> {
 		/**
 		 * Returns whether the specified type is applicable to this input.
@@ -38,7 +38,7 @@ public interface INodeConfiguration {
 		 */
 		public boolean isCollection();
 	}
-	
+
 	public static interface IConfigurationOutput {
 		/**
 		 * Returns the type of the output.
@@ -48,7 +48,7 @@ public interface INodeConfiguration {
 		 * @return the type of the output
 		 */
 		public IType getType(List<IType> inputs);
-		
+
 		/**
 		 * Returns whether the output is enabled for the given linked inputs. Can be used
 		 * to set a requirement for a specific input to be linked before the output
@@ -59,7 +59,7 @@ public interface INodeConfiguration {
 		 * @return whether the output is enabled for the given linked inputs
 		 */
 		public boolean isEnabled(List<IType> inputs);
-		
+
 		/**
 		 * Returns whether this output produces multiple values of the output's type at once
 		 * in a collection object, i.e. the output value will be a {@link Collection}<code>&lt;output type&gt;</code>, where <code>output type</code>
@@ -80,4 +80,11 @@ public interface INodeConfiguration {
 	 * @return a list of outputs that determine the type produced on each output slot
 	 */
 	public List<IConfigurationOutput> getOutputs();
+
+	/**
+	 * Returns the ID of this node configuration. Must be unique per {@link INodeBlueprint} and
+	 * must be persistent.
+	 * @return the ID of this node configuration
+	 */
+	public int getId();
 }
