@@ -3,6 +3,7 @@ package thebetweenlands.client.gui.inventory;
 import java.io.IOException;
 import java.util.Random;
 
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -356,12 +357,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 					int relX = mouseX - (this.guiLeft + this.xSize + 2);
 					int relY = mouseY - (this.guiTop + 20);
 					if(relX >= 0 && relX <= 15 && relY >= 0 && relY <= 24) {
-						int currPage = this.container.getCurrentPage().index;
-						if(currPage > 0) {
-							this.newPage = currPage - 1;
-							TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneChainAltarPage(this.newPage));
-							this.swapAnimationTicks = 1;
-						}
+						this.movePage(true);
 						return;
 					}
 				}
@@ -369,12 +365,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 					int relX = mouseX - (this.guiLeft + this.xSize + 2);
 					int relY = mouseY - (this.guiTop + 100);
 					if(relX >= 0 && relX <= 15 && relY >= 0 && relY <= 24) {
-						int currPage = this.container.getCurrentPage().index;
-						if(currPage < this.container.getPages() - 1) {
-							this.newPage = currPage + 1;
-							TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneChainAltarPage(this.newPage));
-							this.swapAnimationTicks = 1;
-						}
+						this.movePage(false);
 						return;
 					}
 				}
@@ -412,6 +403,34 @@ public class GuiRuneChainAltar extends GuiContainer {
 
 			super.mouseClicked(mouseX, mouseY, mouseButton);
 		}
+	}
+
+	@Override
+	public void handleMouseInput() throws IOException {
+		super.handleMouseInput();
+
+		int scroll = Mouse.getEventDWheel();
+
+		if(scroll < 0) {
+			this.movePage(false);
+		} else if(scroll > 0) {
+			this.movePage(true);
+		}
+	}
+
+	protected boolean movePage(boolean up) {
+		if(!up && this.container.getCurrentPage().index < this.container.getPages() - 1 && this.swapAnimationTicks == 0) {
+			this.newPage = this.container.getCurrentPage().index + 1;
+			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneChainAltarPage(this.newPage));
+			this.swapAnimationTicks = 1;
+			return true;
+		} else if(up && this.container.getCurrentPage().index > 0 && this.swapAnimationTicks == 0) {
+			this.newPage = this.container.getCurrentPage().index - 1;
+			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneChainAltarPage(this.newPage));
+			this.swapAnimationTicks = 1;
+			return true;
+		}
+		return false;
 	}
 
 	@Override
