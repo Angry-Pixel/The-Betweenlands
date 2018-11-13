@@ -144,6 +144,11 @@ public class ContainerRuneChainAltar extends Container {
 					if(i + 1 == this.selectedSlot) {
 						this.selectedSlot--;
 					}
+
+					if(slot instanceof SlotRune && nextSlot instanceof SlotRune) {
+						((SlotRune) slot).prevHoverTicks = ((SlotRune) slot).hoverTicks = ((SlotRune) nextSlot).hoverTicks;
+						((SlotRune) nextSlot).prevHoverTicks = ((SlotRune) nextSlot).hoverTicks = 0;
+					}
 				}
 			} else {
 				for(int i = hole; i >= slotIndex + 1; --i) {
@@ -156,6 +161,11 @@ public class ContainerRuneChainAltar extends Container {
 
 					if(i - 1 == this.selectedSlot) {
 						this.selectedSlot++;
+					}
+
+					if(slot instanceof SlotRune && prevSlot instanceof SlotRune) {
+						((SlotRune) slot).prevHoverTicks = ((SlotRune) slot).hoverTicks = ((SlotRune) prevSlot).hoverTicks;
+						((SlotRune) prevSlot).prevHoverTicks = ((SlotRune) prevSlot).hoverTicks = 0;
 					}
 				}
 			}

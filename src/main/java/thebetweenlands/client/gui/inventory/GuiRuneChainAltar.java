@@ -5,9 +5,7 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -52,7 +50,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 	private int newPage = 0;
 
 	private int updateCounter;
-	
+
 	private static final int[][] CORD_PIECE_SLOT_UVs = new int[][] {
 		{10, 251}, {36, 266}, {60, 261}, {84, 260}, {108, 260}, {132, 261}, {156, 266},
 		{180, 274},
@@ -136,6 +134,102 @@ public class GuiRuneChainAltar extends GuiContainer {
 
 	@Override
 	public void drawSlot(Slot slot) {
+		if(slot instanceof SlotRune) {
+			SlotRune slotRune = (SlotRune) slot;
+
+			float hoverPercent = (slotRune.prevHoverTicks + (slotRune.hoverTicks - slotRune.prevHoverTicks) * this.mc.getRenderPartialTicks()) / 7.0F;
+
+			float hover = this.easeInOutCubic(hoverPercent, 0, 1.0F, 1.0F);
+
+			ItemStack stack = slot.getStack();
+
+			if(!stack.isEmpty()) {
+				Framebuffer fbo = this.mc.getFramebuffer();
+
+				boolean useStencil = false;
+				int stencilBit = MinecraftForgeClient.reserveStencilBit();
+				int stencilMask = 1 << stencilBit;
+
+				if(stencilBit >= 0) {
+					useStencil = fbo.isStencilEnabled() ? true : fbo.enableStencil();
+				}
+
+				if(useStencil) {
+					GlStateManager.pushMatrix();
+
+					GlStateManager.translate(slot.xPos + hover * 2.25F + 8, slot.yPos + hover * 2.25F + 8, 0);
+					GlStateManager.scale(1.0F - hover * 0.15F, 1.0F - hover * 0.15F, 1.0F);
+
+					GL11.glEnable(GL11.GL_STENCIL_TEST);
+
+					//Clear our stencil bit to 0
+					GL11.glStencilMask(stencilMask);
+					GL11.glClearStencil(0);
+					GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+					GL11.glStencilMask(~0);
+
+					GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
+					GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+
+					GlStateManager.colorMask(false, false, false, false);
+					GlStateManager.depthMask(false);
+					GlStateManager.enableAlpha();
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.05F);
+
+					ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, -8, -8, 1, 1, 1, 1);
+
+					GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
+					GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+
+					GlStateManager.colorMask(true, true, true, true);
+					GlStateManager.depthMask(true);
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+
+					int left = -16;
+					int right = 16;
+					int top = -16;
+					int bottom = 16;
+
+					Tessellator tessellator = Tessellator.getInstance();
+					BufferBuilder bufferbuilder = tessellator.getBuffer();
+					GlStateManager.enableBlend();
+					GlStateManager.disableTexture2D();
+					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+					GlStateManager.color(0.15F, 0.15F, 0.15F, Math.min(hoverPercent / 0.25F, 1.0F) * (1.0F - hover * 0.4F));
+					bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+					bufferbuilder.pos((double)left, (double)bottom, 0.0D).endVertex();
+					bufferbuilder.pos((double)right, (double)bottom, 0.0D).endVertex();
+					bufferbuilder.pos((double)right, (double)top, 0.0D).endVertex();
+					bufferbuilder.pos((double)left, (double)top, 0.0D).endVertex();
+					tessellator.draw();
+					GlStateManager.enableTexture2D();
+
+					GlStateManager.disableBlend();
+
+					GL11.glDisable(GL11.GL_STENCIL_TEST);
+
+					GlStateManager.popMatrix();
+				}
+
+				if(stencilBit >= 0) {
+					MinecraftForgeClient.releaseStencilBit(stencilBit);
+				}
+
+				GlStateManager.color(1, 1, 1, 1);
+			}
+
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0, hover * -5.5F, 0);
+
+			this.drawSlotItem(slot);
+
+			GlStateManager.popMatrix();
+		} else {
+			this.drawSlotItem(slot);
+		}
+	}
+
+	protected void drawSlotItem(Slot slot) {
 		if(this.swapAnimationTicks > 0 && this.isSlabSlot(slot)) {
 			this.zLevel = 100.0F;
 			this.itemRender.zLevel = 100.0F;
@@ -235,21 +329,14 @@ public class GuiRuneChainAltar extends GuiContainer {
 				}
 			}
 		}
-		
+
 		if(this.container.getSelectedSlot() >= 0) {
 			Slot selectedSlot = this.container.getSlot(this.container.getSelectedSlot());
 			ItemStack selectedStack = selectedSlot.getStack();
-			
+
 			if(!selectedStack.isEmpty() && selectedSlot instanceof SlotRune) {
-				if(((SlotRune) selectedSlot).getPage().isCurrent()) {
-					this.preRenderSlab();
-					this.drawSelectedSlotHighlight(selectedSlot);
-					this.postRenderSlab();
-					this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
-				}
-				
 				this.drawSubMenu(this.guiLeft - 185, this.container.getSelectedSlot(), selectedStack);
-				
+
 				//TODO use correct slot & stack
 				this.drawSubMenu(this.guiLeft + this.xSize + 19, this.container.getSelectedSlot(), selectedStack);
 			}
@@ -327,7 +414,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 		super.updateScreen();
 
 		this.updateCounter++;
-		
+
 		this.lastSwapAnimationTicks = this.swapAnimationTicks;
 		if(this.swapAnimationTicks > 0) {
 			if(this.swapAnimationTicks == 1) {
@@ -346,101 +433,60 @@ public class GuiRuneChainAltar extends GuiContainer {
 				this.swapAnimationTicks++;
 			}
 		}
+
+		this.updateSlotHoverTicks();
 	}
-	
-	protected void drawSelectedSlotHighlight(Slot slot) {
-		ItemStack stack = slot.getStack();
-		
-		if(!stack.isEmpty()) {
-			Framebuffer fbo = this.mc.getFramebuffer();
-			
-			boolean useStencil = false;
-			int stencilBit = MinecraftForgeClient.reserveStencilBit();
-			int stencilMask = 1 << stencilBit;
 
-			if(stencilBit >= 0) {
-				useStencil = fbo.isStencilEnabled() ? true : fbo.enableStencil();
-			}
-			
-			if(useStencil) {
-				GL11.glEnable(GL11.GL_STENCIL_TEST);
-				
-				//Clear our stencil bit to 0
-				GL11.glStencilMask(stencilMask);
-				GL11.glClearStencil(0);
-				GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-				GL11.glStencilMask(~0);
+	protected void updateSlotHoverTicks() {
+		for(Slot slot : this.container.inventorySlots) {
+			if(slot instanceof SlotRune) {
+				SlotRune slotRune = (SlotRune) slot;
 
-				GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
-				GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+				slotRune.prevHoverTicks = slotRune.hoverTicks;
 
-				GlStateManager.colorMask(false, false, false, false);
-				GlStateManager.depthMask(false);
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.05F);
-				
-				for(int xo = -1; xo <= 1; xo++) {
-					for(int yo = -1; yo <= 1; yo++) {
-						GlStateManager.pushMatrix();
-						GlStateManager.translate(xo, yo, 0.0F);
-						ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, this.guiLeft + slot.xPos, this.guiTop + slot.yPos, 1, 1, 1, 1);
-						GlStateManager.popMatrix();
+				if(slotRune.getSlotIndex() == this.container.getSelectedSlot()) {
+					if(slotRune.hoverTicks < 7) {
+						slotRune.hoverTicks++;
+					} else {
+						slotRune.hoverTicks = 7;
+					}
+				} else {
+					if(slotRune.hoverTicks > 0) {
+						slotRune.hoverTicks--;
+					} else {
+						slotRune.hoverTicks = 0;
 					}
 				}
-				
-				GL11.glStencilFunc(GL11.GL_ALWAYS, 0, stencilMask);
-				
-				ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, this.guiLeft + slot.xPos, this.guiTop + slot.yPos, 1, 1, 1, 1);
-				
-				GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
-				GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-				
-				GlStateManager.colorMask(true, true, true, true);
-				GlStateManager.depthMask(true);
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-				
-				//Gui.drawRect(this.guiLeft + slot.xPos - 8, this.guiTop + slot.yPos - 8, this.guiLeft + slot.xPos + 24, this.guiTop + slot.yPos + 24, 0xFF000000);
-				GlStateManager.color(1, 1, 1, 1);
-				this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
-				this.drawTexturedModalRect512(this.guiLeft + slot.xPos - 8, this.guiTop + slot.yPos - 8, 416, 94, 32, 32);
-				
-				GL11.glDisable(GL11.GL_STENCIL_TEST);
 			}
-			
-			if(stencilBit >= 0) {
-				MinecraftForgeClient.releaseStencilBit(stencilBit);
-			}
-			
-			GlStateManager.color(1, 1, 1, 1);
 		}
-		//this.drawTexturedModalRect512(this.guiLeft + slot.xPos, this.guiTop + slot.yPos - 25, 389, 168, 15, 22);
 	}
-	
+
 	//TODO
 	protected void drawSubMenu(int x, int runeSlot, ItemStack stack) {
 		int width = 160;
 		int height = 210;
-		
+
 		int y = this.guiTop + 60 - height / 2;
-		
+
 		this.drawSubMenuBackground(x, y, width, height);
-		
+
 		ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, x + 4, y + 4, 1, 1, 1, 1);
-		
+
 		this.fontRenderer.drawString(TextFormatting.UNDERLINE + "Rune name", x + 24, y + 8, 0xFF404040);
-		
+
 		INodeBlueprint<?, RuneExecutionContext> bp = ((ItemRune)stack.getItem()).getRuneBlueprint(stack);
-		
+
 		this.fontRenderer.drawString("Configs: " + bp.getConfigurations().size(), x + 4, y + 22, 0xFF404040);
 		int i = 1;
 		for(INodeConfiguration config : bp.getConfigurations()) {
 			this.fontRenderer.drawString(" " + config.getId() + ") Marks: " + config.getInputs().size() + "/" + config.getOutputs().size(), x + 4, y + 22 + i * 10, 0xFF404040);
 			i++;
 		}
-		
+
 		GlStateManager.color(1, 1, 1, 1);
 		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
 	}
-	
+
 	protected void drawSubMenuBackground(float x, float y, int width, int height) {
 		//Top left corner
 		this.drawTexturedModalRect512(x, y, 212, 94, 3, 3);
@@ -458,7 +504,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 		this.drawTexturedModalRect512(x, y + 3 + height, 212, 313, 3, 3);
 		//Left bar
 		this.drawTexturedModalRect512(x, y + 3, 212, 97, 3, height);
-		
+
 		//Background
 		this.drawTexturedModalRect512(x + 3, y + 3, 215, 97, width, height);
 	}

@@ -11,6 +11,9 @@ public class SlotRune extends Slot {
 	private final TileEntityRuneChainAltar altar;
 	private final ContainerRuneChainAltar.Page page;
 
+	public int prevHoverTicks;
+	public int hoverTicks;
+	
 	public SlotRune(TileEntityRuneChainAltar altar, int index, int xPosition, int yPosition, ContainerRuneChainAltar.Page page) {
 		super(altar, index, xPosition, yPosition);
 		this.altar = altar;
