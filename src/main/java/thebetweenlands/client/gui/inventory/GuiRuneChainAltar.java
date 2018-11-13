@@ -5,7 +5,9 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,11 +15,13 @@ import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.rune.INodeBlueprint;
@@ -239,8 +243,9 @@ public class GuiRuneChainAltar extends GuiContainer {
 			if(!selectedStack.isEmpty() && selectedSlot instanceof SlotRune) {
 				if(((SlotRune) selectedSlot).getPage().isCurrent()) {
 					this.preRenderSlab();
-					this.drawSelectedSlotArrow(selectedSlot);
+					this.drawSelectedSlotHighlight(selectedSlot);
 					this.postRenderSlab();
+					this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
 				}
 				
 				this.drawSubMenu(this.guiLeft - 185, this.container.getSelectedSlot(), selectedStack);
@@ -343,8 +348,71 @@ public class GuiRuneChainAltar extends GuiContainer {
 		}
 	}
 	
-	protected void drawSelectedSlotArrow(Slot slot) {
-		this.drawTexturedModalRect512(this.guiLeft + slot.xPos, this.guiTop + slot.yPos - 25, 389, 168, 15, 22);
+	protected void drawSelectedSlotHighlight(Slot slot) {
+		ItemStack stack = slot.getStack();
+		
+		if(!stack.isEmpty()) {
+			Framebuffer fbo = this.mc.getFramebuffer();
+			
+			boolean useStencil = false;
+			int stencilBit = MinecraftForgeClient.reserveStencilBit();
+			int stencilMask = 1 << stencilBit;
+
+			if(stencilBit >= 0) {
+				useStencil = fbo.isStencilEnabled() ? true : fbo.enableStencil();
+			}
+			
+			if(useStencil) {
+				GL11.glEnable(GL11.GL_STENCIL_TEST);
+				
+				//Clear our stencil bit to 0
+				GL11.glStencilMask(stencilMask);
+				GL11.glClearStencil(0);
+				GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+				GL11.glStencilMask(~0);
+
+				GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
+				GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+
+				GlStateManager.colorMask(false, false, false, false);
+				GlStateManager.depthMask(false);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.05F);
+				
+				for(int xo = -1; xo <= 1; xo++) {
+					for(int yo = -1; yo <= 1; yo++) {
+						GlStateManager.pushMatrix();
+						GlStateManager.translate(xo, yo, 0.0F);
+						ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, this.guiLeft + slot.xPos, this.guiTop + slot.yPos, 1, 1, 1, 1);
+						GlStateManager.popMatrix();
+					}
+				}
+				
+				GL11.glStencilFunc(GL11.GL_ALWAYS, 0, stencilMask);
+				
+				ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, this.guiLeft + slot.xPos, this.guiTop + slot.yPos, 1, 1, 1, 1);
+				
+				GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
+				GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+				
+				GlStateManager.colorMask(true, true, true, true);
+				GlStateManager.depthMask(true);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+				
+				//Gui.drawRect(this.guiLeft + slot.xPos - 8, this.guiTop + slot.yPos - 8, this.guiLeft + slot.xPos + 24, this.guiTop + slot.yPos + 24, 0xFF000000);
+				GlStateManager.color(1, 1, 1, 1);
+				this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
+				this.drawTexturedModalRect512(this.guiLeft + slot.xPos - 8, this.guiTop + slot.yPos - 8, 416, 94, 32, 32);
+				
+				GL11.glDisable(GL11.GL_STENCIL_TEST);
+			}
+			
+			if(stencilBit >= 0) {
+				MinecraftForgeClient.releaseStencilBit(stencilBit);
+			}
+			
+			GlStateManager.color(1, 1, 1, 1);
+		}
+		//this.drawTexturedModalRect512(this.guiLeft + slot.xPos, this.guiTop + slot.yPos - 25, 389, 168, 15, 22);
 	}
 	
 	//TODO
