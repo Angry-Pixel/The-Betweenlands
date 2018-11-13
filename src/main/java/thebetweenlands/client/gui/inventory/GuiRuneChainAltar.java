@@ -79,8 +79,9 @@ public class GuiRuneChainAltar extends GuiContainer {
 		this.player = player;
 	}
 
-	protected float preRenderSlab() {
+	protected float setSlabTransform() {
 		GlStateManager.pushMatrix();
+
 		if(this.swapAnimationTicks > 0) {
 			float tick = this.lastSwapAnimationTicks + (this.swapAnimationTicks - this.lastSwapAnimationTicks) * this.mc.getRenderPartialTicks();
 
@@ -106,7 +107,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 		return 1.0F;
 	}
 
-	protected void postRenderSlab() {
+	protected void revertSlabTransform() {
 		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.popMatrix();
 	}
@@ -144,6 +145,8 @@ public class GuiRuneChainAltar extends GuiContainer {
 			ItemStack stack = slot.getStack();
 
 			if(!stack.isEmpty()) {
+				float alpha = this.setSlabTransform();
+
 				Framebuffer fbo = this.mc.getFramebuffer();
 
 				boolean useStencil = false;
@@ -195,7 +198,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 					GlStateManager.enableBlend();
 					GlStateManager.disableTexture2D();
 					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-					GlStateManager.color(0.15F, 0.15F, 0.15F, Math.min(hoverPercent / 0.25F, 1.0F) * (1.0F - hover * 0.4F));
+					GlStateManager.color(0.15F, 0.15F, 0.15F, (Math.min(hoverPercent / 0.25F, 1.0F) * (1.0F - hover * 0.4F)) * alpha);
 					bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
 					bufferbuilder.pos((double)left, (double)bottom, 0.0D).endVertex();
 					bufferbuilder.pos((double)right, (double)bottom, 0.0D).endVertex();
@@ -216,6 +219,8 @@ public class GuiRuneChainAltar extends GuiContainer {
 				}
 
 				GlStateManager.color(1, 1, 1, 1);
+
+				this.revertSlabTransform();
 			}
 
 			GlStateManager.pushMatrix();
@@ -235,7 +240,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 			this.itemRender.zLevel = 100.0F;
 			GlStateManager.enableDepth();
 
-			float alpha = this.preRenderSlab();
+			float alpha = this.setSlabTransform();
 
 			int x = slot.xPos;
 			int y = slot.yPos;
@@ -244,7 +249,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 			ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, itemstack, x, y, 1, 1, 1, alpha);
 			ColoredItemRenderer.renderItemOverlayIntoGUI(this.fontRenderer, itemstack, x, y, null, 1, 1, 1, alpha);
 
-			this.postRenderSlab();
+			this.revertSlabTransform();
 
 			this.itemRender.zLevel = 0.0F;
 			this.zLevel = 0.0F;
@@ -260,29 +265,29 @@ public class GuiRuneChainAltar extends GuiContainer {
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.enableBlend();
 
-		this.preRenderSlab();
+		this.setSlabTransform();
 		this.drawSlabBackground(this.guiLeft - 11, this.guiTop + 4);
-		this.postRenderSlab();
+		this.revertSlabTransform();
 
 		this.drawTexturedModalRect512(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 
-		this.preRenderSlab();
+		this.setSlabTransform();
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 		this.drawSlabForeground(this.guiLeft - 11, this.guiTop + 4);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-		this.postRenderSlab();
+		this.revertSlabTransform();
 
 		if(this.container.getCurrentPage().index > 0) {
-			this.drawUpArrow(this.guiLeft + this.xSize + 2, this.guiTop + 18, x, y, this.preRenderSlab());
-			this.postRenderSlab();
+			this.drawUpArrow(this.guiLeft + this.xSize + 2, this.guiTop + 18, x, y, this.setSlabTransform());
+			this.revertSlabTransform();
 		}
 
 		if(this.container.getCurrentPage().index < this.container.getPages() - 1) {
-			this.drawDownArrow(this.guiLeft + this.xSize + 2, this.guiTop + 100, x, y, this.preRenderSlab());
-			this.postRenderSlab();
+			this.drawDownArrow(this.guiLeft + this.xSize + 2, this.guiTop + 100, x, y, this.setSlabTransform());
+			this.revertSlabTransform();
 		}
 
-		this.preRenderSlab();
+		this.setSlabTransform();
 
 		for(int i = 0; i < Math.min(ContainerRuneChainAltar.SLOTS_PER_PAGE + 1, this.tile.getChainLength() - this.container.getCurrentPage().index * ContainerRuneChainAltar.SLOTS_PER_PAGE); i++) {
 			this.drawCordPiece(this.guiLeft - 11, this.guiTop + 4, i);
@@ -300,7 +305,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 			this.drawSlotCoverStone(this.guiLeft + ContainerRuneChainAltar.SLOT_POSITIONS[i][0], this.guiTop + ContainerRuneChainAltar.SLOT_POSITIONS[i][1]);
 		}
 
-		this.postRenderSlab();
+		this.revertSlabTransform();
 
 		for(int i = 0; i < ContainerRuneChainAltar.SLOTS_PER_PAGE; i++) {
 			int slotIndex = this.container.getCurrentPage().index * ContainerRuneChainAltar.SLOTS_PER_PAGE + TileEntityRuneChainAltar.NON_INPUT_SLOTS + i;
@@ -310,21 +315,21 @@ public class GuiRuneChainAltar extends GuiContainer {
 			if(slot.getHasStack() && x >= this.guiLeft + slot.xPos - 4 && x <= this.guiLeft + slot.xPos + 16 + 3 && y >= this.guiTop + slot.yPos - 10 && y <= this.guiTop + slot.yPos + 16 + 10) {
 				if(this.container.getShiftHoleSlot(slotIndex, false) >= 0) {
 					if(i >= ContainerRuneChainAltar.SLOTS_PER_PAGE / 2) {
-						this.drawShiftLeftArrow(this.guiLeft + slot.xPos + 2, this.guiTop + slot.yPos - 9, x, y, this.preRenderSlab());
-						this.postRenderSlab();
+						this.drawShiftLeftArrow(this.guiLeft + slot.xPos + 2, this.guiTop + slot.yPos - 9, x, y, this.setSlabTransform());
+						this.revertSlabTransform();
 					} else {
-						this.drawShiftRightArrow(this.guiLeft + slot.xPos + 2, this.guiTop + slot.yPos - 9, x, y, this.preRenderSlab());
-						this.postRenderSlab();
+						this.drawShiftRightArrow(this.guiLeft + slot.xPos + 2, this.guiTop + slot.yPos - 9, x, y, this.setSlabTransform());
+						this.revertSlabTransform();
 					}
 				}
 
 				if(this.container.getShiftHoleSlot(slotIndex, true) >= 0) {
 					if(i >= ContainerRuneChainAltar.SLOTS_PER_PAGE / 2) {
-						this.drawShiftRightArrow(this.guiLeft + slot.xPos + 2, this.guiTop + slot.yPos + 9 + 9, x, y, this.preRenderSlab());
-						this.postRenderSlab();
+						this.drawShiftRightArrow(this.guiLeft + slot.xPos + 2, this.guiTop + slot.yPos + 9 + 9, x, y, this.setSlabTransform());
+						this.revertSlabTransform();
 					} else {
-						this.drawShiftLeftArrow(this.guiLeft + slot.xPos + 2, this.guiTop + slot.yPos + 9 + 9, x, y, this.preRenderSlab());
-						this.postRenderSlab();
+						this.drawShiftLeftArrow(this.guiLeft + slot.xPos + 2, this.guiTop + slot.yPos + 9 + 9, x, y, this.setSlabTransform());
+						this.revertSlabTransform();
 					}
 				}
 			}
