@@ -48,7 +48,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 	private static final int SWAP_ANIMATION_HALF_DURATION = 7;
 	private int lastSwapAnimationTicks = 0;
 	private int swapAnimationTicks = 0;
-	private int newPage = 0;
+	private int newPage = -1;
 
 	private int updateCounter;
 
@@ -357,7 +357,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 					int relX = mouseX - (this.guiLeft + this.xSize + 2);
 					int relY = mouseY - (this.guiTop + 20);
 					if(relX >= 0 && relX <= 15 && relY >= 0 && relY <= 24) {
-						this.movePage(true);
+						this.movePage(-1);
 						return;
 					}
 				}
@@ -365,7 +365,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 					int relX = mouseX - (this.guiLeft + this.xSize + 2);
 					int relY = mouseY - (this.guiTop + 100);
 					if(relX >= 0 && relX <= 15 && relY >= 0 && relY <= 24) {
-						this.movePage(false);
+						this.movePage(1);
 						return;
 					}
 				}
@@ -412,25 +412,31 @@ public class GuiRuneChainAltar extends GuiContainer {
 		int scroll = Mouse.getEventDWheel();
 
 		if(scroll < 0) {
-			this.movePage(false);
+			this.movePage(1);
 		} else if(scroll > 0) {
-			this.movePage(true);
+			this.movePage(-1);
 		}
 	}
 
-	protected boolean movePage(boolean up) {
-		if(!up && this.container.getCurrentPage().index < this.container.getPages() - 1 && this.swapAnimationTicks == 0) {
-			this.newPage = this.container.getCurrentPage().index + 1;
+	protected int movePage(int i) {
+		if(i > 0 && this.container.getCurrentPage().index < this.container.getPages() - 1 && this.swapAnimationTicks < SWAP_ANIMATION_HALF_DURATION) {
+			int start = this.newPage >= 0 ? this.newPage : this.container.getCurrentPage().index;
+			this.newPage = Math.min(start + i, this.container.getPages() - 1);
 			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneChainAltarPage(this.newPage));
-			this.swapAnimationTicks = 1;
-			return true;
-		} else if(up && this.container.getCurrentPage().index > 0 && this.swapAnimationTicks == 0) {
-			this.newPage = this.container.getCurrentPage().index - 1;
+			if(this.swapAnimationTicks <= 0) {
+				this.swapAnimationTicks = 1;
+			}
+			return this.newPage - start;
+		} else if(i < 0 && this.container.getCurrentPage().index > 0 && this.swapAnimationTicks < SWAP_ANIMATION_HALF_DURATION) {
+			int start = this.newPage >= 0 ? this.newPage : this.container.getCurrentPage().index;
+			this.newPage = Math.max(start + i, 0);
 			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneChainAltarPage(this.newPage));
-			this.swapAnimationTicks = 1;
-			return true;
+			if(this.swapAnimationTicks <= 0) {
+				this.swapAnimationTicks = 1;
+			}
+			return this.newPage - start;
 		}
-		return false;
+		return 0;
 	}
 
 	@Override
@@ -445,9 +451,10 @@ public class GuiRuneChainAltar extends GuiContainer {
 				this.mc.getSoundHandler().playSound(PositionedSoundRecord.getRecord(SoundRegistry.RUNE_SLATE_MOVE, rand.nextFloat() * 0.066F + 0.933F, 1.0F));
 				this.container.getCurrentPage().interactable = false;
 			}
-			if(this.swapAnimationTicks == SWAP_ANIMATION_HALF_DURATION) {
+			if(this.swapAnimationTicks == SWAP_ANIMATION_HALF_DURATION && this.newPage >= 0) {
 				this.container.getCurrentPage().interactable = true;
 				this.container.setCurrentPage(this.newPage);
+				this.newPage = -1;
 				this.container.getCurrentPage().interactable = false;
 			}
 			if(this.swapAnimationTicks >= SWAP_ANIMATION_HALF_DURATION * 2) {
