@@ -41,6 +41,8 @@ public class GuiRuneChainAltar extends GuiContainer {
 	private static final Random rand = new Random();
 
 	private static final ResourceLocation GUI_RUNE_CHAIN_ALTAR = new ResourceLocation("thebetweenlands:textures/gui/rune_chain_altar.png");
+	private static final ResourceLocation GUI_RUNE_CHAIN_ALTAR_ROPE = new ResourceLocation("thebetweenlands:textures/gui/rune_chain_altar_rope.png");
+
 	private final TileEntityRuneChainAltar tile;
 	private final ContainerRuneChainAltar container;
 	private final EntityPlayer player;
@@ -515,6 +517,12 @@ public class GuiRuneChainAltar extends GuiContainer {
 		}
 
 		GlStateManager.color(1, 1, 1, 1);
+
+		int mx = Mouse.getX()* this.width / this.mc.displayWidth;
+		int my = this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
+
+		this.drawHangingRope(mx, my, 50, 50);
+
 		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
 	}
 
@@ -538,6 +546,94 @@ public class GuiRuneChainAltar extends GuiContainer {
 
 		//Background
 		this.drawTexturedModalRect512(x + 3, y + 3, 215, 97, width, height);
+	}
+
+	protected void drawHangingRope(float sx, float sy, float ex, float ey) {
+		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR_ROPE);
+
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+
+		float x1 = sx;
+		float y1 = sy;
+
+		float x3 = ex;
+		float y3 = ey;
+
+		if(x1 - x3 >= 0.0F && x1 - x3 < 1.0F) {
+			x3 += 1.0F;
+		} else if (x1 - x3 < 0.0F && x1 - x3 > -1.0F) {
+			x3 -= 1.0F;
+		}
+
+		float x2 = (x1 + x3) / 2.0F;
+		float y2 = Math.max(y1, y3) + 15.0F;
+
+		//Fit parabola
+		float a1 = -x1*x1 + x2*x2;
+		float b1 = -x1 + x2;
+		float d1 = -y1 + y2;
+		float a2 = -x2*x2 + x3*x3;
+		float b2 = -x2 + x3;
+		float d2 = -y2 + y3;
+		float b3 = -b2 / b1;
+		float a3 = b3 * a1 + a2;
+		float d = b3 * d1 + d2;
+		float a = d / a3;
+		float b = (d1 - a1 * a) / b1;
+		float c = y1 - a * x1*x1 - b * x1;
+
+		float px = x1;
+		float py = y1;
+
+		float width = 2F;
+
+		float pxc1 = x1 - width;
+		float pyc1 = y1;
+		float pxc2 = x1 + width;
+		float pyc2 = y1;
+
+		float v1 = sx < ex ? 0 : 1;
+		float v2 = sx < ex ? 1 : 0;
+
+		float u = 0;
+
+		buffer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_TEX);
+
+		int pieces = 32;
+
+		for(int i = -1; i <= pieces; i++) {
+			float x = x1 + (x3 - x1) / (float) (pieces - 1) * i;
+			float y = a * x*x + b * x + c;
+
+			float sideX = y - py;
+			float sideY = -(x - px);
+			float sideDirLength = (float) Math.sqrt(sideX*sideX + sideY*sideY);
+			sideX *= width / sideDirLength;
+			sideY *= width / sideDirLength;
+
+			float xc1 = x - sideX;
+			float yc1 = y - sideY;
+			float xc2 = x + sideX;
+			float yc2 = y + sideY;
+
+			if(i > 0) {
+				buffer.pos(pxc2, pyc2, this.zLevel).tex(u, v1).endVertex();
+				buffer.pos(pxc1, pyc1, this.zLevel).tex(u, v2).endVertex();
+
+				u += (float) Math.sqrt((x-px)*(x-px) + (y-py)*(y-py)) / 16.0F;
+			}
+
+			px = x;
+			py = y;
+
+			pxc1 = xc1;
+			pyc1 = yc1;
+			pxc2 = xc2;
+			pyc2 = yc2;
+		}
+
+		tessellator.draw();
 	}
 
 	protected void drawSlotCoverStone(float x, float y) {
