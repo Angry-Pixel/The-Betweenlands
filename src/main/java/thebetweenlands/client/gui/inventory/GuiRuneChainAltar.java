@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
@@ -53,6 +54,8 @@ public class GuiRuneChainAltar extends GuiContainer {
 	private int newPage = -1;
 
 	private int updateCounter;
+
+	private boolean drawHoveringSlots = false;
 
 	private static final int[][] CORD_PIECE_SLOT_UVs = new int[][] {
 		{10, 251}, {36, 266}, {60, 261}, {84, 260}, {108, 260}, {132, 261}, {156, 266},
@@ -129,10 +132,13 @@ public class GuiRuneChainAltar extends GuiContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
+
 		super.drawScreen(mouseX, mouseY, partialTicks);
+
 		if(this.swapAnimationTicks > 0 && this.hoveredSlot != null && this.isSlabSlot(this.hoveredSlot)) {
 			this.hoveredSlot = null;
 		}
+
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 
@@ -141,98 +147,102 @@ public class GuiRuneChainAltar extends GuiContainer {
 		if(slot instanceof SlotRune) {
 			SlotRune slotRune = (SlotRune) slot;
 
-			float hoverPercent = (slotRune.prevHoverTicks + (slotRune.hoverTicks - slotRune.prevHoverTicks) * this.mc.getRenderPartialTicks()) / 7.0F;
+			if(slotRune.hoverTicks + slotRune.prevHoverTicks == 0 != this.drawHoveringSlots) {
+				float hoverPercent = (slotRune.prevHoverTicks + (slotRune.hoverTicks - slotRune.prevHoverTicks) * this.mc.getRenderPartialTicks()) / 7.0F;
 
-			float hover = this.easeInOutCubic(hoverPercent, 0, 1.0F, 1.0F);
+				float hover = this.easeInOutCubic(hoverPercent, 0, 1.0F, 1.0F);
 
-			ItemStack stack = slot.getStack();
+				float hoverHeight = hover * 5.5F + hover * ((float)Math.sin((this.updateCounter + this.mc.getRenderPartialTicks()) / 8.0F) * 0.8F);
 
-			if(!stack.isEmpty()) {
-				float alpha = this.setSlabTransform();
+				ItemStack stack = slot.getStack();
 
-				Framebuffer fbo = this.mc.getFramebuffer();
-
-				boolean useStencil = false;
-				int stencilBit = MinecraftForgeClient.reserveStencilBit();
-				int stencilMask = 1 << stencilBit;
-
-				if(stencilBit >= 0) {
-					useStencil = fbo.isStencilEnabled() ? true : fbo.enableStencil();
-				}
-
-				if(useStencil) {
+				if(!stack.isEmpty()) {
 					GlStateManager.pushMatrix();
 
-					GlStateManager.translate(slot.xPos + hover * 2.25F + 8, slot.yPos + hover * 2.25F + 8, 0);
-					GlStateManager.scale(1.0F - hover * 0.15F, 1.0F - hover * 0.15F, 1.0F);
+					float alpha = this.setSlabTransform();
 
-					GL11.glEnable(GL11.GL_STENCIL_TEST);
+					Framebuffer fbo = this.mc.getFramebuffer();
 
-					//Clear our stencil bit to 0
-					GL11.glStencilMask(stencilMask);
-					GL11.glClearStencil(0);
-					GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-					GL11.glStencilMask(~0);
+					boolean useStencil = false;
+					int stencilBit = MinecraftForgeClient.reserveStencilBit();
+					int stencilMask = 1 << stencilBit;
 
-					GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
-					GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+					if(stencilBit >= 0) {
+						useStencil = fbo.isStencilEnabled() ? true : fbo.enableStencil();
+					}
 
-					GlStateManager.colorMask(false, false, false, false);
-					GlStateManager.depthMask(false);
-					GlStateManager.enableAlpha();
-					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.05F);
+					if(useStencil) {
+						GlStateManager.translate(slot.xPos + hoverHeight / 2.25F + 8, slot.yPos + hoverHeight / 2.25F + 8, 0);
+						GlStateManager.scale(1.0F / (1.0F + hoverHeight / 32.0F), 1.0F / (1.0F + hoverHeight / 32.0F), 1.0F);
 
-					ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, -8, -8, 1, 1, 1, 1);
+						GL11.glEnable(GL11.GL_STENCIL_TEST);
 
-					GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
-					GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+						//Clear our stencil bit to 0
+						GL11.glStencilMask(stencilMask);
+						GL11.glClearStencil(0);
+						GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+						GL11.glStencilMask(~0);
 
-					GlStateManager.colorMask(true, true, true, true);
-					GlStateManager.depthMask(true);
-					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+						GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
+						GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
 
-					int left = -16;
-					int right = 16;
-					int top = -16;
-					int bottom = 16;
+						GlStateManager.colorMask(false, false, false, false);
+						GlStateManager.depthMask(false);
+						GlStateManager.enableAlpha();
+						GlStateManager.alphaFunc(GL11.GL_GREATER, 0.05F);
 
-					Tessellator tessellator = Tessellator.getInstance();
-					BufferBuilder bufferbuilder = tessellator.getBuffer();
-					GlStateManager.enableBlend();
-					GlStateManager.disableTexture2D();
-					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-					GlStateManager.color(0.15F, 0.15F, 0.15F, (Math.min(hoverPercent / 0.25F, 1.0F) * (1.0F - hover * 0.4F)) * alpha);
-					bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
-					bufferbuilder.pos((double)left, (double)bottom, 0.0D).endVertex();
-					bufferbuilder.pos((double)right, (double)bottom, 0.0D).endVertex();
-					bufferbuilder.pos((double)right, (double)top, 0.0D).endVertex();
-					bufferbuilder.pos((double)left, (double)top, 0.0D).endVertex();
-					tessellator.draw();
-					GlStateManager.enableTexture2D();
+						ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, -8, -8, 1, 1, 1, 1);
 
-					GlStateManager.disableBlend();
+						GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
+						GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
 
-					GL11.glDisable(GL11.GL_STENCIL_TEST);
+						GlStateManager.colorMask(true, true, true, true);
+						GlStateManager.depthMask(true);
+						GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+
+						int left = -16;
+						int right = 16;
+						int top = -16;
+						int bottom = 16;
+
+						Tessellator tessellator = Tessellator.getInstance();
+						BufferBuilder bufferbuilder = tessellator.getBuffer();
+						GlStateManager.enableBlend();
+						GlStateManager.disableTexture2D();
+						GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+						GlStateManager.color(0.15F, 0.15F, 0.15F, (Math.min(hoverPercent / 0.25F, 1.0F) * (1.0F - hover * 0.4F)) * alpha);
+						bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+						bufferbuilder.pos((double)left, (double)bottom, 0.0D).endVertex();
+						bufferbuilder.pos((double)right, (double)bottom, 0.0D).endVertex();
+						bufferbuilder.pos((double)right, (double)top, 0.0D).endVertex();
+						bufferbuilder.pos((double)left, (double)top, 0.0D).endVertex();
+						tessellator.draw();
+						GlStateManager.enableTexture2D();
+
+						GlStateManager.disableBlend();
+
+						GL11.glDisable(GL11.GL_STENCIL_TEST);
+					}
+
+					if(stencilBit >= 0) {
+						MinecraftForgeClient.releaseStencilBit(stencilBit);
+					}
+
+					GlStateManager.color(1, 1, 1, 1);
 
 					GlStateManager.popMatrix();
+
+					this.revertSlabTransform();
 				}
 
-				if(stencilBit >= 0) {
-					MinecraftForgeClient.releaseStencilBit(stencilBit);
-				}
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(0, -hoverHeight, 0);
 
-				GlStateManager.color(1, 1, 1, 1);
+				this.drawSlotItem(slot);
 
-				this.revertSlabTransform();
+				GlStateManager.popMatrix();
 			}
-
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(0, hover * -5.5F, 0);
-
-			this.drawSlotItem(slot);
-
-			GlStateManager.popMatrix();
-		} else {
+		} else if(!this.drawHoveringSlots) {
 			this.drawSlotItem(slot);
 		}
 	}
@@ -258,6 +268,35 @@ public class GuiRuneChainAltar extends GuiContainer {
 			this.zLevel = 0.0F;
 		} else {
 			super.drawSlot(slot);
+		}
+	}
+
+	@Override
+	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+		//Render hovering slots so that they render above the slot highlight
+
+		this.drawHoveringSlots = true;
+		for(int i = 0; i < this.inventorySlots.inventorySlots.size(); ++i) {
+			Slot slot = this.inventorySlots.inventorySlots.get(i);
+
+			if(slot.isEnabled()) {
+				this.drawSlot(slot);
+			}
+		}
+		this.drawHoveringSlots = false;
+
+		RenderHelper.disableStandardItemLighting();
+
+		if(this.container.getSelectedSlot() >= 0) {
+			Slot selectedSlot = this.container.getSlot(this.container.getSelectedSlot());
+			ItemStack selectedStack = selectedSlot.getStack();
+
+			if(!selectedStack.isEmpty() && selectedSlot instanceof SlotRune) {
+				this.drawSubMenu(-185, this.container.getSelectedSlot(), selectedStack);
+
+				//TODO use correct slot & stack
+				this.drawSubMenu(this.xSize + 19, this.container.getSelectedSlot(), selectedStack);
+			}
 		}
 	}
 
@@ -343,10 +382,10 @@ public class GuiRuneChainAltar extends GuiContainer {
 			ItemStack selectedStack = selectedSlot.getStack();
 
 			if(!selectedStack.isEmpty() && selectedSlot instanceof SlotRune) {
-				this.drawSubMenu(this.guiLeft - 185, this.container.getSelectedSlot(), selectedStack);
+				this.drawSubMenuBackground(this.guiLeft - 185, this.container.getSelectedSlot(), selectedStack);
 
 				//TODO use correct slot & stack
-				this.drawSubMenu(this.guiLeft + this.xSize + 19, this.container.getSelectedSlot(), selectedStack);
+				this.drawSubMenuBackground(this.guiLeft + this.xSize + 19, this.container.getSelectedSlot(), selectedStack);
 			}
 		}
 	}
@@ -495,17 +534,35 @@ public class GuiRuneChainAltar extends GuiContainer {
 	}
 
 	//TODO
-	protected void drawSubMenu(int x, int runeSlot, ItemStack stack) {
-		int width = 160;
-		int height = 210;
+	protected void drawSubMenuBackground(int x, int runeSlot, ItemStack stack) {
+		int width = 166;
+		int height = 216;
 
 		int y = this.guiTop + 60 - height / 2;
 
-		this.drawSubMenuBackground(x, y, width, height);
+		//Top left corner
+		this.drawTexturedModalRect512(x, y, 212, 94, 3, 3);
+		//Top bar
+		this.drawTexturedModalRect512(x + 3, y, 215, 94, width - 6, 3);
+		//Top right corner
+		this.drawTexturedModalRect512(x + 3 + width - 6, y, 383, 94, 3, 3);
+		//Right bar
+		this.drawTexturedModalRect512(x + 3 + width - 6, y + 3, 383, 97, 3, height - 6);
+		//Bottom right corner
+		this.drawTexturedModalRect512(x + 3 + width - 6, y + 3 + height - 6, 383, 313, 3, 3);
+		//Bottom bar
+		this.drawTexturedModalRect512(x + 3, y + 3 + height - 6, 215, 313, width - 6, 3);
+		//Bottom left corner
+		this.drawTexturedModalRect512(x, y + 3 + height - 6, 212, 313, 3, 3);
+		//Left bar
+		this.drawTexturedModalRect512(x, y + 3, 212, 97, 3, height - 6);
+
+		//Background
+		this.drawTexturedModalRect512(x + 3, y + 3, 215, 97, width - 6, height - 6);
 
 		ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, x + 4, y + 4, 1, 1, 1, 1);
 
-		this.fontRenderer.drawString(TextFormatting.UNDERLINE + "Rune name", x + 24, y + 8, 0xFF404040);
+		this.fontRenderer.drawString(TextFormatting.UNDERLINE + stack.getDisplayName(), x + 24, y + 8, 0xFF404040);
 
 		INodeBlueprint<?, RuneExecutionContext> bp = ((ItemRune)stack.getItem()).getRuneBlueprint(stack);
 
@@ -517,35 +574,25 @@ public class GuiRuneChainAltar extends GuiContainer {
 		}
 
 		GlStateManager.color(1, 1, 1, 1);
+		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
+	}
+
+	protected void drawSubMenu(int x, int runeSlot, ItemStack stack) {
+		int width = 166;
+		int height = 216;
+
+		int y = 60 - height / 2;
+
+		GlStateManager.color(1, 1, 1, 1);
 
 		int mx = Mouse.getX()* this.width / this.mc.displayWidth;
 		int my = this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
 
-		this.drawHangingRope(mx, my, 50, 50);
+		this.zLevel = 280.0F;
+		this.drawHangingRope(x + width, y + height, mx - this.guiLeft, my - this.guiTop);
+		this.zLevel = 0.0F;
 
 		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
-	}
-
-	protected void drawSubMenuBackground(float x, float y, int width, int height) {
-		//Top left corner
-		this.drawTexturedModalRect512(x, y, 212, 94, 3, 3);
-		//Top bar
-		this.drawTexturedModalRect512(x + 3, y, 215, 94, width, 3);
-		//Top right corner
-		this.drawTexturedModalRect512(x + 3 + width, y, 383, 94, 3, 3);
-		//Right bar
-		this.drawTexturedModalRect512(x + 3 + width, y + 3, 383, 97, 3, height);
-		//Bottom right corner
-		this.drawTexturedModalRect512(x + 3 + width, y + 3 + height, 383, 313, 3, 3);
-		//Bottom bar
-		this.drawTexturedModalRect512(x + 3, y + 3 + height, 215, 313, width, 3);
-		//Bottom left corner
-		this.drawTexturedModalRect512(x, y + 3 + height, 212, 313, 3, 3);
-		//Left bar
-		this.drawTexturedModalRect512(x, y + 3, 212, 97, 3, height);
-
-		//Background
-		this.drawTexturedModalRect512(x + 3, y + 3, 215, 97, width, height);
 	}
 
 	protected void drawHangingRope(float sx, float sy, float ex, float ey) {
@@ -561,13 +608,13 @@ public class GuiRuneChainAltar extends GuiContainer {
 		float y3 = ey;
 
 		if(x1 - x3 >= 0.0F && x1 - x3 < 1.0F) {
-			x3 += 1.0F;
+			x3 = x1 + 1;
 		} else if (x1 - x3 < 0.0F && x1 - x3 > -1.0F) {
-			x3 -= 1.0F;
+			x3 = x1 - 1;
 		}
 
 		float x2 = (x1 + x3) / 2.0F;
-		float y2 = Math.max(y1, y3) + 15.0F;
+		float y2 = Math.max(y1, y3) + 15.0F + (float)Math.sin((this.updateCounter + this.mc.getRenderPartialTicks()) / 15.0F) * 2.5f;
 
 		//Fit parabola
 		float a1 = -x1*x1 + x2*x2;
@@ -593,8 +640,8 @@ public class GuiRuneChainAltar extends GuiContainer {
 		float pxc2 = x1 + width;
 		float pyc2 = y1;
 
-		float v1 = sx < ex ? 0 : 1;
-		float v2 = sx < ex ? 1 : 0;
+		float v1 = x1 < x3 ? 0 : 1;
+		float v2 = x1 < x3 ? 1 : 0;
 
 		float u = 0;
 
