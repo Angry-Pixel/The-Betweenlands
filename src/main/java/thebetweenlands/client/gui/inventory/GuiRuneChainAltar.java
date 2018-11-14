@@ -640,8 +640,19 @@ public class GuiRuneChainAltar extends GuiContainer {
 		float pxc2 = x1 + width;
 		float pyc2 = y1;
 
-		float v1 = x1 < x3 ? 0 : 1;
-		float v2 = x1 < x3 ? 1 : 0;
+		boolean isTowardsRight = x1 < x3;
+
+		float ropeV1 = isTowardsRight ? 0 : 0.5F;
+		float ropeV2 = isTowardsRight ? 0.5F : 0;
+
+		float endV1 = isTowardsRight ? 0.5F : 1.0F;
+		float endV2 = isTowardsRight ? 1.0F : 0.5F;
+
+		float endU11 = isTowardsRight ? 0 : 1.0F;
+		float endU12 = isTowardsRight ? 0.5F : 0.5F;
+
+		float endU21 = isTowardsRight ? 0.5F : 0.5F;
+		float endU22 = isTowardsRight ? 1.0F : 0;
 
 		float u = 0;
 
@@ -664,11 +675,31 @@ public class GuiRuneChainAltar extends GuiContainer {
 			float xc2 = x + sideX;
 			float yc2 = y + sideY;
 
+			if(i == 1) {
+				float offX = -sideY / width * 8.0F;
+				float offY = sideX / width * 8.0F;
+
+				buffer.pos(pxc2 - offX, pyc2 - offY, this.zLevel).tex(endU11, endV1).endVertex();
+				buffer.pos(pxc1 - offX, pyc1 - offY, this.zLevel).tex(endU11, endV2).endVertex();
+				buffer.pos(pxc2, pyc2, this.zLevel).tex(endU12, endV1).endVertex();
+				buffer.pos(pxc1, pyc1, this.zLevel).tex(endU12, endV2).endVertex();
+			}
+
 			if(i > 0) {
-				buffer.pos(pxc2, pyc2, this.zLevel).tex(u, v1).endVertex();
-				buffer.pos(pxc1, pyc1, this.zLevel).tex(u, v2).endVertex();
+				buffer.pos(pxc2, pyc2, this.zLevel).tex(u, ropeV1).endVertex();
+				buffer.pos(pxc1, pyc1, this.zLevel).tex(u, ropeV2).endVertex();
 
 				u += (float) Math.sqrt((x-px)*(x-px) + (y-py)*(y-py)) / 16.0F;
+			}
+
+			if(i == pieces) {
+				float offX = -sideY / width * 8.0F;
+				float offY = sideX / width * 8.0F;
+
+				buffer.pos(pxc2, pyc2, this.zLevel).tex(endU21, endV1).endVertex();
+				buffer.pos(pxc1, pyc1, this.zLevel).tex(endU21, endV2).endVertex();
+				buffer.pos(pxc2 + offX, pyc2 + offY, this.zLevel).tex(endU22, endV1).endVertex();
+				buffer.pos(pxc1 + offX, pyc1 + offY, this.zLevel).tex(endU22, endV2).endVertex();
 			}
 
 			px = x;
