@@ -538,7 +538,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 		int width = 166;
 		int height = 216;
 
-		int y = this.guiTop + 60 - height / 2;
+		int y = this.guiTop + 70 - height / 2;
 
 		//Top left corner
 		this.drawTexturedModalRect512(x, y, 212, 94, 3, 3);
@@ -581,16 +581,18 @@ public class GuiRuneChainAltar extends GuiContainer {
 		int width = 166;
 		int height = 216;
 
-		int y = 60 - height / 2;
+		int y = 70 - height / 2;
 
 		GlStateManager.color(1, 1, 1, 1);
 
-		int mx = Mouse.getX()* this.width / this.mc.displayWidth;
-		int my = this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
+		if(x < 0) {
+			int mx = Mouse.getX()* this.width / this.mc.displayWidth;
+			int my = this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
 
-		this.zLevel = 280.0F;
-		this.drawHangingRope(x + width, y + height, mx - this.guiLeft, my - this.guiTop);
-		this.zLevel = 0.0F;
+			this.zLevel = 280.0F;
+			this.drawHangingRope(x + width - 10, y + height - 10, mx - 10 - this.guiLeft, my - 10 - this.guiTop);
+			this.zLevel = 0.0F;
+		}
 
 		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
 	}
