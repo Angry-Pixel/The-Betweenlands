@@ -154,21 +154,30 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		int mouseX = Mouse.getX() * this.width / this.mc.displayWidth;
 		int mouseY = this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
 
-		Tuple<IGuiRuneMark, IRuneLink> hoveredLink = this.getHoveredOnLink(mouseX, mouseY);
-
 		IRuneGui currentGui = this.openRuneGuis.get(RuneMenuType.SECONDARY);
 
 		boolean closeCurrentGui = false;
 
+		int targetRune = -1;
+
+		Tuple<IGuiRuneMark, IRuneLink> hoveredLink = this.getHoveredOnLink(mouseX, mouseY);
+
 		if(hoveredLink != null) {
-			int targetRune = hoveredLink.getSecond().getOutputRune();
+			targetRune = hoveredLink.getSecond().getOutputRune();
+		} else if(this.linkingDropdownMenuSlot >= this.tile.getChainStart()) {
+			targetRune = this.linkingDropdownMenuSlot - this.tile.getChainStart();
+		} else {
+			closeCurrentGui = true;
+		}
+
+		if(targetRune >= 0) {
 			ItemStack stack = this.container.getRuneItemStack(targetRune);
 
 			if(!stack.isEmpty() && stack.getItem() instanceof IRuneItem) {
 				IRuneContainer container = this.container.getRuneContainer(targetRune);
 
 				if(container != null) {
-					if(currentGui == null || currentGui.getContext().getRuneIndex() != hoveredLink.getSecond().getOutputRune() || currentGui.getContainer() != container) {
+					if(currentGui == null || currentGui.getContext().getRuneIndex() != targetRune || currentGui.getContainer() != container) {
 						if(currentGui != null) {
 							currentGui.close();
 						}
@@ -187,8 +196,6 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			} else {
 				closeCurrentGui = true;
 			}
-		} else {
-			closeCurrentGui = true;
 		}
 
 		if(closeCurrentGui && currentGui != null) {
