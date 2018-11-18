@@ -173,6 +173,11 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	public boolean onStartMarkLinking(IGuiRuneMark mark, int mouseX, int mouseY) {
 		return false;
 	}
+	
+	@Override
+	public boolean onStartMarkUnlinking(IGuiRuneMark mark, int mouseX, int mouseY) {
+		return false;
+	}
 
 	@Override
 	public Collection<Mark> getInteractableInputMarks() {

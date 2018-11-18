@@ -582,10 +582,20 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			if(primaryRuneGui != null) {
 				for(IGuiRuneMark mark : primaryRuneGui.getInteractableInputMarks()) {
 					if(mark.isInside(mouseX, mouseY)) {
-						if(!primaryRuneGui.onStartMarkLinking(mark, mouseX, mouseY)) {
-							this.draggingMark = mark;
-							handled = true;
-							break;
+						if(mouseButton == 0) {
+							if(!primaryRuneGui.onStartMarkLinking(mark, mouseX, mouseY)) {
+								this.draggingMark = mark;
+								handled = true;
+								break;
+							}
+						} else {
+							if(!primaryRuneGui.onStartMarkUnlinking(mark, mouseX, mouseY)) {
+								//TODO Send message to link on server side too
+								System.out.println("Unlinking: " + primaryRuneGui.getContext().getRuneIndex() + "#" + mark.getMarkIndex());
+
+								this.container.unlink(primaryRuneGui.getContext().getRuneIndex(), mark.getMarkIndex());
+								break;
+							}
 						}
 					}
 				}

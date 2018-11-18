@@ -31,6 +31,8 @@ public interface IRuneGui {
 	
 	public boolean onStartMarkLinking(IGuiRuneMark mark, int mouseX, int mouseY);
 
+	public boolean onStartMarkUnlinking(IGuiRuneMark mark, int mouseX, int mouseY);
+	
 	public Collection<? extends IGuiRuneMark> getInteractableInputMarks();
 	
 	public Collection<? extends IGuiRuneMark> getInteractableOutputMarks();
