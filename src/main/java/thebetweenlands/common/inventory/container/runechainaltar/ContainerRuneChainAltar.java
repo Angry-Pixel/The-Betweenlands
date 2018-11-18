@@ -1,4 +1,4 @@
-package thebetweenlands.common.inventory.container;
+package thebetweenlands.common.inventory.container.runechainaltar;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,8 +29,8 @@ import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 
 
 public class ContainerRuneChainAltar extends Container implements IRuneChainAltarContainer {
-	private final TileEntityRuneChainAltar altar;
-	private final EntityPlayer player;
+	protected final TileEntityRuneChainAltar altar;
+	protected final EntityPlayer player;
 
 	public static final int [][] SLOT_POSITIONS = new int[][] {
 		{8, 43}, {32, 37}, {56, 35}, {80, 33}, {104, 35}, {128, 37}, {152, 43},
@@ -65,15 +65,31 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 	private int selectedRune = -1;
 
-	protected static class RuneContainerEntry {
-		protected final IRuneContainer container;
-		protected final IRuneContainerContext context;
-		protected final List<Slot> slots;
+	protected class RuneContainerEntry {
+		protected IRuneContainer container;
+		protected IRuneContainerContext context;
+		protected final List<Slot> slots = new ArrayList<>();
+		protected int runeIndex;
 
-		protected RuneContainerEntry(IRuneContainer container, IRuneContainerContext data, List<Slot> slots) {
-			this.container = container;
-			this.context = data;
-			this.slots = slots;
+		protected RuneContainerEntry(int runeIndex) {
+			this.runeIndex = runeIndex;
+		}
+
+		//TODO Implement adding/removing 
+		protected void addSlotsToContainer() {
+			for(Slot slot : this.slots) {
+				ContainerRuneChainAltar.this.addSlotToContainer(slot);
+			}
+		}
+
+		protected void removeSlotsFromContainer() {
+			for(Slot entrySlot : this.slots) {
+				int index = ContainerRuneChainAltar.this.inventorySlots.indexOf(entrySlot);
+				if(index >= 0) {
+					ContainerRuneChainAltar.this.inventorySlots.remove(index);
+					ContainerRuneChainAltar.this.inventoryItemStacks.remove(index);
+				}
+			}
 		}
 	}
 
@@ -121,6 +137,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 			this.updateRuneContainer(i);
 		}
 
+		//TODO Need a better way than doing this in ctor
 		this.altar.openContainer(this);
 	}
 
@@ -268,6 +285,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 					if(containerEntry != null) {
 						this.runeContainers.put(i - chainStart, containerEntry);
 						this.runeContainers.remove(i - chainStart + 1);
+						containerEntry.runeIndex = i - chainStart;
 					}
 
 					Slot slot = this.getSlot(i);
@@ -296,6 +314,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 					if(containerEntry != null) {
 						this.runeContainers.put(i - chainStart, containerEntry);
 						this.runeContainers.remove(i - chainStart - 1);
+						containerEntry.runeIndex = i - chainStart;
 					}
 
 					Slot slot = this.getSlot(i);
@@ -427,12 +446,17 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 					this.removeContainerEntry(runeIndex);
 				}
 
-				List<Slot> slots = new ArrayList<>();
-				IRuneContainerContext newContainerContext = this.createRuneContainerContext(runeIndex, slots);
+				RuneContainerEntry entry = new RuneContainerEntry(runeIndex);
+
+				entry.container = newContainer;
+
+				IRuneContainerContext newContainerContext = this.createRuneContainerContext(entry);
+
+				entry.context = newContainerContext;
 
 				newContainer.init(newContainerContext);
 
-				this.runeContainers.put(runeIndex, new RuneContainerEntry(newContainer, newContainerContext, slots));
+				this.runeContainers.put(runeIndex, entry);
 			}
 		} else {
 			this.removeContainerEntry(runeIndex);
@@ -449,14 +473,11 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 			info.removeContainerData(runeIndex);
 
 			//Remove slots from current container
-			for(Slot entrySlot : entry.slots) {
-				this.inventorySlots.remove(entrySlot.slotNumber);
-				this.inventoryItemStacks.remove(entrySlot.slotNumber);
-			}
+			entry.removeSlotsFromContainer();
 		}
 	}
 
-	protected IRuneContainerContext createRuneContainerContext(int runeIndex, List<Slot> slots) {
+	protected IRuneContainerContext createRuneContainerContext(RuneContainerEntry entry) {
 		return new IRuneContainerContext() {
 			@Override
 			public IRuneChainAltarContainer getRuneChainAltarContainer() {
@@ -465,29 +486,32 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 			@Override
 			public IRuneChainAltarGui getRuneChainAltarGui() {
-				//TODO Override and implement this in ContainerRuneChainAltarGui
 				return null;
 			}
 
 			@Override
 			public int getRuneIndex() {
-				return runeIndex;
+				return entry.runeIndex;
+			}
+
+			@Override
+			public ItemStack getRuneItemStack() {
+				return ContainerRuneChainAltar.this.getRuneItemStack(entry.runeIndex);
 			}
 
 			@Override
 			public NBTTagCompound getData() {
-				return ContainerRuneChainAltar.this.altar.getChainInfo().getContainerData(runeIndex);
+				return ContainerRuneChainAltar.this.altar.getChainInfo().getContainerData(entry.runeIndex);
 			}
 
 			@Override
 			public void setData(NBTTagCompound nbt) {
-				ContainerRuneChainAltar.this.altar.getChainInfo().setContainerData(runeIndex, nbt);
+				ContainerRuneChainAltar.this.altar.getChainInfo().setContainerData(entry.runeIndex, nbt);
 			}
 
 			@Override
 			public void addSlot(Slot slot) {
-				slots.add(slot);
-				ContainerRuneChainAltar.this.addSlotToContainer(slot);
+				entry.slots.add(slot);
 			}
 		};
 	}

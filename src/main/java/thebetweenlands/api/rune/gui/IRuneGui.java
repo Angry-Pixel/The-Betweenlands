@@ -3,27 +3,35 @@ package thebetweenlands.api.rune.gui;
 import java.util.Collection;
 
 public interface IRuneGui {
-	public void init(IRuneContainerContext context, IRuneContainer container);
+	public void init(IRuneContainerContext context, IRuneContainer container, int width, int height);
 
-	public IRuneContainer getContainer();
+	public IRuneContainerContext getContext();
 	
+	public IRuneContainer getContainer();
+
 	public void close();
 
 	public void update();
 
-	public void draw(int mouseX, int mouseY);
+	public void drawBackground(int mouseX, int mouseY);
+
+	public void drawForeground(int mouseX, int mouseY);
 
 	public void drawMarkConnection(IGuiRuneMark mark, int targetX, int targetY, boolean linked);
 
-	public boolean onKeyTyped(char typedChar, int keyCode);
+	public boolean onKeyTyped(char typedChar, int keyCode, boolean handled);
 
-	public boolean onMouseClicked(int mouseX, int mouseY, int mouseButton);
+	public boolean onMouseClicked(int mouseX, int mouseY, int mouseButton, boolean handled);
 
-	public boolean onMouseReleased(int mouseX, int mouseY, int state);
+	public boolean onMouseReleased(int mouseX, int mouseY, int state, boolean handled);
+	
+	public void onMouseInput();
 
-	public void onParentResized(int w, int h);
+	public void onParentSizeSet(int w, int h);
+	
+	public boolean onStartMarkLinking(IGuiRuneMark mark, int mouseX, int mouseY);
 
-	public Collection<IGuiRuneMark> getInteractableMarks();
+	public Collection<? extends IGuiRuneMark> getInteractableMarks();
 
 	public int getMinX();
 

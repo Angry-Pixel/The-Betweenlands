@@ -16,8 +16,8 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import thebetweenlands.api.item.IRuneItem;
-import thebetweenlands.common.inventory.container.ContainerRuneChainAltar;
-import thebetweenlands.common.inventory.container.RuneChainInfo;
+import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
+import thebetweenlands.common.inventory.container.runechainaltar.RuneChainInfo;
 
 public class TileEntityRuneChainAltar extends TileEntity implements ISidedInventory {
 	private final String name;

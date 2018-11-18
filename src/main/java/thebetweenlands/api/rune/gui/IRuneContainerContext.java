@@ -1,6 +1,7 @@
 package thebetweenlands.api.rune.gui;
 
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public interface IRuneContainerContext {
@@ -9,6 +10,8 @@ public interface IRuneContainerContext {
 	public IRuneChainAltarGui getRuneChainAltarGui();
 
 	public int getRuneIndex();
+
+	public ItemStack getRuneItemStack();
 
 	public NBTTagCompound getData();
 

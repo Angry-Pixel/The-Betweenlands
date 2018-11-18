@@ -5,6 +5,8 @@ import net.minecraft.util.ResourceLocation;
 public interface IRuneContainer {
 	public void init(IRuneContainerContext context);
 
+	public IRuneContainerContext getContext();
+	
 	public void onMarkLinked(int input, IRuneLink link);
 
 	public void onMarkUnlinked(int input, IRuneLink link);

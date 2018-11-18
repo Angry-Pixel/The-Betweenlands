@@ -1,4 +1,4 @@
-package thebetweenlands.common.inventory.container;
+package thebetweenlands.common.inventory.container.runechainaltar;
 
 import java.util.Collection;
 import java.util.HashMap;
