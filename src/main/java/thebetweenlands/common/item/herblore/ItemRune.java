@@ -5,7 +5,7 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.api.item.IRuneItem;
 import thebetweenlands.api.rune.gui.IRuneContainer;
 import thebetweenlands.api.rune.gui.IRuneGui;
-import thebetweenlands.api.rune.gui.IRuneMenuFactory;
+import thebetweenlands.api.rune.gui.IRuneContainerFactory;
 import thebetweenlands.api.rune.gui.RuneMenuType;
 import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.client.gui.inventory.runechainaltar.DefaultRuneGui;
@@ -24,11 +24,11 @@ public class ItemRune extends Item implements IRuneItem {
 	}
 
 	@Override
-	public IRuneMenuFactory getRuneMenuFactory(ItemStack stack) {
+	public IRuneContainerFactory getRuneContainerFactory(ItemStack stack) {
 		return this.factory;
 	}
 
-	private static class Factory implements IRuneMenuFactory {
+	private static class Factory implements IRuneContainerFactory {
 		private ItemRune item;
 
 		private Factory(ItemRune item) {

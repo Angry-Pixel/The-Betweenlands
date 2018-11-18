@@ -81,15 +81,15 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	@Override
-	public void init(IRuneContainerContext context, IRuneContainer container, int width, int height) {
-		this.context = context;
+	public void init(IRuneContainer container, int width, int height) {
+		this.context = container.getContext();
 		this.container = container;
 		this.width = width;
 		this.height = height;
 
 		//TODO Implement this proper
 		INodeConfiguration config = container.getConfiguration();
-		
+
 		int x = 4;
 		for(int i = 0; i < config.getInputs().size(); i++) {
 			this.interactableMarks.add(new Mark(this, i, x, 50, 16, 16));

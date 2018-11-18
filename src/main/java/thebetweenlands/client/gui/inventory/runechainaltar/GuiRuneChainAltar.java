@@ -32,6 +32,7 @@ import thebetweenlands.api.rune.gui.IGuiRuneMark;
 import thebetweenlands.api.rune.gui.IRuneChainAltarGui;
 import thebetweenlands.api.rune.gui.IRuneContainer;
 import thebetweenlands.api.rune.gui.IRuneGui;
+import thebetweenlands.api.rune.gui.IRuneLink;
 import thebetweenlands.api.rune.gui.RuneMenuType;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
@@ -66,6 +67,8 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 	private EnumMap<RuneMenuType, IRuneGui> openRuneGuis = new EnumMap<>(RuneMenuType.class);
 
 	private IGuiRuneMark draggingMark = null;
+
+	private int linkingDropdownMenuSlot = -1;
 
 	private static final int[][] CORD_PIECE_SLOT_UVs = new int[][] {
 		{10, 251}, {36, 266}, {60, 261}, {84, 260}, {108, 260}, {132, 261}, {156, 266},
@@ -120,9 +123,9 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 					IRuneItem runeItem = (IRuneItem) stack.getItem();
 
-					IRuneGui newGui = runeItem.getRuneMenuFactory(stack).createGui(RuneMenuType.PRIMARY);
+					IRuneGui newGui = runeItem.getRuneContainerFactory(stack).createGui(RuneMenuType.PRIMARY);
 
-					newGui.init(this.container.getRuneContainerContext(runeIndex), container, this.width, this.height);
+					newGui.init(container, this.width, this.height);
 
 					this.openRuneGuis.put(RuneMenuType.PRIMARY, newGui);
 
@@ -203,7 +206,9 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			this.hoveredSlot = null;
 		}
 
-		this.renderHoveredToolTip(mouseX, mouseY);
+		if(!this.isInsideLinkingDropdownMenu(mouseX, mouseY)) {
+			this.renderHoveredToolTip(mouseX, mouseY);
+		}
 	}
 
 	@Override
@@ -352,6 +357,8 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		RenderHelper.disableStandardItemLighting();
 
 		this.drawLinkingDropdownMenus(mouseX, mouseY);
+
+		this.drawHoveredRuneMarkConnections(mouseX, mouseY);
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(-this.guiLeft, -this.guiTop, 0);
@@ -550,7 +557,17 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		boolean handled = false;
 
 		if(this.draggingMark != null) {
-			//TODO Link mark
+			if(this.container.getSelectedRuneIndex() >= 0 && this.linkingDropdownMenuSlot >= 0) {
+				int linkingMarkIndex = this.getLinkingDropdownMenuMarkIndex(mouseX, mouseY);
+
+				if(linkingMarkIndex >= 0) {
+					//TODO Send message to link on server side too
+					System.out.println("Linking: " + this.container.getSelectedRuneIndex() + "#" + this.draggingMark.getMarkIndex() + " to " + (this.linkingDropdownMenuSlot - this.tile.getChainStart()) + "#" + linkingMarkIndex);
+
+					this.container.link(this.container.getSelectedRuneIndex(), this.draggingMark.getMarkIndex(), this.linkingDropdownMenuSlot - this.tile.getChainStart(), linkingMarkIndex);
+				}
+			}
+
 			this.draggingMark = null;
 			handled = true;
 		}
@@ -631,6 +648,8 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 		this.updateSlotHoverTicks();
 
+		this.updateLinkingDropdownMenus();
+
 		for(IRuneGui gui : this.openRuneGuis.values()) {
 			gui.update();
 		}
@@ -688,42 +707,119 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		}
 	}
 
-	protected void drawLinkingDropdownMenus(int mouseX, int mouseY) {
-		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
+	protected void updateLinkingDropdownMenus() {
+		int mouseX = Mouse.getX() * this.width / this.mc.displayWidth;
+		int mouseY = this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
 
-		if(this.draggingMark != null) {
-			for(Slot slot : this.container.inventorySlots) {
-				if(slot instanceof SlotRune) {
-					SlotRune runeSlot = (SlotRune) slot;
+		if(this.draggingMark != null && this.linkingDropdownMenuSlot >= 0) {
+			Slot slot = this.inventorySlots.getSlot(this.linkingDropdownMenuSlot);
 
-					if(runeSlot.isEnabled()) {
+			if(slot instanceof SlotRune)  {
+				IRuneContainer container = this.container.getRuneContainer(this.linkingDropdownMenuSlot - this.tile.getChainStart());
+
+				if(container != null) {
+					INodeConfiguration configuration = container.getConfiguration();
+					int outputs = configuration.getOutputs().size();
+
+					if(!this.isInsideLinkingDropdownMenuArea(slot, outputs, mouseX, mouseY, true)) {
+						this.linkingDropdownMenuSlot = -1;
+					}
+				} else {
+					this.linkingDropdownMenuSlot = -1;
+				}
+			} else {
+				this.linkingDropdownMenuSlot = -1;
+			}
+		} else {
+			this.linkingDropdownMenuSlot = -1;
+		}
+
+		if(this.draggingMark != null && this.linkingDropdownMenuSlot < 0) {
+			IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
+
+			if(primaryRuneGui != null) {
+				for(Slot slot : this.container.inventorySlots) {
+					if(slot instanceof SlotRune && slot.isEnabled() && slot.slotNumber - this.tile.getChainStart() < primaryRuneGui.getContext().getRuneIndex()) {
 						IRuneContainer container = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
 
 						if(container != null) {
 							INodeConfiguration configuration = container.getConfiguration();
 							int outputs = configuration.getOutputs().size();
 
-							if(outputs > 0) {
-								int sx = runeSlot.xPos - 3;
-								int sy = runeSlot.yPos + 20;
-
-								int minX = this.guiLeft + sx;
-								int minY = this.guiTop + sy - 22;
-								int maxX = this.guiLeft + sx + 21;
-								int maxY = this.guiTop + sy + outputs * 16 + 6;
-
-								if(mouseX >= minX && mouseX <= maxX && mouseY >= minY && mouseY <= maxY) {
-									this.drawDropdownMenu(runeSlot);
-								}
+							if(outputs > 0 && this.isInsideLinkingDropdownMenuArea(slot, outputs, mouseX, mouseY, true)) {
+								this.linkingDropdownMenuSlot = slot.slotNumber;
 							}
 						}
 					}
 				}
 			}
 		}
+
+		if(this.swapAnimationTicks > 0) {
+			this.linkingDropdownMenuSlot = -1;
+		}
 	}
 
-	protected void drawDropdownMenu(SlotRune slot) {
+	protected boolean isInsideLinkingDropdownMenu(int mouseX, int mouseY) {
+		if(this.linkingDropdownMenuSlot >= 0) {
+			IRuneContainer container = this.container.getRuneContainer(this.linkingDropdownMenuSlot - this.tile.getChainStart());
+
+			if(container != null) {
+				INodeConfiguration configuration = container.getConfiguration();
+				int outputs = configuration.getOutputs().size();
+
+				return this.isInsideLinkingDropdownMenuArea(this.inventorySlots.getSlot(this.linkingDropdownMenuSlot), outputs, mouseX, mouseY, false);
+			}
+		}
+
+		return false;
+	}
+
+	protected boolean isInsideLinkingDropdownMenuArea(Slot slot, int outputs, int mouseX, int mouseY, boolean includeSlot) {
+		int sx = slot.xPos - 3;
+		int sy = slot.yPos + 20;
+
+		int minX = this.guiLeft + sx;
+		int minY = this.guiTop + sy - (includeSlot ? 22 : 0);
+		int maxX = this.guiLeft + sx + 21;
+		int maxY = this.guiTop + sy + outputs * 18 + 6;
+
+		return mouseX >= minX && mouseX <= maxX && mouseY >= minY && mouseY <= maxY;
+	}
+
+	protected int getLinkingDropdownMenuMarkIndex(int mouseX, int mouseY) {
+		if(this.linkingDropdownMenuSlot >= 0 && this.isInsideLinkingDropdownMenu(mouseX, mouseY)) {
+			IRuneContainer container = this.container.getRuneContainer(this.linkingDropdownMenuSlot - this.tile.getChainStart());
+			Slot slot = this.inventorySlots.getSlot(this.linkingDropdownMenuSlot);
+
+			if(container != null) {
+				INodeConfiguration configuration = container.getConfiguration();
+				int outputs = configuration.getOutputs().size();
+
+				int sy = slot.yPos + 20;
+
+				int yOff = 0;
+				for(int i = 0; i < outputs; i++) {
+					if(mouseY >= this.guiTop + sy + 3 + yOff && mouseY <= this.guiTop + sy + 3 + yOff + 16) {
+						return i;
+					}
+					yOff += 18;
+				}
+			}
+		}
+
+		return -1;
+	}
+
+	protected void drawLinkingDropdownMenus(int mouseX, int mouseY) {
+		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
+
+		if(this.linkingDropdownMenuSlot >= 0) {
+			this.drawDropdownMenu(this.inventorySlots.getSlot(this.linkingDropdownMenuSlot));
+		}
+	}
+
+	protected void drawDropdownMenu(Slot slot) {
 		IRuneContainer container = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
 
 		if(container != null) {
@@ -735,13 +831,22 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 				int sy = slot.yPos + 20;
 
 				this.zLevel = 270;
-				this.drawDrowndownMenuBackground(sx, sy, outputs * 16);
+				this.drawDrowndownMenuBackground(sx, sy, outputs * 18 + 3);
+
+				int yOff = 0;
+				for(int i = 0; i < outputs; i++) {
+					this.drawGradientRect(sx + 3, sy + 3 + yOff, sx + 3 + 16, sy + 3 + 16 + yOff, 0xFFFF0000, 0xFFFF0000);
+					yOff += 18;
+				}
+
 				this.zLevel = 0;
 			}
 		}
 	}
 
 	protected void drawDrowndownMenuBackground(int x, int y, int height) {
+		height -= 5;
+
 		//Top left corner
 		this.drawTexturedModalRect512(x, y, 388, 94, 3, 3);
 		//Top bar
@@ -761,6 +866,40 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 		//Background
 		this.drawTexturedModalRect512(x + 3, y + 3, 391, 97, 16, height);
+	}
+
+	protected void drawHoveredRuneMarkConnections(int mouseX, int mouseY) {
+		if(this.swapAnimationTicks == 0) {
+			IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
+
+			if(primaryRuneGui != null) {
+				for(IGuiRuneMark mark : primaryRuneGui.getInteractableMarks()) {
+					if(mark.isInside(mouseX, mouseY)) {
+						IRuneLink link = this.container.getLink(primaryRuneGui.getContext().getRuneIndex(), mark.getMarkIndex());
+
+						if(link != null) {
+							Slot linkedSlot = this.inventorySlots.getSlot(link.getOutputRune() + this.tile.getChainStart());
+
+							if(linkedSlot instanceof SlotRune && linkedSlot.isEnabled()) {
+								this.drawDropdownMenu(linkedSlot);
+
+								int sy = this.guiTop + linkedSlot.yPos + 20;
+
+								int cx = this.guiLeft + linkedSlot.xPos - 3 + 12;
+								int cy = sy + link.getOutput() * 18 + 11;
+
+								GlStateManager.pushMatrix();
+								GlStateManager.translate(-this.guiLeft, -this.guiTop, 0);
+
+								primaryRuneGui.drawMarkConnection(mark, cx, cy, true);
+
+								GlStateManager.popMatrix();
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	protected void drawSlotCoverStone(float x, float y) {

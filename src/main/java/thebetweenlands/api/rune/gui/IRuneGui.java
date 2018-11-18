@@ -3,7 +3,7 @@ package thebetweenlands.api.rune.gui;
 import java.util.Collection;
 
 public interface IRuneGui {
-	public void init(IRuneContainerContext context, IRuneContainer container, int width, int height);
+	public void init(IRuneContainer container, int width, int height);
 
 	public IRuneContainerContext getContext();
 	

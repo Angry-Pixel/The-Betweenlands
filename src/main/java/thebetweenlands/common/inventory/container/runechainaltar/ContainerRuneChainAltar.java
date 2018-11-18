@@ -298,7 +298,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 						entry.container.onRuneShifted(i - chainStart + 1, i - chainStart);
 					}
 
-					this.altar.getChainInfo().moveAllLinks(i - chainStart + 1, i);
+					this.altar.getChainInfo().moveAllLinks(i - chainStart + 1, i - chainStart);
 
 					if(slot instanceof SlotRune && nextSlot instanceof SlotRune) {
 						((SlotRune) slot).prevHoverTicks = ((SlotRune) slot).hoverTicks = ((SlotRune) nextSlot).hoverTicks;
@@ -327,7 +327,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 						entry.container.onRuneShifted(i - chainStart - 1, i - chainStart);
 					}
 
-					this.altar.getChainInfo().moveAllLinks(i - chainStart - 1, i);
+					this.altar.getChainInfo().moveAllLinks(i - chainStart - 1, i - chainStart);
 
 					if(slot instanceof SlotRune && prevSlot instanceof SlotRune) {
 						((SlotRune) slot).prevHoverTicks = ((SlotRune) slot).hoverTicks = ((SlotRune) prevSlot).hoverTicks;
@@ -432,7 +432,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 		if(!stack.isEmpty() && stack.getItem() instanceof IRuneItem) {
 			IRuneItem runeItem = (IRuneItem) stack.getItem();
 
-			IRuneContainer newContainer = runeItem.getRuneMenuFactory(stack).createContainer();
+			IRuneContainer newContainer = runeItem.getRuneContainerFactory(stack).createContainer();
 
 			RuneContainerEntry currentContainerEntry = this.runeContainers.get(runeIndex);
 

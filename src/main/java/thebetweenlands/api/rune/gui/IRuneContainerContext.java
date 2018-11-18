@@ -1,12 +1,16 @@
 package thebetweenlands.api.rune.gui;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public interface IRuneContainerContext {
+	@Nullable
 	public IRuneChainAltarContainer getRuneChainAltarContainer();
 
+	@Nullable
 	public IRuneChainAltarGui getRuneChainAltarGui();
 
 	public int getRuneIndex();
