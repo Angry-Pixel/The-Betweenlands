@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -23,6 +25,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -147,6 +150,49 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		}
 	}
 
+	protected void updateSecondaryRuneGui() {
+		int mouseX = Mouse.getX() * this.width / this.mc.displayWidth;
+		int mouseY = this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
+
+		Tuple<IGuiRuneMark, IRuneLink> hoveredLink = this.getHoveredOnLink(mouseX, mouseY);
+
+		IRuneGui currentGui = this.openRuneGuis.get(RuneMenuType.SECONDARY);
+
+		if(hoveredLink != null) {
+			int targetRune = hoveredLink.getSecond().getOutputRune();
+			ItemStack stack = this.container.getRuneItemStack(targetRune);
+
+			if(!stack.isEmpty() && stack.getItem() instanceof IRuneItem) {
+				IRuneContainer container = this.container.getRuneContainer(targetRune);
+
+				if(container != null) {
+					if(currentGui == null || currentGui.getContext().getRuneIndex() != hoveredLink.getSecond().getOutputRune() || currentGui.getContainer() != container) {
+						if(currentGui != null) {
+							currentGui.close();
+						}
+
+						IRuneItem runeItem = (IRuneItem) stack.getItem();
+
+						IRuneGui newGui = runeItem.getRuneContainerFactory(stack).createGui(RuneMenuType.SECONDARY);
+
+						newGui.init(container, this.width, this.height);
+
+						this.openRuneGuis.put(RuneMenuType.SECONDARY, newGui);
+					}
+				} else if(currentGui != null) {
+					currentGui.close();
+					this.openRuneGuis.remove(RuneMenuType.SECONDARY);
+				}
+			} else if(currentGui != null) {
+				currentGui.close();
+				this.openRuneGuis.remove(RuneMenuType.SECONDARY);
+			}
+		} else if(currentGui != null) {
+			currentGui.close();
+			this.openRuneGuis.remove(RuneMenuType.SECONDARY);
+		}
+	}
+
 	protected float setSlabTransform() {
 		GlStateManager.pushMatrix();
 
@@ -193,10 +239,11 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		//Make sure that the currently selected rune GUI is always correct
+		//Make sure that the currently selected and secondary rune GUI is always correct
 		if(this.container.getSelectedRuneIndex() >= 0) {
 			this.updateSelectedRuneGui(this.container.getSelectedRuneIndex());
 		}
+		this.updateSecondaryRuneGui();
 
 		this.drawDefaultBackground();
 
@@ -371,7 +418,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
 
 			if(primaryRuneGui != null) {
-				if(primaryRuneGui.getInteractableMarks().contains(this.draggingMark)) {
+				if(primaryRuneGui.getInteractableInputMarks().contains(this.draggingMark)) {
 					primaryRuneGui.drawMarkConnection(this.draggingMark, mouseX, mouseY, false);
 				} else {
 					this.draggingMark = null;
@@ -533,7 +580,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
 
 			if(primaryRuneGui != null) {
-				for(IGuiRuneMark mark : primaryRuneGui.getInteractableMarks()) {
+				for(IGuiRuneMark mark : primaryRuneGui.getInteractableInputMarks()) {
 					if(mark.isInside(mouseX, mouseY)) {
 						if(!primaryRuneGui.onStartMarkLinking(mark, mouseX, mouseY)) {
 							this.draggingMark = mark;
@@ -617,10 +664,11 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 	@Override
 	public void updateScreen() {
-		//Make sure that the currently selected rune GUI is always correct
+		//Make sure that the currently selected and secondary rune GUI is always correct
 		if(this.container.getSelectedRuneIndex() >= 0) {
 			this.updateSelectedRuneGui(this.container.getSelectedRuneIndex());
 		}
+		this.updateSecondaryRuneGui();
 
 		super.updateScreen();
 
@@ -812,8 +860,6 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 	}
 
 	protected void drawLinkingDropdownMenus(int mouseX, int mouseY) {
-		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
-
 		if(this.linkingDropdownMenuSlot >= 0) {
 			this.drawDropdownMenu(this.inventorySlots.getSlot(this.linkingDropdownMenuSlot));
 		}
@@ -830,14 +876,18 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 				int sx = slot.xPos - 3;
 				int sy = slot.yPos + 20;
 
+				this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
+
 				this.zLevel = 270;
 				this.drawDrowndownMenuBackground(sx, sy, outputs * 18 + 3);
 
 				int yOff = 0;
 				for(int i = 0; i < outputs; i++) {
-					this.drawGradientRect(sx + 3, sy + 3 + yOff, sx + 3 + 16, sy + 3 + 16 + yOff, 0xFFFF0000, 0xFFFF0000);
+					this.drawGradientRect(sx + 3, sy + 3 + yOff, sx + 3 + 16, sy + 3 + 16 + yOff, 0xFF0000FF, 0xFF0000FF);
 					yOff += 18;
 				}
+
+				GlStateManager.color(1, 1, 1, 1);
 
 				this.zLevel = 0;
 			}
@@ -868,35 +918,70 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		this.drawTexturedModalRect512(x + 3, y + 3, 391, 97, 16, height);
 	}
 
+	@Nullable
+	protected Tuple<IGuiRuneMark, IRuneLink> getHoveredOnLink(int mouseX, int mouseY) {
+		IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
+
+		if(primaryRuneGui != null) {
+			for(IGuiRuneMark mark : primaryRuneGui.getInteractableInputMarks()) {
+				if(mark.isInside(mouseX, mouseY)) {
+					IRuneLink link = this.container.getLink(primaryRuneGui.getContext().getRuneIndex(), mark.getMarkIndex());
+
+					if(link != null) {
+						return new Tuple<>(mark, link);
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
 	protected void drawHoveredRuneMarkConnections(int mouseX, int mouseY) {
-		if(this.swapAnimationTicks == 0) {
-			IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
+		IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
 
-			if(primaryRuneGui != null) {
-				for(IGuiRuneMark mark : primaryRuneGui.getInteractableMarks()) {
-					if(mark.isInside(mouseX, mouseY)) {
-						IRuneLink link = this.container.getLink(primaryRuneGui.getContext().getRuneIndex(), mark.getMarkIndex());
+		if(primaryRuneGui != null) {
+			Tuple<IGuiRuneMark, IRuneLink> link = this.getHoveredOnLink(mouseX, mouseY);
 
-						if(link != null) {
-							Slot linkedSlot = this.inventorySlots.getSlot(link.getOutputRune() + this.tile.getChainStart());
+			if(link != null) {
+				IRuneGui secondaryRuneGui = this.openRuneGuis.get(RuneMenuType.SECONDARY);
+				IGuiRuneMark secondaryGuiRuneMark = null;
 
-							if(linkedSlot instanceof SlotRune && linkedSlot.isEnabled()) {
-								this.drawDropdownMenu(linkedSlot);
-
-								int sy = this.guiTop + linkedSlot.yPos + 20;
-
-								int cx = this.guiLeft + linkedSlot.xPos - 3 + 12;
-								int cy = sy + link.getOutput() * 18 + 11;
-
-								GlStateManager.pushMatrix();
-								GlStateManager.translate(-this.guiLeft, -this.guiTop, 0);
-
-								primaryRuneGui.drawMarkConnection(mark, cx, cy, true);
-
-								GlStateManager.popMatrix();
-							}
+				if(secondaryRuneGui != null) {
+					for(IGuiRuneMark mark : secondaryRuneGui.getInteractableOutputMarks()) {
+						if(mark.getMarkIndex() == link.getSecond().getOutput()) {
+							secondaryGuiRuneMark = mark;
 						}
 					}
+				}
+
+				Slot linkedSlot = this.inventorySlots.getSlot(link.getSecond().getOutputRune() + this.tile.getChainStart());
+
+				if(this.swapAnimationTicks == 0 && linkedSlot instanceof SlotRune && linkedSlot.isEnabled()) {
+					this.drawDropdownMenu(linkedSlot);
+
+					int sy = this.guiTop + linkedSlot.yPos + 20;
+
+					int cx = this.guiLeft + linkedSlot.xPos - 3 + 12;
+					int cy = sy + link.getSecond().getOutput() * 18 + 11;
+
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(-this.guiLeft, -this.guiTop, 0);
+
+					primaryRuneGui.drawMarkConnection(link.getFirst(), cx, cy, true);
+
+					if(secondaryGuiRuneMark != null) {
+						secondaryRuneGui.drawMarkConnection(secondaryGuiRuneMark, cx, cy, true);
+					}
+
+					GlStateManager.popMatrix();
+				} else if(secondaryGuiRuneMark != null) {
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(-this.guiLeft, -this.guiTop, 0);
+
+					primaryRuneGui.drawMarkConnection(link.getFirst(), secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), true);
+
+					GlStateManager.popMatrix();
 				}
 			}
 		}

@@ -71,7 +71,9 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected IRuneContainerContext context;
 	protected IRuneContainer container;
 
-	protected List<Mark> interactableMarks = new ArrayList<>();
+	protected List<Mark> interactableInputMarks = new ArrayList<>();
+	protected List<Mark> interactableOutputMarks = new ArrayList<>();
+
 	protected int updateCounter;
 	protected int xSize = 166;
 	protected int ySize = 216;
@@ -92,7 +94,13 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		int x = 4;
 		for(int i = 0; i < config.getInputs().size(); i++) {
-			this.interactableMarks.add(new Mark(this, i, x, 50, 16, 16));
+			this.interactableInputMarks.add(new Mark(this, i, x, 50, 16, 16));
+			x += 18;
+		}
+
+		x = 4;
+		for(int i = 0; i < config.getOutputs().size(); i++) {
+			this.interactableOutputMarks.add(new Mark(this, i, x, 50 + 20, 16, 16));
 			x += 18;
 		}
 	}
@@ -167,8 +175,13 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	@Override
-	public Collection<Mark> getInteractableMarks() {
-		return this.interactableMarks;
+	public Collection<Mark> getInteractableInputMarks() {
+		return this.interactableInputMarks;
+	}
+
+	@Override
+	public Collection<Mark> getInteractableOutputMarks() {
+		return this.interactableOutputMarks;
 	}
 
 	@Override
@@ -235,9 +248,15 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		GlStateManager.color(1, 1, 1, 1);
 		this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
 
-		for(Mark mark : this.interactableMarks) {
+		for(Mark mark : this.interactableInputMarks) {
 			Gui.drawRect(mark.getCenterX() - mark.w / 2, mark.getCenterY() - mark.h / 2, mark.getCenterX() + mark.w / 2, mark.getCenterY() + mark.h / 2, 0xFFFF0000);
 		}
+		
+		for(Mark mark : this.interactableOutputMarks) {
+			Gui.drawRect(mark.getCenterX() - mark.w / 2, mark.getCenterY() - mark.h / 2, mark.getCenterX() + mark.w / 2, mark.getCenterY() + mark.h / 2, 0xFF0000FF);
+		}
+
+		GlStateManager.color(1, 1, 1, 1);
 	}
 
 	protected void drawMenu() {
