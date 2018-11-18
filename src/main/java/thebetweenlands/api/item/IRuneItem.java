@@ -9,7 +9,7 @@ import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 public interface IRuneItem {
 	//TODO Use capability instead?
 
-	public INodeBlueprint<?, RuneExecutionContext> getRuneBlueprint(ItemStack stack, NBTTagCompound data /*TODO From rune container*/);
+	//TODO Remove from this interface
 
 	public IRuneMenuFactory getRuneMenuFactory(ItemStack stack);
 }

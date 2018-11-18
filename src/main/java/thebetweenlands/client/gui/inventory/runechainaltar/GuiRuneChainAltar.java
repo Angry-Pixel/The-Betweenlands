@@ -27,6 +27,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.IRuneItem;
+import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.gui.IGuiRuneMark;
 import thebetweenlands.api.rune.gui.IRuneChainAltarGui;
 import thebetweenlands.api.rune.gui.IRuneContainer;
@@ -350,6 +351,8 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 		RenderHelper.disableStandardItemLighting();
 
+		this.drawLinkingDropdownMenus(mouseX, mouseY);
+
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(-this.guiLeft, -this.guiTop, 0);
 
@@ -377,6 +380,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
 		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
+
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.enableBlend();
@@ -682,6 +686,81 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		for(IRuneGui gui : this.openRuneGuis.values()) {
 			gui.onParentSizeSet(width, height);
 		}
+	}
+
+	protected void drawLinkingDropdownMenus(int mouseX, int mouseY) {
+		this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
+
+		if(this.draggingMark != null) {
+			for(Slot slot : this.container.inventorySlots) {
+				if(slot instanceof SlotRune) {
+					SlotRune runeSlot = (SlotRune) slot;
+
+					if(runeSlot.isEnabled()) {
+						IRuneContainer container = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
+
+						if(container != null) {
+							INodeConfiguration configuration = container.getConfiguration();
+							int outputs = configuration.getOutputs().size();
+
+							if(outputs > 0) {
+								int sx = runeSlot.xPos - 3;
+								int sy = runeSlot.yPos + 20;
+
+								int minX = this.guiLeft + sx;
+								int minY = this.guiTop + sy - 22;
+								int maxX = this.guiLeft + sx + 21;
+								int maxY = this.guiTop + sy + outputs * 16 + 6;
+
+								if(mouseX >= minX && mouseX <= maxX && mouseY >= minY && mouseY <= maxY) {
+									this.drawDropdownMenu(runeSlot);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	protected void drawDropdownMenu(SlotRune slot) {
+		IRuneContainer container = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
+
+		if(container != null) {
+			INodeConfiguration configuration = container.getConfiguration();
+			int outputs = configuration.getOutputs().size();
+
+			if(outputs > 0) {
+				int sx = slot.xPos - 3;
+				int sy = slot.yPos + 20;
+
+				this.zLevel = 270;
+				this.drawDrowndownMenuBackground(sx, sy, outputs * 16);
+				this.zLevel = 0;
+			}
+		}
+	}
+
+	protected void drawDrowndownMenuBackground(int x, int y, int height) {
+		//Top left corner
+		this.drawTexturedModalRect512(x, y, 388, 94, 3, 3);
+		//Top bar
+		this.drawTexturedModalRect512(x + 3, y, 391, 94, 16, 3);
+		//Top right corner
+		this.drawTexturedModalRect512(x + 3 + 16, y, 407, 94, 3, 3);
+		//Right bar
+		this.drawTexturedModalRect512(x + 3 + 16, y + 3, 407, 97, 3, height);
+		//Bottom right corner
+		this.drawTexturedModalRect512(x + 3 + 16, y + 3 + height, 407, 313, 3, 3);
+		//Bottom bar
+		this.drawTexturedModalRect512(x + 3, y + 3 + height, 391, 313, 16, 3);
+		//Bottom left corner
+		this.drawTexturedModalRect512(x, y + 3 + height, 388, 313, 3, 3);
+		//Left bar
+		this.drawTexturedModalRect512(x, y + 3, 388, 97, 3, height);
+
+		//Background
+		this.drawTexturedModalRect512(x + 3, y + 3, 391, 97, 16, height);
 	}
 
 	protected void drawSlotCoverStone(float x, float y) {

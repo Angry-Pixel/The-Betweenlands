@@ -16,7 +16,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import thebetweenlands.api.item.IRuneItem;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.gui.IGuiRuneMark;
@@ -89,10 +88,8 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.height = height;
 
 		//TODO Implement this proper
-		ItemStack stack = context.getRuneItemStack();
-		INodeBlueprint<?, RuneExecutionContext> bp = ((IRuneItem)stack.getItem()).getRuneBlueprint(stack, null);
-
-		INodeConfiguration config = bp.getConfigurations().iterator().next();
+		INodeConfiguration config = container.getConfiguration();
+		
 		int x = 4;
 		for(int i = 0; i < config.getInputs().size(); i++) {
 			this.interactableMarks.add(new Mark(this, i, x, 50, 16, 16));
@@ -226,7 +223,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		//TODO Remove all this and implement it properly with multiple pages etc.
 
-		INodeBlueprint<?, RuneExecutionContext> bp = ((IRuneItem)stack.getItem()).getRuneBlueprint(stack, null);
+		INodeBlueprint<?, RuneExecutionContext> bp = this.container.getBlueprint();
 
 		this.fontRenderer.drawString("Configs: " + bp.getConfigurations().size(), x + 4, y + 22, 0xFF404040);
 		int i = 1;

@@ -2,7 +2,6 @@ package thebetweenlands.common.item.herblore;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import thebetweenlands.api.item.IRuneItem;
 import thebetweenlands.api.rune.gui.IRuneContainer;
 import thebetweenlands.api.rune.gui.IRuneGui;
@@ -25,11 +24,6 @@ public class ItemRune extends Item implements IRuneItem {
 	}
 
 	@Override
-	public AbstractRune.Blueprint<?> getRuneBlueprint(ItemStack stack, NBTTagCompound data) {
-		return this.blueprint;
-	}
-
-	@Override
 	public IRuneMenuFactory getRuneMenuFactory(ItemStack stack) {
 		return this.factory;
 	}
@@ -43,7 +37,7 @@ public class ItemRune extends Item implements IRuneItem {
 
 		@Override
 		public IRuneContainer createContainer() {
-			return new DefaultRuneContainer(this.item.getRegistryName());
+			return new DefaultRuneContainer(this.item.getRegistryName()).setBlueprint(this.item.blueprint);
 		}
 
 		@Override

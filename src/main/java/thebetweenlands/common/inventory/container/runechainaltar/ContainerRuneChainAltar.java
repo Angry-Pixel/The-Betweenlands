@@ -177,11 +177,8 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 	@Nullable
 	public INodeBlueprint<?, RuneExecutionContext> getRuneBlueprint(int slotIndex) {
-		ItemStack stack = this.inventorySlots.get(slotIndex).getStack();
-		if(!stack.isEmpty() && stack.getItem() instanceof IRuneItem) {
-			return ((IRuneItem) stack.getItem()).getRuneBlueprint(stack, null /*TODO*/);
-		}
-		return null;
+		IRuneContainer container = this.getRuneContainer(slotIndex - this.altar.getChainStart());
+		return container != null ? container.getBlueprint() : null;
 	}
 
 	@Override
