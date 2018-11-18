@@ -42,7 +42,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		@Override
 		public boolean isInside(int mouseX, int mouseY) {
-			return mouseX >= this.gui.getMinX() + this.x && mouseX <= this.gui.getMinX() + this.x + this.w && mouseY >= this.gui.getMinY() + this.y && mouseY <= this.gui.getMinY() + this.y + this.h;
+			return mouseX >= this.gui.getMinX() + this.x && mouseX < this.gui.getMinX() + this.x + this.w && mouseY >= this.gui.getMinY() + this.y && mouseY < this.gui.getMinY() + this.y + this.h;
 		}
 
 		@Override

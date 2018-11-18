@@ -158,6 +158,8 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 		IRuneGui currentGui = this.openRuneGuis.get(RuneMenuType.SECONDARY);
 
+		boolean closeCurrentGui = false;
+
 		if(hoveredLink != null) {
 			int targetRune = hoveredLink.getSecond().getOutputRune();
 			ItemStack stack = this.container.getRuneItemStack(targetRune);
@@ -179,15 +181,17 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 						this.openRuneGuis.put(RuneMenuType.SECONDARY, newGui);
 					}
-				} else if(currentGui != null) {
-					currentGui.close();
-					this.openRuneGuis.remove(RuneMenuType.SECONDARY);
+				} else {
+					closeCurrentGui = true;
 				}
-			} else if(currentGui != null) {
-				currentGui.close();
-				this.openRuneGuis.remove(RuneMenuType.SECONDARY);
+			} else {
+				closeCurrentGui = true;
 			}
-		} else if(currentGui != null) {
+		} else {
+			closeCurrentGui = true;
+		}
+
+		if(closeCurrentGui && currentGui != null) {
 			currentGui.close();
 			this.openRuneGuis.remove(RuneMenuType.SECONDARY);
 		}
@@ -235,6 +239,21 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		if (time < 1) return change/2*time*time*time + start;
 		time -= 2;
 		return change/2*(time*time*time + 2) + start;
+	}
+
+	@Override
+	protected boolean hasClickedOutside(int mouseX, int mouseY, int guiLeft, int guiTop) {
+		if(mouseX >= this.guiLeft - 15 && mouseX < this.guiLeft + this.xSize + 15 && mouseY >= this.guiTop && mouseY < this.guiTop + this.ySize) {
+			return false;
+		}
+
+		for(IRuneGui gui : this.openRuneGuis.values()) {
+			if(mouseX >= gui.getMinX() && mouseX < gui.getMaxX() && mouseY >= gui.getMinY() && mouseY < gui.getMaxY()) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	@Override
@@ -486,7 +505,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 			SlotRune slot = (SlotRune) this.inventorySlots.getSlot(slotIndex);
 
-			if(slot.getHasStack() && x >= this.guiLeft + slot.xPos - 4 && x <= this.guiLeft + slot.xPos + 16 + 3 && y >= this.guiTop + slot.yPos - 10 && y <= this.guiTop + slot.yPos + 16 + 10) {
+			if(slot.getHasStack() && x >= this.guiLeft + slot.xPos - 4 && x <= this.guiLeft + slot.xPos + 16 + 3 && y >= this.guiTop + slot.yPos - 10 && y < this.guiTop + slot.yPos + 16 + 10) {
 				if(this.container.getShiftHoleSlot(slotIndex, false) >= 0) {
 					if(i >= ContainerRuneChainAltar.SLOTS_PER_PAGE / 2) {
 						this.drawShiftLeftArrow(this.guiLeft + slot.xPos + 2, this.guiTop + slot.yPos - 9, x, y, this.setSlabTransform());
@@ -544,7 +563,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 						SlotRune slot = (SlotRune) this.inventorySlots.getSlot(slotIndex);
 
-						if(slot.getHasStack() && mouseX >= this.guiLeft + slot.xPos - 4 && mouseX <= this.guiLeft + slot.xPos + 16 + 3 && mouseY >= this.guiTop + slot.yPos - 10 && mouseY <= this.guiTop + slot.yPos + 16 + 10) {
+						if(slot.getHasStack() && mouseX >= this.guiLeft + slot.xPos - 4 && mouseX < this.guiLeft + slot.xPos + 16 + 3 && mouseY >= this.guiTop + slot.yPos - 10 && mouseY < this.guiTop + slot.yPos + 16 + 10) {
 							if(this.container.getShiftHoleSlot(slotIndex, false) >= 0) {
 								int relX = mouseX - (this.guiLeft + slot.xPos + 2);
 								int relY = mouseY - (this.guiTop + slot.yPos - 9);
@@ -842,7 +861,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		int maxX = this.guiLeft + sx + 21;
 		int maxY = this.guiTop + sy + outputs * 18 + 6;
 
-		return mouseX >= minX && mouseX <= maxX && mouseY >= minY && mouseY <= maxY;
+		return mouseX >= minX && mouseX < maxX && mouseY >= minY && mouseY < maxY;
 	}
 
 	protected int getLinkingDropdownMenuMarkIndex(int mouseX, int mouseY) {
@@ -858,7 +877,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 				int yOff = 0;
 				for(int i = 0; i < outputs; i++) {
-					if(mouseY >= this.guiTop + sy + 3 + yOff && mouseY <= this.guiTop + sy + 3 + yOff + 16) {
+					if(mouseY >= this.guiTop + sy + 3 + yOff && mouseY < this.guiTop + sy + 3 + yOff + 16) {
 						return i;
 					}
 					yOff += 18;
