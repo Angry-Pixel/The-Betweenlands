@@ -132,7 +132,7 @@ public class CommonProxy implements IGuiHandler {
 
 		case GUI_RUNE_CHAIN_ALTAR:
 			if (tile instanceof TileEntityRuneChainAltar) {
-				return new ContainerRuneChainAltar(player.inventory, (TileEntityRuneChainAltar) tile);
+				return new ContainerRuneChainAltar(player, (TileEntityRuneChainAltar) tile);
 			}
 			break;
 			

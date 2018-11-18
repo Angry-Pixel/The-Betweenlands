@@ -1,6 +1,8 @@
 package thebetweenlands.client.gui.inventory;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.EnumMap;
 import java.util.Random;
 
 import org.lwjgl.input.Mouse;
@@ -24,13 +26,18 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.item.IRuneItem;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
+import thebetweenlands.api.rune.gui.IRuneChainAltarGui;
+import thebetweenlands.api.rune.gui.IRuneContainer;
+import thebetweenlands.api.rune.gui.IRuneGui;
+import thebetweenlands.api.rune.gui.RuneMenuType;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.ContainerRuneChainAltar;
+import thebetweenlands.common.inventory.container.ContainerRuneChainAltarGui;
 import thebetweenlands.common.inventory.slot.SlotRune;
-import thebetweenlands.common.item.herblore.ItemRune;
 import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarPage;
 import thebetweenlands.common.network.serverbound.MessageShiftRuneChainAltarSlot;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -38,7 +45,7 @@ import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 import thebetweenlands.util.ColoredItemRenderer;
 
 @SideOnly(Side.CLIENT)
-public class GuiRuneChainAltar extends GuiContainer {
+public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGui {
 	private static final Random rand = new Random();
 
 	private static final ResourceLocation GUI_RUNE_CHAIN_ALTAR = new ResourceLocation("thebetweenlands:textures/gui/rune_chain_altar.png");
@@ -56,6 +63,8 @@ public class GuiRuneChainAltar extends GuiContainer {
 	private int updateCounter;
 
 	private boolean drawHoveringSlots = false;
+
+	private EnumMap<RuneMenuType, IRuneGui> openRuneGuis = new EnumMap<>(RuneMenuType.class); //TODO
 
 	private static final int[][] CORD_PIECE_SLOT_UVs = new int[][] {
 		{10, 251}, {36, 266}, {60, 261}, {84, 260}, {108, 260}, {132, 261}, {156, 266},
@@ -76,13 +85,48 @@ public class GuiRuneChainAltar extends GuiContainer {
 	};
 
 	public GuiRuneChainAltar(EntityPlayer player, TileEntityRuneChainAltar tile) {
-		super(new ContainerRuneChainAltar(player.inventory, tile));
+		super(new ContainerRuneChainAltarGui(player, tile));
+		((ContainerRuneChainAltarGui) this.inventorySlots).setGui(this);
 		this.container = (ContainerRuneChainAltar) this.inventorySlots;
 		this.tile = tile;
 		this.allowUserInput = false;
 		this.xSize = 176;
 		this.ySize = 224;
 		this.player = player;
+	}
+
+	public void onSetSelectedRune(int runeIndex) {
+		if(runeIndex < 0) {
+			for(IRuneGui gui : this.openRuneGuis.values()) {
+				gui.close();
+			}
+
+			this.openRuneGuis.clear();
+		} else {
+			IRuneGui currentGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
+
+			ItemStack stack = this.container.getRuneItemStack(runeIndex);
+
+			if(!stack.isEmpty() && stack.getItem() instanceof IRuneItem) {
+				IRuneContainer container = this.container.getRuneContainer(runeIndex);
+
+				if(currentGui == null || currentGui.getContainer() != container) {
+					if(currentGui != null) {
+						currentGui.close();
+					}
+
+					IRuneItem runeItem = (IRuneItem) stack.getItem();
+
+					IRuneGui newGui = runeItem.getRuneMenuFactory(stack).createGui(RuneMenuType.PRIMARY);
+
+					newGui.init(this.container.getRuneContainerContext(runeIndex), container);
+
+					this.openRuneGuis.put(RuneMenuType.PRIMARY, newGui);
+				}
+			} else if(currentGui != null) {
+				currentGui.close();
+			}
+		}
 	}
 
 	protected float setSlabTransform() {
@@ -421,7 +465,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 							int relX = mouseX - (this.guiLeft + slot.xPos + 2);
 							int relY = mouseY - (this.guiTop + slot.yPos - 9);
 							if(relX >= 0 && relX <= 13 && relY >= 0 && relY <= 7) {
-								this.container.shift(slotIndex, false);
+								this.container.shiftSlot(slotIndex, false);
 								TheBetweenlands.networkWrapper.sendToServer(new MessageShiftRuneChainAltarSlot(slotIndex, false));
 								this.mc.getSoundHandler().playSound(PositionedSoundRecord.getRecord(SoundRegistry.RUNE_SLOT_SHIFT, rand.nextFloat() * 0.066F + 0.933F, 1.0F));
 								return;
@@ -432,7 +476,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 							int relX = mouseX - (this.guiLeft + slot.xPos + 2);
 							int relY = mouseY - (this.guiTop + slot.yPos + 9 + 9);
 							if(relX >= 0 && relX <= 13 && relY >= 0 && relY <= 7) {
-								this.container.shift(slotIndex, true);
+								this.container.shiftSlot(slotIndex, true);
 								TheBetweenlands.networkWrapper.sendToServer(new MessageShiftRuneChainAltarSlot(slotIndex, true));
 								this.mc.getSoundHandler().playSound(PositionedSoundRecord.getRecord(SoundRegistry.RUNE_SLOT_SHIFT, rand.nextFloat() * 0.066F + 0.933F, 1.0F));
 								return;
@@ -516,7 +560,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 
 				slotRune.prevHoverTicks = slotRune.hoverTicks;
 
-				if(slotRune.getSlotIndex() == this.container.getSelectedSlot()) {
+				if(slotRune.slotNumber == this.container.getSelectedSlot()) {
 					if(slotRune.hoverTicks < 7) {
 						slotRune.hoverTicks++;
 					} else {
@@ -533,7 +577,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 		}
 	}
 
-	//TODO
+	//TODO Remove all this and replace with proper IRuneContainer and IRuneGui
 	protected void drawSubMenuBackground(int x, int runeSlot, ItemStack stack) {
 		int width = 166;
 		int height = 216;
@@ -564,7 +608,7 @@ public class GuiRuneChainAltar extends GuiContainer {
 
 		this.fontRenderer.drawString(TextFormatting.UNDERLINE + stack.getDisplayName(), x + 24, y + 8, 0xFF404040);
 
-		INodeBlueprint<?, RuneExecutionContext> bp = ((ItemRune)stack.getItem()).getRuneBlueprint(stack);
+		INodeBlueprint<?, RuneExecutionContext> bp = ((IRuneItem)stack.getItem()).getRuneBlueprint(stack, null);
 
 		this.fontRenderer.drawString("Configs: " + bp.getConfigurations().size(), x + 4, y + 22, 0xFF404040);
 		int i = 1;
@@ -789,5 +833,10 @@ public class GuiRuneChainAltar extends GuiContainer {
 		bufferbuilder.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(minU + width) * scale), (double)((float)(minV + 0) * scale)).endVertex();
 		bufferbuilder.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(minU + 0) * scale), (double)((float)(minV + 0) * scale)).endVertex();
 		tessellator.draw();
+	}
+
+	@Override
+	public Collection<IRuneGui> getOpenRuneGuis() {
+		return this.openRuneGuis.values();
 	}
 }

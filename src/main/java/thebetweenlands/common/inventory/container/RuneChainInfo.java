@@ -1,0 +1,136 @@
+package thebetweenlands.common.inventory.container;
+
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.nbt.NBTTagCompound;
+import thebetweenlands.api.rune.gui.IRuneLink;
+
+public class RuneChainInfo {
+	public static final class Link implements IRuneLink {
+		private int outputRune;
+		private int output;
+
+		private Link(int outputRune, int output) {
+			this.outputRune = outputRune;
+			this.output = output;
+		}
+
+		@Override
+		public int getOutputRune() {
+			return this.outputRune;
+		}
+
+		@Override
+		public int getOutput() {
+			return this.output;
+		}
+	}
+
+	private final Map<Integer, Map<Integer, Link>> links = new HashMap<>();
+	private final Map<Integer, NBTTagCompound> containerData = new HashMap<>();
+
+	public Collection<Integer> getLinkedInputs(int runeIndex) {
+		Set<Integer> linkedSlots = new HashSet<>();
+		Map<Integer, Link> links = this.links.get(runeIndex);
+		if(links != null) {
+			for(Entry<Integer, Link> link : links.entrySet()) {
+				linkedSlots.add(link.getKey());
+			}
+		}
+		return linkedSlots;
+	}
+
+	@Nullable
+	public Link getLink(int runeIndex, int input) {
+		if(input >= 0) {
+			Map<Integer, Link> links = this.links.get(runeIndex);
+			if(links != null) {
+				return links.get(input);
+			}
+		}
+		return null;
+	}
+
+	public boolean link(int runeIndex, int input, int outputRuneIndex, int output) {
+		if(runeIndex <= outputRuneIndex) {
+			return false;
+		}
+
+		Map<Integer, Link> links = this.links.get(runeIndex);
+
+		if(links == null) {
+			this.links.put(runeIndex, links = new HashMap<>());
+		}
+
+		links.put(input, new Link(outputRuneIndex, output));
+
+		return true;
+	}
+
+	@Nullable
+	public Link unlink(int runeIndex, int input) {
+		Map<Integer, Link> links = this.links.get(runeIndex);
+		if(links != null) {
+			Link removed = links.remove(input);
+			if(links.isEmpty()) {
+				this.links.remove(runeIndex);
+			}
+			return removed;
+		}
+		return null;
+	}
+
+	public void unlinkAll(int runeIndex) {
+		this.links.remove(runeIndex);
+	}
+
+	public void moveAllLinks(int formRune, int toRune) {
+		//First adjust links that point towards the old position
+		for(Entry<Integer, Map<Integer, Link>> entry : this.links.entrySet()) {
+			Map<Integer, Link> links = entry.getValue();
+			for(Link link : links.values()) {
+				if(link.outputRune == formRune) {
+					link.outputRune = toRune;
+				}
+			}
+		}
+
+		Map<Integer, Link> links = this.links.get(formRune);
+
+		if(links != null) {
+			Map<Integer, Link> newPosLinks = this.links.get(toRune);
+			if(newPosLinks == null) {
+				this.links.put(toRune, newPosLinks = new HashMap<>());
+			} else {
+				newPosLinks.clear();
+			}
+
+			newPosLinks.putAll(links);
+
+			this.links.remove(formRune);
+		} else {
+			if(this.links.containsKey(toRune)) {
+				this.links.remove(toRune);
+			}
+		}
+	}
+
+	public NBTTagCompound getContainerData(int runeIndex) {
+		return this.containerData.get(runeIndex);
+	}
+
+	public void setContainerData(int runeIndex, NBTTagCompound nbt) {
+		this.containerData.put(runeIndex, nbt);
+	}
+
+	public void removeContainerData(int runeIndex) {
+		this.containerData.remove(runeIndex);
+	}
+}

@@ -24,7 +24,7 @@ import thebetweenlands.api.rune.INodeBlueprint.INodeIO;
 import thebetweenlands.api.rune.INodeBlueprint.INodeIO.ISchedulerTask;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeCompositionBlueprint;
-import thebetweenlands.api.rune.INodeCompositionBlueprint.ILink;
+import thebetweenlands.api.rune.INodeCompositionBlueprint.INodeLink;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationInput;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
@@ -59,7 +59,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			}
 		}
 
-		private final class SlotLink implements ILink {
+		private final class SlotLink implements INodeLink {
 			private final NodeSlot slot;
 			private final int output;
 
@@ -137,7 +137,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		}
 
 		@Override
-		public ILink getLink(int node, int input) {
+		public INodeLink getLink(int node, int input) {
 			if(input >= 0) {
 				NodeSlot slot = this.slots.get(node);
 				if(input < slot.links.length) {
@@ -279,7 +279,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 					ImmutableList.Builder<IType> inputTypesBuilder = ImmutableList.builder();
 					for(int i = 0; i < inputs.size(); i++) {
 						if(linkedSlots.contains(i)) {
-							ILink link = this.getLink(nodeIndex, i);
+							INodeLink link = this.getLink(nodeIndex, i);
 							inputTypesBuilder.addAll(this.getValidOutputTypes(link.getNode(), link.getOutput()));
 						} else {
 							inputTypesBuilder.add((IType) null);
@@ -318,7 +318,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 					if(i < inputs.size()) {
 						IConfigurationInput input = inputs.get(i);
 
-						ILink link = this.getLink(nodeIndex, i);
+						INodeLink link = this.getLink(nodeIndex, i);
 
 						boolean validOutputConfiguration = false;
 
@@ -775,7 +775,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 								//TODO Is it possible to merge the collections without having to collect all values
 								//and only get the values later on iteratively?
 								List<Object> values = new ArrayList<>();
-								ILink link = this.blueprint.getLink(this.currentNode, inputIndex);
+								INodeLink link = this.blueprint.getLink(this.currentNode, inputIndex);
 								values.addAll(this.sourceBranch.getOutputValues(link.getNode()).get(link.getOutput()));
 								this.inputValues.add(values);
 							}
@@ -849,7 +849,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 
 									// Override values at nodes that produced the input values
 									for(int inputIndex = 0; inputIndex < inputs.size(); inputIndex++) {
-										ILink link = this.blueprint.getLink(this.currentNode, inputIndex);
+										INodeLink link = this.blueprint.getLink(this.currentNode, inputIndex);
 										this.nodeIO.branch.addOverrideOutputValue(link.getNode(), link.getOutput(), Collections.singleton(this.combination[inputIndex]));
 									}
 								} else if(this.nodeIO.branch == this.sourceBranch && !this.sourceBranchAdded) {

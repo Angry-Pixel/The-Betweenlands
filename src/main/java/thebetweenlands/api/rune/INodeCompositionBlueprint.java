@@ -7,7 +7,7 @@ public interface INodeCompositionBlueprint<E> {
 	/**
 	 * This class represents a link to a node's output
 	 */
-	public static interface ILink {
+	public static interface INodeLink {
 		/**
 		 * Returns the output node's index
 		 * @return the output node's index
@@ -43,7 +43,7 @@ public interface INodeCompositionBlueprint<E> {
 	 * If the specified input does not exist or no link is available <b><i>null</b></i> is returned
 	 * @throws IndexOutOfBoundsException if the node index is out of range (node < 0 || node >= {@link #getNodeBlueprints()})
 	 */
-	public ILink getLink(int node, int input);
+	public INodeLink getLink(int node, int input);
 	
 	/**
 	 * Returns a collection of input indices that have links.

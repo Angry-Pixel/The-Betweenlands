@@ -15,20 +15,23 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import thebetweenlands.common.inventory.container.RuneChainLinkInfo;
-import thebetweenlands.common.item.herblore.ItemRune;
+import thebetweenlands.api.item.IRuneItem;
+import thebetweenlands.common.inventory.container.ContainerRuneChainAltar;
+import thebetweenlands.common.inventory.container.RuneChainInfo;
 
 public class TileEntityRuneChainAltar extends TileEntity implements ISidedInventory {
 	private final String name;
-	
+
 	protected NonNullList<ItemStack> inventory;
 	protected final ItemStackHandler inventoryHandler;
 
-	protected RuneChainLinkInfo links = new RuneChainLinkInfo();
-	
+	protected RuneChainInfo links = new RuneChainInfo();
+
 	public static final int OUTPUT_SLOT = 0;
 	public static final int NON_INPUT_SLOTS = 1;
-	
+
+	private ContainerRuneChainAltar openContainer;
+
 	public TileEntityRuneChainAltar() {
 		this(43 /*output + 3 full pages*/, "rune_chain_altar" /*TODO: Proper name??*/);
 	}
@@ -58,6 +61,10 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 			@Override
 			protected void onContentsChanged(int slot) {
 				TileEntityRuneChainAltar.this.markDirty();
+
+				if(openContainer != null) {
+					openContainer.onSlotChanged(slot);
+				}
 			}
 
 			@Override
@@ -70,10 +77,18 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 				return 1;
 			}
 		};
-		
+
 		this.inventoryHandler.setSize(invtSize);
 
 		this.name = name;
+	}
+
+	public void openContainer(ContainerRuneChainAltar container) {
+		this.openContainer = container;
+	}
+
+	public void closeContainer() {
+		this.openContainer = null;
 	}
 
 	@Override
@@ -98,6 +113,9 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) {
+		if(this.openContainer != null && this.openContainer.getPlayer() != player) {
+			return false;
+		}
 		if (this.world.getTileEntity(this.pos) != this) {
 			return false;
 		} else {
@@ -135,8 +153,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 		if(slot == OUTPUT_SLOT) {
 			return false;
 		} else {
-			return slot < this.getSizeInventory() && stack.getItem() instanceof ItemRune
-					/*TODO: Check for something else than ItemRune?*/;
+			return slot < this.getSizeInventory() && stack.getItem() instanceof IRuneItem;
 		}
 	}
 
@@ -237,6 +254,10 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 		nbt.setTag("Inventory", inventoryNbt);
 	}
 
+	public int getChainStart() {
+		return NON_INPUT_SLOTS;
+	}
+
 	public int getChainLength() {
 		for(int i = this.inventory.size() - 1; i >= NON_INPUT_SLOTS; i--) {
 			if(!this.inventory.get(i).isEmpty()) {
@@ -249,8 +270,8 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 	public int getMaxChainLength() {
 		return this.inventory.size() - NON_INPUT_SLOTS;
 	}
-	
-	public RuneChainLinkInfo getLinks() {
+
+	public RuneChainInfo getChainInfo() {
 		return this.links; //TODO Save
 	}
 }

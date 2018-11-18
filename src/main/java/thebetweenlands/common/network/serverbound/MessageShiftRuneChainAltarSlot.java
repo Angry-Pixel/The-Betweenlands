@@ -38,7 +38,7 @@ public class MessageShiftRuneChainAltarSlot extends MessageBase {
 			if(player.openContainer instanceof ContainerRuneChainAltar) {
 				ContainerRuneChainAltar container = (ContainerRuneChainAltar) player.openContainer;
 				if(this.slot < container.inventorySlots.size()) {
-					container.shift(this.slot, this.back);
+					container.shiftSlot(this.slot, this.back);
 				}
 			}
 		}

@@ -26,21 +26,21 @@ public class SlotRune extends Slot {
 
 	@Override
 	public boolean isItemValid(ItemStack stack) {
-		return this.altar.isItemValidForSlot(this.slotNumber, stack) && this.page.isInteractable() && this.getSlotIndex() - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
+		return this.altar.isItemValidForSlot(this.slotNumber, stack) && this.page.isInteractable() && this.slotNumber - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
 	}
 
 	@Override
 	public boolean canTakeStack(EntityPlayer playerIn) {
-		return this.page.isInteractable() && this.getSlotIndex() - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
+		return this.page.isInteractable() && this.slotNumber - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
 	}
 
 	@Override
 	public boolean isHere(IInventory inv, int slotIn) {
-		return super.isHere(inv, slotIn) && this.page.isInteractable() && this.getSlotIndex() - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
+		return super.isHere(inv, slotIn) && this.page.isInteractable() && this.slotNumber - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return this.page.isCurrent() && this.getSlotIndex() - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
+		return this.page.isCurrent() && this.slotNumber - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
 	}
 }
