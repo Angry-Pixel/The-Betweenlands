@@ -336,6 +336,8 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 				}
 			}
 		}
+
+		this.altar.markDirty();
 	}
 
 	@Override
@@ -372,10 +374,13 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 	@Override
 	public boolean link(int runeIndex, int input, int outputRuneIndex, int output) {
+		//TODO Validate that link is possible, especially on server side
+
 		if(this.altar.getChainInfo().link(runeIndex, input, outputRuneIndex, output)) {
 			for(RuneContainerEntry entry : this.runeContainers.values()) {
 				entry.container.onMarkLinked(input, this.altar.getChainInfo().getLink(runeIndex, input));
 			}
+			this.altar.markDirty();
 			return true;
 		}
 		return false;
@@ -388,6 +393,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 			for(RuneContainerEntry entry : this.runeContainers.values()) {
 				entry.container.onMarkUnlinked(input, unlinked);
 			}
+			this.altar.markDirty();
 		}
 		return unlinked;
 	}
@@ -405,6 +411,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 				entry.container.onMarkUnlinked(unlinked.getKey(), unlinked.getValue());
 			}
 		}
+		this.altar.markDirty();
 	}
 
 	@Override
@@ -413,6 +420,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 		for(RuneContainerEntry entry : this.runeContainers.values()) {
 			entry.container.onLinksMoved(fromRuneIndex, toRuneIndex);
 		}
+		this.altar.markDirty();
 	}
 
 	@Override
@@ -502,6 +510,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 				NBTTagCompound nbt = info.getContainerData(entry.runeIndex);
 				if(nbt == null) {
 					info.setContainerData(entry.runeIndex, nbt = new NBTTagCompound());
+					ContainerRuneChainAltar.this.altar.markDirty();
 				}
 				return nbt;
 			}
@@ -509,6 +518,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 			@Override
 			public void setData(NBTTagCompound nbt) {
 				ContainerRuneChainAltar.this.altar.getChainInfo().setContainerData(entry.runeIndex, nbt);
+				ContainerRuneChainAltar.this.altar.markDirty();
 			}
 
 			@Override

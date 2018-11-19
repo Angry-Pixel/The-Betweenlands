@@ -41,8 +41,10 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltarGui;
 import thebetweenlands.common.inventory.slot.SlotRune;
+import thebetweenlands.common.network.serverbound.MessageLinkRuneChainAltarRune;
 import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarPage;
 import thebetweenlands.common.network.serverbound.MessageShiftRuneChainAltarSlot;
+import thebetweenlands.common.network.serverbound.MessageUnlinkRuneChainAltarRune;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 import thebetweenlands.util.ColoredItemRenderer;
@@ -617,10 +619,11 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 							}
 						} else {
 							if(!primaryRuneGui.onStartMarkUnlinking(mark, mouseX, mouseY)) {
-								//TODO Send message to link on server side too
-								System.out.println("Unlinking: " + primaryRuneGui.getContainer().getContext().getRuneIndex() + "#" + mark.getMarkIndex());
-
-								this.container.unlink(primaryRuneGui.getContainer().getContext().getRuneIndex(), mark.getMarkIndex());
+								IRuneLink unlinked = this.container.unlink(primaryRuneGui.getContainer().getContext().getRuneIndex(), mark.getMarkIndex());
+								if(unlinked != null) {
+									//Send message to link on server side too
+									TheBetweenlands.networkWrapper.sendToServer(new MessageUnlinkRuneChainAltarRune(primaryRuneGui.getContainer().getContext().getRuneIndex(), mark.getMarkIndex()));
+								}
 								break;
 							}
 						}
@@ -645,16 +648,16 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 				int linkingMarkIndex = this.getLinkingDropdownMenuMarkIndex(mouseX, mouseY);
 
 				if(linkingMarkIndex >= 0) {
-					//TODO Send message to link on server side too
-					System.out.println("Linking: " + this.container.getSelectedRuneIndex() + "#" + this.draggingMark.getMarkIndex() + " to " + (this.linkingDropdownMenuSlot - this.tile.getChainStart()) + "#" + linkingMarkIndex);
+					if(this.container.link(this.container.getSelectedRuneIndex(), this.draggingMark.getMarkIndex(), this.linkingDropdownMenuSlot - this.tile.getChainStart(), linkingMarkIndex)) {
+						//Send message to link on server side too
+						TheBetweenlands.networkWrapper.sendToServer(new MessageLinkRuneChainAltarRune(this.container.getSelectedRuneIndex(), this.draggingMark.getMarkIndex(), this.linkingDropdownMenuSlot - this.tile.getChainStart(), linkingMarkIndex));
 
-					this.container.link(this.container.getSelectedRuneIndex(), this.draggingMark.getMarkIndex(), this.linkingDropdownMenuSlot - this.tile.getChainStart(), linkingMarkIndex);
-
-					IRuneLink link = this.container.getLink(this.container.getSelectedRuneIndex(), this.draggingMark.getMarkIndex());
-					if(link != null) {
-						this.recentlyLinked = new Tuple<>(this.draggingMark, link);
-					} else {
-						this.recentlyLinked = null;
+						IRuneLink link = this.container.getLink(this.container.getSelectedRuneIndex(), this.draggingMark.getMarkIndex());
+						if(link != null) {
+							this.recentlyLinked = new Tuple<>(this.draggingMark, link);
+						} else {
+							this.recentlyLinked = null;
+						}
 					}
 				}
 			}
