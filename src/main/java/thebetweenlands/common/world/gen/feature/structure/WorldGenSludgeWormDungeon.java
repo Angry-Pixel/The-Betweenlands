@@ -154,10 +154,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				for(int xx = 0; xx <= 28; xx++) {
 					for(int zz = 0; zz <= 28; zz++) {
 						for(int yUp = yy - 2; yUp < yy + 6; yUp++) {
-							world.setBlockState(pos.add(xx, yUp, 0), getMudBricksForLevel(rand, level, yUp));
-							world.setBlockState(pos.add(xx, yUp, 28), getMudBricksForLevel(rand, level, yUp));
-							world.setBlockState(pos.add(0, yUp, zz), getMudBricksForLevel(rand, level, yUp));
-							world.setBlockState(pos.add(28, yUp, zz), getMudBricksForLevel(rand, level, yUp));
+							world.setBlockState(pos.add(xx, yUp, 0), getMudBricksForLevel(rand, level, yUp), 2);
+							world.setBlockState(pos.add(xx, yUp, 28), getMudBricksForLevel(rand, level, yUp), 2);
+							world.setBlockState(pos.add(0, yUp, zz), getMudBricksForLevel(rand, level, yUp), 2);
+							world.setBlockState(pos.add(28, yUp, zz), getMudBricksForLevel(rand, level, yUp), 2);
 							if (!isSolidStructureBlock(world.getBlockState(pos.add(xx, yUp, zz))) && !(world.getBlockState(pos.add(xx, yUp, zz)) instanceof BlockStairs))
 								world.setBlockToAir(pos.add(xx, yUp, zz));
 						}
@@ -173,30 +173,30 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			if (level <= 7) {
 				// create STAIRS
 				if (level == 1 || level == 3 || level == 5 || level == 7) {
-					world.setBlockState(pos.add(1, yy + 1, 1), getMudBricksForLevel(rand, level, 1));
-					world.setBlockState(pos.add(1, yy + 2, 1), getMudBricksForLevel(rand, level, 2));
-					world.setBlockState(pos.add(1, yy + 3, 1), getMudBricksForLevel(rand, level, 3));
+					world.setBlockState(pos.add(1, yy + 1, 1), getMudBricksForLevel(rand, level, 1), 2);
+					world.setBlockState(pos.add(1, yy + 2, 1), getMudBricksForLevel(rand, level, 2), 2);
+					world.setBlockState(pos.add(1, yy + 3, 1), getMudBricksForLevel(rand, level, 3), 2);
 					world.setBlockState(pos.add(1, yy + 4, 1), getStairsForLevel(rand, level, EnumFacing.NORTH, EnumHalf.BOTTOM), 2);
 					if (world.isAirBlock(pos.add(1, yy + 1, 2)))
-						world.setBlockState(pos.add(1, yy + 1, 2), getMudBricksForLevel(rand, level, 1));
+						world.setBlockState(pos.add(1, yy + 1, 2), getMudBricksForLevel(rand, level, 1), 2);
 					placeRuneCombination(world, pos.add(0, yy + 2, 0), level, rand);
 					//world.setBlockState(pos.add(1, yy + 2, 2), getMudBricksForLevel(rand, level, 2));//this is the combo I think
 					world.setBlockState(pos.add(1, yy + 3, 2), getStairsForLevel(rand, level, EnumFacing.NORTH, EnumHalf.BOTTOM), 2);
 					world.setBlockState(pos.add(1, yy + 2, 3), getStairsForLevel(rand, level, EnumFacing.WEST, EnumHalf.BOTTOM), 2);
-					world.setBlockState(pos.add(1, yy + 1, 3), getMudBricksForLevel(rand, level, 1));
+					world.setBlockState(pos.add(1, yy + 1, 3), getMudBricksForLevel(rand, level, 1), 2);
 					world.setBlockState(pos.add(2, yy + 1, 3), getStairsForLevel(rand, level, EnumFacing.WEST, EnumHalf.BOTTOM), 2);
 				} else {
-					world.setBlockState(pos.add(27, yy + 1, 27), getMudBricksForLevel(rand, level, 1));
-					world.setBlockState(pos.add(27, yy + 2, 27), getMudBricksForLevel(rand, level, 2));
-					world.setBlockState(pos.add(27, yy + 3, 27), getMudBricksForLevel(rand, level, 3));
+					world.setBlockState(pos.add(27, yy + 1, 27), getMudBricksForLevel(rand, level, 1), 2);
+					world.setBlockState(pos.add(27, yy + 2, 27), getMudBricksForLevel(rand, level, 2), 2);
+					world.setBlockState(pos.add(27, yy + 3, 27), getMudBricksForLevel(rand, level, 3), 2);
 					world.setBlockState(pos.add(27, yy + 4, 27), getStairsForLevel(rand, level, EnumFacing.SOUTH, EnumHalf.BOTTOM), 2);
 					if (world.isAirBlock(pos.add(27, yy + 1, 26)))
-						world.setBlockState(pos.add(27, yy + 1, 26), getMudBricksForLevel(rand, level, 1));
+						world.setBlockState(pos.add(27, yy + 1, 26), getMudBricksForLevel(rand, level, 1), 2);
 					placeRuneCombination(world, pos.add(0, yy + 2, 0), level, rand);
 					//world.setBlockState(pos.add(27, yy + 2, 26), getMudBricksForLevel(rand, level, 2));//this is the combo I think
 					world.setBlockState(pos.add(27, yy + 3, 26), getStairsForLevel(rand, level, EnumFacing.SOUTH, EnumHalf.BOTTOM), 2);
 					world.setBlockState(pos.add(27, yy + 2, 25), getStairsForLevel(rand, level, EnumFacing.EAST, EnumHalf.BOTTOM), 2);
-					world.setBlockState(pos.add(27, yy + 1, 25), getMudBricksForLevel(rand, level, 1));
+					world.setBlockState(pos.add(27, yy + 1, 25), getMudBricksForLevel(rand, level, 1), 2);
 					world.setBlockState(pos.add(26, yy + 1, 25), getStairsForLevel(rand, level, EnumFacing.EAST, EnumHalf.BOTTOM), 2);
 				}
 				if (level != 7)
@@ -240,6 +240,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					break;
 				case 4:
 					buildLevel(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
+					addMazeCellFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
 					addFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
 					break;
 				case 5:
@@ -254,81 +255,95 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private void buildLevel(World world, BlockPos pos, Random rand, int w, int h, int[][] maze, int level, int layer) {
 		for (int i = 0; i < h; i++) {
 			// draw the north edge
-			for (int j = 0; j < w; j++)
+			for (int j = 0; j < w; j++) {
 				if ((maze[j][i] & 1) == 0) {
 					world.setBlockState(pos.add(j * 4, 0, i * 4), (layer == 1 || layer == 2 || layer == 3) ? getPillarsForLevel(rand, level, layer) : getMudBricksForLevel(rand, level, layer), 2);
-					world.setBlockState(pos.add(j * 4 + 1, 0, i * 4), getMudBricksForLevel(rand, level, layer));
-					world.setBlockState(pos.add(j * 4 + 2, 0, i * 4), getMudBricksForLevel(rand, level, layer));
-					world.setBlockState(pos.add(j * 4 + 3, 0, i * 4), getMudBricksForLevel(rand, level, layer));
+					world.setBlockState(pos.add(j * 4 + 1, 0, i * 4), getMudBricksForLevel(rand, level, layer), 2);
+					world.setBlockState(pos.add(j * 4 + 2, 0, i * 4), getMudBricksForLevel(rand, level, layer), 2);
+					world.setBlockState(pos.add(j * 4 + 3, 0, i * 4), getMudBricksForLevel(rand, level, layer), 2);
 				} else
-					world.setBlockState(pos.add(j * 4, 0, i * 4), getMudBricksForLevel(rand, level, layer));
-			// draw the west edge
-			for (int j = 0; j < w; j++)
+					world.setBlockState(pos.add(j * 4, 0, i * 4), getMudBricksForLevel(rand, level, layer), 2);
+			}
+				for (int j = 0; j < w; j++) {
+				// draw the west edge
+
 				if ((maze[j][i] & 8) == 0) {
-					world.setBlockState(pos.add(j * 4, 0, i * 4), (layer == 1 || layer == 2 || layer == 3) ? getPillarsForLevel(rand, level, layer) : getMudBricksForLevel(rand, level, layer));
-					world.setBlockState(pos.add(j * 4, 0, i * 4 + 1), getMudBricksForLevel(rand, level, layer));
-					world.setBlockState(pos.add(j * 4, 0, i * 4 + 2), getMudBricksForLevel(rand, level, layer));
-					world.setBlockState(pos.add(j * 4, 0, i * 4 + 3), getMudBricksForLevel(rand, level, layer));
-				}
-			
-			for (int j = 0; j < w; j++)
-				if ((maze[j][i] & 4) == 0) {
-					world.setBlockState(pos.add(j * 4, 0, i * 4), (layer == 1 || layer == 2 || layer == 3) ? getPillarsForLevel(rand, level, layer) : getMudBricksForLevel(rand, level, layer));
-				}
-			
-			for (int j = 0; j < w; j++)
-				if ((maze[j][i] & 2) == 0) {
-					world.setBlockState(pos.add(j * 4, 0, i * 4), (layer == 1 || layer == 2 || layer == 3) ? getPillarsForLevel(rand, level, layer) : getMudBricksForLevel(rand, level, layer));
+					world.setBlockState(pos.add(j * 4, 0, i * 4), (layer == 1 || layer == 2 || layer == 3) ? getPillarsForLevel(rand, level, layer) : getMudBricksForLevel(rand, level, layer), 2);
+					world.setBlockState(pos.add(j * 4, 0, i * 4 + 1), getMudBricksForLevel(rand, level, layer), 2);
+					world.setBlockState(pos.add(j * 4, 0, i * 4 + 2), getMudBricksForLevel(rand, level, layer), 2);
+					world.setBlockState(pos.add(j * 4, 0, i * 4 + 3), getMudBricksForLevel(rand, level, layer), 2);
 				}
 
-			world.setBlockState(pos.add(w * 4, 0, i * 4), (layer == 1 || layer == 2 || layer == 3) ? getPillarsForLevel(rand, level, layer) : getMudBricksForLevel(rand, level, layer));
-			world.setBlockState(pos.add(w * 4, 0, i * 4 + 1), getMudBricksForLevel(rand, level, layer));
-			world.setBlockState(pos.add(w * 4, 0, i * 4 + 2), getMudBricksForLevel(rand, level, layer));
-			world.setBlockState(pos.add(w * 4, 0, i * 4 + 3), getMudBricksForLevel(rand, level, layer));
+				if ((maze[j][i] & 4) == 0) {
+					world.setBlockState(pos.add(j * 4, 0, i * 4), (layer == 1 || layer == 2 || layer == 3) ? getPillarsForLevel(rand, level, layer) : getMudBricksForLevel(rand, level, layer), 2);
+				}
+
+				if ((maze[j][i] & 2) == 0) {
+					world.setBlockState(pos.add(j * 4, 0, i * 4), (layer == 1 || layer == 2 || layer == 3) ? getPillarsForLevel(rand, level, layer) : getMudBricksForLevel(rand, level, layer), 2);
+				}
+
+				world.setBlockState(pos.add(w * 4, 0, i * 4), (layer == 1 || layer == 2 || layer == 3) ? getPillarsForLevel(rand, level, layer) : getMudBricksForLevel(rand, level, layer), 2);
+				world.setBlockState(pos.add(w * 4, 0, i * 4 + 1), getMudBricksForLevel(rand, level, layer), 2);
+				world.setBlockState(pos.add(w * 4, 0, i * 4 + 2), getMudBricksForLevel(rand, level, layer), 2);
+				world.setBlockState(pos.add(w * 4, 0, i * 4 + 3), getMudBricksForLevel(rand, level, layer), 2);
+			}
 		}
 		// draw the bottom line
 		for (int j = 0; j <= w * 4; j++)
-			world.setBlockState(pos.add(j, 0, h * 4), (j%4 == 0 && (layer == 1 || layer == 2 || layer == 3)) ? getPillarsForLevel(rand, level, layer) : getMudBricksForLevel(rand, level, layer));
+			world.setBlockState(pos.add(j, 0, h * 4), (j % 4 == 0 && (layer == 1 || layer == 2 || layer == 3)) ? getPillarsForLevel(rand, level, layer) : getMudBricksForLevel(rand, level, layer), 2);
 	}
 
+	private void addMazeCellFeature(World world, BlockPos pos, Random rand, int w, int h, int[][] maze, int level, int layer) {
+		//  TODO add features here for end of tunnels
+		// byte directions 1 = SOUTH, 2 = NORTH, 4 = WEST, 8 = EAST
+		for (int i = 0; i < h; i++) {
+			for (int j = 0; j < w; j++) {
+				if ((maze[j][i] & 2) == 0 && (maze[j][i] & 4) == 0 && (maze[j][i] & 8) == 0) {
+					// SOUTH
+					if (!isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, -3, 3 + i * 4))))
+						placeChest(world, pos.add(2 + j * 4, -3, 3 + i * 4), CHEST_NORTH, rand);
+				}
+				if ((maze[j][i] & 1) == 0 && (maze[j][i] & 4) == 0 && (maze[j][i] & 8) == 0) {
+					// NORTH
+					if (!isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, -3, 1 + i * 4))))
+						placeChest(world, pos.add(2 + j * 4, -3, 1 + i * 4), CHEST_SOUTH, rand);
+				}
+				if ((maze[j][i] & 1) == 0 && (maze[j][i] & 2) == 0 && (maze[j][i] & 4) == 0) {
+					// EAST
+					if (!isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, -3, 2 + i * 4))))
+						placeChest(world, pos.add(3 + j * 4, -3, 2 + i * 4), CHEST_WEST, rand);
+
+				}
+				if ((maze[j][i] & 1) == 0 && (maze[j][i] & 2) == 0 && (maze[j][i] & 8) == 0) {
+					// WEST
+					if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, -3, 2 + i * 4))))
+						placeChest(world, pos.add(1 + j * 4, -3, 2 + i * 4), CHEST_EAST, rand);
+
+				}
+			}
+		}
+	}
+	
 	// Level Feature Placements
 	private void addFeature(World world, BlockPos pos, Random rand, int w, int h, int[][] maze, int level, int layer) {
 		for (int i = 0; i < h; i++) {
-			for (int j = 0; j < w; j++)
+			for (int j = 0; j < w; j++) {
 				if ((maze[j][i] & 1) == 0) {
-
 					if (layer == 1) {
-						if (rand.nextInt(100) == 0) {
-							if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 1 + i * 4))))
-								placeChest(world, pos.add(1 + j * 4, 0, 1 + i * 4), CHEST_SOUTH, rand);
-						}
-						else if (rand.nextInt(3) == 0)
-								setRandomRoot(world, pos.add(1 + j * 4, 0, 1 + rand.nextInt(2) + i * 4), rand);
+						if (rand.nextInt(3) == 0)
+							setRandomRoot(world, pos.add(1 + j * 4, 0, 1 + rand.nextInt(2) + i * 4), rand);
 					}
-
-					if(layer == 2) {
+					if (layer == 2) {
 						if (rand.nextInt(25) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 1 + i * 4))))
 							world.setBlockState(pos.add(1 + j * 4, 0, 1 + i * 4), TORCH_SOUTH, 2);
 						else if (rand.nextInt(10) == 0) {
-								int randOffset = rand.nextInt(2);
-								world.setBlockState(pos.add(1 + j * 4, - randOffset, i * 4), TRAP_1, 2);
-							}
-						/*else if (rand.nextInt(10) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, 0, 2 + i * 4)))) {
-							if (rand.nextBoolean()) {
-								world.setBlockState(pos.add(2 + j * 4, 0, 2 + i * 4), MOB_SPAWNER);
-								BlockMobSpawnerBetweenlands.setMob(world, pos.add(2 + j * 4, 0, 2 + i * 4), "thebetweenlands:chiromaw", logic -> logic.setSpawnRange(2));
-							}
-							else {
-								world.setBlockState(pos.add(2 + j * 4, 0, 2 + i * 4), MOB_SPAWNER);
-								BlockMobSpawnerBetweenlands.setMob(world, pos.add(2 + j * 4, 0, 2 + i * 4), "thebetweenlands:termite");
-							}
-						}*/
+							int randOffset = rand.nextInt(2);
+							world.setBlockState(pos.add(1 + j * 4, -randOffset, i * 4), TRAP_1, 2);
+						}
 					}
-
-					if(layer == 3) {
+					if (layer == 3) {
 					}
-
-					if(layer == 4) {
+					if (layer == 4) {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(j * 4, 0, 1 + i * 4))))
 							world.setBlockState(pos.add(j * 4, 0, 1 + i * 4), getStairsForLevel(rand, level, EnumFacing.NORTH, EnumHalf.TOP), 2);
 						world.setBlockState(pos.add(1 + j * 4, 0, 1 + i * 4), getStairsForLevel(rand, level, EnumFacing.NORTH, EnumHalf.TOP), 2);
@@ -339,28 +354,20 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					}
 				}
 
-			for (int j = 0; j < w; j++)
 				if ((maze[j][i] & 8) == 0) {
-
-					if(layer == 1) {
-						if (rand.nextInt(100) == 0)
-							if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 2 + i * 4))))
-								placeChest(world, pos.add(1 + j * 4, 0, 2 + i * 4), CHEST_EAST, rand);
+					if (layer == 1) {
 					}
-
-					if(layer == 2) {
+					if (layer == 2) {
 						if (rand.nextInt(25) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 2 + i * 4))))
 							world.setBlockState(pos.add(1 + j * 4, 0, 2 + i * 4), TORCH_EAST, 2);
 						else if (rand.nextInt(10) == 0) {
 							int randOffset = rand.nextInt(2);
-							world.setBlockState(pos.add(j * 4, - randOffset, 2 + i * 4), TRAP_1, 2);
+							world.setBlockState(pos.add(j * 4, -randOffset, 2 + i * 4), TRAP_1, 2);
 						}
 					}
-
-					if(layer == 3) {
+					if (layer == 3) {
 					}
-
-					if(layer == 4) {
+					if (layer == 4) {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, i * 4))))
 							world.setBlockState(pos.add(1 + j * 4, 0, i * 4), getStairsForLevel(rand, level, EnumFacing.WEST, EnumHalf.TOP), 2);
 						world.setBlockState(pos.add(1 + j * 4, 0, 1 + i * 4), getStairsForLevel(rand, level, EnumFacing.WEST, EnumHalf.TOP), 2);
@@ -371,28 +378,20 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					}
 				}
 
-			for (int j = 0; j < w; j++)
 				if ((maze[j][i] & 4) == 0) {
-
-					if(layer == 1) {
-						if (rand.nextInt(100) == 0)
-							if (!isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, 0, 2 + i * 4))))
-								placeChest(world, pos.add(3 + j * 4, 0, 2 + i * 4), CHEST_WEST, rand);
+					if (layer == 1) {
 					}
-
-					if(layer == 2) {
+					if (layer == 2) {
 						if (rand.nextInt(25) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, 0, 2 + i * 4))))
 							world.setBlockState(pos.add(3 + j * 4, 0, 2 + i * 4), TORCH_WEST, 2);
 						else if (rand.nextInt(10) == 0) {
 							int randOffset = rand.nextInt(2);
-							world.setBlockState(pos.add(4 + j * 4, - randOffset, 2 + i * 4), TRAP_1, 2);
+							world.setBlockState(pos.add(4 + j * 4, -randOffset, 2 + i * 4), TRAP_1, 2);
 						}
 					}
-
-					if(layer == 3) {
+					if (layer == 3) {
 					}
-
-					if(layer == 4) {
+					if (layer == 4) {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, 0, i * 4))))
 							world.setBlockState(pos.add(3 + j * 4, 0, i * 4), getStairsForLevel(rand, level, EnumFacing.EAST, EnumHalf.TOP), 2);
 						world.setBlockState(pos.add(3 + j * 4, 0, 1 + i * 4), getStairsForLevel(rand, level, EnumFacing.EAST, EnumHalf.TOP), 2);
@@ -403,28 +402,20 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					}
 				}
 
-			for (int j = 0; j < w; j++)
 				if ((maze[j][i] & 2) == 0) {
-
-					if(layer == 1) {
-						if (rand.nextInt(100) == 0)
-							if (!isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, 0, 3 + i * 4))))
-								placeChest(world, pos.add(2 + j * 4, 0, 3 + i * 4), CHEST_NORTH, rand);
+					if (layer == 1) {
 					}
-
-					if(layer == 2) {
+					if (layer == 2) {
 						if (rand.nextInt(25) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, 0, 3 + i * 4))))
 							world.setBlockState(pos.add(2 + j * 4, 0, 3 + i * 4), TORCH_NORTH, 2);
 						else if (rand.nextInt(10) == 0) {
 							int randOffset = rand.nextInt(2);
-							world.setBlockState(pos.add(1 + j * 4, - randOffset, 4 + i * 4), TRAP_1, 2);
+							world.setBlockState(pos.add(1 + j * 4, -randOffset, 4 + i * 4), TRAP_1, 2);
 						}
 					}
-
-					if(layer == 3) {
+					if (layer == 3) {
 					}
-
-					if(layer == 4) {
+					if (layer == 4) {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(j * 4, 0, 3 + i * 4))))
 							world.setBlockState(pos.add(j * 4, 0, 3 + i * 4), getStairsForLevel(rand, level, EnumFacing.SOUTH, EnumHalf.TOP), 2);
 						world.setBlockState(pos.add(1 + j * 4, 0, 3 + i * 4), getStairsForLevel(rand, level, EnumFacing.SOUTH, EnumHalf.TOP), 2);
@@ -434,6 +425,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 							world.setBlockState(pos.add(4 + j * 4, 0, 3 + i * 4), getStairsForLevel(rand, level, EnumFacing.SOUTH, EnumHalf.TOP), 2);
 					}
 				}
+			}
 		}
 	}
 
@@ -485,9 +477,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				world.setBlockToAir(pos.add(1, 3, 3));
 				world.setBlockToAir(pos.add(2, 4, 3));
 				world.setBlockToAir(pos.add(2, 3, 3));
-				world.setBlockState(pos.add(1, 6, 1), getTilesForLevel(rand, level));
-				world.setBlockState(pos.add(1, 6, 2), getTilesForLevel(rand, level)); //lock
-				world.setBlockState(pos.add(1, 6, 3), getTilesForLevel(rand, level));
+				world.setBlockState(pos.add(1, 6, 1), getTilesForLevel(rand, level), 2);
+				world.setBlockState(pos.add(1, 6, 2), getTilesForLevel(rand, level), 2); //lock
+				world.setBlockState(pos.add(1, 6, 3), getTilesForLevel(rand, level), 2);
 			} else if (level == 0 || level == 2 || level == 4 || level == 6) {
 				world.setBlockToAir(pos.add(27, 5, 27));
 				world.setBlockToAir(pos.add(27, 5, 26));
@@ -498,9 +490,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				world.setBlockToAir(pos.add(26, 4, 25));
 				world.setBlockToAir(pos.add(26, 3, 25));
 				if(level != 0) {
-				world.setBlockState(pos.add(27, 6, 27), getTilesForLevel(rand, level));
-				world.setBlockState(pos.add(27, 6, 26), getTilesForLevel(rand, level)); //lock
-				world.setBlockState(pos.add(27, 6, 25), getTilesForLevel(rand, level));
+				world.setBlockState(pos.add(27, 6, 27), getTilesForLevel(rand, level), 2);
+				world.setBlockState(pos.add(27, 6, 26), getTilesForLevel(rand, level), 2); //lock
+				world.setBlockState(pos.add(27, 6, 25), getTilesForLevel(rand, level), 2);
 				}
 			}
 	}
@@ -520,7 +512,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			for (int j = 0; j <= w * 4; j++) {
 				if (rand.nextInt(15) == 0 && addFeature && !isSolidStructureBlock(world.getBlockState(pos.add(j, 1, i)))) {
 					if (rand.nextBoolean() && rand.nextBoolean())
-						world.setBlockState(pos.add(j, 0, i), STAGNANT_WATER);
+						world.setBlockState(pos.add(j, 0, i), STAGNANT_WATER, 2);
 					else if (rand.nextInt(10) == 0 && addSpawners)
 						world.setBlockState(pos.add(j, 0, i), SPAWNER_TYPE_1, 2);
 					else if (rand.nextInt(6) == 0 && addSpawners)
@@ -839,19 +831,19 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		if (!isSolidStructureBlock(world.getBlockState(pos))) {
 			int rnd = rand.nextInt(30);
 			if (rnd < 10) {
-				world.setBlockState(pos, ROOT);
+				world.setBlockState(pos, ROOT, 2);
 			} else if (rnd < 20) {
-				world.setBlockState(pos, ROOT);
-				world.setBlockState(pos.up(1), ROOT);
+				world.setBlockState(pos, ROOT, 2);
+				world.setBlockState(pos.up(1), ROOT, 2);
 			} else if (rnd < 25) {
-				world.setBlockState(pos, ROOT);
-				world.setBlockState(pos.up(1), ROOT);
-				world.setBlockState(pos.up(2), ROOT);
+				world.setBlockState(pos, ROOT, 2);
+				world.setBlockState(pos.up(1), ROOT, 2);
+				world.setBlockState(pos.up(2), ROOT, 2);
 			} else {
-				world.setBlockState(pos, ROOT);
-				world.setBlockState(pos.up(1), ROOT);
-				world.setBlockState(pos.up(2), ROOT);
-				world.setBlockState(pos.up(3), ROOT);
+				world.setBlockState(pos, ROOT, 2);
+				world.setBlockState(pos.up(1), ROOT, 2);
+				world.setBlockState(pos.up(2), ROOT, 2);
+				world.setBlockState(pos.up(3), ROOT, 2);
 			}
 		}
 	}
