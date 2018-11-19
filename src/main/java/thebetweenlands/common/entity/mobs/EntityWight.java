@@ -532,11 +532,6 @@ public class EntityWight extends EntityMob implements IEntityBL {
     }
 
     @Override
-    public boolean isAIDisabled() {
-        return false;
-    }
-
-    @Override
     public float getBlockPathWeight(BlockPos pos) {
         return 0.5F;
     }

@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -26,6 +27,7 @@ import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite.EnumLifeCrystalType;
 import thebetweenlands.common.network.clientbound.MessageSoundRipple;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 import thebetweenlands.util.NBTHelper;
 
@@ -67,6 +69,7 @@ public class ItemGemSinger extends Item {
 	public ItemGemSinger() {
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 		this.setMaxStackSize(1);
+		this.setMaxDamage(32);
 	}
 
 	@Override
@@ -144,6 +147,10 @@ public class ItemGemSinger extends Item {
 
 				playerIn.getCooldownTracker().setCooldown(stack.getItem(), 60);
 			}
+		}
+
+		if(worldIn.isRemote && !playerIn.isSneaking()) {
+			worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundRegistry.GEM_SINGER, SoundCategory.PLAYERS, 2, 1);
 		}
 
 		playerIn.swingArm(handIn);

@@ -12,7 +12,9 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
@@ -21,6 +23,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
+import thebetweenlands.common.item.misc.ItemBoneWayfinder;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
@@ -44,6 +47,7 @@ import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeMaker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 @JEIPlugin
 public class BetweenlandsJEIPlugin implements IModPlugin{
@@ -81,27 +85,6 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
 
         IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
         //Hiding blocks/items that don't have to show in JEI
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.MIDDLE_FRUIT_BUSH).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.FUNGUS_CROP).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.WEEDWOOD_DOOR).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.RUBBER_TREE_PLANK_DOOR).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.SYRMORITE_DOOR).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.SCABYST_DOOR).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.GIANT_ROOT_PLANK_DOOR).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.STANDING_WEEDWOOD_SIGN).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.WALL_WEEDWOOD_SIGN).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.MOSS_BED).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.ASPECT_VIAL_BLOCK).getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.ASPECTRUS_CROP.getItemBlock()));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SWAMP_KELP));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SWAMP_REED));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SWAMP_REED_UNDERWATER));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SULFUR_FURNACE_ACTIVE));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SULFUR_FURNACE_DUAL_ACTIVE));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.ROPE));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.WEEDWOOD_RUBBER_TAP));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SYRMORITE_RUBBER_TAP));
-        blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.TREE_PORTAL));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.GLUE));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TAINTED_POTION));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.ROTTEN_FOOD));
@@ -134,6 +117,12 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.BL_BUCKET_PLANT_TONIC, 1, 0), ItemRegistry.BL_BUCKET.withFluid(0, FluidRegistry.SWAMP_WATER), ItemRegistry.SAP_BALL).setRegistryName(ModInfo.ID, RecipeRegistry.PLANT_TONIC.getResourcePath() + "_weedwood"));
         recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.BL_BUCKET_PLANT_TONIC, 1, 1), ItemRegistry.BL_BUCKET.withFluid(1, FluidRegistry.SWAMP_WATER), ItemRegistry.SAP_BALL).setRegistryName(ModInfo.ID, RecipeRegistry.PLANT_TONIC.getResourcePath() + "_syrmorite"));
 
+        //Bone Wayfinder
+        recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.BONE_WAYFINDER, 1, 0), Function.identity().andThen(o -> {
+            ((ItemBoneWayfinder)((ItemStack)o).getItem() ).setBoundWaystone((ItemStack) o, new BlockPos(0, 0, 0));
+            return o;
+        }).apply(new ItemStack(ItemRegistry.BONE_WAYFINDER, 1, 0))).setRegistryName(RecipeRegistry.CLEAR_BONE_WAYFINDER));
+
         //Lurker skin
         ItemStack output = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
         ItemStack input = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
@@ -156,6 +145,9 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         //Coating
         CoatingRecipeJEI.setCoatableItems();
         registry.handleRecipes(RecipesCoating.class, recipe -> new CoatingRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
+
+        //Sap Spit Cleaning
+        registry.handleRecipes(RecipeSapSpitCleanTool.class, recipe -> new SapCleanRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
 
         //CircleGems
         CircleGemsRecipeJEI.updateApplicableItems();
@@ -199,7 +191,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
             if (slotIndex == ouputIndex) {
                 boolean showAdvanced = Minecraft.getMinecraft().gameSettings.advancedItemTooltips || GuiScreen.isShiftKeyDown();
                 if (showAdvanced) {
-                    tooltip.add(TextFormatting.GRAY + registryName.getResourcePath());
+                    tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocalFormatted("jei.tooltip.recipe.id", registryName.toString()));
                 }
             }
         });

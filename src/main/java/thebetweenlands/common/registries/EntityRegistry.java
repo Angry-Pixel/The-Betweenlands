@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
@@ -75,7 +76,7 @@ public class EntityRegistry {
 		registerEntity(EntitySludgeBall.class, "sludge_ball", 64, 20, true);
 		//registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
 		registerEntity(EntitySmollSludge.class, "smoll_sludge", 0x3A2F0B, 0x5F4C0B);
-		//registerEntity(EntityGreebling.class, "greebling", 0xD9D7A7, 0xD99830);
+		registerEntity(EntityGreebling.class, "greebling", 0xD9D7A7, 0xD99830);
 		registerEntity(EntityBoulderSprite.class, "boulder_sprite", 0x6f7784, 0x535559);
 		registerEntity(EntitySpiritTreeFaceSmall.class, "spirit_tree_face_small");
 		registerEntity(EntitySpiritTreeFaceLarge.class, "spirit_tree_face_large");
@@ -85,6 +86,7 @@ public class EntityRegistry {
 		registerEntity(EntityRootGrabber.class, "root_grabber");
 		registerEntity(EntitySpiritTreeFaceMask.class, "spirit_tree_face_mask", 64, 20, false);
 		registerEntity(EntityRootSprite.class, "root_sprite", 0x686868, 0x9fe530);
+		registerEntity(EntityLurkerSkinRaft.class, "lurker_skin_raft");
 	}
 
 	private static int id = 0;

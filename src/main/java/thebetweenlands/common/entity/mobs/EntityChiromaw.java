@@ -85,11 +85,6 @@ public class EntityChiromaw extends EntityFlyingMob implements IEntityBL {
 	}
 
 	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
-	@Override
 	protected void updateAITasks() {
 		super.updateAITasks();
 

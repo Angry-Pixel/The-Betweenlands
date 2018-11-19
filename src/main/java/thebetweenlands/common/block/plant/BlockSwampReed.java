@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -19,9 +20,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
-public class BlockSwampReed extends BlockStackablePlant {
+public class BlockSwampReed extends BlockStackablePlant implements ICustomItemBlock {
 	public BlockSwampReed() {
 		this.setMaxHeight(4);
 		this.setCreativeTab(null);
@@ -102,5 +104,10 @@ public class BlockSwampReed extends BlockStackablePlant {
 		if (world.rand.nextInt(65) == 0) {
 			BLParticles.MOSQUITO.spawn(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 		}
+	}
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }

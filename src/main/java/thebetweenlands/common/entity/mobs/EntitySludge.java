@@ -285,12 +285,6 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		}
 	}
 
-
-	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if(!this.isActive() && !source.isCreativePlayer()) {

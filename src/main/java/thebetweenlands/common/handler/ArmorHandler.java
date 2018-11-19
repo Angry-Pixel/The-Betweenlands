@@ -26,15 +26,15 @@ public class ArmorHandler {
 			Iterable<ItemStack> armorStacks = entityLiving.getArmorInventoryList();
 			float reductionAmount = 0.25F;
 			for(ItemStack stack : armorStacks) {
-				if (stack != null && stack.getItem() instanceof ItemSyrmoriteArmor) {
+				if (!stack.isEmpty() && stack.getItem() instanceof ItemSyrmoriteArmor) {
 					damageMultiplier -= reductionAmount;
 				}
 			}
 			if (damageMultiplier < 0.001F) {
-				event.setCanceled(true);
+				event.setAmount(0.01F); //Set to tiny amount so armor still takes damage
 				entityLiving.extinguish();
 			} else {
-				event.setAmount(damageMultiplier);
+				event.setAmount(event.getAmount() * damageMultiplier);
 			}
 		}
 	}

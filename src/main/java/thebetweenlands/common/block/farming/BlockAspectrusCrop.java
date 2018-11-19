@@ -10,6 +10,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -209,10 +210,8 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	@Nullable
-	public ItemStack getRenderedItem() {
-		return new ItemStack(ItemRegistry.ASPECTRUS_SEEDS);
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 
 	@Override

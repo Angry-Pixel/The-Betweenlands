@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.storage.IWorldStorage;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.item.misc.ItemGemSinger;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
@@ -86,11 +87,13 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 				this.savedGemTargets.add(target);
 			}
 
-			for(ItemGemSinger.GemSingerTarget target : ItemGemSinger.GemSingerTarget.values()) {
-				if(!this.savedGemTargets.contains(target.getId())) {
-					//A new gem singer target was added -> chunk needs to be rescanned
-					this.rescanGemSingerTargets = true;
-					break;
+			if(this.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+				for(ItemGemSinger.GemSingerTarget target : ItemGemSinger.GemSingerTarget.values()) {
+					if(!this.savedGemTargets.contains(target.getId())) {
+						//A new gem singer target was added -> chunk needs to be rescanned
+						this.rescanGemSingerTargets = true;
+						break;
+					}
 				}
 			}
 

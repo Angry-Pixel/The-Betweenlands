@@ -14,6 +14,7 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
@@ -32,11 +33,12 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.teleporter.TeleporterHandler;
 
-public class BlockTreePortal extends BasicBlock {
+public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.<EnumFacing.Axis>create("axis", EnumFacing.Axis.class, new EnumFacing.Axis[]{EnumFacing.Axis.X, EnumFacing.Axis.Z});
 
 	protected static final AxisAlignedBB X_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.375D, 1.0D, 1.0D, 0.625D);
@@ -321,5 +323,10 @@ public class BlockTreePortal extends BasicBlock {
 		for(LocationPortal portal : portals) {
 			portal.validateAndRemove();
 		}
+	}
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }

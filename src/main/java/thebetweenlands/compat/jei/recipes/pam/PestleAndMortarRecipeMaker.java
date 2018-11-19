@@ -1,12 +1,11 @@
 package thebetweenlands.compat.jei.recipes.pam;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
+
+import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PestleAndMortarRecipeMaker {
     @Nonnull

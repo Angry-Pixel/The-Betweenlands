@@ -1,6 +1,17 @@
 {
   "pools": [
     {
+      "name": "bark_amulet",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:bark_amulet",
+          "weight": 1
+        }
+      ]
+    },
+    {
       "name": "spirit_tree_face_large_mask",
       "rolls": 1,
       "conditions": [

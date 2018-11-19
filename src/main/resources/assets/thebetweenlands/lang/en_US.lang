@@ -703,6 +703,7 @@ item.thebetweenlands.amate_map.name=Amate Map
 item.thebetweenlands.bone_wayfinder.name=Bone Wayfinder
 item.thebetweenlands.magic_item_magnet.name=Magic Item Magnet
 item.thebetweenlands.gem_singer.name=Gem Singer
+item.thebetweenlands.bark_amulet.name=Bark Amulet
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -820,6 +821,7 @@ tooltip.infusion.ingredients=§aIngredients:
 tooltip.infusion.empty=Empty
 tooltip.bone_wayfinder=Must be linked to a Menhir
 tooltip.bone_wayfinder_linked=Requires sufficient XP to use.\nLinked to Menhir\nX: %s\nY: %s\nZ: %s
+tooltip.lurker_skin_shield=Can also be used as a raft
 
 tooltip.bl.elixir.potency=§9Potency: %s
 tooltip.bl.elixir.duration=§9Duration: %s (%s)
@@ -957,6 +959,8 @@ chat.amate_map.invalid=Can't create an amate map outside of The Betweenlands
 chat.equipment.equipped=Equipped %s
 chat.equipment.unequipped=Unequipped %s
 
+chat.waystone.obstructed=Menhir is obstructed
+
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
 
@@ -1076,6 +1080,8 @@ entity.thebetweenlands.spike_wave.name=Root Wave
 entity.thebetweenlands.root_grabber.name=Root Grabber
 entity.thebetweenlands.spirit_tree_face_mask.name=Spirit Tree Face Mask
 entity.thebetweenlands.root_sprite.name=Root Sprite
+entity.thebetweenlands.greebling.name=Greebling
+entity.thebetweenlands.lurker_skin_raft.name=Lurker Skin Raft
 
 
 # Equipment
@@ -1242,7 +1248,7 @@ manual.item.thebetweenlands.ground_sludgecreep.description=Sludgecreep is a slim
 manual.item.thebetweenlands.ground_soft_rush.description=Soft Rush is a small plant that grows in the Marsh biome.
 manual.item.thebetweenlands.ground_swamp_kelp.description=Swamp Kelp is an aquatic plant that grows commonly in Deep Waters and Coarse Islands biomes.
 manual.item.thebetweenlands.ground_swamp_grass_tall.description=Swamp Tallgrass is a common plant found in Swamplands, Patchy Islands, Coarse Islands, and Marsh biomes, and in Underground Oases.
-manual.item.thebetweenlands.ground_tangled_roots.description=<scale:0.8>Tangled Roots grow in the water in Coarse Islands biomes and on land in Sludge Plains biomes, and on Giant Roots. They can also be derived from Pyrads, nature spirits found around Giant Weedwood Trees.</scale>
+manual.item.thebetweenlands.ground_roots.description=<scale:0.8>Roots grow in Coarse Islands and Sludge Plains biomes, in both regular and Giant forms. They can also be derived from Pyrads, nature spirits found around Giant Weedwood Trees.</scale>
 manual.item.thebetweenlands.ground_weedwood_bark.description=<scale:0.9>Weedwood Bark grows around the soft wood inside Weedwood Trees. It can also be derived from the Hollow Logs found scattered about Swamplands, Marsh, and Sludge Plains biomes.</scale>
 manual.item.thebetweenlands.ground_water_weeds.description=Water Weeds can be found growing in Mud at the bottom of the water in Deep Waters biomes.
 manual.item.thebetweenlands.ground_volarpad.description=Volarpads are very large plants that grow commonly in Coarse Islands biomes and sometimes in Swamplands biomes.
@@ -1517,6 +1523,8 @@ config.thebetweenlands.torch_whitelist=Torch Whitelist
 config.thebetweenlands.torch_blacklist=Torch Blacklist
 config.thebetweenlands.pouch_blacklist=Lurker Skin Pouch Blacklist
 config.thebetweenlands.caving_rope_despawn_time=Caving Rope Despawn Time
+config.thebetweenlands.equipment_hotbar_side=Equipment Hotbar Side
+config.thebetweenlands.equipment_visible=Show Equipment on HUD
 
 config.thebetweenlands.mob_spawning=Mob Spawning
 config.thebetweenlands.max_entities_per_loaded_area=Max. entities per loaded area

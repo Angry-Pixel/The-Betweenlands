@@ -37,11 +37,6 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
-	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		if (getGrowingAge() < 0 || getGrowingAge() > 0) // stupid hack to stop entity scaling

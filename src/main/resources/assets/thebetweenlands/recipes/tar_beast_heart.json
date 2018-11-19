@@ -8,14 +8,14 @@
   "key": {
     "#": {
       "item": "thebetweenlands:items_misc",
-      "data": 32
+      "data": 26
     },
     "T": {
-      "item": "thebetweenlands:swamp_talisman",
-      "data": 0
+      "item": "thebetweenlands:wight_heart"
     }
   },
   "result": {
-    "item": "thebetweenlands:empty_amate_map"
+    "item": "thebetweenlands:items_misc",
+    "data": 24
   }
 }

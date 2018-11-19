@@ -14,13 +14,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.client.audio.GemSingerEchoSound;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.lib.ModInfo;
 
 public class ParticleSoundRipple extends Particle {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/particle/sound_ripple.png");
-
-	//TODO Sound
 
 	private boolean spawnMore;
 	private int delay;
@@ -92,6 +93,7 @@ public class ParticleSoundRipple extends Particle {
 
 			GlStateManager.color(1, 1, 1, 1);
 
+			GlStateManager.disableLighting();
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
 			GlStateManager.disableDepth();
 			GlStateManager.enableTexture2D();
@@ -113,8 +115,13 @@ public class ParticleSoundRipple extends Particle {
 
 	@Override
 	public void onUpdate() {
-		if(this.spawnMore && this.particleAge >= this.delay && (this.particleAge - this.delay) % 10 == 0) {
-			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleSoundRipple(this.world, this.posX, this.posY, this.posZ, this.particleScale, 0, false));
+		if(this.spawnMore && this.particleAge >= this.delay) {
+			if(this.particleAge == this.delay && Minecraft.getMinecraft().player != null) {
+				Minecraft.getMinecraft().getSoundHandler().playSound(new GemSingerEchoSound(new Vec3d(this.posX, this.posY, this.posZ)).setVolumeAndPitch(0.7f, 0.98f + this.world.rand.nextFloat() * 0.06f - 0.03f));
+			}
+			if((this.particleAge - this.delay) % 10 == 0) {
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.UNBATCHED, new ParticleSoundRipple(this.world, this.posX, this.posY, this.posZ, this.particleScale, 0, false));
+			}
 		}
 
 		if(this.particleAge++ >= this.particleMaxAge) {
@@ -144,7 +151,7 @@ public class ParticleSoundRipple extends Particle {
 
 		@Override
 		protected void setBaseArguments(ParticleArgs<?> args) {
-			args.withScale(0.25F).withData(20);
+			args.withScale(0.125F).withData(20);
 		}
 	}
 }

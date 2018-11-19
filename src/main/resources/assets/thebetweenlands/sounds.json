@@ -558,6 +558,13 @@
       "thebetweenlands:gas_cloud_death"
     ]
   },
+  "boulder_sprite_living": {
+    "sounds": [
+      "thebetweenlands:boulder_sprite_living_1",
+      "thebetweenlands:boulder_sprite_living_2",
+      "thebetweenlands:boulder_sprite_living_3"
+    ]
+  },
   "boulder_sprite_hurt": {
     "sounds": [
       "thebetweenlands:boulder_sprite_hurt_1",
@@ -664,6 +671,11 @@
       "thebetweenlands:root_sprite_living_3"
     ]
   },
+  "greebling_vanish": {
+    "sounds": [
+      "thebetweenlands:greebling_vanish"
+    ]
+  },
   "sorry": {
     "sounds": [
       "thebetweenlands:sorry"
@@ -765,6 +777,16 @@
   "voodoo_doll": {
     "sounds": [
       "thebetweenlands:voodoo_doll"
+    ]
+  },
+  "gem_singer": {
+    "sounds": [
+      "thebetweenlands:gem_singer"
+    ]
+  },
+  "gem_singer_echo": {
+    "sounds": [
+      "thebetweenlands:gem_singer_echo"
     ]
   },
   "rejected": {
@@ -891,6 +913,22 @@
       {
         "name": "thebetweenlands:music/the_other_world",
         "stream": true
+      }
+    ]
+  },
+  "greebling_music_1": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:music/greebling_music_1",
+        "preload": true
+      }
+    ]
+  },
+  "greebling_music_2": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:music/greebling_music_2",
+        "preload": true
       }
     ]
   },

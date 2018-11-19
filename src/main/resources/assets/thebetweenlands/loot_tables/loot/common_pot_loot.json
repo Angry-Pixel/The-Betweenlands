@@ -352,6 +352,13 @@
                     ],
                     "weight": 4,
                     "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:bone_wayfinder",
+                    "weight": 5,
+                    "quality": 0
                 }
             ],
             "rolls": {

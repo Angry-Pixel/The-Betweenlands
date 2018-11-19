@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketMaps;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
@@ -208,7 +209,8 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
                 List<LocationStorage> localStorages = handler.getLocalStorages(LocationStorage.class, x << 4, z << 4, input -> true);
                 if (localStorages.size() > 0) {
                     for (LocationStorage storage : localStorages) {
-                        Vec3d center = storage.getEnclosingBounds().getCenter();
+                    	AxisAlignedBB aabb = storage.getEnclosingBounds();
+                        Vec3d center = new Vec3d(aabb.minX + (aabb.maxX - aabb.minX) * 0.5D, aabb.minY + (aabb.maxY - aabb.minY) * 0.5D, aabb.minZ + (aabb.maxZ - aabb.minZ) * 0.5D);
                         byte mapX = (byte) ((center.x - centerX) / (float) blocksPerPixel * 2F);
                         byte mapZ = (byte) ((center.z - centerZ) / (float) blocksPerPixel * 2F);
                         Location location = Location.getLocation(storage);

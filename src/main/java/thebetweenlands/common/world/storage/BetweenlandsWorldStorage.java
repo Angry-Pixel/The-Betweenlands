@@ -16,6 +16,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Biomes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
@@ -31,6 +32,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
+import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.storage.IWorldStorage;
@@ -45,7 +47,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	private BLEnvironmentEventRegistry environmentEventRegistry;
 	private AspectManager aspectManager = new AspectManager();
 
-	private Map<BiomeBetweenlands, BiomeSpawnEntriesData> biomeSpawnEntriesData = new HashMap<>();
+	private Map<ICustomSpawnEntriesProvider, BiomeSpawnEntriesData> biomeSpawnEntriesData = new HashMap<>();
 
 	protected final Set<ChunkPos> previousCheckedAmbientChunks = new HashSet<>();
 	protected int ambienceTicks;
@@ -63,11 +65,11 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	@Override
 	public BiomeSpawnEntriesData getBiomeSpawnEntriesData(Biome biome) {
-		if(biome instanceof BiomeBetweenlands) {
-			BiomeBetweenlands biomeBL = (BiomeBetweenlands) biome;
-			BiomeSpawnEntriesData data = this.biomeSpawnEntriesData.get(biomeBL);
+		if(biome instanceof ICustomSpawnEntriesProvider) {
+			ICustomSpawnEntriesProvider provider = (ICustomSpawnEntriesProvider) biome;
+			BiomeSpawnEntriesData data = this.biomeSpawnEntriesData.get(provider);
 			if(data == null) {
-				this.biomeSpawnEntriesData.put(biomeBL, data = new BiomeSpawnEntriesData(biomeBL));
+				this.biomeSpawnEntriesData.put(provider, data = new BiomeSpawnEntriesData(provider));
 			}
 			return data;
 		}
@@ -102,10 +104,10 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 			this.biomeSpawnEntriesData.clear();
 			if(nbt.hasKey("biomeData", Constants.NBT.TAG_COMPOUND)) {
 				NBTTagCompound biomesNbt = nbt.getCompoundTag("biomeData");
-				for(BiomeBetweenlands biome : BiomeRegistry.REGISTERED_BIOMES) {
-					if(biomesNbt.hasKey(biome.getRegistryName().toString(), Constants.NBT.TAG_COMPOUND)) {
-						NBTTagCompound biomeSpawnEntriesNbt = biomesNbt.getCompoundTag(biome.getRegistryName().toString());
-						this.getBiomeSpawnEntriesData(biome).readFromNbt(biomeSpawnEntriesNbt);
+				for(String key : biomesNbt.getKeySet()) {
+					Biome biome = Biome.REGISTRY.getObject(new ResourceLocation(key));
+					if(biome instanceof ICustomSpawnEntriesProvider) {
+						this.getBiomeSpawnEntriesData(biome).readFromNbt(biomesNbt.getCompoundTag(key));
 					}
 				}
 			}
@@ -255,11 +257,11 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	}
 
 	public static class BiomeSpawnEntriesData implements IBiomeSpawnEntriesData {
-		public final BiomeBetweenlands biome;
+		public final ICustomSpawnEntriesProvider biome;
 
 		private final TObjectLongMap<ResourceLocation> lastSpawnMap = new TObjectLongHashMap<>();
 
-		protected BiomeSpawnEntriesData(BiomeBetweenlands biome) {
+		protected BiomeSpawnEntriesData(ICustomSpawnEntriesProvider biome) {
 			this.biome = biome;
 		}
 

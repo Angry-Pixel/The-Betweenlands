@@ -29,6 +29,7 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -117,6 +118,7 @@ import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
@@ -139,7 +141,7 @@ import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
-import thebetweenlands.common.item.misc.ItemHealthOrb;
+import thebetweenlands.common.item.misc.ItemBarkAmulet;
 import thebetweenlands.common.item.shields.ItemSwatShield;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.lib.ModInfo;
@@ -403,6 +405,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityRootGrabber.class, RenderRootGrabber::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceMask.class, RenderSpiritTreeFaceMask::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRootSprite.class, RenderRootSprite::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityLurkerSkinRaft.class, RenderLurkerSkinRaft::new);
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
@@ -495,7 +498,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		for (Block block : BlockRegistry.BLOCKS) {
 			if (block instanceof ITintedBlock) {
 				final ITintedBlock tintedBlock = (ITintedBlock) block;
-				Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> tintedBlock.getColorMultiplier(((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()), null, null, tintIndex), block);
+				if (Item.getItemFromBlock(block) != Items.AIR) {
+					Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> tintedBlock.getColorMultiplier(((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()), null, null, tintIndex), block);
+				}
 				Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(tintedBlock::getColorMultiplier, block);
 			}
 		}
@@ -575,7 +580,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(EventSpoopy.class);
         MinecraftForge.EVENT_BUS.register(ArmSwingSpeedHandler.class);
         MinecraftForge.EVENT_BUS.register(BLSkyRenderer.class);
-        MinecraftForge.EVENT_BUS.register(ItemHealthOrb.class);
+        MinecraftForge.EVENT_BUS.register(ItemBarkAmulet.class);
 	}
 
 	private static FontRenderer pixelLove;

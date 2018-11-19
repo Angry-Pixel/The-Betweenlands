@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.item.ItemStack;
@@ -35,21 +36,26 @@ public class RenderLivingWeedwoodShield extends TileEntityItemStackRenderer {
 	public void renderByItem(ItemStack stack, float partialTicks) {
 		this.copy(stack);
 
+		Minecraft mc = Minecraft.getMinecraft();
+		TextureManager textureManager = mc.getTextureManager();
+		
 		GlStateManager.pushMatrix();
 
 		GlStateManager.translate(0.5D, 0.5D, 0.5D);
 
 
-		ITextureObject atlas = Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		ITextureObject atlas = textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		//Need to restore before rendering item because item renderer restores too
+		textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		atlas.restoreLastBlurMipmap();
 
-		Minecraft.getMinecraft().getRenderItem().renderItem(this.normalShield, TransformType.NONE);
+		mc.getRenderItem().renderItem(this.normalShield, TransformType.NONE);
 
+		textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		atlas.setBlurMipmap(false, false);
 
-		Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
+		textureManager.bindTexture(TEXTURE);
 
 		GlStateManager.scale(-1, -1, 1);
 		GlStateManager.rotate(180, 0, 1, 0);
@@ -64,7 +70,7 @@ public class RenderLivingWeedwoodShield extends TileEntityItemStackRenderer {
 		if(spitTicks > 0) {
 			float overlayAlpha = (spitTicks - partialTicks) / 15.0F;
 
-			Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE_GLOW);
+			textureManager.bindTexture(TEXTURE_GLOW);
 
 			GlStateManager.doPolygonOffset(0, -3.0F);
 			GlStateManager.enablePolygonOffset();

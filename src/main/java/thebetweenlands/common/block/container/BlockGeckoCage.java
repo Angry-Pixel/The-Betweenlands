@@ -20,11 +20,14 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.DiscoveryContainer;
@@ -101,6 +104,16 @@ public class BlockGeckoCage extends BlockContainer {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
+	protected void spawnHeartParticles(World world, BlockPos pos) {
+		for (int i = 0; i < 7; ++i) {
+			double d0 = world.rand.nextGaussian() * 0.02D;
+			double d1 = world.rand.nextGaussian() * 0.02D;
+			double d2 = world.rand.nextGaussian() * 0.02D;
+			world.spawnParticle(EnumParticleTypes.HEART, pos.getX() + world.rand.nextFloat(), pos.getY() + world.rand.nextFloat(), pos.getZ() + world.rand.nextFloat(), d0, d1, d2, new int[0]);
+		}
+	}
+	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItemStack = player.getHeldItem(hand);
@@ -116,18 +129,29 @@ public class BlockGeckoCage extends BlockContainer {
 				Item heldItem = heldItemStack.getItem();
 				if(heldItem == ItemRegistry.GECKO) {
 					if(!tile.hasGecko()) {
-						String name = "";
-						if (!(heldItemStack.getDisplayName().equals(TranslationHelper.translateToLocal(heldItemStack.getUnlocalizedName()))) && heldItemStack.hasDisplayName())
-								name = heldItemStack.getDisplayName();
-
-						tile.addGecko(heldItemStack.hasTagCompound() && heldItemStack.getTagCompound().hasKey("Health") ? (int) heldItemStack.getTagCompound().getFloat("Health") : 12, name);
-						if(!player.capabilities.isCreativeMode)
-							heldItemStack.shrink(1);
+						if(!world.isRemote) {
+							String name = "";
+							if (!(heldItemStack.getDisplayName().equals(TranslationHelper.translateToLocal(heldItemStack.getUnlocalizedName()))) && heldItemStack.hasDisplayName())
+									name = heldItemStack.getDisplayName();
+	
+							tile.addGecko(heldItemStack.hasTagCompound() && heldItemStack.getTagCompound().hasKey("Health") ? (int) heldItemStack.getTagCompound().getFloat("Health") : 12, name);
+							if(!player.capabilities.isCreativeMode)
+								heldItemStack.shrink(1);
+						}
 						return true;
 					}
 					return false;
 				}
-				if(tile.getAspectType() == null) {
+				if(heldItem == ItemRegistry.SAP_SPIT && tile.hasGecko() && tile.getGeckoUsages() < 12) {
+					if(!world.isRemote) {
+						tile.setGeckoUsages(12);
+						if(!player.capabilities.isCreativeMode)
+							heldItemStack.shrink(1);
+					} else {
+						this.spawnHeartParticles(world, pos);
+					}
+					return true;
+				} else if(tile.getAspectType() == null) {
 					if(tile.hasGecko()) {
 						if(DiscoveryContainer.hasDiscoveryProvider(player)) {
 							if(!world.isRemote) {

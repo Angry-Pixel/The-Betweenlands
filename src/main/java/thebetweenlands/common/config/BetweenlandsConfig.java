@@ -335,6 +335,17 @@ public class BetweenlandsConfig {
 		@Comment("After how many seconds caving rope should despawn after the player is no longer connected")
 		@RangeInt(min = 0, max = Integer.MAX_VALUE / 20)
 		public int cavingRopeDespawnTime = 1200;
+		
+		@Name("equipment_hotbar_side")
+		@LangKey(LANG_PREFIX + "equipment_hotbar_side")
+		@Comment("Change this to 1 or 0 to change on which side of the hotbar the equipment is shown")
+		@RangeInt(min = 0, max = 1)
+		public int equipmentHotbarSide = 0;
+		
+		@Name("equipment_visible")
+		@LangKey(LANG_PREFIX + "equipment_visible")
+		@Comment("Whether equipment should be shown on the HUD")
+		public boolean equipmentVisible = true;
 	}
 
 	@Name("mob_spawning")

@@ -108,8 +108,8 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
         World world = this.getWorld();
 
         //Generate middle gems
-        int cycles = 1 + (rand.nextBoolean() ? rand.nextInt(2) : 0);
-        for (int i = 0; i < cycles; i++) {
+        int cycles = rand.nextInt(4) == 0 ? (1 + rand.nextInt(3)) : 0;
+        gems: for (int i = 0; i < cycles; i++) {
             if (rand.nextInt(9 / cycles + 1) == 0) {
                 int xx = this.getX() + this.offsetXZ();
                 int zz = this.getZ() + this.offsetXZ();
@@ -126,13 +126,13 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
                     switch (rand.nextInt(3)) {
                         case 0:
                             world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.AQUA_MIDDLE_GEM_ORE.getDefaultState());
-                            break;
+                            break gems;
                         case 1:
                             world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.CRIMSON_MIDDLE_GEM_ORE.getDefaultState());
-                            break;
+                            break gems;
                         case 2:
                             world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.GREEN_MIDDLE_GEM_ORE.getDefaultState());
-                            break;
+                            break gems;
                     }
                 }
             }

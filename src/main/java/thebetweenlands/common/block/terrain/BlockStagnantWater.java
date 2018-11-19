@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
@@ -14,12 +15,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
-public class BlockStagnantWater extends BlockFluidClassic implements IStateMappedBlock {
+public class BlockStagnantWater extends BlockFluidClassic implements IStateMappedBlock, ICustomItemBlock {
 	public BlockStagnantWater() {
 		super(FluidRegistry.STAGNANT_WATER, Material.WATER);
 	}
@@ -71,5 +73,10 @@ public class BlockStagnantWater extends BlockFluidClassic implements IStateMappe
 	@Override
 	public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion) {
 		return 100;
+	}
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }

@@ -5,6 +5,7 @@ import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IStackHelper;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class CoatingRecipeJEI implements ICraftingRecipeWrapper, ICustomCraftingRecipeWrapper {
 
-    private static List<ItemStack> coatableItems = NonNullList.create();
+    protected static List<ItemStack> coatableItems = NonNullList.create();
     private final ICraftingGridHelper craftingGridHelper;
 
     public CoatingRecipeJEI(IGuiHelper guiHelper) {
@@ -78,8 +79,8 @@ public class CoatingRecipeJEI implements ICraftingRecipeWrapper, ICustomCrafting
 
         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
         IFocus focus = recipeLayout.getFocus();
-        List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
-        List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
+        List<List<ItemStack>> inputs = ingredients.getInputs(VanillaTypes.ITEM);
+        List<List<ItemStack>> outputs = ingredients.getOutputs(VanillaTypes.ITEM);
 
         if (focus != null && focus.getValue() instanceof ItemStack && ((ItemStack) focus.getValue()).getItem() instanceof ICorrodible) {
             if (focus.getMode() == IFocus.Mode.INPUT) {

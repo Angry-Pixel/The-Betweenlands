@@ -2,7 +2,6 @@ package thebetweenlands.common.world.event;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.concurrent.TimeUnit;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,21 +14,31 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
-public class EventSpoopy extends BLEnvironmentEvent {
+public class EventSpoopy extends SeasonalEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "spook");
 
 	private static final long SPOOPY_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 9, 23, 0, 0).getTime().getTime();
 
-	private World world;
-	private World lastWorld;
-	private boolean chatSent = false;
 	private float skyTransparency = 0.0F;
 	private float lastSkyTransparency = 0.0F;
+
+	public EventSpoopy(BLEnvironmentEventRegistry registry) {
+		super(registry);
+	}
+
+	@Override
+	public long getStartDateInMs() {
+		return SPOOPY_DATE;
+	}
+
+	@Override
+	public int getDurationInDays() {
+		return 8;
+	}
 
 	public void setSkyTransparency(float transparency) {
 		this.lastSkyTransparency = this.skyTransparency;
@@ -40,26 +49,6 @@ public class EventSpoopy extends BLEnvironmentEvent {
 		return (this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks) / 2.0F;
 	}
 
-	public EventSpoopy(BLEnvironmentEventRegistry registry) {
-		super(registry);
-	}
-
-	public long getDayDiff() {
-		return TimeUnit.DAYS.convert(Calendar.getInstance().getTime().getTime() - SPOOPY_DATE, TimeUnit.MILLISECONDS);
-	}
-
-	private boolean wasSet = false;
-
-	public static boolean isSpoopy(World world) {
-		if(world != null) {
-			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
-			if(provider != null) {
-				return provider.getEnvironmentEventRegistry().spoopy.isActive();
-			}
-		}
-		return false;
-	}
-
 	@Override
 	public ResourceLocation getEventName() {
 		return ID;
@@ -67,11 +56,6 @@ public class EventSpoopy extends BLEnvironmentEvent {
 
 	@Override
 	public void setActive(boolean active) {
-		if(active && TheBetweenlands.proxy.getClientWorld() != null && (!this.isActive() || this.lastWorld != TheBetweenlands.proxy.getClientWorld()) && TheBetweenlands.proxy.getClientPlayer() != null && this.world != null && this.world.isRemote) {
-			this.lastWorld = TheBetweenlands.proxy.getClientWorld();
-			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
-			player.sendStatusMessage(new TextComponentTranslation("chat.event.spook"), true);
-		}
 		//Mark blocks in range for render update to update block textures
 		if(active != this.isActive() && TheBetweenlands.proxy.getClientWorld() != null && TheBetweenlands.proxy.getClientPlayer() != null) {
 			updateModelActiveState(active);
@@ -82,27 +66,15 @@ public class EventSpoopy extends BLEnvironmentEvent {
 			int pz = MathHelper.floor(player.posZ) - 256;
 			TheBetweenlands.proxy.getClientWorld().markBlockRangeForRenderUpdate(px, py, pz, px + 512, py + 512, pz + 512);
 		}
+
 		super.setActive(active);
 	}
 
 	@Override
 	public void update(World world) {
 		super.update(world);
-		this.world = world;
-		if(!world.isRemote) {
-			if (BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
-				long dayDiff = this.getDayDiff();
-				if (dayDiff >= 0 && dayDiff <= 8 && BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
-					if (!this.isActive() && !this.wasSet) {
-						this.setActive(true);
-						this.wasSet = true;
-					}
-				} else if (this.wasSet) {
-					this.wasSet = false;
-					this.setActive(false);
-				}
-			}
-		} else {
+
+		if(world.isRemote) {
 			if(this.isActive()) {
 				if(this.skyTransparency < 1.0F) {
 					this.setSkyTransparency(this.skyTransparency + 0.003F);
@@ -121,34 +93,6 @@ public class EventSpoopy extends BLEnvironmentEvent {
 		}
 	}
 
-	@Override
-	public void resetActiveState() {
-		long dayDiff = this.getDayDiff();
-		if (dayDiff >= 0 && dayDiff <= 8 && BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
-			if (!this.isActive()) {
-				this.setActive(true);
-			}
-			this.wasSet = true;
-		} else {
-			if(this.isActive()) {
-				this.setActive(false);
-			}
-			this.wasSet = false;
-		}
-	}
-
-	@Override
-	public void saveEventData() { 
-		super.saveEventData();
-		this.getData().setBoolean("wasSet", this.wasSet);
-	}
-
-	@Override
-	public void loadEventData() { 
-		super.loadEventData();
-		this.wasSet = this.getData().getBoolean("wasSet");
-	}
-
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public static void onClientTick(ClientTickEvent event) {
@@ -163,5 +107,10 @@ public class EventSpoopy extends BLEnvironmentEvent {
 	@SideOnly(Side.CLIENT)
 	private static void updateModelActiveState(boolean active) {
 		ModelRegistry.SPOOK_EVENT.setActive(active);
+	}
+
+	@Override
+	protected void showStatusMessage(EntityPlayer player) {
+		player.sendStatusMessage(new TextComponentTranslation("chat.event.spook"), true);
 	}
 }

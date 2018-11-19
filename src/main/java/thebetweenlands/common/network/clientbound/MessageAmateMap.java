@@ -1,5 +1,12 @@
 package thebetweenlands.common.network.clientbound;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.MapItemRenderer;
 import net.minecraft.network.PacketBuffer;
@@ -9,18 +16,11 @@ import net.minecraft.world.storage.MapDecoration;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.misc.ItemAmateMap;
 import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.world.storage.AmateMapData;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class MessageAmateMap extends MessageBase {
     private int mapId;
@@ -62,7 +62,16 @@ public class MessageAmateMap extends MessageBase {
 
     @Override
     public IMessage process(MessageContext ctx) {
-        MapItemRenderer mapItemRenderer = Minecraft.getMinecraft().entityRenderer.getMapItemRenderer();
+        if(ctx.side == Side.CLIENT) {
+        	this.handle();
+        }
+
+        return null;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    private void handle() {
+    	MapItemRenderer mapItemRenderer = Minecraft.getMinecraft().entityRenderer.getMapItemRenderer();
         AmateMapData mapData = ItemAmateMap.loadMapData(mapId, Minecraft.getMinecraft().world);
 
         if (mapData == null) {
@@ -96,7 +105,5 @@ public class MessageAmateMap extends MessageBase {
         
         mapData.mapDecorations.putAll(vanilla);
         mapData.updateMapTexture();
-
-        return null;
     }
 }
