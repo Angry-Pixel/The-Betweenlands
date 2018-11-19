@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
+import thebetweenlands.common.block.container.BlockMudBricksAlcove;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
@@ -44,7 +45,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private IBlockState FLAT_HEAD_MUSHROOM = BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState();
 
 	private IBlockState STAGNANT_WATER = BlockRegistry.STAGNANT_WATER.getDefaultState();
-	private IBlockState TRAP_1 = Blocks.SLIME_BLOCK.getDefaultState();
 	private IBlockState SPAWNER_TYPE_1 = Blocks.PRISMARINE.getDefaultState();
 	private IBlockState SPAWNER_TYPE_2 = Blocks.PURPUR_BLOCK.getDefaultState();
 
@@ -106,12 +106,17 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private IBlockState ROTTEN_BARK = BlockRegistry.LOG_ROTTEN_BARK.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, EnumAxis.NONE);
 
 	private IBlockState ROOT = BlockRegistry.ROOT.getDefaultState();
-	
+
 	private IBlockState DUNGEON_DOOR_COMBINATION_EAST = BlockRegistry.DUNGEON_DOOR_COMBINATION.getDefaultState().withProperty(BlockDungeonDoorCombination.FACING, EnumFacing.EAST);
 	private IBlockState DUNGEON_DOOR_COMBINATION_WEST = BlockRegistry.DUNGEON_DOOR_COMBINATION.getDefaultState().withProperty(BlockDungeonDoorCombination.FACING, EnumFacing.WEST);
 
 	private IBlockState DUNGEON_DOOR_EAST = BlockRegistry.DUNGEON_DOOR_RUNES.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.EAST);
 	private IBlockState DUNGEON_DOOR_WEST = BlockRegistry.DUNGEON_DOOR_RUNES.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.WEST);
+
+	private IBlockState MUD_BRICKS_ALCOVE_NORTH = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.NORTH);
+	private IBlockState MUD_BRICKS_ALCOVE_EAST = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.EAST);
+	private IBlockState MUD_BRICKS_ALCOVE_SOUTH = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.SOUTH);
+	private IBlockState MUD_BRICKS_ALCOVE_WEST = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.WEST);
 
 	private final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
@@ -336,9 +341,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (layer == 2) {
 						if (rand.nextInt(25) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 1 + i * 4))))
 							world.setBlockState(pos.add(1 + j * 4, 0, 1 + i * 4), TORCH_SOUTH, 2);
-						else if (rand.nextInt(10) == 0) {
-							int randOffset = rand.nextInt(2);
-							world.setBlockState(pos.add(1 + j * 4, -randOffset, i * 4), TRAP_1, 2);
+						else {
+							if (rand.nextInt(5) == 0)
+								world.setBlockState(pos.add(2 + j * 4, 0, i * 4), MUD_BRICKS_ALCOVE_SOUTH, 2);
+							if (rand.nextInt(5) == 0)
+								world.setBlockState(pos.add(1 + j * 4, 0, i * 4), MUD_BRICKS_ALCOVE_SOUTH, 2);
+							if (rand.nextInt(5) == 0)
+								world.setBlockState(pos.add(3 + j * 4, 0, i * 4), MUD_BRICKS_ALCOVE_SOUTH, 2);
 						}
 					}
 					if (layer == 3) {
@@ -360,9 +369,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (layer == 2) {
 						if (rand.nextInt(25) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 2 + i * 4))))
 							world.setBlockState(pos.add(1 + j * 4, 0, 2 + i * 4), TORCH_EAST, 2);
-						else if (rand.nextInt(10) == 0) {
-							int randOffset = rand.nextInt(2);
-							world.setBlockState(pos.add(j * 4, -randOffset, 2 + i * 4), TRAP_1, 2);
+						else {
+							if (rand.nextInt(5) == 0)
+								world.setBlockState(pos.add(j * 4, 0, 2 + i * 4), MUD_BRICKS_ALCOVE_EAST, 2);
+							if (rand.nextInt(5) == 0)
+								world.setBlockState(pos.add(j * 4, 0, 1 + i * 4), MUD_BRICKS_ALCOVE_EAST, 2);
+							if (rand.nextInt(5) == 0)
+								world.setBlockState(pos.add(j * 4, 0, 3 + i * 4), MUD_BRICKS_ALCOVE_EAST, 2);
 						}
 					}
 					if (layer == 3) {
@@ -384,9 +397,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (layer == 2) {
 						if (rand.nextInt(25) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, 0, 2 + i * 4))))
 							world.setBlockState(pos.add(3 + j * 4, 0, 2 + i * 4), TORCH_WEST, 2);
-						else if (rand.nextInt(10) == 0) {
-							int randOffset = rand.nextInt(2);
-							world.setBlockState(pos.add(4 + j * 4, -randOffset, 2 + i * 4), TRAP_1, 2);
+						else  {
+							if (rand.nextInt(5) == 0)
+								world.setBlockState(pos.add(4 + j * 4, 0, 2 + i * 4), MUD_BRICKS_ALCOVE_WEST, 2);
+							if (rand.nextInt(5) == 0)
+								world.setBlockState(pos.add(4 + j * 4, 0, 1 + i * 4), MUD_BRICKS_ALCOVE_WEST, 2);
+							if (rand.nextInt(5) == 0)
+								world.setBlockState(pos.add(4 + j * 4, 0, 3 + i * 4), MUD_BRICKS_ALCOVE_WEST, 2);
 						}
 					}
 					if (layer == 3) {
@@ -408,9 +425,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (layer == 2) {
 						if (rand.nextInt(25) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, 0, 3 + i * 4))))
 							world.setBlockState(pos.add(2 + j * 4, 0, 3 + i * 4), TORCH_NORTH, 2);
-						else if (rand.nextInt(10) == 0) {
-							int randOffset = rand.nextInt(2);
-							world.setBlockState(pos.add(1 + j * 4, -randOffset, 4 + i * 4), TRAP_1, 2);
+						else {
+							if (rand.nextInt(5) == 0)
+								world.setBlockState(pos.add(2 + j * 4, 0, 4 + i * 4), MUD_BRICKS_ALCOVE_NORTH, 2);
+							if (rand.nextInt(5) == 0)
+								world.setBlockState(pos.add(1 + j * 4, 0, 4 + i * 4), MUD_BRICKS_ALCOVE_NORTH, 2);
+							if (rand.nextInt(5) == 0)
+								world.setBlockState(pos.add(3 + j * 4, 0, 4 + i * 4), MUD_BRICKS_ALCOVE_NORTH, 2);
 						}
 					}
 					if (layer == 3) {
@@ -901,6 +922,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			STRUCTURE_BLOCKS.put(DUNGEON_DOOR_COMBINATION_WEST, true);
 			STRUCTURE_BLOCKS.put(DUNGEON_DOOR_EAST, true);
 			STRUCTURE_BLOCKS.put(DUNGEON_DOOR_WEST, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_ALCOVE_NORTH, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_ALCOVE_EAST, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_ALCOVE_SOUTH, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_ALCOVE_WEST, true);
 		}
 	}
 }

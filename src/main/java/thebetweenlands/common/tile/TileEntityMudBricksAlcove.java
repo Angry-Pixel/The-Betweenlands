@@ -17,7 +17,7 @@ public class TileEntityMudBricksAlcove extends TileEntityLootInventory {
 	public void setUpGreeble() {
 		Random rand = getWorld().rand;
 		if(!greebled) {
-			if(rand.nextInt(5) == 0)
+			if(rand.nextInt(3) == 0)
 				has_urn = true;
 			if(has_urn) {
 				urn_type = rand.nextInt(3);

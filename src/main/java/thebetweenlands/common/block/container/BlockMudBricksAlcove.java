@@ -38,13 +38,13 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
 	public BlockMudBricksAlcove() {
-		this(Material.GLASS);
+		this(Material.ROCK);
 	}
 
 	public BlockMudBricksAlcove(Material material) {
 		super(material);
 		setHardness(0.4f);
-		setSoundType(SoundType.GLASS);
+		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
