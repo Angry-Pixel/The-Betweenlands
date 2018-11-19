@@ -622,7 +622,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 								handled = true;
 								break;
 							}
-						} else {
+						} else if(mouseButton == 1) {
 							if(!primaryRuneGui.onStartMarkUnlinking(mark, mouseX, mouseY)) {
 								IRuneLink unlinked = this.container.unlink(primaryRuneGui.getContainer().getContext().getRuneIndex(), mark.getMarkIndex());
 								if(unlinked != null) {
@@ -855,8 +855,18 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 							INodeConfiguration configuration = container.getConfiguration();
 							int outputs = configuration.getOutputs().size();
 
-							if(outputs > 0 && this.isInsideLinkingDropdownMenuArea(slot, outputs, mouseX, mouseY, true)) {
-								this.linkingDropdownMenuSlot = slot.slotNumber;
+							if(outputs > 0) {
+								int sx = slot.xPos - 3;
+								int sy = slot.yPos - 3;
+
+								int minX = this.guiLeft + sx;
+								int minY = this.guiTop + sy;
+								int maxX = this.guiLeft + sx + 16 + 6;
+								int maxY = this.guiTop + sy + 16 + 6;
+
+								if(mouseX >= minX && mouseX < maxX && mouseY >= minY && mouseY < maxY) {
+									this.linkingDropdownMenuSlot = slot.slotNumber;
+								}
 							}
 						}
 					}
@@ -891,7 +901,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 		int minX = this.guiLeft + sx;
 		int minY = this.guiTop + sy + (!includeSlot ? 18 : 0);
-		int maxX = this.guiLeft + sx + 21;
+		int maxX = this.guiLeft + sx + 22;
 		int maxY = this.guiTop + sy + outputs * 18 + 6 + 17;
 
 		return mouseX >= minX && mouseX < maxX && mouseY >= minY && mouseY < maxY;
