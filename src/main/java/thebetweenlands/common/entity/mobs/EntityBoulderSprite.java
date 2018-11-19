@@ -274,6 +274,14 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	}
 
 	@Override
+	protected SoundEvent getAmbientSound() {
+		if(!this.isHiddenOrInWall()) {
+			return SoundRegistry.BOULDER_SPRITE_LIVING;
+		}
+		return null;
+	}
+	
+	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundRegistry.BOULDER_SPRITE_HURT;
 	}

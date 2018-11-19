@@ -128,6 +128,7 @@ public class SoundRegistry {
     public static final BLSoundEvent GAS_CLOUD_LIVING = reg("gas_cloud_living");
     public static final BLSoundEvent GAS_CLOUD_HURT = reg("gas_cloud_hurt");
     public static final BLSoundEvent GAS_CLOUD_DEATH = reg("gas_cloud_death");
+    public static final BLSoundEvent BOULDER_SPRITE_LIVING = reg("boulder_sprite_living");
     public static final BLSoundEvent BOULDER_SPRITE_HURT = reg("boulder_sprite_hurt");
     public static final BLSoundEvent BOULDER_SPRITE_DEATH = reg("bounder_sprite_death");
     public static final BLSoundEvent BOULDER_SPRITE_ROLL = reg("bounder_sprite_roll");
