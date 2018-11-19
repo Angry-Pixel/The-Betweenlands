@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -30,19 +32,25 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	public static class Mark implements IGuiRuneMark {
 		private final IRuneGui gui;
 		private final int markIndex, x, y, w, h;
+		private final boolean output;
 
-		public Mark(IRuneGui gui, int markIndex, int x, int y, int w, int h) {
+		public Mark(IRuneGui gui, int markIndex, int x, int y, int w, int h, boolean output) {
 			this.gui = gui;
 			this.markIndex = markIndex;
 			this.x = x;
 			this.y = y;
 			this.w = w;
 			this.h = h;
+			this.output = output;
+		}
+
+		public boolean isOutput() {
+			return this.output;
 		}
 
 		@Override
-		public boolean isInside(int mouseX, int mouseY) {
-			return mouseX >= this.gui.getMinX() + this.x && mouseX < this.gui.getMinX() + this.x + this.w && mouseY >= this.gui.getMinY() + this.y && mouseY < this.gui.getMinY() + this.y + this.h;
+		public boolean isInside(int centerX, int centerY, int mouseX, int mouseY) {
+			return mouseX >= centerX - this.w / 2 && mouseX < centerX + this.w / 2 && mouseY >= centerY - this.h / 2 && mouseY < centerY + this.h / 2;
 		}
 
 		@Override
@@ -59,6 +67,11 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		public int getCenterY() {
 			return this.gui.getMinY() + this.y + this.h / 2;
 		}
+
+		@Override
+		public boolean isInteractable() {
+			return true;
+		}
 	}
 
 	protected final Minecraft mc = Minecraft.getMinecraft();
@@ -71,8 +84,8 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected IRuneContainerContext context;
 	protected IRuneContainer container;
 
-	protected List<Mark> interactableInputMarks = new ArrayList<>();
-	protected List<Mark> interactableOutputMarks = new ArrayList<>();
+	protected List<Mark> inputMarks = new ArrayList<>();
+	protected List<Mark> outputMarks = new ArrayList<>();
 
 	protected int updateCounter;
 	protected int xSize = 166;
@@ -94,20 +107,15 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		int x = 4;
 		for(int i = 0; i < config.getInputs().size(); i++) {
-			this.interactableInputMarks.add(new Mark(this, i, x, 50, 16, 16));
+			this.inputMarks.add(new Mark(this, i, x, 50, 16, 16, false));
 			x += 18;
 		}
 
 		x = 4;
 		for(int i = 0; i < config.getOutputs().size(); i++) {
-			this.interactableOutputMarks.add(new Mark(this, i, x, 50 + 20, 16, 16));
+			this.outputMarks.add(new Mark(this, i, x, 50 + 20, 16, 16, true));
 			x += 18;
 		}
-	}
-
-	@Override
-	public IRuneContainerContext getContext() {
-		return this.context;
 	}
 
 	@Override
@@ -132,7 +140,38 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 	@Override
 	public void drawForeground(int mouseX, int mouseY) {
-		this.drawMenu();
+		this.drawMenu(mouseX, mouseY);
+	}
+
+	@Override
+	public void drawMark(IGuiRuneMark mark, int centerX, int centerY, boolean linked) {
+		Mark m = (Mark) mark;
+
+		if(m.isOutput()) {
+			Gui.drawRect(centerX - m.w / 2, centerY - m.h / 2, centerX + m.w / 2, centerY + m.h / 2, 0xFF0000FF);
+		} else {
+			Gui.drawRect(centerX - m.w / 2, centerY - m.h / 2, centerX + m.w / 2, centerY + m.h / 2, 0xFFFF0000);
+		}
+
+		GlStateManager.enableBlend();
+		GlStateManager.color(1, 1, 1, 1);
+	}
+
+	@Override
+	public void drawMarkTooltip(IGuiRuneMark mark, int centerX, int centerY, int mouseX, int mouseY, boolean linked) {
+		List<String> text = new ArrayList<>();
+		text.add("Mark " + mark.getMarkIndex());
+
+		if(((Mark) mark).isOutput()) {
+			text.add(ChatFormatting.DARK_PURPLE + "Output");
+		} else {
+			text.add(ChatFormatting.DARK_PURPLE + "Input");
+		}
+
+		this.drawHoveringText(text, mouseX, mouseY, this.fontRenderer);
+
+		GlStateManager.disableLighting();
+		GlStateManager.color(1, 1, 1, 1);
 	}
 
 	@Override
@@ -173,20 +212,30 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	public boolean onStartMarkLinking(IGuiRuneMark mark, int mouseX, int mouseY) {
 		return false;
 	}
-	
+
 	@Override
 	public boolean onStartMarkUnlinking(IGuiRuneMark mark, int mouseX, int mouseY) {
 		return false;
 	}
 
 	@Override
-	public Collection<Mark> getInteractableInputMarks() {
-		return this.interactableInputMarks;
+	public IGuiRuneMark getInputMark(int markIndex) {
+		return this.inputMarks.get(markIndex);
 	}
 
 	@Override
-	public Collection<Mark> getInteractableOutputMarks() {
-		return this.interactableOutputMarks;
+	public Collection<Mark> getInputMarks() {
+		return this.inputMarks;
+	}
+
+	@Override
+	public IGuiRuneMark getOutputMark(int markIndex) {
+		return this.outputMarks.get(markIndex);
+	}
+
+	@Override
+	public Collection<Mark> getOutputMarks() {
+		return this.outputMarks;
 	}
 
 	@Override
@@ -253,18 +302,18 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		GlStateManager.color(1, 1, 1, 1);
 		this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
 
-		for(Mark mark : this.interactableInputMarks) {
-			Gui.drawRect(mark.getCenterX() - mark.w / 2, mark.getCenterY() - mark.h / 2, mark.getCenterX() + mark.w / 2, mark.getCenterY() + mark.h / 2, 0xFFFF0000);
+		for(Mark mark : this.inputMarks) {
+			this.drawMark(mark, mark.getCenterX(), mark.getCenterY(), false);
 		}
-		
-		for(Mark mark : this.interactableOutputMarks) {
-			Gui.drawRect(mark.getCenterX() - mark.w / 2, mark.getCenterY() - mark.h / 2, mark.getCenterX() + mark.w / 2, mark.getCenterY() + mark.h / 2, 0xFF0000FF);
+
+		for(Mark mark : this.outputMarks) {
+			this.drawMark(mark, mark.getCenterX(), mark.getCenterY(), false);
 		}
 
 		GlStateManager.color(1, 1, 1, 1);
 	}
 
-	protected void drawMenu() {
+	protected void drawMenu(int mouseX, int mouseY) {
 		GlStateManager.color(1, 1, 1, 1);
 
 		/*if(this.menu == RuneMenuType.PRIMARY) {
@@ -276,6 +325,19 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			this.zLevel = 0;
 		}*/
 
+		for(Mark mark : this.inputMarks) {
+			if(mark.isInside(mark.getCenterX(), mark.getCenterY(), mouseX, mouseY)) {
+				this.drawMarkTooltip(mark, mark.getCenterX(), mark.getCenterY(), mouseX, mouseY, false);
+			}
+		}
+
+		for(Mark mark : this.outputMarks) {
+			if(mark.isInside(mark.getCenterX(), mark.getCenterY(), mouseX, mouseY)) {
+				this.drawMarkTooltip(mark, mark.getCenterX(), mark.getCenterY(), mouseX, mouseY, false);
+			}
+		}
+
+		GlStateManager.color(1, 1, 1, 1);
 		this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
 	}
 
@@ -298,7 +360,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		}
 
 		float x2 = (x1 + x3) / 2.0F;
-		float y2 = Math.max(y1, y3) + 15.0F + (float)Math.sin((this.updateCounter + this.mc.getRenderPartialTicks()) / 15.0F) * 2.5f;
+		float y2 = Math.max(y1, y3) + 0.0F + (float)Math.sin((this.updateCounter + this.mc.getRenderPartialTicks()) / 25.0F) * 1.5f;
 
 		//Fit parabola
 		float a1 = -x1*x1 + x2*x2;
@@ -411,5 +473,9 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		bufferbuilder.pos((double)(x + width), (double)(y + 0), (double)this.zLevel).tex((double)((float)(minU + width) * scale), (double)((float)(minV + 0) * scale)).endVertex();
 		bufferbuilder.pos((double)(x + 0), (double)(y + 0), (double)this.zLevel).tex((double)((float)(minU + 0) * scale), (double)((float)(minV + 0) * scale)).endVertex();
 		tessellator.draw();
+	}
+
+	protected void drawHoveringText(List<String> textLines, int x, int y, FontRenderer font) {
+		net.minecraftforge.fml.client.config.GuiUtils.drawHoveringText(textLines, x, y, this.width, this.height, -1, font);
 	}
 }

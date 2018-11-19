@@ -483,7 +483,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 			@Override
 			public IRuneChainAltarGui getRuneChainAltarGui() {
-				return null;
+				return ContainerRuneChainAltar.this.getRuneChainAltarGui();
 			}
 
 			@Override
@@ -498,7 +498,12 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 			@Override
 			public NBTTagCompound getData() {
-				return ContainerRuneChainAltar.this.altar.getChainInfo().getContainerData(entry.runeIndex);
+				RuneChainInfo info = ContainerRuneChainAltar.this.altar.getChainInfo();
+				NBTTagCompound nbt = info.getContainerData(entry.runeIndex);
+				if(nbt == null) {
+					info.setContainerData(entry.runeIndex, nbt = new NBTTagCompound());
+				}
+				return nbt;
 			}
 
 			@Override
@@ -511,5 +516,14 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 				entry.slots.add(slot);
 			}
 		};
+	}
+
+	protected IRuneChainAltarGui getRuneChainAltarGui() {
+		return null;
+	}
+
+	@Override
+	public Slot getRuneSlot(int runeIndex) {
+		return this.getSlot(runeIndex + this.altar.getChainStart());
 	}
 }

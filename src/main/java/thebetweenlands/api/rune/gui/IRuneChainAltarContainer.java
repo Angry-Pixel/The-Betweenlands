@@ -4,15 +4,18 @@ import java.util.Collection;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 public interface IRuneChainAltarContainer {
 	public int getRuneInventorySize();
 
+	public Slot getRuneSlot(int runeIndex);
+
 	public int getSelectedRuneIndex();
 
 	public void setSelectedRune(int runeIndex);
-	
+
 	public ItemStack getRuneItemStack(int runeIndex);
 
 	public void setRuneItemStack(int runeIndex, ItemStack stack);

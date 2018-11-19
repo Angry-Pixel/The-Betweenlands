@@ -1,11 +1,13 @@
 package thebetweenlands.api.rune.gui;
 
 public interface IGuiRuneMark {
-	public boolean isInside(int mouseX, int mouseY);
+	public boolean isInside(int centerX, int centerY, int mouseX, int mouseY);
 
 	public int getMarkIndex();
 
 	public int getCenterX();
 
 	public int getCenterY();
+	
+	public boolean isInteractable();
 }
