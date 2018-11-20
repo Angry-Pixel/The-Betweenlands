@@ -2,7 +2,9 @@ package thebetweenlands.client.gui.inventory.runechainaltar;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
@@ -17,16 +19,19 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.gui.RuneMenuDrawingContext;
 import thebetweenlands.api.rune.gui.IGuiRuneMark;
 import thebetweenlands.api.rune.gui.IRuneContainer;
 import thebetweenlands.api.rune.gui.IRuneContainerContext;
 import thebetweenlands.api.rune.gui.IRuneGui;
+import thebetweenlands.api.rune.gui.RuneMenuDrawingContext;
 import thebetweenlands.api.rune.gui.RuneMenuType;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ColoredItemRenderer;
 
 public class DefaultRuneGui extends Gui implements IRuneGui {
@@ -92,8 +97,30 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected int xSize = 166;
 	protected int ySize = 216;
 
+	protected Map<String, IMarkRenderer> markRenderers = new HashMap<>();
+	protected IMarkRenderer unknownMarkRenderer = null;
+
+	protected static final ResourceLocation UNKNOWN_MARK_DESCRIPTOR = new ResourceLocation(ModInfo.ID, "N/A");
+
+	protected static interface IMarkRenderer {
+		public void render(int centerX, int centerY);
+	}
+
 	public DefaultRuneGui(RuneMenuType menu) {
 		this.menu = menu;
+
+		this.addDefaultMarkRenderer(UNKNOWN_MARK_DESCRIPTOR, 216, 9, 6, 7);
+
+		this.addDefaultMarkRenderer(RuneMarkDescriptors.BLOCK, 216, 1, 6, 7);
+		this.addDefaultMarkRenderer(RuneMarkDescriptors.BLOCK, 224, 1, 6, 7);
+		this.addDefaultMarkRenderer(RuneMarkDescriptors.ENTITY, 232, 1, 6, 7);
+	}
+
+	protected void addDefaultMarkRenderer(ResourceLocation descriptor, int minU, int minV, int width, int height) {
+		this.markRenderers.put(descriptor.toString(), (centerX, centerY) -> {
+			this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
+			this.drawTexturedModalRect512(centerX - width / 2, centerY - width / 2, minU, minV, width, height);
+		});
 	}
 
 	@Override
@@ -150,14 +177,27 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	protected void drawMark(Mark mark, int centerX, int centerY) {
+		String desc;
 		if(mark.isOutput()) {
-			Gui.drawRect(centerX - mark.w / 2, centerY - mark.h / 2, centerX + mark.w / 2, centerY + mark.h / 2, 0xFF0000FF);
+			desc = this.container.getConfiguration().getOutputs().get(mark.getMarkIndex()).getDescriptor();
+			//Gui.drawRect(centerX - mark.w / 2, centerY - mark.h / 2, centerX + mark.w / 2, centerY + mark.h / 2, 0xFF0000FF);
 		} else {
-			Gui.drawRect(centerX - mark.w / 2, centerY - mark.h / 2, centerX + mark.w / 2, centerY + mark.h / 2, 0xFFFF0000);
+			desc = this.container.getConfiguration().getInputs().get(mark.getMarkIndex()).getDescriptor();
+			//Gui.drawRect(centerX - mark.w / 2, centerY - mark.h / 2, centerX + mark.w / 2, centerY + mark.h / 2, 0xFFFF0000);
 		}
 
 		GlStateManager.enableBlend();
 		GlStateManager.color(1, 1, 1, 1);
+
+		IMarkRenderer renderer = null;
+		if(desc != null) {
+			renderer = this.markRenderers.get(desc);
+		} else {
+			renderer = this.markRenderers.get(UNKNOWN_MARK_DESCRIPTOR.toString());
+		}
+		if(renderer != null) {
+			renderer.render(centerX, centerY);
+		}
 	}
 
 	@Override
@@ -170,8 +210,10 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		text.add("Mark " + mark.getMarkIndex());
 
 		if(mark.isOutput()) {
+			text.add(ChatFormatting.GRAY + this.container.getConfiguration().getOutputs().get(mark.getMarkIndex()).getDescriptor());
 			text.add(ChatFormatting.DARK_PURPLE + "Output");
 		} else {
+			text.add(ChatFormatting.GRAY + this.container.getConfiguration().getInputs().get(mark.getMarkIndex()).getDescriptor());
 			text.add(ChatFormatting.DARK_PURPLE + "Input");
 		}
 

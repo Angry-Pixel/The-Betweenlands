@@ -36,7 +36,7 @@ public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_POSITION = builder.in(BlockPos.class, RuneMarkDescriptors.BLOCK_POS);
+			IN_POSITION = builder.in(BlockPos.class, RuneMarkDescriptors.BLOCK);
 			IN_ENTITY = builder.in(Entity.class, RuneMarkDescriptors.ENTITY);
 
 			CONFIGURATION_1 = builder.build();

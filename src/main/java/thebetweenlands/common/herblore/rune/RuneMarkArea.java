@@ -37,7 +37,7 @@ public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			OUT_POSITIONS = builder.multiOut(BlockPos.class, RuneMarkDescriptors.BLOCK_POS);
+			OUT_POSITIONS = builder.multiOut(BlockPos.class, RuneMarkDescriptors.BLOCK);
 			OUT_ENTITY = builder.out(Entity.class, RuneMarkDescriptors.ENTITY);
 
 			CONFIGURATION_1 = builder.build();

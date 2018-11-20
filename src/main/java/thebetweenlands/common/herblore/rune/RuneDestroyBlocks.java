@@ -35,7 +35,7 @@ public final class RuneDestroyBlocks extends AbstractRune<RuneDestroyBlocks> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_POSITIONS = builder.multiIn(BlockPos.class, RuneMarkDescriptors.BLOCK_POS);
+			IN_POSITIONS = builder.multiIn(BlockPos.class, RuneMarkDescriptors.BLOCK);
 			IN_ENTITY = builder.in(Entity.class, RuneMarkDescriptors.ENTITY);
 
 			CONFIGURATION_1 = builder.build();
