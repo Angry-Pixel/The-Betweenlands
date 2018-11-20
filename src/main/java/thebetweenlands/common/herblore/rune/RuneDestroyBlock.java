@@ -9,10 +9,11 @@ import net.minecraft.util.math.BlockPos;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
-import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneDestroyBlock extends AbstractRune<RuneDestroyBlock> {
@@ -27,21 +28,21 @@ public final class RuneDestroyBlock extends AbstractRune<RuneDestroyBlock> {
 
 		private static final INodeConfiguration CONFIGURATION_1;
 		private static final INodeConfiguration CONFIGURATION_2;
-		
+
 		private static final InputPort<Entity> IN_ENTITY;
 		private static final InputPort<BlockPos> IN_POSITION;
 
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_POSITION = builder.in(BlockPos.class);
-			IN_ENTITY = builder.in(Entity.class);
+			IN_POSITION = builder.in(BlockPos.class, RuneMarkDescriptors.BLOCK_POS);
+			IN_ENTITY = builder.in(Entity.class, RuneMarkDescriptors.ENTITY);
 
 			CONFIGURATION_1 = builder.build();
-			
-			builder.in(BlockPos.class);
-			builder.out(Entity.class);
-			
+
+			builder.in(BlockPos.class, RuneMarkDescriptors.BLOCK_POS);
+			builder.out(Entity.class, RuneMarkDescriptors.ENTITY);
+
 			CONFIGURATION_2 = builder.build();
 		}
 

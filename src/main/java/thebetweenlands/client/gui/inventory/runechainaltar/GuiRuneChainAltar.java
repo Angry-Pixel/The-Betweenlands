@@ -31,6 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.IRuneItem;
 import thebetweenlands.api.rune.INodeConfiguration;
+import thebetweenlands.api.rune.gui.RuneMenuDrawingContext;
 import thebetweenlands.api.rune.gui.IGuiRuneMark;
 import thebetweenlands.api.rune.gui.IRuneChainAltarGui;
 import thebetweenlands.api.rune.gui.IRuneContainer;
@@ -451,7 +452,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(0, 0, 120);
 
-					primaryRuneGui.drawMarkConnection(this.draggingMark, mouseX, mouseY, false);
+					primaryRuneGui.drawMarkConnection(this.draggingMark, mouseX, mouseY, RuneMenuDrawingContext.Connection.CONNECTING); //TODO Check context
 
 					GlStateManager.popMatrix();
 				} else {
@@ -944,11 +945,11 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 	protected void drawLinkingDropdownMenus(int mouseX, int mouseY) {
 		if(this.linkingDropdownMenuSlot >= 0) {
-			this.drawDropdownMenu(this.inventorySlots.getSlot(this.linkingDropdownMenuSlot));
+			this.drawDropdownMenu(this.inventorySlots.getSlot(this.linkingDropdownMenuSlot), mouseX, mouseY);
 		}
 	}
 
-	protected void drawDropdownMenu(Slot slot) {
+	protected void drawDropdownMenu(Slot slot, int mouseX, int mouseY) {
 		IRuneContainer container = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
 
 		if(container != null) {
@@ -975,8 +976,11 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 				IRuneGui secondaryGui = this.openRuneGuis.get(RuneMenuType.SECONDARY);
 
 				if(secondaryGui != null) {
-					int mouseX = Mouse.getX() * this.width / this.mc.displayWidth;
-					int mouseY = this.height - Mouse.getY() * this.height / this.mc.displayHeight - 1;
+					Tuple<IGuiRuneMark, IRuneLink> link = this.getHoveredOnLink(mouseX, mouseY);
+
+					if(link == null) {
+						link = this.recentlyLinked;
+					}
 
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(-this.guiLeft, -this.guiTop, 271);
@@ -988,7 +992,20 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 						IGuiRuneMark mark = secondaryGui.getOutputMark(i);
 
-						secondaryGui.drawMark(mark, cx, cy, false); //TODO Linked boolean
+						RuneMenuDrawingContext.Mark drawingContext;
+						boolean isLinked = link != null && link.getSecond().getOutput() == i;
+						boolean isConnecting = this.draggingMark != null;
+						if(isLinked && isConnecting) {
+							drawingContext = RuneMenuDrawingContext.Mark.DROPDOWN_CONNECTION_AND_CONNECTING;
+						} else if(isLinked) {
+							drawingContext = RuneMenuDrawingContext.Mark.DROPDOWN_CONNECTION;
+						} else if(isConnecting) {
+							drawingContext = RuneMenuDrawingContext.Mark.DROPDOWN_CONNECTING;
+						} else {
+							drawingContext = RuneMenuDrawingContext.Mark.DROPDOWN;
+						}
+
+						secondaryGui.drawMark(mark, cx, cy, drawingContext);
 
 						yOff += 18;
 					}
@@ -1002,7 +1019,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 							IGuiRuneMark mark = secondaryGui.getOutputMark(i);
 
 							if(mark.isInside(cx, cy, mouseX, mouseY)) {
-								secondaryGui.drawMarkTooltip(mark, cx, cy, mouseX, mouseY, false); //TODO Linked boolean
+								secondaryGui.drawMarkTooltip(mark, cx, cy, mouseX, mouseY, link != null && link.getSecond().getOutput() == i ? RuneMenuDrawingContext.Tooltip.DROPDOWN_CONNECTION_AND_CONNECTING : RuneMenuDrawingContext.Tooltip.DROPDOWN_CONNECTING);
 							}
 
 							yOff += 18;
@@ -1084,7 +1101,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 				Slot linkedSlot = this.inventorySlots.getSlot(link.getSecond().getOutputRune() + this.tile.getChainStart());
 
 				if(this.swapAnimationTicks == 0 && linkedSlot instanceof SlotRune && linkedSlot.isEnabled()) {
-					this.drawDropdownMenu(linkedSlot);
+					this.drawDropdownMenu(linkedSlot, mouseX, mouseY);
 
 					int sy = this.guiTop + linkedSlot.yPos - 3;
 
@@ -1094,12 +1111,12 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(-this.guiLeft, -this.guiTop, 120);
 
-					primaryRuneGui.drawMarkConnection(link.getFirst(), cx, cy, true);
+					primaryRuneGui.drawMarkConnection(link.getFirst(), cx, cy, RuneMenuDrawingContext.Connection.VIA_DROPDOWN);
 
 					if(secondaryGuiRuneMark != null) {
-						secondaryRuneGui.drawMarkConnection(secondaryGuiRuneMark, cx, cy, true);
+						secondaryRuneGui.drawMarkConnection(secondaryGuiRuneMark, cx, cy, RuneMenuDrawingContext.Connection.VIA_DROPDOWN);
 
-						secondaryRuneGui.drawMarkTooltip(secondaryGuiRuneMark, secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), true);
+						secondaryRuneGui.drawMarkTooltip(secondaryGuiRuneMark, secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), RuneMenuDrawingContext.Tooltip.CONNECTION_END);
 					}
 
 					GlStateManager.popMatrix();
@@ -1107,9 +1124,9 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(-this.guiLeft, -this.guiTop, 120);
 
-					primaryRuneGui.drawMarkConnection(link.getFirst(), secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), true);
+					primaryRuneGui.drawMarkConnection(link.getFirst(), secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), RuneMenuDrawingContext.Connection.DIRECTLY);
 
-					secondaryRuneGui.drawMarkTooltip(secondaryGuiRuneMark, secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), true);
+					secondaryRuneGui.drawMarkTooltip(secondaryGuiRuneMark, secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), secondaryGuiRuneMark.getCenterX(), secondaryGuiRuneMark.getCenterY(), RuneMenuDrawingContext.Tooltip.CONNECTION_END);
 
 					GlStateManager.popMatrix();
 				}

@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
+import javax.annotation.Nullable;
+
 public interface INodeConfiguration {
 	public static interface IType {
 		/**
@@ -37,6 +39,14 @@ public interface INodeConfiguration {
 		 * @return whether this input accepts multiple values of the input's type at once
 		 */
 		public boolean isCollection();
+
+		/**
+		 * Returns a descriptor for this input that identifies the kind
+		 * of types this input accepts. May be null if such a descriptor is not feasible
+		 * @return a descriptor for this input
+		 */
+		@Nullable
+		public String getDescriptor();
 	}
 
 	public static interface IConfigurationOutput {
@@ -67,6 +77,15 @@ public interface INodeConfiguration {
 		 * @return whether this output produces multiple values of the output's type at once
 		 */
 		public boolean isCollection();
+
+
+		/**
+		 * Returns a descriptor for this output that identifies the kind
+		 * of types this output produces. May be null if such a descriptor is not feasible
+		 * @return a descriptor for this output
+		 */
+		@Nullable
+		public String getDescriptor();
 	}
 
 	/**

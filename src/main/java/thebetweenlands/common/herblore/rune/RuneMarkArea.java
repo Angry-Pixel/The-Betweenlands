@@ -12,10 +12,11 @@ import net.minecraft.util.math.BlockPos;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
-import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.OutputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {
@@ -36,8 +37,8 @@ public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			OUT_POSITIONS = builder.multiOut(BlockPos.class);
-			OUT_ENTITY = builder.out(Entity.class);
+			OUT_POSITIONS = builder.multiOut(BlockPos.class, RuneMarkDescriptors.BLOCK_POS);
+			OUT_ENTITY = builder.out(Entity.class, RuneMarkDescriptors.ENTITY);
 
 			CONFIGURATION_1 = builder.build();
 		}

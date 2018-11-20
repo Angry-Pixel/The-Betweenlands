@@ -11,10 +11,11 @@ import net.minecraft.util.math.BlockPos;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.impl.AbstractRune;
+import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
-import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
@@ -35,8 +36,8 @@ public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_POSITION = builder.in(BlockPos.class);
-			IN_ENTITY = builder.in(Entity.class);
+			IN_POSITION = builder.in(BlockPos.class, RuneMarkDescriptors.BLOCK_POS);
+			IN_ENTITY = builder.in(Entity.class, RuneMarkDescriptors.ENTITY);
 
 			CONFIGURATION_1 = builder.build();
 		}

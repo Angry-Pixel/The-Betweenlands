@@ -20,6 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
+import thebetweenlands.api.rune.gui.RuneMenuDrawingContext;
 import thebetweenlands.api.rune.gui.IGuiRuneMark;
 import thebetweenlands.api.rune.gui.IRuneContainer;
 import thebetweenlands.api.rune.gui.IRuneContainerContext;
@@ -144,13 +145,15 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	@Override
-	public void drawMark(IGuiRuneMark mark, int centerX, int centerY, boolean linked) {
-		Mark m = (Mark) mark;
+	public void drawMark(IGuiRuneMark mark, int centerX, int centerY, RuneMenuDrawingContext.Mark context) {
+		this.drawMark((Mark) mark, centerX, centerY);
+	}
 
-		if(m.isOutput()) {
-			Gui.drawRect(centerX - m.w / 2, centerY - m.h / 2, centerX + m.w / 2, centerY + m.h / 2, 0xFF0000FF);
+	protected void drawMark(Mark mark, int centerX, int centerY) {
+		if(mark.isOutput()) {
+			Gui.drawRect(centerX - mark.w / 2, centerY - mark.h / 2, centerX + mark.w / 2, centerY + mark.h / 2, 0xFF0000FF);
 		} else {
-			Gui.drawRect(centerX - m.w / 2, centerY - m.h / 2, centerX + m.w / 2, centerY + m.h / 2, 0xFFFF0000);
+			Gui.drawRect(centerX - mark.w / 2, centerY - mark.h / 2, centerX + mark.w / 2, centerY + mark.h / 2, 0xFFFF0000);
 		}
 
 		GlStateManager.enableBlend();
@@ -158,11 +161,15 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	@Override
-	public void drawMarkTooltip(IGuiRuneMark mark, int centerX, int centerY, int mouseX, int mouseY, boolean linked) {
+	public void drawMarkTooltip(IGuiRuneMark mark, int centerX, int centerY, int mouseX, int mouseY, RuneMenuDrawingContext.Tooltip context) {
+		this.drawMarkTooltip((Mark) mark, centerX, centerY, mouseX, mouseY);
+	}
+
+	protected void drawMarkTooltip(Mark mark, int centerX, int centerY, int mouseX, int mouseY) {
 		List<String> text = new ArrayList<>();
 		text.add("Mark " + mark.getMarkIndex());
 
-		if(((Mark) mark).isOutput()) {
+		if(mark.isOutput()) {
 			text.add(ChatFormatting.DARK_PURPLE + "Output");
 		} else {
 			text.add(ChatFormatting.DARK_PURPLE + "Input");
@@ -175,7 +182,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	@Override
-	public void drawMarkConnection(IGuiRuneMark mark, int targetX, int targetY, boolean linked) {
+	public void drawMarkConnection(IGuiRuneMark mark, int targetX, int targetY, RuneMenuDrawingContext.Connection context) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, 0, 280.0F);
 		this.drawHangingRope(mark.getCenterX(), mark.getCenterY(), targetX, targetY);
@@ -303,11 +310,11 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
 
 		for(Mark mark : this.inputMarks) {
-			this.drawMark(mark, mark.getCenterX(), mark.getCenterY(), false);
+			this.drawMark(mark, mark.getCenterX(), mark.getCenterY());
 		}
 
 		for(Mark mark : this.outputMarks) {
-			this.drawMark(mark, mark.getCenterX(), mark.getCenterY(), false);
+			this.drawMark(mark, mark.getCenterX(), mark.getCenterY());
 		}
 
 		GlStateManager.color(1, 1, 1, 1);
@@ -327,13 +334,13 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		for(Mark mark : this.inputMarks) {
 			if(mark.isInside(mark.getCenterX(), mark.getCenterY(), mouseX, mouseY)) {
-				this.drawMarkTooltip(mark, mark.getCenterX(), mark.getCenterY(), mouseX, mouseY, false);
+				this.drawMarkTooltip(mark, mark.getCenterX(), mark.getCenterY(), mouseX, mouseY);
 			}
 		}
 
 		for(Mark mark : this.outputMarks) {
 			if(mark.isInside(mark.getCenterX(), mark.getCenterY(), mouseX, mouseY)) {
-				this.drawMarkTooltip(mark, mark.getCenterX(), mark.getCenterY(), mouseX, mouseY, false);
+				this.drawMarkTooltip(mark, mark.getCenterX(), mark.getCenterY(), mouseX, mouseY);
 			}
 		}
 

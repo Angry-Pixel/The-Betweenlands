@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.rune.INodeBlueprint.INodeIO;
 import thebetweenlands.api.rune.INodeConfiguration;
 
@@ -29,10 +30,11 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		/**
 		 * Creates a new input that accepts the specified type
 		 * @param type - type to accept
+		 * @param descriptor - descriptor that identifies the output type
 		 * @return a new input that accepts the specified type
 		 */
-		public <T> InputPort<T> in(Class<T> type) {
-			InputPort<T> input = new InputPort<T>(type, this.inIndices++, false);
+		public <T> InputPort<T> in(Class<T> type, ResourceLocation descriptor) {
+			InputPort<T> input = new InputPort<T>(type, this.inIndices++, descriptor.toString(), false);
 			this.inputPorts.add(input);
 			return input;
 		}
@@ -40,10 +42,11 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		/**
 		 * Creates a new input that accepts a multiple objects of the specified type at once
 		 * @param type - type to accept
+		 * @param descriptor - descriptor that identifies the output type
 		 * @return a new input that accepts a multiple objects of the specified type at once
 		 */
-		public <T> InputPort<Collection<T>> multiIn(Class<T> type) {
-			InputPort<Collection<T>> input = new InputPort<Collection<T>>(type, this.inIndices++, true);
+		public <T> InputPort<Collection<T>> multiIn(Class<T> type, ResourceLocation descriptor) {
+			InputPort<Collection<T>> input = new InputPort<Collection<T>>(type, this.inIndices++, descriptor.toString(), true);
 			this.inputPorts.add(input);
 			return input;
 		}
@@ -51,10 +54,11 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		/**
 		 * Creates a new output that produces the specified type
 		 * @param type - type to produce
+		 * @param descriptor - descriptor that identifies the output type
 		 * @return a new output that produces the specified type
 		 */
-		public <T> OutputPort<T> out(Class<T> type) {
-			OutputPort<T> output = new OutputPort<>(type, this.outIndices++);
+		public <T> OutputPort<T> out(Class<T> type, ResourceLocation descriptor) {
+			OutputPort<T> output = new OutputPort<>(type, this.outIndices++, descriptor.toString());
 			this.outputPorts.add(output);
 			return output;
 		}
@@ -74,10 +78,11 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		/**
 		 * Creates a new output that produces multiple objects of the specified type at once
 		 * @param type - type to produce
+		 * @param descriptor - descriptor that identifies the output type
 		 * @return a new output that produces multiple objects of the specified type at once
 		 */
-		public <T> OutputPort<Collection<T>> multiOut(Class<T> type) {
-			OutputPort<Collection<T>> output = new OutputPort<>(type, this.outIndices++, true);
+		public <T> OutputPort<Collection<T>> multiOut(Class<T> type, ResourceLocation descriptor) {
+			OutputPort<Collection<T>> output = new OutputPort<>(type, this.outIndices++, descriptor.toString(), true);
 			this.outputPorts.add(output);
 			return output;
 		}
@@ -117,6 +122,11 @@ public class PortNodeConfiguration implements INodeConfiguration {
 					public boolean isCollection() {
 						return input.isMulti;
 					}
+
+					@Override
+					public String getDescriptor() {
+						return input.getDescriptor();
+					}
 				});
 			}
 
@@ -155,6 +165,11 @@ public class PortNodeConfiguration implements INodeConfiguration {
 					public boolean isCollection() {
 						return output.isMulti;
 					}
+
+					@Override
+					public String getDescriptor() {
+						return output.getDescriptor();
+					}
 				});
 			}
 
@@ -174,18 +189,25 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		private final Class<T> type;
 		private final int index;
 		private final boolean isMulti;
+		private final String descriptor;
 
-		private InputPort(Class<T> type, int index) {
+		private InputPort(Class<T> type, int index, String descriptor) {
 			this.type = type;
 			this.index = index;
 			this.isMulti = false;
+			this.descriptor = descriptor;
 		}
 
 		@SuppressWarnings("unchecked")
-		private InputPort(Class<?> type, int index, boolean isMulti) {
+		private InputPort(Class<?> type, int index, String descriptor, boolean isMulti) {
 			this.type = (Class<T>) type;
 			this.index = index;
 			this.isMulti = isMulti;
+			this.descriptor = descriptor;
+		}
+
+		public String getDescriptor() {
+			return this.descriptor;
 		}
 
 		/**
@@ -207,18 +229,25 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		private final Class<T> type;
 		private final int index;
 		private final boolean isMulti;
+		private final String descriptor;
 
-		private OutputPort(Class<T> type, int index) {
+		private OutputPort(Class<T> type, int index, String descriptor) {
 			this.type = type;
 			this.index = index;
 			this.isMulti = false;
+			this.descriptor = descriptor;
 		}
 
 		@SuppressWarnings("unchecked")
-		private OutputPort(Class<?> type, int index, boolean isMulti) {
+		private OutputPort(Class<?> type, int index, String descriptor, boolean isMulti) {
 			this.type = (Class<T>) type;
 			this.index = index;
 			this.isMulti = isMulti;
+			this.descriptor = descriptor;
+		}
+
+		public String getDescriptor() {
+			return this.descriptor;
 		}
 
 		/**
@@ -235,13 +264,18 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		private final InputPort<?> input;
 
 		private PassthroughOutputPort(Class<T> type, int index, InputPort<?> input) {
-			super(type, index);
+			super(type, index, null);
 			this.input = input;
 		}
 
 		private PassthroughOutputPort(Class<?> type, int index, InputPort<?> input, boolean isMulti) {
-			super(type, index, isMulti);
+			super(type, index, null, isMulti);
 			this.input = input;
+		}
+
+		@Override
+		public String getDescriptor() {
+			return this.input.getDescriptor();
 		}
 	}
 

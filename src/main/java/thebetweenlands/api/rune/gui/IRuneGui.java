@@ -15,11 +15,11 @@ public interface IRuneGui {
 
 	public void drawForeground(int mouseX, int mouseY);
 
-	public void drawMark(IGuiRuneMark mark, int centerX, int centerY, boolean linked);
+	public void drawMark(IGuiRuneMark mark, int centerX, int centerY, RuneMenuDrawingContext.Mark context);
 	
-	public void drawMarkTooltip(IGuiRuneMark mark, int centerX, int centerY, int mouseX, int mouseY, boolean linked);
+	public void drawMarkTooltip(IGuiRuneMark mark, int centerX, int centerY, int mouseX, int mouseY, RuneMenuDrawingContext.Tooltip context);
 	
-	public void drawMarkConnection(IGuiRuneMark mark, int targetX, int targetY, boolean linked);
+	public void drawMarkConnection(IGuiRuneMark mark, int targetX, int targetY, RuneMenuDrawingContext.Connection context);
 
 	public boolean onKeyTyped(char typedChar, int keyCode, boolean handled);
 
