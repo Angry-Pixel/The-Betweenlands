@@ -1,6 +1,6 @@
 package thebetweenlands.api.rune;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -127,12 +127,12 @@ public interface INodeBlueprint<T extends INode<?, E>, E> {
 	}
 
 	/**
-	 * Returns an unmodifiable set containing all valid configurations for
+	 * Returns an unmodifiable list containing all valid configurations for
 	 * nodes of this blueprint.
-	 * @return an unmodifiable set containing all valid configurations for
+	 * @return an unmodifiable list containing all valid configurations for
 	 * nodes of this blueprint
 	 */
-	public Set<INodeConfiguration> getConfigurations();
+	public List<INodeConfiguration> getConfigurations();
 
 	/**
 	 * Creates a node instance from the specified configuration.

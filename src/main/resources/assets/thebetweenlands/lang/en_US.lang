@@ -1310,6 +1310,27 @@ manual.item.thebetweenlands.bl.elixir.healing.description=<scale:0.85>The Elixir
 manual.item.thebetweenlands.bl.elixir.nimblefeet.description=<scale:0.85>The Nimblefeet Elixir enhances muscle swiftness and nimbleness, increasing one's movement speed. <nl>A combination of Azuwynn, Ordaniis, and Yunugaz aspects is required to make this elixir. <nl>The more Yunugaz is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Lumbering Elixir, which slows one's movement.</scale>
 manual.item.thebetweenlands.bl.elixir.strength.description=<scale:0.8>The Elixir of Strength increases raw physical strength, causing one to deal more damage when they attack. <nl>A combination of Azuwynn and Ordaniis aspects is required to make this elixir. <nl>The more Azuwynn is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Elixir of Weakness, which reduces one's damage output.</scale>
 
+# Runes
+rune.mark.unknown=Rune Mark
+
+rune.mark.thebetweenlands.block=Block Mark
+rune.mark.thebetweenlands.entity=Entity Mark
+
+rune.mark.thebetweenlands.block.description=Marks a block
+rune.mark.thebetweenlands.entity.description=Marks an entity
+
+rune.gui.inputs=Inputs:
+rune.gui.outputs=Outputs:
+
+rune.item.thebetweenlands.test_rune_destroy_block.title=<underline>Destroy Block</underline>
+rune.item.thebetweenlands.test_rune_destroy_block.description=Destroys the marked block
+rune.item.thebetweenlands.test_rune_destroy_blocks.title=<underline>Destroy Blocks</underline>
+rune.item.thebetweenlands.test_rune_destroy_blocks.description=Destroys the marked blocks
+rune.item.thebetweenlands.test_rune_mark_area.title=<underline>Mark Area</underline>
+rune.item.thebetweenlands.test_rune_mark_area.description=Marks block area around the chain user
+rune.item.thebetweenlands.test_rune_select_grass.title=<underline>Select Grass</underline>
+rune.item.thebetweenlands.test_rune_select_grass.description=Only allows the block mark if the block is grass
+
 # Advancements
 
 # Adventures

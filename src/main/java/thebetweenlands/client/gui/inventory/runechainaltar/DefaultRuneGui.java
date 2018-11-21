@@ -8,8 +8,6 @@ import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
@@ -18,10 +16,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.gui.IGuiRuneMark;
 import thebetweenlands.api.rune.gui.IRuneContainer;
@@ -29,8 +27,9 @@ import thebetweenlands.api.rune.gui.IRuneContainerContext;
 import thebetweenlands.api.rune.gui.IRuneGui;
 import thebetweenlands.api.rune.gui.RuneMenuDrawingContext;
 import thebetweenlands.api.rune.gui.RuneMenuType;
-import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
+import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
+import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ColoredItemRenderer;
 
@@ -94,14 +93,21 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected List<Mark> outputMarks = new ArrayList<>();
 
 	protected int updateCounter;
-	protected int xSize = 166;
-	protected int ySize = 216;
+	
+	protected int maxXSize = 166;
+	protected int maxYSize = 216;
+	
+	protected int xSize = this.maxXSize;
+	protected int ySize = this.maxYSize;
 
 	protected Map<String, IMarkRenderer> markRenderers = new HashMap<>();
 	protected IMarkRenderer unknownMarkRenderer = null;
 
 	protected static final ResourceLocation UNKNOWN_MARK_DESCRIPTOR = new ResourceLocation(ModInfo.ID, "N/A");
 
+	protected TextContainer title;
+	protected TextContainer description;
+	
 	protected static interface IMarkRenderer {
 		public void render(int centerX, int centerY);
 	}
@@ -109,17 +115,20 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	public DefaultRuneGui(RuneMenuType menu) {
 		this.menu = menu;
 
-		this.addDefaultMarkRenderer(UNKNOWN_MARK_DESCRIPTOR, 216, 9, 6, 7);
+		this.addDefaultMarkRenderer(UNKNOWN_MARK_DESCRIPTOR, 414, 110, 12, 14);
 
-		this.addDefaultMarkRenderer(RuneMarkDescriptors.BLOCK, 216, 1, 6, 7);
-		this.addDefaultMarkRenderer(RuneMarkDescriptors.BLOCK, 224, 1, 6, 7);
-		this.addDefaultMarkRenderer(RuneMarkDescriptors.ENTITY, 232, 1, 6, 7);
+		this.addDefaultMarkRenderer(RuneMarkDescriptors.BLOCK, 414, 94, 12, 14);
+		this.addDefaultMarkRenderer(RuneMarkDescriptors.BLOCK, 430, 94, 12, 14);
+		this.addDefaultMarkRenderer(RuneMarkDescriptors.ENTITY, 446, 94, 12, 14);
 	}
 
 	protected void addDefaultMarkRenderer(ResourceLocation descriptor, int minU, int minV, int width, int height) {
-		this.markRenderers.put(descriptor.toString(), (centerX, centerY) -> {
-			this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
-			this.drawTexturedModalRect512(centerX - width / 2, centerY - width / 2, minU, minV, width, height);
+		this.markRenderers.put(String.format("%s.%s", descriptor.getResourceDomain(), descriptor.getResourcePath()), new IMarkRenderer() {
+			@Override
+			public void render(int centerX, int centerY) {
+				mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
+				drawTexturedModalRect512(centerX - width / 2, centerY - height / 2, minU, minV, width, height);
+			}
 		});
 	}
 
@@ -130,18 +139,54 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.width = width;
 		this.height = height;
 
+		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("rune.%s.title", container.getContext().getRuneItemStack().getUnlocalizedName())), this.fontRenderer);
+
+		this.title.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
+
+		this.title.registerTag(new FormatTags.TagNewLine());
+		this.title.registerTag(new FormatTags.TagTooltip("N/A"));
+		this.title.registerTag(new FormatTags.TagSimple("bold", TextFormatting.BOLD));
+		this.title.registerTag(new FormatTags.TagSimple("obfuscated", TextFormatting.OBFUSCATED));
+		this.title.registerTag(new FormatTags.TagSimple("italic", TextFormatting.ITALIC));
+		this.title.registerTag(new FormatTags.TagSimple("strikethrough", TextFormatting.STRIKETHROUGH));
+		this.title.registerTag(new FormatTags.TagSimple("underline", TextFormatting.UNDERLINE));
+		this.title.registerTag(new FormatTags.TagRainbow());
+
+		this.title.parse();
+
+		this.description = new TextContainer(this.xSize - 8 - 4, this.maxYSize - 6 - this.title.getPages().get(0).getTextHeight(), I18n.format(String.format("rune.%s.description", container.getContext().getRuneItemStack().getUnlocalizedName())), this.fontRenderer);
+
+		this.description.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
+
+		this.description.registerTag(new FormatTags.TagNewLine());
+		this.description.registerTag(new FormatTags.TagTooltip("N/A"));
+		this.description.registerTag(new FormatTags.TagSimple("bold", TextFormatting.BOLD));
+		this.description.registerTag(new FormatTags.TagSimple("obfuscated", TextFormatting.OBFUSCATED));
+		this.description.registerTag(new FormatTags.TagSimple("italic", TextFormatting.ITALIC));
+		this.description.registerTag(new FormatTags.TagSimple("strikethrough", TextFormatting.STRIKETHROUGH));
+		this.description.registerTag(new FormatTags.TagSimple("underline", TextFormatting.UNDERLINE));
+		this.description.registerTag(new FormatTags.TagRainbow());
+
+		this.description.parse();
+
+		this.ySize = (int) (this.title.getPages().get(0).getTextHeight() + 20 + 45 + this.description.getPages().get(0).getTextHeight());
+		
 		//TODO Implement this proper
 		INodeConfiguration config = container.getConfiguration();
 
+		int xOffInputs = this.fontRenderer.getStringWidth(I18n.format("rune.gui.inputs")) + 2;
+		
 		int x = 4;
 		for(int i = 0; i < config.getInputs().size(); i++) {
-			this.inputMarks.add(new Mark(this, i, x, 50, 16, 16, false));
+			this.inputMarks.add(new Mark(this, i, xOffInputs + x, this.ySize - 3 - 40, 16, 16, false));
 			x += 18;
 		}
 
+		int xOffOutputs = this.fontRenderer.getStringWidth(I18n.format("rune.gui.outputs")) + 2;
+		
 		x = 4;
 		for(int i = 0; i < config.getOutputs().size(); i++) {
-			this.outputMarks.add(new Mark(this, i, x, 50 + 20, 16, 16, true));
+			this.outputMarks.add(new Mark(this, i, xOffOutputs + x, this.ySize - 3 - 20, 16, 16, true));
 			x += 18;
 		}
 	}
@@ -207,17 +252,32 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 	protected void drawMarkTooltip(Mark mark, int centerX, int centerY, int mouseX, int mouseY) {
 		List<String> text = new ArrayList<>();
-		text.add("Mark " + mark.getMarkIndex());
+
+		String descriptor;
 
 		if(mark.isOutput()) {
-			text.add(ChatFormatting.GRAY + this.container.getConfiguration().getOutputs().get(mark.getMarkIndex()).getDescriptor());
-			text.add(ChatFormatting.DARK_PURPLE + "Output");
+			descriptor = this.container.getConfiguration().getOutputs().get(mark.getMarkIndex()).getDescriptor();
 		} else {
-			text.add(ChatFormatting.GRAY + this.container.getConfiguration().getInputs().get(mark.getMarkIndex()).getDescriptor());
-			text.add(ChatFormatting.DARK_PURPLE + "Input");
+			descriptor = this.container.getConfiguration().getInputs().get(mark.getMarkIndex()).getDescriptor();
+		}
+
+		if(descriptor != null) {
+			text.add(TextFormatting.RESET + "     " + I18n.format(String.format("rune.mark.%s", descriptor)));
+		} else {
+			text.add(TextFormatting.RESET + "     " + I18n.format("rune.mark.unknown"));
+		}
+
+		text.add(TextFormatting.RESET + "     " + TextFormatting.DARK_PURPLE + (mark.isOutput() ? "Output" : "Input"));
+
+		if(descriptor != null && I18n.hasKey(String.format("rune.mark.%s.description", descriptor))) {
+			text.add(TextFormatting.GRAY + I18n.format(String.format("rune.mark.%s.description", descriptor)));
 		}
 
 		this.drawHoveringText(text, mouseX, mouseY, this.fontRenderer);
+
+		GlStateManager.disableDepth();
+		this.drawMark(mark, mouseX + 12 + 9, mouseY - 12 + 10);
+		GlStateManager.enableDepth();
 
 		GlStateManager.disableLighting();
 		GlStateManager.color(1, 1, 1, 1);
@@ -335,7 +395,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, x + 4, y + 4, 1, 1, 1, 1);
 
-		this.fontRenderer.drawString(TextFormatting.UNDERLINE + stack.getDisplayName(), x + 24, y + 8, 0xFF404040);
+		/*this.fontRenderer.drawString(TextFormatting.UNDERLINE + stack.getDisplayName(), x + 24, y + 8, 0xFF404040);
 
 		//TODO Remove all this and implement it properly with multiple pages etc.
 
@@ -346,11 +406,16 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		for(INodeConfiguration config : bp.getConfigurations()) {
 			this.fontRenderer.drawString(" " + config.getId() + ") Marks: " + config.getInputs().size() + "/" + config.getOutputs().size(), x + 4, y + 22 + i * 10, 0xFF404040);
 			i++;
-		}
+		}*/
 
-		GlStateManager.color(1, 1, 1, 1);
-		this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
+		this.title.getPages().get(0).render(x + 4 + 20, y + 8);
 
+		this.description.getPages().get(0).render(x + 4, y + 16 + this.title.getPages().get(0).getTextHeight());
+		
+		//TODO
+		this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 4, y + 4 + this.ySize - 3 - 40, 0xFF3d3d3d);
+		this.fontRenderer.drawString(I18n.format("rune.gui.outputs"), x + 4, y + 4 + this.ySize - 3 - 20, 0xFF3d3d3d);
+		
 		for(Mark mark : this.inputMarks) {
 			this.drawMark(mark, mark.getCenterX(), mark.getCenterY());
 		}

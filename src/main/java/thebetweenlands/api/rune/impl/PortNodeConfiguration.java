@@ -34,7 +34,7 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		 * @return a new input that accepts the specified type
 		 */
 		public <T> InputPort<T> in(Class<T> type, ResourceLocation descriptor) {
-			InputPort<T> input = new InputPort<T>(type, this.inIndices++, descriptor.toString(), false);
+			InputPort<T> input = new InputPort<T>(type, this.inIndices++, String.format("%s.%s", descriptor.getResourceDomain(), descriptor.getResourcePath()), false);
 			this.inputPorts.add(input);
 			return input;
 		}
@@ -46,7 +46,7 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		 * @return a new input that accepts a multiple objects of the specified type at once
 		 */
 		public <T> InputPort<Collection<T>> multiIn(Class<T> type, ResourceLocation descriptor) {
-			InputPort<Collection<T>> input = new InputPort<Collection<T>>(type, this.inIndices++, descriptor.toString(), true);
+			InputPort<Collection<T>> input = new InputPort<Collection<T>>(type, this.inIndices++, String.format("%s.%s", descriptor.getResourceDomain(), descriptor.getResourcePath()), true);
 			this.inputPorts.add(input);
 			return input;
 		}
@@ -58,7 +58,7 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		 * @return a new output that produces the specified type
 		 */
 		public <T> OutputPort<T> out(Class<T> type, ResourceLocation descriptor) {
-			OutputPort<T> output = new OutputPort<>(type, this.outIndices++, descriptor.toString());
+			OutputPort<T> output = new OutputPort<>(type, this.outIndices++, String.format("%s.%s", descriptor.getResourceDomain(), descriptor.getResourcePath()));
 			this.outputPorts.add(output);
 			return output;
 		}
@@ -82,7 +82,7 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		 * @return a new output that produces multiple objects of the specified type at once
 		 */
 		public <T> OutputPort<Collection<T>> multiOut(Class<T> type, ResourceLocation descriptor) {
-			OutputPort<Collection<T>> output = new OutputPort<>(type, this.outIndices++, descriptor.toString(), true);
+			OutputPort<Collection<T>> output = new OutputPort<>(type, this.outIndices++, String.format("%s.%s", descriptor.getResourceDomain(), descriptor.getResourcePath()), true);
 			this.outputPorts.add(output);
 			return output;
 		}

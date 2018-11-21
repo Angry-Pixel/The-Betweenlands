@@ -1,19 +1,19 @@
 package thebetweenlands.common.herblore.rune;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.impl.AbstractRune;
-import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
@@ -42,8 +42,8 @@ public final class RuneDestroyBlocks extends AbstractRune<RuneDestroyBlocks> {
 		}
 
 		@Override
-		public Set<INodeConfiguration> getConfigurations() {
-			return ImmutableSet.of(CONFIGURATION_1);
+		public List<INodeConfiguration> getConfigurations() {
+			return ImmutableList.of(CONFIGURATION_1);
 		}
 
 		@Override

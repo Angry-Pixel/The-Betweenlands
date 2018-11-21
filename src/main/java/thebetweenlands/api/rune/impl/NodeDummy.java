@@ -1,8 +1,8 @@
 package thebetweenlands.api.rune.impl;
 
-import java.util.Set;
+import java.util.List;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 
 import thebetweenlands.api.rune.INode;
 import thebetweenlands.api.rune.INodeBlueprint;
@@ -25,8 +25,8 @@ public final class NodeDummy implements INode<NodeDummy, RuneExecutionContext> {
 		private Blueprint() {}
 
 		@Override
-		public Set<INodeConfiguration> getConfigurations() {
-			return ImmutableSet.of(CONFIGURATION);
+		public List<INodeConfiguration> getConfigurations() {
+			return ImmutableList.of(CONFIGURATION);
 		}
 
 		@Override

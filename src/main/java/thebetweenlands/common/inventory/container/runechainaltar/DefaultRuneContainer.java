@@ -22,7 +22,7 @@ public class DefaultRuneContainer implements IRuneContainer {
 
 	public DefaultRuneContainer setBlueprint(INodeBlueprint<?, RuneExecutionContext> blueprint) {
 		this.blueprint = blueprint;
-		this.configuration = this.blueprint.getConfigurations().iterator().next();
+		this.configuration = this.blueprint.getConfigurations().get(0);
 		return this;
 	}
 
