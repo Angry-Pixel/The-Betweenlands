@@ -20,6 +20,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 	public int top_rotate = 0, mid_rotate = 0, bottom_rotate = 0;
 	public int lastTickTopRotate = 0, lastTickMidRotate = 0, lastTickBottomRotate = 0;
 	public int renderTicks = 0;
+	public boolean mimic = false;
 	
 	public TileEntityDungeonDoorRunes() {
 		super();
@@ -67,7 +68,13 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 			IBlockState state = getWorld().getBlockState(getPos());
 			EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
 			if (top_state_prev == top_code && mid_state_prev == mid_code && bottom_state_prev == bottom_code) {
-				breakAllDoorBlocks(state, facing, true);
+				// Start animation here
+				if(!mimic) {
+					breakAllDoorBlocks(state, facing, true);
+				}
+				else {
+					breakAllDoorBlocks(state, facing, false); //spawn door golem thingy here
+				}
 			}
 
 			if(getWorld().getTotalWorldTime()%5 == 0)
@@ -142,7 +149,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 		top_state_prev = nbt.getInteger("top_state_prev");
 		mid_state_prev = nbt.getInteger("mid_state_prev");
 		bottom_state_prev = nbt.getInteger("bottom_state_prev");
-
+		mimic = nbt.getBoolean("mimic");
 	}
 
 	@Override
@@ -157,6 +164,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable 
 		nbt.setInteger("top_state_prev", top_state_prev);
 		nbt.setInteger("mid_state_prev", mid_state_prev);
 		nbt.setInteger("bottom_state_prev", bottom_state_prev);
+		nbt.setBoolean("mimic", mimic);
 		return nbt;
 	}
 
