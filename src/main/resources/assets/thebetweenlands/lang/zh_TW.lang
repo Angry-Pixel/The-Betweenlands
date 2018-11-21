@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Blocks
 
 tile.thebetweenlands.angry_betweenstone.name=憤怒的交錯石
@@ -3220,4 +3219,3 @@ config.thebetweenlands.debug_recipe_overrides=調試配方覆蓋機制
 # Damage sources
 death.attack.bl.shockwave=%1$s 死於衝擊波
 death.attack.bl.spikewave=%1$s 被根須刺穿了
->>>>>>> 1.12-dev
