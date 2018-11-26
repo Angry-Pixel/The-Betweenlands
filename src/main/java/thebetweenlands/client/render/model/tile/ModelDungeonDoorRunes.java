@@ -82,9 +82,10 @@ public class ModelDungeonDoorRunes extends ModelBase {
         behind.addBox(-24.0F, -24.0F, -1.0F, 48, 48, 9, 0.0F);
 
 		slate2.addChild(slate2b);
-		slate3.addChild(slate3c);
 		slate2.addChild(slate2c);
+		
 		slate3.addChild(slate3b);
+		slate3.addChild(slate3c);
 		slate3.addChild(slate3d);
 	}
 
@@ -92,6 +93,31 @@ public class ModelDungeonDoorRunes extends ModelBase {
 		top.rotateAngleX = 0F + (tile.lastTickTopRotate + (tile.top_rotate - tile.lastTickTopRotate) * partialTicks) / (180F / (float) Math.PI);
 		mid.rotateAngleX = 0F + (tile.lastTickMidRotate + (tile.mid_rotate - tile.lastTickMidRotate) * partialTicks) / (180F / (float) Math.PI);
 		bottom.rotateAngleX = 0F + (tile.lastTickBottomRotate + (tile.bottom_rotate - tile.lastTickBottomRotate) * partialTicks) / (180F / (float) Math.PI);
+
+		if(tile.mimic) {
+			slate1.rotateAngleX = 0F + (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks) / (180F / (float) Math.PI);
+			slate2.rotateAngleX = 0F + (tile.last_tick_slate_2_rotate + (tile.slate_2_rotate - tile.last_tick_slate_2_rotate) * partialTicks) / (180F / (float) Math.PI);
+			slate3.rotateAngleX = 0F + (tile.last_tick_slate_3_rotate + (tile.slate_3_rotate - tile.last_tick_slate_3_rotate) * partialTicks) / (180F / (float) Math.PI);
+		}
+		if(!tile.mimic) {
+			slate1.rotateAngleX = 0F;
+			slate2.rotateAngleX = 0F;
+			slate3.rotateAngleX = 0F;
+			slate1.setRotationPoint(0F, 24F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -4F);
+			slate2.setRotationPoint(-8F, 24F + 0.275F * (tile.last_tick_slate_2_rotate + (tile.slate_2_rotate - tile.last_tick_slate_2_rotate) * partialTicks), -4F);
+
+			frame_right.setRotationPoint(0.0F, 0.0F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F);
+			frame_left.setRotationPoint(0.0F, 0.0F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F);
+			frame_top.setRotationPoint(0.0F, 0.0F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F);
+			frame_bottom.setRotationPoint(0.0F, 0.0F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F);
+			
+			top.setRotationPoint(0.0F, -4.5F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -5.5F);
+			mid.setRotationPoint(0.0F, 0.0F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -6.0F);
+			bottom.setRotationPoint(0.0F, 4.5F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -5.5F);
+
+			slate3.setRotationPoint(16F, 24F + 0.275F * (tile.last_tick_slate_3_rotate + (tile.slate_3_rotate - tile.last_tick_slate_3_rotate) * partialTicks), -7F);
+		}
+		
 		slate2.render(scale);
 		slate1.render(scale);
 		slate3.render(scale);
@@ -104,7 +130,7 @@ public class ModelDungeonDoorRunes extends ModelBase {
 		bottom.render(scale);
 		GlStateManager.pushMatrix();
 		GlStateManager.scale(0.99F, 1F, 1F);
-		behind.render(scale);
+		//behind.render(scale);
 		GlStateManager.popMatrix();
 	}
 

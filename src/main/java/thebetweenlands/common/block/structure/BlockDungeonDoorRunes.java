@@ -108,7 +108,7 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 		if (!state.getValue(INVISIBLE)) {
 			TileEntityDungeonDoorRunes tile = getTileEntity(world, pos);
 			if (tile instanceof TileEntityDungeonDoorRunes) {
-				tile.breakAllDoorBlocks(state, state.getValue(FACING), false);
+				tile.breakAllDoorBlocks(state, state.getValue(FACING), false, true);
 			}
 		}
 		super.breakBlock(world, pos, state);
@@ -144,21 +144,21 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 				if (facing == state.getValue(FACING)) {
 					if(hitY >= 0.0625F && hitY < 0.375F && tileDoor.bottom_rotate == 0) {
 						//System.out.println("Bottom Hit");
-						tile.cycleBottomState();
+						 tileDoor.cycleBottomState();
 					}
 					if(hitY >= 0.375F && hitY < 0.625F && tileDoor.mid_rotate == 0) {
 						//System.out.println("Mid Hit");
-						tile.cycleMidState();
+						 tileDoor.cycleMidState();
 					}
-					if(hitY >= 0.625F && hitY <= 0.9375F && tile.top_rotate == 0) {
+					if(hitY >= 0.625F && hitY <= 0.9375F &&  tileDoor.top_rotate == 0) {
 						//System.out.println("Top Hit");
-						tile.cycleTopState();
+						 tileDoor.cycleTopState();
 					}
 					world.notifyBlockUpdate(pos, state, state, 3);
 					System.out.println("*******");
-					System.out.println("T: " + tile.top_state);
-					System.out.println("M: "+ tile.mid_state);
-					System.out.println("B: "+ tile.bottom_state);
+					System.out.println("T: " +  tileDoor.top_state);
+					System.out.println("M: "+  tileDoor.mid_state);
+					System.out.println("B: "+  tileDoor.bottom_state);
 					return true;
 				}
 			}

@@ -45,6 +45,8 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 		if (tile instanceof TileEntityDungeonDoorRunes) {
 			TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
 			top_overlay.rotateAngleX = 0F + (tileDoor.lastTickTopRotate + (tileDoor.top_rotate - tileDoor.lastTickTopRotate) * partialTicks) / (180F / (float) Math.PI);
+			if(!tileDoor.mimic)
+				top_overlay.setRotationPoint(0.0F, -4.5F + 0.275F * (tileDoor.last_tick_slate_1_rotate + (tileDoor.slate_1_rotate - tileDoor.last_tick_slate_1_rotate) * partialTicks), -5.5F);
 		} else {
 			top_overlay.rotateAngleX = 0;
 		}
@@ -56,8 +58,10 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 		if (tile instanceof TileEntityDungeonDoorRunes) {
 			TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
 			mid_overlay.rotateAngleX = 0F + (tileDoor.lastTickMidRotate + (tileDoor.mid_rotate - tileDoor.lastTickMidRotate) * partialTicks) / (180F / (float) Math.PI);
+			if(!tileDoor.mimic)
+				mid_overlay.setRotationPoint(0.0F, 0.0F + 0.275F * (tileDoor.last_tick_slate_1_rotate + (tileDoor.slate_1_rotate - tileDoor.last_tick_slate_1_rotate) * partialTicks), -6.0F);
 		} else {
-			top_overlay.rotateAngleX = 0;
+			mid_overlay.rotateAngleX = 0;
 		}
 		
 		this.renderRune(mid_overlay, glow, ticks, scale, partialTicks);
@@ -67,8 +71,10 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 		if (tile instanceof TileEntityDungeonDoorRunes) {
 			TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
 			bottom_overlay.rotateAngleX = 0F + (tileDoor.lastTickBottomRotate + (tileDoor.bottom_rotate - tileDoor.lastTickBottomRotate) * partialTicks) / (180F / (float) Math.PI);
+			if(!tileDoor.mimic)
+				bottom_overlay.setRotationPoint(0.0F, 4.5F + 0.275F * (tileDoor.last_tick_slate_1_rotate + (tileDoor.slate_1_rotate - tileDoor.last_tick_slate_1_rotate) * partialTicks), -5.5F);
 		} else {
-			top_overlay.rotateAngleX = 0;
+			bottom_overlay.rotateAngleX = 0;
 		}
 		
 		this.renderRune(bottom_overlay, glow, ticks, scale, partialTicks);
