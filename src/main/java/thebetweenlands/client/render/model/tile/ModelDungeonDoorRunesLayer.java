@@ -46,11 +46,11 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 			TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
 			top_overlay.rotateAngleX = 0F + (tileDoor.lastTickTopRotate + (tileDoor.top_rotate - tileDoor.lastTickTopRotate) * partialTicks) / (180F / (float) Math.PI);
 			if(!tileDoor.mimic)
-				top_overlay.setRotationPoint(0.0F, -4.5F + 0.275F * (tileDoor.last_tick_slate_1_rotate + (tileDoor.slate_1_rotate - tileDoor.last_tick_slate_1_rotate) * partialTicks), -5.5F);
+				top_overlay.setRotationPoint(0.0F, -4.5F + 0.1375F * (tileDoor.last_tick_slate_1_rotate + (tileDoor.slate_1_rotate - tileDoor.last_tick_slate_1_rotate) * partialTicks), -5.5F + 0.275F * (tileDoor.last_tick_recess_pos + (tileDoor.recess_pos - tileDoor.last_tick_recess_pos) * partialTicks));
 		} else {
 			top_overlay.rotateAngleX = 0;
 		}
-		
+
 		this.renderRune(top_overlay, glow, ticks, scale, partialTicks);
 	}
 
@@ -59,11 +59,11 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 			TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
 			mid_overlay.rotateAngleX = 0F + (tileDoor.lastTickMidRotate + (tileDoor.mid_rotate - tileDoor.lastTickMidRotate) * partialTicks) / (180F / (float) Math.PI);
 			if(!tileDoor.mimic)
-				mid_overlay.setRotationPoint(0.0F, 0.0F + 0.275F * (tileDoor.last_tick_slate_1_rotate + (tileDoor.slate_1_rotate - tileDoor.last_tick_slate_1_rotate) * partialTicks), -6.0F);
+				mid_overlay.setRotationPoint(0.0F, 0.0F + 0.1375F * (tileDoor.last_tick_slate_1_rotate + (tileDoor.slate_1_rotate - tileDoor.last_tick_slate_1_rotate) * partialTicks), -6.0F + 0.275F * (tileDoor.last_tick_recess_pos + (tileDoor.recess_pos - tileDoor.last_tick_recess_pos) * partialTicks));
 		} else {
 			mid_overlay.rotateAngleX = 0;
 		}
-		
+
 		this.renderRune(mid_overlay, glow, ticks, scale, partialTicks);
 	}
 
@@ -72,20 +72,20 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 			TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
 			bottom_overlay.rotateAngleX = 0F + (tileDoor.lastTickBottomRotate + (tileDoor.bottom_rotate - tileDoor.lastTickBottomRotate) * partialTicks) / (180F / (float) Math.PI);
 			if(!tileDoor.mimic)
-				bottom_overlay.setRotationPoint(0.0F, 4.5F + 0.275F * (tileDoor.last_tick_slate_1_rotate + (tileDoor.slate_1_rotate - tileDoor.last_tick_slate_1_rotate) * partialTicks), -5.5F);
+				bottom_overlay.setRotationPoint(0.0F, 4.5F + 0.1375F * (tileDoor.last_tick_slate_1_rotate + (tileDoor.slate_1_rotate - tileDoor.last_tick_slate_1_rotate) * partialTicks), -5.5F + 0.275F * (tileDoor.last_tick_recess_pos + (tileDoor.recess_pos - tileDoor.last_tick_recess_pos) * partialTicks));
 		} else {
 			bottom_overlay.rotateAngleX = 0;
 		}
-		
+
 		this.renderRune(bottom_overlay, glow, ticks, scale, partialTicks);
 	}
 	
 	private void renderRune(ModelRenderer box, ResourceLocation glow, int ticks, float scale, float partialTicks) {
 		GlStateManager.enablePolygonOffset();
 		GlStateManager.doPolygonOffset(-0.001F, -3F);
-		
+
 		Framebuffer fbo = Minecraft.getMinecraft().getFramebuffer();
-		
+
 		boolean useStencil = false;
 		int stencilBit = MinecraftForgeClient.reserveStencilBit();
 		int stencilMask = 1 << stencilBit;
@@ -93,10 +93,10 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 		if(stencilBit >= 0) {
 			useStencil = fbo.isStencilEnabled() ? true : fbo.enableStencil();
 		}
-		
+
 		if(useStencil) {
 			GL11.glEnable(GL11.GL_STENCIL_TEST);
-			
+
 			//Clear our stencil bit to 0
 			GL11.glStencilMask(stencilMask);
 			GL11.glClearStencil(0);
@@ -108,9 +108,9 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-			
+
 			GlStateManager.color(1, 1, 1, 1);
-			
+
 			GlStateManager.depthMask(false);
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 
@@ -121,46 +121,46 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 
 			GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
 			GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-			
+
 			//Render glowy stuff
 			Minecraft.getMinecraft().getTextureManager().bindTexture(glow);
 			this.renderRuneGlow(box, ticks, scale, partialTicks);
-			
+
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
-			
+
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		} else {
 			//No fancy runes for toasters
 			box.render(scale);
 		}
-		
+
 		if(stencilBit >= 0) {
 			MinecraftForgeClient.releaseStencilBit(stencilBit);
 		}
-		
+
 		GlStateManager.disablePolygonOffset();
 	}
 
 	private void renderRuneGlow(ModelRenderer box, int ticks, float scale, float partialTicks) {
 		LightingUtil.INSTANCE.setLighting(255);
-		
+
 		float renderTicks = ticks + partialTicks;
-		
+
 		float texOffset = renderTicks * 0.0015F;
-		
+
 		int passes = 3;
-		
+
 		for(int i = 0; i < passes; i++) {
 			GlStateManager.depthMask(i == passes - 1);
 			if(i == passes - 1) {
 				GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
 			}
-			
+
 			GlStateManager.color(1, 1, 1, 0.3f + (float)(Math.sin(renderTicks / 10.0f + i * Math.PI * 2.0f / passes) + 1) / 2.0f * 0.3f);
-			
+
 			float dirU = (float) Math.cos(i * Math.PI * 2.0f / passes);
 			float dirV = (float) Math.sin(i * Math.PI * 2.0f / passes);
-			
+
 			GlStateManager.matrixMode(GL11.GL_TEXTURE);
 			GlStateManager.loadIdentity();
 			GlStateManager.translate(dirU * texOffset, dirV * texOffset, 0);
@@ -168,19 +168,19 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 			GlStateManager.scale(passes - i, passes - i, 1);
 			GlStateManager.rotate(renderTicks / 30.0f, 0, 0, 1);
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-			
+
 			box.render(scale);
-			
+
 			GlStateManager.matrixMode(GL11.GL_TEXTURE);
 			GlStateManager.loadIdentity();
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-			
+
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		}
-		
+
 		LightingUtil.INSTANCE.revert();
 	}
-	
+
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
 		modelRenderer.rotateAngleX = x;
 		modelRenderer.rotateAngleY = y;

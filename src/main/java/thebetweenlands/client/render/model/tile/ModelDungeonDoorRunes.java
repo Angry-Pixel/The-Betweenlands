@@ -103,21 +103,23 @@ public class ModelDungeonDoorRunes extends ModelBase {
 			slate1.rotateAngleX = 0F;
 			slate2.rotateAngleX = 0F;
 			slate3.rotateAngleX = 0F;
-			slate1.setRotationPoint(0F, 24F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -4F);
-			slate2.setRotationPoint(-8F, 24F + 0.275F * (tile.last_tick_slate_2_rotate + (tile.slate_2_rotate - tile.last_tick_slate_2_rotate) * partialTicks), -4F);
+			slate1.setRotationPoint(0F, 24F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -4F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
+			slate2.setRotationPoint(-8F, 24F + 0.1375F * (tile.last_tick_slate_2_rotate + (tile.slate_2_rotate - tile.last_tick_slate_2_rotate) * partialTicks), -4F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
 
-			frame_right.setRotationPoint(0.0F, 0.0F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F);
-			frame_left.setRotationPoint(0.0F, 0.0F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F);
-			frame_top.setRotationPoint(0.0F, 0.0F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F);
-			frame_bottom.setRotationPoint(0.0F, 0.0F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F);
-			
-			top.setRotationPoint(0.0F, -4.5F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -5.5F);
-			mid.setRotationPoint(0.0F, 0.0F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -6.0F);
-			bottom.setRotationPoint(0.0F, 4.5F + 0.275F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -5.5F);
+			frame_right.setRotationPoint(0.0F, 0.0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
+			frame_left.setRotationPoint(0.0F, 0.0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
+			frame_top.setRotationPoint(0.0F, 0.0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
+			frame_bottom.setRotationPoint(0.0F, 0.0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
 
-			slate3.setRotationPoint(16F, 24F + 0.275F * (tile.last_tick_slate_3_rotate + (tile.slate_3_rotate - tile.last_tick_slate_3_rotate) * partialTicks), -7F);
+			top.setRotationPoint(0.0F, -4.5F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -5.5F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
+			mid.setRotationPoint(0.0F, 0.0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -6.0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
+			bottom.setRotationPoint(0.0F, 4.5F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -5.5F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
+
+			slate3.setRotationPoint(16F, 24F + 0.1375F * (tile.last_tick_slate_3_rotate + (tile.slate_3_rotate - tile.last_tick_slate_3_rotate) * partialTicks), -7F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
+
+			behind.setRotationPoint(0F, 0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
 		}
-		
+
 		slate2.render(scale);
 		slate1.render(scale);
 		slate3.render(scale);
@@ -130,7 +132,7 @@ public class ModelDungeonDoorRunes extends ModelBase {
 		bottom.render(scale);
 		GlStateManager.pushMatrix();
 		GlStateManager.scale(0.99F, 1F, 1F);
-		//behind.render(scale);
+		behind.render(scale);
 		GlStateManager.popMatrix();
 	}
 
