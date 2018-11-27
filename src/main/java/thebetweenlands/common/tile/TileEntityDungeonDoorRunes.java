@@ -54,23 +54,23 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		return new AxisAlignedBB(getPos()).grow(1D);
 	}
 
-	public void sinkingParticles() {
+	public void sinkingParticles(float ySpikeVel) {
 		IBlockState state = getWorld().getBlockState(getPos());
 		EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
 		if (facing == EnumFacing.WEST || facing == EnumFacing.EAST) {
 			for (int z = -1; z <= 1; z++)
 				if (getWorld().isRemote)
-					spawnSinkingParticles(getPos().add(0, -1, z));
+					spawnSinkingParticles(getPos().add(0, -1, z), 0F + ySpikeVel);
 		}
 
 		if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH) {
 			for (int x = -1; x <= 1; x++)
 				if (getWorld().isRemote)
-					spawnSinkingParticles(getPos().add(x, -1, 0));
+					spawnSinkingParticles(getPos().add(x, -1, 0), 0F + ySpikeVel);
 		}	
 	}
 
-	private void spawnSinkingParticles(BlockPos pos) {
+	private void spawnSinkingParticles(BlockPos pos, float ySpikeVel) {
 		if (getWorld().isRemote) {
 			double px = pos.getX() + 0.5D;
 			double py = pos.getY() + 0.0625D;
@@ -79,7 +79,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 				double ox = getWorld().rand.nextDouble() * 0.1F - 0.05F;
 				double oz = getWorld().rand.nextDouble() * 0.1F - 0.05F;
 				double motionX = getWorld().rand.nextDouble() * 0.2F - 0.1F;
-				double motionY = getWorld().rand.nextDouble() * 0.1F + 0.075F;
+				double motionY = getWorld().rand.nextDouble() * 0.1F + 0.075F + ySpikeVel;
 				double motionZ = getWorld().rand.nextDouble() * 0.2F - 0.1F;
 				world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(BlockRegistry.MUD_TILES.getDefaultState()));
 			}
@@ -165,7 +165,10 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 			if (mimic)
 				limit = 90;
 			if(!mimic)
-				sinkingParticles();
+				if (slate_3_rotate < limit - 6)
+					sinkingParticles(0F);
+				else
+					sinkingParticles(0.25F);	
 			if (slate_1_rotate > limit)
 				last_tick_slate_1_rotate = slate_1_rotate = limit;
 			if (slate_2_rotate > limit)
