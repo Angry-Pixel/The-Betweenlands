@@ -3,7 +3,6 @@ package thebetweenlands.common.tile;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -41,8 +40,10 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 	private int prev_shake_timer;
 	private int shake_timer;
 	private boolean shaking = false;
+	private boolean falling_shake = false;
+	private int break_delay;
 
-	private static final int SHAKING_TIMER_MAX = 240;
+	private static int SHAKING_TIMER_MAX = 240;
 
 	public TileEntityDungeonDoorRunes() {
 		super();
@@ -70,6 +71,39 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		}	
 	}
 
+	public void crashingParticles(float ySpikeVel) {
+		IBlockState state = getWorld().getBlockState(getPos());
+		EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
+		if (facing == EnumFacing.EAST) {
+			for (int x = 1; x <= 3; x++)
+				for (int z = -1; z <= 1; z++)
+					if (getWorld().isRemote)
+						spawnCrashingParticles(getPos().add(x, -1, z), 0F + ySpikeVel);
+		}
+		
+		if (facing == EnumFacing.WEST) {
+			for (int x = -1; x >= -3; x--)
+				for (int z = -1; z <= 1; z++)
+					if (getWorld().isRemote)
+						spawnCrashingParticles(getPos().add(x, -1, z), 0F + ySpikeVel);
+		}
+
+		if (facing == EnumFacing.SOUTH) {
+			for (int x = -1; x <= 1; x++)
+				for (int z = 1; z <= 3; z++)
+					if (getWorld().isRemote)
+						spawnCrashingParticles(getPos().add(x, -1, z), 0F + ySpikeVel);
+		}
+		
+		if (facing == EnumFacing.NORTH) {
+			for (int x = -1; x <= 1; x++)
+				for (int z = -1; z >= -3; z--)
+					if (getWorld().isRemote)
+						spawnCrashingParticles(getPos().add(x, -1, z), 0F + ySpikeVel);
+		}
+	}
+
+	//TODO shrink all this in to 1 method and eventually in to BL particles
 	private void spawnSinkingParticles(BlockPos pos, float ySpikeVel) {
 		if (getWorld().isRemote) {
 			double px = pos.getX() + 0.5D;
@@ -82,6 +116,23 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 				double motionY = getWorld().rand.nextDouble() * 0.1F + 0.075F + ySpikeVel;
 				double motionZ = getWorld().rand.nextDouble() * 0.2F - 0.1F;
 				world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(BlockRegistry.MUD_TILES.getDefaultState()));
+			}
+		}
+	}
+	
+	private void spawnCrashingParticles(BlockPos pos, float ySpikeVel) {
+		if (getWorld().isRemote) {
+			double px = pos.getX() + 0.5D;
+			double py = pos.getY() + 0.0625D;
+			double pz = pos.getZ() + 0.5D;
+			for (int i = 0, amount = 2 + getWorld().rand.nextInt(2); i < amount; i++) {
+				double ox = getWorld().rand.nextDouble() * 0.1F - 0.05F;
+				double oz = getWorld().rand.nextDouble() * 0.1F - 0.05F;
+				double motionX = getWorld().rand.nextDouble() * 0.2F - 0.1F;
+				double motionY = getWorld().rand.nextDouble() * 0.025F + 0.075F;
+				double motionZ = getWorld().rand.nextDouble() * 0.2F - 0.1F;
+				world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY + ySpikeVel, motionZ, Block.getStateId(BlockRegistry.MUD_BRICKS.getDefaultState()));
+				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, px + ox, py, pz + oz, motionX, 0D, motionZ);
 			}
 		}
 	}
@@ -125,19 +176,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		}
 		
 		if (animate_open_recess) {
-				prev_shake_timer = shake_timer;
-				if(shake_timer == 0) {
-					shaking = true;
-					shake_timer = 1;
-				}
-				if(shake_timer > 0)
-					shake_timer++;
-
-				if(shake_timer >= SHAKING_TIMER_MAX)
-					shaking = false;
-				else
-					shaking = true;
-
+			shake(240);
 			recess_pos += 1;
 			int limit = 30;
 			if (recess_pos > limit) {
@@ -152,34 +191,43 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 
 		if (animate_open) {
 			if (mimic) {
-				slate_1_rotate += 4;
-				slate_2_rotate += 3;
-				slate_3_rotate += 3;
+				slate_1_rotate += 4 + (last_tick_slate_1_rotate < 8 ? 0 : last_tick_slate_1_rotate / 8);
+				slate_2_rotate += 2 + (last_tick_slate_2_rotate < 6 ? 0 : last_tick_slate_2_rotate / 6);
+				slate_3_rotate += 2 + (last_tick_slate_3_rotate < 8 ? 0 : last_tick_slate_3_rotate / 8);
 			}
 			if (!mimic) {
 				slate_1_rotate += 4;
 				slate_2_rotate += 3;
 				slate_3_rotate += 3;
 			}
-			int limit = 360;
-			if (mimic)
-				limit = 90;
+			int limit = mimic ? 90 : 360;
 			if(!mimic)
 				if (slate_3_rotate < limit - 6)
 					sinkingParticles(0F);
 				else
 					sinkingParticles(0.25F);	
-			if (slate_1_rotate > limit)
+			if (slate_1_rotate > limit) {
+				if(mimic)
+					falling_shake = true;
 				last_tick_slate_1_rotate = slate_1_rotate = limit;
-			if (slate_2_rotate > limit)
+				crashingParticles(0.125F);
+			}
+			if (slate_2_rotate > limit) {
 				last_tick_slate_2_rotate = slate_2_rotate = limit;
+				crashingParticles(0.125F);
+			}
 			if (slate_3_rotate > limit) {
 				last_tick_slate_3_rotate = slate_3_rotate = limit;
+				crashingParticles(0.125F);
 				if (!getWorld().isRemote) {
 					break_blocks = true;
 					animate_open = false;
 					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
 				}
+			}
+			if (falling_shake) {
+				shake(10);
+				falling_shake = shaking;
 			}
 		}
 
@@ -195,24 +243,46 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 					animate_open = true;
 					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
 				}
-				
 			}
 
 			if (break_blocks) {
 				if (!mimic)
 					breakAllDoorBlocks(state, facing, true, false);
 				else {
+					/*
+					 * if(break_delay < 5) //tweak this for final age of blocks
+					 * break_delay++; if(break_delay >= 5)
+					 */
 					breakAllDoorBlocks(state, facing, false, false);
-					BlockPos offsetPos = getPos().offset(facing);
-					EntityChicken entity = new EntityChicken(getWorld()); // door golem here :P
-					entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.getY(), offsetPos.getZ() + 0.5D, 0.0F, 0.0F);
-					getWorld().spawnEntity(entity);
+					/*
+					 * BlockPos offsetPos = getPos().offset(facing);
+					 * EntityChicken entity = new EntityChicken(getWorld()); // door golem here :P
+					 * entity.setLocationAndAngles(offsetPos.getX() + 0.5D,
+					 * offsetPos.getY(), offsetPos.getZ() + 0.5D, 0.0F, 0.0F);
+					 * getWorld().spawnEntity(entity);
+					 */
 				}
 			}
 
 			if (getWorld().getTotalWorldTime() % 5 == 0)
 				checkComplete(state, facing);
 		}
+	}
+
+	public void shake(int shakeTimerMax) {
+		SHAKING_TIMER_MAX = shakeTimerMax;
+		prev_shake_timer = shake_timer;
+		if(shake_timer == 0) {
+			shaking = true;
+			shake_timer = 1;
+		}
+		if(shake_timer > 0)
+			shake_timer++;
+
+		if(shake_timer >= SHAKING_TIMER_MAX)
+			shaking = false;
+		else
+			shaking = true;
 	}
 
 	private void checkComplete(IBlockState state, EnumFacing facing) {
