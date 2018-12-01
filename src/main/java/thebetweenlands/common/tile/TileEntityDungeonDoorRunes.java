@@ -1,13 +1,17 @@
 package thebetweenlands.common.tile;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
@@ -76,16 +80,17 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		}	
 	}
 
-	public void crashingParticles(float ySpikeVel) { // could use this to damage entities easily
+	public void crashingParticles(float ySpikeVel) { // used for damaging entities too atm
 		IBlockState state = getWorld().getBlockState(getPos());
 		EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
+		AxisAlignedBB hitBox = new AxisAlignedBB(getPos().offset(facing, 2)).grow(1D);
 		if (facing == EnumFacing.EAST) {
 			for (int x = 1; x <= 3; x++)
 				for (int z = -1; z <= 1; z++)
 					if (getWorld().isRemote)
 						spawnCrashingParticles(getPos().add(x, -1, z), 0F + ySpikeVel);
 		}
-		
+
 		if (facing == EnumFacing.WEST) {
 			for (int x = -1; x >= -3; x--)
 				for (int z = -1; z <= 1; z++)
@@ -99,12 +104,21 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 					if (getWorld().isRemote)
 						spawnCrashingParticles(getPos().add(x, -1, z), 0F + ySpikeVel);
 		}
-		
+
 		if (facing == EnumFacing.NORTH) {
 			for (int x = -1; x <= 1; x++)
 				for (int z = -1; z >= -3; z--)
 					if (getWorld().isRemote)
 						spawnCrashingParticles(getPos().add(x, -1, z), 0F + ySpikeVel);
+		}
+
+		List<EntityLivingBase> list = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, hitBox);
+		for (int i = 0; i < list.size(); i++) {
+			Entity entity = list.get(i);
+			if (entity != null)
+				if (entity instanceof EntityLivingBase)
+					if (!getWorld().isRemote)
+						entity.attackEntityFrom(DamageSource.FALLING_BLOCK, 10F); // dunno what damage to do yet...
 		}
 	}
 
