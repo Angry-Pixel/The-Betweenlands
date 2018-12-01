@@ -36,12 +36,17 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 	public int last_tick_slate_1_rotate = 0, last_tick_slate_2_rotate = 0, last_tick_slate_3_rotate = 0;
 	public int recess_pos = 0;
 	public int last_tick_recess_pos = 0;
-	
+
 	private int prev_shake_timer;
 	private int shake_timer;
 	private boolean shaking = false;
 	private boolean falling_shake = false;
-	private int break_delay;
+
+	public boolean hide_slate_1 = false;
+	public boolean hide_slate_2 = false;
+	public boolean hide_slate_3 = false;
+	public boolean hide_lock = false;
+	public boolean hide_back_wall = false;
 
 	private static int SHAKING_TIMER_MAX = 240;
 
@@ -71,7 +76,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		}	
 	}
 
-	public void crashingParticles(float ySpikeVel) {
+	public void crashingParticles(float ySpikeVel) { // could use this to damage entities easily
 		IBlockState state = getWorld().getBlockState(getPos());
 		EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
 		if (facing == EnumFacing.EAST) {
@@ -174,7 +179,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 				bottom_state_prev = bottom_state;
 			}
 		}
-		
+
 		if (animate_open_recess) {
 			shake(240);
 			recess_pos += 1;
@@ -194,6 +199,8 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 				slate_1_rotate += 4 + (last_tick_slate_1_rotate < 8 ? 0 : last_tick_slate_1_rotate / 8);
 				slate_2_rotate += 2 + (last_tick_slate_2_rotate < 6 ? 0 : last_tick_slate_2_rotate / 6);
 				slate_3_rotate += 2 + (last_tick_slate_3_rotate < 8 ? 0 : last_tick_slate_3_rotate / 8);
+				hide_lock = true;
+				hide_back_wall = true;
 			}
 			if (!mimic) {
 				slate_1_rotate += 4;
@@ -207,18 +214,26 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 				else
 					sinkingParticles(0.25F);	
 			if (slate_1_rotate > limit) {
-				if(mimic)
+				if (mimic) {
 					falling_shake = true;
+					crashingParticles(0.125F);
+					hide_slate_1 = true;
+				}
 				last_tick_slate_1_rotate = slate_1_rotate = limit;
-				crashingParticles(0.125F);
 			}
 			if (slate_2_rotate > limit) {
+				if (mimic) {
+					crashingParticles(0.125F);
+					hide_slate_2 = true;
+				}
 				last_tick_slate_2_rotate = slate_2_rotate = limit;
-				crashingParticles(0.125F);
 			}
 			if (slate_3_rotate > limit) {
+				if (mimic) {
+					crashingParticles(0.125F);
+					hide_slate_3 = true;
+				}
 				last_tick_slate_3_rotate = slate_3_rotate = limit;
-				crashingParticles(0.125F);
 				if (!getWorld().isRemote) {
 					break_blocks = true;
 					animate_open = false;
@@ -249,18 +264,13 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 				if (!mimic)
 					breakAllDoorBlocks(state, facing, true, false);
 				else {
-					/*
-					 * if(break_delay < 5) //tweak this for final age of blocks
-					 * break_delay++; if(break_delay >= 5)
-					 */
 					breakAllDoorBlocks(state, facing, false, false);
-					/*
-					 * BlockPos offsetPos = getPos().offset(facing);
-					 * EntityChicken entity = new EntityChicken(getWorld()); // door golem here :P
-					 * entity.setLocationAndAngles(offsetPos.getX() + 0.5D,
-					 * offsetPos.getY(), offsetPos.getZ() + 0.5D, 0.0F, 0.0F);
-					 * getWorld().spawnEntity(entity);
-					 */
+				/*
+					BlockPos offsetPos = getPos().offset(facing);
+					EntityChicken entity = new EntityChicken(getWorld()); // door golem here :P
+					entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.getY(), offsetPos.getZ() + 0.5D, 0.0F, 0.0F);
+					getWorld().spawnEntity(entity);
+				*/
 				}
 			}
 
@@ -289,19 +299,15 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		if (facing == EnumFacing.WEST || facing == EnumFacing.EAST) {
 			for (int z = -1; z <= 1; z++)
 				for (int y = -1; y <= 1; y++)
-					if(getPos().add(0, y, z) != getPos()) {
-						if (!(getWorld().getBlockState(getPos().add(0, y, z)).getBlock() instanceof BlockDungeonDoorRunes))
-							breakAllDoorBlocks(state, facing, false, true);
-					}
+					if (!(getWorld().getBlockState(getPos().add(0, y, z)).getBlock() instanceof BlockDungeonDoorRunes))
+						breakAllDoorBlocks(state, facing, false, true);
 		}
 
 		if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH) {
 			for (int x = -1; x <= 1; x++)
 				for (int y = -1; y <= 1; y++)
-					if(getPos().add(x, y, 0) != getPos()) {
-						if (!(getWorld().getBlockState(getPos().add(x, y, 0)).getBlock() instanceof BlockDungeonDoorRunes))
-							breakAllDoorBlocks(state, facing, false, true);
-					}
+					if (!(getWorld().getBlockState(getPos().add(x, y, 0)).getBlock() instanceof BlockDungeonDoorRunes))
+						breakAllDoorBlocks(state, facing, false, true);
 		}
 	}
 

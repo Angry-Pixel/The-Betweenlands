@@ -142,23 +142,13 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 			if (tile instanceof TileEntityDungeonDoorRunes) {
 				TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
 				if (facing == state.getValue(FACING)) {
-					if(hitY >= 0.0625F && hitY < 0.375F && tileDoor.bottom_rotate == 0) {
-						//System.out.println("Bottom Hit");
+					if(hitY >= 0.0625F && hitY < 0.375F && tileDoor.bottom_rotate == 0)
 						 tileDoor.cycleBottomState();
-					}
-					if(hitY >= 0.375F && hitY < 0.625F && tileDoor.mid_rotate == 0) {
-						//System.out.println("Mid Hit");
+					if(hitY >= 0.375F && hitY < 0.625F && tileDoor.mid_rotate == 0)
 						 tileDoor.cycleMidState();
-					}
-					if(hitY >= 0.625F && hitY <= 0.9375F &&  tileDoor.top_rotate == 0) {
-						//System.out.println("Top Hit");
+					if(hitY >= 0.625F && hitY <= 0.9375F &&  tileDoor.top_rotate == 0)
 						 tileDoor.cycleTopState();
-					}
 					world.notifyBlockUpdate(pos, state, state, 3);
-					System.out.println("*******");
-					System.out.println("T: " +  tileDoor.top_state);
-					System.out.println("M: "+  tileDoor.mid_state);
-					System.out.println("B: "+  tileDoor.bottom_state);
 					return true;
 				}
 			}
@@ -175,6 +165,5 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 	@Override
 	public void setStateMapper(Builder builder) {
 		builder.ignore(new IProperty[] {INVISIBLE}).build();
-		
 	}
 }

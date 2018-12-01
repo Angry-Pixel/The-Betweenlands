@@ -83,7 +83,6 @@ public class ModelDungeonDoorRunes extends ModelBase {
 
 		slate2.addChild(slate2b);
 		slate2.addChild(slate2c);
-		
 		slate3.addChild(slate3b);
 		slate3.addChild(slate3c);
 		slate3.addChild(slate3d);
@@ -119,21 +118,27 @@ public class ModelDungeonDoorRunes extends ModelBase {
 
 			behind.setRotationPoint(0F, 0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
 		}
-
-		slate2.render(scale);
-		slate1.render(scale);
-		slate3.render(scale);
-		frame_right.render(scale);
-		frame_left.render(scale);
-		frame_top.render(scale);
-		frame_bottom.render(scale);
-		top.render(scale);
-		mid.render(scale);
-		bottom.render(scale);
-		GlStateManager.pushMatrix();
-		GlStateManager.scale(0.99F, 1F, 1F);
-		behind.render(scale);
-		GlStateManager.popMatrix();
+		if(!tile.hide_slate_1)
+			slate1.render(scale);
+		if(!tile.hide_slate_2)
+			slate2.render(scale);
+		if(!tile.hide_slate_3)
+			slate3.render(scale);
+		if (!tile.hide_lock) {
+			frame_right.render(scale);
+			frame_left.render(scale);
+			frame_top.render(scale);
+			frame_bottom.render(scale);
+			top.render(scale);
+			mid.render(scale);
+			bottom.render(scale);
+		}
+		if (!tile.hide_back_wall) {
+			GlStateManager.pushMatrix();
+			GlStateManager.scale(0.99F, 1F, 1F);
+			behind.render(scale);
+			GlStateManager.popMatrix();
+		}
 	}
 
 	public void renderItem(float scale) {
