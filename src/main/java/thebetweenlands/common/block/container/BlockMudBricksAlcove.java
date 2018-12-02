@@ -47,6 +47,7 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		useNeighborBrightness = true;
 	}
 	
 	@Nullable

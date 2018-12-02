@@ -1,6 +1,12 @@
-{ 
-  "parent": "block/cube_all",
-  "textures": {
-    "all": "thebetweenlands:blocks/amate_paper_pane_1_ct_0"
-  } 
+{
+    "parent": "block/cube",
+    "textures": {
+        "particle": "thebetweenlands:blocks/mud_bricks",
+        "down": "thebetweenlands:blocks/mud_bricks",
+        "up": "thebetweenlands:blocks/mud_bricks",
+        "north": "thebetweenlands:blocks/mud_bricks",
+        "east": "thebetweenlands:blocks/mud_bricks",
+        "south": "thebetweenlands:blocks/dungeon_door_combination_front",
+        "west": "thebetweenlands:blocks/mud_bricks"
+    }
 }
