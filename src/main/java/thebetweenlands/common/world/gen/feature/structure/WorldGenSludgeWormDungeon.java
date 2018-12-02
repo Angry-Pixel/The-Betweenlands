@@ -328,7 +328,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		}
 	}
 	
-	// Level Feature Placements
+	// Roots, Alcoves, Torches and upside down Stairs for the ceiling
 	private void addFeature(World world, BlockPos pos, Random rand, int w, int h, int[][] maze, int level, int layer) {
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < w; j++) {
