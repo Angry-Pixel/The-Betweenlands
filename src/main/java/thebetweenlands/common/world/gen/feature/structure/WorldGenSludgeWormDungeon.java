@@ -186,7 +186,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (world.isAirBlock(pos.add(1, yy + 1, 2)))
 						world.setBlockState(pos.add(1, yy + 1, 2), getMudBricksForLevel(rand, level, 1), 2);
 					placeRuneCombination(world, pos.add(0, yy + 2, 0), level, rand);
-					//world.setBlockState(pos.add(1, yy + 2, 2), getMudBricksForLevel(rand, level, 2));//this is the combo I think
 					world.setBlockState(pos.add(1, yy + 3, 2), getStairsForLevel(rand, level, EnumFacing.NORTH, EnumHalf.BOTTOM), 2);
 					world.setBlockState(pos.add(1, yy + 2, 3), getStairsForLevel(rand, level, EnumFacing.WEST, EnumHalf.BOTTOM), 2);
 					world.setBlockState(pos.add(1, yy + 1, 3), getMudBricksForLevel(rand, level, 1), 2);
@@ -199,7 +198,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (world.isAirBlock(pos.add(27, yy + 1, 26)))
 						world.setBlockState(pos.add(27, yy + 1, 26), getMudBricksForLevel(rand, level, 1), 2);
 					placeRuneCombination(world, pos.add(0, yy + 2, 0), level, rand);
-					//world.setBlockState(pos.add(27, yy + 2, 26), getMudBricksForLevel(rand, level, 2));//this is the combo I think
 					world.setBlockState(pos.add(27, yy + 3, 26), getStairsForLevel(rand, level, EnumFacing.SOUTH, EnumHalf.BOTTOM), 2);
 					world.setBlockState(pos.add(27, yy + 2, 25), getStairsForLevel(rand, level, EnumFacing.EAST, EnumHalf.BOTTOM), 2);
 					world.setBlockState(pos.add(27, yy + 1, 25), getMudBricksForLevel(rand, level, 1), 2);
@@ -452,7 +450,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		}
 	}
 
-	// Block Selection and conditions
+	// Places doors and code blocks
 	private void placeRuneCombination(World world, BlockPos pos, int level, Random rand) {
 		if (level <= 6) {
 			if (level == 1 || level == 3 || level == 5) {
@@ -474,7 +472,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		IBlockState lockState = world.getBlockState(lockPos);
 		TileEntityDungeonDoorCombination tileCode = (TileEntityDungeonDoorCombination) world.getTileEntity(codePos);
 		if (tileCode instanceof TileEntityDungeonDoorCombination) {
-			// add random code setting here and test block placement
 			tileCode.top_code = world.rand.nextInt(8);
 			tileCode.mid_code = world.rand.nextInt(8);
 			tileCode.bottom_code = world.rand.nextInt(8);
@@ -501,7 +498,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				world.setBlockToAir(pos.add(2, 4, 3));
 				world.setBlockToAir(pos.add(2, 3, 3));
 				world.setBlockState(pos.add(1, 6, 1), getTilesForLevel(rand, level), 2);
-				world.setBlockState(pos.add(1, 6, 2), getTilesForLevel(rand, level), 2); //lock
+				world.setBlockState(pos.add(1, 6, 2), getTilesForLevel(rand, level), 2);
 				world.setBlockState(pos.add(1, 6, 3), getTilesForLevel(rand, level), 2);
 			} else if (level == 0 || level == 2 || level == 4 || level == 6) {
 				world.setBlockToAir(pos.add(27, 5, 27));
@@ -514,7 +511,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				world.setBlockToAir(pos.add(26, 3, 25));
 				if(level != 0) {
 				world.setBlockState(pos.add(27, 6, 27), getTilesForLevel(rand, level), 2);
-				world.setBlockState(pos.add(27, 6, 26), getTilesForLevel(rand, level), 2); //lock
+				world.setBlockState(pos.add(27, 6, 26), getTilesForLevel(rand, level), 2);
 				world.setBlockState(pos.add(27, 6, 25), getTilesForLevel(rand, level), 2);
 				}
 			}
@@ -601,7 +598,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		}
 	}
 
-	// Block Selection and conditions
+	// Places chests
 	private void placeChest(World world, BlockPos pos, IBlockState state, Random rand) {
 		world.setBlockState(pos, state, 2);
 		TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
@@ -610,6 +607,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		}
 	}
 
+	// Places alcoves and sets TE level (used for textures atm)
 	public void setAlcoveForLevel(World world, BlockPos pos, IBlockState state, Random rand, int level) {
 		world.setBlockState(pos, state, 2);
 		TileEntityMudBricksAlcove alcove = (TileEntityMudBricksAlcove) world.getTileEntity(pos);
@@ -790,7 +788,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		case 7:
 			return MUD_BRICKS;
 		}
-		return MUD_BRICKS;//betweenstoneBricks;
+		return MUD_BRICKS;
 	}
 
 	public @Nullable IBlockState getStairsForLevel(Random rand, int level, EnumFacing facing, EnumHalf half) {
