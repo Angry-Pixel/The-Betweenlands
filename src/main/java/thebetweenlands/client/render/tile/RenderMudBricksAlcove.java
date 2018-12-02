@@ -20,7 +20,11 @@ import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
 public class RenderMudBricksAlcove extends TileEntitySpecialRenderer<TileEntityMudBricksAlcove> {
 
 	private static final ModelMudBricksAlcove ALCOVE = new ModelMudBricksAlcove();
-	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/tiles/mud_bricks_alcove.png");
+	private static final ResourceLocation ALCOVE_TEXTURE_0 = new ResourceLocation(ModInfo.ID, "textures/tiles/mud_bricks_alcove_0.png");
+	private static final ResourceLocation ALCOVE_TEXTURE_1 = new ResourceLocation(ModInfo.ID, "textures/tiles/mud_bricks_alcove_1.png");
+	private static final ResourceLocation ALCOVE_TEXTURE_2 = new ResourceLocation(ModInfo.ID, "textures/tiles/mud_bricks_alcove_2.png");
+	private static final ResourceLocation ALCOVE_TEXTURE_3 = new ResourceLocation(ModInfo.ID, "textures/tiles/mud_bricks_alcove_3.png");
+	private static final ResourceLocation ALCOVE_TEXTURE_4 = new ResourceLocation(ModInfo.ID, "textures/tiles/mud_bricks_alcove_4.png");
 
 	private static final ModelLootUrn1 LOOT_URN_1 = new ModelLootUrn1();
 	private static final ModelLootUrn2 LOOT_URN_2 = new ModelLootUrn2();
@@ -35,7 +39,18 @@ public class RenderMudBricksAlcove extends TileEntitySpecialRenderer<TileEntityM
 		if (state == null || state.getBlock() != BlockRegistry.MUD_BRICKS_ALCOVE)
 			return;
 		EnumFacing facing = state.getValue(BlockMudBricksAlcove.FACING);
-		bindTexture(TEXTURE);
+
+		if(tile.dungeon_level <= 2)
+			bindTexture(ALCOVE_TEXTURE_0);
+		if(tile.dungeon_level == 3)
+			bindTexture(ALCOVE_TEXTURE_1);
+		if(tile.dungeon_level == 4)
+			bindTexture(ALCOVE_TEXTURE_2);
+		if(tile.dungeon_level == 5)
+			bindTexture(ALCOVE_TEXTURE_3);
+		if(tile.dungeon_level >= 6)
+			bindTexture(ALCOVE_TEXTURE_4);
+
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);
@@ -93,7 +108,7 @@ public class RenderMudBricksAlcove extends TileEntitySpecialRenderer<TileEntityM
 
 	private void renderTileAsItem(double x, double y, double z) {
 		GlStateManager.pushMatrix();
-		bindTexture(TEXTURE);
+		bindTexture(ALCOVE_TEXTURE_0);
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(-1, -1, 1);
 		ALCOVE.renderItem(0.0625F);

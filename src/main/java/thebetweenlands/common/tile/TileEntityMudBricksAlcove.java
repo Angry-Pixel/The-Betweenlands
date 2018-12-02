@@ -8,7 +8,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 
 public class TileEntityMudBricksAlcove extends TileEntityLootInventory {
 	public boolean has_urn, greebled, top_web, bottom_web, small_candle, big_candle, out_crop;
-	public int urn_type = 0, rotationOffset = 0;
+	public int urn_type = 0, rotationOffset = 0, dungeon_level = 0;
 
 	public TileEntityMudBricksAlcove() {
 		super(1, "container.mud_bricks_alcove");
@@ -32,6 +32,10 @@ public class TileEntityMudBricksAlcove extends TileEntityLootInventory {
 		}
 	}
 
+	public void setDungeonLevel(int level) {
+		dungeon_level = level;
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
@@ -44,6 +48,7 @@ public class TileEntityMudBricksAlcove extends TileEntityLootInventory {
 		small_candle = nbt.getBoolean("small_candle");
 		big_candle = nbt.getBoolean("big_candle");
 		out_crop = nbt.getBoolean("out_crop");
+		dungeon_level = nbt.getInteger("dungeon_level");
 	}
 
 	@Override
@@ -58,6 +63,7 @@ public class TileEntityMudBricksAlcove extends TileEntityLootInventory {
 		nbt.setBoolean("small_candle", small_candle);
 		nbt.setBoolean("big_candle", big_candle );
 		nbt.setBoolean("out_crop", out_crop);
+		nbt.setInteger("dungeon_level", dungeon_level);
 		return nbt;
 	}
 
