@@ -140,7 +140,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 			}
 		}
 	}
-	
+
 	private void spawnCrashingParticles(BlockPos pos, float ySpikeVel) {
 		if (getWorld().isRemote) {
 			double px = pos.getX() + 0.5D;
@@ -395,15 +395,15 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 	private void playLockSound() {
 		getWorld().playSound(null, getPos(), SoundRegistry.MUD_DOOR_LOCK, SoundCategory.BLOCKS, 1F, 1.0F);
 	}
-	
+
 	private void playOpenRecessSound() {
 		getWorld().playSound(null, getPos(), SoundRegistry.MUD_DOOR_1, SoundCategory.BLOCKS, 1F, 1.0F);
 	}
-	
+
 	private void playOpenSinkingSound() {
 		getWorld().playSound(null, getPos(), SoundRegistry.MUD_DOOR_2, SoundCategory.BLOCKS, 1F, 0.9F);
 	}
-	
+
 	private void playTrapFallingSound() {
 		getWorld().playSound(null, getPos(), SoundRegistry.MUD_DOOR_TRAP, SoundCategory.BLOCKS, 1F, 1.25F);
 	}

@@ -136,6 +136,31 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 	}
 
 	@Override
+    public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
+    	if (side == EnumFacing.WEST || side == EnumFacing.EAST) {
+			for (int z = -1; z <= 1; z++)
+				for (int y = -1; y <= 1; y++)
+					if(!world.getBlockState(pos.add(0, y, z)).getBlock().isReplaceable(world, pos.add(0, y, z)))
+						return false;
+		}
+		if (side == EnumFacing.NORTH || side == EnumFacing.SOUTH) {
+			for (int x = -1; x <= 1; x++)
+				for (int y = -1; y <= 1; y++) {
+					if(!world.getBlockState(pos.add(x, y, 0)).getBlock().isReplaceable(world, pos.add(x, y, 0)))
+						return false;
+				}
+		}
+		if (side == EnumFacing.UP || side == EnumFacing.DOWN)
+			return false;
+        return canPlaceBlockAt(world, pos);
+    }
+
+	@Override
+    public boolean canPlaceBlockAt(World world, BlockPos pos) { // added because additional logic will be needed
+        return world.getBlockState(pos).getBlock().isReplaceable(world, pos);
+    }
+
+	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote && !state.getValue(INVISIBLE)) {
 			TileEntityDungeonDoorRunes tile = getTileEntity(world, pos);
