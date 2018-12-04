@@ -61,7 +61,8 @@ public class RenderDungeonDoorRunes extends TileEntitySpecialRenderer<TileEntity
 			break;
 		}
 		RUNE_BLOCK.render(tile, 0.0625F, partialTick);
-
+		if(!tile.mimic)
+			GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTick) * 0.0625F, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTick) * 0.0625F);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 

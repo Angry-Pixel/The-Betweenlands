@@ -47,12 +47,9 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 			top_overlay.rotateAngleX = 0F + (tileDoor.lastTickTopRotate + (tileDoor.top_rotate - tileDoor.lastTickTopRotate) * partialTicks) / (180F / (float) Math.PI);
 			if(tileDoor.hide_lock)
 				return;
-			if(!tileDoor.mimic)
-				top_overlay.setRotationPoint(0.0F, -4.5F + 0.1375F * (tileDoor.last_tick_slate_1_rotate + (tileDoor.slate_1_rotate - tileDoor.last_tick_slate_1_rotate) * partialTicks), -5.5F + 0.275F * (tileDoor.last_tick_recess_pos + (tileDoor.recess_pos - tileDoor.last_tick_recess_pos) * partialTicks));
 		} else {
 			top_overlay.rotateAngleX = 0;
 		}
-
 		this.renderRune(top_overlay, glow, ticks, scale, partialTicks);
 	}
 
@@ -62,12 +59,9 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 			if(tileDoor.hide_lock)
 				return;
 			mid_overlay.rotateAngleX = 0F + (tileDoor.lastTickMidRotate + (tileDoor.mid_rotate - tileDoor.lastTickMidRotate) * partialTicks) / (180F / (float) Math.PI);
-			if(!tileDoor.mimic)
-				mid_overlay.setRotationPoint(0.0F, 0.0F + 0.1375F * (tileDoor.last_tick_slate_1_rotate + (tileDoor.slate_1_rotate - tileDoor.last_tick_slate_1_rotate) * partialTicks), -6.0F + 0.275F * (tileDoor.last_tick_recess_pos + (tileDoor.recess_pos - tileDoor.last_tick_recess_pos) * partialTicks));
 		} else {
 			mid_overlay.rotateAngleX = 0;
 		}
-
 		this.renderRune(mid_overlay, glow, ticks, scale, partialTicks);
 	}
 
@@ -77,12 +71,9 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 			if(tileDoor.hide_lock)
 				return;
 			bottom_overlay.rotateAngleX = 0F + (tileDoor.lastTickBottomRotate + (tileDoor.bottom_rotate - tileDoor.lastTickBottomRotate) * partialTicks) / (180F / (float) Math.PI);
-			if(!tileDoor.mimic)
-				bottom_overlay.setRotationPoint(0.0F, 4.5F + 0.1375F * (tileDoor.last_tick_slate_1_rotate + (tileDoor.slate_1_rotate - tileDoor.last_tick_slate_1_rotate) * partialTicks), -5.5F + 0.275F * (tileDoor.last_tick_recess_pos + (tileDoor.recess_pos - tileDoor.last_tick_recess_pos) * partialTicks));
 		} else {
 			bottom_overlay.rotateAngleX = 0;
 		}
-
 		this.renderRune(bottom_overlay, glow, ticks, scale, partialTicks);
 	}
 	

@@ -15,6 +15,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -23,6 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable, IEntityScreenShake {
 
@@ -195,6 +197,9 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		}
 
 		if (animate_open_recess) {
+			if (recess_pos <= 0)
+				if (!getWorld().isRemote)
+					playOpenRecessSound();
 			shake(240);
 			recess_pos += 1;
 			int limit = 30;
@@ -202,14 +207,20 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 				last_tick_recess_pos = recess_pos = limit;
 				if (!getWorld().isRemote) {
 					animate_open_recess = false;
-					animate_open = true;
-					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+					if(!animate_open) {
+						animate_open = true;
+						playOpenSinkingSound();
+						getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+					}
 				}
 			}
 		}
 
 		if (animate_open) {
 			if (mimic) {
+				if (slate_1_rotate <= 0)
+					if (!getWorld().isRemote)
+						playTrapFallingSound();
 				slate_1_rotate += 4 + (last_tick_slate_1_rotate < 8 ? 0 : last_tick_slate_1_rotate / 8);
 				slate_2_rotate += 2 + (last_tick_slate_2_rotate < 6 ? 0 : last_tick_slate_2_rotate / 6);
 				slate_3_rotate += 2 + (last_tick_slate_3_rotate < 8 ? 0 : last_tick_slate_3_rotate / 8);
@@ -265,12 +276,16 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 			EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
 			if (top_state_prev == top_code && mid_state_prev == mid_code && bottom_state_prev == bottom_code) {
 				if(!mimic) {
-					animate_open_recess = true;
-					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+					if (!animate_open_recess) {
+						animate_open_recess = true;
+						getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()),getWorld().getBlockState(getPos()), 3);
+					}
 				}
 				else {
-					animate_open = true;
-					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+					if (!animate_open) {
+						animate_open = true;
+						getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()),getWorld().getBlockState(getPos()), 3);
+					}
 				}
 			}
 
@@ -329,8 +344,10 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		if (facing == EnumFacing.WEST || facing == EnumFacing.EAST) {
 			for (int z = -1; z <= 1; z++)
 				for (int y = breakFloorBelow ? -2 : -1; y <= 1; y++)
-					if (particles)
+					if (particles) {
 						getWorld().destroyBlock(getPos().add(0, y, z), false);
+						getWorld().removeTileEntity(getPos());
+					}
 					else {
 						getWorld().setBlockState(getPos().add(0, y, z), Blocks.AIR.getDefaultState(), 3);
 						getWorld().removeTileEntity(getPos());
@@ -340,8 +357,10 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		if (facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH) {
 			for (int x = -1; x <= 1; x++)
 				for (int y = breakFloorBelow ? -2 : -1; y <= 1; y++)
-					if (particles)
+					if (particles) {
 						getWorld().destroyBlock(getPos().add(x, y, 0), false);
+						getWorld().removeTileEntity(getPos());
+					}
 					else {
 						getWorld().setBlockState(getPos().add(x, y, 0), Blocks.AIR.getDefaultState(), 3);
 						getWorld().removeTileEntity(getPos());
@@ -354,6 +373,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		top_state++;
 		if (top_state > 7)
 			top_state = 0;
+		playLockSound();
 	}
 
 	public void cycleMidState() {
@@ -361,6 +381,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		mid_state++;
 		if (mid_state > 7)
 			mid_state = 0;
+		playLockSound();
 	}
 
 	public void cycleBottomState() {
@@ -368,6 +389,23 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		bottom_state++;
 		if (bottom_state > 7)
 			bottom_state = 0;
+		playLockSound();
+	}
+
+	private void playLockSound() {
+		getWorld().playSound(null, getPos(), SoundRegistry.MUD_DOOR_LOCK, SoundCategory.BLOCKS, 1F, 1.0F);
+	}
+	
+	private void playOpenRecessSound() {
+		getWorld().playSound(null, getPos(), SoundRegistry.MUD_DOOR_1, SoundCategory.BLOCKS, 1F, 1.0F);
+	}
+	
+	private void playOpenSinkingSound() {
+		getWorld().playSound(null, getPos(), SoundRegistry.MUD_DOOR_2, SoundCategory.BLOCKS, 1F, 0.9F);
+	}
+	
+	private void playTrapFallingSound() {
+		getWorld().playSound(null, getPos(), SoundRegistry.MUD_DOOR_TRAP, SoundCategory.BLOCKS, 1F, 1.25F);
 	}
 
 	@Override

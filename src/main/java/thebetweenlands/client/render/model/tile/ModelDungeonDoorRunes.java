@@ -102,42 +102,74 @@ public class ModelDungeonDoorRunes extends ModelBase {
 			slate1.rotateAngleX = 0F;
 			slate2.rotateAngleX = 0F;
 			slate3.rotateAngleX = 0F;
-			slate1.setRotationPoint(0F, 24F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -4F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
-			slate2.setRotationPoint(-8F, 24F + 0.1375F * (tile.last_tick_slate_2_rotate + (tile.slate_2_rotate - tile.last_tick_slate_2_rotate) * partialTicks), -4F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
-
-			frame_right.setRotationPoint(0.0F, 0.0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
-			frame_left.setRotationPoint(0.0F, 0.0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
-			frame_top.setRotationPoint(0.0F, 0.0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
-			frame_bottom.setRotationPoint(0.0F, 0.0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0.0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
-
-			top.setRotationPoint(0.0F, -4.5F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -5.5F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
-			mid.setRotationPoint(0.0F, 0.0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -6.0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
-			bottom.setRotationPoint(0.0F, 4.5F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), -5.5F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
-
-			slate3.setRotationPoint(16F, 24F + 0.1375F * (tile.last_tick_slate_3_rotate + (tile.slate_3_rotate - tile.last_tick_slate_3_rotate) * partialTicks), -7F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
-
-			behind.setRotationPoint(0F, 0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks), 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks));
 		}
-		if(!tile.hide_slate_1)
-			slate1.render(scale);
-		if(!tile.hide_slate_2)
+		if(!tile.hide_slate_1) {
+			if(!tile.mimic) {
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks) * scale, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks) * scale);
+				slate1.render(scale);
+				GlStateManager.popMatrix();
+			}
+			else
+				slate1.render(scale);
+		}
+		if(!tile.hide_slate_2) {
+			if(!tile.mimic) {
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_2_rotate + (tile.slate_2_rotate - tile.last_tick_slate_2_rotate) * partialTicks) * scale, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks) * scale);
+				slate2.render(scale);
+				GlStateManager.popMatrix();
+			}
+		else
 			slate2.render(scale);
-		if(!tile.hide_slate_3)
-			slate3.render(scale);
+		}
+		if(!tile.hide_slate_3) {
+			if(!tile.mimic) {
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_3_rotate + (tile.slate_3_rotate - tile.last_tick_slate_3_rotate) * partialTicks) * scale, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks) * scale);
+				slate3.render(scale);
+				GlStateManager.popMatrix();
+			}
+			else
+				slate3.render(scale);
+		}
 		if (!tile.hide_lock) {
-			frame_right.render(scale);
-			frame_left.render(scale);
-			frame_top.render(scale);
-			frame_bottom.render(scale);
-			top.render(scale);
-			mid.render(scale);
-			bottom.render(scale);
+			if(!tile.mimic) {
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks) * scale, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks) * scale);
+				frame_right.render(scale);
+				frame_left.render(scale);
+				frame_top.render(scale);
+				frame_bottom.render(scale);
+				top.render(scale);
+				mid.render(scale);
+				bottom.render(scale);
+				GlStateManager.popMatrix();
+			}
+			else {
+				frame_right.render(scale);
+				frame_left.render(scale);
+				frame_top.render(scale);
+				frame_bottom.render(scale);
+				top.render(scale);
+				mid.render(scale);
+				bottom.render(scale);
+			}
 		}
 		if (!tile.hide_back_wall) {
-			GlStateManager.pushMatrix();
-			GlStateManager.scale(0.99F, 1F, 1F);
-			behind.render(scale);
-			GlStateManager.popMatrix();
+			if(!tile.mimic) {
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks) * scale, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks) * scale);
+				GlStateManager.scale(0.99F, 1F, 1F);
+				behind.render(scale);
+				GlStateManager.popMatrix();
+			}
+			else {
+				GlStateManager.pushMatrix();
+				GlStateManager.scale(0.99F, 1F, 1F);
+				behind.render(scale);
+				GlStateManager.popMatrix();
+			}
 		}
 	}
 

@@ -1,15 +1,13 @@
 package thebetweenlands.common.registries;
 
-import net.minecraft.util.SoundEvent;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.sound.BLSoundEvent;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.util.SoundEvent;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.common.sound.BLSoundEvent;
 
 public class SoundRegistry {
     public static final List<SoundEvent> SOUNDS = new ArrayList<>();
@@ -186,6 +184,11 @@ public class SoundRegistry {
     public static final BLSoundEvent PORTAL_TRAVEL = reg("portal_travel");
     public static final BLSoundEvent PORTAL_TRIGGER = reg("portal_trigger");
     public static final BLSoundEvent PUFF_SHROOM = reg("puff_shroom");
+    public static final BLSoundEvent MUD_DOOR_1 = reg("mud_door_1");
+    public static final BLSoundEvent MUD_DOOR_2 = reg("mud_door_2");
+    public static final BLSoundEvent MUD_DOOR_LOCK = reg("mud_door_lock");
+    public static final BLSoundEvent MUD_DOOR_TRAP = reg("mud_door_trap");
+    
     private SoundRegistry() {
     }
 

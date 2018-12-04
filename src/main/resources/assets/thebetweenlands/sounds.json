@@ -1083,5 +1083,25 @@
     "sounds": [
       "thebetweenlands:puff_shroom"
     ]
+  },
+  "mud_door_1": {
+    "sounds": [
+      "thebetweenlands:mud_door_1"
+    ]
+  },
+  "mud_door_2": {
+    "sounds": [
+      "thebetweenlands:mud_door_2"
+    ]
+  },
+  "mud_door_lock": {
+    "sounds": [
+      "thebetweenlands:mud_door_lock"
+    ]
+  },
+  "mud_door_trap": {
+    "sounds": [
+      "thebetweenlands:mud_door_trap"
+    ]
   }
 }
