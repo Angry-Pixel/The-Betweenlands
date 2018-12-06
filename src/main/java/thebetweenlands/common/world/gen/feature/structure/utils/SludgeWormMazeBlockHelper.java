@@ -1,0 +1,438 @@
+package thebetweenlands.common.world.gen.feature.structure.utils;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.block.BlockLog.EnumAxis;
+import net.minecraft.block.BlockStairs.EnumHalf;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import thebetweenlands.common.block.container.BlockChestBetweenlands;
+import thebetweenlands.common.block.container.BlockMudBricksAlcove;
+import thebetweenlands.common.block.misc.BlockSulfurTorch;
+import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
+import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
+import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
+import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
+import thebetweenlands.common.block.structure.BlockMudTiles;
+import thebetweenlands.common.block.structure.BlockMudTiles.EnumMudTileType;
+import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
+import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
+import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
+import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
+import thebetweenlands.common.block.structure.BlockWormDungeonPillar.EnumWormPillarType;
+import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
+import thebetweenlands.common.registries.BlockRegistry;
+
+public class SludgeWormMazeBlockHelper {
+	
+	public IBlockState MOB_SPAWNER = BlockRegistry.MOB_SPAWNER.getDefaultState();
+	public IBlockState BLACK_HAT_MUSHROOM = BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState();
+	public IBlockState BULB_CAPPED_MUSHROOM = BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState();
+	public IBlockState FLAT_HEAD_MUSHROOM = BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState();
+
+	public IBlockState STAGNANT_WATER = BlockRegistry.STAGNANT_WATER.getDefaultState();
+	public IBlockState SPAWNER_TYPE_1 = Blocks.PRISMARINE.getDefaultState();
+	public IBlockState SPAWNER_TYPE_2 = Blocks.PURPUR_BLOCK.getDefaultState();
+
+	public IBlockState TORCH_NORTH = BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, EnumFacing.NORTH);
+	public IBlockState TORCH_EAST = BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, EnumFacing.EAST);
+	public IBlockState TORCH_SOUTH = BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, EnumFacing.SOUTH);
+	public IBlockState TORCH_WEST = BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, EnumFacing.WEST);
+	public IBlockState CHEST_NORTH = BlockRegistry.WEEDWOOD_CHEST.getDefaultState().withProperty(BlockChestBetweenlands.FACING, EnumFacing.NORTH);
+	public IBlockState CHEST_EAST = BlockRegistry.WEEDWOOD_CHEST.getDefaultState().withProperty(BlockChestBetweenlands.FACING, EnumFacing.EAST);
+	public IBlockState CHEST_SOUTH = BlockRegistry.WEEDWOOD_CHEST.getDefaultState().withProperty(BlockChestBetweenlands.FACING, EnumFacing.SOUTH);
+	public IBlockState CHEST_WEST = BlockRegistry.WEEDWOOD_CHEST.getDefaultState().withProperty(BlockChestBetweenlands.FACING, EnumFacing.WEST);
+	public IBlockState WORM_DUNGEON_PILLAR = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState();
+	public IBlockState WORM_DUNGEON_PILLAR_TOP = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP);
+	public IBlockState WORM_DUNGEON_PILLAR_DECAY_1 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_VERTICAL_DECAY_1);
+	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_1 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_1);
+	public IBlockState WORM_DUNGEON_PILLAR_DECAY_2 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_VERTICAL_DECAY_2);
+	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_2 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_2);
+	public IBlockState WORM_DUNGEON_PILLAR_DECAY_3 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_VERTICAL_DECAY_3);
+	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_3 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_3);
+	public IBlockState WORM_DUNGEON_PILLAR_DECAY_4 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_VERTICAL_DECAY_4);
+	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_4 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_4);
+	public IBlockState WORM_DUNGEON_PILLAR_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_VERTICAL_DECAY_FULL);
+	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_FULL);
+
+	public IBlockState MUD_TILES = BlockRegistry.MUD_TILES.getDefaultState();
+	public IBlockState MUD_TILES_DECAY = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY);
+	public IBlockState MUD_TILES_CRACKED = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED);
+	public IBlockState MUD_TILES_CRACKED_DECAY = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED_DECAY);
+
+	public IBlockState MUD_BRICK_STAIRS = BlockRegistry.MUD_BRICK_STAIRS.getDefaultState();
+	public IBlockState MUD_BRICK_STAIRS_DECAY_1 = BlockRegistry.MUD_BRICK_STAIRS_DECAY_1.getDefaultState();
+	public IBlockState MUD_BRICK_STAIRS_DECAY_2 = BlockRegistry.MUD_BRICK_STAIRS_DECAY_2.getDefaultState();
+	public IBlockState MUD_BRICK_STAIRS_DECAY_3 = BlockRegistry.MUD_BRICK_STAIRS_DECAY_3.getDefaultState();
+
+	public IBlockState MUD_BRICK_SLAB = BlockRegistry.MUD_BRICK_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
+	public IBlockState MUD_BRICK_SLAB_DECAY_1 = BlockRegistry.MUD_BRICK_SLAB_DECAY_1.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
+	public IBlockState MUD_BRICK_SLAB_DECAY_2 = BlockRegistry.MUD_BRICK_SLAB_DECAY_1.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
+	public IBlockState MUD_BRICK_SLAB_DECAY_3 = BlockRegistry.MUD_BRICK_SLAB_DECAY_1.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
+
+	public IBlockState MUD_BRICKS = BlockRegistry.MUD_BRICKS.getDefaultState();
+	public IBlockState MUD_BRICKS_DECAY_1 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_1);
+	public IBlockState MUD_BRICKS_DECAY_2 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_2);
+	public IBlockState MUD_BRICKS_DECAY_3 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3);
+	public IBlockState MUD_BRICKS_DECAY_4 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_4);
+	public IBlockState MUD_BRICKS_CARVED = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED);
+	public IBlockState MUD_BRICKS_CARVED_DECAY_1 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_DECAY_1);
+	public IBlockState MUD_BRICKS_CARVED_DECAY_2 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_DECAY_2);
+	public IBlockState MUD_BRICKS_CARVED_DECAY_3 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_DECAY_3);
+	public IBlockState MUD_BRICKS_CARVED_DECAY_4 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_DECAY_4);
+	public IBlockState MUD_BRICKS_CARVED_EDGE = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_EDGE);
+	public IBlockState MUD_BRICKS_CARVED_EDGE_DECAY_1 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_EDGE_DECAY_1);
+	public IBlockState MUD_BRICKS_CARVED_EDGE_DECAY_2 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_EDGE_DECAY_2);
+	public IBlockState MUD_BRICKS_CARVED_EDGE_DECAY_3 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_EDGE_DECAY_3);
+	public IBlockState MUD_BRICKS_CARVED_EDGE_DECAY_4 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_EDGE_DECAY_4);
+
+	public IBlockState MUD = BlockRegistry.MUD.getDefaultState();
+	public IBlockState DRIPPING_MUD = BlockRegistry.DRIPPING_MUD.getDefaultState();
+	public IBlockState PUFFSHROOM = BlockRegistry.PUFFSHROOM.getDefaultState();
+	public IBlockState ROTTEN_BARK = BlockRegistry.LOG_ROTTEN_BARK.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, EnumAxis.NONE);
+
+	public IBlockState ROOT = BlockRegistry.ROOT.getDefaultState();
+
+	public IBlockState DUNGEON_DOOR_COMBINATION_EAST = BlockRegistry.DUNGEON_DOOR_COMBINATION.getDefaultState().withProperty(BlockDungeonDoorCombination.FACING, EnumFacing.EAST);
+	public IBlockState DUNGEON_DOOR_COMBINATION_WEST = BlockRegistry.DUNGEON_DOOR_COMBINATION.getDefaultState().withProperty(BlockDungeonDoorCombination.FACING, EnumFacing.WEST);
+
+	public IBlockState DUNGEON_DOOR_EAST = BlockRegistry.DUNGEON_DOOR_RUNES.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.EAST);
+	public IBlockState DUNGEON_DOOR_WEST = BlockRegistry.DUNGEON_DOOR_RUNES.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.WEST);
+
+	public IBlockState MUD_BRICKS_ALCOVE_NORTH = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.NORTH);
+	public IBlockState MUD_BRICKS_ALCOVE_EAST = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.EAST);
+	public IBlockState MUD_BRICKS_ALCOVE_SOUTH = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.SOUTH);
+	public IBlockState MUD_BRICKS_ALCOVE_WEST = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.WEST);
+	
+	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
+	
+	public SludgeWormMazeBlockHelper() {
+		initStuctureBlockMap();
+	}
+	
+	public @Nullable IBlockState getMudBricksForLevel(Random rand, int level, int layer) {
+		switch (level) {
+		case 0:
+			if(layer == 1)
+				return MUD_BRICKS;
+			if(layer == 2)
+				return MUD_BRICKS_CARVED;
+			if(layer == 3)
+				return MUD_BRICKS_CARVED_EDGE;
+		case 1:
+			if(layer == 1)
+				return rand.nextBoolean() ? MUD_BRICKS : MUD_BRICKS_DECAY_1;
+			if(layer == 2)
+				return MUD_BRICKS_CARVED;
+			if(layer == 3)
+				return rand.nextBoolean() ? MUD_BRICKS_CARVED_EDGE : MUD_BRICKS_CARVED_EDGE_DECAY_1;
+		case 2:
+			if(layer == 1)
+				return rand.nextBoolean() ? MUD_BRICKS_DECAY_1 : MUD_BRICKS_DECAY_2;
+			if(layer == 2)
+				return MUD_BRICKS_CARVED;
+			if(layer == 3)
+				return rand.nextBoolean() ? MUD_BRICKS_CARVED_EDGE_DECAY_1 : MUD_BRICKS_CARVED_EDGE_DECAY_2;
+		case 3:
+			if(layer == 1)
+				return rand.nextBoolean() ? MUD_BRICKS_DECAY_2 : MUD_BRICKS_DECAY_3;
+			if(layer == 2)
+				return rand.nextBoolean() ? MUD_BRICKS_CARVED : MUD_BRICKS_CARVED_DECAY_1;
+			if(layer == 3)
+				return rand.nextBoolean() ? MUD_BRICKS_CARVED_EDGE_DECAY_2 : MUD_BRICKS_CARVED_EDGE_DECAY_3;
+		case 4:
+			if(layer == 1)
+				return rand.nextBoolean() ? MUD_BRICKS_DECAY_3 : MUD_BRICKS_DECAY_4;
+			if(layer == 2)
+				return rand.nextBoolean() ? MUD_BRICKS_CARVED_DECAY_1 : MUD_BRICKS_CARVED_DECAY_2;
+			if(layer == 3)
+				return rand.nextBoolean() ? MUD_BRICKS_CARVED_EDGE_DECAY_3 :MUD_BRICKS_CARVED_EDGE_DECAY_4;
+		case 5:
+			if(layer == 1)
+				return MUD_BRICKS_DECAY_4;
+			if(layer == 2)
+				return rand.nextBoolean() ? MUD_BRICKS_CARVED_DECAY_1 : rand.nextBoolean() ? MUD_BRICKS_CARVED_DECAY_2 : MUD_BRICKS_CARVED_DECAY_3;
+			if(layer == 3)
+				return MUD_BRICKS_CARVED_EDGE_DECAY_4;
+		case 6:
+			if(layer == 1)
+				return MUD_BRICKS_DECAY_4;
+			if(layer == 2)
+				return rand.nextBoolean() ? MUD_BRICKS_CARVED_DECAY_2 : rand.nextBoolean() ? MUD_BRICKS_CARVED_DECAY_3 : MUD_BRICKS_CARVED_DECAY_4;
+			if(layer == 3)
+				return MUD_BRICKS_CARVED_EDGE_DECAY_4;
+		case 7:
+			return MUD_BRICKS;
+		}
+		return MUD_BRICKS;
+	}
+
+	public @Nullable IBlockState getPillarsForLevel(Random rand, int level, int layer) {
+		switch (level) {
+		case 0:
+			if(layer == 1)
+				return WORM_DUNGEON_PILLAR;
+			if(layer == 2)
+				return WORM_DUNGEON_PILLAR;
+			if(layer == 3)
+				return WORM_DUNGEON_PILLAR_TOP;
+		case 1:
+			if(layer == 1)
+				return WORM_DUNGEON_PILLAR_DECAY_1;
+			if(layer == 2)
+				return WORM_DUNGEON_PILLAR;
+			if(layer == 3)
+				return WORM_DUNGEON_PILLAR_TOP_DECAY_1;
+		case 2:
+			if(layer == 1)
+				return WORM_DUNGEON_PILLAR_DECAY_2;
+			if(layer == 2)
+				return WORM_DUNGEON_PILLAR;
+			if(layer == 3)
+				return WORM_DUNGEON_PILLAR_TOP_DECAY_2;
+		case 3:
+			if(layer == 1)
+				return WORM_DUNGEON_PILLAR_DECAY_3;
+			if(layer == 2)
+				return WORM_DUNGEON_PILLAR_DECAY_1;
+			if(layer == 3)
+				return WORM_DUNGEON_PILLAR_TOP_DECAY_3;
+		case 4:
+			if(layer == 1)
+				return WORM_DUNGEON_PILLAR_DECAY_4;
+			if(layer == 2)
+				return WORM_DUNGEON_PILLAR_DECAY_2;
+			if(layer == 3)
+				return WORM_DUNGEON_PILLAR_TOP_DECAY_4;
+		case 5:
+			if(layer == 1)
+				return WORM_DUNGEON_PILLAR_DECAY_FULL;
+			if(layer == 2)
+				return WORM_DUNGEON_PILLAR_DECAY_3;
+			if(layer == 3)
+				return WORM_DUNGEON_PILLAR_TOP_DECAY_4;
+		case 6:
+			if(layer == 1)
+				return WORM_DUNGEON_PILLAR_DECAY_FULL;
+			if(layer == 2)
+				return WORM_DUNGEON_PILLAR_DECAY_4;
+			if(layer == 3)
+				return WORM_DUNGEON_PILLAR_TOP_DECAY_FULL;
+		case 7:
+			return null;
+		}
+		return WORM_DUNGEON_PILLAR;
+	}
+
+	public @Nullable IBlockState getTilesForLevel(Random rand, int level) {
+		int type = rand.nextInt(8);
+		switch (level) {
+		case 0:
+			if(type == 0)
+				return MUD_TILES_CRACKED;
+			else
+				return MUD_TILES;
+		case 1:
+			if(type == 0 || type == 1)
+				return MUD_TILES_CRACKED;
+			if(type == 2)
+				return MUD_TILES_DECAY;
+			else
+				return MUD_TILES;
+		case 2:
+			if(type == 0 || type == 1)
+				return MUD_TILES_DECAY;
+			if(type == 2)
+				return MUD_TILES_CRACKED_DECAY;
+			else
+				return MUD_TILES;
+		case 3:
+			if(type == 0 || type == 1)
+				return MUD_TILES_DECAY;
+			if(type == 2 || type == 3)
+				return MUD_TILES_CRACKED_DECAY;
+			if(type == 4)
+				return MUD_TILES_CRACKED;
+			else
+				return MUD_TILES;
+		case 4:
+			if(type == 0 || type == 1 || type == 2)
+				return MUD_TILES_DECAY;
+			if(type == 3 || type == 4)
+				return MUD_TILES_CRACKED;
+			if(type == 5)
+				return MUD_TILES_CRACKED_DECAY;
+			else
+				return MUD_TILES;
+		case 5:
+			if(type == 0 || type == 1 || type == 2)
+				return MUD_TILES_DECAY;
+			if(type == 3 || type == 4)
+				return MUD_TILES_CRACKED_DECAY;
+			if(type == 5)
+				return MUD_TILES_CRACKED;
+			else
+				return MUD_TILES;
+		case 6:
+			if(type == 0 || type == 1)
+				return MUD_TILES_CRACKED_DECAY;
+			if(type == 3)
+				return MUD_TILES_CRACKED;
+			else
+				return MUD_TILES_DECAY;
+		case 7:
+			return MUD_BRICKS;
+		}
+		return MUD_BRICKS;
+	}
+
+	public @Nullable IBlockState getStairsForLevel(Random rand, int level, EnumFacing facing, EnumHalf half) {
+		IBlockState state = MUD_BRICK_STAIRS;
+		int type = rand.nextInt(3);
+		switch (level) {
+		case 0:
+			state = MUD_BRICK_STAIRS;
+			break;
+		case 1:
+			if(type == 0 || type == 1)
+				state = MUD_BRICK_STAIRS;
+			if(type == 2)
+				state = MUD_BRICK_STAIRS_DECAY_1;
+			break;
+		case 2:
+			if(type == 0)
+				state = MUD_BRICK_STAIRS;
+			if(type == 1)
+				state = MUD_BRICK_STAIRS_DECAY_1;
+			if(type == 2)
+				state = MUD_BRICK_STAIRS_DECAY_2;
+			break;
+		case 3:
+			if(type == 0 || type == 1)
+				state = MUD_BRICK_STAIRS_DECAY_1;
+			if(type == 2)
+				state = MUD_BRICK_STAIRS_DECAY_2;
+			break;
+		case 4:
+			if(type == 0)
+				state = MUD_BRICK_STAIRS_DECAY_1;
+			if(type == 1)
+				state = MUD_BRICK_STAIRS_DECAY_2;
+			if(type == 2)
+				state = MUD_BRICK_STAIRS_DECAY_3;
+			break;
+		case 5:
+			if(type == 0 || type == 1)
+				state = MUD_BRICK_STAIRS_DECAY_2;
+			if(type == 2)
+				state = MUD_BRICK_STAIRS_DECAY_3;
+			break;
+		case 6:
+			state = MUD_BRICK_STAIRS_DECAY_3;
+			break;
+		case 7:
+			state = MUD_BRICK_STAIRS;
+			break;
+		}
+		return state.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, half);
+	}
+
+	public IBlockState getRandomMushroom(Random rand) {
+		int rnd = rand.nextInt(30);
+		if(rnd < 14) {
+			return FLAT_HEAD_MUSHROOM;
+		} else if(rnd < 28) {
+			return BLACK_HAT_MUSHROOM;
+		} else {
+			return BULB_CAPPED_MUSHROOM;
+		}
+	}
+
+	public void setRandomRoot(World world, BlockPos pos, Random rand) {
+		if (!isSolidStructureBlock(world.getBlockState(pos))) {
+			int rnd = rand.nextInt(30);
+			if (rnd < 10) {
+				world.setBlockState(pos, ROOT, 2);
+			} else if (rnd < 20) {
+				world.setBlockState(pos, ROOT, 2);
+				world.setBlockState(pos.up(1), ROOT, 2);
+			} else if (rnd < 25) {
+				world.setBlockState(pos, ROOT, 2);
+				world.setBlockState(pos.up(1), ROOT, 2);
+				world.setBlockState(pos.up(2), ROOT, 2);
+			} else {
+				world.setBlockState(pos, ROOT, 2);
+				world.setBlockState(pos.up(1), ROOT, 2);
+				world.setBlockState(pos.up(2), ROOT, 2);
+				world.setBlockState(pos.up(3), ROOT, 2);
+			}
+		}
+	}
+
+	public boolean isSolidStructureBlock(IBlockState state) {
+		return STRUCTURE_BLOCKS.get(state) != null;
+	}
+
+	private void initStuctureBlockMap() {
+		if (STRUCTURE_BLOCKS.isEmpty()) {
+			STRUCTURE_BLOCKS.put(DRIPPING_MUD, true);
+			STRUCTURE_BLOCKS.put(ROTTEN_BARK, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICK_SLAB, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICK_SLAB_DECAY_1, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICK_SLAB_DECAY_2, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICK_SLAB_DECAY_3, true);
+			STRUCTURE_BLOCKS.put(MUD, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_DECAY_1, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_DECAY_2, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_DECAY_3, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_DECAY_4, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CARVED, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CARVED_DECAY_1, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CARVED_DECAY_2, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CARVED_DECAY_3, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CARVED_DECAY_4, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CARVED_EDGE, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CARVED_EDGE_DECAY_1, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CARVED_EDGE_DECAY_2, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CARVED_EDGE_DECAY_3, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CARVED_EDGE_DECAY_4, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICK_STAIRS, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICK_STAIRS_DECAY_1, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICK_STAIRS_DECAY_2, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICK_STAIRS_DECAY_3, true);
+			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_TOP, true);
+			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_TOP_DECAY_1, true);
+			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_TOP_DECAY_2, true);
+			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_TOP_DECAY_3, true);
+			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_TOP_DECAY_4, true);
+			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_TOP_DECAY_FULL, true);
+			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR, true);
+			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_DECAY_1, true);
+			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_DECAY_2, true);
+			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_DECAY_3, true);
+			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_DECAY_4, true);
+			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_DECAY_FULL, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_DECAY, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED_DECAY, true);
+			STRUCTURE_BLOCKS.put(ROOT, true);
+			STRUCTURE_BLOCKS.put(DUNGEON_DOOR_COMBINATION_EAST, true);
+			STRUCTURE_BLOCKS.put(DUNGEON_DOOR_COMBINATION_WEST, true);
+			STRUCTURE_BLOCKS.put(DUNGEON_DOOR_EAST, true);
+			STRUCTURE_BLOCKS.put(DUNGEON_DOOR_WEST, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_ALCOVE_NORTH, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_ALCOVE_EAST, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_ALCOVE_SOUTH, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_ALCOVE_WEST, true);
+		}
+	}
+}
