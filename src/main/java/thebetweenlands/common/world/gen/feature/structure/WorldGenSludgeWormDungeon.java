@@ -22,6 +22,7 @@ import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBl
 public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
+	private SludgeWormMazeMicroBuilds microBuild = new SludgeWormMazeMicroBuilds();
 
 	public WorldGenSludgeWormDungeon() {
 		super(true);
@@ -199,31 +200,30 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	}
 
 	private void addMazeCellFeature(World world, BlockPos pos, Random rand, int w, int h, int[][] maze, int level, int layer) {
-		//  TODO add features here for end of tunnels
+		// TODO add features here for end of tunnels
 		// byte directions 1 = SOUTH, 2 = NORTH, 4 = WEST, 8 = EAST
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < w; j++) {
 				if ((maze[j][i] & 2) == 0 && (maze[j][i] & 4) == 0 && (maze[j][i] & 8) == 0) {
 					// SOUTH
 					if (!isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, -3, 3 + i * 4))))
-						placeChest(world, pos.add(2 + j * 4, -3, 3 + i * 4), blockHelper.CHEST_NORTH, rand);
+						microBuild.selectFeature(world, pos.add(2 + j * 4, -3, 2 + i * 4), EnumFacing.NORTH, rand, level, layer);
 				}
 				if ((maze[j][i] & 1) == 0 && (maze[j][i] & 4) == 0 && (maze[j][i] & 8) == 0) {
 					// NORTH
 					if (!isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, -3, 1 + i * 4))))
-						placeChest(world, pos.add(2 + j * 4, -3, 1 + i * 4), blockHelper.CHEST_SOUTH, rand);
+						microBuild.selectFeature(world, pos.add(2 + j * 4, -3, 2 + i * 4), EnumFacing.SOUTH, rand, level, layer);
 				}
 				if ((maze[j][i] & 1) == 0 && (maze[j][i] & 2) == 0 && (maze[j][i] & 4) == 0) {
 					// EAST
 					if (!isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, -3, 2 + i * 4))))
-						placeChest(world, pos.add(3 + j * 4, -3, 2 + i * 4), blockHelper.CHEST_WEST, rand);
+						microBuild.selectFeature(world, pos.add(2 + j * 4, -3, 2 + i * 4), EnumFacing.WEST, rand, level, layer);
 
 				}
 				if ((maze[j][i] & 1) == 0 && (maze[j][i] & 2) == 0 && (maze[j][i] & 8) == 0) {
 					// WEST
 					if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, -3, 2 + i * 4))))
-						placeChest(world, pos.add(1 + j * 4, -3, 2 + i * 4), blockHelper.CHEST_EAST, rand);
-
+						microBuild.selectFeature(world, pos.add(2 + j * 4, -3, 2 + i * 4), EnumFacing.EAST, rand, level, layer);
 				}
 			}
 		}
