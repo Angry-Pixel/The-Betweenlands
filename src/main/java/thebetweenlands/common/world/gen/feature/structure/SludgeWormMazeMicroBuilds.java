@@ -2,6 +2,7 @@ package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.Random;
 
+import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -23,28 +24,13 @@ public class SludgeWormMazeMicroBuilds {
 		case 1:
 		case 2:
 		case 3:
-			buildJustChest(world, pos, facing, rand, level, layer);
+			buildTest(world, pos, facing, rand, level, layer);
 			break;
 		}
 	}
 
-	private void buildJustChest(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
-		switch (facing) {
-		case WEST:
-			world.setBlockState(pos, blockHelper.CHEST_WEST);
-			break;
-		case EAST:
-			world.setBlockState(pos, blockHelper.CHEST_EAST);
-			break;
-		case NORTH:
-			world.setBlockState(pos, blockHelper.CHEST_NORTH);
-			break;
-		case SOUTH:
-			world.setBlockState(pos, blockHelper.CHEST_SOUTH);
-			break;
-		default:
-			break;
-		}
+	private void buildTest(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		rotatedCubeVolume(world, rand, pos, -1, 0, -1, blockHelper.getStairsForLevel(rand, level, facing.getOpposite(), EnumHalf.TOP), 3, 1, 1, facing);
 	}
 
 	@SuppressWarnings("incomplete-switch")
@@ -58,7 +44,7 @@ public class SludgeWormMazeMicroBuilds {
 						world.setBlockState(pos.add(xx, yy, zz), state, 16);
 					}
 			break;
-		case WEST:
+		case EAST:
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int zz = -offsetA; zz > -offsetA - sizeWidth; zz--)
 					for (int xx = offsetC; xx < offsetC + sizeDepth; xx++) {
@@ -72,7 +58,7 @@ public class SludgeWormMazeMicroBuilds {
 						world.setBlockState(pos.add(xx, yy, zz), state, 16);
 					}
 			break;
-		case EAST:
+		case WEST:
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int zz = offsetA; zz < offsetA + sizeWidth; zz++)
 					for (int xx = -offsetC; xx > -offsetC - sizeDepth; xx--) {
