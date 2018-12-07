@@ -465,7 +465,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						else if (rand.nextInt(6) == 0 && addSpawners)
 							world.setBlockState(pos.add(j, 0, i), blockHelper.SPAWNER_TYPE_2, 2);
 						else
-							world.setBlockState(pos.add(j, 0, i), blockHelper.PUFFSHROOM, 2);
+							if (rand.nextBoolean())
+								world.setBlockState(pos.add(j, 0, i), blockHelper.PUFFSHROOM, 2);
 					}
 				} 
 					
