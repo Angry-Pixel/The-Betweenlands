@@ -21,16 +21,38 @@ public class SludgeWormMazeMicroBuilds {
 		int type = rand.nextInt(4);
 		switch (type) {
 		case 0:
+			buildBasicAltar(world, pos, facing, rand, level, layer);
+			break;
 		case 1:
+			buildBasicAltarWithSides(world, pos, facing, rand, level, layer);
+			break;
 		case 2:
+			buildBasicAltarWithRoot(world, pos, facing, rand, level, layer);
+			break;
 		case 3:
-			buildTest(world, pos, facing, rand, level, layer);
+			buildBlockAltarWithPillar(world, pos, facing, rand, level, layer);
 			break;
 		}
 	}
 
-	private void buildTest(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+	private void buildBasicAltar(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
 		rotatedCubeVolume(world, rand, pos, -1, 0, -1, blockHelper.getStairsForLevel(rand, level, facing.getOpposite(), EnumHalf.TOP), 3, 1, 1, facing);
+	}
+
+	private void buildBasicAltarWithSides(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		rotatedCubeVolume(world, rand, pos, -1, 0, -1, blockHelper.getStairsForLevel(rand, level, facing.getOpposite(), EnumHalf.TOP), 3, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, 0, blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP), 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, 0, blockHelper.getStairsForLevel(rand, level, facing.getOpposite().rotateY(), EnumHalf.TOP), 1, 1, 2, facing);
+	}
+	
+	private void buildBasicAltarWithRoot(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		rotatedCubeVolume(world, rand, pos, -1, 0, -1, blockHelper.getStairsForLevel(rand, level, facing.getOpposite(), EnumHalf.TOP), 3, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 1, -1, blockHelper.ROOT, 1, 2, 1, facing);
+	}
+
+	private void buildBlockAltarWithPillar(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		rotatedCubeVolume(world, rand, pos, -1, 0, -1, blockHelper.getMudBricksForLevel(rand, level, 2), 3, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 1, -1, blockHelper.getPillarsForLevel(rand, level, 3), 1, 2, 1, facing);
 	}
 
 	@SuppressWarnings("incomplete-switch")
