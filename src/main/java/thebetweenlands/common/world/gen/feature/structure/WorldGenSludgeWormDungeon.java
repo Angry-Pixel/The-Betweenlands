@@ -260,8 +260,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					}
 					if (layer == 2) {
 						if (!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -3, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -3, 2 + i * 4)))
-							if (rand.nextInt(25) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 1 + i * 4))))
-								world.setBlockState(pos.add(1 + j * 4, 0, 1 + i * 4), blockHelper.TORCH_SOUTH, 2);
+							if (rand.nextInt(25) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, 0, 1 + i * 4))))
+								world.setBlockState(pos.add(2 + j * 4, 0, 1 + i * 4), blockHelper.TORCH_SOUTH, 2);
 							else {
 								if (rand.nextInt(5) == 0)
 									setAlcoveForLevel(world, pos.add(2 + j * 4, 0, i * 4), blockHelper.MUD_BRICKS_ALCOVE_SOUTH, rand, level);
@@ -455,7 +455,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private void buildFloor(World world, BlockPos pos, Random rand, int w, int h, boolean addFeature, boolean addSpawners, int level) {
 		for (int i = 0; i <= h * 4; i++) {
 			for (int j = 0; j <= w * 4; j++) {
-				world.setBlockState(pos.add(j, 0, i), getTilesForLevel(rand, level), 2);
 				if (rand.nextInt(15) == 0 && addFeature && !isSolidStructureBlock(world.getBlockState(pos.add(j, 1, i)))) {
 					if (!isBlackListedAreaForGen(pos.add(2, 0, 2), pos.add(j, 0, i), 1) && !isBlackListedAreaForGen(pos.add(26, 0, 26), pos.add(j, 0, i), 1)) {
 						if (rand.nextBoolean() && rand.nextBoolean())
@@ -467,7 +466,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						else
 							world.setBlockState(pos.add(j, 0, i), blockHelper.PUFFSHROOM, 2);
 					}
-				}
+				} else
+					world.setBlockState(pos.add(j, 0, i), getTilesForLevel(rand, level), 2);
+
 				if (world.getBlockState(pos.add(j, 0, i)).isNormalCube() && world.isAirBlock(pos.add(j, 1, i)))
 					if (rand.nextInt(40) == 0)
 						if (!isBlackListedAreaForGen(pos.add(2, 0, 2), pos.add(j, 0, i), 1) && !isBlackListedAreaForGen(pos.add(26, 0, 26), pos.add(j, 0, i), 1))
