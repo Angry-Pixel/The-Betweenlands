@@ -455,6 +455,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private void buildFloor(World world, BlockPos pos, Random rand, int w, int h, boolean addFeature, boolean addSpawners, int level) {
 		for (int i = 0; i <= h * 4; i++) {
 			for (int j = 0; j <= w * 4; j++) {
+				world.setBlockState(pos.add(j, 0, i), getTilesForLevel(rand, level), 2);
 				if (rand.nextInt(15) == 0 && addFeature && !isSolidStructureBlock(world.getBlockState(pos.add(j, 1, i)))) {
 					if (!isBlackListedAreaForGen(pos.add(2, 0, 2), pos.add(j, 0, i), 1) && !isBlackListedAreaForGen(pos.add(26, 0, 26), pos.add(j, 0, i), 1)) {
 						if (rand.nextBoolean() && rand.nextBoolean())
@@ -466,9 +467,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						else
 							world.setBlockState(pos.add(j, 0, i), blockHelper.PUFFSHROOM, 2);
 					}
-				} else
-					world.setBlockState(pos.add(j, 0, i), getTilesForLevel(rand, level), 2);
-
+				} 
+					
 				if (world.getBlockState(pos.add(j, 0, i)).isNormalCube() && world.isAirBlock(pos.add(j, 1, i)))
 					if (rand.nextInt(40) == 0)
 						if (!isBlackListedAreaForGen(pos.add(2, 0, 2), pos.add(j, 0, i), 1) && !isBlackListedAreaForGen(pos.add(26, 0, 26), pos.add(j, 0, i), 1))
