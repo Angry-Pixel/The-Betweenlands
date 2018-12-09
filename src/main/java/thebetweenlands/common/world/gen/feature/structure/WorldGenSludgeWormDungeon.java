@@ -405,6 +405,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				tileLock.top_code = tileCode.top_code;
 				tileLock.mid_code = tileCode.mid_code;
 				tileLock.bottom_code = tileCode.bottom_code;
+				tileLock.is_in_dungeon = true;
 			}
 		}
 		world.notifyBlockUpdate(codePos, codeState, codeState, 3);
@@ -422,9 +423,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				world.setBlockToAir(pos.add(1, 3, 3));
 				world.setBlockToAir(pos.add(2, 4, 3));
 				world.setBlockToAir(pos.add(2, 3, 3));
-				world.setBlockState(pos.add(1, 6, 1), getTilesForLevel(rand, level), 2);
-				world.setBlockState(pos.add(1, 6, 2), getTilesForLevel(rand, level), 2);
-				world.setBlockState(pos.add(1, 6, 3), getTilesForLevel(rand, level), 2);
+				world.setBlockToAir(pos.add(1, 6, 1));
+				world.setBlockToAir(pos.add(1, 6, 2));
+				world.setBlockToAir(pos.add(1, 6, 3));
 			} else if (level == 0 || level == 2 || level == 4 || level == 6) {
 				world.setBlockToAir(pos.add(27, 5, 27));
 				world.setBlockToAir(pos.add(27, 5, 26));
@@ -435,9 +436,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				world.setBlockToAir(pos.add(26, 4, 25));
 				world.setBlockToAir(pos.add(26, 3, 25));
 				if(level != 0) {
-				world.setBlockState(pos.add(27, 6, 27), getTilesForLevel(rand, level), 2);
-				world.setBlockState(pos.add(27, 6, 26), getTilesForLevel(rand, level), 2);
-				world.setBlockState(pos.add(27, 6, 25), getTilesForLevel(rand, level), 2);
+					world.setBlockToAir(pos.add(27, 6, 27));
+					world.setBlockToAir(pos.add(27, 6, 26));
+					world.setBlockToAir(pos.add(27, 6, 25));
 				}
 			}
 	}

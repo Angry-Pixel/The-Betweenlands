@@ -37,11 +37,19 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 	public boolean mimic = false;
 	public boolean animate_open = false;
 	public boolean animate_open_recess = false;
+	public boolean animate_tile_recess = false;
 	public boolean break_blocks = false;
 	public int slate_1_rotate = 0, slate_2_rotate = 0, slate_3_rotate = 0;
 	public int last_tick_slate_1_rotate = 0, last_tick_slate_2_rotate = 0, last_tick_slate_3_rotate = 0;
 	public int recess_pos = 0;
 	public int last_tick_recess_pos = 0;
+
+	public int tile_1_recess_pos = 0;
+	public int last_tick_recess_pos_tile_1 = 0;
+	public int tile_2_recess_pos = 0;
+	public int last_tick_recess_pos_tile_2 = 0;
+	public int tile_3_recess_pos = 0;
+	public int last_tick_recess_pos_tile_3 = 0;
 
 	private int prev_shake_timer;
 	private int shake_timer;
@@ -53,6 +61,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 	public boolean hide_slate_3 = false;
 	public boolean hide_lock = false;
 	public boolean hide_back_wall = false;
+	public boolean is_in_dungeon = false;
 
 	private static int SHAKING_TIMER_MAX = 240;
 
@@ -171,6 +180,10 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		last_tick_slate_3_rotate = slate_3_rotate;
 
 		last_tick_recess_pos = recess_pos;
+		
+		last_tick_recess_pos_tile_1 = tile_1_recess_pos;
+		last_tick_recess_pos_tile_2 = tile_2_recess_pos;
+		last_tick_recess_pos_tile_3 = tile_3_recess_pos;
 
 		if (top_state_prev != top_state) {
 			top_rotate += 4;
@@ -199,7 +212,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		if (animate_open_recess) {
 			if (recess_pos <= 0)
 				if (!getWorld().isRemote)
-					playOpenRecessSound();
+					playOpenRecessSound(true);
 			shake(240);
 			recess_pos += 1;
 			int limit = 30;
@@ -209,9 +222,41 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 					animate_open_recess = false;
 					if(!animate_open) {
 						animate_open = true;
-						playOpenSinkingSound();
 						getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
 					}
+				}
+			}
+		}
+
+		if (animate_tile_recess) {
+			if (!mimic) {
+				if(tile_1_recess_pos <= 0)
+					if (!getWorld().isRemote)
+						playOpenRecessSound(false);
+				if(tile_2_recess_pos == 2)
+					if (!getWorld().isRemote)
+						playOpenRecessSound(false);
+				if(tile_3_recess_pos == 2)
+					if (!getWorld().isRemote)
+						playOpenRecessSound(false);
+				tile_1_recess_pos += 2;
+				if(tile_1_recess_pos >= 20)
+					tile_2_recess_pos += 2;
+				if(tile_2_recess_pos >= 20)
+					tile_3_recess_pos += 2;
+			}
+			int limit = 60;	
+			if (tile_1_recess_pos >= limit)
+				last_tick_recess_pos_tile_1 = tile_1_recess_pos = limit;
+
+			if (tile_2_recess_pos >= limit)
+				last_tick_recess_pos_tile_2 = tile_2_recess_pos = limit;
+
+			if (tile_3_recess_pos >= limit) {
+				last_tick_recess_pos_tile_3 = tile_3_recess_pos = limit;
+				if (!getWorld().isRemote) {
+					break_blocks = true;
+					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
 				}
 			}
 		}
@@ -228,6 +273,9 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 				hide_back_wall = true;
 			}
 			if (!mimic) {
+				if (slate_1_rotate == 0)
+					if (!getWorld().isRemote)
+						playOpenSinkingSound();
 				slate_1_rotate += 4;
 				slate_2_rotate += 3;
 				slate_3_rotate += 3;
@@ -238,7 +286,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 					sinkingParticles(0F);
 				else
 					sinkingParticles(0.25F);	
-			if (slate_1_rotate > limit) {
+			if (slate_1_rotate >= limit) {
 				if (mimic) {
 					falling_shake = true;
 					crashingParticles(0.125F);
@@ -246,21 +294,34 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 				}
 				last_tick_slate_1_rotate = slate_1_rotate = limit;
 			}
-			if (slate_2_rotate > limit) {
+			if (slate_2_rotate >= limit) {
 				if (mimic) {
 					crashingParticles(0.125F);
 					hide_slate_2 = true;
 				}
 				last_tick_slate_2_rotate = slate_2_rotate = limit;
 			}
-			if (slate_3_rotate > limit) {
+			if (slate_3_rotate >= limit) {
 				if (mimic) {
 					crashingParticles(0.125F);
 					hide_slate_3 = true;
 				}
+				if(!mimic) {
+					hide_slate_1 = true;
+					hide_slate_2 = true;
+					hide_slate_3 = true;
+					hide_lock = true;
+					hide_back_wall = true;
+				}
 				last_tick_slate_3_rotate = slate_3_rotate = limit;
 				if (!getWorld().isRemote) {
-					break_blocks = true;
+					if(mimic)
+						break_blocks = true;
+					if(!mimic)
+						if(is_in_dungeon)
+							animate_tile_recess = true;
+						else
+							break_blocks = true;
 					animate_open = false;
 					getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
 				}
@@ -288,10 +349,12 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 					}
 				}
 			}
-
 			if (break_blocks) {
 				if (!mimic)
-					breakAllDoorBlocks(state, facing, true, false);
+					if(is_in_dungeon)
+						breakAllDoorBlocks(state, facing, true, false);
+					else
+						breakAllDoorBlocks(state, facing, false, false);
 				else {
 					breakAllDoorBlocks(state, facing, false, false);
 				/*
@@ -396,8 +459,8 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		getWorld().playSound(null, getPos(), SoundRegistry.MUD_DOOR_LOCK, SoundCategory.BLOCKS, 1F, 1.0F);
 	}
 
-	private void playOpenRecessSound() {
-		getWorld().playSound(null, getPos(), SoundRegistry.MUD_DOOR_1, SoundCategory.BLOCKS, 1F, 1.0F);
+	private void playOpenRecessSound(boolean isBigDoor) {
+		getWorld().playSound(null, getPos(), SoundRegistry.MUD_DOOR_1, SoundCategory.BLOCKS, isBigDoor ? 1F : 0.5F, 1.0F);
 	}
 
 	private void playOpenSinkingSound() {
@@ -423,7 +486,14 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		mimic = nbt.getBoolean("mimic");
 		animate_open = nbt.getBoolean("animate_open");
 		animate_open_recess = nbt.getBoolean("animate_open_recess");
+		animate_tile_recess = nbt.getBoolean("animate_tile_recess");
 		break_blocks = nbt.getBoolean("break_blocks");
+		hide_slate_1 = nbt.getBoolean("hide_slate_1");
+		hide_slate_2 = nbt.getBoolean("hide_slate_2");
+		hide_slate_3 = nbt.getBoolean("hide_slate_3");
+		hide_lock = nbt.getBoolean("hide_lock");
+		hide_back_wall = nbt.getBoolean("hide_back_wall");
+		is_in_dungeon = nbt.getBoolean("is_in_dungeon");
 	}
 
 	@Override
@@ -441,7 +511,14 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		nbt.setBoolean("mimic", mimic);
 		nbt.setBoolean("animate_open", animate_open);
 		nbt.setBoolean("animate_open_recess", animate_open_recess);
+		nbt.setBoolean("animate_tile_recess", animate_tile_recess);
 		nbt.setBoolean("break_blocks", break_blocks);
+		nbt.setBoolean("hide_slate_1", hide_slate_1);
+		nbt.setBoolean("hide_slate_2", hide_slate_2);
+		nbt.setBoolean("hide_slate_3", hide_slate_3);
+		nbt.setBoolean("hide_lock", hide_lock);
+		nbt.setBoolean("hide_back_wall", hide_back_wall);
+		nbt.setBoolean("is_in_dungeon", is_in_dungeon);
 		return nbt;
 	}
 

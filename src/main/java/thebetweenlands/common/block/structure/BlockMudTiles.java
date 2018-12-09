@@ -96,7 +96,7 @@ public class BlockMudTiles extends Block implements ICustomItemBlock, ISubtypeIt
     	final IBlockState stateConnection = world.getBlockState(pos.offset(side));
     	if(stateConnection.getBlock() == this && state.getBlock() == this) {
     		if(state.getValue(VARIANT) == EnumMudTileType.MUD_TILES || state.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED)
-    			if(stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES_DECAY || stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED_DECAY)
+    			if(stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES_DECAY || stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED_DECAY || stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES || stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED)
     				return false;
     		if(state.getValue(VARIANT) == EnumMudTileType.MUD_TILES_DECAY || state.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED_DECAY)
     			if(stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES || stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED)

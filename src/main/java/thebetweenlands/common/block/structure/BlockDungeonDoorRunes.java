@@ -63,6 +63,11 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 	}
 
 	@Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+
+	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		if(!getStateFromMeta(meta).getValue(INVISIBLE))
 			return new TileEntityDungeonDoorRunes();

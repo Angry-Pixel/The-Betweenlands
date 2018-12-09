@@ -1,5 +1,5 @@
 { 
-  "parent":"thebetweenlands:block/dungeon_door_combination",
+  "parent":"thebetweenlands:block/mud_bricks_climbable",
       "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

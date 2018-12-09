@@ -26,6 +26,9 @@ public class ModelDungeonDoorRunes extends ModelBase {
 	public ModelRenderer slate3c;
 	public ModelRenderer slate3d;
 	public ModelRenderer behind;
+	public ModelRenderer tile_block_mid;
+	public ModelRenderer tile_block_left;
+	public ModelRenderer tile_block_right;
 
 	public ModelDungeonDoorRunes() {
 		textureWidth = 256;
@@ -80,6 +83,15 @@ public class ModelDungeonDoorRunes extends ModelBase {
 		behind = new ModelRenderer(this, 81, 46);
         behind.setRotationPoint(0.0F, 0.0F, 0.0F);
         behind.addBox(-24.0F, -24.0F, -1.0F, 48, 48, 9, 0.0F);
+        tile_block_left = new ModelRenderer(this, 0, 162);
+        tile_block_left.setRotationPoint(-16.0F, 24.0F, 0.0F);
+        tile_block_left.addBox(-8.0F, 0.0F, -8.0F, 16, 16, 16, 0.0F);
+        tile_block_right = new ModelRenderer(this, 130, 162);
+        tile_block_right.setRotationPoint(16.0F, 24.0F, 0.0F);
+        tile_block_right.addBox(-8.0F, 0.0F, -8.0F, 16, 16, 16, 0.0F);
+        tile_block_mid = new ModelRenderer(this, 65, 162);
+        tile_block_mid.setRotationPoint(-0.0F, 24.0F, 0.0F);
+        tile_block_mid.addBox(-8.0F, 0.0F, -8.0F, 16, 16, 16, 0.0F);
 
 		slate2.addChild(slate2b);
 		slate2.addChild(slate2c);
@@ -159,6 +171,28 @@ public class ModelDungeonDoorRunes extends ModelBase {
 				GlStateManager.popMatrix();
 			}
 		}
+
+		if(!tile.mimic && tile.is_in_dungeon) {
+			if(tile.animate_tile_recess) {
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(0F, 0F, 0F + 0.275F * (tile.last_tick_recess_pos_tile_1 + (tile.tile_1_recess_pos - tile.last_tick_recess_pos_tile_1) * partialTicks) * scale);
+				tile_block_right.render(scale);
+				GlStateManager.popMatrix();
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(0F, 0F, 0F + 0.275F * (tile.last_tick_recess_pos_tile_2 + (tile.tile_2_recess_pos - tile.last_tick_recess_pos_tile_2) * partialTicks) * scale);
+				tile_block_mid.render(scale);
+				GlStateManager.popMatrix();
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(0F, 0F, 0F + 0.275F * (tile.last_tick_recess_pos_tile_3 + (tile.tile_3_recess_pos - tile.last_tick_recess_pos_tile_3) * partialTicks) * scale);
+				tile_block_left.render(scale);
+				GlStateManager.popMatrix();
+			}
+			else {
+				tile_block_left.render(scale);
+				tile_block_mid.render(scale);
+				tile_block_right.render(scale);
+			}
+		}
 	}
 
 	public void renderLockParts(float scale) {
@@ -183,6 +217,9 @@ public class ModelDungeonDoorRunes extends ModelBase {
 		top.render(scale);
 		bottom.render(scale);
 		behind.render(scale);
+		tile_block_left.render(scale);
+		tile_block_right.render(scale);
+		tile_block_mid.render(scale);
 	}
 
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
