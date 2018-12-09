@@ -20,6 +20,7 @@ import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
+import thebetweenlands.common.block.structure.BlockMudBricksClimbable;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockMudTiles.EnumMudTileType;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
@@ -110,6 +111,11 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState MUD_BRICKS_ALCOVE_EAST = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.EAST);
 	public IBlockState MUD_BRICKS_ALCOVE_SOUTH = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.SOUTH);
 	public IBlockState MUD_BRICKS_ALCOVE_WEST = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.WEST);
+	
+	public IBlockState MUD_BRICKS_CLIMBABLE_NORTH = BlockRegistry.MUD_BRICKS_CLIMBABLE.getDefaultState().withProperty(BlockMudBricksClimbable.FACING, EnumFacing.NORTH);
+	public IBlockState MUD_BRICKS_CLIMBABLE_EAST = BlockRegistry.MUD_BRICKS_CLIMBABLE.getDefaultState().withProperty(BlockMudBricksClimbable.FACING, EnumFacing.EAST);
+	public IBlockState MUD_BRICKS_CLIMBABLE_SOUTH = BlockRegistry.MUD_BRICKS_CLIMBABLE.getDefaultState().withProperty(BlockMudBricksClimbable.FACING, EnumFacing.SOUTH);
+	public IBlockState MUD_BRICKS_CLIMBABLE_WEST = BlockRegistry.MUD_BRICKS_CLIMBABLE.getDefaultState().withProperty(BlockMudBricksClimbable.FACING, EnumFacing.WEST);
 	
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 	
@@ -433,6 +439,10 @@ public class SludgeWormMazeBlockHelper {
 			STRUCTURE_BLOCKS.put(MUD_BRICKS_ALCOVE_EAST, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICKS_ALCOVE_SOUTH, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICKS_ALCOVE_WEST, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CLIMBABLE_NORTH, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CLIMBABLE_EAST, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CLIMBABLE_SOUTH, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_CLIMBABLE_WEST, true);
 		}
 	}
 }
