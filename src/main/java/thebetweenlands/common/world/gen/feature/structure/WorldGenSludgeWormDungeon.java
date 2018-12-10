@@ -12,6 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
@@ -521,21 +522,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				}
 				else if(world.isAirBlock(pos.add(j, 0, i)) && !isSolidStructureBlock(world.getBlockState(pos.add(j, 0, i)))) {
 					if(level == 0)
-						world.setBlockState(pos.add(j, 0, i), blockHelper.MUD_BRICK_SLAB, 2);
-					if(level != 0 && rand.nextInt(level) == 0) {
-						if(level == 1)
-							world.setBlockState(pos.add(j, 0, i), rand.nextBoolean() ? blockHelper.MUD_BRICK_SLAB : blockHelper.MUD_BRICK_SLAB_DECAY_1, 2);
-						if(level == 2)
-							world.setBlockState(pos.add(j, 0, i), blockHelper.MUD_BRICK_SLAB_DECAY_1, 2);
-						if(level == 3)
-							world.setBlockState(pos.add(j, 0, i), rand.nextBoolean() ? blockHelper.MUD_BRICK_SLAB_DECAY_1 : blockHelper.MUD_BRICK_SLAB_DECAY_2, 2);
-						if(level == 4)
-							world.setBlockState(pos.add(j, 0, i), blockHelper.MUD_BRICK_SLAB_DECAY_2, 2);
-						if(level == 5)
-							world.setBlockState(pos.add(j, 0, i), rand.nextBoolean() ? blockHelper.MUD_BRICK_SLAB_DECAY_2 : blockHelper.MUD_BRICK_SLAB_DECAY_3, 2);
-						if(level == 6)
-							world.setBlockState(pos.add(j, 0, i), blockHelper.MUD_BRICK_SLAB_DECAY_3, 2);
-					}
+						world.setBlockState(pos.add(j, 0, i), blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 2);
+					if(level != 0 && rand.nextInt(level) == 0)
+						world.setBlockState(pos.add(j, 0, i), blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 2);
 		}
 	}
 
