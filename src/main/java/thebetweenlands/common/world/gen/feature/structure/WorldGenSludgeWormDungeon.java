@@ -483,7 +483,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 								world.setBlockState(pos.add(j, 0, i), blockHelper.PUFFSHROOM, 2);
 					}
 				} 
-					
+
 				if (world.getBlockState(pos.add(j, 0, i)).isNormalCube() && world.isAirBlock(pos.add(j, 1, i)))
 					if (rand.nextInt(40) == 0)
 						if (!isBlackListedAreaForGen(pos.add(2, 0, 2), pos.add(j, 0, i), 1) && !isBlackListedAreaForGen(pos.add(26, 0, 26), pos.add(j, 0, i), 1))
@@ -522,9 +522,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				}
 				else if(world.isAirBlock(pos.add(j, 0, i)) && !isSolidStructureBlock(world.getBlockState(pos.add(j, 0, i)))) {
 					if(level == 0)
-						world.setBlockState(pos.add(j, 0, i), blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 2);
+						world.setBlockState(pos.add(j, 0, i), getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 2);
 					if(level != 0 && rand.nextInt(level) == 0)
-						world.setBlockState(pos.add(j, 0, i), blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 2);
+						world.setBlockState(pos.add(j, 0, i), getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 2);
 		}
 	}
 
@@ -559,6 +559,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 	public @Nullable IBlockState getStairsForLevel(Random rand, int level, EnumFacing facing, EnumHalf half) {
 		return blockHelper.getStairsForLevel(rand, level, facing, half);
+	}
+
+	public @Nullable IBlockState getMudSlabsForLevel(Random rand, int level, EnumBlockHalfBL half) {
+		return blockHelper.getMudSlabsForLevel(rand, level, half);
 	}
 
 	public IBlockState getRandomMushroom(Random rand) {
