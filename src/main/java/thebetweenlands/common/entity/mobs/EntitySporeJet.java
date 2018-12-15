@@ -2,11 +2,11 @@ package thebetweenlands.common.entity.mobs;
 
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
@@ -14,7 +14,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 
-public class EntitySporeJet extends EntityLiving {
+public class EntitySporeJet extends Entity {
 
 	public EntitySporeJet(World world) {
 		super(world);
@@ -43,18 +43,25 @@ public class EntitySporeJet extends EntityLiving {
 	}
 
 	@Override
-	protected void collideWithEntity(Entity entity) {
+	public void onCollideWithPlayer(EntityPlayer entity) {
 		if (!getEntityWorld().isRemote) {
-			if (entity instanceof EntityPlayer) {
-				((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
-				EntityPlayer player = (EntityPlayer) entity;
-				ItemStack is = player.getHeldItemMainhand();
-				if (!is.isEmpty())
-					player.dropItem(true);
-			}
+			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
+			ItemStack is = entity.getHeldItemMainhand();
+			if (!is.isEmpty())
+				entity.dropItem(true);
 		}
-		setDead();
-		super.collideWithEntity(entity);
+	}
+
+	@Override
+	protected void entityInit() {
+	}
+
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound compound) {
+	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound compound) {
 	}
 
 }

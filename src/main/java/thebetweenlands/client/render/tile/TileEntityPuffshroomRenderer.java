@@ -18,7 +18,7 @@ public class TileEntityPuffshroomRenderer extends TileEntitySpecialRenderer<Tile
 	public void render(TileEntityPuffshroom tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
+		GlStateManager.translate((float) x + 0.5F, (float) y + 1.89F, (float) z + 0.5F);
 		GlStateManager.scale(-1, -1, 1);
 		model.render(tile, partialTicks);
 		GlStateManager.popMatrix();
