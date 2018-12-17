@@ -311,7 +311,7 @@ public class ModelPuffshroom extends ModelBase {
 			if (tile.animation_4 <= 8)
 				GlStateManager.scale(1F + interAnimationTicks_4 * 0.125F, 1F, 1F + interAnimationTicks_4 * 0.125F);
 			if (tile.animation_4 >= 10)
-				GlStateManager.scale(1.75F - (interAnimationTicks_4 - 2) * 0.0625F, 1F, 1.75F - (interAnimationTicks_4 - 2) * 0.0625F);
+				GlStateManager.scale(1.75F - interAnimationTicks_4 * 0.0625F, 1F, 1.75F - interAnimationTicks_4 * 0.0625F);
 
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
