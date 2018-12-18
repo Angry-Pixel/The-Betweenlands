@@ -25,7 +25,7 @@ public class EntitySporeJet extends Entity {
 	public void onUpdate() {
 		super.onUpdate();
 		if (!getEntityWorld().isRemote) {
-			if (ticksExisted > 20)
+			if (ticksExisted > 40)
 				setDead();
 			if (ticksExisted == 1)
 				TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.SPORE_JET, (float) posX, (float)posY + 0.625F, (float)posZ, 0F));
@@ -43,12 +43,16 @@ public class EntitySporeJet extends Entity {
 	}
 
 	@Override
-	public void onCollideWithPlayer(EntityPlayer entity) {
+	public void onCollideWithPlayer(EntityPlayer player) {
 		if (!getEntityWorld().isRemote) {
-			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
-			ItemStack is = entity.getHeldItemMainhand();
-			if (!is.isEmpty())
-				entity.dropItem(true);
+			if (player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY)
+				if (player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX)
+					if (player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
+						((EntityLivingBase) player).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
+						ItemStack stack = player.getHeldItemMainhand();
+						if (!stack.isEmpty())
+							player.dropItem(true);
+					}
 		}
 	}
 

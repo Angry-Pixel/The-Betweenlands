@@ -162,9 +162,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					addFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
 					break;
 				case 5:
-					buildFloor(world, pos, rand, mazeWidth, mazeHeight, true, false, level);
 					buildRoof(world, pos.up(layer), rand, mazeWidth, mazeHeight, level);
 					addMazeCellFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
+					buildFloor(world, pos, rand, mazeWidth, mazeHeight, true, false, level);
 					break;
 			}
 	//	System.out.println("Generated Maze At: X: " + pos.getX() + " Y: " + pos.getY() + " Z: " + pos.getZ());
