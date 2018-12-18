@@ -411,20 +411,20 @@ public class SludgeWormMazeBlockHelper {
 	}
 
 	public IBlockState getMudTilesWater(Random rand) {
-		int randDirection = rand.nextInt(3);
+		int randDirection = rand.nextInt(4);
 		IBlockState state = MUD_TILES_WATER;
 		switch (randDirection) {
 		case 0:
 			state = MUD_TILES_WATER.withProperty(BlockMudTilesWater.FACING, EnumFacing.NORTH);
 			break;
 		case 1:
-			MUD_TILES_WATER.withProperty(BlockMudTilesWater.FACING, EnumFacing.SOUTH);
+			state = MUD_TILES_WATER.withProperty(BlockMudTilesWater.FACING, EnumFacing.SOUTH);
 			break;
 		case 2:
-			MUD_TILES_WATER.withProperty(BlockMudTilesWater.FACING, EnumFacing.WEST);
+			state = MUD_TILES_WATER.withProperty(BlockMudTilesWater.FACING, EnumFacing.WEST);
 			break;
 		case 3:
-			MUD_TILES_WATER.withProperty(BlockMudTilesWater.FACING, EnumFacing.EAST);
+			state = MUD_TILES_WATER.withProperty(BlockMudTilesWater.FACING, EnumFacing.EAST);
 			break;
 		}
 		return state;
