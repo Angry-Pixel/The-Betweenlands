@@ -132,6 +132,7 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState MUD_FLOWER_POT_CANDLE_UNLIT = BlockRegistry.MUD_FLOWER_POT_CANDLE.getDefaultState().withProperty(BlockMudFlowerPotCandle.LIT, false);
 
 	public IBlockState MUD_BRICK_WALL = BlockRegistry.MUD_BRICK_WALL.getDefaultState();
+	public IBlockState ITEM_SHELF = BlockRegistry.ITEM_SHELF.getDefaultState();
 
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
@@ -541,6 +542,7 @@ public class SludgeWormMazeBlockHelper {
 			STRUCTURE_BLOCKS.put(LOOT_URN_2, true);
 			STRUCTURE_BLOCKS.put(LOOT_URN_3, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICK_WALL, true);
+			STRUCTURE_BLOCKS.put(ITEM_SHELF, true);
 		}
 	}
 }

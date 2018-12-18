@@ -18,6 +18,9 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -75,6 +78,27 @@ public class BlockMudTilesWater extends BasicBlock {
 	@Override
 	public int quantityDropped(Random random) {
 		return 0;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		double d0 = (double) pos.getX() + 0.375D;
+		double d1 = (double) pos.getY();
+		double d2 = (double) pos.getZ() + 0.375D;
+		int distance = 0;
+		for (distance = 1; distance < 10; distance++) {
+			IBlockState stateUp = world.getBlockState(pos.up(distance));
+			Material material = world.getBlockState(pos.up(distance)).getMaterial();
+			if (state.getBlock() != null && material.blocksMovement() && !material.isLiquid())
+				break;
+		}
+ 
+		if (distance > 1 && distance < 10) {
+			double d3 = d0 + (double) rand.nextFloat() * 0.25F;
+			double d5 = (d1 + distance) - 0.05D;
+			double d7 = d2 + (double) rand.nextFloat() * 0.25F;
+			BLParticles.CAVE_WATER_DRIP.spawn(world, d3, d5, d7).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+		}
 	}
 
     @Override
