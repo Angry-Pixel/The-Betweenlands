@@ -20,13 +20,13 @@ public class SludgeWormMazeMicroBuilds {
 
 	public void selectFeature(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
 		// add random selection for builds here
-		int type = 0; //rand.nextInt(10);
+		int type = 1; //rand.nextInt(10);
 		switch (type) {
 		case 0:
 			buildCryptBench1(world, pos, facing, rand, level, layer);
 			break;
 		case 1:
-			buildBasicAltarWithSides(world, pos, facing, rand, level, layer);
+			buildWallPillarRoom(world, pos, facing, rand, level, layer);
 			break;
 		case 2:
 			buildBasicAltarWithRoot(world, pos, facing, rand, level, layer);
@@ -68,10 +68,14 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 1, 1, -1, blockHelper.getRandomLitCandle(rand), 1, 1, 1, facing);
 	}
 
-	private void buildBasicAltarWithSides(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
-		rotatedCubeVolume(world, rand, pos, -1, 0, -1, blockHelper.getStairsForLevel(rand, level, facing.getOpposite(), EnumHalf.TOP), 3, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, -1, 0, 0, blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP), 1, 1, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 1, 0, 0, blockHelper.getStairsForLevel(rand, level, facing.getOpposite().rotateY(), EnumHalf.TOP), 1, 1, 2, facing);
+	private void buildWallPillarRoom(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		rotatedCubeVolume(world, rand, pos, -1, 0, 1, blockHelper.MUD_BRICK_WALL, 1, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, 1, blockHelper.MUD_BRICK_WALL, 1, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, 0, blockHelper.getRandomLootUrn(rand, facing), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, -1, blockHelper.getRandomLootUrn(rand, facing), 1, 1, 1, facing);
 	}
 
 	private void buildBasicAltarWithRoot(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {

@@ -159,12 +159,12 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					break;
 				case 4:
 					buildLevel(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
-					addMazeCellFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
 					addFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
 					break;
 				case 5:
 					buildFloor(world, pos, rand, mazeWidth, mazeHeight, true, false, level);
 					buildRoof(world, pos.up(layer), rand, mazeWidth, mazeHeight, level);
+					addMazeCellFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
 					break;
 			}
 	//	System.out.println("Generated Maze At: X: " + pos.getX() + " Y: " + pos.getY() + " Z: " + pos.getZ());
@@ -220,28 +220,28 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			for (int j = 0; j < w; j++) {
 				if ((maze[j][i] & 2) == 0 && (maze[j][i] & 4) == 0 && (maze[j][i] & 8) == 0) {
 					// SOUTH
-					if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -3, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -3, 2 + i * 4)))
-						if (!isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, -3, 3 + i * 4))))
-							microBuild.selectFeature(world, pos.add(2 + j * 4, -3, 2 + i * 4), EnumFacing.NORTH, rand, level, layer);
+					if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)))
+						if (!isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, -4, 3 + i * 4))))
+							microBuild.selectFeature(world, pos.add(2 + j * 4, -4, 2 + i * 4), EnumFacing.NORTH, rand, level, layer);
 				}
 				if ((maze[j][i] & 1) == 0 && (maze[j][i] & 4) == 0 && (maze[j][i] & 8) == 0) {
 					// NORTH
-					if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -3, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -3, 2 + i * 4)))
-						if (!isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, -3, 1 + i * 4))))
-							microBuild.selectFeature(world, pos.add(2 + j * 4, -3, 2 + i * 4), EnumFacing.SOUTH, rand, level, layer);
+					if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)))
+						if (!isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, -4, 1 + i * 4))))
+							microBuild.selectFeature(world, pos.add(2 + j * 4, -4, 2 + i * 4), EnumFacing.SOUTH, rand, level, layer);
 				}
 				if ((maze[j][i] & 1) == 0 && (maze[j][i] & 2) == 0 && (maze[j][i] & 4) == 0) {
 					// EAST
-					if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -3, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -3, 2 + i * 4)))
-						if (!isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, -3, 2 + i * 4))))
-							microBuild.selectFeature(world, pos.add(2 + j * 4, -3, 2 + i * 4), EnumFacing.WEST, rand, level, layer);
+					if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)))
+						if (!isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, -4, 2 + i * 4))))
+							microBuild.selectFeature(world, pos.add(2 + j * 4, -4, 2 + i * 4), EnumFacing.WEST, rand, level, layer);
 
 				}
 				if ((maze[j][i] & 1) == 0 && (maze[j][i] & 2) == 0 && (maze[j][i] & 8) == 0) {
 					// WEST
-					if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -3, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -3, 2 + i * 4)))
-						if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, -3, 2 + i * 4))))
-							microBuild.selectFeature(world, pos.add(2 + j * 4, -3, 2 + i * 4), EnumFacing.EAST, rand, level, layer);
+					if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)))
+						if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, -4, 2 + i * 4))))
+							microBuild.selectFeature(world, pos.add(2 + j * 4, -4, 2 + i * 4), EnumFacing.EAST, rand, level, layer);
 				}
 			}
 		}
@@ -473,7 +473,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				if (rand.nextInt(15) == 0 && addFeature && !isSolidStructureBlock(world.getBlockState(pos.add(j, 1, i)))) {
 					if (!isBlackListedAreaForGen(pos.add(2, 0, 2), pos.add(j, 0, i), 1) && !isBlackListedAreaForGen(pos.add(26, 0, 26), pos.add(j, 0, i), 1)) {
 						if (rand.nextBoolean() && rand.nextBoolean())
-							world.setBlockState(pos.add(j, 0, i), blockHelper.STAGNANT_WATER, 2);
+							world.setBlockState(pos.add(j, 0, i), blockHelper.getMudTilesWater(rand), 2); // change this
 						else if (rand.nextInt(10) == 0 && addSpawners)
 							world.setBlockState(pos.add(j, 0, i), blockHelper.SPAWNER_TYPE_1, 2);
 						else if (rand.nextInt(6) == 0 && addSpawners)

@@ -142,6 +142,7 @@ import thebetweenlands.common.block.structure.BlockMudBricks;
 import thebetweenlands.common.block.structure.BlockMudBricksClimbable;
 import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
 import thebetweenlands.common.block.structure.BlockMudTiles;
+import thebetweenlands.common.block.structure.BlockMudTilesWater;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.block.structure.BlockPuffshroom;
@@ -554,6 +555,7 @@ public class BlockRegistry {
 	public static final Block DUNGEON_DOOR_RUNES = new BlockDungeonDoorRunes();
 	public static final Block DUNGEON_DOOR_COMBINATION = new BlockDungeonDoorCombination();
 	public static final Block MUD_BRICKS_CLIMBABLE = new BlockMudBricksClimbable();
+	public static final Block MUD_TILES_WATER = new BlockMudTilesWater();
     public static final Block PRESENT = new BlockPresent();
     
     //Plants

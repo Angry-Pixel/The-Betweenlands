@@ -26,6 +26,7 @@ import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.block.structure.BlockMudBricksClimbable;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockMudTiles.EnumMudTileType;
+import thebetweenlands.common.block.structure.BlockMudTilesWater;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
@@ -72,6 +73,7 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState MUD_TILES_DECAY = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY);
 	public IBlockState MUD_TILES_CRACKED = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED);
 	public IBlockState MUD_TILES_CRACKED_DECAY = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED_DECAY);
+	public IBlockState MUD_TILES_WATER = BlockRegistry.MUD_TILES_WATER.getDefaultState();
 
 	public IBlockState MUD_BRICK_STAIRS = BlockRegistry.MUD_BRICK_STAIRS.getDefaultState();
 	public IBlockState MUD_BRICK_STAIRS_DECAY_1 = BlockRegistry.MUD_BRICK_STAIRS_DECAY_1.getDefaultState();
@@ -128,6 +130,8 @@ public class SludgeWormMazeBlockHelper {
 
 	public IBlockState MUD_FLOWER_POT_CANDLE_LIT = BlockRegistry.MUD_FLOWER_POT_CANDLE.getDefaultState().withProperty(BlockMudFlowerPotCandle.LIT, true);
 	public IBlockState MUD_FLOWER_POT_CANDLE_UNLIT = BlockRegistry.MUD_FLOWER_POT_CANDLE.getDefaultState().withProperty(BlockMudFlowerPotCandle.LIT, false);
+
+	public IBlockState MUD_BRICK_WALL = BlockRegistry.MUD_BRICK_WALL.getDefaultState();
 
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
@@ -406,6 +410,26 @@ public class SludgeWormMazeBlockHelper {
 		}
 	}
 
+	public IBlockState getMudTilesWater(Random rand) {
+		int randDirection = rand.nextInt(3);
+		IBlockState state = MUD_TILES_WATER;
+		switch (randDirection) {
+		case 0:
+			state = MUD_TILES_WATER.withProperty(BlockMudTilesWater.FACING, EnumFacing.NORTH);
+			break;
+		case 1:
+			MUD_TILES_WATER.withProperty(BlockMudTilesWater.FACING, EnumFacing.SOUTH);
+			break;
+		case 2:
+			MUD_TILES_WATER.withProperty(BlockMudTilesWater.FACING, EnumFacing.WEST);
+			break;
+		case 3:
+			MUD_TILES_WATER.withProperty(BlockMudTilesWater.FACING, EnumFacing.EAST);
+			break;
+		}
+		return state;
+	}
+
 	public void setRandomRoot(World world, BlockPos pos, Random rand) {
 		if (!isSolidStructureBlock(world.getBlockState(pos))) {
 			int rnd = rand.nextInt(30);
@@ -516,6 +540,7 @@ public class SludgeWormMazeBlockHelper {
 			STRUCTURE_BLOCKS.put(LOOT_URN_1, true);
 			STRUCTURE_BLOCKS.put(LOOT_URN_2, true);
 			STRUCTURE_BLOCKS.put(LOOT_URN_3, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICK_WALL, true);
 		}
 	}
 }
