@@ -1,10 +1,10 @@
 {
   "parent": "block/cube_all",
     "textures": {
-        "0": "thebetweenlands:blocks/mud_bricks",
+        "0": "thebetweenlands:blocks/worm_pillar_top_decay_1",
         "1": "thebetweenlands:blocks/mud_bricks_spawner_hole_top",
         "2": "thebetweenlands:blocks/mud_bricks_spawner_hole_top_inner",
-        "particle": "thebetweenlands:blocks/mud_bricks"
+        "particle": "thebetweenlands:blocks/worm_pillar_top_decay_1"
     },
     "elements": [
         {
