@@ -68,8 +68,8 @@ public class TileEntityMudBricksSpawnerHole extends TileEntity implements ITicka
 					entity.setLocationAndAngles(getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, facing.getHorizontalAngle(), 0.0F);
 					//TODO make this better
 					float vertical = facing == EnumFacing.UP ? 0.5F : facing == EnumFacing.DOWN ? - 0.5F : 0F;
-					float horizontalX = facing == EnumFacing.EAST ? 0.5F : facing == EnumFacing.WEST ? - 0.5F : 0F;
-					float horizontalZ = facing == EnumFacing.SOUTH ? 0.5F : facing == EnumFacing.NORTH ? - 0.5F : 0F;
+					float horizontalX = facing == EnumFacing.EAST ? 0.5F : facing == EnumFacing.WEST ? - 0.75F : 0F;
+					float horizontalZ = facing == EnumFacing.SOUTH ? 0.5F : facing == EnumFacing.NORTH ? - 0.75F : 0F;
 					entity.move(MoverType.SELF, horizontalX, vertical, horizontalZ);
 
 					if (entity instanceof EntityLiving)
