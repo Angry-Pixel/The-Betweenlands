@@ -1,17 +1,21 @@
 package thebetweenlands.common.tile.spawner;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.MoverType;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
 import thebetweenlands.common.entity.mobs.EntitySmolSludgeWorm;
 
 public class TileEntityMudBricksSpawnerHole extends TileEntity implements ITickable {
@@ -57,8 +61,16 @@ public class TileEntityMudBricksSpawnerHole extends TileEntity implements ITicka
 						return;
 					}
 
+					IBlockState state = getWorld().getBlockState(getPos());
+					EnumFacing facing = state.getValue(BlockMudBricksSpawnerHole.FACING);
+
 					EntityLiving entityliving = entity instanceof EntityLiving ? (EntityLiving) entity : null;
-					entity.setLocationAndAngles(getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, getWorld().rand.nextFloat() * 360.0F, 0.0F);
+					entity.setLocationAndAngles(getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, facing.getHorizontalAngle(), 0.0F);
+					//TODO make this better
+					float vertical = facing == EnumFacing.UP ? 0.5F : facing == EnumFacing.DOWN ? - 0.5F : 0F;
+					float horizontalX = facing == EnumFacing.EAST ? 0.5F : facing == EnumFacing.WEST ? - 0.5F : 0F;
+					float horizontalZ = facing == EnumFacing.SOUTH ? 0.5F : facing == EnumFacing.NORTH ? - 0.5F : 0F;
+					entity.move(MoverType.SELF, horizontalX, vertical, horizontalZ);
 
 					if (entity instanceof EntityLiving)
 						((EntityLiving) entity).onInitialSpawn(getWorld().getDifficultyForLocation(new BlockPos(entity)), (IEntityLivingData) null);
