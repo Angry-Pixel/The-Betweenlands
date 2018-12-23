@@ -131,6 +131,7 @@ import thebetweenlands.common.block.structure.BlockDrippingMud;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
+import thebetweenlands.common.block.structure.BlockDungeonWallCandle;
 import thebetweenlands.common.block.structure.BlockEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.block.structure.BlockFenceGateBetweenlands;
@@ -556,6 +557,9 @@ public class BlockRegistry {
 	public static final Block DUNGEON_DOOR_COMBINATION = new BlockDungeonDoorCombination();
 	public static final Block MUD_BRICKS_CLIMBABLE = new BlockMudBricksClimbable();
 	public static final Block MUD_TILES_WATER = new BlockMudTilesWater();
+	public static final Block DUNGEON_WALL_CANDLE = new BlockDungeonWallCandle();
+	
+	//Winter Event
     public static final Block PRESENT = new BlockPresent();
     
     //Plants

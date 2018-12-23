@@ -29,6 +29,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom2;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom3;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBulbCappedMushroom;
+import thebetweenlands.client.render.model.baked.modelbase.ModelDungeonWallCandle;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFlatHeadMushroom1;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFlatHeadMushroom2;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop1;
@@ -163,6 +164,8 @@ public class ModelRegistry {
 			return vertexIn;
 		}
 	});
+
+	public static final IModel DUNGEON_WALL_CANDLE = new ModelFromModelBase(new ModelDungeonWallCandle(), new ResourceLocation("thebetweenlands:blocks/dungeon_wall_candle"), 32, 32);
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 
