@@ -18,11 +18,11 @@ import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockLootUrn.EnumLootUrn;
 import thebetweenlands.common.block.container.BlockMudBricksAlcove;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
-import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
+import thebetweenlands.common.block.structure.BlockDungeonWallCandle;
 import thebetweenlands.common.block.structure.BlockMudBricksClimbable;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockMudTiles.EnumMudTileType;
@@ -48,10 +48,10 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState SPAWNER_TYPE_1 = Blocks.PRISMARINE.getDefaultState();
 	public IBlockState SPAWNER_TYPE_2 = Blocks.PURPUR_BLOCK.getDefaultState();
 
-	public IBlockState TORCH_NORTH = BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, EnumFacing.NORTH);
-	public IBlockState TORCH_EAST = BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, EnumFacing.EAST);
-	public IBlockState TORCH_SOUTH = BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, EnumFacing.SOUTH);
-	public IBlockState TORCH_WEST = BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, EnumFacing.WEST);
+	public IBlockState DUNGEON_WALL_CANDLE_NORTH = BlockRegistry.DUNGEON_WALL_CANDLE.getDefaultState().withProperty(BlockDungeonWallCandle.FACING, EnumFacing.NORTH);
+	public IBlockState DUNGEON_WALL_CANDLE_EAST = BlockRegistry.DUNGEON_WALL_CANDLE.getDefaultState().withProperty(BlockDungeonWallCandle.FACING, EnumFacing.EAST);
+	public IBlockState DUNGEON_WALL_CANDLE_SOUTH = BlockRegistry.DUNGEON_WALL_CANDLE.getDefaultState().withProperty(BlockDungeonWallCandle.FACING, EnumFacing.SOUTH);
+	public IBlockState DUNGEON_WALL_CANDLE_WEST = BlockRegistry.DUNGEON_WALL_CANDLE.getDefaultState().withProperty(BlockDungeonWallCandle.FACING, EnumFacing.WEST);
 	public IBlockState CHEST_NORTH = BlockRegistry.WEEDWOOD_CHEST.getDefaultState().withProperty(BlockChestBetweenlands.FACING, EnumFacing.NORTH);
 	public IBlockState CHEST_EAST = BlockRegistry.WEEDWOOD_CHEST.getDefaultState().withProperty(BlockChestBetweenlands.FACING, EnumFacing.EAST);
 	public IBlockState CHEST_SOUTH = BlockRegistry.WEEDWOOD_CHEST.getDefaultState().withProperty(BlockChestBetweenlands.FACING, EnumFacing.SOUTH);
