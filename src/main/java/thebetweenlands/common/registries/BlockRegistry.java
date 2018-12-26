@@ -159,6 +159,7 @@ import thebetweenlands.common.block.structure.BlockWalkway;
 import thebetweenlands.common.block.structure.BlockWallBetweenlands;
 import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
 import thebetweenlands.common.block.structure.BlockWaystone;
+import thebetweenlands.common.block.structure.BlockWoodenSupportBeam;
 import thebetweenlands.common.block.structure.BlockWormDungeonDoorWood;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
@@ -558,7 +559,10 @@ public class BlockRegistry {
 	public static final Block MUD_BRICKS_CLIMBABLE = new BlockMudBricksClimbable();
 	public static final Block MUD_TILES_WATER = new BlockMudTilesWater();
 	public static final Block DUNGEON_WALL_CANDLE = new BlockDungeonWallCandle();
-	
+	public static final Block WOODEN_SUPPORT_BEAM_ROTTEN_1 = new BlockWoodenSupportBeam();
+	public static final Block WOODEN_SUPPORT_BEAM_ROTTEN_2 = new BlockWoodenSupportBeam();
+	public static final Block WOODEN_SUPPORT_BEAM_ROTTEN_3 = new BlockWoodenSupportBeam();
+
 	//Winter Event
     public static final Block PRESENT = new BlockPresent();
     

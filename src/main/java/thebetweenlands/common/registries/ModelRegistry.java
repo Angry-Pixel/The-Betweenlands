@@ -20,8 +20,8 @@ import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
 import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
 import thebetweenlands.client.render.model.baked.ModelRubberTapLiquid;
-import thebetweenlands.client.render.model.baked.ModelStalactite;
 import thebetweenlands.client.render.model.baked.ModelSlant;
+import thebetweenlands.client.render.model.baked.ModelStalactite;
 import thebetweenlands.client.render.model.baked.ModelWalkway;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodBush;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodShieldBurning;
@@ -55,6 +55,9 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop4;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop5;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop6;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop6Decayed;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWoodSupportBeam1;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWoodSupportBeam2;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWoodSupportBeam3;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelBoneShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelDentrothystShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelLurkerSkinShield;
@@ -166,6 +169,9 @@ public class ModelRegistry {
 	});
 
 	public static final IModel DUNGEON_WALL_CANDLE = new ModelFromModelBase(new ModelDungeonWallCandle(), new ResourceLocation("thebetweenlands:blocks/dungeon_wall_candle"), 32, 32);
+	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_1 = new ModelFromModelBase(new ModelWoodSupportBeam1(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_1"), 64, 64);
+	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_2 = new ModelFromModelBase(new ModelWoodSupportBeam2(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_2"), 64, 64);
+	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_3 = new ModelFromModelBase(new ModelWoodSupportBeam3(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_3"), 64, 64);
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 
