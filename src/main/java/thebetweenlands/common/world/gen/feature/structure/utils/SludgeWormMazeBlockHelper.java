@@ -27,9 +27,11 @@ import thebetweenlands.common.block.structure.BlockMudBricksClimbable;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockMudTiles.EnumMudTileType;
 import thebetweenlands.common.block.structure.BlockMudTilesWater;
+import thebetweenlands.common.block.structure.BlockRottenBarkCarved;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
+import thebetweenlands.common.block.structure.BlockWoodenSupportBeam;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar.EnumWormPillarType;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
@@ -133,6 +135,26 @@ public class SludgeWormMazeBlockHelper {
 
 	public IBlockState MUD_BRICK_WALL = BlockRegistry.MUD_BRICK_WALL.getDefaultState();
 	public IBlockState ITEM_SHELF = BlockRegistry.ITEM_SHELF.getDefaultState();
+	public IBlockState WOODEN_SUPPORT_BEAM_ROTTEN_1 = BlockRegistry.WOODEN_SUPPORT_BEAM_ROTTEN_1.getDefaultState();
+	public IBlockState WOODEN_SUPPORT_BEAM_ROTTEN_2 = BlockRegistry.WOODEN_SUPPORT_BEAM_ROTTEN_2.getDefaultState();
+	public IBlockState WOODEN_SUPPORT_BEAM_ROTTEN_3 = BlockRegistry.WOODEN_SUPPORT_BEAM_ROTTEN_2.getDefaultState();
+
+	public IBlockState LOG_ROTTEN_BARK_CARVED_1 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_1.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_2 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_2.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_3 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_3.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_4 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_4.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_5 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_5.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_6 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_6.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_7 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_7.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_8 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_8.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_9 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_9.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_10 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_10.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_11 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_11.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_12 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_12.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_13 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_13.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_14 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_14.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_15 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_15.getDefaultState();
+	public IBlockState LOG_ROTTEN_BARK_CARVED_16 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_16.getDefaultState();
 
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
@@ -396,15 +418,89 @@ public class SludgeWormMazeBlockHelper {
 		return state.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, half);
 	}
 
+	public IBlockState getRandomBeam(EnumFacing facing, Random rand, int level, int count) {
+		IBlockState state = LOG_ROTTEN_BARK_CARVED_1;
+		if (count == 1 || count == 3) {
+			int endType = rand.nextInt(6);
+			switch (endType) {
+			case 0:
+				state = LOG_ROTTEN_BARK_CARVED_11;
+				break;
+			case 1:
+				state = LOG_ROTTEN_BARK_CARVED_12;
+				break;
+			case 2:
+				state = LOG_ROTTEN_BARK_CARVED_13;
+				break;
+			case 3:
+				state = LOG_ROTTEN_BARK_CARVED_14;
+				break;
+			case 4:
+				state = LOG_ROTTEN_BARK_CARVED_15;
+				break;
+			case 5:
+				state = LOG_ROTTEN_BARK_CARVED_16;
+				break;
+			}
+		} else {
+			int midType = rand.nextInt(10);
+			switch (midType) {
+			case 0:
+				state = LOG_ROTTEN_BARK_CARVED_1;
+				break;
+			case 1:
+				state = LOG_ROTTEN_BARK_CARVED_2;
+				break;
+			case 2:
+				state = LOG_ROTTEN_BARK_CARVED_3;
+				break;
+			case 3:
+				state = LOG_ROTTEN_BARK_CARVED_4;
+				break;
+			case 4:
+				state = LOG_ROTTEN_BARK_CARVED_5;
+				break;
+			case 5:
+				state = LOG_ROTTEN_BARK_CARVED_6;
+				break;
+			case 6:
+				state = LOG_ROTTEN_BARK_CARVED_7;
+				break;
+			case 7:
+				state = LOG_ROTTEN_BARK_CARVED_8;
+				break;
+			case 8:
+				state = LOG_ROTTEN_BARK_CARVED_9;
+				break;
+			case 9:
+				state = LOG_ROTTEN_BARK_CARVED_10;
+				break;
+			}
+		}
+		return state.withProperty(BlockRottenBarkCarved.FACING, facing);
+	}
+
+	public IBlockState getRandomSupportBeam(EnumFacing facing, boolean isTop, Random rand) {
+		IBlockState state = WOODEN_SUPPORT_BEAM_ROTTEN_1;
+		int type = rand.nextInt(3);
+		if(type == 0)
+			state = WOODEN_SUPPORT_BEAM_ROTTEN_1;
+		if(type == 1)
+			state = WOODEN_SUPPORT_BEAM_ROTTEN_2;
+		if(type == 2)
+			state = WOODEN_SUPPORT_BEAM_ROTTEN_3;
+		return state.withProperty(BlockWoodenSupportBeam.FACING, facing).withProperty(BlockWoodenSupportBeam.TOP, isTop);
+	}
+
 	public IBlockState getRandomLitCandle(Random rand) {
 		return rand.nextBoolean() ? MUD_FLOWER_POT_CANDLE_UNLIT : MUD_FLOWER_POT_CANDLE_LIT;
 	}
 
 	public IBlockState getRandomMushroom(Random rand) {
-		int rnd = rand.nextInt(30);
-		if(rnd < 14) {
+		int type = rand.nextInt(30);
+		if(type < 14) {
 			return FLAT_HEAD_MUSHROOM;
-		} else if(rnd < 28) {
+		} else if(type < 28) {
 			return BLACK_HAT_MUSHROOM;
 		} else {
 			return BULB_CAPPED_MUSHROOM;
@@ -543,6 +639,25 @@ public class SludgeWormMazeBlockHelper {
 			STRUCTURE_BLOCKS.put(LOOT_URN_3, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICK_WALL, true);
 			STRUCTURE_BLOCKS.put(ITEM_SHELF, true);
+			STRUCTURE_BLOCKS.put(WOODEN_SUPPORT_BEAM_ROTTEN_1, true);
+			STRUCTURE_BLOCKS.put(WOODEN_SUPPORT_BEAM_ROTTEN_2, true);
+			STRUCTURE_BLOCKS.put(WOODEN_SUPPORT_BEAM_ROTTEN_3, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_1, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_2, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_3, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_4, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_5, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_6, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_7, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_8, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_9, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_10, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_11, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_12, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_13, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_14, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_15, true);
+			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_16, true);
 		}
 	}
 }
