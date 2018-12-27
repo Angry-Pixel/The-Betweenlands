@@ -8,37 +8,37 @@
    "variants":{
       "facing=east,top=false":{
          "model":"thebetweenlands:internal/wooden_support_beam_rotten_2",
-         "y":90,
+         "y":270,
          "x":180
       },
       "facing=east,top=true":{
          "model":"thebetweenlands:internal/wooden_support_beam_rotten_2",
-         "y":270
+         "y":90
       },
       "facing=west,top=false":{
          "model":"thebetweenlands:internal/wooden_support_beam_rotten_2",
-         "y":270,
+         "y":90,
          "x":180
       },
       "facing=west,top=true":{
          "model":"thebetweenlands:internal/wooden_support_beam_rotten_2",
-         "y":90
+         "y":270
       },
       "facing=south,top=false":{
          "model":"thebetweenlands:internal/wooden_support_beam_rotten_2",
-         "y":180,
          "x":180
       },
       "facing=south,top=true":{
-         "model":"thebetweenlands:internal/wooden_support_beam_rotten_2"
+         "model":"thebetweenlands:internal/wooden_support_beam_rotten_2",
+         "y":180
       },
       "facing=north,top=false":{
          "model":"thebetweenlands:internal/wooden_support_beam_rotten_2",
-         "x":180
+         "x":180,
+         "y":180
       },
       "facing=north,top=true":{
-         "model":"thebetweenlands:internal/wooden_support_beam_rotten_2",
-         "y":180
+         "model":"thebetweenlands:internal/wooden_support_beam_rotten_2"
       }
    }
 }

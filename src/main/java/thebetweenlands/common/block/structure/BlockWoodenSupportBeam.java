@@ -31,10 +31,11 @@ public class BlockWoodenSupportBeam extends BlockDirectional {
 
 	public BlockWoodenSupportBeam(Material material) {
 		super(material);
+		setHardness(0.1F);
 		setHarvestLevel("axe", 0);
 		setCreativeTab(BLCreativeTabs.PLANTS);
-		setDefaultState(blockState.getBaseState().withProperty(TOP, false));
-		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(TOP, false));
+		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
     @Override
@@ -76,24 +77,20 @@ public class BlockWoodenSupportBeam extends BlockDirectional {
 
 	@Override
 	 public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		IBlockState state = getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
+		IBlockState state = getDefaultState().withProperty(FACING, facing);
 		if (canPlaceAt(world, pos, facing))
 			 return facing != EnumFacing.DOWN && (facing == EnumFacing.UP || (double)hitY <= 0.5D) ? state.withProperty(TOP, false) : state.withProperty(TOP, true);
 		return this.getDefaultState();
 	}
 
 	@Override
-    public boolean canPlaceBlockOnSide(World world, BlockPos pos, EnumFacing side) {
-        return canPlaceAt(world, pos, side);
-    }
-
-	@Override
-    public boolean canPlaceBlockAt(World world, BlockPos pos) {
-        for (EnumFacing enumfacing : EnumFacing.values())
-            if (canPlaceAt(world, pos, enumfacing))
-                return true;
-        return false;
-    }
+	public boolean canPlaceBlockAt(World world, BlockPos pos) {
+		for (EnumFacing enumfacing : FACING.getAllowedValues()) {
+			if (canPlaceAt(world, pos, enumfacing))
+				return true;
+		}
+		return false;
+	}
 
 	private boolean canPlaceAt(World world, BlockPos pos, EnumFacing facing) {
 		BlockPos blockpos = pos.offset(facing.getOpposite());

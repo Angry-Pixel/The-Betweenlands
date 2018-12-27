@@ -147,6 +147,7 @@ import thebetweenlands.common.block.structure.BlockMudTilesWater;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.block.structure.BlockPuffshroom;
+import thebetweenlands.common.block.structure.BlockRottenBarkCarved;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSpikeTrap;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
@@ -562,7 +563,22 @@ public class BlockRegistry {
 	public static final Block WOODEN_SUPPORT_BEAM_ROTTEN_1 = new BlockWoodenSupportBeam();
 	public static final Block WOODEN_SUPPORT_BEAM_ROTTEN_2 = new BlockWoodenSupportBeam();
 	public static final Block WOODEN_SUPPORT_BEAM_ROTTEN_3 = new BlockWoodenSupportBeam();
-
+	public static final Block LOG_ROTTEN_BARK_CARVED_1 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_2 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_3 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_4 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_5 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_6 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_7 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_8 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_9 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_10 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_11 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_12 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_13 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_14 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_15 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_16 = new BlockRottenBarkCarved();
 	//Winter Event
     public static final Block PRESENT = new BlockPresent();
     
