@@ -13,7 +13,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockLootUrn.EnumLootUrn;
 import thebetweenlands.common.block.container.BlockMudBricksAlcove;
@@ -54,10 +53,7 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState DUNGEON_WALL_CANDLE_EAST = BlockRegistry.DUNGEON_WALL_CANDLE.getDefaultState().withProperty(BlockDungeonWallCandle.FACING, EnumFacing.EAST);
 	public IBlockState DUNGEON_WALL_CANDLE_SOUTH = BlockRegistry.DUNGEON_WALL_CANDLE.getDefaultState().withProperty(BlockDungeonWallCandle.FACING, EnumFacing.SOUTH);
 	public IBlockState DUNGEON_WALL_CANDLE_WEST = BlockRegistry.DUNGEON_WALL_CANDLE.getDefaultState().withProperty(BlockDungeonWallCandle.FACING, EnumFacing.WEST);
-	public IBlockState CHEST_NORTH = BlockRegistry.WEEDWOOD_CHEST.getDefaultState().withProperty(BlockChestBetweenlands.FACING, EnumFacing.NORTH);
-	public IBlockState CHEST_EAST = BlockRegistry.WEEDWOOD_CHEST.getDefaultState().withProperty(BlockChestBetweenlands.FACING, EnumFacing.EAST);
-	public IBlockState CHEST_SOUTH = BlockRegistry.WEEDWOOD_CHEST.getDefaultState().withProperty(BlockChestBetweenlands.FACING, EnumFacing.SOUTH);
-	public IBlockState CHEST_WEST = BlockRegistry.WEEDWOOD_CHEST.getDefaultState().withProperty(BlockChestBetweenlands.FACING, EnumFacing.WEST);
+	public IBlockState CHEST = BlockRegistry.WEEDWOOD_CHEST.getDefaultState();
 	public IBlockState WORM_DUNGEON_PILLAR = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState();
 	public IBlockState WORM_DUNGEON_PILLAR_TOP = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP);
 	public IBlockState WORM_DUNGEON_PILLAR_DECAY_1 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_VERTICAL_DECAY_1);
@@ -658,6 +654,7 @@ public class SludgeWormMazeBlockHelper {
 			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_14, true);
 			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_15, true);
 			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_16, true);
+			STRUCTURE_BLOCKS.put(CHEST, true);
 		}
 	}
 }

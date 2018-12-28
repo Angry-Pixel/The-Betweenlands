@@ -21,7 +21,7 @@ public class SludgeWormMazeMicroBuilds {
 
 	public void selectFeature(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
 		// add random selection for builds here
-		int type = 4; //rand.nextInt(10);
+		int type = rand.nextInt(10);
 		switch (type) {
 		case 0:
 			buildCryptBench1(world, pos, facing, rand, level, layer);
@@ -39,19 +39,19 @@ public class SludgeWormMazeMicroBuilds {
 			buildWallPillarCentral(world, pos, facing, rand, level, layer);
 			break;
 		case 5:
-			buildBlockTest(world, pos, facing, rand, level, layer);
+			buildBigPillarTableRoom(world, pos, facing, rand, level, layer);
 			break;
 		case 6:
-			buildBlockTest(world, pos, facing, rand, level, layer);
+			buildWallPillarRoomLowJamb(world, pos, facing, rand, level, layer);
 			break;
 		case 7:
-			buildBlockTest(world, pos, facing, rand, level, layer);
+			buildOpenShrineRoom(world, pos, facing, rand, level, layer);
 			break;
 		case 8:
-			buildBlockTest(world, pos, facing, rand, level, layer);
+			buildMudWallJamb(world, pos, facing, rand, level, layer);
 			break;
 		case 9:
-			buildBlockTest(world, pos, facing, rand, level, layer);
+			buildCubbyHole(world, pos, facing, rand, level, layer);
 			break;
 		}
 	}
@@ -104,9 +104,90 @@ public class SludgeWormMazeMicroBuilds {
 	private void buildWallPillarCentral(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
 		rotatedCubeVolume(world, rand, pos, 0, 0, 1, blockHelper.MUD_BRICK_WALL, 1, 3, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 0, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 0, 0, blockHelper.CHEST.withProperty(BlockItemShelf.FACING, facing.getOpposite()), 1, 1, 1, facing);  //loot?
 	}
 
-	private void buildBlockTest(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+	private void buildBigPillarTableRoom(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		rotatedCubeVolume(world, rand, pos, 1, 0, 1, blockHelper.getPillarsForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 1, blockHelper.getPillarsForLevel(rand, level, 2), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, 1, blockHelper.getPillarsForLevel(rand, level, 3), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 2, 1, blockHelper.getPillarsForLevel(rand, level, 3), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, 1, blockHelper.getPillarsForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 1, 1, blockHelper.getPillarsForLevel(rand, level, 2), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 2, 1, blockHelper.getPillarsForLevel(rand, level, 3), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, 0, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, 0, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 1, 0, blockHelper.getRandomLootUrn(rand, facing), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 1, -1, blockHelper.getRandomLootUrn(rand, facing), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, -1, blockHelper.getRandomLitCandle(rand), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 2, 0, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, 0, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 2, -1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, -1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, -1, blockHelper.getStairsForLevel(rand, level, facing.getOpposite(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, -1, blockHelper.getStairsForLevel(rand, level, facing.getOpposite(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+	}
+
+	private void buildWallPillarRoomLowJamb(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		rotatedCubeVolume(world, rand, pos, -1, 0, 1, blockHelper.MUD_BRICK_WALL, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, 1, blockHelper.MUD_BRICK_WALL, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 2, 1, blockHelper.getMudBricksForLevel(rand, level, 2), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 2, 1, blockHelper.getMudBricksForLevel(rand, level, 2), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, 1, blockHelper.getMudBricksForLevel(rand, level, 2), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 0, -1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 2, -1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, -1, blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, -1, blockHelper.getStairsForLevel(rand, level, facing.getOpposite().rotateY(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 2, -1, blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, -1, blockHelper.getStairsForLevel(rand, level, facing.getOpposite().rotateY(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 1, -1, blockHelper.getRandomLootUrn(rand, facing), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, -1, blockHelper.getRandomLootUrn(rand, facing), 1, 1, 1, facing);
+	}
+
+	private void buildOpenShrineRoom(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		rotatedCubeVolume(world, rand, pos, -1, 0, 1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, 1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, 0, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, 0, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 1, 0, blockHelper.getRandomLitCandle(rand), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 0, blockHelper.getRandomLitCandle(rand), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, -1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, -1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 1, -1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, -1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 1, -1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 2, -1, blockHelper.getRandomLootUrn(rand, facing), 1, 1, 1, facing);
+	}
+
+	private void buildMudWallJamb(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		rotatedCubeVolume(world, rand, pos, -1, 0, 1, blockHelper.MUD_BRICK_WALL, 1, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, 1, blockHelper.MUD_BRICK_WALL, 1, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 2, 1, blockHelper.MUD_BRICK_WALL, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, -1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, -1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, 0, blockHelper.getStairsForLevel(rand, level, facing, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, 0, blockHelper.getStairsForLevel(rand, level, facing, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 1, -1, blockHelper.getRandomLitCandle(rand), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+	}
+
+	private void buildCubbyHole(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		rotatedCubeVolume(world, rand, pos, 0, 0, -1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 1, -1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 2, -1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, -1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, -1, blockHelper.getMudSlabsForLevel(rand, level, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 1, -1, blockHelper.getRandomLootUrn(rand, facing), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, -1, blockHelper.getRandomLootUrn(rand, facing), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 2, 0, blockHelper.getStairsForLevel(rand, level, facing.getOpposite(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 2, 0, blockHelper.getStairsForLevel(rand, level, facing.getOpposite(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, 0, blockHelper.getStairsForLevel(rand, level, facing.getOpposite(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
 	}
 
 	@SuppressWarnings("incomplete-switch")
