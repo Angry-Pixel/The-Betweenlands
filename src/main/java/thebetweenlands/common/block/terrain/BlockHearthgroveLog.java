@@ -126,18 +126,18 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 		int axisIndex = meta & 3;
 		switch(axisIndex) {
 		default:
-		case 0:
-			axis = BlockLog.EnumAxis.X;
-			break;
-		case 1:
-			axis = BlockLog.EnumAxis.Y;
-			break;
-		case 2:
-			axis = BlockLog.EnumAxis.Z;
-			break;
-		case 3:
-			axis = BlockLog.EnumAxis.NONE;
-			break;
+			case 0:
+				axis = BlockLog.EnumAxis.X;
+				break;
+			case 1:
+				axis = BlockLog.EnumAxis.Y;
+				break;
+			case 2:
+				axis = BlockLog.EnumAxis.Z;
+				break;
+			case 3:
+				axis = BlockLog.EnumAxis.NONE;
+				break;
 		}
 
 		boolean tarred = (meta >> 2) != 0;
@@ -150,18 +150,18 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 		int meta = 0;
 
 		switch(state.getValue(LOG_AXIS)) {
-		case X:
-			meta = 0;
-			break;
-		case Y:
-			meta = 1;
-			break;
-		case Z:
-			meta = 2;
-			break;
-		case NONE:
-			meta = 3;
-			break;
+			case X:
+				meta = 0;
+				break;
+			case Y:
+				meta = 1;
+				break;
+			case Z:
+				meta = 2;
+				break;
+			case NONE:
+				meta = 3;
+				break;
 		}
 
 		meta |= state.getValue(TARRED) ? (1 << 2) : 0;
@@ -194,11 +194,16 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 
 	@Override
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		return new ItemStack(Item.getItemFromBlock(this), 1, this.damageDropped(state));
+		return getSilkTouchDrop(state);
 	}
 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		return getSilkTouchDrop(state);
+	}
+
+	@Override
+	protected ItemStack getSilkTouchDrop(IBlockState state) {
 		return new ItemStack(Item.getItemFromBlock(this), 1, this.damageDropped(state));
 	}
 
