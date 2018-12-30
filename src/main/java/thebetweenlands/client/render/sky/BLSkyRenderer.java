@@ -9,11 +9,7 @@ import javax.vecmath.Vector2d;
 import javax.vecmath.Vector4f;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL21;
-import org.lwjgl.opengl.GL30;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -77,7 +73,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 			clipPlaneBuffer = new GeometryBuffer(Minecraft.getMinecraft().getTextureManager(), WorldShader.CLIP_PLANE_DIFFUSE_TEXTURE, WorldShader.CLIP_PLANE_DEPTH_TEXTURE, true);
 		}
 
-		if(starMesh == null) {
+		if(starMesh == null && ShaderHelper.INSTANCE.canUseShaders()) {
 			starMesh = this.createStarMesh();
 		}
 
@@ -210,7 +206,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 			fade = provider.getEnvironmentEventRegistry().denseFog.getFade(partialTicks) * 0.95F + 0.05F;
 		}
 		starBrightness *= fade;
-		if (starBrightness > 0.0F && !useShaderSky) {
+		if (starBrightness > 0.0F && !useShaderSky && starMesh != null) {
 			GL14.glBlendColor(0, 0, 0, (starBrightness - 0.22F) * 3.5F);
 			GlStateManager.blendFunc(SourceFactor.CONSTANT_ALPHA, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
 			GlStateManager.pushMatrix();
