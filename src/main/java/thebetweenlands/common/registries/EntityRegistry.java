@@ -43,6 +43,7 @@ import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntityPyradFlame;
 import thebetweenlands.common.entity.mobs.EntityRootSprite;
+import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySmolSludgeWorm;
@@ -136,6 +137,8 @@ public class EntityRegistry {
 		registerEntity(EntitySmolSludgeWorm.class, "smol_sludge_worm", 0x3A2F0B, 0x5F4C0B);
 
 		registerEntity(EntityLurkerSkinRaft.class, "lurker_skin_raft");
+		
+		registerEntity(EntityShambler.class, "shambler", 0x0B3B0B, 0xDBA901);
 
 	}
 
