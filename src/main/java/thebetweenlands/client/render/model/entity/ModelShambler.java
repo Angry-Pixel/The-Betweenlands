@@ -117,7 +117,7 @@ public class ModelShambler extends ModelBase {
         this.maw_bottom_2 = new ModelRenderer(this, 14, 54);
         this.maw_bottom_2.setRotationPoint(0.0F, 4.0F, 0.0F);
         this.maw_bottom_2.addBox(-1.0F, -0.5F, -1.0F, 2, 5, 2, 0.0F);
-        this.setRotateAngle(maw_bottom_2, -1.5707963267948966F, 0.0F, 0.0017453292519943296F);
+        this.setRotateAngle(maw_bottom_2, -1.5707963267948966F, 0.0F, 0.0F);
         this.left_leg_2 = new ModelRenderer(this, 46, 20);
         this.left_leg_2.setRotationPoint(1.5F, 2.5F, -2.5F);
         this.left_leg_2.addBox(-1.6F, 0.0F, 0.0F, 3, 3, 3, 0.0F);
@@ -213,36 +213,37 @@ public class ModelShambler extends ModelBase {
 		float animation = MathHelper.cos((limbSwing * 1.2F) * 0.75F) * 0.3F * limbSwingAmount * 0.5F;
 		float animation2 = MathHelper.sin((limbSwing * 1.2F) * 0.75F) * 0.3F * limbSwingAmount * 0.5F;
 		float flap = MathHelper.sin((shambler.ticksExisted) * 0.3F) * 0.8F;
-		
-		left_leg_top.rotateAngleX  = -0.17453292519943295F - (animation2 * 14F) + flap * 0.1F;
+		float smoothedAngle = shambler.smoothedAngle(partialTickTime);
+
+		left_leg_top.rotateAngleX = -0.17453292519943295F - (animation2 * 14F) + flap * 0.1F;
 		right_leg_top.rotateAngleX = -0.17453292519943295F - (animation * 14F) + flap * 0.1F;
-		
-		left_leg_2.rotateAngleX  = 0.8726646259971648F + (animation2 * 8F) - flap * 0.05F;
+
+		left_leg_2.rotateAngleX = 0.8726646259971648F + (animation2 * 8F) - flap * 0.05F;
 		right_leg_2.rotateAngleX = 0.8726646259971648F + (animation * 8F) - flap * 0.05F;
-		
-		left_leg_3.rotateAngleX  = 0.5235987755982988F + (animation2 * 4F) + flap * 0.05F;
+
+		left_leg_3.rotateAngleX = 0.5235987755982988F + (animation2 * 4F) + flap * 0.05F;
 		right_leg_3.rotateAngleX = 0.5235987755982988F + (animation * 4F) + flap * 0.05F;
-		
-		left_foot_1.rotateAngleX  = -1.2217304763960306F - (animation2 * 2F) + flap * 0.05F;
-		right_foot_1.rotateAngleX  = -1.2217304763960306F - (animation * 2F) + flap * 0.05F;
-		
-	    left_foot_2.rotateAngleX  = -1.2217304763960306F - (animation2 * 2F) - flap * 0.075F;
-	    left_foot_3.rotateAngleX  = -1.0471975511965976F - (animation2 * 2F) - flap * 0.075F;
-	    left_foot_4.rotateAngleX  = -1.0471975511965976F - (animation2 * 2F) - flap * 0.075F;
-	    
-	    right_foot_2.rotateAngleX  = -1.0471975511965976F - (animation * 2F) - flap * 0.075F;
-	    right_foot_3.rotateAngleX  = -1.0471975511965976F - (animation * 2F) - flap * 0.075F;
-	    right_foot_4.rotateAngleX  = -1.0471975511965976F - (animation * 2F) - flap * 0.075F;
+
+		left_foot_1.rotateAngleX = -1.2217304763960306F - (animation2 * 2F) + flap * 0.05F;
+		right_foot_1.rotateAngleX = -1.2217304763960306F - (animation * 2F) + flap * 0.05F;
+
+	    left_foot_2.rotateAngleX = -1.2217304763960306F - (animation2 * 2F) - flap * 0.075F/ (180F / (float) Math.PI);
+	    left_foot_3.rotateAngleX = -1.0471975511965976F - (animation2 * 2F) - flap * 0.075F/ (180F / (float) Math.PI);
+	    left_foot_4.rotateAngleX = -1.0471975511965976F - (animation2 * 2F) - flap * 0.075F/ (180F / (float) Math.PI);
+
+	    right_foot_2.rotateAngleX = -1.0471975511965976F - (animation * 2F) - flap * 0.075F/ (180F / (float) Math.PI);
+	    right_foot_3.rotateAngleX = -1.0471975511965976F - (animation * 2F) - flap * 0.075F/ (180F / (float) Math.PI);
+	    right_foot_4.rotateAngleX = -1.0471975511965976F - (animation * 2F) - flap * 0.075F/ (180F / (float) Math.PI);
 
 		body.rotateAngleX = -0.5235987755982988F - (animation2 * 3F) - flap * 0.05F;
 		head.rotateAngleX = 0.5235987755982988F + (animation2 * 4F) + flap * 0.1F;
-		
+
 		body.rotateAngleZ = 0F - (animation2 * 2F);
 		head.rotateAngleZ = 0F + (animation2 * 4F);
-		
+
 		left_leg_top.rotateAngleZ = 0F + (animation2 * 2F);
 		right_leg_top.rotateAngleZ = 0F + (animation * 2F);
-		
+
 		tail_1.rotateAngleY = flap * 0.2F;
 		tail_2.rotateAngleY = tail_1.rotateAngleY * 1.2F;
 		tail_3.rotateAngleY = tail_2.rotateAngleY * 1.4F;
@@ -250,6 +251,16 @@ public class ModelShambler extends ModelBase {
 		tail_1.rotateAngleX = 0.06981317007977318F - animation * 1F;
 		tail_2.rotateAngleX = 0.10471975511965977F - animation * 3F;
 		tail_3.rotateAngleX = 0.03490658503988659F - animation * 4F;
+
+	    maw_left_1.rotateAngleY = 1.0471975511965976F - smoothedAngle / (180F / (float) Math.PI) * 3F + (!shambler.jawsAreOpen() ? 0F : flap * 0.1F);
+	    maw_left_2.rotateAngleY = 1.5707963267948966F - smoothedAngle / (180F / (float) Math.PI) * 6F + (!shambler.jawsAreOpen() ? 0F : flap * 0.2F);
+	    maw_right_1.rotateAngleY = -1.0471975511965976F + smoothedAngle / (180F / (float) Math.PI) * 3F - (!shambler.jawsAreOpen() ? 0F : flap * 0.1F);
+	    maw_right_2.rotateAngleY = -1.5707963267948966F + smoothedAngle / (180F / (float) Math.PI) * 6F - (!shambler.jawsAreOpen() ? 0F : flap * 0.2F);
+	    maw_top_1.rotateAngleX = 1.0471975511965976F - smoothedAngle / (180F / (float) Math.PI) * 3F + (!shambler.jawsAreOpen() ? 0F : flap * 0.1F);
+	    maw_top_2.rotateAngleX = 1.5707963267948966F - smoothedAngle / (180F / (float) Math.PI) * 6F + (!shambler.jawsAreOpen() ? 0F : flap * 0.2F);
+	    maw_bottom_1.rotateAngleX = -1.0471975511965976F + smoothedAngle / (180F / (float) Math.PI) * 3F - (!shambler.jawsAreOpen() ? 0F : flap * 0.1F);
+	    maw_bottom_2.rotateAngleX = -1.5707963267948966F + smoothedAngle / (180F / (float) Math.PI) * 6F - (!shambler.jawsAreOpen() ? 0F : flap * 0.2F);
+
 	}
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

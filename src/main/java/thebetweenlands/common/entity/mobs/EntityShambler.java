@@ -7,17 +7,24 @@ import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 
 public class EntityShambler extends EntityMob implements IEntityBL {
+
+	private static final DataParameter<Boolean> JAWS_OPEN = EntityDataManager.createKey(EntityShambler.class, DataSerializers.BOOLEAN);
+	public int jawAngle, prevJawAngle;
 
 	public EntityShambler(World world) {
 		super(world);
@@ -41,6 +48,15 @@ public class EntityShambler extends EntityMob implements IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
+		dataManager.register(JAWS_OPEN, false);
+	}
+
+	public boolean jawsAreOpen() {
+		return dataManager.get(JAWS_OPEN);
+	}
+
+	private void setOpenJaws(boolean standing) {
+		dataManager.set(JAWS_OPEN, standing);
 	}
 
 	@Override
@@ -80,6 +96,43 @@ public class EntityShambler extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onLivingUpdate() {
+		if (!getEntityWorld().isRemote) {
+
+			if (getAttackTarget() != null) {
+				faceEntity(getAttackTarget(), 10.0F, 20.0F);
+				double distance = getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
+
+				if (distance > 5.0D)
+					setOpenJaws(false);
+
+				if (distance <= 5.0D)
+					setOpenJaws(true);
+			}
+
+			if (getAttackTarget() == null)
+				setOpenJaws(false);
+		}
+
+		if (getEntityWorld().isRemote) {
+			prevJawAngle = jawAngle;
+
+			if (jawAngle > 0 && !jawsAreOpen())
+				jawAngle -= 1;
+
+			if (jawsAreOpen() && jawAngle <= 10F)
+				jawAngle += 1;
+			
+			if (jawAngle < 0 && !jawsAreOpen())
+				jawAngle = 0;
+
+			if (jawsAreOpen() && jawAngle > 10F)
+				jawAngle = 10;
+		}
 		super.onLivingUpdate();
 	}
+
+    @SideOnly(Side.CLIENT)
+    public float smoothedAngle(float partialTicks) {
+        return prevJawAngle + (jawAngle - prevJawAngle) * partialTicks;
+    }
 }
