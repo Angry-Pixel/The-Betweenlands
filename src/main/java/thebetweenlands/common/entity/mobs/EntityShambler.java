@@ -224,6 +224,8 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 				if (entity instanceof EntityLivingBase)
 					if (!isBeingRidden()) {
 						entity.startRiding(this, true);
+						if (isExtendingTongue())
+							setExtendingTongue(false);
 					}
 			}
 		}
