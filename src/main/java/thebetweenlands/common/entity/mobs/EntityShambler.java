@@ -77,7 +77,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	private void setOpenJaws(boolean jawState) {
 		dataManager.set(JAWS_OPEN, jawState);
 	}
-	
+
 	public boolean isExtendingTongue() {
 		return dataManager.get(TONGUE_EXTEND);
 	}

@@ -20,7 +20,7 @@ public class RenderShambler extends RenderLiving<EntityShambler> {
 	public RenderShambler(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelShambler(), 0.5F);
 	}
-	
+
 	@Override
 	public void doRender(EntityShambler entity, double x, double y, double z, float yaw, float partialTicks) {
 		super.doRender(entity, x, y, z, yaw, partialTicks);
