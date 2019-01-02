@@ -1,5 +1,11 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityMultiPart;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -21,14 +27,25 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 
-public class EntityShambler extends EntityMob implements IEntityBL {
+public class EntityShambler extends EntityMob implements IEntityMultiPart, IEntityBL {
 
 	private static final DataParameter<Boolean> JAWS_OPEN = EntityDataManager.createKey(EntityShambler.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> TONGUE_EXTEND = EntityDataManager.createKey(EntityShambler.class, DataSerializers.BOOLEAN);
 	public int jawAngle, prevJawAngle;
+	public int tongueLength, prevTongueLength;
+
+	public MultiPartEntityPart[] tongue_array; // we may want to make more tongue parts
+	public MultiPartEntityPart tongue_end = new MultiPartEntityPart(this, "tongue_end", 0.5F, 0.5F);
 
 	public EntityShambler(World world) {
 		super(world);
-		this.setSize(1.25F, 1F);
+		this.setSize(1.0F, 1.25F);
+		tongue_array = new MultiPartEntityPart[] {tongue_end};
+	}
+
+	@Override
+	public World getWorld() {
+		return getEntityWorld();
 	}
 
 	@Override
@@ -49,14 +66,23 @@ public class EntityShambler extends EntityMob implements IEntityBL {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(JAWS_OPEN, false);
+		dataManager.register(TONGUE_EXTEND, false);
 	}
 
 	public boolean jawsAreOpen() {
 		return dataManager.get(JAWS_OPEN);
 	}
 
-	private void setOpenJaws(boolean standing) {
-		dataManager.set(JAWS_OPEN, standing);
+	private void setOpenJaws(boolean jawState) {
+		dataManager.set(JAWS_OPEN, jawState);
+	}
+	
+	public boolean isExtendingTongue() {
+		return dataManager.get(TONGUE_EXTEND);
+	}
+
+	private void setExtendingTongue(boolean tongueState) {
+		dataManager.set(TONGUE_EXTEND, tongueState);
 	}
 
 	@Override
@@ -102,15 +128,29 @@ public class EntityShambler extends EntityMob implements IEntityBL {
 				faceEntity(getAttackTarget(), 10.0F, 20.0F);
 				double distance = getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
 
-				if (distance > 5.0D)
-					setOpenJaws(false);
+				if (distance > 5.0D) {
+					if(jawsAreOpen()) {
+						setOpenJaws(false);
+						if (isExtendingTongue())
+							setExtendingTongue(false);
+					}
+				}
 
-				if (distance <= 5.0D)
-					setOpenJaws(true);
+				if (distance <= 5.0D) {
+					if (!jawsAreOpen()) {
+						setOpenJaws(true);
+						if (!isExtendingTongue())
+							setExtendingTongue(true);
+					}
+				}
 			}
 
-			if (getAttackTarget() == null)
-				setOpenJaws(false);
+			if (getAttackTarget() == null) {
+				if(jawsAreOpen())
+					setOpenJaws(false);
+				if (isExtendingTongue())
+					setExtendingTongue(false);
+			}
 		}
 
 		if (getEntityWorld().isRemote) {
@@ -128,11 +168,79 @@ public class EntityShambler extends EntityMob implements IEntityBL {
 			if (jawsAreOpen() && jawAngle > 10F)
 				jawAngle = 10;
 		}
+		
+		if (getEntityWorld().isRemote) {
+			prevTongueLength = tongueLength;
+
+			if (tongueLength > 0 && !isExtendingTongue())
+				tongueLength -= 1;
+
+			if (isExtendingTongue() && tongueLength <= 10F)
+				tongueLength += 1;
+			
+			if (tongueLength < 0 && !isExtendingTongue()) {
+				tongueLength = 0;
+				setExtendingTongue(true);
+			}
+
+			if (isExtendingTongue() && tongueLength > 10F) {
+				tongueLength = 10;
+				setExtendingTongue(false);
+			}
+		}
 		super.onLivingUpdate();
+	}
+
+	@Override
+    public void onUpdate() {
+    	super.onUpdate();
+    	renderYawOffset = rotationYaw;
+		double a = Math.toRadians(rotationYaw);
+		double offSetX = Math.sin(a) * -0.6D * (double)tongueLength * 1D;
+		double offSetZ = -Math.cos(a) * -0.6D * (double)tongueLength * 1D;
+		tongue_end.setLocationAndAngles(posX + offSetX, posY + 0.95D, posZ + offSetZ, 0.0F, 0.0F);
+		checkCollision();
+    }
+
+	@Override
+	public void updatePassenger(Entity entity) {
+		super.updatePassenger(entity);
+		if (entity instanceof EntityLivingBase) {
+			double a = Math.toRadians(rotationYaw);
+			double offSetX = Math.sin(a) * -0.725D;
+			double offSetZ = -Math.cos(a) * -0.725D;
+			entity.setPosition(tongue_end.posX + offSetX, tongue_end.posY - entity.height*0.5D, tongue_end.posZ + offSetZ);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected Entity checkCollision() {
+		List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, tongue_end.getEntityBoundingBox());
+		for (int i = 0; i < list.size(); i++) {
+			Entity entity = list.get(i);
+			if (entity != null && !(entity instanceof EntityShambler)) {
+				System.out.println("Entity is: " + entity);
+				if (entity instanceof EntityLivingBase)
+					if (!isBeingRidden()) {
+						entity.startRiding(this, true);
+					}
+			}
+		}
+		return null;
 	}
 
     @SideOnly(Side.CLIENT)
     public float smoothedAngle(float partialTicks) {
         return prevJawAngle + (jawAngle - prevJawAngle) * partialTicks;
     }
+
+	@Override
+	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float dmg) {
+		damageShambler(source, dmg); // we may want seperate tongue damage - dunno
+		return true;
+	}
+
+	protected boolean damageShambler(DamageSource source, float ammount) {
+		return super.attackEntityFrom(source, ammount);
+	}
 }

@@ -42,6 +42,7 @@ public class ModelShambler extends ModelBase {
     public ModelRenderer maw_right_2;
     public ModelRenderer maw_top_2;
     public ModelRenderer maw_bottom_2;
+    public ModelRenderer tongue_end;
 
     public ModelShambler() {
         this.textureWidth = 64;
@@ -170,6 +171,10 @@ public class ModelShambler extends ModelBase {
         this.right_leg_2.setRotationPoint(-1.5F, 2.5F, -2.5F);
         this.right_leg_2.addBox(-1.4F, 0.0F, 0.0F, 3, 3, 3, 0.0F);
         this.setRotateAngle(right_leg_2, 0.8726646259971648F, 0.0F, 0.0F);
+        this.tongue_end = new ModelRenderer(this, 0, 57);
+        this.tongue_end.setRotationPoint(0.0F, 0.0F, -8.0F);
+        this.tongue_end.addBox(-1.0F, -1.0F, -2.0F, 2, 2, 2, 0.0F);
+
         this.right_foot_1.addChild(this.right_foot_2);
         this.maw_top_1.addChild(this.maw_top_2);
         this.head.addChild(this.maw_top_1);
@@ -200,6 +205,7 @@ public class ModelShambler extends ModelBase {
         this.left_leg_2.addChild(this.left_leg_3);
         this.tail_3.addChild(this.tail_4);
         this.right_leg_top.addChild(this.right_leg_2);
+        this.face.addChild(this.tongue_end);
     }
 
 	@Override
@@ -214,6 +220,7 @@ public class ModelShambler extends ModelBase {
 		float animation2 = MathHelper.sin((limbSwing * 1.2F) * 0.75F) * 0.3F * limbSwingAmount * 0.5F;
 		float flap = MathHelper.sin((shambler.ticksExisted) * 0.3F) * 0.8F;
 		float smoothedAngle = shambler.smoothedAngle(partialTickTime);
+		float headX = 0.5235987755982988F + shambler.rotationPitch / (180F / (float) Math.PI);
 
 		left_leg_top.rotateAngleX = -0.17453292519943295F - (animation2 * 14F) + flap * 0.1F;
 		right_leg_top.rotateAngleX = -0.17453292519943295F - (animation * 14F) + flap * 0.1F;
@@ -236,7 +243,7 @@ public class ModelShambler extends ModelBase {
 	    right_foot_4.rotateAngleX = -1.0471975511965976F - (animation * 2F) - flap * 0.075F/ (180F / (float) Math.PI);
 
 		body.rotateAngleX = -0.5235987755982988F - (animation2 * 3F) - flap * 0.05F;
-		head.rotateAngleX = 0.5235987755982988F + (animation2 * 4F) + flap * 0.1F;
+		head.rotateAngleX = headX + (animation2 * 4F) + flap * 0.1F;
 
 		body.rotateAngleZ = 0F - (animation2 * 2F);
 		head.rotateAngleZ = 0F + (animation2 * 4F);
