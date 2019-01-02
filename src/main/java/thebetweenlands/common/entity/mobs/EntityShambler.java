@@ -39,11 +39,16 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 
 	public MultiPartEntityPart[] tongue_array; // we may want to make more tongue parts
 	public MultiPartEntityPart tongue_end = new MultiPartEntityPart(this, "tongue_end", 0.5F, 0.5F);
+	public MultiPartEntityPart tongue_1 = new MultiPartEntityPart(this, "tongue_1", 0.25F, 0.25F);
+	public MultiPartEntityPart tongue_2 = new MultiPartEntityPart(this, "tongue_2", 0.25F, 0.25F);
+	public MultiPartEntityPart tongue_3 = new MultiPartEntityPart(this, "tongue_3", 0.25F, 0.25F);
+	public MultiPartEntityPart tongue_4 = new MultiPartEntityPart(this, "tongue_4", 0.25F, 0.25F);
+	public MultiPartEntityPart tongue_5 = new MultiPartEntityPart(this, "tongue_5", 0.25F, 0.25F);
 
 	public EntityShambler(World world) {
 		super(world);
 		this.setSize(1.0F, 1.25F);
-		tongue_array = new MultiPartEntityPart[] {tongue_end};
+		tongue_array = new MultiPartEntityPart[] {tongue_end, tongue_1, tongue_2, tongue_3, tongue_4, tongue_5};
 	}
 
 	@Override
@@ -228,8 +233,15 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		super.onUpdate();
 		renderYawOffset = rotationYaw;
 		Vec3d vector = getLookVec();
-		tongue_end.setLocationAndAngles(posX + ((double) vector.x * getTongueLength() * 0.5D), (posY + getEyeHeight() - 0.3D) + ((double) vector.y * getTongueLength() * 0.5D), posZ + ((double) vector.z * getTongueLength() * 0.5D), 0.0F, 0.0F);
-    	checkCollision();
+		tongue_end.setLocationAndAngles(posX + ((double) vector.x * getTongueLength() * 0.5D), (posY + getEyeHeight() - 0.3D) + ((double) vector.y * getTongueLength() * 0.5D), posZ + ((double) vector.z * getTongueLength() * 0.5D), rotationYaw, rotationPitch);
+		tongue_1.setLocationAndAngles(posX + ((double) vector.x * getTongueLength() * 0.1D), (posY + getEyeHeight() - 0.3D) + ((double) vector.y * getTongueLength() * 0.1D), posZ + ((double) vector.z * getTongueLength() * 0.1D), rotationYaw, rotationPitch);
+		tongue_2.setLocationAndAngles(posX + ((double) vector.x * getTongueLength() * 0.2D), (posY + getEyeHeight() - 0.3D) + ((double) vector.y * getTongueLength() * 0.2D), posZ + ((double) vector.z * getTongueLength() * 0.2D), rotationYaw, rotationPitch);
+		tongue_3.setLocationAndAngles(posX + ((double) vector.x * getTongueLength() * 0.3D), (posY + getEyeHeight() - 0.3D) + ((double) vector.y * getTongueLength() * 0.3D), posZ + ((double) vector.z * getTongueLength() * 0.3D), rotationYaw, rotationPitch);
+		tongue_4.setLocationAndAngles(posX + ((double) vector.x * getTongueLength() * 0.4D), (posY + getEyeHeight() - 0.3D) + ((double) vector.y * getTongueLength() * 0.4D), posZ + ((double) vector.z * getTongueLength() * 0.4D), rotationYaw, rotationPitch);
+		tongue_5.setLocationAndAngles(posX + ((double) vector.x * getTongueLength() * 0.5D), (posY + getEyeHeight() - 0.3D) + ((double) vector.y * getTongueLength() * 0.5D), posZ + ((double) vector.z * getTongueLength() * 0.5D), rotationYaw, rotationPitch);
+		
+		
+		checkCollision();
     }
 
 	@Override

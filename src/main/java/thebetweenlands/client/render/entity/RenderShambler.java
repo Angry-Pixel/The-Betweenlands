@@ -26,8 +26,18 @@ public class RenderShambler extends RenderLiving<EntityShambler> {
 		super.doRender(entity, x, y, z, yaw, partialTicks);
 		//	renderDebugBoundingBox(entity, x, y, z, yaw, partialTicks, 0, 0, 0);
 			// Child Entity Hitbox
-		MultiPartEntityPart tongue = (MultiPartEntityPart) entity.tongue_end;
-			renderDebugBoundingBox(tongue, x, y, z, yaw, partialTicks, tongue.posX - entity.posX, tongue.posY - entity.posY, tongue.posZ - entity.posZ);
+		MultiPartEntityPart tongue_end = (MultiPartEntityPart) entity.tongue_end;
+		MultiPartEntityPart tongue_1 = (MultiPartEntityPart) entity.tongue_1;
+		MultiPartEntityPart tongue_2 = (MultiPartEntityPart) entity.tongue_2;
+		MultiPartEntityPart tongue_3 = (MultiPartEntityPart) entity.tongue_3;
+		MultiPartEntityPart tongue_4 = (MultiPartEntityPart) entity.tongue_4;
+		MultiPartEntityPart tongue_5 = (MultiPartEntityPart) entity.tongue_5;
+		renderDebugBoundingBox(tongue_end, x, y, z, yaw, partialTicks, tongue_end.posX - entity.posX, tongue_end.posY - entity.posY, tongue_end.posZ - entity.posZ);
+		renderDebugBoundingBox(tongue_1, x, y, z, yaw, partialTicks, tongue_1.posX - entity.posX, tongue_1.posY - entity.posY, tongue_1.posZ - entity.posZ);
+		renderDebugBoundingBox(tongue_2, x, y, z, yaw, partialTicks, tongue_2.posX - entity.posX, tongue_2.posY - entity.posY, tongue_2.posZ - entity.posZ);
+		renderDebugBoundingBox(tongue_3, x, y, z, yaw, partialTicks, tongue_3.posX - entity.posX, tongue_3.posY - entity.posY, tongue_3.posZ - entity.posZ);
+		renderDebugBoundingBox(tongue_4, x, y, z, yaw, partialTicks, tongue_4.posX - entity.posX, tongue_4.posY - entity.posY, tongue_4.posZ - entity.posZ);
+		renderDebugBoundingBox(tongue_5, x, y, z, yaw, partialTicks, tongue_5.posX - entity.posX, tongue_5.posY - entity.posY, tongue_5.posZ - entity.posZ);
 	}
 
 	@Override
