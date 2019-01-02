@@ -32,8 +32,10 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 
 	private static final DataParameter<Boolean> JAWS_OPEN = EntityDataManager.createKey(EntityShambler.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> TONGUE_EXTEND = EntityDataManager.createKey(EntityShambler.class, DataSerializers.BOOLEAN);
-	public int jawAngle, prevJawAngle;
-	public int tongueLength, prevTongueLength;
+	private static final DataParameter<Integer> JAW_ANGLE = EntityDataManager.createKey(EntityShambler.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> JAW_ANGLE_PREV = EntityDataManager.createKey(EntityShambler.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> TONGUE_LENGTH = EntityDataManager.createKey(EntityShambler.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> TONGUE_LENGTH_PREV = EntityDataManager.createKey(EntityShambler.class, DataSerializers.VARINT);
 
 	public MultiPartEntityPart[] tongue_array; // we may want to make more tongue parts
 	public MultiPartEntityPart tongue_end = new MultiPartEntityPart(this, "tongue_end", 0.5F, 0.5F);
@@ -68,6 +70,10 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		super.entityInit();
 		dataManager.register(JAWS_OPEN, false);
 		dataManager.register(TONGUE_EXTEND, false);
+		dataManager.register(JAW_ANGLE, 0);
+		dataManager.register(JAW_ANGLE_PREV, 0);
+		dataManager.register(TONGUE_LENGTH, 0);
+		dataManager.register(TONGUE_LENGTH_PREV, 0);
 	}
 
 	public boolean jawsAreOpen() {
@@ -84,6 +90,38 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 
 	private void setExtendingTongue(boolean tongueState) {
 		dataManager.set(TONGUE_EXTEND, tongueState);
+	}
+
+	private void setJawAngle(int count) {
+		dataManager.set(JAW_ANGLE, count);
+	}
+
+	private void setJawAnglePrev(int count) {
+		dataManager.set(JAW_ANGLE_PREV, count);
+	}
+
+	private void setTongueLength(int count) {
+		dataManager.set(TONGUE_LENGTH, count);
+	}
+
+	private void setTongueLengthPrev(int count) {
+		dataManager.set(TONGUE_LENGTH, count);
+	}
+
+	private int getJawAngle() {
+		return dataManager.get(JAW_ANGLE);
+	}
+
+	private int getJawAnglePrev() {
+		return dataManager.get(JAW_ANGLE_PREV);
+	}
+
+	private int getTongueLength() {
+		return dataManager.get(TONGUE_LENGTH);
+	}
+
+	private int getTongueLengthPrev() {
+		return dataManager.get(TONGUE_LENGTH);
 	}
 
 	@Override
@@ -152,37 +190,36 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 				if (isExtendingTongue())
 					setExtendingTongue(false);
 			}
-		}
 
-			prevJawAngle = jawAngle;
-			prevTongueLength = tongueLength;
+			setJawAnglePrev(getJawAngle());
+			setTongueLengthPrev(getTongueLength());
 
-			if (jawAngle > 0 && !jawsAreOpen())
-				jawAngle -= 1;
+			if (getJawAngle() > 0 && !jawsAreOpen())
+				setJawAngle(getJawAngle() - 1);
 
-			if (jawsAreOpen() && jawAngle <= 10)
-				jawAngle += 1;
-			
-			if (jawAngle < 0 && !jawsAreOpen())
-				jawAngle = 0;
+			if (jawsAreOpen() && getJawAngle() <= 10)
+				setJawAngle(getJawAngle() + 1);
 
-			if (jawsAreOpen() && jawAngle > 10)
-				jawAngle = 10;
+			if (getJawAngle() < 0 && !jawsAreOpen())
+				setJawAngle(0);
 
-			if (tongueLength > 1 && !isExtendingTongue())
-				tongueLength -= 1;
+			if (jawsAreOpen() && getJawAngle() > 10)
+				setJawAngle(10);
 
-			if (isExtendingTongue() && tongueLength <= 10)
-				tongueLength += 1;
-			
-			if (tongueLength < 1 && !isExtendingTongue()) {
-				tongueLength = 1;
-			}
+			if (getTongueLength() > 1 && !isExtendingTongue())
+				setTongueLength(getTongueLength() - 1);
 
-			if (isExtendingTongue() && tongueLength > 10) {
-				tongueLength = 10;
+			if (isExtendingTongue() && getTongueLength() <= 10)
+				setTongueLength(getTongueLength() + 1);
+
+			if (getTongueLength() < 1 && !isExtendingTongue())
+				setTongueLength(1);
+
+			if (isExtendingTongue() && getTongueLength() > 10) {
+				setTongueLength(10);
 				setExtendingTongue(false);
 			}
+		}
 		super.onLivingUpdate();
 	}
 
@@ -191,7 +228,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		super.onUpdate();
 		renderYawOffset = rotationYaw;
 		Vec3d vector = getLookVec();
-		tongue_end.setLocationAndAngles(posX + ((double) vector.x * tongueLength * 0.5D), (posY + getEyeHeight() - 0.3D) + ((double) vector.y * tongueLength * 0.5D), posZ + ((double) vector.z * tongueLength * 0.5D), 0.0F, 0.0F);
+		tongue_end.setLocationAndAngles(posX + ((double) vector.x * getTongueLength() * 0.5D), (posY + getEyeHeight() - 0.3D) + ((double) vector.y * getTongueLength() * 0.5D), posZ + ((double) vector.z * getTongueLength() * 0.5D), 0.0F, 0.0F);
     	checkCollision();
     }
 
@@ -220,12 +257,13 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, tongue_end.getEntityBoundingBox());
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity = list.get(i);
-			if (entity != null && !(entity instanceof EntityShambler)) {
+			if (entity != null && entity == getAttackTarget() && !(entity instanceof IEntityMultiPart) && !(entity instanceof MultiPartEntityPart)) {
 				if (entity instanceof EntityLivingBase)
 					if (!isBeingRidden()) {
 						entity.startRiding(this, true);
-						if (isExtendingTongue())
-							setExtendingTongue(false);
+						if (!getEntityWorld().isRemote)
+							if (isExtendingTongue())
+								setExtendingTongue(false); //eeeeeh!
 					}
 			}
 		}
@@ -234,7 +272,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 
     @SideOnly(Side.CLIENT)
     public float smoothedAngle(float partialTicks) {
-        return prevJawAngle + (jawAngle - prevJawAngle) * partialTicks;
+        return getJawAnglePrev() + (getJawAngle() - getJawAnglePrev()) * partialTicks;
     }
 
 	@Override
