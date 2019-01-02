@@ -14,7 +14,6 @@ import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.math.Vec3d;
@@ -24,12 +23,15 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
+import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.client.render.entity.RenderGasCloud;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.util.RenderUtils;
 
 
@@ -154,7 +156,7 @@ public class WorldRenderHandler {
 		if(ShaderHelper.INSTANCE.isWorldShaderActive() && (!DefaultParticleBatches.HEAT_HAZE_PARTICLE_ATLAS.isEmpty() || !DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS.isEmpty())) {
 			ShaderHelper.INSTANCE.require();
 		}
-		
+
 		//Gas clouds/Heat haze
 		if(ShaderHelper.INSTANCE.isWorldShaderActive() && MC.getRenderViewEntity() != null) {
 			GeometryBuffer fbo = ShaderHelper.INSTANCE.getWorldShader().getGasParticleBuffer();
@@ -167,11 +169,11 @@ public class WorldRenderHandler {
 
 					BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.GAS_CLOUDS, MC.getRenderViewEntity(), event.getPartialTicks());
 				}
-				
+
 				if(!DefaultParticleBatches.HEAT_HAZE_PARTICLE_ATLAS.isEmpty()) {
 					BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.HEAT_HAZE_PARTICLE_ATLAS, MC.getRenderViewEntity(), event.getPartialTicks());
 				}
-				
+
 				if(!DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS.isEmpty()) {
 					BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS, MC.getRenderViewEntity(), event.getPartialTicks());
 				}
@@ -184,5 +186,21 @@ public class WorldRenderHandler {
 		}
 
 		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
+		//Sludge worm dungeon ground fog
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			WorldShader shader = ShaderHelper.INSTANCE.getWorldShader();
+			if(shader != null) {
+				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(Minecraft.getMinecraft().world);
+
+				for (ILocalStorage sharedStorage : worldStorage.getLocalStorageHandler().getLoadedStorages()) {
+					if (sharedStorage instanceof LocationSludgeWormDungeon) {
+						if(((LocationSludgeWormDungeon) sharedStorage).addGroundFogVolumesToShader(shader)) {
+							ShaderHelper.INSTANCE.require();
+						}
+					}
+				}
+			}
+		}
 	}
 }
