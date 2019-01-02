@@ -21,6 +21,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -155,35 +156,31 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 
 		if (getEntityWorld().isRemote) {
 			prevJawAngle = jawAngle;
+			prevTongueLength = tongueLength;
 
 			if (jawAngle > 0 && !jawsAreOpen())
 				jawAngle -= 1;
 
-			if (jawsAreOpen() && jawAngle <= 10F)
+			if (jawsAreOpen() && jawAngle <= 10)
 				jawAngle += 1;
 			
 			if (jawAngle < 0 && !jawsAreOpen())
 				jawAngle = 0;
 
-			if (jawsAreOpen() && jawAngle > 10F)
+			if (jawsAreOpen() && jawAngle > 10)
 				jawAngle = 10;
-		}
-		
-		if (getEntityWorld().isRemote) {
-			prevTongueLength = tongueLength;
 
-			if (tongueLength > 0 && !isExtendingTongue())
+			if (tongueLength > 1 && !isExtendingTongue())
 				tongueLength -= 1;
 
-			if (isExtendingTongue() && tongueLength <= 10F)
+			if (isExtendingTongue() && tongueLength <= 10)
 				tongueLength += 1;
 			
-			if (tongueLength < 0 && !isExtendingTongue()) {
-				tongueLength = 0;
-				setExtendingTongue(true);
+			if (tongueLength < 1 && !isExtendingTongue()) {
+				tongueLength = 1;
 			}
 
-			if (isExtendingTongue() && tongueLength > 10F) {
+			if (isExtendingTongue() && tongueLength > 10) {
 				tongueLength = 10;
 				setExtendingTongue(false);
 			}
@@ -193,13 +190,18 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 
 	@Override
     public void onUpdate() {
-    	super.onUpdate();
-    	renderYawOffset = rotationYaw;
-		double a = Math.toRadians(rotationYaw);
-		double offSetX = Math.sin(a) * -0.6D * (double)tongueLength * 1D;
-		double offSetZ = -Math.cos(a) * -0.6D * (double)tongueLength * 1D;
-		tongue_end.setLocationAndAngles(posX + offSetX, posY + 0.95D, posZ + offSetZ, 0.0F, 0.0F);
-		checkCollision();
+		super.onUpdate();
+		renderYawOffset = rotationYaw;
+		Vec3d vector = getLookVec();
+		tongue_end.setLocationAndAngles(posX + ((double) vector.x * tongueLength * 0.5D), (posY + getEyeHeight() - 0.3D) + ((double) vector.y * tongueLength * 0.5D), posZ + ((double) vector.z * tongueLength * 0.5D), 0.0F, 0.0F);
+
+    		//renderYawOffset = rotationYaw;
+    		//double a = Math.toRadians(rotationYaw);
+    		//double offSetX = Math.sin(a) * -0.6D * (double)tongueLength * 1D;
+    		//double offSetZ = -Math.cos(a) * -0.6D * (double)tongueLength * 1D;
+    		//tongue_end.setLocationAndAngles(posX + offSetX, posY + 0.95D, posZ + offSetZ, 0.0F, 0.0F);
+
+    	checkCollision();
     }
 
 	@Override
@@ -207,9 +209,9 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		super.updatePassenger(entity);
 		if (entity instanceof EntityLivingBase) {
 			double a = Math.toRadians(rotationYaw);
-			double offSetX = Math.sin(a) * -0.725D;
-			double offSetZ = -Math.cos(a) * -0.725D;
-			entity.setPosition(tongue_end.posX + offSetX, tongue_end.posY - entity.height*0.5D, tongue_end.posZ + offSetZ);
+			double offSetX = Math.sin(a) * - 0.25D;
+			double offSetZ = -Math.cos(a) * - 0.25D;
+			entity.setPosition(tongue_end.posX + offSetX, tongue_end.posY - entity.height * 0.3D, tongue_end.posZ + offSetZ);
 		}
 	}
 
@@ -219,7 +221,6 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity = list.get(i);
 			if (entity != null && !(entity instanceof EntityShambler)) {
-				System.out.println("Entity is: " + entity);
 				if (entity instanceof EntityLivingBase)
 					if (!isBeingRidden()) {
 						entity.startRiding(this, true);
