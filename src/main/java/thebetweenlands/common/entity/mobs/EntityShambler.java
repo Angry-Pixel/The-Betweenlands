@@ -154,7 +154,6 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 			}
 		}
 
-		if (getEntityWorld().isRemote) {
 			prevJawAngle = jawAngle;
 			prevTongueLength = tongueLength;
 
@@ -184,7 +183,6 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 				tongueLength = 10;
 				setExtendingTongue(false);
 			}
-		}
 		super.onLivingUpdate();
 	}
 
@@ -194,25 +192,27 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		renderYawOffset = rotationYaw;
 		Vec3d vector = getLookVec();
 		tongue_end.setLocationAndAngles(posX + ((double) vector.x * tongueLength * 0.5D), (posY + getEyeHeight() - 0.3D) + ((double) vector.y * tongueLength * 0.5D), posZ + ((double) vector.z * tongueLength * 0.5D), 0.0F, 0.0F);
-
-    		//renderYawOffset = rotationYaw;
-    		//double a = Math.toRadians(rotationYaw);
-    		//double offSetX = Math.sin(a) * -0.6D * (double)tongueLength * 1D;
-    		//double offSetZ = -Math.cos(a) * -0.6D * (double)tongueLength * 1D;
-    		//tongue_end.setLocationAndAngles(posX + offSetX, posY + 0.95D, posZ + offSetZ, 0.0F, 0.0F);
-
     	checkCollision();
     }
 
 	@Override
 	public void updatePassenger(Entity entity) {
-		super.updatePassenger(entity);
 		if (entity instanceof EntityLivingBase) {
 			double a = Math.toRadians(rotationYaw);
-			double offSetX = Math.sin(a) * - 0.25D;
-			double offSetZ = -Math.cos(a) * - 0.25D;
+			double offSetX = Math.sin(a) * -0.25D;
+			double offSetZ = -Math.cos(a) * -0.25D;
 			entity.setPosition(tongue_end.posX + offSetX, tongue_end.posY - entity.height * 0.3D, tongue_end.posZ + offSetZ);
 		}
+	}
+
+	@Override
+	public boolean canRiderInteract() {
+		return true;
+	}
+
+	@Override
+	public boolean shouldRiderSit() {
+		return false;
 	}
 
 	@SuppressWarnings("unchecked")
