@@ -1023,13 +1023,14 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     
     @SubscribeEvent
     public static void onLivingAttacked(LivingAttackEvent event) {
-    	EntityLivingBase entity = event.getEntityLiving();
-    	Vec3d location = event.getSource().getDamageLocation();
-    	Entity attacker = event.getSource().getImmediateSource();
-    	Entity ridingEntity = entity.getRidingEntity();
-    	if(ridingEntity instanceof EntityWeedwoodRowboat && location != null && location.y + (attacker != null ? attacker.getEyeHeight() : 0) < ridingEntity.posY + ridingEntity.height / 2) {
-    		//Cancel any damage dealt from below the boat
-    		event.setCanceled(true);
-    	}
+        Entity ridingEntity = event.getEntityLiving().getRidingEntity();
+    	if (ridingEntity instanceof EntityWeedwoodRowboat && event.getSource().getTrueSource() != null) {
+            Vec3d location = event.getSource().getDamageLocation();
+            Entity attacker = event.getSource().getImmediateSource();
+            if (location != null && location.y + (attacker != null ? attacker.getEyeHeight() : 0) < ridingEntity.posY + ridingEntity.height / 2) {
+                //Cancel any damage dealt from below the boat
+                event.setCanceled(true);
+            }
+        }
     }
 }
