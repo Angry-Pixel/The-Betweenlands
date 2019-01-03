@@ -43,6 +43,7 @@ public class ModelShambler extends ModelBase {
     public ModelRenderer maw_top_2;
     public ModelRenderer maw_bottom_2;
     public ModelRenderer tongue_end;
+    public ModelRenderer tongue_part;
 
     public ModelShambler() {
         this.textureWidth = 64;
@@ -171,9 +172,6 @@ public class ModelShambler extends ModelBase {
         this.right_leg_2.setRotationPoint(-1.5F, 2.5F, -2.5F);
         this.right_leg_2.addBox(-1.4F, 0.0F, 0.0F, 3, 3, 3, 0.0F);
         this.setRotateAngle(right_leg_2, 0.8726646259971648F, 0.0F, 0.0F);
-        this.tongue_end = new ModelRenderer(this, 0, 57);
-        this.tongue_end.setRotationPoint(0.0F, 0.0F, -8.0F);
-        this.tongue_end.addBox(-1.0F, -1.0F, -2.0F, 2, 2, 2, 0.0F);
 
         this.right_foot_1.addChild(this.right_foot_2);
         this.maw_top_1.addChild(this.maw_top_2);
@@ -205,13 +203,29 @@ public class ModelShambler extends ModelBase {
         this.left_leg_2.addChild(this.left_leg_3);
         this.tail_3.addChild(this.tail_4);
         this.right_leg_top.addChild(this.right_leg_2);
-        this.face.addChild(this.tongue_end);
+        
+		this.tongue_part = new ModelRenderer(this, 0, 57);
+		this.tongue_part.setRotationPoint(0.0F, 16.0F, 0.0F);
+		this.tongue_part.addBox(-1.0F, -1.0F, -2.0F, 2, 2, 4, 0.0F);
+
+		this.tongue_end = new ModelRenderer(this, 48, 56);
+        this.tongue_end.setRotationPoint(0.0F, 16.0F, 0.0F);
+        this.tongue_end.addBox(-2.0F, -2.0F, -2.0F, 4, 4, 4, 0.0F);
+
     }
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ticksExisted, float rotationYaw, float rotationPitch, float scale) {
         this.body.render(scale);
     }
+
+	public void renderTonguePart(float scale) {
+		this.tongue_part.render(scale);
+	}
+
+	public void renderTongueEnd(float scale) {
+		this.tongue_end.render(scale);
+	}
 
 	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTickTime ) {
