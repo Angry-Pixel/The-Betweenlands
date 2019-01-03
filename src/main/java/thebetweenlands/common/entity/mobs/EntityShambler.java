@@ -272,8 +272,8 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	public void updatePassenger(Entity entity) {
 		if (entity instanceof EntityLivingBase) {
 			double a = Math.toRadians(rotationYaw);
-			double offSetX = Math.sin(a) * -0.25D;
-			double offSetZ = -Math.cos(a) * -0.25D;
+			double offSetX = Math.sin(a) * getTongueLength() > 0 ? -0.25D : -0.5D;
+			double offSetZ = -Math.cos(a) * getTongueLength() > 0 ? -0.25D : -0.5D;
 			entity.setPosition(tongue_end.posX + offSetX, tongue_end.posY - entity.height * 0.3D, tongue_end.posZ + offSetZ);
 		}
 	}
