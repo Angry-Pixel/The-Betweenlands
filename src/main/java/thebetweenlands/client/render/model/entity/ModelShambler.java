@@ -2,6 +2,7 @@ package thebetweenlands.client.render.model.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
@@ -43,6 +44,10 @@ public class ModelShambler extends ModelBase {
     public ModelRenderer maw_top_2;
     public ModelRenderer maw_bottom_2;
     public ModelRenderer tongue_end;
+    public ModelRenderer tongue_end_right;
+    public ModelRenderer tongue_end_left;
+    public ModelRenderer tongue_end_top;
+    public ModelRenderer tongue_end_bottom;
     public ModelRenderer tongue_part;
 
     public ModelShambler() {
@@ -211,7 +216,27 @@ public class ModelShambler extends ModelBase {
 		this.tongue_end = new ModelRenderer(this, 48, 56);
         this.tongue_end.setRotationPoint(0.0F, 16.0F, 0.0F);
         this.tongue_end.addBox(-2.0F, -2.0F, -2.0F, 4, 4, 4, 0.0F);
+        this.tongue_end_top = new ModelRenderer(this, 0, 57);
+        this.tongue_end_top.setRotationPoint(0.0F, -2.0F, 0.0F);
+        this.tongue_end_top.addBox(-1.0F, 0.0F, -4.0F, 2, 2, 4, 0.0F);
+        this.setRotateAngle(tongue_end_top, -0.6981317007977318F, 0.0F, 0.0F);
+        this.tongue_end_bottom = new ModelRenderer(this, 0, 57);
+        this.tongue_end_bottom.setRotationPoint(0.0F, 1.0F, 0.0F);
+        this.tongue_end_bottom.addBox(-1.0F, -1.0F, -4.0F, 2, 2, 4, 0.0F);
+        this.setRotateAngle(tongue_end_bottom, 0.6981317007977318F, 0.0F, 0.0F);
+        this.tongue_end_left = new ModelRenderer(this, 0, 57);
+        this.tongue_end_left.setRotationPoint(2.0F, 0.0F, 0.0F);
+        this.tongue_end_left.addBox(-2.0F, -1.0F, -4.0F, 2, 2, 4, 0.0F);
+        this.setRotateAngle(tongue_end_left, 0.0F, -0.6981317007977318F, 0.0F);
+        this.tongue_end_right = new ModelRenderer(this, 0, 57);
+        this.tongue_end_right.setRotationPoint(-2.0F, 0.0F, 0.0F);
+        this.tongue_end_right.addBox(0.0F, -1.0F, -4.0F, 2, 2, 4, 0.0F);
+        this.setRotateAngle(tongue_end_right, 0.0F, 0.6981317007977318F, 0.0F);
 
+        this.tongue_end.addChild(this.tongue_end_top);
+        this.tongue_end.addChild(this.tongue_end_bottom);
+        this.tongue_end.addChild(this.tongue_end_left);
+        this.tongue_end.addChild(this.tongue_end_right);
     }
 
 	@Override
@@ -220,11 +245,17 @@ public class ModelShambler extends ModelBase {
     }
 
 	public void renderTonguePart(float scale) {
+		GlStateManager.pushMatrix();
+		GlStateManager.rotate(180F, 0F, 1F, 0F);
 		this.tongue_part.render(scale);
+		GlStateManager.popMatrix();
 	}
 
 	public void renderTongueEnd(float scale) {
+		GlStateManager.pushMatrix();
+		GlStateManager.rotate(180F, 0F, 1F, 0F);
 		this.tongue_end.render(scale);
+		GlStateManager.popMatrix();
 	}
 
 	@Override
