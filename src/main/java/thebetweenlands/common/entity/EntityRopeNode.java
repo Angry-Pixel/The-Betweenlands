@@ -199,7 +199,7 @@ public class EntityRopeNode extends Entity {
 							inventory.setInventorySlotContents(i, stack.getCount() > 0 ? stack : ItemStack.EMPTY);
 							Vec3d connection = this.getConnectionToNext();
 							if(connection != null) {
-								Vec3d newPos = nextNode.getPositionVector().add(connection.scale(-0.5D)).addVector(0, 0.1D, 0);
+								Vec3d newPos = nextNode.getPositionVector().add(connection.scale(-0.5D)).add(0, 0.1D, 0);
 								RayTraceResult result = this.world.rayTraceBlocks(nextNode.getPositionVector(), newPos, false);
 								if(result != null && result.typeOfHit == Type.BLOCK && result.hitVec.squareDistanceTo(nextNode.getPositionVector()) < newPos.squareDistanceTo(nextNode.getPositionVector())) {
 									newPos = result.hitVec.add(result.hitVec.subtract(this.getPositionVector()).normalize().scale(0.1D));
@@ -265,7 +265,7 @@ public class EntityRopeNode extends Entity {
 					constrainedPoint = new Vec3d(
 							constrainedPoint.x * ROPE_LENGTH, 
 							constrainedPoint.y * ROPE_LENGTH, 
-							constrainedPoint.z * ROPE_LENGTH).addVector(tetherPoint.x, tetherPoint.y, tetherPoint.z);
+							constrainedPoint.z * ROPE_LENGTH).add(tetherPoint.x, tetherPoint.y, tetherPoint.z);
 					Vec3d diff = new Vec3d(this.posX, this.posY, this.posZ).subtract(constrainedPoint);
 					this.motionX = -diff.x;
 					this.motionY = -diff.y;
@@ -284,7 +284,7 @@ public class EntityRopeNode extends Entity {
 					constrainedPoint = new Vec3d(
 							constrainedPoint.x * ROPE_LENGTH, 
 							constrainedPoint.y * ROPE_LENGTH, 
-							constrainedPoint.z * ROPE_LENGTH).addVector(tetherPoint.x, tetherPoint.y, tetherPoint.z);
+							constrainedPoint.z * ROPE_LENGTH).add(tetherPoint.x, tetherPoint.y, tetherPoint.z);
 					Vec3d diff = new Vec3d(this.posX, this.posY, this.posZ).subtract(constrainedPoint).scale(0.8D);
 					this.motionX = -diff.x;
 					this.motionY = -diff.y;

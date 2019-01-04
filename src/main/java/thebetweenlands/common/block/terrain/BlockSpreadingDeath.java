@@ -143,7 +143,7 @@ public abstract class BlockSpreadingDeath extends Block {
 	}
 
 	protected void convertBiome(World world, BlockPos pos, Biome biome) {
-		Chunk chunk = world.getChunkFromBlockCoords(pos);
+		Chunk chunk = world.getChunk(pos);
 		byte[] biomes = chunk.getBiomeArray().clone();
 		int index = (pos.getZ() & 15) << 4 | (pos.getX() & 15);
 		biomes[index] = (byte) (Biome.getIdForBiome(biome) & 255);

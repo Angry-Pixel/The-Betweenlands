@@ -873,7 +873,7 @@ public class DecorationHelper {
 				if(biomeN == BiomeRegistry.SWAMPLANDS_CLEARING && biomeE == BiomeRegistry.SWAMPLANDS_CLEARING && biomeS == BiomeRegistry.SWAMPLANDS_CLEARING
 						&& biomeW == BiomeRegistry.SWAMPLANDS_CLEARING) {
 					pos.setPos(decorator.getX() + xo, decorator.getY(), decorator.getZ() + zo);
-					pos.setY(decorator.getWorld().getChunkFromBlockCoords(pos).getHeightValue(pos.getX() & 15, pos.getY() & 15));
+					pos.setY(decorator.getWorld().getChunk(pos).getHeightValue(pos.getX() & 15, pos.getY() & 15));
 					BlockPos genPos = null;
 					for(int i = 0; i > -8; i--) {
 						if(SurfaceType.MIXED_GROUND.matches(decorator.getWorld().getBlockState(pos))) {

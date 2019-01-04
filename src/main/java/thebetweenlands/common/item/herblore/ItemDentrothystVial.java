@@ -35,7 +35,7 @@ public class ItemDentrothystVial extends Item implements ItemRegistry.IBlockStat
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         String s = "item.thebetweenlands.elixir.dentrothyst_vial.";
         try {
             switch(stack.getItemDamage()) {

@@ -232,7 +232,7 @@ public class OverworldItemHandler {
 				event.setUseItem(Result.DENY);
 				event.setCanceled(true);
 				if(event.getWorld().isRemote) {
-					event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation("chat.flintandsteel", new TextComponentTranslation(item.getUnlocalizedName() + ".name")), true);
+					event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation("chat.flintandsteel", new TextComponentTranslation(item.getTranslationKey() + ".name")), true);
 				}
 			}
 		}
@@ -246,7 +246,7 @@ public class OverworldItemHandler {
 				event.setResult(Result.DENY);
 				event.setCanceled(true);
 				if(event.getWorld().isRemote) {
-					event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation("chat.fertilizer", new TextComponentTranslation(stack.getUnlocalizedName() + ".name")), true);
+					event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation("chat.fertilizer", new TextComponentTranslation(stack.getTranslationKey() + ".name")), true);
 				}
 			}
 		}

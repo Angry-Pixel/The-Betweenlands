@@ -123,7 +123,7 @@ public class LocationHandler {
 					event.setUseItem(Result.DENY);
 					if(event.getWorld().isRemote) {
 						Vec3d hitVec = event.getHitVec();
-						BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + event.getFace().getFrontOffsetX() * 0.025F, hitVec.y + event.getFace().getFrontOffsetY() * 0.025F, hitVec.z + event.getFace().getFrontOffsetZ() * 0.025F, ParticleArgs.get().withData(event.getFace()));
+						BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + event.getFace().getXOffset() * 0.025F, hitVec.y + event.getFace().getYOffset() * 0.025F, hitVec.z + event.getFace().getZOffset() * 0.025F, ParticleArgs.get().withData(event.getFace()));
 					}
 					return;
 				}
@@ -182,7 +182,7 @@ public class LocationHandler {
 				if(location != null && location.getGuard() != null && location.getGuard().isGuarded(event.getWorld(), event.getEntityPlayer(), event.getPos())) {
 					if(event.getWorld().isRemote && event.getEntityPlayer().swingProgressInt == 0) {
 						Vec3d hitVec = event.getHitVec();
-						BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + event.getFace().getFrontOffsetX() * 0.025F, hitVec.y + event.getFace().getFrontOffsetY() * 0.025F, hitVec.z + event.getFace().getFrontOffsetZ() * 0.025F, ParticleArgs.get().withData(event.getFace()));
+						BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + event.getFace().getXOffset() * 0.025F, hitVec.y + event.getFace().getYOffset() * 0.025F, hitVec.z + event.getFace().getZOffset() * 0.025F, ParticleArgs.get().withData(event.getFace()));
 					}
 					event.setCanceled(true);
 					break;

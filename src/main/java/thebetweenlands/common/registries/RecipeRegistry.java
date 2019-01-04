@@ -120,7 +120,7 @@ public class RecipeRegistry {
 			List<IRecipe> otherRecipes = new ArrayList<>();
 
 			for(IRecipe recipe : registry) {
-				if(ModInfo.ID.equals(recipe.getRegistryName().getResourceDomain())) {
+				if(ModInfo.ID.equals(recipe.getRegistryName().getNamespace())) {
 					blRecipes.add(recipe);
 				} else {
 					otherRecipes.add(recipe);
@@ -130,7 +130,7 @@ public class RecipeRegistry {
 			Multimap<IRecipe, ResourceLocation> conflictingRecipes = HashMultimap.create();
 
 			for(IRecipe otherRecipe : otherRecipes) {
-				if(!otherRecipe.isDynamic() && (any || (vanilla && "minecraft".equals(otherRecipe.getRegistryName().getResourceDomain())))) {
+				if(!otherRecipe.isDynamic() && (any || (vanilla && "minecraft".equals(otherRecipe.getRegistryName().getNamespace())))) {
 					NonNullList<Ingredient> otherIngredients = otherRecipe.getIngredients();
 					for(IRecipe blRecipe : blRecipes) {
 						if(!blRecipe.isDynamic()) {
@@ -511,10 +511,10 @@ public class RecipeRegistry {
 				NBTTagCompound compound = output.getTagCompound();
 				NBTTagCompound attrs = compound.getCompoundTag("attributes");
 				attrs.removeTag("isTarred");
-				if (attrs.hasNoTags()) {
+				if (attrs.isEmpty()) {
 					compound.removeTag("attributes");
 				}
-				if (compound.hasNoTags()) {
+				if (compound.isEmpty()) {
 					output.setTagCompound(null);	
 				}
 				return output;

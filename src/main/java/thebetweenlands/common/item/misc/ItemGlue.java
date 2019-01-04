@@ -79,10 +79,10 @@ public class ItemGlue extends Item {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().getBoolean("mmm")) {
 			return "Sniff.. sniff... Hmm, I like this stuff";
 		}
-		return super.getUnlocalizedName();
+		return super.getTranslationKey();
 	}
 }

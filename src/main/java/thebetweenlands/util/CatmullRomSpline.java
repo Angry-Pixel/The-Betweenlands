@@ -190,7 +190,7 @@ public class CatmullRomSpline implements ISpline {
 		//alpha = 1.0F: chordal
 		float alpha = 0.5F;
 
-		return (float)Math.pow(p1.subtract(p0).lengthVector(), alpha) + t;
+		return (float)Math.pow(p1.subtract(p0).length(), alpha) + t;
 	}
 
 	@Override

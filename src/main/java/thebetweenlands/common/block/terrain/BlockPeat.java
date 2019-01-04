@@ -31,7 +31,7 @@ public class BlockPeat extends Block {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
 		boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer) entity).inventory.armorInventory.get(0).getItem() instanceof ItemRubberBoots;
 		if(!canWalk) {
 			entity.motionX *= 0.85D;

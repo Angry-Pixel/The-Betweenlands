@@ -41,7 +41,7 @@ public class WorldGenMossCluster extends WorldGenerator {
 			mutablePos.setPos(position.getX() + rand.nextInt(this.offset) - rand.nextInt(this.offset), position.getY() + rand.nextInt(this.offset/2+1) - rand.nextInt(this.offset/2+1), position.getZ() + rand.nextInt(this.offset) - rand.nextInt(this.offset));
 
 			if (worldIn.isAreaLoaded(mutablePos, 1) && worldIn.isAirBlock(mutablePos) && this.block.canPlaceBlockAt(worldIn, mutablePos)) {
-				EnumFacing facing = EnumFacing.getFront(rand.nextInt(EnumFacing.VALUES.length));
+				EnumFacing facing = EnumFacing.byIndex(rand.nextInt(EnumFacing.VALUES.length));
 				EnumFacing.Axis axis = facing.getAxis();
 				EnumFacing oppositeFacing = facing.getOpposite();
 				boolean isInvalid = false;

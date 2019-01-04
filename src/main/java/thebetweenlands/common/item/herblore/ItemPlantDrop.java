@@ -37,9 +37,9 @@ public class ItemPlantDrop extends Item implements ItemRegistry.IMultipleItemMod
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		try {
-			return "item.thebetweenlands." + IGenericItem.getFromStack(EnumItemPlantDrop.class, stack).getUnlocalizedName();
+			return "item.thebetweenlands." + IGenericItem.getFromStack(EnumItemPlantDrop.class, stack).getTranslationKey();
 		} catch (Exception e) {
 			return "item.thebetweenlands.unknown_plant_drop";
 		}
@@ -107,7 +107,7 @@ public class ItemPlantDrop extends Item implements ItemRegistry.IMultipleItemMod
 		}
 
 		@Override
-		public String getUnlocalizedName() {
+		public String getTranslationKey() {
 			return this.unlocalizedName;
 		}
 

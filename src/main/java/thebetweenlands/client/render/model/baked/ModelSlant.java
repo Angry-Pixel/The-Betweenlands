@@ -124,7 +124,7 @@ public class ModelSlant implements IModel {
 			boolean cornerSE = (key & 0x4) != 0;
 			boolean cornerSW = (key & 0x8) != 0;
 			boolean upsidedown = (key & 0x10) != 0;
-			EnumFacing slantDir = EnumFacing.getHorizontal(key >> 5);
+			EnumFacing slantDir = EnumFacing.byHorizontalIndex(key >> 5);
 
 			float cornerHeightNW = cornerNW ? 1.0F : this.slopeEdge;
 			float cornerHeightNE = cornerNE ? 1.0F : this.slopeEdge;

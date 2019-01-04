@@ -140,7 +140,7 @@ public class BlockFenceBetweenlands extends Block {
 		IBlockState iblockstate = worldIn.getBlockState(pos);
 		BlockFaceShape blockfaceshape = iblockstate.getBlockFaceShape(worldIn, pos, facing);
 		Block block = iblockstate.getBlock();
-		boolean flag = blockfaceshape == BlockFaceShape.MIDDLE_POLE && (iblockstate.getMaterial() == this.blockMaterial || (block instanceof BlockFenceGate || block instanceof BlockFenceGateBetweenlands));
+		boolean flag = blockfaceshape == BlockFaceShape.MIDDLE_POLE && (iblockstate.getMaterial() == this.material || (block instanceof BlockFenceGate || block instanceof BlockFenceGateBetweenlands));
 		return !isExcepBlockForAttachWithPiston(block) && blockfaceshape == BlockFaceShape.SOLID || flag;
 	}
 

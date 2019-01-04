@@ -72,7 +72,7 @@ public class AdvancedStateMap extends StateMapperBase {
 		if (this.nameMapper == null) {
 			fileName = ((ResourceLocation)Block.REGISTRY.getNameForObject(state.getBlock())).toString();
 		} else {
-			fileName = String.format("%s:%s", Block.REGISTRY.getNameForObject(state.getBlock()).getResourceDomain(), this.nameMapper.apply(wrappedPropertiesMapModifiable));
+			fileName = String.format("%s:%s", Block.REGISTRY.getNameForObject(state.getBlock()).getNamespace(), this.nameMapper.apply(wrappedPropertiesMapModifiable));
 		}
 
 		if (this.suffix != null) {

@@ -56,8 +56,8 @@ public class WorldGenGiantTreeDead extends WorldGenGiantTreeTrunk {
 
 	public void addVineToRandomBlockSide(World world, Random rand, int x, int y, int z) {
 		EnumFacing direction = EnumFacing.values()[2 + rand.nextInt(3)];
-		if (world.getBlockState(new BlockPos(x + direction.getFrontOffsetX(), y, z + direction.getFrontOffsetZ())).getMaterial().isReplaceable()) {
-			world.setBlockState(new BlockPos(x + direction.getFrontOffsetX(), y, z + direction.getFrontOffsetZ()), IVY.withProperty(BlockVineBL.getPropertyFor(direction.getOpposite()), Boolean.valueOf(true)), 2);
+		if (world.getBlockState(new BlockPos(x + direction.getXOffset(), y, z + direction.getZOffset())).getMaterial().isReplaceable()) {
+			world.setBlockState(new BlockPos(x + direction.getXOffset(), y, z + direction.getZOffset()), IVY.withProperty(BlockVineBL.getPropertyFor(direction.getOpposite()), Boolean.valueOf(true)), 2);
 		}
 	}
 

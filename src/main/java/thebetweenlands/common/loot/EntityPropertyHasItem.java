@@ -175,7 +175,7 @@ public class EntityPropertyHasItem implements EntityProperty {
 
 		@Override
 		public EntityPropertyHasItem deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
-			JsonObject obj = JsonUtils.getJsonObject(element, this.getName().getResourcePath());
+			JsonObject obj = JsonUtils.getJsonObject(element, this.getName().getPath());
 			boolean hasItem = JsonUtils.getBoolean(obj.get("has_item"), "has_item");
 			boolean combineStacks = obj.has("combine_stacks") ? JsonUtils.getBoolean(obj.get("combine_stacks"), "combine_stacks") : false;
 			JsonObject itemJson = JsonUtils.getJsonObject(obj.get("item"), "item");

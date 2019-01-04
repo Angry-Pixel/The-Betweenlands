@@ -251,7 +251,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 		ChunkPos pos = null;
 		while(it.hasNext()) {
 			pos = it.next();
-			Chunk chunk = this.worldStorage.getWorld().getChunkFromChunkCoords(pos.x, pos.z);
+			Chunk chunk = this.worldStorage.getWorld().getChunk(pos.x, pos.z);
 			IChunkStorage chunkData = this.worldStorage.getChunkStorage(chunk);
 			if(chunkData == null || !chunkData.unlinkLocalStorage(this)) {
 				allUnlinked = false;

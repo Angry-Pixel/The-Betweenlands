@@ -226,8 +226,8 @@ public class BlockRepeller extends BlockContainer {
 						double radius = Math.max(tile.getRadius(0.0F), 1.0D);
 						double rotX = Math.sin(rot) * radius;
 						double rotZ = Math.cos(rot) * radius;
-						double xOff = -facing.getFrontOffsetX() * 0.23F;
-						double zOff = facing.getFrontOffsetZ() * 0.23F;
+						double xOff = -facing.getXOffset() * 0.23F;
+						double zOff = facing.getZOffset() * 0.23F;
 						double centerX = pos.getX() + 0.5F + xOff;
 						double centerY = pos.getY() + 1.3F;
 						double centerZ = pos.getZ() + 0.5F - zOff;
@@ -262,7 +262,7 @@ public class BlockRepeller extends BlockContainer {
 	public IBlockState getStateFromMeta(int meta) {
 		int facing = (meta >> 1) & 0b11;
 		boolean isUpper = (meta & 1) == 1;
-		return this.getDefaultState().withProperty(HALF, isUpper ? EnumBlockHalf.TOP : EnumBlockHalf.BOTTOM).withProperty(FACING, EnumFacing.getHorizontal(facing));
+		return this.getDefaultState().withProperty(HALF, isUpper ? EnumBlockHalf.TOP : EnumBlockHalf.BOTTOM).withProperty(FACING, EnumFacing.byHorizontalIndex(facing));
 	}
 
 	@Override

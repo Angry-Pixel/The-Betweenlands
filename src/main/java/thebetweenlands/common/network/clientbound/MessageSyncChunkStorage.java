@@ -62,7 +62,7 @@ public class MessageSyncChunkStorage extends MessageBase {
 	private void handle() {
 		World world = Minecraft.getMinecraft().world;
 		if(world != null) {
-			Chunk chunk = world.getChunkFromChunkCoords(this.pos.x, this.pos.z);
+			Chunk chunk = world.getChunk(this.pos.x, this.pos.z);
 			if(chunk != null) {
 				IWorldStorage worldStorage = WorldStorageImpl.getCapability(world);
 				IChunkStorage chunkStorage = worldStorage.getChunkStorage(chunk);

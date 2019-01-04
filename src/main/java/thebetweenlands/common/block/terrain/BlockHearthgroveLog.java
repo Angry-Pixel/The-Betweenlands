@@ -52,15 +52,15 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 
 		boolean hasWater = false;
 		for(EnumFacing offset : EnumFacing.HORIZONTALS) {
-			IBlockState offsetState = worldIn.getBlockState(checkPos.setPos(pos.getX() + offset.getFrontOffsetX(), pos.getY(), pos.getZ() + offset.getFrontOffsetZ()));
-			IBlockState offsetStateDown = worldIn.getBlockState(checkPos.setPos(pos.getX() + offset.getFrontOffsetX(), pos.getY() - 1, pos.getZ() + offset.getFrontOffsetZ()));
+			IBlockState offsetState = worldIn.getBlockState(checkPos.setPos(pos.getX() + offset.getXOffset(), pos.getY(), pos.getZ() + offset.getZOffset()));
+			IBlockState offsetStateDown = worldIn.getBlockState(checkPos.setPos(pos.getX() + offset.getXOffset(), pos.getY() - 1, pos.getZ() + offset.getZOffset()));
 
 			if(offsetStateDown.getMaterial() == Material.WATER && offsetState.getMaterial() != Material.WATER) {
 				if(rand.nextInt(8) == 0) {
 					for(int i = 0; i < 5; i++) {
-						float x = pos.getX() + (offset.getFrontOffsetX() > 0 ? 1.05F : offset.getFrontOffsetX() == 0 ? rand.nextFloat() : -0.05F);
+						float x = pos.getX() + (offset.getXOffset() > 0 ? 1.05F : offset.getXOffset() == 0 ? rand.nextFloat() : -0.05F);
 						float y = pos.getY() - 0.1F;
-						float z = pos.getZ() + (offset.getFrontOffsetZ() > 0 ? 1.05F : offset.getFrontOffsetZ() == 0 ? rand.nextFloat() : -0.05F);
+						float z = pos.getZ() + (offset.getZOffset() > 0 ? 1.05F : offset.getZOffset() == 0 ? rand.nextFloat() : -0.05F);
 
 						BLParticles.PURIFIER_STEAM.spawn(worldIn, x, y, z);
 					}
@@ -70,9 +70,9 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 			if(offsetState.getMaterial() == Material.WATER) {
 				if(rand.nextInt(8) == 0) {
 					for(int i = 0; i < 5; i++) {
-						float x = pos.getX() + (offset.getFrontOffsetX() > 0 ? 1.1F : offset.getFrontOffsetX() == 0 ? rand.nextFloat() : -0.1F);
+						float x = pos.getX() + (offset.getXOffset() > 0 ? 1.1F : offset.getXOffset() == 0 ? rand.nextFloat() : -0.1F);
 						float y = pos.getY() + rand.nextFloat();
-						float z = pos.getZ() + (offset.getFrontOffsetZ() > 0 ? 1.1F : offset.getFrontOffsetZ() == 0 ? rand.nextFloat() : -0.1F);
+						float z = pos.getZ() + (offset.getZOffset() > 0 ? 1.1F : offset.getZOffset() == 0 ? rand.nextFloat() : -0.1F);
 
 						worldIn.spawnParticle(EnumParticleTypes.WATER_BUBBLE, x, y, z, 0, 0, 0);
 					}
@@ -83,12 +83,12 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 		if(!hasWater) {
 			for(EnumFacing offset : EnumFacing.HORIZONTALS) {
 				if(rand.nextFloat() < 0.04F) {
-					checkPos.setPos(pos.getX() + offset.getFrontOffsetX(), pos.getY(), pos.getZ() + offset.getFrontOffsetZ());
+					checkPos.setPos(pos.getX() + offset.getXOffset(), pos.getY(), pos.getZ() + offset.getZOffset());
 					IBlockState offsetState = worldIn.getBlockState(checkPos);
 					if(!offsetState.isSideSolid(worldIn, checkPos, offset.getOpposite())) {
-						float x = pos.getX() + (offset.getFrontOffsetX() > 0 ? 1.05F : offset.getFrontOffsetX() == 0 ? rand.nextFloat() : -0.05F);
+						float x = pos.getX() + (offset.getXOffset() > 0 ? 1.05F : offset.getXOffset() == 0 ? rand.nextFloat() : -0.05F);
 						float y = pos.getY() + rand.nextFloat();
-						float z = pos.getZ() + (offset.getFrontOffsetZ() > 0 ? 1.05F : offset.getFrontOffsetZ() == 0 ? rand.nextFloat() : -0.05F);
+						float z = pos.getZ() + (offset.getZOffset() > 0 ? 1.05F : offset.getZOffset() == 0 ? rand.nextFloat() : -0.05F);
 
 						switch(rand.nextInt(3)) {
 						default:
@@ -244,9 +244,9 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 	public ItemBlock getItemBlock() {
 		ItemBlock item = new ItemBlock(this) {
 			@Override
-			public String getUnlocalizedName(ItemStack stack) {
+			public String getTranslationKey(ItemStack stack) {
 				IBlockState state = this.block.getStateFromMeta(this.getMetadata(stack.getItemDamage()));
-				return this.block.getUnlocalizedName() + (state.getValue(TARRED) ? "_tarred" : "");
+				return this.block.getTranslationKey() + (state.getValue(TARRED) ? "_tarred" : "");
 			}
 
 			@Override

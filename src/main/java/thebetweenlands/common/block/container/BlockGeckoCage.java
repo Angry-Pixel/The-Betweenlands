@@ -63,7 +63,7 @@ public class BlockGeckoCage extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
+		return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class BlockGeckoCage extends BlockContainer {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		int rotation = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		state = state.withProperty(FACING, EnumFacing.getHorizontal(rotation));
+		state = state.withProperty(FACING, EnumFacing.byHorizontalIndex(rotation));
 		worldIn.setBlockState(pos, state, 3);
 	}
 
@@ -131,7 +131,7 @@ public class BlockGeckoCage extends BlockContainer {
 					if(!tile.hasGecko()) {
 						if(!world.isRemote) {
 							String name = "";
-							if (!(heldItemStack.getDisplayName().equals(TranslationHelper.translateToLocal(heldItemStack.getUnlocalizedName()))) && heldItemStack.hasDisplayName())
+							if (!(heldItemStack.getDisplayName().equals(TranslationHelper.translateToLocal(heldItemStack.getTranslationKey()))) && heldItemStack.hasDisplayName())
 									name = heldItemStack.getDisplayName();
 	
 							tile.addGecko(heldItemStack.hasTagCompound() && heldItemStack.getTagCompound().hasKey("Health") ? (int) heldItemStack.getTagCompound().getFloat("Health") : 12, name);

@@ -55,7 +55,7 @@ public class Fungus {
 					world.setBlockState(coord, BlockRegistry.SHELF_FUNGUS.getDefaultState());
 				}
 				for (EnumFacing direction : WorldGenGiantTreeTrunk.DIRECTIONS) {
-					BlockPos neighborCoord = new BlockPos(coord.getX() + direction.getFrontOffsetX(), coord.getY(), coord.getZ() + direction.getFrontOffsetZ());
+					BlockPos neighborCoord = new BlockPos(coord.getX() + direction.getXOffset(), coord.getY(), coord.getZ() + direction.getZOffset());
 					IBlockState block = world.getBlockState(neighborCoord);
 					IBlockState above = world.getBlockState(neighborCoord.up());
 					if (!pendingCoords.contains(neighborCoord) && getDistanceBetweenChunkCoordinates(center, neighborCoord) <= radius && (block.getMaterial().isReplaceable() || (above.getMaterial().isReplaceable() && block.getBlock() != BlockRegistry.SHELF_FUNGUS))) {
