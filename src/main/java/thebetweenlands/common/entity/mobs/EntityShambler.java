@@ -243,10 +243,10 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	@Override
     public void onUpdate() {
 		super.onUpdate();
-		//renderYawOffset = rotationYaw;
-		double a = Math.toRadians(rotationYawHead);
-		double offSetX = Math.sin(a) * -0.425D;
-		double offSetZ = -Math.cos(a) * -0.425D;
+		renderYawOffset = rotationYaw;
+		double a = Math.toRadians(rotationYaw);
+		double offSetX = Math.sin(a) * -0.25D;
+		double offSetZ = -Math.cos(a) * -0.25D;
 		Vec3d vector = getLookVec();
 		tongue_end.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.5D), (posY + 0.90625D - 0.3125D) + ((double) vector.y * getTongueLength() * 0.5D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.5D), rotationYaw, rotationPitch);
 		tongue_1.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.03125D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.03125D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.03125D), rotationYaw, rotationPitch);
@@ -272,8 +272,8 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	public void updatePassenger(Entity entity) {
 		if (entity instanceof EntityLivingBase) {
 			double a = Math.toRadians(rotationYaw);
-			double offSetX = Math.sin(a) * getTongueLength() > 0 ? -0.25D : -0.5D;
-			double offSetZ = -Math.cos(a) * getTongueLength() > 0 ? -0.25D : -0.5D;
+			double offSetX = Math.sin(a) * getTongueLength() > 0 ? -0.125D : -0.25D;
+			double offSetZ = -Math.cos(a) * getTongueLength() > 0 ? -0.125D : -0.25D;
 			entity.setPosition(tongue_end.posX + offSetX, tongue_end.posY - entity.height * 0.3D, tongue_end.posZ + offSetZ);
 		}
 	}
