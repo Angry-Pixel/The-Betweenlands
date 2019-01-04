@@ -98,7 +98,7 @@ public class AttackDamageHandler {
 					damage = damage * DAMAGE_REDUCTION;
 
 					if(!attackedEntity.world.isRemote) {
-						Vec3d center = attackedEntity.getPositionVector().addVector(0, attackedEntity.height / 2.0F, 0);
+						Vec3d center = attackedEntity.getPositionVector().add(0, attackedEntity.height / 2.0F, 0);
 
 						Vec3d hitOffset = null;
 
@@ -111,11 +111,11 @@ public class AttackDamageHandler {
 							}
 						}
 						if(immediateAttacker != null && hitOffset == null) {
-							hitOffset = immediateAttacker.getPositionVector().addVector(0, immediateAttacker.height / 2.0F, 0).subtract(center);
+							hitOffset = immediateAttacker.getPositionVector().add(0, immediateAttacker.height / 2.0F, 0).subtract(center);
 						}
 						if(hitOffset != null) {
 							Vec3d offsetDirXZ = new Vec3d(hitOffset.x, 0, hitOffset.z).normalize();
-							Vec3d offset = offsetDirXZ.scale(attackedEntity.width).addVector(0, hitOffset.y + attackedEntity.height / 2.0F, 0);
+							Vec3d offset = offsetDirXZ.scale(attackedEntity.width).add(0, hitOffset.y + attackedEntity.height / 2.0F, 0);
 
 							attackedEntity.world.playSound(null, attackedEntity.posX, attackedEntity.posY + 0.5D, attackedEntity.posZ, SoundRegistry.DAMAGE_REDUCTION, SoundCategory.PLAYERS, 0.7F, 0.75F + attackedEntity.world.rand.nextFloat() * 0.3F);
 

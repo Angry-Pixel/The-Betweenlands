@@ -1175,7 +1175,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 	}
 
 	private void placeSign(World world, Random rand, BlockPos pos, IBlockState state, int blockMeta) {
-		this.setBlockAndNotifyAdequately(world, pos, state.withProperty(BlockWallWeedwoodSign.FACING, EnumFacing.getFront(blockMeta)));
+		this.setBlockAndNotifyAdequately(world, pos, state.withProperty(BlockWallWeedwoodSign.FACING, EnumFacing.byIndex(blockMeta)));
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileEntityWeedwoodSign) {
 			TileEntityWeedwoodSign sign = (TileEntityWeedwoodSign) tile;

@@ -157,7 +157,7 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 

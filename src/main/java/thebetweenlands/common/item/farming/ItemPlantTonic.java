@@ -127,10 +127,10 @@ public class ItemPlantTonic extends Item implements ItemRegistry.IMultipleItemMo
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		if (stack.getMetadata() >= 2)
-			return getUnlocalizedName() + ".unknown";
-		return getUnlocalizedName() + (stack.getMetadata() == 0 ? "_weedwood": "_syrmorite");
+			return getTranslationKey() + ".unknown";
+		return getTranslationKey() + (stack.getMetadata() == 0 ? "_weedwood": "_syrmorite");
 	}
 
 	@Override

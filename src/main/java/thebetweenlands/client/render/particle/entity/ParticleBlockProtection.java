@@ -72,9 +72,9 @@ public class ParticleBlockProtection extends ParticleAnimated implements IPartic
 		if (this.particleAngle != 0.0F) {
 			float f8 = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
 			float f9 = MathHelper.cos(f8 * 0.5F);
-			float f10 = MathHelper.sin(f8 * 0.5F) * this.face.getFrontOffsetX();
-			float f11 = MathHelper.sin(f8 * 0.5F) * this.face.getFrontOffsetY();
-			float f12 = MathHelper.sin(f8 * 0.5F) * this.face.getFrontOffsetZ();
+			float f10 = MathHelper.sin(f8 * 0.5F) * this.face.getXOffset();
+			float f11 = MathHelper.sin(f8 * 0.5F) * this.face.getYOffset();
+			float f12 = MathHelper.sin(f8 * 0.5F) * this.face.getZOffset();
 			Vec3d vec3d = new Vec3d((double)f10, (double)f11, (double)f12);
 
 			for (int l = 0; l < 4; ++l) {

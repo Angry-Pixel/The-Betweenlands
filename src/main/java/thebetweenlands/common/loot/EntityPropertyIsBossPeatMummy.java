@@ -38,7 +38,7 @@ public class EntityPropertyIsBossPeatMummy implements EntityProperty {
 
 		@Override
 		public EntityPropertyIsBossPeatMummy deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
-			return new EntityPropertyIsBossPeatMummy(JsonUtils.getBoolean(element, this.getName().getResourcePath()));
+			return new EntityPropertyIsBossPeatMummy(JsonUtils.getBoolean(element, this.getName().getPath()));
 		}
 	}
 }

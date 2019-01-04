@@ -227,7 +227,7 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		if (!entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn.timeUntilPortal <= 0 && BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionWhitelistSet.isListed(entityIn.dimension)) {
 			AxisAlignedBB aabb = state.getBoundingBox(worldIn, pos);
 			if (aabb != null && aabb.offset(pos).intersects(entityIn.getEntityBoundingBox())) {
@@ -264,7 +264,7 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 

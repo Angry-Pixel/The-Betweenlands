@@ -243,7 +243,7 @@ public class PuppetHandler {
 				} else {
 					Vec3d vec = new Vec3d(living.posX - event.player.posX, (living.posY + living.getEyeHeight() * 0.8F) - (event.player.posY + event.player.getEyeHeight() * 0.8F), living.posZ - event.player.posZ);
 					vec = vec.normalize();
-					vec = vec.addVector((event.player.world.rand.nextFloat() - 0.5F) / 3.0F, 
+					vec = vec.add((event.player.world.rand.nextFloat() - 0.5F) / 3.0F,
 							(event.player.world.rand.nextFloat() - 0.5F) / 3.0F, 
 							(event.player.world.rand.nextFloat() - 0.5F) / 3.0F);
 					vec = vec.normalize();

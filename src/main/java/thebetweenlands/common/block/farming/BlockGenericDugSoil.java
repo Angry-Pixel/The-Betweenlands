@@ -175,7 +175,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 
     @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
 

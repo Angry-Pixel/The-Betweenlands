@@ -603,7 +603,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		if(ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
 			for(int so = -1; so <= 1; so++) {
 				for(int yo = 0; yo <= 1; yo++) {
-					BlockPos pos = this.getPosition().offset(dir).add(dir.getFrontOffsetX() == 0 ? so : 0, yo, dir.getFrontOffsetZ() == 0 ? so : 0);
+					BlockPos pos = this.getPosition().offset(dir).add(dir.getXOffset() == 0 ? so : 0, yo, dir.getZOffset() == 0 ? so : 0);
 					if(this.world.isAirBlock(pos.offset(dir.getOpposite()))) {
 						IBlockState hitState = this.world.getBlockState(pos);
 						float hardness = hitState.getBlockHardness(this.world, pos);
@@ -858,7 +858,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 			if(this.entity.getNavigator().noPath()) {
 				if(this.path.isFinished()) {
 					this.entity.getMoveHelper().setMoveTo(this.target.getX() + 0.5D, this.target.getY(), this.target.getZ() + 0.5D, this.approachSpeedNear / this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-					this.entity.getLookHelper().setLookPosition(this.target.getX() - this.targetEntrance.getFrontOffsetX() + 0.5D, this.target.getY() + this.entity.getEyeHeight(), this.target.getZ() - this.targetEntrance.getFrontOffsetZ() + 0.5D, 30, 30);
+					this.entity.getLookHelper().setLookPosition(this.target.getX() - this.targetEntrance.getXOffset() + 0.5D, this.target.getY() + this.entity.getEyeHeight(), this.target.getZ() - this.targetEntrance.getZOffset() + 0.5D, 30, 30);
 
 					this.approachSpeedNear = this.approachSpeedNear * 0.9D + Math.min((dstSq + 0.2D) / 4.0D, 0.4D / 4.0D) * 0.1D;
 

@@ -51,7 +51,7 @@ public class EntityPropertyEventActive implements EntityProperty {
 
 		@Override
 		public EntityPropertyEventActive deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
-			JsonObject obj = JsonUtils.getJsonObject(element, this.getName().getResourcePath());
+			JsonObject obj = JsonUtils.getJsonObject(element, this.getName().getPath());
 			return new EntityPropertyEventActive(new ResourceLocation(JsonUtils.getString(obj.get("event"), "event")), JsonUtils.getBoolean(obj.get("active"), "active"));
 		}
 	}

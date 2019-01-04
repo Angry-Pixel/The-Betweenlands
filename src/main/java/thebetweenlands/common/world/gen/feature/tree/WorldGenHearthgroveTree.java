@@ -88,7 +88,7 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 					boolean support = false;
 					int steps = 30;
 					for(int j = 0; j < steps; j++) {
-						BlockPos branchPos = new BlockPos(spline.interpolate(1.0F / (steps-1) * j).addVector(0.5, 0.5, 0.5));
+						BlockPos branchPos = new BlockPos(spline.interpolate(1.0F / (steps-1) * j).add(0.5, 0.5, 0.5));
 						if(!branchPos.equals(setBranchPos) && world.isAirBlock(branchPos)) {
 							this.setBlockAndNotifyAdequately(world, branchPos, log);
 
@@ -105,8 +105,8 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 									this.setBlockAndNotifyAdequately(world, branchPos.add(supportXO, 1 + supportYO, supportZO), logY);
 
 									if((k+1) % 3 == 0) {
-										supportXO += supportDir.getFrontOffsetX();
-										supportZO += supportDir.getFrontOffsetZ();
+										supportXO += supportDir.getXOffset();
+										supportZO += supportDir.getZOffset();
 										k++;
 									}
 									supportYO++;
@@ -196,8 +196,8 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 						for(int j = rootHeight; j >= -4; j--) {
 							if(j < rootHeight && rand.nextInt(3) == 0) {
 								EnumFacing offset = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
-								rootXO += rootX * Math.abs(offset.getFrontOffsetX());
-								rootZO += rootZ * Math.abs(offset.getFrontOffsetZ());
+								rootXO += rootX * Math.abs(offset.getXOffset());
+								rootZO += rootZ * Math.abs(offset.getZOffset());
 							}
 							BlockPos rootPos = pos.add(rootX + rootXO, j, rootZ + rootZO);
 							if(world.getBlockState(rootPos).getBlock().isReplaceable(world, rootPos)) {

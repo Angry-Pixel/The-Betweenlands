@@ -130,7 +130,7 @@ public class MobSpawnHandler {
 
 		@Override
 		public boolean isSaved() {
-			return !"-1".equals(this.id.getResourcePath());
+			return !"-1".equals(this.id.getPath());
 		}
 
 		@Override
@@ -503,7 +503,7 @@ public class MobSpawnHandler {
 							continue;
 
 						int spawnSegmentY = entitySpawnPos.getY() / 16;
-						Chunk spawnChunk = world.getChunkFromBlockCoords(entitySpawnPos);
+						Chunk spawnChunk = world.getChunk(entitySpawnPos);
 						ClassInheritanceMultiMap<Entity>[] entityLists = spawnChunk.getEntityLists();
 						int chunkEntityCount = 0;
 						for(int l = 0; l < entityLists.length; l++) {
@@ -570,7 +570,7 @@ public class MobSpawnHandler {
 	}
 
 	private BlockPos getRandomSpawnPosition(World world, ChunkPos chunkPos) {
-		Chunk chunk = world.getChunkFromChunkCoords(chunkPos.x, chunkPos.z);
+		Chunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
 		int x = chunkPos.x * 16 + world.rand.nextInt(16);
 		int z = chunkPos.z * 16 + world.rand.nextInt(16);
 		int y = Math.min(world.rand.nextInt(chunk == null ? world.getActualHeight() : chunk.getTopFilledSegment() + 16 - 1), 256);
@@ -636,7 +636,7 @@ public class MobSpawnHandler {
 		this.entityCounts.clear();
 		for(ChunkPos chunkPos : this.eligibleChunksForSpawning) {
 			if(world.getChunkProvider().getLoadedChunk(chunkPos.x, chunkPos.z) != null) {
-				Chunk chunk = world.getChunkFromChunkCoords(chunkPos.x, chunkPos.z);
+				Chunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
 				ClassInheritanceMultiMap<Entity>[] entityLists = chunk.getEntityLists();
 				for(ClassInheritanceMultiMap<Entity> entityList : entityLists) {
 					for(Entity entity : entityList) {

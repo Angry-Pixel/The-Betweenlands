@@ -36,7 +36,7 @@ public class BlockAmatePaperPane extends BlockPaneBetweenlands implements IConne
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
@@ -51,7 +51,7 @@ public class BlockAmatePaperPane extends BlockPaneBetweenlands implements IConne
 		IConnectionRules connectionState = new IConnectionRules() {
 			@Override
 			public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing face, MutableBlockPos to) {
-				return Math.abs(to.getX() - pos.getX() - face.getFrontOffsetX()) + Math.abs(to.getY() - pos.getY() - face.getFrontOffsetY()) + Math.abs(to.getZ() - pos.getZ() - face.getFrontOffsetZ()) != 1 && world.getBlockState(to).getBlock() == BlockAmatePaperPane.this;
+				return Math.abs(to.getX() - pos.getX() - face.getXOffset()) + Math.abs(to.getY() - pos.getY() - face.getYOffset()) + Math.abs(to.getZ() - pos.getZ() - face.getZOffset()) != 1 && world.getBlockState(to).getBlock() == BlockAmatePaperPane.this;
 			}
 
 			@Override

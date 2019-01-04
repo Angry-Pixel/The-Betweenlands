@@ -113,7 +113,7 @@ public class ItemLivingWeedwoodShield extends ItemWeedwoodShield {
 			Vec3d bodyForward = new Vec3d(MathHelper.sin(-yaw * 0.017453292F - (float)Math.PI), 0, MathHelper.cos(-yaw * 0.017453292F - (float)Math.PI));
 			Vec3d up = new Vec3d(0, 1, 0);
 			Vec3d right = bodyForward.crossProduct(up);
-			Vec3d offset = new Vec3d(bodyForward.x, owner.getEyeHeight(), bodyForward.z).add(right.scale(hand == EnumHand.MAIN_HAND ? 0.35D : -0.35D).addVector(0, lookVec.y * 0.5D - 0.4D, 0).add(bodyForward.scale(-0.1D)));
+			Vec3d offset = new Vec3d(bodyForward.x, owner.getEyeHeight(), bodyForward.z).add(right.scale(hand == EnumHand.MAIN_HAND ? 0.35D : -0.35D).add(0, lookVec.y * 0.5D - 0.4D, 0).add(bodyForward.scale(-0.1D)));
 
 			EntitySapSpit spit = new EntitySapSpit(world, owner, 4.5F);
 			spit.setPosition(owner.posX + owner.motionX + offset.x, owner.posY + offset.y, owner.posZ + owner.motionZ + offset.z);

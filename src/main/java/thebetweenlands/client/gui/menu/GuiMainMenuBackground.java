@@ -33,7 +33,7 @@ public class GuiMainMenuBackground extends GuiScreen {
 	public GuiMainMenuBackground(ResourceLocation texture, int layers) {
 		this.layerTextures = new ResourceLocation[layers];
 		for(int i = 0; i < layers; i++) {
-			this.layerTextures[i] = new ResourceLocation(texture.getResourceDomain(), texture.getResourcePath() + "_" + i + ".png");
+			this.layerTextures[i] = new ResourceLocation(texture.getNamespace(), texture.getPath() + "_" + i + ".png");
 		}
 	}
 

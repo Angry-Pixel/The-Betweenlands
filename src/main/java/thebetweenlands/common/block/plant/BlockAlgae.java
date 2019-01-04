@@ -34,7 +34,7 @@ public class BlockAlgae extends BlockPlant implements IConnectedTextureBlock {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		if(entityIn instanceof EntityWeedwoodRowboat == false) {
 			entityIn.motionX *= 0.95D;
 			entityIn.motionZ *= 0.95D;
@@ -74,7 +74,7 @@ public class BlockAlgae extends BlockPlant implements IConnectedTextureBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 

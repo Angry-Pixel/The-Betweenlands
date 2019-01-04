@@ -148,7 +148,7 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

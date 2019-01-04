@@ -151,7 +151,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 			int ez = MathHelper.floor(boundingBox.maxZ) >> 4;
 			for(int cx = sx; cx <= ex; cx++) {
 				for(int cz = sz; cz <= ez; cz++) {
-					Chunk chunk = this.getWorldStorage().getWorld().getChunkFromChunkCoords(cx, cz);
+					Chunk chunk = this.getWorldStorage().getWorld().getChunk(cx, cz);
 					this.linkChunk(chunk);
 				}
 			}

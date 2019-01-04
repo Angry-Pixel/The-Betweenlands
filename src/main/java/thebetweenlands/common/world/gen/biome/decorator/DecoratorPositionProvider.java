@@ -233,7 +233,7 @@ public class DecoratorPositionProvider {
 		this.x = x;
 		this.z = z;
 		if(y == -1) {
-			this.y = world.getChunkFromChunkCoords(x >> 4, z >> 4).getHeightValue(x & 15, z & 15);
+			this.y = world.getChunk(x >> 4, z >> 4).getHeightValue(x & 15, z & 15);
 		} else {
 			this.y = y;
 		}

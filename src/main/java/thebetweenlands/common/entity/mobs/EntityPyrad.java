@@ -94,7 +94,7 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 					BlockPos pos = new BlockPos(this.entity);
 					int groundHeight = FlightMoveHelper.getGroundHeight(this.entity.world, pos, 16, pos).getY();
 					Vec3d dir = new Vec3d(target.posX - this.entity.posX, target.posY + 1 - this.entity.rand.nextFloat() * 0.3 - this.entity.posY - 1, target.posZ - this.entity.posZ);
-					double dst = dir.lengthVector();
+					double dst = dir.length();
 					if(dst > 10) {
 						dir = dir.normalize();
 						this.setSpeed(0.75D);

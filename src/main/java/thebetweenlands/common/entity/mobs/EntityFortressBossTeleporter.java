@@ -71,7 +71,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 						if((closestPlayer == null || player.getDistance(this) < closestPlayer.getDistance(this)) && player.getDistance(this) < radius && player.canEntityBeSeen(this)) {
 							Vec3d playerLook = player.getLook(1.0F).normalize();
 							Vec3d vecDiff = new Vec3d(this.posX - player.posX, this.getEntityBoundingBox().minY + (double)(this.height / 2.0F) - (player.posY + (double)player.getEyeHeight()), this.posZ - player.posZ);
-							double dist = vecDiff.lengthVector();
+							double dist = vecDiff.length();
 							vecDiff = vecDiff.normalize();
 							double angle = playerLook.dotProduct(vecDiff);
 							if(angle > 1.0D - 0.01D / dist)
@@ -86,7 +86,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 					} else {
 						Vec3d playerLook = this.target.getLook(1.0F).normalize();
 						Vec3d vecDiff = new Vec3d(this.posX - this.target.posX, this.getEntityBoundingBox().minY + (double)(this.height / 2.0F) - (this.target.posY + (double)this.target.getEyeHeight()), this.posZ - this.target.posZ);
-						double dist = vecDiff.lengthVector();
+						double dist = vecDiff.length();
 						vecDiff = vecDiff.normalize();
 						double angle = playerLook.dotProduct(vecDiff);
 						if(angle <= 1.0D - (0.01D + Math.pow(this.getTeleportProgress(), 3) / 10.0D) / dist)

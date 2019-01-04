@@ -109,7 +109,7 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 		this.type = Type.values()[buf.readInt()];
 		this.hangingPosition = BlockPos.fromLong(buf.readLong());
 		if(buf.readBoolean()) {
-			this.facingDirection = EnumFacing.getFront(buf.readInt());
+			this.facingDirection = EnumFacing.byIndex(buf.readInt());
 			this.updateFacingWithBoundingBox(this.facingDirection);
 		}
 	}
