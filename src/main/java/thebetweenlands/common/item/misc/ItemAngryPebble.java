@@ -72,7 +72,7 @@ public class ItemAngryPebble extends Item {
 			float f3 = MathHelper.sin(-pitch * 0.017453292F);
 			Vec3d up = new Vec3d((double)(f1 * f2), (double)f3, (double)(f * f2));
 			Vec3d right = forward.crossProduct(up).normalize();
-			Vec3d source = player.getPositionVector().addVector(0, player.getEyeHeight() - 0.2F, 0).add(forward.scale(0.4F)).add(right.scale(0.3F));
+			Vec3d source = player.getPositionVector().add(0, player.getEyeHeight() - 0.2F, 0).add(forward.scale(0.4F)).add(right.scale(0.3F));
 
 			for(int i = 0; i < 5; i++) {
 				player.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, source.x + player.world.rand.nextFloat() * 0.5F - 0.25F, source.y + player.world.rand.nextFloat() * 0.5F - 0.25F, source.z + player.world.rand.nextFloat() * 0.5F - 0.25F, 0, 0, 0);

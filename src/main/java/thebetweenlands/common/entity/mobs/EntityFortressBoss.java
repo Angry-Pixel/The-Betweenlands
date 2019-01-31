@@ -249,9 +249,9 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 			Vec3d vert1 = new Vec3d(v1[0]+v1Normalized.x*vertexExplode, v1[1]+v1Normalized.y*vertexExplode, v1[2]+v1Normalized.z*vertexExplode);
 			Vec3d vert2 = new Vec3d(v2[0]+v2Normalized.x*vertexExplode, v2[1]+v2Normalized.y*vertexExplode, v2[2]+v2Normalized.z*vertexExplode);
 			Vec3d vert3 = new Vec3d(v3[0]+v3Normalized.x*vertexExplode, v3[1]+v3Normalized.y*vertexExplode, v3[2]+v3Normalized.z*vertexExplode);
-			vert1 = vert1.addVector(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
-			vert2 = vert2.addVector(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
-			vert3 = vert3.addVector(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
+			vert1 = vert1.add(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
+			vert2 = vert2.add(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
+			vert3 = vert3.add(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
 			Vec3d normal = vert2.subtract(vert1).crossProduct(vert3.subtract(vert1));
 
 			if(rayTraceTriangle(pos, ray, vert1, vert2, vert3) && (back || normal.normalize().dotProduct(ray.normalize()) < Math.cos(Math.toRadians(90)))) {
@@ -344,7 +344,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 						return false;
 					}
 				}
-				RayTraceResult result = this.coreBoundingBox.offset(this.posX, this.posY, this.posZ).calculateIntercept(pos, ray.addVector(pos.x, pos.y, pos.z));
+				RayTraceResult result = this.coreBoundingBox.offset(this.posX, this.posY, this.posZ).calculateIntercept(pos, ray.add(pos.x, pos.y, pos.z));
 				if(result != null) {
 					return super.attackEntityFrom(source, damage);
 				} else {

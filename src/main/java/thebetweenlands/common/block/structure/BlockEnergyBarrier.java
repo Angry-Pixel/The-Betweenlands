@@ -36,7 +36,7 @@ public class BlockEnergyBarrier extends Block {
 	public BlockEnergyBarrier() {
 		super(Material.GLASS);
 		this.setSoundType(SoundType.GLASS);
-		this.setUnlocalizedName("thebetweenlands.energy_barrier");
+		this.setTranslationKey("thebetweenlands.energy_barrier");
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setBlockUnbreakable();
 		this.setResistance(6000000.0F);
@@ -51,7 +51,7 @@ public class BlockEnergyBarrier extends Block {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
@@ -93,7 +93,7 @@ public class BlockEnergyBarrier extends Block {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			EnumHand swordHand = null;

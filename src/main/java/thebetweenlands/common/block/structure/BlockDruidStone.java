@@ -49,7 +49,7 @@ public class BlockDruidStone extends BasicBlock implements BlockRegistry.ISubtyp
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState()
-				.withProperty(FACING, EnumFacing.getHorizontal(meta))
+				.withProperty(FACING, EnumFacing.byHorizontalIndex(meta))
 				.withProperty(ACTIVE, (meta & 4) != 0);
 	}
 
@@ -86,9 +86,9 @@ public class BlockDruidStone extends BasicBlock implements BlockRegistry.ISubtyp
 				BlockPos side = pos.offset(facing);
 				if (!world.getBlockState(side).isOpaqueCube()) {
 					double dx = rand.nextFloat() - 0.5, dy = rand.nextFloat() - 0.5, dz = rand.nextFloat() - 0.5;
-					int vx = facing.getFrontOffsetX();
-					int vy = facing.getFrontOffsetY();
-					int vz = facing.getFrontOffsetZ();
+					int vx = facing.getXOffset();
+					int vy = facing.getYOffset();
+					int vz = facing.getZOffset();
 					dx *= (1 - Math.abs(vx));
 					dy *= (1 - Math.abs(vy));
 					dz *= (1 - Math.abs(vz));

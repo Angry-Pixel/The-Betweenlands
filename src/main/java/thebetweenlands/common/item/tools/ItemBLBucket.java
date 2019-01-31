@@ -133,17 +133,17 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
     }
 
     @Override
-    public String getUnlocalizedName(ItemStack stack) {
+    public String getTranslationKey(ItemStack stack) {
         if (stack.getMetadata() >= 2)
-            return getUnlocalizedName() + ".unknown";
-        return getUnlocalizedName() + (stack.getMetadata() == 0 ? "_weedwood": "_syrmorite");
+            return getTranslationKey() + ".unknown";
+        return getTranslationKey() + (stack.getMetadata() == 0 ? "_weedwood": "_syrmorite");
     }
 
     @SuppressWarnings("deprecation")
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
         final FluidStack fluidStack = getFluid(stack);
-        final String unlocName = getEmpty(stack).getUnlocalizedName();
+        final String unlocName = getEmpty(stack).getTranslationKey();
 
         if (fluidStack == null)
             return I18n.translateToLocal(unlocName + ".name").trim();
@@ -153,7 +153,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
         if (I18n.canTranslate(fluidUnlocKey))
             return I18n.translateToLocal(fluidUnlocKey).trim();
 
-        return I18n.translateToLocalFormatted(getEmpty(stack).getUnlocalizedName() + ".filled.name", fluidStack.getFluid().getRarity(fluidStack).rarityColor + fluidStack.getLocalizedName() + TextFormatting.WHITE);
+        return I18n.translateToLocalFormatted(getEmpty(stack).getTranslationKey() + ".filled.name", fluidStack.getFluid().getRarity(fluidStack).rarityName + fluidStack.getLocalizedName() + TextFormatting.WHITE);
     }
 
     @Override

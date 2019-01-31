@@ -60,7 +60,7 @@ public interface IConnectedTextureBlock {
 				//Diagonal block connection
 				for(EnumFacing offsetFace : EnumFacing.VALUES) {
 					//Check if offsetFace points to a neighbour of the connected texture block
-					if(Math.abs(planeOffset.getX() + offsetFace.getFrontOffsetX()) + Math.abs(planeOffset.getY() + offsetFace.getFrontOffsetY()) + Math.abs(planeOffset.getZ() + offsetFace.getFrontOffsetZ()) == 1) {
+					if(Math.abs(planeOffset.getX() + offsetFace.getXOffset()) + Math.abs(planeOffset.getY() + offsetFace.getYOffset()) + Math.abs(planeOffset.getZ() + offsetFace.getZOffset()) == 1) {
 						//Check if either sides of the diagonal block that point to a direct neighbour of the connected texture block are solid
 						if(onSamePlane) {
 							if(world.isSideSolid(to, offsetFace, false) || world.isSideSolid(to, face, false)) {
@@ -71,7 +71,7 @@ public interface IConnectedTextureBlock {
 								return false;
 							}
 						}
-						directNeighbour.setPos(to.getX() + offsetFace.getFrontOffsetX(), to.getY() + offsetFace.getFrontOffsetY(), to.getZ() + offsetFace.getFrontOffsetZ());
+						directNeighbour.setPos(to.getX() + offsetFace.getXOffset(), to.getY() + offsetFace.getYOffset(), to.getZ() + offsetFace.getZOffset());
 						//Check if direct neighbour can be connected to, if not it needs to check if it lets a conncetion through
 						if(!this.canConnectTo(world, pos, face, directNeighbour)) {
 							//Check if either sides of the direct neighbour block of the connected texture block are solid
@@ -244,7 +244,7 @@ public interface IConnectedTextureBlock {
 
 	/**
 	 * Updates and sets the state of the connected texture properties
-	 * @param oldState
+	 * @param state
 	 * @param world
 	 * @param pos
 	 * @param connectionRules The connection rules determines which blocks this block can connect to and which blocks let a connection through
@@ -448,10 +448,10 @@ public interface IConnectedTextureBlock {
 					int my = (zr ? zo : (xr ? yo : zo)) + 1;
 					int blockIndex = getIndex(xp ? mx : 2 - mx, yp ? my : 2 - my, 3);
 
-					if(connectionRules.canConnectThrough(world, pos, dir, checkPos.setPos(x + dir.getFrontOffsetX(), y + dir.getFrontOffsetY(), z + dir.getFrontOffsetZ()))) {
+					if(connectionRules.canConnectThrough(world, pos, dir, checkPos.setPos(x + dir.getXOffset(), y + dir.getYOffset(), z + dir.getZOffset()))) {
 						Axis axis = dir.getAxis();
 						if((axis == Axis.X && (yo != 0 || zo != 0)) || (axis == Axis.Y && (xo != 0 || zo != 0)) || (axis == Axis.Z && (xo != 0 || yo != 0))) {
-							MutableBlockPos diagPos = checkPos.setPos(axis == Axis.X ? (x + dir.getFrontOffsetX()) : (x + xo), axis == Axis.Y ? (y + dir.getFrontOffsetY()) : (y + yo), axis == Axis.Z ? (z + dir.getFrontOffsetZ()) : (z + zo));
+							MutableBlockPos diagPos = checkPos.setPos(axis == Axis.X ? (x + dir.getXOffset()) : (x + xo), axis == Axis.Y ? (y + dir.getYOffset()) : (y + yo), axis == Axis.Z ? (z + dir.getZOffset()) : (z + zo));
 							boolean isDiagConnectable = connectionRules.canConnectTo(world, pos, dir, diagPos);
 							if(isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, diagPos)) {
 								MutableBlockPos obstructionPos = checkPos.setPos(axis == Axis.X ? x : (x + xo), axis == Axis.Y ? y : (y + yo), axis == Axis.Z ? z : (z + zo));

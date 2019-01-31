@@ -104,7 +104,7 @@ public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 		IBlockState blockState = world.getBlockState(pos);
 		boolean removed = blockState.getBlock().removedByPlayer(blockState, world, pos, player, canHarvest);
 		if (removed) {
-			blockState.getBlock().onBlockDestroyedByPlayer(world, pos, blockState);
+			blockState.getBlock().onPlayerDestroy(world, pos, blockState);
 		}
 		return removed;
 	}

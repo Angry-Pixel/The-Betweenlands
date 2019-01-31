@@ -106,7 +106,7 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 								boolean hasEnoughSnowAround = true;
 								PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
 								for (EnumFacing dir : EnumFacing.HORIZONTALS) {
-									checkPos.setPos(pos.getX() + dir.getFrontOffsetX(), pos.getY() + 1, pos.getZ() + dir.getFrontOffsetZ());
+									checkPos.setPos(pos.getX() + dir.getXOffset(), pos.getY() + 1, pos.getZ() + dir.getZOffset());
 									if (world.isBlockLoaded(checkPos)) {
 										IBlockState neighourState = world.getBlockState(checkPos);
 										if (BlockRegistry.SNOW.canPlaceBlockAt(world, checkPos)

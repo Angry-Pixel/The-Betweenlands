@@ -219,9 +219,9 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 		if(this.isMoving() && this.world.isRemote) {
 			if(this.ticksExisted % 3 == 0) {
 				EnumFacing facing = this.getFacing();
-				double px = this.posX + facing.getFrontOffsetX() * this.width / 2;
-				double py = this.posY + this.height / 2 + facing.getFrontOffsetY() * this.height / 2;
-				double pz = this.posZ + facing.getFrontOffsetZ() * this.width / 2;
+				double px = this.posX + facing.getXOffset() * this.width / 2;
+				double py = this.posY + this.height / 2 + facing.getYOffset() * this.height / 2;
+				double pz = this.posZ + facing.getZOffset() * this.width / 2;
 				for(int i = 0; i < 24; i++) {
 					double rx = (this.world.rand.nextDouble() - 0.5D) * this.width;
 					double ry = (this.world.rand.nextDouble() - 0.5D) * this.height;
@@ -229,9 +229,9 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 					BlockPos pos = new BlockPos(px + rx, py + ry, pz + rz);
 					IBlockState state = this.world.getBlockState(pos);
 					if(!state.getBlock().isAir(state, this.world, pos)) {
-						double mx = facing.getFrontOffsetX() * 0.15F + (this.world.rand.nextDouble() - 0.5D) * 0.25F;
-						double my = facing.getFrontOffsetY() * 0.15F + (this.world.rand.nextDouble() - 0.5D) * 0.25F;
-						double mz = facing.getFrontOffsetZ() * 0.15F + (this.world.rand.nextDouble() - 0.5D) * 0.25F;
+						double mx = facing.getXOffset() * 0.15F + (this.world.rand.nextDouble() - 0.5D) * 0.25F;
+						double my = facing.getYOffset() * 0.15F + (this.world.rand.nextDouble() - 0.5D) * 0.25F;
+						double mz = facing.getZOffset() * 0.15F + (this.world.rand.nextDouble() - 0.5D) * 0.25F;
 						this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + rx, py + ry, pz + rz, mx, my, mz, Block.getStateId(state));
 					}
 				}
@@ -306,7 +306,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 			EnumFacing facing = this.getFacing();
 
 			EntitySapSpit spit = new EntitySapSpit(this.world, this, this.spitDamage);
-			spit.setPosition(this.posX + facing.getFrontOffsetX() * (this.width / 2 + 0.1F), this.posY + this.height / 2.0F + facing.getFrontOffsetY() * (this.height / 2 + 0.1F), this.posZ + facing.getFrontOffsetZ() * (this.width / 2 + 0.1F));
+			spit.setPosition(this.posX + facing.getXOffset() * (this.width / 2 + 0.1F), this.posY + this.height / 2.0F + facing.getYOffset() * (this.height / 2 + 0.1F), this.posZ + facing.getZOffset() * (this.width / 2 + 0.1F));
 
 			double dx = target.posX - spit.posX;
 			double dy = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - spit.posY;
@@ -376,22 +376,22 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 						if(!this.stayInRange || this.entity.getAttackTarget().getDistanceSqToCenter(pos) <= this.maxRangeSq) {
 							Vec3d center = new Vec3d(pos.getX() + this.entity.getBlockWidth() / 2.0D, pos.getY() + this.entity.getBlockHeight() / 2.0D, pos.getZ() + this.entity.getBlockWidth() / 2.0D);
-							Vec3d lookDir = this.entity.getAttackTarget().getPositionVector().addVector(0, this.entity.getAttackTarget().getEyeHeight(), 0).subtract(center);
+							Vec3d lookDir = this.entity.getAttackTarget().getPositionVector().add(0, this.entity.getAttackTarget().getEyeHeight(), 0).subtract(center);
 
 							EnumFacing facing = EnumFacing.getFacingFromVector((float)lookDir.x, (float)lookDir.y, (float)lookDir.z);
 
 							if(this.canSeeFrom(pos, facing, this.entity.getAttackTarget()) && this.entity.checkAnchorAt(center, lookDir, AnchorChecks.ALL) == 0) {
 								this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
-								this.entity.lookHelper.setLookDirection(facing.getFrontOffsetX(), facing.getFrontOffsetY(), facing.getFrontOffsetZ());
+								this.entity.lookHelper.setLookDirection(facing.getXOffset(), facing.getYOffset(), facing.getZOffset());
 								break;
 							} else {
 								for(EnumFacing otherFacing : EnumFacing.HORIZONTALS) {
 									if(otherFacing != facing) {
-										lookDir = new Vec3d(otherFacing.getFrontOffsetX(), 0, otherFacing.getFrontOffsetZ());
+										lookDir = new Vec3d(otherFacing.getXOffset(), 0, otherFacing.getZOffset());
 
 										if(this.canSeeFrom(pos, otherFacing, this.entity.getAttackTarget()) && this.entity.checkAnchorAt(center, lookDir, AnchorChecks.ALL) == 0) {
 											this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
-											this.entity.lookHelper.setLookDirection(otherFacing.getFrontOffsetX(), otherFacing.getFrontOffsetY(), otherFacing.getFrontOffsetZ());
+											this.entity.lookHelper.setLookDirection(otherFacing.getXOffset(), otherFacing.getYOffset(), otherFacing.getZOffset());
 											break;
 										} 
 									}
@@ -407,7 +407,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 		}
 
 		protected boolean canSeeFrom(BlockPos pos, EnumFacing facing, Entity entity) {
-			return this.entity.world.rayTraceBlocks(new Vec3d(pos.getX() + this.entity.getBlockWidth() / 2.0D + facing.getFrontOffsetX() * (this.entity.width / 2 + this.entity.getPeek()), pos.getY() + this.entity.getBlockHeight() / 2.0D + facing.getFrontOffsetY() * (this.entity.height / 2 + this.entity.getPeek()), pos.getZ() + this.entity.getBlockWidth() / 2.0D + facing.getFrontOffsetZ() * (this.entity.width / 2 + this.entity.getPeek())), new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight(), entity.posZ), false, true, false) == null;
+			return this.entity.world.rayTraceBlocks(new Vec3d(pos.getX() + this.entity.getBlockWidth() / 2.0D + facing.getXOffset() * (this.entity.width / 2 + this.entity.getPeek()), pos.getY() + this.entity.getBlockHeight() / 2.0D + facing.getYOffset() * (this.entity.height / 2 + this.entity.getPeek()), pos.getZ() + this.entity.getBlockWidth() / 2.0D + facing.getZOffset() * (this.entity.width / 2 + this.entity.getPeek())), new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight(), entity.posZ), false, true, false) == null;
 		}
 
 		@Override

@@ -25,7 +25,7 @@ public class BlockWeedwoodWorkbench extends BlockContainer {
         super(Material.WOOD);
         setSoundType(SoundType.WOOD);
         setCreativeTab(BLCreativeTabs.BLOCKS);
-        setUnlocalizedName("thebetweenlands.weedwoodCraftingTable");
+        setTranslationKey("thebetweenlands.weedwoodCraftingTable");
         setHardness(2.5F);
     }
 

@@ -78,7 +78,7 @@ allprojects {
 	apply plugin: 'net.minecraftforge.gradle.forge'
 	
 	minecraft {
-		version = "1.12.2-14.23.4.2767"
+		version = "1.12.2-14.23.5.2768"
 		runDir = 'minecraft'
 		replace '${version}', project.version
 		replace '${mcversion}', project.minecraft.version
@@ -92,7 +92,7 @@ allprojects {
 		// stable_#            stables are built at the discretion of the MCP team.
 		// Use non-default mappings at your own risk. they may not allways work.
 		// simply re-run your setup task after changing the mappings to update your workspace.
-		mappings = "snapshot_20171003"
+		mappings = "stable_39"
 		makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 	}
 	

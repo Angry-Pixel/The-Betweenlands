@@ -40,7 +40,7 @@ public abstract class LoaderExtension {
 	 * @return
 	 */
 	public final ResourceLocation getLocationWithExtension(ResourceLocation location, String arg) {
-		return new ResourceLocation(location.getResourceDomain(), location.getResourcePath() + "$" + this.getName() + "(" + arg + ")");
+		return new ResourceLocation(location.getNamespace(), location.getPath() + "$" + this.getName() + "(" + arg + ")");
 	}
 
 	/**
@@ -140,7 +140,7 @@ public abstract class LoaderExtension {
 	 * @return
 	 */
 	protected String readMetadata(ResourceLocation location) {
-		location = new ResourceLocation(location.getResourceDomain(), location.getResourcePath() + ".mlmeta");
+		location = new ResourceLocation(location.getNamespace(), location.getPath() + ".mlmeta");
 		IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
 		try {
 			IResource metadataResource = manager.getResource(location);

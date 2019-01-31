@@ -29,7 +29,7 @@ public class ItemWeedwoodRowboat extends Item {
 
     @Override
     public String getUnlocalizedNameInefficiently(ItemStack stack) {
-        String key = getUnlocalizedName(stack);
+        String key = getTranslationKey(stack);
         if (EntityWeedwoodRowboat.isTarred(stack)) {
             return key + ".tarred";
         }
@@ -54,7 +54,7 @@ public class ItemWeedwoodRowboat extends Item {
         ItemStack stack = player.getHeldItem(hand);
         Vec3d pos = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
         Vec3d look = player.getLookVec();
-        Vec3d lookExtent = pos.addVector(look.x * REACH, look.y * REACH, look.z * REACH);
+        Vec3d lookExtent = pos.add(look.x * REACH, look.y * REACH, look.z * REACH);
         RayTraceResult hit = world.rayTraceBlocks(pos, lookExtent, true);
         if (hit == null) {
             return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);

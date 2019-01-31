@@ -84,7 +84,7 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
@@ -204,9 +204,9 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 	public ItemBlock getItemBlock() {
 		ItemBlock item = new ItemBlock(this) {
 			@Override
-			public String getUnlocalizedName(ItemStack stack) {
+			public String getTranslationKey(ItemStack stack) {
 				IBlockState state = this.block.getStateFromMeta(this.getMetadata(stack.getItemDamage()));
-				return this.block.getUnlocalizedName() + (state.getValue(SEEDED) ? "_seeded" : "");
+				return this.block.getTranslationKey() + (state.getValue(SEEDED) ? "_seeded" : "");
 			}
 
 			@Override

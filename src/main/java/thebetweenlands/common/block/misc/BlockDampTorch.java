@@ -33,7 +33,7 @@ public class BlockDampTorch extends BlockTorch {
 
 			if (facing.getAxis().isHorizontal()) {
 				EnumFacing facingOpposite = facing.getOpposite();
-				BLParticles.SMOKE.spawn(worldIn, x + 0.27D * (double)facingOpposite.getFrontOffsetX(), y + 0.22D, z + 0.27D * (double)facingOpposite.getFrontOffsetZ(), ParticleArgs.get().withColor(0.2F, 0.2F, 0.2F, 1.0F));
+				BLParticles.SMOKE.spawn(worldIn, x + 0.27D * (double)facingOpposite.getXOffset(), y + 0.22D, z + 0.27D * (double)facingOpposite.getZOffset(), ParticleArgs.get().withColor(0.2F, 0.2F, 0.2F, 1.0F));
 			} else {
 				BLParticles.SMOKE.spawn(worldIn, x, y, z, ParticleArgs.get().withColor(0.2F, 0.2F, 0.2F, 1.0F));
 			}

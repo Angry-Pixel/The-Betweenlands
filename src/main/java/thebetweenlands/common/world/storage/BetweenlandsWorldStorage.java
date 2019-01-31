@@ -191,7 +191,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 						int bx = chunkpos.x * 16;
 						int bz = chunkpos.z * 16;
 
-						Chunk chunk = this.getWorld().getChunkFromChunkCoords(chunkpos.x, chunkpos.z);
+						Chunk chunk = this.getWorld().getChunk(chunkpos.x, chunkpos.z);
 
 						if(this.playAmbientCaveSounds(player, bx, bz, chunk)) {
 							break;

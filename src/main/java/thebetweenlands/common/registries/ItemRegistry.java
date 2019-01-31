@@ -335,7 +335,7 @@ public class ItemRegistry {
 
                     if (BetweenlandsConfig.DEBUG.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
                         if (item.getCreativeTab() == null)
-                        	TheBetweenlands.logger.warn(String.format("Item %s doesn't have a creative tab", item.getUnlocalizedName()));
+                        	TheBetweenlands.logger.warn(String.format("Item %s doesn't have a creative tab", item.getTranslationKey()));
                     }
                 }
             }
@@ -348,7 +348,7 @@ public class ItemRegistry {
     private static void registerItem(Item item, String fieldName) {
         ITEMS.add(item);
         String name = fieldName.toLowerCase(Locale.ENGLISH);
-        item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.ID + "." + name);
+        item.setRegistryName(ModInfo.ID, name).setTranslationKey(ModInfo.ID + "." + name);
     }
 
     private static void registerItemTypes() {

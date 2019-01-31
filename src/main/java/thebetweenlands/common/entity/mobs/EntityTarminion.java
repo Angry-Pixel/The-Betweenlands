@@ -219,7 +219,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 			}
 			entity.attackEntityFrom(damageSource, (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 			this.playSound(SoundRegistry.TAR_BEAST_STEP, 1.0F, 2.0F);
-			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, world.getDifficulty().getDifficultyId() * 50, 0));
+			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, world.getDifficulty().getId() * 50, 0));
 			return true;
 		}
 		return true;

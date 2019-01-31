@@ -128,7 +128,7 @@ public class ParticleThem extends Particle {
 		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
 		if(renderView != null) {
 			Vec3d diff = renderView.getPositionVector().subtract(this.posX, this.posY - renderView.getEyeHeight(), this.posZ);
-			if(diff.lengthVector() < 2.0F) {
+			if(diff.length() < 2.0F) {
 				this.setExpired();
 			}
 			Vec3d dir = diff.normalize();

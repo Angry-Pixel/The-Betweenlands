@@ -169,7 +169,7 @@ public class PlayerRespawnHandler {
 			for(int zo = -spawnFuzzHalf; zo <= spawnFuzzHalf; zo += 1 + world.rand.nextInt(xzSkip)) {
 				checkPos.setPos(pos.getX() + xo, 0, pos.getZ() + zo);
 
-				Chunk chunk = world.getChunkFromBlockCoords(checkPos);
+				Chunk chunk = world.getChunk(checkPos);
 
 				for(int yo = yRange; surface || yo >= -yRange; yo--) {
 					if(surface) {

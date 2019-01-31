@@ -72,9 +72,9 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		try {
-			return "item.thebetweenlands." + IGenericItem.getFromStack(EnumTalisman.class, stack).getUnlocalizedName();
+			return "item.thebetweenlands." + IGenericItem.getFromStack(EnumTalisman.class, stack).getTranslationKey();
 		} catch (Exception e) {
 			return "item.thebetweenlands.unknown_talisman";
 		}
@@ -234,7 +234,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 
 	protected LocationPortal getPortalAt(World world, BlockPos pos) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, pos.getX() + 0.5D, pos.getZ() + 0.5D, location -> location.isInside(new Vec3d(pos).addVector(0.5D, 0.5D, 0.5D)));
+		List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, pos.getX() + 0.5D, pos.getZ() + 0.5D, location -> location.isInside(new Vec3d(pos).add(0.5D, 0.5D, 0.5D)));
 		if(!portals.isEmpty()) {
 			return portals.get(0);
 		}
@@ -243,7 +243,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 
 	protected LocationPortal getLinkPortal(WorldServer world, BlockPos portal2Pos) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, portal2Pos.getX() + 0.5D, portal2Pos.getZ() + 0.5D, location -> location.isInside(new Vec3d(portal2Pos).addVector(0.5D, 0.5D, 0.5D)) && portal2Pos.equals(location.getPortalPosition()));
+		List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, portal2Pos.getX() + 0.5D, portal2Pos.getZ() + 0.5D, location -> location.isInside(new Vec3d(portal2Pos).add(0.5D, 0.5D, 0.5D)) && portal2Pos.equals(location.getPortalPosition()));
 		if(!portals.isEmpty()) {
 			return portals.get(0);
 		}
@@ -306,7 +306,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 	public Map<Integer, String> getVariants() {
 		Map<Integer, String> variants = new HashMap<>();
 		for (EnumTalisman type : EnumTalisman.values())
-			variants.put(type.ordinal(), type.getUnlocalizedName());
+			variants.put(type.ordinal(), type.getTranslationKey());
 		return variants;
 	}
 
@@ -327,7 +327,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 		}
 
 		@Override
-		public String getUnlocalizedName() {
+		public String getTranslationKey() {
 			return this.unlocalizedName;
 		}
 

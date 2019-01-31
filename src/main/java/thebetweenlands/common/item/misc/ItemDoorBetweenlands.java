@@ -34,8 +34,8 @@ public abstract class ItemDoorBetweenlands extends Item {
 
 			if (player.canPlayerEdit(pos, facing, player.getHeldItem(hand)) && this.getDoorBlock().canPlaceBlockAt(worldIn, pos)) {
 				EnumFacing placeDir = EnumFacing.fromAngle((double)player.rotationYaw);
-				int xOffset = placeDir.getFrontOffsetX();
-				int zOffset = placeDir.getFrontOffsetZ();
+				int xOffset = placeDir.getXOffset();
+				int zOffset = placeDir.getZOffset();
 				boolean flag = xOffset < 0 && hitZ < 0.5F || xOffset > 0 && hitZ > 0.5F || zOffset < 0 && hitX > 0.5F || zOffset > 0 && hitX < 0.5F;
 				ItemDoor.placeDoor(worldIn, pos, placeDir, this.getDoorBlock(), flag);
 				SoundType soundtype = this.getDoorBlock().getSoundType();

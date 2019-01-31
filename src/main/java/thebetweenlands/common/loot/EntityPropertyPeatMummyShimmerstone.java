@@ -38,7 +38,7 @@ public class EntityPropertyPeatMummyShimmerstone implements EntityProperty {
 
 		@Override
 		public EntityPropertyPeatMummyShimmerstone deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
-			return new EntityPropertyPeatMummyShimmerstone(JsonUtils.getBoolean(element, this.getName().getResourcePath()));
+			return new EntityPropertyPeatMummyShimmerstone(JsonUtils.getBoolean(element, this.getName().getPath()));
 		}
 	}
 }

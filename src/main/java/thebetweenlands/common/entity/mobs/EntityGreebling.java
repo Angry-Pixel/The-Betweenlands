@@ -165,7 +165,7 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 		setType(compound.getInteger("type"));
-		this.dataManager.set(FACING, EnumFacing.getHorizontal(compound.getInteger("facing")));
+		this.dataManager.set(FACING, EnumFacing.byHorizontalIndex(compound.getInteger("facing")));
 	}
 
 	@Override

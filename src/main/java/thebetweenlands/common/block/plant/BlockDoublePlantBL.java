@@ -137,7 +137,7 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		int rot = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		worldIn.setBlockState(pos.up(), this.getDefaultState().withProperty(HALF, BlockDoublePlantBL.EnumBlockHalf.UPPER).withProperty(FACING, EnumFacing.getHorizontal(rot)), 2);
+		worldIn.setBlockState(pos.up(), this.getDefaultState().withProperty(HALF, BlockDoublePlantBL.EnumBlockHalf.UPPER).withProperty(FACING, EnumFacing.byHorizontalIndex(rot)), 2);
 	}
 
 	@Override
@@ -161,12 +161,12 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 	public IBlockState getStateFromMeta(int meta) {
 		int facing = (meta >> 1) & 4;
 		boolean isUpper = (meta & 1) == 1;
-		return this.getDefaultState().withProperty(HALF, isUpper ? EnumBlockHalf.UPPER : EnumBlockHalf.LOWER).withProperty(FACING, EnumFacing.getHorizontal(facing));
+		return this.getDefaultState().withProperty(HALF, isUpper ? EnumBlockHalf.UPPER : EnumBlockHalf.LOWER).withProperty(FACING, EnumFacing.byHorizontalIndex(facing));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		int facing = ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
+		int facing = state.getValue(FACING).getHorizontalIndex();
 		boolean isUpper = state.getValue(HALF) == BlockDoublePlantBL.EnumBlockHalf.UPPER;
 		int meta = facing << 1;
 		meta |= isUpper ? 1 : 0;

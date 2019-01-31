@@ -40,7 +40,7 @@ public class ItemMossBed extends Item {
 			}
 
 			int rot = MathHelper.floor((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-			EnumFacing placementFacing = EnumFacing.getHorizontal(rot);
+			EnumFacing placementFacing = EnumFacing.byHorizontalIndex(rot);
 			BlockPos headPos = pos.offset(placementFacing);
 			ItemStack stack = player.getHeldItem(hand);
 

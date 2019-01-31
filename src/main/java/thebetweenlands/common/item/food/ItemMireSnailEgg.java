@@ -36,7 +36,7 @@ public class ItemMireSnailEgg extends ItemBLFood {
 			entity.readFromNBT(nbt);
 		}
 		entity.setUniqueId(UUID.randomUUID());
-		entity.setLocationAndAngles(pos.getX() + hitX + facing.getFrontOffsetX() * entity.width, pos.getY() + hitY + (facing.getFrontOffsetY() < 0 ? -entity.height - 0.005F : 0.0F), pos.getZ() + hitZ + facing.getFrontOffsetZ() * entity.width, 0.0F, 0.0F);
+		entity.setLocationAndAngles(pos.getX() + hitX + facing.getXOffset() * entity.width, pos.getY() + hitY + (facing.getYOffset() < 0 ? -entity.height - 0.005F : 0.0F), pos.getZ() + hitZ + facing.getZOffset() * entity.width, 0.0F, 0.0F);
 		if(entity.isNotColliding()) {
 			world.spawnEntity(entity);
 			entity.playLivingSound();
