@@ -65,8 +65,8 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock, 
 	@Override
 	public void onParticleCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, EnumFacing side, Particle particle) {
 		EnumFacing facing = state.getValue(FACING);
-		int fx = facing.getFrontOffsetX();
-		int fz = facing.getFrontOffsetZ();
+		int fx = facing.getXOffset();
+		int fz = facing.getZOffset();
 		double mx = 0.4 * fx;
 		double mz = 0.4 * fz;
 		BLParticles.BEAM.spawn(worldIn, pos.getX() + (mx == 0? 0.5: Math.max(0, fx)), pos.getY() + 0.5, pos.getZ() +  (mz == 0? 0.5: Math.max(0, fz)), ParticleFactory.ParticleArgs.get().withMotion(mx, 0, mz));

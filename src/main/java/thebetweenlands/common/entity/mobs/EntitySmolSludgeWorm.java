@@ -226,7 +226,7 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		
 		for(int i = 0; i < 5; i++) {
 			Vec3d diff = destinationPart.getPositionVector().subtract(targetPart.getPositionVector());
-			double len = diff.lengthVector();
+			double len = diff.length();
 			
 			if(len > maxDist) {
 				Vec3d correction = diff.scale(1.0D / len * (len - maxDist));
@@ -249,7 +249,7 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		//Welp, failed to move smoothly along Y, just clip
 		if(!correctY) {
 			Vec3d diff = destinationPart.getPositionVector().subtract(targetPart.getPositionVector());
-			double len = diff.lengthVector();
+			double len = diff.lengthSquared();
 				
 			if(len > maxDist) {
 				Vec3d correction = diff.scale(1.0D / len * (len - maxDist));

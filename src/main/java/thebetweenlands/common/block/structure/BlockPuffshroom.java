@@ -57,7 +57,7 @@ public class BlockPuffshroom extends Block implements ITileEntityProvider, IShea
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

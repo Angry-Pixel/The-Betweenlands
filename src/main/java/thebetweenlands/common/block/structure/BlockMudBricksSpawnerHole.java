@@ -40,7 +40,7 @@ public class BlockMudBricksSpawnerHole extends BlockDirectional implements ITile
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.SOLID;
 	}
 
@@ -56,7 +56,7 @@ public class BlockMudBricksSpawnerHole extends BlockDirectional implements ITile
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
+		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
 	}
 
 	@Override

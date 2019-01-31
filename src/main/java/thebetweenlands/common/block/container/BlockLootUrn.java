@@ -101,7 +101,7 @@ public class BlockLootUrn extends BasicBlock implements ITileEntityProvider, ICu
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(VARIANT, EnumLootUrn.byMetadata(meta)).withProperty(FACING, EnumFacing.getHorizontal(meta & 3));
+		return this.getDefaultState().withProperty(VARIANT, EnumLootUrn.byMetadata(meta)).withProperty(FACING, EnumFacing.byHorizontalIndex(meta & 3));
 	}
 
 	@Override
@@ -122,7 +122,7 @@ public class BlockLootUrn extends BasicBlock implements ITileEntityProvider, ICu
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		int rotation = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		state = state.withProperty(FACING, EnumFacing.getHorizontal(rotation));
+		state = state.withProperty(FACING, EnumFacing.byHorizontalIndex(rotation));
 		state = state.withProperty(VARIANT, EnumLootUrn.byMetadata(stack.getItemDamage()));
 		worldIn.setBlockState(pos, state, 3);
 		TileEntity tile = worldIn.getTileEntity(pos);
@@ -188,7 +188,7 @@ public class BlockLootUrn extends BasicBlock implements ITileEntityProvider, ICu
 	}
 
 	@Override
-	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
+	public void onPlayerDestroy(World worldIn, BlockPos pos, IBlockState state) {
 		if (!worldIn.isRemote) {
 			if (worldIn.rand.nextInt(3) == 0) {
 				EntityTermite entity = new EntityTermite(worldIn);
@@ -197,7 +197,7 @@ public class BlockLootUrn extends BasicBlock implements ITileEntityProvider, ICu
 				worldIn.spawnEntity(entity);
 			}
 		}
-		super.onBlockDestroyedByPlayer(worldIn, pos, state);
+		super.onPlayerDestroy(worldIn, pos, state);
 	}
 
 	@Override
