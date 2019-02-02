@@ -123,7 +123,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	protected void addDefaultMarkRenderer(ResourceLocation descriptor, int minU, int minV, int width, int height) {
-		this.markRenderers.put(String.format("%s.%s", descriptor.getResourceDomain(), descriptor.getResourcePath()), new IMarkRenderer() {
+		this.markRenderers.put(String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath()), new IMarkRenderer() {
 			@Override
 			public void render(int centerX, int centerY) {
 				mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
@@ -139,7 +139,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.width = width;
 		this.height = height;
 
-		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("rune.%s.title", container.getContext().getRuneItemStack().getUnlocalizedName())), this.fontRenderer);
+		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("rune.%s.title", container.getContext().getRuneItemStack().getTranslationKey())), this.fontRenderer);
 
 		this.title.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -154,7 +154,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.title.parse();
 
-		this.description = new TextContainer(this.xSize - 8 - 4, this.maxYSize - 6 - this.title.getPages().get(0).getTextHeight(), I18n.format(String.format("rune.%s.description", container.getContext().getRuneItemStack().getUnlocalizedName())), this.fontRenderer);
+		this.description = new TextContainer(this.xSize - 8 - 4, this.maxYSize - 6 - this.title.getPages().get(0).getTextHeight(), I18n.format(String.format("rune.%s.description", container.getContext().getRuneItemStack().getTranslationKey())), this.fontRenderer);
 
 		this.description.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 

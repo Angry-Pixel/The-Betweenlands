@@ -61,7 +61,7 @@ public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {
 				for(int xo = -range; xo <= range; xo++) {
 					for(int yo = -range; yo <= range; yo++) {
 						for(int zo = -range; zo <= range; zo++) {
-							positions.add(new BlockPos(context.getUser().getPosition().addVector(xo, yo, zo)));
+							positions.add(new BlockPos(context.getUser().getPosition().add(xo, yo, zo)));
 						}
 					}
 				}
