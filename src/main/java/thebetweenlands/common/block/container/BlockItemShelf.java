@@ -169,7 +169,7 @@ public class BlockItemShelf extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing facing = EnumFacing.getFront(meta);
+		EnumFacing facing = EnumFacing.byIndex(meta);
 
 		if (facing.getAxis() == EnumFacing.Axis.Y) {
 			facing = EnumFacing.NORTH;
@@ -195,7 +195,7 @@ public class BlockItemShelf extends BlockContainer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

@@ -475,12 +475,12 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         Vec3d oar = getOarVector(side);
         Vec3d of = new Vec3d(oar.x, 0, oar.z);
         Vec3d nf = new Vec3d(normal.x, 0, normal.z);
-        float angle = nf.lengthVector() < 1e-12 ? 0 : (float) Math.acos(Math.max(Math.min(nf.dotProduct(of) / (nf.lengthVector() * of.lengthVector()), 1), -1));
+        float angle = nf.length() < 1e-12 ? 0 : (float) Math.acos(Math.max(Math.min(nf.dotProduct(of) / (nf.length() * of.length()), 1), -1));
         float align = MathUtils.linearTransformf(angle, 0, MathUtils.PI, 1, 0);
         float yaw = (float) Math.atan2(-normal.z, -normal.x) - (rotationYaw - 90) * MathUtils.DEG_TO_RAD;
         float pitch = (float) Math.acos(Math.max(Math.min(normal.dotProduct(of), 1), -1));
         float x = oarXWavePull.get(side);
-        oarXWavePull.put(side, x + (MathHelper.clamp(yaw * align * (float) nf.lengthVector() * 2, -0.3F, 0.3F) - x) * 0.7F * (float) nf.lengthVector());
+        oarXWavePull.put(side, x + (MathHelper.clamp(yaw * align * (float) nf.length() * 2, -0.3F, 0.3F) - x) * 0.7F * (float) nf.length());
         float z = oarZWavePull.get(side);
         oarZWavePull.put(side, z + ((pitch - MathUtils.PI / 2) * (1 - align) * (getOarElevation(side) + 1) / 2 - z) * 0.4F);
     }
@@ -645,9 +645,9 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             if (canOarsApplyForce()) {
                 leftOarForce *= getOarPeriodicForceApplyment(ShipSide.STARBOARD);
                 Vec3d leftLever = new Vec3d(0, 0, leftOarForce);
-                motion = motion.addVector(0, 0, leftOarForce * forceFactor);
+                motion = motion.add(0, 0, leftOarForce * forceFactor);
                 Vec3d cross = rowForce.crossProduct(leftLever);
-                rotation = rotation.addVector(cross.x, cross.y, cross.z);
+                rotation = rotation.add(cross.x, cross.y, cross.z);
             }
         }
         if (rightOarForce > 0) {
@@ -655,13 +655,13 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             if (canOarsApplyForce()) {
                 rightOarForce *= getOarPeriodicForceApplyment(ShipSide.PORT);
                 Vec3d righerLever = new Vec3d(0, 0, rightOarForce);
-                motion = motion.addVector(0, 0, rightOarForce * forceFactor);
+                motion = motion.add(0, 0, rightOarForce * forceFactor);
                 Vec3d cross = new Vec3d(-rowForce.x, -rowForce.y, -rowForce.z).crossProduct(righerLever);
-                rotation = rotation.addVector(cross.x, cross.y, cross.z);
+                rotation = rotation.add(cross.x, cross.y, cross.z);
             }
         }
         Vec3d currentMotion = new Vec3d(motionX, 0, motionZ);
-        if (currentMotion.lengthVector() < 0.1 && rotation.x * rotation.x + rotation.y * rotation.y + rotation.z + rotation.z > 0) {
+        if (currentMotion.length() < 0.1 && rotation.x * rotation.x + rotation.y * rotation.y + rotation.z + rotation.z > 0) {
             motion = motion.scale(0.35);
             rotation = rotation.scale(1.6);
         }
@@ -764,7 +764,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     private void animateOar(ShipSide side, double motion) {
         Vec3d oarlock = getOarlockPosition(side);
         Vec3d oarVector = getOarVector(side);
-        Vec3d blade = oarlock.addVector(oarVector.x * OAR_LENGTH, oarVector.y * OAR_LENGTH, oarVector.z * OAR_LENGTH);
+        Vec3d blade = oarlock.add(oarVector.x * OAR_LENGTH, oarVector.y * OAR_LENGTH, oarVector.z * OAR_LENGTH);
         RayTraceResult raytrace = world.rayTraceBlocks(new Vec3d(oarlock.x, oarlock.y, oarlock.z), blade, true);
         boolean bladeInAir = true;
         float amountOfBladeInAir = BLADE_LENGTH;
@@ -827,7 +827,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         double velocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
         Vec3d oarlock = getOarlockPosition(side);
         Vec3d oarVector = getOarVector(side);
-        Vec3d blade = oarlock.addVector(oarVector.x * OAR_LENGTH, oarVector.y * OAR_LENGTH, oarVector.z * OAR_LENGTH);
+        Vec3d blade = oarlock.add(oarVector.x * OAR_LENGTH, oarVector.y * OAR_LENGTH, oarVector.z * OAR_LENGTH);
         RayTraceResult raytrace = world.rayTraceBlocks(new Vec3d(oarlock.x, oarlock.y, oarlock.z), blade, true);
         boolean bladeInAir = true;
         if (raytrace != null && raytrace.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -1023,13 +1023,14 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     
     @SubscribeEvent
     public static void onLivingAttacked(LivingAttackEvent event) {
-    	EntityLivingBase entity = event.getEntityLiving();
-    	Vec3d location = event.getSource().getDamageLocation();
-    	Entity attacker = event.getSource().getImmediateSource();
-    	Entity ridingEntity = entity.getRidingEntity();
-    	if(ridingEntity instanceof EntityWeedwoodRowboat && location != null && location.y + (attacker != null ? attacker.getEyeHeight() : 0) < ridingEntity.posY + ridingEntity.height / 2) {
-    		//Cancel any damage dealt from below the boat
-    		event.setCanceled(true);
-    	}
+        Entity ridingEntity = event.getEntityLiving().getRidingEntity();
+    	if (ridingEntity instanceof EntityWeedwoodRowboat && event.getSource().getTrueSource() != null) {
+            Vec3d location = event.getSource().getDamageLocation();
+            Entity attacker = event.getSource().getImmediateSource();
+            if (location != null && location.y + (attacker != null ? attacker.getEyeHeight() : 0) < ridingEntity.posY + ridingEntity.height / 2) {
+                //Cancel any damage dealt from below the boat
+                event.setCanceled(true);
+            }
+        }
     }
 }

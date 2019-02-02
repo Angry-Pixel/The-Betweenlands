@@ -78,9 +78,9 @@ public class WorldGenGiantRoot extends WorldGenerator {
 
 		Vec3d offsetDir = up.crossProduct(dir);
 
-		Vec3d controlPtStart = new Vec3d(this.start).subtract(dir).addVector(0, -16, 0);
+		Vec3d controlPtStart = new Vec3d(this.start).subtract(dir).add(0, -16, 0);
 
-		Vec3d controlPtEnd = new Vec3d(this.end).add(dir).addVector(0, -16, 0);
+		Vec3d controlPtEnd = new Vec3d(this.end).add(dir).add(0, -16, 0);
 
 		List<Vec3d> pts = new ArrayList<>();
 
@@ -89,7 +89,7 @@ public class WorldGenGiantRoot extends WorldGenerator {
 
 		int randPts = 5;
 		for(int i = 0; i < randPts; i++) {
-			Vec3d pt = new Vec3d(this.start).add(diff.scale(i / (float)randPts)).addVector(offsetDir.x * (rand.nextDouble() - 0.5D) * this.randXZOffsetRange * 2.0D, (rand.nextDouble() - 0.5D) * this.randYOffsetRange * 2.0D + Math.sin(i / (float)randPts * Math.PI) * this.maxArcHeight, offsetDir.z * (rand.nextDouble() - 0.5D) * this.randXZOffsetRange * 2.0D);
+			Vec3d pt = new Vec3d(this.start).add(diff.scale(i / (float)randPts)).add(offsetDir.x * (rand.nextDouble() - 0.5D) * this.randXZOffsetRange * 2.0D, (rand.nextDouble() - 0.5D) * this.randYOffsetRange * 2.0D + Math.sin(i / (float)randPts * Math.PI) * this.maxArcHeight, offsetDir.z * (rand.nextDouble() - 0.5D) * this.randXZOffsetRange * 2.0D);
 			pts.add(pt);
 		}
 
@@ -289,7 +289,7 @@ public class WorldGenGiantRoot extends WorldGenerator {
 								Collections.shuffle(dirs, foliageRand);
 								for(EnumFacing facing : dirs) {
 									//Check if offset pos is giant root
-									if((xo+facing.getFrontOffsetX())*(xo+facing.getFrontOffsetX())+(yo+facing.getFrontOffsetY())*(yo+facing.getFrontOffsetY())+(zo+facing.getFrontOffsetZ())*(zo+facing.getFrontOffsetZ()) <= (radius-1)*(radius-1)) {
+									if((xo+facing.getXOffset())*(xo+facing.getXOffset())+(yo+facing.getYOffset())*(yo+facing.getYOffset())+(zo+facing.getZOffset())*(zo+facing.getZOffset()) <= (radius-1)*(radius-1)) {
 										worldIn.setBlockState(genPos, BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, facing.getOpposite()), 2);
 									}
 								}

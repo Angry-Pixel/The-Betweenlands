@@ -50,7 +50,7 @@ public class EventTrigger extends BLTrigger<EventTrigger.Instance, EventTrigger.
         }
 
         public boolean test(ResourceLocation location) {
-            return "all".equals(this.location.getResourcePath()) || this.location.equals(location);
+            return "all".equals(this.location.getPath()) || this.location.equals(location);
         }
     }
 

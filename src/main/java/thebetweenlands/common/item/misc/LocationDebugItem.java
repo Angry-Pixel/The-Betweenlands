@@ -79,7 +79,7 @@ public class LocationDebugItem extends Item {
 					playerIn.sendMessage(new TextComponentString("  Locations:"));
 					for(LocationStorage location : locations) {
 						playerIn.sendMessage(new TextComponentString("    " + location.getName() + " (" + location.getID().getStringID() + ")"));
-						playerIn.sendMessage(new TextComponentTranslation("      Guarded at %s, %s: %s", new TextComponentTranslation(world.getBlockState(pos).getBlock().getUnlocalizedName() + ".name"), "X=" + pos.getX() + " Y=" + pos.getY() + " Z=" + pos.getZ(), (location.getGuard() == null ? String.valueOf(false) : location.getGuard().isGuarded(world, playerIn, pos))));
+						playerIn.sendMessage(new TextComponentTranslation("      Guarded at %s, %s: %s", new TextComponentTranslation(world.getBlockState(pos).getBlock().getTranslationKey() + ".name"), "X=" + pos.getX() + " Y=" + pos.getY() + " Z=" + pos.getZ(), (location.getGuard() == null ? String.valueOf(false) : location.getGuard().isGuarded(world, playerIn, pos))));
 						playerIn.sendMessage(new TextComponentString("      Watchers:"));
 						for(EntityPlayerMP watcher : location.getWatchers()) {
 							playerIn.sendMessage(new TextComponentString("        " + watcher.getName()));

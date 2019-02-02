@@ -26,7 +26,7 @@ public class SimpleItemLoaderExtension extends LoaderExtension {
 	@Override
 	public IModel loadModel(IModel original, ResourceLocation location, String arg) {
 		ResourceLocation childModel = new ResourceLocation(arg);
-		this.dummyReplacementMap.put(new ModelResourceLocation(new ResourceLocation(childModel.getResourceDomain(), childModel.getResourcePath()), "inventory"), location);
+		this.dummyReplacementMap.put(new ModelResourceLocation(new ResourceLocation(childModel.getNamespace(), childModel.getPath()), "inventory"), location);
 		return this.getItemDummyModel();
 	}
 

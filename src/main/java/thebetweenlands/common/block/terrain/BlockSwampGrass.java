@@ -172,7 +172,7 @@ public class BlockSwampGrass extends BasicBlock implements IGrowable, ITintedBlo
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 

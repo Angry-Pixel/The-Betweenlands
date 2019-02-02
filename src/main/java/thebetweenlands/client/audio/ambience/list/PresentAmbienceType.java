@@ -28,7 +28,7 @@ public class PresentAmbienceType extends AmbienceType {
 		TileEntityPresent closest = null;
 		for(int cx = sx; cx <= ex; cx++) {
 			for(int cz = sz; cz <= ez; cz++) {
-				Chunk chunk = player.world.getChunkFromChunkCoords(cx, cz);
+				Chunk chunk = player.world.getChunk(cx, cz);
 				for(Entry<BlockPos, TileEntity> entry : chunk.getTileEntityMap().entrySet()) {
 					TileEntity tile = entry.getValue();
 					if(tile instanceof TileEntityPresent) {

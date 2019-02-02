@@ -103,7 +103,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		try {
 			return "item.thebetweenlands." + this.getElixirFromItem(stack).getEffectName();
 		} catch (Exception e) {
@@ -113,8 +113,8 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		if(I18n.canTranslate(stack.getUnlocalizedName() + ".name")) {
-			return I18n.translateToLocalFormatted(stack.getUnlocalizedName() + ".name", TranslationHelper.translateToLocal(this.getElixirFromItem(stack).getEffectName()));
+		if(I18n.canTranslate(stack.getTranslationKey() + ".name")) {
+			return I18n.translateToLocalFormatted(stack.getTranslationKey() + ".name", TranslationHelper.translateToLocal(this.getElixirFromItem(stack).getEffectName()));
 		}
 		return I18n.translateToLocalFormatted("item.thebetweenlands.bl.elixir.name", TranslationHelper.translateToLocal(this.getElixirFromItem(stack).getEffectName()));
 	}

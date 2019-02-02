@@ -159,7 +159,7 @@ public class ItemEquipmentHandler {
 
 							player.swingArm(hand);
 
-							player.sendStatusMessage(new TextComponentTranslation("chat.equipment.equipped", new TextComponentTranslation(heldItem.getUnlocalizedName() + ".name")), true);
+							player.sendStatusMessage(new TextComponentTranslation("chat.equipment.equipped", new TextComponentTranslation(heldItem.getTranslationKey() + ".name")), true);
 
 							return true;
 						}

@@ -51,7 +51,7 @@ public class ItemLurkerSkinShield extends ItemBLShield {
 		float pitchSin = MathHelper.sin(-pitch * 0.017453292F);
 		float dirX = yawSin * pitchCos;
 		float dirZ = yawCos * pitchCos;
-		Vec3d endPos = playerPos.addVector((double)dirX * 5.0D, (double)pitchSin * 5.0D, (double)dirZ * 5.0D);
+		Vec3d endPos = playerPos.add((double)dirX * 5.0D, (double)pitchSin * 5.0D, (double)dirZ * 5.0D);
 		RayTraceResult rayTrace = worldIn.rayTraceBlocks(playerPos, endPos, true);
 
 		if(rayTrace != null) {

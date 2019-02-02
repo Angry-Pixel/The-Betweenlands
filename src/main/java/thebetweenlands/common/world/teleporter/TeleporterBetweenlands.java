@@ -687,7 +687,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 			}
 		}
 		mutableBlockPos.release();
-		return world.getChunkFromBlockCoords(pos);
+		return world.getChunk(pos);
 	}
 
 	@Override

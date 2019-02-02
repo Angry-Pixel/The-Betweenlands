@@ -41,7 +41,7 @@ public class ItemTaintedPotion extends Item {
 	public String getItemStackDisplayName(ItemStack stack) {
 		ItemStack originalStack = this.getOriginalStack(stack);
 		if(!originalStack.isEmpty() && originalStack.getItem() != Items.AIR) {
-			return net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".name", originalStack.getRarity().rarityColor + originalStack.getDisplayName() + TextFormatting.RESET).trim();
+			return net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".name", originalStack.getRarity().rarityName + originalStack.getDisplayName() + TextFormatting.RESET).trim();
 		}
 		return net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + "_empty.name").trim();
 	}

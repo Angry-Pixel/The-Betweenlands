@@ -124,7 +124,7 @@ public class ManualManager {
             for (Map.Entry<AspectItem, List<AspectManager.AspectItemEntry>> e : matchedAspects.entrySet()) {
                 if (e.getKey() != null) {
                     ItemStack itemStack = new ItemStack(e.getKey().getOriginal().getItem(), 1, e.getKey().getOriginal().getItemDamage());
-                    if (itemStack.getUnlocalizedName().toLowerCase().replace(" ", "").equals(page)) {
+                    if (itemStack.getTranslationKey().toLowerCase().replace(" ", "").equals(page)) {
                         ingredient = new ItemStack(e.getKey().getOriginal().getItem(), 1, e.getKey().getOriginal().getItemDamage());
                         break;
                     }

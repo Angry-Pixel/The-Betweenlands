@@ -171,8 +171,8 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer() {
-		return Blocks.LEAVES.getBlockLayer();
+	public BlockRenderLayer getRenderLayer() {
+		return Blocks.LEAVES.getRenderLayer();
 	}
 
 	@Override
@@ -184,7 +184,7 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity){
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity){
 		if(entity instanceof EntityPlayer) {
 			entity.motionX *= 0.06D;
 			entity.motionZ *= 0.06D;

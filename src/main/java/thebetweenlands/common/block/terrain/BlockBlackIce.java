@@ -39,7 +39,7 @@ public class BlockBlackIce extends BlockBreakable {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
@@ -87,7 +87,7 @@ public class BlockBlackIce extends BlockBreakable {
 	}
 
 	@Override
-	public EnumPushReaction getMobilityFlag(IBlockState state) {
+	public EnumPushReaction getPushReaction(IBlockState state) {
 		return EnumPushReaction.NORMAL;
 	}
 }

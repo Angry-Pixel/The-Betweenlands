@@ -46,7 +46,7 @@ public class ItemMob extends Item {
         if (entity != null) {
             BlockPos offset = pos.offset(facing);
             entity.setLocationAndAngles(offset.getX() + 0.5F, offset.getY(), offset.getZ() + 0.5F, 0.0F, 0.0F);
-            if (!(stack.getDisplayName().equals(TranslationHelper.translateToLocal(stack.getUnlocalizedName()))) && stack.hasDisplayName())
+            if (!(stack.getDisplayName().equals(TranslationHelper.translateToLocal(stack.getTranslationKey()))) && stack.hasDisplayName())
                 entity.setCustomNameTag(stack.getDisplayName());
             world.spawnEntity(entity);
             entity.playLivingSound();

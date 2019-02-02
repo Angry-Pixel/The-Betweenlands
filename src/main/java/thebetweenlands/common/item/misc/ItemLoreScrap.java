@@ -93,12 +93,12 @@ public class ItemLoreScrap extends Item implements ItemRegistry.IMultipleItemMod
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		String pageName = getPageName(stack);
 		if(pageName != null) {
-			return super.getUnlocalizedName() + "." + pageName;
+			return super.getTranslationKey() + "." + pageName;
 		}
-		return super.getUnlocalizedName();
+		return super.getTranslationKey();
 	}
 
 	@Override

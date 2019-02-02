@@ -174,10 +174,10 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	@Override
 	public int getBrightnessForRender() {
 		EnumFacing facing = this.getFacing();
-		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(MathHelper.floor(this.posX) + facing.getFrontOffsetX(), 0, MathHelper.floor(this.posZ) + facing.getFrontOffsetZ());
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(MathHelper.floor(this.posX) + facing.getXOffset(), 0, MathHelper.floor(this.posZ) + facing.getZOffset());
 
 		if (this.world.isBlockLoaded(pos)) {
-			pos.setY(MathHelper.floor(this.posY + (double)this.getEyeHeight()) + facing.getFrontOffsetY());
+			pos.setY(MathHelper.floor(this.posY + (double)this.getEyeHeight()) + facing.getYOffset());
 			return this.world.getCombinedLight(pos, 0);
 		} else {
 			return 0;
@@ -192,7 +192,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 			EntityItem entityItem = new EntityItem(this.world, this.posX, this.posY + (double)offsetY, this.posZ, stack);
 
 			EnumFacing facing = this.getFacing();
-			Vec3d dropPos = this.getFrontCenter().addVector(facing.getFrontOffsetX() * entityItem.width, facing.getFrontOffsetY() * entityItem.height, facing.getFrontOffsetZ() * entityItem.width);
+			Vec3d dropPos = this.getFrontCenter().add(facing.getXOffset() * entityItem.width, facing.getYOffset() * entityItem.height, facing.getZOffset() * entityItem.width);
 
 			entityItem.setPosition(dropPos.x, dropPos.y, dropPos.z);
 
@@ -225,8 +225,8 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 
-		this.dataManager.set(FACING, EnumFacing.getFront(nbt.getInteger("facing")));
-		this.dataManager.set(FACING_UP, EnumFacing.getFront(nbt.getInteger("facingUp")));
+		this.dataManager.set(FACING, EnumFacing.byIndex(nbt.getInteger("facing")));
+		this.dataManager.set(FACING_UP, EnumFacing.byIndex(nbt.getInteger("facingUp")));
 		this.dataManager.set(ANCHOR, BlockPos.fromLong(nbt.getLong("anchor")));
 	}
 
@@ -417,13 +417,13 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	}
 
 	public Vec3d getCenter() {
-		return new Vec3d(this.getAnchor()).addVector(this.getBlockWidth() / 2.0D, this.getBlockHeight() / 2.0D, this.getBlockWidth() / 2.0D);
+		return new Vec3d(this.getAnchor()).add(this.getBlockWidth() / 2.0D, this.getBlockHeight() / 2.0D, this.getBlockWidth() / 2.0D);
 	}
 
 	public Vec3d getFrontCenter() {
 		EnumFacing facing = this.getFacing();
 		Vec3d center = this.getCenter();
-		return center.add(this.getOffset(this.getMovementProgress(1))).addVector(facing.getFrontOffsetX() * this.width / 2.0F, facing.getFrontOffsetY() * this.height / 2.0F, facing.getFrontOffsetZ() * this.width / 2.0F);
+		return center.add(this.getOffset(this.getMovementProgress(1))).add(facing.getXOffset() * this.width / 2.0F, facing.getYOffset() * this.height / 2.0F, facing.getZOffset() * this.width / 2.0F);
 	}
 
 	public EnumFacing[] getFacingForLookDir(Vec3d lookDir) {
@@ -477,7 +477,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 
 	public int checkAnchorAt(BlockPos anchor, EnumFacing facing, EnumFacing facingUp, int checks) {
 		if((checks & AnchorChecks.ENTITIES) != 0) {
-			if(!this.world.getEntitiesWithinAABB(EntityWallFace.class, this.getEntityBoundingBox().offset(anchor.subtract(this.getAnchor())).expand(facing.getFrontOffsetX() * this.getPeek(), facing.getFrontOffsetY() * this.getPeek(), facing.getFrontOffsetZ() * this.getPeek()), e -> e != this).isEmpty()) {
+			if(!this.world.getEntitiesWithinAABB(EntityWallFace.class, this.getEntityBoundingBox().offset(anchor.subtract(this.getAnchor())).expand(facing.getXOffset() * this.getPeek(), facing.getYOffset() * this.getPeek(), facing.getZOffset() * this.getPeek()), e -> e != this).isEmpty()) {
 				return AnchorChecks.ENTITIES;
 			}
 		}
@@ -503,7 +503,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 				for(int xo = 0; xo < this.getBlockWidth(); xo++) {
 					for(int zo = 0; zo < this.getBlockWidth(); zo++) {
 						for(int yo = 0; yo < MathHelper.ceil(this.getPeek()); yo++) {
-							pos.setPos(anchor.getX() + xo, anchor.getY() + y + facing.getFrontOffsetY() * yo, anchor.getZ() + zo);
+							pos.setPos(anchor.getX() + xo, anchor.getY() + y + facing.getYOffset() * yo, anchor.getZ() + zo);
 							if(!this.canMoveFaceInto(pos)) {
 								return AnchorChecks.FACE_BLOCKS;
 							}
@@ -515,7 +515,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 				for(int xo = 0; xo < this.getBlockWidth(); xo++) {
 					for(int yo = 0; yo < this.getBlockHeight(); yo++) {
 						for(int zo = 0; zo < MathHelper.ceil(this.getPeek()); zo++) {
-							pos.setPos(anchor.getX() + xo, anchor.getY() + yo, anchor.getZ() + z + facing.getFrontOffsetZ() * zo);
+							pos.setPos(anchor.getX() + xo, anchor.getY() + yo, anchor.getZ() + z + facing.getZOffset() * zo);
 							if(!this.canMoveFaceInto(pos)) {
 								return AnchorChecks.FACE_BLOCKS;
 							}
@@ -527,7 +527,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 				for(int zo = 0; zo < this.getBlockWidth(); zo++) {
 					for(int yo = 0; yo < this.getBlockHeight(); yo++) {
 						for(int xo = 0; xo < MathHelper.ceil(this.getPeek()); xo++) {
-							pos.setPos(anchor.getX() + x + facing.getFrontOffsetX() * xo, anchor.getY() + yo, anchor.getZ() + zo);
+							pos.setPos(anchor.getX() + x + facing.getXOffset() * xo, anchor.getY() + yo, anchor.getZ() + zo);
 							if(!this.canMoveFaceInto(pos)) {
 								return AnchorChecks.FACE_BLOCKS;
 							}

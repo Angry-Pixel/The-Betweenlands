@@ -38,8 +38,8 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 	public void render(TileEntityRepeller tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		EnumFacing facing = TileEntityHelper.getStatePropertySafely(tile, BlockRepeller.class, BlockRepeller.FACING, EnumFacing.NORTH);
 
-		double xOff = -facing.getFrontOffsetX() * 0.12F;
-		double zOff = facing.getFrontOffsetZ() * 0.12F;
+		double xOff = -facing.getXOffset() * 0.12F;
+		double zOff = facing.getZOffset() * 0.12F;
 
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();

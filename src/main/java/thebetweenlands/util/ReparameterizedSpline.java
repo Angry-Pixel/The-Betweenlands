@@ -97,7 +97,7 @@ public class ReparameterizedSpline implements ISpline {
 		for(int i = 0; i <= subdivs; i++) {
 			Vec3d interp = this.spline.interpolate((float)(start + (i * delta)));
 			if(prev != null) {
-				sum += prev.subtract(interp).lengthVector();
+				sum += prev.subtract(interp).length();
 			}
 			prev = interp;
 		}
@@ -105,7 +105,7 @@ public class ReparameterizedSpline implements ISpline {
 	}
 
 	private double speed(double t) {
-		return this.spline.derivative((float) t).lengthVector();
+		return this.spline.derivative((float) t).length();
 	}
 
 	/**

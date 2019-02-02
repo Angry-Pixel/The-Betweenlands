@@ -31,7 +31,7 @@ public class BlockSludge extends Block {
 		this.setHardness(0.1F);
 		this.setSoundType(SoundType.GROUND);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
-		this.setUnlocalizedName("thebetweenlands.sludge");
+		this.setTranslationKey("thebetweenlands.sludge");
 		this.setHarvestLevel("shovel", 0);
 	}
 
@@ -51,7 +51,7 @@ public class BlockSludge extends Block {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
 		if (!(entity instanceof IEntityBL) && entity.onGround) {
 			entity.setInWeb();
 		}
@@ -64,7 +64,7 @@ public class BlockSludge extends Block {
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 

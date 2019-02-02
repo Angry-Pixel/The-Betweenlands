@@ -190,7 +190,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 				this.motionY += dy / dist * speed;
 				this.motionZ += dz / dist * speed;
 				Vec3d motion = new Vec3d(this.motionX, this.motionY, this.motionZ);
-				if(motion.lengthVector() > maxSpeed) {
+				if(motion.length() > maxSpeed) {
 					motion = motion.normalize();
 					this.motionX = motion.x * maxSpeed;
 					this.motionY = motion.y * maxSpeed;

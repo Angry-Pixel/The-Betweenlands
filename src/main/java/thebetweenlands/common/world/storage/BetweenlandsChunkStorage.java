@@ -255,7 +255,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @return
 	 */
 	public static boolean markGem(World world, BlockPos pos, ItemGemSinger.GemSingerTarget target) {
-		BetweenlandsChunkStorage storage = forChunk(world, world.getChunkFromBlockCoords(pos));
+		BetweenlandsChunkStorage storage = forChunk(world, world.getChunk(pos));
 		if(storage != null) {
 			return storage.markGem(pos.getX(), pos.getY(), pos.getZ(), target);
 		}
@@ -271,7 +271,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 * @return
 	 */
 	public static boolean unmarkGem(World world, BlockPos pos, ItemGemSinger.GemSingerTarget target) {
-		BetweenlandsChunkStorage storage = forChunk(world, world.getChunkFromBlockCoords(pos));
+		BetweenlandsChunkStorage storage = forChunk(world, world.getChunk(pos));
 		if(storage != null) {
 			return storage.unmarkGem(pos.getX(), pos.getY(), pos.getZ(), target);
 		}
@@ -289,7 +289,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	 */
 	@Nullable
 	public static BlockPos findRandomGem(World world, ItemGemSinger.GemSingerTarget target, Random rand, BlockPos pos, float range) {
-		BetweenlandsChunkStorage storage = forChunk(world, world.getChunkFromBlockCoords(pos));
+		BetweenlandsChunkStorage storage = forChunk(world, world.getChunk(pos));
 		if(storage != null) {
 			return storage.findRandomGem(target, rand, pos, range);
 		}

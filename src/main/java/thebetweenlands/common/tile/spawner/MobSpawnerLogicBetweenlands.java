@@ -340,7 +340,7 @@ public abstract class MobSpawnerLogicBetweenlands {
                                 boundingBox = boundingBox.offset(down);
                                 AxisAlignedBB entityBoundingBox = entity.getEntityBoundingBox();
                                 if (boundingBox.intersects(entityBoundingBox.minX, boundingBox.minY, entityBoundingBox.minZ, entityBoundingBox.maxX, boundingBox.maxY, entityBoundingBox.maxZ)) {
-                                    RayTraceResult intercept = boundingBox.calculateIntercept(entity.getPositionVector(), entity.getPositionVector().addVector(0, -2, 0));
+                                    RayTraceResult intercept = boundingBox.calculateIntercept(entity.getPositionVector(), entity.getPositionVector().add(0, -2, 0));
                                     if (intercept != null) {
                                         canSpawn = true;
                                         entity.setLocationAndAngles(entity.posX, intercept.hitVec.y + 0.1D, entity.posZ, entity.rotationYaw, entity.rotationPitch);

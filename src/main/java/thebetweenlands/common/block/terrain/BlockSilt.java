@@ -36,7 +36,7 @@ public class BlockSilt extends BasicBlock {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		boolean canWalk = entityIn instanceof EntityPlayer && !((EntityPlayer)entityIn).inventory.armorInventory.get(0).isEmpty()
 				&& ((EntityPlayer)entityIn).inventory.armorInventory.get(0).getItem() instanceof ItemRubberBoots;
 		if(!(entityIn instanceof IEntityBL) && !canWalk) {

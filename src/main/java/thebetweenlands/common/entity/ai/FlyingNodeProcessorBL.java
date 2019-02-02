@@ -64,7 +64,7 @@ public class FlyingNodeProcessorBL extends NodeProcessor {
 	public int findPathOptions(PathPoint[] pathOptions, PathPoint currentPoint, PathPoint targetPoint, float maxDistance) {
 		int i = 0;
 		for (EnumFacing enumfacing : EnumFacing.values()) {
-			PathPoint pathpoint = this.getAirNode(currentPoint.x + enumfacing.getFrontOffsetX(), currentPoint.y + enumfacing.getFrontOffsetY(), currentPoint.z + enumfacing.getFrontOffsetZ(), targetPoint);
+			PathPoint pathpoint = this.getAirNode(currentPoint.x + enumfacing.getXOffset(), currentPoint.y + enumfacing.getYOffset(), currentPoint.z + enumfacing.getZOffset(), targetPoint);
 			if (pathpoint != null && !pathpoint.visited && pathpoint.distanceTo(targetPoint) < maxDistance) {
 				pathOptions[i++] = pathpoint;
 			}

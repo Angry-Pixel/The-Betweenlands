@@ -50,8 +50,8 @@ public class BlockSpreadingRottenLog extends BlockSpreadingDeath {
 	}
 
 	@Override
-	public void onBlockDestroyedByPlayer(World world, BlockPos pos, IBlockState state) {
-		super.onBlockDestroyedByPlayer(world, pos, state);
+	public void onPlayerDestroy(World world, BlockPos pos, IBlockState state) {
+		super.onPlayerDestroy(world, pos, state);
 
 		if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 			if (world.rand.nextInt(6) == 0) {

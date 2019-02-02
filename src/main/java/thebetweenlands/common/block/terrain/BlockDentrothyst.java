@@ -40,7 +40,7 @@ public class BlockDentrothyst extends BasicBlock implements BlockRegistry.ICusto
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 

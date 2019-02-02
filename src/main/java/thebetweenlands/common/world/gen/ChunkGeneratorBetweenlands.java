@@ -728,7 +728,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		    }
 		}
 		g.dispose();
-		File out = new File(Minecraft.getMinecraft().mcDataDir, "chunk_provides.png");
+		File out = new File(Minecraft.getMinecraft().gameDir, "chunk_provides.png");
 		try {
 			ImageIO.write(img, "png", out);
 			Desktop.getDesktop().edit(out);

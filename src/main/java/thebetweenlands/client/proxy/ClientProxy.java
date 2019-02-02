@@ -635,15 +635,15 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 					JsonObject jsonObj = array.get(i).getAsJsonObject();
 					
 					ResourceLocation textureMask = new ResourceLocation(JsonUtils.getString(jsonObj, "texture_mask"));
-					textureMask = new ResourceLocation(textureMask.getResourceDomain(), "textures/" + textureMask.getResourcePath());
+					textureMask = new ResourceLocation(textureMask.getNamespace(), "textures/" + textureMask.getPath());
 					
 					ResourceLocation textureOverlay = new ResourceLocation(JsonUtils.getString(jsonObj, "texture_overlay"));
-					textureOverlay = new ResourceLocation(textureMask.getResourceDomain(), "textures/" + textureOverlay.getResourcePath());
+					textureOverlay = new ResourceLocation(textureMask.getNamespace(), "textures/" + textureOverlay.getPath());
 					
 					ResourceLocation textureAltOverlay = null;
 					if(jsonObj.has("texture_alt_overlay")) {
 						textureAltOverlay = new ResourceLocation(JsonUtils.getString(jsonObj, "texture_alt_overlay"));
-						textureAltOverlay = new ResourceLocation(textureAltOverlay.getResourceDomain(), "textures/" + textureAltOverlay.getResourcePath());
+						textureAltOverlay = new ResourceLocation(textureAltOverlay.getNamespace(), "textures/" + textureAltOverlay.getPath());
 					}
 					
 					JsonObject yawJson = JsonUtils.getJsonObject(jsonObj, "yaw");
