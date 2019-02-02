@@ -28,6 +28,7 @@ import thebetweenlands.api.rune.gui.IRuneGui;
 import thebetweenlands.api.rune.gui.RuneMenuDrawingContext;
 import thebetweenlands.api.rune.gui.RuneMenuType;
 import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.lib.ModInfo;
@@ -93,10 +94,10 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected List<Mark> outputMarks = new ArrayList<>();
 
 	protected int updateCounter;
-	
+
 	protected int maxXSize = 166;
 	protected int maxYSize = 216;
-	
+
 	protected int xSize = this.maxXSize;
 	protected int ySize = this.maxYSize;
 
@@ -107,7 +108,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 	protected TextContainer title;
 	protected TextContainer description;
-	
+
 	protected static interface IMarkRenderer {
 		public void render(int centerX, int centerY);
 	}
@@ -139,7 +140,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.width = width;
 		this.height = height;
 
-		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("rune.%s.title", container.getContext().getRuneItemStack().getTranslationKey())), this.fontRenderer);
+		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("rune.%s.configuration.%d.title", container.getContext().getRuneItemStack().getTranslationKey(), container.getConfiguration().getId())), this.fontRenderer);
 
 		this.title.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -154,7 +155,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.title.parse();
 
-		this.description = new TextContainer(this.xSize - 8 - 4, this.maxYSize - 6 - this.title.getPages().get(0).getTextHeight(), I18n.format(String.format("rune.%s.description", container.getContext().getRuneItemStack().getTranslationKey())), this.fontRenderer);
+		this.description = new TextContainer(this.xSize - 8 - 4, this.maxYSize - 6 - this.title.getPages().get(0).getTextHeight(), I18n.format(String.format("rune.%s.configuration.%d.description", container.getContext().getRuneItemStack().getTranslationKey(), container.getConfiguration().getId())), this.fontRenderer);
 
 		this.description.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -170,12 +171,12 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.description.parse();
 
 		this.ySize = (int) (this.title.getPages().get(0).getTextHeight() + 20 + 45 + this.description.getPages().get(0).getTextHeight());
-		
+
 		//TODO Implement this proper
 		INodeConfiguration config = container.getConfiguration();
 
 		int xOffInputs = this.fontRenderer.getStringWidth(I18n.format("rune.gui.inputs")) + 2;
-		
+
 		int x = 4;
 		for(int i = 0; i < config.getInputs().size(); i++) {
 			this.inputMarks.add(new Mark(this, i, xOffInputs + x, this.ySize - 3 - 40, 16, 16, false));
@@ -183,7 +184,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		}
 
 		int xOffOutputs = this.fontRenderer.getStringWidth(I18n.format("rune.gui.outputs")) + 2;
-		
+
 		x = 4;
 		for(int i = 0; i < config.getOutputs().size(); i++) {
 			this.outputMarks.add(new Mark(this, i, xOffOutputs + x, this.ySize - 3 - 20, 16, 16, true));
@@ -267,10 +268,18 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			text.add(TextFormatting.RESET + "     " + I18n.format("rune.mark.unknown"));
 		}
 
-		text.add(TextFormatting.RESET + "     " + TextFormatting.DARK_PURPLE + (mark.isOutput() ? "Output" : "Input"));
+		text.add(TextFormatting.RESET + "     " + TextFormatting.DARK_PURPLE + (mark.isOutput() ? I18n.format("rune.output") : I18n.format("rune.input")));
 
-		if(descriptor != null && I18n.hasKey(String.format("rune.mark.%s.description", descriptor))) {
-			text.add(TextFormatting.GRAY + I18n.format(String.format("rune.mark.%s.description", descriptor)));
+		if(descriptor != null) {
+			if(mark.isOutput()) {
+				if(I18n.hasKey(String.format("rune.%s.configuration.%d.output.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.container.getConfiguration().getId(), mark.getMarkIndex()))) {
+					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("rune.%s.configuration.%d.output.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.container.getConfiguration().getId(), mark.getMarkIndex())), 0));
+				}
+			} else {
+				if(I18n.hasKey(String.format("rune.%s.configuration.%d.input.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.container.getConfiguration().getId(), mark.getMarkIndex()))) {
+					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("rune.%s.configuration.%d.input.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.container.getConfiguration().getId(), mark.getMarkIndex())), 0));
+				}
+			}
 		}
 
 		this.drawHoveringText(text, mouseX, mouseY, this.fontRenderer);
@@ -411,11 +420,11 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.title.getPages().get(0).render(x + 4 + 20, y + 8);
 
 		this.description.getPages().get(0).render(x + 4, y + 16 + this.title.getPages().get(0).getTextHeight());
-		
+
 		//TODO
 		this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 4, y + 4 + this.ySize - 3 - 40, 0xFF3d3d3d);
 		this.fontRenderer.drawString(I18n.format("rune.gui.outputs"), x + 4, y + 4 + this.ySize - 3 - 20, 0xFF3d3d3d);
-		
+
 		for(Mark mark : this.inputMarks) {
 			this.drawMark(mark, mark.getCenterX(), mark.getCenterY());
 		}

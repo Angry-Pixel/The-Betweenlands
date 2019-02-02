@@ -1316,20 +1316,31 @@ rune.mark.unknown=Rune Mark
 rune.mark.thebetweenlands.block=Block Mark
 rune.mark.thebetweenlands.entity=Entity Mark
 
-rune.mark.thebetweenlands.block.description=Marks a block
-rune.mark.thebetweenlands.entity.description=Marks an entity
+rune.input=Input
+rune.output=Output
 
-rune.gui.inputs=Inputs:
-rune.gui.outputs=Outputs:
+rune.gui.inputs=Consumes:
+rune.gui.outputs=Produces:
 
-rune.item.thebetweenlands.test_rune_destroy_block.title=<underline>Destroy Block</underline>
-rune.item.thebetweenlands.test_rune_destroy_block.description=Destroys the marked block
-rune.item.thebetweenlands.test_rune_destroy_blocks.title=<underline>Destroy Blocks</underline>
-rune.item.thebetweenlands.test_rune_destroy_blocks.description=Destroys the marked blocks
-rune.item.thebetweenlands.test_rune_mark_area.title=<underline>Mark Area</underline>
-rune.item.thebetweenlands.test_rune_mark_area.description=Marks block area around the chain user
-rune.item.thebetweenlands.test_rune_select_grass.title=<underline>Select Grass</underline>
-rune.item.thebetweenlands.test_rune_select_grass.description=Only allows the block mark if the block is grass
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.title=<underline>Destroy Block</underline>
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.description=Destroys the marked block
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.input.0.description=Marked block to destroy
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.input.1.description=Placeholder
+
+rune.item.thebetweenlands.test_rune_destroy_blocks.configuration.0.title=<underline>Destroy Blocks</underline>
+rune.item.thebetweenlands.test_rune_destroy_blocks.configuration.0.description=Destroys the marked blocks
+rune.item.thebetweenlands.test_rune_destroy_blocks.configuration.0.input.0.description=Marked block to destroy
+rune.item.thebetweenlands.test_rune_destroy_blocks.configuration.0.input.1.description=Placeholder
+
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.title=<underline>Mark Area</underline>
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.description=Marks block area around the chain user
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.output.0.description=Marked block
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.output.1.description=Placeholder
+
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.title=<underline>Select Grass</underline>
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.description=Only allows the block mark if the block is grass
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.input.0.description=Marked block to filter
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.input.1.description=Placeholder
 
 # Advancements
 
