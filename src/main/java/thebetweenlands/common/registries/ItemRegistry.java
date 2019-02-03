@@ -284,6 +284,7 @@ public class ItemRegistry {
     public static final Item PESTLE = new ItemPestle();
     public static final Item LIFE_CRYSTAL = new ItemLifeCrystal();
     public static final Item TEST_ITEM = new TestItem();
+    public static final Item TEST_ITEM_CHIMP = new TestItem();
     public static final Item LOCATION_DEBUG = new LocationDebugItem().setCreativeTab(null);
     public static final Item PYRAD_FLAME = new ItemPyradFlame();
     public static final Item NET = new ItemNet();
