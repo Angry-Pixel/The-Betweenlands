@@ -109,6 +109,8 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected TextContainer title;
 	protected TextContainer description;
 
+	protected int currentDescriptionPage = 0;
+
 	protected static interface IMarkRenderer {
 		public void render(int centerX, int centerY);
 	}
@@ -155,7 +157,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.title.parse();
 
-		this.description = new TextContainer(this.xSize - 8 - 4, this.maxYSize - 6 - this.title.getPages().get(0).getTextHeight(), I18n.format(String.format("rune.%s.configuration.%d.description", container.getContext().getRuneItemStack().getTranslationKey(), container.getConfiguration().getId())), this.fontRenderer);
+		this.description = new TextContainer(this.xSize - 8 - 4, this.maxYSize - 6 - this.title.getPages().get(0).getTextHeight() - 50, I18n.format(String.format("rune.%s.configuration.%d.description", container.getContext().getRuneItemStack().getTranslationKey(), container.getConfiguration().getId())), this.fontRenderer);
 
 		this.description.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -284,6 +286,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.drawHoveringText(text, mouseX, mouseY, this.fontRenderer);
 
+		GlStateManager.disableLighting();
 		GlStateManager.disableDepth();
 		this.drawMark(mark, mouseX + 12 + 9, mouseY - 12 + 10);
 		GlStateManager.enableDepth();
@@ -307,6 +310,22 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 	@Override
 	public boolean onMouseClicked(int mouseX, int mouseY, int mouseButton, boolean handled) {
+		int x = this.getMinX();
+		int y = this.getMinY();
+
+		//TODO Sounds?
+		if(mouseX >= x + this.xSize - 6 - 40 && mouseX < x + this.xSize - 6 - 40 + 13
+				&& mouseY >= y + 8 && mouseY < y + 8 + 7) {
+			this.currentDescriptionPage = Math.max(this.currentDescriptionPage - 1, 0);
+			return true;
+		}
+
+		if(mouseX >= x + this.xSize - 6 - 13 && mouseX < x + this.xSize - 6 - 13 + 13
+				&& mouseY >= y + 8 && mouseY < y + 8 + 7) {
+			this.currentDescriptionPage = Math.min(this.currentDescriptionPage + 1, this.description.getPages().size() - 1);
+			return true;
+		}
+
 		return false;
 	}
 
@@ -400,6 +419,12 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		//Background
 		this.drawTexturedModalRect512(x + 3, y + 3, 215, 97, this.xSize - 6, this.ySize - 6);
 
+		if(this.description.getPages().size() > 1) {
+			//Page left/right
+			this.drawTexturedModalRect512(x + this.xSize - 6 - 40, y + 8, 452, 0, 13, 7);
+			this.drawTexturedModalRect512(x + this.xSize - 6 - 13, y + 8, 452, 29, 13, 7);
+		}
+
 		ItemStack stack = this.context.getRuneItemStack();
 
 		ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, x + 4, y + 4, 1, 1, 1, 1);
@@ -417,9 +442,16 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			i++;
 		}*/
 
+		if(this.description.getPages().size() > 1) {
+			//Page left/right number
+			this.fontRenderer.drawString(String.valueOf(this.currentDescriptionPage + 1), x + this.xSize - 6 - 40 + 21 - this.fontRenderer.getStringWidth(String.valueOf(this.currentDescriptionPage + 1)) / 2, y + 8, 0xFF3d3d3d);
+		}
+
 		this.title.getPages().get(0).render(x + 4 + 20, y + 8);
 
-		this.description.getPages().get(0).render(x + 4, y + 16 + this.title.getPages().get(0).getTextHeight());
+		if(this.currentDescriptionPage < this.description.getPages().size()) {
+			this.description.getPages().get(this.currentDescriptionPage).render(x + 4, y + 16 + this.title.getPages().get(0).getTextHeight());
+		}
 
 		//TODO
 		this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 4, y + 4 + this.ySize - 3 - 40, 0xFF3d3d3d);
