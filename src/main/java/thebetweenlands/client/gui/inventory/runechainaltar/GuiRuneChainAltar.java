@@ -824,7 +824,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 	protected List<Integer> getCurrentlyLinkableOutputs(int outputRuneIndex, INodeConfiguration outputConfiguration) {
 		IRuneGui primaryGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
 		if(primaryGui != null && this.draggingMark != null) {
-			IConfigurationInput input = primaryGui.getContainer().getConfiguration().getInputs().get(this.draggingMark.getMarkIndex());
+			IConfigurationInput input = primaryGui.getContainer().getContext().getConfiguration().getInputs().get(this.draggingMark.getMarkIndex());
 			if(input != null) {
 				return this.getLinkableOutputs(input, outputRuneIndex, outputConfiguration);
 			}
@@ -858,7 +858,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			IRuneLink link = this.container.getLink(runeIndex, i);
 
 			if(link != null) {
-				INodeConfiguration inputConfiguration = this.container.getRuneContainer(link.getOutputRune()).getConfiguration();
+				INodeConfiguration inputConfiguration = this.container.getRuneContainer(link.getOutputRune()).getContext().getConfiguration();
 				inputTypes.add(this.getOutputType(link.getOutputRune(), inputConfiguration, inputConfiguration.getOutputs().get(link.getOutput())));
 			} else {
 				inputTypes.add((IType) null);
@@ -877,7 +877,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			IRuneLink link = this.container.getLink(runeIndex, i);
 
 			if(link != null) {
-				INodeConfiguration inputConfiguration = this.container.getRuneContainer(link.getOutputRune()).getConfiguration();
+				INodeConfiguration inputConfiguration = this.container.getRuneContainer(link.getOutputRune()).getContext().getConfiguration();
 				inputTypes.add(this.getOutputType(link.getOutputRune(), inputConfiguration, inputConfiguration.getOutputs().get(link.getOutput())));
 			} else {
 				inputTypes.add((IType) null);
@@ -898,7 +898,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 				IRuneContainer container = this.container.getRuneContainer(this.linkingDropdownMenuSlot - this.tile.getChainStart());
 
 				if(container != null) {
-					INodeConfiguration configuration = container.getConfiguration();
+					INodeConfiguration configuration = container.getContext().getConfiguration();
 					int outputs;
 					if(this.draggingMark != null) {
 						outputs = this.getCurrentlyLinkableOutputs(this.linkingDropdownMenuSlot - this.tile.getChainStart(), configuration).size();
@@ -932,7 +932,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 						IRuneContainer container = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
 
 						if(container != null) {
-							INodeConfiguration configuration = container.getConfiguration();
+							INodeConfiguration configuration = container.getContext().getConfiguration();
 							int outputs = this.getCurrentlyLinkableOutputs(slot.slotNumber - this.tile.getChainStart(), configuration).size();
 
 							if(outputs > 0) {
@@ -965,7 +965,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			IRuneContainer container = this.container.getRuneContainer(this.linkingDropdownMenuSlot - this.tile.getChainStart());
 
 			if(container != null) {
-				INodeConfiguration configuration = container.getConfiguration();
+				INodeConfiguration configuration = container.getContext().getConfiguration();
 
 				int outputs;
 				if(onlyLinkable) {
@@ -1002,7 +1002,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 				IRuneGui secondaryRuneGui = this.openRuneGuis.get(RuneMenuType.SECONDARY);
 
 				if(secondaryRuneGui != null) {
-					INodeConfiguration configuration = container.getConfiguration();
+					INodeConfiguration configuration = container.getContext().getConfiguration();
 					List<Integer> outputs = this.getCurrentlyLinkableOutputs(this.linkingDropdownMenuSlot - this.tile.getChainStart(), configuration);
 
 					int sx = slot.xPos - 3;
@@ -1038,7 +1038,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		IRuneContainer container = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
 
 		if(container != null) {
-			INodeConfiguration configuration = container.getConfiguration();
+			INodeConfiguration configuration = container.getContext().getConfiguration();
 			List<Integer> outputs;
 			if(onlyLinkable) {
 				outputs = this.getCurrentlyLinkableOutputs(slot.slotNumber - this.tile.getChainStart(), configuration);

@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import thebetweenlands.api.item.IRuneItem;
 import thebetweenlands.api.rune.INodeBlueprint;
+import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.gui.IRuneChainAltarContainer;
 import thebetweenlands.api.rune.gui.IRuneChainAltarGui;
 import thebetweenlands.api.rune.gui.IRuneContainer;
@@ -483,7 +484,30 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 	}
 
 	protected IRuneContainerContext createRuneContainerContext(RuneContainerEntry entry) {
+		INodeConfiguration loadedConfiguration = null;
+
+		RuneChainInfo info = ContainerRuneChainAltar.this.altar.getChainInfo();
+
+		if(info.hasConfigurationId(entry.runeIndex)) {
+			int savedConfigurationId = info.getConfigurationId(entry.runeIndex);
+
+			for(INodeConfiguration configuration : entry.container.getBlueprint().getConfigurations()) {
+				if(configuration.getId() == savedConfigurationId) {
+					loadedConfiguration = configuration;
+					break;
+				}
+			}
+		}
+
+		if(loadedConfiguration == null) {
+			loadedConfiguration = entry.container.getBlueprint().getConfigurations().get(0);
+		}
+
+		final INodeConfiguration configuration = loadedConfiguration;
+
 		return new IRuneContainerContext() {
+			private INodeConfiguration currentConfiguration = configuration;
+
 			@Override
 			public IRuneChainAltarContainer getRuneChainAltarContainer() {
 				return ContainerRuneChainAltar.this;
@@ -524,6 +548,25 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 			@Override
 			public void addSlot(Slot slot) {
 				entry.slots.add(slot);
+			}
+
+			@Override
+			public INodeConfiguration getConfiguration() {
+				return this.currentConfiguration;
+			}
+
+			@Override
+			public void setConfiguration(INodeConfiguration configuration) {
+				if(this.currentConfiguration != configuration) {
+					entry.container.onConfigurationChanged(this.currentConfiguration, configuration);
+					
+					this.currentConfiguration = configuration;
+					
+					ContainerRuneChainAltar.this.altar.getChainInfo().setConfigurationId(entry.runeIndex, configuration.getId());
+					ContainerRuneChainAltar.this.altar.markDirty();
+				}
+				
+				//TODO Remove all links, or preferably store links per configuration
 			}
 		};
 	}

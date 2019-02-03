@@ -142,7 +142,11 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.width = width;
 		this.height = height;
 
-		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("rune.%s.configuration.%d.title", container.getContext().getRuneItemStack().getTranslationKey(), container.getConfiguration().getId())), this.fontRenderer);
+		this.createGui();
+	}
+	
+	private void createGui() {
+		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("rune.%s.configuration.%d.title", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
 
 		this.title.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -157,7 +161,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.title.parse();
 
-		this.description = new TextContainer(this.xSize - 8 - 4, this.maxYSize - 6 - this.title.getPages().get(0).getTextHeight() - 50, I18n.format(String.format("rune.%s.configuration.%d.description", container.getContext().getRuneItemStack().getTranslationKey(), container.getConfiguration().getId())), this.fontRenderer);
+		this.description = new TextContainer(this.xSize - 8 - 4, this.maxYSize - 6 - this.title.getPages().get(0).getTextHeight() - 50, I18n.format(String.format("rune.%s.configuration.%d.description", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
 
 		this.description.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -174,11 +178,11 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.ySize = (int) (this.title.getPages().get(0).getTextHeight() + 20 + 45 + this.description.getPages().get(0).getTextHeight());
 
-		//TODO Implement this proper
-		INodeConfiguration config = container.getConfiguration();
+		INodeConfiguration config = this.context.getConfiguration();
 
 		int xOffInputs = this.fontRenderer.getStringWidth(I18n.format("rune.gui.inputs")) + 2;
 
+		this.inputMarks.clear();
 		int x = 4;
 		for(int i = 0; i < config.getInputs().size(); i++) {
 			this.inputMarks.add(new Mark(this, i, xOffInputs + x, this.ySize - 3 - 40, 16, 16, false));
@@ -187,6 +191,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		int xOffOutputs = this.fontRenderer.getStringWidth(I18n.format("rune.gui.outputs")) + 2;
 
+		this.outputMarks.clear();
 		x = 4;
 		for(int i = 0; i < config.getOutputs().size(); i++) {
 			this.outputMarks.add(new Mark(this, i, xOffOutputs + x, this.ySize - 3 - 20, 16, 16, true));
@@ -207,6 +212,12 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	@Override
 	public void update() {
 		this.updateCounter++;
+		
+		//System.out.println(this.container.getBlueprint().getConfigurations().get(1));
+		/*if(this.container.getBlueprint().getConfigurations().size() > 1 && this.context.getConfiguration() != this.container.getBlueprint().getConfigurations().get(1)) {
+		this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(1));
+		this.createGui();
+		}*/
 	}
 
 	@Override
@@ -227,10 +238,10 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected void drawMark(Mark mark, int centerX, int centerY) {
 		String desc;
 		if(mark.isOutput()) {
-			desc = this.container.getConfiguration().getOutputs().get(mark.getMarkIndex()).getDescriptor();
+			desc = this.context.getConfiguration().getOutputs().get(mark.getMarkIndex()).getDescriptor();
 			//Gui.drawRect(centerX - mark.w / 2, centerY - mark.h / 2, centerX + mark.w / 2, centerY + mark.h / 2, 0xFF0000FF);
 		} else {
-			desc = this.container.getConfiguration().getInputs().get(mark.getMarkIndex()).getDescriptor();
+			desc = this.context.getConfiguration().getInputs().get(mark.getMarkIndex()).getDescriptor();
 			//Gui.drawRect(centerX - mark.w / 2, centerY - mark.h / 2, centerX + mark.w / 2, centerY + mark.h / 2, 0xFFFF0000);
 		}
 
@@ -259,9 +270,9 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		String descriptor;
 
 		if(mark.isOutput()) {
-			descriptor = this.container.getConfiguration().getOutputs().get(mark.getMarkIndex()).getDescriptor();
+			descriptor = this.context.getConfiguration().getOutputs().get(mark.getMarkIndex()).getDescriptor();
 		} else {
-			descriptor = this.container.getConfiguration().getInputs().get(mark.getMarkIndex()).getDescriptor();
+			descriptor = this.context.getConfiguration().getInputs().get(mark.getMarkIndex()).getDescriptor();
 		}
 
 		if(descriptor != null) {
@@ -274,12 +285,12 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		if(descriptor != null) {
 			if(mark.isOutput()) {
-				if(I18n.hasKey(String.format("rune.%s.configuration.%d.output.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.container.getConfiguration().getId(), mark.getMarkIndex()))) {
-					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("rune.%s.configuration.%d.output.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.container.getConfiguration().getId(), mark.getMarkIndex())), 0));
+				if(I18n.hasKey(String.format("rune.%s.configuration.%d.output.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), mark.getMarkIndex()))) {
+					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("rune.%s.configuration.%d.output.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), mark.getMarkIndex())), 0));
 				}
 			} else {
-				if(I18n.hasKey(String.format("rune.%s.configuration.%d.input.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.container.getConfiguration().getId(), mark.getMarkIndex()))) {
-					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("rune.%s.configuration.%d.input.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.container.getConfiguration().getId(), mark.getMarkIndex())), 0));
+				if(I18n.hasKey(String.format("rune.%s.configuration.%d.input.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), mark.getMarkIndex()))) {
+					text.addAll(ItemTooltipHandler.splitTooltip(TextFormatting.GRAY + I18n.format(String.format("rune.%s.configuration.%d.input.%d.description", this.container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId(), mark.getMarkIndex())), 0));
 				}
 			}
 		}

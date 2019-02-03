@@ -37,7 +37,7 @@ public class ItemRune extends Item implements IRuneItem {
 
 		@Override
 		public IRuneContainer createContainer() {
-			return new DefaultRuneContainer(this.item.getRegistryName()).setBlueprint(this.item.blueprint);
+			return new DefaultRuneContainer(this.item.getRegistryName(), this.item.blueprint);
 		}
 
 		@Override

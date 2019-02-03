@@ -34,9 +34,15 @@ public class RuneChainInfo {
 			return this.output;
 		}
 	}
+	
+	private static final class ContainerData {
+		private NBTTagCompound nbt;
+		private int configurationId;
+		private boolean hasConfigurationId;
+	}
 
 	private final Map<Integer, Map<Integer, Link>> links = new HashMap<>();
-	private final Map<Integer, NBTTagCompound> containerData = new HashMap<>();
+	private final Map<Integer, ContainerData> containerData = new HashMap<>();
 
 	public Collection<Integer> getLinkedInputs(int runeIndex) {
 		Set<Integer> linkedSlots = new HashSet<>();
@@ -125,13 +131,37 @@ public class RuneChainInfo {
 	}
 
 	public NBTTagCompound getContainerData(int runeIndex) {
-		return this.containerData.get(runeIndex);
+		ContainerData data = this.containerData.get(runeIndex);
+		return data == null ? null : data.nbt;
 	}
 
 	public void setContainerData(int runeIndex, NBTTagCompound nbt) {
-		this.containerData.put(runeIndex, nbt);
+		ContainerData data = this.containerData.get(runeIndex);
+		if(data == null) {
+			this.containerData.put(runeIndex, data = new ContainerData());
+		}
+		data.nbt = nbt;
 	}
 
+	public int getConfigurationId(int runeIndex) {
+		ContainerData data = this.containerData.get(runeIndex);
+		return data == null ? 0 : data.configurationId;
+	}
+	
+	public boolean hasConfigurationId(int runeIndex) {
+		ContainerData data = this.containerData.get(runeIndex);
+		return data == null ? false : data.hasConfigurationId;
+	}
+	
+	public void setConfigurationId(int runeIndex, int configurationId) {
+		ContainerData data = this.containerData.get(runeIndex);
+		if(data == null) {
+			this.containerData.put(runeIndex, data = new ContainerData());
+		}
+		data.configurationId = configurationId;
+		data.hasConfigurationId = true;
+	}
+	
 	public void removeContainerData(int runeIndex) {
 		this.containerData.remove(runeIndex);
 	}
@@ -165,11 +195,16 @@ public class RuneChainInfo {
 
 		NBTTagList dataNbt = new NBTTagList();
 
-		for(Entry<Integer, NBTTagCompound> dataEntry : this.containerData.entrySet()) {
+		for(Entry<Integer, ContainerData> dataEntry : this.containerData.entrySet()) {
 			NBTTagCompound dataEntryNbt = new NBTTagCompound();
 
 			dataEntryNbt.setInteger("rune", dataEntry.getKey());
-			dataEntryNbt.setTag("data", dataEntry.getValue());
+			if(dataEntry.getValue().nbt != null) {
+				dataEntryNbt.setTag("nbt", dataEntry.getValue().nbt);
+			}
+			if(dataEntry.getValue().hasConfigurationId) {
+				dataEntryNbt.setInteger("configuration", dataEntry.getValue().configurationId);
+			}
 
 			dataNbt.appendTag(dataEntryNbt);
 		}
@@ -205,9 +240,13 @@ public class RuneChainInfo {
 			NBTTagCompound dataEntryNbt = dataNbt.getCompoundTagAt(i);
 
 			int rune = dataEntryNbt.getInteger("rune");
-			NBTTagCompound data = dataEntryNbt.getCompoundTag("data");
-
-			info.setContainerData(rune, data);
+			if(dataEntryNbt.hasKey("nbt", Constants.NBT.TAG_COMPOUND)) {
+				NBTTagCompound data = dataEntryNbt.getCompoundTag("nbt");
+				info.setContainerData(rune, data);
+			}
+			if(dataEntryNbt.hasKey("configuration", Constants.NBT.TAG_INT)) {
+				info.setConfigurationId(rune, dataEntryNbt.getInteger("configuration"));
+			}
 		}
 
 		return info;

@@ -14,16 +14,10 @@ public class DefaultRuneContainer implements IRuneContainer {
 	protected IRuneContainerContext context;
 
 	protected INodeBlueprint<?, RuneExecutionContext> blueprint;
-	protected INodeConfiguration configuration;
 
-	public DefaultRuneContainer(ResourceLocation id) {
+	public DefaultRuneContainer(ResourceLocation id, INodeBlueprint<?, RuneExecutionContext> blueprint) {
 		this.id = id;
-	}
-
-	public DefaultRuneContainer setBlueprint(INodeBlueprint<?, RuneExecutionContext> blueprint) {
 		this.blueprint = blueprint;
-		this.configuration = this.blueprint.getConfigurations().get(0);
-		return this;
 	}
 
 	@Override
@@ -57,13 +51,13 @@ public class DefaultRuneContainer implements IRuneContainer {
 	}
 
 	@Override
-	public INodeBlueprint<?, RuneExecutionContext> getBlueprint() {
-		return this.blueprint;
+	public void onConfigurationChanged(INodeConfiguration oldConfiguration, INodeConfiguration newConfiguration) {
+
 	}
 
 	@Override
-	public INodeConfiguration getConfiguration() {
-		return this.configuration;
+	public INodeBlueprint<?, RuneExecutionContext> getBlueprint() {
+		return this.blueprint;
 	}
 
 	@Override

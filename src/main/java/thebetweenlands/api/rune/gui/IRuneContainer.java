@@ -17,10 +17,10 @@ public interface IRuneContainer {
 	public void onLinksMoved(int fromRuneIndex, int toRuneIndex);
 
 	public void onRuneShifted(int fromRuneIndex, int toRuneIndex);
+	
+	public void onConfigurationChanged(INodeConfiguration oldConfiguration, INodeConfiguration newConfiguration);
 
 	public INodeBlueprint<?, RuneExecutionContext> getBlueprint();
-
-	public INodeConfiguration getConfiguration();
 
 	public ResourceLocation getId();
 }
