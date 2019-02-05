@@ -29,9 +29,11 @@ import thebetweenlands.api.rune.gui.RuneMenuDrawingContext;
 import thebetweenlands.api.rune.gui.RuneMenuType;
 import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
 import thebetweenlands.client.handler.ItemTooltipHandler;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarConfiguration;
 import thebetweenlands.util.ColoredItemRenderer;
 
 public class DefaultRuneGui extends Gui implements IRuneGui {
@@ -109,7 +111,12 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	protected TextContainer title;
 	protected TextContainer description;
 
-	protected int currentDescriptionPage = 0;
+	protected int currentDescriptionPageIndex = 0;
+
+	protected boolean hasMultipleConfigurations = false;
+	protected int additionalConfigurationsHeight = 0;
+
+	int currentConfigurationIndex = 0;
 
 	protected static interface IMarkRenderer {
 		public void render(int centerX, int centerY);
@@ -144,8 +151,15 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.createGui();
 	}
-	
-	private void createGui() {
+
+	protected void createGui() {
+		this.hasMultipleConfigurations = container.getBlueprint().getConfigurations().size() > 1;
+		if(this.hasMultipleConfigurations) {
+			this.additionalConfigurationsHeight = 12;
+
+			this.currentConfigurationIndex = Math.max(0, this.container.getBlueprint().getConfigurations().indexOf(this.context.getConfiguration()));
+		}
+
 		this.title = new TextContainer(this.xSize - 8 - 20, 80, I18n.format(String.format("rune.%s.configuration.%d.title", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
 
 		this.title.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
@@ -161,7 +175,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.title.parse();
 
-		this.description = new TextContainer(this.xSize - 8 - 4, this.maxYSize - 6 - this.title.getPages().get(0).getTextHeight() - 50, I18n.format(String.format("rune.%s.configuration.%d.description", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
+		this.description = new TextContainer(this.xSize - 8 - 4, this.maxYSize - 6 - this.title.getPages().get(0).getTextHeight() - 50 - this.additionalConfigurationsHeight, I18n.format(String.format("rune.%s.configuration.%d.description", container.getContext().getRuneItemStack().getTranslationKey(), this.context.getConfiguration().getId())), this.fontRenderer);
 
 		this.description.setCurrentScale(1).setCurrentColor(0xFF3d3d3d);
 
@@ -176,7 +190,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		this.description.parse();
 
-		this.ySize = (int) (this.title.getPages().get(0).getTextHeight() + 20 + 45 + this.description.getPages().get(0).getTextHeight());
+		this.ySize = (int) (this.title.getPages().get(0).getTextHeight() + 20 + 45 + this.description.getPages().get(0).getTextHeight()) + this.additionalConfigurationsHeight;
 
 		INodeConfiguration config = this.context.getConfiguration();
 
@@ -185,7 +199,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.inputMarks.clear();
 		int x = 4;
 		for(int i = 0; i < config.getInputs().size(); i++) {
-			this.inputMarks.add(new Mark(this, i, xOffInputs + x, this.ySize - 3 - 40, 16, 16, false));
+			this.inputMarks.add(new Mark(this, i, xOffInputs + x, this.ySize - 3 - 40 - this.additionalConfigurationsHeight, 16, 16, false));
 			x += 18;
 		}
 
@@ -194,7 +208,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.outputMarks.clear();
 		x = 4;
 		for(int i = 0; i < config.getOutputs().size(); i++) {
-			this.outputMarks.add(new Mark(this, i, xOffOutputs + x, this.ySize - 3 - 20, 16, 16, true));
+			this.outputMarks.add(new Mark(this, i, xOffOutputs + x, this.ySize - 3 - 20 - this.additionalConfigurationsHeight, 16, 16, true));
 			x += 18;
 		}
 	}
@@ -212,12 +226,6 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	@Override
 	public void update() {
 		this.updateCounter++;
-		
-		//System.out.println(this.container.getBlueprint().getConfigurations().get(1));
-		/*if(this.container.getBlueprint().getConfigurations().size() > 1 && this.context.getConfiguration() != this.container.getBlueprint().getConfigurations().get(1)) {
-		this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(1));
-		this.createGui();
-		}*/
 	}
 
 	@Override
@@ -327,13 +335,34 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		//TODO Sounds?
 		if(mouseX >= x + this.xSize - 6 - 40 && mouseX < x + this.xSize - 6 - 40 + 13
 				&& mouseY >= y + 8 && mouseY < y + 8 + 7) {
-			this.currentDescriptionPage = Math.max(this.currentDescriptionPage - 1, 0);
+			this.currentDescriptionPageIndex = Math.max(this.currentDescriptionPageIndex - 1, 0);
 			return true;
 		}
 
 		if(mouseX >= x + this.xSize - 6 - 13 && mouseX < x + this.xSize - 6 - 13 + 13
 				&& mouseY >= y + 8 && mouseY < y + 8 + 7) {
-			this.currentDescriptionPage = Math.min(this.currentDescriptionPage + 1, this.description.getPages().size() - 1);
+			this.currentDescriptionPageIndex = Math.min(this.currentDescriptionPageIndex + 1, this.description.getPages().size() - 1);
+			return true;
+		}
+
+		//this.drawTexturedModalRect512(x + this.xSize / 2 - 8 - 13, y + this.ySize - 13, 452, 0, 13, 7);
+		//this.drawTexturedModalRect512(x + this.xSize / 2 + 8, y + this.ySize - 13, 452, 29, 13, 7);
+
+		if(mouseX >= x + this.xSize / 2 - 8 - 13 && mouseX < x + this.xSize / 2 - 8 - 13 + 13
+				&& mouseY >= y + this.ySize - 13 && mouseY < y + this.ySize - 13 + 7) {
+			this.currentConfigurationIndex = Math.max(this.currentConfigurationIndex - 1, 0);
+			this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(this.currentConfigurationIndex));
+			this.createGui();
+			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneChainAltarConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
+			return true;
+		}
+
+		if(mouseX >= x + this.xSize / 2 + 8 && mouseX < x + this.xSize / 2 + 8 + 13
+				&& mouseY >= y + this.ySize - 13 && mouseY < y + this.ySize - 13 + 7) {
+			this.currentConfigurationIndex = Math.min(this.currentConfigurationIndex + 1, this.container.getBlueprint().getConfigurations().size() - 1);
+			this.context.setConfiguration(this.container.getBlueprint().getConfigurations().get(this.currentConfigurationIndex));
+			this.createGui();
+			TheBetweenlands.networkWrapper.sendToServer(new MessageSetRuneChainAltarConfiguration(this.context.getRuneIndex(), this.currentConfigurationIndex));
 			return true;
 		}
 
@@ -430,43 +459,41 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		//Background
 		this.drawTexturedModalRect512(x + 3, y + 3, 215, 97, this.xSize - 6, this.ySize - 6);
 
+		//Page left/right
 		if(this.description.getPages().size() > 1) {
-			//Page left/right
 			this.drawTexturedModalRect512(x + this.xSize - 6 - 40, y + 8, 452, 0, 13, 7);
 			this.drawTexturedModalRect512(x + this.xSize - 6 - 13, y + 8, 452, 29, 13, 7);
+		}
+
+		//Configuration left/right
+		if(this.hasMultipleConfigurations) {
+			this.drawTexturedModalRect512(x + this.xSize / 2 - 8 - 13, y + this.ySize - 13, 452, 0, 13, 7);
+			this.drawTexturedModalRect512(x + this.xSize / 2 + 8, y + this.ySize - 13, 452, 29, 13, 7);
 		}
 
 		ItemStack stack = this.context.getRuneItemStack();
 
 		ColoredItemRenderer.renderItemAndEffectIntoGUI(this.itemRender, this.mc.player, stack, x + 4, y + 4, 1, 1, 1, 1);
 
-		/*this.fontRenderer.drawString(TextFormatting.UNDERLINE + stack.getDisplayName(), x + 24, y + 8, 0xFF404040);
-
-		//TODO Remove all this and implement it properly with multiple pages etc.
-
-		INodeBlueprint<?, RuneExecutionContext> bp = this.container.getBlueprint();
-
-		this.fontRenderer.drawString("Configs: " + bp.getConfigurations().size(), x + 4, y + 22, 0xFF404040);
-		int i = 1;
-		for(INodeConfiguration config : bp.getConfigurations()) {
-			this.fontRenderer.drawString(" " + config.getId() + ") Marks: " + config.getInputs().size() + "/" + config.getOutputs().size(), x + 4, y + 22 + i * 10, 0xFF404040);
-			i++;
-		}*/
-
+		//Page left/right number
 		if(this.description.getPages().size() > 1) {
-			//Page left/right number
-			this.fontRenderer.drawString(String.valueOf(this.currentDescriptionPage + 1), x + this.xSize - 6 - 40 + 21 - this.fontRenderer.getStringWidth(String.valueOf(this.currentDescriptionPage + 1)) / 2, y + 8, 0xFF3d3d3d);
+			this.fontRenderer.drawString(String.valueOf(this.currentDescriptionPageIndex + 1), x + this.xSize - 6 - 40 + 21 - this.fontRenderer.getStringWidth(String.valueOf(this.currentDescriptionPageIndex + 1)) / 2, y + 8, 0xFF3d3d3d);
+		}
+
+		//Configuration left/right
+		if(this.hasMultipleConfigurations) {
+			this.fontRenderer.drawString(String.valueOf(this.currentConfigurationIndex + 1), x + this.xSize / 2 + 1 - this.fontRenderer.getStringWidth(String.valueOf(this.currentConfigurationIndex + 1)) / 2, y + this.ySize - 13, 0xFF3d3d3d);
 		}
 
 		this.title.getPages().get(0).render(x + 4 + 20, y + 8);
 
-		if(this.currentDescriptionPage < this.description.getPages().size()) {
-			this.description.getPages().get(this.currentDescriptionPage).render(x + 4, y + 16 + this.title.getPages().get(0).getTextHeight());
+		if(this.currentDescriptionPageIndex < this.description.getPages().size()) {
+			this.description.getPages().get(this.currentDescriptionPageIndex).render(x + 4, y + 16 + this.title.getPages().get(0).getTextHeight());
 		}
 
 		//TODO
-		this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 4, y + 4 + this.ySize - 3 - 40, 0xFF3d3d3d);
-		this.fontRenderer.drawString(I18n.format("rune.gui.outputs"), x + 4, y + 4 + this.ySize - 3 - 20, 0xFF3d3d3d);
+		this.fontRenderer.drawString(I18n.format("rune.gui.inputs"), x + 4, y + 4 + this.ySize - 3 - 40 - this.additionalConfigurationsHeight, 0xFF3d3d3d);
+		this.fontRenderer.drawString(I18n.format("rune.gui.outputs"), x + 4, y + 4 + this.ySize - 3 - 20 - this.additionalConfigurationsHeight, 0xFF3d3d3d);
 
 		for(Mark mark : this.inputMarks) {
 			this.drawMark(mark, mark.getCenterX(), mark.getCenterY());

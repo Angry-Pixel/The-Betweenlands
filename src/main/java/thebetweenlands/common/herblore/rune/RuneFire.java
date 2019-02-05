@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -18,17 +17,18 @@ import thebetweenlands.api.rune.impl.RuneMarkDescriptors;
 import thebetweenlands.api.rune.impl.RuneStats;
 import thebetweenlands.common.registries.AspectRegistry;
 
-public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
+public final class RuneFire extends AbstractRune<RuneFire> {
 
-	public static final class Blueprint extends AbstractRune.Blueprint<RuneSelectGrass> {
+	public static final class Blueprint extends AbstractRune.Blueprint<RuneFire> {
 		public Blueprint() {
 			super(RuneStats.builder()
-					.aspect(AspectRegistry.ORDANIIS, 1)
-					.duration(0.1f, 0.01f)
+					.aspect(AspectRegistry.FERGALAZ, 1)
+					.duration(0.333f)
 					.build());
 		}
 
 		private static final INodeConfiguration CONFIGURATION_1;
+		private static final INodeConfiguration CONFIGURATION_2;
 
 		private static final InputPort<Entity> IN_ENTITY;
 		private static final InputPort<BlockPos> IN_POSITION;
@@ -37,40 +37,43 @@ public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
 			IN_POSITION = builder.in(BlockPos.class, RuneMarkDescriptors.BLOCK);
-			IN_ENTITY = builder.in(Entity.class, RuneMarkDescriptors.ENTITY);
-
 			CONFIGURATION_1 = builder.build();
+
+			IN_ENTITY = builder.in(Entity.class, RuneMarkDescriptors.ENTITY);
+			CONFIGURATION_2 = builder.build();
 		}
 
 		@Override
 		public List<INodeConfiguration> getConfigurations() {
-			return ImmutableList.of(CONFIGURATION_1);
+			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2);
 		}
 
 		@Override
-		public RuneSelectGrass create(INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
-			return new RuneSelectGrass(this, composition, configuration);
+		public RuneFire create(INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+			return new RuneFire(this, composition, configuration);
 		}
 
 		@Override
-		protected void activate(RuneSelectGrass state, RuneExecutionContext context, INodeIO io) {
+		protected void activate(RuneFire state, RuneExecutionContext context, INodeIO io) {
 
 			if (state.getConfiguration() == CONFIGURATION_1) {
-				BlockPos position = IN_POSITION.get(io);
+				BlockPos pos = IN_POSITION.get(io);
+
+				if(context.getUser().getWorld().isAirBlock(pos.up())) {
+					context.getUser().getWorld().setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
+				}
+			}
+
+			if (state.getConfiguration() == CONFIGURATION_2) {
 				Entity entity = IN_ENTITY.get(io);
 
-				io.branch();
-
-				Block block = entity.world.getBlockState(position).getBlock();
-				if(block != Blocks.GRASS /*&& block != Blocks.DIRT*/) {
-					io.fail();
-				}
+				entity.setFire(3);
 			}
 
 		}
 	}
 
-	private RuneSelectGrass(Blueprint blueprint, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
+	private RuneFire(Blueprint blueprint, INodeComposition<RuneExecutionContext> composition, INodeConfiguration configuration) {
 		super(blueprint, composition, configuration);
 	}
 }

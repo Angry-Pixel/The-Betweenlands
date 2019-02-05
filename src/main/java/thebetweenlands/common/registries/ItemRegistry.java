@@ -40,6 +40,7 @@ import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.herblore.rune.RuneDestroyBlock;
 import thebetweenlands.common.herblore.rune.RuneDestroyBlocks;
+import thebetweenlands.common.herblore.rune.RuneFire;
 import thebetweenlands.common.herblore.rune.RuneMarkArea;
 import thebetweenlands.common.herblore.rune.RuneSelectGrass;
 import thebetweenlands.common.item.BLMaterialRegistry;
@@ -402,6 +403,7 @@ public class ItemRegistry {
     public static final Item TEST_RUNE_DESTROY_BLOCKS = new ItemRune(new RuneDestroyBlocks.Blueprint());
     public static final Item TEST_RUNE_MARK_AREA = new ItemRune(new RuneMarkArea.Blueprint());
     public static final Item TEST_RUNE_SELECT_GRASS = new ItemRune(new RuneSelectGrass.Blueprint());
+    public static final Item TEST_RUNE_FIRE = new ItemRune(new RuneFire.Blueprint());
     
     private ItemRegistry() {
 

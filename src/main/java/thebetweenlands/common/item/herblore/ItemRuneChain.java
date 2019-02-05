@@ -17,6 +17,7 @@ import thebetweenlands.api.rune.impl.RuneChainComposition;
 import thebetweenlands.api.rune.impl.RuneChainComposition.IAspectBuffer;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.herblore.rune.RuneDestroyBlock;
+import thebetweenlands.common.herblore.rune.RuneFire;
 import thebetweenlands.common.herblore.rune.RuneMarkArea;
 import thebetweenlands.common.herblore.rune.RuneSelectGrass;
 import thebetweenlands.common.registries.AspectRegistry;
@@ -35,19 +36,20 @@ public class ItemRuneChain extends Item {
 			bp.addNodeBlueprint(0, new RuneMarkArea.Blueprint());
 			//bp.addNodeBlueprint(1, new NodeDestroyBlocks.Blueprint());
 			bp.addNodeBlueprint(1, new RuneSelectGrass.Blueprint());
-			bp.addNodeBlueprint(2, new RuneDestroyBlock.Blueprint());
+			bp.addNodeBlueprint(2, new RuneFire.Blueprint());
 
 			System.out.println("Link mark -> grass 1: " + bp.link(1, 0, 0, 0));
 			System.out.println("Link mark -> grass 2: " + bp.link(1, 1, 0, 1));
 			System.out.println("Link mark -> destroy 1: " + bp.link(2, 0, 0, 0));
-			System.out.println("Link mark -> destroy 2: " + bp.link(2, 1, 0, 1));
+			//System.out.println("Link mark -> destroy 2: " + bp.link(2, 1, 0, 1));
 
 			final RuneChainComposition composition = bp.create();
 
 			final AspectContainer aspects = new AspectContainer();
 
 			aspects.add(AspectRegistry.ORDANIIS, 10000);
-
+			aspects.add(AspectRegistry.FERGALAZ, 10000);
+			
 			final IRuneUser user = new IRuneUser() {
 				@Override
 				public World getWorld() {
@@ -90,6 +92,16 @@ public class ItemRuneChain extends Item {
 					} else {
 						this.setDead();
 					}
+				}
+				
+				@Override
+				protected void dealFireDamage(int amount) {
+					
+				}
+				
+				@Override
+				public boolean attackEntityFrom(net.minecraft.util.DamageSource source, float amount) {
+					return false;
 				}
 			};
 

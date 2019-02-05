@@ -531,9 +531,9 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 			@Override
 			public NBTTagCompound getData() {
 				RuneChainInfo info = ContainerRuneChainAltar.this.altar.getChainInfo();
-				NBTTagCompound nbt = info.getContainerData(entry.runeIndex);
+				NBTTagCompound nbt = info.getContainerNbt(entry.runeIndex);
 				if(nbt == null) {
-					info.setContainerData(entry.runeIndex, nbt = new NBTTagCompound());
+					info.setContainerNbt(entry.runeIndex, nbt = new NBTTagCompound());
 					ContainerRuneChainAltar.this.altar.markDirty();
 				}
 				return nbt;
@@ -541,7 +541,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 			@Override
 			public void setData(NBTTagCompound nbt) {
-				ContainerRuneChainAltar.this.altar.getChainInfo().setContainerData(entry.runeIndex, nbt);
+				ContainerRuneChainAltar.this.altar.getChainInfo().setContainerNbt(entry.runeIndex, nbt);
 				ContainerRuneChainAltar.this.altar.markDirty();
 			}
 
@@ -563,10 +563,13 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 					this.currentConfiguration = configuration;
 					
 					ContainerRuneChainAltar.this.altar.getChainInfo().setConfigurationId(entry.runeIndex, configuration.getId());
+					
+					//TODO Preferably store links per configuration
+					ContainerRuneChainAltar.this.altar.getChainInfo().unlinkAll(entry.runeIndex);
+					ContainerRuneChainAltar.this.altar.getChainInfo().unlinkAllIncoming(entry.runeIndex);
+					
 					ContainerRuneChainAltar.this.altar.markDirty();
 				}
-				
-				//TODO Remove all links, or preferably store links per configuration
 			}
 		};
 	}

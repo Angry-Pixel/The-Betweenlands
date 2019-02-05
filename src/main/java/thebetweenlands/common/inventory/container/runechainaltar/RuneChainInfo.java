@@ -3,6 +3,7 @@ package thebetweenlands.common.inventory.container.runechainaltar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -98,6 +99,24 @@ public class RuneChainInfo {
 	public void unlinkAll(int runeIndex) {
 		this.links.remove(runeIndex);
 	}
+	
+	public void unlinkAllIncoming(int runeIndex) {
+		Iterator<Entry<Integer, Map<Integer, Link>>> entryIT = this.links.entrySet().iterator();
+		while(entryIT.hasNext()) {
+			Entry<Integer, Map<Integer, Link>> entry = entryIT.next();
+			
+			Iterator<Entry<Integer, Link>> linksIT = entry.getValue().entrySet().iterator();
+			while(linksIT.hasNext()) {
+				if(linksIT.next().getValue().outputRune == runeIndex) {
+					linksIT.remove();
+				}
+			}
+			
+			if(entry.getValue().isEmpty()) {
+				entryIT.remove();
+			}
+		}
+	}
 
 	public void moveAllLinks(int formRune, int toRune) {
 		//First adjust links that point towards the old position
@@ -130,12 +149,12 @@ public class RuneChainInfo {
 		}
 	}
 
-	public NBTTagCompound getContainerData(int runeIndex) {
+	public NBTTagCompound getContainerNbt(int runeIndex) {
 		ContainerData data = this.containerData.get(runeIndex);
 		return data == null ? null : data.nbt;
 	}
 
-	public void setContainerData(int runeIndex, NBTTagCompound nbt) {
+	public void setContainerNbt(int runeIndex, NBTTagCompound nbt) {
 		ContainerData data = this.containerData.get(runeIndex);
 		if(data == null) {
 			this.containerData.put(runeIndex, data = new ContainerData());
@@ -160,6 +179,21 @@ public class RuneChainInfo {
 		}
 		data.configurationId = configurationId;
 		data.hasConfigurationId = true;
+	}
+	
+	public void removeConfigurationId(int runeIndex) {
+		ContainerData data = this.containerData.get(runeIndex);
+		if(data != null) {
+			data.configurationId = 0;
+			data.hasConfigurationId = false;
+		}
+	}
+	
+	public void removeContainerNbt(int runeIndex) {
+		ContainerData data = this.containerData.get(runeIndex);
+		if(data != null) {
+			data.nbt = null;
+		}
 	}
 	
 	public void removeContainerData(int runeIndex) {
@@ -242,7 +276,7 @@ public class RuneChainInfo {
 			int rune = dataEntryNbt.getInteger("rune");
 			if(dataEntryNbt.hasKey("nbt", Constants.NBT.TAG_COMPOUND)) {
 				NBTTagCompound data = dataEntryNbt.getCompoundTag("nbt");
-				info.setContainerData(rune, data);
+				info.setContainerNbt(rune, data);
 			}
 			if(dataEntryNbt.hasKey("configuration", Constants.NBT.TAG_INT)) {
 				info.setConfigurationId(rune, dataEntryNbt.getInteger("configuration"));

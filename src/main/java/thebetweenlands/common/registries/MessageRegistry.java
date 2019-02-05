@@ -18,6 +18,7 @@ import thebetweenlands.common.network.serverbound.MessageOpenPouch;
 import thebetweenlands.common.network.serverbound.MessageItemNaming;
 import thebetweenlands.common.network.serverbound.MessageLinkRuneChainAltarRune;
 import thebetweenlands.common.network.serverbound.MessageRow;
+import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarConfiguration;
 import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarPage;
 import thebetweenlands.common.network.serverbound.MessageShiftRuneChainAltarSlot;
 import thebetweenlands.common.network.serverbound.MessageUnlinkRuneChainAltarRune;
@@ -70,6 +71,7 @@ public class MessageRegistry {
 		registerMessage(MessageShiftRuneChainAltarSlot.class, Side.SERVER);
 		registerMessage(MessageLinkRuneChainAltarRune.class, Side.SERVER);
 		registerMessage(MessageUnlinkRuneChainAltarRune.class, Side.SERVER);
+		registerMessage(MessageSetRuneChainAltarConfiguration.class, Side.SERVER);
 	}
 
 	private static void registerMessage(Class<? extends MessageBase> messageType, Side toSide) {
