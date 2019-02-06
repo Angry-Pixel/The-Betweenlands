@@ -13,6 +13,14 @@ public abstract class TransformerModule {
 	private boolean successful = false;
 	private final List<Pair<String, String>> acceptedClasses = new ArrayList<>();
 	private boolean obfuscated = false;
+	protected static boolean isBukkitServer = false;
+
+	static {
+		try {
+			Class.forName("org.bukkit.Bukkit");
+			isBukkitServer = true;
+		} catch (ClassNotFoundException e) { }
+	}
 
 	/**
 	 * Adds an accepted class
