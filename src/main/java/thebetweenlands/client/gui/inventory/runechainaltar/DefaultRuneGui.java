@@ -153,6 +153,8 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	}
 
 	protected void createGui() {
+		this.currentDescriptionPageIndex = 0;
+		
 		this.hasMultipleConfigurations = container.getBlueprint().getConfigurations().size() > 1;
 		if(this.hasMultipleConfigurations) {
 			this.additionalConfigurationsHeight = 12;
