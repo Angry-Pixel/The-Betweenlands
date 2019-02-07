@@ -38,16 +38,25 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 
 		private final class NodeSlot {
 			private final INodeBlueprint<?, RuneExecutionContext> blueprint;
+
+			@Nullable
+			private final INodeConfiguration configuration;
+
 			private final SlotLink[] links;
 
 			private int cachedIndex = -1;
 
-			private NodeSlot(INodeBlueprint<?, RuneExecutionContext> blueprint) {
+			private NodeSlot(INodeBlueprint<?, RuneExecutionContext> blueprint, @Nullable INodeConfiguration configuration) {
 				this.blueprint = blueprint;
 				int maxSlots = 0;
-				for(INodeConfiguration configuration : blueprint.getConfigurations()) {
-					maxSlots = Math.max(configuration.getInputs().size(), maxSlots);
+				if(configuration != null) {
+					maxSlots = configuration.getInputs().size();
+				} else {
+					for(INodeConfiguration c : blueprint.getConfigurations()) {
+						maxSlots = Math.max(c.getInputs().size(), maxSlots);
+					}
 				}
+				this.configuration = configuration;
 				this.links = new SlotLink[maxSlots];
 			}
 
@@ -125,6 +134,11 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		}
 
 		@Override
+		public INodeConfiguration getNodeConfiguration(int node) {
+			return this.slots.get(node).configuration;
+		}
+
+		@Override
 		public Collection<Integer> getLinkedSlots(int node) {
 			Set<Integer> linkedSlots = new HashSet<>();
 			NodeSlot slot = this.slots.get(node);
@@ -166,7 +180,26 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		 * @param blueprint - blueprint to add to the rune chain
 		 */
 		public void addNodeBlueprint(int index, INodeBlueprint<?, RuneExecutionContext> blueprint) {
-			this.slots.add(index, new NodeSlot(blueprint));
+			this.slots.add(index, new NodeSlot(blueprint, null));
+		}
+
+		/**
+		 * Adds a new node blueprint with the specified configuration to the rune chain
+		 * @param blueprint - blueprint to add to the rune chain
+		 * @param configuration - node configuration to be used
+		 */
+		public void addNodeBlueprint(INodeBlueprint<?, RuneExecutionContext> blueprint, INodeConfiguration configuration) {
+			this.addNodeBlueprint(this.slots.size(), blueprint, configuration);
+		}
+
+		/**
+		 * Adds a new node blueprint with the specified configuration at the specified index to the rune chain
+		 * @param index - index where the blueprint should be inserted
+		 * @param blueprint - blueprint to add to the rune chain
+		 * @param configuration - node configuration to be used
+		 */
+		public void addNodeBlueprint(int index, INodeBlueprint<?, RuneExecutionContext> blueprint, INodeConfiguration configuration) {
+			this.slots.add(index, new NodeSlot(blueprint, configuration));
 		}
 
 		/**
@@ -559,7 +592,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		public IAspectBuffer getAspectBuffer() {
 			return RuneChainComposition.this.aspectBuffer;
 		}
-		
+
 		/**
 		 * Returns the number of currently active branches.
 		 * @return the number of currently active branches
@@ -617,7 +650,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		 */
 		public AspectContainer get(IAspectType type);
 	}
-	
+
 	private final Blueprint blueprint;
 	private final List<INode<?, RuneExecutionContext>> nodes;
 
@@ -625,7 +658,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 	private final NodeIO nodeIO = new NodeIO();
 
 	private IAspectBuffer aspectBuffer;
-	
+
 	private boolean running = false;
 
 	private int nextNode = 0;
@@ -651,13 +684,14 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		this.nodes = new ArrayList<>(this.blueprint.getNodeBlueprints());
 
 		for(int i = 0; i < this.blueprint.getNodeBlueprints(); i++) {
+			INodeConfiguration setConfiguration = this.blueprint.getNodeConfiguration(i);
 			List<INodeConfiguration> validConfigurations = this.blueprint.getValidConfigurations(i, true);
 
-			if(validConfigurations.isEmpty()) {
+			if(validConfigurations.isEmpty() || (setConfiguration != null && !validConfigurations.contains(setConfiguration))) {
 				// Add dummy node that always fails instantly
 				this.nodes.add(NodeDummy.Blueprint.INSTANCE.create(this, NodeDummy.Blueprint.CONFIGURATION));
 			} else {
-				INodeConfiguration configuration = validConfigurations.get(0);
+				INodeConfiguration configuration = setConfiguration != null ? setConfiguration : validConfigurations.get(0);
 				INodeBlueprint<?, RuneExecutionContext> nodeBlueprint = this.blueprint.getNodeBlueprint(i);
 				this.nodes.add(nodeBlueprint.create(this, configuration));
 			}
@@ -675,6 +709,11 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 	}
 
 	@Override
+	public boolean isInvalid(int node) {
+		return this.nodes.get(node).getBlueprint() == NodeDummy.Blueprint.INSTANCE;
+	}
+
+	@Override
 	public boolean isRunning() {
 		return this.running;
 	}
@@ -682,7 +721,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 	@Override
 	public void run(RuneExecutionContext context) {
 		Preconditions.checkNotNull(this.aspectBuffer, "Aspect buffer must be set before running rune chain");
-		
+
 		this.nextNode = 0;
 		this.context = context;
 		this.running = true;
@@ -712,7 +751,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 	public void setAspectBuffer(IAspectBuffer buffer) {
 		this.aspectBuffer = buffer;
 	}
-	
+
 	/**
 	 * Starts the execution of this rune chain. Requires an aspect buffer
 	 * before running, see {@link #setAspectBuffer(IAspectBuffer)}!
@@ -863,7 +902,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 								this.newBranches.remove(this.sourceBranch);
 								this.currentCombination = this.combinations; //Exit loop
 							}
-							
+
 							if(!this.nodeIO.terminated && this.nodeIO.task != null) {
 								this.scheduledTask = this.nodeIO.task;
 								if(this.updateTask()) {

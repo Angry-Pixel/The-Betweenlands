@@ -27,8 +27,8 @@ public final class RuneFire extends AbstractRune<RuneFire> {
 					.build());
 		}
 
-		private static final INodeConfiguration CONFIGURATION_1;
-		private static final INodeConfiguration CONFIGURATION_2;
+		public static final INodeConfiguration CONFIGURATION_1;
+		public static final INodeConfiguration CONFIGURATION_2;
 
 		private static final InputPort<Entity> IN_ENTITY;
 		private static final InputPort<BlockPos> IN_POSITION;

@@ -1,7 +1,8 @@
 package thebetweenlands.api.rune;
 
 import java.util.Collection;
-import java.util.List;
+
+import javax.annotation.Nullable;
 
 public interface INodeCompositionBlueprint<E> {
 	/**
@@ -34,6 +35,16 @@ public interface INodeCompositionBlueprint<E> {
 	 * @throws IndexOutOfBoundsException if the node index is out of range (node < 0 || node >= {@link #getNodeBlueprints()})
 	 */
 	public INodeBlueprint<?, E> getNodeBlueprint(int node);
+	
+	/**
+	 * Returns the node configuration at the specified node index. May return null
+	 * if the configuration was not specified (yet).
+	 * @param node - index of the node
+	 * @return the node configuration at the specified node index
+	 * @throws IndexOutOfBoundsException if the node index is out of range (node < 0 || node >= {@link #getNodeBlueprints()})
+	 */
+	@Nullable
+	public INodeConfiguration getNodeConfiguration(int node);
 	
 	/**
 	 * Returns the link at the specified node index and input index.

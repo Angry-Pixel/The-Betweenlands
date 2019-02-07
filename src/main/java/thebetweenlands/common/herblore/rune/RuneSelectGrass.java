@@ -28,7 +28,7 @@ public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
 					.build());
 		}
 
-		private static final INodeConfiguration CONFIGURATION_1;
+		public static final INodeConfiguration CONFIGURATION_1;
 
 		private static final InputPort<Entity> IN_ENTITY;
 		private static final InputPort<BlockPos> IN_POSITION;

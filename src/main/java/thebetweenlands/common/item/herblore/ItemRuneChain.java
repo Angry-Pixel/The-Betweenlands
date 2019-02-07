@@ -33,10 +33,10 @@ public class ItemRuneChain extends Item {
 		if(!world.isRemote) {
 			RuneChainComposition.Blueprint bp = new RuneChainComposition.Blueprint();
 
-			bp.addNodeBlueprint(0, new RuneMarkArea.Blueprint());
-			//bp.addNodeBlueprint(1, new NodeDestroyBlocks.Blueprint());
-			bp.addNodeBlueprint(1, new RuneSelectGrass.Blueprint());
-			bp.addNodeBlueprint(2, new RuneFire.Blueprint());
+			bp.addNodeBlueprint(new RuneMarkArea.Blueprint());
+			//bp.addNodeBlueprint(new NodeDestroyBlocks.Blueprint());
+			bp.addNodeBlueprint(new RuneSelectGrass.Blueprint());
+			bp.addNodeBlueprint(new RuneFire.Blueprint());
 
 			System.out.println("Link mark -> grass 1: " + bp.link(1, 0, 0, 0));
 			System.out.println("Link mark -> grass 2: " + bp.link(1, 1, 0, 1));

@@ -11,8 +11,17 @@ public interface INodeComposition<E> {
 	 * Returns the node at the specified index
 	 * @param node - index of the node
 	 * @return node at the specified index
+	 * @throws IndexOutOfBoundsException if the node index is out of range (node < 0 || node >= {@link INodeCompositionBlueprint#getNodeBlueprints()})
 	 */
 	public INode<?, E> getNode(int node);
+	
+	/**
+	 * Returns true if the node at the specified index is invalid, e.g. has missing links
+	 * @param node - index of the node
+	 * @return whether the node at the specified index is invalid
+	 * @throws IndexOutOfBoundsException if the node index is out of range (node < 0 || node >= {@link INodeCompositionBlueprint#getNodeBlueprints()})
+	 */
+	public boolean isInvalid(int node);
 
 	/**
 	 * Returns whether the node composition is executing

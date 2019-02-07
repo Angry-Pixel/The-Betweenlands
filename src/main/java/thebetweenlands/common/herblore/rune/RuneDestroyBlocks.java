@@ -27,7 +27,7 @@ public final class RuneDestroyBlocks extends AbstractRune<RuneDestroyBlocks> {
 					.build());
 		}
 
-		private static final INodeConfiguration CONFIGURATION_1;
+		public static final INodeConfiguration CONFIGURATION_1;
 
 		private static final InputPort<Entity> IN_ENTITY;
 		private static final InputPort<Collection<BlockPos>> IN_POSITIONS;

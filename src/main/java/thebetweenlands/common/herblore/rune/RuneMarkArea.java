@@ -28,7 +28,7 @@ public final class RuneMarkArea extends AbstractRune<RuneMarkArea> {
 					.build());
 		}
 
-		private static final INodeConfiguration CONFIGURATION_1;
+		public static final INodeConfiguration CONFIGURATION_1;
 
 		private static final OutputPort<Collection<BlockPos>> OUT_POSITIONS;
 		private static final OutputPort<Entity> OUT_ENTITY;
