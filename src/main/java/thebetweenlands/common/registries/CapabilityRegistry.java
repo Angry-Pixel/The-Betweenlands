@@ -22,7 +22,9 @@ import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
 import thebetweenlands.common.capability.flight.FlightEntityCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSicknessEntityCapability;
 import thebetweenlands.common.capability.item.ILivingWeedwoodShieldCapability;
+import thebetweenlands.common.capability.item.IRuneChainCapability;
 import thebetweenlands.common.capability.item.LivingWeedwoodShieldItemCapability;
+import thebetweenlands.common.capability.item.RuneChainItemCapability;
 import thebetweenlands.common.capability.portal.PortalEntityCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppetCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppeteerCapability;
@@ -64,6 +66,9 @@ public class CapabilityRegistry {
 	@CapabilityInject(ILivingWeedwoodShieldCapability.class)
 	public static final Capability<ILivingWeedwoodShieldCapability> CAPABILITY_LIVING_WEEDWOOD_SHIELD = null;
 	
+	@CapabilityInject(IRuneChainCapability.class)
+	public static final Capability<IRuneChainCapability> CAPABILITY_RUNE_CHAIN = null;
+	
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new CircleGemEntityCapability());
@@ -77,6 +82,7 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new CustomStepSoundCapability());
 		
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
+		ItemCapabilityHandler.registerItemCapability(new RuneChainItemCapability());
 		
 		EntityCapabilityHandler.registerCapabilities();
 		ItemCapabilityHandler.registerCapabilities();

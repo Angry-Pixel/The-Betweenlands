@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.rune.gui.IRuneLink;
 
-public class RuneChainInfo {
+public class RuneChainContainerData {
 	public static final class Link implements IRuneLink {
 		private int outputRune;
 		private int output;
@@ -248,8 +248,8 @@ public class RuneChainInfo {
 		return nbt;
 	}
 
-	public static RuneChainInfo readFromNBT(NBTTagCompound nbt) {
-		RuneChainInfo info = new RuneChainInfo();
+	public static RuneChainContainerData readFromNBT(NBTTagCompound nbt) {
+		RuneChainContainerData containerData = new RuneChainContainerData();
 
 		NBTTagList linksNbt = nbt.getTagList("links", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < linksNbt.tagCount(); i++) {
@@ -265,7 +265,7 @@ public class RuneChainInfo {
 				int outputRune = linkNbt.getInteger("outputRune");
 				int output = linkNbt.getInteger("output");
 
-				info.link(inputRune, input, outputRune, output);
+				containerData.link(inputRune, input, outputRune, output);
 			}
 		}
 
@@ -276,13 +276,13 @@ public class RuneChainInfo {
 			int rune = dataEntryNbt.getInteger("rune");
 			if(dataEntryNbt.hasKey("nbt", Constants.NBT.TAG_COMPOUND)) {
 				NBTTagCompound data = dataEntryNbt.getCompoundTag("nbt");
-				info.setContainerNbt(rune, data);
+				containerData.setContainerNbt(rune, data);
 			}
 			if(dataEntryNbt.hasKey("configuration", Constants.NBT.TAG_INT)) {
-				info.setConfigurationId(rune, dataEntryNbt.getInteger("configuration"));
+				containerData.setConfigurationId(rune, dataEntryNbt.getInteger("configuration"));
 			}
 		}
 
-		return info;
+		return containerData;
 	}
 }

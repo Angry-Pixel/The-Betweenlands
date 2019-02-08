@@ -6,9 +6,11 @@ import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 
 public interface IRuneContainer {
-	public void init(IRuneContainerContext context);
-
+	public void setContext(IRuneContainerContext context);
+	
 	public IRuneContainerContext getContext();
+	
+	public void init();
 
 	public void onMarkLinked(int input, IRuneLink link);
 
@@ -20,6 +22,10 @@ public interface IRuneContainer {
 	
 	public void onConfigurationChanged(INodeConfiguration oldConfiguration, INodeConfiguration newConfiguration);
 
+	/**
+	 * Returns the node blueprint of this rune. May be called before {@link #init()}.
+	 * @return node blueprint of this rune
+	 */
 	public INodeBlueprint<?, RuneExecutionContext> getBlueprint();
 
 	public ResourceLocation getId();

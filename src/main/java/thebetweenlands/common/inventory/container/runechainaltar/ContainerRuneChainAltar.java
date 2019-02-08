@@ -15,6 +15,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import thebetweenlands.api.item.IRuneItem;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
@@ -24,8 +25,12 @@ import thebetweenlands.api.rune.gui.IRuneContainer;
 import thebetweenlands.api.rune.gui.IRuneContainerContext;
 import thebetweenlands.api.rune.gui.IRuneLink;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
+import thebetweenlands.common.capability.item.IRuneChainCapability;
+import thebetweenlands.common.herblore.rune.RuneChainData;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotRune;
+import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 
 
@@ -71,6 +76,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 		protected IRuneContainerContext context;
 		protected final List<Slot> slots = new ArrayList<>();
 		protected int runeIndex;
+		protected INodeConfiguration configuration;
 
 		protected RuneContainerEntry(int runeIndex) {
 			this.runeIndex = runeIndex;
@@ -211,6 +217,24 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 	@Override
 	public ItemStack slotClick(int slotId, int dragType, ClickType clickType, EntityPlayer player) {
+		//TODO Create this only on change and remove runes when taking out chain
+		ItemStack stack = new ItemStack(ItemRegistry.RUNE_CHAIN);
+		if(stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {
+			IRuneChainCapability cap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
+			
+			int runeCount = this.getRuneInventorySize();
+			
+			NonNullList<ItemStack> runes = NonNullList.withSize(runeCount, ItemStack.EMPTY);
+			for(int i = 0; i < runeCount; i++) {
+				runes.set(i, this.getRuneItemStack(i));
+			}
+			
+			RuneChainData data = new RuneChainData(runes, this.altar.getContainerData());
+			
+			cap.setData(data);
+		}
+		this.altar.setInventorySlotContents(0, stack);
+		
 		if(slotId > 0 && slotId < this.altar.getMaxChainLength() + 1 && clickType == ClickType.PICKUP && dragType == 1) {
 			if(this.getSelectedSlot() == slotId) {
 				this.setSelectedSlot(-1);
@@ -299,7 +323,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 						entry.container.onRuneShifted(i - chainStart + 1, i - chainStart);
 					}
 
-					this.altar.getChainInfo().moveAllLinks(i - chainStart + 1, i - chainStart);
+					this.altar.getContainerData().moveAllLinks(i - chainStart + 1, i - chainStart);
 
 					if(slot instanceof SlotRune && nextSlot instanceof SlotRune) {
 						((SlotRune) slot).prevHoverTicks = ((SlotRune) slot).hoverTicks = ((SlotRune) nextSlot).hoverTicks;
@@ -328,7 +352,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 						entry.container.onRuneShifted(i - chainStart - 1, i - chainStart);
 					}
 
-					this.altar.getChainInfo().moveAllLinks(i - chainStart - 1, i - chainStart);
+					this.altar.getContainerData().moveAllLinks(i - chainStart - 1, i - chainStart);
 
 					if(slot instanceof SlotRune && prevSlot instanceof SlotRune) {
 						((SlotRune) slot).prevHoverTicks = ((SlotRune) slot).hoverTicks = ((SlotRune) prevSlot).hoverTicks;
@@ -365,21 +389,21 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 	@Override
 	public Collection<Integer> getLinkedInputs(int runeIndex) {
-		return this.altar.getChainInfo().getLinkedInputs(runeIndex + this.altar.getChainLength());
+		return this.altar.getContainerData().getLinkedInputs(runeIndex + this.altar.getChainLength());
 	}
 
 	@Override
 	public IRuneLink getLink(int runeIndex, int input) {
-		return this.altar.getChainInfo().getLink(runeIndex, input);
+		return this.altar.getContainerData().getLink(runeIndex, input);
 	}
 
 	@Override
 	public boolean link(int runeIndex, int input, int outputRuneIndex, int output) {
 		//TODO Validate that link is possible, especially on server side
 
-		if(this.altar.getChainInfo().link(runeIndex, input, outputRuneIndex, output)) {
+		if(this.altar.getContainerData().link(runeIndex, input, outputRuneIndex, output)) {
 			for(RuneContainerEntry entry : this.runeContainers.values()) {
-				entry.container.onMarkLinked(input, this.altar.getChainInfo().getLink(runeIndex, input));
+				entry.container.onMarkLinked(input, this.altar.getContainerData().getLink(runeIndex, input));
 			}
 			this.altar.markDirty();
 			return true;
@@ -389,7 +413,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 	@Override
 	public IRuneLink unlink(int runeIndex, int input) {
-		IRuneLink unlinked = this.altar.getChainInfo().unlink(runeIndex, input);
+		IRuneLink unlinked = this.altar.getContainerData().unlink(runeIndex, input);
 		if(unlinked != null) {
 			for(RuneContainerEntry entry : this.runeContainers.values()) {
 				entry.container.onMarkUnlinked(input, unlinked);
@@ -402,11 +426,11 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 	@Override
 	public void unlinkAll(int runeIndex) {
 		Map<Integer, IRuneLink> links = new HashMap<>();
-		for(int linkedInput : this.altar.getChainInfo().getLinkedInputs(runeIndex)) {
-			IRuneLink link = this.altar.getChainInfo().getLink(runeIndex, linkedInput);
+		for(int linkedInput : this.altar.getContainerData().getLinkedInputs(runeIndex)) {
+			IRuneLink link = this.altar.getContainerData().getLink(runeIndex, linkedInput);
 			links.put(linkedInput, link);
 		}
-		this.altar.getChainInfo().unlinkAll(runeIndex);
+		this.altar.getContainerData().unlinkAll(runeIndex);
 		for(Entry<Integer, IRuneLink> unlinked : links.entrySet()) {
 			for(RuneContainerEntry entry : this.runeContainers.values()) {
 				entry.container.onMarkUnlinked(unlinked.getKey(), unlinked.getValue());
@@ -417,7 +441,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 	@Override
 	public void moveAllLinks(int fromRuneIndex, int toRuneIndex) {
-		this.altar.getChainInfo().moveAllLinks(fromRuneIndex, toRuneIndex);
+		this.altar.getContainerData().moveAllLinks(fromRuneIndex, toRuneIndex);
 		for(RuneContainerEntry entry : this.runeContainers.values()) {
 			entry.container.onLinksMoved(fromRuneIndex, toRuneIndex);
 		}
@@ -460,7 +484,26 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 				entry.context = newContainerContext;
 
-				newContainer.init(newContainerContext);
+				newContainer.setContext(newContainerContext);
+				
+				RuneChainContainerData containerData = ContainerRuneChainAltar.this.altar.getContainerData();
+
+				if(containerData.hasConfigurationId(entry.runeIndex)) {
+					int savedConfigurationId = containerData.getConfigurationId(entry.runeIndex);
+
+					for(INodeConfiguration configuration : entry.container.getBlueprint().getConfigurations()) {
+						if(configuration.getId() == savedConfigurationId) {
+							entry.configuration = configuration;
+							break;
+						}
+					}
+				}
+
+				if(entry.configuration == null) {
+					entry.configuration = entry.container.getBlueprint().getConfigurations().get(0);
+				}
+				
+				newContainer.init();
 
 				this.runeContainers.put(runeIndex, entry);
 			}
@@ -474,9 +517,9 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 		if(entry != null) {
 			//Remove all links and data
-			RuneChainInfo info = this.altar.getChainInfo();
-			info.unlinkAll(runeIndex);
-			info.removeContainerData(runeIndex);
+			RuneChainContainerData containerData = this.altar.getContainerData();
+			containerData.unlinkAll(runeIndex);
+			containerData.removeContainerData(runeIndex);
 
 			//Remove slots from current container
 			entry.removeSlotsFromContainer();
@@ -484,30 +527,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 	}
 
 	protected IRuneContainerContext createRuneContainerContext(RuneContainerEntry entry) {
-		INodeConfiguration loadedConfiguration = null;
-
-		RuneChainInfo info = ContainerRuneChainAltar.this.altar.getChainInfo();
-
-		if(info.hasConfigurationId(entry.runeIndex)) {
-			int savedConfigurationId = info.getConfigurationId(entry.runeIndex);
-
-			for(INodeConfiguration configuration : entry.container.getBlueprint().getConfigurations()) {
-				if(configuration.getId() == savedConfigurationId) {
-					loadedConfiguration = configuration;
-					break;
-				}
-			}
-		}
-
-		if(loadedConfiguration == null) {
-			loadedConfiguration = entry.container.getBlueprint().getConfigurations().get(0);
-		}
-
-		final INodeConfiguration configuration = loadedConfiguration;
-
 		return new IRuneContainerContext() {
-			private INodeConfiguration currentConfiguration = configuration;
-
 			@Override
 			public IRuneChainAltarContainer getRuneChainAltarContainer() {
 				return ContainerRuneChainAltar.this;
@@ -530,7 +550,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 			@Override
 			public NBTTagCompound getData() {
-				RuneChainInfo info = ContainerRuneChainAltar.this.altar.getChainInfo();
+				RuneChainContainerData info = ContainerRuneChainAltar.this.altar.getContainerData();
 				NBTTagCompound nbt = info.getContainerNbt(entry.runeIndex);
 				if(nbt == null) {
 					info.setContainerNbt(entry.runeIndex, nbt = new NBTTagCompound());
@@ -541,7 +561,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 			@Override
 			public void setData(NBTTagCompound nbt) {
-				ContainerRuneChainAltar.this.altar.getChainInfo().setContainerNbt(entry.runeIndex, nbt);
+				ContainerRuneChainAltar.this.altar.getContainerData().setContainerNbt(entry.runeIndex, nbt);
 				ContainerRuneChainAltar.this.altar.markDirty();
 			}
 
@@ -552,21 +572,21 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 			@Override
 			public INodeConfiguration getConfiguration() {
-				return this.currentConfiguration;
+				return entry.configuration;
 			}
 
 			@Override
 			public void setConfiguration(INodeConfiguration configuration) {
-				if(this.currentConfiguration != configuration) {
-					entry.container.onConfigurationChanged(this.currentConfiguration, configuration);
+				if(entry.configuration != configuration) {
+					entry.container.onConfigurationChanged(entry.configuration, configuration);
 					
-					this.currentConfiguration = configuration;
+					entry.configuration = configuration;
 					
-					ContainerRuneChainAltar.this.altar.getChainInfo().setConfigurationId(entry.runeIndex, configuration.getId());
+					ContainerRuneChainAltar.this.altar.getContainerData().setConfigurationId(entry.runeIndex, configuration.getId());
 					
 					//TODO Preferably store links per configuration
-					ContainerRuneChainAltar.this.altar.getChainInfo().unlinkAll(entry.runeIndex);
-					ContainerRuneChainAltar.this.altar.getChainInfo().unlinkAllIncoming(entry.runeIndex);
+					ContainerRuneChainAltar.this.altar.getContainerData().unlinkAll(entry.runeIndex);
+					ContainerRuneChainAltar.this.altar.getContainerData().unlinkAllIncoming(entry.runeIndex);
 					
 					ContainerRuneChainAltar.this.altar.markDirty();
 				}

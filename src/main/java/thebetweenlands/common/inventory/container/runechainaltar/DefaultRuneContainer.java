@@ -21,8 +21,13 @@ public class DefaultRuneContainer implements IRuneContainer {
 	}
 
 	@Override
-	public void init(IRuneContainerContext context) {
+	public void setContext(IRuneContainerContext context) {
 		this.context = context;
+	}
+	
+	@Override
+	public void init() {
+		
 	}
 
 	@Override

@@ -19,7 +19,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import thebetweenlands.api.item.IRuneItem;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
-import thebetweenlands.common.inventory.container.runechainaltar.RuneChainInfo;
+import thebetweenlands.common.inventory.container.runechainaltar.RuneChainContainerData;
 
 public class TileEntityRuneChainAltar extends TileEntity implements ISidedInventory {
 	private final String name;
@@ -27,7 +27,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 	protected NonNullList<ItemStack> inventory;
 	protected final ItemStackHandler inventoryHandler;
 
-	protected RuneChainInfo chainInfo = new RuneChainInfo();
+	protected RuneChainContainerData containerData = new RuneChainContainerData();
 
 	public static final int OUTPUT_SLOT = 0;
 	public static final int NON_INPUT_SLOTS = 1;
@@ -235,7 +235,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.readInventoryNBT(nbt);
-		this.chainInfo = RuneChainInfo.readFromNBT(nbt.getCompoundTag("chainInfo"));
+		this.containerData = RuneChainContainerData.readFromNBT(nbt.getCompoundTag("chainInfo"));
 	}
 
 	protected void readInventoryNBT(NBTTagCompound nbt) {
@@ -249,7 +249,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		this.writeInventoryNBT(nbt);
-		nbt.setTag("chainInfo", this.chainInfo.writeToNBT(new NBTTagCompound()));
+		nbt.setTag("chainInfo", this.containerData.writeToNBT(new NBTTagCompound()));
 		return nbt;
 	}
 
@@ -264,20 +264,20 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound nbt = super.getUpdateTag();
-		nbt.setTag("chainInfo", this.chainInfo.writeToNBT(new NBTTagCompound()));
+		nbt.setTag("chainInfo", this.containerData.writeToNBT(new NBTTagCompound()));
 		return nbt;
 	}
 	
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setTag("chainInfo", this.chainInfo.writeToNBT(new NBTTagCompound()));
+		nbt.setTag("chainInfo", this.containerData.writeToNBT(new NBTTagCompound()));
 		return new SPacketUpdateTileEntity(this.getPos(), 1, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		this.chainInfo = RuneChainInfo.readFromNBT(pkt.getNbtCompound().getCompoundTag("chainInfo"));
+		this.containerData = RuneChainContainerData.readFromNBT(pkt.getNbtCompound().getCompoundTag("chainInfo"));
 	}
 	//##################################
 	
@@ -299,7 +299,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 		return this.inventory.size() - NON_INPUT_SLOTS;
 	}
 
-	public RuneChainInfo getChainInfo() {
-		return this.chainInfo;
+	public RuneChainContainerData getContainerData() {
+		return this.containerData;
 	}
 }

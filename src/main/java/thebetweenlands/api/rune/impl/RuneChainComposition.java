@@ -239,7 +239,8 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		}
 
 		/**
-		 * Tries to link the specified input to the specified output
+		 * Link the specified input to the specified output.
+		 * No validation is done, if necessary see {@link #canLink(int, int, int, int)}.
 		 * @param inNodeIndex - index of the input node
 		 * @param inputIndex - index of the input node's input
 		 * @param outNodeIndex - index of the output node
@@ -247,13 +248,13 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		 * @return <i>true</i> if the input was successfully linked, <i>false</i> otherwise
 		 */
 		public boolean link(int inNodeIndex, int inputIndex, int outNodeIndex, int outputIndex) {
-			if(this.canLink(inNodeIndex, inputIndex, outNodeIndex, outputIndex)) {
-				NodeSlot outputSlot = this.slots.get(outNodeIndex);
-				NodeSlot inputSlot = this.slots.get(inNodeIndex);
-				inputSlot.links[inputIndex] = new SlotLink(outputSlot, outputIndex);
-				return true;
+			if(outNodeIndex < 0 || outNodeIndex >= this.getNodeBlueprints() || inNodeIndex < 0 || inNodeIndex >= this.getNodeBlueprints() || inNodeIndex <= outNodeIndex) {
+				return false;
 			}
-			return false;
+			NodeSlot outputSlot = this.slots.get(outNodeIndex);
+			NodeSlot inputSlot = this.slots.get(inNodeIndex);
+			inputSlot.links[inputIndex] = new SlotLink(outputSlot, outputIndex);
+			return true;
 		}
 
 		/**
@@ -337,8 +338,16 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			INodeBlueprint<?, ?> node = this.getNodeBlueprint(nodeIndex);
 
 			List<INodeConfiguration> validConfigurations = new ArrayList<>();
+			
+			List<INodeConfiguration> potentialConfigurations = new ArrayList<>();
+			INodeConfiguration setConfiguration = this.getNodeConfiguration(nodeIndex);
+			if(setConfiguration != null) {
+				potentialConfigurations.add(setConfiguration);
+			} else {
+				potentialConfigurations.addAll(node.getConfigurations());
+			}
 
-			configurations: for(INodeConfiguration configuration : node.getConfigurations()) {
+			configurations: for(INodeConfiguration configuration : potentialConfigurations) {
 				List<IConfigurationInput> inputs = configuration.getInputs();
 
 				Collection<Integer> linkedSlots = this.getLinkedSlots(nodeIndex);
