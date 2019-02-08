@@ -52,14 +52,26 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 	@Override
 	public void setData(RuneChainData data) {
 		this.data = data;
-		this.blueprint = data.createBlueprint();
 
 		NBTTagCompound itemNbt = this.getItemStack().getTagCompound();
-		if(itemNbt == null) {
-			itemNbt = new NBTTagCompound();
+
+		if(data != null) {
+			this.blueprint = data.createBlueprint();
+
+			if(itemNbt == null) {
+				itemNbt = new NBTTagCompound();
+			}
+
+			itemNbt.setTag(RUNE_CHAIN_BLUEPRINT_NBT_KEY, data.writeToNBT(new NBTTagCompound()));
+
+			this.getItemStack().setTagCompound(itemNbt);
+		} else {
+			this.blueprint = null;
+
+			if(itemNbt != null) {
+				itemNbt.removeTag(RUNE_CHAIN_BLUEPRINT_NBT_KEY);
+			}
 		}
-		itemNbt.setTag(RUNE_CHAIN_BLUEPRINT_NBT_KEY, data.writeToNBT(new NBTTagCompound()));
-		this.getItemStack().setTagCompound(itemNbt);
 	}
 
 	private void initFromNbt() {
