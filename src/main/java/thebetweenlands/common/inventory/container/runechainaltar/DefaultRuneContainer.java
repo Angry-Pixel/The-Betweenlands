@@ -3,9 +3,9 @@ package thebetweenlands.common.inventory.container.runechainaltar;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.rune.INodeBlueprint;
 import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.gui.IRuneContainer;
-import thebetweenlands.api.rune.gui.IRuneContainerContext;
-import thebetweenlands.api.rune.gui.IRuneLink;
+import thebetweenlands.api.rune.IRuneContainer;
+import thebetweenlands.api.rune.IRuneContainerContext;
+import thebetweenlands.api.rune.IRuneLink;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 
 public class DefaultRuneContainer implements IRuneContainer {
@@ -46,12 +46,12 @@ public class DefaultRuneContainer implements IRuneContainer {
 	}
 
 	@Override
-	public void onLinksMoved(int fromRuneIndex, int toRuneIndex) {
+	public void onRuneDataMoved(int fromRuneIndex, int toRuneIndex) {
 
 	}
 
 	@Override
-	public void onRuneShifted(int fromRuneIndex, int toRuneIndex) {
+	public void onRuneMoved(int fromRuneIndex, int toRuneIndex) {
 
 	}
 

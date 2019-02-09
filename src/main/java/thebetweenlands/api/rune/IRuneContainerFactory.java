@@ -1,4 +1,4 @@
-package thebetweenlands.api.rune.gui;
+package thebetweenlands.api.rune;
 
 public interface IRuneContainerFactory {
 	public IRuneContainer createContainer();

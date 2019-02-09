@@ -34,18 +34,17 @@ import net.minecraft.util.Tuple;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.item.IRuneItem;
+import thebetweenlands.api.rune.IGuiRuneMark;
 import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationInput;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 import thebetweenlands.api.rune.INodeConfiguration.IType;
-import thebetweenlands.api.rune.gui.IGuiRuneMark;
-import thebetweenlands.api.rune.gui.IRuneChainAltarGui;
-import thebetweenlands.api.rune.gui.IRuneContainer;
-import thebetweenlands.api.rune.gui.IRuneGui;
-import thebetweenlands.api.rune.gui.IRuneLink;
-import thebetweenlands.api.rune.gui.RuneMenuDrawingContext;
-import thebetweenlands.api.rune.gui.RuneMenuType;
+import thebetweenlands.api.rune.IRuneChainAltarGui;
+import thebetweenlands.api.rune.IRuneContainer;
+import thebetweenlands.api.rune.IRuneGui;
+import thebetweenlands.api.rune.IRuneLink;
+import thebetweenlands.api.rune.RuneMenuDrawingContext;
+import thebetweenlands.api.rune.RuneMenuType;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltarGui;
@@ -54,6 +53,7 @@ import thebetweenlands.common.network.serverbound.MessageLinkRuneChainAltarRune;
 import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarPage;
 import thebetweenlands.common.network.serverbound.MessageShiftRuneChainAltarSlot;
 import thebetweenlands.common.network.serverbound.MessageUnlinkRuneChainAltarRune;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 import thebetweenlands.util.ColoredItemRenderer;
@@ -128,7 +128,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 			ItemStack stack = this.container.getRuneItemStack(runeIndex);
 
-			if(!stack.isEmpty() && stack.getItem() instanceof IRuneItem) {
+			if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) {
 				IRuneContainer container = this.container.getRuneContainer(runeIndex);
 
 				if(currentGui == null || currentGui.getContainer() != container) {
@@ -136,9 +136,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 						currentGui.close();
 					}
 
-					IRuneItem runeItem = (IRuneItem) stack.getItem();
-
-					IRuneGui newGui = runeItem.getRuneContainerFactory(stack).createGui(RuneMenuType.PRIMARY);
+					IRuneGui newGui = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null).getRuneContainerFactory().createGui(RuneMenuType.PRIMARY);
 
 					newGui.init(container, this.width, this.height);
 
@@ -185,7 +183,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		if(targetRune >= 0) {
 			ItemStack stack = this.container.getRuneItemStack(targetRune);
 
-			if(!stack.isEmpty() && stack.getItem() instanceof IRuneItem) {
+			if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) {
 				IRuneContainer container = this.container.getRuneContainer(targetRune);
 
 				if(container != null) {
@@ -194,9 +192,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 							currentGui.close();
 						}
 
-						IRuneItem runeItem = (IRuneItem) stack.getItem();
-
-						IRuneGui newGui = runeItem.getRuneContainerFactory(stack).createGui(RuneMenuType.SECONDARY);
+						IRuneGui newGui = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null).getRuneContainerFactory().createGui(RuneMenuType.SECONDARY);
 
 						newGui.init(container, this.width, this.height);
 

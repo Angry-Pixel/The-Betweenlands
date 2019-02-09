@@ -12,6 +12,8 @@ import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.capability.IPuppeteerCapability;
+import thebetweenlands.api.capability.IRuneCapability;
+import thebetweenlands.api.capability.IRuneChainCapability;
 import thebetweenlands.api.capability.ISummoningCapability;
 import thebetweenlands.common.capability.CustomStepSoundCapability;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
@@ -22,9 +24,9 @@ import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
 import thebetweenlands.common.capability.flight.FlightEntityCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSicknessEntityCapability;
 import thebetweenlands.common.capability.item.ILivingWeedwoodShieldCapability;
-import thebetweenlands.common.capability.item.IRuneChainCapability;
 import thebetweenlands.common.capability.item.LivingWeedwoodShieldItemCapability;
 import thebetweenlands.common.capability.item.RuneChainItemCapability;
+import thebetweenlands.common.capability.item.RuneItemCapability;
 import thebetweenlands.common.capability.portal.PortalEntityCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppetCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppeteerCapability;
@@ -69,6 +71,9 @@ public class CapabilityRegistry {
 	@CapabilityInject(IRuneChainCapability.class)
 	public static final Capability<IRuneChainCapability> CAPABILITY_RUNE_CHAIN = null;
 	
+	@CapabilityInject(IRuneCapability.class)
+	public static final Capability<IRuneCapability> CAPABILITY_RUNE = null;
+	
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new CircleGemEntityCapability());
@@ -83,6 +88,7 @@ public class CapabilityRegistry {
 		
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		ItemCapabilityHandler.registerItemCapability(new RuneChainItemCapability());
+		ItemCapabilityHandler.registerItemCapability(new RuneItemCapability());
 		
 		EntityCapabilityHandler.registerCapabilities();
 		ItemCapabilityHandler.registerCapabilities();

@@ -2,17 +2,16 @@ package thebetweenlands.common.item.herblore;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.api.item.IRuneItem;
-import thebetweenlands.api.rune.gui.IRuneContainer;
-import thebetweenlands.api.rune.gui.IRuneGui;
-import thebetweenlands.api.rune.gui.IRuneContainerFactory;
-import thebetweenlands.api.rune.gui.RuneMenuType;
+import thebetweenlands.api.rune.IRuneContainer;
+import thebetweenlands.api.rune.IRuneContainerFactory;
+import thebetweenlands.api.rune.IRuneGui;
+import thebetweenlands.api.rune.RuneMenuType;
 import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.client.gui.inventory.runechainaltar.DefaultRuneGui;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.inventory.container.runechainaltar.DefaultRuneContainer;
 
-public class ItemRune extends Item implements IRuneItem {
+public class ItemRune extends Item {
 	private final Factory factory = new Factory(this);
 	private AbstractRune.Blueprint<?> blueprint;
 
@@ -23,7 +22,6 @@ public class ItemRune extends Item implements IRuneItem {
 		this.blueprint = blueprint;
 	}
 
-	@Override
 	public IRuneContainerFactory getRuneContainerFactory(ItemStack stack) {
 		return this.factory;
 	}

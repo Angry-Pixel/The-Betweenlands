@@ -1,15 +1,15 @@
-package thebetweenlands.common.capability.item;
+package thebetweenlands.api.capability;
 
 import javax.annotation.Nullable;
 
+import thebetweenlands.api.rune.IRuneChainData;
 import thebetweenlands.api.rune.impl.RuneChainComposition;
-import thebetweenlands.common.herblore.rune.RuneChainData;
 
 public interface IRuneChainCapability {
-	public void setData(@Nullable RuneChainData data);
+	public void setData(@Nullable IRuneChainData data);
 
 	@Nullable
-	public RuneChainData getData();
+	public IRuneChainData getData();
 
 	@Nullable
 	public RuneChainComposition.Blueprint getBlueprint();

@@ -1,4 +1,4 @@
-package thebetweenlands.api.rune.gui;
+package thebetweenlands.api.rune;
 
 public enum RuneMenuType {
 	PRIMARY,

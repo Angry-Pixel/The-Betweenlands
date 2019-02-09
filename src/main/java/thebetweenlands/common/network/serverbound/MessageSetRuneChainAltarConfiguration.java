@@ -5,7 +5,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.gui.IRuneContainer;
+import thebetweenlands.api.rune.IRuneContainer;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
 import thebetweenlands.common.network.MessageBase;
 

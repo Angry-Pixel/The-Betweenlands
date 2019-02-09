@@ -1,11 +1,10 @@
-package thebetweenlands.api.rune.gui;
+package thebetweenlands.api.rune;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import thebetweenlands.api.rune.INodeConfiguration;
 
 public interface IRuneContainerContext {
 	@Nullable

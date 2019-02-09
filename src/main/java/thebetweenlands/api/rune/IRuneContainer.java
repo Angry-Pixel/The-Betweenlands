@@ -1,8 +1,6 @@
-package thebetweenlands.api.rune.gui;
+package thebetweenlands.api.rune;
 
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.api.rune.INodeBlueprint;
-import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 
 public interface IRuneContainer {
@@ -16,9 +14,9 @@ public interface IRuneContainer {
 
 	public void onMarkUnlinked(int input, IRuneLink link);
 
-	public void onLinksMoved(int fromRuneIndex, int toRuneIndex);
+	public void onRuneDataMoved(int fromRuneIndex, int toRuneIndex);
 
-	public void onRuneShifted(int fromRuneIndex, int toRuneIndex);
+	public void onRuneMoved(int fromRuneIndex, int toRuneIndex);
 	
 	public void onConfigurationChanged(INodeConfiguration oldConfiguration, INodeConfiguration newConfiguration);
 

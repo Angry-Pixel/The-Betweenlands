@@ -1,4 +1,4 @@
-package thebetweenlands.api.rune.gui;
+package thebetweenlands.api.rune;
 
 public final class RuneMenuDrawingContext {
 	public static enum Connection {

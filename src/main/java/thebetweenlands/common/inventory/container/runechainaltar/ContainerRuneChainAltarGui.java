@@ -1,7 +1,7 @@
 package thebetweenlands.common.inventory.container.runechainaltar;
 
 import net.minecraft.entity.player.EntityPlayer;
-import thebetweenlands.api.rune.gui.IRuneChainAltarGui;
+import thebetweenlands.api.rune.IRuneChainAltarGui;
 import thebetweenlands.client.gui.inventory.runechainaltar.GuiRuneChainAltar;
 import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 

@@ -1,11 +1,26 @@
 package thebetweenlands.common.capability.item;
 
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.api.capability.IRuneChainCapability;
+import thebetweenlands.api.rune.INodeBlueprint;
+import thebetweenlands.api.rune.INodeConfiguration;
+import thebetweenlands.api.rune.IRuneChainAltarContainer;
+import thebetweenlands.api.rune.IRuneChainAltarGui;
+import thebetweenlands.api.rune.IRuneChainContainerData;
+import thebetweenlands.api.rune.IRuneChainData;
+import thebetweenlands.api.rune.IRuneContainer;
+import thebetweenlands.api.rune.IRuneContainerContext;
+import thebetweenlands.api.rune.IRuneLink;
+import thebetweenlands.api.rune.impl.NodeDummy;
 import thebetweenlands.api.rune.impl.RuneChainComposition;
+import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 import thebetweenlands.common.capability.base.ItemCapability;
 import thebetweenlands.common.herblore.rune.RuneChainData;
 import thebetweenlands.common.item.herblore.ItemRuneChain;
@@ -40,30 +55,30 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 		return IRuneChainCapability.class;
 	}
 
-	private RuneChainData data;
+	private IRuneChainData data;
 	private RuneChainComposition.Blueprint blueprint;
 
 	public static final String RUNE_CHAIN_BLUEPRINT_NBT_KEY = "thebetweenlands.runechain.blueprint";
 
 	@Override
 	protected void init() {
-		
+
 	}
 
 	@Override
-	public void setData(RuneChainData data) {
+	public void setData(IRuneChainData data) {
 		this.data = data;
 
 		NBTTagCompound itemNbt = this.getItemStack().getTagCompound();
 
 		if(data != null) {
-			this.blueprint = data.createBlueprint();
+			this.blueprint =createBlueprint(data);
 
 			if(itemNbt == null) {
 				itemNbt = new NBTTagCompound();
 			}
 
-			itemNbt.setTag(RUNE_CHAIN_BLUEPRINT_NBT_KEY, data.writeToNBT(new NBTTagCompound()));
+			itemNbt.setTag(RUNE_CHAIN_BLUEPRINT_NBT_KEY, RuneChainData.writeToNBT(data, new NBTTagCompound()));
 
 			this.getItemStack().setTagCompound(itemNbt);
 		} else {
@@ -75,21 +90,127 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 		}
 	}
 
-	private void initFromNbt() {
+	public static RuneChainComposition.Blueprint createBlueprint(IRuneChainData data) {
+		RuneChainComposition.Blueprint blueprint = new RuneChainComposition.Blueprint();
+
+		NonNullList<ItemStack> runes = data.getRuneItems();
+		IRuneChainContainerData containerData = data.getContainerData();
+
+		for(int i = 0; i < runes.size(); i++) {
+			ItemStack stack = runes.get(i);
+
+			if(!stack.isEmpty() && stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE, null)) {
+				final int runeIndex = i;
+
+				IRuneContainer container = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE, null).getRuneContainerFactory().createContainer();
+
+				IRuneContainerContext context = new IRuneContainerContext() {
+					@Override
+					public IRuneChainAltarContainer getRuneChainAltarContainer() {
+						return null;
+					}
+
+					@Override
+					public IRuneChainAltarGui getRuneChainAltarGui() {
+						return null;
+					}
+
+					@Override
+					public int getRuneIndex() {
+						return runeIndex;
+					}
+
+					@Override
+					public ItemStack getRuneItemStack() {
+						return stack;
+					}
+
+					@Override
+					public NBTTagCompound getData() {
+						IRuneChainContainerData info = containerData;
+						NBTTagCompound nbt = info.getContainerNbt(runeIndex);
+						if(nbt == null) {
+							nbt = new NBTTagCompound();
+						}
+						return nbt;
+					}
+
+					@Override
+					public void setData(NBTTagCompound nbt) { }
+
+					@Override
+					public void addSlot(Slot slot) { }
+
+					@Override
+					public INodeConfiguration getConfiguration() {
+						return null;
+					}
+
+					@Override
+					public void setConfiguration(INodeConfiguration configuration) { }
+				};
+
+				container.setContext(context);
+
+				INodeBlueprint<?, RuneExecutionContext> nodeBlueprint = container.getBlueprint();
+
+				INodeConfiguration nodeConfiguration = null;
+
+				if(containerData.hasConfigurationId(runeIndex)) {
+					int savedConfigurationId = containerData.getConfigurationId(runeIndex);
+
+					for(INodeConfiguration configuration : nodeBlueprint.getConfigurations()) {
+						if(configuration.getId() == savedConfigurationId) {
+							nodeConfiguration = configuration;
+							break;
+						}
+					}
+				}
+
+				if(nodeConfiguration == null) {
+					nodeConfiguration = nodeBlueprint.getConfigurations().get(0);
+				}
+
+				//Always specify the used configuration
+				blueprint.addNodeBlueprint(nodeBlueprint, nodeConfiguration);
+			} else {
+				blueprint.addNodeBlueprint(NodeDummy.Blueprint.INSTANCE);
+			}
+		}
+
+		for(int nodeIndex = 0; nodeIndex < blueprint.getNodeBlueprints(); nodeIndex++) {
+			INodeConfiguration configuration = blueprint.getNodeConfiguration(nodeIndex);
+
+			//Configuration should not be null for any node except for dummy nodes where we don't have links anyways
+			if(configuration != null) {
+				for(int inputIndex = 0; inputIndex < configuration.getInputs().size(); inputIndex++) {
+					IRuneLink link = containerData.getLink(nodeIndex, inputIndex);
+
+					if(link != null) {
+						blueprint.link(nodeIndex, inputIndex, link.getOutputRune(), link.getOutput());
+					}
+				}
+			}
+		}
+
+		return blueprint;
+	}
+
+	protected void initFromNbt() {
 		if(this.data == null) {
 			this.blueprint = null;
-			
+
 			NBTTagCompound itemNbt = this.getItemStack().getTagCompound();
 
 			if(itemNbt != null && itemNbt.hasKey(RUNE_CHAIN_BLUEPRINT_NBT_KEY, Constants.NBT.TAG_COMPOUND)) {
 				this.data = RuneChainData.readFromNBT(itemNbt.getCompoundTag(RUNE_CHAIN_BLUEPRINT_NBT_KEY));
-				this.blueprint = this.data.createBlueprint();
+				this.blueprint = createBlueprint(this.data);
 			}
 		}
 	}
 
 	@Override
-	public RuneChainData getData() {
+	public IRuneChainData getData() {
 		this.initFromNbt();
 		return this.data;
 	}

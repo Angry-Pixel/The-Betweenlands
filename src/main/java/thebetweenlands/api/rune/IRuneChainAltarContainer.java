@@ -1,4 +1,4 @@
-package thebetweenlands.api.rune.gui;
+package thebetweenlands.api.rune;
 
 import java.util.Collection;
 
@@ -37,7 +37,7 @@ public interface IRuneChainAltarContainer {
 
 	public void unlinkAll(int runeIndex);
 
-	public void moveAllLinks(int fromRuneIndex, int toRuneIndex);
+	public void moveRuneData(int fromRuneIndex, int toRuneIndex);
 
 	@Nullable
 	public IRuneContainer getRuneContainer(int runeIndex);
