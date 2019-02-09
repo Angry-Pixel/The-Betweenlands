@@ -115,6 +115,8 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 	}
 
 	public void onSetSelectedRune(int runeIndex) {
+		this.linkingDropdownMenuSlot = -1;
+		
 		this.updateSelectedRuneGui(runeIndex);
 	}
 
