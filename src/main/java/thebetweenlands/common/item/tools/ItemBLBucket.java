@@ -153,7 +153,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
         if (I18n.canTranslate(fluidUnlocKey))
             return I18n.translateToLocal(fluidUnlocKey).trim();
 
-        return I18n.translateToLocalFormatted(getEmpty(stack).getTranslationKey() + ".filled.name", fluidStack.getFluid().getRarity(fluidStack).rarityName + fluidStack.getLocalizedName() + TextFormatting.WHITE);
+        return I18n.translateToLocalFormatted(getEmpty(stack).getTranslationKey() + ".filled.name", fluidStack.getFluid().getRarity(fluidStack).color + fluidStack.getLocalizedName() + TextFormatting.WHITE);
     }
 
     @Override
