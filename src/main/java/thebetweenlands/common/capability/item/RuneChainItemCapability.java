@@ -47,7 +47,7 @@ public class RuneChainItemCapability extends ItemCapability<RuneChainItemCapabil
 
 	@Override
 	protected void init() {
-
+		
 	}
 
 	@Override

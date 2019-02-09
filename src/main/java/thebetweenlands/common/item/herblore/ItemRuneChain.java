@@ -8,19 +8,23 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.api.aspect.AspectContainer;
+import thebetweenlands.api.item.IRenamableItem;
 import thebetweenlands.api.rune.IRuneUser;
 import thebetweenlands.api.rune.impl.RuneChainComposition;
 import thebetweenlands.api.rune.impl.RuneChainComposition.IAspectBuffer;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.item.IRuneChainCapability;
+import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
-public class ItemRuneChain extends Item {
+public class ItemRuneChain extends Item implements IRenamableItem {
 	public ItemRuneChain() {
 		this.setMaxStackSize(1);
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
@@ -29,6 +33,11 @@ public class ItemRuneChain extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if(!world.isRemote) {
+			if (player.isSneaking()) {
+				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ITEM_RENAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
+				return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+			}
+
 			ItemStack stack = player.getHeldItem(hand);
 
 			if(stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {

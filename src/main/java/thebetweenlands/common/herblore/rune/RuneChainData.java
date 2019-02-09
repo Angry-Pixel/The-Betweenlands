@@ -198,4 +198,8 @@ public class RuneChainData implements IItemHandler {
 	public int getSlotLimit(int slot) {
 		return 64;
 	}
+	
+	public RuneChainContainerData copyContainerData() {
+		return RuneChainContainerData.readFromNBT(this.containerData.writeToNBT(new NBTTagCompound()));
+	}
 }

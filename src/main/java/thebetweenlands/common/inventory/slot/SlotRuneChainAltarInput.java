@@ -7,14 +7,14 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
 import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 
-public class SlotRune extends Slot {
+public class SlotRuneChainAltarInput extends Slot {
 	private final TileEntityRuneChainAltar altar;
 	private final ContainerRuneChainAltar.Page page;
 
 	public int prevHoverTicks;
 	public int hoverTicks;
 	
-	public SlotRune(TileEntityRuneChainAltar altar, int index, int xPosition, int yPosition, ContainerRuneChainAltar.Page page) {
+	public SlotRuneChainAltarInput(TileEntityRuneChainAltar altar, int index, int xPosition, int yPosition, ContainerRuneChainAltar.Page page) {
 		super(altar, index, xPosition, yPosition);
 		this.altar = altar;
 		this.page = page;
@@ -31,16 +31,16 @@ public class SlotRune extends Slot {
 
 	@Override
 	public boolean canTakeStack(EntityPlayer playerIn) {
-		return this.page.isInteractable() && this.slotNumber - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
+		return this.page.isInteractable() && this.altar.isOutputItemAvailable() && this.slotNumber - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
 	}
 
 	@Override
 	public boolean isHere(IInventory inv, int slotIn) {
-		return super.isHere(inv, slotIn) && this.page.isInteractable() && this.slotNumber - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
+		return super.isHere(inv, slotIn) && this.page.isInteractable() && this.altar.isOutputItemAvailable() && this.slotNumber - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return this.page.isCurrent() && this.slotNumber - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
+		return this.page.isCurrent() && this.altar.isOutputItemAvailable() && this.slotNumber - TileEntityRuneChainAltar.NON_INPUT_SLOTS < this.altar.getChainLength() + 1;
 	}
 }

@@ -18,8 +18,18 @@ public interface IRuneContainerContext {
 
 	public ItemStack getRuneItemStack();
 
+	/**
+	 * Returns the NBT data that is associated with the rune container this context belongs to.
+	 * @return NBT data associated with the rune container this context belongs to
+	 */
 	public NBTTagCompound getData();
 
+	/**
+	 * Sets the NBT data that is associated with the rune container this context belongs to.
+	 * If this data changes and affects the rune container's {@link IRuneContainer#getBlueprint()}, {@link IRuneChainAltarContainer#onRuneChanged(int)} must be called
+	 * if the rune chain altar container is not <code>null</code>.
+	 * @param nbt - NBT data that is associated with the rune container this context belongs to
+	 */
 	public void setData(NBTTagCompound nbt);
 
 	public void addSlot(Slot slot);

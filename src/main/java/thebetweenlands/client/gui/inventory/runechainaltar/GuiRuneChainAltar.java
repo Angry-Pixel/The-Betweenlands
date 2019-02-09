@@ -49,7 +49,7 @@ import thebetweenlands.api.rune.gui.RuneMenuType;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltarGui;
-import thebetweenlands.common.inventory.slot.SlotRune;
+import thebetweenlands.common.inventory.slot.SlotRuneChainAltarInput;
 import thebetweenlands.common.network.serverbound.MessageLinkRuneChainAltarRune;
 import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarPage;
 import thebetweenlands.common.network.serverbound.MessageShiftRuneChainAltarSlot;
@@ -298,8 +298,8 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 	@Override
 	public void drawSlot(Slot slot) {
-		if(slot instanceof SlotRune) {
-			SlotRune slotRune = (SlotRune) slot;
+		if(slot instanceof SlotRuneChainAltarInput) {
+			SlotRuneChainAltarInput slotRune = (SlotRuneChainAltarInput) slot;
 
 			if(slotRune.hoverTicks + slotRune.prevHoverTicks == 0 != this.drawHoveringSlots) {
 				float hoverPercent = (slotRune.prevHoverTicks + (slotRune.hoverTicks - slotRune.prevHoverTicks) * this.mc.getRenderPartialTicks()) / 7.0F;
@@ -510,8 +510,10 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			this.drawCordPiece(this.guiLeft - 11, this.guiTop + 4, i);
 		}
 
-		for(int i = this.tile.getChainLength() + 1; i < this.tile.getMaxChainLength(); i++) {
-			SlotRune slot = (SlotRune) this.inventorySlots.getSlot(i + TileEntityRuneChainAltar.NON_INPUT_SLOTS);
+		int coverStartIndex = this.tile.getChainLength() + (this.tile.isOutputItemAvailable() ? 1 : 0);
+		
+		for(int i = coverStartIndex; i < this.tile.getMaxChainLength(); i++) {
+			SlotRuneChainAltarInput slot = (SlotRuneChainAltarInput) this.inventorySlots.getSlot(i + TileEntityRuneChainAltar.NON_INPUT_SLOTS);
 
 			if(slot.getPage().isCurrent()) {
 				this.drawSlotCoverStone(this.guiLeft + slot.xPos, this.guiTop + slot.yPos);
@@ -527,7 +529,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		for(int i = 0; i < ContainerRuneChainAltar.SLOTS_PER_PAGE; i++) {
 			int slotIndex = this.container.getCurrentPage().index * ContainerRuneChainAltar.SLOTS_PER_PAGE + TileEntityRuneChainAltar.NON_INPUT_SLOTS + i;
 
-			SlotRune slot = (SlotRune) this.inventorySlots.getSlot(slotIndex);
+			SlotRuneChainAltarInput slot = (SlotRuneChainAltarInput) this.inventorySlots.getSlot(slotIndex);
 
 			if(slot.getHasStack() && x >= this.guiLeft + slot.xPos - 4 && x <= this.guiLeft + slot.xPos + 16 + 3 && y >= this.guiTop + slot.yPos - 10 && y < this.guiTop + slot.yPos + 16 + 10) {
 				if(this.container.getShiftHoleSlot(slotIndex, false) >= 0) {
@@ -585,7 +587,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 					for(int i = 0; i < ContainerRuneChainAltar.SLOTS_PER_PAGE; i++) {
 						int slotIndex = this.container.getCurrentPage().index * ContainerRuneChainAltar.SLOTS_PER_PAGE + TileEntityRuneChainAltar.NON_INPUT_SLOTS + i;
 
-						SlotRune slot = (SlotRune) this.inventorySlots.getSlot(slotIndex);
+						SlotRuneChainAltarInput slot = (SlotRuneChainAltarInput) this.inventorySlots.getSlot(slotIndex);
 
 						if(slot.getHasStack() && mouseX >= this.guiLeft + slot.xPos - 4 && mouseX < this.guiLeft + slot.xPos + 16 + 3 && mouseY >= this.guiTop + slot.yPos - 10 && mouseY < this.guiTop + slot.yPos + 16 + 10) {
 							if(this.container.getShiftHoleSlot(slotIndex, false) >= 0) {
@@ -771,8 +773,8 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 	protected void updateSlotHoverTicks() {
 		for(Slot slot : this.container.inventorySlots) {
-			if(slot instanceof SlotRune) {
-				SlotRune slotRune = (SlotRune) slot;
+			if(slot instanceof SlotRuneChainAltarInput) {
+				SlotRuneChainAltarInput slotRune = (SlotRuneChainAltarInput) slot;
 
 				slotRune.prevHoverTicks = slotRune.hoverTicks;
 
@@ -894,7 +896,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		if(this.linkingDropdownMenuSlot >= 0) {
 			Slot slot = this.inventorySlots.getSlot(this.linkingDropdownMenuSlot);
 
-			if(slot instanceof SlotRune)  {
+			if(slot instanceof SlotRuneChainAltarInput)  {
 				IRuneContainer container = this.container.getRuneContainer(this.linkingDropdownMenuSlot - this.tile.getChainStart());
 
 				if(container != null) {
@@ -928,7 +930,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 			if(primaryRuneGui != null) {
 				for(Slot slot : this.container.inventorySlots) {
-					if(slot instanceof SlotRune && slot.isEnabled() && slot.slotNumber - this.tile.getChainStart() < primaryRuneGui.getContainer().getContext().getRuneIndex()) {
+					if(slot instanceof SlotRuneChainAltarInput && slot.isEnabled() && slot.slotNumber - this.tile.getChainStart() < primaryRuneGui.getContainer().getContext().getRuneIndex()) {
 						IRuneContainer container = this.container.getRuneContainer(slot.slotNumber - this.tile.getChainStart());
 
 						if(container != null) {
@@ -1190,7 +1192,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 				Slot linkedSlot = this.inventorySlots.getSlot(link.getSecond().getOutputRune() + this.tile.getChainStart());
 
-				if(this.swapAnimationTicks == 0 && linkedSlot instanceof SlotRune && linkedSlot.isEnabled()) {
+				if(this.swapAnimationTicks == 0 && linkedSlot instanceof SlotRuneChainAltarInput && linkedSlot.isEnabled()) {
 					this.drawDropdownMenu(linkedSlot, mouseX, mouseY, false);
 
 					int sy = this.guiTop + linkedSlot.yPos - 3;
@@ -1330,6 +1332,6 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 			return false;
 		}
 		Slot slot = this.container.getRuneSlot(runeIndex);
-		return slot instanceof SlotRune ? ((SlotRune) slot).isEnabled() : false;
+		return slot instanceof SlotRuneChainAltarInput ? ((SlotRuneChainAltarInput) slot).isEnabled() : false;
 	}
 }

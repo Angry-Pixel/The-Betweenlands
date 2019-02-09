@@ -20,6 +20,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import thebetweenlands.api.item.IRuneItem;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
 import thebetweenlands.common.inventory.container.runechainaltar.RuneChainContainerData;
+import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class TileEntityRuneChainAltar extends TileEntity implements ISidedInventory {
 	private final String name;
@@ -53,7 +54,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 
 			@Override
 			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-				if (stack.isEmpty() || !TileEntityRuneChainAltar.this.isItemValidForSlot(slot, stack)) {
+				if (stack.isEmpty() || (!TileEntityRuneChainAltar.this.isOutputItemAvailable() && slot >= NON_INPUT_SLOTS) || !TileEntityRuneChainAltar.this.isItemValidForSlot(slot, stack)) {
 					return stack;
 				}
 
@@ -153,9 +154,9 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if(slot == OUTPUT_SLOT) {
-			return false;
+			return stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
 		} else {
-			return slot < this.getSizeInventory() && stack.getItem() instanceof IRuneItem;
+			return this.isOutputItemAvailable() && slot < this.getSizeInventory() && stack.getItem() instanceof IRuneItem;
 		}
 	}
 
@@ -176,7 +177,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 
 	@Override
 	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing side) {
-		return isItemValidForSlot(slot, stack);
+		return this.isItemValidForSlot(slot, stack);
 	}
 
 	@Override
@@ -258,7 +259,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 		nbt.setTag("Inventory", inventoryNbt);
 	}
 
-	
+
 	//TODO Remove all this and only sync when GUI is opened
 	//##################################
 	@Override
@@ -267,7 +268,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 		nbt.setTag("chainInfo", this.containerData.writeToNBT(new NBTTagCompound()));
 		return nbt;
 	}
-	
+
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
@@ -280,8 +281,8 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 		this.containerData = RuneChainContainerData.readFromNBT(pkt.getNbtCompound().getCompoundTag("chainInfo"));
 	}
 	//##################################
-	
-	
+
+
 	public int getChainStart() {
 		return NON_INPUT_SLOTS;
 	}
@@ -299,7 +300,16 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 		return this.inventory.size() - NON_INPUT_SLOTS;
 	}
 
+	public void setContainerData(RuneChainContainerData data) {
+		this.containerData = data;
+		this.markDirty();
+	}
+	
 	public RuneChainContainerData getContainerData() {
 		return this.containerData;
+	}
+	
+	public boolean isOutputItemAvailable() {
+		return !this.inventory.get(OUTPUT_SLOT).isEmpty();
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
@@ -40,4 +41,13 @@ public interface IRuneChainAltarContainer {
 
 	@Nullable
 	public IRuneContainer getRuneContainer(int runeIndex);
+
+	/**
+	 * Called when runes have changed, i.e. rune is added/removed, mark input is linked/unlinked.
+	 * Custom {@link IRuneContainer}s must call this only if its node blueprint has changed, i.e. if anything of the rune's
+	 * {@link IRuneContainer} has changed that affects the node blueprint.
+	 * This method is what triggers the update of the output rune chain stack, similarly to {@link Container#onCraftMatrixChanged(net.minecraft.inventory.IInventory)}.
+	 * @param runeIndex - index of the rune that has changed
+	 */
+	public void onRunesChanged();
 }

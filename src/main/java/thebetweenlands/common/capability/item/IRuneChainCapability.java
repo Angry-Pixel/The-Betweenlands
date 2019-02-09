@@ -7,7 +7,7 @@ import thebetweenlands.common.herblore.rune.RuneChainData;
 
 public interface IRuneChainCapability {
 	public void setData(@Nullable RuneChainData data);
-	
+
 	@Nullable
 	public RuneChainData getData();
 
