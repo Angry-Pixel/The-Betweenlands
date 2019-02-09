@@ -42,6 +42,7 @@ import thebetweenlands.common.herblore.rune.RuneDestroyBlock;
 import thebetweenlands.common.herblore.rune.RuneDestroyBlocks;
 import thebetweenlands.common.herblore.rune.RuneFire;
 import thebetweenlands.common.herblore.rune.RuneMarkArea;
+import thebetweenlands.common.herblore.rune.RuneProjectile;
 import thebetweenlands.common.herblore.rune.RuneSelectGrass;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemBoneArmor;
@@ -404,6 +405,7 @@ public class ItemRegistry {
     public static final Item TEST_RUNE_MARK_AREA = new ItemRune(new RuneMarkArea.Blueprint());
     public static final Item TEST_RUNE_SELECT_GRASS = new ItemRune(new RuneSelectGrass.Blueprint());
     public static final Item TEST_RUNE_FIRE = new ItemRune(new RuneFire.Blueprint());
+    public static final Item TEST_RUNE_PROJECTILE = new ItemRune(new RuneProjectile.Blueprint());
     
     private ItemRegistry() {
 

@@ -396,14 +396,19 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 	private static final class Scheduler implements INodeIO.IScheduler {
 		private boolean terminated;
 		private float delay;
+		private int updateCount;
 
 		private Scheduler() {
-			this.reset();
+			this.beginUpdateTask();
 		}
 
-		private void reset() {
+		private void beginUpdateTask() {
 			this.delay = 0.0F;
 			this.terminated = false;
+		}
+		
+		private void finishScheduledTask() {
+			this.updateCount = 0;
 		}
 
 		@Override
@@ -416,6 +421,11 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		@Override
 		public void terminate() {
 			this.terminated = true;
+		}
+
+		@Override
+		public int getUpdateCount() {
+			return this.updateCount;
 		}
 	}
 
@@ -949,14 +959,17 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 	}
 
 	private boolean updateTask() {
-		this.scheduler.reset();
+		this.scheduler.beginUpdateTask();
 
 		while(this.delay < 1.0F) {
 			this.scheduledTask.update(this.scheduler);
 
 			this.delay += this.scheduler.delay;
 
+			this.scheduler.updateCount++;
+			
 			if(this.scheduler.terminated) {
+				this.scheduler.finishScheduledTask();
 				this.scheduledTask = null;
 				return this.delay >= 1.0F;
 			}

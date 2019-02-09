@@ -41,10 +41,18 @@ public interface INodeBlueprint<T extends INode<?, E>, E> {
 		 */
 		public static interface IScheduler {
 			/**
+			 * Returns how many times the task has already been updated.
+			 * This counter is incremented every time <i>after</i> {@link ISchedulerTask#update(IScheduler)} was called
+			 * and starts at 0.
+			 * @return how many times the task has already been updated
+			 */
+			public int getUpdateCount();
+
+			/**
 			 * Causes the task's execution to temporarily stop after returning.
 			 * The task will continue execution after the specified duration.
 			 * If sleep is called multiple times the duration is accumulated.
-			 * @param duration - how long the execution should be paused
+			 * @param duration - how long the execution should be paused. In ticks
 			 */
 			public void sleep(float duration);
 
