@@ -24,13 +24,13 @@ import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 
 public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	private SludgeWormMazeMicroBuilds microBuild = new SludgeWormMazeMicroBuilds();
+	private LightTowerBuildParts lightTowerBuild = new LightTowerBuildParts();
 
 	public WorldGenSludgeWormDungeon() {
 		super(true);
@@ -53,6 +53,58 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 		
 		return true;
+	}
+	
+	public void generateTower(World world, Random rand, BlockPos pos) {
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+
+		int height = 19;
+		int radius = 9;
+
+		int level1 = 0;
+		int level2 = 8;
+		int level3 = 16;
+
+		// main
+		for (int yy = y; y + height >= yy; yy++) {
+			for (int i = radius * -1; i <= radius; ++i) {
+				for (int j = radius * -1; j <= radius; ++j) {
+					double dSq = i * i + j * j;
+					if (Math.round(Math.sqrt(dSq)) == radius && yy - y < level2)
+						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.SMOOTH_BETWEENSTONE, 2);
+					if (Math.round(Math.sqrt(dSq)) == radius && yy - y >= level2)
+						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.BETWEENSTONE_BRICKS, 2);
+
+					// TODO - replace this with parts in the tower helper class
+					if (Math.round(Math.sqrt(dSq)) == radius - 1 && (yy == y || yy == y + 8 || yy == y + 16))
+						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.SMOOTH_BETWEENSTONE_STAIRS, 2);
+
+					if (Math.round(Math.sqrt(dSq)) <= radius - 2 && Math.round(Math.sqrt(dSq)) >= radius - 7 && (yy == y || yy == y + 8 || yy == y + 16))
+						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.SMOOTH_BETWEENSTONE, 2);
+					if (Math.round(Math.sqrt(dSq)) <= radius - 8 && (yy == y || yy == y + 8 || yy == y + 16))
+						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.BETWEENSTONE_BRICKS, 2);
+				}
+			}
+		}
+
+		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level1, 0);
+		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level2, 0);
+		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.NORTH, rand, level2, 0);
+		
+		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level1, 0);
+		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.NORTH, rand, level2, 0);
+		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.WEST, rand, level3, 0);
+		
+		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.NORTH, rand, level1, 0);
+		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.WEST, rand, level2, 0);
+		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level3, 0);
+		
+		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.WEST, rand, level1, 0);
+		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level2, 0);
+		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level3, 0);
+		//System.out.println("TOWER!");
 	}
 
 	private void generateDecayPit(World world, BlockPos pos) {

@@ -151,6 +151,17 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState LOG_ROTTEN_BARK_CARVED_14 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_14.getDefaultState();
 	public IBlockState LOG_ROTTEN_BARK_CARVED_15 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_15.getDefaultState();
 	public IBlockState LOG_ROTTEN_BARK_CARVED_16 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_16.getDefaultState();
+	
+	//Tower
+	public IBlockState BETWEENSTONE = BlockRegistry.BETWEENSTONE.getDefaultState();
+	
+	public IBlockState SMOOTH_BETWEENSTONE = BlockRegistry.SMOOTH_BETWEENSTONE.getDefaultState();
+	public IBlockState SMOOTH_BETWEENSTONE_STAIRS = BlockRegistry.SMOOTH_BETWEENSTONE_STAIRS.getDefaultState();
+	
+	public IBlockState BETWEENSTONE_BRICKS = BlockRegistry.BETWEENSTONE_BRICKS.getDefaultState();
+	public IBlockState BETWEENSTONE_BRICK_STAIRS = BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState();
+	public IBlockState BETWEENSTONE_BRICK_SLAB_UPPER = BlockRegistry.BETWEENSTONE_BRICK_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
+	public IBlockState BETWEENSTONE_BRICK_SLAB_LOWER = BlockRegistry.BETWEENSTONE_BRICK_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.BOTTOM);
 
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 

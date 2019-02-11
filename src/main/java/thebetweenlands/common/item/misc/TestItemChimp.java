@@ -113,7 +113,8 @@ public class TestItemChimp extends Item {
 		*/
 			WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 			//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
-			dungeon.generate(worldIn, itemRand, pos);
+			//dungeon.generate(worldIn, itemRand, pos);
+			dungeon.generateTower(worldIn, itemRand, pos);
 
 		/*
 			WorldGenNibbletwigTree tree = new WorldGenNibbletwigTree();
