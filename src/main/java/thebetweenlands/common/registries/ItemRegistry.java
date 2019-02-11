@@ -39,11 +39,11 @@ import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.herblore.rune.RuneDestroyBlock;
-import thebetweenlands.common.herblore.rune.RuneDestroyBlocks;
 import thebetweenlands.common.herblore.rune.RuneFire;
 import thebetweenlands.common.herblore.rune.RuneMarkArea;
 import thebetweenlands.common.herblore.rune.RuneProjectile;
 import thebetweenlands.common.herblore.rune.RuneSelectGrass;
+import thebetweenlands.common.herblore.rune.RuneSelf;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemBoneArmor;
 import thebetweenlands.common.item.armor.ItemExplorersHat;
@@ -401,11 +401,11 @@ public class ItemRegistry {
 
     public static final Item RUNE_CHAIN = new ItemRuneChain();
     public static final Item TEST_RUNE_DESTROY_BLOCK = new ItemRune(new RuneDestroyBlock.Blueprint());
-    public static final Item TEST_RUNE_DESTROY_BLOCKS = new ItemRune(new RuneDestroyBlocks.Blueprint());
     public static final Item TEST_RUNE_MARK_AREA = new ItemRune(new RuneMarkArea.Blueprint());
     public static final Item TEST_RUNE_SELECT_GRASS = new ItemRune(new RuneSelectGrass.Blueprint());
     public static final Item TEST_RUNE_FIRE = new ItemRune(new RuneFire.Blueprint());
     public static final Item TEST_RUNE_PROJECTILE = new ItemRune(new RuneProjectile.Blueprint());
+    public static final Item TEST_RUNE_SELF = new ItemRune(new RuneSelf.Blueprint());
     
     private ItemRegistry() {
 

@@ -8,8 +8,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
+import thebetweenlands.api.rune.IRuneUser;
 import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
@@ -31,14 +34,14 @@ public final class RuneProjectile extends AbstractRune<RuneProjectile> {
 
 		public static final INodeConfiguration CONFIGURATION_1;
 
-		private static final InputPort<Entity> IN_ENTITY;
+		private static final InputPort<?> IN_ENTITY;
 		private static final OutputPort<BlockPos> OUT_POSITION;
 
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_ENTITY = builder.in(Entity.class, RuneMarkDescriptors.ENTITY);
-			OUT_POSITION = builder.out(BlockPos.class, RuneMarkDescriptors.BLOCK);
+			IN_ENTITY = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneUser.class);
+			OUT_POSITION = builder.out(RuneMarkDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_1 = builder.build();
 		}
@@ -57,27 +60,36 @@ public final class RuneProjectile extends AbstractRune<RuneProjectile> {
 		protected void activate(RuneProjectile state, RuneExecutionContext context, INodeIO io) {
 			if (state.getConfiguration() == CONFIGURATION_1) {
 
-				Entity thrower = IN_ENTITY.get(io);
+				IN_ENTITY.run(io, Entity.class, entity -> {
+					run(io, context.getUser().getWorld(), entity instanceof EntityLivingBase ? (EntityLivingBase) entity : null, entity.getPositionEyes(1), entity.getLookVec());
+				});
+				IN_ENTITY.run(io, IRuneUser.class, user -> {
+					run(io, context.getUser().getWorld(), user.getEntity() instanceof EntityLivingBase ? (EntityLivingBase) user.getEntity() : null, user.getEyesPosition(), user.getLook());
+				});
+			}
+		}
 
-				if(thrower instanceof EntityLivingBase) {
-					EntitySnowball projectile = new EntitySnowball(context.getUser().getWorld(), (EntityLivingBase) thrower);
+		private void run(INodeIO io, World world, EntityLivingBase thrower, Vec3d pos, Vec3d dir) {
+			EntitySnowball projectile;
+			if(thrower != null) {
+				projectile = new EntitySnowball(world, thrower);
+				projectile.setPosition(pos.x, pos.y, pos.z);
+			} else {
+				projectile = new EntitySnowball(world, pos.x, pos.y, pos.z);
+			}
 
-					projectile.shoot((EntityLivingBase) thrower, thrower.rotationPitch, thrower.rotationYaw, 0.0F, 1.5F, 1.0F);
-					
-					context.getUser().getWorld().spawnEntity(projectile);
+			projectile.shoot(dir.x, dir.y, dir.z, 1, 0);
 
-					io.schedule(scheduler -> {
-						if(projectile.isEntityAlive()) {
-							scheduler.sleep(1);
-						} else {
-							OUT_POSITION.set(io, new BlockPos(projectile));
-							scheduler.terminate();
-						}
-					});
+			world.spawnEntity(projectile);
+
+			io.schedule(scheduler -> {
+				if(projectile.isEntityAlive()) {
+					scheduler.sleep(1);
+				} else {
+					OUT_POSITION.set(io, new BlockPos(projectile));
+					scheduler.terminate();
 				}
-
-
-			}			
+			});
 		}
 	}
 

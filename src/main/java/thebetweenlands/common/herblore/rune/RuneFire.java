@@ -36,10 +36,10 @@ public final class RuneFire extends AbstractRune<RuneFire> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_POSITION = builder.in(BlockPos.class, RuneMarkDescriptors.BLOCK);
+			IN_POSITION = builder.in(RuneMarkDescriptors.BLOCK, BlockPos.class);
 			CONFIGURATION_1 = builder.build();
 
-			IN_ENTITY = builder.in(Entity.class, RuneMarkDescriptors.ENTITY);
+			IN_ENTITY = builder.in(RuneMarkDescriptors.ENTITY, Entity.class);
 			CONFIGURATION_2 = builder.build();
 		}
 

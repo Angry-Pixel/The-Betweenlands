@@ -23,6 +23,13 @@ public interface IRuneUser {
 	 * rune chain
 	 */
 	public Vec3d getPosition();
+	
+	/**
+	 * Returns the eye position of the thing that activated the rune chain
+	 * @return the eye position of the thing that activated the
+	 * rune chain
+	 */
+	public Vec3d getEyesPosition();
 
 	/**
 	 * Returns the look vector of the thing that activated

@@ -712,6 +712,7 @@ item.thebetweenlands.test_rune_mark_area.name=Rune: Mark Area
 item.thebetweenlands.test_rune_select_grass.name=Rune: Select Grass
 item.thebetweenlands.test_rune_fire.name=Rune: Fire
 item.thebetweenlands.test_rune_projectile.name=Rune: Projectile
+item.thebetweenlands.test_rune_self.name=Rune: Self
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1336,32 +1337,28 @@ rune.item.thebetweenlands.test_rune_fire.configuration.1.input.0.description=Mar
 rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.title=<underline>Destroy Block</underline>
 rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.description=Destroys the marked block
 rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.input.0.description=Marked block to destroy
-rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.input.1.description=Placeholder
-
-rune.item.thebetweenlands.test_rune_destroy_block.configuration.1.title=<underline>Destroy Block (2)</underline>
-rune.item.thebetweenlands.test_rune_destroy_block.configuration.1.description=Destroys the marked block and marks an entity. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-rune.item.thebetweenlands.test_rune_destroy_block.configuration.1.input.0.description=Marked block to destroy
-rune.item.thebetweenlands.test_rune_destroy_block.configuration.1.output.1.description=Placeholder
-
-rune.item.thebetweenlands.test_rune_destroy_blocks.configuration.0.title=<underline>Destroy Blocks</underline>
-rune.item.thebetweenlands.test_rune_destroy_blocks.configuration.0.description=Destroys the marked blocks
-rune.item.thebetweenlands.test_rune_destroy_blocks.configuration.0.input.0.description=Marked block to destroy
-rune.item.thebetweenlands.test_rune_destroy_blocks.configuration.0.input.1.description=Placeholder
 
 rune.item.thebetweenlands.test_rune_mark_area.configuration.0.title=<underline>Mark Area</underline>
 rune.item.thebetweenlands.test_rune_mark_area.configuration.0.description=Marks block area around the chain user
 rune.item.thebetweenlands.test_rune_mark_area.configuration.0.output.0.description=Marked block
-rune.item.thebetweenlands.test_rune_mark_area.configuration.0.output.1.description=Placeholder
+
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.title=<underline>Mark Area</underline>
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.description=Marks block area around a marked center block
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.input.0.description=Marked center block
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.output.0.description=Marked block
 
 rune.item.thebetweenlands.test_rune_select_grass.configuration.0.title=<underline>Select Grass</underline>
 rune.item.thebetweenlands.test_rune_select_grass.configuration.0.description=Only allows the block mark if the block is grass. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 rune.item.thebetweenlands.test_rune_select_grass.configuration.0.input.0.description=Marked block to filter
-rune.item.thebetweenlands.test_rune_select_grass.configuration.0.input.1.description=Placeholder
 
 rune.item.thebetweenlands.test_rune_projectile.configuration.0.title=<underline>Projectile</underline>
 rune.item.thebetweenlands.test_rune_projectile.configuration.0.description=Shoots a projectile
 rune.item.thebetweenlands.test_rune_projectile.configuration.0.input.0.description=The marked entity to shoot the projectile from
 rune.item.thebetweenlands.test_rune_projectile.configuration.0.output.0.description=Marks the block that is hit by the projectile
+
+rune.item.thebetweenlands.test_rune_self.configuration.0.title=<underline>Self</underline>
+rune.item.thebetweenlands.test_rune_self.configuration.0.description=Marks the rune chain user
+rune.item.thebetweenlands.test_rune_self.configuration.0.output.0.description=Marked rune chain user
 
 # Advancements
 

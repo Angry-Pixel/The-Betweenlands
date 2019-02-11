@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableList;
 
@@ -29,23 +30,35 @@ public class PortNodeConfiguration implements INodeConfiguration {
 
 		/**
 		 * Creates a new input that accepts the specified type
+		 * @param descriptor - descriptor that identifies the input type
 		 * @param type - type to accept
-		 * @param descriptor - descriptor that identifies the output type
 		 * @return a new input that accepts the specified type
 		 */
-		public <T> InputPort<T> in(Class<T> type, ResourceLocation descriptor) {
+		public <T> InputPort<T> in(ResourceLocation descriptor, Class<T> type) {
 			InputPort<T> input = new InputPort<T>(type, this.inIndices++, String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath()), false);
 			this.inputPorts.add(input);
 			return input;
 		}
 
 		/**
-		 * Creates a new input that accepts a multiple objects of the specified type at once
+		 * Creates a new input that accepts any of the specified types
+		 * @param descriptor - descriptor that identifies the input types
 		 * @param type - type to accept
-		 * @param descriptor - descriptor that identifies the output type
+		 * @return a new input that accepts the specified type
+		 */
+		public InputPort<?> in(ResourceLocation descriptor, Class<?>... types) {
+			InputPort<?> input = new InputPort<>(types, this.inIndices++, String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath()), false);
+			this.inputPorts.add(input);
+			return input;
+		}
+
+		/**
+		 * Creates a new input that accepts a multiple objects of the specified type at once
+		 * @param descriptor - descriptor that identifies the input type
+		 * @param type - type to accept
 		 * @return a new input that accepts a multiple objects of the specified type at once
 		 */
-		public <T> InputPort<Collection<T>> multiIn(Class<T> type, ResourceLocation descriptor) {
+		public <T> InputPort<Collection<T>> multiIn(ResourceLocation descriptor, Class<T> type) {
 			InputPort<Collection<T>> input = new InputPort<Collection<T>>(type, this.inIndices++, String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath()), true);
 			this.inputPorts.add(input);
 			return input;
@@ -53,11 +66,11 @@ public class PortNodeConfiguration implements INodeConfiguration {
 
 		/**
 		 * Creates a new output that produces the specified type
-		 * @param type - type to produce
 		 * @param descriptor - descriptor that identifies the output type
+		 * @param type - type to produce
 		 * @return a new output that produces the specified type
 		 */
-		public <T> OutputPort<T> out(Class<T> type, ResourceLocation descriptor) {
+		public <T> OutputPort<T> out(ResourceLocation descriptor, Class<T> type) {
 			OutputPort<T> output = new OutputPort<>(type, this.outIndices++, String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath()));
 			this.outputPorts.add(output);
 			return output;
@@ -77,11 +90,11 @@ public class PortNodeConfiguration implements INodeConfiguration {
 
 		/**
 		 * Creates a new output that produces multiple objects of the specified type at once
-		 * @param type - type to produce
 		 * @param descriptor - descriptor that identifies the output type
+		 * @param type - type to produce
 		 * @return a new output that produces multiple objects of the specified type at once
 		 */
-		public <T> OutputPort<Collection<T>> multiOut(Class<T> type, ResourceLocation descriptor) {
+		public <T> OutputPort<Collection<T>> multiOut(ResourceLocation descriptor, Class<T> type) {
 			OutputPort<Collection<T>> output = new OutputPort<>(type, this.outIndices++, String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath()), true);
 			this.outputPorts.add(output);
 			return output;
@@ -108,26 +121,51 @@ public class PortNodeConfiguration implements INodeConfiguration {
 			ImmutableList.Builder<IConfigurationOutput> outputTypes = ImmutableList.builder();
 
 			for(InputPort<?> input : this.inputPorts) {
-				inputTypes.add(new IConfigurationInput() {
-					@Override
-					public boolean test(IType type) {
-						if(input.type.isAssignableFrom(type.getTypeClass())) {
-							//TODO Check generics?
-							return true;
+				if(input.type != null) {
+					inputTypes.add(new IConfigurationInput() {
+						@Override
+						public boolean test(IType type) {
+							if(input.type.isAssignableFrom(type.getTypeClass())) {
+								//TODO Check generics?
+								return true;
+							}
+							return false;
 						}
-						return false;
-					}
 
-					@Override
-					public boolean isCollection() {
-						return input.isMulti;
-					}
+						@Override
+						public boolean isCollection() {
+							return input.isMulti;
+						}
 
-					@Override
-					public String getDescriptor() {
-						return input.getDescriptor();
-					}
-				});
+						@Override
+						public String getDescriptor() {
+							return input.getDescriptor();
+						}
+					});
+				} else {
+					inputTypes.add(new IConfigurationInput() {
+						@Override
+						public boolean test(IType type) {
+							for(Class<?> inputType : input.types) {
+								if(inputType.isAssignableFrom(type.getTypeClass())) {
+									//TODO Check generics?
+									return true;
+								}
+							}
+							return false;
+						}
+
+						@Override
+						public boolean isCollection() {
+							return input.isMulti;
+						}
+
+						@Override
+						public String getDescriptor() {
+							return input.getDescriptor();
+						}
+					});
+				}
 			}
 
 			for(OutputPort<?> output : this.outputPorts) {
@@ -187,12 +225,14 @@ public class PortNodeConfiguration implements INodeConfiguration {
 	 */
 	public static class InputPort<T> {
 		private final Class<T> type;
+		private final Class<?>[] types;
 		private final int index;
 		private final boolean isMulti;
 		private final String descriptor;
 
 		private InputPort(Class<T> type, int index, String descriptor) {
 			this.type = type;
+			this.types = null;
 			this.index = index;
 			this.isMulti = false;
 			this.descriptor = descriptor;
@@ -201,6 +241,23 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		@SuppressWarnings("unchecked")
 		private InputPort(Class<?> type, int index, String descriptor, boolean isMulti) {
 			this.type = (Class<T>) type;
+			this.types = null;
+			this.index = index;
+			this.isMulti = isMulti;
+			this.descriptor = descriptor;
+		}
+
+		private InputPort(Class<?>[] types, int index, String descriptor) {
+			this.type = null;
+			this.types = types;
+			this.index = index;
+			this.isMulti = false;
+			this.descriptor = descriptor;
+		}
+
+		private InputPort(Class<?>[] types, int index, String descriptor, boolean isMulti) {
+			this.type = null;
+			this.types = types;
 			this.index = index;
 			this.isMulti = isMulti;
 			this.descriptor = descriptor;
@@ -219,6 +276,14 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		public T get(INodeIO io) {
 			// TODO Type check
 			return (T) io.get(this.index);
+		}
+
+		@SuppressWarnings("unchecked")
+		public <F> void run(INodeIO io, Class<F> cls, Consumer<F> runnable) {
+			Object obj = io.get(this.index);
+			if(obj == null || cls.isInstance(obj)) {
+				runnable.accept((F) obj);
+			}
 		}
 	}
 

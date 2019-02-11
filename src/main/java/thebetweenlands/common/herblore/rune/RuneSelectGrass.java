@@ -30,14 +30,12 @@ public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
 
 		public static final INodeConfiguration CONFIGURATION_1;
 
-		private static final InputPort<Entity> IN_ENTITY;
 		private static final InputPort<BlockPos> IN_POSITION;
 
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_POSITION = builder.in(BlockPos.class, RuneMarkDescriptors.BLOCK);
-			IN_ENTITY = builder.in(Entity.class, RuneMarkDescriptors.ENTITY);
+			IN_POSITION = builder.in(RuneMarkDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_1 = builder.build();
 		}
@@ -57,11 +55,10 @@ public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
 
 			if (state.getConfiguration() == CONFIGURATION_1) {
 				BlockPos position = IN_POSITION.get(io);
-				Entity entity = IN_ENTITY.get(io);
 
 				io.branch();
 
-				Block block = entity.world.getBlockState(position).getBlock();
+				Block block = context.getUser().getWorld().getBlockState(position).getBlock();
 				if(block != Blocks.GRASS /*&& block != Blocks.DIRT*/) {
 					io.fail();
 				}

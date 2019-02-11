@@ -75,6 +75,11 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 						public Vec3d getPosition() {
 							return player.getPositionVector();
 						}
+						
+						@Override
+						public Vec3d getEyesPosition() {
+							return player.getPositionEyes(1);
+						}
 
 						@Override
 						public Vec3d getLook() {
