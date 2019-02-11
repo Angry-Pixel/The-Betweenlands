@@ -29,7 +29,8 @@ public class LightTowerBuildParts {
 		rotatedCubeVolume(world, rand, pos, 9, 3 + level, -5, blockHelper.BETWEENSTONE_BRICK_SLAB_LOWER, 3, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 9, 3 + level, -6, blockHelper.BETWEENSTONE_BRICK_SLAB_UPPER, 3, 1, 1, facing);
 
-		rotatedCubeVolume(world, rand, pos, 8, 4 + level, -6, blockHelper.SMOOTH_BETWEENSTONE, 1, 1, 1, facing);
+		if(4 + level < 19)
+			rotatedCubeVolume(world, rand, pos, 8, 4 + level, -6, blockHelper.SMOOTH_BETWEENSTONE, 1, 1, 1, facing);
 
 		rotatedCubeVolume(world, rand, pos, 9, 4 + level, -7, blockHelper.BETWEENSTONE_BRICK_SLAB_LOWER, 3, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 9, 4 + level, -8, blockHelper.BETWEENSTONE_BRICK_SLAB_LOWER, 3, 1, 1, facing);
