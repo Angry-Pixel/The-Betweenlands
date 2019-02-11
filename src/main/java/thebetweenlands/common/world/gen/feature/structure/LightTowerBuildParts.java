@@ -7,6 +7,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.container.BlockLootUrn;
+import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
 public class LightTowerBuildParts {
@@ -47,6 +48,30 @@ public class LightTowerBuildParts {
 
 		rotatedCubeVolume(world, rand, pos, 1, 8 + level, -11, blockHelper.BETWEENSTONE_BRICK_SLAB_LOWER, 1, 1, 2, facing);
 		//rotatedCubeVolume(world, rand, pos, 0, 8, -11, blockHelper.BETWEENSTONE_BRICK_SLAB_UPPER, 1, 1, 2, facing);
+	}
+	
+	public void addTowerFloor(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		if(level == 0 || level == 8) {
+			rotatedCubeVolume(world, rand, pos, 8, 0 + level, 0, blockHelper.getStairsForTowerLevel(rand, level, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 3, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 0 + level, 2, blockHelper.getStairsForTowerLevel(rand, level, facing, BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 0 + level, 3, blockHelper.getStairsForTowerLevel(rand, level, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 2, facing);
+			rotatedCubeVolume(world, rand, pos, 6, 0 + level, 4, blockHelper.getStairsForTowerLevel(rand, level, facing, BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 6, 0 + level, 5, blockHelper.getStairsForTowerLevel(rand, level, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 2, facing);
+			rotatedCubeVolume(world, rand, pos, 5, 0 + level, 6, blockHelper.getStairsForTowerLevel(rand, level, facing, BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 4, 0 + level, 6, blockHelper.getStairsForTowerLevel(rand, level, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 2, facing);
+			rotatedCubeVolume(world, rand, pos, 3, 0 + level, 7, blockHelper.getStairsForTowerLevel(rand, level, facing, BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 2, 0 + level, 7, blockHelper.getStairsForTowerLevel(rand, level, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 2, facing);
+			rotatedCubeVolume(world, rand, pos, 1, 0 + level, 8, blockHelper.getStairsForTowerLevel(rand, level, facing, BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 1, facing);
+
+			rotatedCubeVolume(world, rand, pos, 2, 0 + level, 0, blockHelper.SMOOTH_BETWEENSTONE, 6, 1, 2, facing);
+			rotatedCubeVolume(world, rand, pos, 1, 0 + level, 2, blockHelper.SMOOTH_BETWEENSTONE, 6, 1, 2, facing);
+			rotatedCubeVolume(world, rand, pos, 1, 0 + level, 4, blockHelper.SMOOTH_BETWEENSTONE, 5, 1, 2, facing);
+			rotatedCubeVolume(world, rand, pos, 1, 0 + level, 6, blockHelper.SMOOTH_BETWEENSTONE, 3, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 1, 0 + level, 7, blockHelper.SMOOTH_BETWEENSTONE, 1, 1, 1, facing);
+		}
+		if (level == 16) {
+			//build the top floor fancy stuff part
+		}
 	}
 
 	@SuppressWarnings("incomplete-switch")

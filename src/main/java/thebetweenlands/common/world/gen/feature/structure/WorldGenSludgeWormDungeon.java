@@ -40,7 +40,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	public boolean generate(World world, Random rand, BlockPos pos) {
 		//conditions blah, blah...
 		makeMaze(world, rand, pos);
-		
+
 		//locations blah, blah, blah...
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 		LocationSludgeWormDungeon location = new LocationSludgeWormDungeon(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos));
@@ -51,10 +51,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		location.setStructurePos(pos);
 		location.setDirty(true);
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
-		
+
 		return true;
 	}
-	
+
 	public void generateTower(World world, Random rand, BlockPos pos) {
 		int x = pos.getX();
 		int y = pos.getY();
@@ -77,14 +77,31 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (Math.round(Math.sqrt(dSq)) == radius && yy - y >= level2)
 						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.BETWEENSTONE_BRICKS, 2);
 
-					// TODO - replace this with parts in the tower helper class
-					if (Math.round(Math.sqrt(dSq)) == radius - 1 && (yy == y || yy == y + 8 || yy == y + 16))
-						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.SMOOTH_BETWEENSTONE_STAIRS, 2);
+					if (yy == y + level1 || yy == y + level2 || yy == y + level3) {
+						if (Math.round(Math.sqrt(dSq)) <= radius - 8)
+							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.BETWEENSTONE_BRICKS, 2);
 
-					if (Math.round(Math.sqrt(dSq)) <= radius - 2 && Math.round(Math.sqrt(dSq)) >= radius - 7 && (yy == y || yy == y + 8 || yy == y + 16))
-						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.SMOOTH_BETWEENSTONE, 2);
-					if (Math.round(Math.sqrt(dSq)) <= radius - 8 && (yy == y || yy == y + 8 || yy == y + 16))
-						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.BETWEENSTONE_BRICKS, 2);
+						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level1, 0);
+						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level1, 0);
+						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level1, 0);
+						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.WEST, rand, level1, 0);
+
+						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level2, 0);
+						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level2, 0);
+						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level2, 0);
+						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.WEST, rand, level2, 0);
+
+						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level3, 0);
+						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level3, 0);
+						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level3, 0);
+						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.WEST, rand, level3, 0);
+					}
+
+					//TODO meh, will sort out later
+					if (yy == y + level1 + 1 || yy == y + level2 + 1 || yy == y + level3 + 1 || yy == y + level1 + 2 || yy == y + level2 + 2 || yy == y + level3 + 2) {
+						if (i == 9 && j == 0 || i == -9 && j == 0 || i == 0 && j == 9 || i == 0 && j == -9)
+							world.setBlockToAir(new BlockPos(x + i, yy, z + j));
+					}
 				}
 			}
 		}
@@ -92,18 +109,19 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level1, 0);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level2, 0);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.NORTH, rand, level2, 0);
-		
+
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level1, 0);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.NORTH, rand, level2, 0);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.WEST, rand, level3, 0);
-		
+
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.NORTH, rand, level1, 0);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.WEST, rand, level2, 0);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level3, 0);
-		
+
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.WEST, rand, level1, 0);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level2, 0);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level3, 0);
+
 		//System.out.println("TOWER!");
 	}
 

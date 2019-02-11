@@ -578,6 +578,14 @@ public class SludgeWormMazeBlockHelper {
 		}
 	}
 
+	/// TOWER STUFF
+
+	// TODO improve for more types
+	public @Nullable IBlockState getStairsForTowerLevel(Random rand, int level, EnumFacing facing, EnumHalf half) {
+		IBlockState state = SMOOTH_BETWEENSTONE_STAIRS;
+		return state.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, half);
+	}
+
 	public boolean isSolidStructureBlock(IBlockState state) {
 		return STRUCTURE_BLOCKS.get(state) != null;
 	}
