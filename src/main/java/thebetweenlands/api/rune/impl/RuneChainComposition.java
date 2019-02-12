@@ -1,11 +1,14 @@
 package thebetweenlands.api.rune.impl;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.Queue;
 import java.util.Set;
 
@@ -283,10 +286,10 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 						List<IConfigurationOutput> outputs = outConfiguration.getOutputs();
 
 						if(outputIndex < outputs.size()) {
-							List<IType> validOutputTypes = this.getValidOutputTypes(outNodeIndex, outputIndex);
+							List<Entry<IConfigurationOutput, IType>> validOutputTypes = this.getValidOutputTypes(outNodeIndex, outputIndex);
 
-							for(IType outputType : validOutputTypes) {
-								if(input.test(outputType)) {
+							for(Entry<IConfigurationOutput, IType> outputType : validOutputTypes) {
+								if(input.test(outputType.getKey(), outputType.getValue())) {
 									return true;
 								}
 							}
@@ -298,8 +301,8 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			return false;
 		}
 
-		private List<IType> getValidOutputTypes(int nodeIndex, int outputIndex) {
-			List<IType> validOutputTypes = new ArrayList<>();
+		private List<Entry<IConfigurationOutput, IType>> getValidOutputTypes(int nodeIndex, int outputIndex) {
+			List<Entry<IConfigurationOutput, IType>> validOutputTypes = new ArrayList<>();
 			List<INodeConfiguration> configurations = this.getValidConfigurations(nodeIndex, false);
 			Collection<Integer> linkedSlots = this.getLinkedSlots(nodeIndex);
 
@@ -314,7 +317,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 					for(int i = 0; i < inputs.size(); i++) {
 						if(linkedSlots.contains(i)) {
 							INodeLink link = this.getLink(nodeIndex, i);
-							inputTypesBuilder.addAll(this.getValidOutputTypes(link.getNode(), link.getOutput()));
+							inputTypesBuilder.addAll(this.getValidOutputTypes(link.getNode(), link.getOutput()).stream().map(entry -> entry.getValue()).collect(Collectors.toList()));
 						} else {
 							inputTypesBuilder.add((IType) null);
 						}
@@ -323,7 +326,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 					List<IType> inputTypes = inputTypesBuilder.build();
 
 					if(output.isEnabled(inputTypes)) {
-						validOutputTypes.add(output.getType(inputTypes));
+						validOutputTypes.add(new AbstractMap.SimpleImmutableEntry<>(output, output.getType(inputTypes)));
 					}
 				}
 			}
@@ -368,9 +371,9 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 							List<IConfigurationOutput> outputs = outputConfiguration.getOutputs();
 
 							if(link.getOutput() < outputs.size()) {
-								List<IType> validOutputTypes = this.getValidOutputTypes(link.getNode(), link.getOutput());
-								for(IType outputType : validOutputTypes) {
-									if(input.test(outputType)) {
+								List<Entry<IConfigurationOutput, IType>> validOutputTypes = this.getValidOutputTypes(link.getNode(), link.getOutput());
+								for(Entry<IConfigurationOutput, IType> outputType : validOutputTypes) {
+									if(input.test(outputType.getKey(), outputType.getValue())) {
 										validOutputConfiguration = true;
 										break;
 									}
