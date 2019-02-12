@@ -32,6 +32,7 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 
 		private static final InputPort<?> IN_ENTITY;
 		private static final OutputPort<Vec3d> OUT_POSITION;
+		private static final OutputPort<Vec3d> OUT_EYE_POSITION;
 		private static final OutputPort<Vec3d> OUT_RAY;
 
 		static {
@@ -39,6 +40,7 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 
 			IN_ENTITY = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneUser.class);
 			OUT_POSITION = builder.out(RuneMarkDescriptors.POSITION, Vec3d.class);
+			OUT_EYE_POSITION = builder.out(RuneMarkDescriptors.POSITION, Vec3d.class);
 			OUT_RAY = builder.out(RuneMarkDescriptors.RAY, Vec3d.class);
 
 			CONFIGURATION_1 = builder.build();
@@ -58,12 +60,14 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 		protected void activate(RunePinpoint state, RuneExecutionContext context, INodeIO io) {
 			if (state.getConfiguration() == CONFIGURATION_1) {
 				IN_ENTITY.run(io, Entity.class, entity -> {
-					OUT_POSITION.set(io, entity.getPositionVector().add(0, 1.5, 0));
-					OUT_RAY.set(io, /*entity.getLookVec()*/new Vec3d(0, 1, 0));
+					OUT_POSITION.set(io, entity.getPositionVector());
+					OUT_EYE_POSITION.set(io, entity.getPositionEyes(1));
+					OUT_RAY.set(io, entity.getLookVec());
 				});
 				IN_ENTITY.run(io, IRuneUser.class, user -> {
-					OUT_POSITION.set(io, user.getPosition().add(0, 1.5, 0));
-					OUT_RAY.set(io, /*user.getLook()*/new Vec3d(0, 1, 0));
+					OUT_POSITION.set(io, user.getPosition());
+					OUT_POSITION.set(io, user.getEyesPosition());
+					OUT_RAY.set(io, user.getLook());
 				});
 			}
 		}

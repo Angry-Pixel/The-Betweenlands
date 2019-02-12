@@ -18,7 +18,7 @@ public final class NodeDummy implements INode<NodeDummy, RuneExecutionContext> {
 		public static final INodeConfiguration CONFIGURATION;
 
 		static {
-			PortNodeConfiguration.Builder builder = new PortNodeConfiguration.Builder();
+			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 			CONFIGURATION = builder.build();
 		}
 

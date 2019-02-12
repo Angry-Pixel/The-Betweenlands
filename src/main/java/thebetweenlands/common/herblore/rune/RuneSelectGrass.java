@@ -56,8 +56,6 @@ public final class RuneSelectGrass extends AbstractRune<RuneSelectGrass> {
 			if (state.getConfiguration() == CONFIGURATION_1) {
 				BlockPos position = IN_POSITION.get(io);
 
-				io.branch();
-
 				Block block = context.getUser().getWorld().getBlockState(position).getBlock();
 				if(block != Blocks.GRASS /*&& block != Blocks.DIRT*/) {
 					io.fail();

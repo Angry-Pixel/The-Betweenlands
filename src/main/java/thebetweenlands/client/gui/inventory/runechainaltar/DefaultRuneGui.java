@@ -457,6 +457,8 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		int x = this.getMinX();
 		int y = this.getMinY();
 
+		this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
+		
 		//Top left corner
 		this.drawTexturedModalRect512(x, y, 212, 94, 3, 3);
 		//Top bar

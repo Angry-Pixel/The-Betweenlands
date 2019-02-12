@@ -464,9 +464,9 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 			this.branchingAllowed = false;
 			// TODO Type check?
 			if(obj instanceof Collection) {
-				RuneChainComposition.this.outputValues.set(output, (Collection<Object>) obj);
+				RuneChainComposition.this.outputValues.get(output).addAll((Collection<Object>) obj);
 			} else {
-				RuneChainComposition.this.outputValues.set(output, Collections.singletonList(obj));
+				RuneChainComposition.this.outputValues.get(output).add(obj);
 			}
 		}
 
@@ -561,7 +561,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 				int slots = RuneChainComposition.this.nodes.get(node).getConfiguration().getInputs().size();
 				nodeValues = new ArrayList<>(slots);
 				for(int i = 0; i < slots; i++) {
-					nodeValues.add(Collections.emptyList());
+					nodeValues.add(new ArrayList<>());
 				}
 			}
 
@@ -867,7 +867,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 
 							this.outputValues = new ArrayList<>();
 							for(int i = 0; i < configuration.getOutputs().size(); i++) {
-								this.outputValues.add(Collections.emptyList());
+								this.outputValues.add(new ArrayList<>());
 							}
 
 							this.combination = new Object[inputs.size()];

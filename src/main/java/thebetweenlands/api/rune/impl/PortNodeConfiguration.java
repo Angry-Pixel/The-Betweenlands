@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.util.ResourceLocation;
@@ -26,8 +28,17 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		private final List<InputPort<?>> inputPorts = new ArrayList<>();
 		private final List<OutputPort<?>> outputPorts = new ArrayList<>();
 
-		public Builder() {}
+		@Nullable
+		private final String descriptorWildcard;
 
+		public Builder(@Nullable ResourceLocation descriptorWildcard) {
+			this.descriptorWildcard = descriptorWildcard != null ? this.getDescriptorString(descriptorWildcard) : null;
+		}
+
+		private String getDescriptorString(ResourceLocation descriptor) {
+			return String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath());
+		}
+		
 		/**
 		 * Creates a new input that accepts the specified type
 		 * @param descriptor - descriptor that identifies the input type
@@ -35,7 +46,8 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		 * @return a new input that accepts the specified type
 		 */
 		public <T> InputPort<T> in(ResourceLocation descriptor, Class<T> type) {
-			InputPort<T> input = new InputPort<T>(type, this.inIndices++, String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath()), false);
+			String desc = this.getDescriptorString(descriptor);
+			InputPort<T> input = new InputPort<T>(type, this.inIndices++, desc.equals(this.descriptorWildcard), desc, false);
 			this.inputPorts.add(input);
 			return input;
 		}
@@ -47,7 +59,8 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		 * @return a new input that accepts the specified type
 		 */
 		public InputPort<?> in(ResourceLocation descriptor, Class<?>... types) {
-			InputPort<?> input = new InputPort<>(types, this.inIndices++, String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath()), false);
+			String desc = this.getDescriptorString(descriptor);
+			InputPort<?> input = new InputPort<>(types, this.inIndices++, desc.equals(this.descriptorWildcard), desc, false);
 			this.inputPorts.add(input);
 			return input;
 		}
@@ -59,7 +72,8 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		 * @return a new input that accepts a multiple objects of the specified type at once
 		 */
 		public <T> InputPort<Collection<T>> multiIn(ResourceLocation descriptor, Class<T> type) {
-			InputPort<Collection<T>> input = new InputPort<Collection<T>>(type, this.inIndices++, String.format("%s.%s", descriptor.getNamespace(), descriptor.getPath()), true);
+			String desc = this.getDescriptorString(descriptor);
+			InputPort<Collection<T>> input = new InputPort<Collection<T>>(type, this.inIndices++, desc.equals(this.descriptorWildcard), desc, true);
 			this.inputPorts.add(input);
 			return input;
 		}
@@ -125,7 +139,7 @@ public class PortNodeConfiguration implements INodeConfiguration {
 					inputTypes.add(new IConfigurationInput() {
 						@Override
 						public boolean test(IConfigurationOutput output, IType type) {
-							if(input.type.isAssignableFrom(type.getTypeClass()) && output.getDescriptor().equals(input.getDescriptor())) {
+							if(input.type.isAssignableFrom(type.getTypeClass()) && (input.isDescriptorWildcard() || output.getDescriptor().equals(input.getDescriptor()))) {
 								//TODO Check generics?
 								return true;
 							}
@@ -146,7 +160,7 @@ public class PortNodeConfiguration implements INodeConfiguration {
 					inputTypes.add(new IConfigurationInput() {
 						@Override
 						public boolean test(IConfigurationOutput output, IType type) {
-							if(output.getDescriptor().equals(input.getDescriptor())) {
+							if(input.isDescriptorWildcard() || output.getDescriptor().equals(input.getDescriptor())) {
 								for(Class<?> inputType : input.types) {
 									if(inputType.isAssignableFrom(type.getTypeClass())) {
 										//TODO Check generics?
@@ -230,39 +244,48 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		private final Class<?>[] types;
 		private final int index;
 		private final boolean isMulti;
+		private final boolean descriptorWildcard;
 		private final String descriptor;
 
-		private InputPort(Class<T> type, int index, String descriptor) {
+		private InputPort(Class<T> type, int index, boolean descriptorWildcard, String descriptor) {
 			this.type = type;
 			this.types = null;
 			this.index = index;
 			this.isMulti = false;
+			this.descriptorWildcard = descriptorWildcard;
 			this.descriptor = descriptor;
 		}
 
 		@SuppressWarnings("unchecked")
-		private InputPort(Class<?> type, int index, String descriptor, boolean isMulti) {
+		private InputPort(Class<?> type, int index, boolean descriptorWildcard, String descriptor, boolean isMulti) {
 			this.type = (Class<T>) type;
 			this.types = null;
 			this.index = index;
 			this.isMulti = isMulti;
+			this.descriptorWildcard = descriptorWildcard;
 			this.descriptor = descriptor;
 		}
 
-		private InputPort(Class<?>[] types, int index, String descriptor) {
+		private InputPort(Class<?>[] types, int index, boolean descriptorWildcard, String descriptor) {
 			this.type = null;
 			this.types = types;
 			this.index = index;
 			this.isMulti = false;
+			this.descriptorWildcard = descriptorWildcard;
 			this.descriptor = descriptor;
 		}
 
-		private InputPort(Class<?>[] types, int index, String descriptor, boolean isMulti) {
+		private InputPort(Class<?>[] types, int index, boolean descriptorWildcard, String descriptor, boolean isMulti) {
 			this.type = null;
 			this.types = types;
 			this.index = index;
 			this.isMulti = isMulti;
+			this.descriptorWildcard = descriptorWildcard;
 			this.descriptor = descriptor;
+		}
+
+		public boolean isDescriptorWildcard() {
+			return this.descriptorWildcard;
 		}
 
 		public String getDescriptor() {
@@ -397,7 +420,19 @@ public class PortNodeConfiguration implements INodeConfiguration {
 	}
 
 	public static Builder builder() {
-		return new Builder();
+		return new Builder(null);
+	}
+
+	/**
+	 * Creates a port node configuration builder with the specified descriptor as input type descriptor wildcard. 
+	 * When an input of this builder specifies this wildcard as type descriptor any output
+	 * will be accepted regardless of the output's type descriptor as long as the input's
+	 * and output's Java types are compatible.
+	 * @param descriptorWildcard Descriptor wildcard
+	 * @return New port node configuration builder
+	 */
+	public static Builder builder(ResourceLocation descriptorWildcard) {
+		return new Builder(descriptorWildcard);
 	}
 
 	@Override

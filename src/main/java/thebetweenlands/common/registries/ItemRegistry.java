@@ -38,6 +38,7 @@ import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.herblore.rune.RuneBranching;
 import thebetweenlands.common.herblore.rune.RuneDestroyBlock;
 import thebetweenlands.common.herblore.rune.RuneFire;
 import thebetweenlands.common.herblore.rune.RuneMarkArea;
@@ -410,6 +411,7 @@ public class ItemRegistry {
     public static final Item TEST_RUNE_SELF = new ItemRune(new RuneSelf.Blueprint());
     public static final Item TEST_RUNE_PINPOINT = new ItemRune(new RunePinpoint.Blueprint());
     public static final Item TEST_RUNE_MARK_NEARBY = new ItemRune(new RuneMarkNearby.Blueprint());
+    public static final Item TEST_RUNE_BRANCHING = new ItemRune(new RuneBranching.Blueprint());
     
     private ItemRegistry() {
 
