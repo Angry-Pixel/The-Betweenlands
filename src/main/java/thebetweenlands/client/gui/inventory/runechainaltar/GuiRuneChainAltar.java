@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -47,6 +49,7 @@ import thebetweenlands.api.rune.RuneMenuDrawingContext;
 import thebetweenlands.api.rune.RuneMenuType;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
+import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar.Page;
 import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltarGui;
 import thebetweenlands.common.inventory.slot.SlotRuneChainAltarInput;
 import thebetweenlands.common.network.serverbound.MessageLinkRuneChainAltarRune;
@@ -116,7 +119,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 
 	public void onSetSelectedRune(int runeIndex) {
 		this.linkingDropdownMenuSlot = -1;
-		
+
 		this.updateSelectedRuneGui(runeIndex);
 	}
 
@@ -509,7 +512,7 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 		}
 
 		int coverStartIndex = this.tile.getChainLength() + (this.tile.isOutputItemAvailable() ? 1 : 0);
-		
+
 		for(int i = coverStartIndex; i < this.tile.getMaxChainLength(); i++) {
 			SlotRuneChainAltarInput slot = (SlotRuneChainAltarInput) this.inventorySlots.getSlot(i + TileEntityRuneChainAltar.NON_INPUT_SLOTS);
 
@@ -1168,6 +1171,45 @@ public class GuiRuneChainAltar extends GuiContainer implements IRuneChainAltarGu
 	}
 
 	protected void drawRuneMarkConnections(int mouseX, int mouseY) {
+		if(isShiftKeyDown()) {
+			this.setSlabTransform();
+
+			for(int runeIndex = 0; runeIndex < this.container.getRuneInventorySize(); runeIndex++) {
+				Slot runeSlot = this.container.getRuneSlot(runeIndex);
+
+				if(runeSlot instanceof SlotRuneChainAltarInput && ((SlotRuneChainAltarInput) runeSlot).isEnabled() && !this.container.getRuneItemStack(runeIndex).isEmpty()) {
+					Page runeSlotPage = ((SlotRuneChainAltarInput) runeSlot).getPage();
+					
+					Set<Integer> visitedRunes = new HashSet<>();
+
+					for(int linkedInput : this.container.getLinkedInputs(runeIndex)) {
+						IRuneLink link = this.container.getLink(runeIndex, linkedInput);
+
+						if(visitedRunes.add(link.getOutputRune())) {
+							Slot linkedSlot = this.container.getRuneSlot(link.getOutputRune());
+
+							if(linkedSlot instanceof SlotRuneChainAltarInput) {
+								Page linkedSlotPage = ((SlotRuneChainAltarInput) linkedSlot).getPage();
+								
+								boolean isTopHalf = runeIndex >= runeSlotPage.index * ContainerRuneChainAltar.SLOTS_PER_PAGE && runeIndex < runeSlotPage.index * ContainerRuneChainAltar.SLOTS_PER_PAGE + ContainerRuneChainAltar.SLOTS_PER_PAGE / 2;
+								boolean isLinkedTopHalf = link.getOutputRune() >= linkedSlotPage.index * ContainerRuneChainAltar.SLOTS_PER_PAGE && link.getOutputRune() < linkedSlotPage.index * ContainerRuneChainAltar.SLOTS_PER_PAGE + ContainerRuneChainAltar.SLOTS_PER_PAGE / 2;
+								
+								if(((SlotRuneChainAltarInput) linkedSlot).isEnabled()) {
+									DefaultRuneGui.drawHangingRope(this.updateCounter + runeIndex * 50, runeSlot.xPos + 8, runeSlot.yPos + 8, linkedSlot.xPos + 8, linkedSlot.yPos + 8, !isTopHalf && isLinkedTopHalf ? -14.0F : 14.0F, this.zLevel);
+								} else {
+									DefaultRuneGui.drawHangingRope(this.updateCounter + runeIndex * 50, runeSlot.xPos + 8, runeSlot.yPos + 8, 88, 70, !isTopHalf ? -6.0F : 0.0F, this.zLevel);
+								}
+							}
+						}
+					}
+				}
+			}
+
+			this.revertSlabTransform();
+
+			this.mc.getTextureManager().bindTexture(GUI_RUNE_CHAIN_ALTAR);
+		}
+
 		IRuneGui primaryRuneGui = this.openRuneGuis.get(RuneMenuType.PRIMARY);
 
 		if(primaryRuneGui != null) {

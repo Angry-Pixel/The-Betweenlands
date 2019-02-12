@@ -5,6 +5,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+
+import javax.annotation.Nullable;
 
 import org.lwjgl.opengl.GL11;
 
@@ -13,6 +16,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -154,7 +158,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 	protected void createGui() {
 		this.currentDescriptionPageIndex = 0;
-		
+
 		this.hasMultipleConfigurations = container.getBlueprint().getConfigurations().size() > 1;
 		if(this.hasMultipleConfigurations) {
 			this.additionalConfigurationsHeight = 12;
@@ -321,13 +325,13 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			}
 		}
 
-		this.drawHoveringText(text, mouseX, mouseY, this.fontRenderer);
+		this.drawHoveringText(text, mouseX, mouseY, this.fontRenderer, (tx, ty) -> {
+			GlStateManager.disableLighting();
+			GlStateManager.disableDepth();
+			this.drawMark(mark, tx + 12, ty + 13);
+		});
 
-		GlStateManager.disableLighting();
-		GlStateManager.disableDepth();
-		this.drawMark(mark, mouseX + 12 + 9, mouseY - 12 + 10);
 		GlStateManager.enableDepth();
-
 		GlStateManager.disableLighting();
 		GlStateManager.color(1, 1, 1, 1);
 	}
@@ -336,7 +340,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 	public void drawMarkConnection(IGuiRuneMark mark, int targetX, int targetY, RuneMenuDrawingContext.Connection context) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, 0, 280.0F);
-		this.drawHangingRope(mark.getCenterX(), mark.getCenterY(), targetX, targetY);
+		drawHangingRope(this.updateCounter, mark.getCenterX(), mark.getCenterY(), targetX, targetY, 0.0F, this.zLevel);
 		GlStateManager.popMatrix();
 	}
 
@@ -458,7 +462,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		int y = this.getMinY();
 
 		this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
-		
+
 		//Top left corner
 		this.drawTexturedModalRect512(x, y, 212, 94, 3, 3);
 		//Top bar
@@ -481,14 +485,22 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 
 		//Page left/right
 		if(this.description.getPages().size() > 1) {
-			this.drawTexturedModalRect512(x + this.xSize - 6 - 40, y + 8, 452, 0, 13, 7);
-			this.drawTexturedModalRect512(x + this.xSize - 6 - 13, y + 8, 452, 29, 13, 7);
+			if(this.currentDescriptionPageIndex > 0) {
+				this.drawTexturedModalRect512(x + this.xSize - 6 - 40, y + 8, 452, 0, 13, 7);
+			}
+			if(this.currentDescriptionPageIndex < this.description.getPages().size() - 1) {
+				this.drawTexturedModalRect512(x + this.xSize - 6 - 13, y + 8, 452, 29, 13, 7);
+			}
 		}
 
 		//Configuration left/right
 		if(this.hasMultipleConfigurations) {
-			this.drawTexturedModalRect512(x + this.xSize / 2 - 8 - 13, y + this.ySize - 13, 452, 0, 13, 7);
-			this.drawTexturedModalRect512(x + this.xSize / 2 + 8, y + this.ySize - 13, 452, 29, 13, 7);
+			if(this.currentConfigurationIndex > 0) {
+				this.drawTexturedModalRect512(x + this.xSize / 2 - 8 - 13, y + this.ySize - 13, 452, 0, 13, 7);
+			}
+			if(this.currentConfigurationIndex < this.container.getBlueprint().getConfigurations().size() - 1) {
+				this.drawTexturedModalRect512(x + this.xSize / 2 + 8, y + this.ySize - 13, 452, 29, 13, 7);
+			}
 		}
 
 		ItemStack stack = this.context.getRuneItemStack();
@@ -511,7 +523,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 			this.description.getPages().get(this.currentDescriptionPageIndex).render(x + 4, y + 16 + this.title.getPages().get(0).getTextHeight());
 		}
 
-		
+
 		//TODO Improve input/output marks GUI
 		int marksYOffset = 0;
 
@@ -563,8 +575,10 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR);
 	}
 
-	protected void drawHangingRope(float sx, float sy, float ex, float ey) {
-		this.mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR_ROPE);
+	public static void drawHangingRope(int updateCounter, float sx, float sy, float ex, float ey, float hang, double zLevel) {
+		Minecraft mc = Minecraft.getMinecraft();
+
+		mc.getTextureManager().bindTexture(GuiRuneChainAltar.GUI_RUNE_CHAIN_ALTAR_ROPE);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -582,7 +596,7 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		}
 
 		float x2 = (x1 + x3) / 2.0F;
-		float y2 = Math.max(y1, y3) + 0.0F + (float)Math.sin((this.updateCounter + this.mc.getRenderPartialTicks()) / 25.0F) * 1.5f;
+		float y2 = Math.max(y1, y3) + hang + (float)Math.sin((updateCounter + mc.getRenderPartialTicks()) / 25.0F) * 1.5f;
 
 		//Fit parabola
 		float a1 = -x1*x1 + x2*x2;
@@ -647,15 +661,15 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 				float offX = -sideY / width * 8.0F;
 				float offY = sideX / width * 8.0F;
 
-				buffer.pos(pxc2 - offX, pyc2 - offY, this.zLevel).tex(endU11, endV1).endVertex();
-				buffer.pos(pxc1 - offX, pyc1 - offY, this.zLevel).tex(endU11, endV2).endVertex();
-				buffer.pos(pxc2, pyc2, this.zLevel).tex(endU12, endV1).endVertex();
-				buffer.pos(pxc1, pyc1, this.zLevel).tex(endU12, endV2).endVertex();
+				buffer.pos(pxc2 - offX, pyc2 - offY, zLevel).tex(endU11, endV1).endVertex();
+				buffer.pos(pxc1 - offX, pyc1 - offY, zLevel).tex(endU11, endV2).endVertex();
+				buffer.pos(pxc2, pyc2, zLevel).tex(endU12, endV1).endVertex();
+				buffer.pos(pxc1, pyc1, zLevel).tex(endU12, endV2).endVertex();
 			}
 
 			if(i > 0) {
-				buffer.pos(pxc2, pyc2, this.zLevel).tex(u, ropeV1).endVertex();
-				buffer.pos(pxc1, pyc1, this.zLevel).tex(u, ropeV2).endVertex();
+				buffer.pos(pxc2, pyc2, zLevel).tex(u, ropeV1).endVertex();
+				buffer.pos(pxc1, pyc1, zLevel).tex(u, ropeV2).endVertex();
 
 				u += (float) Math.sqrt((x-px)*(x-px) + (y-py)*(y-py)) / 16.0F;
 			}
@@ -664,10 +678,10 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 				float offX = -sideY / width * 8.0F;
 				float offY = sideX / width * 8.0F;
 
-				buffer.pos(pxc2, pyc2, this.zLevel).tex(endU21, endV1).endVertex();
-				buffer.pos(pxc1, pyc1, this.zLevel).tex(endU21, endV2).endVertex();
-				buffer.pos(pxc2 + offX, pyc2 + offY, this.zLevel).tex(endU22, endV1).endVertex();
-				buffer.pos(pxc1 + offX, pyc1 + offY, this.zLevel).tex(endU22, endV2).endVertex();
+				buffer.pos(pxc2, pyc2, zLevel).tex(endU21, endV1).endVertex();
+				buffer.pos(pxc1, pyc1, zLevel).tex(endU21, endV2).endVertex();
+				buffer.pos(pxc2 + offX, pyc2 + offY, zLevel).tex(endU22, endV1).endVertex();
+				buffer.pos(pxc1 + offX, pyc1 + offY, zLevel).tex(endU22, endV2).endVertex();
 			}
 
 			px = x;
@@ -697,7 +711,184 @@ public class DefaultRuneGui extends Gui implements IRuneGui {
 		tessellator.draw();
 	}
 
-	protected void drawHoveringText(List<String> textLines, int x, int y, FontRenderer font) {
-		net.minecraftforge.fml.client.config.GuiUtils.drawHoveringText(textLines, x, y, this.width, this.height, -1, font);
+	protected void drawHoveringText(List<String> textLines, int x, int y, FontRenderer font, @Nullable BiConsumer<Integer, Integer> renderer) {
+		if (!textLines.isEmpty())
+		{
+			int mouseX = x;
+			int mouseY = y;
+
+			int screenWidth = this.width;
+			int screenHeight = this.height;
+			int maxTextWidth = -1;
+
+			GlStateManager.disableRescaleNormal();
+			RenderHelper.disableStandardItemLighting();
+			GlStateManager.disableLighting();
+			GlStateManager.disableDepth();
+			int tooltipTextWidth = 0;
+
+			for (String textLine : textLines)
+			{
+				int textLineWidth = font.getStringWidth(textLine);
+
+				if (textLineWidth > tooltipTextWidth)
+				{
+					tooltipTextWidth = textLineWidth;
+				}
+			}
+
+			boolean needsWrap = false;
+
+			int titleLinesCount = 1;
+			int tooltipX = mouseX + 12;
+			if (tooltipX + tooltipTextWidth + 4 > screenWidth)
+			{
+				tooltipX = mouseX - 16 - tooltipTextWidth;
+				if (tooltipX < 4) // if the tooltip doesn't fit on the screen
+				{
+					if (mouseX > screenWidth / 2)
+					{
+						tooltipTextWidth = mouseX - 12 - 8;
+					}
+					else
+					{
+						tooltipTextWidth = screenWidth - 16 - mouseX;
+					}
+					needsWrap = true;
+				}
+			}
+
+			if (maxTextWidth > 0 && tooltipTextWidth > maxTextWidth)
+			{
+				tooltipTextWidth = maxTextWidth;
+				needsWrap = true;
+			}
+
+			if (needsWrap)
+			{
+				int wrappedTooltipWidth = 0;
+				List<String> wrappedTextLines = new ArrayList<String>();
+				for (int i = 0; i < textLines.size(); i++)
+				{
+					String textLine = textLines.get(i);
+					List<String> wrappedLine = font.listFormattedStringToWidth(textLine, tooltipTextWidth);
+					if (i == 0)
+					{
+						titleLinesCount = wrappedLine.size();
+					}
+
+					for (String line : wrappedLine)
+					{
+						int lineWidth = font.getStringWidth(line);
+						if (lineWidth > wrappedTooltipWidth)
+						{
+							wrappedTooltipWidth = lineWidth;
+						}
+						wrappedTextLines.add(line);
+					}
+				}
+				tooltipTextWidth = wrappedTooltipWidth;
+				textLines = wrappedTextLines;
+
+				if (mouseX > screenWidth / 2)
+				{
+					tooltipX = mouseX - 16 - tooltipTextWidth;
+				}
+				else
+				{
+					tooltipX = mouseX + 12;
+				}
+			}
+
+			int tooltipY = mouseY - 12;
+			int tooltipHeight = 8;
+
+			if (textLines.size() > 1)
+			{
+				tooltipHeight += (textLines.size() - 1) * 10;
+				if (textLines.size() > titleLinesCount) {
+					tooltipHeight += 2; // gap between title lines and next lines
+				}
+			}
+
+			if (tooltipY < 4)
+			{
+				tooltipY = 4;
+			}
+			else if (tooltipY + tooltipHeight + 4 > screenHeight)
+			{
+				tooltipY = screenHeight - tooltipHeight - 4;
+			}
+
+			final int zLevel = 300;
+			int backgroundColor = 0xF0100010;
+			int borderColorStart = 0x505000FF;
+			int borderColorEnd = (borderColorStart & 0xFEFEFE) >> 1 | borderColorStart & 0xFF000000;
+			drawGradientRect(zLevel, tooltipX - 3, tooltipY - 4, tooltipX + tooltipTextWidth + 3, tooltipY - 3, backgroundColor, backgroundColor);
+			drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 4, backgroundColor, backgroundColor);
+			drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+			drawGradientRect(zLevel, tooltipX - 4, tooltipY - 3, tooltipX - 3, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+			drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 3, tooltipY - 3, tooltipX + tooltipTextWidth + 4, tooltipY + tooltipHeight + 3, backgroundColor, backgroundColor);
+			drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3 + 1, tooltipX - 3 + 1, tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
+			drawGradientRect(zLevel, tooltipX + tooltipTextWidth + 2, tooltipY - 3 + 1, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3 - 1, borderColorStart, borderColorEnd);
+			drawGradientRect(zLevel, tooltipX - 3, tooltipY - 3, tooltipX + tooltipTextWidth + 3, tooltipY - 3 + 1, borderColorStart, borderColorStart);
+			drawGradientRect(zLevel, tooltipX - 3, tooltipY + tooltipHeight + 2, tooltipX + tooltipTextWidth + 3, tooltipY + tooltipHeight + 3, borderColorEnd, borderColorEnd);
+
+			int tooltipYStart = tooltipY;
+
+			for (int lineNumber = 0; lineNumber < textLines.size(); ++lineNumber)
+			{
+				String line = textLines.get(lineNumber);
+				font.drawStringWithShadow(line, (float)tooltipX, (float)tooltipY, -1);
+
+				if (lineNumber + 1 == titleLinesCount)
+				{
+					tooltipY += 2;
+				}
+
+				tooltipY += 10;
+			}
+
+			GlStateManager.enableLighting();
+			GlStateManager.enableDepth();
+			RenderHelper.enableStandardItemLighting();
+			GlStateManager.enableRescaleNormal();
+
+			if(renderer != null) {
+				renderer.accept(tooltipX - 4, tooltipYStart - 4);
+			}
+		}
+	}
+
+	public static void drawGradientRect(int zLevel, int left, int top, int right, int bottom, int startColor, int endColor)
+	{
+		float startAlpha = (float)(startColor >> 24 & 255) / 255.0F;
+		float startRed   = (float)(startColor >> 16 & 255) / 255.0F;
+		float startGreen = (float)(startColor >>  8 & 255) / 255.0F;
+		float startBlue  = (float)(startColor       & 255) / 255.0F;
+		float endAlpha   = (float)(endColor   >> 24 & 255) / 255.0F;
+		float endRed     = (float)(endColor   >> 16 & 255) / 255.0F;
+		float endGreen   = (float)(endColor   >>  8 & 255) / 255.0F;
+		float endBlue    = (float)(endColor         & 255) / 255.0F;
+
+		GlStateManager.disableTexture2D();
+		GlStateManager.enableBlend();
+		GlStateManager.disableAlpha();
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+		buffer.pos(right,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+		buffer.pos( left,    top, zLevel).color(startRed, startGreen, startBlue, startAlpha).endVertex();
+		buffer.pos( left, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
+		buffer.pos(right, bottom, zLevel).color(  endRed,   endGreen,   endBlue,   endAlpha).endVertex();
+		tessellator.draw();
+
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+		GlStateManager.disableBlend();
+		GlStateManager.enableAlpha();
+		GlStateManager.enableTexture2D();
 	}
 }

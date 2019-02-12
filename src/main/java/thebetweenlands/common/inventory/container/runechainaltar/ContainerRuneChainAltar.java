@@ -381,7 +381,7 @@ public class ContainerRuneChainAltar extends Container implements IRuneChainAlta
 
 	@Override
 	public Collection<Integer> getLinkedInputs(int runeIndex) {
-		return this.altar.getContainerData().getLinkedInputs(runeIndex + this.altar.getChainLength());
+		return this.altar.getContainerData().getLinkedInputs(runeIndex);
 	}
 
 	@Override
