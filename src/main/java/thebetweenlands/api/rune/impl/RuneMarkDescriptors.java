@@ -8,4 +8,6 @@ public final class RuneMarkDescriptors {
 
 	public static final ResourceLocation BLOCK = new ResourceLocation(ModInfo.ID, "block");
 	public static final ResourceLocation ENTITY = new ResourceLocation(ModInfo.ID, "entity");
+	public static final ResourceLocation RAY = new ResourceLocation(ModInfo.ID, "ray");
+	public static final ResourceLocation POSITION = new ResourceLocation(ModInfo.ID, "position");
 }

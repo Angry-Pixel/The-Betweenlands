@@ -34,21 +34,45 @@ public final class RuneProjectile extends AbstractRune<RuneProjectile> {
 
 		public static final INodeConfiguration CONFIGURATION_1;
 
-		private static final InputPort<?> IN_ENTITY;
-		private static final OutputPort<BlockPos> OUT_POSITION;
+		private static final InputPort<?> IN_ENTITY_1;
+		private static final OutputPort<BlockPos> OUT_POSITION_1;
+
+		public static final INodeConfiguration CONFIGURATION_2;
+
+		private static final InputPort<?> IN_ENTITY_2;
+		private static final InputPort<Vec3d> IN_RAY_2;
+		private static final OutputPort<BlockPos> OUT_POSITION_2;
+
+		public static final INodeConfiguration CONFIGURATION_3;
+
+		private static final InputPort<Vec3d> IN_POSITION_3;
+		private static final InputPort<Vec3d> IN_RAY_3;
+		private static final OutputPort<BlockPos> OUT_POSITION_3;
 
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_ENTITY = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneUser.class);
-			OUT_POSITION = builder.out(RuneMarkDescriptors.BLOCK, BlockPos.class);
+			IN_ENTITY_1 = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneUser.class);
+			OUT_POSITION_1 = builder.out(RuneMarkDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_1 = builder.build();
+
+			IN_ENTITY_2 = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneUser.class);
+			IN_RAY_2 = builder.in(RuneMarkDescriptors.RAY, Vec3d.class);
+			OUT_POSITION_2 = builder.out(RuneMarkDescriptors.BLOCK, BlockPos.class);
+
+			CONFIGURATION_2 = builder.build();
+
+			IN_POSITION_3 = builder.in(RuneMarkDescriptors.POSITION, Vec3d.class);
+			IN_RAY_3 = builder.in(RuneMarkDescriptors.RAY, Vec3d.class);
+			OUT_POSITION_3 = builder.out(RuneMarkDescriptors.BLOCK, BlockPos.class);
+
+			CONFIGURATION_3 = builder.build();
 		}
 
 		@Override
 		public List<INodeConfiguration> getConfigurations() {
-			return ImmutableList.of(CONFIGURATION_1);
+			return ImmutableList.of(CONFIGURATION_1, CONFIGURATION_2, CONFIGURATION_3);
 		}
 
 		@Override
@@ -58,18 +82,26 @@ public final class RuneProjectile extends AbstractRune<RuneProjectile> {
 
 		@Override
 		protected void activate(RuneProjectile state, RuneExecutionContext context, INodeIO io) {
-			if (state.getConfiguration() == CONFIGURATION_1) {
-
-				IN_ENTITY.run(io, Entity.class, entity -> {
-					run(io, context.getUser().getWorld(), entity instanceof EntityLivingBase ? (EntityLivingBase) entity : null, entity.getPositionEyes(1), entity.getLookVec());
+			if(state.getConfiguration() == CONFIGURATION_1) {
+				IN_ENTITY_1.run(io, Entity.class, entity -> {
+					run(io, context.getUser().getWorld(), entity instanceof EntityLivingBase ? (EntityLivingBase) entity : null, entity.getPositionEyes(1), entity.getLookVec(), OUT_POSITION_1);
 				});
-				IN_ENTITY.run(io, IRuneUser.class, user -> {
-					run(io, context.getUser().getWorld(), user.getEntity() instanceof EntityLivingBase ? (EntityLivingBase) user.getEntity() : null, user.getEyesPosition(), user.getLook());
+				IN_ENTITY_1.run(io, IRuneUser.class, user -> {
+					run(io, context.getUser().getWorld(), user.getEntity() instanceof EntityLivingBase ? (EntityLivingBase) user.getEntity() : null, user.getEyesPosition(), user.getLook(), OUT_POSITION_1);
 				});
+			} else if(state.getConfiguration() == CONFIGURATION_2) {
+				IN_ENTITY_2.run(io, Entity.class, entity -> {
+					run(io, context.getUser().getWorld(), entity instanceof EntityLivingBase ? (EntityLivingBase) entity : null, entity.getPositionEyes(1), IN_RAY_2.get(io), OUT_POSITION_2);
+				});
+				IN_ENTITY_2.run(io, IRuneUser.class, user -> {
+					run(io, context.getUser().getWorld(), user.getEntity() instanceof EntityLivingBase ? (EntityLivingBase) user.getEntity() : null, user.getEyesPosition(), IN_RAY_2.get(io), OUT_POSITION_2);
+				});
+			} else if(state.getConfiguration() == CONFIGURATION_3) {
+				run(io, context.getUser().getWorld(), null, IN_POSITION_3.get(io), IN_RAY_3.get(io), OUT_POSITION_3);
 			}
 		}
 
-		private void run(INodeIO io, World world, EntityLivingBase thrower, Vec3d pos, Vec3d dir) {
+		private void run(INodeIO io, World world, EntityLivingBase thrower, Vec3d pos, Vec3d dir, OutputPort<BlockPos> out) {
 			EntitySnowball projectile;
 			if(thrower != null) {
 				projectile = new EntitySnowball(world, thrower);
@@ -86,7 +118,7 @@ public final class RuneProjectile extends AbstractRune<RuneProjectile> {
 				if(projectile.isEntityAlive()) {
 					scheduler.sleep(1);
 				} else {
-					OUT_POSITION.set(io, new BlockPos(projectile));
+					out.set(io, new BlockPos(projectile));
 					scheduler.terminate();
 				}
 			});

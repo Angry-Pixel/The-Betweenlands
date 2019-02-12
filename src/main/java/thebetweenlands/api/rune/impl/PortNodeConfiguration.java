@@ -124,8 +124,8 @@ public class PortNodeConfiguration implements INodeConfiguration {
 				if(input.type != null) {
 					inputTypes.add(new IConfigurationInput() {
 						@Override
-						public boolean test(IType type) {
-							if(input.type.isAssignableFrom(type.getTypeClass())) {
+						public boolean test(IConfigurationOutput output, IType type) {
+							if(input.type.isAssignableFrom(type.getTypeClass()) && output.getDescriptor().equals(input.getDescriptor())) {
 								//TODO Check generics?
 								return true;
 							}
@@ -145,11 +145,13 @@ public class PortNodeConfiguration implements INodeConfiguration {
 				} else {
 					inputTypes.add(new IConfigurationInput() {
 						@Override
-						public boolean test(IType type) {
-							for(Class<?> inputType : input.types) {
-								if(inputType.isAssignableFrom(type.getTypeClass())) {
-									//TODO Check generics?
-									return true;
+						public boolean test(IConfigurationOutput output, IType type) {
+							if(output.getDescriptor().equals(input.getDescriptor())) {
+								for(Class<?> inputType : input.types) {
+									if(inputType.isAssignableFrom(type.getTypeClass())) {
+										//TODO Check generics?
+										return true;
+									}
 								}
 							}
 							return false;
@@ -268,7 +270,7 @@ public class PortNodeConfiguration implements INodeConfiguration {
 		}
 
 		/**
-		 * Returns the input value at this port
+		 * Returns the input value at this port, without doing any type checks
 		 * @param input - node I/O
 		 * @return the input value at this port
 		 */
@@ -278,6 +280,46 @@ public class PortNodeConfiguration implements INodeConfiguration {
 			return (T) io.get(this.index);
 		}
 
+		/**
+		 * Returns the input value at this port after doing a type check.
+		 * If the object cannot be cast to the specified type <code>null</code> is returned.
+		 * @param io node I/O
+		 * @param cls type to cast to
+		 * @return the input value at this port, or null if the input value cannot be cast to the specified type
+		 */
+		@SuppressWarnings("unchecked")
+		public <F> F get(INodeIO io, Class<F> cls) {
+			Object obj = io.get(this.index);
+			if(obj == null || cls.isInstance(obj)) {
+				return (F) obj;
+			}
+			return null;
+		}
+
+		/**
+		 * Returns the input value at this port after doing a type check.
+		 * If the object cannot be cast to the specified type <i>defaultValue</i> is returned.
+		 * @param io node I/O
+		 * @param cls type to cast to
+		 * @param defaultValue default value returned if input value cannot be cast to the specified type
+		 * @return the input value at this port, or <i>defaultValue</i> if the input value cannot be cast to the specified type
+		 */
+		@SuppressWarnings("unchecked")
+		public <F> F get(INodeIO io, Class<F> cls, F defaultValue) {
+			Object obj = io.get(this.index);
+			if(obj == null || cls.isInstance(obj)) {
+				return (F) obj;
+			}
+			return defaultValue;
+		}
+
+		/**
+		 * Calls the consumer with the input value at this port after doing a type check.
+		 * If the object cannot be cast to the specified type the consumer will not be called.
+		 * @param io node I/O
+		 * @param cls type to cast to
+		 * @param runnable consumer to call with the cast input value
+		 */
 		@SuppressWarnings("unchecked")
 		public <F> void run(INodeIO io, Class<F> cls, Consumer<F> runnable) {
 			Object obj = io.get(this.index);

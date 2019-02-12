@@ -2,7 +2,7 @@ package thebetweenlands.api.rune;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 
 import javax.annotation.Nullable;
 
@@ -16,21 +16,22 @@ public interface INodeConfiguration {
 
 		/**
 		 * Returns the generic types of the type. These are optional and if not
-		 * specified no generic type checks will be done by {@link IConfigurationInput#test(IType)}.
+		 * specified, i.e. returning an empty list, no generic type checks will be done by {@link IConfigurationInput#test(IConfigurationOutput, IType)}.
 		 * @return generic types of the type
 		 */
 		public List<IType> getTypeGenerics();
 	}
 
-	public static interface IConfigurationInput extends Predicate<IType> {
+	public static interface IConfigurationInput extends BiPredicate<IConfigurationOutput, IType> {
 		/**
-		 * Returns whether the specified type is applicable to this input.
-		 * @param type - type to check. The generic types {@link IType#getTypeGenerics()} are optional and
+		 * Returns whether the specified configuration output and its output type are applicable to this input.
+		 * @param output configuration output to check
+		 * @param type type of the configuration output to check. The generic types {@link IType#getTypeGenerics()} are optional and
 		 * if not specified the predicate <b>must not</b> do any checks for the generic types.
 		 * @return whether the specified type is applicable to this input
 		 */
 		@Override
-		public boolean test(IType type);
+		public boolean test(IConfigurationOutput output, IType type);
 
 		/**
 		 * Returns whether this input accepts multiple values of the input's type at once
