@@ -77,7 +77,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (Math.round(Math.sqrt(dSq)) == radius && yy - y >= level2)
 						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.BETWEENSTONE_BRICKS, 2);
 
-					if (yy == y + level1 || yy == y + level2 || yy == y + level3) {
+					if (yy == y + level1 || yy == y + level2) {
 						if (Math.round(Math.sqrt(dSq)) <= radius - 8)
 							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.BETWEENSTONE_BRICKS, 2);
 					}
@@ -347,7 +347,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			for (int count = 1; count <= 2; count++)
 				if (!isSolidStructureBlock(world.getBlockState(pos.offset(facing, count))) && world.isAirBlock(pos.offset(facing, count)))
 					if (isWithinMazeAreaForGen(posOrigin, pos.offset(facing, count)))
-						world.setBlockState(pos.offset(facing, count), getRandomBeam(facing.rotateY(), rand, level, count));
+						world.setBlockState(pos.offset(facing, count), getRandomBeam(facing.rotateY(), rand, level, count, false));
 		}
 	}
 
@@ -698,8 +698,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		return blockHelper.getRandomMushroom(rand);
 	}
 
-	public IBlockState getRandomBeam(EnumFacing facing, Random rand, int level, int count) {
-		return blockHelper.getRandomBeam(facing, rand, level, count);
+	public IBlockState getRandomBeam(EnumFacing facing, Random rand, int level, int count, boolean randomiseLine) {
+		return blockHelper.getRandomBeam(facing, rand, level, count, randomiseLine);
 	}
 
 	public IBlockState getRandomSupportBeam(EnumFacing facing, boolean isTop, Random rand) {

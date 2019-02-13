@@ -135,6 +135,7 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState WOODEN_SUPPORT_BEAM_ROTTEN_2 = BlockRegistry.WOODEN_SUPPORT_BEAM_ROTTEN_2.getDefaultState();
 	public IBlockState WOODEN_SUPPORT_BEAM_ROTTEN_3 = BlockRegistry.WOODEN_SUPPORT_BEAM_ROTTEN_2.getDefaultState();
 
+	public IBlockState LOG_ROTTEN_BARK = BlockRegistry.LOG_ROTTEN_BARK.getDefaultState();
 	public IBlockState LOG_ROTTEN_BARK_CARVED_1 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_1.getDefaultState();
 	public IBlockState LOG_ROTTEN_BARK_CARVED_2 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_2.getDefaultState();
 	public IBlockState LOG_ROTTEN_BARK_CARVED_3 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_3.getDefaultState();
@@ -157,6 +158,8 @@ public class SludgeWormMazeBlockHelper {
 	
 	public IBlockState SMOOTH_BETWEENSTONE = BlockRegistry.SMOOTH_BETWEENSTONE.getDefaultState();
 	public IBlockState SMOOTH_BETWEENSTONE_STAIRS = BlockRegistry.SMOOTH_BETWEENSTONE_STAIRS.getDefaultState();
+	public IBlockState SMOOTH_BETWEENSTONE_SLAB_UPPER = BlockRegistry.SMOOTH_BETWEENSTONE_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
+	public IBlockState SMOOTH_BETWEENSTONE_SLAB_LOWER = BlockRegistry.SMOOTH_BETWEENSTONE_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.BOTTOM);
 	
 	public IBlockState BETWEENSTONE_BRICKS = BlockRegistry.BETWEENSTONE_BRICKS.getDefaultState();
 	public IBlockState BETWEENSTONE_BRICK_STAIRS = BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState();
@@ -427,8 +430,11 @@ public class SludgeWormMazeBlockHelper {
 		return state.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, half);
 	}
 
-	public IBlockState getRandomBeam(EnumFacing facing, Random rand, int level, int count) {
+	public IBlockState getRandomBeam(EnumFacing facing, Random rand, int level, int count, boolean randomiseLine) {
 		IBlockState state = LOG_ROTTEN_BARK_CARVED_1;
+		if(randomiseLine)
+			count = rand.nextInt(6); // overrides fixed ends and middles with a random choice for multi-placed blocks
+
 		if (count == 1 || count == 3) {
 			int endType = rand.nextInt(6);
 			switch (endType) {
@@ -583,9 +589,9 @@ public class SludgeWormMazeBlockHelper {
 	/// TOWER STUFF
 
 	// TODO improve for more types
-	public @Nullable IBlockState getStairsForTowerLevel(Random rand, int level, EnumFacing facing, EnumHalf half) {
+	public @Nullable IBlockState getStairsForTowerLevel(Random rand, int level, EnumFacing facing, EnumHalf half, boolean bricks) {
 		IBlockState state = SMOOTH_BETWEENSTONE_STAIRS;
-		if(level >= 16)
+		if(bricks)
 			state = BETWEENSTONE_BRICK_STAIRS;
 		return state.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, half);
 	}
