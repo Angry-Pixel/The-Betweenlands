@@ -58,6 +58,7 @@ import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.entity.mobs.EntityTarminion;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
+import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
@@ -139,6 +140,7 @@ public class EntityRegistry {
 		registerEntity(EntityLurkerSkinRaft.class, "lurker_skin_raft");
 		
 		registerEntity(EntityShambler.class, "shambler", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityWallLamprey.class, "wall_lamprey", 0x0B3B0B, 0xDBA901);
 
 	}
 
