@@ -11,7 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ModelLampreyHole extends ModelBase {
+public class ModelWallLamprey extends ModelBase {
 	public static class BlockTexturedModelRenderer extends ModelRenderer {
 		private int textureOffsetX;
 		private int textureOffsetY;
@@ -231,8 +231,9 @@ public class ModelLampreyHole extends ModelBase {
 	public ModelRenderer bottom;
 	public ModelRenderer top;
 	public ModelRenderer back;
+	public ModelRenderer window;
 
-	public ModelLampreyHole() {
+	public ModelWallLamprey() {
 		this.textureWidth = 16;
 		this.textureHeight = 16;
 		this.frontPiece17 = new BlockTexturedModelRenderer(this, 3, 14, false);
@@ -301,6 +302,9 @@ public class ModelLampreyHole extends ModelBase {
 		this.back = new BlockTexturedModelRenderer(this, 1, 1, false);
 		this.back.setRotationPoint(1.0F, 1.0F, 9.0F);
 		this.back.addBox(0.0F, 0.0F, 0.0F, 14, 14, 1, 0.0F);
+		this.window = new BlockTexturedModelRenderer(this, 0, 0, false);
+		this.window.setRotationPoint(-8.0F, 0.0F, -8.0F);
+		this.window.addBox(0.0F, 0.0F, 0.0F, 16, 16, 0, 0.0F);
 		this.frontPiece1.addChild(this.frontPiece17);
 		this.frontPiece1.addChild(this.frontPiece12);
 		this.frontPiece1.addChild(this.frontPiece2);
@@ -322,11 +326,15 @@ public class ModelLampreyHole extends ModelBase {
 		this.frontPiece1.addChild(this.frontPiece6);
 		this.frontPiece1.addChild(this.frontPiece14);
 		this.frontPiece1.addChild(this.back);
+
+		//Don't render window normally
+		this.window.showModel = false;
 	}
 
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
 		this.frontPiece1.render(f5);
+		this.window.render(f5);
 	}
 
 	/**
