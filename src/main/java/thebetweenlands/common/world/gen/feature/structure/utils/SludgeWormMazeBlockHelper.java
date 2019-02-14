@@ -152,7 +152,10 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState LOG_ROTTEN_BARK_CARVED_14 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_14.getDefaultState();
 	public IBlockState LOG_ROTTEN_BARK_CARVED_15 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_15.getDefaultState();
 	public IBlockState LOG_ROTTEN_BARK_CARVED_16 = BlockRegistry.LOG_ROTTEN_BARK_CARVED_16.getDefaultState();
-	
+
+	public IBlockState GIANT_ROOT_PLANKS = BlockRegistry.GIANT_ROOT_PLANKS.getDefaultState();
+	public IBlockState GIANT_ROOT_PLANK_SLAB_UPPER = BlockRegistry.GIANT_ROOT_PLANK_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
+	public IBlockState GIANT_ROOT_PLANK_SLAB_LOWER = BlockRegistry.GIANT_ROOT_PLANK_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.BOTTOM);
 	//Tower
 	public IBlockState BETWEENSTONE = BlockRegistry.BETWEENSTONE.getDefaultState();
 	
