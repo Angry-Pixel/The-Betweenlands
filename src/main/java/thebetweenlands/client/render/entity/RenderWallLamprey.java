@@ -141,90 +141,16 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 		GlStateManager.colorMask(true, true, true, true);
 		GlStateManager.depthFunc(GL11.GL_LEQUAL);
 
+		if(stencilBit >= 0) {
+			MinecraftForgeClient.releaseStencilBit(stencilBit);
+		}
+		if(useStencil) {
+			GL11.glDisable(GL11.GL_STENCIL_TEST);
+		}
+
 		//Render visible pass
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-
-		if(stencilBit >= 0) {
-			MinecraftForgeClient.releaseStencilBit(stencilBit);
-		}
-		if(useStencil) {
-			GL11.glDisable(GL11.GL_STENCIL_TEST);
-		}
 	}
-
-	/*@Override
-	protected void renderModel(EntityWallLamprey entitylivingbaseIn, float limbSwing, float limbSwingAmount,
-			float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
-		Framebuffer fbo = Minecraft.getMinecraft().getFramebuffer();
-
-		boolean useStencil = false;
-		int stencilBit = MinecraftForgeClient.reserveStencilBit();
-		int stencilMask = 1 << stencilBit;
-
-		if(stencilBit >= 0) {
-			useStencil = fbo.isStencilEnabled() ? true : fbo.enableStencil();
-		}
-
-		if(useStencil) {
-			GL11.glEnable(GL11.GL_STENCIL_TEST);
-
-			//Clear our stencil bit to 0
-			GL11.glStencilMask(stencilMask);
-			GL11.glClearStencil(0);
-			GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-			GL11.glStencilMask(~0);
-
-			GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
-			GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_KEEP, GL11.GL_REPLACE);
-
-			GlStateManager.depthMask(false);
-			GlStateManager.colorMask(false, false, false, false);
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
-
-			GlStateManager.disableAlpha();
-			GlStateManager.disableBlend();
-			GlStateManager.disableTexture2D();
-
-			//Polygon offset required so that there's no z fighting with the window and background wall
-			GlStateManager.enablePolygonOffset();
-			GlStateManager.doPolygonOffset(-5.0F, -5.0F);
-
-			//Render window through which the hole will be visible
-			this.model.window.render(scaleFactor);
-
-			GlStateManager.disablePolygonOffset();
-
-			GlStateManager.enableAlpha();
-			GlStateManager.enableBlend();
-			GlStateManager.enableTexture2D();
-
-			GlStateManager.depthMask(true);
-			GlStateManager.colorMask(true, true, true, true);
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-
-			GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
-			GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-		}
-
-		//Render to depth only with reversed depth test such that in the next pass it can be rendered normally
-		GlStateManager.depthFunc(GL11.GL_GEQUAL);
-		GlStateManager.colorMask(false, false, false, false);
-
-		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
-
-		GlStateManager.colorMask(true, true, true, true);
-		GlStateManager.depthFunc(GL11.GL_LEQUAL);
-
-		//Render visible pass
-		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
-
-		if(stencilBit >= 0) {
-			MinecraftForgeClient.releaseStencilBit(stencilBit);
-		}
-		if(useStencil) {
-			GL11.glDisable(GL11.GL_STENCIL_TEST);
-		}
-	}*/
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityWallLamprey entity) {
