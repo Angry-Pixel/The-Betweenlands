@@ -12,7 +12,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneUser;
+import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
@@ -52,12 +52,12 @@ public final class RuneProjectile extends AbstractRune<RuneProjectile> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_ENTITY_1 = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneUser.class);
+			IN_ENTITY_1 = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneChainUser.class);
 			OUT_POSITION_1 = builder.out(RuneMarkDescriptors.BLOCK, BlockPos.class);
 
 			CONFIGURATION_1 = builder.build();
 
-			IN_ENTITY_2 = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneUser.class);
+			IN_ENTITY_2 = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneChainUser.class);
 			IN_RAY_2 = builder.in(RuneMarkDescriptors.RAY, Vec3d.class);
 			OUT_POSITION_2 = builder.out(RuneMarkDescriptors.BLOCK, BlockPos.class);
 
@@ -86,14 +86,14 @@ public final class RuneProjectile extends AbstractRune<RuneProjectile> {
 				IN_ENTITY_1.run(io, Entity.class, entity -> {
 					run(io, context.getUser().getWorld(), entity instanceof EntityLivingBase ? (EntityLivingBase) entity : null, entity.getPositionEyes(1), entity.getLookVec(), OUT_POSITION_1);
 				});
-				IN_ENTITY_1.run(io, IRuneUser.class, user -> {
+				IN_ENTITY_1.run(io, IRuneChainUser.class, user -> {
 					run(io, context.getUser().getWorld(), user.getEntity() instanceof EntityLivingBase ? (EntityLivingBase) user.getEntity() : null, user.getEyesPosition(), user.getLook(), OUT_POSITION_1);
 				});
 			} else if(state.getConfiguration() == CONFIGURATION_2) {
 				IN_ENTITY_2.run(io, Entity.class, entity -> {
 					run(io, context.getUser().getWorld(), entity instanceof EntityLivingBase ? (EntityLivingBase) entity : null, entity.getPositionEyes(1), IN_RAY_2.get(io), OUT_POSITION_2);
 				});
-				IN_ENTITY_2.run(io, IRuneUser.class, user -> {
+				IN_ENTITY_2.run(io, IRuneChainUser.class, user -> {
 					run(io, context.getUser().getWorld(), user.getEntity() instanceof EntityLivingBase ? (EntityLivingBase) user.getEntity() : null, user.getEyesPosition(), IN_RAY_2.get(io), OUT_POSITION_2);
 				});
 			} else if(state.getConfiguration() == CONFIGURATION_3) {

@@ -6,7 +6,7 @@ import com.google.common.collect.ImmutableList;
 
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneUser;
+import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.OutputPort;
@@ -26,12 +26,12 @@ public final class RuneSelf extends AbstractRune<RuneSelf> {
 
 		public static final INodeConfiguration CONFIGURATION_1;
 
-		private static final OutputPort<IRuneUser> OUT_ENTITY;
+		private static final OutputPort<IRuneChainUser> OUT_ENTITY;
 
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			OUT_ENTITY = builder.out(RuneMarkDescriptors.ENTITY, IRuneUser.class);
+			OUT_ENTITY = builder.out(RuneMarkDescriptors.ENTITY, IRuneChainUser.class);
 
 			CONFIGURATION_1 = builder.build();
 		}

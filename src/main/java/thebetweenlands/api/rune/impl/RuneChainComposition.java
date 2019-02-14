@@ -32,7 +32,7 @@ import thebetweenlands.api.rune.INodeConfiguration;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationInput;
 import thebetweenlands.api.rune.INodeConfiguration.IConfigurationOutput;
 import thebetweenlands.api.rune.INodeConfiguration.IType;
-import thebetweenlands.api.rune.IRuneUser;
+import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.impl.RuneChainComposition.RuneExecutionContext;
 
 public class RuneChainComposition implements INodeComposition<RuneExecutionContext> {
@@ -589,13 +589,13 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 	}
 
 	public final class RuneExecutionContext {
-		private final IRuneUser user;
+		private final IRuneChainUser user;
 		private int parallelActivationCount;
 		private int parallelActivation;
 		private int branchCount;
 		private int branch;
 
-		private RuneExecutionContext(IRuneUser user) {
+		private RuneExecutionContext(IRuneChainUser user) {
 			this.user = user;
 		}
 
@@ -603,7 +603,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 		 * Returns the user that activated the rune chain
 		 * @return the user that activated the rune chain
 		 */
-		public IRuneUser getUser() {
+		public IRuneChainUser getUser() {
 			return this.user;
 		}
 
@@ -767,7 +767,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 
 	/**
 	 * Sets the aspect buffer that provides the runes with aspect. Must be set before calling
-	 * {@link #run(IRuneUser)}.
+	 * {@link #run(IRuneChainUser)}.
 	 * @param buffer - aspect buffer that provides the runes with aspect
 	 */
 	public void setAspectBuffer(IAspectBuffer buffer) {
@@ -779,7 +779,7 @@ public class RuneChainComposition implements INodeComposition<RuneExecutionConte
 	 * before running, see {@link #setAspectBuffer(IAspectBuffer)}!
 	 * @param user - rune user that is executing this rune chain
 	 */
-	public void run(IRuneUser user) {
+	public void run(IRuneChainUser user) {
 		this.run(new RuneExecutionContext(user));
 	}
 

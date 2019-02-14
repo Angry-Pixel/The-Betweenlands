@@ -1,21 +1,16 @@
 package thebetweenlands.common.item.herblore;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.capability.IRuneChainCapability;
+import thebetweenlands.api.capability.IRuneChainUserCapability;
 import thebetweenlands.api.item.IRenamableItem;
-import thebetweenlands.api.rune.IRuneUser;
 import thebetweenlands.api.rune.impl.RuneChainComposition;
 import thebetweenlands.api.rune.impl.RuneChainComposition.IAspectBuffer;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -38,96 +33,44 @@ public class ItemRuneChain extends Item implements IRenamableItem {
 				return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 			}
 
-			ItemStack stack = player.getHeldItem(hand);
+			if(player.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN_USER, null)) {
+				IRuneChainUserCapability userCap = player.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN_USER, null);
 
-			if(stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {
-				IRuneChainCapability cap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
+				ItemStack stack = player.getHeldItem(hand);
 
-				RuneChainComposition.Blueprint bp = cap.getBlueprint();
+				if(stack.hasCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null)) {
+					IRuneChainCapability chainCap = stack.getCapability(CapabilityRegistry.CAPABILITY_RUNE_CHAIN, null);
 
-				if(bp != null) {
-					/*RuneChainComposition.Blueprint bp = new RuneChainComposition.Blueprint();
+					RuneChainComposition.Blueprint bp = chainCap.getBlueprint();
 
-					bp.addNodeBlueprint(new RuneMarkArea.Blueprint());
-					//bp.addNodeBlueprint(new NodeDestroyBlocks.Blueprint());
-					bp.addNodeBlueprint(new RuneSelectGrass.Blueprint());
-					bp.addNodeBlueprint(new RuneFire.Blueprint());
+					if(bp != null) {
+						/*RuneChainComposition.Blueprint bp = new RuneChainComposition.Blueprint();
 
-					System.out.println("Link mark -> grass 1: " + bp.link(1, 0, 0, 0));
-					System.out.println("Link mark -> grass 2: " + bp.link(1, 1, 0, 1));
-					System.out.println("Link mark -> destroy 1: " + bp.link(2, 0, 0, 0));
-					//System.out.println("Link mark -> destroy 2: " + bp.link(2, 1, 0, 1));*/
+						bp.addNodeBlueprint(new RuneMarkArea.Blueprint());
+						//bp.addNodeBlueprint(new NodeDestroyBlocks.Blueprint());
+						bp.addNodeBlueprint(new RuneSelectGrass.Blueprint());
+						bp.addNodeBlueprint(new RuneFire.Blueprint());
 
-					final RuneChainComposition composition = bp.create();
+						System.out.println("Link mark -> grass 1: " + bp.link(1, 0, 0, 0));
+						System.out.println("Link mark -> grass 2: " + bp.link(1, 1, 0, 1));
+						System.out.println("Link mark -> destroy 1: " + bp.link(2, 0, 0, 0));
+						//System.out.println("Link mark -> destroy 2: " + bp.link(2, 1, 0, 1));*/
 
-					final AspectContainer aspects = new AspectContainer();
+						final RuneChainComposition composition = bp.create();
 
-					aspects.add(AspectRegistry.ORDANIIS, 10000);
-					aspects.add(AspectRegistry.FERGALAZ, 10000);
+						final AspectContainer aspects = new AspectContainer();
 
-					final IRuneUser user = new IRuneUser() {
-						@Override
-						public World getWorld() {
-							return player.world;
-						}
+						aspects.add(AspectRegistry.ORDANIIS, 10000);
+						aspects.add(AspectRegistry.FERGALAZ, 10000);
 
-						@Override
-						public Vec3d getPosition() {
-							return player.getPositionVector();
-						}
-						
-						@Override
-						public Vec3d getEyesPosition() {
-							return player.getPositionEyes(1);
-						}
+						final IAspectBuffer buffer = type -> aspects;
 
-						@Override
-						public Vec3d getLook() {
-							return player.getLookVec();
-						}
+						composition.setAspectBuffer(buffer);
 
-						@Override
-						public Entity getEntity() {
-							return player;
-						}
+						composition.run(userCap.getUser());
 
-						@Override
-						public IInventory getInventory() {
-							return player.inventory;
-						}
-					};
-
-					final IAspectBuffer buffer = type -> aspects;
-					composition.setAspectBuffer(buffer);
-
-					composition.run(user);
-
-					EntityItem item = new EntityItem(world, player.posX, player.posY, player.posZ, new ItemStack(Items.DIAMOND)) {
-						@Override
-						public void onUpdate() {
-							super.onUpdate();
-
-							if(composition.isRunning()) {
-								composition.update();
-							} else {
-								this.setDead();
-							}
-						}
-
-						@Override
-						protected void dealFireDamage(int amount) {
-
-						}
-
-						@Override
-						public boolean attackEntityFrom(net.minecraft.util.DamageSource source, float amount) {
-							return false;
-						}
-					};
-
-					item.setPickupDelay(20);
-
-					world.spawnEntity(item);
+						userCap.setUpdating(userCap.addRuneChain(composition), true, true);
+					}
 				}
 			}
 		}

@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.api.rune.INodeComposition;
 import thebetweenlands.api.rune.INodeConfiguration;
-import thebetweenlands.api.rune.IRuneUser;
+import thebetweenlands.api.rune.IRuneChainUser;
 import thebetweenlands.api.rune.impl.AbstractRune;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration;
 import thebetweenlands.api.rune.impl.PortNodeConfiguration.InputPort;
@@ -38,7 +38,7 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 		static {
 			PortNodeConfiguration.Builder builder = PortNodeConfiguration.builder();
 
-			IN_ENTITY = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneUser.class);
+			IN_ENTITY = builder.in(RuneMarkDescriptors.ENTITY, Entity.class, IRuneChainUser.class);
 			OUT_POSITION = builder.out(RuneMarkDescriptors.POSITION, Vec3d.class);
 			OUT_EYE_POSITION = builder.out(RuneMarkDescriptors.POSITION, Vec3d.class);
 			OUT_RAY = builder.out(RuneMarkDescriptors.RAY, Vec3d.class);
@@ -64,7 +64,7 @@ public final class RunePinpoint extends AbstractRune<RunePinpoint> {
 					OUT_EYE_POSITION.set(io, entity.getPositionEyes(1));
 					OUT_RAY.set(io, entity.getLookVec());
 				});
-				IN_ENTITY.run(io, IRuneUser.class, user -> {
+				IN_ENTITY.run(io, IRuneChainUser.class, user -> {
 					OUT_POSITION.set(io, user.getPosition());
 					OUT_POSITION.set(io, user.getEyesPosition());
 					OUT_RAY.set(io, user.getLook());

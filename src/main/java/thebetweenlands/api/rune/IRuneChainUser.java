@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import thebetweenlands.api.aspect.AspectContainer;
 import thebetweenlands.api.aspect.IAspectType;
 
-public interface IRuneUser {
+public interface IRuneChainUser {
 	/**
 	 * Returns the world the rune chain was activated in
 	 * @return the world the rune chain was activated in
@@ -54,4 +54,12 @@ public interface IRuneUser {
 	 */
 	@Nullable
 	public Entity getEntity();
+	
+	/**
+	 * Returns whether the rune chain user is currently "using"
+	 * the rune chain (e.g. player holding right-click with a rune chain item)
+	 * @return Whether the rune chain user is currently "using"
+	 * the rune chain
+	 */
+	public boolean isUsingRuneChain();
 }
