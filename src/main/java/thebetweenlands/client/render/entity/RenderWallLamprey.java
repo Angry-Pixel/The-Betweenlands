@@ -15,7 +15,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.entity.layer.LayerOverlay;
-import thebetweenlands.client.render.model.entity.ModelWallLamprey;
+import thebetweenlands.client.render.model.entity.ModelWallLampreyHole;
 import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -23,14 +23,25 @@ import thebetweenlands.common.lib.ModInfo;
 public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 	protected static final ResourceLocation[] DESTROY_STAGES = new ResourceLocation[] {new ResourceLocation("textures/blocks/destroy_stage_0.png"), new ResourceLocation("textures/blocks/destroy_stage_1.png"), new ResourceLocation("textures/blocks/destroy_stage_2.png"), new ResourceLocation("textures/blocks/destroy_stage_3.png"), new ResourceLocation("textures/blocks/destroy_stage_4.png"), new ResourceLocation("textures/blocks/destroy_stage_5.png"), new ResourceLocation("textures/blocks/destroy_stage_6.png"), new ResourceLocation("textures/blocks/destroy_stage_7.png"), new ResourceLocation("textures/blocks/destroy_stage_8.png"), new ResourceLocation("textures/blocks/destroy_stage_9.png")};
 
+	private static final ResourceLocation TEXTURE_OVERLAY = new ResourceLocation(ModInfo.ID, "textures/entity/wall_lamprey_hole_overlay.png");
+
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/blocks/mud_bricks.png");
 
-	private final ModelWallLamprey model;
+	private final ModelWallLampreyHole modelBlockTextured;
+	private final ModelWallLampreyHole modelNormal;
 
 	public RenderWallLamprey(RenderManager renderManager) {
-		super(renderManager, new ModelWallLamprey(), 0);
+		super(renderManager, new ModelWallLampreyHole(true), 0);
 
-		this.model = (ModelWallLamprey) this.mainModel;
+		this.modelBlockTextured = (ModelWallLampreyHole) this.mainModel;
+		this.modelNormal = new ModelWallLampreyHole(false);
+
+		this.addLayer(new LayerOverlay<EntityWallLamprey>(this, TEXTURE_OVERLAY) {
+			@Override
+			protected ModelBase[] getModels(EntityWallLamprey entity) {
+				return new ModelBase[] { RenderWallLamprey.this.modelNormal };
+			}
+		});
 
 		this.addLayer(new LayerOverlay<EntityWallLamprey>(this) {
 			@Override
@@ -112,11 +123,11 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 			GlStateManager.doPolygonOffset(-5.0F, -5.0F);
 
 			//Render window through which the hole will be visible
-			this.model.frontPiece1.showModel = false;
-			this.model.window.showModel = true;
+			this.modelBlockTextured.frontPiece1.showModel = false;
+			this.modelBlockTextured.window.showModel = true;
 			super.doRender(entity, x, y, z, entityYaw, partialTicks);
-			this.model.frontPiece1.showModel = true;
-			this.model.window.showModel = false;
+			this.modelBlockTextured.frontPiece1.showModel = true;
+			this.modelBlockTextured.window.showModel = false;
 
 			GlStateManager.disablePolygonOffset();
 

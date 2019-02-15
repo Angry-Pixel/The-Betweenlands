@@ -11,7 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ModelWallLamprey extends ModelBase {
+public class ModelWallLampreyHole extends ModelBase {
 	public static class BlockTexturedModelRenderer extends ModelRenderer {
 		private int textureOffsetX;
 		private int textureOffsetY;
@@ -211,7 +211,6 @@ public class ModelWallLamprey extends ModelBase {
 
 	public ModelRenderer frontPiece1;
 	public ModelRenderer frontPiece2;
-	public ModelRenderer frontPiece3;
 	public ModelRenderer frontPiece4;
 	public ModelRenderer frontPiece5;
 	public ModelRenderer frontPiece6;
@@ -219,12 +218,10 @@ public class ModelWallLamprey extends ModelBase {
 	public ModelRenderer frontPiece8;
 	public ModelRenderer frontPiece9;
 	public ModelRenderer frontPiece10;
-	public ModelRenderer frontPiece11;
 	public ModelRenderer frontPiece12;
 	public ModelRenderer frontPiece13;
 	public ModelRenderer frontPiece14;
 	public ModelRenderer frontPiece15;
-	public ModelRenderer frontPiece16;
 	public ModelRenderer frontPiece17;
 	public ModelRenderer left;
 	public ModelRenderer right;
@@ -233,102 +230,104 @@ public class ModelWallLamprey extends ModelBase {
 	public ModelRenderer back;
 	public ModelRenderer window;
 
-	public ModelWallLamprey() {
-		this.textureWidth = 16;
-		this.textureHeight = 16;
-		this.frontPiece17 = new BlockTexturedModelRenderer(this, 3, 14, false);
-		this.frontPiece17.setRotationPoint(3.0F, 14.0F, 0.0F);
-		this.frontPiece17.addBox(0.0F, 0.0F, 0.0F, 1, 2, 1, 0.0F);
-		this.frontPiece12 = new BlockTexturedModelRenderer(this, 14, 9, false);
-		this.frontPiece12.setRotationPoint(14.0F, 9.0F, 0.0F);
-		this.frontPiece12.addBox(0.0F, 0.0F, 0.0F, 1, 2, 1, 0.0F);
-		this.frontPiece2 = new BlockTexturedModelRenderer(this, 0, 2, false);
-		this.frontPiece2.setRotationPoint(0.0F, 2.0F, 0.0F);
-		this.frontPiece2.addBox(0.0F, 0.0F, 0.0F, 2, 1, 1, 0.0F);
-		this.left = new BlockTexturedModelRenderer(this, 6, 0, false);
-		this.left.setRotationPoint(0.0F, 0.0F, 1.0F);
-		this.left.addBox(0.0F, 0.0F, 0.0F, 1, 16, 9, 0.0F);
-		this.frontPiece9 = new BlockTexturedModelRenderer(this, 13, 2, false);
+	public ModelWallLampreyHole(boolean blockTextured) {
+		this.textureWidth = blockTextured ? 16 : 64;
+		this.textureHeight = blockTextured ? 16 : 64;
+
+		this.right = this.createModelRenderer(this, 32, 38, false, blockTextured);
+		this.right.mirror = true;
+		this.right.setRotationPoint(15.0F, 0.0F, 0.0F);
+		this.right.addBox(0.0F, 0.0F, 0.0F, 1, 16, 10, 0.0F);
+		this.frontPiece9 = this.createModelRenderer(this, 15, 1, false, blockTextured);
+		this.frontPiece9.mirror = true;
 		this.frontPiece9.setRotationPoint(13.0F, 2.0F, 0.0F);
-		this.frontPiece9.addBox(0.0F, 0.0F, 0.0F, 1, 1, 1, 0.0F);
-		this.frontPiece16 = new BlockTexturedModelRenderer(this, 4, 15, false);
-		this.frontPiece16.setRotationPoint(4.0F, 15.0F, 0.0F);
-		this.frontPiece16.addBox(0.0F, 0.0F, 0.0F, 6, 1, 1, 0.0F);
-		this.frontPiece5 = new BlockTexturedModelRenderer(this, 1, 12, false);
-		this.frontPiece5.setRotationPoint(1.0F, 12.0F, 0.0F);
-		this.frontPiece5.addBox(0.0F, 0.0F, 0.0F, 1, 1, 1, 0.0F);
-		this.top = new BlockTexturedModelRenderer(this, 1, 6, false);
-		this.top.setRotationPoint(1.0F, 0.0F, 1.0F);
-		this.top.addBox(0.0F, 0.0F, 0.0F, 14, 1, 9, 0.0F);
-		this.frontPiece7 = new BlockTexturedModelRenderer(this, 4, 2, false);
-		this.frontPiece7.setRotationPoint(4.0F, 2.0F, 0.0F);
-		this.frontPiece7.addBox(0.0F, 0.0F, 0.0F, 8, 1, 1, 0.0F);
-		this.frontPiece10 = new BlockTexturedModelRenderer(this, 14, 2, false);
-		this.frontPiece10.setRotationPoint(14.0F, 2.0F, 0.0F);
-		this.frontPiece10.addBox(0.0F, 0.0F, 0.0F, 2, 2, 1, 0.0F);
-		this.frontPiece15 = new BlockTexturedModelRenderer(this, 9, 14, false);
-		this.frontPiece15.setRotationPoint(9.0F, 14.0F, 0.0F);
-		this.frontPiece15.addBox(0.0F, 0.0F, 0.0F, 1, 1, 1, 0.0F);
-		this.bottom = new BlockTexturedModelRenderer(this, 1, 1, false);
-		this.bottom.setRotationPoint(1.0F, 15.0F, 1.0F);
-		this.bottom.addBox(0.0F, 0.0F, 0.0F, 14, 1, 9, 0.0F);
-		this.right = new BlockTexturedModelRenderer(this, 1, 0, false);
-		this.right.setRotationPoint(15.0F, 0.0F, 1.0F);
-		this.right.addBox(0.0F, 0.0F, 0.0F, 1, 16, 9, 0.0F);
-		this.frontPiece4 = new BlockTexturedModelRenderer(this, 1, 6, false);
-		this.frontPiece4.setRotationPoint(1.0F, 6.0F, 0.0F);
-		this.frontPiece4.addBox(0.0F, 0.0F, 0.0F, 1, 4, 1, 0.0F);
-		this.frontPiece1 = new BlockTexturedModelRenderer(this, 0, 0, true);
-		this.frontPiece1.setRotationPoint(-8.0F, 0.0F, -8.0F);
-		this.frontPiece1.addBox(0.0F, 0.0F, 0.0F, 16, 2, 1, 0.0F);
-		this.frontPiece3 = new BlockTexturedModelRenderer(this, 0, 3, false);
-		this.frontPiece3.setRotationPoint(0.0F, 3.0F, 0.0F);
-		this.frontPiece3.addBox(0.0F, 0.0F, 0.0F, 1, 13, 1, 0.0F);
-		this.frontPiece11 = new BlockTexturedModelRenderer(this, 15, 4, false);
-		this.frontPiece11.setRotationPoint(15.0F, 4.0F, 0.0F);
-		this.frontPiece11.addBox(0.0F, 0.0F, 0.0F, 1, 12, 1, 0.0F);
-		this.frontPiece8 = new BlockTexturedModelRenderer(this, 5, 3, false);
-		this.frontPiece8.setRotationPoint(5.0F, 3.0F, 0.0F);
-		this.frontPiece8.addBox(0.0F, 0.0F, 0.0F, 4, 1, 1, 0.0F);
-		this.frontPiece13 = new BlockTexturedModelRenderer(this, 12, 12, false);
-		this.frontPiece13.setRotationPoint(12.0F, 12.0F, 0.0F);
-		this.frontPiece13.addBox(0.0F, 0.0F, 0.0F, 3, 1, 1, 0.0F);
-		this.frontPiece6 = new BlockTexturedModelRenderer(this, 1, 13, false);
-		this.frontPiece6.setRotationPoint(1.0F, 13.0F, 0.0F);
-		this.frontPiece6.addBox(0.0F, 0.0F, 0.0F, 2, 3, 1, 0.0F);
-		this.frontPiece14 = new BlockTexturedModelRenderer(this, 10, 13, false);
-		this.frontPiece14.setRotationPoint(10.0F, 13.0F, 0.0F);
-		this.frontPiece14.addBox(0.0F, 0.0F, 0.0F, 5, 3, 1, 0.0F);
-		this.back = new BlockTexturedModelRenderer(this, 1, 1, false);
+		this.frontPiece9.addBox(0.0F, 0.0F, 0.0F, 1, 1, 9, 0.0F);
+		this.back = this.createModelRenderer(this, 34, 0, false, blockTextured);
 		this.back.setRotationPoint(1.0F, 1.0F, 9.0F);
 		this.back.addBox(0.0F, 0.0F, 0.0F, 14, 14, 1, 0.0F);
+		this.frontPiece8 = this.createModelRenderer(this, 11, 12, false, blockTextured);
+		this.frontPiece8.mirror = true;
+		this.frontPiece8.setRotationPoint(5.0F, 3.0F, 0.0F);
+		this.frontPiece8.addBox(0.0F, 0.0F, 0.0F, 4, 1, 9, 0.0F);
+		this.frontPiece5 = this.createModelRenderer(this, -8, 7, false, blockTextured);
+		this.frontPiece5.setRotationPoint(1.0F, 12.0F, 0.0F);
+		this.frontPiece5.addBox(0.0F, 0.0F, 0.0F, 1, 1, 9, 0.0F);
+		this.frontPiece7 = this.createModelRenderer(this, 12, 34, false, blockTextured);
+		this.frontPiece7.setRotationPoint(4.0F, 2.0F, 0.0F);
+		this.frontPiece7.addBox(0.0F, 0.0F, 0.0F, 8, 1, 9, 0.0F);
+		this.frontPiece17 = this.createModelRenderer(this, -8, 7, false, blockTextured);
+		this.frontPiece17.setRotationPoint(3.0F, 14.0F, 0.0F);
+		this.frontPiece17.addBox(0.0F, 0.0F, 0.0F, 1, 1, 9, 0.0F);
+		this.frontPiece4 = this.createModelRenderer(this, -8, 7, false, blockTextured);
+		this.frontPiece4.setRotationPoint(1.0F, 6.0F, 0.0F);
+		this.frontPiece4.addBox(0.0F, 0.0F, 0.0F, 1, 4, 9, 0.0F);
+		this.frontPiece12 = this.createModelRenderer(this, 15, 1, false, blockTextured);
+		this.frontPiece12.mirror = true;
+		this.frontPiece12.setRotationPoint(14.0F, 9.0F, 0.0F);
+		this.frontPiece12.addBox(0.0F, 0.0F, 0.0F, 1, 2, 9, 0.0F);
+		this.frontPiece1 = this.createModelRenderer(this, 24, 22, true, blockTextured);
+		this.frontPiece1.setRotationPoint(-8.0F, 0.0F, -8.0F);
+		this.frontPiece1.addBox(1.0F, 1.0F, 0.0F, 14, 1, 9, 0.0F);
+		this.frontPiece15 = this.createModelRenderer(this, -8, 7, false, blockTextured);
+		this.frontPiece15.mirror = true;
+		this.frontPiece15.setRotationPoint(9.0F, 14.0F, 0.0F);
+		this.frontPiece15.addBox(0.0F, 0.0F, 0.0F, 1, 1, 9, 0.0F);
+		this.left = this.createModelRenderer(this, 0, 38, false, blockTextured);
+		this.left.setRotationPoint(0.0F, 0.0F, 0.0F);
+		this.left.addBox(0.0F, 0.0F, 0.0F, 1, 16, 10, 0.0F);
+		this.top = this.createModelRenderer(this, 28, 36, false, blockTextured);
+		this.top.setRotationPoint(1.0F, 0.0F, 0.0F);
+		this.top.addBox(0.0F, 0.0F, 0.0F, 14, 1, 10, 0.0F);
+		this.frontPiece6 = this.createModelRenderer(this, -9, 7, false, blockTextured);
+		this.frontPiece6.setRotationPoint(1.0F, 13.0F, 0.0F);
+		this.frontPiece6.addBox(0.0F, 0.0F, 0.0F, 2, 2, 9, 0.0F);
+		this.frontPiece14 = this.createModelRenderer(this, 11, 1, false, blockTextured);
+		this.frontPiece14.mirror = true;
+		this.frontPiece14.setRotationPoint(10.0F, 13.0F, 0.0F);
+		this.frontPiece14.addBox(0.0F, 0.0F, 0.0F, 5, 2, 9, 0.0F);
+		this.frontPiece2 = this.createModelRenderer(this, -8, 7, false, blockTextured);
+		this.frontPiece2.setRotationPoint(1.0F, 2.0F, 0.0F);
+		this.frontPiece2.addBox(0.0F, 0.0F, 0.0F, 1, 1, 9, 0.0F);
+		this.frontPiece13 = this.createModelRenderer(this, 12, 34, false, blockTextured);
+		this.frontPiece13.setRotationPoint(12.0F, 12.0F, 0.0F);
+		this.frontPiece13.addBox(0.0F, 0.0F, 0.0F, 3, 1, 9, 0.0F);
+		this.frontPiece10 = this.createModelRenderer(this, 14, 1, false, blockTextured);
+		this.frontPiece10.mirror = true;
+		this.frontPiece10.setRotationPoint(14.0F, 2.0F, 0.0F);
+		this.frontPiece10.addBox(0.0F, 0.0F, 0.0F, 1, 2, 9, 0.0F);
+		this.bottom = this.createModelRenderer(this, 10, 21, false, blockTextured);
+		this.bottom.setRotationPoint(1.0F, 15.0F, 0.0F);
+		this.bottom.addBox(0.0F, 0.0F, 0.0F, 14, 1, 10, 0.0F);
+
+		this.frontPiece1.addChild(this.right);
+		this.frontPiece1.addChild(this.frontPiece9);
+		this.frontPiece1.addChild(this.back);
+		this.frontPiece1.addChild(this.frontPiece8);
+		this.frontPiece1.addChild(this.frontPiece5);
+		this.frontPiece1.addChild(this.frontPiece7);
+		this.frontPiece1.addChild(this.frontPiece17);
+		this.frontPiece1.addChild(this.frontPiece4);
+		this.frontPiece1.addChild(this.frontPiece12);
+		this.frontPiece1.addChild(this.frontPiece15);
+		this.frontPiece1.addChild(this.left);
+		this.frontPiece1.addChild(this.top);
+		this.frontPiece1.addChild(this.frontPiece6);
+		this.frontPiece1.addChild(this.frontPiece14);
+		this.frontPiece1.addChild(this.frontPiece2);
+		this.frontPiece1.addChild(this.frontPiece13);
+		this.frontPiece1.addChild(this.frontPiece10);
+		this.frontPiece1.addChild(this.bottom);
+
 		this.window = new BlockTexturedModelRenderer(this, 0, 0, false);
 		this.window.setRotationPoint(-8.0F, 0.0F, -8.0F);
 		this.window.addBox(0.0F, 0.0F, 0.0F, 16, 16, 0, 0.0F);
-		this.frontPiece1.addChild(this.frontPiece17);
-		this.frontPiece1.addChild(this.frontPiece12);
-		this.frontPiece1.addChild(this.frontPiece2);
-		this.frontPiece1.addChild(this.left);
-		this.frontPiece1.addChild(this.frontPiece9);
-		this.frontPiece1.addChild(this.frontPiece16);
-		this.frontPiece1.addChild(this.frontPiece5);
-		this.frontPiece1.addChild(this.top);
-		this.frontPiece1.addChild(this.frontPiece7);
-		this.frontPiece1.addChild(this.frontPiece10);
-		this.frontPiece1.addChild(this.frontPiece15);
-		this.frontPiece1.addChild(this.bottom);
-		this.frontPiece1.addChild(this.right);
-		this.frontPiece1.addChild(this.frontPiece4);
-		this.frontPiece1.addChild(this.frontPiece3);
-		this.frontPiece1.addChild(this.frontPiece11);
-		this.frontPiece1.addChild(this.frontPiece8);
-		this.frontPiece1.addChild(this.frontPiece13);
-		this.frontPiece1.addChild(this.frontPiece6);
-		this.frontPiece1.addChild(this.frontPiece14);
-		this.frontPiece1.addChild(this.back);
 
 		//Don't render window normally
 		this.window.showModel = false;
+	}
+
+	private ModelRenderer createModelRenderer(ModelBase model, int texOffX, int texOffY, boolean root, boolean blockTextured) {
+		return blockTextured ? new BlockTexturedModelRenderer(model, texOffX, texOffY, root) : new ModelRenderer(model, texOffX,texOffY);
 	}
 
 	@Override
