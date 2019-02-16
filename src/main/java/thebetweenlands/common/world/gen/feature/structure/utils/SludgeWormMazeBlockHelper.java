@@ -171,6 +171,22 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState BETWEENSTONE_PILLAR = BlockRegistry.BETWEENSTONE_PILLAR.getDefaultState();
 	public IBlockState BETWEENSTONE_TILES = BlockRegistry.BETWEENSTONE_TILES.getDefaultState();
 
+	public IBlockState SMOOTH_PITSTONE = BlockRegistry.SMOOTH_PITSTONE.getDefaultState();
+	public IBlockState SMOOTH_PITSTONE_STAIRS = BlockRegistry.SMOOTH_PITSTONE_STAIRS.getDefaultState();
+	public IBlockState SMOOTH_PITSTONE_SLAB_UPPER = BlockRegistry.SMOOTH_PITSTONE_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
+	public IBlockState SMOOTH_PITSTONE_SLAB_LOWER = BlockRegistry.SMOOTH_PITSTONE_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.BOTTOM);
+
+	public IBlockState PITSTONE_BRICKS = BlockRegistry.PITSTONE_BRICKS.getDefaultState();
+	public IBlockState PITSTONE_BRICK_STAIRS = BlockRegistry.PITSTONE_BRICK_STAIRS.getDefaultState();
+	public IBlockState PITSTONE_BRICK_SLAB_UPPER = BlockRegistry.PITSTONE_BRICK_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
+	public IBlockState PITSTONE_BRICK_SLAB_LOWER = BlockRegistry.PITSTONE_BRICK_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.BOTTOM);
+	public IBlockState PITSTONE_PILLAR = BlockRegistry.PITSTONE_PILLAR.getDefaultState();
+	public IBlockState PITSTONE_TILES = BlockRegistry.PITSTONE_TILES.getDefaultState();
+
+	public IBlockState PITSTONE_CHISELED = BlockRegistry.PITSTONE_CHISELED.getDefaultState();
+	public IBlockState SCABYST_PITSTONE_DOTTED = BlockRegistry.SCABYST_PITSTONE_DOTTED.getDefaultState();
+    public IBlockState SCABYST_PITSTONE_HORIZONTAL = BlockRegistry.SCABYST_PITSTONE_HORIZONTAL.getDefaultState();
+
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
 	public SludgeWormMazeBlockHelper() {
@@ -593,9 +609,9 @@ public class SludgeWormMazeBlockHelper {
 
 	// TODO improve for more types
 	public @Nullable IBlockState getStairsForTowerLevel(Random rand, int level, EnumFacing facing, EnumHalf half, boolean bricks) {
-		IBlockState state = SMOOTH_BETWEENSTONE_STAIRS;
+		IBlockState state = SMOOTH_PITSTONE_STAIRS;
 		if(bricks)
-			state = BETWEENSTONE_BRICK_STAIRS;
+			state = PITSTONE_BRICK_STAIRS;
 		return state.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, half);
 	}
 

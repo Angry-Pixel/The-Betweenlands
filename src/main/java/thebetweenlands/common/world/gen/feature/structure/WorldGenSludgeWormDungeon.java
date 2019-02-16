@@ -62,25 +62,44 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 		int height = 16;
 		int radius = 9;
+		int radiusMud = 15;
 		int level1 = 0;
 		int level2 = 8;
 		int level3 = 16;
 
 		// main
+		for (int i = radiusMud * -1; i <= radiusMud; ++i) {
+			for (int j = radiusMud * -1; j <= radiusMud; ++j) {
+				double dSq = i * i + j * j;
+				if (Math.round(Math.sqrt(dSq)) > radius && Math.round(Math.sqrt(dSq)) <= radiusMud)
+					world.setBlockState(new BlockPos(x + i, y, z + j), blockHelper.MUD, 2);
+			}
+		}
+
 		for (int yy = y; y + height >= yy; yy++) {
 			for (int i = radius * -1; i <= radius; ++i) {
 				for (int j = radius * -1; j <= radius; ++j) {
 					double dSq = i * i + j * j;
 					if (Math.round(Math.sqrt(dSq)) == radius && yy - y < level2)
-						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getMudBricksForLevel(rand, 0, 1), 2);
-					if (Math.round(Math.sqrt(dSq)) == radius && yy - y >= level2)
+						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.PITSTONE_BRICKS, 2);
+					if (Math.round(Math.sqrt(dSq)) == radius && yy - y > level2 && yy - y < level3)
 						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getMudBricksForLevel(rand, 0, 1), 2);
 
 					if (yy == y + level1 || yy == y + level2) {
 						if (Math.round(Math.sqrt(dSq)) <= radius - 8)
 							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.BETWEENSTONE_BRICKS, 2);
 					}
-					
+
+					if (yy == y + level2) {
+						if (Math.round(Math.sqrt(dSq)) == radius)
+							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getRandomBeam(EnumFacing.SOUTH, rand, 0, 0, false), 2);
+					}
+
+					if (yy == y + level3) {
+						if (Math.round(Math.sqrt(dSq)) == radius)
+							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getRandomBeam(EnumFacing.SOUTH, rand, 0, 0, false), 2);
+					}
+
 					if (yy == y + level1) {
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level1, 0);
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level1, 0);
@@ -101,33 +120,31 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level3, 0);
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.WEST, rand, level3, 0);
 					}
-
-					//TODO meh, will sort out later
-					if (yy == y + level1 + 1 || yy == y + level2 + 1 || yy == y + level3 + 1 || yy == y + level1 + 2 || yy == y + level2 + 2 || yy == y + level3 + 2) {
-						if (i == 9 && j == 0 || i == -9 && j == 0 || i == 0 && j == 9 || i == 0 && j == -9)
-							world.setBlockToAir(new BlockPos(x + i, yy, z + j));
-					}
 				}
 			} 
 		}
 
+		lightTowerBuild.addTowerDoorways(world, pos, EnumFacing.SOUTH, rand, level1, 0);
+		lightTowerBuild.addTowerDoorways(world, pos, EnumFacing.SOUTH, rand, level2, 0);
+		lightTowerBuild.addTowerDoorways(world, pos, EnumFacing.EAST, rand, level1, 0);
+		lightTowerBuild.addTowerDoorways(world, pos, EnumFacing.EAST, rand, level2, 0);
+		lightTowerBuild.addTowerDoorways(world, pos, EnumFacing.NORTH, rand, level1, 0);
+		lightTowerBuild.addTowerDoorways(world, pos, EnumFacing.NORTH, rand, level2, 0);
+		lightTowerBuild.addTowerDoorways(world, pos, EnumFacing.WEST, rand, level1, 0);
+		lightTowerBuild.addTowerDoorways(world, pos, EnumFacing.WEST, rand, level2, 0);
+
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level1, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level2, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.NORTH, rand, level3, 0, true);
-
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level1, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.NORTH, rand, level2, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.WEST, rand, level3, 0, true);
-
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.NORTH, rand, level1, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.WEST, rand, level2, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level3, 0, true);
-
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.WEST, rand, level1, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level2, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level3, 0, true);
-
-		System.out.println("TOWER!");
 	}
 
 	private void generateDecayPit(World world, BlockPos pos) {
