@@ -19,6 +19,7 @@ import thebetweenlands.common.block.container.BlockMudBricksAlcove;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
+import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.block.structure.BlockDungeonWallCandle;
@@ -186,6 +187,7 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState PITSTONE_CHISELED = BlockRegistry.PITSTONE_CHISELED.getDefaultState();
 	public IBlockState SCABYST_PITSTONE_DOTTED = BlockRegistry.SCABYST_PITSTONE_DOTTED.getDefaultState();
     public IBlockState SCABYST_PITSTONE_HORIZONTAL = BlockRegistry.SCABYST_PITSTONE_HORIZONTAL.getDefaultState();
+    public IBlockState DIAGONAL_ENERGY_BARRIER = BlockRegistry.DIAGONAL_ENERGY_BARRIER.getDefaultState();
 
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
@@ -613,6 +615,10 @@ public class SludgeWormMazeBlockHelper {
 		if(bricks)
 			state = PITSTONE_BRICK_STAIRS;
 		return state.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, half);
+	}
+	
+	public @Nullable IBlockState getEnergyBarrier(boolean flipped) {
+		return DIAGONAL_ENERGY_BARRIER.withProperty(BlockDiagonalEnergyBarrier.FLIPPED, flipped);
 	}
 
 	public boolean isSolidStructureBlock(IBlockState state) {

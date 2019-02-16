@@ -85,22 +85,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (Math.round(Math.sqrt(dSq)) == radius && yy - y > level2 && yy - y < level3)
 						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getMudBricksForLevel(rand, 0, 1), 2);
 
-					if (yy == y + level1 || yy == y + level2) {
-						if (Math.round(Math.sqrt(dSq)) <= radius - 8)
-							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.BETWEENSTONE_BRICKS, 2);
-					}
-
-					if (yy == y + level2) {
-						if (Math.round(Math.sqrt(dSq)) == radius)
-							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getRandomBeam(EnumFacing.SOUTH, rand, 0, 0, false), 2);
-					}
-
-					if (yy == y + level3) {
-						if (Math.round(Math.sqrt(dSq)) == radius)
-							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getRandomBeam(EnumFacing.SOUTH, rand, 0, 0, false), 2);
-					}
-
 					if (yy == y + level1) {
+						if (Math.round(Math.sqrt(dSq)) <= radius - 8)
+							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.PITSTONE_TILES, 2);
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level1, 0);
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level1, 0);
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level1, 0);
@@ -108,6 +95,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					}
 
 					if (yy == y + level2) {
+						if (Math.round(Math.sqrt(dSq)) == radius - 8)
+							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.PITSTONE_TILES, 2);
+						if (Math.round(Math.sqrt(dSq)) == radius)
+							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getRandomBeam(EnumFacing.SOUTH, rand, 0, 0, false), 2);
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level2, 0);
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level2, 0);
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level2, 0);
@@ -115,6 +106,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					}
 
 					if (yy == y + level3) {
+						if (Math.round(Math.sqrt(dSq)) == radius)
+							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getRandomBeam(EnumFacing.SOUTH, rand, 0, 0, false), 2);
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level3, 0);
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level3, 0);
 						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level3, 0);
