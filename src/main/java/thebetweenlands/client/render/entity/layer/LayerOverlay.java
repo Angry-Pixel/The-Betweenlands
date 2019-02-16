@@ -47,7 +47,7 @@ public class LayerOverlay<T extends EntityLivingBase> implements LayerRenderer<T
 				float green = this.getGreen();
 				float blue = this.getBlue();
 
-				GlStateManager.doPolygonOffset(0, -3.0F);
+				GlStateManager.doPolygonOffset(-0.01F, -3.0F);
 				GlStateManager.enablePolygonOffset();
 
 				GlStateManager.enableBlend();
