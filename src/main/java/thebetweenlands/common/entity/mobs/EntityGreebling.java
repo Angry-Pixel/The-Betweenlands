@@ -118,10 +118,10 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 			if (disappearTimer == 5) this.world.setEntityState(this, EVENT_DISAPPEAR);
 			if (disappearTimer >= 8) remove();
 			
-			List<EntityPlayer> nearPlayers = world.getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().grow(4.5, 5, 4.5), e -> !e.abilities.isCreativeMode && !e.isInvisible());
+			List<EntityPlayer> nearPlayers = world.getEntitiesWithinAABB(EntityPlayer.class, getBoundingBox().grow(4.5, 5, 4.5), e -> !e.abilities.isCreativeMode && !e.isInvisible());
 			if (disappearTimer == 0 && !nearPlayers.isEmpty()) {
 				disappearTimer++;
-				this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.GREEBLING_VANISH, SoundCategory.NEUTRAL, 1, 1);
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.GREEBLING_VANISH, SoundCategory.NEUTRAL, 1, 1);
 				this.world.setEntityState(this, EVENT_START_DISAPPEARING);
 			}
 		}

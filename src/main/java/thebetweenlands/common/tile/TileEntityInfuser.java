@@ -307,13 +307,13 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			evaporation = 0;
 		}
 		if (world.getBlockState(pos.down()).getBlock() == Blocks.FIRE && temp < 100 && getWaterAmount() > 0) {
-			if (world.getTotalWorldTime() % 12 == 0) {
+			if (world.getGameTime() % 12 == 0) {
 				temp++;
 				this.markForUpdate();
 			}
 		}
 		if (world.getBlockState(pos.down()).getBlock() != Blocks.FIRE && temp > 0) {
-			if (world.getTotalWorldTime() % 6 == 0) {
+			if (world.getGameTime() % 6 == 0) {
 				temp--;
 				this.markForUpdate();
 			}

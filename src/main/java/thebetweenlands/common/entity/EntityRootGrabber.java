@@ -197,7 +197,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 					}
 				} else {
 					this.spawnExtendParticles();
-					this.world.play(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
+					this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
 				}
 			}
 
@@ -236,11 +236,11 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 			this.spawnBlockDust();
 			if(this.emergeSound && !retracting) {
 				this.emergeSound = false;
-				this.world.play(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP_EMERGE, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
+				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP_EMERGE, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
 			}
 			if(this.retractSound && retracting) {
 				this.retractSound = false;
-				this.world.play(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP_EMERGE, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
+				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP_EMERGE, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
 			}
 		}
 
@@ -345,7 +345,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 			}
 
 			SoundType soundType = SoundType.WOOD;
-			this.world.play(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
+			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
 		} else if(id == EVENT_HIT) {
 			for(int i = 0; i < 8; i++) {
 				double dx = (this.rand.nextDouble() * 2 - 1) * this.width / 4;
@@ -358,7 +358,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 			}
 
 			SoundType soundType = SoundType.WOOD;
-			this.world.play(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 8.0F, soundType.getPitch() * 0.5F, false);
+			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 8.0F, soundType.getPitch() * 0.5F, false);
 		}
 	}
 

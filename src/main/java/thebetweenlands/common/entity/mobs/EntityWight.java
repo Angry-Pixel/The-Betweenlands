@@ -171,7 +171,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
                         this.volatileTicks = 0;
 
                         TheBetweenlands.networkWrapper.sendToAllAround(new MessageWightVolatileParticles(this), new TargetPoint(this.dimension, this.posX, this.posY, this.posZ, 32));
-                        this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.WIGHT_ATTACK, SoundCategory.HOSTILE, 1.6F, 1.0F);
+                        this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.WIGHT_ATTACK, SoundCategory.HOSTILE, 1.6F, 1.0F);
                     }
                 } else if (this.didTurnVolatileOnPlayer && this.isVolatile() && !this.canPossess(this.getAttackTarget())) {
                     this.setVolatile(false);
@@ -315,7 +315,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
                 float f = 0.91F;
 
                 if (this.onGround) {
-                    f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
+                    f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().getSlipperiness() * 0.91F;
                 }
 
                 float f1 = 0.16277136F / (f * f * f);
@@ -323,7 +323,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
                 f = 0.91F;
 
                 if (this.onGround) {
-                    f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
+                    f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().getSlipperiness() * 0.91F;
                 }
 
                 this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
@@ -351,7 +351,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
     }
 
     @Override
-    public boolean isEntityInvulnerable(DamageSource source) {
+    public boolean isInvulnerableTo(DamageSource source) {
         boolean isCreative = source instanceof EntityDamageSourceIndirect && ((EntityDamageSourceIndirect) source).getTrueSource() instanceof EntityPlayer && ((EntityPlayer) ((EntityDamageSourceIndirect) source).getTrueSource()).isCreative();
         return this.isHiding() && isCreative;
     }

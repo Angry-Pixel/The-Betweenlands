@@ -452,7 +452,7 @@ public class EntityHarlequinToad extends EntityCreature implements IEntityBL {
 			this.spawnToadParticles(true);
 		} else if (id == 6) {
 			this.spawnToadParticles(false);
-			this.play(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
+			this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
 		} else {
 			super.handleStatusUpdate(id);
 		}

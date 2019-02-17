@@ -37,7 +37,7 @@ public class ItemVoodooDoll extends Item {
 			if (entity.isAlive() && !(entity instanceof IBLBoss) && entity instanceof EntityPlayer == false) {
 				if (!world.isRemote()) {
 					attacked |= entity.attackEntityFrom(DamageSource.MAGIC, 20);
-				} else if (!entity.isEntityInvulnerable(DamageSource.MAGIC)) {
+				} else if (!entity.isInvulnerableTo(DamageSource.MAGIC)) {
 					attacked = true;
 					for (int i = 0; i < 20; i++)
 						BLParticles.SWAMP_SMOKE.spawn(world, entity.posX, entity.posY + entity.height / 2.0D, entity.posZ, ParticleFactory.ParticleArgs.get().withMotion((world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F).withColor(1, 1, 1, 1));

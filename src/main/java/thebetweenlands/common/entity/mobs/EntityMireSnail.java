@@ -67,7 +67,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox());
+		return world.getCollisionBoxes(this, getBoundingBox()).isEmpty() && !world.containsAnyLiquid(getBoundingBox());
 	}
 
 	@Override

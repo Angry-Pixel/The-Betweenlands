@@ -225,7 +225,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 
 	protected void dealDamage(EntityLivingBase entityIn) {
 		if (this.isActive() && this.canEntityBeSeen(entityIn) && this.getDistanceSq(entityIn) < 2.5D && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue())) {
-			this.play(SoundEvents.ENTITY_SLIME_ATTACK, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+			this.playSound(SoundEvents.ENTITY_SLIME_ATTACK, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 		}
 	}
 
@@ -457,7 +457,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 						this.sludge.getJumpHelper().setJumping();
 
 						if (this.sludge.makesSoundOnJump()) {
-							this.sludge.play(this.sludge.getJumpSound(), this.sludge.getSoundVolume(), ((this.sludge.getRNG().nextFloat() - this.sludge.getRNG().nextFloat()) * 0.2F + 1.0F) * 0.8F);
+							this.sludge.playSound(this.sludge.getJumpSound(), this.sludge.getSoundVolume(), ((this.sludge.getRNG().nextFloat() - this.sludge.getRNG().nextFloat()) * 0.2F + 1.0F) * 0.8F);
 						}
 					} else {
 						this.sludge.moveStrafing = 0.0F;

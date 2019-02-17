@@ -224,7 +224,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 		if(!this.world.isRemote()) {
 			if(this.shouldUpdateSpawningAnimation()) {
 				if(this.getSpawningTicks() == 0) {
-					this.play(SoundRegistry.PEAT_MUMMY_EMERGE, 1.2F, 1.0F);
+					this.playSound(SoundRegistry.PEAT_MUMMY_EMERGE, 1.2F, 1.0F);
 				}
 				this.updateSpawningTicks();
 			} else if(this.getSpawningTicks() > 0) {
@@ -241,7 +241,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 				if ((getSpawningTicks() - breakPoint / 2 - 1) % breakPoint == 0) {
 					BlockPos pos = new BlockPos(this.posX, this.posY - 1, this.posZ);
 					IBlockState blockState = this.world.getBlockState(pos);
-					this.play(blockState.getBlock().getSoundType().getBreakSound(), this.rand.nextFloat() * 0.3F + 0.3F, this.rand.nextFloat() * 0.15F + 0.7F);
+					this.playSound(blockState.getBlock().getSoundType().getBreakSound(), this.rand.nextFloat() * 0.3F + 0.3F, this.rand.nextFloat() * 0.15F + 0.7F);
 				}
 
 				if(this.getAttackTarget() != null) {
@@ -399,7 +399,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * Starts the charging progress
 	 */
 	public void startCharging() {
-		this.play(SoundRegistry.PEAT_MUMMY_CHARGE, 1.75F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
+		this.playSound(SoundRegistry.PEAT_MUMMY_CHARGE, 1.75F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 		this.setChargingState(1);
 	}
 

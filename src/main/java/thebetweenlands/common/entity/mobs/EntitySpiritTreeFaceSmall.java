@@ -109,12 +109,12 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 
 	@Override
 	protected void playSpitSound() {
-		this.play(SoundRegistry.SPIRIT_TREE_FACE_SMALL_SPIT, 1, 0.8F + this.rand.nextFloat() * 0.3F);
+		this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SMALL_SPIT, 1, 0.8F + this.rand.nextFloat() * 0.3F);
 	}
 
 	@Override
 	protected void playEmergeSound() {
-		this.play(SoundRegistry.SPIRIT_TREE_FACE_SMALL_EMERGE, 1, 0.8F + this.rand.nextFloat() * 0.3F);
+		this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SMALL_EMERGE, 1, 0.8F + this.rand.nextFloat() * 0.3F);
 	}
 
 	@Override
@@ -127,7 +127,7 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 		SoundEvent sound = this.getAmbientSound();
 
 		if(sound != null) {
-			this.play(sound, this.getSoundVolume() * 0.5F, this.getSoundPitch() * 1.3F);
+			this.playSound(sound, this.getSoundVolume() * 0.5F, this.getSoundPitch() * 1.3F);
 		}
 	}
 }

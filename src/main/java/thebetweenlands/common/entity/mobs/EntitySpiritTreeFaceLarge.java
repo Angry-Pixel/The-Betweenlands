@@ -328,12 +328,12 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 	@Override
 	protected void playSpitSound() {
-		this.play(SoundRegistry.SPIRIT_TREE_FACE_LARGE_SPIT, 1, 0.8F + this.rand.nextFloat() * 0.3F);
+		this.playSound(SoundRegistry.SPIRIT_TREE_FACE_LARGE_SPIT, 1, 0.8F + this.rand.nextFloat() * 0.3F);
 	}
 
 	@Override
 	protected void playEmergeSound() {
-		this.play(SoundRegistry.SPIRIT_TREE_FACE_LARGE_EMERGE, 1, 0.8F + this.rand.nextFloat() * 0.3F);
+		this.playSound(SoundRegistry.SPIRIT_TREE_FACE_LARGE_EMERGE, 1, 0.8F + this.rand.nextFloat() * 0.3F);
 	}
 
 	@Override
@@ -352,7 +352,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			dir = dir.normalize().scale(2);
 			BLParticles.CORRUPTED.spawn(this.world, pos.getX() + 0.5D + this.rand.nextFloat() / 2.0F - 0.25F, pos.getY() + 0.5D + this.rand.nextFloat() / 2.0F - 0.25F, pos.getZ() + 0.5D + this.rand.nextFloat() / 2.0F - 0.25F, ParticleArgs.get().withMotion(dir.x, dir.y, dir.z));
 		}
-		this.world.play(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.DAMAGE_REDUCTION, SoundCategory.HOSTILE, 0.65F, 0.5F, false);
+		this.world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.DAMAGE_REDUCTION, SoundCategory.HOSTILE, 0.65F, 0.5F, false);
 	}
 
 	@Override
@@ -450,13 +450,13 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 					if((this.blowTicks - (21 + this.blowDelay)) % 15 == 0) {
 						this.doBlowAttack();
 						this.world.setEntityState(this, EVENT_BLOW_ATTACK);
-						this.play(SoundRegistry.SPIRIT_TREE_FACE_SPIT_ROOT_SPIKES, 1, 0.9F + this.rand.nextFloat() * 0.2F);
+						this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SPIT_ROOT_SPIKES, 1, 0.9F + this.rand.nextFloat() * 0.2F);
 					}
 				} else {
 					if(this.blowTicks > this.blowDelay) {
 						this.dataManager.set(BLOW_STATE, 2);
 						if(this.blowTicks == this.blowDelay + 1) {
-							this.play(SoundRegistry.SPIRIT_TREE_FACE_SUCK, 1, 1);
+							this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SUCK, 1, 1);
 						}
 					} else {
 						this.dataManager.set(BLOW_STATE, 1);

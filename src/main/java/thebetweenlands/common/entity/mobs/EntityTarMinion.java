@@ -96,7 +96,7 @@ public class EntityTarMinion extends EntityTameable implements IEntityBL {
 	@Override
 	protected void playStepSound(BlockPos pos, Block state) {
 		if(this.rand.nextInt(10) == 0) {
-			this.play(SoundRegistry.TAR_BEAST_STEP, 0.8F, 1.5F);
+			this.playSound(SoundRegistry.TAR_BEAST_STEP, 0.8F, 1.5F);
 		}
 	}
 
@@ -150,7 +150,7 @@ public class EntityTarMinion extends EntityTameable implements IEntityBL {
 					}
 				} else {
 					for(int i = 0; i < 8; i++) {
-						this.play(SoundRegistry.TAR_BEAST_STEP, 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
+						this.playSound(SoundRegistry.TAR_BEAST_STEP, 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 					}
 					List<EntityCreature> affectedEntities = (List<EntityCreature>)this.world.getEntitiesWithinAABB(EntityCreature.class, this.getBoundingBox().grow(5.25F, 5.25F, 5.25F));
 					for(EntityCreature e : affectedEntities) {
@@ -166,7 +166,7 @@ public class EntityTarMinion extends EntityTameable implements IEntityBL {
 				this.dropLoot(false, 0, DamageSource.GENERIC);
 			}
 
-			this.play(SoundRegistry.TAR_BEAST_STEP, 2.5F, 0.5F);
+			this.playSound(SoundRegistry.TAR_BEAST_STEP, 2.5F, 0.5F);
 
 			if(this.world.isRemote()) {
 				for(int i = 0; i < 100; i++) {
@@ -219,7 +219,7 @@ public class EntityTarMinion extends EntityTameable implements IEntityBL {
 				damageSource = DamageSource.causeMobDamage(this);
 			}
 			entity.attackEntityFrom(damageSource, (float)this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
-			this.play(SoundRegistry.TAR_BEAST_STEP, 1.0F, 2.0F);
+			this.playSound(SoundRegistry.TAR_BEAST_STEP, 1.0F, 2.0F);
 			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, world.getDifficulty().getId() * 50, 0));
 			return true;
 		}

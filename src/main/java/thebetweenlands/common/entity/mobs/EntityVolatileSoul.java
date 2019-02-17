@@ -112,7 +112,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (this.isEntityInvulnerable(source)) {
+		if (this.isInvulnerableTo(source)) {
 			return false;
 		} else {
 			this.strikes++;

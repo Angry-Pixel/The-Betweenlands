@@ -93,12 +93,12 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		return this.isEntityInvulnerable(source) ? false : super.attackEntityFrom(source, amount);
+		return this.isInvulnerableTo(source) ? false : super.attackEntityFrom(source, amount);
 	}
 
 	@Override
-	public boolean isEntityInvulnerable(DamageSource source) {
-		return source == DamageSource.IN_WALL || super.isEntityInvulnerable(source);
+	public boolean isInvulnerableTo(DamageSource source) {
+		return source == DamageSource.IN_WALL || super.isInvulnerableTo(source);
 	}
 
 	@Override

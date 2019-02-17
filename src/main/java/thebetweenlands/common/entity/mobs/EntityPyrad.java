@@ -318,7 +318,7 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 						ParticleArgs<?> args = ParticleArgs.get().withMotion((this.rand.nextFloat() - 0.5F) / 2.0F, (this.rand.nextFloat() - 0.5F) / 2.0F, (this.rand.nextFloat() - 0.5F) / 2.0F).withColor(1F, 0.65F, 0.25F, 1);
 						BLParticles.WEEDWOOD_LEAF.spawn(this.world, this.posX, this.posY + 0.8D, this.posZ, args);
 					}
-					this.play(SoundRegistry.PYRAD_HURT, 0.1F, 0.3F + this.rand.nextFloat() * 0.3F);
+					this.playSound(SoundRegistry.PYRAD_HURT, 0.1F, 0.3F + this.rand.nextFloat() * 0.3F);
 				}
 				this.hitTicks = 20;
 			}
@@ -358,8 +358,8 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 				}
 				if(this.deathTicks > 30 && !this.world.isRemote()) {
 					for(int i = 0; i < 10; i++) {
-						this.play(SoundRegistry.PYRAD_HURT, 0.18F, 0.1F + this.rand.nextFloat() * 0.2F);
-						this.play(SoundRegistry.PYRAD_DEATH, 0.08F, 0.1F + this.rand.nextFloat() * 0.2F);
+						this.playSound(SoundRegistry.PYRAD_HURT, 0.18F, 0.1F + this.rand.nextFloat() * 0.2F);
+						this.playSound(SoundRegistry.PYRAD_DEATH, 0.08F, 0.1F + this.rand.nextFloat() * 0.2F);
 					}
 					this.remove();
 				}

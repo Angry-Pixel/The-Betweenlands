@@ -70,7 +70,7 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
-		this.play(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
+		this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
 	}
 
 	@Nullable

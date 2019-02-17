@@ -116,7 +116,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.glBegin(GL11.GL_TRIANGLES);
         float roughness = 0.15F, scale = 0.5F;
-        double t = (rowboat.worldObj.getTotalWorldTime() + delta) * 0.03;
+        double t = (rowboat.worldObj.getGameTime() + delta) * 0.03;
         int range = 4;
         // scale up waves to normal level from number of ticks the rowboat has existed
         for (int dx = -range; dx <= range; dx++) {

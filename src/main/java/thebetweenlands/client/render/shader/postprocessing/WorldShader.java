@@ -247,7 +247,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 		this.uploadInt(this.lightSourceAmountUniformID, renderedLightSources);
 		this.uploadFloat(this.msTimeUniformID, System.nanoTime() / 1000000.0F);
-		this.uploadFloat(this.worldTimeUniformID, Minecraft.getInstance().world.getTotalWorldTime() + partialTicks);
+		this.uploadFloat(this.worldTimeUniformID, Minecraft.getInstance().world.getGameTime() + partialTicks);
 
 		Entity renderView = Minecraft.getInstance().getRenderViewEntity();
 		Vec3d camPos = renderView != null ? ActiveRenderInfo.projectViewFromEntity(Minecraft.getInstance().getRenderViewEntity(), partialTicks) : Vec3d.ZERO;
@@ -620,7 +620,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		}
 		if (hasCloud) {
 			//Update gas texture
-			float worldTimeInterp = world.getTotalWorldTime() + partialTicks;
+			float worldTimeInterp = world.getGameTime() + partialTicks;
 			float offsetX = ((float) Math.sin((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 600.0F;
 			float offsetY = ((float) Math.cos((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 600.0F;
 			this.gasWarpEffect.setOffset(offsetX, offsetY)

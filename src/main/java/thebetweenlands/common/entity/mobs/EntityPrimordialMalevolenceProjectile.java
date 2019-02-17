@@ -133,7 +133,7 @@ public class EntityPrimordialMalevolenceProjectile extends Entity implements IPr
 						if(!this.world.isRemote()) {
 							boss.setShieldActive(shieldHit, false);
 
-							this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SHIELD_DOWN, SoundCategory.HOSTILE, 1.0F, 1.0F);
+							this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SHIELD_DOWN, SoundCategory.HOSTILE, 1.0F, 1.0F);
 
 							double angle = Math.PI * 2.0D / 18;
 							for(int i = 0; i < 18; i++) {
@@ -173,7 +173,7 @@ public class EntityPrimordialMalevolenceProjectile extends Entity implements IPr
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (this.isEntityInvulnerable(source)) {
+		if (this.isInvulnerableTo(source)) {
 			return false;
 		} else {
 			if(this.isDeflectable()) {

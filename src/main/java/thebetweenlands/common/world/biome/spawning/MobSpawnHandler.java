@@ -295,7 +295,7 @@ public class MobSpawnHandler {
 			if(world == null || world.playerEntities.isEmpty())
 				return;
 
-			if(world.getGameRules().getBoolean("doMobSpawning") && world.getTotalWorldTime() % 4 == 0) {
+			if(world.getGameRules().getBoolean("doMobSpawning") && world.getGameTime() % 4 == 0) {
 				//long start = System.nanoTime();
 				this.populateWorld(world);
 				//System.out.println("Time: " + (System.nanoTime() - start) / 1000000.0F);
@@ -477,7 +477,7 @@ public class MobSpawnHandler {
 					if(!ignoreRestrictions && lastSpawn >= 0) {
 						//Adjust intervals for MP when there are multiple players and the loaded area is bigger -> smaller intervals
 						int adjustedInterval = (int)(spawnEntry.getSpawningInterval() / loadedAreas);
-						if(spawnEntriesData != null && world.getTotalWorldTime() - lastSpawn < adjustedInterval) {
+						if(spawnEntriesData != null && world.getGameTime() - lastSpawn < adjustedInterval) {
 							//Too early, don't spawn yet
 							continue;
 						}
@@ -561,7 +561,7 @@ public class MobSpawnHandler {
 					}
 
 					if(spawnEntriesData != null && !ignoreRestrictions && groupSpawnedEntities > 0) {
-						spawnEntriesData.setLastSpawn(spawnEntry, world.getTotalWorldTime());
+						spawnEntriesData.setLastSpawn(spawnEntry, world.getGameTime());
 					}
 				}
 			}

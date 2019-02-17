@@ -63,7 +63,7 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 	@Override
 	public void onBroken(@Nullable Entity brokenEntity) {
 		if (this.world.getGameRules().getBoolean("doEntityDrops")) {
-			this.play(SoundEvents.BLOCK_WOOD_BREAK, 1.0F, 1.0F);
+			this.playSound(SoundEvents.BLOCK_WOOD_BREAK, 1.0F, 1.0F);
 
 			if (brokenEntity instanceof EntityPlayer) {
 				EntityPlayer entityplayer = (EntityPlayer)brokenEntity;
@@ -79,7 +79,7 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 
 	@Override
 	public void playPlaceSound() {
-		this.play(SoundEvents.BLOCK_WOOD_PLACE, 1.0F, 1.0F);
+		this.playSound(SoundEvents.BLOCK_WOOD_PLACE, 1.0F, 1.0F);
 	}
 
 	@Override

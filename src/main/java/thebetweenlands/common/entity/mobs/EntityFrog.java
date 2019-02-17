@@ -155,7 +155,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 			}
 		}
 
-		if (world.isRemote() && getSkin() == 4 && world.getTotalWorldTime() % 10 == 0) {
+		if (world.isRemote() && getSkin() == 4 && world.getGameTime() % 10 == 0) {
 			BLParticles.DIRT_DECAY.spawn(world, posX, posY + 0.5D, posZ);
 		}
 	}
@@ -169,7 +169,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	public void onCollideWithPlayer(EntityPlayer player) {
 		super.onCollideWithPlayer(player);
 		if (getSkin() == 4) {
-			if (!world.isRemote() && !player.abilities.isCreativeMode && player.getBoundingBox().maxY >= getEntityBoundingBox().minY && player.getBoundingBox().minY <= getEntityBoundingBox().maxY && player.getBoundingBox().maxX >= getEntityBoundingBox().minX && player.getBoundingBox().minX <= getEntityBoundingBox().maxX && player.getBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
+			if (!world.isRemote() && !player.abilities.isCreativeMode && player.getBoundingBox().maxY >= getBoundingBox().minY && player.getBoundingBox().minY <= getBoundingBox().maxY && player.getBoundingBox().maxX >= getBoundingBox().minX && player.getBoundingBox().minX <= getBoundingBox().maxX && player.getBoundingBox().maxZ >= getBoundingBox().minZ && player.getBoundingBox().minZ <= getBoundingBox().maxZ) {
 				int duration = 0;
 				switch(world.getDifficulty()) {
 				default:

@@ -112,8 +112,8 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 			}
 		} else if(id == EVENT_HURT_SOUND || id == EVENT_DEATH) {
 			SoundType soundType = SoundType.WOOD;
-			this.world.play(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 1.3F, soundType.getPitch() * 0.8F, false);
-			this.world.play(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 4.0F, soundType.getPitch() * 0.5F, false);
+			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 1.3F, soundType.getPitch() * 0.8F, false);
+			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 4.0F, soundType.getPitch() * 0.5F, false);
 		}
 	}
 
@@ -177,13 +177,13 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 	}
 
 	@Override
-	public boolean isEntityInvulnerable(DamageSource source) {
-		return source == DamageSource.DROWN || source == DamageSource.LAVA || super.isEntityInvulnerable(source);
+	public boolean isInvulnerableTo(DamageSource source) {
+		return source == DamageSource.DROWN || source == DamageSource.LAVA || super.isInvulnerableTo(source);
 	}
 
 	@Override
-	public boolean getIsInvulnerable() {
-		return super.getIsInvulnerable() || !this.isActive();
+	public boolean isInvulnerable() {
+		return super.isInvulnerable() || !this.isActive();
 	}
 
 	@Override

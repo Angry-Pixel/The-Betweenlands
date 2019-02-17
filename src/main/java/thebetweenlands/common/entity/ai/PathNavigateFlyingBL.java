@@ -116,11 +116,11 @@ public class PathNavigateFlyingBL extends PathNavigate {
 
 	@Override
 	public void updatePath() {
-		if (this.world.getTotalWorldTime() - this.lastTimeUpdated > 20L) {
+		if (this.world.getGameTime() - this.lastTimeUpdated > 20L) {
 			if (this.targetPos != null) {
 				this.currentPath = null;
 				this.currentPath = this.getPathToPos(this.targetPos);
-				this.lastTimeUpdated = this.world.getTotalWorldTime();
+				this.lastTimeUpdated = this.world.getGameTime();
 				this.tryUpdatePath = false;
 			}
 		} else {

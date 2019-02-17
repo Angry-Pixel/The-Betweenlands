@@ -109,7 +109,7 @@ public class EntitySludgeBall extends EntityThrowable {
 							else 
 								explode();
 						} else {
-							getEntityWorld().play(null, getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.9f);
+							getEntityWorld().playSound(null, getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.9f);
 							spawnBounceParticles(8);
 						}
 					} else if (collision.sideHit.getAxis() == Axis.Z) {
@@ -161,8 +161,8 @@ public class EntitySludgeBall extends EntityThrowable {
 					this.attackEntity(entity);
 				}
 			}
-			getEntityWorld().play(null, getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.5f);
-			getEntityWorld().play(null, getPosition(), SoundEvents.ENTITY_SMALL_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.5f);
+			getEntityWorld().playSound(null, getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.5f);
+			getEntityWorld().playSound(null, getPosition(), SoundEvents.ENTITY_SMALL_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.5f);
 			remove();
 		} else {
 			//TODO Better explosion particle effects

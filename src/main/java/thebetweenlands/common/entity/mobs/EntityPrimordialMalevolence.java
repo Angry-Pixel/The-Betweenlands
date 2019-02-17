@@ -353,7 +353,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 			
 			if(isDeflected) {
 				if(!this.world.isRemote()) {
-					this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_NOPE, SoundCategory.HOSTILE, 1, 1);
+					this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_NOPE, SoundCategory.HOSTILE, 1, 1);
 					
 					if(sourceEntity != null) {
 						double dx = sourceEntity.posX - this.posX;
@@ -505,7 +505,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 		}
 		if (currentIdleSound == null) {
 			currentIdleSound = new FortressBossIdleSound(this);
-			Minecraft.getInstance().getSoundHandler().play(currentIdleSound);
+			Minecraft.getInstance().getSoundHandler().playSound(currentIdleSound);
 		}
 	}
 
@@ -582,7 +582,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 				}
 
 				if(this.isFloating() && (this.getDistance(anchorCenter.x, this.posY, anchorCenter.z) > this.anchorRadius || Math.abs(this.posY - anchorCenter.y) > this.anchorRadius)) {
-					this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
+					this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
 					this.setPosition(anchorCenter.x, anchorCenter.y, anchorCenter.z);
 				}
 
@@ -650,7 +650,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 						this.teleportTicks--;
 						if(this.teleportTicks <= 0) {
 							if(this.teleportTicks == 0) {
-								this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
+								this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
 								this.setLocationAndAngles(anchorCenter.x + (this.world.rand.nextFloat()-0.5F)*2.0F*(this.anchorRadius-1), anchorCenter.y, anchorCenter.z + (this.world.rand.nextFloat()-0.5F)*2.0F*(this.anchorRadius-1), 0, 0);
 							}
 							this.teleportTicks = 140 + this.world.rand.nextInt(200);
@@ -669,7 +669,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 										turret.setLocationAndAngles(anchorCenter.x + dir.x, anchorCenter.y + dir.y, anchorCenter.z + dir.z, 0, 0);
 										turret.setAttackDelay(turretFrequency);
 										this.world.spawnEntity(turret);
-										this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 0.25F, 0.3F + 0.7F / 300.0F * this.turretStreakTicks);
+										this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 0.25F, 0.3F + 0.7F / 300.0F * this.turretStreakTicks);
 									}
 								}
 								if(this.turretStreakTicks >= 300) {
@@ -682,7 +682,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 										turret.setAttackDelay(5 + i / 3);
 										this.world.spawnEntity(turret);
 									}
-									this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 1.0F, 1.0F);
+									this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 1.0F, 1.0F);
 									this.turretStreakTicks = 0;
 									this.turretStreak = -1;
 								}
@@ -705,7 +705,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 											this.world.spawnEntity(turret);
 										}
 									}
-									this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 1.0F, 1.0F);
+									this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 1.0F, 1.0F);
 								}
 								this.turretTicks = 100 + this.world.rand.nextInt(200);
 							} else {
@@ -779,7 +779,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 				float friction = 0.91F;
 
 				if (this.onGround) {
-					friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
+					friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().getSlipperiness() * 0.91F;
 				}
 
 				float groundFriction = 0.16277136F / (friction * friction * friction);
@@ -787,7 +787,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 				friction = 0.91F;
 
 				if (this.onGround) {
-					friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
+					friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().getSlipperiness() * 0.91F;
 				}
 
 				this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
@@ -819,7 +819,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 		if(this.deathTicks == 0) {
 			if(!this.world.isRemote()) {
 				final Vec3d anchorCenter = this.getAnchorCenter();
-				this.world.play(null, anchorCenter.x, anchorCenter.y, anchorCenter.z, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
+				this.world.playSound(null, anchorCenter.x, anchorCenter.y, anchorCenter.z, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
 				this.setPosition(anchorCenter.x, anchorCenter.y, anchorCenter.z);
 				List<Entity> trackedEntities = this.world.getEntitiesWithinAABB(EntityWight.class, this.getBoundingBox().grow(this.anchorRadius*2, 512, this.anchorRadius*2));
 				Iterator<Entity> it = trackedEntities.iterator();

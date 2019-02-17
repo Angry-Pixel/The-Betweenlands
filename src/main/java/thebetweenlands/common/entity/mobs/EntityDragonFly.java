@@ -123,7 +123,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 				if (isInWater()) {
 					motionY += 0.2F;
 				}
-				if (world.containsAnyLiquid(getEntityBoundingBox().grow(0D, 1D, 0D))) {
+				if (world.containsAnyLiquid(getBoundingBox().grow(0D, 1D, 0D))) {
 					flyAbout();
 				}
 				if (world.getClosestPlayerToEntity(this, 4.0D) != null) {

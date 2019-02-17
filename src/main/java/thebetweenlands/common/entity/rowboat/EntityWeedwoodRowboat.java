@@ -250,10 +250,10 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (isEntityInvulnerable(source)) {
+        if (isInvulnerableTo(source)) {
             return false;
         }
-        if (!world.isRemote() && !isDead) {
+        if (!world.isRemote() && isAlive()) {
             if (source instanceof EntityDamageSourceIndirect && source.getTrueSource() != null && isPassenger(source.getTrueSource())) {
                 return false;
             }
@@ -394,7 +394,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             }
         }
         if (!world.isRemote()) {
-            world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(0.2, 0.05, 0.2)).forEach(this::applyEntityCollision);
+            world.getEntitiesWithinAABBExcludingEntity(this, getBoundingBox().grow(0.2, 0.05, 0.2)).forEach(this::applyEntityCollision);
         }
         rotationYaw = MathHelper.wrapDegrees(rotationYaw);
         prevRotationYaw = MathUtils.adjustAngleForInterpolation(rotationYaw, prevRotationYaw);
@@ -402,7 +402,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     private void hitWaves(double pow) {
         // TODO: custom smooth sync total world time
-        double t = world.getTotalWorldTime() * 0.03;
+        double t = world.getGameTime() * 0.03;
         double roughness = 0.15 * pow * (inWaterTicks < 20 ? inWaterTicks / 20D : 1), scale = 0.5;
         double x = posX, z = posZ;
         Matrix mat = new Matrix();
@@ -594,7 +594,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         IBlockState blockAbove = world.getBlockState(pos.up());
         if (isWater(blockAt) && !isWater(blockAbove)) {
             float y = (float) pos.getY() + getLiquidHeight(blockAt, world, pos) + height;
-            buoyancy = (y - (float) getEntityBoundingBox().minY - 0.55F) / height;
+            buoyancy = (y - (float) getBoundingBox().minY - 0.55F) / height;
             drag = 0.9875F;
             submergeTicks = 0;
         } else if (isWater(blockAt) && isWater(blockAbove)) {
@@ -834,7 +834,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                 if (oarInAir.get(side) || start) {
                     float volume = force * 0.8F + 0.2F;
                     SoundEvent sound = (start ? SOUND_ROW_START : SOUND_ROW).get(side);
-                    world.play(null, raytrace.hitVec.x, raytrace.hitVec.y, raytrace.hitVec.z, sound, SoundCategory.NEUTRAL, volume, 0.8F + rand.nextFloat() * 0.3F);
+                    world.playSound(null, raytrace.hitVec.x, raytrace.hitVec.y, raytrace.hitVec.z, sound, SoundCategory.NEUTRAL, volume, 0.8F + rand.nextFloat() * 0.3F);
                 }
             }
         }
@@ -849,7 +849,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     @Override
     public boolean handleWaterMovement() {
         double mX = motionX, mZ = motionZ;
-        if (world.handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this)) {
+        if (world.handleMaterialAcceleration(getBoundingBox(), Material.WATER, this)) {
             if (mX != motionX && mZ != motionZ && canPassengerSteer()) {
                 double aX = motionX - mX, aZ = motionZ - mZ;
                 double dir = Math.atan2(aZ, aX) * MathUtils.RAD_TO_DEG;
@@ -863,7 +863,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                         volume = 1;
                     }
                     playSound(getSplashSound(), volume, 1 + (rand.nextFloat() - rand.nextFloat()) * 0.4F);
-                    float min = MathHelper.floor(getEntityBoundingBox().minY);
+                    float min = MathHelper.floor(getBoundingBox().minY);
                     for (int i = 0; i < 1 + width * 20; i++) {
                         float x = (rand.nextFloat() * 2 - 1) * width;
                         float z = (rand.nextFloat() * 2 - 1) * width;

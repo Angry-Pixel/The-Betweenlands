@@ -293,7 +293,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	}
 
 	protected void playRollSound() {
-		this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.BOULDER_SPRITE_ROLL, SoundCategory.HOSTILE, this.getSoundVolume(), this.getSoundPitch());
+		this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.BOULDER_SPRITE_ROLL, SoundCategory.HOSTILE, this.getSoundVolume(), this.getSoundPitch());
 	}
 
 	@Override
@@ -306,11 +306,11 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 			} else {
 				distanceWalked = this.distanceWalkedOnStepModified + 0.5F;
 			}
-			this.play(SoundEvents.BLOCK_STONE_HIT, 0.6F, 1.0F);
+			this.playSound(SoundEvents.BLOCK_STONE_HIT, 0.6F, 1.0F);
 		} else {
 			distanceWalked = this.distanceWalkedOnStepModified + 0.7F;
-			this.play(SoundEvents.BLOCK_STONE_HIT, 0.35F, 1.0F);
-			this.play(SoundEvents.BLOCK_GRAVEL_BREAK, 0.08F, 1.0F);
+			this.playSound(SoundEvents.BLOCK_STONE_HIT, 0.35F, 1.0F);
+			this.playSound(SoundEvents.BLOCK_GRAVEL_BREAK, 0.08F, 1.0F);
 		}
 
 		this.distanceWalkedOnStepModified = distanceWalked;
@@ -429,8 +429,8 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	}
 
 	@Override
-	public boolean isEntityInvulnerable(DamageSource source) {
-		return source == DamageSource.IN_WALL || super.isEntityInvulnerable(source);
+	public boolean isInvulnerableTo(DamageSource source) {
+		return source == DamageSource.IN_WALL || super.isInvulnerableTo(source);
 	}
 
 	@Override

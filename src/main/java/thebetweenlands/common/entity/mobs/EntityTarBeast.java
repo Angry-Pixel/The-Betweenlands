@@ -200,7 +200,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
-		this.play(SoundRegistry.TAR_BEAST_STEP, 1, 1);
+		this.playSound(SoundRegistry.TAR_BEAST_STEP, 1, 1);
 	}
 
 	@Override
@@ -265,9 +265,9 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				}
 
 				if(this.sheddingProgress > this.getSheddingSpeed()) {
-					this.play(SoundRegistry.TAR_BEAST_LIVING, 1F, (this.rand.nextFloat() * 0.2F + 1.0F) * 0.6F);
+					this.playSound(SoundRegistry.TAR_BEAST_LIVING, 1F, (this.rand.nextFloat() * 0.2F + 1.0F) * 0.6F);
 					for(int i = 0; i < 8; i++) {
-						this.play(SoundRegistry.TAR_BEAST_STEP, 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
+						this.playSound(SoundRegistry.TAR_BEAST_STEP, 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 					}
 					this.sheddingProgress = 0;
 					this.setShedding(false);
@@ -310,7 +310,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 						this.setSucking(true);
 						this.suckingCooldown = this.getSuckingCooldown() + this.world.rand.nextInt(this.getSuckingCooldown() / 2);
-						this.play(SoundRegistry.TAR_BEAST_SUCK, 1F, 1F);
+						this.playSound(SoundRegistry.TAR_BEAST_SUCK, 1F, 1F);
 					}
 				}
 

@@ -135,7 +135,7 @@ public class EntityRootSpikeWave extends Entity implements IEntityAdditionalSpaw
 		if(this.ticksExisted >= this.delay) {
 			if(this.world.isRemote() && this.ticksExisted == this.delay) {
 				this.spawnEmergeParticles();
-				this.world.play(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKES, SoundCategory.HOSTILE, 0.7F, 0.9F + this.rand.nextFloat() * 0.2F, false);
+				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKES, SoundCategory.HOSTILE, 0.7F, 0.9F + this.rand.nextFloat() * 0.2F, false);
 			}
 			if(this.ticksExisted == this.delay && this.motionY <= 0.0D) {
 				this.motionY += 0.25D;

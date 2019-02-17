@@ -269,7 +269,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 			if(getSpawningProgress() < 1.0F) {
 
 				if(getSpawningState() == 0) {
-					getEntityWorld().play(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_EMERGE, SoundCategory.HOSTILE, 1.2F, 1.0F);
+					getEntityWorld().playSound(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_EMERGE, SoundCategory.HOSTILE, 1.2F, 1.0F);
 				}
 				updateSpawningState();
 
@@ -298,7 +298,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 
 		if(!getEntityWorld().isRemote() && isAlive() && this.getSpawningProgress() >= 1) {
 			if (getAttackTarget() != null) {
-				AxisAlignedBB checkAABB = getEntityBoundingBox().expand(64, 64, 64);
+				AxisAlignedBB checkAABB = getBoundingBox().expand(64, 64, 64);
 				List<EntityPeatMummy> peatMummies = getEntityWorld().getEntitiesWithinAABB(EntityPeatMummy.class, checkAABB);
 				int mummies = 0;
 				for(EntityPeatMummy mummy : peatMummies) {
@@ -345,7 +345,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 			getEntityWorld().spawnEntity(mummy);
 			mummy.setCarryShimmerstone(false);
 			mummy.setBossMummy(true);
-			getEntityWorld().play(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_SCREAM, SoundCategory.HOSTILE, 1F, 1.0F);
+			getEntityWorld().playSound(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_SCREAM, SoundCategory.HOSTILE, 1F, 1.0F);
 			TheBetweenlands.networkWrapper.sendToAllAround(new MessageSummonPeatMummyParticles(mummy), new TargetPoint(this.dimension, mummy.posX, mummy.posY, mummy.posZ, 64));
 		} else {
 			//Try again the next tick
@@ -364,7 +364,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 		sludge.motionX = look.x * 0.5D;
 		sludge.motionY = look.y;
 		sludge.motionZ = look.z * 0.5D;
-		getEntityWorld().play(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_RETCH, SoundCategory.HOSTILE, 1F, 0.7F + rand.nextFloat() * 0.6F);
+		getEntityWorld().playSound(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_RETCH, SoundCategory.HOSTILE, 1F, 0.7F + rand.nextFloat() * 0.6F);
 		getEntityWorld().spawnEntity(sludge);
 	}
 
@@ -377,7 +377,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 			setPrey((EntityLivingBase)target);
 		}
 		if(attacked)
-			getEntityWorld().play(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_SWIPE, SoundCategory.HOSTILE, 1F, 0.7F + rand.nextFloat() * 0.6F);
+			getEntityWorld().playSound(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_SWIPE, SoundCategory.HOSTILE, 1F, 0.7F + rand.nextFloat() * 0.6F);
 		return attacked;
 	}
 
@@ -389,7 +389,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 		if (ticksExisted % 10 == 0) {
 			if(!getEntityWorld().isRemote()) {
 				currentEatPrey.attackEntityFrom(DamageSource.causeMobDamage(this), 3);
-				getEntityWorld().play(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_BITE, SoundCategory.HOSTILE, 1F, 0.7F + rand.nextFloat() * 0.6F);
+				getEntityWorld().playSound(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_BITE, SoundCategory.HOSTILE, 1F, 0.7F + rand.nextFloat() * 0.6F);
 			}
 		}
 		if (!currentEatPrey.isAlive() && !getEntityWorld().isRemote()) 
@@ -431,7 +431,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 		bossInfo.setPercent(0);
 		if(deathTicks == 0) {
 			if(!getEntityWorld().isRemote()) {
-				getEntityWorld().play(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_DEATH, SoundCategory.HOSTILE, 1F, 1F);
+				getEntityWorld().playSound(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_DEATH, SoundCategory.HOSTILE, 1F, 1F);
 			}
 		}
 
@@ -479,7 +479,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 							double px = posX + rand.nextDouble() - 0.5F;
 							double py = posY - getYOffset() + rand.nextDouble() * 0.2 + 0.075;
 							double pz = posZ + rand.nextDouble() - 0.5F;
-							getEntityWorld().play(null, getPosition(), block.getSoundType(state, getEntityWorld(), getPosition().down(), null).getBreakSound(), SoundCategory.BLOCKS, rand.nextFloat() * 0.3F + 0.3F, rand.nextFloat() * 0.15F + 0.7F);
+							getEntityWorld().playSound(null, getPosition(), block.getSoundType(state, getEntityWorld(), getPosition().down(), null).getBreakSound(), SoundCategory.BLOCKS, rand.nextFloat() * 0.3F + 0.3F, rand.nextFloat() * 0.15F + 0.7F);
 							for (int i = 0, amount = rand.nextInt(20) + 10; i < amount; i++) {
 								double ox = rand.nextDouble() * 0.1F - 0.05F;
 								double oz = rand.nextDouble() * 0.1F - 0.05F;

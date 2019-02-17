@@ -163,8 +163,8 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 				setIsLeaping(false);
 			onGround = false;
 			isAirBorne = true;
-			if(getEntityWorld().getTotalWorldTime()%5==0)
-				getEntityWorld().play((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
+			if(getEntityWorld().getGameTime()%5==0)
+				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
 				damageEntity(DamageSource.DROWN, 0.5F);
 		}
 
@@ -176,11 +176,11 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 		if(!getEntityWorld().isRemote()) {
 		if(getAttackTarget() != null && !getEntityWorld().containsAnyLiquid(getAttackTarget().getBoundingBox())) {
 			Double distance = getPosition().getDistance((int) getAttackTarget().posX, (int) getAttackTarget().posY, (int) getAttackTarget().posZ);
-			if (distance > 1.0F && distance < 6.0F) // && getAttackTarget().getBoundingBox().maxY >= getEntityBoundingBox().minY && getAttackTarget().getBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0)
+			if (distance > 1.0F && distance < 6.0F) // && getAttackTarget().getBoundingBox().maxY >= getBoundingBox().minY && getAttackTarget().getBoundingBox().minY <= getBoundingBox().maxY && rand.nextInt(3) == 0)
 				if (isInWater() && getEntityWorld().isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
 					if(!isLeaping()) {
 						setIsLeaping(true);
-						getEntityWorld().play((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1F, 2F);
+						getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1F, 2F);
 					}
 					double distanceX = getAttackTarget().posX - posX;
 					double distanceZ = getAttackTarget().posZ - posZ;
@@ -226,7 +226,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 
 	@Override
     public boolean isNotColliding() {
-		 return getEntityWorld().checkNoEntityCollision(getEntityBoundingBox(), this) && getEntityWorld().getCollisionBoxes(this, getEntityBoundingBox()).isEmpty();
+		 return getEntityWorld().checkNoEntityCollision(getBoundingBox(), this) && getEntityWorld().getCollisionBoxes(this, getBoundingBox()).isEmpty();
     }
 
     @Override

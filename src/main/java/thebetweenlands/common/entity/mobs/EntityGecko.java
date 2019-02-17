@@ -107,7 +107,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 
 	public void startHiding() {
 		this.setHiding(true);
-		this.play(SoundRegistry.GECKO_HIDE, 0.5F, rand.nextFloat() * 0.3F + 0.9F);
+		this.playSound(SoundRegistry.GECKO_HIDE, 0.5F, rand.nextFloat() * 0.3F + 0.9F);
 		this.sendRustleEffect(1.0F);
 		this.setPosition(this.hidingBush.getX() + 0.5, this.hidingBush.getY(), this.hidingBush.getZ() + 0.5);
 		this.timeHiding = 0;

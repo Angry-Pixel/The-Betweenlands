@@ -212,8 +212,8 @@ public class EntityDarkDruid extends EntityMob {
                     druidParticlePacketOrigin();
                     druidParticlePacketTarget(newDruid);
                     
-                    this.play(SoundRegistry.DRUID_TELEPORT, 1.0F, 1.0F);
-                    newDruid.play(SoundRegistry.DRUID_TELEPORT, 1.0F, 1.0F);
+                    this.playSound(SoundRegistry.DRUID_TELEPORT, 1.0F, 1.0F);
+                    newDruid.playSound(SoundRegistry.DRUID_TELEPORT, 1.0F, 1.0F);
                 } else
                     newDruid.remove();
             }

@@ -69,7 +69,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
-		this.play(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
+		this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	public boolean attackEntityAsMob(Entity entityIn) {
 		boolean attacked;
 		if(attacked = super.attackEntityAsMob(entityIn)) {
-			this.play(SoundRegistry.CRAB_SNIP, 1, 1);
+			this.playSound(SoundRegistry.CRAB_SNIP, 1, 1);
 		}
 		return attacked;
 	}

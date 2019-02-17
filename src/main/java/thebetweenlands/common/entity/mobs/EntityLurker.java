@@ -156,11 +156,11 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
 
     @Override
     public boolean isInWater() {
-        return getEntityWorld().handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this);
+        return getEntityWorld().handleMaterialAcceleration(getBoundingBox(), Material.WATER, this);
     }
 
     private Block getRelativeBlock(int offsetY) {
-        return getEntityWorld().getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(getEntityBoundingBox().minY) + offsetY, MathHelper.floor(posZ))).getBlock();
+        return getEntityWorld().getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(getBoundingBox().minY) + offsetY, MathHelper.floor(posZ))).getBlock();
     }
 
     @Override
@@ -237,7 +237,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
         int blockX = MathHelper.floor(posX), blockZ = MathHelper.floor(posZ);
         int y = 0;
         while (getRelativeBlock(y--) == Blocks.AIR && posY - y > 0) ;
-        int blockY = MathHelper.floor(getEntityBoundingBox().minY + y);
+        int blockY = MathHelper.floor(getBoundingBox().minY + y);
         IBlockState blockState = getEntityWorld().getBlockState(new BlockPos(blockX, blockY, blockZ));
         if (blockState.getMaterial().isLiquid()) {
             int r = 255, g = 255, b = 255;
@@ -289,7 +289,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
 
         if (!this.getEntityWorld().isRemote()) {
             Entity target = this.getAttackTarget();
-            if (target instanceof EntityDragonFly && attackTime <= 0 && target.getDistance(this) < 3.2D && target.getBoundingBox().maxY >= getEntityBoundingBox().minY && target.getBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
+            if (target instanceof EntityDragonFly && attackTime <= 0 && target.getDistance(this) < 3.2D && target.getBoundingBox().maxY >= getBoundingBox().minY && target.getBoundingBox().minY <= getBoundingBox().maxY && ticksUntilBiteDamage == -1) {
                 setShouldMouthBeOpen(true);
                 setMouthMoveSpeed(10);
                 ticksUntilBiteDamage = 10;
@@ -430,7 +430,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
             motionZ += distanceZ / magnitude * 0.8;
         }
 
-        if (attackTime <= 0 && distance < 3.5D && entityIn.getBoundingBox().maxY >= getEntityBoundingBox().minY && entityIn.getBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
+        if (attackTime <= 0 && distance < 3.5D && entityIn.getBoundingBox().maxY >= getBoundingBox().minY && entityIn.getBoundingBox().minY <= getBoundingBox().maxY && ticksUntilBiteDamage == -1) {
             setShouldMouthBeOpen(true);
             setMouthMoveSpeed(10);
             ticksUntilBiteDamage = 10;
@@ -442,12 +442,12 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float damage) {
-        if (isEntityInvulnerable(source) || source.equals(DamageSource.IN_WALL) || source.equals(DamageSource.DROWN)) {
+        if (isInvulnerableTo(source) || source.equals(DamageSource.IN_WALL) || source.equals(DamageSource.DROWN)) {
             return false;
         }
         Entity attacker = source.getTrueSource();
         if (attacker instanceof EntityPlayer) {
-            List<EntityLurker> nearLurkers = getEntityWorld().getEntitiesWithinAABB(EntityLurker.class, getEntityBoundingBox().grow(16, 16, 16));
+            List<EntityLurker> nearLurkers = getEntityWorld().getEntitiesWithinAABB(EntityLurker.class, getBoundingBox().grow(16, 16, 16));
             for (EntityLurker fellowLurker : nearLurkers) {
                 // Thou shouldst joineth me! F'r thither is a great foe comest!
                 // RE: lol

@@ -177,7 +177,7 @@ public class EntityPrimordialMalevolenceTeleporter extends Entity implements IEn
 
 	@OnlyIn(Dist.CLIENT)
 	private void playTeleportSound() {
-		Minecraft.getInstance().getSoundHandler().play(new TeleporterSound(this, this.getTarget()));
+		Minecraft.getInstance().getSoundHandler().playSound(new TeleporterSound(this, this.getTarget()));
 	}
 
 	public void faceEntity(Entity target) {
