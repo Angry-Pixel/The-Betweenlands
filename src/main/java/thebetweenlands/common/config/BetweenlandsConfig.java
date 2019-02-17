@@ -29,11 +29,6 @@ public class BetweenlandsConfig {
 	public static final WorldAndDimension WORLD_AND_DIMENSION = new WorldAndDimension();
 
 	public static class WorldAndDimension {
-		@Name("dimension_id")
-		@LangKey(LANG_PREFIX + "dimension_id")
-		@RequiresMcRestart
-		public int dimensionId = 20;
-
 		@Name("druid_circle_frequency")
 		@LangKey(LANG_PREFIX + "druid_circle_frequency")
 		@Comment("Higher numbers decrease rate")

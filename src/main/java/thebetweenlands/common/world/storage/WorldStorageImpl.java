@@ -9,6 +9,7 @@ import java.util.concurrent.Callable;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -96,17 +97,17 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 	/**
 	 * Registers the capability and event handler
 	 */
-	public static void register() {
+	public static void registerCapability() {
 		CapabilityManager.INSTANCE.register(IWorldStorage.class, new IStorage<IWorldStorage>() {
 			@Override
-			public NBTBase writeNBT(Capability<IWorldStorage> capability, IWorldStorage instance, EnumFacing side) {
+			public INBTBase writeNBT(Capability<IWorldStorage> capability, IWorldStorage instance, EnumFacing side) {
 				NBTTagCompound nbt = new NBTTagCompound();
 				instance.writeToNBT(nbt);
 				return nbt;
 			}
 
 			@Override
-			public void readNBT(Capability<IWorldStorage> capability, IWorldStorage instance, EnumFacing side, NBTBase nbt) {
+			public void readNBT(Capability<IWorldStorage> capability, IWorldStorage instance, EnumFacing side, INBTBase nbt) {
 				if(nbt instanceof NBTTagCompound) {
 					instance.readFromNBT((NBTTagCompound)nbt);
 				}
@@ -117,8 +118,6 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 				return new BetweenlandsWorldStorage();
 			}
 		});
-
-		MinecraftForge.EVENT_BUS.register(Handler.class);
 	}
 	////////////// End Handler //////////////////
 

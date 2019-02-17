@@ -1,0 +1,70 @@
+# This is an example mods.toml file. It contains the data relating to the loading mods.
+# There are several mandatory fields (#mandatory), and many more that are optional (#optional).
+# The overall format is standard TOML format, v0.5.0.
+# Note that there are a couple of TOML lists in this file.
+# Find more information on toml format here:  https://github.com/toml-lang/toml
+# The name of the mod loader type to load - for regular FML @Mod mods it should be javafml
+modLoader="javafml"
+
+# A version range to match for said mod loader - for regular FML @Mod it will be the forge version
+loaderVersion="[24,)" #(24 is current forge version)
+
+# A URL to refer people to when problems occur with this mod
+issueTrackerURL="https://github.com/Angry-Pixel/The-Betweenlands/issues"
+
+# A URL for the "homepage" for this mod, displayed in the mod UI
+displayURL="https://minecraft.curseforge.com/projects/angry-pixel-the-betweenlands-mod"
+
+# A file name (in the root of the mod JAR) containing a logo for display
+logoFile="logo.png"
+
+# A text field displayed in the mod UI
+credits="\n \u00A7nDevelopment Team:\u00A7r Angry Pixel\n \u00A7nContributors:\u00A7r https://github.com/Angry-Pixel/The-Betweenlands/graphs/contributors\n \u00A7nLocalization:\u00A7r DYColdWind (zh_CN), RisingInIris2017 (zh_CN), DL_Slime (zh_CN), LIL_SUZEE (ru_RU), TimeConqueror (ru_RU)\n \u00A7nSpecial Thanks:\u00A7r okl1001, iLexiconn, OnyxDarkNight, SanAndreasP, Stealthgert, Dylan4Ever, Vahkiti, Aginsun, Cricket, FairWolf, Fish2, Hologuard, Hwd45, Iridium616, Ivorius, KazunariAkito, Laskeri, Quintinity, RandumbDude, Robonix, Sagotomi, Sartharis, Stealthgert, Vazkii, ZeuX, calebmanley, daveyx0, kiko0804, Timinations and probably many more!"
+
+# A text field displayed in the mod UI
+authors="Angry Pixel"
+
+# A list of mods - how many allowed here is determined by the individual mod loader
+[[mods]]
+
+# The modid of the mod
+modId="thebetweenlands"
+
+# The version number of the mod - there's a few well known ${} variables useable here or just hardcode it
+version="${file.jarVersion}"
+
+ # A display name for the mod
+displayName="The Betweenlands"
+
+# A URL to query for updates for this mod. See the JSON update specification <here>
+#updateJSONURL="http://myurl.me/" #optional
+
+# The description text for the mod
+description='''
+Introducing The Betweenlands... a dark and hostile environment. This large and expansive mod adds a whole new dimension to the game.
+'''
+
+# A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
+#[[dependencies.examplemod]] #optional
+#    # the modid of the dependency
+#    modId="forge" #mandatory
+#    
+#    # Does this dependency have to exist - if not, ordering below must be specified
+#    mandatory=true #mandatory
+#    
+#    # The version range of the dependency
+#    versionRange="[24,)" #mandatory
+#    
+#    # An ordering relationship for the dependency - BEFORE or AFTER required if the relationship is not mandatory
+#    ordering="NONE"
+#    
+#    # Side this dependency is applied on - BOTH, CLIENT or SERVER
+#    side="BOTH"
+    
+# Here's another dependency
+#[[dependencies.examplemod]]
+#    modId="minecraft"
+#    mandatory=true
+#    versionRange="[1.13.2]"
+#    ordering="NONE"
+#    side="BOTH"
