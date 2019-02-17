@@ -190,13 +190,13 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 1, 0 + level, 6, level == 0 ? blockHelper.SMOOTH_PITSTONE : blockHelper.PITSTONE_BRICKS, 3, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 1, 0 + level, 7, level == 0 ? blockHelper.SMOOTH_PITSTONE : blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
 
-	/*		rotatedCubeVolume(world, rand, pos, 1, 1 + level, 1, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 1, 1 + level, 1, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 2, 1 + level, 2, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 3, 1 + level, 3, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 4, 1 + level, 4, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 5, 1 + level, 5, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 6, 1 + level, 6, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
-	*/	
+	
 		}
 
 		if (level == 16) {
@@ -363,7 +363,6 @@ public class LightTowerBuildParts {
 			
 			rotatedCubeVolume(world, rand, pos, 2, 1 + level, 0, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 2, 2 + level, 0, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
-			//pg2
 			
 			rotatedCubeVolume(world, rand, pos, 0, 1 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 0, 2 + level, -4, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
