@@ -1,8 +1,18 @@
 package thebetweenlands.common.registries;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import java.util.function.Consumer;
+
+import com.mojang.datafixers.DataFixUtils;
+import com.mojang.datafixers.types.Type;
+
+import net.minecraft.tileentity.TileEntityType;
+import net.minecraft.util.SharedConstants;
+import net.minecraft.util.datafix.DataFixesManager;
+import net.minecraft.util.datafix.TypeReferences;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.IForgeRegistry;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.tile.TileEntityAlembic;
 import thebetweenlands.common.tile.TileEntityAnimator;
@@ -22,7 +32,6 @@ import thebetweenlands.common.tile.TileEntityItemShelf;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMossBed;
-import thebetweenlands.common.tile.TileEntityMudFlowerPot;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPresent;
 import thebetweenlands.common.tile.TileEntityPurifier;
@@ -40,46 +49,69 @@ import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.tile.spawner.TileEntityTarBeastSpawner;
 
 public class TileEntityRegistry {
-	private TileEntityRegistry() { }
+	@SubscribeEvent
+	public static void register(RegistryEvent.Register<TileEntityType<?>> event) {
+		final IForgeRegistry<TileEntityType<?>> registry = event.getRegistry();
 
-	public static void init() {
-		registerTileEntity(TileEntityDruidAltar.class, "druid_altar");
-		registerTileEntity(TileEntityPurifier.class, "purifier");
-		registerTileEntity(TileEntityWeedwoodWorkbench.class, "weedwood_workbench");
-		registerTileEntity(TileEntityCompostBin.class, "compost_bin");
-		registerTileEntity(TileEntityLootPot.class, "loot_pot");
-		registerTileEntity(TileEntityMobSpawnerBetweenlands.class, "mob_spawner");
-		registerTileEntity(TileEntityWisp.class, "wisp");
-		registerTileEntity(TileEntityBLFurnace.class, "sulfur_furnace");
-		registerTileEntity(TileEntityBLDualFurnace.class, "sulfur_furnace_dual");
-		registerTileEntity(TileEntityChestBetweenlands.class, "betweenlands_chest");
-		registerTileEntity(TileEntityRubberTap.class, "rubber_tap");
-		registerTileEntity(TileEntitySpikeTrap.class, "spike_trap");
-		registerTileEntity(TileEntityPossessedBlock.class, "possessed_block");
-		registerTileEntity(TileEntityItemCage.class, "item_cage");
-		registerTileEntity(TileEntityWeedwoodSign.class, "weedwood_sign");
-		registerTileEntity(TileEntityMudFlowerPot.class, "mud_flower_pot");
-		registerTileEntity(TileEntityGeckoCage.class, "gecko_cage");
-		registerTileEntity(TileEntityInfuser.class, "infuser");
-		registerTileEntity(TileEntityMortar.class, "mortar");
-		registerTileEntity(TileEntityAnimator.class, "animator");
-		registerTileEntity(TileEntityAlembic.class, "alembic");
-		registerTileEntity(TileEntityDugSoil.class, "dug_soil");
-		registerTileEntity(TileEntityItemShelf.class, "item_shelf");
-		registerTileEntity(TileEntityTarBeastSpawner.class, "tar_beast_spawner");
-		registerTileEntity(TileEntityTarLootPot1.class, "tar_loot_pot_1");
-		registerTileEntity(TileEntityTarLootPot2.class, "tar_loot_pot_2");
-		registerTileEntity(TileEntityTarLootPot3.class, "tar_loot_pot_3");
-		registerTileEntity(TileEntityHopperBetweenlands.class, "syrmorite_hopper");
-		registerTileEntity(TileEntityMossBed.class, "moss_bed");
-		registerTileEntity(TileEntityAspectVial.class, "aspect_vial");
-		registerTileEntity(TileEntityAspectrusCrop.class, "aspectrus_crop");
-		registerTileEntity(TileEntityRepeller.class, "repeller");
-		registerTileEntity(TileEntityPresent.class, "present");
-		registerTileEntity(TileEntityWaystone.class, "waystone");
+		register(new RegistryHelper<TileEntityType.Builder<?>>() {
+			@Override
+			public <F extends TileEntityType.Builder<?>> F reg(String regName, F obj, Consumer<F> callback) {
+				Type<?> fixerType = null;
+
+				//TODO 1.13 Entity registering like this? Or use TileEntityType.register(...)?
+				try {
+					fixerType = DataFixesManager.getDataFixer().getSchema(DataFixUtils.makeKey(1631)).getChoiceType(TypeReferences.BLOCK_ENTITY, ModInfo.ID + ":" + regName);
+				} catch (IllegalArgumentException illegalstateexception) {
+					if (SharedConstants.developmentMode) {
+						throw illegalstateexception;
+					}
+
+					TheBetweenlands.logger.warn("No data fixer registered for Betweenlands block entity {}", ModInfo.ID + ":" + regName);
+				}
+
+				TileEntityType<?> type = obj.build(fixerType);
+				type.setRegistryName(ModInfo.ID, regName);
+				registry.register(type);
+				return obj;
+			}
+		});
 	}
 
-	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
-		GameRegistry.registerTileEntity(cls, new ResourceLocation(ModInfo.ID, baseName));
+	private static void register(RegistryHelper<TileEntityType.Builder<?>> reg) {
+		reg.reg("druid_altar", TileEntityType.Builder.create(TileEntityDruidAltar::new));
+		reg.reg("purifier", TileEntityType.Builder.create(TileEntityPurifier::new));
+		reg.reg("weedwood_workbench", TileEntityType.Builder.create(TileEntityWeedwoodWorkbench::new));
+		reg.reg("compost_bin", TileEntityType.Builder.create(TileEntityCompostBin::new));
+		reg.reg("loot_pot", TileEntityType.Builder.create(TileEntityLootPot::new));
+		reg.reg("mob_spawner", TileEntityType.Builder.create(TileEntityMobSpawnerBetweenlands::new));
+		reg.reg("wisp", TileEntityType.Builder.create(TileEntityWisp::new));
+		reg.reg("sulfur_furnace", TileEntityType.Builder.create(TileEntityBLFurnace::new));
+		reg.reg("sulfur_furnace_dual", TileEntityType.Builder.create(TileEntityBLDualFurnace::new));
+		reg.reg("betweenlands_chest", TileEntityType.Builder.create(TileEntityChestBetweenlands::new));
+		reg.reg("rubber_tap", TileEntityType.Builder.create(TileEntityRubberTap::new));
+		reg.reg("spike_trap", TileEntityType.Builder.create(TileEntitySpikeTrap::new));
+		reg.reg("possessed_block", TileEntityType.Builder.create(TileEntityPossessedBlock::new));
+		reg.reg("item_cage", TileEntityType.Builder.create(TileEntityItemCage::new));
+		reg.reg("weedwood_sign", TileEntityType.Builder.create(TileEntityWeedwoodSign::new));
+		//TODO 1.13 Flower pot TE removed due to flattening
+		//reg.reg("mud_flower_pot", TileEntityType.Builder.create(TileEntityMudFlowerPot::new));
+		reg.reg("gecko_cage", TileEntityType.Builder.create(TileEntityGeckoCage::new));
+		reg.reg("infuser", TileEntityType.Builder.create(TileEntityInfuser::new));
+		reg.reg("mortar", TileEntityType.Builder.create(TileEntityMortar::new));
+		reg.reg("animator", TileEntityType.Builder.create(TileEntityAnimator::new));
+		reg.reg("alembic", TileEntityType.Builder.create(TileEntityAlembic::new));
+		reg.reg("dug_soil", TileEntityType.Builder.create(TileEntityDugSoil::new));
+		reg.reg("item_shelf", TileEntityType.Builder.create(TileEntityItemShelf::new));
+		reg.reg("tar_beast_spawner", TileEntityType.Builder.create(TileEntityTarBeastSpawner::new));
+		reg.reg("tar_loot_pot_1", TileEntityType.Builder.create(TileEntityTarLootPot1::new));
+		reg.reg("tar_loot_pot_2", TileEntityType.Builder.create(TileEntityTarLootPot2::new));
+		reg.reg("tar_loot_pot_3", TileEntityType.Builder.create(TileEntityTarLootPot3::new));
+		reg.reg("syrmorite_hopper", TileEntityType.Builder.create(TileEntityHopperBetweenlands::new));
+		reg.reg("moss_bed", TileEntityType.Builder.create(TileEntityMossBed::new));
+		reg.reg("aspect_vial", TileEntityType.Builder.create(TileEntityAspectVial::new));
+		reg.reg("aspectrus_crop", TileEntityType.Builder.create(TileEntityAspectrusCrop::new));
+		reg.reg("repeller", TileEntityType.Builder.create(TileEntityRepeller::new));
+		reg.reg("present", TileEntityType.Builder.create(TileEntityPresent::new));
+		reg.reg("waystone", TileEntityType.Builder.create(TileEntityWaystone::new));
 	}
 }

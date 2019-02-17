@@ -1,23 +1,23 @@
 package thebetweenlands.common.registries;
 
-import net.minecraft.util.SoundEvent;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.sound.BLSoundEvent;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.util.SoundEvent;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import thebetweenlands.common.sound.BLSoundEvent;
+
 public class SoundRegistry {
     public static final List<SoundEvent> SOUNDS = new ArrayList<>();
+    
     // Music
     public static final BLSoundEvent BL_MUSIC_MENU = reg("bl_menu");
     public static final BLSoundEvent BL_MUSIC_DIMENSION = reg("bl_dimension");
     public static final BLSoundEvent GREEBLING_MUSIC_1 = reg("greebling_music_1");
     public static final BLSoundEvent GREEBLING_MUSIC_2 = reg("greebling_music_2");
+    
     // Records
     public static final BLSoundEvent _16612 = reg("16612");
     public static final BLSoundEvent ACIENT = reg("ancient");
@@ -33,6 +33,7 @@ public class SoundRegistry {
     public static final BLSoundEvent THE_EXPLORER = reg("the_explorer");
     public static final BLSoundEvent WANDERING_WISPS = reg("wandering_wisps");
     public static final BLSoundEvent WATERLOGGED = reg("waterlogged");
+    
     // Ambience
     public static final BLSoundEvent AMBIENT_BLOOD_SKY_ROAR = reg("ambient_blood_sky_roar");
     public static final BLSoundEvent AMBIENT_BLOOD_SKY = reg("ambient_blood_sky");
@@ -44,6 +45,7 @@ public class SoundRegistry {
     public static final BLSoundEvent AMBIENT_WATER = reg("ambient_water");
     public static final BLSoundEvent AMBIENT_FROSTY = reg("ambient_frosty");
     public static final BLSoundEvent AMBIENT_SNOWFALL = reg("ambient_snowfall");
+    
     // Miscellaneous
     public static final BLSoundEvent CRUMBLE = reg("crumble");
     public static final BLSoundEvent FIG = reg("fig");
@@ -57,6 +59,7 @@ public class SoundRegistry {
     public static final BLSoundEvent DAMAGE_REDUCTION = reg("damage_reduction");
     public static final BLSoundEvent RIFT_OPEN = reg("rift_open");
     public static final BLSoundEvent RIFT_CREAK = reg("rift_creak");
+    
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
@@ -145,6 +148,7 @@ public class SoundRegistry {
     public static final BLSoundEvent SPIRIT_TREE_SPIKE_TRAP_EMERGE = reg("spirit_tree_spike_trap_emerge");
     public static final BLSoundEvent SPIRIT_TREE_SPIKES = reg("spirit_tree_spikes");
     public static final BLSoundEvent ROOT_SPIKE_PARTICLE_HIT = reg("root_spike_particle_hit");
+    
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");
@@ -168,6 +172,7 @@ public class SoundRegistry {
     public static final BLSoundEvent ROOT_SPRITE_LIVING = reg("root_sprite_living");
     public static final BLSoundEvent ROOT_SPRITE_HURT = reg("root_sprite_hurt");
     public static final BLSoundEvent GREEBLING_VANISH = reg("greebling_vanish");
+    
     // Items
     public static final BLSoundEvent ROWBOAT_ROW_STARBOARD = reg("rowboat_row_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_PORT = reg("rowboat_row_port");
@@ -176,6 +181,7 @@ public class SoundRegistry {
     public static final BLSoundEvent VOODOO_DOLL = reg("voodoo_doll");
     public static final BLSoundEvent GEM_SINGER = reg("gem_singer");
     public static final BLSoundEvent GEM_SINGER_ECHO = reg("gem_singer_echo");
+    
     // Blocks
     public static final BLSoundEvent GRIND = reg("grind");
     public static final BLSoundEvent INFUSER_FINISHED = reg("infuser_finished");
@@ -185,31 +191,17 @@ public class SoundRegistry {
     public static final BLSoundEvent PORTAL_ACTIVATE = reg("portal_activate");
     public static final BLSoundEvent PORTAL_TRAVEL = reg("portal_travel");
     public static final BLSoundEvent PORTAL_TRIGGER = reg("portal_trigger");
-    private SoundRegistry() {
-    }
 
     private static BLSoundEvent reg(String name) {
         BLSoundEvent event = new BLSoundEvent(name);
-
         SOUNDS.add(event);
         return event;
     }
 
     @SubscribeEvent
-    public static void registerSounds(RegistryEvent.Register<SoundEvent> register) {
-        try {
-            for (Field field : SoundRegistry.class.getDeclaredFields()) {
-                Object obj = field.get(null);
-                if (obj instanceof BLSoundEvent) {
-                    register.getRegistry().register((BLSoundEvent)obj);
-                }
-            }
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+    public static void register(RegistryEvent.Register<SoundEvent> register) {
+        for(SoundEvent sound : SOUNDS) {
+        	register.getRegistry().register(sound);
         }
-    }
-
-    public static void preInit() {
-        assert !SOUNDS.isEmpty();
     }
 }
