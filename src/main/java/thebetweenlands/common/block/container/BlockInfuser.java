@@ -6,10 +6,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -19,21 +17,23 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.state.IProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -78,7 +78,7 @@ public class BlockInfuser extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
 		TileEntity tileEntity = world.getTileEntity(pos);
 		if (!world.isRemote && tileEntity instanceof TileEntityInfuser) {
@@ -104,7 +104,7 @@ public class BlockInfuser extends BlockContainer {
 								singleIngredient.setCount(1);
 								tile.setInventorySlotContents(i, singleIngredient);
 								tile.updateInfusingRecipe();
-								if (!player.capabilities.isCreativeMode) 
+								if (!player.abilities.isCreativeMode) 
 									heldItem.shrink(1);
 								world.notifyBlockUpdate(pos, state, state, 2);
 								if(tile.getWaterAmount() > 0) {
@@ -122,7 +122,7 @@ public class BlockInfuser extends BlockContainer {
 					if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).isEmpty()) {
 						tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, heldItem);
 						tile.updateInfusingRecipe();
-						if (!player.capabilities.isCreativeMode) player.setHeldItem(hand, ItemStack.EMPTY);
+						if (!player.abilities.isCreativeMode) player.setHeldItem(hand, ItemStack.EMPTY);
 					}
 					return true;
 				}
@@ -182,13 +182,13 @@ public class BlockInfuser extends BlockContainer {
 	}
 
 	@Nullable
-	private IFluidHandler getFluidHandler(IBlockAccess world, BlockPos pos) {
+	private IFluidHandler getFluidHandler(IWorldReader world, BlockPos pos) {
 		TileEntity tileentity = (TileEntity) world.getTileEntity(pos);
 		return tileentity.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
 	}
 
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+	public void onReplaced(IBlockState state, World world, BlockPos pos, IBlockState newState, boolean isMoving) {
 		if(!world.isRemote) {
 			IInventory tileInventory = (IInventory) world.getTileEntity(pos);
 			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(pos);
@@ -222,12 +222,12 @@ public class BlockInfuser extends BlockContainer {
 				}
 			}
 		}
-		super.breakBlock(world, pos, state);
+		super.onReplaced(state, world, pos, newState, isMoving);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+	@OnlyIn(Dist.CLIENT)
+	public void animateTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		if (world.getTileEntity(pos) instanceof TileEntityInfuser) {
 			int x = pos.getX();
 			int y = pos.getY();
@@ -274,7 +274,7 @@ public class BlockInfuser extends BlockContainer {
 	}
 	
 	@Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
 	

@@ -1,7 +1,7 @@
 package thebetweenlands.client.render.model.baked.modelbase;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.model.ModelBase;
+import net.minecraft.client.renderer.entity.model.ModelRenderer;
 
 public class ModelVolarpad extends ModelBase {
 	public ModelRenderer stalk1;

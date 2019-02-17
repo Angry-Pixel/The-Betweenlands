@@ -1,14 +1,15 @@
 package thebetweenlands.common.network.clientbound;
 
+import javax.xml.ws.handler.MessageContext;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.audio.EntitySound;
 import thebetweenlands.common.network.MessageEntity;
 
@@ -50,18 +51,18 @@ public class MessagePlayEntityIdle extends MessageEntity {
 	public IMessage process(MessageContext ctx) {
 		super.process(ctx);
 
-		if(ctx.side == Side.CLIENT) {
+		if(ctx.side == Dist.CLIENT) {
 			this.handle();
 		}
 
 		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private void handle() {
 		Entity entity = this.getEntity(0);
 		if(entity != null) {
-			Minecraft.getMinecraft().getSoundHandler().playSound(new EntitySound<Entity>(this.sound, this.category, entity, e -> e.isEntityAlive()));
+			Minecraft.getInstance().getSoundHandler().playSound(new EntitySound<Entity>(this.sound, this.category, entity, e -> e.isEntityAlive()));
 		}
 	}
 }

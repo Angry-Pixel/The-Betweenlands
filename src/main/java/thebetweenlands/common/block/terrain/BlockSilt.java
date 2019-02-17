@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.terrain;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -8,15 +10,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
-
-import javax.annotation.Nullable;
 
 public class BlockSilt extends BasicBlock {
 	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1 - 0.125F, 1);
@@ -31,12 +31,12 @@ public class BlockSilt extends BasicBlock {
 
 	@Nullable
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IWorldReader worldIn, BlockPos pos) {
 		return BOUNDING_BOX;
 	}
 
 	@Override
-	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollision(IBlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		boolean canWalk = entityIn instanceof EntityPlayer && !((EntityPlayer)entityIn).inventory.armorInventory.get(0).isEmpty()
 				&& ((EntityPlayer)entityIn).inventory.armorInventory.get(0).getItem() instanceof ItemRubberBoots;
 		if(!(entityIn instanceof IEntityBL) && !canWalk) {
@@ -46,7 +46,7 @@ public class BlockSilt extends BasicBlock {
 	}
 
 	@Override
-	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable) {
+	public boolean canSustainPlant(IBlockState state, IWorldReader world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable) {
 		if(super.canSustainPlant(state, world, pos, direction, plantable)) {
 			return true;
 		}

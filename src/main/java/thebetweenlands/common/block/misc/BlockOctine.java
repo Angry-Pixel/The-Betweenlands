@@ -4,17 +4,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.plant.BlockMoss;
 import thebetweenlands.common.block.plant.BlockThorns;
-import thebetweenlands.common.item.misc.ItemOctineIngot;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockOctine extends BasicBlock {
@@ -41,7 +40,7 @@ public class BlockOctine extends BasicBlock {
                 if (facing.equals(stateIn.getValue(BlockDirectional.FACING)))
                     isTouching = false;
             } else if (stateIn.getBlock() instanceof BlockThorns) {
-                PropertyBool side = null;
+                BooleanProperty side = null;
                 switch (facing.getOpposite()) {
                     case UP:
                         side = BlockThorns.UP;

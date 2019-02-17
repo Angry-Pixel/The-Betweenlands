@@ -1,17 +1,18 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.util.TranslationHelper;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemLifeCrystal extends Item {
 
@@ -33,7 +34,7 @@ public class ItemLifeCrystal extends Item {
         setCreativeTab(BLCreativeTabs.ITEMS);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(TranslationHelper.translateToLocal("tooltip.life_crystal.remaining", Math.round(100F - 100F / getMaxDamage() * getDamage(stack)) + "%"));

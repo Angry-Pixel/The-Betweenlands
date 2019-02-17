@@ -7,11 +7,11 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -20,15 +20,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.common.item.herblore.ItemAspectVial;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.ICustomItemBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAspectrusCrop;
 import thebetweenlands.common.tile.TileEntityDugSoil;
@@ -44,7 +42,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 		this.setMaxHeight(MAX_HEIGHT);
 	}
 
-	public void setAspect(IBlockAccess world, BlockPos pos, @Nullable Aspect aspect) {
+	public void setAspect(IWorldReader world, BlockPos pos, @Nullable Aspect aspect) {
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile instanceof TileEntityAspectrusCrop) {
 			((TileEntityAspectrusCrop)tile).setAspect(aspect);
@@ -52,7 +50,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Nullable
-	public Aspect getAspect(IBlockAccess world, BlockPos pos) {
+	public Aspect getAspect(IWorldReader world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile instanceof TileEntityAspectrusCrop) {
 			return ((TileEntityAspectrusCrop)tile).getAspect();
@@ -61,7 +59,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
 		if(stack.getItem() instanceof ItemAspectVial) {
 			if(this.getAspect(world, pos) == null) {
@@ -106,7 +104,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IWorldReader worldIn, BlockPos pos) {
 		return BlockFence.PILLAR_AABB;
 	}
 
@@ -116,7 +114,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Override
-	public int getCropDrops(IBlockAccess world, BlockPos pos, Random rand, int fortune) {
+	public int getCropDrops(IWorldReader world, BlockPos pos, Random rand, int fortune) {
 		IBlockState state = world.getBlockState(pos);
 		if(state.getValue(AGE) >= 15) {
 			return 1 + rand.nextInt(3 + fortune);
@@ -125,7 +123,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Override
-	public int getSeedDrops(IBlockAccess world, BlockPos pos, Random rand, int fortune) {
+	public int getSeedDrops(IWorldReader world, BlockPos pos, Random rand, int fortune) {
 		IBlockState state = world.getBlockState(pos);
 		if(state.getValue(AGE) >= 15) {
 			return 1 + (rand.nextInt(8) == 0 ? 1 : 0);
@@ -177,12 +175,12 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Override
-	protected PropertyInteger createStageProperty() {
-		return PropertyInteger.create("stage", 0, 15);
+	protected IntegerProperty createStageProperty() {
+		return IntegerProperty.create("stage", 0, 15);
 	}
 
 	@Override
-	public ItemStack getSeedDrop(IBlockAccess world, BlockPos pos, Random rand) {
+	public ItemStack getSeedDrop(IWorldReader world, BlockPos pos, Random rand) {
 		ItemStack stack = new ItemStack(ItemRegistry.ASPECTRUS_SEEDS);
 		Aspect aspect = this.getAspect(world, pos);
 		if(aspect != null && aspect.amount - ASPECT_SEEDS_DEGRADATION > 0) {
@@ -192,7 +190,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Override
-	public ItemStack getCropDrop(IBlockAccess world, BlockPos pos, Random rand) {
+	public ItemStack getCropDrop(IWorldReader world, BlockPos pos, Random rand) {
 		if(!this.isDecayed(world, pos)) {
 			ItemStack stack = new ItemStack(ItemRegistry.ASPECTRUS_FRUIT);
 			Aspect aspect = this.getAspect(world, pos);
@@ -215,8 +213,8 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		super.breakBlock(worldIn, pos, state);
+	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 		worldIn.removeTileEntity(pos);
 	}
 

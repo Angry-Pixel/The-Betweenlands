@@ -5,13 +5,13 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.model.entity.ModelDarkDruid;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
 import thebetweenlands.util.LightingUtil;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderDarkDruid extends RenderLiving<EntityDarkDruid> {
 	private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/dark_druid.png");
 
@@ -25,7 +25,7 @@ public class RenderDarkDruid extends RenderLiving<EntityDarkDruid> {
 		return texture;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class LayerDruidGlow implements LayerRenderer<EntityDarkDruid> {
 		private static final ResourceLocation GLOW = new ResourceLocation("thebetweenlands:textures/entity/dark_druid_glow.png");
 		private final RenderDarkDruid renderer;

@@ -17,7 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 
 public class FlyingNodeProcessorBL extends NodeProcessor {
 	public int preferredMinHeight = -1;
@@ -73,12 +73,12 @@ public class FlyingNodeProcessorBL extends NodeProcessor {
 	}
 
 	@Override
-	public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+	public PathNodeType getPathNodeType(IWorldReader blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
 		return this.isFree(x, y, z);
 	}
 
 	@Override
-	public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z) {
+	public PathNodeType getPathNodeType(IWorldReader blockaccessIn, int x, int y, int z) {
 		return this.isFree(x, y, z);
 	}
 

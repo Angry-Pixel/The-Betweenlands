@@ -8,6 +8,6 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 public class RenderSapSpit extends RenderSnowball<EntitySapSpit> {
 	public RenderSapSpit(RenderManager renderManagerIn) {
-		super(renderManagerIn, ItemRegistry.SAP_SPIT, Minecraft.getMinecraft().getRenderItem());
+		super(renderManagerIn, ItemRegistry.SAP_SPIT, Minecraft.getInstance().getRenderItem());
 	}
 }

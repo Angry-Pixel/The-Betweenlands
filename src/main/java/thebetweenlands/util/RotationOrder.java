@@ -1,8 +1,9 @@
 package thebetweenlands.util;
 
 
-import net.minecraft.util.EnumFacing.Axis;
 import org.lwjgl.opengl.GL11;
+
+import net.minecraft.util.EnumFacing.Axis;
 
 
 public enum RotationOrder {

@@ -3,27 +3,27 @@ package thebetweenlands.client.render.entity;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.model.entity.ModelSwordEnergy;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 	private static final ResourceLocation FORCE_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
 	private static ModelSwordEnergy model = new ModelSwordEnergy();
@@ -136,7 +136,7 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 		GlStateManager.translate((float) x, (float) (y), (float) z);
 		GlStateManager.scale(1.25F, 1.25F, 1.25F);
 		GlStateManager.rotate(ticks * 4F, 0, 1, 0);
-		Minecraft.getMinecraft().getRenderItem().renderItem(item, ItemCameraTransforms.TransformType.GROUND);
+		Minecraft.getInstance().getRenderItem().renderItem(item, ItemCameraTransforms.TransformType.GROUND);
 		GlStateManager.popMatrix();
 	}
 

@@ -3,6 +3,8 @@ package thebetweenlands.common.item.tools;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,16 +19,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
-
-import javax.annotation.Nullable;
 
 public class ItemSickle extends Item implements ICorrodible, IAnimatorRepairable {
 	public ItemSickle() {
@@ -40,7 +40,7 @@ public class ItemSickle extends Item implements ICorrodible, IAnimatorRepairable
 	@Override
 	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
 		boolean shouldDrop = player.world.rand.nextFloat() <= 1.0F * CorrosionHelper.getModifier(itemstack);
-		if (player.world.isRemote || player.capabilities.isCreativeMode || !shouldDrop)
+		if (player.world.isRemote || player.abilities.isCreativeMode || !shouldDrop)
 			return false;
 		Block block = player.world.getBlockState(pos).getBlock();
 		if (block instanceof ISickleHarvestable) {
@@ -91,7 +91,7 @@ public class ItemSickle extends Item implements ICorrodible, IAnimatorRepairable
 		CorrosionHelper.updateCorrosion(itemStack, world, holder, slot, isHeldItem);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());

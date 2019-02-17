@@ -2,8 +2,7 @@ package thebetweenlands.client.gui;
 
 import java.io.IOException;
 
-import org.lwjgl.input.Keyboard;
-
+import net.java.games.input.Keyboard;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;

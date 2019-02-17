@@ -12,9 +12,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAdditionalSpawnData {
@@ -68,7 +68,7 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 			if (brokenEntity instanceof EntityPlayer) {
 				EntityPlayer entityplayer = (EntityPlayer)brokenEntity;
 
-				if (entityplayer.capabilities.isCreativeMode) {
+				if (entityplayer.abilities.isCreativeMode) {
 					return;
 				}
 			}
@@ -88,7 +88,7 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
 		BlockPos blockpos = this.hangingPosition.add(x - this.posX, y - this.posY, z - this.posZ);
 		this.setPosition((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ());

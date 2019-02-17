@@ -2,9 +2,7 @@ package thebetweenlands.client.tab;
 
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 
 public abstract class CreativeTabBetweenlands extends CreativeTabs {
 	public CreativeTabBetweenlands(String label) {

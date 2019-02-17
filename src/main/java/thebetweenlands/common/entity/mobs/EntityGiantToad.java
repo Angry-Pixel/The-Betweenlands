@@ -32,9 +32,9 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.client.render.model.ControlledAnimation;
@@ -322,7 +322,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 					} else {
 						this.world.setEntityState(this, (byte) 6);
 					}
-					if (!player.capabilities.isCreativeMode) {
+					if (!player.abilities.isCreativeMode) {
 						player.getHeldItem(hand).shrink(1);
 						if (player.getHeldItem(hand).getCount() <= 0)
 							player.setHeldItem(hand, ItemStack.EMPTY);
@@ -430,7 +430,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void spawnToadParticles(boolean isHeart) {
 		EnumParticleTypes enumparticletypes = isHeart ? EnumParticleTypes.HEART : EnumParticleTypes.SMOKE_NORMAL;
 		for (int i = 0; i < 7; ++i) {
@@ -441,7 +441,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void handleStatusUpdate(byte id) {
 		if (id == 8) {

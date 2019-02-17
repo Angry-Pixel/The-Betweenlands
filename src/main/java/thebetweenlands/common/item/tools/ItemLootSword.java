@@ -1,14 +1,14 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import thebetweenlands.client.tab.BLCreativeTabs;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class ItemLootSword extends ItemBLSword {
     private List<Class<? extends EntityLivingBase>> instantKills = new ArrayList<>();

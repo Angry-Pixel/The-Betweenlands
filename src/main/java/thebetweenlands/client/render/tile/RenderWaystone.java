@@ -9,7 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ColorizerGrass;
-import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraft.world.biome.BiomeColors;
 import thebetweenlands.client.render.model.tile.ModelWaystone;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
@@ -113,7 +113,7 @@ public class RenderWaystone extends TileEntitySpecialRenderer<TileEntityWaystone
 			} else {
 				this.bindTexture(TEXTURE_GRASS);
 
-				int grassColor = te != null ? BiomeColorHelper.getGrassColorAtPos(te.getWorld(), te.getPos()) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
+				int grassColor = te != null ? BiomeColors.getGrassColor(te.getWorld(), te.getPos()) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
 
 				GlStateManager.color((float)(grassColor >> 16 & 0xff) / 255F, (float)(grassColor >> 8 & 0xff) / 255F, (float)(grassColor & 0xff) / 255F);
 

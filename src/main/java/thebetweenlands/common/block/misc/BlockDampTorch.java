@@ -8,8 +8,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -22,9 +22,9 @@ public class BlockDampTorch extends BlockTorch {
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		if(rand.nextInt(4) == 0) {
 			EnumFacing facing = (EnumFacing)stateIn.getValue(FACING);
 			double x = (double)pos.getX() + 0.5D;

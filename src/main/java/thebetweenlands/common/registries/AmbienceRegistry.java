@@ -1,8 +1,8 @@
 package thebetweenlands.common.registries;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceManager;
 import thebetweenlands.client.audio.ambience.list.CaveAmbienceType;
@@ -18,7 +18,7 @@ import thebetweenlands.common.world.event.EventBloodSky;
 import thebetweenlands.common.world.event.EventSpoopy;
 import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class AmbienceRegistry {
 	public static final AmbienceLayer BASE_LAYER = new AmbienceLayer(new ResourceLocation("base_layer"));
 

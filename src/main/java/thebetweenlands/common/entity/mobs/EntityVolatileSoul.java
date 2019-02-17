@@ -25,11 +25,9 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 
 public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL {
 	private Entity target = null;
@@ -271,7 +269,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 		nbt.setInteger("strikes", this.strikes);
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public Collection<Vec3d> getTrail() {
 		return this.trail;
 	}

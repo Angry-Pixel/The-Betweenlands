@@ -6,12 +6,12 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -19,8 +19,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.model.tile.ModelInfuser;
 import thebetweenlands.common.block.container.BlockInfuser;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -29,7 +29,7 @@ import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityInfuser;
 import thebetweenlands.util.TileEntityHelper;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> {
 	private final ModelInfuser model = new ModelInfuser();
 	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/infuser.png");
@@ -112,7 +112,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 		if (amount >= 100) {
 			Tessellator tess = Tessellator.getInstance();
 			BufferBuilder vb = tess.getBuffer();
-			TextureAtlasSprite waterSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(FluidRegistry.SWAMP_WATER.getStill().toString());
+			TextureAtlasSprite waterSprite = Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite(FluidRegistry.SWAMP_WATER.getStill().toString());
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(770, 771);
@@ -152,7 +152,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 			GlStateManager.scale(0.25D, 0.25D, 0.25D);
 			GlStateManager.translate(0D, itemBob, 0D);
 			GlStateManager.rotate((float) rotation, 0, 1, 0);
-			Minecraft.getMinecraft().getRenderItem().renderItem(infuser.getStackInSlot(slotIndex), TransformType.FIXED);
+			Minecraft.getInstance().getRenderItem().renderItem(infuser.getStackInSlot(slotIndex), TransformType.FIXED);
 			GlStateManager.popMatrix();
 		}
 	}
@@ -164,8 +164,8 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x + 0.5F, y + height + 0.75F, z + 0.5F);
 		GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+		GlStateManager.rotate(-Minecraft.getInstance().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(Minecraft.getInstance().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
 		GlStateManager.scale(-scale, -scale, scale);
 		GlStateManager.disableLighting();
 		GlStateManager.depthMask(false);
@@ -178,7 +178,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 		BufferBuilder vb = tessellator.getBuffer();
 
 		vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-		FontRenderer fontrenderer = Minecraft.getMinecraft().fontRenderer;
+		FontRenderer fontrenderer = Minecraft.getInstance().fontRenderer;
 		int width = fontrenderer.getStringWidth(count) / 2;
 		vb.pos(-width - 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
 		vb.pos(-width - 1, 8, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();

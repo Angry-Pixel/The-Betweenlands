@@ -10,8 +10,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.EntityRopeNode;
-import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
-import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.IStateMappedBlock;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
 public class BlockCavingRopeLight extends BlockAir implements ICustomItemBlock, IStateMappedBlock {

@@ -3,38 +3,47 @@ package thebetweenlands.client.gui.menu;
 import java.io.IOException;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GLContext;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Runnables;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.util.StringUtils;
-import net.minecraftforge.client.ForgeHooksClient;
-import net.minecraftforge.client.gui.NotificationModUpdateScreen;
-import net.minecraftforge.fml.client.GuiModList;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 
+import net.java.games.input.Mouse;
+import net.minecraft.client.GameSettings;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiConfirmOpenLink;
+import net.minecraft.client.gui.GuiLanguage;
+import net.minecraft.client.gui.GuiMainMenu;
+import net.minecraft.client.gui.GuiMultiplayer;
+import net.minecraft.client.gui.GuiOptions;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiWinGame;
+import net.minecraft.client.gui.GuiWorldSelection;
+import net.minecraft.client.gui.GuiYesNo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.realms.RealmsBridge;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.WorldServerDemo;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.WorldInfo;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.GuiOpenEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.lwjgl.opengl.GLContext;
-
+import net.minecraftforge.client.gui.NotificationModUpdateScreen;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.client.gui.GuiModList;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -115,7 +124,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
 
 		this.mc.setConnectedToRealms(false);
 
-		if (Minecraft.getMinecraft().gameSettings.getOptionOrdinalValue(GameSettings.Options.REALMS_NOTIFICATIONS) && !this.hasCheckedForRealmsNotification) {
+		if (Minecraft.getInstance().gameSettings.getOptionOrdinalValue(GameSettings.Options.REALMS_NOTIFICATIONS) && !this.hasCheckedForRealmsNotification) {
 			RealmsBridge realmsbridge = new RealmsBridge();
 			this.realmsNotification = realmsbridge.getNotificationScreen(this);
 			this.hasCheckedForRealmsNotification = true;
@@ -130,7 +139,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
 	}
 
 	private boolean areRealmsNotificationsEnabled() {
-		return Minecraft.getMinecraft().gameSettings.getOptionOrdinalValue(GameSettings.Options.REALMS_NOTIFICATIONS) && this.realmsNotification != null;
+		return Minecraft.getInstance().gameSettings.getOptionOrdinalValue(GameSettings.Options.REALMS_NOTIFICATIONS) && this.realmsNotification != null;
 	}
 
 	@Override

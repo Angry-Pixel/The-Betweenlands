@@ -9,7 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockFlatheadMushroom extends BlockMushroomBetweenlands {
@@ -19,12 +19,12 @@ public class BlockFlatheadMushroom extends BlockMushroomBetweenlands {
 	}
 
 	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
+	public boolean isShearable(ItemStack item, IWorldReader world, BlockPos pos) {
 		return false;
 	}
 
 	@Override
-	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+	public List<ItemStack> onSheared(ItemStack item, IWorldReader world, BlockPos pos, int fortune) {
 		return ImmutableList.of();
 	}
 }

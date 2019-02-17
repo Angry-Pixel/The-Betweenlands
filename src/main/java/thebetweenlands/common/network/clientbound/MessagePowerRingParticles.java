@@ -1,10 +1,11 @@
 package thebetweenlands.common.network.clientbound;
 
+import javax.xml.ws.handler.MessageContext;
+
 import net.minecraft.entity.Entity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.handler.AttackDamageHandler;
 import thebetweenlands.common.network.MessageEntity;
 
@@ -19,14 +20,14 @@ public class MessagePowerRingParticles extends MessageEntity {
 	public IMessage process(MessageContext ctx) {
 		super.process(ctx);
 
-		if(ctx.side == Side.CLIENT) {
+		if(ctx.side == Dist.CLIENT) {
 			this.handle();
 		}
 
 		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private void handle() {
 		Entity entityHit = this.getEntity(0);
 		if(entityHit != null) {

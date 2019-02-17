@@ -23,10 +23,10 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ParticleBatchTypeBuilder {
 	public static class Pass {
 		private final ParticleBatchTypeBuilder builder;
@@ -209,8 +209,8 @@ public class ParticleBatchTypeBuilder {
 				GlStateManager.blendFunc(pass.glBlendSrc, pass.glBlendDst);
 
 				if(pass.texture != null) {
-					Minecraft.getMinecraft().getTextureManager().bindTexture(pass.texture);
-					ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(pass.texture);
+					Minecraft.getInstance().getTextureManager().bindTexture(pass.texture);
+					ITextureObject tex = Minecraft.getInstance().getTextureManager().getTexture(pass.texture);
 					if(tex != null) {
 						tex.setBlurMipmap(pass.blur, pass.mipmap);
 					}
@@ -219,8 +219,8 @@ public class ParticleBatchTypeBuilder {
 
 			protected void postSetup(Pass pass) {
 				if(pass.texture != null) {
-					Minecraft.getMinecraft().getTextureManager().bindTexture(pass.texture);
-					ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(pass.texture);
+					Minecraft.getInstance().getTextureManager().bindTexture(pass.texture);
+					ITextureObject tex = Minecraft.getInstance().getTextureManager().getTexture(pass.texture);
 					if(tex != null) {
 						tex.restoreLastBlurMipmap();
 					}

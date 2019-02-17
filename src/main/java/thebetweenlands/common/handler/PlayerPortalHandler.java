@@ -7,18 +7,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.client.audio.PortalSound;
 import thebetweenlands.client.render.shader.ShaderHelper;
@@ -58,7 +56,7 @@ public class PlayerPortalHandler {
 
 					if(inPortalBlock) {
 						if(!cap.wasTeleported()) {
-							if (cap.getTicksUntilTeleport() <= 0 || player.capabilities.isCreativeMode) {
+							if (cap.getTicksUntilTeleport() <= 0 || player.abilities.isCreativeMode) {
 								if(player.world instanceof WorldServer) {
 									BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(player.world);
 									AxisAlignedBB entityAabb = player.getEntityBoundingBox();
@@ -103,11 +101,11 @@ public class PlayerPortalHandler {
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
 		if(event.phase == Phase.END) {
-			EntityPlayerSP player = Minecraft.getMinecraft().player;
+			EntityPlayerSP player = Minecraft.getInstance().player;
 	
 			if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
 				IPortalCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
@@ -120,7 +118,7 @@ public class PlayerPortalHandler {
 						player.closeScreen();
 	
 						if (timer == MAX_PORTAL_TIME - 1) {
-							Minecraft.getMinecraft().getSoundHandler().playSound(new PortalSound(SoundRegistry.PORTAL_TRIGGER, SoundCategory.BLOCKS, player));
+							Minecraft.getInstance().getSoundHandler().playSound(new PortalSound(SoundRegistry.PORTAL_TRIGGER, SoundCategory.BLOCKS, player));
 						}
 	
 						if (timer == 2) {

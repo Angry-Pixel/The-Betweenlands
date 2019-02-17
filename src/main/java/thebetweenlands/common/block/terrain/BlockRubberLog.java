@@ -8,37 +8,37 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.IStateMappedBlock;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
-	public static final PropertyBool NORTH = PropertyBool.create("north");
-	public static final PropertyBool EAST = PropertyBool.create("east");
-	public static final PropertyBool SOUTH = PropertyBool.create("south");
-	public static final PropertyBool WEST = PropertyBool.create("west");
-	public static final PropertyBool UP = PropertyBool.create("up");
-	public static final PropertyBool DOWN = PropertyBool.create("down");
-	public static final PropertyBool NATURAL = PropertyBool.create("natural");
+	public static final BooleanProperty NORTH = BooleanProperty.create("north");
+	public static final BooleanProperty EAST = BooleanProperty.create("east");
+	public static final BooleanProperty SOUTH = BooleanProperty.create("south");
+	public static final BooleanProperty WEST = BooleanProperty.create("west");
+	public static final BooleanProperty UP = BooleanProperty.create("up");
+	public static final BooleanProperty DOWN = BooleanProperty.create("down");
+	public static final BooleanProperty NATURAL = BooleanProperty.create("natural");
 
 	protected static final AxisAlignedBB[] BOUNDING_BOXES = new AxisAlignedBB[] {
 			//CENTER
@@ -151,7 +151,7 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
 		return state
 				.withProperty(NORTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.north())))
 				.withProperty(EAST, Boolean.valueOf(this.canConnectTo(worldIn, pos.east())))
@@ -161,7 +161,7 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 				.withProperty(DOWN, Boolean.valueOf(worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP) || this.canConnectTo(worldIn, pos.down())));
 	}
 
-	public boolean canConnectTo(IBlockAccess worldIn, BlockPos pos) {
+	public boolean canConnectTo(IWorldReader worldIn, BlockPos pos) {
 		Block block = worldIn.getBlockState(pos).getBlock();
 		return block == this || block == BlockRegistry.LEAVES_RUBBER_TREE;
 	}
@@ -229,19 +229,19 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
 		state = this.getActualState(state, source, pos);
 		return getCombinedBoundingBoxForState(state);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(LOG_AXIS).ignore(NATURAL).withPropertySuffixFalse(NATURAL, "cut");
 	}
 	
 	@Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
 	

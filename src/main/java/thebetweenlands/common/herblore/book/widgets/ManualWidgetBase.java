@@ -3,20 +3,23 @@ package thebetweenlands.common.herblore.book.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.util.ITooltipFlag;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
@@ -24,7 +27,7 @@ import thebetweenlands.common.herblore.book.ManualCategory;
 import thebetweenlands.common.herblore.book.Page;
 import thebetweenlands.common.registries.ItemRegistry;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ManualWidgetBase {
     public static ResourceLocation icons = new ResourceLocation("thebetweenlands:textures/gui/manual/icons.png");
     public static String processTimeString = I18n.translateToLocal("manual.widget.process.time");
@@ -42,7 +45,7 @@ public class ManualWidgetBase {
     protected int mouseX;
     protected int mouseY;
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public ManualWidgetBase(int xStart, int yStart) {
         this.unchangedXStart = xStart;
         this.unchangedYStart = yStart;
@@ -58,7 +61,7 @@ public class ManualWidgetBase {
      * @param color2      the color of the outlining
      * @return some kind of number?
      */
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static int renderTooltip(int x, int y, List<String> tooltipData, int color, int color2) {
         boolean lighting = GL11.glGetBoolean(GL11.GL_LIGHTING);
         if (lighting)
@@ -69,7 +72,7 @@ public class ManualWidgetBase {
             int var5 = 0;
             int var6;
 
-            FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+            FontRenderer fontRenderer = Minecraft.getInstance().fontRenderer;
             for (var6 = 0; var6 < tooltipData.size(); ++var6) {
                 var7 = fontRenderer.getStringWidth(tooltipData.get(var6));
                 if (var7 > var5)
@@ -119,7 +122,7 @@ public class ManualWidgetBase {
      * @param startColor
      * @param endColor
      */
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void drawGradientRect(int left, int top, float z, int right, int bottom, int startColor, int endColor) {
         float var7 = (startColor >> 24 & 255) / 255F;
         float var8 = (startColor >> 16 & 255) / 255F;
@@ -148,23 +151,23 @@ public class ManualWidgetBase {
         GlStateManager.enableTexture2D();
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void init(GuiManualHerblore manual) {
         this.manual = manual;
         resize();
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setPageToLeft() {
         this.isPageRight = false;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setPageToRight() {
         this.isPageRight = true;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void draw(int mouseX, int mouseY) {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
@@ -173,13 +176,13 @@ public class ManualWidgetBase {
         drawForeGround();
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void resize() {
         this.xStart = (isPageRight ? manual.xStartRightPage : manual.xStart) + unchangedXStart;
         this.yStart = manual.yStart + unchangedYStart;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void drawBackGround() {
 
     }
@@ -189,7 +192,7 @@ public class ManualWidgetBase {
      *
      * @param xStart the new x start
      */
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void changeXStart(int xStart) {
         this.unchangedXStart = xStart;
         //this.xStart = manual.xStart + unchangedXStart;
@@ -200,32 +203,32 @@ public class ManualWidgetBase {
      *
      * @param yStart the new y start
      */
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void changeYStart(int yStart) {
         this.unchangedYStart = yStart;
         //this.yStart = manual.yStart + unchangedYStart;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void drawForeGround() {
     }
 
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void drawToolTip() {
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void keyTyped(char c, int key) {
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateScreen() {
         if (manual.untilUpdate % 5 == 0)
             resize();
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void mouseClicked(int x, int y, int mouseButton) {
         if (mouseButton == 0) {
             for (PageLink link : pageLinks)
@@ -242,9 +245,9 @@ public class ManualWidgetBase {
      * @param stack             the item stack to draw
      * @param hasSpecialTooltip whether or not the item has a special tooltip
      */
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void renderItem(int xPos, int yPos, ItemStack stack, boolean hasSpecialTooltip, boolean addPageLink, Item book) {
-        RenderItem render = Minecraft.getMinecraft().getRenderItem();
+        RenderItem render = Minecraft.getInstance().getRenderItem();
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -252,7 +255,7 @@ public class ManualWidgetBase {
         GlStateManager.enableRescaleNormal();
         GlStateManager.enableDepth();
         render.renderItemAndEffectIntoGUI(stack, xPos, yPos);
-        render.renderItemOverlays(Minecraft.getMinecraft().fontRenderer, stack, xPos, yPos);
+        render.renderItemOverlays(Minecraft.getInstance().fontRenderer, stack, xPos, yPos);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
 
@@ -266,7 +269,7 @@ public class ManualWidgetBase {
         }
         if (!hasSpecialTooltip && mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 16 && mouseY <= yPos + 16) {
             if (!stack.isEmpty()) {
-                List<String> tooltipData = stack.getTooltip(Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL);
+                List<String> tooltipData = stack.getTooltip(Minecraft.getInstance().player, ITooltipFlag.TooltipFlags.NORMAL);
                 List<String> parsedTooltip = new ArrayList<>();
                 boolean first = true;
                 if (addPageLink && shouldShowTooltip)
@@ -293,11 +296,11 @@ public class ManualWidgetBase {
      * @param stack    the item stack the tooltip is for
      * @param toolTips the tooltip lines
      */
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void addSpecialItemTooltip(int xPos, int yPos, ItemStack stack, ArrayList<String> toolTips) {
         if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 16 && mouseY <= yPos + 16) {
             if (stack != null) {
-                List<String> tooltipData = stack.getTooltip(Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL);
+                List<String> tooltipData = stack.getTooltip(Minecraft.getInstance().player, ITooltipFlag.TooltipFlags.NORMAL);
                 List<String> parsedTooltip = new ArrayList<>();
                 boolean first = true;
 

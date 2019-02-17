@@ -2,11 +2,10 @@ package thebetweenlands.client.render.model.baked;
 
 import java.util.Collection;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonParser;
 
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;

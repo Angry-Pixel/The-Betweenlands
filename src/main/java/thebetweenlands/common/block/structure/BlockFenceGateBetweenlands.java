@@ -6,37 +6,34 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockWall;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.IStateMappedBlock;
 import thebetweenlands.util.AdvancedStateMap;
 
 /**
  * Just a vanilla C&P because it's not extensible...
  */
 public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStateMappedBlock {
-    public static final PropertyBool OPEN = PropertyBool.create("open");
-    public static final PropertyBool POWERED = PropertyBool.create("powered");
-    public static final PropertyBool IN_WALL = PropertyBool.create("in_wall");
+    public static final BooleanProperty OPEN = BooleanProperty.create("open");
+    public static final BooleanProperty POWERED = BooleanProperty.create("powered");
+    public static final BooleanProperty IN_WALL = BooleanProperty.create("in_wall");
     protected static final AxisAlignedBB AABB_HITBOX_ZAXIS = new AxisAlignedBB(0.0D, 0.0D, 0.375D, 1.0D, 1.0D, 0.625D);
     protected static final AxisAlignedBB AABB_HITBOX_XAXIS = new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 1.0D, 1.0D);
     protected static final AxisAlignedBB AABB_HITBOX_ZAXIS_INWALL = new AxisAlignedBB(0.0D, 0.0D, 0.375D, 1.0D, 0.8125D, 0.625D);
@@ -53,7 +50,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
         state = this.getActualState(state, source, pos);
 
         if (state.getValue(IN_WALL)) {
@@ -68,7 +65,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
      * metadata, such as fence connections.
      */
     @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+    public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
         EnumFacing.Axis enumfacing$axis = state.getValue(FACING).getAxis();
 
         if (enumfacing$axis == EnumFacing.Axis.Z && (canFenceGateConnectTo(worldIn, pos, EnumFacing.WEST) || canFenceGateConnectTo(worldIn, pos, EnumFacing.EAST))
@@ -104,7 +101,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
 
     @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IWorldReader worldIn, BlockPos pos) {
         if (blockState.getValue(OPEN)) {
             return NULL_AABB;
         } else {
@@ -126,7 +123,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
     }
 
     @Override
-    public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+    public boolean isPassable(IWorldReader worldIn, BlockPos pos) {
         return worldIn.getBlockState(pos).getValue(OPEN);
     }
 
@@ -139,10 +136,9 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
         boolean flag = worldIn.isBlockPowered(pos);
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing()).withProperty(OPEN, flag).withProperty(POWERED, flag).withProperty(IN_WALL, Boolean.FALSE);
     }
-
-
+    
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (state.getValue(OPEN)) {
             state = state.withProperty(OPEN, Boolean.FALSE);
             worldIn.setBlockState(pos, state, 10);
@@ -181,9 +177,9 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(IBlockState blockState, IWorldReader blockAccess, BlockPos pos, EnumFacing side) {
         return true;
     }
 
@@ -220,7 +216,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setStateMapper(AdvancedStateMap.Builder builder) {
         builder.ignore(POWERED);
     }
@@ -228,12 +224,12 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
     /* ======================================== FORGE START ======================================== */
 
     @Override
-    public boolean canBeConnectedTo(IBlockAccess world, BlockPos pos, EnumFacing facing) {
+    public boolean canBeConnectedTo(IWorldReader world, BlockPos pos, EnumFacing facing) {
         Block connector = world.getBlockState(pos.offset(facing)).getBlock();
         return connector instanceof BlockFence || connector instanceof BlockWall || connector instanceof BlockWallBetweenlands || connector instanceof BlockFenceBetweenlands;
     }
 
-    private boolean canFenceGateConnectTo(IBlockAccess world, BlockPos pos, EnumFacing facing) {
+    private boolean canFenceGateConnectTo(IWorldReader world, BlockPos pos, EnumFacing facing) {
         Block block = world.getBlockState(pos.offset(facing)).getBlock();
         return block.canBeConnectedTo(world, pos.offset(facing), facing.getOpposite());
     }
@@ -241,7 +237,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
     /* ======================================== FORGE END ======================================== */
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing facing) {
+    public BlockFaceShape getBlockFaceShape(IWorldReader world, IBlockState state, BlockPos pos, EnumFacing facing) {
         if (facing != EnumFacing.UP && facing != EnumFacing.DOWN) {
             return state.getValue(FACING).getAxis() == facing.rotateY().getAxis() ? BlockFaceShape.MIDDLE_POLE : BlockFaceShape.UNDEFINED;
         } else {

@@ -2,20 +2,17 @@ package thebetweenlands.common.block.container;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.IProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -24,10 +21,11 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.DiscoveryContainer;
@@ -104,7 +102,7 @@ public class BlockGeckoCage extends BlockContainer {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void spawnHeartParticles(World world, BlockPos pos) {
 		for (int i = 0; i < 7; ++i) {
 			double d0 = world.rand.nextGaussian() * 0.02D;
@@ -115,7 +113,7 @@ public class BlockGeckoCage extends BlockContainer {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItemStack = player.getHeldItem(hand);
 		TileEntity te = world.getTileEntity(pos);
 		if (te instanceof TileEntityGeckoCage) {
@@ -135,7 +133,7 @@ public class BlockGeckoCage extends BlockContainer {
 									name = heldItemStack.getDisplayName();
 	
 							tile.addGecko(heldItemStack.hasTagCompound() && heldItemStack.getTagCompound().hasKey("Health") ? (int) heldItemStack.getTagCompound().getFloat("Health") : 12, name);
-							if(!player.capabilities.isCreativeMode)
+							if(!player.abilities.isCreativeMode)
 								heldItemStack.shrink(1);
 						}
 						return true;
@@ -145,7 +143,7 @@ public class BlockGeckoCage extends BlockContainer {
 				if(heldItem == ItemRegistry.SAP_SPIT && tile.hasGecko() && tile.getGeckoUsages() < 12) {
 					if(!world.isRemote) {
 						tile.setGeckoUsages(12);
-						if(!player.capabilities.isCreativeMode)
+						if(!player.abilities.isCreativeMode)
 							heldItemStack.shrink(1);
 					} else {
 						this.spawnHeartParticles(world, pos);
@@ -177,7 +175,7 @@ public class BlockGeckoCage extends BlockContainer {
                                         } else {
                                             player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.more"), true);
                                         }
-										if(!player.capabilities.isCreativeMode)
+										if(!player.abilities.isCreativeMode)
                                             heldItemStack.shrink(1);
 										return true;
 									case END:
@@ -227,7 +225,7 @@ public class BlockGeckoCage extends BlockContainer {
 	}
 	
 	@Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
 }

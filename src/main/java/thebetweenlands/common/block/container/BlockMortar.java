@@ -1,11 +1,12 @@
 package thebetweenlands.common.block.container;
 
+import java.util.Random;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -18,16 +19,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMortar;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class BlockMortar extends BlockContainer {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
@@ -51,7 +50,7 @@ public class BlockMortar extends BlockContainer {
 	}
 
 	@Override
-	public void onBlockClicked(World worldIn, BlockPos pos, EntityPlayer playerIn) {
+	public void onBlockClicked(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn) {
 		if(!worldIn.isRemote) {
 			if (worldIn.getTileEntity(pos) instanceof TileEntityMortar) {
 				TileEntityMortar tile = (TileEntityMortar) worldIn.getTileEntity(pos);
@@ -89,7 +88,7 @@ public class BlockMortar extends BlockContainer {
 	}
 
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+	public void onReplaced(IBlockState state, World world, BlockPos pos, IBlockState newState, boolean isMoving) {
 		IInventory tile = (IInventory) world.getTileEntity(pos);
 		if (tile != null)
 			for (int i = 0; i < tile.getSizeInventory(); i++) {
@@ -109,11 +108,11 @@ public class BlockMortar extends BlockContainer {
 					}
 				}
 			}
-		super.breakBlock(world, pos, state);
+		super.onReplaced(state, world, pos, newState, isMoving);
 	}
 
 	@Override
-	public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random rand) {
+	public void animateTick(IBlockState stateIn, World world, BlockPos pos, Random rand) {
 		TileEntityMortar tile = (TileEntityMortar) world.getTileEntity(pos);
 		if (tile.progress > 0 && rand.nextInt(3) == 0) {
 			float f = pos.getX() + 0.5F;
@@ -154,7 +153,7 @@ public class BlockMortar extends BlockContainer {
 	}
 	
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
 	}
 }

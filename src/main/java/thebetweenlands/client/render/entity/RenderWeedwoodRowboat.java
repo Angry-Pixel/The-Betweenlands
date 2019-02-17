@@ -3,17 +3,17 @@ package thebetweenlands.client.render.entity;
 import java.util.EnumMap;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Quaternion;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Quaternion;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.model.ModelRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,8 +23,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import thebetweenlands.client.render.model.entity.rowboat.ModelWeedwoodRowboat;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.entity.rowboat.ShipSide;
@@ -105,7 +104,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         int by = MathHelper.floor_double(bpy);
         int bz = MathHelper.floor_double(bpz);
         OpenSimplexNoise waveRng = new OpenSimplexNoise(6354);
-        TextureMap texturemap = Minecraft.getMinecraft().getTextureMapBlocks();
+        TextureMap texturemap = Minecraft.getInstance().getTextureMapBlocks();
         TextureAtlasSprite sprite = texturemap.getAtlasSprite("minecraft:blocks/water_still");
         bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         GlStateManager.pushMatrix();
@@ -220,7 +219,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         if (riding instanceof EntityWeedwoodRowboat && riding.getControllingPassenger() == e) {
             event.setCanceled(true);
             EntityWeedwoodRowboat rowboat = (EntityWeedwoodRowboat) riding;
-            float delta = isRenderingWorld ? Minecraft.getMinecraft().getRenderPartialTicks() : 1;
+            float delta = isRenderingWorld ? Minecraft.getInstance().getRenderPartialTicks() : 1;
             model.animateOar(rowboat, ShipSide.STARBOARD, delta);
             model.animateOar(rowboat, ShipSide.PORT, delta);
             calculateGrip(rowboat, ShipSide.STARBOARD, delta);

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import net.java.games.input.Mouse;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
@@ -22,10 +22,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -73,17 +72,17 @@ public class RadialMenuHandler {
 	public void onMouseInput(MouseEvent event) {
 		if(this.isOpen) {
 			event.setCanceled(true);
-			if(Minecraft.getMinecraft().inGameHasFocus) {
-				Minecraft.getMinecraft().mouseHelper.ungrabMouseCursor();
-				Minecraft.getMinecraft().inGameHasFocus = false;
+			if(Minecraft.getInstance().inGameHasFocus) {
+				Minecraft.getInstance().mouseHelper.ungrabMouseCursor();
+				Minecraft.getInstance().inGameHasFocus = false;
 				this.repositionMouse = true;
 			}
 			if(this.mouseButtons == null || this.mouseButtons.length < Mouse.getButtonCount()) {
 				this.mouseButtons = new boolean[Mouse.getButtonCount()];
 			}
-			ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
-			double mouseX = (this.prevMouseX * res.getScaledWidth()) / Minecraft.getMinecraft().displayWidth;
-			double mouseY = res.getScaledHeight() - (this.prevMouseY * res.getScaledHeight()) / Minecraft.getMinecraft().displayHeight;
+			ScaledResolution res = new ScaledResolution(Minecraft.getInstance());
+			double mouseX = (this.prevMouseX * res.getScaledWidth()) / Minecraft.getInstance().displayWidth;
+			double mouseY = res.getScaledHeight() - (this.prevMouseY * res.getScaledHeight()) / Minecraft.getInstance().displayHeight;
 			for(int i = 0; i < Mouse.getButtonCount(); i++) {
 				if(Mouse.isButtonDown(i)) {
 					if(!this.mouseButtons[i]) {
@@ -99,9 +98,9 @@ public class RadialMenuHandler {
 
 	public void openGUI() {
 		this.isOpen = true;
-		Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-		Minecraft.getMinecraft().mouseHelper.ungrabMouseCursor();
-		Minecraft.getMinecraft().inGameHasFocus = false;
+		Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+		Minecraft.getInstance().mouseHelper.ungrabMouseCursor();
+		Minecraft.getInstance().inGameHasFocus = false;
 		this.prevMouseX = Mouse.getX();
 		this.prevMouseY = Mouse.getY();
 
@@ -110,8 +109,8 @@ public class RadialMenuHandler {
 
 	public void closeGUI() {
 		this.isOpen = false;
-		Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-		Minecraft.getMinecraft().setIngameFocus();
+		Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+		Minecraft.getInstance().setIngameFocus();
 	}
 
 	public boolean isOpen() {
@@ -366,7 +365,7 @@ public class RadialMenuHandler {
 	@SubscribeEvent
 	public void renderGui(RenderGameOverlayEvent.Post event) {
 		if(event.getType() == ElementType.HOTBAR) {
-			Minecraft mc = Minecraft.getMinecraft();
+			Minecraft mc = Minecraft.getInstance();
 
 			if(mc.currentScreen != null && this.isOpen) {
 				this.closeGUI();
@@ -583,7 +582,7 @@ public class RadialMenuHandler {
 				this.lastCategories.remove(this.lastCategories.size() - 1);
 				//this.displayedCategories = 0;
 				this.displayedCategories = this.currentCategory.getCategories().size();
-				Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			}
 		} else {
 			for(int i = 0; i < Math.min(this.currentCategory.getCategories().size(), this.displayedCategories); i++) {
@@ -599,7 +598,7 @@ public class RadialMenuHandler {
 							this.closeGUI();
 						}
 					}
-					Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+					Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					break;
 				}
 			}

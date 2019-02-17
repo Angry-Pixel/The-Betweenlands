@@ -1,6 +1,6 @@
 package thebetweenlands.client.render.model.armor;
 
-import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.model.ModelRenderer;
 
 public class ModelExplorersHat extends ModelBodyAttachment {
 	public ModelRenderer hatrim;

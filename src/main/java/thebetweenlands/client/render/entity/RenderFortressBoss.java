@@ -1,9 +1,9 @@
 package thebetweenlands.client.render.entity;
 
-import net.minecraft.client.renderer.BufferBuilder;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -299,8 +299,8 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 		if(this.getRenderManager().isDebugBoundingBox()) {
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.disableCull();
-			Vec3d pos = Minecraft.getMinecraft().player.getPositionEyes(partialTicks);
-			Vec3d ray = Minecraft.getMinecraft().player.getLook(partialTicks);
+			Vec3d pos = Minecraft.getInstance().player.getPositionEyes(partialTicks);
+			Vec3d ray = Minecraft.getInstance().player.getLook(partialTicks);
 			ray = ray.scale(64.0D);
 			int hitShield = boss.rayTraceShield(pos, ray, false);
 			if(hitShield >= 0) {

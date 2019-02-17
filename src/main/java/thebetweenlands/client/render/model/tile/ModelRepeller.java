@@ -1,13 +1,12 @@
 package thebetweenlands.client.render.model.tile;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.entity.model.ModelBase;
+import net.minecraft.client.renderer.entity.model.ModelRenderer;
 import thebetweenlands.common.registries.AspectRegistry;
-import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.util.ColorUtils;
 import thebetweenlands.util.LightingUtil;
 

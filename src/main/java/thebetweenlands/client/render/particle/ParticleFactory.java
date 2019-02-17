@@ -832,7 +832,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 	public final T spawn(World world, double x, double y, double z, @Nullable ParticleArgs<?> args) {
 		T particle = this.create(world, x, y, z, args);
 		if(particle != null)
-			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+			Minecraft.getInstance().effectRenderer.addEffect(particle);
 		return particle;
 	}
 }

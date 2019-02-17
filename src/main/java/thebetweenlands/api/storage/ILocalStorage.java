@@ -11,9 +11,9 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
 
 public interface ILocalStorage extends ICapabilityProvider {
@@ -104,7 +104,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * Sets the linked chunks. Only for use on client side for syncing
 	 * @param linkedChunks New linked chunks
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setLinkedChunks(List<ChunkPos> linkedChunks);
 
 	/**

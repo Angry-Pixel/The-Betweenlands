@@ -29,17 +29,16 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.ArmSwingSpeedEvent;
 import thebetweenlands.common.block.misc.BlockDampTorch;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -252,7 +251,7 @@ public class OverworldItemHandler {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onArmSwingSpeed(ArmSwingSpeedEvent event) {
 		if(event.getEntityLiving().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
@@ -275,14 +274,14 @@ public class OverworldItemHandler {
 
 	@SubscribeEvent
 	public static void onEntitySpawn(EntityJoinWorldEvent event) {
-		if(event.getEntity() instanceof EntityPlayer && !((EntityPlayer)event.getEntity()).capabilities.isCreativeMode) {
+		if(event.getEntity() instanceof EntityPlayer && !((EntityPlayer)event.getEntity()).abilities.isCreativeMode) {
 			updatePlayerInventory((EntityPlayer)event.getEntity());
 		}
 	}
 
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event) {
-		if(!event.player.world.isRemote && event.player.ticksExisted % 5 == 0 && !event.player.capabilities.isCreativeMode) {
+		if(!event.player.world.isRemote && event.player.ticksExisted % 5 == 0 && !event.player.abilities.isCreativeMode) {
 			updatePlayerInventory(event.player);
 		}
 	}
@@ -337,7 +336,7 @@ public class OverworldItemHandler {
 	@SubscribeEvent
 	public static void onItemPickup(EntityItemPickupEvent event) {
 		EntityPlayer player = event.getEntityPlayer();
-		if(player != null && !player.world.isRemote && !player.capabilities.isCreativeMode) {
+		if(player != null && !player.world.isRemote && !player.abilities.isCreativeMode) {
 			ItemStack stack = event.getItem().getItem();
 			if(!stack.isEmpty()) {
 				if(player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {

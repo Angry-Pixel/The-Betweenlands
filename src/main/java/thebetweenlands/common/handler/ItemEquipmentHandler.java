@@ -11,14 +11,14 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.TheBetweenlands;
@@ -37,12 +37,12 @@ public class ItemEquipmentHandler {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event) {
 		if(event.phase == Phase.END) {
 			World world = TheBetweenlands.proxy.getClientWorld();
-			if(world != null && !Minecraft.getMinecraft().isGamePaused()) {
+			if(world != null && !Minecraft.getInstance().isGamePaused()) {
 				tickEquipmentInventories(world);
 			}
 		}
@@ -82,7 +82,7 @@ public class ItemEquipmentHandler {
 						ItemStack result = EquipmentHelper.equipItem(player, target, heldItem, false);
 
 						if(result.isEmpty() || result.getCount() != heldItem.getCount()) {
-							if(!player.capabilities.isCreativeMode) {
+							if(!player.abilities.isCreativeMode) {
 								player.setHeldItem(event.getHand(), result);
 							}
 
@@ -153,7 +153,7 @@ public class ItemEquipmentHandler {
 						ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, false);
 
 						if(result.isEmpty() || result.getCount() != heldItem.getCount()) {
-							if(!player.capabilities.isCreativeMode) {
+							if(!player.abilities.isCreativeMode) {
 								player.setHeldItem(hand, result);
 							}
 

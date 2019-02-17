@@ -1,14 +1,13 @@
 package thebetweenlands.common.block.terrain;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
+import net.minecraft.world.IWorldReader;
 import thebetweenlands.common.block.BasicBlock;
-
-import javax.annotation.Nullable;
 
 public class BlockGenericMirage extends BasicBlock {
     public BlockGenericMirage(Material materialIn) {
@@ -17,7 +16,7 @@ public class BlockGenericMirage extends BasicBlock {
 
     @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IWorldReader worldIn, BlockPos pos) {
         return NULL_AABB;
     }
 

@@ -16,7 +16,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -65,12 +65,12 @@ public class ItemPlantableSeeds extends ItemSeeds {
 	}
 	
 	@Override
-	public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos){
+	public EnumPlantType getPlantType(IWorldReader world, BlockPos pos){
 		return EnumPlantType.Crop;
 	}
 
 	@Override
-	public IBlockState getPlant(IBlockAccess world, BlockPos pos) {
+	public IBlockState getPlant(IWorldReader world, BlockPos pos) {
 		return this.crops.get();
 	}
 }

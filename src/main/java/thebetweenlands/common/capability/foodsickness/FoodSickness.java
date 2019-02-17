@@ -5,11 +5,11 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.IResourceManagerReloadListener;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum FoodSickness {
 	FINE(10 * 5),
@@ -22,12 +22,12 @@ public enum FoodSickness {
 	private FoodSickness(int maxHatred) {
 		this.maxHatred = maxHatred;
 
-		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+		if(FMLCommonHandler.instance().getEffectiveSide() == Dist.CLIENT) {
 			this.updateLines();
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void updateLines() {
 		this.lines.clear();
 		int index = 0;
@@ -37,12 +37,12 @@ public enum FoodSickness {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public List<String> getLines() {
 		return this.lines;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public String getRandomLine(Random rnd) {
 		List<String> lines = this.getLines();
 		if(lines.isEmpty()) {

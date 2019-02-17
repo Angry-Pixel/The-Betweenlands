@@ -2,9 +2,8 @@ package thebetweenlands.client.render.model.entity.rowboat;
 
 import java.util.EnumMap;
 
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelRenderer;
-
+import net.minecraft.client.renderer.entity.model.ModelBase;
+import net.minecraft.client.renderer.entity.model.ModelRenderer;
 import thebetweenlands.client.render.model.AdvancedModelRenderer;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.entity.rowboat.ShipSide;

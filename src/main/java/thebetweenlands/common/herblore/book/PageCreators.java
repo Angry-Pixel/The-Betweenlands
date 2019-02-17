@@ -12,7 +12,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.IAspectType;
-import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.book.widgets.AspectItemSlideShowWidget;
 import thebetweenlands.common.herblore.book.widgets.AspectSlideShowWidget;
 import thebetweenlands.common.herblore.book.widgets.AspectWidget;
@@ -76,7 +75,7 @@ public class PageCreators {
     public static ArrayList<Page> TextPages(int x, int y, String unlocalizedName, String pageName, boolean isHidden, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         String text = TranslationHelper.translateToLocal(unlocalizedName);
-        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, text, Minecraft.getMinecraft().fontRenderer));
+        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, text, Minecraft.getInstance().fontRenderer));
 
         for (int i = 0; i < textContainer.getPages().size(); i++) {
             newPages.add(new Page(pageName, isHidden, manualType, new TextWidget(x, y, unlocalizedName, i)));
@@ -100,7 +99,7 @@ public class PageCreators {
         widgets.add(new TextWidget(38, 14, "<font:custom>" + aspect.getName() + "</font>", true));
         height += 24;
         widgets.add(new TextWidget(18, 12 + height, "manual." + aspect.getName().toLowerCase() + ".description"));
-        TextContainer textContainer = parseTextContainer(new TextContainer(112, 144, TranslationHelper.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description"), Minecraft.getMinecraft().fontRenderer));
+        TextContainer textContainer = parseTextContainer(new TextContainer(112, 144, TranslationHelper.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description"), Minecraft.getInstance().fontRenderer));
 
         height += textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 18;
 
@@ -172,7 +171,7 @@ public class PageCreators {
         widgets.add((new TextWidget(38, 16, itemStack.getDisplayName(), true)).setWidth(70));
         height += 28;
         widgets.add(new TextWidget(18, 12 + height, "manual." + itemStack.getTranslationKey() + ".description"));
-        TextContainer textContainer = parseTextContainer(new TextContainer(112, 144, TranslationHelper.translateToLocal("manual." + itemStack.getTranslationKey() + ".description"), Minecraft.getMinecraft().fontRenderer));
+        TextContainer textContainer = parseTextContainer(new TextContainer(112, 144, TranslationHelper.translateToLocal("manual." + itemStack.getTranslationKey() + ".description"), Minecraft.getInstance().fontRenderer));
 
         height += 18 + textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y;
         widgets.add(new TextWidget(18, 12 + height, "manual.has.aspects"));
@@ -205,7 +204,7 @@ public class PageCreators {
         widgets.add(new ItemWidget(18, 12, item, 1f));
         widgets.add(new TextWidget(38, 14, item.getDisplayName(), true));
         height += 32;
-        TextContainer textContainer = new TextContainer(115, 130, TranslationHelper.translateToLocal("manual." + item.getTranslationKey() + ".description"), Minecraft.getMinecraft().fontRenderer);
+        TextContainer textContainer = new TextContainer(115, 130, TranslationHelper.translateToLocal("manual." + item.getTranslationKey() + ".description"), Minecraft.getInstance().fontRenderer);
         textContainer = parseTextContainer(textContainer);
         Page temp = null;
         if (textContainer.getPages().size() > 1) {

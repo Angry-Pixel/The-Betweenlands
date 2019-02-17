@@ -10,20 +10,20 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ReportedException;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ReportedException;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.IWorldReader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class IsolatedBlockModelRenderer {
 	public static interface OcclusionCuller {
 		/**
@@ -382,12 +382,12 @@ public class IsolatedBlockModelRenderer {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class AmbientOcclusionFace {
 		protected final float[] vertexColorMultiplier = new float[4];
 		protected final int[] vertexBrightness = new int[4];
 
-		public void updateVertexBrightness(IBlockAccess worldIn, IBlockState state, BlockPos centerPos, EnumFacing direction, float[] faceShape, BitSet shapeState) {
+		public void updateVertexBrightness(IWorldReader worldIn, IBlockState state, BlockPos centerPos, EnumFacing direction, float[] faceShape, BitSet shapeState) {
 			BlockPos blockpos = shapeState.get(0) ? centerPos.offset(direction) : centerPos;
 			BlockPos.PooledMutableBlockPos blockpos$pooledmutableblockpos = BlockPos.PooledMutableBlockPos.retain();
 			IsolatedBlockModelRenderer.EnumNeighborInfo blockmodelrenderer$enumneighborinfo = IsolatedBlockModelRenderer.EnumNeighborInfo.getNeighbourInfo(direction);
@@ -544,7 +544,7 @@ public class IsolatedBlockModelRenderer {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static enum EnumNeighborInfo {
 		DOWN(new EnumFacing[]{EnumFacing.WEST, EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.SOUTH}, 0.5F, true, new IsolatedBlockModelRenderer.Orientation[]{IsolatedBlockModelRenderer.Orientation.FLIP_WEST, IsolatedBlockModelRenderer.Orientation.SOUTH, IsolatedBlockModelRenderer.Orientation.FLIP_WEST, IsolatedBlockModelRenderer.Orientation.FLIP_SOUTH, IsolatedBlockModelRenderer.Orientation.WEST, IsolatedBlockModelRenderer.Orientation.FLIP_SOUTH, IsolatedBlockModelRenderer.Orientation.WEST, IsolatedBlockModelRenderer.Orientation.SOUTH}, new IsolatedBlockModelRenderer.Orientation[]{IsolatedBlockModelRenderer.Orientation.FLIP_WEST, IsolatedBlockModelRenderer.Orientation.NORTH, IsolatedBlockModelRenderer.Orientation.FLIP_WEST, IsolatedBlockModelRenderer.Orientation.FLIP_NORTH, IsolatedBlockModelRenderer.Orientation.WEST, IsolatedBlockModelRenderer.Orientation.FLIP_NORTH, IsolatedBlockModelRenderer.Orientation.WEST, IsolatedBlockModelRenderer.Orientation.NORTH}, new IsolatedBlockModelRenderer.Orientation[]{IsolatedBlockModelRenderer.Orientation.FLIP_EAST, IsolatedBlockModelRenderer.Orientation.NORTH, IsolatedBlockModelRenderer.Orientation.FLIP_EAST, IsolatedBlockModelRenderer.Orientation.FLIP_NORTH, IsolatedBlockModelRenderer.Orientation.EAST, IsolatedBlockModelRenderer.Orientation.FLIP_NORTH, IsolatedBlockModelRenderer.Orientation.EAST, IsolatedBlockModelRenderer.Orientation.NORTH}, new IsolatedBlockModelRenderer.Orientation[]{IsolatedBlockModelRenderer.Orientation.FLIP_EAST, IsolatedBlockModelRenderer.Orientation.SOUTH, IsolatedBlockModelRenderer.Orientation.FLIP_EAST, IsolatedBlockModelRenderer.Orientation.FLIP_SOUTH, IsolatedBlockModelRenderer.Orientation.EAST, IsolatedBlockModelRenderer.Orientation.FLIP_SOUTH, IsolatedBlockModelRenderer.Orientation.EAST, IsolatedBlockModelRenderer.Orientation.SOUTH}),
 		UP(new EnumFacing[]{EnumFacing.EAST, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.SOUTH}, 1.0F, true, new IsolatedBlockModelRenderer.Orientation[]{IsolatedBlockModelRenderer.Orientation.EAST, IsolatedBlockModelRenderer.Orientation.SOUTH, IsolatedBlockModelRenderer.Orientation.EAST, IsolatedBlockModelRenderer.Orientation.FLIP_SOUTH, IsolatedBlockModelRenderer.Orientation.FLIP_EAST, IsolatedBlockModelRenderer.Orientation.FLIP_SOUTH, IsolatedBlockModelRenderer.Orientation.FLIP_EAST, IsolatedBlockModelRenderer.Orientation.SOUTH}, new IsolatedBlockModelRenderer.Orientation[]{IsolatedBlockModelRenderer.Orientation.EAST, IsolatedBlockModelRenderer.Orientation.NORTH, IsolatedBlockModelRenderer.Orientation.EAST, IsolatedBlockModelRenderer.Orientation.FLIP_NORTH, IsolatedBlockModelRenderer.Orientation.FLIP_EAST, IsolatedBlockModelRenderer.Orientation.FLIP_NORTH, IsolatedBlockModelRenderer.Orientation.FLIP_EAST, IsolatedBlockModelRenderer.Orientation.NORTH}, new IsolatedBlockModelRenderer.Orientation[]{IsolatedBlockModelRenderer.Orientation.WEST, IsolatedBlockModelRenderer.Orientation.NORTH, IsolatedBlockModelRenderer.Orientation.WEST, IsolatedBlockModelRenderer.Orientation.FLIP_NORTH, IsolatedBlockModelRenderer.Orientation.FLIP_WEST, IsolatedBlockModelRenderer.Orientation.FLIP_NORTH, IsolatedBlockModelRenderer.Orientation.FLIP_WEST, IsolatedBlockModelRenderer.Orientation.NORTH}, new IsolatedBlockModelRenderer.Orientation[]{IsolatedBlockModelRenderer.Orientation.WEST, IsolatedBlockModelRenderer.Orientation.SOUTH, IsolatedBlockModelRenderer.Orientation.WEST, IsolatedBlockModelRenderer.Orientation.FLIP_SOUTH, IsolatedBlockModelRenderer.Orientation.FLIP_WEST, IsolatedBlockModelRenderer.Orientation.FLIP_SOUTH, IsolatedBlockModelRenderer.Orientation.FLIP_WEST, IsolatedBlockModelRenderer.Orientation.SOUTH}),
@@ -587,7 +587,7 @@ public class IsolatedBlockModelRenderer {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static enum Orientation {
 		DOWN(EnumFacing.DOWN, false),
 		UP(EnumFacing.UP, false),
@@ -609,7 +609,7 @@ public class IsolatedBlockModelRenderer {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	static enum VertexTranslations {
 		DOWN(0, 1, 2, 3),
 		UP(2, 3, 0, 1),

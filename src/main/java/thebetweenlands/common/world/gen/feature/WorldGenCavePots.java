@@ -10,8 +10,8 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.tile.TileEntityLootPot;
 
 public class WorldGenCavePots extends WorldGenerator {
 	public WorldGenCavePots() {

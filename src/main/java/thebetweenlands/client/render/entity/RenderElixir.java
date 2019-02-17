@@ -10,7 +10,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 public class RenderElixir extends RenderSnowball<EntityElixir> {
 
     public RenderElixir(RenderManager renderManagerIn) {
-        super(renderManagerIn, ItemRegistry.ELIXIR, Minecraft.getMinecraft().getRenderItem());
+        super(renderManagerIn, ItemRegistry.ELIXIR, Minecraft.getInstance().getRenderItem());
     }
 
     @Override

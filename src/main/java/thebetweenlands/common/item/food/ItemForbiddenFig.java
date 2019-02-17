@@ -2,6 +2,8 @@ package thebetweenlands.common.item.food;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -11,13 +13,11 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.TranslationHelper;
-
-import javax.annotation.Nullable;
 
 
 public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
@@ -30,7 +30,7 @@ public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
         return 20;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(TranslationHelper.translateToLocal("tooltip.fig"));

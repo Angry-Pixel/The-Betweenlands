@@ -1,10 +1,13 @@
 package thebetweenlands.common.block.structure;
 
+import java.util.Random;
+
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,14 +20,12 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockSlab;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import javax.annotation.Nonnull;
-import java.util.Random;
 
 public class BlockSlabBetweenlands extends BasicBlock implements BlockRegistry.ICustomItemBlock {
 	public static final PropertyEnum<EnumBlockHalfBL> HALF = PropertyEnum.<EnumBlockHalfBL>create("half", EnumBlockHalfBL.class);
@@ -58,7 +59,7 @@ public class BlockSlabBetweenlands extends BasicBlock implements BlockRegistry.I
 	}
 
 	@Override
-	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public boolean doesSideBlockRendering(IBlockState state, IWorldReader world, BlockPos pos, EnumFacing face) {
 		return (state.getValue(HALF).equals(EnumBlockHalfBL.BOTTOM) && face == EnumFacing.DOWN) || (state.getValue(HALF).equals(EnumBlockHalfBL.TOP) && face == EnumFacing.UP) || state.getValue(HALF).equals(EnumBlockHalfBL.FULL);
 	}
 
@@ -79,7 +80,7 @@ public class BlockSlabBetweenlands extends BasicBlock implements BlockRegistry.I
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
 		EnumBlockHalfBL half = state.getValue(HALF);
 		switch (half) {
 			case TOP:
@@ -97,7 +98,7 @@ public class BlockSlabBetweenlands extends BasicBlock implements BlockRegistry.I
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
         if (state.getValue(HALF) == EnumBlockHalfBL.FULL) {
             return BlockFaceShape.SOLID;
         } else if (face == EnumFacing.UP && state.getValue(HALF) == EnumBlockHalfBL.TOP) {
@@ -108,12 +109,12 @@ public class BlockSlabBetweenlands extends BasicBlock implements BlockRegistry.I
     }
 
 	@Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 	    ItemStack heldItem = playerIn.getHeldItem(hand);
 		if (!heldItem.isEmpty() && ((state.getValue(HALF).equals(EnumBlockHalfBL.TOP) && facing.equals(EnumFacing.DOWN)) || (state.getValue(HALF).equals(EnumBlockHalfBL.BOTTOM) && facing.equals(EnumFacing.UP)))){
 			if (heldItem.getItem() == Item.getItemFromBlock(this)) {
 				worldIn.setBlockState(pos, state.withProperty(HALF, EnumBlockHalfBL.FULL));
-				if(!playerIn.capabilities.isCreativeMode)
+				if(!playerIn.abilities.isCreativeMode)
 					heldItem.setCount(heldItem.getCount() - 1);
 				SoundType soundtype = this.getSoundType(state, worldIn, pos, playerIn);
 				worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);

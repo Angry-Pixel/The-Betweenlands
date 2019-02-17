@@ -7,15 +7,13 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -32,11 +30,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import thebetweenlands.api.capability.ICircleGemCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
@@ -109,7 +107,7 @@ public class ItemAmulet extends Item implements IEquippable {
 		return stack;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRenderLiving(RenderLivingEvent.Specials.Post<EntityLivingBase> event) {
 		if (event.getEntity() != null) {
@@ -117,7 +115,7 @@ public class ItemAmulet extends Item implements IEquippable {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private static void renderAmulet(EntityLivingBase entity, double x, double y, double z, float partialTicks) {
 		if(entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator()) {
 			return;
@@ -142,8 +140,8 @@ public class ItemAmulet extends Item implements IEquippable {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x, y, z);
 	
-				TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
-				RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+				TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+				RenderItem renderItem = Minecraft.getInstance().getRenderItem();
 	
 				textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				ITextureObject texture = textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
@@ -215,7 +213,7 @@ public class ItemAmulet extends Item implements IEquippable {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
 		if (this.isInCreativeTab(tab)) {
 			list.add(createStack(CircleGemType.NONE));
@@ -282,13 +280,13 @@ public class ItemAmulet extends Item implements IEquippable {
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.amulet." + CircleGemHelper.getGem(stack).name), 0));
 		if(CircleGemHelper.getGem(stack) != CircleGemType.NONE) {
 			if (GuiScreen.isShiftKeyDown()) {
-				list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.amulet.usage", KeyBindRegistry.RADIAL_MENU.getDisplayName(), Minecraft.getMinecraft().gameSettings.keyBindUseItem.getDisplayName()), 1));
+				list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.amulet.usage", KeyBindRegistry.RADIAL_MENU.getDisplayName(), Minecraft.getInstance().gameSettings.keyBindUseItem.getDisplayName()), 1));
 			} else {
 				list.add(I18n.format("tooltip.press.shift"));
 			}

@@ -47,7 +47,7 @@ public class ParticleSoundRipple extends Particle {
 	@Override
 	public void renderParticle(BufferBuilder vertexBuffer, Entity entity, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		if(!this.spawnMore) {
-			Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
+			Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE);
 
 			float umin = 0;
 			float umax = 1;
@@ -116,8 +116,8 @@ public class ParticleSoundRipple extends Particle {
 	@Override
 	public void onUpdate() {
 		if(this.spawnMore && this.particleAge >= this.delay) {
-			if(this.particleAge == this.delay && Minecraft.getMinecraft().player != null) {
-				Minecraft.getMinecraft().getSoundHandler().playSound(new GemSingerEchoSound(new Vec3d(this.posX, this.posY, this.posZ)).setVolumeAndPitch(0.7f, 0.98f + this.world.rand.nextFloat() * 0.06f - 0.03f));
+			if(this.particleAge == this.delay && Minecraft.getInstance().player != null) {
+				Minecraft.getInstance().getSoundHandler().playSound(new GemSingerEchoSound(new Vec3d(this.posX, this.posY, this.posZ)).setVolumeAndPitch(0.7f, 0.98f + this.world.rand.nextFloat() * 0.06f - 0.03f));
 			}
 			if((this.particleAge - this.delay) % 10 == 0) {
 				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.UNBATCHED, new ParticleSoundRipple(this.world, this.posX, this.posY, this.posZ, this.particleScale, 0, false));

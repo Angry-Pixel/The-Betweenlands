@@ -1,17 +1,14 @@
 package thebetweenlands.client.render.tile;
 
-import net.minecraftforge.client.model.pipeline.VertexBufferConsumer;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
-import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -19,13 +16,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.model.pipeline.ForgeBlockModelRenderer;
+import net.minecraftforge.client.model.pipeline.VertexBufferConsumer;
 import thebetweenlands.client.render.block.VertexLighterFlatNoOffsets;
 import thebetweenlands.common.block.misc.BlockMudFlowerPot;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
 import thebetweenlands.util.TileEntityHelper;
 
 public class RenderMudFlowerPot extends TileEntitySpecialRenderer<TileEntityMudFlowerPot> {
-	private static final VertexLighterFlatNoOffsets FLAT_LIGHTER = new VertexLighterFlatNoOffsets(Minecraft.getMinecraft().getBlockColors());
+	private static final VertexLighterFlatNoOffsets FLAT_LIGHTER = new VertexLighterFlatNoOffsets(Minecraft.getInstance().getBlockColors());
 
 	@Override
 	public void render(TileEntityMudFlowerPot te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -34,7 +32,7 @@ public class RenderMudFlowerPot extends TileEntitySpecialRenderer<TileEntityMudF
 		IBlockState flowerBlockState = TileEntityHelper.getStatePropertySafely(te, BlockMudFlowerPot.class, BlockMudFlowerPot.FLOWER, null, false, true);
 
 		if(flowerBlockState != null && flowerBlockState.getBlock() != Blocks.AIR) {
-			IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(flowerBlockState);
+			IBakedModel model = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(flowerBlockState);
 			Tessellator tessellator = Tessellator.getInstance();
 			BufferBuilder vertexBuffer = tessellator.getBuffer();
 			this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

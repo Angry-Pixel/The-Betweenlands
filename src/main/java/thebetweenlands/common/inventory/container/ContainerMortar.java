@@ -7,8 +7,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotPestle;
 import thebetweenlands.common.inventory.slot.SlotRestrictionNoMeta;
@@ -90,7 +90,7 @@ public class ContainerMortar  extends Container {
     }
 
     @Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int id, int value)
     {
         super.updateProgressBar(id, value);

@@ -2,8 +2,8 @@ package thebetweenlands.api.misc;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class Fog {
 	public static enum FogType {
@@ -71,7 +71,7 @@ public class Fog {
 	 * Returns the fog type GL constant
 	 * @return
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getGlFogType() {
 		switch(this.type) {
 		default:

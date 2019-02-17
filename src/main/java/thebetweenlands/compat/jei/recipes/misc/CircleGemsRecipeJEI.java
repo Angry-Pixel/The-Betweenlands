@@ -1,5 +1,11 @@
 package thebetweenlands.compat.jei.recipes.misc;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IGuiItemStackGroup;
@@ -20,11 +26,6 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class CircleGemsRecipeJEI implements ICraftingRecipeWrapper, ICustomCraftingRecipeWrapper {
 

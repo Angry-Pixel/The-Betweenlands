@@ -1,13 +1,14 @@
 package thebetweenlands.common.world.gen.feature;
 
+import java.util.Random;
+
 import com.google.common.base.Predicate;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenMinable;
-
-import java.util.Random;
 
 public class WorldGenBLMinable extends WorldGenMinable {
 

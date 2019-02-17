@@ -2,40 +2,35 @@ package thebetweenlands.common.block.plant;
 
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.SoilHelper;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 	protected static final AxisAlignedBB STACKABLE_PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 1D, 0.9D);
 
-	public static final PropertyBool IS_TOP = BlockStackablePlant.IS_TOP;
-	public static final PropertyBool IS_BOTTOM = BlockStackablePlant.IS_BOTTOM;
-	public static final PropertyInteger AGE = BlockStackablePlant.AGE;
+	public static final BooleanProperty IS_TOP = BlockStackablePlant.IS_TOP;
+	public static final BooleanProperty IS_BOTTOM = BlockStackablePlant.IS_BOTTOM;
+	public static final IntegerProperty AGE = BlockStackablePlant.AGE;
 
 	protected int maxHeight = -1;
 	protected boolean harvestAll = false;
@@ -53,7 +48,7 @@ public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
 		return STACKABLE_PLANT_AABB;
 	}
 
@@ -63,7 +58,7 @@ public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
 		boolean isTop = !this.isSamePlant(worldIn.getBlockState(pos.up()));
 		boolean isBottom = !this.isSamePlant(worldIn.getBlockState(pos.down()));
 		return state.withProperty(IS_TOP, isTop).withProperty(IS_BOTTOM, isBottom);
@@ -232,7 +227,7 @@ public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		super.setStateMapper(builder);
 		builder.ignore(AGE);

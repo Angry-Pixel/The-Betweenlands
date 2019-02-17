@@ -1,11 +1,12 @@
 package thebetweenlands.common.network.serverbound;
 
+import javax.xml.ws.handler.MessageContext;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IFlightCapability;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;

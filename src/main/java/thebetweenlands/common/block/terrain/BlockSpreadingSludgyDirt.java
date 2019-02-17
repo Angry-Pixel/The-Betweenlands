@@ -12,11 +12,11 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BiomeRegistry;
@@ -84,12 +84,12 @@ public class BlockSpreadingSludgyDirt extends BlockSpreadingDeath {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IWorldReader worldIn, BlockPos pos) {
 		return BOUNDING_BOX;
 	}
 
 	@Override
-	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity){
+	public void onEntityCollision(IBlockState state, World world, BlockPos pos, Entity entity){
 		if(entity instanceof IEntityBL == false) entity.setInWeb();
 	}
 
@@ -99,13 +99,13 @@ public class BlockSpreadingSludgyDirt extends BlockSpreadingDeath {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
 	@Override
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess iblockaccess, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(IBlockState blockState, IWorldReader iblockaccess, BlockPos pos, EnumFacing side) {
 		Block block = iblockaccess.getBlockState(pos.offset(side)).getBlock();
 		return block instanceof BlockSludgyDirt == false && block instanceof BlockSpreadingSludgyDirt == false;
 	}

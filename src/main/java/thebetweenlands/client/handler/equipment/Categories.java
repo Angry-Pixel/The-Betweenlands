@@ -49,7 +49,7 @@ public class Categories {
 				GlStateManager.enableBlend();
 				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
-				Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(this.getItem(), 0, 0);
+				Minecraft.getInstance().getRenderItem().renderItemAndEffectIntoGUI(this.getItem(), 0, 0);
 
 				GlStateManager.popMatrix();
 			}
@@ -57,7 +57,7 @@ public class Categories {
 
 		@Override
 		public boolean onClicked(int mouseX, int mouseY, int mouseButton) {
-			EntityPlayer sender = Minecraft.getMinecraft().player;
+			EntityPlayer sender = Minecraft.getInstance().player;
 
 			if(sender.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				ItemStack res = EquipmentHelper.equipItem(sender, sender, item, false);
@@ -65,7 +65,7 @@ public class Categories {
 				if(res.isEmpty() || res.getCount() != item.getCount()) {
 					TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(this.slot, sender));
 
-					if(!sender.capabilities.isCreativeMode) {
+					if(!sender.abilities.isCreativeMode) {
 						sender.inventory.setInventorySlotContents(this.slot, res);
 					}
 
@@ -92,7 +92,7 @@ public class Categories {
 
 		@Override
 		public boolean onClicked(int mouseX, int mouseY, int mouseButton) {
-			EntityPlayer sender = Minecraft.getMinecraft().player;
+			EntityPlayer sender = Minecraft.getInstance().player;
 
 			if(sender.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				ItemStack unequipped = EquipmentHelper.unequipItem(sender, sender, this.inventory, this.slot, false);

@@ -8,9 +8,6 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,6 +16,8 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -26,8 +25,11 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -36,25 +38,22 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.event.world.BlockEvent.CropGrowEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.IConnectedTextureBlock;
 import thebetweenlands.common.item.ItemBlockMeta;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
-import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
-import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
+import thebetweenlands.common.registries.BlockRegistryOld.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.IStateMappedBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.ISubtypeItemBlockModelDefinition;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.util.AdvancedStateMap;
 
 public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEntityProvider, ISubtypeItemBlockModelDefinition, IStateMappedBlock, ICustomItemBlock, IConnectedTextureBlock {
-    public static final PropertyBool COMPOSTED = PropertyBool.create("composted");
-    public static final PropertyBool DECAYED = PropertyBool.create("decayed");
+    public static final BooleanProperty COMPOSTED = BooleanProperty.create("composted");
+    public static final BooleanProperty DECAYED = BooleanProperty.create("decayed");
 
     private final boolean purified;
 
@@ -168,13 +167,13 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     }
 
     @Override
-    public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos) {
+    public IBlockState getExtendedState(IBlockState oldState, IWorldReader worldIn, BlockPos pos) {
         IExtendedBlockState state = (IExtendedBlockState) oldState;
         return this.getExtendedConnectedTextureState(state, worldIn, pos, p -> worldIn.getBlockState(p).getBlock() instanceof BlockGenericDugSoil /*TODO: Add canConnectTo similar to fence?*/, false);
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT;
     }
@@ -206,7 +205,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setStateMapper(AdvancedStateMap.Builder builder) {
         builder.ignore(COMPOSTED).ignore(DECAYED).withPropertySuffix(COMPOSTED, null, "composted")
                 .withPropertySuffixExclusions((map) -> {
@@ -354,7 +353,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack heldItem = playerIn.getHeldItem(hand);
         TileEntityDugSoil te = getTile(world, pos);
         if (te != null && te.getCompost() == 0 && !heldItem.isEmpty() && EnumItemMisc.COMPOST.isItemOf(heldItem)) {
@@ -371,8 +370,8 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    @OnlyIn(Dist.CLIENT)
+    public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
         if (stateIn.getValue(DECAYED)) {
             BLParticles.DIRT_DECAY.spawn(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + rand.nextFloat());
 
@@ -430,7 +429,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     }
 
     @Override
-    public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable) {
+    public boolean canSustainPlant(IBlockState state, IWorldReader world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable) {
         if (super.canSustainPlant(state, world, pos, direction, plantable)) {
             return true;
         }

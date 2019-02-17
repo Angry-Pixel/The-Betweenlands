@@ -6,8 +6,8 @@ import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceType;
 import thebetweenlands.common.registries.AmbienceRegistry;
 import thebetweenlands.common.world.storage.location.LocationAmbience;
-import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class LocationAmbienceType extends AmbienceType {
 	private final EnumLocationAmbience ambience;

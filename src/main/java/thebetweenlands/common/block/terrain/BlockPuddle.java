@@ -6,31 +6,31 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.farming.BlockGenericCrop;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.IStateMappedBlock;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBlock {
 
     private static final AxisAlignedBB AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D/16.0D, 1.0D);
-    public static PropertyInteger AMOUNT = PropertyInteger.create("amount", 0, 15);
+    public static IntegerProperty AMOUNT = IntegerProperty.create("amount", 0, 15);
 
     public BlockPuddle() {
         super(Material.GROUND);
@@ -90,7 +90,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
         return AABB;
     }
 
@@ -100,7 +100,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
     }
 
     @Override
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(IBlockState blockState, IWorldReader blockAccess, BlockPos pos, EnumFacing side) {
         if (blockAccess.getBlockState(pos.offset(side)).getBlock() == this) {
             return false;
         } else {
@@ -124,7 +124,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
     }
 
     @Override
-    public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+    public boolean isPassable(IWorldReader worldIn, BlockPos pos) {
         return true;
     }
 
@@ -134,7 +134,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
     }
 
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
         return BlockFaceShape.UNDEFINED;
     }
 
@@ -146,12 +146,12 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
     }
 
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IWorldReader world, BlockPos pos, EnumFacing side) {
         return false;
     }
 
     @Override
-    public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+    public int getColorMultiplier(IBlockState state, IWorldReader worldIn, BlockPos pos, int tintIndex) {
         if (worldIn == null || pos == null) return -1;
         int avgRed = 0;
         int avgGreen = 0;
@@ -176,12 +176,12 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
 
     @Nullable
     @Override
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IWorldReader worldIn, BlockPos pos) {
         return NULL_AABB;
     }
 
     @Override
-    public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
+    public boolean isReplaceable(IWorldReader worldIn, BlockPos pos) {
         return true;
     }
 }

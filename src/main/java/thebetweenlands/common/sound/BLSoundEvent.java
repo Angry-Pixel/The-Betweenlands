@@ -3,7 +3,6 @@ package thebetweenlands.common.sound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-
 import thebetweenlands.common.lib.ModInfo;
 
 public class BLSoundEvent extends SoundEvent {

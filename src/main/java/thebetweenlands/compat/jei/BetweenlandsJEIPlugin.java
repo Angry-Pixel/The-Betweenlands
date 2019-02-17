@@ -1,5 +1,9 @@
 package thebetweenlands.compat.jei;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+
 import mezz.jei.api.*;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
@@ -9,15 +13,14 @@ import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.ModContainer;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
@@ -28,7 +31,14 @@ import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe.ShapedOverrideDummyRecipe;
-import thebetweenlands.common.recipe.misc.*;
+import thebetweenlands.common.recipe.misc.BookMergeRecipe;
+import thebetweenlands.common.recipe.misc.HearthgroveTarringRecipe;
+import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
+import thebetweenlands.common.recipe.misc.RecipeMummyBait;
+import thebetweenlands.common.recipe.misc.RecipeSapSpitCleanTool;
+import thebetweenlands.common.recipe.misc.RecipesCircleGems;
+import thebetweenlands.common.recipe.misc.RecipesCoating;
+import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -39,15 +49,20 @@ import thebetweenlands.compat.jei.recipes.compost.CompostRecipeCategory;
 import thebetweenlands.compat.jei.recipes.compost.CompostRecipeMaker;
 import thebetweenlands.compat.jei.recipes.druid_altar.DruidAltarRecipeCategory;
 import thebetweenlands.compat.jei.recipes.druid_altar.DruidAltarRecipeMaker;
-import thebetweenlands.compat.jei.recipes.misc.*;
+import thebetweenlands.compat.jei.recipes.misc.BookMergeRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.CircleGemsRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.CoatingRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.LifeCrystalRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.MarshRunnerBootsRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.MummyBaitRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.SapCleanRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.ShapedOverrideRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.ShapelessOverrideRecipeJEI;
+import thebetweenlands.compat.jei.recipes.misc.TarringRecipeJEI;
 import thebetweenlands.compat.jei.recipes.pam.PestleAndMortarCategory;
 import thebetweenlands.compat.jei.recipes.pam.PestleAndMortarRecipeMaker;
 import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeCategory;
 import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeMaker;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
 
 @JEIPlugin
 public class BetweenlandsJEIPlugin implements IModPlugin{
@@ -189,7 +204,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
     public static void addRecipeName(ResourceLocation registryName, IGuiItemStackGroup guiItemStacks, int ouputIndex) {
         guiItemStacks.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
             if (slotIndex == ouputIndex) {
-                boolean showAdvanced = Minecraft.getMinecraft().gameSettings.advancedItemTooltips || GuiScreen.isShiftKeyDown();
+                boolean showAdvanced = Minecraft.getInstance().gameSettings.advancedItemTooltips || GuiScreen.isShiftKeyDown();
                 if (showAdvanced) {
                     tooltip.add(TextFormatting.DARK_GRAY + I18n.translateToLocalFormatted("jei.tooltip.recipe.id", registryName.toString()));
                 }

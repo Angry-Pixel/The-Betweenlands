@@ -4,36 +4,36 @@ import java.util.Random;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.chunk.BlockStateContainer;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
-import thebetweenlands.common.block.property.PropertyBoolUnlisted;
-import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
+import thebetweenlands.common.block.property.BooleanPropertyUnlisted;
+import thebetweenlands.common.block.property.IntegerPropertyUnlisted;
 import thebetweenlands.common.item.ItemBlockRoot;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.ICustomItemBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockRoot extends BasicBlock implements ICustomItemBlock {
-	public static final PropertyBoolUnlisted NO_BOTTOM = new PropertyBoolUnlisted("no_bottom");
-	public static final PropertyBoolUnlisted NO_TOP = new PropertyBoolUnlisted("no_top");
-	public static final PropertyIntegerUnlisted DIST_UP = new PropertyIntegerUnlisted("dist_up");
-	public static final PropertyIntegerUnlisted DIST_DOWN = new PropertyIntegerUnlisted("dist_down");
-	public static final PropertyIntegerUnlisted POS_X = new PropertyIntegerUnlisted("pos_x");
-	public static final PropertyIntegerUnlisted POS_Y = new PropertyIntegerUnlisted("pos_x");
-	public static final PropertyIntegerUnlisted POS_Z = new PropertyIntegerUnlisted("pos_z");
+	public static final BooleanPropertyUnlisted NO_BOTTOM = new BooleanPropertyUnlisted("no_bottom");
+	public static final BooleanPropertyUnlisted NO_TOP = new BooleanPropertyUnlisted("no_top");
+	public static final IntegerPropertyUnlisted DIST_UP = new IntegerPropertyUnlisted("dist_up");
+	public static final IntegerPropertyUnlisted DIST_DOWN = new IntegerPropertyUnlisted("dist_down");
+	public static final IntegerPropertyUnlisted POS_X = new IntegerPropertyUnlisted("pos_x");
+	public static final IntegerPropertyUnlisted POS_Y = new IntegerPropertyUnlisted("pos_x");
+	public static final IntegerPropertyUnlisted POS_Z = new IntegerPropertyUnlisted("pos_z");
 
 	public BlockRoot() {
 		super(Material.WOOD);
@@ -69,7 +69,7 @@ public class BlockRoot extends BasicBlock implements ICustomItemBlock {
 	}
 
 	@Override
-	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getExtendedState(IBlockState oldState, IWorldReader worldIn, BlockPos pos) {
 		IExtendedBlockState state = (IExtendedBlockState) oldState;
 
 		final int maxLength = 32;
@@ -102,7 +102,7 @@ public class BlockRoot extends BasicBlock implements ICustomItemBlock {
 	}
 	
 	@Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
 	

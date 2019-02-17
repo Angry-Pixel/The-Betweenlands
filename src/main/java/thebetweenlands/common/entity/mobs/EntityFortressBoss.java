@@ -25,21 +25,19 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityMusic;
@@ -194,17 +192,17 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 		return this.groundAttackTicks;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public float getShieldRotationYaw(float partialTicks) {
 		return this.lastShieldRotationYaw + (this.shieldRotationYaw - this.lastShieldRotationYaw) * partialTicks;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public float getShieldRotationPitch(float partialTicks) {
 		return this.lastShieldRotationPitch + (this.shieldRotationPitch - this.lastShieldRotationPitch) * partialTicks;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public float getShieldRotationRoll(float partialTicks) {
 		return this.lastShieldRotationRoll + (this.shieldRotationRoll - this.lastShieldRotationRoll) * partialTicks;
 	}
@@ -335,11 +333,11 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 				
 				pos = new Vec3d(attackingEntity.posX, attackingEntity.posY + attackingEntity.getEyeHeight(), attackingEntity.posZ);
 				
-				if(this.hasShield() && (attackingEntity instanceof EntityPlayer == false || !((EntityPlayer)attackingEntity).capabilities.isCreativeMode) || attackingEntity.isSneaking()) {
+				if(this.hasShield() && (attackingEntity instanceof EntityPlayer == false || !((EntityPlayer)attackingEntity).abilities.isCreativeMode) || attackingEntity.isSneaking()) {
 					int shieldHit = this.rayTraceShield(pos, ray, false);
 					
 					if(shieldHit >= 0) {
-						if(!this.world.isRemote && attackingEntity.isSneaking() && ((EntityPlayer)attackingEntity).capabilities.isCreativeMode) {
+						if(!this.world.isRemote && attackingEntity.isSneaking() && ((EntityPlayer)attackingEntity).abilities.isCreativeMode) {
 							this.setShieldActive(shieldHit, false);
 						}
 						
@@ -497,16 +495,16 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void updateAmbientSounds() {
 		if (currentIdleSound != null) {
-			if (!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(currentIdleSound)) {
+			if (!Minecraft.getInstance().getSoundHandler().isPlaying(currentIdleSound)) {
 				currentIdleSound = null;
 			}
 		}
 		if (currentIdleSound == null) {
 			currentIdleSound = new FortressBossIdleSound(this);
-			Minecraft.getMinecraft().getSoundHandler().playSound(currentIdleSound);
+			Minecraft.getInstance().getSoundHandler().playSound(currentIdleSound);
 		}
 	}
 

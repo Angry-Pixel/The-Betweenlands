@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -372,7 +373,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		if(getSpawningProgress() < 1.0F)
 			return false;
 		boolean attacked = super.attackEntityAsMob(target);
-		if (attacked && rand.nextInt(6) == 0 && target != currentEatPrey && target instanceof EntityLivingBase && !(target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.isCreativeMode) && !getEntityWorld().isRemote) {
+		if (attacked && rand.nextInt(6) == 0 && target != currentEatPrey && target instanceof EntityLivingBase && !(target instanceof EntityPlayer && ((EntityPlayer)target).abilities.isCreativeMode) && !getEntityWorld().isRemote) {
 			setPrey((EntityLivingBase)target);
 		}
 		if(attacked)

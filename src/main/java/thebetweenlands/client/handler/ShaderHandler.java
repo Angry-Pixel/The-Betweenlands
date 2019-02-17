@@ -13,9 +13,8 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import thebetweenlands.api.event.PreRenderShadersEvent;
@@ -37,7 +36,7 @@ public class ShaderHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onPreRenderWorld(TickEvent.RenderTickEvent event) {
 		if(event.phase == Phase.START) {
-			Minecraft mc = Minecraft.getMinecraft();
+			Minecraft mc = Minecraft.getInstance();
 
 			boolean canUseInWorld = true;
 			if(BetweenlandsConfig.RENDERING.dimensionShaderOnly) {
@@ -76,8 +75,8 @@ public class ShaderHandler {
 			GlStateManager.colorMask(false, false, false, false);
 			//Don't render water overlays so they don't write to the depth buffer
 			this.cancelTransparentOverlays = true;
-			Minecraft.getMinecraft().entityRenderer.renderHand(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
-			Minecraft.getMinecraft().entityRenderer.setupCameraTransform(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
+			Minecraft.getInstance().entityRenderer.renderHand(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
+			Minecraft.getInstance().entityRenderer.setupCameraTransform(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
 			this.cancelTransparentOverlays = false;
 			GlStateManager.colorMask(true, true, true, true);
 			GlStateManager.popMatrix();

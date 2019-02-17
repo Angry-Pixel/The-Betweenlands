@@ -1,14 +1,14 @@
 package thebetweenlands.common.entity.ai;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.function.Predicate;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class EntityAIDruidTeleport extends EntityAIBase {
 	private EntityAINearestAttackableTarget.Sorter nearestEntitySorter;
@@ -31,7 +31,7 @@ public class EntityAIDruidTeleport extends EntityAIBase {
 			List<EntityPlayer> nearPlayers = druid.world.getEntitiesWithinAABB(EntityPlayer.class, druid.getEntityBoundingBox().grow(24, 10, 24));
 			Collections.sort(nearPlayers, nearestEntitySorter);
 			for (EntityPlayer player : nearPlayers) {
-				if (player.onGround && !player.capabilities.disableDamage) {
+				if (player.onGround && !player.abilities.disableDamage) {
 					entityToTeleportTo = player;
 					return true;
 				}

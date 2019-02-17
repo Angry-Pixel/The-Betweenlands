@@ -55,11 +55,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityCustomBlockCollisions;
 import thebetweenlands.api.entity.IEntityWithLootModifier;
@@ -108,7 +108,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	protected int[] stalactiteHeights;
 
 	@Nullable
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public List<SpikeRenderer> stalactites;
 
 	public EntityBoulderSprite(World worldIn) {
@@ -189,7 +189,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void initStalactiteModels() {
 		if(this.stalactites == null) {
 			this.stalactites = new ArrayList<>();
@@ -198,7 +198,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 			seededRng.setSeed(this.stalactitesSeed);
 
 			if(this.numStalactites > 0) {
-				TextureMap altas = Minecraft.getMinecraft().getTextureMapBlocks();
+				TextureMap altas = Minecraft.getInstance().getTextureMapBlocks();
 
 				for(int i = 0; i < numStalactites; i++) {
 					Vec3d offset = new Vec3d(-0.08D + seededRng.nextDouble() * 0.5D - 0.25D, 0.5D, -0.15D + seededRng.nextDouble() * 0.5D - 0.25D);
@@ -352,7 +352,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	@Override
 	public void knockBack(Entity entityIn, float strength, double xRatio, double zRatio) { }
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public int getBrightnessForRender() {
 		if(this.isEntityInsideOpaqueBlock()) {

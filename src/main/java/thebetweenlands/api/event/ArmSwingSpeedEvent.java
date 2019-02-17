@@ -2,7 +2,7 @@ package thebetweenlands.api.event;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.fml.common.eventhandler.Cancelable;
+import net.minecraftforge.eventbus.api.Cancelable;
 
 @Cancelable
 public class ArmSwingSpeedEvent extends LivingEvent {

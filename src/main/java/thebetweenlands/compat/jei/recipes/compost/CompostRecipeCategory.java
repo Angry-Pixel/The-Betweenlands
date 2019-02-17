@@ -1,5 +1,11 @@
 package thebetweenlands.compat.jei.recipes.compost;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
@@ -11,11 +17,6 @@ import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
 import thebetweenlands.util.TranslationHelper;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CompostRecipeCategory implements IRecipeCategory {
 

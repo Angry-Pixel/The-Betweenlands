@@ -3,9 +3,9 @@ package thebetweenlands.client.handler;
 import java.util.List;
 import java.util.Random;
 
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import net.java.games.input.Mouse;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -37,7 +37,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import thebetweenlands.api.aspect.Aspect;
@@ -95,7 +95,7 @@ public class ScreenRenderHandler extends Gui {
 
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent event) {
-		if(event.phase == Phase.START && !Minecraft.getMinecraft().isGamePaused()) {
+		if(event.phase == Phase.START && !Minecraft.getInstance().isGamePaused()) {
 			this.updateCounter++;
 
 			if(this.titleTicks > 0) {
@@ -107,7 +107,7 @@ public class ScreenRenderHandler extends Gui {
 				this.cavingRopeConnectTicks--;
 			}
 
-			EntityPlayer player = Minecraft.getMinecraft().player;
+			EntityPlayer player = Minecraft.getInstance().player;
 			
 			if(player != null) {
 				if(BetweenlandsConfig.GENERAL.cavingRopeIndicator) {
@@ -194,7 +194,7 @@ public class ScreenRenderHandler extends Gui {
 
 	@SubscribeEvent
 	public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		EntityPlayer player = mc.player;
 		int width = event.getResolution().getScaledWidth();
 		int height = event.getResolution().getScaledHeight();
@@ -250,7 +250,7 @@ public class ScreenRenderHandler extends Gui {
 					mc.fontRenderer.drawString(String.valueOf(this.cavingRopeCount), 0, 0, 0xFFFFFFFF);
 					GlStateManager.popMatrix();
 					
-					Minecraft.getMinecraft().renderEngine.bindTexture(CAVING_ROPE_CONNECTED);
+					Minecraft.getInstance().renderEngine.bindTexture(CAVING_ROPE_CONNECTED);
 					
 					Tessellator tessellator = Tessellator.getInstance();
 					BufferBuilder buffer = tessellator.getBuffer();
@@ -268,7 +268,7 @@ public class ScreenRenderHandler extends Gui {
 					GlStateManager.enableBlend();
 					GlStateManager.color(1.0F, 1.0F, 1.0F, MathHelper.clamp(this.cavingRopeConnectTicks / 80.0F * (0.8F + 0.2F * (float)Math.sin((this.cavingRopeConnectTicks + 1 - event.getPartialTicks()) / 2.0F)), 0, 1));
 					
-					Minecraft.getMinecraft().renderEngine.bindTexture(CAVING_ROPE_DISCONNECTED);
+					Minecraft.getInstance().renderEngine.bindTexture(CAVING_ROPE_DISCONNECTED);
 					
 					Tessellator tessellator = Tessellator.getInstance();
 					BufferBuilder buffer = tessellator.getBuffer();
@@ -393,7 +393,7 @@ public class ScreenRenderHandler extends Gui {
 
 						int decay = 20 - capability.getDecayStats().getDecayLevel();
 
-						Minecraft.getMinecraft().getTextureManager().bindTexture(DECAY_BAR_TEXTURE);
+						Minecraft.getInstance().getTextureManager().bindTexture(DECAY_BAR_TEXTURE);
 
 						for (int i = 0; i < 10; i++) {
 							int offsetY = player.isInsideOfMaterial(Material.WATER) ? -10 : 0;
@@ -440,7 +440,7 @@ public class ScreenRenderHandler extends Gui {
 				}
 				averageScale /= page.getSegments().size();
 				GlStateManager.popMatrix();
-				Minecraft.getMinecraft().renderEngine.bindTexture(TITLE_TEXTURE);
+				Minecraft.getInstance().renderEngine.bindTexture(TITLE_TEXTURE);
 				GlStateManager.color(1, 1, 1, fade);
 				double sidePadding = 6;
 				double yOffset = 5;
@@ -509,7 +509,7 @@ public class ScreenRenderHandler extends Gui {
 
 	@SubscribeEvent
 	public void onRenderScreen(DrawScreenEvent.Post event) {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		if(GuiScreen.isShiftKeyDown() && mc.currentScreen instanceof GuiContainer && mc.player != null) {
 			GuiContainer container = (GuiContainer) mc.currentScreen;
 

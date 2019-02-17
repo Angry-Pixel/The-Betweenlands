@@ -1,5 +1,8 @@
 package thebetweenlands.common.inventory;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
@@ -13,9 +16,6 @@ import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.api.event.EquipmentChangedEvent;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class InventoryEquipment implements IInventory, ITickable {
     protected final NonNullList<ItemStack> inventory;

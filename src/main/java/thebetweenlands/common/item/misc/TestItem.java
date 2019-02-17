@@ -10,15 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.tile.TileEntityDugSoil;
-import thebetweenlands.common.world.gen.feature.WorldGenSmallSpiritTree;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallPortal;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallRuins;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTree;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 
 //MINE!!
 public class TestItem extends Item {

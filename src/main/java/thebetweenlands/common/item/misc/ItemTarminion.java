@@ -32,7 +32,7 @@ public class ItemTarminion extends Item {
 			tarminion.shoot(lookVec.x, lookVec.y, lookVec.z, 0.8F, 0.1F);
 			world.spawnEntity(tarminion);
 
-			if (!player.capabilities.isCreativeMode) {
+			if (!player.abilities.isCreativeMode) {
 				itemStack.shrink(1);
 			}
 		}

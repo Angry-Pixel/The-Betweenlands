@@ -34,7 +34,7 @@ public class ItemPyradFlame extends Item {
 				world.spawnEntity(flame);
 			}
 
-			if (!player.capabilities.isCreativeMode) {
+			if (!player.abilities.isCreativeMode) {
 				stack.shrink(1);
 			}
 		}

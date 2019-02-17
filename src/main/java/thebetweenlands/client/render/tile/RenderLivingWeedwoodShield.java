@@ -2,7 +2,7 @@ package thebetweenlands.client.render.tile;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -36,7 +36,7 @@ public class RenderLivingWeedwoodShield extends TileEntityItemStackRenderer {
 	public void renderByItem(ItemStack stack, float partialTicks) {
 		this.copy(stack);
 
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		TextureManager textureManager = mc.getTextureManager();
 		
 		GlStateManager.pushMatrix();

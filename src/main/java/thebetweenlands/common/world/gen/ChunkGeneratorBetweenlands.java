@@ -36,7 +36,10 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.gen.*;
+import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.NoiseGeneratorOctaves;
+import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import net.minecraftforge.event.ForgeEventFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
@@ -728,7 +731,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		    }
 		}
 		g.dispose();
-		File out = new File(Minecraft.getMinecraft().gameDir, "chunk_provides.png");
+		File out = new File(Minecraft.getInstance().gameDir, "chunk_provides.png");
 		try {
 			ImageIO.write(img, "png", out);
 			Desktop.getDesktop().edit(out);

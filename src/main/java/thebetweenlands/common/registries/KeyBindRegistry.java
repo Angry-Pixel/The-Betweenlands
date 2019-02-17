@@ -1,7 +1,6 @@
 package thebetweenlands.common.registries;
 
-import org.lwjgl.input.Keyboard;
-
+import net.java.games.input.Keyboard;
 import thebetweenlands.client.input.KeyBindingBL;
 
 public class KeyBindRegistry {

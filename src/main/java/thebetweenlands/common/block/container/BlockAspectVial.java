@@ -1,20 +1,17 @@
 package thebetweenlands.common.block.container;
 
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -25,11 +22,12 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.common.block.terrain.BlockDentrothyst;
@@ -40,7 +38,7 @@ import thebetweenlands.common.tile.TileEntityAspectVial;
 
 public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICustomItemBlock {
     public static final PropertyEnum<BlockDentrothyst.EnumDentrothyst> TYPE = PropertyEnum.create("type", BlockDentrothyst.EnumDentrothyst.class);
-    public static final PropertyBool RANDOM_POSITION = PropertyBool.create("random_position");
+    public static final BooleanProperty RANDOM_POSITION = BooleanProperty.create("random_position");
     
     public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.95F, 0.45F, 0.95F);
 
@@ -52,7 +50,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
         return new AxisAlignedBB(0.15F, 0.0F, 0.15F, 0.85F, 0.45F, 0.85F);
     }
 
@@ -99,7 +97,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
 	}
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (world.getTileEntity(pos) instanceof TileEntityAspectVial) {
             TileEntityAspectVial tile = (TileEntityAspectVial) world.getTileEntity(pos);
 
@@ -199,7 +197,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.TRANSLUCENT;
@@ -218,7 +216,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
     }
 
     @Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public void getDrops(NonNullList<ItemStack> drops, IWorldReader world, BlockPos pos, IBlockState state, int fortune) {
 		TileEntityAspectVial tile = (TileEntityAspectVial) world.getTileEntity(pos);
 		if(tile != null) {
 			if(tile.getAspect() != null) {
@@ -258,7 +256,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
 
         player.addStat(StatList.getBlockStats(this), 1);
         player.addExhaustion(0.025F);
-        if (!world.isRemote && !world.restoringBlockSnapshots && world.getGameRules().getBoolean("doTileDrops") && !player.capabilities.isCreativeMode) {
+        if (!world.isRemote && !world.restoringBlockSnapshots && world.getGameRules().getBoolean("doTileDrops") && !player.abilities.isCreativeMode) {
             NonNullList<ItemStack> drops = NonNullList.create();
             getDrops(drops, world, pos, state, 0);
             float chance = ForgeEventFactory.fireBlockHarvesting(drops, world, pos, world.getBlockState(pos), 0, 1, false, harvesters.get());
@@ -279,12 +277,12 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
     }
     
     @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    public boolean isSideSolid(IBlockState base_state, IWorldReader world, BlockPos pos, EnumFacing side) {
     	return false;
     }
     
     @Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
     

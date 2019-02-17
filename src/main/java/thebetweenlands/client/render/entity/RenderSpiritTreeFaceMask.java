@@ -1,20 +1,18 @@
 package thebetweenlands.client.render.entity;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.model.armor.ModelSpiritTreeFaceMaskLarge;
 import thebetweenlands.client.render.model.armor.ModelSpiritTreeFaceMaskSmall;
-import thebetweenlands.client.render.model.entity.ModelSpiritTreeFaceLarge;
-import thebetweenlands.client.render.model.entity.ModelSpiritTreeFaceSmall2;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.lib.ModInfo;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderSpiritTreeFaceMask extends Render<EntitySpiritTreeFaceMask> {
 	private static final ResourceLocation TEXTURE_LARGE = new ResourceLocation(ModInfo.ID, "textures/entity/spirit_tree_face_large.png");
 	private static final ResourceLocation TEXTURE_SMALL = new ResourceLocation(ModInfo.ID, "textures/entity/spirit_tree_face_small.png");

@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
@@ -45,7 +45,7 @@ public class SimpleItemLoaderExtension extends LoaderExtension {
 
 			//Bake replacement model
 			IBakedModel bakedModel = replacementModel.bake(replacementModel.getDefaultState(), DefaultVertexFormats.ITEM, 
-					(loc) -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(loc.toString()));
+					(loc) -> Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite(loc.toString()));
 
 			//Return wrapped model
 			return new BakedModelItemWrapper(original, bakedModel);

@@ -3,13 +3,13 @@ package thebetweenlands.common.handler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.common.TheBetweenlands;
@@ -54,11 +54,11 @@ public class EnvironmentEventHandler {
 	}
 
 	//Update events on the client side
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onTick(TickEvent.ClientTickEvent event) {
-		if(event.phase == Phase.END && !Minecraft.getMinecraft().isGamePaused()) {
-			World world = Minecraft.getMinecraft().world;
+		if(event.phase == Phase.END && !Minecraft.getInstance().isGamePaused()) {
+			World world = Minecraft.getInstance().world;
 			if(world != null && world.isRemote) {
 				BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
 				if(storage != null) {

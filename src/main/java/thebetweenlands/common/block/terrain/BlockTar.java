@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.terrain;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -14,20 +16,18 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
-import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.util.AdvancedStateMap;
-
-import javax.annotation.Nonnull;
 
 public class BlockTar extends BlockFluidClassic implements IStateMappedBlock, ICustomItemBlock {
 	public BlockTar() {
@@ -35,7 +35,7 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock, IC
 	}
 
 	@Override
-	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
+	public boolean canDisplace(IWorldReader world, BlockPos pos) {
 		if (world.getBlockState(pos).getMaterial().isLiquid())
 			return false;
 		return super.canDisplace(world, pos);
@@ -49,8 +49,8 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock, IC
 	}
 
 	@Override
-	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
-		if (entity instanceof EntityLivingBase && !(entity instanceof EntityTarBeast) && !(entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode)) {
+	public void onEntityCollision(IBlockState state, World world, BlockPos pos, Entity entity) {
+		if (entity instanceof EntityLivingBase && !(entity instanceof EntityTarBeast) && !(entity instanceof EntityPlayer && ((EntityPlayer)entity).abilities.isCreativeMode)) {
 			double liquidHeight = (double)((float)(pos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(((Integer)state.getValue(BlockLiquid.LEVEL)).intValue()));
 			if (entity.posY + entity.getEyeHeight() < liquidHeight) {
 				((EntityLivingBase) entity).attackEntityFrom(DamageSource.DROWN, 2.0F);
@@ -104,7 +104,7 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock, IC
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void playEffects(World world, int x, int y, int z) {
 		world.playSound(null, (double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 
@@ -114,13 +114,13 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock, IC
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(BlockTar.LEVEL);
 	}
 
 	@Override
-	public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState state, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
+	public Boolean isEntityInsideMaterial(IWorldReader world, BlockPos blockpos, IBlockState state, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
 		if(entity instanceof EntityTarBeast == false && materialIn == Material.WATER) {
 			double liquidHeight = (double)((float)(blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(((Integer)state.getValue(BlockLiquid.LEVEL)).intValue()));
 			if(testingHead) {

@@ -1,20 +1,22 @@
 package thebetweenlands.client.render.model;
 
-import com.google.common.collect.Lists;
-import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBox;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.model.TextureOffset;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
-import thebetweenlands.util.MathUtils;
-import thebetweenlands.util.RotationOrder;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.Lists;
+
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.model.ModelBase;
+import net.minecraft.client.renderer.entity.model.ModelBox;
+import net.minecraft.client.renderer.entity.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.model.TextureOffset;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import thebetweenlands.util.MathUtils;
+import thebetweenlands.util.RotationOrder;
 
 public class AdvancedModelRenderer extends MowzieModelRenderer {
     public boolean compiled;
@@ -96,7 +98,7 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
         return this;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     protected void compileDisplayList(float scale) {
         displayList = GLAllocation.generateDisplayLists(1);
         GL11.glNewList(displayList, GL11.GL_COMPILE);
@@ -108,7 +110,7 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void postRender(float scale) {
         if (!isHidden) {
             if (showModel) {
@@ -165,7 +167,7 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void render(float scale) {
         if (!isHidden) {
             if (!compiled) {
@@ -249,7 +251,7 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void renderWithRotation(float scale) {
         if (!isHidden) {
             if (!compiled) {

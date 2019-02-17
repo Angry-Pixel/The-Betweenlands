@@ -7,7 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class BlockTemplePillar extends BlockRotatedPillar {
@@ -25,7 +25,7 @@ public class BlockTemplePillar extends BlockRotatedPillar {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
 		switch (state.getValue(AXIS)) {
 		case Y:
 			return AABB_Y;
@@ -53,13 +53,13 @@ public class BlockTemplePillar extends BlockRotatedPillar {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(IBlockState blockState, IWorldReader blockAccess, BlockPos pos, EnumFacing side) {
 		return super.shouldSideBeRendered(blockState, blockAccess, pos, side) && (blockAccess.getBlockState(pos.offset(side)).getBlock() != this
 				|| (blockState.getValue(AXIS) != blockAccess.getBlockState(pos.offset(side)).getValue(AXIS) || side.getAxis() != blockState.getValue(AXIS)));
 	}
 
 	@Override
-	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(IBlockState base_state, IWorldReader world, BlockPos pos, EnumFacing side) {
 		return side.getAxis() == base_state.getValue(AXIS);
 	}
 }

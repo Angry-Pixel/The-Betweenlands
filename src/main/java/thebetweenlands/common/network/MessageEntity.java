@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
+import javax.xml.ws.handler.MessageContext;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class MessageEntity extends MessageBase {
 	private static class EntityIdentifier {
@@ -89,7 +89,7 @@ public abstract class MessageEntity extends MessageBase {
 
 	@Override
 	public IMessage process(MessageContext ctx) {
-		if(ctx.side == Side.CLIENT) {
+		if(ctx.side == Dist.CLIENT) {
 			this.processClient();
 		} else {
 			for(EntityIdentifier id : this.entityIdentifiers) {
@@ -103,9 +103,9 @@ public abstract class MessageEntity extends MessageBase {
 		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private void processClient() {
-		World world = Minecraft.getMinecraft().world;
+		World world = Minecraft.getInstance().world;
 		if(world != null) {
 			for(EntityIdentifier id : this.entityIdentifiers) {
 				if(id.dimensionId == world.provider.getDimension()) {

@@ -18,7 +18,7 @@ public abstract class AbstractCapability<F extends AbstractCapability<F, T, A>, 
 
 	/**
 	 * Returns the capability instance.
-	 * <p>Use the {@link net.minecraftforge.common.capabilities.CapabilityInject} annotation to retrieve the capability
+	 * <p>Use the {@link net.minecraftforge.common.abilities.CapabilityInject} annotation to retrieve the capability
 	 * @return
 	 */
 	protected abstract Capability<T> getCapability();

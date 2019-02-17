@@ -27,8 +27,8 @@ public class BlockCircleGem extends BlockGenericOre {
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		super.breakBlock(worldIn, pos, state);
+	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 
 		if(this.gem.gemSingerTarget != null) {
 			BetweenlandsChunkStorage.unmarkGem(worldIn, pos, this.gem.gemSingerTarget);

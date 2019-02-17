@@ -8,33 +8,25 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.event.entity.item.ItemTossEvent;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
-import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemMisc;
-import thebetweenlands.common.item.misc.ItemShimmerStone;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
-
-import java.util.List;
 
 public class AdvancementHandler {
 
     @SubscribeEvent
     public static void onPlayerRightClick(PlayerInteractEvent.RightClickBlock event) {
-        if (event.getSide() == Side.SERVER && event.getEntityPlayer() instanceof EntityPlayerMP) {
+        if (event.getSide() == Dist.DEDICATED_SERVER && event.getEntityPlayer() instanceof EntityPlayerMP) {
             ItemStack stack = event.getItemStack();
             IBlockState state = event.getWorld().getBlockState(event.getPos());
             AdvancementCriterionRegistry.CLICK_BLOCK.trigger(stack, (EntityPlayerMP) event.getEntityPlayer(), event.getPos(), state, event.getFace());

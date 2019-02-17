@@ -2,14 +2,12 @@ package thebetweenlands.common.entity.rowboat;
 
 import java.util.EnumMap;
 
-import javax.annotation.Nullable;
-
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,13 +29,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.network.serverbound.MessageRow;
@@ -49,8 +46,6 @@ import thebetweenlands.util.MathUtils;
 import thebetweenlands.util.Matrix;
 import thebetweenlands.util.OpenSimplexNoise;
 import thebetweenlands.util.Quat;
-
-import io.netty.buffer.ByteBuf;
 
 /*
  * Useful links:
@@ -198,7 +193,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         return dataManager.get(IS_TARRED);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void updateInputs(boolean starboard, boolean port, boolean forward, boolean backward) {
         oarState.put(ShipSide.STARBOARD, starboard);
@@ -266,7 +261,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             setTimeSinceHit(10);
             setDamageTaken(getDamageTaken() + amount * 10);
             markVelocityChanged();
-            boolean creative = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).capabilities.isCreativeMode;
+            boolean creative = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).abilities.isCreativeMode;
             if (creative || getDamageTaken() > 20) {
                 if (!creative && world.getGameRules().getBoolean("doEntityDrops")) {
                     entityDropItem(getItem(), 0);

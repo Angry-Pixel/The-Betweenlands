@@ -1,7 +1,7 @@
 package thebetweenlands.common.block.property;
 
-public class PropertyIntegerUnlisted extends UnlistedPropertyHelper<Integer> {
-	public PropertyIntegerUnlisted(String name) {
+public class IntegerPropertyUnlisted extends AbstractUnlistedProperty<Integer> {
+	public IntegerPropertyUnlisted(String name) {
 		super(name);
 	}
 

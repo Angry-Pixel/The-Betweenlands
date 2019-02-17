@@ -3,15 +3,16 @@ package thebetweenlands.common.network.clientbound;
 import java.io.IOException;
 import java.util.List;
 
+import javax.xml.ws.handler.MessageContext;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.api.storage.ILocalStorageHandler;
@@ -72,15 +73,15 @@ public class MessageAddLocalStorage extends MessageBase {
 
 	@Override
 	public IMessage process(MessageContext ctx) {
-		if(ctx.side == Side.CLIENT) {
+		if(ctx.side == Dist.CLIENT) {
 			this.handle();
 		}
 		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private void handle() {
-		World world = Minecraft.getMinecraft().world;
+		World world = Minecraft.getInstance().world;
 		if(world != null) {
 			StorageID id = StorageID.readFromNBT(this.idNbt);
 

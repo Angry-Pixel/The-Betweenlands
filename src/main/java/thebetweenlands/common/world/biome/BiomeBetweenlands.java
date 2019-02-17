@@ -12,9 +12,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.entity.spawning.IWeightProvider;
@@ -170,7 +170,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 		return this;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public int getGrassColorAtPos(BlockPos pos) {
 		if(this.secondaryGrassColor < 0) {
@@ -193,7 +193,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public int getFoliageColorAtPos(BlockPos pos) {
 		if(this.secondaryFoliageColor < 0) {
@@ -229,7 +229,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 	 * @param farPlaneDistance Maximum render distance
 	 * @return float
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public float getFogStart(float farPlaneDistance, int mode) {
 		return mode == -1 ? 0.0F : farPlaneDistance * 0.5F;
 	}
@@ -239,7 +239,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 	 * @param farPlaneDistance Maximum render distance
 	 * @return float
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public float getFogEnd(float farPlaneDistance, int mode) {
 		return farPlaneDistance;
 	}
@@ -248,7 +248,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 	 * Returns the fog RGB color.
 	 * @return int[3]
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int[] getFogRGB() {
 		return this.fogColorRGB;
 	}

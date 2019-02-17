@@ -3,7 +3,6 @@ package thebetweenlands.client.render.particle.entity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -109,7 +108,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 	}
 
 	public static float getDistanceToViewer(double x, double y, double z, float partialRenderTicks) {
-		Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
+		Entity entity = Minecraft.getInstance().getRenderViewEntity();
 		if(entity != null) {
 			double dx = (float) (entity.prevPosX + (entity.posX - entity.prevPosX) * partialRenderTicks) - x;
 			double dy = (float) (entity.prevPosY + (entity.posY - entity.prevPosY) * partialRenderTicks) - y;

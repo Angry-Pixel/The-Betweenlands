@@ -10,10 +10,10 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ItemWidget extends ManualWidgetBase {
     public int width;
     public int height;
@@ -42,9 +42,9 @@ public class ItemWidget extends ManualWidgetBase {
 
 
     @Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
     public void drawForeGround() {
-        RenderItem render = Minecraft.getMinecraft().getRenderItem();
+        RenderItem render = Minecraft.getInstance().getRenderItem();
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -53,7 +53,7 @@ public class ItemWidget extends ManualWidgetBase {
         GlStateManager.enableDepth();
         GlStateManager.scale(scale, scale, scale);
         render.renderItemAndEffectIntoGUI(stacks.get(currentDisplayItem), (int) (xStart / scale), (int) (yStart / scale));
-        render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, stacks.get(currentDisplayItem), (int) (xStart / scale), (int) (yStart / scale), null);
+        render.renderItemOverlayIntoGUI(Minecraft.getInstance().fontRenderer, stacks.get(currentDisplayItem), (int) (xStart / scale), (int) (yStart / scale), null);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.scale(1f, 1f, 1f);
         GlStateManager.disableLighting();
@@ -61,7 +61,7 @@ public class ItemWidget extends ManualWidgetBase {
 
         if (mouseX >= xStart && mouseX <= xStart + 16 * scale && mouseY >= yStart && mouseY <= yStart + 16 * scale) {
             if (stacks.get(currentDisplayItem) != null) {
-                List<String> tooltipData = stacks.get(currentDisplayItem).getTooltip(Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL);
+                List<String> tooltipData = stacks.get(currentDisplayItem).getTooltip(Minecraft.getInstance().player, ITooltipFlag.TooltipFlags.NORMAL);
                 List<String> parsedTooltip = new ArrayList();
                 boolean first = true;
 
@@ -90,7 +90,7 @@ public class ItemWidget extends ManualWidgetBase {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateScreen() {
         super.updateScreen();
         if (manual != null) {

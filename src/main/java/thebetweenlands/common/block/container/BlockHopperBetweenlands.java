@@ -4,9 +4,8 @@ import net.minecraft.block.BlockHopper;
 import net.minecraft.block.SoundType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityHopperBetweenlands;
@@ -27,7 +26,7 @@ public class BlockHopperBetweenlands extends BlockHopper implements BlockRegistr
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void setStateMapper(AdvancedStateMap.Builder builder) {
         builder.ignore(ENABLED);
     }

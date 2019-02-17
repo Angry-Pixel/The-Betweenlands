@@ -1,15 +1,15 @@
 package thebetweenlands.common.herblore.book.widgets;
 
+import java.util.ArrayList;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-import java.util.ArrayList;
-
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class PictureWidget extends ManualWidgetBase {
     ResourceLocation recourseLocation;
     public int width;
@@ -52,9 +52,9 @@ public class PictureWidget extends ManualWidgetBase {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void drawForeGround() {
-        TextureManager render = Minecraft.getMinecraft().renderEngine;
+        TextureManager render = Minecraft.getInstance().renderEngine;
         render.bindTexture(recourseLocation);
 
         GlStateManager.enableBlend();

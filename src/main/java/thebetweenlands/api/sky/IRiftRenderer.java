@@ -2,8 +2,8 @@ package thebetweenlands.api.sky;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IRiftRenderer {
 	/**
@@ -12,34 +12,34 @@ public interface IRiftRenderer {
 	 * @param world
 	 * @param mc
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void render(float partialTicks, WorldClient world, Minecraft mc);
 
 	/**
 	 * Sets the rift mask renderer that renders the rift mask and the overlay
 	 * @param maskRenderer
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setRiftMaskRenderer(IRiftMaskRenderer maskRenderer);
 
 	/**
 	 * Returns the rift mask renderer
 	 * @return
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public IRiftMaskRenderer getRiftMaskRenderer();
 
 	/**
 	 * Sets the rift sky renderer
 	 * @param skyRenderer
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setRiftSkyRenderer(IRiftSkyRenderer skyRenderer);
 
 	/**
 	 * Returns the rift sky renderer
 	 * @return
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public IRiftSkyRenderer getRiftSkyRenderer();
 }

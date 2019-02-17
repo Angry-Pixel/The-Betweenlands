@@ -2,14 +2,11 @@ package thebetweenlands.common.block.container;
 
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -24,10 +21,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -85,7 +83,7 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 	}
 
 	@Override
-	public void onBlockClicked(World world, BlockPos pos, EntityPlayer playerIn) {
+	public void onBlockClicked(IBlockState state, World world, BlockPos pos, EntityPlayer playerIn) {
 		if(!world.isRemote) {
 			if (world.getTileEntity(pos) instanceof TileEntityCompostBin) {
 				TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(pos);
@@ -97,7 +95,7 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 	}
 	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
 
 		if (!world.isRemote) {
@@ -123,7 +121,7 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 							switch (tile.addItemToBin(heldItem, amount, time, true)) {
 							case 1:
 								tile.addItemToBin(heldItem, amount, time, false);
-								if (!player.capabilities.isCreativeMode) {
+								if (!player.abilities.isCreativeMode) {
 									player.getHeldItem(hand).shrink(1);
 								}
 								break;
@@ -150,7 +148,7 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
@@ -166,7 +164,7 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
 		TileEntity tileEntity = worldIn.getTileEntity(pos);
 
 		if (tileEntity instanceof IInventory) {
@@ -174,16 +172,16 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 			worldIn.updateComparatorOutputLevel(pos, this);
 		}
 
-		super.breakBlock(worldIn, pos, state);
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 	
 	@Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
 	
 	@Override
-	public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random rand) {
+	public void animateTick(IBlockState stateIn, World world, BlockPos pos, Random rand) {
 		if (world.getTileEntity(pos) instanceof TileEntityCompostBin) {
 			TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(pos);
 			if(!tile.isOpen() && !tile.isEmpty()) {

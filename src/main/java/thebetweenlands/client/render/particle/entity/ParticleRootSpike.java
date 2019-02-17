@@ -16,14 +16,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.model.SpikeRenderer;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.SoundRegistry;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ParticleRootSpike extends Particle {
 	public static final ResourceLocation SPRITE = new ResourceLocation(ModInfo.ID, "blocks/log_spirit_tree");
 
@@ -82,7 +82,7 @@ public class ParticleRootSpike extends Particle {
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		if(this.renderer == null) {
-			this.renderer = new SpikeRenderer(this.length, this.width, 1.0F, 1, this.seed).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(SPRITE.toString()));
+			this.renderer = new SpikeRenderer(this.length, this.width, 1.0F, 1, this.seed).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite(SPRITE.toString()));
 		}
 
 		int i = this.getBrightnessForRender(partialTicks);
@@ -94,7 +94,7 @@ public class ParticleRootSpike extends Particle {
 
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
 
-		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		float rx = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
 		float ry = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
@@ -126,7 +126,7 @@ public class ParticleRootSpike extends Particle {
 
 		GlStateManager.scale(this.scale, this.scale, this.scale);
 
-		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		this.renderer.render();
 

@@ -14,10 +14,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.IBakedModel;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.resources.IResource;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
@@ -141,7 +141,7 @@ public abstract class LoaderExtension {
 	 */
 	protected String readMetadata(ResourceLocation location) {
 		location = new ResourceLocation(location.getNamespace(), location.getPath() + ".mlmeta");
-		IResourceManager manager = Minecraft.getMinecraft().getResourceManager();
+		IResourceManager manager = Minecraft.getInstance().getResourceManager();
 		try {
 			IResource metadataResource = manager.getResource(location);
 			return IOUtils.toString(metadataResource.getInputStream());

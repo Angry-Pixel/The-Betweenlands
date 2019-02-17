@@ -12,13 +12,12 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraftforge.common.config.Config;
+import com.electronwill.nightconfig.core.Config;
+
 import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.FieldWrapper;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.common.config.remapper.ConfigRemapper;
 import thebetweenlands.common.config.remapper.Remapper1;
 import thebetweenlands.common.lib.ModInfo;

@@ -3,23 +3,23 @@ package thebetweenlands.common.block.structure;
 import java.util.EnumMap;
 
 import net.minecraft.block.BlockStairs;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.chunk.BlockStateContainer;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BlockStateContainerHelper;
-import thebetweenlands.common.block.property.PropertyBoolUnlisted;
+import thebetweenlands.common.block.property.BooleanPropertyUnlisted;
 
 public class BlockSlanted extends BlockStairs {
-	public static final IUnlistedProperty<Boolean> CORNER_NORTH_WEST = new PropertyBoolUnlisted("corner_north_west");
-	public static final IUnlistedProperty<Boolean> CORNER_NORTH_EAST = new PropertyBoolUnlisted("corner_north_east");
-	public static final IUnlistedProperty<Boolean> CORNER_SOUTH_EAST = new PropertyBoolUnlisted("corner_south_east");
-	public static final IUnlistedProperty<Boolean> CORNER_SOUTH_WEST = new PropertyBoolUnlisted("corner_south_west");
+	public static final IUnlistedProperty<Boolean> CORNER_NORTH_WEST = new BooleanPropertyUnlisted("corner_north_west");
+	public static final IUnlistedProperty<Boolean> CORNER_NORTH_EAST = new BooleanPropertyUnlisted("corner_north_east");
+	public static final IUnlistedProperty<Boolean> CORNER_SOUTH_EAST = new BooleanPropertyUnlisted("corner_south_east");
+	public static final IUnlistedProperty<Boolean> CORNER_SOUTH_WEST = new BooleanPropertyUnlisted("corner_south_west");
 
 	public BlockSlanted(IBlockState modelState) {
 		super(modelState);
@@ -32,7 +32,7 @@ public class BlockSlanted extends BlockStairs {
 	}
 
 	@Override
-	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getExtendedState(IBlockState oldState, IWorldReader worldIn, BlockPos pos) {
 		IExtendedBlockState state = (IExtendedBlockState) oldState;
 
 		//x, z

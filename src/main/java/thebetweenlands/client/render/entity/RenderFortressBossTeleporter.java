@@ -41,7 +41,7 @@ public class RenderFortressBossTeleporter extends Render<EntityFortressBossTelep
 		GlStateManager.translate(-MODEL.eye.rotationPointX * 0.065F / 2.0F, -MODEL.eye.rotationPointY * 0.065F / 2.0F + 0.3D, -MODEL.eye.rotationPointZ * 0.065F / 2.0F);
 		if(entity.getTarget() != null)
 			GlStateManager.translate(Math.sin((entity.ticksExisted + partialTicks)/5.0D) * 0.1F, Math.cos((entity.ticksExisted + partialTicks)/7.0D) * 0.1F, Math.cos((entity.ticksExisted + partialTicks)/6.0D) * 0.1F);
-		if(entity.getTarget() == null || entity.getTarget() != Minecraft.getMinecraft().getRenderViewEntity()) {
+		if(entity.getTarget() == null || entity.getTarget() != Minecraft.getInstance().getRenderViewEntity()) {
 			GlStateManager.scale(0.8F, 0.8F, 0.8F);
 		} else {
 			float scale = (float)Math.pow(entity.getTeleportProgress(), 3) * 2.5F;
@@ -66,7 +66,7 @@ public class RenderFortressBossTeleporter extends Render<EntityFortressBossTelep
 			GlStateManager.colorMask(true, true, true, true);
 			MODEL.eye.render(0.065F);
 
-			if(entity.getTarget() == Minecraft.getMinecraft().getRenderViewEntity()) {
+			if(entity.getTarget() == Minecraft.getInstance().getRenderViewEntity()) {
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 				float alpha = (float) Math.pow(entity.getTeleportProgress(), 2.5D);

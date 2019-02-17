@@ -20,13 +20,13 @@ import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
+import net.minecraft.crash.ReportedException;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.ReportedException;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.common.config.BetweenlandsConfig;
 
@@ -432,7 +432,7 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setValuesFromPacket(List<? extends IDataEntry<?>> newEntries) {
 		this.lock.writeLock().lock();
 
@@ -471,7 +471,7 @@ public class GenericDataManager implements IGenericDataManagerAccess {
 	}
 
 	@SuppressWarnings("unchecked")
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected <T> void setEntryValue(GenericDataManager.DataEntry<T> target, Object value) {
 		target.setValue((T) value);
 	}

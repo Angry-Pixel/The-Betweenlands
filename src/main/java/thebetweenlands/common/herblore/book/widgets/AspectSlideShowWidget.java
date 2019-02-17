@@ -5,11 +5,11 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.IAspectType;
@@ -17,7 +17,7 @@ import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.util.AspectIconRenderer;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class AspectSlideShowWidget extends ManualWidgetBase {
     public ItemStack itemStack;
     public ArrayList<IAspectType> aspects = new ArrayList<>();
@@ -68,7 +68,7 @@ public class AspectSlideShowWidget extends ManualWidgetBase {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateScreen() {
         super.updateScreen();
         if (manual.untilUpdate % 20 == 0) {
@@ -94,8 +94,8 @@ public class AspectSlideShowWidget extends ManualWidgetBase {
 
     public void getAspects() {
         aspects.clear();
-        ItemAspectContainer container = ItemAspectContainer.fromItem(this.itemStack, AspectManager.get(Minecraft.getMinecraft().world));
-        List<Aspect> visibleAspects = container.getAspects(DiscoveryContainer.getMergedDiscoveryContainer(Minecraft.getMinecraft().player));
+        ItemAspectContainer container = ItemAspectContainer.fromItem(this.itemStack, AspectManager.get(Minecraft.getInstance().world));
+        List<Aspect> visibleAspects = container.getAspects(DiscoveryContainer.getMergedDiscoveryContainer(Minecraft.getInstance().player));
         for (Aspect aspect : visibleAspects) {
             aspects.add(aspect.type);
         }

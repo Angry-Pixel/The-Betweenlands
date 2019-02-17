@@ -14,13 +14,13 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.AttachLocalStorageCapabilitiesEvent;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.ILocalStorage;
@@ -63,12 +63,12 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return this.capabilities == null ? false : this.capabilities.hasCapability(capability, facing);
+		return this.capabilities == null ? false : this.abilities.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return this.capabilities == null ? null : this.capabilities.getCapability(capability, facing);
+		return this.capabilities == null ? null : this.abilities.getCapability(capability, facing);
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		if(this.capabilities != null && nbt.hasKey("ForgeCaps")) {
-			this.capabilities.deserializeNBT(nbt.getCompoundTag("ForgeCaps"));
+			this.abilities.deserializeNBT(nbt.getCompoundTag("ForgeCaps"));
 		}
 
 		this.readReferenceChunks(nbt);
@@ -98,7 +98,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		if(this.capabilities != null) {
-			NBTTagCompound caps = this.capabilities.serializeNBT();
+			NBTTagCompound caps = this.abilities.serializeNBT();
 			if(caps.getSize() > 0) {
 				nbt.setTag("ForgeCaps", caps);
 			}
@@ -155,7 +155,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setLinkedChunks(List<ChunkPos> linkedChunks) {
 		this.linkedChunks.clear();
 		this.linkedChunks.addAll(linkedChunks);

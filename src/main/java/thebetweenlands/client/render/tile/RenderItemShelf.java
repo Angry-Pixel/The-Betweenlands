@@ -2,11 +2,11 @@ package thebetweenlands.client.render.tile;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemSkull;
 import net.minecraft.item.ItemStack;
@@ -21,7 +21,7 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 	public static final ModelItemShelf MODEL = new ModelItemShelf();
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/item_shelf.png");
 
-	protected final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+	protected final RenderItem renderItem = Minecraft.getInstance().getRenderItem();
 
 	@Override
 	public void render(TileEntityItemShelf te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

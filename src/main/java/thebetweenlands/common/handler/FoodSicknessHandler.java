@@ -8,12 +8,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.item.IDecayFood;
@@ -37,7 +37,7 @@ public class FoodSicknessHandler {
 		return BetweenlandsConfig.GENERAL.useFoodSickness && GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_FOOD_SICKNESS);
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
@@ -49,7 +49,7 @@ public class FoodSicknessHandler {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected static void addSicknessMessage(EntityPlayer player, ItemStack item, FoodSickness sickness) {
 		if(lastUsedItem.isEmpty() || !item.isItemEqual(lastUsedItem) || lastSickness == null || lastSickness != sickness) {
 			player.sendStatusMessage(new TextComponentString(String.format(sickness.getRandomLine(player.getRNG()), item.getDisplayName())), true);

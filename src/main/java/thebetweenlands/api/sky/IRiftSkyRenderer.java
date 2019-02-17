@@ -2,8 +2,8 @@ package thebetweenlands.api.sky;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IRiftSkyRenderer {
 	/**
@@ -12,7 +12,7 @@ public interface IRiftSkyRenderer {
 	 * @param world
 	 * @param mc
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setClearColor(float partialTicks, WorldClient world, Minecraft mc);
 
 	/**
@@ -21,7 +21,7 @@ public interface IRiftSkyRenderer {
 	 * @param world
 	 * @param mc
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void render(float partialTicks, WorldClient world, Minecraft mc);
 	
 	/**
@@ -31,6 +31,6 @@ public interface IRiftSkyRenderer {
 	 * @param mc
 	 * @return
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public float getSkyBrightness(float partialTicks, WorldClient world, Minecraft mc);
 }

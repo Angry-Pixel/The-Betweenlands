@@ -8,32 +8,32 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistryOld.ICustomItemBlock;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.teleporter.TeleporterHandler;
@@ -95,7 +95,7 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 		return false;
 	}
 
-	public static boolean isPatternValidX(IBlockAccess world, BlockPos pos) {
+	public static boolean isPatternValidX(IWorldReader world, BlockPos pos) {
 		// Layer 0
 		if (!check(world, pos.down(), BlockRegistry.PORTAL_FRAME) && !checkPortal(world, pos.down(), BlockRegistry.TREE_PORTAL, EnumFacing.Axis.Z)) {
 			return false;
@@ -125,7 +125,7 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 		return true;
 	}
 
-	public static boolean isPatternValidZ(IBlockAccess world, BlockPos pos) {
+	public static boolean isPatternValidZ(IWorldReader world, BlockPos pos) {
 		// Layer 0
 		if (!check(world, pos.down(), BlockRegistry.PORTAL_FRAME) && !checkPortal(world, pos.down(), BlockRegistry.TREE_PORTAL, EnumFacing.Axis.X)) {
 			return false;
@@ -155,17 +155,17 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 		return true;
 	}
 
-	private static boolean check(IBlockAccess world, BlockPos pos, Block target) {
+	private static boolean check(IWorldReader world, BlockPos pos, Block target) {
 		return world.getBlockState(pos).getBlock() == target;
 	}
 
-	private static boolean checkPortal(IBlockAccess world, BlockPos pos, Block target, EnumFacing.Axis axis) {
+	private static boolean checkPortal(IWorldReader world, BlockPos pos, Block target, EnumFacing.Axis axis) {
 		IBlockState state = world.getBlockState(pos);
 		return state.getBlock() == target && state.getValue(AXIS) == axis;
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
 		switch ((EnumFacing.Axis) state.getValue(AXIS)) {
 		case X:
 			return X_AABB;
@@ -222,12 +222,12 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 
 	@Nullable
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IWorldReader worldIn, BlockPos pos) {
 		return NULL_AABB;
 	}
 
 	@Override
-	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollision(IBlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		if (!entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn.timeUntilPortal <= 0 && BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionWhitelistSet.isListed(entityIn.dimension)) {
 			AxisAlignedBB aabb = state.getBoundingBox(worldIn, pos);
 			if (aabb != null && aabb.offset(pos).intersects(entityIn.getEntityBoundingBox())) {
@@ -263,7 +263,7 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
@@ -274,12 +274,12 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 	}
 
 	@Override
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(IBlockState blockState, IWorldReader blockAccess, BlockPos pos, EnumFacing side) {
 		return side != EnumFacing.DOWN || side != EnumFacing.UP;
 	}
 
 	@Override
-	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		for (int i = 0; i < 4; i++) {
 			double particleX = pos.getX() + rand.nextFloat();
 			double particleY = pos.getY() + rand.nextFloat();
@@ -310,13 +310,13 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		super.breakBlock(worldIn, pos, state);
+	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(worldIn);
 		List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, new AxisAlignedBB(pos).grow(1, 1, 1), null);

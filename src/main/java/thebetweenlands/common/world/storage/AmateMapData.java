@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.storage;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import java.util.Objects;
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
@@ -22,8 +23,6 @@ import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.MathUtils;
-
-import java.util.*;
 
 public class AmateMapData extends MapData {
 	public final Int2ObjectMap<BLMapDecoration> decorations = new Int2ObjectOpenHashMap<>();
@@ -66,7 +65,7 @@ public class AmateMapData extends MapData {
     }
 
     public void updateMapTexture() {
-        MapItemRenderer mapItemRenderer = Minecraft.getMinecraft().entityRenderer.getMapItemRenderer();
+        MapItemRenderer mapItemRenderer = Minecraft.getInstance().entityRenderer.getMapItemRenderer();
         MapItemRenderer.Instance instance = mapItemRenderer.getMapRendererInstance(this);
         for (int i = 0; i < 16384; ++i) {
             int j = this.colors[i] & 255;
@@ -150,7 +149,7 @@ public class AmateMapData extends MapData {
 
         @Override
         public boolean render(int index) {
-            Minecraft.getMinecraft().renderEngine.bindTexture(MAP_ICONS);
+            Minecraft.getInstance().renderEngine.bindTexture(MAP_ICONS);
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F + getX() / 2.0F + 64.0F, 0.0F + getY() / 2.0F + 64.0F, -0.02F);
             GlStateManager.rotate((float) (getRotation() * 360) / 16.0F, 0.0F, 0.0F, 1.0F);

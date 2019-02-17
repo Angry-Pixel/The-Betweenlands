@@ -9,11 +9,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.ISummoningCapability;
 import thebetweenlands.api.entity.IEntityCameraOffset;
 import thebetweenlands.api.entity.IEntityScreenShake;
@@ -27,8 +27,8 @@ public class CameraPositionHandler {
 
 	private float getShakeStrength(float delta) {
 		float screenShake = 0.0F;
-		World world = Minecraft.getMinecraft().world;
-		Entity renderViewEntity = Minecraft.getMinecraft().getRenderViewEntity();
+		World world = Minecraft.getInstance().world;
+		Entity renderViewEntity = Minecraft.getInstance().getRenderViewEntity();
 		if(renderViewEntity != null) {
 			for(Entity entity : (List<Entity>) world.loadedEntityList) {
 				if(entity instanceof IEntityScreenShake) {
@@ -45,10 +45,10 @@ public class CameraPositionHandler {
 	private double prevPosZ;
 	private boolean didChange = false;
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public void onRenderTickStart(RenderTickEvent event) {
-		Entity renderViewEntity = Minecraft.getMinecraft().getRenderViewEntity();
+		Entity renderViewEntity = Minecraft.getInstance().getRenderViewEntity();
 
 		if(renderViewEntity != null) {
 
@@ -88,7 +88,7 @@ public class CameraPositionHandler {
 
 			boolean shouldChange = shakeStrength > 0.0F || !offsetEntities.isEmpty();
 
-			if((shouldChange && !Minecraft.getMinecraft().isGamePaused()) || this.didChange) {
+			if((shouldChange && !Minecraft.getInstance().isGamePaused()) || this.didChange) {
 				if(event.phase == Phase.START) {
 					this.prevPosX = renderViewEntity.posX;
 					this.prevPosY = renderViewEntity.posY;

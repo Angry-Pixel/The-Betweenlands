@@ -1,16 +1,18 @@
 package thebetweenlands.common.item.misc;
 
-import com.google.common.collect.*;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectList;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.material.MapColor;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
@@ -19,33 +21,26 @@ import net.minecraft.network.play.server.SPacketMaps;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.MapData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.network.clientbound.MessageAmateMap;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.registries.ItemRegistry.ICustomMeshCallback;
+import thebetweenlands.common.registries.ItemRegistryOld.ICustomMeshCallback;
 import thebetweenlands.common.world.storage.AmateMapData;
 import thebetweenlands.common.world.storage.AmateMapData.BLMapDecoration.Location;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.LocalStorageHandlerImpl;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
-import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.common.world.storage.location.LocationStorage;
-
-import javax.annotation.Nullable;
-import java.util.*;
 
 public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
 
@@ -67,7 +62,7 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
     }
 
     @Nullable
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static AmateMapData loadMapData(int mapId, World worldIn) {
         String s = STR_ID + "_" + mapId;
         return (AmateMapData)worldIn.loadData(AmateMapData.class, s);
@@ -291,7 +286,7 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {}
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public ItemMeshDefinition getMeshDefinition() {
         return stack -> new ModelResourceLocation(getRegistryName(), "inventory");

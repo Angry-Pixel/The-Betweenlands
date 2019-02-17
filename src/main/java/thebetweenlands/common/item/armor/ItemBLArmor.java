@@ -15,11 +15,12 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
@@ -99,24 +100,24 @@ public class ItemBLArmor extends ItemArmor implements IAnimatorRepairable {
 		return BLMaterialRegistry.getFullRepairLifeCost(this.getArmorMaterial());
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Nullable
 	protected ResourceLocation getOverlayTexture(ItemStack stack, EntityPlayer player, float partialTicks) {
 		return null;
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Nullable
 	protected ResourceLocation getOverlaySideTexture(ItemStack stack, EntityPlayer player, float partialTicks, boolean left) {
 		return null;
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected int getOverlayTextureFilter(ItemStack stack, EntityPlayer player, float partialTicks) {
 		return GL11.GL_NEAREST;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void renderHelmetOverlay(ItemStack stack, EntityPlayer player, ScaledResolution resolution, float partialTicks) {
 		int filter = this.getOverlayTextureFilter(stack, player, partialTicks);
@@ -130,7 +131,7 @@ public class ItemBLArmor extends ItemArmor implements IAnimatorRepairable {
 			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 			GlStateManager.color(1, 1, 1);
 			
-			Minecraft.getMinecraft().getTextureManager().bindTexture(overlay);
+			Minecraft.getInstance().getTextureManager().bindTexture(overlay);
 			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
 			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, filter);
@@ -154,7 +155,7 @@ public class ItemBLArmor extends ItemArmor implements IAnimatorRepairable {
 				
 				float texWidth = (width / 2 - height / 2) / height;
 				
-				Minecraft.getMinecraft().getTextureManager().bindTexture(sideOverlayLeft);
+				Minecraft.getInstance().getTextureManager().bindTexture(sideOverlayLeft);
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, filter);
@@ -166,7 +167,7 @@ public class ItemBLArmor extends ItemArmor implements IAnimatorRepairable {
 				vertexBuffer.pos(0, 0, -90).tex(1 - texWidth, 0).endVertex();
 				tessellator.draw();
 				
-				Minecraft.getMinecraft().getTextureManager().bindTexture(sideOverlayRight);
+				Minecraft.getInstance().getTextureManager().bindTexture(sideOverlayRight);
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, filter);

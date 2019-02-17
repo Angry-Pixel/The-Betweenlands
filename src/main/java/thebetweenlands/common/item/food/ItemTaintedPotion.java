@@ -57,7 +57,7 @@ public class ItemTaintedPotion extends Item {
 	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityLivingBase entity) {
 		EntityPlayer player = entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
 
-		if (player == null || !player.capabilities.isCreativeMode) {
+		if (player == null || !player.abilities.isCreativeMode) {
 			stack.shrink(1);
 		}
 
@@ -70,7 +70,7 @@ public class ItemTaintedPotion extends Item {
 			player.addStat(StatList.getObjectUseStats(this));
 		}
 
-		if (player == null || !player.capabilities.isCreativeMode) {
+		if (player == null || !player.abilities.isCreativeMode) {
 			if (stack.getCount() <= 0) {
 				return new ItemStack(Items.GLASS_BOTTLE);
 			}

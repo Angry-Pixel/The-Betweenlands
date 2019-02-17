@@ -130,7 +130,7 @@ public class ManualManager {
                     }
                 }
             }
-            ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(ingredient, AspectManager.get(Minecraft.getMinecraft().world));
+            ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(ingredient, AspectManager.get(Minecraft.getInstance().world));
             return ingredient != null && aspectContainer.getAspects(container).size() > 0;
         }
 

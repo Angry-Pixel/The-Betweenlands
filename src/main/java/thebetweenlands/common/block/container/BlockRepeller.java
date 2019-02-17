@@ -8,13 +8,11 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.BlockSlab.EnumBlockHalf;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -28,12 +26,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.plant.BlockDoublePlantBL.EnumBlockHalf;
 import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -56,7 +56,7 @@ public class BlockRepeller extends BlockContainer {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
 		return state.getValue(HALF) == EnumBlockHalf.TOP ? AABB_TOP : AABB_BOTTOM;
 	}
 
@@ -81,7 +81,7 @@ public class BlockRepeller extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
+	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
 		if(state.getValue(HALF) == EnumBlockHalf.TOP && world.getBlockState(pos.down()).getBlock() == this) {
 			this.onBlockActivated(world, pos.down(), world.getBlockState(pos.down()), player, hand, facing, hitX, hitY, hitZ);
 		} else if(state.getValue(HALF) == EnumBlockHalf.BOTTOM) {
@@ -91,7 +91,7 @@ public class BlockRepeller extends BlockContainer {
 				if(held.getItem() == ItemRegistry.SHIMMER_STONE) {
 					if(!tile.hasShimmerstone()) {
 						tile.addShimmerstone();
-						if(!player.capabilities.isCreativeMode) {
+						if(!player.abilities.isCreativeMode) {
 							held.shrink(1);
 							if(held.getCount() <= 0) {
 								player.setHeldItem(hand, ItemStack.EMPTY);
@@ -108,7 +108,7 @@ public class BlockRepeller extends BlockContainer {
 							if(amount >= loss) {
 								if(!world.isRemote) {
 									int added = tile.addFuel(amount - loss);
-									if(!player.capabilities.isCreativeMode) {
+									if(!player.abilities.isCreativeMode) {
 										int leftAmount = amount - added - loss;
 										if(leftAmount > 0) {
 											aspectContainer.set(AspectRegistry.BYARIIS, leftAmount);
@@ -182,7 +182,7 @@ public class BlockRepeller extends BlockContainer {
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
 		if(!worldIn.isRemote) {
 			TileEntityRepeller tile = (TileEntityRepeller) worldIn.getTileEntity(pos);
 			if(tile != null) {
@@ -205,16 +205,16 @@ public class BlockRepeller extends BlockContainer {
 				worldIn.spawnEntity(entityitem);
 			}
 		}
-		super.breakBlock(worldIn, pos, state);
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public List<ItemStack> getDrops(IWorldReader world, BlockPos pos, IBlockState state, int fortune) {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		if(rand.nextInt(6) == 0) {
 			IBlockState state = worldIn.getBlockState(pos);
 			if(state.getValue(HALF) == EnumBlockHalf.BOTTOM) {
@@ -300,7 +300,7 @@ public class BlockRepeller extends BlockContainer {
 	}
 	
 	@Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
 }

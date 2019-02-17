@@ -4,20 +4,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.ArmSwingSpeedEvent;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ArmSwingSpeedHandler {
 
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent e) {
 		if(e.phase == TickEvent.Phase.END) {
-			World world = Minecraft.getMinecraft().world;
+			World world = Minecraft.getInstance().world;
 			if(world != null) {
 				for(Entity entity : world.loadedEntityList) {
 					if(entity instanceof EntityLivingBase) {

@@ -1,5 +1,8 @@
 package thebetweenlands.common.tile;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -17,9 +20,6 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class TileEntityCompostBin extends TileEntity implements ITickable, ISidedInventory {
     public static final int COMPOST_PER_ITEM = 25;

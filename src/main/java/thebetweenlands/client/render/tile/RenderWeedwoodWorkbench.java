@@ -2,11 +2,11 @@ package thebetweenlands.client.render.tile;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
-import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class RenderWeedwoodWorkbench extends TileEntitySpecialRenderer<TileEntityWeedwoodWorkbench> {
-	private final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+	private final RenderItem renderItem = Minecraft.getInstance().getRenderItem();
 
 	@Override
 	public void render(TileEntityWeedwoodWorkbench table, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -26,7 +26,7 @@ public class RenderWeedwoodWorkbench extends TileEntitySpecialRenderer<TileEntit
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
-		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		float prevLGTX = OpenGlHelper.lastBrightnessX;
 		float prevLGTY = OpenGlHelper.lastBrightnessY;
 		BlockPos pos = table.getPos();

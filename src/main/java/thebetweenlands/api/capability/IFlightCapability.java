@@ -58,7 +58,7 @@ public interface IFlightCapability {
 	 * @return
 	 */
 	public default boolean canFlyWithoutRing(EntityPlayer player) {
-		return player.capabilities.isCreativeMode || player.isSpectator();
+		return player.abilities.isCreativeMode || player.isSpectator();
 	}
 	
 	/**

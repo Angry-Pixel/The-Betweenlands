@@ -12,7 +12,6 @@ import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.util.vector.Matrix4f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
@@ -426,7 +425,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 				String[] shaders = new String[2];
 				for(int i = 0; i < 2; i++) {
 					StringWriter strBuf = new StringWriter();
-					IOUtils.copy(Minecraft.getMinecraft().getResourceManager().getResource(shaderLocations[i]).getInputStream(), strBuf, "UTF-8");
+					IOUtils.copy(Minecraft.getInstance().getResourceManager().getResource(shaderLocations[i]).getInputStream(), strBuf, "UTF-8");
 					shaders[i] = strBuf.toString();
 				}
 				vertexShaderID = createShader(shaders[0], ARBVertexShader.GL_VERTEX_SHADER_ARB);

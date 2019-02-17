@@ -149,7 +149,7 @@ public class GuiMainMenuBackground extends GuiScreen {
 			this.starfieldEffect.setOffset((this.layerTick + partialTicks) / 8000.0F, 0, 0);
 			int renderDimension = Math.max(this.width, this.height);
 			this.starfieldEffect.create(this.starfieldTextureFBO)
-			.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
+			.setPreviousFramebuffer(Minecraft.getInstance().getFramebuffer())
 			.setRenderDimensions(renderDimension, renderDimension)
 			.render(partialTicks);
 

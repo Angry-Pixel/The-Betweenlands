@@ -35,8 +35,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.common.entity.ai.EntityAIApproachItem;
@@ -661,9 +661,9 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return Minecraft.getMinecraft().player.capabilities.isCreativeMode || this.getSpawningTicks() > 0 ? this.getEntityBoundingBox() : ZERO_AABB;
+		return Minecraft.getInstance().player.abilities.isCreativeMode || this.getSpawningTicks() > 0 ? this.getEntityBoundingBox() : ZERO_AABB;
 	}
 
 	@Override

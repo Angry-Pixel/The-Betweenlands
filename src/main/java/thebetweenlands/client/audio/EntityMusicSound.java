@@ -4,11 +4,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IEntityMusic;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class EntityMusicSound<T extends Entity> extends EntitySound<T> {
 	public final IEntityMusic music;
 	public final float originalVolume;
@@ -42,7 +42,7 @@ public class EntityMusicSound<T extends Entity> extends EntitySound<T> {
 					}
 				}
 			} else {
-				if(!this.music.isMusicActive(Minecraft.getMinecraft().player) || this.entity.getDistance(Minecraft.getMinecraft().player) > this.music.getMusicRange(Minecraft.getMinecraft().player)) {
+				if(!this.music.isMusicActive(Minecraft.getInstance().player) || this.entity.getDistance(Minecraft.getInstance().player) > this.music.getMusicRange(Minecraft.getInstance().player)) {
 					this.repeat = false;
 					this.fadeOut = true;
 	

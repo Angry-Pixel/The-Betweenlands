@@ -3,13 +3,14 @@ package thebetweenlands.common.network.clientbound;
 import java.io.IOException;
 import java.util.Random;
 
+import javax.xml.ws.handler.MessageContext;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.capability.circlegem.CircleGem;
@@ -51,14 +52,14 @@ public class MessageGemProc extends MessageEntity {
 	public IMessage process(MessageContext ctx) {
 		super.process(ctx);
 
-		if(ctx.side == Side.CLIENT) {
+		if(ctx.side == Dist.CLIENT) {
 			this.handle();
 		}
 
 		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private void handle() {
 		CircleGem gem = this.getGem();
 		Entity entityHit = this.getEntity(0);

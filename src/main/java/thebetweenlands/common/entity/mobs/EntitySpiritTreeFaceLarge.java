@@ -41,8 +41,8 @@ import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.BossType;
 import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.api.entity.IEntityWithLootModifier;
@@ -199,7 +199,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		return SoundRegistry.SPIRIT_TREE_FACE_LARGE_LIVING;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void handleStatusUpdate(byte id) {
 		super.handleStatusUpdate(id);
@@ -344,7 +344,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void wispLockEffect(BlockPos pos) {
 		for(int i = 0; i < 64; i++) {
 			Vec3d dir = new Vec3d(this.rand.nextFloat() - 0.5F, this.rand.nextFloat() - 0.5F + 0.25F, this.rand.nextFloat() - 0.5F);

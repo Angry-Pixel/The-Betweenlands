@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -26,7 +26,7 @@ public class OverlayHandler {
 	@SubscribeEvent
 	public static void onRenderOverlay(RenderBlockOverlayEvent event) {
 		if(event.getOverlayType() == OverlayType.WATER) {
-			Minecraft mc = Minecraft.getMinecraft();
+			Minecraft mc = Minecraft.getInstance();
 			IBlockState state = mc.world.getBlockState(new BlockPos(mc.player));
 			EntityPlayer player = mc.player;
 
@@ -61,14 +61,14 @@ public class OverlayHandler {
 	}
 
 	private static void renderOverlay(ResourceLocation texture) {
-		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
+		Minecraft.getInstance().getTextureManager().bindTexture(texture);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder vertexbuffer = tessellator.getBuffer();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.pushMatrix();
-		float xOffset = -Minecraft.getMinecraft().player.rotationYaw / 64.0F;
-		float yOffset = Minecraft.getMinecraft().player.rotationPitch / 64.0F;
+		float xOffset = -Minecraft.getInstance().player.rotationYaw / 64.0F;
+		float yOffset = Minecraft.getInstance().player.rotationPitch / 64.0F;
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		vertexbuffer.pos(-1.0D, -1.0D, -0.5D).tex((double)(4.0F + xOffset), (double)(4.0F + yOffset)).endVertex();
 		vertexbuffer.pos(1.0D, -1.0D, -0.5D).tex((double)(0.0F + xOffset), (double)(4.0F + yOffset)).endVertex();

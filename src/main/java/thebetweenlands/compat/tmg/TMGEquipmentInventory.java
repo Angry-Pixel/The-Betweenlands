@@ -1,8 +1,14 @@
 package thebetweenlands.compat.tmg;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import com.m4thg33k.tombmanygraves2api.api.inventory.AbstractSpecialInventory;
 import com.m4thg33k.tombmanygraves2api.api.inventory.SpecialInventoryHelper;
 import com.m4thg33k.tombmanygraves2api.api.inventory.TransitionInventory;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -12,10 +18,6 @@ import net.minecraft.nbt.NBTTagList;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.registries.CapabilityRegistry;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Copied from provided example

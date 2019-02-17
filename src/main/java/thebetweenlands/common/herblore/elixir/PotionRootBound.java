@@ -12,12 +12,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import thebetweenlands.common.lib.ModInfo;
 
 public class PotionRootBound extends Potion {
@@ -71,7 +71,7 @@ public class PotionRootBound extends Potion {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private static void updateClientEntity(EntityLivingBase entity) {
 		if(entity instanceof AbstractClientPlayer) {
 			NBTTagCompound nbt = entity.getEntityData();
@@ -88,7 +88,7 @@ public class PotionRootBound extends Potion {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onFovUpdate(FOVUpdateEvent event) {
 		EntityPlayer entity = event.getEntity();

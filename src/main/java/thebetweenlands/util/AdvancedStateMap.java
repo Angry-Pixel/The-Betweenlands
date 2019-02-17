@@ -15,15 +15,15 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class AdvancedStateMap extends StateMapperBase {
 	private final Function<PropertiesMap, String> nameMapper;
 	private final String suffix;
@@ -131,7 +131,7 @@ public class AdvancedStateMap extends StateMapperBase {
 		return new ModelResourceLocation(fileName, this.getPropertyString(propertiesMap));
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class Builder {
 		private Function<PropertiesMap, String> nameMapper;
 		private String suffix;

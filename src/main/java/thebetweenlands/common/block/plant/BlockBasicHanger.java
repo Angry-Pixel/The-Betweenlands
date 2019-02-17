@@ -1,6 +1,9 @@
 package thebetweenlands.common.block.plant;
 
-import net.minecraft.block.Block;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -8,13 +11,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class BlockBasicHanger extends BlockBush {
 
@@ -59,7 +59,7 @@ public class BlockBasicHanger extends BlockBush {
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
         return new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.75F, 1.0F, 0.75F);
     }
 }

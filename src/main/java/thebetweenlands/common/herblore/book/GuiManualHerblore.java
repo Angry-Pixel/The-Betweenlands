@@ -1,25 +1,24 @@
 package thebetweenlands.common.herblore.book;
 
+import java.io.IOException;
+
+import net.java.games.input.Keyboard;
+import net.java.games.input.Mouse;
+import net.minecraft.client.GameSettings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.io.IOException;
-import java.nio.Buffer;
 
 public class GuiManualHerblore extends GuiScreen {
     private static ResourceLocation book = new ResourceLocation("thebetweenlands:textures/gui/manual/manual_hl.png");
@@ -70,7 +69,7 @@ public class GuiManualHerblore extends GuiScreen {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void drawScreen(int mouseX, int mouseY, float renderPartials) {
         mc.renderEngine.bindTexture(book);
         drawTexture(xStart, yStart, WIDTH, HEIGHT, 1024.0D, 1024.0D, 0.0D, 292.0D, 0.0D, 180.0D);
@@ -177,7 +176,7 @@ public class GuiManualHerblore extends GuiScreen {
         }
 
         if (this.currentCategory != null) {
-            GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
+            GameSettings gameSettings = Minecraft.getInstance().gameSettings;
             if (key == gameSettings.keyBindLeft.getKeyCode()) {
                 this.currentCategory.previousPage(this);
             } else if (key == gameSettings.keyBindRight.getKeyCode()) {
@@ -240,7 +239,7 @@ public class GuiManualHerblore extends GuiScreen {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateScreen() {
         untilUpdate++;
         if (currentCategory != null)

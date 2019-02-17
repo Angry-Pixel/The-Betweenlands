@@ -1,10 +1,21 @@
 package thebetweenlands.compat.jei.recipes.animator;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import org.lwjgl.opengl.GL11;
+
 import mezz.jei.api.gui.IGuiIngredient;
 import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
+import net.java.games.input.Mouse;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -16,8 +27,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
@@ -26,13 +35,6 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
 import thebetweenlands.util.TranslationHelper;
-
-import javax.annotation.Nullable;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class AnimatorRecipeJEI implements IRecipeWrapper {
     private IAnimatorRecipe animatorRecipe;
@@ -93,7 +95,7 @@ public class AnimatorRecipeJEI implements IRecipeWrapper {
         if (result != null)
             ingredients.setOutput(VanillaTypes.ITEM, result);
         if (lootTableName != null){
-            ingredients.setOutputLists(VanillaTypes.ITEM, Collections.singletonList(LootTableRegistry.getItemsFromTable(lootTableName, Minecraft.getMinecraft().world, true)));
+            ingredients.setOutputLists(VanillaTypes.ITEM, Collections.singletonList(LootTableRegistry.getItemsFromTable(lootTableName, Minecraft.getInstance().world, true)));
         }
     }
 
@@ -105,7 +107,7 @@ public class AnimatorRecipeJEI implements IRecipeWrapper {
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
         if (entity == null && animatorRecipe.getSpawnEntityClass(input) != null) {
             try {
-                entity = animatorRecipe.getSpawnEntityClass(input).getConstructor(new Class[]{World.class}).newInstance(Minecraft.getMinecraft().world);
+                entity = animatorRecipe.getSpawnEntityClass(input).getConstructor(new Class[]{World.class}).newInstance(Minecraft.getInstance().world);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }
@@ -115,7 +117,7 @@ public class AnimatorRecipeJEI implements IRecipeWrapper {
             }
         }
         if (entity != null) {
-            if (entity.world == null) entity.world = Minecraft.getMinecraft().world;
+            if (entity.world == null) entity.world = Minecraft.getInstance().world;
 
             final ScaledResolution scaledresolution = new ScaledResolution(minecraft);
             int i1 = scaledresolution.getScaledWidth();

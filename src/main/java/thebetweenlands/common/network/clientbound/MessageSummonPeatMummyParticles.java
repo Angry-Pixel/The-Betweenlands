@@ -1,16 +1,14 @@
 package thebetweenlands.common.network.clientbound;
 
+import javax.xml.ws.handler.MessageContext;
+
 import net.minecraft.block.Block;
-import net.minecraft.client.particle.ParticleDigging;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.network.MessageEntity;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -25,14 +23,14 @@ public class MessageSummonPeatMummyParticles extends MessageEntity {
 	public IMessage process(MessageContext ctx) {
 		super.process(ctx);
 
-		if(ctx.side == Side.CLIENT) {
+		if(ctx.side == Dist.CLIENT) {
 			this.handle();
 		}
 
 		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private void handle() {
 		Entity entity = this.getEntity(0);
 		if(entity != null) {

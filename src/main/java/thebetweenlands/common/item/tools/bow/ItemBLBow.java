@@ -26,11 +26,11 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
@@ -48,7 +48,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairab
 
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
 			@Override
-			@SideOnly(Side.CLIENT)
+			@OnlyIn(Dist.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				if (entityIn == null) {
 					return 0.0F;
@@ -85,7 +85,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairab
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft) {
 		if (entityLiving instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entityLiving;
-			boolean infiniteArrows = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
+			boolean infiniteArrows = player.abilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 			ItemStack arrow = this.findArrows(player);
 
 			int usedTicks = this.getMaxItemUseDuration(stack) - timeLeft;
@@ -132,7 +132,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairab
 
 						stack.damageItem(1, player);
 
-						if (infiniteArrows || player.capabilities.isCreativeMode && (arrow.getItem() == Items.SPECTRAL_ARROW || arrow.getItem() == Items.TIPPED_ARROW)) {
+						if (infiniteArrows || player.abilities.isCreativeMode && (arrow.getItem() == Items.SPECTRAL_ARROW || arrow.getItem() == Items.TIPPED_ARROW)) {
 							entityArrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 						}
 
@@ -180,7 +180,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairab
 		boolean flag = !this.findArrows(playerIn).isEmpty();
 		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, worldIn, playerIn, hand, flag);
 		if (ret != null) return ret;
-		if (!playerIn.capabilities.isCreativeMode && !flag) {
+		if (!playerIn.abilities.isCreativeMode && !flag) {
 			return new ActionResult<>(EnumActionResult.FAIL, itemstack);
 		} else {
 			playerIn.setActiveHand(hand);
@@ -208,13 +208,13 @@ public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairab
 		CorrosionHelper.updateCorrosion(itemStack, world, holder, slot, isHeldItem);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());
 	}
 	
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onUpdateFov(FOVUpdateEvent event) {
 		ItemStack activeItem = event.getEntity().getActiveItemStack();

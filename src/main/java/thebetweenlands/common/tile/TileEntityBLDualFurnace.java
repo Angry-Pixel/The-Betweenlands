@@ -10,8 +10,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.common.block.container.BlockBLDualFurnace;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -142,12 +142,12 @@ public class TileEntityBLDualFurnace extends TileEntityBasicInventory implements
 		return this.world.getTileEntity(this.pos) == this && player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getCookProgressScaled(int count) {
 		return furnaceCookTime * count / 200;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getBurnTimeRemainingScaled(int remainingTime) {
 		if (currentItemBurnTime == 0)
 			currentItemBurnTime = 200;
@@ -159,12 +159,12 @@ public class TileEntityBLDualFurnace extends TileEntityBasicInventory implements
 		return furnaceBurnTime > 0;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getCookProgressScaled2(int count) {
 		return furnaceCookTime2 * count / 200;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public int getBurnTimeRemainingScaled2(int remainingTime) {
 		if (currentItemBurnTime2 == 0)
 			currentItemBurnTime2 = 200;

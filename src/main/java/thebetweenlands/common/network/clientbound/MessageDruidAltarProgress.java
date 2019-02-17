@@ -1,5 +1,7 @@
 package thebetweenlands.common.network.clientbound;
 
+import javax.xml.ws.handler.MessageContext;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
@@ -7,11 +9,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.audio.DruidAltarSound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -50,13 +51,13 @@ public class MessageDruidAltarProgress extends MessageBase {
 
 	@Override
 	public IMessage process(MessageContext ctx) {
-		if(ctx.side == Side.CLIENT) {
+		if(ctx.side == Dist.CLIENT) {
 			this.handle();
 		}
 		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void handle() {
 		World world = FMLClientHandler.instance().getWorldClient();
 		if(world != null) {
@@ -80,7 +81,7 @@ public class MessageDruidAltarProgress extends MessageBase {
 						}
 					}
 	
-					Minecraft.getMinecraft().getSoundHandler().playSound(new DruidAltarSound(SoundRegistry.DRUID_CHANT, SoundCategory.BLOCKS, altar));
+					Minecraft.getInstance().getSoundHandler().playSound(new DruidAltarSound(SoundRegistry.DRUID_CHANT, SoundCategory.BLOCKS, altar));
 				}
 			}
 		}

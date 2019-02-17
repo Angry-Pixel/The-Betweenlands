@@ -2,8 +2,8 @@ package thebetweenlands.common.block.property;
 
 import net.minecraft.block.state.IBlockState;
 
-public class PropertyBlockStateUnlisted extends UnlistedPropertyHelper<IBlockState> {
-	public PropertyBlockStateUnlisted(String name) {
+public class BlockStatePropertyUnlisted extends AbstractUnlistedProperty<IBlockState> {
+	public BlockStatePropertyUnlisted(String name) {
 		super(name);
 	}
 

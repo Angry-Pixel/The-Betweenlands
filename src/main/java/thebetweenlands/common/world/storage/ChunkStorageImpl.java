@@ -56,12 +56,12 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return this.capabilities == null ? false : this.capabilities.hasCapability(capability, facing);
+		return this.capabilities == null ? false : this.abilities.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return this.capabilities == null ? null : this.capabilities.getCapability(capability, facing);
+		return this.capabilities == null ? null : this.abilities.getCapability(capability, facing);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt, boolean packet) {
 		if(this.capabilities != null && nbt.hasKey("ForgeCaps")) {
-			this.capabilities.deserializeNBT(nbt.getCompoundTag("ForgeCaps"));
+			this.abilities.deserializeNBT(nbt.getCompoundTag("ForgeCaps"));
 		}
 
 		this.readLocalStorageReferences(nbt);
@@ -138,7 +138,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt, boolean packet) {
 		if(this.capabilities != null) {
-			NBTTagCompound caps = this.capabilities.serializeNBT();
+			NBTTagCompound caps = this.abilities.serializeNBT();
 			if(caps.getSize() > 0) {
 				nbt.setTag("ForgeCaps", caps);
 			}

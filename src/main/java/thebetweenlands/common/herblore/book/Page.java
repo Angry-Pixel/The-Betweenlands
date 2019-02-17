@@ -1,16 +1,16 @@
 package thebetweenlands.common.herblore.book;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.translation.I18n;
-import thebetweenlands.api.aspect.IAspectType;
-import thebetweenlands.common.herblore.book.widgets.ManualWidgetBase;
-import thebetweenlands.common.registries.ItemRegistry;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import net.minecraft.client.resources.I18n;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import thebetweenlands.api.aspect.IAspectType;
+import thebetweenlands.common.herblore.book.widgets.ManualWidgetBase;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class Page {
     public int pageNumber;

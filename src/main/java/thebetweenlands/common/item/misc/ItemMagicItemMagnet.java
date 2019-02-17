@@ -11,12 +11,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -24,7 +23,6 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
-import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.NBTHelper;
 
@@ -129,7 +127,7 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void spawnParticles(EntityItem item) {
 		if(item.ticksExisted % 4 == 0) {
 			BLParticles.CORRUPTED.spawn(item.world, item.posX, item.posY + item.height / 2.0f + 0.25f, item.posZ, ParticleArgs.get().withScale(0.5f));

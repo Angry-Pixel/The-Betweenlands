@@ -7,9 +7,9 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ColorizerGrass;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraft.world.biome.BiomeColors;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.terrain.BlockSwampGrass;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -24,8 +24,8 @@ public class BlockDugGrass extends BlockGenericDugSoil implements ITintedBlock {
 	}
 
 	@Override
-	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
-		return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
+	public int getColorMultiplier(IBlockState state, IWorldReader worldIn, BlockPos pos, int tintIndex) {
+		return worldIn != null && pos != null ? BiomeColors.getGrassColor(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
 	}
 
 	@Override

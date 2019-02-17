@@ -1,6 +1,10 @@
 package thebetweenlands.client.handler;
 
 
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,9 +20,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
-
-import java.util.List;
 
 public class ArrowPredictionRenderer {
     private static class EntityArrowSilent extends EntityArrow {
@@ -77,7 +78,7 @@ public class ArrowPredictionRenderer {
     private static float lastQuality = 0.0F;
 
     public static void render(float quality) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getInstance().player;
         if(player.getActiveHand() == null) return;
         ItemStack stack = player.getHeldItem(player.getActiveHand());
         if(stack.isEmpty() || !(stack.getItem() instanceof ItemBow)) {
@@ -88,8 +89,8 @@ public class ArrowPredictionRenderer {
             randomYawPitchSet = true;
             lastQuality = quality;
             float maxOffset = 3.0F;
-            randYaw = (maxOffset / 2.0F - Minecraft.getMinecraft().world.rand.nextFloat() * maxOffset * 2.0F) * (1.0F - quality);
-            randPitch = (maxOffset / 2.0F - Minecraft.getMinecraft().world.rand.nextFloat() * maxOffset * 2.0F) * (1.0F - quality);
+            randYaw = (maxOffset / 2.0F - Minecraft.getInstance().world.rand.nextFloat() * maxOffset * 2.0F) * (1.0F - quality);
+            randPitch = (maxOffset / 2.0F - Minecraft.getInstance().world.rand.nextFloat() * maxOffset * 2.0F) * (1.0F - quality);
         }
         int maxDur = stack.getMaxItemUseDuration() - player.getItemInUseCount();
         float strength = (float)maxDur / 20.0F;
@@ -102,22 +103,22 @@ public class ArrowPredictionRenderer {
         double pz = player.posZ;
         float pYaw = player.rotationYaw;
         float pPitch = player.rotationPitch;
-        player.posX = Minecraft.getMinecraft().getRenderManager().renderPosX;
-        player.posY = Minecraft.getMinecraft().getRenderManager().renderPosY;
-        player.posZ = Minecraft.getMinecraft().getRenderManager().renderPosZ;
+        player.posX = Minecraft.getInstance().getRenderManager().renderPosX;
+        player.posY = Minecraft.getInstance().getRenderManager().renderPosY;
+        player.posZ = Minecraft.getInstance().getRenderManager().renderPosZ;
         player.rotationYaw += randYaw;
         player.rotationPitch += randPitch;
         //TODO: Mabye find a better way to simulate an arrow
-        EntityArrowSilent ea = new EntityArrowSilent(Minecraft.getMinecraft().world, player);
+        EntityArrowSilent ea = new EntityArrowSilent(Minecraft.getInstance().world, player);
         ea.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, strength * 3.0f, 1.0f);
         player.posX = px;
         player.posY = py;
         player.posZ = pz;
         player.rotationYaw = pYaw;
         player.rotationPitch = pPitch;
-        double rx = Minecraft.getMinecraft().getRenderManager().renderPosX;
-        double ry = Minecraft.getMinecraft().getRenderManager().renderPosY;
-        double rz = Minecraft.getMinecraft().getRenderManager().renderPosZ;
+        double rx = Minecraft.getInstance().getRenderManager().renderPosX;
+        double ry = Minecraft.getInstance().getRenderManager().renderPosY;
+        double rz = Minecraft.getInstance().getRenderManager().renderPosZ;
         double startX = rx - (double)(MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * 0.46F);
         double startY = ry - 0.10000000149011612D + 1.5D;
         double startZ = rz - (double)(MathHelper.sin(player.rotationYaw / 180.0F * (float)Math.PI) * 0.46F);
@@ -206,18 +207,18 @@ public class ArrowPredictionRenderer {
     private static RayTraceResult getCollision(EntityArrowSilent ea) {
         Vec3d start = new Vec3d(ea.posX, ea.posY, ea.posZ);
         Vec3d dest = new Vec3d(ea.posX + ea.motionX, ea.posY + ea.motionY, ea.posZ + ea.motionZ);
-        RayTraceResult hit = Minecraft.getMinecraft().world.rayTraceBlocks(start, dest, false, true, false);
+        RayTraceResult hit = Minecraft.getInstance().world.rayTraceBlocks(start, dest, false, true, false);
         start = new Vec3d(ea.posX, ea.posY, ea.posZ);
         dest = new Vec3d(ea.posX + ea.motionX, ea.posY + ea.motionY, ea.posZ + ea.motionZ);
         if (hit != null) {
             dest = new Vec3d(hit.hitVec.x, hit.hitVec.y, hit.hitVec.z);
         }
         Entity collidedEntity = null;
-        List entityList = Minecraft.getMinecraft().world.getEntitiesWithinAABBExcludingEntity(ea, ea.getEntityBoundingBox().expand(ea.motionX, ea.motionY, ea.motionZ).grow(1.0D, 1.0D, 1.0D));
+        List entityList = Minecraft.getInstance().world.getEntitiesWithinAABBExcludingEntity(ea, ea.getEntityBoundingBox().expand(ea.motionX, ea.motionY, ea.motionZ).grow(1.0D, 1.0D, 1.0D));
         double lastDistance = 0.0D;
         for (int c = 0; c < entityList.size(); ++c) {
             Entity currentEntity = (Entity)entityList.get(c);
-            if (currentEntity.canBeCollidedWith() && (currentEntity != Minecraft.getMinecraft().player)) {
+            if (currentEntity.canBeCollidedWith() && (currentEntity != Minecraft.getInstance().player)) {
                 AxisAlignedBB entityBoundingBox = currentEntity.getEntityBoundingBox().grow((double)0.3F, (double)0.3F, (double)0.3F);
                 RayTraceResult collision = entityBoundingBox.calculateIntercept(start, dest);
                 if (collision != null) {

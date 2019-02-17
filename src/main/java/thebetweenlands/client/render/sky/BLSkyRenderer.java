@@ -25,12 +25,12 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.IRenderHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.sky.IBetweenlandsSky;
 import thebetweenlands.api.sky.IRiftRenderer;
 import thebetweenlands.client.handler.FogHandler;
@@ -39,15 +39,14 @@ import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
-import thebetweenlands.common.world.event.EventAuroras;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.Mesh;
-import thebetweenlands.util.RenderUtils;
 import thebetweenlands.util.Mesh.Triangle;
 import thebetweenlands.util.Mesh.Triangle.Vertex;
 import thebetweenlands.util.Mesh.Triangle.Vertex.Vector3D;
+import thebetweenlands.util.RenderUtils;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 	public static final ResourceLocation SKY_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_texture.png");
 	public static final ResourceLocation SKY_SPOOPY_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/spoopy.png");
@@ -70,7 +69,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 
 	public BLSkyRenderer() {
 		if(clipPlaneBuffer == null) {
-			clipPlaneBuffer = new GeometryBuffer(Minecraft.getMinecraft().getTextureManager(), WorldShader.CLIP_PLANE_DIFFUSE_TEXTURE, WorldShader.CLIP_PLANE_DEPTH_TEXTURE, true);
+			clipPlaneBuffer = new GeometryBuffer(Minecraft.getInstance().getTextureManager(), WorldShader.CLIP_PLANE_DIFFUSE_TEXTURE, WorldShader.CLIP_PLANE_DEPTH_TEXTURE, true);
 		}
 
 		if(starMesh == null && ShaderHelper.INSTANCE.canUseShaders()) {
@@ -252,7 +251,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 			//Render sky clip plane
 			this.renderFlatSky(partialTicks, world, mc, true, false);
 		} else {
-			if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+			if(Minecraft.getInstance().gameSettings.fancyGraphics) {
 				//Render fancy non-shader sky dome
 				mc.renderEngine.bindTexture(SKY_TEXTURE);
 				GlStateManager.disableAlpha();
@@ -278,7 +277,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 		}
 		
 		if(this.spoopy) {
-			if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+			if(Minecraft.getInstance().gameSettings.fancyGraphics) {
 				mc.renderEngine.bindTexture(SKY_SPOOPY_TEXTURE);
 				
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
@@ -405,7 +404,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 
 	protected void renderFog(float partialTicks, WorldClient world, Minecraft mc) {
 		//Render sky dome with fog texture for fog noise illusion
-		if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+		if(Minecraft.getInstance().gameSettings.fancyGraphics) {
 			GlStateManager.pushMatrix();
 
 			float renderRadius = 80.0F;
@@ -634,10 +633,10 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
 		if(event.phase == Phase.END) {
-			WorldClient world = Minecraft.getMinecraft().world;
+			WorldClient world = Minecraft.getInstance().world;
 			BLSkyRenderer skyRenderer = WorldProviderBetweenlands.getBLSkyRenderer();
 			if(world != null && skyRenderer != null) {
-				skyRenderer.update(world, Minecraft.getMinecraft());
+				skyRenderer.update(world, Minecraft.getInstance());
 			}
 		}
 	}

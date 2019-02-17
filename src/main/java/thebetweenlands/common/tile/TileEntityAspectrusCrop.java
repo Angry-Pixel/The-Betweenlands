@@ -11,8 +11,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.aspect.Aspect;
 
 public class TileEntityAspectrusCrop extends TileEntity implements ITickable {
@@ -39,13 +39,13 @@ public class TileEntityAspectrusCrop extends TileEntity implements ITickable {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public double getMaxRenderDistanceSquared() {
 		return 4096.0D * 6.0D;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
 		return new AxisAlignedBB(this.pos.getX() - 0.5D, this.pos.getY() - 0.5D, this.pos.getZ() - 0.5D, this.pos.getX() + 1.5D, this.pos.getY() + 1.5D, this.pos.getZ() + 1.5D);
 	}

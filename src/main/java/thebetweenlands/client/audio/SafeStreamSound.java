@@ -9,12 +9,11 @@ import net.minecraft.client.audio.Sound;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import paulscode.sound.SoundSystem;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class SafeStreamSound extends MovingSound {
     private boolean isDone;
 
@@ -45,7 +44,7 @@ public class SafeStreamSound extends MovingSound {
     protected void updateSafeStreamSound() {
     	if (this.isSoundStreamed(false) && donePlaying && !isDone) {
             if (pauseTicks == 0) {
-                SoundManager manager = Minecraft.getMinecraft().getSoundHandler().sndManager;
+                SoundManager manager = Minecraft.getInstance().getSoundHandler().sndManager;
                 SoundSystem sys = manager.sndSystem;
                 Map<ISound, String> sounds = manager.invPlayingSounds;
                 sys.pause(sounds.get(this));

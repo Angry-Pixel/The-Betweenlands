@@ -7,17 +7,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.ws.handler.MessageContext;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.MapItemRenderer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.server.SPacketMaps;
 import net.minecraft.world.storage.MapData;
 import net.minecraft.world.storage.MapDecoration;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.misc.ItemAmateMap;
 import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.world.storage.AmateMapData;
@@ -62,17 +63,17 @@ public class MessageAmateMap extends MessageBase {
 
     @Override
     public IMessage process(MessageContext ctx) {
-        if(ctx.side == Side.CLIENT) {
+        if(ctx.side == Dist.CLIENT) {
         	this.handle();
         }
 
         return null;
     }
     
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     private void handle() {
-    	MapItemRenderer mapItemRenderer = Minecraft.getMinecraft().entityRenderer.getMapItemRenderer();
-        AmateMapData mapData = ItemAmateMap.loadMapData(mapId, Minecraft.getMinecraft().world);
+    	MapItemRenderer mapItemRenderer = Minecraft.getInstance().entityRenderer.getMapItemRenderer();
+        AmateMapData mapData = ItemAmateMap.loadMapData(mapId, Minecraft.getInstance().world);
 
         if (mapData == null) {
             String s = ItemAmateMap.STR_ID + "_" + mapId;
@@ -86,7 +87,7 @@ public class MessageAmateMap extends MessageBase {
                 }
             }
 
-            Minecraft.getMinecraft().world.setData(s, mapData);
+            Minecraft.getInstance().world.setData(s, mapData);
         }
 
         inner.setMapdataTo(mapData);

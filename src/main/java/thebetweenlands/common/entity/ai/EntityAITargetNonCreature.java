@@ -102,7 +102,7 @@ public abstract class EntityAITargetNonCreature extends EntityAIBase
 						}
 					}
 
-					if (entitylivingbase instanceof EntityPlayer && ((EntityPlayer)entitylivingbase).capabilities.disableDamage)
+					if (entitylivingbase instanceof EntityPlayer && ((EntityPlayer)entitylivingbase).abilities.disableDamage)
 					{
 						return false;
 					}
@@ -182,7 +182,7 @@ public abstract class EntityAITargetNonCreature extends EntityAIBase
 					return false;
 				}
 			}
-			else if (target instanceof EntityPlayer && !includeInvincibles && ((EntityPlayer)target).capabilities.disableDamage)
+			else if (target instanceof EntityPlayer && !includeInvincibles && ((EntityPlayer)target).abilities.disableDamage)
 			{
 				return false;
 			}

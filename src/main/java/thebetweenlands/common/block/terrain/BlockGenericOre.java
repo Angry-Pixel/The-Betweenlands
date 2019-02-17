@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
 
@@ -56,7 +56,7 @@ public class BlockGenericOre extends BasicBlock {
 	}
 
 	@Override
-	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune) {
+	public int getExpDrop(IBlockState state, IWorldReader world, BlockPos pos, int fortune) {
 		return MathHelper.getInt(rand, this.minXP, this.maxXP);
 	}
 
@@ -67,7 +67,7 @@ public class BlockGenericOre extends BasicBlock {
 	}
 
 	@Override
-	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		double pixel = 0.0625D;
 		if(rand.nextInt(3) == 0) {
 			for (int l = 0; l < 5; l++) {

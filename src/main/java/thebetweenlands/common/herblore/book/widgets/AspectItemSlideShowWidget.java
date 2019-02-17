@@ -6,15 +6,15 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class AspectItemSlideShowWidget extends ManualWidgetBase {
     public IAspectType aspectType;
     public ArrayList<ItemStack> items = new ArrayList<>();
@@ -55,7 +55,7 @@ public class AspectItemSlideShowWidget extends ManualWidgetBase {
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public void updateScreen() {
         super.updateScreen();
         if (manual.untilUpdate % 60 == 0) {
@@ -81,9 +81,9 @@ public class AspectItemSlideShowWidget extends ManualWidgetBase {
 
     public void getItems() {
         items.clear();
-        AspectManager manager = AspectManager.get(Minecraft.getMinecraft().world);
+        AspectManager manager = AspectManager.get(Minecraft.getInstance().world);
         for (Map.Entry<AspectItem, List<AspectManager.AspectItemEntry>> entry : AspectManager.getRegisteredItems().entrySet()) {
-            List<Aspect> discoveredAspects = manager.getDiscoveredStaticAspects(entry.getKey(), DiscoveryContainer.getMergedDiscoveryContainer(Minecraft.getMinecraft().player));
+            List<Aspect> discoveredAspects = manager.getDiscoveredStaticAspects(entry.getKey(), DiscoveryContainer.getMergedDiscoveryContainer(Minecraft.getInstance().player));
             for (Aspect aspect : discoveredAspects) {
                 if (aspect.type.equals(this.aspectType))
                     items.add(new ItemStack(entry.getKey().getOriginal().getItem(), 1, entry.getKey().getOriginal().getItemDamage()));

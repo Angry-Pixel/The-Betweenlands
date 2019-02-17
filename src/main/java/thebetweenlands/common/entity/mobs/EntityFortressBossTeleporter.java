@@ -17,8 +17,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.client.audio.TeleporterSound;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -175,9 +175,9 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private void playTeleportSound() {
-		Minecraft.getMinecraft().getSoundHandler().playSound(new TeleporterSound(this, this.getTarget()));
+		Minecraft.getInstance().getSoundHandler().playSound(new TeleporterSound(this, this.getTarget()));
 	}
 
 	public void faceEntity(Entity target) {
@@ -264,7 +264,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 		return 0.0F;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void spawnSmokeParticle(double x, double y, double z, double mx, double my, double mz) {
 		BLParticles.PORTAL.spawn(this.world, x, y, z, ParticleArgs.get().withMotion(mx, my, mz));
 	}

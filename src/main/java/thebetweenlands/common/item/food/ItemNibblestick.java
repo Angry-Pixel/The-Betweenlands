@@ -7,8 +7,8 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
@@ -45,7 +45,7 @@ public class ItemNibblestick extends ItemBLFood {
 		super.onFoodEaten(stack, worldIn, player);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void addFinishEatingParticles(ItemStack stack, World world, EntityPlayer player) {
 		for(int i = 0; i < 20; i++) {
 			BLParticles.XP_PIECES.spawn(world, player.posX + world.rand.nextFloat() * 0.6F - 0.3F, player.posY + player.getEyeHeight() - 0.1F + world.rand.nextFloat() * 0.6F - 0.3F, player.posZ + world.rand.nextFloat() * 0.6F - 0.3F);

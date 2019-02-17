@@ -2,14 +2,15 @@ package thebetweenlands.common.network.clientbound;
 
 import java.io.IOException;
 
+import javax.xml.ws.handler.MessageContext;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -41,15 +42,15 @@ public class MessageSoundRipple extends MessageBase {
 
 	@Override
 	public IMessage process(MessageContext ctx) {
-		if(ctx.side == Side.CLIENT) {
+		if(ctx.side == Dist.CLIENT) {
 			this.addEffect();
 		}
 		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private void addEffect() {
-		World world = Minecraft.getMinecraft().world;
+		World world = Minecraft.getInstance().world;
 		if(world != null) {
 			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.UNBATCHED, BLParticles.SOUND_RIPPLE.spawn(world, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, ParticleArgs.get().withData(this.delay)));
 		}

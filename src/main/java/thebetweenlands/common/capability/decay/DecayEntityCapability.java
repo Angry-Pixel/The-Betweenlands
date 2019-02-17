@@ -71,8 +71,8 @@ public class DecayEntityCapability extends EntityCapability<DecayEntityCapabilit
 	public boolean isDecayEnabled() {
 		return this.getEntity().getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL && 
 				this.getEntity().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && 
-				!this.getEntity().capabilities.isCreativeMode && 
-				!this.getEntity().capabilities.disableDamage;
+				!this.getEntity().abilities.isCreativeMode && 
+				!this.getEntity().abilities.disableDamage;
 	}
 
 	@Override

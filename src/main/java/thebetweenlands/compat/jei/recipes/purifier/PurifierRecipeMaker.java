@@ -1,12 +1,13 @@
 package thebetweenlands.compat.jei.recipes.purifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nonnull;
+
 import thebetweenlands.api.recipes.IPurifierRecipe;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.recipe.purifier.PurifierRecipeStandard;
-
-import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.List;
 
 public class PurifierRecipeMaker {
 

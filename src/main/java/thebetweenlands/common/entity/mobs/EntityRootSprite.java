@@ -15,8 +15,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -127,7 +127,7 @@ public class EntityRootSprite extends EntityCreature implements IEntityBL {
 		this.world.setEntityState(this, EVENT_STEP);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void handleStatusUpdate(byte id) {
 		super.handleStatusUpdate(id);
@@ -137,7 +137,7 @@ public class EntityRootSprite extends EntityCreature implements IEntityBL {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private void spawnLeafParticles() {
 		for(int i = 0; i < 1 + this.rand.nextInt(3); i++) {
 			BLParticles.WEEDWOOD_LEAF.spawn(this.world, this.posX + this.motionX, this.posY + 0.1F + this.rand.nextFloat() * 0.3F, this.posZ + this.motionZ, ParticleArgs.get()

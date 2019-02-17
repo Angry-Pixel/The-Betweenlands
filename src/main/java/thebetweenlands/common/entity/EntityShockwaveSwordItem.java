@@ -7,8 +7,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class EntityShockwaveSwordItem extends EntityItem {
 	private static final DataParameter<Integer> WAVE_PROGRESS = EntityDataManager.createKey(EntityShockwaveSwordItem.class, DataSerializers.VARINT);
@@ -56,7 +56,7 @@ public class EntityShockwaveSwordItem extends EntityItem {
 		this.getDataManager().set(WAVE_PROGRESS, nbt.getInteger("WaveProgress"));
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public float getWaveProgress(float partialTicks) {
 		return this.lastWaveProgress + (this.waveProgress - this.lastWaveProgress) * partialTicks;
 	}

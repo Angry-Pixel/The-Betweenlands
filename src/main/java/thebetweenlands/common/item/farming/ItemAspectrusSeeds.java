@@ -2,19 +2,17 @@ package thebetweenlands.common.item.farming;
 
 import java.util.List;
 
-import net.minecraft.block.BlockBush;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.ItemAspectContainer;
-import thebetweenlands.client.handler.ScreenRenderHandler;
 import thebetweenlands.common.block.farming.BlockAspectrusCrop;
 import thebetweenlands.common.registries.BlockRegistry;
 

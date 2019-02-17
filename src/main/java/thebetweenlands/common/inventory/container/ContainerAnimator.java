@@ -2,18 +2,18 @@ package thebetweenlands.common.inventory.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.common.inventory.slot.SlotRestriction;
 import thebetweenlands.common.inventory.slot.SlotRestrictionNoMeta;
 import thebetweenlands.common.inventory.slot.SlotSizeRestriction;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAnimator;
-import net.minecraft.inventory.Container;
 
 
 public class ContainerAnimator extends Container {
@@ -83,7 +83,7 @@ public class ContainerAnimator extends Container {
     }
 
     @Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
     public void updateProgressBar(int id, int value)
     {
         super.updateProgressBar(id, value);

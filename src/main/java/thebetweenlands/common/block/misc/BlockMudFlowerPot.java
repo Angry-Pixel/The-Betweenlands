@@ -1,7 +1,6 @@
 package thebetweenlands.common.block.misc;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -12,33 +11,36 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.IProperty;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.plant.BlockPlant;
-import thebetweenlands.common.block.plant.BlockPlantUnderwater;
 import thebetweenlands.common.block.plant.BlockStackablePlant;
-import thebetweenlands.common.block.property.PropertyBlockStateUnlisted;
+import thebetweenlands.common.block.property.BlockStatePropertyUnlisted;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
@@ -47,7 +49,7 @@ import thebetweenlands.util.TileEntityHelper;
 public class BlockMudFlowerPot extends BlockContainer {
 	protected static final AxisAlignedBB FLOWER_POT_AABB = new AxisAlignedBB(0.3125D, 0.0D, 0.3125D, 0.6875D, 0.375D, 0.6875D);
 
-	public static final PropertyBlockStateUnlisted FLOWER = new PropertyBlockStateUnlisted("flower");
+	public static final BlockStatePropertyUnlisted FLOWER = new BlockStatePropertyUnlisted("flower");
 
 	protected Map<Item, Function<ItemStack, IBlockState>> plants = new HashMap<>();
 
@@ -69,7 +71,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
 		return FLOWER_POT_AABB;
 	}
 
@@ -94,7 +96,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 	}
 
 	@Override
-	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public IBlockState getExtendedState(IBlockState state, IWorldReader world, BlockPos pos) {
 		state = ((IExtendedBlockState)state).withProperty(FLOWER, Blocks.AIR.getDefaultState());
 
 		TileEntityMudFlowerPot te = TileEntityHelper.getTileEntityThreadSafe(world, pos, TileEntityMudFlowerPot.class);
@@ -110,7 +112,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = playerIn.getHeldItem(hand);
 		TileEntityMudFlowerPot te = this.getTileEntity(worldIn, pos);
 
@@ -125,7 +127,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 						te.setItemStack(heldItem);
 						playerIn.addStat(StatList.FLOWER_POTTED);
 	
-						if (!playerIn.capabilities.isCreativeMode) {
+						if (!playerIn.abilities.isCreativeMode) {
 							heldItem.shrink(1);
 						}
 					}
@@ -233,7 +235,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
 		super.onBlockHarvested(worldIn, pos, state, player);
 
-		if (player.capabilities.isCreativeMode) {
+		if (player.abilities.isCreativeMode) {
 			TileEntityMudFlowerPot te = this.getTileEntity(worldIn, pos);
 
 			if (te != null) {
@@ -243,20 +245,20 @@ public class BlockMudFlowerPot extends BlockContainer {
 	}
 
 	@Nullable
-	private TileEntityMudFlowerPot getTileEntity(IBlockAccess worldIn, BlockPos pos) {
+	private TileEntityMudFlowerPot getTileEntity(IWorldReader worldIn, BlockPos pos) {
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		return tileentity instanceof TileEntityMudFlowerPot ? (TileEntityMudFlowerPot) tileentity : null;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
 	/*============================FORGE START=====================================*/
 	@Override
-	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public void getDrops(NonNullList<ItemStack> drops, IWorldReader world, BlockPos pos, IBlockState state, int fortune) {
 		super.getDrops(drops, world, pos, state, fortune);
 		TileEntityMudFlowerPot te = getTileEntity(world, pos);
 		if (te != null && te.getFlowerPotItem() != null)
@@ -283,7 +285,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 	}
 	
 	@Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return face == EnumFacing.DOWN ? BlockFaceShape.CENTER_SMALL : BlockFaceShape.UNDEFINED;
     }
 }

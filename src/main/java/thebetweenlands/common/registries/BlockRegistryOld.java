@@ -9,14 +9,13 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -24,15 +23,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.TheBetweenlands;
@@ -176,7 +175,6 @@ import thebetweenlands.common.block.terrain.BlockSludgyDirt;
 import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
 import thebetweenlands.common.block.terrain.BlockSpreadingRottenLog;
 import thebetweenlands.common.block.terrain.BlockSpreadingSludgyDirt;
-import thebetweenlands.common.block.terrain.BlockSpreadingDeath;
 import thebetweenlands.common.block.terrain.BlockStagnantWater;
 import thebetweenlands.common.block.terrain.BlockStalactite;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
@@ -191,7 +189,6 @@ import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.gen.feature.WorldGenRootPodRoots;
-import thebetweenlands.common.world.gen.feature.WorldGenSmallSpiritTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenRubberTree;
@@ -242,7 +239,7 @@ public class BlockRegistryOld {
     public static final Block SWAMP_GRASS = new BlockSwampGrass();
     public static final Block WISP = new BlockWisp();
     public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK){
-        @SideOnly(Side.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         @Override
         public void spawnParticle(World world, double x, double y, double z) {
             BLParticles.FLAME.spawn(world, x, y, z);
@@ -260,7 +257,7 @@ public class BlockRegistryOld {
             return EnumItemMisc.SULFUR.create(1 + rand.nextInt(fortune + 1));
         }
 
-        @SideOnly(Side.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         @Override
         public void spawnParticle(World world, double x, double y, double z) {
             BLParticles.SULFUR_ORE.spawn(world, x, y, z);
@@ -532,7 +529,7 @@ public class BlockRegistryOld {
     public static final BlockDoublePlantBL VOLARPAD = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.VOLARPAD_ITEM.create(1));
     public static final Block SWAMP_PLANT = new BlockPlant() {
         @Override
-        @SideOnly(Side.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         public Block.EnumOffsetType getOffsetType() {
             return Block.EnumOffsetType.XZ;
         }
@@ -591,7 +588,7 @@ public class BlockRegistryOld {
     public static final Block MOSS = new BlockMoss().setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
     public static final Block LICHEN = new BlockMoss(){
     	@Override
-    	public int getColorMultiplier(IBlockState state, net.minecraft.world.IBlockAccess worldIn, net.minecraft.util.math.BlockPos pos, int tintIndex) { return 0xFFFFFF; }
+    	public int getColorMultiplier(IBlockState state, net.minecraft.world.IWorldReader worldIn, net.minecraft.util.math.BlockPos pos, int tintIndex) { return 0xFFFFFF; }
     }.setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
     public static final Block HANGER = new BlockHanger();
     public static final Block MIDDLE_FRUIT_BUSH = new BlockMiddleFruitBush();
@@ -608,7 +605,7 @@ public class BlockRegistryOld {
     //Misc
     public static final Block LOG_PORTAL = new BlockLogBetweenlands() {
     	@Override
-    	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+    	public int getFlammability(IWorldReader world, BlockPos pos, EnumFacing face) {
     		return 0;
         }
     };
@@ -745,14 +742,14 @@ public class BlockRegistryOld {
         	ITEM_BLOCKS.add(item);
         	item.setRegistryName(ModInfo.ID, name).setTranslationKey(ModInfo.ID + "." + name);
         	
-        	if (BetweenlandsConfig.DEBUG.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+        	if (BetweenlandsConfig.DEBUG.debug && FMLCommonHandler.instance().getEffectiveSide() == Dist.CLIENT) {
                 if (block.getCreativeTab() == null)
                     TheBetweenlands.logger.warn(String.format("Block %s doesn't have a creative tab", block.getTranslationKey()));
             }
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void registerBlockRenderers(ModelRegistryEvent event) {
         for (Block block : BlockRegistry.BLOCKS) {
@@ -817,7 +814,7 @@ public class BlockRegistryOld {
          *
          * @return
          */
-        @SideOnly(Side.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         default ItemStack getRenderedItem() {
             return ItemStack.EMPTY;
         }
@@ -857,7 +854,7 @@ public class BlockRegistryOld {
          *
          * @param builder
          */
-        @SideOnly(Side.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         void setStateMapper(AdvancedStateMap.Builder builder);
     }
 

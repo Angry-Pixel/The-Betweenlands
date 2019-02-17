@@ -4,10 +4,8 @@ import java.util.Locale;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,41 +13,43 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BlockStateContainerHelper;
-import thebetweenlands.common.block.property.PropertyBoolUnlisted;
-import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
+import thebetweenlands.common.block.property.BooleanPropertyUnlisted;
+import thebetweenlands.common.block.property.IntegerPropertyUnlisted;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.item.misc.ItemGemSinger;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.IStateMappedBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockLifeCrystalStalactite extends BlockSwampWater implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeItemBlockModelDefinition, IStateMappedBlock {
 	public static final PropertyEnum<EnumLifeCrystalType> VARIANT = PropertyEnum.<EnumLifeCrystalType>create("variant", EnumLifeCrystalType.class);
-	public static final PropertyBoolUnlisted NO_BOTTOM = new PropertyBoolUnlisted("no_bottom");
-	public static final PropertyBoolUnlisted NO_TOP = new PropertyBoolUnlisted("no_top");
-	public static final PropertyIntegerUnlisted DIST_UP = new PropertyIntegerUnlisted("dist_up");
-	public static final PropertyIntegerUnlisted DIST_DOWN = new PropertyIntegerUnlisted("dist_down");
-	public static final PropertyIntegerUnlisted POS_X = new PropertyIntegerUnlisted("pos_x");
-	public static final PropertyIntegerUnlisted POS_Y = new PropertyIntegerUnlisted("pos_x");
-	public static final PropertyIntegerUnlisted POS_Z = new PropertyIntegerUnlisted("pos_z");
+	public static final BooleanPropertyUnlisted NO_BOTTOM = new BooleanPropertyUnlisted("no_bottom");
+	public static final BooleanPropertyUnlisted NO_TOP = new BooleanPropertyUnlisted("no_top");
+	public static final IntegerPropertyUnlisted DIST_UP = new IntegerPropertyUnlisted("dist_up");
+	public static final IntegerPropertyUnlisted DIST_DOWN = new IntegerPropertyUnlisted("dist_down");
+	public static final IntegerPropertyUnlisted POS_X = new IntegerPropertyUnlisted("pos_x");
+	public static final IntegerPropertyUnlisted POS_Y = new IntegerPropertyUnlisted("pos_x");
+	public static final IntegerPropertyUnlisted POS_Z = new IntegerPropertyUnlisted("pos_z");
 
 	public BlockLifeCrystalStalactite(Fluid fluid, Material materialIn) {
 		super(fluid, materialIn);
@@ -62,7 +62,7 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
 		items.add(new ItemStack(this, 1, EnumLifeCrystalType.DEFAULT.getMetadata()));
 		items.add(new ItemStack(this, 1, EnumLifeCrystalType.ORE.getMetadata()));
@@ -156,13 +156,13 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
 	@Override
-	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getExtendedState(IBlockState oldState, IWorldReader worldIn, BlockPos pos) {
 		IExtendedBlockState state = (IExtendedBlockState) super.getExtendedState(oldState, worldIn, pos);
 
 		final int maxLength = 32;
@@ -195,7 +195,7 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		super.setStateMapper(builder);
 		builder.ignore(VARIANT);
@@ -233,12 +233,12 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 	}	
 	
 	@Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
 	
 	@Override
-	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public int getLightValue(IBlockState state, IWorldReader world, BlockPos pos) {
 		return (int)((state.getValue(VARIANT) == EnumLifeCrystalType.ORE ? 0.4F : 0.0F) * 15.0F);
 	}
 	
@@ -252,8 +252,8 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		super.breakBlock(worldIn, pos, state);
+	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 
 		if(state.getValue(VARIANT) == EnumLifeCrystalType.ORE) {
 			BetweenlandsChunkStorage.unmarkGem(worldIn, pos, ItemGemSinger.GemSingerTarget.LIFE_CRYSTAL);

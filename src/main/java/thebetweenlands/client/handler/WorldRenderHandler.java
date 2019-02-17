@@ -14,12 +14,11 @@ import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -34,7 +33,7 @@ import thebetweenlands.util.RenderUtils;
 
 
 public class WorldRenderHandler {
-	private static final Minecraft MC = Minecraft.getMinecraft();
+	private static final Minecraft MC = Minecraft.getInstance();
 
 	public static final List<Pair<Vec3d, Float>> REPELLER_SHIELDS = new ArrayList<>();
 
@@ -55,7 +54,7 @@ public class WorldRenderHandler {
 
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
-		if(event.phase == TickEvent.Phase.END && !Minecraft.getMinecraft().isGamePaused() && Minecraft.getMinecraft().world != null) {
+		if(event.phase == TickEvent.Phase.END && !Minecraft.getInstance().isGamePaused() && Minecraft.getInstance().world != null) {
 			BatchedParticleRenderer.INSTANCE.update();
 		}
 	}

@@ -31,8 +31,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.entity.attributes.BooleanAttribute;
@@ -261,7 +261,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	protected boolean getIsPlayerNearby(double distanceX, double distanceY, double distanceZ, double radius) {
 		List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(distanceX, distanceY, distanceZ));
 		for (Entity entityNeighbor : entities) {
-			if (entityNeighbor instanceof EntityPlayer && this.getDistance(entityNeighbor) <= radius && (!((EntityPlayer) entityNeighbor).capabilities.isCreativeMode && !((EntityPlayer) entityNeighbor).isSpectator() && this.getEntitySenses().canSee(entityNeighbor)))
+			if (entityNeighbor instanceof EntityPlayer && this.getDistance(entityNeighbor) <= radius && (!((EntityPlayer) entityNeighbor).abilities.isCreativeMode && !((EntityPlayer) entityNeighbor).isSpectator() && this.getEntitySenses().canSee(entityNeighbor)))
 				return true;
 		}
 		return false;
@@ -273,9 +273,9 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return Minecraft.getMinecraft().player.capabilities.isCreativeMode || this.isActive() ? this.getEntityBoundingBox() : ZERO_AABB;
+		return Minecraft.getInstance().player.abilities.isCreativeMode || this.isActive() ? this.getEntityBoundingBox() : ZERO_AABB;
 	}
 
 	@Override
@@ -308,7 +308,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		@Override
 		public boolean shouldExecute() {
 			EntityLivingBase entitylivingbase = this.sludge.getAttackTarget();
-			return entitylivingbase == null ? false : (!entitylivingbase.isEntityAlive() ? false : !(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer)entitylivingbase).capabilities.disableDamage);
+			return entitylivingbase == null ? false : (!entitylivingbase.isEntityAlive() ? false : !(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer)entitylivingbase).abilities.disableDamage);
 		}
 
 		@Override
@@ -320,7 +320,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		@Override
 		public boolean shouldContinueExecuting() {
 			EntityLivingBase entitylivingbase = this.sludge.getAttackTarget();
-			return entitylivingbase == null ? false : (!entitylivingbase.isEntityAlive() ? false : (entitylivingbase instanceof EntityPlayer && ((EntityPlayer)entitylivingbase).capabilities.disableDamage ? false : --this.growTieredTimer > 0));
+			return entitylivingbase == null ? false : (!entitylivingbase.isEntityAlive() ? false : (entitylivingbase instanceof EntityPlayer && ((EntityPlayer)entitylivingbase).abilities.disableDamage ? false : --this.growTieredTimer > 0));
 		}
 
 		@Override

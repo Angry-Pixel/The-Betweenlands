@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -32,12 +32,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -110,7 +110,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
         return false;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
         int slots = 9 + (stack.getItemDamage() * 9);
@@ -162,19 +162,19 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 
     private static boolean isRenderingWorld;
     
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onFogColors(EntityViewRenderEvent.FogColors event) {
         isRenderingWorld = true;
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void onRenderWorldLast(RenderWorldLastEvent event) {
         isRenderingWorld = false;
     }
     
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
     @SubscribeEvent
 	public static void onRenderPlayer(RenderLivingEvent.Specials.Post<EntityLivingBase> event) {
 		if(event.getEntity() instanceof EntityPlayer) {
@@ -182,7 +182,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private static void renderPouch(EntityPlayer player, double x, double y, double z, float partialTicks) {
 		if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 			IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
@@ -199,8 +199,8 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 			}
 
 			if(pouch != null) {
-				TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
-				RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+				TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+				RenderItem renderItem = Minecraft.getInstance().getRenderItem();
 
 				textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				ITextureObject texture = textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

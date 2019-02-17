@@ -10,11 +10,11 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.common.TheBetweenlands;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class AmbienceManager {
 	public static final AmbienceManager INSTANCE = new AmbienceManager();
 
@@ -60,7 +60,7 @@ public class AmbienceManager {
 		Iterator<AmbienceSound> delayedAmbiencesIT = this.delayedAmbiences.iterator();
 		while(delayedAmbiencesIT.hasNext()) {
 			AmbienceSound sound = delayedAmbiencesIT.next();
-			boolean soundPlaying = Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sound) || sound.isDonePlaying();
+			boolean soundPlaying = Minecraft.getInstance().getSoundHandler().isPlaying(sound) || sound.isDonePlaying();
 			if(soundPlaying)
 				delayedAmbiencesIT.remove();
 		}
@@ -69,10 +69,10 @@ public class AmbienceManager {
 		Iterator<AmbienceSound> playingAmbiencesIT = this.playingAmbiences.iterator();
 		while(playingAmbiencesIT.hasNext()) {
 			AmbienceSound sound = playingAmbiencesIT.next();
-			boolean soundPlaying = Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(sound) || this.delayedAmbiences.contains(sound); //Check if sound is playing or scheduled
+			boolean soundPlaying = Minecraft.getInstance().getSoundHandler().isPlaying(sound) || this.delayedAmbiences.contains(sound); //Check if sound is playing or scheduled
 			if(sound.isDonePlaying() || !soundPlaying) {
 				if(soundPlaying)
-					Minecraft.getMinecraft().getSoundHandler().stopSound(sound); //Stop sound because it's not supposed to play anymore
+					Minecraft.getInstance().getSoundHandler().stop(sound); //Stop sound because it's not supposed to play anymore
 				playingAmbiencesIT.remove();
 			}
 		}
@@ -184,10 +184,10 @@ public class AmbienceManager {
 		this.playingAmbiences.add(sound);
 		if(sound.type.getSound() != null) {
 			if(delay == 0) {
-				Minecraft.getMinecraft().getSoundHandler().playSound(sound);
+				Minecraft.getInstance().getSoundHandler().playSound(sound);
 			} else {
 				this.delayedAmbiences.add(sound);
-				Minecraft.getMinecraft().getSoundHandler().playDelayedSound(sound, delay);
+				Minecraft.getInstance().getSoundHandler().playDelayedSound(sound, delay);
 			}
 		}
 	}
@@ -212,11 +212,11 @@ public class AmbienceManager {
 	 */
 	public void stopAll() {
 		for(AmbienceSound sound : this.playingAmbiences) {
-			Minecraft.getMinecraft().getSoundHandler().stopSound(sound);
+			Minecraft.getInstance().getSoundHandler().stop(sound);
 			sound.stopImmediately();
 		}
 		for(AmbienceSound sound : this.delayedAmbiences) {
-			Minecraft.getMinecraft().getSoundHandler().stopSound(sound);
+			Minecraft.getInstance().getSoundHandler().stop(sound);
 			sound.stopImmediately();
 		}
 		this.playingAmbiences.clear();

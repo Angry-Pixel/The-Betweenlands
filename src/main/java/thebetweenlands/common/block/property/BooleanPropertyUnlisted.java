@@ -1,7 +1,7 @@
 package thebetweenlands.common.block.property;
 
-public class PropertyBoolUnlisted extends UnlistedPropertyHelper<Boolean> {
-	public PropertyBoolUnlisted(String name) {
+public class BooleanPropertyUnlisted extends AbstractUnlistedProperty<Boolean> {
+	public BooleanPropertyUnlisted(String name) {
 		super(name);
 	}
 

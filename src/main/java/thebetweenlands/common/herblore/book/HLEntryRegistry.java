@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -31,7 +31,7 @@ public class HLEntryRegistry {
     /**
      * initializes the HL book
      */
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void init() {
         CATEGORIES.clear();
         initAspectEntries();
@@ -41,7 +41,7 @@ public class HLEntryRegistry {
     /**
      * initializes the aspect pages
      */
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void initAspectEntries() {
         int indexPages = 3;
         aspectPages.clear();
@@ -112,7 +112,7 @@ public class HLEntryRegistry {
         CATEGORIES.add(aspectCategory);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     public static void initElixirEntries() {
         elixirPages.clear();
         ArrayList<Page> infusionPages = new ArrayList<>();

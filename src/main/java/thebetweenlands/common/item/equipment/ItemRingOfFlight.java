@@ -2,14 +2,13 @@ package thebetweenlands.common.item.equipment;
 
 import java.util.List;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.world.World;
-import org.lwjgl.input.Keyboard;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -18,12 +17,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IFlightCapability;
 import thebetweenlands.client.handler.ItemTooltipHandler;
@@ -37,19 +36,17 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.NBTHelper;
 
-import javax.annotation.Nullable;
-
 public class ItemRingOfFlight extends ItemRing {
 	public ItemRingOfFlight() {
 		this.setMaxDamage(1800);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.ring.flight.bonus"), 0));
 		if (GuiScreen.isShiftKeyDown()) {
-			String toolTip = I18n.format("tooltip.ring.flight", KeyBindRegistry.RADIAL_MENU.getDisplayName(), Minecraft.getMinecraft().gameSettings.keyBindJump.getDisplayName());
+			String toolTip = I18n.format("tooltip.ring.flight", KeyBindRegistry.RADIAL_MENU.getDisplayName(), Minecraft.getInstance().gameSettings.keyBindJump.getDisplayName());
 			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
 		} else {
 			list.add(I18n.format("tooltip.press.shift"));
@@ -66,7 +63,7 @@ public class ItemRingOfFlight extends ItemRing {
 				if(!cap.canFlyWithoutRing(player) && cap.canFlyWithRing(player, stack)) {
 					double flightHeight = 3.5D;
 					if(player.world.isRemote || cap.isFlying()) {
-						player.capabilities.allowFlying = true;
+						player.abilities.allowFlying = true;
 					}
 					boolean isFlying = cap.isFlying();
 					NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
@@ -160,7 +157,7 @@ public class ItemRingOfFlight extends ItemRing {
 	public static void onPlayerTick(PlayerTickEvent event) {
 		if(event.player != null) {
 			EntityPlayer player = (EntityPlayer) event.player;
-			if(!player.capabilities.isCreativeMode) {
+			if(!player.abilities.isCreativeMode) {
 				if(player.hasCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null)) {
 					IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
 
@@ -185,9 +182,9 @@ public class ItemRingOfFlight extends ItemRing {
 					if(!flightRing.isEmpty() && player.world.isRemote) {
 						if(!cap.canFlyWithoutRing(player) && cap.canFlyWithRing(player, flightRing)) {
 							if(event.phase == Phase.START) {
-								player.capabilities.isFlying = false;
+								player.abilities.isFlying = false;
 							} else {
-								if(player.capabilities.isFlying) {
+								if(player.abilities.isFlying) {
 									cap.setFlying(!cap.isFlying());
 									if(player == TheBetweenlands.proxy.getClientPlayer()) {
 										TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
@@ -208,10 +205,10 @@ public class ItemRingOfFlight extends ItemRing {
 						if(flightRing.isEmpty() || !cap.isFlying()) {
 							if(cap.getFlightRing()) {
 								if(!cap.canFlyWithoutRing(player)) {
-									player.capabilities.isFlying = false;
-									player.capabilities.allowFlying = false;
+									player.abilities.isFlying = false;
+									player.abilities.allowFlying = false;
 									if(player.world.isRemote) {
-										player.capabilities.setFlySpeed(0.05F);
+										player.abilities.setFlySpeed(0.05F);
 									}
 								}
 								cap.setFlightRing(false);
@@ -230,7 +227,7 @@ public class ItemRingOfFlight extends ItemRing {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public boolean hasEffect(ItemStack stack) {
 		return stack.hasTagCompound() && stack.getTagCompound().getBoolean("ringActive");
 	}

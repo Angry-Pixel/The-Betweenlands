@@ -15,16 +15,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.PngSizeInfo;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.data.AnimationMetadataSection;
 import net.minecraft.item.Item;
+import net.minecraft.resources.IResource;
+import net.minecraft.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelLoaderRegistry.LoaderException;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
@@ -48,7 +48,7 @@ public class TextureStitchHandler {
 
 	@SubscribeEvent
 	public void onTextureStitchPre(TextureStitchEvent.Pre e) {
-		if(e.getMap() != Minecraft.getMinecraft().getTextureMapBlocks()) {
+		if(e.getMap() != Minecraft.getInstance().getTextureMapBlocks()) {
 			//Only stitch to the main texture map
 			return;
 		}
@@ -106,7 +106,7 @@ public class TextureStitchHandler {
 
 		//Stitch textures and split animations if necessary
 		Map<ResourceLocation, Frame[]> animationFramesCache = new HashMap<>();
-		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+		IResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
 		for(TextureStitcher stitcher : this.stitchers) {
 			ResourceLocation[] textures = stitcher.getTextures();
 			Frame[][] frames = new Frame[textures.length][];
@@ -178,7 +178,7 @@ public class TextureStitchHandler {
 
 	@SubscribeEvent
 	public void onTextureStitchPost(TextureStitchEvent.Post e) {
-		if(e.getMap() != Minecraft.getMinecraft().getTextureMapBlocks()) {
+		if(e.getMap() != Minecraft.getInstance().getTextureMapBlocks()) {
 			//Only stitch to the main texture map
 			return;
 		}

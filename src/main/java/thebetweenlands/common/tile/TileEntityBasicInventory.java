@@ -1,5 +1,7 @@
 package thebetweenlands.common.tile;
 
+import javax.annotation.Nonnull;
+
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -16,8 +18,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
-
-import javax.annotation.Nonnull;
 
 public class TileEntityBasicInventory extends TileEntity implements ISidedInventory {
 	private final String name;

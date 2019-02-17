@@ -8,24 +8,24 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.IGrowable;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.EnumPlantType;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.plant.BlockStackablePlant;
@@ -33,9 +33,9 @@ import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
-	public static final PropertyBool DECAYED = PropertyBool.create("decayed");
+	public static final BooleanProperty DECAYED = BooleanProperty.create("decayed");
 
-	private PropertyInteger stageProperty;
+	private IntegerProperty stageProperty;
 
 	public BlockGenericCrop() {
 		this.harvestAll = true;
@@ -48,15 +48,15 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	 * Creates the growth stage property. Can be used to change the number of stages (max 15)
 	 * @return
 	 */
-	protected PropertyInteger createStageProperty() {
-		return PropertyInteger.create("stage", 0, 3);
+	protected IntegerProperty createStageProperty() {
+		return IntegerProperty.create("stage", 0, 3);
 	}
 
 	/**
 	 * Returns the growth stage property
 	 * @return
 	 */
-	public PropertyInteger getStageProperty() {
+	public IntegerProperty getStageProperty() {
 		return this.stageProperty;
 	}
 
@@ -66,7 +66,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	 * @param pos
 	 * @return
 	 */
-	public boolean isDecayed(IBlockAccess world, BlockPos pos) {
+	public boolean isDecayed(IWorldReader world, BlockPos pos) {
 		for(int i = 0; i < this.maxHeight + 1; i++) {
 			IBlockState blockState = world.getBlockState(pos);
 			if(blockState.getBlock() instanceof BlockGenericDugSoil) {
@@ -83,7 +83,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	 * @param pos
 	 * @return
 	 */
-	public boolean isComposted(IBlockAccess world, BlockPos pos) {
+	public boolean isComposted(IWorldReader world, BlockPos pos) {
 		for(int i = 0; i < this.maxHeight + 1; i++) {
 			IBlockState blockState = world.getBlockState(pos);
 			if(blockState.getBlock() instanceof BlockGenericDugSoil) {
@@ -95,7 +95,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	}
 
 	@Override
-	public EnumPlantType getPlantType(net.minecraft.world.IBlockAccess world, BlockPos pos) {
+	public EnumPlantType getPlantType(net.minecraft.world.IWorldReader world, BlockPos pos) {
 		return EnumPlantType.Crop;
 	}
 
@@ -173,7 +173,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	}
 
 	@Override
-	public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	public ArrayList<ItemStack> getDrops(IWorldReader world, BlockPos pos, IBlockState state, int fortune) {
 		Random rand = world instanceof World ? ((World)world).rand : RANDOM;
 
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
@@ -206,7 +206,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	 * @param fortune
 	 * @return
 	 */
-	public int getSeedDrops(IBlockAccess world, BlockPos pos, Random rand, int fortune) {
+	public int getSeedDrops(IWorldReader world, BlockPos pos, Random rand, int fortune) {
 		IBlockState state = world.getBlockState(pos);
 		return 1 + (state.getValue(AGE) >= 15 ? (rand.nextInt(Math.max(3 - fortune, 1)) == 0 ? 1 : 0) : 0);
 	}
@@ -219,7 +219,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	 * @param fortune
 	 * @return
 	 */
-	public int getCropDrops(IBlockAccess world, BlockPos pos, Random rand, int fortune) {
+	public int getCropDrops(IWorldReader world, BlockPos pos, Random rand, int fortune) {
 		IBlockState state = world.getBlockState(pos);
 		if(state.getValue(AGE) >= 15) {
 			return 2 + rand.nextInt(3 + fortune);
@@ -234,7 +234,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	 * @param rand
 	 * @return
 	 */
-	public ItemStack getSeedDrop(IBlockAccess world, BlockPos pos, Random rand) {
+	public ItemStack getSeedDrop(IWorldReader world, BlockPos pos, Random rand) {
 		return ItemStack.EMPTY;
 	}
 
@@ -245,12 +245,12 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	 * @param rand
 	 * @return
 	 */
-	public ItemStack getCropDrop(IBlockAccess world, BlockPos pos, Random rand) {
+	public ItemStack getCropDrop(IWorldReader world, BlockPos pos, Random rand) {
 		return ItemStack.EMPTY;
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
 		state = super.getActualState(state, worldIn, pos);
 		return state.withProperty(DECAYED, this.isDecayed(worldIn, pos)).withProperty(this.stageProperty, MathHelper.floor(state.getValue(AGE) / 15.0f * Collections.max(this.stageProperty.getAllowedValues())));
 	}
@@ -317,7 +317,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		super.setStateMapper(builder);
 		builder.ignore(DECAYED).withPropertySuffixTrue(DECAYED, "decayed");
@@ -330,12 +330,12 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	}
 	
 	@Override
-	public boolean isHarvestable(ItemStack item, IBlockAccess world, BlockPos pos) {
+	public boolean isHarvestable(ItemStack item, IWorldReader world, BlockPos pos) {
 		return false;
 	}
 	
 	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
+	public boolean isShearable(ItemStack item, IWorldReader world, BlockPos pos) {
 		return false;
 	}
 }

@@ -8,7 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityTermite;
@@ -25,7 +25,7 @@ public class BlockSpreadingRottenLog extends BlockSpreadingDeath {
 	}
 
 	@Override
-	public boolean isWood(IBlockAccess world, BlockPos pos) {
+	public boolean isWood(IWorldReader world, BlockPos pos) {
 		return true;
 	}
 

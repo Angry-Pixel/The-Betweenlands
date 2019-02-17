@@ -2,7 +2,6 @@ package thebetweenlands.api.event;
 
 import java.util.List;
 
-import net.minecraftforge.fml.common.eventhandler.Event;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 

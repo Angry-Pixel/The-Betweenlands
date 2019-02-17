@@ -5,15 +5,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.IRenderHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.misc.Fog;
 import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
@@ -44,7 +44,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	private boolean allowHostiles, allowAnimals;
 	private BetweenlandsWorldStorage worldData;
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private static BLSkyRenderer skyRenderer;
 
 	private boolean showClouds = false;
@@ -77,7 +77,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public float getSunBrightness(float partialTicks) {
 		EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
 		return rift.getVisibility(partialTicks) * this.getOverworldSunBrightness(partialTicks) * 0.6F + rift.getVisibility(partialTicks) * 0.2F;
@@ -103,7 +103,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		return f1;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected float getOverworldSunBrightness(float partialTicks) {
 		float f = this.getOverworldCelestialAngle(partialTicks);
 		float f1 = 1.0F - (MathHelper.cos(f * ((float)Math.PI * 2F)) * 2.0F + 0.2F);
@@ -164,7 +164,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public boolean doesXZShowFog(int x, int z) {
 		return false;
 	}
@@ -243,7 +243,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	 * Updates the brightness table relative to the specified player
 	 * @param player
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void updateClientLightTable(EntityPlayer player) {
 		float configBrightness = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionBrightness / 100.0F;
 
@@ -269,32 +269,32 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public Vec3d getFogColor(float celestialAngle, float partialTickTime) {
 		Fog fog = FogHandler.getFogState().getFog(partialTickTime);
 		return new Vec3d(fog.getRed(), fog.getGreen(), fog.getBlue());
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public IRenderHandler getSkyRenderer() {
 		return getBLSkyRenderer();
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public Vec3d getSkyColor(Entity cameraEntity, float partialTicks) {
 		return new Vec3d(0.1F, 0.8F, 0.55F);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public boolean isSkyColored() {
 		return false;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static BLSkyRenderer getBLSkyRenderer() {
 		if(skyRenderer == null) {
 			skyRenderer = new BLSkyRenderer();
@@ -302,7 +302,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		return skyRenderer;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public IRenderHandler getWeatherRenderer() {
 		if(this.getEnvironmentEventRegistry().snowfall.isSnowing()) {
@@ -320,7 +320,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		return TheBetweenlands.dimensionType;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setShowClouds(boolean show) {
 		this.showClouds = show;
 	}

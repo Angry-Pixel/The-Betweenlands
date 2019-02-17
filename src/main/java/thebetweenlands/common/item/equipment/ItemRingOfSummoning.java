@@ -2,12 +2,11 @@ package thebetweenlands.common.item.equipment;
 
 import java.util.List;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.world.World;
-import org.lwjgl.input.Keyboard;
+import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,8 +19,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.ISummoningCapability;
 import thebetweenlands.client.handler.ItemTooltipHandler;
@@ -32,8 +32,6 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.NBTHelper;
 
-import javax.annotation.Nullable;
-
 public class ItemRingOfSummoning extends ItemRing {
 	public static final int MAX_USE_TIME = 100;
 	public static final int USE_COOLDOWN = 120;
@@ -43,7 +41,7 @@ public class ItemRingOfSummoning extends ItemRing {
 		this.setMaxDamage(256);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.ring.summoning.bonus"), 0));
@@ -128,7 +126,7 @@ public class ItemRingOfSummoning extends ItemRing {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public boolean hasEffect(ItemStack stack) {
 		return stack.hasTagCompound() && stack.getTagCompound().getBoolean("ringActive");
 	}

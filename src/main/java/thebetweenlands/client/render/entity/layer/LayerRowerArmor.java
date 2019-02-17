@@ -1,10 +1,9 @@
 package thebetweenlands.client.render.entity.layer;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
+import net.minecraft.client.renderer.entity.model.ModelBiped;
 import net.minecraft.inventory.EntityEquipmentSlot;
-
 import thebetweenlands.client.render.model.entity.rowboat.ModelBipedRower;
 
 public class LayerRowerArmor extends LayerArmorBase<ModelBiped> {

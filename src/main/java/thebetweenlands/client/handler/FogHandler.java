@@ -16,13 +16,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.UpdateFogEvent;
 import thebetweenlands.api.misc.Fog;
 import thebetweenlands.api.misc.Fog.MutableFog;
@@ -91,14 +91,14 @@ public class FogHandler {
 	 */
 	public static boolean hasDenseFog(World world) {
 		BLEnvironmentEventRegistry eeRegistry = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry();
-		return eeRegistry.denseFog.isActive() && Minecraft.getMinecraft().player.posY > WorldProviderBetweenlands.CAVE_START;
+		return eeRegistry.denseFog.isActive() && Minecraft.getInstance().player.posY > WorldProviderBetweenlands.CAVE_START;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onFogRenderEvent(RenderFogEvent event) {
 		farPlaneDistance = event.getFarPlaneDistance();
-		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
+		Entity renderView = Minecraft.getInstance().getRenderViewEntity();
 		if(renderView != null && renderView.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			float partialTicks = (float) event.getRenderPartialTicks();
 			Fog fog = state.getFog(partialTicks);
@@ -131,7 +131,7 @@ public class FogHandler {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event) {
 		World world = TheBetweenlands.proxy.getClientWorld();
@@ -150,17 +150,17 @@ public class FogHandler {
 	}
 
 	////// Underwater fog fix & Dark fog in caves //////
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onFogColor(FogColors event) {
-		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
+		Entity renderView = Minecraft.getInstance().getRenderViewEntity();
 		if(renderView != null) {
 			IBlockState blockState = ActiveRenderInfo.getBlockStateAtEntityViewpoint(renderView.world, renderView, (float) event.getRenderPartialTicks());
 			Fog fog = state.getFog((float)event.getRenderPartialTicks());
 			float fogColorMultiplier = fog.getColorMultiplier();
 			if(blockState.getBlock() instanceof BlockSwampWater) {
 				BlockPos pos = new BlockPos(ActiveRenderInfo.projectViewFromEntity(renderView, (float) event.getRenderPartialTicks()));
-				int colorMultiplier = Minecraft.getMinecraft().getBlockColors().colorMultiplier(blockState, renderView.world, pos, 0);
+				int colorMultiplier = Minecraft.getInstance().getBlockColors().colorMultiplier(blockState, renderView.world, pos, 0);
 				if(renderView.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 					double waterFogColorMultiplier = fogColorMultiplier / 2.0F;
 					event.setRed((float)(colorMultiplier >> 16 & 255) / 255.0F * (float)waterFogColorMultiplier);
@@ -181,10 +181,10 @@ public class FogHandler {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onFogDensity(FogDensity event) {
-		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
+		Entity renderView = Minecraft.getInstance().getRenderViewEntity();
 		if(renderView != null) {
 			Block block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(renderView.world, renderView, (float) event.getRenderPartialTicks()).getBlock();
 			if(block instanceof BlockSwampWater) {
@@ -200,7 +200,7 @@ public class FogHandler {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void updateFog(UpdateFogEvent event) {
 		Vec3d position = event.getPosition();
@@ -224,8 +224,8 @@ public class FogHandler {
 		}
 
 		if(hasDenseFog(world)) {
-			if(fogGenerator == null || fogGenerator.getSeed() != Minecraft.getMinecraft().world.getSeed()) {
-				fogGenerator = new FogGenerator(Minecraft.getMinecraft().world.getSeed());
+			if(fogGenerator == null || fogGenerator.getSeed() != Minecraft.getInstance().world.getSeed()) {
+				fogGenerator = new FogGenerator(Minecraft.getInstance().world.getSeed());
 			}
 			float lowViewDistanceFogReduction = biomeFog.getEnd() > 64 ? 1.0F : (64.0F - biomeFog.getEnd()) / 64.0F;
 			float[] range = fogGenerator.getFogRange(0.2F, 1.0F);

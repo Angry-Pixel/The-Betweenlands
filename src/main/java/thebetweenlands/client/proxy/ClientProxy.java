@@ -5,12 +5,10 @@ import java.net.Proxy;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -18,21 +16,21 @@ import com.google.gson.JsonParser;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.resources.IReloadableResourceManager;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.resources.IReloadableResourceManager;
+import net.minecraft.resources.IResource;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -40,13 +38,12 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import thebetweenlands.client.gui.GuiLorePage;
 import thebetweenlands.client.gui.GuiItemNaming;
+import thebetweenlands.client.gui.GuiLorePage;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
@@ -77,11 +74,67 @@ import thebetweenlands.client.handler.ThemHandler;
 import thebetweenlands.client.handler.WeedwoodRowboatHandler;
 import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
-import thebetweenlands.client.render.entity.*;
+import thebetweenlands.client.render.entity.RenderAngler;
+import thebetweenlands.client.render.entity.RenderAngryPebble;
+import thebetweenlands.client.render.entity.RenderBLArrow;
+import thebetweenlands.client.render.entity.RenderBlindCaveFish;
+import thebetweenlands.client.render.entity.RenderBloodSnail;
+import thebetweenlands.client.render.entity.RenderBoulderSprite;
+import thebetweenlands.client.render.entity.RenderChiromaw;
+import thebetweenlands.client.render.entity.RenderDarkDruid;
+import thebetweenlands.client.render.entity.RenderDarkLight;
+import thebetweenlands.client.render.entity.RenderDragonFly;
+import thebetweenlands.client.render.entity.RenderDreadfulMummy;
+import thebetweenlands.client.render.entity.RenderElixir;
+import thebetweenlands.client.render.entity.RenderFirefly;
+import thebetweenlands.client.render.entity.RenderFortressBoss;
+import thebetweenlands.client.render.entity.RenderFortressBossBlockade;
+import thebetweenlands.client.render.entity.RenderFortressBossProjectile;
+import thebetweenlands.client.render.entity.RenderFortressBossSpawner;
+import thebetweenlands.client.render.entity.RenderFortressBossTeleporter;
+import thebetweenlands.client.render.entity.RenderFortressBossTurret;
+import thebetweenlands.client.render.entity.RenderFrog;
+import thebetweenlands.client.render.entity.RenderGasCloud;
+import thebetweenlands.client.render.entity.RenderGecko;
+import thebetweenlands.client.render.entity.RenderGiantToad;
+import thebetweenlands.client.render.entity.RenderGreebling;
+import thebetweenlands.client.render.entity.RenderLeech;
+import thebetweenlands.client.render.entity.RenderLurker;
+import thebetweenlands.client.render.entity.RenderLurkerSkinRaft;
+import thebetweenlands.client.render.entity.RenderMireSnail;
+import thebetweenlands.client.render.entity.RenderMireSnailEgg;
+import thebetweenlands.client.render.entity.RenderMummyArm;
+import thebetweenlands.client.render.entity.RenderPeatMummy;
+import thebetweenlands.client.render.entity.RenderPyrad;
+import thebetweenlands.client.render.entity.RenderPyradFlame;
+import thebetweenlands.client.render.entity.RenderRootGrabber;
+import thebetweenlands.client.render.entity.RenderRootSprite;
+import thebetweenlands.client.render.entity.RenderRopeNode;
+import thebetweenlands.client.render.entity.RenderSapSpit;
+import thebetweenlands.client.render.entity.RenderShockwaveBlock;
+import thebetweenlands.client.render.entity.RenderShockwaveSwordItem;
+import thebetweenlands.client.render.entity.RenderSiltCrab;
+import thebetweenlands.client.render.entity.RenderSludge;
+import thebetweenlands.client.render.entity.RenderSludgeBall;
+import thebetweenlands.client.render.entity.RenderSmollSludge;
+import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
+import thebetweenlands.client.render.entity.RenderSpikeWave;
+import thebetweenlands.client.render.entity.RenderSpiritTreeFaceLarge;
+import thebetweenlands.client.render.entity.RenderSpiritTreeFaceMask;
+import thebetweenlands.client.render.entity.RenderSpiritTreeFaceSmall;
+import thebetweenlands.client.render.entity.RenderSporeling;
+import thebetweenlands.client.render.entity.RenderSwampHag;
+import thebetweenlands.client.render.entity.RenderSwordEnergy;
+import thebetweenlands.client.render.entity.RenderTarBeast;
+import thebetweenlands.client.render.entity.RenderTarminion;
+import thebetweenlands.client.render.entity.RenderTermite;
+import thebetweenlands.client.render.entity.RenderThrownTarminion;
+import thebetweenlands.client.render.entity.RenderVolatileSoul;
+import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
+import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
-import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.client.render.sky.RiftVariant;
@@ -97,6 +150,7 @@ import thebetweenlands.client.render.tile.RenderInfuser;
 import thebetweenlands.client.render.tile.RenderItemCage;
 import thebetweenlands.client.render.tile.RenderItemShelf;
 import thebetweenlands.client.render.tile.RenderItemStackAsTileEntity;
+import thebetweenlands.client.render.tile.RenderLivingWeedwoodShield;
 import thebetweenlands.client.render.tile.RenderLootPot;
 import thebetweenlands.client.render.tile.RenderMudFlowerPot;
 import thebetweenlands.client.render.tile.RenderPestleAndMortar;
@@ -105,7 +159,6 @@ import thebetweenlands.client.render.tile.RenderPurifier;
 import thebetweenlands.client.render.tile.RenderRepeller;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderSpikeTrap;
-import thebetweenlands.client.render.tile.RenderLivingWeedwoodShield;
 import thebetweenlands.client.render.tile.RenderTarLootPot1;
 import thebetweenlands.client.render.tile.RenderTarLootPot2;
 import thebetweenlands.client.render.tile.RenderTarLootPot3;
@@ -126,7 +179,49 @@ import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.entity.EntitySwordEnergy;
-import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.mobs.EntityAngler;
+import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityDarkDruid;
+import thebetweenlands.common.entity.mobs.EntityDarkLight;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
+import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityFortressBoss;
+import thebetweenlands.common.entity.mobs.EntityFortressBossBlockade;
+import thebetweenlands.common.entity.mobs.EntityFortressBossProjectile;
+import thebetweenlands.common.entity.mobs.EntityFortressBossSpawner;
+import thebetweenlands.common.entity.mobs.EntityFortressBossTeleporter;
+import thebetweenlands.common.entity.mobs.EntityFortressBossTurret;
+import thebetweenlands.common.entity.mobs.EntityFrog;
+import thebetweenlands.common.entity.mobs.EntityGasCloud;
+import thebetweenlands.common.entity.mobs.EntityGecko;
+import thebetweenlands.common.entity.mobs.EntityGiantToad;
+import thebetweenlands.common.entity.mobs.EntityGreebling;
+import thebetweenlands.common.entity.mobs.EntityLeech;
+import thebetweenlands.common.entity.mobs.EntityLurker;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntityMummyArm;
+import thebetweenlands.common.entity.mobs.EntityPeatMummy;
+import thebetweenlands.common.entity.mobs.EntityPyrad;
+import thebetweenlands.common.entity.mobs.EntityPyradFlame;
+import thebetweenlands.common.entity.mobs.EntityRootSprite;
+import thebetweenlands.common.entity.mobs.EntitySiltCrab;
+import thebetweenlands.common.entity.mobs.EntitySludge;
+import thebetweenlands.common.entity.mobs.EntitySmollSludge;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityTamedSpiritTreeFace;
+import thebetweenlands.common.entity.mobs.EntityTarBeast;
+import thebetweenlands.common.entity.mobs.EntityTarminion;
+import thebetweenlands.common.entity.mobs.EntityTermite;
+import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
+import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
@@ -275,12 +370,12 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 
 	@Override
 	public EntityPlayer getClientPlayer() {
-		return Minecraft.getMinecraft().player;
+		return Minecraft.getInstance().player;
 	}
 
 	@Override
 	public World getClientWorld() {
-		return Minecraft.getMinecraft().world;
+		return Minecraft.getInstance().world;
 	}
 
 	@Override
@@ -366,7 +461,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveBlock.class, RenderShockwaveBlock::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGecko.class, RenderGecko::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityWight.class, RenderWight::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveSwordItem.class, manager -> new RenderShockwaveSwordItem(manager, Minecraft.getMinecraft().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveSwordItem.class, manager -> new RenderShockwaveSwordItem(manager, Minecraft.getInstance().getRenderItem()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityFirefly.class, RenderFirefly::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGasCloud.class, RenderGasCloud::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySludge.class, RenderSludge::new);
@@ -382,7 +477,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrownTarminion.class, RenderThrownTarminion::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRopeNode.class, RenderRopeNode::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMummyArm.class, RenderMummyArm::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityAngryPebble.class, manager -> new RenderAngryPebble(manager, Minecraft.getMinecraft().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityAngryPebble.class, manager -> new RenderAngryPebble(manager, Minecraft.getInstance().getRenderItem()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBoss.class, RenderFortressBoss::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossSpawner.class, RenderFortressBossSpawner::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossBlockade.class, RenderFortressBossBlockade::new);
@@ -407,7 +502,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityRootSprite.class, RenderRootSprite::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityLurkerSkinRaft.class, RenderLurkerSkinRaft::new);
 		
-		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
+		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getInstance().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
 		resourceManager.registerReloadListener(new FoodSickness.ResourceReloadListener());
 		resourceManager.registerReloadListener(r -> {
@@ -437,7 +532,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 	@SuppressWarnings("deprecation")
 	@Override
 	public void postInit() {
-	    RenderManager mgr = Minecraft.getMinecraft().getRenderManager();
+	    RenderManager mgr = Minecraft.getInstance().getRenderManager();
 		dragonFlyRenderer = mgr.getEntityClassRenderObject(EntityDragonFly.class);
         MinecraftForge.EVENT_BUS.register(mgr.getEntityClassRenderObject(EntityWeedwoodRowboat.class));
 
@@ -499,9 +594,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			if (block instanceof ITintedBlock) {
 				final ITintedBlock tintedBlock = (ITintedBlock) block;
 				if (Item.getItemFromBlock(block) != Items.AIR) {
-					Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> tintedBlock.getColorMultiplier(((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()), null, null, tintIndex), block);
+					Minecraft.getInstance().getItemColors().registerItemColorHandler((stack, tintIndex) -> tintedBlock.getColorMultiplier(((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()), null, null, tintIndex), block);
 				}
-				Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(tintedBlock::getColorMultiplier, block);
+				Minecraft.getInstance().getBlockColors().registerBlockColorHandler(tintedBlock::getColorMultiplier, block);
 			}
 		}
 
@@ -509,15 +604,15 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		for (Item item : ItemRegistry.ITEMS) {
 			if (item instanceof ITintedItem) {
 				final ITintedItem tintedItem = (ITintedItem) item;
-				Minecraft.getMinecraft().getItemColors().registerItemColorHandler(tintedItem::getColorMultiplier, item);
+				Minecraft.getInstance().getItemColors().registerItemColorHandler(tintedItem::getColorMultiplier, item);
 			}
 		}
 
-		pixelLove = new FontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("thebetweenlands:textures/gui/manual/font_atlas.png"), Minecraft.getMinecraft().renderEngine, false);
-		if (Minecraft.getMinecraft().gameSettings.language != null) {
-			pixelLove.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
+		pixelLove = new FontRenderer(Minecraft.getInstance().gameSettings, new ResourceLocation("thebetweenlands:textures/gui/manual/font_atlas.png"), Minecraft.getInstance().renderEngine, false);
+		if (Minecraft.getInstance().gameSettings.language != null) {
+			pixelLove.setBidiFlag(Minecraft.getInstance().getLanguageManager().isCurrentLanguageBidirectional());
 		}
-		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(pixelLove);
+		((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).registerReloadListener(pixelLove);
 		HLEntryRegistry.init();
 
 		WeedwoodRowboatHandler.INSTANCE.init();
@@ -602,12 +697,12 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
     
     @Override
     public Proxy getNetProxy() {
-    	return Minecraft.getMinecraft().getProxy();
+    	return Minecraft.getInstance().getProxy();
     }
     
     @Override
     public boolean isSingleplayer() {
-    	return Minecraft.getMinecraft().isSingleplayer();
+    	return Minecraft.getInstance().isSingleplayer();
     }
 
 	@Override
@@ -619,7 +714,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		this.riftVariants.clear();
 		
 		try {
-			IResource riftsFile = Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation(ModInfo.ID, "textures/sky/rifts/rifts.json"));
+			IResource riftsFile = Minecraft.getInstance().getResourceManager().getResource(new ResourceLocation(ModInfo.ID, "textures/sky/rifts/rifts.json"));
 			JsonParser parser = new JsonParser();
 			try(InputStreamReader reader = new InputStreamReader(riftsFile.getInputStream())) {
 				JsonArray array = parser.parse(reader).getAsJsonArray();

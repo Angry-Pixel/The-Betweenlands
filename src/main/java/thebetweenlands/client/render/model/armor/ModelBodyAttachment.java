@@ -3,9 +3,9 @@ package thebetweenlands.client.render.model.armor;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.model.ModelBiped;
+import net.minecraft.client.renderer.entity.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelBodyAttachment extends ModelBiped {

@@ -7,14 +7,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.BlockFluidClassic;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.BLMaterialRegistry;
-import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
-import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
@@ -24,7 +24,7 @@ public class BlockRubber extends BlockFluidClassic implements IStateMappedBlock,
 	}
 
 	@Override
-	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
+	public boolean canDisplace(IWorldReader world, BlockPos pos) {
 		if (world.getBlockState(pos).getMaterial().isLiquid())
 			return false;
 		return super.canDisplace(world, pos);
@@ -38,7 +38,7 @@ public class BlockRubber extends BlockFluidClassic implements IStateMappedBlock,
 	}
 
 	@Override
-	public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState state, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
+	public Boolean isEntityInsideMaterial(IWorldReader world, BlockPos blockpos, IBlockState state, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
 		if(materialIn == Material.WATER) {
 			double liquidHeight = (double)((float)(blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(((Integer)state.getValue(BlockLiquid.LEVEL)).intValue()));
 			if(testingHead) {
@@ -67,7 +67,7 @@ public class BlockRubber extends BlockFluidClassic implements IStateMappedBlock,
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(BlockRubber.LEVEL);
 	}

@@ -5,31 +5,31 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IProperty;
+import net.minecraft.state.IntegerProperty;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ForgeHooks;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.SoilHelper;
-import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.IStateMappedBlock;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock {
 	protected static final AxisAlignedBB STACKABLE_PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 1D, 0.9D);
 
-	public static final PropertyBool IS_TOP = PropertyBool.create("is_top");
-	public static final PropertyBool IS_BOTTOM = PropertyBool.create("is_bottom");
-	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 15);
+	public static final BooleanProperty IS_TOP = BooleanProperty.create("is_top");
+	public static final BooleanProperty IS_BOTTOM = BooleanProperty.create("is_bottom");
+	public static final IntegerProperty AGE = IntegerProperty.create("age", 0, 15);
 
 	protected int maxHeight = 3;
 	protected boolean harvestAll = false;
@@ -42,13 +42,13 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public Block.EnumOffsetType getOffsetType() {
 		return this.maxHeight != 1 ? Block.EnumOffsetType.NONE : Block.EnumOffsetType.XZ;
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
 		return STACKABLE_PLANT_AABB;
 	}
 
@@ -58,7 +58,7 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
 		boolean isTop = !this.isSamePlant(worldIn.getBlockState(pos.up()));
 		boolean isBottom = !this.isSamePlant(worldIn.getBlockState(pos.down()));
 		return state.withProperty(IS_TOP, isTop).withProperty(IS_BOTTOM, isBottom);
@@ -244,7 +244,7 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(AGE);
 		if(this.maxHeight == 1) {

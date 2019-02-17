@@ -2,7 +2,7 @@ package thebetweenlands.client.handler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.serverbound.MessageConnectCavingRope;
@@ -22,7 +22,7 @@ public class InputHandler {
 
 	@SubscribeEvent
 	public static void onInput(InputEvent event) {
-		EntityPlayer player = Minecraft.getMinecraft().player;
+		EntityPlayer player = Minecraft.getInstance().player;
 
 		if(player != null) {
 			updateRopeConnectButtonState();
@@ -51,10 +51,10 @@ public class InputHandler {
 	}
 
 	private static void updateUseButtonState() {
-		if(!wasUseButtonPressed && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
+		if(!wasUseButtonPressed && Minecraft.getInstance().gameSettings.keyBindUseItem.isKeyDown()) {
 			wasUseButtonPressed = true;
 			TheBetweenlands.networkWrapper.sendToServer(new MessageUpdatePuppeteerState(true));
-		} else if(wasUseButtonPressed && !Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
+		} else if(wasUseButtonPressed && !Minecraft.getInstance().gameSettings.keyBindUseItem.isKeyDown()) {
 			wasUseButtonPressed = false;
 			TheBetweenlands.networkWrapper.sendToServer(new MessageUpdatePuppeteerState(false));
 		}

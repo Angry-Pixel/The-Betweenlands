@@ -7,9 +7,9 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import thebetweenlands.api.event.SplashPotionEvent;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.item.BLMaterialRegistry;
@@ -23,7 +23,7 @@ public class ItemDentrothystShield extends ItemBLShield {
 		this.green = green;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.dentrothyst_shield"), 0));

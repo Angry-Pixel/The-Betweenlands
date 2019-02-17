@@ -1,5 +1,12 @@
 package thebetweenlands.client.handler;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -8,18 +15,16 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.ArmSwingSpeedEvent;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-
-import java.util.*;
 
 public class ElixirClientHandler {
 
@@ -99,9 +104,9 @@ public class ElixirClientHandler {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getInstance().player;
         if(event.phase == TickEvent.Phase.END) {
-            if(player != null && player.world != null && player.world.isRemote && player == Minecraft.getMinecraft().player) {
+            if(player != null && player.world != null && player.world.isRemote && player == Minecraft.getInstance().player) {
                 if(ElixirEffectRegistry.EFFECT_HUNTERSSENSE.isActive(player)) {
                     int strength = ElixirEffectRegistry.EFFECT_HUNTERSSENSE.getStrength(player);
                     World world = player.world;
@@ -167,14 +172,14 @@ public class ElixirClientHandler {
                 }
 
                 if(ElixirEffectRegistry.EFFECT_SWIFTARM.isActive(player)) {
-                    if(Minecraft.getMinecraft().gameSettings.keyBindAttack.isKeyDown() && !player.isActiveItemStackBlocking()) {
+                    if(Minecraft.getInstance().gameSettings.keyBindAttack.isKeyDown() && !player.isActiveItemStackBlocking()) {
                         try {
-                            RayTraceResult target = Minecraft.getMinecraft().objectMouseOver;
+                            RayTraceResult target = Minecraft.getInstance().objectMouseOver;
                             if(target == null || target.entityHit != null || target.typeOfHit == RayTraceResult.Type.MISS) {
-                                Minecraft.getMinecraft().clickMouse();
+                                Minecraft.getInstance().clickMouse();
                             } else if(target != null) {
                                 if(!player.isSwingInProgress) {
-                                    Minecraft.getMinecraft().sendClickBlockToController(true);
+                                    Minecraft.getInstance().sendClickBlockToController(true);
                                 }
                             }
                         } catch (Exception e) {
@@ -190,15 +195,15 @@ public class ElixirClientHandler {
 
     @SubscribeEvent
     public void onShootArrow(ArrowLooseEvent event) {
-        if(event.getEntityPlayer() == Minecraft.getMinecraft().player) {
+        if(event.getEntityPlayer() == Minecraft.getInstance().player) {
             ArrowPredictionRenderer.setRandomYawPitch();
         }
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public void onRenderWorld(RenderWorldLastEvent event) {
-        EntityPlayer player = Minecraft.getMinecraft().player;
+        EntityPlayer player = Minecraft.getInstance().player;
         if(player != null && player.world != null) {
             if(ElixirEffectRegistry.EFFECT_SAGITTARIUS.isActive(player)) {
                 ArrowPredictionRenderer.render(Math.min((ElixirEffectRegistry.EFFECT_SAGITTARIUS.getStrength(player) + 1) / 3.0F, 1.0F));

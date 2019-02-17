@@ -6,11 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.xml.ws.handler.MessageContext;
+
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.GameRules;
+import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.registries.GameruleRegistry;
 
@@ -44,7 +45,7 @@ public class MessageSyncGameRules extends MessageBase {
 
 	@Override
 	public IMessage process(MessageContext ctx) {
-		if(ctx.side == Side.CLIENT) {
+		if(ctx.side == Dist.CLIENT) {
 			GameRules gameRules = GameruleRegistry.getGameRules();
 
 			if(gameRules != null) {

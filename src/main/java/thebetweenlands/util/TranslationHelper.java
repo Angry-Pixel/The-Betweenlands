@@ -1,13 +1,11 @@
 package thebetweenlands.util;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
 
 public class TranslationHelper {
 	private static final Set<String> UNLOCALIZED_STRINGS = new HashSet<>();
@@ -20,7 +18,7 @@ public class TranslationHelper {
 	 * @return localized string
 	 */
 	public static String translateToLocal(String unlocalizedString, Object... params) {
-		//Needs to be old deprecated I18n for now because Item#getItemStackDisplayName is not @SideOnly(Side.CLIENT)!
+		//Needs to be old deprecated I18n for now because Item#getItemStackDisplayName is not @OnlyIn(Dist.CLIENT)!
 		if (I18n.canTranslate(unlocalizedString))
 			return I18n.translateToLocalFormatted(unlocalizedString, params);
 		else {

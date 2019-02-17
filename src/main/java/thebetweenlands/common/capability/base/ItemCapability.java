@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
 
 /**
  * <b>THIS IS CURRENTLY BROKEN AND DOES _NOT_ SYNC ON SERVERS</b>

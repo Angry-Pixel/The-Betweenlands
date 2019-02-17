@@ -20,19 +20,19 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.IFluidBlock;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.item.armor.ItemMarshRunnerBoots;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
-import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistryOld.IStateMappedBlock;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.AdvancedStateMap;
 
@@ -76,7 +76,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
     }
 	
 	@Override
-	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
+	public boolean canDisplace(IWorldReader world, BlockPos pos) {
 		if (world.isAirBlock(pos)) return true;
 
 		IBlockState state = world.getBlockState(pos);
@@ -147,7 +147,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	}
 
 	@Override
-	public float getFluidHeightForRender(IBlockAccess world, BlockPos pos, @Nonnull IBlockState up) {
+	public float getFluidHeightForRender(IWorldReader world, BlockPos pos, @Nonnull IBlockState up) {
 		IBlockState here = world.getBlockState(pos);
 		if (here.getBlock() instanceof BlockSwampWater) {
 			if ((up.getMaterial().isLiquid() || up.getBlock() instanceof IFluidBlock) && (up.getBlock() instanceof BlockSwampWater == false || !((BlockSwampWater)up.getBlock()).isUnderwaterBlock)) {
@@ -162,7 +162,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	}
 
 	@Override
-	public Vec3d getFlowVector(IBlockAccess world, BlockPos pos) {
+	public Vec3d getFlowVector(IWorldReader world, BlockPos pos) {
 		Vec3d vec = new Vec3d(0.0D, 0.0D, 0.0D);
 		int decay = quantaPerBlock - getQuantaValue(world, pos);
 
@@ -214,7 +214,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	}
 
 	@Override
-	protected boolean causesDownwardCurrent(IBlockAccess world, BlockPos pos, EnumFacing side) {
+	protected boolean causesDownwardCurrent(IWorldReader world, BlockPos pos, EnumFacing side) {
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
         Material material = state.getMaterial();
@@ -232,7 +232,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
     }
 	
 	@Override
-	public int getQuantaValue(IBlockAccess world, BlockPos pos) {
+	public int getQuantaValue(IWorldReader world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
 
 		if (state.getBlock() instanceof BlockSwampWater && ((BlockSwampWater) state.getBlock()).isUnderwaterBlock) {
@@ -252,12 +252,12 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	}
 
 	@Override
-	public boolean isSourceBlock(IBlockAccess world, BlockPos pos) {
+	public boolean isSourceBlock(IWorldReader world, BlockPos pos) {
 		return super.isSourceBlock(world, pos);
 	}
 
 	@Override
-	protected boolean canFlowInto(IBlockAccess world, BlockPos pos) {
+	protected boolean canFlowInto(IWorldReader world, BlockPos pos) {
 		if (world instanceof World && !((World) world).isBlockLoaded(pos)) return false;
 
 		if (world.isAirBlock(pos)) return true;
@@ -382,7 +382,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
 		if (state.getBlock() instanceof BlockSwampWater && ((BlockSwampWater) state.getBlock()).isUnderwaterBlock)
 			return state.getBoundingBox(worldIn, pos).offset(pos);
@@ -390,7 +390,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState blockState, @Nonnull IWorldReader worldIn, @Nonnull BlockPos pos) {
 		if (blockState.getBlock() instanceof BlockSwampWater && ((BlockSwampWater) blockState.getBlock()).isUnderwaterBlock)
 			return blockState.getBoundingBox(worldIn, pos);
 		return null;
@@ -402,13 +402,13 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	}
 
 	@Override
-	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
+	public boolean isReplaceable(IWorldReader worldIn, BlockPos pos) {
 		IBlockState state = worldIn.getBlockState(pos);
 		return !(state.getBlock() instanceof BlockSwampWater) || !((BlockSwampWater) state.getBlock()).isUnderwaterBlock && super.isReplaceable(worldIn, pos);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(BlockSwampWater.LEVEL);
 	}
@@ -419,7 +419,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	}
 
 	@Override
-	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+	public int getColorMultiplier(IBlockState state, IWorldReader worldIn, BlockPos pos, int tintIndex) {
 		if (worldIn == null || pos == null || tintIndex != 0) {
 			return -1;
 		}
@@ -455,8 +455,8 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+	@OnlyIn(Dist.CLIENT)
+	public void animateTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		if (rand.nextInt(1500) == 0) {
 			if (world.getBlockState(pos.up(2)).getMaterial().isLiquid()) {
 				BLParticles.FISH.spawn(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
@@ -471,7 +471,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	}
 
 	@Override
-	public boolean shouldSideBeRendered(@Nonnull IBlockState state, @Nonnull IBlockAccess world, @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
+	public boolean shouldSideBeRendered(@Nonnull IBlockState state, @Nonnull IWorldReader world, @Nonnull BlockPos pos, @Nonnull EnumFacing side) {
 		if(this.isUnderwaterBlock) {
 			IBlockState neighbor = world.getBlockState(pos.offset(side));
 			if (neighbor.getMaterial() == state.getMaterial()) {
@@ -491,12 +491,12 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		return super.shouldSideBeRendered(state, world, pos, side);
 	}
 
-	private boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	private boolean isBlockSolid(IWorldReader world, BlockPos pos, EnumFacing face) {
 		return world.getBlockState(pos).getBlockFaceShape(world, pos, face) == BlockFaceShape.SOLID;
 	}
 	
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
         return BlockFaceShape.UNDEFINED;
     }
 	

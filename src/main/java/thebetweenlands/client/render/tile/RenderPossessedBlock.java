@@ -6,14 +6,14 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.model.tile.ModelPossessedBlock;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.util.TileEntityHelper;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderPossessedBlock extends TileEntitySpecialRenderer<TileEntityPossessedBlock> {
     private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/possessed_block.png");
     private final ModelPossessedBlock model = new ModelPossessedBlock();

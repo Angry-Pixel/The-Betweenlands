@@ -2,9 +2,9 @@ package thebetweenlands.util;
 
 import com.google.common.base.Predicate;
 
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockStateMatcher;
+import net.minecraft.state.IProperty;
 
 public class BlockStatePropertiesMatcher implements Predicate<IBlockState> {
 	private final BlockStateMatcher matcher;

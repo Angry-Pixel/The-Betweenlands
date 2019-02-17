@@ -5,9 +5,9 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -42,7 +42,7 @@ public class ParticleThem extends Particle {
 
 	@Override
 	public void renderParticle(BufferBuilder vertexBuffer, Entity entity, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
+		Minecraft.getInstance().getTextureManager().bindTexture(TEXTURE);
 
 		float umin = 0;
 		float umax = 1;
@@ -77,7 +77,7 @@ public class ParticleThem extends Particle {
 
 		float fogEnd = FogHandler.getCurrentFogEnd();
 		float fogStart = FogHandler.getCurrentFogStart();
-		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
+		Entity renderView = Minecraft.getInstance().getRenderViewEntity();
 		float particleDist = renderView == null ? 0.0F : (float)renderView.getDistance(this.posX, this.posY, this.posZ);
 		float fadeStart = Math.max(fogStart + (fogEnd - fogStart) / 3.0F, 12.0F);
 		float fadeEnd = 8.0F;
@@ -125,7 +125,7 @@ public class ParticleThem extends Particle {
 
 		this.setPosition(this.posX, this.startY + Math.sin(this.particleAge / 150.0f) / 1.5F, this.posZ);
 
-		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
+		Entity renderView = Minecraft.getInstance().getRenderViewEntity();
 		if(renderView != null) {
 			Vec3d diff = renderView.getPositionVector().subtract(this.posX, this.posY - renderView.getEyeHeight(), this.posZ);
 			if(diff.length() < 2.0F) {

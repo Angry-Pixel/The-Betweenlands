@@ -9,7 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
@@ -26,12 +26,12 @@ public class BlockPeat extends Block {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IWorldReader worldIn, BlockPos pos) {
 		return PEAT_AABB;
 	}
 
 	@Override
-	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
+	public void onEntityCollision(IBlockState state, World world, BlockPos pos, Entity entity) {
 		boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer) entity).inventory.armorInventory.get(0).getItem() instanceof ItemRubberBoots;
 		if(!canWalk) {
 			entity.motionX *= 0.85D;
@@ -46,7 +46,7 @@ public class BlockPeat extends Block {
 	}
 
 	@Override
-	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+	public int getFlammability(IWorldReader world, BlockPos pos, EnumFacing face) {
 		return 0;
 	}
 }

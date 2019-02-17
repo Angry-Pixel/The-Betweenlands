@@ -1,11 +1,11 @@
 package thebetweenlands.common.tile;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-
-import javax.annotation.Nonnull;
 
 public class TileEntityItemShelf extends TileEntityBasicInventory {
     public TileEntityItemShelf() {

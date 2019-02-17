@@ -1,5 +1,9 @@
 package thebetweenlands.compat.jei.recipes.misc;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import mezz.jei.api.IJeiHelpers;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
@@ -9,9 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ShapelessOverrideRecipeJEI implements ICraftingRecipeWrapper {
 

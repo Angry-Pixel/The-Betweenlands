@@ -6,17 +6,17 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.BlockStateContainer;
 import net.minecraft.world.chunk.Chunk;
 
 public abstract class BlockSpreadingDeath extends Block {
-	public static final PropertyBool INACTIVE = PropertyBool.create("inactive");
+	public static final BooleanProperty INACTIVE = BooleanProperty.create("inactive");
 
 	public BlockSpreadingDeath(Material material) {
 		super(material);
@@ -40,8 +40,8 @@ public abstract class BlockSpreadingDeath extends Block {
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		super.breakBlock(worldIn, pos, state);
+	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 
 		if(!worldIn.isRemote) {
 			this.checkAndRevertBiome(worldIn, pos);

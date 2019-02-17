@@ -28,13 +28,13 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import thebetweenlands.api.entity.BossType;
 import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.common.TheBetweenlands;
@@ -118,10 +118,10 @@ public class BossHandler<T extends Entity & IBLBoss> {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onBossBarRender(RenderGameOverlayEvent.BossInfo event) {
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 
 		IBLBoss boss = null;
 
@@ -187,7 +187,7 @@ public class BossHandler<T extends Entity & IBLBoss> {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onRenderLiving(RenderLivingEvent.Specials.Post<EntityLivingBase> event) {
 		EntityLivingBase entity = event.getEntity();
@@ -195,11 +195,11 @@ public class BossHandler<T extends Entity & IBLBoss> {
 		if(entity instanceof IBLBoss) {
 			IBLBoss boss = (IBLBoss) entity;
 			if(boss.getBossType() == BossType.MINI_BOSS) {
-				BossInfo info = Minecraft.getMinecraft().ingameGUI.getBossOverlay().mapBossInfos.get(boss.getBossInfoUuid());
+				BossInfo info = Minecraft.getInstance().ingameGUI.getBossOverlay().mapBossInfos.get(boss.getBossInfoUuid());
 				if(info != null) {
 					RenderManager renderManager = event.getRenderer().getRenderManager();
-					TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
-					Framebuffer fbo = Minecraft.getMinecraft().getFramebuffer();
+					TextureManager textureManager = Minecraft.getInstance().getTextureManager();
+					Framebuffer fbo = Minecraft.getInstance().getFramebuffer();
 
 					Tessellator tessellator = Tessellator.getInstance();
 
@@ -290,7 +290,7 @@ public class BossHandler<T extends Entity & IBLBoss> {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private static void renderTag(Tessellator tessellator, Framebuffer fbo, TextureManager textureManager, double width, double height, double emptyPercentage, boolean useStencil) {
 		GL11.glDisable(GL11.GL_STENCIL_TEST);
 
@@ -307,7 +307,7 @@ public class BossHandler<T extends Entity & IBLBoss> {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private static void renderTagQuad(Tessellator tessellator, double minX, double minY, double maxX, double maxY, double minU, double minV, double maxU, double maxV) {
 		BufferBuilder buffer = tessellator.getBuffer();
 		buffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);

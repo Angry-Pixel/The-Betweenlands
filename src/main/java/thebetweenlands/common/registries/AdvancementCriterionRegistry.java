@@ -2,7 +2,16 @@ package thebetweenlands.common.registries;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.common.advancments.*;
+import thebetweenlands.common.advancments.BreakBlockTrigger;
+import thebetweenlands.common.advancments.EquipTrigger;
+import thebetweenlands.common.advancments.EventTrigger;
+import thebetweenlands.common.advancments.GeckoTrigger;
+import thebetweenlands.common.advancments.HasAdvancementTrigger;
+import thebetweenlands.common.advancments.LocationTrigger;
+import thebetweenlands.common.advancments.NoCriteriaTrigger;
+import thebetweenlands.common.advancments.RightClickBlockTrigger;
+import thebetweenlands.common.advancments.ShockwaveKillTrigger;
+import thebetweenlands.common.advancments.SwatShieldTrigger;
 import thebetweenlands.common.lib.ModInfo;
 
 public class AdvancementCriterionRegistry {

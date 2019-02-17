@@ -3,11 +3,11 @@ package thebetweenlands.client.render.entity;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderSnailPoisonJet extends Render<EntitySnailPoisonJet> {
 	public RenderSnailPoisonJet(RenderManager renderManager) {
 		super(renderManager);

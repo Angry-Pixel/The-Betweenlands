@@ -2,7 +2,6 @@ package thebetweenlands.client.render.entity.layer;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-
 import thebetweenlands.client.render.model.entity.rowboat.ModelBipedRower;
 import thebetweenlands.client.render.model.entity.rowboat.ModelBipedRower.BipedTextureUVs;
 import thebetweenlands.client.render.model.entity.rowboat.ModelPlayerRower;

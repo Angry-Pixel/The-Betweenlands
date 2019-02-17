@@ -9,25 +9,25 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class ThemHandler {
 	private static final List<Particle> activeParticles = new ArrayList<Particle>();
 
 	@SubscribeEvent
 	public static void onTick(ClientTickEvent event) {
-		if(event.phase == Phase.END && !Minecraft.getMinecraft().isGamePaused()) {
+		if(event.phase == Phase.END && !Minecraft.getInstance().isGamePaused()) {
 			World world = TheBetweenlands.proxy.getClientWorld();
-			Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
+			Entity viewer = Minecraft.getInstance().getRenderViewEntity();
 			if(world != null && viewer != null && viewer.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && FogHandler.hasDenseFog(world) && (FogHandler.getCurrentFogEnd() + FogHandler.getCurrentFogStart()) / 2 < 65.0F) {
 				Iterator<Particle> it = activeParticles.iterator();
 				while(it.hasNext()) {

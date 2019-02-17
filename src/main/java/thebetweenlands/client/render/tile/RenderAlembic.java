@@ -3,13 +3,13 @@ package thebetweenlands.client.render.tile;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.model.tile.ModelAlembic;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.tile.TileEntityAlembic;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderAlembic extends TileEntitySpecialRenderer<TileEntityAlembic> {
 
 	private final ModelAlembic model = new ModelAlembic();

@@ -8,10 +8,8 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,15 +17,17 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.IProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -49,7 +49,7 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 	}
 
 	@Nullable
-	public static TileEntityPresent getTileEntity(IBlockAccess world, BlockPos pos) {
+	public static TileEntityPresent getTileEntity(IWorldReader world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile instanceof TileEntityPresent) {
 			return (TileEntityPresent) tile;
@@ -58,7 +58,7 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
 		return AABB;
 	}
 
@@ -68,12 +68,12 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 	}
 
 	@Override
-	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public boolean isNormalCube(IBlockState state, IWorldReader world, BlockPos pos) {
 		return false;
 	}
 
 	@Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IWorldReader worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
         return BlockFaceShape.UNDEFINED;
     }
 	
@@ -110,16 +110,16 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
 		IInventory tile = (IInventory) worldIn.getTileEntity(pos);
 		if (tile != null) {
 			InventoryHelper.dropInventoryItems(worldIn, pos, tile);
 		}
-		super.breakBlock(worldIn, pos, state);
+		super.onReplaced(state, worldIn, pos, newState, isMoving);
 	}
 
 	@Override
-	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public MapColor getMapColor(IBlockState state, IWorldReader worldIn, BlockPos pos) {
 		return MapColor.getBlockColor((EnumDyeColor)state.getValue(COLOR));
 	}
 
@@ -139,14 +139,14 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 	}
 
 	@Override
-	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+	public int getColorMultiplier(IBlockState state, IWorldReader worldIn, BlockPos pos, int tintIndex) {
 		if(tintIndex == 0) {
 			return state.getValue(COLOR).getColorValue();
 		}
 		return 0xFFFFFF;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;

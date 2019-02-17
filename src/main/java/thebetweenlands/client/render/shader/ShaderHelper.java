@@ -1,6 +1,5 @@
 package thebetweenlands.client.render.shader;
 
-import net.minecraft.client.renderer.BufferBuilder;
 import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.GL11;
@@ -9,14 +8,14 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GLContext;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.math.MathHelper;
 import thebetweenlands.client.render.shader.postprocessing.Tonemapper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
@@ -59,7 +58,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 		if(this.isShaderSupported()) {
 			boolean canUseInWorld = true;
 			if(BetweenlandsConfig.RENDERING.dimensionShaderOnly) {
-				canUseInWorld = Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
+				canUseInWorld = Minecraft.getInstance().world != null && Minecraft.getInstance().world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
 			}
 			return this.shaderError == null && OpenGlHelper.isFramebufferEnabled() && BetweenlandsConfig.RENDERING.useShader && canUseInWorld;
 		} else {
@@ -185,7 +184,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	 */
 	public void renderShaders(float partialTicks) {
 		if(this.shadersUpdated && this.worldShader != null && this.isRequired() && this.canUseShaders()) {
-			Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
+			Framebuffer mainFramebuffer = Minecraft.getInstance().getFramebuffer();
 			int parentFboId = -1;
 			if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 				parentFboId = RenderUtils.getBoundFramebuffer();
@@ -200,7 +199,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 			int renderPasses = MathHelper.floor(this.worldShader.getLightSourcesAmount() / WorldShader.MAX_LIGHT_SOURCES_PER_PASS) + 1;
 			renderPasses = 1; //Multiple render passes are currently not recommended
 
-			Minecraft.getMinecraft().entityRenderer.setupOverlayRendering();
+			Minecraft.getInstance().entityRenderer.setupOverlayRendering();
 
 			targetFramebuffer2.framebufferClear();
 
@@ -319,7 +318,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 		if(this.required) {
 			return true;
 		}
-		Minecraft mc = Minecraft.getMinecraft();
+		Minecraft mc = Minecraft.getInstance();
 		if(mc.player != null && mc.player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null) && mc.player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null).isInPortal()) {
 			return true;
 		}

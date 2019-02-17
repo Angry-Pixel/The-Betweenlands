@@ -7,12 +7,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
-import net.minecraft.block.material.MapColor;
-import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,16 +15,19 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemLead;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 /**
@@ -38,13 +36,13 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 public class BlockFenceBetweenlands extends Block {
 
 	/** Whether this fence connects in the northern direction */
-	public static final PropertyBool NORTH = PropertyBool.create("north");
+	public static final BooleanProperty NORTH = BooleanProperty.create("north");
 	/** Whether this fence connects in the eastern direction */
-	public static final PropertyBool EAST = PropertyBool.create("east");
+	public static final BooleanProperty EAST = BooleanProperty.create("east");
 	/** Whether this fence connects in the southern direction */
-	public static final PropertyBool SOUTH = PropertyBool.create("south");
+	public static final BooleanProperty SOUTH = BooleanProperty.create("south");
 	/** Whether this fence connects in the western direction */
-	public static final PropertyBool WEST = PropertyBool.create("west");
+	public static final BooleanProperty WEST = BooleanProperty.create("west");
 	protected static final AxisAlignedBB[] BOUNDING_BOXES = new AxisAlignedBB[] {new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D), new AxisAlignedBB(0.0D, 0.0D, 0.375D, 0.625D, 1.0D, 1.0D), new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 1.0D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.625D, 1.0D, 0.625D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.625D, 1.0D, 1.0D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 1.0D, 1.0D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.375D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.375D, 1.0D, 1.0D, 0.625D), new AxisAlignedBB(0.0D, 0.0D, 0.375D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.375D, 0.0D, 0.0D, 1.0D, 1.0D, 0.625D), new AxisAlignedBB(0.375D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.625D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
 	public static final AxisAlignedBB PILLAR_AABB = new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 1.5D, 0.625D);
 	public static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0.375D, 0.0D, 0.625D, 0.625D, 1.5D, 1.0D);
@@ -84,7 +82,7 @@ public class BlockFenceBetweenlands extends Block {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos)
 	{
 		state = this.getActualState(state, source, pos);
 		return BOUNDING_BOXES[getBoundingBoxIdx(state)];
@@ -131,12 +129,12 @@ public class BlockFenceBetweenlands extends Block {
 	}
 
 	@Override
-	public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
+	public boolean isPassable(IWorldReader worldIn, BlockPos pos)
 	{
 		return false;
 	}
 
-	public boolean canConnectTo(IBlockAccess worldIn, BlockPos pos, EnumFacing facing) {
+	public boolean canConnectTo(IWorldReader worldIn, BlockPos pos, EnumFacing facing) {
 		IBlockState iblockstate = worldIn.getBlockState(pos);
 		BlockFaceShape blockfaceshape = iblockstate.getBlockFaceShape(worldIn, pos, facing);
 		Block block = iblockstate.getBlock();
@@ -149,13 +147,13 @@ public class BlockFenceBetweenlands extends Block {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	@OnlyIn(Dist.CLIENT)
+	public boolean shouldSideBeRendered(IBlockState blockState, IWorldReader blockAccess, BlockPos pos, EnumFacing side) {
 		return true;
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote) {
 			return ItemLead.attachToFence(playerIn, worldIn, pos);
 		} else {
@@ -178,7 +176,7 @@ public class BlockFenceBetweenlands extends Block {
 	 * metadata, such as fence connections.
 	 */
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
 		return state.withProperty(NORTH, canFenceConnectTo(worldIn, pos, EnumFacing.NORTH))
 					.withProperty(EAST,  canFenceConnectTo(worldIn, pos, EnumFacing.EAST))
 					.withProperty(SOUTH, canFenceConnectTo(worldIn, pos, EnumFacing.SOUTH))
@@ -226,14 +224,14 @@ public class BlockFenceBetweenlands extends Block {
 	}
 
 	@Override
-	public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos) {
+	public boolean canPlaceTorchOnTop(IBlockState state, IWorldReader world, BlockPos pos) {
 		return true;
     }
 
     /* ======================================== FORGE START ======================================== */
 
 	@Override
-	public boolean canBeConnectedTo(IBlockAccess world, BlockPos pos, EnumFacing facing) {
+	public boolean canBeConnectedTo(IWorldReader world, BlockPos pos, EnumFacing facing) {
 		Block connector = world.getBlockState(pos.offset(facing)).getBlock();
 
 		if(connector instanceof BlockFence || connector instanceof BlockFenceBetweenlands) {
@@ -242,7 +240,7 @@ public class BlockFenceBetweenlands extends Block {
 		return false;
 	}
 
-	private boolean canFenceConnectTo(IBlockAccess world, BlockPos pos, EnumFacing facing) {
+	private boolean canFenceConnectTo(IWorldReader world, BlockPos pos, EnumFacing facing) {
 		BlockPos other = pos.offset(facing);
 		Block block = world.getBlockState(other).getBlock();
 		return block.canBeConnectedTo(world, other, facing.getOpposite()) || canConnectTo(world, other, facing.getOpposite());
@@ -251,7 +249,7 @@ public class BlockFenceBetweenlands extends Block {
     /* ======================================== FORGE END ======================================== */
 
     @Override
-	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing facing) {
+	public BlockFaceShape getBlockFaceShape(IWorldReader world, IBlockState state, BlockPos pos, EnumFacing facing) {
 		return facing != EnumFacing.UP && facing != EnumFacing.DOWN ? BlockFaceShape.MIDDLE_POLE : BlockFaceShape.CENTER;
 	}
 }

@@ -2,8 +2,6 @@ package thebetweenlands.client.render.tile;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
-import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +26,7 @@ public class RenderSpawnerBetweenlands extends TileEntitySpecialRenderer<TileEnt
             GlStateManager.translate(0.0F, -0.4F, 0.0F);
             GlStateManager.scale(scale, scale, scale);
             entity.setLocationAndAngles(x, y, z, 0.0F, 0.0F);
-            Minecraft.getMinecraft().getRenderManager().renderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
+            Minecraft.getInstance().getRenderManager().renderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, partialTicks, true);
         }
     }
 

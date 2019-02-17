@@ -501,7 +501,7 @@
 //		return this.dataManager.get(GUARD_STATE_DW) == 2;
 //	}
 //
-//	@SideOnly(Side.CLIENT)
+//	@OnlyIn(Dist.CLIENT)
 //	private void spawnVolatileParticles() {
 //		final double radius = 0.3F;
 //		final double cx = this.posX;

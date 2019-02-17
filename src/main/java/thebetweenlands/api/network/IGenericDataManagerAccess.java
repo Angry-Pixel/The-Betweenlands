@@ -6,8 +6,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IGenericDataManagerAccess extends ITickable {
 	public static interface IDataEntry<T> {
@@ -47,7 +47,7 @@ public interface IGenericDataManagerAccess extends ITickable {
 	@Nullable
 	public List<IDataEntry<?>> getAll();
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void setValuesFromPacket(List<? extends IDataEntry<?>> newEntries);
 
 	public boolean isEmpty();

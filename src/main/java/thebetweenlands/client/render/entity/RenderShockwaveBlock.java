@@ -2,30 +2,29 @@ package thebetweenlands.client.render.entity;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.block.IsolatedBlockModelRenderer;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 	private static final IsolatedBlockModelRenderer blockRenderer = new IsolatedBlockModelRenderer();
 
@@ -62,7 +61,7 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 
 		@SuppressWarnings("deprecation")
 		IBlockState state = entity.block.getStateFromMeta(entity.blockMeta);
-		IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(state);
+		IBakedModel model = Minecraft.getInstance().getBlockRendererDispatcher().getModelForState(state);
 		if(model != null) {
 			Tessellator tessellator = Tessellator.getInstance();
 			BufferBuilder buffer = tessellator.getBuffer();
@@ -73,9 +72,9 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 				return state.getPackedLightmapCoords(entity.world, facing != null ? entity.origin.up().offset(facing) : entity.origin.up());
 			}).setTint((IBlockState blockState, int tintIndex) -> {
 				if(blockState.getBlock() == entity.block)
-					return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, entity.world, entity.origin, tintIndex);
+					return Minecraft.getInstance().getBlockColors().colorMultiplier(state, entity.world, entity.origin, tintIndex);
 				else
-					return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, null, null, tintIndex);
+					return Minecraft.getInstance().getBlockColors().colorMultiplier(state, null, null, tintIndex);
 			});
 
 			blockRenderer.renderModel(entity.origin, model, state, MathHelper.getPositionRandom(entity.origin), buffer);

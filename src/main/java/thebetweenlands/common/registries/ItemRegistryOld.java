@@ -14,12 +14,12 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -28,14 +28,85 @@ import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityLeech;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntitySludge;
+import thebetweenlands.common.entity.mobs.EntitySmollSludge;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntityTermite;
+import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.item.BLMaterialRegistry;
-import thebetweenlands.common.item.armor.*;
-import thebetweenlands.common.item.equipment.*;
-import thebetweenlands.common.item.farming.*;
-import thebetweenlands.common.item.food.*;
-import thebetweenlands.common.item.herblore.*;
-import thebetweenlands.common.item.misc.*;
+import thebetweenlands.common.item.armor.ItemBoneArmor;
+import thebetweenlands.common.item.armor.ItemExplorersHat;
+import thebetweenlands.common.item.armor.ItemLurkerSkinArmor;
+import thebetweenlands.common.item.armor.ItemMarshRunnerBoots;
+import thebetweenlands.common.item.armor.ItemRubberBoots;
+import thebetweenlands.common.item.armor.ItemSkullMask;
+import thebetweenlands.common.item.armor.ItemSpiritTreeFaceMaskLarge;
+import thebetweenlands.common.item.armor.ItemSpiritTreeFaceMaskSmall;
+import thebetweenlands.common.item.armor.ItemSyrmoriteArmor;
+import thebetweenlands.common.item.armor.ItemValoniteArmor;
+import thebetweenlands.common.item.equipment.ItemAmulet;
+import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
+import thebetweenlands.common.item.equipment.ItemRingOfFlight;
+import thebetweenlands.common.item.equipment.ItemRingOfPower;
+import thebetweenlands.common.item.equipment.ItemRingOfRecruitment;
+import thebetweenlands.common.item.equipment.ItemRingOfSummoning;
+import thebetweenlands.common.item.farming.ItemAspectrusSeeds;
+import thebetweenlands.common.item.farming.ItemMiddleFruitBushSeeds;
+import thebetweenlands.common.item.farming.ItemPlantTonic;
+import thebetweenlands.common.item.farming.ItemSpores;
+import thebetweenlands.common.item.farming.ItemSwampKelp;
+import thebetweenlands.common.item.farming.ItemSwampReed;
+import thebetweenlands.common.item.food.ItemAspectrusFruit;
+import thebetweenlands.common.item.food.ItemBLFood;
+import thebetweenlands.common.item.food.ItemBlackHatMushroom;
+import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
+import thebetweenlands.common.item.food.ItemChiromawWing;
+import thebetweenlands.common.item.food.ItemFlatHeadMushroom;
+import thebetweenlands.common.item.food.ItemForbiddenFig;
+import thebetweenlands.common.item.food.ItemGertsDonut;
+import thebetweenlands.common.item.food.ItemMarshmallow;
+import thebetweenlands.common.item.food.ItemMarshmallowPink;
+import thebetweenlands.common.item.food.ItemMireScramble;
+import thebetweenlands.common.item.food.ItemMireSnailEgg;
+import thebetweenlands.common.item.food.ItemNettleSoup;
+import thebetweenlands.common.item.food.ItemNibblestick;
+import thebetweenlands.common.item.food.ItemRottenFood;
+import thebetweenlands.common.item.food.ItemSapBall;
+import thebetweenlands.common.item.food.ItemSapJello;
+import thebetweenlands.common.item.food.ItemSpiritFruit;
+import thebetweenlands.common.item.food.ItemTaintedPotion;
+import thebetweenlands.common.item.food.ItemTangledRoot;
+import thebetweenlands.common.item.food.ItemWeepingBluePetal;
+import thebetweenlands.common.item.food.ItemWeepingBluePetalSalad;
+import thebetweenlands.common.item.food.ItemWightHeart;
+import thebetweenlands.common.item.herblore.ItemAspectVial;
+import thebetweenlands.common.item.herblore.ItemCrushed;
+import thebetweenlands.common.item.herblore.ItemDentrothystVial;
+import thebetweenlands.common.item.herblore.ItemElixir;
+import thebetweenlands.common.item.herblore.ItemManualHL;
+import thebetweenlands.common.item.herblore.ItemPlantDrop;
+import thebetweenlands.common.item.misc.ItemAmateMap;
+import thebetweenlands.common.item.misc.ItemAmuletSlot;
+import thebetweenlands.common.item.misc.ItemAngryPebble;
+import thebetweenlands.common.item.misc.ItemBLRecord;
+import thebetweenlands.common.item.misc.ItemBarkAmulet;
+import thebetweenlands.common.item.misc.ItemBoneWayfinder;
+import thebetweenlands.common.item.misc.ItemCavingRope;
+import thebetweenlands.common.item.misc.ItemDentrothystShard;
+import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
+import thebetweenlands.common.item.misc.ItemEmptyAmateMap;
+import thebetweenlands.common.item.misc.ItemGem;
+import thebetweenlands.common.item.misc.ItemGemSinger;
+import thebetweenlands.common.item.misc.ItemGlue;
+import thebetweenlands.common.item.misc.ItemLifeCrystal;
+import thebetweenlands.common.item.misc.ItemLoreScrap;
+import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
+import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMossBed;
@@ -44,6 +115,7 @@ import thebetweenlands.common.item.misc.ItemOctineIngot;
 import thebetweenlands.common.item.misc.ItemPyradFlame;
 import thebetweenlands.common.item.misc.ItemRope;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
+import thebetweenlands.common.item.misc.ItemSpiritTreeFaceMaskSmallAnimated;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.ItemTarminion;
 import thebetweenlands.common.item.misc.ItemWeedwoodRowboat;
@@ -335,7 +407,7 @@ public class ItemRegistryOld {
                     Item item = (Item) field.get(null);
                     registerItem(item, field.getName());
 
-                    if (BetweenlandsConfig.DEBUG.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+                    if (BetweenlandsConfig.DEBUG.debug && FMLCommonHandler.instance().getEffectiveSide() == Dist.CLIENT) {
                         if (item.getCreativeTab() == null)
                         	TheBetweenlands.logger.warn(String.format("Item %s doesn't have a creative tab", item.getTranslationKey()));
                     }
@@ -541,7 +613,7 @@ public class ItemRegistryOld {
         registerOreDictionary();
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
         for (Item item : ITEMS) {
@@ -554,7 +626,7 @@ public class ItemRegistryOld {
     	 * A map from item meta values to different item models
     	 * @return
     	 */
-    	@SideOnly(Side.CLIENT)
+    	@OnlyIn(Dist.CLIENT)
         Map<Integer, ResourceLocation> getModels();
     }
 
@@ -563,7 +635,7 @@ public class ItemRegistryOld {
     	 * A maps from item meta values to blockstate variants
     	 * @return
     	 */
-    	@SideOnly(Side.CLIENT)
+    	@OnlyIn(Dist.CLIENT)
         Map<Integer, String> getVariants();
     }
 
@@ -573,7 +645,7 @@ public class ItemRegistryOld {
          * A callback to get a custom mesh definition
          * @return
          */
-        @SideOnly(Side.CLIENT)
+        @OnlyIn(Dist.CLIENT)
         ItemMeshDefinition getMeshDefinition();
 
     }

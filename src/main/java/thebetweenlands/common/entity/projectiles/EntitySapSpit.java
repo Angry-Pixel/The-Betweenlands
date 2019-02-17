@@ -8,8 +8,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFace;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -36,7 +36,7 @@ public class EntitySapSpit extends EntityThrowable {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void handleStatusUpdate(byte id) {
 		if(id == 3) {
 			for(int i = 0; i < 16; ++i) {

@@ -5,15 +5,15 @@ import com.google.common.base.Predicates;
 
 import net.minecraftforge.common.property.IUnlistedProperty;
 
-public abstract class UnlistedPropertyHelper<T> implements IUnlistedProperty<T> {
+public abstract class AbstractUnlistedProperty<T> implements IUnlistedProperty<T> {
 	private final String name;
 	private final Predicate<T> validator;
 
-	public UnlistedPropertyHelper(String name) {
+	public AbstractUnlistedProperty(String name) {
 		this(name, Predicates.alwaysTrue());
 	}
 
-	public UnlistedPropertyHelper(String name, Predicate<T> validator) {
+	public AbstractUnlistedProperty(String name, Predicate<T> validator) {
 		this.name = name;
 		this.validator = validator;
 	}

@@ -1,7 +1,6 @@
 package thebetweenlands.common.entity.mobs;
 
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntitySmollSludge extends EntitySludge {

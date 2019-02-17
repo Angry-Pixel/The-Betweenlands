@@ -1,5 +1,10 @@
 package thebetweenlands.compat.jei.recipes.compost;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeWrapper;
@@ -8,10 +13,6 @@ import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.TranslationHelper;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CompostRecipeJEI implements IRecipeWrapper {
     private ItemStack input;

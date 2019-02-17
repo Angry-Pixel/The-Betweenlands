@@ -6,23 +6,23 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.IConnectedTextureBlock;
 
 public class BlockAmatePaperPane extends BlockPaneBetweenlands implements IConnectedTextureBlock {
@@ -34,7 +34,7 @@ public class BlockAmatePaperPane extends BlockPaneBetweenlands implements IConne
 		this.setHardness(0.3F);
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
@@ -46,16 +46,16 @@ public class BlockAmatePaperPane extends BlockPaneBetweenlands implements IConne
 	}
 
 	@Override
-	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess world, BlockPos pos) {
+	public IBlockState getExtendedState(IBlockState oldState, IWorldReader world, BlockPos pos) {
 		IExtendedBlockState state = (IExtendedBlockState) oldState;
 		IConnectionRules connectionState = new IConnectionRules() {
 			@Override
-			public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing face, MutableBlockPos to) {
+			public boolean canConnectTo(IWorldReader world, BlockPos pos, EnumFacing face, MutableBlockPos to) {
 				return Math.abs(to.getX() - pos.getX() - face.getXOffset()) + Math.abs(to.getY() - pos.getY() - face.getYOffset()) + Math.abs(to.getZ() - pos.getZ() - face.getZOffset()) != 1 && world.getBlockState(to).getBlock() == BlockAmatePaperPane.this;
 			}
 
 			@Override
-			public boolean canConnectThrough(IBlockAccess world, BlockPos pos, EnumFacing face, MutableBlockPos to) {
+			public boolean canConnectThrough(IWorldReader world, BlockPos pos, EnumFacing face, MutableBlockPos to) {
 				Axis axis = face.getAxis();
 				if((axis == Axis.X && to.getX() - pos.getX() != 0) || (axis == Axis.Y && to.getY() - pos.getY() != 0) || (axis == Axis.Z && to.getZ() - pos.getZ() != 0)) {
 					return true;
@@ -106,7 +106,7 @@ public class BlockAmatePaperPane extends BlockPaneBetweenlands implements IConne
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
 		state = this.getActualState(state, source, pos);
 		return AABB_BY_INDEX[getBoundingBoxIndex(state)];
 	}

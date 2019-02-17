@@ -37,10 +37,10 @@ public class FogGenerator {
 	 * @return
 	 */
 	public float[] getFogRange(float min, float max) {
-		if(Minecraft.getMinecraft().player == null)
+		if(Minecraft.getInstance().player == null)
 			return new float[]{min, max};
-		double x = Minecraft.getMinecraft().player.posX;
-		double z = Minecraft.getMinecraft().player.posZ;
+		double x = Minecraft.getInstance().player.posX;
+		double z = Minecraft.getInstance().player.posZ;
 		int cx = (int)((x - ((int)(Math.floor(x)) & 15)) / 16) - 1;
 		int cz = (int)((z - ((int)(Math.floor(z)) & 15)) / 16);
 		if(this.fogChunkNoise == null || this.lastCX != cx || this.lastCZ != cz) {

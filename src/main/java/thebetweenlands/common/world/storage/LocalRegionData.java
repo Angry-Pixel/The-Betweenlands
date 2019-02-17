@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.storage.LocalRegion;

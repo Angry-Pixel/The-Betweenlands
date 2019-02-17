@@ -3,17 +3,17 @@ package thebetweenlands.common.block.plant;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class BlockVenusFlyTrap extends BlockPlant {
-	public static final PropertyBool BLOOMING = PropertyBool.create("blooming");
+	public static final BooleanProperty BLOOMING = BooleanProperty.create("blooming");
 
 	public BlockVenusFlyTrap() {
 		super();
@@ -53,7 +53,7 @@ public class BlockVenusFlyTrap extends BlockPlant {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public Block.EnumOffsetType getOffsetType() {
 		return Block.EnumOffsetType.XZ;
 	}

@@ -26,9 +26,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.SpikeRenderer;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -62,10 +62,10 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 	protected EntityLivingBase grabbedEntity = null;
 
 	@Nullable
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public List<RootPart> modelParts;
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public static class RootPart {
 		public SpikeRenderer renderer;
 		public float x, y, z;
@@ -107,7 +107,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		this.delay = delay;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void initRootModels() {
 		if(this.modelParts == null) {
 			this.modelParts = new ArrayList<>();
@@ -122,7 +122,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 					float scale = 0.6F + this.rand.nextFloat() * 0.2F;
 					double angle = i * Math.PI * 2 / roots;
 					Vec3d offset = new Vec3d(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
-					SpikeRenderer renderer = new SpikeRenderer(3, scale * 0.5F, scale, 1, this.rand.nextLong(), -scale * 0.5F * 1.5F, 0, -scale * 0.5F * 1.5F).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(ParticleRootSpike.SPRITE.toString()));
+					SpikeRenderer renderer = new SpikeRenderer(3, scale * 0.5F, scale, 1, this.rand.nextLong(), -scale * 0.5F * 1.5F, 0, -scale * 0.5F * 1.5F).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite(ParticleRootSpike.SPRITE.toString()));
 					RootPart part = new RootPart();
 					part.renderer = renderer;
 					part.x = (float)offset.x;
@@ -136,7 +136,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public int getBrightnessForRender() {
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(MathHelper.floor(this.posX), 0, MathHelper.floor(this.posZ));
@@ -250,7 +250,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		this.world.profiler.endSection();
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void spawnExtendParticles() {
 		for(int i = 0; i < 64; i++) {
 			double dx = (this.rand.nextDouble() * 2 - 1) * this.width / 2;
@@ -278,7 +278,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	protected void spawnBlockDust() {
 		for(int i = 0; i < 8; i++) {
 			double dx = (this.rand.nextDouble() * 2 - 1) * this.width / 2;
@@ -328,7 +328,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		return true;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void handleStatusUpdate(byte id) {
 		super.handleStatusUpdate(id);

@@ -1,5 +1,7 @@
 package thebetweenlands.common.network.serverbound;
 
+import javax.xml.ws.handler.MessageContext;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -7,7 +9,6 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
 import thebetweenlands.common.network.MessageEntity;
@@ -97,7 +98,7 @@ public class MessageEquipItem extends MessageEntity {
 					if(this.sourceSlot >= -1 && this.sourceSlot < sender.inventory.getSizeInventory()) {
 						ItemStack stack = this.sourceSlot == -1 ? sender.getHeldItem(EnumHand.OFF_HAND) : sender.inventory.getStackInSlot(this.sourceSlot);
 						ItemStack result = EquipmentHelper.equipItem(sender, target, stack, false);
-						if(!sender.capabilities.isCreativeMode) {
+						if(!sender.abilities.isCreativeMode) {
 							if(this.sourceSlot == -1) {
 								sender.setHeldItem(EnumHand.OFF_HAND, result);
 							} else {

@@ -27,10 +27,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.SpikeRenderer;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -47,7 +47,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 	public int delay;
 
 	@Nullable
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public Map<BlockPos, List<SpikeRenderer>> modelParts;
 
 	protected float attackDamage = 10.0F;
@@ -82,7 +82,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 		this.renderingBounds = this.blockEnclosingBounds.offset(this.posX - (this.origin.getX() + 0.5D), this.posY - this.origin.getY(), this.posZ - (this.origin.getZ() + 0.5D));
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void initRootModels() {
 		if(this.modelParts == null) {
 			this.modelParts = new HashMap<>();
@@ -97,7 +97,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 							pos.getZ() + this.rand.nextDouble() * 0.6D - 0.3D - this.posZ
 							);
 					float scale = 0.4F + this.rand.nextFloat() * 0.2F;
-					SpikeRenderer renderer = new SpikeRenderer(2, scale * 0.5F, scale, 1, this.rand.nextLong(), offset.x, offset.y, offset.z).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(ParticleRootSpike.SPRITE.toString()));
+					SpikeRenderer renderer = new SpikeRenderer(2, scale * 0.5F, scale, 1, this.rand.nextLong(), offset.x, offset.y, offset.z).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite(ParticleRootSpike.SPRITE.toString()));
 					renderers.add(renderer);
 				}
 
@@ -106,7 +106,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public int getBrightnessForRender() {
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(MathHelper.floor(this.posX), 0, MathHelper.floor(this.posZ));
@@ -180,7 +180,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 		this.world.profiler.endSection();
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	private void spawnEmergeParticles() {
 		if(!this.positions.isEmpty()) {
 			int particles = 8 + this.rand.nextInt(8);

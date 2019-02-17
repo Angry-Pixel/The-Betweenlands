@@ -5,9 +5,6 @@ import java.util.Random;
 
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -17,6 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
@@ -24,20 +23,21 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.BlockStateContainerHelper;
 
 public class BlockHearthgroveLog extends BlockLogBetweenlands {
-	public static final PropertyBool TARRED = PropertyBool.create("tarred");
+	public static final BooleanProperty TARRED = BooleanProperty.create("tarred");
 
 	public BlockHearthgroveLog() {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(TARRED, false));
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		List<String> strings = ItemTooltipHandler.splitTooltip(I18n.format("tooltip.hearthgrove_log"), 0);
@@ -47,7 +47,7 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 	}
 
 	@Override
-	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
 
 		boolean hasWater = false;
@@ -175,7 +175,7 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(this, 1, this.getMetaFromState(this.getDefaultState().withProperty(LOG_AXIS, BlockLog.EnumAxis.Y).withProperty(TARRED, false))));
 		list.add(new ItemStack(this, 1, this.getMetaFromState(this.getDefaultState().withProperty(LOG_AXIS, BlockLog.EnumAxis.Y).withProperty(TARRED, true))));

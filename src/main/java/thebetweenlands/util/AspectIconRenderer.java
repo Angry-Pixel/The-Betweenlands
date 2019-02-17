@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class AspectIconRenderer {
 	public static void renderIcon(int x, int y, int width, int height, ResourceLocation icon) {
-		Minecraft.getMinecraft().renderEngine.bindTexture(icon);
+		Minecraft.getInstance().renderEngine.bindTexture(icon);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, 0);
 		GlStateManager.disableBlend();

@@ -1,10 +1,10 @@
 package thebetweenlands.client.render.model.entity;
 
-import net.minecraft.client.model.ModelBox;
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.model.PositionTextureVertex;
-import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.entity.model.ModelBox;
+import net.minecraft.client.renderer.entity.model.ModelRenderer;
+import net.minecraft.client.renderer.entity.model.PositionTextureVertex;
+import net.minecraft.client.renderer.entity.model.TexturedQuad;
 
 public class ModelBoxCustomizable extends ModelBox {
     public static final int SIDE_LEFT = 1;

@@ -9,8 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 
-import javax.annotation.Nonnull;
-
 public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
     private static final List<IPestleAndMortarRecipe> recipes = new ArrayList<IPestleAndMortarRecipe>();
 

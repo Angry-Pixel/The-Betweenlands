@@ -1,11 +1,11 @@
 package thebetweenlands.common.herblore.book;
 
-import net.minecraft.item.Item;
-import thebetweenlands.common.registries.ItemRegistry;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+
+import net.minecraft.item.Item;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class ManualCategory {
     class LimitedList<E> extends LinkedList<E> {

@@ -6,8 +6,8 @@ import java.util.Random;
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableMap;
 
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.state.IProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;

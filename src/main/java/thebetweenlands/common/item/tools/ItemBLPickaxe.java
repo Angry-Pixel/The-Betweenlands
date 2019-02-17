@@ -1,6 +1,11 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Multimap;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -10,15 +15,12 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.item.BLMaterialRegistry;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemBLPickaxe extends ItemPickaxe implements ICorrodible, IAnimatorRepairable {
     public ItemBLPickaxe(ToolMaterial material) {
@@ -52,7 +54,7 @@ public class ItemBLPickaxe extends ItemPickaxe implements ICorrodible, IAnimator
         return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, this.attackDamage);
     }
 
-    @SideOnly(Side.CLIENT)
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());

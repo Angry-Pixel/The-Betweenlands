@@ -16,8 +16,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.audio.IEntitySound;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityMusic;
@@ -117,7 +117,7 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 			if (disappearTimer == 5) this.world.setEntityState(this, EVENT_DISAPPEAR);
 			if (disappearTimer >= 8) setDead();
 			
-			List<EntityPlayer> nearPlayers = world.getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().grow(4.5, 5, 4.5), e -> !e.capabilities.isCreativeMode && !e.isInvisible());
+			List<EntityPlayer> nearPlayers = world.getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().grow(4.5, 5, 4.5), e -> !e.abilities.isCreativeMode && !e.isInvisible());
 			if (disappearTimer == 0 && !nearPlayers.isEmpty()) {
 				disappearTimer++;
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.GREEBLING_VANISH, SoundCategory.NEUTRAL, 1, 1);
@@ -126,7 +126,7 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void handleStatusUpdate(byte id) {
 		super.handleStatusUpdate(id);
@@ -192,7 +192,7 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 		return null;
 	}
 
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public IEntitySound getMusicSound(EntityPlayer listener) {
 		return new GreeblingMusicSound(this.getType(), this, 0.75f);

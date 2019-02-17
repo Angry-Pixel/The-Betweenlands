@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,9 +20,8 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.TranslationHelper;
@@ -203,10 +204,10 @@ public class ElixirEffect {
 		private final ElixirEffect effect;
 		private final ResourceLocation icon;
 
-		@SideOnly(Side.CLIENT)
+		@OnlyIn(Dist.CLIENT)
 		private String localizedElixirName;
 		
-		@SideOnly(Side.CLIENT)
+		@OnlyIn(Dist.CLIENT)
 		private TextContainer nameContainer;
 
 		protected ElixirPotionEffect(ElixirEffect effect, String unlocalizedName, int color, ResourceLocation icon) {
@@ -217,7 +218,7 @@ public class ElixirEffect {
 		}
 
 		@Override
-		@SideOnly(Side.CLIENT)
+		@OnlyIn(Dist.CLIENT)
 		public boolean hasStatusIcon() {
 			return this.icon != null;
 		}
@@ -228,12 +229,12 @@ public class ElixirEffect {
 		}
 
 		@Override
-		@SideOnly(Side.CLIENT)
+		@OnlyIn(Dist.CLIENT)
 		public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
 			if(this.icon != null) {
 				GlStateManager.enableTexture2D();
 				GlStateManager.enableBlend();
-				Minecraft.getMinecraft().renderEngine.bindTexture(this.icon);
+				Minecraft.getInstance().renderEngine.bindTexture(this.icon);
 				Tessellator tessellator = Tessellator.getInstance();
 				BufferBuilder vertexBuffer = tessellator.getBuffer();
 
@@ -248,8 +249,8 @@ public class ElixirEffect {
 				this.localizedElixirName = TranslationHelper.translateToLocal(this.getName());
 			}
 			if(this.nameContainer == null) {
-				this.nameContainer = new TextContainer(88, 100, this.localizedElixirName, Minecraft.getMinecraft().fontRenderer);
-				int width = Minecraft.getMinecraft().fontRenderer.getStringWidth(this.localizedElixirName);
+				this.nameContainer = new TextContainer(88, 100, this.localizedElixirName, Minecraft.getInstance().fontRenderer);
+				int width = Minecraft.getInstance().fontRenderer.getStringWidth(this.localizedElixirName);
 				float scale = 1.0F;
 				if(width > 88) {
 					scale = 88.0F / (float)width;
@@ -285,7 +286,7 @@ public class ElixirEffect {
 			if(this.icon != null) {
 				GlStateManager.enableTexture2D();
 				GlStateManager.enableBlend();
-				Minecraft.getMinecraft().renderEngine.bindTexture(this.icon);
+				Minecraft.getInstance().renderEngine.bindTexture(this.icon);
 
 				Tessellator tessellator = Tessellator.getInstance();
 				BufferBuilder vertexBuffer = tessellator.getBuffer();

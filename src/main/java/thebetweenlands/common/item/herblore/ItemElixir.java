@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import com.google.common.collect.Lists;
 
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -33,7 +34,6 @@ import net.minecraft.util.StringUtils;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -138,7 +138,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 				elixir.shoot(entityLiving, ((EntityPlayer)entityLiving).rotationPitch, ((EntityPlayer)entityLiving).rotationYaw, -20.0F, strength, 1.0F);
 				world.spawnEntity(elixir);
 				
-				if (!((EntityPlayer)entityLiving).capabilities.isCreativeMode) {
+				if (!((EntityPlayer)entityLiving).abilities.isCreativeMode) {
 					stack.shrink(1);
 					if(stack.isEmpty()) {
 						((EntityPlayer) entityLiving).inventory.deleteStack(stack);
@@ -193,7 +193,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityLivingBase entityLiving) {
 		EntityPlayer entityplayer = entityLiving instanceof EntityPlayer ? (EntityPlayer)entityLiving : null;
-		if (entityplayer == null || !entityplayer.capabilities.isCreativeMode) {
+		if (entityplayer == null || !entityplayer.abilities.isCreativeMode) {
 			stack.shrink(1);
 		}
 
@@ -213,7 +213,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 		}
 
 		//Add empty dentrothyst vial
-		if (entityplayer == null || !entityplayer.capabilities.isCreativeMode) {
+		if (entityplayer == null || !entityplayer.abilities.isCreativeMode) {
 			if (stack.isEmpty()) {
 				return ItemRegistry.DENTROTHYST_VIAL.createStack(stack.getItemDamage() % 2 == 0 ? 1 : 2);
 			}

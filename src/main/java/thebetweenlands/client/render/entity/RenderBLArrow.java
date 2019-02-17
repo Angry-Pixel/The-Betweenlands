@@ -3,14 +3,14 @@ package thebetweenlands.client.render.entity;
 import net.minecraft.client.renderer.entity.RenderArrow;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class RenderBLArrow extends RenderArrow<EntityBLArrow> {
 	private static final ResourceLocation TEXTURE_ANGLER_TOOTH = new ResourceLocation("thebetweenlands:textures/entity/angler_tooth_arrow.png");
 	private static final ResourceLocation TEXTURE_POISONED_ANGLER_TOOTH = new ResourceLocation("thebetweenlands:textures/entity/poisoned_angler_tooth_arrow.png");

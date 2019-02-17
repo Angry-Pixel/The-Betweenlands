@@ -9,8 +9,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -231,7 +231,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	 * Returns the rift variant
 	 * @return
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public RiftVariant getVariant() {
 		List<RiftVariant> availableVariants = TheBetweenlands.proxy.getRiftVariants();
 		if(availableVariants.isEmpty()) {
@@ -246,7 +246,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	 * @param partialTicks
 	 * @return
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public float getRiftScale(float partialTicks) {
 		RiftVariant variant = this.getVariant();
 		return variant.getMinScale() + this.getRiftConfiguration().scaleComponent * (variant.getMaxScale() - variant.getMinScale());
@@ -256,7 +256,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	 * Returns whether the U coordinates of the rift are mirrored
 	 * @return
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public boolean getRiftMirrorU() {
 		return this.getRiftConfiguration().mirrorU && this.getVariant().getMirrorU();
 	}
@@ -265,7 +265,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	 * Returns whether the V coordinates of the rift are mirrored
 	 * @return
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public boolean getRiftMirrorV() {
 		return this.getRiftConfiguration().mirrorV && this.getVariant().getMirrorV();
 	}
@@ -275,7 +275,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	 * @param partialTicks
 	 * @return
 	 */
-	@SideOnly(Side.CLIENT)
+	@OnlyIn(Dist.CLIENT)
 	public float[] getRiftAngles(float partialTicks) {
 		RiftVariant variant = this.getVariant();
 		RiftConfiguration configuration = this.getRiftConfiguration();

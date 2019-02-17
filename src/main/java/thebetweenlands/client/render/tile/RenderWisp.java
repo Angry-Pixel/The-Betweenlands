@@ -1,22 +1,12 @@
 package thebetweenlands.client.render.tile;
 
-import java.util.List;
-
-import net.minecraft.client.renderer.BufferBuilder;
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.Vec3d;
-import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.tile.TileEntityWisp;
@@ -25,11 +15,11 @@ import thebetweenlands.util.TileEntityHelper;
 public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 	@Override
 	public void render(TileEntityWisp tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		double renderViewX = Minecraft.getMinecraft().getRenderManager().viewerPosX;
-		double renderViewY = Minecraft.getMinecraft().getRenderManager().viewerPosY;
-		double renderViewZ = Minecraft.getMinecraft().getRenderManager().viewerPosZ;
+		double renderViewX = Minecraft.getInstance().getRenderManager().viewerPosX;
+		double renderViewY = Minecraft.getInstance().getRenderManager().viewerPosY;
+		double renderViewZ = Minecraft.getInstance().getRenderManager().viewerPosZ;
 
-		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
+		Entity renderView = Minecraft.getInstance().getRenderViewEntity();
 
 		if(!BlockWisp.canSee(tileEntity.getWorld(), tileEntity.getPos())) {
 			double dist = renderView != null ? renderView.getDistance(x + renderViewX, y + renderViewY, z + renderViewZ) : 0.0D;
@@ -38,7 +28,7 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 			}
 		}
 
-		if(!Minecraft.getMinecraft().isGamePaused()) {
+		if(!Minecraft.getInstance().isGamePaused()) {
 			if(System.nanoTime() - ((TileEntityWisp)tileEntity).lastSpawn >= (500f - 500.0f * BetweenlandsConfig.RENDERING.wispQuality / 150.0f) * 1000000L) {
 				((TileEntityWisp)tileEntity).lastSpawn = System.nanoTime();
 
