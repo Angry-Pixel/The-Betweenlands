@@ -1,53 +1,64 @@
 package thebetweenlands.common.registries;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.function.Consumer;
 
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.biome.BiomeCoarseIslands;
-import thebetweenlands.common.world.biome.BiomeDeepWaters;
 import thebetweenlands.common.world.biome.BiomeMarsh;
 import thebetweenlands.common.world.biome.BiomePatchyIslands;
 import thebetweenlands.common.world.biome.BiomeSludgePlains;
 import thebetweenlands.common.world.biome.BiomeSwamplands;
-import thebetweenlands.common.world.biome.BiomeSwamplandsClearing;
 
+@ObjectHolder(ModInfo.ID)
 public class BiomeRegistry {
-    public static final BiomeBetweenlands PATCHY_ISLANDS = new BiomePatchyIslands();
-    public static final BiomeBetweenlands SWAMPLANDS = new BiomeSwamplands();
-    public static final BiomeBetweenlands DEEP_WATERS = new BiomeDeepWaters();
-    public static final BiomeBetweenlands COARSE_ISLANDS = new BiomeCoarseIslands();
-    public static final BiomeBetweenlands SLUDGE_PLAINS = new BiomeSludgePlains();
-    public static final BiomeBetweenlands MARSH_0 = new BiomeMarsh(0);
-    public static final BiomeBetweenlands MARSH_1 = new BiomeMarsh(1);
-    
-    public static final BiomeBetweenlands SWAMPLANDS_CLEARING = new BiomeSwamplandsClearing();
-    
-    public static final List<BiomeBetweenlands> REGISTERED_BIOMES = new ArrayList<BiomeBetweenlands>();
+	@ObjectHolder("patchy_islands")
+	public static final BiomeBetweenlands PATCHY_ISLANDS = null;
 
-    private BiomeRegistry() {
-    }
+	@ObjectHolder("swamplands")
+	public static final BiomeBetweenlands SWAMPLANDS = null;
 
-    @SubscribeEvent
-    public static void registerBiomes(final RegistryEvent.Register<Biome> event) {
-        final IForgeRegistry<Biome> registry = event.getRegistry();
-        try {
-            for (Field f : BiomeRegistry.class.getDeclaredFields()) {
-                Object obj = f.get(null);
-                if (obj instanceof BiomeBetweenlands) {
-                    BiomeBetweenlands biome = (BiomeBetweenlands) obj;
-                    registry.register(biome);
-                    biome.addTypes();
-                    REGISTERED_BIOMES.add(biome);
-                }
-            }
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	@ObjectHolder("deep_waters")
+	public static final BiomeBetweenlands DEEP_WATERS = null;
+
+	@ObjectHolder("coarse_islands")
+	public static final BiomeBetweenlands COARSE_ISLANDS = null;
+
+	@ObjectHolder("sludge_plains")
+	public static final BiomeBetweenlands SLUDGE_PLAINS = null;
+
+	@ObjectHolder("marsh_0")
+	public static final BiomeBetweenlands MARSH_0 = null;
+
+	@ObjectHolder("marsh_1")
+	public static final BiomeBetweenlands MARSH_1 = null;
+
+	@SubscribeEvent
+	public static void register(RegistryEvent.Register<Biome> event) {
+		final IForgeRegistry<Biome> registry = event.getRegistry();
+
+		register(new RegistryHelper<Biome>() {
+			@Override
+			public <F extends Biome> F reg(String regName, F obj, Consumer<F> callback) {
+				obj.setRegistryName(ModInfo.ID, regName);
+				registry.register(obj);
+				callback.accept(obj);
+				return obj;
+			}
+		});
+	}
+
+	private static void register(RegistryHelper<Biome> reg) {
+		reg.reg("patchy_islands", new BiomePatchyIslands());
+		reg.reg("swamplands", new BiomeSwamplands());
+		reg.reg("coarse_islands", new BiomeCoarseIslands());
+		reg.reg("sludge_plains", new BiomeSludgePlains());
+		reg.reg("marsh_0", new BiomeMarsh(0));
+		reg.reg("marsh_1", new BiomeMarsh(1));
+	}
 }
