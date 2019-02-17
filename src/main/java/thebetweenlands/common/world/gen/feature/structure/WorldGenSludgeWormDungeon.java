@@ -82,6 +82,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					double dSq = i * i + j * j;
 					if (Math.round(Math.sqrt(dSq)) == radius && yy - y < level2)
 						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.PITSTONE_BRICKS, 2);
+
 					if (Math.round(Math.sqrt(dSq)) == radius && yy - y > level2 && yy - y < level3)
 						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getMudBricksForLevel(rand, 0, 1), 2);
 
