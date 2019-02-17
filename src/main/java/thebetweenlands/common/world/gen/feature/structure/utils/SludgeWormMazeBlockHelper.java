@@ -187,6 +187,7 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState PITSTONE_CHISELED = BlockRegistry.PITSTONE_CHISELED.getDefaultState();
 	public IBlockState SCABYST_PITSTONE_DOTTED = BlockRegistry.SCABYST_PITSTONE_DOTTED.getDefaultState();
     public IBlockState SCABYST_PITSTONE_HORIZONTAL = BlockRegistry.SCABYST_PITSTONE_HORIZONTAL.getDefaultState();
+    public IBlockState ENERGY_BARRIER = BlockRegistry.ENERGY_BARRIER.getDefaultState();
     public IBlockState DIAGONAL_ENERGY_BARRIER = BlockRegistry.DIAGONAL_ENERGY_BARRIER.getDefaultState();
     public IBlockState BETWEENSTONE_BRICKS_BEAM_ORIGIN = BlockRegistry.BETWEENSTONE_BRICKS_BEAM_ORIGIN.getDefaultState();
     public IBlockState BETWEENSTONE_BRICKS_BEAM_RELAY = BlockRegistry.BETWEENSTONE_BRICKS_BEAM_RELAY.getDefaultState();
