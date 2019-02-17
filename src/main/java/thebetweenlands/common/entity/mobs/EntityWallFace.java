@@ -5,6 +5,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -56,16 +57,16 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 
 	protected float peek = 0.25F;
 
-	public EntityWallFace(World world) {
-		super(world);
+	public EntityWallFace(EntityType<?> type, World world) {
+		super(type, world);
 		this.lookHelper = new LookHelper(this);
 		this.moveHelper = new MoveHelper(this);
 		this.setSize(0.9F, 0.9F);
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 
 		this.dataManager.register(FACING, EnumFacing.NORTH);
 		this.dataManager.register(FACING_UP, EnumFacing.UP);
@@ -85,8 +86,8 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
+	protected void registerAttributes() {
+		super.registerAttributes();
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 	}
 
@@ -126,8 +127,8 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	}
 
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
+	public void livingTick() {
+		super.livingTick();
 
 		if(this.isServerWorld() && !this.isMovementBlocked()) {
 			this.lookHelper.onUpdateLook();
@@ -212,8 +213,8 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 
 		nbt.setInt("facing", this.getFacing().getIndex());
 		nbt.setInt("facingUp", this.getFacing().getIndex());
@@ -221,8 +222,8 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 
 		this.dataManager.set(FACING, EnumFacing.byIndex(nbt.getInt("facing")));
 		this.dataManager.set(FACING_UP, EnumFacing.byIndex(nbt.getInt("facingUp")));
@@ -230,14 +231,14 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.fallDistance = 0;
 		this.onGround = true;
 		this.setNoGravity(true);
 
 		double px = this.posX, py = this.posY, pz = this.posZ;
 
-		super.onUpdate();
+		super.tick();
 
 		this.posX = this.prevPosX = this.lastTickPosX = px;
 		this.posY = this.prevPosY = this.lastTickPosY = py;
@@ -289,7 +290,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		}
 
 		if(!this.isMoving()) {
-			if(!this.world.isRemote) {
+			if(!this.world.isRemote()) {
 				if(this.targetFacingTimeout > 0) {
 					this.targetFacingTimeout--;
 				} else {
@@ -649,11 +650,11 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 				int strafeDir = -(int)Math.signum(this.moveStrafe);
 				this.face.targetAnchorTimeout = 30 + this.entity.world.rand.nextInt(30);
 				this.face.targetAnchor = this.face.getAnchor().add(horDir.getX() * strafeDir, horDir.getY() * strafeDir, horDir.getZ() * strafeDir);
-				this.setSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+				this.setSpeed((float)(this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
 			} else if(this.action == EntityMoveHelper.Action.MOVE_TO) {
 				this.face.targetAnchorTimeout = 30 + this.entity.world.rand.nextInt(30);
 				this.face.targetAnchor = new BlockPos(this.posX - this.face.getBlockWidth() / 2.0D, this.posY - this.face.getBlockHeight() / 2.0D, this.posZ - this.face.getBlockWidth() / 2.0D);
-				this.setSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+				this.setSpeed((float)(this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
 			}
 			this.action = EntityMoveHelper.Action.WAIT;
 		}

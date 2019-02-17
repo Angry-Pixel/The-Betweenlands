@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -16,6 +17,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -25,7 +27,11 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 	private int variant;
 
 	public EntitySpiritTreeFaceSmall(World world) {
-		super(world);
+		this(EntityRegistry.SPIRIT_TREE_FACE_SMALL, world);
+	}
+	
+	public EntitySpiritTreeFaceSmall(EntityType<?> type, World world) {
+		super(type, world);
 	}
 
 	@Override
@@ -41,10 +47,10 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(2.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(2.0D);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
 	}
 
 	@Override
@@ -72,14 +78,14 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 		nbt.setInt("variant", this.getVariant());
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 		this.setVariant(nbt.getInt("variant"));
 	}
 
@@ -103,12 +109,12 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 
 	@Override
 	protected void playSpitSound() {
-		this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SMALL_SPIT, 1, 0.8F + this.rand.nextFloat() * 0.3F);
+		this.play(SoundRegistry.SPIRIT_TREE_FACE_SMALL_SPIT, 1, 0.8F + this.rand.nextFloat() * 0.3F);
 	}
 
 	@Override
 	protected void playEmergeSound() {
-		this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SMALL_EMERGE, 1, 0.8F + this.rand.nextFloat() * 0.3F);
+		this.play(SoundRegistry.SPIRIT_TREE_FACE_SMALL_EMERGE, 1, 0.8F + this.rand.nextFloat() * 0.3F);
 	}
 
 	@Override
@@ -121,7 +127,7 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 		SoundEvent sound = this.getAmbientSound();
 
 		if(sound != null) {
-			this.playSound(sound, this.getSoundVolume() * 0.5F, this.getSoundPitch() * 1.3F);
+			this.play(sound, this.getSoundVolume() * 0.5F, this.getSoundPitch() * 1.3F);
 		}
 	}
 }

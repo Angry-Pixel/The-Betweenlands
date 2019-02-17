@@ -49,7 +49,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	public LocalStorageHandlerImpl(IWorldStorage worldStorage) {
 		this.worldStorage = worldStorage;
 		this.world = worldStorage.getWorld();
-		String dimFolder = this.world.provider.getSaveFolder();
+		String dimFolder = this.world.dimension.getSaveFolder();
 		this.localStorageDir = new File(this.world.getSaveHandler().getWorldDirectory(), (dimFolder != null && dimFolder.length() > 0 ? dimFolder + File.separator : "") + "data" + File.separator + "local_storage" + File.separator);
 		this.regionCache = new LocalRegionCache(this, new File(this.localStorageDir, "region"));
 	}
@@ -98,7 +98,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	@Override
 	public boolean removeLocalStorage(ILocalStorage storage) {
 		if(this.localStorage.containsKey(storage.getID())) {
-			if(!this.world.isRemote) {
+			if(!this.world.isRemote()) {
 				storage.unlinkAllChunks();
 			}
 
@@ -113,7 +113,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 				}
 			}
 
-			if(!this.world.isRemote) {
+			if(!this.world.isRemote()) {
 				this.deleteLocalStorageFile(storage);
 			}
 
@@ -258,7 +258,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	public boolean unloadLocalStorage(ILocalStorage storage) {
 		if(this.localStorage.containsKey(storage.getID())) {
 			//Only save if dirty
-			if(!this.world.isRemote && storage.isDirty()) {
+			if(!this.world.isRemote() && storage.isDirty()) {
 				this.saveLocalStorageFile(storage);
 				storage.setDirty(false);
 			}
@@ -276,7 +276,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 			storage.onUnloaded();
 
-			if(!this.world.isRemote && storage.getRegion() != null) {
+			if(!this.world.isRemote() && storage.getRegion() != null) {
 				LocalRegionData data = this.regionCache.getOrCreateRegion(storage.getRegion());
 				data.decrRefCounter();
 

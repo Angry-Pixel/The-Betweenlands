@@ -97,7 +97,7 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock, IC
 
 			if (placeTar) {
 				world.setBlockState(pos, BlockRegistry.TAR_SOLID.getDefaultState());
-				if(world.isRemote) {
+				if(world.isRemote()) {
 					playEffects(world, pos.getX(), pos.getY(), pos.getZ());
 				}
 			}
@@ -106,7 +106,7 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock, IC
 
 	@OnlyIn(Dist.CLIENT)
 	protected void playEffects(World world, int x, int y, int z) {
-		world.playSound(null, (double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+		world.play(null, (double) ((float) x + 0.5F), (double) ((float) y + 0.5F), (double) ((float) z + 0.5F), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 
 		for (int l = 0; l < 8; ++l) {
 			world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, x + Math.random(), y + 1.2D, z + Math.random(), 0.0D, 0.0D, 0.0D, new int[0]);

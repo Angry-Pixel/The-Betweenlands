@@ -72,8 +72,8 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 			@Override
 			public EntityLiving createEntity(World world) {
 				EntityLiving entity = super.createEntity(world);
-				entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.32D);
-				entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8.0D);
+				entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.32D);
+				entity.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8.0D);
 				return entity;
 			}
 		}.setHostile(true));
@@ -81,8 +81,8 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 			@Override
 			public EntityLiving createEntity(World world) {
 				EntityLiving entity = super.createEntity(world);
-				entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(EntityPeatMummy.BASE_SPEED + 0.075D);
-				entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(EntityPeatMummy.BASE_DAMAGE + 2.0D);
+				entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(EntityPeatMummy.BASE_SPEED + 0.075D);
+				entity.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(EntityPeatMummy.BASE_DAMAGE + 2.0D);
 				return entity;
 			}
 		}.setHostile(true).setSpawnCheckRadius(20.0D));

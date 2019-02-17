@@ -109,7 +109,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                     Aspect itemAspect = container.getAspects().get(0);
                     if(!player.isSneaking()) {
                         if(tile.getAspect() == null || tile.getAspect().type == itemAspect.type) {
-                            if(!world.isRemote) {
+                            if(!world.isRemote()) {
                                 if(tile.getAspect() == null)
                                     tile.setAspect(new Aspect(itemAspect.type, 0));
                                 int added = tile.addAmount(Math.min(itemAspect.amount, 100));
@@ -135,7 +135,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                         }
                     } else {
                         if(tile.getAspect() != null && tile.getAspect().type == itemAspect.type) {
-                            if(!world.isRemote) {
+                            if(!world.isRemote()) {
                                 int toRemove = (int) Math.min(100, Amounts.VIAL - itemAspect.amount);
                                 if(toRemove > 0) {
                                     int removedAmount = tile.removeAmount(toRemove);
@@ -147,7 +147,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                         }
                     }
                 } else if(heldItem.getItem() == ItemRegistry.DENTROTHYST_VIAL && player.isSneaking() && tile.getAspect() != null && heldItem.getItemDamage() != 1) {
-                    if(!world.isRemote) {
+                    if(!world.isRemote()) {
                         Aspect aspect = tile.getAspect();
                         int removedAmount = tile.removeAmount(100);
                         if(removedAmount > 0) {
@@ -177,7 +177,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                     return true;
                 }
             } else if(player.isSneaking()) {
-            	if(!world.isRemote) {
+            	if(!world.isRemote()) {
             		world.setBlockState(pos, state.with(RANDOM_POSITION, !state.get(RANDOM_POSITION)));
             	}
             	player.swingArm(hand);
@@ -252,11 +252,11 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
 
     @Override
     public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-        if(world.isRemote) return;
+        if(world.isRemote()) return;
 
         player.addStat(StatList.getBlockStats(this), 1);
         player.addExhaustion(0.025F);
-        if (!world.isRemote && !world.restoringBlockSnapshots && world.getGameRules().getBoolean("doTileDrops") && !player.abilities.isCreativeMode) {
+        if (!world.isRemote() && !world.restoringBlockSnapshots && world.getGameRules().getBoolean("doTileDrops") && !player.abilities.isCreativeMode) {
             NonNullList<ItemStack> drops = NonNullList.create();
             getDrops(drops, world, pos, state, 0);
             float chance = ForgeEventFactory.fireBlockHarvesting(drops, world, pos, world.getBlockState(pos), 0, 1, false, harvesters.get());
@@ -273,7 +273,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
             }
         }
 
-        world.setBlockToAir(pos);
+        world.removeBlock(pos);
     }
     
     @Override

@@ -28,7 +28,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.sky.IRiftSkyRenderer;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 @OnlyIn(Dist.CLIENT)
 public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
@@ -74,7 +74,7 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 
 		TextureManager textureManager = mc.renderEngine;
 
-		long worldTime = world.getWorldTime();
+		long worldTime = world.getDayTime();
 
 		GlStateManager.disableTexture2D();
 		Vec3d vec3d = this.getSkyColor(world, mc.getRenderViewEntity(), partialTicks);
@@ -283,7 +283,7 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 		if(BetweenlandsConfig.RENDERING.skyRiftClouds) {
 			Entity entity = mc.getRenderViewEntity();
 
-			WorldProviderBetweenlands providerBl = world.provider instanceof WorldProviderBetweenlands ? (WorldProviderBetweenlands) world.provider : null;
+			DimensionBetweenlands providerBl = world.dimension instanceof DimensionBetweenlands ? (DimensionBetweenlands) world.dimension : null;
 
 			if(providerBl != null) providerBl.setShowClouds(true);
 
@@ -505,7 +505,7 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 
 	public void updateFogColor(WorldClient world, float partialTicks, Minecraft mc)
 	{
-		long worldTime = world.getWorldTime();
+		long worldTime = world.getDayTime();
 
 		Entity entity = mc.getRenderViewEntity();
 		float f = 0.25F + 0.75F * (float)mc.gameSettings.renderDistanceChunks / 32.0F;
@@ -643,7 +643,7 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 	}
 
 	protected float getStarBrightness(World world, float partialTicks) {
-		float f = this.getCelestialAngle(world.getWorldTime(), partialTicks);
+		float f = this.getCelestialAngle(world.getDayTime(), partialTicks);
         float f1 = 1.0F - (MathHelper.cos(f * ((float)Math.PI * 2F)) * 2.0F + 0.25F);
         f1 = MathHelper.clamp(f1, 0.0F, 1.0F);
         return f1 * f1 * 0.5F;
@@ -701,7 +701,7 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 	}
 
 	protected Vec3d getSkyColor(World world, Entity renderViewEntity, float partialTicks) {
-		float f = this.getCelestialAngle(world.getWorldTime(), partialTicks);
+		float f = this.getCelestialAngle(world.getDayTime(), partialTicks);
 		float f1 = MathHelper.cos(f * ((float)Math.PI * 2F)) * 2.0F + 0.5F;
 		f1 = MathHelper.clamp(f1, 0.0F, 1.0F);
 		int i = MathHelper.floor(renderViewEntity.posX);
@@ -733,7 +733,7 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 
 	@Override
 	public float getSkyBrightness(float partialTicks, WorldClient world, Minecraft mc) {
-		float f = this.getCelestialAngle(world.getWorldTime(), partialTicks);
+		float f = this.getCelestialAngle(world.getDayTime(), partialTicks);
 		float f1 = MathHelper.cos(f * ((float)Math.PI * 2F)) * 2.0F + 0.5F;
 		f1 = MathHelper.clamp(f1, 0.0F, 1.0F);
 		return f1;

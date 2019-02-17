@@ -252,7 +252,7 @@ public final class WeedwoodRowboatHandler {
         }
 
         @Override
-        protected void entityInit() {}
+        protected void registerData() {}
 
         public void update(Entity rowboat, float delta) {
             double x = rowboat.lastTickPosX + (rowboat.posX - rowboat.lastTickPosX) * delta;
@@ -292,9 +292,9 @@ public final class WeedwoodRowboatHandler {
         }
 
         @Override
-        protected void readEntityFromNBT(NBTTagCompound compound) {}
+        protected void readAdditional(NBTTagCompound compound) {}
 
         @Override
-        protected void writeEntityToNBT(NBTTagCompound compound) {}
+        protected void writeAdditional(NBTTagCompound compound) {}
     }
 }

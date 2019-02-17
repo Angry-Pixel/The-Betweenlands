@@ -26,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIBLAvoidEntity;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
@@ -57,7 +58,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	private static final DataParameter<Byte> BLOOD_CONSUMED = EntityDataManager.createKey(EntityLeech.class, DataSerializers.BYTE);
 
 	public EntityLeech(World worldIn) {
-		super(worldIn);
+		super(EntityRegistry.LEECH, worldIn);
 		setSize(0.7F, 0.3F);
 		stepHeight = 0;
 		moveProgress = 0;
@@ -83,18 +84,18 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		dataManager.register(BLOOD_CONSUMED, (byte) 0);
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0);
 	}
 
 	@Override
@@ -113,7 +114,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	}
 
 	public void onCollideWithEntity(EntityLivingBase entity) {
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			if (!entity.isBeingRidden() && getBloodConsumed() <= 0) {
 				startRiding(entity);
 				this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(entity));
@@ -124,8 +125,8 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		if (!world.isRemote) {
+	public void tick() {
+		if (!world.isRemote()) {
 			if (fleeingTick == 0 && getAttackTarget() != null && getDistance(getAttackTarget()) < 2) {
 				onCollideWithEntity(getAttackTarget());
 			}
@@ -172,24 +173,24 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 					world.spawnParticle(EnumParticleTypes.REDSTONE, posX + (rand.nextFloat() - rand.nextFloat()), posY + rand.nextFloat(), posZ + (rand.nextFloat() - rand.nextFloat()), 0, 0, 0);
 				}
 			}
-		} else if (!world.isRemote) {
+		} else if (!world.isRemote()) {
 			moveProgress = 0F + mathSucking.swing(1, 0.15F, false);
 		}
 
 		if (getRidingEntity() != null && getRidingEntity() instanceof EntityLivingBase && getBloodConsumed() < MAX_BLOOD_LEVEL) {
 			drainage++;
 			if (drainage >= attackCountDown && this.deathTime == 0) {
-				getRidingEntity().attackEntityFrom(DamageSource.causeMobDamage(this), (int)getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+				getRidingEntity().attackEntityFrom(DamageSource.causeMobDamage(this), (int)getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
 				drainage = 0;
 				setBloodConsumed(getBloodConsumed() + 1);
 			}
 		}
-		super.onUpdate();
+		super.tick();
 	}
 
 	private void flee() {
 		fleeingTick = TIME_TO_FLEE;
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			aiAvoidHarmer.setTargetEntityClass(getRidingEntity().getClass());
 			tasks.addTask(0, aiAvoidHarmer);
 			targetTasks.removeTask(aiAttackTarget);
@@ -198,7 +199,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	}
 
 	private void stopFleeing() {
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			tasks.removeTask(aiAvoidHarmer);
 			targetTasks.addTask(0, aiAttackTarget);
 			tasks.addTask(0, aiAttackOnCollide);
@@ -233,7 +234,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	public void setBloodConsumed(int amount) {
 		hungerCoolDown = 500;
 		dataManager.set(BLOOD_CONSUMED, Byte.valueOf((byte) amount));
-		if (amount == 0 && getRidingEntity() == null && !this.world.isRemote) {
+		if (amount == 0 && getRidingEntity() == null && !this.world.isRemote()) {
 			targetTasks.addTask(0, aiAttackTarget);
 			tasks.addTask(0, aiAttackOnCollide);
 		}
@@ -245,15 +246,15 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.writeEntityToNBT(nbttagcompound);
+	public void writeAdditional(NBTTagCompound nbttagcompound) {
+		super.writeAdditional(nbttagcompound);
 		nbttagcompound.setInt("bloodLevel", getBloodConsumed());
 		nbttagcompound.setInt("fleeingTick", fleeingTick);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		super.readEntityFromNBT(nbttagcompound);
+	public void readAdditional(NBTTagCompound nbttagcompound) {
+		super.readAdditional(nbttagcompound);
 		if(nbttagcompound.contains("bloodLevel")) {
 			setBloodConsumed(nbttagcompound.getInt("bloodLevel"));
 		}

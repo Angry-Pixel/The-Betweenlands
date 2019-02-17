@@ -16,7 +16,7 @@ public class RenderTermite extends RenderLiving<EntityTermite> {
 
 	@Override
 	protected void preRenderCallback(EntityTermite entity, float partialTickTime) {
-		if(entity.getEntityAttribute(EntityTermite.SMALL).getAttributeValue() == 1) {
+		if(entity.getAttribute(EntityTermite.SMALL).getValue() == 1) {
 			GlStateManager.scale(0.5F, 0.5F, 0.5F);
 			this.shadowSize = 0.25F;
 		} else {

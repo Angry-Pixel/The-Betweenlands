@@ -10,10 +10,10 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.model.entity.ModelFortressBoss;
-import thebetweenlands.common.entity.mobs.EntityFortressBossTeleporter;
+import thebetweenlands.common.entity.mobs.EntityPrimordialMalevolenceTeleporter;
 import thebetweenlands.util.LightingUtil;
 
-public class RenderFortressBossTeleporter extends Render<EntityFortressBossTeleporter> {
+public class RenderFortressBossTeleporter extends Render<EntityPrimordialMalevolenceTeleporter> {
 	protected static final ResourceLocation MODEL_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/fortress_boss.png");
 	protected static final ModelFortressBoss MODEL = new ModelFortressBoss();
 
@@ -22,7 +22,7 @@ public class RenderFortressBossTeleporter extends Render<EntityFortressBossTelep
 	}
 
 	@Override
-	public void doRender(EntityFortressBossTeleporter entity, double x, double y, double z, float yaw, float partialTicks) {
+	public void doRender(EntityPrimordialMalevolenceTeleporter entity, double x, double y, double z, float yaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.enableTexture2D();
@@ -89,7 +89,7 @@ public class RenderFortressBossTeleporter extends Render<EntityFortressBossTelep
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityFortressBossTeleporter p_110775_1_) {
+	protected ResourceLocation getEntityTexture(EntityPrimordialMalevolenceTeleporter p_110775_1_) {
 		return null;
 	}
 }

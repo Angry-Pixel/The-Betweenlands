@@ -35,7 +35,7 @@ public abstract class SeasonalEnvironmentEvent extends BLEnvironmentEvent {
 
 	@Override
 	public void setActive(boolean active) {
-		if(active && TheBetweenlands.proxy.getClientWorld() != null && (!this.isActive() || this.lastWorld != TheBetweenlands.proxy.getClientWorld()) && TheBetweenlands.proxy.getClientPlayer() != null && this.world != null && this.world.isRemote) {
+		if(active && TheBetweenlands.proxy.getClientWorld() != null && (!this.isActive() || this.lastWorld != TheBetweenlands.proxy.getClientWorld()) && TheBetweenlands.proxy.getClientPlayer() != null && this.world != null && this.world.isRemote()) {
 			this.lastWorld = TheBetweenlands.proxy.getClientWorld();
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 			this.showStatusMessage(player);
@@ -54,7 +54,7 @@ public abstract class SeasonalEnvironmentEvent extends BLEnvironmentEvent {
 
 		this.world = world;
 
-		if(!world.isRemote) {
+		if(!world.isRemote()) {
 			if(BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
 				long dayDiff = this.getDayDiffFromStartDate();
 				if (dayDiff >= 0 && dayDiff <= this.getDurationInDays() && BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {

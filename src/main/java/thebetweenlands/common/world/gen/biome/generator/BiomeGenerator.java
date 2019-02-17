@@ -12,7 +12,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlands;
@@ -343,7 +343,7 @@ public class BiomeGenerator {
 	 * @return Block
 	 */
 	public IBlockState getBaseBlockState(int y) {
-		return y > WorldProviderBetweenlands.PITSTONE_HEIGHT ? this.baseBlockState : BlockRegistry.PITSTONE.getDefaultState();
+		return y > DimensionBetweenlands.PITSTONE_HEIGHT ? this.baseBlockState : BlockRegistry.PITSTONE.getDefaultState();
 	}
 
 	/**

@@ -106,7 +106,7 @@ public class BlockEnergyBarrier extends Block {
 			}
 			if (swordHand != null) {
 				int data = Block.getIdFromBlock(world.getBlockState(pos).getBlock());
-				if (!world.isRemote)
+				if (!world.isRemote())
 					world.playEvent(null, 2001, pos, data);
 				int range = 7;
 				for (int x = -range; x < range; x++) {
@@ -121,8 +121,8 @@ public class BlockEnergyBarrier extends Block {
 									}
 								}
 
-								if (!world.isRemote)
-									world.setBlockToAir(offset);
+								if (!world.isRemote())
+									world.removeBlock(offset);
 							}
 						}
 					}
@@ -138,7 +138,7 @@ public class BlockEnergyBarrier extends Block {
 				dx = (int)dx;
 				dz = (int)dz;
 				entity.addVelocity(dx*0.85D, 0.08D, dz*0.85D);
-				entity.playSound(SoundRegistry.REJECTED, 0.5F, 1F);
+				entity.play(SoundRegistry.REJECTED, 0.5F, 1F);
 			}
 		}
 	}

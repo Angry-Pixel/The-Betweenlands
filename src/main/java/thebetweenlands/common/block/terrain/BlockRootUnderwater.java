@@ -123,6 +123,6 @@ public class BlockRootUnderwater extends BlockSwampWater {
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		this.onBlockHarvested(world, pos, state, player);
-		return world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getDefaultState(), world.isRemote ? 11 : 3);
+		return world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getDefaultState(), world.isRemote() ? 11 : 3);
 	}
 }

@@ -37,7 +37,7 @@ import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.Mesh;
@@ -200,7 +200,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 
 		float starBrightness = (world.getStarBrightness(partialTicks) + 0.5F) * invRainStrength * invRainStrength * invRainStrength;
 		float fade = 1.0F;
-		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(mc.world);
+		DimensionBetweenlands provider = DimensionBetweenlands.getProvider(mc.world);
 		if(provider != null) {
 			fade = provider.getEnvironmentEventRegistry().denseFog.getFade(partialTicks) * 0.95F + 0.05F;
 		}
@@ -220,7 +220,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 		GlStateManager.disableBlend();
 		GlStateManager.enableAlpha();
 
-		if (world.provider.isSkyColored()) {
+		if (world.dimension.isSkyColored()) {
 			GlStateManager.color(skyR * 0.2F + 0.04F, skyG * 0.2F + 0.04F, skyB * 0.6F + 0.1F, starBrightness / (!useShaderSky ? 1.5F : 1.0F));
 		} else {
 			GlStateManager.color(skyR, skyG, skyB, starBrightness / (!useShaderSky ? 1.5F : 1.0F));
@@ -634,7 +634,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 	public static void onClientTick(ClientTickEvent event) {
 		if(event.phase == Phase.END) {
 			WorldClient world = Minecraft.getInstance().world;
-			BLSkyRenderer skyRenderer = WorldProviderBetweenlands.getBLSkyRenderer();
+			BLSkyRenderer skyRenderer = DimensionBetweenlands.getBLSkyRenderer();
 			if(world != null && skyRenderer != null) {
 				skyRenderer.update(world, Minecraft.getInstance());
 			}

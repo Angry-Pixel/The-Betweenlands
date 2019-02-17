@@ -14,7 +14,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.MapGenBase;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.util.MathUtils;
@@ -173,7 +173,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 									level++;
 								}
 							} else {
-								while (level <= WorldProviderBetweenlands.LAYER_HEIGHT + 20) {
+								while (level <= DimensionBetweenlands.LAYER_HEIGHT + 20) {
 									IBlockState state = primer.getBlockState(bx, level, bz);
 									if (state.getMaterial() == Material.AIR || state.getMaterial().isLiquid()) {
 										break;
@@ -203,7 +203,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 								if(state.getBlock() == BlockRegistry.SWAMP_WATER && noise < limit + 0.25 && noise > limit) {
 									primer.setBlockState(bx, by, bz, BlockRegistry.COARSE_SWAMP_DIRT.getDefaultState());
 								} else if (noise < limit && state.getBlock() != BlockRegistry.BETWEENLANDS_BEDROCK) {
-									primer.setBlockState(bx, by, bz, by > WorldProviderBetweenlands.CAVE_WATER_HEIGHT ? Blocks.AIR.getDefaultState() : BlockRegistry.SWAMP_WATER.getDefaultState());
+									primer.setBlockState(bx, by, bz, by > DimensionBetweenlands.CAVE_WATER_HEIGHT ? Blocks.AIR.getDefaultState() : BlockRegistry.SWAMP_WATER.getDefaultState());
 								}
 							}
 

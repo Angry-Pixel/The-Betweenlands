@@ -28,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL {
 	private Entity target = null;
@@ -39,13 +40,13 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 	protected Deque<Vec3d> trail = new LinkedList<>();
 	
 	public EntityVolatileSoul(World world) {
-		super(world);
+		super(EntityRegistry.VOLATILE_SOUL, world);
 		this.setSize(0.3F, 0.3F);
 		this.noClip = true;
 	}
 
 	@Override
-	protected void entityInit() {
+	protected void registerData() {
 		this.getDataManager().register(OWNER_UUID_DW, Optional.absent());
 	}
 
@@ -79,7 +80,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 
 	protected void onImpact(RayTraceResult target) {
 		if (target.entityHit != null && target.entityHit instanceof EntityLivingBase && target.entityHit instanceof EntityWight == false && target.entityHit instanceof EntitySwampHag == false) {
-			if(!this.world.isRemote) {
+			if(!this.world.isRemote()) {
 				if(target.entityHit instanceof EntityPlayer && ((EntityPlayer)target.entityHit).isActiveItemStackBlocking() && ((EntityPlayer)target.entityHit).getItemInUseCount() <= 15) {
 					this.motionX *= -6;
 					this.motionY *= -6;
@@ -88,15 +89,15 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 					return;
 				}
 				target.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 3);
-				if(!this.isDead && target.entityHit instanceof EntityPlayer && (target.entityHit.isDead || ((EntityLivingBase)target.entityHit).getHealth() <= 0.0F)) {
-					target.entityHit.setDead();
+				if(this.isAlive() && target.entityHit instanceof EntityPlayer && (target.entityHit.isDead || ((EntityLivingBase)target.entityHit).getHealth() <= 0.0F)) {
+					target.entityHit.remove();
 					/*EntityWight wight = new EntityWight(this.world);
 					wight.setLocationAndAngles(target.entityHit.posX, target.entityHit.posY + 0.05D, target.entityHit.posZ, target.entityHit.rotationYaw, target.entityHit.rotationPitch);
 					if(this.world.getCollidingBoundingBoxes(wight, wight.boundingBox).isEmpty()) {
 						this.world.spawnEntityInWorld(wight);
 					}*/
 				}
-				this.setDead();
+				this.remove();
 				this.motionX = 0;
 				this.motionY = 0;
 				this.motionZ = 0;
@@ -116,12 +117,12 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 		} else {
 			this.strikes++;
 			if(this.strikes >= 3) {
-				this.setDead();
+				this.remove();
 				return true;
 			}
 			this.markVelocityChanged();
 			if (source.getTrueSource() != null) {
-				if(!this.world.isRemote) {
+				if(!this.world.isRemote()) {
 					Vec3d vec3 = source.getTrueSource().getLookVec();
 					if (vec3 != null) {
 						this.motionX = vec3.x * 1.5F;
@@ -137,26 +138,26 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 	}
 
 	@Override
-	public void onUpdate() {
-		if(!this.world.isRemote && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || this.getOwner() == null || this.getOwner().isDead)) {
-			this.setDead();
+	public void tick() {
+		if(!this.world.isRemote() && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || this.getOwner() == null || !this.getOwner().isAlive())) {
+			this.remove();
 			return;
 		}
 
-		if(!this.world.isRemote) {
-			if((this.getOwner() == null || !this.getOwner().isEntityAlive() || this.getOwner() instanceof EntityWight == false || !((EntityWight)this.getOwner()).isVolatile()) /*|| this.target instanceof EntityFortressBoss*/)
-				this.setDead();
+		if(!this.world.isRemote()) {
+			if((this.getOwner() == null || !this.getOwner().isAlive() || this.getOwner() instanceof EntityWight == false || !((EntityWight)this.getOwner()).isVolatile()) /*|| this.target instanceof EntityFortressBoss*/)
+				this.remove();
 		}
 
-		if(!this.isDead) {
+		if(this.isAlive()) {
 			this.ticksInAir++;
-			if(this.world.isRemote) {
+			if(this.world.isRemote()) {
 				this.trail.push(this.getPositionVector());
 				while(this.trail.size() > 4) {
 					this.trail.removeLast();
 				}
 			}
-			if(this.target == null || this.target.isDead) {
+			if(this.target == null || !this.target.isAlive()) {
 				List<Entity> targetList = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox().grow(16.0D, 16.0D, 16.0D));
 				List<Entity> eligibleTargets = new ArrayList<Entity>();
 				if(this.world.rand.nextInt(4) > 0) {
@@ -230,7 +231,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 		}
 
-		super.onUpdate();
+		super.tick();
 	}
 
 	@Override
@@ -254,7 +255,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbt) {
+	protected void readAdditional(NBTTagCompound nbt) {
 		if(nbt.contains("ownerUUID")) {
 			this.setOwner(nbt.getUniqueId("ownerUUID"));
 		}
@@ -264,7 +265,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbt) {
+	protected void writeAdditional(NBTTagCompound nbt) {
 		nbt.setUniqueId("ownerUUID", this.getOwnerUUID());
 		nbt.setInt("strikes", this.strikes);
 	}

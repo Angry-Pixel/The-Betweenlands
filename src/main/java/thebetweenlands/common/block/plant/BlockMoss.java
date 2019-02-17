@@ -168,7 +168,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
             }
             if (shouldDrop) {
                 this.dropBlockAsItem(worldIn, pos, state, 0);
-                worldIn.setBlockToAir(pos);
+                worldIn.removeBlock(pos);
             }
         }
     }
@@ -184,7 +184,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
         } else {
             if (worldIn.getBlockState(pos).getBlock() == this) {
                 this.dropBlockAsItem(worldIn, pos, state, 0);
-                worldIn.setBlockToAir(pos);
+                worldIn.removeBlock(pos);
             }
             return false;
         }
@@ -248,7 +248,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
     }
 
     @Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(IBlockState state, World world, BlockPos pos, Random rand) {
     	MutableBlockPos checkPos = new MutableBlockPos();
 		byte radius = 2;
     	int attempt = 0;
@@ -303,7 +303,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
 				}
 			}
 		} else if(rand.nextInt(20) == 0) {
-			world.setBlockToAir(pos);
+			world.removeBlock(pos);
 		}
 	}
     

@@ -26,11 +26,12 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
+import thebetweenlands.common.registries.EntityRegistry;
 
-public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
-	protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.<Optional<UUID>>createKey(EntityFortressBossBlockade.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-	protected static final DataParameter<Float> SIZE = EntityDataManager.<Float>createKey(EntityFortressBossBlockade.class, DataSerializers.FLOAT);
-	protected static final DataParameter<Float> ROTATION = EntityDataManager.<Float>createKey(EntityFortressBossBlockade.class, DataSerializers.FLOAT);
+public class EntityPrimordialMalevolenceBlockade extends EntityMob implements IEntityBL {
+	protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.<Optional<UUID>>createKey(EntityPrimordialMalevolenceBlockade.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+	protected static final DataParameter<Float> SIZE = EntityDataManager.<Float>createKey(EntityPrimordialMalevolenceBlockade.class, DataSerializers.FLOAT);
+	protected static final DataParameter<Float> ROTATION = EntityDataManager.<Float>createKey(EntityPrimordialMalevolenceBlockade.class, DataSerializers.FLOAT);
 
 	private Entity cachedOwner;
 
@@ -39,26 +40,26 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 	private int despawnTicks = 0;
 	private int maxDespawnTicks = 160;
 
-	public EntityFortressBossBlockade(World world) {
-		super(world);
+	public EntityPrimordialMalevolenceBlockade(World world) {
+		super(EntityRegistry.PRIMORDIAL_MALEVOLENCE_BLOCKADE, world);
 		this.setSize(1.0F, 0.2F);
 	}
 
-	public EntityFortressBossBlockade(World world, Entity source) {
-		super(world);
+	public EntityPrimordialMalevolenceBlockade(World world, Entity source) {
+		super(EntityRegistry.PRIMORDIAL_MALEVOLENCE_BLOCKADE, world);
 		this.setSize(1.0F, 0.2F);
 		this.setOwner(source);
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.0D);
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		this.getDataManager().register(OWNER, Optional.absent());
 		this.getDataManager().register(SIZE, 1.0F);
 		this.getDataManager().register(ROTATION, this.rotation);
@@ -79,7 +80,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 		UUID uuid = this.getOwnerUUID();
 		if(uuid == null) {
 			this.cachedOwner = null;
-		} else if(this.cachedOwner == null || !this.cachedOwner.isEntityAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
+		} else if(this.cachedOwner == null || !this.cachedOwner.isAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
 			this.cachedOwner = null;
 			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
@@ -93,7 +94,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 
 	public void setTriangleSize(float size) {
 		this.getDataManager().set(SIZE, size);
-		if(this.world.isRemote) {
+		if(this.world.isRemote()) {
 			double prevX = this.posX;
 			double prevZ = this.posZ;
 			this.setSize(size*2, this.height);
@@ -128,8 +129,8 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 		nbt.setFloat("triangleSize", this.getTriangleSize());
 		nbt.setFloat("triangleRotation", this.getDataManager().get(ROTATION));
 		nbt.setInt("despawnTicks", this.despawnTicks);
@@ -140,8 +141,8 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 		this.setTriangleSize(nbt.getFloat("triangleSize"));
 		this.getDataManager().set(ROTATION, nbt.getFloat("triangleRotation"));
 		this.despawnTicks = nbt.getInt("despawnTicks");
@@ -154,9 +155,9 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		if(!this.world.isRemote && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isEntityAlive()))) {
-			this.setDead();
+	public void tick() {
+		if(!this.world.isRemote() && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isAlive()))) {
+			this.remove();
 			return;
 		}
 
@@ -166,12 +167,12 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 		this.motionY = 0;
 		this.motionZ = 0;
 
-		super.onUpdate();
+		super.tick();
 
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			this.despawnTicks++;
 			if(this.despawnTicks >= this.getMaxDespawnTicks()) {
-				this.setDead();
+				this.remove();
 			}
 
 			this.rotation += 1.0F;
@@ -180,8 +181,8 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			List<EntityPlayer> targets = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getBoundingBox().grow(this.getTriangleSize()*2, 0, this.getTriangleSize()*2));
 			for(EntityPlayer target : targets) {
 				Vec3d[] vertices = this.getTriangleVertices(1);
-				if(EntityFortressBoss.rayTraceTriangle(new Vec3d(target.posX - this.posX, 1, target.posZ - this.posZ), new Vec3d(0, -2, 0), vertices[0], vertices[1], vertices[2])) {
-					float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+				if(EntityPrimordialMalevolence.rayTraceTriangle(new Vec3d(target.posX - this.posX, 1, target.posZ - this.posZ), new Vec3d(0, -2, 0), vertices[0], vertices[1], vertices[2])) {
+					float damage = (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
 					if(target.attackEntityFrom(DamageSource.MAGIC, damage) && this.getOwner() != null && this.getOwner() instanceof EntityLivingBase) {
 						EntityLivingBase owner = (EntityLivingBase) this.getOwner();
 						if(owner.getHealth() < owner.getMaxHealth() - damage) {

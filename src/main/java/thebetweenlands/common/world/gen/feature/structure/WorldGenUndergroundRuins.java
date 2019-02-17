@@ -14,7 +14,7 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
@@ -529,7 +529,7 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 		int x = position.getX();
 		int y = position.getY();
 		int z = position.getZ();
-		while (y > WorldProviderBetweenlands.CAVE_WATER_HEIGHT) {
+		while (y > DimensionBetweenlands.CAVE_WATER_HEIGHT) {
 			if (world.getBlockState(this.getCheckPos(x, y - 1, z)).getBlock() == BlockRegistry.PITSTONE && world.isAirBlock(this.getCheckPos(x, y, z))) {
 				shouldStop = false;
 				break;

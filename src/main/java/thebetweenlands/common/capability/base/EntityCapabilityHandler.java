@@ -159,7 +159,7 @@ public class EntityCapabilityHandler {
 
 	@SubscribeEvent
 	public static void onPlayerJoin(EntityJoinWorldEvent event) {
-		if (!event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerMP) {
+		if (!event.getWorld().isRemote() && event.getEntity() instanceof EntityPlayerMP) {
 			EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
 			addTrackers(player, player);
 		}
@@ -167,7 +167,7 @@ public class EntityCapabilityHandler {
 
 	@SubscribeEvent
 	public static void onEntityChangeDimension(PlayerChangedDimensionEvent event) {
-		if(!event.player.getEntityWorld().isRemote && event.player instanceof EntityPlayerMP)  {
+		if(!event.player.getEntityWorld().isRemote() && event.player instanceof EntityPlayerMP)  {
 			EntityPlayerMP player = (EntityPlayerMP) event.player;
 			List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(player);
 			if(trackers != null) {
@@ -194,7 +194,7 @@ public class EntityCapabilityHandler {
 
 	@SubscribeEvent
 	public static void onEntityUpdate(PlayerTickEvent event) {
-		if(!event.player.getEntityWorld().isRemote && event.side == Dist.DEDICATED_SERVER)  {
+		if(!event.player.getEntityWorld().isRemote() && event.side == Dist.DEDICATED_SERVER)  {
 			EntityPlayerMP player = (EntityPlayerMP) event.player;
 			List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(player);
 			if(trackers != null) {

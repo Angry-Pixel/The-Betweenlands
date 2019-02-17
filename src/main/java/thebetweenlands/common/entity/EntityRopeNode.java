@@ -59,7 +59,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	@Override
-	protected void entityInit() {
+	protected void registerData() {
 		this.getDataManager().register(DW_PREV_NODE, -1);
 		this.cachedPrevNodeDW = -1;
 		this.getDataManager().register(DW_NEXT_NODE, -1);
@@ -67,7 +67,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbt) {
+	protected void readAdditional(NBTTagCompound nbt) {
 		this.setNextNodeUUID(nbt.hasUniqueId("nextNodeUUID") ? nbt.getUniqueId("nextNodeUUID") : null);
 		this.setPreviousNodeUUID(nbt.hasUniqueId("previousNodeUUID") ? nbt.getUniqueId("previousNodeUUID") : null);
 		this.pickUp = nbt.getBoolean("pickUp");
@@ -81,7 +81,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbt) {
+	protected void writeAdditional(NBTTagCompound nbt) {
 		if(this.getNextNodeUUID() != null) {
 			nbt.setUniqueId("nextNodeUUID", this.getNextNodeUUID());
 		}
@@ -97,7 +97,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	@Override
-	public void onEntityUpdate() {
+	public void baseTick() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
@@ -113,13 +113,13 @@ public class EntityRopeNode extends Entity {
 		attached = this.isAttached();
 
 		if(attached && !prevAttached) {
-			this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
+			this.world.play((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
 		}
 
 		Entity nextNode;
 		Entity prevNode;
 
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			nextNode = this.getNextNodeByUUID();
 			prevNode = this.getPreviousNodeByUUID();
 
@@ -139,13 +139,13 @@ public class EntityRopeNode extends Entity {
 				this.cachedPrevNodeDW = -1;
 			}
 			
-			if(this.isEntityAlive()) {
+			if(this.isAlive()) {
 				if(attached) {
 					BlockPos pos = this.getPosition();
 					
 					if(this.lightBlock != null && (this.lightBlock.getX() != pos.getX() || this.lightBlock.getY() != pos.getY() || this.lightBlock.getZ() != pos.getZ())) {
 						if(this.world.isBlockLoaded(this.lightBlock) && this.world.getBlockState(this.lightBlock).getBlock() == BlockRegistry.CAVING_ROPE_LIGHT) {
-							this.world.setBlockToAir(this.lightBlock);
+							this.world.removeBlock(this.lightBlock);
 						}
 						
 						this.lightBlock = null;
@@ -159,7 +159,7 @@ public class EntityRopeNode extends Entity {
 					}
 				} else if(this.lightBlock != null) {
 					if(this.world.isBlockLoaded(this.lightBlock) && this.world.getBlockState(this.lightBlock).getBlock() == BlockRegistry.CAVING_ROPE_LIGHT) {
-						this.world.setBlockToAir(this.lightBlock);
+						this.world.removeBlock(this.lightBlock);
 					}
 					
 					this.lightBlock = null;
@@ -170,7 +170,7 @@ public class EntityRopeNode extends Entity {
 			prevNode = this.getPreviousNode();
 		}
 
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			if(nextNode instanceof EntityPlayer) {
 				if(nextNode.getDistance(this) > 1.5D) {
 					this.pickUp = true;
@@ -179,7 +179,7 @@ public class EntityRopeNode extends Entity {
 					this.removeNode(nextNode);
 					EntityPlayer player = (EntityPlayer) nextNode;
 					if(player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.CAVING_ROPE, 1))) {
-						this.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+						this.world.play((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 					} else {
 						EntityItem itemEntity = new EntityItem(this.world, this.posX, this.posY, this.posZ, new ItemStack(ItemRegistry.CAVING_ROPE, 1));
 						itemEntity.setPickupDelay(0);
@@ -206,7 +206,7 @@ public class EntityRopeNode extends Entity {
 								}
 								EntityRopeNode rope = this.extendRope(nextNode, newPos.x, newPos.y, newPos.z);
 								if(rope.isAttached()) {
-									this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
+									this.world.play((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
 								}
 								break;
 							}
@@ -302,7 +302,7 @@ public class EntityRopeNode extends Entity {
 			this.motionZ = 0.0D;
 		}
 
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			if(nextNode == null) {
 				if(prevNode == null) {
 					this.onKillCommand();
@@ -326,7 +326,7 @@ public class EntityRopeNode extends Entity {
 
 	@Override
 	public boolean processInitialInteract(EntityPlayer player,  EnumHand hand) {
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			Entity prevNode = this.getPreviousNodeByUUID();
 			Entity nextNode = this.getNextNodeByUUID();
 
@@ -363,10 +363,10 @@ public class EntityRopeNode extends Entity {
 				}
 				if(endNode.getNextNodeByUUID() == null && endNode.getPreviousNodeByUUID() instanceof EntityRopeNode) {
 					((EntityRopeNode) endNode.getPreviousNodeByUUID()).setNextNode(null);
-					endNode.setDead();
+					endNode.remove();
 
 					if(player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.CAVING_ROPE, 1))) {
-						this.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+						this.world.play((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 					} else {
 						EntityItem itemEntity = new EntityItem(this.world, this.posX, this.posY, this.posZ, new ItemStack(ItemRegistry.CAVING_ROPE, 1));
 						itemEntity.setPickupDelay(0);
@@ -389,11 +389,11 @@ public class EntityRopeNode extends Entity {
 	}
 	
 	@Override
-	public void setDead() {
-		super.setDead();
+	public void remove() {
+		super.remove();
 		
 		if(this.lightBlock != null && this.world.isBlockLoaded(this.lightBlock) && this.world.getBlockState(this.lightBlock).getBlock() == BlockRegistry.CAVING_ROPE_LIGHT) {
-			this.world.setBlockToAir(this.lightBlock);
+			this.world.removeBlock(this.lightBlock);
 		}
 		
 		this.lightBlock = null;
@@ -436,7 +436,7 @@ public class EntityRopeNode extends Entity {
 
 	public Vec3d getConnectionToNext() {
 		Entity nextNode;
-		if(this.world.isRemote) {
+		if(this.world.isRemote()) {
 			nextNode = this.getNextNode();
 		} else {
 			nextNode = this.getNextNodeByUUID();
@@ -464,7 +464,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public Entity getNextNodeByUUID() {
-		if(this.cachedNextNodeEntity != null && this.cachedNextNodeEntity.isEntityAlive() && this.cachedNextNodeEntity.getUniqueID().equals(this.nextNodeUUID)) {
+		if(this.cachedNextNodeEntity != null && this.cachedNextNodeEntity.isAlive() && this.cachedNextNodeEntity.getUniqueID().equals(this.nextNodeUUID)) {
 			return this.cachedNextNodeEntity;
 		} else {
 			UUID uuid = this.nextNodeUUID;
@@ -491,7 +491,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public Entity getPreviousNodeByUUID() {
-		if(this.cachedPrevNodeEntity != null && this.cachedPrevNodeEntity.isEntityAlive() && this.cachedPrevNodeEntity.getUniqueID().equals(this.prevNodeUUID)) {
+		if(this.cachedPrevNodeEntity != null && this.cachedPrevNodeEntity.isAlive() && this.cachedPrevNodeEntity.getUniqueID().equals(this.prevNodeUUID)) {
 			return this.cachedPrevNodeEntity;
 		} else {
 			UUID uuid = this.prevNodeUUID;
@@ -503,7 +503,7 @@ public class EntityRopeNode extends Entity {
 
 	@OnlyIn(Dist.CLIENT)
 	public Entity getNextNode() {
-		if(this.cachedNextNodeEntity == null || !this.cachedNextNodeEntity.isEntityAlive() || this.cachedNextNodeEntity.getEntityId() != this.getDataManager().get(DW_NEXT_NODE)) {
+		if(this.cachedNextNodeEntity == null || !this.cachedNextNodeEntity.isAlive() || this.cachedNextNodeEntity.getEntityId() != this.getDataManager().get(DW_NEXT_NODE)) {
 			Entity entity = this.world.getEntityByID(this.getDataManager().get(DW_NEXT_NODE));
 			this.cachedNextNodeEntity = entity;
 			return entity;
@@ -513,7 +513,7 @@ public class EntityRopeNode extends Entity {
 
 	@OnlyIn(Dist.CLIENT)
 	public Entity getPreviousNode() {
-		if(this.cachedPrevNodeEntity == null || !this.cachedPrevNodeEntity.isEntityAlive() || this.cachedPrevNodeEntity.getEntityId() != this.getDataManager().get(DW_PREV_NODE)) {
+		if(this.cachedPrevNodeEntity == null || !this.cachedPrevNodeEntity.isAlive() || this.cachedPrevNodeEntity.getEntityId() != this.getDataManager().get(DW_PREV_NODE)) {
 			Entity entity = this.world.getEntityByID(this.getDataManager().get(DW_PREV_NODE));
 			this.cachedPrevNodeEntity = entity;
 			return entity;

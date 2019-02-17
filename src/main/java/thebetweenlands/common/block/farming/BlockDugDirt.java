@@ -15,10 +15,10 @@ public class BlockDugDirt extends BlockGenericDugSoil {
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(world, pos, state, rand);
+	public void tick(IBlockState state, World world, BlockPos pos, Random rand) {
+		super.tick(state, world, pos, rand);
 
-		if(!world.isRemote) {
+		if(!world.isRemote()) {
 			TileEntityDugSoil te = getTile(world, pos);
 
 			if(te != null && !te.isComposted() && rand.nextInt(20) == 0) {

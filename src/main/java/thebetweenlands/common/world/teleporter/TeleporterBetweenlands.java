@@ -55,7 +55,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 		this.toWorld = toWorld;
 		this.makePortal = makePortal;
 		this.setSpawn = setSpawn;
-		this.isToEnd = this.toWorld.provider.getDimensionType().getId() == 1;
+		this.isToEnd = this.toWorld.dimension.getType().getId() == 1;
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 							for(int xo = -1; xo <= 1; xo++) {
 								for(int zo = -1; zo <= 1; zo++) {
 									for(int yo = 0; yo <= 2; yo++) {
-										this.toWorld.setBlockToAir(pos.add(xo, yo, zo));
+										this.toWorld.removeBlock(pos.add(xo, yo, zo));
 									}
 								}
 							}
@@ -397,7 +397,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 	@Override
 	public boolean makePortal(Entity entity) {
 		if(this.makePortal) {
-			boolean isToBL = this.toWorld.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
+			boolean isToBL = this.toWorld.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
 			BlockPos center;
 			if(isToBL) {
 				center = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
@@ -509,7 +509,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 				//Link portals
 				LocationPortal newPortal = newPortals.get(0);
 				newPortal.setOtherPortalPosition(this.fromDim, portal.getPortalPosition());
-				portal.setOtherPortalPosition(this.toWorld.provider.getDimension(), newPortal.getPortalPosition());
+				portal.setOtherPortalPosition(this.toWorld.dimension.getDimension(), newPortal.getPortalPosition());
 			}
 		}
 
@@ -654,7 +654,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 			player.setSpawnChunk(coords, true, BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 		}
 
-		if(this.toWorld.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+		if(this.toWorld.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			NBTTagCompound dataNbt = player.getEntityData();
 			NBTTagCompound persistentNbt = dataNbt.getCompound(EntityPlayer.PERSISTED_NBT_TAG);
 

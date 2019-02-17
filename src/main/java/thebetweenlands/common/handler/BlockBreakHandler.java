@@ -20,7 +20,7 @@ public class BlockBreakHandler {
 	@SubscribeEvent
 	public static void onBlockBreak(BlockEvent.BreakEvent event) {
 		EntityPlayer player = event.getPlayer();
-		if(player != null && !event.getWorld().isRemote) {
+		if(player != null && !event.getWorld().isRemote()) {
 			BlockPos pos = event.getPos();
 			IBlockState blockState = event.getState();
 
@@ -36,9 +36,9 @@ public class BlockBreakHandler {
 
 							for (EntityPyrad pyrad : pyrads) {
 								if (!pyrad.isActive() && event.getWorld().rand.nextInt(10) == 0) {
-									pyrad.playSound(SoundRegistry.PYRAD_HURT, 0.4F, 1.0F);
-									pyrad.playSound(SoundRegistry.PYRAD_HURT, 0.4F, 0.5F);
-									pyrad.playSound(SoundRegistry.PYRAD_HURT, 0.4F, 0.25F);
+									pyrad.play(SoundRegistry.PYRAD_HURT, 0.4F, 1.0F);
+									pyrad.play(SoundRegistry.PYRAD_HURT, 0.4F, 0.5F);
+									pyrad.play(SoundRegistry.PYRAD_HURT, 0.4F, 0.25F);
 									pyrad.setActive(true);
 									pyrad.setAttackTarget(player);
 									if (player instanceof EntityPlayerMP)

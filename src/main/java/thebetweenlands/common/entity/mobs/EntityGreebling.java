@@ -25,6 +25,7 @@ import thebetweenlands.client.audio.EntityMusicLayers;
 import thebetweenlands.client.audio.GreeblingMusicSound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.sound.BLSoundEvent;
 
@@ -41,7 +42,7 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 	public int disappearTimer = 0;
 
 	public EntityGreebling(World worldIn) {
-		super(worldIn);
+		super(EntityRegistry.GREEBLING, worldIn);
 		this.setSize(1, 0.75f);
 	}
 
@@ -89,8 +90,8 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		this.dataManager.register(TYPE, 0);
 		this.dataManager.register(FACING, EnumFacing.NORTH);
 	}
@@ -104,8 +105,8 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		this.prevRotationPitch = this.rotationPitch = 0;
 		this.prevRotationYaw = this.rotationYaw = this.dataManager.get(FACING).getHorizontalAngle();
@@ -113,14 +114,14 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 
 		if (disappearTimer > 0 && disappearTimer < 8) disappearTimer++;
 		
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			if (disappearTimer == 5) this.world.setEntityState(this, EVENT_DISAPPEAR);
-			if (disappearTimer >= 8) setDead();
+			if (disappearTimer >= 8) remove();
 			
 			List<EntityPlayer> nearPlayers = world.getEntitiesWithinAABB(EntityPlayer.class, getEntityBoundingBox().grow(4.5, 5, 4.5), e -> !e.abilities.isCreativeMode && !e.isInvisible());
 			if (disappearTimer == 0 && !nearPlayers.isEmpty()) {
 				disappearTimer++;
-				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.GREEBLING_VANISH, SoundCategory.NEUTRAL, 1, 1);
+				this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.GREEBLING_VANISH, SoundCategory.NEUTRAL, 1, 1);
 				this.world.setEntityState(this, EVENT_START_DISAPPEARING);
 			}
 		}
@@ -139,7 +140,7 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 	}
 	
 	private void doLeafEffects() {
-		if(world.isRemote) {
+		if(world.isRemote()) {
 			int leafCount = 40;
 			float x = (float) (posX);
 			float y = (float) (posY + 1.3F);
@@ -155,15 +156,15 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
-		super.writeEntityToNBT(compound);
+	public void writeAdditional(NBTTagCompound compound) {
+		super.writeAdditional(compound);
 		compound.setInt("type", getType());
 		compound.setInt("facing", this.dataManager.get(FACING).getHorizontalIndex());
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
-		super.readEntityFromNBT(compound);
+	public void readAdditional(NBTTagCompound compound) {
+		super.readAdditional(compound);
 		setType(compound.getInt("type"));
 		this.dataManager.set(FACING, EnumFacing.byHorizontalIndex(compound.getInt("facing")));
 	}
@@ -205,7 +206,7 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 
 	@Override
 	public boolean isMusicActive(EntityPlayer listener) {
-		return this.isEntityAlive();
+		return this.isAlive();
 	}
 
 	@Override

@@ -84,7 +84,7 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 
 	@Override
 	public void onBlockClicked(IBlockState state, World world, BlockPos pos, EntityPlayer playerIn) {
-		if(!world.isRemote) {
+		if(!world.isRemote()) {
 			if (world.getTileEntity(pos) instanceof TileEntityCompostBin) {
 				TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(pos);
 				tile.setOpen(!tile.isOpen());
@@ -98,7 +98,7 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
 
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			if (world.getTileEntity(pos) instanceof TileEntityCompostBin) {
 				TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(pos);
 				boolean open = tile.isOpen();

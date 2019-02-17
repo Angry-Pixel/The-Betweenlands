@@ -28,7 +28,7 @@ public class ItemSpiritFruit extends ItemBLFood {
 
 	@Override
 	protected void onFoodEaten(ItemStack stack, World worldIn, EntityPlayer player) {
-		if (!worldIn.isRemote) {
+		if (!worldIn.isRemote()) {
 			player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 100, 1));
 			player.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 2400, 0));
 		}

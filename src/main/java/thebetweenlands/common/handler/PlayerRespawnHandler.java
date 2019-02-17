@@ -40,7 +40,7 @@ public class PlayerRespawnHandler {
 
 			BlockPos adjustedSpawnPos = spawnPos == null ? null : EntityPlayer.getBedSpawnLocation(player.world, spawnPos, player.isSpawnForced(player.dimension));
 
-			boolean respawnInBL = BetweenlandsConfig.WORLD_AND_DIMENSION.startInBetweenlands && (!player.world.provider.canRespawnHere() || adjustedSpawnPos == null);
+			boolean respawnInBL = BetweenlandsConfig.WORLD_AND_DIMENSION.startInBetweenlands && (!player.world.dimension.canRespawnHere() || adjustedSpawnPos == null);
 
 			persistentNbt.setBoolean(RESPAWN_IN_BL_NBT, respawnInBL);
 
@@ -51,7 +51,7 @@ public class PlayerRespawnHandler {
 
 	@SubscribeEvent
 	public static void onRespawn(PlayerRespawnEvent event) {
-		if(!event.player.world.isRemote) {
+		if(!event.player.world.isRemote()) {
 			BlockPos spawnPos = event.player.getBedLocation(event.player.dimension);
 
 			BlockPos adjustedSpawnPos = spawnPos == null ? null : EntityPlayer.getBedSpawnLocation(event.player.world, spawnPos, event.player.isSpawnForced(event.player.dimension));

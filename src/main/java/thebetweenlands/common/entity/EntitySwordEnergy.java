@@ -42,7 +42,7 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	@Override
-	protected void entityInit() {
+	protected void registerData() {
 		dataManager.register(PART_POS_1, Float.valueOf(3.5F));
 		dataManager.register(PART_POS_2, Float.valueOf(3.5F));
 		dataManager.register(PART_POS_3, Float.valueOf(3.5F));
@@ -54,13 +54,13 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 		pulseFloat = pulse.swing(0.3F, 0.75F, false);
 		motionY = 0;
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			if(ticksExisted%140 == 0)
-				world.playSound(null, posX, posY, posZ, SoundRegistry.FORTRESS_PUZZLE_ORB, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.play(null, posX, posY, posZ, SoundRegistry.FORTRESS_PUZZLE_ORB, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 			if (getSwordPart1Pos() > 0 && getSwordPart1Pos() < 3.5F)
 				setSwordPart1Pos(getSwordPart1Pos() - 0.05F);
@@ -75,13 +75,13 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 				setSwordPart4Pos(getSwordPart4Pos() - 0.05F);
 
 			if (getSwordPart1Pos() <= 0 && getSwordPart2Pos() <= 0 && getSwordPart3Pos() <= 0 && getSwordPart4Pos() <= 0) {
-				world.playSound(null, posX, posY, posZ, SoundRegistry.FORTRESS_PUZZLE_SWORD, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.play(null, posX, posY, posZ, SoundRegistry.FORTRESS_PUZZLE_SWORD, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				EntityItem entityItem = new EntityShockwaveSwordItem(world, posX, posY, posZ, new ItemStack(ItemRegistry.SHOCKWAVE_SWORD));
 				entityItem.motionX = 0;
 				entityItem.motionY = 0;
 				entityItem.motionZ = 0;
 				world.spawnEntity(entityItem);
-				setDead();
+				remove();
 			}
 		} else {
 			this.lastPos1 = this.pos1;
@@ -128,7 +128,7 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
+	public void writeAdditional(NBTTagCompound nbt) {
 		nbt.setFloat("partPos1", getSwordPart1Pos());
 		nbt.setFloat("partPos2", getSwordPart2Pos());
 		nbt.setFloat("partPos3", getSwordPart3Pos());
@@ -136,7 +136,7 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
+	public void readAdditional(NBTTagCompound nbt) {
 		setSwordPart1Pos(nbt.getFloat("partPos1"));
 		setSwordPart2Pos(nbt.getFloat("partPos2"));
 		setSwordPart3Pos(nbt.getFloat("partPos3"));

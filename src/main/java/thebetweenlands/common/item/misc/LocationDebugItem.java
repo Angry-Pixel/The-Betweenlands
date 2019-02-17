@@ -29,7 +29,7 @@ public class LocationDebugItem extends Item {
 
 	@Override
 	public EnumActionResult onItemUse( EntityPlayer playerIn, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 			if(playerIn.isSneaking()) {
 				List<LocationStorage> locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, pos.getX(), pos.getZ(), location -> location.isInside(new Vec3d(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ)));

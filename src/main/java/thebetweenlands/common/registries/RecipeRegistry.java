@@ -283,7 +283,7 @@ public class RecipeRegistry {
 						logic.setNextEntityName("thebetweenlands:dark_druid").setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false).setMaxEntities(1 + world.rand.nextInt(3));
 					}
 					
-					world.playSound(null, spawnerPos, SoundRegistry.DRUID_TELEPORT, SoundCategory.BLOCKS, 1, 1);
+					world.play(null, spawnerPos, SoundRegistry.DRUID_TELEPORT, SoundCategory.BLOCKS, 1, 1);
 					
 					// Block break effect, see RenderGlobal#playEvent(EntityPlayer player, int type, BlockPos blockPosIn, int data)
 					world.playEvent(2001, spawnerPos.up(4), Block.getStateId(Blocks.SAPLING.getDefaultState()));

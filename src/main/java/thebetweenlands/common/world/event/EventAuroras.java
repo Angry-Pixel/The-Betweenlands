@@ -44,7 +44,7 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	public void setActive(boolean active) {
 		if((active && this.canBeActive()) || !active) {
 			super.setActive(active);
-			if(active && !this.getWorld().isRemote) {
+			if(active && !this.getWorld().isRemote()) {
 				this.dataManager.set(AURORA_TYPE, this.getWorld().rand.nextInt(3));
 			}
 		}
@@ -53,7 +53,7 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	@Override
 	public void update(World world) {
 		super.update(world);
-		if(!world.isRemote && !this.canBeActive() && this.getTicks() > 500) {
+		if(!world.isRemote() && !this.canBeActive() && this.getTicks() > 500) {
 			this.dataManager.set(TICKS, 500).syncImmediately(); //Start fading out
 		}
 	}

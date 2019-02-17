@@ -74,7 +74,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 		if(this.getBoundWaystone(stack) == null && stack.getItemDamage() < stack.getMaxDamage()) {
 			IBlockState state = world.getBlockState(pos);
 			if(state.getBlock() == BlockRegistry.WAYSTONE && this.activateWaystone(world, pos, state, stack)) {
-				if(!world.isRemote) {
+				if(!world.isRemote()) {
 					this.setBoundWaystone(stack, pos);
 				}
 				return EnumActionResult.SUCCESS;
@@ -88,7 +88,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 		if(player.isSneaking()) {
-			if (!world.isRemote) {
+			if (!world.isRemote()) {
 				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_ITEM_RENAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
 			}
 		} else {
@@ -103,7 +103,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entity) {
-		if(!worldIn.isRemote && stack.getItemDamage() < stack.getMaxDamage()) {
+		if(!worldIn.isRemote() && stack.getItemDamage() < stack.getMaxDamage()) {
 			BlockPos waystone = this.getBoundWaystone(stack);
 			if(waystone != null) {
 				BlockPos spawnPoint = PlayerRespawnHandler.getSpawnPointNearPos(worldIn, waystone, 8, false, 4, 0);
@@ -166,22 +166,22 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase entity, int count) {
-		if(!entity.world.isRemote) {
+		if(!entity.world.isRemote()) {
 			if(entity.hurtTime > 0) {
 				entity.stopActiveHand();
-				entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
+				entity.world.play(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
 			}
 
 			if(entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative() && count < 60 && entity.ticksExisted % 3 == 0) {
 				int removed = ItemRing.removeXp((EntityPlayer) entity, 1);
 				if(removed == 0) {
 					entity.stopActiveHand();
-					entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
+					entity.world.play(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
 				}
 			}
 
 			if(count < 90 && count % 20 == 0) {
-				entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundRegistry.PORTAL_TRAVEL, SoundCategory.PLAYERS, 0.05F + 0.4F * (float)MathHelper.clamp(80 - count, 1, 80) / 80.0F, 0.9F + entity.world.rand.nextFloat() * 0.2F);
+				entity.world.play(null, entity.posX, entity.posY, entity.posZ, SoundRegistry.PORTAL_TRAVEL, SoundCategory.PLAYERS, 0.05F + 0.4F * (float)MathHelper.clamp(80 - count, 1, 80) / 80.0F, 0.9F + entity.world.rand.nextFloat() * 0.2F);
 			}
 		} else {
 			Random rand = entity.world.rand;
@@ -192,8 +192,8 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 	}
 
 	protected void playThunderSounds(World world, double x, double y, double z) {
-		world.playSound(null, x, y, z, SoundRegistry.RIFT_CREAK, SoundCategory.PLAYERS, 2, 1);
-		world.playSound(null, x, y, z, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.PLAYERS, 0.75F, 0.75F);
+		world.play(null, x, y, z, SoundRegistry.RIFT_CREAK, SoundCategory.PLAYERS, 2, 1);
+		world.play(null, x, y, z, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.PLAYERS, 0.75F, 0.75F);
 	}
 
 	protected boolean activateWaystone(World world, BlockPos pos, IBlockState state, ItemStack stack) {
@@ -201,7 +201,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 		if(block.isValidWaystone(world, pos, state)) {
 			BlockWaystone.Part part = state.get(BlockWaystone.PART);
 
-			if(!world.isRemote) {
+			if(!world.isRemote()) {
 				int startY = part == BlockWaystone.Part.BOTTOM ? 0 : (part == BlockWaystone.Part.MIDDLE ? -1 : -2);
 				for(int yo = startY; yo < startY + 3; yo++) {
 					IBlockState newState = world.getBlockState(pos.up(yo)).with(BlockWaystone.ACTIVE, true);

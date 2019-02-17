@@ -22,6 +22,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
 import thebetweenlands.common.entity.ai.EntityAIJumpRandomly;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -31,7 +32,7 @@ public class EntityRootSprite extends EntityCreature implements IEntityBL {
 	private float jumpHeightOverride = -1;
 
 	public EntityRootSprite(World worldIn) {
-		super(worldIn);
+		super(EntityRegistry.ROOT_SPRITE, worldIn);
 		this.experienceValue = 1;
 		this.setSize(0.3F, 0.55F);
 	}
@@ -58,11 +59,11 @@ public class EntityRootSprite extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
+	protected void registerAttributes() {
+		super.registerAttributes();
 
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
 	}
 
 	@Override
@@ -105,10 +106,10 @@ public class EntityRootSprite extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
-		if(this.world.isRemote && this.rand.nextInt(20) == 0) {
+		if(this.world.isRemote() && this.rand.nextInt(20) == 0) {
 			this.spawnLeafParticles();
 		}
 	}

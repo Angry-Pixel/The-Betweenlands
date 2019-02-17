@@ -106,7 +106,7 @@ public class BlockRepeller extends BlockContainer {
 							int amount = aspectContainer.get(AspectRegistry.BYARIIS);
 							int loss = 10; //Loss when adding
 							if(amount >= loss) {
-								if(!world.isRemote) {
+								if(!world.isRemote()) {
 									int added = tile.addFuel(amount - loss);
 									if(!player.abilities.isCreativeMode) {
 										int leftAmount = amount - added - loss;
@@ -122,14 +122,14 @@ public class BlockRepeller extends BlockContainer {
 							}
 						}
 					} else {
-						if(!world.isRemote) {
+						if(!world.isRemote()) {
 							player.sendStatusMessage(new TextComponentTranslation("chat.repeller.shimmerstone_missing"), true);
 						}
 					}
 				} else if(held.getItem() == ItemRegistry.DENTROTHYST_VIAL && tile.getFuel() > 0) {
 					if(held.getItemDamage() == 0 || held.getItemDamage() == 2) {
 						ItemStack newStack = new ItemStack(ItemRegistry.ASPECT_VIAL, 1, held.getItemDamage() == 0 ? 0 : 1);
-						if(!world.isRemote) {
+						if(!world.isRemote()) {
 							ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(newStack);
 							aspectContainer.set(AspectRegistry.BYARIIS, tile.removeFuel(Amounts.VIAL));
 						}
@@ -151,7 +151,7 @@ public class BlockRepeller extends BlockContainer {
 				}
 				return true;
 			} else if(!player.isSneaking() && held.isEmpty()) {
-				if(!world.isRemote) {
+				if(!world.isRemote()) {
 					tile.cycleRadiusState();
 				}
 				player.swingArm(hand);
@@ -177,13 +177,13 @@ public class BlockRepeller extends BlockContainer {
 		if ((half == EnumBlockHalf.BOTTOM && (!world.isSideSolid(pos.down(), EnumFacing.UP) || world.getBlockState(pos.up()).getBlock() != this))
 				|| (half == EnumBlockHalf.TOP) && world.getBlockState(pos.down()).getBlock() != this) {
 			this.breakBlock(world, pos, state);
-			world.setBlockToAir(pos);
+			world.removeBlock(pos);
 		}
 	}
 
 	@Override
 	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
-		if(!worldIn.isRemote) {
+		if(!worldIn.isRemote()) {
 			TileEntityRepeller tile = (TileEntityRepeller) worldIn.getTileEntity(pos);
 			if(tile != null) {
 				float f = 0.7F;

@@ -12,7 +12,7 @@ import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.api.event.UpdateFogEvent;
 import thebetweenlands.api.misc.Fog.FogType;
 import thebetweenlands.api.misc.Fog.MutableFog;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 
 public class FogState {
@@ -153,15 +153,15 @@ public class FogState {
 		float fixedFogStart = this.getFixedFogStart(defaultAmbientFog.getStart());
 		float fixedFogEnd = this.getFixedFogEnd(defaultAmbientFog.getEnd());
 
-		if(position.y < WorldProviderBetweenlands.CAVE_START) {
-			float fogColorMultiplier = ((float)(WorldProviderBetweenlands.CAVE_START - position.y) / WorldProviderBetweenlands.CAVE_START);
+		if(position.y < DimensionBetweenlands.CAVE_START) {
+			float fogColorMultiplier = ((float)(DimensionBetweenlands.CAVE_START - position.y) / DimensionBetweenlands.CAVE_START);
 			fogColorMultiplier = 1.0F - fogColorMultiplier;
 			fogColorMultiplier *= Math.pow(fogColorMultiplier, 8.5);
 			fogColorMultiplier = fogColorMultiplier * 0.95F + 0.05F;
-			if(position.y <= WorldProviderBetweenlands.PITSTONE_HEIGHT) {
+			if(position.y <= DimensionBetweenlands.PITSTONE_HEIGHT) {
 				float targettedMultiplier = 0.3F;
 				if(fogColorMultiplier < targettedMultiplier) {
-					fogColorMultiplier += Math.pow(((targettedMultiplier - fogColorMultiplier) / WorldProviderBetweenlands.PITSTONE_HEIGHT * (WorldProviderBetweenlands.PITSTONE_HEIGHT - position.y)), 0.85F);
+					fogColorMultiplier += Math.pow(((targettedMultiplier - fogColorMultiplier) / DimensionBetweenlands.PITSTONE_HEIGHT * (DimensionBetweenlands.PITSTONE_HEIGHT - position.y)), 0.85F);
 				}
 			}
 			fogColorMultiplier = MathHelper.clamp(fogColorMultiplier, 0.1F, 1);

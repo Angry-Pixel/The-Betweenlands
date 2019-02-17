@@ -81,10 +81,10 @@ public class BlockMudFlowerPotCandle extends Block {
 
 	@Override
 	public void onBlockClicked(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn) {
-		if(!worldIn.isRemote) {
+		if(!worldIn.isRemote()) {
 			worldIn.setBlockState(pos, BlockRegistry.MUD_FLOWER_POT.getDefaultState());
 
-			worldIn.playSound(null, pos, SoundType.WOOD.getBreakSound(), SoundCategory.BLOCKS, (SoundType.WOOD.getVolume() + 1.0F) / 2.0F, SoundType.WOOD.getPitch() * 0.8F);
+			worldIn.play(null, pos, SoundType.WOOD.getBreakSound(), SoundCategory.BLOCKS, (SoundType.WOOD.getVolume() + 1.0F) / 2.0F, SoundType.WOOD.getPitch() * 0.8F);
 
 			spawnAsEntity(worldIn, pos, new ItemStack(BlockRegistry.SULFUR_TORCH));
 		}
@@ -105,7 +105,7 @@ public class BlockMudFlowerPotCandle extends Block {
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (!worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockToAir(pos);
+			worldIn.removeBlock(pos);
 		}
 	}
 

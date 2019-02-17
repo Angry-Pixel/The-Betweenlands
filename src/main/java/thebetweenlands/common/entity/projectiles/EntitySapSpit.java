@@ -27,10 +27,10 @@ public class EntitySapSpit extends EntityThrowable {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
-		if(this.world.isRemote) {
+		if(this.world.isRemote()) {
 			this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, Item.getIdFromItem(ItemRegistry.SAP_SPIT));
 		}
 	}
@@ -47,26 +47,26 @@ public class EntitySapSpit extends EntityThrowable {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if(!this.world.isRemote && result.entityHit instanceof EntitySpiritTreeFace == false && result.entityHit instanceof EntityRootGrabber == false) {
+		if(!this.world.isRemote() && result.entityHit instanceof EntitySpiritTreeFace == false && result.entityHit instanceof EntityRootGrabber == false) {
 			if(result.entityHit != null) {
 				result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.damage);
 			}
 			
 			this.world.setEntityState(this, (byte)3);
-			this.setDead();
+			this.remove();
 		}
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 
 		nbt.setFloat("damage", this.damage);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 
 		this.damage = nbt.getFloat("damage");
 	}

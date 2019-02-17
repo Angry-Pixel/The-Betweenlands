@@ -27,8 +27,8 @@ public class BlockDeadGrass extends BasicBlock implements IGrowable {
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if (!worldIn.isRemote) {
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+		if (!worldIn.isRemote()) {
 			if(worldIn.getBlockState(pos.up()).getLightOpacity(worldIn, pos.up()) > 2) {
 				worldIn.setBlockState(pos, BlockRegistry.SWAMP_DIRT.getDefaultState());
 			}

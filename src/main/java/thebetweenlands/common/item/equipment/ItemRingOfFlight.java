@@ -62,7 +62,7 @@ public class ItemRingOfFlight extends ItemRing {
 				cap.setFlightRing(true);
 				if(!cap.canFlyWithoutRing(player) && cap.canFlyWithRing(player, stack)) {
 					double flightHeight = 3.5D;
-					if(player.world.isRemote || cap.isFlying()) {
+					if(player.world.isRemote() || cap.isFlying()) {
 						player.abilities.allowFlying = true;
 					}
 					boolean isFlying = cap.isFlying();
@@ -87,7 +87,7 @@ public class ItemRingOfFlight extends ItemRing {
 
 								double my = 0.0D;
 								boolean moveUp = false;
-								if(player.world.isRemote) {
+								if(player.world.isRemote()) {
 									if(player instanceof EntityPlayerSP) {
 										moveUp = ((EntityPlayerSP)player).movementInput.jump;
 									}
@@ -107,7 +107,7 @@ public class ItemRingOfFlight extends ItemRing {
 
 							entity.fallDistance = 0.0F;
 
-							if(!entity.onGround && entity.world.isRemote) {
+							if(!entity.onGround && entity.world.isRemote()) {
 								if(cap.getFlightTime() > 40) {
 									BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 0.0F, entity));
 								} else {
@@ -124,14 +124,14 @@ public class ItemRingOfFlight extends ItemRing {
 						nbt.setBoolean("ringActive", false);
 					}
 				} else {
-					if(!player.world.isRemote) {
+					if(!player.world.isRemote()) {
 						NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 						nbt.setBoolean("ringActive", false);
 						if(cap.isFlying()) {
 							cap.setFlying(false);
 						}
 					}
-					if(cap.isFlying() && !player.onGround && player.world.isRemote) {
+					if(cap.isFlying() && !player.onGround && player.world.isRemote()) {
 						if(cap.getFlightTime() > 40) {
 							BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 0.0F, entity));
 						} else {
@@ -179,7 +179,7 @@ public class ItemRingOfFlight extends ItemRing {
 						}
 					}
 
-					if(!flightRing.isEmpty() && player.world.isRemote) {
+					if(!flightRing.isEmpty() && player.world.isRemote()) {
 						if(!cap.canFlyWithoutRing(player) && cap.canFlyWithRing(player, flightRing)) {
 							if(event.phase == Phase.START) {
 								player.abilities.isFlying = false;
@@ -207,7 +207,7 @@ public class ItemRingOfFlight extends ItemRing {
 								if(!cap.canFlyWithoutRing(player)) {
 									player.abilities.isFlying = false;
 									player.abilities.allowFlying = false;
-									if(player.world.isRemote) {
+									if(player.world.isRemote()) {
 										player.abilities.setFlySpeed(0.05F);
 									}
 								}

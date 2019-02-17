@@ -34,8 +34,8 @@ public class ItemCrushed extends Item implements ItemRegistry.IMultipleItemModel
 			Block block = worldIn.getBlockState(pos).getBlock();
 			if (block instanceof IGrowable) {
 				IGrowable growable = (IGrowable) block;
-				if (growable.canGrow(worldIn, pos, worldIn.getBlockState(pos), worldIn.isRemote)) {
-					if (!worldIn.isRemote) {
+				if (growable.canGrow(worldIn, pos, worldIn.getBlockState(pos), worldIn.isRemote())) {
+					if (!worldIn.isRemote()) {
 						if (growable.canUseBonemeal(worldIn, worldIn.rand, pos, worldIn.getBlockState(pos))) {
 							growable.grow(worldIn, worldIn.rand, pos, worldIn.getBlockState(pos));
 						}

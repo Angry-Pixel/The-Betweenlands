@@ -56,7 +56,7 @@ public class ItemAngryPebble extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		playerIn.setActiveHand(handIn);
-		worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_CREEPER_PRIMED, SoundCategory.PLAYERS, 1.0F, 0.5F);
+		worldIn.play(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_CREEPER_PRIMED, SoundCategory.PLAYERS, 1.0F, 0.5F);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
@@ -84,11 +84,11 @@ public class ItemAngryPebble extends Item {
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		if (!worldIn.isRemote && entityLiving instanceof EntityPlayer) {
+		if (!worldIn.isRemote() && entityLiving instanceof EntityPlayer) {
 			int useTime = this.getMaxItemUseDuration(stack) - timeLeft;
 
 			if(useTime > 20) {
-				worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, SoundRegistry.SORRY, SoundCategory.PLAYERS, 0.7F, 0.8F);
+				worldIn.play(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, SoundRegistry.SORRY, SoundCategory.PLAYERS, 0.7F, 0.8F);
 				EntityAngryPebble pebble = new EntityAngryPebble(worldIn, entityLiving);
 				pebble.shoot(entityLiving, entityLiving.rotationPitch, entityLiving.rotationYaw, -10, 1.2F, 3.5F);
 				worldIn.spawnEntity(pebble);

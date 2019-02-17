@@ -13,7 +13,7 @@ public class EntityAIAvoidEntityGecko extends EntityAIGeckoHide {
 	public final Predicate<Entity> viableSelector = new Predicate<Entity>() {
 		@Override
 		public boolean apply(Entity entity) {
-			return entity.isEntityAlive() && gecko.getEntitySenses().canSee(entity);
+			return entity.isAlive() && gecko.getEntitySenses().canSee(entity);
 		}
 	};
 

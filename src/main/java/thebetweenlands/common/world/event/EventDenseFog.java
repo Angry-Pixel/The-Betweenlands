@@ -34,7 +34,7 @@ public class EventDenseFog extends TimedEnvironmentEvent {
 	@Override
 	public void update(World world) {
 		super.update(world);
-		if(world.isRemote) {
+		if(world.isRemote()) {
 			if(this.isActive()) {
 				if(this.fade > 0.0F) {
 					this.lastFade = this.fade;

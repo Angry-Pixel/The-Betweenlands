@@ -510,7 +510,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 
 	@Override
 	public void update() {
-		if(this.getWorldStorage().getWorld().isRemote) {
+		if(this.getWorldStorage().getWorld().isRemote()) {
 			Iterator<Entity> it = this.titleDisplayCooldowns.keySet().iterator();
 			while(it.hasNext()) {
 				Entity entity = it.next();

@@ -23,6 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
@@ -41,7 +42,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	private int pathingCooldown = 0;
 	
 	public EntitySwampHag(World world) {
-		super(world);
+		super(EntityRegistry.SWAMP_HAG, world);
 		this.setSize(0.6F, 1.8F);
 	}
 
@@ -64,20 +65,20 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		dataManager.register(TALK_SOUND, (byte) 0);
 		dataManager.register(SHOULD_JAW_MOVE, false);
 		dataManager.register(LIVING_SOUND_TIMER, 0);
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(35.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40.0D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(35.0D);
 	}
 
 	@Override
@@ -121,7 +122,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void onLivingUpdate() {
+	public void livingTick() {
 		breatheFloat = animationBreathe.swing(0.2F, 0.5F, false);
 		
 		if(this.getAttackTarget() != null && !this.getRecursivePassengersByType(EntityWight.class).isEmpty()) {
@@ -135,7 +136,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 			}
 		}
 		
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			updateLivingSoundTime();
 		}
 
@@ -157,7 +158,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 			jawFloat = animationTalk.swing(2.0F, 0.1F, false);
 		else if (shouldJawMove() && getTalkSound() == 3 || shouldJawMove() && getTalkSound() == 4)
 			jawFloat = animationTalk.swing(0.4F, 1.2F, false);
-		super.onLivingUpdate();
+		super.livingTick();
 	}
 
 	private byte getTalkSound() {

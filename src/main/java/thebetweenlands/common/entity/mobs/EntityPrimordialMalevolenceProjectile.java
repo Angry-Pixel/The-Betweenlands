@@ -28,11 +28,12 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityFortressBossProjectile extends Entity implements IProjectile {
-	protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.<Optional<UUID>>createKey(EntityFortressBossProjectile.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-	protected static final DataParameter<Boolean> DEFLECTION_STATE = EntityDataManager.<Boolean>createKey(EntityFortressBossProjectile.class, DataSerializers.BOOLEAN);
+public class EntityPrimordialMalevolenceProjectile extends Entity implements IProjectile {
+	protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.<Optional<UUID>>createKey(EntityPrimordialMalevolenceProjectile.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+	protected static final DataParameter<Boolean> DEFLECTION_STATE = EntityDataManager.<Boolean>createKey(EntityPrimordialMalevolenceProjectile.class, DataSerializers.BOOLEAN);
 
 	private UUID throwerUUID;
 	private int ticksInAir = 0;
@@ -41,20 +42,20 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 	private Entity cachedOwner;
 	private Entity cachedThrower;	
 
-	public EntityFortressBossProjectile(World world) {
-		super(world);
+	public EntityPrimordialMalevolenceProjectile(World world) {
+		super(EntityRegistry.PRIMORDIAL_MALEVOLENCE_PROJECTILE, world);
 		this.setSize(0.65F, 0.65F);
 		this.noClip = true;
 	}
 
-	public EntityFortressBossProjectile(World world, Entity source) {
+	public EntityPrimordialMalevolenceProjectile(World world, Entity source) {
 		this(world);
 		this.setOwner(source);
 		this.setThrower(source);
 	}
 
 	@Override
-	protected void entityInit() {
+	protected void registerData() {
 		this.getDataManager().register(OWNER, Optional.absent());
 		this.getDataManager().register(DEFLECTION_STATE, false);
 	}
@@ -82,7 +83,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 		UUID uuid = this.getOwnerUUID();
 		if(uuid == null) {
 			this.cachedOwner = null;
-		} else if(this.cachedOwner == null || !this.cachedOwner.isEntityAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
+		} else if(this.cachedOwner == null || !this.cachedOwner.isAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
 			this.cachedOwner = null;
 			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
@@ -108,7 +109,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 		UUID uuid = this.getThrowerUUID();
 		if(uuid == null) {
 			this.cachedThrower = null;
-		} else if(this.cachedThrower == null || !this.cachedThrower.isEntityAlive() || !this.cachedThrower.getUniqueID().equals(uuid)) {
+		} else if(this.cachedThrower == null || !this.cachedThrower.isAlive() || !this.cachedThrower.getUniqueID().equals(uuid)) {
 			this.cachedThrower = null;
 			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
@@ -121,25 +122,25 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 	}
 
 	protected void onImpact(RayTraceResult target) {
-		if(target.entityHit instanceof EntityFortressBossProjectile == false) {
+		if(target.entityHit instanceof EntityPrimordialMalevolenceProjectile == false) {
 			if (target.entityHit != null && target.entityHit instanceof EntityLivingBase) {
-				if(target.entityHit instanceof EntityFortressBoss) {
-					EntityFortressBoss boss = (EntityFortressBoss) target.entityHit;
+				if(target.entityHit instanceof EntityPrimordialMalevolence) {
+					EntityPrimordialMalevolence boss = (EntityPrimordialMalevolence) target.entityHit;
 					Vec3d ray = new Vec3d(this.motionX, this.motionY, this.motionZ);
 					ray = ray.normalize().scale(64.0D);
 					int shieldHit = boss.rayTraceShield(new Vec3d(this.posX, this.posY, this.posZ), ray, false);
 					if(shieldHit >= 0) {
-						if(!this.world.isRemote) {
+						if(!this.world.isRemote()) {
 							boss.setShieldActive(shieldHit, false);
 
-							this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SHIELD_DOWN, SoundCategory.HOSTILE, 1.0F, 1.0F);
+							this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SHIELD_DOWN, SoundCategory.HOSTILE, 1.0F, 1.0F);
 
 							double angle = Math.PI * 2.0D / 18;
 							for(int i = 0; i < 18; i++) {
 								Vec3d dir = new Vec3d(Math.sin(angle * i), 0, Math.cos(angle * i));
 								dir = dir.normalize();
 								float speed = 0.8F;
-								EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.world, this.getOwner());
+								EntityPrimordialMalevolenceProjectile bullet = new EntityPrimordialMalevolenceProjectile(this.world, this.getOwner());
 								bullet.setLocationAndAngles(boss.posX, boss.posY, boss.posZ, 0, 0);
 								bullet.shoot(dir.x, dir.y, dir.z, speed, 0.0F);
 								this.world.spawnEntity(bullet);
@@ -149,18 +150,18 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 						boss.attackEntityFrom(DamageSource.GENERIC, 10);
 					}
 
-					if(!this.world.isRemote) {
+					if(!this.world.isRemote()) {
 						boss.setFloating(false);
 					}
 				} else {
 					target.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 2);
 				}
 
-				if(!this.world.isRemote) {
-					this.setDead();
+				if(!this.world.isRemote()) {
+					this.remove();
 				}
 			} else if(target.typeOfHit == RayTraceResult.Type.BLOCK) {
-				this.setDead();
+				this.remove();
 			}
 		}
 	}
@@ -180,7 +181,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 				if (source.getTrueSource() instanceof EntityPlayer) {
 					ItemStack heldItem = ((EntityPlayer)source.getTrueSource()).getHeldItem(EnumHand.MAIN_HAND);
 					if(heldItem != null && heldItem.getItem() instanceof ItemSword) {
-						if(!this.world.isRemote && source.getTrueSource().getPassengers().isEmpty()) {
+						if(!this.world.isRemote() && source.getTrueSource().getPassengers().isEmpty()) {
 							this.startRiding(source.getTrueSource(), true);
 							this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(source.getTrueSource()));
 							return true;
@@ -188,8 +189,8 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 					}
 				}
 			} else {
-				if(!this.world.isRemote) {
-					this.setDead();
+				if(!this.world.isRemote()) {
+					this.remove();
 				}
 			}
 			return false;
@@ -197,18 +198,18 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 	}
 
 	@Override
-	public void onUpdate() {
-		if(!this.world.isRemote && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isEntityAlive()))) {
-			this.setDead();
+	public void tick() {
+		if(!this.world.isRemote() && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isAlive()))) {
+			this.remove();
 			return;
 		}
 
-		if(!this.isDead) {
+		if(this.isAlive()) {
 			if(this.getRidingEntity() == null) {
 				this.ticksInAir++;
 
 				if(this.ticksInAir > 200) {
-					this.setDead();
+					this.remove();
 				}
 
 				Vec3d currentPos = new Vec3d(this.posX, this.posY, this.posZ);
@@ -254,8 +255,8 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 					EntityPlayer player = (EntityPlayer) this.getRidingEntity();
 					ItemStack heldItem = player.getHeldItem(EnumHand.MAIN_HAND);
 					if(!this.isDeflectable() || heldItem == null || heldItem.getItem() instanceof ItemSword == false) {
-						if(!this.world.isRemote) {
-							this.setDead();
+						if(!this.world.isRemote()) {
+							this.remove();
 						}
 					} else {
 						player.setInWeb();
@@ -276,7 +277,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 			}
 		}
 
-		super.onUpdate();
+		super.tick();
 	}
 
 	@Override
@@ -301,7 +302,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbt) {
+	protected void readAdditional(NBTTagCompound nbt) {
 		if(nbt.hasUniqueId("owner")) {
 			this.getDataManager().set(OWNER, Optional.of(nbt.getUniqueId("owner")));
 		} else {
@@ -318,7 +319,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbt) {
+	protected void writeAdditional(NBTTagCompound nbt) {
 		if(this.getOwnerUUID() != null) {
 			nbt.setUniqueId("owner", this.getOwnerUUID());
 		}

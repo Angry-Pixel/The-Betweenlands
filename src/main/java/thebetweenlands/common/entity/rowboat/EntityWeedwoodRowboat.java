@@ -153,8 +153,8 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         dataManager.register(ROW_PROGRESS.get(ShipSide.STARBOARD), RESTING_ROW_PROGRESS);
         dataManager.register(ROW_PROGRESS.get(ShipSide.PORT), RESTING_ROW_PROGRESS);
         dataManager.register(IS_TARRED, false);
@@ -216,7 +216,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         posY = y;
         posZ = MathHelper.clamp(z, -3E7, 3E7);
         // Keep prev for serverside onUpdate
-        //if (world.isRemote) {
+        //if (world.isRemote()) {
         prevPosX = posX;
         prevPosY = posY;
         prevPosZ = posZ;   
@@ -253,7 +253,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         if (isEntityInvulnerable(source)) {
             return false;
         }
-        if (!world.isRemote && !isDead) {
+        if (!world.isRemote() && !isDead) {
             if (source instanceof EntityDamageSourceIndirect && source.getTrueSource() != null && isPassenger(source.getTrueSource())) {
                 return false;
             }
@@ -266,7 +266,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                 if (!creative && world.getGameRules().getBoolean("doEntityDrops")) {
                     entityDropItem(getItem(), 0);
                 }
-                setDead();
+                remove();
             }
         }
         return true;
@@ -276,12 +276,12 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (EnumItemMisc.TAR_DRIP.isItemOf(stack) && !isTarred()) {
-            if (!world.isRemote) {
+            if (!world.isRemote()) {
                 setIsTarred(true);
                 stack.shrink(1);
                 playSound(SoundRegistry.TAR_BEAST_STEP, 0.9F + rand.nextFloat() * 0.1F, 0.6F + rand.nextFloat() * 0.15F);
             }
-        } else if (!world.isRemote && !player.isSneaking()) {
+        } else if (!world.isRemote() && !player.isSneaking()) {
             player.startRiding(this);
         }
         return true;
@@ -302,23 +302,23 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     @Override
     protected void addPassenger(Entity passenger) {
         super.addPassenger(passenger);
-        if (world.isRemote && getControllingPassenger() == passenger) {
+        if (world.isRemote() && getControllingPassenger() == passenger) {
             TheBetweenlands.proxy.onPilotEnterWeedwoodRowboat(passenger);
         }
     }
 
     @Override
     protected void removePassenger(Entity passenger) {
-        if (world.isRemote && getControllingPassenger() == passenger) {
+        if (world.isRemote() && getControllingPassenger() == passenger) {
             TheBetweenlands.proxy.onPilotExitWeedwoodRowboat(this, passenger);
         }
         super.removePassenger(passenger);
     }
 
     @Override
-    public void onUpdate() {
+    public void tick() {
         double pow = 1 - SPEED_WAVE_POWER.eval(MathHelper.sqrt((posX - prevPosX) * (posX - prevPosX) + (posZ - prevPosZ) * (posZ - prevPosZ)));
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             setFlag(6, isGlowing());
         }
         onEntityUpdate();
@@ -329,7 +329,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             setDamageTaken(getDamageTaken() - 1);
         }
         tickLerp();
-        if (world.isRemote) {
+        if (world.isRemote()) {
             updateClientOarProgress(ShipSide.STARBOARD);
             updateClientOarProgress(ShipSide.PORT);
         }
@@ -365,11 +365,11 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         }
         if (canPassengerSteer()) {
             Vec3d motion = null;
-            if (world.isRemote) {
+            if (world.isRemote()) {
                 motion = applyRowForce();
             }
             rotationYaw += rotationalVelocity;
-            if (world.isRemote) {
+            if (world.isRemote()) {
                 if (motion != null) {
                     updateMotion(motion);
                 }
@@ -386,14 +386,14 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         }
         doBlockCollisions();
         if (inWater) {
-            if (world.isRemote) {
+            if (world.isRemote()) {
                 animateHullWaterInteraction();
                 animateOars();   
             } else {
                 createSoundFX();
             }
         }
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(0.2, 0.05, 0.2)).forEach(this::applyEntityCollision);
         }
         rotationYaw = MathHelper.wrapDegrees(rotationYaw);
@@ -834,7 +834,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                 if (oarInAir.get(side) || start) {
                     float volume = force * 0.8F + 0.2F;
                     SoundEvent sound = (start ? SOUND_ROW_START : SOUND_ROW).get(side);
-                    world.playSound(null, raytrace.hitVec.x, raytrace.hitVec.y, raytrace.hitVec.z, sound, SoundCategory.NEUTRAL, volume, 0.8F + rand.nextFloat() * 0.3F);
+                    world.play(null, raytrace.hitVec.x, raytrace.hitVec.y, raytrace.hitVec.z, sound, SoundCategory.NEUTRAL, volume, 0.8F + rand.nextFloat() * 0.3F);
                 }
             }
         }
@@ -953,14 +953,14 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound compound) {
+    protected void writeAdditional(NBTTagCompound compound) {
         if (isTarred()) {
             compound.setBoolean("isTarred", isTarred());   
         }
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound compound) {
+    public void readAdditional(NBTTagCompound compound) {
         setIsTarred(compound.getBoolean("isTarred"));
     }
 

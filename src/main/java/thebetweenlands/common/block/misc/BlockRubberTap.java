@@ -67,7 +67,7 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 
 	@Override
 	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
-		if(!worldIn.isRemote && te instanceof TileEntityRubberTap) {
+		if(!worldIn.isRemote() && te instanceof TileEntityRubberTap) {
 			player.addStat(StatList.getBlockStats(this));
 			player.addExhaustion(0.025F);
 
@@ -124,7 +124,7 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 			EnumFacing oppositeFacing = facing.getOpposite();
 			if (axis.isVertical() || !this.canPlaceOn(world, pos.offset(oppositeFacing))) {
 				this.dropBlockAsItem(world, pos, state, 0);
-				world.setBlockToAir(pos);
+				world.removeBlock(pos);
 			}
 		}
 	}
@@ -135,7 +135,7 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 		} else {
 			if (worldIn.getBlockState(pos).getBlock() == this) {
 				this.dropBlockAsItem(worldIn, pos, state, 0);
-				worldIn.setBlockToAir(pos);
+				worldIn.removeBlock(pos);
 			}
 			return false;
 		}

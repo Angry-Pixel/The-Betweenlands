@@ -84,7 +84,7 @@ public class ItemGemSinger extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		if(!worldIn.isRemote) {
+		if(!worldIn.isRemote()) {
 			ItemStack stack = playerIn.getHeldItem(handIn);
 			if(playerIn.isSneaking()) {
 				this.setTarget(stack, null, null);
@@ -149,8 +149,8 @@ public class ItemGemSinger extends Item {
 			}
 		}
 
-		if(worldIn.isRemote && !playerIn.isSneaking()) {
-			worldIn.playSound(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundRegistry.GEM_SINGER, SoundCategory.PLAYERS, 2, 1);
+		if(worldIn.isRemote() && !playerIn.isSneaking()) {
+			worldIn.play(playerIn, playerIn.posX, playerIn.posY, playerIn.posZ, SoundRegistry.GEM_SINGER, SoundCategory.PLAYERS, 2, 1);
 		}
 
 		playerIn.swingArm(handIn);

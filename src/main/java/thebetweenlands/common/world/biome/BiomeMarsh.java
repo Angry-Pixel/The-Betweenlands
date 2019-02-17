@@ -15,13 +15,13 @@ import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
-import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
+import thebetweenlands.common.entity.mobs.EntityShallowbreath;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.BetweenstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.GreeblingSpawnEntry;
@@ -40,7 +40,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 	public BiomeMarsh(int type) {
 		super(new ResourceLocation(ModInfo.ID, "marsh_" + type),
 				new BiomeProperties("Marsh " + type)
-				.setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 1)
+				.setBaseHeight(DimensionBetweenlands.LAYER_HEIGHT - 1)
 				.setHeightVariation(1.1F)
 				.setWaterColor(0x485E18)
 				.setTemperature(0.8F)
@@ -73,7 +73,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		entries.add(new CaveSpawnEntry(7, EntityChiromaw.class, (short) 60).setHostile(true).setSpawnCheckRadius(40.0D).setGroupSize(1, 3));
 		entries.add(new SwampHagCaveSpawnEntry(8, (short) 120).setHostile(true).setSpawnCheckRadius(24.0D).setGroupSize(1, 3));
 		entries.add(new CaveSpawnEntry(9, EntityAngler.class, (short) 40).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
-		entries.add(new SurfaceSpawnEntry(10, EntityGasCloud.class, (short) 3).setCanSpawnOnWater(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(64.0D));
+		entries.add(new SurfaceSpawnEntry(10, EntityShallowbreath.class, (short) 3).setCanSpawnOnWater(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(64.0D));
 		entries.add(new BetweenstoneCaveSpawnEntry(11, EntityBoulderSprite.class, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
 	}
 
@@ -96,7 +96,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		float fogStart = Math.min(10, super.getFogStart(farPlaneDistance, mode));
 
 		Entity viewEntity = Minecraft.getInstance().getRenderViewEntity();
-		if (viewEntity == null || viewEntity.posY <= WorldProviderBetweenlands.CAVE_START)
+		if (viewEntity == null || viewEntity.posY <= DimensionBetweenlands.CAVE_START)
 			return fogStart;
 
 		float fogEnd = super.getFogEnd(farPlaneDistance, mode);
@@ -110,7 +110,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		float fogEnd = super.getFogEnd(farPlaneDistance, mode);
 
 		Entity viewEntity = Minecraft.getInstance().getRenderViewEntity();
-		if (viewEntity == null || viewEntity.posY <= WorldProviderBetweenlands.CAVE_START)
+		if (viewEntity == null || viewEntity.posY <= DimensionBetweenlands.CAVE_START)
 			return fogEnd;
 
 		float fogStart = Math.min(10, super.getFogStart(farPlaneDistance, mode));
@@ -123,7 +123,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 	public int[] getFogRGB() {
 		Entity viewEntity = Minecraft.getInstance().getRenderViewEntity();
 
-		if (viewEntity == null || viewEntity.posY <= WorldProviderBetweenlands.CAVE_START)
+		if (viewEntity == null || viewEntity.posY <= DimensionBetweenlands.CAVE_START)
 			return super.getFogRGB();
 
 		int[] targetFogColor = super.getFogRGB().clone();

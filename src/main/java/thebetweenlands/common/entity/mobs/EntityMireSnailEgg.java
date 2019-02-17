@@ -17,6 +17,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.food.ItemMireSnailEgg;
 import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.util.AnimationMathHelper;
 
@@ -26,22 +27,22 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 	AnimationMathHelper pulse = new AnimationMathHelper();
 
 	public EntityMireSnailEgg(World world) {
-		super(world);
+		super(EntityRegistry.MIRE_SNAIL_EGG, world);
 		setSize(0.45F, 0.35F);
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		dataManager.register(HATCH_TICKS, 0);
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 		if (getGrowingAge() < 0 || getGrowingAge() > 0) // stupid hack to stop entity scaling
 			setGrowingAge(0);
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			if (getHatchTime() < 12000)
 				setHatchTime(getHatchTime() + 1);
 			if (getHatchTime() >= 12000) //this should be 12000 = 1/2 day (10 mins)
@@ -55,7 +56,7 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 		EntityMireSnail snail = new EntityMireSnail(world);
 		snail.setPosition(posX, posY, posZ);
 		if (snail.getCanSpawnHere()) {
-			setDead();
+			remove();
 			hatchParticlePacketTarget();
 			snail.setHasMated(true);
 			world.spawnEntity(snail);
@@ -77,10 +78,10 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
 	}
 
 	public int getHatchTime() {
@@ -92,14 +93,14 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 		nbt.setInt("hatchTicks", getHatchTime());
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 		if(nbt.contains("hatchTicks")) {
 			setHatchTime(nbt.getInt("hatchTicks"));
 		}
@@ -112,12 +113,12 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			ItemStack egg = ItemMireSnailEgg.fromEgg(this);
 			if(!player.inventory.addItemStackToInventory(egg)) {
 				player.entityDropItem(egg, 0);
 			}
-			this.setDead();
+			this.remove();
 		}
 		return true;
 	}

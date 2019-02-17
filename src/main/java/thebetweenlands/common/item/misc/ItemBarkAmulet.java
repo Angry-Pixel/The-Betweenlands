@@ -70,7 +70,7 @@ public class ItemBarkAmulet extends Item implements IEquippable {
 
 	@Override
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
-		if(!entity.world.isRemote && entity instanceof EntityLivingBase && entity.ticksExisted % 20 == 0) {
+		if(!entity.world.isRemote() && entity instanceof EntityLivingBase && entity.ticksExisted % 20 == 0) {
 			stack.damageItem(1, (EntityLivingBase) entity);
 		}
 	}

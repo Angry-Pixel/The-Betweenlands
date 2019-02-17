@@ -32,7 +32,7 @@ public class ItemMob extends Item {
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
-        if (world.isRemote) return EnumActionResult.FAIL;
+        if (world.isRemote()) return EnumActionResult.FAIL;
         EntityLiving entity = null;
         switch (name) {
             case "firefly":
@@ -40,7 +40,7 @@ public class ItemMob extends Item {
                 break;
             case "gecko":
                 entity = new EntityGecko(world);
-                entity.setHealth(stack.hasTagCompound() && stack.getTag().contains("Health") ? stack.getTag().getFloat("Health"): (float) entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue());
+                entity.setHealth(stack.hasTagCompound() && stack.getTag().contains("Health") ? stack.getTag().getFloat("Health"): (float) entity.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getValue());
                 break;
         }
         if (entity != null) {

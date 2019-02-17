@@ -19,7 +19,7 @@ import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 public class BlockThorns extends BlockVineBL {
 	@Override
 	public void onEntityCollision(IBlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-		if (!worldIn.isRemote && !(entityIn instanceof IEntityBL) && entityIn instanceof EntityLivingBase && !ElixirEffectRegistry.EFFECT_TOUGHSKIN.isActive((EntityLivingBase)entityIn)) {
+		if (!worldIn.isRemote() && !(entityIn instanceof IEntityBL) && entityIn instanceof EntityLivingBase && !ElixirEffectRegistry.EFFECT_TOUGHSKIN.isActive((EntityLivingBase)entityIn)) {
 			entityIn.attackEntityFrom(DamageSource.CACTUS, 1.0F);
 		}
 	}

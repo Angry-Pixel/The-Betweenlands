@@ -92,9 +92,9 @@ public class BlockLeavesSpiritTree extends BlockLeavesBetweenlands {
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
 		if(this.type == Type.TOP) {
-			super.updateTick(worldIn, pos, state, rand);
+			super.tick(state, worldIn, pos, rand);
 		}
 		this.checkAndDropBlock(worldIn, pos, state);
 	}

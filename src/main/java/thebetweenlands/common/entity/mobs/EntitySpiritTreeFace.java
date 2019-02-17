@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -48,15 +49,15 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 	protected int glowTicks = 0;
 	protected int glowDuration = 0;
 
-	public EntitySpiritTreeFace(World world) {
-		super(world);
+	public EntitySpiritTreeFace(EntityType<?> type, World world) {
+		super(type, world);
 		this.experienceValue = 4;
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(48.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(48.0D);
 	}
 
 	public void setGlowTicks(int duration) {
@@ -111,8 +112,8 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 			}
 		} else if(id == EVENT_HURT_SOUND || id == EVENT_DEATH) {
 			SoundType soundType = SoundType.WOOD;
-			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 1.3F, soundType.getPitch() * 0.8F, false);
-			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 4.0F, soundType.getPitch() * 0.5F, false);
+			this.world.play(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 1.3F, soundType.getPitch() * 0.8F, false);
+			this.world.play(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 4.0F, soundType.getPitch() * 0.5F, false);
 		}
 	}
 
@@ -187,19 +188,19 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 	@Override
 	public void onKillCommand() {
-		this.setDead();
+		this.remove();
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		this.prevGlowTicks = this.glowTicks;
 		if(this.glowTicks > 0) {
 			this.glowTicks--;
 		}
 
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			float moveProgress = this.getMovementProgress(1);
 			if(moveProgress < 0.6F) {
 				this.emergeSound = false;
@@ -216,7 +217,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 			this.updateSpitAttack();
 		}
 
-		if(this.isMoving() && this.world.isRemote) {
+		if(this.isMoving() && this.world.isRemote()) {
 			if(this.ticksExisted % 3 == 0) {
 				EnumFacing facing = this.getFacing();
 				double px = this.posX + facing.getXOffset() * this.width / 2;
@@ -346,7 +347,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 		@Override
 		public boolean shouldExecute() {
-			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && !this.isTargetVisibleAndInRange();
+			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive() && !this.isTargetVisibleAndInRange();
 		}
 
 		@Override
@@ -412,7 +413,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && !this.isTargetVisibleAndInRange();
+			return !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive() && !this.isTargetVisibleAndInRange();
 		}
 	}
 
@@ -450,7 +451,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 		@Override
 		public boolean shouldExecute() {
-			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
+			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
 		}
 
 		@Override

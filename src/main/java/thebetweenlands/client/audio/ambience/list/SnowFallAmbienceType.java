@@ -7,7 +7,7 @@ import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceType;
 import thebetweenlands.common.registries.AmbienceRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.event.EventSnowfall;
 
 public class SnowFallAmbienceType extends AmbienceType {
@@ -39,12 +39,12 @@ public class SnowFallAmbienceType extends AmbienceType {
 	@Override
 	public float getVolume() {
 		float volume;
-		if(this.getPlayer().posY <= WorldProviderBetweenlands.CAVE_START) {
+		if(this.getPlayer().posY <= DimensionBetweenlands.CAVE_START) {
 			//Fade out when going down
-			volume = MathHelper.clamp(1.0F - (float)(WorldProviderBetweenlands.CAVE_START - this.getPlayer().posY) / 15.0F, 0.0F, 1.0F);
-		} else if(this.getPlayer().posY >= WorldProviderBetweenlands.LAYER_HEIGHT + 10) {
+			volume = MathHelper.clamp(1.0F - (float)(DimensionBetweenlands.CAVE_START - this.getPlayer().posY) / 15.0F, 0.0F, 1.0F);
+		} else if(this.getPlayer().posY >= DimensionBetweenlands.LAYER_HEIGHT + 10) {
 			//Fade out when going up
-			volume = MathHelper.clamp(1.0F - (float)(this.getPlayer().posY - (WorldProviderBetweenlands.LAYER_HEIGHT + 10)) / 40.0F, 0.0F, 1.0F);
+			volume = MathHelper.clamp(1.0F - (float)(this.getPlayer().posY - (DimensionBetweenlands.LAYER_HEIGHT + 10)) / 40.0F, 0.0F, 1.0F);
 		} else {
 			volume = 1.0F;
 		}

@@ -18,7 +18,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 	public final Predicate<Entity> entitySelector = new Predicate<Entity>() {
 		@Override
 		public boolean apply(Entity entity) {
-			return entity.isEntityAlive() && entity.getDistance(EntityAIApproachItem.this.entity) <= EntityAIApproachItem.this.targetDistance
+			return entity.isAlive() && entity.getDistance(EntityAIApproachItem.this.entity) <= EntityAIApproachItem.this.targetDistance
 					&& entity instanceof EntityItem && 
 					(EntityAIApproachItem.this.ignoreDamage ? ((EntityItem)entity).getItem().getItem() == EntityAIApproachItem.this.targetItem.getItem() : ((EntityItem)entity).getItem().isItemEqual(EntityAIApproachItem.this.targetItem));
 		}
@@ -60,7 +60,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 			return false;
 		}
 		this.targetEntity = list.get(0);
-		if(this.targetEntity == null || !this.targetEntity.isEntityAlive()) {
+		if(this.targetEntity == null || !this.targetEntity.isAlive()) {
 			return false;
 		}
 		this.entityPathEntity = this.entityPathNavigate.getPathToXYZ(this.targetEntity.posX, this.targetEntity.posY, this.targetEntity.posZ);
@@ -72,7 +72,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		boolean cont = (this.entityPathEntity != null && this.targetEntity != null && this.targetEntity.isEntityAlive()) || !this.entityPathNavigate.noPath();
+		boolean cont = (this.entityPathEntity != null && this.targetEntity != null && this.targetEntity.isAlive()) || !this.entityPathNavigate.noPath();
 		return cont;
 	}
 
@@ -100,7 +100,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 			if(this.entity.getDistance(this.targetEntity) < 2.0D) {
 				this.distractionTicks++;
 				if(this.distractionTicks > this.getDistractionTime()) {
-					this.targetEntity.setDead();
+					this.targetEntity.remove();
 					this.onPickup();
 					this.resetTask();
 				}

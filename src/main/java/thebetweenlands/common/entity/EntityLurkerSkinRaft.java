@@ -62,7 +62,7 @@ public class EntityLurkerSkinRaft extends EntityBoat {
 
 	@Override
 	protected void removePassenger(Entity passenger) {
-		if(!this.world.isRemote && this.getPassengers().indexOf(passenger) == 0) {
+		if(!this.world.isRemote() && this.getPassengers().indexOf(passenger) == 0) {
 			ItemStack drop = this.getBoatDrop();
 
 			boolean itemReturned = false;
@@ -82,7 +82,7 @@ public class EntityLurkerSkinRaft extends EntityBoat {
 			}
 
 			if(itemReturned) {
-				this.setDead();
+				this.remove();
 			}
 		}
 
@@ -90,9 +90,9 @@ public class EntityLurkerSkinRaft extends EntityBoat {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.updating = true;
-		super.onUpdate();
+		super.tick();
 		this.updating = false;
 	}
 
@@ -111,7 +111,7 @@ public class EntityLurkerSkinRaft extends EntityBoat {
 
 		if(this.isPassenger(passenger)) {
 			float offset = -0.2F;
-			float yOffset = (float)((this.isDead ? 0.01D : this.getMountedYOffset()) + passenger.getYOffset());
+			float yOffset = (float)((!this.isAlive() ? 0.01D : this.getMountedYOffset()) + passenger.getYOffset());
 
 			if(this.getPassengers().size() > 1) {
 				int i = this.getPassengers().indexOf(passenger);
@@ -133,8 +133,8 @@ public class EntityLurkerSkinRaft extends EntityBoat {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	protected void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 
 		if(!this.shield.isEmpty()) {
 			NBTTagCompound shieldNbt = new NBTTagCompound();
@@ -144,8 +144,8 @@ public class EntityLurkerSkinRaft extends EntityBoat {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	protected void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 
 		this.shield = ItemStack.EMPTY;
 		if(nbt.contains("shield", Constants.NBT.TAG_COMPOUND)) {

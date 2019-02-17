@@ -37,12 +37,12 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		return this.attacker.getAttackTarget() != null && this.attacker.getAttackTarget().isEntityAlive();
+		return this.attacker.getAttackTarget() != null && this.attacker.getAttackTarget().isAlive();
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return this.attacker.getAttackTarget() != null && this.attacker.getAttackTarget().isEntityAlive();
+		return this.attacker.getAttackTarget() != null && this.attacker.getAttackTarget().isAlive();
 	}
 
 	@Override
@@ -80,8 +80,8 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 	 */
 	public static boolean useStandardAttack(EntityLiving attacker, Entity target) {
 		float attackDamage;
-		if(attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE) != null) {
-			attackDamage = (float)attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+		if(attacker.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE) != null) {
+			attackDamage = (float)attacker.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
 		} else {
 			attackDamage = 2.0F;
 		}

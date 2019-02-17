@@ -29,7 +29,7 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 	public void tick() {
 		this.prevTicks = this.ticks;
 		++this.ticks;
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			if(this.recoverTicks > 0) {
 				--this.recoverTicks;
 				if(this.recoverTicks == 0) {

@@ -21,8 +21,8 @@ public class ItemPyradFlame extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick( World world, EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
-		if(!world.isRemote) {
-			world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F + 1.0F);
+		if(!world.isRemote()) {
+			world.play((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F + 1.0F);
 
 			Vec3d look = player.getLookVec();
 

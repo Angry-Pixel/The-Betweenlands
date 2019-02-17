@@ -57,7 +57,7 @@ public class ItemSpiritTreeFaceMask extends ItemBLArmor {
 			EntityHanging entity = this.factory.create(world, offsetPos, facing);
 
 			if (entity != null && entity.onValidSurface()) {
-				if (!world.isRemote) {
+				if (!world.isRemote()) {
 					entity.playPlaceSound();
 					world.spawnEntity(entity);
 				}

@@ -298,7 +298,7 @@ public class CircleGemHelper {
 					World world = attackedEntity.world;
 					int dim = 0;
 					if (world instanceof WorldServer) {
-						dim = ((WorldServer)world).provider.getDimension();
+						dim = ((WorldServer)world).dimension.getDimension();
 					}
 					if(attackerProcd) {
 						for(CircleGemType gem : attackerProcdGems) {
@@ -310,8 +310,8 @@ public class CircleGemHelper {
 							TheBetweenlands.networkWrapper.sendToAllAround(new MessageGemProc(attackedEntity, false, gem), new TargetPoint(dim, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 64.0D));
 						}
 					}
-					source.world.playSound(null, source.posX, source.posY, source.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
-					source.world.playSound(null, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
+					source.world.play(null, source.posX, source.posY, source.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
+					source.world.play(null, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
 				}
 			}
 		}

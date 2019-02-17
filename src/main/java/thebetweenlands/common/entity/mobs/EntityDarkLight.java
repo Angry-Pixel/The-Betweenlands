@@ -35,7 +35,7 @@ public class EntityDarkLight extends EntityFlyingMob implements IEntityBL {
 	public static final DamageSource DAMAGE_WITHER = (new DamageSource("wither")).setDamageBypassesArmor();
 
 	public EntityDarkLight(World world) {
-		super(world);
+		super(/*TODO 1.13 Dark light mob type*/ null, world);
 		this.setSize(1.75F, 1.75F);
 		this.noClip = true;
 		this.ignoreFrustumCheck = true;
@@ -134,12 +134,12 @@ public class EntityDarkLight extends EntityFlyingMob implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.065D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
-		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.065D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
+		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 	}
 
 	@Override
@@ -153,10 +153,10 @@ public class EntityDarkLight extends EntityFlyingMob implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
-		if (this.getEntityWorld().isRemote) {
+		if (this.getEntityWorld().isRemote()) {
 			this.prevRotation = this.rotation;
 			this.rotation += ROTATION_SPEED;
 			if (this.rotation >= 360.0F) {
@@ -165,8 +165,8 @@ public class EntityDarkLight extends EntityFlyingMob implements IEntityBL {
 			}
 		}
 
-		if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			this.setDead();
+		if (!this.world.isRemote() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			this.remove();
 		}
 
 		if (this.isInWater()) {
@@ -177,13 +177,13 @@ public class EntityDarkLight extends EntityFlyingMob implements IEntityBL {
 			}
 		}
 
-		if (!this.world.isRemote && this.isEntityAlive()) {
+		if (!this.world.isRemote() && this.isAlive()) {
 			List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox().grow(0.5D, 0.5D, 0.5D));
 			for (EntityLivingBase target : targets) {
 				if (!(target instanceof EntityDarkLight) && !(target instanceof IEntityBL)) {
 					target.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 0));
 					if (target.ticksExisted % 10 == 0)
-						target.attackEntityFrom(DAMAGE_WITHER, (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+						target.attackEntityFrom(DAMAGE_WITHER, (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
 				}
 			}
 		}
@@ -219,7 +219,7 @@ public class EntityDarkLight extends EntityFlyingMob implements IEntityBL {
 		++this.deathTime;
 
 		if (this.deathTime >= 80) {
-			if (!this.world.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot"))) {
+			if (!this.world.isRemote() && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot"))) {
 				int i = this.getExperiencePoints(this.attackingPlayer);
 				i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
 				while (i > 0) {
@@ -229,7 +229,7 @@ public class EntityDarkLight extends EntityFlyingMob implements IEntityBL {
 				}
 			}
 
-			this.setDead();
+			this.remove();
 		}
 	}
 

@@ -58,7 +58,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 		if(this.isShaderSupported()) {
 			boolean canUseInWorld = true;
 			if(BetweenlandsConfig.RENDERING.dimensionShaderOnly) {
-				canUseInWorld = Minecraft.getInstance().world != null && Minecraft.getInstance().world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
+				canUseInWorld = Minecraft.getInstance().world != null && Minecraft.getInstance().world.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
 			}
 			return this.shaderError == null && OpenGlHelper.isFramebufferEnabled() && BetweenlandsConfig.RENDERING.useShader && canUseInWorld;
 		} else {
@@ -322,7 +322,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 		if(mc.player != null && mc.player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null) && mc.player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null).isInPortal()) {
 			return true;
 		}
-		return mc.world != null && mc.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
+		return mc.world != null && mc.world.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
 	}
 
 	@Override

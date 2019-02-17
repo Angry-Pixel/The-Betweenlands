@@ -51,7 +51,7 @@ public final class WorldEventHandler {
 	public static void onChunkUnload(ChunkEvent.Unload event) {
 		IWorldStorage cap = WorldStorageImpl.getCapability(event.getWorld());
 		if(cap != null) {
-			if(event.getWorld().isRemote) {
+			if(event.getWorld().isRemote()) {
 				//Unload immediately on client side
 				cap.unloadChunk(event.getChunk());
 			} else {
@@ -117,7 +117,7 @@ public final class WorldEventHandler {
 
 	@SubscribeEvent
 	public static void onWorldTick(WorldTickEvent event) {
-		if(event.phase == Phase.END && !event.world.isRemote) {
+		if(event.phase == Phase.END && !event.world.isRemote()) {
 			tickWorld(event.world);
 		}
 	}

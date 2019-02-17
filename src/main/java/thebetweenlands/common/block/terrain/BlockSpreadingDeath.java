@@ -43,7 +43,7 @@ public abstract class BlockSpreadingDeath extends Block {
 	public void onReplaced(IBlockState state, World worldIn, BlockPos pos, IBlockState newState, boolean isMoving) {
 		super.onReplaced(state, worldIn, pos, newState, isMoving);
 
-		if(!worldIn.isRemote) {
+		if(!worldIn.isRemote()) {
 			this.checkAndRevertBiome(worldIn, pos);
 		}
 	}
@@ -58,8 +58,8 @@ public abstract class BlockSpreadingDeath extends Block {
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		if(!world.isRemote) {
+	public void tick(IBlockState state, World world, BlockPos pos, Random rand) {
+		if(!world.isRemote()) {
 			if(!state.get(INACTIVE) && this.shouldSpread(world, pos, state)) {
 				boolean spread = false;
 				for(int i = 0; i < 16; ++i) {

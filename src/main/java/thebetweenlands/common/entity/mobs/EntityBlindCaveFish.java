@@ -27,9 +27,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.util.AnimationMathHelper;
 
 public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
@@ -37,7 +38,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
     private AnimationMathHelper animation = new AnimationMathHelper();
 
     public EntityBlindCaveFish(World world) {
-        super(world);
+        super(EntityRegistry.BLIND_CAVE_FISH, world);
         setSize(0.3F, 0.2F);
         setAir(80);
         this.moveHelper = new EntityBlindCaveFish.BlindFishMoveHelper(this);
@@ -55,10 +56,10 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
-        getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(3.0D);
+    protected void registerAttributes() {
+        super.registerAttributes();
+        getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
+        getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(3.0D);
     }
 
     @Override
@@ -95,7 +96,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 
     @Override
     public boolean getCanSpawnHere() {
-        return this.posY <= WorldProviderBetweenlands.CAVE_WATER_HEIGHT && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
+        return this.posY <= DimensionBetweenlands.CAVE_WATER_HEIGHT && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
     }
 
     @Override
@@ -130,10 +131,10 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
     }
 
     @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
 
-        if (this.world.isRemote) {
+        if (this.world.isRemote()) {
             if (isInWater()) {
                 moveProgress = animation.swing(1.2F, 0.4F, false);
             } else {
@@ -150,18 +151,18 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
                 onGround = false;
                 isAirBorne = true;
                 if (world.getTotalWorldTime() % 5 == 0)
-                    world.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
+                    world.play((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
                 this.damageEntity(DamageSource.DROWN, 0.5F);
             }
         }
     }
 
     @Override
-    public void onEntityUpdate() {
+    public void baseTick() {
         int air = getAir();
-        super.onEntityUpdate();
+        super.baseTick();
 
-        if (isEntityAlive() && !isInWater()) {
+        if (isAlive() && !isInWater()) {
             --air;
             setAir(air);
 
@@ -203,7 +204,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
                 float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
                 fish.rotationYaw = limitAngle(fish.rotationYaw, f, 90.0F);
                 fish.renderYawOffset = fish.rotationYaw;
-                float f1 = (float) (speed * fish.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+                float f1 = (float) (speed * fish.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue());
                 fish.setAIMoveSpeed(fish.getAIMoveSpeed() + (f1 - fish.getAIMoveSpeed()) * 0.125F);
                 double d4 = Math.sin((double) (fish.ticksExisted + fish.getEntityId()) * 0.5D) * 0.05D;
                 double d5 = Math.cos((double) (fish.rotationYaw * 0.017453292F));

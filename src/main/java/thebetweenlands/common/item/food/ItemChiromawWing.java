@@ -34,7 +34,7 @@ public class ItemChiromawWing extends ItemBLFood {
 	protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
 		super.onFoodEaten(stack, world, player);
 
-		if (!world.isRemote && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
+		if (!world.isRemote() && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 			IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 			if (FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK) {
 				cap.increaseFoodHatred(this, FoodSickness.SICK.maxHatred, FoodSickness.SICK.maxHatred);

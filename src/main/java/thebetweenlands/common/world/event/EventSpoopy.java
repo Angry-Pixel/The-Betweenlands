@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ModelRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 public class EventSpoopy extends SeasonalEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "spook");
@@ -74,7 +74,7 @@ public class EventSpoopy extends SeasonalEnvironmentEvent {
 	public void update(World world) {
 		super.update(world);
 
-		if(world.isRemote) {
+		if(world.isRemote()) {
 			if(this.isActive()) {
 				if(this.skyTransparency < 1.0F) {
 					this.setSkyTransparency(this.skyTransparency + 0.003F);
@@ -97,8 +97,8 @@ public class EventSpoopy extends SeasonalEnvironmentEvent {
 	@OnlyIn(Dist.CLIENT)
 	public static void onClientTick(ClientTickEvent event) {
 		World world = Minecraft.getInstance().world;
-		if(world != null && world.provider instanceof WorldProviderBetweenlands) {
-			updateModelActiveState(((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().spoopy.isActive());
+		if(world != null && world.dimension instanceof DimensionBetweenlands) {
+			updateModelActiveState(((DimensionBetweenlands)world.dimension).getEnvironmentEventRegistry().spoopy.isActive());
 		} else {
 			updateModelActiveState(false);
 		}

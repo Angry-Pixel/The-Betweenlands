@@ -10,7 +10,7 @@ public class ElixirHealing extends ElixirEffect {
 
 	@Override
 	protected void performEffect(EntityLivingBase entity, int strength) {
-		if(!entity.world.isRemote && entity.getHealth() < entity.getMaxHealth()) {
+		if(!entity.world.isRemote() && entity.getHealth() < entity.getMaxHealth()) {
 			entity.heal(1.0F);
 		}
 	}

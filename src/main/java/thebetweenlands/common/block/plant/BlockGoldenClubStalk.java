@@ -78,7 +78,7 @@ public class BlockGoldenClubStalk extends BlockStackablePlantUnderwater {
 	public void decayPlant(World world, BlockPos pos, IBlockState state, Random rand) {
 		super.decayPlant(world, pos, state, rand);
 		if(world.getBlockState(pos.up()).getBlock() == BlockRegistry.GOLDEN_CLUB_FLOWER) {
-			world.setBlockToAir(pos.up());
+			world.removeBlock(pos.up());
 		}
 	}
 	

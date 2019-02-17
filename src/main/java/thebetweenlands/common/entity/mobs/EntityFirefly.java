@@ -17,6 +17,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
 import thebetweenlands.common.entity.ai.EntityAISeekRainShelter;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
@@ -31,7 +32,7 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	protected int prevGlowTicks = 0;
 
 	public EntityFirefly(World world) {
-		super(world);
+		super(EntityRegistry.FIREFLY, world);
 		this.setSize(0.6F, 0.6F);
 		this.ignoreFrustumCheck = true;
 		this.moveHelper = new FlightMoveHelper(this);
@@ -53,18 +54,18 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.035D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.035D);
 		this.getAttributeMap().registerAttribute(GLOW_STRENGTH_ATTRIB);
 		this.getAttributeMap().registerAttribute(GLOW_START_CHANCE);
 		this.getAttributeMap().registerAttribute(GLOW_STOP_CHANCE);
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		this.dataManager.register(GLOW_STRENGTH, (float)GLOW_STRENGTH_ATTRIB.getDefaultValue());
 	}
 
@@ -79,19 +80,19 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		if(getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP))
 			getMoveHelper().setMoveTo(this.posX, this.posY + 1, this.posZ, 0.32D);
 
 		this.prevGlowTicks = this.glowTicks;
 
-		if(this.isEntityAlive()) {
-			if(!this.world.isRemote) {
-				if(!this.isGlowActive() && this.rand.nextDouble() < this.getEntityAttribute(GLOW_START_CHANCE).getAttributeValue()) {
-					this.setGlowStrength(this.getEntityAttribute(GLOW_STRENGTH_ATTRIB).getAttributeValue());
-				} else if(this.isGlowActive() && this.rand.nextDouble() < this.getEntityAttribute(GLOW_STOP_CHANCE).getAttributeValue()) {
+		if(this.isAlive()) {
+			if(!this.world.isRemote()) {
+				if(!this.isGlowActive() && this.rand.nextDouble() < this.getAttribute(GLOW_START_CHANCE).getValue()) {
+					this.setGlowStrength(this.getAttribute(GLOW_STRENGTH_ATTRIB).getValue());
+				} else if(this.isGlowActive() && this.rand.nextDouble() < this.getAttribute(GLOW_STOP_CHANCE).getValue()) {
 					this.setGlowStrength(0);
 				}
 			}
@@ -114,19 +115,19 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	
 	@Override
 	public boolean getCanSpawnHere() {
-		float brightness = this.world.provider.getSunBrightnessFactor(1);
+		float brightness = this.world.dimension.getSunBrightnessFactor(1);
 		return (brightness <= 0.3F || BetweenlandsWorldStorage.forWorld(this.world).getEnvironmentEventRegistry().bloodSky.isActive()) && super.getCanSpawnHere();
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 		nbt.setDouble("glowStrength", this.getGlowStrength());
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 		this.setGlowStrength(nbt.getDouble("glowStrength"));
 	}
 

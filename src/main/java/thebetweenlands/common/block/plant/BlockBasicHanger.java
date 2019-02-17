@@ -27,7 +27,7 @@ public class BlockBasicHanger extends BlockBush {
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+    public void tick(IBlockState state, World world, BlockPos pos, Random rand) {
         if (world.isAirBlock(pos.down()) && canBlockStay(world, pos.down(), state) && rand.nextInt(8) == 0)
             world.setBlockState(pos.down(), this.getDefaultState());
     }

@@ -29,7 +29,7 @@ public class ParticleAltarCrafting extends Particle {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		TileEntity tileEntity = this.world.getTileEntity(this.target.getPos());
 		double craftingProgress = 0;
 		if(tileEntity instanceof TileEntityDruidAltar) {

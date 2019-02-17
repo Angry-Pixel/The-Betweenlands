@@ -40,7 +40,7 @@ public class ItemMarshRunnerBoots extends ItemRubberBoots {
 			player.motionZ *= 1.0D / MAX_WALK_TICKS * walkTicksLeft;
 		}
 
-		if(!player.world.isRemote) {
+		if(!player.world.isRemote()) {
 			boolean playerOnGround = player.onGround && !player.isInWater() && blockBelowPlayer.getBlock() instanceof BlockSwampWater == false;
 			if(walkTicksLeft == 0 || playerOnGround) {
 				nbt.setInt("walkTicksLeft", MAX_WALK_TICKS);

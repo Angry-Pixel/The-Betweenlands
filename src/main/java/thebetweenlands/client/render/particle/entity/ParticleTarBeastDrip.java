@@ -33,7 +33,7 @@ public class ParticleTarBeastDrip extends Particle {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		prevPosX = posX;
 		prevPosY = posY;
 		prevPosZ = posZ;

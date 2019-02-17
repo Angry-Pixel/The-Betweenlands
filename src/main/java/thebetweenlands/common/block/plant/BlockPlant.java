@@ -129,7 +129,7 @@ public class BlockPlant extends BlockBush implements IShearable, ISickleHarvesta
 
 	@Override
 	public void decayPlant(World world, BlockPos pos, IBlockState state, Random rand) {
-		world.setBlockToAir(pos);
+		world.removeBlock(pos);
 	}
 
 	@Override

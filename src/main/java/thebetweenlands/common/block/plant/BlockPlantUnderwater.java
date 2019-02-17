@@ -82,7 +82,7 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	 * @return
 	 */
 	protected boolean removePlant(World world, BlockPos pos, @Nullable EntityPlayer player, boolean canHarvest) {
-		return world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getDefaultState(), world.isRemote ? 11 : 3);
+		return world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getDefaultState(), world.isRemote() ? 11 : 3);
 	}
 
 	@Override
@@ -149,8 +149,8 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(worldIn, pos, state, rand);
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+		super.tick(state, worldIn, pos, rand);
 		this.checkAndDropBlock(worldIn, pos, state);
 	}
 

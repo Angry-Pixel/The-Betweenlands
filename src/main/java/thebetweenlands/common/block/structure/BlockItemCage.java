@@ -57,11 +57,11 @@ public class BlockItemCage extends BlockContainer {
 
 	@Override
 	public void onReplaced(IBlockState state, World world, BlockPos pos, IBlockState newState, boolean isMoving) {
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			TileEntityItemCage swordStone = (TileEntityItemCage) world.getTileEntity(pos);
 			if (swordStone != null && swordStone.isSwordEnergyBelow() != null) {
 				EntitySwordEnergy energyBall = (EntitySwordEnergy) swordStone.isSwordEnergyBelow();
-				world.playSound(null, pos, SoundRegistry.FORTRESS_PUZZLE_CAGE_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.play(null, pos, SoundRegistry.FORTRESS_PUZZLE_CAGE_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				switch (swordStone.type) {
 					case 0:
 						energyBall.setSwordPart1Pos(energyBall.getSwordPart1Pos() - 0.05F);

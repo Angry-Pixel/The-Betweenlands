@@ -67,7 +67,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 				List<Aspect> aspects = aspectContainer.getAspects();
 				if(!aspects.isEmpty()) {
 					Aspect aspect = aspects.get(0);
-					if(!world.isRemote) {
+					if(!world.isRemote()) {
 						this.setAspect(world, pos, aspect);
 						if(!player.isCreative()) {
 							player.setHeldItem(hand, stack.getItem().getContainerItem(stack));
@@ -81,8 +81,8 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(worldIn, pos, state, rand);
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+		super.tick(state, worldIn, pos, rand);
 		Aspect aspect = this.getAspect(worldIn, pos);
 		if(aspect != null && worldIn.rand.nextInt(Math.max((int)(DECAY_CHANCE - aspect.amount / 1000.0F * 15.0F), 2)) == 0) {
 			MutableBlockPos checkPos = new MutableBlockPos();
@@ -110,7 +110,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 
 	@Override
 	protected boolean removePlant(World world, BlockPos pos, EntityPlayer player, boolean canHarvest) {
-		return world.setBlockState(pos, BlockRegistry.RUBBER_TREE_PLANK_FENCE.getDefaultState(), world.isRemote ? 11 : 3);
+		return world.setBlockState(pos, BlockRegistry.RUBBER_TREE_PLANK_FENCE.getDefaultState(), world.isRemote() ? 11 : 3);
 	}
 
 	@Override

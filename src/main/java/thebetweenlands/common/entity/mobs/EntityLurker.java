@@ -42,6 +42,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.MathUtils;
@@ -84,7 +85,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     private PathNavigateSwimmer pathNavigatorWater;
     
     public EntityLurker(World world) {
-        super(world);
+        super(EntityRegistry.LURKER, world);
         
         this.experienceValue = 5;
 
@@ -123,24 +124,24 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         dataManager.register(IS_LEAPING, false);
         dataManager.register(SHOULD_MOUTH_BE_OPEN, false);
         dataManager.register(MOUTH_MOVE_SPEED, 1.0f);
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
+    protected void registerAttributes() {
+        super.registerAttributes();
         
         getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
         
-        getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.5);
-        getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16);
-        getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
-        getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
-        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(55);
+        getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.5);
+        getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16);
+        getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
+        getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+        getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(55);
     }
     
     @Override
@@ -163,16 +164,16 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     }
 
     @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+    public void livingTick() {
+        super.livingTick();
         if (isInWater()) {
-            if (!getEntityWorld().isRemote) {
+            if (!getEntityWorld().isRemote()) {
                 if (motionY < 0 && isLeaping()) {
                     setIsLeaping(false);
                 }
             }
         } else {
-            if (getEntityWorld().isRemote) {
+            if (getEntityWorld().isRemote()) {
                 if (prevInWater && isLeaping()) {
                     breachWater();
                 }
@@ -188,7 +189,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
         }
         if (isLeaping()) {
             leapRiseTime++;
-            if (!getEntityWorld().isRemote) {
+            if (!getEntityWorld().isRemote()) {
                 rotationYaw += 10F;
             }
         } else {
@@ -283,10 +284,10 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     }
     
     @Override
-    public void onUpdate() {
+    public void tick() {
         this.updateMovementAndPathfinding();
 
-        if (!this.getEntityWorld().isRemote) {
+        if (!this.getEntityWorld().isRemote()) {
             Entity target = this.getAttackTarget();
             if (target instanceof EntityDragonFly && attackTime <= 0 && target.getDistance(this) < 3.2D && target.getBoundingBox().maxY >= getEntityBoundingBox().minY && target.getBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
                 setShouldMouthBeOpen(true);
@@ -326,7 +327,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
         prevMouthOpenTicks = mouthOpenTicks;
         prevInWater = inWater;
 
-        super.onUpdate();
+        super.tick();
 
         if (shouldMouthBeOpen()) {
             if (mouthOpenTicks < MOUTH_OPEN_TICKS) {
@@ -348,7 +349,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
             if (ticksUntilBiteDamage == -1) {
                 setShouldMouthBeOpen(false);
                 if (entityBeingBit != null) {
-                    if (!entityBeingBit.isDead) {
+                    if (entityBeingBit.isAlive()) {
                     	EntityAIAttackOnCollide.useStandardAttack(this, entityBeingBit);
                         if (getRidingEntity() == entityBeingBit) {
                             getRidingEntity().attackEntityFrom(DamageSource.causeMobDamage(this), ((EntityLivingBase) entityBeingBit).getMaxHealth());
@@ -526,14 +527,14 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound tagCompound) {
-        super.writeEntityToNBT(tagCompound);
+    public void writeAdditional(NBTTagCompound tagCompound) {
+        super.writeAdditional(tagCompound);
         tagCompound.setShort("Anger", (short) anger);
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound tagCompound) {
-        super.readEntityFromNBT(tagCompound);
+    public void readAdditional(NBTTagCompound tagCompound) {
+        super.readAdditional(tagCompound);
         if (tagCompound.contains("Anger")) {
             anger = tagCompound.getShort("Anger");
         }
@@ -565,7 +566,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
                 float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
                 lurker.rotationYaw = limitAngle(lurker.rotationYaw, f, 90.0F);
                 lurker.renderYawOffset = lurker.rotationYaw;
-                float f1 = (float) (speed * lurker.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+                float f1 = (float) (speed * lurker.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue());
                 lurker.setAIMoveSpeed(lurker.getAIMoveSpeed() + (f1 - lurker.getAIMoveSpeed()) * 0.125F);
                 double d4 = Math.sin((double) (lurker.ticksExisted + lurker.getEntityId()) * 0.5D) * 0.05D;
                 double d5 = Math.cos((double) (lurker.rotationYaw * 0.017453292F));

@@ -26,7 +26,7 @@ public class TileEntityItemCage extends TileEntity implements ITickable {
 	
 	@Override
 	public void tick() {
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			if (isBlockOccupied() != null)
 				if (!canBreak)
 					setCanBeBroken(true);

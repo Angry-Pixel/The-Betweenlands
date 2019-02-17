@@ -20,7 +20,7 @@ public class TestItem extends Item {
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!worldIn.isRemote) {
+		if (!worldIn.isRemote()) {
 			IBlockState state = worldIn.getBlockState(pos);
 			if (state.getBlock() instanceof BlockGenericDugSoil) {
 				TileEntityDugSoil te = (TileEntityDugSoil) worldIn.getTileEntity(pos);

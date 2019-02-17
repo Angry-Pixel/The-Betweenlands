@@ -89,7 +89,7 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		if(!worldIn.isRemote) {
+		if(!worldIn.isRemote()) {
 			state = state.with(COLOR, EnumDyeColor.values()[worldIn.rand.nextInt(EnumDyeColor.values().length)]);
 			worldIn.setBlockState(pos, state, 3);
 			TileEntityPresent tile = getTileEntity(worldIn, pos);
@@ -153,9 +153,9 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
 		if(rand.nextInt(20) == 0 && worldIn.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 32.0D, false) == null) {
-			worldIn.setBlockToAir(pos);
+			worldIn.removeBlock(pos);
 		}
 	}
 }

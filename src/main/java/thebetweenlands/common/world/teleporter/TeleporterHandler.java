@@ -14,16 +14,16 @@ public final class TeleporterHandler {
 	private TeleporterHandler() {}
 	
 	public static void transferToDim(Entity entity, World world) {
-		INSTANCE.transferEntity(entity, world.provider.getDimension(), true, true);
+		INSTANCE.transferEntity(entity, world.dimension.getDimension(), true, true);
 	}
 	
 	public static void transferToDim(Entity entity, World world, boolean makePortal, boolean setSpawn) {
-		INSTANCE.transferEntity(entity, world.provider.getDimension(), makePortal, setSpawn);
+		INSTANCE.transferEntity(entity, world.dimension.getDimension(), makePortal, setSpawn);
 	}
 
 	private void transferEntity(Entity entity, int dimensionId, boolean makePortal, boolean setSpawn) {
 		World world = entity.world;
-		if (!world.isRemote && !entity.isDead && !(entity instanceof FakePlayer) && world instanceof WorldServer) {
+		if (!world.isRemote() && entity.isAlive() && !(entity instanceof FakePlayer) && world instanceof WorldServer) {
 			if (!net.minecraftforge.common.ForgeHooks.onTravelToDimension(entity, dimensionId)) {
 				return;
 			}
@@ -35,15 +35,15 @@ public final class TeleporterHandler {
 			if (entity instanceof EntityPlayerMP) {
 				EntityPlayerMP player = (EntityPlayerMP) entity;
 				player.invulnerableDimensionChange = true;
-				player.server.getPlayerList().transferPlayerToDimension(player, dimensionId, new TeleporterBetweenlands(world.provider.getDimension(), aabb, toWorld, makePortal, setSpawn));
+				player.server.getPlayerList().transferPlayerToDimension(player, dimensionId, new TeleporterBetweenlands(world.dimension.getDimension(), aabb, toWorld, makePortal, setSpawn));
 				player.timeUntilPortal = 0;
 			} else {
 				entity.setDropItemsWhenDead(false);
 				world.removeEntityDangerously(entity);
 				entity.dimension = dimensionId;
-				entity.isDead = false;
+				entity.removed = false;
 				WorldServer oldWorld = server.getWorld(entity.dimension);
-				server.getPlayerList().transferEntityToWorld(entity, dimensionId, oldWorld, toWorld, new TeleporterBetweenlands(world.provider.getDimension(), aabb, toWorld, makePortal, setSpawn));
+				server.getPlayerList().transferEntityToWorld(entity, dimensionId, oldWorld, toWorld, new TeleporterBetweenlands(world.dimension.getDimension(), aabb, toWorld, makePortal, setSpawn));
 			}
 		}
 	}

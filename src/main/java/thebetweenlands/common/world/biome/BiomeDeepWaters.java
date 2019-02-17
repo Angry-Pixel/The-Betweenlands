@@ -15,7 +15,7 @@ import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.BetweenstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SporelingSpawnEntry;
@@ -31,7 +31,7 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 	public BiomeDeepWaters() {
 		super(new ResourceLocation(ModInfo.ID, "deep_waters"),
 				new BiomeProperties("Deep Waters")
-				.setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 12)
+				.setBaseHeight(DimensionBetweenlands.LAYER_HEIGHT - 12)
 				.setHeightVariation(5.0F)
 				.setWaterColor(0x1b3944)
 				.setTemperature(0.8F)

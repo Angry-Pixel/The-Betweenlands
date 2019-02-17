@@ -83,7 +83,7 @@ public class BlockGeckoCage extends BlockContainer {
 
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			TileEntity te = world.getTileEntity(pos);
 			if (te instanceof TileEntityGeckoCage) {
 				TileEntityGeckoCage tile = (TileEntityGeckoCage) te;
@@ -127,7 +127,7 @@ public class BlockGeckoCage extends BlockContainer {
 				Item heldItem = heldItemStack.getItem();
 				if(heldItem == ItemRegistry.GECKO) {
 					if(!tile.hasGecko()) {
-						if(!world.isRemote) {
+						if(!world.isRemote()) {
 							String name = "";
 							if (!(heldItemStack.getDisplayName().equals(TranslationHelper.translateToLocal(heldItemStack.getTranslationKey()))) && heldItemStack.hasDisplayName())
 									name = heldItemStack.getDisplayName();
@@ -141,7 +141,7 @@ public class BlockGeckoCage extends BlockContainer {
 					return false;
 				}
 				if(heldItem == ItemRegistry.SAP_SPIT && tile.hasGecko() && tile.getGeckoUsages() < 12) {
-					if(!world.isRemote) {
+					if(!world.isRemote()) {
 						tile.setGeckoUsages(12);
 						if(!player.abilities.isCreativeMode)
 							heldItemStack.shrink(1);
@@ -152,7 +152,7 @@ public class BlockGeckoCage extends BlockContainer {
 				} else if(tile.getAspectType() == null) {
 					if(tile.hasGecko()) {
 						if(DiscoveryContainer.hasDiscoveryProvider(player)) {
-							if(!world.isRemote) {
+							if(!world.isRemote()) {
 								AspectManager manager = AspectManager.get(world);
 								AspectItem aspectItem = AspectManager.getAspectItem(heldItemStack);
 								List<Aspect> aspects = manager.getStaticAspects(aspectItem);
@@ -197,19 +197,19 @@ public class BlockGeckoCage extends BlockContainer {
 							}
 						} else {
 							//no herblore book
-							if(!world.isRemote) 
+							if(!world.isRemote()) 
 								player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.book.none"), true);
 							return false;
 						}
 					} else {
 						//no gecko
-						if(!world.isRemote) 
+						if(!world.isRemote()) 
 							player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.gecko.none"), true);
 						return false;
 					}
 				} else {
 					//recovering
-					if(!world.isRemote) 
+					if(!world.isRemote()) 
 						player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.gecko.recovering"), true);
 					return false;
 				}

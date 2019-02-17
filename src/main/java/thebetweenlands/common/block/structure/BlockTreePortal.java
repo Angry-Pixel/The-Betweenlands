@@ -193,7 +193,7 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 			return true;
 		else {
 			world.playEvent(null, 2001, pos, Block.getIdFromBlock(BlockRegistry.TREE_PORTAL));
-			world.setBlockToAir(pos);
+			world.removeBlock(pos);
 		}
 		return true;
 	}
@@ -249,7 +249,7 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 					if (entityIn.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
 						IPortalCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
 						cap.setInPortal(true);
-					} else if (!worldIn.isRemote && worldIn instanceof WorldServer) {
+					} else if (!worldIn.isRemote() && worldIn instanceof WorldServer) {
 
 						WorldServer otherDim = ((WorldServer) worldIn).getMinecraftServer().getWorld(targetDim);
 						if(otherDim != null) {
@@ -305,7 +305,7 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 		}
 
 		if (rand.nextInt(20) == 0) {
-			worldIn.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL, SoundCategory.BLOCKS, 0.3F, rand.nextFloat() * 0.4F + 0.8F, false);
+			worldIn.play(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL, SoundCategory.BLOCKS, 0.3F, rand.nextFloat() * 0.4F + 0.8F, false);
 		}
 	}
 

@@ -30,10 +30,10 @@ public class ParticleXPPieces extends ParticleBreakingBL {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.xpColor++;
 
-		super.onUpdate();
+		super.tick();
 	}
 
 	public static final class Factory extends ParticleFactory<Factory, ParticleXPPieces> {

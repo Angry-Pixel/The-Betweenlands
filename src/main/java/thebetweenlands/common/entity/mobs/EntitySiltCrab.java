@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -31,7 +32,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	private boolean canAttack = false;
 
 	public EntitySiltCrab(World world) {
-		super(world);
+		super(EntityRegistry.SILT_CRAB, world);
 		this.setSize(0.8F, 0.6F);
 		this.stepHeight = 2;
 	}
@@ -53,12 +54,12 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(8.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(8.0D);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
+		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 	}
 
 	@Override
@@ -68,14 +69,14 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
-		this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
+		this.play(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
-		if (!this.world.isRemote) {
+		if (!this.world.isRemote()) {
 			if (this.aggroCooldown == 200 && !this.canAttack) {
 				this.tasks.removeTask(this.aiRunAway);
 				this.tasks.addTask(0, this.aiAttack);
@@ -102,7 +103,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
-		if (!this.world.isRemote && getDistance(player) <= 1.5F && this.canAttack) {
+		if (!this.world.isRemote() && getDistance(player) <= 1.5F && this.canAttack) {
 			this.aggroCooldown = 0;
 		}
 	}
@@ -111,7 +112,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	public boolean attackEntityAsMob(Entity entityIn) {
 		boolean attacked;
 		if(attacked = super.attackEntityAsMob(entityIn)) {
-			this.playSound(SoundRegistry.CRAB_SNIP, 1, 1);
+			this.play(SoundRegistry.CRAB_SNIP, 1, 1);
 		}
 		return attacked;
 	}

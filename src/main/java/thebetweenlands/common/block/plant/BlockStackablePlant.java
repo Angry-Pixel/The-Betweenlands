@@ -121,7 +121,7 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	 * @return
 	 */
 	protected boolean removePlant(World world, BlockPos pos, @Nullable EntityPlayer player, boolean canHarvest) {
-		return world.setBlockState(pos, Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
+		return world.setBlockState(pos, Blocks.AIR.getDefaultState(), world.isRemote() ? 11 : 3);
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
 		this.checkAndDropBlock(worldIn, pos, state);
 
 		if(this.canGrow(worldIn, pos, state)) {

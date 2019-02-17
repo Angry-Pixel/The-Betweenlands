@@ -9,17 +9,17 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.provider.BiomeProvider;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.storage.WorldInfo;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.layer.GenLayerBetweenlands;
 
 public class BiomeProviderBetweenlands extends BiomeProvider {
 	public static final List<Biome> ALLOWED_SPAWN_BIOMES = Lists.newArrayList(/*TODO: Add biomes suitable for spawning*/);
 
-	protected final WorldProviderBetweenlands provider;
+	protected final DimensionBetweenlands provider;
 	
-	public BiomeProviderBetweenlands(WorldProviderBetweenlands provider, WorldInfo worldInfo) {
+	public BiomeProviderBetweenlands(DimensionBetweenlands provider, WorldInfo worldInfo) {
 		super(worldInfo);
-		this.provider = provider;
+		this.dimension = provider;
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class BiomeProviderBetweenlands extends BiomeProvider {
 	
 	@Override
 	public float getTemperatureAtHeight(float biomeTemp, int y) {
-		if(this.provider.getEnvironmentEventRegistry().winter.isActive()) {
+		if(this.dimension.getEnvironmentEventRegistry().winter.isActive()) {
 			return 0.1F;
 		}
         return biomeTemp;

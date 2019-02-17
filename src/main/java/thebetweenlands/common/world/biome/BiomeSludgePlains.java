@@ -19,7 +19,7 @@ import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.BetweenstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
@@ -35,7 +35,7 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 	public BiomeSludgePlains() {
 		super(new ResourceLocation(ModInfo.ID, "sludge_plains"), 
 				new BiomeProperties("Sludge Plains")
-				.setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 5)
+				.setBaseHeight(DimensionBetweenlands.LAYER_HEIGHT - 5)
 				.setHeightVariation(3F)
 				.setWaterColor(0x3A2F0B)
 				.setTemperature(0.8F)
@@ -43,7 +43,7 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 		
 		this.setWeight(5);
 		this.getBiomeGenerator().setTopBlockState(BlockRegistry.MUD.getDefaultState()).setFillerBlockHeight(1).setDecorator(new BiomeDecoratorSludgePlains(this))
-		.addFeature(new FlatLandFeature(WorldProviderBetweenlands.LAYER_HEIGHT, 5))
+		.addFeature(new FlatLandFeature(DimensionBetweenlands.LAYER_HEIGHT, 5))
 		.addFeature(new PatchFeature(0.03125D * 5.75D, 0.03125D * 5.75D, BlockRegistry.SLUDGY_DIRT.getDefaultState()))
 		.addFeature(new PatchFeature(0.74D, 0.74D, BlockRegistry.SWAMP_DIRT.getDefaultState()))
 		.addFeature(new PatchFeature(0.65D, 0.65D, BlockRegistry.MUD.getDefaultState(), 1.0D / 1.35D, 1.72D))

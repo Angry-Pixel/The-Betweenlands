@@ -33,7 +33,7 @@ import thebetweenlands.common.item.armor.ItemMarshRunnerBoots;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistryOld.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistryOld.IStateMappedBlock;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBlock, ITintedBlock, ICustomItemBlock {
@@ -300,7 +300,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(IBlockState state, World world, BlockPos pos, Random rand) {
 		int quantaRemaining = quantaPerBlock - state.get(LEVEL);
 
 		//Replenishing source
@@ -342,7 +342,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 					quantaRemaining = expQuanta;
 
 					if (expQuanta <= 0) {
-						world.setBlockToAir(pos);
+						world.removeBlock(pos);
 					} else {
 						world.setBlockState(pos, state.with(LEVEL, quantaPerBlock - expQuanta), 2);
 						world.scheduleUpdate(pos, this, tickRate);
@@ -439,13 +439,13 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		g /= 9;
 		b /= 9;
 		float depth = 0;
-		if (pos.getY() > WorldProviderBetweenlands.CAVE_START) {
+		if (pos.getY() > DimensionBetweenlands.CAVE_START) {
 			depth = 1;
 		} else {
-			if (pos.getY() < WorldProviderBetweenlands.CAVE_WATER_HEIGHT) {
+			if (pos.getY() < DimensionBetweenlands.CAVE_WATER_HEIGHT) {
 				depth = 0;
 			} else {
-				depth = (pos.getY() - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) / (float) (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
+				depth = (pos.getY() - DimensionBetweenlands.CAVE_WATER_HEIGHT) / (float) (DimensionBetweenlands.CAVE_START - DimensionBetweenlands.CAVE_WATER_HEIGHT);
 			}
 		}
 		r = (int) (r * depth + DEEP_COLOR_R * (1 - depth) + 0.5F);

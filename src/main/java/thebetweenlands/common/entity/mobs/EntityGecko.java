@@ -37,6 +37,7 @@ import thebetweenlands.common.entity.ai.gecko.EntityAIAvoidEntityGecko;
 import thebetweenlands.common.entity.ai.gecko.EntityAIGeckoHideFromRain;
 import thebetweenlands.common.network.clientbound.MessageWeedwoodBushRustle;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -55,7 +56,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	private int timeHiding;
 
 	public EntityGecko(World worldObj) {
-		super(worldObj);
+		super(EntityRegistry.GECKO, worldObj);
 		this.setPathPriority(PathNodeType.WATER, 0.0F);
 		this.setSize(0.75F, 0.35F);
 	}
@@ -79,16 +80,16 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	}
 	
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		this.dataManager.register(HIDING, false);
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
 	}
 
 	public void setHidingBush(BlockPos pos) {
@@ -106,7 +107,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 
 	public void startHiding() {
 		this.setHiding(true);
-		this.playSound(SoundRegistry.GECKO_HIDE, 0.5F, rand.nextFloat() * 0.3F + 0.9F);
+		this.play(SoundRegistry.GECKO_HIDE, 0.5F, rand.nextFloat() * 0.3F + 0.9F);
 		this.sendRustleEffect(1.0F);
 		this.setPosition(this.hidingBush.getX() + 0.5, this.hidingBush.getY(), this.hidingBush.getZ() + 0.5);
 		this.timeHiding = 0;
@@ -151,9 +152,9 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
-		if (!world.isRemote) {
+	public void tick() {
+		super.tick();
+		if (!world.isRemote()) {
 			if (isHiding()) {
 				if (hasValidHiding()) {
 					timeHiding++;
@@ -178,7 +179,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 		if(!stack.isEmpty() && stack.getItem() == ItemRegistry.SAP_SPIT && this.getHealth() < this.getMaxHealth()) {
-			if(!this.world.isRemote) {
+			if(!this.world.isRemote()) {
 				this.heal(this.getMaxHealth());
 			} else {
 				this.spawnHeartParticles();
@@ -220,8 +221,8 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
-		super.writeEntityToNBT(compound);
+	public void writeAdditional(NBTTagCompound compound) {
+		super.writeAdditional(compound);
 		compound.setBoolean("isHiding", isHiding());
 		if (isHiding()) {
 			compound.setInt("hidingBushX", hidingBush.getX());
@@ -231,8 +232,8 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
-		super.readEntityFromNBT(compound);
+	public void readAdditional(NBTTagCompound compound) {
+		super.readAdditional(compound);
 		if(compound.contains("isHiding")) {
 			setHiding(compound.getBoolean("isHiding"));
 			if (isHiding()) {

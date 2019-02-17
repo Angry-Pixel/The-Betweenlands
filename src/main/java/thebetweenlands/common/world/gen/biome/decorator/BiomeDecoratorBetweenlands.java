@@ -13,7 +13,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.feature.OreGens;
 
@@ -94,15 +94,15 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
      * Generates the default ores
      */
     protected void generateOres() {
-		this.generateOre(22, 12, OreGens.SULFUR, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
-		this.generateOre(6, 12, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT + 40, WorldProviderBetweenlands.CAVE_START - 5);
-		this.generateOre(5, 12, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
-		this.generateOre(4.5F, 12, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 40);
-		this.generateOre(4, 12, OreGens.SWAMP_DIRT, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(0.2F, 12, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(1, 12, OreGens.VALONITE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
-		this.generateOre(3, 12, OreGens.SCABYST, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
-		this.generateOre(70, 2, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
+		this.generateOre(22, 12, OreGens.SULFUR, DimensionBetweenlands.PITSTONE_HEIGHT, 128);
+		this.generateOre(6, 12, OreGens.SYRMORITE, DimensionBetweenlands.PITSTONE_HEIGHT + 40, DimensionBetweenlands.CAVE_START - 5);
+		this.generateOre(5, 12, OreGens.BONE_ORE, DimensionBetweenlands.PITSTONE_HEIGHT, 128);
+		this.generateOre(4.5F, 12, OreGens.OCTINE, DimensionBetweenlands.PITSTONE_HEIGHT, DimensionBetweenlands.CAVE_START - 40);
+		this.generateOre(4, 12, OreGens.SWAMP_DIRT, DimensionBetweenlands.PITSTONE_HEIGHT, DimensionBetweenlands.CAVE_START - 15);
+		this.generateOre(0.2F, 12, OreGens.LIMESTONE, DimensionBetweenlands.PITSTONE_HEIGHT, DimensionBetweenlands.CAVE_START - 15);
+		this.generateOre(1, 12, OreGens.VALONITE, 0, DimensionBetweenlands.PITSTONE_HEIGHT);
+		this.generateOre(3, 12, OreGens.SCABYST, 0, DimensionBetweenlands.PITSTONE_HEIGHT);
+		this.generateOre(70, 2, OreGens.LIFE_GEM, 0, DimensionBetweenlands.CAVE_WATER_HEIGHT);
 
         Random rand = this.getRand();
         World world = this.getWorld();

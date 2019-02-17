@@ -98,7 +98,7 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		if(!worldIn.isRemote) {
+		if(!worldIn.isRemote()) {
 			Random random = new Random();
 			setRandomMob(worldIn, pos, random);
 		}

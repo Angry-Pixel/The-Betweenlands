@@ -21,7 +21,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
+import thebetweenlands.common.entity.mobs.EntityDreadfulPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 
 public class EntitySludgeBall extends EntityThrowable {
@@ -59,13 +59,13 @@ public class EntitySludgeBall extends EntityThrowable {
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 		this.posX = this.lastTickPosX;
 		this.posY = this.lastTickPosY;
 		this.posZ = this.lastTickPosZ;
@@ -77,7 +77,7 @@ public class EntitySludgeBall extends EntityThrowable {
 		double prevY = this.posY;
 		double prevZ = this.posZ;
 		move(MoverType.SELF,this.motionX, this.motionY, this.motionZ);
-		if(!this.getEntityWorld().isRemote && prevX == this.posX && prevY == this.posY && prevZ == this.posZ) {
+		if(!this.getEntityWorld().isRemote() && prevX == this.posX && prevY == this.posY && prevZ == this.posZ) {
 			this.explode();
 		}
 		this.motionX = prevMotionX;
@@ -94,7 +94,7 @@ public class EntitySludgeBall extends EntityThrowable {
 				state.addCollisionBoxToList(this.world, collision.getBlockPos(), this.getBoundingBox().offset(this.motionX, this.motionY, this.motionZ), aabbs, this, true);
 				if(!aabbs.isEmpty()) {
 					if(Math.abs(this.motionY) <= 0.001) {
-						if(this.getEntityWorld().isRemote)
+						if(this.getEntityWorld().isRemote())
 							this.motionX = this.motionY = this.motionZ = 0.0D;
 						else 
 							explode();
@@ -104,12 +104,12 @@ public class EntitySludgeBall extends EntityThrowable {
 						this.velocityChanged = true;
 						this.bounces++;
 						if (this.bounces >= 3) {
-							if(this.getEntityWorld().isRemote)
+							if(this.getEntityWorld().isRemote())
 								this.motionX = this.motionY = this.motionZ = 0.0D;
 							else 
 								explode();
 						} else {
-							getEntityWorld().playSound(null, getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.9f);
+							getEntityWorld().play(null, getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.9f);
 							spawnBounceParticles(8);
 						}
 					} else if (collision.sideHit.getAxis() == Axis.Z) {
@@ -117,7 +117,7 @@ public class EntitySludgeBall extends EntityThrowable {
 						this.velocityChanged = true;
 						this.bounces++;
 						if(this.bounces >= 3) {
-							if(this.getEntityWorld().isRemote)
+							if(this.getEntityWorld().isRemote())
 								this.motionX = this.motionY = this.motionZ = 0.0D;
 							else 
 								explode();
@@ -127,7 +127,7 @@ public class EntitySludgeBall extends EntityThrowable {
 						this.velocityChanged = true;
 						this.bounces++;
 						if(this.bounces >= 3) {
-							if(this.getEntityWorld().isRemote)
+							if(this.getEntityWorld().isRemote())
 								this.motionX = this.motionY = this.motionZ = 0.0D;
 							else 
 								explode();
@@ -137,7 +137,7 @@ public class EntitySludgeBall extends EntityThrowable {
 			}
 		}
 		if (collision.typeOfHit == RayTraceResult.Type.ENTITY) {
-			if(!(collision.entityHit instanceof EntityPeatMummy) && !(collision.entityHit instanceof EntityDreadfulMummy)) {
+			if(!(collision.entityHit instanceof EntityPeatMummy) && !(collision.entityHit instanceof EntityDreadfulPeatMummy)) {
 				if(this.attackEntity(collision.entityHit)) {
 					explode();
 				} else {
@@ -151,19 +151,19 @@ public class EntitySludgeBall extends EntityThrowable {
 	}
 
 	private void explode() {
-		if(!this.getEntityWorld().isRemote) {
+		if(!this.getEntityWorld().isRemote()) {
 			float radius = 3;
 			AxisAlignedBB region = new AxisAlignedBB(this.posX - radius, this.posY - radius, this.posZ - radius, this.posX + radius, this.posY + radius, this.posZ + radius);
 			List<Entity> entities = this.getEntityWorld().getEntitiesWithinAABBExcludingEntity(this, region);
 			double radiusSq = radius * radius;
 			for (Entity entity : entities) {
-				if (entity instanceof EntityLivingBase && !(entity instanceof EntityPeatMummy) && !(entity instanceof EntityDreadfulMummy) && getDistanceSq(entity) < radiusSq) {
+				if (entity instanceof EntityLivingBase && !(entity instanceof EntityPeatMummy) && !(entity instanceof EntityDreadfulPeatMummy) && getDistanceSq(entity) < radiusSq) {
 					this.attackEntity(entity);
 				}
 			}
-			getEntityWorld().playSound(null, getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.5f);
-			getEntityWorld().playSound(null, getPosition(), SoundEvents.ENTITY_SMALL_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.5f);
-			setDead();
+			getEntityWorld().play(null, getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.5f);
+			getEntityWorld().play(null, getPosition(), SoundEvents.ENTITY_SMALL_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.5f);
+			remove();
 		} else {
 			//TODO Better explosion particle effects
 			spawnBounceParticles(20);
@@ -178,7 +178,7 @@ public class EntitySludgeBall extends EntityThrowable {
 		} else {
 			attacked = entity.attackEntityFrom(new EntityDamageSource("entity", this).setProjectile(), 8);
 		}
-		if(!this.world.isRemote && attacked) {
+		if(!this.world.isRemote() && attacked) {
 			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 80, 3));
 		}
 		return attacked;
@@ -196,13 +196,13 @@ public class EntitySludgeBall extends EntityThrowable {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
+	public void writeAdditional(NBTTagCompound nbt) {
 		nbt.setInt("bounces", this.bounces);
 		nbt.setString("ownerUUID", this.ownerUUID);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
+	public void readAdditional(NBTTagCompound nbt) {
 		this.bounces = nbt.getInt("bounces");
 		this.ownerUUID = nbt.getString("ownerUUID");
 	}

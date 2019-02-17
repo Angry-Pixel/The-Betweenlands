@@ -14,10 +14,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 	public EntityTamedSpiritTreeFace(World world) {
-		super(world);
+		super(EntityRegistry.TAMED_SPIRIT_TREE_FACE, world);
 	}
 
 	@Override
@@ -29,7 +30,7 @@ public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 		this.tasks.addTask(2, new AISpit(this, 5.0F, 30, 70) {
 			@Override
 			protected float getSpitDamage() {
-				return (float) EntityTamedSpiritTreeFace.this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+				return (float) EntityTamedSpiritTreeFace.this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
 			}
 		});
 		this.tasks.addTask(3, new AIWander(this, 8, 0.33D, 200));
@@ -50,11 +51,11 @@ public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
 	}
 
 	@Override
@@ -66,7 +67,7 @@ public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 	protected void fixUnsuitablePosition(int violatedChecks) {
 		if((violatedChecks & AnchorChecks.ANCHOR_BLOCKS) != 0 || (violatedChecks & AnchorChecks.FACE_BLOCKS) != 0) {
 			this.onDeath(DamageSource.OUT_OF_WORLD);
-			this.setDead();
+			this.remove();
 		} else {
 			super.fixUnsuitablePosition(violatedChecks);
 		}

@@ -3,7 +3,7 @@ package thebetweenlands.common.world.biome.spawning.spawners;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 public class BetweenstoneCaveSpawnEntry extends CaveSpawnEntry {
 	public BetweenstoneCaveSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
@@ -16,8 +16,8 @@ public class BetweenstoneCaveSpawnEntry extends CaveSpawnEntry {
 
 	@Override
 	public void update(World world, BlockPos pos) {
-		int surfaceHeight = WorldProviderBetweenlands.CAVE_START;
-		int pitstoneHeight = WorldProviderBetweenlands.PITSTONE_HEIGHT;
+		int surfaceHeight = DimensionBetweenlands.CAVE_START;
+		int pitstoneHeight = DimensionBetweenlands.PITSTONE_HEIGHT;
 		short spawnWeight;
 		if(pos.getY() > pitstoneHeight && pos.getY() < surfaceHeight) {
 			spawnWeight = this.getBaseWeight();

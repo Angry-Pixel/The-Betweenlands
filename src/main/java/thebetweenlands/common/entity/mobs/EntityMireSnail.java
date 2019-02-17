@@ -23,6 +23,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -32,7 +33,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	int shagCount = 0;
 
 	public EntityMireSnail(World world) {
-		super(world);
+		super(EntityRegistry.MIRE_SNAIL, world);
 		setPathPriority(PathNodeType.WATER, -1.0f);
 		setSize(0.75F, 0.6F);
 		stepHeight = 0.0F;
@@ -51,17 +52,17 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		dataManager.register(HAS_MATED, false);
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.18D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.18D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 	}
 
 	@Override
@@ -134,14 +135,14 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 		nbt.setBoolean("hasMated", hasMated());
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 		if(nbt.contains("hasMated")) {
 			setHasMated(nbt.getBoolean("hasMated"));
 		}

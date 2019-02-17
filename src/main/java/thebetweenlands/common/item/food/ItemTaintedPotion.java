@@ -61,7 +61,7 @@ public class ItemTaintedPotion extends Item {
 			stack.shrink(1);
 		}
 
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			player.addPotionEffect(new PotionEffect(ElixirEffectRegistry.EFFECT_DECAY.getPotionEffect(), 180, 3));
 			player.addPotionEffect(new PotionEffect(MobEffects.POISON, 120, 2));
 		}

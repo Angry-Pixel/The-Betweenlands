@@ -27,7 +27,7 @@ public class WorldGenSmallPortal extends WorldGenerator {
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
 		for(BlockPos p : BlockPos.getAllInBox(pos.getX() - 2, pos.getY() + 1, pos.getZ() - 2, pos.getX() + 2, pos.getY() + 4, pos.getZ() + 2)) {
-			world.setBlockToAir(p);
+			world.removeBlock(p);
 		}
 		
 		for(BlockPos p : BlockPos.getAllInBox(pos.getX() - 2, pos.getY(), pos.getZ() - 2, pos.getX() + 2, pos.getY(), pos.getZ() + 2)) {

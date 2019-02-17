@@ -43,6 +43,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -66,7 +67,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	protected static final DataParameter<Boolean> SHEDDING_STATE_DW = EntityDataManager.createKey(EntityTarBeast.class, DataSerializers.BOOLEAN);
 
 	public EntityTarBeast(World world) {
-		super(world);
+		super(EntityRegistry.TAR_BEAST, world);
 		setSize(1.25F, 2F);
 	}
 
@@ -90,20 +91,20 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		this.getDataManager().register(SUCKING_STATE_DW, (byte) 0);
 		this.getDataManager().register(SHEDDING_STATE_DW, false);
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.22D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(25.0D);
-		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.22D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(25.0D);
+		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 
 		this.getAttributeMap().registerAttribute(SHED_COOLDOWN_ATTRIB);
 		this.getAttributeMap().registerAttribute(SHED_SPEED_ATTRIB);
@@ -157,7 +158,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
+	public void writeAdditional(NBTTagCompound nbt) {
 		nbt.setInt("shedCooldown", this.shedCooldown);
 		nbt.setInt("sheddingProgress", this.sheddingProgress);
 		nbt.setBoolean("sheddingState", this.isShedding());
@@ -167,11 +168,11 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		nbt.setInt("suckingProgress", this.suckingProgress);
 		nbt.setByte("suckingState", this.getDataManager().get(SUCKING_STATE_DW));
 
-		super.writeEntityToNBT(nbt);
+		super.writeAdditional(nbt);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
+	public void readAdditional(NBTTagCompound nbt) {
 		if(nbt.contains("shedCooldown")) {
 			this.shedCooldown = nbt.getInt("shedCooldown");
 		}
@@ -194,12 +195,12 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			this.getDataManager().set(SUCKING_STATE_DW, nbt.getByte("suckingState"));
 		}
 
-		super.readEntityFromNBT(nbt);
+		super.readAdditional(nbt);
 	}
 
 	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
-		this.playSound(SoundRegistry.TAR_BEAST_STEP, 1, 1);
+		this.play(SoundRegistry.TAR_BEAST_STEP, 1, 1);
 	}
 
 	@Override
@@ -208,10 +209,10 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
-		if (world.isRemote) {
+		if (world.isRemote()) {
 			if(ticksExisted % 10 == 0) {
 				renderParticles(world, posX, posY, posZ, rand);
 			}
@@ -246,7 +247,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			}
 		}
 
-		if(!world.isRemote) {
+		if(!world.isRemote()) {
 			if(this.isInsideOfMaterial(BLMaterialRegistry.TAR)) {
 				this.stepHeight = 2.0F;
 			} else {
@@ -264,9 +265,9 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				}
 
 				if(this.sheddingProgress > this.getSheddingSpeed()) {
-					this.playSound(SoundRegistry.TAR_BEAST_LIVING, 1F, (this.rand.nextFloat() * 0.2F + 1.0F) * 0.6F);
+					this.play(SoundRegistry.TAR_BEAST_LIVING, 1F, (this.rand.nextFloat() * 0.2F + 1.0F) * 0.6F);
 					for(int i = 0; i < 8; i++) {
-						this.playSound(SoundRegistry.TAR_BEAST_STEP, 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
+						this.play(SoundRegistry.TAR_BEAST_STEP, 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 					}
 					this.sheddingProgress = 0;
 					this.setShedding(false);
@@ -278,7 +279,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 								if(((EntityPlayer)e).isActiveItemStackBlocking()) continue;
 							}
 							double dst = e.getDistance(this);
-							float dmg = (float) (this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() / dst * 7.0F);
+							float dmg = (float) (this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() / dst * 7.0F);
 							e.attackEntityFrom(DamageSource.causeMobDamage(this), dmg);
 							e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, (int)(20 + (1.0F - dst / 6.0F) * 150), 1));
 						}
@@ -304,16 +305,16 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				if(this.isPreparing()) {
 					this.suckingPreparation++;
 
-					if(this.suckingPreparation > this.getEntityAttribute(SUCK_PREPARATION_SPEED_ATTRIB).getAttributeValue()) {
+					if(this.suckingPreparation > this.getAttribute(SUCK_PREPARATION_SPEED_ATTRIB).getValue()) {
 						this.suckingPreparation = 0;
 
 						this.setSucking(true);
 						this.suckingCooldown = this.getSuckingCooldown() + this.world.rand.nextInt(this.getSuckingCooldown() / 2);
-						this.playSound(SoundRegistry.TAR_BEAST_SUCK, 1F, 1F);
+						this.play(SoundRegistry.TAR_BEAST_SUCK, 1F, 1F);
 					}
 				}
 
-				if(this.suckingProgress > (int)this.getEntityAttribute(SUCK_LENGTH_ATTRIB).getAttributeValue()) {
+				if(this.suckingProgress > (int)this.getAttribute(SUCK_LENGTH_ATTRIB).getValue()) {
 					this.setSucking(false);
 					this.suckingProgress = 0;
 				}
@@ -349,10 +350,10 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 						e.motionZ += vec.z * 0.18F * mod;
 						e.velocityChanged = true;
 					}
-					getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.75D);
+					getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.75D);
 				} else {
 					this.suckingProgress = 0;
-					getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
+					getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 				}
 			}
 		}
@@ -407,15 +408,15 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	}
 
 	public int getSheddingCooldown() {
-		return (int)this.getEntityAttribute(SHED_COOLDOWN_ATTRIB).getAttributeValue();
+		return (int)this.getAttribute(SHED_COOLDOWN_ATTRIB).getValue();
 	}
 
 	public int getSheddingSpeed() {
-		return (int)this.getEntityAttribute(SHED_SPEED_ATTRIB).getAttributeValue();
+		return (int)this.getAttribute(SHED_SPEED_ATTRIB).getValue();
 	}
 
 	public int getSuckingCooldown() {
-		return (int)this.getEntityAttribute(SUCK_COOLDOWN_ATTRIB).getAttributeValue();
+		return (int)this.getAttribute(SUCK_COOLDOWN_ATTRIB).getValue();
 	}
 
 	public boolean isSucking() {

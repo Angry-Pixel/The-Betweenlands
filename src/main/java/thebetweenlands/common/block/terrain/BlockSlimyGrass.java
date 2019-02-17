@@ -27,8 +27,8 @@ public class BlockSlimyGrass extends Block
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        if( !world.isRemote ) {
+    public void tick(IBlockState state, World world, BlockPos pos, Random rand) {
+        if( !world.isRemote() ) {
             if( world.getLight(pos.up()) < 4 && world.getBlockLightOpacity(pos.up()) > 2 ) {
                 world.setBlockState(pos, BlockRegistry.SLIMY_DIRT.getDefaultState());
             } else if( world.getLight(pos.up()) >= 9 ) {

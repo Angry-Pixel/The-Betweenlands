@@ -105,7 +105,7 @@ public class ItemShimmerStone extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			double px = player.posX;
 			double py = player.posY + player.getEyeHeight();
 			double pz = player.posZ;
@@ -134,7 +134,7 @@ public class ItemShimmerStone extends Item {
 	}
 	
 	protected void triggerAdvancement(EntityPlayer player) {
-		if (player != null && !player.world.isRemote && player instanceof EntityPlayerMP && player.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+		if (player != null && !player.world.isRemote() && player instanceof EntityPlayerMP && player.world.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
             BlockPos pos = player.getPosition();
             List<EntityPeatMummy> mummies = player.world.getEntitiesWithinAABB(EntityPeatMummy.class, new AxisAlignedBB(pos, pos).grow(20));
             if (mummies.size() > 0)

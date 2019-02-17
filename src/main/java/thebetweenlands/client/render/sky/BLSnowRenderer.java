@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.IRenderHandler;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 public class BLSnowRenderer extends IRenderHandler {
 	public static final BLSnowRenderer INSTANCE = new BLSnowRenderer();
@@ -46,8 +46,8 @@ public class BLSnowRenderer extends IRenderHandler {
 
 	public void update(World world) {
 		this.prevSnowingStrength = this.snowingStrength;
-		if(world.provider instanceof WorldProviderBetweenlands) {
-			WorldProviderBetweenlands provider = (WorldProviderBetweenlands) world.provider;
+		if(world.dimension instanceof DimensionBetweenlands) {
+			DimensionBetweenlands provider = (DimensionBetweenlands) world.dimension;
 			this.snowingStrength = provider.getEnvironmentEventRegistry().snowfall.getSnowingStrength();
 		} else {
 			this.snowingStrength = 0;

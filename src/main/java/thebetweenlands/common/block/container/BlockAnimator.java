@@ -63,7 +63,7 @@ public class BlockAnimator extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
-		if (world.isRemote) {
+		if (world.isRemote()) {
 			return true;
 		}
 		if (world.getTileEntity(pos) instanceof TileEntityAnimator) {

@@ -29,7 +29,7 @@ import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.mobs.EntityGasCloud;
+import thebetweenlands.common.entity.mobs.EntityShallowbreath;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -613,7 +613,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	private void updateGasParticlesTexture(World world, float partialTicks) {
 		boolean hasCloud = false;
 		for (Entity entity : Minecraft.getInstance().world.loadedEntityList) {
-			if (entity instanceof EntityGasCloud) {
+			if (entity instanceof EntityShallowbreath) {
 				hasCloud = true;
 				break;
 			}

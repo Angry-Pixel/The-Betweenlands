@@ -66,7 +66,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 	@Override
 	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (world.isRemote) {
+		if (world.isRemote()) {
 			return true;
 		}
 		if (world.getTileEntity(pos) instanceof TileEntityPurifier) {
@@ -224,7 +224,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 	
 	@Override
 	public void fillWithRain(World world, BlockPos pos) {
-		if (world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.getTileEntity(pos) instanceof TileEntityPurifier) {
+		if (world.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.getTileEntity(pos) instanceof TileEntityPurifier) {
 			TileEntityPurifier tile = (TileEntityPurifier) world.getTileEntity(pos);
 			
 			if(tile != null) {

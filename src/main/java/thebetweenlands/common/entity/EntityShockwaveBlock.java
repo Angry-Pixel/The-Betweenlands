@@ -76,7 +76,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.world.profiler.startSection("entityBaseTick");
 
 		this.prevPosX = this.posX;
@@ -94,8 +94,8 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			} else {
 				this.motionY -= 0.05D;
 
-				if(!this.world.isRemote && (this.posY <= this.origin.getY() || this.onGround)) {
-					this.setDead();
+				if(!this.world.isRemote() && (this.posY <= this.origin.getY() || this.onGround)) {
+					this.remove();
 				}
 			}
 		} else {
@@ -103,7 +103,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 		}
 
 		if(this.posY < -64.0D) {
-			this.setDead();
+			this.remove();
 		}
 
 		if(this.posY + this.motionY <= this.origin.getY()) {
@@ -113,7 +113,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			this.move(MoverType.SELF, 0, this.motionY, 0);
 		}
 
-		if(this.motionY > 0.1D && !this.world.isRemote) {
+		if(this.motionY > 0.1D && !this.world.isRemote()) {
 			DamageSource damageSource;
 			Entity owner = getOwner();
 			if(owner != null) {
@@ -146,8 +146,8 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	}
 
 	@Override
-	public void setDead() {
-		super.setDead();
+	public void remove() {
+		super.remove();
 	}
 
 	@Override
@@ -179,7 +179,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 
 	@Override
 	public boolean canBeCollidedWith() {
-		return !this.isDead;
+		return this.isAlive();
 	}
 
 	@Override
@@ -209,12 +209,12 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	}
 
 	@Override
-	protected void entityInit() {
+	protected void registerData() {
 		this.getDataManager().register(OWNER_DW, "");
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound data) {
+	protected void readAdditional(NBTTagCompound data) {
 		this.block = Block.getBlockById(data.getInt("blockID"));
 		if(this.block == null)
 			this.block = Blocks.STONE;
@@ -227,7 +227,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound data) {
+	protected void writeAdditional(NBTTagCompound data) {
 		data.setInt("blockID", Block.getIdFromBlock(this.block));
 		data.setInt("blockMeta", this.blockMeta);
 		data.setInt("originX", this.origin.getX());

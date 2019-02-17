@@ -44,7 +44,7 @@ public class ItemRingOfRecruitment extends ItemRing {
 
 	@Override
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
-		if(!entity.world.isRemote && entity instanceof EntityPlayer) {
+		if(!entity.world.isRemote() && entity instanceof EntityPlayer) {
 			int tickRate = 80;
 
 			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {

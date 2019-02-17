@@ -32,6 +32,7 @@ import thebetweenlands.common.entity.ai.EntityAIDruidTeleport;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetDruid;
 import thebetweenlands.common.entity.ai.EntityAINearestAttackableTargetDruid;
 import thebetweenlands.common.network.clientbound.MessageDruidTeleportParticles;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.MathUtils;
@@ -57,7 +58,7 @@ public class EntityDarkDruid extends EntityMob {
     private int attackAnimationTime;
 
     public EntityDarkDruid(World world) {
-        super(world);
+        super(EntityRegistry.DARK_DRUID, world);
         ((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
         setSize(0.9F, 1.9F);
     }
@@ -81,25 +82,25 @@ public class EntityDarkDruid extends EntityMob {
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         dataManager.register(CASTING, false);
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
-        getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.45);
-        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
-        getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5);
-        getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16);
-        getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.5);
+    protected void registerAttributes() {
+        super.registerAttributes();
+        getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.45);
+        getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
+        getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5);
+        getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16);
+        getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.5);
     }
 
     @Override
-    public void onUpdate() {
-        super.onUpdate();
-        if (!world.isRemote) {
+    public void tick() {
+        super.tick();
+        if (!world.isRemote()) {
             if (getAttackTarget() != null) {
                 if (this.attackDelayCounter > 0 && !this.isCasting() && getAttackTarget().getDistance(this) < 10.0D) {
                     this.attackDelayCounter--;
@@ -109,21 +110,21 @@ public class EntityDarkDruid extends EntityMob {
                         if (attackCounter == 0) {
                             if (getAttackTarget().onGround) {
                                 attackCounter++;
-                                if (!world.isRemote) {
+                                if (!world.isRemote()) {
                                     tasks.removeTask(meleeAI);
                                 }
                             }
                         } else if (attackCounter < MAX_ATTACK_TIME) {
                             attackCounter++;
                             startCasting();
-                            if (!world.isRemote) {
+                            if (!world.isRemote()) {
                                 chargeSpell(getAttackTarget());
                             }
                         } else if (attackCounter >= MAX_ATTACK_TIME) {
                             this.attackDelayCounter = MIN_ATTACK_DELAY + this.rand.nextInt(MAX_ATTACK_DELAY - MIN_ATTACK_DELAY + 1) + 1;
                             attackCounter = 0;
                             stopCasting();
-                            if (!world.isRemote) {
+                            if (!world.isRemote()) {
                                 castSpell(getAttackTarget());
                                 tasks.addTask(2, meleeAI);
                             }
@@ -138,7 +139,7 @@ public class EntityDarkDruid extends EntityMob {
                 stopCasting();
             }
         }
-        if (world.isRemote) {
+        if (world.isRemote()) {
             prevRenderYawOffset = prevRotationYaw;
             renderYawOffset = rotationYaw;
             prevAttackAnimationTime = attackAnimationTime;
@@ -206,15 +207,15 @@ public class EntityDarkDruid extends EntityMob {
                 newDruid.attackDelayCounter = MIN_ATTACK_DELAY + this.rand.nextInt(MAX_ATTACK_DELAY - MIN_ATTACK_DELAY + 1) + 1;
                 if (world.getCollisionBoxes(newDruid, newDruid.getBoundingBox()).isEmpty() && !world.containsAnyLiquid(newDruid.getBoundingBox())) {
                     successful = true;
-                    setDead();
+                    remove();
                     world.spawnEntity(newDruid);
                     druidParticlePacketOrigin();
                     druidParticlePacketTarget(newDruid);
                     
-                    this.playSound(SoundRegistry.DRUID_TELEPORT, 1.0F, 1.0F);
-                    newDruid.playSound(SoundRegistry.DRUID_TELEPORT, 1.0F, 1.0F);
+                    this.play(SoundRegistry.DRUID_TELEPORT, 1.0F, 1.0F);
+                    newDruid.play(SoundRegistry.DRUID_TELEPORT, 1.0F, 1.0F);
                 } else
-                    newDruid.setDead();
+                    newDruid.remove();
             }
         }
 
@@ -228,7 +229,7 @@ public class EntityDarkDruid extends EntityMob {
     private void druidParticlePacketTarget(EntityDarkDruid newDruid) {
         World world = this.world;
         if (world instanceof WorldServer) {
-            int dim = ((WorldServer) world).provider.getDimension();
+            int dim = ((WorldServer) world).dimension.getDimension();
             TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidTeleportParticles(newDruid), new NetworkRegistry.TargetPoint(dim, newDruid.posX + 0.5D, newDruid.posY + 1.0D, newDruid.posZ + 0.5D, 64D));
         }
     }
@@ -236,7 +237,7 @@ public class EntityDarkDruid extends EntityMob {
     private void druidParticlePacketOrigin() {
         World world = this.world;
         if (world instanceof WorldServer) {
-            int dim = ((WorldServer) world).provider.getDimension();
+            int dim = ((WorldServer) world).dimension.getDimension();
             TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidTeleportParticles(this), new NetworkRegistry.TargetPoint(dim, this.posX + 0.5D, this.posY + 1.0D, this.posZ + 0.5D, 64D));
         }
     }
@@ -357,14 +358,14 @@ public class EntityDarkDruid extends EntityMob {
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound tagCompound) {
-        super.writeEntityToNBT(tagCompound);
+    public void writeAdditional(NBTTagCompound tagCompound) {
+        super.writeAdditional(tagCompound);
         tagCompound.setInt("Teleport", teleportCooldown);
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound tagCompound) {
-        super.readEntityFromNBT(tagCompound);
+    public void readAdditional(NBTTagCompound tagCompound) {
+        super.readAdditional(tagCompound);
         teleportCooldown = tagCompound.getInt("Teleport");
     }
 }

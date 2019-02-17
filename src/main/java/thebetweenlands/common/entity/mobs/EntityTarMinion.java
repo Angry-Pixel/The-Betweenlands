@@ -38,18 +38,19 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityTarminion extends EntityTameable implements IEntityBL {
+public class EntityTarMinion extends EntityTameable implements IEntityBL {
 	public static final IAttribute MAX_TICKS_ATTRIB = (new RangedAttribute(null, "bl.maxAliveTicks", 7200.0D, 0, Integer.MAX_VALUE)).setDescription("Maximum ticks until the Tar Minion despawns");
 
 	private int despawnTicks = 0;
 
 	protected boolean dropContentsWhenDead = true;
 	
-	public EntityTarminion(World world) {
-		super(world);
+	public EntityTarMinion(World world) {
+		super(EntityRegistry.TAR_MINION, world);
 		this.setSize(0.3F, 0.5F);
 		this.experienceValue = 0;
 		this.isImmuneToFire = true;
@@ -67,7 +68,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 		this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false) {
 			@Override
 			protected void setEntityAttackTarget(EntityCreature ally, EntityLivingBase target) {
-				if(target instanceof EntityTarminion == false) {
+				if(target instanceof EntityTarMinion == false) {
 					super.setEntityAttackTarget(ally, target);
 				}
 			}
@@ -76,12 +77,12 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.9D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0D);
+		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
+		this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.9D);
 
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
 		this.getAttributeMap().registerAttribute(MAX_TICKS_ATTRIB);
@@ -95,7 +96,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	@Override
 	protected void playStepSound(BlockPos pos, Block state) {
 		if(this.rand.nextInt(10) == 0) {
-			this.playSound(SoundRegistry.TAR_BEAST_STEP, 0.8F, 1.5F);
+			this.play(SoundRegistry.TAR_BEAST_STEP, 0.8F, 1.5F);
 		}
 	}
 
@@ -105,17 +106,17 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			this.despawnTicks++;
-			if(this.despawnTicks > this.getEntityAttribute(MAX_TICKS_ATTRIB).getAttributeValue()) {
+			if(this.despawnTicks > this.getAttribute(MAX_TICKS_ATTRIB).getValue()) {
 				this.attackEntityFrom(DamageSource.GENERIC, this.getMaxHealth());
 			}
 		}
 
-		if(this.world.isRemote && this.ticksExisted % 20 == 0) {
+		if(this.world.isRemote() && this.ticksExisted % 20 == 0) {
 			this.spawnParticles(this.world, this.posX, this.posY, this.posZ, this.rand);
 		}
 	}
@@ -134,10 +135,10 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	}
 
 	@Override
-	public void setDead() {
-		if(!this.isDead && this.dropContentsWhenDead) {
+	public void remove() {
+		if(!this.removed && this.dropContentsWhenDead) {
 			if(this.getAttackTarget() != null) {
-				if(this.world.isRemote) {
+				if(this.world.isRemote()) {
 					for(int i = 0; i < 200; i++) {
 						Random rnd = this.world.rand;
 						float rx = rnd.nextFloat() * 1.0F - 0.5F;
@@ -149,25 +150,25 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 					}
 				} else {
 					for(int i = 0; i < 8; i++) {
-						this.playSound(SoundRegistry.TAR_BEAST_STEP, 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
+						this.play(SoundRegistry.TAR_BEAST_STEP, 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 					}
 					List<EntityCreature> affectedEntities = (List<EntityCreature>)this.world.getEntitiesWithinAABB(EntityCreature.class, this.getBoundingBox().grow(5.25F, 5.25F, 5.25F));
 					for(EntityCreature e : affectedEntities) {
-						if(e == this || e.getDistance(this) > 5.25F || !e.canEntityBeSeen(this) || e instanceof EntityTarminion) continue;
+						if(e == this || e.getDistance(this) > 5.25F || !e.canEntityBeSeen(this) || e instanceof EntityTarMinion) continue;
 						double dst = e.getDistance(this);
-						e.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 4);
+						e.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue() * 4);
 						e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, (int)(20 + (1.0F - dst / 5.25F) * 150), 1));
 					}
 				}
 			}
 
-			if(!this.world.isRemote) {
+			if(!this.world.isRemote()) {
 				this.dropLoot(false, 0, DamageSource.GENERIC);
 			}
 
-			this.playSound(SoundRegistry.TAR_BEAST_STEP, 2.5F, 0.5F);
+			this.play(SoundRegistry.TAR_BEAST_STEP, 2.5F, 0.5F);
 
-			if(this.world.isRemote) {
+			if(this.world.isRemote()) {
 				for(int i = 0; i < 100; i++) {
 					Random rnd = world.rand;
 					float rx = rnd.nextFloat() * 1.0F - 0.5F;
@@ -180,7 +181,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 			}
 		}
 		
-		super.setDead();
+		super.remove();
 	}
 
 	@Override
@@ -201,7 +202,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	}
 
 	protected boolean attack(Entity entity) {
-		if (!this.world.isRemote) {
+		if (!this.world.isRemote()) {
 			if (this.onGround) {
 				double dx = entity.posX - this.posX;
 				double dz = entity.posZ - this.posZ;
@@ -217,8 +218,8 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 			} else {
 				damageSource = DamageSource.causeMobDamage(this);
 			}
-			entity.attackEntityFrom(damageSource, (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
-			this.playSound(SoundRegistry.TAR_BEAST_STEP, 1.0F, 2.0F);
+			entity.attackEntityFrom(damageSource, (float)this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
+			this.play(SoundRegistry.TAR_BEAST_STEP, 1.0F, 2.0F);
 			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, world.getDifficulty().getId() * 50, 0));
 			return true;
 		}

@@ -34,7 +34,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.tile.TileEntityPresent;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 public class EventWinter extends SeasonalEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "winter");
@@ -57,7 +57,7 @@ public class EventWinter extends SeasonalEnvironmentEvent {
 
 	public static boolean isFroooosty(World world) {
 		if(world != null) {
-			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
+			DimensionBetweenlands provider = DimensionBetweenlands.getProvider(world);
 			if(provider != null) {
 				return provider.getEnvironmentEventRegistry().winter.isActive();
 			}
@@ -90,8 +90,8 @@ public class EventWinter extends SeasonalEnvironmentEvent {
 	public void update(World world) {
 		super.update(world);
 
-		if(!world.isRemote && this.isActive()) {
-			if(world.provider instanceof WorldProviderBetweenlands && world instanceof WorldServer && world.rand.nextInt(10) == 0) {
+		if(!world.isRemote() && this.isActive()) {
+			if(world.dimension instanceof DimensionBetweenlands && world instanceof WorldServer && world.rand.nextInt(10) == 0) {
 				WorldServer worldServer = (WorldServer)world;
 				for (Iterator<Chunk> iterator = worldServer.getPersistentChunkIterable(worldServer.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
 					Chunk chunk = iterator.next();
@@ -150,8 +150,8 @@ public class EventWinter extends SeasonalEnvironmentEvent {
 	@OnlyIn(Dist.CLIENT)
 	public static void onClientTick(ClientTickEvent event) {
 		World world = Minecraft.getInstance().world;
-		if(world != null && world.provider instanceof WorldProviderBetweenlands) {
-			updateModelActiveState(((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().winter.isActive());
+		if(world != null && world.dimension instanceof DimensionBetweenlands) {
+			updateModelActiveState(((DimensionBetweenlands)world.dimension).getEnvironmentEventRegistry().winter.isActive());
 		} else {
 			updateModelActiveState(false);
 		}
@@ -166,10 +166,10 @@ public class EventWinter extends SeasonalEnvironmentEvent {
 	@OnlyIn(Dist.CLIENT)
 	public static void onUpdateFog(UpdateFogEvent event) {
 		World world = event.getWorld();
-		if(world.provider instanceof WorldProviderBetweenlands && ((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().winter.isActive()) {
+		if(world.dimension instanceof DimensionBetweenlands && ((DimensionBetweenlands)world.dimension).getEnvironmentEventRegistry().winter.isActive()) {
 			Fog targetFog = event.getAmbientFog();
-			float interp = (float) MathHelper.clamp((Minecraft.getInstance().player.posY - WorldProviderBetweenlands.CAVE_START + 10) / 10.0F, 0.0F, 1.0F);
-			float snowingStrength = ((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().snowfall.getSnowingStrength();
+			float interp = (float) MathHelper.clamp((Minecraft.getInstance().player.posY - DimensionBetweenlands.CAVE_START + 10) / 10.0F, 0.0F, 1.0F);
+			float snowingStrength = ((DimensionBetweenlands)world.dimension).getEnvironmentEventRegistry().snowfall.getSnowingStrength();
 			FogState state = event.getFogState();
 			Fog.MutableFog newFog = new Fog.MutableFog(event.getAmbientFog());
 			float newStart = Math.min(2.0F + event.getFarPlaneDistance() * 0.8F / (1.0F + snowingStrength), targetFog.getStart());

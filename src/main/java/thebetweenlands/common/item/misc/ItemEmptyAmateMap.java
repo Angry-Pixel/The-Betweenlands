@@ -24,7 +24,7 @@ public class ItemEmptyAmateMap extends ItemMapBase {
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
         ItemStack itemstack1 = playerIn.getHeldItem(handIn);
-        if (worldIn.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+        if (worldIn.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
             ItemStack itemstack = ItemAmateMap.setupNewMap(worldIn, playerIn.posX, playerIn.posZ, (byte) 4, true, false);
             itemstack1.shrink(1);
 
@@ -39,7 +39,7 @@ public class ItemEmptyAmateMap extends ItemMapBase {
                 return new ActionResult<>(EnumActionResult.SUCCESS, itemstack1);
             }
         } else {
-            if (!worldIn.isRemote) {
+            if (!worldIn.isRemote()) {
                 playerIn.sendStatusMessage(new TextComponentTranslation("chat.amate_map.invalid").setStyle(new Style().setColor(TextFormatting.RED)), false);
             }
             return new ActionResult<>(EnumActionResult.FAIL, itemstack1);

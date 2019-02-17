@@ -123,7 +123,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 
 			if (itemstack1.isEmpty()) {
 				if (this.getPlantBlockStateFromItem(heldItem) != null) {
-					if(!worldIn.isRemote) {
+					if(!worldIn.isRemote()) {
 						te.setItemStack(heldItem);
 						playerIn.addStat(StatList.FLOWER_POTTED);
 	
@@ -132,10 +132,10 @@ public class BlockMudFlowerPot extends BlockContainer {
 						}
 					}
 				} else if(Block.getBlockFromItem(heldItem.getItem()) == BlockRegistry.SULFUR_TORCH) {
-					if(!worldIn.isRemote) {
+					if(!worldIn.isRemote()) {
 						worldIn.setBlockState(pos, BlockRegistry.MUD_FLOWER_POT_CANDLE.getDefaultState());
 						
-						worldIn.playSound(null, pos, SoundType.WOOD.getPlaceSound(), SoundCategory.BLOCKS, (SoundType.WOOD.getVolume() + 1.0F) / 2.0F, SoundType.WOOD.getPitch() * 0.8F);
+						worldIn.play(null, pos, SoundType.WOOD.getPlaceSound(), SoundCategory.BLOCKS, (SoundType.WOOD.getVolume() + 1.0F) / 2.0F, SoundType.WOOD.getPitch() * 0.8F);
 						
 						if(!playerIn.isCreative()) {
 							heldItem.shrink(1);
@@ -145,7 +145,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 				} else {
 					return false;
 				}
-			} else if(!worldIn.isRemote) {
+			} else if(!worldIn.isRemote()) {
 				if (heldItem.isEmpty()) {
 					playerIn.setHeldItem(hand, itemstack1);
 				} else if (!playerIn.addItemStackToInventory(itemstack1)) {
@@ -155,7 +155,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 				te.setItemStack(ItemStack.EMPTY);
 			}
 			
-			if(!worldIn.isRemote) {
+			if(!worldIn.isRemote()) {
 				te.markDirty();
 				worldIn.notifyBlockUpdate(pos, state, state, 3);
 			}
@@ -227,7 +227,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (!worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockToAir(pos);
+			worldIn.removeBlock(pos);
 		}
 	}
 
@@ -275,7 +275,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 	@Override
 	public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack tool) {
 		super.harvestBlock(world, player, pos, state, te, tool);
-		world.setBlockToAir(pos);
+		world.removeBlock(pos);
 	}
 	/*===========================FORGE END==========================================*/
 

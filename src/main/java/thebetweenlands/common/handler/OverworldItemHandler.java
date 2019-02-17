@@ -194,10 +194,10 @@ public class OverworldItemHandler {
 					IBlockState dampTorch = BlockRegistry.DAMP_TORCH.getDefaultState().with(BlockDampTorch.FACING, facing);
 					world.setBlockState(pos, dampTorch);
 				} else {
-					world.setBlockToAir(pos);
+					world.removeBlock(pos);
 					world.spawnEntity(new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(BlockRegistry.DAMP_TORCH)));
 				}
-				world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.2F, 1.0F);
+				world.play(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.2F, 1.0F);
 				if(player instanceof EntityPlayerMP) {
 					AdvancementCriterionRegistry.DAMP_TORCH_PLACED.trigger((EntityPlayerMP) player);
 				}
@@ -230,7 +230,7 @@ public class OverworldItemHandler {
 			if(isFireToolBlocked(item)) {
 				event.setUseItem(Result.DENY);
 				event.setCanceled(true);
-				if(event.getWorld().isRemote) {
+				if(event.getWorld().isRemote()) {
 					event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation("chat.flintandsteel", new TextComponentTranslation(item.getTranslationKey() + ".name")), true);
 				}
 			}
@@ -244,7 +244,7 @@ public class OverworldItemHandler {
 			if(!stack.isEmpty() && isFertilizerBlocked(stack)) {
 				event.setResult(Result.DENY);
 				event.setCanceled(true);
-				if(event.getWorld().isRemote) {
+				if(event.getWorld().isRemote()) {
 					event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation("chat.fertilizer", new TextComponentTranslation(stack.getTranslationKey() + ".name")), true);
 				}
 			}
@@ -281,7 +281,7 @@ public class OverworldItemHandler {
 
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event) {
-		if(!event.player.world.isRemote && event.player.ticksExisted % 5 == 0 && !event.player.abilities.isCreativeMode) {
+		if(!event.player.world.isRemote() && event.player.ticksExisted % 5 == 0 && !event.player.abilities.isCreativeMode) {
 			updatePlayerInventory(event.player);
 		}
 	}
@@ -336,7 +336,7 @@ public class OverworldItemHandler {
 	@SubscribeEvent
 	public static void onItemPickup(EntityItemPickupEvent event) {
 		EntityPlayer player = event.getEntityPlayer();
-		if(player != null && !player.world.isRemote && !player.abilities.isCreativeMode) {
+		if(player != null && !player.world.isRemote() && !player.abilities.isCreativeMode) {
 			ItemStack stack = event.getItem().getItem();
 			if(!stack.isEmpty()) {
 				if(player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
@@ -354,7 +354,7 @@ public class OverworldItemHandler {
 					if(!originalStack.isEmpty()) {
 						event.getItem().setItem(originalStack);
 					} else {
-						event.getItem().setDead();
+						event.getItem().remove();
 						event.setCanceled(true);
 					}
 				} else if(stack.getItem() == ItemRegistry.TAINTED_POTION) {
@@ -362,7 +362,7 @@ public class OverworldItemHandler {
 					if(!originalStack.isEmpty()) {
 						event.getItem().setItem(originalStack);
 					} else {
-						event.getItem().setDead();
+						event.getItem().remove();
 						event.setCanceled(true);
 					}
 				}

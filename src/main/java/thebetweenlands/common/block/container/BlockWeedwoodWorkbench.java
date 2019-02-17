@@ -31,7 +31,7 @@ public class BlockWeedwoodWorkbench extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             player.openGui(TheBetweenlands.instance, CommonProxy.GUI_WEEDWOOD_CRAFT, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
@@ -44,7 +44,7 @@ public class BlockWeedwoodWorkbench extends BlockContainer {
 
     @Override
     public void onReplaced(IBlockState state, World world, BlockPos pos, IBlockState newState, boolean isMoving) {
-        if (world.isRemote)
+        if (world.isRemote())
             return;
         TileEntityWeedwoodWorkbench tile = (TileEntityWeedwoodWorkbench) world.getTileEntity(pos);
         for (ItemStack stack : tile.craftingSlots) {

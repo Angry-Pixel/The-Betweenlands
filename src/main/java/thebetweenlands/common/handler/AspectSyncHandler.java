@@ -10,7 +10,7 @@ import thebetweenlands.common.network.clientbound.MessageSyncStaticAspects;
 public class AspectSyncHandler {
 	@SubscribeEvent
 	public static void joinWorld(EntityJoinWorldEvent event) {
-		if (!event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerMP) {
+		if (!event.getWorld().isRemote() && event.getEntity() instanceof EntityPlayerMP) {
 			TheBetweenlands.networkWrapper.sendTo(new MessageSyncStaticAspects(AspectManager.get(event.getWorld())), (EntityPlayerMP) event.getEntity());
 		}
 	}

@@ -119,7 +119,7 @@ public class AmbienceManager {
 							}
 							if(!isPlaying && typeIndex <= lowestPlayedAmbience) {
 								if(this.lastSoundPlayTicks <= 0) {
-									this.playSound(new AmbienceSound(type.getSound(), type.getCategory(), type, player, this), type.getDelay());
+									this.play(new AmbienceSound(type.getSound(), type.getCategory(), type, player, this), type.getDelay());
 									this.lastSoundPlayTicks = 1;
 								} else {
 									break;
@@ -184,10 +184,10 @@ public class AmbienceManager {
 		this.playingAmbiences.add(sound);
 		if(sound.type.getSound() != null) {
 			if(delay == 0) {
-				Minecraft.getInstance().getSoundHandler().playSound(sound);
+				Minecraft.getInstance().getSoundHandler().play(sound);
 			} else {
 				this.delayedAmbiences.add(sound);
-				Minecraft.getInstance().getSoundHandler().playDelayedSound(sound, delay);
+				Minecraft.getInstance().getSoundHandler().playDelayed(sound, delay);
 			}
 		}
 	}

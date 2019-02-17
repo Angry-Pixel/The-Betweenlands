@@ -34,7 +34,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
 
     @Override
     public void tick() {
-        if (world.isRemote) {
+        if (world.isRemote()) {
             if (hasCrystal) {
                 crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
                 crystalRotation += this.crystalVelocity;
@@ -64,10 +64,10 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
                 if ((!output.isEmpty() && inventory.get(2).isEmpty()) || (!output.isEmpty() && inventory.get(2).isItemEqual(output) && inventory.get(2).getCount() + output.getCount() <= output.getMaxStackSize())) {
                     progress++;
                     if (progress == 1)
-                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F);
+                        world.play(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F);
                     if (progress == 64 || progress == 84) {
-                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
-                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
+                        world.play(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
+                        world.play(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
                     }
                     if (!inventory.get(1).isEmpty() && !getStackInSlot(1).getTag().getBoolean("active"))
                         getStackInSlot(1).getTag().setBoolean("active", true);

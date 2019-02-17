@@ -53,14 +53,14 @@ public class EntityAIWightBuffSwampHag extends EntityAIBase {
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return this.hag != null && this.hag.isEntityAlive();
+		return this.hag != null && this.hag.isAlive();
 	}
 
 	@Override
 	public void resetTask() {
 		this.navigator.clearPath();
 		this.cooldown = 80 + this.world.rand.nextInt(60);
-		if(!this.wight.isRiding() && (this.hag == null || !this.hag.isEntityAlive())) {
+		if(!this.wight.isRiding() && (this.hag == null || !this.hag.isAlive())) {
 			this.wight.setVolatile(false);
 		}
 	}
@@ -71,7 +71,7 @@ public class EntityAIWightBuffSwampHag extends EntityAIBase {
 			if(!this.wight.isVolatile()) {
 				this.wight.setVolatile(true);
 				 TheBetweenlands.networkWrapper.sendToAllAround(new MessageWightVolatileParticles(this.wight), new TargetPoint(this.wight.dimension, this.wight.posX, this.wight.posY, this.wight.posZ, 32));
-                 this.world.playSound(null, this.wight.posX, this.wight.posY, this.wight.posZ, SoundRegistry.WIGHT_ATTACK, SoundCategory.HOSTILE, 1.6F, 1.0F);
+                 this.world.play(null, this.wight.posX, this.wight.posY, this.wight.posZ, SoundRegistry.WIGHT_ATTACK, SoundCategory.HOSTILE, 1.6F, 1.0F);
 			}
 
 			if(!this.wight.isRiding()) {

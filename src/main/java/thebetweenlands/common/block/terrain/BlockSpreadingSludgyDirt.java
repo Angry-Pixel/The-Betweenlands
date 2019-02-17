@@ -36,12 +36,12 @@ public class BlockSpreadingSludgyDirt extends BlockSpreadingDeath {
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(IBlockState state, World world, BlockPos pos, Random rand) {
 		if(world.getLight(pos.up()) < 4 && world.getBlockLightOpacity(pos.up()) > 2) {
 			world.setBlockState(pos, BlockRegistry.SWAMP_DIRT.getDefaultState());
 			this.checkAndRevertBiome(world, pos);
 		} else {
-			super.updateTick(world, pos, state, rand);
+			super.tick(state, world, pos, rand);
 		}
 	}
 

@@ -23,8 +23,8 @@ public class ItemTarminion extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack itemStack = player.getHeldItem(hand);
-		if (!world.isRemote) {
-			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_EGG_THROW, SoundCategory.NEUTRAL, 1, 1);
+		if (!world.isRemote()) {
+			world.play(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_EGG_THROW, SoundCategory.NEUTRAL, 1, 1);
 
 			EntityThrownTarminion tarminion = new EntityThrownTarminion(world, player);
 			Vec3d lookVec = player.getLookVec();

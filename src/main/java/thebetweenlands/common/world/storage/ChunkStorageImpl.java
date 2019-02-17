@@ -120,14 +120,14 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 			ILocalStorage storage = this.worldStorage.getLocalStorageHandler().getLocalStorage(ref.getID());
 
 			//Not cached, load from file
-			if(!this.worldStorage.getWorld().isRemote && storage == null) {
+			if(!this.worldStorage.getWorld().isRemote() && storage == null) {
 				storage = this.worldStorage.getLocalStorageHandler().loadLocalStorage(ref);
 			}
 
 			//Load reference if properly linked
 			if(storage != null && storage.getLinkedChunks().contains(this.chunk.getPos())) {
 				storage.loadReference(ref);
-			} else if(!this.worldStorage.getWorld().isRemote) {
+			} else if(!this.worldStorage.getWorld().isRemote()) {
 				//Local storage doesn't exist or chunk shouldn't be linked to local storage, remove link
 				refIT.remove();
 			}

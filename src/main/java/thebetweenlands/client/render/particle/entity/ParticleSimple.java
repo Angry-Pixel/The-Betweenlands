@@ -24,8 +24,8 @@ public class ParticleSimple extends Particle implements IParticleSpriteReceiver 
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		if(this.particleAge > this.particleMaxAge - 40) {
 			this.particleAlpha = (this.startAlpha * (this.particleMaxAge - this.particleAge) / 40.0F);

@@ -33,7 +33,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
@@ -49,9 +49,9 @@ public class LocationHandler {
 		if(event.phase == Phase.END) {
 			EntityPlayer player = event.player;
 
-			if(player != null && !player.world.isRemote) {
-				if (player instanceof EntityPlayerMP && ((EntityPlayerMP) player).world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
-					if (player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
+			if(player != null && !player.world.isRemote()) {
+				if (player instanceof EntityPlayerMP && ((EntityPlayerMP) player).world.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+					if (player.posY < DimensionBetweenlands.CAVE_START - 10) {
 						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, "caverns");
 					} else {
 						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, "wilderness");
@@ -120,7 +120,7 @@ public class LocationHandler {
 			for(LocationStorage location : locations) {
 				if(location != null && location.getGuard() != null && location.getGuard().isGuarded(player.world, player, resultingPos)) {
 					event.setUseItem(Result.DENY);
-					if(event.getWorld().isRemote) {
+					if(event.getWorld().isRemote()) {
 						Vec3d hitVec = event.getHitVec();
 						BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + event.getFace().getXOffset() * 0.025F, hitVec.y + event.getFace().getYOffset() * 0.025F, hitVec.z + event.getFace().getZOffset() * 0.025F, ParticleArgs.get().withData(event.getFace()));
 					}
@@ -179,7 +179,7 @@ public class LocationHandler {
 			List<LocationStorage> locations = LocationStorage.getLocations(event.getWorld(), new Vec3d(event.getPos()));
 			for(LocationStorage location : locations) {
 				if(location != null && location.getGuard() != null && location.getGuard().isGuarded(event.getWorld(), event.getEntityPlayer(), event.getPos())) {
-					if(event.getWorld().isRemote && event.getEntityPlayer().swingProgressInt == 0) {
+					if(event.getWorld().isRemote() && event.getEntityPlayer().swingProgressInt == 0) {
 						Vec3d hitVec = event.getHitVec();
 						BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + event.getFace().getXOffset() * 0.025F, hitVec.y + event.getFace().getYOffset() * 0.025F, hitVec.z + event.getFace().getZOffset() * 0.025F, ParticleArgs.get().withData(event.getFace()));
 					}

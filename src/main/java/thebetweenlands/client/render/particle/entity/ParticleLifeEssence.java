@@ -57,7 +57,7 @@ public class ParticleLifeEssence extends Particle implements IParticleSpriteRece
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;

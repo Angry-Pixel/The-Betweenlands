@@ -12,7 +12,7 @@ import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.environment.IEnvironmentEventRegistry;
 import thebetweenlands.api.event.InitializeEnvironmentEventsEvent;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 	public final EventDenseFog denseFog;
@@ -48,7 +48,7 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 
 	public void init() {
 		//Only add events to the dimension
-		if(this.world.provider instanceof WorldProviderBetweenlands) {
+		if(this.world.dimension instanceof DimensionBetweenlands) {
 			register(denseFog);
 			register(heavyRain);
 			register(auroras);

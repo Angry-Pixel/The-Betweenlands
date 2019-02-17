@@ -60,12 +60,12 @@ public class ParticleRootSpike extends Particle {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.prevMotionX = this.motionX;
 		this.prevMotionY = this.motionY;
 		this.prevMotionZ = this.motionZ;
 
-		super.onUpdate();
+		super.tick();
 
 		if(this.onGround) {
 			this.motionX *= 0.01F;
@@ -74,7 +74,7 @@ public class ParticleRootSpike extends Particle {
 			
 			if(this.sound) {
 				this.sound = false;
-				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.ROOT_SPIKE_PARTICLE_HIT, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
+				this.world.play(this.posX, this.posY, this.posZ, SoundRegistry.ROOT_SPIKE_PARTICLE_HIT, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
 			}
 		}
 	}

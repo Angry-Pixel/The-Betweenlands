@@ -22,7 +22,7 @@ public class EntityAINearestAttackableTargetDruid extends EntityAINearestAttacka
 	@Override
 	public boolean shouldContinueExecuting() {
 		Entity target = druid.getAttackTarget();
-		return target != null && target.isEntityAlive() && (druid.getAttackCounter() != 0 || target.onGround);
+		return target != null && target.isAlive() && (druid.getAttackCounter() != 0 || target.onGround);
 	}
 
 	@Override

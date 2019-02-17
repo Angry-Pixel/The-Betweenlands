@@ -94,7 +94,7 @@ public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShe
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if(!isValidBlock(worldIn.getBlockState(pos.up()))) {
-			worldIn.setBlockToAir(pos);
+			worldIn.removeBlock(pos);
 		}
 	}
 
@@ -157,7 +157,7 @@ public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShe
 	}
 	
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
 		if(rand.nextInt(16) == 0 && state.get(CAN_GROW) && worldIn.isAirBlock(pos.down())) {
 			worldIn.setBlockState(pos.down(), this.getDefaultState());
 		}

@@ -25,7 +25,7 @@ public class PlayerJoinWorldHandler {
 
 	@SubscribeEvent
 	public static void onEntityJoin(EntityJoinWorldEvent event) {
-		if(!event.getWorld().isRemote && event.getEntity() instanceof EntityPlayer && BetweenlandsConfig.WORLD_AND_DIMENSION.activateRiftOnFirstJoin && event.getWorld().provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+		if(!event.getWorld().isRemote() && event.getEntity() instanceof EntityPlayer && BetweenlandsConfig.WORLD_AND_DIMENSION.activateRiftOnFirstJoin && event.getWorld().dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			EntityPlayer player = (EntityPlayer) event.getEntity();
 
 			NBTTagCompound dataNbt = player.getEntityData();
@@ -52,7 +52,7 @@ public class PlayerJoinWorldHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event) {
-		if(!event.player.world.isRemote && BetweenlandsConfig.WORLD_AND_DIMENSION.startInBetweenlands && event.player.world.provider.getDimension() != BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && event.player.world instanceof WorldServer) {
+		if(!event.player.world.isRemote() && BetweenlandsConfig.WORLD_AND_DIMENSION.startInBetweenlands && event.player.world.dimension.getDimension() != BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && event.player.world instanceof WorldServer) {
 			NBTTagCompound dataNbt = event.player.getEntityData();
 			NBTTagCompound persistentNbt = dataNbt.getCompound(EntityPlayer.PERSISTED_NBT_TAG);
 

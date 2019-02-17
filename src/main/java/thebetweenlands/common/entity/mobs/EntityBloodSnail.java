@@ -27,6 +27,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -37,7 +38,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	protected int rangedAttackTimer = 0;
 
 	public EntityBloodSnail(World world) {
-		super(world);
+		super(EntityRegistry.BLOOD_SNAIL, world);
 		setSize(0.7F, 0.5F);
 		stepHeight = 0.0F;
 	}
@@ -54,12 +55,12 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 		getAttributeMap().registerAttribute(RANGED_ATTACK_MIN_DIST_ATTRIB);
 		getAttributeMap().registerAttribute(RANGED_ATTACK_COOLDOWN_ATTRIB);
 	}
@@ -110,14 +111,14 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
-		if (getAttackTarget() != null && this.isEntityAlive()) {
+	public void tick() {
+		super.tick();
+		if (getAttackTarget() != null && this.isAlive()) {
 			float distance = (float) getDistance(getAttackTarget().posX, getAttackTarget().getBoundingBox().minY, getAttackTarget().posZ);
-			double minDist = this.getEntityAttribute(RANGED_ATTACK_MIN_DIST_ATTRIB).getAttributeValue();
+			double minDist = this.getAttribute(RANGED_ATTACK_MIN_DIST_ATTRIB).getValue();
 
 			if(distance > minDist) {
-				int cooldown = (int) this.getEntityAttribute(RANGED_ATTACK_COOLDOWN_ATTRIB).getAttributeValue();
+				int cooldown = (int) this.getAttribute(RANGED_ATTACK_COOLDOWN_ATTRIB).getValue();
 
 				if (getRangeAttackTimer() < cooldown) {
 					setRangeAttackTimer(getRangeAttackTimer() + 1);

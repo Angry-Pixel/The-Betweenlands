@@ -39,13 +39,14 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityGiantToad extends EntityCreature implements IEntityBL {
-	private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityGiantToad.class, DataSerializers.BYTE);
-	private static final DataParameter<Boolean> DW_TAMED = EntityDataManager.createKey(EntityGiantToad.class, DataSerializers.BOOLEAN);
+public class EntityHarlequinToad extends EntityCreature implements IEntityBL {
+	private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityHarlequinToad.class, DataSerializers.BYTE);
+	private static final DataParameter<Boolean> DW_TAMED = EntityDataManager.createKey(EntityHarlequinToad.class, DataSerializers.BOOLEAN);
 
 	private int temper = 0;
 	private int ticksOnGround = 0;
@@ -55,8 +56,8 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	private ControlledAnimation swimmingAnim = new ControlledAnimation(8);
 	private ControlledAnimation waterStanceAnim = new ControlledAnimation(4);
 
-	public EntityGiantToad(World world) {
-		super(world);
+	public EntityHarlequinToad(World world) {
+		super(EntityRegistry.HARLEQUIN_TOAD, world);
 		this.setPathPriority(PathNodeType.WATER, 0.0F);
 		this.setSize(1.6F, 1.5F);
 		this.stepHeight = 1.0F;
@@ -74,30 +75,30 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.05D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.05D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0D);
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		dataManager.register(DW_SWIM_STROKE, (byte) 0);
 		dataManager.register(DW_TAMED, false);
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 		nbt.setBoolean("Tamed", this.isTamed());
 		nbt.setInt("Temper", this.temper);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 		this.setTamed(nbt.getBoolean("Tamed"));
 		this.temper = nbt.getInt("Temper");
 	}
@@ -116,14 +117,14 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		prevOnGround = onGround;
 
 		//Extend AABB so that the player doesn't suffocate in blocks
 		if (this.isBeingRidden()) {
 			this.setEntityBoundingBox(this.getBoundingBox().setMaxY(this.getBoundingBox().minY + this.height + this.getControllingPassenger().height));
 		}
-		super.onUpdate();
+		super.tick();
 		this.setEntityBoundingBox(this.getBoundingBox().setMaxY(this.getBoundingBox().minY + this.height));
 
 		if (this.onGround) {
@@ -131,7 +132,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		} else {
 			this.ticksOnGround = 0;
 		}
-		if (!this.world.isRemote) {
+		if (!this.world.isRemote()) {
 			if (this.strokeTicks > 0) {
 				this.strokeTicks--;
 				this.dataManager.set(DW_SWIM_STROKE, (byte) 1);
@@ -139,7 +140,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				this.dataManager.set(DW_SWIM_STROKE, (byte) 0);
 			}
 		}
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			if (this.rand.nextInt(900) == 0 && this.deathTime == 0) {
 				this.heal(1.0F);
 			}
@@ -215,7 +216,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				}
 				if (closestTarget != null) {
 					DamageSource damageSource = new EntityDamageSourceIndirect("mob", this, controllingPassenger);
-					float attackDamage = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+					float attackDamage = (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue();
 					if (closestTarget.attackEntityFrom(damageSource, attackDamage)) {
 						boolean doesJump = true;
 						//Random chance for the target to attack back
@@ -244,7 +245,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 			}
 		}
 
-		if (this.world.isRemote) {
+		if (this.world.isRemote()) {
 			waterStanceAnim.updateTimer();
 			if (this.inWater) {
 				waterStanceAnim.increaseTimer();
@@ -308,12 +309,12 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		if (holdsEquipment)
 			return true;
 		boolean holdsWings = EnumItemMisc.DRAGONFLY_WING.isItemOf(player.getHeldItem(hand));
-		if (!this.isBeingRidden() && this.isTamed() && (!holdsWings || this.getHealth() >= this.getMaxHealth()) && !player.isSneaking() && !this.world.isRemote) {
+		if (!this.isBeingRidden() && this.isTamed() && (!holdsWings || this.getHealth() >= this.getMaxHealth()) && !player.isSneaking() && !this.world.isRemote()) {
 			player.startRiding(this);
 			return true;
 		} else if (holdsWings) {
 			if (!this.isTamed()) {
-				if (!this.world.isRemote) {
+				if (!this.world.isRemote()) {
 					this.temper += this.rand.nextInt(4) + 1;
 					if (this.temper >= 30) {
 						this.world.setEntityState(this, (byte) 7);
@@ -331,7 +332,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				return true;
 			}
 			if (this.getHealth() < this.getMaxHealth()) {
-				if (!this.world.isRemote) {
+				if (!this.world.isRemote()) {
 					this.world.setEntityState(this, (byte) 6);
 					this.heal(4.0F);
 					player.getHeldItem(hand).shrink(1);
@@ -379,7 +380,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
 			if (!this.inWater || !onWaterSurface) {
 				if (this.onGround && forward != 0.0F) {
-					if (!this.world.isRemote) {
+					if (!this.world.isRemote()) {
 						if (this.ticksOnGround > 4) {
 							motionY += 0.5;
 							motionX += forward / 1.5F * MathHelper.cos((float) Math.toRadians(this.rotationYaw + 90));
@@ -400,14 +401,14 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 					this.motionY += 0.02F;
 				}
 
-				if (!this.world.isRemote) {
+				if (!this.world.isRemote()) {
 					if (this.collidedHorizontally) {
 						this.motionY += 0.2D;
 						this.strokeTicks = 0;
 					}
 				}
 
-				if (!this.world.isRemote && forward > 0.0F) {
+				if (!this.world.isRemote() && forward > 0.0F) {
 					if (forward != 0.0F && this.strokeTicks == 0) {
 						motionX += forward / 1.25F * MathHelper.cos((float) Math.toRadians(this.rotationYaw + 90));
 						motionZ += forward / 1.25F * MathHelper.sin((float) Math.toRadians(this.rotationYaw + 90));
@@ -418,7 +419,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 					}
 				}
 			}
-			if (!this.world.isRemote && forward > 0.0F) {
+			if (!this.world.isRemote() && forward > 0.0F) {
 				motionX += 0.05D * MathHelper.cos((float) Math.toRadians(this.rotationYaw + 90));
 				motionZ += 0.05D * MathHelper.sin((float) Math.toRadians(this.rotationYaw + 90));
 			}
@@ -451,7 +452,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 			this.spawnToadParticles(true);
 		} else if (id == 6) {
 			this.spawnToadParticles(false);
-			this.playSound(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
+			this.play(SoundEvents.ENTITY_GENERIC_EAT, this.getSoundVolume(), this.getSoundPitch());
 		} else {
 			super.handleStatusUpdate(id);
 		}

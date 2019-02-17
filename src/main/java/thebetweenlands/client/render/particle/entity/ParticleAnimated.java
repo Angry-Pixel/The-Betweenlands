@@ -51,11 +51,11 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.animation.update();
 		this.setParticleTexture(this.animation.getCurrentSprite());
 
-		super.onUpdate();
+		super.tick();
 	}
 
 	public static final class GenericFactory extends ParticleFactory<GenericFactory, ParticleAnimated> {
@@ -111,8 +111,8 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 				}
 
 				@Override
-				public void onUpdate() {
-					super.onUpdate();
+				public void tick() {
+					super.tick();
 
 					if(this.particleAge > this.particleMaxAge - 40) {
 						this.particleAlpha = (this.startAlpha * (this.particleMaxAge - this.particleAge) / 40.0F);

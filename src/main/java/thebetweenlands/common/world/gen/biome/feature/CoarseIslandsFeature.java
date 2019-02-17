@@ -10,7 +10,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockCragrock.EnumCragrockType;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
@@ -69,7 +69,7 @@ public class CoarseIslandsFeature extends BiomeFeature {
 			double islandNoise = this.getIslandNoiseAt(x, z, biomeWeight);
 			double cragNoise = this.getCragrockNoiseAt(x, z);
 			boolean isCrag = cragNoise <= 0;
-			int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
+			int layerHeight = DimensionBetweenlands.LAYER_HEIGHT;
 			if(islandNoise <= 0 && chunkPrimer.getBlockState(x, layerHeight, z).getBlock() == chunkGenerator.layerBlock) {
 				int minHeight = 1;
 				int heightVariation = 4;

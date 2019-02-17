@@ -8,7 +8,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.model.AdvancedModelRenderer;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
-import thebetweenlands.common.entity.mobs.EntityGiantToad;
+import thebetweenlands.common.entity.mobs.EntityHarlequinToad;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelGiantToad extends MowzieModelBase {
@@ -422,7 +422,7 @@ public class ModelGiantToad extends MowzieModelBase {
 
     @Override
     public void setLivingAnimations(EntityLivingBase entity, float yaw, float pitch, float partialRenderTicks) {
-        EntityGiantToad toad = (EntityGiantToad) entity;
+        EntityHarlequinToad toad = (EntityHarlequinToad) entity;
         setToInitPose();
         float frame = toad.ticksExisted + partialRenderTicks;
         float leapingProgress = toad.getLeapProgress(partialRenderTicks);

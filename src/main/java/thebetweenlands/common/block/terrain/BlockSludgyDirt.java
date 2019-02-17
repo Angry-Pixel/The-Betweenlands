@@ -33,8 +33,8 @@ public class BlockSludgyDirt extends Block {
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if (!worldIn.isRemote) {
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+		if (!worldIn.isRemote()) {
 			IBlockState blockStateAbove = worldIn.getBlockState(pos.up());
 			if(blockStateAbove.getLightOpacity(worldIn, pos.up()) > 2 || blockStateAbove.getBlock() == this) {
 				worldIn.setBlockState(pos, BlockRegistry.SWAMP_DIRT.getDefaultState());

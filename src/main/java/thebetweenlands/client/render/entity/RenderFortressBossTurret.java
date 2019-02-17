@@ -7,9 +7,9 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.model.entity.ModelWight;
-import thebetweenlands.common.entity.mobs.EntityFortressBossTurret;
+import thebetweenlands.common.entity.mobs.EntityPrimordialMalevolenceTurret;
 
-public class RenderFortressBossTurret extends Render<EntityFortressBossTurret> {
+public class RenderFortressBossTurret extends Render<EntityPrimordialMalevolenceTurret> {
 	protected static final ModelWight MODEL = new ModelWight().setRenderHeadOnly(true);
 
 	public RenderFortressBossTurret(RenderManager renderManager) {
@@ -17,7 +17,7 @@ public class RenderFortressBossTurret extends Render<EntityFortressBossTurret> {
 	}
 
 	@Override
-	public void doRender(EntityFortressBossTurret entity, double x, double y, double z, float yaw, float partialTicks) {
+	public void doRender(EntityPrimordialMalevolenceTurret entity, double x, double y, double z, float yaw, float partialTicks) {
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		GlStateManager.pushMatrix();
@@ -41,7 +41,7 @@ public class RenderFortressBossTurret extends Render<EntityFortressBossTurret> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityFortressBossTurret p_110775_1_) {
+	protected ResourceLocation getEntityTexture(EntityPrimordialMalevolenceTurret p_110775_1_) {
 		return null;
 	}
 }

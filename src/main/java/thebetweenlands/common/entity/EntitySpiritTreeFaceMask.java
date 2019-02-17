@@ -39,14 +39,14 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 		nbt.setInt("type", this.type.ordinal());
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 		this.type = Type.values()[nbt.getInt("type")];
 	}
 
@@ -63,7 +63,7 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 	@Override
 	public void onBroken(@Nullable Entity brokenEntity) {
 		if (this.world.getGameRules().getBoolean("doEntityDrops")) {
-			this.playSound(SoundEvents.BLOCK_WOOD_BREAK, 1.0F, 1.0F);
+			this.play(SoundEvents.BLOCK_WOOD_BREAK, 1.0F, 1.0F);
 
 			if (brokenEntity instanceof EntityPlayer) {
 				EntityPlayer entityplayer = (EntityPlayer)brokenEntity;
@@ -79,7 +79,7 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 
 	@Override
 	public void playPlaceSound() {
-		this.playSound(SoundEvents.BLOCK_WOOD_PLACE, 1.0F, 1.0F);
+		this.play(SoundEvents.BLOCK_WOOD_PLACE, 1.0F, 1.0F);
 	}
 
 	@Override

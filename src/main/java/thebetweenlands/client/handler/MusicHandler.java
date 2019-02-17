@@ -142,7 +142,7 @@ public class MusicHandler {
 								this.entityMusicMap.put(entry.getIntKey(), newSound);
 								this.playingEntityMusicLayers.add(entry.getIntKey());
 								
-								this.mc.getSoundHandler().playSound(newSound);
+								this.mc.getSoundHandler().play(newSound);
 							}
 						} else if(currentlyPlaying.getMusicEntity() != entry.getValue() && entry.getValue().canInterruptOtherEntityMusic(player)) {
 							currentlyPlaying.stopEntityMusic();
@@ -290,7 +290,7 @@ public class MusicHandler {
 				ISound parentSound = PositionedSoundRecord.getMusicRecord(isInBlMainMenu ? SoundRegistry.BL_MUSIC_MENU: SoundRegistry.BL_MUSIC_DIMENSION);
 				ISound playingSound = SoundWrapper.wrap(parentSound, sound);
 				this.currentSound = playingSound;
-				this.mc.getSoundHandler().playSound(playingSound);
+				this.mc.getSoundHandler().play(playingSound);
 			}
 		}
 	}

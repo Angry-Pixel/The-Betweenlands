@@ -118,11 +118,11 @@ public class PlayerPortalHandler {
 						player.closeScreen();
 	
 						if (timer == MAX_PORTAL_TIME - 1) {
-							Minecraft.getInstance().getSoundHandler().playSound(new PortalSound(SoundRegistry.PORTAL_TRIGGER, SoundCategory.BLOCKS, player));
+							Minecraft.getInstance().getSoundHandler().play(new PortalSound(SoundRegistry.PORTAL_TRIGGER, SoundCategory.BLOCKS, player));
 						}
 	
 						if (timer == 2) {
-							player.playSound(SoundRegistry.PORTAL_TRAVEL, 1.0F, 0.8F);
+							player.play(SoundRegistry.PORTAL_TRAVEL, 1.0F, 0.8F);
 						}
 					}
 				}

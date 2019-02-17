@@ -26,7 +26,7 @@ import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.common.entity.mobs.EntityGasCloud;
+import thebetweenlands.common.entity.mobs.EntityShallowbreath;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
@@ -164,7 +164,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		}
 		boolean updateBlock = false;
 		if (this.hasInfusion && this.infusingRecipe != null) {
-			if (!this.world.isRemote) {
+			if (!this.world.isRemote()) {
 				this.infusionTime++;
 			} else {
 				if (this.prevInfusionState != this.currentInfusionState) {
@@ -175,10 +175,10 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				}
 			}
 			if(this.prevInfusionState != this.currentInfusionState && this.currentInfusionState == 2) {
-				this.world.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.INFUSER_FINISHED, SoundCategory.BLOCKS, 1, 1);
+				this.world.play(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.INFUSER_FINISHED, SoundCategory.BLOCKS, 1, 1);
 			}
 			this.prevInfusionState = this.currentInfusionState;
-			if (!this.world.isRemote) {
+			if (!this.world.isRemote()) {
 				if (this.infusionTime > this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
 					//fail
 					if (this.currentInfusionState != 3)
@@ -200,16 +200,16 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			if (this.infusionColorGradientTicks > 0) {
 				this.infusionColorGradientTicks++;
 			}
-			if (!this.world.isRemote && this.currentInfusionState != prevInfusionState) {
+			if (!this.world.isRemote() && this.currentInfusionState != prevInfusionState) {
 				//start gradient animation
 				this.infusionColorGradientTicks = 1;
 				updateBlock = true;
 			}
-			if (!this.world.isRemote && this.infusionColorGradientTicks > 30) {
+			if (!this.world.isRemote() && this.infusionColorGradientTicks > 30) {
 				this.infusionColorGradientTicks = 0;
 				updateBlock = true;
 			}
-			if (this.world.isRemote && this.infusionColorGradientTicks > 0 && this.currentInfusionState == 2) {
+			if (this.world.isRemote() && this.infusionColorGradientTicks > 0 && this.currentInfusionState == 2) {
 				for (int i = 0; i < 10; i++) {
 					double x = pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F;
 					double z = pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F;
@@ -227,26 +227,26 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 					this.infusionColorGradientTicks++;
 				}
 				
-				if (!this.world.isRemote && this.infusionColorGradientTicks == 0 && this.currentInfusionState == 0 && this.stirProgress == 89) {
+				if (!this.world.isRemote() && this.infusionColorGradientTicks == 0 && this.currentInfusionState == 0 && this.stirProgress == 89) {
 					//start gradient animation
 					this.infusionColorGradientTicks = 1;
 					this.currentInfusionState = 1;
-					this.world.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.INFUSER_FINISHED, SoundCategory.BLOCKS, 1, 1);
+					this.world.play(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.INFUSER_FINISHED, SoundCategory.BLOCKS, 1, 1);
 					updateBlock = true;
 				}
 				
-				if (!this.world.isRemote && this.infusionColorGradientTicks > 30) {
+				if (!this.world.isRemote() && this.infusionColorGradientTicks > 30) {
 					this.infusionColorGradientTicks = 0;
 					this.currentInfusionState = 2;
 					updateBlock = true;
 				}
 				
-				if(this.world.isRemote && (this.infusionColorGradientTicks > 0 || this.currentInfusionState == 2)) {
+				if(this.world.isRemote() && (this.infusionColorGradientTicks > 0 || this.currentInfusionState == 2)) {
 					this.prevInfusionColor = new float[]{0.2F, 0.6F, 0.4F, 1.0F};
 					this.currentInfusionColor = new float[]{0.8F, 0.0F, 0.8F, 1.0F};
 				}
 				
-				if (this.world.isRemote && this.infusionColorGradientTicks > 0) {
+				if (this.world.isRemote() && this.infusionColorGradientTicks > 0) {
 					for (int i = 0; i < 10; i++) {
 						double x = pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F;
 						double z = pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F;
@@ -259,10 +259,10 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				this.prevInfusionColor = this.currentInfusionColor;
 			}
 		}
-		if (!this.world.isRemote && updateBlock) {
+		if (!this.world.isRemote() && updateBlock) {
 			this.markForUpdate();
 		}
-		if (world.isRemote) {
+		if (world.isRemote()) {
 			if (isValidCrystalInstalled()) {
 				crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
 				crystalRotation += this.crystalVelocity;
@@ -389,7 +389,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 					setInventorySlotContents(i, ItemStack.EMPTY);
 				}
 				if (evaporation == 600) {
-					EntityGasCloud gasCloud = new EntityGasCloud(this.world);
+					EntityShallowbreath gasCloud = new EntityShallowbreath(this.world);
 					if (this.infusingRecipe != null) {
 						float[] color = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
 						gasCloud.setGasColor((int)(color[0] * 255), (int)(color[1] * 255), (int)(color[2] * 255), 170);

@@ -14,7 +14,7 @@ public class BlockRottenLog extends BlockLogBetweenlands {
 	public void onPlayerDestroy(World world, BlockPos pos, IBlockState state) {
 		super.onPlayerDestroy(world, pos, state);
 
-		if (!world.isRemote && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+		if (!world.isRemote() && world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 			if (world.rand.nextInt(6) == 0) {
 				EntityTermite entity = new EntityTermite(world);
 				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);

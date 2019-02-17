@@ -24,6 +24,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -31,7 +32,7 @@ public class EntityChiromaw extends EntityFlyingMob implements IEntityBL {
 	private static final DataParameter<Boolean> IS_HANGING = EntityDataManager.createKey(EntityChiromaw.class, DataSerializers.BOOLEAN);
 
 	public EntityChiromaw(World world) {
-		super(world);
+		super(EntityRegistry.CHIROMAW, world);
 		setSize(0.7F, 0.9F);
 		setIsHanging(false);
 
@@ -51,18 +52,18 @@ public class EntityChiromaw extends EntityFlyingMob implements IEntityBL {
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 
 		this.dataManager.register(IS_HANGING, false);
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
-		if (!world.isRemote && world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			setDead();
+		if (!world.isRemote() && world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			remove();
 		}
 
 		if (this.isJumping && this.isInWater()) {
@@ -89,7 +90,7 @@ public class EntityChiromaw extends EntityFlyingMob implements IEntityBL {
 		super.updateAITasks();
 
 		if (getIsHanging()) {
-			if (!this.world.isRemote) {
+			if (!this.world.isRemote()) {
 				this.moveHelper.setMoveTo(this.posX, this.posY + 0.5D, this.posZ, 0);
 
 				if (this.rand.nextInt(250) == 0 || !this.world.getBlockState(new BlockPos(this.posX, this.posY + 1, this.posZ)).isNormalCube()) {
@@ -102,7 +103,7 @@ public class EntityChiromaw extends EntityFlyingMob implements IEntityBL {
 			}
 		} else {
 			if (this.getAttackTarget() == null) {
-				if (!this.world.isRemote && this.rand.nextInt(20) == 0 && world.getBlockState(new BlockPos(this.posX, this.posY + 1, this.posZ)).isNormalCube()) {
+				if (!this.world.isRemote() && this.rand.nextInt(20) == 0 && world.getBlockState(new BlockPos(this.posX, this.posY + 1, this.posZ)).isNormalCube()) {
 					setIsHanging(true);
 				}
 			}
@@ -139,12 +140,12 @@ public class EntityChiromaw extends EntityFlyingMob implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.095D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.095D);
 	}
 
 	@Override

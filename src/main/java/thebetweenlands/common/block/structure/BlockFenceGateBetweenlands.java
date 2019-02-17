@@ -164,7 +164,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
      */
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        if (!worldIn.isRemote) {
+        if (!worldIn.isRemote()) {
             boolean flag = worldIn.isBlockPowered(pos);
 
             if (state.get(POWERED) != flag) {

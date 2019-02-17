@@ -115,7 +115,7 @@ public class EnvironmentEventOverridesHandler {
 
 	@SubscribeEvent
 	public static void onWorldLoad(WorldEvent.Load event) {
-		if(!event.getWorld().isRemote && overrideStatesDownloaded) {
+		if(!event.getWorld().isRemote() && overrideStatesDownloaded) {
 			updateWorldEventOverrideStates(event.getWorld());
 		}
 	}
@@ -268,11 +268,11 @@ public class EnvironmentEventOverridesHandler {
 				Set<ResourceLocation> updatedEvents = new HashSet<>();
 
 				for(OverrideState override : overrideStates) {
-					if(!override.dimensions.isPresent() || override.dimensions.get().contains(world.provider.getDimensionType().getName())) {
+					if(!override.dimensions.isPresent() || override.dimensions.get().contains(world.dimension.getType().getRegistryName().toString())) {
 						IEnvironmentEvent event = registry.getEvent(override.eventId);
 						if(event instanceof IRemotelyControllableEnvironmentEvent) {
 							IRemotelyControllableEnvironmentEvent controllable = (IRemotelyControllableEnvironmentEvent) event;
-							if(controllable.isRemotelyControllable()) {
+							if(controllable.isRemote()lyControllable()) {
 								controllable.updateStateFromRemote(override.value, override.remoteResetTicks, override.data);
 								updatedEvents.add(override.eventId);
 							}
@@ -284,7 +284,7 @@ public class EnvironmentEventOverridesHandler {
 					IEnvironmentEvent event = entry.getValue();
 					if(event instanceof IRemotelyControllableEnvironmentEvent) {
 						IRemotelyControllableEnvironmentEvent controllable = (IRemotelyControllableEnvironmentEvent) event;
-						if(controllable.isRemotelyControllable() && !updatedEvents.contains(entry.getKey())) {
+						if(controllable.isRemote()lyControllable() && !updatedEvents.contains(entry.getKey())) {
 							boolean wasStateFromRemote = controllable.isCurrentStateFromRemote();
 							controllable.updateNoStateFromRemote();
 							if(wasStateFromRemote) {

@@ -26,6 +26,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
 import thebetweenlands.common.entity.ai.EntityAIJumpRandomly;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -38,7 +39,7 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	protected float floatingRotationTicks = 0;
 	
 	public EntitySporeling(World world) {
-		super(world);
+		super(EntityRegistry.SPORELING, world);
 		setSize(0.3F, 0.6F);
 		stepHeight = 1.0F;
 		this.experienceValue = 1;
@@ -47,8 +48,8 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		dataManager.register(IS_FALLING, false);
 	}
 
@@ -72,25 +73,25 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.49D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.49D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 	}
 
 	@Override
-	public void onLivingUpdate() {
-		if(this.world.isRemote) {
+	public void livingTick() {
+		if(this.world.isRemote()) {
 			BLParticles.REDSTONE_DUST.spawn(this.world, posX + (rand.nextDouble() - 0.5D) * width, posY + rand.nextDouble() * height - 0.25D, posZ + (rand.nextDouble() - 0.5D) * width, 
 					ParticleArgs.get().withColor(0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 1.0F));
 		}
-		super.onLivingUpdate();
+		super.livingTick();
 	}
 
 	@Override
-	public void onUpdate() {
-		if (!getEntityWorld().isRemote) {
+	public void tick() {
+		if (!getEntityWorld().isRemote()) {
 			if (!this.isInWater()) {
 				boolean canSpin = (this.getRidingEntity() != null ? !this.getRidingEntity().onGround : !onGround) && !this.isInWeb && !this.isInWater() && !this.isInLava() && world.isAirBlock(getPosition().down());
 				if (canSpin && (motionY < 0D || (this.getRidingEntity() != null && this.getRidingEntity().motionY < 0))) {
@@ -119,7 +120,7 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 			this.floatingRotationTicks = 0;
 		}
 		
-		super.onUpdate();
+		super.tick();
 	}
 
     public float smoothedAngle(float partialTicks) {

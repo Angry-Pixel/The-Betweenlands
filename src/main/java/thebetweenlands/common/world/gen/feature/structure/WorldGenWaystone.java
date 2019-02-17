@@ -55,7 +55,7 @@ public class WorldGenWaystone extends WorldGenerator implements IWorldGenerator 
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		if(world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+		if(world.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			int gridSizePower2 = 3;
 
 			int gridBlockSize = 1 << (gridSizePower2 + 4);

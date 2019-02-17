@@ -98,7 +98,7 @@ public class RadialMenuHandler {
 
 	public void openGUI() {
 		this.isOpen = true;
-		Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+		Minecraft.getInstance().getSoundHandler().play(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 		Minecraft.getInstance().mouseHelper.ungrabMouseCursor();
 		Minecraft.getInstance().inGameHasFocus = false;
 		this.prevMouseX = Mouse.getX();
@@ -109,7 +109,7 @@ public class RadialMenuHandler {
 
 	public void closeGUI() {
 		this.isOpen = false;
-		Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+		Minecraft.getInstance().getSoundHandler().play(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 		Minecraft.getInstance().setIngameFocus();
 	}
 
@@ -582,7 +582,7 @@ public class RadialMenuHandler {
 				this.lastCategories.remove(this.lastCategories.size() - 1);
 				//this.displayedCategories = 0;
 				this.displayedCategories = this.currentCategory.getCategories().size();
-				Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				Minecraft.getInstance().getSoundHandler().play(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			}
 		} else {
 			for(int i = 0; i < Math.min(this.currentCategory.getCategories().size(), this.displayedCategories); i++) {
@@ -598,7 +598,7 @@ public class RadialMenuHandler {
 							this.closeGUI();
 						}
 					}
-					Minecraft.getInstance().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+					Minecraft.getInstance().getSoundHandler().play(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					break;
 				}
 			}

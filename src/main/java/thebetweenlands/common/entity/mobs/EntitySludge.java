@@ -8,6 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -37,6 +38,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.entity.attributes.BooleanAttribute;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 
 public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
@@ -54,7 +56,11 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	public ControlledAnimation scale = new ControlledAnimation(5);
 
 	public EntitySludge(World worldIn) {
-		super(worldIn);
+		this(EntityRegistry.SLUDGE, worldIn);
+	}
+	
+	public EntitySludge(EntityType<?> type, World worldIn) {
+		super(type, worldIn);
 		this.moveHelper = new EntitySludge.SludgeMoveHelper(this);
 		this.isImmuneToFire = true;
 		this.setSize(1.1F, 1.2F);
@@ -72,8 +78,8 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		this.getDataManager().register(IS_ACTIVE, true);
 	}
 
@@ -84,39 +90,39 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	}
 	
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
+	protected void registerAttributes() {
+		super.registerAttributes();
 		this.getAttributeMap().registerAttribute(SLUDGE_TRAIL).setBaseValue(1);
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.5D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
+		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound compound) {
-		super.writeEntityToNBT(compound);
+	public void writeAdditional(NBTTagCompound compound) {
+		super.writeAdditional(compound);
 		compound.setBoolean("wasOnGround", this.wasOnGround);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
-		super.readEntityFromNBT(compound);
+	public void readAdditional(NBTTagCompound compound) {
+		super.readAdditional(compound);
 		if(compound.contains("wasOnGround")) {
 			this.wasOnGround = compound.getBoolean("wasOnGround");
 		}
 	}
 
 	@Override
-	public void onUpdate() {
-		if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			this.isDead = true;
+	public void tick() {
+		if (!this.world.isRemote() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			this.remove();
 		}
 
 		this.squishFactor += (this.squishAmount - this.squishFactor) * 0.5F;
 		this.prevSquishFactor = this.squishFactor;
 
-		if (!this.world.isRemote) {
+		if (!this.world.isRemote()) {
 			if (getIsPlayerNearby(7, 3, 7, 7) || getAttackTarget() != null || this.world.rand.nextInt(2200) == 0) {
 				if (!this.isActive()) {
 					this.setActive(true);
@@ -125,7 +131,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 			}
 
 			if(this.isActive()) {
-				if(this.getEntityAttribute(SLUDGE_TRAIL).getAttributeValue() == 1) {
+				if(this.getAttribute(SLUDGE_TRAIL).getValue() == 1) {
 					BlockPos position = new BlockPos(this.posX, this.posY, this.posZ);;
 					if (this.world.isAirBlock(position)) {
 						this.createTrail(position);
@@ -144,7 +150,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 			}
 		}
 
-		super.onUpdate();
+		super.tick();
 
 		if(this.isActive()) {
 			this.setNormalSize();
@@ -163,7 +169,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		this.alterSquishAmount();
 
 		//Update animation
-		if (this.world.isRemote) {
+		if (this.world.isRemote()) {
 			this.scale.updateTimer();
 			if (this.isActive()) {
 				this.scale.increaseTimer();
@@ -218,8 +224,8 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	}
 
 	protected void dealDamage(EntityLivingBase entityIn) {
-		if (this.isActive() && this.canEntityBeSeen(entityIn) && this.getDistanceSq(entityIn) < 2.5D && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())) {
-			this.playSound(SoundEvents.ENTITY_SLIME_ATTACK, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
+		if (this.isActive() && this.canEntityBeSeen(entityIn) && this.getDistanceSq(entityIn) < 2.5D && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue())) {
+			this.play(SoundEvents.ENTITY_SLIME_ATTACK, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 		}
 	}
 
@@ -288,7 +294,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if(!this.isActive() && !source.isCreativePlayer()) {
-			if (!this.world.isRemote) {
+			if (!this.world.isRemote()) {
 				this.setActive(true);
 			}
 			return false;
@@ -308,7 +314,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		@Override
 		public boolean shouldExecute() {
 			EntityLivingBase entitylivingbase = this.sludge.getAttackTarget();
-			return entitylivingbase == null ? false : (!entitylivingbase.isEntityAlive() ? false : !(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer)entitylivingbase).abilities.disableDamage);
+			return entitylivingbase == null ? false : (!entitylivingbase.isAlive() ? false : !(entitylivingbase instanceof EntityPlayer) || !((EntityPlayer)entitylivingbase).abilities.disableDamage);
 		}
 
 		@Override
@@ -320,7 +326,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		@Override
 		public boolean shouldContinueExecuting() {
 			EntityLivingBase entitylivingbase = this.sludge.getAttackTarget();
-			return entitylivingbase == null ? false : (!entitylivingbase.isEntityAlive() ? false : (entitylivingbase instanceof EntityPlayer && ((EntityPlayer)entitylivingbase).abilities.disableDamage ? false : --this.growTieredTimer > 0));
+			return entitylivingbase == null ? false : (!entitylivingbase.isAlive() ? false : (entitylivingbase instanceof EntityPlayer && ((EntityPlayer)entitylivingbase).abilities.disableDamage ? false : --this.growTieredTimer > 0));
 		}
 
 		@Override
@@ -439,7 +445,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 				this.action = EntityMoveHelper.Action.WAIT;
 
 				if (this.entity.onGround) {
-					this.entity.setAIMoveSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+					this.entity.setAIMoveSpeed((float)(this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
 
 					if (this.jumpDelay-- <= 0) {
 						this.jumpDelay = this.sludge.getJumpDelay();
@@ -451,7 +457,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 						this.sludge.getJumpHelper().setJumping();
 
 						if (this.sludge.makesSoundOnJump()) {
-							this.sludge.playSound(this.sludge.getJumpSound(), this.sludge.getSoundVolume(), ((this.sludge.getRNG().nextFloat() - this.sludge.getRNG().nextFloat()) * 0.2F + 1.0F) * 0.8F);
+							this.sludge.play(this.sludge.getJumpSound(), this.sludge.getSoundVolume(), ((this.sludge.getRNG().nextFloat() - this.sludge.getRNG().nextFloat()) * 0.2F + 1.0F) * 0.8F);
 						}
 					} else {
 						this.sludge.moveStrafing = 0.0F;
@@ -459,7 +465,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 						this.entity.setAIMoveSpeed(0.0F);
 					}
 				} else {
-					this.entity.setAIMoveSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+					this.entity.setAIMoveSpeed((float)(this.speed * this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue()));
 				}
 			}
 		}

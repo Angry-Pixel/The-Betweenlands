@@ -114,10 +114,10 @@ public class ParticleSoundRipple extends Particle {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		if(this.spawnMore && this.particleAge >= this.delay) {
 			if(this.particleAge == this.delay && Minecraft.getInstance().player != null) {
-				Minecraft.getInstance().getSoundHandler().playSound(new GemSingerEchoSound(new Vec3d(this.posX, this.posY, this.posZ)).setVolumeAndPitch(0.7f, 0.98f + this.world.rand.nextFloat() * 0.06f - 0.03f));
+				Minecraft.getInstance().getSoundHandler().play(new GemSingerEchoSound(new Vec3d(this.posX, this.posY, this.posZ)).setVolumeAndPitch(0.7f, 0.98f + this.world.rand.nextFloat() * 0.06f - 0.03f));
 			}
 			if((this.particleAge - this.delay) % 10 == 0) {
 				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.UNBATCHED, new ParticleSoundRipple(this.world, this.posX, this.posY, this.posZ, this.particleScale, 0, false));

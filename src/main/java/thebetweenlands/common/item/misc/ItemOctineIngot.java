@@ -104,7 +104,7 @@ public class ItemOctineIngot extends Item {
 								result.hitVec.y + worldIn.rand.nextFloat()*0.2-0.1, 
 								result.hitVec.z + worldIn.rand.nextFloat()*0.2-0.1, 0, 0.1, 0);
 					}
-					if(!worldIn.isRemote) {
+					if(!worldIn.isRemote()) {
 						if(count <= 1) {
 							if(playerIn instanceof EntityPlayerMP) {
 								AdvancementCriterionRegistry.OCTINE_INGOT_FIRE.trigger((EntityPlayerMP)playerIn);
@@ -121,7 +121,7 @@ public class ItemOctineIngot extends Item {
 									worldIn.setBlockState(offsetPos, Blocks.FIRE.getDefaultState());
 								}
 							}
-							worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
+							worldIn.play(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
 						}
 					}
 				}

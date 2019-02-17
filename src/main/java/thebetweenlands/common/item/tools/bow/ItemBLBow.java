@@ -105,7 +105,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairab
 				strength *= CorrosionHelper.getModifier(stack);
 
 				if (strength >= 0.1F) {
-					if (!world.isRemote) {
+					if (!world.isRemote()) {
 						ItemArrow itemArrow = (ItemArrow)arrow.getItem();
 						EntityArrow entityArrow = itemArrow.createArrow(world, arrow, player);
 						entityArrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, strength * 3.0F, 1.0F);
@@ -139,7 +139,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairab
 						world.spawnEntity(entityArrow);
 					}
 
-					world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + strength * 0.5F);
+					world.play((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + strength * 0.5F);
 
 					if (!infiniteArrows) {
 						arrow.shrink(1);

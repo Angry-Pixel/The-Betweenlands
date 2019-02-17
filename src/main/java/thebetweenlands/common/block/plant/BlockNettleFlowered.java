@@ -14,8 +14,8 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockNettleFlowered extends BlockPlant {
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(worldIn, pos, state, rand);
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+		super.tick(state, worldIn, pos, rand);
 		if(rand.nextInt(350) == 0) {
 			BlockPos randOffset = pos.add(rand.nextInt(3) - 1, rand.nextInt(2) - rand.nextInt(2), rand.nextInt(3) - 1);
 			if(worldIn.isAreaLoaded(randOffset, 0) && worldIn.isAirBlock(randOffset) && canBlockStay(worldIn, randOffset, worldIn.getBlockState(randOffset))) {
@@ -29,7 +29,7 @@ public class BlockNettleFlowered extends BlockPlant {
 
 	@Override
 	public void onEntityCollision(IBlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-		if(!worldIn.isRemote && entityIn instanceof IEntityBL == false && entityIn instanceof EntityLivingBase && !ElixirEffectRegistry.EFFECT_TOUGHSKIN.isActive((EntityLivingBase)entityIn)) {
+		if(!worldIn.isRemote() && entityIn instanceof IEntityBL == false && entityIn instanceof EntityLivingBase && !ElixirEffectRegistry.EFFECT_TOUGHSKIN.isActive((EntityLivingBase)entityIn)) {
 			entityIn.attackEntityFrom(DamageSource.CACTUS, 1);
 		}
 	}

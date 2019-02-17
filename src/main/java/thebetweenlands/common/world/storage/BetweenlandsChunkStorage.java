@@ -23,7 +23,7 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.item.misc.ItemGemSinger;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 
 public class BetweenlandsChunkStorage extends ChunkStorageImpl {
@@ -87,7 +87,7 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 				this.savedGemTargets.add(target);
 			}
 
-			if(this.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+			if(this.world.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 				for(ItemGemSinger.GemSingerTarget target : ItemGemSinger.GemSingerTarget.values()) {
 					if(!this.savedGemTargets.contains(target.getId())) {
 						//A new gem singer target was added -> chunk needs to be rescanned
@@ -112,13 +112,13 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 	public void update() {
 		super.update();
 
-		if(!this.world.isRemote && this.rescanGemSingerTargets) {
+		if(!this.world.isRemote() && this.rescanGemSingerTargets) {
 			this.rescanGemSingerTargets = false;
 			this.gemToPositions.clear();
 
 			Chunk chunk = this.getChunk();
 
-			int maxCheckY = Math.min(WorldProviderBetweenlands.LAYER_HEIGHT + 16, 255);
+			int maxCheckY = Math.min(DimensionBetweenlands.LAYER_HEIGHT + 16, 255);
 
 			for(int y = 0; y < maxCheckY; y++) {
 				for(int x = 0; x < 16; x++) {

@@ -23,7 +23,7 @@ import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -100,7 +100,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		CHISELED_CRAGROCK = BlockRegistry.CRAGROCK_CHISELED.getDefaultState();
 		AIR = Blocks.AIR.getDefaultState();
 
-		while (worldIn.isAirBlock(pos) && pos.getY() > WorldProviderBetweenlands.LAYER_HEIGHT)
+		while (worldIn.isAirBlock(pos) && pos.getY() > DimensionBetweenlands.LAYER_HEIGHT)
 			pos = pos.add(0, -1, 0);
 
 
@@ -719,7 +719,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		NBTTagCompound entityNbt = new NBTTagCompound();
 		entityNbt.setString("id", "thebetweenlands:pyrad");
 		EntityPyrad pyrad = new EntityPyrad(world);
-		pyrad.getEntityAttribute(EntityPyrad.AGRESSIVE).setBaseValue(1);
+		pyrad.getAttribute(EntityPyrad.AGRESSIVE).setBaseValue(1);
 		entityNbt.setTag("Attributes", SharedMonsterAttributes.writeBaseAttributeMapToNBT(pyrad.getAttributeMap()));
 		nbt.setTag("Entity", entityNbt);
 		rotatedSpawner(world, x, y, z, 8, 35, 10, direction, "thebetweenlands:pyrad")

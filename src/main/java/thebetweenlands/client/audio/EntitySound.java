@@ -22,9 +22,9 @@ public class EntitySound<T extends Entity> extends SafeStreamSound implements IE
 		this.attenuationType = AttenuationType.LINEAR;
 		this.entity = entity;
 		this.isPlaying = isPlaying;
-		this.xPosF = (float) this.entity.posX;
-		this.yPosF = (float) this.entity.posY;
-		this.zPosF = (float) this.entity.posZ;
+		this.x = (float) this.entity.posX;
+		this.y = (float) this.entity.posY;
+		this.z = (float) this.entity.posZ;
 		this.volume = 0.4F;
 	}
 
@@ -32,11 +32,11 @@ public class EntitySound<T extends Entity> extends SafeStreamSound implements IE
 	public void update() {
 		super.update();
 		
-		this.xPosF = (float) this.entity.posX;
-		this.yPosF = (float) this.entity.posY;
-		this.zPosF = (float) this.entity.posZ;
+		this.x = (float) this.entity.posX;
+		this.y = (float) this.entity.posY;
+		this.z = (float) this.entity.posZ;
 		
-		if(this.fadeOut || this.entity == null || !this.entity.isEntityAlive() || this.entity.isDead || !this.entity.world.isBlockLoaded(this.entity.getPosition())
+		if(this.fadeOut || this.entity == null || !this.entity.isAlive() || !this.entity.world.isBlockLoaded(this.entity.getPosition())
 				|| !this.isPlaying.test(this.entity)) {
 			this.repeat = false;
 			this.fadeOut = true;

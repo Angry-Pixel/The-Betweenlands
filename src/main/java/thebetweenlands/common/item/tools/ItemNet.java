@@ -32,12 +32,12 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 					receivedItem.setTagCompound(new NBTTagCompound());
 				receivedItem.getTag().setFloat("Health", target.getHealth());
 			}
-			if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == this && !player.world.isRemote) {
+			if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == this && !player.world.isRemote()) {
 				if (!target.getCustomNameTag().isEmpty()) {
 					receivedItem.setStackDisplayName(target.getCustomNameTag());
 				}
 				player.world.spawnEntity(new EntityItem(player.world, player.posX, player.posY, player.posZ, receivedItem));
-				target.setDead();
+				target.remove();
 				stack.damageItem(1, player);
 			}
 			player.swingArm(hand);

@@ -67,7 +67,7 @@ public abstract class EntityAITargetNonCreature extends EntityAIBase
 		{
 			return false;
 		}
-		else if (!entitylivingbase.isEntityAlive())
+		else if (!entitylivingbase.isAlive())
 		{
 			return false;
 		}
@@ -118,8 +118,8 @@ public abstract class EntityAITargetNonCreature extends EntityAIBase
 
 	protected double getTargetDistance()
 	{
-		IAttributeInstance iattributeinstance = this.taskOwner.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
-		return iattributeinstance == null ? 16.0D : iattributeinstance.getAttributeValue();
+		IAttributeInstance iattributeinstance = this.taskOwner.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+		return iattributeinstance == null ? 16.0D : iattributeinstance.getValue();
 	}
 
 	/**
@@ -156,7 +156,7 @@ public abstract class EntityAITargetNonCreature extends EntityAIBase
 		{
 			return false;
 		}
-		else if (!target.isEntityAlive())
+		else if (!target.isAlive())
 		{
 			return false;
 		}

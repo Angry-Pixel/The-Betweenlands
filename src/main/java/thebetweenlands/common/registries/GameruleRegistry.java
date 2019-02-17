@@ -79,7 +79,7 @@ public final class GameruleRegistry {
 
 	@SubscribeEvent
 	public static void onEntityJoin(EntityJoinWorldEvent event) {
-		if(!event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerMP) {
+		if(!event.getWorld().isRemote() && event.getEntity() instanceof EntityPlayerMP) {
 			TheBetweenlands.networkWrapper.sendTo(new MessageSyncGameRules(GameruleRegistry.INSTANCE.gamerules), (EntityPlayerMP) event.getEntity());
 		}
 	}

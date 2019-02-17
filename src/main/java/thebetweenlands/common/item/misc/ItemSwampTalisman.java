@@ -103,7 +103,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 					BlockPos portalPos = offsetPos.down(yo);
 					EnumFacing.Axis frameAxis = this.getPortalWoodFrameAxis(worldIn, portalPos);
 					if(frameAxis != null) {
-						if(!worldIn.isRemote) {
+						if(!worldIn.isRemote()) {
 							EnumFacing closestDir = null;
 							for(EnumFacing dir : EnumFacing.VALUES) {
 								if(dir.getAxis() == frameAxis) {
@@ -132,7 +132,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 									worldStorage.getLocalStorageHandler().addLocalStorage(location);
 								}
 
-								worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE, SoundCategory.PLAYERS, 0.5F, itemRand.nextFloat() * 0.4F + 0.8F);
+								worldIn.play(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE, SoundCategory.PLAYERS, 0.5F, itemRand.nextFloat() * 0.4F + 0.8F);
 							}
 						}
 						return EnumActionResult.SUCCESS;
@@ -143,14 +143,14 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 			boolean isCustomListed = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.isListed(state);
 			boolean sapling = this.isBlockSapling(worldIn, playerIn, state, pos, facing, hitX, hitY, hitZ);
 			if ((sapling || isCustomListed) && (EnumTalisman.SWAMP_TALISMAN_0.isItemOf(stack) || EnumTalisman.SWAMP_TALISMAN_5.isItemOf(stack))) {
-				if (!worldIn.isRemote) {
-					if(!BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionWhitelistSet.isListed(playerIn.world.provider.getDimension())) {
+				if (!worldIn.isRemote()) {
+					if(!BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionWhitelistSet.isListed(playerIn.world.dimension.getDimension())) {
 						playerIn.sendStatusMessage(new TextComponentTranslation("chat.talisman.wrongdimension"), true);
 					} else {
 						WorldGenWeedwoodPortalTree gen;
 						if(isCustomListed) {
 							int targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.getDimension(state);
-							if(targetDim == playerIn.world.provider.getDimension()) {
+							if(targetDim == playerIn.world.dimension.getDimension()) {
 								gen = new WorldGenWeedwoodPortalTree();
 							} else {
 								gen = new WorldGenWeedwoodPortalTree(BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.getDimension(state));
@@ -159,7 +159,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 							gen = new WorldGenWeedwoodPortalTree();
 						}
 						if(gen.generate(worldIn, itemRand, pos)) {
-							worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE, SoundCategory.PLAYERS, 0.5F, itemRand.nextFloat() * 0.4F + 0.8F);
+							worldIn.play(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE, SoundCategory.PLAYERS, 0.5F, itemRand.nextFloat() * 0.4F + 0.8F);
 							playerIn.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
 							if(playerIn instanceof EntityPlayerMP) {
 								((EntityPlayerMP)playerIn).connection.setPlayerLocation(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
@@ -173,27 +173,27 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 			} else if(EnumTalisman.SWAMP_TALISMAN_0.isItemOf(stack) && playerIn instanceof FakePlayer == false) {
 				LocationPortal portal = this.getPortalAt(worldIn, pos);
 				if(portal != null) {
-					if(!worldIn.isRemote) {
+					if(!worldIn.isRemote()) {
 						stack = stack.copy();
 						stack.setItemDamage(EnumTalisman.SWAMP_TALISMAN_5.getID());
 						playerIn.setHeldItem(hand, stack);
 
 						stack.setTagInfo("link", new NBTTagLong(portal.getPortalPosition().toLong()));
-						stack.setTagInfo("linkDim", new NBTTagInt(worldIn.provider.getDimension()));
+						stack.setTagInfo("linkDim", new NBTTagInt(worldIn.dimension.getDimension()));
 
 						playerIn.sendStatusMessage(new TextComponentTranslation("chat.talisman.linked"), true);
 
-						worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 0.8F, 0.7F);
+						worldIn.play(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 0.8F, 0.7F);
 					}
 					return EnumActionResult.SUCCESS;
 				}
 			} else if(EnumTalisman.SWAMP_TALISMAN_5.isItemOf(stack) && playerIn instanceof FakePlayer == false) {
-				if(!worldIn.isRemote) {
+				if(!worldIn.isRemote()) {
 					stack = stack.copy();
 					stack.setItemDamage(EnumTalisman.SWAMP_TALISMAN_0.getID());
 					playerIn.setHeldItem(hand, stack);
 
-					worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 0.8F, 0.7F);
+					worldIn.play(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 0.8F, 0.7F);
 				}
 
 				if(stack.hasTagCompound() && stack.getTag().contains("link", Constants.NBT.TAG_LONG) && stack.getTag().contains("linkDim", Constants.NBT.TAG_INT)) {
@@ -202,15 +202,15 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 					if(portal != null) {
 						if(worldIn instanceof WorldServer) {
 							int linkDim = stack.getTag().getInt("linkDim");
-							if(linkDim != worldIn.provider.getDimension() && 
-									(linkDim == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId || worldIn.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)) {
+							if(linkDim != worldIn.dimension.getDimension() && 
+									(linkDim == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId || worldIn.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)) {
 								WorldServer otherWorld = ((WorldServer) worldIn).getMinecraftServer().getWorld(linkDim);
 								if(otherWorld != null) {
-									double moveFactor = otherWorld.provider.getMovementFactor() / worldIn.provider.getMovementFactor();
+									double moveFactor = otherWorld.dimension.getMovementFactor() / worldIn.dimension.getMovementFactor();
 									if(new Vec3d(portal.getPortalPosition()).distanceTo(new Vec3d(otherPortalPos.getX() * moveFactor, portal.getPortalPosition().getY(), otherPortalPos.getZ() * moveFactor)) <= BetweenlandsConfig.WORLD_AND_DIMENSION.portalMaxLinkDist) {
 										LocationPortal linkPortal = this.getLinkPortal(otherWorld, otherPortalPos);
 										if(linkPortal != null) {
-											linkPortal.setOtherPortalPosition(worldIn.provider.getDimension(), portal.getPortalPosition());
+											linkPortal.setOtherPortalPosition(worldIn.dimension.getDimension(), portal.getPortalPosition());
 											portal.setOtherPortalPosition(linkDim, linkPortal.getPortalPosition());
 											playerIn.sendStatusMessage(new TextComponentTranslation("chat.talisman.portal_linked"), true);
 										} else {

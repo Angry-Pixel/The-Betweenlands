@@ -22,33 +22,34 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.common.registries.EntityRegistry;
 
-public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
-	protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.<Optional<UUID>>createKey(EntityFortressBossSpawner.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+public class EntityPrimordialMalevolenceSpawner extends EntityMob implements IEntityBL {
+	protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.<Optional<UUID>>createKey(EntityPrimordialMalevolenceSpawner.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 	public int spawnDelay = 40;
 	public final int maxSpawnDelay = 40;
 	private Entity cachedOwner;
 
-	public EntityFortressBossSpawner(World world) {
-		super(world);
+	public EntityPrimordialMalevolenceSpawner(World world) {
+		super(EntityRegistry.PRIMORDIAL_MALEVOLENCE_SPAWNER, world);
 		this.setSize(0.4F, 0.4F);
 	}
 
-	public EntityFortressBossSpawner(World world, Entity source) {
-		super(world);
+	public EntityPrimordialMalevolenceSpawner(World world, Entity source) {
+		super(EntityRegistry.PRIMORDIAL_MALEVOLENCE_SPAWNER, world);
 		this.setOwner(source);
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.0D);
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		this.getDataManager().register(OWNER, Optional.absent());
 	}
 
@@ -67,7 +68,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 		UUID uuid = this.getOwnerUUID();
 		if(uuid == null) {
 			this.cachedOwner = null;
-		} else if(this.cachedOwner == null || !this.cachedOwner.isEntityAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
+		} else if(this.cachedOwner == null || !this.cachedOwner.isAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
 			this.cachedOwner = null;
 			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
@@ -90,8 +91,8 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 		nbt.setInt("spawnDelay", this.spawnDelay);
 		if(this.getOwnerUUID() != null) {
 			nbt.setUniqueId("owner", this.getOwnerUUID());
@@ -99,8 +100,8 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 		this.spawnDelay = nbt.getInt("spawnDelay");
 		if(nbt.hasUniqueId("owner")) {
 			this.getDataManager().set(OWNER, Optional.of(nbt.getUniqueId("owner")));
@@ -110,9 +111,9 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		if(!this.world.isRemote && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isEntityAlive()))) {
-			this.setDead();
+	public void tick() {
+		if(!this.world.isRemote() && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isAlive()))) {
+			this.remove();
 			return;
 		}
 
@@ -120,9 +121,9 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 		this.motionY = 0;
 		this.motionZ = 0;
 
-		super.onUpdate();
+		super.tick();
 
-		if(this.world.isRemote) {
+		if(this.world.isRemote()) {
 			Entity owner = this.getOwner();
 			if(owner != null) {
 				for(int i = 0; i < 3; i++) {
@@ -140,22 +141,22 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 		if(this.spawnDelay > 0) {
 			this.spawnDelay--;
 		} else {
-			if(!this.world.isRemote) {
+			if(!this.world.isRemote()) {
 				EntityWight wight = new EntityWight(this.world);
 				wight.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 				wight.setCanTurnVolatile(false);
-				wight.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
+				wight.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
 				wight.setHealth(wight.getMaxHealth());
 				if(this.getOwner() instanceof EntityLiving) {
 					wight.setAttackTarget(((EntityLiving)this.getOwner()).getAttackTarget());
 				}
 				this.world.spawnEntity(wight);
-				this.setDead();
+				this.remove();
 			} else {
 				for(int i = 0; i < 6; i++) {
 					this.spawnVolatileParticles();
 				}
-				this.setDead();
+				this.remove();
 			}
 		}
 	}

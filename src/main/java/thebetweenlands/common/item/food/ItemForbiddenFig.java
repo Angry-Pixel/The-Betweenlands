@@ -40,9 +40,9 @@ public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
     protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
         super.onFoodEaten(stack, world, player);
 
-        if (world.isRemote) {
+        if (world.isRemote()) {
             player.sendStatusMessage(new TextComponentTranslation("chat.item.forbiddenfig"), true);
-            world.playSound(player, player.posX, player.posY, player.posZ, SoundRegistry.FIG, SoundCategory.AMBIENT, 0.7F, 0.8F);
+            world.play(player, player.posX, player.posY, player.posZ, SoundRegistry.FIG, SoundCategory.AMBIENT, 0.7F, 0.8F);
         } else {
             player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 1200, 1));
             player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 1200, 1));

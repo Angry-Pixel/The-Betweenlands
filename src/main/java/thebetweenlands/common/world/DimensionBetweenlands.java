@@ -3,12 +3,13 @@ package thebetweenlands.common.world;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.dimension.Dimension;
 import net.minecraft.world.dimension.DimensionType;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,7 +33,7 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
  * @author A long time ago in a galaxy far, far away: The Erebus Team
  *
  */
-public class WorldProviderBetweenlands extends WorldProvider {
+public class DimensionBetweenlands extends Dimension {
 	public static final int LAYER_HEIGHT = 120;
 
 	public static final int CAVE_WATER_HEIGHT = 15;
@@ -49,7 +50,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	private boolean showClouds = false;
 
-	public WorldProviderBetweenlands() {
+	public DimensionBetweenlands() {
 		this.allowHostiles = true;
 		this.allowAnimals = true;
 	}
@@ -59,9 +60,9 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	 *
 	 * @param world
 	 */
-	public static final WorldProviderBetweenlands getProvider(World world) {
-		if (world != null && world.provider instanceof WorldProviderBetweenlands) {
-			return (WorldProviderBetweenlands) world.provider;
+	public static final DimensionBetweenlands getProvider(World world) {
+		if (world != null && world.dimension instanceof DimensionBetweenlands) {
+			return (DimensionBetweenlands) world.dimension;
 		}
 		return null;
 	}
@@ -115,7 +116,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	}
 
 	public float getOverworldCelestialAngle(float partialTicks) {
-		int i = (int)(this.world.getWorldTime() % 24000L);
+		int i = (int)(this.world.getDayTime() % 24000L);
 		float f = ((float)i + partialTicks) / 24000.0F - 0.25F;
 
 		if (f < 0.0F)
@@ -140,7 +141,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	protected void generateLightBrightnessTable() {
-		if(this.world.isRemote) {
+		if(this.world.isRemote()) {
 			float configBrightness = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionBrightness / 100.0F;
 			for(int i = 0; i <= 15; i++) {
 				float f1 = 1F - (float)Math.pow(i / 15F, 1.1F + 0.35F * (1.0F - configBrightness));
@@ -218,7 +219,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		this.world.getWorldInfo().setThundering(eeRegistry.thunderstorm.isActive());
 		this.world.thunderingStrength = this.world.prevThunderingStrength = eeRegistry.thunderstorm.isActive() ? 1 : 0;
 		this.world.prevRainingStrength = this.world.rainingStrength;
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			float rainingStrength = this.world.rainingStrength;
 			if(eeRegistry.heavyRain.isActive()) {
 				if (rainingStrength < 0.5F) {
@@ -260,8 +261,8 @@ public class WorldProviderBetweenlands extends WorldProvider {
 			undergroundTable[i] = Math.max((1.0F - f1) / (f1 * 2.5F * (1.0F - configBrightness) + 1.0F) * 0.425F - 0.05F, -0.035F + 0.035F * configBrightness * configBrightness);
 		}
 
-		double caveHeightDiff = Math.max(WorldProviderBetweenlands.CAVE_START - player.posY, 0.0D);
-		float caveMultiplier = (float) caveHeightDiff / WorldProviderBetweenlands.CAVE_START;
+		double caveHeightDiff = Math.max(DimensionBetweenlands.CAVE_START - player.posY, 0.0D);
+		float caveMultiplier = (float) caveHeightDiff / DimensionBetweenlands.CAVE_START;
 		caveMultiplier = 1.0F - caveMultiplier;
 		caveMultiplier *= Math.pow(caveMultiplier, 6);
 		for(int i = 0; i < 16; i++) {
@@ -315,13 +316,25 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		return this.getWorldData().getEnvironmentEventRegistry();
 	}
 
-	@Override
-	public DimensionType getDimensionType() {
-		return TheBetweenlands.dimensionType;
-	}
-
 	@OnlyIn(Dist.CLIENT)
 	public void setShowClouds(boolean show) {
 		this.showClouds = show;
+	}
+
+	@Override
+	public BlockPos findSpawn(ChunkPos p_206920_1_, boolean checkValid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BlockPos findSpawn(int p_206921_1_, int p_206921_2_, boolean checkValid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DimensionType getType() {
+		return TheBetweenlands.dimensionType;
 	}
 }

@@ -92,7 +92,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     @SubscribeEvent
     public static void onBlockBreak(BreakEvent event) {
         //Consume compost if non-BL crop is broken
-        if (!event.getWorld().isRemote) {
+        if (!event.getWorld().isRemote()) {
             IBlockState stateDown = event.getWorld().getBlockState(event.getPos().down());
             if (stateDown.getBlock() instanceof BlockGenericDugSoil) {
                 if (event.getState().getBlock() instanceof BlockGenericCrop == false && event.getState().getBlock() instanceof IPlantable) {
@@ -108,7 +108,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     @SubscribeEvent
     public static void onHarvestBlock(HarvestDropsEvent event) {
         //Don't drop items except one seed if soil is decayed
-        if (!event.getWorld().isRemote) {
+        if (!event.getWorld().isRemote()) {
             IBlockState stateDown = event.getWorld().getBlockState(event.getPos().down());
             if (stateDown.getBlock() instanceof BlockGenericDugSoil) {
                 if (event.getState().getBlock() instanceof BlockGenericCrop == false && event.getState().getBlock() instanceof IPlantable && stateDown.getValue(DECAYED)) {
@@ -132,7 +132,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     @SubscribeEvent
     public static void onCropGrow(CropGrowEvent.Pre event) {
         //Don't let crops grow further on decayed soil
-        if (!event.getWorld().isRemote) {
+        if (!event.getWorld().isRemote()) {
             IBlockState stateDown = event.getWorld().getBlockState(event.getPos().down());
             if (stateDown.getBlock() instanceof BlockGenericDugSoil) {
                 if (event.getState().getBlock() instanceof BlockGenericCrop == false && event.getState().getBlock() instanceof IPlantable && stateDown.getValue(DECAYED)) {
@@ -251,8 +251,8 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        if (!world.isRemote) {
+    public void tick(IBlockState state, World world, BlockPos pos, Random rand) {
+        if (!world.isRemote()) {
             TileEntityDugSoil te = getTile(world, pos);
 
             if (te != null) {
@@ -358,8 +358,8 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
         ItemStack heldItem = playerIn.getHeldItem(hand);
         TileEntityDugSoil te = getTile(world, pos);
         if (te != null && te.getCompost() == 0 && !heldItem.isEmpty() && EnumItemMisc.COMPOST.isItemOf(heldItem)) {
-            if (!world.isRemote) {
-                world.playSound(null, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 1, 0.5f + world.rand.nextFloat() * 0.5f);
+            if (!world.isRemote()) {
+                world.play(null, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 1, 0.5f + world.rand.nextFloat() * 0.5f);
                 te.setCompost(30);
                 if (!playerIn.isCreative()) {
                     heldItem.shrink(1);

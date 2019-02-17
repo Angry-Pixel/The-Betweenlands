@@ -20,16 +20,16 @@ import thebetweenlands.client.render.model.entity.ModelSwordEnergy;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
-import thebetweenlands.common.entity.mobs.EntityFortressBoss;
+import thebetweenlands.common.entity.mobs.EntityPrimordialMalevolence;
 import thebetweenlands.util.LightingUtil;
 
-public class RenderFortressBoss extends Render<EntityFortressBoss> {
+public class RenderFortressBoss extends Render<EntityPrimordialMalevolence> {
 	public RenderFortressBoss(RenderManager renderManager) {
 		super(renderManager);
 	}
 
-	private static double vertices[][] = EntityFortressBoss.ICOSAHEDRON_VERTICES;
-	private static int indices[][] = EntityFortressBoss.ICOSAHEDRON_INDICES;
+	private static double vertices[][] = EntityPrimordialMalevolence.ICOSAHEDRON_VERTICES;
+	private static int indices[][] = EntityPrimordialMalevolence.ICOSAHEDRON_INDICES;
 
 	private static final ResourceLocation SHIELD_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
 	private static final ModelSwordEnergy BULLET_MODEL = new ModelSwordEnergy();
@@ -38,8 +38,8 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 	private static final ModelFortressBoss MODEL = new ModelFortressBoss();
 
 	@Override
-	public void doRender(EntityFortressBoss entity, double x, double y, double z, float yaw, float partialTicks) {
-		EntityFortressBoss boss = (EntityFortressBoss) entity;
+	public void doRender(EntityPrimordialMalevolence entity, double x, double y, double z, float yaw, float partialTicks) {
+		EntityPrimordialMalevolence boss = (EntityPrimordialMalevolence) entity;
 
 		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			WorldShader shader = ShaderHelper.INSTANCE.getWorldShader();
@@ -98,7 +98,7 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x + EntityFortressBoss.SHIELD_OFFSET_X, y + EntityFortressBoss.SHIELD_OFFSET_Y, z + EntityFortressBoss.SHIELD_OFFSET_Z);
+		GlStateManager.translate(x + EntityPrimordialMalevolence.SHIELD_OFFSET_X, y + EntityPrimordialMalevolence.SHIELD_OFFSET_Y, z + EntityPrimordialMalevolence.SHIELD_OFFSET_Z);
 
 		//Rotate shield
 		GlStateManager.rotate(boss.getShieldRotationPitch(partialTicks), 1, 0, 0);
@@ -365,7 +365,7 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityFortressBoss entity) {
+	protected ResourceLocation getEntityTexture(EntityPrimordialMalevolence entity) {
 		return null;
 	}
 }

@@ -130,8 +130,8 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft) {
 		if(stack.getTag() != null && stack.getTag().contains("throwing") && stack.getTag().getBoolean("throwing")) {
-			world.playSound((EntityPlayer)entityLiving, entityLiving.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS,0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
-			if (!world.isRemote) {
+			world.play((EntityPlayer)entityLiving, entityLiving.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS,0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
+			if (!world.isRemote()) {
 				int useCount = this.getMaxItemUseDuration(stack) - timeLeft;
 				EntityElixir elixir = new EntityElixir(world, entityLiving, stack);
 				float strength = Math.min(0.2F + useCount / 20.0F, 1.0F);
@@ -201,7 +201,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 			CriteriaTriggers.CONSUME_ITEM.trigger((EntityPlayerMP)entityplayer, stack);
 		}
 
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			ElixirEffect effect = this.getElixirFromItem(stack);
 			int duration = this.getElixirDuration(stack);
 			int strength = this.getElixirStrength(stack);

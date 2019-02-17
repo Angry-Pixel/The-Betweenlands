@@ -30,14 +30,14 @@ public class EntityShockwaveSwordItem extends EntityItem {
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		this.getDataManager().register(WAVE_PROGRESS, 0);
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 		this.lastWaveProgress = this.waveProgress;
 		this.waveProgress = this.getDataManager().get(WAVE_PROGRESS);
 		if(this.waveProgress < 50)
@@ -45,14 +45,14 @@ public class EntityShockwaveSwordItem extends EntityItem {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 		nbt.setInt("WaveProgress", this.getDataManager().get(WAVE_PROGRESS));
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 		this.getDataManager().set(WAVE_PROGRESS, nbt.getInt("WaveProgress"));
 	}
 

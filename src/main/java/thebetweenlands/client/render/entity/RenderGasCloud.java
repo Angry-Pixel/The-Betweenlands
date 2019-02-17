@@ -12,10 +12,10 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.common.entity.mobs.EntityGasCloud;
+import thebetweenlands.common.entity.mobs.EntityShallowbreath;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderGasCloud extends Render<EntityGasCloud> {
+public class RenderGasCloud extends Render<EntityShallowbreath> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/gas_cloud.png");
 
 	public RenderGasCloud(RenderManager renderManager) {
@@ -23,7 +23,7 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 	}
 
 	@Override
-	public void doRender(EntityGasCloud entity, double x, double y, double z, float yaw, float partialTicks) {
+	public void doRender(EntityShallowbreath entity, double x, double y, double z, float yaw, float partialTicks) {
 		GlStateManager.disableLighting();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -50,7 +50,7 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityGasCloud entity) {
+	protected ResourceLocation getEntityTexture(EntityShallowbreath entity) {
 		return null;
 	}
 }

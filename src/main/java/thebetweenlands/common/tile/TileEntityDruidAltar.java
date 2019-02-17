@@ -49,11 +49,11 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 
 	@Override
 	public void tick() {
-		if (!this.world.isRemote && this.circleShouldRevert) {
+		if (!this.world.isRemote() && this.circleShouldRevert) {
 			checkDruidCircleBlocks(this.world);
 			this.circleShouldRevert = false;
 		}
-		if (this.world.isRemote) {
+		if (this.world.isRemote()) {
 			this.prevRotation = this.rotation;
 			this.rotation += ROTATION_SPEED;
 			if (this.rotation >= 360.0F) {
@@ -105,7 +105,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 			stack.setCount( getInventoryStackLimit());
 		}
 		IDruidAltarRecipe recipe = DruidAltarRecipe.getDruidAltarRecipe(this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4));
-		if (!this.world.isRemote && recipe != null && !stack.isEmpty() && this.inventory.get(0).isEmpty() && this.craftingProgress == 0) {
+		if (!this.world.isRemote() && recipe != null && !stack.isEmpty() && this.inventory.get(0).isEmpty() && this.craftingProgress == 0) {
 			recipe.onStartCrafting(world, pos, new ItemStack[] {this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4)});
 			startCraftingProcess();
 		}
@@ -113,7 +113,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 
 	private void startCraftingProcess() {
 		World world = this.world;
-		int dim = world.provider.getDimension();
+		int dim = world.dimension.getDimension();
 		this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(BlockDruidAltar.ACTIVE, true), 3);
 		this.craftingProgress = 1;
 		// Packet to start sound
@@ -138,7 +138,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 
 	private void stopCraftingProcess() {
 		World world = this.world;
-		int dim = world.provider.getDimension();
+		int dim = world.dimension.getDimension();
 		this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(BlockDruidAltar.ACTIVE, false), 3);
 		this.craftingProgress = 0;
 		// Packet to cancel sound
@@ -161,7 +161,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 
 	public void sendCraftingProgressPacket() {
 		World world = this.world;
-		int dim = world.provider.getDimension();
+		int dim = world.dimension.getDimension();
 		TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this), new NetworkRegistry.TargetPoint(dim, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 64D));
 	}
 

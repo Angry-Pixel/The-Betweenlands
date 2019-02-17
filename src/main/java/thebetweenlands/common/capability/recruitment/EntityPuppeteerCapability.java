@@ -69,7 +69,7 @@ public class EntityPuppeteerCapability extends EntityCapability<EntityPuppeteerC
 	public Entity getActivatingEntity() {
 		if(this.activatingEntityId < 0) {
 			this.activatingEntity = null;
-		} else if(this.activatingEntity == null || !this.activatingEntity.isEntityAlive() || this.activatingEntity.getEntityId() != this.activatingEntityId) {
+		} else if(this.activatingEntity == null || !this.activatingEntity.isAlive() || this.activatingEntity.getEntityId() != this.activatingEntityId) {
 			this.activatingEntity = this.getEntity().world.getEntityByID(this.activatingEntityId);
 		}
 		return this.activatingEntity;

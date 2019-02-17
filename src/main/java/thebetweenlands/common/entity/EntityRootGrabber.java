@@ -79,7 +79,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	@Override
-	protected void entityInit() {
+	protected void registerData() {
 		this.dataManager.register(DAMAGE, 0.0F);
 		this.dataManager.register(RETRACT, false);
 	}
@@ -91,8 +91,8 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 	public void setDamage(float damage) {
 		this.dataManager.set(DAMAGE, damage);
 
-		if(damage >= 1.0F && !this.world.isRemote) {
-			this.setDead();
+		if(damage >= 1.0F && !this.world.isRemote()) {
+			this.remove();
 			this.world.setEntityState(this, EVENT_BROKEN);
 		}
 	}
@@ -166,7 +166,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.world.profiler.startSection("entityBaseTick");
 
 		this.prevPosX = this.posX;
@@ -183,7 +183,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 
 		if(this.attackTicks >= this.delay) {
 			if(this.attackTicks == this.delay) {
-				if(!this.world.isRemote) {
+				if(!this.world.isRemote()) {
 					List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox(), e -> !e.getIsInvulnerable() && (e instanceof EntityPlayer == false || (!((EntityPlayer)e).isSpectator() && !((EntityPlayer)e).isCreative())));
 					if(!targets.isEmpty()) {
 						this.grabbedEntity = targets.get(this.rand.nextInt(targets.size()));
@@ -197,11 +197,11 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 					}
 				} else {
 					this.spawnExtendParticles();
-					this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
+					this.world.play(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
 				}
 			}
 
-			if(!this.world.isRemote && this.grabbedEntity != null && !this.dataManager.get(RETRACT)) {
+			if(!this.world.isRemote() && this.grabbedEntity != null && !this.dataManager.get(RETRACT)) {
 				if(this.getBoundingBox().intersects(this.grabbedEntity.getBoundingBox())) {
 					this.grabbedEntity.addPotionEffect(new PotionEffect(ElixirEffectRegistry.ROOT_BOUND, 5, 0, true, false));
 				} else {
@@ -209,7 +209,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 				}
 			}
 
-			if(!this.world.isRemote) {
+			if(!this.world.isRemote()) {
 				if(this.grabbedEntity != null) {
 					if(this.attackTicks >= this.delay + this.maxAge) {
 						this.dataManager.set(RETRACT, true);
@@ -224,23 +224,23 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 			if(this.dataManager.get(RETRACT)) {
 				this.retractTicks++;
 
-				if(!this.world.isRemote && this.getRootYOffset(1) <= -2.4F) {
-					this.setDead();
+				if(!this.world.isRemote() && this.getRootYOffset(1) <= -2.4F) {
+					this.remove();
 				}
 			}
 		}
 
 		boolean retracting = this.dataManager.get(RETRACT);
 
-		if(this.world.isRemote && (this.attackTicks <= 5 || retracting)) {
+		if(this.world.isRemote() && (this.attackTicks <= 5 || retracting)) {
 			this.spawnBlockDust();
 			if(this.emergeSound && !retracting) {
 				this.emergeSound = false;
-				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP_EMERGE, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
+				this.world.play(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP_EMERGE, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
 			}
 			if(this.retractSound && retracting) {
 				this.retractSound = false;
-				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP_EMERGE, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
+				this.world.play(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP_EMERGE, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
 			}
 		}
 
@@ -317,7 +317,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 
 	@Override
 	public boolean hitByEntity(Entity entity) {
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			if(entity instanceof EntityPlayer && ((EntityPlayer)entity).isCreative()) {
 				this.setDamage(1.0F);
 			} else {
@@ -345,7 +345,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 			}
 
 			SoundType soundType = SoundType.WOOD;
-			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
+			this.world.play(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 2.0F, soundType.getPitch() * 0.8F, false);
 		} else if(id == EVENT_HIT) {
 			for(int i = 0; i < 8; i++) {
 				double dx = (this.rand.nextDouble() * 2 - 1) * this.width / 4;
@@ -358,7 +358,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 			}
 
 			SoundType soundType = SoundType.WOOD;
-			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 8.0F, soundType.getPitch() * 0.5F, false);
+			this.world.play(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 8.0F, soundType.getPitch() * 0.5F, false);
 		}
 	}
 
@@ -377,7 +377,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbt) {
+	protected void readAdditional(NBTTagCompound nbt) {
 		this.delay = nbt.getInt("delay");
 		this.origin = BlockPos.fromLong(nbt.getLong("origin"));
 		this.attackTicks = nbt.getInt("attackTicks");
@@ -385,7 +385,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbt) {
+	protected void writeAdditional(NBTTagCompound nbt) {
 		nbt.setInt("delay", this.delay);
 		nbt.setLong("origin", this.origin.toLong());
 		nbt.setInt("attackTicks", this.attackTicks);

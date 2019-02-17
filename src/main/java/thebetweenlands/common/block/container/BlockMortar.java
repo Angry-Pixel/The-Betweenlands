@@ -51,7 +51,7 @@ public class BlockMortar extends BlockContainer {
 
 	@Override
 	public void onBlockClicked(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn) {
-		if(!worldIn.isRemote) {
+		if(!worldIn.isRemote()) {
 			if (worldIn.getTileEntity(pos) instanceof TileEntityMortar) {
 				TileEntityMortar tile = (TileEntityMortar) worldIn.getTileEntity(pos);
 
@@ -64,7 +64,7 @@ public class BlockMortar extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand,EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (worldIn.isRemote)
+		if (worldIn.isRemote())
 			return true;
 		if (worldIn.getTileEntity(pos) instanceof TileEntityMortar) {
 			TileEntityMortar tile = (TileEntityMortar) worldIn.getTileEntity(pos);
@@ -94,7 +94,7 @@ public class BlockMortar extends BlockContainer {
 			for (int i = 0; i < tile.getSizeInventory(); i++) {
 				ItemStack stack = tile.getStackInSlot(i);
 				if (!stack.isEmpty()) {
-					if (!world.isRemote && world.getGameRules().getBoolean("doTileDrops")) {
+					if (!world.isRemote() && world.getGameRules().getBoolean("doTileDrops")) {
 						float f = 0.7F;
 						double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
 						double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;

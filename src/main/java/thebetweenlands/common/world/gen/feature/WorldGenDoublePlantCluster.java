@@ -40,7 +40,7 @@ public class WorldGenDoublePlantCluster extends WorldGenerator {
 		for (int i = 0; i < this.attempts; ++i) {
 			BlockPos blockpos = position.add(rand.nextInt(this.offset) - rand.nextInt(this.offset), rand.nextInt(this.offset/2+1) - rand.nextInt(this.offset/2+1), rand.nextInt(this.offset) - rand.nextInt(this.offset));
 
-			if ((worldIn.isAirBlock(blockpos) || (this.isUnderwater && worldIn.getBlockState(blockpos).getMaterial().isLiquid())) && (worldIn.provider.hasSkyLight() || blockpos.getY() < 254) && this.block.canPlaceBlockAt(worldIn, blockpos)) {
+			if ((worldIn.isAirBlock(blockpos) || (this.isUnderwater && worldIn.getBlockState(blockpos).getMaterial().isLiquid())) && (worldIn.dimension.hasSkyLight() || blockpos.getY() < 254) && this.block.canPlaceBlockAt(worldIn, blockpos)) {
 				this.block.placeAt(worldIn, blockpos, 2);
 				generated = true;
 			}

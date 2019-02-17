@@ -38,7 +38,7 @@ public class EntitySpawnHandler {
 	public static void onEntitySpawn(EntityJoinWorldEvent event) {
 		Entity entity = event.getEntity();
 
-		if (!entity.world.isRemote) {
+		if (!entity.world.isRemote()) {
 			//Add gem modifier to arrows
 			if (entity instanceof EntityArrow) {
 				EntityArrow entityArrow = (EntityArrow) entity;

@@ -6,10 +6,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.model.entity.ModelDreadfulMummy;
-import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
+import thebetweenlands.common.entity.mobs.EntityDreadfulPeatMummy;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderDreadfulMummy extends RenderLiving<EntityDreadfulMummy> {
+public class RenderDreadfulMummy extends RenderLiving<EntityDreadfulPeatMummy> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/dreadful_mummy.png");
 
 	public RenderDreadfulMummy(RenderManager rendermanagerIn) {
@@ -17,12 +17,12 @@ public class RenderDreadfulMummy extends RenderLiving<EntityDreadfulMummy> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityDreadfulMummy entity) {
+	protected ResourceLocation getEntityTexture(EntityDreadfulPeatMummy entity) {
 		return TEXTURE;
 	}
 
 	@Override
-	public void doRender(EntityDreadfulMummy entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(EntityDreadfulPeatMummy entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		super.doRender(entity, x, y + entity.getInterpolatedYOffsetProgress(partialTicks), z, entityYaw, partialTicks);
 	}
 }

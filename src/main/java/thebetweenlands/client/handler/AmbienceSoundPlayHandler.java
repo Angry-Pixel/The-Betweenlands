@@ -31,7 +31,7 @@ public class AmbienceSoundPlayHandler {
 
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload event) {
-		if(event.getWorld().isRemote) {
+		if(event.getWorld().isRemote()) {
 			AmbienceManager.INSTANCE.stopAll();
 		}
 	}

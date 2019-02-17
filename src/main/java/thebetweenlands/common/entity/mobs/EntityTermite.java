@@ -17,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.attributes.BooleanAttribute;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -24,7 +25,7 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	public static final IAttribute SMALL = (new BooleanAttribute(null, "bl.termiteSmall", false)).setDescription("Whether this is a small termite").setShouldWatch(true);
 
 	public EntityTermite(World worldIn) {
-		super(worldIn);
+		super(EntityRegistry.TERMITE, worldIn);
 		this.setSize(0.9F, 0.6F);
 	}
 
@@ -33,7 +34,7 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	 * @param small
 	 */
 	public void setSmall(boolean small) {
-		this.getEntityAttribute(SMALL).setBaseValue(small ? 1 : 0);
+		this.getAttribute(SMALL).setBaseValue(small ? 1 : 0);
 	}
 
 	@Override
@@ -43,12 +44,12 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(8.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(8.0D);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
+		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 		this.getAttributeMap().registerAttribute(SMALL);
 	}
 
@@ -69,7 +70,7 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
-		this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
+		this.play(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
 	}
 
 	@Nullable
@@ -84,14 +85,14 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		if(this.getEntityAttribute(SMALL).getAttributeValue() == 1) {
+	public void tick() {
+		if(this.getAttribute(SMALL).getValue() == 1) {
 			this.setSize(0.45F, 0.3F);
 		} else {
 			this.setSize(0.9F, 0.6F);
 		}
 
-		super.onUpdate();
+		super.tick();
 	}
 
 	@Override

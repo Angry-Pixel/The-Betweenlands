@@ -35,7 +35,7 @@ public class ItemCavingRope extends Item {
 	@Override
 	public EnumActionResult onItemUse( EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
-		if(!world.isRemote) {
+		if(!world.isRemote()) {
 			EntityRopeNode connectedRopeNode = null;
 			for(Entity e : (List<Entity>) world.loadedEntityList) {
 				if(e instanceof EntityRopeNode) {
@@ -53,7 +53,7 @@ public class ItemCavingRope extends Item {
 				world.spawnEntity(ropeNode);
 				if (player instanceof EntityPlayerMP)
 					AdvancementCriterionRegistry.CAVINGROPE_PLACED.trigger((EntityPlayerMP) player);
-				world.playSound((EntityPlayer)null, ropeNode.posX, ropeNode.posY, ropeNode.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
+				world.play((EntityPlayer)null, ropeNode.posX, ropeNode.posY, ropeNode.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
 				stack.shrink(1);
 			} else {
 				if(connectedRopeNode.getDistance(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ) > EntityRopeNode.ROPE_LENGTH) {
@@ -62,7 +62,7 @@ public class ItemCavingRope extends Item {
 					return EnumActionResult.FAIL;
 				} else {
 					EntityRopeNode ropeNode = connectedRopeNode.extendRope(player, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ);
-					world.playSound((EntityPlayer)null, ropeNode.posX, ropeNode.posY, ropeNode.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
+					world.play((EntityPlayer)null, ropeNode.posX, ropeNode.posY, ropeNode.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
 					stack.shrink(1);
 				}
 			}

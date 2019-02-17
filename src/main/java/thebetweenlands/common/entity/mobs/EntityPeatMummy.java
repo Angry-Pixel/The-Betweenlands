@@ -43,6 +43,7 @@ import thebetweenlands.common.entity.ai.EntityAIApproachItem;
 import thebetweenlands.common.entity.ai.EntityAIPeatMummyCharge;
 import thebetweenlands.common.entity.attributes.BooleanAttribute;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -94,7 +95,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	private List<EntityAIBase> inactiveTargetTasks;
 
 	public EntityPeatMummy(World world) {
-		super(world);
+		super(EntityRegistry.PEAT_MUMMY, world);
 		this.setSize(1.0F, 1.2F);
 		this.setSpawningTicks(0);
 	}
@@ -148,20 +149,20 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 		this.inactiveTargetTasks.add(new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, false) {
 			@Override
 			protected double getTargetDistance() {
-				return EntityPeatMummy.this.getEntityAttribute(SPAWN_RANGE_ATTRIB).getAttributeValue();
+				return EntityPeatMummy.this.getAttribute(SPAWN_RANGE_ATTRIB).getValue();
 			}
 		});
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
+	protected void registerAttributes() {
+		super.registerAttributes();
 
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(BASE_SPEED);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(110.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(BASE_DAMAGE);
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(BASE_SPEED);
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(110.0D);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(BASE_DAMAGE);
+		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
+		this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 
 		this.getAttributeMap().registerAttribute(CARRY_SHIMMERSTONE);
 		this.getAttributeMap().registerAttribute(IS_BOSS);
@@ -176,8 +177,8 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 
 		this.getDataManager().register(SPAWNING_TICKS, 0);
 		this.getDataManager().register(CHARGING_STATE, (byte) 0);
@@ -189,16 +190,16 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
+	public void writeAdditional(NBTTagCompound nbt) {
 		nbt.setInt("spawningTicks", this.getSpawningTicks());
 		nbt.setInt("chargingPreparation", this.chargingPreparation);
 		nbt.setByte("chargingState", this.getDataManager().get(CHARGING_STATE));
 
-		super.writeEntityToNBT(nbt);
+		super.writeAdditional(nbt);
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
+	public void readAdditional(NBTTagCompound nbt) {
 		if(nbt.contains("spawningTicks")) {
 			this.setSpawningTicks(nbt.getInt("spawningTicks"));
 		}
@@ -209,21 +210,21 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 			this.getDataManager().set(CHARGING_STATE, nbt.getByte("chargingState"));
 		}
 
-		super.readEntityFromNBT(nbt);
+		super.readAdditional(nbt);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		this.prevSpawningOffset = this.getSpawningOffset();
 		this.prevSpawningProgress = this.getSpawningProgress();
 
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			if(this.shouldUpdateSpawningAnimation()) {
 				if(this.getSpawningTicks() == 0) {
-					this.playSound(SoundRegistry.PEAT_MUMMY_EMERGE, 1.2F, 1.0F);
+					this.play(SoundRegistry.PEAT_MUMMY_EMERGE, 1.2F, 1.0F);
 				}
 				this.updateSpawningTicks();
 			} else if(this.getSpawningTicks() > 0) {
@@ -240,7 +241,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 				if ((getSpawningTicks() - breakPoint / 2 - 1) % breakPoint == 0) {
 					BlockPos pos = new BlockPos(this.posX, this.posY - 1, this.posZ);
 					IBlockState blockState = this.world.getBlockState(pos);
-					this.playSound(blockState.getBlock().getSoundType().getBreakSound(), this.rand.nextFloat() * 0.3F + 0.3F, this.rand.nextFloat() * 0.15F + 0.7F);
+					this.play(blockState.getBlock().getSoundType().getBreakSound(), this.rand.nextFloat() * 0.3F + 0.3F, this.rand.nextFloat() * 0.15F + 0.7F);
 				}
 
 				if(this.getAttackTarget() != null) {
@@ -292,7 +293,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 				this.screamTimer = 0;
 			}
 
-			if(!this.world.isRemote) {
+			if(!this.world.isRemote()) {
 				if(this.isPreparing()){
 					this.chargingPreparation++;
 					if(this.getPreparationProgress() == 1.0F) {
@@ -302,11 +303,11 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 				}
 
 				if(this.isCharging()) {
-					this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(BASE_DAMAGE * this.getEntityAttribute(CHARGING_DAMAGE_MULTIPLIER_ATTRIB).getAttributeValue());
-					this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.getEntityAttribute(CHARGING_SPEED_ATTRIB).getAttributeValue());
+					this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(BASE_DAMAGE * this.getAttribute(CHARGING_DAMAGE_MULTIPLIER_ATTRIB).getValue());
+					this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(this.getAttribute(CHARGING_SPEED_ATTRIB).getValue());
 				} else {
-					this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(BASE_DAMAGE);
-					this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(BASE_SPEED);
+					this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(BASE_DAMAGE);
+					this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(BASE_SPEED);
 				}
 			}
 		}
@@ -398,7 +399,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * Starts the charging progress
 	 */
 	public void startCharging() {
-		this.playSound(SoundRegistry.PEAT_MUMMY_CHARGE, 1.75F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
+		this.play(SoundRegistry.PEAT_MUMMY_CHARGE, 1.75F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 		this.setChargingState(1);
 	}
 
@@ -432,7 +433,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * @return
 	 */
 	public double getMaxSpawnOffset() {
-		return this.getEntityAttribute(SPAWN_OFFSET_ATTRIB).getAttributeValue();
+		return this.getAttribute(SPAWN_OFFSET_ATTRIB).getValue();
 	}
 
 	/**
@@ -442,7 +443,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	public void setSpawningTicks(int ticks) {
 		this.getDataManager().set(SPAWNING_TICKS, ticks);
 
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			if(this.isSpawningFinished()) {
 				for(EntityAIBase task : this.inactiveTargetTasks) {
 					this.targetTasks.removeTask(task);
@@ -474,7 +475,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * @return
 	 */
 	public int getSpawningLength() {
-		return (int) this.getEntityAttribute(SPAWN_LENGTH_ATTRIB).getAttributeValue();
+		return (int) this.getAttribute(SPAWN_LENGTH_ATTRIB).getValue();
 	}
 
 	/**
@@ -482,7 +483,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * @return
 	 */
 	public double getSpawningRange() {
-		return this.getEntityAttribute(SPAWN_RANGE_ATTRIB).getAttributeValue();
+		return this.getAttribute(SPAWN_RANGE_ATTRIB).getValue();
 	}
 
 	/**
@@ -545,7 +546,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * @return
 	 */
 	public int getMaxChargingCooldown() {
-		return (int) this.getEntityAttribute(CHARGING_COOLDOWN_ATTRIB).getAttributeValue();
+		return (int) this.getAttribute(CHARGING_COOLDOWN_ATTRIB).getValue();
 	}
 
 	/**
@@ -588,7 +589,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * @return
 	 */
 	public float getPreparationProgress() {
-		return 1.0F / (int)this.getEntityAttribute(CHARGING_PREPARATION_SPEED_ATTRIB).getAttributeValue() * this.chargingPreparation;
+		return 1.0F / (int)this.getAttribute(CHARGING_PREPARATION_SPEED_ATTRIB).getValue() * this.chargingPreparation;
 	}
 
 	/**
@@ -633,7 +634,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * @param shimmerStone
 	 */
 	public void setCarryShimmerstone(boolean shimmerStone) {
-		this.getEntityAttribute(CARRY_SHIMMERSTONE).setBaseValue(shimmerStone ? 1 : 0);
+		this.getAttribute(CARRY_SHIMMERSTONE).setBaseValue(shimmerStone ? 1 : 0);
 	}
 	
 	/**
@@ -641,7 +642,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * @return
 	 */
 	public boolean doesCarryShimmerstone() {
-		return this.getEntityAttribute(CARRY_SHIMMERSTONE).getBaseValue() > 0;
+		return this.getAttribute(CARRY_SHIMMERSTONE).getBaseValue() > 0;
 	}
 	
 	/**
@@ -649,7 +650,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * @param shimmerStone
 	 */
 	public void setBossMummy(boolean boss) {
-		this.getEntityAttribute(IS_BOSS).setBaseValue(boss ? 1 : 0);
+		this.getAttribute(IS_BOSS).setBaseValue(boss ? 1 : 0);
 	}
 	
 	/**
@@ -657,7 +658,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * @return
 	 */
 	public boolean isBossMummy() {
-		return this.getEntityAttribute(IS_BOSS).getBaseValue() > 0;
+		return this.getAttribute(IS_BOSS).getBaseValue() > 0;
 	}
 
 	@Override

@@ -70,6 +70,7 @@ import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler.BlockCo
 import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler.EntityCollisionPredicate;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
@@ -112,24 +113,24 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	public List<SpikeRenderer> stalactites;
 
 	public EntityBoulderSprite(World worldIn) {
-		super(worldIn);
+		super(EntityRegistry.BOULDER_SPRITE, worldIn);
 		this.setSize(0.9F, 1.2F);
 		this.setStalactitesSeed(worldIn.rand.nextLong());
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		this.dataManager.register(ROLL_SPEED, 0.0F);
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(28);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		this.getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.2D);
+		this.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(28);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4);
 	}
 
 	@Override
@@ -222,8 +223,8 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 
 		if(this.hideout != null) {
 			nbt.setLong("hideout", this.hideout.toLong());
@@ -249,8 +250,8 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 
 		if(nbt.contains("hideout", Constants.NBT.TAG_LONG)) {
 			this.hideout = BlockPos.fromLong(nbt.getLong("hideout"));
@@ -292,7 +293,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	}
 
 	protected void playRollSound() {
-		this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.BOULDER_SPRITE_ROLL, SoundCategory.HOSTILE, this.getSoundVolume(), this.getSoundPitch());
+		this.world.play(null, this.posX, this.posY, this.posZ, SoundRegistry.BOULDER_SPRITE_ROLL, SoundCategory.HOSTILE, this.getSoundVolume(), this.getSoundPitch());
 	}
 
 	@Override
@@ -305,11 +306,11 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 			} else {
 				distanceWalked = this.distanceWalkedOnStepModified + 0.5F;
 			}
-			this.playSound(SoundEvents.BLOCK_STONE_HIT, 0.6F, 1.0F);
+			this.play(SoundEvents.BLOCK_STONE_HIT, 0.6F, 1.0F);
 		} else {
 			distanceWalked = this.distanceWalkedOnStepModified + 0.7F;
-			this.playSound(SoundEvents.BLOCK_STONE_HIT, 0.35F, 1.0F);
-			this.playSound(SoundEvents.BLOCK_GRAVEL_BREAK, 0.08F, 1.0F);
+			this.play(SoundEvents.BLOCK_STONE_HIT, 0.35F, 1.0F);
+			this.play(SoundEvents.BLOCK_GRAVEL_BREAK, 0.08F, 1.0F);
 		}
 
 		this.distanceWalkedOnStepModified = distanceWalked;
@@ -433,7 +434,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		double prevMotionX = this.motionX;
 		double prevMotionZ = this.motionZ;
 
@@ -449,9 +450,9 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 			this.stepHeight = 0.6F;
 		}
 
-		super.onUpdate();
+		super.tick();
 
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			if(this.getHideout() != null && !this.isValidHideoutBlock(this.getHideout())) {
 				this.setHideout(null);
 			}
@@ -467,7 +468,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 				this.rollSoundPlayed = false;
 			}
 
-			IAttributeInstance attackAttribute = this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+			IAttributeInstance attackAttribute = this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 
 			if(this.isRolling()) {
 				if(this.collidedHorizontally) {
@@ -540,7 +541,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 				this.rollingTicks--;
 			}
 		} else {
-			if(this.isEntityAlive() && this.isRolling()) {
+			if(this.isAlive() && this.isRolling()) {
 				this.setRollSpeed(this.dataManager.get(ROLL_SPEED));
 			}
 
@@ -611,7 +612,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 								&& hitState.getBlock().canEntityDestroy(hitState, this.world, pos, this)
 								&& ForgeEventFactory.onEntityDestroyBlock(this, pos, hitState)) {
 							this.world.playEvent(2001, pos, Block.getStateId(hitState));
-							this.world.setBlockToAir(pos);
+							this.world.removeBlock(pos);
 						}
 					}
 				}
@@ -727,7 +728,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		@Override
 		public boolean shouldExecute() {
 			if(this.cooldown-- <= 0) {
-				return this.entity.isEntityAlive() && this.entity.getAttackTarget() != null && this.entity.getRollingTicks() <= 0 && this.entity.onGround && this.entity.getAttackTarget().isEntityAlive() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
+				return this.entity.isAlive() && this.entity.getAttackTarget() != null && this.entity.getRollingTicks() <= 0 && this.entity.onGround && this.entity.getAttackTarget().isAlive() && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
 			}
 			return false;
 		}
@@ -791,7 +792,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 		@Override
 		public boolean shouldExecute() {
-			if(this.entity.isEntityAlive() && this.entity.getHideout() != null && !this.entity.isHiddenOrInWall()) {
+			if(this.entity.isAlive() && this.entity.getHideout() != null && !this.entity.isHiddenOrInWall()) {
 				EnumFacing entrance;
 				if(this.entity.getHideoutEntrance() == null) {
 					if(this.potentialEntrances.isEmpty()) {
@@ -857,7 +858,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 			if(this.entity.getNavigator().noPath()) {
 				if(this.path.isFinished()) {
-					this.entity.getMoveHelper().setMoveTo(this.target.getX() + 0.5D, this.target.getY(), this.target.getZ() + 0.5D, this.approachSpeedNear / this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+					this.entity.getMoveHelper().setMoveTo(this.target.getX() + 0.5D, this.target.getY(), this.target.getZ() + 0.5D, this.approachSpeedNear / this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue());
 					this.entity.getLookHelper().setLookPosition(this.target.getX() - this.targetEntrance.getXOffset() + 0.5D, this.target.getY() + this.entity.getEyeHeight(), this.target.getZ() - this.targetEntrance.getZOffset() + 0.5D, 30, 30);
 
 					this.approachSpeedNear = this.approachSpeedNear * 0.9D + Math.min((dstSq + 0.2D) / 4.0D, 0.4D / 4.0D) * 0.1D;
@@ -886,7 +887,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 					double decay = (this.entity.getAIMoveSpeed() * 5 * 5 - dstSq) / (this.entity.getAIMoveSpeed() * 5 * 5) * 0.33D;
 
 					this.approachSpeedNear = this.approachSpeedFar = this.approachSpeedFar * (1 - decay) + Math.min(0.6D / 4.0D, this.speed / 4.0D) * decay;
-					this.entity.getNavigator().setSpeed(this.approachSpeedFar / this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+					this.entity.getNavigator().setSpeed(this.approachSpeedFar / this.entity.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue());
 				} else {
 					this.approachSpeedFar = this.approachSpeedNear = this.entity.getAIMoveSpeed();
 				}
@@ -912,7 +913,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return this.entity.isEntityAlive() && this.entity.getHideout() != null && this.targetHideout != null && this.targetHideout.equals(this.entity.getHideout()) && this.pathingFails < 3 && !this.finished;
+			return this.entity.isAlive() && this.entity.getHideout() != null && this.targetHideout != null && this.targetHideout.equals(this.entity.getHideout()) && this.pathingFails < 3 && !this.finished;
 		}
 	}
 
@@ -931,7 +932,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 		@Override
 		public boolean shouldExecute() {
-			if(this.entity.isEntityAlive() && this.entity.getHideout() != null && this.entity.getHideoutEntrance() != null && this.entity.isValidHideoutBlock(this.entity.getHideout())) {
+			if(this.entity.isAlive() && this.entity.getHideout() != null && this.entity.getHideoutEntrance() != null && this.entity.isValidHideoutBlock(this.entity.getHideout())) {
 				BlockPos entrance = this.entity.getHideout().offset(this.entity.getHideoutEntrance());
 				if(entrance.distanceSqToCenter(this.entity.posX, this.entity.posY, this.entity.posZ) <= 0.33D) {
 					this.hideout = this.entity.getHideout();
@@ -960,7 +961,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return this.entity.isEntityAlive() && this.entity.getHideout() == this.hideout && this.hideout.getY() >= MathHelper.floor(this.entity.posY) && this.entity.isValidHideoutBlock(this.hideout);
+			return this.entity.isAlive() && this.entity.getHideout() == this.hideout && this.hideout.getY() >= MathHelper.floor(this.entity.posY) && this.entity.isValidHideoutBlock(this.hideout);
 		}
 	}
 
@@ -981,7 +982,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 		@Override
 		public boolean shouldExecute() {
-			return this.entity.isHiddenOrInWall() && this.entity.isEntityAlive() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && Math.abs(this.entity.posY - this.entity.getAttackTarget().posY) <= 3 && this.entity.getRNG().nextInt(this.chance) == 0;
+			return this.entity.isHiddenOrInWall() && this.entity.isAlive() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isAlive() && Math.abs(this.entity.posY - this.entity.getAttackTarget().posY) <= 3 && this.entity.getRNG().nextInt(this.chance) == 0;
 		}
 
 		@Override
@@ -1033,7 +1034,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 		@Override
 		public boolean shouldExecute() {
-			return this.entity.isEntityAlive() && this.entity.onGround && this.entity.getRNG().nextInt(this.chance) == 0;
+			return this.entity.isAlive() && this.entity.onGround && this.entity.getRNG().nextInt(this.chance) == 0;
 		}
 
 		@Override
@@ -1072,7 +1073,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 		@Override
 		public boolean shouldExecute() {
-			return this.entity.isEntityAlive() && this.entity.getHealth() <= this.entity.getMaxHealth() / 3 && this.entity.getRNG().nextInt(this.chance) == 0;
+			return this.entity.isAlive() && this.entity.getHealth() <= this.entity.getMaxHealth() / 3 && this.entity.getRNG().nextInt(this.chance) == 0;
 		}
 	}
 }

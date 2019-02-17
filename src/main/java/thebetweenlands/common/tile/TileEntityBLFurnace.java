@@ -160,7 +160,7 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
         else if (furnaceBurnTime < 0)
             furnaceBurnTime = 0;
 
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             if (furnaceBurnTime != 0 || !inventory.get(1).isEmpty()&& !inventory.get(0).isEmpty()) {
                 if (furnaceBurnTime == 0 && canSmelt()) {
                     currentItemBurnTime = furnaceBurnTime = TileEntityFurnace.getItemBurnTime(inventory.get(1));

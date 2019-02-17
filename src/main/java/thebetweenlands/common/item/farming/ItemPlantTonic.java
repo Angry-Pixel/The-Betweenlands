@@ -87,7 +87,7 @@ public class ItemPlantTonic extends Item implements ItemRegistry.IMultipleItemMo
 						TileEntityDugSoil te = BlockGenericDugSoil.getTile(world, offsetPos);
 						if(te != null && te.getDecay() > 0) {
 							cured = true;
-							if(!world.isRemote) {
+							if(!world.isRemote()) {
 								te.setDecay(0);
 							} else {
 								ItemDye.spawnBonemealParticles(world, offsetPos.up(), 6);
@@ -98,14 +98,14 @@ public class ItemPlantTonic extends Item implements ItemRegistry.IMultipleItemMo
 			}
 
 			if(cured) {
-				if(!world.isRemote && !player.isCreative()) {
+				if(!world.isRemote() && !player.isCreative()) {
 					setUsages(stack, getUsages(stack) + 1);
 					if(getUsages(stack) >= 3) {
 						player.setHeldItem(hand, new ItemStack(ItemRegistry.BL_BUCKET, 1, getMetadata(stack)));
 					}
 				}
 
-				world.playSound(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 1, 1);
+				world.play(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 1, 1);
 
 				return EnumActionResult.SUCCESS;
 			}

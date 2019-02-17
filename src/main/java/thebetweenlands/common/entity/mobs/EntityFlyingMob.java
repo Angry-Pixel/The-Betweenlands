@@ -1,6 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.pathfinding.PathNavigate;
@@ -9,9 +10,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.PathNavigateFlyingBL;
 
-public class EntityFlyingMob extends EntityMob {
-	public EntityFlyingMob(World worldIn) {
-		super(worldIn);
+public abstract class EntityFlyingMob extends EntityMob {
+	public EntityFlyingMob(EntityType<?> type, World worldIn) {
+		super(type, worldIn);
 	}
 
 	@Override

@@ -10,7 +10,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockCragrock.EnumCragrockType;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
@@ -44,7 +44,7 @@ public class CragSpiresFeature extends BiomeFeature {
 		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
 			float biomeWeight = biomeWeights.get(x, z);
 			double noise = this.spireNoise[x * 16 + z] / 1.5f * biomeWeight + 2.4f;
-			int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
+			int layerHeight = DimensionBetweenlands.LAYER_HEIGHT;
 			if(chunkPrimer.getBlockState(x, layerHeight, z).getBlock() != chunkGenerator.layerBlock) {
 				return;
 			}
@@ -57,7 +57,7 @@ public class CragSpiresFeature extends BiomeFeature {
 					break;
 				}
 			}
-			if(WorldProviderBetweenlands.LAYER_HEIGHT - lowestBlock < 3) {
+			if(DimensionBetweenlands.LAYER_HEIGHT - lowestBlock < 3) {
 				return;
 			}
 			if(-noise * 12 >= 1) {

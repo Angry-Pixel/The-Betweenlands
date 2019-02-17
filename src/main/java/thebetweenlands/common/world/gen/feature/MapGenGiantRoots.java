@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.MapGenBase;
 import thebetweenlands.common.registries.BiomeRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.IBlockStateAccessOnly;
 import thebetweenlands.common.world.gen.biome.feature.CoarseIslandsFeature;
 
@@ -55,7 +55,7 @@ public class MapGenGiantRoots extends MapGenBase {
 		for(int xs = 0; xs < subDivs; xs++) {
 			for(int zs = 0; zs < subDivs; zs++) {
 				if(worldIn.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + inChunkX, 64, chunkZ * 16 + inChunkZ)) == BiomeRegistry.COARSE_ISLANDS && this.rand.nextInt(28) == 0 /*&& this.coarseIslandsFeature.isIslandAt(inChunkX, inChunkZ, 1) && !this.coarseIslandsFeature.isIslandCragrockAt(inChunkX, inChunkZ)*/) {
-					BlockPos candidate = new BlockPos(chunkX * 16 + inChunkX, WorldProviderBetweenlands.LAYER_HEIGHT - 6, chunkZ * 16 + inChunkZ);
+					BlockPos candidate = new BlockPos(chunkX * 16 + inChunkX, DimensionBetweenlands.LAYER_HEIGHT - 6, chunkZ * 16 + inChunkZ);
 					startCandidates.add(candidate);
 				}
 
@@ -96,7 +96,7 @@ public class MapGenGiantRoots extends MapGenBase {
 				for(int xs = 0; xs < subDivs; xs++) {
 					for(int zs = 0; zs < subDivs; zs++) {
 						if(this.rand.nextInt(100) == 0 /*&& this.coarseIslandsFeature.isIslandAt(inChunkX, inChunkZ, 1) && !this.coarseIslandsFeature.isIslandCragrockAt(inChunkX, inChunkZ)*/) {
-							endCandidates.add(new BlockPos(newChunkX * 16 + inChunkX, WorldProviderBetweenlands.LAYER_HEIGHT - 6, newChunkZ * 16 + inChunkZ));
+							endCandidates.add(new BlockPos(newChunkX * 16 + inChunkX, DimensionBetweenlands.LAYER_HEIGHT - 6, newChunkZ * 16 + inChunkZ));
 						}
 
 						inChunkZ += step;

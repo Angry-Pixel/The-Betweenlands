@@ -40,7 +40,7 @@ public class ItemSickle extends Item implements ICorrodible, IAnimatorRepairable
 	@Override
 	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
 		boolean shouldDrop = player.world.rand.nextFloat() <= 1.0F * CorrosionHelper.getModifier(itemstack);
-		if (player.world.isRemote || player.abilities.isCreativeMode || !shouldDrop)
+		if (player.world.isRemote() || player.abilities.isCreativeMode || !shouldDrop)
 			return false;
 		Block block = player.world.getBlockState(pos).getBlock();
 		if (block instanceof ISickleHarvestable) {
@@ -63,7 +63,7 @@ public class ItemSickle extends Item implements ICorrodible, IAnimatorRepairable
 				block.onBlockHarvested(player.world, pos, player.world.getBlockState(pos), player);
 				if (player instanceof EntityPlayerMP)
 					AdvancementCriterionRegistry.SICKLE_USE.trigger((EntityPlayerMP) player);
-				player.world.setBlockToAir(pos);
+				player.world.removeBlock(pos);
 				player.addStat(StatList.getBlockStats(block), 1);
 				return true;
 			}

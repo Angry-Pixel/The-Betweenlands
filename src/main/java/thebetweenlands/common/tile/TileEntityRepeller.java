@@ -127,7 +127,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 
 	@Override
 	public void tick() {
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			if(this.fuel > 0) {
 				if(this.fuel <= 0) {
 					this.fuel = 0;

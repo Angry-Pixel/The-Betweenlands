@@ -9,9 +9,9 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.model.entity.ModelSwordEnergy;
-import thebetweenlands.common.entity.mobs.EntityFortressBossProjectile;
+import thebetweenlands.common.entity.mobs.EntityPrimordialMalevolenceProjectile;
 
-public class RenderFortressBossProjectile extends Render<EntityFortressBossProjectile> {
+public class RenderFortressBossProjectile extends Render<EntityPrimordialMalevolenceProjectile> {
 	protected static final ResourceLocation TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
 	protected static final ModelSwordEnergy MODEL = new ModelSwordEnergy();
 
@@ -20,11 +20,11 @@ public class RenderFortressBossProjectile extends Render<EntityFortressBossProje
 	}
 
 	@Override
-	public void doRender(EntityFortressBossProjectile entity, double x, double y, double z, float rotationYaw, float partialTickTime) {
+	public void doRender(EntityPrimordialMalevolenceProjectile entity, double x, double y, double z, float rotationYaw, float partialTickTime) {
 		renderProjectile(entity, x, y, z, rotationYaw, partialTickTime);
 	}
 
-	public void renderProjectile(EntityFortressBossProjectile entity, double x, double y, double z, float rotationYaw, float partialTickTime) {
+	public void renderProjectile(EntityPrimordialMalevolenceProjectile entity, double x, double y, double z, float rotationYaw, float partialTickTime) {
 		float ticks = entity.ticksExisted + partialTickTime;
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y - 0.6D * 0.6D, z);
@@ -58,7 +58,7 @@ public class RenderFortressBossProjectile extends Render<EntityFortressBossProje
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityFortressBossProjectile entity) {
+	protected ResourceLocation getEntityTexture(EntityPrimordialMalevolenceProjectile entity) {
 		return null;
 	}
 }

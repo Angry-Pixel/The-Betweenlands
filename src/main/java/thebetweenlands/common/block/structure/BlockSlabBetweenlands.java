@@ -117,7 +117,7 @@ public class BlockSlabBetweenlands extends BasicBlock implements BlockRegistry.I
 				if(!playerIn.abilities.isCreativeMode)
 					heldItem.setCount(heldItem.getCount() - 1);
 				SoundType soundtype = this.getSoundType(state, worldIn, pos, playerIn);
-				worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+				worldIn.play(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 				return true;
 			}
 		}

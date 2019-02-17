@@ -69,7 +69,7 @@ public class FoodSicknessHandler {
 				Item item = itemStack.getItem();
 				FoodSickness sickness = cap.getSickness(item);
 
-				if(player.world.isRemote && sickness == FoodSickness.SICK) {
+				if(player.world.isRemote() && sickness == FoodSickness.SICK) {
 					addSicknessMessage(player, itemStack, sickness);
 				}
 			}
@@ -79,7 +79,7 @@ public class FoodSicknessHandler {
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onUseItemTick(LivingEntityUseItemEvent.Tick event) {
 		//Check if item will be consumed this tick
-		if(!event.getEntityLiving().getEntityWorld().isRemote && event.getDuration() <= 1) {
+		if(!event.getEntityLiving().getEntityWorld().isRemote() && event.getDuration() <= 1) {
 			EntityPlayer player = event.getEntity() instanceof EntityPlayer ? (EntityPlayer) event.getEntity() : null;
 			ItemStack itemStack = event.getItem();
 
@@ -94,7 +94,7 @@ public class FoodSicknessHandler {
 					int prevFoodHatred = cap.getFoodHatred(item);
 					FoodSickness currentSickness = cap.getSickness(item);
 
-					if(player.world.isRemote) {
+					if(player.world.isRemote()) {
 						if(currentSickness != lastSickness && lastSickness == FoodSickness.SICK) {
 							addSicknessMessage(player, itemStack, currentSickness);
 						}
@@ -107,7 +107,7 @@ public class FoodSicknessHandler {
 							int foodLevel = ((ItemFood)itemStack.getItem()).getHealAmount(itemStack);
 							double foodLoss = 1.0D / 3.0D * 2.0;
 
-							if(player.world.isRemote) {
+							if(player.world.isRemote()) {
 								//Remove all gained food on client side and wait for sync
 								player.getFoodStats().addStats(-Math.min(MathHelper.ceil(foodLevel * foodLoss), foodLevel), 0.0F);
 							} else {
@@ -122,7 +122,7 @@ public class FoodSicknessHandler {
 							DecayStats decayStats = decayCap.getDecayStats();
 							double decayLoss = 1.0D / 3.0D * 2.0;
 
-							if(player.world.isRemote) {
+							if(player.world.isRemote()) {
 								//Remove all gained decay on client side and wait for sync
 								decayStats.addStats(-Math.min(MathHelper.ceil(decayLevel * decayLoss), decayLevel), 0.0F);
 							} else {
@@ -131,18 +131,18 @@ public class FoodSicknessHandler {
 							}
 						}
 
-						if(!player.world.isRemote) {
+						if(!player.world.isRemote()) {
 							cap.increaseFoodHatred(item, sicknessIncrease, 0);
 						}
 					} else {
-						if(!player.world.isRemote) {
+						if(!player.world.isRemote()) {
 							cap.increaseFoodHatred(item, sicknessIncrease, prevFoodHatred <= 2 * 5 ? 4 : 3);
 						}
 					}
 
 					FoodSickness newSickness = cap.getSickness(item);
 
-					if(!player.world.isRemote && player instanceof EntityPlayerMP) {
+					if(!player.world.isRemote() && player instanceof EntityPlayerMP) {
 						if(newSickness != lastSickness) {
 							TheBetweenlands.networkWrapper.sendTo(new MessageShowFoodSicknessLine(itemStack, newSickness), (EntityPlayerMP) player);
 						}

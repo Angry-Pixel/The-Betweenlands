@@ -61,11 +61,11 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        if(!world.isRemote) {
+    public void tick(IBlockState state, World world, BlockPos pos, Random rand) {
+        if(!world.isRemote()) {
             int amount = state.get(AMOUNT);
             if(!BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().heavyRain.isActive()) {
-                world.setBlockToAir(pos);
+                world.removeBlock(pos);
                 amount = 0;
             } else if(world.canBlockSeeSky(pos)) {
                 amount = Math.min(amount + rand.nextInt(6), 15);
@@ -141,7 +141,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
     @Override
     public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
         if(!world.getBlockState(pos.down()).isSideSolid(world, pos, EnumFacing.UP)) {
-            world.setBlockToAir(pos);
+            world.removeBlock(pos);
         }
     }
 

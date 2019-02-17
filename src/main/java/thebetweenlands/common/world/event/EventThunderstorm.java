@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 public class EventThunderstorm extends TimedEnvironmentEvent {
 	protected int updateLCG = (new Random()).nextInt();
@@ -40,16 +40,16 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 	public void update(World world) {
 		super.update(world);
 
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			if(this.isActive() && !this.getRegistry().heavyRain.isActive()) {
 				this.setActive(false);
 			}
 
-			if(this.isActive() && world.provider instanceof WorldProviderBetweenlands && world instanceof WorldServer) {
+			if(this.isActive() && world.dimension instanceof DimensionBetweenlands && world instanceof WorldServer) {
 				WorldServer worldServer = (WorldServer)world;
 				for (Iterator<Chunk> iterator = worldServer.getPersistentChunkIterable(worldServer.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
 					Chunk chunk = iterator.next();
-					if(world.provider.canDoLightning(chunk) && world.rand.nextInt(30000) == 0) {
+					if(world.dimension.canDoLightning(chunk) && world.rand.nextInt(30000) == 0) {
 						this.updateLCG = this.updateLCG * 3 + 1013904223;
 						int l = this.updateLCG >> 2;
 						BlockPos pos = this.adjustPosToNearbyEntity(worldServer, new BlockPos(chunk.x * 16 + (l & 15), 0, chunk.z * 16 + (l >> 8 & 15)));
@@ -68,7 +68,7 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 		List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, new com.google.common.base.Predicate<EntityLivingBase>() {
 			@Override
 			public boolean apply(@Nullable EntityLivingBase entity) {
-				return entity != null && entity.isEntityAlive() && world.canSeeSky(entity.getPosition());
+				return entity != null && entity.isAlive() && world.canSeeSky(entity.getPosition());
 			}
 		});
 

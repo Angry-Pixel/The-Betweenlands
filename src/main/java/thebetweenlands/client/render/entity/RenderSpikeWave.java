@@ -17,22 +17,22 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.model.SpikeRenderer;
-import thebetweenlands.common.entity.EntitySpikeWave;
+import thebetweenlands.common.entity.EntityRootSpikeWave;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderSpikeWave extends Render<EntitySpikeWave> {
+public class RenderSpikeWave extends Render<EntityRootSpikeWave> {
 	public RenderSpikeWave(RenderManager rendermanagerIn) {
 		super(rendermanagerIn);
 	}
 
 	@Override
-	public void doRender(EntitySpikeWave entity, double x, double y, double z, float yaw, float partialTicks) {
+	public void doRender(EntityRootSpikeWave entity, double x, double y, double z, float yaw, float partialTicks) {
 		if(entity.posY != entity.origin.getY()) {
 			renderSpikes(entity, x, y, z, yaw, partialTicks);
 		}
 	}
 
-	public void renderSpikes(EntitySpikeWave entity, double x, double y, double z, float yaw, float partialTicks) {
+	public void renderSpikes(EntityRootSpikeWave entity, double x, double y, double z, float yaw, float partialTicks) {
 		entity.initRootModels();
 
 		if(entity.modelParts != null) {
@@ -64,7 +64,7 @@ public class RenderSpikeWave extends Render<EntitySpikeWave> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntitySpikeWave entity) {
+	protected ResourceLocation getEntityTexture(EntityRootSpikeWave entity) {
 		return TextureMap.LOCATION_BLOCKS_TEXTURE;
 	}
 }

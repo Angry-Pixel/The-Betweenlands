@@ -9,7 +9,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
-import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
+import thebetweenlands.common.entity.mobs.EntityDreadfulPeatMummy;
 
 @OnlyIn(Dist.CLIENT)
 public class ModelDreadfulMummy extends MowzieModelBase {
@@ -273,7 +273,7 @@ public class ModelDreadfulMummy extends MowzieModelBase {
 	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-		EntityDreadfulMummy mummy = (EntityDreadfulMummy)entity;
+		EntityDreadfulPeatMummy mummy = (EntityDreadfulPeatMummy)entity;
 
 		faceTarget(neck, 1, f3, f4);
 		//        f = mummy.ticksExisted;
@@ -336,7 +336,7 @@ public class ModelDreadfulMummy extends MowzieModelBase {
 		chainWave(tentacle1, 0.2f, 0.3f, -2, frame, 1);
 		chainWave(tentacle2, 0.3f, 0.3f, -2, frame, 1);
 
-		EntityDreadfulMummy mummy = (EntityDreadfulMummy) entity;
+		EntityDreadfulPeatMummy mummy = (EntityDreadfulPeatMummy) entity;
 
 		if (mummy.currentEatPrey != null) {
 			walk(neck, 0.8f, 0.7f, false, 0, -0.2f, frame, 1);

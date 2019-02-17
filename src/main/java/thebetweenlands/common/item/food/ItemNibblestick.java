@@ -31,10 +31,10 @@ public class ItemNibblestick extends ItemBLFood {
 			if(FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK) {
 				int xp = worldIn.rand.nextInt(4);
 				if(xp > 0) {
-					if(!worldIn.isRemote) {
+					if(!worldIn.isRemote()) {
 						cap.increaseFoodHatred(this, 4, 0); //Increased food sickness speed
 						player.addExperience(xp);
-						worldIn.playSound(null, player.posX, player.posY + 0.5D, player.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.5F, 0.8F + worldIn.rand.nextFloat() * 0.4F);
+						worldIn.play(null, player.posX, player.posY + 0.5D, player.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 0.5F, 0.8F + worldIn.rand.nextFloat() * 0.4F);
 					} else {
 						this.addFinishEatingParticles(stack, worldIn, player);
 					}

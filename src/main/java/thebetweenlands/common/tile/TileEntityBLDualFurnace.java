@@ -194,7 +194,7 @@ public class TileEntityBLDualFurnace extends TileEntityBasicInventory implements
 		else if (furnaceBurnTime2 < 0)
 			furnaceBurnTime2 = 0;
 
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			if (furnaceBurnTime != 0 || !inventory.get(1).isEmpty() && !inventory.get(0).isEmpty()) {
 				if (furnaceBurnTime == 0 && canSmelt()) {
 					currentItemBurnTime = furnaceBurnTime = TileEntityFurnace.getItemBurnTime(inventory.get(1));

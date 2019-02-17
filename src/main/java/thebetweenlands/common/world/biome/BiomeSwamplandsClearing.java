@@ -5,14 +5,14 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorSwamplandsClearing;
 
 public class BiomeSwamplandsClearing extends BiomeBetweenlands {
 	public BiomeSwamplandsClearing() {
 		super(new ResourceLocation(ModInfo.ID, "swamplands_clearing"), 
 				new BiomeProperties("Swamplands Clearing")
-				.setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT + 2)
+				.setBaseHeight(DimensionBetweenlands.LAYER_HEIGHT + 2)
 				.setHeightVariation(1F)
 				.setWaterColor(0x184220)
 				.setTemperature(0.8F)

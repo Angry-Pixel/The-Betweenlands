@@ -31,7 +31,7 @@ public class ItemRope extends Item {
 			}
 
 			if(playerIn.canPlayerEdit(offsetPos, facing, stack) && BlockRegistry.ROPE.canPlaceBlockAt(worldIn, offsetPos)) {
-				if(!worldIn.isRemote) {
+				if(!worldIn.isRemote()) {
 					worldIn.setBlockState(offsetPos, BlockRegistry.ROPE.getDefaultState());
 
 					if(!playerIn.isCreative()) {
@@ -42,7 +42,7 @@ public class ItemRope extends Item {
 				return EnumActionResult.SUCCESS;
 			}
 		} else if(BlockRegistry.ROPE.canPlaceBlockAt(worldIn, pos.down())) {
-			if(!worldIn.isRemote) {
+			if(!worldIn.isRemote()) {
 				worldIn.setBlockState(pos.down(), BlockRegistry.ROPE.getDefaultState());
 
 				if(!playerIn.isCreative()) {

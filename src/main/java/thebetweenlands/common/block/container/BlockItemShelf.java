@@ -80,7 +80,7 @@ public class BlockItemShelf extends BlockContainer {
 
 	@Override
 	public void onBlockClicked(IBlockState state, World world, BlockPos pos, EntityPlayer player) {
-		if(!world.isRemote && (!player.isSwingInProgress || player.prevSwingProgress != player.swingProgress)
+		if(!world.isRemote() && (!player.isSwingInProgress || player.prevSwingProgress != player.swingProgress)
 				/*Ugly check so that it doesn't give 2 items when clicking with empty hand*/) {
 			TileEntity te = world.getTileEntity(pos);
 
@@ -102,7 +102,7 @@ public class BlockItemShelf extends BlockContainer {
 						if(!player.inventory.addItemStackToInventory(result)) {
 							player.entityDropItem(result, 0);
 						}
-						world.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_PLACE, SoundCategory.BLOCKS, 1, 0.8f);
+						world.play(null, pos, SoundEvents.ENTITY_ITEMFRAME_PLACE, SoundCategory.BLOCKS, 1, 0.8f);
 					}
 				}
 			}
@@ -112,7 +112,7 @@ public class BlockItemShelf extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(hand == EnumHand.MAIN_HAND) {
-			if(!world.isRemote) {
+			if(!world.isRemote()) {
 				ItemStack heldItem = player.getHeldItem(hand);
 				TileEntity te = world.getTileEntity(pos);
 
@@ -131,7 +131,7 @@ public class BlockItemShelf extends BlockContainer {
 							if(!player.isCreative()) {
 								player.setHeldItem(hand, result);
 							}
-							world.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_PLACE, SoundCategory.BLOCKS, 1, 1);
+							world.play(null, pos, SoundEvents.ENTITY_ITEMFRAME_PLACE, SoundCategory.BLOCKS, 1, 1);
 						}
 					}
 				}

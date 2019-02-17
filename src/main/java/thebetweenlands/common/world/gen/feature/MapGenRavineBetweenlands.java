@@ -8,7 +8,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.MapGenRavine;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 public class MapGenRavineBetweenlands extends MapGenRavine {
 	protected static final IBlockState SWAMP_WATER = BlockRegistry.SWAMP_WATER.getDefaultState();
@@ -31,7 +31,7 @@ public class MapGenRavineBetweenlands extends MapGenRavine {
 
 	@Override
 	protected boolean isOceanBlock(ChunkPrimer data, int x, int y, int z, int chunkX, int chunkZ) {
-		if(y > WorldProviderBetweenlands.CAVE_WATER_HEIGHT) {
+		if(y > DimensionBetweenlands.CAVE_WATER_HEIGHT) {
 			Block block = data.getBlockState(x, y, z).getBlock();
 			return block == BlockRegistry.SWAMP_WATER;
 		}
@@ -46,7 +46,7 @@ public class MapGenRavineBetweenlands extends MapGenRavine {
 		IBlockState filler = biome.fillerBlock;
 
 		if (state.getBlock() == BlockRegistry.BETWEENSTONE || state.getBlock() == BlockRegistry.PITSTONE || state.getBlock() == top.getBlock() || state.getBlock() == filler.getBlock()) {
-			if (y - 1 < WorldProviderBetweenlands.CAVE_WATER_HEIGHT) {
+			if (y - 1 < DimensionBetweenlands.CAVE_WATER_HEIGHT) {
 				data.setBlockState(x, y, z, SWAMP_WATER);
 			} else {
 				data.setBlockState(x, y, z, AIR);

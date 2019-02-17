@@ -6,10 +6,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.model.entity.ModelGiantToad;
-import thebetweenlands.common.entity.mobs.EntityGiantToad;
+import thebetweenlands.common.entity.mobs.EntityHarlequinToad;
 
 @OnlyIn(Dist.CLIENT)
-public class RenderGiantToad extends RenderLiving<EntityGiantToad> {
+public class RenderGiantToad extends RenderLiving<EntityHarlequinToad> {
     public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/giant_toad.png");
 
     public RenderGiantToad(RenderManager rendermanagerIn) {
@@ -17,7 +17,7 @@ public class RenderGiantToad extends RenderLiving<EntityGiantToad> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityGiantToad entity) {
+    protected ResourceLocation getEntityTexture(EntityHarlequinToad entity) {
         return TEXTURE;
     }
 }

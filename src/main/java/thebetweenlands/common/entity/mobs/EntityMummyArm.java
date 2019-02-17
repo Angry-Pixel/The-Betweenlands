@@ -27,6 +27,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.item.equipment.ItemRingOfSummoning;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Integer> OWNER_ID = EntityDataManager.<Integer>createKey(EntityMummyArm.class, DataSerializers.VARINT);
@@ -45,13 +46,13 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	private double yOffset = 0.0D;
 
 	public EntityMummyArm(World world) {
-		super(world);
+		super(EntityRegistry.MUMMY_ARM, world);
 		this.setSize(0.7F, 0.7F);
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		this.getDataManager().register(OWNER_ID, -1);
 	}
 
@@ -62,12 +63,12 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
+	protected void registerAttributes() {
+		super.registerAttributes();
 
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0F);
-		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
+		this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0F);
+		this.getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
 
 	public void setOwner(Entity owner) {
@@ -77,7 +78,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	}
 
 	public Entity getOwner() {
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			if(this.owner != null && this.owner.getUniqueID().equals(this.ownerUUID)) {
 				return this.owner;
 			} else {
@@ -106,15 +107,15 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		BlockPos pos = this.getPosition().down(1);
 		IBlockState blockState = this.world.getBlockState(pos);
 
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			if(blockState.getBlock() == Blocks.AIR || !blockState.isSideSolid(this.world, pos, EnumFacing.UP)) {
-				this.setDead();
+				this.remove();
 			}
 
 			Entity owner = this.getOwner();
@@ -145,7 +146,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 			this.yOffset = 0.0F;
 		}
 
-		if(this.isEntityAlive()) {
+		if(this.isAlive()) {
 			if(this.spawnTicks >= 4) {
 				List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox());
 				for(EntityLivingBase target : targets) {
@@ -161,7 +162,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 								damageSource = DamageSource.causeMobDamage(this);
 							}
 
-							target.attackEntityFrom(damageSource, (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+							target.attackEntityFrom(damageSource, (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
 
 							if(this.attackSwing <= 0) {
 								this.attackSwing = 20;
@@ -183,7 +184,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 			}
 		}
 
-		if(this.world.isRemote && this.rand.nextInt(this.yOffset < 0.0F ? 2 : 8) == 0) {
+		if(this.world.isRemote() && this.rand.nextInt(this.yOffset < 0.0F ? 2 : 8) == 0) {
 			if(blockState.getBlock() != Blocks.AIR) {
 				double px = this.posX;
 				double py = this.posY;
@@ -228,14 +229,14 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	protected void onDeathUpdate() {
 		this.deathTicks++;
 
-		if(!this.world.isRemote && this.deathTicks >= 40) {
-			this.setDead();
+		if(!this.world.isRemote() && this.deathTicks >= 40) {
+			this.remove();
 		}
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 		if(this.ownerUUID != null) {
 			nbt.setUniqueId("ownerUUID", this.ownerUUID);
 		}
@@ -245,8 +246,8 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 		if(nbt.hasUniqueId("ownerUUID")) {
 			this.ownerUUID = nbt.getUniqueId("ownerUUID");
 		}

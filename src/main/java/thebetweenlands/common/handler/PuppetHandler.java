@@ -62,7 +62,7 @@ public class PuppetHandler {
 			EntityLiving living = (EntityLiving) entity;
 
 			if(cap.hasPuppeteer()) {
-				if(!entity.world.isRemote) {
+				if(!entity.world.isRemote()) {
 					cap.setRemainingTicks(cap.getRemainingTicks() - 1);
 
 					if(cap.getRemainingTicks() <= 0 || (cap.getPuppeteer() != null && !ItemRingOfRecruitment.isRingActive(cap.getPuppeteer()))) {
@@ -138,7 +138,7 @@ public class PuppetHandler {
 	@SubscribeEvent
 	public static void onEntityAttacked(LivingHurtEvent event) {
 		EntityLivingBase attackedEntity = event.getEntityLiving();
-		if(!attackedEntity.world.isRemote) {
+		if(!attackedEntity.world.isRemote()) {
 			DamageSource source = event.getSource();
 
 			if(source.getTrueSource() instanceof EntityPlayer && source.getTrueSource().hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
@@ -180,12 +180,12 @@ public class PuppetHandler {
 
 				if(player == puppeteer) {
 					if(player.isSneaking()) {
-						if(!player.world.isRemote) {
+						if(!player.world.isRemote()) {
 							cap.setRemainingTicks(0);
 						}
 						player.swingArm(EnumHand.MAIN_HAND);
 					} else {
-						if(!player.world.isRemote){
+						if(!player.world.isRemote()){
 							EntityAIPuppet puppetAI = EntityAIPuppet.getPuppetAI(living.tasks);
 							if(puppetAI != null) {
 								EntityAIStay aiStay = getAI(EntityAIStay.class, puppetAI.getSubTasks());
@@ -198,7 +198,7 @@ public class PuppetHandler {
 						player.swingArm(EnumHand.MAIN_HAND);
 					}
 				}
-			} else if(!player.world.isRemote) {
+			} else if(!player.world.isRemote()) {
 				if(ItemRingOfRecruitment.isRingActive(player) && player.hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
 					IPuppeteerCapability capPlayer = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
 					if(capPlayer.getActivatingEntity() == null) {
@@ -219,7 +219,7 @@ public class PuppetHandler {
 			if(activatingEntity instanceof EntityLiving) {
 				EntityLiving living = (EntityLiving) activatingEntity;
 
-				if(!event.player.world.isRemote) {
+				if(!event.player.world.isRemote()) {
 					if(living.getDistance(event.player) > 5.0D) {
 						cap.setActivatingEntity(null);
 						cap.setActivatingTicks(0);
@@ -274,7 +274,7 @@ public class PuppetHandler {
 				for(Entity puppet : puppets) {
 					if(puppet instanceof EntityLiving) {
 						EntityLiving living = (EntityLiving) puppet;
-						if(!player.world.isRemote) {
+						if(!player.world.isRemote()) {
 							EntityAIPuppet puppetAI = EntityAIPuppet.getPuppetAI(living.tasks);
 							if(puppetAI != null) {
 								EntityAIGoTo aiGoTo = getAI(EntityAIGoTo.class, puppetAI.getSubTasks());
@@ -291,7 +291,7 @@ public class PuppetHandler {
 				if(ordered) {
 					player.swingArm(EnumHand.MAIN_HAND);
 
-					if(player.world.isRemote) {
+					if(player.world.isRemote()) {
 						for(int i = 0; i < 4; i++) {
 							BLParticles.SPAWNER.spawn(player.world, target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D,
 									ParticleArgs.get().withMotion(

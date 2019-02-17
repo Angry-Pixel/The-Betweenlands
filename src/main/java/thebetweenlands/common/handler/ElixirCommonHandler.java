@@ -166,7 +166,7 @@ public class ElixirCommonHandler {
             }
         }
 
-        if(!entityLivingBase.world.isRemote) {
+        if(!entityLivingBase.world.isRemote()) {
 	        if(ElixirEffectRegistry.EFFECT_CATSEYES.isActive(entityLivingBase)) {
 	            entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, ElixirEffectRegistry.EFFECT_CATSEYES.getDuration(entityLivingBase), ElixirEffectRegistry.EFFECT_CATSEYES.getStrength(entityLivingBase)));
 	            ElixirEffectRegistry.EFFECT_CATSEYES.removeElixir(entityLivingBase);
@@ -190,7 +190,7 @@ public class ElixirCommonHandler {
 	        //Stenching
 	        if(!(entityLivingBase instanceof EntityPlayer) && entityLivingBase instanceof EntityMob && entityLivingBase.ticksExisted % 20 == 0) {
 	            EntityLiving entityLiving = (EntityLiving) entityLivingBase;
-	            IAttributeInstance followRangeAttrib = entityLiving.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+	            IAttributeInstance followRangeAttrib = entityLiving.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
 	            if(followRangeAttrib != null) {
 	                List<EntityPlayer> stenchingPlayers = this.getStenchingPlayersInRange(entityLiving);
 	                if(stenchingPlayers.isEmpty()) {
@@ -239,14 +239,14 @@ public class ElixirCommonHandler {
         return playerList;
     }
     private double getSpottingRange(EntityLivingBase entity, int strength) {
-        IAttributeInstance followRangeAttrib = entity.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+        IAttributeInstance followRangeAttrib = entity.getAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
         AttributeModifier rangeMod = followRangeAttrib.getModifier(FOLLOW_RANGE_MODIFIER.getID());
         if(rangeMod != null) {
             followRangeAttrib.removeModifier(rangeMod);
         }
         AttributeModifier tempRangeMod = this.getFollowRangeModifier(strength);
         followRangeAttrib.applyModifier(tempRangeMod);
-        double spottingRange = followRangeAttrib == null ? (16.0D + FOLLOW_RANGE_MODIFIER.getAmount() / 4.0D * Math.min(strength, 4)) : followRangeAttrib.getAttributeValue();
+        double spottingRange = followRangeAttrib == null ? (16.0D + FOLLOW_RANGE_MODIFIER.getAmount() / 4.0D * Math.min(strength, 4)) : followRangeAttrib.getValue();
         followRangeAttrib.removeModifier(tempRangeMod);
         if(rangeMod != null) {
             followRangeAttrib.applyModifier(rangeMod);

@@ -21,9 +21,9 @@ public class EntityMusicSound<T extends Entity> extends EntitySound<T> {
 		this.attenuationType = attenuationType;
 
 		this.music = (IEntityMusic) entity;
-		this.xPosF = (float) this.entity.posX;
-		this.yPosF = (float) this.entity.posY;
-		this.zPosF = (float) this.entity.posZ;
+		this.x = (float) this.entity.posX;
+		this.y = (float) this.entity.posY;
+		this.z = (float) this.entity.posZ;
 		this.originalVolume = volume;
 		this.volume = 0.1F;
 	}
@@ -32,7 +32,7 @@ public class EntityMusicSound<T extends Entity> extends EntitySound<T> {
 	public void update() {
 		this.updateSafeStreamSound();
 
-		if(this.entity != null && !this.entity.isDead) {
+		if(this.entity != null && this.entity.isAlive()) {
 			if(this.mustFadeOut) {
 				if(this.volume > 0) {
 					this.volume -= 0.1F;
@@ -65,9 +65,9 @@ public class EntityMusicSound<T extends Entity> extends EntitySound<T> {
 						}
 					}
 				}
-				this.xPosF = (float) this.entity.posX;
-				this.yPosF = (float) this.entity.posY;
-				this.zPosF = (float) this.entity.posZ;
+				this.x = (float) this.entity.posX;
+				this.y = (float) this.entity.posY;
+				this.z = (float) this.entity.posZ;
 			}
 		} else {
 			this.donePlaying = true;

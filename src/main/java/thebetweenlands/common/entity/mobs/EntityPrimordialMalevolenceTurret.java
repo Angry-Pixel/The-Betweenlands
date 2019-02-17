@@ -28,11 +28,12 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.registries.EntityRegistry;
 
-public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
-	protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.<Optional<UUID>>createKey(EntityFortressBossTurret.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-	protected static final DataParameter<Optional<UUID>> TARGET = EntityDataManager.<Optional<UUID>>createKey(EntityFortressBossTurret.class, DataSerializers.OPTIONAL_UNIQUE_ID);
-	protected static final DataParameter<Boolean> DEFLECTION_STATE = EntityDataManager.<Boolean>createKey(EntityFortressBossTurret.class, DataSerializers.BOOLEAN);
+public class EntityPrimordialMalevolenceTurret extends EntityMob implements IEntityBL {
+	protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.<Optional<UUID>>createKey(EntityPrimordialMalevolenceTurret.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+	protected static final DataParameter<Optional<UUID>> TARGET = EntityDataManager.<Optional<UUID>>createKey(EntityPrimordialMalevolenceTurret.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+	protected static final DataParameter<Boolean> DEFLECTION_STATE = EntityDataManager.<Boolean>createKey(EntityPrimordialMalevolenceTurret.class, DataSerializers.BOOLEAN);
 
 	private Entity cachedOwner;
 	private Entity cachedTarget;	
@@ -41,21 +42,21 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	private int attackTicks = 0;
 	private int attackDelay = 40;
 
-	public EntityFortressBossTurret(World world) {
-		super(world);
+	public EntityPrimordialMalevolenceTurret(World world) {
+		super(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TURRET, world);
 		float width = 0.4F;
 		float height = 0.4F;
 		this.setSize(width, height);
 	}
 
-	public EntityFortressBossTurret(World world, Entity source) {
-		super(world);
+	public EntityPrimordialMalevolenceTurret(World world, Entity source) {
+		super(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TURRET, world);
 		this.setOwner(source);
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
+	protected void registerData() {
+		super.registerData();
 		this.getDataManager().register(OWNER, Optional.absent());
 		this.getDataManager().register(TARGET, Optional.absent());
 		this.getDataManager().register(DEFLECTION_STATE, false);
@@ -84,7 +85,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		UUID uuid = this.getOwnerUUID();
 		if(uuid == null) {
 			this.cachedOwner = null;
-		} else if(this.cachedOwner == null || !this.cachedOwner.isEntityAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
+		} else if(this.cachedOwner == null || !this.cachedOwner.isAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
 			this.cachedOwner = null;
 			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
@@ -111,7 +112,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		UUID uuid = this.getTargetUUID();
 		if(uuid == null) {
 			this.cachedTarget = null;
-		} else if(this.cachedTarget == null || !this.cachedTarget.isEntityAlive() || !this.cachedTarget.getUniqueID().equals(uuid)) {
+		} else if(this.cachedTarget == null || !this.cachedTarget.isAlive() || !this.cachedTarget.getUniqueID().equals(uuid)) {
 			this.cachedTarget = null;
 			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
@@ -132,9 +133,9 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		this.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.0D);
 	}
 
 	@Override
@@ -148,8 +149,8 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 		nbt.setInt("attackDelay", this.attackDelay);
 		nbt.setBoolean("deflectable", this.isDeflectable());
 		if(this.getOwnerUUID() != null) {
@@ -161,8 +162,8 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 		this.attackDelay = nbt.getInt("attackDelay");
 		this.setDeflectable(nbt.getBoolean("deflectable"));
 		if(nbt.hasUniqueId("owner")) {
@@ -178,17 +179,17 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		if(!this.world.isRemote && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isEntityAlive()))) {
-			this.setDead();
+	public void tick() {
+		if(!this.world.isRemote() && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isAlive()))) {
+			this.remove();
 			return;
 		}
 		this.motionX = 0;
 		this.motionY = 0;
 		this.motionZ = 0;
-		super.onUpdate();
+		super.tick();
 
-		if(this.world.isRemote) {
+		if(this.world.isRemote()) {
 			if(!this.particlesSpawned) {
 				this.particlesSpawned = true;
 				for(int i = 0; i < 6; i++) {
@@ -217,13 +218,13 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			this.attackTicks++;
 
 			if(this.attackTicks > this.attackDelay) {
-				if(!this.world.isRemote) {
+				if(!this.world.isRemote()) {
 					if(!this.isObstructedByBoss()) {
 						Vec3d diff = new Vec3d(this.posX, this.posY, this.posZ)
 								.subtract(new Vec3d(this.getTarget().getBoundingBox().minX + (this.getTarget().getBoundingBox().maxX - this.getTarget().getBoundingBox().minX) / 2.0D,
 										this.getTarget().getBoundingBox().minY + (this.getTarget().getBoundingBox().maxY - this.getTarget().getBoundingBox().minY) / 2.0D,
 										this.getTarget().getBoundingBox().minZ + (this.getTarget().getBoundingBox().maxZ - this.getTarget().getBoundingBox().minZ) / 2.0D)).normalize();
-						EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.world, this.getOwner());
+						EntityPrimordialMalevolenceProjectile bullet = new EntityPrimordialMalevolenceProjectile(this.world, this.getOwner());
 						bullet.setDeflectable(this.isDeflectable());
 						bullet.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 						float speed = 0.5F;
@@ -234,7 +235,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 					for(int i = 0; i < 6; i++)
 						this.spawnVolatileParticles();
 				}
-				this.setDead();
+				this.remove();
 			}
 		} else {
 			this.attackTicks = 0;
@@ -263,7 +264,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 				}
 			}
 		}
-		if(hitEntity == null || (hitEntity instanceof EntityFortressBoss == false && hitEntity != this.getOwner())) {
+		if(hitEntity == null || (hitEntity instanceof EntityPrimordialMalevolence == false && hitEntity != this.getOwner())) {
 			return false;
 		}
 		return true;

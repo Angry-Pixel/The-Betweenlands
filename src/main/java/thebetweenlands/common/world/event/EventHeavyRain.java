@@ -11,7 +11,7 @@ import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.block.farming.BlockGenericCrop;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 public class EventHeavyRain extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "heavy_rain");
@@ -45,12 +45,12 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 	public void update(World world) {
 		super.update(world);
 
-		if(!world.isRemote && this.getRegistry().winter.isActive()) {
+		if(!world.isRemote() && this.getRegistry().winter.isActive()) {
 			this.setActive(false);
 		}
 
-		if(this.isActive() && world.provider instanceof WorldProviderBetweenlands && world.rand.nextInt(20) == 0) {
-			if(!world.isRemote && world instanceof WorldServer) {
+		if(this.isActive() && world.dimension instanceof DimensionBetweenlands && world.rand.nextInt(20) == 0) {
+			if(!world.isRemote() && world instanceof WorldServer) {
 				WorldServer worldServer = (WorldServer)world;
 				for (Iterator<Chunk> iterator = worldServer.getPersistentChunkIterable(worldServer.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
 					Chunk chunk = iterator.next();

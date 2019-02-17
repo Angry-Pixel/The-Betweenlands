@@ -38,7 +38,7 @@ import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage.BiomeSpawnEntriesData;
 import thebetweenlands.util.WeightedList;
@@ -304,12 +304,12 @@ public class MobSpawnHandler {
 	}
 
 	public void populateChunk(WorldServer world, int chunkX, int chunkZ) {
-		if(world == null || world.provider.getDimension() != BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)
+		if(world == null || world.dimension.getDimension() != BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)
 			return;
 
 		if(world.getGameRules().getBoolean("doMobSpawning")) {
-			boolean spawnHostiles = ((WorldProviderBetweenlands)world.provider).getCanSpawnHostiles();
-			boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
+			boolean spawnHostiles = ((DimensionBetweenlands)world.dimension).getCanSpawnHostiles();
+			boolean spawnAnimals = ((DimensionBetweenlands)world.dimension).getCanSpawnAnimals();
 
 			//long start = System.nanoTime();
 			int spawnedEntities = 0;
@@ -320,7 +320,7 @@ public class MobSpawnHandler {
 	}
 
 	private void populateWorld(WorldServer world) {
-		if(world.provider instanceof WorldProviderBetweenlands == false) {
+		if(world.dimension instanceof DimensionBetweenlands == false) {
 			return;
 		}
 
@@ -368,8 +368,8 @@ public class MobSpawnHandler {
 
 		Collections.shuffle(spawnerChunks);
 
-		boolean spawnHostiles = ((WorldProviderBetweenlands)world.provider).getCanSpawnHostiles();
-		boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
+		boolean spawnHostiles = ((DimensionBetweenlands)world.dimension).getCanSpawnHostiles();
+		boolean spawnAnimals = ((DimensionBetweenlands)world.dimension).getCanSpawnAnimals();
 
 		//The approximate number of loaded areas (one area is the area loaded by one player)
 		float loadedAreas = (float)spawnerChunks.size() / (float)MAX_SPAWN_CHUNKS_PER_AREA;

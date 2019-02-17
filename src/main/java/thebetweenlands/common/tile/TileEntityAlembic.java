@@ -67,7 +67,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
 
         if (this.isFull() && !this.hasFinished()) {
             this.progress++;
-            if (!this.world.isRemote) {
+            if (!this.world.isRemote()) {
                 if (!this.running || this.progress % 20 == 0) {
                     markDirty();
                 }
@@ -77,7 +77,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
                 }
             }
         } else {
-            if (!this.world.isRemote) {
+            if (!this.world.isRemote()) {
                 if (this.running) {
                     markDirty();
                 }

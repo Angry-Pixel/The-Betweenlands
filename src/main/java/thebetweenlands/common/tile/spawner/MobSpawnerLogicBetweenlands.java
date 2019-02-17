@@ -61,7 +61,7 @@ public abstract class MobSpawnerLogicBetweenlands {
      */
     public MobSpawnerLogicBetweenlands setNextEntityName(String name) {
         this.randomEntity.getNbt().setString("id", name);
-        if (this.getSpawnerWorld() != null && this.getSpawnerWorld().isRemote) {
+        if (this.getSpawnerWorld() != null && this.getSpawnerWorld().isRemote()) {
             this.cachedEntity = null;
         }
         return this;
@@ -74,7 +74,7 @@ public abstract class MobSpawnerLogicBetweenlands {
      */
     public MobSpawnerLogicBetweenlands setNextEntity(WeightedSpawnerEntity entity) {
         this.randomEntity = entity;
-        if (this.getSpawnerWorld() != null && this.getSpawnerWorld().isRemote) {
+        if (this.getSpawnerWorld() != null && this.getSpawnerWorld().isRemote()) {
             this.cachedEntity = null;
         }
         return this;
@@ -264,7 +264,7 @@ public abstract class MobSpawnerLogicBetweenlands {
         if (!this.isActivated()) {
             this.lastEntityRotation = this.entityRotation;
         } else {
-            if (this.getSpawnerWorld().isRemote) {
+            if (this.getSpawnerWorld().isRemote()) {
                 if (this.spawnDelay > 0) {
                     --this.spawnDelay;
                 }
@@ -460,7 +460,7 @@ public abstract class MobSpawnerLogicBetweenlands {
         if (nbt.contains("SpawnInAir")) {
             this.spawnInAir = nbt.getBoolean("SpawnInAir");
         }
-        if (this.getSpawnerWorld() != null && this.getSpawnerWorld().isRemote) {
+        if (this.getSpawnerWorld() != null && this.getSpawnerWorld().isRemote()) {
             this.cachedEntity = null;
         }
     }
@@ -492,7 +492,7 @@ public abstract class MobSpawnerLogicBetweenlands {
      * Sets the delay to minDelay if parameter given is 1, else return false.
      */
     public boolean setDelayToMin(int event) {
-        if (event == 1 && this.getSpawnerWorld().isRemote) {
+        if (event == 1 && this.getSpawnerWorld().isRemote()) {
             this.spawnDelay = this.minSpawnDelay;
             return true;
         } else {

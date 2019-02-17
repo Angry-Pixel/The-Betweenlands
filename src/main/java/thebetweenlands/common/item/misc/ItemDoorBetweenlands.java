@@ -38,7 +38,7 @@ public abstract class ItemDoorBetweenlands extends Item {
 				boolean flag = xOffset < 0 && hitZ < 0.5F || xOffset > 0 && hitZ > 0.5F || zOffset < 0 && hitX > 0.5F || zOffset > 0 && hitX < 0.5F;
 				ItemDoor.placeDoor(worldIn, pos, placeDir, this.getDoorBlock(), flag);
 				SoundType soundtype = this.getDoorBlock().getSoundType();
-				worldIn.playSound(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+				worldIn.play(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 				player.getHeldItem(hand).shrink(1);
 				return EnumActionResult.SUCCESS;
 			} else {

@@ -14,7 +14,7 @@ import net.minecraft.world.biome.Biome;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
+import thebetweenlands.common.entity.mobs.EntityDreadfulPeatMummy;
 import thebetweenlands.common.registries.BiomeRegistry;
 
 public class ItemMummyBait extends Item {
@@ -44,7 +44,7 @@ public class ItemMummyBait extends Item {
                         }
                     }
                     if(canSpawn) {
-                        if(entityItem.world.isRemote) {
+                        if(entityItem.world.isRemote()) {
                             for(int xo = -1; xo <= 1 && canSpawn; xo++) {
                                 for(int zo = -1; zo <= 1 && canSpawn; zo++) {
                                     IBlockState state = entityItem.world.getBlockState(pos.setPos(bx+xo, by-1, bz+zo));
@@ -62,11 +62,11 @@ public class ItemMummyBait extends Item {
                                 }
                             }
                         } else {
-                            EntityDreadfulMummy boss = new EntityDreadfulMummy(entityItem.world);
+                            EntityDreadfulPeatMummy boss = new EntityDreadfulPeatMummy(entityItem.world);
                             boss.setLocationAndAngles(entityItem.posX, entityItem.posY, entityItem.posZ, 0, 0);
                             if(boss.getCanSpawnHere()) {
                                 entityItem.world.spawnEntity(boss);
-                                entityItem.setDead();
+                                entityItem.remove();
                                 pos.release();
                                 return true;
                             }

@@ -9,7 +9,7 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.IChunkGenerator;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 public class DecoratorPositionProvider {
 	private Biome biome;
@@ -238,7 +238,7 @@ public class DecoratorPositionProvider {
 			this.y = y;
 		}
 		this.seaGroundY = this.y;
-		if(this.y <= WorldProviderBetweenlands.LAYER_HEIGHT && world.getBlockState(new BlockPos(this.x, this.y, this.z)).getMaterial().isLiquid()) {
+		if(this.y <= DimensionBetweenlands.LAYER_HEIGHT && world.getBlockState(new BlockPos(this.x, this.y, this.z)).getMaterial().isLiquid()) {
 			MutableBlockPos offsetPos = new MutableBlockPos();
 			for(int oy = this.y; oy > 0; oy--) {
 				offsetPos.setPos(this.x, oy, this.z);

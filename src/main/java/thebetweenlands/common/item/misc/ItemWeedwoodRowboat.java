@@ -82,7 +82,7 @@ public class ItemWeedwoodRowboat extends Item {
         if (!world.getCollisionBoxes(rowboat, rowboat.getBoundingBox().grow(-0.1, -0.1, -0.1)).isEmpty()) {
             return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
         }
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             NBTTagCompound attrs = stack.getSubCompound("attributes");
             if (attrs != null) {
                 rowboat.readEntityFromNBT(attrs);

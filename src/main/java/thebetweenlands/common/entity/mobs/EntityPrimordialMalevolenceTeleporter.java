@@ -23,9 +23,10 @@ import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.client.audio.TeleporterSound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.registries.EntityRegistry;
 
-public class EntityFortressBossTeleporter extends Entity implements IEntityScreenShake {
-	protected static final DataParameter<Integer> TARGET_ID = EntityDataManager.<Integer>createKey(EntityFortressBossTeleporter.class, DataSerializers.VARINT);
+public class EntityPrimordialMalevolenceTeleporter extends Entity implements IEntityScreenShake {
+	protected static final DataParameter<Integer> TARGET_ID = EntityDataManager.<Integer>createKey(EntityPrimordialMalevolenceTeleporter.class, DataSerializers.VARINT);
 
 	private Vec3d teleportDestination = Vec3d.ZERO;
 	private BlockPos bossSpawnPosition = BlockPos.ORIGIN;
@@ -39,13 +40,13 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 
 	private boolean spawnedBoss = false;
 
-	public EntityFortressBossTeleporter(World world) {
-		super(world);
+	public EntityPrimordialMalevolenceTeleporter(World world) {
+		super(EntityRegistry.PRIMORDIAL_MALEVOLENCE_TELEPORTER, world);
 		setSize(1F, 1F);
 	}
 
 	@Override
-	protected void entityInit() {
+	protected void registerData() {
 		this.getDataManager().register(TARGET_ID, -1);
 	}
 
@@ -53,15 +54,14 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 	public void applyEntityCollision(Entity entity) {
 	}
 
-
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		double radius = 6.0D;
 		double lookRadius = 8.0D;
 
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote()) {
 			if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 				if(this.target == null) {
 					AxisAlignedBB checkAABB = new AxisAlignedBB(this.posX-radius, this.posY-radius, this.posZ-radius, this.posX+radius, this.posY+radius, this.posZ+radius);
@@ -115,7 +115,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 			} else {
 				this.target = null;
 			}
-			if(this.target != null && prevTarget != this.target && this.world.isRemote) {
+			if(this.target != null && prevTarget != this.target && this.world.isRemote()) {
 				this.playTeleportSound();
 			}
 		}
@@ -125,7 +125,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 
 			this.teleportTicks++;
 
-			if(!this.world.isRemote && this.teleportTicks > this.maxTeleportTicks) {
+			if(!this.world.isRemote() && this.teleportTicks > this.maxTeleportTicks) {
 				//Teleport
 				if(this.target instanceof EntityPlayerMP) {
 					EntityPlayerMP player = (EntityPlayerMP) this.target;
@@ -141,7 +141,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 				}
 				this.target = null;
 				this.teleportTicks = 0;
-			} else if(this.world.isRemote && this.world.rand.nextInt(2) == 0) {
+			} else if(this.world.isRemote() && this.world.rand.nextInt(2) == 0) {
 				double rx = (double)(this.world.rand.nextFloat());
 				double ry = (double)(this.world.rand.nextFloat());
 				double rz = (double)(this.world.rand.nextFloat());
@@ -161,7 +161,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 			}
 			if(closestPlayer != null) {
 				this.faceEntity(closestPlayer);
-				if(this.world.isRemote) {
+				if(this.world.isRemote()) {
 					if(!this.isLookingAtPlayer) {
 						for(int i = 0; i < 10; i++) {
 							this.spawnSmokeParticle(this.posX, this.posY + this.height / 2.0D, this.posZ, (this.world.rand.nextFloat() - 0.5F) / 2.5F, (this.world.rand.nextFloat() - 0.5F) / 2.5F, (this.world.rand.nextFloat() - 0.5F) / 2.5F);
@@ -177,7 +177,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 
 	@OnlyIn(Dist.CLIENT)
 	private void playTeleportSound() {
-		Minecraft.getInstance().getSoundHandler().playSound(new TeleporterSound(this, this.getTarget()));
+		Minecraft.getInstance().getSoundHandler().play(new TeleporterSound(this, this.getTarget()));
 	}
 
 	public void faceEntity(Entity target) {
@@ -207,7 +207,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbt) {
+	protected void readAdditional(NBTTagCompound nbt) {
 		double dx = nbt.getDouble("destinationX");
 		double dy = nbt.getDouble("destinationY");
 		double dz = nbt.getDouble("destinationZ");
@@ -220,7 +220,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbt) {
+	protected void writeAdditional(NBTTagCompound nbt) {
 		if(this.teleportDestination != null) {
 			nbt.setDouble("destinationX", this.teleportDestination.x);
 			nbt.setDouble("destinationY", this.teleportDestination.y);
@@ -251,7 +251,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 	}
 
 	protected void spawnBoss() {
-		EntityFortressBoss boss = new EntityFortressBoss(this.world);
+		EntityPrimordialMalevolence boss = new EntityPrimordialMalevolence(this.world);
 		boss.setPosition(this.bossSpawnPosition.getX() + 0.5D, this.bossSpawnPosition.getY() + 0.5D, this.bossSpawnPosition.getZ() + 0.5D);
 		boss.setAnchor(this.bossSpawnPosition, 6.0D);
 		this.world.spawnEntity(boss);

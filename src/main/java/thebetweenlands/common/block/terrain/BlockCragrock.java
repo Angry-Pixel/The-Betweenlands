@@ -43,7 +43,7 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random random){
-		if (!world.isRemote && state.get(VARIANT) != EnumCragrockType.DEFAULT) {
+		if (!world.isRemote() && state.get(VARIANT) != EnumCragrockType.DEFAULT) {
 			BlockPos newPos = pos.add(random.nextInt(3) - 1, random.nextInt(3) - 1, random.nextInt(3) - 1);
 			if(newPos.getY() >= 0 && newPos.getY() < 256 && world.isBlockLoaded(newPos)) {
 				IBlockState blockState = world.getBlockState(newPos);

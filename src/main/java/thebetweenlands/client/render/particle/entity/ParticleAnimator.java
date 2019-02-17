@@ -20,8 +20,8 @@ public class ParticleAnimator extends PathParticle {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		if(this.targetPoints.isEmpty()) {
 			this.setExpired();

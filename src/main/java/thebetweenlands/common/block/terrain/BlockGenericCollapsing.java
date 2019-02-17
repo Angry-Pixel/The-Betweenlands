@@ -43,24 +43,24 @@ public class BlockGenericCollapsing extends BlockFalling {
     }
 
     @Override
-    public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-        if (!worldIn.isRemote)
+    public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+        if (!worldIn.isRemote())
             createFallingBlock(worldIn, pos);
     }
-
+    
     private void createFallingBlock(World world, BlockPos pos) {
         if (canFallThrough(world.getBlockState(pos.down())) && pos.getY() >= 0) {
             int i = 32;
 
             if (!fallInstantly && world.isAreaLoaded(pos.add(-i, -i, -i), pos.add(i, i, i))) {
-                if (!world.isRemote) {
-                    world.playSound((double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.5F, 1.0F, false);
+                if (!world.isRemote()) {
+                    world.play((double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.5F, 1.0F, false);
                     EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double) ((float) pos.getX() + 0.5F), (double) ((float) pos.getY() + 0.5F), (double) ((float) pos.getZ() + 0.5F), world.getBlockState(pos));
                     this.onStartFalling(entityfallingblock);
                     world.spawnEntity(entityfallingblock);
                 }
             } else {
-                world.setBlockToAir(pos);
+                world.removeBlock(pos);
 
                 while (canFallThrough(world.getBlockState(pos.down())) && pos.getY() > 0)
                     pos = pos.down();
@@ -73,17 +73,17 @@ public class BlockGenericCollapsing extends BlockFalling {
 
     @Override
     public void onEntityWalk(World worldIn, BlockPos pos, Entity entityIn) {
-        if (!worldIn.isRemote)
+        if (!worldIn.isRemote())
             if(entityIn instanceof EntityPlayer && !entityIn.isSneaking())
                 worldIn.scheduleBlockUpdate(pos, this, this.tickRate(worldIn), 0);
     }
 
     @Override
     public void onEndFalling(World world, BlockPos pos, IBlockState p_176502_3_, IBlockState p_176502_4_) {
-        if (!world.isRemote) {
-            world.playSound((double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), blockSoundType.getStepSound(), SoundCategory.BLOCKS, (blockSoundType.getVolume() + 1.0F) / 2.0F, blockSoundType.getPitch() * 0.8F, false);
+        if (!world.isRemote()) {
+            world.play((double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), blockSoundType.getStepSound(), SoundCategory.BLOCKS, (blockSoundType.getVolume() + 1.0F) / 2.0F, blockSoundType.getPitch() * 0.8F, false);
             world.playEvent(null, 2001, pos.up(), Block.getIdFromBlock(world.getBlockState(pos).getBlock()));
-            world.setBlockToAir(pos);
+            world.removeBlock(pos);
         }
     }
 }

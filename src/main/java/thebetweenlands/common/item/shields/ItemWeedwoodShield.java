@@ -58,7 +58,7 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	@Override
 	public void onAttackBlocked(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
 		super.onAttackBlocked(stack, attacked, damage, source);
-		if(!attacked.world.isRemote && source.getTrueSource() != null) {
+		if(!attacked.world.isRemote() && source.getTrueSource() != null) {
 			Entity attacker;
 			if(source instanceof EntityDamageSourceIndirect) {
 				attacker = ((EntityDamageSourceIndirect)source).getTrueSource();
@@ -81,12 +81,12 @@ public class ItemWeedwoodShield extends ItemBLShield {
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if(!worldIn.isRemote && entityIn != null) {
+		if(!worldIn.isRemote() && entityIn != null) {
 			int burningTicks = this.getBurningTicks(stack);
 			if(burningTicks > 0) {
 				this.setBurningTicks(stack, burningTicks - 1);
 				if(burningTicks % 5 == 0)
-					worldIn.playSound((EntityPlayer)null, (double)((float)entityIn.posX), (double)((float)entityIn.posY + entityIn.getEyeHeight()), (double)((float)entityIn.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + worldIn.rand.nextFloat(), worldIn.rand.nextFloat() * 0.7F + 0.3F);
+					worldIn.play((EntityPlayer)null, (double)((float)entityIn.posX), (double)((float)entityIn.posY + entityIn.getEyeHeight()), (double)((float)entityIn.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + worldIn.rand.nextFloat(), worldIn.rand.nextFloat() * 0.7F + 0.3F);
 				if(burningTicks % 10 == 0 && worldIn.rand.nextFloat() < 0.3F)
 					entityIn.world.setEntityState(entityIn, (byte)30);
 				if(burningTicks % 3 == 0 && entityIn instanceof EntityLivingBase)
@@ -106,12 +106,12 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem) {
 		ItemStack stack = entityItem.getItem();
-		if(!entityItem.world.isRemote) {
+		if(!entityItem.world.isRemote()) {
 			int burningTicks = this.getBurningTicks(stack);
 			if(burningTicks > 0) {
 				this.setBurningTicks(stack, burningTicks - 1);
 				if(burningTicks % 5 == 0)
-					entityItem.world.playSound((EntityPlayer)null, (double)((float)entityItem.posX), (double)((float)entityItem.posY + entityItem.height / 2.0F), (double)((float)entityItem.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + entityItem.world.rand.nextFloat(), entityItem.world.rand.nextFloat() * 0.7F + 0.3F);
+					entityItem.world.play((EntityPlayer)null, (double)((float)entityItem.posX), (double)((float)entityItem.posY + entityItem.height / 2.0F), (double)((float)entityItem.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + entityItem.world.rand.nextFloat(), entityItem.world.rand.nextFloat() * 0.7F + 0.3F);
 				if(burningTicks % 3 == 0) {
 					if (stack.attemptDamageItem(1, entityItem.world.rand, null)) {
 						this.renderBrokenItemStack(entityItem.world, entityItem.posX, entityItem.posY + entityItem.height / 2.0F, entityItem.posZ, stack);
@@ -119,7 +119,7 @@ public class ItemWeedwoodShield extends ItemBLShield {
 						if (stack.getCount() < 0) {
 							stack.setCount(0);
 						}
-						entityItem.setDead();
+						entityItem.remove();
 					}
 				}
 			}
@@ -137,7 +137,7 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	}
 
 	protected void renderBrokenItemStack(World world, double x, double y, double z, ItemStack stack) {
-		world.playSound((EntityPlayer)null, x, y, z, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.NEUTRAL, 0.8F, 0.8F + world.rand.nextFloat() * 0.4F);
+		world.play((EntityPlayer)null, x, y, z, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.NEUTRAL, 0.8F, 0.8F + world.rand.nextFloat() * 0.4F);
 		for (int i = 0; i < 5; ++i) {
 			Vec3d motion = new Vec3d(((double)world.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
 			world.spawnParticle(EnumParticleTypes.ITEM_CRACK, x, y, z, motion.x, motion.y + 0.05D, motion.z, new int[] {Item.getIdFromItem(stack.getItem())});

@@ -35,12 +35,12 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 	
 	@Override
 	public void tick() {
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			findEnemyToAttack();
 			if (active) {
 				activateBlock();
 				if (animationTicks == 0)
-					world.playSound(null, getPos(), SoundRegistry.POSSESSED_SCREAM, SoundCategory.BLOCKS, 0.25F, 1.25F - this.world.rand.nextFloat() * 0.5F);
+					world.play(null, getPos(), SoundRegistry.POSSESSED_SCREAM, SoundCategory.BLOCKS, 0.25F, 1.25F - this.world.rand.nextFloat() * 0.5F);
 				if (animationTicks <= 24)
 					animationTicks++;
 				if (animationTicks == 24) {
@@ -57,7 +57,7 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 		}
 		moveProgress = 1 + headShake.swing(4, 1F, false);
-		if (world.isRemote)
+		if (world.isRemote())
 			if(!active && animationTicks %8 > 0)
 				spawnParticles();
 	}

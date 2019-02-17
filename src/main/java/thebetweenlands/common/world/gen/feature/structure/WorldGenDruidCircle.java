@@ -37,7 +37,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		if (world.provider.getDimensionType() == DimensionType.OVERWORLD) {
+		if (world.dimension.getType() == DimensionType.OVERWORLD) {
 			this.generate(world, random, chunkX * 16, chunkZ * 16);
 		}
 	}
@@ -106,7 +106,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 						Biome biome = world.getBiomeForCoordsBody(pos);
 						IBlockState blockState = world.getBlockState(pos);
 						if(blockState == biome.fillerBlock || blockState == biome.topBlock || blockState.getMaterial() == Material.ROCK || blockState.getMaterial() == Material.GROUND) {
-							world.setBlockToAir(pos.toImmutable());
+							world.removeBlock(pos.toImmutable());
 						}
 						pos.setY(pos.getY() + 1);
 					}
@@ -141,7 +141,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 		for (int k = 0, y = pos.getY(); k <= this.height; k++, pos.setY(y + k)) {
 			IBlockState blockState = world.getBlockState(pos);
 			if(blockState == biome.fillerBlock || blockState == biome.topBlock || blockState.getMaterial() == Material.ROCK || blockState.getMaterial() == Material.GROUND) {
-				world.setBlockToAir(pos.toImmutable());
+				world.removeBlock(pos.toImmutable());
 			}
 		}
 	}

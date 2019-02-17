@@ -77,7 +77,7 @@ public class ItemLurkerSkinShield extends ItemBLShield {
 					boat.rotationYaw = playerIn.rotationYaw;
 
 					if(worldIn.getCollisionBoxes(boat, boat.getBoundingBox().grow(-0.1D)).isEmpty()) {
-						if(!worldIn.isRemote) {
+						if(!worldIn.isRemote()) {
 							worldIn.spawnEntity(boat);
 
 							if(!playerIn.isSneaking()) {

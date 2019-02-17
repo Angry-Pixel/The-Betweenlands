@@ -89,7 +89,7 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
     }
 
     private void setDefaultFacing(World worldIn, BlockPos pos, IBlockState state) {
-        if (!worldIn.isRemote) {
+        if (!worldIn.isRemote()) {
             IBlockState iblockstate = worldIn.getBlockState(pos.north());
             IBlockState iblockstate1 = worldIn.getBlockState(pos.south());
             IBlockState iblockstate2 = worldIn.getBlockState(pos.west());
@@ -114,7 +114,7 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 
 	@Override
 	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (world.isRemote)
+		if (world.isRemote())
 			return true;
 		else {
 			TileEntityBLFurnace tileentityfurnace = (TileEntityBLFurnace)world.getTileEntity(pos);
@@ -185,7 +185,7 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 			double d4 = rand.nextDouble() * 0.6D - 0.3D;
 
 			if (rand.nextDouble() < 0.1D) {
-				worldIn.playSound((double) pos.getX() + 0.5D, (double) pos.getY(), (double) pos.getZ() + 0.5D, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+				worldIn.play((double) pos.getX() + 0.5D, (double) pos.getY(), (double) pos.getZ() + 0.5D, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
 			}
 
 			switch (enumfacing) {

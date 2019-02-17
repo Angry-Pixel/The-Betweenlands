@@ -78,7 +78,7 @@ public class BlockWaystone extends BlockContainer {
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 
-		if(!worldIn.isRemote) {
+		if(!worldIn.isRemote()) {
 			IBlockState stateTop = this.getDefaultState().with(PART, Part.TOP);
 			IBlockState stateMiddle = this.getDefaultState().with(PART, Part.MIDDLE);
 
@@ -104,8 +104,8 @@ public class BlockWaystone extends BlockContainer {
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(worldIn, pos, state, rand);
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+		super.tick(state, worldIn, pos, rand);
 		this.checkAndDropBlock(worldIn, pos, state);
 	}
 
@@ -173,7 +173,7 @@ public class BlockWaystone extends BlockContainer {
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		if(!worldIn.isRemote) {
+		if(!worldIn.isRemote()) {
 			return new TileEntityWaystone(worldIn.rand.nextFloat() * 360.0F);
 		}
 		return new TileEntityWaystone();

@@ -193,7 +193,7 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 
 	@Override
 	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
-		if(!worldIn.isRemote && !stack.isEmpty() && stack.getItem() instanceof ItemShears) {
+		if(!worldIn.isRemote() && !stack.isEmpty() && stack.getItem() instanceof ItemShears) {
 			player.addStat(StatList.getBlockStats(this));
 			player.addExhaustion(0.025F);
 		} else {
@@ -229,13 +229,13 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 					MutableBlockPos pos = it.next();
 					if(entity.world.isBlockLoaded(pos) && entity.world.getBlockState(pos).getBlock() == BlockRegistry.WEEDWOOD_BUSH) {
 						inBush = true;
-						if(entity.world.isRemote) {
+						if(entity.world.isRemote()) {
 							spawnLeafParticles(entity.world, pos, Math.min((entity.distanceWalkedOnStepModified - cap.getNextWeedwoodBushStep()) * 40, 1));
 						}
 					}
 				}
 				if(inBush) {
-					entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundRegistry.GECKO_HIDE, SoundCategory.BLOCKS, 0.4F, entity.world.rand.nextFloat() * 0.3F + 0.7F);
+					entity.world.play(null, entity.posX, entity.posY, entity.posZ, SoundRegistry.GECKO_HIDE, SoundCategory.BLOCKS, 0.4F, entity.world.rand.nextFloat() * 0.3F + 0.7F);
 				}
 				cap.setNextWeeedwoodBushStep(entity.distanceWalkedOnStepModified + 0.8F);
 			}
@@ -274,7 +274,7 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 
 	@Override
 	public void decayPlant(World world, BlockPos pos, IBlockState state, Random rand) {
-		world.setBlockToAir(pos);
+		world.removeBlock(pos);
 	}
 
 	@Override

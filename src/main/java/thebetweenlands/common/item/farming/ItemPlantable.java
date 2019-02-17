@@ -27,9 +27,9 @@ public abstract class ItemPlantable extends Item {
 			block = worldIn.getBlockState(newPos).getBlock();
 			Block placeBlock = this.getBlock(stack, playerIn, worldIn, newPos);
 			if (placeBlock != null && block != placeBlock && placeBlock.canPlaceBlockAt(worldIn, newPos)) {
-				if (!worldIn.isRemote) {
+				if (!worldIn.isRemote()) {
 					worldIn.setBlockState(newPos, this.getBlockState(placeBlock, stack, playerIn, worldIn, newPos));
-					worldIn.playSound((EntityPlayer)null, (float)pos.getX() + 0.5F, (float)pos.getY() + 0.5F, (float)pos.getZ() + 0.5F, placeBlock.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (placeBlock.getSoundType().getVolume() + 1.0F) / 2.0F, placeBlock.getSoundType().getPitch() * 0.8F);
+					worldIn.play((EntityPlayer)null, (float)pos.getX() + 0.5F, (float)pos.getY() + 0.5F, (float)pos.getZ() + 0.5F, placeBlock.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (placeBlock.getSoundType().getVolume() + 1.0F) / 2.0F, placeBlock.getSoundType().getPitch() * 0.8F);
 					stack.shrink(1);
 				}
 				return EnumActionResult.SUCCESS;

@@ -34,7 +34,7 @@ public class ItemWeedwoodSign extends Item {
 			pos = pos.offset(facing);
 
 			if (playerIn.canPlayerEdit(pos, facing, stack) && BlockRegistry.STANDING_WEEDWOOD_SIGN.canPlaceBlockAt(worldIn, pos)) {
-				if (worldIn.isRemote) {
+				if (worldIn.isRemote()) {
 					return EnumActionResult.SUCCESS;
 				} else {
 					pos = flag ? pos.down() : pos;

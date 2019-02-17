@@ -25,6 +25,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -34,7 +35,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	private BlockPos spawnPos;
 	
 	public EntityDragonFly(World world) {
-		super(world);
+		super(EntityRegistry.DRAGONFLY, world);
 		setSize(0.9F, 0.5F);
 		this.experienceValue = 3;
 	}
@@ -47,11 +48,11 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	}
 	
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.9D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.9D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+		getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 	}
 
 	@Override
@@ -97,7 +98,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		if(this.spawnPos == null) {
 			this.spawnPos = new BlockPos(this.posX, this.posY, this.posZ);
 		}
@@ -105,7 +106,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 		if (motionY < 0.0D) {
 			motionY *= 0.6D;
 		}
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			if (rand.nextInt(200) == 0) {
 				if (!entityFlying) {
 					setEntityFlying(true);
@@ -130,7 +131,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 				}
 			}
 		}
-		super.onUpdate();
+		super.tick();
 	}
 
 	public void flyAbout() {
@@ -199,7 +200,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	protected void onDeathUpdate() {
 		deathTime++;
 		if (deathTime == 20) {
-			if (!world.isRemote && (recentlyHit > 0 || isPlayer()) && !this.isChild() && world.getGameRules().getBoolean("doMobLoot")) {
+			if (!world.isRemote() && (recentlyHit > 0 || isPlayer()) && !this.isChild() && world.getGameRules().getBoolean("doMobLoot")) {
 				int experiencePoints = getExperiencePoints(attackingPlayer);
 				while (experiencePoints > 0) {
 					int amount = EntityXPOrb.getXPSplit(experiencePoints);
@@ -207,7 +208,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 					world.spawnEntity(new EntityXPOrb(world, posX, posY, posZ, amount));
 				}
 			}
-			setDead();
+			remove();
 			if (!isInLurkersMouth()) {
 				for (int particle = 0; particle < 20; particle++) {
 					double motionX = rand.nextGaussian() * 0.02D;

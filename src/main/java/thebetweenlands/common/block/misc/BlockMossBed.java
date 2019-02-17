@@ -80,7 +80,7 @@ public class BlockMossBed extends BlockBed implements IStateMappedBlock, ICustom
 	@Override
 	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(playerIn.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
-			if(!worldIn.isRemote) {
+			if(!worldIn.isRemote()) {
 				playerIn.setSpawnPoint(pos, false);
 				playerIn.sendStatusMessage(new TextComponentTranslation("chat.bed_spawn_set"), true);
 			}

@@ -31,7 +31,7 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 				this.dataManager.set(TICKS, this.getTicks() - 1);
 			}
 
-			if(!world.isRemote && this.getTicks() <= 0) {
+			if(!world.isRemote() && this.getTicks() <= 0) {
 				if(this.isActive()) {
 					int offTime = this.getOffTime(world.rand);
 					this.dataManager.set(TICKS, offTime).syncImmediately();
@@ -96,7 +96,7 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	public void setActive(boolean active) {
 		if(!active || this.canActivate()) {
 			super.setActive(active);
-			if(!this.getWorld().isRemote) {
+			if(!this.getWorld().isRemote()) {
 				if(!this.isActive()) {
 					int offTime = this.getOffTime(this.getWorld().rand);
 					this.dataManager.set(TICKS, offTime).syncImmediately();

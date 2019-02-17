@@ -19,7 +19,7 @@ public class ItemRandomSound extends Item {
     public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 
         int randomSound = itemRand.nextInt(SoundRegistry.SOUNDS.size());
-        worldIn.playSound(player, pos, SoundRegistry.SOUNDS.get(randomSound), SoundCategory.NEUTRAL, 1f, 1f);
+        worldIn.play(player, pos, SoundRegistry.SOUNDS.get(randomSound), SoundCategory.NEUTRAL, 1f, 1f);
         return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
 }

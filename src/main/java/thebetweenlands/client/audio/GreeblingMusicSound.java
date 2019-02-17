@@ -75,7 +75,7 @@ public class GreeblingMusicSound extends EntityMusicSound<EntityGreebling> {
 		if(!this.mustFadeOut && !this.fadeOut) {
 			EntityPlayer player = MusicHandler.INSTANCE.getPlayer();
 			if(player != null) {
-				this.volume = (float) MathHelper.clamp(this.originalVolume * (1.0D - player.getDistance(this.xPosF, this.yPosF, this.zPosF) / ((EntityGreebling) this.getMusicEntity()).getMusicRange(player)), 0, 1);
+				this.volume = (float) MathHelper.clamp(this.originalVolume * (1.0D - player.getDistance(this.x, this.y, this.z) / ((EntityGreebling) this.getMusicEntity()).getMusicRange(player)), 0, 1);
 			}
 		}
 	}

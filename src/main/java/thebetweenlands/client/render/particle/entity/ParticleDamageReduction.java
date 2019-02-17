@@ -44,13 +44,13 @@ public class ParticleDamageReduction extends ParticleAnimated implements IPartic
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
 		this.prevParticleAngle = this.particleAngle;
 		this.particleAngle += (this.rotateCW ? -1 : 1) * this.particleAge / 16.0F;
 		
-		if(this.entity != null && this.entity.isEntityAlive()) {
+		if(this.entity != null && this.entity.isAlive()) {
 			this.posX = this.entity.posX + this.offset.x;
 			this.posY = this.entity.posY + this.offset.y;
 			this.posZ = this.entity.posZ + this.offset.z;

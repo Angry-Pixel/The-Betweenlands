@@ -51,7 +51,7 @@ public class BlockAlembic extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             if (world.getTileEntity(pos) instanceof TileEntityAlembic) {
                 TileEntityAlembic tile = (TileEntityAlembic) world.getTileEntity(pos);
 

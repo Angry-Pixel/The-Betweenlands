@@ -132,7 +132,7 @@ public class EventRift extends TimedEnvironmentEvent {
 
 	@Override
 	public void setActive(boolean active) {
-		if(!this.getWorld().isRemote && active && !this.isActive() && this.getActivationTicks() == 0) {
+		if(!this.getWorld().isRemote() && active && !this.isActive() && this.getActivationTicks() == 0) {
 			this.setRandomConfiguration();
 
 			if(this.playRiftOpenSound) {
@@ -175,7 +175,7 @@ public class EventRift extends TimedEnvironmentEvent {
 			}
 		}
 
-		if(!this.getWorld().isRemote) {
+		if(!this.getWorld().isRemote()) {
 			int remainingTicks = this.getTicks();
 			if((!this.isActive() && remainingTicks < 1800 && remainingTicks > 80) || (this.isActive() && remainingTicks < 1800 && remainingTicks > 80)) {
 				if(this.soundTicks-- <= 0) {

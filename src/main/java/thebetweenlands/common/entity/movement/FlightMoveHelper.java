@@ -21,7 +21,7 @@ public class FlightMoveHelper extends EntityMoveHelper {
 	@Override
 	public void onUpdateMoveHelper() {
 		IAttributeInstance entityMoveSpeedAttribute = this.entity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
-		double entityMoveSpeed = entityMoveSpeedAttribute != null ? entityMoveSpeedAttribute.getAttributeValue() : 1.0D;
+		double entityMoveSpeed = entityMoveSpeedAttribute != null ? entityMoveSpeedAttribute.getValue() : 1.0D;
 		double speed = this.getFlightSpeed() * entityMoveSpeed;
 
 		if(this.action == EntityMoveHelper.Action.MOVE_TO) {

@@ -36,7 +36,7 @@ public class AdvancementHandler {
     @SubscribeEvent
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
         EntityPlayer player = event.getPlayer();
-        if(player != null && !event.getWorld().isRemote && player instanceof EntityPlayerMP) {
+        if(player != null && !event.getWorld().isRemote() && player instanceof EntityPlayerMP) {
             AdvancementCriterionRegistry.BREAK_BLOCK.trigger((EntityPlayerMP) player, event.getPos(), event.getState());
         }
     }
@@ -51,7 +51,7 @@ public class AdvancementHandler {
 
     @SubscribeEvent
     public static void onItemCrafting(PlayerEvent.ItemCraftedEvent event) {
-        if (event.player != null && !event.player.world.isRemote && event.craftMatrix instanceof InventoryCrafting) {
+        if (event.player != null && !event.player.world.isRemote() && event.craftMatrix instanceof InventoryCrafting) {
             if (CircleGemHelper.getGem(event.crafting) != CircleGemType.NONE) {
                 boolean hadGem = false;
                 for (int i = 0; i < event.craftMatrix.getSizeInventory(); ++i) {

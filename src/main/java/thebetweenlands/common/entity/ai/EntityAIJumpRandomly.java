@@ -19,7 +19,7 @@ public class EntityAIJumpRandomly extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		return this.taskOwner.isEntityAlive() && this.taskOwner.getRNG().nextInt(this.chance) == 0 && this.condition.get();
+		return this.taskOwner.isAlive() && this.taskOwner.getRNG().nextInt(this.chance) == 0 && this.condition.get();
 	}
 
 	@Override

@@ -17,17 +17,17 @@ public class EntityAngryPebble extends EntityThrowable {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 		if(this.ticksExisted > 400) {
-			setDead();
+			remove();
 		}
 	}
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
 		if(result.typeOfHit != null) {
-			if(this.world.isRemote) {
+			if(this.world.isRemote()) {
 				double particleX = MathHelper.floor(this.posX) + this.rand.nextFloat();
 				double particleY = MathHelper.floor(this.posY) + this.rand.nextFloat();
 				double particleZ = MathHelper.floor(this.posZ) + this.rand.nextFloat();
@@ -36,7 +36,7 @@ public class EntityAngryPebble extends EntityThrowable {
 				}
 			} else {
 				this.explode();
-				this.setDead();
+				this.remove();
 			}
 		}
 	}

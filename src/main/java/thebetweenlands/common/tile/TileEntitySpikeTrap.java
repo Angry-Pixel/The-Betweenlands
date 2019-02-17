@@ -31,7 +31,7 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 	
 	@Override
 	public void tick() {
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			IBlockState stateUp = world.getBlockState(pos.up());
 			if (stateUp.getBlock() != Blocks.AIR && stateUp.getBlockHardness(world, pos.up()) >= 0.0F) {
 				setType((byte) 1);
@@ -39,7 +39,7 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 				Block block = stateUp.getBlock();
 				world.playEvent(null, 2001, pos.up(), Block.getIdFromBlock(block));
 				block.dropBlockAsItem(world, pos.up(), world.getBlockState(pos.up()), 0);
-				world.setBlockToAir(pos.up());
+				world.removeBlock(pos.up());
 			}
 			IBlockState stateUp2 = world.getBlockState(pos.up(2));
 			if (stateUp2.getBlock() != Blocks.AIR && stateUp2.getBlockHardness(world, pos.up(2)) >= 0.0F) {
@@ -48,7 +48,7 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 				Block block = stateUp2.getBlock();
 				world.playEvent(null, 2001, pos.up(2), Block.getIdFromBlock(block));
 				block.dropBlockAsItem(world, pos.up(2), world.getBlockState(pos.up(2)), 0);
-				world.setBlockToAir(pos.up(2));
+				world.removeBlock(pos.up(2));
 			}
 			if (world.rand.nextInt(500) == 0) {
 				if (type != 0 && !active && animationTicks == 0)
@@ -66,10 +66,10 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 		if (active) {
 			activateBlock();
 			if (animationTicks == 0)
-				world.playSound(null, (double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.SPIKE, SoundCategory.BLOCKS, 1.25F, 1.0F);
+				world.play(null, (double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.SPIKE, SoundCategory.BLOCKS, 1.25F, 1.0F);
 			if (animationTicks <= 20)
 				animationTicks += 4;
-			if (animationTicks == 20 && !this.world.isRemote)
+			if (animationTicks == 20 && !this.world.isRemote())
 				setActive(false);
 		}
 		if (!active)

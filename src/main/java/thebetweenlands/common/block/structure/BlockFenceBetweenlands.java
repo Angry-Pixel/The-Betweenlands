@@ -154,7 +154,7 @@ public class BlockFenceBetweenlands extends Block {
 
 	@Override
 	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!worldIn.isRemote) {
+		if (!worldIn.isRemote()) {
 			return ItemLead.attachToFence(playerIn, worldIn, pos);
 		} else {
 			ItemStack itemstack = playerIn.getHeldItem(hand);

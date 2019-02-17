@@ -42,7 +42,7 @@ public class ElixirClientHandler {
         }
 
         private void update(int strength) {
-            if(this.entity != null && !this.entity.isDead) {
+            if(this.entity != null && this.entity.isAlive()) {
                 Vec3d newPos = new Vec3d(this.entity.posX, this.entity.posY, this.entity.posZ);
                 if(this.cachedPositions.size() > 0) {
                     Vec3d lastPos = this.cachedPositions.get(this.cachedPositions.size() - 1);
@@ -106,7 +106,7 @@ public class ElixirClientHandler {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         EntityPlayer player = Minecraft.getInstance().player;
         if(event.phase == TickEvent.Phase.END) {
-            if(player != null && player.world != null && player.world.isRemote && player == Minecraft.getInstance().player) {
+            if(player != null && player.world != null && player.world.isRemote() && player == Minecraft.getInstance().player) {
                 if(ElixirEffectRegistry.EFFECT_HUNTERSSENSE.isActive(player)) {
                     int strength = ElixirEffectRegistry.EFFECT_HUNTERSSENSE.getStrength(player);
                     World world = player.world;
@@ -163,7 +163,7 @@ public class ElixirClientHandler {
                     Map.Entry<Entity, EntityTrail> entry;
                     while(it.hasNext() && (entry = it.next()) != null) {
                         EntityTrail trail = entry.getValue();
-                        if(trail.entity == null || trail.entity.isDead || !entityList.contains(entry.getKey())) {
+                        if(trail.entity == null || !trail.entity.isAlive() || !entityList.contains(entry.getKey())) {
                             it.remove();
                         }
                     }

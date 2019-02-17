@@ -81,7 +81,7 @@ public class BlockInfuser extends BlockContainer {
 	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
 		TileEntity tileEntity = world.getTileEntity(pos);
-		if (!world.isRemote && tileEntity instanceof TileEntityInfuser) {
+		if (!world.isRemote() && tileEntity instanceof TileEntityInfuser) {
 			TileEntityInfuser tile = (TileEntityInfuser) tileEntity;
 
 			final IFluidHandler fluidHandler = getFluidHandler(world, pos);
@@ -108,9 +108,9 @@ public class BlockInfuser extends BlockContainer {
 									heldItem.shrink(1);
 								world.notifyBlockUpdate(pos, state, state, 2);
 								if(tile.getWaterAmount() > 0) {
-									world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.3f, 0.9f + world.rand.nextFloat() * 0.3f);
+									world.play(null, pos, SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.3f, 0.9f + world.rand.nextFloat() * 0.3f);
 								} else {
-									world.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_ADD_ITEM, SoundCategory.BLOCKS, 0.3f, 0.9f + world.rand.nextFloat() * 0.3f);
+									world.play(null, pos, SoundEvents.ENTITY_ITEMFRAME_ADD_ITEM, SoundCategory.BLOCKS, 0.3f, 0.9f + world.rand.nextFloat() * 0.3f);
 								}
 								return true;
 							}
@@ -189,7 +189,7 @@ public class BlockInfuser extends BlockContainer {
 
 	@Override
 	public void onReplaced(IBlockState state, World world, BlockPos pos, IBlockState newState, boolean isMoving) {
-		if(!world.isRemote) {
+		if(!world.isRemote()) {
 			IInventory tileInventory = (IInventory) world.getTileEntity(pos);
 			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(pos);
 			if (tileInventory != null && !tile.hasInfusion()) {
@@ -246,7 +246,7 @@ public class BlockInfuser extends BlockContainer {
 					float colors[] = infuser.currentInfusionColor;
 					BLParticles.BUBBLE_INFUSION.spawn(world, xx + 0.3F - rand.nextFloat() * 0.6F, yy, zz + 0.3F - rand.nextFloat() * 0.6F, ParticleArgs.get().withScale(0.3F).withColor(colors[0], colors[1], colors[2], 1));
 					if (rand.nextInt(10) == 0 && infuser.getTemperature() > 70)
-						world.playSound(xx, yy, zz, SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.BLOCKS, 1.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.5F, false);
+						world.play(xx, yy, zz, SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.BLOCKS, 1.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.5F, false);
 				}
 				if (infuser.getTemperature() >= 100) {
 					BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) y + 0.75D, (double) (zz + randomOffset));
@@ -280,7 +280,7 @@ public class BlockInfuser extends BlockContainer {
 	
 	@Override
 	public void fillWithRain(World world, BlockPos pos) {
-		if (world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.getTileEntity(pos) instanceof TileEntityInfuser) {
+		if (world.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.getTileEntity(pos) instanceof TileEntityInfuser) {
 			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(pos);
 			
 			if(tile != null) {

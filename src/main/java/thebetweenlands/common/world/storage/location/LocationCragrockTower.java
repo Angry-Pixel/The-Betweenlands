@@ -183,10 +183,10 @@ public class LocationCragrockTower extends LocationGuarded {
 			World world = this.getWorldStorage().getWorld();
 
 			for(BlockPos pos : blocks) {
-				world.playSound(null, pos, SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.2F, 1F);
+				world.play(null, pos, SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.2F, 1F);
 				world.playEvent(null, 2001, pos.down(), Block.getIdFromBlock(world.getBlockState(pos).getBlock()));
 
-				world.setBlockToAir(pos);
+				world.removeBlock(pos);
 				this.getGuard().setGuarded(world, pos, false);
 			}
 		}
@@ -345,7 +345,7 @@ public class LocationCragrockTower extends LocationGuarded {
 
 							if(canLightUp) {
 								world.setBlockState(closest, BlockRegistry.WISP.getDefaultState().with(BlockWisp.COLOR, world.rand.nextInt(4)));
-								world.playSound(null, closest.getX(), closest.getY(), closest.getZ(), SoundRegistry.IGNITE, SoundCategory.AMBIENT, 1.6F + world.rand.nextFloat() * 0.45F, 1.0F + world.rand.nextFloat() * 0.4F);
+								world.play(null, closest.getX(), closest.getY(), closest.getZ(), SoundRegistry.IGNITE, SoundCategory.AMBIENT, 1.6F + world.rand.nextFloat() * 0.45F, 1.0F + world.rand.nextFloat() * 0.4F);
 
 								this.inactiveWisps.remove(closest);
 
@@ -364,7 +364,7 @@ public class LocationCragrockTower extends LocationGuarded {
 			this.inactiveWisps.addAll(this.wisps);
 
 			for(BlockPos pos : this.wisps) {
-				world.setBlockToAir(pos);
+				world.removeBlock(pos);
 			}
 
 			this.setDirty(true);
@@ -452,7 +452,7 @@ public class LocationCragrockTower extends LocationGuarded {
 		if(this.isCrumbling()) {
 			this.dataManager.set(CRUMBLING_TICKS, this.getCrumblingTicks() + 1);
 
-			if(!world.isRemote) {
+			if(!world.isRemote()) {
 				if(this.getCrumblingTicks() > 1200) {
 					this.dataManager.set(CRUMBLING_TICKS, -1).syncImmediately();
 					this.setCrumbling(false);
@@ -464,7 +464,7 @@ public class LocationCragrockTower extends LocationGuarded {
 			}
 		}
 
-		if(!world.isRemote) {
+		if(!world.isRemote()) {
 			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEnclosingBounds(), player -> this.isInside(player) && !player.isCreative() && !player.isSpectator());
 
 			if(!players.isEmpty()) {
@@ -502,7 +502,7 @@ public class LocationCragrockTower extends LocationGuarded {
 						}
 						player.fallDistance = 0.0F;
 						player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 2));
-						player.world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.AMBIENT, 1, 1);
+						player.world.play(null, player.posX, player.posY, player.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.AMBIENT, 1, 1);
 					}
 				}
 
@@ -552,7 +552,7 @@ public class LocationCragrockTower extends LocationGuarded {
 						fallingBlock.setHurtEntities(true);
 						world.spawnEntity(fallingBlock);
 
-						world.playSound(null, pos, SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.2F, 0.5F + world.rand.nextFloat() * 0.4F);
+						world.play(null, pos, SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.2F, 0.5F + world.rand.nextFloat() * 0.4F);
 					}
 				}
 			}
@@ -580,7 +580,7 @@ public class LocationCragrockTower extends LocationGuarded {
 
 	@Override
 	public void onBreakBlock(BreakEvent event) {
-		if(!event.getWorld().isRemote) {
+		if(!event.getWorld().isRemote()) {
 			BlockPos pos = event.getPos();
 			IBlockState blockState = event.getState();
 

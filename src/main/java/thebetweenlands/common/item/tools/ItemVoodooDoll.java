@@ -34,8 +34,8 @@ public class ItemVoodooDoll extends Item {
 		living.remove(player);
 		boolean attacked = false;
 		for (EntityLivingBase entity : living) {
-			if (entity.isEntityAlive() && !(entity instanceof IBLBoss) && entity instanceof EntityPlayer == false) {
-				if (!world.isRemote) {
+			if (entity.isAlive() && !(entity instanceof IBLBoss) && entity instanceof EntityPlayer == false) {
+				if (!world.isRemote()) {
 					attacked |= entity.attackEntityFrom(DamageSource.MAGIC, 20);
 				} else if (!entity.isEntityInvulnerable(DamageSource.MAGIC)) {
 					attacked = true;
@@ -44,9 +44,9 @@ public class ItemVoodooDoll extends Item {
 				}
 			}
 		}
-		if (!world.isRemote && attacked) {
+		if (!world.isRemote() && attacked) {
 			stack.damageItem(1, player);
-			world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.VOODOO_DOLL, SoundCategory.PLAYERS, 0.5F, 1.0F - world.rand.nextFloat() * 0.3F);
+			world.play(null, player.posX, player.posY, player.posZ, SoundRegistry.VOODOO_DOLL, SoundCategory.PLAYERS, 0.5F, 1.0F - world.rand.nextFloat() * 0.3F);
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}

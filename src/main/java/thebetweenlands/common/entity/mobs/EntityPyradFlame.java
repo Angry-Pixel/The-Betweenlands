@@ -11,6 +11,8 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 
 public class EntityPyradFlame extends EntitySmallFireball {
+	//TODO 1.13 Pyrad flame can't extend EntitySmallFireball because EntityType is hardcoded...
+	
 	public EntityPyradFlame(World world) {
 		super(world);
 	}
@@ -26,14 +28,14 @@ public class EntityPyradFlame extends EntitySmallFireball {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
-		if (!this.world.isRemote)
+		if (!this.world.isRemote())
 			if (this.ticksExisted >= 1200)
-				this.setDead();
+				this.remove();
 
-		if (this.world.isRemote)
+		if (this.world.isRemote())
 			this.trailParticles(this.world, this.prevPosX, this.prevPosY, this.prevPosZ, this.rand);
 
 		if (this.isBurning())

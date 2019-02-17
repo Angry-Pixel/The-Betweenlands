@@ -150,10 +150,10 @@ public class CorrosionHelper {
 	 * @param isHeldItem
 	 */
 	public static void updateCorrosion(ItemStack stack, World world, Entity holder, int slot, boolean isHeldItem) {
-		if (world.isRemote) {
+		if (world.isRemote()) {
 			return;
 		}
-		if(!world.isRemote && holder.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && !(holder instanceof EntityPlayer && ((EntityPlayer)holder).isCreative())) {
+		if(!world.isRemote() && holder.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && !(holder instanceof EntityPlayer && ((EntityPlayer)holder).isCreative())) {
 			if(!stack.isEmpty() && stack.getItem() instanceof ICorrodible) {
 				ICorrodible corrodible = (ICorrodible) stack.getItem();
 				int corrosion = corrodible.getCorrosion(stack);

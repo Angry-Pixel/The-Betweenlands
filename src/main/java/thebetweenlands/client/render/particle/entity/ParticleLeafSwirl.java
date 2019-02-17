@@ -26,10 +26,10 @@ public class ParticleLeafSwirl extends ParticleSwirl implements IParticleSpriteR
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
-		if(!this.target.isEntityAlive()) {
+		if(!this.target.isAlive()) {
 			this.setExpired();
 		}
 

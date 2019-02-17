@@ -8,7 +8,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
@@ -48,7 +48,7 @@ public class SiltBeachFeature extends BiomeFeature {
 		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
 			float biomeWeight = biomeWeights.get(x, z);
 			if(this.siltNoise[x * 16 + z] / 1.6f + 1.5f <= 0 && biomeWeight <= this.terrainWeightThreshold) {
-				int y = WorldProviderBetweenlands.LAYER_HEIGHT;
+				int y = DimensionBetweenlands.LAYER_HEIGHT;
 				Block currentBlock = chunkPrimer.getBlockState(x, y, z).getBlock();
 				Block blockAbove = chunkPrimer.getBlockState(x, y + 1, z).getBlock();
 				if(currentBlock == biome.topBlock.getBlock() && (blockAbove == null || blockAbove == Blocks.AIR)) {

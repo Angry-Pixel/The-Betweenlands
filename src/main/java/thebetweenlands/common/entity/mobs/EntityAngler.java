@@ -37,6 +37,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -44,7 +45,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
     private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(EntityAngler.class, DataSerializers.BOOLEAN);
 
     public EntityAngler(World world) {
-        super(world);
+        super(EntityRegistry.ANGLER, world);
         setSize(0.8F, 0.7F);
         moveHelper = new EntityAngler.AnglerMoveHelper(this);
 		setPathPriority(PathNodeType.WALKABLE, -8.0F);
@@ -69,8 +70,8 @@ public class EntityAngler extends EntityMob implements IEntityBL {
     }
 
     @Override
-    protected void entityInit() {
-        super.entityInit();
+    protected void registerData() {
+        super.registerData();
         dataManager.register(IS_LEAPING, false);
     }
 
@@ -83,12 +84,12 @@ public class EntityAngler extends EntityMob implements IEntityBL {
     }
 
     @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
-        getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
-        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
-        getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(12.0D);
-        getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+    protected void registerAttributes() {
+        super.registerAttributes();
+        getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
+        getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
+        getAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(12.0D);
+        getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
     }
 
     @Override
@@ -142,8 +143,8 @@ public class EntityAngler extends EntityMob implements IEntityBL {
     }
 
 	@Override
-	public void onLivingUpdate() {
-		if (getEntityWorld().isRemote) {
+	public void livingTick() {
+		if (getEntityWorld().isRemote()) {
 			if (isInWater()) {
 				Vec3d vec3d = getLook(0.0F);
 				for (int i = 0; i < 2; ++i)
@@ -163,23 +164,23 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 			onGround = false;
 			isAirBorne = true;
 			if(getEntityWorld().getTotalWorldTime()%5==0)
-				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
+				getEntityWorld().play((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
 				damageEntity(DamageSource.DROWN, 0.5F);
 		}
 
-		super.onLivingUpdate();
+		super.livingTick();
 	}
 
 	@Override
-	public void onUpdate() {
-		if(!getEntityWorld().isRemote) {
+	public void tick() {
+		if(!getEntityWorld().isRemote()) {
 		if(getAttackTarget() != null && !getEntityWorld().containsAnyLiquid(getAttackTarget().getBoundingBox())) {
 			Double distance = getPosition().getDistance((int) getAttackTarget().posX, (int) getAttackTarget().posY, (int) getAttackTarget().posZ);
 			if (distance > 1.0F && distance < 6.0F) // && getAttackTarget().getBoundingBox().maxY >= getEntityBoundingBox().minY && getAttackTarget().getBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0)
 				if (isInWater() && getEntityWorld().isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
 					if(!isLeaping()) {
 						setIsLeaping(true);
-						getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1F, 2F);
+						getEntityWorld().play((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1F, 2F);
 					}
 					double distanceX = getAttackTarget().posX - posX;
 					double distanceZ = getAttackTarget().posZ - posZ;
@@ -190,7 +191,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 					}
 			}
 		}
-		super.onUpdate();
+		super.tick();
 	}
 
 	@Override
@@ -255,7 +256,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
                 float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
                 angler.rotationYaw = limitAngle(angler.rotationYaw, f, 90.0F);
                 angler.renderYawOffset = angler.rotationYaw;
-                float f1 = (float) (speed * angler.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+                float f1 = (float) (speed * angler.getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getValue());
                 angler.setAIMoveSpeed(angler.getAIMoveSpeed() + (f1 - angler.getAIMoveSpeed()) * 0.125F);
                 double d4 = Math.sin((double) (angler.ticksExisted + angler.getEntityId()) * 0.5D) * 0.05D;
                 double d5 = Math.cos((double) (angler.rotationYaw * 0.017453292F));

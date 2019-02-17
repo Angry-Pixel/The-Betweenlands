@@ -51,7 +51,7 @@ public class MessageDruidTeleportParticles extends MessageBase {
 	@OnlyIn(Dist.CLIENT)
 	public void handle() {
 		World world = FMLClientHandler.instance().getWorldClient();
-		if (world != null && world.isRemote) {
+		if (world != null && world.isRemote()) {
 			for (int a = 0; a < 360; a += 4) {
 				double rad = a * Math.PI / 180D;
 				BLParticles.SMOKE.spawn(world, this.x - MathHelper.sin((float) rad) * 0.25D, this.y, this.z + MathHelper.cos((float) rad) * 0.25D, ParticleFactory.ParticleArgs.get().withMotion(-MathHelper.sin((float) rad) * 0.1D, 0.01D, MathHelper.cos((float) rad) * 0.1));

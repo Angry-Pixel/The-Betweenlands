@@ -55,7 +55,7 @@ public class ItemRingOfSummoning extends ItemRing {
 
 	@Override
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
-		if(!entity.world.isRemote && entity instanceof EntityPlayer && entity.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {
+		if(!entity.world.isRemote() && entity instanceof EntityPlayer && entity.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {
 			ISummoningCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_SUMMON, null);
 
 			NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);

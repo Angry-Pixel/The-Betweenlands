@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
@@ -33,7 +33,7 @@ public class DeepWatersFeature extends BiomeFeature {
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
 			float biomeWeight = biomeWeights.get(x, z);
-			int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
+			int layerHeight = DimensionBetweenlands.LAYER_HEIGHT;
 			//Flatten terrain
 			int lowestBlock = 0;
 			for(int yOff = 0; yOff < layerHeight; yOff++) {

@@ -33,7 +33,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -91,7 +91,7 @@ public class FogHandler {
 	 */
 	public static boolean hasDenseFog(World world) {
 		BLEnvironmentEventRegistry eeRegistry = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry();
-		return eeRegistry.denseFog.isActive() && Minecraft.getInstance().player.posY > WorldProviderBetweenlands.CAVE_START;
+		return eeRegistry.denseFog.isActive() && Minecraft.getInstance().player.posY > DimensionBetweenlands.CAVE_START;
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -138,7 +138,7 @@ public class FogHandler {
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 
 		if(world != null && player != null) {
-			if(farPlaneDistance != 0.0F && world.provider instanceof WorldProviderBetweenlands) {
+			if(farPlaneDistance != 0.0F && world.dimension instanceof DimensionBetweenlands) {
 				state.update(world, player.getPositionVector().add(0, player.getEyeHeight(), 0), farPlaneDistance, 0);
 			}
 
@@ -172,7 +172,7 @@ public class FogHandler {
 					event.setBlue((float)(colorMultiplier & 255) / 255.0F);
 				}
 			} else if(renderView.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
-				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) renderView.getEntityWorld().provider;
+				DimensionBetweenlands provider = (DimensionBetweenlands) renderView.getEntityWorld().dimension;
 				Vec3d fogColor = provider.getFogColor(renderView.getEntityWorld().getCelestialAngle((float)event.getRenderPartialTicks()), (float)event.getRenderPartialTicks());
 				event.setRed((float)fogColor.x);
 				event.setGreen((float)fogColor.y);
@@ -235,8 +235,8 @@ public class FogHandler {
 			fog.setStart(Math.min(fog.getStart(), denseFogStart));
 			fog.setEnd(Math.min(fog.getEnd(), denseFogEnd));
 
-			final int transitionStart = WorldProviderBetweenlands.CAVE_START;
-			final int transitionEnd = WorldProviderBetweenlands.CAVE_START - 15;
+			final int transitionStart = DimensionBetweenlands.CAVE_START;
+			final int transitionEnd = DimensionBetweenlands.CAVE_START - 15;
 			float y = (float) event.getPosition().y;
 
 			if (y < transitionStart) {
@@ -295,7 +295,7 @@ public class FogHandler {
 			}
 		}
 
-		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
+		DimensionBetweenlands provider = DimensionBetweenlands.getProvider(world);
 		BLEnvironmentEventRegistry reg = provider.getEnvironmentEventRegistry();
 
 		if(reg.bloodSky.isActive()) {

@@ -99,12 +99,12 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 		boolean canHangOn = stateAbove.getMaterial() == Material.LEAVES || stateAbove.isSideSolid(worldIn, pos.up(), EnumFacing.DOWN) || stateAbove.getBlock() == this;
 		if (!canHangOn) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockToAir(pos);
+			worldIn.removeBlock(pos);
 		}
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
 		if(rand.nextInt(16) == 0 && state.get(CAN_GROW) && worldIn.isAirBlock(pos.down())) {
 			worldIn.setBlockState(pos.down(), this.getDefaultState());
 		}

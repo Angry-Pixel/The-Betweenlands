@@ -126,7 +126,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
     	if(player.isSneaking()) {
     		ItemStack heldItem = player.getHeldItem(hand);
     		if(!heldItem.isEmpty() && heldItem.getItem() == this) {
-    			if(!world.isRemote) {
+    			if(!world.isRemote()) {
 	    			InventoryItem inventory = new InventoryItem(heldItem, 9 + (heldItem.getItemDamage() * 9), "Lurker Skin Pouch");
 	    			TileEntity tile = world.getTileEntity(pos);
 	        		if(tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
@@ -149,7 +149,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             if (!player.isSneaking()) {
                 player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH, world, 0, 0, 0);
             } else {

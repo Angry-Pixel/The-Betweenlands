@@ -43,7 +43,7 @@ public class ItemRing extends Item implements IEquippable {
 		ItemStack stack = player.getHeldItem(hand);
 		if(!player.isSneaking()) {
 			if(stack.getItemDamage() > 0 && player.experienceTotal > 0) {
-				if(!world.isRemote) {
+				if(!world.isRemote()) {
 					int repairPerClick = 40;
 					float conversion = this.getXPConversionRate(stack, player);
 					float requiredRepair = Math.min(repairPerClick, stack.getItemDamage() / conversion);

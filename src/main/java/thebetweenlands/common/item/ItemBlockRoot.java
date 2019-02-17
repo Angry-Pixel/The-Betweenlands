@@ -42,7 +42,7 @@ public class ItemBlockRoot extends ItemBlock {
             if (placeBlockAt(stack, player, world, pos, facing, hitX, hitY, hitZ, state)) {
                 state = world.getBlockState(pos);
                 SoundType soundtype = state.getBlock().getSoundType(state, world, pos, player);
-                world.playSound(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
+                world.play(player, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
                 stack.shrink(1);
             }
 

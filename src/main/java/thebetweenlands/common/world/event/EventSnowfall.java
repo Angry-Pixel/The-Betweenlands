@@ -22,7 +22,7 @@ import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 public class EventSnowfall extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "snowfall");
@@ -42,7 +42,7 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 
 	public static float getSnowingStrength(World world) {
 		if (world != null) {
-			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
+			DimensionBetweenlands provider = DimensionBetweenlands.getProvider(world);
 			if (provider != null) {
 				return provider.getEnvironmentEventRegistry().snowfall.getSnowingStrength();
 			}
@@ -70,7 +70,7 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 
 	@Override
 	public void setActive(boolean active) {
-		if(!this.getWorld().isRemote) {
+		if(!this.getWorld().isRemote()) {
 			if (active) {
 				this.dataManager.set(TARGET_SNOWING_STRENGTH, 0.5F + this.getWorld().rand.nextFloat() * 7.5F);
 			} else {
@@ -84,12 +84,12 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 	public void update(World world) {
 		super.update(world);
 
-		if (!world.isRemote) {
+		if (!world.isRemote()) {
 			if(this.isActive() && !this.getRegistry().winter.isActive()) {
 				this.setActive(false);
 			}
 
-			if (this.isActive() && world.provider instanceof WorldProviderBetweenlands && world instanceof WorldServer && world.rand.nextInt(5) == 0) {
+			if (this.isActive() && world.dimension instanceof DimensionBetweenlands && world instanceof WorldServer && world.rand.nextInt(5) == 0) {
 				WorldServer worldServer = (WorldServer) world;
 				for (Iterator<Chunk> iterator = worldServer.getPersistentChunkIterable(worldServer.getPlayerChunkMap().getChunkIterator()); iterator.hasNext();) {
 					Chunk chunk = iterator.next();

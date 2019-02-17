@@ -39,7 +39,7 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 	@Override
 	public void doRender(EntityFirefly entity, double x, double y, double z, float yaw, float partialTicks) {
 		if(MinecraftForgeClient.getRenderPass() == 0) {
-			double glowStrength = (float)entity.getEntityAttribute(EntityFirefly.GLOW_STRENGTH_ATTRIB).getAttributeValue();
+			double glowStrength = (float)entity.getAttribute(EntityFirefly.GLOW_STRENGTH_ATTRIB).getValue();
 
 			this.glow.setAlpha(entity.getGlowTicks(partialTicks) / 20.0F * (float)Math.min(glowStrength, 1.0D));
 
@@ -103,7 +103,7 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 		double ipy = y + 0.25D + Math.sin((entity.ticksExisted + partialTicks) / 10.0F) * 0.15F;
 		double ipz = z;
 
-		double glowStrength = (float)entity.getEntityAttribute(EntityFirefly.GLOW_STRENGTH_ATTRIB).getAttributeValue();
+		double glowStrength = (float)entity.getAttribute(EntityFirefly.GLOW_STRENGTH_ATTRIB).getValue();
 
 		double scale = entity.getGlowTicks(partialTicks) / 20.0F * glowStrength;
 

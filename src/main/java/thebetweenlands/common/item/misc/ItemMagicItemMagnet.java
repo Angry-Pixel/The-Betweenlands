@@ -111,7 +111,7 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 				double dz = entity.posZ - item.posZ;
 				double len = Math.sqrt(dx*dx + dy*dy + dz*dz);
 
-				if(!entity.world.isRemote) {
+				if(!entity.world.isRemote()) {
 					item.motionX += dx / len * 0.015D;
 					if(item.onGround) {
 						item.motionY += 0.015D;
@@ -166,7 +166,7 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 
 	@SubscribeEvent
 	public static void onItemPickup(ItemPickupEvent event) {
-		if(!event.player.world.isRemote) {
+		if(!event.player.world.isRemote()) {
 			ItemStack magnet = EquipmentHelper.getEquipment(EnumEquipmentInventory.MISC, event.player, ItemRegistry.MAGIC_ITEM_MAGNET);
 			if(!magnet.isEmpty()) {
 				//Damage magnet on pickup

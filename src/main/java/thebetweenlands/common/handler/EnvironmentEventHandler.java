@@ -25,7 +25,7 @@ public class EnvironmentEventHandler {
 	//Update events on the server side
 	@SubscribeEvent
 	public static void onWorldTick(WorldTickEvent event) {
-		if(event.phase == Phase.END && !event.world.isRemote) {
+		if(event.phase == Phase.END && !event.world.isRemote()) {
 			BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(event.world);
 
 			if(storage != null) {
@@ -45,7 +45,7 @@ public class EnvironmentEventHandler {
 					if(dataManager != null) {
 						dataManager.update();
 						if(dataManager.isDirty()) {
-							TheBetweenlands.networkWrapper.sendToDimension(new MessageSyncEnvironmentEventData(eevent, false), event.world.provider.getDimension());
+							TheBetweenlands.networkWrapper.sendToDimension(new MessageSyncEnvironmentEventData(eevent, false), event.world.dimension.getDimension());
 						}
 					}
 				}
@@ -59,7 +59,7 @@ public class EnvironmentEventHandler {
 	public static void onTick(TickEvent.ClientTickEvent event) {
 		if(event.phase == Phase.END && !Minecraft.getInstance().isGamePaused()) {
 			World world = Minecraft.getInstance().world;
-			if(world != null && world.isRemote) {
+			if(world != null && world.isRemote()) {
 				BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
 				if(storage != null) {
 					BLEnvironmentEventRegistry reg = storage.getEnvironmentEventRegistry();
@@ -76,7 +76,7 @@ public class EnvironmentEventHandler {
 	//Send packet to sync events on joining
 	@SubscribeEvent
 	public static void joinWorld(EntityJoinWorldEvent event) {
-		if (!event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerMP) {
+		if (!event.getWorld().isRemote() && event.getEntity() instanceof EntityPlayerMP) {
 			BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(event.getWorld());
 			if(storage != null) {
 				for(IEnvironmentEvent eevent : storage.getEnvironmentEventRegistry().getEvents().values()) {

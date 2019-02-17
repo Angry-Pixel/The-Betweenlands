@@ -26,7 +26,7 @@ public class ItemMossBed extends Item {
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (worldIn.isRemote) {
+		if (worldIn.isRemote()) {
 			return EnumActionResult.SUCCESS;
 		} else if (facing != EnumFacing.UP) {
 			return EnumActionResult.FAIL;
@@ -58,7 +58,7 @@ public class ItemMossBed extends Item {
 					}
 
 					SoundType sound = bedState.getBlock().getSoundType(bedState, worldIn, pos, player);
-					worldIn.playSound((EntityPlayer)null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
+					worldIn.play((EntityPlayer)null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 
 					worldIn.notifyNeighborsRespectDebug(pos, block, false);
 					worldIn.notifyNeighborsRespectDebug(headPos, headState.getBlock(), false);

@@ -53,13 +53,13 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		if(this.animation != null) {
 			this.animation.update();
 			this.setParticleTexture(this.animation.getCurrentSprite());
 		}
 
-		super.onUpdate();
+		super.tick();
 
 		this.move(this.world.rand.nextFloat()*this.jitter*2-this.jitter, this.world.rand.nextFloat()*this.jitter*2-this.jitter, this.world.rand.nextFloat()*this.jitter*2-this.jitter);
 		double distToTarget = Math.sqrt((this.tx-this.posX)*(this.tx-this.posX)+(this.ty-this.posY)*(this.ty-this.posY)+(this.tz-this.posZ)*(this.tz-this.posZ));

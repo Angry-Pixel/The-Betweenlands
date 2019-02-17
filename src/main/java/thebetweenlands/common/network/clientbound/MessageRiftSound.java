@@ -14,7 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 public class MessageRiftSound extends MessageBase {
 	public static enum RiftSoundType {
@@ -64,13 +64,13 @@ public class MessageRiftSound extends MessageBase {
 			
 			final float pitchRange = (this.type == RiftSoundType.CREAK ? (Minecraft.getInstance().world.rand.nextFloat() * 0.3f + 0.7f) : 1.0f);
 			
-			Minecraft.getInstance().getSoundHandler().playSound(new PositionedSoundRecord(sound.getSoundName(), SoundCategory.AMBIENT, 1, 1, false, 0, ISound.AttenuationType.NONE, 0, 0, 0) {
+			Minecraft.getInstance().getSoundHandler().play(new PositionedSoundRecord(sound.getSoundName(), SoundCategory.AMBIENT, 1, 1, false, 0, ISound.AttenuationType.NONE, 0, 0, 0) {
 				@Override
 				public float getPitch() {
 					EntityPlayer player = Minecraft.getInstance().player;
 					if(player != null) {
-						if(player.posY < WorldProviderBetweenlands.CAVE_START) {
-							return (0.5F + (float)player.posY / WorldProviderBetweenlands.CAVE_START * 0.5F) * pitchRange;
+						if(player.posY < DimensionBetweenlands.CAVE_START) {
+							return (0.5F + (float)player.posY / DimensionBetweenlands.CAVE_START * 0.5F) * pitchRange;
 						}
 					}
 					return 1;
@@ -80,8 +80,8 @@ public class MessageRiftSound extends MessageBase {
 				public float getVolume() {
 					EntityPlayer player = Minecraft.getInstance().player;
 					if(player != null) {
-						if(player.posY < WorldProviderBetweenlands.CAVE_START) {
-							return (0.15F + (float)player.posY / WorldProviderBetweenlands.CAVE_START * 0.85F);
+						if(player.posY < DimensionBetweenlands.CAVE_START) {
+							return (0.15F + (float)player.posY / DimensionBetweenlands.CAVE_START * 0.85F);
 						}
 					}
 					return 1;

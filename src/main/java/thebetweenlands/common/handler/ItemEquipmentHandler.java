@@ -119,7 +119,7 @@ public class ItemEquipmentHandler {
 
 			if(equippable.canEquipOnRightClick(heldItem, player, player)) {
 				if(packet) {
-					if(player.world.isRemote) {
+					if(player.world.isRemote()) {
 						ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, true);
 
 						if(result.isEmpty() || result.getCount() != heldItem.getCount()) {
@@ -142,7 +142,7 @@ public class ItemEquipmentHandler {
 						}
 					}
 				} else {
-					if(player.world.isRemote) {
+					if(player.world.isRemote()) {
 						ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, true);
 
 						if(result.isEmpty() || result.getCount() != heldItem.getCount()) {
@@ -175,7 +175,7 @@ public class ItemEquipmentHandler {
 	public static void onDeathDrops(LivingDropsEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 
-		if(entity != null && !entity.world.isRemote && !entity.world.getGameRules().getBoolean("keepInventory")) {
+		if(entity != null && !entity.world.isRemote() && !entity.world.getGameRules().getBoolean("keepInventory")) {
 			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 

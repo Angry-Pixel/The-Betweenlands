@@ -62,7 +62,7 @@ public class BlockBulbCappedMushroomCap extends BasicBlock {
 
 	@Override
 	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
-		if (!worldIn.isRemote) {
+		if (!worldIn.isRemote()) {
 			int dropChance = 3;
 
 			if (fortune > 0) {

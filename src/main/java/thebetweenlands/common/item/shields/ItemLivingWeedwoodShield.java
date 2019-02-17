@@ -30,7 +30,7 @@ public class ItemLivingWeedwoodShield extends ItemWeedwoodShield {
 		if(entityIn instanceof EntityLivingBase) {
 			EntityLivingBase living = (EntityLivingBase) entityIn;
 
-			if(!worldIn.isRemote) {
+			if(!worldIn.isRemote()) {
 				boolean mainhand = living.getHeldItem(EnumHand.MAIN_HAND) == stack;
 				boolean offhand = living.getHeldItem(EnumHand.OFF_HAND) == stack;
 				if(living.isActiveItemStackBlocking() && (mainhand || offhand)) {
@@ -43,7 +43,7 @@ public class ItemLivingWeedwoodShield extends ItemWeedwoodShield {
 					}
 
 					if(worldIn.rand.nextInt(60) == 0) {
-						worldIn.playSound(null, entityIn.posX, entityIn.posY + entityIn.height / 2, entityIn.posZ, SoundRegistry.SPIRIT_TREE_FACE_SMALL_LIVING, SoundCategory.PLAYERS, 0.35F, 1.4F);
+						worldIn.play(null, entityIn.posX, entityIn.posY + entityIn.height / 2, entityIn.posZ, SoundRegistry.SPIRIT_TREE_FACE_SMALL_LIVING, SoundCategory.PLAYERS, 0.35F, 1.4F);
 					}
 				}
 			} else {
@@ -126,7 +126,7 @@ public class ItemLivingWeedwoodShield extends ItemWeedwoodShield {
 
 			world.spawnEntity(spit);
 
-			world.playSound(null, spit.posX, spit.posY, spit.posZ, SoundRegistry.SPIRIT_TREE_FACE_SMALL_SPIT, SoundCategory.PLAYERS, 1, 1);
+			world.play(null, spit.posX, spit.posY, spit.posZ, SoundRegistry.SPIRIT_TREE_FACE_SMALL_SPIT, SoundCategory.PLAYERS, 1, 1);
 
 			TheBetweenlands.networkWrapper.sendToAllAround(new MessageLivingWeedwoodShieldSpit(owner, hand == EnumHand.MAIN_HAND, 15), new TargetPoint(owner.dimension, owner.posX, owner.posY, owner.posZ, 64));
 

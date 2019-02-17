@@ -35,8 +35,8 @@ public class BlockSaplingBetweenlands extends BlockSapling implements IStateMapp
 	}
 
 	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		if (!world.isRemote) {
+	public void tick(IBlockState state, World world, BlockPos pos, Random rand) {
+		if (!world.isRemote()) {
 			this.checkAndDropBlock(world, pos, state);
 
 			if (rand.nextInt(7) == 0) {
@@ -56,7 +56,7 @@ public class BlockSaplingBetweenlands extends BlockSapling implements IStateMapp
 			return;
 		}
 		
-		world.setBlockToAir(pos);
+		world.removeBlock(pos);
 
 		if (!this.gen.generate(world, rand, pos)) {
 			world.setBlockState(pos, state);

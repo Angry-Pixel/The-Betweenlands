@@ -23,15 +23,15 @@ public class BlockFungusCrop extends BlockGenericCrop implements ICustomItemBloc
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(worldIn, pos, state, rand);
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+		super.tick(state, worldIn, pos, rand);
 
 		if(this.isDecayed(worldIn, pos)) {
-			if(!worldIn.isRemote && state.get(AGE) >= 15 && rand.nextInt(6) == 0) {
+			if(!worldIn.isRemote() && state.get(AGE) >= 15 && rand.nextInt(6) == 0) {
 				EntitySporeling sporeling = new EntitySporeling(worldIn);
 				sporeling.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, rand.nextFloat() * 360.0F, 0.0F);
 				worldIn.spawnEntity(sporeling);
-				worldIn.setBlockToAir(pos);
+				worldIn.removeBlock(pos);
 				this.harvestAndUpdateSoil(worldIn, pos, 5);
 
 				for (EntityPlayerMP playerMP : worldIn.getEntitiesWithinAABB(EntityPlayerMP.class, new AxisAlignedBB(pos, pos).grow(10.0D, 5.0D, 10.0D))) {

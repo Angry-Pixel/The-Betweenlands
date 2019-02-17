@@ -24,7 +24,7 @@ public class ParticleCaveWaterDrip extends Particle {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		prevPosX = posX;
 		prevPosY = posY;
 		prevPosZ = posZ;

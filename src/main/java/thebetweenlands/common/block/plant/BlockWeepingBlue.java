@@ -31,7 +31,7 @@ public class BlockWeepingBlue extends BlockDoublePlantBL {
 
 	@Override
 	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
-		if(!worldIn.isRemote && !stack.isEmpty() && stack.getItem() instanceof ItemShears) {
+		if(!worldIn.isRemote() && !stack.isEmpty() && stack.getItem() instanceof ItemShears) {
 			player.addStat(StatList.getBlockStats(this));
 			player.addExhaustion(0.025F);
 		} else {

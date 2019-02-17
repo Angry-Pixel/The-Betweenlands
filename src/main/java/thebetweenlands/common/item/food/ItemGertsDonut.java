@@ -34,14 +34,14 @@ public class ItemGertsDonut extends ItemBLFood {
         IBlockState iblockstate = worldIn.getBlockState(pos);
 
         if (iblockstate.getBlock() instanceof BlockWeedwoodJukebox && !iblockstate.get(BlockJukebox.HAS_RECORD)) {
-            if (!worldIn.isRemote) {
+            if (!worldIn.isRemote()) {
                 ((BlockJukebox) iblockstate.getBlock()).insertRecord(worldIn, pos, iblockstate, stack);
                 worldIn.playEvent(null, 1010, pos, Item.getIdFromItem(this));
                 stack.shrink(stack.getCount());
                 playerIn.addStat(StatList.RECORD_PLAYED);
             } else {
                 playerIn.sendStatusMessage(new TextComponentString("DOH!"), true);
-                worldIn.playSound(playerIn, pos, SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.RECORDS, 1.0F, 1.0F);
+                worldIn.play(playerIn, pos, SoundEvents.ENTITY_GENERIC_EAT, SoundCategory.RECORDS, 1.0F, 1.0F);
             }
 
             return EnumActionResult.SUCCESS;

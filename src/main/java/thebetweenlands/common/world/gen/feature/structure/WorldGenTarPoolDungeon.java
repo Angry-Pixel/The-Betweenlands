@@ -18,7 +18,7 @@ import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
@@ -39,7 +39,7 @@ public class WorldGenTarPoolDungeon extends WorldGenHelper {
 		if (!world.isAreaLoaded(pos, halfSize + 1))
 			return false;
 
-		if (y + height + 1 >= WorldProviderBetweenlands.LAYER_HEIGHT - height || y - 1 <= WorldProviderBetweenlands.CAVE_WATER_HEIGHT + height)
+		if (y + height + 1 >= DimensionBetweenlands.LAYER_HEIGHT - height || y - 1 <= DimensionBetweenlands.CAVE_WATER_HEIGHT + height)
 			return false;
 
 		for (int xx = x - halfSize - 1; xx <= x + halfSize + 1; ++xx)
@@ -55,7 +55,7 @@ public class WorldGenTarPoolDungeon extends WorldGenHelper {
 				for (int y1 = y; y1 < y + height; y1++) {
 					double dSq = Math.pow(x1 - x, 2.0D) + Math.pow(z1 - z, 2.0D) + Math.pow(y1 - y, 2.0D);
 					if (Math.round(Math.sqrt(dSq)) <= halfSize && y1 >= y + 3)
-						world.setBlockToAir(new BlockPos(x1, y1, z1));
+						world.removeBlock(new BlockPos(x1, y1, z1));
 				}
 
 		for (int yy = y + 2; yy >= y; --yy) {

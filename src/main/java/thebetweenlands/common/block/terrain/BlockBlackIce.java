@@ -74,7 +74,7 @@ public class BlockBlackIce extends BlockBreakable {
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
 		if (!EventWinter.isFroooosty(worldIn) || (worldIn.getLightFor(EnumSkyBlock.BLOCK, pos) > 11 - this.getDefaultState().getLightOpacity())) {
 			this.turnIntoWater(worldIn, pos);
 		}

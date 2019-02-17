@@ -39,15 +39,15 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
-		if (this.world.isRemote) {
+		if (this.world.isRemote()) {
 			this.trailParticles(this.world, this.posX, this.posY + this.height / 2.0D, this.posZ, this.rand);
 		}
 
 		if (this.ticksExisted > 140) {
-			this.setDead();
+			this.remove();
 		}
 	}
 
@@ -56,9 +56,9 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 		if (result.entityHit != null) {
 			if (result.entityHit instanceof EntityLivingBase && !(result.entityHit instanceof EntityBloodSnail)) {
 				if(result.entityHit.attackEntityFrom(getThrower() != null ? DamageSource.causeIndirectDamage(this, getThrower()).setProjectile() : DamageSource.causeThrownDamage(this, null), 1.0F)) {
-					if (!world.isRemote) {
+					if (!world.isRemote()) {
 						((EntityLivingBase) result.entityHit).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
-						this.setDead();
+						this.remove();
 					}
 				} else {
 					this.motionX *= -0.1D;
@@ -73,10 +73,10 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 				IBlockState blockState = this.world.getBlockState(result.getBlockPos());
 				AxisAlignedBB collisionBox = blockState.getCollisionBoundingBox(this.world, result.getBlockPos());
 				if(collisionBox != null && collisionBox.offset(result.getBlockPos()).intersects(this.getBoundingBox())) {
-					this.setDead();
+					this.remove();
 				}
 			} else {
-				this.setDead();
+				this.remove();
 			}
 		}
 	}

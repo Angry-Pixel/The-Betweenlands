@@ -11,9 +11,9 @@ public class GemSingerEchoSound extends SafeStreamSound {
 	public GemSingerEchoSound(Vec3d source) {
 		super(SoundRegistry.GEM_SINGER_ECHO, SoundCategory.PLAYERS);
 		this.attenuationType = ISound.AttenuationType.NONE;
-		this.xPosF = (float)source.x;
-		this.yPosF = (float)source.y;
-		this.zPosF = (float)source.z;
+		this.x = (float)source.x;
+		this.y = (float)source.y;
+		this.z = (float)source.z;
 	}
 
 	public GemSingerEchoSound setVolumeAndPitch(float volume, float pitch) {

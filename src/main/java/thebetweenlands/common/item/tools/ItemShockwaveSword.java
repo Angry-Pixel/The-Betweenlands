@@ -101,9 +101,9 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 		}
 
 		if (stack.getTag().getInt("uses") < 3) {
-			if (!world.isRemote) {
+			if (!world.isRemote()) {
 				stack.damageItem(2, player);
-				world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.SHOCKWAVE_SWORD, SoundCategory.BLOCKS, 1.25F, 1.0F + world.rand.nextFloat() * 0.1F);
+				world.play(null, player.posX, player.posY, player.posZ, SoundRegistry.SHOCKWAVE_SWORD, SoundCategory.BLOCKS, 1.25F, 1.0F + world.rand.nextFloat() * 0.1F);
 				double direction = Math.toRadians(player.rotationYaw);
 				Vec3d diag = new Vec3d(Math.sin(direction + Math.PI / 2.0D), 0, Math.cos(direction + Math.PI / 2.0D)).normalize();
 				List<BlockPos> spawnedPos = new ArrayList<BlockPos>();

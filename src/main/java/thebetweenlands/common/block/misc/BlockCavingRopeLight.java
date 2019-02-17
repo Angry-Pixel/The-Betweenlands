@@ -29,7 +29,7 @@ public class BlockCavingRopeLight extends BlockAir implements ICustomItemBlock, 
 	public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random) {
 		List<EntityRopeNode> ropes = worldIn.getEntitiesWithinAABB(EntityRopeNode.class, new AxisAlignedBB(pos));
 		if(ropes.isEmpty()) {
-			worldIn.setBlockToAir(pos);
+			worldIn.removeBlock(pos);
 		}
 	}
 

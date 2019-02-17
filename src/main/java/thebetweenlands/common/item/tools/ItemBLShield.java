@@ -106,7 +106,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 	 * @param source
 	 */
 	public void onAttackBlocked(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
-		if(!attacked.world.isRemote) {
+		if(!attacked.world.isRemote()) {
 			damage = CircleGemHelper.handleAttack(source, attacked, damage);
 			
 			if(source.getTrueSource() instanceof EntityLivingBase) {
@@ -227,11 +227,11 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 
 					if(shield.canBlockDamageSource(stack, attacked, hand, source)) {
 						//Cancel event
-						if(!attacked.world.isRemote) {
+						if(!attacked.world.isRemote()) {
 							event.setCanceled(true);
 						}
 
-						if(!attacked.world.isRemote) {
+						if(!attacked.world.isRemote()) {
 							//Apply damage with multiplier
 							float defenderKbMultiplier = shield.getDefenderKnockbackMultiplier(stack, attacked, event.getAmount(), source);
 							float newDamage = shield.getBlockedDamage(stack, attacked, event.getAmount(), source);
@@ -301,7 +301,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 						}
 
 						//Knock back attacker
-						if(!attacked.world.isRemote) {
+						if(!attacked.world.isRemote()) {
 							if (source.getTrueSource() == source.getImmediateSource() && source.getTrueSource() instanceof EntityLivingBase) {
 								float attackerKbMultiplier = shield.getAttackerKnockbackMultiplier(stack, attacked, event.getAmount(), source);
 								if(attackerKbMultiplier > 0.0F) {
@@ -320,7 +320,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 
 						shield.onAttackBlocked(stack, attacked, event.getAmount(), source);
 
-						if(!attacked.world.isRemote) {
+						if(!attacked.world.isRemote()) {
 							//Damage item
 							int itemDamage = 1 + MathHelper.floor(event.getAmount());
 							stack.damageItem(itemDamage, attacked);

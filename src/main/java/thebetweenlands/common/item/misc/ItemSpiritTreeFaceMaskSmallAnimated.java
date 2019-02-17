@@ -28,11 +28,11 @@ public class ItemSpiritTreeFaceMaskSmallAnimated extends Item {
 		if(entityIn instanceof EntityLivingBase) {
 			EntityLivingBase living = (EntityLivingBase) entityIn;
 
-			if(!worldIn.isRemote) {
+			if(!worldIn.isRemote()) {
 				boolean mainhand = living.getHeldItem(EnumHand.MAIN_HAND) == stack;
 				boolean offhand = living.getHeldItem(EnumHand.OFF_HAND) == stack;
 				if((mainhand || offhand) && worldIn.rand.nextInt(60) == 0) {
-					worldIn.playSound(null, entityIn.posX, entityIn.posY + entityIn.height / 2, entityIn.posZ, SoundRegistry.SPIRIT_TREE_FACE_SMALL_LIVING, SoundCategory.PLAYERS, 0.35F, 1.4F);
+					worldIn.play(null, entityIn.posX, entityIn.posY + entityIn.height / 2, entityIn.posZ, SoundRegistry.SPIRIT_TREE_FACE_SMALL_LIVING, SoundCategory.PLAYERS, 0.35F, 1.4F);
 				}
 			}
 		}

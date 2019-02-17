@@ -65,8 +65,8 @@ public class BlockRope extends Block implements ICustomItemBlock {
 			}
 			offsetPos = offsetPos.up();
 			if(offsetPos.getY() != pos.getY()) {
-				if(!world.isRemote) {
-					world.setBlockToAir(offsetPos);
+				if(!world.isRemote()) {
+					world.removeBlock(offsetPos);
 
 					if(!player.abilities.isCreativeMode && !player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.ROPE_ITEM))) {
 						world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, new ItemStack(ItemRegistry.ROPE_ITEM)));
@@ -105,7 +105,7 @@ public class BlockRope extends Block implements ICustomItemBlock {
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
 		if (!(worldIn.getBlockState(pos.up()).isSideSolid(worldIn, pos, EnumFacing.DOWN) || worldIn.getBlockState(pos.up()).getBlock() == this)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockToAir(pos);
+			worldIn.removeBlock(pos);
 		}
 	}
 

@@ -97,7 +97,7 @@ public class ItemBLShovel extends ItemSpade implements ICorrodible, IAnimatorRep
 			}
 
 			if(dug) {
-				if(world.isRemote) {
+				if(world.isRemote()) {
 					for(int i = 0; i < 80; i++) {
 						world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F, (world.rand.nextFloat() - 0.5F) * 0.1F, world.rand.nextFloat() * 0.3f, (world.rand.nextFloat() - 0.5F) * 0.1F, new int[] {Block.getStateId(blockState)});
 					}
@@ -105,7 +105,7 @@ public class ItemBLShovel extends ItemSpade implements ICorrodible, IAnimatorRep
 
 				SoundType sound = blockState.getBlock().getSoundType(blockState, world, pos, player);
 				for(int i = 0; i < 3; i++) {
-					world.playSound(null, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, sound.getBreakSound(), SoundCategory.PLAYERS, 1, 0.5f + world.rand.nextFloat() * 0.5f);
+					world.play(null, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, sound.getBreakSound(), SoundCategory.PLAYERS, 1, 0.5f + world.rand.nextFloat() * 0.5f);
 				}
 
 				player.getHeldItem(hand).damageItem(1, player);

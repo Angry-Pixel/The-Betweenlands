@@ -13,7 +13,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.feature.WorldGenBigBulbCappedMushroom;
 import thebetweenlands.common.world.gen.feature.WorldGenBladderwortCluster;
@@ -73,7 +73,7 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_SOFT_RUSH = new WorldGenPlantCluster(BlockRegistry.SOFT_RUSH.getDefaultState());
 	public static final WorldGenerator GEN_BOTTLE_BRUSH_GRASS = new WorldGenPlantCluster(BlockRegistry.BOTTLE_BRUSH_GRASS.getDefaultState());
 	public static final WorldGenerator GEN_STAGNANT_WATER_POOL = new WorldGenFluidPool(BlockRegistry.STAGNANT_WATER);
-	public static final WorldGenerator GEN_TAR_POOL_SURFACE = new WorldGenFluidPool(BlockRegistry.TAR).setMinY(WorldProviderBetweenlands.CAVE_START + 5);
+	public static final WorldGenerator GEN_TAR_POOL_SURFACE = new WorldGenFluidPool(BlockRegistry.TAR).setMinY(DimensionBetweenlands.CAVE_START + 5);
 	public static final WorldGenerator GEN_SWAMP_REED = new WorldGenSwampReedCluster();
 	public static final WorldGenerator GEN_SWAMP_PLANT = new WorldGenPlantCluster(BlockRegistry.SWAMP_PLANT.getDefaultState(), 8, 256);
 	public static final WorldGenerator GEN_FLAT_HEAD_MUSHROOM = new WorldGenPlantCluster(BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState(), 5, 40);
@@ -158,7 +158,7 @@ public class DecorationHelper {
 	public static boolean generateSpeleothemCluster(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX();
 		float v = SPELEOTHEM_Y_CDF.eval(decorator.getRand().nextFloat());
-		int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int y = (int) (v * (DimensionBetweenlands.LAYER_HEIGHT - DimensionBetweenlands.CAVE_WATER_HEIGHT) + DimensionBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ();
 		boolean generated = false;
 		for(int i = 0; i < 35; i++) {
@@ -173,7 +173,7 @@ public class DecorationHelper {
 	public static boolean generateSpeleothem(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX();
 		float v = SPELEOTHEM_Y_CDF.eval(decorator.getRand().nextFloat());
-		int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int y = (int) (v * (DimensionBetweenlands.LAYER_HEIGHT - DimensionBetweenlands.CAVE_WATER_HEIGHT) + DimensionBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ();
 		return GEN_SPELEOTHEM.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
@@ -181,7 +181,7 @@ public class DecorationHelper {
 	public static boolean generateCavePotsCluster(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX();
 		float v = CAVE_POTS_Y_CDF.eval(decorator.getRand().nextFloat());
-		int y = (int) (v * (WorldProviderBetweenlands.CAVE_START - 5.0F - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int y = (int) (v * (DimensionBetweenlands.CAVE_START - 5.0F - DimensionBetweenlands.CAVE_WATER_HEIGHT) + DimensionBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ();
 		return GEN_CAVE_POTS.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
@@ -189,7 +189,7 @@ public class DecorationHelper {
 	public static boolean generateCaveThornsCluster(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX();
 		float v = THORNS_Y_CDF.eval(decorator.getRand().nextFloat());
-		int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int y = (int) (v * (DimensionBetweenlands.LAYER_HEIGHT - DimensionBetweenlands.CAVE_WATER_HEIGHT) + DimensionBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ();
 		return GEN_CAVE_THORNS.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
@@ -197,7 +197,7 @@ public class DecorationHelper {
 	public static boolean generateCaveMossCluster(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX();
 		float v = CAVE_MOSS_Y_CDF.eval(decorator.getRand().nextFloat());
-		int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int y = (int) (v * (DimensionBetweenlands.LAYER_HEIGHT - DimensionBetweenlands.CAVE_WATER_HEIGHT) + DimensionBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ();
 		return GEN_CAVE_MOSS.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
@@ -205,7 +205,7 @@ public class DecorationHelper {
 	public static boolean generateCaveHangersCluster(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX(9);
 		float v = CAVE_HANGERS_Y_CDF.eval(decorator.getRand().nextFloat());
-		int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int y = (int) (v * (DimensionBetweenlands.LAYER_HEIGHT - DimensionBetweenlands.CAVE_WATER_HEIGHT) + DimensionBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ(9);
 		return GEN_CAVE_HANGERS.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
@@ -213,7 +213,7 @@ public class DecorationHelper {
 	public static boolean generateUndergroundMossCluster(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX();
 		float v = CAVE_MOSS_Y_CDF.eval(decorator.getRand().nextFloat());
-		int y = (int) (v * (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int y = (int) (v * (DimensionBetweenlands.CAVE_START - DimensionBetweenlands.CAVE_WATER_HEIGHT) + DimensionBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ();
 		return GEN_MOSS_UNDERGROUND.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
@@ -221,7 +221,7 @@ public class DecorationHelper {
 	public static boolean generateUndergroundLichenCluster(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX();
 		float v = CAVE_MOSS_Y_CDF.eval(decorator.getRand().nextFloat());
-		int y = (int) (v * (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int y = (int) (v * (DimensionBetweenlands.CAVE_START - DimensionBetweenlands.CAVE_WATER_HEIGHT) + DimensionBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ();
 		return GEN_LICHEN_UNDERGROUND.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
@@ -229,14 +229,14 @@ public class DecorationHelper {
 	public static boolean generateCaveGrassCluster(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX();
 		float v = CAVE_GRASS_Y_CDF.eval(decorator.getRand().nextFloat());
-		int y = (int) (v * (WorldProviderBetweenlands.PITSTONE_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int y = (int) (v * (DimensionBetweenlands.PITSTONE_HEIGHT - DimensionBetweenlands.CAVE_WATER_HEIGHT) + DimensionBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ();
 		return GEN_CAVE_GRASS.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
 
 	public static boolean generateSpawner(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX(13);
-		int y = decorator.getRand().nextInt(WorldProviderBetweenlands.CAVE_START - 20);
+		int y = decorator.getRand().nextInt(DimensionBetweenlands.CAVE_START - 20);
 		int z = decorator.getRandomPosZ(13);
 		if(GEN_SPAWNER.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z))) {
 			return true;
@@ -246,7 +246,7 @@ public class DecorationHelper {
 	
 	public static boolean generateTarPoolDungeon(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX(10);
-		int y = decorator.getRand().nextInt(WorldProviderBetweenlands.CAVE_START - 20);
+		int y = decorator.getRand().nextInt(DimensionBetweenlands.CAVE_START - 20);
 		int z = decorator.getRandomPosZ(10);
 		if(GEN_TAR_POOL_DUNGEON.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z))) {
 			return true;
@@ -402,7 +402,7 @@ public class DecorationHelper {
 
 	public static boolean generateStagnantWaterPool(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX();
-		int y = 6 + decorator.getRand().nextInt(WorldProviderBetweenlands.CAVE_START / 2);
+		int y = 6 + decorator.getRand().nextInt(DimensionBetweenlands.CAVE_START / 2);
 		int z = decorator.getRandomPosZ();
 		BlockPos pos = new BlockPos(x, y, z);
 		if(SurfaceType.UNDERGROUND.matches(decorator.getWorld(), pos)) {
@@ -413,7 +413,7 @@ public class DecorationHelper {
 
 	public static boolean generateTarPoolSurface(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX();
-		int y = 6 + decorator.getRand().nextInt(WorldProviderBetweenlands.LAYER_HEIGHT + 20);
+		int y = 6 + decorator.getRand().nextInt(DimensionBetweenlands.LAYER_HEIGHT + 20);
 		int z = decorator.getRandomPosZ();
 		BlockPos pos = new BlockPos(x, y, z);
 		if(SurfaceType.UNDERGROUND.matches(decorator.getWorld(), pos) || SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos)) {
@@ -671,7 +671,7 @@ public class DecorationHelper {
 
 	public static boolean generateUndergroundRuins(DecoratorPositionProvider decorator) {
 		int x = decorator.getRandomPosX(10);
-		int y = WorldProviderBetweenlands.CAVE_WATER_HEIGHT + decorator.getRand().nextInt(20);
+		int y = DimensionBetweenlands.CAVE_WATER_HEIGHT + decorator.getRand().nextInt(20);
 		int z = decorator.getRandomPosZ(10);
 		BlockPos pos = new BlockPos(x, y, z);
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.UNDERGROUND.matches(decorator.getWorld(), pos.down())) {
@@ -776,7 +776,7 @@ public class DecorationHelper {
 					boolean hasLeaves = true;
 					for(int i = 0; i < 128; i++) {
 						yo++;
-						if(py-yo <= WorldProviderBetweenlands.CAVE_START) {
+						if(py-yo <= DimensionBetweenlands.CAVE_START) {
 							break;
 						}
 						IBlockState cBlockState = world.getBlockState(checkPos.setPos(px, py-yo, pz));

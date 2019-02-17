@@ -148,7 +148,7 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 					//Stupid workarounds...
 					this.harvestBlock(worldIn, player, pos.down(), worldIn.getBlockState(pos.down()), worldIn.getTileEntity(pos.down()), player.getHeldItemMainhand());
 				}
-				worldIn.setBlockToAir(pos.down());
+				worldIn.removeBlock(pos.down());
 			}
 		} else if (worldIn.getBlockState(pos.up()).getBlock() == this) {
 			worldIn.setBlockState(pos.up(), Blocks.AIR.getDefaultState(), 2);
@@ -253,8 +253,8 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 
 	@Override
 	public void decayPlant(World world, BlockPos pos, IBlockState state, Random rand) {
-		world.setBlockToAir(pos.up());
-		world.setBlockToAir(pos);
+		world.removeBlock(pos.up());
+		world.removeBlock(pos);
 	}
 
 	@Override

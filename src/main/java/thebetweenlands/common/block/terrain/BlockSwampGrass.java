@@ -37,8 +37,8 @@ public class BlockSwampGrass extends BasicBlock implements IGrowable, ITintedBlo
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if (!worldIn.isRemote) {
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
+		if (!worldIn.isRemote()) {
 			updateGrass(worldIn, pos, rand);
 		}
 	}

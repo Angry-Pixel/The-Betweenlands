@@ -24,7 +24,7 @@ public class BlockPoisonIvy extends BlockVineBL implements ITintedBlock {
 
 	@Override
 	public void onEntityCollision(IBlockState state, World worldIn, BlockPos pos, Entity entityIn) {
-		if (!worldIn.isRemote && !(entityIn instanceof IEntityBL) && entityIn instanceof EntityLivingBase && worldIn.rand.nextInt(200) == 0 && !ElixirEffectRegistry.EFFECT_TOUGHSKIN.isActive((EntityLivingBase)entityIn)) {
+		if (!worldIn.isRemote() && !(entityIn instanceof IEntityBL) && entityIn instanceof EntityLivingBase && worldIn.rand.nextInt(200) == 0 && !ElixirEffectRegistry.EFFECT_TOUGHSKIN.isActive((EntityLivingBase)entityIn)) {
 			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.POISON, 50, 25));
 		}
 	}

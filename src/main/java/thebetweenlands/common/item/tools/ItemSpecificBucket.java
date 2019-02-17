@@ -87,7 +87,7 @@ public class ItemSpecificBucket extends ItemBLBucket {
             FluidStack fluidStack = targetFluidHandler.drain(this.fluidStack, false);
             if (fluidStack != null && fluidStack.amount == this.fluidStack.amount && fluidStack.getFluid() == this.fluidStack.getFluid()) {
                 fluidStack = targetFluidHandler.drain(this.fluidStack, true);
-                world.playSound(null, pos, fluidStack.getFluid().getFillSound(fluidStack), SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.play(null, pos, fluidStack.getFluid().getFillSound(fluidStack), SoundCategory.BLOCKS, 1.0F, 1.0F);
 
                 //Replace with specific bucket
                 event.setResult(Result.ALLOW);

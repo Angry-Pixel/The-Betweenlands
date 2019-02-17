@@ -62,7 +62,7 @@ public class MessagePlayEntityIdle extends MessageEntity {
 	private void handle() {
 		Entity entity = this.getEntity(0);
 		if(entity != null) {
-			Minecraft.getInstance().getSoundHandler().playSound(new EntitySound<Entity>(this.sound, this.category, entity, e -> e.isEntityAlive()));
+			Minecraft.getInstance().getSoundHandler().play(new EntitySound<Entity>(this.sound, this.category, entity, e -> e.isAlive()));
 		}
 	}
 }

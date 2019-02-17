@@ -53,8 +53,8 @@ public class ItemGlue extends Item {
 
 		if (entityLiving instanceof EntityPlayer) {
 			EntityPlayer entityPlayer = (EntityPlayer)entityLiving;
-			worldIn.playSound((EntityPlayer)null, entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
-			if (!worldIn.isRemote) {
+			worldIn.play((EntityPlayer)null, entityPlayer.posX, entityPlayer.posY, entityPlayer.posZ, SoundEvents.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 0.5F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+			if (!worldIn.isRemote()) {
 				entityPlayer.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 200, 1));
 				entityPlayer.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 200, 1));
 				entityPlayer.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 200, 2));

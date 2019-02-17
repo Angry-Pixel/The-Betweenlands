@@ -2,16 +2,17 @@ package thebetweenlands.common.entity.mobs;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.world.World;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class EntitySmollSludge extends EntitySludge {
     public EntitySmollSludge(World worldIn) {
-        super(worldIn);
+        super(EntityRegistry.SMOLL_SLUDGE, worldIn);
         this.setSize(0.7F, 0.7F);
     }
 
     @Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
+	protected void registerAttributes() {
+		super.registerAttributes();
 		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(14.0D);
 		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
 		this.getAttributeMap().getAttributeInstance(SLUDGE_TRAIL).setBaseValue(0);

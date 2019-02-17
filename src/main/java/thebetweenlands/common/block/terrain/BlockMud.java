@@ -59,7 +59,7 @@ public class BlockMud extends Block {
 		AxisAlignedBB blockAABB = FULL_BLOCK_AABB.offset(pos);
 		if (entityBox.intersects(blockAABB) && (entity == null || canEntityWalkOnMud(entity)))
 			collidingBoxes.add(blockAABB);
-		else if (world.isRemote) {
+		else if (world.isRemote()) {
 			blockAABB = MUD_AABB.offset(pos);
 			if (entityBox.intersects(blockAABB)) {
 				collidingBoxes.add(blockAABB);

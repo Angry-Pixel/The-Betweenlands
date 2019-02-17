@@ -26,13 +26,13 @@ public class BlockSnowBetweenlands extends BlockSnow {
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+	public void tick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
 		if(!EventWinter.isFroooosty(worldIn) || worldIn.getLightFor(EnumSkyBlock.BLOCK, pos) > 11) {
 			int layers = state.get(LAYERS);
 			if(layers > 1) {
 				worldIn.setBlockState(pos, state.with(LAYERS, layers - 1));
 			} else {
-				worldIn.setBlockToAir(pos);
+				worldIn.removeBlock(pos);
 			}
 		}
 	}

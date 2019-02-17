@@ -40,7 +40,7 @@ public class EntityAIPeatMummyCharge extends EntityAIBase {
 			}
 		} else if(!this.mummy.isPreparing()) {
 			this.chargingTime++;
-			if(this.chargingTime >= this.mummy.getEntityAttribute(EntityPeatMummy.CHARGING_TIME_ATTRIB).getAttributeValue()) {
+			if(this.chargingTime >= this.mummy.getAttribute(EntityPeatMummy.CHARGING_TIME_ATTRIB).getValue()) {
 				this.mummy.stopCharging();
 			}
 		}

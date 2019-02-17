@@ -63,7 +63,7 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 
 	@Override
 	public void update(World world) {
-		if(!world.isRemote && !this.isStateFromRemoteOverridden && (!EnvironmentEventOverridesHandler.isRemoteDataAvailable() || this.hasNoRemoteState)) {
+		if(!world.isRemote() && !this.isStateFromRemoteOverridden && (!EnvironmentEventOverridesHandler.isRemote()DataAvailable() || this.hasNoRemoteState)) {
 			if(this.remoteResetTicks > 0) {
 				this.remoteResetTicks--;
 			}

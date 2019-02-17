@@ -7,14 +7,14 @@ import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceType;
 import thebetweenlands.common.registries.AmbienceRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.event.EventWinter;
 
 public class SurfaceAmbienceType extends AmbienceType {
 	@Override
 	public boolean isActive() {
 		//System.out.println(this.getPlayer().posY > WorldProviderBetweenlands.CAVE_START - 15);
-		return !EventWinter.isFroooosty(this.getPlayer().world) && this.getPlayer().posY > WorldProviderBetweenlands.CAVE_START - 15;
+		return !EventWinter.isFroooosty(this.getPlayer().world) && this.getPlayer().posY > DimensionBetweenlands.CAVE_START - 15;
 	}
 
 	@Override
@@ -39,12 +39,12 @@ public class SurfaceAmbienceType extends AmbienceType {
 
 	@Override
 	public float getVolume() {
-		if(this.getPlayer().posY <= WorldProviderBetweenlands.CAVE_START) {
+		if(this.getPlayer().posY <= DimensionBetweenlands.CAVE_START) {
 			//Fade out when going down
-			return MathHelper.clamp(1.0F - (float)(WorldProviderBetweenlands.CAVE_START - this.getPlayer().posY) / 15.0F, 0.0F, 1.0F);
-		} else if(this.getPlayer().posY >= WorldProviderBetweenlands.LAYER_HEIGHT + 10) {
+			return MathHelper.clamp(1.0F - (float)(DimensionBetweenlands.CAVE_START - this.getPlayer().posY) / 15.0F, 0.0F, 1.0F);
+		} else if(this.getPlayer().posY >= DimensionBetweenlands.LAYER_HEIGHT + 10) {
 			//Fade out when going up
-			return MathHelper.clamp(1.0F - (float)(this.getPlayer().posY - (WorldProviderBetweenlands.LAYER_HEIGHT + 10)) / 40.0F, 0.0F, 1.0F);
+			return MathHelper.clamp(1.0F - (float)(this.getPlayer().posY - (DimensionBetweenlands.LAYER_HEIGHT + 10)) / 40.0F, 0.0F, 1.0F);
 		} else {
 			return 1.0F;
 		}

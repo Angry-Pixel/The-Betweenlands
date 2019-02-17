@@ -8,7 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
@@ -56,8 +56,8 @@ public class PatchFeature extends BiomeFeature {
 		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
 			float biomeWeight = biomeWeights.get(x, z);
 			if(this.mudNoise[x * 16 + z] * this.mult * biomeWeight + this.offset <= 0) {
-				int y = WorldProviderBetweenlands.LAYER_HEIGHT + 20;
-				for(int yo = 0; yo < WorldProviderBetweenlands.LAYER_HEIGHT + 20; yo++) {
+				int y = DimensionBetweenlands.LAYER_HEIGHT + 20;
+				for(int yo = 0; yo < DimensionBetweenlands.LAYER_HEIGHT + 20; yo++) {
 					Block currentBlock = chunkPrimer.getBlockState(x, y - yo, z).getBlock();
 					Block blockAbove = chunkPrimer.getBlockState(x, y - yo + 1, z).getBlock();
 					if(currentBlock == biome.topBlock.getBlock() && (blockAbove == Blocks.AIR || blockAbove == null)) {

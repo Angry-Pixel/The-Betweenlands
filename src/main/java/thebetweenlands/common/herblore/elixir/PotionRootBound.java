@@ -61,7 +61,7 @@ public class PotionRootBound extends Potion {
 	public static void onEntityLivingUpdate(LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 
-		if(entity.world.isRemote) {
+		if(entity.world.isRemote()) {
 			updateClientEntity(entity);
 		}
 

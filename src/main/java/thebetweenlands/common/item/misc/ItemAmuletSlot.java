@@ -30,7 +30,7 @@ public class ItemAmuletSlot extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
-		if(!world.isRemote) {
+		if(!world.isRemote()) {
 			if(player.isSneaking() && player.abilities.isCreativeMode) {
 				removeAmuletSlot(player);
 			} else {
@@ -42,7 +42,7 @@ public class ItemAmuletSlot extends Item {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
-		if(!player.world.isRemote) {
+		if(!player.world.isRemote()) {
 			if(ItemAmulet.SUPPORTED_ENTITIES.contains(target.getClass()) || player.abilities.isCreativeMode) {
 				if(player.isSneaking() && player.abilities.isCreativeMode) {
 					removeAmuletSlot(target);

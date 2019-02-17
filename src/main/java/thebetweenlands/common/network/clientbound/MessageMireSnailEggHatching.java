@@ -37,7 +37,7 @@ public class MessageMireSnailEggHatching extends MessageEntity {
 			for (int count = 0; count <= 50; ++count) {
 				entity.world.spawnParticle(EnumParticleTypes.SLIME, entity.posX + (entity.world.rand.nextDouble() - 0.5D) * 0.35F, entity.posY + entity.world.rand.nextDouble() * 0.175F, entity.posZ + (entity.world.rand.nextDouble() - 0.5D) * 0.35F, 0, 0, 0);
 			}
-			entity.world.playSound(Minecraft.getInstance().player, entity.posX, entity.posY, entity.posZ, SoundRegistry.SQUISH, SoundCategory.NEUTRAL, 1, 0.8F);
+			entity.world.play(Minecraft.getInstance().player, entity.posX, entity.posY, entity.posZ, SoundRegistry.SQUISH, SoundCategory.NEUTRAL, 1, 0.8F);
 		}
 	}
 }

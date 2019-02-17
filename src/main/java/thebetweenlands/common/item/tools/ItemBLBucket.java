@@ -173,7 +173,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
         final ItemStack heldItem = player.getHeldItem(hand);
         final FluidStack fluidStack = getFluid(heldItem);
 
-        if(world.isRemote)
+        if(world.isRemote())
             return new ActionResult<>(EnumActionResult.PASS, heldItem);
 
         if (fluidStack == null) {
@@ -191,7 +191,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
         if (fluidStack != null) {
             ActionResult<ItemStack> result = super.onItemRightClick(world, player, hand);
             if (result.getType() == EnumActionResult.SUCCESS)
-                world.playSound(null, pos, fluidStack.getFluid().getEmptySound(fluidStack), SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.play(null, pos, fluidStack.getFluid().getEmptySound(fluidStack), SoundCategory.BLOCKS, 1.0F, 1.0F);
             return result;
         }
 
@@ -205,7 +205,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
             final FluidActionResult filledResult = FluidUtil.tryPickUpFluid(singleBucket, player, world, pos, target.sideHit);
             if (filledResult.isSuccess()) {
                 FluidStack fluidStack1 = getFluid(filledResult.getResult());
-                world.playSound(null, pos, fluidStack1.getFluid().getFillSound(fluidStack1), SoundCategory.BLOCKS, 1.0F, 1.0F);
+                world.play(null, pos, fluidStack1.getFluid().getFillSound(fluidStack1), SoundCategory.BLOCKS, 1.0F, 1.0F);
                 final ItemStack filledBucket = filledResult.result;
                 if (player.abilities.isCreativeMode)
                     return new ActionResult<>(EnumActionResult.SUCCESS, heldItem);
@@ -237,7 +237,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
                         world.setBlockState(offset, rubberTap.getDefaultState().with(BlockRubberTap.FACING, result.sideHit));
                         itemStack.shrink(1);
 
-                        world.playSound(null, pos, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.PLAYERS, 1, 1);
+                        world.play(null, pos, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.PLAYERS, 1, 1);
 
                         return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
                     }

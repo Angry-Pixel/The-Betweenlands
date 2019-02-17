@@ -7,9 +7,9 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.model.entity.ModelWight;
-import thebetweenlands.common.entity.mobs.EntityFortressBossSpawner;
+import thebetweenlands.common.entity.mobs.EntityPrimordialMalevolenceSpawner;
 
-public class RenderFortressBossSpawner extends Render<EntityFortressBossSpawner> {
+public class RenderFortressBossSpawner extends Render<EntityPrimordialMalevolenceSpawner> {
 	protected static final ModelWight MODEL = new ModelWight();
 	protected static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/wight.png");
 
@@ -18,7 +18,7 @@ public class RenderFortressBossSpawner extends Render<EntityFortressBossSpawner>
 	}
 
 	@Override
-	public void doRender(EntityFortressBossSpawner entity, double x, double y, double z, float yaw, float partialTicks) {
+	public void doRender(EntityPrimordialMalevolenceSpawner entity, double x, double y, double z, float yaw, float partialTicks) {
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.pushMatrix();
@@ -36,7 +36,7 @@ public class RenderFortressBossSpawner extends Render<EntityFortressBossSpawner>
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityFortressBossSpawner p_110775_1_) {
+	protected ResourceLocation getEntityTexture(EntityPrimordialMalevolenceSpawner p_110775_1_) {
 		return null;
 	}
 }

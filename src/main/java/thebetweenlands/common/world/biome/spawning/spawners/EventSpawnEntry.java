@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.api.environment.IEnvironmentEvent;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
 
 public class EventSpawnEntry extends BLSpawnEntry {
@@ -32,8 +32,8 @@ public class EventSpawnEntry extends BLSpawnEntry {
 	@Override
 	public void update(World world, BlockPos pos) {
 		this.setWeight((short) 0);
-		if(world.provider instanceof WorldProviderBetweenlands) {
-			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
+		if(world.dimension instanceof DimensionBetweenlands) {
+			DimensionBetweenlands provider = (DimensionBetweenlands)world.dimension;
 			IEnvironmentEvent event = provider.getEnvironmentEventRegistry().forName(this.eventName);
 			if(event != null && event.isActive()) {
 				this.setWeight(this.getBaseWeight());

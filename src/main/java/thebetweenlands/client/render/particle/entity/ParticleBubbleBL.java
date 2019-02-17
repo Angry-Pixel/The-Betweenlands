@@ -24,7 +24,7 @@ public class ParticleBubbleBL extends ParticleBubble implements IParticleSpriteR
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		prevPosX = posX;
 		prevPosY = posY;
 		prevPosZ = posZ;

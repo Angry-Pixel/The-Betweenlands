@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.properties.EntityProperty;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 
 public class EntityPropertyEventActive implements EntityProperty {
 	private final ResourceLocation event;
@@ -27,8 +27,8 @@ public class EntityPropertyEventActive implements EntityProperty {
 	@Override
 	public boolean testProperty(Random random, Entity entity) {
 		boolean isEventOn = false;
-		if(entity.world.provider instanceof WorldProviderBetweenlands) {
-			IEnvironmentEvent event = ((WorldProviderBetweenlands)entity.world.provider).getEnvironmentEventRegistry().forName(this.event);
+		if(entity.world.dimension instanceof DimensionBetweenlands) {
+			IEnvironmentEvent event = ((DimensionBetweenlands)entity.world.dimension).getEnvironmentEventRegistry().forName(this.event);
 			if(event != null && event.isActiveAt(entity.posX, entity.posY, entity.posZ)) {
 				isEventOn = true;
 			}

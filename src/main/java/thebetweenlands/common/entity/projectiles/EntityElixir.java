@@ -35,7 +35,7 @@ public class EntityElixir extends EntityThrowable {
     }
 
     @Override
-	protected void entityInit() {
+	protected void registerData() {
         this.getDataManager().register(ITEM, ItemStack.EMPTY);
     }
 
@@ -55,7 +55,7 @@ public class EntityElixir extends EntityThrowable {
     
     @Override
     protected void onImpact(RayTraceResult result) {
-        if (!this.world.isRemote) {
+        if (!this.world.isRemote()) {
             AxisAlignedBB hitBB = this.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
             List<EntityLivingBase> hitEntities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, hitBB);
             if (!hitEntities.isEmpty()) {
@@ -81,25 +81,25 @@ public class EntityElixir extends EntityThrowable {
             this.entityDropItem(new ItemStack(ItemRegistry.ELIXIR.getDentrothystType(getElixirStack()) == EnumDentrothyst.GREEN ? ItemRegistry.DENTROTHYST_SHARD_GREEN : ItemRegistry.DENTROTHYST_SHARD_ORANGE,
             		this.world.rand.nextInt(2) + 2), this.height / 2);
             if(this.world.rand.nextInt(2) == 0) this.entityDropItem(EnumItemMisc.RUBBER_BALL.create(1), this.height / 2);
-            this.setDead();
+            this.remove();
         }
     }
 
     @Override
-    public void readEntityFromNBT(NBTTagCompound nbt) {
-        super.readEntityFromNBT(nbt);
+    public void readAdditional(NBTTagCompound nbt) {
+        super.readAdditional(nbt);
     	ItemStack itemstack = new ItemStack(nbt.getCompound("elixir"));
 
         if (itemstack.isEmpty()) {
-            this.setDead();
+            this.remove();
         } else {
             this.setItem(itemstack);
         }
     }
 
     @Override
-    public void writeEntityToNBT(NBTTagCompound nbt) {
-        super.writeEntityToNBT(nbt);
+    public void writeAdditional(NBTTagCompound nbt) {
+        super.writeAdditional(nbt);
         ItemStack stack = getElixirStack();
         if (!stack.isEmpty()) {
             nbt.setTag("elixir", stack.writeToNBT(new NBTTagCompound()));

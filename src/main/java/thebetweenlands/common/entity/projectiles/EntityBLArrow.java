@@ -42,20 +42,20 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 	}
 	
 	@Override
-	public void entityInit() {
-		super.entityInit();
+	public void registerData() {
+		super.registerData();
 		this.dataManager.register(DW_TYPE, "");
 	}
 
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
 		nbt.setString("arrowType", this.getArrowType().getName());
 	}
 
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
 		this.setType(EnumArrowType.getEnumFromString(nbt.getString("arrowType")));
 	}
 

@@ -38,7 +38,7 @@ public class ParticleDruidCasting extends Particle {
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;

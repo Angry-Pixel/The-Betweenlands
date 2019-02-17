@@ -81,7 +81,7 @@ public class MessageDruidAltarProgress extends MessageBase {
 						}
 					}
 	
-					Minecraft.getInstance().getSoundHandler().playSound(new DruidAltarSound(SoundRegistry.DRUID_CHANT, SoundCategory.BLOCKS, altar));
+					Minecraft.getInstance().getSoundHandler().play(new DruidAltarSound(SoundRegistry.DRUID_CHANT, SoundCategory.BLOCKS, altar));
 				}
 			}
 		}

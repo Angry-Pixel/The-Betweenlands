@@ -31,7 +31,7 @@ public class FakeClientWorld/* extends World*/ {
 
         @Override
         public long getWorldTime() {
-            return worldInfo.getWorldTime();
+            return worldInfo.getDayTime();
         }
     };
 

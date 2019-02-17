@@ -34,7 +34,7 @@ import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHal
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
 import thebetweenlands.common.entity.EntitySwordEnergy;
-import thebetweenlands.common.entity.mobs.EntityFortressBossTeleporter;
+import thebetweenlands.common.entity.mobs.EntityPrimordialMalevolenceTeleporter;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -435,7 +435,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		for (int xa = 8; xa <= 24; ++xa) {
 			for(int za = 8; za <= 24; ++za) {
 				for(int ya = - 8; ya < 0; ++ya ) {
-					world.setBlockToAir(pos.add(xa, ya, za));
+					world.removeBlock(pos.add(xa, ya, za));
 				}
 			}
 		}
@@ -526,7 +526,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			NBTTagCompound entityNbt = new NBTTagCompound();
 			entityNbt.setString("id", "thebetweenlands:pyrad");
 			EntityPyrad pyrad = new EntityPyrad(world);
-			pyrad.getEntityAttribute(EntityPyrad.AGRESSIVE).setBaseValue(1);
+			pyrad.getAttribute(EntityPyrad.AGRESSIVE).setBaseValue(1);
 			entityNbt.setTag("Attributes", SharedMonsterAttributes.writeBaseAttributeMapToNBT(pyrad.getAttributeMap()));
 			nbt.setTag("Entity", entityNbt);
 
@@ -1104,7 +1104,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		//floor2
 		rotatedCubeVolume(world, rand, pos, 13, 28, 13, limestonePolished, 0, 6, 1, 6, 0);
 
-		EntityFortressBossTeleporter tp = new EntityFortressBossTeleporter(world);
+		EntityPrimordialMalevolenceTeleporter tp = new EntityPrimordialMalevolenceTeleporter(world);
 		tp.setLocationAndAngles(pos.getX() + 16, pos.getY() + 30, pos.getZ() + 16, 0, 0);
 		tp.setTeleportDestination(new Vec3d(pos.getX() + 16, pos.getY() + 17 + 19.2D, pos.getZ() + 16));
 		tp.setBossSpawnPosition(new BlockPos(pos.getX() + 16, pos.getY() + 17 + 19 + 5.2D, pos.getZ() + 16));

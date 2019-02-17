@@ -35,13 +35,13 @@ public class PlayerDecayHandler {
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		EntityPlayer player = event.player;
 
-		if(!player.world.isRemote && event.phase == Phase.START) {
+		if(!player.world.isRemote() && event.phase == Phase.START) {
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
 				DecayStats stats = capability.getDecayStats();
 
-				IAttributeInstance attr = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+				IAttributeInstance attr = player.getAttribute(SharedMonsterAttributes.MAX_HEALTH);
 				
 				if(attr != null) {
 					int currentMaxHealth = (int) attr.getBaseValue();
@@ -61,8 +61,8 @@ public class PlayerDecayHandler {
 
 						//Update health
 						attr.setBaseValue(currentMaxHealth + healthDiff);
-						if(player.getHealth() > attr.getAttributeValue()) {
-							player.setHealth((float)attr.getAttributeValue());
+						if(player.getHealth() > attr.getValue()) {
+							player.setHealth((float)attr.getValue());
 						}
 
 						//Keep track of how much was removed
@@ -121,7 +121,7 @@ public class PlayerDecayHandler {
 
 	@SubscribeEvent
 	public static void onEntityAttacked(LivingHurtEvent event) {
-		if(!event.getEntityLiving().world.isRemote && event.getEntityLiving() instanceof EntityPlayer) {
+		if(!event.getEntityLiving().world.isRemote() && event.getEntityLiving() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
@@ -155,15 +155,15 @@ public class PlayerDecayHandler {
 	public static void onPlayerTick(PlayerRespawnEvent event) {
 		//Workaround for client not receiving the new MAX_HEALTH attribute after a respawn
 		EntityPlayer player = event.player;
-		if(!player.world.isRemote && player instanceof EntityPlayerMP && player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH) != null) {
-			((EntityPlayerMP)player).connection.sendPacket(new SPacketEntityProperties(player.getEntityId(), ImmutableList.of(player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH))));
+		if(!player.world.isRemote() && player instanceof EntityPlayerMP && player.getAttribute(SharedMonsterAttributes.MAX_HEALTH) != null) {
+			((EntityPlayerMP)player).connection.sendPacket(new SPacketEntityProperties(player.getEntityId(), ImmutableList.of(player.getAttribute(SharedMonsterAttributes.MAX_HEALTH))));
 		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onUseItemTick(LivingEntityUseItemEvent.Tick event) {
 		//Check if item will be consumed this tick
-		if(!event.getEntityLiving().getEntityWorld().isRemote && event.getDuration() <= 1) {
+		if(!event.getEntityLiving().getEntityWorld().isRemote() && event.getDuration() <= 1) {
 			if (!event.getItem().isEmpty() && event.getItem().getItem() instanceof IDecayFood && event.getEntityLiving() instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 				if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {

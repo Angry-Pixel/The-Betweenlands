@@ -174,7 +174,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	@Override
 	public void onRemoved() {
 		//Notify clients if shared storage is removed
-		if(!this.getWorldStorage().getWorld().isRemote) {
+		if(!this.getWorldStorage().getWorld().isRemote()) {
 			if (!this.getWatchers().isEmpty()) {
 				this.sendMessageToAllWatchers(new MessageRemoveLocalStorage(this.getID()));
 			}

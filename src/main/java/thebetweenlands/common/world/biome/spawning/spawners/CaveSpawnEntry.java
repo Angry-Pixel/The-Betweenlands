@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
@@ -40,7 +40,7 @@ public class CaveSpawnEntry extends BLSpawnEntry {
 
 	@Override
 	public void update(World world, BlockPos pos) {
-		int surfaceHeight = WorldProviderBetweenlands.CAVE_START;
+		int surfaceHeight = DimensionBetweenlands.CAVE_START;
 		short spawnWeight = (short) (this.getBaseWeight() / 3);
 		if(pos.getY() < surfaceHeight) {
 			double percentage = 1.0D - ((double)(surfaceHeight - pos.getY()) / (double)surfaceHeight);

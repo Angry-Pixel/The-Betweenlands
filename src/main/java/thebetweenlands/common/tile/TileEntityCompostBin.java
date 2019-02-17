@@ -72,7 +72,7 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
     public void tick() {
         this.lidAngle = this.open ? Math.min(this.lidAngle + OPEN_SPEED, MAX_OPEN) : Math.max(this.lidAngle - CLOSE_SPEED, MIN_OPEN);
 
-        if (!this.world.isRemote) {
+        if (!this.world.isRemote()) {
             if (!this.open) {
                 for (int i = 0; i < this.inventory.size(); i++) {
                     if (!this.inventory.get(i).isEmpty()) {

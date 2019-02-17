@@ -50,7 +50,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
         } else {
             this.itemToAnimate = ItemStack.EMPTY;
         }
-        if (!world.isRemote) {
+        if (!world.isRemote()) {
             if (isCrystalInslot())
                 lifeCrystalLife = 128 - getCrystalPower();
             if (!isSlotInUse(0) || !isSlotInUse(1) || !isSlotInUse(2)) {
@@ -108,7 +108,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 
     @OnlyIn(Dist.CLIENT)
     protected void playAnimatorSound() {
-        Minecraft.getInstance().getSoundHandler().playSound(new AnimatorSound(SoundRegistry.ANIMATOR, SoundCategory.BLOCKS, this));
+        Minecraft.getInstance().getSoundHandler().play(new AnimatorSound(SoundRegistry.ANIMATOR, SoundCategory.BLOCKS, this));
     }
 
     @Override

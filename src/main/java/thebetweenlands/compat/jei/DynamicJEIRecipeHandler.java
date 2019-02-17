@@ -23,19 +23,19 @@ public class DynamicJEIRecipeHandler {
 			for(IRecipeWrapper recipe : dynamicRecipes) {
 				BetweenlandsJEIPlugin.jeiRuntime.getRecipeRegistry().addRecipe(recipe);
 			}
-			DYNAMIC_RECIPES.put(world.provider.getDimension(), dynamicRecipes);
+			DYNAMIC_RECIPES.put(world.dimension.getDimension(), dynamicRecipes);
 		}
 	}
 
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload event) {
 		World world = event.getWorld();
-		List<IRecipeWrapper> dynamicRecipes = DYNAMIC_RECIPES.get(world.provider.getDimension());
+		List<IRecipeWrapper> dynamicRecipes = DYNAMIC_RECIPES.get(world.dimension.getDimension());
 		if(dynamicRecipes != null) {
 			for(IRecipeWrapper recipe : dynamicRecipes) {
 				BetweenlandsJEIPlugin.jeiRuntime.getRecipeRegistry().removeRecipe(recipe);
 			}
-			DYNAMIC_RECIPES.remove(world.provider.getDimension());
+			DYNAMIC_RECIPES.remove(world.dimension.getDimension());
 		}
 	}
 

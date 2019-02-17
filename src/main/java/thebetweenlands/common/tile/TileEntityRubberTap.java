@@ -65,7 +65,7 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 
 	@Override
 	public void tick() {
-		if(!this.world.isRemote && this.getBlockType() instanceof BlockRubberTap) {
+		if(!this.world.isRemote() && this.getBlockType() instanceof BlockRubberTap) {
 			FluidStack drained = this.tank.drain(Fluid.BUCKET_VOLUME, false);
 			final int ticksPerStep = ((BlockRubberTap)this.getBlockType()).ticksPerStep;
 			if(drained == null || drained.amount < Fluid.BUCKET_VOLUME) {

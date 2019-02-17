@@ -59,7 +59,7 @@ import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextSegme
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.AspectIconRenderer;
@@ -124,7 +124,7 @@ public class ScreenRenderHandler extends Gui {
 					List<LocationStorage> locations = getVisibleLocations(player);
 					if(locations.isEmpty()) {
 						String location;
-						if(player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
+						if(player.posY < DimensionBetweenlands.CAVE_START - 10) {
 							String wildernessName = I18n.format("location.wilderness.name");
 							if(this.currentLocation.equals(wildernessName)) {
 								prevLocation = "";

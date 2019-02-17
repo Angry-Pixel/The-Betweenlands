@@ -136,7 +136,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 	@Override
 	public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote) {
+		if(!worldIn.isRemote()) {
 			if (worldIn.getTileEntity(pos) instanceof TileEntityLootPot) {
 				TileEntityLootPot tile = (TileEntityLootPot) worldIn.getTileEntity(pos);
 				InvWrapper wrapper = new InvWrapper(tile);
@@ -190,10 +190,10 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 	@Override
 	public void onPlayerDestroy(World worldIn, BlockPos pos, IBlockState state) {
-		if (!worldIn.isRemote) {
+		if (!worldIn.isRemote()) {
 			if (worldIn.rand.nextInt(3) == 0) {
 				EntityTermite entity = new EntityTermite(worldIn);
-				entity.getEntityAttribute(EntityTermite.SMALL).setBaseValue(1);
+				entity.getAttribute(EntityTermite.SMALL).setBaseValue(1);
 				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
 				worldIn.spawnEntity(entity);
 			}

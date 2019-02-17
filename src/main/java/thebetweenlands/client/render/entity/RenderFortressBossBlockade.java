@@ -13,10 +13,10 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
-import thebetweenlands.common.entity.mobs.EntityFortressBossBlockade;
+import thebetweenlands.common.entity.mobs.EntityPrimordialMalevolenceBlockade;
 import thebetweenlands.util.LightingUtil;
 
-public class RenderFortressBossBlockade extends Render<EntityFortressBossBlockade> {
+public class RenderFortressBossBlockade extends Render<EntityPrimordialMalevolenceBlockade> {
 	private static final ResourceLocation SHIELD_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
 
 	public RenderFortressBossBlockade(RenderManager renderManager) {
@@ -24,8 +24,8 @@ public class RenderFortressBossBlockade extends Render<EntityFortressBossBlockad
 	}
 
 	@Override
-	public void doRender(EntityFortressBossBlockade entity, double x, double y, double z, float yaw, float partialTicks) {
-		EntityFortressBossBlockade blockade = (EntityFortressBossBlockade) entity;
+	public void doRender(EntityPrimordialMalevolenceBlockade entity, double x, double y, double z, float yaw, float partialTicks) {
+		EntityPrimordialMalevolenceBlockade blockade = (EntityPrimordialMalevolenceBlockade) entity;
 
 		Vec3d[] vertices = blockade.getTriangleVertices(partialTicks);
 
@@ -119,7 +119,7 @@ public class RenderFortressBossBlockade extends Render<EntityFortressBossBlockad
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityFortressBossBlockade p_110775_1_) {
+	protected ResourceLocation getEntityTexture(EntityPrimordialMalevolenceBlockade p_110775_1_) {
 		return null;
 	}
 }

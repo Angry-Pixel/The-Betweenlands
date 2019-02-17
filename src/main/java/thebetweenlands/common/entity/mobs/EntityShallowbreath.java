@@ -32,10 +32,11 @@ import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
+public class EntityShallowbreath extends EntityFlyingMob implements IEntityBL {
 	public static final IAttribute GAS_CLOUD_COLOR_R = (new RangedAttribute(null, "bl.gasCloudColorRed", 104, 0, 255)).setDescription("Gas cloud color red component").setShouldWatch(true);
 	public static final IAttribute GAS_CLOUD_COLOR_G = (new RangedAttribute(null, "bl.gasCloudColorGreen", 196, 0, 255)).setDescription("Gas cloud color green component").setShouldWatch(true);
 	public static final IAttribute GAS_CLOUD_COLOR_B = (new RangedAttribute(null, "bl.gasCloudColorBlue", 179, 0, 255)).setDescription("Gas cloud color blue component").setShouldWatch(true);
@@ -46,8 +47,8 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 
 	public static final DamageSource damageSourceSuffocation = (new DamageSource("suffocation")).setDamageBypassesArmor();
 
-	public EntityGasCloud(World world) {
-		super(world);
+	public EntityShallowbreath(World world) {
+		super(EntityRegistry.SHALLOWBREATH, world);
 		this.setSize(1.75F, 1.75F);
 		this.noClip = true;
 		this.ignoreFrustumCheck = true;
@@ -62,7 +63,7 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 				double cy = this.entity.posY;
 				double cz = this.entity.posZ;
 
-				boolean canPassSolidBlocks = ((EntityGasCloud) this.entity).getAttackTarget() != null;
+				boolean canPassSolidBlocks = ((EntityShallowbreath) this.entity).getAttackTarget() != null;
 
 				PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
 
@@ -97,7 +98,7 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(1, new EntityAIFlyRandomly<EntityGasCloud>(this) {
+		this.tasks.addTask(1, new EntityAIFlyRandomly<EntityShallowbreath>(this) {
 			@Override
 			protected double getTargetY(Random rand, double distanceMultiplier) {
 				if(this.entity.posY <= 0.0D) {
@@ -108,7 +109,7 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 
 				PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
 
-				for(int yo = 0; yo < MathHelper.ceil(EntityGasCloud.this.aboveLayer); yo++) {
+				for(int yo = 0; yo < MathHelper.ceil(EntityShallowbreath.this.aboveLayer); yo++) {
 					checkPos.setPos(this.entity.posX, this.entity.posY - yo, this.entity.posZ);
 
 					if(!this.entity.getEntityWorld().isBlockLoaded(checkPos))
@@ -122,12 +123,12 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 
 				checkPos.release();
 
-				if(this.entity.posY > worldHeight + EntityGasCloud.this.aboveLayer) {
+				if(this.entity.posY > worldHeight + EntityShallowbreath.this.aboveLayer) {
 					return this.entity.posY + (-rand.nextFloat() * 2.0F) * 16.0F * distanceMultiplier;
 				} else {
 					float rndFloat = rand.nextFloat() * 2.0F - 1.0F;
 					if(rndFloat > 0.0D) {
-						double maxRange = worldHeight + EntityGasCloud.this.aboveLayer - this.entity.posY;
+						double maxRange = worldHeight + EntityShallowbreath.this.aboveLayer - this.entity.posY;
 						return this.entity.posY + (-rand.nextFloat() * 2.0F) * maxRange * distanceMultiplier;
 					} else {
 						return this.entity.posY + (rand.nextFloat() * 2.0F - 1.0F) * 16.0F * distanceMultiplier;
@@ -146,12 +147,12 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 	}
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.065D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(16.0D);
-		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+	protected void registerAttributes() {
+		super.registerAttributes();
+		getAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.065D);
+		getAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(16.0D);
+		getAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
+		getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_R);
 		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_G);
 		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_B);
@@ -166,10 +167,10 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 	 * @param a
 	 */
 	public void setGasColor(int r, int g, int b, int a) {
-		this.getEntityAttribute(GAS_CLOUD_COLOR_R).setBaseValue(r);
-		this.getEntityAttribute(GAS_CLOUD_COLOR_G).setBaseValue(g);
-		this.getEntityAttribute(GAS_CLOUD_COLOR_B).setBaseValue(b);
-		this.getEntityAttribute(GAS_CLOUD_COLOR_A).setBaseValue(a);
+		this.getAttribute(GAS_CLOUD_COLOR_R).setBaseValue(r);
+		this.getAttribute(GAS_CLOUD_COLOR_G).setBaseValue(g);
+		this.getAttribute(GAS_CLOUD_COLOR_B).setBaseValue(b);
+		this.getAttribute(GAS_CLOUD_COLOR_A).setBaseValue(a);
 	}
 
 	/**
@@ -177,10 +178,10 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 	 * @return
 	 */
 	public int[] getGasColor() {
-		return new int[] { (int)this.getEntityAttribute(GAS_CLOUD_COLOR_R).getAttributeValue(),
-				(int)this.getEntityAttribute(GAS_CLOUD_COLOR_G).getAttributeValue(),
-				(int)this.getEntityAttribute(GAS_CLOUD_COLOR_B).getAttributeValue(),
-				(int)this.getEntityAttribute(GAS_CLOUD_COLOR_A).getAttributeValue() };
+		return new int[] { (int)this.getAttribute(GAS_CLOUD_COLOR_R).getValue(),
+				(int)this.getAttribute(GAS_CLOUD_COLOR_G).getValue(),
+				(int)this.getAttribute(GAS_CLOUD_COLOR_B).getValue(),
+				(int)this.getAttribute(GAS_CLOUD_COLOR_A).getValue() };
 	};
 
 	@Override
@@ -194,14 +195,14 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 	}
 
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
+	public void tick() {
+		super.tick();
 
-		if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			this.setDead();
+		if (!this.world.isRemote() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			this.remove();
 		}
 
-		if (this.world.isRemote) {
+		if (this.world.isRemote()) {
 			this.spawnCloudParticle(false);
 		}
 
@@ -213,13 +214,13 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 			}
 		}
 
-		if (!this.world.isRemote && this.isEntityAlive()) {
+		if (!this.world.isRemote() && this.isAlive()) {
 			List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox().grow(0.5D, 0.5D, 0.5D));
 			for (EntityLivingBase target : targets) {
-				if (!(target instanceof EntityGasCloud) && !(target instanceof IEntityBL)) {
+				if (!(target instanceof EntityShallowbreath) && !(target instanceof IEntityBL)) {
 					target.addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 0));
 					if (target.ticksExisted % 10 == 0)
-						target.attackEntityFrom(damageSourceSuffocation, (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+						target.attackEntityFrom(damageSourceSuffocation, (float) this.getAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getValue());
 				}
 			}
 		}
@@ -288,14 +289,14 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 	protected void onDeathUpdate() {
 		++this.deathTime;
 
-		if(this.world.isRemote) {
+		if(this.world.isRemote()) {
 			for(int i = 0; i < 6; i++) {
 				this.spawnCloudParticle(true);
 			}
 		}
 
 		if (this.deathTime >= 80) {
-			if (!this.world.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot"))) {
+			if (!this.world.isRemote() && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot"))) {
 				int i = this.getExperiencePoints(this.attackingPlayer);
 				i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
 				while (i > 0) {
@@ -305,7 +306,7 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 				}
 			}
 
-			this.setDead();
+			this.remove();
 		}
 	}
 

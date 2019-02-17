@@ -74,7 +74,7 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
         String s = STR_ID + "_" + stack.getMetadata();
         AmateMapData mapdata = (AmateMapData)worldIn.loadData(AmateMapData.class, s);
 
-        if (mapdata == null && !worldIn.isRemote) {
+        if (mapdata == null && !worldIn.isRemote()) {
             stack.setItemDamage(worldIn.getUniqueDataId(STR_ID));
             s = STR_ID + "_" + stack.getMetadata();
             mapdata = new AmateMapData(s);

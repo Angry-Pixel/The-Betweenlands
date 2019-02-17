@@ -42,7 +42,7 @@ public class LocationPortal extends LocationStorage {
 			this.otherPortalDimension = nbt.getInt("OtherPortalDimension");
 		} else {
 			//Legacy code for old portals that didn't support other dimensions
-			int currDim = this.getWorldStorage().getWorld().provider.getDimension();
+			int currDim = this.getWorldStorage().getWorld().dimension.getDimension();
 			if(currDim == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 				this.otherPortalDimension = 0;
 			} else {

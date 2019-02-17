@@ -37,7 +37,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnData {
+public class EntityRootSpikeWave extends Entity implements IEntityAdditionalSpawnData {
 	protected List<BlockPos> positions = new ArrayList<>();
 
 	private AxisAlignedBB blockEnclosingBounds;
@@ -52,7 +52,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 
 	protected float attackDamage = 10.0F;
 
-	public EntitySpikeWave(World world) {
+	public EntityRootSpikeWave(World world) {
 		super(world);
 		this.setSize(1, 1);
 		this.noClip = true;
@@ -120,7 +120,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 	}
 
 	@Override
-	public void onUpdate() {
+	public void tick() {
 		this.world.profiler.startSection("entityBaseTick");
 
 		this.prevPosX = this.posX;
@@ -133,17 +133,17 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 		this.lastTickPosZ = this.posZ;
 
 		if(this.ticksExisted >= this.delay) {
-			if(this.world.isRemote && this.ticksExisted == this.delay) {
+			if(this.world.isRemote() && this.ticksExisted == this.delay) {
 				this.spawnEmergeParticles();
-				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKES, SoundCategory.HOSTILE, 0.7F, 0.9F + this.rand.nextFloat() * 0.2F, false);
+				this.world.play(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKES, SoundCategory.HOSTILE, 0.7F, 0.9F + this.rand.nextFloat() * 0.2F, false);
 			}
 			if(this.ticksExisted == this.delay && this.motionY <= 0.0D) {
 				this.motionY += 0.25D;
 			} else {
 				this.motionY -= 0.05D;
 
-				if(!this.world.isRemote && (this.posY <= this.origin.getY() || this.onGround)) {
-					this.setDead();
+				if(!this.world.isRemote() && (this.posY <= this.origin.getY() || this.onGround)) {
+					this.remove();
 				}
 			}
 		} else {
@@ -151,7 +151,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 		}
 
 		if(this.posY < -64.0D) {
-			this.setDead();
+			this.remove();
 		}
 
 		if(this.posY + this.motionY <= this.origin.getY()) {
@@ -161,7 +161,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 			this.move(MoverType.SELF, 0, this.motionY, 0);
 		}
 
-		if(this.motionY > 0.1D && !this.world.isRemote) {
+		if(this.motionY > 0.1D && !this.world.isRemote()) {
 			DamageSource damageSource = new EntityDamageSource("bl.spikewave", this);
 			for(BlockPos pos : this.positions) {
 				AxisAlignedBB aabb = new AxisAlignedBB(pos).offset(this.posX - (this.origin.getX() + 0.5D), this.posY - this.origin.getY(), this.posZ - (this.origin.getZ() + 0.5D)).shrink(0.1D).offset(0, 0.2D, 0);
@@ -266,7 +266,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbt) {
+	protected void readAdditional(NBTTagCompound nbt) {
 		this.delay = nbt.getInt("delay");
 		this.origin = BlockPos.fromLong(nbt.getLong("origin"));
 
@@ -283,7 +283,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbt) {
+	protected void writeAdditional(NBTTagCompound nbt) {
 		nbt.setInt("delay", this.delay);
 		nbt.setLong("origin", this.origin.toLong());
 
@@ -297,5 +297,5 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 	}
 
 	@Override
-	protected void entityInit() { }
+	protected void registerData() { }
 }

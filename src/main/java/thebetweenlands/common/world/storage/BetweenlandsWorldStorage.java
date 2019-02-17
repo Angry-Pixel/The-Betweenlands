@@ -80,7 +80,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		this.environmentEventRegistry = new BLEnvironmentEventRegistry(this.getWorld());
 		this.environmentEventRegistry.init();
 
-		if(!this.getWorld().isRemote) {
+		if(!this.getWorld().isRemote()) {
 			for(IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 				event.setDefaults();
 				event.setLoaded();
@@ -93,7 +93,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		if(!this.getWorld().isRemote) {
+		if(!this.getWorld().isRemote()) {
 			for(IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 				event.readFromNBT(nbt);
 			}
@@ -121,7 +121,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
-		if(!this.getWorld().isRemote) {
+		if(!this.getWorld().isRemote()) {
 			for(IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 				event.writeToNBT(nbt);
 			}
@@ -150,7 +150,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	public void tick() {
 		super.tick();
 
-		if(this.getWorld().isRemote && this.getWorld().provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+		if(this.getWorld().isRemote() && this.getWorld().dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			this.updateAmbientCaveSounds();
 		}
 	}
@@ -224,7 +224,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 			double dst = player.getDistanceSq((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D);
 
 			if(dst > 4.0D && dst < 256.0D) {
-				world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, SoundRegistry.AMBIENT_CAVE_SPOOK, SoundCategory.AMBIENT, 0.85F, 0.8F + world.rand.nextFloat() * 0.2F, false);
+				world.play((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, SoundRegistry.AMBIENT_CAVE_SPOOK, SoundCategory.AMBIENT, 0.85F, 0.8F + world.rand.nextFloat() * 0.2F, false);
 				this.ambienceTicks = world.rand.nextInt(7000) + 3000;
 				return true;
 			}
@@ -235,7 +235,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	public static BetweenlandsWorldStorage forWorld(World world) {
 		BetweenlandsWorldStorage storage = forWorldNullable(world);
 		if(storage == null) {
-			throw new RuntimeException(String.format("World %s (%s) does not have BetweenlandsWorldStorage capability", world.getWorldInfo().getWorldName(), world.provider.getClass().getName()));
+			throw new RuntimeException(String.format("World %s (%s) does not have BetweenlandsWorldStorage capability", world.getWorldInfo().getWorldName(), world.dimension.getClass().getName()));
 		}
 		return storage;
 	}

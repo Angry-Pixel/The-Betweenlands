@@ -14,7 +14,7 @@ import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityFrog;
 import thebetweenlands.common.entity.mobs.EntityGecko;
-import thebetweenlands.common.entity.mobs.EntityGiantToad;
+import thebetweenlands.common.entity.mobs.EntityHarlequinToad;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
@@ -23,7 +23,7 @@ import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.DimensionBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.BetweenstoneCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.GreeblingSpawnEntry;
@@ -42,7 +42,7 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 	public BiomeSwamplands() {
 		super(new ResourceLocation(ModInfo.ID, "swamplands"), 
 				new BiomeProperties("Swamplands")
-				.setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 2)
+				.setBaseHeight(DimensionBetweenlands.LAYER_HEIGHT - 2)
 				.setHeightVariation(1F)
 				.setWaterColor(0x184220)
 				.setTemperature(0.8F)
@@ -51,7 +51,7 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		this.setWeight(25);
 		this.getBiomeGenerator().setFillerBlockState(BlockRegistry.COARSE_SWAMP_DIRT.getDefaultState())
 		.setTopBlockState(BlockRegistry.DEAD_GRASS.getDefaultState())
-		.addFeature(new FlatLandFeature(WorldProviderBetweenlands.LAYER_HEIGHT, 8))
+		.addFeature(new FlatLandFeature(DimensionBetweenlands.LAYER_HEIGHT, 8))
 		.addFeature(new PatchFeature(0.18D, 0.18D, BlockRegistry.SWAMP_GRASS.getDefaultState()))
 		.addFeature(new PatchFeature(0.05D, 0.05D, BlockRegistry.SWAMP_GRASS.getDefaultState()))
 		.addFeature(new PatchFeature(0.74D, 0.74D, BlockRegistry.COARSE_SWAMP_DIRT.getDefaultState()))
@@ -78,8 +78,8 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		entries.add(new SurfaceSpawnEntry(3, EntityFrog.class, (short) 26).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
 		entries.add(new CaveSpawnEntry(4, EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
 		entries.add(new SporelingSpawnEntry(5, EntitySporeling.class, (short) 120).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
-		entries.add(new SurfaceSpawnEntry(6, EntityGiantToad.class, (short) 12).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
-		entries.add(new CaveSpawnEntry(7, EntityGiantToad.class, (short) 8).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
+		entries.add(new SurfaceSpawnEntry(6, EntityHarlequinToad.class, (short) 12).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
+		entries.add(new CaveSpawnEntry(7, EntityHarlequinToad.class, (short) 8).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
 		entries.add(new GreeblingSpawnEntry(20, (short) 20).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setGroupSpawnRadius(4).setSpawningInterval(24000));
 		
 		entries.add(new TarSpawnEntry(8, EntityTarBeast.class, (short) 80).setHostile(true));

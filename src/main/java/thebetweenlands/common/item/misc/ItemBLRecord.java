@@ -34,7 +34,7 @@ public class ItemBLRecord extends ItemRecord {
         IBlockState iblockstate = worldIn.getBlockState(pos);
 
         if (iblockstate.getBlock() instanceof BlockWeedwoodJukebox && !iblockstate.get(BlockJukebox.HAS_RECORD)) {
-            if (!worldIn.isRemote) {
+            if (!worldIn.isRemote()) {
                 ((BlockJukebox) iblockstate.getBlock()).insertRecord(worldIn, pos, iblockstate, stack);
                 worldIn.playEvent(null, 1010, pos, Item.getIdFromItem(this));
                 stack.shrink(1);
