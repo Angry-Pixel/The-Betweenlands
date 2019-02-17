@@ -41,7 +41,7 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 
 	@Override
 	public boolean hasEffect(ItemStack stack) {
-		return stack.hasTagCompound() ? stack.getTagCompound().getBoolean("magnetActive") : false;
+		return stack.hasTagCompound() ? stack.getTag().getBoolean("magnetActive") : false;
 	}
 
 	@Override
@@ -95,11 +95,11 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 					
 					boolean isGravityCompensated = false;
 					
-					if(nbt.hasKey("thebetweenlands.item_magnet_last_gravity_update", Constants.NBT.TAG_INT) && nbt.getInteger("thebetweenlands.item_magnet_last_gravity_update") == item.ticksExisted) {
+					if(nbt.contains("thebetweenlands.item_magnet_last_gravity_update", Constants.NBT.TAG_INT) && nbt.getInt("thebetweenlands.item_magnet_last_gravity_update") == item.ticksExisted) {
 						isGravityCompensated = true;
 					}
 					
-					nbt.setInteger("thebetweenlands.item_magnet_last_gravity_update", item.ticksExisted);
+					nbt.setInt("thebetweenlands.item_magnet_last_gravity_update", item.ticksExisted);
 					
 					if(!isGravityCompensated) {
 						item.motionY += 0.03999999910593033D;

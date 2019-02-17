@@ -34,7 +34,7 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 	public BlockLeavesBetweenlands() {
 		super();
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(blockState.getBaseState().withProperty(CHECK_DECAY, true).withProperty(DECAYABLE, true));
+		setDefaultState(blockState.getBaseState().with(CHECK_DECAY, true).with(DECAYABLE, true));
 	}
 
 	@Override
@@ -97,20 +97,20 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(DECAYABLE, (meta & 4) == 0).withProperty(CHECK_DECAY, (meta & 8) > 0);
+		return getDefaultState().with(DECAYABLE, (meta & 4) == 0).with(CHECK_DECAY, (meta & 8) > 0);
 	}
 
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(DECAYABLE, false);
+		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).with(DECAYABLE, false);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int i = 0;
-		if (!state.getValue(DECAYABLE))
+		if (!state.get(DECAYABLE))
 			i |= 4;
-		if (state.getValue(CHECK_DECAY))
+		if (state.get(CHECK_DECAY))
 			i |= 8;
 		return i;
 	}
@@ -144,7 +144,7 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		if (!worldIn.isRemote) {
-			if (state.getValue(CHECK_DECAY) && state.getValue(DECAYABLE)) {
+			if (state.get(CHECK_DECAY) && state.get(DECAYABLE)) {
 				byte logReach = 5;
 				int checkRadius = logReach + 1;
 				byte cacheSize = 32;
@@ -230,7 +230,7 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 				int distanceToLog = this.decayBlockCache[cacheHalf * cacheSquared + cacheHalf * cacheSize + cacheHalf];
 
 				if (distanceToLog >= 0) {
-					worldIn.setBlockState(pos, state.withProperty(CHECK_DECAY, Boolean.FALSE), 4);
+					worldIn.setBlockState(pos, state.with(CHECK_DECAY, Boolean.FALSE), 4);
 				} else {
 					this.removeLeaves(worldIn, pos);
 				}

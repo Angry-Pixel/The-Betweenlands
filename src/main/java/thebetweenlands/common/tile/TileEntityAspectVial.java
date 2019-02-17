@@ -11,12 +11,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.common.herblore.Amounts;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityAspectVial extends TileEntity {
     public static final float MAX_AMOUNT = Amounts.VIAL;
 
     private Aspect aspect = null;
 
+    public TileEntityAspectVial() {
+    	super(TileEntityRegistry.ASPECT_VIAL);
+    }
+    
     /**
      * Tries to add an amount and returns the added amount
      * @param amount
@@ -66,17 +71,17 @@ public class TileEntityAspectVial extends TileEntity {
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-        super.writeToNBT(compound);
+    public NBTTagCompound write(NBTTagCompound compound) {
+        super.write(compound);
         if(this.aspect != null)
             this.aspect.writeToNBT(compound);
         return compound;
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        if(nbt.hasKey("aspect")) {
+    public void read(NBTTagCompound nbt) {
+        super.read(nbt);
+        if(nbt.contains("aspect")) {
             this.aspect = Aspect.readFromNBT(nbt);
         } else {
             this.aspect = null;

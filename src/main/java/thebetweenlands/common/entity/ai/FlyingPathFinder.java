@@ -32,7 +32,7 @@ public class FlyingPathFinder extends PathFinder {
 	@Override
 	@Nullable
 	public Path findPath(IWorldReader worldIn, EntityLiving entitylivingIn, Entity targetEntity, float maxDistance) {
-		return this.findPath(worldIn, entitylivingIn, targetEntity.posX, targetEntity.getEntityBoundingBox().minY,
+		return this.findPath(worldIn, entitylivingIn, targetEntity.posX, targetEntity.getBoundingBox().minY,
 				targetEntity.posZ, maxDistance);
 	}
 

@@ -22,6 +22,7 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityPurifier extends TileEntityBasicInventory implements IFluidHandler, ITickable {
     private static final int MAX_TIME = 432;
@@ -66,25 +67,25 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
     private boolean isPurifyingClient = false;
 
     public TileEntityPurifier() {
-        super(3, "container.purifier");
+        super(TileEntityRegistry.PURIFIER, 3, "container.purifier");
         this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 4);
         this.waterTank.setTileEntity(this);
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
+    public void read(NBTTagCompound nbt) {
+        super.read(nbt);
+        waterTank.readFromNBT(nbt.getCompound("waterTank"));
         lightOn = nbt.getBoolean("state");
-        time = nbt.getInteger("progress");
+        time = nbt.getInt("progress");
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        nbt = super.writeToNBT(nbt);
+    public NBTTagCompound write(NBTTagCompound nbt) {
+        nbt = super.write(nbt);
         nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
         nbt.setBoolean("state", lightOn);
-        nbt.setInteger("progress", time);
+        nbt.setInt("progress", time);
         return nbt;
     }
 
@@ -111,7 +112,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
     protected void readPacketNbt(NBTTagCompound nbt) {
         NBTTagCompound compound = nbt;
         lightOn = compound.getBoolean("state");
-        waterTank.readFromNBT(compound.getCompoundTag("waterTank"));
+        waterTank.readFromNBT(compound.getCompound("waterTank"));
         this.readInventoryNBT(nbt);
         isPurifyingClient = compound.getBoolean("isPurifying");
     }
@@ -169,7 +170,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
     }
 
     @Override
-    public void update() {
+    public void tick() {
         if (world.isRemote)
             return;
         ItemStack output = PurifierRecipe.getRecipeOutput(inventory.get(1));

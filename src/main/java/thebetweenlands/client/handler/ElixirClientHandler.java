@@ -110,7 +110,7 @@ public class ElixirClientHandler {
                 if(ElixirEffectRegistry.EFFECT_HUNTERSSENSE.isActive(player)) {
                     int strength = ElixirEffectRegistry.EFFECT_HUNTERSSENSE.getStrength(player);
                     World world = player.world;
-                    List<Entity> entityList = world.getEntitiesWithinAABB(Entity.class, player.getEntityBoundingBox().grow(50, 50, 50));
+                    List<Entity> entityList = world.getEntitiesWithinAABB(Entity.class, player.getBoundingBox().grow(50, 50, 50));
                     List<TrailPos> availablePositions = new ArrayList<TrailPos>();
                     for(Entity e : entityList) {
                         if(e == player) continue;

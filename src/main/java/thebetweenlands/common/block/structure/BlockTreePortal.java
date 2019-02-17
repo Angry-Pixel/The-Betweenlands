@@ -8,11 +8,11 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -39,7 +39,7 @@ import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.teleporter.TeleporterHandler;
 
 public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
-	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.<EnumFacing.Axis>create("axis", EnumFacing.Axis.class, new EnumFacing.Axis[]{EnumFacing.Axis.X, EnumFacing.Axis.Z});
+	public static final EnumProperty<EnumFacing.Axis> AXIS = EnumProperty.<EnumFacing.Axis>create("axis", EnumFacing.Axis.class, new EnumFacing.Axis[]{EnumFacing.Axis.X, EnumFacing.Axis.Z});
 
 	protected static final AxisAlignedBB X_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.375D, 1.0D, 1.0D, 0.625D);
 	protected static final AxisAlignedBB Z_AABB = new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 1.0D, 1.0D);
@@ -50,45 +50,45 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 		setLightLevel(1.0F);
 		setBlockUnbreakable();
 		setSoundType2(SoundType.GLASS);
-		setDefaultState(this.blockState.getBaseState().withProperty(AXIS, EnumFacing.Axis.X));
+		setDefaultState(this.blockState.getBaseState().with(AXIS, EnumFacing.Axis.X));
 		setCreativeTab(null);
 	}
 
 	public static boolean makePortalX(World world, BlockPos pos) {
-		world.setBlockState(pos.add(0, 2, -1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_TOP_RIGHT).withProperty(BlockPortalFrame.X_AXIS, true));
-		world.setBlockState(pos.add(0, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.TOP).withProperty(BlockPortalFrame.X_AXIS, true));
-		world.setBlockState(pos.add(0, 2, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_TOP_LEFT).withProperty(BlockPortalFrame.X_AXIS, true));
-		world.setBlockState(pos.add(0, 1, -1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_RIGHT).withProperty(BlockPortalFrame.X_AXIS, true));
-		world.setBlockState(pos.add(0, 1, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_LEFT).withProperty(BlockPortalFrame.X_AXIS, true));
-		world.setBlockState(pos.add(0, 0, -1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_RIGHT).withProperty(BlockPortalFrame.X_AXIS, true));
-		world.setBlockState(pos.add(0, 0, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_LEFT).withProperty(BlockPortalFrame.X_AXIS, true));
-		world.setBlockState(pos.add(0, -1, -1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_BOTTOM_RIGHT).withProperty(BlockPortalFrame.X_AXIS, true));
-		world.setBlockState(pos.add(0, -1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.BOTTOM).withProperty(BlockPortalFrame.X_AXIS, true));
-		world.setBlockState(pos.add(0, -1, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_BOTTOM_LEFT).withProperty(BlockPortalFrame.X_AXIS, true));
+		world.setBlockState(pos.add(0, 2, -1), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_TOP_RIGHT).with(BlockPortalFrame.X_AXIS, true));
+		world.setBlockState(pos.add(0, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.TOP).with(BlockPortalFrame.X_AXIS, true));
+		world.setBlockState(pos.add(0, 2, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_TOP_LEFT).with(BlockPortalFrame.X_AXIS, true));
+		world.setBlockState(pos.add(0, 1, -1), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_RIGHT).with(BlockPortalFrame.X_AXIS, true));
+		world.setBlockState(pos.add(0, 1, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_LEFT).with(BlockPortalFrame.X_AXIS, true));
+		world.setBlockState(pos.add(0, 0, -1), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_RIGHT).with(BlockPortalFrame.X_AXIS, true));
+		world.setBlockState(pos.add(0, 0, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_LEFT).with(BlockPortalFrame.X_AXIS, true));
+		world.setBlockState(pos.add(0, -1, -1), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_BOTTOM_RIGHT).with(BlockPortalFrame.X_AXIS, true));
+		world.setBlockState(pos.add(0, -1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.BOTTOM).with(BlockPortalFrame.X_AXIS, true));
+		world.setBlockState(pos.add(0, -1, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_BOTTOM_LEFT).with(BlockPortalFrame.X_AXIS, true));
 
 		if (isPatternValidX(world, pos)) {
-			world.setBlockState(pos, BlockRegistry.TREE_PORTAL.getDefaultState().withProperty(AXIS, EnumFacing.Axis.Z), 2);
-			world.setBlockState(pos.up(), BlockRegistry.TREE_PORTAL.getDefaultState().withProperty(AXIS, EnumFacing.Axis.Z), 2);
+			world.setBlockState(pos, BlockRegistry.TREE_PORTAL.getDefaultState().with(AXIS, EnumFacing.Axis.Z), 2);
+			world.setBlockState(pos.up(), BlockRegistry.TREE_PORTAL.getDefaultState().with(AXIS, EnumFacing.Axis.Z), 2);
 			return true;
 		}
 		return false;
 	}
 
 	public static boolean makePortalZ(World world, BlockPos pos) {
-		world.setBlockState(pos.add(-1, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_TOP_RIGHT).withProperty(BlockPortalFrame.X_AXIS, false));
-		world.setBlockState(pos.add(0, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.TOP).withProperty(BlockPortalFrame.X_AXIS, false));
-		world.setBlockState(pos.add(1, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_TOP_LEFT).withProperty(BlockPortalFrame.X_AXIS, false));
-		world.setBlockState(pos.add(-1, 1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_RIGHT).withProperty(BlockPortalFrame.X_AXIS, false));
-		world.setBlockState(pos.add(1, 1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_LEFT).withProperty(BlockPortalFrame.X_AXIS, false));
-		world.setBlockState(pos.add(-1, 0, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_RIGHT).withProperty(BlockPortalFrame.X_AXIS, false));
-		world.setBlockState(pos.add(1, 0, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_LEFT).withProperty(BlockPortalFrame.X_AXIS, false));
-		world.setBlockState(pos.add(-1, -1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_BOTTOM_RIGHT).withProperty(BlockPortalFrame.X_AXIS, false));
-		world.setBlockState(pos.add(0, -1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.BOTTOM).withProperty(BlockPortalFrame.X_AXIS, false));
-		world.setBlockState(pos.add(1, -1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_BOTTOM_LEFT).withProperty(BlockPortalFrame.X_AXIS, false));
+		world.setBlockState(pos.add(-1, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_TOP_RIGHT).with(BlockPortalFrame.X_AXIS, false));
+		world.setBlockState(pos.add(0, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.TOP).with(BlockPortalFrame.X_AXIS, false));
+		world.setBlockState(pos.add(1, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_TOP_LEFT).with(BlockPortalFrame.X_AXIS, false));
+		world.setBlockState(pos.add(-1, 1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_RIGHT).with(BlockPortalFrame.X_AXIS, false));
+		world.setBlockState(pos.add(1, 1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_LEFT).with(BlockPortalFrame.X_AXIS, false));
+		world.setBlockState(pos.add(-1, 0, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_RIGHT).with(BlockPortalFrame.X_AXIS, false));
+		world.setBlockState(pos.add(1, 0, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.SIDE_LEFT).with(BlockPortalFrame.X_AXIS, false));
+		world.setBlockState(pos.add(-1, -1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_BOTTOM_RIGHT).with(BlockPortalFrame.X_AXIS, false));
+		world.setBlockState(pos.add(0, -1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.BOTTOM).with(BlockPortalFrame.X_AXIS, false));
+		world.setBlockState(pos.add(1, -1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().with(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_BOTTOM_LEFT).with(BlockPortalFrame.X_AXIS, false));
 
 		if (isPatternValidZ(world, pos)) {
-			world.setBlockState(pos, BlockRegistry.TREE_PORTAL.getDefaultState().withProperty(AXIS, EnumFacing.Axis.X), 2);
-			world.setBlockState(pos.up(), BlockRegistry.TREE_PORTAL.getDefaultState().withProperty(AXIS, EnumFacing.Axis.X), 2);
+			world.setBlockState(pos, BlockRegistry.TREE_PORTAL.getDefaultState().with(AXIS, EnumFacing.Axis.X), 2);
+			world.setBlockState(pos.up(), BlockRegistry.TREE_PORTAL.getDefaultState().with(AXIS, EnumFacing.Axis.X), 2);
 			return true;
 		}
 
@@ -161,12 +161,12 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 
 	private static boolean checkPortal(IWorldReader world, BlockPos pos, Block target, EnumFacing.Axis axis) {
 		IBlockState state = world.getBlockState(pos);
-		return state.getBlock() == target && state.getValue(AXIS) == axis;
+		return state.getBlock() == target && state.get(AXIS) == axis;
 	}
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
-		switch ((EnumFacing.Axis) state.getValue(AXIS)) {
+		switch ((EnumFacing.Axis) state.get(AXIS)) {
 		case X:
 			return X_AABB;
 		case Y:
@@ -205,13 +205,13 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		EnumFacing.Axis axis = state.getValue(AXIS);
+		EnumFacing.Axis axis = state.get(AXIS);
 		return axis == EnumFacing.Axis.X ? 1 : (axis == EnumFacing.Axis.Z ? 2 : 0);
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(AXIS, (meta & 3) == 2 ? EnumFacing.Axis.Z : EnumFacing.Axis.X);
+		return this.getDefaultState().with(AXIS, (meta & 3) == 2 ? EnumFacing.Axis.Z : EnumFacing.Axis.X);
 	}
 
 	@Override
@@ -230,9 +230,9 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 	public void onEntityCollision(IBlockState state, World worldIn, BlockPos pos, Entity entityIn) {
 		if (!entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn.timeUntilPortal <= 0 && BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionWhitelistSet.isListed(entityIn.dimension)) {
 			AxisAlignedBB aabb = state.getBoundingBox(worldIn, pos);
-			if (aabb != null && aabb.offset(pos).intersects(entityIn.getEntityBoundingBox())) {
+			if (aabb != null && aabb.offset(pos).intersects(entityIn.getBoundingBox())) {
 				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(worldIn);
-				AxisAlignedBB entityAabb = entityIn.getEntityBoundingBox();
+				AxisAlignedBB entityAabb = entityIn.getBoundingBox();
 				List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, entityAabb, loc -> loc.intersects(entityAabb));
 				LocationPortal portal = null;
 				if(!portals.isEmpty()) {

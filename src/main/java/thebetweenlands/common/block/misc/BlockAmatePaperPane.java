@@ -80,22 +80,22 @@ public class BlockAmatePaperPane extends BlockPaneBetweenlands implements IConne
 
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_BY_INDEX[0]);
 
-		if (((Boolean)state.getValue(NORTH)).booleanValue())
+		if (((Boolean)state.get(NORTH)).booleanValue())
 		{
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_BY_INDEX[getBoundingBoxIndex(EnumFacing.NORTH)]);
 		}
 
-		if (((Boolean)state.getValue(SOUTH)).booleanValue())
+		if (((Boolean)state.get(SOUTH)).booleanValue())
 		{
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_BY_INDEX[getBoundingBoxIndex(EnumFacing.SOUTH)]);
 		}
 
-		if (((Boolean)state.getValue(EAST)).booleanValue())
+		if (((Boolean)state.get(EAST)).booleanValue())
 		{
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_BY_INDEX[getBoundingBoxIndex(EnumFacing.EAST)]);
 		}
 
-		if (((Boolean)state.getValue(WEST)).booleanValue())
+		if (((Boolean)state.get(WEST)).booleanValue())
 		{
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_BY_INDEX[getBoundingBoxIndex(EnumFacing.WEST)]);
 		}
@@ -115,22 +115,22 @@ public class BlockAmatePaperPane extends BlockPaneBetweenlands implements IConne
 	{
 		int i = 0;
 
-		if (((Boolean)state.getValue(NORTH)).booleanValue())
+		if (((Boolean)state.get(NORTH)).booleanValue())
 		{
 			i |= getBoundingBoxIndex(EnumFacing.NORTH);
 		}
 
-		if (((Boolean)state.getValue(EAST)).booleanValue())
+		if (((Boolean)state.get(EAST)).booleanValue())
 		{
 			i |= getBoundingBoxIndex(EnumFacing.EAST);
 		}
 
-		if (((Boolean)state.getValue(SOUTH)).booleanValue())
+		if (((Boolean)state.get(SOUTH)).booleanValue())
 		{
 			i |= getBoundingBoxIndex(EnumFacing.SOUTH);
 		}
 
-		if (((Boolean)state.getValue(WEST)).booleanValue())
+		if (((Boolean)state.get(WEST)).booleanValue())
 		{
 			i |= getBoundingBoxIndex(EnumFacing.WEST);
 		}

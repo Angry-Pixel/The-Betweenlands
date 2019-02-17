@@ -1,12 +1,11 @@
 package thebetweenlands.common.block.terrain;
 
-import java.util.Random;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IProperty;
@@ -14,6 +13,7 @@ import net.minecraft.state.IntegerProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -39,7 +39,7 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 
 	public BlockWisp() {
 		super(BLMaterialRegistry.WISP);
-		this.setDefaultState(this.getBlockState().getBaseState().withProperty(COLOR, 0));
+		this.setDefaultState(this.getBlockState().getBaseState().with(COLOR, 0));
 		setSoundType(SoundType.STONE);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setHardness(0);
@@ -78,8 +78,8 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return null;
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+		return Items.AIR;
 	}
 
 	@Override
@@ -107,7 +107,7 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-		world.setBlockState(pos, this.getDefaultState().withProperty(COLOR, world.rand.nextInt(COLORS.length / 2)), 2);
+		world.setBlockState(pos, this.getDefaultState().with(COLOR, world.rand.nextInt(COLORS.length / 2)), 2);
 	}
 
 	@Override
@@ -135,17 +135,17 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	 * @param pos
 	 */
 	public void generateBlock(World world, BlockPos pos) {
-		world.setBlockState(pos, this.getDefaultState().withProperty(COLOR, world.rand.nextInt(COLORS.length / 2)), 2);
+		world.setBlockState(pos, this.getDefaultState().with(COLOR, world.rand.nextInt(COLORS.length / 2)), 2);
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(COLOR, meta);
+		return this.getDefaultState().with(COLOR, meta);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(COLOR);
+		return state.get(COLOR);
 	}
 
 	@Override

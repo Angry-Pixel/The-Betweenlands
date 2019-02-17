@@ -21,6 +21,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityRepeller extends TileEntity implements ITickable {
 	private static final float MAX_RADIUS = 18.0F;
@@ -38,6 +39,10 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 
 	public int renderTicks = 0;
 
+	public TileEntityRepeller() {
+		super(TileEntityRegistry.REPELLER);
+	}
+	
 	public void setRadiusState(int state) {
 		if(this.running && state % 4 != this.radiusState)
 			this.deployTicks = 0;
@@ -121,7 +126,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 		if(!this.world.isRemote) {
 			if(this.fuel > 0) {
 				if(this.fuel <= 0) {
@@ -158,7 +163,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 				List<Entity> affectedEntities = this.world.getEntitiesWithinAABB(Entity.class, affectedBB);
 				for(Entity entity : affectedEntities) {
 					if(entity instanceof IMob && entity instanceof EntityWight == false && entity instanceof IBLBoss == false) {
-						Vec3d closestPoint = this.getClosestAABBCorner(entity.getEntityBoundingBox(), centerX, centerY, centerZ);
+						Vec3d closestPoint = this.getClosestAABBCorner(entity.getBoundingBox(), centerX, centerY, centerZ);
 						if(closestPoint.squareDistanceTo(centerX, centerY, centerZ) < this.radius*this.radius) {
 							double diffX = entity.posX - centerX;
 							double diffY = entity.posY - centerY;
@@ -177,7 +182,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 						}
 					}
 					if(entity instanceof IProjectile) {
-						Vec3d closestPoint = this.getClosestAABBCorner(entity.getEntityBoundingBox(), centerX, centerY, centerZ);
+						Vec3d closestPoint = this.getClosestAABBCorner(entity.getBoundingBox(), centerX, centerY, centerZ);
 						if(closestPoint.squareDistanceTo(centerX, centerY, centerZ) < this.radius*this.radius) {
 							double velocity = Math.sqrt(entity.motionX*entity.motionX + entity.motionY*entity.motionY + entity.motionZ*entity.motionZ);
 							double diffX = entity.posX - centerX;
@@ -279,27 +284,27 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		this.fuel = nbt.getInteger("fuel");
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
+		this.fuel = nbt.getInt("fuel");
 		this.hasShimmerstone = nbt.getBoolean("hasShimmerstone");
-		this.deployTicks = nbt.getInteger("deployTicks");
+		this.deployTicks = nbt.getInt("deployTicks");
 		this.radius = nbt.getFloat("radius");
 		this.running = nbt.getBoolean("running");
 		this.prevRunning = this.running;
-		this.radiusState = nbt.getInteger("radiusState");
+		this.radiusState = nbt.getInt("radiusState");
 		this.accumulatedCost = nbt.getFloat("accumulatedCost");
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		nbt.setInteger("fuel", this.fuel);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
+		nbt.setInt("fuel", this.fuel);
 		nbt.setBoolean("hasShimmerstone", this.hasShimmerstone);
-		nbt.setInteger("deployTicks", this.deployTicks);
+		nbt.setInt("deployTicks", this.deployTicks);
 		nbt.setFloat("radius", this.radius);
 		nbt.setBoolean("running", this.running);
-		nbt.setInteger("radiusState", this.radiusState);
+		nbt.setInt("radiusState", this.radiusState);
 		nbt.setFloat("accumulatedCost", this.accumulatedCost);
 		return nbt;
 	}
@@ -307,36 +312,36 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("fuel", this.fuel);
+		nbt.setInt("fuel", this.fuel);
 		nbt.setBoolean("hasShimmerstone", this.hasShimmerstone);
 		nbt.setBoolean("running", this.running);
-		nbt.setInteger("deployTicks", this.deployTicks);
+		nbt.setInt("deployTicks", this.deployTicks);
 		nbt.setFloat("radius", this.radius);
-		nbt.setInteger("radiusState", this.radiusState);
+		nbt.setInt("radiusState", this.radiusState);
 		return new SPacketUpdateTileEntity(this.getPos(), 1, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		NBTTagCompound nbt = pkt.getNbtCompound();
-		this.fuel = nbt.getInteger("fuel");
+		this.fuel = nbt.getInt("fuel");
 		this.hasShimmerstone = nbt.getBoolean("hasShimmerstone");
-		this.deployTicks = nbt.getInteger("deployTicks");
+		this.deployTicks = nbt.getInt("deployTicks");
 		this.radius = nbt.getFloat("radius");
 		this.running = nbt.getBoolean("running");
 		this.prevRunning = this.running;
-		this.radiusState = nbt.getInteger("radiusState");
+		this.radiusState = nbt.getInt("radiusState");
 	}
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound nbt = super.getUpdateTag();
-		nbt.setInteger("fuel", this.fuel);
+		nbt.setInt("fuel", this.fuel);
 		nbt.setBoolean("hasShimmerstone", this.hasShimmerstone);
 		nbt.setBoolean("running", this.running);
-		nbt.setInteger("deployTicks", this.deployTicks);
+		nbt.setInt("deployTicks", this.deployTicks);
 		nbt.setFloat("radius", this.radius);
-		nbt.setInteger("radiusState", this.radiusState);
+		nbt.setInt("radiusState", this.radiusState);
 		return nbt;
 	}
 }

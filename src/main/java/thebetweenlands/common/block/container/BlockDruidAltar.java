@@ -32,7 +32,7 @@ public class BlockDruidAltar extends BasicBlock implements ITileEntityProvider {
 		setResistance(100.0F);
 		setSoundType(SoundType.STONE);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(this.blockState.getBaseState().withProperty(ACTIVE, false));
+		setDefaultState(this.blockState.getBaseState().with(ACTIVE, false));
 		setItemDropped(() -> null);
 	}
 
@@ -43,12 +43,12 @@ public class BlockDruidAltar extends BasicBlock implements ITileEntityProvider {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(ACTIVE, meta != 0);
+		return getDefaultState().with(ACTIVE, meta != 0);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(ACTIVE) ? 1 : 0;
+		return state.get(ACTIVE) ? 1 : 0;
 	}
 
 	@Override

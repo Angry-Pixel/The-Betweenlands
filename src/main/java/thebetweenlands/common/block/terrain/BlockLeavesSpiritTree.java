@@ -54,7 +54,7 @@ public class BlockLeavesSpiritTree extends BlockLeavesBetweenlands {
 
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(DECAYABLE, false);
+		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).with(DECAYABLE, false);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class BlockLeavesSpiritTree extends BlockLeavesBetweenlands {
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
+	public int getItemsToDropCount(IBlockState state, int fortune, World worldIn, BlockPos pos, Random random) {
 		return 0;
 	}
 

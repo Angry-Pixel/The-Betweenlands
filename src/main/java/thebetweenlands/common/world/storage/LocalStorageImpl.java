@@ -63,12 +63,12 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return this.capabilities == null ? false : this.abilities.hasCapability(capability, facing);
+		return this.capabilities == null ? false : this.capabilities.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return this.capabilities == null ? null : this.abilities.getCapability(capability, facing);
+		return this.capabilities == null ? null : this.capabilities.getCapability(capability, facing);
 	}
 
 	@Override
@@ -88,8 +88,8 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		if(this.capabilities != null && nbt.hasKey("ForgeCaps")) {
-			this.abilities.deserializeNBT(nbt.getCompoundTag("ForgeCaps"));
+		if(this.capabilities != null && nbt.contains("ForgeCaps")) {
+			this.capabilities.deserializeNBT(nbt.getCompound("ForgeCaps"));
 		}
 
 		this.readReferenceChunks(nbt);
@@ -98,7 +98,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		if(this.capabilities != null) {
-			NBTTagCompound caps = this.abilities.serializeNBT();
+			NBTTagCompound caps = this.capabilities.serializeNBT();
 			if(caps.getSize() > 0) {
 				nbt.setTag("ForgeCaps", caps);
 			}
@@ -113,19 +113,19 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 		NBTTagList referenceChunkList = new NBTTagList();
 		for(ChunkPos referenceChunk : this.linkedChunks) {
 			NBTTagCompound referenceChunkNbt = new NBTTagCompound();
-			referenceChunkNbt.setInteger("x", referenceChunk.x);
-			referenceChunkNbt.setInteger("z", referenceChunk.z);
-			referenceChunkList.appendTag(referenceChunkNbt);
+			referenceChunkNbt.setInt("x", referenceChunk.x);
+			referenceChunkNbt.setInt("z", referenceChunk.z);
+			referenceChunkList.add(referenceChunkNbt);
 		}
 		nbt.setTag("ReferenceChunks", referenceChunkList);
 	}
 
 	protected final void readReferenceChunks(NBTTagCompound nbt) {
 		this.linkedChunks.clear();
-		NBTTagList referenceChunkList = nbt.getTagList("ReferenceChunks", Constants.NBT.TAG_COMPOUND);
-		for(int i = 0; i < referenceChunkList.tagCount(); i++) {
-			NBTTagCompound referenceChunkNbt = referenceChunkList.getCompoundTagAt(i);
-			this.linkedChunks.add(new ChunkPos(referenceChunkNbt.getInteger("x"), referenceChunkNbt.getInteger("z")));
+		NBTTagList referenceChunkList = nbt.getList("ReferenceChunks", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < referenceChunkList.size(); i++) {
+			NBTTagCompound referenceChunkNbt = referenceChunkList.getCompound(i);
+			this.linkedChunks.add(new ChunkPos(referenceChunkNbt.getInt("x"), referenceChunkNbt.getInt("z")));
 		}
 	}
 

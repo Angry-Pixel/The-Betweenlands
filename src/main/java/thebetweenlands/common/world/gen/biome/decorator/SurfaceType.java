@@ -58,7 +58,7 @@ public enum SurfaceType implements Predicate<IBlockState> {
 	GRASS_AND_DIRT(GRASS, DIRT),
 	MIXED_GROUND_AND_UNDERGROUND(MIXED_GROUND, UNDERGROUND),
 	MIXED_GROUND_OR_REPLACEABLE(ImmutableList.of(state -> state.getMaterial().isReplaceable()), MIXED_GROUND),
-	CRAGROCK_MOSSY(ImmutableList.of(state -> state.getBlock() == BlockRegistry.CRAGROCK && state.getValue(BlockCragrock.VARIANT) != BlockCragrock.EnumCragrockType.DEFAULT)),
+	CRAGROCK_MOSSY(ImmutableList.of(state -> state.getBlock() == BlockRegistry.CRAGROCK && state.get(BlockCragrock.VARIANT) != BlockCragrock.EnumCragrockType.DEFAULT)),
 	PLANT_DECORATION_SOIL(ImmutableList.of(
 			BlockMatcher.forBlock(BlockRegistry.GIANT_ROOT)),
 			GRASS_AND_DIRT, CRAGROCK_MOSSY);

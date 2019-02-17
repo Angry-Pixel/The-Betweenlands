@@ -31,7 +31,7 @@ public class WorldGenSmallPortal extends WorldGenerator {
 		}
 		
 		for(BlockPos p : BlockPos.getAllInBox(pos.getX() - 2, pos.getY(), pos.getZ() - 2, pos.getX() + 2, pos.getY(), pos.getZ() + 2)) {
-			world.setBlockState(p, BlockRegistry.LOG_PORTAL.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
+			world.setBlockState(p, BlockRegistry.LOG_PORTAL.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
 		}
 
 		if(this.dir.getAxis() == EnumFacing.Axis.X) BlockTreePortal.makePortalX(world, pos.up(2));

@@ -72,7 +72,7 @@ public class CameraPositionHandler {
 
 
 			//Ring of Summoning
-			List<EntityPlayer> nearbyPlayers = renderViewEntity.world.getEntitiesWithinAABB(EntityPlayer.class, renderViewEntity.getEntityBoundingBox().grow(32, 32, 32), entity -> entity.getDistance(renderViewEntity) <= 32.0D);
+			List<EntityPlayer> nearbyPlayers = renderViewEntity.world.getEntitiesWithinAABB(EntityPlayer.class, renderViewEntity.getBoundingBox().grow(32, 32, 32), entity -> entity.getDistance(renderViewEntity) <= 32.0D);
 
 			for(EntityPlayer player : nearbyPlayers) {
 				if(player.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {

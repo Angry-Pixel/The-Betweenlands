@@ -36,7 +36,7 @@ public class ItemBlockSlab extends ItemBlock {
 
 				BlockSlabBetweenlands.EnumBlockHalfBL type = blockState.getValue(BlockSlabBetweenlands.HALF);
 				if ((facing == EnumFacing.UP && type.equals(BlockSlabBetweenlands.EnumBlockHalfBL.BOTTOM) || facing == EnumFacing.DOWN && type.equals(BlockSlabBetweenlands.EnumBlockHalfBL.TOP))) {
-					IBlockState newState = blockState.withProperty(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.FULL);
+					IBlockState newState = blockState.with(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.FULL);
 					AxisAlignedBB axisalignedbb = newState.getCollisionBoundingBox(worldIn, pos);
 
 					if (axisalignedbb != Block.NULL_AABB && worldIn.checkNoEntityCollision(axisalignedbb.offset(pos)) && worldIn.setBlockState(pos, newState, 11)) {
@@ -82,7 +82,7 @@ public class ItemBlockSlab extends ItemBlock {
 		IBlockState blockState = worldIn.getBlockState(pos);
 
 		if (blockState.getBlock() == getBlock()) {
-			IBlockState newState = blockState.withProperty(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.FULL);
+			IBlockState newState = blockState.with(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.FULL);
 			AxisAlignedBB axisalignedbb = newState.getCollisionBoundingBox(worldIn, pos);
 
 			if (axisalignedbb != Block.NULL_AABB && worldIn.checkNoEntityCollision(axisalignedbb.offset(pos)) && worldIn.setBlockState(pos, newState, 11)) {

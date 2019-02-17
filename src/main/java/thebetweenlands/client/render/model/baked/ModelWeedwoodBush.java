@@ -351,21 +351,21 @@ public class ModelWeedwoodBush implements IModel {
 				long index = 0;
 
 				try {
-					if (state.getValue(BlockWeedwoodBush.WEST))
+					if (state.get(BlockWeedwoodBush.WEST))
 						index |= 1;
-					if (state.getValue(BlockWeedwoodBush.EAST))
+					if (state.get(BlockWeedwoodBush.EAST))
 						index |= 1 << 1;
-					if (state.getValue(BlockWeedwoodBush.DOWN))
+					if (state.get(BlockWeedwoodBush.DOWN))
 						index |= 1 << 2;
-					if (state.getValue(BlockWeedwoodBush.UP))
+					if (state.get(BlockWeedwoodBush.UP))
 						index |= 1 << 3;
-					if (state.getValue(BlockWeedwoodBush.NORTH))
+					if (state.get(BlockWeedwoodBush.NORTH))
 						index |= 1 << 4;
-					if (state.getValue(BlockWeedwoodBush.SOUTH))
+					if (state.get(BlockWeedwoodBush.SOUTH))
 						index |= 1 << 5;
-					posX = state.getValue(BlockWeedwoodBush.POS_X);
-					posY = state.getValue(BlockWeedwoodBush.POS_Y);
-					posZ = state.getValue(BlockWeedwoodBush.POS_Z);
+					posX = state.get(BlockWeedwoodBush.POS_X);
+					posY = state.get(BlockWeedwoodBush.POS_Y);
+					posZ = state.get(BlockWeedwoodBush.POS_Z);
 				} catch(Exception ex) {
 					//how should this handle item rendering gracefully? :(
 				}

@@ -107,17 +107,17 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 
 	public static AxisAlignedBB getCombinedBoundingBoxForState(IBlockState state) {
 		int index = 0;
-		if(state.getValue(NORTH))
+		if(state.get(NORTH))
 			index |= 1;
-		if(state.getValue(SOUTH))
+		if(state.get(SOUTH))
 			index |= 2;
-		if(state.getValue(EAST))
+		if(state.get(EAST))
 			index |= 4;
-		if(state.getValue(WEST))
+		if(state.get(WEST))
 			index |= 8;
-		if(state.getValue(UP))
+		if(state.get(UP))
 			index |= 16;
-		if(state.getValue(DOWN))
+		if(state.get(DOWN))
 			index |= 32;
 		return COMBINED_BOUNDING_BOXES[index];
 	}
@@ -127,17 +127,17 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 		this.setSoundType(SoundType.WOOD);
 		this.setHarvestLevel("axe", 0);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(this.blockState.getBaseState().withProperty(NATURAL, false));
+		setDefaultState(this.blockState.getBaseState().with(NATURAL, false));
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(NATURAL, meta == 1);
+		return this.getDefaultState().with(NATURAL, meta == 1);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(NATURAL) ? 1 : 0;
+		return state.get(NATURAL) ? 1 : 0;
 	}
 
 	@Override
@@ -153,12 +153,12 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 	@Override
 	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
 		return state
-				.withProperty(NORTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.north())))
-				.withProperty(EAST, Boolean.valueOf(this.canConnectTo(worldIn, pos.east())))
-				.withProperty(SOUTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.south())))
-				.withProperty(WEST, Boolean.valueOf(this.canConnectTo(worldIn, pos.west())))
-				.withProperty(UP, Boolean.valueOf(this.canConnectTo(worldIn, pos.up())))
-				.withProperty(DOWN, Boolean.valueOf(worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP) || this.canConnectTo(worldIn, pos.down())));
+				.with(NORTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.north())))
+				.with(EAST, Boolean.valueOf(this.canConnectTo(worldIn, pos.east())))
+				.with(SOUTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.south())))
+				.with(WEST, Boolean.valueOf(this.canConnectTo(worldIn, pos.west())))
+				.with(UP, Boolean.valueOf(this.canConnectTo(worldIn, pos.up())))
+				.with(DOWN, Boolean.valueOf(worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP) || this.canConnectTo(worldIn, pos.down())));
 	}
 
 	public boolean canConnectTo(IWorldReader worldIn, BlockPos pos) {
@@ -170,11 +170,11 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		switch (rot) {
 		case CLOCKWISE_180:
-			return state.withProperty(NORTH, state.getValue(SOUTH)).withProperty(EAST, state.getValue(WEST)).withProperty(SOUTH, state.getValue(NORTH)).withProperty(WEST, state.getValue(EAST));
+			return state.with(NORTH, state.get(SOUTH)).with(EAST, state.get(WEST)).with(SOUTH, state.get(NORTH)).with(WEST, state.get(EAST));
 		case COUNTERCLOCKWISE_90:
-			return state.withProperty(NORTH, state.getValue(EAST)).withProperty(EAST, state.getValue(SOUTH)).withProperty(SOUTH, state.getValue(WEST)).withProperty(WEST, state.getValue(NORTH));
+			return state.with(NORTH, state.get(EAST)).with(EAST, state.get(SOUTH)).with(SOUTH, state.get(WEST)).with(WEST, state.get(NORTH));
 		case CLOCKWISE_90:
-			return state.withProperty(NORTH, state.getValue(WEST)).withProperty(EAST, state.getValue(NORTH)).withProperty(SOUTH, state.getValue(EAST)).withProperty(WEST, state.getValue(SOUTH));
+			return state.with(NORTH, state.get(WEST)).with(EAST, state.get(NORTH)).with(SOUTH, state.get(EAST)).with(WEST, state.get(SOUTH));
 		default:
 			return state;
 		}
@@ -185,9 +185,9 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
 		switch (mirrorIn) {
 		case LEFT_RIGHT:
-			return state.withProperty(NORTH, state.getValue(SOUTH)).withProperty(SOUTH, state.getValue(NORTH));
+			return state.with(NORTH, state.get(SOUTH)).with(SOUTH, state.get(NORTH));
 		case FRONT_BACK:
-			return state.withProperty(EAST, state.getValue(WEST)).withProperty(WEST, state.getValue(EAST));
+			return state.with(EAST, state.get(WEST)).with(WEST, state.get(EAST));
 		default:
 			return super.withMirror(state, mirrorIn);
 		}
@@ -209,22 +209,22 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, BOUNDING_BOXES[0]);
 
-		if(state.getValue(NORTH))
+		if(state.get(NORTH))
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, BOUNDING_BOXES[1]);
 
-		if(state.getValue(SOUTH))
+		if(state.get(SOUTH))
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, BOUNDING_BOXES[2]);
 
-		if(state.getValue(EAST))
+		if(state.get(EAST))
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, BOUNDING_BOXES[3]);
 
-		if(state.getValue(WEST))
+		if(state.get(WEST))
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, BOUNDING_BOXES[4]);
 
-		if(state.getValue(UP))
+		if(state.get(UP))
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, BOUNDING_BOXES[5]);
 
-		if(state.getValue(DOWN))
+		if(state.get(DOWN))
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, BOUNDING_BOXES[6]);
 	}
 
@@ -247,6 +247,6 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 	
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		return this.getDefaultState().withProperty(NATURAL, placer instanceof EntityPlayer && ((EntityPlayer)placer).isCreative());
+		return this.getDefaultState().with(NATURAL, placer instanceof EntityPlayer && ((EntityPlayer)placer).isCreative());
 	}
 }

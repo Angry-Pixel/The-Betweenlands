@@ -37,7 +37,7 @@ public class EntityAIAvoidEntityGecko extends EntityAIGeckoHide {
 				return false;
 			}
 		} else {
-			List<Entity> list = gecko.world.getEntitiesWithinAABB(avoidingEntityClass, gecko.getEntityBoundingBox().grow(distance, 3.0D, distance), viableSelector);
+			List<Entity> list = gecko.world.getEntitiesWithinAABB(avoidingEntityClass, gecko.getBoundingBox().grow(distance, 3.0D, distance), viableSelector);
 			if (list.isEmpty()) {
 				return false;
 			}

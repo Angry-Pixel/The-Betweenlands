@@ -47,7 +47,7 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 
 		int checkHeight = 20;
 
-		this.bark = BlockRegistry.LOG_PORTAL.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
+		this.bark = BlockRegistry.LOG_PORTAL.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 		this.wood = BlockRegistry.WEEDWOOD.getDefaultState();
 		this.leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState();
 

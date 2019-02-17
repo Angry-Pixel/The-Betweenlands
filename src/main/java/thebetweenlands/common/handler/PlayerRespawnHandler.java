@@ -34,7 +34,7 @@ public class PlayerRespawnHandler {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
 			NBTTagCompound dataNbt = player.getEntityData();
-			NBTTagCompound persistentNbt = dataNbt.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+			NBTTagCompound persistentNbt = dataNbt.getCompound(EntityPlayer.PERSISTED_NBT_TAG);
 
 			BlockPos spawnPos = player.getBedLocation(player.dimension);
 
@@ -57,7 +57,7 @@ public class PlayerRespawnHandler {
 			BlockPos adjustedSpawnPos = spawnPos == null ? null : EntityPlayer.getBedSpawnLocation(event.player.world, spawnPos, event.player.isSpawnForced(event.player.dimension));
 
 			NBTTagCompound dataNbt = event.player.getEntityData();
-			NBTTagCompound persistentNbt = dataNbt.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+			NBTTagCompound persistentNbt = dataNbt.getCompound(EntityPlayer.PERSISTED_NBT_TAG);
 
 			boolean shouldTeleportToBL = (BetweenlandsConfig.WORLD_AND_DIMENSION.startInBetweenlands && event.isEndConquered()) || persistentNbt.getBoolean(RESPAWN_IN_BL_NBT);
 
@@ -95,7 +95,7 @@ public class PlayerRespawnHandler {
 				}
 
 				if(newRespawn) {
-					if(persistentNbt.hasKey(TeleporterBetweenlands.LAST_PORTAL_POS_NBT, Constants.NBT.TAG_LONG)) {
+					if(persistentNbt.contains(TeleporterBetweenlands.LAST_PORTAL_POS_NBT, Constants.NBT.TAG_LONG)) {
 						BlockPos lastPortal = BlockPos.fromLong(persistentNbt.getLong(TeleporterBetweenlands.LAST_PORTAL_POS_NBT));
 
 						respawnNearPos(event.player, lastPortal);
@@ -110,7 +110,7 @@ public class PlayerRespawnHandler {
 
 		entity.setLocationAndAngles(newSpawn.getX() + 0.5D, newSpawn.getY(), newSpawn.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
 
-		while (!entity.world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty() && entity.posY < 256.0D) {
+		while (!entity.world.getCollisionBoxes(entity, entity.getBoundingBox()).isEmpty() && entity.posY < 256.0D) {
 			entity.setPosition(entity.posX, entity.posY + 1.0D, entity.posZ);
 		}
 

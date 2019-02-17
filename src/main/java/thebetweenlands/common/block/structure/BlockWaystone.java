@@ -6,20 +6,20 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -37,7 +37,7 @@ import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class BlockWaystone extends BlockContainer {
-	public static final PropertyEnum<Part> PART = PropertyEnum.create("part", Part.class);
+	public static final EnumProperty<Part> PART = EnumProperty.create("part", Part.class);
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
 	public BlockWaystone() {
@@ -46,7 +46,7 @@ public class BlockWaystone extends BlockContainer {
 		this.setResistance(10000.0F);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setTickRandomly(true);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(PART, Part.BOTTOM).withProperty(ACTIVE, false));
+		this.setDefaultState(this.blockState.getBaseState().with(PART, Part.BOTTOM).with(ACTIVE, false));
 	}
 
 	@Override
@@ -56,12 +56,12 @@ public class BlockWaystone extends BlockContainer {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(PART).getMeta() | (state.getValue(ACTIVE) ? 0b100 : 0);
+		return state.get(PART).getMeta() | (state.get(ACTIVE) ? 0b100 : 0);
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(PART, Part.fromMeta(meta & 0b11)).withProperty(ACTIVE, (meta & 0b100) != 0);
+		return this.getDefaultState().with(PART, Part.fromMeta(meta & 0b11)).with(ACTIVE, (meta & 0b100) != 0);
 	}
 
 	@Override
@@ -79,8 +79,8 @@ public class BlockWaystone extends BlockContainer {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 
 		if(!worldIn.isRemote) {
-			IBlockState stateTop = this.getDefaultState().withProperty(PART, Part.TOP);
-			IBlockState stateMiddle = this.getDefaultState().withProperty(PART, Part.MIDDLE);
+			IBlockState stateTop = this.getDefaultState().with(PART, Part.TOP);
+			IBlockState stateMiddle = this.getDefaultState().with(PART, Part.MIDDLE);
 
 			worldIn.setBlockState(pos.up(2), stateTop, 3);
 			worldIn.setBlockState(pos.up(), stateMiddle, 3);
@@ -117,7 +117,7 @@ public class BlockWaystone extends BlockContainer {
 	}
 
 	public boolean isValidWaystone(World world, BlockPos pos, IBlockState state) {
-		switch(state.getValue(PART)) {
+		switch(state.get(PART)) {
 		case TOP: {
 			IBlockState down1 = world.getBlockState(pos.down());
 			IBlockState down2 = world.getBlockState(pos.down(2));
@@ -140,7 +140,7 @@ public class BlockWaystone extends BlockContainer {
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IWorldReader world, BlockPos pos, IBlockState state, int fortune) {
 		//Only drop once
-		if(state.getValue(PART) == Part.BOTTOM) {
+		if(state.get(PART) == Part.BOTTOM) {
 			super.getDrops(drops, world, pos, state, fortune);
 		}
 	}
@@ -180,18 +180,18 @@ public class BlockWaystone extends BlockContainer {
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
+	public int getItemsToDropCount(IBlockState state, int fortune, World worldIn, BlockPos pos, Random random) {
 		return 0;
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
 		return Items.AIR;
 	}
 
 	@Override
 	public int getLightValue(IBlockState state) {
-		return state.getValue(ACTIVE) ? 8 : 0;
+		return state.get(ACTIVE) ? 8 : 0;
 	}
 
 	@OnlyIn(Dist.CLIENT)

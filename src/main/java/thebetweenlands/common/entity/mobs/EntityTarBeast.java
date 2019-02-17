@@ -126,14 +126,14 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 					this.world.getBlockState(pos.setPos(bx+1, by, bz)).getBlock() == BlockRegistry.TAR &&
 					this.world.getBlockState(pos.setPos(bx, by, bz-1)).getBlock() == BlockRegistry.TAR &&
 					this.world.getBlockState(pos.setPos(bx, by, bz+1)).getBlock() == BlockRegistry.TAR;
-			return this.world.checkNoEntityCollision(this.getEntityBoundingBox()) && this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && isInTar;
+			return this.world.checkNoEntityCollision(this.getBoundingBox()) && this.world.getCollisionBoxes(this, this.getBoundingBox()).isEmpty() && isInTar;
 		}
 		return false;
 	}
 
 	@Override
 	public boolean isNotColliding() {
-		return this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+		return this.world.getCollisionBoxes(this, this.getBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getBoundingBox(), this);
 	}
 
 	@Override
@@ -158,13 +158,13 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("shedCooldown", this.shedCooldown);
-		nbt.setInteger("sheddingProgress", this.sheddingProgress);
+		nbt.setInt("shedCooldown", this.shedCooldown);
+		nbt.setInt("sheddingProgress", this.sheddingProgress);
 		nbt.setBoolean("sheddingState", this.isShedding());
 
-		nbt.setInteger("suckingCooldown", this.suckingCooldown);
-		nbt.setInteger("suckingPreparation", this.suckingPreparation);
-		nbt.setInteger("suckingProgress", this.suckingProgress);
+		nbt.setInt("suckingCooldown", this.suckingCooldown);
+		nbt.setInt("suckingPreparation", this.suckingPreparation);
+		nbt.setInt("suckingProgress", this.suckingProgress);
 		nbt.setByte("suckingState", this.getDataManager().get(SUCKING_STATE_DW));
 
 		super.writeEntityToNBT(nbt);
@@ -172,25 +172,25 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
-		if(nbt.hasKey("shedCooldown")) {
-			this.shedCooldown = nbt.getInteger("shedCooldown");
+		if(nbt.contains("shedCooldown")) {
+			this.shedCooldown = nbt.getInt("shedCooldown");
 		}
-		if(nbt.hasKey("sheddingProgress")) {
-			this.sheddingProgress = nbt.getInteger("sheddingProgress");
+		if(nbt.contains("sheddingProgress")) {
+			this.sheddingProgress = nbt.getInt("sheddingProgress");
 		}
-		if(nbt.hasKey("sheddingState")) {
+		if(nbt.contains("sheddingState")) {
 			this.getDataManager().set(SHEDDING_STATE_DW, nbt.getBoolean("sheddingState"));
 		}
-		if(nbt.hasKey("suckingCooldown")) {
-			this.suckingCooldown = nbt.getInteger("suckingCooldown");
+		if(nbt.contains("suckingCooldown")) {
+			this.suckingCooldown = nbt.getInt("suckingCooldown");
 		}
-		if(nbt.hasKey("suckingPreparation")) {
-			this.suckingPreparation = nbt.getInteger("suckingPreparation");
+		if(nbt.contains("suckingPreparation")) {
+			this.suckingPreparation = nbt.getInt("suckingPreparation");
 		}
-		if(nbt.hasKey("suckingProgress")) {
-			this.suckingProgress = nbt.getInteger("suckingProgress");
+		if(nbt.contains("suckingProgress")) {
+			this.suckingProgress = nbt.getInt("suckingProgress");
 		}
-		if(nbt.hasKey("suckingState")) {
+		if(nbt.contains("suckingState")) {
 			this.getDataManager().set(SUCKING_STATE_DW, nbt.getByte("suckingState"));
 		}
 
@@ -271,7 +271,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 					this.sheddingProgress = 0;
 					this.setShedding(false);
 					if(this.getAttackTarget() != null) {
-						List<EntityLivingBase> affectedEntities = (List<EntityLivingBase>)this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(6.0F, 6.0F, 6.0F));
+						List<EntityLivingBase> affectedEntities = (List<EntityLivingBase>)this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox().grow(6.0F, 6.0F, 6.0F));
 						for(EntityLivingBase e : affectedEntities) {
 							if(e == this || e.getDistance(this) > 6.0F || !e.canEntityBeSeen(this) || e instanceof EntityTarBeast) continue;
 							if(e instanceof EntityPlayer) {
@@ -321,7 +321,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				if(this.isSucking()) {
 					this.suckingProgress++;
 
-					List<Entity> affectedEntities = (List<Entity>)this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(10.0F, 10.0F, 10.0F));
+					List<Entity> affectedEntities = (List<Entity>)this.world.getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(10.0F, 10.0F, 10.0F));
 					for(Entity e : affectedEntities) {
 						if(e == this || e.getDistance(this) > 10.0F || !this.canEntityBeSeen(e) || e instanceof EntityTarBeast) continue;
 						Vec3d vec = new Vec3d(this.posX - e.posX, this.posY - e.posY, this.posZ - e.posZ);

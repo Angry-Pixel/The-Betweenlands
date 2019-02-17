@@ -13,11 +13,13 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
@@ -57,7 +59,7 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
 		this.setUnderwaterBlock(true);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(LEVEL, 0));
+		this.setDefaultState(this.blockState.getBaseState().with(LEVEL, 0));
 		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
 
@@ -216,9 +218,8 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	}
 
 	@Override
-	@Nullable
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return null;
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+		return Items.AIR;
 	}
 
 	@Override

@@ -168,7 +168,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	public void onCollideWithPlayer(EntityPlayer player) {
 		super.onCollideWithPlayer(player);
 		if (getSkin() == 4) {
-			if (!world.isRemote && !player.abilities.isCreativeMode && player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX && player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
+			if (!world.isRemote && !player.abilities.isCreativeMode && player.getBoundingBox().maxY >= getEntityBoundingBox().minY && player.getBoundingBox().minY <= getEntityBoundingBox().maxY && player.getBoundingBox().maxX >= getEntityBoundingBox().minX && player.getBoundingBox().minX <= getEntityBoundingBox().maxX && player.getBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
 				int duration = 0;
 				switch(world.getDifficulty()) {
 				default:
@@ -193,7 +193,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 
 	@Override
 	public boolean isNotColliding() {
-		return this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+		return this.world.getCollisionBoxes(this, this.getBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getBoundingBox(), this);
 	}
 
 	public int getSkin() {

@@ -9,14 +9,18 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.structure.BlockWaystone;
+import thebetweenlands.common.registries.TileEntityRegistry;
 import thebetweenlands.util.TileEntityHelper;
 
 public class TileEntityWaystone extends TileEntity {
 	private float rotation;
 
-	public TileEntityWaystone() { }
+	public TileEntityWaystone() {
+		super(TileEntityRegistry.WAYSTONE);
+	}
 
 	public TileEntityWaystone(float rotation) {
+		this();
 		this.rotation = rotation;
 	}
 
@@ -35,15 +39,15 @@ public class TileEntityWaystone extends TileEntity {
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
 		nbt.setFloat("rotation", this.rotation);
 		return nbt;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
 		this.rotation = nbt.getFloat("rotation");
 	}
 

@@ -41,7 +41,7 @@ public final class ItemAspectContainer extends AspectContainer {
 	 */
 	public static ItemAspectContainer fromItem(ItemStack stack, @Nullable AspectManager manager) {
 		ItemAspectContainer container = new ItemAspectContainer(manager, stack);
-		NBTTagCompound aspectNbt = stack.getTagCompound() != null ? stack.getTagCompound().getCompoundTag(ASPECTS_NBT_TAG) : null;
+		NBTTagCompound aspectNbt = stack.getTag() != null ? stack.getTag().getCompound(ASPECTS_NBT_TAG) : null;
 		if(aspectNbt != null)
 			container.read(aspectNbt);
 		return container;
@@ -55,7 +55,7 @@ public final class ItemAspectContainer extends AspectContainer {
 	 */
 	public static ItemAspectContainer fromItem(ItemStack stack) {
 		ItemAspectContainer container = new ItemAspectContainer(null, stack);
-		NBTTagCompound aspectNbt = stack.getTagCompound() != null ? stack.getTagCompound().getCompoundTag(ASPECTS_NBT_TAG) : null;
+		NBTTagCompound aspectNbt = stack.getTag() != null ? stack.getTag().getCompound(ASPECTS_NBT_TAG) : null;
 		if(aspectNbt != null)
 			container.read(aspectNbt);
 		return container;
@@ -63,7 +63,7 @@ public final class ItemAspectContainer extends AspectContainer {
 
 	@Override
 	protected void onChanged() {
-		NBTTagCompound nbt = this.itemStack.getTagCompound();
+		NBTTagCompound nbt = this.itemStack.getTag();
 		if(nbt == null)
 			this.itemStack.setTagCompound(nbt = new NBTTagCompound());
 		nbt.setTag(ASPECTS_NBT_TAG, this.save(new NBTTagCompound()));

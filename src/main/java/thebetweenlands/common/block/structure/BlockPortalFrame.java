@@ -7,7 +7,6 @@ import java.util.Locale;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
@@ -33,7 +33,7 @@ import thebetweenlands.common.registries.BlockRegistryOld.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistryOld.ISubtypeItemBlockModelDefinition;
 
 public class BlockPortalFrame extends BasicBlock implements ICustomItemBlock, ISubtypeItemBlockModelDefinition {
-	public static final PropertyEnum<EnumPortalFrame> FRAME_POSITION = PropertyEnum.create("frame_position", EnumPortalFrame.class);
+	public static final EnumProperty<EnumPortalFrame> FRAME_POSITION = EnumProperty.create("frame_position", EnumPortalFrame.class);
 	public static final BooleanProperty X_AXIS = BooleanProperty.create("x_axis");
 
 	public BlockPortalFrame() {
@@ -41,13 +41,13 @@ public class BlockPortalFrame extends BasicBlock implements ICustomItemBlock, IS
 		setHardness(2.0F);
 		setSoundType(SoundType.WOOD);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(this.blockState.getBaseState().withProperty(FRAME_POSITION, EnumPortalFrame.CORNER_TOP_LEFT).withProperty(X_AXIS, false));
+		setDefaultState(this.blockState.getBaseState().with(FRAME_POSITION, EnumPortalFrame.CORNER_TOP_LEFT).with(X_AXIS, false));
 	}
 
 	@Override
 	public List<ItemStack> getDrops(IWorldReader world, BlockPos pos, IBlockState state, int fortune) {
 		List<ItemStack> drops = new ArrayList<ItemStack>();
-		IBlockState dropBlock = BlockRegistry.LOG_PORTAL.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
+		IBlockState dropBlock = BlockRegistry.LOG_PORTAL.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 		drops.add(new ItemStack(Item.getItemFromBlock(dropBlock.getBlock()), 1, dropBlock.getBlock().getMetaFromState(dropBlock)));
 		return drops;
 	}
@@ -71,18 +71,18 @@ public class BlockPortalFrame extends BasicBlock implements ICustomItemBlock, IS
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FRAME_POSITION, EnumPortalFrame.values()[meta > 7 ? meta - 8 : meta]).withProperty(X_AXIS, meta > 7);
+		return getDefaultState().with(FRAME_POSITION, EnumPortalFrame.values()[meta > 7 ? meta - 8 : meta]).with(X_AXIS, meta > 7);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		EnumPortalFrame type = state.getValue(FRAME_POSITION);
-		return type.ordinal() + (state.getValue(X_AXIS) ? 8 : 0);
+		EnumPortalFrame type = state.get(FRAME_POSITION);
+		return type.ordinal() + (state.get(X_AXIS) ? 8 : 0);
 	}
 
 	@Override
 	protected ItemStack getSilkTouchDrop(IBlockState state) {
-		return super.getSilkTouchDrop(this.getDefaultState().withProperty(FRAME_POSITION, state.getValue(FRAME_POSITION))); //Remove facing
+		return super.getSilkTouchDrop(this.getDefaultState().with(FRAME_POSITION, state.get(FRAME_POSITION))); //Remove facing
 	}
 	
 	@Override
@@ -94,7 +94,7 @@ public class BlockPortalFrame extends BasicBlock implements ICustomItemBlock, IS
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
 		if (placer.getHorizontalFacing().getAxis() == EnumFacing.Axis.X)
-			worldIn.setBlockState(pos, state.withProperty(X_AXIS, true));
+			worldIn.setBlockState(pos, state.with(X_AXIS, true));
 	}
 
 	@Override

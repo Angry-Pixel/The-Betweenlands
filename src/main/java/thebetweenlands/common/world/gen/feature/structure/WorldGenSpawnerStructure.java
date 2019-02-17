@@ -73,11 +73,11 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 				world.setBlockState(new BlockPos(x + 4, yy, z + 4), BlockRegistry.BETWEENSTONE_BRICKS.getDefaultState(), 2);
 				world.setBlockState(new BlockPos(x, yy, z + 4), BlockRegistry.BETWEENSTONE_BRICKS.getDefaultState(), 2);
 				for (int xx = x + 1; xx < x + 4; xx++) {
-					world.setBlockState(new BlockPos(xx, yy, z), BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH), 2);
-					world.setBlockState(new BlockPos(xx, yy, z + 4), BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH), 2);
+					world.setBlockState(new BlockPos(xx, yy, z), BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState().with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH), 2);
+					world.setBlockState(new BlockPos(xx, yy, z + 4), BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState().with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH), 2);
 				}
 				for (int zz = z + 1; zz < z + 4; zz++) {
-					world.setBlockState(new BlockPos(x, yy, zz), BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST), 2);
+					world.setBlockState(new BlockPos(x, yy, zz), BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState().with(BlockStairsBetweenlands.FACING, EnumFacing.EAST), 2);
 					world.setBlockState(new BlockPos(x + 1, yy, zz), BlockRegistry.BETWEENSTONE_TILES.getDefaultState(), 2);
 					if (zz != z + 2)
 						world.setBlockState(new BlockPos(x + 2, yy, zz), BlockRegistry.BETWEENSTONE_TILES.getDefaultState(), 2);
@@ -90,7 +90,7 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 						}
 					}
 					world.setBlockState(new BlockPos(x + 3, yy, zz), BlockRegistry.BETWEENSTONE_TILES.getDefaultState(), 2);
-					world.setBlockState(new BlockPos(x + 4, yy, zz), BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST), 2);
+					world.setBlockState(new BlockPos(x + 4, yy, zz), BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState().with(BlockStairsBetweenlands.FACING, EnumFacing.WEST), 2);
 				}
 				int randomInt = random.nextInt(4);
 				TileEntity tile;

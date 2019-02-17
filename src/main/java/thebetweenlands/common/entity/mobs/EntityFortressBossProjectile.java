@@ -84,7 +84,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 			this.cachedOwner = null;
 		} else if(this.cachedOwner == null || !this.cachedOwner.isEntityAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
 			this.cachedOwner = null;
-			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
+			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
 					this.cachedOwner = entity;
 					break;
@@ -110,7 +110,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 			this.cachedThrower = null;
 		} else if(this.cachedThrower == null || !this.cachedThrower.isEntityAlive() || !this.cachedThrower.getUniqueID().equals(uuid)) {
 			this.cachedThrower = null;
-			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
+			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
 					this.cachedThrower = entity;
 					break;
@@ -222,14 +222,14 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 				}
 
 				Entity hitEntity = null;
-				List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(this.motionX, this.motionY, this.motionZ).grow(0.1D, 0.1D, 0.1D));
+				List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().grow(this.motionX, this.motionY, this.motionZ).grow(0.1D, 0.1D, 0.1D));
 				double minDist = 0.0D;
 
 				for (int i = 0; i < hitEntities.size(); ++i) {
 					Entity entity = (Entity)hitEntities.get(i);
 					if (entity.canBeCollidedWith() && entity != this.getThrower() && entity != this) {
 						float f = 0.1F;
-						AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().grow((double)f, (double)f, (double)f);
+						AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow((double)f, (double)f, (double)f);
 						RayTraceResult movingobjectposition1 = axisalignedbb.calculateIntercept(currentPos, nextPos);
 						if (movingobjectposition1 != null) {
 							double d1 = currentPos.distanceTo(movingobjectposition1.hitVec);
@@ -312,7 +312,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 		} else {
 			this.throwerUUID = null;
 		}
-		this.ticksInAir = nbt.getInteger("ticksInAir");
+		this.ticksInAir = nbt.getInt("ticksInAir");
 		this.canDismount = nbt.getBoolean("canDismount");
 		this.setDeflectable(nbt.getBoolean("deflectable"));
 	}
@@ -325,7 +325,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 		if(this.getThrowerUUID() != null) {
 			nbt.setUniqueId("thrower", this.getThrowerUUID());
 		}
-		nbt.setInteger("ticksInAir", this.ticksInAir);
+		nbt.setInt("ticksInAir", this.ticksInAir);
 		nbt.setBoolean("canDismount", this.canDismount);
 		nbt.setBoolean("deflectable", this.isDeflectable());
 	}

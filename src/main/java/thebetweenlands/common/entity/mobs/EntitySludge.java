@@ -102,7 +102,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		if(compound.hasKey("wasOnGround")) {
+		if(compound.contains("wasOnGround")) {
 			this.wasOnGround = compound.getBoolean("wasOnGround");
 		}
 	}
@@ -259,7 +259,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	}
 
 	protected boolean getIsPlayerNearby(double distanceX, double distanceY, double distanceZ, double radius) {
-		List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(distanceX, distanceY, distanceZ));
+		List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().grow(distanceX, distanceY, distanceZ));
 		for (Entity entityNeighbor : entities) {
 			if (entityNeighbor instanceof EntityPlayer && this.getDistance(entityNeighbor) <= radius && (!((EntityPlayer) entityNeighbor).abilities.isCreativeMode && !((EntityPlayer) entityNeighbor).isSpectator() && this.getEntitySenses().canSee(entityNeighbor)))
 				return true;
@@ -275,7 +275,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return Minecraft.getInstance().player.abilities.isCreativeMode || this.isActive() ? this.getEntityBoundingBox() : ZERO_AABB;
+		return Minecraft.getInstance().player.abilities.isCreativeMode || this.isActive() ? this.getBoundingBox() : ZERO_AABB;
 	}
 
 	@Override

@@ -3,15 +3,17 @@ package thebetweenlands.common.block.terrain;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.BlockStateContainer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -21,11 +23,11 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockDentrothyst extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeItemBlockModelDefinition {
-	public static final PropertyEnum<EnumDentrothyst> TYPE = PropertyEnum.create("type", EnumDentrothyst.class);
+	public static final EnumProperty<EnumDentrothyst> TYPE = EnumProperty.create("type", EnumDentrothyst.class);
 
 	public BlockDentrothyst(Material materialIn) {
 		super(materialIn);
-		setDefaultState(this.blockState.getBaseState().withProperty(TYPE, EnumDentrothyst.GREEN));
+		setDefaultState(this.blockState.getBaseState().with(TYPE, EnumDentrothyst.GREEN));
 	}
 
 	@Override
@@ -46,12 +48,12 @@ public class BlockDentrothyst extends BasicBlock implements BlockRegistry.ICusto
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(TYPE, meta == 0 ? EnumDentrothyst.GREEN : EnumDentrothyst.ORANGE);
+		return this.getDefaultState().with(TYPE, meta == 0 ? EnumDentrothyst.GREEN : EnumDentrothyst.ORANGE);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(TYPE).meta;
+		return state.get(TYPE).meta;
 	}
 
 	@Override
@@ -81,8 +83,8 @@ public class BlockDentrothyst extends BasicBlock implements BlockRegistry.ICusto
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return state.getValue(TYPE) == EnumDentrothyst.ORANGE ? ItemRegistry.DENTROTHYST_SHARD_ORANGE : ItemRegistry.DENTROTHYST_SHARD_GREEN;
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+		return state.get(TYPE) == EnumDentrothyst.ORANGE ? ItemRegistry.DENTROTHYST_SHARD_ORANGE : ItemRegistry.DENTROTHYST_SHARD_GREEN;
 	}
 
 	@Override

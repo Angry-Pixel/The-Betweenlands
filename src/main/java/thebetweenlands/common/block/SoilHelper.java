@@ -9,7 +9,7 @@ import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 public class SoilHelper {
 	public static boolean canSustainPlant(IBlockState state) {
 		return SurfaceType.GRASS.matches(state) || SurfaceType.DIRT.matches(state) || state.getBlock() instanceof BlockGenericDugSoil || state.getBlock() == BlockRegistry.MUD_BRICKS || state.getBlock() == BlockRegistry.GIANT_ROOT ||
-				(state.getBlock() == BlockRegistry.CRAGROCK && state.getValue(BlockCragrock.VARIANT) != BlockCragrock.EnumCragrockType.DEFAULT) || state.getBlock() == BlockRegistry.MUD_BRICK_SHINGLES || state.getBlock() == BlockRegistry.MUD_BRICK_SHINGLE_SLAB;
+				(state.getBlock() == BlockRegistry.CRAGROCK && state.get(BlockCragrock.VARIANT) != BlockCragrock.EnumCragrockType.DEFAULT) || state.getBlock() == BlockRegistry.MUD_BRICK_SHINGLES || state.getBlock() == BlockRegistry.MUD_BRICK_SHINGLE_SLAB;
 	}
 
 	public static boolean canSustainUnderwaterPlant(IBlockState state) {
@@ -17,6 +17,6 @@ public class SoilHelper {
 	}
 
 	public static boolean canSustainCrop(IBlockState state) {
-		return state.getBlock() instanceof BlockGenericDugSoil && (state.getValue(BlockGenericDugSoil.COMPOSTED) || state.getValue(BlockGenericDugSoil.DECAYED));
+		return state.getBlock() instanceof BlockGenericDugSoil && (state.get(BlockGenericDugSoil.COMPOSTED) || state.get(BlockGenericDugSoil.DECAYED));
 	}
 }

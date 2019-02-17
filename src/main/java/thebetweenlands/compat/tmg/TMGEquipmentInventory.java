@@ -66,7 +66,7 @@ public class TMGEquipmentInventory extends AbstractSpecialInventory {
             if (equipmentCapability != null) {
 
                 for (EnumEquipmentInventory type : equipmentInventories) {
-                    if (((NBTTagCompound) compound).hasKey(type.ordinal() + "")) {
+                    if (((NBTTagCompound) compound).contains(type.ordinal() + "")) {
                         NBTTagList tagList = (NBTTagList) ((NBTTagCompound) compound).getTag(type.ordinal() + "");
 
                         TransitionInventory graveItems = new TransitionInventory(tagList);
@@ -107,7 +107,7 @@ public class TMGEquipmentInventory extends AbstractSpecialInventory {
         if (compound instanceof NBTTagCompound) {
             EnumEquipmentInventory[] equipmentInventories = EnumEquipmentInventory.values();
             for (EnumEquipmentInventory type : equipmentInventories) {
-                if (((NBTTagCompound) compound).hasKey(type.ordinal() + "")) {
+                if (((NBTTagCompound) compound).contains(type.ordinal() + "")) {
                     NBTTagList tagList = (NBTTagList) ((NBTTagCompound) compound).getTag(type.ordinal() + "");
 
                     ret.addAll((new TransitionInventory(tagList)).getListOfNonEmptyItemStacks());

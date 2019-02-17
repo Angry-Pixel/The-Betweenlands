@@ -309,7 +309,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 			spit.setPosition(this.posX + facing.getXOffset() * (this.width / 2 + 0.1F), this.posY + this.height / 2.0F + facing.getYOffset() * (this.height / 2 + 0.1F), this.posZ + facing.getZOffset() * (this.width / 2 + 0.1F));
 
 			double dx = target.posX - spit.posX;
-			double dy = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - spit.posY;
+			double dy = target.getBoundingBox().minY + (double)(target.height / 3.0F) - spit.posY;
 			double dz = target.posZ - spit.posZ;
 			double dist = (double)MathHelper.sqrt(dx * dx + dz * dz);
 			spit.shoot(dx, dy + dist * 0.20000000298023224D, dz, 1, 1);

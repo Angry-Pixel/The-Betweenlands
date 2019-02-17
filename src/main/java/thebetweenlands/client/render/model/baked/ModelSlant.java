@@ -471,7 +471,7 @@ public class ModelSlant implements IModel {
 
 		@Override
 		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-			boolean upsidedown = state != null ? state.getValue(BlockSlanted.HALF) == EnumHalf.TOP : false;
+			boolean upsidedown = state != null ? state.get(BlockSlanted.HALF) == EnumHalf.TOP : false;
 			boolean cornerNW = false;
 			boolean cornerNE = false;
 			boolean cornerSE = false;
@@ -484,7 +484,7 @@ public class ModelSlant implements IModel {
 				cornerNE = extendedState.getValue(BlockSlanted.CORNER_NORTH_EAST);
 				cornerSE = extendedState.getValue(BlockSlanted.CORNER_SOUTH_EAST);
 				cornerSW = extendedState.getValue(BlockSlanted.CORNER_SOUTH_WEST);
-				slantDir = state.getValue(BlockSlanted.FACING);
+				slantDir = state.get(BlockSlanted.FACING);
 			} else {
 				cornerNW = true;
 				cornerNE = false;

@@ -811,7 +811,7 @@ public class DecorationHelper {
 					color = c;
 				}
 			}
-			return decorator.getWorld().setBlockState(pos, BlockRegistry.WISP.getDefaultState().withProperty(BlockWisp.COLOR, color));
+			return decorator.getWorld().setBlockState(pos, BlockRegistry.WISP.getDefaultState().with(BlockWisp.COLOR, color));
 		}
 		return false;
 	}

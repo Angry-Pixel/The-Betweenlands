@@ -17,18 +17,18 @@ public class BlockVenusFlyTrap extends BlockPlant {
 
 	public BlockVenusFlyTrap() {
 		super();
-		this.setDefaultState(this.blockState.getBaseState().withProperty(BLOOMING, false));
+		this.setDefaultState(this.blockState.getBaseState().with(BLOOMING, false));
 	}
 
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(worldIn, pos, state, rand);
 		if(rand.nextInt(300) == 0) {
-			if(!state.getValue(BLOOMING)) {
+			if(!state.get(BLOOMING)) {
 				if(rand.nextInt(3) == 0)
-					worldIn.setBlockState(pos, this.getDefaultState().withProperty(BLOOMING, true));
+					worldIn.setBlockState(pos, this.getDefaultState().with(BLOOMING, true));
 			} else {
-				worldIn.setBlockState(pos, this.getDefaultState().withProperty(BLOOMING, false));
+				worldIn.setBlockState(pos, this.getDefaultState().with(BLOOMING, false));
 			}
 		}
 	}
@@ -41,13 +41,13 @@ public class BlockVenusFlyTrap extends BlockPlant {
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		boolean blooming = meta == 1;
-		return this.getDefaultState().withProperty(BLOOMING, blooming);
+		return this.getDefaultState().with(BLOOMING, blooming);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
-		if(state.getValue(BLOOMING))
+		if(state.get(BLOOMING))
 			meta = 1;
 		return meta;
 	}

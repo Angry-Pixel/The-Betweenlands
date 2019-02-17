@@ -147,7 +147,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 
 		if(this.isEntityAlive()) {
 			if(this.spawnTicks >= 4) {
-				List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox());
+				List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox());
 				for(EntityLivingBase target : targets) {
 					if(target != this && target != this.getOwner() && target instanceof EntityMob || target instanceof IMob) {
 						target.setInWeb();
@@ -239,9 +239,9 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 		if(this.ownerUUID != null) {
 			nbt.setUniqueId("ownerUUID", this.ownerUUID);
 		}
-		nbt.setInteger("spawnTicks", this.spawnTicks);
-		nbt.setInteger("despawnTicks", this.despawnTicks);
-		nbt.setInteger("deathTicks", this.deathTicks);
+		nbt.setInt("spawnTicks", this.spawnTicks);
+		nbt.setInt("despawnTicks", this.despawnTicks);
+		nbt.setInt("deathTicks", this.deathTicks);
 	}
 
 	@Override
@@ -250,8 +250,8 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 		if(nbt.hasUniqueId("ownerUUID")) {
 			this.ownerUUID = nbt.getUniqueId("ownerUUID");
 		}
-		this.spawnTicks = nbt.getInteger("spawnTicks");
-		this.despawnTicks = nbt.getInteger("despawnTicks");
-		this.deathTicks = nbt.getInteger("deathTicks");
+		this.spawnTicks = nbt.getInt("spawnTicks");
+		this.despawnTicks = nbt.getInt("despawnTicks");
+		this.deathTicks = nbt.getInt("deathTicks");
 	}
 }

@@ -302,9 +302,9 @@ public abstract class MobSpawnerLogicBetweenlands {
                     ry = this.getSpawnerY() + ry / len * this.spawnRange;
                     rz = this.getSpawnerZ() + rz / len * this.spawnRange;
                     NBTTagCompound entityNbt = this.randomEntity.getNbt();
-                    NBTTagList posNbt = entityNbt.getTagList("Pos", 6);
+                    NBTTagList posNbt = entityNbt.getList("Pos", 6);
                     World world = this.getSpawnerWorld();
-                    int tags = posNbt.tagCount();
+                    int tags = posNbt.size();
                     rx = tags >= 1 ? posNbt.getDoubleAt(0) : rx;
                     ry = tags >= 2 ? posNbt.getDoubleAt(1) : ry;
                     rz = tags >= 3 ? posNbt.getDoubleAt(2) : rz;
@@ -329,7 +329,7 @@ public abstract class MobSpawnerLogicBetweenlands {
 
                     entity.setLocationAndAngles(rx, ry, rz, this.getSpawnerWorld().rand.nextFloat() * 360.0F, 0.0F);
 
-                    boolean canSpawn = this.canSpawnInAir() || entity.getEntityBoundingBox() == null;
+                    boolean canSpawn = this.canSpawnInAir() || entity.getBoundingBox() == null;
 
                     //Check if entity can stand on block below and set position
                     if (!canSpawn) {
@@ -339,7 +339,7 @@ public abstract class MobSpawnerLogicBetweenlands {
                             AxisAlignedBB boundingBox = blockState.getCollisionBoundingBox(this.getSpawnerWorld(), down);
                             if (boundingBox != null) {
                                 boundingBox = boundingBox.offset(down);
-                                AxisAlignedBB entityBoundingBox = entity.getEntityBoundingBox();
+                                AxisAlignedBB entityBoundingBox = entity.getBoundingBox();
                                 if (boundingBox.intersects(entityBoundingBox.minX, boundingBox.minY, entityBoundingBox.minZ, entityBoundingBox.maxX, boundingBox.maxY, entityBoundingBox.maxZ)) {
                                     RayTraceResult intercept = boundingBox.calculateIntercept(entity.getPositionVector(), entity.getPositionVector().add(0, -2, 0));
                                     if (intercept != null) {
@@ -425,39 +425,39 @@ public abstract class MobSpawnerLogicBetweenlands {
         this.broadcastEvent(1);
     }
 
-    public void readFromNBT(NBTTagCompound nbt) {
-        NBTTagCompound entityNbt = nbt.getCompoundTag("SpawnData");
-        if (!entityNbt.hasKey("id", 8)) {
+    public void read(NBTTagCompound nbt) {
+        NBTTagCompound entityNbt = nbt.getCompound("SpawnData");
+        if (!entityNbt.contains("id", 8)) {
             entityNbt.setString("id", "Pig");
         }
         this.setNextEntity(new WeightedSpawnerEntity(1, entityNbt));
         this.spawnDelay = nbt.getShort("Delay");
         this.entitySpawnList.clear();
-        if (nbt.hasKey("SpawnPotentials", 9)) {
-            NBTTagList nbttaglist = nbt.getTagList("SpawnPotentials", 10);
-            for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-                this.entitySpawnList.add(new WeightedSpawnerEntity(nbttaglist.getCompoundTagAt(i)));
+        if (nbt.contains("SpawnPotentials", 9)) {
+            NBTTagList nbttaglist = nbt.getList("SpawnPotentials", 10);
+            for (int i = 0; i < nbttaglist.size(); ++i) {
+                this.entitySpawnList.add(new WeightedSpawnerEntity(nbttaglist.getCompound(i)));
             }
         }
-        if (nbt.hasKey("MinSpawnDelay", 99)) {
+        if (nbt.contains("MinSpawnDelay", 99)) {
             this.minSpawnDelay = nbt.getShort("MinSpawnDelay");
             this.maxSpawnDelay = nbt.getShort("MaxSpawnDelay");
             this.spawnCount = nbt.getShort("SpawnCount");
         }
-        if (nbt.hasKey("MaxNearbyEntities", 99)) {
+        if (nbt.contains("MaxNearbyEntities", 99)) {
             this.maxNearbyEntities = nbt.getShort("MaxNearbyEntities");
             this.activatingRangeFromPlayer = nbt.getShort("RequiredPlayerRange");
         }
-        if (nbt.hasKey("SpawnRange", 99)) {
+        if (nbt.contains("SpawnRange", 99)) {
             this.spawnRange = nbt.getShort("SpawnRange");
         }
-        if (nbt.hasKey("CheckRange", 99)) {
+        if (nbt.contains("CheckRange", 99)) {
             this.checkRange = nbt.getDouble("CheckRange");
         }
-        if (nbt.hasKey("HasParticles")) {
+        if (nbt.contains("HasParticles")) {
             this.hasParticles = nbt.getBoolean("HasParticles");
         }
-        if (nbt.hasKey("SpawnInAir")) {
+        if (nbt.contains("SpawnInAir")) {
             this.spawnInAir = nbt.getBoolean("SpawnInAir");
         }
         if (this.getSpawnerWorld() != null && this.getSpawnerWorld().isRemote) {
@@ -469,10 +469,10 @@ public abstract class MobSpawnerLogicBetweenlands {
         nbt.setTag("SpawnData", this.randomEntity.getNbt().copy());
         NBTTagList entityNbtList = new NBTTagList();
         if (this.entitySpawnList.isEmpty()) {
-            entityNbtList.appendTag(this.randomEntity.toCompoundTag());
+            entityNbtList.add(this.randomEntity.toCompoundTag());
         } else {
             for (WeightedSpawnerEntity weightedspawnerentity : this.entitySpawnList) {
-                entityNbtList.appendTag(weightedspawnerentity.toCompoundTag());
+                entityNbtList.add(weightedspawnerentity.toCompoundTag());
             }
         }
         nbt.setTag("SpawnPotentials", entityNbtList);
@@ -506,7 +506,7 @@ public abstract class MobSpawnerLogicBetweenlands {
         if (this.cachedEntity == null) {
             this.cachedEntity = AnvilChunkLoader.readWorldEntity(this.randomEntity.getNbt(), this.getSpawnerWorld(), false);
 
-            if (this.randomEntity.getNbt().getSize() == 1 && this.randomEntity.getNbt().hasKey("id", 8) && this.cachedEntity instanceof EntityLiving) {
+            if (this.randomEntity.getNbt().getSize() == 1 && this.randomEntity.getNbt().contains("id", 8) && this.cachedEntity instanceof EntityLiving) {
                 ((EntityLiving) this.cachedEntity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(this.cachedEntity)), (IEntityLivingData) null);
             }
         }

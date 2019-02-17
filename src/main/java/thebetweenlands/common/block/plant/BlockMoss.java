@@ -14,12 +14,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -74,22 +76,22 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
+        return this.getDefaultState().with(FACING, EnumFacing.byIndex(meta));
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).getIndex();
+        return state.get(FACING).getIndex();
     }
 
     @Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
         if (this.canPlaceAt(world, pos, facing)) {
-            return this.getDefaultState().withProperty(FACING, facing);
+            return this.getDefaultState().with(FACING, facing);
         } else {
             for (EnumFacing enumfacing : EnumFacing.values()) {
                 if (world.isSideSolid(pos.offset(enumfacing.getOpposite()), enumfacing, true)) {
-                    return this.getDefaultState().withProperty(FACING, enumfacing);
+                    return this.getDefaultState().with(FACING, enumfacing);
                 }
             }
             return this.getDefaultState();
@@ -123,9 +125,8 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
     }
 
     @Override
-    @Nullable
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return null;
+    public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+        return Items.AIR;
     }
 
     @Override
@@ -156,7 +157,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         if (this.checkForDrop(worldIn, pos, state)) {
-            EnumFacing facing = (EnumFacing) state.getValue(FACING);
+            EnumFacing facing = (EnumFacing) state.get(FACING);
             EnumFacing.Axis axis = facing.getAxis();
             EnumFacing oppositeFacing = facing.getOpposite();
             boolean shouldDrop = false;
@@ -178,7 +179,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
     }
 
     protected boolean checkForDrop(World worldIn, BlockPos pos, IBlockState state) {
-        if (state.getBlock() == this && this.canPlaceAt(worldIn, pos, (EnumFacing) state.getValue(FACING))) {
+        if (state.getBlock() == this && this.canPlaceAt(worldIn, pos, (EnumFacing) state.get(FACING))) {
             return true;
         } else {
             if (worldIn.getBlockState(pos).getBlock() == this) {
@@ -191,12 +192,12 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
 
     @Override
     public IBlockState withRotation(IBlockState state, Rotation rot) {
-        return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
+        return state.with(FACING, rot.rotate((EnumFacing) state.get(FACING)));
     }
 
     @Override
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-        return state.withRotation(mirrorIn.toRotation((EnumFacing) state.getValue(FACING)));
+        return state.withRotation(mirrorIn.toRotation((EnumFacing) state.get(FACING)));
     }
 
     @Override
@@ -206,7 +207,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
-        switch ((EnumFacing) state.getValue(FACING)) {
+        switch ((EnumFacing) state.get(FACING)) {
             default:
             case EAST:
                 return MOSS_EAST_AABB;
@@ -296,7 +297,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
 						isInvalid = true;
 					}
 					if (!isInvalid) {
-						world.setBlockState(offsetPos, this.getDefaultState().withProperty(BlockMoss.FACING, facing));
+						world.setBlockState(offsetPos, this.getDefaultState().with(BlockMoss.FACING, facing));
 						break;
 					}
 				}

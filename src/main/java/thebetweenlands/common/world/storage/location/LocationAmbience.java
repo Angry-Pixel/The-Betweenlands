@@ -117,19 +117,19 @@ public class LocationAmbience {
 		if(type != EnumLocationAmbience.NONE) {
 			LocationAmbience ambience = new LocationAmbience(type);
 			ambience.setLocation(location);
-			if(nbt.hasKey("fogStart") && nbt.hasKey("fogEnd")) {
+			if(nbt.contains("fogStart") && nbt.contains("fogEnd")) {
 				ambience.setFogRange(nbt.getFloat("fogStart"), nbt.getFloat("fogEnd"));
 			}
-			if(nbt.hasKey("fogColor")) {
+			if(nbt.contains("fogColor")) {
 				ambience.setFogColor(nbt.getIntArray("fogColor"));
 			}
-			if(nbt.hasKey("fogBrightness")) {
-				ambience.setFogBrightness(nbt.getInteger("fogBrightness"));
+			if(nbt.contains("fogBrightness")) {
+				ambience.setFogBrightness(nbt.getInt("fogBrightness"));
 			}
-			if(nbt.hasKey("fogColorMultiplier")) {
+			if(nbt.contains("fogColorMultiplier")) {
 				ambience.setFogColorMultiplier(nbt.getFloat("fogColorMultiplier"));
 			}
-			if(nbt.hasKey("fogRangeMultiplier")) {
+			if(nbt.contains("fogRangeMultiplier")) {
 				ambience.setFogRangeMultiplier(nbt.getFloat("fogRangeMultiplier"));
 			}
 			return ambience;
@@ -147,7 +147,7 @@ public class LocationAmbience {
 			nbt.setIntArray("fogColor", this.fogColor);
 		}
 		if(this.hasFogBrightness()) {
-			nbt.setInteger("fogBrightness", this.fogBrightness);
+			nbt.setInt("fogBrightness", this.fogBrightness);
 		}
 		if(this.hasFogColorMultiplier()) {
 			nbt.setFloat("fogColorMultiplier", this.fogColorMultiplier);

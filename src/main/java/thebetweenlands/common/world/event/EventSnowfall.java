@@ -120,7 +120,7 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 								}
 								checkPos.release();
 								if (hasEnoughSnowAround) {
-									world.setBlockState(pos.up(), stateAbove.withProperty(BlockSnowBetweenlands.LAYERS, layers + 1));
+									world.setBlockState(pos.up(), stateAbove.with(BlockSnowBetweenlands.LAYERS, layers + 1));
 								}
 							}
 						}

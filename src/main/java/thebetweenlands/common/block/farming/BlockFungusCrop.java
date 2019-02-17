@@ -27,7 +27,7 @@ public class BlockFungusCrop extends BlockGenericCrop implements ICustomItemBloc
 		super.updateTick(worldIn, pos, state, rand);
 
 		if(this.isDecayed(worldIn, pos)) {
-			if(!worldIn.isRemote && state.getValue(AGE) >= 15 && rand.nextInt(6) == 0) {
+			if(!worldIn.isRemote && state.get(AGE) >= 15 && rand.nextInt(6) == 0) {
 				EntitySporeling sporeling = new EntitySporeling(worldIn);
 				sporeling.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, rand.nextFloat() * 360.0F, 0.0F);
 				worldIn.spawnEntity(sporeling);
@@ -49,7 +49,7 @@ public class BlockFungusCrop extends BlockGenericCrop implements ICustomItemBloc
 	@Override
 	public int getCropDrops(IWorldReader world, BlockPos pos, Random rand, int fortune) {
 		IBlockState state = world.getBlockState(pos);
-		if(state.getValue(AGE) >= 15) {
+		if(state.get(AGE) >= 15) {
 			return 1 + (fortune > 0 ? rand.nextInt(1 + fortune) : 0);
 		}
 		return 0;

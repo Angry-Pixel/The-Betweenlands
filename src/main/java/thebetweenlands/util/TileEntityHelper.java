@@ -85,7 +85,7 @@ public class TileEntityHelper {
 			if(extended) {
 				state = state.getBlock().getExtendedState(state, te.getWorld(), te.getPos());
 			}
-			return state.getValue(property);
+			return state.get(property);
 		}
 		return defaultVal;
 	}

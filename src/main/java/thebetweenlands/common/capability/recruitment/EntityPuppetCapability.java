@@ -62,7 +62,7 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 			this.puppeteer = null;
 		} else if(this.puppeteer == null || !this.puppeteer.isEntityAlive() || !this.puppeteer.getUniqueID().equals(this.puppeteerUUID)) {
 			this.puppeteer = null;
-			for(Entity entity : this.getEntity().getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntity().getEntityBoundingBox().grow(24.0D, 24.0D, 24.0D))) {
+			for(Entity entity : this.getEntity().getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntity().getBoundingBox().grow(24.0D, 24.0D, 24.0D))) {
 				if(entity.getUniqueID().equals(this.puppeteerUUID)) {
 					this.puppeteer = entity;
 					break;
@@ -84,7 +84,7 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("ticks", this.remainingTicks);
+		nbt.setInt("ticks", this.remainingTicks);
 		if(this.puppeteerUUID != null) {
 			nbt.setUniqueId("puppeteer", this.puppeteerUUID);
 		}
@@ -92,7 +92,7 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		this.remainingTicks = nbt.getInteger("ticks");
+		this.remainingTicks = nbt.getInt("ticks");
 		if(nbt.hasUniqueId("puppeteer")) {
 			this.puppeteerUUID = nbt.getUniqueId("puppeteer");
 		} else {

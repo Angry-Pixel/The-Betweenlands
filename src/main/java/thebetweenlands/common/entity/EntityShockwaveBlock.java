@@ -163,13 +163,13 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	@Override
 	@Nullable
 	public AxisAlignedBB getCollisionBox(Entity entityIn) {
-		return entityIn.getEntityBoundingBox();
+		return entityIn.getBoundingBox();
 	}
 
 	@Override
 	@Nullable
 	public AxisAlignedBB getCollisionBoundingBox() {
-		return this.getEntityBoundingBox();
+		return this.getBoundingBox();
 	}
 
 	@Override
@@ -215,27 +215,27 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound data) {
-		this.block = Block.getBlockById(data.getInteger("blockID"));
+		this.block = Block.getBlockById(data.getInt("blockID"));
 		if(this.block == null)
 			this.block = Blocks.STONE;
-		this.blockMeta = data.getInteger("blockMeta");
-		this.origin = new BlockPos(data.getInteger("originX"), data.getInteger("originY"), data.getInteger("originZ"));
+		this.blockMeta = data.getInt("blockMeta");
+		this.origin = new BlockPos(data.getInt("originX"), data.getInt("originY"), data.getInt("originZ"));
 		this.waveStartX = data.getDouble("waveStartX");
 		this.waveStartZ = data.getDouble("waveStartZ");
-		this.jumpDelay = data.getInteger("jumpDelay");
+		this.jumpDelay = data.getInt("jumpDelay");
 		setOwner(data.getString("ownerUUID"));
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound data) {
-		data.setInteger("blockID", Block.getIdFromBlock(this.block));
-		data.setInteger("blockMeta", this.blockMeta);
-		data.setInteger("originX", this.origin.getX());
-		data.setInteger("originY", this.origin.getY());
-		data.setInteger("originZ", this.origin.getZ());
+		data.setInt("blockID", Block.getIdFromBlock(this.block));
+		data.setInt("blockMeta", this.blockMeta);
+		data.setInt("originX", this.origin.getX());
+		data.setInt("originY", this.origin.getY());
+		data.setInt("originZ", this.origin.getZ());
 		data.setDouble("waveStartX", this.waveStartX);
 		data.setDouble("waveStartZ", this.waveStartZ);
-		data.setInteger("jumpDelay", this.jumpDelay);
+		data.setInt("jumpDelay", this.jumpDelay);
 		data.setString("ownerUUID", this.getOwnerUUID());
 	}
 }

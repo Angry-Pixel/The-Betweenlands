@@ -243,7 +243,7 @@ public class AspectManager {
 	 * @param aspectSeed
 	 */
 	public void loadAndPopulateStaticAspects(NBTTagCompound nbt, long aspectSeed) {
-		if(nbt != null && nbt.hasKey("entries")) {
+		if(nbt != null && nbt.contains("entries")) {
 			this.loadStaticAspects(nbt);
 			//System.out.println("Loaded aspects: ");
 			//int loaded = this.matchedAspects.size();
@@ -274,8 +274,8 @@ public class AspectManager {
 		this.matchedAspects.clear();
 		NBTTagList entryList = (NBTTagList) nbt.getTag("entries");
 		entryIT:
-			for(int i = 0; i < entryList.tagCount(); i++) {
-				NBTTagCompound entryCompound = entryList.getCompoundTagAt(i);
+			for(int i = 0; i < entryList.size(); i++) {
+				NBTTagCompound entryCompound = entryList.getCompound(i);
 				//System.out.println("Getting aspect item: " + entryCompound);
 				AspectItem itemEntry = readAspectItemFromNBT(entryCompound);
 				if(itemEntry == null) {
@@ -285,8 +285,8 @@ public class AspectManager {
 				//System.out.println("Getting aspect list for item: " + itemEntry);
 				NBTTagList aspectList = (NBTTagList) entryCompound.getTag("aspects");
 				List<Aspect> itemAspects = new ArrayList<Aspect>();
-				for(int c = 0; c < aspectList.tagCount(); c++) {
-					NBTTagCompound aspectCompound = aspectList.getCompoundTagAt(c);
+				for(int c = 0; c < aspectList.size(); c++) {
+					NBTTagCompound aspectCompound = aspectList.getCompound(c);
 					Aspect aspect = Aspect.readFromNBT(aspectCompound);
 					if(aspect == null) {
 						//System.out.println("Failed getting aspect");
@@ -311,10 +311,10 @@ public class AspectManager {
 			writeAspectItemToNbt(itemEntry, entryCompound);
 			NBTTagList aspectList = new NBTTagList();
 			for(Aspect aspect : itemAspects) {
-				aspectList.appendTag(aspect.writeToNBT(new NBTTagCompound()));
+				aspectList.add(aspect.writeToNBT(new NBTTagCompound()));
 			}
 			entryCompound.setTag("aspects", aspectList);
-			entryList.appendTag(entryCompound);
+			entryList.add(entryCompound);
 			//System.out.println("Saved item aspects: " + entryCompound);
 		}
 		nbt.setTag("entries", entryList);
@@ -337,7 +337,7 @@ public class AspectManager {
 	 */
 	@Nullable
 	public static AspectItem readAspectItemFromNBT(NBTTagCompound nbt) {
-		ItemStack item = nbt.hasKey("item") ? new ItemStack(nbt.getCompoundTag("item")) : null;
+		ItemStack item = nbt.contains("item") ? new ItemStack(nbt.getCompound("item")) : null;
 		if(item == null)
 			return null;
 		return AspectManager.getAspectItem(item);

@@ -23,7 +23,7 @@ import thebetweenlands.common.world.storage.location.LocationStorage;
 public class WorldGenMudStructures extends WorldGenHelper {
 	private static final IBlockState MUD_BRICKS = BlockRegistry.MUD_BRICKS.getDefaultState();
 	private static final IBlockState MUD_BRICK_SLAB = BlockRegistry.MUD_BRICK_SLAB.getDefaultState();
-	private static final IBlockState MUD_BRICK_SLAB_UPSIDE_DOWN = MUD_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.TOP);
+	private static final IBlockState MUD_BRICK_SLAB_UPSIDE_DOWN = MUD_BRICK_SLAB.with(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.TOP);
 	private static final IBlockState MUD_BRICK_STAIRS = BlockRegistry.MUD_BRICK_STAIRS.getDefaultState();
 	private static final IBlockState MUD_FLOWER_POT = BlockRegistry.MUD_FLOWER_POT.getDefaultState();
 	private static final IBlockState ROTTEN_BARK = BlockRegistry.LOG_ROTTEN_BARK.getDefaultState();

@@ -12,6 +12,7 @@ import net.minecraft.util.datafix.TypeReferences;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
+import net.minecraftforge.registries.ObjectHolder;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.tile.TileEntityAlembic;
@@ -48,7 +49,107 @@ import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.tile.spawner.TileEntityTarBeastSpawner;
 
+@ObjectHolder(ModInfo.ID)
 public class TileEntityRegistry {
+	@ObjectHolder("druid_altar")
+	public static final TileEntityType<TileEntityDruidAltar> DRUID_ALTAR = null;
+
+	@ObjectHolder("purifier")
+	public static final TileEntityType<TileEntityPurifier> PURIFIER = null;
+
+	@ObjectHolder("weedwood_workbench")
+	public static final TileEntityType<TileEntityWeedwoodWorkbench> WEEDWOOD_WORKBENCH = null;
+
+	@ObjectHolder("compost_bin")
+	public static final TileEntityType<TileEntityCompostBin> COMPOST_BIN = null;
+
+	@ObjectHolder("loot_pot")
+	public static final TileEntityType<TileEntityLootPot> LOOT_POT = null;
+
+	@ObjectHolder("mob_spawner")
+	public static final TileEntityType<TileEntityMobSpawnerBetweenlands> MOB_SPAWNER = null;
+
+	@ObjectHolder("wisp")
+	public static final TileEntityType<TileEntityWisp> WISP = null;
+
+	@ObjectHolder("sulfur_furnace")
+	public static final TileEntityType<TileEntityBLFurnace> SULFUR_FURNACE = null;
+
+	@ObjectHolder("sulfur_furnace_dual")
+	public static final TileEntityType<TileEntityBLDualFurnace> DUAL_SULFUR_FURNACE = null;
+
+	@ObjectHolder("betweenlands_chest")
+	public static final TileEntityType<TileEntityChestBetweenlands> WEEDWOOD_CHEST = null;
+
+	@ObjectHolder("rubber_tap")
+	public static final TileEntityType<TileEntityRubberTap> RUBBER_TAP = null;
+
+	@ObjectHolder("spike_trap")
+	public static final TileEntityType<TileEntitySpikeTrap> SPIKE_TRAP = null;
+
+	@ObjectHolder("possessed_block")
+	public static final TileEntityType<TileEntityPossessedBlock> POSSESSED_BLOCK = null;
+
+	@ObjectHolder("item_cage")
+	public static final TileEntityType<TileEntityItemCage> ITEM_CAGE = null;
+
+	@ObjectHolder("weedwood_sign")
+	public static final TileEntityType<TileEntityWeedwoodSign> SIGN = null;
+
+	@ObjectHolder("gecko_cage")
+	public static final TileEntityType<TileEntityGeckoCage> GECKO_CAGE = null;
+
+	@ObjectHolder("infuser")
+	public static final TileEntityType<TileEntityInfuser> INFUSER = null;
+
+	@ObjectHolder("mortar")
+	public static final TileEntityType<TileEntityMortar> MORTAR = null;
+
+	@ObjectHolder("animator")
+	public static final TileEntityType<TileEntityAnimator> ANIMATOR = null;
+
+	@ObjectHolder("alembic")
+	public static final TileEntityType<TileEntityAlembic> ALEMBIC = null;
+
+	@ObjectHolder("dug_soil")
+	public static final TileEntityType<TileEntityDugSoil> DUG_SOIL = null;
+
+	@ObjectHolder("item_shelf")
+	public static final TileEntityType<TileEntityItemShelf> ITEM_SHELF = null;
+
+	@ObjectHolder("tar_beast_spawner")
+	public static final TileEntityType<TileEntityTarBeastSpawner> TAR_BEAST_SPAWNER = null;
+
+	@ObjectHolder("tar_loot_pot_1")
+	public static final TileEntityType<TileEntityTarLootPot1> TAR_LOOT_POT_1 = null;
+
+	@ObjectHolder("tar_loot_pot_2")
+	public static final TileEntityType<TileEntityTarLootPot2> TAR_LOOT_POT_2 = null;
+
+	@ObjectHolder("tar_loot_pot_3")
+	public static final TileEntityType<TileEntityTarLootPot3> TAR_LOOT_POT_3 = null;
+
+	@ObjectHolder("syrmorite_hopper")
+	public static final TileEntityType<TileEntityHopperBetweenlands> SYRMORITE_HOPPER = null;
+
+	@ObjectHolder("moss_bed")
+	public static final TileEntityType<TileEntityMossBed> MOSS_BED = null;
+
+	@ObjectHolder("aspect_vial")
+	public static final TileEntityType<TileEntityAspectVial> ASPECT_VIAL = null;
+
+	@ObjectHolder("aspectrus_crop")
+	public static final TileEntityType<TileEntityAspectrusCrop> ASPECTRUS_CROP = null;
+
+	@ObjectHolder("repeller")
+	public static final TileEntityType<TileEntityRepeller> REPELLER = null;
+
+	@ObjectHolder("present")
+	public static final TileEntityType<TileEntityPresent> PRESENT = null;
+
+	@ObjectHolder("waystone")
+	public static final TileEntityType<TileEntityWaystone> WAYSTONE = null;
+
 	@SubscribeEvent
 	public static void register(RegistryEvent.Register<TileEntityType<?>> event) {
 		final IForgeRegistry<TileEntityType<?>> registry = event.getRegistry();

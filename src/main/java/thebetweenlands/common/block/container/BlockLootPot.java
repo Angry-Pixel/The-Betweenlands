@@ -8,8 +8,6 @@ import javax.annotation.Nullable;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -20,6 +18,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -29,6 +29,7 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.BlockStateContainer;
@@ -48,8 +49,8 @@ import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
 public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICustomItemBlock, ISubtypeItemBlockModelDefinition, IStateMappedBlock {
-	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	public static final PropertyEnum<EnumLootPot> VARIANT = PropertyEnum.create("type", EnumLootPot.class);
+	public static final DirectionProperty FACING = DirectionProperty.create("facing", EnumFacing.Plane.HORIZONTAL);
+	public static final EnumProperty<EnumLootPot> VARIANT = EnumProperty.create("type", EnumLootPot.class);
 
 	public BlockLootPot() {
 		this(Material.GLASS);
@@ -60,7 +61,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 		setHardness(0.4f);
 		setSoundType(SoundType.GLASS);
 		setHarvestLevel("pickaxe", 0);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(VARIANT, EnumLootPot.POT_1));
+		this.setDefaultState(this.blockState.getBaseState().with(FACING, EnumFacing.NORTH).with(VARIANT, EnumLootPot.POT_1));
 	}
 	
 	@Nullable
@@ -95,18 +96,18 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	}
 
 	@Override
-	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		return new ItemStack(this, 1, ((EnumLootPot) state.getValue(VARIANT)).getMetadata(EnumFacing.NORTH));
+	public ItemStack getItem(IBlockReader worldIn, BlockPos pos, IBlockState state) {
+		return new ItemStack(this, 1, ((EnumLootPot) state.get(VARIANT)).getMetadata(EnumFacing.NORTH));
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(VARIANT, EnumLootPot.byMetadata(meta)).withProperty(FACING, EnumFacing.byHorizontalIndex(meta & 3));
+		return this.getDefaultState().with(VARIANT, EnumLootPot.byMetadata(meta)).with(FACING, EnumFacing.byHorizontalIndex(meta & 3));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumLootPot) state.getValue(VARIANT)).getMetadata(state.getValue(FACING));
+		return ((EnumLootPot) state.get(VARIANT)).getMetadata(state.get(FACING));
 	}
 
 	@Override
@@ -115,15 +116,15 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
+	public int getItemsToDropCount(IBlockState state, int fortune, World worldIn, BlockPos pos, Random random) {
 		return 0;
 	}
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		int rotation = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		state = state.withProperty(FACING, EnumFacing.byHorizontalIndex(rotation));
-		state = state.withProperty(VARIANT, EnumLootPot.byMetadata(stack.getItemDamage()));
+		state = state.with(FACING, EnumFacing.byHorizontalIndex(rotation));
+		state = state.with(VARIANT, EnumLootPot.byMetadata(stack.getItemDamage()));
 		worldIn.setBlockState(pos, state, 3);
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile instanceof TileEntityLootPot) {

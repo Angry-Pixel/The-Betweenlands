@@ -149,7 +149,7 @@ public class ElixirCommonHandler {
         }
 
         if(ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.isActive(entityLivingBase) && !entityLivingBase.isInWater()) {
-            IBlockState state = entityLivingBase.world.getBlockState(new BlockPos(entityLivingBase.posX, entityLivingBase.getEntityBoundingBox().minY + Math.min(-0.1D, entityLivingBase.motionY), entityLivingBase.posZ));
+            IBlockState state = entityLivingBase.world.getBlockState(new BlockPos(entityLivingBase.posX, entityLivingBase.getBoundingBox().minY + Math.min(-0.1D, entityLivingBase.motionY), entityLivingBase.posZ));
             if(state.getMaterial().isLiquid()) {
                 float relStrength = Math.min((ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.getStrength(entityLivingBase)) / 4.0F, 1.0F);
                 entityLivingBase.motionX *= 0.1F + relStrength * 0.9F;
@@ -254,7 +254,7 @@ public class ElixirCommonHandler {
         return spottingRange;
     }
     private boolean isEntityOnWall(EntityLivingBase entity) {
-        AxisAlignedBB bb = entity.getEntityBoundingBox().grow(0.05D, 0.05D, 0.05D);
+        AxisAlignedBB bb = entity.getBoundingBox().grow(0.05D, 0.05D, 0.05D);
         int mX = MathHelper.floor(bb.minX);
         int mY = MathHelper.floor(bb.minY + 0.06D);
         int mZ = MathHelper.floor(bb.minZ);

@@ -123,14 +123,14 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setInteger("despawnTicks", this.despawnTicks);
+		nbt.setInt("despawnTicks", this.despawnTicks);
 		return nbt;
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		this.despawnTicks = nbt.getInteger("despawnTicks");
+		this.despawnTicks = nbt.getInt("despawnTicks");
 	}
 
 	@Override
@@ -151,7 +151,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 					for(int i = 0; i < 8; i++) {
 						this.playSound(SoundRegistry.TAR_BEAST_STEP, 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 					}
-					List<EntityCreature> affectedEntities = (List<EntityCreature>)this.world.getEntitiesWithinAABB(EntityCreature.class, this.getEntityBoundingBox().grow(5.25F, 5.25F, 5.25F));
+					List<EntityCreature> affectedEntities = (List<EntityCreature>)this.world.getEntitiesWithinAABB(EntityCreature.class, this.getBoundingBox().grow(5.25F, 5.25F, 5.25F));
 					for(EntityCreature e : affectedEntities) {
 						if(e == this || e.getDistance(this) > 5.25F || !e.canEntityBeSeen(this) || e instanceof EntityTarminion) continue;
 						double dst = e.getDistance(this);

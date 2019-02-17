@@ -14,12 +14,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.aspect.Aspect;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityAspectrusCrop extends TileEntity implements ITickable {
 	protected Aspect seedAspect = null;
 
 	public int glowTicks = 0;
 
+	public TileEntityAspectrusCrop() {
+		super(TileEntityRegistry.ASPECTRUS_CROP);
+	}
+	
 	public void setAspect(@Nullable Aspect aspect) {
 		this.seedAspect = aspect;
 		IBlockState state = this.world.getBlockState(this.pos);
@@ -51,8 +56,8 @@ public class TileEntityAspectrusCrop extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
 		if(this.seedAspect != null) {
 			this.seedAspect.writeToNBT(nbt);
 		}
@@ -60,8 +65,8 @@ public class TileEntityAspectrusCrop extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
 		this.seedAspect = Aspect.readFromNBT(nbt);
 	}
 
@@ -96,7 +101,7 @@ public class TileEntityAspectrusCrop extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 		this.glowTicks++;
 	}
 }

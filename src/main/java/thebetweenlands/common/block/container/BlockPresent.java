@@ -8,7 +8,6 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,6 +16,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -35,7 +35,7 @@ import thebetweenlands.common.tile.TileEntityLootInventory;
 import thebetweenlands.common.tile.TileEntityPresent;
 
 public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITintedBlock {
-	public static final PropertyEnum<EnumDyeColor> COLOR = PropertyEnum.<EnumDyeColor>create("color", EnumDyeColor.class);
+	public static final EnumProperty<EnumDyeColor> COLOR = EnumProperty.<EnumDyeColor>create("color", EnumDyeColor.class);
 
 	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.06D, 0, 0.06D, 0.94D, 0.82D, 0.94D);
 
@@ -43,7 +43,7 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 		super(Material.CLOTH);
 		this.setHardness(0.8f);
 		this.setSoundType(SoundType.CLOTH);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumDyeColor.RED));
+		this.setDefaultState(this.blockState.getBaseState().with(COLOR, EnumDyeColor.RED));
 		this.setTickRandomly(true);
 		this.setCreativeTab(null);
 	}
@@ -83,14 +83,14 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
+	public int getItemsToDropCount(IBlockState state, int fortune, World worldIn, BlockPos pos, Random random) {
 		return 0;
 	}
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		if(!worldIn.isRemote) {
-			state = state.withProperty(COLOR, EnumDyeColor.values()[worldIn.rand.nextInt(EnumDyeColor.values().length)]);
+			state = state.with(COLOR, EnumDyeColor.values()[worldIn.rand.nextInt(EnumDyeColor.values().length)]);
 			worldIn.setBlockState(pos, state, 3);
 			TileEntityPresent tile = getTileEntity(worldIn, pos);
 			if (tile != null) {
@@ -120,17 +120,17 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 
 	@Override
 	public MapColor getMapColor(IBlockState state, IWorldReader worldIn, BlockPos pos) {
-		return MapColor.getBlockColor((EnumDyeColor)state.getValue(COLOR));
+		return MapColor.getBlockColor((EnumDyeColor)state.get(COLOR));
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(COLOR, EnumDyeColor.byMetadata(meta));
+		return this.getDefaultState().with(COLOR, EnumDyeColor.byMetadata(meta));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumDyeColor)state.getValue(COLOR)).getMetadata();
+		return ((EnumDyeColor)state.get(COLOR)).getMetadata();
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 	@Override
 	public int getColorMultiplier(IBlockState state, IWorldReader worldIn, BlockPos pos, int tintIndex) {
 		if(tintIndex == 0) {
-			return state.getValue(COLOR).getColorValue();
+			return state.get(COLOR).getColorValue();
 		}
 		return 0xFFFFFF;
 	}

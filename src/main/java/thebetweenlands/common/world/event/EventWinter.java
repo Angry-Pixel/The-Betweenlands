@@ -127,7 +127,7 @@ public class EventWinter extends SeasonalEnvironmentEvent {
 						if(world.isSideSolid(pos, EnumFacing.UP)) {
 							IBlockState stateAbove = world.getBlockState(pos.up());
 							if(stateAbove.getBlock() == Blocks.AIR || (stateAbove.getBlock() instanceof BlockSnowBetweenlands && stateAbove.getValue(BlockSnowBetweenlands.LAYERS) <= 5)) {
-								world.setBlockState(pos.up(), BlockRegistry.PRESENT.getDefaultState().withProperty(BlockPresent.COLOR, EnumDyeColor.values()[world.rand.nextInt(EnumDyeColor.values().length)]));
+								world.setBlockState(pos.up(), BlockRegistry.PRESENT.getDefaultState().with(BlockPresent.COLOR, EnumDyeColor.values()[world.rand.nextInt(EnumDyeColor.values().length)]));
 								TileEntityPresent tile = BlockPresent.getTileEntity(world, pos.up());
 								if (tile != null) {
 									tile.setLootTable(LootTableRegistry.PRESENT, world.rand.nextLong());

@@ -61,7 +61,7 @@ public class BlockAlgae extends BlockPlant implements IConnectedTextureBlock {
 		if (pos.getY() >= 0 && pos.getY() < 256) {
 			IBlockState iblockstate = worldIn.getBlockState(pos.down());
 			Material material = iblockstate.getMaterial();
-			return material == Material.WATER && ((Integer)iblockstate.getValue(BlockLiquid.LEVEL)).intValue() == 0;
+			return material == Material.WATER && ((Integer)iblockstate.get(BlockLiquid.LEVEL)).intValue() == 0;
 		} else {
 			return false;
 		}

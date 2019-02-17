@@ -30,7 +30,7 @@ public final class TeleporterHandler {
 			
 			MinecraftServer server = world.getMinecraftServer();
 			WorldServer toWorld = server.getWorld(dimensionId);
-			AxisAlignedBB aabb = entity.getEntityBoundingBox();
+			AxisAlignedBB aabb = entity.getBoundingBox();
 			aabb = new AxisAlignedBB(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ);
 			if (entity instanceof EntityPlayerMP) {
 				EntityPlayerMP player = (EntityPlayerMP) entity;

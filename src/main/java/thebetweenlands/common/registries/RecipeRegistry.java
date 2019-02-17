@@ -507,8 +507,8 @@ public class RecipeRegistry {
 			@Override
 			public ItemStack getOutput(ItemStack input) {
 				ItemStack output = input.copy();
-				NBTTagCompound compound = output.getTagCompound();
-				NBTTagCompound attrs = compound.getCompoundTag("attributes");
+				NBTTagCompound compound = output.getTag();
+				NBTTagCompound attrs = compound.getCompound("attributes");
 				attrs.removeTag("isTarred");
 				if (attrs.isEmpty()) {
 					compound.removeTag("attributes");

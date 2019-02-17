@@ -8,10 +8,10 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
@@ -80,7 +80,7 @@ public class BlockSludge extends Block {
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rnd, int fortune) {
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
 		return ItemRegistry.SLUDGE_BALL;
 	}
 

@@ -98,15 +98,15 @@ public class LocationSpiritTree extends LocationGuarded {
 	protected void saveBlockList(NBTTagCompound nbt, String name, List<BlockPos> blocks) {
 		NBTTagList blockList = new NBTTagList();
 		for(BlockPos pos : blocks) {
-			blockList.appendTag(new NBTTagLong(pos.toLong()));
+			blockList.add(new NBTTagLong(pos.toLong()));
 		}
 		nbt.setTag(name, blockList);
 	}
 
 	protected void readBlockList(NBTTagCompound nbt, String name, List<BlockPos> blocks) {
 		blocks.clear();
-		NBTTagList blockList = nbt.getTagList(name, Constants.NBT.TAG_LONG);
-		for(int i = 0; i < blockList.tagCount(); i++) {
+		NBTTagList blockList = nbt.getList(name, Constants.NBT.TAG_LONG);
+		for(int i = 0; i < blockList.size(); i++) {
 			NBTTagLong posNbt = (NBTTagLong) blockList.get(i);
 			blocks.add(BlockPos.fromLong(posNbt.getLong()));
 		}

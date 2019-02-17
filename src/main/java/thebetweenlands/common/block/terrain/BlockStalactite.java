@@ -1,16 +1,16 @@
 package thebetweenlands.common.block.terrain;
 
-import java.util.Random;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.BlockStateContainer;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -86,12 +86,12 @@ public class BlockStalactite extends BasicBlock {
 			break;
 		}
 
-		return state.withProperty(POS_X, pos.getX()).withProperty(POS_Y, pos.getY()).withProperty(POS_Z, pos.getZ()).withProperty(DIST_UP, distUp).withProperty(DIST_DOWN, distDown).withProperty(NO_TOP, noTop).withProperty(NO_BOTTOM, noBottom);
+		return state.with(POS_X, pos.getX()).with(POS_Y, pos.getY()).with(POS_Z, pos.getZ()).with(DIST_UP, distUp).with(DIST_DOWN, distDown).with(NO_TOP, noTop).with(NO_BOTTOM, noBottom);
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return null;
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+		return Items.AIR;
 	}
 	
 	@Override

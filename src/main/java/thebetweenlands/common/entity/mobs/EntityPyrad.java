@@ -176,7 +176,7 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
-		if(nbt.hasKey("active")) {
+		if(nbt.contains("active")) {
 			this.setActive(nbt.getBoolean("active"));
 		}
 
@@ -284,13 +284,13 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 	@Override
 	@Nullable
 	public AxisAlignedBB getCollisionBox(Entity entity) {
-		return !this.isActive() && this.activeTicks == 0 ? entity.getEntityBoundingBox() : super.getCollisionBox(entity);
+		return !this.isActive() && this.activeTicks == 0 ? entity.getBoundingBox() : super.getCollisionBox(entity);
 	}
 
 	@Override
 	@Nullable
 	public AxisAlignedBB getCollisionBoundingBox() {
-		return !this.isActive() && this.activeTicks == 0 ? this.getEntityBoundingBox() : super.getCollisionBoundingBox();
+		return !this.isActive() && this.activeTicks == 0 ? this.getBoundingBox() : super.getCollisionBoundingBox();
 	}
 
 	@Override
@@ -445,7 +445,7 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 				this.pyrad.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, 1.0D);
 			} else if (distSq < 256.0D) {
 				double dx = target.posX - this.pyrad.posX;
-				double dy = target.getEntityBoundingBox().minY + (double)(target.height / 2.0F) - (this.pyrad.posY + (double)(this.pyrad.height / 2.0F));
+				double dy = target.getBoundingBox().minY + (double)(target.height / 2.0F) - (this.pyrad.posY + (double)(this.pyrad.height / 2.0F));
 				double dz = target.posZ - this.pyrad.posZ;
 
 				if (this.attackTime <= 0) {

@@ -247,18 +247,18 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 		super.writeEntityToNBT(nbttagcompound);
-		nbttagcompound.setInteger("bloodLevel", getBloodConsumed());
-		nbttagcompound.setInteger("fleeingTick", fleeingTick);
+		nbttagcompound.setInt("bloodLevel", getBloodConsumed());
+		nbttagcompound.setInt("fleeingTick", fleeingTick);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 		super.readEntityFromNBT(nbttagcompound);
-		if(nbttagcompound.hasKey("bloodLevel")) {
-			setBloodConsumed(nbttagcompound.getInteger("bloodLevel"));
+		if(nbttagcompound.contains("bloodLevel")) {
+			setBloodConsumed(nbttagcompound.getInt("bloodLevel"));
 		}
-		if(nbttagcompound.hasKey("fleeingTick")) {
-			fleeingTick = nbttagcompound.getInteger("fleeingTick");
+		if(nbttagcompound.contains("fleeingTick")) {
+			fleeingTick = nbttagcompound.getInt("fleeingTick");
 		}
 	}
 

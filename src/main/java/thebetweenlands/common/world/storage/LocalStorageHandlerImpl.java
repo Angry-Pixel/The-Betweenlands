@@ -327,7 +327,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		ResourceLocation type = new ResourceLocation(nbt.getString("type"));
 		StorageID id = StorageID.readFromNBT(nbt);
 		ILocalStorage storage = this.createLocalStorage(type, id, region);
-		storage.readFromNBT(nbt.getCompoundTag("data"));
+		storage.readFromNBT(nbt.getCompound("data"));
 		return storage;
 	}
 

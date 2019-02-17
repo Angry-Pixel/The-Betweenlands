@@ -46,8 +46,8 @@ public class AspectContainer {
 		 * @return
 		 */
 		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-			nbt.setInteger("dynamic", this.dynamicAmount);
-			nbt.setInteger("storedStatic", this.storedStaticAmount);
+			nbt.setInt("dynamic", this.dynamicAmount);
+			nbt.setInt("storedStatic", this.storedStaticAmount);
 			nbt.setBoolean("hasStoredStatic", this.hasStoredStaticAmount);
 			return nbt;
 		}
@@ -58,8 +58,8 @@ public class AspectContainer {
 		 * @return
 		 */
 		public Storage readFromNBT(NBTTagCompound nbt) {
-			this.dynamicAmount = nbt.getInteger("dynamic");
-			this.storedStaticAmount = nbt.getInteger("storedStatic");
+			this.dynamicAmount = nbt.getInt("dynamic");
+			this.storedStaticAmount = nbt.getInt("storedStatic");
 			this.hasStoredStaticAmount = nbt.getBoolean("hasStoredStatic");
 			return this;
 		}
@@ -278,7 +278,7 @@ public class AspectContainer {
 			storageNbt.setTag("aspect", type.writeToNBT(new NBTTagCompound()));
 			storageNbt.setTag("storage", storage.writeToNBT(new NBTTagCompound()));
 
-			typesList.appendTag(storageNbt);
+			typesList.add(storageNbt);
 		}
 		nbt.setTag("container", typesList);
 		return nbt;
@@ -291,14 +291,14 @@ public class AspectContainer {
 	 * @return
 	 */
 	public AspectContainer read(NBTTagCompound nbt) {
-		NBTTagList typesList = nbt.getTagList("container", Constants.NBT.TAG_COMPOUND);
-		for(int i = 0; i < typesList.tagCount(); i++) {
-			NBTTagCompound storageNbt = typesList.getCompoundTagAt(i);
-			IAspectType type = IAspectType.readFromNBT(storageNbt.getCompoundTag("aspect"));
+		NBTTagList typesList = nbt.getList("container", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < typesList.size(); i++) {
+			NBTTagCompound storageNbt = typesList.getCompound(i);
+			IAspectType type = IAspectType.readFromNBT(storageNbt.getCompound("aspect"));
 			if(type == null)
 				continue;
 			Storage storage = this.getStorage(type);
-			storage.readFromNBT(storageNbt.getCompoundTag("storage"));
+			storage.readFromNBT(storageNbt.getCompound("storage"));
 		}
 		return this;
 	}

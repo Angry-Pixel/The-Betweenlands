@@ -15,6 +15,7 @@ import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityMortar extends TileEntityBasicInventory implements ITickable {
 
@@ -28,12 +29,11 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
     public boolean countUp = true;
 
     public TileEntityMortar() {
-        super(4, "pestleAndMortar");
+        super(TileEntityRegistry.MORTAR, 4, "pestleAndMortar");
     }
 
-
     @Override
-    public void update() {
+    public void tick() {
         if (world.isRemote) {
             if (hasCrystal) {
                 crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
@@ -69,8 +69,8 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
                         world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
                         world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
                     }
-                    if (!inventory.get(1).isEmpty() && !getStackInSlot(1).getTagCompound().getBoolean("active"))
-                        getStackInSlot(1).getTagCompound().setBoolean("active", true);
+                    if (!inventory.get(1).isEmpty() && !getStackInSlot(1).getTag().getBoolean("active"))
+                        getStackInSlot(1).getTag().setBoolean("active", true);
                     if (progress > 84) {
                         if (!inventory.get(0).isEmpty())
                             if (inventory.get(0).getCount() - 1 <= 0)
@@ -90,8 +90,8 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
                             inventory.set(1, ItemStack.EMPTY);
                             hasPestle = false;
                         }
-                        if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTagCompound().getBoolean("active"))
-                            getStackInSlot(1).getTagCompound().setBoolean("active", false);
+                        if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTag().getBoolean("active"))
+                            getStackInSlot(1).getTag().setBoolean("active", false);
                         markDirty();
                     }
                 }
@@ -107,14 +107,14 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
             world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
         }
         if (getStackInSlot(0).isEmpty() || getStackInSlot(1).isEmpty() || outputIsFull()) {
-            if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTagCompound().getBoolean("active"))
-                getStackInSlot(1).getTagCompound().setBoolean("active", false);
+            if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTag().getBoolean("active"))
+                getStackInSlot(1).getTag().setBoolean("active", false);
             progress = 0;
             markDirty();
         }
         if (getStackInSlot(3).isEmpty() && progress > 0 && !manualGrinding) {
-            if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTagCompound().getBoolean("active"))
-                getStackInSlot(1).getTagCompound().setBoolean("active", false);
+            if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTag().getBoolean("active"))
+                getStackInSlot(1).getTag().setBoolean("active", false);
             progress = 0;
             markDirty();
         }
@@ -152,9 +152,9 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
-        nbt.setInteger("progress", progress);
+    public NBTTagCompound write(NBTTagCompound nbt) {
+        super.write(nbt);
+        nbt.setInt("progress", progress);
         nbt.setBoolean("hasPestle", hasPestle);
         nbt.setBoolean("hasCrystal", hasCrystal);
         nbt.setBoolean("manualGrinding", manualGrinding);
@@ -162,9 +162,9 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        progress = nbt.getInteger("progress");
+    public void read(NBTTagCompound nbt) {
+        super.read(nbt);
+        progress = nbt.getInt("progress");
         hasPestle = nbt.getBoolean("hasPestle");
         hasCrystal = nbt.getBoolean("hasCrystal");
         manualGrinding = nbt.getBoolean("manualGrinding");
@@ -174,7 +174,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setInteger("progress", progress);
+        nbt.setInt("progress", progress);
         nbt.setBoolean("hasPestle", hasPestle);
         nbt.setBoolean("hasCrystal", hasCrystal);
         nbt.setBoolean("manualGrinding", manualGrinding);
@@ -184,7 +184,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        progress = packet.getNbtCompound().getInteger("progress");
+        progress = packet.getNbtCompound().getInt("progress");
         hasPestle = packet.getNbtCompound().getBoolean("hasPestle");
         hasCrystal = packet.getNbtCompound().getBoolean("hasCrystal");
         manualGrinding = packet.getNbtCompound().getBoolean("manualGrinding");

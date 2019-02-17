@@ -24,12 +24,12 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 		int height = rand.nextInt(5) + 15;
 		int maxRadius = 9;
 
-		this.logX = BlockRegistry.LOG_WEEDWOOD.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X);
-		this.logY = BlockRegistry.LOG_WEEDWOOD.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Y);
-		this.logZ = BlockRegistry.LOG_WEEDWOOD.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Z);
-		this.bark = BlockRegistry.LOG_WEEDWOOD.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
+		this.logX = BlockRegistry.LOG_WEEDWOOD.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X);
+		this.logY = BlockRegistry.LOG_WEEDWOOD.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Y);
+		this.logZ = BlockRegistry.LOG_WEEDWOOD.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Z);
+		this.bark = BlockRegistry.LOG_WEEDWOOD.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 		this.wood = BlockRegistry.WEEDWOOD.getDefaultState();
-		this.leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
+		this.leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState().with(BlockLeavesBetweenlands.CHECK_DECAY, false);
 		this.ivy = BlockRegistry.POISON_IVY.getDefaultState();
 
 		if (!world.isAreaLoaded(pos, maxRadius))
@@ -303,7 +303,7 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 			int length = rand.nextInt(4) + 4;
 			for (int yy = 0; yy < length; ++yy)
 				if (world.isAirBlock(pos.down(yy)))
-					world.setBlockState(pos.down(yy), ivy.withProperty(BlockVineBL.getPropertyFor(facing.getOpposite()), Boolean.valueOf(true)), 2);
+					world.setBlockState(pos.down(yy), ivy.with(BlockVineBL.getPropertyFor(facing.getOpposite()), Boolean.valueOf(true)), 2);
 				else
 					break;
 		}

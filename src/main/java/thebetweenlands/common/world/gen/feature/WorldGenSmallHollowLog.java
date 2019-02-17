@@ -24,9 +24,9 @@ public class WorldGenSmallHollowLog extends WorldGenerator {
 		for (int a = 0; a < len; a++) {
 			IBlockState state = BlockRegistry.HOLLOW_LOG.getDefaultState();
 			if(offsetX != 0)
-				state = state.withProperty(BlockHollowLog.FACING, EnumFacing.EAST);
+				state = state.with(BlockHollowLog.FACING, EnumFacing.EAST);
 			else if(offsetZ != 0)
-				state = state.withProperty(BlockHollowLog.FACING, EnumFacing.SOUTH);
+				state = state.with(BlockHollowLog.FACING, EnumFacing.SOUTH);
 			this.setBlockAndNotifyAdequately(world, pos.add(offsetX * a, 0, offsetZ * a), state);
 			if(wasLastBranch) {
 				wasLastBranch = false;
@@ -34,9 +34,9 @@ public class WorldGenSmallHollowLog extends WorldGenerator {
 				wasLastBranch = true;
 				IBlockState state2 = BlockRegistry.HOLLOW_LOG.getDefaultState();
 				if(offsetX != 0)
-					state2 = state.withProperty(BlockHollowLog.FACING, EnumFacing.SOUTH);
+					state2 = state.with(BlockHollowLog.FACING, EnumFacing.SOUTH);
 				else if(offsetZ != 0)
-					state2 = state.withProperty(BlockHollowLog.FACING, EnumFacing.EAST);
+					state2 = state.with(BlockHollowLog.FACING, EnumFacing.EAST);
 				BlockPos newPos = pos.add(offsetX * a, 0, offsetZ * a);
 				if(rand.nextInt(2) == 0)
 					newPos = newPos.add(offsetZ != 0 ? 1 : 0, 0, offsetX != 0 ? 1 : 0);

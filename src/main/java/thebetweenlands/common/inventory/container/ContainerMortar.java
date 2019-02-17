@@ -47,8 +47,8 @@ public class ContainerMortar  extends Container {
             stack = stack1.copy();
             if (slotIndex == 1) {
                 if (stack1.getItem() == ItemRegistry.PESTLE) {
-                    if(stack1.getTagCompound().getBoolean("active"))
-                        stack1.getTagCompound().setBoolean("active", false);
+                    if(stack1.getTag().getBoolean("active"))
+                        stack1.getTag().setBoolean("active", false);
                 }
             }
             if (slotIndex > 3) {

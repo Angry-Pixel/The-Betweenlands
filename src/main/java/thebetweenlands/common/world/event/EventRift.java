@@ -49,7 +49,7 @@ public class EventRift extends TimedEnvironmentEvent {
 			this.yawComponent = nbt.getFloat("yaw");
 			this.pitchComponent = nbt.getFloat("pitch");
 			this.rollComponent = nbt.getFloat("roll");
-			this.riftSeed = Math.max(nbt.getInteger("riftSeed"), 0);
+			this.riftSeed = Math.max(nbt.getInt("riftSeed"), 0);
 			this.mirrorU = nbt.getBoolean("mirrorU");
 			this.mirrorV = nbt.getBoolean("mirrorV");
 			this.scaleComponent = nbt.getFloat("scale");
@@ -59,7 +59,7 @@ public class EventRift extends TimedEnvironmentEvent {
 			nbt.setFloat("yaw", this.yawComponent);
 			nbt.setFloat("pitch", this.pitchComponent);
 			nbt.setFloat("roll", this.rollComponent);
-			nbt.setInteger("riftSeed", this.riftSeed);
+			nbt.setInt("riftSeed", this.riftSeed);
 			nbt.setBoolean("mirrorU", this.mirrorU);
 			nbt.setBoolean("mirrorV", this.mirrorV);
 			nbt.setFloat("scale", this.scaleComponent);
@@ -190,7 +190,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	public void saveEventData() { 
 		super.saveEventData();
 		NBTTagCompound nbt = this.getData();
-		nbt.setInteger("riftTicks", this.getActivationTicks());
+		nbt.setInt("riftTicks", this.getActivationTicks());
 		this.getRiftConfiguration().writeToNBT(nbt);
 	}
 
@@ -198,7 +198,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	public void loadEventData() { 
 		super.loadEventData();
 		NBTTagCompound nbt = this.getData();
-		this.dataManager.set(ACTIVATION_TICKS, nbt.getInteger("riftTicks")).syncImmediately();
+		this.dataManager.set(ACTIVATION_TICKS, nbt.getInt("riftTicks")).syncImmediately();
 		this.dataManager.set(RIFT_CONFIGURATION, new RiftConfiguration(nbt));
 	}
 

@@ -41,13 +41,13 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setInteger("type", this.type.ordinal());
+		nbt.setInt("type", this.type.ordinal());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		this.type = Type.values()[nbt.getInteger("type")];
+		this.type = Type.values()[nbt.getInt("type")];
 	}
 
 	@Override

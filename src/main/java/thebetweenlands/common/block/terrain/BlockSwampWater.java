@@ -247,7 +247,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 			return -1;
 		}
 
-		int quantaRemaining = this.quantaPerBlock - state.getValue(LEVEL);
+		int quantaRemaining = this.quantaPerBlock - state.get(LEVEL);
 		return quantaRemaining;
 	}
 
@@ -295,13 +295,13 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	protected void flowIntoBlock(World world, BlockPos pos, int meta) {
 		if (meta < 0) return;
 		if (displaceIfPossible(world, pos)) {
-			world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getBlockState().getBaseState().withProperty(LEVEL, meta), 3);
+			world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getBlockState().getBaseState().with(LEVEL, meta), 3);
 		}
 	}
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		int quantaRemaining = quantaPerBlock - state.getValue(LEVEL);
+		int quantaRemaining = quantaPerBlock - state.get(LEVEL);
 
 		//Replenishing source
 		if (quantaRemaining < quantaPerBlock && !world.isAirBlock(pos.down())) {
@@ -311,7 +311,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 			if (this.isSourceBlock(world, pos.south())) adjacentSources++;
 			if (this.isSourceBlock(world, pos.west())) adjacentSources++;
 			if (adjacentSources >= 2) {
-				world.setBlockState(pos, state.withProperty(LEVEL, 0), 2);
+				world.setBlockState(pos, state.with(LEVEL, 0), 2);
 				quantaRemaining = quantaPerBlock;
 			}
 		}
@@ -344,7 +344,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 					if (expQuanta <= 0) {
 						world.setBlockToAir(pos);
 					} else {
-						world.setBlockState(pos, state.withProperty(LEVEL, quantaPerBlock - expQuanta), 2);
+						world.setBlockState(pos, state.with(LEVEL, quantaPerBlock - expQuanta), 2);
 						world.scheduleUpdate(pos, this, tickRate);
 						world.notifyNeighborsOfStateChange(pos, this, true);
 					}

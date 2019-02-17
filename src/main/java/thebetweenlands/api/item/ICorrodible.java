@@ -60,9 +60,9 @@ public interface ICorrodible {
 	 * @return
 	 */
 	default int getCoating(ItemStack stack) {
-		NBTTagCompound nbt = stack.getTagCompound();
-		if(nbt != null && nbt.hasKey(CorrosionHelper.ITEM_COATING_NBT_TAG, Constants.NBT.TAG_INT)) {
-			return nbt.getInteger(CorrosionHelper.ITEM_COATING_NBT_TAG);
+		NBTTagCompound nbt = stack.getTag();
+		if(nbt != null && nbt.contains(CorrosionHelper.ITEM_COATING_NBT_TAG, Constants.NBT.TAG_INT)) {
+			return nbt.getInt(CorrosionHelper.ITEM_COATING_NBT_TAG);
 		}
 		return 0;
 	}
@@ -73,9 +73,9 @@ public interface ICorrodible {
 	 * @return
 	 */
 	default int getCorrosion(ItemStack stack) {
-		NBTTagCompound nbt = stack.getTagCompound();
-		if(nbt != null && nbt.hasKey(CorrosionHelper.ITEM_CORROSION_NBT_TAG, Constants.NBT.TAG_INT)) {
-			return nbt.getInteger(CorrosionHelper.ITEM_CORROSION_NBT_TAG);
+		NBTTagCompound nbt = stack.getTag();
+		if(nbt != null && nbt.contains(CorrosionHelper.ITEM_CORROSION_NBT_TAG, Constants.NBT.TAG_INT)) {
+			return nbt.getInt(CorrosionHelper.ITEM_CORROSION_NBT_TAG);
 		}
 		return 0;
 	}
@@ -87,7 +87,7 @@ public interface ICorrodible {
 	 */
 	default void setCoating(ItemStack stack, int coating) {
 		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
-		nbt.setInteger(CorrosionHelper.ITEM_COATING_NBT_TAG, coating);
+		nbt.setInt(CorrosionHelper.ITEM_COATING_NBT_TAG, coating);
 	}
 
 	/**
@@ -97,6 +97,6 @@ public interface ICorrodible {
 	 */
 	default void setCorrosion(ItemStack stack, int corrosion) {
 		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
-		nbt.setInteger(CorrosionHelper.ITEM_CORROSION_NBT_TAG, corrosion);
+		nbt.setInt(CorrosionHelper.ITEM_CORROSION_NBT_TAG, corrosion);
 	}
 }

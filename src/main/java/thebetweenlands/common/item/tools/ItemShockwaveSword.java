@@ -49,7 +49,7 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 		this.addPropertyOverride(new ResourceLocation("charging"), new IItemPropertyGetter() {
 			@Override
 			public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
-				return stack.getTagCompound() != null && stack.getTagCompound().getInteger("cooldown") < 60 ? 1 : 0;
+				return stack.getTag() != null && stack.getTag().getInt("cooldown") < 60 ? 1 : 0;
 			}
 		});
 	}
@@ -71,17 +71,17 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
-		if (!stack.getTagCompound().hasKey("cooldown"))
-			stack.getTagCompound().setInteger("cooldown", 0);
-		if (!stack.getTagCompound().hasKey("uses"))
-			stack.getTagCompound().setInteger("uses", 0);
+		if (!stack.getTag().contains("cooldown"))
+			stack.getTag().setInt("cooldown", 0);
+		if (!stack.getTag().contains("uses"))
+			stack.getTag().setInt("uses", 0);
 
-		if(stack.getTagCompound().getInteger("uses") == 3) {
-			if (stack.getTagCompound().getInteger("cooldown") < 60)
-				stack.getTagCompound().setInteger("cooldown", stack.getTagCompound().getInteger("cooldown") + 1);
-			if (stack.getTagCompound().getInteger("cooldown") >= 60) {
-				stack.getTagCompound().setInteger("cooldown", 60);
-				stack.getTagCompound().setInteger("uses", 0);
+		if(stack.getTag().getInt("uses") == 3) {
+			if (stack.getTag().getInt("cooldown") < 60)
+				stack.getTag().setInt("cooldown", stack.getTag().getInt("cooldown") + 1);
+			if (stack.getTag().getInt("cooldown") >= 60) {
+				stack.getTag().setInt("cooldown", 60);
+				stack.getTag().setInt("uses", 0);
 			}
 		}
 	}
@@ -96,11 +96,11 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 		}
 
 		if(stack.getItemDamage() == stack.getMaxDamage()) {
-			stack.getTagCompound().setInteger("cooldown", 0);
+			stack.getTag().setInt("cooldown", 0);
 			return EnumActionResult.PASS;
 		}
 
-		if (stack.getTagCompound().getInteger("uses") < 3) {
+		if (stack.getTag().getInt("uses") < 3) {
 			if (!world.isRemote) {
 				stack.damageItem(2, player);
 				world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.SHOCKWAVE_SWORD, SoundCategory.BLOCKS, 1.25F, 1.0F + world.rand.nextFloat() * 0.1F);
@@ -125,23 +125,23 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 							if (block.isNormalCube() && !block.getBlock().hasTileEntity(block)
 									&& block.getBlockHardness(world, origin) <= 5.0F && block.getBlockHardness(world, origin) >= 0.0F
 									&& !world.getBlockState(origin.up()).isOpaqueCube()) {
-								stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlockState(origin).getBlock()));
-								stack.getTagCompound().setInteger("blockMeta", world.getBlockState(origin).getBlock().getMetaFromState(world.getBlockState(origin)));
+								stack.getTag().setInt("blockID", Block.getIdFromBlock(world.getBlockState(origin).getBlock()));
+								stack.getTag().setInt("blockMeta", world.getBlockState(origin).getBlock().getMetaFromState(world.getBlockState(origin)));
 
 								EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(world);
 								shockwaveBlock.setOrigin(origin, MathHelper.floor(Math.sqrt(distance*distance+distance2*distance2)), pos.getX() + 0.5D, pos.getZ() + 0.5D, player);
 								shockwaveBlock.setLocationAndAngles(originX + 0.5D, originY, originZ + 0.5D, 0.0F, 0.0F);
-								shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
+								shockwaveBlock.setBlock(Block.getBlockById(stack.getTag().getInt("blockID")), stack.getTag().getInt("blockMeta"));
 								world.spawnEntity(shockwaveBlock);
 								break;
 							}
 						}
 					}
 				}
-				stack.getTagCompound().setInteger("uses", stack.getTagCompound().getInteger("uses") + 1);
-				if (stack.getTagCompound().getInteger("uses") >= 3) {
-					stack.getTagCompound().setInteger("uses", 3);
-					stack.getTagCompound().setInteger("cooldown", 0);
+				stack.getTag().setInt("uses", stack.getTag().getInt("uses") + 1);
+				if (stack.getTag().getInt("uses") >= 3) {
+					stack.getTag().setInt("uses", 3);
+					stack.getTag().setInt("cooldown", 0);
 				}
 			}
 			return EnumActionResult.SUCCESS;
@@ -153,8 +153,8 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-		boolean wasCharging = oldStack.getTagCompound() != null && oldStack.getTagCompound().getInteger("cooldown") < 60;
-		boolean isCharging = newStack.getTagCompound() != null && newStack.getTagCompound().getInteger("cooldown") < 60;
+		boolean wasCharging = oldStack.getTag() != null && oldStack.getTag().getInt("cooldown") < 60;
+		boolean isCharging = newStack.getTag() != null && newStack.getTag().getInt("cooldown") < 60;
 		return (super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged) && !isCharging || isCharging != wasCharging) || !NBTHelper.areItemStackTagsEqual(oldStack, newStack, STACK_NBT_EXCLUSIONS);
 	}
 

@@ -55,10 +55,10 @@ public class WorldGenSmallSpiritTree extends WorldGenerator {
 			}
 		}
 
-		this.log = BlockRegistry.LOG_SPIRIT_TREE.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
-		this.leavesTop = BlockRegistry.LEAVES_SPIRIT_TREE_TOP.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
-		this.leavesMiddle = BlockRegistry.LEAVES_SPIRIT_TREE_MIDDLE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
-		this.leavesBottom = BlockRegistry.LEAVES_SPIRIT_TREE_BOTTOM.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
+		this.log = BlockRegistry.LOG_SPIRIT_TREE.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
+		this.leavesTop = BlockRegistry.LEAVES_SPIRIT_TREE_TOP.getDefaultState().with(BlockLeavesBetweenlands.CHECK_DECAY, false);
+		this.leavesMiddle = BlockRegistry.LEAVES_SPIRIT_TREE_MIDDLE.getDefaultState().with(BlockLeavesBetweenlands.CHECK_DECAY, false);
+		this.leavesBottom = BlockRegistry.LEAVES_SPIRIT_TREE_BOTTOM.getDefaultState().with(BlockLeavesBetweenlands.CHECK_DECAY, false);
 		this.roots = BlockRegistry.ROOT.getDefaultState();
 
 		int trunkX = position.getX();

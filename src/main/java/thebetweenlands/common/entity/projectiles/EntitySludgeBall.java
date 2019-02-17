@@ -91,7 +91,7 @@ public class EntitySludgeBall extends EntityThrowable {
 			IBlockState state = getEntityWorld().getBlockState(collision.getBlockPos());
 			if (state.getBlock().canCollideCheck(state, false)) {
 				List<AxisAlignedBB> aabbs = new ArrayList<>();
-				state.addCollisionBoxToList(this.world, collision.getBlockPos(), this.getEntityBoundingBox().offset(this.motionX, this.motionY, this.motionZ), aabbs, this, true);
+				state.addCollisionBoxToList(this.world, collision.getBlockPos(), this.getBoundingBox().offset(this.motionX, this.motionY, this.motionZ), aabbs, this, true);
 				if(!aabbs.isEmpty()) {
 					if(Math.abs(this.motionY) <= 0.001) {
 						if(this.getEntityWorld().isRemote)
@@ -197,13 +197,13 @@ public class EntitySludgeBall extends EntityThrowable {
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("bounces", this.bounces);
+		nbt.setInt("bounces", this.bounces);
 		nbt.setString("ownerUUID", this.ownerUUID);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
-		this.bounces = nbt.getInteger("bounces");
+		this.bounces = nbt.getInt("bounces");
 		this.ownerUUID = nbt.getString("ownerUUID");
 	}
 }

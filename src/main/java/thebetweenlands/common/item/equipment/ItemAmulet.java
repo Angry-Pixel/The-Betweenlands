@@ -244,12 +244,12 @@ public class ItemAmulet extends Item implements IEquippable {
 
 	@Override
 	public boolean canUnequip(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory) {
-		return target == player || stack.getTagCompound() == null || !stack.getTagCompound().hasKey("canUnequip") || stack.getTagCompound().getBoolean("canUnequip");
+		return target == player || stack.getTag() == null || !stack.getTag().contains("canUnequip") || stack.getTag().getBoolean("canUnequip");
 	}
 
 	@Override
 	public boolean canDrop(ItemStack stack, Entity entity, IInventory inventory) {
-		return stack.getTagCompound() == null || !stack.getTagCompound().hasKey("canDrop") || stack.getTagCompound().getBoolean("canDrop");
+		return stack.getTag() == null || !stack.getTag().contains("canDrop") || stack.getTag().getBoolean("canDrop");
 	}
 
 	@Override

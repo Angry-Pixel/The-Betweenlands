@@ -39,13 +39,13 @@ public final class Aspect implements Comparable<Aspect> {
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setString("aspect", this.type.getName());
-		nbt.setInteger("amount", this.amount);
+		nbt.setInt("amount", this.amount);
 		return nbt;
 	}
 
 	public static Aspect readFromNBT(NBTTagCompound nbt) {
 		String aspectName = nbt.getString("aspect");
-		int amount = nbt.getInteger("amount");
+		int amount = nbt.getInt("amount");
 		IAspectType aspectType = AspectRegistry.getAspectTypeFromName(aspectName);
 		if(aspectType != null) {
 			return new Aspect(aspectType, amount);

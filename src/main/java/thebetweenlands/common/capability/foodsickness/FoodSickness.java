@@ -31,7 +31,7 @@ public enum FoodSickness {
 	public void updateLines() {
 		this.lines.clear();
 		int index = 0;
-		while (I18n.hasKey("chat.foodSickness." + name().toLowerCase() + "." + index)) {
+		while (I18n.contains("chat.foodSickness." + name().toLowerCase() + "." + index)) {
 			this.lines.add(I18n.format("chat.foodSickness." + name().toLowerCase() + "." + index));
 			index++;
 		}

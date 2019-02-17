@@ -113,15 +113,15 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	@Override
 	public void saveEventData() {
 		super.saveEventData();
-		this.getData().setInteger("ticks", this.getTicks());
-		this.getData().setInteger("startTicks", this.getStartTicks());
+		this.getData().setInt("ticks", this.getTicks());
+		this.getData().setInt("startTicks", this.getStartTicks());
 	}
 
 	@Override
 	public void loadEventData() {
 		super.loadEventData();
-		this.dataManager.set(TICKS, this.getData().getInteger("ticks")).syncImmediately();
-		this.dataManager.set(START_TICKS, this.getData().getInteger("startTicks"));
+		this.dataManager.set(TICKS, this.getData().getInt("ticks")).syncImmediately();
+		this.dataManager.set(START_TICKS, this.getData().getInt("startTicks"));
 	}
 
 	@Override

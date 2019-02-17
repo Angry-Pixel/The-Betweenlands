@@ -11,6 +11,7 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.registries.AspectRegistry;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityGeckoCage extends TileEntity implements ITickable {
 	private int ticks = 0;
@@ -20,8 +21,12 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 	private int geckoUsages = 0;
 	private String geckoName;
 
+	public TileEntityGeckoCage() {
+		super(TileEntityRegistry.GECKO_CAGE);
+	}
+	
 	@Override
-	public void update() {
+	public void tick() {
 		this.prevTicks = this.ticks;
 		++this.ticks;
 		if(!this.world.isRemote) {
@@ -98,36 +103,36 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		nbt.setInteger("RecoverTicks", this.recoverTicks);
-		nbt.setInteger("GeckoUsages", this.geckoUsages);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
+		nbt.setInt("RecoverTicks", this.recoverTicks);
+		nbt.setInt("GeckoUsages", this.geckoUsages);
 		if(this.geckoName != null) {
 			nbt.setString("GeckoName", this.geckoName);
 		}
 		nbt.setString("AspectType", this.aspectType == null ? "" : this.aspectType.getName());
-		nbt.setInteger("Ticks", this.ticks);
+		nbt.setInt("Ticks", this.ticks);
 		return nbt;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		this.recoverTicks = nbt.getInteger("RecoverTicks");
-		this.geckoUsages = nbt.getInteger("GeckoUsages");
-		if(nbt.hasKey("GeckoName", Constants.NBT.TAG_STRING)) {
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
+		this.recoverTicks = nbt.getInt("RecoverTicks");
+		this.geckoUsages = nbt.getInt("GeckoUsages");
+		if(nbt.contains("GeckoName", Constants.NBT.TAG_STRING)) {
 			this.geckoName = nbt.getString("GeckoName");
 		} else {
 			this.geckoName = null;
 		}
 		this.aspectType = AspectRegistry.getAspectTypeFromName(nbt.getString("AspectType"));
-		this.ticks = nbt.getInteger("Ticks");
+		this.ticks = nbt.getInt("Ticks");
 	}
 
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("GeckoUsages", this.geckoUsages);
+		nbt.setInt("GeckoUsages", this.geckoUsages);
 		nbt.setString("AspectType", this.aspectType == null ? "" : this.aspectType.getName());
 		return new SPacketUpdateTileEntity(this.getPos(), 1, nbt);
 	}
@@ -135,14 +140,14 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		NBTTagCompound nbt = pkt.getNbtCompound();
-		this.geckoUsages = nbt.getInteger("GeckoUsages");
+		this.geckoUsages = nbt.getInt("GeckoUsages");
 		this.aspectType = AspectRegistry.getAspectTypeFromName(nbt.getString("AspectType"));
 	}
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound nbt = super.getUpdateTag();
-		nbt.setInteger("GeckoUsages", this.geckoUsages);
+		nbt.setInt("GeckoUsages", this.geckoUsages);
 		nbt.setString("AspectType", this.aspectType == null ? "" : this.aspectType.getName());
 		return nbt;
 	}

@@ -8,10 +8,10 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -52,7 +52,7 @@ public class BlockRootUnderwater extends BlockSwampWater {
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
 		return ItemRegistry.TANGLED_ROOT;
 	}
 
@@ -107,7 +107,7 @@ public class BlockRootUnderwater extends BlockSwampWater {
 			break;
 		}
 
-		return state.withProperty(BlockRoot.POS_X, pos.getX()).withProperty(BlockRoot.POS_Y, pos.getY()).withProperty(BlockRoot.POS_Z, pos.getZ()).withProperty(BlockRoot.DIST_UP, distUp).withProperty(BlockRoot.DIST_DOWN, distDown).withProperty(BlockRoot.NO_TOP, noTop).withProperty(BlockRoot.NO_BOTTOM, noBottom);
+		return state.with(BlockRoot.POS_X, pos.getX()).with(BlockRoot.POS_Y, pos.getY()).with(BlockRoot.POS_Z, pos.getZ()).with(BlockRoot.DIST_UP, distUp).with(BlockRoot.DIST_DOWN, distDown).with(BlockRoot.NO_TOP, noTop).with(BlockRoot.NO_BOTTOM, noBottom);
 	}
 	
 	@Override

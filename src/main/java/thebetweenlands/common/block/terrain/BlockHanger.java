@@ -3,8 +3,6 @@ package thebetweenlands.common.block.terrain;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
@@ -15,6 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -23,6 +22,7 @@ import net.minecraft.state.IProperty;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -56,7 +56,7 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 		this.setHardness(0.1F);
 		this.setCreativeTab(BLCreativeTabs.PLANTS);
 		this.setTickRandomly(true);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(CAN_GROW, true).withProperty(SEEDED, false));
+		this.setDefaultState(this.blockState.getBaseState().with(CAN_GROW, true).with(SEEDED, false));
 	}
 
 	@Override
@@ -105,15 +105,14 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if(rand.nextInt(16) == 0 && state.getValue(CAN_GROW) && worldIn.isAirBlock(pos.down())) {
+		if(rand.nextInt(16) == 0 && state.get(CAN_GROW) && worldIn.isAirBlock(pos.down())) {
 			worldIn.setBlockState(pos.down(), this.getDefaultState());
 		}
 	}
 
 	@Override
-	@Nullable
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return null;
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+		return Items.AIR;
 	}
 
 	@Override
@@ -155,18 +154,18 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		IBlockState state = this.getDefaultState();
-		state = state.withProperty(CAN_GROW, (meta & 1) != 0);
-		state = state.withProperty(SEEDED, (meta & 2) != 0);
+		state = state.with(CAN_GROW, (meta & 1) != 0);
+		state = state.with(SEEDED, (meta & 2) != 0);
 		return state;
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
-		if(state.getValue(CAN_GROW)) {
+		if(state.get(CAN_GROW)) {
 			meta |= 1;
 		}
-		if(state.getValue(SEEDED)) {
+		if(state.get(SEEDED)) {
 			meta |= 2;
 		}
 		return meta;
@@ -205,7 +204,7 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 			@Override
 			public String getTranslationKey(ItemStack stack) {
 				IBlockState state = this.block.getStateFromMeta(this.getMetadata(stack.getItemDamage()));
-				return this.block.getTranslationKey() + (state.getValue(SEEDED) ? "_seeded" : "");
+				return this.block.getTranslationKey() + (state.get(SEEDED) ? "_seeded" : "");
 			}
 
 			@Override
@@ -219,12 +218,12 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(SEEDED) ? 3 : 0);
+		return new ItemStack(Item.getItemFromBlock(this), 1, state.get(SEEDED) ? 3 : 0);
 	}
 
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IWorldReader world, BlockPos pos, IBlockState state, int fortune) {
-		if(state.getValue(SEEDED)) {
+		if(state.get(SEEDED)) {
 			drops.add(new ItemStack(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS));
 			return;
 		}
@@ -238,6 +237,6 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 	
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(CAN_GROW, true);
+		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).with(CAN_GROW, true);
 	}
 }

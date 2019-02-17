@@ -47,7 +47,7 @@ public class EntityPuppeteerCapability extends EntityCapability<EntityPuppeteerC
 
 	@Override
 	public List<Entity> getPuppets() {
-		return this.getEntity().getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntity().getEntityBoundingBox().grow(24.0D, 24.0D, 24.0D), entity -> {
+		return this.getEntity().getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntity().getBoundingBox().grow(24.0D, 24.0D, 24.0D), entity -> {
 			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
 				IPuppetCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
 				if(cap.getPuppeteer() == this.getEntity()) {
@@ -87,12 +87,12 @@ public class EntityPuppeteerCapability extends EntityCapability<EntityPuppeteerC
 
 	@Override
 	public void writeTrackingDataToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("activatingEntityId", this.activatingEntityId);
+		nbt.setInt("activatingEntityId", this.activatingEntityId);
 	}
 
 	@Override
 	public void readTrackingDataFromNBT(NBTTagCompound nbt) {
-		this.activatingEntityId = nbt.getInteger("activatingEntityId");
+		this.activatingEntityId = nbt.getInt("activatingEntityId");
 	}
 
 	@Override

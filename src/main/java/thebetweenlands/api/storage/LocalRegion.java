@@ -67,8 +67,8 @@ public class LocalRegion {
 	 * @return
 	 */
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("x", this.x);
-		nbt.setInteger("z", this.z);
+		nbt.setInt("x", this.x);
+		nbt.setInt("z", this.z);
 		return nbt;
 	}
 
@@ -78,7 +78,7 @@ public class LocalRegion {
 	 * @return
 	 */
 	public static LocalRegion readFromNBT(NBTTagCompound nbt) {
-		return new LocalRegion(nbt.getInteger("x"), nbt.getInteger("z"));
+		return new LocalRegion(nbt.getInt("x"), nbt.getInt("z"));
 	}
 
 	@Override

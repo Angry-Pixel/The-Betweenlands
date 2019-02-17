@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.MathHelper;
@@ -16,8 +17,17 @@ import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITickable {
+	public TileEntityMobSpawnerBetweenlands(TileEntityType<?> type) {
+		super(type);
+	}
+	
+	public TileEntityMobSpawnerBetweenlands() {
+		super(TileEntityRegistry.MOB_SPAWNER);
+	}
+
 	public float counter = 0.0F;
 	public float lastCounter = 0.0F;
 
@@ -112,20 +122,20 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 	};
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
 		this.spawnerLogic.readFromNBT(nbt);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
 		this.spawnerLogic.writeToNBT(nbt);
 		return nbt;
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 		this.spawnerLogic.updateSpawner();
 		this.lastCounter = this.counter;
 		this.counter += 0.0085F;
@@ -141,7 +151,7 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-		if (packet.getNbtCompound().hasKey("entityType")) {
+		if (packet.getNbtCompound().contains("entityType")) {
 			String entityType = packet.getNbtCompound().getString("entityType");
 			this.getSpawnerLogic().setNextEntityName(entityType);
 		}

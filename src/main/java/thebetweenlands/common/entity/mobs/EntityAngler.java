@@ -173,9 +173,9 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		if(!getEntityWorld().isRemote) {
-		if(getAttackTarget() != null && !getEntityWorld().containsAnyLiquid(getAttackTarget().getEntityBoundingBox())) {
+		if(getAttackTarget() != null && !getEntityWorld().containsAnyLiquid(getAttackTarget().getBoundingBox())) {
 			Double distance = getPosition().getDistance((int) getAttackTarget().posX, (int) getAttackTarget().posY, (int) getAttackTarget().posZ);
-			if (distance > 1.0F && distance < 6.0F) // && getAttackTarget().getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && getAttackTarget().getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0)
+			if (distance > 1.0F && distance < 6.0F) // && getAttackTarget().getBoundingBox().maxY >= getEntityBoundingBox().minY && getAttackTarget().getBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0)
 				if (isInWater() && getEntityWorld().isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
 					if(!isLeaping()) {
 						setIsLeaping(true);

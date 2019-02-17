@@ -22,7 +22,7 @@ public class BlockTarLootPot extends BlockLootPot {
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		IBlockState state = this.getStateFromMeta(meta);
-		switch(state.getValue(VARIANT)) {
+		switch(state.get(VARIANT)) {
 		default:
 		case POT_1:
 			return new TileEntityTarLootPot1();

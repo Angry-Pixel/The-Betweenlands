@@ -50,7 +50,7 @@ public class WorldGenBigBulbCappedMushroom extends WorldGenerator {
 	@Override
 	public boolean generate(World world, Random rand, BlockPos position) {
 		this.head = BlockRegistry.BULB_CAPPED_MUSHROOM_CAP.getDefaultState();
-		this.stalk = BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.getDefaultState().withProperty(BlockLog.LOG_AXIS, EnumAxis.Y);
+		this.stalk = BlockRegistry.BULB_CAPPED_MUSHROOM_STALK.getDefaultState().with(BlockLog.LOG_AXIS, EnumAxis.Y);
 
 		int height = rand.nextInt(2) + 8;
 		int maxRadius = 2;

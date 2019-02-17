@@ -190,8 +190,8 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("spawningTicks", this.getSpawningTicks());
-		nbt.setInteger("chargingPreparation", this.chargingPreparation);
+		nbt.setInt("spawningTicks", this.getSpawningTicks());
+		nbt.setInt("chargingPreparation", this.chargingPreparation);
 		nbt.setByte("chargingState", this.getDataManager().get(CHARGING_STATE));
 
 		super.writeEntityToNBT(nbt);
@@ -199,13 +199,13 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
-		if(nbt.hasKey("spawningTicks")) {
-			this.setSpawningTicks(nbt.getInteger("spawningTicks"));
+		if(nbt.contains("spawningTicks")) {
+			this.setSpawningTicks(nbt.getInt("spawningTicks"));
 		}
-		if(nbt.hasKey("chargingPreparation")) {
-			this.chargingPreparation = nbt.getInteger("chargingPreparation");
+		if(nbt.contains("chargingPreparation")) {
+			this.chargingPreparation = nbt.getInt("chargingPreparation");
 		}
-		if(nbt.hasKey("chargingState")) {
+		if(nbt.contains("chargingState")) {
 			this.getDataManager().set(CHARGING_STATE, nbt.getByte("chargingState"));
 		}
 
@@ -663,7 +663,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return Minecraft.getInstance().player.abilities.isCreativeMode || this.getSpawningTicks() > 0 ? this.getEntityBoundingBox() : ZERO_AABB;
+		return Minecraft.getInstance().player.abilities.isCreativeMode || this.getSpawningTicks() > 0 ? this.getBoundingBox() : ZERO_AABB;
 	}
 
 	@Override

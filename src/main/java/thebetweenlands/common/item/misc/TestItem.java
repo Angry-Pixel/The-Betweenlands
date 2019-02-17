@@ -116,14 +116,14 @@ public class TestItem extends Item {
 			ItemStack stack = player.getHeldItem(hand);
 			NBTTagCompound nbt = stack.getOrCreateSubCompound("pos");
 			
-			if(!nbt.hasKey("x1")) {
-				nbt.setInteger("x1", pos.getX());
-				nbt.setInteger("y1", pos.getY());
-				nbt.setInteger("z1", pos.getZ());
+			if(!nbt.contains("x1")) {
+				nbt.setInt("x1", pos.getX());
+				nbt.setInt("y1", pos.getY());
+				nbt.setInt("z1", pos.getZ());
 			} else {
 				long time = System.nanoTime();
 				
-				WorldGenGiantRoot root = new WorldGenGiantRoot(new BlockPos(nbt.getInteger("x1"), nbt.getInteger("y1"), nbt.getInteger("z1")), pos, 14);
+				WorldGenGiantRoot root = new WorldGenGiantRoot(new BlockPos(nbt.getInt("x1"), nbt.getInt("y1"), nbt.getInt("z1")), pos, 14);
 				root.generate(worldIn, itemRand, pos);
 				
 				System.out.println("ms: " + (System.nanoTime() - time) / 1000000.0F);

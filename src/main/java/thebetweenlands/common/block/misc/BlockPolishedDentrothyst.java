@@ -1,11 +1,11 @@
 package thebetweenlands.common.block.misc;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.chunk.BlockStateContainer;
@@ -18,7 +18,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
 public class BlockPolishedDentrothyst extends BlockGlassBetweenlands implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeItemBlockModelDefinition, BlockRegistry.IStateMappedBlock {
-	public static final PropertyEnum<EnumDentrothyst> TYPE = PropertyEnum.create("type", EnumDentrothyst.class);
+	public static final EnumProperty<EnumDentrothyst> TYPE = EnumProperty.create("type", EnumDentrothyst.class);
 
 	public BlockPolishedDentrothyst() {
 		super(Material.GLASS);
@@ -26,12 +26,12 @@ public class BlockPolishedDentrothyst extends BlockGlassBetweenlands implements 
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(TYPE, meta == 0 ? EnumDentrothyst.GREEN : EnumDentrothyst.ORANGE);
+		return this.getDefaultState().with(TYPE, meta == 0 ? EnumDentrothyst.GREEN : EnumDentrothyst.ORANGE);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(TYPE).getMeta();
+		return state.get(TYPE).getMeta();
 	}
 
 	@Override

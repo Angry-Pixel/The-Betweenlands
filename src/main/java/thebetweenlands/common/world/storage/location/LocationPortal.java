@@ -33,13 +33,13 @@ public class LocationPortal extends LocationStorage {
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.portalPos = BlockPos.fromLong(nbt.getLong("PortalPos"));
-		if(nbt.hasKey("OtherPortalPos", Constants.NBT.TAG_LONG)) {
+		if(nbt.contains("OtherPortalPos", Constants.NBT.TAG_LONG)) {
 			this.otherPortalPos = BlockPos.fromLong(nbt.getLong("OtherPortalPos"));
 		} else {
 			this.otherPortalPos = null;
 		}
-		if(nbt.hasKey("OtherPortalDimension", Constants.NBT.TAG_INT)) {
-			this.otherPortalDimension = nbt.getInteger("OtherPortalDimension");
+		if(nbt.contains("OtherPortalDimension", Constants.NBT.TAG_INT)) {
+			this.otherPortalDimension = nbt.getInt("OtherPortalDimension");
 		} else {
 			//Legacy code for old portals that didn't support other dimensions
 			int currDim = this.getWorldStorage().getWorld().provider.getDimension();
@@ -59,7 +59,7 @@ public class LocationPortal extends LocationStorage {
 		if(this.otherPortalPos != null) {
 			nbt.setLong("OtherPortalPos", this.otherPortalPos.toLong());
 		}
-		nbt.setInteger("OtherPortalDimension", this.otherPortalDimension);
+		nbt.setInt("OtherPortalDimension", this.otherPortalDimension);
 		nbt.setBoolean("TargetDimSet", this.targetDimensionSet);
 		return nbt;
 	}

@@ -59,7 +59,7 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 		tasks.addTask(1, new EntityAIPanic(this, 1.0D));
 		tasks.addTask(2, new EntityAIAvoidEntity<EntityLivingBase>(this, EntityLivingBase.class, entity -> entity instanceof EntityMob || entity instanceof IMob || (entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative()), 10.0F, 0.5D, 1.0D));
 		tasks.addTask(3, new EntityAIFollowTarget(this, new EntityAIFollowTarget.FollowClosest(this, EntityRootSprite.class, 10), 0.65D, 0.5F, 10.0F, false));
-		tasks.addTask(4, new EntityAIJumpRandomly(this, 10, () -> !EntitySporeling.this.world.getEntitiesWithinAABB(EntityRootSprite.class, this.getEntityBoundingBox().grow(1)).isEmpty()) {
+		tasks.addTask(4, new EntityAIJumpRandomly(this, 10, () -> !EntitySporeling.this.world.getEntitiesWithinAABB(EntityRootSprite.class, this.getBoundingBox().grow(1)).isEmpty()) {
 			@Override
 			public void startExecuting() {
 				EntitySporeling.this.setJumpHeightOverride(0.2F);

@@ -229,7 +229,7 @@ public class ScreenRenderHandler extends Gui {
 			
 			if(BetweenlandsConfig.GENERAL.cavingRopeIndicator && player != null) {
 				boolean connected = false;
-				List<EntityRopeNode> ropeNodes = player.world.getEntitiesWithinAABB(EntityRopeNode.class, player.getEntityBoundingBox().grow(32, 32, 32));
+				List<EntityRopeNode> ropeNodes = player.world.getEntitiesWithinAABB(EntityRopeNode.class, player.getBoundingBox().grow(32, 32, 32));
 				for(EntityRopeNode rope : ropeNodes) {
 					if(rope.getNextNode() == player) {
 						connected = true;
@@ -361,8 +361,8 @@ public class ScreenRenderHandler extends Gui {
 						int startY = height - 49;
 
 						//Erebus compatibility
-						if (player.getEntityData().hasKey("antivenomDuration")) {
-							int duration = player.getEntityData().getInteger("antivenomDuration");
+						if (player.getEntityData().contains("antivenomDuration")) {
+							int duration = player.getEntityData().getInt("antivenomDuration");
 							if (duration > 0) {
 								startY -= 12;
 							}

@@ -973,7 +973,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     public static boolean isTarred(ItemStack stack) {
-        return stack.hasTagCompound() && stack.getTagCompound().getCompoundTag("attributes").getBoolean("isTarred");
+        return stack.hasTagCompound() && stack.getTag().getCompound("attributes").getBoolean("isTarred");
     }
 
     private static <T> DataParameter<T> defineId(DataSerializer<T> serializer) {

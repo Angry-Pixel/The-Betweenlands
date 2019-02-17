@@ -47,7 +47,7 @@ public class CircleGem {
 	 */
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setString("gem", this.gemType.name);
-		nbt.setInteger("type", this.combatType.ordinal());
+		nbt.setInt("type", this.combatType.ordinal());
 		return nbt;
 	}
 
@@ -58,7 +58,7 @@ public class CircleGem {
 	 */
 	public static CircleGem readFromNBT(NBTTagCompound nbt) {
 		CircleGemType gem = CircleGemType.fromName(nbt.getString("gem"));
-		int typeOrdinal = nbt.getInteger("type");
+		int typeOrdinal = nbt.getInt("type");
 		if(CombatType.values().length > typeOrdinal) {
 			return new CircleGem(gem, CombatType.values()[typeOrdinal]);
 		}

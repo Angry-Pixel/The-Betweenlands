@@ -33,7 +33,7 @@ public class TextWidget extends ManualWidgetBase {
         height = 144;
         this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getInstance().fontRenderer);
         this.text = I18n.format(unlocalizedText);
-        if (!I18n.hasKey(unlocalizedText) || text.equals("")) {
+        if (!I18n.contains(unlocalizedText) || text.equals("")) {
         	TranslationHelper.addUnlocalizedString(unlocalizedText);
         }
         this.init();
@@ -46,7 +46,7 @@ public class TextWidget extends ManualWidgetBase {
         height = 144;
         this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getInstance().fontRenderer);
         this.text = I18n.format(unlocalizedText);
-        if (!I18n.hasKey(unlocalizedText) || text.equals("")) {
+        if (!I18n.contains(unlocalizedText) || text.equals("")) {
         	TranslationHelper.addUnlocalizedString(unlocalizedText);
         }
         this.init();
@@ -59,7 +59,7 @@ public class TextWidget extends ManualWidgetBase {
         this.height = height;
         this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getInstance().fontRenderer);
         this.text = I18n.format(unlocalizedText);
-        if (!I18n.hasKey(unlocalizedText) || text.equals("")) {
+        if (!I18n.contains(unlocalizedText) || text.equals("")) {
         	TranslationHelper.addUnlocalizedString(unlocalizedText);
         }
         this.init();
@@ -73,7 +73,7 @@ public class TextWidget extends ManualWidgetBase {
         height = 144;
         this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getInstance().fontRenderer);
         this.text = I18n.format(unlocalizedText);
-        if (!I18n.hasKey(unlocalizedText) || text.equals("")) {
+        if (!I18n.contains(unlocalizedText) || text.equals("")) {
         	TranslationHelper.addUnlocalizedString(unlocalizedText);
         }
         this.scale = scale;
@@ -87,7 +87,7 @@ public class TextWidget extends ManualWidgetBase {
         width = 130 - xStart;
         height = 144;
         this.textContainer = new TextContainer(width, height, text, Minecraft.getInstance().fontRenderer);
-        if (!isLocalized && (!I18n.hasKey(text) || text.equals(""))) {
+        if (!isLocalized && (!I18n.contains(text) || text.equals(""))) {
         	TranslationHelper.addUnlocalizedString(text);
         }
         this.init();

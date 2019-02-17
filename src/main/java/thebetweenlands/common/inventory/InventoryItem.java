@@ -23,7 +23,7 @@ public class InventoryItem implements IInventory {
 		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
-		this.readFromNBT(stack.getTagCompound());
+		this.readFromNBT(stack.getTag());
 	}
 	
 	public ItemStack getInventoryItemStack() {
@@ -80,7 +80,7 @@ public class InventoryItem implements IInventory {
 				this.inventory.set(i, ItemStack.EMPTY);
 			}
 		}
-		this.writeToNBT(this.invItem.getTagCompound());
+		this.writeToNBT(this.invItem.getTag());
 	}
 
 	@Override
@@ -94,10 +94,10 @@ public class InventoryItem implements IInventory {
 	}
 
 	public void readFromNBT(NBTTagCompound compound) {
-		/*NBTTagList items = compound.getTagList("ItemInventory", Constants.NBT.TAG_COMPOUND);
-		for (int i = 0; i < items.tagCount(); ++i) {
-			NBTTagCompound item = items.getCompoundTagAt(i);
-			int slot = item.getInteger("Slot");
+		/*NBTTagList items = compound.getList("ItemInventory", Constants.NBT.TAG_COMPOUND);
+		for (int i = 0; i < items.size(); ++i) {
+			NBTTagCompound item = items.getCompound(i);
+			int slot = item.getInt("Slot");
 			if (slot >= 0 && slot < this.getSizeInventory()) {
 				this.inventory[slot] = new ItemStack(item);
 			}
@@ -113,9 +113,9 @@ public class InventoryItem implements IInventory {
 		for (int i = 0; i < this.getSizeInventory(); ++i) {
 			if (this.getStackInSlot(i) != null) {
 				NBTTagCompound item = new NBTTagCompound();
-				item.setInteger("Slot", i);
+				item.setInt("Slot", i);
 				getStackInSlot(i).writeToNBT(item);
-				items.appendTag(item);
+				items.add(item);
 			}
 		}
 

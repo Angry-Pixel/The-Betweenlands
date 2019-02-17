@@ -36,7 +36,7 @@ public class ItemGemSinger extends Item {
 		AQUA_MIDDLE_GEM(0, state -> state.getBlock() == BlockRegistry.AQUA_MIDDLE_GEM_ORE),
 		CRIMSON_MIDDLE_GEM(1, state -> state.getBlock() == BlockRegistry.CRIMSON_MIDDLE_GEM_ORE),
 		GREEN_MIDDLE_GEM(2, state -> state.getBlock() == BlockRegistry.GREEN_MIDDLE_GEM_ORE),
-		LIFE_CRYSTAL(3, state -> state.getBlock() == BlockRegistry.LIFE_CRYSTAL_STALACTITE && state.getValue(BlockLifeCrystalStalactite.VARIANT) == EnumLifeCrystalType.ORE);
+		LIFE_CRYSTAL(3, state -> state.getBlock() == BlockRegistry.LIFE_CRYSTAL_STALACTITE && state.get(BlockLifeCrystalStalactite.VARIANT) == EnumLifeCrystalType.ORE);
 
 		private final int id;
 		private final Predicate<IBlockState> predicate;
@@ -169,25 +169,25 @@ public class ItemGemSinger extends Item {
 		if(pos != null && target != null) {
 			NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 			nbt.setLong("targetPos", pos.toLong());
-			nbt.setInteger("targetType", target.getId());
-		} else if(stack.getTagCompound() != null) {
-			stack.getTagCompound().removeTag("targetPos");
-			stack.getTagCompound().removeTag("targetType");
+			nbt.setInt("targetType", target.getId());
+		} else if(stack.getTag() != null) {
+			stack.getTag().removeTag("targetPos");
+			stack.getTag().removeTag("targetType");
 		}
 	}
 
 	@Nullable
 	protected BlockPos getTargetPosition(ItemStack stack) {
-		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("targetPos", Constants.NBT.TAG_LONG)) {
-			return BlockPos.fromLong(stack.getTagCompound().getLong("targetPos"));
+		if(stack.hasTagCompound() && stack.getTag().contains("targetPos", Constants.NBT.TAG_LONG)) {
+			return BlockPos.fromLong(stack.getTag().getLong("targetPos"));
 		}
 		return null;
 	}
 
 	@Nullable
 	protected GemSingerTarget getTargetType(ItemStack stack) {
-		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("targetType", Constants.NBT.TAG_INT)) {
-			return GemSingerTarget.byId(stack.getTagCompound().getInteger("targetType"));
+		if(stack.hasTagCompound() && stack.getTag().contains("targetType", Constants.NBT.TAG_INT)) {
+			return GemSingerTarget.byId(stack.getTag().getInt("targetType"));
 		}
 		return null;
 	}

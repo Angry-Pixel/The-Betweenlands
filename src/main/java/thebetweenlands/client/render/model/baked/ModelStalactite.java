@@ -70,13 +70,13 @@ public class ModelStalactite implements IModel {
 
 			if(side == null) {
 				try {
-					int distUp = state.getValue(BlockStalactite.DIST_UP);
-					int distDown = state.getValue(BlockStalactite.DIST_DOWN);
-					boolean noTop = state.getValue(BlockStalactite.NO_TOP);
-					boolean noBottom = state.getValue(BlockStalactite.NO_BOTTOM);
-					int posX = state.getValue(BlockStalactite.POS_X);
-					int posY = state.getValue(BlockStalactite.POS_Y);
-					int posZ = state.getValue(BlockStalactite.POS_Z);
+					int distUp = state.get(BlockStalactite.DIST_UP);
+					int distDown = state.get(BlockStalactite.DIST_DOWN);
+					boolean noTop = state.get(BlockStalactite.NO_TOP);
+					boolean noBottom = state.get(BlockStalactite.NO_BOTTOM);
+					int posX = state.get(BlockStalactite.POS_X);
+					int posY = state.get(BlockStalactite.POS_Y);
+					int posZ = state.get(BlockStalactite.POS_Z);
 					float height = 1.0F;
 
 					int totalHeight = 1 + distDown + distUp;

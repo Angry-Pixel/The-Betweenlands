@@ -21,13 +21,13 @@ public class WorldGenCavePots extends WorldGenerator {
 	private IBlockState getRandomPot(Random rand) {
 		switch (rand.nextInt(3)) {
 		case 0:
-			return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_1);
+			return BlockRegistry.LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_1);
 		case 1:
-			return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_2);
+			return BlockRegistry.LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_2);
 		case 2:
-			return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_3);
+			return BlockRegistry.LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_3);
 		default:
-			return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_1);
+			return BlockRegistry.LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_1);
 		}
 	}
 

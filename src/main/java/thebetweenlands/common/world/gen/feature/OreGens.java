@@ -51,7 +51,7 @@ public class OreGens {
 					for(int i = 0; i <= height; i++) {
 						IBlockState blockState = BlockRegistry.LIFE_CRYSTAL_STALACTITE.getDefaultState();
 						if(genOre && (i == oreBlock || rand.nextInt(18) == 0))
-							blockState = blockState.withProperty(BlockLifeCrystalStalactite.VARIANT, EnumLifeCrystalType.ORE);
+							blockState = blockState.with(BlockLifeCrystalStalactite.VARIANT, EnumLifeCrystalType.ORE);
 						world.setBlockState(pos.add(0, i, 0), blockState);
 					}
 					return true;

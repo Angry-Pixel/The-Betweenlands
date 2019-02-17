@@ -53,7 +53,7 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 	@SuppressWarnings("deprecation")
 	public BlockRubberTap(IBlockState material, int ticksPerStep) {
 		super(material.getMaterial());
-		this.setDefaultState(this.getBlockState().getBaseState().withProperty(AMOUNT, 0));
+		this.setDefaultState(this.getBlockState().getBaseState().with(AMOUNT, 0));
 		this.setSoundType(material.getBlock().getSoundType());
 		this.setHardness(2.0F);
 		this.ticksPerStep = ticksPerStep;
@@ -91,11 +91,11 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		if (this.canPlaceAt(world, pos, facing)) {
-			return this.getDefaultState().withProperty(FACING, facing);
+			return this.getDefaultState().with(FACING, facing);
 		} else {
 			for (EnumFacing enumfacing : FACING.getAllowedValues()) {
 				if(this.canPlaceAt(world, pos, enumfacing))
-					return this.getDefaultState().withProperty(FACING, enumfacing);
+					return this.getDefaultState().with(FACING, enumfacing);
 			}
 			return this.getDefaultState();
 		}
@@ -119,7 +119,7 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (this.checkForDrop(world, pos, world.getBlockState(pos))) {
-			EnumFacing facing = (EnumFacing)state.getValue(FACING);
+			EnumFacing facing = (EnumFacing)state.get(FACING);
 			EnumFacing.Axis axis = facing.getAxis();
 			EnumFacing oppositeFacing = facing.getOpposite();
 			if (axis.isVertical() || !this.canPlaceOn(world, pos.offset(oppositeFacing))) {
@@ -130,7 +130,7 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 	}
 
 	protected boolean checkForDrop(World worldIn, BlockPos pos, IBlockState state) {
-		if (state.getBlock() == this && this.canPlaceAt(worldIn, pos, (EnumFacing)state.getValue(FACING))) {
+		if (state.getBlock() == this && this.canPlaceAt(worldIn, pos, (EnumFacing)state.get(FACING))) {
 			return true;
 		} else {
 			if (worldIn.getBlockState(pos).getBlock() == this) {
@@ -149,17 +149,17 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 
 	private boolean canPlaceOn(World worldIn, BlockPos pos) {
 		IBlockState state = worldIn.getBlockState(pos);
-		return state.getBlock() == BlockRegistry.LOG_RUBBER && state.getValue(BlockRubberLog.NATURAL);
+		return state.getBlock() == BlockRegistry.LOG_RUBBER && state.get(BlockRubberLog.NATURAL);
 	}
 
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
-		return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
+		return state.with(FACING, rot.rotate((EnumFacing)state.get(FACING)));
 	}
 
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-		return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+		return state.withRotation(mirrorIn.toRotation((EnumFacing)state.get(FACING)));
 	}
 
 	@Override
@@ -185,12 +185,12 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+		return this.getDefaultState().with(FACING, EnumFacing.byHorizontalIndex(meta));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
+		return ((EnumFacing)state.get(FACING)).getHorizontalIndex();
 	}
 
 	@Override
@@ -200,9 +200,9 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 			FluidStack drained = ((TileEntityRubberTap)te).drain(Fluid.BUCKET_VOLUME, false);
 			if(drained != null) {
 				int amount = (int)((float)drained.amount / (float)Fluid.BUCKET_VOLUME * 15.0F);
-				state = state.withProperty(AMOUNT, amount);
+				state = state.with(AMOUNT, amount);
 			} else {
-				state = state.withProperty(AMOUNT, 0);
+				state = state.with(AMOUNT, 0);
 			}
 		}
 		return state;
@@ -215,7 +215,7 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
-		switch ((EnumFacing)state.getValue(FACING)) {
+		switch ((EnumFacing)state.get(FACING)) {
 		default:
 		case EAST:
 			return TAP_EAST_AABB;

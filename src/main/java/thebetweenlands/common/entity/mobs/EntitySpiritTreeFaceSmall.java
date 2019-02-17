@@ -60,7 +60,7 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 
 	@Override
 	public List<BlockPos> findNearbyWoodBlocks() {
-		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
+		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getBoundingBox(), loc -> loc.isInside(this));
 		if(!locations.isEmpty()) {
 			List<BlockPos> positions = new ArrayList<>();
 			positions.addAll(locations.get(0).getSmallFacePositions());
@@ -74,13 +74,13 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setInteger("variant", this.getVariant());
+		nbt.setInt("variant", this.getVariant());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		this.setVariant(nbt.getInteger("variant"));
+		this.setVariant(nbt.getInt("variant"));
 	}
 
 	public void setVariant(int variant) {

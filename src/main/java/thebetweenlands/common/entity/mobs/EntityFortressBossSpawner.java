@@ -69,7 +69,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 			this.cachedOwner = null;
 		} else if(this.cachedOwner == null || !this.cachedOwner.isEntityAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
 			this.cachedOwner = null;
-			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
+			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
 					this.cachedOwner = entity;
 					break;
@@ -92,7 +92,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setInteger("spawnDelay", this.spawnDelay);
+		nbt.setInt("spawnDelay", this.spawnDelay);
 		if(this.getOwnerUUID() != null) {
 			nbt.setUniqueId("owner", this.getOwnerUUID());
 		}
@@ -101,7 +101,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		this.spawnDelay = nbt.getInteger("spawnDelay");
+		this.spawnDelay = nbt.getInt("spawnDelay");
 		if(nbt.hasUniqueId("owner")) {
 			this.getDataManager().set(OWNER, Optional.of(nbt.getUniqueId("owner")));
 		} else {

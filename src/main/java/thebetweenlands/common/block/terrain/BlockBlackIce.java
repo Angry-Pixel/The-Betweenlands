@@ -69,7 +69,7 @@ public class BlockBlackIce extends BlockBreakable {
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
+	public int getItemsToDropCount(IBlockState state, int fortune, World worldIn, BlockPos pos, Random random) {
 		return 0;
 	}
 

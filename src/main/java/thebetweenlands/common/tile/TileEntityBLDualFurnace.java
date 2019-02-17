@@ -15,6 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.common.block.container.BlockBLDualFurnace;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityBLDualFurnace extends TileEntityBasicInventory implements ISidedInventory, ITickable
 {
@@ -31,7 +32,7 @@ public class TileEntityBLDualFurnace extends TileEntityBasicInventory implements
 	private String customName;
 
 	public TileEntityBLDualFurnace() {
-		super(8, "dual_sulfur_furnace");
+		super(TileEntityRegistry.DUAL_SULFUR_FURNACE, 8, "dual_sulfur_furnace");
 	}
 
 	@Override
@@ -104,8 +105,8 @@ public class TileEntityBLDualFurnace extends TileEntityBasicInventory implements
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
 		furnaceBurnTime = nbt.getShort("BurnTime");
 		furnaceCookTime = nbt.getShort("CookTime");
 		currentItemBurnTime = TileEntityFurnace.getItemBurnTime(inventory.get(1));
@@ -114,13 +115,13 @@ public class TileEntityBLDualFurnace extends TileEntityBasicInventory implements
 		furnaceCookTime2 = nbt.getShort("CookTime2");
 		currentItemBurnTime2 = TileEntityFurnace.getItemBurnTime(inventory.get(4));
 
-		if (nbt.hasKey("CustomName", 8))
+		if (nbt.contains("CustomName", 8))
 			customName = nbt.getString("CustomName");
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
 		nbt.setShort("BurnTime", (short)furnaceBurnTime);
 		nbt.setShort("CookTime", (short)furnaceCookTime);
 
@@ -177,7 +178,7 @@ public class TileEntityBLDualFurnace extends TileEntityBasicInventory implements
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 		boolean isBurning1 = furnaceBurnTime > 0;
 		boolean isDirty1 = false;
 		boolean isBurning2 = furnaceBurnTime2 > 0;

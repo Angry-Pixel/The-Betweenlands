@@ -76,11 +76,11 @@ public class PotionRootBound extends Potion {
 		if(entity instanceof AbstractClientPlayer) {
 			NBTTagCompound nbt = entity.getEntityData();
 			if(entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null) {
-				nbt.setInteger("thebetweenlands.rootBoundTicks", 5);
+				nbt.setInt("thebetweenlands.rootBoundTicks", 5);
 			} else {
-				int rootBoundTicks = nbt.getInteger("thebetweenlands.rootBoundTicks");
+				int rootBoundTicks = nbt.getInt("thebetweenlands.rootBoundTicks");
 				if(rootBoundTicks > 1) {
-					nbt.setInteger("thebetweenlands.rootBoundTicks", rootBoundTicks - 1);
+					nbt.setInt("thebetweenlands.rootBoundTicks", rootBoundTicks - 1);
 				} else {
 					nbt.removeTag("thebetweenlands.rootBoundTicks");
 				}
@@ -94,7 +94,7 @@ public class PotionRootBound extends Potion {
 		EntityPlayer entity = event.getEntity();
 		NBTTagCompound nbt = entity.getEntityData();
 		//NBT is necessary so that FOV doesn't flicker when potion wears off .-.
-		if(entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null || nbt.hasKey("thebetweenlands.rootBoundTicks")) {
+		if(entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null || nbt.contains("thebetweenlands.rootBoundTicks")) {
 			event.setNewfov(1);
 		}
 	}

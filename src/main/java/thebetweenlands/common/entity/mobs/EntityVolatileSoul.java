@@ -157,7 +157,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 				}
 			}
 			if(this.target == null || this.target.isDead) {
-				List<Entity> targetList = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D));
+				List<Entity> targetList = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox().grow(16.0D, 16.0D, 16.0D));
 				List<Entity> eligibleTargets = new ArrayList<Entity>();
 				if(this.world.rand.nextInt(4) > 0) {
 					for(Entity e : targetList) {
@@ -178,9 +178,9 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 				}
 			} 
 			if(this.target != null && this.ticksInAir >= 10) {
-				double dx = this.target.getEntityBoundingBox().minX + (this.target.getEntityBoundingBox().maxX - this.target.getEntityBoundingBox().minX) / 2.0D - this.posX;
-				double dy = this.target.getEntityBoundingBox().minY + (this.target.getEntityBoundingBox().maxY - this.target.getEntityBoundingBox().minY) / 2.0D - this.posY;
-				double dz = this.target.getEntityBoundingBox().minZ + (this.target.getEntityBoundingBox().maxZ - this.target.getEntityBoundingBox().minZ) / 2.0D - this.posZ;
+				double dx = this.target.getBoundingBox().minX + (this.target.getBoundingBox().maxX - this.target.getBoundingBox().minX) / 2.0D - this.posX;
+				double dy = this.target.getBoundingBox().minY + (this.target.getBoundingBox().maxY - this.target.getBoundingBox().minY) / 2.0D - this.posY;
+				double dz = this.target.getBoundingBox().minZ + (this.target.getBoundingBox().maxZ - this.target.getBoundingBox().minZ) / 2.0D - this.posZ;
 				double dist = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
 				double speed = 0.075D;
 				double maxSpeed = 0.8D;
@@ -204,13 +204,13 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 				nextPos = new Vec3d(hitObject.hitVec.x, hitObject.hitVec.y, hitObject.hitVec.z);
 			}
 			Entity hitEntity = null;
-			List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(this.motionX, this.motionY, this.motionZ).grow(2.0D, 2.0D, 2.0D));
+			List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().grow(this.motionX, this.motionY, this.motionZ).grow(2.0D, 2.0D, 2.0D));
 			double minDist = 0.0D;
 			for (int i = 0; i < hitEntities.size(); ++i) {
 				Entity entity1 = (Entity)hitEntities.get(i);
 				if (entity1.canBeCollidedWith() && (this.ticksInAir >= 10)) {
 					float f = 0.3F;
-					AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double)f, (double)f, (double)f);
+					AxisAlignedBB axisalignedbb = entity1.getBoundingBox().grow((double)f, (double)f, (double)f);
 					RayTraceResult movingobjectposition1 = axisalignedbb.calculateIntercept(currentPos, nextPos);
 					if (movingobjectposition1 != null) {
 						double d1 = currentPos.distanceTo(movingobjectposition1.hitVec);
@@ -255,18 +255,18 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
-		if(nbt.hasKey("ownerUUID")) {
+		if(nbt.contains("ownerUUID")) {
 			this.setOwner(nbt.getUniqueId("ownerUUID"));
 		}
-		if(nbt.hasKey("strikes")) {
-			this.strikes = nbt.getInteger("strikes");
+		if(nbt.contains("strikes")) {
+			this.strikes = nbt.getInt("strikes");
 		}
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setUniqueId("ownerUUID", this.getOwnerUUID());
-		nbt.setInteger("strikes", this.strikes);
+		nbt.setInt("strikes", this.strikes);
 	}
 	
 	@OnlyIn(Dist.CLIENT)

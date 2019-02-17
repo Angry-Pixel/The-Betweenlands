@@ -72,8 +72,8 @@ public class EntityRopeNode extends Entity {
 		this.setPreviousNodeUUID(nbt.hasUniqueId("previousNodeUUID") ? nbt.getUniqueId("previousNodeUUID") : null);
 		this.pickUp = nbt.getBoolean("pickUp");
 		this.canExtend = nbt.getBoolean("canExtend");
-		this.despawnTimer = nbt.getInteger("despawnTimer");
-		if(nbt.hasKey("lightBlock", Constants.NBT.TAG_LONG)) {
+		this.despawnTimer = nbt.getInt("despawnTimer");
+		if(nbt.contains("lightBlock", Constants.NBT.TAG_LONG)) {
 			this.lightBlock = BlockPos.fromLong(nbt.getLong("lightBlock"));
 		} else {
 			this.lightBlock = null;
@@ -90,7 +90,7 @@ public class EntityRopeNode extends Entity {
 		}
 		nbt.setBoolean("pickUp", this.pickUp);
 		nbt.setBoolean("canExtend", this.canExtend);
-		nbt.setInteger("despawnTimer", this.despawnTimer);
+		nbt.setInt("despawnTimer", this.despawnTimer);
 		if(this.lightBlock != null) {
 			nbt.setLong("lightBlock", this.lightBlock.toLong());
 		}
@@ -175,7 +175,7 @@ public class EntityRopeNode extends Entity {
 				if(nextNode.getDistance(this) > 1.5D) {
 					this.pickUp = true;
 				}
-				if(this.pickUp && nextNode.getEntityBoundingBox().grow(0.4D, 0.4D, 0.4D).intersects(this.getEntityBoundingBox())) {
+				if(this.pickUp && nextNode.getBoundingBox().grow(0.4D, 0.4D, 0.4D).intersects(this.getBoundingBox())) {
 					this.removeNode(nextNode);
 					EntityPlayer player = (EntityPlayer) nextNode;
 					if(player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.CAVING_ROPE, 1))) {
@@ -419,7 +419,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public boolean isAttached() {
-		return !this.world.getCollisionBoxes(this, this.getEntityBoundingBox().grow(0.1D, 0.1D, 0.1D)).isEmpty();
+		return !this.world.getCollisionBoxes(this, this.getBoundingBox().grow(0.1D, 0.1D, 0.1D)).isEmpty();
 	}
 
 	public EntityRopeNode extendRope(Entity entity, double x, double y, double z) {
@@ -522,7 +522,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	private Entity getEntityByUUID(UUID uuid) {
-		for(Entity entity : (List<Entity>) this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(24, 24, 24))) {
+		for(Entity entity : (List<Entity>) this.world.getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(24, 24, 24))) {
 			if (uuid.equals(entity.getUniqueID())) {
 				return entity;
 			}

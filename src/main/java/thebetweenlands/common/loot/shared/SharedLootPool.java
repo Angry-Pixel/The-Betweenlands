@@ -141,7 +141,7 @@ public class SharedLootPool implements ISharedLootPool {
 		if(!this.removedItems.isEmpty()) {
 			NBTTagCompound removedItemsNbt = new NBTTagCompound();
 			for(Object2IntMap.Entry<String> entry : this.removedItems.object2IntEntrySet()) {
-				removedItemsNbt.setInteger(entry.getKey(), entry.getIntValue());
+				removedItemsNbt.setInt(entry.getKey(), entry.getIntValue());
 			}
 			nbt.setTag("removedItems", removedItemsNbt);
 		}
@@ -166,7 +166,7 @@ public class SharedLootPool implements ISharedLootPool {
 			nbt.setString("lootTable", this.lootTableLocation.toString());
 		}
 
-		nbt.setInteger("generatedLootTables", this.guaranteeCounter);
+		nbt.setInt("generatedLootTables", this.guaranteeCounter);
 
 		nbt.setLong("sharedLootSeed", this.sharedLootSeed);
 
@@ -175,29 +175,29 @@ public class SharedLootPool implements ISharedLootPool {
 
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.removedItems.clear();
-		NBTTagCompound removedItemsNbt = nbt.getCompoundTag("removedItems");
+		NBTTagCompound removedItemsNbt = nbt.getCompound("removedItems");
 		for(String key : removedItemsNbt.getKeySet()) {
-			this.removedItems.put(key, removedItemsNbt.getInteger(key));
+			this.removedItems.put(key, removedItemsNbt.getInt(key));
 		}
 
 		this.poolSeeds.clear();
-		NBTTagCompound poolSeedsNbt = nbt.getCompoundTag("poolSeeds");
+		NBTTagCompound poolSeedsNbt = nbt.getCompound("poolSeeds");
 		for(String key : poolSeedsNbt.getKeySet()) {
 			this.poolSeeds.put(key, poolSeedsNbt.getLong(key));
 		}
 
 		this.entrySeeds.clear();
-		NBTTagCompound entrySeedsNbt = nbt.getCompoundTag("entrySeeds");
+		NBTTagCompound entrySeedsNbt = nbt.getCompound("entrySeeds");
 		for(String key : entrySeedsNbt.getKeySet()) {
 			this.entrySeeds.put(key, entrySeedsNbt.getLong(key));
 		}
 
 		this.lootTableLocation = null;
-		if(nbt.hasKey("lootTable", Constants.NBT.TAG_STRING)) {
+		if(nbt.contains("lootTable", Constants.NBT.TAG_STRING)) {
 			this.lootTableLocation = new ResourceLocation(nbt.getString("lootTable"));
 		}
 
-		this.guaranteeCounter = nbt.getInteger("generatedLootTables");
+		this.guaranteeCounter = nbt.getInt("generatedLootTables");
 
 		this.sharedLootSeed = nbt.getLong("sharedLootSeed");
 	}

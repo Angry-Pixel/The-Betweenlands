@@ -16,6 +16,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 
@@ -24,8 +25,12 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 	public boolean active;
 	public byte type;
 
+	public TileEntitySpikeTrap() {
+		super(TileEntityRegistry.SPIKE_TRAP);
+	}
+	
 	@Override
-	public void update() {
+	public void tick() {
 		if (!world.isRemote) {
 			IBlockState stateUp = world.getBlockState(pos.up());
 			if (stateUp.getBlock() != Blocks.AIR && stateUp.getBlockHardness(world, pos.up()) >= 0.0F) {
@@ -107,18 +112,18 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		nbt.setInteger("animationTicks", animationTicks);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
+		nbt.setInt("animationTicks", animationTicks);
 		nbt.setBoolean("active", active);
 		nbt.setByte("type", type);
 		return nbt;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		animationTicks = nbt.getInteger("animationTicks");
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
+		animationTicks = nbt.getInt("animationTicks");
 		active = nbt.getBoolean("active");
 		type = nbt.getByte("type");
 	}

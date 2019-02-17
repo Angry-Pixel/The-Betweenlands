@@ -19,6 +19,7 @@ import net.minecraft.util.math.MathHelper;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.registries.TileEntityRegistry;
 import thebetweenlands.util.AnimationMathHelper;
 
 public class TileEntityPossessedBlock extends TileEntity implements ITickable {
@@ -28,8 +29,12 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 	AnimationMathHelper headShake = new AnimationMathHelper();
 	public float moveProgress;
 
+	public TileEntityPossessedBlock() {
+		super(TileEntityRegistry.POSSESSED_BLOCK);
+	}
+	
 	@Override
-	public void update() {
+	public void tick() {
 		if (!world.isRemote) {
 			findEnemyToAttack();
 			if (active) {
@@ -59,7 +64,7 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 
 	private void spawnParticles() {
 		IBlockState state = getWorld().getBlockState(pos);
-		EnumFacing facing = state.getValue(BlockPossessedBlock.FACING);
+		EnumFacing facing = state.get(BlockPossessedBlock.FACING);
 		float x = 0, z = 0;
 		if(facing == EnumFacing.WEST)
 			x = -1F;
@@ -88,7 +93,7 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 	@SuppressWarnings("unchecked")
 	protected Entity findEnemyToAttack() {
 		IBlockState state = getWorld().getBlockState(pos);
-		EnumFacing facing = state.getValue(BlockPossessedBlock.FACING);
+		EnumFacing facing = state.get(BlockPossessedBlock.FACING);
 		float x = 0, z = 0;
 		if(facing == EnumFacing.WEST)
 			x = -1.25F;
@@ -112,7 +117,7 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 	@SuppressWarnings("unchecked")
 	protected Entity activateBlock() {
 		IBlockState state = getWorld().getBlockState(pos);
-		EnumFacing facing = state.getValue(BlockPossessedBlock.FACING);
+		EnumFacing facing = state.get(BlockPossessedBlock.FACING);
 		float x = 0, z = 0;
 		if(facing == EnumFacing.WEST)
 			x = -1.25F;
@@ -137,17 +142,17 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		nbt.setInteger("animationTicks", animationTicks);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
+		nbt.setInt("animationTicks", animationTicks);
 		nbt.setBoolean("active", active);
 		return nbt;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		animationTicks = nbt.getInteger("animationTicks");
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
+		animationTicks = nbt.getInt("animationTicks");
 		active = nbt.getBoolean("active");
 	}
 

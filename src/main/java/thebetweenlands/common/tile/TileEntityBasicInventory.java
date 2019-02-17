@@ -8,6 +8,7 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
@@ -24,7 +25,8 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	protected NonNullList<ItemStack> inventory;
 	protected final ItemStackHandler inventoryHandler;
 
-	public TileEntityBasicInventory(int invtSize, String name) {
+	public TileEntityBasicInventory(TileEntityType<?> type, int invtSize, String name) {
+		super(type);
 		this.inventoryHandler = new ItemStackHandler(this.inventory = NonNullList.withSize(invtSize, ItemStack.EMPTY)) {
 			@Override
 			public void setSize(int size) {
@@ -43,8 +45,8 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
 		this.readInventoryNBT(nbt);
 	}
 
@@ -54,14 +56,14 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	 */
 	protected void readInventoryNBT(NBTTagCompound nbt) {
 		this.clear();
-		if(nbt.hasKey("Inventory", Constants.NBT.TAG_COMPOUND)) {
-			this.inventoryHandler.deserializeNBT(nbt.getCompoundTag("Inventory"));
+		if(nbt.contains("Inventory", Constants.NBT.TAG_COMPOUND)) {
+			this.inventoryHandler.deserializeNBT(nbt.getCompound("Inventory"));
 		}
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
 		this.writeInventoryNBT(nbt);
 		return nbt;
 	}

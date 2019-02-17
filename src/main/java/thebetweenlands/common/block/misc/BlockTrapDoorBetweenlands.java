@@ -23,10 +23,10 @@ public class BlockTrapDoorBetweenlands extends BlockTrapDoor {
 
 	@Override
 	public boolean isLadder(IBlockState state, IWorldReader world, BlockPos pos, EntityLivingBase entity) {
-		if (state.getValue(OPEN)) {
+		if (state.get(OPEN)) {
 			IBlockState down = world.getBlockState(pos.down());
 			if (down.getBlock() instanceof BlockLadder) {
-				return down.getValue(BlockLadder.FACING) == state.getValue(FACING);
+				return down.getValue(BlockLadder.FACING) == state.get(FACING);
 			}
 		}
 		return false;

@@ -103,7 +103,7 @@ public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
             if (input.getItemDamage() == OreDictionary.WILDCARD_VALUE || input.getItemDamage() == toCheck.getItemDamage())
                 if (!matchSize || input.getCount() == toCheck.getCount()) {
                     if (input.hasTagCompound() && toCheck.hasTagCompound())
-                        return input.getTagCompound().equals(toCheck.getTagCompound());
+                        return input.getTag().equals(toCheck.getTag());
                     return input.hasTagCompound() == toCheck.hasTagCompound();
                 }
         return false;

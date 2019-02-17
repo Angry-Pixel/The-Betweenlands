@@ -12,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import thebetweenlands.common.entity.EntitySwordEnergy;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 
 public class TileEntityItemCage extends TileEntity implements ITickable {
@@ -19,8 +20,12 @@ public class TileEntityItemCage extends TileEntity implements ITickable {
 	public byte type; // type will be used for each sword part rendering
 	public boolean canBreak;
 
+	public TileEntityItemCage() {
+		super(TileEntityRegistry.INFUSER);
+	}
+	
 	@Override
-	public void update() {
+	public void tick() {
 		if (!world.isRemote) {
 			if (isBlockOccupied() != null)
 				if (!canBreak)
@@ -66,16 +71,16 @@ public class TileEntityItemCage extends TileEntity implements ITickable {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
 		nbt.setBoolean("canBreak", canBreak);
 		nbt.setByte("type", type);
 		return nbt;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
 		canBreak = nbt.getBoolean("canBreak");
 		type = nbt.getByte("type");
 	}

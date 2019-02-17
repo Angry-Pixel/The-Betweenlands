@@ -97,14 +97,14 @@ public class BlockMudFlowerPot extends BlockContainer {
 
 	@Override
 	public IBlockState getExtendedState(IBlockState state, IWorldReader world, BlockPos pos) {
-		state = ((IExtendedBlockState)state).withProperty(FLOWER, Blocks.AIR.getDefaultState());
+		state = ((IExtendedBlockState)state).with(FLOWER, Blocks.AIR.getDefaultState());
 
 		TileEntityMudFlowerPot te = TileEntityHelper.getTileEntityThreadSafe(world, pos, TileEntityMudFlowerPot.class);
 
 		if(te != null && !te.getFlowerItemStack().isEmpty()) {
 			IBlockState blockState = this.getPlantBlockStateFromItem(te.getFlowerItemStack());
 			if(blockState != null) {
-				state = ((IExtendedBlockState)state).withProperty(FLOWER, blockState);
+				state = ((IExtendedBlockState)state).with(FLOWER, blockState);
 			}
 		}
 

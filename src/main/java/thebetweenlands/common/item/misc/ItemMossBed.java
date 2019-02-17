@@ -51,10 +51,10 @@ public class ItemMossBed extends Item {
 				boolean isHeadPlaceable = isHeadPosReplaceable || worldIn.isAirBlock(headPos);
 
 				if (isFootPlaceable && isHeadPlaceable && worldIn.getBlockState(pos.down()).isTopSolid() && worldIn.getBlockState(headPos.down()).isTopSolid()) {
-					IBlockState bedState = BlockRegistry.MOSS_BED.getDefaultState().withProperty(BlockBed.OCCUPIED, Boolean.valueOf(false)).withProperty(BlockBed.FACING, placementFacing).withProperty(BlockBed.PART, BlockBed.EnumPartType.FOOT);
+					IBlockState bedState = BlockRegistry.MOSS_BED.getDefaultState().with(BlockBed.OCCUPIED, Boolean.valueOf(false)).with(BlockBed.FACING, placementFacing).with(BlockBed.PART, BlockBed.EnumPartType.FOOT);
 
 					if(worldIn.setBlockState(pos, bedState, 10)) {
-						worldIn.setBlockState(headPos, bedState.withProperty(BlockBed.PART, BlockBed.EnumPartType.HEAD), 10);
+						worldIn.setBlockState(headPos, bedState.with(BlockBed.PART, BlockBed.EnumPartType.HEAD), 10);
 					}
 
 					SoundType sound = bedState.getBlock().getSoundType(bedState, worldIn, pos, player);

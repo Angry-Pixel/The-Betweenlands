@@ -162,7 +162,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 						if (rand.nextFloat() < 0.3F) sendRustleEffect((rand.nextFloat() + 0.2F) * 0.06F);
 					}
 					if (timeHiding > MIN_HIDE_TIME) {
-						List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE));
+						List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getBoundingBox().grow(PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE));
 						if (players.size() < 1 && rand.nextFloat() < UNHIDE_CHANCE) {
 							stopHiding();
 						}
@@ -224,19 +224,19 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 		super.writeEntityToNBT(compound);
 		compound.setBoolean("isHiding", isHiding());
 		if (isHiding()) {
-			compound.setInteger("hidingBushX", hidingBush.getX());
-			compound.setInteger("hidingBushY", hidingBush.getY());
-			compound.setInteger("hidingBushZ", hidingBush.getZ());
+			compound.setInt("hidingBushX", hidingBush.getX());
+			compound.setInt("hidingBushY", hidingBush.getY());
+			compound.setInt("hidingBushZ", hidingBush.getZ());
 		}
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		if(compound.hasKey("isHiding")) {
+		if(compound.contains("isHiding")) {
 			setHiding(compound.getBoolean("isHiding"));
 			if (isHiding()) {
-				setHidingBush(new BlockPos(compound.getInteger("hidingBushX"), compound.getInteger("hidingBushY"), compound.getInteger("hidingBushZ")));
+				setHidingBush(new BlockPos(compound.getInt("hidingBushX"), compound.getInt("hidingBushY"), compound.getInt("hidingBushZ")));
 			}
 		}
 	}

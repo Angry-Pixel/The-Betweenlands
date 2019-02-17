@@ -204,7 +204,7 @@ public class EntityDarkDruid extends EntityMob {
                 newDruid.faceEntity(entity, 100, 100);
                 newDruid.setAttackTarget(this.getAttackTarget());
                 newDruid.attackDelayCounter = MIN_ATTACK_DELAY + this.rand.nextInt(MAX_ATTACK_DELAY - MIN_ATTACK_DELAY + 1) + 1;
-                if (world.getCollisionBoxes(newDruid, newDruid.getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(newDruid.getEntityBoundingBox())) {
+                if (world.getCollisionBoxes(newDruid, newDruid.getBoundingBox()).isEmpty() && !world.containsAnyLiquid(newDruid.getBoundingBox())) {
                     successful = true;
                     setDead();
                     world.spawnEntity(newDruid);
@@ -285,7 +285,7 @@ public class EntityDarkDruid extends EntityMob {
 
     @Override
     public boolean getCanSpawnHere() {
-        return super.getCanSpawnHere() && !this.world.containsAnyLiquid(this.getEntityBoundingBox());
+        return super.getCanSpawnHere() && !this.world.containsAnyLiquid(this.getBoundingBox());
     }
 
     @Override
@@ -359,12 +359,12 @@ public class EntityDarkDruid extends EntityMob {
     @Override
     public void writeEntityToNBT(NBTTagCompound tagCompound) {
         super.writeEntityToNBT(tagCompound);
-        tagCompound.setInteger("Teleport", teleportCooldown);
+        tagCompound.setInt("Teleport", teleportCooldown);
     }
 
     @Override
     public void readEntityFromNBT(NBTTagCompound tagCompound) {
         super.readEntityFromNBT(tagCompound);
-        teleportCooldown = tagCompound.getInteger("Teleport");
+        teleportCooldown = tagCompound.getInt("Teleport");
     }
 }

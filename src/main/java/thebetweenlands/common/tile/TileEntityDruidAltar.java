@@ -26,6 +26,7 @@ import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
 import thebetweenlands.common.network.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
+import thebetweenlands.common.registries.TileEntityRegistry;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
@@ -43,11 +44,11 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 	private boolean circleShouldRevert = true;
 
 	public TileEntityDruidAltar() {
-		super(5, "druid_altar");
+		super(TileEntityRegistry.DRUID_ALTAR, 5, "druid_altar");
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 		if (!this.world.isRemote && this.circleShouldRevert) {
 			checkDruidCircleBlocks(this.world);
 			this.circleShouldRevert = false;
@@ -113,7 +114,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 	private void startCraftingProcess() {
 		World world = this.world;
 		int dim = world.provider.getDimension();
-		this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).withProperty(BlockDruidAltar.ACTIVE, true), 3);
+		this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(BlockDruidAltar.ACTIVE, true), 3);
 		this.craftingProgress = 1;
 		// Packet to start sound
 		TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this, -1), new NetworkRegistry.TargetPoint(dim, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 64D));
@@ -138,7 +139,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 	private void stopCraftingProcess() {
 		World world = this.world;
 		int dim = world.provider.getDimension();
-		this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).withProperty(BlockDruidAltar.ACTIVE, false), 3);
+		this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).with(BlockDruidAltar.ACTIVE, false), 3);
 		this.craftingProgress = 0;
 		// Packet to cancel sound
 		TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this, -2), new NetworkRegistry.TargetPoint(dim, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 64D));
@@ -177,10 +178,10 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 						IBlockState state = world.getBlockState(pos);
 						Block block = state.getBlock();
 						if (block instanceof BlockDruidStone) {
-							if ((this.craftingProgress == 0 || this.circleShouldRevert) && state.getValue(BlockDruidStone.ACTIVE)) {
-								world.setBlockState(pos, state.withProperty(BlockDruidStone.ACTIVE, false), 3);
-							} else if (this.craftingProgress == 1 && !state.getValue(BlockDruidStone.ACTIVE)) {
-								world.setBlockState(pos, state.withProperty(BlockDruidStone.ACTIVE, true), 3);
+							if ((this.craftingProgress == 0 || this.circleShouldRevert) && state.get(BlockDruidStone.ACTIVE)) {
+								world.setBlockState(pos, state.with(BlockDruidStone.ACTIVE, false), 3);
+							} else if (this.craftingProgress == 1 && !state.get(BlockDruidStone.ACTIVE)) {
+								world.setBlockState(pos, state.with(BlockDruidStone.ACTIVE, true), 3);
 							}
 						}
 					}
@@ -201,16 +202,16 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		nbt.setInteger("craftingProgress", this.craftingProgress);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
+		nbt.setInt("craftingProgress", this.craftingProgress);
 		return nbt;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		this.craftingProgress = nbt.getInteger("craftingProgress");
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
+		this.craftingProgress = nbt.getInt("craftingProgress");
 	}
 
 	@Override

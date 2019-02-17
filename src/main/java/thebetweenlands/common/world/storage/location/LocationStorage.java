@@ -284,10 +284,10 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		this.hasSharedLootPools = nbt.getBoolean("hasSharedLootPools");
 
 		this.sharedLootPools.clear();
-		NBTTagList sharedLootPoolsNbt = nbt.getTagList("sharedLootPools", Constants.NBT.TAG_COMPOUND);
+		NBTTagList sharedLootPoolsNbt = nbt.getList("sharedLootPools", Constants.NBT.TAG_COMPOUND);
 
-		for(int i = 0; i < sharedLootPoolsNbt.tagCount(); i++) {
-			SharedLootPool sharedLootPool = new SharedLootPool(sharedLootPoolsNbt.getCompoundTagAt(i), this);
+		for(int i = 0; i < sharedLootPoolsNbt.size(); i++) {
+			SharedLootPool sharedLootPool = new SharedLootPool(sharedLootPoolsNbt.getCompound(i), this);
 			ResourceLocation lootTable = sharedLootPool.getLootTable();
 			if(lootTable != null) {
 				this.sharedLootPools.put(lootTable, sharedLootPool);
@@ -302,9 +302,9 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 			this.setDirty(true);
 		}
 		this.boundingBoxes.clear();
-		NBTTagList boundingBoxes = nbt.getTagList("bounds", Constants.NBT.TAG_COMPOUND);
-		for(int i = 0; i < boundingBoxes.tagCount(); i++) {
-			NBTTagCompound boxNbt = boundingBoxes.getCompoundTagAt(i);
+		NBTTagList boundingBoxes = nbt.getList("bounds", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < boundingBoxes.size(); i++) {
+			NBTTagCompound boxNbt = boundingBoxes.getCompound(i);
 			double minX = boxNbt.getDouble("minX");
 			double minY = boxNbt.getDouble("minY");
 			double minZ = boxNbt.getDouble("minZ");
@@ -315,9 +315,9 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		}
 		this.updateEnclosingBounds();
 		this.type = EnumLocationType.fromName(nbt.getString("type"));
-		this.layer = nbt.getInteger("layer");
-		if(nbt.hasKey("ambience")) {
-			NBTTagCompound ambienceTag = nbt.getCompoundTag("ambience");
+		this.layer = nbt.getInt("layer");
+		if(nbt.contains("ambience")) {
+			NBTTagCompound ambienceTag = nbt.getCompound("ambience");
 			this.ambience = LocationAmbience.readFromNBT(this, ambienceTag);
 		}
 		this.dataManager.set(VISIBLE, nbt.getBoolean("visible"));
@@ -330,7 +330,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public void readGuardNBT(NBTTagCompound nbt) {
 		if(this.getGuard() != null) {
-			this.getGuard().readFromNBT(nbt.getCompoundTag("guard"));
+			this.getGuard().readFromNBT(nbt.getCompound("guard"));
 		}
 	}
 
@@ -346,7 +346,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 			NBTTagList sharedLootPoolsNbt = new NBTTagList();
 
 			for(SharedLootPool sharedLootPool : this.sharedLootPools.values()) {
-				sharedLootPoolsNbt.appendTag(sharedLootPool.writeToNBT(new NBTTagCompound()));
+				sharedLootPoolsNbt.add(sharedLootPool.writeToNBT(new NBTTagCompound()));
 			}
 
 			nbt.setTag("sharedLootPools", sharedLootPoolsNbt);
@@ -366,11 +366,11 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 			boxNbt.setDouble("maxX", boundingBox.maxX);
 			boxNbt.setDouble("maxY", boundingBox.maxY);
 			boxNbt.setDouble("maxZ", boundingBox.maxZ);
-			boundingBoxes.appendTag(boxNbt);
+			boundingBoxes.add(boxNbt);
 		}
 		nbt.setTag("bounds", boundingBoxes);
 		nbt.setString("type", this.type.name);
-		nbt.setInteger("layer", this.layer);
+		nbt.setInt("layer", this.layer);
 		if(this.hasAmbience()) {
 			NBTTagCompound ambienceTag = new NBTTagCompound();
 			this.ambience.writeToNBT(ambienceTag);
@@ -409,7 +409,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 * @return
 	 */
 	public boolean isInside(Entity entity) {
-		return this.intersects(entity.getEntityBoundingBox());
+		return this.intersects(entity.getBoundingBox());
 	}
 
 	/**
@@ -540,7 +540,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Entity entity) {
-		return getLocations(entity.world, entity.getEntityBoundingBox());
+		return getLocations(entity.world, entity.getBoundingBox());
 	}
 
 	/**

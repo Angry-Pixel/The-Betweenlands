@@ -26,7 +26,7 @@ public class WorldGenRottenLogs extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
-		this.log = BlockRegistry.LOG_ROTTEN_BARK.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, EnumAxis.NONE);
+		this.log = BlockRegistry.LOG_ROTTEN_BARK.getDefaultState().with(BlockLogBetweenlands.LOG_AXIS, EnumAxis.NONE);
 
 		int x = pos.getX();
 		int y = pos.getY();

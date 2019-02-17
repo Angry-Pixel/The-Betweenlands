@@ -44,7 +44,7 @@ public class EntityRootSprite extends EntityCreature implements IEntityBL {
 		this.tasks.addTask(1, new EntityAIPanic(this, 1.0D));
 		this.tasks.addTask(2, new EntityAIAvoidEntity<>(this, EntityPlayer.class, 5, 0.5F, 1.0F));
 		this.tasks.addTask(3, new EntityAIFollowTarget(this, new EntityAIFollowTarget.FollowClosest(this, EntitySporeling.class, 10), 0.65D, 0.5F, 10.0F, false));
-		this.tasks.addTask(4, new EntityAIJumpRandomly(this, 10, () -> !EntityRootSprite.this.world.getEntitiesWithinAABB(EntitySporeling.class, this.getEntityBoundingBox().grow(1)).isEmpty()) {
+		this.tasks.addTask(4, new EntityAIJumpRandomly(this, 10, () -> !EntityRootSprite.this.world.getEntitiesWithinAABB(EntitySporeling.class, this.getBoundingBox().grow(1)).isEmpty()) {
 			@Override
 			public void startExecuting() {
 				EntityRootSprite.this.setJumpHeightOverride(0.2F);

@@ -47,13 +47,13 @@ public class EntityShockwaveSwordItem extends EntityItem {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setInteger("WaveProgress", this.getDataManager().get(WAVE_PROGRESS));
+		nbt.setInt("WaveProgress", this.getDataManager().get(WAVE_PROGRESS));
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		this.getDataManager().set(WAVE_PROGRESS, nbt.getInteger("WaveProgress"));
+		this.getDataManager().set(WAVE_PROGRESS, nbt.getInt("WaveProgress"));
 	}
 
 	@OnlyIn(Dist.CLIENT)

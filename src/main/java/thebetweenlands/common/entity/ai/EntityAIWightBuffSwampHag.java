@@ -90,7 +90,7 @@ public class EntityAIWightBuffSwampHag extends EntityAIBase {
 		EntityLivingBase target = this.wight.getAttackTarget();
 		if(target != null) {
 			double range = 16.0D;
-			AxisAlignedBB aabb = this.wight.getEntityBoundingBox().grow(range);
+			AxisAlignedBB aabb = this.wight.getBoundingBox().grow(range);
 			EntitySwampHag closestSuitableToTarget = null;
 			List<EntitySwampHag> nearby = this.world.getEntitiesWithinAABB(EntitySwampHag.class, aabb);
 			for(EntitySwampHag hag : nearby) {

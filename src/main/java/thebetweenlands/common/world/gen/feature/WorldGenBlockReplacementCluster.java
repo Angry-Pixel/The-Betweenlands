@@ -57,7 +57,7 @@ public class WorldGenBlockReplacementCluster extends WorldGenerator {
 							IProperty sourceProperty = property.getKey();
 							IProperty targetProperty = setState.getBlock().getBlockState().getProperty(sourceProperty.getName());
 							if (targetProperty != null && sourceProperty.getValueClass() == targetProperty.getValueClass()) {
-								setState = setState.withProperty(targetProperty, (Comparable) property.getValue());
+								setState = setState.with(targetProperty, (Comparable) property.getValue());
 							}
 						}
 					}

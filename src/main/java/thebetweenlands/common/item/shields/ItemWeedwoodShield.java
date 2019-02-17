@@ -51,8 +51,8 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	}
 
 	public int getBurningTicks(ItemStack stack) {
-		NBTTagCompound tag = stack.getTagCompound();
-		return tag != null && tag.hasKey("burningTicks", Constants.NBT.TAG_INT) ? tag.getInteger("burningTicks") : 0;
+		NBTTagCompound tag = stack.getTag();
+		return tag != null && tag.contains("burningTicks", Constants.NBT.TAG_INT) ? tag.getInt("burningTicks") : 0;
 	}
 
 	@Override

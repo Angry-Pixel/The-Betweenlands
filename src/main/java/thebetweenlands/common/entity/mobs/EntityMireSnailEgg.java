@@ -94,14 +94,14 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setInteger("hatchTicks", getHatchTime());
+		nbt.setInt("hatchTicks", getHatchTime());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		if(nbt.hasKey("hatchTicks")) {
-			setHatchTime(nbt.getInteger("hatchTicks"));
+		if(nbt.contains("hatchTicks")) {
+			setHatchTime(nbt.getInt("hatchTicks"));
 		}
 	}
 

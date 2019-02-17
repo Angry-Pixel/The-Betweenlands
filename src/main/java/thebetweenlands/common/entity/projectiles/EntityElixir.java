@@ -56,7 +56,7 @@ public class EntityElixir extends EntityThrowable {
     @Override
     protected void onImpact(RayTraceResult result) {
         if (!this.world.isRemote) {
-            AxisAlignedBB hitBB = this.getEntityBoundingBox().grow(4.0D, 2.0D, 4.0D);
+            AxisAlignedBB hitBB = this.getBoundingBox().grow(4.0D, 2.0D, 4.0D);
             List<EntityLivingBase> hitEntities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, hitBB);
             if (!hitEntities.isEmpty()) {
                 Iterator<EntityLivingBase> hitEntitiesIT = hitEntities.iterator();
@@ -88,7 +88,7 @@ public class EntityElixir extends EntityThrowable {
     @Override
     public void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
-    	ItemStack itemstack = new ItemStack(nbt.getCompoundTag("elixir"));
+    	ItemStack itemstack = new ItemStack(nbt.getCompound("elixir"));
 
         if (itemstack.isEmpty()) {
             this.setDead();

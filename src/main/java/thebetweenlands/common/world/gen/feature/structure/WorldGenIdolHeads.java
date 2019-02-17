@@ -40,7 +40,7 @@ public class WorldGenIdolHeads extends WorldGenHelper {
 	private final WorldGenerator crackGen = new WorldGenBlockReplacementCluster(BlockRegistry.CRAGROCK.getDefaultState(), BlockMatcher.forBlock(BlockRegistry.SMOOTH_CRAGROCK));
 	private final WorldGenerator crackGenSlabs = new WorldGenBlockReplacementCluster(BlockRegistry.CRAGROCK_BRICK_SLAB.getDefaultState(), BlockMatcher.forBlock(BlockRegistry.SMOOTH_CRAGROCK_SLAB)).setInheritProperties(true);
 	private final WorldGenerator crackGenStairs = new WorldGenBlockReplacementCluster(BlockRegistry.CRAGROCK_BRICK_STAIRS.getDefaultState(), BlockMatcher.forBlock(BlockRegistry.SMOOTH_CRAGROCK_STAIRS)).setInheritProperties(true);
-	private final WorldGenerator mossGen = new WorldGenBlockReplacementCluster(BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_2), BlockMatcher.forBlock(BlockRegistry.SMOOTH_CRAGROCK));
+	private final WorldGenerator mossGen = new WorldGenBlockReplacementCluster(BlockRegistry.CRAGROCK.getDefaultState().with(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_2), BlockMatcher.forBlock(BlockRegistry.SMOOTH_CRAGROCK));
 	private final WorldGenerator lichenClusterGen = new WorldGenMossCluster(BlockRegistry.LICHEN.getDefaultState());
 	private final WorldGenerator mossClusterGen = new WorldGenMossCluster(BlockRegistry.MOSS.getDefaultState());
 
@@ -92,27 +92,27 @@ public class WorldGenIdolHeads extends WorldGenHelper {
 			rotatedCubeVolume(world, xx, y, zz, 2, 4, 3, octine, 1, 1, 1, direction);
 			rotatedCubeVolume(world, xx, y, zz, 5, 4, 3, octine, 1, 1, 1, direction);
 			rotatedCubeVolume(world, xx, y, zz, 2, 1, 1, slab, 4, 1, 1, direction);
-			rotatedCubeVolume(world, xx, y, zz, 2, 2, 1, slab.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 4, 1, 1, direction);
+			rotatedCubeVolume(world, xx, y, zz, 2, 2, 1, slab.with(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 4, 1, 1, direction);
 			rotatedCubeVolume(world, xx, y, zz, 1, 1, 1, 
-					direction == 0 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST) : 
-						direction == 2 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST) : 
-							direction == 1 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH) : 
-								stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH), 1, 1, 1, direction); //bottom right
+					direction == 0 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST) : 
+						direction == 2 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST) : 
+							direction == 1 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH) : 
+								stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH), 1, 1, 1, direction); //bottom right
 			rotatedCubeVolume(world, xx, y, zz, 6, 1, 1, 
-					direction == 0 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST) : 
-						direction == 2 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST) : 
-							direction == 1 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH) : 
-								stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH), 1, 1, 1, direction); //bottom left
+					direction == 0 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST) : 
+						direction == 2 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST) : 
+							direction == 1 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH) : 
+								stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH), 1, 1, 1, direction); //bottom left
 			rotatedCubeVolume(world, xx, y, zz, 1, 2, 1, 
-					direction == 0 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-						direction == 2 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-							direction == 1 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-								stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, direction); //top right
+					direction == 0 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+						direction == 2 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+							direction == 1 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+								stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, direction); //top right
 			rotatedCubeVolume(world, xx, y, zz, 6, 2, 1, 
-					direction == 0 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-						direction == 2 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-							direction == 1 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-								stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, direction); //top left
+					direction == 0 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+						direction == 2 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+							direction == 1 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+								stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, direction); //top left
 			break;
 
 		case 1:// Silver Head
@@ -122,10 +122,10 @@ public class WorldGenIdolHeads extends WorldGenHelper {
 			rotatedCubeVolume(world, xx, y, zz, 3, 1, 7, solid, 2, 5, 1, direction);
 			rotatedCubeVolume(world, xx, y, zz, 1, 4, 3, solid, 6, 3, 4, direction);
 			rotatedCubeVolume(world, xx, y, zz, 1, 7, 1, solid, 2, 1, 6, direction);
-			rotatedCubeVolume(world, xx, y, zz, 1, 6, 1, slab.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 2, 1, 2, direction);
+			rotatedCubeVolume(world, xx, y, zz, 1, 6, 1, slab.with(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 2, 1, 2, direction);
 			rotatedCubeVolume(world, xx, y, zz, 3, 7, 1, slab, 2, 1, 6, direction);
 			rotatedCubeVolume(world, xx, y, zz, 5, 7, 1, solid, 2, 1, 6, direction);
-			rotatedCubeVolume(world, xx, y, zz, 5, 6, 1, slab.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 2, 1, 2, direction); 
+			rotatedCubeVolume(world, xx, y, zz, 5, 6, 1, slab.with(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 2, 1, 2, direction); 
 			rotatedCubeVolume(world, xx, y, zz, 3, 3, 0, solid, 2, 3, 3, direction);
 			rotatedCubeVolume(world, xx, y, zz, 3, 6, 1, solid, 2, 1, 2, direction);
 			rotatedCubeVolume(world, xx, y, zz, 1, 4, 2, slab, 2, 1, 1, direction);
@@ -134,25 +134,25 @@ public class WorldGenIdolHeads extends WorldGenHelper {
 			rotatedCubeVolume(world, xx, y, zz, 2, 5, 3, octine, 1, 1, 1, direction);
 			rotatedCubeVolume(world, xx, y, zz, 5, 5, 3, octine, 1, 1, 1, direction);
 			rotatedCubeVolume(world, xx, y, zz, 3, 1, 1, 
-					direction == 0 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST) : 
-						direction == 2 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST) : 
-							direction == 1 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH) : 
-								stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH), 1, 1, 1, direction); //bottom right
+					direction == 0 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST) : 
+						direction == 2 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST) : 
+							direction == 1 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH) : 
+								stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH), 1, 1, 1, direction); //bottom right
 			rotatedCubeVolume(world, xx, y, zz, 4, 1, 1, 
-					direction == 0 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST) : 
-						direction == 2 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST) : 
-							direction == 1 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH) : 
-								stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH), 1, 1, 1, direction); //bottom left
+					direction == 0 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST) : 
+						direction == 2 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST) : 
+							direction == 1 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH) : 
+								stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH), 1, 1, 1, direction); //bottom left
 			rotatedCubeVolume(world, xx, y, zz, 3, 2, 1, 
-					direction == 0 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-						direction == 2 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-							direction == 1 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-								stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, direction); //top right
+					direction == 0 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+						direction == 2 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+							direction == 1 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+								stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, direction); //top right
 			rotatedCubeVolume(world, xx, y, zz, 4, 2, 1, 
-					direction == 0 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-						direction == 2 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-							direction == 1 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-								stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, direction); //top left
+					direction == 0 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+						direction == 2 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+							direction == 1 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+								stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, direction); //top left
 			break;
 
 		case 2://Bronze Head
@@ -171,27 +171,27 @@ public class WorldGenIdolHeads extends WorldGenHelper {
 			rotatedCubeVolume(world, xx, y, zz, 2, 5, 3, octine, 1, 1, 1, direction);
 			rotatedCubeVolume(world, xx, y, zz, 5, 5, 3, octine, 1, 1, 1, direction);
 			rotatedCubeVolume(world, xx, y, zz, 3, 1, 1, slab, 2, 1, 1, direction);
-			rotatedCubeVolume(world, xx, y, zz, 3, 2, 1, slab.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 2, 1, 1, direction);
+			rotatedCubeVolume(world, xx, y, zz, 3, 2, 1, slab.with(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 2, 1, 1, direction);
 			rotatedCubeVolume(world, xx, y, zz, 2, 1, 1, 
-					direction == 0 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST) : 
-						direction == 2 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST) : 
-							direction == 1 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH) : 
-								stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH), 1, 1, 1, direction); //bottom right
+					direction == 0 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST) : 
+						direction == 2 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST) : 
+							direction == 1 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH) : 
+								stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH), 1, 1, 1, direction); //bottom right
 			rotatedCubeVolume(world, xx, y, zz, 5, 1, 1, 
-					direction == 0 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST) : 
-						direction == 2 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST) : 
-							direction == 1 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH) : 
-								stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH), 1, 1, 1, direction); //bottom left
+					direction == 0 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST) : 
+						direction == 2 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST) : 
+							direction == 1 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH) : 
+								stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH), 1, 1, 1, direction); //bottom left
 			rotatedCubeVolume(world, xx, y, zz, 2, 2, 1, 
-					direction == 0 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-						direction == 2 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-							direction == 1 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-								stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, direction); //top right
+					direction == 0 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+						direction == 2 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+							direction == 1 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+								stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, direction); //top right
 			rotatedCubeVolume(world, xx, y, zz, 5, 2, 1, 
-					direction == 0 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-						direction == 2 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-							direction == 1 ? stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
-								stairs.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, direction); //top left
+					direction == 0 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+						direction == 2 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+							direction == 1 ? stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP) : 
+								stairs.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, direction); //top left
 			break;
 		}
 

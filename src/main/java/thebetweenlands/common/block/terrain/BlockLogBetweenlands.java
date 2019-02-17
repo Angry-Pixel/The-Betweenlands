@@ -22,7 +22,7 @@ public class BlockLogBetweenlands extends BlockLog implements ISubtypeItemBlockM
 	public BlockLogBetweenlands() {
 		setHarvestLevel("axe", 0);
 		setCreativeTab(BLCreativeTabs.PLANTS);
-		setDefaultState(blockState.getBaseState().withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
+		setDefaultState(blockState.getBaseState().with(LOG_AXIS, BlockLog.EnumAxis.Y));
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
@@ -38,16 +38,16 @@ public class BlockLogBetweenlands extends BlockLog implements ISubtypeItemBlockM
 		IBlockState state = getDefaultState();
 		switch (meta & 12) {
 		case 0:
-			state = state.withProperty(LOG_AXIS, BlockLog.EnumAxis.Y);
+			state = state.with(LOG_AXIS, BlockLog.EnumAxis.Y);
 			break;
 		case 4:
-			state = state.withProperty(LOG_AXIS, BlockLog.EnumAxis.X);
+			state = state.with(LOG_AXIS, BlockLog.EnumAxis.X);
 			break;
 		case 8:
-			state = state.withProperty(LOG_AXIS, BlockLog.EnumAxis.Z);
+			state = state.with(LOG_AXIS, BlockLog.EnumAxis.Z);
 			break;
 		default:
-			state = state.withProperty(LOG_AXIS, BlockLog.EnumAxis.NONE);
+			state = state.with(LOG_AXIS, BlockLog.EnumAxis.NONE);
 		}
 
 		return state;
@@ -57,7 +57,7 @@ public class BlockLogBetweenlands extends BlockLog implements ISubtypeItemBlockM
 	@SuppressWarnings("incomplete-switch")
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
-		switch (state.getValue(LOG_AXIS)) {
+		switch (state.get(LOG_AXIS)) {
 		case X:
 			meta |= 4;
 			break;
@@ -79,7 +79,7 @@ public class BlockLogBetweenlands extends BlockLog implements ISubtypeItemBlockM
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		if(state.getValue(LOG_AXIS) == BlockLog.EnumAxis.NONE) {
+		if(state.get(LOG_AXIS) == BlockLog.EnumAxis.NONE) {
 			return 12;
 		}
 		return 0;
@@ -126,14 +126,14 @@ public class BlockLogBetweenlands extends BlockLog implements ISubtypeItemBlockM
 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		return new ItemStack(Item.getItemFromBlock(this), 1, state.getValue(LOG_AXIS) == BlockLog.EnumAxis.NONE ? 12 : 0);
+		return new ItemStack(Item.getItemFromBlock(this), 1, state.get(LOG_AXIS) == BlockLog.EnumAxis.NONE ? 12 : 0);
 	}
 	
 	@Override
 	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         if(meta != 12) {
-        	return this.getStateFromMeta(meta).withProperty(LOG_AXIS, BlockLog.EnumAxis.fromFacingAxis(facing.getAxis()));
+        	return this.getStateFromMeta(meta).with(LOG_AXIS, BlockLog.EnumAxis.fromFacingAxis(facing.getAxis()));
         }
-        return this.getDefaultState().withProperty(LOG_AXIS, BlockLog.EnumAxis.NONE);
+        return this.getDefaultState().with(LOG_AXIS, BlockLog.EnumAxis.NONE);
     }
 }

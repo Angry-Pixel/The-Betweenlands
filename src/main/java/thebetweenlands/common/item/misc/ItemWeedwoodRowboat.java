@@ -63,10 +63,10 @@ public class ItemWeedwoodRowboat extends Item {
         if (hit == null) {
             return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
         }
-        List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().grow(look.x * REACH, look.y * REACH, look.z * REACH).grow(1, 1, 1));
+        List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, player.getBoundingBox().grow(look.x * REACH, look.y * REACH, look.z * REACH).grow(1, 1, 1));
         for (Entity entity : list) {
             if (entity.canBeCollidedWith()) {
-                AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().grow(entity.getCollisionBorderSize(), entity.getCollisionBorderSize(), entity.getCollisionBorderSize());
+                AxisAlignedBB axisalignedbb = entity.getBoundingBox().grow(entity.getCollisionBorderSize(), entity.getCollisionBorderSize(), entity.getCollisionBorderSize());
                 if (axisalignedbb.contains(pos)) {
                     return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
                 }
@@ -79,7 +79,7 @@ public class ItemWeedwoodRowboat extends Item {
         boolean liquid = block.getMaterial().isLiquid();
         EntityWeedwoodRowboat rowboat = new EntityWeedwoodRowboat(world, hit.hitVec.x, liquid ? hit.hitVec.y - 0.3 : hit.hitVec.y, hit.hitVec.z);
         rowboat.rotationYaw = player.rotationYaw;
-        if (!world.getCollisionBoxes(rowboat, rowboat.getEntityBoundingBox().grow(-0.1, -0.1, -0.1)).isEmpty()) {
+        if (!world.getCollisionBoxes(rowboat, rowboat.getBoundingBox().grow(-0.1, -0.1, -0.1)).isEmpty()) {
             return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
         }
         if (!world.isRemote) {

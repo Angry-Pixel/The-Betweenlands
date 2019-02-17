@@ -12,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.inventory.InventoryWeedwoodWorkbench;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityWeedwoodWorkbench extends TileEntity {
 	public NonNullList<ItemStack> craftingSlots = NonNullList.withSize(9, ItemStack.EMPTY);
@@ -20,6 +21,10 @@ public class TileEntityWeedwoodWorkbench extends TileEntity {
 
 	private Set<InventoryWeedwoodWorkbench> openInventories = new HashSet<>();
 
+	public TileEntityWeedwoodWorkbench() {
+		super(TileEntityRegistry.WEEDWOOD_WORKBENCH);
+	}
+	
 	public void openInventory(InventoryWeedwoodWorkbench inv) {
 		this.openInventories.add(inv);
 	}
@@ -48,17 +53,17 @@ public class TileEntityWeedwoodWorkbench extends TileEntity {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
 		this.readNBT(nbt);
 	}
 
 	private NBTTagCompound readNBT(NBTTagCompound nbt) {
-		NBTTagList items = nbt.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+		NBTTagList items = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
 
-		int count = items.tagCount();
+		int count = items.size();
 		for (int i = 0; i < count; i++) {
-			NBTTagCompound nbtItem = items.getCompoundTagAt(i);
+			NBTTagCompound nbtItem = items.getCompound(i);
 			this.craftingSlots.set(nbtItem.getByte("Slot"), new ItemStack(nbtItem));
 		}
 
@@ -70,8 +75,8 @@ public class TileEntityWeedwoodWorkbench extends TileEntity {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		nbt = super.writeToNBT(nbt);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		nbt = super.write(nbt);
 		return this.writeNbt(nbt);
 	}
 
@@ -83,7 +88,7 @@ public class TileEntityWeedwoodWorkbench extends TileEntity {
 				NBTTagCompound nbtItem = new NBTTagCompound();
 				nbtItem.setByte("Slot", (byte) i);
 				this.craftingSlots.get(i).writeToNBT(nbtItem);
-				items.appendTag(nbtItem);
+				items.add(nbtItem);
 			}
 		}
 

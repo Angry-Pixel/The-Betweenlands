@@ -93,7 +93,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 							}
 							for(int xo = -1; xo <= 1; xo++) {
 								for(int zo = -1; zo <= 1; zo++) {
-									this.toWorld.setBlockState(pos.add(xo, -1, zo), BlockRegistry.LOG_PORTAL.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
+									this.toWorld.setBlockState(pos.add(xo, -1, zo), BlockRegistry.LOG_PORTAL.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
 								}
 							}
 
@@ -656,7 +656,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 		if(this.toWorld.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			NBTTagCompound dataNbt = player.getEntityData();
-			NBTTagCompound persistentNbt = dataNbt.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+			NBTTagCompound persistentNbt = dataNbt.getCompound(EntityPlayer.PERSISTED_NBT_TAG);
 
 			persistentNbt.setLong(LAST_PORTAL_POS_NBT, portalPos.toLong());
 			dataNbt.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentNbt);

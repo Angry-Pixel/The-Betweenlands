@@ -61,8 +61,8 @@ public class LocalRegionData {
 
 	@Nullable
 	public NBTTagCompound getLocalStorageNBT(StorageID id) {
-		if(this.nbt.hasKey(id.getStringID(), Constants.NBT.TAG_COMPOUND)) {
-			return this.nbt.getCompoundTag(id.getStringID());
+		if(this.nbt.contains(id.getStringID(), Constants.NBT.TAG_COMPOUND)) {
+			return this.nbt.getCompound(id.getStringID());
 		}
 		return null;
 	}
@@ -91,7 +91,7 @@ public class LocalRegionData {
 	 * @param id
 	 */
 	public void deleteLocalStorage(File dir, StorageID id) {
-		if(this.nbt.hasKey(id.getStringID(), Constants.NBT.TAG_COMPOUND)) {
+		if(this.nbt.contains(id.getStringID(), Constants.NBT.TAG_COMPOUND)) {
 			this.dirty = true;
 			this.nbt.removeTag(id.getStringID());
 			if(this.nbt.getSize() == 0) {

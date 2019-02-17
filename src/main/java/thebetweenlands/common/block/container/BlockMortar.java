@@ -3,9 +3,7 @@ package thebetweenlands.common.block.container;
 import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,6 +11,8 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -29,24 +29,24 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMortar;
 
 public class BlockMortar extends BlockContainer {
-	public static final PropertyDirection FACING = BlockHorizontal.FACING;
+	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 	public BlockMortar() {
 		super(Material.ROCK);
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		setDefaultState(blockState.getBaseState().with(FACING, EnumFacing.NORTH));
 	}
 
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
+		return this.getDefaultState().with(FACING, placer.getHorizontalFacing());
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()), 2);
+		world.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing()), 2);
 	}
 
 	@Override
@@ -100,7 +100,7 @@ public class BlockMortar extends BlockContainer {
 						double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
 						double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
 						if (stack.getItem() == ItemRegistry.PESTLE){
-							stack.getTagCompound().setBoolean("active", false);
+							stack.getTag().setBoolean("active", false);
 						}
 						EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, stack);
 						entityitem.setPickupDelay(10);
@@ -144,12 +144,12 @@ public class BlockMortar extends BlockContainer {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getHorizontalIndex();
+		return state.get(FACING).getHorizontalIndex();
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+		return this.getDefaultState().with(FACING, EnumFacing.byHorizontalIndex(meta));
 	}
 	
 	@Override

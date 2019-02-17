@@ -12,12 +12,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IWorldReader;
@@ -41,7 +42,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 		this.harvestAll = true;
 		this.resetAge = false;
 		this.setMaxHeight(1);
-		this.setDefaultState(this.getDefaultState().withProperty(DECAYED, false));
+		this.setDefaultState(this.getDefaultState().with(DECAYED, false));
 	}
 
 	/**
@@ -136,7 +137,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		boolean removed = super.removedByPlayer(state, world, pos, player, willHarvest);
-		if(removed && state.getValue(AGE) >= 15) {
+		if(removed && state.get(AGE) >= 15) {
 			//Remove 10 compost after harvesting fully grown crop
 			this.harvestAndUpdateSoil(world, pos, 10);
 		}
@@ -163,13 +164,13 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
+	public int getItemsToDropCount(IBlockState state, int fortune, World worldIn, BlockPos pos, Random random) {
 		return 0;
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return null;
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+		return Items.AIR;
 	}
 
 	@Override
@@ -208,7 +209,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	 */
 	public int getSeedDrops(IWorldReader world, BlockPos pos, Random rand, int fortune) {
 		IBlockState state = world.getBlockState(pos);
-		return 1 + (state.getValue(AGE) >= 15 ? (rand.nextInt(Math.max(3 - fortune, 1)) == 0 ? 1 : 0) : 0);
+		return 1 + (state.get(AGE) >= 15 ? (rand.nextInt(Math.max(3 - fortune, 1)) == 0 ? 1 : 0) : 0);
 	}
 
 	/**
@@ -221,7 +222,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	 */
 	public int getCropDrops(IWorldReader world, BlockPos pos, Random rand, int fortune) {
 		IBlockState state = world.getBlockState(pos);
-		if(state.getValue(AGE) >= 15) {
+		if(state.get(AGE) >= 15) {
 			return 2 + rand.nextInt(3 + fortune);
 		}
 		return 0;
@@ -252,7 +253,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	@Override
 	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
 		state = super.getActualState(state, worldIn, pos);
-		return state.withProperty(DECAYED, this.isDecayed(worldIn, pos)).withProperty(this.stageProperty, MathHelper.floor(state.getValue(AGE) / 15.0f * Collections.max(this.stageProperty.getAllowedValues())));
+		return state.with(DECAYED, this.isDecayed(worldIn, pos)).with(this.stageProperty, MathHelper.floor(state.get(AGE) / 15.0f * Collections.max(this.stageProperty.getAllowedValues())));
 	}
 
 	@Override
@@ -270,18 +271,18 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState state = worldIn.getBlockState(pos.down());
 		return super.canPlaceBlockAt(worldIn, pos) && 
-				!(state.getBlock() instanceof BlockGenericDugSoil && state.getValue(BlockGenericDugSoil.DECAYED)) &&
-				!(state.getBlock() instanceof BlockGenericCrop && state.getValue(AGE) < 15);
+				!(state.getBlock() instanceof BlockGenericDugSoil && state.get(BlockGenericDugSoil.DECAYED)) &&
+				!(state.getBlock() instanceof BlockGenericCrop && state.get(AGE) < 15);
 	}
 
 	@Override
 	protected boolean canGrow(World world, BlockPos pos, IBlockState state) {
-		return !state.getValue(DECAYED) && this.isComposted(world, pos);
+		return !state.get(DECAYED) && this.isComposted(world, pos);
 	}
 
 	@Override
 	protected void growUp(World world, BlockPos pos) {
-		world.setBlockState(pos.up(), this.getDefaultState().withProperty(DECAYED, world.getBlockState(pos).getValue(DECAYED)));
+		world.setBlockState(pos.up(), this.getDefaultState().with(DECAYED, world.getBlockState(pos).getValue(DECAYED)));
 	}
 
 	@Override
@@ -289,7 +290,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 		if(!this.canGrow(worldIn, pos, state)) {
 			return false;
 		}
-		if(state.getValue(AGE) < 15) {
+		if(state.get(AGE) < 15) {
 			return true;
 		}
 		int height;
@@ -304,7 +305,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 
 	@Override
 	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-		int age = state.getValue(AGE) + MathHelper.getInt(worldIn.rand, 2, 5);
+		int age = state.get(AGE) + MathHelper.getInt(worldIn.rand, 2, 5);
 		if(age > 15) {
 			age = 15;
 			int height;
@@ -313,7 +314,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 				this.growUp(worldIn, pos);
 			}
 		}
-		worldIn.setBlockState(pos, state.withProperty(AGE, age));
+		worldIn.setBlockState(pos, state.with(AGE, age));
 	}
 
 	@Override

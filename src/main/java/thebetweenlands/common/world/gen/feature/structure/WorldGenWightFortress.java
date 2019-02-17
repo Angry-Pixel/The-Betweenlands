@@ -91,9 +91,9 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private IBlockState root = BlockRegistry.ROOT.getDefaultState();
 	private IBlockState possessedBlock = BlockRegistry.POSSESSED_BLOCK.getDefaultState();
 	private IBlockState chest = BlockRegistry.WEEDWOOD_CHEST.getDefaultState();
-	private IBlockState lootPot1 = BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_1);
-	private IBlockState lootPot2 = BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_2);
-	private IBlockState lootPot3 = BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_3);
+	private IBlockState lootPot1 = BlockRegistry.LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_1);
+	private IBlockState lootPot2 = BlockRegistry.LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_2);
+	private IBlockState lootPot3 = BlockRegistry.LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_3);
 	private IBlockState spawner = BlockRegistry.MOB_SPAWNER.getDefaultState();
 	private IBlockState obviousSign = BlockRegistry.WALL_WEEDWOOD_SIGN.getDefaultState();
 	private IBlockState valoniteBlock = BlockRegistry.VALONITE_BLOCK.getDefaultState();
@@ -346,21 +346,21 @@ public class WorldGenWightFortress extends WorldGenerator {
 		int direction = blockMeta;
 		switch (direction) {
 		case 0:
-			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST);
+			return state.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST);
 		case 1:
-			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST);
+			return state.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST);
 		case 2:
-			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH);
+			return state.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH);
 		case 3:
-			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH);
+			return state.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH);
 		case 4:
-			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
+			return state.with(BlockStairsBetweenlands.FACING, EnumFacing.EAST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
 		case 5:
-			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
+			return state.with(BlockStairsBetweenlands.FACING, EnumFacing.WEST).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
 		case 6:
-			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
+			return state.with(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
 		case 7:
-			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
+			return state.with(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).with(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
 		}
 		return state;
 	}
@@ -371,13 +371,13 @@ public class WorldGenWightFortress extends WorldGenerator {
 		case 0: //unused
 		case 1: //unused
 		case 2:
-			return state.withProperty(BlockChestBetweenlands.FACING, EnumFacing.NORTH);
+			return state.with(BlockChestBetweenlands.FACING, EnumFacing.NORTH);
 		case 3:
-			return state.withProperty(BlockChestBetweenlands.FACING, EnumFacing.SOUTH);
+			return state.with(BlockChestBetweenlands.FACING, EnumFacing.SOUTH);
 		case 4:
-			return state.withProperty(BlockChestBetweenlands.FACING, EnumFacing.WEST);
+			return state.with(BlockChestBetweenlands.FACING, EnumFacing.WEST);
 		case 5:
-			return state.withProperty(BlockChestBetweenlands.FACING, EnumFacing.EAST);
+			return state.with(BlockChestBetweenlands.FACING, EnumFacing.EAST);
 		}
 		return state;
 	}
@@ -388,13 +388,13 @@ public class WorldGenWightFortress extends WorldGenerator {
 		case 0: //unused
 		case 1: //unused
 		case 2:
-			return state.withProperty(BlockLootPot.FACING, EnumFacing.NORTH);
+			return state.with(BlockLootPot.FACING, EnumFacing.NORTH);
 		case 3:
-			return state.withProperty(BlockLootPot.FACING, EnumFacing.SOUTH);
+			return state.with(BlockLootPot.FACING, EnumFacing.SOUTH);
 		case 4:
-			return state.withProperty(BlockLootPot.FACING, EnumFacing.WEST);
+			return state.with(BlockLootPot.FACING, EnumFacing.WEST);
 		case 5:
-			return state.withProperty(BlockLootPot.FACING, EnumFacing.EAST);
+			return state.with(BlockLootPot.FACING, EnumFacing.EAST);
 		}
 		return state;
 	}
@@ -405,19 +405,19 @@ public class WorldGenWightFortress extends WorldGenerator {
 		case 0: //unused
 		case 1: //unused
 		case 2:
-			return state.withProperty(BlockPossessedBlock.FACING, EnumFacing.NORTH);
+			return state.with(BlockPossessedBlock.FACING, EnumFacing.NORTH);
 		case 3:
-			return state.withProperty(BlockPossessedBlock.FACING, EnumFacing.SOUTH);
+			return state.with(BlockPossessedBlock.FACING, EnumFacing.SOUTH);
 		case 4:
-			return state.withProperty(BlockPossessedBlock.FACING, EnumFacing.WEST);
+			return state.with(BlockPossessedBlock.FACING, EnumFacing.WEST);
 		case 5:
-			return state.withProperty(BlockPossessedBlock.FACING, EnumFacing.EAST);
+			return state.with(BlockPossessedBlock.FACING, EnumFacing.EAST);
 		}
 		return state;
 	}
 
 	private IBlockState getSlabType(IBlockState slabType, int blockMeta) {
-		return blockMeta == 0 ? slabType.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.BOTTOM) : slabType.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
+		return blockMeta == 0 ? slabType.with(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.BOTTOM) : slabType.with(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
 	}
 
 	public boolean generateStructure(World world, Random rand, BlockPos pos) {
@@ -1182,7 +1182,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 	}
 
 	private void placeSign(World world, Random rand, BlockPos pos, IBlockState state, int blockMeta) {
-		this.setBlockAndNotifyAdequately(world, pos, state.withProperty(BlockWallWeedwoodSign.FACING, EnumFacing.byIndex(blockMeta)));
+		this.setBlockAndNotifyAdequately(world, pos, state.with(BlockWallWeedwoodSign.FACING, EnumFacing.byIndex(blockMeta)));
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileEntityWeedwoodSign) {
 			TileEntityWeedwoodSign sign = (TileEntityWeedwoodSign) tile;

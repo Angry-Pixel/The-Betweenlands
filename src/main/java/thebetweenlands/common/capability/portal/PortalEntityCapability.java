@@ -44,14 +44,14 @@ public class PortalEntityCapability extends EntityCapability<PortalEntityCapabil
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setBoolean("inPortal", this.inPortal);
-		nbt.setInteger("ticks", this.ticksUntilTeleport);
+		nbt.setInt("ticks", this.ticksUntilTeleport);
 		nbt.setBoolean("wasTeleported", this.wasTeleported);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.inPortal = nbt.getBoolean("inPortal");
-		this.ticksUntilTeleport = nbt.getInteger("ticks");
+		this.ticksUntilTeleport = nbt.getInt("ticks");
 		this.wasTeleported = nbt.getBoolean("wasTeleported");
 	}
 

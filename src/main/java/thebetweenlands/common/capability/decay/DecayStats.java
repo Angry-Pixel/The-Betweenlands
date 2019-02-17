@@ -60,9 +60,9 @@ public class DecayStats {
 	 * @param nbt
 	 */
 	public void readNBT(NBTTagCompound nbt) {
-		if (nbt.hasKey("decayLevel", 99)) {
-			this.decayLevel = nbt.getInteger("decayLevel");
-			this.prevDecayLevel = nbt.getInteger("prevDecayLevel");
+		if (nbt.contains("decayLevel", 99)) {
+			this.decayLevel = nbt.getInt("decayLevel");
+			this.prevDecayLevel = nbt.getInt("prevDecayLevel");
 			this.decaySaturationLevel = nbt.getFloat("decaySaturationLevel");
 			this.decayAccelerationLevel = nbt.getFloat("decayExhaustionLevel");
 		}
@@ -73,8 +73,8 @@ public class DecayStats {
 	 * @param nbt
 	 */
 	public void writeNBT(NBTTagCompound nbt) {
-		nbt.setInteger("decayLevel", this.decayLevel);
-		nbt.setInteger("prevDecayLevel", this.prevDecayLevel);
+		nbt.setInt("decayLevel", this.decayLevel);
+		nbt.setInt("prevDecayLevel", this.prevDecayLevel);
 		nbt.setFloat("decaySaturationLevel", this.decaySaturationLevel);
 		nbt.setFloat("decayExhaustionLevel", this.decayAccelerationLevel);
 	}

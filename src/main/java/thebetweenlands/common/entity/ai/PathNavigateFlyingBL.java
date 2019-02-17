@@ -165,7 +165,7 @@ public class PathNavigateFlyingBL extends PathNavigate {
 				BlockPos blockpos1 = (new BlockPos(this.entity)).up();
 				int i = (int)(f + 16.0F);
 				ChunkCache chunkcache = new ChunkCache(this.world, blockpos1.add(-i, -i, -i), blockpos1.add(i, i, i), 0);
-				Path path = this.getPathFinder().findPath(chunkcache, this.entity, new BlockPos(entityIn.posX, entityIn.getEntityBoundingBox().minY + entityIn.height / 2.0D, entityIn.posZ), f);
+				Path path = this.getPathFinder().findPath(chunkcache, this.entity, new BlockPos(entityIn.posX, entityIn.getBoundingBox().minY + entityIn.height / 2.0D, entityIn.posZ), f);
 				this.world.profiler.endSection();
 				return path;
 			}

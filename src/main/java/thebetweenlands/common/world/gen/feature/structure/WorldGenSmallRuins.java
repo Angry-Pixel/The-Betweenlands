@@ -34,14 +34,14 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 	private static final IBlockState BETWEENSTONE_BRICKS = BlockRegistry.BETWEENSTONE_BRICKS.getDefaultState();
 	private static final IBlockState BETWEENSTONE_BRICK_STAIRS = BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState();
 	private static final IBlockState BETWEENSTONE_BRICK_SLAB = BlockRegistry.BETWEENSTONE_BRICK_SLAB.getDefaultState();
-	private static final IBlockState BETWEENSTONE_BRICK_SLAB_UPSIDE_DOWN = BETWEENSTONE_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
+	private static final IBlockState BETWEENSTONE_BRICK_SLAB_UPSIDE_DOWN = BETWEENSTONE_BRICK_SLAB.with(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
 	private static final IBlockState CHISELED_BETWEENSTONE = BlockRegistry.BETWEENSTONE_CHISELED.getDefaultState();
 	private static final IBlockState BETWEENSTONE_PILLAR = BlockRegistry.BETWEENSTONE_PILLAR.getDefaultState();
 	private static final IBlockState SMOOTH_BETWEENSTONE_WALL = BlockRegistry.SMOOTH_BETWEENSTONE_WALL.getDefaultState();
 	private static final IBlockState WEEDWOOD_LOG = BlockRegistry.LOG_WEEDWOOD.getDefaultState();
 	private static final IBlockState WEEDWOOD_PLANK_STAIRS = BlockRegistry.WEEDWOOD_PLANK_STAIRS.getDefaultState();
 	private static final IBlockState WEEDWOOD_PLANK_SLAB = BlockRegistry.WEEDWOOD_PLANK_SLAB.getDefaultState();
-	private static final IBlockState WEEDWOOD_PLANK_SLAB_UPSIDE_DOWN = WEEDWOOD_PLANK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
+	private static final IBlockState WEEDWOOD_PLANK_SLAB_UPSIDE_DOWN = WEEDWOOD_PLANK_SLAB.with(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
 	private static final IBlockState BETWEENSTONE_BRICK_WALL = BlockRegistry.BETWEENSTONE_BRICK_WALL.getDefaultState();
 	private static final IBlockState WEEDWOOD_FENCE = BlockRegistry.WEEDWOOD_PLANK_FENCE.getDefaultState();
 	private static final IBlockState ROPE = BlockRegistry.ROPE.getDefaultState();
@@ -599,13 +599,13 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 	private IBlockState getRandomBlock(Random rand, EnumFacing dir) {
 		switch (rand.nextInt(3)) {
 		case 0:
-			return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_1).withProperty(BlockLootPot.FACING, dir);
+			return BlockRegistry.LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_1).with(BlockLootPot.FACING, dir);
 		case 1:
-			return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_2).withProperty(BlockLootPot.FACING, dir);
+			return BlockRegistry.LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_2).with(BlockLootPot.FACING, dir);
 		case 2:
-			return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_3).withProperty(BlockLootPot.FACING, dir);
+			return BlockRegistry.LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_3).with(BlockLootPot.FACING, dir);
 		default:
-			return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_1).withProperty(BlockLootPot.FACING, dir);
+			return BlockRegistry.LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_1).with(BlockLootPot.FACING, dir);
 		}
 	}
 

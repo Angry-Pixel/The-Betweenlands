@@ -20,7 +20,7 @@ public abstract class BlockSpreadingDeath extends Block {
 
 	public BlockSpreadingDeath(Material material) {
 		super(material);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(INACTIVE, false));
+		this.setDefaultState(this.blockState.getBaseState().with(INACTIVE, false));
 		this.setTickRandomly(true);
 	}
 
@@ -31,12 +31,12 @@ public abstract class BlockSpreadingDeath extends Block {
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(INACTIVE) ? 1 : 0;
+		return state.get(INACTIVE) ? 1 : 0;
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(INACTIVE, (meta & 1) == 1);
+		return this.getDefaultState().with(INACTIVE, (meta & 1) == 1);
 	}
 
 	@Override
@@ -60,7 +60,7 @@ public abstract class BlockSpreadingDeath extends Block {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		if(!world.isRemote) {
-			if(!state.getValue(INACTIVE) && this.shouldSpread(world, pos, state)) {
+			if(!state.get(INACTIVE) && this.shouldSpread(world, pos, state)) {
 				boolean spread = false;
 				for(int i = 0; i < 16; ++i) {
 					BlockPos target = pos.add(rand.nextInt(3) - 1, rand.nextInt(3) - 1, rand.nextInt(3) - 1);
@@ -102,7 +102,7 @@ public abstract class BlockSpreadingDeath extends Block {
 			}
 
 			if(world.rand.nextInt(6) == 0) {
-				world.setBlockState(pos, state.withProperty(INACTIVE, true));
+				world.setBlockState(pos, state.with(INACTIVE, true));
 			}
 
 			if(this.getSpreadingBiome() != null && rand.nextInt(3) == 0 && world.getBiomeForCoordsBody(pos) != this.getSpreadingBiome()) {

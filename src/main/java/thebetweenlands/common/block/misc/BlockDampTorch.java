@@ -26,7 +26,7 @@ public class BlockDampTorch extends BlockTorch {
 	@Override
 	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		if(rand.nextInt(4) == 0) {
-			EnumFacing facing = (EnumFacing)stateIn.getValue(FACING);
+			EnumFacing facing = (EnumFacing)stateIn.get(FACING);
 			double x = (double)pos.getX() + 0.5D;
 			double y = (double)pos.getY() + 0.7D;
 			double z = (double)pos.getZ() + 0.5D;

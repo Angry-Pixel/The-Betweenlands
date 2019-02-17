@@ -409,39 +409,39 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setInteger("shields", this.packShieldData());
+		nbt.setInt("shields", this.packShieldData());
 		nbt.setDouble("anchorX", this.anchor.getX());
 		nbt.setDouble("anchorY", this.anchor.getY());
 		nbt.setDouble("anchorZ", this.anchor.getZ());
 		nbt.setDouble("anchorRadius", this.anchorRadius);
 		nbt.setBoolean("floating", this.isFloating());
-		nbt.setInteger("groundTicks", this.groundTicks);
-		nbt.setInteger("turretTicks", this.turretTicks);
-		nbt.setInteger("groundAttackTicks", this.groundAttackTicks);
-		nbt.setInteger("turretStreak", this.turretStreak);
-		nbt.setInteger("turretStreakTicks", this.turretStreakTicks);
-		nbt.setInteger("wightSpawnTicks", this.wightSpawnTicks);
-		nbt.setInteger("teleportTicks", this.teleportTicks);
-		nbt.setInteger("blockadeSpawnTicks", this.blockadeSpawnTicks);
-		nbt.setInteger("deathTicks", this.deathTicks);
+		nbt.setInt("groundTicks", this.groundTicks);
+		nbt.setInt("turretTicks", this.turretTicks);
+		nbt.setInt("groundAttackTicks", this.groundAttackTicks);
+		nbt.setInt("turretStreak", this.turretStreak);
+		nbt.setInt("turretStreakTicks", this.turretStreakTicks);
+		nbt.setInt("wightSpawnTicks", this.wightSpawnTicks);
+		nbt.setInt("teleportTicks", this.teleportTicks);
+		nbt.setInt("blockadeSpawnTicks", this.blockadeSpawnTicks);
+		nbt.setInt("deathTicks", this.deathTicks);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		this.unpackShieldData(nbt.getInteger("shields"));
+		this.unpackShieldData(nbt.getInt("shields"));
 		this.anchor = new BlockPos(nbt.getDouble("anchorX"), nbt.getDouble("anchorY"), nbt.getDouble("anchorZ"));
 		this.anchorRadius = nbt.getDouble("anchorRadius");
 		this.setFloating(nbt.getBoolean("floating"));
-		this.groundTicks = nbt.getInteger("groundTicks");
-		this.turretTicks = nbt.getInteger("turretTicks");
-		this.groundAttackTicks = nbt.getInteger("groundAttackTicks");
-		this.turretStreak = nbt.getInteger("turretStreak");
-		this.turretStreakTicks = nbt.getInteger("turretStreakTicks");
-		this.wightSpawnTicks = nbt.getInteger("wightSpawnTicks");
-		this.teleportTicks = nbt.getInteger("teleportTicks");
-		this.blockadeSpawnTicks = nbt.getInteger("blockadeSpawnTicks");
-		this.deathTicks = nbt.getInteger("deathTicks");
+		this.groundTicks = nbt.getInt("groundTicks");
+		this.turretTicks = nbt.getInt("turretTicks");
+		this.groundAttackTicks = nbt.getInt("groundAttackTicks");
+		this.turretStreak = nbt.getInt("turretStreak");
+		this.turretStreakTicks = nbt.getInt("turretStreakTicks");
+		this.wightSpawnTicks = nbt.getInt("wightSpawnTicks");
+		this.teleportTicks = nbt.getInt("teleportTicks");
+		this.blockadeSpawnTicks = nbt.getInt("blockadeSpawnTicks");
+		this.deathTicks = nbt.getInt("deathTicks");
 		if(hasCustomName())
 			bossInfo.setName(this.getDisplayName());
 	}
@@ -587,7 +587,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 
 				//Heal when no player is nearby
 				if(this.ticksExisted % 12 == 0 && this.getHealth() < this.getMaxHealth()) {
-					List<EntityLivingBase> currentlyTrackedEntities = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(this.anchorRadius*2, this.anchorRadius*2, this.anchorRadius*2));
+					List<EntityLivingBase> currentlyTrackedEntities = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getBoundingBox().grow(this.anchorRadius*2, this.anchorRadius*2, this.anchorRadius*2));
 					Iterator<EntityLivingBase> it = currentlyTrackedEntities.iterator();
 					while(it.hasNext()) {
 						EntityLivingBase living = it.next();
@@ -600,14 +600,14 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 				}
 			}
 
-			AxisAlignedBB checkArea = this.getEntityBoundingBox().grow(32, 16, 32);
+			AxisAlignedBB checkArea = this.getBoundingBox().grow(32, 16, 32);
 			List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, checkArea);
 			if(!players.isEmpty()) {
 				if(!this.world.isRemote) {
 					this.getDataManager().set(SHIELD_STATE, this.packShieldData());
 
 					if(this.isFloating() && this.posY >= anchorCenter.y) {
-						AxisAlignedBB checkAABB = this.getEntityBoundingBox().grow(16, 16, 16);
+						AxisAlignedBB checkAABB = this.getBoundingBox().grow(16, 16, 16);
 						List<EntityWight> wights = this.world.getEntitiesWithinAABB(EntityWight.class, checkAABB);
 						List<EntityFortressBossSpawner> spawners = this.world.getEntitiesWithinAABB(EntityFortressBossSpawner.class, checkAABB);
 						if(wights.isEmpty() && spawners.isEmpty()) {
@@ -778,7 +778,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 				float friction = 0.91F;
 
 				if (this.onGround) {
-					friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
+					friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 				}
 
 				float groundFriction = 0.16277136F / (friction * friction * friction);
@@ -786,7 +786,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 				friction = 0.91F;
 
 				if (this.onGround) {
-					friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
+					friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 				}
 
 				this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
@@ -820,7 +820,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 				final Vec3d anchorCenter = this.getAnchorCenter();
 				this.world.playSound(null, anchorCenter.x, anchorCenter.y, anchorCenter.z, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
 				this.setPosition(anchorCenter.x, anchorCenter.y, anchorCenter.z);
-				List<Entity> trackedEntities = this.world.getEntitiesWithinAABB(EntityWight.class, this.getEntityBoundingBox().grow(this.anchorRadius*2, 512, this.anchorRadius*2));
+				List<Entity> trackedEntities = this.world.getEntitiesWithinAABB(EntityWight.class, this.getBoundingBox().grow(this.anchorRadius*2, 512, this.anchorRadius*2));
 				Iterator<Entity> it = trackedEntities.iterator();
 				while(it.hasNext()) {
 					Entity entity = it.next();

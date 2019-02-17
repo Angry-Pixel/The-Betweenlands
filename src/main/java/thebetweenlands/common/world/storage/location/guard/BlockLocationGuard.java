@@ -103,10 +103,10 @@ public class BlockLocationGuard implements ILocationGuard {
 		NBTTagList chunksList = new NBTTagList();
 		for(GuardChunk chunk : this.chunkMap.values()) {
 			NBTTagCompound chunkNbt = new NBTTagCompound();
-			chunkNbt.setInteger("X", chunk.x);
-			chunkNbt.setInteger("Z", chunk.z);
+			chunkNbt.setInt("X", chunk.x);
+			chunkNbt.setInt("Z", chunk.z);
 			chunk.writeToNBT(chunkNbt);
-			chunksList.appendTag(chunkNbt);
+			chunksList.add(chunkNbt);
 		}
 		nbt.setTag("Chunks", chunksList);
 		return nbt;
@@ -115,12 +115,12 @@ public class BlockLocationGuard implements ILocationGuard {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.chunkMap.clear();
-		if(nbt.hasKey("Chunks", Constants.NBT.TAG_LIST)) {
-			NBTTagList chunksList = nbt.getTagList("Chunks", Constants.NBT.TAG_COMPOUND);
-			for(int i = 0; i < chunksList.tagCount(); i++) {
-				NBTTagCompound chunkNbt = chunksList.getCompoundTagAt(i);
-				int x = chunkNbt.getInteger("X");
-				int z = chunkNbt.getInteger("Z");
+		if(nbt.contains("Chunks", Constants.NBT.TAG_LIST)) {
+			NBTTagList chunksList = nbt.getList("Chunks", Constants.NBT.TAG_COMPOUND);
+			for(int i = 0; i < chunksList.size(); i++) {
+				NBTTagCompound chunkNbt = chunksList.getCompound(i);
+				int x = chunkNbt.getInt("X");
+				int z = chunkNbt.getInt("Z");
 				GuardChunk chunk = new GuardChunk(x, z);
 				chunk.readFromNBT(chunkNbt);
 				this.chunkMap.put(ChunkPos.asLong(x, z), chunk);
@@ -264,7 +264,7 @@ public class BlockLocationGuard implements ILocationGuard {
 					NBTTagCompound sectionNbt = new NBTTagCompound();
 					sectionNbt.setByte("Y", (byte)i);
 					sectionNbt.setByteArray("Data", data);
-					sectionsNbt.appendTag(sectionNbt);
+					sectionsNbt.add(sectionNbt);
 				}
 			}
 			nbt.setTag("Sections", sectionsNbt);
@@ -273,10 +273,10 @@ public class BlockLocationGuard implements ILocationGuard {
 
 		public void readFromNBT(NBTTagCompound nbt) {
 			this.clear();
-			if(nbt.hasKey("Sections", Constants.NBT.TAG_LIST)) {
-				NBTTagList sectionsNbt = nbt.getTagList("Sections", Constants.NBT.TAG_COMPOUND);
-				for(int i = 0; i < sectionsNbt.tagCount(); i++) {
-					NBTTagCompound sectionNbt = sectionsNbt.getCompoundTagAt(i);
+			if(nbt.contains("Sections", Constants.NBT.TAG_LIST)) {
+				NBTTagList sectionsNbt = nbt.getList("Sections", Constants.NBT.TAG_COMPOUND);
+				for(int i = 0; i < sectionsNbt.size(); i++) {
+					NBTTagCompound sectionNbt = sectionsNbt.getCompound(i);
 					int y = sectionNbt.getByte("Y");
 					byte[] data = sectionNbt.getByteArray("Data");
 					this.sections[y] = new GuardChunkSection(data);

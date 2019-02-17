@@ -56,12 +56,12 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return this.capabilities == null ? false : this.abilities.hasCapability(capability, facing);
+		return this.capabilities == null ? false : this.capabilities.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return this.capabilities == null ? null : this.abilities.getCapability(capability, facing);
+		return this.capabilities == null ? null : this.capabilities.getCapability(capability, facing);
 	}
 
 	@Override
@@ -99,8 +99,8 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt, boolean packet) {
-		if(this.capabilities != null && nbt.hasKey("ForgeCaps")) {
-			this.abilities.deserializeNBT(nbt.getCompoundTag("ForgeCaps"));
+		if(this.capabilities != null && nbt.contains("ForgeCaps")) {
+			this.capabilities.deserializeNBT(nbt.getCompound("ForgeCaps"));
 		}
 
 		this.readLocalStorageReferences(nbt);
@@ -109,8 +109,8 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 	@Override
 	public NBTTagCompound readLocalStorageReferences(NBTTagCompound nbt) {
 		this.localStorageReferences.clear();
-		NBTTagList localReferenceList = nbt.getTagList("LocalStorageReferences", Constants.NBT.TAG_COMPOUND);
-		for(int i = 0; i < localReferenceList.tagCount(); i++) {
+		NBTTagList localReferenceList = nbt.getList("LocalStorageReferences", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < localReferenceList.size(); i++) {
 			this.localStorageReferences.add(LocalStorageReference.readFromNBT((NBTTagCompound)localReferenceList.get(i)));
 		}
 
@@ -138,7 +138,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt, boolean packet) {
 		if(this.capabilities != null) {
-			NBTTagCompound caps = this.abilities.serializeNBT();
+			NBTTagCompound caps = this.capabilities.serializeNBT();
 			if(caps.getSize() > 0) {
 				nbt.setTag("ForgeCaps", caps);
 			}
@@ -154,7 +154,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 		if(!this.localStorageReferences.isEmpty()) {
 			NBTTagList localReferenceList = new NBTTagList();
 			for(LocalStorageReference ref : this.localStorageReferences) {
-				localReferenceList.appendTag(ref.writeToNBT(new NBTTagCompound()));
+				localReferenceList.add(ref.writeToNBT(new NBTTagCompound()));
 			}
 			nbt.setTag("LocalStorageReferences", localReferenceList);
 		}

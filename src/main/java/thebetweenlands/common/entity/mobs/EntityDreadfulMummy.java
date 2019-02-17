@@ -338,7 +338,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	private void spawnMummy() {
 		EntityPeatMummy mummy = new EntityPeatMummy(getEntityWorld());
 		mummy.setPosition(posX + (rand.nextInt(6) - 3), posY, posZ + (rand.nextInt(6) - 3));
-		if(mummy.getEntityWorld().checkNoEntityCollision(mummy.getEntityBoundingBox()) && mummy.getEntityWorld().getCollisionBoxes(mummy, mummy.getEntityBoundingBox()).isEmpty()) {
+		if(mummy.getEntityWorld().checkNoEntityCollision(mummy.getBoundingBox()) && mummy.getEntityWorld().getCollisionBoxes(mummy, mummy.getBoundingBox()).isEmpty()) {
 			untilSpawnMummy = SPAWN_MUMMY_COOLDOWN;
 			mummy.setAttackTarget((EntityLivingBase) getAttackTarget());
 			mummy.setHealth(30);
@@ -546,8 +546,8 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setInteger("spawningState", getSpawningState());
-		nbt.setInteger("deathTicks", deathTicks);
+		nbt.setInt("spawningState", getSpawningState());
+		nbt.setInt("deathTicks", deathTicks);
 		nbt.setDouble("initialPosY", posY);
 		nbt.setFloat("previousYOffset", prevYOffset);
 	}
@@ -555,10 +555,10 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		deathTicks = nbt.getInteger("deathTicks");
+		deathTicks = nbt.getInt("deathTicks");
 		posY = nbt.getDouble("initialPosY");
 		setYOffset(nbt.getFloat("previousYOffset"));
-		dataManager.set(SPAWNING_STATE_DW, nbt.getInteger("spawningState"));
+		dataManager.set(SPAWNING_STATE_DW, nbt.getInt("spawningState"));
         if(hasCustomName())
         	bossInfo.setName(this.getDisplayName());
 	}

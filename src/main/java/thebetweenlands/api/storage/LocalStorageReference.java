@@ -27,10 +27,10 @@ public class LocalStorageReference {
 	 * @return
 	 */
 	public static LocalStorageReference readFromNBT(NBTTagCompound nbt) {
-		ChunkPos pos = new ChunkPos(nbt.getInteger("x"), nbt.getInteger("z"));
+		ChunkPos pos = new ChunkPos(nbt.getInt("x"), nbt.getInt("z"));
 		LocalRegion region = null;
-		if(nbt.hasKey("region")) {
-			region = LocalRegion.readFromNBT(nbt.getCompoundTag("region"));
+		if(nbt.contains("region")) {
+			region = LocalRegion.readFromNBT(nbt.getCompound("region"));
 		}
 		return new LocalStorageReference(pos, StorageID.readFromNBT(nbt), region);
 	}
@@ -42,8 +42,8 @@ public class LocalStorageReference {
 	 */
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		this.id.writeToNBT(nbt);
-		nbt.setInteger("x", this.chunkPos.x);
-		nbt.setInteger("z", this.chunkPos.z);
+		nbt.setInt("x", this.chunkPos.x);
+		nbt.setInt("z", this.chunkPos.z);
 		if(this.region != null) {
 			nbt.setTag("region", this.region.writeToNBT(new NBTTagCompound()));
 		}

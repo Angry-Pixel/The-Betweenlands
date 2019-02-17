@@ -37,7 +37,7 @@ public class BlockOctine extends BasicBlock {
 
             IBlockState stateIn = worldIn.getBlockState(fromPos);
             if (stateIn.getBlock() instanceof BlockMoss) {
-                if (facing.equals(stateIn.getValue(BlockDirectional.FACING)))
+                if (facing.equals(stateIn.get(BlockDirectional.FACING)))
                     isTouching = false;
             } else if (stateIn.getBlock() instanceof BlockThorns) {
                 BooleanProperty side = null;
@@ -58,7 +58,7 @@ public class BlockOctine extends BasicBlock {
                         side = BlockThorns.EAST;
                         break;
                 }
-                if (side == null || stateIn.getValue(side))
+                if (side == null || stateIn.get(side))
                     isTouching = false;
             }
             if (isTouching)

@@ -234,19 +234,19 @@ public class WorldGenRottenWeedwoodTree extends WorldGenerator {
 			switch(dir) {
 			default:
 			case NORTH:
-				state = state.withProperty(BlockPoisonIvy.NORTH, true);
+				state = state.with(BlockPoisonIvy.NORTH, true);
 				break;
 			case SOUTH:
-				state = state.withProperty(BlockPoisonIvy.SOUTH, true);
+				state = state.with(BlockPoisonIvy.SOUTH, true);
 				break;
 			case EAST:
-				state = state.withProperty(BlockPoisonIvy.EAST, true);
+				state = state.with(BlockPoisonIvy.EAST, true);
 				break;
 			case WEST:
-				state = state.withProperty(BlockPoisonIvy.WEST, true);
+				state = state.with(BlockPoisonIvy.WEST, true);
 				break;
 			case UP:
-				state = state.withProperty(BlockPoisonIvy.UP, true);
+				state = state.with(BlockPoisonIvy.UP, true);
 				break;
 			}
 		}

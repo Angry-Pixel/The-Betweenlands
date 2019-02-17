@@ -28,9 +28,9 @@ public abstract class WorldGenGiantTreeTrunk extends WorldGenerator {
 
 	private static final byte[][] TRUNK_LAYERS = new byte[MAX_TRUNK_RADIUS - MIN_TRUNK_RADIUS + 1][];
 
-	public static IBlockState BARK = BlockRegistry.LOG_WEEDWOOD.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
+	public static IBlockState BARK = BlockRegistry.LOG_WEEDWOOD.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 	public static IBlockState WOOD = BlockRegistry.WEEDWOOD.getDefaultState();
-	public static IBlockState LEAVES = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
+	public static IBlockState LEAVES = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState().with(BlockLeavesBetweenlands.CHECK_DECAY, false);
 	public static IBlockState IVY = BlockRegistry.POISON_IVY.getDefaultState();
 	public static IBlockState HANGER = BlockRegistry.HANGER.getDefaultState();
 
@@ -216,7 +216,7 @@ public abstract class WorldGenGiantTreeTrunk extends WorldGenerator {
 	protected void placeWood(World world, Random rand, int radius, int height, int blockX, int blockY, int blockZ, int dx, int dy, int dz) {
 		boolean isDentrothyst = dy < 40 ? (rand.nextInt(dy * 2 + 60) == 0 ? true : false) : false;
 		if(isDentrothyst) {
-			this.setBlockAndNotifyAdequately(world, new BlockPos(blockX + dx, blockY + dy, blockZ + dz), rand.nextInt(20) == 0 ? BlockRegistry.DENTROTHYST.getDefaultState().withProperty(BlockDentrothyst.TYPE, EnumDentrothyst.ORANGE) : BlockRegistry.DENTROTHYST.getDefaultState());
+			this.setBlockAndNotifyAdequately(world, new BlockPos(blockX + dx, blockY + dy, blockZ + dz), rand.nextInt(20) == 0 ? BlockRegistry.DENTROTHYST.getDefaultState().with(BlockDentrothyst.TYPE, EnumDentrothyst.ORANGE) : BlockRegistry.DENTROTHYST.getDefaultState());
 		} else {
 			this.setBlockAndNotifyAdequately(world, new BlockPos(blockX + dx, blockY + dy, blockZ + dz), WOOD);
 		}

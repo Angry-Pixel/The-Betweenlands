@@ -25,7 +25,7 @@ public class ItemPestle extends Item implements IAnimatorRepairable {
         maxStackSize = 1;
         setCreativeTab(BLCreativeTabs.ITEMS);
         addPropertyOverride(new ResourceLocation("remaining"), (stack, worldIn, entityIn) -> {
-            if(hasTag(stack) && stack.getTagCompound().getBoolean("active"))
+            if(hasTag(stack) && stack.getTag().getBoolean("active"))
                 return 1;
             return 0;
         });

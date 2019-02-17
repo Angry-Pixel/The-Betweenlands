@@ -18,9 +18,9 @@ public class NBTHelper {
 	 * @return
 	 */
 	public static NBTTagCompound getStackNBTSafe(ItemStack stack) {
-		if(stack.getTagCompound() == null)
+		if(stack.getTag() == null)
 			stack.setTagCompound(new NBTTagCompound());
-		return stack.getTagCompound();
+		return stack.getTag();
 	}
 
 	/**
@@ -56,13 +56,13 @@ public class NBTHelper {
 			return true;
 		}
 		if (a != null && b != null) {
-			if (a.getTagCompound() == null && b.getTagCompound() == null) {
+			if (a.getTag() == null && b.getTag() == null) {
 				return true;
 			}
-			if (a.getTagCompound() == null ^ b.getTagCompound() == null) {
+			if (a.getTag() == null ^ b.getTag() == null) {
 				return false;
 			}
-			return areNBTCompoundsEquals(a.getTagCompound(), b.getTagCompound(), exclusions);
+			return areNBTCompoundsEquals(a.getTag(), b.getTag(), exclusions);
 		}
 		return false;
 	}

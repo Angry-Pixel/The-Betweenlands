@@ -3,8 +3,6 @@ package thebetweenlands.common.block.plant;
 import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
@@ -13,12 +11,14 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
@@ -46,7 +46,7 @@ public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShe
 		setHardness(0);
 		setCreativeTab(BLCreativeTabs.PLANTS);
 		setSoundType(SoundType.PLANT);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(IS_TOP, true).withProperty(IS_BOTTOM, false).withProperty(CAN_GROW, true));
+		this.setDefaultState(this.blockState.getBaseState().with(IS_TOP, true).with(IS_BOTTOM, false).with(CAN_GROW, true));
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShe
 	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
 		boolean isTop = worldIn.getBlockState(pos.up()).getBlock() != this;
 		boolean isBottom = worldIn.getBlockState(pos.down()).getBlock() != this;
-		return state.withProperty(IS_TOP, isTop).withProperty(IS_BOTTOM, isBottom);
+		return state.with(IS_TOP, isTop).with(IS_BOTTOM, isBottom);
 	}
 
 	@Override
@@ -82,13 +82,12 @@ public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShe
 	}
 
 	@Override
-	@Nullable
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return null;
+	public IItemProvider getItemDropped(IBlockState state,  World world, BlockPos pos, int fortune) {
+		return Items.AIR;
 	}
 
 	@Override
-	public int quantityDropped(Random random) {
+	public int getItemsToDropCount(IBlockState state, int fortune, World worldIn, BlockPos pos, Random random) {
 		return 0;
 	}
 
@@ -139,17 +138,17 @@ public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShe
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(CAN_GROW) ? 1 : 0;
+		return state.get(CAN_GROW) ? 1 : 0;
 	}
 	
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		return this.getDefaultState().withProperty(CAN_GROW, true);
+		return this.getDefaultState().with(CAN_GROW, true);
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(CAN_GROW, meta == 1);
+		return this.getDefaultState().with(CAN_GROW, meta == 1);
 	}
 
 	@Override
@@ -159,7 +158,7 @@ public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShe
 	
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if(rand.nextInt(16) == 0 && state.getValue(CAN_GROW) && worldIn.isAirBlock(pos.down())) {
+		if(rand.nextInt(16) == 0 && state.get(CAN_GROW) && worldIn.isAirBlock(pos.down())) {
 			worldIn.setBlockState(pos.down(), this.getDefaultState());
 		}
 	}

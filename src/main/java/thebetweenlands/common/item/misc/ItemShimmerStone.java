@@ -85,12 +85,12 @@ public class ItemShimmerStone extends Item {
 				nbt.setBoolean("shimmering", true);
 			}
 		} else {
-			int ticks = nbt.getInteger("shimmeringTicks");
+			int ticks = nbt.getInt("shimmeringTicks");
 			if(ticks < MAX_SHIMMER_TICKS) {
-				nbt.setInteger("shimmeringTicks", ticks + 1);
+				nbt.setInt("shimmeringTicks", ticks + 1);
 			} else {
 				nbt.setBoolean("shimmering", false);
-				nbt.setInteger("shimmeringTicks", 0);
+				nbt.setInt("shimmeringTicks", 0);
 			}
 		}
 	}

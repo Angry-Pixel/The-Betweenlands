@@ -66,9 +66,9 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 			NBTTagList gemToPositionsNbt = new NBTTagList();
 			for(Int2ObjectMap.Entry<IntSet> entry : this.gemToPositions.int2ObjectEntrySet()) {
 				NBTTagCompound targetNbt = new NBTTagCompound();
-				targetNbt.setInteger("id", entry.getIntKey());
+				targetNbt.setInt("id", entry.getIntKey());
 				targetNbt.setTag("positions", new NBTTagIntArray(entry.getValue().toIntArray()));
-				gemToPositionsNbt.appendTag(targetNbt);
+				gemToPositionsNbt.add(targetNbt);
 			}
 			nbt.setTag("gemToPositions", gemToPositionsNbt);
 		}
@@ -98,10 +98,10 @@ public class BetweenlandsChunkStorage extends ChunkStorageImpl {
 			}
 
 			this.gemToPositions.clear();
-			NBTTagList gemToPositionsNbt = nbt.getTagList("gemToPositions", Constants.NBT.TAG_COMPOUND);
-			for(int i = 0; i < gemToPositionsNbt.tagCount(); i++) {
-				NBTTagCompound targetNbt = gemToPositionsNbt.getCompoundTagAt(i);
-				int id = targetNbt.getInteger("id");
+			NBTTagList gemToPositionsNbt = nbt.getList("gemToPositions", Constants.NBT.TAG_COMPOUND);
+			for(int i = 0; i < gemToPositionsNbt.size(); i++) {
+				NBTTagCompound targetNbt = gemToPositionsNbt.getCompound(i);
+				int id = targetNbt.getInt("id");
 				int[] positions = targetNbt.getIntArray("positions");
 				this.gemToPositions.put(id, new IntArraySet(positions));
 			}

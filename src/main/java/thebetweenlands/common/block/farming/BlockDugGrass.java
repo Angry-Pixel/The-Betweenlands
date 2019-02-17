@@ -56,7 +56,7 @@ public class BlockDugGrass extends BlockGenericDugSoil implements ITintedBlock {
 
 	@Override
 	public IBlockState getUnpurifiedDugSoil(World world, BlockPos pos, IBlockState state) {
-		return BlockRegistry.DUG_SWAMP_GRASS.getDefaultState().withProperty(COMPOSTED, state.getValue(COMPOSTED)).withProperty(DECAYED, state.getValue(DECAYED));
+		return BlockRegistry.DUG_SWAMP_GRASS.getDefaultState().with(COMPOSTED, state.get(COMPOSTED)).with(DECAYED, state.get(DECAYED));
 	}
 	
 	@Override

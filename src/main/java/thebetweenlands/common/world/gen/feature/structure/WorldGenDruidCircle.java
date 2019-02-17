@@ -151,9 +151,9 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 		for (int k = 0, y = pos.getY(); k <= height; k++, pos.setY(y + k)) {
 			EnumFacing facing = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
 			if (rand.nextBoolean()) {
-				world.setBlockState(pos.toImmutable(), getRandomRuneBlock(rand).withProperty(BlockDruidStone.FACING, facing), 3);
+				world.setBlockState(pos.toImmutable(), getRandomRuneBlock(rand).with(BlockDruidStone.FACING, facing), 3);
 			} else {
-				world.setBlockState(pos.toImmutable(), BlockRegistry.DRUID_STONE_6.getDefaultState().withProperty(BlockDruidStone.FACING, facing));
+				world.setBlockState(pos.toImmutable(), BlockRegistry.DRUID_STONE_6.getDefaultState().with(BlockDruidStone.FACING, facing));
 				for (int vineCount = 0; vineCount < 4; vineCount++) {
 					setRandomFoliage(world, pos, rand);
 				}
@@ -165,7 +165,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 		EnumFacing facing = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
 		BlockPos side = pos.toImmutable().offset(facing);
 		if (world.isAirBlock(side)) {
-			world.setBlockState(side, Blocks.VINE.getDefaultState().withProperty(BlockVine.getPropertyFor(facing.getOpposite()), true));
+			world.setBlockState(side, Blocks.VINE.getDefaultState().with(BlockVine.getPropertyFor(facing.getOpposite()), true));
 		}
 	}
 

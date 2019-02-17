@@ -52,15 +52,15 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		if (hasTag(stack)) {
-			if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("infused") && stack.getTagCompound().hasKey("ingredients") && stack.getTagCompound().hasKey("infusionTime")) {
-				int infusionTime = stack.getTagCompound().getInteger("infusionTime");
+			if (stack.getTag() != null && stack.getTag().contains("infused") && stack.getTag().contains("ingredients") && stack.getTag().contains("infusionTime")) {
+				int infusionTime = stack.getTag().getInt("infusionTime");
 				list.add(I18n.format("tooltip.infusion.time", StringUtils.ticksToElapsedTime(infusionTime), infusionTime));
 				list.add(I18n.format("tooltip.infusion.ingredients"));
 				// The properties will be retrieved in the Alembic's TE logic
-				NBTTagList nbtList = (NBTTagList) stack.getTagCompound().getTag("ingredients");
+				NBTTagList nbtList = (NBTTagList) stack.getTag().getTag("ingredients");
 				Map<ItemStack, Integer> stackMap = new LinkedHashMap<ItemStack, Integer>();
-				for (int i = 0; i < nbtList.tagCount(); i++) {
-					ItemStack ingredient = new ItemStack(nbtList.getCompoundTagAt(i));
+				for (int i = 0; i < nbtList.size(); i++) {
+					ItemStack ingredient = new ItemStack(nbtList.getCompound(i));
 					boolean contained = false;
 					for (Map.Entry<ItemStack, Integer> stackCount : stackMap.entrySet()) {
 						if (ItemStack.areItemStacksEqual(stackCount.getKey(), ingredient)) {
@@ -127,10 +127,10 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 	public List<IAspectType> getInfusingAspects(ItemStack stack) {
 		List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
 		if (hasTag(stack)) {
-			if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("infused") && stack.getTagCompound().hasKey("ingredients") && stack.getTagCompound().hasKey("infusionTime")) {
-				NBTTagList nbtList = (NBTTagList) stack.getTagCompound().getTag("ingredients");
-				for (int i = 0; i < nbtList.tagCount(); i++) {
-					ItemStack ingredient = new ItemStack(nbtList.getCompoundTagAt(i));
+			if (stack.getTag() != null && stack.getTag().contains("infused") && stack.getTag().contains("ingredients") && stack.getTag().contains("infusionTime")) {
+				NBTTagList nbtList = (NBTTagList) stack.getTag().getTag("ingredients");
+				for (int i = 0; i < nbtList.size(); i++) {
+					ItemStack ingredient = new ItemStack(nbtList.getCompound(i));
 					ItemAspectContainer container = ItemAspectContainer.fromItem(ingredient, AspectManager.get(TheBetweenlands.proxy.getClientWorld()));
 					for (Aspect aspect : container.getAspects()) {
 						infusingAspects.add(aspect.type);
@@ -144,8 +144,8 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 
 	public int getInfusionTime(ItemStack stack) {
 		if (hasTag(stack)) {
-			if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("infused") && stack.getTagCompound().hasKey("ingredients") && stack.getTagCompound().hasKey("infusionTime")) {
-				return stack.getTagCompound().getInteger("infusionTime");
+			if (stack.getTag() != null && stack.getTag().contains("infused") && stack.getTag().contains("ingredients") && stack.getTag().contains("infusionTime")) {
+				return stack.getTag().getInt("infusionTime");
 			}
 		}
 		return 0;

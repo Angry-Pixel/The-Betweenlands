@@ -9,7 +9,6 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IProperty;
@@ -17,6 +16,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -40,7 +40,7 @@ public class BlockMudFlowerPotCandle extends Block {
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setHardness(0.3F);
 		this.setSoundType(SoundType.STONE);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(LIT, true));
+		this.setDefaultState(this.blockState.getBaseState().with(LIT, true));
 		this.useNeighborBrightness = true;
 	}
 
@@ -51,17 +51,17 @@ public class BlockMudFlowerPotCandle extends Block {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(LIT, meta != 0);
+		return this.getDefaultState().with(LIT, meta != 0);
 	}
 	
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(LIT) ? 1 : 0;
+		return state.get(LIT) ? 1 : 0;
 	}
 	
 	@Override
 	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		return this.getDefaultState().withProperty(LIT, true);
+		return this.getDefaultState().with(LIT, true);
 	}
 	
 	@Override
@@ -116,8 +116,8 @@ public class BlockMudFlowerPotCandle extends Block {
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return Item.getItemFromBlock(BlockRegistry.MUD_FLOWER_POT);
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+		return BlockRegistry.MUD_FLOWER_POT;
 	}
 
 	@Override
@@ -133,13 +133,13 @@ public class BlockMudFlowerPotCandle extends Block {
 
 	@Override
 	public int getLightValue(IBlockState state) {
-		return state.getValue(LIT) ? 13 : 0;
+		return state.get(LIT) ? 13 : 0;
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-		if(stateIn.getValue(LIT)) {
+		if(stateIn.get(LIT)) {
 			double x = (double)pos.getX() + 0.5D;
 			double y = (double)pos.getY() + 1.0D;
 			double z = (double)pos.getZ() + 0.5D;

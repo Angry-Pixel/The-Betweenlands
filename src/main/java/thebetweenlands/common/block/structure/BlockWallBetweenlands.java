@@ -40,7 +40,7 @@ public class BlockWallBetweenlands extends Block {
 		super(state.getMaterial());
 		setSoundType(state.getBlock().getSoundType());
 		setHardness(2.0F);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(UP, Boolean.FALSE).withProperty(NORTH, Boolean.FALSE).withProperty(EAST, Boolean.FALSE).withProperty(SOUTH, Boolean.FALSE).withProperty(WEST, Boolean.FALSE));
+		this.setDefaultState(this.blockState.getBaseState().with(UP, Boolean.FALSE).with(NORTH, Boolean.FALSE).with(EAST, Boolean.FALSE).with(SOUTH, Boolean.FALSE).with(WEST, Boolean.FALSE));
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
@@ -69,19 +69,19 @@ public class BlockWallBetweenlands extends Block {
 	private static int getAABBIndex(IBlockState state) {
 		int i = 0;
 
-		if (state.getValue(NORTH)) {
+		if (state.get(NORTH)) {
 			i |= 1 << EnumFacing.NORTH.getHorizontalIndex();
 		}
 
-		if (state.getValue(EAST)) {
+		if (state.get(EAST)) {
 			i |= 1 << EnumFacing.EAST.getHorizontalIndex();
 		}
 
-		if (state.getValue(SOUTH)) {
+		if (state.get(SOUTH)) {
 			i |= 1 << EnumFacing.SOUTH.getHorizontalIndex();
 		}
 
-		if (state.getValue(WEST)) {
+		if (state.get(WEST)) {
 			i |= 1 << EnumFacing.WEST.getHorizontalIndex();
 		}
 
@@ -166,7 +166,7 @@ public class BlockWallBetweenlands extends Block {
 		boolean flag2 = canWallConnectTo(worldIn, pos, EnumFacing.SOUTH);
 		boolean flag3 = canWallConnectTo(worldIn, pos, EnumFacing.WEST);
 		boolean flag4 = flag && !flag1 && flag2 && !flag3 || !flag && flag1 && !flag2 && flag3;
-		return state.withProperty(UP, !flag4 || !worldIn.isAirBlock(pos.up())).withProperty(NORTH, flag).withProperty(EAST, flag1).withProperty(SOUTH, flag2).withProperty(WEST, flag3);
+		return state.with(UP, !flag4 || !worldIn.isAirBlock(pos.up())).with(NORTH, flag).with(EAST, flag1).with(SOUTH, flag2).with(WEST, flag3);
 	}
 
 	@Override

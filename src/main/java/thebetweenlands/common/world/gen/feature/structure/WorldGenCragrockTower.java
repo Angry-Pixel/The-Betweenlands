@@ -81,14 +81,14 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 	@Override
 	public boolean generate(World worldIn, Random rand, BlockPos pos) {
 		CRAGROCK = BlockRegistry.CRAGROCK.getDefaultState();
-		MOSSY_CRAGROCK_TOP = BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, BlockCragrock.EnumCragrockType.MOSSY_1);
-		MOSSY_CRAGROCK_BOTTOM = BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, BlockCragrock.EnumCragrockType.MOSSY_2);
+		MOSSY_CRAGROCK_TOP = BlockRegistry.CRAGROCK.getDefaultState().with(BlockCragrock.VARIANT, BlockCragrock.EnumCragrockType.MOSSY_1);
+		MOSSY_CRAGROCK_BOTTOM = BlockRegistry.CRAGROCK.getDefaultState().with(BlockCragrock.VARIANT, BlockCragrock.EnumCragrockType.MOSSY_2);
 		CRAGROCK_BRICKS = BlockRegistry.CRAGROCK_BRICKS.getDefaultState();
 		SMOOTH_CRAGROCK_STAIRS = BlockRegistry.SMOOTH_CRAGROCK_STAIRS.getDefaultState();
 		CRAGROCK_BRICK_SLAB = BlockRegistry.CRAGROCK_BRICK_SLAB.getDefaultState();
-		CRAGROCK_BRICK_SLAB_UPSIDEDOWN = BlockRegistry.CRAGROCK_BRICK_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.TOP);
+		CRAGROCK_BRICK_SLAB_UPSIDEDOWN = BlockRegistry.CRAGROCK_BRICK_SLAB.getDefaultState().with(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.TOP);
 		SMOOTH_CRAGROCK_SLAB = BlockRegistry.SMOOTH_CRAGROCK_SLAB.getDefaultState();
-		SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN = BlockRegistry.SMOOTH_CRAGROCK_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.TOP);
+		SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN = BlockRegistry.SMOOTH_CRAGROCK_SLAB.getDefaultState().with(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.TOP);
 		CRAGROCK_BRICK_STAIRS = BlockRegistry.CRAGROCK_BRICK_STAIRS.getDefaultState();
 		CRAGROCK_PILLAR = BlockRegistry.CRAGROCK_PILLAR.getDefaultState();
 		SMOOTH_CRAGROCK = BlockRegistry.SMOOTH_CRAGROCK.getDefaultState();

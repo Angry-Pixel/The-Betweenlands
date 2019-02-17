@@ -3,15 +3,15 @@ package thebetweenlands.common.block.container;
 import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -28,25 +28,25 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAlembic;
 
 public class BlockAlembic extends BlockContainer {
-    public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockAlembic() {
         super(Material.ROCK);
         setHardness(2.0F);
         setResistance(5.0F);
         setCreativeTab(BLCreativeTabs.BLOCKS);
-        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        setDefaultState(blockState.getBaseState().with(FACING, EnumFacing.NORTH));
     }
 
 
     @Override
     public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand){
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
+        return this.getDefaultState().with(FACING, placer.getHorizontalFacing());
     }
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()), 2);
+        world.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing()), 2);
     }
 
     @Override
@@ -136,12 +136,12 @@ public class BlockAlembic extends BlockContainer {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+        return getDefaultState().with(FACING, EnumFacing.byHorizontalIndex(meta));
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).getIndex();
+        return state.get(FACING).getIndex();
     }
     
     @Override

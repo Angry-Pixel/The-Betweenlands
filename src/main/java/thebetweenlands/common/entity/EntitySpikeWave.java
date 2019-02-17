@@ -267,12 +267,12 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
-		this.delay = nbt.getInteger("delay");
+		this.delay = nbt.getInt("delay");
 		this.origin = BlockPos.fromLong(nbt.getLong("origin"));
 
 		this.positions.clear();
-		NBTTagList blocks = nbt.getTagList("positions", Constants.NBT.TAG_LONG);
-		for(int i = 0; i < blocks.tagCount(); i++) {
+		NBTTagList blocks = nbt.getList("positions", Constants.NBT.TAG_LONG);
+		for(int i = 0; i < blocks.size(); i++) {
 			this.addPosition(BlockPos.fromLong(((NBTTagLong)blocks.get(i)).getLong()));
 		}
 		if(this.positions.isEmpty()) {
@@ -284,12 +284,12 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("delay", this.delay);
+		nbt.setInt("delay", this.delay);
 		nbt.setLong("origin", this.origin.toLong());
 
 		NBTTagList blocks = new NBTTagList();
 		for(BlockPos pos : this.positions) {
-			blocks.appendTag(new NBTTagLong(pos.toLong()));
+			blocks.add(new NBTTagLong(pos.toLong()));
 		}
 		nbt.setTag("positions", blocks);
 

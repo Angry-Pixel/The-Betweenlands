@@ -186,7 +186,7 @@ public class WorldGenGiantTree extends WorldGenGiantTreeTrunk {
 			for (int y = startY; y > startY - length; y--) {
 				if (world.getBlockState(new BlockPos(x, y, z)).getMaterial().isReplaceable()) {
 					if(startY - y < 6 && rand.nextInt(5) == 0) {
-						this.setBlockAndNotifyAdequately(world, new BlockPos(x, y, z), HANGER.withProperty(BlockHanger.SEEDED, true));
+						this.setBlockAndNotifyAdequately(world, new BlockPos(x, y, z), HANGER.with(BlockHanger.SEEDED, true));
 					} else {
 						this.setBlockAndNotifyAdequately(world, new BlockPos(x, y, z), HANGER);
 					}

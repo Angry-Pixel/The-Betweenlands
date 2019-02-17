@@ -66,7 +66,7 @@ public class CircleGemHelper {
 	 */
 	public static void setGem(ItemStack stack, CircleGemType gem) {
 		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
-		nbt.setInteger(ITEM_GEM_NBT_TAG, gem.id);
+		nbt.setInt(ITEM_GEM_NBT_TAG, gem.id);
 	}
 
 	/**
@@ -75,9 +75,9 @@ public class CircleGemHelper {
 	 * @return
 	 */
 	public static CircleGemType getGem(ItemStack stack) {
-		NBTTagCompound nbt = stack.getTagCompound();
-		if(nbt != null && nbt.hasKey(ITEM_GEM_NBT_TAG, Constants.NBT.TAG_INT)) {
-			return CircleGemType.fromID(nbt.getInteger(ITEM_GEM_NBT_TAG));
+		NBTTagCompound nbt = stack.getTag();
+		if(nbt != null && nbt.contains(ITEM_GEM_NBT_TAG, Constants.NBT.TAG_INT)) {
+			return CircleGemType.fromID(nbt.getInt(ITEM_GEM_NBT_TAG));
 		}
 		return CircleGemType.NONE;
 	}

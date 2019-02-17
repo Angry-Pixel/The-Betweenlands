@@ -151,7 +151,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox() {
-		return this.getEntityBoundingBox();
+		return this.getBoundingBox();
 	}
 
 	@Override
@@ -215,8 +215,8 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
 
-		nbt.setInteger("facing", this.getFacing().getIndex());
-		nbt.setInteger("facingUp", this.getFacing().getIndex());
+		nbt.setInt("facing", this.getFacing().getIndex());
+		nbt.setInt("facingUp", this.getFacing().getIndex());
 		nbt.setLong("anchor", this.getAnchor().toLong());
 	}
 
@@ -224,8 +224,8 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 
-		this.dataManager.set(FACING, EnumFacing.byIndex(nbt.getInteger("facing")));
-		this.dataManager.set(FACING_UP, EnumFacing.byIndex(nbt.getInteger("facingUp")));
+		this.dataManager.set(FACING, EnumFacing.byIndex(nbt.getInt("facing")));
+		this.dataManager.set(FACING_UP, EnumFacing.byIndex(nbt.getInt("facingUp")));
 		this.dataManager.set(ANCHOR, BlockPos.fromLong(nbt.getLong("anchor")));
 	}
 
@@ -476,7 +476,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 
 	public int checkAnchorAt(BlockPos anchor, EnumFacing facing, EnumFacing facingUp, int checks) {
 		if((checks & AnchorChecks.ENTITIES) != 0) {
-			if(!this.world.getEntitiesWithinAABB(EntityWallFace.class, this.getEntityBoundingBox().offset(anchor.subtract(this.getAnchor())).expand(facing.getXOffset() * this.getPeek(), facing.getYOffset() * this.getPeek(), facing.getZOffset() * this.getPeek()), e -> e != this).isEmpty()) {
+			if(!this.world.getEntitiesWithinAABB(EntityWallFace.class, this.getBoundingBox().offset(anchor.subtract(this.getAnchor())).expand(facing.getXOffset() * this.getPeek(), facing.getYOffset() * this.getPeek(), facing.getZOffset() * this.getPeek()), e -> e != this).isEmpty()) {
 				return AnchorChecks.ENTITIES;
 			}
 		}
@@ -570,7 +570,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 			if (entityIn instanceof EntityLivingBase) {
 				this.y = entityIn.posY + (double)entityIn.getEyeHeight();
 			} else {
-				this.y = (entityIn.getEntityBoundingBox().minY + entityIn.getEntityBoundingBox().maxY) / 2.0D;
+				this.y = (entityIn.getBoundingBox().minY + entityIn.getBoundingBox().maxY) / 2.0D;
 			}
 
 			this.z = entityIn.posZ;

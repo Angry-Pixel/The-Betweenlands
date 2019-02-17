@@ -102,7 +102,7 @@ public class CircleGemEntityCapability extends EntityCapability<CircleGemEntityC
 		for(CircleGem gem : this.gems) {
 			NBTTagCompound gemCompound = new NBTTagCompound();
 			gem.writeToNBT(gemCompound);
-			gemList.appendTag(gemCompound);
+			gemList.add(gemCompound);
 		}
 		nbt.setTag("gems", gemList);
 	}
@@ -110,9 +110,9 @@ public class CircleGemEntityCapability extends EntityCapability<CircleGemEntityC
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.gems.clear();
-		NBTTagList gemList = nbt.getTagList("gems", Constants.NBT.TAG_COMPOUND);
-		for(int i = 0; i < gemList.tagCount(); i++) {
-			NBTTagCompound gemCompound = gemList.getCompoundTagAt(i);
+		NBTTagList gemList = nbt.getList("gems", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < gemList.size(); i++) {
+			NBTTagCompound gemCompound = gemList.getCompound(i);
 			CircleGem gem = CircleGem.readFromNBT(gemCompound);
 			if(gem != null) {
 				this.gems.add(gem);

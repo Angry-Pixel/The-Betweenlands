@@ -3,10 +3,8 @@ package thebetweenlands.common.block.container;
 import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,20 +12,23 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryHelper;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.BlockStateContainer;
@@ -43,11 +44,11 @@ import thebetweenlands.common.tile.TileEntityBLFurnace;
 public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 	private final boolean isBurning;
 	private static boolean keepInventory;
-    public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockBLFurnace(boolean isBurning) {
         super(Material.ROCK);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        this.setDefaultState(this.blockState.getBaseState().with(FACING, EnumFacing.NORTH));
         this.isBurning = isBurning;
         setHardness(3.5F);
         setSoundType(SoundType.STONE);
@@ -56,8 +57,8 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
     }
 
 	@Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock(BlockRegistry.SULFUR_FURNACE);
+    public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+        return BlockRegistry.SULFUR_FURNACE;
     }
 
 	@Override
@@ -93,7 +94,7 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
             IBlockState iblockstate1 = worldIn.getBlockState(pos.south());
             IBlockState iblockstate2 = worldIn.getBlockState(pos.west());
             IBlockState iblockstate3 = worldIn.getBlockState(pos.east());
-            EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+            EnumFacing enumfacing = (EnumFacing)state.get(FACING);
 
             if (enumfacing == EnumFacing.NORTH && iblockstate.isFullBlock() && !iblockstate1.isFullBlock())
                 enumfacing = EnumFacing.SOUTH;
@@ -107,7 +108,7 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
             else if (enumfacing == EnumFacing.EAST && iblockstate3.isFullBlock() && !iblockstate2.isFullBlock())
                 enumfacing = EnumFacing.WEST;
 
-            worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
+            worldIn.setBlockState(pos, state.with(FACING, enumfacing), 2);
         }
     }
 
@@ -129,9 +130,9 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 		keepInventory = true;
 
 		if (active)
-			world.setBlockState(pos, BlockRegistry.SULFUR_FURNACE_ACTIVE.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+			world.setBlockState(pos, BlockRegistry.SULFUR_FURNACE_ACTIVE.getDefaultState().with(FACING, iblockstate.get(FACING)), 3);
 		else
-			world.setBlockState(pos, BlockRegistry.SULFUR_FURNACE.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+			world.setBlockState(pos, BlockRegistry.SULFUR_FURNACE.getDefaultState().with(FACING, iblockstate.get(FACING)), 3);
 
 		keepInventory = false;
 
@@ -147,12 +148,12 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
     }
 
 	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+		return this.getDefaultState().with(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+		world.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 
 		if (stack.hasDisplayName())
 			((TileEntityBLFurnace)world.getTileEntity(pos)).getStackDisplayName(stack.getDisplayName());
@@ -176,7 +177,7 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 	@Override
 	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		if (this.isBurning) {
-			EnumFacing enumfacing = (EnumFacing) stateIn.getValue(FACING);
+			EnumFacing enumfacing = (EnumFacing) stateIn.get(FACING);
 			double d0 = (double) pos.getX() + 0.5D;
 			double d1 = (double) pos.getY() + 0.25D + rand.nextDouble() * 6.0D / 16.0D;
 			double d2 = (double) pos.getZ() + 0.5D;
@@ -218,7 +219,7 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 	}
 
 	@Override
-	public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
+	public ItemStack getItem(IBlockReader world, BlockPos pos, IBlockState state) {
 		return new ItemStack(BlockRegistry.SULFUR_FURNACE);
 	}
 
@@ -230,22 +231,22 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 			enumfacing = EnumFacing.NORTH;
 		}
 
-		return getDefaultState().withProperty(FACING, enumfacing);
+		return getDefaultState().with(FACING, enumfacing);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumFacing) state.getValue(FACING)).getIndex();
+		return ((EnumFacing) state.get(FACING)).getIndex();
 	}
 
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
-		return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
+		return state.with(FACING, rot.rotate((EnumFacing) state.get(FACING)));
 	}
 
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-		return state.withRotation(mirrorIn.toRotation((EnumFacing) state.getValue(FACING)));
+		return state.withRotation(mirrorIn.toRotation((EnumFacing) state.get(FACING)));
 	}
 
 	@Override

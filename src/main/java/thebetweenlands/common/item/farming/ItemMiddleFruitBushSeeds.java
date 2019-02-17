@@ -8,7 +8,7 @@ public class ItemMiddleFruitBushSeeds extends ItemPlantableSeeds {
 		super(() -> { 
 			return BlockRegistry.MIDDLE_FRUIT_BUSH.getDefaultState();
 		}, state -> { 
-			return state.getBlock() instanceof BlockGenericDugSoil && !state.getValue(BlockGenericDugSoil.DECAYED);
+			return state.getBlock() instanceof BlockGenericDugSoil && !state.get(BlockGenericDugSoil.DECAYED);
 		});
 	}
 }

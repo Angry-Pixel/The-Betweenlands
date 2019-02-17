@@ -79,12 +79,12 @@ public class EntitySummoningCapability extends EntityCapability<EntitySummoningC
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("cooldown", this.cooldownTicks);
+		nbt.setInt("cooldown", this.cooldownTicks);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		this.cooldownTicks = nbt.getInteger("cooldown");
+		this.cooldownTicks = nbt.getInt("cooldown");
 	}
 
 	@Override

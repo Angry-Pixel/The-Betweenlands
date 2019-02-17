@@ -49,7 +49,7 @@ public class PlayerPortalHandler {
 					boolean inPortalBlock = false;
 					if(state.getBlock() instanceof BlockTreePortal) {
 						AxisAlignedBB aabb = state.getBoundingBox(player.world, pos);
-						if(aabb != null && aabb.offset(pos).intersects(player.getEntityBoundingBox())) {
+						if(aabb != null && aabb.offset(pos).intersects(player.getBoundingBox())) {
 							inPortalBlock = true;
 						}
 					}
@@ -59,7 +59,7 @@ public class PlayerPortalHandler {
 							if (cap.getTicksUntilTeleport() <= 0 || player.abilities.isCreativeMode) {
 								if(player.world instanceof WorldServer) {
 									BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(player.world);
-									AxisAlignedBB entityAabb = player.getEntityBoundingBox();
+									AxisAlignedBB entityAabb = player.getBoundingBox();
 									List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, entityAabb, loc -> loc.intersects(entityAabb));
 									LocationPortal portal = null;
 									if(!portals.isEmpty()) {

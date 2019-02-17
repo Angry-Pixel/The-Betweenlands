@@ -2,13 +2,13 @@ package thebetweenlands.common.block.structure;
 
 import java.util.Random;
 
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
@@ -23,15 +23,15 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockDruidStone extends BasicBlock implements BlockRegistry.ISubtypeItemBlockModelDefinition {
-	public static final PropertyDirection FACING = BlockHorizontal.FACING;
+	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 	public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
 
 	public BlockDruidStone(Material blockMaterialIn) {
 		super(blockMaterialIn);
 		setDefaultState(blockState.getBaseState()
-				.withProperty(FACING, EnumFacing.NORTH)
-				.withProperty(ACTIVE, false)
+				.with(FACING, EnumFacing.NORTH)
+				.with(ACTIVE, false)
 				);
 		setHardness(1.5F);
 		setResistance(10.0F);
@@ -49,28 +49,28 @@ public class BlockDruidStone extends BasicBlock implements BlockRegistry.ISubtyp
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState()
-				.withProperty(FACING, EnumFacing.byHorizontalIndex(meta))
-				.withProperty(ACTIVE, (meta & 4) != 0);
+				.with(FACING, EnumFacing.byHorizontalIndex(meta))
+				.with(ACTIVE, (meta & 4) != 0);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getHorizontalIndex() | (state.getValue(ACTIVE) ? 4 : 0);
+		return state.get(FACING).getHorizontalIndex() | (state.get(ACTIVE) ? 4 : 0);
 	}
 
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
-		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
+		return state.with(FACING, rot.rotate(state.get(FACING)));
 	}
 
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
+		return state.withRotation(mirrorIn.toRotation(state.get(FACING)));
 	}
 
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		return getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+		return getDefaultState().with(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 
 	@Override

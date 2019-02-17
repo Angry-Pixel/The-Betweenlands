@@ -29,7 +29,7 @@ public class EntityAIFollowTarget extends EntityAIBase {
 
 		@Override
 		public EntityLivingBase get() {
-			List<EntityLivingBase> entities = this.taskOwner.world.getEntitiesWithinAABB(this.type, this.taskOwner.getEntityBoundingBox().grow(this.range));
+			List<EntityLivingBase> entities = this.taskOwner.world.getEntitiesWithinAABB(this.type, this.taskOwner.getBoundingBox().grow(this.range));
 			EntityLivingBase closest = null;
 			for(EntityLivingBase entity : entities) {
 				if(closest == null || entity.getDistanceSq(this.taskOwner) < closest.getDistanceSq(this.taskOwner)) {
@@ -117,7 +117,7 @@ public class EntityAIFollowTarget extends EntityAIBase {
 						if (this.taskOwner.getDistanceSq(target) >= 144.0D) {
 							int i = MathHelper.floor(target.posX) - 2;
 							int j = MathHelper.floor(target.posZ) - 2;
-							int k = MathHelper.floor(target.getEntityBoundingBox().minY);
+							int k = MathHelper.floor(target.getBoundingBox().minY);
 
 							for (int l = 0; l <= 4; ++l) {
 								for (int i1 = 0; i1 <= 4; ++i1) {

@@ -115,8 +115,8 @@ public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessE
 		for (Map.Entry<Item, Integer> entry : this.hatredMap.entrySet()) {
 			NBTTagCompound listCompound = new NBTTagCompound();
 			listCompound.setString("Food", entry.getKey().getRegistryName().toString());
-			listCompound.setInteger("Level", entry.getValue());
-			list.appendTag(listCompound);
+			listCompound.setInt("Level", entry.getValue());
+			list.add(listCompound);
 		}
 		nbt.setTag("HatredMap", list);
 	}
@@ -124,12 +124,12 @@ public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessE
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.hatredMap = Maps.newHashMap();
-		NBTTagList list = nbt.getTagList("HatredMap", Constants.NBT.TAG_COMPOUND);
-		for (int i = 0; i < list.tagCount(); i++) {
-			NBTTagCompound listCompound = list.getCompoundTagAt(i);
+		NBTTagList list = nbt.getList("HatredMap", Constants.NBT.TAG_COMPOUND);
+		for (int i = 0; i < list.size(); i++) {
+			NBTTagCompound listCompound = list.getCompound(i);
 			Item food = Item.getByNameOrId(listCompound.getString("Food"));
 			if(food != null) {
-				int level = listCompound.getInteger("Level");
+				int level = listCompound.getInt("Level");
 				this.hatredMap.put(food, level);
 			}
 		}

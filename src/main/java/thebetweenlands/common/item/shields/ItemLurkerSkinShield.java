@@ -57,11 +57,11 @@ public class ItemLurkerSkinShield extends ItemBLShield {
 		if(rayTrace != null) {
 			Vec3d lookVec = playerIn.getLook(1.0F);
 			boolean entityColliding = false;
-			List<Entity> entities = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, playerIn.getEntityBoundingBox().expand(lookVec.x * 5.0D, lookVec.y * 5.0D, lookVec.z * 5.0D).grow(1.0D));
+			List<Entity> entities = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, playerIn.getBoundingBox().expand(lookVec.x * 5.0D, lookVec.y * 5.0D, lookVec.z * 5.0D).grow(1.0D));
 
 			for(Entity entity : entities) {
 				if(entity.canBeCollidedWith()) {
-					AxisAlignedBB aabb = entity.getEntityBoundingBox().grow((double)entity.getCollisionBorderSize());
+					AxisAlignedBB aabb = entity.getBoundingBox().grow((double)entity.getCollisionBorderSize());
 
 					if(aabb.contains(playerPos)) {
 						entityColliding = true;
@@ -76,7 +76,7 @@ public class ItemLurkerSkinShield extends ItemBLShield {
 					EntityBoat boat = new EntityLurkerSkinRaft(worldIn, rayTrace.hitVec.x, rayTrace.hitVec.y - 0.12D, rayTrace.hitVec.z, stack);
 					boat.rotationYaw = playerIn.rotationYaw;
 
-					if(worldIn.getCollisionBoxes(boat, boat.getEntityBoundingBox().grow(-0.1D)).isEmpty()) {
+					if(worldIn.getCollisionBoxes(boat, boat.getBoundingBox().grow(-0.1D)).isEmpty()) {
 						if(!worldIn.isRemote) {
 							worldIn.spawnEntity(boat);
 

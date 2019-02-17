@@ -26,6 +26,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -78,12 +79,12 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 		this.setCreativeTab(BLCreativeTabs.PLANTS);
 
 		this.setDefaultState(this.blockState.getBaseState()
-				.withProperty(NORTH, Boolean.valueOf(false))
-				.withProperty(EAST, Boolean.valueOf(false))
-				.withProperty(SOUTH, Boolean.valueOf(false))
-				.withProperty(WEST, Boolean.valueOf(false))
-				.withProperty(UP, Boolean.valueOf(false))
-				.withProperty(DOWN, Boolean.valueOf(false)));
+				.with(NORTH, Boolean.valueOf(false))
+				.with(EAST, Boolean.valueOf(false))
+				.with(SOUTH, Boolean.valueOf(false))
+				.with(WEST, Boolean.valueOf(false))
+				.with(UP, Boolean.valueOf(false))
+				.with(DOWN, Boolean.valueOf(false)));
 	}
 
 	@Override
@@ -112,8 +113,7 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	}
 
 	@Override
-	@Nullable
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
 		return ItemRegistry.ITEMS_MISC;
 	}
 
@@ -135,12 +135,12 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	@Override
 	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
 		return state
-				.withProperty(NORTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.north())))
-				.withProperty(EAST, Boolean.valueOf(this.canConnectTo(worldIn, pos.east())))
-				.withProperty(SOUTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.south())))
-				.withProperty(WEST, Boolean.valueOf(this.canConnectTo(worldIn, pos.west())))
-				.withProperty(UP, Boolean.valueOf(this.canConnectTo(worldIn, pos.up())))
-				.withProperty(DOWN, Boolean.valueOf(this.canConnectTo(worldIn, pos.down())));
+				.with(NORTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.north())))
+				.with(EAST, Boolean.valueOf(this.canConnectTo(worldIn, pos.east())))
+				.with(SOUTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.south())))
+				.with(WEST, Boolean.valueOf(this.canConnectTo(worldIn, pos.west())))
+				.with(UP, Boolean.valueOf(this.canConnectTo(worldIn, pos.up())))
+				.with(DOWN, Boolean.valueOf(this.canConnectTo(worldIn, pos.down())));
 	}
 
 	public boolean canConnectTo(IWorldReader worldIn, BlockPos pos) {
@@ -152,7 +152,7 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	@Override
 	public IBlockState getExtendedState(IBlockState oldState, IWorldReader worldIn, BlockPos pos) {
 		IExtendedBlockState state = (IExtendedBlockState)oldState;
-		return state.withProperty(POS_X, pos.getX()).withProperty(POS_Y, pos.getY()).withProperty(POS_Z, pos.getZ());
+		return state.with(POS_X, pos.getX()).with(POS_Y, pos.getY()).with(POS_Z, pos.getZ());
 	}
 
 	@Override
@@ -223,7 +223,7 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 			ICustomStepSoundCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_CUSTOM_STEP_SOUND, null);
 			if(entity.distanceWalkedOnStepModified > cap.getNextWeedwoodBushStep()) {
 				boolean inBush = false;
-				AxisAlignedBB aabb = entity.getEntityBoundingBox();
+				AxisAlignedBB aabb = entity.getBoundingBox();
 				Iterator<MutableBlockPos> it = BlockPos.getAllInBoxMutable(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ)).iterator();
 				while(it.hasNext()) {
 					MutableBlockPos pos = it.next();

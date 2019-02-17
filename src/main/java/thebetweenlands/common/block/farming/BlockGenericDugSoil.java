@@ -25,6 +25,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.BlockStateContainer;
@@ -67,7 +68,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
         this.setSoundType(SoundType.GROUND);
         this.setHardness(0.5F);
         this.setHarvestLevel("shovel", 0);
-        this.setDefaultState(this.getBlockState().getBaseState().withProperty(COMPOSTED, false).withProperty(DECAYED, false));
+        this.setDefaultState(this.getBlockState().getBaseState().with(COMPOSTED, false).with(DECAYED, false));
         this.purified = purified;
     }
 
@@ -148,7 +149,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return !this.purified && state.getValue(DECAYED) ? 2 : state.getValue(COMPOSTED) ? 1 : 0;
+        return !this.purified && state.get(DECAYED) ? 2 : state.get(COMPOSTED) ? 1 : 0;
     }
 
     @Override
@@ -158,11 +159,11 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
             case 0:
                 return this.getDefaultState();
             case 1:
-                return this.getDefaultState().withProperty(COMPOSTED, true);
+                return this.getDefaultState().with(COMPOSTED, true);
             case 2:
                 if (this.purified)
                     return this.getDefaultState();
-                return this.getDefaultState().withProperty(DECAYED, true);
+                return this.getDefaultState().with(DECAYED, true);
         }
     }
 
@@ -225,7 +226,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     }
 
     @Override
-    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
+    public ItemStack getItem(IBlockReader worldIn, BlockPos pos, IBlockState state) {
         return new ItemStack(this, 1, this.getMetaFromState(state));
     }
 
@@ -234,10 +235,10 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
         TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileEntityDugSoil) {
             TileEntityDugSoil te = (TileEntityDugSoil) tile;
-            if (state.getValue(COMPOSTED)) {
+            if (state.get(COMPOSTED)) {
                 te.setCompost(30);
             }
-            if (state.getValue(DECAYED)) {
+            if (state.get(DECAYED)) {
                 te.setDecay(20);
                 te.setCompost(30);
             }
@@ -372,7 +373,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     @Override
     @OnlyIn(Dist.CLIENT)
     public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-        if (stateIn.getValue(DECAYED)) {
+        if (stateIn.get(DECAYED)) {
             BLParticles.DIRT_DECAY.spawn(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + rand.nextFloat());
 
             for (int i = 0; i < 5; i++) {
@@ -436,7 +437,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 
         EnumPlantType plantType = plantable.getPlantType(world, pos.offset(direction));
 
-        boolean isSoilSuitable = direction == EnumFacing.UP && (state.getValue(DECAYED) || state.getValue(COMPOSTED));
+        boolean isSoilSuitable = direction == EnumFacing.UP && (state.get(DECAYED) || state.get(COMPOSTED));
 
         if (!isSoilSuitable) {
             return false;

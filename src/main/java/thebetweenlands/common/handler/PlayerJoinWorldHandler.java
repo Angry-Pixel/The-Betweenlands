@@ -29,9 +29,9 @@ public class PlayerJoinWorldHandler {
 			EntityPlayer player = (EntityPlayer) event.getEntity();
 
 			NBTTagCompound dataNbt = player.getEntityData();
-			NBTTagCompound persistentNbt = dataNbt.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+			NBTTagCompound persistentNbt = dataNbt.getCompound(EntityPlayer.PERSISTED_NBT_TAG);
 
-			boolean isFirstTimeInDimension = !(persistentNbt.hasKey(NOT_FIRST_JOIN_NBT, Constants.NBT.TAG_BYTE) && persistentNbt.getBoolean(NOT_FIRST_JOIN_NBT));
+			boolean isFirstTimeInDimension = !(persistentNbt.contains(NOT_FIRST_JOIN_NBT, Constants.NBT.TAG_BYTE) && persistentNbt.getBoolean(NOT_FIRST_JOIN_NBT));
 
 			if(isFirstTimeInDimension) {
 				int minActiveTicks = BetweenlandsConfig.WORLD_AND_DIMENSION.minRiftOnFirstJoinDuration * 20;
@@ -54,9 +54,9 @@ public class PlayerJoinWorldHandler {
 	public static void onPlayerLogin(PlayerLoggedInEvent event) {
 		if(!event.player.world.isRemote && BetweenlandsConfig.WORLD_AND_DIMENSION.startInBetweenlands && event.player.world.provider.getDimension() != BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && event.player.world instanceof WorldServer) {
 			NBTTagCompound dataNbt = event.player.getEntityData();
-			NBTTagCompound persistentNbt = dataNbt.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+			NBTTagCompound persistentNbt = dataNbt.getCompound(EntityPlayer.PERSISTED_NBT_TAG);
 
-			boolean isFirstTimeSpawning = !(persistentNbt.hasKey(NOT_FIRST_SPAWN_NBT, Constants.NBT.TAG_BYTE) && persistentNbt.getBoolean(NOT_FIRST_SPAWN_NBT));
+			boolean isFirstTimeSpawning = !(persistentNbt.contains(NOT_FIRST_SPAWN_NBT, Constants.NBT.TAG_BYTE) && persistentNbt.getBoolean(NOT_FIRST_SPAWN_NBT));
 
 			if(isFirstTimeSpawning) {
 				//Set before teleporting because recursion

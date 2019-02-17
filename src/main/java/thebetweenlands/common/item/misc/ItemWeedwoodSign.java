@@ -41,9 +41,9 @@ public class ItemWeedwoodSign extends Item {
 
 					if (facing == EnumFacing.UP) {
 						int i = MathHelper.floor((double)((playerIn.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
-						worldIn.setBlockState(pos, BlockRegistry.STANDING_WEEDWOOD_SIGN.getDefaultState().withProperty(BlockStandingSign.ROTATION, Integer.valueOf(i)), 11);
+						worldIn.setBlockState(pos, BlockRegistry.STANDING_WEEDWOOD_SIGN.getDefaultState().with(BlockStandingSign.ROTATION, Integer.valueOf(i)), 11);
 					} else {
-						worldIn.setBlockState(pos, BlockRegistry.WALL_WEEDWOOD_SIGN.getDefaultState().withProperty(BlockWallSign.FACING, facing), 11);
+						worldIn.setBlockState(pos, BlockRegistry.WALL_WEEDWOOD_SIGN.getDefaultState().with(BlockWallSign.FACING, facing), 11);
 					}
 
 					stack.shrink(1);

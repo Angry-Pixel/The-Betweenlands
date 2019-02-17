@@ -77,7 +77,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
     
     @Override
     public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
-    	NBTTagCompound nbt = stack.getTagCompound();
+    	NBTTagCompound nbt = stack.getTag();
     	if(nbt == null) {
     		nbt = new NBTTagCompound();
     	}
@@ -234,7 +234,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
                 if(blockState.getBlock() == BlockRegistry.LOG_RUBBER && blockState.getValue(BlockRubberLog.NATURAL)) {
                     BlockPos offset = pos.offset(result.sideHit);
                     if(world.getBlockState(offset).getBlock().isReplaceable(world, offset) && rubberTap.canPlaceBlockAt(world, offset)) {
-                        world.setBlockState(offset, rubberTap.getDefaultState().withProperty(BlockRubberTap.FACING, result.sideHit));
+                        world.setBlockState(offset, rubberTap.getDefaultState().with(BlockRubberTap.FACING, result.sideHit));
                         itemStack.shrink(1);
 
                         world.playSound(null, pos, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.PLAYERS, 1, 1);
@@ -296,12 +296,12 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
     @Nullable
     @Override
     public FluidStack getFluid(final ItemStack container) {
-        NBTTagCompound tagCompound = container.getTagCompound();
-        if (tagCompound == null || !tagCompound.hasKey(FluidHandlerItemStackSimple.FLUID_NBT_KEY))
+        NBTTagCompound tagCompound = container.getTag();
+        if (tagCompound == null || !tagCompound.contains(FluidHandlerItemStackSimple.FLUID_NBT_KEY))
         {
             return null;
         }
-        return FluidStack.loadFluidStackFromNBT(tagCompound.getCompoundTag(FluidHandlerItemStackSimple.FLUID_NBT_KEY));
+        return FluidStack.loadFluidStackFromNBT(tagCompound.getCompound(FluidHandlerItemStackSimple.FLUID_NBT_KEY));
     }
 
     @Override

@@ -51,7 +51,7 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock, IC
 	@Override
 	public void onEntityCollision(IBlockState state, World world, BlockPos pos, Entity entity) {
 		if (entity instanceof EntityLivingBase && !(entity instanceof EntityTarBeast) && !(entity instanceof EntityPlayer && ((EntityPlayer)entity).abilities.isCreativeMode)) {
-			double liquidHeight = (double)((float)(pos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(((Integer)state.getValue(BlockLiquid.LEVEL)).intValue()));
+			double liquidHeight = (double)((float)(pos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(((Integer)state.get(BlockLiquid.LEVEL)).intValue()));
 			if (entity.posY + entity.getEyeHeight() < liquidHeight) {
 				((EntityLivingBase) entity).attackEntityFrom(DamageSource.DROWN, 2.0F);
 			}
@@ -122,7 +122,7 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock, IC
 	@Override
 	public Boolean isEntityInsideMaterial(IWorldReader world, BlockPos blockpos, IBlockState state, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
 		if(entity instanceof EntityTarBeast == false && materialIn == Material.WATER) {
-			double liquidHeight = (double)((float)(blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(((Integer)state.getValue(BlockLiquid.LEVEL)).intValue()));
+			double liquidHeight = (double)((float)(blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(((Integer)state.get(BlockLiquid.LEVEL)).intValue()));
 			if(testingHead) {
 				double liquidHeightBelow = 0;
 				if(world.getBlockState(blockpos.up()).getBlock() == state.getBlock()) {
@@ -130,7 +130,7 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock, IC
 				}
 				return entity.posY + entity.getEyeHeight() < 0.1D + liquidHeight || entity.posY + entity.getEyeHeight() < 0.1D + liquidHeightBelow;
 			} else {
-				return entity.getEntityBoundingBox().maxY >= liquidHeight && entity.getEntityBoundingBox().minY < liquidHeight;
+				return entity.getBoundingBox().maxY >= liquidHeight && entity.getBoundingBox().minY < liquidHeight;
 			}
 		}
 		return null;

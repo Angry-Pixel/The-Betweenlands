@@ -174,7 +174,7 @@ public class OverworldItemHandler {
 			public void onTorchBlockPlaced(World world, BlockPos pos, IBlockState state, ItemStack stack, EntityPlayer player) {
 				EnumFacing facing = null;
 				try {
-					facing = state.getValue(BlockTorch.FACING);
+					facing = state.get(BlockTorch.FACING);
 				} catch(Exception ex) {}
 				if(facing == null) {
 					List<EnumFacing> dirs = new ArrayList<>();
@@ -191,7 +191,7 @@ public class OverworldItemHandler {
 					}
 				}
 				if(facing != null) {
-					IBlockState dampTorch = BlockRegistry.DAMP_TORCH.getDefaultState().withProperty(BlockDampTorch.FACING, facing);
+					IBlockState dampTorch = BlockRegistry.DAMP_TORCH.getDefaultState().with(BlockDampTorch.FACING, facing);
 					world.setBlockState(pos, dampTorch);
 				} else {
 					world.setBlockToAir(pos);

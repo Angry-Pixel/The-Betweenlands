@@ -221,7 +221,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	                        EntityLivingBase entitylivingbase = attackTarget;
 	                        dy = entitylivingbase.posY + (double) entitylivingbase.getEyeHeight() - (this.posY + (double) this.getEyeHeight());
 	                    } else {
-	                        dy = (attackTarget.getEntityBoundingBox().minY + attackTarget.getEntityBoundingBox().maxY) / 2.0D - (this.posY + (double) this.getEyeHeight());
+	                        dy = (attackTarget.getBoundingBox().minY + attackTarget.getBoundingBox().maxY) / 2.0D - (this.posY + (double) this.getEyeHeight());
 	                    }
 	                    double dist = (double) MathHelper.sqrt(dx * dx + dz * dz);
 	                    float yaw = (float) (Math.atan2(dz, dx) * 180.0D / Math.PI) - 90.0F;
@@ -233,7 +233,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	                    this.setRotationYawHead(0);
 	
 	                    if (this.ticksExisted % 5 == 0 && this.canEntityBeSeen(this.getAttackTarget()) && !this.isWearingSkullMask(this.getAttackTarget())) {
-	                        List<EntityVolatileSoul> existingSouls = this.world.getEntitiesWithinAABB(EntityVolatileSoul.class, this.getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D));
+	                        List<EntityVolatileSoul> existingSouls = this.world.getEntitiesWithinAABB(EntityVolatileSoul.class, this.getBoundingBox().grow(16.0D, 16.0D, 16.0D));
 	                        if (existingSouls.size() < 16) {
 	                            EntityVolatileSoul soul = new EntityVolatileSoul(this.world);
 	                            float mx = this.world.rand.nextFloat() - 0.5F;
@@ -313,7 +313,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
                 float f = 0.91F;
 
                 if (this.onGround) {
-                    f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
+                    f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
                 }
 
                 float f1 = 0.16277136F / (f * f * f);
@@ -321,7 +321,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
                 f = 0.91F;
 
                 if (this.onGround) {
-                    f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
+                    f = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
                 }
 
                 this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
@@ -418,8 +418,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
     public void writeEntityToNBT(NBTTagCompound nbt) {
         super.writeEntityToNBT(nbt);
         nbt.setBoolean("volatileState", this.isVolatile());
-        nbt.setInteger("volatileCooldown", this.volatileCooldownTicks);
-        nbt.setInteger("volatileTicks", this.volatileTicks);
+        nbt.setInt("volatileCooldown", this.volatileCooldownTicks);
+        nbt.setInt("volatileTicks", this.volatileTicks);
         nbt.setFloat("volatileReceivedDamage", this.volatileReceivedDamage);
         nbt.setBoolean("canTurnVolatileOnTarget", this.canTurnVolatileOnTarget);
         nbt.setBoolean("canTurnVolatile", this.canTurnVolatile);
@@ -430,25 +430,25 @@ public class EntityWight extends EntityMob implements IEntityBL {
     public void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
 
-        if (nbt.hasKey("volatileState")) {
+        if (nbt.contains("volatileState")) {
             this.setVolatile(nbt.getBoolean("volatileState"));
         }
-        if (nbt.hasKey("turnVolatileOnPlayer")) {
+        if (nbt.contains("turnVolatileOnPlayer")) {
             this.didTurnVolatileOnPlayer = nbt.getBoolean("turnVolatileOnPlayer");
         }
-        if (nbt.hasKey("volatileCooldown")) {
-            this.volatileCooldownTicks = nbt.getInteger("volatileCooldown");
+        if (nbt.contains("volatileCooldown")) {
+            this.volatileCooldownTicks = nbt.getInt("volatileCooldown");
         }
-        if (nbt.hasKey("volatileTicks")) {
-            this.volatileTicks = nbt.getInteger("volatileTicks");
+        if (nbt.contains("volatileTicks")) {
+            this.volatileTicks = nbt.getInt("volatileTicks");
         }
-        if (nbt.hasKey("volatileReceivedDamage")) {
+        if (nbt.contains("volatileReceivedDamage")) {
             this.volatileReceivedDamage = nbt.getFloat("volatileReceivedDamage");
         }
-        if (nbt.hasKey("canTurnVolatileOnTarget")) {
+        if (nbt.contains("canTurnVolatileOnTarget")) {
             this.canTurnVolatileOnTarget = nbt.getBoolean("canTurnVolatileOnTarget");
         }
-        if (nbt.hasKey("canTurnVolatile")) {
+        if (nbt.contains("canTurnVolatile")) {
             this.canTurnVolatile = nbt.getBoolean("canTurnVolatile");
         }
     }

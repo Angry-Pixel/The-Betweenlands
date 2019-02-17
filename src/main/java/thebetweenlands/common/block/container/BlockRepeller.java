@@ -7,17 +7,17 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -41,8 +41,8 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityRepeller;
 
 public class BlockRepeller extends BlockContainer {
-	public static final PropertyDirection FACING = BlockHorizontal.FACING;
-	public static final PropertyEnum<EnumBlockHalf> HALF = PropertyEnum.<EnumBlockHalf>create("half", EnumBlockHalf.class);
+	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+	public static final EnumProperty<EnumBlockHalf> HALF = EnumProperty.<EnumBlockHalf>create("half", EnumBlockHalf.class);
 
 	protected static final AxisAlignedBB AABB_BOTTOM = new AxisAlignedBB(0.15F, 0, 0.15F, 0.85F, 1.0F, 0.85F);
 	protected static final AxisAlignedBB AABB_TOP = new AxisAlignedBB(0.15F, 0, 0.15F, 0.85F, 0.7F, 0.85F);
@@ -52,18 +52,18 @@ public class BlockRepeller extends BlockContainer {
 		setHardness(1.0F);
 		setSoundType(SoundType.WOOD);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(HALF, EnumBlockHalf.BOTTOM));
+		setDefaultState(this.blockState.getBaseState().with(FACING, EnumFacing.NORTH).with(HALF, EnumBlockHalf.BOTTOM));
 	}
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
-		return state.getValue(HALF) == EnumBlockHalf.TOP ? AABB_TOP : AABB_BOTTOM;
+		return state.get(HALF) == EnumBlockHalf.TOP ? AABB_TOP : AABB_BOTTOM;
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		IBlockState state = this.getStateFromMeta(meta);
-		if(state.getValue(HALF) == EnumBlockHalf.BOTTOM) {
+		if(state.get(HALF) == EnumBlockHalf.BOTTOM) {
 			return new TileEntityRepeller();
 		}
 		return null;
@@ -71,20 +71,20 @@ public class BlockRepeller extends BlockContainer {
 
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand){
-		return this.getDefaultState().withProperty(HALF, EnumBlockHalf.BOTTOM).withProperty(FACING, placer.getHorizontalFacing());
+		return this.getDefaultState().with(HALF, EnumBlockHalf.BOTTOM).with(FACING, placer.getHorizontalFacing());
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		world.setBlockState(pos, state.withProperty(HALF, EnumBlockHalf.BOTTOM).withProperty(FACING, placer.getHorizontalFacing()), 2);
-		world.setBlockState(pos.up(), this.getDefaultState().withProperty(HALF, EnumBlockHalf.TOP).withProperty(FACING, placer.getHorizontalFacing()), 2);
+		world.setBlockState(pos, state.with(HALF, EnumBlockHalf.BOTTOM).with(FACING, placer.getHorizontalFacing()), 2);
+		world.setBlockState(pos.up(), this.getDefaultState().with(HALF, EnumBlockHalf.TOP).with(FACING, placer.getHorizontalFacing()), 2);
 	}
 
 	@Override
 	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
-		if(state.getValue(HALF) == EnumBlockHalf.TOP && world.getBlockState(pos.down()).getBlock() == this) {
+		if(state.get(HALF) == EnumBlockHalf.TOP && world.getBlockState(pos.down()).getBlock() == this) {
 			this.onBlockActivated(world, pos.down(), world.getBlockState(pos.down()), player, hand, facing, hitX, hitY, hitZ);
-		} else if(state.getValue(HALF) == EnumBlockHalf.BOTTOM) {
+		} else if(state.get(HALF) == EnumBlockHalf.BOTTOM) {
 			TileEntityRepeller tile = (TileEntityRepeller) world.getTileEntity(pos);
 			ItemStack held = player.getHeldItem(hand);
 			if(!player.isSneaking() && !held.isEmpty()) {
@@ -173,7 +173,7 @@ public class BlockRepeller extends BlockContainer {
 
 	protected void checkAndBreakBlock(World world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
-		EnumBlockHalf half = state.getValue(HALF);
+		EnumBlockHalf half = state.get(HALF);
 		if ((half == EnumBlockHalf.BOTTOM && (!world.isSideSolid(pos.down(), EnumFacing.UP) || world.getBlockState(pos.up()).getBlock() != this))
 				|| (half == EnumBlockHalf.TOP) && world.getBlockState(pos.down()).getBlock() != this) {
 			this.breakBlock(world, pos, state);
@@ -217,10 +217,10 @@ public class BlockRepeller extends BlockContainer {
 	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		if(rand.nextInt(6) == 0) {
 			IBlockState state = worldIn.getBlockState(pos);
-			if(state.getValue(HALF) == EnumBlockHalf.BOTTOM) {
+			if(state.get(HALF) == EnumBlockHalf.BOTTOM) {
 				TileEntityRepeller tile = (TileEntityRepeller) worldIn.getTileEntity(pos);
 				if(tile != null && tile.isRunning())  {
-					EnumFacing facing = state.getValue(FACING);
+					EnumFacing facing = state.get(FACING);
 					for(int i = 0; i < 60; i++) {
 						float rot = (float) (Math.PI * 2.0F / 60.0F * i + Math.PI * rand.nextFloat() / 60.0F);
 						double radius = Math.max(tile.getRadius(0.0F), 1.0D);
@@ -262,13 +262,13 @@ public class BlockRepeller extends BlockContainer {
 	public IBlockState getStateFromMeta(int meta) {
 		int facing = (meta >> 1) & 0b11;
 		boolean isUpper = (meta & 1) == 1;
-		return this.getDefaultState().withProperty(HALF, isUpper ? EnumBlockHalf.TOP : EnumBlockHalf.BOTTOM).withProperty(FACING, EnumFacing.byHorizontalIndex(facing));
+		return this.getDefaultState().with(HALF, isUpper ? EnumBlockHalf.TOP : EnumBlockHalf.BOTTOM).with(FACING, EnumFacing.byHorizontalIndex(facing));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		int facing = ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
-		boolean isUpper = state.getValue(HALF) == EnumBlockHalf.TOP;
+		int facing = ((EnumFacing)state.get(FACING)).getHorizontalIndex();
+		boolean isUpper = state.get(HALF) == EnumBlockHalf.TOP;
 		int meta = facing << 1;
 		meta |= isUpper ? 1 : 0;
 		return meta;

@@ -40,7 +40,7 @@ public class ItemRottenFood extends ItemBLFood {
 	}
 
 	public ItemStack getOriginalStack(ItemStack stack) {
-		return stack.getTagCompound() != null ? new ItemStack(stack.getTagCompound().getCompoundTag("originalStack")) : ItemStack.EMPTY;
+		return stack.getTag() != null ? new ItemStack(stack.getTag().getCompound("originalStack")) : ItemStack.EMPTY;
 	}
 
 	@Override

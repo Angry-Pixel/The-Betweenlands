@@ -67,7 +67,7 @@ public class MessageGemProc extends MessageEntity {
 			Random rnd = entityHit.world.rand;
 			for(int i = 0; i < 40; i++) {
 				double x = entityHit.posX + rnd.nextFloat() * entityHit.width * 2.0F - entityHit.width;
-				double y = entityHit.getEntityBoundingBox().minY + rnd.nextFloat() * entityHit.height;
+				double y = entityHit.getBoundingBox().minY + rnd.nextFloat() * entityHit.height;
 				double z = entityHit.posZ + rnd.nextFloat() * entityHit.width * 2.0F - entityHit.width;
 				double dx = x - entityHit.posX;
 				double dy = y - (entityHit.posY + entityHit.height / 2.0F);

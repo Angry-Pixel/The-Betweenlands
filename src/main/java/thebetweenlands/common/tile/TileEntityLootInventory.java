@@ -14,6 +14,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -31,8 +32,8 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 	protected long sharedLootTableSeed;
 	protected boolean isSharedLootTable;
 
-	public TileEntityLootInventory(int invtSize, String name) {
-		super(invtSize, name);
+	public TileEntityLootInventory(TileEntityType<?> type, int invtSize, String name) {
+		super(type, invtSize, name);
 	}
 
 	@Override
@@ -207,7 +208,7 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 	 * @return
 	 */
 	protected boolean checkLootAndRead(NBTTagCompound compound) {
-		if (compound.hasKey("LootTable", 8)) {
+		if (compound.contains("LootTable", 8)) {
 			this.lootTable = new ResourceLocation(compound.getString("LootTable"));
 			this.lootTableSeed = compound.getLong("LootTableSeed");
 			this.isSharedLootTable = compound.getBoolean("SharedLootTable");

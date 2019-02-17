@@ -78,13 +78,13 @@ public class DecayEntityCapability extends EntityCapability<DecayEntityCapabilit
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		this.decayStats.writeNBT(nbt);
-		nbt.setInteger("removedHealth", this.removedHealth);
+		nbt.setInt("removedHealth", this.removedHealth);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.decayStats.readNBT(nbt);
-		this.removedHealth = nbt.getInteger("removedHealth");
+		this.removedHealth = nbt.getInt("removedHealth");
 	}
 
 	@Override

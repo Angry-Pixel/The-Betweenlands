@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,6 +16,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -46,7 +46,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityInfuser;
 
 public class BlockInfuser extends BlockContainer {
-	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	public static final DirectionProperty FACING = DirectionProperty.create("facing", EnumFacing.Plane.HORIZONTAL);
 
 	public BlockInfuser() {
 		super(Material.IRON);
@@ -57,12 +57,12 @@ public class BlockInfuser extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta & 3));
+		return this.getDefaultState().with(FACING, EnumFacing.byHorizontalIndex(meta & 3));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getHorizontalIndex();
+		return state.get(FACING).getHorizontalIndex();
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class BlockInfuser extends BlockContainer {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		int rotation = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		state = state.withProperty(FACING, EnumFacing.byHorizontalIndex(rotation));
+		state = state.with(FACING, EnumFacing.byHorizontalIndex(rotation));
 		worldIn.setBlockState(pos, state, 3);
 	}
 
@@ -151,11 +151,11 @@ public class BlockInfuser extends BlockContainer {
 					for (int i = 0; i < tile.getSizeInventory() - 1; i++) {
 						ItemStack stackInSlot = tile.getStackInSlot(i);
 						if (!stackInSlot.isEmpty()) {
-							nbtList.appendTag(stackInSlot.writeToNBT(new NBTTagCompound()));
+							nbtList.add(stackInSlot.writeToNBT(new NBTTagCompound()));
 						}
 					}
 					nbtCompound.setTag("ingredients", nbtList);
-					nbtCompound.setInteger("infusionTime", tile.getInfusionTime());
+					nbtCompound.setInt("infusionTime", tile.getInfusionTime());
 					tile.extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
 					if (heldItem.getCount() == 1) {
 						player.setHeldItem(hand, infusionBucket.copy());

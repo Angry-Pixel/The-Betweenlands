@@ -81,7 +81,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			this.cachedOwner = null;
 		} else if(this.cachedOwner == null || !this.cachedOwner.isEntityAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
 			this.cachedOwner = null;
-			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
+			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
 					this.cachedOwner = entity;
 					break;
@@ -132,8 +132,8 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 		super.writeEntityToNBT(nbt);
 		nbt.setFloat("triangleSize", this.getTriangleSize());
 		nbt.setFloat("triangleRotation", this.getDataManager().get(ROTATION));
-		nbt.setInteger("despawnTicks", this.despawnTicks);
-		nbt.setInteger("maxDespawnTicks", this.maxDespawnTicks);
+		nbt.setInt("despawnTicks", this.despawnTicks);
+		nbt.setInt("maxDespawnTicks", this.maxDespawnTicks);
 		if(this.getOwnerUUID() != null) {
 			nbt.setUniqueId("owner", this.getOwnerUUID());
 		}
@@ -144,8 +144,8 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 		super.readEntityFromNBT(nbt);
 		this.setTriangleSize(nbt.getFloat("triangleSize"));
 		this.getDataManager().set(ROTATION, nbt.getFloat("triangleRotation"));
-		this.despawnTicks = nbt.getInteger("despawnTicks");
-		this.maxDespawnTicks = nbt.getInteger("maxDespawnTicks");
+		this.despawnTicks = nbt.getInt("despawnTicks");
+		this.maxDespawnTicks = nbt.getInt("maxDespawnTicks");
 		if(nbt.hasUniqueId("owner")) {
 			this.getDataManager().set(OWNER, Optional.of(nbt.getUniqueId("owner")));
 		} else {
@@ -177,7 +177,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			this.rotation += 1.0F;
 			this.getDataManager().set(ROTATION, this.rotation);
 
-			List<EntityPlayer> targets = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(this.getTriangleSize()*2, 0, this.getTriangleSize()*2));
+			List<EntityPlayer> targets = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getBoundingBox().grow(this.getTriangleSize()*2, 0, this.getTriangleSize()*2));
 			for(EntityPlayer target : targets) {
 				Vec3d[] vertices = this.getTriangleVertices(1);
 				if(EntityFortressBoss.rayTraceTriangle(new Vec3d(target.posX - this.posX, 1, target.posZ - this.posZ), new Vec3d(0, -2, 0), vertices[0], vertices[1], vertices[2])) {
@@ -230,7 +230,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 
 				if(this.getOwner() != null) {
 					sx = this.getOwner().posX;
-					sy = this.getOwner().getEntityBoundingBox().minY + (this.getOwner().getEntityBoundingBox().maxY - this.getOwner().getEntityBoundingBox().minY) / 2.0D;
+					sy = this.getOwner().getBoundingBox().minY + (this.getOwner().getBoundingBox().maxY - this.getOwner().getBoundingBox().minY) / 2.0D;
 					sz = this.getOwner().posZ;
 				}
 
@@ -251,7 +251,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			float friction = 0.91F;
 
 			if (this.onGround) {
-				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
+				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 			}
 
 			float groundFriction = 0.16277136F / (friction * friction * friction);
@@ -259,7 +259,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			friction = 0.91F;
 
 			if (this.onGround) {
-				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
+				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 			}
 
 			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);

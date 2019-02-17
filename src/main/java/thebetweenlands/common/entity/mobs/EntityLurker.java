@@ -150,7 +150,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     
     @Override
     public boolean isNotColliding() {
-        return this.getEntityWorld().getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.getEntityWorld().checkNoEntityCollision(this.getEntityBoundingBox(), this);
+        return this.getEntityWorld().getCollisionBoxes(this, this.getBoundingBox()).isEmpty() && this.getEntityWorld().checkNoEntityCollision(this.getBoundingBox(), this);
     }
 
     @Override
@@ -267,7 +267,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
             this.moveHelper = this.moveHelperLand;
         }
         
-        if (this.isInWater() && !this.world.isAirBlock(new BlockPos(this.posX, this.getEntityBoundingBox().maxY + 0.25D, this.posZ))) {
+        if (this.isInWater() && !this.world.isAirBlock(new BlockPos(this.posX, this.getBoundingBox().maxY + 0.25D, this.posZ))) {
         	this.navigator = this.pathNavigatorWater;
         } else {
         	this.navigator = this.pathNavigatorGround;
@@ -288,7 +288,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
 
         if (!this.getEntityWorld().isRemote) {
             Entity target = this.getAttackTarget();
-            if (target instanceof EntityDragonFly && attackTime <= 0 && target.getDistance(this) < 3.2D && target.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && target.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
+            if (target instanceof EntityDragonFly && attackTime <= 0 && target.getDistance(this) < 3.2D && target.getBoundingBox().maxY >= getEntityBoundingBox().minY && target.getBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
                 setShouldMouthBeOpen(true);
                 setMouthMoveSpeed(10);
                 ticksUntilBiteDamage = 10;
@@ -429,7 +429,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
             motionZ += distanceZ / magnitude * 0.8;
         }
 
-        if (attackTime <= 0 && distance < 3.5D && entityIn.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && entityIn.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
+        if (attackTime <= 0 && distance < 3.5D && entityIn.getBoundingBox().maxY >= getEntityBoundingBox().minY && entityIn.getBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
             setShouldMouthBeOpen(true);
             setMouthMoveSpeed(10);
             ticksUntilBiteDamage = 10;
@@ -534,7 +534,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     @Override
     public void readEntityFromNBT(NBTTagCompound tagCompound) {
         super.readEntityFromNBT(tagCompound);
-        if (tagCompound.hasKey("Anger")) {
+        if (tagCompound.contains("Anger")) {
             anger = tagCompound.getShort("Anger");
         }
     }

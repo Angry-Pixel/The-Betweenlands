@@ -64,7 +64,7 @@ public class ItemSwatShield extends ItemBLShield {
 	 * @param ticks
 	 */
 	public void setPreparingChargeTicks(ItemStack stack, EntityLivingBase user, int ticks) {
-		user.getEntityData().setInteger("thebetweenlands.shield.chargingTicks", ticks);
+		user.getEntityData().setInt("thebetweenlands.shield.chargingTicks", ticks);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class ItemSwatShield extends ItemBLShield {
 	 * @return
 	 */
 	public int getPreparingChargeTicks(ItemStack stack, EntityLivingBase user) {
-		return user.getEntityData().getInteger("thebetweenlands.shield.chargingTicks");
+		return user.getEntityData().getInt("thebetweenlands.shield.chargingTicks");
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class ItemSwatShield extends ItemBLShield {
 	 * @param ticks
 	 */
 	public void setRemainingChargeTicks(ItemStack stack, EntityLivingBase user, int ticks) {
-		user.getEntityData().setInteger("thebetweenlands.shield.remainingRunningTicks", ticks);
+		user.getEntityData().setInt("thebetweenlands.shield.remainingRunningTicks", ticks);
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class ItemSwatShield extends ItemBLShield {
 	 * @return
 	 */
 	public int getRemainingChargeTicks(ItemStack stack, EntityLivingBase user) {
-		return user.getEntityData().getInteger("thebetweenlands.shield.remainingRunningTicks");
+		return user.getEntityData().getInt("thebetweenlands.shield.remainingRunningTicks");
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class ItemSwatShield extends ItemBLShield {
 		}
 		if(Math.sqrt(user.motionX*user.motionX + user.motionZ*user.motionZ) > 0.2D) {
 			Vec3d moveDir = new Vec3d(user.motionX, user.motionY, user.motionZ).normalize();
-			List<EntityLivingBase> targets = user.world.getEntitiesWithinAABB(EntityLivingBase.class, user.getEntityBoundingBox().grow(1), e -> e != user);
+			List<EntityLivingBase> targets = user.world.getEntitiesWithinAABB(EntityLivingBase.class, user.getBoundingBox().grow(1), e -> e != user);
 			for(EntityLivingBase target : targets) {
 				this.onEnemyRammed(stack, user, target, moveDir);
 			}

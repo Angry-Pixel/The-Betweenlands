@@ -180,7 +180,7 @@ public class LootTableRegistry {
                                             tmpItems.get(0).setTagCompound(new NBTTagCompound());
                                         }
 
-                                        NBTTagCompound compound = tmpItems.get(0).getTagCompound();
+                                        NBTTagCompound compound = tmpItems.get(0).getTag();
                                         compound.setFloat("LootCountMin", valueRange.getMin());
                                         compound.setFloat("LootCountMax", valueRange.getMax());
                                         break;

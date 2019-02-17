@@ -99,9 +99,9 @@ public class WorldGenGiantRoot extends WorldGenerator {
 		ISpline spline = new CatmullRomSpline(pts.toArray(new Vec3d[0]));
 
 		IBlockState bark = BlockRegistry.GIANT_ROOT.getDefaultState();
-		IBlockState leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
+		IBlockState leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState().with(BlockLeavesBetweenlands.CHECK_DECAY, false);
 		IBlockState root = BlockRegistry.ROOT.getDefaultState();
-		IBlockState hanger = BlockRegistry.HANGER.getDefaultState().withProperty(BlockHanger.CAN_GROW, false);
+		IBlockState hanger = BlockRegistry.HANGER.getDefaultState().with(BlockHanger.CAN_GROW, false);
 		IBlockState fungus = BlockRegistry.SHELF_FUNGUS.getDefaultState();
 
 		int steps = 20 + (int)(this.start.getDistance(this.end.getX(), this.end.getY(), this.end.getZ()) * 4);//MathHelper.ceil(spline.getArcLength()) * 4;
@@ -290,7 +290,7 @@ public class WorldGenGiantRoot extends WorldGenerator {
 								for(EnumFacing facing : dirs) {
 									//Check if offset pos is giant root
 									if((xo+facing.getXOffset())*(xo+facing.getXOffset())+(yo+facing.getYOffset())*(yo+facing.getYOffset())+(zo+facing.getZOffset())*(zo+facing.getZOffset()) <= (radius-1)*(radius-1)) {
-										worldIn.setBlockState(genPos, BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, facing.getOpposite()), 2);
+										worldIn.setBlockState(genPos, BlockRegistry.MOSS.getDefaultState().with(BlockMoss.FACING, facing.getOpposite()), 2);
 									}
 								}
 							}

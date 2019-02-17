@@ -86,7 +86,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			this.cachedOwner = null;
 		} else if(this.cachedOwner == null || !this.cachedOwner.isEntityAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
 			this.cachedOwner = null;
-			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
+			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
 					this.cachedOwner = entity;
 					break;
@@ -113,7 +113,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			this.cachedTarget = null;
 		} else if(this.cachedTarget == null || !this.cachedTarget.isEntityAlive() || !this.cachedTarget.getUniqueID().equals(uuid)) {
 			this.cachedTarget = null;
-			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
+			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
 					this.cachedTarget = entity;
 					break;
@@ -150,7 +150,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setInteger("attackDelay", this.attackDelay);
+		nbt.setInt("attackDelay", this.attackDelay);
 		nbt.setBoolean("deflectable", this.isDeflectable());
 		if(this.getOwnerUUID() != null) {
 			nbt.setUniqueId("owner", this.getOwnerUUID());
@@ -163,7 +163,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		this.attackDelay = nbt.getInteger("attackDelay");
+		this.attackDelay = nbt.getInt("attackDelay");
 		this.setDeflectable(nbt.getBoolean("deflectable"));
 		if(nbt.hasUniqueId("owner")) {
 			this.getDataManager().set(OWNER, Optional.of(nbt.getUniqueId("owner")));
@@ -201,7 +201,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		}
 
 		if(this.getTarget() == null) {
-			AxisAlignedBB searchBB = this.getEntityBoundingBox().grow(16, 16, 16);
+			AxisAlignedBB searchBB = this.getBoundingBox().grow(16, 16, 16);
 			List<EntityPlayer> eligiblePlayers = this.world.getEntitiesWithinAABB(EntityPlayer.class, searchBB);
 			EntityPlayer closest = null;
 			for(EntityPlayer player : eligiblePlayers) {
@@ -220,9 +220,9 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 				if(!this.world.isRemote) {
 					if(!this.isObstructedByBoss()) {
 						Vec3d diff = new Vec3d(this.posX, this.posY, this.posZ)
-								.subtract(new Vec3d(this.getTarget().getEntityBoundingBox().minX + (this.getTarget().getEntityBoundingBox().maxX - this.getTarget().getEntityBoundingBox().minX) / 2.0D,
-										this.getTarget().getEntityBoundingBox().minY + (this.getTarget().getEntityBoundingBox().maxY - this.getTarget().getEntityBoundingBox().minY) / 2.0D,
-										this.getTarget().getEntityBoundingBox().minZ + (this.getTarget().getEntityBoundingBox().maxZ - this.getTarget().getEntityBoundingBox().minZ) / 2.0D)).normalize();
+								.subtract(new Vec3d(this.getTarget().getBoundingBox().minX + (this.getTarget().getBoundingBox().maxX - this.getTarget().getBoundingBox().minX) / 2.0D,
+										this.getTarget().getBoundingBox().minY + (this.getTarget().getBoundingBox().maxY - this.getTarget().getBoundingBox().minY) / 2.0D,
+										this.getTarget().getBoundingBox().minZ + (this.getTarget().getBoundingBox().maxZ - this.getTarget().getBoundingBox().minZ) / 2.0D)).normalize();
 						EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.world, this.getOwner());
 						bullet.setDeflectable(this.isDeflectable());
 						bullet.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
@@ -246,13 +246,13 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		Vec3d currentPos = new Vec3d(this.posX, this.posY, this.posZ);
 		Vec3d nextPos = currentPos.add(ray.x * 64.0D, ray.y * 64.0D, ray.z * 64.0D);
 		Entity hitEntity = null;
-		List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(64, 64, 64));
+		List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getBoundingBox().grow(64, 64, 64));
 		double minDist = 0.0D;
 		for (int i = 0; i < hitEntities.size(); ++i) {
 			Entity entity = (Entity)hitEntities.get(i);
 			if (entity.canBeCollidedWith()) {
 				float f = 0.65F / 2.0F + 0.1F + 0.1F;
-				AxisAlignedBB entityBB = entity.getEntityBoundingBox().grow((double)f, (double)f, (double)f);
+				AxisAlignedBB entityBB = entity.getBoundingBox().grow((double)f, (double)f, (double)f);
 				RayTraceResult result = entityBB.calculateIntercept(currentPos, nextPos);
 				if (result != null) {
 					double dst = currentPos.distanceTo(result.hitVec);
@@ -304,7 +304,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			float friction = 0.91F;
 
 			if (this.onGround) {
-				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
+				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 			}
 
 			float groundFriction = 0.16277136F / (friction * friction * friction);
@@ -312,7 +312,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			friction = 0.91F;
 
 			if (this.onGround) {
-				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
+				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 			}
 
 			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);

@@ -72,7 +72,7 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 			if(result.typeOfHit == Type.BLOCK) {
 				IBlockState blockState = this.world.getBlockState(result.getBlockPos());
 				AxisAlignedBB collisionBox = blockState.getCollisionBoundingBox(this.world, result.getBlockPos());
-				if(collisionBox != null && collisionBox.offset(result.getBlockPos()).intersects(this.getEntityBoundingBox())) {
+				if(collisionBox != null && collisionBox.offset(result.getBlockPos()).intersects(this.getBoundingBox())) {
 					this.setDead();
 				}
 			} else {

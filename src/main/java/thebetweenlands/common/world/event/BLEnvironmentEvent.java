@@ -78,7 +78,7 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 	@Override
 	public void saveEventData() {
 		NBTTagCompound nbt = this.getData();
-		nbt.setInteger("remoteResetTicks", this.remoteResetTicks);
+		nbt.setInt("remoteResetTicks", this.remoteResetTicks);
 		nbt.setBoolean("isStateFromRemote", this.isStateFromRemote);
 		nbt.setBoolean("isStateFromRemoteOverridden", this.isStateFromRemoteOverridden);
 		nbt.setBoolean("hasNoRemoteState", this.hasNoRemoteState);
@@ -87,7 +87,7 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 	@Override
 	public void loadEventData() {
 		NBTTagCompound nbt = this.getData();
-		this.remoteResetTicks = nbt.getInteger("remoteResetTicks");
+		this.remoteResetTicks = nbt.getInt("remoteResetTicks");
 		this.isStateFromRemote = nbt.getBoolean("isStateFromRemote");
 		this.isStateFromRemoteOverridden = nbt.getBoolean("isStateFromRemoteOverridden");
 		this.hasNoRemoteState = nbt.getBoolean("hasNoRemoteState");
@@ -165,7 +165,7 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 
 	@Override
 	public final void readFromNBT(NBTTagCompound compound) {
-		this.nbtt = compound.getCompoundTag("environmentEvent:" + this.getEventName());
+		this.nbtt = compound.getCompound("environmentEvent:" + this.getEventName());
 		this.dataManager.set(ACTIVE, this.nbtt.getBoolean("active"));
 		this.loadEventData();
 		this.loaded = true;

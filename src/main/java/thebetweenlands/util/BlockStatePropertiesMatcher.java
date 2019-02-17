@@ -18,7 +18,7 @@ public class BlockStatePropertiesMatcher implements Predicate<IBlockState> {
 		if(properties == null || properties.length == 0)
 			properties = state.getBlock().getBlockState().getProperties().toArray(new IProperty<?>[0]);
 		for(IProperty<?> property : properties) {
-			Object value = state.getValue(property);
+			Object value = state.get(property);
 			matcher.where(property, (obj) -> (obj == null && value == null) || (obj != null && obj.equals(value)));
 		}
 		return new BlockStatePropertiesMatcher(matcher);

@@ -158,7 +158,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IM
      * @param aspect
      */
     public static void placeAspectVial(World world, BlockPos pos, int vialType, Aspect aspect) {
-        world.setBlockState(pos, BlockRegistry.ASPECT_VIAL_BLOCK.getDefaultState().withProperty(BlockAspectVial.TYPE, BlockDentrothyst.EnumDentrothyst.values()[vialType]), 2);
+        world.setBlockState(pos, BlockRegistry.ASPECT_VIAL_BLOCK.getDefaultState().with(BlockAspectVial.TYPE, BlockDentrothyst.EnumDentrothyst.values()[vialType]), 2);
         TileEntityAspectVial tile = (TileEntityAspectVial) world.getTileEntity(pos);
         if(tile != null)
             tile.setAspect(aspect);

@@ -4,7 +4,6 @@ package thebetweenlands.common.block.container;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -12,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -37,7 +37,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAspectVial;
 
 public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICustomItemBlock {
-    public static final PropertyEnum<BlockDentrothyst.EnumDentrothyst> TYPE = PropertyEnum.create("type", BlockDentrothyst.EnumDentrothyst.class);
+    public static final EnumProperty<BlockDentrothyst.EnumDentrothyst> TYPE = EnumProperty.create("type", BlockDentrothyst.EnumDentrothyst.class);
     public static final BooleanProperty RANDOM_POSITION = BooleanProperty.create("random_position");
     
     public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.95F, 0.45F, 0.95F);
@@ -46,7 +46,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
         super(Material.GLASS);
         setSoundType(SoundType.GLASS);
         setHardness(0.4F);
-        setDefaultState(this.blockState.getBaseState().withProperty(TYPE, BlockDentrothyst.EnumDentrothyst.GREEN).withProperty(RANDOM_POSITION, false));
+        setDefaultState(this.blockState.getBaseState().with(TYPE, BlockDentrothyst.EnumDentrothyst.GREEN).with(RANDOM_POSITION, false));
     }
 
     @Override
@@ -66,13 +66,13 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
     		type = BlockDentrothyst.EnumDentrothyst.ORANGE;
     		break;
     	}
-        return this.getDefaultState().withProperty(TYPE, type).withProperty(RANDOM_POSITION, (meta & 0x2) == 0);
+        return this.getDefaultState().with(TYPE, type).with(RANDOM_POSITION, (meta & 0x2) == 0);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
     	int meta = 0;
-        switch(state.getValue(TYPE)) {
+        switch(state.get(TYPE)) {
         default:
         case GREEN:
         	break;
@@ -80,7 +80,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
         	meta |= 0x1;
         	break;
         }
-        if(!state.getValue(RANDOM_POSITION)) {
+        if(!state.get(RANDOM_POSITION)) {
         	meta |= 0x2;
         }
         return meta;
@@ -178,7 +178,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                 }
             } else if(player.isSneaking()) {
             	if(!world.isRemote) {
-            		world.setBlockState(pos, state.withProperty(RANDOM_POSITION, !state.getValue(RANDOM_POSITION)));
+            		world.setBlockState(pos, state.with(RANDOM_POSITION, !state.get(RANDOM_POSITION)));
             	}
             	player.swingArm(hand);
                 return true;
@@ -222,7 +222,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
 			if(tile.getAspect() != null) {
 				if(tile.getAspect().amount > 0) {
 					ItemStack vial = new ItemStack(ItemRegistry.ASPECT_VIAL);
-					switch(state.getValue(TYPE)) {
+					switch(state.get(TYPE)) {
 					case ORANGE:
 						vial.setItemDamage(1);
 						break;
@@ -236,7 +236,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
 				}
 			} else {
 				ItemStack vial = new ItemStack(ItemRegistry.DENTROTHYST_VIAL);
-				switch(state.getValue(TYPE)) {
+				switch(state.get(TYPE)) {
 				case ORANGE:
 					vial.setItemDamage(2);
 					break;

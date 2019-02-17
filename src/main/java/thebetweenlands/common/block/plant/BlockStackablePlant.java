@@ -38,7 +38,7 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	protected final ThreadLocal<Boolean> harvesting = new ThreadLocal<>();
 
 	public BlockStackablePlant() {
-		this.setDefaultState(this.blockState.getBaseState().withProperty(IS_TOP, true).withProperty(IS_BOTTOM, false));
+		this.setDefaultState(this.blockState.getBaseState().with(IS_TOP, true).with(IS_BOTTOM, false));
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
 		boolean isTop = !this.isSamePlant(worldIn.getBlockState(pos.up()));
 		boolean isBottom = !this.isSamePlant(worldIn.getBlockState(pos.down()));
-		return state.withProperty(IS_TOP, isTop).withProperty(IS_BOTTOM, isBottom);
+		return state.with(IS_TOP, isTop).with(IS_BOTTOM, isBottom);
 	}
 
 	@Override
@@ -162,7 +162,7 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 
 		if(this.canGrow(worldIn, pos, state)) {
 			if(ForgeHooks.onCropsGrowPre(worldIn, pos, state, rand.nextFloat() <= this.getGrowthChance(worldIn, pos, state, rand))) {
-				int currentAge = ((Integer)state.getValue(AGE)).intValue();
+				int currentAge = ((Integer)state.get(AGE)).intValue();
 
 				if (currentAge >= 15) {
 					int height;
@@ -172,9 +172,9 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 						this.growUp(worldIn, pos);
 					}
 
-					worldIn.setBlockState(pos, state.withProperty(AGE, this.resetAge ? 0 : 15));
+					worldIn.setBlockState(pos, state.with(AGE, this.resetAge ? 0 : 15));
 				} else {
-					worldIn.setBlockState(pos, state.withProperty(AGE, currentAge + 1));
+					worldIn.setBlockState(pos, state.with(AGE, currentAge + 1));
 				}
 
 				ForgeHooks.onCropsGrowPost(worldIn, pos, state, worldIn.getBlockState(pos));
@@ -235,12 +235,12 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(AGE, Integer.valueOf(meta));
+		return this.getDefaultState().with(AGE, Integer.valueOf(meta));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((Integer)state.getValue(AGE)).intValue();
+		return ((Integer)state.get(AGE)).intValue();
 	}
 
 	@Override

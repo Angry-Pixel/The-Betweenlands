@@ -18,7 +18,7 @@ public class FuelHandler {
 			event.setBurnTime(1600);
 		} else if(stack.getItem() == Item.getItemFromBlock(BlockRegistry.LOG_HEARTHGROVE)) {
 			IBlockState state = BlockRegistry.LOG_HEARTHGROVE.getStateFromMeta(stack.getMetadata());
-			if(state.getValue(BlockHearthgroveLog.TARRED)) {
+			if(state.get(BlockHearthgroveLog.TARRED)) {
 				event.setBurnTime(4800);
 			} else {
 				event.setBurnTime(800);

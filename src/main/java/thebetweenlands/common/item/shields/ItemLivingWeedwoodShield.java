@@ -96,7 +96,7 @@ public class ItemLivingWeedwoodShield extends ItemWeedwoodShield {
 
 	protected boolean trySpit(ItemStack stack, World world, EntityLivingBase owner, EnumHand hand) {
 		EntityLivingBase target = null;
-		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, owner.getEntityBoundingBox().grow(8, 3, 8), IMob.MOB_SELECTOR::apply);
+		List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, owner.getBoundingBox().grow(8, 3, 8), IMob.MOB_SELECTOR::apply);
 
 		Vec3d lookVec = owner.getLookVec().normalize();
 
@@ -119,7 +119,7 @@ public class ItemLivingWeedwoodShield extends ItemWeedwoodShield {
 			spit.setPosition(owner.posX + owner.motionX + offset.x, owner.posY + offset.y, owner.posZ + owner.motionZ + offset.z);
 
 			double dx = target.posX - spit.posX;
-			double dy = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - spit.posY;
+			double dy = target.getBoundingBox().minY + (double)(target.height / 3.0F) - spit.posY;
 			double dz = target.posZ - spit.posZ;
 			double dist = (double)MathHelper.sqrt(dx * dx + dz * dz);
 			spit.shoot(dx, dy + dist * 0.20000000298023224D, dz, 1, 1);

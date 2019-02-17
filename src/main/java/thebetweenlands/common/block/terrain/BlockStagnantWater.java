@@ -56,7 +56,7 @@ public class BlockStagnantWater extends BlockFluidClassic implements IStateMappe
 	@Override
 	public Boolean isEntityInsideMaterial(IWorldReader world, BlockPos blockpos, IBlockState state, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
 		if(materialIn == Material.WATER) {
-			double liquidHeight = (double)((float)(blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(((Integer)state.getValue(BlockLiquid.LEVEL)).intValue()));
+			double liquidHeight = (double)((float)(blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(((Integer)state.get(BlockLiquid.LEVEL)).intValue()));
 			if(testingHead) {
 				double liquidHeightBelow = 0;
 				if(world.getBlockState(blockpos.up()).getBlock() == state.getBlock()) {
@@ -64,7 +64,7 @@ public class BlockStagnantWater extends BlockFluidClassic implements IStateMappe
 				}
 				return entity.posY + entity.getEyeHeight() < 0.1D + liquidHeight || entity.posY + entity.getEyeHeight() < 0.1D + liquidHeightBelow;
 			} else {
-				return entity.getEntityBoundingBox().maxY >= liquidHeight && entity.getEntityBoundingBox().minY < liquidHeight;
+				return entity.getBoundingBox().maxY >= liquidHeight && entity.getBoundingBox().minY < liquidHeight;
 			}
 		}
 		return null;

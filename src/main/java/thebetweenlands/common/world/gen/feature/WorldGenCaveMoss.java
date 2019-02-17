@@ -75,7 +75,7 @@ public class WorldGenCaveMoss extends WorldGenCave {
 			}
 			height = (int) (heights[i] * (height - 1) + 1);
 			for (int dy = 0; dy < height; dy++) {
-				this.setBlockAndNotifyAdequately(world, pos.add(0, -dy, 0), BlockRegistry.CAVE_MOSS.getDefaultState().withProperty(BlockCaveMoss.CAN_GROW, false));
+				this.setBlockAndNotifyAdequately(world, pos.add(0, -dy, 0), BlockRegistry.CAVE_MOSS.getDefaultState().with(BlockCaveMoss.CAN_GROW, false));
 			}
 		}
 		return true;

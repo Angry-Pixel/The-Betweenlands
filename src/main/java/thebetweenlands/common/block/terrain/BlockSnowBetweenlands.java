@@ -28,9 +28,9 @@ public class BlockSnowBetweenlands extends BlockSnow {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		if(!EventWinter.isFroooosty(worldIn) || worldIn.getLightFor(EnumSkyBlock.BLOCK, pos) > 11) {
-			int layers = state.getValue(LAYERS);
+			int layers = state.get(LAYERS);
 			if(layers > 1) {
-				worldIn.setBlockState(pos, state.withProperty(LAYERS, layers - 1));
+				worldIn.setBlockState(pos, state.with(LAYERS, layers - 1));
 			} else {
 				worldIn.setBlockToAir(pos);
 			}
@@ -44,7 +44,7 @@ public class BlockSnowBetweenlands extends BlockSnow {
 
 		if (block != BlockRegistry.BLACK_ICE && block != Blocks.ICE && block != Blocks.PACKED_ICE && block != Blocks.BARRIER) {
 			BlockFaceShape blockfaceshape = iblockstate.getBlockFaceShape(worldIn, pos.down(), EnumFacing.UP);
-			return blockfaceshape == BlockFaceShape.SOLID || iblockstate.getBlock().isLeaves(iblockstate, worldIn, pos.down()) || block == this && ((Integer)iblockstate.getValue(LAYERS)).intValue() == 8;
+			return blockfaceshape == BlockFaceShape.SOLID || iblockstate.getBlock().isLeaves(iblockstate, worldIn, pos.down()) || block == this && ((Integer)iblockstate.get(LAYERS)).intValue() == 8;
 		} else {
 			return false;
 		}

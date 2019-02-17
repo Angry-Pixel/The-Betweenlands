@@ -33,6 +33,6 @@ public class BlockDugDirt extends BlockGenericDugSoil {
 
 	@Override
 	public IBlockState getUnpurifiedDugSoil(World world, BlockPos pos, IBlockState state) {
-		return BlockRegistry.DUG_SWAMP_DIRT.getDefaultState().withProperty(COMPOSTED, state.getValue(COMPOSTED)).withProperty(DECAYED, state.getValue(DECAYED));
+		return BlockRegistry.DUG_SWAMP_DIRT.getDefaultState().with(COMPOSTED, state.get(COMPOSTED)).with(DECAYED, state.get(DECAYED));
 	}
 }

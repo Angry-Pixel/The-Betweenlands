@@ -3,12 +3,18 @@ package thebetweenlands.common.tile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntityType;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityLootPot extends TileEntityLootInventory {
 	private int rotationOffset;
 
 	public TileEntityLootPot() {
-		super(3, "container.lootPot");
+		super(TileEntityRegistry.LOOT_POT, 3, "container.lootPot");
+	}
+	
+	public TileEntityLootPot(TileEntityType<?> type) {
+		super(type, 3, "container.lootPot");
 	}
 
 	public void setModelRotationOffset(int rotation) {
@@ -20,34 +26,34 @@ public class TileEntityLootPot extends TileEntityLootInventory {
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		this.rotationOffset = nbt.getInteger("rotationOffset");
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
+		this.rotationOffset = nbt.getInt("rotationOffset");
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		nbt.setInteger("rotationOffset", this.rotationOffset);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
+		nbt.setInt("rotationOffset", this.rotationOffset);
 		return nbt;
 	}
 
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("rotationOffset", this.rotationOffset);
+		nbt.setInt("rotationOffset", this.rotationOffset);
 		return new SPacketUpdateTileEntity(this.pos, 0, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-		this.rotationOffset = packet.getNbtCompound().getInteger("rotationOffset");
+		this.rotationOffset = packet.getNbtCompound().getInt("rotationOffset");
 	}
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound nbt = super.getUpdateTag();
-		nbt.setInteger("rotationOffset", this.rotationOffset);
+		nbt.setInt("rotationOffset", this.rotationOffset);
 		return nbt;
 	}
 }

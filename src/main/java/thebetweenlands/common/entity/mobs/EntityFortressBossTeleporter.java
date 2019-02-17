@@ -70,7 +70,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 					for(EntityPlayer player : players) {
 						if((closestPlayer == null || player.getDistance(this) < closestPlayer.getDistance(this)) && player.getDistance(this) < radius && player.canEntityBeSeen(this)) {
 							Vec3d playerLook = player.getLook(1.0F).normalize();
-							Vec3d vecDiff = new Vec3d(this.posX - player.posX, this.getEntityBoundingBox().minY + (double)(this.height / 2.0F) - (player.posY + (double)player.getEyeHeight()), this.posZ - player.posZ);
+							Vec3d vecDiff = new Vec3d(this.posX - player.posX, this.getBoundingBox().minY + (double)(this.height / 2.0F) - (player.posY + (double)player.getEyeHeight()), this.posZ - player.posZ);
 							double dist = vecDiff.length();
 							vecDiff = vecDiff.normalize();
 							double angle = playerLook.dotProduct(vecDiff);
@@ -85,7 +85,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 						this.target = null;
 					} else {
 						Vec3d playerLook = this.target.getLook(1.0F).normalize();
-						Vec3d vecDiff = new Vec3d(this.posX - this.target.posX, this.getEntityBoundingBox().minY + (double)(this.height / 2.0F) - (this.target.posY + (double)this.target.getEyeHeight()), this.posZ - this.target.posZ);
+						Vec3d vecDiff = new Vec3d(this.posX - this.target.posX, this.getBoundingBox().minY + (double)(this.height / 2.0F) - (this.target.posY + (double)this.target.getEyeHeight()), this.posZ - this.target.posZ);
 						double dist = vecDiff.length();
 						vecDiff = vecDiff.normalize();
 						double angle = playerLook.dotProduct(vecDiff);
@@ -189,7 +189,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 			double actualPosY = entitylivingbase.posY;
 			dy = actualPosY + (double)entitylivingbase.getEyeHeight() - (this.posY + (double)this.getEyeHeight());
 		} else {
-			dy = (target.getEntityBoundingBox().minY + target.getEntityBoundingBox().maxY) / 2.0D - (this.posY + (double)this.getEyeHeight());
+			dy = (target.getBoundingBox().minY + target.getBoundingBox().maxY) / 2.0D - (this.posY + (double)this.getEyeHeight());
 		}
 		double dist = (double)MathHelper.sqrt(dx * dx + dz * dz);
 		float yaw = (float)(Math.atan2(dz, dx) * 180.0D / Math.PI) - 90.0F;

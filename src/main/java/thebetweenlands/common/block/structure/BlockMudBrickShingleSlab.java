@@ -16,7 +16,7 @@ public class BlockMudBrickShingleSlab extends BlockSlabBetweenlands {
 
 	@Override
 	public boolean canSustainPlant(IBlockState state, IWorldReader world, BlockPos pos, EnumFacing direction, IPlantable plantable) {
-		EnumBlockHalfBL half = state.getValue(HALF);
+		EnumBlockHalfBL half = state.get(HALF);
 		if(half == EnumBlockHalfBL.FULL || (half == EnumBlockHalfBL.TOP && direction == EnumFacing.UP) || (half == EnumBlockHalfBL.BOTTOM && direction == EnumFacing.DOWN)) {
 			if(super.canSustainPlant(state, world, pos, direction, plantable)) {
 				return true;

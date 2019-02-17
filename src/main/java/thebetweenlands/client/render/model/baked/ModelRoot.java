@@ -76,13 +76,13 @@ public class ModelRoot implements IModel {
 
 			if(side == null) {
 				try {
-					int distUp = state.getValue(BlockRoot.DIST_UP);
-					int distDown = state.getValue(BlockRoot.DIST_DOWN);
-					boolean noTop = state.getValue(BlockRoot.NO_TOP);
-					boolean noBottom = state.getValue(BlockRoot.NO_BOTTOM);
-					int posX = state.getValue(BlockRoot.POS_X);
-					int posY = state.getValue(BlockRoot.POS_Y);
-					int posZ = state.getValue(BlockRoot.POS_Z);
+					int distUp = state.get(BlockRoot.DIST_UP);
+					int distDown = state.get(BlockRoot.DIST_DOWN);
+					boolean noTop = state.get(BlockRoot.NO_TOP);
+					boolean noBottom = state.get(BlockRoot.NO_BOTTOM);
+					int posX = state.get(BlockRoot.POS_X);
+					int posY = state.get(BlockRoot.POS_Y);
+					int posZ = state.get(BlockRoot.POS_Z);
 					float height = 1.0F;
 
 					int totalHeight = 1 + distDown + distUp;

@@ -8,7 +8,7 @@ public class ItemSpores extends ItemPlantableSeeds {
 		super(() -> { 
 			return BlockRegistry.FUNGUS_CROP.getDefaultState();
 		}, state -> { 
-			return state.getBlock() instanceof BlockGenericDugSoil && !state.getValue(BlockGenericDugSoil.DECAYED);
+			return state.getBlock() instanceof BlockGenericDugSoil && !state.get(BlockGenericDugSoil.DECAYED);
 		});
 	}
 }

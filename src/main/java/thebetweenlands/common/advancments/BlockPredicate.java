@@ -40,7 +40,7 @@ public class BlockPredicate {
         } else {
             if (this.map != null) {
                 for (Map.Entry< IProperty<?>, Object > entry : this.map.entrySet()) {
-                    if (state.getValue(entry.getKey()) != entry.getValue()) {
+                    if (state.get(entry.getKey()) != entry.getValue()) {
                         return false;
                     }
                 }

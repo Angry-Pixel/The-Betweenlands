@@ -55,7 +55,7 @@ public class BlockFenceBetweenlands extends Block {
 		setSoundType(state.getBlock().getSoundType());
 		setHardness(2.0F);
 		setResistance(5.0F);
-		setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.FALSE).withProperty(EAST, Boolean.FALSE).withProperty(SOUTH, Boolean.FALSE).withProperty(WEST, Boolean.FALSE));
+		setDefaultState(this.blockState.getBaseState().with(NORTH, Boolean.FALSE).with(EAST, Boolean.FALSE).with(SOUTH, Boolean.FALSE).with(WEST, Boolean.FALSE));
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
@@ -64,19 +64,19 @@ public class BlockFenceBetweenlands extends Block {
 		state = state.getActualState(worldIn, pos);
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, PILLAR_AABB);
 
-		if (state.getValue(NORTH)) {
+		if (state.get(NORTH)) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_AABB);
 		}
 
-		if (state.getValue(EAST)) {
+		if (state.get(EAST)) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_AABB);
 		}
 
-		if (state.getValue(SOUTH)) {
+		if (state.get(SOUTH)) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_AABB);
 		}
 
-		if (state.getValue(WEST)) {
+		if (state.get(WEST)) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_AABB);
 		}
 	}
@@ -94,19 +94,19 @@ public class BlockFenceBetweenlands extends Block {
 	private static int getBoundingBoxIdx(IBlockState state) {
 		int i = 0;
 
-		if (state.getValue(NORTH)) {
+		if (state.get(NORTH)) {
 			i |= 1 << EnumFacing.NORTH.getHorizontalIndex();
 		}
 
-		if (state.getValue(EAST)) {
+		if (state.get(EAST)) {
 			i |= 1 << EnumFacing.EAST.getHorizontalIndex();
 		}
 
-		if (state.getValue(SOUTH)) {
+		if (state.get(SOUTH)) {
 			i |= 1 << EnumFacing.SOUTH.getHorizontalIndex();
 		}
 
-		if (state.getValue(WEST)) {
+		if (state.get(WEST)) {
 			i |= 1 << EnumFacing.WEST.getHorizontalIndex();
 		}
 
@@ -177,10 +177,10 @@ public class BlockFenceBetweenlands extends Block {
 	 */
 	@Override
 	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
-		return state.withProperty(NORTH, canFenceConnectTo(worldIn, pos, EnumFacing.NORTH))
-					.withProperty(EAST,  canFenceConnectTo(worldIn, pos, EnumFacing.EAST))
-					.withProperty(SOUTH, canFenceConnectTo(worldIn, pos, EnumFacing.SOUTH))
-					.withProperty(WEST,  canFenceConnectTo(worldIn, pos, EnumFacing.WEST));
+		return state.with(NORTH, canFenceConnectTo(worldIn, pos, EnumFacing.NORTH))
+					.with(EAST,  canFenceConnectTo(worldIn, pos, EnumFacing.EAST))
+					.with(SOUTH, canFenceConnectTo(worldIn, pos, EnumFacing.SOUTH))
+					.with(WEST,  canFenceConnectTo(worldIn, pos, EnumFacing.WEST));
 	}
 
 	/**
@@ -191,11 +191,11 @@ public class BlockFenceBetweenlands extends Block {
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		switch (rot) {
 			case CLOCKWISE_180:
-				return state.withProperty(NORTH, state.getValue(SOUTH)).withProperty(EAST, state.getValue(WEST)).withProperty(SOUTH, state.getValue(NORTH)).withProperty(WEST, state.getValue(EAST));
+				return state.with(NORTH, state.get(SOUTH)).with(EAST, state.get(WEST)).with(SOUTH, state.get(NORTH)).with(WEST, state.get(EAST));
 			case COUNTERCLOCKWISE_90:
-				return state.withProperty(NORTH, state.getValue(EAST)).withProperty(EAST, state.getValue(SOUTH)).withProperty(SOUTH, state.getValue(WEST)).withProperty(WEST, state.getValue(NORTH));
+				return state.with(NORTH, state.get(EAST)).with(EAST, state.get(SOUTH)).with(SOUTH, state.get(WEST)).with(WEST, state.get(NORTH));
 			case CLOCKWISE_90:
-				return state.withProperty(NORTH, state.getValue(WEST)).withProperty(EAST, state.getValue(NORTH)).withProperty(SOUTH, state.getValue(EAST)).withProperty(WEST, state.getValue(SOUTH));
+				return state.with(NORTH, state.get(WEST)).with(EAST, state.get(NORTH)).with(SOUTH, state.get(EAST)).with(WEST, state.get(SOUTH));
 			default:
 				return state;
 		}
@@ -210,9 +210,9 @@ public class BlockFenceBetweenlands extends Block {
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
 		switch (mirrorIn) {
 			case LEFT_RIGHT:
-				return state.withProperty(NORTH, state.getValue(SOUTH)).withProperty(SOUTH, state.getValue(NORTH));
+				return state.with(NORTH, state.get(SOUTH)).with(SOUTH, state.get(NORTH));
 			case FRONT_BACK:
-				return state.withProperty(EAST, state.getValue(WEST)).withProperty(WEST, state.getValue(EAST));
+				return state.with(EAST, state.get(WEST)).with(WEST, state.get(EAST));
 			default:
 				return super.withMirror(state, mirrorIn);
 		}

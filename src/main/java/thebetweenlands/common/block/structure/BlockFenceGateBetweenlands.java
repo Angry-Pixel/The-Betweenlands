@@ -45,7 +45,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
         super(state.getMaterial(), state.getMaterial().getMaterialMapColor());
         setSoundType(state.getBlock().getSoundType());
         setHardness(2.0F);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(OPEN, Boolean.FALSE).withProperty(POWERED, Boolean.FALSE).withProperty(IN_WALL, Boolean.FALSE));
+        this.setDefaultState(this.blockState.getBaseState().with(OPEN, Boolean.FALSE).with(POWERED, Boolean.FALSE).with(IN_WALL, Boolean.FALSE));
         this.setCreativeTab(BLCreativeTabs.BLOCKS);
     }
 
@@ -53,10 +53,10 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
     public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
         state = this.getActualState(state, source, pos);
 
-        if (state.getValue(IN_WALL)) {
-            return state.getValue(FACING).getAxis() == EnumFacing.Axis.X ? AABB_HITBOX_XAXIS_INWALL : AABB_HITBOX_ZAXIS_INWALL;
+        if (state.get(IN_WALL)) {
+            return state.get(FACING).getAxis() == EnumFacing.Axis.X ? AABB_HITBOX_XAXIS_INWALL : AABB_HITBOX_ZAXIS_INWALL;
         } else {
-            return state.getValue(FACING).getAxis() == EnumFacing.Axis.X ? AABB_HITBOX_XAXIS : AABB_HITBOX_ZAXIS;
+            return state.get(FACING).getAxis() == EnumFacing.Axis.X ? AABB_HITBOX_XAXIS : AABB_HITBOX_ZAXIS;
         }
     }
 
@@ -66,11 +66,11 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
      */
     @Override
     public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
-        EnumFacing.Axis enumfacing$axis = state.getValue(FACING).getAxis();
+        EnumFacing.Axis enumfacing$axis = state.get(FACING).getAxis();
 
         if (enumfacing$axis == EnumFacing.Axis.Z && (canFenceGateConnectTo(worldIn, pos, EnumFacing.WEST) || canFenceGateConnectTo(worldIn, pos, EnumFacing.EAST))
                 || enumfacing$axis == EnumFacing.Axis.X && (canFenceGateConnectTo(worldIn, pos, EnumFacing.NORTH) || canFenceGateConnectTo(worldIn, pos, EnumFacing.SOUTH))) {
-            state = state.withProperty(IN_WALL, Boolean.TRUE);
+            state = state.with(IN_WALL, Boolean.TRUE);
         }
 
         return state;
@@ -82,7 +82,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
      */
     @Override
     public IBlockState withRotation(IBlockState state, Rotation rot) {
-        return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
+        return state.with(FACING, rot.rotate(state.get(FACING)));
     }
 
     /**
@@ -91,7 +91,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
      */
     @Override
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-        return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
+        return state.withRotation(mirrorIn.toRotation(state.get(FACING)));
     }
 
     @Override
@@ -134,26 +134,26 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
     @Override
 	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         boolean flag = worldIn.isBlockPowered(pos);
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing()).withProperty(OPEN, flag).withProperty(POWERED, flag).withProperty(IN_WALL, Boolean.FALSE);
+        return this.getDefaultState().with(FACING, placer.getHorizontalFacing()).with(OPEN, flag).with(POWERED, flag).with(IN_WALL, Boolean.FALSE);
     }
     
     @Override
     public boolean onBlockActivated(IBlockState state, World worldIn, BlockPos pos, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        if (state.getValue(OPEN)) {
-            state = state.withProperty(OPEN, Boolean.FALSE);
+        if (state.get(OPEN)) {
+            state = state.with(OPEN, Boolean.FALSE);
             worldIn.setBlockState(pos, state, 10);
         } else {
             EnumFacing enumfacing = EnumFacing.fromAngle((double)playerIn.rotationYaw);
 
-            if (state.getValue(FACING) == enumfacing.getOpposite()) {
-                state = state.withProperty(FACING, enumfacing);
+            if (state.get(FACING) == enumfacing.getOpposite()) {
+                state = state.with(FACING, enumfacing);
             }
 
-            state = state.withProperty(OPEN, Boolean.TRUE);
+            state = state.with(OPEN, Boolean.TRUE);
             worldIn.setBlockState(pos, state, 10);
         }
 
-        worldIn.playEvent(playerIn, state.getValue(OPEN) ? 1008 : 1014, pos, 0);
+        worldIn.playEvent(playerIn, state.get(OPEN) ? 1008 : 1014, pos, 0);
         return true;
     }
 
@@ -167,10 +167,10 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
         if (!worldIn.isRemote) {
             boolean flag = worldIn.isBlockPowered(pos);
 
-            if (state.getValue(POWERED) != flag) {
-                worldIn.setBlockState(pos, state.withProperty(POWERED, flag).withProperty(OPEN, flag), 2);
+            if (state.get(POWERED) != flag) {
+                worldIn.setBlockState(pos, state.with(POWERED, flag).with(OPEN, flag), 2);
 
-                if (state.getValue(OPEN) != flag) {
+                if (state.get(OPEN) != flag) {
                     worldIn.playEvent(null, flag ? 1008 : 1014, pos, 0);
                 }
             }
@@ -188,7 +188,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta)).withProperty(OPEN, (meta & 4) != 0).withProperty(POWERED, (meta & 8) != 0);
+        return this.getDefaultState().with(FACING, EnumFacing.byHorizontalIndex(meta)).with(OPEN, (meta & 4) != 0).with(POWERED, (meta & 8) != 0);
     }
 
     /**
@@ -197,13 +197,13 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
     @Override
     public int getMetaFromState(IBlockState state) {
         int i = 0;
-        i = i | ((EnumFacing) state.getValue(FACING)).getHorizontalIndex();
+        i = i | ((EnumFacing) state.get(FACING)).getHorizontalIndex();
 
-        if (state.getValue(POWERED)) {
+        if (state.get(POWERED)) {
             i |= 8;
         }
 
-        if (state.getValue(OPEN)) {
+        if (state.get(OPEN)) {
             i |= 4;
         }
 
@@ -239,7 +239,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
     @Override
     public BlockFaceShape getBlockFaceShape(IWorldReader world, IBlockState state, BlockPos pos, EnumFacing facing) {
         if (facing != EnumFacing.UP && facing != EnumFacing.DOWN) {
-            return state.getValue(FACING).getAxis() == facing.rotateY().getAxis() ? BlockFaceShape.MIDDLE_POLE : BlockFaceShape.UNDEFINED;
+            return state.get(FACING).getAxis() == facing.rotateY().getAxis() ? BlockFaceShape.MIDDLE_POLE : BlockFaceShape.UNDEFINED;
         } else {
             return BlockFaceShape.UNDEFINED;
         }

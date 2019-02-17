@@ -157,15 +157,15 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		compound.setInteger("type", getType());
-		compound.setInteger("facing", this.dataManager.get(FACING).getHorizontalIndex());
+		compound.setInt("type", getType());
+		compound.setInt("facing", this.dataManager.get(FACING).getHorizontalIndex());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		setType(compound.getInteger("type"));
-		this.dataManager.set(FACING, EnumFacing.byHorizontalIndex(compound.getInteger("facing")));
+		setType(compound.getInt("type"));
+		this.dataManager.set(FACING, EnumFacing.byHorizontalIndex(compound.getInt("facing")));
 	}
 
 	@Override

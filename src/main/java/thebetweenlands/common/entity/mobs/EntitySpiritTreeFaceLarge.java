@@ -167,7 +167,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 	@Override
 	public List<BlockPos> findNearbyWoodBlocks() {
-		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
+		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getBoundingBox(), loc -> loc.isInside(this));
 		if(!locations.isEmpty()) {
 			List<BlockPos> positions = new ArrayList<>();
 			positions.addAll(locations.get(0).getLargeFacePositions());
@@ -179,7 +179,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	}
 
 	protected List<BlockPos> findSmallFacesBlocks() {
-		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
+		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getBoundingBox(), loc -> loc.isInside(this));
 		if(!locations.isEmpty()) {
 			List<BlockPos> positions = locations.get(0).getSmallFacePositions();
 			if(!positions.isEmpty()) {
@@ -258,7 +258,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			}
 			killTokens.add(new SpiritTreeKillToken(this.getPosition(), this.getWispStrengthModifier()));
 
-			List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
+			List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getBoundingBox(), loc -> loc.isInside(this));
 			if(!locations.isEmpty()) {
 				LocationSpiritTree location = locations.get(0);
 
@@ -408,7 +408,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 				}
 
 				if(this.ticksExisted % 10 == 0) {
-					List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
+					List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getBoundingBox(), loc -> loc.isInside(this));
 					if(!locations.isEmpty()) {
 						LocationSpiritTree location = locations.get(0);
 
@@ -762,7 +762,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	}
 
 	protected void updateWispStrengthModifier() {
-		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
+		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getBoundingBox(), loc -> loc.isInside(this));
 		if(!locations.isEmpty()) {
 			LocationSpiritTree location = locations.get(0);
 
@@ -815,7 +815,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		}
 
 		protected int countSmallFaces() {
-			return this.entity.world.getEntitiesWithinAABB(EntitySpiritTreeFaceSmall.class, this.entity.getEntityBoundingBox().grow(40.0D)).size();
+			return this.entity.world.getEntitiesWithinAABB(EntitySpiritTreeFaceSmall.class, this.entity.getBoundingBox().grow(40.0D)).size();
 		}
 
 		protected boolean hasEnoughSmallFaces() {

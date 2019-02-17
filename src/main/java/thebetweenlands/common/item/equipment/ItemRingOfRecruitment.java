@@ -76,7 +76,7 @@ public class ItemRingOfRecruitment extends ItemRing {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public boolean hasEffect(ItemStack stack) {
-		return stack.hasTagCompound() && stack.getTagCompound().getBoolean("ringActive");
+		return stack.hasTagCompound() && stack.getTag().getBoolean("ringActive");
 	}
 
 	public static boolean isRingActive(Entity entity) {

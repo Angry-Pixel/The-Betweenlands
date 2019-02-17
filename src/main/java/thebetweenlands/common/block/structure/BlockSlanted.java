@@ -55,9 +55,9 @@ public class BlockSlanted extends BlockStairs {
 			}
 		}
 
-		EnumHalf half = state.getValue(HALF);
+		EnumHalf half = state.get(HALF);
 
-		switch(state.getValue(FACING)) {
+		switch(state.get(FACING)) {
 		default:
 		case NORTH:
 			cornerNW = true;
@@ -125,7 +125,7 @@ public class BlockSlanted extends BlockStairs {
 			break;
 		}
 
-		return state.withProperty(CORNER_NORTH_WEST, cornerNW).withProperty(CORNER_NORTH_EAST, cornerNE).withProperty(CORNER_SOUTH_EAST, cornerSE).withProperty(CORNER_SOUTH_WEST, cornerSW);
+		return state.with(CORNER_NORTH_WEST, cornerNW).with(CORNER_NORTH_EAST, cornerNE).with(CORNER_SOUTH_EAST, cornerSE).with(CORNER_SOUTH_WEST, cornerSW);
 	}
 
 	@Override

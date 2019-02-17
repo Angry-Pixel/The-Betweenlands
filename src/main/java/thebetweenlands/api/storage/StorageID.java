@@ -23,7 +23,7 @@ public class StorageID {
 
 	@Nullable
 	public static StorageID readFromNBT(NBTTagCompound nbt) {
-		if(nbt.hasKey("id", Constants.NBT.TAG_STRING)) {
+		if(nbt.contains("id", Constants.NBT.TAG_STRING)) {
 			return new StorageID(nbt.getString("id"));
 		}
 		return null;

@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -12,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -40,7 +40,7 @@ import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.util.TranslationHelper;
 
 public class BlockGeckoCage extends BlockContainer {
-	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	public static final DirectionProperty FACING = DirectionProperty.create("facing", EnumFacing.Plane.HORIZONTAL);
 
 	public BlockGeckoCage() {
 		super(Material.WOOD);
@@ -61,12 +61,12 @@ public class BlockGeckoCage extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+		return this.getDefaultState().with(FACING, EnumFacing.byHorizontalIndex(meta));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getHorizontalIndex();
+		return state.get(FACING).getHorizontalIndex();
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class BlockGeckoCage extends BlockContainer {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		int rotation = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		state = state.withProperty(FACING, EnumFacing.byHorizontalIndex(rotation));
+		state = state.with(FACING, EnumFacing.byHorizontalIndex(rotation));
 		worldIn.setBlockState(pos, state, 3);
 	}
 
@@ -132,7 +132,7 @@ public class BlockGeckoCage extends BlockContainer {
 							if (!(heldItemStack.getDisplayName().equals(TranslationHelper.translateToLocal(heldItemStack.getTranslationKey()))) && heldItemStack.hasDisplayName())
 									name = heldItemStack.getDisplayName();
 	
-							tile.addGecko(heldItemStack.hasTagCompound() && heldItemStack.getTagCompound().hasKey("Health") ? (int) heldItemStack.getTagCompound().getFloat("Health") : 12, name);
+							tile.addGecko(heldItemStack.hasTagCompound() && heldItemStack.getTag().contains("Health") ? (int) heldItemStack.getTag().getFloat("Health") : 12, name);
 							if(!player.abilities.isCreativeMode)
 								heldItemStack.shrink(1);
 						}

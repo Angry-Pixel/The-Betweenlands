@@ -19,11 +19,11 @@ public class WorldGenSapTree extends WorldGenerator {
 		int height = rand.nextInt(3) + 16;
 		int maxRadius = 6;
 
-		this.logX = BlockRegistry.LOG_SAP.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X);
-		this.logY = BlockRegistry.LOG_SAP.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Y);
-		this.logZ = BlockRegistry.LOG_SAP.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Z);
-		this.roots = BlockRegistry.LOG_SAP.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
-		this.leaves = BlockRegistry.LEAVES_SAP_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
+		this.logX = BlockRegistry.LOG_SAP.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.X);
+		this.logY = BlockRegistry.LOG_SAP.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Y);
+		this.logZ = BlockRegistry.LOG_SAP.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Z);
+		this.roots = BlockRegistry.LOG_SAP.getDefaultState().with(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
+		this.leaves = BlockRegistry.LEAVES_SAP_TREE.getDefaultState().with(BlockLeavesBetweenlands.CHECK_DECAY, false);
 
 		for (int xx = - maxRadius; xx <= maxRadius; xx++)
 			for (int zz = - maxRadius; zz <= maxRadius; zz++)

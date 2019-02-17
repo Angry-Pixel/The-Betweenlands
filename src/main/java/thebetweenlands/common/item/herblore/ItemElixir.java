@@ -121,7 +121,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack) {
-		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("throwing") && stack.getTagCompound().getBoolean("throwing")) {
+		if(stack.getTag() != null && stack.getTag().contains("throwing") && stack.getTag().getBoolean("throwing")) {
 			return EnumAction.BOW;
 		}
 		return EnumAction.DRINK;
@@ -129,7 +129,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft) {
-		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("throwing") && stack.getTagCompound().getBoolean("throwing")) {
+		if(stack.getTag() != null && stack.getTag().contains("throwing") && stack.getTag().getBoolean("throwing")) {
 			world.playSound((EntityPlayer)entityLiving, entityLiving.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS,0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 			if (!world.isRemote) {
 				int useCount = this.getMaxItemUseDuration(stack) - timeLeft;
@@ -160,10 +160,10 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 	public ItemStack getElixirItem(ElixirEffect effect, int duration, int strength, int vialType) {
 		ItemStack elixirStack = new ItemStack(this, 1, effect.getID() * 2 + vialType);
 		NBTTagCompound elixirData = new NBTTagCompound();
-		elixirData.setInteger("duration", duration);
-		elixirData.setInteger("strength", strength);
-		if(elixirStack.getTagCompound() == null) elixirStack.setTagCompound(new NBTTagCompound());
-		elixirStack.getTagCompound().setTag("elixirData", elixirData);
+		elixirData.setInt("duration", duration);
+		elixirData.setInt("strength", strength);
+		if(elixirStack.getTag() == null) elixirStack.setTagCompound(new NBTTagCompound());
+		elixirStack.getTag().setTag("elixirData", elixirData);
 		return elixirStack;
 	}
 
@@ -173,7 +173,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 	
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
-		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("throwing") && stack.getTagCompound().getBoolean("throwing")) {
+		if(stack.getTag() != null && stack.getTag().contains("throwing") && stack.getTag().getBoolean("throwing")) {
 			return 100000;
 		}
 		return 32;
@@ -182,10 +182,10 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		if(stack.getTagCompound() == null) {
+		if(stack.getTag() == null) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
-		stack.getTagCompound().setBoolean("throwing", playerIn.isSneaking());
+		stack.getTag().setBoolean("throwing", playerIn.isSneaking());
 		playerIn.setActiveHand(handIn);
 		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
@@ -240,17 +240,17 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 	}
 
 	public int getElixirDuration(ItemStack stack) {
-		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("elixirData")) {
-			NBTTagCompound elixirData = stack.getTagCompound().getCompoundTag("elixirData");
-			return elixirData.getInteger("duration");
+		if(stack.getTag() != null && stack.getTag().contains("elixirData")) {
+			NBTTagCompound elixirData = stack.getTag().getCompound("elixirData");
+			return elixirData.getInt("duration");
 		}
 		return 1200;
 	}
 
 	public int getElixirStrength(ItemStack stack) {
-		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("elixirData")) {
-			NBTTagCompound elixirData = stack.getTagCompound().getCompoundTag("elixirData");
-			return elixirData.getInteger("strength");
+		if(stack.getTag() != null && stack.getTag().contains("elixirData")) {
+			NBTTagCompound elixirData = stack.getTag().getCompound("elixirData");
+			return elixirData.getInt("strength");
 		}
 		return 0;
 	}

@@ -28,9 +28,9 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 				receivedItem = new ItemStack(ItemRegistry.FIREFLY);
 			} else {
 				receivedItem = new ItemStack(ItemRegistry.GECKO);
-				if (receivedItem.getTagCompound() == null)
+				if (receivedItem.getTag() == null)
 					receivedItem.setTagCompound(new NBTTagCompound());
-				receivedItem.getTagCompound().setFloat("Health", target.getHealth());
+				receivedItem.getTag().setFloat("Health", target.getHealth());
 			}
 			if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == this && !player.world.isRemote) {
 				if (!target.getCustomNameTag().isEmpty()) {

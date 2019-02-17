@@ -19,9 +19,9 @@ import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGener
  * Adds coarse, corroded islands to larger water bodies
  */
 public class CoarseIslandsFeature extends BiomeFeature {
-	private final IBlockState cragrockDefault = BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.DEFAULT);
-	private final IBlockState cragrockMossy1 = BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_1);
-	private final IBlockState cragrockMossy2 = BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_2);
+	private final IBlockState cragrockDefault = BlockRegistry.CRAGROCK.getDefaultState().with(BlockCragrock.VARIANT, EnumCragrockType.DEFAULT);
+	private final IBlockState cragrockMossy1 = BlockRegistry.CRAGROCK.getDefaultState().with(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_1);
+	private final IBlockState cragrockMossy2 = BlockRegistry.CRAGROCK.getDefaultState().with(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_2);
 
 	private NoiseGeneratorPerlin islandNoiseGen;
 	private double[] islandNoise = new double[256];

@@ -58,7 +58,7 @@ public class ArrowPredictionRenderer {
 
         @Override
         public boolean handleWaterMovement() {
-            if (this.world.handleMaterialAcceleration(this.getEntityBoundingBox().expand(0.0D, -0.4000000059604645D, 0.0D).contract(0.001D, 0.001D, 0.001D), Material.WATER, this)) {
+            if (this.world.handleMaterialAcceleration(this.getBoundingBox().expand(0.0D, -0.4000000059604645D, 0.0D).contract(0.001D, 0.001D, 0.001D), Material.WATER, this)) {
                 this.fallDistance = 0.0F;
                 this.inWater = true;
             } else {
@@ -214,12 +214,12 @@ public class ArrowPredictionRenderer {
             dest = new Vec3d(hit.hitVec.x, hit.hitVec.y, hit.hitVec.z);
         }
         Entity collidedEntity = null;
-        List entityList = Minecraft.getInstance().world.getEntitiesWithinAABBExcludingEntity(ea, ea.getEntityBoundingBox().expand(ea.motionX, ea.motionY, ea.motionZ).grow(1.0D, 1.0D, 1.0D));
+        List entityList = Minecraft.getInstance().world.getEntitiesWithinAABBExcludingEntity(ea, ea.getBoundingBox().expand(ea.motionX, ea.motionY, ea.motionZ).grow(1.0D, 1.0D, 1.0D));
         double lastDistance = 0.0D;
         for (int c = 0; c < entityList.size(); ++c) {
             Entity currentEntity = (Entity)entityList.get(c);
             if (currentEntity.canBeCollidedWith() && (currentEntity != Minecraft.getInstance().player)) {
-                AxisAlignedBB entityBoundingBox = currentEntity.getEntityBoundingBox().grow((double)0.3F, (double)0.3F, (double)0.3F);
+                AxisAlignedBB entityBoundingBox = currentEntity.getBoundingBox().grow((double)0.3F, (double)0.3F, (double)0.3F);
                 RayTraceResult collision = entityBoundingBox.calculateIntercept(start, dest);
                 if (collision != null) {
                     double currentDistance = start.distanceTo(collision.hitVec);

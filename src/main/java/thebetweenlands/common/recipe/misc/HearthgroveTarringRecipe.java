@@ -27,7 +27,7 @@ public class HearthgroveTarringRecipe extends IForgeRegistryEntry.Impl<IRecipe> 
 			if(!stack.isEmpty()) {
 				if(stack.getItem() == Item.getItemFromBlock(BlockRegistry.LOG_HEARTHGROVE)) {
 					IBlockState state = BlockRegistry.LOG_HEARTHGROVE.getStateFromMeta(stack.getMetadata());
-					if(!state.getValue(BlockHearthgroveLog.TARRED)) {
+					if(!state.get(BlockHearthgroveLog.TARRED)) {
 						hearthgroveLogs++;
 					} else {
 						return false;
@@ -62,7 +62,7 @@ public class HearthgroveTarringRecipe extends IForgeRegistryEntry.Impl<IRecipe> 
 				}
 			}
 		}
-		return new ItemStack(BlockRegistry.LOG_HEARTHGROVE, tarredLogs, BlockRegistry.LOG_HEARTHGROVE.getMetaFromState(BlockRegistry.LOG_HEARTHGROVE.getDefaultState().withProperty(BlockHearthgroveLog.LOG_AXIS, BlockLog.EnumAxis.Y).withProperty(BlockHearthgroveLog.TARRED, true)));
+		return new ItemStack(BlockRegistry.LOG_HEARTHGROVE, tarredLogs, BlockRegistry.LOG_HEARTHGROVE.getMetaFromState(BlockRegistry.LOG_HEARTHGROVE.getDefaultState().with(BlockHearthgroveLog.LOG_AXIS, BlockLog.EnumAxis.Y).with(BlockHearthgroveLog.TARRED, true)));
 	}
 
 	@Override

@@ -37,9 +37,9 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 		if(!this.rotatedCubeCantReplace(world, x, y + 2, z, 0, 0, 0, 1, height, 1, 0) && 
 				!this.rotatedCubeCantReplace(world, x, y + 2, z, -canopySize+2, 0, -canopySize+2, canopySize*2-4, height, canopySize*2-4, 0)) {
 
-			IBlockState log = BlockRegistry.LOG_HEARTHGROVE.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, BlockLog.EnumAxis.NONE);
-			IBlockState logY = BlockRegistry.LOG_HEARTHGROVE.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, BlockLog.EnumAxis.Y);
-			IBlockState leaves = BlockRegistry.LEAVES_HEARTHGROVE_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
+			IBlockState log = BlockRegistry.LOG_HEARTHGROVE.getDefaultState().with(BlockLogBetweenlands.LOG_AXIS, BlockLog.EnumAxis.NONE);
+			IBlockState logY = BlockRegistry.LOG_HEARTHGROVE.getDefaultState().with(BlockLogBetweenlands.LOG_AXIS, BlockLog.EnumAxis.Y);
+			IBlockState leaves = BlockRegistry.LEAVES_HEARTHGROVE_TREE.getDefaultState().with(BlockLeavesBetweenlands.CHECK_DECAY, false);
 			IBlockState hangers = BlockRegistry.HANGER.getDefaultState();
 
 			int rootHeight = rand.nextInt(3) + 1;

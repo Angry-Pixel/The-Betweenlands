@@ -21,8 +21,8 @@ public class SlotPestle extends Slot {
     @Override
     public ItemStack onTake(EntityPlayer thePlayer, ItemStack stack) {
         if (!stack.isEmpty() && slotNumber == 1)
-            if(stack.getTagCompound().getBoolean("active"))
-                stack.getTagCompound().setBoolean("active", false);
+            if(stack.getTag().getBoolean("active"))
+                stack.getTag().setBoolean("active", false);
         return super.onTake(thePlayer, stack);
     }
 }

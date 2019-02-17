@@ -22,6 +22,7 @@ import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityAnimator extends TileEntityBasicInventory implements ITickable {
     public ItemStack itemToAnimate = ItemStack.EMPTY;
@@ -34,11 +35,11 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     private boolean soundPlaying = false;
 
     public TileEntityAnimator() {
-        super(3, "animator");
+        super(TileEntityRegistry.ANIMATOR, 3, "animator");
     }
 
     @Override
-    public void update() {
+    public void tick() {
         if (isSlotInUse(0) && isValidFocalItem()) {
             this.itemToAnimate = this.inventory.get(0);
             IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(this.itemToAnimate);
@@ -182,16 +183,16 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
+    public NBTTagCompound write(NBTTagCompound nbt) {
+        super.write(nbt);
         this.writeNBT(nbt);
         return nbt;
     }
 
     protected void writeNBT(NBTTagCompound nbt) {
-        nbt.setInteger("life", lifeCrystalLife);
-        nbt.setInteger("progress", fuelBurnProgress);
-        nbt.setInteger("itemsConsumed", fuelConsumed);
+        nbt.setInt("life", lifeCrystalLife);
+        nbt.setInt("progress", fuelBurnProgress);
+        nbt.setInt("itemsConsumed", fuelConsumed);
         nbt.setBoolean("lifeDepleted", itemAnimated);
         NBTTagCompound toAnimateCompound = new NBTTagCompound();
         if (!this.itemToAnimate.isEmpty()) {
@@ -201,18 +202,18 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
+    public void read(NBTTagCompound nbt) {
+        super.read(nbt);
         this.readNBT(nbt);
     }
 
     protected void readNBT(NBTTagCompound nbt) {
-        lifeCrystalLife = nbt.getInteger("life");
-        fuelBurnProgress = nbt.getInteger("progress");
-        fuelConsumed = nbt.getInteger("itemsConsumed");
+        lifeCrystalLife = nbt.getInt("life");
+        fuelBurnProgress = nbt.getInt("progress");
+        fuelConsumed = nbt.getInt("itemsConsumed");
         itemAnimated = nbt.getBoolean("lifeDepleted");
-        NBTTagCompound toAnimateStackCompound = nbt.getCompoundTag("toAnimate");
-        if (toAnimateStackCompound.hasKey("id", Constants.NBT.TAG_STRING))
+        NBTTagCompound toAnimateStackCompound = nbt.getCompound("toAnimate");
+        if (toAnimateStackCompound.contains("id", Constants.NBT.TAG_STRING))
             this.itemToAnimate = new ItemStack(toAnimateStackCompound);
         else
             this.itemToAnimate = ItemStack.EMPTY;

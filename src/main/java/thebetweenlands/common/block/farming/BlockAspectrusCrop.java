@@ -116,7 +116,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	@Override
 	public int getCropDrops(IWorldReader world, BlockPos pos, Random rand, int fortune) {
 		IBlockState state = world.getBlockState(pos);
-		if(state.getValue(AGE) >= 15) {
+		if(state.get(AGE) >= 15) {
 			return 1 + rand.nextInt(3 + fortune);
 		}
 		return 0;
@@ -125,7 +125,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	@Override
 	public int getSeedDrops(IWorldReader world, BlockPos pos, Random rand, int fortune) {
 		IBlockState state = world.getBlockState(pos);
-		if(state.getValue(AGE) >= 15) {
+		if(state.get(AGE) >= 15) {
 			return 1 + (rand.nextInt(8) == 0 ? 1 : 0);
 		}
 		return 1;
@@ -232,7 +232,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 
 	@Override
 	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-		int age = state.getValue(AGE) + (rand.nextInt(2) == 0 ? 1 : 0);
+		int age = state.get(AGE) + (rand.nextInt(2) == 0 ? 1 : 0);
 		if(age > 15) {
 			age = 15;
 			int height;
@@ -241,6 +241,6 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 				this.growUp(worldIn, pos);
 			}
 		}
-		worldIn.setBlockState(pos, state.withProperty(AGE, age));
+		worldIn.setBlockState(pos, state.with(AGE, age));
 	}
 }

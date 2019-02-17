@@ -23,9 +23,9 @@ public class ItemManualHL extends Item implements IDiscoveryProvider<ItemStack>{
     @Override
     public DiscoveryContainer<ItemStack> getContainer(ItemStack stack) {
         if(stack != null) {
-            if(stack.getTagCompound() == null)
+            if(stack.getTag() == null)
                 stack.setTagCompound(new NBTTagCompound());
-            return new DiscoveryContainer<ItemStack>(this, stack).updateFromNBT(stack.getTagCompound(), false);
+            return new DiscoveryContainer<ItemStack>(this, stack).updateFromNBT(stack.getTag(), false);
         }
         return null;
     }
@@ -39,9 +39,9 @@ public class ItemManualHL extends Item implements IDiscoveryProvider<ItemStack>{
     @Override
     public void saveContainer(ItemStack stack, DiscoveryContainer<ItemStack> container) {
         if(stack != null) {
-            if(stack.getTagCompound() == null)
+            if(stack.getTag() == null)
                 stack.setTagCompound(new NBTTagCompound());
-            stack.setTagCompound(container.writeToNBT(stack.getTagCompound()));
+            stack.setTagCompound(container.writeToNBT(stack.getTag()));
         }
     }
 }

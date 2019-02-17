@@ -181,7 +181,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
     public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
         //Makes mummy bait and runner boots work better, but vials recipe won't work
         /*subtypeRegistry.registerSubtypeInterpreter(ItemRegistry.ASPECT_VIAL, itemStack -> {
-            NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
+            NBTTagCompound nbtTagCompound = itemStack.getTag();
             if (nbtTagCompound == null || nbtTagCompound.hasNoTags()) {
                 return itemStack.getItemDamage() + ISubtypeRegistry.ISubtypeInterpreter.NONE;
             }

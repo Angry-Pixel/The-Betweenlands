@@ -72,14 +72,14 @@ public class ModelLifeCrystalStalactite implements IModel {
 			
 			if(side == null) {
 				try {
-					EnumLifeCrystalType type = state.getValue(BlockLifeCrystalStalactite.VARIANT);
-					int distUp = state.getValue(BlockLifeCrystalStalactite.DIST_UP);
-					int distDown = state.getValue(BlockLifeCrystalStalactite.DIST_DOWN);
-					boolean noTop = state.getValue(BlockLifeCrystalStalactite.NO_TOP);
-					boolean noBottom = state.getValue(BlockLifeCrystalStalactite.NO_BOTTOM);
-					int posX = state.getValue(BlockLifeCrystalStalactite.POS_X);
-					int posY = state.getValue(BlockLifeCrystalStalactite.POS_Y);
-					int posZ = state.getValue(BlockLifeCrystalStalactite.POS_Z);
+					EnumLifeCrystalType type = state.get(BlockLifeCrystalStalactite.VARIANT);
+					int distUp = state.get(BlockLifeCrystalStalactite.DIST_UP);
+					int distDown = state.get(BlockLifeCrystalStalactite.DIST_DOWN);
+					boolean noTop = state.get(BlockLifeCrystalStalactite.NO_TOP);
+					boolean noBottom = state.get(BlockLifeCrystalStalactite.NO_BOTTOM);
+					int posX = state.get(BlockLifeCrystalStalactite.POS_X);
+					int posY = state.get(BlockLifeCrystalStalactite.POS_Y);
+					int posZ = state.get(BlockLifeCrystalStalactite.POS_Z);
 					float height = distUp == 0 && noTop ? 0.75F : 1.0F;
 
 					int totalHeight = 1 + distDown + distUp;

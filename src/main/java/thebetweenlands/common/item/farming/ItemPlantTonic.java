@@ -115,21 +115,21 @@ public class ItemPlantTonic extends Item implements ItemRegistry.IMultipleItemMo
 	}
 
 	private NBTTagCompound getNBT(ItemStack stack) {
-		NBTTagCompound compound = stack.getTagCompound();
+		NBTTagCompound compound = stack.getTag();
 		if (compound == null) {
 			compound = new NBTTagCompound();
-			compound.setInteger("usages", 0);
+			compound.setInt("usages", 0);
 			stack.setTagCompound(compound);
 		}
 		return compound;
 	}
 
 	private void setUsages(ItemStack stack, int usage) {
-		getNBT(stack).setInteger("usages", Math.max(usage, 0));
+		getNBT(stack).setInt("usages", Math.max(usage, 0));
 	}
 
 	private int getUsages(ItemStack stack) {
-		return getNBT(stack).getInteger("usages");
+		return getNBT(stack).getInt("usages");
 	}
 
 	@Override

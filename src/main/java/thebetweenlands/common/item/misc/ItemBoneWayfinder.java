@@ -151,8 +151,8 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("link", Constants.NBT.TAG_LONG)) {
-			BlockPos waystone = BlockPos.fromLong(stack.getTagCompound().getLong("link"));
+		if(stack.hasTagCompound() && stack.getTag().contains("link", Constants.NBT.TAG_LONG)) {
+			BlockPos waystone = BlockPos.fromLong(stack.getTag().getLong("link"));
 			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bone_wayfinder_linked", waystone.getX(), waystone.getY(), waystone.getZ()), 0));
 		} else {
 			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bone_wayfinder"), 0));
@@ -199,12 +199,12 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 	protected boolean activateWaystone(World world, BlockPos pos, IBlockState state, ItemStack stack) {
 		BlockWaystone block = (BlockWaystone) state.getBlock();
 		if(block.isValidWaystone(world, pos, state)) {
-			BlockWaystone.Part part = state.getValue(BlockWaystone.PART);
+			BlockWaystone.Part part = state.get(BlockWaystone.PART);
 
 			if(!world.isRemote) {
 				int startY = part == BlockWaystone.Part.BOTTOM ? 0 : (part == BlockWaystone.Part.MIDDLE ? -1 : -2);
 				for(int yo = startY; yo < startY + 3; yo++) {
-					IBlockState newState = world.getBlockState(pos.up(yo)).withProperty(BlockWaystone.ACTIVE, true);
+					IBlockState newState = world.getBlockState(pos.up(yo)).with(BlockWaystone.ACTIVE, true);
 					world.setBlockState(pos.up(yo), newState);
 					world.notifyBlockUpdate(pos.up(yo), newState, newState, 2); //why tf is this necessary
 				}
@@ -250,8 +250,8 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 	@Nullable
 	public BlockPos getBoundWaystone(ItemStack stack) {
 		if(stack.hasTagCompound()) {
-			NBTTagCompound nbt = stack.getTagCompound();
-			if(nbt.hasKey("link", Constants.NBT.TAG_LONG)) {
+			NBTTagCompound nbt = stack.getTag();
+			if(nbt.contains("link", Constants.NBT.TAG_LONG)) {
 				return BlockPos.fromLong(nbt.getLong("link"));
 			}
 		}
@@ -259,7 +259,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 	}
 
 	public void setBoundWaystone(ItemStack stack, @Nullable BlockPos pos) {
-		NBTTagCompound nbt = stack.getTagCompound();
+		NBTTagCompound nbt = stack.getTag();
 		if(pos == null) {
 			if(nbt != null) {
 				nbt.removeTag("link");

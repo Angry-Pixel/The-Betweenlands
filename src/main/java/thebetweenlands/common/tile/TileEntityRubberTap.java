@@ -16,6 +16,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityRubberTap extends TileEntity implements IFluidHandler, ITickable {
 	private final FluidTank tank;
@@ -57,12 +58,13 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 	private int fillProgress = 0;
 
 	public TileEntityRubberTap() {
+		super(TileEntityRegistry.RUBBER_TAP);
 		this.tank = new FluidTank(FluidRegistry.RUBBER, 0, Fluid.BUCKET_VOLUME);
 		this.tank.setTileEntity(this);
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 		if(!this.world.isRemote && this.getBlockType() instanceof BlockRubberTap) {
 			FluidStack drained = this.tank.drain(Fluid.BUCKET_VOLUME, false);
 			final int ticksPerStep = ((BlockRubberTap)this.getBlockType()).ticksPerStep;
@@ -82,18 +84,18 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
-		super.writeToNBT(tagCompound);
+	public NBTTagCompound write(NBTTagCompound tagCompound) {
+		super.write(tagCompound);
 		this.tank.writeToNBT(tagCompound);
-		tagCompound.setInteger("FillProgress", this.fillProgress);
+		tagCompound.setInt("FillProgress", this.fillProgress);
 		return tagCompound;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound tagCompound) {
-		super.readFromNBT(tagCompound);
+	public void read(NBTTagCompound tagCompound) {
+		super.read(tagCompound);
 		this.tank.readFromNBT(tagCompound);
-		this.fillProgress = tagCompound.getInteger("FillProgress");
+		this.fillProgress = tagCompound.getInt("FillProgress");
 	}
 
 	@Override
@@ -161,7 +163,7 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound nbt = super.getUpdateTag();
 		this.tank.writeToNBT(nbt);
-		nbt.setInteger("FillProgress", this.fillProgress);
+		nbt.setInt("FillProgress", this.fillProgress);
 		return nbt;
 	}
 }

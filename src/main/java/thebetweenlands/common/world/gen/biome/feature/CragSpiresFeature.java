@@ -19,9 +19,9 @@ import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGener
  * Adds Cragrock spires to large water bodies
  */
 public class CragSpiresFeature extends BiomeFeature {
-	private final IBlockState cragrockDefault = BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.DEFAULT);
-	private final IBlockState cragrockMossy1 = BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_1);
-	private final IBlockState cragrockMossy2 = BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_2);
+	private final IBlockState cragrockDefault = BlockRegistry.CRAGROCK.getDefaultState().with(BlockCragrock.VARIANT, EnumCragrockType.DEFAULT);
+	private final IBlockState cragrockMossy1 = BlockRegistry.CRAGROCK.getDefaultState().with(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_1);
+	private final IBlockState cragrockMossy2 = BlockRegistry.CRAGROCK.getDefaultState().with(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_2);
 
 	private NoiseGeneratorPerlin spireNoiseGen;
 	private double[] spireNoise = new double[256];

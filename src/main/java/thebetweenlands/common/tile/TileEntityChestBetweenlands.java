@@ -11,10 +11,15 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.loot.ISharedLootContainer;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityChestBetweenlands extends TileEntityChest implements ISharedLootContainer {
 	protected boolean isSharedLootTable;
 
+	public TileEntityChestBetweenlands() {
+		super(TileEntityRegistry.WEEDWOOD_CHEST);
+	}
+	
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
 		//Use vanilla behaviour to prevent inventory from resetting when creating double chest
@@ -27,13 +32,13 @@ public class TileEntityChestBetweenlands extends TileEntityChest implements ISha
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		return super.writeToNBT(compound);
+	public NBTTagCompound write(NBTTagCompound compound) {
+		return super.write(compound);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound compound) {
-		super.readFromNBT(compound);
+	public void read(NBTTagCompound compound) {
+		super.read(compound);
 	}
 
 	@Override

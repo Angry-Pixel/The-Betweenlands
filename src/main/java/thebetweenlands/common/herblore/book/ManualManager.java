@@ -43,7 +43,7 @@ public class ManualManager {
                 else
                     stack = player.getHeldItem(EnumHand.OFF_HAND);
                 if (!stack.isEmpty() && stack.getItem() == itemManual) {
-                    NBTTagCompound nbt = stack.getTagCompound();
+                    NBTTagCompound nbt = stack.getTag();
                     if (nbt == null)
                         nbt = new NBTTagCompound();
                     ArrayList<String> foundPages = getFoundPages(player, itemManual);
@@ -52,17 +52,17 @@ public class ManualManager {
                         for (String string : foundPages) {
                             NBTTagCompound data = new NBTTagCompound();
                             data.setString("page", string);
-                            pages.appendTag(data);
+                            pages.add(data);
                         }
                         NBTTagCompound data = new NBTTagCompound();
                         data.setString("page", pageName);
-                        pages.appendTag(data);
+                        pages.add(data);
                         nbt.setTag("pages", pages);
                     } else {
                         NBTTagList pages = new NBTTagList();
                         NBTTagCompound data = new NBTTagCompound();
                         data.setString("page", pageName);
-                        pages.appendTag(data);
+                        pages.add(data);
                         nbt.setTag("pages", pages);
                     }
                     player.inventory.getStackInSlot(i).setTagCompound(nbt);
@@ -91,11 +91,11 @@ public class ManualManager {
                 else
                     stack = player.getHeldItem(EnumHand.OFF_HAND);
                 if (!stack.isEmpty() && stack.getItem() == itemManual) {
-                    NBTTagCompound nbt = stack.getTagCompound();
+                    NBTTagCompound nbt = stack.getTag();
                     if (nbt != null) {
-                        NBTTagList tag = nbt.getTagList("pages", 10);
-                        for (int j = 0; j < tag.tagCount(); j++) {
-                            NBTTagCompound data = tag.getCompoundTagAt(j);
+                        NBTTagList tag = nbt.getList("pages", 10);
+                        for (int j = 0; j < tag.size(); j++) {
+                            NBTTagCompound data = tag.getCompound(j);
                             foundPages.add(data.getString("page"));
                         }
                         return foundPages;
@@ -162,10 +162,10 @@ public class ManualManager {
      */
     public static void setCurrentPage(String category, int pageNumber, Item itemManual, EntityPlayer player, EnumHand hand) {
         if (player != null && !player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == itemManual && category != null) {
-            if (player.getHeldItem(hand).getTagCompound() == null)
+            if (player.getHeldItem(hand).getTag() == null)
                 player.getHeldItem(hand).setTagCompound(new NBTTagCompound());
-            NBTTagCompound tagCompound = player.getHeldItem(hand).getTagCompound();
-            tagCompound.setInteger("page_number", pageNumber);
+            NBTTagCompound tagCompound = player.getHeldItem(hand).getTag();
+            tagCompound.setInt("page_number", pageNumber);
             tagCompound.setString("category", category);
             player.getHeldItem(EnumHand.MAIN_HAND).setTagCompound(tagCompound);
         }
@@ -179,8 +179,8 @@ public class ManualManager {
      */
     public static int getCurrentPageNumber(ItemStack manual) {
         if (!manual.isEmpty())
-            if (manual.getTagCompound() != null && manual.getTagCompound().hasKey("page_number"))
-                return manual.getTagCompound().getInteger("page_number");
+            if (manual.getTag() != null && manual.getTag().contains("page_number"))
+                return manual.getTag().getInt("page_number");
         return -1;
     }
 
@@ -192,8 +192,8 @@ public class ManualManager {
     @Nullable
     public static ManualCategory getCurrentCategory(ItemStack manual) {
         if (!manual.isEmpty()) {
-            NBTTagCompound nbt = manual.getTagCompound();
-            if (nbt != null && nbt.hasKey("category")) {
+            NBTTagCompound nbt = manual.getTag();
+            if (nbt != null && nbt.contains("category")) {
                 return getCategoryFromString(nbt.getString("category"), manual.getItem());
             }
         }

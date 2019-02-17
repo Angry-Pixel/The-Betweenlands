@@ -77,14 +77,14 @@ public class FlightEntityCapability extends EntityCapability<FlightEntityCapabil
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setBoolean("flying", this.flying);
-		nbt.setInteger("time", this.flightTime);
+		nbt.setInt("time", this.flightTime);
 		nbt.setBoolean("ring", this.ring);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.flying = nbt.getBoolean("flying");
-		this.flightTime = nbt.getInteger("time");
+		this.flightTime = nbt.getInt("time");
 		this.ring = nbt.getBoolean("ring");
 	}
 

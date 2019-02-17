@@ -78,7 +78,7 @@ public class WorldGenTarPoolDungeon extends WorldGenHelper {
 						else
 							world.setBlockState(new BlockPos(x + xx, yy, z + zz), BlockRegistry.BETWEENSTONE.getDefaultState());
 						if (rand.nextInt(18) == 0) {
-							world.setBlockState(new BlockPos(x + xx, yy, z + zz), getRandomTarLootPot(rand).withProperty(BlockLootPot.FACING, EnumFacing.HORIZONTALS[rand.nextInt(4)]));
+							world.setBlockState(new BlockPos(x + xx, yy, z + zz), getRandomTarLootPot(rand).with(BlockLootPot.FACING, EnumFacing.HORIZONTALS[rand.nextInt(4)]));
 							TileEntity te = world.getTileEntity(this.getCheckPos(x + xx, yy, z + zz));
 							if(te instanceof TileEntityLootPot) {
 								((TileEntityLootPot)te).setLootTable(loot, rand.nextLong());
@@ -113,9 +113,9 @@ public class WorldGenTarPoolDungeon extends WorldGenHelper {
 	private IBlockState getRandomTarLootPot(Random rand) {
 		switch(rand.nextInt(3)) {
 		default:
-		case 0: return BlockRegistry.TAR_LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_1);
-		case 1: return BlockRegistry.TAR_LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_2);
-		case 2: return BlockRegistry.TAR_LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_3);
+		case 0: return BlockRegistry.TAR_LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_1);
+		case 1: return BlockRegistry.TAR_LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_2);
+		case 2: return BlockRegistry.TAR_LOOT_POT.getDefaultState().with(BlockLootPot.VARIANT, EnumLootPot.POT_3);
 		}
 	}
 }

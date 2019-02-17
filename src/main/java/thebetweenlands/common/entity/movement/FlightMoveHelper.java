@@ -106,7 +106,7 @@ public class FlightMoveHelper extends EntityMoveHelper {
 		double stepX = (x - this.entity.posX) / step;
 		double stepY = (y - this.entity.posY) / step;
 		double stepZ = (z - this.entity.posZ) / step;
-		AxisAlignedBB aabb = this.entity.getEntityBoundingBox();
+		AxisAlignedBB aabb = this.entity.getBoundingBox();
 
 		for(int i = 1; (double)i < step; ++i) {
 			aabb = aabb.offset(stepX, stepY, stepZ);

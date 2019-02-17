@@ -1,24 +1,23 @@
 package thebetweenlands.common.block.misc;
 
 import java.util.Locale;
-import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -31,13 +30,13 @@ import thebetweenlands.common.registries.ItemRegistry;
 public class BlockRope extends Block implements ICustomItemBlock {
 	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.4375f, 0f, 0.4375f, 0.5625f, 1f, 0.5625f);
 
-	public static final PropertyEnum<EnumRopeVariant> VARIANT = PropertyEnum.<EnumRopeVariant>create("variant", EnumRopeVariant.class);
+	public static final EnumProperty<EnumRopeVariant> VARIANT = EnumProperty.<EnumRopeVariant>create("variant", EnumRopeVariant.class);
 
 	public BlockRope() {
 		super(Material.PLANTS);
 		this.setSoundType(SoundType.PLANT);
 		this.setHardness(0.5F);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumRopeVariant.SINGLE));
+		this.setDefaultState(this.blockState.getBaseState().with(VARIANT, EnumRopeVariant.SINGLE));
 		this.setCreativeTab(null);
 	}
 
@@ -97,7 +96,7 @@ public class BlockRope extends Block implements ICustomItemBlock {
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
 		return ItemRegistry.ROPE_ITEM;
 	}
 
@@ -112,16 +111,16 @@ public class BlockRope extends Block implements ICustomItemBlock {
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
-		state = state.withProperty(VARIANT, EnumRopeVariant.MIDDLE);
+		state = state.with(VARIANT, EnumRopeVariant.MIDDLE);
 
 		if(worldIn.getBlockState(pos.up()).getBlock() != this) {
 			if(worldIn.getBlockState(pos.down()).getBlock() == this) {
-				state = state.withProperty(VARIANT, EnumRopeVariant.TOP);
+				state = state.with(VARIANT, EnumRopeVariant.TOP);
 			} else {
-				state = state.withProperty(VARIANT, EnumRopeVariant.SINGLE);
+				state = state.with(VARIANT, EnumRopeVariant.SINGLE);
 			}
 		} else if(worldIn.getBlockState(pos.down()).getBlock() != this){
-			state = state.withProperty(VARIANT, EnumRopeVariant.BOTTOM);
+			state = state.with(VARIANT, EnumRopeVariant.BOTTOM);
 		}
 
 		return state;
@@ -132,19 +131,19 @@ public class BlockRope extends Block implements ICustomItemBlock {
 		switch(meta) {
 		default:
 		case 0:
-			return this.getDefaultState().withProperty(VARIANT, EnumRopeVariant.SINGLE);
+			return this.getDefaultState().with(VARIANT, EnumRopeVariant.SINGLE);
 		case 1:
-			return this.getDefaultState().withProperty(VARIANT, EnumRopeVariant.TOP);
+			return this.getDefaultState().with(VARIANT, EnumRopeVariant.TOP);
 		case 2:
-			return this.getDefaultState().withProperty(VARIANT, EnumRopeVariant.MIDDLE);
+			return this.getDefaultState().with(VARIANT, EnumRopeVariant.MIDDLE);
 		case 3:
-			return this.getDefaultState().withProperty(VARIANT, EnumRopeVariant.BOTTOM);
+			return this.getDefaultState().with(VARIANT, EnumRopeVariant.BOTTOM);
 		}
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		switch(state.getValue(VARIANT)) {
+		switch(state.get(VARIANT)) {
 		default:
 		case SINGLE:
 			return 0;

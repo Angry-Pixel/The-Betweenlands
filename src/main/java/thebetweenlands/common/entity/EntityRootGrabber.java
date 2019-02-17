@@ -184,7 +184,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		if(this.attackTicks >= this.delay) {
 			if(this.attackTicks == this.delay) {
 				if(!this.world.isRemote) {
-					List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox(), e -> !e.getIsInvulnerable() && (e instanceof EntityPlayer == false || (!((EntityPlayer)e).isSpectator() && !((EntityPlayer)e).isCreative())));
+					List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox(), e -> !e.getIsInvulnerable() && (e instanceof EntityPlayer == false || (!((EntityPlayer)e).isSpectator() && !((EntityPlayer)e).isCreative())));
 					if(!targets.isEmpty()) {
 						this.grabbedEntity = targets.get(this.rand.nextInt(targets.size()));
 						this.grabbedEntity.setLocationAndAngles(this.posX, this.posY + 1, this.posZ, this.grabbedEntity.rotationYaw, this.grabbedEntity.rotationPitch);
@@ -202,7 +202,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 			}
 
 			if(!this.world.isRemote && this.grabbedEntity != null && !this.dataManager.get(RETRACT)) {
-				if(this.getEntityBoundingBox().intersects(this.grabbedEntity.getEntityBoundingBox())) {
+				if(this.getBoundingBox().intersects(this.grabbedEntity.getBoundingBox())) {
 					this.grabbedEntity.addPotionEffect(new PotionEffect(ElixirEffectRegistry.ROOT_BOUND, 5, 0, true, false));
 				} else {
 					this.grabbedEntity = null;
@@ -378,17 +378,17 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
-		this.delay = nbt.getInteger("delay");
+		this.delay = nbt.getInt("delay");
 		this.origin = BlockPos.fromLong(nbt.getLong("origin"));
-		this.attackTicks = nbt.getInteger("attackTicks");
+		this.attackTicks = nbt.getInt("attackTicks");
 		this.dataManager.set(DAMAGE, nbt.getFloat("damage"));
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("delay", this.delay);
+		nbt.setInt("delay", this.delay);
 		nbt.setLong("origin", this.origin.toLong());
-		nbt.setInteger("attackTicks", this.attackTicks);
+		nbt.setInt("attackTicks", this.attackTicks);
 		nbt.setFloat("damage", this.dataManager.get(DAMAGE));
 	}
 }

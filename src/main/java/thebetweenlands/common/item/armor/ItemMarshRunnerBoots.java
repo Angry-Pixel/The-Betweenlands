@@ -24,7 +24,7 @@ public class ItemMarshRunnerBoots extends ItemRubberBoots {
 
 	@Override
 	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-		if(itemStack.getTagCompound() == null) {
+		if(itemStack.getTag() == null) {
 			itemStack.setTagCompound(new NBTTagCompound());
 		}
 	}
@@ -32,7 +32,7 @@ public class ItemMarshRunnerBoots extends ItemRubberBoots {
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(itemStack);
-		int walkTicksLeft = nbt.getInteger("walkTicksLeft");
+		int walkTicksLeft = nbt.getInt("walkTicksLeft");
 		IBlockState blockBelowPlayer = world.getBlockState(player.getPosition().down());
 
 		if(player.onGround && blockBelowPlayer.getBlock() instanceof BlockSwampWater) {
@@ -43,10 +43,10 @@ public class ItemMarshRunnerBoots extends ItemRubberBoots {
 		if(!player.world.isRemote) {
 			boolean playerOnGround = player.onGround && !player.isInWater() && blockBelowPlayer.getBlock() instanceof BlockSwampWater == false;
 			if(walkTicksLeft == 0 || playerOnGround) {
-				nbt.setInteger("walkTicksLeft", MAX_WALK_TICKS);
+				nbt.setInt("walkTicksLeft", MAX_WALK_TICKS);
 			} else {
 				if(walkTicksLeft > 1) {
-					nbt.setInteger("walkTicksLeft", --walkTicksLeft);
+					nbt.setInt("walkTicksLeft", --walkTicksLeft);
 				}
 			}
 		}
@@ -56,7 +56,7 @@ public class ItemMarshRunnerBoots extends ItemRubberBoots {
 		if(player.isSneaking() || ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive(player)) return false;
 		ItemStack boots = player.inventory.armorInventory.get(0);
 		if(!boots.isEmpty() && boots.getItem() instanceof ItemMarshRunnerBoots) {
-			if(boots.getTagCompound() != null && boots.getTagCompound().getInteger("walkTicksLeft") > 1) {
+			if(boots.getTag() != null && boots.getTag().getInt("walkTicksLeft") > 1) {
 				return true;
 			}
 		}
@@ -66,8 +66,8 @@ public class ItemMarshRunnerBoots extends ItemRubberBoots {
 	public static double getWalkPercentage(EntityPlayer player) {
 		ItemStack boots = player.inventory.armorInventory.get(0);
 		if(!boots.isEmpty() && boots.getItem() instanceof ItemMarshRunnerBoots) {
-			if(boots.getTagCompound() != null) {
-				return (double)boots.getTagCompound().getInteger("walkTicksLeft") / (double)MAX_WALK_TICKS;
+			if(boots.getTag() != null) {
+				return (double)boots.getTag().getInt("walkTicksLeft") / (double)MAX_WALK_TICKS;
 			}
 		}
 		return 0.0D;

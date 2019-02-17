@@ -197,7 +197,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 									noise += (shouldntBreak + MathUtils.linearTransformd(this.seaBreakNoiseField[bx * 16 + bz], -1, 1, 0, 1)) * BREAK_SCALE * (1 - surfaceDist / (float) UPPER_BOUND);
 								}
 								//if (y == level) {   
-								//    primer.setBlockState(bx, 150, bz, Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.byMetadata((int) MathUtils.linearTransformd(noise, -0.5F, 1, 0, 15))));
+								//    primer.setBlockState(bx, 150, bz, Blocks.STAINED_GLASS.getDefaultState().with(BlockStainedGlass.COLOR, EnumDyeColor.byMetadata((int) MathUtils.linearTransformd(noise, -0.5F, 1, 0, 15))));
 								//}
 								IBlockState state = primer.getBlockState(bx, by, bz);
 								if(state.getBlock() == BlockRegistry.SWAMP_WATER && noise < limit + 0.25 && noise > limit) {

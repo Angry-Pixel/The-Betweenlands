@@ -134,18 +134,18 @@
 //	public void writeEntityToNBT(NBTTagCompound nbt) {
 //		super.writeEntityToNBT(nbt);
 //		nbt.setByte("volatileState", this.getDataManager().get(VOLATILE_STATE_DW));
-//		nbt.setInteger("volatileCooldown", this.volatileCooldown);
-//		nbt.setInteger("volatileProgress", this.volatileProgress);
+//		nbt.setInt("volatileCooldown", this.volatileCooldown);
+//		nbt.setInt("volatileProgress", this.volatileProgress);
 //		nbt.setFloat("volatileReceivedDamage", this.volatileReceivedDamage);
 //		nbt.setBoolean("isLocationGuard", this.isLocationGuard());
 //		if (this.locationViolatorUUID != null)
 //			nbt.setString("locationViolatorUUID", this.locationViolatorUUID);
 //
 //		nbt.setBoolean("isRepairGuard", this.isRepairGuard());
-//		nbt.setInteger("repairMeta", this.repairMeta);
-//		nbt.setInteger("repairX", this.repairX);
-//		nbt.setInteger("repairY", this.repairY);
-//		nbt.setInteger("repairZ", this.repairZ);
+//		nbt.setInt("repairMeta", this.repairMeta);
+//		nbt.setInt("repairX", this.repairX);
+//		nbt.setInt("repairY", this.repairY);
+//		nbt.setInt("repairZ", this.repairZ);
 //		nbt.setBoolean("breakBlock", this.breakBlock);
 //		if (this.repairBlock != null)
 //			nbt.setString("repairBlock", Block.REGISTRY.getNameForObject(this.repairBlock).toString());
@@ -157,21 +157,21 @@
 //	public void readEntityFromNBT(NBTTagCompound nbt) {
 //		super.readEntityFromNBT(nbt);
 //		this.dataManager.set(VOLATILE_STATE_DW, nbt.getByte("volatileState"));
-//		this.volatileCooldown = nbt.getInteger("volatileCooldown");
-//		this.volatileProgress = nbt.getInteger("volatileProgress");
+//		this.volatileCooldown = nbt.getInt("volatileCooldown");
+//		this.volatileProgress = nbt.getInt("volatileProgress");
 //		this.volatileReceivedDamage = nbt.getFloat("volatileReceivedDamage");
 //		if (nbt.getBoolean("isLocationGuard"))
 //			this.dataManager.set(GUARD_STATE_DW, (byte) 1);
-//		if (this.isLocationGuard() && nbt.hasKey("locationViolatorUUID"))
+//		if (this.isLocationGuard() && nbt.contains("locationViolatorUUID"))
 //			this.locationViolatorUUID = nbt.getString("locationViolatorUUID");
 //
 //		if (nbt.getBoolean("isRepairGuard"))
 //			this.dataManager.set(GUARD_STATE_DW, (byte) 2);
 //		if (this.isRepairGuard()) {
-//			this.repairMeta = nbt.getInteger("repairMeta");
-//			this.repairX = nbt.getInteger("repairX");
-//			this.repairY = nbt.getInteger("repairY");
-//			this.repairZ = nbt.getInteger("repairZ");
+//			this.repairMeta = nbt.getInt("repairMeta");
+//			this.repairX = nbt.getInt("repairX");
+//			this.repairY = nbt.getInt("repairY");
+//			this.repairZ = nbt.getInt("repairZ");
 //			this.breakBlock = nbt.getBoolean("breakBlock");
 //			this.repairBlock = Block.REGISTRY.getObject(new ResourceLocation(nbt.getString("repairBlock")));
 //		}
@@ -291,7 +291,7 @@
 //							EntityLivingBase entitylivingbase = this.getAttackTarget();
 //							dy = entitylivingbase.posY + (double) entitylivingbase.getEyeHeight() - (this.posY + (double) this.getEyeHeight());
 //						} else {
-//							dy = (this.getAttackTarget().getEntityBoundingBox().minY + this.getAttackTarget().getEntityBoundingBox().maxY) / 2.0D - (this.posY + (double) this.getEyeHeight());
+//							dy = (this.getAttackTarget().getBoundingBox().minY + this.getAttackTarget().getBoundingBox().maxY) / 2.0D - (this.posY + (double) this.getEyeHeight());
 //						}
 //						double dist = (double) MathHelper.sqrt_double(dx * dx + dz * dz);
 //						float yaw = (float) (Math.atan2(dz, dx) * 180.0D / Math.PI) - 90.0F;
@@ -317,7 +317,7 @@
 //					if (this.volatileProgress >= 20) {
 //						if (this.getAttackTarget() != null) {
 //							this.waypointX = this.getAttackTarget().posX;
-//							this.waypointY = this.getAttackTarget().getEntityBoundingBox().minY + (this.getAttackTarget().getEntityBoundingBox().maxY - this.getAttackTarget().getEntityBoundingBox().minY) / 2.0D;
+//							this.waypointY = this.getAttackTarget().getBoundingBox().minY + (this.getAttackTarget().getBoundingBox().maxY - this.getAttackTarget().getBoundingBox().minY) / 2.0D;
 //							this.waypointZ = this.getAttackTarget().posZ;
 //						} else {
 //							this.waypointX = this.posX;
@@ -335,7 +335,7 @@
 //					if (this.getRidingEntity() != null) {
 //						if (this.ticksExisted % 30 == 0) {
 //							/* TODO add EntityVolatileSoul
-//                            List<EntityVolatileSoul> existingSouls = this.worldObj.getEntitiesWithinAABB(EntityVolatileSoul.class, this.getEntityBoundingBox().expand(16.0D, 16.0D, 16.0D));
+//                            List<EntityVolatileSoul> existingSouls = this.worldObj.getEntitiesWithinAABB(EntityVolatileSoul.class, this.getBoundingBox().expand(16.0D, 16.0D, 16.0D));
 //                            if (existingSouls.size() < 16) {
 //                                EntityVolatileSoul soul = new EntityVolatileSoul(this.worldObj);
 //                                float mx = this.worldObj.rand.nextFloat() - 0.5F;
@@ -553,7 +553,7 @@
 //				float friction = 0.91F;
 //
 //				if (this.onGround) {
-//					friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
+//					friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
 //				}
 //
 //				float groundFriction = 0.16277136F / (friction * friction * friction);
@@ -561,7 +561,7 @@
 //				friction = 0.91F;
 //
 //				if (this.onGround) {
-//					friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
+//					friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
 //				}
 //
 //				this.moveEntity(this.motionX, this.motionY, this.motionZ);

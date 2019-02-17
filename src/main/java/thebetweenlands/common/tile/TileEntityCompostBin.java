@@ -20,6 +20,7 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityCompostBin extends TileEntity implements ITickable, ISidedInventory {
     public static final int COMPOST_PER_ITEM = 25;
@@ -40,6 +41,9 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
     private int[] compostAmounts = new int[MAX_ITEMS];
     private int[] compostTimes = new int[MAX_ITEMS];
 
+    public TileEntityCompostBin() {
+    	super(TileEntityRegistry.COMPOST_BIN);
+    }
 
     public static int[] readIntArrayFixedSize(String id, int length, NBTTagCompound compound) {
         int[] array = compound.getIntArray(id);
@@ -65,7 +69,7 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
     }
 
     @Override
-    public void update() {
+    public void tick() {
         this.lidAngle = this.open ? Math.min(this.lidAngle + OPEN_SPEED, MAX_OPEN) : Math.max(this.lidAngle - CLOSE_SPEED, MIN_OPEN);
 
         if (!this.world.isRemote) {
@@ -160,31 +164,31 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
+    public void read(NBTTagCompound nbt) {
+        super.read(nbt);
         this.readNbt(nbt);
     }
 
     protected void readNbt(NBTTagCompound nbt) {
-		NBTTagList inventoryTags = nbt.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+		NBTTagList inventoryTags = nbt.getList("Items", Constants.NBT.TAG_COMPOUND);
 		this.inventory = NonNullList.withSize(this.inventory.size(), ItemStack.EMPTY);
-		for (int i = 0; i < inventoryTags.tagCount(); i++) {
-			NBTTagCompound data = inventoryTags.getCompoundTagAt(i);
+		for (int i = 0; i < inventoryTags.size(); i++) {
+			NBTTagCompound data = inventoryTags.getCompound(i);
 			int j = data.getByte("Slot") & 255;
 			this.inventory.set(j, new ItemStack(data));
 		}
         this.processes = readIntArrayFixedSize("Processes", inventory.size(), nbt);
         this.compostAmounts = readIntArrayFixedSize("CompostAmounts", inventory.size(), nbt);
         this.compostTimes = readIntArrayFixedSize("CompostTimes", inventory.size(), nbt);
-        this.totalCompostAmount = nbt.getInteger("TotalCompostAmount");
-        this.compostedAmount = nbt.getInteger("CompostedAmount");
+        this.totalCompostAmount = nbt.getInt("TotalCompostAmount");
+        this.compostedAmount = nbt.getInt("CompostedAmount");
         this.open = nbt.getBoolean("Open");
         this.lidAngle = nbt.getFloat("LidAngle");
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        nbt = super.writeToNBT(nbt);
+    public NBTTagCompound write(NBTTagCompound nbt) {
+        nbt = super.write(nbt);
         this.writeNbt(nbt);
         return nbt;
     }
@@ -196,14 +200,14 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 				NBTTagCompound data = new NBTTagCompound();
 				data.setByte("Slot", (byte) i);
 				this.inventory.get(i).writeToNBT(data);
-				inventoryTags.appendTag(data);
+				inventoryTags.add(data);
 			}
 		}
         nbt.setIntArray("Processes", this.processes);
         nbt.setIntArray("CompostAmounts", this.compostAmounts);
         nbt.setIntArray("CompostTimes", this.compostTimes);
-        nbt.setInteger("TotalCompostAmount", this.totalCompostAmount);
-        nbt.setInteger("CompostedAmount", this.compostedAmount);
+        nbt.setInt("TotalCompostAmount", this.totalCompostAmount);
+        nbt.setInt("CompostedAmount", this.compostedAmount);
 		nbt.setTag("Items", inventoryTags);
         nbt.setBoolean("Open", this.open);
         nbt.setFloat("LidAngle", this.lidAngle);

@@ -148,8 +148,8 @@ public class EntityLurkerSkinRaft extends EntityBoat {
 		super.readEntityFromNBT(nbt);
 
 		this.shield = ItemStack.EMPTY;
-		if(nbt.hasKey("shield", Constants.NBT.TAG_COMPOUND)) {
-			NBTTagCompound shieldNbt = nbt.getCompoundTag("shield");
+		if(nbt.contains("shield", Constants.NBT.TAG_COMPOUND)) {
+			NBTTagCompound shieldNbt = nbt.getCompound("shield");
 			this.shield = new ItemStack(shieldNbt);
 		}
 	}

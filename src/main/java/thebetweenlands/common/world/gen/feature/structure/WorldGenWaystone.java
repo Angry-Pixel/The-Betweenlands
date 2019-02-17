@@ -35,9 +35,9 @@ public class WorldGenWaystone extends WorldGenerator implements IWorldGenerator 
 
 				IBlockState state = BlockRegistry.WAYSTONE.getDefaultState();
 
-				world.setBlockState(pos, state.withProperty(BlockWaystone.PART, BlockWaystone.Part.BOTTOM));
-				world.setBlockState(pos.up(2), state.withProperty(BlockWaystone.PART, BlockWaystone.Part.TOP));
-				world.setBlockState(pos.up(1), state.withProperty(BlockWaystone.PART, BlockWaystone.Part.MIDDLE));
+				world.setBlockState(pos, state.with(BlockWaystone.PART, BlockWaystone.Part.BOTTOM));
+				world.setBlockState(pos.up(2), state.with(BlockWaystone.PART, BlockWaystone.Part.TOP));
+				world.setBlockState(pos.up(1), state.with(BlockWaystone.PART, BlockWaystone.Part.MIDDLE));
 
 				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 				AxisAlignedBB locationAABB = new AxisAlignedBB(pos.up()).grow(4, 3, 4);

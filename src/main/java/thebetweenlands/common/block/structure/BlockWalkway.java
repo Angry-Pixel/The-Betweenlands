@@ -1,10 +1,8 @@
 package thebetweenlands.common.block.structure;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -13,7 +11,9 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.state.BooleanProperty;
+import net.minecraft.state.DirectionProperty;
 import net.minecraft.state.IProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -32,7 +32,7 @@ import thebetweenlands.common.registries.BlockRegistryOld.IStateMappedBlock;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
 public class BlockWalkway extends Block implements IStateMappedBlock {
-	public static final PropertyDirection FACING = BlockHorizontal.FACING;
+	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 	public static final BooleanProperty STANDS = BooleanProperty.create("has_stands");
 
 	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0, 0.0F, 0, 1.0F, 0.6F, 1.0F);
@@ -42,7 +42,7 @@ public class BlockWalkway extends Block implements IStateMappedBlock {
 		this.setSoundType(SoundType.WOOD);
 		this.setHardness(1.0F);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(STANDS, true));
+		this.setDefaultState(this.blockState.getBaseState().with(FACING, EnumFacing.NORTH).with(STANDS, true));
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class BlockWalkway extends Block implements IStateMappedBlock {
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IWorldReader worldIn, BlockPos pos) {
-		return state.withProperty(STANDS, worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP));
+		return state.with(STANDS, worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP));
 	}
 
 	@Override
@@ -68,12 +68,12 @@ public class BlockWalkway extends Block implements IStateMappedBlock {
 
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+		return this.getDefaultState().with(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+		world.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 	}
 
 	@Override
@@ -84,22 +84,22 @@ public class BlockWalkway extends Block implements IStateMappedBlock {
 			enumfacing = EnumFacing.NORTH;
 		}
 
-		return getDefaultState().withProperty(FACING, enumfacing);
+		return getDefaultState().with(FACING, enumfacing);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumFacing) state.getValue(FACING)).getIndex();
+		return ((EnumFacing) state.get(FACING)).getIndex();
 	}
 
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
-		return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
+		return state.with(FACING, rot.rotate((EnumFacing) state.get(FACING)));
 	}
 
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-		return state.withRotation(mirrorIn.toRotation((EnumFacing) state.getValue(FACING)));
+		return state.withRotation(mirrorIn.toRotation((EnumFacing) state.get(FACING)));
 	}
 
 	@Override

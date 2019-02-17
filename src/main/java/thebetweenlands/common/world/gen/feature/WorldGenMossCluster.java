@@ -51,7 +51,7 @@ public class WorldGenMossCluster extends WorldGenerator {
 					isInvalid = true;
 				}
 				if (!isInvalid) {
-					IBlockState state = this.blockState.withProperty(BlockMoss.FACING, facing);
+					IBlockState state = this.blockState.with(BlockMoss.FACING, facing);
 					this.setBlockAndNotifyAdequately(worldIn, mutablePos.toImmutable(), state);
 					generated = true;
 				}

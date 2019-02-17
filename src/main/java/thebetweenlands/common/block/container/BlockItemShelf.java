@@ -1,10 +1,8 @@
 package thebetweenlands.common.block.container;
 
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,6 +11,8 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
@@ -33,7 +33,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.tile.TileEntityItemShelf;
 
 public class BlockItemShelf extends BlockContainer {
-	public static final PropertyDirection FACING = BlockHorizontal.FACING;
+	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
 	protected static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.5D, 1.0D, 1.0D);
 	protected static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.5D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
@@ -50,7 +50,7 @@ public class BlockItemShelf extends BlockContainer {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
-		switch ((EnumFacing)state.getValue(FACING)) {
+		switch ((EnumFacing)state.get(FACING)) {
 		default:
 		case EAST:
 			return EAST_AABB;
@@ -70,12 +70,12 @@ public class BlockItemShelf extends BlockContainer {
 
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
-		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
+		return this.getDefaultState().with(FACING, placer.getHorizontalFacing());
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()), 2);
+		world.setBlockState(pos, state.with(FACING, placer.getHorizontalFacing()), 2);
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class BlockItemShelf extends BlockContainer {
 				if(ray != null) {
 					InvWrapper wrapper = new InvWrapper(shelf);
 
-					int slot = this.getSlot(state.getValue(FACING), (float)(ray.hitVec.x - pos.getX()), (float)(ray.hitVec.y - pos.getY()), (float)(ray.hitVec.z - pos.getZ()));
+					int slot = this.getSlot(state.get(FACING), (float)(ray.hitVec.x - pos.getX()), (float)(ray.hitVec.y - pos.getY()), (float)(ray.hitVec.z - pos.getZ()));
 
 					ItemStack result = wrapper.extractItem(slot, player.isSneaking() ? 64 : 1, true);
 					if(!result.isEmpty() && result.getCount() > 0) {
@@ -121,7 +121,7 @@ public class BlockItemShelf extends BlockContainer {
 
 					InvWrapper wrapper = new InvWrapper(shelf);
 
-					int slot = this.getSlot(state.getValue(FACING), hitX, hitY, hitZ);
+					int slot = this.getSlot(state.get(FACING), hitX, hitY, hitZ);
 
 					if(!heldItem.isEmpty()) {
 						ItemStack result = wrapper.insertItem(slot, heldItem, true);
@@ -175,12 +175,12 @@ public class BlockItemShelf extends BlockContainer {
 			facing = EnumFacing.NORTH;
 		}
 
-		return this.getDefaultState().withProperty(FACING, facing);
+		return this.getDefaultState().with(FACING, facing);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getIndex();
+		return state.get(FACING).getIndex();
 	}
 
 	@Override

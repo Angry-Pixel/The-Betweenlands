@@ -40,7 +40,7 @@ public class ItemMob extends Item {
                 break;
             case "gecko":
                 entity = new EntityGecko(world);
-                entity.setHealth(stack.hasTagCompound() && stack.getTagCompound().hasKey("Health") ? stack.getTagCompound().getFloat("Health"): (float) entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue());
+                entity.setHealth(stack.hasTagCompound() && stack.getTag().contains("Health") ? stack.getTag().getFloat("Health"): (float) entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue());
                 break;
         }
         if (entity != null) {

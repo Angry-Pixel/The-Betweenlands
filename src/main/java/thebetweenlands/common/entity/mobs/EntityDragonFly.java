@@ -245,7 +245,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		if(nbt.hasKey("spawnPos", Constants.NBT.TAG_LONG)) {
+		if(nbt.contains("spawnPos", Constants.NBT.TAG_LONG)) {
 			this.spawnPos = BlockPos.fromLong(nbt.getLong("spawnPos"));
 		}
 		super.readFromNBT(nbt);

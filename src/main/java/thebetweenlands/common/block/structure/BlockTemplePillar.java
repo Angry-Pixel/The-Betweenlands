@@ -21,12 +21,12 @@ public class BlockTemplePillar extends BlockRotatedPillar {
 		setResistance(10.0F);
 		setSoundType(SoundType.STONE);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(this.blockState.getBaseState().withProperty(AXIS, EnumFacing.Axis.Y));
+		setDefaultState(this.blockState.getBaseState().with(AXIS, EnumFacing.Axis.Y));
 	}
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IWorldReader source, BlockPos pos) {
-		switch (state.getValue(AXIS)) {
+		switch (state.get(AXIS)) {
 		case Y:
 			return AABB_Y;
 		case X:
@@ -60,6 +60,6 @@ public class BlockTemplePillar extends BlockRotatedPillar {
 
 	@Override
 	public boolean isSideSolid(IBlockState base_state, IWorldReader world, BlockPos pos, EnumFacing side) {
-		return side.getAxis() == base_state.getValue(AXIS);
+		return side.getAxis() == base_state.get(AXIS);
 	}
 }

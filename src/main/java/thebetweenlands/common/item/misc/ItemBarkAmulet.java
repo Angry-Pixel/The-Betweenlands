@@ -84,7 +84,7 @@ public class ItemBarkAmulet extends Item implements IEquippable {
 				if(!EquipmentHelper.getEquipment(EnumEquipmentInventory.MISC, view, ItemRegistry.BARK_AMULET).isEmpty()) {
 					final float range = 12.0F;
 
-					List<EntityLivingBase> entities = view.world.getEntitiesWithinAABB(EntityLivingBase.class, view.getEntityBoundingBox().grow(range), e -> e.getDistanceSq(view) <= range * range);
+					List<EntityLivingBase> entities = view.world.getEntitiesWithinAABB(EntityLivingBase.class, view.getBoundingBox().grow(range), e -> e.getDistanceSq(view) <= range * range);
 
 					for(EntityLivingBase entity : entities) {
 						if(entity != view && entity.ticksExisted % 50 == 0) {

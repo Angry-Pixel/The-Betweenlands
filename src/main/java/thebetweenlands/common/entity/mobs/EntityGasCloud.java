@@ -214,7 +214,7 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 		}
 
 		if (!this.world.isRemote && this.isEntityAlive()) {
-			List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(0.5D, 0.5D, 0.5D));
+			List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox().grow(0.5D, 0.5D, 0.5D));
 			for (EntityLivingBase target : targets) {
 				if (!(target instanceof EntityGasCloud) && !(target instanceof IEntityBL)) {
 					target.addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 0));

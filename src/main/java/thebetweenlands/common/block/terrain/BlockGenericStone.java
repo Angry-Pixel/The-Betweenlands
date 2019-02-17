@@ -5,12 +5,12 @@ import java.util.Locale;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
@@ -22,7 +22,7 @@ import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockGenericStone extends Block implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeItemBlockModelDefinition{
-	public static final PropertyEnum<EnumStoneType> VARIANT = PropertyEnum.<EnumStoneType>create("variant", EnumStoneType.class);
+	public static final EnumProperty<EnumStoneType> VARIANT = EnumProperty.<EnumStoneType>create("variant", EnumStoneType.class);
 
 	public BlockGenericStone() {
 		super(Material.ROCK);
@@ -31,7 +31,7 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumStoneType.CORRUPT_BETWEENSTONE));
+		this.setDefaultState(this.blockState.getBaseState().with(VARIANT, EnumStoneType.CORRUPT_BETWEENSTONE));
 	}
 
 	@Override
@@ -48,22 +48,22 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 	}
 
 	protected ItemStack createStackedBlock(IBlockState state) {
-		return new ItemStack(Item.getItemFromBlock(this), 1, ((EnumStoneType)state.getValue(VARIANT)).getMetadata());
+		return new ItemStack(Item.getItemFromBlock(this), 1, ((EnumStoneType)state.get(VARIANT)).getMetadata());
 	}
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		return ((EnumStoneType)state.getValue(VARIANT)).getMetadata();
+		return ((EnumStoneType)state.get(VARIANT)).getMetadata();
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return state.getValue(VARIANT).getMetadata();
+		return state.get(VARIANT).getMetadata();
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(VARIANT, EnumStoneType.byMetadata(meta));
+		return this.getDefaultState().with(VARIANT, EnumStoneType.byMetadata(meta));
 	}
 
 	@Override

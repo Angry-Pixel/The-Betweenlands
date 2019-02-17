@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
@@ -308,32 +309,32 @@ public class BlockRegistryOld {
     public static final Block ROOT_POD = new BlockSaplingBetweenlands(new WorldGenRootPodRoots());
     public static final Block LEAVES_WEEDWOOD_TREE = new BlockTintedLeaves() {
     	@Override
-    	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-    		return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD);
+    	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+    		return BlockRegistry.SAPLING_WEEDWOOD;
     	}
     };
     public static final Block LEAVES_SAP_TREE = new BlockTintedLeaves() {
         @Override
-        public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-            return Item.getItemFromBlock(BlockRegistry.SAPLING_SAP);
+        public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+            return BlockRegistry.SAPLING_SAP;
         }
     };
     public static final Block LEAVES_RUBBER_TREE = new BlockTintedLeaves() {
         @Override
-        public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-            return Item.getItemFromBlock(BlockRegistry.SAPLING_RUBBER);
+        public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+            return BlockRegistry.SAPLING_RUBBER;
         }
     };
     public static final Block LEAVES_HEARTHGROVE_TREE = new BlockTintedLeaves() {
     	@Override
-    	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-    		return Item.getItemFromBlock(BlockRegistry.SAPLING_HEARTHGROVE);
+    	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+    		return BlockRegistry.SAPLING_HEARTHGROVE;
     	}
     };
     public static final Block LEAVES_NIBBLETWIG_TREE = new BlockTintedLeaves() {
     	@Override
-    	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-    		return Item.getItemFromBlock(BlockRegistry.SAPLING_NIBBLETWIG);
+    	public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+    		return BlockRegistry.SAPLING_NIBBLETWIG;
     	}
     };
     public static final Block LEAVES_SPIRIT_TREE_TOP = new BlockLeavesSpiritTree(BlockLeavesSpiritTree.Type.TOP);

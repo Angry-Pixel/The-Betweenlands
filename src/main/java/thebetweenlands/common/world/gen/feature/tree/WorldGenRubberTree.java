@@ -67,8 +67,8 @@ public class WorldGenRubberTree extends WorldGenerator {
 		int height = rand.nextInt(8) + 8;
 		int maxRadius = 4;
 
-		this.log = BlockRegistry.LOG_RUBBER.getDefaultState().withProperty(BlockRubberLog.NATURAL, true);
-		this.leaves = BlockRegistry.LEAVES_RUBBER_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
+		this.log = BlockRegistry.LOG_RUBBER.getDefaultState().with(BlockRubberLog.NATURAL, true);
+		this.leaves = BlockRegistry.LEAVES_RUBBER_TREE.getDefaultState().with(BlockLeavesBetweenlands.CHECK_DECAY, false);
 
 
 

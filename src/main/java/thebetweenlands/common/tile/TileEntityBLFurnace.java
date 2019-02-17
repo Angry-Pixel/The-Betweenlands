@@ -17,6 +17,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.common.block.container.BlockBLFurnace;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISidedInventory, ITickable {
     private static final int[] slotsTop = new int[]{0};
@@ -29,7 +30,7 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
     private String customName;
 
     public TileEntityBLFurnace() {
-        super(4, "sulfur_furnace");
+        super(TileEntityRegistry.SULFUR_FURNACE, 4, "sulfur_furnace");
     }
 
     public static boolean isItemFlux(ItemStack itemstack) {
@@ -103,18 +104,18 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
     }
 
     @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
+    public void read(NBTTagCompound nbt) {
+        super.read(nbt);
         furnaceBurnTime = nbt.getShort("BurnTime");
         furnaceCookTime = nbt.getShort("CookTime");
         currentItemBurnTime = TileEntityFurnace.getItemBurnTime(inventory.get(1));
-        if (nbt.hasKey("CustomName", 8))
+        if (nbt.contains("CustomName", 8))
             customName = nbt.getString("CustomName");
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
+    public NBTTagCompound write(NBTTagCompound nbt) {
+        super.write(nbt);
         nbt.setShort("BurnTime", (short) furnaceBurnTime);
         nbt.setShort("CookTime", (short) furnaceCookTime);
         if (hasCustomName())
@@ -150,7 +151,7 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
     }
 
     @Override
-    public void update() {
+    public void tick() {
         boolean isBurning = furnaceBurnTime > 0;
         boolean isDirty = false;
 

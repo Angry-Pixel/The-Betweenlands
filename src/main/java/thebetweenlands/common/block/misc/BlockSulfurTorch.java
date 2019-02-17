@@ -23,7 +23,7 @@ public class BlockSulfurTorch extends BlockTorch {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void animateTick(IBlockState state, World world, BlockPos pos, Random rand) {
-		EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+		EnumFacing enumfacing = (EnumFacing)state.get(FACING);
 		double px = (double)pos.getX() + 0.5D;
 		double py = (double)pos.getY() + 0.7D;
 		double pz = (double)pos.getZ() + 0.5D;

@@ -6,10 +6,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityItemShelf extends TileEntityBasicInventory {
     public TileEntityItemShelf() {
-        super(4, "container.itemShelf");
+        super(TileEntityRegistry.ITEM_SHELF, 4, "container.itemShelf");
     }
 
     @Override

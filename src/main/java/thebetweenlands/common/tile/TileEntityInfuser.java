@@ -33,6 +33,7 @@ import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 //TODO: Send resulting elixir recipe with the NBT
 public class TileEntityInfuser extends TileEntityBasicInventory implements IFluidHandler, ITickable {
@@ -98,7 +99,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	public float[] currentInfusionColor = new float[4];
 
 	public TileEntityInfuser() {
-		super(MAX_INGREDIENTS + 2, "infuser");
+		super(TileEntityRegistry.INFUSER, MAX_INGREDIENTS + 2, "infuser");
 		this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 3);
 		this.waterTank.setTileEntity(this);
 	}
@@ -154,7 +155,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 		BlockPos pos = this.getPos();
 		
 		if (this.updateRecipe) {
@@ -428,32 +429,32 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		super.write(nbt);
 		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
-		nbt.setInteger("stirProgress", stirProgress);
-		nbt.setInteger("evaporation", evaporation);
-		nbt.setInteger("temp", temp);
-		nbt.setInteger("infusionTime", infusionTime);
+		nbt.setInt("stirProgress", stirProgress);
+		nbt.setInt("evaporation", evaporation);
+		nbt.setInt("temp", temp);
+		nbt.setInt("infusionTime", infusionTime);
 		nbt.setBoolean("hasInfusion", hasInfusion);
 		nbt.setBoolean("hasCrystal", hasCrystal);
-		nbt.setInteger("infusionState", this.currentInfusionState);
-		nbt.setInteger("infusionColorGradientTicks", this.infusionColorGradientTicks);
+		nbt.setInt("infusionState", this.currentInfusionState);
+		nbt.setInt("infusionColorGradientTicks", this.infusionColorGradientTicks);
 		return nbt;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
-		stirProgress = nbt.getInteger("stirProgress");
-		evaporation = nbt.getInteger("evaporation");
-		temp = nbt.getInteger("temp");
-		infusionTime = nbt.getInteger("infusionTime");
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
+		waterTank.readFromNBT(nbt.getCompound("waterTank"));
+		stirProgress = nbt.getInt("stirProgress");
+		evaporation = nbt.getInt("evaporation");
+		temp = nbt.getInt("temp");
+		infusionTime = nbt.getInt("infusionTime");
 		hasInfusion = nbt.getBoolean("hasInfusion");
 		hasCrystal = nbt.getBoolean("hasCrystal");
-		currentInfusionState = nbt.getInteger("infusionState");
-		infusionColorGradientTicks = nbt.getInteger("infusionColorGradientTicks");
+		currentInfusionState = nbt.getInt("infusionState");
+		infusionColorGradientTicks = nbt.getInt("infusionColorGradientTicks");
 		this.updateRecipe = true;
 	}
 
@@ -466,15 +467,15 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		NBTTagCompound nbt = pkt.getNbtCompound();
 		this.readInventoryNBT(nbt);
-		waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
-		stirProgress = nbt.getInteger("stirProgress");
-		evaporation = nbt.getInteger("evaporation");
-		temp = nbt.getInteger("temp");
-		infusionTime = nbt.getInteger("infusionTime");
+		waterTank.readFromNBT(nbt.getCompound("waterTank"));
+		stirProgress = nbt.getInt("stirProgress");
+		evaporation = nbt.getInt("evaporation");
+		temp = nbt.getInt("temp");
+		infusionTime = nbt.getInt("infusionTime");
 		hasInfusion = nbt.getBoolean("hasInfusion");
 		hasCrystal = nbt.getBoolean("hasCrystal");
-		currentInfusionState = nbt.getInteger("infusionState");
-		infusionColorGradientTicks = nbt.getInteger("infusionColorGradientTicks");
+		currentInfusionState = nbt.getInt("infusionState");
+		infusionColorGradientTicks = nbt.getInt("infusionColorGradientTicks");
 		this.updateInfusingRecipe();
 	}
 
@@ -483,14 +484,14 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		NBTTagCompound nbt = super.getUpdateTag();
 		this.writeInventoryNBT(nbt);
 		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
-		nbt.setInteger("stirProgress", stirProgress);
-		nbt.setInteger("evaporation", evaporation);
-		nbt.setInteger("temp", temp);
-		nbt.setInteger("infusionTime", infusionTime);
+		nbt.setInt("stirProgress", stirProgress);
+		nbt.setInt("evaporation", evaporation);
+		nbt.setInt("temp", temp);
+		nbt.setInt("infusionTime", infusionTime);
 		nbt.setBoolean("hasInfusion", hasInfusion);
 		nbt.setBoolean("hasCrystal", hasCrystal);
-		nbt.setInteger("infusionState", this.currentInfusionState);
-		nbt.setInteger("infusionColorGradientTicks", this.infusionColorGradientTicks);
+		nbt.setInt("infusionState", this.currentInfusionState);
+		nbt.setInt("infusionColorGradientTicks", this.infusionColorGradientTicks);
 		return nbt;
 	}
 

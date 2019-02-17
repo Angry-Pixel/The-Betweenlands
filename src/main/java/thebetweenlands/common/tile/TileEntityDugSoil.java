@@ -9,46 +9,51 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.farming.BlockGenericCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
+import thebetweenlands.common.registries.TileEntityRegistry;
 
 public class TileEntityDugSoil extends TileEntity {
 	private int compost = 0;
 	private int decay = 0;
 	private int purifiedHarvests = 0;
 
+	public TileEntityDugSoil() {
+		super(TileEntityRegistry.DUG_SOIL);
+	}
+	
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		this.decay = nbt.getInteger("decay");
-		this.compost = nbt.getInteger("compost");
-		this.purifiedHarvests = nbt.getInteger("purifiedHarvests");
+	public void read(NBTTagCompound nbt) {
+		super.read(nbt);
+		this.decay = nbt.getInt("decay");
+		this.compost = nbt.getInt("compost");
+		this.purifiedHarvests = nbt.getInt("purifiedHarvests");
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("compost", this.compost);
-		nbt.setInteger("decay", this.decay);
-		nbt.setInteger("purifiedHarvests", this.purifiedHarvests);
-		return super.writeToNBT(nbt);
+	public NBTTagCompound write(NBTTagCompound nbt) {
+		nbt.setInt("compost", this.compost);
+		nbt.setInt("decay", this.decay);
+		nbt.setInt("purifiedHarvests", this.purifiedHarvests);
+		return super.write(nbt);
 	}
 
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("compost", this.compost);
-		nbt.setInteger("decay", this.decay);
+		nbt.setInt("compost", this.compost);
+		nbt.setInt("decay", this.decay);
 		return new SPacketUpdateTileEntity(this.getPos(), 1, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		NBTTagCompound nbt = pkt.getNbtCompound();
-		this.decay = nbt.getInteger("decay");
-		this.compost = nbt.getInteger("compost");
+		this.decay = nbt.getInt("decay");
+		this.compost = nbt.getInt("compost");
 	}
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
-		return this.writeToNBT(new NBTTagCompound());
+		return this.write(new NBTTagCompound());
 	}
 
 	@Override
@@ -94,9 +99,9 @@ public class TileEntityDugSoil extends TileEntity {
 		if(wasComposted != this.isComposted()) {
 			IBlockState blockState = this.world.getBlockState(this.pos);
 			if(!this.isFullyDecayed()) {
-				this.world.setBlockState(this.pos, blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, this.isComposted()), 3);
+				this.world.setBlockState(this.pos, blockState.with(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).with(BlockGenericDugSoil.COMPOSTED, this.isComposted()), 3);
 			} else {
-				this.world.setBlockState(this.pos, blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, false), 3);
+				this.world.setBlockState(this.pos, blockState.with(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).with(BlockGenericDugSoil.COMPOSTED, false), 3);
 			}
 		} else {
 			IBlockState state = this.world.getBlockState(this.pos);
@@ -122,9 +127,9 @@ public class TileEntityDugSoil extends TileEntity {
 		if(wasDecayed != this.isFullyDecayed()) {
 			IBlockState blockState = this.world.getBlockState(this.pos);
 			if(this.isFullyDecayed()) {
-				blockState = blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, false);
+				blockState = blockState.with(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).with(BlockGenericDugSoil.COMPOSTED, false);
 			} else {
-				blockState = blockState.withProperty(BlockGenericDugSoil.DECAYED, false).withProperty(BlockGenericDugSoil.COMPOSTED, this.isComposted());
+				blockState = blockState.with(BlockGenericDugSoil.DECAYED, false).with(BlockGenericDugSoil.COMPOSTED, this.isComposted());
 			}
 			this.world.setBlockState(this.pos, blockState, 3);
 
@@ -135,9 +140,9 @@ public class TileEntityDugSoil extends TileEntity {
 					IBlockState cropBlockState = this.world.getBlockState(pos);
 					if(cropBlockState.getBlock() instanceof BlockGenericCrop) {
 						if(this.isFullyDecayed()) {
-							this.world.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, true), 3);
+							this.world.setBlockState(pos, cropBlockState.with(BlockGenericCrop.DECAYED, true), 3);
 						} else {
-							this.world.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, false), 3);
+							this.world.setBlockState(pos, cropBlockState.with(BlockGenericCrop.DECAYED, false), 3);
 						}
 					} else {
 						break;

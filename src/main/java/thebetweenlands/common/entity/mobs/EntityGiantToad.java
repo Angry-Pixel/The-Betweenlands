@@ -92,14 +92,14 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
 		nbt.setBoolean("Tamed", this.isTamed());
-		nbt.setInteger("Temper", this.temper);
+		nbt.setInt("Temper", this.temper);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		this.setTamed(nbt.getBoolean("Tamed"));
-		this.temper = nbt.getInteger("Temper");
+		this.temper = nbt.getInt("Temper");
 	}
 
 	@Override
@@ -121,10 +121,10 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
 		//Extend AABB so that the player doesn't suffocate in blocks
 		if (this.isBeingRidden()) {
-			this.setEntityBoundingBox(this.getEntityBoundingBox().setMaxY(this.getEntityBoundingBox().minY + this.height + this.getControllingPassenger().height));
+			this.setEntityBoundingBox(this.getBoundingBox().setMaxY(this.getBoundingBox().minY + this.height + this.getControllingPassenger().height));
 		}
 		super.onUpdate();
-		this.setEntityBoundingBox(this.getEntityBoundingBox().setMaxY(this.getEntityBoundingBox().minY + this.height));
+		this.setEntityBoundingBox(this.getBoundingBox().setMaxY(this.getBoundingBox().minY + this.height));
 
 		if (this.onGround) {
 			this.ticksOnGround++;
@@ -195,7 +195,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				}
 			}
 			if (this.isBeingRidden()) {
-				List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(0.6D, 0.6D, 0.6D));
+				List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox().grow(0.6D, 0.6D, 0.6D));
 				EntityLivingBase closestTarget = null;
 				float lastAngDiff = 0.0F;
 				Entity controllingPassenger = this.getControllingPassenger();

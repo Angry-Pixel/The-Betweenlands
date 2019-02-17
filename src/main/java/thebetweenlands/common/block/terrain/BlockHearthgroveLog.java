@@ -22,6 +22,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.BlockStateContainer;
 import net.minecraftforge.api.distmarker.Dist;
@@ -34,7 +35,7 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 	public static final BooleanProperty TARRED = BooleanProperty.create("tarred");
 
 	public BlockHearthgroveLog() {
-		this.setDefaultState(this.blockState.getBaseState().withProperty(TARRED, false));
+		this.setDefaultState(this.blockState.getBaseState().with(TARRED, false));
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -113,8 +114,8 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 	@Override
 	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		IBlockState state = this.getStateFromMeta(meta);
-		if(state.getValue(LOG_AXIS) != BlockLog.EnumAxis.NONE) {
-			return state.withProperty(LOG_AXIS, BlockLog.EnumAxis.fromFacingAxis(facing.getAxis()));
+		if(state.get(LOG_AXIS) != BlockLog.EnumAxis.NONE) {
+			return state.with(LOG_AXIS, BlockLog.EnumAxis.fromFacingAxis(facing.getAxis()));
 		}
 		return state;
 	}
@@ -142,14 +143,14 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 
 		boolean tarred = (meta >> 2) != 0;
 
-		return this.getDefaultState().withProperty(LOG_AXIS, axis).withProperty(TARRED, tarred);
+		return this.getDefaultState().with(LOG_AXIS, axis).with(TARRED, tarred);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
 
-		switch(state.getValue(LOG_AXIS)) {
+		switch(state.get(LOG_AXIS)) {
 			case X:
 				meta = 0;
 				break;
@@ -164,7 +165,7 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 				break;
 		}
 
-		meta |= state.getValue(TARRED) ? (1 << 2) : 0;
+		meta |= state.get(TARRED) ? (1 << 2) : 0;
 
 		return meta;
 	}
@@ -177,23 +178,23 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this, 1, this.getMetaFromState(this.getDefaultState().withProperty(LOG_AXIS, BlockLog.EnumAxis.Y).withProperty(TARRED, false))));
-		list.add(new ItemStack(this, 1, this.getMetaFromState(this.getDefaultState().withProperty(LOG_AXIS, BlockLog.EnumAxis.Y).withProperty(TARRED, true))));
-		list.add(new ItemStack(this, 1, this.getMetaFromState(this.getDefaultState().withProperty(LOG_AXIS, BlockLog.EnumAxis.NONE).withProperty(TARRED, false))));
-		list.add(new ItemStack(this, 1, this.getMetaFromState(this.getDefaultState().withProperty(LOG_AXIS, BlockLog.EnumAxis.NONE).withProperty(TARRED, true))));
+		list.add(new ItemStack(this, 1, this.getMetaFromState(this.getDefaultState().with(LOG_AXIS, BlockLog.EnumAxis.Y).with(TARRED, false))));
+		list.add(new ItemStack(this, 1, this.getMetaFromState(this.getDefaultState().with(LOG_AXIS, BlockLog.EnumAxis.Y).with(TARRED, true))));
+		list.add(new ItemStack(this, 1, this.getMetaFromState(this.getDefaultState().with(LOG_AXIS, BlockLog.EnumAxis.NONE).with(TARRED, false))));
+		list.add(new ItemStack(this, 1, this.getMetaFromState(this.getDefaultState().with(LOG_AXIS, BlockLog.EnumAxis.NONE).with(TARRED, true))));
 	}
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		BlockLog.EnumAxis axis = state.getValue(LOG_AXIS);
+		BlockLog.EnumAxis axis = state.get(LOG_AXIS);
 		if(axis == BlockLog.EnumAxis.X || axis == BlockLog.EnumAxis.Z) {
-			state = state.withProperty(LOG_AXIS, BlockLog.EnumAxis.Y);
+			state = state.with(LOG_AXIS, BlockLog.EnumAxis.Y);
 		}
 		return this.getMetaFromState(state);
 	}
 
 	@Override
-	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
+	public ItemStack getItem(IBlockReader worldIn, BlockPos pos, IBlockState state) {
 		return getSilkTouchDrop(state);
 	}
 
@@ -217,13 +218,13 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 		switch(subtype) {
 		default:
 		case 0:
-			return this.getMetaFromState(this.getDefaultState().withProperty(LOG_AXIS, BlockLog.EnumAxis.Y).withProperty(TARRED, false));
+			return this.getMetaFromState(this.getDefaultState().with(LOG_AXIS, BlockLog.EnumAxis.Y).with(TARRED, false));
 		case 1:
-			return this.getMetaFromState(this.getDefaultState().withProperty(LOG_AXIS, BlockLog.EnumAxis.Y).withProperty(TARRED, true));
+			return this.getMetaFromState(this.getDefaultState().with(LOG_AXIS, BlockLog.EnumAxis.Y).with(TARRED, true));
 		case 2:
-			return this.getMetaFromState(this.getDefaultState().withProperty(LOG_AXIS, BlockLog.EnumAxis.NONE).withProperty(TARRED, false));
+			return this.getMetaFromState(this.getDefaultState().with(LOG_AXIS, BlockLog.EnumAxis.NONE).with(TARRED, false));
 		case 3:
-			return this.getMetaFromState(this.getDefaultState().withProperty(LOG_AXIS, BlockLog.EnumAxis.NONE).withProperty(TARRED, true));
+			return this.getMetaFromState(this.getDefaultState().with(LOG_AXIS, BlockLog.EnumAxis.NONE).with(TARRED, true));
 		}
 	}
 
@@ -231,10 +232,10 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 	public String getSubtypeName(int meta) {
 		IBlockState state = this.getStateFromMeta(meta);
 		String name = "%s";
-		if(state.getValue(LOG_AXIS) == BlockLog.EnumAxis.NONE) {
+		if(state.get(LOG_AXIS) == BlockLog.EnumAxis.NONE) {
 			name = name + "_full";
 		}
-		if(state.getValue(TARRED)) {
+		if(state.get(TARRED)) {
 			name = name + "_tarred";
 		}
 		return name;
@@ -246,7 +247,7 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 			@Override
 			public String getTranslationKey(ItemStack stack) {
 				IBlockState state = this.block.getStateFromMeta(this.getMetadata(stack.getItemDamage()));
-				return this.block.getTranslationKey() + (state.getValue(TARRED) ? "_tarred" : "");
+				return this.block.getTranslationKey() + (state.get(TARRED) ? "_tarred" : "");
 			}
 
 			@Override

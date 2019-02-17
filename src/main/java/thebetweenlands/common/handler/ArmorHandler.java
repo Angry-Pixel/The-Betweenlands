@@ -44,7 +44,7 @@ public class ArmorHandler {
 		EntityPlayer player = event.getEntityPlayer();
 
 		if(player.isInWater()) {
-			IBlockState blockState = player.world.getBlockState(new BlockPos(player.posX, player.getEntityBoundingBox().maxY + 0.1D, player.posZ));
+			IBlockState blockState = player.world.getBlockState(new BlockPos(player.posX, player.getBoundingBox().maxY + 0.1D, player.posZ));
 			boolean fullyInWater = blockState.getMaterial().isLiquid();
 
 			if(fullyInWater) {

@@ -32,16 +32,16 @@ public class FlyingNodeProcessorBL extends NodeProcessor {
 
 	@Override
 	public PathPoint getStart() {
-		int startY = MathHelper.floor(this.entity.getEntityBoundingBox().minY + 0.5D);
+		int startY = MathHelper.floor(this.entity.getBoundingBox().minY + 0.5D);
 		BlockPos blockpos1 = new BlockPos(this.entity);
 		PathNodeType startNodeType = this.isFree(blockpos1.getX(), startY, blockpos1.getZ());
 
 		if (this.entity.getPathPriority(startNodeType) < 0.0F) {
 			Set<BlockPos> set = Sets.<BlockPos>newHashSet();
-			set.add(new BlockPos(this.entity.getEntityBoundingBox().minX, startY, this.entity.getEntityBoundingBox().minZ));
-			set.add(new BlockPos(this.entity.getEntityBoundingBox().minX, startY, this.entity.getEntityBoundingBox().maxZ));
-			set.add(new BlockPos(this.entity.getEntityBoundingBox().maxX, startY, this.entity.getEntityBoundingBox().minZ));
-			set.add(new BlockPos(this.entity.getEntityBoundingBox().maxX, startY, this.entity.getEntityBoundingBox().maxZ));
+			set.add(new BlockPos(this.entity.getBoundingBox().minX, startY, this.entity.getBoundingBox().minZ));
+			set.add(new BlockPos(this.entity.getBoundingBox().minX, startY, this.entity.getBoundingBox().maxZ));
+			set.add(new BlockPos(this.entity.getBoundingBox().maxX, startY, this.entity.getBoundingBox().minZ));
+			set.add(new BlockPos(this.entity.getBoundingBox().maxX, startY, this.entity.getBoundingBox().maxZ));
 
 			for (BlockPos blockpos : set) {
 				PathNodeType pathnodetype = this.isFree(blockpos.getX(), blockpos.getY(), blockpos.getZ());//this.getPathNodeType(this.entity, blockpos);

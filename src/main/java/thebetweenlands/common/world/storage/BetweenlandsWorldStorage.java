@@ -98,23 +98,23 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 				event.readFromNBT(nbt);
 			}
 			this.environmentEventRegistry.setDisabled(nbt.getBoolean("eventsDisabled"));
-			this.aspectManager.loadAndPopulateStaticAspects(nbt.getCompoundTag("itemAspects"), AspectManager.getAspectsSeed(this.getWorld().getWorldInfo().getSeed()));
+			this.aspectManager.loadAndPopulateStaticAspects(nbt.getCompound("itemAspects"), AspectManager.getAspectsSeed(this.getWorld().getWorldInfo().getSeed()));
 
 			this.biomeSpawnEntriesData.clear();
-			if(nbt.hasKey("biomeData", Constants.NBT.TAG_COMPOUND)) {
-				NBTTagCompound biomesNbt = nbt.getCompoundTag("biomeData");
+			if(nbt.contains("biomeData", Constants.NBT.TAG_COMPOUND)) {
+				NBTTagCompound biomesNbt = nbt.getCompound("biomeData");
 				for(String key : biomesNbt.getKeySet()) {
 					Biome biome = Biome.REGISTRY.getObject(new ResourceLocation(key));
 					if(biome instanceof ICustomSpawnEntriesProvider) {
-						this.getBiomeSpawnEntriesData(biome).readFromNbt(biomesNbt.getCompoundTag(key));
+						this.getBiomeSpawnEntriesData(biome).readFromNbt(biomesNbt.getCompound(key));
 					}
 				}
 			}
 
 			this.spiritTreeKillTokens.clear();
-			NBTTagList spiritTreeKillTokensNbt = nbt.getTagList("spiritTreeKillTokens", Constants.NBT.TAG_COMPOUND);
-			for(int i = 0; i < spiritTreeKillTokensNbt.tagCount(); i++) {
-				this.spiritTreeKillTokens.add(SpiritTreeKillToken.readFromNBT(spiritTreeKillTokensNbt.getCompoundTagAt(i)));
+			NBTTagList spiritTreeKillTokensNbt = nbt.getList("spiritTreeKillTokens", Constants.NBT.TAG_COMPOUND);
+			for(int i = 0; i < spiritTreeKillTokensNbt.size(); i++) {
+				this.spiritTreeKillTokens.add(SpiritTreeKillToken.readFromNBT(spiritTreeKillTokensNbt.getCompound(i)));
 			}
 		}
 	}
@@ -140,7 +140,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 			NBTTagList spiritTreeKillTokensNbt = new NBTTagList();
 			for(SpiritTreeKillToken token : this.spiritTreeKillTokens) {
-				spiritTreeKillTokensNbt.appendTag(token.writeToNBT());
+				spiritTreeKillTokensNbt.add(token.writeToNBT());
 			}
 			nbt.setTag("spiritTreeKillTokens", spiritTreeKillTokensNbt);
 		}
@@ -283,7 +283,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 			this.lastSpawnMap.clear();
 			for(ICustomSpawnEntry spawnEntry : this.biome.getCustomSpawnEntries()) {
 				if(spawnEntry.isSaved()) {
-					if(nbt.hasKey(spawnEntry.getID().toString(), Constants.NBT.TAG_LONG)) {
+					if(nbt.contains(spawnEntry.getID().toString(), Constants.NBT.TAG_LONG)) {
 						this.lastSpawnMap.put(spawnEntry.getID(), nbt.getLong(spawnEntry.getID().toString()));
 					}
 				}

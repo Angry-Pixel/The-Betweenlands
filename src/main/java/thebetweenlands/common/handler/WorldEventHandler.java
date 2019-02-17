@@ -39,10 +39,10 @@ public final class WorldEventHandler {
 
 	@SubscribeEvent
 	public static void onChunkRead(ChunkDataEvent.Load event) {
-		if(event.getData().hasKey(CHUNK_NBT_TAG, Constants.NBT.TAG_COMPOUND)) {
+		if(event.getData().contains(CHUNK_NBT_TAG, Constants.NBT.TAG_COMPOUND)) {
 			IWorldStorage cap = WorldStorageImpl.getCapability(event.getWorld());
 			if(cap != null) {
-				cap.readAndLoadChunk(event.getChunk(), event.getData().getCompoundTag(CHUNK_NBT_TAG));
+				cap.readAndLoadChunk(event.getChunk(), event.getData().getCompound(CHUNK_NBT_TAG));
 			}
 		}
 	}

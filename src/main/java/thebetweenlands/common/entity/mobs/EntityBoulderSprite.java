@@ -234,10 +234,10 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		}
 
 		nbt.setDouble("rollingSpeed", this.rollingSpeed);
-		nbt.setInteger("rollingTicks", this.rollingTicks);
-		nbt.setInteger("rollingAccelerationTime", this.rollingAccelerationTime);
-		nbt.setInteger("rollingDecelerationTime", this.rollingDecelerationTime);
-		nbt.setInteger("rollingDuration", this.rollingDuration);
+		nbt.setInt("rollingTicks", this.rollingTicks);
+		nbt.setInt("rollingAccelerationTime", this.rollingAccelerationTime);
+		nbt.setInt("rollingDecelerationTime", this.rollingDecelerationTime);
+		nbt.setInt("rollingDuration", this.rollingDuration);
 
 		if(this.rollingDir != null) {
 			nbt.setDouble("rollingDirX", this.rollingDir.x);
@@ -252,21 +252,21 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 
-		if(nbt.hasKey("hideout", Constants.NBT.TAG_LONG)) {
+		if(nbt.contains("hideout", Constants.NBT.TAG_LONG)) {
 			this.hideout = BlockPos.fromLong(nbt.getLong("hideout"));
 		}
 
-		if(nbt.hasKey("hideoutEntrance", Constants.NBT.TAG_STRING)) {
+		if(nbt.contains("hideoutEntrance", Constants.NBT.TAG_STRING)) {
 			this.hideoutEntrance = EnumFacing.byName(nbt.getString("hideoutEntrance"));
 		}
 
 		this.rollingSpeed = nbt.getDouble("rollingSpeed");
-		this.rollingTicks = nbt.getInteger("rollingTicks");
-		this.rollingAccelerationTime = nbt.getInteger("rollingAccelerationTime");
-		this.rollingDecelerationTime = nbt.getInteger("rollingDecelerationTime");
-		this.rollingDuration = nbt.getInteger("rollingDuration");
+		this.rollingTicks = nbt.getInt("rollingTicks");
+		this.rollingAccelerationTime = nbt.getInt("rollingAccelerationTime");
+		this.rollingDecelerationTime = nbt.getInt("rollingDecelerationTime");
+		this.rollingDuration = nbt.getInt("rollingDuration");
 
-		if(nbt.hasKey("rollingDirX", Constants.NBT.TAG_DOUBLE) && nbt.hasKey("rollingDirY", Constants.NBT.TAG_DOUBLE) && nbt.hasKey("rollingDirZ", Constants.NBT.TAG_DOUBLE)) {
+		if(nbt.contains("rollingDirX", Constants.NBT.TAG_DOUBLE) && nbt.contains("rollingDirY", Constants.NBT.TAG_DOUBLE) && nbt.contains("rollingDirZ", Constants.NBT.TAG_DOUBLE)) {
 			this.rollingDir = new Vec3d(nbt.getDouble("rollingDirX"), nbt.getDouble("rollingDirY"), nbt.getDouble("rollingDirZ"));
 		}
 
@@ -356,7 +356,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	@Override
 	public int getBrightnessForRender() {
 		if(this.isEntityInsideOpaqueBlock()) {
-			AxisAlignedBB renderAABB = this.getEntityBoundingBox().grow(0.1D, 0.1D, 0.1D);
+			AxisAlignedBB renderAABB = this.getBoundingBox().grow(0.1D, 0.1D, 0.1D);
 			Iterable<MutableBlockPos> it = MutableBlockPos.getAllInBoxMutable(new BlockPos(renderAABB.minX, this.posY + this.getEyeHeight(), renderAABB.minZ), new BlockPos(renderAABB.maxX, renderAABB.maxY, renderAABB.maxZ));
 			int brightestBlock = 0;
 			int brightestSky = 0;
@@ -387,12 +387,12 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox() {
-		return this.isRolling() || this.isHiddenOrInWall() ? null : this.getEntityBoundingBox();
+		return this.isRolling() || this.isHiddenOrInWall() ? null : this.getBoundingBox();
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entityIn) {
-		return this.isRolling() || this.isHiddenOrInWall() ? null : this.getEntityBoundingBox();
+		return this.isRolling() || this.isHiddenOrInWall() ? null : this.getBoundingBox();
 	}
 
 	@Override
@@ -506,7 +506,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 				attackAttribute.applyModifier(new AttributeModifier(ROLLING_ATTACK_MODIFIER_ATTRIBUTE_UUID, "Rolling attack modifier", Math.min(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ) * 20.0F, 10.0F), 0));
 
 				Vec3d motionDir = new Vec3d(this.motionX, 0, this.motionZ).normalize();
-				List<Entity> collidingEntities = this.world.getEntitiesInAABBexcluding(this, this.getEntityBoundingBox().grow(0.35D, 0, 0.35D), EntitySelectors.getTeamCollisionPredicate(this));
+				List<Entity> collidingEntities = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox().grow(0.35D, 0, 0.35D), EntitySelectors.getTeamCollisionPredicate(this));
 				for(Entity collidingEntity : collidingEntities) {
 					if(collidingEntity.hurtResistantTime <= 0) {
 						double dot = motionDir.dotProduct(collidingEntity.getPositionVector().subtract(this.getPositionVector()));

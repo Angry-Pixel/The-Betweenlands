@@ -5,17 +5,18 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.EnumProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.BlockStateContainer;
@@ -29,11 +30,11 @@ import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeItemBlockModelDefinition {
-	public static final PropertyEnum<EnumCragrockType> VARIANT = PropertyEnum.<EnumCragrockType>create("variant", EnumCragrockType.class);
+	public static final EnumProperty<EnumCragrockType> VARIANT = EnumProperty.<EnumCragrockType>create("variant", EnumCragrockType.class);
 
 	public BlockCragrock(Material materialIn) {
 		super(materialIn);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumCragrockType.DEFAULT));
+		this.setDefaultState(this.blockState.getBaseState().with(VARIANT, EnumCragrockType.DEFAULT));
 		this.setTickRandomly(true);
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
@@ -42,7 +43,7 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random random){
-		if (!world.isRemote && state.getValue(VARIANT) != EnumCragrockType.DEFAULT) {
+		if (!world.isRemote && state.get(VARIANT) != EnumCragrockType.DEFAULT) {
 			BlockPos newPos = pos.add(random.nextInt(3) - 1, random.nextInt(3) - 1, random.nextInt(3) - 1);
 			if(newPos.getY() >= 0 && newPos.getY() < 256 && world.isBlockLoaded(newPos)) {
 				IBlockState blockState = world.getBlockState(newPos);
@@ -51,10 +52,10 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 					if (world.getBlockState(newPos.up()).getBlock() == this 
 							&& world.getBlockState(newPos.up(2)).getBlock() == Blocks.AIR 
 							&& blockState.getValue(VARIANT) != EnumCragrockType.MOSSY_2) {
-						world.setBlockState(newPos, state.withProperty(VARIANT, EnumCragrockType.MOSSY_2));
+						world.setBlockState(newPos, state.with(VARIANT, EnumCragrockType.MOSSY_2));
 					} else if (world.getBlockState(newPos).getBlock() == this 
 							&& world.getBlockState(newPos.up()).getBlock() == Blocks.AIR) {
-						world.setBlockState(newPos, state.withProperty(VARIANT, EnumCragrockType.MOSSY_1), 2);
+						world.setBlockState(newPos, state.with(VARIANT, EnumCragrockType.MOSSY_1), 2);
 					}
 				}
 			}
@@ -70,18 +71,18 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 	}
 
 	@Override
-	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		return new ItemStack(this, 1, ((EnumCragrockType)state.getValue(VARIANT)).getMetadata());
+	public ItemStack getItem(IBlockReader worldIn, BlockPos pos, IBlockState state) {
+		return new ItemStack(this, 1, ((EnumCragrockType)state.get(VARIANT)).getMetadata());
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(VARIANT, EnumCragrockType.byMetadata(meta));
+		return this.getDefaultState().with(VARIANT, EnumCragrockType.byMetadata(meta));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumCragrockType)state.getValue(VARIANT)).getMetadata();
+		return ((EnumCragrockType)state.get(VARIANT)).getMetadata();
 	}
 
 	@Override
@@ -91,7 +92,7 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		return ((EnumCragrockType)state.getValue(VARIANT)).getMetadata();
+		return ((EnumCragrockType)state.get(VARIANT)).getMetadata();
 	}
 
 	public static enum EnumCragrockType implements IStringSerializable {
@@ -148,7 +149,7 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 			return true;
 		}
 
-		if(state.getValue(VARIANT) != EnumCragrockType.DEFAULT) {
+		if(state.get(VARIANT) != EnumCragrockType.DEFAULT) {
 			EnumPlantType plantType = plantable.getPlantType(world, pos.offset(direction));
 	
 			switch(plantType) {

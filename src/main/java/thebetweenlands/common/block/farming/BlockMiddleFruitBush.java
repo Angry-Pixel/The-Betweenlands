@@ -25,10 +25,10 @@ public class BlockMiddleFruitBush extends BlockGenericCrop implements ICustomIte
 
 	@Override
 	public boolean onBlockActivated(IBlockState state, World world, BlockPos pos, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(state.getValue(AGE) >= 15) {
+		if(state.get(AGE) >= 15) {
 			if(!world.isRemote) {
 				this.dropBlockAsItem(world, pos, state, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, playerIn.getHeldItem(hand)));
-				world.setBlockState(pos, state.withProperty(AGE, 8));
+				world.setBlockState(pos, state.with(AGE, 8));
 				this.harvestAndUpdateSoil(world, pos, 10);
 			}
 			return true;
@@ -39,7 +39,7 @@ public class BlockMiddleFruitBush extends BlockGenericCrop implements ICustomIte
 	@Override
 	public int getCropDrops(IWorldReader world, BlockPos pos, Random rand, int fortune) {
 		IBlockState state = world.getBlockState(pos);
-		if(state.getValue(AGE) >= 15) {
+		if(state.get(AGE) >= 15) {
 			return 1 + rand.nextInt(3 + fortune);
 		}
 		return 0;

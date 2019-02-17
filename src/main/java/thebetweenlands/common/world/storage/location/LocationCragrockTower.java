@@ -206,7 +206,7 @@ public class LocationCragrockTower extends LocationGuarded {
 			World world = this.getWorldStorage().getWorld();
 
 			for(BlockPos pos : blocks) {
-				world.setBlockState(pos, BlockRegistry.SMOOTH_CRAGROCK_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.TOP));
+				world.setBlockState(pos, BlockRegistry.SMOOTH_CRAGROCK_SLAB.getDefaultState().with(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.TOP));
 				this.getGuard().setGuarded(world, pos, true);
 			}
 		}
@@ -344,7 +344,7 @@ public class LocationCragrockTower extends LocationGuarded {
 							}
 
 							if(canLightUp) {
-								world.setBlockState(closest, BlockRegistry.WISP.getDefaultState().withProperty(BlockWisp.COLOR, world.rand.nextInt(4)));
+								world.setBlockState(closest, BlockRegistry.WISP.getDefaultState().with(BlockWisp.COLOR, world.rand.nextInt(4)));
 								world.playSound(null, closest.getX(), closest.getY(), closest.getZ(), SoundRegistry.IGNITE, SoundCategory.AMBIENT, 1.6F + world.rand.nextFloat() * 0.45F, 1.0F + world.rand.nextFloat() * 0.4F);
 
 								this.inactiveWisps.remove(closest);
@@ -382,7 +382,7 @@ public class LocationCragrockTower extends LocationGuarded {
 		this.readBlockList(nbt, "wisps", this.wisps);
 		this.readBlockList(nbt, "inactiveWisps", this.inactiveWisps);
 		for(int i = 0; i < 5; i++) {
-			NBTTagCompound blockadeNbt = nbt.getCompoundTag("blockade." + i);
+			NBTTagCompound blockadeNbt = nbt.getCompound("blockade." + i);
 			List<BlockPos> blocks = new ArrayList<>();
 			this.readBlockList(blockadeNbt, "blocks", blocks);
 			if(!blocks.isEmpty()) {
@@ -396,8 +396,8 @@ public class LocationCragrockTower extends LocationGuarded {
 			this.spawners[i] = nbt.getBoolean("spawner." + i);
 		}
 		this.setCrumbling(nbt.getBoolean("crumbling"));
-		this.setCrumblingTicks(nbt.getInteger("crumblingTicks"));
-		this.topSpawners = nbt.getInteger("topSpawners");
+		this.setCrumblingTicks(nbt.getInt("crumblingTicks"));
+		this.topSpawners = nbt.getInt("topSpawners");
 	}
 
 	@Override
@@ -421,23 +421,23 @@ public class LocationCragrockTower extends LocationGuarded {
 			nbt.setBoolean("spawner." + i, this.spawners[i]);
 		}
 		nbt.setBoolean("crumbling", this.isCrumbling());
-		nbt.setInteger("crumblingTicks", this.getCrumblingTicks());
-		nbt.setInteger("topSpawners", this.topSpawners);
+		nbt.setInt("crumblingTicks", this.getCrumblingTicks());
+		nbt.setInt("topSpawners", this.topSpawners);
 		return nbt;
 	}
 
 	protected void saveBlockList(NBTTagCompound nbt, String name, List<BlockPos> blocks) {
 		NBTTagList blockList = new NBTTagList();
 		for(BlockPos pos : blocks) {
-			blockList.appendTag(new NBTTagLong(pos.toLong()));
+			blockList.add(new NBTTagLong(pos.toLong()));
 		}
 		nbt.setTag(name, blockList);
 	}
 
 	protected void readBlockList(NBTTagCompound nbt, String name, List<BlockPos> blocks) {
 		blocks.clear();
-		NBTTagList blockList = nbt.getTagList(name, Constants.NBT.TAG_LONG);
-		for(int i = 0; i < blockList.tagCount(); i++) {
+		NBTTagList blockList = nbt.getList(name, Constants.NBT.TAG_LONG);
+		for(int i = 0; i < blockList.size(); i++) {
 			NBTTagLong posNbt = (NBTTagLong) blockList.get(i);
 			blocks.add(BlockPos.fromLong(posNbt.getLong()));
 		}

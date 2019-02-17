@@ -175,7 +175,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 
     @Override
     public boolean isNotColliding() {
-        return this.getEntityWorld().getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.getEntityWorld().checkNoEntityCollision(this.getEntityBoundingBox(), this);
+        return this.getEntityWorld().getCollisionBoxes(this, this.getBoundingBox()).isEmpty() && this.getEntityWorld().checkNoEntityCollision(this.getBoundingBox(), this);
     }
 
     @Override

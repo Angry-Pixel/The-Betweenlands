@@ -82,7 +82,7 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("amuletSlots", this.amuletSlots);
+		nbt.setInt("amuletSlots", this.amuletSlots);
 		NBTTagList inventoryList = new NBTTagList();
 		for (EnumEquipmentInventory inventoryType : EnumEquipmentInventory.values()) {
 			NonNullList<ItemStack> inventoryStacks = this.allInventoryStacks.get(inventoryType);
@@ -92,18 +92,18 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 				ItemStack stack = inventoryStacks.get(c);
 				if (!stack.isEmpty()) {
 					NBTTagCompound slotNbt = new NBTTagCompound();
-					slotNbt.setInteger("slot", c);
+					slotNbt.setInt("slot", c);
 					slotNbt.setTag("stack", stack.writeToNBT(new NBTTagCompound()));
-					slotList.appendTag(slotNbt);
+					slotList.add(slotNbt);
 				}
 			}
-			if (slotList.tagCount() > 0) {
-				inventoryNbt.setInteger("id", inventoryType.id);
+			if (slotList.size() > 0) {
+				inventoryNbt.setInt("id", inventoryType.id);
 				inventoryNbt.setTag("items", slotList);
-				inventoryList.appendTag(inventoryNbt);
+				inventoryList.add(inventoryNbt);
 			}
 		}
-		if (inventoryList.tagCount() > 0)
+		if (inventoryList.size() > 0)
 			nbt.setTag("inventories", inventoryList);
 	}
 
@@ -113,24 +113,24 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 		for (EnumEquipmentInventory inventory : EnumEquipmentInventory.values()) {
 			this.allInventoryStacks.put(inventory, NonNullList.withSize(inventory.maxSize, ItemStack.EMPTY));
 		}
-		if (nbt.hasKey("amuletSlots")) {
-			this.amuletSlots = nbt.getInteger("amuletSlots");
+		if (nbt.contains("amuletSlots")) {
+			this.amuletSlots = nbt.getInt("amuletSlots");
 		}
-		if (nbt.hasKey("inventories")) {
-			NBTTagList inventoryList = nbt.getTagList("inventories", Constants.NBT.TAG_COMPOUND);
-			for (int i = 0; i < inventoryList.tagCount(); i++) {
-				NBTTagCompound inventoryNbt = inventoryList.getCompoundTagAt(i);
-				if (inventoryNbt.hasKey("items")) {
-					int id = inventoryNbt.getInteger("id");
+		if (nbt.contains("inventories")) {
+			NBTTagList inventoryList = nbt.getList("inventories", Constants.NBT.TAG_COMPOUND);
+			for (int i = 0; i < inventoryList.size(); i++) {
+				NBTTagCompound inventoryNbt = inventoryList.getCompound(i);
+				if (inventoryNbt.contains("items")) {
+					int id = inventoryNbt.getInt("id");
 					EnumEquipmentInventory inventoryType = EnumEquipmentInventory.fromID(id);
 					if (inventoryType != null) {
 						NonNullList<ItemStack> inventoryStacks = this.allInventoryStacks.get(inventoryType);
-						NBTTagList slotList = inventoryNbt.getTagList("items", Constants.NBT.TAG_COMPOUND);
-						for (int c = 0; c < slotList.tagCount(); c++) {
-							NBTTagCompound slotNbt = slotList.getCompoundTagAt(c);
-							int slot = slotNbt.getInteger("slot");
+						NBTTagList slotList = inventoryNbt.getList("items", Constants.NBT.TAG_COMPOUND);
+						for (int c = 0; c < slotList.size(); c++) {
+							NBTTagCompound slotNbt = slotList.getCompound(c);
+							int slot = slotNbt.getInt("slot");
 							if (slot < inventoryStacks.size()) {
-								inventoryStacks.set(slot, new ItemStack(slotNbt.getCompoundTag("stack")));
+								inventoryStacks.set(slot, new ItemStack(slotNbt.getCompound("stack")));
 							}
 						}
 					}

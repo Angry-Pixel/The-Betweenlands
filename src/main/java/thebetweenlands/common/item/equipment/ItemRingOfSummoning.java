@@ -73,17 +73,17 @@ public class ItemRingOfSummoning extends ItemRing {
 						cap.setActive(false);
 						cap.setCooldownTicks(USE_COOLDOWN);
 					} else {
-						int arms = entity.world.getEntitiesWithinAABB(EntityMummyArm.class, entity.getEntityBoundingBox().grow(18), e -> e.getDistance(entity) <= 18.0D).size();
+						int arms = entity.world.getEntitiesWithinAABB(EntityMummyArm.class, entity.getBoundingBox().grow(18), e -> e.getDistance(entity) <= 18.0D).size();
 
 						if(arms < MAX_ARMS) {
-							List<EntityLivingBase> targets = entity.world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(16),
+							List<EntityLivingBase> targets = entity.world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getBoundingBox().grow(16),
 									e -> e instanceof EntityLiving && e.getDistance(entity) <= 16.0D && e != entity && (e instanceof EntityMob || e instanceof IMob));
 
 							BlockPos targetPos = null;
 
 							if(!targets.isEmpty()) {
 								EntityLivingBase target = targets.get(entity.world.rand.nextInt(targets.size()));
-								boolean isAttacked = !entity.world.getEntitiesWithinAABB(EntityMummyArm.class, target.getEntityBoundingBox()).isEmpty();
+								boolean isAttacked = !entity.world.getEntitiesWithinAABB(EntityMummyArm.class, target.getBoundingBox()).isEmpty();
 								if(!isAttacked) {
 									targetPos = target.getPosition();
 								}
@@ -104,7 +104,7 @@ public class ItemRingOfSummoning extends ItemRing {
 								EntityMummyArm arm = new EntityMummyArm(entity.world);
 								arm.setLocationAndAngles(targetPos.getX() + 0.5D, targetPos.getY(), targetPos.getZ() + 0.5D, 0, 0);
 
-								if(arm.world.getCollisionBoxes(arm, arm.getEntityBoundingBox()).isEmpty()) {
+								if(arm.world.getCollisionBoxes(arm, arm.getBoundingBox()).isEmpty()) {
 									this.drainPower(stack, entity);
 									arm.setOwner(entity);
 									entity.world.spawnEntity(arm);
@@ -128,7 +128,7 @@ public class ItemRingOfSummoning extends ItemRing {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public boolean hasEffect(ItemStack stack) {
-		return stack.hasTagCompound() && stack.getTagCompound().getBoolean("ringActive");
+		return stack.hasTagCompound() && stack.getTag().getBoolean("ringActive");
 	}
 
 	public static boolean isRingActive(Entity entity) {

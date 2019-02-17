@@ -9,11 +9,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.state.IProperty;
 import net.minecraft.state.IntegerProperty;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
@@ -37,7 +37,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
         setHardness(0.1F);
         setCreativeTab(BLCreativeTabs.BLOCKS);
         setTickRandomly(true);
-        setDefaultState(this.blockState.getBaseState().withProperty(AMOUNT, 0));
+        setDefaultState(this.blockState.getBaseState().with(AMOUNT, 0));
     }
 
     @Override
@@ -47,12 +47,12 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(AMOUNT, meta);
+        return this.getDefaultState().with(AMOUNT, meta);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(AMOUNT);
+        return state.get(AMOUNT);
     }
 
     @Override
@@ -63,17 +63,17 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
         if(!world.isRemote) {
-            int amount = state.getValue(AMOUNT);
+            int amount = state.get(AMOUNT);
             if(!BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().heavyRain.isActive()) {
                 world.setBlockToAir(pos);
                 amount = 0;
             } else if(world.canBlockSeeSky(pos)) {
                 amount = Math.min(amount + rand.nextInt(6), 15);
-                world.setBlockState(pos, state.withProperty(AMOUNT, amount), 2);
+                world.setBlockState(pos, state.with(AMOUNT, amount), 2);
             }
             if(amount > 2) {
                 amount = Math.max(0, amount - 3);
-                world.setBlockState(pos, state.withProperty(AMOUNT, amount), 2);
+                world.setBlockState(pos, state.with(AMOUNT, amount), 2);
                 for(int xo = -1; xo <= 1; xo++) {
                     for(int zo = -1; zo <= 1; zo++) {
                         BlockPos newPos = pos.add(xo, 0, zo);
@@ -81,7 +81,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
                         if((world.isAirBlock(newPos) || world.getBlockState(newPos).getBlock() instanceof BlockGenericCrop) && BlockRegistry.PUDDLE.canPlaceBlockAt(world, newPos)) {
                             world.setBlockState(newPos, getDefaultState());
                         } else if(world.getBlockState(newPos).getBlock() == BlockRegistry.PUDDLE) {
-                            world.setBlockState(newPos, state.withProperty(AMOUNT, Math.min(amount + rand.nextInt(6), 15)), 2);
+                            world.setBlockState(newPos, state.with(AMOUNT, Math.min(amount + rand.nextInt(6), 15)), 2);
                         }
                     }
                 }
@@ -109,7 +109,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
         return Items.AIR;
     }
 

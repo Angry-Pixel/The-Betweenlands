@@ -2,13 +2,12 @@ package thebetweenlands.common.block.plant;
 
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
@@ -34,14 +33,13 @@ public class BlockBasicHanger extends BlockBush {
     }
 
     @Override
-    public int quantityDropped(Random random) {
+    public int getItemsToDropCount(IBlockState state, int fortune, World worldIn, BlockPos pos, Random random) {
         return 0;
     }
 
-    @Nullable
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return null;
+    public IItemProvider getItemDropped(IBlockState state, World world, BlockPos pos, int fortune) {
+        return Items.AIR;
     }
 
     @Override
