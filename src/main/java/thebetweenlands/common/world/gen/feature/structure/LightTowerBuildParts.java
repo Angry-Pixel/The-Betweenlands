@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
+import thebetweenlands.common.block.structure.BlockTemplePillar;
 import thebetweenlands.common.block.terrain.BlockRottenLog;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
@@ -189,12 +190,13 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 1, 0 + level, 6, level == 0 ? blockHelper.SMOOTH_PITSTONE : blockHelper.PITSTONE_BRICKS, 3, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 1, 0 + level, 7, level == 0 ? blockHelper.SMOOTH_PITSTONE : blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
 
-			rotatedCubeVolume(world, rand, pos, 1, 1 + level, 1, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
+	/*		rotatedCubeVolume(world, rand, pos, 1, 1 + level, 1, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 2, 1 + level, 2, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 3, 1 + level, 3, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 4, 1 + level, 4, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 5, 1 + level, 5, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 6, 1 + level, 6, blockHelper.getEnergyBarrier(facing == EnumFacing.SOUTH ? true : facing == EnumFacing.NORTH ? true : false), 1, 7, 1, facing);
+	*/	
 		}
 
 		if (level == 16) {
@@ -315,6 +317,96 @@ public class LightTowerBuildParts {
 		if(level == 8) {
 			rotatedCubeVolume(world, rand, pos, 1, 3 + level, 9, blockHelper.getStairsForLevel(rand, 0, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -1, 3 + level, 9, blockHelper.getStairsForLevel(rand, 0, facing.rotateY(), BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 1, facing);
+		}
+	}
+
+	public void addLightBeams(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int i) {
+		if(level == 0) {
+			rotatedCubeVolume(world, rand, pos, -2, 1 + level, 4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 2, 1 + level, 4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 1 + level, 4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 1 + level, 4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 6 + level, 5, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			
+			rotatedCubeVolume(world, rand, pos, -2, 1 + level, -4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 2, 1 + level, -4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 1 + level, -4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 1 + level, -4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			
+			rotatedCubeVolume(world, rand, pos, 7, 6 + level, -1, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 8, 6 + level, -1, blockHelper.PITSTONE_PILLAR.withProperty(BlockTemplePillar.AXIS, EnumFacing.Axis.X), 1, 1, 1, facing);
+		}
+		
+		if(level == 8) {
+			rotatedCubeVolume(world, rand, pos, 0, 2 + level, 0, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 0, 1 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 0, 2 + level, 4, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 2, 0 + level, 4, Blocks.AIR.getDefaultState(), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -2, 0 + level, 4, Blocks.AIR.getDefaultState(), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -2, 2 + level, 4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 2, 2 + level, 4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 0 + level, 4, Blocks.AIR.getDefaultState(), 1, 1, 1, facing);
+			
+			rotatedCubeVolume(world, rand, pos, -7, 2 + level, 4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 3 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 4 + level, 4, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 5 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 6 + level, 4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			
+			rotatedCubeVolume(world, rand, pos, 7, 0 + level, 4, Blocks.AIR.getDefaultState(), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 6 + level, 4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 7 + level, 4, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 8 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			
+			rotatedCubeVolume(world, rand, pos, -2, 1 + level, 0, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -2, 2 + level, 0, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
+			
+			rotatedCubeVolume(world, rand, pos, 2, 1 + level, 0, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 2, 2 + level, 0, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			//pg2
+			
+			rotatedCubeVolume(world, rand, pos, 0, 1 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 0, 2 + level, -4, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
+			
+			rotatedCubeVolume(world, rand, pos, 2, 0 + level, -4, Blocks.AIR.getDefaultState(), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -2, 0 + level, -4, Blocks.AIR.getDefaultState(), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -2, 2 + level, -4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 2, 2 + level, -4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 0 + level, -4, Blocks.AIR.getDefaultState(), 1, 1, 1, facing);
+			
+			rotatedCubeVolume(world, rand, pos, -7, 2 + level, -4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 3 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 4 + level, -4, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 5 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 6 + level, -4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			
+			rotatedCubeVolume(world, rand, pos, 7, 6 + level, -1, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 0 + level, -1, Blocks.AIR.getDefaultState(), 1, 1, 1, facing);
+			
+			
+			rotatedCubeVolume(world, rand, pos, 7, 1 + level, 0, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 2 + level, 0, blockHelper.PITSTONE_PILLAR, 1, 5, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 7 + level, 0, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			
+			rotatedCubeVolume(world, rand, pos, -7, 1 + level, 0, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 2 + level, 0, blockHelper.PITSTONE_PILLAR, 1, 5, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 7 + level, 0, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			
+			
+			rotatedCubeVolume(world, rand, pos, 7, 2 + level, -4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 3 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 4 + level, -4, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 5 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 6 + level, -4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 0 + level, -4, Blocks.AIR.getDefaultState(), 1, 1, 1, facing);
+		}
+		
+		if(level == 16) {
+			rotatedCubeVolume(world, rand, pos, 0, 0 + level, 0, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 1 + level, 4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 0 + level, 4, Blocks.AIR.getDefaultState(), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 1 + level, -4, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, 0 + level, -4, Blocks.AIR.getDefaultState(), 1, 1, 1, facing);
 		}
 	}
 

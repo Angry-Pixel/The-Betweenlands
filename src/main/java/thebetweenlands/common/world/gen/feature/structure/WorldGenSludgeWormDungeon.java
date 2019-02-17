@@ -127,7 +127,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		lightTowerBuild.addTowerDoorways(world, pos, EnumFacing.WEST, rand, level1, 0);
 		lightTowerBuild.addTowerDoorways(world, pos, EnumFacing.WEST, rand, level2, 0);
 
-		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level1, 0, false);
+/*		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level1, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level2, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.NORTH, rand, level3, 0, true);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level1, 0, false);
@@ -139,6 +139,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.WEST, rand, level1, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level2, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level3, 0, true);
+*/		
+		lightTowerBuild.addLightBeams(world, pos, EnumFacing.SOUTH, rand, level1, 0);
+		lightTowerBuild.addLightBeams(world, pos, EnumFacing.SOUTH, rand, level2, 0);
+		lightTowerBuild.addLightBeams(world, pos, EnumFacing.SOUTH, rand, level3, 0);
 	}
 
 	private void generateDecayPit(World world, BlockPos pos) {
