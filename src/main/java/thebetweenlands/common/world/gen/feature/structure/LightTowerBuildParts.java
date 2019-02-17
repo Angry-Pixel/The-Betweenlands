@@ -335,6 +335,22 @@ public class LightTowerBuildParts {
 			
 			rotatedCubeVolume(world, rand, pos, 7, 6 + level, -1, blockHelper.BETWEENSTONE_BRICKS_BEAM_RELAY, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 8, 6 + level, -1, blockHelper.PITSTONE_PILLAR.withProperty(BlockTemplePillar.AXIS, EnumFacing.Axis.X), 1, 1, 1, facing);
+		
+			rotatedCubeVolume(world, rand, pos, 5, 1 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 5, 2 + level, 4, blockHelper.PITSTONE_PILLAR, 1, 5, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 5, 7 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+
+			rotatedCubeVolume(world, rand, pos, 5, 1 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 5, 2 + level, -4, blockHelper.PITSTONE_PILLAR, 1, 5, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 5, 7 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+
+			rotatedCubeVolume(world, rand, pos, -5, 1 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -5, 2 + level, 4, blockHelper.PITSTONE_PILLAR, 1, 5, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -5, 7 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+
+			rotatedCubeVolume(world, rand, pos, -5, 1 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -5, 2 + level, -4, blockHelper.PITSTONE_PILLAR, 1, 5, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -5, 7 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
 		}
 		
 		if(level == 8) {
