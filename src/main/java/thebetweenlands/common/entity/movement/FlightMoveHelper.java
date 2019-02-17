@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 
 public class FlightMoveHelper extends EntityMoveHelper {
 	protected int courseChangeCooldown;
@@ -19,7 +20,7 @@ public class FlightMoveHelper extends EntityMoveHelper {
 	}
 
 	@Override
-	public void onUpdateMoveHelper() {
+	public void tick() {
 		IAttributeInstance entityMoveSpeedAttribute = this.entity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
 		double entityMoveSpeed = entityMoveSpeedAttribute != null ? entityMoveSpeedAttribute.getValue() : 1.0D;
 		double speed = this.getFlightSpeed() * entityMoveSpeed;
@@ -146,7 +147,7 @@ public class FlightMoveHelper extends EntityMoveHelper {
 	 */
 	public static BlockPos getGroundHeight(World world, BlockPos pos, int maxIter, BlockPos fallback) {
 		if(world.canSeeSky(pos)) {
-			return world.getHeight(pos);
+			return world.getHeight(Heightmap.Type.MOTION_BLOCKING, pos);
 		}
 		MutableBlockPos mutablePos = new MutableBlockPos();
 		int i = 0;

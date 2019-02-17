@@ -13,33 +13,35 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.entity.mobs.EntityTarMinion;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class EntityThrownTarminion extends EntityThrowable {
 	private UUID ownerUUID = null;
 
 	public EntityThrownTarminion(World world) {
-		super(world);
+		super(EntityRegistry.TAR_MINION, world);
 	}
 
 	public EntityThrownTarminion(World world, EntityLivingBase entity) {
-		super(world, entity);
+		super(EntityRegistry.TAR_MINION, entity, world);
 		this.ownerUUID = entity.getUniqueID();
 	}
 
 	public EntityThrownTarminion(World world, double x, double y, double z) {
-		super(world, x, y, z);
+		super(EntityRegistry.TAR_MINION, x, y, z, world);
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
+		
 		nbt.setUniqueId("owner", this.ownerUUID);
-		return nbt;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
+		
 		this.ownerUUID = nbt.getUniqueId("owner");
 	}
 
@@ -55,13 +57,13 @@ public class EntityThrownTarminion extends EntityThrowable {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if (result.entityHit != null && result.entityHit instanceof EntityLivingBase) {
-			if(!(result.entityHit instanceof EntityTarMinion)) {
+		if (result.entity != null && result.entity instanceof EntityLivingBase) {
+			if(!(result.entity instanceof EntityTarMinion)) {
 				if(!this.world.isRemote()) {
-					result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, getThrower()), 2);
+					result.entity.attackEntityFrom(DamageSource.causeThrownDamage(this, getThrower()), 2);
 
-					if (this.isBurning() && !(result.entityHit instanceof EntityEnderman)) {
-						result.entityHit.setFire(5);
+					if (this.isBurning() && !(result.entity instanceof EntityEnderman)) {
+						result.entity.setFire(5);
 					}
 				}
 
@@ -74,11 +76,11 @@ public class EntityThrownTarminion extends EntityThrowable {
 
 			if (!this.world.isRemote()) {
 				EntityTarMinion tarminion = spawnTarminion();
-				if(result.entityHit instanceof EntityMob) {
-					tarminion.setAttackTarget((EntityLivingBase) result.entityHit);
+				if(result.entity instanceof EntityMob) {
+					tarminion.setAttackTarget((EntityLivingBase) result.entity);
 				}
 			}
-		} else if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
+		} else if (result.type == RayTraceResult.Type.BLOCK) {
 			if (!this.world.isRemote()) {
 				spawnTarminion();
 			}

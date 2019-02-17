@@ -15,19 +15,22 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityLurkerSkinRaft extends EntityBoat {
+	//TODO 1.13 Lurker skin raft can't extend EntityBoat because EntityType is hardcoded...
+	
 	private ItemStack shield = ItemStack.EMPTY;
 	private boolean updating = false;
 
 	public EntityLurkerSkinRaft(World worldIn) {
-		super(worldIn);
+		super(EntityRegistry.LURKER_SKIN_RAFT, worldIn);
 		this.setSize(1.25F, 0.25F);
 	}
 
 	public EntityLurkerSkinRaft(World worldIn, double x, double y, double z, ItemStack shield) {
-		super(worldIn, x, y,z);
+		super(EntityRegistry.LURKER_SKIN_RAFT, worldIn, x, y,z);
 		this.setSize(1.25F, 0.25F);
 		this.shield = shield.copy();
 	}

@@ -2,19 +2,20 @@ package thebetweenlands.common.entity;
 
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAdditionalSpawnData {
@@ -25,11 +26,11 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 	private Type type;
 
 	public EntitySpiritTreeFaceMask(World world) {
-		super(world);
+		super(EntityRegistry.SPIRIT_TREE_FACE_MASK, world);
 	}
 
 	public EntitySpiritTreeFaceMask(World world, BlockPos pos, EnumFacing facing, Type type) {
-		super(world, pos);
+		super(EntityRegistry.SPIRIT_TREE_FACE_MASK, world, pos);
 		this.type = type;
 		this.updateFacingWithBoundingBox(facing);
 	}
@@ -95,7 +96,7 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 	}
 
 	@Override
-	public void writeSpawnData(ByteBuf buf) {
+	public void writeSpawnData(PacketBuffer buf) {
 		buf.writeInt(this.type.ordinal());
 		buf.writeLong(this.hangingPosition.toLong());
 		buf.writeBoolean(this.facingDirection != null);
@@ -105,7 +106,7 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf buf) {
+	public void readSpawnData(PacketBuffer buf) {
 		this.type = Type.values()[buf.readInt()];
 		this.hangingPosition = BlockPos.fromLong(buf.readLong());
 		if(buf.readBoolean()) {

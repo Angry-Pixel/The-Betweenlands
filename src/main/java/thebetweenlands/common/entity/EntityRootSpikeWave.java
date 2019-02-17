@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -18,6 +17,7 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -35,6 +35,7 @@ import thebetweenlands.client.render.model.SpikeRenderer;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityRootSpikeWave extends Entity implements IEntityAdditionalSpawnData {
@@ -53,7 +54,7 @@ public class EntityRootSpikeWave extends Entity implements IEntityAdditionalSpaw
 	protected float attackDamage = 10.0F;
 
 	public EntityRootSpikeWave(World world) {
-		super(world);
+		super(EntityRegistry.ROOT_SPIKE_WAVE, world);
 		this.setSize(1, 1);
 		this.noClip = true;
 	}
@@ -235,7 +236,7 @@ public class EntityRootSpikeWave extends Entity implements IEntityAdditionalSpaw
 	}
 
 	@Override
-	public void writeSpawnData(ByteBuf data) {
+	public void writeSpawnData(PacketBuffer data) {
 		data.writeLong(this.origin.toLong());
 
 		data.writeInt(this.positions.size());
@@ -247,7 +248,7 @@ public class EntityRootSpikeWave extends Entity implements IEntityAdditionalSpaw
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf data) {
+	public void readSpawnData(PacketBuffer data) {
 		this.origin = BlockPos.fromLong(data.readLong());
 
 		this.blockEnclosingBounds = null;

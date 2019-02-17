@@ -555,7 +555,7 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
         }
 
         @Override
-		public void onUpdateMoveHelper() {
+		public void tick() {
             if (action == EntityMoveHelper.Action.MOVE_TO && !lurker.getNavigator().noPath()) {
                 double d0 = posX - lurker.posX;
                 double d1 = posY - lurker.posY;

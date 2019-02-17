@@ -644,7 +644,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		}
 
 		@Override
-		public void onUpdateMoveHelper() {
+		public void tick() {
 			if(this.action == EntityMoveHelper.Action.STRAFE && this.moveStrafe != 0) {
 				Vec3i horDir = this.face.getFacing().getDirectionVec().crossProduct(this.face.getFacingUp().getDirectionVec());
 				int strafeDir = -(int)Math.signum(this.moveStrafe);

@@ -122,10 +122,10 @@ public class EntityPrimordialMalevolenceProjectile extends Entity implements IPr
 	}
 
 	protected void onImpact(RayTraceResult target) {
-		if(target.entityHit instanceof EntityPrimordialMalevolenceProjectile == false) {
-			if (target.entityHit != null && target.entityHit instanceof EntityLivingBase) {
-				if(target.entityHit instanceof EntityPrimordialMalevolence) {
-					EntityPrimordialMalevolence boss = (EntityPrimordialMalevolence) target.entityHit;
+		if(target.entity instanceof EntityPrimordialMalevolenceProjectile == false) {
+			if (target.entity != null && target.entity instanceof EntityLivingBase) {
+				if(target.entity instanceof EntityPrimordialMalevolence) {
+					EntityPrimordialMalevolence boss = (EntityPrimordialMalevolence) target.entity;
 					Vec3d ray = new Vec3d(this.motionX, this.motionY, this.motionZ);
 					ray = ray.normalize().scale(64.0D);
 					int shieldHit = boss.rayTraceShield(new Vec3d(this.posX, this.posY, this.posZ), ray, false);
@@ -154,13 +154,13 @@ public class EntityPrimordialMalevolenceProjectile extends Entity implements IPr
 						boss.setFloating(false);
 					}
 				} else {
-					target.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 2);
+					target.entity.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 2);
 				}
 
 				if(!this.world.isRemote()) {
 					this.remove();
 				}
-			} else if(target.typeOfHit == RayTraceResult.Type.BLOCK) {
+			} else if(target.type == RayTraceResult.Type.BLOCK) {
 				this.remove();
 			}
 		}
@@ -246,7 +246,7 @@ public class EntityPrimordialMalevolenceProjectile extends Entity implements IPr
 					hitObject = new RayTraceResult(hitEntity);
 				}
 
-				if (hitObject != null && hitObject.entityHit != this.getThrower()) {
+				if (hitObject != null && hitObject.entity != this.getThrower()) {
 					this.onImpact(hitObject);
 				}
 				this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);

@@ -23,13 +23,14 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.mobs.EntityDreadfulPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class EntitySludgeBall extends EntityThrowable {
 	private int bounces = 0;
 	private String ownerUUID;
 
 	public EntitySludgeBall(World world) {
-		super(world);
+		super(EntityRegistry.SLUDGE_BALL, world);
 		this.setSize(0.75F, 0.75F);
 		this.ownerUUID = "";
 	}
@@ -87,7 +88,7 @@ public class EntitySludgeBall extends EntityThrowable {
 
 	@Override
 	protected void onImpact(RayTraceResult collision) {
-		if(collision.typeOfHit == RayTraceResult.Type.BLOCK) {
+		if(collision.type == RayTraceResult.Type.BLOCK) {
 			IBlockState state = getEntityWorld().getBlockState(collision.getBlockPos());
 			if (state.getBlock().canCollideCheck(state, false)) {
 				List<AxisAlignedBB> aabbs = new ArrayList<>();
@@ -136,9 +137,9 @@ public class EntitySludgeBall extends EntityThrowable {
 				}
 			}
 		}
-		if (collision.typeOfHit == RayTraceResult.Type.ENTITY) {
-			if(!(collision.entityHit instanceof EntityPeatMummy) && !(collision.entityHit instanceof EntityDreadfulPeatMummy)) {
-				if(this.attackEntity(collision.entityHit)) {
+		if (collision.type == RayTraceResult.Type.ENTITY) {
+			if(!(collision.entity instanceof EntityPeatMummy) && !(collision.entity instanceof EntityDreadfulPeatMummy)) {
+				if(this.attackEntity(collision.entity)) {
 					explode();
 				} else {
 					this.motionX *= -0.1D;

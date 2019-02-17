@@ -29,6 +29,7 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityRopeNode extends Entity {
@@ -54,7 +55,7 @@ public class EntityRopeNode extends Entity {
 	private BlockPos lightBlock = null;
 	
 	public EntityRopeNode(World world) {
-		super(world);
+		super(EntityRegistry.ROPE_NODE, world);
 		this.setSize(0.1F, 0.1F);
 	}
 
@@ -201,7 +202,7 @@ public class EntityRopeNode extends Entity {
 							if(connection != null) {
 								Vec3d newPos = nextNode.getPositionVector().add(connection.scale(-0.5D)).add(0, 0.1D, 0);
 								RayTraceResult result = this.world.rayTraceBlocks(nextNode.getPositionVector(), newPos, false);
-								if(result != null && result.typeOfHit == Type.BLOCK && result.hitVec.squareDistanceTo(nextNode.getPositionVector()) < newPos.squareDistanceTo(nextNode.getPositionVector())) {
+								if(result != null && result.type == Type.BLOCK && result.hitVec.squareDistanceTo(nextNode.getPositionVector()) < newPos.squareDistanceTo(nextNode.getPositionVector())) {
 									newPos = result.hitVec.add(result.hitVec.subtract(this.getPositionVector()).normalize().scale(0.1D));
 								}
 								EntityRopeNode rope = this.extendRope(nextNode, newPos.x, newPos.y, newPos.z);

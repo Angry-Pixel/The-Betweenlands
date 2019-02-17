@@ -2,7 +2,6 @@ package thebetweenlands.common.entity.rowboat;
 
 import java.util.EnumMap;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -14,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
@@ -763,7 +763,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         RayTraceResult raytrace = world.rayTraceBlocks(new Vec3d(oarlock.x, oarlock.y, oarlock.z), blade, true);
         boolean bladeInAir = true;
         float amountOfBladeInAir = BLADE_LENGTH;
-        if (raytrace != null && raytrace.typeOfHit == RayTraceResult.Type.BLOCK) {
+        if (raytrace != null && raytrace.type == RayTraceResult.Type.BLOCK) {
             if (motion > 0.175) {
                 for (int p = 0; p < motion; p++) {
                     float x = MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.2F, 0.2F);
@@ -825,7 +825,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         Vec3d blade = oarlock.add(oarVector.x * OAR_LENGTH, oarVector.y * OAR_LENGTH, oarVector.z * OAR_LENGTH);
         RayTraceResult raytrace = world.rayTraceBlocks(new Vec3d(oarlock.x, oarlock.y, oarlock.z), blade, true);
         boolean bladeInAir = true;
-        if (raytrace != null && raytrace.typeOfHit == RayTraceResult.Type.BLOCK) {
+        if (raytrace != null && raytrace.type == RayTraceResult.Type.BLOCK) {
             float amountInAir = (float) oarlock.distanceTo(raytrace.hitVec);
             if (amountInAir < LOOM_LENGTH) {
                 bladeInAir = false;
@@ -965,10 +965,10 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     @Override
-    public void writeSpawnData(ByteBuf buf) {}
+    public void writeSpawnData(PacketBuffer buf) {}
 
     @Override
-    public void readSpawnData(ByteBuf buf) {
+    public void readSpawnData(PacketBuffer buf) {
         prevRotationYaw = rotationYaw;
     }
 

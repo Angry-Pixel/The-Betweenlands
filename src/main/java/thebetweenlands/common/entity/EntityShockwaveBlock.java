@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,6 +25,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpawnData {
 	private static final DataParameter<String> OWNER_DW = EntityDataManager.<String>createKey(EntitySwordEnergy.class, DataSerializers.STRING);
@@ -37,7 +37,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	private double waveStartX, waveStartZ;
 
 	public EntityShockwaveBlock(World world) {
-		super(world);
+		super(EntityRegistry.SHOCKWAVE_BLOCK, world);
 		this.setSize(1.0F, 1.0F);
 		this.setBlock(Blocks.STONE, 0);
 		this.noClip = true;
@@ -183,7 +183,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	}
 
 	@Override
-	public void writeSpawnData(ByteBuf data) {
+	public void writeSpawnData(PacketBuffer data) {
 		PacketBuffer buffer = new PacketBuffer(data);
 		buffer.writeInt(Block.getIdFromBlock(this.block));
 		buffer.writeInt(this.blockMeta);
@@ -192,7 +192,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf data) {
+	public void readSpawnData(PacketBuffer data) {
 		PacketBuffer buffer = new PacketBuffer(data);
 		this.block = Block.getBlockById(buffer.readInt());
 		this.blockMeta = buffer.readInt();

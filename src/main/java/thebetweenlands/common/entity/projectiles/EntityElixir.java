@@ -20,17 +20,18 @@ import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.api.event.SplashPotionEvent;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityElixir extends EntityThrowable {
     private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(EntityElixir.class, DataSerializers.ITEM_STACK);
 
     public EntityElixir(World world) {
-        super(world);
+        super(EntityRegistry.ELIXIR, world);
     }
 
     public EntityElixir(World world, EntityLivingBase thrower, ItemStack elixir) {
-        super(world, thrower);
+        super(EntityRegistry.ELIXIR, thrower, world);
         this.setItem(elixir.copy());
     }
 
@@ -65,7 +66,7 @@ public class EntityElixir extends EntityThrowable {
                     double entityDst = this.getDistanceSq(affectedEntity);
                     if (entityDst < 16.0D) {
                         double modifier = 1.0D - Math.sqrt(entityDst) / 4.0D;
-                        if (affectedEntity == result.entityHit) {
+                        if (affectedEntity == result.entity) {
                             modifier = 1.0D;
                         }
                         PotionEffect effect = ItemRegistry.ELIXIR.createPotionEffect(getElixirStack(), modifier);

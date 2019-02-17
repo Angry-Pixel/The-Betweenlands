@@ -106,7 +106,7 @@ public class PathNavigateFlyingBL extends PathNavigate {
 	@Override
 	protected boolean isDirectPathBetweenPoints(Vec3d start, Vec3d end, int sizeX, int sizeY, int sizeZ) {
 		RayTraceResult raytraceresult = this.world.rayTraceBlocks(start, new Vec3d(end.x, end.y + (double) this.entity.height * 0.5D, end.z), false, true, false);
-		return raytraceresult == null || raytraceresult.typeOfHit == RayTraceResult.Type.MISS;
+		return raytraceresult == null || raytraceresult.type == RayTraceResult.Type.MISS;
 	}
 
 	@Override

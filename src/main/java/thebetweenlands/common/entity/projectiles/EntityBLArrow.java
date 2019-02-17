@@ -14,21 +14,23 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
+//TODO 1.13 BL arrow is missing IThrowableEntity. Removed or renamed?
 public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for shooter sync*/ {
 	private static final DataParameter<String> DW_TYPE = EntityDataManager.<String>createKey(EntityArrow.class, DataSerializers.STRING);
 
 	public EntityBLArrow(World worldIn) {
-		super(worldIn);
+		super(EntityRegistry.BETWEENLANDS_ARROW, worldIn);
 	}
 
 	public EntityBLArrow(World worldIn, double x, double y, double z) {
-		super(worldIn, x, y, z);
+		super(EntityRegistry.BETWEENLANDS_ARROW, x, y, z, worldIn);
 	}
 
 	public EntityBLArrow(World worldIn, EntityLivingBase shooter) {
-		super(worldIn, shooter);
+		super(EntityRegistry.BETWEENLANDS_ARROW, shooter, worldIn);
 	}
 
 	@Override

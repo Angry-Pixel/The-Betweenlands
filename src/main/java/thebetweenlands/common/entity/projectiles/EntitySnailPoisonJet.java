@@ -5,7 +5,6 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
@@ -18,24 +17,21 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class EntitySnailPoisonJet extends EntityThrowable {
 
 	public EntitySnailPoisonJet(World world) {
-		super(world);
+		super(EntityRegistry.SNAIL_POISON_JET, world);
 		setSize(0.25F, 0.25F);
 	}
 
 	public EntitySnailPoisonJet(World world, EntityLiving entity) {
-		super(world, entity);
+		super(EntityRegistry.SNAIL_POISON_JET, entity, world);
 	}
 
 	public EntitySnailPoisonJet(World world, double x, double y, double z) {
-		super(world, x, y, z);
-	}
-
-	public EntitySnailPoisonJet(World world, EntityPlayer player) {
-		super(world, player);
+		super(EntityRegistry.SNAIL_POISON_JET, x, y, z, world);
 	}
 
 	@Override
@@ -53,11 +49,11 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if (result.entityHit != null) {
-			if (result.entityHit instanceof EntityLivingBase && !(result.entityHit instanceof EntityBloodSnail)) {
-				if(result.entityHit.attackEntityFrom(getThrower() != null ? DamageSource.causeIndirectDamage(this, getThrower()).setProjectile() : DamageSource.causeThrownDamage(this, null), 1.0F)) {
+		if (result.entity != null) {
+			if (result.entity instanceof EntityLivingBase && !(result.entity instanceof EntityBloodSnail)) {
+				if(result.entity.attackEntityFrom(getThrower() != null ? DamageSource.causeIndirectDamage(this, getThrower()).setProjectile() : DamageSource.causeThrownDamage(this, null), 1.0F)) {
 					if (!world.isRemote()) {
-						((EntityLivingBase) result.entityHit).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
+						((EntityLivingBase) result.entity).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
 						this.remove();
 					}
 				} else {
@@ -69,7 +65,7 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 				}
 			}
 		} else {
-			if(result.typeOfHit == Type.BLOCK) {
+			if(result.type == Type.BLOCK) {
 				IBlockState blockState = this.world.getBlockState(result.getBlockPos());
 				AxisAlignedBB collisionBox = blockState.getCollisionBoundingBox(this.world, result.getBlockPos());
 				if(collisionBox != null && collisionBox.offset(result.getBlockPos()).intersects(this.getBoundingBox())) {

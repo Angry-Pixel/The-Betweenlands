@@ -1,10 +1,10 @@
 package thebetweenlands.common.entity;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -14,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
@@ -31,7 +32,7 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 	AnimationMathHelper pulse = new AnimationMathHelper();
 
 	public EntitySwordEnergy(World world) {
-		super(world);
+		super(EntityRegistry.SWORD_ENERGY, world);
 		this.setSize(1F, 1F);
 	}
 
@@ -144,7 +145,7 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	@Override
-	public void writeSpawnData(ByteBuf buffer) {
+	public void writeSpawnData(PacketBuffer buffer) {
 		buffer.writeFloat(dataManager.get(PART_POS_1));
 		buffer.writeFloat(dataManager.get(PART_POS_2));
 		buffer.writeFloat(dataManager.get(PART_POS_3));
@@ -152,7 +153,7 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf additionalData) {
+	public void readSpawnData(PacketBuffer additionalData) {
 		dataManager.set(PART_POS_1, additionalData.readFloat());
 		dataManager.set(PART_POS_2, additionalData.readFloat());
 		dataManager.set(PART_POS_3, additionalData.readFloat());

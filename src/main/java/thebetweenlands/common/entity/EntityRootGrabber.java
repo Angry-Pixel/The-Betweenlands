@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +15,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -35,6 +35,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnData {
@@ -73,7 +74,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	public EntityRootGrabber(World world) {
-		super(world);
+		super(EntityRegistry.ROOT_GRABBER, world);
 		this.setSize(2, 2);
 		this.noClip = true;
 	}
@@ -363,14 +364,14 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 	}
 
 	@Override
-	public void writeSpawnData(ByteBuf data) {
+	public void writeSpawnData(PacketBuffer data) {
 		data.writeLong(this.origin.toLong());
 		data.writeInt(this.delay);
 		data.writeInt(this.attackTicks);
 	}
 
 	@Override
-	public void readSpawnData(ByteBuf data) {
+	public void readSpawnData(PacketBuffer data) {
 		this.origin = BlockPos.fromLong(data.readLong());
 		this.delay = data.readInt();
 		this.attackTicks = data.readInt();

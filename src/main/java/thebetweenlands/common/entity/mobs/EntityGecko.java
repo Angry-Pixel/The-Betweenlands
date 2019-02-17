@@ -28,6 +28,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.TheBetweenlands;
@@ -234,7 +235,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	@Override
 	public void readAdditional(NBTTagCompound compound) {
 		super.readAdditional(compound);
-		if(compound.contains("isHiding")) {
+		if(compound.contains("isHiding", Constants.NBT.TAG_BYTE)) {
 			setHiding(compound.getBoolean("isHiding"));
 			if (isHiding()) {
 				setHidingBush(new BlockPos(compound.getInt("hidingBushX"), compound.getInt("hidingBushY"), compound.getInt("hidingBushZ")));

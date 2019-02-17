@@ -79,20 +79,20 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 	}
 
 	protected void onImpact(RayTraceResult target) {
-		if (target.entityHit != null && target.entityHit instanceof EntityLivingBase && target.entityHit instanceof EntityWight == false && target.entityHit instanceof EntitySwampHag == false) {
+		if (target.entity != null && target.entity instanceof EntityLivingBase && target.entity instanceof EntityWight == false && target.entity instanceof EntitySwampHag == false) {
 			if(!this.world.isRemote()) {
-				if(target.entityHit instanceof EntityPlayer && ((EntityPlayer)target.entityHit).isActiveItemStackBlocking() && ((EntityPlayer)target.entityHit).getItemInUseCount() <= 15) {
+				if(target.entity instanceof EntityPlayer && ((EntityPlayer)target.entity).isActiveItemStackBlocking() && ((EntityPlayer)target.entity).getItemInUseCount() <= 15) {
 					this.motionX *= -6;
 					this.motionY *= -6;
 					this.motionZ *= -6;
 					this.strikes++;
 					return;
 				}
-				target.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 3);
-				if(this.isAlive() && target.entityHit instanceof EntityPlayer && (target.entityHit.isDead || ((EntityLivingBase)target.entityHit).getHealth() <= 0.0F)) {
-					target.entityHit.remove();
+				target.entity.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 3);
+				if(this.isAlive() && target.entity instanceof EntityPlayer && (target.entity.isDead || ((EntityLivingBase)target.entity).getHealth() <= 0.0F)) {
+					target.entity.remove();
 					/*EntityWight wight = new EntityWight(this.world);
-					wight.setLocationAndAngles(target.entityHit.posX, target.entityHit.posY + 0.05D, target.entityHit.posZ, target.entityHit.rotationYaw, target.entityHit.rotationPitch);
+					wight.setLocationAndAngles(target.entity.posX, target.entity.posY + 0.05D, target.entity.posZ, target.entity.rotationYaw, target.entity.rotationPitch);
 					if(this.world.getCollidingBoundingBoxes(wight, wight.boundingBox).isEmpty()) {
 						this.world.spawnEntityInWorld(wight);
 					}*/

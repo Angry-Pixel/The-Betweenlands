@@ -12,17 +12,18 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFace;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntitySapSpit extends EntityThrowable {
 	protected float damage;
 
 	public EntitySapSpit(World worldIn) {
-		super(worldIn);
+		super(EntityRegistry.SAP_SPIT, worldIn);
 	}
 
 	public EntitySapSpit(World worldIn, EntityLivingBase throwerIn, float damage) {
-		super(worldIn, throwerIn);
+		super(EntityRegistry.SAP_SPIT, throwerIn, worldIn);
 		this.damage = damage;
 	}
 
@@ -47,9 +48,9 @@ public class EntitySapSpit extends EntityThrowable {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if(!this.world.isRemote() && result.entityHit instanceof EntitySpiritTreeFace == false && result.entityHit instanceof EntityRootGrabber == false) {
-			if(result.entityHit != null) {
-				result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.damage);
+		if(!this.world.isRemote() && result.entity instanceof EntitySpiritTreeFace == false && result.entity instanceof EntityRootGrabber == false) {
+			if(result.entity != null) {
+				result.entity.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), this.damage);
 			}
 			
 			this.world.setEntityState(this, (byte)3);

@@ -3,7 +3,7 @@ package thebetweenlands.common.entity.mobs;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
@@ -94,7 +94,7 @@ public class EntityTarMinion extends EntityTameable implements IEntityBL {
 	}
 
 	@Override
-	protected void playStepSound(BlockPos pos, Block state) {
+	protected void playStepSound(BlockPos pos, IBlockState state) {
 		if(this.rand.nextInt(10) == 0) {
 			this.playSound(SoundRegistry.TAR_BEAST_STEP, 0.8F, 1.5F);
 		}
@@ -122,15 +122,16 @@ public class EntityTarMinion extends EntityTameable implements IEntityBL {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
+		
 		nbt.setInt("despawnTicks", this.despawnTicks);
-		return nbt;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
+		
 		this.despawnTicks = nbt.getInt("despawnTicks");
 	}
 

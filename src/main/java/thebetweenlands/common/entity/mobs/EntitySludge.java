@@ -429,7 +429,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		}
 
 		@Override
-		public void onUpdateMoveHelper() {
+		public void tick() {
 			if(!this.sludge.isActive()) {
 				this.action = EntityMoveHelper.Action.WAIT;
 				return;

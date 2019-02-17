@@ -237,18 +237,20 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public void writeAdditional(NBTTagCompound nbt) {
+		super.writeAdditional(nbt);
+		
 		if(this.spawnPos != null) {
 			nbt.setLong("spawnPos", this.spawnPos.toLong());
 		}
-		return super.writeToNBT(nbt);
 	}
 	
 	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
+	public void readAdditional(NBTTagCompound nbt) {
+		super.readAdditional(nbt);
+		
 		if(nbt.contains("spawnPos", Constants.NBT.TAG_LONG)) {
 			this.spawnPos = BlockPos.fromLong(nbt.getLong("spawnPos"));
 		}
-		super.readFromNBT(nbt);
 	}
 }

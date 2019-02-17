@@ -193,7 +193,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
         }
 
         @Override
-		public void onUpdateMoveHelper() {
+		public void tick() {
             if (action == EntityMoveHelper.Action.MOVE_TO && !fish.getNavigator().noPath()) {
                 double d0 = posX - fish.posX;
                 double d1 = posY - fish.posY;

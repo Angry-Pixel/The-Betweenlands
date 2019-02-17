@@ -6,14 +6,15 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class EntityAngryPebble extends EntityThrowable {
 	public EntityAngryPebble(World world) {
-		super(world);
+		super(EntityRegistry.ANGRY_PEBBLE, world);
 	}
 
 	public EntityAngryPebble(World world, EntityLivingBase entity) {
-		super(world, entity);
+		super(EntityRegistry.ANGRY_PEBBLE, entity, world);
 	}
 
 	@Override
@@ -26,7 +27,7 @@ public class EntityAngryPebble extends EntityThrowable {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if(result.typeOfHit != null) {
+		if(result.type != null) {
 			if(this.world.isRemote()) {
 				double particleX = MathHelper.floor(this.posX) + this.rand.nextFloat();
 				double particleY = MathHelper.floor(this.posY) + this.rand.nextFloat();

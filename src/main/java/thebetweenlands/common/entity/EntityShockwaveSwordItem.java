@@ -9,22 +9,25 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import thebetweenlands.common.registries.EntityRegistry;
 
 public class EntityShockwaveSwordItem extends EntityItem {
+	//TODO 1.13 Shockwave sword can't extend EnttiyItem because EntitType is hardcoded
+	
 	private static final DataParameter<Integer> WAVE_PROGRESS = EntityDataManager.createKey(EntityShockwaveSwordItem.class, DataSerializers.VARINT);
 
 	private int waveProgress;
 	private int lastWaveProgress;
 
 	public EntityShockwaveSwordItem(World worldIn) {
-		super(worldIn);
+		super(EntityRegistry.SHOCKWAVE_SWORD_ITEM, worldIn);
 		this.setPickupDelay(80);
 		this.setNoDespawn();
 		this.setSize(0.25F, 1.0F);
 	}
 
 	public EntityShockwaveSwordItem(World worldObj, double posX, double posY, double posZ, ItemStack itemStack) {
-		super(worldObj, posX, posY, posZ, itemStack);
+		super(EntityRegistry.SHOCKWAVE_SWORD_ITEM, worldObj, posX, posY, posZ, itemStack);
 		this.setPickupDelay(80);
 		this.setNoDespawn();
 	}
