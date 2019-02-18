@@ -169,7 +169,7 @@ public class BatchedParticleRenderer {
 			GlStateManager.enableBlend();
 			GlStateManager.depthMask(true);
 			GlStateManager.enableLighting();
-			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.004F);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -207,7 +207,7 @@ public class BatchedParticleRenderer {
 			GlStateManager.enableDepth();
 			GlStateManager.colorMask(true, true, true, true);
 			GlStateManager.depthMask(true);
-			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.disableBlend();
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 			GlStateManager.disableLighting();

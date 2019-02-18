@@ -19,13 +19,12 @@ public class RenderLeech extends RenderLiving<EntityLeech> {
 
     @Override
     protected void preRenderCallback(EntityLeech leech, float partialTickTime) {
-        if(!leech.isRiding())
-            GlStateManager.scale(1 + leech.getBloodConsumed() * 0.1F, 1 + leech.getBloodConsumed() * 0.1F, (leech.moveProgress + 3F) / 3F);
-
-        if(leech.isRiding()) {
-            GlStateManager.scale(leech.moveProgress*leech.moveProgress/2 + 0.5F, leech.moveProgress*leech.moveProgress/2 + 0.5F, 1F);
-            GlStateManager.rotate(180, 0, 1, 0);
-            GlStateManager.translate(0, 0, 0.5F);
+        if(leech.getRidingEntity() == null) {
+            GlStateManager.scalef(1 + leech.getBloodConsumed() * 0.1F, 1 + leech.getBloodConsumed() * 0.1F, (leech.moveProgress + 3F) / 3F);
+        } else {
+            GlStateManager.scalef(leech.moveProgress*leech.moveProgress/2 + 0.5F, leech.moveProgress*leech.moveProgress/2 + 0.5F, 1F);
+            GlStateManager.rotatef(180, 0, 1, 0);
+            GlStateManager.translatef(0, 0, 0.5F);
         }
     }
 

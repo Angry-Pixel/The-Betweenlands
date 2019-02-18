@@ -23,11 +23,11 @@ public class ModelBodyAttachment extends ModelBiped {
 		GlStateManager.pushMatrix();
 
 		if (this.isChild) {
-			GlStateManager.scale(0.5F, 0.5F, 0.5F);
-			GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
+			GlStateManager.scalef(0.5F, 0.5F, 0.5F);
+			GlStateManager.translatef(0.0F, 24.0F * scale, 0.0F);
 		} else  {
 			if(entity.isSneaking()) {
-				GlStateManager.translate(0.0F, 0.2F, 0.0F);
+				GlStateManager.translatef(0.0F, 0.2F, 0.0F);
 			}
 		}
 
@@ -61,7 +61,7 @@ public class ModelBodyAttachment extends ModelBiped {
 					base.renderWithRotation(scale);
 				}
 
-				GlStateManager.translate(base.offsetX, base.offsetY, base.offsetZ);
+				GlStateManager.translatef(base.offsetX, base.offsetY, base.offsetZ);
 
 				if(base.rotateAngleX == 0.0F && base.rotateAngleY == 0.0F && base.rotateAngleZ == 0.0F) {
 					if(base.rotationPointX == 0.0F && base.rotationPointY == 0.0F && base.rotationPointZ == 0.0F) {
@@ -75,7 +75,7 @@ public class ModelBodyAttachment extends ModelBiped {
 							}
 						}
 					} else {
-						GlStateManager.translate(base.rotationPointX * scale, base.rotationPointY * scale, base.rotationPointZ * scale);
+						GlStateManager.translatef(base.rotationPointX * scale, base.rotationPointY * scale, base.rotationPointZ * scale);
 
 						if(base.childModels != null) {
 							for(ModelRenderer childModel : base.childModels) {
@@ -87,22 +87,22 @@ public class ModelBodyAttachment extends ModelBiped {
 							}
 						}
 
-						GlStateManager.translate(-base.rotationPointX * scale, -base.rotationPointY * scale, -base.rotationPointZ * scale);
+						GlStateManager.translatef(-base.rotationPointX * scale, -base.rotationPointY * scale, -base.rotationPointZ * scale);
 					}
 				} else {
 					GlStateManager.pushMatrix();
-					GlStateManager.translate(base.rotationPointX * scale, base.rotationPointY * scale, base.rotationPointZ * scale);
+					GlStateManager.translatef(base.rotationPointX * scale, base.rotationPointY * scale, base.rotationPointZ * scale);
 
 					if(base.rotateAngleZ != 0.0F) {
-						GlStateManager.rotate(base.rotateAngleZ * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
+						GlStateManager.rotatef(base.rotateAngleZ * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
 					}
 
 					if(base.rotateAngleY != 0.0F) {
-						GlStateManager.rotate(base.rotateAngleY * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+						GlStateManager.rotatef(base.rotateAngleY * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
 					}
 
 					if(base.rotateAngleX != 0.0F) {
-						GlStateManager.rotate(base.rotateAngleX * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
+						GlStateManager.rotatef(base.rotateAngleX * (180F / (float)Math.PI), 1.0F, 0.0F, 0.0F);
 					}
 
 					if(base.childModels != null) {
@@ -118,7 +118,7 @@ public class ModelBodyAttachment extends ModelBiped {
 					GlStateManager.popMatrix();
 				}
 
-				GlStateManager.translate(-base.offsetX, -base.offsetY, -base.offsetZ);
+				GlStateManager.translatef(-base.offsetX, -base.offsetY, -base.offsetZ);
 			}
 		}
 	}

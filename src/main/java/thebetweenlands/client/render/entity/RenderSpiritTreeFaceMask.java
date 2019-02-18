@@ -27,10 +27,10 @@ public class RenderSpiritTreeFaceMask extends Render<EntitySpiritTreeFaceMask> {
 	@Override
 	public void doRender(EntitySpiritTreeFaceMask entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y, z);
-		GlStateManager.rotate(180.0F - entityYaw, 0.0F, 1.0F, 0.0F);
+		GlStateManager.translated(x, y, z);
+		GlStateManager.rotatef(180.0F - entityYaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.enableRescaleNormal();
-		GlStateManager.scale(-1, -1, 1);
+		GlStateManager.scalef(-1, -1, 1);
 
 		this.bindEntityTexture(entity);
 
@@ -42,9 +42,9 @@ public class RenderSpiritTreeFaceMask extends Render<EntitySpiritTreeFaceMask> {
 		ModelBase model = entity.getType() == EntitySpiritTreeFaceMask.Type.LARGE ? MODEL_LARGE : MODEL_SMALL;
 
 		if(entity.getType() == EntitySpiritTreeFaceMask.Type.LARGE) {
-			GlStateManager.translate(0, -0.4D, 0);
+			GlStateManager.translatef(0, -0.4F, 0);
 		} else {
-			GlStateManager.translate(0, -1.1D, -0.5D);
+			GlStateManager.translatef(0, -1.1F, -0.5F);
 		}
 
 		model.render(entity, 0, 0, 0, 0, 0, 0.0625F);

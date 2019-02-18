@@ -16,7 +16,7 @@ public class RenderMireSnailEgg extends RenderLiving<EntityMireSnailEgg> {
 
     @Override
     protected void preRenderCallback(EntityMireSnailEgg entitylivingbaseIn, float partialTickTime) {
-        GlStateManager.scale(2.5F + entitylivingbaseIn.pulseFloat, 2.5F + entitylivingbaseIn.pulseFloat, 2.5F + entitylivingbaseIn.pulseFloat);
+        GlStateManager.scalef(2.5F + entitylivingbaseIn.pulseFloat, 2.5F + entitylivingbaseIn.pulseFloat, 2.5F + entitylivingbaseIn.pulseFloat);
     }
 
     @Override

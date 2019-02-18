@@ -30,10 +30,10 @@ public class RenderDarkLight extends RenderLiving<EntityDarkLight> {
 	public void doRender(EntityDarkLight entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		float renderRotation = entity.rotation + (entity.rotation - entity.prevRotation) * partialTicks;
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + 0.875F, z);
-		GlStateManager.rotate(renderRotation * 2.0F, 0, 1, 0);
-		double shineScale = 0.08F;
-		GlStateManager.scale(shineScale, shineScale, shineScale);
+		GlStateManager.translated(x, y + 0.875F, z);
+		GlStateManager.rotatef(renderRotation * 2.0F, 0, 1, 0);
+		float shineScale = 0.08F;
+		GlStateManager.scalef(shineScale, shineScale, shineScale);
 		this.renderShine((float) Math.sin(Math.toRadians(renderRotation)) / 2.0F - 0.2F, 80);
 		GlStateManager.popMatrix();
 
@@ -41,12 +41,12 @@ public class RenderDarkLight extends RenderLiving<EntityDarkLight> {
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-		GlStateManager.disableAlpha();
+		GlStateManager.disableAlphaTest();
 		GlStateManager.depthMask(false);
-		GlStateManager.translate(x, y + 1.75F, z);
-		GlStateManager.scale(1, -1, 1);
-		GlStateManager.rotate(180F + entity.renderYawOffset, 0, -1, 0);
-		GlStateManager.color(0.1F, 0.4F, 1F, 0.3F);
+		GlStateManager.translated(x, y + 1.75F, z);
+		GlStateManager.scalef(1, -1, 1);
+		GlStateManager.rotatef(180F + entity.renderYawOffset, 0, -1, 0);
+		GlStateManager.color4f(0.1F, 0.4F, 1F, 0.3F);
 		bindTexture(TEXTURE);
 		MODEL.render();
 		MODEL.setLivingAnimations(entity, 0F, 0F, partialTicks);
@@ -54,7 +54,7 @@ public class RenderDarkLight extends RenderLiving<EntityDarkLight> {
 		GlStateManager.disableBlend();
 		GL11.glShadeModel(GL11.GL_FLAT);
 		GlStateManager.enableTexture2D();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		RenderHelper.enableStandardItemLighting();
 		GlStateManager.popMatrix();
 	}
@@ -65,7 +65,7 @@ public class RenderDarkLight extends RenderLiving<EntityDarkLight> {
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-		GlStateManager.disableAlpha();
+		GlStateManager.disableAlphaTest();
 		GlStateManager.enableCull();
 		GlStateManager.depthMask(false);
 		GlStateManager.pushMatrix();
@@ -77,12 +77,12 @@ public class RenderDarkLight extends RenderLiving<EntityDarkLight> {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		for (int i = 0; (float) i < iterations; ++i) {
-			GlStateManager.rotate(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-			GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
-			GlStateManager.rotate(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-			GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate(random.nextFloat() * 360.0F + f1 * 90.0F, 0.0F, 0.0F, 1.0F);
+			GlStateManager.rotatef(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
+			GlStateManager.rotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotatef(random.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
+			GlStateManager.rotatef(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
+			GlStateManager.rotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotatef(random.nextFloat() * 360.0F + f1 * 90.0F, 0.0F, 0.0F, 1.0F);
 			float pos1 = random.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
 			float pos2 = random.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
 			buffer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
@@ -98,9 +98,9 @@ public class RenderDarkLight extends RenderLiving<EntityDarkLight> {
 		GlStateManager.disableCull();
 		GlStateManager.disableBlend();
 		GL11.glShadeModel(GL11.GL_FLAT);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.enableTexture2D();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		RenderHelper.enableStandardItemLighting();
 	}
 

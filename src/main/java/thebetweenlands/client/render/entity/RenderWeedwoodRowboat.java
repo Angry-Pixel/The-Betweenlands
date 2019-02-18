@@ -80,10 +80,10 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         model.animateOar(rowboat, ShipSide.STARBOARD, delta);
         model.animateOar(rowboat, ShipSide.PORT, delta);
         GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y + 1.5F + rowboat.getWaveHeight(delta), z);
+        GlStateManager.translated(x, y + 1.5F + rowboat.getWaveHeight(delta), z);
         roll(rowboat, yaw, delta);
         bindEntityTexture(rowboat);
-        GlStateManager.scale(-1, -1, 1);
+        GlStateManager.scalef(-1, -1, 1);
         model.render(rowboat, 0.0625F, delta);
         GlStateManager.popMatrix();
     }
@@ -91,7 +91,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     @Override
     public void renderMultipass(EntityWeedwoodRowboat rowboat, double x, double y, double z, float yaw, float delta) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate(x, y + 1.5F + rowboat.getWaveHeight(delta), z);
+        GlStateManager.translated(x, y + 1.5F + rowboat.getWaveHeight(delta), z);
         roll(rowboat, yaw, delta);
         renderWaterMask();
         GlStateManager.popMatrix();
@@ -111,7 +111,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         float fracX = MathHelper.positiveModulo((float) bpx, 1);
         float fracZ = MathHelper.positiveModulo((float) bpz, 1);
         GlStateManager.translate(x - fracX, y - MathHelper.positiveModulo((float) bpy, 1) + 14.22 / 16, z - fracZ);
-        GlStateManager.enableAlpha();
+        GlStateManager.enableAlphaTest();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.glBegin(GL11.GL_TRIANGLES);
@@ -160,7 +160,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
             }
         }
         GlStateManager.glEnd();
-        GlStateManager.disableAlpha();
+        GlStateManager.disableAlphaTest();
         GlStateManager.disableBlend();
         GlStateManager.colorMask(false, false, false, false);
         GlStateManager.glBegin(GL11.GL_QUADS);
@@ -186,19 +186,19 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
 
     private void roll(EntityWeedwoodRowboat rowboat, float yaw, float delta) {
         Quat rot = rowboat.getRotation(delta);
-        GlStateManager.translate(0, -1.5F, 0);
+        GlStateManager.translatef(0, -1.5F, 0);
         GlStateManager.rotate(new Quaternion((float) rot.x, (float) rot.y, (float) rot.z, (float) rot.w));
-        GlStateManager.translate(0, 1.5F, 0);
-        GlStateManager.rotate(-yaw, 0, 1, 0);
+        GlStateManager.translatef(0, 1.5F, 0);
+        GlStateManager.rotatef(-yaw, 0, 1, 0);
         float timeSinceHit = rowboat.getTimeSinceHit() - delta;
         float damageTaken = rowboat.getDamageTaken() - delta;
         if (damageTaken < 0) {
             damageTaken = 0;
         }
         if (timeSinceHit > 0) {
-            GlStateManager.translate(0, -1, 0);
-            GlStateManager.rotate(MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10 * rowboat.getForwardDirection(), 0, 0, 1);
-            GlStateManager.translate(0, 1, 0);
+            GlStateManager.translatef(0, -1, 0);
+            GlStateManager.rotatef(MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10 * rowboat.getForwardDirection(), 0, 0, 1);
+            GlStateManager.translatef(0, 1, 0);
         }
     }
 
@@ -355,13 +355,13 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
             vb.pos(endWidth, y, endDepth + endOffset).endVertex();
             vb.pos(endWidth, y, -endDepth + endOffset).endVertex();
             vb.pos(-endWidth, y, -endDepth + endOffset).endVertex();
-            GlStateManager.glNewList(maskId, GL11.GL_COMPILE_AND_EXECUTE);
+            GlStateManager.newList(maskId, GL11.GL_COMPILE_AND_EXECUTE);
             GlStateManager.disableTexture2D();
             GlStateManager.colorMask(false, false, false, false);
             tessellator.draw();
             GlStateManager.colorMask(true, true, true, true);
             GlStateManager.enableTexture2D();
-            GlStateManager.glEndList();
+            GlStateManager.endList();
         } else {
             GlStateManager.callList(maskId);
         }

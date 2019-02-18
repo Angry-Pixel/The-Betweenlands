@@ -32,7 +32,7 @@ public class ModelMummyArm extends MowzieModelBase {
 
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		GlStateManager.scale(0.7D, 0.7D, 0.7D);
+		GlStateManager.scalef(0.7F, 0.7F, 0.7F);
 		this.armleft.render(f5);
 	}
 

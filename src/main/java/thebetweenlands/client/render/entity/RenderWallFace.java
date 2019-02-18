@@ -16,13 +16,13 @@ public abstract class RenderWallFace<T extends EntityWallFace> extends RenderLiv
 
 	@Override
 	protected void preRenderCallback(T entity, float partialTickTime) {
-		GlStateManager.translate(0, -entity.getEyeHeight(), 0);
-		GlStateManager.rotate(entity.rotationPitch, 1, 0, 0);
-		GlStateManager.translate(0, entity.getEyeHeight(), 0);
+		GlStateManager.translatef(0, (float)-entity.getEyeHeight(), 0);
+		GlStateManager.rotatef(entity.rotationPitch, 1, 0, 0);
+		GlStateManager.translatef(0, entity.getEyeHeight(), 0);
 	}
 
 	@Override
 	protected void applyRotations(T entityLiving, float thisFieldWasObfuscatedAndICantBeBotheredToCheckWhatItIs, float rotationYaw, float partialTicks) {
-		GlStateManager.rotate(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotatef(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
 	}
 }

@@ -72,9 +72,9 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 				return state.getPackedLightmapCoords(entity.world, facing != null ? entity.origin.up().offset(facing) : entity.origin.up());
 			}).setTint((IBlockState blockState, int tintIndex) -> {
 				if(blockState.getBlock() == entity.block)
-					return Minecraft.getInstance().getBlockColors().colorMultiplier(state, entity.world, entity.origin, tintIndex);
+					return Minecraft.getInstance().getBlockColors().getColor(state, entity.world, entity.origin, tintIndex);
 				else
-					return Minecraft.getInstance().getBlockColors().colorMultiplier(state, null, null, tintIndex);
+					return Minecraft.getInstance().getBlockColors().getColor(state, null, null, tintIndex);
 			});
 
 			blockRenderer.renderModel(entity.origin, model, state, MathHelper.getPositionRandom(entity.origin), buffer);

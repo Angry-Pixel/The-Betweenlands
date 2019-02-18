@@ -76,7 +76,7 @@ public class ModelLeech extends ModelBase {
     public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
         super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
         EntityLeech leech = (EntityLeech) entity;
-        if (!leech.isRiding())
+        if (leech.getRidingEntity() == null)
             leech.moveProgress = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
     }
 }

@@ -46,8 +46,8 @@ public class RenderVolatileSoul extends Render<EntityVolatileSoul> {
 		y += 0.2D;
 
 		GlStateManager.enableBlend();
-		GlStateManager.enableAlpha();
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.enableAlphaTest();
+		GlStateManager.color4f(1, 1, 1, 1);
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -64,7 +64,7 @@ public class RenderVolatileSoul extends Render<EntityVolatileSoul> {
 		GlStateManager.depthMask(false);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.004F);
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 

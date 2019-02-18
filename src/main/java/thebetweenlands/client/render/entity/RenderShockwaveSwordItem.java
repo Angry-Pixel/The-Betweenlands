@@ -1,6 +1,6 @@
 package thebetweenlands.client.render.entity;
 
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderEntityItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.item.EntityItem;
@@ -9,7 +9,7 @@ import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 
 public class RenderShockwaveSwordItem extends RenderEntityItem {
-	public RenderShockwaveSwordItem(RenderManager renderManager, RenderItem renderItem) {
+	public RenderShockwaveSwordItem(RenderManager renderManager, ItemRenderer renderItem) {
 		super(renderManager, renderItem);
 	}
 

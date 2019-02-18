@@ -114,9 +114,9 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 		}
 
 		GlStateManager.disableFog();
-		GlStateManager.disableAlpha();
+		GlStateManager.disableAlphaTest();
 		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		RenderHelper.disableStandardItemLighting();
 		float[] afloat = this.calcSunriseSunsetColors(world, this.getCelestialAngle(worldTime, partialTicks), partialTicks);
 
@@ -159,7 +159,7 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 		}
 
 		GlStateManager.enableTexture2D();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.pushMatrix();
 		float f16 = 1.0F - this.getRainStrength(world, partialTicks);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, f16);
@@ -212,12 +212,12 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.disableBlend();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		GlStateManager.enableFog();
 		GlStateManager.popMatrix();
 		GlStateManager.disableTexture2D();
 		GlStateManager.color(0.0F, 0.0F, 0.0F);
-		double d3 = mc.player.getPositionEyes(partialTicks).y - this.getHorizon();
+		double d3 = mc.player.getEyePosition(partialTicks).y - this.getHorizon();
 
 		if (d3 < 0.0D)
 		{
@@ -353,10 +353,10 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 		else
 		{
 			this.glSkyList2 = GLAllocation.generateDisplayLists(1);
-			GlStateManager.glNewList(this.glSkyList2, 4864);
+			GlStateManager.newList(this.glSkyList2, 4864);
 			this.renderSky(bufferbuilder, -16.0F, true);
 			tessellator.draw();
-			GlStateManager.glEndList();
+			GlStateManager.endList();
 		}
 	}
 
@@ -387,10 +387,10 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 		else
 		{
 			this.glSkyList = GLAllocation.generateDisplayLists(1);
-			GlStateManager.glNewList(this.glSkyList, 4864);
+			GlStateManager.newList(this.glSkyList, 4864);
 			this.renderSky(bufferbuilder, 16.0F, false);
 			tessellator.draw();
-			GlStateManager.glEndList();
+			GlStateManager.endList();
 		}
 	}
 
@@ -495,10 +495,10 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 		{
 			this.starGLCallList = GLAllocation.generateDisplayLists(1);
 			GlStateManager.pushMatrix();
-			GlStateManager.glNewList(this.starGLCallList, 4864);
+			GlStateManager.newList(this.starGLCallList, 4864);
 			this.renderStars(bufferbuilder);
 			tessellator.draw();
-			GlStateManager.glEndList();
+			GlStateManager.endList();
 			GlStateManager.popMatrix();
 		}
 	}

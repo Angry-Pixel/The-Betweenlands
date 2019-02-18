@@ -4,7 +4,7 @@ import java.util.SplittableRandom;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -26,7 +26,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/animator.png");
 	public static RenderAnimator instance;
 	private RenderManager renderManager;
-	private final RenderItem renderItem = Minecraft.getInstance().getRenderItem();
+	private final ItemRenderer renderItem = Minecraft.getInstance().getItemRenderer();
 
 	public RenderAnimator() {
 		renderManager = Minecraft.getInstance().getRenderManager();

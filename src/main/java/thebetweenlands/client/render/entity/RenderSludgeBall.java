@@ -24,8 +24,8 @@ public class RenderSludgeBall extends Render<EntitySludgeBall> {
 	public void doRender(EntitySludgeBall entity, double x, double y, double z, float yaw, float partialTickTime) {
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y, z);
-		GlStateManager.scale(0.5, 0.5, 0.5);
+		GlStateManager.translated(x, y, z);
+		GlStateManager.scalef(0.5F, 0.5F, 0.5F);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GlStateManager.depthMask(true);

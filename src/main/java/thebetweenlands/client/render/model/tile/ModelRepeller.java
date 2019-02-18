@@ -95,29 +95,29 @@ public class ModelRepeller extends ModelBase {
 
 		if(liquid > 0.0F) {
 			GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
-			GlStateManager.color(0, 0, 0, 1);
+			GlStateManager.color4f(0, 0, 0, 1);
 			GlStateManager.disableTexture2D();
 	
 			float[] aspectRGBA = ColorUtils.getRGBA(AspectRegistry.BYARIIS.getColor());
-			GlStateManager.color(aspectRGBA[0] * 2, aspectRGBA[1] * 2, aspectRGBA[2] * 2, 0.98F);
+			GlStateManager.color4f(aspectRGBA[0] * 2, aspectRGBA[1] * 2, aspectRGBA[2] * 2, 0.98F);
 	
 			LightingUtil.INSTANCE.setLighting(255);
 			GlStateManager.enableNormalize();
 			GlStateManager.pushMatrix();
 			float px = 0.0625F;
-			GlStateManager.translate(-1.65F * px, 5.5F * px, -3.5F * px);
-			GlStateManager.rotate(3, 0, 1, 0);
-			GlStateManager.rotate(6, 0, 0, 1);
-			GlStateManager.rotate(26, 1, 0, 0);
-			GlStateManager.translate(0, 3 * px - 3 * px * liquid, 0);
-			GlStateManager.scale(1, liquid, 1);
+			GlStateManager.translatef(-1.65F * px, 5.5F * px, -3.5F * px);
+			GlStateManager.rotatef(3, 0, 1, 0);
+			GlStateManager.rotatef(6, 0, 0, 1);
+			GlStateManager.rotatef(26, 1, 0, 0);
+			GlStateManager.translatef(0, 3 * px - 3 * px * liquid, 0);
+			GlStateManager.scalef(1, liquid, 1);
 			this.liquid.render(0.0625F);
 			GlStateManager.popMatrix();
 			GlStateManager.disableNormalize();
 			LightingUtil.INSTANCE.revert();
 			
 			GlStateManager.enableTexture2D();
-			GlStateManager.color(1, 1, 1, 1);
+			GlStateManager.color4f(1, 1, 1, 1);
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		}
 		

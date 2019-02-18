@@ -44,12 +44,12 @@ public class Categories {
 				GlStateManager.pushMatrix();
 				double posX = centerX + startX + dirX * radius / 2.0D - 8;
 				double posY = centerY + startY + dirY * radius / 2.0D - 8;
-				GlStateManager.translate(posX, posY, 0);
-				GlStateManager.color(1, 1, 1, 1);
+				GlStateManager.translatef((float)posX, (float)posY, 0);
+				GlStateManager.color4f(1, 1, 1, 1);
 				GlStateManager.enableBlend();
 				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
-				Minecraft.getInstance().getRenderItem().renderItemAndEffectIntoGUI(this.getItem(), 0, 0);
+				Minecraft.getInstance().getItemRenderer().renderItemAndEffectIntoGUI(this.getItem(), 0, 0);
 
 				GlStateManager.popMatrix();
 			}

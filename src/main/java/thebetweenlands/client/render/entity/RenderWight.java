@@ -36,11 +36,11 @@ public class RenderWight extends RenderLiving<EntityWight> {
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY, entity.posZ, 10.0f, -1, -1, -1));
 		}
 
-		GlStateManager.scale(0.9F, 0.9F, 0.9F);
+		GlStateManager.scalef(0.9F, 0.9F, 0.9F);
 
 		if(entity.isVolatile()) {
-			GlStateManager.scale(0.5D, 0.5D, 0.5D);
-			GlStateManager.translate(0, 1.0D, 0);
+			GlStateManager.scalef(0.5F, 0.5F, 0.5F);
+			GlStateManager.translatef(0, 1.0F, 0);
 		}
 	}
 
@@ -50,14 +50,14 @@ public class RenderWight extends RenderLiving<EntityWight> {
 			GlStateManager.pushMatrix();
 			GlStateManager.disableBlend();
 			GlStateManager.colorMask(false, false, false, false);
-			GlStateManager.color(1, 1, 1, 1);
+			GlStateManager.color4f(1, 1, 1, 1);
 
 			super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
 			GlStateManager.colorMask(true, true, true, true);
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			GlStateManager.color(1F, 1F, 1F, 1F - entity.getHidingAnimation(partialTicks) * 0.5F);
+			GlStateManager.color4f(1F, 1F, 1F, 1F - entity.getHidingAnimation(partialTicks) * 0.5F);
 
 			super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
@@ -68,16 +68,16 @@ public class RenderWight extends RenderLiving<EntityWight> {
 			GlStateManager.pushMatrix();
 			GlStateManager.disableBlend();
 			GlStateManager.colorMask(false, false, false, false);
-			GlStateManager.color(1, 1, 1, 1);
+			GlStateManager.color4f(1, 1, 1, 1);
 
 			if (entity.getRidingEntity() != null) {
-				GlStateManager.translate(x, y, z);
+				GlStateManager.translated(x, y, z);
 				GlStateManager.enableRescaleNormal();
-				GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-				GlStateManager.rotate((float) (entity.ticksExisted + partialTicks) / 30.0F * 360.0F, 0, 1, 0);
-				GlStateManager.rotate(180, 0, 1, 0);
-				GlStateManager.translate(0, -entity.getRidingEntity().getEyeHeight() + 1.65D, 0.8D);
-				GlStateManager.scale(0.5D, 0.5D, 0.5D);
+				GlStateManager.scalef(-1.0F, -1.0F, 1.0F);
+				GlStateManager.rotatef((float) (entity.ticksExisted + partialTicks) / 30.0F * 360.0F, 0, 1, 0);
+				GlStateManager.rotatef(180, 0, 1, 0);
+				GlStateManager.translatef(0, (float)-entity.getRidingEntity().getEyeHeight() + 1.65F, 0.8F);
+				GlStateManager.scalef(0.5F, 0.5F, 0.5F);
 
 				this.bindEntityTexture(entity);
 
@@ -86,7 +86,7 @@ public class RenderWight extends RenderLiving<EntityWight> {
 				GlStateManager.colorMask(true, true, true, true);
 				GlStateManager.enableBlend();
 				GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-				GlStateManager.color(1F, 1F, 1F, 0.4F);
+				GlStateManager.color4f(1F, 1F, 1F, 0.4F);
 
 				MODEL_HEAD_ONLY.render(entity, 0.0F, 0.0F, entity.ticksExisted + partialTicks, 0.0F, 0.0F, 0.0625F);
 			} else {
@@ -95,7 +95,7 @@ public class RenderWight extends RenderLiving<EntityWight> {
 				GlStateManager.colorMask(true, true, true, true);
 				GlStateManager.enableBlend();
 				GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-				GlStateManager.color(1F, 1F, 1F, 0.4F);
+				GlStateManager.color4f(1F, 1F, 1F, 0.4F);
 
 				super.doRender(entity, x, y, z, entityYaw, partialTicks);
 			}

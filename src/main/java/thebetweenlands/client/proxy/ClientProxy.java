@@ -147,9 +147,9 @@ import thebetweenlands.client.render.tile.RenderCompostBin;
 import thebetweenlands.client.render.tile.RenderDruidAltar;
 import thebetweenlands.client.render.tile.RenderGeckoCage;
 import thebetweenlands.client.render.tile.RenderInfuser;
-import thebetweenlands.client.render.tile.RenderItemCage;
-import thebetweenlands.client.render.tile.RenderItemShelf;
-import thebetweenlands.client.render.tile.RenderItemStackAsTileEntity;
+import thebetweenlands.client.render.tile.ItemRendererCage;
+import thebetweenlands.client.render.tile.ItemRendererShelf;
+import thebetweenlands.client.render.tile.ItemRendererStackAsTileEntity;
 import thebetweenlands.client.render.tile.RenderLivingWeedwoodShield;
 import thebetweenlands.client.render.tile.RenderLootPot;
 import thebetweenlands.client.render.tile.RenderMudFlowerPot;
@@ -392,7 +392,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 
 	/*
         @Override
-        public void registerDefaultBlockItemRenderer(Block block) {
+        public void registerDefaultBlockFirstPersonRenderer(Block block) {
             if (block instanceof BlockRegistry.ISubBlocksBlock) {
                 List<String> models = ((BlockRegistry.ISubBlocksBlock) block).getModels();
                 if (block instanceof BlockDruidStone) {
@@ -413,7 +413,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         }
 	 */
 	@Override
-	public void registerDefaultItemRenderer(Item item) {
+	public void registerDefaultFirstPersonRenderer(Item item) {
 		Map<Integer, ResourceLocation> map = this.getItemModelMap(item);
 		for(Entry<Integer, ResourceLocation> entry : map.entrySet()) {
 			ModelLoader.setCustomModelResourceLocation(item, entry.getKey(), (ModelResourceLocation) entry.getValue());
@@ -461,7 +461,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveBlock.class, RenderShockwaveBlock::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGecko.class, RenderGecko::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityWight.class, RenderWight::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveSwordItem.class, manager -> new RenderShockwaveSwordItem(manager, Minecraft.getInstance().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveSwordItem.class, manager -> new RenderShockwaveSwordItem(manager, Minecraft.getInstance().getItemRenderer()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityFirefly.class, RenderFirefly::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityShallowbreath.class, RenderGasCloud::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySludge.class, RenderSludge::new);
@@ -477,7 +477,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrownTarminion.class, RenderThrownTarminion::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRopeNode.class, RenderRopeNode::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMummyArm.class, RenderMummyArm::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityAngryPebble.class, manager -> new RenderAngryPebble(manager, Minecraft.getInstance().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityAngryPebble.class, manager -> new RenderAngryPebble(manager, Minecraft.getInstance().getItemRenderer()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityPrimordialMalevolence.class, RenderFortressBoss::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityPrimordialMalevolenceSpawner.class, RenderFortressBossSpawner::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityPrimordialMalevolenceBlockade.class, RenderFortressBossBlockade::new);
@@ -545,7 +545,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChestBetweenlands.class, new RenderChestBetweenlands());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpikeTrap.class, new RenderSpikeTrap());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPossessedBlock.class, new RenderPossessedBlock());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemCage.class, new RenderItemCage());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemCage.class, new ItemRendererCage());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodSign.class, new RenderWeedwoodSign());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudFlowerPot.class, new RenderMudFlowerPot());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGeckoCage.class, new RenderGeckoCage());
@@ -555,7 +555,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAnimator.class, new RenderAnimator());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAlembic.class, new RenderAlembic());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCompostBin.class, new RenderCompostBin());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemShelf.class, new RenderItemShelf());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemShelf.class, new ItemRendererShelf());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot1.class, new RenderTarLootPot1());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot2.class, new RenderTarLootPot2());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot3.class, new RenderTarLootPot3());
@@ -565,21 +565,21 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWaystone.class, new RenderWaystone());
 		
 		//item models
-		Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityDruidAltar.class));
-		Item.getItemFromBlock(BlockRegistry.COMPOST_BIN).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCompostBin.class));
-		Item.getItemFromBlock(BlockRegistry.PURIFIER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityPurifier.class));
-		Item.getItemFromBlock(BlockRegistry.MOB_SPAWNER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityMobSpawnerBetweenlands.class));
-		Item.getItemFromBlock(BlockRegistry.SPIKE_TRAP).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntitySpikeTrap.class));
-		Item.getItemFromBlock(BlockRegistry.POSSESSED_BLOCK).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityPossessedBlock.class));
-		Item.getItemFromBlock(BlockRegistry.ITEM_CAGE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityItemCage.class));
-		Item.getItemFromBlock(BlockRegistry.GECKO_CAGE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityGeckoCage.class));
-		Item.getItemFromBlock(BlockRegistry.INFUSER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityInfuser.class));
-		Item.getItemFromBlock(BlockRegistry.MORTAR).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityMortar.class));
-		Item.getItemFromBlock(BlockRegistry.ANIMATOR).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityAnimator.class));
-		Item.getItemFromBlock(BlockRegistry.ALEMBIC).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityAlembic.class));
-		Item.getItemFromBlock(BlockRegistry.ITEM_SHELF).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityItemShelf.class));
-		Item.getItemFromBlock(BlockRegistry.REPELLER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityRepeller.class));
-		Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(renderer -> {
+		Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityDruidAltar.class));
+		Item.getItemFromBlock(BlockRegistry.COMPOST_BIN).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityCompostBin.class));
+		Item.getItemFromBlock(BlockRegistry.PURIFIER).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityPurifier.class));
+		Item.getItemFromBlock(BlockRegistry.MOB_SPAWNER).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityMobSpawnerBetweenlands.class));
+		Item.getItemFromBlock(BlockRegistry.SPIKE_TRAP).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntitySpikeTrap.class));
+		Item.getItemFromBlock(BlockRegistry.POSSESSED_BLOCK).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityPossessedBlock.class));
+		Item.getItemFromBlock(BlockRegistry.ITEM_CAGE).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityItemCage.class));
+		Item.getItemFromBlock(BlockRegistry.GECKO_CAGE).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityGeckoCage.class));
+		Item.getItemFromBlock(BlockRegistry.INFUSER).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityInfuser.class));
+		Item.getItemFromBlock(BlockRegistry.MORTAR).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityMortar.class));
+		Item.getItemFromBlock(BlockRegistry.ANIMATOR).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityAnimator.class));
+		Item.getItemFromBlock(BlockRegistry.ALEMBIC).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityAlembic.class));
+		Item.getItemFromBlock(BlockRegistry.ITEM_SHELF).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityItemShelf.class));
+		Item.getItemFromBlock(BlockRegistry.REPELLER).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityRepeller.class));
+		Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(renderer -> {
 			for(EnumFacing facing : EnumFacing.HORIZONTALS) {
 				renderer.add(EnumLootPot.POT_1.getMetadata(facing), TileEntityTarLootPot1.class);
 				renderer.add(EnumLootPot.POT_2.getMetadata(facing), TileEntityTarLootPot2.class);
@@ -587,7 +587,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			}
 		}));
 		ItemRegistry.LIVING_WEEDWOOD_SHIELD.setTileEntityItemStackRenderer(new RenderLivingWeedwoodShield());
-		Item.getItemFromBlock(BlockRegistry.WAYSTONE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityWaystone.class));
+		Item.getItemFromBlock(BlockRegistry.WAYSTONE).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityWaystone.class));
 		
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {

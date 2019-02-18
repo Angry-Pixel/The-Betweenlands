@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -31,7 +31,7 @@ public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/purifier.png");
 	public static final ModelPurifier MODEL = new ModelPurifier();
 
-	private final RenderItem renderItem = Minecraft.getInstance().getRenderItem();
+	private final ItemRenderer renderItem = Minecraft.getInstance().getItemRenderer();
 
 	@Override
 	public void render(TileEntityPurifier tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

@@ -76,17 +76,17 @@ public class RenderFortressBoss extends Render<EntityPrimordialMalevolence> {
 		GlStateManager.enableBlend();
 		GlStateManager.pushMatrix();
 		GlStateManager.enableTexture2D();
-		GlStateManager.translate(x, y + (boss.coreBoundingBox.maxY-boss.coreBoundingBox.minY) / 2.0D + 0.15D, z);
+		GlStateManager.translated(x, y + (boss.coreBoundingBox.maxY-boss.coreBoundingBox.minY) / 2.0D + 0.15D, z);
 
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 		this.bindTexture(MODEL_TEXTURE);
-		GlStateManager.rotate(180, 1, 0, 0);
-		GlStateManager.rotate(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks, 0, 1, 0);
-		GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 1, 0, 0);
-		GlStateManager.translate(0, -0.2D, 0);
-		GlStateManager.translate(Math.sin((entity.ticksExisted + partialTicks)/5.0D) * 0.1F, Math.cos((entity.ticksExisted + partialTicks)/7.0D) * 0.1F, Math.cos((entity.ticksExisted + partialTicks)/6.0D) * 0.1F);
-		GlStateManager.scale(0.55F, 0.55F, 0.55F);
+		GlStateManager.rotatef(180, 1, 0, 0);
+		GlStateManager.rotatef(entity.prevRotationYaw + (entity.rotationYaw - entity.prevRotationYaw) * partialTicks, 0, 1, 0);
+		GlStateManager.rotatef(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 1, 0, 0);
+		GlStateManager.translatef(0, -0.2F, 0);
+		GlStateManager.translatef((float)Math.sin((entity.ticksExisted + partialTicks)/5.0D) * 0.1F, (float)Math.cos((entity.ticksExisted + partialTicks)/7.0D) * 0.1F, (float)Math.cos((entity.ticksExisted + partialTicks)/6.0D) * 0.1F);
+		GlStateManager.scalef(0.55F, 0.55F, 0.55F);
 		GlStateManager.disableCull();
 		LightingUtil.INSTANCE.setLighting(255);
 		MODEL.render(entity, entity.distanceWalkedModified, 360, entity.ticksExisted + partialTicks, 0, 0, 0.065F);
@@ -94,16 +94,16 @@ public class RenderFortressBoss extends Render<EntityPrimordialMalevolence> {
 		GlStateManager.enableCull();
 		GlStateManager.popMatrix();
 
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x + EntityPrimordialMalevolence.SHIELD_OFFSET_X, y + EntityPrimordialMalevolence.SHIELD_OFFSET_Y, z + EntityPrimordialMalevolence.SHIELD_OFFSET_Z);
+		GlStateManager.translated(x + EntityPrimordialMalevolence.SHIELD_OFFSET_X, y + EntityPrimordialMalevolence.SHIELD_OFFSET_Y, z + EntityPrimordialMalevolence.SHIELD_OFFSET_Z);
 
 		//Rotate shield
-		GlStateManager.rotate(boss.getShieldRotationPitch(partialTicks), 1, 0, 0);
-		GlStateManager.rotate(boss.getShieldRotationYaw(partialTicks), 0, 1, 0);
-		GlStateManager.rotate(boss.getShieldRotationRoll(partialTicks), 0, 0, 1);
+		GlStateManager.rotatef(boss.getShieldRotationPitch(partialTicks), 1, 0, 0);
+		GlStateManager.rotatef(boss.getShieldRotationYaw(partialTicks), 0, 1, 0);
+		GlStateManager.rotatef(boss.getShieldRotationRoll(partialTicks), 0, 0, 1);
 
 		GlStateManager.disableTexture2D();		
 		GlStateManager.disableLighting();
@@ -124,7 +124,7 @@ public class RenderFortressBoss extends Render<EntityPrimordialMalevolence> {
 		GlStateManager.pushMatrix();
 		float uOffset = (ticks * 0.01F) % 1.0F;
 		float vOffset = (ticks * 0.01F) % 1.0F;
-		GlStateManager.translate(uOffset, vOffset, 0.0F);
+		GlStateManager.translatef(uOffset, vOffset, 0.0F);
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 		GlStateManager.enableTexture2D();
 
@@ -272,7 +272,7 @@ public class RenderFortressBoss extends Render<EntityPrimordialMalevolence> {
 		}
 
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		GL11.glLineWidth(1.0F);
+		GlStateManager.lineWidth(1.0F);
 
 		buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 		for(int i = 0; i <= 19; i++) {
@@ -299,7 +299,7 @@ public class RenderFortressBoss extends Render<EntityPrimordialMalevolence> {
 		if(this.getRenderManager().isDebugBoundingBox()) {
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.disableCull();
-			Vec3d pos = Minecraft.getInstance().player.getPositionEyes(partialTicks);
+			Vec3d pos = Minecraft.getInstance().player.getEyePosition(partialTicks);
 			Vec3d ray = Minecraft.getInstance().player.getLook(partialTicks);
 			ray = ray.scale(64.0D);
 			int hitShield = boss.rayTraceShield(pos, ray, false);
@@ -331,7 +331,7 @@ public class RenderFortressBoss extends Render<EntityPrimordialMalevolence> {
 
 		if(boss.getGroundAttackTicks() > 0) {
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x, y - 2.8D, z);
+			GlStateManager.translated(x, y - 2.8D, z);
 			GlStateManager.enableTexture2D();
 			this.bindTexture(SHIELD_TEXTURE);
 			GlStateManager.matrixMode(GL11.GL_TEXTURE);
@@ -339,13 +339,13 @@ public class RenderFortressBoss extends Render<EntityPrimordialMalevolence> {
 			float interpTicks = ticks + partialTicks;
 			float uOffsetAttack = interpTicks * 0.01F;
 			float vOffsetAttack = interpTicks * 0.01F;
-			GlStateManager.translate(uOffsetAttack, vOffsetAttack, 0.0F);
+			GlStateManager.translatef(uOffsetAttack, vOffsetAttack, 0.0F);
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 			GlStateManager.enableBlend();
 			GlStateManager.disableLighting();
 			GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
-			GlStateManager.scale(3.8D, 3.8D, 3.8D);
-			GlStateManager.color(0.8F / 20.0F * boss.getGroundAttackTicks(), 0.6F / 20.0F * boss.getGroundAttackTicks(), 0.4F / 20.0F * boss.getGroundAttackTicks(), 1.0F);
+			GlStateManager.scalef(3.8F, 3.8F, 3.8F);
+			GlStateManager.color4f(0.8F / 20.0F * boss.getGroundAttackTicks(), 0.6F / 20.0F * boss.getGroundAttackTicks(), 0.4F / 20.0F * boss.getGroundAttackTicks(), 1.0F);
 			BULLET_MODEL.render(0.0625F);
 			GlStateManager.enableCull();
 			GlStateManager.matrixMode(GL11.GL_TEXTURE);

@@ -80,7 +80,7 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-		GlStateManager.disableAlpha();
+		GlStateManager.disableAlphaTest();
 		GlStateManager.enableCull();
 		GlStateManager.depthMask(false);
 		GlStateManager.pushMatrix();
@@ -112,7 +112,7 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.enableTexture2D();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		RenderHelper.enableStandardItemLighting();
 	}
 }

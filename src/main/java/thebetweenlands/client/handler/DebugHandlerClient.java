@@ -58,7 +58,7 @@ public class DebugHandlerClient {
 					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0f);
 					GlStateManager.color(1, 1, 1, 1);
-					GlStateManager.glLineWidth(1F);
+					GlStateManager.lineWidth(1F);
 					GlStateManager.depthMask(false);
 					GL11.glEnable(GL11.GL_LINE_SMOOTH);
 
@@ -118,11 +118,11 @@ public class DebugHandlerClient {
 					GlStateManager.color(1, 1, 1, 1);
 
 					GlStateManager.enableDepth();
-					GlStateManager.glLineWidth(2F);
+					GlStateManager.lineWidth(2F);
 
 					ILocationGuard guard = location.getGuard();
 					if (guard != null) {
-						GlStateManager.doPolygonOffset(-0.1F, -10.0F);
+						GlStateManager.polygonOffset(-0.1F, -10.0F);
 						GlStateManager.enablePolygonOffset();
 						for (int xo = -8; xo <= 8; xo++) {
 							for (int yo = -8; yo <= 8; yo++) {
@@ -176,7 +176,7 @@ public class DebugHandlerClient {
 		GlStateManager.scale(-0.025F, -0.025F, 0.025F);
 
 		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
 				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
 				GlStateManager.DestFactor.ZERO);
 		int i = fontRenderer.getStringWidth(str) / 2;

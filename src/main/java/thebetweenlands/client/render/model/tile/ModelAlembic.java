@@ -115,13 +115,13 @@ public class ModelAlembic extends ModelBase {
 
     public void renderWithLiquid(float r, float g, float b, float progress) {
         GlStateManager.disableTexture2D();
-        GlStateManager.color(r, g, b, 0.8F);
+        GlStateManager.color4f(r, g, b, 0.8F);
 
         if(1.0F - progress > 0.0F) {
         	GlStateManager.enableNormalize();
             GlStateManager.pushMatrix();
-            GlStateManager.translate(0, -(20.5F * 0.0625F) * (1.0F - progress) + (20.5F * 0.0625F), 0);
-            GlStateManager.scale(1, 1.0F - progress, 1);
+            GlStateManager.translatef(0, -(20.5F * 0.0625F) * (1.0F - progress) + (20.5F * 0.0625F), 0);
+            GlStateManager.scalef(1, 1.0F - progress, 1);
             alembic_liquid.render(0.0625F);
             GlStateManager.popMatrix();
             GlStateManager.disableNormalize();
@@ -130,15 +130,15 @@ public class ModelAlembic extends ModelBase {
         if(progress != 0.0F) {
         	GlStateManager.enableNormalize();
             GlStateManager.pushMatrix();
-            GlStateManager.translate(0, -(23.5F * 0.0625F) * progress + (23.5F * 0.0625F), 0);
-            GlStateManager.scale(1, progress, 1);
+            GlStateManager.translatef(0, -(23.5F * 0.0625F) * progress + (23.5F * 0.0625F), 0);
+            GlStateManager.scalef(1, progress, 1);
             jar_liquid.render(0.0625F);
             GlStateManager.popMatrix();
             GlStateManager.disableNormalize();
         }
 
         GlStateManager.enableTexture2D();
-        GlStateManager.color(1, 1, 1, 1.0F);
+        GlStateManager.color4f(1, 1, 1, 1.0F);
 
         this.render();
     }

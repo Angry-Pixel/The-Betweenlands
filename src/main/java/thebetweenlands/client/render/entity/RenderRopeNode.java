@@ -45,14 +45,14 @@ public class RenderRopeNode extends Render<EntityRopeNode> {
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableLighting();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 0.35F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 0.35F);
 		LightingUtil.INSTANCE.setLighting(255);
 
 		AxisAlignedBB boundingBox = ropeNode.getBoundingBox().offset(-ropeNode.posX, -ropeNode.posY, -ropeNode.posZ);
 
 		if(ropeNode.getNextNode() == null) {
 			boundingBox = boundingBox.grow(0.025D, 0.025D, 0.025D);
-			GlStateManager.color(0.25F, 1.0F, 0.25F, 0.35F);
+			GlStateManager.color4f(0.25F, 1.0F, 0.25F, 0.35F);
 		}
 		
 		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
@@ -69,11 +69,11 @@ public class RenderRopeNode extends Render<EntityRopeNode> {
 		}
 		
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y, z);
+		GlStateManager.translated(x, y, z);
 		nodeModel.render(ropeNode, 0, 0, 0, 0, 0, 0.0625F);
 		GlStateManager.popMatrix();
 		
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 
 		LightingUtil.INSTANCE.revert();
 		GlStateManager.enableTexture2D();
@@ -94,7 +94,7 @@ public class RenderRopeNode extends Render<EntityRopeNode> {
 				double renderOffsetX = this.interpolate(prevNode.lastTickPosX - ropeNode.lastTickPosX, prevNode.posX - ropeNode.posX, partialTicks);
 				double renderOffsetY = this.interpolate(prevNode.lastTickPosY - ropeNode.lastTickPosY, prevNode.posY - ropeNode.posY, partialTicks);
 				double renderOffsetZ = this.interpolate(prevNode.lastTickPosZ - ropeNode.lastTickPosZ, prevNode.posZ - ropeNode.posZ, partialTicks);
-				GlStateManager.translate(renderOffsetX, renderOffsetY, renderOffsetZ);
+				GlStateManager.translated(renderOffsetX, renderOffsetY, renderOffsetZ);
 				this.renderConnection(prevNode, ropeNode, tessellator, buffer, x, y, z, partialTicks);
 				GlStateManager.popMatrix();
 			}

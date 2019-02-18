@@ -26,17 +26,17 @@ public class RenderPyradFlame extends Render<EntityPyradFlame> {
 	public void doRender(EntityPyradFlame entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		this.bindEntityTexture(entity);
-		GlStateManager.translate((float)x, (float)y, (float)z);
+		GlStateManager.translated(x, y, z);
 		GlStateManager.enableRescaleNormal();
-		GlStateManager.scale(this.scale, this.scale, this.scale);
+		GlStateManager.scalef(this.scale, this.scale, this.scale);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder vertexbuffer = tessellator.getBuffer();
 		float minU = 0;
 		float maxU = 1;
 		float minV = 0;
 		float maxV = 1;
-		GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate((float)(this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+		GlStateManager.rotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotatef((float)(this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 
 		if (this.renderOutlines) {
 			GlStateManager.enableColorMaterial();

@@ -89,7 +89,7 @@ public class BlockItemShelf extends BlockContainer {
 
 				TileEntityItemShelf shelf = (TileEntityItemShelf) te;
 
-				RayTraceResult ray = this.rayTrace(pos, player.getPositionEyes(1), player.getPositionEyes(1).add(player.getLookVec().scale(10)), this.getBoundingBox(state, world, pos));
+				RayTraceResult ray = this.rayTrace(pos, player.getEyePosition(1), player.getEyePosition(1).add(player.getLookVec().scale(10)), this.getBoundingBox(state, world, pos));
 				if(ray != null) {
 					InvWrapper wrapper = new InvWrapper(shelf);
 

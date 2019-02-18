@@ -14,33 +14,33 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-public class RenderItemStackAsTileEntity extends TileEntityItemStackRenderer {
+public class ItemRendererStackAsTileEntity extends TileEntityItemStackRenderer {
 	private TileEntitySpecialRenderer<?> renderer;
 	private Int2ObjectMap<TileEntitySpecialRenderer<?>> map;
 
-	public RenderItemStackAsTileEntity(Class<? extends TileEntity> te) {
+	public ItemRendererStackAsTileEntity(Class<? extends TileEntity> te) {
 		this.renderer = TileEntityRendererDispatcher.instance.getRenderer(te);
 		this.map = null;
 		Preconditions.checkNotNull(this.renderer, "TileEntity %s for ItemStack renderer does not have a renderer!", te.getName());
 	}
 
-	public RenderItemStackAsTileEntity(Map<Integer, Class<? extends TileEntity>> map) {
+	public ItemRendererStackAsTileEntity(Map<Integer, Class<? extends TileEntity>> map) {
 		this.renderer = null;
 		for(Entry<Integer, Class<? extends TileEntity>> entry : map.entrySet()) {
 			this.add(entry.getKey(), entry.getValue());
 		}
 	}
 
-	public RenderItemStackAsTileEntity() {
+	public ItemRendererStackAsTileEntity() {
 		this.renderer = null;
 		this.map = null;
 	}
 
-	public RenderItemStackAsTileEntity(Consumer<RenderItemStackAsTileEntity> constructor) {
+	public ItemRendererStackAsTileEntity(Consumer<ItemRendererStackAsTileEntity> constructor) {
 		constructor.accept(this);
 	}
 
-	public RenderItemStackAsTileEntity add(int meta, Class<? extends TileEntity> te) {
+	public ItemRendererStackAsTileEntity add(int meta, Class<? extends TileEntity> te) {
 		if(this.map == null) {
 			this.map = new Int2ObjectOpenHashMap<>();
 		}

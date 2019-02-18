@@ -234,11 +234,11 @@ public class ModelChiromaw extends MowzieModelBase {
         EntityChiromaw chiromaw = (EntityChiromaw) entity;
         GlStateManager.pushMatrix();
         if (chiromaw.getIsHanging()) {
-            GlStateManager.translate(0.0F, 2.125F, 0.0F);
-            GlStateManager.rotate(180, 1F, 0F, 0.0F);
+            GlStateManager.translatef(0.0F, 2.125F, 0.0F);
+            GlStateManager.rotatef(180, 1F, 0F, 0.0F);
         } else {
-            GlStateManager.rotate(40, 1F, 0F, 0.0F);
-            GlStateManager.translate(0.0F, 0F, -0.8F);
+            GlStateManager.rotatef(40, 1F, 0F, 0.0F);
+            GlStateManager.translatef(0.0F, 0F, -0.8F);
         }
         
         GlStateManager.enableCull();

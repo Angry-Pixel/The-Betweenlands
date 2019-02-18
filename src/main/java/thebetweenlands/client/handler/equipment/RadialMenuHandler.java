@@ -512,7 +512,7 @@ public class RadialMenuHandler {
 				GL11.glEnable(GL11.GL_LINE_SMOOTH);
 				GlStateManager.enableBlend();
 				GlStateManager.disableTexture2D();
-				GlStateManager.glLineWidth(3.0f);
+				GlStateManager.lineWidth(3.0f);
 
 				GlStateManager.pushMatrix();
 				double yOffset = Math.cos(Math.toRadians(180-midAngle))*segments*2.8D;

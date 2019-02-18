@@ -52,7 +52,7 @@ public class ItemValoniteShield extends ItemSwatShield {
 		if(source instanceof EntityDamageSourceIndirect) {
 			EntityDamageSourceIndirect indirectSource = (EntityDamageSourceIndirect) source;
 			if(indirectSource.getImmediateSource() != null && indirectSource.getTrueSource() != null && indirectSource.getImmediateSource() instanceof IProjectile) {
-				Vec3d dir = indirectSource.getImmediateSource().getPositionEyes(1).subtract(indirectSource.getTrueSource().getPositionEyes(1)).normalize();
+				Vec3d dir = indirectSource.getImmediateSource().getEyePosition(1).subtract(indirectSource.getTrueSource().getEyePosition(1)).normalize();
 				((IProjectile)indirectSource.getImmediateSource()).shoot(dir.x, dir.y, dir.z, 15, 2);
 				if(indirectSource.getImmediateSource() instanceof EntityArrow) {
 					((EntityArrow)indirectSource.getImmediateSource()).shootingEntity = attacked;

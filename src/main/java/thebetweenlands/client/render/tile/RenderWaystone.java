@@ -33,7 +33,7 @@ public class RenderWaystone extends TileEntitySpecialRenderer<TileEntityWaystone
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		} else {
-			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		}
 
@@ -118,7 +118,7 @@ public class RenderWaystone extends TileEntitySpecialRenderer<TileEntityWaystone
 				GlStateManager.color((float)(grassColor >> 16 & 0xff) / 255F, (float)(grassColor >> 8 & 0xff) / 255F, (float)(grassColor & 0xff) / 255F);
 
 				GlStateManager.enablePolygonOffset();
-				GlStateManager.doPolygonOffset(-3, -3);
+				GlStateManager.polygonOffset(-3, -3);
 
 				MODEL.render(null, 0, 0, 0, 0, 0, 0.0625F);
 
@@ -127,7 +127,7 @@ public class RenderWaystone extends TileEntitySpecialRenderer<TileEntityWaystone
 		}
 
 		GlStateManager.disableRescaleNormal();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.popMatrix();
 	}

@@ -78,7 +78,7 @@ public class RenderPlayerRower extends RenderLivingBase<AbstractClientPlayer> {
     @Override
     protected void preRenderCallback(AbstractClientPlayer player, float delta) {
         float scale = 0.9375F;
-        GlStateManager.scale(scale, scale, scale);
+        GlStateManager.scalef(scale, scale, scale);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class RenderPlayerRower extends RenderLivingBase<AbstractClientPlayer> {
             Scoreboard scoreboard = player.getWorldScoreboard();
             ScoreObjective sidebarObj = scoreboard.getObjectiveInDisplaySlot(2);
             if (sidebarObj != null) {
-                Score score = scoreboard.getOrCreateScore(player.getName(), sidebarObj);
+                Score score = scoreboard.getOrCreateScore(player.getScoreboardName(), sidebarObj);
                 renderLivingLabel(player, score.getScorePoints() + " " + sidebarObj.getDisplayName(), x, y, z, 64);
                 y += getFontRendererFromRenderManager().FONT_HEIGHT * 1.15F * 0.025F;
             }

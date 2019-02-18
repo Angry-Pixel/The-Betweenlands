@@ -38,25 +38,25 @@ public class RenderRootGrabber extends Render<EntityRootGrabber> {
 			GlStateManager.disableCull();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-			GlStateManager.translate(x, y + 1, z);
+			GlStateManager.translated(x, y + 1, z);
 
 			for(RootPart part : entity.modelParts) {
 				GlStateManager.pushMatrix();
 
 				this.bindEntityTexture(entity);
 
-				GlStateManager.translate(part.x, part.y, part.z);
+				GlStateManager.translatef(part.x, part.y, part.z);
 
-				GlStateManager.rotate(part.yaw - 90, 0, 1, 0);
-				GlStateManager.rotate(part.pitch, 1, 0, 0);
+				GlStateManager.rotatef(part.yaw - 90, 0, 1, 0);
+				GlStateManager.rotatef(part.pitch, 1, 0, 0);
 
-				GlStateManager.translate(0, entity.getRootYOffset(partialTicks), 0);
+				GlStateManager.translatef(0, entity.getRootYOffset(partialTicks), 0);
 
 				float animationTicks = entity.ticksExisted + partialTicks;
-				GlStateManager.rotate((float)Math.cos(animationTicks / 4) * 0.5F, 0, 0, 1);
-				GlStateManager.rotate((float)Math.sin(animationTicks / 5) * 0.8F, 1, 0, 0);
+				GlStateManager.rotatef((float)Math.cos(animationTicks / 4) * 0.5F, 0, 0, 1);
+				GlStateManager.rotatef((float)Math.sin(animationTicks / 5) * 0.8F, 1, 0, 0);
 
 				part.renderer.render();
 
@@ -71,8 +71,8 @@ public class RenderRootGrabber extends Render<EntityRootGrabber> {
 					GlStateManager.matrixMode(GL11.GL_TEXTURE);
 					GlStateManager.pushMatrix();
 					GlStateManager.loadIdentity();
-					GlStateManager.scale(1.0F / (sprite.getMaxU() - sprite.getMinU()), 1.0F / (sprite.getMaxV() - sprite.getMinV()), 0);
-					GlStateManager.translate(-sprite.getMinU(), -sprite.getMinV(), 0);
+					GlStateManager.scalef(1.0F / (sprite.getMaxU() - sprite.getMinU()), 1.0F / (sprite.getMaxV() - sprite.getMinV()), 0);
+					GlStateManager.translatef(-sprite.getMinU(), -sprite.getMinV(), 0);
 					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 
 					part.renderer.render();
@@ -93,23 +93,23 @@ public class RenderRootGrabber extends Render<EntityRootGrabber> {
 	}
 
 	private void preRenderDamagedBlocks() {
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.enableBlend();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
-		GlStateManager.doPolygonOffset(-3.0F, -3.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 0.5F);
+		GlStateManager.polygonOffset(-3.0F, -3.0F);
 		GlStateManager.enablePolygonOffset();
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 	}
 
 	private void postRenderDamagedBlocks() {
-		GlStateManager.disableAlpha();
-		GlStateManager.doPolygonOffset(0.0F, 0.0F);
+		GlStateManager.disableAlphaTest();
+		GlStateManager.polygonOffset(0.0F, 0.0F);
 		GlStateManager.disablePolygonOffset();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		GlStateManager.depthMask(true);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	@Override

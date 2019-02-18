@@ -23,7 +23,7 @@ public class RenderDragonFly extends RenderLiving<EntityDragonFly> {
     }
 
     protected void scaleDragonFly(EntityDragonFly dragonFly, float partialTickTime) {
-        GlStateManager.scale(0.6F, 0.6F, 0.6F);
+        GlStateManager.scalef(0.6F, 0.6F, 0.6F);
     }
 
     @Override

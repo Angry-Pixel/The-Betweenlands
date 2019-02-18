@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,7 @@ import net.minecraft.util.math.BlockPos;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class RenderWeedwoodWorkbench extends TileEntitySpecialRenderer<TileEntityWeedwoodWorkbench> {
-	private final RenderItem renderItem = Minecraft.getInstance().getRenderItem();
+	private final ItemRenderer renderItem = Minecraft.getInstance().getItemRenderer();
 
 	@Override
 	public void render(TileEntityWeedwoodWorkbench table, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

@@ -42,9 +42,9 @@ public class RenderSpikeWave extends Render<EntityRootSpikeWave> {
 
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-			GlStateManager.translate(x, y, z);
+			GlStateManager.translated(x, y, z);
 
 			Tessellator tessellator = Tessellator.getInstance();
 			BufferBuilder buffer = tessellator.getBuffer();

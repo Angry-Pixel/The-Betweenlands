@@ -82,9 +82,9 @@ public class RiftRenderer implements IRiftRenderer {
 				GlStateManager.enableCull();
 				GlStateManager.enableDepth();
 				GlStateManager.depthMask(true);
-				GlStateManager.enableAlpha();
+				GlStateManager.enableAlphaTest();
 				GlStateManager.enableBlend();
-				GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+				GlStateManager.blendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
 				GlStateManager.disableTexture2D();
 
 				//Render rift sky
@@ -96,7 +96,7 @@ public class RiftRenderer implements IRiftRenderer {
 				
 				float skyBrightness = this.riftSkyRenderer.getSkyBrightness(partialTicks, world, mc);
 
-				GlStateManager.enableAlpha();
+				GlStateManager.enableAlphaTest();
 				GlStateManager.enableBlend();
 				GlStateManager.enableTexture2D();
 				RenderHelper.disableStandardItemLighting();
@@ -114,7 +114,7 @@ public class RiftRenderer implements IRiftRenderer {
 
 				//Render mask
 				if(OpenGlHelper.openGL14) {
-					GlStateManager.tryBlendFuncSeparate(SourceFactor.ZERO, DestFactor.ONE, SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA);
+					GlStateManager.blendFuncSeparate(SourceFactor.ZERO, DestFactor.ONE, SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA);
 				} else {
 					GlStateManager.blendFunc(SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA); //Still decent looking fallback
 				}
@@ -130,7 +130,7 @@ public class RiftRenderer implements IRiftRenderer {
 				//Reset fog to this world's fog
 				mc.entityRenderer.setupFogColor(false);
 
-				GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+				GlStateManager.blendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
 				GlStateManager.color(1, 1, 1, 1);
 				GlStateManager.disableFog();
 				GlStateManager.bindTexture(skyFbo.framebufferTexture);

@@ -67,7 +67,7 @@ public class ModelBoulderSprite extends MowzieModelBase {
 				}
 
 				GlStateManager.pushMatrix();
-				GlStateManager.scale(-1, -1, 1);
+				GlStateManager.scalef(-1, -1, 1);
 
 				Tessellator tessellator = Tessellator.getInstance();
 				BufferBuilder buffer = tessellator.getBuffer();

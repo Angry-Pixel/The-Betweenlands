@@ -105,7 +105,7 @@ public class AttackDamageHandler {
 						Entity immediateAttacker = source.getImmediateSource();
 
 						if(immediateAttacker == null || attacker == immediateAttacker) {
-							RayTraceResult result = attackedEntity.getBoundingBox().calculateIntercept(attacker.getPositionEyes(1), attacker.getPositionEyes(1).add(attacker.getLookVec().scale(10)));
+							RayTraceResult result = attackedEntity.getBoundingBox().calculateIntercept(attacker.getEyePosition(1), attacker.getEyePosition(1).add(attacker.getLookVec().scale(10)));
 							if(result != null) {
 								hitOffset = result.hitVec.subtract(center);
 							}

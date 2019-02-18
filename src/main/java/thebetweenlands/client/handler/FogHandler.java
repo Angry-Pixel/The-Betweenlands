@@ -160,7 +160,7 @@ public class FogHandler {
 			float fogColorMultiplier = fog.getColorMultiplier();
 			if(blockState.getBlock() instanceof BlockSwampWater) {
 				BlockPos pos = new BlockPos(ActiveRenderInfo.projectViewFromEntity(renderView, (float) event.getRenderPartialTicks()));
-				int colorMultiplier = Minecraft.getInstance().getBlockColors().colorMultiplier(blockState, renderView.world, pos, 0);
+				int colorMultiplier = Minecraft.getInstance().getBlockColors().getColor(blockState, renderView.world, pos, 0);
 				if(renderView.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 					double waterFogColorMultiplier = fogColorMultiplier / 2.0F;
 					event.setRed((float)(colorMultiplier >> 16 & 255) / 255.0F * (float)waterFogColorMultiplier);

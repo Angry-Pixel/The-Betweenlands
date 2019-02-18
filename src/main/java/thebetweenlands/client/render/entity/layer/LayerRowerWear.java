@@ -19,7 +19,7 @@ public class LayerRowerWear implements LayerRenderer<AbstractClientPlayer> {
     }
 
     @Override
-    public void doRenderLayer(AbstractClientPlayer player, float swing, float speed, float delta, float age, float yaw, float pitch, float scale) {
+    public void render(AbstractClientPlayer player, float swing, float speed, float delta, float age, float yaw, float pitch, float scale) {
         model.render(player, swing, speed, age, yaw, pitch, scale);
     }
 

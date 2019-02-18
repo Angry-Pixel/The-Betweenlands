@@ -57,7 +57,7 @@ public class DecayRenderHandler {
 		}
 
 		@Override
-		public void doRenderLayer(AbstractClientPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		public void render(AbstractClientPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 				IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 				if(cap.isDecayEnabled()) {
@@ -133,7 +133,7 @@ public class DecayRenderHandler {
 	}
 
 	/**
-	 * From ItemRenderer#renderArmFirstPerson
+	 * From FirstPersonRenderer#renderArmFirstPerson
 	 * @param swingProgress
 	 * @param equipProgress
 	 * @param handSide

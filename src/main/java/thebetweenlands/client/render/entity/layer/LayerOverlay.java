@@ -33,7 +33,7 @@ public class LayerOverlay<T extends EntityLivingBase> implements LayerRenderer<T
 	}
 
 	@Override
-	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void render(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		int index = 0;
 
 		for(ModelBase model : this.getModels(entity)) {
@@ -47,20 +47,20 @@ public class LayerOverlay<T extends EntityLivingBase> implements LayerRenderer<T
 				float green = this.getGreen();
 				float blue = this.getBlue();
 
-				GlStateManager.doPolygonOffset(0, -3.0F);
+				GlStateManager.polygonOffset(0, -3.0F);
 				GlStateManager.enablePolygonOffset();
 
 				GlStateManager.enableBlend();
-				GlStateManager.enableAlpha();
+				GlStateManager.enableAlphaTest();
 				GlStateManager.depthMask(false);
 				GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-				GlStateManager.color(red, green, blue, alpha);
+				GlStateManager.color4f(red, green, blue, alpha);
 
 				this.renderOverlay(entity, model, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
 
 				if(this.getGlow()) {
 					GlStateManager.depthMask(!entity.isInvisible());
-					GlStateManager.color(red * alpha, green * alpha, blue * alpha, alpha);
+					GlStateManager.color4f(red * alpha, green * alpha, blue * alpha, alpha);
 					GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 					int i = 61680;
 					int j = i % 65536;
@@ -75,9 +75,9 @@ public class LayerOverlay<T extends EntityLivingBase> implements LayerRenderer<T
 
 				GlStateManager.depthMask(true);
 				GlStateManager.disableBlend();
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
-				GlStateManager.doPolygonOffset(0.0F, 0.0F);
+				GlStateManager.polygonOffset(0.0F, 0.0F);
 				GlStateManager.disablePolygonOffset();
 			}
 

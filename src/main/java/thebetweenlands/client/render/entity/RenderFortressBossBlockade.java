@@ -30,7 +30,7 @@ public class RenderFortressBossBlockade extends Render<EntityPrimordialMalevolen
 		Vec3d[] vertices = blockade.getTriangleVertices(partialTicks);
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + 0.2F, z);
+		GlStateManager.translated(x, y + 0.2F, z);
 
 		GlStateManager.disableTexture2D();
 		GlStateManager.disableLighting();
@@ -49,7 +49,7 @@ public class RenderFortressBossBlockade extends Render<EntityPrimordialMalevolen
 		GlStateManager.pushMatrix();
 		float uOffset = (ticks * 0.01F) % 1.0F;
 		float vOffset = (ticks * 0.01F) % 1.0F;
-		GlStateManager.translate(uOffset, vOffset, 0.0F);
+		GlStateManager.translatef(uOffset, vOffset, 0.0F);
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 		GlStateManager.enableTexture2D();
 
@@ -97,7 +97,7 @@ public class RenderFortressBossBlockade extends Render<EntityPrimordialMalevolen
 		GlStateManager.depthMask(true);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		GlStateManager.glLineWidth(1.0F);
+		GlStateManager.lineWidth(1.0F);
 
 		buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 		buffer.pos(vertices[0].x, vertices[0].y, vertices[0].z).color(0.5F, 0.75F, 1F, 1.0F).endVertex();

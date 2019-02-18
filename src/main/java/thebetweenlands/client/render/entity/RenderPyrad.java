@@ -33,7 +33,7 @@ public class RenderPyrad extends RenderLiving<EntityPyrad> {
 		this.glow.setAlpha(entity.getActiveTicks(partialTicks) / 60.0F + (!entity.isActive() ? entity.getHitTicks(partialTicks) / 20.0F * 0.45F : 0.0F));
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0, (Math.sin((entity.ticksExisted + partialTicks) / 10.0F) / 4.0F - 0.25D) * entity.getActiveTicks(partialTicks) / 60.0D - 0.9D * (1.0D - entity.getActiveTicks(partialTicks) / 60.0D), 0);
+		GlStateManager.translatef(0, (float)(Math.sin((entity.ticksExisted + partialTicks) / 10.0F) / 4.0F - 0.25F) * entity.getActiveTicks(partialTicks) / 60.0F - 0.9F * (1.0F - entity.getActiveTicks(partialTicks) / 60.0F), 0);
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 		GlStateManager.popMatrix();
 

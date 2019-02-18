@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.Vector3d;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
@@ -32,7 +32,7 @@ import thebetweenlands.util.TileEntityHelper;
 public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidAltar> {
 	public static RenderDruidAltar instance;
 	private final ModelDruidAltar model = new ModelDruidAltar();
-	private final RenderItem renderItem = Minecraft.getInstance().getRenderItem();
+	private final ItemRenderer renderItem = Minecraft.getInstance().getItemRenderer();
 	private final ModelStone stone = new ModelStone();
 	private final ResourceLocation ACTIVE = new ResourceLocation("thebetweenlands:textures/tiles/druid_altar_active.png");
 	private final ResourceLocation ACTIVEGLOW = new ResourceLocation("thebetweenlands:textures/tiles/druid_altar_active_glow.png");
@@ -66,7 +66,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
-		GlStateManager.disableAlpha();
+		GlStateManager.disableAlphaTest();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 		GlStateManager.depthMask(true);
 		bindTexture(NORMALGLOW);
@@ -80,7 +80,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		GlStateManager.popMatrix();
 
 		GlStateManager.enableBlend();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.popMatrix();
 
@@ -178,7 +178,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		//Render glow overlay
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
-		GlStateManager.disableAlpha();
+		GlStateManager.disableAlphaTest();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 		GlStateManager.depthMask(true);
 
@@ -203,7 +203,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		GlStateManager.popMatrix();
 
 		GlStateManager.disableBlend();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		GlStateManager.popMatrix();
 
 		LightingUtil.INSTANCE.revert();
@@ -232,7 +232,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-		GlStateManager.disableAlpha();
+		GlStateManager.disableAlphaTest();
 		GlStateManager.enableCull();
 		GlStateManager.depthMask(false);
 		GlStateManager.pushMatrix();
@@ -267,7 +267,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.enableTexture2D();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		RenderHelper.enableStandardItemLighting();
 	}
 
@@ -279,7 +279,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-		GlStateManager.disableAlpha();
+		GlStateManager.disableAlphaTest();
 		GlStateManager.enableCull();
 		GlStateManager.depthMask(false);
 
@@ -315,7 +315,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.enableTexture2D();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		RenderHelper.enableStandardItemLighting();
 		GlStateManager.popMatrix();
 	}

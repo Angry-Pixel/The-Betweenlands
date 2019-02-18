@@ -54,21 +54,21 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 
 		float ticks = energyBall.ticksExisted + partialTickTime;
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y - 0.0625D - energyBall.pulseFloat, z);
+		GlStateManager.translated(x, y - 0.0625D - energyBall.pulseFloat, z);
 		float f1 = ticks;
 		bindTexture(FORCE_TEXTURE);
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
 		float f2 = f1 * 0.01F;
 		float f3 = f1 * 0.01F;
-		GlStateManager.translate(f2, f3, 0.0F);
+		GlStateManager.translatef(f2, f3, 0.0F);
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 		GlStateManager.enableBlend();
 		float f4 = 0.5F;
-		GlStateManager.color(f4, f4, f4, 1.0F);
+		GlStateManager.color4f(f4, f4, f4, 1.0F);
 		GlStateManager.disableLighting();
 		GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
-		GlStateManager.scale(1F + energyBall.pulseFloat, 1F + energyBall.pulseFloat, 1F + energyBall.pulseFloat);
+		GlStateManager.scalef(1F + energyBall.pulseFloat, 1F + energyBall.pulseFloat, 1F + energyBall.pulseFloat);
 		model.render(0.0625F);
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
@@ -89,35 +89,35 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 		bindTexture(FORCE_TEXTURE);
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
-		GlStateManager.translate(f2, 0, 0.0F);
+		GlStateManager.translatef(f2, 0, 0.0F);
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 		GlStateManager.enableBlend();
-		GlStateManager.color(f4, f4, f4, 1.0F);
+		GlStateManager.color4f(f4, f4, f4, 1.0F);
 		GlStateManager.disableLighting();
 		GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
 		GlStateManager.enableTexture2D();
 		GlStateManager.disableCull();
 		renderBeam(new Vec3d(x, y + 0.85F, z), new Vec3d(x - interpPos1 - 0.1F, y + 0.9F, z - interpPos1 - 0.1F), 0.05F, 0.25F, true, true);
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x - interpPos1, y - 0.14F, z - interpPos1);
+		GlStateManager.translated(x - interpPos1, y - 0.14F, z - interpPos1);
 		if(energyBall.pos1 < 3.5F)
 			model.render(0.0625F);
 		GlStateManager.popMatrix();
 		renderBeam(new Vec3d(x, y + 0.85F, z), new Vec3d(x + interpPos2 + 0.1F, y + 0.9F, z - interpPos2 - 0.1F), 0.05F, 0.25F, true, true);
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x + interpPos2, y - 0.14F, z - interpPos2);
+		GlStateManager.translated(x + interpPos2, y - 0.14F, z - interpPos2);
 		if(energyBall.pos2 < 3.5F)
 			model.render(0.0625F);
 		GlStateManager.popMatrix();
 		renderBeam(new Vec3d(x, y + 0.85F, z), new Vec3d(x + interpPos3 + 0.1F, y + 0.9F, z + interpPos3 + 0.1F), 0.05F, 0.25F, true, true);
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x + interpPos3, y - 0.14F, z + interpPos3);
+		GlStateManager.translated(x + interpPos3, y - 0.14F, z + interpPos3);
 		if(energyBall.pos3 < 3.5F)
 			model.render(0.0625F);
 		GlStateManager.popMatrix();
 		renderBeam(new Vec3d(x, y + 0.85F, z), new Vec3d(x - interpPos4 - 0.1F, y + 0.9F, z + interpPos4 + 0.1F), 0.05F, 0.25F, true, true);
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x - interpPos4, y - 0.14F, z + interpPos4);
+		GlStateManager.translated(x - interpPos4, y - 0.14F, z + interpPos4);
 		if(energyBall.pos4 < 3.5F)
 			model.render(0.0625F);
 		GlStateManager.popMatrix();
@@ -133,10 +133,10 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 
 	public void renderItemInBlock(double x, double y, double z, ItemStack item, float ticks) {
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) (y), (float) z);
-		GlStateManager.scale(1.25F, 1.25F, 1.25F);
-		GlStateManager.rotate(ticks * 4F, 0, 1, 0);
-		Minecraft.getInstance().getRenderItem().renderItem(item, ItemCameraTransforms.TransformType.GROUND);
+		GlStateManager.translatef((float) x, (float) (y), (float) z);
+		GlStateManager.scalef(1.25F, 1.25F, 1.25F);
+		GlStateManager.rotatef(ticks * 4F, 0, 1, 0);
+		Minecraft.getInstance().getItemRenderer().renderItem(item, ItemCameraTransforms.TransformType.GROUND);
 		GlStateManager.popMatrix();
 	}
 

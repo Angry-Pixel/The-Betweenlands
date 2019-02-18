@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemSkull;
@@ -17,11 +17,11 @@ import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.tile.TileEntityItemShelf;
 import thebetweenlands.util.TileEntityHelper;
 
-public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShelf> {
+public class ItemRendererShelf extends TileEntitySpecialRenderer<TileEntityItemShelf> {
 	public static final ModelItemShelf MODEL = new ModelItemShelf();
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/item_shelf.png");
 
-	protected final RenderItem renderItem = Minecraft.getInstance().getRenderItem();
+	protected final ItemRenderer renderItem = Minecraft.getInstance().getItemRenderer();
 
 	@Override
 	public void render(TileEntityItemShelf te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -115,7 +115,7 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 			GlStateManager.scale(0.4F, 0.4F, 0.4F);
 			RenderHelper.enableStandardItemLighting();
 
-			if (!this.renderItem.shouldRenderItemIn3D(stack) || stack.getItem() instanceof ItemSkull) {
+			if (!this.renderItem.shouldItemRendererIn3D(stack) || stack.getItem() instanceof ItemSkull) {
 				GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 			}
 

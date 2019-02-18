@@ -19,9 +19,9 @@ public class LayerTarBeastEffects implements LayerRenderer<EntityTarBeast> {
 	}
 
 	@Override
-	public void doRenderLayer(EntityTarBeast entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void render(EntityTarBeast entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		GlStateManager.enableBlend();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.depthMask(!entity.isInvisible());
 
@@ -30,10 +30,10 @@ public class LayerTarBeastEffects implements LayerRenderer<EntityTarBeast> {
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
 		float yScroll = scrollTimer * 0.002F;
-		GlStateManager.translate(0F, -yScroll, 0.0F);
+		GlStateManager.translatef(0F, -yScroll, 0.0F);
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 		float colour = 0.5F;
-		GlStateManager.color(colour, colour, colour, 1.0F);
+		GlStateManager.color4f(colour, colour, colour, 1.0F);
 
 		ModelTarBeast mainModel = (ModelTarBeast) this.renderer.getMainModel();
 		mainModel.drippingtar1_keepstraight.showModel = false;
@@ -55,10 +55,10 @@ public class LayerTarBeastEffects implements LayerRenderer<EntityTarBeast> {
 		if(entity.isShedding()) {
 			float sheddingScale = (float)(entity.getSheddingProgress() * entity.getSheddingProgress() * 0.002F) + 1.0F;
 
-			GlStateManager.color(1, 1, 1, 0.6F);
+			GlStateManager.color4f(1, 1, 1, 0.6F);
 
 			GlStateManager.pushMatrix();
-			GlStateManager.scale(sheddingScale, sheddingScale, sheddingScale);
+			GlStateManager.scalef(sheddingScale, sheddingScale, sheddingScale);
 
 			this.renderer.getMainModel().render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
@@ -66,10 +66,10 @@ public class LayerTarBeastEffects implements LayerRenderer<EntityTarBeast> {
 
 			sheddingScale = (float)(entity.getSheddingProgress() * entity.getSheddingProgress() * 0.004F) + 1.0F;
 
-			GlStateManager.color(1, 1, 1, 0.3F);
+			GlStateManager.color4f(1, 1, 1, 0.3F);
 
 			GlStateManager.pushMatrix();
-			GlStateManager.scale(sheddingScale, sheddingScale, sheddingScale);
+			GlStateManager.scalef(sheddingScale, sheddingScale, sheddingScale);
 
 			this.renderer.getMainModel().render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
@@ -79,10 +79,10 @@ public class LayerTarBeastEffects implements LayerRenderer<EntityTarBeast> {
 		if(entity.isPreparing()) {
 			float sheddingScale = (float)((1.0F - (entity.ticksExisted % 8) / 8.0F) * 0.15F + 1.0F);
 
-			GlStateManager.color(1, 1, 1, 0.6F);
+			GlStateManager.color4f(1, 1, 1, 0.6F);
 
 			GlStateManager.pushMatrix();
-			GlStateManager.scale(sheddingScale, sheddingScale, sheddingScale);
+			GlStateManager.scalef(sheddingScale, sheddingScale, sheddingScale);
 
 			this.renderer.getMainModel().render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
@@ -90,10 +90,10 @@ public class LayerTarBeastEffects implements LayerRenderer<EntityTarBeast> {
 
 			sheddingScale = (float)((1.0F - (entity.ticksExisted % 8) / 8.0F) * 0.2F + 1.05F);
 
-			GlStateManager.color(1, 1, 1, 0.3F);
+			GlStateManager.color4f(1, 1, 1, 0.3F);
 
 			GlStateManager.pushMatrix();
-			GlStateManager.scale(sheddingScale, sheddingScale, sheddingScale);
+			GlStateManager.scalef(sheddingScale, sheddingScale, sheddingScale);
 
 			this.renderer.getMainModel().render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 

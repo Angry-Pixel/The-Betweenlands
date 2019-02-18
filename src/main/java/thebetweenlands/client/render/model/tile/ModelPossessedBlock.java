@@ -154,12 +154,12 @@ public class ModelPossessedBlock extends ModelBase {
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			if (tile.animationTicks <= 8)
-				GlStateManager.translate(0F, 0F, 0F - 1F / 8 * tile.animationTicks);
+				GlStateManager.translatef(0F, 0F, 0F - 1F / 8 * tile.animationTicks);
 			if (tile.animationTicks > 8)
-				GlStateManager.translate(0F, 0F, 0F - 1F);
+				GlStateManager.translatef(0F, 0F, 0F - 1F);
 			if (tile.animationTicks > 1) {
 				GlStateManager.pushMatrix();
-				GlStateManager.rotate(tile.moveProgress, 0, 1, 0);
+				GlStateManager.rotatef(tile.moveProgress, 0, 1, 0);
 				head.render(0.0625F);
 				foreHead.render(0.0625F);
 				nose.render(0.0625F);
@@ -178,9 +178,9 @@ public class ModelPossessedBlock extends ModelBase {
 				body.render(0.0625F);
 				GlStateManager.pushMatrix();
 				if (tile.animationTicks > 8)
-					GlStateManager.rotate(10F - tile.animationTicks, 0, 1, 0);
+					GlStateManager.rotatef(10F - tile.animationTicks, 0, 1, 0);
 				else
-					GlStateManager.rotate(-0, 0, 1, 0);
+					GlStateManager.rotatef(-0, 0, 1, 0);
 				rightArm1.render(0.0625F);
 				rightArm2.render(0.0625F);
 				rightPalm.render(0.0625F);
@@ -191,9 +191,9 @@ public class ModelPossessedBlock extends ModelBase {
 
 				GlStateManager.pushMatrix();
 				if (tile.animationTicks > 8)
-					GlStateManager.rotate(-10F + tile.animationTicks, 0, 1, 0);
+					GlStateManager.rotatef(-10F + tile.animationTicks, 0, 1, 0);
 				else
-					GlStateManager.rotate(0, 0, 1, 0);
+					GlStateManager.rotatef(0, 0, 1, 0);
 				leftArm1.render(0.0625F);
 				leftArm2.render(0.0625F);
 				leftPalm.render(0.0625F);

@@ -152,7 +152,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 			GlStateManager.scale(0.25D, 0.25D, 0.25D);
 			GlStateManager.translate(0D, itemBob, 0D);
 			GlStateManager.rotate((float) rotation, 0, 1, 0);
-			Minecraft.getInstance().getRenderItem().renderItem(infuser.getStackInSlot(slotIndex), TransformType.FIXED);
+			Minecraft.getInstance().getItemRenderer().renderItem(infuser.getStackInSlot(slotIndex), TransformType.FIXED);
 			GlStateManager.popMatrix();
 		}
 	}

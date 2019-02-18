@@ -131,7 +131,7 @@ public class ArrowPredictionRenderer {
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GL11.glEnable(GL11.GL_LINE_SMOOTH);
-        GlStateManager.glLineWidth(alpha * 3.5F);
+        GlStateManager.lineWidth(alpha * 3.5F);
         GlStateManager.color(1.0f, 1.0f, 1.0f, alpha);
 
         boolean drawing = true;
@@ -152,7 +152,7 @@ public class ArrowPredictionRenderer {
                     GL11.glVertex3d(ea.posX - rx, ea.posY - ry, ea.posZ - rz);
                     GL11.glVertex3d(collisionPoint.hitVec.x-rx, collisionPoint.hitVec.y-ry, collisionPoint.hitVec.z-rz);
                     GL11.glEnd();
-                    GL11.glLineWidth(2.0f);
+                    GL11.lineWidth(2.0f);
                     GlStateManager.color(1.0f, 0.0f, 0.0f, quality);
                     GL11.glEnable(GL11.GL_LINE_SMOOTH);
                     GL11.glBegin(GL11.GL_LINES);

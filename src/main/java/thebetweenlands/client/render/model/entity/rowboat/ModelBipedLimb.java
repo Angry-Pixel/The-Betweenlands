@@ -80,17 +80,17 @@ public class ModelBipedLimb extends ModelRenderer {
         GL11.glPushAttrib(GL11.GL_CULL_FACE);
         GlStateManager.disableCull();
         GlStateManager.pushMatrix();
-        GlStateManager.translate(rotationPointX * scale, rotationPointY * scale, rotationPointZ * scale);
+        GlStateManager.translatef(rotationPointX * scale, rotationPointY * scale, rotationPointZ * scale);
         if (rotateAngleZ != 0) {
-            GlStateManager.rotate(rotateAngleZ * MathUtils.RAD_TO_DEG, 0, 0, 1);
+            GlStateManager.rotatef(rotateAngleZ * MathUtils.RAD_TO_DEG, 0, 0, 1);
         }
         if (rotateAngleY != 0) {
-            GlStateManager.rotate(rotateAngleY * MathUtils.RAD_TO_DEG, 0, 1, 0);
+            GlStateManager.rotatef(rotateAngleY * MathUtils.RAD_TO_DEG, 0, 1, 0);
         }
         if (rotateAngleX != 0) {
-            GlStateManager.rotate(rotateAngleX * MathUtils.RAD_TO_DEG, 1, 0, 0);
+            GlStateManager.rotatef(rotateAngleX * MathUtils.RAD_TO_DEG, 1, 0, 0);
         }
-        GlStateManager.translate(offsetX * scale, offsetY * scale, offsetZ * scale);
+        GlStateManager.translatef(offsetX * scale, offsetY * scale, offsetZ * scale);
         float h = depth * 3;
         float m = h / 2;
         float dw = depth + width;
@@ -198,13 +198,13 @@ public class ModelBipedLimb extends ModelRenderer {
         setUV(leftU + x2p / sizeZES * depth + depth / 2, leftV + m + y2p / sizeYES * m);
         GlStateManager.glVertex3f(sizeX + ex, sizeZ * ratio + y2p, x2p + sizeZ / 2);
         GlStateManager.glEnd();
-        GlStateManager.translate(-offsetX * scale, -offsetY * scale, -offsetZ * scale);
+        GlStateManager.translatef(-offsetX * scale, -offsetY * scale, -offsetZ * scale);
         renderChildren(childModels, scale);
-        GlStateManager.translate(0, sizeZ * ratio + offsetY * scale, 0);
-        GlStateManager.rotate(angle, 1, 0, 0);
-        GlStateManager.translate(offsetX * scale, 0, offsetZ * scale);
+        GlStateManager.translatef(0, sizeZ * ratio + offsetY * scale, 0);
+        GlStateManager.rotatef(angle, 1, 0, 0);
+        GlStateManager.translatef(offsetX * scale, 0, offsetZ * scale);
         // front
-        GlStateManager.translate(sizeX / 2, -y1i, 0);
+        GlStateManager.translatef(sizeX / 2, -y1i, 0);
         GlStateManager.glBegin(GL11.GL_QUADS);
         GlStateManager.glNormal3f(0, 0, -1);
         setUV(depth, dmm - len1 / (m * scale + ex) * m);
@@ -216,9 +216,9 @@ public class ModelBipedLimb extends ModelRenderer {
         setUV(dw, dmm - len1 / (m * scale + ex) * m);
         GlStateManager.glVertex3f(sizeX / 2 + ex, 0, -ex);
         GlStateManager.glEnd();
-        GlStateManager.translate(-sizeX / 2, y1i, 0);
+        GlStateManager.translatef(-sizeX / 2, y1i, 0);
         // back
-        GlStateManager.translate(-sizeX / 2, -y2o, 0);
+        GlStateManager.translatef(-sizeX / 2, -y2o, 0);
         GlStateManager.glBegin(GL11.GL_QUADS);
         GlStateManager.glNormal3f(0, 0, 1);
         setUV(dwd, dmm - len2 / (h * scale + ex * 2) * h);
@@ -230,7 +230,7 @@ public class ModelBipedLimb extends ModelRenderer {
         setUV(dwdw, dmm - len2 / (h * scale + ex * 2) * h);
         GlStateManager.glVertex3f(sizeX / 2 - ex, 0, sizeZ + ex);
         GlStateManager.glEnd();
-        GlStateManager.translate(sizeX / 2, y2o, 0);
+        GlStateManager.translatef(sizeX / 2, y2o, 0);
         GlStateManager.glBegin(GL11.GL_QUADS);
         // right side
         GlStateManager.glNormal3f(-1, 0, 0);

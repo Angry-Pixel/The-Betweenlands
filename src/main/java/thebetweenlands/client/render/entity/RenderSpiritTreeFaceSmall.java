@@ -50,25 +50,25 @@ public class RenderSpiritTreeFaceSmall extends RenderWallFace<EntitySpiritTreeFa
 			}
 
 			private void preRenderDamagedBlocks() {
-				GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+				GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 				GlStateManager.enableBlend();
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
+				GlStateManager.color4f(1.0F, 1.0F, 1.0F, 0.5F);
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-				GlStateManager.enableAlpha();
+				GlStateManager.enableAlphaTest();
 
 				GlStateManager.matrixMode(GL11.GL_TEXTURE);
 				GlStateManager.pushMatrix();
 				GlStateManager.loadIdentity();
-				GlStateManager.scale(4f, 4f, 0);
+				GlStateManager.scalef(4f, 4f, 0);
 				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 			}
 
 			private void postRenderDamagedBlocks() {
-				GlStateManager.disableAlpha();
-				GlStateManager.enableAlpha();
+				GlStateManager.disableAlphaTest();
+				GlStateManager.enableAlphaTest();
 				GlStateManager.depthMask(true);
 				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 				GlStateManager.matrixMode(GL11.GL_TEXTURE);
 				GlStateManager.popMatrix();
@@ -85,15 +85,15 @@ public class RenderSpiritTreeFaceSmall extends RenderWallFace<EntitySpiritTreeFa
 		this.glow.setAlpha(entity.getGlow(partialTicks));
 
 		float scale = 0.8F + entity.getHalfMovementProgress(partialTicks) * entity.getHalfMovementProgress(partialTicks) * 0.2F;
-		GlStateManager.scale(scale, scale, scale);
+		GlStateManager.scalef(scale, scale, scale);
 
 		int variant = entity.getVariant();
 		if(variant == 0) {
 			this.mainModel = this.model1;
-			GlStateManager.translate(0, 1, -0.25D);
+			GlStateManager.translatef(0, 1, -0.25F);
 		} else {
 			this.mainModel = this.model2;
-			GlStateManager.translate(0, 0, -0.74D);
+			GlStateManager.translatef(0, 0, -0.74F);
 		}
 	}
 

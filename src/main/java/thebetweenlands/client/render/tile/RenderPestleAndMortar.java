@@ -75,7 +75,7 @@ public class RenderPestleAndMortar extends TileEntitySpecialRenderer<TileEntityM
 			GlStateManager.scale(0.15D, 0.15D, 0.15D);
 			GlStateManager.translate(0D, te.itemBob * 0.01F, 0D);
 			GlStateManager.rotate(te.crystalRotation, 0, 1, 0);
-			Minecraft.getInstance().getRenderItem().renderItem(te.getStackInSlot(3), ItemCameraTransforms.TransformType.GROUND);
+			Minecraft.getInstance().getItemRenderer().renderItem(te.getStackInSlot(3), ItemCameraTransforms.TransformType.GROUND);
 			GlStateManager.popMatrix();
 		}
 	}

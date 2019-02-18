@@ -46,7 +46,7 @@ public class RenderLurkerSkinRaft extends Render<EntityBoat> {
 	}
 
 	public void setupRotation(EntityBoat entity, float yaw, float partialTicks) {
-		GlStateManager.rotate(180.0F - yaw, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotatef(180.0F - yaw, 0.0F, 1.0F, 0.0F);
 		float wobbleTimer = (float)entity.getTimeSinceHit() - partialTicks;
 		float wobbleStrength = entity.getDamageTaken() - partialTicks;
 
@@ -55,14 +55,14 @@ public class RenderLurkerSkinRaft extends Render<EntityBoat> {
 		}
 
 		if (wobbleTimer > 0.0F) {
-			GlStateManager.rotate(MathHelper.sin(wobbleTimer) * wobbleTimer * wobbleStrength / 10.0F * (float)entity.getForwardDirection(), 1.0F, 0.0F, 0.0F);
+			GlStateManager.rotatef(MathHelper.sin(wobbleTimer) * wobbleTimer * wobbleStrength / 10.0F * (float)entity.getForwardDirection(), 1.0F, 0.0F, 0.0F);
 		}
 
-		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
+		GlStateManager.scalef(-1.0F, -1.0F, 1.0F);
 	}
 
 	public void setupTranslation(double x, double y, double z) {
-		GlStateManager.translate((float)x, (float)y + 0.375F, (float)z);
+		GlStateManager.translatef((float)x, (float)y + 0.375F, (float)z);
 	}
 
 	@Override

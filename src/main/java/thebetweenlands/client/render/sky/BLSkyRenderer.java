@@ -78,9 +78,9 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 
 		if(skyDomeDispList == -1) {
 			skyDomeDispList = GLAllocation.generateDisplayLists(1);
-			GlStateManager.glNewList(skyDomeDispList, GL11.GL_COMPILE);
+			GlStateManager.newList(skyDomeDispList, GL11.GL_COMPILE);
 			this.renderSkyDome();
-			GlStateManager.glEndList();
+			GlStateManager.endList();
 		}
 
 		if(blRiftRenderer == null) {
@@ -194,7 +194,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 
 		boolean useShaderSky = ShaderHelper.INSTANCE.isWorldShaderActive() && ShaderHelper.INSTANCE.getWorldShader() != null && ShaderHelper.INSTANCE.getWorldShader().getStarfieldTexture() >= 0;
 
@@ -218,7 +218,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 		GlStateManager.disableBlend();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 
 		if (world.dimension.isSkyColored()) {
 			GlStateManager.color(skyR * 0.2F + 0.04F, skyG * 0.2F + 0.04F, skyB * 0.6F + 0.1F, starBrightness / (!useShaderSky ? 1.5F : 1.0F));
@@ -231,7 +231,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 		if(useShaderSky) {
 			//Render shader sky dome
 			GlStateManager.bindTexture(ShaderHelper.INSTANCE.getWorldShader().getStarfieldTexture());
-			GlStateManager.disableAlpha();
+			GlStateManager.disableAlphaTest();
 			GlStateManager.enableBlend();
 			GlStateManager.enableTexture2D();
 			RenderHelper.disableStandardItemLighting();
@@ -246,7 +246,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 			GlStateManager.depthMask(true);
 			GlStateManager.disableBlend();
-			GlStateManager.enableAlpha();
+			GlStateManager.enableAlphaTest();
 
 			//Render sky clip plane
 			this.renderFlatSky(partialTicks, world, mc, true, false);
@@ -254,7 +254,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 			if(Minecraft.getInstance().gameSettings.fancyGraphics) {
 				//Render fancy non-shader sky dome
 				mc.renderEngine.bindTexture(SKY_TEXTURE);
-				GlStateManager.disableAlpha();
+				GlStateManager.disableAlphaTest();
 				GlStateManager.enableBlend();
 				GlStateManager.enableTexture2D();
 				RenderHelper.disableStandardItemLighting();
@@ -269,7 +269,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 				GlStateManager.depthMask(true);
 				GlStateManager.disableBlend();
-				GlStateManager.enableAlpha();
+				GlStateManager.enableAlphaTest();
 			} else {
 				//Render flat sky
 				this.renderFlatSky(partialTicks, world, mc, false, false);
@@ -289,7 +289,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 				GlStateManager.scale(2.0D, 2.0D, 0.0D);
 				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 				
-				GlStateManager.disableAlpha();
+				GlStateManager.disableAlphaTest();
 				GlStateManager.enableBlend();
 				GlStateManager.enableTexture2D();
 				RenderHelper.disableStandardItemLighting();
@@ -300,7 +300,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 				GlStateManager.depthMask(true);
 				GlStateManager.disableBlend();
-				GlStateManager.enableAlpha();
+				GlStateManager.enableAlphaTest();
 				
 				GlStateManager.matrixMode(GL11.GL_TEXTURE);
 				GlStateManager.popMatrix();
@@ -331,7 +331,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 	}
 
 	protected void renderFlatSky(float partialTicks, WorldClient world, Minecraft mc, boolean renderClipPlane, boolean spoopy) {
-		GlStateManager.disableAlpha();
+		GlStateManager.disableAlphaTest();
 		GlStateManager.enableBlend();
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
 		GlStateManager.depthMask(false);
@@ -423,7 +423,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 
 			mc.renderEngine.bindTexture(FOG_TEXTURE);
 
-			GlStateManager.disableAlpha();
+			GlStateManager.disableAlphaTest();
 			GlStateManager.enableBlend();
 			GlStateManager.enableTexture2D();
 			RenderHelper.disableStandardItemLighting();
@@ -460,7 +460,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 			GlStateManager.depthMask(true);
 			GlStateManager.disableBlend();
-			GlStateManager.enableAlpha();
+			GlStateManager.enableAlphaTest();
 
 			GlStateManager.popMatrix();
 
@@ -543,7 +543,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 		if(!this.auroras.isEmpty()) {
 			GlStateManager.disableFog();
 			GlStateManager.depthMask(false);
-			GlStateManager.disableAlpha();
+			GlStateManager.disableAlphaTest();
 			GlStateManager.enableBlend();
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(-mc.getRenderManager().viewerPosX, -mc.getRenderManager().viewerPosY, -mc.getRenderManager().viewerPosZ);
@@ -551,7 +551,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 				aurora.render(partialTicks, 1);
 			}
 			GlStateManager.popMatrix();
-			GlStateManager.enableAlpha();
+			GlStateManager.enableAlphaTest();
 			GlStateManager.depthMask(true);
 		}
 	}

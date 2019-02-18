@@ -16,7 +16,7 @@ import thebetweenlands.common.tile.TileEntityItemCage;
 
 
 @OnlyIn(Dist.CLIENT)
-public class RenderItemCage extends TileEntitySpecialRenderer<TileEntityItemCage> {
+public class ItemRendererCage extends TileEntitySpecialRenderer<TileEntityItemCage> {
 
 	private static final ResourceLocation FORCE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/item_cage_power.png");
 	private static final ResourceLocation CAGE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/item_cage.png");

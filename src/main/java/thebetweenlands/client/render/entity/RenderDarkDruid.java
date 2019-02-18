@@ -35,17 +35,17 @@ public class RenderDarkDruid extends RenderLiving<EntityDarkDruid> {
 		}
 
 		@Override
-		public void doRenderLayer(EntityDarkDruid entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		public void render(EntityDarkDruid entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 			if (!entity.isInvisible()) {
 				this.renderer.bindTexture(GLOW);
 				GlStateManager.enableBlend();
-				GlStateManager.disableAlpha();
+				GlStateManager.disableAlphaTest();
 				LightingUtil.INSTANCE.setLighting(255);
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 				this.renderer.getMainModel().render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 				LightingUtil.INSTANCE.revert();
 				GlStateManager.disableBlend();
-				GlStateManager.enableAlpha();
+				GlStateManager.enableAlphaTest();
 			}
 		}
 

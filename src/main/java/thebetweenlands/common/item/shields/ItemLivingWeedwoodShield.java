@@ -101,7 +101,7 @@ public class ItemLivingWeedwoodShield extends ItemWeedwoodShield {
 		Vec3d lookVec = owner.getLookVec().normalize();
 
 		for(EntityLivingBase e : entities) {
-			if(Math.toDegrees(Math.acos(lookVec.dotProduct(e.getPositionEyes(1).subtract(owner.getPositionEyes(1)).normalize()))) <= 70) {
+			if(Math.toDegrees(Math.acos(lookVec.dotProduct(e.getEyePosition(1).subtract(owner.getEyePosition(1)).normalize()))) <= 70) {
 				if(target == null || target.getDistance(owner) > e.getDistance(owner)) {
 					target = e;
 				}

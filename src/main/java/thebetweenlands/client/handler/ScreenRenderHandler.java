@@ -90,7 +90,7 @@ public class ScreenRenderHandler extends Gui {
 	
 	public static List<LocationStorage> getVisibleLocations(Entity entity) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(entity.world);
-		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, entity.posX, entity.posZ, location -> location.isInside(entity.getPositionEyes(1)) && location.isVisible(entity));
+		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, entity.posX, entity.posZ, location -> location.isInside(entity.getEyePosition(1)) && location.isVisible(entity));
 	}
 
 	@SubscribeEvent
@@ -324,10 +324,10 @@ public class ScreenRenderHandler extends Gui {
 								GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 								GlStateManager.scale(scale, scale, scale);
 
-								mc.getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
-								mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, stack, 0, 0, null);
+								mc.getItemRenderer().renderItemAndEffectIntoGUI(stack, 0, 0);
+								mc.getItemRenderer().renderItemOverlayIntoGUI(mc.fontRenderer, stack, 0, 0, null);
 
-								GlStateManager.disableAlpha();
+								GlStateManager.disableAlphaTest();
 								GlStateManager.disableRescaleNormal();
 								GlStateManager.disableLighting();
 								GlStateManager.color(1, 1, 1, 1);
@@ -475,10 +475,10 @@ public class ScreenRenderHandler extends Gui {
             timeInPortal = timeInPortal * 0.8F + 0.2F;
         }
 
-        GlStateManager.disableAlpha();
+        GlStateManager.disableAlphaTest();
         GlStateManager.disableDepth();
         GlStateManager.depthMask(false);
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GlStateManager.color(1.0F, 1.0F, 1.0F, timeInPortal);
         mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         TextureAtlasSprite textureatlassprite = mc.getBlockRendererDispatcher().getBlockModelShapes().getTexture(BlockRegistry.TREE_PORTAL.getDefaultState());
@@ -496,7 +496,7 @@ public class ScreenRenderHandler extends Gui {
         tessellator.draw();
         GlStateManager.depthMask(true);
         GlStateManager.enableDepth();
-        GlStateManager.enableAlpha();
+        GlStateManager.enableAlphaTest();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 	

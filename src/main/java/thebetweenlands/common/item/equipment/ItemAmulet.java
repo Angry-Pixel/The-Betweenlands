@@ -12,7 +12,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -141,7 +141,7 @@ public class ItemAmulet extends Item implements IEquippable {
 				GlStateManager.translate(x, y, z);
 	
 				TextureManager textureManager = Minecraft.getInstance().getTextureManager();
-				RenderItem renderItem = Minecraft.getInstance().getRenderItem();
+				ItemRenderer renderItem = Minecraft.getInstance().getItemRenderer();
 	
 				textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				ITextureObject texture = textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

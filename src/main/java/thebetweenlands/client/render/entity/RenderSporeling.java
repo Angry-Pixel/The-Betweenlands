@@ -20,7 +20,7 @@ public class RenderSporeling extends RenderLiving<EntitySporeling> {
 	@Override
 	protected void preRenderCallback(EntitySporeling sporeling, float partialTickTime) {
 		if (sporeling.getIsFalling())
-			GlStateManager.rotate(sporeling.smoothedAngle(partialTickTime), 0, 1, 0);
+			GlStateManager.rotatef(sporeling.smoothedAngle(partialTickTime), 0, 1, 0);
 	}
 
 	@Override

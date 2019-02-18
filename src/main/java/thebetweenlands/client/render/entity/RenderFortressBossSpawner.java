@@ -23,14 +23,14 @@ public class RenderFortressBossSpawner extends Render<EntityPrimordialMalevolenc
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.pushMatrix();
 		GlStateManager.enableTexture2D();
-		GlStateManager.translate(x, y + 1.338F, z);
-		GlStateManager.scale(0.9F, 0.9F, 0.9F);
+		GlStateManager.translated(x, y + 1.338F, z);
+		GlStateManager.scalef(0.9F, 0.9F, 0.9F);
 		this.bindTexture(TEXTURE);
-		GlStateManager.rotate(180, 1, 0, 0);
+		GlStateManager.rotatef(180, 1, 0, 0);
 		float progress = 1.0F - (float)entity.spawnDelay / entity.maxSpawnDelay;
-		GlStateManager.color(1, 1, 1, progress);
+		GlStateManager.color4f(1, 1, 1, progress);
 		MODEL.render(entity, 0, 0, entity.ticksExisted + partialTicks, 0, 0, 0.0625F);
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.popMatrix();
 	}

@@ -127,7 +127,7 @@ public class ItemBLArmor extends ItemArmor implements IAnimatorRepairable {
 			GlStateManager.disableDepth();
 			GlStateManager.depthMask(false);
 			GlStateManager.enableBlend();
-			GlStateManager.disableAlpha();
+			GlStateManager.disableAlphaTest();
 			OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ZERO);
 			GlStateManager.color(1, 1, 1);
 			
@@ -190,7 +190,7 @@ public class ItemBLArmor extends ItemArmor implements IAnimatorRepairable {
 			
 			GlStateManager.depthMask(true);
 			GlStateManager.enableDepth();
-			GlStateManager.enableAlpha();
+			GlStateManager.enableAlphaTest();
 			GlStateManager.color(1, 1, 1);
 		}
 	}

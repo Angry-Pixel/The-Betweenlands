@@ -38,8 +38,8 @@ public class Model3DTexture extends ModelBox {
 	@Override
 	public void render(BufferBuilder renderer, float scale) {
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(posX1, posY1, posZ1);
-		GlStateManager.scale(width / 16F, height / 16F, 1);
+		GlStateManager.translated(posX1, posY1, posZ1);
+		GlStateManager.scalef(width / 16F, height / 16F, 1);
 		float depth = 0.0625F;
 		Tessellator tessellator = Tessellator.getInstance();
 

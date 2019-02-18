@@ -224,9 +224,9 @@ public class BossHandler<T extends Entity & IBLBoss> {
 					GlStateManager.rotate((float)(isThirdPersonFrontal ? -1 : 1) * viewerPitch, 1.0F, 0.0F, 0.0F);
 					GlStateManager.disableLighting();
 					GlStateManager.enableBlend();
-					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+					GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 					GlStateManager.enableTexture2D();
-					GlStateManager.enableAlpha();
+					GlStateManager.enableAlphaTest();
 					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 					GlStateManager.depthMask(false);
 

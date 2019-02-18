@@ -26,7 +26,7 @@ public class ModelSpawnerCrystal extends ModelBase {
 
     public void render() {
         GlStateManager.pushMatrix();
-        GlStateManager.scale(0.1D, 0.3D, 0.1D);
+        GlStateManager.scalef(0.1F, 0.3F, 0.1F);
         this.crystal.render(0.0625F);
         GlStateManager.popMatrix();
     }

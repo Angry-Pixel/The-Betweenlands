@@ -48,25 +48,25 @@ public class RenderSpiritTreeFaceLarge extends RenderWallFace<EntitySpiritTreeFa
 			}
 
 			private void preRenderDamagedBlocks() {
-				GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+				GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.DST_COLOR, GlStateManager.DestFactor.SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 				GlStateManager.enableBlend();
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
+				GlStateManager.color4f(1.0F, 1.0F, 1.0F, 0.5F);
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-				GlStateManager.enableAlpha();
+				GlStateManager.enableAlphaTest();
 
 				GlStateManager.matrixMode(GL11.GL_TEXTURE);
 				GlStateManager.pushMatrix();
 				GlStateManager.loadIdentity();
-				GlStateManager.scale(8f, 8f, 0);
+				GlStateManager.scalef(8f, 8f, 0);
 				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 			}
 
 			private void postRenderDamagedBlocks() {
-				GlStateManager.disableAlpha();
-				GlStateManager.enableAlpha();
+				GlStateManager.disableAlphaTest();
+				GlStateManager.enableAlphaTest();
 				GlStateManager.depthMask(true);
 				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 				GlStateManager.matrixMode(GL11.GL_TEXTURE);
 				GlStateManager.popMatrix();
@@ -94,9 +94,9 @@ public class RenderSpiritTreeFaceLarge extends RenderWallFace<EntitySpiritTreeFa
 		}
 
 		float scale = 0.8F + entity.getHalfMovementProgress(partialTicks) * entity.getHalfMovementProgress(partialTicks) * 0.2F;
-		GlStateManager.scale(scale, scale, scale);
+		GlStateManager.scalef(scale, scale, scale);
 
-		GlStateManager.translate(0, 0.15D, -0.7D);
+		GlStateManager.translatef(0, 0.15F, -0.7F);
 	}
 
 	@Override

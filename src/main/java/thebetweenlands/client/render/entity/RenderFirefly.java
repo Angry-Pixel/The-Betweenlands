@@ -44,7 +44,7 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 			this.glow.setAlpha(entity.getGlowTicks(partialTicks) / 20.0F * (float)Math.min(glowStrength, 1.0D));
 
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(0, Math.sin((entity.ticksExisted + partialTicks) / 10.0F) * 0.15F, 0);
+			GlStateManager.translatef(0, (float)Math.sin((entity.ticksExisted + partialTicks) / 10.0F) * 0.15F, 0);
 			super.doRender(entity, x, y, z, yaw, partialTicks);
 			GlStateManager.popMatrix();
 
@@ -85,7 +85,7 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 		GlStateManager.pushMatrix();
 		GlStateManager.depthMask(false);
 		GlStateManager.enableBlend();
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569F);
 

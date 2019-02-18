@@ -27,20 +27,20 @@ public class RenderLurker extends RenderLiving<EntityLurker> {
 	@Override
 	protected void applyRotations(EntityLurker lurker, float headPitch, float yaw, float partialTicks) {
 		super.applyRotations(lurker, headPitch, yaw, partialTicks);
-		GlStateManager.rotate((lurker).getRotationPitch(partialTicks), 1, 0, 0);
+		GlStateManager.rotatef((lurker).getRotationPitch(partialTicks), 1, 0, 0);
 	}
 
 	@Override
 	protected void renderModel(EntityLurker lurker, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		if (!lurker.getPassengers().isEmpty() && lurker.getPassengers().get(0) instanceof EntityDragonFly) {
 			GlStateManager.pushMatrix();
-			GlStateManager.rotate(180, 1, 0, 0);
-			GlStateManager.translate(0, -1.25F, 0);
-			GlStateManager.translate(0, 0, 0.7F);
-			GlStateManager.rotate(-MathHelper.clamp(netHeadYaw, -50, 50), 0, 1, 0);
-			GlStateManager.rotate(headPitch, 1, 0, 0);
-			GlStateManager.translate(0, 0, 0.8F);
-			GlStateManager.color(1, 1, 1, 1);
+			GlStateManager.rotatef(180, 1, 0, 0);
+			GlStateManager.translatef(0, -1.25F, 0);
+			GlStateManager.translatef(0, 0, 0.7F);
+			GlStateManager.rotatef(-MathHelper.clamp(netHeadYaw, -50, 50), 0, 1, 0);
+			GlStateManager.rotatef(headPitch, 1, 0, 0);
+			GlStateManager.translatef(0, 0, 0.8F);
+			GlStateManager.color4f(1, 1, 1, 1);
 			GlStateManager.enableTexture2D();
 			EntityDragonFly dragonfly = (EntityDragonFly) lurker.getPassengers().get(0);
 			dragonfly.prevRenderYawOffset = dragonfly.renderYawOffset = 0;

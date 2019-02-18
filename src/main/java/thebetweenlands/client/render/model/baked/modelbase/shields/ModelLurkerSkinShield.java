@@ -159,7 +159,7 @@ public class ModelLurkerSkinShield extends ModelBase {
 
 	public void renderAsRaft(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		GlStateManager.pushMatrix();
-		GlStateManager.rotate(90, 1, 0, 0);
+		GlStateManager.rotatef(90, 1, 0, 0);
 		this.shield_main.render(f5);
 		GlStateManager.popMatrix();
 	}

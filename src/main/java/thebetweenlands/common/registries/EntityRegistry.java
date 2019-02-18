@@ -252,6 +252,10 @@ public class EntityRegistry {
 			@Override
 			public <F extends EntityType.Builder<?>> F reg(String regName, F obj, Consumer<F> callback) {
 				EntityType<?> type = obj.build(ModInfo.ID + ":" + regName);
+				if(!type.hasCustomTracking()) {
+					obj.tracker(64, 3, true);
+				}
+				type = obj.build(ModInfo.ID + ":" + regName);
 				type.setRegistryName(ModInfo.ID, regName);
 				registry.register(type);
 				return obj;

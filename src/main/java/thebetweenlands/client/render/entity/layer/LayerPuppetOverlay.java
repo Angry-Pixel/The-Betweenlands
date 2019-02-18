@@ -13,9 +13,9 @@ public class LayerPuppetOverlay extends LayerAnimatedOverlay<EntityLivingBase> {
 	}
 
 	@Override
-	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void render(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null) && entity.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null).hasPuppeteer()) {
-			super.doRenderLayer(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+			super.render(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
 		}
 	}
 }

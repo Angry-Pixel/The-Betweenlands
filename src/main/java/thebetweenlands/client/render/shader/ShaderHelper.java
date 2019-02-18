@@ -203,7 +203,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 
 			targetFramebuffer2.framebufferClear();
 
-			GlStateManager.disableAlpha();
+			GlStateManager.disableAlphaTest();
 
 			for(int i = 0; i < renderPasses; i++) {
 				//Renders the shader to the blitBuffer
@@ -279,7 +279,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 				.render(partialTicks);
 			}
 
-			GlStateManager.enableAlpha();
+			GlStateManager.enableAlphaTest();
 
 			this.shadersUpdated = false;
 			this.required = false;

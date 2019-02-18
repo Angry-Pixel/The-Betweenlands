@@ -24,7 +24,7 @@ public class RenderChiromaw extends RenderLiving<EntityChiromaw> {
 	protected void preRenderCallback(EntityChiromaw chiromaw, float partialTickTime) {
 		if (!chiromaw.getIsHanging()) {
 			float flap = MathHelper.sin((chiromaw.ticksExisted + partialTickTime) * 0.5F) * 0.6F;
-			GlStateManager.translate(0.0F, 0F - flap * 0.5F, 0.0F);
+			GlStateManager.translatef(0.0F, 0F - flap * 0.5F, 0.0F);
 		}
 	}
 

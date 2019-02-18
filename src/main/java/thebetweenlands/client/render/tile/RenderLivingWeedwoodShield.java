@@ -50,7 +50,7 @@ public class RenderLivingWeedwoodShield extends TileEntityItemStackRenderer {
 		textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		atlas.restoreLastBlurMipmap();
 
-		mc.getRenderItem().renderItem(this.normalShield, TransformType.NONE);
+		mc.getItemRenderer().renderItem(this.normalShield, TransformType.NONE);
 
 		textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		atlas.setBlurMipmap(false, false);
@@ -72,10 +72,10 @@ public class RenderLivingWeedwoodShield extends TileEntityItemStackRenderer {
 
 			textureManager.bindTexture(TEXTURE_GLOW);
 
-			GlStateManager.doPolygonOffset(0, -3.0F);
+			GlStateManager.polygonOffset(0, -3.0F);
 			GlStateManager.enablePolygonOffset();
 			GlStateManager.enableBlend();
-			GlStateManager.enableAlpha();
+			GlStateManager.enableAlphaTest();
 			GlStateManager.depthMask(false);
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.color(1, 1, 1, overlayAlpha);
@@ -93,7 +93,7 @@ public class RenderLivingWeedwoodShield extends TileEntityItemStackRenderer {
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.depthMask(true);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			GlStateManager.doPolygonOffset(0.0F, 0.0F);
+			GlStateManager.polygonOffset(0.0F, 0.0F);
 			GlStateManager.disablePolygonOffset();
 		}
 

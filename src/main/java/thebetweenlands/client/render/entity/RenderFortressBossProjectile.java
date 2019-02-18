@@ -27,25 +27,25 @@ public class RenderFortressBossProjectile extends Render<EntityPrimordialMalevol
 	public void renderProjectile(EntityPrimordialMalevolenceProjectile entity, double x, double y, double z, float rotationYaw, float partialTickTime) {
 		float ticks = entity.ticksExisted + partialTickTime;
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y - 0.6D * 0.6D, z);
+		GlStateManager.translated(x, y - 0.6D * 0.6D, z);
 		this.bindTexture(TEXTURE);
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
 		float uOffset = ticks * 0.01F;
 		float vOffset = ticks * 0.01F;
-		GlStateManager.translate(uOffset, vOffset, 0.0F);
+		GlStateManager.translatef(uOffset, vOffset, 0.0F);
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 		GlStateManager.enableBlend();
 		GlStateManager.disableLighting();
 		GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
-		GlStateManager.scale(0.6D, 0.6D, 0.6D);
+		GlStateManager.scalef(0.6F, 0.6F, 0.6F);
 		if(entity.getRidingEntity() != null) {
 			GlStateManager.disableCull();
 		}
 		if(!entity.isDeflectable()) {
-			GlStateManager.color(0.8F, 0.6F, 0.4F, 1.0F);
+			GlStateManager.color4f(0.8F, 0.6F, 0.4F, 1.0F);
 		} else {
-			GlStateManager.color(0.15F, 1.0F, 0.35F, 1.0F);
+			GlStateManager.color4f(0.15F, 1.0F, 0.35F, 1.0F);
 		}
 		MODEL.render(0.0625F);
 		GlStateManager.enableCull();

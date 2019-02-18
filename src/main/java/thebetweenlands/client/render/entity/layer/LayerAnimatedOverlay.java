@@ -19,10 +19,10 @@ public class LayerAnimatedOverlay<T extends EntityLivingBase> implements LayerRe
 	}
 
 	@Override
-	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void render(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
-		GlStateManager.enableAlpha();
+		GlStateManager.enableAlphaTest();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.depthMask(!entity.isInvisible());
 
@@ -31,13 +31,13 @@ public class LayerAnimatedOverlay<T extends EntityLivingBase> implements LayerRe
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
 		float yScroll = scrollTimer * 0.002F;
-		GlStateManager.translate(0F, -yScroll, 0.0F);
+		GlStateManager.translatef(0F, -yScroll, 0.0F);
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 		float colour = 0.5F;
-		GlStateManager.color(colour, colour, colour, 1.0F);
+		GlStateManager.color4f(colour, colour, colour, 1.0F);
 
 		GlStateManager.enablePolygonOffset();
-		GlStateManager.doPolygonOffset(0.0F, -5.0F);
+		GlStateManager.polygonOffset(0.0F, -5.0F);
 		
 		ModelBase mainModel = this.renderer.getMainModel();
 		mainModel.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTicks);

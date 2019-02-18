@@ -134,7 +134,7 @@ public class ManualWidgetBase {
         float var14 = (endColor & 255) / 255F;
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
-        GlStateManager.disableAlpha();
+        GlStateManager.disableAlphaTest();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         Tessellator tessellator = Tessellator.getInstance();
@@ -147,7 +147,7 @@ public class ManualWidgetBase {
         tessellator.draw();
         GlStateManager.shadeModel(GL11.GL_FLAT);
         GlStateManager.disableBlend();
-        GlStateManager.enableAlpha();
+        GlStateManager.enableAlphaTest();
         GlStateManager.enableTexture2D();
     }
 
@@ -247,7 +247,7 @@ public class ManualWidgetBase {
      */
     @OnlyIn(Dist.CLIENT)
     public void renderItem(int xPos, int yPos, ItemStack stack, boolean hasSpecialTooltip, boolean addPageLink, Item book) {
-        RenderItem render = Minecraft.getInstance().getRenderItem();
+        ItemRenderer render = Minecraft.getInstance().getItemRenderer();
         GlStateManager.pushMatrix();
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -284,7 +284,7 @@ public class ManualWidgetBase {
                 renderTooltip(mouseX, mouseY, parsedTooltip, 0xffffff, 0xf0100010);
             }
         }
-        GlStateManager.enableAlpha();
+        GlStateManager.enableAlphaTest();
         GlStateManager.color(1F, 1F, 1F, 1F);
     }
 

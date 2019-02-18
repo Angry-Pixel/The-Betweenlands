@@ -27,6 +27,6 @@ public class RenderSwampHag extends RenderLiving<EntitySwampHag> {
 
 	@Override
 	protected void preRenderCallback(EntitySwampHag entitylivingbaseIn, float partialTickTime) {
-		GlStateManager.scale(0.74F, 0.74F, 0.74F);
+		GlStateManager.scalef(0.74F, 0.74F, 0.74F);
 	}
 }
