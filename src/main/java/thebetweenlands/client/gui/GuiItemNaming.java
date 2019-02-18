@@ -36,7 +36,7 @@ public class GuiItemNaming extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		this.drawDefaultBackground();
 		GlStateManager.color(1, 1, 1, 1);
-		this.mc.renderEngine.bindTexture(GUI_TEXTURE);
+		this.mc.textureManager.bindTexture(GUI_TEXTURE);
 		this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 	}
 

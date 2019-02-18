@@ -29,7 +29,7 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 		if(randomStart) {
 			this.animation.setRandomStart(this.rand);
 		}
-		this.particleMaxAge = maxAge;
+		this.maxAge = maxAge;
 	}
 
 	@Override
@@ -41,8 +41,8 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 	public void setStitchedSprites(Frame[][] frames) {
 		if (this.animation != null && frames != null) {
 			this.animation.setFrames(frames[0]);
-			if(this.particleMaxAge < 0) {
-				this.particleMaxAge = this.animation.getTotalDuration() - 1;
+			if(this.maxAge < 0) {
+				this.maxAge = this.animation.getTotalDuration() - 1;
 			}
 			if (this.particleTexture == null) {
 				this.setParticleTexture(frames[0][0].getSprite());
@@ -114,8 +114,8 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 				public void tick() {
 					super.tick();
 
-					if(this.particleAge > this.particleMaxAge - 40) {
-						this.particleAlpha = (this.startAlpha * (this.particleMaxAge - this.particleAge) / 40.0F);
+					if(this.age > this.maxAge - 40) {
+						this.particleAlpha = (this.startAlpha * (this.maxAge - this.age) / 40.0F);
 					}
 				}
 			};

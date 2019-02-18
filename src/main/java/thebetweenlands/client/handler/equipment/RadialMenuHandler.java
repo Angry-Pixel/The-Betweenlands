@@ -8,7 +8,8 @@ import org.lwjgl.opengl.GL11;
 
 import net.java.games.input.Mouse;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SimpleSound;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -98,7 +99,7 @@ public class RadialMenuHandler {
 
 	public void openGUI() {
 		this.isOpen = true;
-		Minecraft.getInstance().getSoundHandler().play(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+		Minecraft.getInstance().getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 		Minecraft.getInstance().mouseHelper.ungrabMouseCursor();
 		Minecraft.getInstance().inGameHasFocus = false;
 		this.prevMouseX = Mouse.getX();
@@ -109,7 +110,7 @@ public class RadialMenuHandler {
 
 	public void closeGUI() {
 		this.isOpen = false;
-		Minecraft.getInstance().getSoundHandler().play(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+		Minecraft.getInstance().getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 		Minecraft.getInstance().setIngameFocus();
 	}
 
@@ -133,9 +134,7 @@ public class RadialMenuHandler {
 
 			List<Category> categories = new ArrayList<Category>();
 
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-
+			player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT).ifPresent(cap -> {
 				//Equippable items
 				for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
 					for(int i = 0; i < inventory.getSizeInventory(); i++) {
@@ -174,7 +173,7 @@ public class RadialMenuHandler {
 						}
 					}
 				}
-			}
+			});
 
 			int index = 0;
 			int page = 1;
@@ -396,7 +395,7 @@ public class RadialMenuHandler {
 			double centerDistance = Math.sqrt(diffX * diffX + diffY * diffY);
 
 			//Render circle sections
-			mc.renderEngine.bindTexture(TEXTURE);
+			mc.textureManager.bindTexture(TEXTURE);
 			int segments = Math.min(this.currentCategory.getCategories().size(), this.displayedCategories);
 			for(int i = 0; i < segments; i++) {
 				float midAngle = i * circleAngle + circleAngle / 2.0F;
@@ -582,7 +581,7 @@ public class RadialMenuHandler {
 				this.lastCategories.remove(this.lastCategories.size() - 1);
 				//this.displayedCategories = 0;
 				this.displayedCategories = this.currentCategory.getCategories().size();
-				Minecraft.getInstance().getSoundHandler().play(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				Minecraft.getInstance().getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			}
 		} else {
 			for(int i = 0; i < Math.min(this.currentCategory.getCategories().size(), this.displayedCategories); i++) {
@@ -598,7 +597,7 @@ public class RadialMenuHandler {
 							this.closeGUI();
 						}
 					}
-					Minecraft.getInstance().getSoundHandler().play(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+					Minecraft.getInstance().getSoundHandler().play(SimpleSound.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 					break;
 				}
 			}

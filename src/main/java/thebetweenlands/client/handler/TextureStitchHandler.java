@@ -48,7 +48,7 @@ public class TextureStitchHandler {
 
 	@SubscribeEvent
 	public void onTextureStitchPre(TextureStitchEvent.Pre e) {
-		if(e.getMap() != Minecraft.getInstance().getTextureMapBlocks()) {
+		if(e.getMap() != Minecraft.getInstance().getTextureMap()) {
 			//Only stitch to the main texture map
 			return;
 		}
@@ -151,7 +151,7 @@ public class TextureStitchHandler {
 									int duration = hasFrameMeta ? animationMetadata.getFrameTimeSingle(frame) : animationMetadata.getFrameTime();
 									int index = hasFrameMeta ? animationMetadata.getFrameIndex(frame) : frame;
 									int frameData[] = sprite.getFrameTextureData(index)[0]; //Use original non-mipmap frame
-									TextureAtlasSprite frameSprite = new TextureFromData(sprite.getIconName() + "_frame_" + frame, frameData, sprite.getIconWidth(), sprite.getIconHeight());
+									TextureAtlasSprite frameSprite = new TextureFromData(sprite.getIconName() + "_frame_" + frame, frameData, sprite.getWidth(), sprite.getHeight());
 									e.getMap().setTextureEntry(frameSprite);
 									frames[i][frame] = new Frame(frameSprite, duration);
 								}
@@ -178,7 +178,7 @@ public class TextureStitchHandler {
 
 	@SubscribeEvent
 	public void onTextureStitchPost(TextureStitchEvent.Post e) {
-		if(e.getMap() != Minecraft.getInstance().getTextureMapBlocks()) {
+		if(e.getMap() != Minecraft.getInstance().getTextureMap()) {
 			//Only stitch to the main texture map
 			return;
 		}

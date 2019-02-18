@@ -266,7 +266,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 					GL11.GL_TRANSFORM_BIT
 					);
 			prevShaderProgram = GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM);
-			GL11.glGetFloat(GL11.GL_COLOR_CLEAR_VALUE, CLEAR_COLOR_BUFFER);
+			GL11.glGetFloatv(GL11.GL_COLOR_CLEAR_VALUE, CLEAR_COLOR_BUFFER);
 
 			//Backup matrices
 			GlStateManager.pushMatrix();
@@ -282,7 +282,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 		GlStateManager.ortho(0.0D, intermediateDst.framebufferWidth, intermediateDst.framebufferHeight, 0.0D, 1000.0D, 3000.0D);
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 		GlStateManager.loadIdentity();
-		GlStateManager.translate(0.0F, 0.0F, -2000.0F);
+		GlStateManager.translatef(0.0F, 0.0F, -2000.0F);
 
 		//Clear buffers
 		if(clearDepth) {
@@ -307,7 +307,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 			TEXEL_SIZE_BUFFER.put(1.0F / (float)intermediateDst.framebufferWidth);
 			TEXEL_SIZE_BUFFER.put(1.0F / (float)intermediateDst.framebufferHeight);
 			TEXEL_SIZE_BUFFER.flip();
-			OpenGlHelper.glUniform1(this.texelSizeUniformID, TEXEL_SIZE_BUFFER);
+			OpenGlHelper.glUniform1fv(this.texelSizeUniformID, TEXEL_SIZE_BUFFER);
 		}
 
 		//Uploads additional uniforms
@@ -366,7 +366,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 			GlStateManager.ortho(0.0D, dst.framebufferWidth, dst.framebufferHeight, 0.0D, 1000.0D, 3000.0D);
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 			GlStateManager.loadIdentity();
-			GlStateManager.translate(0.0F, 0.0F, -2000.0F);
+			GlStateManager.translatef(0.0F, 0.0F, -2000.0F);
 
 			dst.bindFramebuffer(true);
 			GlStateManager.enableTexture2D();
@@ -556,19 +556,19 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 			default:
 			case 1:
 				this.setFloats(FLOAT_BUFFER_1, values);
-				OpenGlHelper.glUniform1(uniform, FLOAT_BUFFER_1);
+				OpenGlHelper.glUniform1fv(uniform, FLOAT_BUFFER_1);
 				break;
 			case 2:
 				this.setFloats(FLOAT_BUFFER_2, values);
-				OpenGlHelper.glUniform2(uniform, FLOAT_BUFFER_2);
+				OpenGlHelper.glUniform2fv(uniform, FLOAT_BUFFER_2);
 				break;
 			case 3:
 				this.setFloats(FLOAT_BUFFER_3, values);
-				OpenGlHelper.glUniform3(uniform, FLOAT_BUFFER_3);
+				OpenGlHelper.glUniform3fv(uniform, FLOAT_BUFFER_3);
 				break;
 			case 4:
 				this.setFloats(FLOAT_BUFFER_4, values);
-				OpenGlHelper.glUniform4(uniform, FLOAT_BUFFER_4);
+				OpenGlHelper.glUniform4fv(uniform, FLOAT_BUFFER_4);
 				break;
 			}
 		}
@@ -593,19 +593,19 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 			default:
 			case 1:
 				this.setInts(INT_BUFFER_1, values);
-				OpenGlHelper.glUniform1(uniform, INT_BUFFER_1);
+				OpenGlHelper.glUniform1iv(uniform, INT_BUFFER_1);
 				break;
 			case 2:
 				this.setInts(INT_BUFFER_2, values);
-				OpenGlHelper.glUniform2(uniform, INT_BUFFER_2);
+				OpenGlHelper.glUniform2iv(uniform, INT_BUFFER_2);
 				break;
 			case 3:
 				this.setInts(INT_BUFFER_3, values);
-				OpenGlHelper.glUniform3(uniform, INT_BUFFER_3);
+				OpenGlHelper.glUniform3iv(uniform, INT_BUFFER_3);
 				break;
 			case 4:
 				this.setInts(INT_BUFFER_4, values);
-				OpenGlHelper.glUniform4(uniform, INT_BUFFER_4);
+				OpenGlHelper.glUniform4iv(uniform, INT_BUFFER_4);
 				break;
 			}
 		}
@@ -626,7 +626,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 	 */
 	protected final void uploadIntArray(int uniform, IntBuffer buffer) {
 		if(uniform >= 0) {
-			OpenGlHelper.glUniform1(uniform, buffer);
+			OpenGlHelper.glUniform1iv(uniform, buffer);
 		}
 	}
 
@@ -637,7 +637,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 	 */
 	protected final void uploadFloatArray(int uniform, FloatBuffer buffer) {
 		if(uniform >= 0) {
-			OpenGlHelper.glUniform1(uniform, buffer);
+			OpenGlHelper.glUniform1fv(uniform, buffer);
 		}
 	}
 
@@ -683,7 +683,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 			MATRIX4F_BUFFER.put(13, matrix.m31);
 			MATRIX4F_BUFFER.put(14, matrix.m32);
 			MATRIX4F_BUFFER.put(15, matrix.m33);
-			OpenGlHelper.glUniformMatrix4(uniform, true, MATRIX4F_BUFFER);
+			OpenGlHelper.glUniformMatrix4fv(uniform, true, MATRIX4F_BUFFER);
 		}
 	}
 

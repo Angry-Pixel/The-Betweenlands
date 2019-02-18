@@ -608,7 +608,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			}
 		}
 
-		pixelLove = new FontRenderer(Minecraft.getInstance().gameSettings, new ResourceLocation("thebetweenlands:textures/gui/manual/font_atlas.png"), Minecraft.getInstance().renderEngine, false);
+		pixelLove = new FontRenderer(Minecraft.getInstance().gameSettings, new ResourceLocation("thebetweenlands:textures/gui/manual/font_atlas.png"), Minecraft.getInstance().textureManager, false);
 		if (Minecraft.getInstance().gameSettings.language != null) {
 			pixelLove.setBidiFlag(Minecraft.getInstance().getLanguageManager().isCurrentLanguageBidirectional());
 		}

@@ -35,7 +35,7 @@ public class ItemLoreScrap extends Item implements ItemRegistry.IMultipleItemMod
 
 		this.addPropertyOverride(new ResourceLocation("page"), new IItemPropertyGetter() {
 			@Override
-			public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
+			public float call(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
 				return getPage(stack);
 			}
 		});

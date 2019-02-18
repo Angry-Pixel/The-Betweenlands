@@ -75,12 +75,10 @@ public class CameraPositionHandler {
 			List<EntityPlayer> nearbyPlayers = renderViewEntity.world.getEntitiesWithinAABB(EntityPlayer.class, renderViewEntity.getBoundingBox().grow(32, 32, 32), entity -> entity.getDistance(renderViewEntity) <= 32.0D);
 
 			for(EntityPlayer player : nearbyPlayers) {
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {
-					ISummoningCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SUMMON, null);
+				ISummoningCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SUMMON).orElse(null);
 
-					if(cap.isActive()) {
-						shakeStrength += (ItemRingOfSummoning.MAX_USE_TIME - cap.getActiveTicks()) / (float)ItemRingOfSummoning.MAX_USE_TIME * 0.1F + 0.01F;
-					}
+				if(cap.isActive()) {
+					shakeStrength += (ItemRingOfSummoning.MAX_USE_TIME - cap.getActiveTicks()) / (float)ItemRingOfSummoning.MAX_USE_TIME * 0.1F + 0.01F;
 				}
 			}
 

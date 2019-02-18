@@ -106,7 +106,7 @@ public class ButtonWidget extends ManualWidgetBase {
             else if (aspect != null) {
                 AspectIconRenderer.renderIcon(xStart, yStart, 16, 16, aspect.getIcon());
             } else if (resourceLocation != null) {
-                Minecraft.getInstance().renderEngine.bindTexture(resourceLocation);
+                Minecraft.getInstance().textureManager.bindTexture(resourceLocation);
                 manual.drawTexture(xStart, yStart, 16, 16, page.textureWidth, page.textureHeight, page.xStartTexture, page.xEndTexture, page.yStartTexture, page.yEndTexture);
             }
             if (isHidden) {

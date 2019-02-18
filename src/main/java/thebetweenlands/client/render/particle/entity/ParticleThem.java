@@ -33,7 +33,7 @@ public class ParticleThem extends Particle {
 		this.posY = this.prevPosY = y;
 		this.posZ = this.prevPosZ = z;
 		this.motionX = this.motionY = this.motionZ = 0.0D;
-		this.particleMaxAge = (int)1200;
+		this.maxAge = (int)1200;
 		this.canCollide = false;
 		this.particleScale = scale;
 		this.startY = this.posY;
@@ -88,10 +88,10 @@ public class ParticleThem extends Particle {
 			alpha = Math.max(1.0F - (fadeStart - particleDist) / (fadeStart - fadeEnd), 0.0F);
 		}
 
-		if(this.particleAge < 40) {
-			alpha *= this.particleAge / 40.0F;
-		} else if(this.particleAge > this.particleMaxAge - 40) {
-			alpha *= (this.particleMaxAge - this.particleAge) / 40.0F;
+		if(this.age < 40) {
+			alpha *= this.age / 40.0F;
+		} else if(this.age > this.maxAge - 40) {
+			alpha *= (this.maxAge - this.age) / 40.0F;
 		}
 
 		alpha = Math.min(alpha * 1.75F, 1.0F);
@@ -123,7 +123,7 @@ public class ParticleThem extends Particle {
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 
-		this.setPosition(this.posX, this.startY + Math.sin(this.particleAge / 150.0f) / 1.5F, this.posZ);
+		this.setPosition(this.posX, this.startY + Math.sin(this.age / 150.0f) / 1.5F, this.posZ);
 
 		Entity renderView = Minecraft.getInstance().getRenderViewEntity();
 		if(renderView != null) {
@@ -152,7 +152,7 @@ public class ParticleThem extends Particle {
 		this.motionX *= 0.96D;
 		this.motionZ *= 0.96D;
 
-		if (this.particleAge++ >= this.particleMaxAge) {
+		if (this.age++ >= this.maxAge) {
 			this.setExpired();
 		}
 	}

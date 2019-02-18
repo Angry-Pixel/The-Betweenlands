@@ -37,6 +37,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -240,17 +241,17 @@ public class ScreenRenderHandler extends Gui {
 					this.cavingRopeConnectTicks = 80;
 					
 					GlStateManager.pushMatrix();
-					GlStateManager.translate(width / 2, height / 2, 0);
-					GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+					GlStateManager.translatef(width / 2, height / 2, 0);
+					GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 					GlStateManager.disableBlend();
 					
 					GlStateManager.pushMatrix();
-					GlStateManager.translate(14, 14, 0);
-					GlStateManager.scale(0.5D, 0.5D, 1);
+					GlStateManager.translatef(14, 14, 0);
+					GlStateManager.scalef(0.5F, 0.5F, 1);
 					mc.fontRenderer.drawString(String.valueOf(this.cavingRopeCount), 0, 0, 0xFFFFFFFF);
 					GlStateManager.popMatrix();
 					
-					Minecraft.getInstance().renderEngine.bindTexture(CAVING_ROPE_CONNECTED);
+					Minecraft.getInstance().textureManager.bindTexture(CAVING_ROPE_CONNECTED);
 					
 					Tessellator tessellator = Tessellator.getInstance();
 					BufferBuilder buffer = tessellator.getBuffer();
@@ -262,13 +263,13 @@ public class ScreenRenderHandler extends Gui {
 					GlStateManager.popMatrix();
 				} else if(!connected && this.cavingRopeConnectTicks > 0) {
 					GlStateManager.pushMatrix();
-					GlStateManager.translate(width / 2, height / 2, 0);
+					GlStateManager.translatef(width / 2, height / 2, 0);
 					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 					GlStateManager.enableBlend();
-					GlStateManager.color(1.0F, 1.0F, 1.0F, MathHelper.clamp(this.cavingRopeConnectTicks / 80.0F * (0.8F + 0.2F * (float)Math.sin((this.cavingRopeConnectTicks + 1 - event.getPartialTicks()) / 2.0F)), 0, 1));
+					GlStateManager.color4f(1.0F, 1.0F, 1.0F, MathHelper.clamp(this.cavingRopeConnectTicks / 80.0F * (0.8F + 0.2F * (float)Math.sin((this.cavingRopeConnectTicks + 1 - event.getPartialTicks()) / 2.0F)), 0, 1));
 					
-					Minecraft.getInstance().renderEngine.bindTexture(CAVING_ROPE_DISCONNECTED);
+					Minecraft.getInstance().textureManager.bindTexture(CAVING_ROPE_DISCONNECTED);
 					
 					Tessellator tessellator = Tessellator.getInstance();
 					BufferBuilder buffer = tessellator.getBuffer();
@@ -282,86 +283,88 @@ public class ScreenRenderHandler extends Gui {
 			}
 		} else if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
 			if(player != null && !player.isSpectator()) {
-				if (BetweenlandsConfig.GENERAL.equipmentVisible && player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-					IEquipmentCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+				if (BetweenlandsConfig.GENERAL.equipmentVisible) {
+					IEquipmentCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT).orElse(null);
 
-					EnumHandSide offhand = player.getPrimaryHand().opposite();
-					
-					int yOffset = 0;
-
-					for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
-						IInventory inv = capability.getInventory(type);
-
-						boolean isOnOppositeSide = BetweenlandsConfig.GENERAL.equipmentHotbarSide == 1;
-						boolean showOnRightSide = (offhand == EnumHandSide.LEFT) != isOnOppositeSide;
+					if(capability != null) {
+						EnumHandSide offhand = player.getPrimaryHand().opposite();
 						
-						int posX;
-						if(showOnRightSide) {
-							posX = width / 2 + 93;
-							if(isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
-								posX += 30;
-							}
-						} else {
-							posX = width / 2 - 93 - 16;
-							if(isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
-								posX -= 30;
-							}
-						}
-						int posY = height + yOffset - 19;
-
-						boolean hadItem = false;
-
-						for(int i = 0; i < inv.getSizeInventory(); i++) {
-							ItemStack stack = inv.getStackInSlot(i);
-
-							if(!stack.isEmpty()) {
-								float scale = 1.0F;
-
-								GlStateManager.pushMatrix();
-								GlStateManager.translate(posX, posY, 0);
-								GlStateManager.color(1, 1, 1, 1);
-								GlStateManager.enableBlend();
-								GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-								GlStateManager.scale(scale, scale, scale);
-
-								mc.getItemRenderer().renderItemAndEffectIntoGUI(stack, 0, 0);
-								mc.getItemRenderer().renderItemOverlayIntoGUI(mc.fontRenderer, stack, 0, 0, null);
-
-								GlStateManager.disableAlphaTest();
-								GlStateManager.disableRescaleNormal();
-								GlStateManager.disableLighting();
-								GlStateManager.color(1, 1, 1, 1);
-								GlStateManager.enableBlend();
-								GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-								GlStateManager.enableTexture2D();
-								GlStateManager.color(1, 1, 1, 1);
-								GlStateManager.popMatrix();
-
-								if(showOnRightSide) {
-									posX += 8;
-								} else {
-									posX -= 8;
+						int yOffset = 0;
+	
+						for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
+							IInventory inv = capability.getInventory(type);
+	
+							boolean isOnOppositeSide = BetweenlandsConfig.GENERAL.equipmentHotbarSide == 1;
+							boolean showOnRightSide = (offhand == EnumHandSide.LEFT) != isOnOppositeSide;
+							
+							int posX;
+							if(showOnRightSide) {
+								posX = width / 2 + 93;
+								if(isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
+									posX += 30;
 								}
-
-								hadItem = true;
+							} else {
+								posX = width / 2 - 93 - 16;
+								if(isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
+									posX -= 30;
+								}
 							}
-						}
-
-						if(hadItem) {
-							yOffset -= 13;
+							int posY = height + yOffset - 19;
+	
+							boolean hadItem = false;
+	
+							for(int i = 0; i < inv.getSizeInventory(); i++) {
+								ItemStack stack = inv.getStackInSlot(i);
+	
+								if(!stack.isEmpty()) {
+									float scale = 1.0F;
+	
+									GlStateManager.pushMatrix();
+									GlStateManager.translatef(posX, posY, 0);
+									GlStateManager.color4f(1, 1, 1, 1);
+									GlStateManager.enableBlend();
+									GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+									GlStateManager.scalef(scale, scale, scale);
+	
+									mc.getItemRenderer().renderItemAndEffectIntoGUI(stack, 0, 0);
+									mc.getItemRenderer().renderItemOverlayIntoGUI(mc.fontRenderer, stack, 0, 0, null);
+	
+									GlStateManager.disableAlphaTest();
+									GlStateManager.disableRescaleNormal();
+									GlStateManager.disableLighting();
+									GlStateManager.color4f(1, 1, 1, 1);
+									GlStateManager.enableBlend();
+									GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+									GlStateManager.enableTexture2D();
+									GlStateManager.color4f(1, 1, 1, 1);
+									GlStateManager.popMatrix();
+	
+									if(showOnRightSide) {
+										posX += 8;
+									} else {
+										posX -= 8;
+									}
+	
+									hadItem = true;
+								}
+							}
+	
+							if(hadItem) {
+								yOffset -= 13;
+							}
 						}
 					}
 				}
 
-				if (PlayerDecayHandler.isDecayEnabled() && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+				if (PlayerDecayHandler.isDecayEnabled()) {
+					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY).orElse(null);
 
-					if(capability.isDecayEnabled()) {
+					if(capability != null && capability.isDecayEnabled()) {
 						int startX = (width / 2) - (27 / 2) + 23;
 						int startY = height - 49;
 
 						//Erebus compatibility
-						if (player.getEntityData().contains("antivenomDuration")) {
+						if (player.getEntityData().contains("antivenomDuration", Constants.NBT.TAG_INT)) {
 							int duration = player.getEntityData().getInt("antivenomDuration");
 							if (duration > 0) {
 								startY -= 12;
@@ -403,7 +406,7 @@ public class ScreenRenderHandler extends Gui {
 
 							GlStateManager.enableBlend();
 							GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-							GlStateManager.color(1, 1, 1, 1);
+							GlStateManager.color4f(1, 1, 1, 1);
 
 							drawTexturedModalRect(startX + 71 - i * 8, startY + offsetY, 18, 0, 9, 9);
 							if (i * 2 + 1 < decay) 
@@ -423,25 +426,25 @@ public class ScreenRenderHandler extends Gui {
 				double strX = width / 2.0D - strWidth / 2.0F;
 				double strY = height / 5.0D;
 				GlStateManager.pushMatrix();
-				GlStateManager.translate(strX, strY, 0);
+				GlStateManager.translated(strX, strY, 0);
 				float fade = Math.min(1.0F, ((float)this.maxTitleTicks - (float)this.titleTicks) / Math.min(40.0F, this.maxTitleTicks - 5.0F) + 0.02F) - Math.max(0, (-this.titleTicks + 5) / 5.0F);
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 				GlStateManager.enableBlend();
 				float averageScale = 0F;
 				for(TextSegment segment : page.getSegments()) {
 					GlStateManager.pushMatrix();
-					GlStateManager.translate(segment.x, segment.y, 0.0D);
-					GlStateManager.scale(segment.scale, segment.scale, 1.0F);
+					GlStateManager.translated(segment.x, segment.y, 0.0D);
+					GlStateManager.scalef(segment.scale, segment.scale, 1.0F);
 					float[] rgba = ColorUtils.getRGBA(segment.color);
 					segment.font.drawString(segment.text, 0, 0, ColorUtils.toHex(rgba[0], rgba[1], rgba[2], rgba[3] * fade));
-					GlStateManager.color(1, 1, 1, 1);
+					GlStateManager.color4f(1, 1, 1, 1);
 					GlStateManager.popMatrix();
 					averageScale += segment.scale;
 				}
 				averageScale /= page.getSegments().size();
 				GlStateManager.popMatrix();
-				Minecraft.getInstance().renderEngine.bindTexture(TITLE_TEXTURE);
-				GlStateManager.color(1, 1, 1, fade);
+				Minecraft.getInstance().textureManager.bindTexture(TITLE_TEXTURE);
+				GlStateManager.color4f(1, 1, 1, fade);
 				double sidePadding = 6;
 				double yOffset = 5;
 				double sy = Math.ceil(strY + strHeight - yOffset * averageScale);
@@ -458,12 +461,13 @@ public class ScreenRenderHandler extends Gui {
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 			}
 		} else if(event.getType() == ElementType.PORTAL) {
-			if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
-				IPortalCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
+			if(player != null) {
+				player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL).ifPresent(cap -> {
+					if(cap.isInPortal()) {
+						this.renderPortal(mc, MathHelper.clamp((1.0F - cap.getTicksUntilTeleport() / (float)PlayerPortalHandler.MAX_PORTAL_TIME), 0, 1), event.getResolution());
+					}
+				});
 				
-				if(cap.isInPortal()) {
-					this.renderPortal(mc, MathHelper.clamp((1.0F - cap.getTicksUntilTeleport() / (float)PlayerPortalHandler.MAX_PORTAL_TIME), 0, 1), event.getResolution());
-				}
 			}
 		}
 	}
@@ -476,10 +480,10 @@ public class ScreenRenderHandler extends Gui {
         }
 
         GlStateManager.disableAlphaTest();
-        GlStateManager.disableDepth();
+        GlStateManager.disableDepthTest();
         GlStateManager.depthMask(false);
         GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, timeInPortal);
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, timeInPortal);
         mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         TextureAtlasSprite textureatlassprite = mc.getBlockRendererDispatcher().getBlockModelShapes().getTexture(BlockRegistry.TREE_PORTAL.getDefaultState());
         float f = textureatlassprite.getMinU();
@@ -495,9 +499,9 @@ public class ScreenRenderHandler extends Gui {
         bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex((double)f, (double)f1).endVertex();
         tessellator.draw();
         GlStateManager.depthMask(true);
-        GlStateManager.enableDepth();
+        GlStateManager.enableDepthTest();
         GlStateManager.enableAlphaTest();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
     }
 	
 	private void renderTexturedRect(BufferBuilder buffer, double x, double y, double x2, double y2, double umin, double umax, double vmin, double vmax) {
@@ -521,7 +525,7 @@ public class ScreenRenderHandler extends Gui {
 				double mouseX = (Mouse.getX() * resolution.getScaledWidth_double()) / mc.displayWidth;
 				double mouseY = resolution.getScaledHeight_double() - (Mouse.getY() * resolution.getScaledHeight_double()) / mc.displayHeight - 1;
 				GlStateManager.pushMatrix();
-				GlStateManager.translate(mouseX + 8, mouseY - 38, 500);
+				GlStateManager.translatef(mouseX + 8, mouseY - 38, 500);
 				int yOffset = 0;
 				int width = 0;
 				List<Aspect> aspects = ItemAspectContainer.fromItem(selectedSlot.getStack(), AspectManager.get(mc.world)).getAspects(mc.player);
@@ -532,7 +536,7 @@ public class ScreenRenderHandler extends Gui {
 					for(Aspect aspect : aspects) {
 						String aspectText = aspect.type.getName() + " (" + aspect.getRoundedDisplayAmount() + ")";
 						String aspectTypeText = aspect.type.getType();
-						GlStateManager.color(1, 1, 1, 1);
+						GlStateManager.color4f(1, 1, 1, 1);
 						fontRenderer.drawString(aspectText, 2 + 17, 2 + yOffset, 0xFFFFFFFF);
 						fontRenderer.drawString(aspectTypeText, 2 + 17, 2 + 9 + yOffset, 0xFFFFFFFF);
 						AspectIconRenderer.renderIcon(2, 2 + yOffset, 16, 16, aspect.type.getIcon());
@@ -542,7 +546,7 @@ public class ScreenRenderHandler extends Gui {
 						}
 						yOffset -= 21;
 					}
-					GlStateManager.translate(0, 0, -10);
+					GlStateManager.translatef(0, 0, -10);
 					Gui.drawRect(0, yOffset + 20, width + 1, 21, 0x90000000);
 					Gui.drawRect(1, yOffset + 21, width, 20, 0xAA000000);
 				}
@@ -550,7 +554,7 @@ public class ScreenRenderHandler extends Gui {
 				GlStateManager.popMatrix();
 				GlStateManager.enableTexture2D();
 				GlStateManager.enableBlend();
-				GlStateManager.color(1, 1, 1, 1);
+				GlStateManager.color4f(1, 1, 1, 1);
 			}
 		}
 	}

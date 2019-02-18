@@ -17,6 +17,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.google.common.base.Function;
 
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
@@ -125,7 +126,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		}
 
 		//Check for registered model providers
-		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
+		for(Entry<ResourceLocation, Function<ResourceLocation, IUnbakedModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
 			ResourceLocation registeredModel = entry.getKey();
 			if(registeredModel.getNamespace().equals(modelLocation.getNamespace()) && modelLocation.getPath().startsWith(registeredModel.getPath())) {
 				String suffix = modelLocation.getPath().substring(registeredModel.getPath().length());
@@ -142,7 +143,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 	}
 
 	@Override
-	public IModel loadModel(ResourceLocation modelLocation) throws Exception {
+	public IUnbakedModel loadModel(ResourceLocation modelLocation) throws Exception {
 		boolean accepted = false;
 
 		//Check for loader extensions
@@ -160,7 +161,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 				String loaderArgs = result.args;
 				try {
 					if(BetweenlandsConfig.DEBUG.debugModelLoader) TheBetweenlands.logger.info(String.format("Loading model %s (full path: %s) through loader extension %s with args %s", result.actualLocation, modelLocation, result.extension.getName(), result.args));
-					IModel loadedModel = loaderExtension.loadModel(model, result.actualLocation, loaderArgs);
+					IUnbakedModel loadedModel = loaderExtension.loadModel(model, result.actualLocation, loaderArgs);
 					if(loadedModel != null) {
 						return loadedModel;
 					}
@@ -176,7 +177,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 
 		if(!accepted) {
 			//Check for registered model providers
-			for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
+			for(Entry<ResourceLocation, Function<ResourceLocation, IUnbakedModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
 				ResourceLocation registeredModel = entry.getKey();
 				if(registeredModel.getNamespace().equals(modelLocation.getNamespace()) && modelLocation.getPath().startsWith(registeredModel.getPath())) {
 					String suffix = modelLocation.getPath().substring(registeredModel.getPath().length());
@@ -185,7 +186,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 					if(suffix.length() == 0 || suffix.startsWith("#")) {
 						accepted = true;
 						if(BetweenlandsConfig.DEBUG.debugModelLoader) TheBetweenlands.logger.info(String.format("Loading model %s as %s through model registry", modelLocation, registeredModel));
-						IModel model = entry.getValue().apply(modelLocation);
+						IUnbakedModel model = entry.getValue().apply(modelLocation);
 						if(model != null) {
 							return model;
 						}
@@ -246,35 +247,6 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		IRegistry<ModelResourceLocation, IBakedModel> modelRegistry = event.getModelRegistry();
 		List<Pair<ModelResourceLocation, IBakedModel>> loadedModels = new ArrayList<Pair<ModelResourceLocation, IBakedModel>>();
 
-		for(ModelResourceLocation modelLocation : modelRegistry.getKeys()) {
-			IBakedModel model = modelRegistry.getObject(modelLocation);
-
-			//Model depends on other baked models
-			if(model instanceof IBakedModelDependant) {
-				IBakedModelDependant dependant = (IBakedModelDependant) model;
-				Collection<ModelResourceLocation> dependencies = dependant.getDependencies(modelLocation);
-				Map<ModelResourceLocation, IBakedModel> loadedDependencies = new HashMap<ModelResourceLocation, IBakedModel>();
-
-				for(ModelResourceLocation dependencyLocation : dependencies) {
-					IBakedModel bakedModel = modelRegistry.getObject(dependencyLocation);
-
-					if(bakedModel == null) {
-						ResourceLocation dependencyLocationNoVariants = new ResourceLocation(dependencyLocation.getNamespace(), dependencyLocation.getPath());
-						try {
-							IModel externalModel = ModelLoaderRegistry.getModel(dependencyLocationNoVariants);
-							bakedModel = externalModel.bake(dependant.getModelState(externalModel), dependant.getVertexFormat(externalModel), dependant.getTextureGetter(externalModel));
-							loadedModels.add(Pair.of(dependencyLocation, bakedModel));
-						} catch (Exception ex) {
-							throw new RuntimeException("Failed to load model dependency " + dependencyLocationNoVariants + " for model " + modelLocation, ex);
-						}
-					}
-
-					loadedDependencies.put(dependencyLocation, bakedModel);
-				}
-
-				dependant.setDependencies(modelLocation, loadedDependencies);
-			}
-		}
 		for(Pair<ModelResourceLocation, IBakedModel> loadedModel : loadedModels) {
 			if(loadedModel.getValue() != null) {
 				if(BetweenlandsConfig.DEBUG.debugModelLoader) TheBetweenlands.logger.info(String.format("Registering additional baked model %s", loadedModel.getKey()));

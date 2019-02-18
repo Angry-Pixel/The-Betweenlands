@@ -23,7 +23,7 @@ public class GuiPurifier extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture(PURIFIER_GUI_TEXTURE);
+        mc.textureManager.bindTexture(PURIFIER_GUI_TEXTURE);
         int xx = (width - xSize) / 2;
         int yy = (height - ySize) / 2;
         drawTexturedModalRect(xx, yy, 0, 0, xSize, ySize);

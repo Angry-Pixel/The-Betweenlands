@@ -15,6 +15,7 @@ import com.google.gson.JsonParser;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.resources.IResource;
 import net.minecraft.resources.IResourceManager;
@@ -24,7 +25,7 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 public abstract class LoaderExtension {
-	private IModel dummyModel = null;
+	private IUnbakedModel dummyModel = null;
 
 	/**
 	 * Returns the name of this loader argument
@@ -51,7 +52,7 @@ public abstract class LoaderExtension {
 	 * @return
 	 */
 	@Nullable
-	public abstract IModel loadModel(IModel original, ResourceLocation location, String arg);
+	public abstract IUnbakedModel loadModel(IModel original, ResourceLocation location, String arg);
 
 	/**
 	 * Returns a replacement for the specified resource location and baked model.
@@ -98,7 +99,7 @@ public abstract class LoaderExtension {
 	 * Returns a blank item dummy model
 	 * @return
 	 */
-	protected final IModel getItemDummyModel() {
+	protected final IUnbakedModel getItemDummyModel() {
 		if(this.dummyModel == null) {
 			try {
 				this.dummyModel = ModelLoaderRegistry.getModel(new ResourceLocation("thebetweenlands:item/dummy"));

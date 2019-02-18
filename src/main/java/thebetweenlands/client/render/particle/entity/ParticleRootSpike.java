@@ -47,7 +47,7 @@ public class ParticleRootSpike extends Particle {
 		this.scale = scale;
 		this.seed = seed;
 		this.particleGravity = 1;
-		this.particleMaxAge = 20 * 3;
+		this.maxAge = 20 * 3;
 	}
 
 	public void setUseSound(boolean sound) {
@@ -74,7 +74,7 @@ public class ParticleRootSpike extends Particle {
 			
 			if(this.sound) {
 				this.sound = false;
-				this.world.play(this.posX, this.posY, this.posZ, SoundRegistry.ROOT_SPIKE_PARTICLE_HIT, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
+				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.ROOT_SPIKE_PARTICLE_HIT, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
 			}
 		}
 	}
@@ -82,7 +82,7 @@ public class ParticleRootSpike extends Particle {
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		if(this.renderer == null) {
-			this.renderer = new SpikeRenderer(this.length, this.width, 1.0F, 1, this.seed).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite(SPRITE.toString()));
+			this.renderer = new SpikeRenderer(this.length, this.width, 1.0F, 1, this.seed).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getInstance().getTextureMap().getAtlasSprite(SPRITE.toString()));
 		}
 
 		int i = this.getBrightnessForRender(partialTicks);
@@ -104,27 +104,27 @@ public class ParticleRootSpike extends Particle {
 
 		float alpha = 1.0F;
 
-		if((this.particleAge + partialTicks) >= this.particleMaxAge - 10) {
-			alpha = 1.0F - ((this.particleAge + partialTicks) - (this.particleMaxAge - 10)) / 10.0F;
+		if((this.age + partialTicks) >= this.maxAge - 10) {
+			alpha = 1.0F - ((this.age + partialTicks) - (this.maxAge - 10)) / 10.0F;
 		}
 
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.CONSTANT_ALPHA, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
 		GL14.glBlendColor(1, 1, 1, alpha);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, alpha);
 
-		GlStateManager.translate(rx, ry, rz);
+		GlStateManager.translatef(rx, ry, rz);
 
 		double mx = this.prevMotionX + (this.motionX - this.prevMotionX) * partialTicks;
 		double my = this.prevMotionY + (this.motionY - this.prevMotionY) * partialTicks;
 		double mz = this.prevMotionZ + (this.motionZ - this.prevMotionZ) * partialTicks;
 
-		GlStateManager.rotate(-(float)Math.toDegrees(Math.atan2(mz, mx)), 0, 1, 0);
-		GlStateManager.rotate((float)Math.toDegrees(Math.atan2(Math.sqrt(mx * mx + mz * mz), -my)) + 180, 0, 0, 1);
+		GlStateManager.rotatef(-(float)Math.toDegrees(Math.atan2(mz, mx)), 0, 1, 0);
+		GlStateManager.rotatef((float)Math.toDegrees(Math.atan2(Math.sqrt(mx * mx + mz * mz), -my)) + 180, 0, 0, 1);
 
-		GlStateManager.translate(0, -0.5F * this.scale, 0);
+		GlStateManager.translatef(0, -0.5F * this.scale, 0);
 
-		GlStateManager.scale(this.scale, this.scale, this.scale);
+		GlStateManager.scalef(this.scale, this.scale, this.scale);
 
 		Minecraft.getInstance().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 

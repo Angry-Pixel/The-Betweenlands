@@ -51,7 +51,7 @@ public class DebugHandlerClient {
 
 					GlStateManager.pushMatrix();
 					if (GuiScreen.isCtrlKeyDown()) {
-						GlStateManager.disableDepth();
+						GlStateManager.disableDepthTest();
 					}
 					GlStateManager.disableTexture2D();
 					GlStateManager.enableBlend();
@@ -117,7 +117,7 @@ public class DebugHandlerClient {
 					GlStateManager.disableTexture2D();
 					GlStateManager.color(1, 1, 1, 1);
 
-					GlStateManager.enableDepth();
+					GlStateManager.enableDepthTest();
 					GlStateManager.lineWidth(2F);
 
 					ILocationGuard guard = location.getGuard();
@@ -158,7 +158,7 @@ public class DebugHandlerClient {
 					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1f);
 					GlStateManager.depthMask(true);
 					GlStateManager.enableTexture2D();
-					GlStateManager.enableDepth();
+					GlStateManager.enableDepthTest();
 					GlStateManager.disableBlend();
 					GlStateManager.popMatrix();
 				}

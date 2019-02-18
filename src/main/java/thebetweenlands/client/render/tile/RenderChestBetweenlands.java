@@ -37,7 +37,7 @@ public class RenderChestBetweenlands extends TileEntitySpecialRenderer<TileEntit
 
 	@Override
 	public void render(TileEntityChestBetweenlands te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		GlStateManager.enableDepth();
+		GlStateManager.enableDepthTest();
 		GlStateManager.depthFunc(515);
 		GlStateManager.depthMask(true);
 		int i;

@@ -181,9 +181,9 @@ public class ParticleBatchTypeBuilder {
 				}
 
 				if(pass.depthTest) {
-					GlStateManager.enableDepth();
+					GlStateManager.enableDepthTest();
 				} else {
-					GlStateManager.disableDepth();
+					GlStateManager.disableDepthTest();
 				}
 
 				if(pass.depthMask) {
@@ -295,7 +295,7 @@ public class ParticleBatchTypeBuilder {
 						vertexformatelement.getUsage().preDraw(vertexformat, j, i, byteBuffer);
 					}
 
-					GlStateManager.glDrawArrays(drawMode, 0, vertexCount);
+					GlStateManager.drawArrays(drawMode, 0, vertexCount);
 					int i1 = 0;
 
 					for (int j1 = list.size(); i1 < j1; ++i1) {

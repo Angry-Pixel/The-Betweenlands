@@ -246,8 +246,8 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 					targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDefaultReturnDimension;
 				}
 				if(targetDim != entityIn.dimension) {
-					if (entityIn.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
-						IPortalCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
+					IPortalCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_PORTAL).orElse(null);
+					if (cap != null) {
 						cap.setInPortal(true);
 					} else if (!worldIn.isRemote() && worldIn instanceof WorldServer) {
 

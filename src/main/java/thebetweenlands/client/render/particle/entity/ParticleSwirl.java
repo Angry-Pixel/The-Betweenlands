@@ -28,7 +28,7 @@ public class ParticleSwirl extends Particle {
 		this.startRotation = (float) (this.rand.nextFloat() * Math.PI * 2.0F);
 		this.endRadius = 0.35F + this.rand.nextFloat() * 0.35F;
 
-		this.particleMaxAge = maxAge;
+		this.maxAge = maxAge;
 		
 		this.particleScale = scale;
 	}
@@ -71,7 +71,7 @@ public class ParticleSwirl extends Particle {
 
 	@Override
 	public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		if(this.particleAge > 2) {
+		if(this.age > 2) {
 			super.renderParticle(worldRendererIn, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
 		}
 	}
@@ -82,7 +82,7 @@ public class ParticleSwirl extends Particle {
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 
-		if (this.particleAge++ >= this.particleMaxAge) {
+		if (this.age++ >= this.maxAge) {
 			this.setExpired();
 		}
 

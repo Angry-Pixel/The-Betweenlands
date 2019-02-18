@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraftforge.common.util.Constants;
 
 public class LocalStorageReference {
 	private final ChunkPos chunkPos;
@@ -29,7 +30,7 @@ public class LocalStorageReference {
 	public static LocalStorageReference readFromNBT(NBTTagCompound nbt) {
 		ChunkPos pos = new ChunkPos(nbt.getInt("x"), nbt.getInt("z"));
 		LocalRegion region = null;
-		if(nbt.contains("region")) {
+		if(nbt.contains("region", Constants.NBT.TAG_COMPOUND)) {
 			region = LocalRegion.readFromNBT(nbt.getCompound("region"));
 		}
 		return new LocalStorageReference(pos, StorageID.readFromNBT(nbt), region);

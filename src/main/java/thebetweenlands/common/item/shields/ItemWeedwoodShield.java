@@ -40,7 +40,7 @@ public class ItemWeedwoodShield extends ItemBLShield {
 		this.addPropertyOverride(new ResourceLocation("burning"), new IItemPropertyGetter() {
 			@Override
 			@OnlyIn(Dist.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+			public float call(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				return ((ItemWeedwoodShield)stack.getItem()).getBurningTicks(stack) > 0 ? 1.0F : 0.0F;
 			}
 		});

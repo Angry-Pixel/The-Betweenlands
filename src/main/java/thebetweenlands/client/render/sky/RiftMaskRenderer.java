@@ -142,7 +142,7 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		GlStateManager.disableBlend();
-		GlStateManager.enableDepth();
+		GlStateManager.enableDepthTest();
 
 		textureManager.bindTexture(variant.getOverlayTexture());
 		

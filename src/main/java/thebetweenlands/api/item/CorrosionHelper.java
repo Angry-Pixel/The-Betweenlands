@@ -53,7 +53,7 @@ public class CorrosionHelper {
 		item.addPropertyOverride(new ResourceLocation("corrosion"), new IItemPropertyGetter() {
 			@Override
 			@OnlyIn(Dist.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+			public float call(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				return getCorrosionStage(stack);
 			}
 		});
@@ -166,11 +166,10 @@ public class CorrosionHelper {
 					if (holder instanceof EntityPlayer) {
 						EntityPlayer player = (EntityPlayer) holder;
 						probability *= (isHeldItem && !player.getActiveItemStack().isEmpty() ? 2.8F : 1.0F);
-						if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-							IDecayCapability decay = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-							float playerCorruption = decay.getDecayStats().getDecayLevel() / 20.0F;
+						player.getCapability(CapabilityRegistry.CAPABILITY_DECAY).ifPresent(cap -> {
+							float playerCorruption = cap.getDecayStats().getDecayLevel() / 20.0F;
 							probability *= (1 - Math.pow(playerCorruption, 2) * 0.9F);
-						}
+						});
 					}
 					if (world.rand.nextFloat() < probability) {
 						int coating = corrodible.getCoating(stack);

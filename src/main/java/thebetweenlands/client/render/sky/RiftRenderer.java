@@ -80,7 +80,7 @@ public class RiftRenderer implements IRiftRenderer {
 
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
 				GlStateManager.enableCull();
-				GlStateManager.enableDepth();
+				GlStateManager.enableDepthTest();
 				GlStateManager.depthMask(true);
 				GlStateManager.enableAlphaTest();
 				GlStateManager.enableBlend();
@@ -175,7 +175,7 @@ public class RiftRenderer implements IRiftRenderer {
 				GlStateManager.color(1, 1, 1, 1);
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 				GlStateManager.disableBlend();
-				GlStateManager.enableDepth();
+				GlStateManager.enableDepthTest();
 			}
 		}
 	}

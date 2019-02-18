@@ -4,7 +4,7 @@ import javax.xml.ws.handler.MessageContext;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.SoundCategory;
@@ -64,7 +64,7 @@ public class MessageRiftSound extends MessageBase {
 			
 			final float pitchRange = (this.type == RiftSoundType.CREAK ? (Minecraft.getInstance().world.rand.nextFloat() * 0.3f + 0.7f) : 1.0f);
 			
-			Minecraft.getInstance().getSoundHandler().play(new PositionedSoundRecord(sound.getSoundName(), SoundCategory.AMBIENT, 1, 1, false, 0, ISound.AttenuationType.NONE, 0, 0, 0) {
+			Minecraft.getInstance().getSoundHandler().play(new SimpleSound(sound.getSoundName(), SoundCategory.AMBIENT, 1, 1, false, 0, ISound.AttenuationType.NONE, 0, 0, 0) {
 				@Override
 				public float getPitch() {
 					EntityPlayer player = Minecraft.getInstance().player;

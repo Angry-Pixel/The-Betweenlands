@@ -54,7 +54,7 @@ public class PictureWidget extends ManualWidgetBase {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void drawForeGround() {
-        TextureManager render = Minecraft.getInstance().renderEngine;
+        TextureManager render = Minecraft.getInstance().textureManager;
         render.bindTexture(recourseLocation);
 
         GlStateManager.enableBlend();

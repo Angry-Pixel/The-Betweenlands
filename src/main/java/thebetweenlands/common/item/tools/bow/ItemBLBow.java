@@ -49,7 +49,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairab
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
 			@Override
 			@OnlyIn(Dist.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+			public float call(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				if (entityIn == null) {
 					return 0.0F;
 				} else {

@@ -63,7 +63,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 
         this.addPropertyOverride(new ResourceLocation("pouch_size"), new IItemPropertyGetter() {
             @Override
-            public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
+            public float call(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
                 return stack.getItemDamage();
             }
         });

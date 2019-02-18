@@ -319,7 +319,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 			return true;
 		}
 		Minecraft mc = Minecraft.getInstance();
-		if(mc.player != null && mc.player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null) && mc.player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null).isInPortal()) {
+		if(mc.player != null && mc.player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL).map(cap -> cap.isInPortal()).orElse(false)) {
 			return true;
 		}
 		return mc.world != null && mc.world.dimension.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;

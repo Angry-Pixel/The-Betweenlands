@@ -28,7 +28,7 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 		this.motionX = mx;
 		this.motionY = my;
 		this.motionZ = mz;
-		this.particleMaxAge = maxAge;
+		this.maxAge = maxAge;
 		//this.noClip = true;
 		this.particleScale = scale;
 		this.jitter = jitter;

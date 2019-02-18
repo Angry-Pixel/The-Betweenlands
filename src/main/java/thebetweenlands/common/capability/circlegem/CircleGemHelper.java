@@ -135,7 +135,7 @@ public class CircleGemHelper {
 		item.addPropertyOverride(new ResourceLocation("gem"), new IItemPropertyGetter() {
 			@Override
 			@OnlyIn(Dist.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+			public float call(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				return CircleGemHelper.getGem(stack).id;
 			}
 		});

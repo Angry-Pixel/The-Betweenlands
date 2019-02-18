@@ -104,7 +104,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         int by = MathHelper.floor_double(bpy);
         int bz = MathHelper.floor_double(bpz);
         OpenSimplexNoise waveRng = new OpenSimplexNoise(6354);
-        TextureMap texturemap = Minecraft.getInstance().getTextureMapBlocks();
+        TextureMap texturemap = Minecraft.getInstance().getTextureMap();
         TextureAtlasSprite sprite = texturemap.getAtlasSprite("minecraft:blocks/water_still");
         bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
         GlStateManager.pushMatrix();

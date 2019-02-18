@@ -34,7 +34,7 @@ public class ParticleBubbleBL extends ParticleBubble implements IParticleSpriteR
 		motionY *= 0.3500000238418579D;
 		motionZ *= 0.8500000238418579D;
 
-		if (particleMaxAge-- <= 0)
+		if (maxAge-- <= 0)
 			setExpired();
 	}
 

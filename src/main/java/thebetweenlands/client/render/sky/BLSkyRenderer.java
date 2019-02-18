@@ -253,7 +253,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 		} else {
 			if(Minecraft.getInstance().gameSettings.fancyGraphics) {
 				//Render fancy non-shader sky dome
-				mc.renderEngine.bindTexture(SKY_TEXTURE);
+				mc.textureManager.bindTexture(SKY_TEXTURE);
 				GlStateManager.disableAlphaTest();
 				GlStateManager.enableBlend();
 				GlStateManager.enableTexture2D();
@@ -278,7 +278,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 		
 		if(this.spoopy) {
 			if(Minecraft.getInstance().gameSettings.fancyGraphics) {
-				mc.renderEngine.bindTexture(SKY_SPOOPY_TEXTURE);
+				mc.textureManager.bindTexture(SKY_SPOOPY_TEXTURE);
 				
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
@@ -308,7 +308,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 			} else {
 				GlStateManager.pushMatrix();
 				
-				mc.renderEngine.bindTexture(SKY_SPOOPY_TEXTURE);
+				mc.textureManager.bindTexture(SKY_SPOOPY_TEXTURE);
 				
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
@@ -344,7 +344,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 
 		if(!renderClipPlane) {
 			if(spoopy) {
-				mc.renderEngine.bindTexture(SKY_SPOOPY_TEXTURE);
+				mc.textureManager.bindTexture(SKY_SPOOPY_TEXTURE);
 			} else {
 				boolean shaderTexture = false;
 				if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
@@ -356,7 +356,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 				}
 	
 				if(!shaderTexture) {
-					mc.renderEngine.bindTexture(SKY_TEXTURE);
+					mc.textureManager.bindTexture(SKY_TEXTURE);
 				}
 			}
 
@@ -421,7 +421,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 
 			GlStateManager.translate(0, 10, 0);
 
-			mc.renderEngine.bindTexture(FOG_TEXTURE);
+			mc.textureManager.bindTexture(FOG_TEXTURE);
 
 			GlStateManager.disableAlphaTest();
 			GlStateManager.enableBlend();
@@ -535,7 +535,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 
 		GlStateManager.disableBlend();
 
-		GlStateManager.enableDepth();
+		GlStateManager.enableDepthTest();
 		GlStateManager.depthMask(true);
 	}
 

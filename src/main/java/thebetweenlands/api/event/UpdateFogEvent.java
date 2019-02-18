@@ -2,6 +2,7 @@ package thebetweenlands.api.event;
 
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.eventbus.api.Event;
 import thebetweenlands.api.misc.Fog;
 import thebetweenlands.api.misc.FogState;
 

@@ -29,7 +29,7 @@ public class ParticleTarBeastDrip extends Particle {
 		setParticleTextureIndex(113);
 		particleGravity = 0.01F;
 		bobTimer = 5;
-		particleMaxAge = 40 + (int)(Math.random() * 40);
+		maxAge = 40 + (int)(Math.random() * 40);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class ParticleTarBeastDrip extends Particle {
 		motionY *= 0.9800000190734863D;
 		motionZ *= 0.9800000190734863D;
 
-		if (particleMaxAge-- <= 0) {
+		if (maxAge-- <= 0) {
 			this.setExpired();
 		}
 

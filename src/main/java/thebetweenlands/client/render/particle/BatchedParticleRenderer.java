@@ -120,7 +120,7 @@ public class BatchedParticleRenderer {
 			while(it.hasNext()) {
 				Particle particle = it.next();
 
-				particle.onUpdate();
+				particle.tick();
 
 				if(!particle.isAlive()) {
 					it.remove();
@@ -165,13 +165,13 @@ public class BatchedParticleRenderer {
 			Tessellator tessellator = Tessellator.getInstance();
 
 			GlStateManager.pushMatrix();
-			GlStateManager.enableDepth();
+			GlStateManager.enableDepthTest();
 			GlStateManager.enableBlend();
 			GlStateManager.depthMask(true);
 			GlStateManager.enableLighting();
 			GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.004F);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 			final int batchSize = batchType.batchSize();
 			final int batches = particles.size() / batchSize + 1;
@@ -204,7 +204,7 @@ public class BatchedParticleRenderer {
 				batchType.postRender(tessellator, entity, partialTicks, rx, rxz, rz, ryz, rxy);
 			}
 
-			GlStateManager.enableDepth();
+			GlStateManager.enableDepthTest();
 			GlStateManager.colorMask(true, true, true, true);
 			GlStateManager.depthMask(true);
 			GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);

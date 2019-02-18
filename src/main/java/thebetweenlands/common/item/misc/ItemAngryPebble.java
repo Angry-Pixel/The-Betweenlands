@@ -30,14 +30,14 @@ public class ItemAngryPebble extends Item {
 		this.addPropertyOverride(new ResourceLocation("charge"), new IItemPropertyGetter() {
 			@Override
 			@OnlyIn(Dist.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+			public float call(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? (float)(stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
 			}
 		});
 		this.addPropertyOverride(new ResourceLocation("charging"), new IItemPropertyGetter() {
 			@Override
 			@OnlyIn(Dist.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+			public float call(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
 			}
 		});

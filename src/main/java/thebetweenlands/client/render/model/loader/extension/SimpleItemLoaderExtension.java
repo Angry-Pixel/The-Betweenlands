@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
@@ -24,7 +25,7 @@ public class SimpleItemLoaderExtension extends LoaderExtension {
 	}
 
 	@Override
-	public IModel loadModel(IModel original, ResourceLocation location, String arg) {
+	public IUnbakedModel loadModel(IModel original, ResourceLocation location, String arg) {
 		ResourceLocation childModel = new ResourceLocation(arg);
 		this.dummyReplacementMap.put(new ModelResourceLocation(new ResourceLocation(childModel.getNamespace(), childModel.getPath()), "inventory"), location);
 		return this.getItemDummyModel();
@@ -35,7 +36,7 @@ public class SimpleItemLoaderExtension extends LoaderExtension {
 		ResourceLocation replacementModelLocation = this.dummyReplacementMap.get(location);
 		if(replacementModelLocation != null) {
 			//Retrieve replacement model
-			IModel replacementModel;
+			IUnbakedModel replacementModel;
 			try {
 				//Makes sure that the model is loaded through the model loader and that the textures are registered properly
 				replacementModel = ModelLoaderRegistry.getModel(replacementModelLocation);
@@ -45,7 +46,7 @@ public class SimpleItemLoaderExtension extends LoaderExtension {
 
 			//Bake replacement model
 			IBakedModel bakedModel = replacementModel.bake(replacementModel.getDefaultState(), DefaultVertexFormats.ITEM, 
-					(loc) -> Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite(loc.toString()));
+					(loc) -> Minecraft.getInstance().getTextureMap().getAtlasSprite(loc.toString()));
 
 			//Return wrapped model
 			return new BakedModelItemWrapper(original, bakedModel);

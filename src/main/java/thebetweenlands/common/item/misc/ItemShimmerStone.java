@@ -41,7 +41,7 @@ public class ItemShimmerStone extends Item {
 		this.addPropertyOverride(new ResourceLocation("shimmer"), new IItemPropertyGetter() {
 			@Override
 			@OnlyIn(Dist.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+			public float call(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				return NBTHelper.getStackNBTSafe(stack).getBoolean("shimmering") ? 1.0F : 0.0F;
 			}
 		});

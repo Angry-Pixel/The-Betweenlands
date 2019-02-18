@@ -703,7 +703,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		if(this.getStitcher() != null) {
 			((IParticleSpriteReceiver)particle).setStitchedSprites(this.getStitcher().getSprites());
 		}
-		particle.setRBGColorF(args.r, args.g, args.b);
+		particle.setColor(args.r, args.g, args.b);
 		particle.setAlphaF(args.a);
 		return particle;
 	}
@@ -832,7 +832,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 	public final T spawn(World world, double x, double y, double z, @Nullable ParticleArgs<?> args) {
 		T particle = this.create(world, x, y, z, args);
 		if(particle != null)
-			Minecraft.getInstance().effectRenderer.addEffect(particle);
+			Minecraft.getInstance().particles.addEffect(particle);
 		return particle;
 	}
 }

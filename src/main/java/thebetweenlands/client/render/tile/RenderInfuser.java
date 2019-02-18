@@ -112,7 +112,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 		if (amount >= 100) {
 			Tessellator tess = Tessellator.getInstance();
 			BufferBuilder vb = tess.getBuffer();
-			TextureAtlasSprite waterSprite = Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite(FluidRegistry.SWAMP_WATER.getStill().toString());
+			TextureAtlasSprite waterSprite = Minecraft.getInstance().getTextureMap().getAtlasSprite(FluidRegistry.SWAMP_WATER.getStill().toString());
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(770, 771);
@@ -169,7 +169,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 		GlStateManager.scale(-scale, -scale, scale);
 		GlStateManager.disableLighting();
 		GlStateManager.depthMask(false);
-		GlStateManager.disableDepth();
+		GlStateManager.disableDepthTest();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.disableTexture2D();
@@ -188,7 +188,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 
 		GlStateManager.enableTexture2D();
 		fontrenderer.drawString(count, -fontrenderer.getStringWidth(count) / 2, 0, 553648127);
-		GlStateManager.enableDepth();
+		GlStateManager.enableDepthTest();
 		GlStateManager.depthMask(true);
 		fontrenderer.drawString(count, -fontrenderer.getStringWidth(count) / 2, 0, -1);
 		GlStateManager.enableLighting();

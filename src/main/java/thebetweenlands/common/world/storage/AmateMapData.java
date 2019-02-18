@@ -149,7 +149,7 @@ public class AmateMapData extends MapData {
 
         @Override
         public boolean render(int index) {
-            Minecraft.getInstance().renderEngine.bindTexture(MAP_ICONS);
+            Minecraft.getInstance().textureManager.bindTexture(MAP_ICONS);
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F + getX() / 2.0F + 64.0F, 0.0F + getY() / 2.0F + 64.0F, -0.02F);
             GlStateManager.rotate((float) (getRotation() * 360) / 16.0F, 0.0F, 0.0F, 1.0F);

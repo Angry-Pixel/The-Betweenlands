@@ -10,6 +10,7 @@ import org.apache.commons.lang3.Validate;
 
 import com.google.common.base.Function;
 
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -20,7 +21,7 @@ public enum CustomModelManager {
 
 	private final CustomModelLoader loader = new CustomModelLoader(this);
 
-	private final Map<ResourceLocation, Function<ResourceLocation, IModel>> registeredModelProviders = new HashMap<ResourceLocation, Function<ResourceLocation, IModel>>();
+	private final Map<ResourceLocation, Function<ResourceLocation, IUnbakedModel>> registeredModelProviders = new HashMap<ResourceLocation, Function<ResourceLocation, IUnbakedModel>>();
 
 	private CustomModelManager() { }
 
@@ -44,7 +45,7 @@ public enum CustomModelManager {
 	 * Returns an unmodifiable map of all registered model providers
 	 * @return
 	 */
-	public Map<ResourceLocation, Function<ResourceLocation, IModel>> getRegisteredModelProviders() {
+	public Map<ResourceLocation, Function<ResourceLocation, IUnbakedModel>> getRegisteredModelProviders() {
 		return Collections.unmodifiableMap(this.registeredModelProviders);
 	}
 
@@ -54,7 +55,7 @@ public enum CustomModelManager {
 	 * @param modelLocation
 	 * @param modelGetter
 	 */
-	private void registerModelProvider(@Nonnull ResourceLocation modelLocation, @Nonnull Function<ResourceLocation, IModel> modelGetter) {
+	private void registerModelProvider(@Nonnull ResourceLocation modelLocation, @Nonnull Function<ResourceLocation, IUnbakedModel> modelGetter) {
 		Validate.notNull(modelLocation);
 		Validate.notNull(modelGetter);
 		this.registeredModelProviders.put(modelLocation, modelGetter);
@@ -65,7 +66,7 @@ public enum CustomModelManager {
 	 * @param modelLocation
 	 * @param model
 	 */
-	public void registerModel(@Nonnull ResourceLocation modelLocation, @Nonnull IModel model) {
+	public void registerModel(@Nonnull ResourceLocation modelLocation, @Nonnull IUnbakedModel model) {
 		Validate.notNull(modelLocation);
 		Validate.notNull(model);
 		if(model instanceof IModelVariantProvider)

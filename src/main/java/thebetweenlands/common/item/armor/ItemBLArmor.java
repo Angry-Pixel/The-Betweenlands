@@ -124,7 +124,7 @@ public class ItemBLArmor extends ItemArmor implements IAnimatorRepairable {
 		ResourceLocation overlay = this.getOverlayTexture(stack, player, partialTicks);
 		
 		if(overlay != null) {
-			GlStateManager.disableDepth();
+			GlStateManager.disableDepthTest();
 			GlStateManager.depthMask(false);
 			GlStateManager.enableBlend();
 			GlStateManager.disableAlphaTest();
@@ -189,7 +189,7 @@ public class ItemBLArmor extends ItemArmor implements IAnimatorRepairable {
 			}
 			
 			GlStateManager.depthMask(true);
-			GlStateManager.enableDepth();
+			GlStateManager.enableDepthTest();
 			GlStateManager.enableAlphaTest();
 			GlStateManager.color(1, 1, 1);
 		}

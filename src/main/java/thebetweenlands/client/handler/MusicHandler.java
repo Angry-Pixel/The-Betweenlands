@@ -16,7 +16,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ISoundEventAccessor;
 import net.minecraft.client.audio.ITickableSound;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.audio.Sound;
 import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
@@ -287,7 +287,7 @@ public class MusicHandler {
 					choice -= sound.getWeight();
 				} while (choice >= 0);
 				this.previousSound = sound;
-				ISound parentSound = PositionedSoundRecord.getMusicRecord(isInBlMainMenu ? SoundRegistry.BL_MUSIC_MENU: SoundRegistry.BL_MUSIC_DIMENSION);
+				ISound parentSound = SimpleSound.getMusicRecord(isInBlMainMenu ? SoundRegistry.BL_MUSIC_MENU: SoundRegistry.BL_MUSIC_DIMENSION);
 				ISound playingSound = SoundWrapper.wrap(parentSound, sound);
 				this.currentSound = playingSound;
 				this.mc.getSoundHandler().play(playingSound);

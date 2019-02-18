@@ -71,7 +71,7 @@ public class GuiManualHerblore extends GuiScreen {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void drawScreen(int mouseX, int mouseY, float renderPartials) {
-        mc.renderEngine.bindTexture(book);
+        mc.textureManager.bindTexture(book);
         drawTexture(xStart, yStart, WIDTH, HEIGHT, 1024.0D, 1024.0D, 0.0D, 292.0D, 0.0D, 180.0D);
 
         if (currentCategory != null) {

@@ -87,7 +87,7 @@ public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier
 		if (amount >= 100) {
 			Tessellator tesselator = Tessellator.getInstance();
 			BufferBuilder buffer = tesselator.getBuffer();
-			TextureAtlasSprite waterIcon = Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite("thebetweenlands:fluids/swamp_water_still");
+			TextureAtlasSprite waterIcon = Minecraft.getInstance().getTextureMap().getAtlasSprite("thebetweenlands:fluids/swamp_water_still");
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

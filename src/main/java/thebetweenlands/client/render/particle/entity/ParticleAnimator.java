@@ -13,8 +13,8 @@ public class ParticleAnimator extends PathParticle {
 		super(world, x, y, z, motionX, motionY, motionZ, targetPoints);
 
 		this.particleScale = world.rand.nextFloat() / 2.0F;
-		this.particleMaxAge = 200;
-		this.particleAge = 0;
+		this.maxAge = 200;
+		this.age = 0;
 
 		this.setParticleTextureIndex((int)(Math.random() * 26.0D + 1.0D + 224.0D));
 	}
@@ -26,7 +26,7 @@ public class ParticleAnimator extends PathParticle {
 		if(this.targetPoints.isEmpty()) {
 			this.setExpired();
 		} else {
-			double t = 1.0D / 200.0D * this.particleAge;
+			double t = 1.0D / 200.0D * this.age;
 
 			if(t >= 1.0D) {
 				this.setExpired();

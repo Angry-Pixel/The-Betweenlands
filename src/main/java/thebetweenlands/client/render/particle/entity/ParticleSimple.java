@@ -12,7 +12,7 @@ public class ParticleSimple extends Particle implements IParticleSpriteReceiver 
 
 	public ParticleSimple(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, int maxAge, float scale, boolean fade, float gravity) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
-		this.particleMaxAge = maxAge;
+		this.maxAge = maxAge;
 		this.particleScale = scale;
 		this.particleGravity = gravity;
 	}
@@ -27,8 +27,8 @@ public class ParticleSimple extends Particle implements IParticleSpriteReceiver 
 	public void tick() {
 		super.tick();
 
-		if(this.particleAge > this.particleMaxAge - 40) {
-			this.particleAlpha = (this.startAlpha * (this.particleMaxAge - this.particleAge) / 40.0F);
+		if(this.age > this.maxAge - 40) {
+			this.particleAlpha = (this.startAlpha * (this.maxAge - this.age) / 40.0F);
 		}
 	}
 

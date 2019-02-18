@@ -95,7 +95,7 @@ public class ManualWidgetBase {
             drawGradientRect(var6 - 3, var7 - 3, z, var6 + var5 + 3, var7 - 3 + 1, color, color);
             drawGradientRect(var6 - 3, var7 + var9 + 2, z, var6 + var5 + 3, var7 + var9 + 3, var12, var12);
 
-            GlStateManager.disableDepth();
+            GlStateManager.disableDepthTest();
             for (int var13 = 0; var13 < tooltipData.size(); ++var13) {
                 String var14 = tooltipData.get(var13);
                 fontRenderer.drawStringWithShadow(var14, var6, var7, -1);
@@ -103,7 +103,7 @@ public class ManualWidgetBase {
                     var7 += 2;
                 var7 += 10;
             }
-            GlStateManager.enableDepth();
+            GlStateManager.enableDepthTest();
         }
         if (!lighting)
             RenderHelper.disableStandardItemLighting();
@@ -253,7 +253,7 @@ public class ManualWidgetBase {
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderHelper.enableGUIStandardItemLighting();
         GlStateManager.enableRescaleNormal();
-        GlStateManager.enableDepth();
+        GlStateManager.enableDepthTest();
         render.renderItemAndEffectIntoGUI(stack, xPos, yPos);
         render.renderItemOverlays(Minecraft.getInstance().fontRenderer, stack, xPos, yPos);
         RenderHelper.disableStandardItemLighting();

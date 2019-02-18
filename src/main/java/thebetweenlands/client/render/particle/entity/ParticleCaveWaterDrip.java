@@ -20,7 +20,7 @@ public class ParticleCaveWaterDrip extends Particle {
 		setParticleTextureIndex(112);
 		setSize(0.01F, 0.01F);
 		particleGravity = 0.06F;
-		particleMaxAge = (int) (64 / (Math.random() * 0.8 + 0.2));
+		maxAge = (int) (64 / (Math.random() * 0.8 + 0.2));
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class ParticleCaveWaterDrip extends Particle {
 		motionX *= 0.98;
 		motionY *= 0.98;
 		motionZ *= 0.98;
-		if (particleMaxAge-- <= 0) {
+		if (maxAge-- <= 0) {
 			this.setExpired();
 		}
 		if (this.isExpired) {

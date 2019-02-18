@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.JsonUtils;
@@ -61,7 +62,7 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 	}
 
 	@Override
-	public IModel loadModel(IModel original, ResourceLocation location, String arg) {
+	public IUnbakedModel loadModel(IModel original, ResourceLocation location, String arg) {
 		ModelContext context = this.parseContextData(location, this.readMetadata(arg));
 		this.modelContexts.put(context.source, context);
 		return this.getItemDummyModel();
@@ -133,7 +134,7 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 
 			//Bake replacement model
 			IBakedModel bakedModel = replacementModel.bake(replacementModel.getDefaultState(), DefaultVertexFormats.ITEM, 
-					(loc) -> Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite(loc.toString()));
+					(loc) -> Minecraft.getInstance().getTextureMap().getAtlasSprite(loc.toString()));
 
 			//Return wrapped model
 			return new BakedModelItemWrapper(original, bakedModel).setInheritOverrides(context.inheritOverrides).setCacheOverrideModels(context.cacheOverrides);

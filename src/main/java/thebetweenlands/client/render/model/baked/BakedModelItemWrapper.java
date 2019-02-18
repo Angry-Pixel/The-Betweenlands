@@ -3,6 +3,7 @@ package thebetweenlands.client.render.model.baked;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
@@ -63,7 +64,7 @@ public class BakedModelItemWrapper implements IBakedModel {
 	}
 
 	@Override
-	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, Random rand) {
 		return this.quadModel.getQuads(state, side, rand);
 	}
 

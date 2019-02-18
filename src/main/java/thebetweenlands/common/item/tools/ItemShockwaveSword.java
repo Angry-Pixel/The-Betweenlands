@@ -48,7 +48,7 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 		super(material);
 		this.addPropertyOverride(new ResourceLocation("charging"), new IItemPropertyGetter() {
 			@Override
-			public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
+			public float call(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
 				return stack.getTag() != null && stack.getTag().getInt("cooldown") < 60 ? 1 : 0;
 			}
 		});

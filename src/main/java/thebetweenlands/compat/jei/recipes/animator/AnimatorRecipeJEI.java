@@ -129,7 +129,7 @@ public class AnimatorRecipeJEI implements IRecipeWrapper {
 
             doGlScissor(minecraft, posX + 42, posY + 12, 24, 24);
             
-            GlStateManager.enableDepth();
+            GlStateManager.enableDepthTest();
             GlStateManager.depthMask(true);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.pushMatrix();

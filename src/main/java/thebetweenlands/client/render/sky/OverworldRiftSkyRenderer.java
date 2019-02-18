@@ -72,7 +72,7 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
 		this.setupFog(-1, partialTicks, mc);
 
-		TextureManager textureManager = mc.renderEngine;
+		TextureManager textureManager = mc.textureManager;
 
 		long worldTime = world.getDayTime();
 

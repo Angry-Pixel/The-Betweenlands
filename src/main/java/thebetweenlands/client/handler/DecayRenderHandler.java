@@ -58,8 +58,7 @@ public class DecayRenderHandler {
 
 		@Override
 		public void render(AbstractClientPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-				IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+			player.getCapability(CapabilityRegistry.CAPABILITY_DECAY).ifPresent(cap -> {
 				if(cap.isDecayEnabled()) {
 					int decay = cap.getDecayStats().getDecayLevel();
 					if(decay > 0) {
@@ -78,16 +77,16 @@ public class DecayRenderHandler {
 						GlStateManager.enableBlend();
 						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 						this.renderer.bindTexture(PLAYER_DECAY_TEXTURE);
-						GlStateManager.color(1, 1, 1, transparency);
+						GlStateManager.color4f(1, 1, 1, transparency);
 						model.render(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-						GlStateManager.color(1, 1, 1, 1);
+						GlStateManager.color4f(1, 1, 1, 1);
 
 						for(Entry<ModelRenderer, Boolean> entry : visibilities.entrySet()) {
 							entry.getKey().showModel = entry.getValue();
 						}
 					}
 				}
-			}
+			});
 		}
 
 		@Override
@@ -100,14 +99,13 @@ public class DecayRenderHandler {
 	public static void onPreRenderPlayer(RenderPlayerEvent.Pre event) {
 		EntityPlayer player = event.getEntityPlayer();
 
-		if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-			IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+		player.getCapability(CapabilityRegistry.CAPABILITY_DECAY).ifPresent(capability -> {
 			if(capability.isDecayEnabled() && capability.getDecayStats().getDecayLevel() > 0) {
 				if(!RenderUtils.doesRendererHaveLayer(event.getRenderer(), LayerDecay.class, false)) {
 					event.getRenderer().addLayer(new LayerDecay(event.getRenderer()));
 				}
 			}
-		}
+		});
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -116,17 +114,19 @@ public class DecayRenderHandler {
 
 		EntityPlayer player = Minecraft.getInstance().player;
 
-		if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-			IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-			if(capability.isDecayEnabled() && capability.getDecayStats().getDecayLevel() > 0) {
-				int decay = capability.getDecayStats().getDecayLevel();
-				boolean isMainHand = event.getHand() == EnumHand.MAIN_HAND;
-				if(isMainHand && !player.isInvisible() && event.getItemStack().isEmpty()) {
-					EnumHandSide enumhandside = isMainHand ? player.getPrimaryHand() : player.getPrimaryHand().opposite();
-					renderArmFirstPersonWithDecay(event.getEquipProgress(), event.getSwingProgress(), enumhandside, decay);
-					event.setCanceled(true);
-				}
-			}
+		if(player != null) {
+			player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null).ifPresent(capability -> {
+				if(capability.isDecayEnabled() && capability.getDecayStats().getDecayLevel() > 0) {
+					int decay = capability.getDecayStats().getDecayLevel();
+					boolean isMainHand = event.getHand() == EnumHand.MAIN_HAND;
+					if(isMainHand && !player.isInvisible() && event.getItemStack().isEmpty()) {
+						EnumHandSide enumhandside = isMainHand ? player.getPrimaryHand() : player.getPrimaryHand().opposite();
+						renderArmFirstPersonWithDecay(event.getEquipProgress(), event.getSwingProgress(), enumhandside, decay);
+						event.setCanceled(true);
+					}
+				}	
+			});
+			
 		}
 
 		GlStateManager.popMatrix();
@@ -167,7 +167,7 @@ public class DecayRenderHandler {
 		if (flag && renderplayer != null) {
 			renderplayer.renderRightArm(abstractclientplayer);
 
-			mc.renderEngine.bindTexture(PLAYER_DECAY_TEXTURE);
+			mc.textureManager.bindTexture(PLAYER_DECAY_TEXTURE);
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			float glow = (float) ((Math.cos(abstractclientplayer.ticksExisted / 10.0D) + 1.0D) / 2.0D) * 0.15F;
 			float transparency = 0.85F * decay / 20.0F - glow;
@@ -187,7 +187,7 @@ public class DecayRenderHandler {
 		} else {
 			renderplayer.renderLeftArm(abstractclientplayer);
 
-			mc.renderEngine.bindTexture(PLAYER_DECAY_TEXTURE);
+			mc.textureManager.bindTexture(PLAYER_DECAY_TEXTURE);
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			float glow = (float) ((Math.cos(abstractclientplayer.ticksExisted / 10.0D) + 1.0D) / 2.0D) * 0.15F;
 			float transparency = 0.85F * decay / 20.0F - glow;

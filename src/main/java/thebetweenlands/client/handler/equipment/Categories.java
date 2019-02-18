@@ -59,7 +59,7 @@ public class Categories {
 		public boolean onClicked(int mouseX, int mouseY, int mouseButton) {
 			EntityPlayer sender = Minecraft.getInstance().player;
 
-			if(sender.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+			if(sender.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT).isPresent()) {
 				ItemStack res = EquipmentHelper.equipItem(sender, sender, item, false);
 
 				if(res.isEmpty() || res.getCount() != item.getCount()) {
@@ -94,7 +94,7 @@ public class Categories {
 		public boolean onClicked(int mouseX, int mouseY, int mouseButton) {
 			EntityPlayer sender = Minecraft.getInstance().player;
 
-			if(sender.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+			if(sender.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT).isPresent()) {
 				ItemStack unequipped = EquipmentHelper.unequipItem(sender, sender, this.inventory, this.slot, false);
 
 				if(!unequipped.isEmpty()) {

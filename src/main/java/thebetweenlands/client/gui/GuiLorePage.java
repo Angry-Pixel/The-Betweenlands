@@ -43,7 +43,7 @@ public class GuiLorePage extends GuiScreen {
 
 		if (this.pageTexture != null) {
 			GlStateManager.color(1F, 1F, 1F, 1F);
-			this.mc.renderEngine.bindTexture(this.pageTexture);
+			this.mc.textureManager.bindTexture(this.pageTexture);
 			drawTexture(xStart, yStart, (int) WIDTH, (int) HEIGHT, WIDTH, HEIGHT, 0.0D, WIDTH, 0.0D, HEIGHT);
 		}
 	}

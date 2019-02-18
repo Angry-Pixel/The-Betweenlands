@@ -234,7 +234,7 @@ public class ElixirEffect {
 			if(this.icon != null) {
 				GlStateManager.enableTexture2D();
 				GlStateManager.enableBlend();
-				Minecraft.getInstance().renderEngine.bindTexture(this.icon);
+				Minecraft.getInstance().textureManager.bindTexture(this.icon);
 				Tessellator tessellator = Tessellator.getInstance();
 				BufferBuilder vertexBuffer = tessellator.getBuffer();
 
@@ -286,7 +286,7 @@ public class ElixirEffect {
 			if(this.icon != null) {
 				GlStateManager.enableTexture2D();
 				GlStateManager.enableBlend();
-				Minecraft.getInstance().renderEngine.bindTexture(this.icon);
+				Minecraft.getInstance().textureManager.bindTexture(this.icon);
 
 				Tessellator tessellator = Tessellator.getInstance();
 				BufferBuilder vertexBuffer = tessellator.getBuffer();

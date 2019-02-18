@@ -158,7 +158,7 @@ public class AuroraRenderer {
 		this.currDirection = new Vector2d(this.direction.x, this.direction.y);
 		Vector2d prevDirection = this.currDirection;
 
-		Minecraft.getInstance().renderEngine.bindTexture(AURORA_TEXTURE);
+		Minecraft.getInstance().textureManager.bindTexture(AURORA_TEXTURE);
 
 		vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
 

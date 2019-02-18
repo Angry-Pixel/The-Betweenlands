@@ -219,8 +219,8 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	@SubscribeEvent
 	public static void onLivingUpdate(LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_CUSTOM_STEP_SOUND, null)) {
-			ICustomStepSoundCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_CUSTOM_STEP_SOUND, null);
+		
+		entity.getCapability(CapabilityRegistry.CAPABILITY_CUSTOM_STEP_SOUND).ifPresent(cap -> {
 			if(entity.distanceWalkedOnStepModified > cap.getNextWeedwoodBushStep()) {
 				boolean inBush = false;
 				AxisAlignedBB aabb = entity.getBoundingBox();
@@ -235,11 +235,11 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 					}
 				}
 				if(inBush) {
-					entity.world.play(null, entity.posX, entity.posY, entity.posZ, SoundRegistry.GECKO_HIDE, SoundCategory.BLOCKS, 0.4F, entity.world.rand.nextFloat() * 0.3F + 0.7F);
+					entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundRegistry.GECKO_HIDE, SoundCategory.BLOCKS, 0.4F, entity.world.rand.nextFloat() * 0.3F + 0.7F);
 				}
 				cap.setNextWeeedwoodBushStep(entity.distanceWalkedOnStepModified + 0.8F);
-			}
-		}
+			}	
+		});
 	}
 
 	@OnlyIn(Dist.CLIENT)

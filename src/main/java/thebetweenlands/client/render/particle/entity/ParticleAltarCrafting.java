@@ -24,7 +24,7 @@ public class ParticleAltarCrafting extends Particle {
 		float colorMulti = this.rand.nextFloat() * 0.3F;
 		this.particleScale = scale;
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F * colorMulti;
-		this.particleMaxAge = TileEntityDruidAltar.CRAFTING_TIME + 200000;
+		this.maxAge = TileEntityDruidAltar.CRAFTING_TIME + 200000;
 		this.setParticleTextureIndex((int) (Math.random() * 26.0D + 1.0D + 224.0D));
 	}
 
@@ -35,7 +35,7 @@ public class ParticleAltarCrafting extends Particle {
 		if(tileEntity instanceof TileEntityDruidAltar) {
 			craftingProgress = ((TileEntityDruidAltar) tileEntity).craftingProgress;
 		}
-		if(this.particleAge++ >= this.particleMaxAge || craftingProgress == 0) {
+		if(this.age++ >= this.maxAge || craftingProgress == 0) {
 			this.setExpired();
 		}
 		craftingProgress /= TileEntityDruidAltar.CRAFTING_TIME;

@@ -123,7 +123,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 					float scale = 0.6F + this.rand.nextFloat() * 0.2F;
 					double angle = i * Math.PI * 2 / roots;
 					Vec3d offset = new Vec3d(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
-					SpikeRenderer renderer = new SpikeRenderer(3, scale * 0.5F, scale, 1, this.rand.nextLong(), -scale * 0.5F * 1.5F, 0, -scale * 0.5F * 1.5F).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite(ParticleRootSpike.SPRITE.toString()));
+					SpikeRenderer renderer = new SpikeRenderer(3, scale * 0.5F, scale, 1, this.rand.nextLong(), -scale * 0.5F * 1.5F, 0, -scale * 0.5F * 1.5F).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getInstance().getTextureMap().getAtlasSprite(ParticleRootSpike.SPRITE.toString()));
 					RootPart part = new RootPart();
 					part.renderer = renderer;
 					part.x = (float)offset.x;

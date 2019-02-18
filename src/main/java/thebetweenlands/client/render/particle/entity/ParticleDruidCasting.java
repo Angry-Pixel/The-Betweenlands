@@ -15,7 +15,7 @@ public class ParticleDruidCasting extends Particle {
 		float colorMulti = this.rand.nextFloat() * 0.3F;
 		this.portalParticleScale = this.particleScale = scale;
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F * colorMulti;
-		this.particleMaxAge = (int) (Math.random() * 10.0D) + 40;
+		this.maxAge = (int) (Math.random() * 10.0D) + 40;
 		//this.noClip = true;
 		this.setParticleTextureIndex((int) (Math.random() * 26.0D + 1.0D + 224.0D));
 	}
@@ -23,7 +23,7 @@ public class ParticleDruidCasting extends Particle {
 	@Override
 	public int getBrightnessForRender(float partTicks) {
 		int i = super.getBrightnessForRender(partTicks);
-		float f1 = (float) this.particleAge / (float) this.particleMaxAge;
+		float f1 = (float) this.age / (float) this.maxAge;
 		f1 *= f1;
 		f1 *= f1;
 		int j = i & 255;
@@ -43,7 +43,7 @@ public class ParticleDruidCasting extends Particle {
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 
-		if( this.particleAge++ >= this.particleMaxAge ) {
+		if( this.age++ >= this.maxAge ) {
 			this.setExpired();
 		}
 

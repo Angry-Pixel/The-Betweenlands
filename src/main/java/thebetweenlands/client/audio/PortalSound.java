@@ -12,12 +12,10 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 public class PortalSound extends EntitySound<EntityPlayer> {
 	public PortalSound(SoundEvent sound, SoundCategory category, EntityPlayer player) {
 		super(sound, category, player, (entity) -> {
-			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
-				IPortalCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
+			IPortalCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_PORTAL).orElse(null);
 
-				if(cap.isInPortal()) {
-					return true;
-				}
+			if(cap != null && cap.isInPortal()) {
+				return true;
 			}
 
 			return false;

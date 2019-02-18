@@ -33,7 +33,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		this.posY = this.prevPosY = y;
 		this.posZ = this.prevPosZ = z;
 		this.flameScale = scale;
-		this.particleMaxAge = (int) (8 / (Math.random() * 0.8 + 0.2)) + 1000;
+		this.maxAge = (int) (8 / (Math.random() * 0.8 + 0.2)) + 1000;
 		this.brightness = bright;
 	}
 
@@ -62,8 +62,8 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		float maxV = this.particleTexture.getMaxV();
 		
 		//remove 1px border to avoid artifacts from smooth filtering
-		float borderU = (maxU - minU) / this.particleTexture.getIconWidth();
-		float borderV = (maxV - minV) / this.particleTexture.getIconHeight();
+		float borderU = (maxU - minU) / this.particleTexture.getWidth();
+		float borderV = (maxV - minV) / this.particleTexture.getHeight();
 
 		minU += borderU;
 		maxU -= borderU;
@@ -130,10 +130,10 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		this.motionX *= 0.96;
 		this.motionZ *= 0.96;
 
-		if (this.particleAge++ >= this.particleMaxAge || this.flameScale <= 0) {
+		if (this.age++ >= this.maxAge || this.flameScale <= 0) {
 			this.setExpired();
 		}
-		if (this.particleAge != 0) {
+		if (this.age != 0) {
 			if (this.flameScale > 0) {
 				this.flameScale -= 0.025;
 			}

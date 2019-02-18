@@ -57,12 +57,11 @@ public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.#
 		
 		if(player != null) {
 			if(FoodSicknessHandler.isFoodSicknessEnabled() && stack.getItem() instanceof ItemFood && stack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)stack.getItem()).canGetSickOf(player, stack)) {
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
-					IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
+				player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null).ifPresent(cap -> {
 					FoodSickness sickness = cap.getSickness((ItemFood)stack.getItem());
 					int hatred = cap.getFoodHatred((ItemFood)stack.getItem());
 					((IFoodSicknessItem)stack.getItem()).getSicknessTooltip(stack, sickness, hatred, event.getFlags().isAdvanced(), toolTip);
-				}
+				});
 			}
 	
 			if(stack.getItem() instanceof IEquippable && ((IEquippable)stack.getItem()).canEquip(stack, player, player)) {

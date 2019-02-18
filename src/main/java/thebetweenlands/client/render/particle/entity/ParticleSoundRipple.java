@@ -41,7 +41,7 @@ public class ParticleSoundRipple extends Particle {
 		this.setAlphaF(0);
 		this.spawnMore = spawnMore;
 		this.delay = delay;
-		this.particleMaxAge = this.spawnMore ? (100 + this.delay) : 20;
+		this.maxAge = this.spawnMore ? (100 + this.delay) : 20;
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class ParticleSoundRipple extends Particle {
 			float vmin = 0;
 			float vmax = 1;
 
-			float scale = this.particleScale * ((this.particleAge + partialTicks) / (float)this.particleMaxAge);
+			float scale = this.particleScale * ((this.age + partialTicks) / (float)this.maxAge);
 
 			Vec3d camPos = ActiveRenderInfo.getCameraPosition();
 
@@ -89,13 +89,13 @@ public class ParticleSoundRipple extends Particle {
 				}
 			}
 
-			float alpha = MathHelper.clamp((this.particleMaxAge - (this.particleAge + partialTicks)) / 10.0F, 0, 1);
+			float alpha = MathHelper.clamp((this.maxAge - (this.age + partialTicks)) / 10.0F, 0, 1);
 
-			GlStateManager.color(1, 1, 1, 1);
+			GlStateManager.color4f(1, 1, 1, 1);
 
 			GlStateManager.disableLighting();
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
-			GlStateManager.disableDepth();
+			GlStateManager.disableDepthTest();
 			GlStateManager.enableTexture2D();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -108,23 +108,23 @@ public class ParticleSoundRipple extends Particle {
 			Tessellator.getInstance().draw();
 
 			GlStateManager.disableBlend();
-			GlStateManager.enableDepth();
+			GlStateManager.enableDepthTest();
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		}
 	}
 
 	@Override
 	public void tick() {
-		if(this.spawnMore && this.particleAge >= this.delay) {
-			if(this.particleAge == this.delay && Minecraft.getInstance().player != null) {
+		if(this.spawnMore && this.age >= this.delay) {
+			if(this.age == this.delay && Minecraft.getInstance().player != null) {
 				Minecraft.getInstance().getSoundHandler().play(new GemSingerEchoSound(new Vec3d(this.posX, this.posY, this.posZ)).setVolumeAndPitch(0.7f, 0.98f + this.world.rand.nextFloat() * 0.06f - 0.03f));
 			}
-			if((this.particleAge - this.delay) % 10 == 0) {
+			if((this.age - this.delay) % 10 == 0) {
 				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.UNBATCHED, new ParticleSoundRipple(this.world, this.posX, this.posY, this.posZ, this.particleScale, 0, false));
 			}
 		}
 
-		if(this.particleAge++ >= this.particleMaxAge) {
+		if(this.age++ >= this.maxAge) {
 			this.setExpired();
 		}
 	}

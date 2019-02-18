@@ -98,7 +98,7 @@ public class EntityRootSpikeWave extends Entity implements IEntityAdditionalSpaw
 							pos.getZ() + this.rand.nextDouble() * 0.6D - 0.3D - this.posZ
 							);
 					float scale = 0.4F + this.rand.nextFloat() * 0.2F;
-					SpikeRenderer renderer = new SpikeRenderer(2, scale * 0.5F, scale, 1, this.rand.nextLong(), offset.x, offset.y, offset.z).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getInstance().getTextureMapBlocks().getAtlasSprite(ParticleRootSpike.SPRITE.toString()));
+					SpikeRenderer renderer = new SpikeRenderer(2, scale * 0.5F, scale, 1, this.rand.nextLong(), offset.x, offset.y, offset.z).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getInstance().getTextureMap().getAtlasSprite(ParticleRootSpike.SPRITE.toString()));
 					renderers.add(renderer);
 				}
 

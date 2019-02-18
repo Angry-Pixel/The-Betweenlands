@@ -93,9 +93,9 @@ public interface IEquippable {
 		item.addPropertyOverride(new ResourceLocation("equipped"), new IItemPropertyGetter() {
 			@Override
 			@OnlyIn(Dist.CLIENT)
-			public float apply(ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
-				if(stack.getItem() instanceof IEquippable && entity != null && entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-					IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+			public float call(ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
+				IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT).orElse(null);
+				if(cap != null) {
 					IInventory inv = cap.getInventory(((IEquippable) stack.getItem()).getEquipmentCategory(stack));
 					for(int i = 0; i < inv.getSizeInventory(); i++) {
 						if(stack == inv.getStackInSlot(i)) {

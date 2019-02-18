@@ -199,7 +199,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 			seededRng.setSeed(this.stalactitesSeed);
 
 			if(this.numStalactites > 0) {
-				TextureMap altas = Minecraft.getInstance().getTextureMapBlocks();
+				TextureMap altas = Minecraft.getInstance().getTextureMap();
 
 				for(int i = 0; i < numStalactites; i++) {
 					Vec3d offset = new Vec3d(-0.08D + seededRng.nextDouble() * 0.5D - 0.25D, 0.5D, -0.15D + seededRng.nextDouble() * 0.5D - 0.25D);
