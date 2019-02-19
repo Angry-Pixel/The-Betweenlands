@@ -14,11 +14,10 @@ import com.google.common.base.Preconditions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityManager;
@@ -29,7 +28,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.StartTracking;
 import net.minecraftforge.event.entity.player.PlayerEvent.StopTracking;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.LoaderState;
+import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -71,8 +70,8 @@ public class EntityCapabilityHandler {
 	@SuppressWarnings("unchecked")
 	public static <E extends Entity> EntityCapability<?, ?, E> getCapability(ResourceLocation id, E entity) {
 		EntityCapability<?, ?, ?> entityCapability = ID_CAPABILITY_MAP.get(id);
-		if(entityCapability != null && entity.hasCapability(entityCapability.getCapability(), null)) {
-			return (EntityCapability<?, ?, E>) entity.getCapability(entityCapability.getCapability(), null);
+		if(entityCapability != null) {
+			return (EntityCapability<?, ?, E>) entity.getCapability(entityCapability.getCapability()).orElse(null);
 		}
 		return null;
 	}
@@ -80,7 +79,7 @@ public class EntityCapabilityHandler {
 	private static <T, E extends Entity> void registerCapability(EntityCapability<?, T, E> capability) {
 		CapabilityManager.INSTANCE.register(capability.getCapabilityClass(), new IStorage<T>() {
 			@Override
-			public final NBTBase writeNBT(Capability<T> capability, T instance, EnumFacing side) {
+			public final INBTBase writeNBT(Capability<T> capability, T instance, EnumFacing side) {
 				if(instance instanceof ISerializableCapability) {
 					NBTTagCompound nbt = new NBTTagCompound();
 					((ISerializableCapability)instance).writeToNBT(nbt);
@@ -90,7 +89,7 @@ public class EntityCapabilityHandler {
 			}
 
 			@Override
-			public final void readNBT(Capability<T> capability, T instance, EnumFacing side, NBTBase nbt) {
+			public final void readNBT(Capability<T> capability, T instance, EnumFacing side, INBTBase nbt) {
 				if(instance instanceof ISerializableCapability && nbt instanceof NBTTagCompound) {
 					((ISerializableCapability)instance).readFromNBT((NBTTagCompound)nbt);
 				}
@@ -167,8 +166,8 @@ public class EntityCapabilityHandler {
 
 	@SubscribeEvent
 	public static void onEntityChangeDimension(PlayerChangedDimensionEvent event) {
-		if(!event.player.getEntityWorld().isRemote() && event.player instanceof EntityPlayerMP)  {
-			EntityPlayerMP player = (EntityPlayerMP) event.player;
+		if(!event.getPlayer().getEntityWorld().isRemote() && event.getPlayer() instanceof EntityPlayerMP)  {
+			EntityPlayerMP player = (EntityPlayerMP) event.getPlayer();
 			List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(player);
 			if(trackers != null) {
 				for(EntityCapabilityTracker tracker : trackers) {
@@ -194,7 +193,7 @@ public class EntityCapabilityHandler {
 
 	@SubscribeEvent
 	public static void onEntityUpdate(PlayerTickEvent event) {
-		if(!event.player.getEntityWorld().isRemote() && event.side == Dist.DEDICATED_SERVER)  {
+		if(!event.player.getEntityWorld().isRemote() && event.side == LogicalSide.SERVER)  {
 			EntityPlayerMP player = (EntityPlayerMP) event.player;
 			List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(player);
 			if(trackers != null) {
@@ -232,7 +231,7 @@ public class EntityCapabilityHandler {
 
 					//System.out.println(entry.getValue().size() + " " + player.getServerWorld().loadedEntityList.size());
 
-					if(player.getServerWorld().getMinecraftServer() != null && !player.getServerWorld().getMinecraftServer().getPlayerList().getPlayers().contains(player)) {
+					if(player.getServerWorld().getServer() != null && !player.getServerWorld().getServer().getPlayerList().getPlayers().contains(player)) {
 						it.remove();
 						for(EntityCapabilityTracker tracker : entry.getValue()) {
 							tracker.remove();
@@ -271,9 +270,7 @@ public class EntityCapabilityHandler {
 		List<EntityCapability<?, ?, E>> capabilities = new ArrayList<EntityCapability<?, ?, E>>();
 
 		for(EntityCapability<?, ?, ?> capability : REGISTERED_CAPABILITIES) {
-			if(entity.hasCapability(capability.getCapability(), null)) {
-				capabilities.add((EntityCapability<?, ?, E>) entity.getCapability(capability.getCapability(), null));
-			}
+			entity.getCapability(capability.getCapability()).ifPresent(cap -> capabilities.add((EntityCapability<?, ?, E>) cap));	
 		}
 
 		return capabilities;

@@ -82,11 +82,6 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere();
-	}
-
-	@Override
 	public int getMaxSpawnedInChunk() {
 		return 3;
 	}

@@ -12,6 +12,7 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
@@ -114,9 +115,9 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	}
 	
 	@Override
-	public boolean getCanSpawnHere() {
+	public boolean canSpawn(IWorld world, boolean spawner) {
 		float brightness = this.world.dimension.getSunBrightnessFactor(1);
-		return (brightness <= 0.3F || BetweenlandsWorldStorage.forWorld(this.world).getEnvironmentEventRegistry().bloodSky.isActive()) && super.getCanSpawnHere();
+		return (brightness <= 0.3F || BetweenlandsWorldStorage.forWorld(this.world).getEnvironmentEventRegistry().bloodSky.isActive()) && super.canSpawn(world, spawner);
 	}
 
 	@Override

@@ -5,7 +5,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import gnu.trove.map.hash.TObjectIntHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -29,7 +30,6 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import thebetweenlands.api.capability.ICircleGemCapability;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGem.CombatType;
@@ -88,13 +88,12 @@ public class CircleGemHelper {
 
 	 */
 	public static void addGem(Entity entity, CircleGemType gemType, CircleGem.CombatType combatType) {
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null)) {
-			ICircleGemCapability capability = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null);
+		entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM).ifPresent(capability -> {
 			CircleGem gem = new CircleGem(gemType, combatType);
 			if(capability.canAdd(gem)) {
 				capability.addGem(gem);
 			}
-		}
+		});
 	}
 
 	/**
@@ -103,12 +102,7 @@ public class CircleGemHelper {
 	 * @return
 	 */
 	public static List<CircleGem> getGems(Entity entity) {
-		List<CircleGem> gems = new ArrayList<CircleGem>();
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null)) {
-			ICircleGemCapability capability = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null);
-			return capability.getGems();
-		}
-		return gems;
+		return entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM).map(cap -> cap.getGems()).orElse(new ArrayList<>());
 	}
 
 	/**
@@ -118,8 +112,8 @@ public class CircleGemHelper {
 	 * @return
 	 */
 	public static CircleGem getGem(Entity entity, int slot) {
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null)) {
-			ICircleGemCapability capability = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null);
+		ICircleGemCapability capability = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM).orElse(null);
+		if(capability != null) {
 			List<CircleGem> gems = capability.getGems();
 			if(gems.size() > slot)
 				return capability.getGems().get(slot);
@@ -245,18 +239,18 @@ public class CircleGemHelper {
 				List<CircleGemType> defenderProcdGems = new ArrayList<CircleGemType>();
 
 				//Attacker gems
-				TObjectIntHashMap<CircleGemType> attackerGemCounts = new TObjectIntHashMap<CircleGemType>();
+				Object2IntMap<CircleGemType> attackerGemCounts = new Object2IntOpenHashMap<>();
 				for(CircleGem gem : attackerGems) {
 					if(gem.matchCombatType(CircleGem.CombatType.OFFENSIVE)) {
-						attackerGemCounts.adjustOrPutValue(gem.getGemType(), 1, 1);
+						attackerGemCounts.computeInt(gem.getGemType(), (g, i) -> i == null ? 1 : i + 1);
 					}
 				}
 				for(CircleGem gem : sourceGems) {
 					if(gem.matchCombatType(CircleGem.CombatType.OFFENSIVE)) {
-						attackerGemCounts.adjustOrPutValue(gem.getGemType(), 1, 1);
+						attackerGemCounts.computeInt(gem.getGemType(), (g, i) -> i == null ? 1 : i + 1);
 					}
 				}
-				attackerGemCounts.adjustOrPutValue(attackerItemGem, 1, 1);
+				attackerGemCounts.computeInt(attackerItemGem, (g, i) -> i == null ? 1 : i + 1);
 				for(CircleGemType gem : attackerGemCounts.keySet()) {
 					if(gem != CircleGemType.NONE && applyProc(gem, attacker, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(attackerGemCounts.get(gem), damage), damageSource, damage)) {
 						attackerProcd = true;
@@ -267,24 +261,24 @@ public class CircleGemHelper {
 				}
 
 				//Defender gems
-				TObjectIntHashMap<CircleGemType> defenderGemCounts = new TObjectIntHashMap<CircleGemType>();
+				Object2IntMap<CircleGemType> defenderGemCounts = new Object2IntOpenHashMap<>();
 				if(attackedEntity instanceof EntityLivingBase) {
 					Iterable<ItemStack> equipment = ((EntityLivingBase)attackedEntity).getEquipmentAndArmor();
 					for(ItemStack equipmentStack : equipment) {
 						if(!equipmentStack.isEmpty() && !equipmentStack.equals(getActiveItem(attackedEntity)) && equipmentStack.getItem() instanceof ItemArmor) {
 							CircleGemType armorGem = CircleGemHelper.getGem(equipmentStack);
 							if(armorGem != CircleGemType.NONE) {
-								defenderGemCounts.adjustOrPutValue(armorGem, 1, 1);
+								defenderGemCounts.computeInt(armorGem, (g, i) -> i == null ? 1 : i + 1);
 							}
 						}
 					}
 				}
 				for(CircleGem gem : attackedGems) {
 					if(gem.matchCombatType(CircleGem.CombatType.DEFENSIVE)) {
-						defenderGemCounts.adjustOrPutValue(gem.getGemType(), 1, 1);
+						defenderGemCounts.computeInt(gem.getGemType(), (g, i) -> i == null ? 1 : i + 1);
 					}
 				}
-				defenderGemCounts.adjustOrPutValue(attackedBlockingItemGem, 1, 1);
+				defenderGemCounts.computeInt(attackedBlockingItemGem, (g, i) -> i == null ? 1 : i + 1);
 				for(CircleGemType gem : defenderGemCounts.keySet()) {
 					if(gem != CircleGemType.NONE && applyProc(gem, attackedEntity, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(defenderGemCounts.get(gem), damage), damageSource, damage)) {
 						defenderProcd = true;
@@ -310,8 +304,8 @@ public class CircleGemHelper {
 							TheBetweenlands.networkWrapper.sendToAllAround(new MessageGemProc(attackedEntity, false, gem), new TargetPoint(dim, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 64.0D));
 						}
 					}
-					source.world.play(null, source.posX, source.posY, source.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
-					source.world.play(null, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
+					source.world.playSound(null, source.posX, source.posY, source.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
+					source.world.playSound(null, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
 				}
 			}
 		}

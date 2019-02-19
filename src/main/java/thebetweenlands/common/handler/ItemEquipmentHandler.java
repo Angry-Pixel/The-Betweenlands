@@ -19,8 +19,8 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
+import thebetweenlands.common.DistUtils;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
@@ -41,7 +41,7 @@ public class ItemEquipmentHandler {
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event) {
 		if(event.phase == Phase.END) {
-			World world = TheBetweenlands.proxy.getClientWorld();
+			World world = DistUtils.getClientWorld();
 			if(world != null && !Minecraft.getInstance().isGamePaused()) {
 				tickEquipmentInventories(world);
 			}
@@ -52,16 +52,16 @@ public class ItemEquipmentHandler {
 		for(int i = 0; i < world.loadedEntityList.size(); i++) {
 			Entity entity = world.loadedEntityList.get(i);
 
-			if(entity instanceof EntityLivingBase && entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+			if(entity instanceof EntityLivingBase) {
+				entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT).ifPresent(cap -> {
+					for(EnumEquipmentInventory invType : EnumEquipmentInventory.values()) {
+						IInventory inventory = cap.getInventory(invType);
 
-				for(EnumEquipmentInventory invType : EnumEquipmentInventory.values()) {
-					IInventory inventory = cap.getInventory(invType);
-
-					if(inventory instanceof ITickable) {
-						((ITickable) inventory).update();
+						if(inventory instanceof ITickable) {
+							((ITickable) inventory).tick();
+						}
 					}
-				}
+				});
 			}
 		}
 	}
@@ -176,9 +176,7 @@ public class ItemEquipmentHandler {
 		EntityLivingBase entity = event.getEntityLiving();
 
 		if(entity != null && !entity.world.isRemote() && !entity.world.getGameRules().getBoolean("keepInventory")) {
-			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-
+			entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT).ifPresent(cap -> {
 				for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
 					IInventory inv = cap.getInventory(type);
 
@@ -200,7 +198,7 @@ public class ItemEquipmentHandler {
 						}
 					}
 				}
-			}
+			});
 		}
 	}
 }

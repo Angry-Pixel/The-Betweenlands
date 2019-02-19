@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import thebetweenlands.common.DistUtils;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.network.MessageBase;
@@ -47,7 +48,7 @@ public class MessageSyncStaticAspects extends MessageBase {
 
 	@OnlyIn(Dist.CLIENT)
 	private void loadAspects() {
-		World world = TheBetweenlands.proxy.getClientWorld();
+		World world = DistUtils.getClientWorld();
 		if(world != null) {
 			AspectManager.get(world).loadStaticAspects(this.nbt);
 		}

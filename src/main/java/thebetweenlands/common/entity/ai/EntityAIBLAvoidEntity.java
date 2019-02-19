@@ -1,6 +1,7 @@
 package thebetweenlands.common.entity.ai;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.google.common.base.Predicates;
 
@@ -31,9 +32,9 @@ public class EntityAIBLAvoidEntity extends EntityAIBase {
 
     private PathNavigate entityPathNavigate;
 
-    private Class targetEntityClass;
+    private Class<? extends Entity> targetEntityClass;
 
-    public EntityAIBLAvoidEntity(EntityCreature entity, Class<?> clazz, float targetDistanceFromEntity, double farSpeed, double nearSpeed) {
+    public EntityAIBLAvoidEntity(EntityCreature entity, Class<? extends Entity> clazz, float targetDistanceFromEntity, double farSpeed, double nearSpeed) {
         this.entity = entity;
         targetEntityClass = clazz;
         this.targetDistanceFromEntity = targetDistanceFromEntity;
@@ -54,7 +55,7 @@ public class EntityAIBLAvoidEntity extends EntityAIBase {
                 return false;
             }
         } else {
-            List list = entity.world.getEntitiesWithinAABB(targetEntityClass, entity.getBoundingBox().grow(targetDistanceFromEntity, 3, targetDistanceFromEntity), Predicates.and(EntitySelectors.IS_ALIVE, EntitySelectors.CAN_AI_TARGET));
+            List<Entity> list = entity.world.getEntitiesWithinAABB(targetEntityClass, entity.getBoundingBox().grow(targetDistanceFromEntity, 3, targetDistanceFromEntity), EntitySelectors.IS_ALIVE.and(EntitySelectors.CAN_AI_TARGET));
             if (list.isEmpty()) {
                 return false;
             }
@@ -87,7 +88,7 @@ public class EntityAIBLAvoidEntity extends EntityAIBase {
     }
 
     @Override
-    public void updateTask() {
+    public void tick() {
         if (entity.getDistanceSq(closestLivingEntity) < 49) {
             entity.getNavigator().setSpeed(nearSpeed);
         } else {
@@ -95,7 +96,7 @@ public class EntityAIBLAvoidEntity extends EntityAIBase {
         }
     }
 
-    public void setTargetEntityClass(Class<?> targetEntityClass) {
+    public void setTargetEntityClass(Class<? extends Entity> targetEntityClass) {
         this.targetEntityClass = targetEntityClass;
     }
 }

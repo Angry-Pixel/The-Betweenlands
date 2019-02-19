@@ -22,6 +22,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -193,8 +194,8 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	public boolean isNotColliding() {
-		return this.world.getCollisionBoxes(this, this.getBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getBoundingBox(), this);
+	public boolean isNotColliding(IWorldReaderBase world) {
+		return !world.getCollisionBoxes(this, this.getBoundingBox(), this.posX, this.posY, this.posZ).findAny().isPresent() && this.world.checkNoEntityCollision(this, this.getBoundingBox());
 	}
 
 	public int getSkin() {

@@ -46,7 +46,7 @@ public class EntityAIFlyRandomly<T extends EntityLiving> extends EntityAIBase {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		EntityMoveHelper moveHelper = this.entity.getMoveHelper();
 		if(moveHelper instanceof FlightMoveHelper) {
 			FlightMoveHelper flightMoveHelper = (FlightMoveHelper) moveHelper;

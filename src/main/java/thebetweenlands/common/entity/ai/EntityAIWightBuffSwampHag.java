@@ -36,7 +36,7 @@ public class EntityAIWightBuffSwampHag extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		boolean canBuff = this.wight.getAttackTarget() != null && !this.wight.isRiding() && this.getTargetSwampHag() != null;
+		boolean canBuff = this.wight.getAttackTarget() != null && this.wight.getRidingEntity() == null && this.getTargetSwampHag() != null;
 		if(canBuff) {
 			if(this.cooldown <= 0 && this.world.rand.nextInt(20) == 0) {
 				return true;
@@ -60,13 +60,13 @@ public class EntityAIWightBuffSwampHag extends EntityAIBase {
 	public void resetTask() {
 		this.navigator.clearPath();
 		this.cooldown = 80 + this.world.rand.nextInt(60);
-		if(!this.wight.isRiding() && (this.hag == null || !this.hag.isAlive())) {
+		if(this.wight.getRidingEntity() == null && (this.hag == null || !this.hag.isAlive())) {
 			this.wight.setVolatile(false);
 		}
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if(this.hag != null) {
 			if(!this.wight.isVolatile()) {
 				this.wight.setVolatile(true);
@@ -74,7 +74,7 @@ public class EntityAIWightBuffSwampHag extends EntityAIBase {
                  this.world.playSound(null, this.wight.posX, this.wight.posY, this.wight.posZ, SoundRegistry.WIGHT_ATTACK, SoundCategory.HOSTILE, 1.6F, 1.0F);
 			}
 
-			if(!this.wight.isRiding()) {
+			if(this.wight.getRidingEntity() == null) {
 				if (this.wight.getDistance(this.hag) < 1.75D) {
 					this.wight.startRiding(this.hag);
 				}

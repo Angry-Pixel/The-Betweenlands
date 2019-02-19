@@ -21,6 +21,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.EntityRegistry;
@@ -66,8 +67,8 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	public boolean getCanSpawnHere() {
-		return world.getCollisionBoxes(this, getBoundingBox()).isEmpty() && !world.containsAnyLiquid(getBoundingBox());
+	public boolean canSpawn(IWorld world, boolean spawner) {
+		return !world.getCollisionBoxes(this, getBoundingBox(), this.posX, this.posY, this.posZ).findAny().isPresent() && !world.containsAnyLiquid(getBoundingBox());
 	}
 
 	@Override

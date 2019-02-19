@@ -36,6 +36,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -150,8 +151,8 @@ public class EntityLurker extends EntityCreature implements IEntityBL, IMob {
     }
     
     @Override
-    public boolean isNotColliding() {
-        return this.getEntityWorld().getCollisionBoxes(this, this.getBoundingBox()).isEmpty() && this.getEntityWorld().checkNoEntityCollision(this.getBoundingBox(), this);
+    public boolean isNotColliding(IWorldReaderBase world) {
+        return !world.getCollisionBoxes(this, this.getBoundingBox(), this.posX, this.posY, this.posZ).findAny().isPresent() && this.getEntityWorld().checkNoEntityCollision(this, this.getBoundingBox());
     }
 
     @Override

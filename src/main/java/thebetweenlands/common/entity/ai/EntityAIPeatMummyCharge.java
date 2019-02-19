@@ -25,7 +25,7 @@ public class EntityAIPeatMummyCharge extends EntityAIBase {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if(!this.mummy.isCharging()) {
 			if(this.chargingCooldown == 0) {
 				//Peat mummy done charging

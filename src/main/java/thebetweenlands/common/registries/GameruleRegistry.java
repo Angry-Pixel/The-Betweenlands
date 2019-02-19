@@ -15,6 +15,7 @@ import net.minecraftforge.event.GameRuleChangeEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
+import thebetweenlands.common.DistUtils;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.MessageSyncGameRules;
 
@@ -61,7 +62,7 @@ public final class GameruleRegistry {
 		if(serverWorld != null) {
 			return serverWorld.getGameRules();
 		} else {
-			World clientWorld = TheBetweenlands.proxy.getClientWorld();
+			World clientWorld = DistUtils.getClientWorld();
 			if(clientWorld != null) {
 				return clientWorld.getGameRules();
 			}

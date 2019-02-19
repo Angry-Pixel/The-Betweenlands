@@ -24,6 +24,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -91,11 +93,11 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 
     @Override
     public float getBlockPathWeight(BlockPos pos) {
-        return world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + world.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
+        return world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + world.getBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
     }
 
     @Override
-    public boolean getCanSpawnHere() {
+    public boolean canSpawn(IWorld world, boolean spawner) {
         return this.posY <= DimensionBetweenlands.CAVE_WATER_HEIGHT && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
     }
 
@@ -175,8 +177,8 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
     }
 
     @Override
-    public boolean isNotColliding() {
-        return this.getEntityWorld().getCollisionBoxes(this, this.getBoundingBox()).isEmpty() && this.getEntityWorld().checkNoEntityCollision(this.getBoundingBox(), this);
+    public boolean isNotColliding(IWorldReaderBase world) {
+        return !world.getCollisionBoxes(this, this.getBoundingBox(), this.posX, this.posY, this.posZ).findAny().isPresent() && world.checkNoEntityCollision(this, this.getBoundingBox());
     }
 
     @Override

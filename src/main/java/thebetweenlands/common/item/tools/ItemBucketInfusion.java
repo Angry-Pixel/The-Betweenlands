@@ -28,11 +28,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
+import thebetweenlands.common.DistUtils;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
@@ -52,7 +54,7 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 	@OnlyIn(Dist.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		if (hasTag(stack)) {
-			if (stack.getTag() != null && stack.getTag().contains("infused") && stack.getTag().contains("ingredients") && stack.getTag().contains("infusionTime")) {
+			if (stack.getTag() != null && stack.getTag().contains("infused", Constants.NBT.TAG_BYTE) && stack.getTag().contains("ingredients", Constants.NBT.TAG_LIST) && stack.getTag().contains("infusionTime", Constants.NBT.TAG_INT)) {
 				int infusionTime = stack.getTag().getInt("infusionTime");
 				list.add(I18n.format("tooltip.infusion.time", StringUtils.ticksToElapsedTime(infusionTime), infusionTime));
 				list.add(I18n.format("tooltip.infusion.ingredients"));
@@ -77,7 +79,7 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 					int count = stackCount.getValue();
 					if (!ingredient.isEmpty()) {
 						list.add((count > 1 ? (count + "x ") : "") + ingredient.getDisplayName());
-						List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredStaticAspects(AspectManager.getAspectItem(ingredient), DiscoveryContainer.getMergedDiscoveryContainer(FMLClientHandler.instance().getClientPlayerEntity()));
+						List<Aspect> ingredientAspects = AspectManager.get(DistUtils.getClientWorld()).getDiscoveredStaticAspects(AspectManager.getAspectItem(ingredient), DiscoveryContainer.getMergedDiscoveryContainer(FMLClientHandler.instance().getClientPlayerEntity()));
 						if (ingredientAspects.size() >= 1) {
 							if (GuiScreen.isShiftKeyDown()) {
 								for (Aspect aspect : ingredientAspects) {
@@ -109,12 +111,12 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 
 	@Override
 	public void onCreated(ItemStack stack, World world, EntityPlayer player) {
-		stack.setTagCompound(new NBTTagCompound());
+		stack.setTag(new NBTTagCompound());
 	}
 
 	private boolean hasTag(ItemStack stack) {
-		if (!stack.hasTagCompound()) {
-			stack.setTagCompound(new NBTTagCompound());
+		if (!stack.hasTag()) {
+			stack.setTag(new NBTTagCompound());
 			return false;
 		}
 		return true;
@@ -127,7 +129,7 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 	public List<IAspectType> getInfusingAspects(ItemStack stack) {
 		List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
 		if (hasTag(stack)) {
-			if (stack.getTag() != null && stack.getTag().contains("infused") && stack.getTag().contains("ingredients") && stack.getTag().contains("infusionTime")) {
+			if (stack.getTag() != null && stack.getTag().contains("infused", Constants.NBT.TAG_BYTE) && stack.getTag().contains("ingredients", Constants.NBT.TAG_LIST) && stack.getTag().contains("infusionTime", Constants.NBT.TAG_INT)) {
 				NBTTagList nbtList = (NBTTagList) stack.getTag().getTag("ingredients");
 				for (int i = 0; i < nbtList.size(); i++) {
 					ItemStack ingredient = new ItemStack(nbtList.getCompound(i));
@@ -144,7 +146,7 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 
 	public int getInfusionTime(ItemStack stack) {
 		if (hasTag(stack)) {
-			if (stack.getTag() != null && stack.getTag().contains("infused") && stack.getTag().contains("ingredients") && stack.getTag().contains("infusionTime")) {
+			if (stack.getTag() != null && stack.getTag().contains("infused", Constants.NBT.TAG_BYTE) && stack.getTag().contains("ingredients", Constants.NBT.TAG_LIST) && stack.getTag().contains("infusionTime", Constants.NBT.TAG_INT)) {
 				return stack.getTag().getInt("infusionTime");
 			}
 		}

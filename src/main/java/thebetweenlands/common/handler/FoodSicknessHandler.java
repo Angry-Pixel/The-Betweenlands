@@ -14,10 +14,9 @@ import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import thebetweenlands.api.capability.IDecayCapability;
-import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.api.item.IFoodSicknessItem;
+import thebetweenlands.common.DistUtils;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.decay.DecayStats;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
@@ -40,7 +39,7 @@ public class FoodSicknessHandler {
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
-		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+		EntityPlayer player = DistUtils.getClientPlayer();
 		if(player != null) {
 			if(!lastUsedItem.isEmpty() && (player.getHeldItem(lastHand).isEmpty() || !player.getHeldItem(lastHand).isItemEqual(lastUsedItem))) {
 				lastUsedItem = ItemStack.EMPTY;
@@ -64,15 +63,14 @@ public class FoodSicknessHandler {
 		ItemStack itemStack = event.getItem();
 
 		if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled() && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(player, itemStack)) {
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
-				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
+			player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS).ifPresent(cap -> {
 				Item item = itemStack.getItem();
 				FoodSickness sickness = cap.getSickness(item);
 
 				if(player.world.isRemote() && sickness == FoodSickness.SICK) {
 					addSicknessMessage(player, itemStack, sickness);
 				}
-			}
+			});
 		}
 	}
 
@@ -84,9 +82,7 @@ public class FoodSicknessHandler {
 			ItemStack itemStack = event.getItem();
 
 			if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled() && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(player, itemStack)) {
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
-					IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
-
+				player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS).ifPresent(cap -> {
 					Item item = itemStack.getItem();
 
 					FoodSickness lastSickness = cap.getLastSickness();
@@ -116,8 +112,7 @@ public class FoodSicknessHandler {
 							}
 						}
 
-						if(itemStack.getItem() instanceof IDecayFood && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-							IDecayCapability decayCap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+						player.getCapability(CapabilityRegistry.CAPABILITY_DECAY).ifPresent(decayCap -> {
 							int decayLevel = ((IDecayFood)itemStack.getItem()).getDecayHealAmount(itemStack);
 							DecayStats decayStats = decayCap.getDecayStats();
 							double decayLoss = 1.0D / 3.0D * 2.0;
@@ -129,7 +124,7 @@ public class FoodSicknessHandler {
 								int minDecayGain = player.world.rand.nextInt(4) == 0 ? 1 : 0;
 								decayStats.addStats(-Math.min(MathHelper.ceil(decayLevel * decayLoss), Math.max(decayLevel - minDecayGain, 0)), 0.0F);
 							}
-						}
+						});
 
 						if(!player.world.isRemote()) {
 							cap.increaseFoodHatred(item, sicknessIncrease, 0);
@@ -149,7 +144,7 @@ public class FoodSicknessHandler {
 					}
 
 					cap.setLastSickness(newSickness);
-				}
+				});
 			}
 		}
 	}

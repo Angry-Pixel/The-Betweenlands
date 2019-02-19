@@ -48,11 +48,9 @@ public class EntityPuppeteerCapability extends EntityCapability<EntityPuppeteerC
 	@Override
 	public List<Entity> getPuppets() {
 		return this.getEntity().getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntity().getBoundingBox().grow(24.0D, 24.0D, 24.0D), entity -> {
-			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
-				IPuppetCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
-				if(cap.getPuppeteer() == this.getEntity()) {
-					return true;
-				}
+			IPuppetCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_PUPPET).orElse(null);
+			if(cap != null && cap.getPuppeteer() == this.getEntity()) {
+				return true;
 			}
 			return false;
 		});

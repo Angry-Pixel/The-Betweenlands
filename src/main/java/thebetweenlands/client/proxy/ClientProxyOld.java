@@ -276,7 +276,8 @@ import thebetweenlands.common.world.event.EventSpoopy;
 import thebetweenlands.common.world.event.EventWinter;
 import thebetweenlands.util.GLUProjection;
 
-public class ClientProxy extends CommonProxy implements IResourceManagerReloadListener {
+//TODO 1.13 Get rid of proxies. Use DistExecutor or put commonly used side only methods in DistUtils
+public class ClientProxyOld extends CommonProxy implements IResourceManagerReloadListener {
 	public static Render<EntityDragonFly> dragonFlyRenderer;
 
 	private final List<RiftVariant> riftVariants = new ArrayList<>();

@@ -37,7 +37,6 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityPurifier;
 

@@ -20,7 +20,6 @@ import net.minecraft.world.chunk.BlockStateContainer;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
-import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 
 public class BlockDruidAltar extends BasicBlock implements ITileEntityProvider {

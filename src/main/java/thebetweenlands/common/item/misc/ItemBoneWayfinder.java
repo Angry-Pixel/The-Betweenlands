@@ -44,7 +44,6 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.structure.BlockWaystone;
 import thebetweenlands.common.handler.PlayerRespawnHandler;
 import thebetweenlands.common.item.equipment.ItemRing;
-import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;

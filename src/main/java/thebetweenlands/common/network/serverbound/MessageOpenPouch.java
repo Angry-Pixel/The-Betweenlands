@@ -9,7 +9,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.network.MessageBase;
-import thebetweenlands.common.proxy.CommonProxy;
 
 public class MessageOpenPouch extends MessageBase {
 	@Override

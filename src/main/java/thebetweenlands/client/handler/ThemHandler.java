@@ -9,6 +9,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,7 +27,7 @@ public class ThemHandler {
 	@SubscribeEvent
 	public static void onTick(ClientTickEvent event) {
 		if(event.phase == Phase.END && !Minecraft.getInstance().isGamePaused()) {
-			World world = TheBetweenlands.proxy.getClientWorld();
+			World world = Minecraft.getInstance().world;
 			Entity viewer = Minecraft.getInstance().getRenderViewEntity();
 			if(world != null && viewer != null && viewer.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && FogHandler.hasDenseFog(world) && (FogHandler.getCurrentFogEnd() + FogHandler.getCurrentFogStart()) / 2 < 65.0F) {
 				Iterator<Particle> it = activeParticles.iterator();
@@ -37,7 +38,7 @@ public class ThemHandler {
 					}
 				}
 				if(activeParticles.size() < 4) {
-					BlockPos worldHeight = world.getHeight(viewer.getPosition());
+					BlockPos worldHeight = world.getHeight(Heightmap.Type.MOTION_BLOCKING, viewer.getPosition());
 					if(viewer.posY >= worldHeight.getY() - 3 && SurfaceType.MIXED_GROUND_AND_UNDERGROUND.matches(world.getBlockState(worldHeight.down()))) {
 						int probability = (int) (FogHandler.getCurrentFogEnd() + FogHandler.getCurrentFogStart()) / 2 * 10 + 60;
 						if(world.rand.nextInt(probability) == 0) {

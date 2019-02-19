@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import thebetweenlands.common.DistUtils;
 import thebetweenlands.common.TheBetweenlands;
 
 @OnlyIn(Dist.CLIENT)
@@ -78,7 +79,7 @@ public class AmbienceManager {
 		}
 
 		//Update ambient tracks
-		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+		EntityPlayer player = Minecraft.getInstance().player;
 		if(player != null) {
 			for(AmbienceLayer layer : this.ambienceRegistry.keySet()) {
 				List<AmbienceType> availableAmbiences = this.getTypes(layer);
@@ -197,7 +198,7 @@ public class AmbienceManager {
 	 * @return
 	 */
 	public boolean shouldStopMusic() {
-		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+		EntityPlayer player = Minecraft.getInstance().player;
 		if(player != null) {
 			for(AmbienceSound sound : this.playingAmbiences) {
 				if(sound.type.stopsMusic())

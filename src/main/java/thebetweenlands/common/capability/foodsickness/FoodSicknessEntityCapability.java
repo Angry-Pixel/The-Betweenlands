@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.registries.ForgeRegistries;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.capability.ISerializableCapability;
 import thebetweenlands.common.capability.base.EntityCapability;
@@ -127,7 +128,7 @@ public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessE
 		NBTTagList list = nbt.getList("HatredMap", Constants.NBT.TAG_COMPOUND);
 		for (int i = 0; i < list.size(); i++) {
 			NBTTagCompound listCompound = list.getCompound(i);
-			Item food = Item.getByNameOrId(listCompound.getString("Food"));
+			Item food = ForgeRegistries.ITEMS.getValue(new ResourceLocation(listCompound.getString("Food")));
 			if(food != null) {
 				int level = listCompound.getInt("Level");
 				this.hatredMap.put(food, level);

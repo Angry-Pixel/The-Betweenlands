@@ -30,7 +30,6 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
 

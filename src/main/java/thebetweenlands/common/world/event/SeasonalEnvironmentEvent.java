@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import thebetweenlands.common.DistUtils;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 
@@ -35,10 +36,9 @@ public abstract class SeasonalEnvironmentEvent extends BLEnvironmentEvent {
 
 	@Override
 	public void setActive(boolean active) {
-		if(active && TheBetweenlands.proxy.getClientWorld() != null && (!this.isActive() || this.lastWorld != TheBetweenlands.proxy.getClientWorld()) && TheBetweenlands.proxy.getClientPlayer() != null && this.world != null && this.world.isRemote()) {
-			this.lastWorld = TheBetweenlands.proxy.getClientWorld();
-			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
-			this.showStatusMessage(player);
+		if(active && DistUtils.getClientWorld() != null && (!this.isActive() || this.lastWorld != DistUtils.getClientWorld()) && DistUtils.getClientPlayer() != null && this.world != null && this.world.isRemote()) {
+			this.lastWorld = DistUtils.getClientWorld();
+			this.showStatusMessage(DistUtils.getClientPlayer());
 		}
 
 		super.setActive(active);

@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import thebetweenlands.common.DistUtils;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -71,9 +72,9 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 	public void setActive(boolean active) {
 		super.setActive(active);
 		if(active) {
-			World world = TheBetweenlands.proxy.getClientWorld();
+			World world = DistUtils.getClientWorld();
 			if(world != null && world.isRemote() && !this.soundPlayed) {
-				world.play(Minecraft.getInstance().player.posX, Minecraft.getInstance().player.posY, Minecraft.getInstance().player.posZ, SoundRegistry.AMBIENT_BLOOD_SKY_ROAR, SoundCategory.AMBIENT, 100.0F, 1.0F, false);
+				world.playSound(Minecraft.getInstance().player.posX, Minecraft.getInstance().player.posY, Minecraft.getInstance().player.posZ, SoundRegistry.AMBIENT_BLOOD_SKY_ROAR, SoundCategory.AMBIENT, 100.0F, 1.0F, false);
 			}
 			this.soundPlayed = true;
 		} else {

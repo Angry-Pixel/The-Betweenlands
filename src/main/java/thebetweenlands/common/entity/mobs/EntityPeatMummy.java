@@ -34,6 +34,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -373,8 +374,8 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	}
 
 	@Override
-	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere() && this.isInValidSpawn();
+	public boolean canSpawn(IWorld world, boolean spawner) {
+		return super.canSpawn(world, spawner) && this.isInValidSpawn();
 	}
 
 	@Override

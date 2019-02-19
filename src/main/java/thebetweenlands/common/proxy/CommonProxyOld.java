@@ -40,7 +40,8 @@ import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
-public class CommonProxy implements IGuiHandler {
+//TODO 1.13 Get rid of proxies. Use DistExecutor or put commonly used side only methods in DistUtils
+public class CommonProxyOld implements IGuiHandler {
 	public static final int GUI_DRUID_ALTAR = 1;
 	public static final int GUI_WEEDWOOD_CRAFT = 2;
 	public static final int GUI_WEEDWOOD_CHEST = 3;

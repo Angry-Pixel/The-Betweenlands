@@ -11,7 +11,9 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.TheBetweenlands;
@@ -55,7 +57,7 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 	private void hatch() {
 		EntityMireSnail snail = new EntityMireSnail(world);
 		snail.setPosition(posX, posY, posZ);
-		if (snail.getCanSpawnHere()) {
+		if (snail.canSpawn(this.world, false)) {
 			remove();
 			hatchParticlePacketTarget();
 			snail.setHasMated(true);
@@ -101,7 +103,7 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 	@Override
 	public void readAdditional(NBTTagCompound nbt) {
 		super.readAdditional(nbt);
-		if(nbt.contains("hatchTicks")) {
+		if(nbt.contains("hatchTicks", Constants.NBT.TAG_INT)) {
 			setHatchTime(nbt.getInt("hatchTicks"));
 		}
 	}

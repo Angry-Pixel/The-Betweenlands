@@ -46,7 +46,7 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		EntityLivingBase target = this.attacker.getAttackTarget();
 		this.attacker.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
 		double distSq = this.attacker.getDistanceSq(target.posX, target.getBoundingBox().minY, target.posZ);

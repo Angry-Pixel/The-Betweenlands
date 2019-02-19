@@ -17,7 +17,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class BlockWeedwoodWorkbench extends BlockContainer {

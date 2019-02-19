@@ -22,6 +22,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.network.NetworkRegistry;
@@ -285,8 +286,8 @@ public class EntityDarkDruid extends EntityMob {
     }
 
     @Override
-    public boolean getCanSpawnHere() {
-        return super.getCanSpawnHere() && !this.world.containsAnyLiquid(this.getBoundingBox());
+    public boolean canSpawn(IWorld world, boolean spawner) {
+        return super.canSpawn(world, spawner) && !this.world.containsAnyLiquid(this.getBoundingBox());
     }
 
     @Override

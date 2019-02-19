@@ -31,7 +31,7 @@ public abstract class EntityAIMoveToDirect<T extends EntityLiving> extends Entit
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		Vec3d target = this.getTarget();
 		if(target != null) {
 			this.entity.getMoveHelper().setMoveTo(target.x, target.y, target.z, this.speed);

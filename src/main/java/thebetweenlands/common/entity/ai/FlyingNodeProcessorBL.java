@@ -17,7 +17,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.IBlockReader;
 
 public class FlyingNodeProcessorBL extends NodeProcessor {
 	public int preferredMinHeight = -1;
@@ -73,12 +73,12 @@ public class FlyingNodeProcessorBL extends NodeProcessor {
 	}
 
 	@Override
-	public PathNodeType getPathNodeType(IWorldReader blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
+	public PathNodeType getPathNodeType(IBlockReader blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
 		return this.isFree(x, y, z);
 	}
 
 	@Override
-	public PathNodeType getPathNodeType(IWorldReader blockaccessIn, int x, int y, int z) {
+	public PathNodeType getPathNodeType(IBlockReader blockaccessIn, int x, int y, int z) {
 		return this.isFree(x, y, z);
 	}
 
@@ -116,7 +116,6 @@ public class FlyingNodeProcessorBL extends NodeProcessor {
 					checkPos.setPos(i, j, k);
 
 					IBlockState state = this.blockaccess.getBlockState(checkPos);
-					state = state.getActualState(this.blockaccess, checkPos);
 
 					List<AxisAlignedBB> collidingAABBs = new ArrayList<>();
 					state.addCollisionBoxToList(this.entity.world, checkPos, new AxisAlignedBB(x, y, z, x + this.entitySizeX, y + this.entitySizeY, z + this.entitySizeZ), collidingAABBs, this.entity, true);

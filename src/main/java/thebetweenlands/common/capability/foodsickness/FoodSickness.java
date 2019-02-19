@@ -9,7 +9,7 @@ import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.DistExecutor;
 
 public enum FoodSickness {
 	FINE(10 * 5),
@@ -22,16 +22,14 @@ public enum FoodSickness {
 	private FoodSickness(int maxHatred) {
 		this.maxHatred = maxHatred;
 
-		if(FMLCommonHandler.instance().getEffectiveSide() == Dist.CLIENT) {
-			this.updateLines();
-		}
+		DistExecutor.runWhenOn(Dist.CLIENT, () -> this::updateLines);
 	}
 
 	@OnlyIn(Dist.CLIENT)
 	public void updateLines() {
 		this.lines.clear();
 		int index = 0;
-		while (I18n.contains("chat.foodSickness." + name().toLowerCase() + "." + index)) {
+		while (I18n.hasKey("chat.foodSickness." + name().toLowerCase() + "." + index)) {
 			this.lines.add(I18n.format("chat.foodSickness." + name().toLowerCase() + "." + index));
 			index++;
 		}

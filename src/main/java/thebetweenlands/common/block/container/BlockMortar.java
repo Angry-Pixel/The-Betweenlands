@@ -24,7 +24,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.BlockStateContainer;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMortar;
 

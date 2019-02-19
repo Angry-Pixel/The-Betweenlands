@@ -8,7 +8,7 @@ import com.google.common.base.Preconditions;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
@@ -17,7 +17,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.LoaderState;
 import thebetweenlands.api.capability.ISerializableCapability;
 
 public class ItemCapabilityHandler {
@@ -46,7 +45,7 @@ public class ItemCapabilityHandler {
 	private static <T> void registerCapability(ItemCapability<?, T> capability) {
 		CapabilityManager.INSTANCE.register(capability.getCapabilityClass(), new IStorage<T>() {
 			@Override
-			public final NBTBase writeNBT(Capability<T> capability, T instance, EnumFacing side) {
+			public final INBTBase writeNBT(Capability<T> capability, T instance, EnumFacing side) {
 				NBTTagCompound nbt = new NBTTagCompound();
 				if(instance instanceof ISerializableCapability) {
 					((ISerializableCapability)instance).writeToNBT(nbt);
@@ -55,7 +54,7 @@ public class ItemCapabilityHandler {
 			}
 
 			@Override
-			public final void readNBT(Capability<T> capability, T instance, EnumFacing side, NBTBase nbt) {
+			public final void readNBT(Capability<T> capability, T instance, EnumFacing side, INBTBase nbt) {
 				if(instance instanceof ISerializableCapability && nbt instanceof NBTTagCompound) {
 					((ISerializableCapability)instance).readFromNBT((NBTTagCompound)nbt);
 				}

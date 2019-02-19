@@ -13,6 +13,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import thebetweenlands.common.DistUtils;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ModelRegistry;
@@ -57,14 +58,14 @@ public class EventSpoopy extends SeasonalEnvironmentEvent {
 	@Override
 	public void setActive(boolean active) {
 		//Mark blocks in range for render update to update block textures
-		if(active != this.isActive() && TheBetweenlands.proxy.getClientWorld() != null && TheBetweenlands.proxy.getClientPlayer() != null) {
+		if(active != this.isActive() && DistUtils.getClientWorld() != null && DistUtils.getClientPlayer() != null) {
 			updateModelActiveState(active);
 
-			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+			EntityPlayer player = DistUtils.getClientPlayer();
 			int px = MathHelper.floor(player.posX) - 256;
 			int py = MathHelper.floor(player.posY) - 256;
 			int pz = MathHelper.floor(player.posZ) - 256;
-			TheBetweenlands.proxy.getClientWorld().markBlockRangeForRenderUpdate(px, py, pz, px + 512, py + 512, pz + 512);
+			DistUtils.getClientWorld().markBlockRangeForRenderUpdate(px, py, pz, px + 512, py + 512, pz + 512);
 		}
 
 		super.setActive(active);

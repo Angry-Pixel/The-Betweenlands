@@ -12,7 +12,6 @@ import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.item.IDiscoveryProvider;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.proxy.CommonProxy;
 
 public class ItemManualHL extends Item implements IDiscoveryProvider<ItemStack>{
     public ItemManualHL() {

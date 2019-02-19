@@ -178,8 +178,8 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     public ItemStack getItem() {
         ItemStack stack = new ItemStack(getItemBoat());
         NBTTagCompound attrs = new NBTTagCompound();
-        writeEntityToNBT(attrs);
-        if (attrs.getSize() > 0) {
+        writeAdditional(attrs);
+        if (attrs.size() > 0) {
             stack.setTagInfo("attributes", attrs);   
         }
         return stack;
@@ -321,7 +321,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         if (!world.isRemote()) {
             setFlag(6, isGlowing());
         }
-        onEntityUpdate();
+        baseTick();
         if (getTimeSinceHit() > 0) {
             setTimeSinceHit(getTimeSinceHit() - 1);
         }
@@ -973,7 +973,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     public static boolean isTarred(ItemStack stack) {
-        return stack.hasTagCompound() && stack.getTag().getCompound("attributes").getBoolean("isTarred");
+        return stack.hasTag() && stack.getTag().getCompound("attributes").getBoolean("isTarred");
     }
 
     private static <T> DataParameter<T> defineId(DataSerializer<T> serializer) {

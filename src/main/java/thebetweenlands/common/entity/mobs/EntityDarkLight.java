@@ -19,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
@@ -143,8 +144,8 @@ public class EntityDarkLight extends EntityFlyingMob implements IEntityBL {
 	}
 
 	@Override
-	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+	public boolean canSpawn(IWorld world, boolean spawner) {
+		return super.canSpawn(world, spawner) && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
 	}
 
 	@Override

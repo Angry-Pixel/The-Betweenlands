@@ -25,8 +25,8 @@ public class EquipmentHelper {
 	 * @return
 	 */
 	public static ItemStack getEquipment(EnumEquipmentInventory inventory, Entity entity, Item item) {
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT).orElse(null);
+		if(cap != null) {
 			IInventory mainInv = cap.getInventory(inventory);
 			for(int i = 0; i < mainInv.getSizeInventory(); i++) {
 				ItemStack stack = mainInv.getStackInSlot(i);
@@ -35,7 +35,6 @@ public class EquipmentHelper {
 				}
 			}
 		}
-
 		return ItemStack.EMPTY;
 	}
 	
@@ -49,9 +48,8 @@ public class EquipmentHelper {
 	@Nonnull
 	public static ItemStack equipItem(@Nullable EntityPlayer player, Entity target, ItemStack stack, boolean simulate) {
 		if(stack.getItem() instanceof IEquippable) {
-			if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-
+			IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT).orElse(null);
+			if(cap != null) {
 				IEquippable equippable = (IEquippable) stack.getItem();
 
 				if(equippable.canEquip(stack, player, target)) {
@@ -95,9 +93,8 @@ public class EquipmentHelper {
 	@Nullable
 	public static ItemStack equipItem(@Nullable EntityPlayer player, Entity target, ItemStack stack, int slot, boolean simulate) {
 		if(slot >= 0 && stack.getItem() instanceof IEquippable) {
-			if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-
+			IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT).orElse(null);
+			if(cap != null) {
 				IEquippable equippable = (IEquippable) stack.getItem();
 
 				if(equippable.canEquip(stack, player, target)) {
@@ -139,9 +136,9 @@ public class EquipmentHelper {
 	 */
 	@Nullable
 	public static ItemStack unequipItem(@Nullable EntityPlayer player, Entity target, boolean simulate) {
-		if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-
+		IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT).orElse(null);
+		
+		if(cap != null) {
 			for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
 				IInventory inv = cap.getInventory(type);
 
@@ -181,8 +178,9 @@ public class EquipmentHelper {
 	 */
 	@Nullable
 	public static ItemStack unequipItem(@Nullable EntityPlayer player, Entity target, EnumEquipmentInventory type, int slot, boolean simulate) {
-		if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT).orElse(null);
+			
+		if(cap != null) {
 			IInventory inv = cap.getInventory(type);
 
 			if(slot >= 0 && slot < inv.getSizeInventory()) {

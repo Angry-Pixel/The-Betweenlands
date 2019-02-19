@@ -28,6 +28,7 @@ import net.minecraft.util.math.AxisAlignedBB;
  * Copy of {@link EntityAINearestAttackableTarget} for non creature entities
  * @param <T>
  */
+//TODO 1.13 AI needs fresh copy
 public class EntityAINearestAttackableTargetNonCreature<T extends EntityLivingBase> extends EntityAITargetNonCreature
 {
 	protected final Class<T> targetClass;

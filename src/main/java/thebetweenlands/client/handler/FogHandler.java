@@ -134,8 +134,8 @@ public class FogHandler {
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event) {
-		World world = TheBetweenlands.proxy.getClientWorld();
-		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+		World world = Minecraft.getInstance().world;
+		EntityPlayer player = Minecraft.getInstance().player;
 
 		if(world != null && player != null) {
 			if(farPlaneDistance != 0.0F && world.dimension instanceof DimensionBetweenlands) {
@@ -205,7 +205,7 @@ public class FogHandler {
 	public static void updateFog(UpdateFogEvent event) {
 		Vec3d position = event.getPosition();
 		World world = event.getWorld();
-		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+		EntityPlayer player = Minecraft.getInstance().player;
 		FogState state = event.getFogState();
 		Fog biomeFog = event.getBiomeFog();
 		MutableFog fog = new MutableFog(event.getAmbientFog());

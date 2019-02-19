@@ -89,7 +89,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if(this.targetEntity.getDistance(this.targetPos.x, this.targetPos.y, this.targetPos.z) > 0.5) {
 			this.entityPathEntity = this.entityPathNavigate.getPathToXYZ(this.targetEntity.posX, this.targetEntity.posY, this.targetEntity.posZ);
 			this.entityPathNavigate.setPath(this.entityPathEntity, this.farSpeed);

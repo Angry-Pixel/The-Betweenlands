@@ -23,7 +23,6 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemLoreScrap extends Item implements ItemRegistry.IMultipleItemModelDefinition {

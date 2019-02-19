@@ -128,7 +128,7 @@ public class RadialMenuHandler {
 		this.currentCategory = this.rootCategory;
 		this.lastCategories.clear();
 
-		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+		EntityPlayer player = Minecraft.getInstance().player;
 		if(player != null) {
 			IInventory inventory = player.inventory;
 
@@ -214,7 +214,7 @@ public class RadialMenuHandler {
 
 	@SubscribeEvent
 	public void onEquipmentChange(EquipmentChangedEvent event) {
-		if(this.isOpen && event.getEntity() == TheBetweenlands.proxy.getClientPlayer()) {
+		if(this.isOpen && event.getEntity() == Minecraft.getInstance().player) {
 			this.scheduleMenuUpdate();
 		}
 	}
@@ -341,7 +341,7 @@ public class RadialMenuHandler {
 					this.updateMenu();
 				}
 
-				EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+				EntityPlayer player = Minecraft.getInstance().player;
 				if(player != null) {
 					List<ItemStack> currentEquippables = new ArrayList<ItemStack>();
 					for(int i = 0; i < player.inventory.getSizeInventory(); i++) {

@@ -13,6 +13,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.ChunkCache;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.Region;
 import net.minecraft.world.World;
 
 public class PathNavigateFlyingBL extends PathNavigate {
@@ -36,7 +38,7 @@ public class PathNavigateFlyingBL extends PathNavigate {
 	}
 
 	@Override
-	public void onUpdateNavigation() {
+	public void tick() {
 		++this.totalTicks;
 
 		if (this.tryUpdatePath) {
@@ -98,10 +100,11 @@ public class PathNavigateFlyingBL extends PathNavigate {
 		this.checkForStuck(currentPosition);
 	}
 
-	@Override
+	//TODO 1.13 removeSunnyPath no longer exists?
+	/*@Override
 	protected void removeSunnyPath() {
 		// super.removeSunnyPath();
-	}
+	}*/
 
 	@Override
 	protected boolean isDirectPathBetweenPoints(Vec3d start, Vec3d end, int sizeX, int sizeY, int sizeZ) {
@@ -141,8 +144,8 @@ public class PathNavigateFlyingBL extends PathNavigate {
 			this.world.profiler.startSection("pathfind");
 			BlockPos blockpos = new BlockPos(this.entity);
 			int i = (int)(f + 8.0F);
-			ChunkCache chunkcache = new ChunkCache(this.world, blockpos.add(-i, -i, -i), blockpos.add(i, i, i), 0);
-			Path path = this.getPathFinder().findPath(chunkcache, this.entity, this.targetPos, f);
+			IBlockReader iblockreader = new Region(this.world, blockpos.add(-i, -i, -i), blockpos.add(i, i, i), 0);
+			Path path = this.getPathFinder().findPath(iblockreader, this.entity, this.targetPos, f);
 			this.world.profiler.endSection();
 			return path;
 		}
@@ -164,8 +167,8 @@ public class PathNavigateFlyingBL extends PathNavigate {
 				this.world.profiler.startSection("pathfind");
 				BlockPos blockpos1 = (new BlockPos(this.entity)).up();
 				int i = (int)(f + 16.0F);
-				ChunkCache chunkcache = new ChunkCache(this.world, blockpos1.add(-i, -i, -i), blockpos1.add(i, i, i), 0);
-				Path path = this.getPathFinder().findPath(chunkcache, this.entity, new BlockPos(entityIn.posX, entityIn.getBoundingBox().minY + entityIn.height / 2.0D, entityIn.posZ), f);
+				IBlockReader iblockreader = new Region(this.world, blockpos1.add(-i, -i, -i), blockpos1.add(i, i, i), 0);
+				Path path = this.getPathFinder().findPath(iblockreader, this.entity, new BlockPos(entityIn.posX, entityIn.getBoundingBox().minY + entityIn.height / 2.0D, entityIn.posZ), f);
 				this.world.profiler.endSection();
 				return path;
 			}

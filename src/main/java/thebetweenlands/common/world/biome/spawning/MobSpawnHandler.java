@@ -10,7 +10,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import gnu.trove.map.hash.TObjectIntHashMap;
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -25,12 +26,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.eventbus.api.Event;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
@@ -442,7 +445,7 @@ public class MobSpawnHandler {
 				int cez = MathHelper.floor(spawnPos.getZ() + groupCheckRadius) >> 4;
 				for (int cx = csx; cx <= cex; ++cx) {
 					for (int cz = csz; cz <= cez; ++cz) {
-						if(world.getChunkProvider().getLoadedChunk(cx, cz) == null && (cx != chunkPos.x || cz != chunkPos.z)) {
+						if(world.getChunkProvider().provideChunk(cx, cz, false, false) == null && (cx != chunkPos.x || cz != chunkPos.z)) {
 							continue spawnLoop;
 						}
 					}
@@ -536,8 +539,8 @@ public class MobSpawnHandler {
 							if(newEntity != null) {
 								newEntity.setLocationAndAngles(sx, sy, sz, yaw, 0.0F);
 
-								Result canSpawn = ForgeEventFactory.canEntitySpawn(newEntity, world, (float)sx, (float)sy, (float)sz, null);
-								if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && newEntity.getCanSpawnHere() && newEntity.isNotColliding())) {
+								Event.Result canSpawn = ForgeEventFactory.canEntitySpawn(newEntity, world, (float)sx, (float)sy, (float)sz, null);
+								if (canSpawn == Event.Result.ALLOW || (canSpawn == Event.Result.DEFAULT && newEntity.canSpawn(world, false) && newEntity.isNotColliding())) {
 									groupSpawnedEntities++;
 									chunkSpawnedEntities++;
 
@@ -629,18 +632,18 @@ public class MobSpawnHandler {
 		}
 	}
 
-	private TObjectIntHashMap<Class<? extends Entity>> entityCounts = new TObjectIntHashMap<Class<? extends Entity>>();
+	private Object2IntMap<Class<? extends Entity>> entityCounts = new Object2IntOpenHashMap<>();
 
 	private void updateEntityCounts(World world) {
 		this.entityCounts.clear();
 		for(ChunkPos chunkPos : this.eligibleChunksForSpawning) {
-			if(world.getChunkProvider().getLoadedChunk(chunkPos.x, chunkPos.z) != null) {
+			if(world.getChunkProvider().provideChunk(chunkPos.x, chunkPos.z, false, false) != null) {
 				Chunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
 				ClassInheritanceMultiMap<Entity>[] entityLists = chunk.getEntityLists();
 				for(ClassInheritanceMultiMap<Entity> entityList : entityLists) {
 					for(Entity entity : entityList) {
 						if(entity instanceof EntityLivingBase) {
-							this.entityCounts.adjustOrPutValue(entity.getClass(), 1, 1);
+							this.entityCounts.compute(entity.getClass(), (e, i) -> i == null ? 1 : i + 1);
 						}
 					}
 				}

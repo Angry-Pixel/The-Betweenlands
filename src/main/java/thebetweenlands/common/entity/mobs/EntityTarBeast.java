@@ -34,6 +34,8 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -114,7 +116,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public boolean getCanSpawnHere() {
+	public boolean canSpawn(IWorld world, boolean spawner) {
 		boolean isDifficultyValid = this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
 		if(isDifficultyValid) {
 			int bx = MathHelper.floor(posX);
@@ -127,14 +129,14 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 					this.world.getBlockState(pos.setPos(bx+1, by, bz)).getBlock() == BlockRegistry.TAR &&
 					this.world.getBlockState(pos.setPos(bx, by, bz-1)).getBlock() == BlockRegistry.TAR &&
 					this.world.getBlockState(pos.setPos(bx, by, bz+1)).getBlock() == BlockRegistry.TAR;
-			return this.world.checkNoEntityCollision(this.getBoundingBox()) && this.world.getCollisionBoxes(this, this.getBoundingBox()).isEmpty() && isInTar;
+			return this.world.checkNoEntityCollision(this, this.getBoundingBox()) && !this.world.getCollisionBoxes(this, this.getBoundingBox(), this.posX, this.posY, this.posZ).findAny().isPresent() && isInTar;
 		}
 		return false;
 	}
 
 	@Override
-	public boolean isNotColliding() {
-		return this.world.getCollisionBoxes(this, this.getBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getBoundingBox(), this);
+	public boolean isNotColliding(IWorldReaderBase world) {
+		return !world.getCollisionBoxes(this, this.getBoundingBox(), this.posX, this.posY, this.posZ).findAny().isPresent() && this.world.checkNoEntityCollision(this, this.getBoundingBox());
 	}
 
 	@Override

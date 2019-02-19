@@ -34,6 +34,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -119,10 +121,10 @@ public class EntityAngler extends EntityMob implements IEntityBL {
     }
 
     @Override
-    public boolean getCanSpawnHere() {
+    public boolean canSpawn(IWorld world, boolean spawner) {
         return world.getDifficulty() != EnumDifficulty.PEACEFUL && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
     }
-
+    
     public boolean isGrounded() {
         return !isInWater() && world.isAirBlock(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY + 1), MathHelper.floor(posZ))) && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ))).getBlock().isCollidable();
     }
@@ -139,7 +141,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 
     @Override
     public float getBlockPathWeight(BlockPos pos) {
-        return world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + world.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
+        return world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + world.getBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
     }
 
 	@Override
@@ -223,10 +225,10 @@ public class EntityAngler extends EntityMob implements IEntityBL {
         }
         return false;
     }
-
+    
 	@Override
-    public boolean isNotColliding() {
-		 return getEntityWorld().checkNoEntityCollision(getBoundingBox(), this) && getEntityWorld().getCollisionBoxes(this, getBoundingBox()).isEmpty();
+    public boolean isNotColliding(IWorldReaderBase world) {
+		 return world.checkNoEntityCollision(this, getBoundingBox()) && !world.getCollisionBoxes(this, getBoundingBox(), this.posX, this.posY, this.posZ).findAny().isPresent();
     }
 
     @Override

@@ -37,6 +37,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.environment.IRemotelyControllableEnvironmentEvent;
+import thebetweenlands.common.DistUtils;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
@@ -131,7 +132,7 @@ public class EnvironmentEventOverridesHandler {
 
 	public static void downloadAndCheckStates(final WeakReference<IThreadListener> schedulerRef, final List<WeakReference<World>> worldRefs) {
 		if(BetweenlandsConfig.EVENT_OVERRIDES.onlineEnvironmentEventOverrides) {
-			final Proxy proxy = TheBetweenlands.proxy.getNetProxy();
+			final Proxy proxy = DistUtils.getNetProxy();
 			DOWNLOADER.submit(new Runnable() {
 				@Override
 				public void run() {

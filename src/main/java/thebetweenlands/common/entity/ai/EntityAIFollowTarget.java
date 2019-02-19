@@ -103,7 +103,7 @@ public class EntityAIFollowTarget extends EntityAIBase {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		EntityLivingBase target = this.target.get();
 
 		if(target != null) {

@@ -84,9 +84,7 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 	 */
 	@SuppressWarnings("unchecked")
 	public final EntityCapability<?, ?, E> getEntityCapability(E entity) {
-		if(entity.hasCapability(this.getCapability(), null))
-			return (EntityCapability<?, ?, E>) entity.getCapability(this.getCapability(), null);
-		return null;
+		return (EntityCapability<?, ?, E>) entity.getCapability(this.getCapability()).orElse(null);
 	}
 
 	/**
