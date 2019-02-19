@@ -357,7 +357,7 @@ public abstract class MobSpawnerLogicBetweenlands {
                         if (entityLiving == null || ForgeEventFactory.canEntitySpawnSpawner(entityLiving, getSpawnerWorld(), (float) entity.posX, (float) entity.posY, (float) entity.posZ)) {
                             if (entityLiving != null) {
                                 if (!ForgeEventFactory.doSpecialSpawn(entityLiving, this.getSpawnerWorld(), (float) entity.posX, (float) entity.posY, (float) entity.posZ)) {
-                                    ((EntityLiving) entity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(entity)), (IEntityLivingData) null);
+                                    ((EntityLiving) entity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(entity)), (IEntityLivingData) null, null);
                                 }
                             }
 
@@ -402,7 +402,7 @@ public abstract class MobSpawnerLogicBetweenlands {
      * @return
      */
     public Entity spawnEntity(Entity entity) {
-        ((EntityLiving) entity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(entity)), (IEntityLivingData) null);
+        ((EntityLiving) entity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(entity)), (IEntityLivingData) null, null);
         this.getSpawnerWorld().spawnEntity(entity);
         return entity;
     }
@@ -507,7 +507,7 @@ public abstract class MobSpawnerLogicBetweenlands {
             this.cachedEntity = AnvilChunkLoader.readWorldEntity(this.randomEntity.getNbt(), this.getSpawnerWorld(), false);
 
             if (this.randomEntity.getNbt().getSize() == 1 && this.randomEntity.getNbt().contains("id", 8) && this.cachedEntity instanceof EntityLiving) {
-                ((EntityLiving) this.cachedEntity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(this.cachedEntity)), (IEntityLivingData) null);
+                ((EntityLiving) this.cachedEntity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(this.cachedEntity)), (IEntityLivingData) null, null);
             }
         }
 

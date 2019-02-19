@@ -38,7 +38,7 @@ public class EntityAIStay extends EntityAIBase {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		PathNavigate navigator = this.taskOwner.getNavigator();
 		if(navigator != null && this.pos != null) {
 			double dist = this.taskOwner.getDistanceSq(this.pos.x, this.pos.y, this.pos.z);

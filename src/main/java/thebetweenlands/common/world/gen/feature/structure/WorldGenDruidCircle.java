@@ -149,7 +149,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 	private void placePillar(World world, MutableBlockPos pos, Random rand) {
 		int height = rand.nextInt(3) + 3;
 		for (int k = 0, y = pos.getY(); k <= height; k++, pos.setY(y + k)) {
-			EnumFacing facing = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
+			EnumFacing facing = EnumFacing.Plane.HORIZONTAL.random(rand);
 			if (rand.nextBoolean()) {
 				world.setBlockState(pos.toImmutable(), getRandomRuneBlock(rand).with(BlockDruidStone.FACING, facing), 3);
 			} else {
@@ -162,7 +162,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 	}
 
 	private void setRandomFoliage(World world, BlockPos pos, Random rand) {
-		EnumFacing facing = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
+		EnumFacing facing = EnumFacing.Plane.HORIZONTAL.random(rand);
 		BlockPos side = pos.toImmutable().offset(facing);
 		if (world.isAirBlock(side)) {
 			world.setBlockState(side, Blocks.VINE.getDefaultState().with(BlockVine.getPropertyFor(facing.getOpposite()), true));

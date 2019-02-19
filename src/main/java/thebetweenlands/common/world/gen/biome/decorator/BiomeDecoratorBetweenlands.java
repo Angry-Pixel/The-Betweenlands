@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -113,7 +114,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
             if (rand.nextInt(9 / cycles + 1) == 0) {
                 int xx = this.getX() + this.offsetXZ();
                 int zz = this.getZ() + this.offsetXZ();
-                int yy = world.getHeight(new BlockPos(xx, 0, zz)).getY() - 1;
+                int yy = world.getHeight(Heightmap.Type.WORLD_SURFACE_WG, new BlockPos(xx, 0, zz)).getY() - 1;
                 boolean hasMud = false;
                 for (int yo = 0; yo < 16; yo++) {
                     if (world.getBlockState(new BlockPos(xx, yy + yo, zz)).getBlock() == BlockRegistry.SWAMP_WATER

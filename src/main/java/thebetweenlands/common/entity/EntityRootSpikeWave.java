@@ -7,20 +7,20 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
+import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -213,7 +213,7 @@ public class EntityRootSpikeWave extends Entity implements IEntityAdditionalSpaw
 						double my = 0.1D + this.rand.nextDouble() * 0.2F;
 						double mz = (this.rand.nextDouble() - 0.5D) * 0.3F;
 
-						this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, x, y, z, mx, my, mz, Block.getStateId(state));
+						this.world.spawnParticle(new BlockParticleData(Particles.BLOCK, state), x, y, z, mx, my, mz);
 					}
 				}
 			}

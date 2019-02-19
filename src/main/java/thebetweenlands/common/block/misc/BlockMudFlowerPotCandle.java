@@ -9,13 +9,13 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Particles;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
@@ -144,8 +144,8 @@ public class BlockMudFlowerPotCandle extends Block {
 			double y = (double)pos.getY() + 1.0D;
 			double z = (double)pos.getZ() + 0.5D;
 
-			worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 0.0D, 0.0D, 0.0D);
-			worldIn.spawnParticle(EnumParticleTypes.FLAME, x, y, z, 0.0D, 0.0D, 0.0D);
+			worldIn.spawnParticle(Particles.SMOKE, x, y, z, 0.0D, 0.0D, 0.0D);
+			worldIn.spawnParticle(Particles.FLAME, x, y, z, 0.0D, 0.0D, 0.0D);
 		}
 	}
 }

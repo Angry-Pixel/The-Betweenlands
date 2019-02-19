@@ -11,13 +11,14 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Particles;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
@@ -117,7 +118,7 @@ public class BlockEnergyBarrier extends Block {
 							if (blockState.getBlock() == this) {
 								if (blockState.getRenderType() != EnumBlockRenderType.INVISIBLE) {
 									for(int i = 0; i < 8; i++) {
-										world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, offset.getX() + (double)world.rand.nextFloat(), offset.getY() + (double)world.rand.nextFloat(), offset.getZ() + (double)world.rand.nextFloat(), (double)world.rand.nextFloat() - 0.5D, (double)world.rand.nextFloat() - 0.5D, (double)world.rand.nextFloat() - 0.5D, new int[] {Block.getStateId(blockState)});
+										world.spawnParticle(new BlockParticleData(Particles.BLOCK, blockState), offset.getX() + (double)world.rand.nextFloat(), offset.getY() + (double)world.rand.nextFloat(), offset.getZ() + (double)world.rand.nextFloat(), (double)world.rand.nextFloat() - 0.5D, (double)world.rand.nextFloat() - 0.5D, (double)world.rand.nextFloat() - 0.5D);
 									}
 								}
 

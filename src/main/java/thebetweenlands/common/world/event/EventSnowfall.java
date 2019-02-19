@@ -104,21 +104,21 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 							int layers = stateAbove.getValue(BlockSnowBetweenlands.LAYERS);
 							if (layers < 5) {
 								boolean hasEnoughSnowAround = true;
-								PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
-								for (EnumFacing dir : EnumFacing.HORIZONTALS) {
-									checkPos.setPos(pos.getX() + dir.getXOffset(), pos.getY() + 1, pos.getZ() + dir.getZOffset());
-									if (world.isBlockLoaded(checkPos)) {
-										IBlockState neighourState = world.getBlockState(checkPos);
-										if (BlockRegistry.SNOW.canPlaceBlockAt(world, checkPos)
-												&& (neighourState.getBlock() != BlockRegistry.SNOW || neighourState.getValue(BlockSnowBetweenlands.LAYERS) < layers)) {
+								try(PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain()) {
+									for (EnumFacing dir : EnumFacing.Plane.HORIZONTAL) {
+										checkPos.setPos(pos.getX() + dir.getXOffset(), pos.getY() + 1, pos.getZ() + dir.getZOffset());
+										if (world.isBlockLoaded(checkPos)) {
+											IBlockState neighourState = world.getBlockState(checkPos);
+											if (BlockRegistry.SNOW.canPlaceBlockAt(world, checkPos)
+													&& (neighourState.getBlock() != BlockRegistry.SNOW || neighourState.getValue(BlockSnowBetweenlands.LAYERS) < layers)) {
+												hasEnoughSnowAround = false;
+											}
+										} else {
 											hasEnoughSnowAround = false;
+											break;
 										}
-									} else {
-										hasEnoughSnowAround = false;
-										break;
 									}
 								}
-								checkPos.release();
 								if (hasEnoughSnowAround) {
 									world.setBlockState(pos.up(), stateAbove.with(BlockSnowBetweenlands.LAYERS, layers + 1));
 								}

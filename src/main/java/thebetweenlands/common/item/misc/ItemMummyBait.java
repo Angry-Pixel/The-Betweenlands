@@ -1,16 +1,15 @@
 package thebetweenlands.common.item.misc;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Particles;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IWorld;
 import net.minecraft.world.biome.Biome;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
@@ -49,7 +48,6 @@ public class ItemMummyBait extends Item {
 	                            for(int xo = -1; xo <= 1 && canSpawn; xo++) {
 	                                for(int zo = -1; zo <= 1 && canSpawn; zo++) {
 	                                    IBlockState state = entityItem.world.getBlockState(pos.setPos(bx+xo, by-1, bz+zo));
-	                                    int stateId = Block.getStateId(state);
 	                                    for (int i = 0, amount = 12 + entityItem.world.rand.nextInt(20); i < amount; i++) {
 	                                        double ox = entityItem.world.rand.nextDouble();
 	                                        double oy = entityItem.world.rand.nextDouble() * 3;
@@ -57,7 +55,7 @@ public class ItemMummyBait extends Item {
 	                                        double motionX = entityItem.world.rand.nextDouble() * 0.2 - 0.1;
 	                                        double motionY = entityItem.world.rand.nextDouble() * 0.1 + 0.1;
 	                                        double motionZ = entityItem.world.rand.nextDouble() * 0.2 - 0.1;
-	                                        entityItem.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, bx+xo + ox, by, bz+zo + oz, motionX, motionY, motionZ, stateId);
+	                                        entityItem.world.spawnParticle(new BlockParticleData(Particles.BLOCK, state), bx+xo + ox, by, bz+zo + oz, motionX, motionY, motionZ);
 	                                        BLParticles.SMOKE.spawn(entityItem.world, bx+xo + ox, by + oy, bz+zo + oz, ParticleFactory.ParticleArgs.get().withColor(-1, 0xDEAD, 0xC0DE, 1).withMotion(0, 0.25F, 0).withScale(1));
 	                                    }
 	                                }

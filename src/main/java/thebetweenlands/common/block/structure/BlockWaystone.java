@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.Particles;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.EnumProperty;
@@ -18,7 +19,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
@@ -198,7 +198,7 @@ public class BlockWaystone extends BlockContainer {
 	@Override
 	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		for(int i = 0; i < 16; i++) {
-			worldIn.spawnParticle(EnumParticleTypes.SUSPENDED_DEPTH, pos.getX() + 0.5D + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 2) * 16, pos.getY() + 0.5D + rand.nextFloat() * 6 - 3, pos.getZ() + 0.5D + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 2) * 16, 0, 0.2D, 0);
+			worldIn.spawnParticle(Particles.SUSPENDED_DEPTH, pos.getX() + 0.5D + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 2) * 16, pos.getY() + 0.5D + rand.nextFloat() * 6 - 3, pos.getZ() + 0.5D + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 2) * 16, 0, 0.2D, 0);
 		}
 	}
 

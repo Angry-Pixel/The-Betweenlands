@@ -1,11 +1,10 @@
 package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
-
-import com.google.common.base.Optional;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
@@ -57,8 +56,8 @@ public class EntityPrimordialMalevolenceTurret extends EntityMob implements IEnt
 	@Override
 	protected void registerData() {
 		super.registerData();
-		this.getDataManager().register(OWNER, Optional.absent());
-		this.getDataManager().register(TARGET, Optional.absent());
+		this.getDataManager().register(OWNER, Optional.empty());
+		this.getDataManager().register(TARGET, Optional.empty());
 		this.getDataManager().register(DEFLECTION_STATE, false);
 	}
 
@@ -71,7 +70,7 @@ public class EntityPrimordialMalevolenceTurret extends EntityMob implements IEnt
 	}
 
 	public void setOwner(@Nullable Entity entity) {
-		this.getDataManager().set(OWNER, entity == null ? Optional.absent() : Optional.of(entity.getUniqueID()));
+		this.getDataManager().set(OWNER, entity == null ? Optional.empty() : Optional.of(entity.getUniqueID()));
 	}
 
 	@Nullable
@@ -98,7 +97,7 @@ public class EntityPrimordialMalevolenceTurret extends EntityMob implements IEnt
 	}
 
 	public void setTarget(@Nullable Entity entity) {
-		this.getDataManager().set(TARGET, entity == null ? Optional.absent() : Optional.of(entity.getUniqueID()));
+		this.getDataManager().set(TARGET, entity == null ? Optional.empty() : Optional.of(entity.getUniqueID()));
 	}
 
 	@Nullable
@@ -169,12 +168,12 @@ public class EntityPrimordialMalevolenceTurret extends EntityMob implements IEnt
 		if(nbt.hasUniqueId("owner")) {
 			this.getDataManager().set(OWNER, Optional.of(nbt.getUniqueId("owner")));
 		} else {
-			this.getDataManager().set(OWNER, Optional.absent());
+			this.getDataManager().set(OWNER, Optional.empty());
 		}
 		if(nbt.hasUniqueId("target")) {
 			this.getDataManager().set(TARGET, Optional.of(nbt.getUniqueId("target")));
 		} else {
-			this.getDataManager().set(TARGET, Optional.absent());
+			this.getDataManager().set(TARGET, Optional.empty());
 		}
 	}
 

@@ -4,11 +4,11 @@ import javax.xml.ws.handler.MessageContext;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
+import net.minecraft.init.Particles;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.particles.ItemParticleData;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.api.distmarker.Dist;
@@ -74,12 +74,11 @@ public class MessageLivingWeedwoodShieldSpit extends MessageEntity {
 				Vec3d right = bodyForward.crossProduct(up);
 				Vec3d offset = new Vec3d(bodyForward.x * 0.5F, owner.getEyeHeight(), bodyForward.z * 0.5F).add(right.scale(this.mainhand ? 0.35D : -0.35D).add(0, lookVec.y * 0.5D - 0.4D, 0).add(bodyForward.scale(-0.1D)));
 
-				int itemId = Item.getIdFromItem(ItemRegistry.SAP_SPIT);
 				for(int i = 0; i < 20; i++) {
 					double dx = living.world.rand.nextDouble() * 0.2D - 0.1D + bodyForward.x * 0.1D;
 					double dy = living.world.rand.nextDouble() * 0.2D - 0.1D + bodyForward.y * 0.1D + 0.08D;
 					double dz = living.world.rand.nextDouble() * 0.2D - 0.1D + bodyForward.z * 0.1D;
-					living.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, living.posX + offset.x + dx, living.posY + offset.y + dy, living.posZ + offset.z + dz, dx * 1.25D, dy, dz * 1.25D, itemId);
+					living.world.spawnParticle(new ItemParticleData(Particles.ITEM, new ItemStack(ItemRegistry.SAP_SPIT)), living.posX + offset.x + dx, living.posY + offset.y + dy, living.posZ + offset.z + dz, dx * 1.25D, dy, dz * 1.25D);
 				}
 			}
 		}

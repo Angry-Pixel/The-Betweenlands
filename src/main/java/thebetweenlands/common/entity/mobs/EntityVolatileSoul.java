@@ -5,9 +5,8 @@ import java.util.Collection;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-
-import com.google.common.base.Optional;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,6 +26,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.EntityRegistry;
 
@@ -47,7 +47,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 
 	@Override
 	protected void registerData() {
-		this.getDataManager().register(OWNER_UUID_DW, Optional.absent());
+		this.getDataManager().register(OWNER_UUID_DW, Optional.empty());
 	}
 
 	public void setOwner(UUID uuid) {
@@ -89,7 +89,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 					return;
 				}
 				target.entity.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 3);
-				if(this.isAlive() && target.entity instanceof EntityPlayer && (target.entity.isDead || ((EntityLivingBase)target.entity).getHealth() <= 0.0F)) {
+				if(this.isAlive() && target.entity instanceof EntityPlayer && (!target.entity.isAlive() || ((EntityLivingBase)target.entity).getHealth() <= 0.0F)) {
 					target.entity.remove();
 					/*EntityWight wight = new EntityWight(this.world);
 					wight.setLocationAndAngles(target.entity.posX, target.entity.posY + 0.05D, target.entity.posZ, target.entity.rotationYaw, target.entity.rotationPitch);
@@ -256,10 +256,10 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 
 	@Override
 	protected void readAdditional(NBTTagCompound nbt) {
-		if(nbt.contains("ownerUUID")) {
+		if(nbt.hasKey("ownerUUID")) {
 			this.setOwner(nbt.getUniqueId("ownerUUID"));
 		}
-		if(nbt.contains("strikes")) {
+		if(nbt.contains("strikes", Constants.NBT.TAG_INT)) {
 			this.strikes = nbt.getInt("strikes");
 		}
 	}

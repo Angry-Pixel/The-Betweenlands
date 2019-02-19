@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Particles;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
@@ -17,7 +18,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -117,7 +117,7 @@ public class BlockMortar extends BlockContainer {
 			float f = pos.getX() + 0.5F;
 			float f1 = pos.getY() + 1.1F + rand.nextFloat() * 6.0F / 16.0F;
 			float f2 = pos.getZ() + 0.5F;
-			world.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, f, f1, f2, 0.0D, 0.0D, 0.0D);
+			world.spawnParticle(Particles.HAPPY_VILLAGER, f, f1, f2, 0.0D, 0.0D, 0.0D);
 		}
 	}
 

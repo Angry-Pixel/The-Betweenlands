@@ -420,7 +420,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public boolean isAttached() {
-		return !this.world.getCollisionBoxes(this, this.getBoundingBox().grow(0.1D, 0.1D, 0.1D)).isEmpty();
+		return this.world.getCollisionBoxes(this, this.getBoundingBox().grow(0.1D, 0.1D, 0.1D), this.posX, this.posY, this.posZ).findAny().isPresent();
 	}
 
 	public EntityRopeNode extendRope(Entity entity, double x, double y, double z) {

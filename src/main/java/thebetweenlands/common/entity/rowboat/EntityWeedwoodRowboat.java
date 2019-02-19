@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Particles;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +19,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumHand;
@@ -743,7 +745,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                     splashX = posX + vecX + vecZ * near * 0.7;
                     splashZ = posZ + vecZ - vecX * near * 0.7;
                 }
-                world.spawnParticle(EnumParticleTypes.WATER_SPLASH, splashX, Math.ceil(posY) - 0.125, splashZ, motionX, 0.01, motionZ);
+                world.spawnParticle(Particles.SPLASH, splashX, Math.ceil(posY) - 0.125, splashZ, motionX, 0.01, motionZ);
             }
         }
     }
@@ -769,7 +771,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                     float x = MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.2F, 0.2F);
                     float y = MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.2F, 0.2F);
                     float z = MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.2F, 0.2F);
-                    world.spawnParticle(EnumParticleTypes.WATER_SPLASH, raytrace.hitVec.x + x, raytrace.hitVec.y + y, raytrace.hitVec.z + z, motionX, 0.01, motionZ);
+                    world.spawnParticle(Particles.SPLASH, raytrace.hitVec.x + x, raytrace.hitVec.y + y, raytrace.hitVec.z + z, motionX, 0.01, motionZ);
                 }
             }
             float amountInAir = (float) oarlock.distanceTo(raytrace.hitVec);
@@ -785,7 +787,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                 float x = (float) (oarVector.x * point + MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.1F, 0.1F));
                 float y = (float) (oarVector.y * point + MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.4F, -0.2F));
                 float z = (float) (oarVector.z * point + MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.1F, 0.1F));
-                world.spawnParticle(EnumParticleTypes.WATER_SPLASH, oarlock.x + x, oarlock.y + y, oarlock.z + z, 0, 1e-8, 0);
+                world.spawnParticle(Particles.SPLASH, oarlock.x + x, oarlock.y + y, oarlock.z + z, 0, 1e-8, 0);
             }
         }
     }
@@ -849,7 +851,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     @Override
     public boolean handleWaterMovement() {
         double mX = motionX, mZ = motionZ;
-        if (world.handleMaterialAcceleration(getBoundingBox(), Material.WATER, this)) {
+        if (this.handleFluidAcceleration(FluidTags.WATER) /* TODO 1.13 is this the correct handleFuidAcceleration? */) {
             if (mX != motionX && mZ != motionZ && canPassengerSteer()) {
                 double aX = motionX - mX, aZ = motionZ - mZ;
                 double dir = Math.atan2(aZ, aX) * MathUtils.RAD_TO_DEG;
@@ -867,12 +869,12 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                     for (int i = 0; i < 1 + width * 20; i++) {
                         float x = (rand.nextFloat() * 2 - 1) * width;
                         float z = (rand.nextFloat() * 2 - 1) * width;
-                        world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + x, min + 1, posZ + z, motionX, motionY - rand.nextFloat() * 0.2F, motionZ);
+                        world.spawnParticle(Particles.BUBBLE, posX + x, min + 1, posZ + z, motionX, motionY - rand.nextFloat() * 0.2F, motionZ);
                     }
                     for (int i = 0; i < 1 + width * 20; i++) {
                         float x = (rand.nextFloat() * 2 - 1) * width;
                         float z = (rand.nextFloat() * 2 - 1) * width;
-                        world.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX + x, min + 1, posZ + z, motionX, motionY, motionZ);
+                        world.spawnParticle(Particles.SPLASH, posX + x, min + 1, posZ + z, motionX, motionY, motionZ);
                     }
                 }
             }

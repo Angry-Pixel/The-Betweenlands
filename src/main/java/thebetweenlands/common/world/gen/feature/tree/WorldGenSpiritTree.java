@@ -30,7 +30,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 
 	static {
 		ImmutableList.Builder<EnumFacing> builder = ImmutableList.builder();
-		builder.add(EnumFacing.HORIZONTALS);
+		builder.add(EnumFacing.Plane.HORIZONTAL);
 		builder.add(EnumFacing.UP);
 		LEAVES_OFFSETS = builder.build();
 	}

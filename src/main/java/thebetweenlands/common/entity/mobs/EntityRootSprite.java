@@ -1,6 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
@@ -120,7 +121,7 @@ public class EntityRootSprite extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	protected void playStepSound(BlockPos pos, Block blockIn) {
+	protected void playStepSound(BlockPos pos, IBlockState blockIn) {
 		super.playStepSound(pos, blockIn);
 
 		this.distanceWalkedOnStepModified += 0.7F;

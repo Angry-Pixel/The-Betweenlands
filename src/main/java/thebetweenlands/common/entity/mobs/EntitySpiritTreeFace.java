@@ -3,7 +3,6 @@ package thebetweenlands.common.entity.mobs;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -15,11 +14,12 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.init.Particles;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -127,7 +127,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 	}
 
 	@Override
-	protected boolean canDespawn() {
+	public boolean canDespawn() {
 		return false;
 	}
 
@@ -152,7 +152,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 	@Override
 	public boolean hitByEntity(Entity entity) {
-		if(this.getIsInvulnerable()) {
+		if(this.isInvulnerable()) {
 			return true;
 		}
 		return super.hitByEntity(entity);
@@ -160,7 +160,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(this.getIsInvulnerable()) {
+		if(this.isInvulnerable()) {
 			return false;
 		}
 		if(source.getImmediateSource() instanceof IProjectile && source.getTrueSource() != null && source.getTrueSource().getDistance(this) >= WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + 12) {
@@ -233,7 +233,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 						double mx = facing.getXOffset() * 0.15F + (this.world.rand.nextDouble() - 0.5D) * 0.25F;
 						double my = facing.getYOffset() * 0.15F + (this.world.rand.nextDouble() - 0.5D) * 0.25F;
 						double mz = facing.getZOffset() * 0.15F + (this.world.rand.nextDouble() - 0.5D) * 0.25F;
-						this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + rx, py + ry, pz + rz, mx, my, mz, Block.getStateId(state));
+						this.world.spawnParticle(new BlockParticleData(Particles.BLOCK, state), px + rx, py + ry, pz + rz, mx, my, mz);
 					}
 				}
 			}
@@ -358,7 +358,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 		}
 
 		@Override
-		public void updateTask() {
+		public void tick() {
 			if(!this.entity.isAttacking()) {
 				if(this.findWoodCooldown <= 0 && (this.woodBlocks == null || this.woodBlocks.isEmpty())) {
 					this.findWoodCooldown = 20 + this.entity.rand.nextInt(40);
@@ -386,7 +386,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 								this.entity.lookHelper.setLookDirection(facing.getXOffset(), facing.getYOffset(), facing.getZOffset());
 								break;
 							} else {
-								for(EnumFacing otherFacing : EnumFacing.HORIZONTALS) {
+								for(EnumFacing otherFacing : EnumFacing.Plane.HORIZONTAL) {
 									if(otherFacing != facing) {
 										lookDir = new Vec3d(otherFacing.getXOffset(), 0, otherFacing.getZOffset());
 
@@ -460,7 +460,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 		}
 
 		@Override
-		public void updateTask() {
+		public void tick() {
 			if(!this.entity.isAttacking()) {
 				if(this.cooldown <= 0) {
 					this.cooldown = this.minCooldown + this.entity.rand.nextInt(this.maxCooldown - this.minCooldown + 1);

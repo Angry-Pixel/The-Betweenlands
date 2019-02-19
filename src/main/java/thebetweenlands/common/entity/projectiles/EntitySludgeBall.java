@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -163,7 +164,6 @@ public class EntitySludgeBall extends EntityThrowable {
 				}
 			}
 			getEntityWorld().playSound(null, getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.5f);
-			getEntityWorld().playSound(null, getPosition(), SoundEvents.ENTITY_SMALL_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.5f);
 			remove();
 		} else {
 			//TODO Better explosion particle effects
@@ -192,7 +192,7 @@ public class EntitySludgeBall extends EntityThrowable {
 
 	private void spawnBounceParticles(int amount) {
 		for (int i = 0; i <= amount; i++) {
-			this.getEntityWorld().spawnParticle(EnumParticleTypes.SLIME, this.posX + (amount/8) * (this.rand.nextFloat() - 0.5), this.posY + 0.3, this.posZ + (amount/8) * (this.rand.nextFloat() - 0.5), 0, 0, 0);
+			this.getEntityWorld().spawnParticle(Particles.ITEM_SLIME, this.posX + (amount/8) * (this.rand.nextFloat() - 0.5), this.posY + 0.3, this.posZ + (amount/8) * (this.rand.nextFloat() - 0.5), 0, 0, 0);
 		}
 	}
 

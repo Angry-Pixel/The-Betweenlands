@@ -32,8 +32,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.ITeleporter;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -258,8 +260,8 @@ public class EntityTarMinion extends EntityTameable implements IEntityBL {
 	}
 
 	@Override
-	public Entity changeDimension(int dimensionIn) {
+	public Entity changeDimension(DimensionType type, ITeleporter teleporter) {
 		this.dropContentsWhenDead = false;
-		return super.changeDimension(dimensionIn);
+		return super.changeDimension(type, teleporter);
 	}
 }

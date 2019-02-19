@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Particles;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.DirectionProperty;
@@ -17,9 +18,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -92,9 +93,9 @@ public class BlockGeckoCage extends BlockContainer {
 					gecko.setHealth(tile.getGeckoUsages());
 					gecko.setLocationAndAngles(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, 0.0F, 0.0F);
 					if (tile.getGeckoName() != null && !tile.getGeckoName().isEmpty())
-						gecko.setCustomNameTag(tile.getGeckoName());
+						gecko.setCustomName(new TextComponentString(tile.getGeckoName()));
 					world.spawnEntity(gecko);
-					gecko.playLivingSound();
+					gecko.playAmbientSound();
 					if (player instanceof EntityPlayerMP)
 						AdvancementCriterionRegistry.GECKO_TRIGGER.trigger((EntityPlayerMP) player, false, true);
 				}
@@ -108,7 +109,7 @@ public class BlockGeckoCage extends BlockContainer {
 			double d0 = world.rand.nextGaussian() * 0.02D;
 			double d1 = world.rand.nextGaussian() * 0.02D;
 			double d2 = world.rand.nextGaussian() * 0.02D;
-			world.spawnParticle(EnumParticleTypes.HEART, pos.getX() + world.rand.nextFloat(), pos.getY() + world.rand.nextFloat(), pos.getZ() + world.rand.nextFloat(), d0, d1, d2, new int[0]);
+			world.spawnParticle(Particles.HEART, pos.getX() + world.rand.nextFloat(), pos.getY() + world.rand.nextFloat(), pos.getZ() + world.rand.nextFloat(), d0, d1, d2);
 		}
 	}
 	
@@ -132,7 +133,7 @@ public class BlockGeckoCage extends BlockContainer {
 							if (!(heldItemStack.getDisplayName().equals(TranslationHelper.translateToLocal(heldItemStack.getTranslationKey()))) && heldItemStack.hasDisplayName())
 									name = heldItemStack.getDisplayName();
 	
-							tile.addGecko(heldItemStack.hasTagCompound() && heldItemStack.getTag().contains("Health") ? (int) heldItemStack.getTag().getFloat("Health") : 12, name);
+							tile.addGecko(heldItemStack.hasTag() && heldItemStack.getTag().contains("Health") ? (int) heldItemStack.getTag().getFloat("Health") : 12, name);
 							if(!player.abilities.isCreativeMode)
 								heldItemStack.shrink(1);
 						}

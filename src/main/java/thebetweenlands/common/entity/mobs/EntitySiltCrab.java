@@ -1,6 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -68,7 +69,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void playStepSound(BlockPos pos, Block blockIn) {
+	protected void playStepSound(BlockPos pos, IBlockState blockIn) {
 		this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
 	}
 
@@ -118,7 +119,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected boolean canDespawn() {
+	public boolean canDespawn() {
 		return false;
 	}
 	

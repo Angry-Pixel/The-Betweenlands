@@ -22,12 +22,13 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -38,6 +39,7 @@ import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.common.entity.ai.EntityAIApproachItem;
@@ -201,13 +203,13 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 
 	@Override
 	public void readAdditional(NBTTagCompound nbt) {
-		if(nbt.contains("spawningTicks")) {
+		if(nbt.contains("spawningTicks", Constants.NBT.TAG_INT)) {
 			this.setSpawningTicks(nbt.getInt("spawningTicks"));
 		}
-		if(nbt.contains("chargingPreparation")) {
+		if(nbt.contains("chargingPreparation", Constants.NBT.TAG_INT)) {
 			this.chargingPreparation = nbt.getInt("chargingPreparation");
 		}
-		if(nbt.contains("chargingState")) {
+		if(nbt.contains("chargingState", Constants.NBT.TAG_BYTE)) {
 			this.getDataManager().set(CHARGING_STATE, nbt.getByte("chargingState"));
 		}
 
@@ -270,7 +272,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 						double motionX = this.rand.nextDouble() * 0.2 - 0.1;
 						double motionY = this.rand.nextDouble() * 0.25 + 0.1;
 						double motionZ = this.rand.nextDouble() * 0.2 - 0.1;
-						this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(blockState));
+						this.world.spawnParticle(new BlockParticleData(Particles.BLOCK, blockState), px + ox, py, pz + oz, motionX, motionY, motionZ);
 					}
 				}
 			}
@@ -390,9 +392,9 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	}
 
 	@Override
-	public void playLivingSound() {
+	public void playAmbientSound() {
 		if(this.isSpawningFinished()) {
-			super.playLivingSound();
+			super.playAmbientSound();
 		}
 	}
 

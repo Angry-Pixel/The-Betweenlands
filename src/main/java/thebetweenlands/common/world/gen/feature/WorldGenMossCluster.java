@@ -36,29 +36,29 @@ public class WorldGenMossCluster extends WorldGenerator {
 			position = position.down();
 		}
 
-		PooledMutableBlockPos mutablePos = PooledMutableBlockPos.retain();
-		for (int i = 0; i < this.attempts; ++i) {
-			mutablePos.setPos(position.getX() + rand.nextInt(this.offset) - rand.nextInt(this.offset), position.getY() + rand.nextInt(this.offset/2+1) - rand.nextInt(this.offset/2+1), position.getZ() + rand.nextInt(this.offset) - rand.nextInt(this.offset));
-
-			if (worldIn.isAreaLoaded(mutablePos, 1) && worldIn.isAirBlock(mutablePos) && this.block.canPlaceBlockAt(worldIn, mutablePos)) {
-				EnumFacing facing = EnumFacing.byIndex(rand.nextInt(EnumFacing.VALUES.length));
-				EnumFacing.Axis axis = facing.getAxis();
-				EnumFacing oppositeFacing = facing.getOpposite();
-				boolean isInvalid = false;
-				if (axis.isHorizontal() && !worldIn.isSideSolid(mutablePos.offset(oppositeFacing), facing, true)) {
-					isInvalid = true;
-				} else if (axis.isVertical() && !this.canPlaceOn(worldIn, mutablePos.offset(oppositeFacing))) {
-					isInvalid = true;
-				}
-				if (!isInvalid) {
-					IBlockState state = this.blockState.with(BlockMoss.FACING, facing);
-					this.setBlockAndNotifyAdequately(worldIn, mutablePos.toImmutable(), state);
-					generated = true;
+		try(PooledMutableBlockPos mutablePos = PooledMutableBlockPos.retain()) {
+			for (int i = 0; i < this.attempts; ++i) {
+				mutablePos.setPos(position.getX() + rand.nextInt(this.offset) - rand.nextInt(this.offset), position.getY() + rand.nextInt(this.offset/2+1) - rand.nextInt(this.offset/2+1), position.getZ() + rand.nextInt(this.offset) - rand.nextInt(this.offset));
+	
+				if (worldIn.isAreaLoaded(mutablePos, 1) && worldIn.isAirBlock(mutablePos) && this.block.canPlaceBlockAt(worldIn, mutablePos)) {
+					EnumFacing facing = EnumFacing.byIndex(rand.nextInt(EnumFacing.VALUES.length));
+					EnumFacing.Axis axis = facing.getAxis();
+					EnumFacing oppositeFacing = facing.getOpposite();
+					boolean isInvalid = false;
+					if (axis.isHorizontal() && !worldIn.isSideSolid(mutablePos.offset(oppositeFacing), facing, true)) {
+						isInvalid = true;
+					} else if (axis.isVertical() && !this.canPlaceOn(worldIn, mutablePos.offset(oppositeFacing))) {
+						isInvalid = true;
+					}
+					if (!isInvalid) {
+						IBlockState state = this.blockState.with(BlockMoss.FACING, facing);
+						this.setBlockAndNotifyAdequately(worldIn, mutablePos.toImmutable(), state);
+						generated = true;
+					}
 				}
 			}
 		}
-		mutablePos.release();
-
+		
 		return generated;
 	}
 

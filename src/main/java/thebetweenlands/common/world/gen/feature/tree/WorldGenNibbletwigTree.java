@@ -39,7 +39,7 @@ public class WorldGenNibbletwigTree extends WorldGenHelper {
 				int bxo = i == 0 ? 0 : xo[i-1];
 				int bzo = i == 0 ? 0 : zo[i-1];
 				if(i == bend1 || i == bend2) {
-					EnumFacing randOffset = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
+					EnumFacing randOffset = EnumFacing.Plane.HORIZONTAL.random(rand);
 					bxo += randOffset.getXOffset();
 					bzo += randOffset.getZOffset();
 				}
@@ -49,7 +49,7 @@ public class WorldGenNibbletwigTree extends WorldGenHelper {
 			}
 
 			this.rotatedCubeVolume(world, setPos -> world.isAirBlock(setPos), xo[canopy1] + x, y + canopy1, zo[canopy1] + z, -1, 0, -1, leaves, 3, 1, 3, 0);
-			for(EnumFacing offset : EnumFacing.HORIZONTALS) {
+			for(EnumFacing offset : EnumFacing.Plane.HORIZONTAL) {
 				BlockPos offsetPos = pos.add(xo[canopy1] + offset.getXOffset(), canopy1 + 1, zo[canopy1] + offset.getZOffset());
 				if(world.isAirBlock(offsetPos)) {
 					this.setBlockAndNotifyAdequately(world, offsetPos, leaves);
@@ -116,7 +116,7 @@ public class WorldGenNibbletwigTree extends WorldGenHelper {
 						}
 					}
 
-					EnumFacing ivyOffset = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
+					EnumFacing ivyOffset = EnumFacing.Plane.HORIZONTAL.random(rand);
 					BlockPos ivyPos = pos.add(xo[height-1] + droopXO + ivyOffset.getXOffset(), height-1, zo[height-1] + droopZO + ivyOffset.getZOffset());
 					int ivyLength = rand.nextInt(9) + 3;
 					for(int yo = 0; yo < ivyLength; yo++) {

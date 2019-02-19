@@ -3,6 +3,8 @@ package thebetweenlands.common.entity.mobs;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -54,9 +56,9 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 	}
 
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata, @Nullable NBTTagCompound itemNbt) {
 		this.setVariant(this.rand.nextInt(2));
-		return super.onInitialSpawn(difficulty, livingdata);
+		return super.onInitialSpawn(difficulty, livingdata, itemNbt);
 	}
 
 	@Override
@@ -123,7 +125,7 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 	}
 
 	@Override
-	public void playLivingSound() {
+	public void playAmbientSound() {
 		SoundEvent sound = this.getAmbientSound();
 
 		if(sound != null) {

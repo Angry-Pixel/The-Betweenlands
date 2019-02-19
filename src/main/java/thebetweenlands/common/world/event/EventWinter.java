@@ -102,22 +102,22 @@ public class EventWinter extends SeasonalEnvironmentEvent {
 					if(world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock() == BlockRegistry.SWAMP_WATER) {
 						if(world.rand.nextInt(3) == 0) {
 							boolean hasSuitableNeighbourBlock = false;
-							PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
-							for(EnumFacing dir : EnumFacing.HORIZONTALS) {
-								checkPos.setPos(pos.getX() + dir.getXOffset(), pos.getY(), pos.getZ() + dir.getZOffset());
-								if(world.isBlockLoaded(checkPos)) {
-									if(!hasSuitableNeighbourBlock) {
-										IBlockState neighourState = world.getBlockState(checkPos);
-										if(neighourState.getBlock() == BlockRegistry.BLACK_ICE || neighourState.isSideSolid(world, checkPos, dir.getOpposite())) {
-											hasSuitableNeighbourBlock = true;
+							try(PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain()) {
+								for(EnumFacing dir : EnumFacing.Plane.HORIZONTAL) {
+									checkPos.setPos(pos.getX() + dir.getXOffset(), pos.getY(), pos.getZ() + dir.getZOffset());
+									if(world.isBlockLoaded(checkPos)) {
+										if(!hasSuitableNeighbourBlock) {
+											IBlockState neighourState = world.getBlockState(checkPos);
+											if(neighourState.getBlock() == BlockRegistry.BLACK_ICE || neighourState.isSideSolid(world, checkPos, dir.getOpposite())) {
+												hasSuitableNeighbourBlock = true;
+											}
 										}
+									} else {
+										hasSuitableNeighbourBlock = false;
+										break;
 									}
-								} else {
-									hasSuitableNeighbourBlock = false;
-									break;
 								}
 							}
-							checkPos.release();
 							if(hasSuitableNeighbourBlock) {
 								world.setBlockState(pos, BlockRegistry.BLACK_ICE.getDefaultState());
 							}

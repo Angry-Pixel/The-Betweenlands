@@ -78,7 +78,7 @@ public class AnimatorRecipeCategory implements IRecipeCategory {
         if (recipeWrapper instanceof AnimatorRecipeJEI)
             ((AnimatorRecipeJEI) recipeWrapper).setGuiIngredient(ingredientsGroup.getGuiIngredients().get(0));
         ingredientsGroup.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
-            if (!input && ingredient.hasTagCompound() && ingredient.getTag().contains("LootCountMin")) {
+            if (!input && ingredient.hasTag() && ingredient.getTag().contains("LootCountMin")) {
                 int min = (int) ingredient.getTag().getFloat("LootCountMin");
                 int max = (int) ingredient.getTag().getFloat("LootCountMax");
                 tooltip.add("Output amount: " + min + " -> " + max);

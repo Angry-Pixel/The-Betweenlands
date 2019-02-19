@@ -54,8 +54,8 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 
 	@Nullable
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		super.onInitialSpawn(difficulty, livingdata);
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata, @Nullable NBTTagCompound itemNbt) {
+		super.onInitialSpawn(difficulty, livingdata, itemNbt);
 
 		if(livingdata == null) {
 			livingdata = new GreeblingGroup();
@@ -66,13 +66,13 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 
 			if(group.count > 0 && (!group.hasType1 || !group.hasType2)) {
 				if(!group.hasType1) {
-					this.setType(0);
+					this.setGreeblingType(0);
 				} else {
-					this.setType(1);
+					this.setGreeblingType(1);
 				}
 			} else {
-				this.setType(rand.nextInt(2));
-				if(this.getType() == 0) {
+				this.setGreeblingType(rand.nextInt(2));
+				if(this.getGreeblingType() == 0) {
 					group.hasType1 = true;
 				} else {
 					group.hasType2 = true;
@@ -81,10 +81,10 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 
 			group.count++;
 		} else {
-			this.setType(rand.nextInt(2));
+			this.setGreeblingType(rand.nextInt(2));
 		}
 
-		this.dataManager.set(FACING, EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)]);
+		this.dataManager.set(FACING, EnumFacing.Plane.HORIZONTAL.random(rand));
 
 		return livingdata;
 	}
@@ -96,11 +96,11 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 		this.dataManager.register(FACING, EnumFacing.NORTH);
 	}
 
-	public void setType(int type) {
+	public void setGreeblingType(int type) {
 		this.dataManager.set(TYPE, type);
 	}
 
-	public int getType() {
+	public int getGreeblingType() {
 		return this.dataManager.get(TYPE);
 	}
 
@@ -158,14 +158,14 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 	@Override
 	public void writeAdditional(NBTTagCompound compound) {
 		super.writeAdditional(compound);
-		compound.setInt("type", getType());
+		compound.setInt("type", getGreeblingType());
 		compound.setInt("facing", this.dataManager.get(FACING).getHorizontalIndex());
 	}
 
 	@Override
 	public void readAdditional(NBTTagCompound compound) {
 		super.readAdditional(compound);
-		setType(compound.getInt("type"));
+		setGreeblingType(compound.getInt("type"));
 		this.dataManager.set(FACING, EnumFacing.byHorizontalIndex(compound.getInt("facing")));
 	}
 
@@ -196,7 +196,7 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public IEntitySound getMusicSound(EntityPlayer listener) {
-		return new GreeblingMusicSound(this.getType(), this, 0.75f);
+		return new GreeblingMusicSound(this.getGreeblingType(), this, 0.75f);
 	}
 
 	@Override
@@ -211,7 +211,7 @@ public class EntityGreebling extends EntityCreature implements IEntityBL, IEntit
 
 	@Override
 	public int getMusicLayer(EntityPlayer listener) {
-		return this.getType() == 0 ? EntityMusicLayers.GREEBLING_1 : EntityMusicLayers.GREEBLING_2;
+		return this.getGreeblingType() == 0 ? EntityMusicLayers.GREEBLING_1 : EntityMusicLayers.GREEBLING_2;
 	}
 
 	@Override

@@ -41,7 +41,7 @@ public class ItemMagicItemMagnet extends Item implements IEquippable, IAnimatorR
 
 	@Override
 	public boolean hasEffect(ItemStack stack) {
-		return stack.hasTagCompound() ? stack.getTag().getBoolean("magnetActive") : false;
+		return stack.hasTag() ? stack.getTag().getBoolean("magnetActive") : false;
 	}
 
 	@Override

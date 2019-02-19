@@ -86,9 +86,7 @@ public final class CustomEntityBlockCollisionsHandler {
 		boolean isOutsideWorldBorder = entity.isOutsideBorder();
 		boolean isInsideWorldBorder = world.isInsideWorldBorder(entity);
 		IBlockState defaultBlockState = Blocks.STONE.getDefaultState();
-		BlockPos.PooledMutableBlockPos checkPos = BlockPos.PooledMutableBlockPos.retain();
-
-		try {
+		try(BlockPos.PooledMutableBlockPos checkPos = BlockPos.PooledMutableBlockPos.retain()) {
 			for(int x = xs; x < xe; ++x) {
 				for(int z = zs; z < ze; ++z) {
 					boolean borderX = x == xs || x == xe - 1;
@@ -118,8 +116,6 @@ public final class CustomEntityBlockCollisionsHandler {
 					}
 				}
 			}
-		} finally {
-			checkPos.release();
 		}
 	}
 }

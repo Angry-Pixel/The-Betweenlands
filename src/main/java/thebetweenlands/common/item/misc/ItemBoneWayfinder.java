@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.EnumRarity;
@@ -23,7 +24,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -150,7 +150,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if(stack.hasTagCompound() && stack.getTag().contains("link", Constants.NBT.TAG_LONG)) {
+		if(stack.hasTag() && stack.getTag().contains("link", Constants.NBT.TAG_LONG)) {
 			BlockPos waystone = BlockPos.fromLong(stack.getTag().getLong("link"));
 			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bone_wayfinder_linked", waystone.getX(), waystone.getY(), waystone.getZ()), 0));
 		} else {
@@ -168,31 +168,31 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 		if(!entity.world.isRemote()) {
 			if(entity.hurtTime > 0) {
 				entity.stopActiveHand();
-				entity.world.play(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
+				entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
 			}
 
 			if(entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative() && count < 60 && entity.ticksExisted % 3 == 0) {
 				int removed = ItemRing.removeXp((EntityPlayer) entity, 1);
 				if(removed == 0) {
 					entity.stopActiveHand();
-					entity.world.play(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
+					entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
 				}
 			}
 
 			if(count < 90 && count % 20 == 0) {
-				entity.world.play(null, entity.posX, entity.posY, entity.posZ, SoundRegistry.PORTAL_TRAVEL, SoundCategory.PLAYERS, 0.05F + 0.4F * (float)MathHelper.clamp(80 - count, 1, 80) / 80.0F, 0.9F + entity.world.rand.nextFloat() * 0.2F);
+				entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundRegistry.PORTAL_TRAVEL, SoundCategory.PLAYERS, 0.05F + 0.4F * (float)MathHelper.clamp(80 - count, 1, 80) / 80.0F, 0.9F + entity.world.rand.nextFloat() * 0.2F);
 			}
 		} else {
 			Random rand = entity.world.rand;
 			for(int i = 0; i < MathHelper.clamp(60 - count, 1, 60); i++) {
-				entity.world.spawnParticle(EnumParticleTypes.SUSPENDED_DEPTH, entity.posX + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 2) * 6, entity.posY + rand.nextFloat() * 4 - 2, entity.posZ + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 2) * 6, 0, 0.2D, 0);
+				entity.world.spawnParticle(Particles.SUSPENDED_DEPTH, entity.posX + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 2) * 6, entity.posY + rand.nextFloat() * 4 - 2, entity.posZ + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 2) * 6, 0, 0.2D, 0);
 			}
 		}
 	}
 
 	protected void playThunderSounds(World world, double x, double y, double z) {
-		world.play(null, x, y, z, SoundRegistry.RIFT_CREAK, SoundCategory.PLAYERS, 2, 1);
-		world.play(null, x, y, z, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.PLAYERS, 0.75F, 0.75F);
+		world.playSound(null, x, y, z, SoundRegistry.RIFT_CREAK, SoundCategory.PLAYERS, 2, 1);
+		world.playSound(null, x, y, z, SoundEvents.ENTITY_LIGHTNING_BOLT_THUNDER, SoundCategory.PLAYERS, 0.75F, 0.75F);
 	}
 
 	protected boolean activateWaystone(World world, BlockPos pos, IBlockState state, ItemStack stack) {
@@ -248,7 +248,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 
 	@Nullable
 	public BlockPos getBoundWaystone(ItemStack stack) {
-		if(stack.hasTagCompound()) {
+		if(stack.hasTag()) {
 			NBTTagCompound nbt = stack.getTag();
 			if(nbt.contains("link", Constants.NBT.TAG_LONG)) {
 				return BlockPos.fromLong(nbt.getLong("link"));
@@ -262,14 +262,14 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 		if(pos == null) {
 			if(nbt != null) {
 				nbt.removeTag("link");
-				stack.setTagCompound(nbt);
+				stack.setTag(nbt);
 			}
 		} else {
 			if(nbt == null) {
 				nbt = new NBTTagCompound();
 			}
 			nbt.setLong("link", pos.toLong());
-			stack.setTagCompound(nbt);
+			stack.setTag(nbt);
 		}
 	}
 

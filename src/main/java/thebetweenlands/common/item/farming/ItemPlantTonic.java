@@ -59,7 +59,7 @@ public class ItemPlantTonic extends Item implements ItemRegistry.IMultipleItemMo
 	@Nullable
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
-		if (!stack.hasTagCompound())
+		if (!stack.hasTag())
 			stack.setTagCompound(new NBTTagCompound());
 		return super.initCapabilities(stack, nbt);
 	}

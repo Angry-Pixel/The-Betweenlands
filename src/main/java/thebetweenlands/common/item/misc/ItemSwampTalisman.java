@@ -83,7 +83,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if(EnumTalisman.SWAMP_TALISMAN_5.isItemOf(stack) && stack.hasTagCompound() && stack.getTag().contains("link", Constants.NBT.TAG_LONG)) {
+		if(EnumTalisman.SWAMP_TALISMAN_5.isItemOf(stack) && stack.hasTag() && stack.getTag().contains("link", Constants.NBT.TAG_LONG)) {
 			BlockPos otherPortalPos = BlockPos.fromLong(stack.getTag().getLong("link"));
 			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.swamp_talisman_linked", otherPortalPos.getX(), otherPortalPos.getY(), otherPortalPos.getZ()), 0));
 		}
@@ -196,7 +196,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 					worldIn.play(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 0.8F, 0.7F);
 				}
 
-				if(stack.hasTagCompound() && stack.getTag().contains("link", Constants.NBT.TAG_LONG) && stack.getTag().contains("linkDim", Constants.NBT.TAG_INT)) {
+				if(stack.hasTag() && stack.getTag().contains("link", Constants.NBT.TAG_LONG) && stack.getTag().contains("linkDim", Constants.NBT.TAG_INT)) {
 					BlockPos otherPortalPos = BlockPos.fromLong(stack.getTag().getLong("link"));
 					LocationPortal portal = this.getPortalAt(worldIn, pos);
 					if(portal != null) {

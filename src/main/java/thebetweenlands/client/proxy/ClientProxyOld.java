@@ -581,7 +581,7 @@ public class ClientProxyOld extends CommonProxy implements IResourceManagerReloa
 		Item.getItemFromBlock(BlockRegistry.ITEM_SHELF).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityItemShelf.class));
 		Item.getItemFromBlock(BlockRegistry.REPELLER).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(TileEntityRepeller.class));
 		Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT).setTileEntityItemStackRenderer(new ItemRendererStackAsTileEntity(renderer -> {
-			for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+			for(EnumFacing facing : EnumFacing.Plane.HORIZONTAL) {
 				renderer.add(EnumLootPot.POT_1.getMetadata(facing), TileEntityTarLootPot1.class);
 				renderer.add(EnumLootPot.POT_2.getMetadata(facing), TileEntityTarLootPot2.class);
 				renderer.add(EnumLootPot.POT_3.getMetadata(facing), TileEntityTarLootPot3.class);

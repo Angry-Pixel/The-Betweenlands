@@ -1,11 +1,10 @@
 package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
-
-import com.google.common.base.Optional;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -56,7 +55,7 @@ public class EntityPrimordialMalevolenceProjectile extends Entity implements IPr
 
 	@Override
 	protected void registerData() {
-		this.getDataManager().register(OWNER, Optional.absent());
+		this.getDataManager().register(OWNER, Optional.empty());
 		this.getDataManager().register(DEFLECTION_STATE, false);
 	}
 
@@ -69,7 +68,7 @@ public class EntityPrimordialMalevolenceProjectile extends Entity implements IPr
 	}
 
 	public void setOwner(@Nullable Entity entity) {
-		this.getDataManager().set(OWNER, entity == null ? Optional.absent() : Optional.of(entity.getUniqueID()));
+		this.getDataManager().set(OWNER, entity == null ? Optional.empty() : Optional.of(entity.getUniqueID()));
 	}
 
 	@Nullable
@@ -306,7 +305,7 @@ public class EntityPrimordialMalevolenceProjectile extends Entity implements IPr
 		if(nbt.hasUniqueId("owner")) {
 			this.getDataManager().set(OWNER, Optional.of(nbt.getUniqueId("owner")));
 		} else {
-			this.getDataManager().set(OWNER, Optional.absent());
+			this.getDataManager().set(OWNER, Optional.empty());
 		}
 		if(nbt.hasUniqueId("thrower")) {
 			this.throwerUUID = nbt.getUniqueId("thrower");

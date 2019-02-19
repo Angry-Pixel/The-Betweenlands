@@ -1,20 +1,19 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
-
-import com.google.common.base.Optional;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -50,11 +49,11 @@ public class EntityPrimordialMalevolenceSpawner extends EntityMob implements IEn
 	@Override
 	protected void registerData() {
 		super.registerData();
-		this.getDataManager().register(OWNER, Optional.absent());
+		this.getDataManager().register(OWNER, Optional.empty());
 	}
 
 	public void setOwner(@Nullable Entity entity) {
-		this.getDataManager().set(OWNER, entity == null ? Optional.absent() : Optional.of(entity.getUniqueID()));
+		this.getDataManager().set(OWNER, entity == null ? Optional.empty() : Optional.of(entity.getUniqueID()));
 	}
 
 	@Nullable
@@ -106,7 +105,7 @@ public class EntityPrimordialMalevolenceSpawner extends EntityMob implements IEn
 		if(nbt.hasUniqueId("owner")) {
 			this.getDataManager().set(OWNER, Optional.of(nbt.getUniqueId("owner")));
 		} else {
-			this.getDataManager().set(OWNER, Optional.absent());
+			this.getDataManager().set(OWNER, Optional.empty());
 		}
 	}
 
@@ -133,7 +132,7 @@ public class EntityPrimordialMalevolenceSpawner extends EntityMob implements IEn
 					double ex = owner.posX + (this.rand.nextDouble() - 0.5D) * (double)owner.width;
 					double ey = owner.posY + this.rand.nextDouble() * (double)owner.height - 0.25D;
 					double ez = owner.posZ + (this.rand.nextDouble() - 0.5D) * (double)owner.width;
-					this.world.spawnParticle(EnumParticleTypes.PORTAL, sx, sy, sz, ex - sx, ey - sy, ez - sz);
+					this.world.spawnParticle(Particles.PORTAL, sx, sy, sz, ex - sx, ey - sy, ez - sz);
 				}
 			}
 		}

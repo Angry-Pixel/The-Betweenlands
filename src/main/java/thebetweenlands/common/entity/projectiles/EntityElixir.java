@@ -46,7 +46,6 @@ public class EntityElixir extends EntityThrowable {
 
     public void setItem(ItemStack stack) {
         this.getDataManager().set(ITEM, stack);
-        this.getDataManager().setDirty(ITEM);
     }
 
     @Override
@@ -89,7 +88,7 @@ public class EntityElixir extends EntityThrowable {
     @Override
     public void readAdditional(NBTTagCompound nbt) {
         super.readAdditional(nbt);
-    	ItemStack itemstack = new ItemStack(nbt.getCompound("elixir"));
+    	ItemStack itemstack = ItemStack.read(nbt.getCompound("elixir"));
 
         if (itemstack.isEmpty()) {
             this.remove();
@@ -103,7 +102,7 @@ public class EntityElixir extends EntityThrowable {
         super.writeAdditional(nbt);
         ItemStack stack = getElixirStack();
         if (!stack.isEmpty()) {
-            nbt.setTag("elixir", stack.writeToNBT(new NBTTagCompound()));
+            nbt.setTag("elixir", stack.write(new NBTTagCompound()));
         }
     }
 }

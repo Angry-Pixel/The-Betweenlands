@@ -195,7 +195,7 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 
 						for(int j = rootHeight; j >= -4; j--) {
 							if(j < rootHeight && rand.nextInt(3) == 0) {
-								EnumFacing offset = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
+								EnumFacing offset = EnumFacing.Plane.HORIZONTAL.random(rand);
 								rootXO += rootX * Math.abs(offset.getXOffset());
 								rootZO += rootZ * Math.abs(offset.getZOffset());
 							}

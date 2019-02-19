@@ -2,6 +2,8 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -34,6 +36,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.entity.attributes.BooleanAttribute;
@@ -84,9 +87,9 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	}
 
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata, @Nullable NBTTagCompound itemNbt) {
 		this.setActive(this.world.rand.nextInt(5) == 0 || !this.canHideIn(this.world.getBlockState(this.getPosition().down())));
-		return super.onInitialSpawn(difficulty, livingdata);
+		return super.onInitialSpawn(difficulty, livingdata, itemNbt);
 	}
 	
 	@Override
@@ -108,7 +111,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	@Override
 	public void readAdditional(NBTTagCompound compound) {
 		super.readAdditional(compound);
-		if(compound.contains("wasOnGround")) {
+		if(compound.contains("wasOnGround", Constants.NBT.TAG_BYTE)) {
 			this.wasOnGround = compound.getBoolean("wasOnGround");
 		}
 	}
@@ -330,7 +333,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		}
 
 		@Override
-		public void updateTask() {
+		public void tick() {
 			this.sludge.faceEntity(this.sludge.getAttackTarget(), 10.0F, 10.0F);
 			((EntitySludge.SludgeMoveHelper)this.sludge.getMoveHelper()).setDirection(this.sludge.rotationYaw, true);
 		}
@@ -352,7 +355,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		}
 
 		@Override
-		public void updateTask() {
+		public void tick() {
 			if (--this.nextRandomizeTime <= 0) {
 				this.nextRandomizeTime = 40 + this.sludge.getRNG().nextInt(60);
 				this.chosenDegrees = (float)this.sludge.getRNG().nextInt(360);
@@ -377,7 +380,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		}
 
 		@Override
-		public void updateTask() {
+		public void tick() {
 			if (this.sludge.getRNG().nextFloat() < 0.8F) {
 				this.sludge.getJumpHelper().setJumping();
 				this.sludge.motionY += 0.01D;
@@ -401,7 +404,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		}
 
 		@Override
-		public void updateTask() {
+		public void tick() {
 			((EntitySludge.SludgeMoveHelper)this.slime.getMoveHelper()).setSpeed(1.0D);
 		}
 	}

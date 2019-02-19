@@ -58,7 +58,7 @@ public class EntityAIGoTo extends EntityAIBase {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		if(this.pos != null) {
 			this.taskOwner.getLookHelper().setLookPosition(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 30.0F, 30.0F);
 

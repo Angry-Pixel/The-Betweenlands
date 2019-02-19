@@ -3,7 +3,7 @@ package thebetweenlands.common.entity.mobs;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -20,13 +20,13 @@ import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -39,6 +39,7 @@ import net.minecraft.world.IWorldReaderBase;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -79,7 +80,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 		this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));
 		this.tasks.addTask(2, new EntityAIMoveToBlock(this, 0.85D, 32) {
 			@Override
-			protected boolean shouldMoveTo(World worldIn, BlockPos pos) {
+			protected boolean shouldMoveTo(IWorldReaderBase worldIn, BlockPos pos) {
 				return worldIn.getBlockState(pos).getBlock() == BlockRegistry.TAR;
 			}
 		});
@@ -175,25 +176,25 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	public void readAdditional(NBTTagCompound nbt) {
-		if(nbt.contains("shedCooldown")) {
+		if(nbt.contains("shedCooldown", Constants.NBT.TAG_INT)) {
 			this.shedCooldown = nbt.getInt("shedCooldown");
 		}
-		if(nbt.contains("sheddingProgress")) {
+		if(nbt.contains("sheddingProgress", Constants.NBT.TAG_INT)) {
 			this.sheddingProgress = nbt.getInt("sheddingProgress");
 		}
-		if(nbt.contains("sheddingState")) {
+		if(nbt.contains("sheddingState", Constants.NBT.TAG_BYTE)) {
 			this.getDataManager().set(SHEDDING_STATE_DW, nbt.getBoolean("sheddingState"));
 		}
-		if(nbt.contains("suckingCooldown")) {
+		if(nbt.contains("suckingCooldown", Constants.NBT.TAG_INT)) {
 			this.suckingCooldown = nbt.getInt("suckingCooldown");
 		}
-		if(nbt.contains("suckingPreparation")) {
+		if(nbt.contains("suckingPreparation", Constants.NBT.TAG_INT)) {
 			this.suckingPreparation = nbt.getInt("suckingPreparation");
 		}
-		if(nbt.contains("suckingProgress")) {
+		if(nbt.contains("suckingProgress", Constants.NBT.TAG_INT)) {
 			this.suckingProgress = nbt.getInt("suckingProgress");
 		}
-		if(nbt.contains("suckingState")) {
+		if(nbt.contains("suckingState", Constants.NBT.TAG_BYTE)) {
 			this.getDataManager().set(SUCKING_STATE_DW, nbt.getByte("suckingState"));
 		}
 
@@ -201,7 +202,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void playStepSound(BlockPos pos, Block blockIn) {
+	protected void playStepSound(BlockPos pos, IBlockState blockIn) {
 		this.playSound(SoundRegistry.TAR_BEAST_STEP, 1, 1);
 	}
 
@@ -244,7 +245,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 					float rz = rnd.nextFloat() * 8.0F - 4.0F;
 					Vec3d vec = new Vec3d(rx, ry, rz);
 					vec = vec.normalize();
-					this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + rx + 0.25F, this.posY + ry, this.posZ + rz + 0.25F, -vec.x * 0.5F, -vec.y * 0.5F, -vec.z * 0.5F);
+					this.world.spawnParticle(Particles.LARGE_SMOKE, this.posX + rx + 0.25F, this.posY + ry, this.posZ + rz + 0.25F, -vec.x * 0.5F, -vec.y * 0.5F, -vec.z * 0.5F);
 				}
 			}
 		}

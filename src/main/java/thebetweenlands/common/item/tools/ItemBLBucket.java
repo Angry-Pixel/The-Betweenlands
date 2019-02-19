@@ -139,7 +139,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-        if (!stack.hasTagCompound())
+        if (!stack.hasTag())
             stack.setTagCompound(new NBTTagCompound());
         return new FluidBLBucketHandler(stack, getCapacity());
     }

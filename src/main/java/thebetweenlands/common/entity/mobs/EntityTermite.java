@@ -2,8 +2,8 @@ package thebetweenlands.common.entity.mobs;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -59,12 +59,12 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.ARTHROPOD;
+	public CreatureAttribute getCreatureAttribute() {
+		return CreatureAttribute.ARTHROPOD;
 	}
 
 	@Override
-	protected void playStepSound(BlockPos pos, Block blockIn) {
+	protected void playStepSound(BlockPos pos, IBlockState blockIn) {
 		this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
 	}
 

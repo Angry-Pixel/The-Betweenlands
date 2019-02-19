@@ -69,7 +69,7 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean isHeldItem) {
 		CorrosionHelper.updateCorrosion(stack, world, entity, slot, isHeldItem);
 
-		if (!stack.hasTagCompound())
+		if (!stack.hasTag())
 			stack.setTagCompound(new NBTTagCompound());
 		if (!stack.getTag().contains("cooldown"))
 			stack.getTag().setInt("cooldown", 0);
@@ -90,7 +90,7 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
 
-		if (!stack.hasTagCompound()) {
+		if (!stack.hasTag()) {
 			stack.setTagCompound(new NBTTagCompound());
 			return EnumActionResult.PASS;
 		}

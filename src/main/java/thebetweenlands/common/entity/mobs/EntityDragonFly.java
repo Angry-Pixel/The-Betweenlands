@@ -1,8 +1,10 @@
 package thebetweenlands.common.entity.mobs;
 
-import net.minecraft.block.Block;
+import javax.annotation.Nullable;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.CreatureAttribute;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -12,9 +14,9 @@ import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -61,8 +63,8 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	}
 
 	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.ARTHROPOD;
+	public CreatureAttribute getCreatureAttribute() {
+		return CreatureAttribute.ARTHROPOD;
 	}
 
 	@Override
@@ -80,7 +82,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	}
 
 	@Override
-	protected void playStepSound(BlockPos pos, Block blockIn) {
+	protected void playStepSound(BlockPos pos, IBlockState blockIn) {
 		playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
 	}
 
@@ -183,8 +185,14 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	}
 
 	@Override
-	protected boolean canDespawn() {
+	public boolean canDespawn() {
 		return false;
+	}
+	
+	@Override
+	public boolean isNoDespawnRequired() {
+		// TODO Auto-generated method stub
+		return super.isNoDespawnRequired();
 	}
 
 	@Override
@@ -214,7 +222,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 					double motionX = rand.nextGaussian() * 0.02D;
 					double motionY = rand.nextGaussian() * 0.02D;
 					double motionZ = rand.nextGaussian() * 0.02D;
-					world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, posX + rand.nextFloat() * width * 2.0F - width, posY + rand.nextFloat() * height, posZ + rand.nextFloat() * width * 2.0F - width, motionX, motionY, motionZ);
+					world.spawnParticle(Particles.EXPLOSION, posX + rand.nextFloat() * width * 2.0F - width, posY + rand.nextFloat() * height, posZ + rand.nextFloat() * width * 2.0F - width, motionX, motionY, motionZ);
 				}
 			}
 		}
@@ -231,9 +239,9 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	}
 	
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata, @Nullable NBTTagCompound itemNbt) {
 		this.spawnPos = new BlockPos(this.posX, this.posY, this.posZ);
-		return super.onInitialSpawn(difficulty, livingdata);
+		return super.onInitialSpawn(difficulty, livingdata, itemNbt);
 	}
 	
 	@Override

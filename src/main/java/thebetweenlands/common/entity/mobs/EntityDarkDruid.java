@@ -200,13 +200,13 @@ public class EntityDarkDruid extends EntityMob {
             if (validBlock) {
                 teleportCooldown = rand.nextInt(20 * 2) + 20 * 2;
                 EntityDarkDruid newDruid = new EntityDarkDruid(world);
-                newDruid.copyDataFromOld(this);
+                newDruid.copyDataFromOldForTeleport(this);
                 newDruid.setUniqueId(UUID.randomUUID());
                 newDruid.setPosition(targetX, targetY, targetZ);
                 newDruid.faceEntity(entity, 100, 100);
                 newDruid.setAttackTarget(this.getAttackTarget());
                 newDruid.attackDelayCounter = MIN_ATTACK_DELAY + this.rand.nextInt(MAX_ATTACK_DELAY - MIN_ATTACK_DELAY + 1) + 1;
-                if (world.getCollisionBoxes(newDruid, newDruid.getBoundingBox()).isEmpty() && !world.containsAnyLiquid(newDruid.getBoundingBox())) {
+                if (!world.getCollisionBoxes(newDruid, newDruid.getBoundingBox(), this.posX, this.posY, this.posZ).findAny().isPresent() && !world.containsAnyLiquid(newDruid.getBoundingBox())) {
                     successful = true;
                     remove();
                     world.spawnEntity(newDruid);
@@ -329,10 +329,10 @@ public class EntityDarkDruid extends EntityMob {
         return attackCounter;
     }
 
-    private void copyDataFromOld(Entity entity) {
-        NBTTagCompound compound = entity.writeToNBT(new NBTTagCompound());
+    private void copyDataFromOldForTeleport(Entity entity) {
+        NBTTagCompound compound = entity.writeWithoutTypeId(new NBTTagCompound());
         compound.removeTag("Dimension");
-        this.readFromNBT(compound);
+        this.read(compound);
     }
 
     public void startCasting() {

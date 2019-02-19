@@ -7,11 +7,11 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Particles;
 import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
@@ -42,8 +42,8 @@ public class BlockWeepingBlue extends BlockDoublePlantBL {
 	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-		if(rand.nextInt(4) == 0 && worldIn.getBlockState(pos).getValue(HALF) == EnumBlockHalf.UPPER) {
-			worldIn.spawnParticle(EnumParticleTypes.DRIP_WATER, pos.getX() + 0.25D + rand.nextFloat() * 0.5D, pos.getY() + 0.6D, pos.getZ() + 0.25D + rand.nextFloat() * 0.5D, 0.0D, 0.0D, 0.0D);
+		if(rand.nextInt(4) == 0 && worldIn.getBlockState(pos).get(HALF) == EnumBlockHalf.UPPER) {
+			worldIn.spawnParticle(Particles.DRIPPING_WATER, pos.getX() + 0.25D + rand.nextFloat() * 0.5D, pos.getY() + 0.6D, pos.getZ() + 0.25D + rand.nextFloat() * 0.5D, 0.0D, 0.0D, 0.0D);
 		}
 	}
 }

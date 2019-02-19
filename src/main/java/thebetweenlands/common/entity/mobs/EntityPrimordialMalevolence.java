@@ -2,11 +2,10 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
-
-import com.google.common.base.Optional;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -32,10 +31,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import thebetweenlands.api.entity.IBLBoss;
@@ -139,7 +140,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 		this.getDataManager().register(GROUND_ATTACK_STATE, false);
 		this.getDataManager().register(ANCHOR, BlockPos.ORIGIN);
 		this.getDataManager().register(ANCHOR_RADIUS, 0.0F);
-		this.getDataManager().register(BOSSINFO_ID, Optional.absent());
+		this.getDataManager().register(BOSSINFO_ID, Optional.empty());
 	}
 
 	public float getShieldExplosion(float partialTicks) {
@@ -448,8 +449,8 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 	}
 
 	@Override
-	public void setCustomNameTag(String name) {
-		super.setCustomNameTag(name);
+	public void setCustomName(ITextComponent name) {
+		super.setCustomName(name);
 		bossInfo.setName(this.getDisplayName());
 	}
 
@@ -467,8 +468,8 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 
 	@Override
 	@Nullable
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		super.onInitialSpawn(difficulty, livingdata);
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata, @Nullable NBTTagCompound itemNbt) {
+		super.onInitialSpawn(difficulty, livingdata, itemNbt);
 		this.anchor = this.getPosition();
 		this.anchorRadius = 10.0D;
 		return livingdata;
@@ -505,7 +506,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 		}
 		if (currentIdleSound == null) {
 			currentIdleSound = new FortressBossIdleSound(this);
-			Minecraft.getInstance().getSoundHandler().playSound(currentIdleSound);
+			Minecraft.getInstance().getSoundHandler().play(currentIdleSound);
 		}
 	}
 
@@ -615,7 +616,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 							this.wightSpawnTicks--;
 							if(this.wightSpawnTicks <= 0) {
 								if(this.wightSpawnTicks == 0) {
-									int spawnY = this.world.getHeight(this.getPosition()).getY();
+									int spawnY = this.world.getHeight(Heightmap.Type.MOTION_BLOCKING, this.getPosition()).getY();
 									if(Math.abs(spawnY - this.posY) < this.anchorRadius) {
 										EntityPrimordialMalevolenceSpawner spawner = new EntityPrimordialMalevolenceSpawner(this.world, this);
 										spawner.setLocationAndAngles(MathHelper.floor(this.posX), spawnY, MathHelper.floor(this.posZ), 0, 0);
@@ -633,7 +634,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 							this.blockadeSpawnTicks--;
 							if(this.blockadeSpawnTicks <= 0) {
 								if(this.blockadeSpawnTicks == 0) {
-									int spawnY = this.world.getHeight(this.getPosition()).getY();
+									int spawnY = this.world.getHeight(Heightmap.Type.MOTION_BLOCKING, this.getPosition()).getY();
 									if(Math.abs(spawnY - this.posY) < this.anchorRadius) {
 										EntityPrimordialMalevolenceBlockade blockade = new EntityPrimordialMalevolenceBlockade(this.world, this);
 										blockade.setLocationAndAngles(this.posX, spawnY, this.posZ, 0, 0);
@@ -902,7 +903,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 	}
 
 	@Override
-	protected boolean canDespawn() {
+	public boolean canDespawn() {
 		return false;
 	}
 
@@ -922,7 +923,7 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 	}
 
 	@Override
-	public void playLivingSound() {
+	public void playAmbientSound() {
 		if(!this.world.isRemote() && !this.isSilent()) {
 			//TheBetweenlands.networkWrapper.sendToAllAround(new MessagePlayEntityIdle(this, SoundRegistry.FORTRESS_BOSS_LIVING, SoundCategory.HOSTILE, 1, 1), new TargetPoint(this.dimension, this.posX, this.posY, this.posZ, 16.0D));
 		}
@@ -950,6 +951,6 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 
 	@Override
 	public UUID getBossInfoUuid() {
-		return dataManager.get(BOSSINFO_ID).or(new UUID(0, 0));
+		return dataManager.get(BOSSINFO_ID).orElse(new UUID(0, 0));
 	}
 }

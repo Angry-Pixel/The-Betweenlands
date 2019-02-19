@@ -3,7 +3,7 @@ package thebetweenlands.common.network.clientbound;
 import javax.xml.ws.handler.MessageContext;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.init.Particles;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -35,7 +35,7 @@ public class MessageMireSnailEggHatching extends MessageEntity {
 		EntityMireSnailEgg entity = (EntityMireSnailEgg) this.getEntity(0);
 		if (entity != null) {
 			for (int count = 0; count <= 50; ++count) {
-				entity.world.spawnParticle(EnumParticleTypes.SLIME, entity.posX + (entity.world.rand.nextDouble() - 0.5D) * 0.35F, entity.posY + entity.world.rand.nextDouble() * 0.175F, entity.posZ + (entity.world.rand.nextDouble() - 0.5D) * 0.35F, 0, 0, 0);
+				entity.world.spawnParticle(Particles.ITEM_SLIME, entity.posX + (entity.world.rand.nextDouble() - 0.5D) * 0.35F, entity.posY + entity.world.rand.nextDouble() * 0.175F, entity.posZ + (entity.world.rand.nextDouble() - 0.5D) * 0.35F, 0, 0, 0);
 			}
 			entity.world.play(Minecraft.getInstance().player, entity.posX, entity.posY, entity.posZ, SoundRegistry.SQUISH, SoundCategory.NEUTRAL, 1, 0.8F);
 		}

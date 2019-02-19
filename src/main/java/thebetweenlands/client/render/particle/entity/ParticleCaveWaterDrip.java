@@ -4,7 +4,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.init.Particles;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory;
@@ -38,7 +38,7 @@ public class ParticleCaveWaterDrip extends Particle {
 		}
 		if (this.isExpired) {
 			this.setExpired();
-			this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
+			this.world.spawnParticle(Particles.SPLASH, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
 			motionX *= 0.7;
 			motionZ *= 0.7;
 		}

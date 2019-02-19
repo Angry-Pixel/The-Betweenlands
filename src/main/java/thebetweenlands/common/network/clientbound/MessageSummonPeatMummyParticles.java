@@ -2,9 +2,9 @@ package thebetweenlands.common.network.clientbound;
 
 import javax.xml.ws.handler.MessageContext;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.init.Particles;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -39,7 +39,7 @@ public class MessageSummonPeatMummyParticles extends MessageEntity {
 				double py = entity.posY - 2.0F + entity.world.rand.nextFloat() * 4.0F;
 				double pz = entity.posZ - 0.75F + entity.world.rand.nextFloat() * 1.5F;
 				Vec3d vec = new Vec3d(px, py, pz).subtract(new Vec3d(entity.posX + 0.35F, entity.posY + 1.1F, entity.posZ + 0.35F)).normalize();
-				entity.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, px, py, pz, vec.x * 0.25F, vec.y * 0.25F, vec.z * 0.25F, Block.getStateId(BlockRegistry.MUD.getDefaultState()));
+				entity.world.spawnParticle(new BlockParticleData(Particles.BLOCK, BlockRegistry.MUD.getDefaultState()), px, py, pz, vec.x * 0.25F, vec.y * 0.25F, vec.z * 0.25F);
 			}
 		}
 	}

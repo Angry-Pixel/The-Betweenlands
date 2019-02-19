@@ -176,7 +176,7 @@ public class LootTableRegistry {
                                         if (valueRange == null)
                                             continue;
 
-                                        if (!tmpItems.get(0).hasTagCompound()) {
+                                        if (!tmpItems.get(0).hasTag()) {
                                             tmpItems.get(0).setTagCompound(new NBTTagCompound());
                                         }
 

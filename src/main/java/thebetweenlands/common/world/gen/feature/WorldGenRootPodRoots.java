@@ -36,7 +36,7 @@ public class WorldGenRootPodRoots extends WorldGenerator {
 				
 				world.setBlockState(position.down(), BlockRegistry.GIANT_ROOT.getDefaultState());
 				
-				for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+				for(EnumFacing facing : EnumFacing.Plane.HORIZONTAL) {
 					BlockPos offset = position.offset(facing).down();
 					if(SurfaceType.PLANT_DECORATION_SOIL.apply(world.getBlockState(offset))) {
 						world.setBlockState(offset, BlockRegistry.GIANT_ROOT.getDefaultState());

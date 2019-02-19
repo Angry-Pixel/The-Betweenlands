@@ -5,12 +5,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.Block;
@@ -23,11 +23,13 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Particles;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
@@ -38,6 +40,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
@@ -141,7 +144,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		this.dataManager.register(CRAWLING_WAVE_STATE, 0);
 		this.dataManager.register(WISP_STRENGTH_MODIFIER, 1.0F);
 		this.dataManager.register(LAST_LOCKED_WISP, BlockPos.ORIGIN);
-		this.dataManager.register(BOSSINFO_ID, Optional.absent());
+		this.dataManager.register(BOSSINFO_ID, Optional.empty());
 	}
 
 	@Override
@@ -214,7 +217,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 				float rz = this.world.rand.nextFloat() * 2.0F - 1.0F;
 				Vec3d vec = new Vec3d(rx, ry, rz);
 				vec = vec.normalize();
-				this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, frontCenter.x + rx, frontCenter.y + ry, frontCenter.z + rz, vec.x * 1.5F, vec.y * 1.5F, vec.z * 1.5F, Block.getIdFromBlock(BlockRegistry.LOG_SPIRIT_TREE));
+				this.world.spawnParticle(new BlockParticleData(Particles.BLOCK, BlockRegistry.LOG_SPIRIT_TREE.getDefaultState()), frontCenter.x + rx, frontCenter.y + ry, frontCenter.z + rz, vec.x * 1.5F, vec.y * 1.5F, vec.z * 1.5F);
 			}
 		} else if(id == EVENT_BLOW_ATTACK) {
 			Vec3d frontCenter = this.getFrontCenter();
@@ -378,8 +381,8 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	}
 
 	@Override
-	public void setCustomNameTag(String name) {
-		super.setCustomNameTag(name);
+	public void setCustomName(ITextComponent name) {
+		super.setCustomName(name);
 		this.bossInfo.setName(this.getDisplayName());
 	}
 
@@ -583,7 +586,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 					float rz = rnd.nextFloat() * 4.0F - 2.0F + this.getFacing().getZOffset() * 4;
 					Vec3d vec = new Vec3d(rx, ry, rz);
 					vec = vec.normalize();
-					this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, frontCenter.x + rx, frontCenter.y - 0.75D + ry, frontCenter.z + rz, -vec.x * 0.5F, -vec.y * 0.5F, -vec.z * 0.5F);
+					this.world.spawnParticle(Particles.SMOKE, frontCenter.x + rx, frontCenter.y - 0.75D + ry, frontCenter.z + rz, -vec.x * 0.5F, -vec.y * 0.5F, -vec.z * 0.5F);
 				}
 			}
 		}
@@ -790,7 +793,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 	@Override
 	public UUID getBossInfoUuid() {
-		return this.dataManager.get(BOSSINFO_ID).or(new UUID(0, 0));
+		return this.dataManager.get(BOSSINFO_ID).orElse(new UUID(0, 0));
 	}
 
 	@Override
@@ -842,7 +845,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		}
 
 		@Override
-		public void updateTask() {
+		public void tick() {
 			if(this.spawnCooldown <= 0) {
 				this.spawnCooldown = (int)((180 + this.entity.rand.nextInt(100)) / this.entity.getWispStrengthModifier());
 				List<BlockPos> blocks = this.entity.findSmallFacesBlocks();
@@ -854,13 +857,13 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 						BlockPos anchor = blocks.get(this.entity.rand.nextInt(blocks.size()));
 
 						List<EnumFacing> facings = new ArrayList<>();
-						facings.addAll(Arrays.asList(EnumFacing.VALUES));
+						facings.addAll(Arrays.asList(EnumFacing.values()));
 						Collections.shuffle(facings, this.entity.rand);
 
 						for(EnumFacing facing : facings) {
-							EnumFacing facingUp = facing.getAxis().isVertical() ? EnumFacing.HORIZONTALS[this.entity.rand.nextInt(EnumFacing.HORIZONTALS.length)] : EnumFacing.UP;
+							EnumFacing facingUp = facing.getAxis().isVertical() ? EnumFacing.Plane.HORIZONTAL.random(this.entity.rand) : EnumFacing.UP;
 							if(face.checkAnchorAt(anchor, facing, facingUp, AnchorChecks.ALL) == 0) {
-								face.onInitialSpawn(this.entity.world.getDifficultyForLocation(anchor), null);
+								face.onInitialSpawn(this.entity.world.getDifficultyForLocation(anchor), null, null);
 								face.setPositionToAnchor(anchor, facing, facingUp);
 								this.entity.world.spawnEntity(face);
 								break spawnLoop;

@@ -15,6 +15,7 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -110,7 +111,7 @@ public class PlayerRespawnHandler {
 
 		entity.setLocationAndAngles(newSpawn.getX() + 0.5D, newSpawn.getY(), newSpawn.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
 
-		while (!entity.world.getCollisionBoxes(entity, entity.getBoundingBox()).isEmpty() && entity.posY < 256.0D) {
+		while (entity.world.getCollisionBoxes(entity, entity.getBoundingBox(), entity.posX, entity.posY, entity.posZ).findAny().isPresent() && entity.posY < 256.0D) {
 			entity.setPosition(entity.posX, entity.posY + 1.0D, entity.posZ);
 		}
 
@@ -173,7 +174,7 @@ public class PlayerRespawnHandler {
 
 				for(int yo = yRange; surface || yo >= -yRange; yo--) {
 					if(surface) {
-						checkPos.setPos(checkPos.getX(), chunk.getHeight(checkPos), checkPos.getZ());
+						checkPos.setPos(checkPos.getX(), chunk.getHeight(Heightmap.Type.MOTION_BLOCKING, checkPos), checkPos.getZ());
 					} else {
 						checkPos.setPos(checkPos.getX(), pos.getY() + yo, checkPos.getZ());
 					}

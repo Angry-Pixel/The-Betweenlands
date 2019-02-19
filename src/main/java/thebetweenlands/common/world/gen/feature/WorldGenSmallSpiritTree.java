@@ -30,7 +30,7 @@ public class WorldGenSmallSpiritTree extends WorldGenerator {
 
 	static {
 		ImmutableList.Builder<EnumFacing> builder = ImmutableList.builder();
-		builder.add(EnumFacing.HORIZONTALS);
+		builder.add(EnumFacing.Plane.HORIZONTAL);
 		builder.add(EnumFacing.UP);
 		LEAVES_OFFSETS = builder.build();
 	}
@@ -169,7 +169,7 @@ public class WorldGenSmallSpiritTree extends WorldGenerator {
 		Collections.shuffle(randFacePositions, rand);
 		largeFaceLoop: for(BlockPos anchor : randFacePositions) {
 			List<EnumFacing> facings = new ArrayList<>();
-			facings.addAll(Arrays.asList(EnumFacing.HORIZONTALS));
+			facings.addAll(Arrays.asList(EnumFacing.Plane.HORIZONTAL));
 			Collections.shuffle(facings, rand);
 			for(EnumFacing facing : facings) {
 				if(face.checkAnchorAt(anchor, facing, EnumFacing.UP, AnchorChecks.ALL) == 0) {
@@ -181,7 +181,7 @@ public class WorldGenSmallSpiritTree extends WorldGenerator {
 		}
 
 		if(faceAnchor != null && faceFacing != null) {
-			face.onInitialSpawn(world.getDifficultyForLocation(faceAnchor), null);
+			face.onInitialSpawn(world.getDifficultyForLocation(faceAnchor), null, null);
 			face.setPositionToAnchor(faceAnchor, faceFacing, EnumFacing.UP);
 			world.spawnEntity(face);
 		}

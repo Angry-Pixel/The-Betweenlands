@@ -1,6 +1,9 @@
 package thebetweenlands.common.entity.mobs;
 
-import net.minecraft.block.Block;
+import java.util.Collections;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -80,9 +83,9 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	}
 
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata, @Nullable NBTTagCompound itemNbt) {
 		this.dataManager.set(ANCHOR, new BlockPos(this));
-		return super.onInitialSpawn(difficulty, livingdata);
+		return super.onInitialSpawn(difficulty, livingdata, itemNbt);
 	}
 
 	@Override
@@ -131,7 +134,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		super.livingTick();
 
 		if(this.isServerWorld() && !this.isMovementBlocked()) {
-			this.lookHelper.onUpdateLook();
+			this.lookHelper.tick();
 		}
 	}
 
@@ -197,8 +200,8 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 			entityItem.setPosition(dropPos.x, dropPos.y, dropPos.z);
 
 			entityItem.setDefaultPickupDelay();
-			if(this.captureDrops) {
-				this.capturedDrops.add(entityItem);
+			if(this.captureDrops() != null) {
+				this.captureDrops(Collections.singleton(entityItem));
 			} else {
 				this.world.spawnEntity(entityItem);
 			}
@@ -273,7 +276,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	}
 
 	@Override
-	public boolean canTrample(World world, Block block, BlockPos pos, float fallDistance) {
+	public boolean canTrample(IBlockState state, BlockPos pos, float fallDistance) {
 		return false;
 	}
 
@@ -614,7 +617,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		}
 
 		@Override
-		public void onUpdateLook() {
+		public void tick() {
 			if(this.lookingMode == 1) {
 				Vec3d center = this.face.getCenter();
 				EnumFacing[] facing = this.face.getFacingForLookDir(new Vec3d(this.x - center.x, this.y - center.y, this.z - center.z));

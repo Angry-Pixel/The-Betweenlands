@@ -5,11 +5,11 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.Particles;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -77,7 +77,7 @@ public class ItemLurkerSkinArmor extends ItemBLArmor {
 							float ry = rand.nextFloat() - rand.nextFloat();
 							float rz = rand.nextFloat() - rand.nextFloat();
 	
-							player.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, player.posX + (double)rx, player.posY + (double)ry, player.posZ + (double)rz, player.motionX, player.motionY, player.motionZ);
+							player.world.spawnParticle(Particles.BUBBLE, player.posX + (double)rx, player.posY + (double)ry, player.posZ + (double)rz, player.motionX, player.motionY, player.motionZ);
 						}
 	
 						player.attackEntityFrom(DamageSource.DROWN, 2.0F);

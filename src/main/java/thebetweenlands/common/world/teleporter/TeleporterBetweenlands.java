@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.layer.IntCache;
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -83,7 +84,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 							BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
 							Chunk chunk = this.getDecoratedChunk(this.toWorld, pos); //Force chunk to generate
-							pos = new BlockPos(pos.getX(), chunk.getHeight(pos), pos.getZ());
+							pos = new BlockPos(pos.getX(), chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING).getHeight(pos.getX() & 15, pos.getZ() & 15), pos.getZ());
 							for(int xo = -1; xo <= 1; xo++) {
 								for(int zo = -1; zo <= 1; zo++) {
 									for(int yo = 0; yo <= 2; yo++) {
@@ -269,7 +270,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 		}
 
 		Chunk chunk = this.getDecoratedChunk(this.toWorld, selectedPos); //Force chunk to generate
-		int height = chunk.getHeight(selectedPos);
+		int height = chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING).getHeight(selectedPos.getX() & 15, selectedPos.getZ() & 15);
 		return new BlockPos(selectedPos.getX(), height, selectedPos.getZ());
 	}
 
@@ -339,7 +340,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 			for(int zo = -16; zo <= -16; zo++) {
 				checkPos.setPos(start.getX() + xo, start.getY(), start.getZ() + zo);
 				Chunk chunk = this.getDecoratedChunk(this.toWorld, checkPos); //Force chunk to generate
-				int height = chunk.getHeight(checkPos);
+				int height = chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING).getHeight(checkPos.getX() & 15, checkPos.getZ() & 15);
 				if(height > 0 && height < this.toWorld.getActualHeight() - 16) {
 					return new BlockPos(checkPos.getX(), height, checkPos.getZ());
 				}
@@ -419,7 +420,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 		return this.spiralGenerate(center, 64, 0, 0, checkPos -> {
 			Chunk chunk = this.getDecoratedChunk(this.toWorld, checkPos); //Force chunk to generate
-			checkPos.setY(chunk.getHeight(checkPos) - 1);
+			checkPos.setY(chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING).getHeight(checkPos.getX() & 15, checkPos.getZ() & 15) - 1);
 
 			if(SurfaceType.MIXED_GROUND.matches(this.toWorld.getBlockState(checkPos)) && this.toWorld.isAirBlock(checkPos.up()) && this.canGeneratePortalTree(this.toWorld, checkPos)) {
 				if(genTree.generate(this.toWorld, this.toWorld.rand, checkPos.toImmutable())) {
@@ -534,7 +535,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 				if(yDown != 0 || yUp != 0) {
 					Chunk chunk = this.getDecoratedChunk(this.toWorld, checkPos); //Force chunk to generate
-					int height = chunk.getHeight(checkPos) - 1;
+					int height = chunk.getHeightmap(Heightmap.Type.MOTION_BLOCKING).getHeight(checkPos.getX() & 15, checkPos.getZ() & 15) - 1;
 					for(int yo = 1; yo <= yUp; yo++) {
 						checkPos.setPos(center.getX() + xo, height + yo, center.getZ() + zo);
 						if(gen.apply(checkPos)) {
@@ -674,19 +675,19 @@ public final class TeleporterBetweenlands extends Teleporter {
 	}
 
 	protected Chunk getDecoratedChunk(World world, BlockPos pos) {
-		BlockPos.PooledMutableBlockPos mutableBlockPos = BlockPos.PooledMutableBlockPos.retain();
-		int bx = pos.getX();
-		int by = pos.getY();
-		int bz = pos.getZ();
-		for (int xo = -16; xo <= 16; xo += 16) {
-			for (int yo = -16; yo <= 16; yo += 16) {
-				for (int zo = -16; zo <= 16; zo += 16) {
-					mutableBlockPos.setPos(bx + xo, by + yo, bz + zo);
-					world.getBlockState(mutableBlockPos); //Get block for compat with cubic chunks mod
+		try(BlockPos.PooledMutableBlockPos mutableBlockPos = BlockPos.PooledMutableBlockPos.retain()) {
+			int bx = pos.getX();
+			int by = pos.getY();
+			int bz = pos.getZ();
+			for (int xo = -16; xo <= 16; xo += 16) {
+				for (int yo = -16; yo <= 16; yo += 16) {
+					for (int zo = -16; zo <= 16; zo += 16) {
+						mutableBlockPos.setPos(bx + xo, by + yo, bz + zo);
+						world.getBlockState(mutableBlockPos); //Get block for compat with cubic chunks mod
+					}
 				}
 			}
 		}
-		mutableBlockPos.release();
 		return world.getChunk(pos);
 	}
 

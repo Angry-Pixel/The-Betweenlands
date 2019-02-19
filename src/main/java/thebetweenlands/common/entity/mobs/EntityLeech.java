@@ -12,18 +12,20 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketSetPassengers;
+import net.minecraft.particles.RedstoneParticleData;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIBLAvoidEntity;
 import thebetweenlands.common.registries.EntityRegistry;
@@ -170,7 +172,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 			moveProgress = 1 + mathSucking.swing(1, 0.15F, false);
 			if (rand.nextInt(10) == 0) {
 				for (int i = 0; i < 8; i++) {
-					world.spawnParticle(EnumParticleTypes.REDSTONE, posX + (rand.nextFloat() - rand.nextFloat()), posY + rand.nextFloat(), posZ + (rand.nextFloat() - rand.nextFloat()), 0, 0, 0);
+					world.spawnParticle(new RedstoneParticleData(0, 0, 0, 1), posX + (rand.nextFloat() - rand.nextFloat()), posY + rand.nextFloat(), posZ + (rand.nextFloat() - rand.nextFloat()), 0, 0, 0);
 				}
 			}
 		} else if (!world.isRemote()) {
@@ -255,10 +257,10 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	@Override
 	public void readAdditional(NBTTagCompound nbttagcompound) {
 		super.readAdditional(nbttagcompound);
-		if(nbttagcompound.contains("bloodLevel")) {
+		if(nbttagcompound.contains("bloodLevel", Constants.NBT.TAG_INT)) {
 			setBloodConsumed(nbttagcompound.getInt("bloodLevel"));
 		}
-		if(nbttagcompound.contains("fleeingTick")) {
+		if(nbttagcompound.contains("fleeingTick", Constants.NBT.TAG_INT)) {
 			fleeingTick = nbttagcompound.getInt("fleeingTick");
 		}
 	}

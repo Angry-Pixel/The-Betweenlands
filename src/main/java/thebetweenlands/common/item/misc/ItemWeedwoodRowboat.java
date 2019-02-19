@@ -79,7 +79,7 @@ public class ItemWeedwoodRowboat extends Item {
         boolean liquid = block.getMaterial().isLiquid();
         EntityWeedwoodRowboat rowboat = new EntityWeedwoodRowboat(world, hit.hitVec.x, liquid ? hit.hitVec.y - 0.3 : hit.hitVec.y, hit.hitVec.z);
         rowboat.rotationYaw = player.rotationYaw;
-        if (!world.getCollisionBoxes(rowboat, rowboat.getBoundingBox().grow(-0.1, -0.1, -0.1)).isEmpty()) {
+        if (world.getCollisionBoxes(rowboat, rowboat.getBoundingBox().grow(-0.1, -0.1, -0.1), rowboat.posX, rowboat.posY, rowboat.posZ).findAny().isPresent()) {
             return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
         }
         if (!world.isRemote()) {

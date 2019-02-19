@@ -3,7 +3,8 @@ package thebetweenlands.common.entity.mobs;
 import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.block.Block;
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -14,14 +15,15 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -57,7 +59,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance diff, IEntityLivingData data) {
+	public IEntityLivingData onInitialSpawn(DifficultyInstance diff, @Nullable IEntityLivingData data, @Nullable NBTTagCompound itemNbt) {
 		this.rotationYaw = this.world.rand.nextFloat() * 360.0F;
 		return data;
 	}
@@ -195,7 +197,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 					double motionX = this.rand.nextDouble() * 0.2 - 0.1;
 					double motionY = this.rand.nextDouble() * 0.1 + 0.1;
 					double motionZ = this.rand.nextDouble() * 0.2 - 0.1;
-					this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(blockState));
+					this.world.spawnParticle(new BlockParticleData(Particles.BLOCK, blockState), px + ox, py, pz + oz, motionX, motionY, motionZ);
 				}
 			}
 		}

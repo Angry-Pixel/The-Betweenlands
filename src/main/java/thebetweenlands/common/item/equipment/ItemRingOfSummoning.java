@@ -104,7 +104,7 @@ public class ItemRingOfSummoning extends ItemRing {
 								EntityMummyArm arm = new EntityMummyArm(entity.world);
 								arm.setLocationAndAngles(targetPos.getX() + 0.5D, targetPos.getY(), targetPos.getZ() + 0.5D, 0, 0);
 
-								if(arm.world.getCollisionBoxes(arm, arm.getBoundingBox()).isEmpty()) {
+								if(!arm.world.getCollisionBoxes(arm, arm.getBoundingBox(), arm.posX, arm.posY, arm.posZ).findAny().isPresent()) {
 									this.drainPower(stack, entity);
 									arm.setOwner(entity);
 									entity.world.spawnEntity(arm);
@@ -128,7 +128,7 @@ public class ItemRingOfSummoning extends ItemRing {
 	@Override
 	@OnlyIn(Dist.CLIENT)
 	public boolean hasEffect(ItemStack stack) {
-		return stack.hasTagCompound() && stack.getTag().getBoolean("ringActive");
+		return stack.hasTag() && stack.getTag().getBoolean("ringActive");
 	}
 
 	public static boolean isRingActive(Entity entity) {

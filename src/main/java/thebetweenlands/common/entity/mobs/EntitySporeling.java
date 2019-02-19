@@ -176,7 +176,7 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	protected boolean canDespawn() {
+	public boolean canDespawn() {
 		return false;
 	}
 	

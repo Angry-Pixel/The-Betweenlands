@@ -23,6 +23,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
+//TODO 1.13 Needs a fresh copy
 @OnlyIn(Dist.CLIENT)
 public class IsolatedBlockModelRenderer {
 	public static interface OcclusionCuller {

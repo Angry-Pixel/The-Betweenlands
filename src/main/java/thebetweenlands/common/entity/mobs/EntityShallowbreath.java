@@ -66,27 +66,25 @@ public class EntityShallowbreath extends EntityFlyingMob implements IEntityBL {
 
 				boolean canPassSolidBlocks = ((EntityShallowbreath) this.entity).getAttackTarget() != null;
 
-				PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
-
-				for(int i = 1; (double)i < step; ++i) {
-					cx += stepX;
-					cy += stepY;
-					cz += stepZ;
-
-					checkPos.setPos(cx, cy, cz);
-
-					if(this.entity.getEntityWorld().isBlockLoaded(checkPos)) {
-						IBlockState state = this.entity.getEntityWorld().getBlockState(checkPos);
-
-						if ((!canPassSolidBlocks && state.isOpaqueCube()) || state.getMaterial().isLiquid()) {
+				try(PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain()) {
+					for(int i = 1; (double)i < step; ++i) {
+						cx += stepX;
+						cy += stepY;
+						cz += stepZ;
+	
+						checkPos.setPos(cx, cy, cz);
+	
+						if(this.entity.getEntityWorld().isBlockLoaded(checkPos)) {
+							IBlockState state = this.entity.getEntityWorld().getBlockState(checkPos);
+	
+							if ((!canPassSolidBlocks && state.isOpaqueCube()) || state.getMaterial().isLiquid()) {
+								return false;
+							}
+						} else {
 							return false;
 						}
-					} else {
-						return false;
 					}
 				}
-
-				checkPos.release();
 
 				return true;
 			}
@@ -108,21 +106,19 @@ public class EntityShallowbreath extends EntityFlyingMob implements IEntityBL {
 
 				int worldHeight = 0;
 
-				PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
-
-				for(int yo = 0; yo < MathHelper.ceil(EntityShallowbreath.this.aboveLayer); yo++) {
-					checkPos.setPos(this.entity.posX, this.entity.posY - yo, this.entity.posZ);
-
-					if(!this.entity.getEntityWorld().isBlockLoaded(checkPos))
-						return this.entity.posY;
-
-					if(!this.entity.getEntityWorld().isAirBlock(checkPos)) {
-						worldHeight = checkPos.getY();
-						break;
+				try(PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain()) {
+					for(int yo = 0; yo < MathHelper.ceil(EntityShallowbreath.this.aboveLayer); yo++) {
+						checkPos.setPos(this.entity.posX, this.entity.posY - yo, this.entity.posZ);
+	
+						if(!this.entity.getEntityWorld().isBlockLoaded(checkPos))
+							return this.entity.posY;
+	
+						if(!this.entity.getEntityWorld().isAirBlock(checkPos)) {
+							worldHeight = checkPos.getY();
+							break;
+						}
 					}
 				}
-
-				checkPos.release();
 
 				if(this.entity.posY > worldHeight + EntityShallowbreath.this.aboveLayer) {
 					return this.entity.posY + (-rand.nextFloat() * 2.0F) * 16.0F * distanceMultiplier;

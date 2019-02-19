@@ -1,11 +1,10 @@
 package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
-
-import com.google.common.base.Optional;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,12 +12,12 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -60,13 +59,13 @@ public class EntityPrimordialMalevolenceBlockade extends EntityMob implements IE
 	@Override
 	protected void registerData() {
 		super.registerData();
-		this.getDataManager().register(OWNER, Optional.absent());
+		this.getDataManager().register(OWNER, Optional.empty());
 		this.getDataManager().register(SIZE, 1.0F);
 		this.getDataManager().register(ROTATION, this.rotation);
 	}
 
 	public void setOwner(@Nullable Entity entity) {
-		this.getDataManager().set(OWNER, entity == null ? Optional.absent() : Optional.of(entity.getUniqueID()));
+		this.getDataManager().set(OWNER, entity == null ? Optional.empty() : Optional.of(entity.getUniqueID()));
 	}
 
 	@Nullable
@@ -150,7 +149,7 @@ public class EntityPrimordialMalevolenceBlockade extends EntityMob implements IE
 		if(nbt.hasUniqueId("owner")) {
 			this.getDataManager().set(OWNER, Optional.of(nbt.getUniqueId("owner")));
 		} else {
-			this.getDataManager().set(OWNER, Optional.absent());
+			this.getDataManager().set(OWNER, Optional.empty());
 		}
 	}
 
@@ -235,7 +234,7 @@ public class EntityPrimordialMalevolenceBlockade extends EntityMob implements IE
 					sz = this.getOwner().posZ;
 				}
 
-				this.world.spawnParticle(EnumParticleTypes.PORTAL, sx, sy, sz, ex - sx, ey - sy, ez - sz);
+				this.world.spawnParticle(Particles.PORTAL, sx, sy, sz, ex - sx, ey - sy, ez - sz);
 			}
 		}
 	}

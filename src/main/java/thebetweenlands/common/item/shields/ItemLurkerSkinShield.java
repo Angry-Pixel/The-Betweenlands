@@ -76,7 +76,7 @@ public class ItemLurkerSkinShield extends ItemBLShield {
 					EntityBoat boat = new EntityLurkerSkinRaft(worldIn, rayTrace.hitVec.x, rayTrace.hitVec.y - 0.12D, rayTrace.hitVec.z, stack);
 					boat.rotationYaw = playerIn.rotationYaw;
 
-					if(worldIn.getCollisionBoxes(boat, boat.getBoundingBox().grow(-0.1D)).isEmpty()) {
+					if(!worldIn.getCollisionBoxes(boat, boat.getBoundingBox().grow(-0.1D), boat.posX, boat.posY, boat.posZ).findAny().isPresent()) {
 						if(!worldIn.isRemote()) {
 							worldIn.spawnEntity(boat);
 

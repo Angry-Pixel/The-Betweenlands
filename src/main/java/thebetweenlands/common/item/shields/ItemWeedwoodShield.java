@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySmallFireball;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.IItemPropertyGetter;
@@ -16,12 +17,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.particles.ItemParticleData;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
@@ -86,7 +87,7 @@ public class ItemWeedwoodShield extends ItemBLShield {
 			if(burningTicks > 0) {
 				this.setBurningTicks(stack, burningTicks - 1);
 				if(burningTicks % 5 == 0)
-					worldIn.play((EntityPlayer)null, (double)((float)entityIn.posX), (double)((float)entityIn.posY + entityIn.getEyeHeight()), (double)((float)entityIn.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + worldIn.rand.nextFloat(), worldIn.rand.nextFloat() * 0.7F + 0.3F);
+					worldIn.playSound((EntityPlayer)null, (double)((float)entityIn.posX), (double)((float)entityIn.posY + entityIn.getEyeHeight()), (double)((float)entityIn.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + worldIn.rand.nextFloat(), worldIn.rand.nextFloat() * 0.7F + 0.3F);
 				if(burningTicks % 10 == 0 && worldIn.rand.nextFloat() < 0.3F)
 					entityIn.world.setEntityState(entityIn, (byte)30);
 				if(burningTicks % 3 == 0 && entityIn instanceof EntityLivingBase)
@@ -111,7 +112,7 @@ public class ItemWeedwoodShield extends ItemBLShield {
 			if(burningTicks > 0) {
 				this.setBurningTicks(stack, burningTicks - 1);
 				if(burningTicks % 5 == 0)
-					entityItem.world.play((EntityPlayer)null, (double)((float)entityItem.posX), (double)((float)entityItem.posY + entityItem.height / 2.0F), (double)((float)entityItem.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + entityItem.world.rand.nextFloat(), entityItem.world.rand.nextFloat() * 0.7F + 0.3F);
+					entityItem.world.playSound((EntityPlayer)null, (double)((float)entityItem.posX), (double)((float)entityItem.posY + entityItem.height / 2.0F), (double)((float)entityItem.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + entityItem.world.rand.nextFloat(), entityItem.world.rand.nextFloat() * 0.7F + 0.3F);
 				if(burningTicks % 3 == 0) {
 					if (stack.attemptDamageItem(1, entityItem.world.rand, null)) {
 						this.renderBrokenItemStack(entityItem.world, entityItem.posX, entityItem.posY + entityItem.height / 2.0F, entityItem.posZ, stack);
@@ -137,10 +138,10 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	}
 
 	protected void renderBrokenItemStack(World world, double x, double y, double z, ItemStack stack) {
-		world.play((EntityPlayer)null, x, y, z, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.NEUTRAL, 0.8F, 0.8F + world.rand.nextFloat() * 0.4F);
+		world.playSound((EntityPlayer)null, x, y, z, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.NEUTRAL, 0.8F, 0.8F + world.rand.nextFloat() * 0.4F);
 		for (int i = 0; i < 5; ++i) {
 			Vec3d motion = new Vec3d(((double)world.rand.nextFloat() - 0.5D) * 0.1D, Math.random() * 0.1D + 0.1D, 0.0D);
-			world.spawnParticle(EnumParticleTypes.ITEM_CRACK, x, y, z, motion.x, motion.y + 0.05D, motion.z, new int[] {Item.getIdFromItem(stack.getItem())});
+			world.spawnParticle(new ItemParticleData(Particles.ITEM, new ItemStack(stack.getItem())), x, y, z, motion.x, motion.y + 0.05D, motion.z);
 		}
 	}
 

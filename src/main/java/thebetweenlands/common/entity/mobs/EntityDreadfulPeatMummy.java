@@ -26,10 +26,12 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -39,6 +41,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
@@ -101,7 +104,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 		dataManager.register(SPAWNING_STATE_DW, 0);
 		dataManager.register(PREY, 0);
 		dataManager.register(Y_OFFSET, 0F);
-		this.getDataManager().register(BOSSINFO_ID, Optional.absent());
+		this.getDataManager().register(BOSSINFO_ID, Optional.empty());
 	}
 /*
 	@Override
@@ -236,7 +239,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 						double motionX = rand.nextDouble() * 0.2 - 0.1;
 						double motionY = rand.nextDouble() * 0.25 + 0.1;
 						double motionZ = rand.nextDouble() * 0.2 - 0.1;
-						getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(state));
+						getEntityWorld().spawnParticle(new BlockParticleData(Particles.BLOCK, state), px + ox, py, pz + oz, motionX, motionY, motionZ);
 					}
 				}
 			} else if(this.deathTicks == 0) {
@@ -257,7 +260,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 						double motionX = rand.nextDouble() * 0.2 - 0.1;
 						double motionY = rand.nextDouble() * 0.25 + 0.1;
 						double motionZ = rand.nextDouble() * 0.2 - 0.1;
-						getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(state));
+						getEntityWorld().spawnParticle(new BlockParticleData(Particles.BLOCK, state), px + ox, py, pz + oz, motionX, motionY, motionZ);
 					}
 				}
 			}
@@ -338,7 +341,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 	private void spawnMummy() {
 		EntityPeatMummy mummy = new EntityPeatMummy(getEntityWorld());
 		mummy.setPosition(posX + (rand.nextInt(6) - 3), posY, posZ + (rand.nextInt(6) - 3));
-		if(mummy.getEntityWorld().checkNoEntityCollision(mummy.getBoundingBox()) && mummy.getEntityWorld().getCollisionBoxes(mummy, mummy.getBoundingBox()).isEmpty()) {
+		if(mummy.getEntityWorld().checkNoEntityCollision(mummy, mummy.getBoundingBox()) && !mummy.getEntityWorld().getCollisionBoxes(mummy, mummy.getBoundingBox(), this.posX, this.posY, this.posZ).findAny().isPresent()) {
 			untilSpawnMummy = SPAWN_MUMMY_COOLDOWN;
 			mummy.setAttackTarget((EntityLivingBase) getAttackTarget());
 			mummy.setHealth(30);
@@ -486,7 +489,7 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 								double motionX = rand.nextDouble() * 0.2 - 0.1;
 								double motionY = rand.nextDouble() * 0.25 + 0.1;
 								double motionZ = rand.nextDouble() * 0.2 - 0.1;
-								getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox + xo, py, pz + oz + zo, motionX, motionY, motionZ, Block.getStateId(state));
+								getEntityWorld().spawnParticle(new BlockParticleData(Particles.BLOCK, state), px + ox + xo, py, pz + oz + zo, motionX, motionY, motionZ);
 							}
 						}
 					}
@@ -564,8 +567,8 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 	}
 
 	@Override
-    public void setCustomNameTag(String name) {
-        super.setCustomNameTag(name);
+    public void setCustomName(ITextComponent name) {
+        super.setCustomName(name);
         bossInfo.setName(this.getDisplayName());
     }
 
@@ -619,6 +622,6 @@ public class EntityDreadfulPeatMummy extends EntityMob implements IEntityBL, IBL
 	
 	@Override
 	public UUID getBossInfoUuid() {
-		return dataManager.get(BOSSINFO_ID).or(new UUID(0, 0));
+		return dataManager.get(BOSSINFO_ID).orElse(new UUID(0, 0));
 	}
 }

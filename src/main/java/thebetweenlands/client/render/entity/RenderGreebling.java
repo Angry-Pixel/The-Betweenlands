@@ -19,7 +19,7 @@ public class RenderGreebling extends RenderLiving<EntityGreebling> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityGreebling entity) {
-		if (entity.getType() == 0) {
+		if (entity.getGreeblingType() == 0) {
 			return TEXTURE_0;
 		}
 		else {

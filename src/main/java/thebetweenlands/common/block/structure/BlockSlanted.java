@@ -47,7 +47,7 @@ public class BlockSlanted extends BlockStairs {
 
 		EnumMap<EnumFacing, EnumHalf> halves = new EnumMap<EnumFacing, EnumHalf>(EnumFacing.class);
 		EnumMap<EnumFacing, EnumFacing> facings = new EnumMap<EnumFacing, EnumFacing>(EnumFacing.class);
-		for(EnumFacing side : EnumFacing.HORIZONTALS) {
+		for(EnumFacing side : EnumFacing.Plane.HORIZONTAL) {
 			IBlockState offsetState = worldIn.getBlockState(pos.offset(side));
 			if(isBlockStairs(offsetState)) {
 				facings.put(side, offsetState.getValue(FACING));

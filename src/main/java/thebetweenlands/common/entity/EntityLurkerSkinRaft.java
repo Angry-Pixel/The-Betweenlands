@@ -141,7 +141,7 @@ public class EntityLurkerSkinRaft extends EntityBoat {
 
 		if(!this.shield.isEmpty()) {
 			NBTTagCompound shieldNbt = new NBTTagCompound();
-			this.shield.writeToNBT(shieldNbt);
+			this.shield.write(shieldNbt);
 			nbt.setTag("shield", shieldNbt);
 		}
 	}
@@ -153,7 +153,7 @@ public class EntityLurkerSkinRaft extends EntityBoat {
 		this.shield = ItemStack.EMPTY;
 		if(nbt.contains("shield", Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound shieldNbt = nbt.getCompound("shield");
-			this.shield = new ItemStack(shieldNbt);
+			this.shield = ItemStack.read(shieldNbt);
 		}
 	}
 }

@@ -108,7 +108,7 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 		Collections.shuffle(largeFacePositions, rand);
 		largeFaceLoop: for(BlockPos anchor : largeFacePositions) {
 			List<EnumFacing> facings = new ArrayList<>();
-			facings.addAll(Arrays.asList(EnumFacing.HORIZONTALS));
+			facings.addAll(Arrays.asList(EnumFacing.Plane.HORIZONTAL));
 			Collections.shuffle(facings, rand);
 			for(EnumFacing facing : facings) {
 				if(face.checkAnchorAt(anchor, facing, EnumFacing.UP, AnchorChecks.ALL) == 0) {
@@ -120,7 +120,7 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 		}
 
 		if(faceAnchor != null && faceFacing != null) {
-			face.onInitialSpawn(world.getDifficultyForLocation(faceAnchor), null);
+			face.onInitialSpawn(world.getDifficultyForLocation(faceAnchor), null, null);
 			face.setPositionToAnchor(faceAnchor, faceFacing, EnumFacing.UP);
 			world.spawnEntity(face);
 		}

@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemPropertyGetter;
@@ -12,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
@@ -75,7 +75,7 @@ public class ItemAngryPebble extends Item {
 			Vec3d source = player.getPositionVector().add(0, player.getEyeHeight() - 0.2F, 0).add(forward.scale(0.4F)).add(right.scale(0.3F));
 
 			for(int i = 0; i < 5; i++) {
-				player.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, source.x + player.world.rand.nextFloat() * 0.5F - 0.25F, source.y + player.world.rand.nextFloat() * 0.5F - 0.25F, source.z + player.world.rand.nextFloat() * 0.5F - 0.25F, 0, 0, 0);
+				player.world.spawnParticle(Particles.SMOKE, source.x + player.world.rand.nextFloat() * 0.5F - 0.25F, source.y + player.world.rand.nextFloat() * 0.5F - 0.25F, source.z + player.world.rand.nextFloat() * 0.5F - 0.25F, 0, 0, 0);
 			}
 		}
 

@@ -23,7 +23,7 @@ public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 
 	@Override
 	protected void initEntityAI() {
-		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, false, false, e -> IMob.VISIBLE_MOB_SELECTOR.apply(e) && e instanceof EntityTamedSpiritTreeFace == false));
+		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, false, false, e -> IMob.VISIBLE_MOB_SELECTOR.test(e) && e instanceof EntityTamedSpiritTreeFace == false));
 
 		this.tasks.addTask(0, new AITrackTarget(this, true, 16.0D));
 		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
@@ -36,16 +36,16 @@ public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 		this.tasks.addTask(3, new AIWander(this, 8, 0.33D, 200));
 		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F) {
 			@Override
-			public void updateTask() {
+			public void tick() {
 				EntityTamedSpiritTreeFace.this.getLookHelper().setSpeed(0.33D);
-				super.updateTask();
+				super.tick();
 			}
 		});
 		this.tasks.addTask(5, new EntityAILookIdle(this) {
 			@Override
-			public void updateTask() {
+			public void tick() {
 				EntityTamedSpiritTreeFace.this.getLookHelper().setSpeed(0.33D);
-				super.updateTask();
+				super.tick();
 			}
 		});
 	}
@@ -124,7 +124,7 @@ public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 		}
 
 		@Override
-		public void updateTask() {
+		public void tick() {
 			if(this.findWoodCooldown <= 0 && (this.woodBlocks == null || this.woodBlocks.isEmpty())) {
 				this.findWoodCooldown = 40 + this.entity.getRNG().nextInt(60);
 				this.woodBlocks = this.entity.findNearbyWoodBlocks();

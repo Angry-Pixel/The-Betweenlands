@@ -9,7 +9,9 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityGecko;
@@ -40,16 +42,16 @@ public class ItemMob extends Item {
                 break;
             case "gecko":
                 entity = new EntityGecko(world);
-                entity.setHealth(stack.hasTagCompound() && stack.getTag().contains("Health") ? stack.getTag().getFloat("Health"): (float) entity.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getValue());
+                entity.setHealth(stack.hasTag() && stack.getTag().contains("Health", Constants.NBT.TAG_FLOAT) ? stack.getTag().getFloat("Health") : (float) entity.getAttribute(SharedMonsterAttributes.MAX_HEALTH).getValue());
                 break;
         }
         if (entity != null) {
             BlockPos offset = pos.offset(facing);
             entity.setLocationAndAngles(offset.getX() + 0.5F, offset.getY(), offset.getZ() + 0.5F, 0.0F, 0.0F);
             if (!(stack.getDisplayName().equals(TranslationHelper.translateToLocal(stack.getTranslationKey()))) && stack.hasDisplayName())
-                entity.setCustomNameTag(stack.getDisplayName());
+                entity.setCustomName(stack.getDisplayName());
             world.spawnEntity(entity);
-            entity.playLivingSound();
+            entity.playAmbientSound();
             player.setHeldItem(hand, ItemStack.EMPTY);
             return EnumActionResult.SUCCESS;
         }

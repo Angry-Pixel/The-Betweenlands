@@ -172,7 +172,7 @@ public abstract class EntityAIGeckoHide extends EntityAIBase {
 	}
 
 	@Override
-	public void updateTask() {
+	public void tick() {
 		Vec3d fleeingCausePos = this.getFleeingCausePosition();
 		if (fleeingCausePos != null && gecko.getPositionVector().squareDistanceTo(fleeingCausePos) < 49) {
 			gecko.getNavigator().setSpeed(nearSpeed);

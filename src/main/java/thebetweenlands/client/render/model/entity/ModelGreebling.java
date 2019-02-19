@@ -339,7 +339,7 @@ public class ModelGreebling extends MowzieModelBase{
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         EntityGreebling greebling = (EntityGreebling) entity;
 
-        if (greebling.getType() == 0) {
+        if (greebling.getGreeblingType() == 0) {
             float disappearFrame = greebling.disappearTimer > 0 ? (float) Math.pow(greebling.disappearTimer / 8f, 4) : 0;
             float scaleXZ = 1 - disappearFrame;
             float scaleY = 1 + 0.1f * disappearFrame;

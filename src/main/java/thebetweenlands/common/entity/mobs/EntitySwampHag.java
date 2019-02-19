@@ -120,7 +120,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	public void livingTick() {
 		breatheFloat = animationBreathe.swing(0.2F, 0.5F, false);
 		
-		if(this.getAttackTarget() != null && !this.getRecursivePassengersByType(EntityWight.class).isEmpty()) {
+		if(this.getAttackTarget() != null && this.getRecursivePassengers().stream().anyMatch(e -> e instanceof EntityWight)) {
 			if(this.pathingCooldown <= 0) {
 				//No idea why the swamp hag doesn't want to move when possessed, this seems to work as hackish solution
 				if(!this.navigator.tryMoveToEntityLiving(this.getAttackTarget(), 1)) {

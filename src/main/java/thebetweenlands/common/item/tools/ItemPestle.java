@@ -40,7 +40,7 @@ public class ItemPestle extends Item implements IAnimatorRepairable {
 
     @Override
     public void onUpdate(ItemStack stack, World world, Entity entity, int tick, boolean map) {
-        if (!stack.hasTagCompound())
+        if (!stack.hasTag())
             stack.setTagCompound(new NBTTagCompound());
     }
 
@@ -50,7 +50,7 @@ public class ItemPestle extends Item implements IAnimatorRepairable {
     }
 
     private boolean hasTag(ItemStack stack) {
-        if (!stack.hasTagCompound()) {
+        if (!stack.hasTag()) {
             stack.setTagCompound(new NBTTagCompound());
             return false;
         }

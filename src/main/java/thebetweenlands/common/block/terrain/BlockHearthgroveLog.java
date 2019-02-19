@@ -11,13 +11,13 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Particles;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.IProperty;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
@@ -49,66 +49,64 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 
 	@Override
 	public void animateTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
-		PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
-
-		boolean hasWater = false;
-		for(EnumFacing offset : EnumFacing.HORIZONTALS) {
-			IBlockState offsetState = worldIn.getBlockState(checkPos.setPos(pos.getX() + offset.getXOffset(), pos.getY(), pos.getZ() + offset.getZOffset()));
-			IBlockState offsetStateDown = worldIn.getBlockState(checkPos.setPos(pos.getX() + offset.getXOffset(), pos.getY() - 1, pos.getZ() + offset.getZOffset()));
-
-			if(offsetStateDown.getMaterial() == Material.WATER && offsetState.getMaterial() != Material.WATER) {
-				if(rand.nextInt(8) == 0) {
-					for(int i = 0; i < 5; i++) {
-						float x = pos.getX() + (offset.getXOffset() > 0 ? 1.05F : offset.getXOffset() == 0 ? rand.nextFloat() : -0.05F);
-						float y = pos.getY() - 0.1F;
-						float z = pos.getZ() + (offset.getZOffset() > 0 ? 1.05F : offset.getZOffset() == 0 ? rand.nextFloat() : -0.05F);
-
-						BLParticles.PURIFIER_STEAM.spawn(worldIn, x, y, z);
+		try(PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain()) {
+			boolean hasWater = false;
+			for(EnumFacing offset : EnumFacing.Plane.HORIZONTAL) {
+				IBlockState offsetState = worldIn.getBlockState(checkPos.setPos(pos.getX() + offset.getXOffset(), pos.getY(), pos.getZ() + offset.getZOffset()));
+				IBlockState offsetStateDown = worldIn.getBlockState(checkPos.setPos(pos.getX() + offset.getXOffset(), pos.getY() - 1, pos.getZ() + offset.getZOffset()));
+	
+				if(offsetStateDown.getMaterial() == Material.WATER && offsetState.getMaterial() != Material.WATER) {
+					if(rand.nextInt(8) == 0) {
+						for(int i = 0; i < 5; i++) {
+							float x = pos.getX() + (offset.getXOffset() > 0 ? 1.05F : offset.getXOffset() == 0 ? rand.nextFloat() : -0.05F);
+							float y = pos.getY() - 0.1F;
+							float z = pos.getZ() + (offset.getZOffset() > 0 ? 1.05F : offset.getZOffset() == 0 ? rand.nextFloat() : -0.05F);
+	
+							BLParticles.PURIFIER_STEAM.spawn(worldIn, x, y, z);
+						}
 					}
 				}
-			}
-
-			if(offsetState.getMaterial() == Material.WATER) {
-				if(rand.nextInt(8) == 0) {
-					for(int i = 0; i < 5; i++) {
-						float x = pos.getX() + (offset.getXOffset() > 0 ? 1.1F : offset.getXOffset() == 0 ? rand.nextFloat() : -0.1F);
-						float y = pos.getY() + rand.nextFloat();
-						float z = pos.getZ() + (offset.getZOffset() > 0 ? 1.1F : offset.getZOffset() == 0 ? rand.nextFloat() : -0.1F);
-
-						worldIn.spawnParticle(EnumParticleTypes.WATER_BUBBLE, x, y, z, 0, 0, 0);
+	
+				if(offsetState.getMaterial() == Material.WATER) {
+					if(rand.nextInt(8) == 0) {
+						for(int i = 0; i < 5; i++) {
+							float x = pos.getX() + (offset.getXOffset() > 0 ? 1.1F : offset.getXOffset() == 0 ? rand.nextFloat() : -0.1F);
+							float y = pos.getY() + rand.nextFloat();
+							float z = pos.getZ() + (offset.getZOffset() > 0 ? 1.1F : offset.getZOffset() == 0 ? rand.nextFloat() : -0.1F);
+	
+							worldIn.spawnParticle(Particles.BUBBLE, x, y, z, 0, 0, 0);
+						}
 					}
+					hasWater = true;
 				}
-				hasWater = true;
 			}
-		}
-		if(!hasWater) {
-			for(EnumFacing offset : EnumFacing.HORIZONTALS) {
-				if(rand.nextFloat() < 0.04F) {
-					checkPos.setPos(pos.getX() + offset.getXOffset(), pos.getY(), pos.getZ() + offset.getZOffset());
-					IBlockState offsetState = worldIn.getBlockState(checkPos);
-					if(!offsetState.isSideSolid(worldIn, checkPos, offset.getOpposite())) {
-						float x = pos.getX() + (offset.getXOffset() > 0 ? 1.05F : offset.getXOffset() == 0 ? rand.nextFloat() : -0.05F);
-						float y = pos.getY() + rand.nextFloat();
-						float z = pos.getZ() + (offset.getZOffset() > 0 ? 1.05F : offset.getZOffset() == 0 ? rand.nextFloat() : -0.05F);
-
-						switch(rand.nextInt(3)) {
-						default:
-						case 0:
-							BLParticles.EMBER_1.spawn(worldIn, x, y, z);
-							break;
-						case 1:
-							BLParticles.EMBER_2.spawn(worldIn, x, y, z);
-							break;
-						case 2:
-							BLParticles.EMBER_3.spawn(worldIn, x, y, z);
-							break;
+			if(!hasWater) {
+				for(EnumFacing offset : EnumFacing.Plane.HORIZONTAL) {
+					if(rand.nextFloat() < 0.04F) {
+						checkPos.setPos(pos.getX() + offset.getXOffset(), pos.getY(), pos.getZ() + offset.getZOffset());
+						IBlockState offsetState = worldIn.getBlockState(checkPos);
+						if(!offsetState.isSideSolid(worldIn, checkPos, offset.getOpposite())) {
+							float x = pos.getX() + (offset.getXOffset() > 0 ? 1.05F : offset.getXOffset() == 0 ? rand.nextFloat() : -0.05F);
+							float y = pos.getY() + rand.nextFloat();
+							float z = pos.getZ() + (offset.getZOffset() > 0 ? 1.05F : offset.getZOffset() == 0 ? rand.nextFloat() : -0.05F);
+	
+							switch(rand.nextInt(3)) {
+							default:
+							case 0:
+								BLParticles.EMBER_1.spawn(worldIn, x, y, z);
+								break;
+							case 1:
+								BLParticles.EMBER_2.spawn(worldIn, x, y, z);
+								break;
+							case 2:
+								BLParticles.EMBER_3.spawn(worldIn, x, y, z);
+								break;
+							}
 						}
 					}
 				}
 			}
 		}
-
-		checkPos.release();
 	}
 
 	@Override

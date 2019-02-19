@@ -149,7 +149,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 			BlockPos posUp = pos.up();
 			IBlockState upState = world.getBlockState(posUp);
 			if(upState.getBlock() == BlockRegistry.RUBBER_TREE_PLANK_FENCE) {
-				for(EnumFacing dir : EnumFacing.HORIZONTALS) {
+				for(EnumFacing dir : EnumFacing.Plane.HORIZONTAL) {
 					if(BlockRegistry.RUBBER_TREE_PLANK_FENCE.canBeConnectedTo(world, posUp, dir)) {
 						return false;
 					}

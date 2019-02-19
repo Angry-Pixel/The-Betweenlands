@@ -78,7 +78,7 @@ public class WorldGenTarPoolDungeon extends WorldGenHelper {
 						else
 							world.setBlockState(new BlockPos(x + xx, yy, z + zz), BlockRegistry.BETWEENSTONE.getDefaultState());
 						if (rand.nextInt(18) == 0) {
-							world.setBlockState(new BlockPos(x + xx, yy, z + zz), getRandomTarLootPot(rand).with(BlockLootPot.FACING, EnumFacing.HORIZONTALS[rand.nextInt(4)]));
+							world.setBlockState(new BlockPos(x + xx, yy, z + zz), getRandomTarLootPot(rand).with(BlockLootPot.FACING, EnumFacing.Plane.HORIZONTAL.random(rand)));
 							TileEntity te = world.getTileEntity(this.getCheckPos(x + xx, yy, z + zz));
 							if(te instanceof TileEntityLootPot) {
 								((TileEntityLootPot)te).setLootTable(loot, rand.nextLong());

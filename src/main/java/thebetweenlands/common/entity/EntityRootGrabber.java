@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -14,13 +13,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Particles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -185,7 +185,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		if(this.attackTicks >= this.delay) {
 			if(this.attackTicks == this.delay) {
 				if(!this.world.isRemote()) {
-					List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox(), e -> !e.getIsInvulnerable() && (e instanceof EntityPlayer == false || (!((EntityPlayer)e).isSpectator() && !((EntityPlayer)e).isCreative())));
+					List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getBoundingBox(), e -> !e.isInvulnerable() && (e instanceof EntityPlayer == false || (!((EntityPlayer)e).isSpectator() && !((EntityPlayer)e).isCreative())));
 					if(!targets.isEmpty()) {
 						this.grabbedEntity = targets.get(this.rand.nextInt(targets.size()));
 						this.grabbedEntity.setLocationAndAngles(this.posX, this.posY + 1, this.posZ, this.grabbedEntity.rotationYaw, this.grabbedEntity.rotationPitch);
@@ -263,7 +263,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 			BlockPos pos = new BlockPos(this.posX + dx, MathHelper.floor(this.posY + dy), this.posZ + dz);
 			IBlockState state = this.world.getBlockState(pos);
 			if(!state.getBlock().isAir(state, this.world, pos)) {
-				this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + dx, MathHelper.floor(this.posY + dy) + 1 + this.rand.nextDouble() * 0.5D, this.posZ + dz, mx, my, mz, Block.getStateId(state));
+				this.world.spawnParticle(new BlockParticleData(Particles.BLOCK, state), this.posX + dx, MathHelper.floor(this.posY + dy) + 1 + this.rand.nextDouble() * 0.5D, this.posZ + dz, mx, my, mz);
 			}
 		}
 
@@ -291,7 +291,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 			BlockPos pos = new BlockPos(this.posX + dx, MathHelper.floor(this.posY + dy), this.posZ + dz);
 			IBlockState state = this.world.getBlockState(pos);
 			if(!state.getBlock().isAir(state, this.world, pos)) {
-				this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + dx, MathHelper.floor(this.posY + dy) + 1, this.posZ + dz, mx, my, mz, Block.getStateId(state));
+				this.world.spawnParticle(new BlockParticleData(Particles.BLOCK, state), this.posX + dx, MathHelper.floor(this.posY + dy) + 1, this.posZ + dz, mx, my, mz);
 			}
 		}
 	}
@@ -342,7 +342,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 				double mx = (this.rand.nextDouble() - 0.5D) * 0.15D;
 				double my = (this.rand.nextDouble() - 0.5D) * 0.15D;
 				double mz = (this.rand.nextDouble() - 0.5D) * 0.15D;
-				this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + dx, this.posY + dy, this.posZ + dz, mx, my, mz, Block.getStateId(BlockRegistry.LOG_SPIRIT_TREE.getDefaultState()));
+				this.world.spawnParticle(new BlockParticleData(Particles.BLOCK, BlockRegistry.LOG_SPIRIT_TREE.getDefaultState()), this.posX + dx, this.posY + dy, this.posZ + dz, mx, my, mz);
 			}
 
 			SoundType soundType = SoundType.WOOD;
@@ -355,7 +355,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 				double mx = (this.rand.nextDouble() - 0.5D) * 0.15D;
 				double my = (this.rand.nextDouble() - 0.5D) * 0.15D;
 				double mz = (this.rand.nextDouble() - 0.5D) * 0.15D;
-				this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + dx, this.posY + dy, this.posZ + dz, mx, my, mz, Block.getStateId(BlockRegistry.LOG_SPIRIT_TREE.getDefaultState()));
+				this.world.spawnParticle(new BlockParticleData(Particles.BLOCK, BlockRegistry.LOG_SPIRIT_TREE.getDefaultState()), this.posX + dx, this.posY + dy, this.posZ + dz, mx, my, mz);
 			}
 
 			SoundType soundType = SoundType.WOOD;

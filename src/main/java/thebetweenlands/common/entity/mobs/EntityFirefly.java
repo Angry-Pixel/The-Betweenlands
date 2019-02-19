@@ -110,7 +110,7 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	}
 
 	@Override
-	protected boolean canDespawn() {
+	public boolean canDespawn() {
 		return true;
 	}
 	

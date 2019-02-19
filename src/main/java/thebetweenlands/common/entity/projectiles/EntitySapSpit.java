@@ -2,10 +2,11 @@ package thebetweenlands.common.entity.projectiles;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.item.Item;
+import net.minecraft.init.Particles;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.particles.ItemParticleData;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,7 +33,7 @@ public class EntitySapSpit extends EntityThrowable {
 		super.tick();
 
 		if(this.world.isRemote()) {
-			this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, Item.getIdFromItem(ItemRegistry.SAP_SPIT));
+			this.world.spawnParticle(new ItemParticleData(Particles.ITEM, new ItemStack(ItemRegistry.SAP_SPIT)), this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
 		}
 	}
 
@@ -41,7 +42,7 @@ public class EntitySapSpit extends EntityThrowable {
 	public void handleStatusUpdate(byte id) {
 		if(id == 3) {
 			for(int i = 0; i < 16; ++i) {
-				this.world.spawnParticle(EnumParticleTypes.ITEM_CRACK, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, Item.getIdFromItem(ItemRegistry.SAP_SPIT));
+				this.world.spawnParticle(new ItemParticleData(Particles.ITEM, new ItemStack(ItemRegistry.SAP_BALL)), this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}

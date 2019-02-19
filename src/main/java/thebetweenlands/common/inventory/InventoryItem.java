@@ -20,7 +20,7 @@ public class InventoryItem implements IInventory {
 		this.invItem = stack;
 		this.inventory = NonNullList.withSize(inventorySize, ItemStack.EMPTY);
 		this.name = inventoryName;
-		if (!stack.hasTagCompound()) {
+		if (!stack.hasTag()) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
 		this.readFromNBT(stack.getTag());

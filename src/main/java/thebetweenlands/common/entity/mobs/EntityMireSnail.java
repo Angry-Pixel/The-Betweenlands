@@ -12,6 +12,7 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -23,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -45,8 +47,8 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIPanic(this, 1.2D));
 		tasks.addTask(2, new EntityAIMate(this, 1.0D));
-		tasks.addTask(3, new EntityAITempt(this, 1.0D, ItemRegistry.SLUDGE_BALL, false));
-		tasks.addTask(3, new EntityAITempt(this, 1.0D, ItemRegistry.SAP_SPIT, false));
+		tasks.addTask(3, new EntityAITempt(this, 1.0D, Ingredient.fromItems(ItemRegistry.SLUDGE_BALL), false));
+		tasks.addTask(3, new EntityAITempt(this, 1.0D, Ingredient.fromItems(ItemRegistry.SAP_SPIT), false));
 		tasks.addTask(5, new EntityAIWander(this, 0.85D));	
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(7, new EntityAILookIdle(this));
@@ -77,7 +79,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	protected boolean canDespawn() {
+	public boolean canDespawn() {
 		return false;
 	}
 
@@ -144,7 +146,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	@Override
 	public void readAdditional(NBTTagCompound nbt) {
 		super.readAdditional(nbt);
-		if(nbt.contains("hasMated")) {
+		if(nbt.contains("hasMated", Constants.NBT.TAG_BYTE)) {
 			setHasMated(nbt.getBoolean("hasMated"));
 		}
 	}

@@ -32,6 +32,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -177,7 +178,7 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 
 	@Override
 	public void readAdditional(NBTTagCompound nbt) {
-		if(nbt.contains("active")) {
+		if(nbt.contains("active", Constants.NBT.TAG_BYTE)) {
 			this.setActive(nbt.getBoolean("active"));
 		}
 
@@ -432,7 +433,7 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 		}
 
 		@Override
-		public void updateTask() {
+		public void tick() {
 			--this.attackTime;
 			EntityLivingBase target = this.pyrad.getAttackTarget();
 			double distSq = this.pyrad.getDistanceSq(target);
@@ -480,7 +481,7 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 				this.pyrad.getLookHelper().setLookPositionWithEntity(target, 10.0F, 10.0F);
 			}
 
-			super.updateTask();
+			super.tick();
 		}
 	}
 	

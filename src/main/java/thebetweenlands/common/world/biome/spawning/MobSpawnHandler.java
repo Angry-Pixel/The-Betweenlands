@@ -550,7 +550,7 @@ public class MobSpawnHandler {
 									world.spawnEntity(newEntity);
 
 									if (!ForgeEventFactory.doSpecialSpawn(newEntity, world, (float)sx, (float)sy, (float)sz, null)) {
-										groupData = newEntity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(sx, sy, sz)), groupData);
+										groupData = newEntity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(sx, sy, sz)), groupData, null);
 									}
 
 									spawnEntry.onSpawned(newEntity);

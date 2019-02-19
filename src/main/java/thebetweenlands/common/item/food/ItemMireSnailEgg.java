@@ -39,7 +39,7 @@ public class ItemMireSnailEgg extends ItemBLFood {
 		entity.setLocationAndAngles(pos.getX() + hitX + facing.getXOffset() * entity.width, pos.getY() + hitY + (facing.getYOffset() < 0 ? -entity.height - 0.005F : 0.0F), pos.getZ() + hitZ + facing.getZOffset() * entity.width, 0.0F, 0.0F);
 		if(entity.isNotColliding()) {
 			world.spawnEntity(entity);
-			entity.playLivingSound();
+			entity.playAmbientSound();
 			stack.shrink(1);
 		}
 		return EnumActionResult.SUCCESS;

@@ -31,6 +31,7 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
@@ -39,12 +40,12 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.particles.BlockParticleData;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -297,7 +298,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	}
 
 	@Override
-	protected void playStepSound(BlockPos pos, Block blockIn) {
+	protected void playStepSound(BlockPos pos, IBlockState blockIn) {
 		float distanceWalked = this.distanceWalkedOnStepModified;
 
 		if(!this.isRolling()) {
@@ -325,12 +326,11 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		if(id == EVENT_STEP && this.isHiddenOrInWall()) {
 			IBlockState state = this.world.getBlockState(this.getPosition());
 			if(!state.getBlock().isAir(state, this.world, this.getPosition())) {
-				int stateId = Block.getStateId(state);
 				for(int i = 0; i < 24; i++) {
 					double dx = this.rand.nextDouble() - 0.5D;
 					double dy = this.rand.nextDouble();
 					double dz = this.rand.nextDouble() - 0.5D;
-					this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + this.motionX + dx, this.posY + this.motionY + dy, this.posZ + this.motionZ + dz, dx * 0.2D, dy * 0.2D, dz * 0.2D, stateId);
+					this.world.spawnParticle(new BlockParticleData(Particles.BLOCK, state), this.posX + this.motionX + dx, this.posY + this.motionY + dy, this.posZ + this.motionZ + dz, dx * 0.2D, dy * 0.2D, dz * 0.2D);
 				}
 			}
 		}
@@ -507,7 +507,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 				attackAttribute.applyModifier(new AttributeModifier(ROLLING_ATTACK_MODIFIER_ATTRIBUTE_UUID, "Rolling attack modifier", Math.min(Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ) * 20.0F, 10.0F), 0));
 
 				Vec3d motionDir = new Vec3d(this.motionX, 0, this.motionZ).normalize();
-				List<Entity> collidingEntities = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox().grow(0.35D, 0, 0.35D), EntitySelectors.getTeamCollisionPredicate(this));
+				List<Entity> collidingEntities = this.world.getEntitiesInAABBexcluding(this, this.getBoundingBox().grow(0.35D, 0, 0.35D), EntitySelectors.pushableBy(this));
 				for(Entity collidingEntity : collidingEntities) {
 					if(collidingEntity.hurtResistantTime <= 0) {
 						double dot = motionDir.dotProduct(collidingEntity.getPositionVector().subtract(this.getPositionVector()));
@@ -553,17 +553,15 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 					BlockPos posBelow = this.getPosition().down();
 					IBlockState stateBelow = this.world.getBlockState(posBelow);
 					if(!stateBelow.getBlock().isAir(stateBelow, this.world, posBelow)) {
-						int stateId = Block.getStateId(stateBelow);
-						int betweenstoneId = Block.getStateId(BlockRegistry.BETWEENSTONE.getDefaultState());
 						for(int i = 0; i < 28; i++) {
 							double dx = this.rand.nextDouble() - 0.5D;
 							double dz = this.rand.nextDouble() - 0.5D;
-							this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + this.motionX + dx, this.posY - 0.2D, this.posZ + this.motionZ + dz, dx * 0.3D, 0.3D, dz * 0.3D, stateId);
+							this.world.spawnParticle(new BlockParticleData(Particles.BLOCK, stateBelow), this.posX + this.motionX + dx, this.posY - 0.2D, this.posZ + this.motionZ + dz, dx * 0.3D, 0.3D, dz * 0.3D);
 						}
 						for(int i = 0; i < 12; i++) {
 							double dx = this.rand.nextDouble() - 0.5D;
 							double dz = this.rand.nextDouble() - 0.5D;
-							this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + this.motionX + dx, this.posY - 0.2D, this.posZ + this.motionZ + dz, dx * 0.3D, 0.3D, dz * 0.3D, betweenstoneId);
+							this.world.spawnParticle(new BlockParticleData(Particles.BLOCK, BlockRegistry.BETWEENSTONE.getDefaultState()), this.posX + this.motionX + dx, this.posY - 0.2D, this.posZ + this.motionZ + dz, dx * 0.3D, 0.3D, dz * 0.3D);
 						}
 					}
 				}
@@ -796,7 +794,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 				EnumFacing entrance;
 				if(this.entity.getHideoutEntrance() == null) {
 					if(this.potentialEntrances.isEmpty()) {
-						for(EnumFacing dir : EnumFacing.HORIZONTALS) {
+						for(EnumFacing dir : EnumFacing.Plane.HORIZONTAL) {
 							BlockPos offset = this.entity.getHideout().offset(dir);
 							PathNodeType node = this.entity.getNavigator().getNodeProcessor().getPathNodeType(this.entity.world, offset.getX(), offset.getY(), offset.getZ());
 							if(node == PathNodeType.OPEN || node == PathNodeType.WALKABLE) {
@@ -836,7 +834,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		}
 
 		@Override
-		public void updateTask() {
+		public void tick() {
 			if(this.delayCounter-- <= 0) {
 				double dist = this.entity.getDistanceSq(this.target.getX() + 0.5D, this.target.getY() + 0.5D, this.target.getZ() + 0.5D);
 
@@ -944,7 +942,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		}
 
 		@Override
-		public void updateTask() {
+		public void tick() {
 			this.entity.isAiHiding = true;
 			BlockPos hideoutPos = this.hideout.offset(this.entrance.getOpposite());
 			double dstSq = hideoutPos.distanceSqToCenter(this.entity.posX, this.entity.posY, this.entity.posZ);
@@ -991,7 +989,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		}
 
 		@Override
-		public void updateTask() {
+		public void tick() {
 			Entity target = this.entity.getAttackTarget();
 
 			if(this.entity.getRollingTicks() <= 0) {
@@ -1044,7 +1042,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 				pos.setPos(this.entity.posX + this.entity.getRNG().nextInt(this.range * 2) - this.range, this.entity.posY, this.entity.posZ + this.entity.getRNG().nextInt(this.range * 2) - this.range);
 				if(this.entity.isValidHideoutBlock(pos) && (!this.entity.world.isAirBlock(pos.up()) || this.entity.getRNG().nextInt(10) == 0)) {
 					boolean hasPotentialEntrance = false;
-					for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+					for(EnumFacing facing : EnumFacing.Plane.HORIZONTAL) {
 						if(this.entity.world.isAirBlock(pos.offset(facing))) {
 							hasPotentialEntrance = true;
 							break;

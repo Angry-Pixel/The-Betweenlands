@@ -178,7 +178,7 @@ public class ItemGemSinger extends Item {
 
 	@Nullable
 	protected BlockPos getTargetPosition(ItemStack stack) {
-		if(stack.hasTagCompound() && stack.getTag().contains("targetPos", Constants.NBT.TAG_LONG)) {
+		if(stack.hasTag() && stack.getTag().contains("targetPos", Constants.NBT.TAG_LONG)) {
 			return BlockPos.fromLong(stack.getTag().getLong("targetPos"));
 		}
 		return null;
@@ -186,7 +186,7 @@ public class ItemGemSinger extends Item {
 
 	@Nullable
 	protected GemSingerTarget getTargetType(ItemStack stack) {
-		if(stack.hasTagCompound() && stack.getTag().contains("targetType", Constants.NBT.TAG_INT)) {
+		if(stack.hasTag() && stack.getTag().contains("targetType", Constants.NBT.TAG_INT)) {
 			return GemSingerTarget.byId(stack.getTag().getInt("targetType"));
 		}
 		return null;

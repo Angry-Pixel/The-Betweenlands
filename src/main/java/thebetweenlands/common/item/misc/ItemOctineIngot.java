@@ -13,6 +13,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Particles;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
@@ -21,7 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -51,7 +51,7 @@ public class ItemOctineIngot extends Item {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		RayTraceResult result = this.rayTrace(worldIn, playerIn, true);
-		if(result != null && result.typeOfHit == Type.BLOCK) {
+		if(result != null && result.type == Type.BLOCK) {
 			BlockPos offsetPos = result.getBlockPos().offset(result.sideHit);
 			boolean hasTinder = false;
 			boolean isBlockTinder = false;
@@ -78,7 +78,7 @@ public class ItemOctineIngot extends Item {
 		if(playerIn instanceof EntityPlayer) {
 			World worldIn = playerIn.world;
 			RayTraceResult result = this.rayTrace(worldIn, (EntityPlayer) playerIn, true);
-			if(result != null && result.typeOfHit == Type.BLOCK) {
+			if(result != null && result.type == Type.BLOCK) {
 				BlockPos pos = result.getBlockPos();
 				BlockPos offsetPos = pos.offset(result.sideHit);
 				boolean hasTinder = false;
@@ -95,11 +95,11 @@ public class ItemOctineIngot extends Item {
 				}
 				if(hasTinder) {
 					if(worldIn.rand.nextInt(count / 10 + 1) == 0) {
-						worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, 
+						worldIn.spawnParticle(Particles.SMOKE, 
 								result.hitVec.x + worldIn.rand.nextFloat()*0.2-0.1, 
 								result.hitVec.y + worldIn.rand.nextFloat()*0.2-0.1, 
 								result.hitVec.z + worldIn.rand.nextFloat()*0.2-0.1, 0, 0.1, 0);
-						worldIn.spawnParticle(EnumParticleTypes.FLAME, 
+						worldIn.spawnParticle(Particles.FLAME, 
 								result.hitVec.x + worldIn.rand.nextFloat()*0.2-0.1, 
 								result.hitVec.y + worldIn.rand.nextFloat()*0.2-0.1, 
 								result.hitVec.z + worldIn.rand.nextFloat()*0.2-0.1, 0, 0.1, 0);
@@ -121,7 +121,7 @@ public class ItemOctineIngot extends Item {
 									worldIn.setBlockState(offsetPos, Blocks.FIRE.getDefaultState());
 								}
 							}
-							worldIn.play(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
+							worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_FLINTANDSTEEL_USE, SoundCategory.PLAYERS, 1, 1);
 						}
 					}
 				}
