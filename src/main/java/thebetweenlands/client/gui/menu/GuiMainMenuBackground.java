@@ -61,7 +61,7 @@ public class GuiMainMenuBackground extends GuiScreen {
 	}
 
 	@Override
-	public void updateScreen() {
+	public void tick() {
 		this.layerTick++;
 
 		for(int i = 0; i < 3; i++) {
@@ -99,11 +99,11 @@ public class GuiMainMenuBackground extends GuiScreen {
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		drawRect(0, 0, this.width, this.height, 0xFF001000);
 
 		GlStateManager.enableTexture2D();
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
@@ -141,7 +141,7 @@ public class GuiMainMenuBackground extends GuiScreen {
 		GlStateManager.disableTexture2D();
 		drawRect(0, this.height - 30, this.width, this.height, 0x60000000);
 		GlStateManager.enableTexture2D();
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 	}
 
 	protected void drawStarfield(float partialTicks) {

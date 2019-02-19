@@ -1,10 +1,10 @@
 package thebetweenlands.common.advancments;
 
 import java.util.Map;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Maps;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -14,9 +14,10 @@ import com.google.gson.JsonSyntaxException;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.state.IProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.chunk.BlockStateContainer;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class BlockPredicate {
 
@@ -60,11 +61,13 @@ public class BlockPredicate {
             if (json.has("block")) {
                 ResourceLocation resourcelocation = new ResourceLocation(JsonUtils.getString(json, "block"));
 
-                if (!Block.REGISTRY.containsKey(resourcelocation)) {
+                
+                
+                if (!ForgeRegistries.BLOCKS.containsKey(resourcelocation)) {
                     throw new JsonSyntaxException("Unknown block type '" + resourcelocation + "'");
                 }
 
-                block = Block.REGISTRY.getObject(resourcelocation);
+                block = ForgeRegistries.BLOCKS.getValue(resourcelocation);
             }
 
             if (json.has("state")) {
@@ -72,27 +75,27 @@ public class BlockPredicate {
                     throw new JsonSyntaxException("Can't define block state without a specific block type");
                 }
 
-                BlockStateContainer blockstatecontainer = block.getBlockState();
+                StateContainer<Block, IBlockState> stateContainer = block.getStateContainer();
 
                 for (Map.Entry<String, JsonElement> entry : JsonUtils.getJsonObject(json, "state").entrySet()) {
-                    IProperty<?> iproperty = blockstatecontainer.getProperty(entry.getKey());
+                    IProperty<?> property = stateContainer.getProperty(entry.getKey());
 
-                    if (iproperty == null) {
-                        throw new JsonSyntaxException("Unknown block state property '" + entry.getKey() + "' for block '" + Block.REGISTRY.getNameForObject(block) + "'");
+                    if (property == null) {
+                        throw new JsonSyntaxException("Unknown block state property '" + entry.getKey() + "' for block '" + ForgeRegistries.BLOCKS.getKey(block) + "'");
                     }
 
                     String s = JsonUtils.getString(entry.getValue(), entry.getKey());
-                    Optional<?> optional = iproperty.parseValue(s);
+                    Optional<?> optional = property.parseValue(s);
 
                     if (!optional.isPresent()) {
-                        throw new JsonSyntaxException("Invalid block state value '" + s + "' for property '" + entry.getKey() + "' on block '" + Block.REGISTRY.getNameForObject(block) + "'");
+                        throw new JsonSyntaxException("Invalid block state value '" + s + "' for property '" + entry.getKey() + "' on block '" + ForgeRegistries.BLOCKS.getKey(block) + "'");
                     }
 
                     if (map == null) {
                         map = Maps.newHashMap();
                     }
 
-                    map.put(iproperty, optional.get());
+                    map.put(property, optional.get());
                 }
             }
 

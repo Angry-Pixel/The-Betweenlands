@@ -1,6 +1,7 @@
 package thebetweenlands.client.gui.inventory;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -46,7 +47,7 @@ public class GuiAnimator extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(GUI_ANIMATOR);
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
@@ -60,9 +61,9 @@ public class GuiAnimator extends GuiContainer {
 				//Required life crystal bar
 				int requiredLifeCrystal = tile.requiredLifeCount / 3;
 				GlStateManager.enableBlend();
-				GlStateManager.color(1.0F, 0.1F, 0.1F, 0.35F + (float)(Math.cos((this.updateTicks + partialTickTime) / 10.0F)+1.0F)/2.0F*0.65F);
+				GlStateManager.color4f(1.0F, 0.1F, 0.1F, 0.35F + (float)(Math.cos((this.updateTicks + partialTickTime) / 10.0F)+1.0F)/2.0F*0.65F);
 				this.drawTexturedModalRect(k + 39, l + 8 + lifeCrystalCount, 175, 2 + lifeCrystalCount, 6, requiredLifeCrystal);
-				GlStateManager.color(1, 1, 1, 1);
+				GlStateManager.color4f(1, 1, 1, 1);
 				GlStateManager.disableBlend();
 			}
 		}
@@ -85,7 +86,7 @@ public class GuiAnimator extends GuiContainer {
 			}
 		}
 		if (tile.getStackInSlot(1) == null)
-			renderSlot(new ItemStack(ItemRegistry.LIFE_CRYSTAL, 1, 0), k + 34, l + 57);
+			renderSlot(new ItemStack(ItemRegistry.LIFE_CRYSTAL, 1), k + 34, l + 57);
 		if (tile.getStackInSlot(2) == null)
 			renderSlot(ItemMisc.EnumItemMisc.SULFUR.create(1), k + 124, l + 57);
 	}
@@ -94,7 +95,8 @@ public class GuiAnimator extends GuiContainer {
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GL14.glBlendColor(0, 0, 0, 0.35f);
-		GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA); //ugly hack
+		//TODO 1.13 Use 1.12-runes-wip's ColoredItemRenderer
+		GL11.glBlendFunc(GL14.GL_CONSTANT_ALPHA, GL14.GL_ONE_MINUS_CONSTANT_ALPHA); //ugly hack
 		GlStateManager.pushMatrix();
 		this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
 		GlStateManager.popMatrix();
@@ -106,8 +108,8 @@ public class GuiAnimator extends GuiContainer {
 	}
 
 	@Override
-	public void updateScreen() {
-		super.updateScreen();
+	public void tick() {
+		super.tick();
 		boolean shouldClose = false;
 		ItemStack input = tile.getStackInSlot(0);
 		if (!input.isEmpty()) {
@@ -120,9 +122,9 @@ public class GuiAnimator extends GuiContainer {
 		this.updateTicks++;
 	}
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 }

@@ -28,7 +28,7 @@ public class GuiPouch extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 		this.mc.getTextureManager().bindTexture(GUI_TEXTURE);
 		int xStart = (this.width - this.xSize) / 2;
 		int yStart = (this.height - this.ySize) / 2;
@@ -37,9 +37,9 @@ public class GuiPouch extends GuiContainer {
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 }

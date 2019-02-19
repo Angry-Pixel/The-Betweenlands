@@ -45,9 +45,9 @@ public class GuiMortar extends GuiContainer {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 
@@ -55,7 +55,8 @@ public class GuiMortar extends GuiContainer {
     	GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GL14.glBlendColor(0, 0, 0, 0.35f);
-		GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA); //ugly hack
+		//TODO 1.13 Use 1.12-runes-wip's ColoredItemRenderer
+		GL11.glBlendFunc(GL14.GL_CONSTANT_ALPHA, GL14.GL_ONE_MINUS_CONSTANT_ALPHA); //ugly hack
 		GlStateManager.pushMatrix();
 		this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
 		GlStateManager.popMatrix();

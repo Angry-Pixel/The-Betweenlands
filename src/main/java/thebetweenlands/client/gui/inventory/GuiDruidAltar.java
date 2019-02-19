@@ -31,6 +31,7 @@ public class GuiDruidAltar extends GuiContainer {
         this.tile = tile;
         allowUserInput = false;
         ySize = 168;
+        //TODO 1.13 Druid altar GUI needs swamp talisman flattening first
         stack = new ItemStack(ghostIcon, 1, iconCountTool);
     }
 
@@ -48,7 +49,7 @@ public class GuiDruidAltar extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
         mc.getTextureManager().bindTexture(GUI_DRUID_ALTAR);
 
         drawTexturedModalRect((width - xSize) / 2, (height - ySize) / 2, 0, 0, xSize, ySize);
@@ -89,7 +90,8 @@ public class GuiDruidAltar extends GuiContainer {
     	GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GL14.glBlendColor(0, 0, 0, 0.35f);
-		GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA); //ugly hack
+		//TODO 1.13 Use 1.12-runes-wip's ColoredItemRenderer
+		GL11.glBlendFunc(GL14.GL_CONSTANT_ALPHA, GL14.GL_ONE_MINUS_CONSTANT_ALPHA); //ugly hack
 		GlStateManager.pushMatrix();
 		this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
 		GlStateManager.popMatrix();
@@ -101,8 +103,8 @@ public class GuiDruidAltar extends GuiContainer {
     }
 
     @Override
-    public void updateScreen() {
-        super.updateScreen();
+    public void tick() {
+        super.tick();
         if (this.mc.world.getGameTime() % 40 == 0) {
             this.stack = new ItemStack(ghostIcon, 1, this.iconCountTool);
             this.iconCountTool++;
@@ -116,9 +118,9 @@ public class GuiDruidAltar extends GuiContainer {
         }
     }
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        super.render(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }
 }

@@ -1,8 +1,7 @@
 package thebetweenlands.client.gui;
 
-import java.io.IOException;
+import org.lwjgl.glfw.GLFW;
 
-import net.java.games.input.Keyboard;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -35,7 +34,7 @@ public class GuiItemNaming extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
 		this.drawDefaultBackground();
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color4f(1, 1, 1, 1);
 		this.mc.textureManager.bindTexture(GUI_TEXTURE);
 		this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 	}
@@ -47,50 +46,50 @@ public class GuiItemNaming extends GuiContainer {
 		this.textFieldName.setMaxStringLength(20);
 		this.textFieldName.setFocused(false);
 		this.textFieldName.setTextColor(5635925);
-		this.buttonList.clear();
+		this.buttons.clear();
 		int xOffSet = (width - xSize) / 2;
 		int yOffSet = (height - ySize) / 2;
-		this.buttonList.add(new GuiItemNamingButton(1, xOffSet, yOffSet - 18, 46, 18, I18n.format("container.lurker_skin_pouch.naming.save")));
-	}
-
-	@Override
-	public void updateScreen() {
-		this.textFieldName.updateCursorCounter();
-	}
-
-	@Override
-	protected void drawGuiContainerForegroundLayer(int x, int y) {
-		this.textFieldName.drawTextBox();
-	}
-
-	@Override
-	protected void keyTyped(char key, int keycode) throws IOException {
-		this.textFieldName.textboxKeyTyped(key, keycode);
-		if(keycode == Keyboard.KEY_ESCAPE) {
-			this.player.closeScreen();
-		} else if (!(keycode != Keyboard.KEY_NONE && this.textFieldName.isFocused())) {
-			super.keyTyped(key, keycode);
-		}
-	}
-
-	@Override
-	public void mouseClicked(int i, int j, int k) throws IOException {
-		super.mouseClicked(i, j, k);
-		this.textFieldName.mouseClicked(22, 17, k);
-	}
-
-	@Override
-	protected void actionPerformed(GuiButton button) {
-		if (button instanceof GuiItemNamingButton) {
-			if (button.id == 1) {
-				if (StringUtils.isNullOrEmpty(this.textFieldName.getText())) {
-					TheBetweenlands.networkWrapper.sendToServer(new MessageItemNaming("", this.hand));
+		this.buttons.add(new GuiItemNamingButton(1, xOffSet, yOffSet - 18, 46, 18, I18n.format("container.lurker_skin_pouch.naming.save")) {
+			@Override
+			public void onClick(double mouseX, double mouseY) {
+				if (StringUtils.isNullOrEmpty(GuiItemNaming.this.textFieldName.getText())) {
+					TheBetweenlands.networkWrapper.sendToServer(new MessageItemNaming("", GuiItemNaming.this.hand));
 				} else {
-					TheBetweenlands.networkWrapper.sendToServer(new MessageItemNaming(this.textFieldName.getText(), this.hand));
+					TheBetweenlands.networkWrapper.sendToServer(new MessageItemNaming(GuiItemNaming.this.textFieldName.getText(), GuiItemNaming.this.hand));
 				}
 
-				this.player.closeScreen();
+				GuiItemNaming.this.player.closeScreen();
+			}
+		});
+	}
+
+	@Override
+	public void tick() {
+		this.textFieldName.tick();
+	}
+
+	@Override
+	public void render(int mouseX, int mouseY, float partialTicks) {
+		super.render(mouseX, mouseY, partialTicks);
+
+		this.textFieldName.drawTextField(mouseX, mouseY, partialTicks);
+	}
+
+	@Override
+	public boolean keyPressed(int key, int scanCode, int modifiers) {
+		if(key == GLFW.GLFW_KEY_ESCAPE) {
+			this.player.closeScreen();
+			return true;
+		} else {
+			if(!this.textFieldName.keyPressed(key, scanCode, modifiers)) {
+				return super.keyPressed(key, scanCode, modifiers);
 			}
 		}
+		return false;
+	}
+
+	@Override
+	public boolean mouseClicked(double i, double j, int k) {
+		return this.textFieldName.mouseClicked(22, 17, k);
 	}
 }

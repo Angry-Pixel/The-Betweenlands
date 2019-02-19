@@ -37,7 +37,7 @@ public class SafeStreamSound extends MovingSound {
     }
 
     @Override
-    public void update() {
+    public void tick() {
         this.updateSafeStreamSound();
     }
     

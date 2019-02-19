@@ -95,6 +95,7 @@ public class SwatShieldTrigger extends BLTrigger<SwatShieldTrigger.Instance, Swa
         public void revert() {
         	List<Tuple<Advancement, String>> criterions = new ArrayList<>();
             for (ICriterionTrigger.Listener<SwatShieldTrigger.Instance> listener : this.listeners) {
+            	//TODO 1.13 Listener#advancement AT
                 AdvancementProgress progress = playerAdvancements.getProgress(listener.advancement);
                 if (!progress.isDone() && progress.hasProgress()) {
                     for (Map.Entry<String, Criterion> entry: listener.advancement.getCriteria().entrySet()) {

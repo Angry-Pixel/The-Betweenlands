@@ -28,7 +28,7 @@ public class AmbienceSound extends MovingSound {
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 		if(this.player == null || this.player.world == null) {
 			this.stopImmediately();
 			return;

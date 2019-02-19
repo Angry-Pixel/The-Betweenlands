@@ -65,8 +65,8 @@ public class GuiFirefly extends Gui {
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		minecraft.getTextureManager().bindTexture(FIREFLY_TEXTURE);
-		GlStateManager.translate(interpX + (float) (Math.sin(interpUpdateCounter) * 500) * 0.01F, interpY, 0);
-		GlStateManager.scale((0.1F + (float) (Math.sin(interpUpdateCounter) * Math.sin(interpUpdateCounter)) / 4) * 0.1F, (0.1F + (float) (Math.sin(interpUpdateCounter) * Math.sin(interpUpdateCounter)) / 4) * 0.1F, 1);
+		GlStateManager.translatef(interpX + (float) (Math.sin(interpUpdateCounter) * 500) * 0.01F, interpY, 0);
+		GlStateManager.scalef((0.1F + (float) (Math.sin(interpUpdateCounter) * Math.sin(interpUpdateCounter)) / 4) * 0.1F, (0.1F + (float) (Math.sin(interpUpdateCounter) * Math.sin(interpUpdateCounter)) / 4) * 0.1F, 1);
 		this.drawTexturedModalRectWithColor(0, 0, 0, 0, 250, 250, 0xFFEC810E);
 		this.drawTexturedModalRectWithColor(0, 0, 0, 0, 250, 250, 0xFFEC810E);
 		GlStateManager.depthMask(true);

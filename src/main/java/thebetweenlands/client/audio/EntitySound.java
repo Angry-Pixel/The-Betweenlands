@@ -29,8 +29,8 @@ public class EntitySound<T extends Entity> extends SafeStreamSound implements IE
 	}
 
 	@Override
-	public void update() {
-		super.update();
+	public void tick() {
+		super.tick();
 		
 		this.x = (float) this.entity.posX;
 		this.y = (float) this.entity.posY;

@@ -29,7 +29,7 @@ public class EntityMusicSound<T extends Entity> extends EntitySound<T> {
 	}
 
 	@Override
-	public void update() {
+	public void tick() {
 		this.updateSafeStreamSound();
 
 		if(this.entity != null && this.entity.isAlive()) {

@@ -3,8 +3,8 @@ package thebetweenlands.client.gui.menu;
 import java.io.IOException;
 import java.util.List;
 
+import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GLContext;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -43,10 +43,10 @@ import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.gui.NotificationModUpdateScreen;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.client.gui.GuiModList;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 
+//TODO 1.13 Main menu needs a fresh C&P
 public class GuiBLMainMenu extends GuiMainMenu {
 	public static final ResourceLocation LOGO_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/main/logo.png");
 
@@ -75,7 +75,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
 	private GuiMainMenuBackground background = new GuiMainMenuBackground(new ResourceLocation(ModInfo.ID, "textures/gui/main/layer"), 4);
 
 	public GuiBLMainMenu() {
-		if (!GLContext.getCapabilities().OpenGL20 && !OpenGlHelper.areShadersSupported()) {
+		if (!GL.getCapabilities().OpenGL20 && !OpenGlHelper.areShadersSupported()) {
 			this.openGLWarning1 = I18n.format("title.oldgl1");
 			this.openGLWarning2 = I18n.format("title.oldgl2");
 		}
@@ -99,25 +99,25 @@ public class GuiBLMainMenu extends GuiMainMenu {
 		this.background.height = this.height;
 		this.background.initGui();
 
-		this.buttonList.clear();
+		this.buttons.clear();
 
 		int j = this.height / 4 + 48;
 
-		this.buttonList.add(new GuiButtonMainMenu(1, this.width / 2 - 100, j, I18n.format("menu.singleplayer")));
-		this.buttonList.add(new GuiButtonMainMenu(2, this.width / 2 - 100, j + 24, I18n.format("menu.multiplayer")));
-		this.buttonList.add(this.realmsButton = new GuiButtonMainMenu(14, this.width / 2 + 2, j + 24 * 2, 98, 20, I18n.format("menu.online", new Object[0]).replace("Minecraft", "").trim()));
+		this.buttons.add(new GuiButtonMainMenu(1, this.width / 2 - 100, j, I18n.format("menu.singleplayer")));
+		this.buttons.add(new GuiButtonMainMenu(2, this.width / 2 - 100, j + 24, I18n.format("menu.multiplayer")));
+		this.buttons.add(this.realmsButton = new GuiButtonMainMenu(14, this.width / 2 + 2, j + 24 * 2, 98, 20, I18n.format("menu.online", new Object[0]).replace("Minecraft", "").trim()));
 
-		this.buttonList.add(this.modButton = new GuiButtonMainMenu(6, this.width / 2 - 100, j + 24 * 2, 98, 20, I18n.format("fml.menu.mods")));
-		this.buttonList.add(new GuiButtonMainMenu(5, this.width / 2 - 124, j + 72 + 12, 20, 20, "L"));
-		this.buttonList.add(new GuiButtonMainMenu(0, this.width / 2 - 100, j + 72 + 12, 98, 20, I18n.format("menu.options")));
-		this.buttonList.add(new GuiButtonMainMenu(4, this.width / 2 + 2, j + 72 + 12, 98, 20, I18n.format("menu.quit")));
+		this.buttons.add(this.modButton = new GuiButtonMainMenu(6, this.width / 2 - 100, j + 24 * 2, 98, 20, I18n.format("fml.menu.mods")));
+		this.buttons.add(new GuiButtonMainMenu(5, this.width / 2 - 124, j + 72 + 12, 20, 20, "L"));
+		this.buttons.add(new GuiButtonMainMenu(0, this.width / 2 - 100, j + 72 + 12, 98, 20, I18n.format("menu.options")));
+		this.buttons.add(new GuiButtonMainMenu(4, this.width / 2 + 2, j + 72 + 12, 98, 20, I18n.format("menu.quit")));
 
 		synchronized (this.threadLock) {
 			this.openGLWarning1Width = this.fontRenderer.getStringWidth(this.openGLWarning1);
 			this.openGLWarning2Width = this.fontRenderer.getStringWidth(this.openGLWarning2);
 			int k = Math.max(this.openGLWarning1Width, this.openGLWarning2Width);
 			this.openGLWarningX1 = (this.width - k) / 2;
-			this.openGLWarningY1 = (this.buttonList.get(0)).y - 24;
+			this.openGLWarningY1 = (this.buttons.get(0)).y - 24;
 			this.openGLWarningX2 = this.openGLWarningX1 + k;
 			this.openGLWarningY2 = this.openGLWarningY1 + 24;
 		}
@@ -197,11 +197,11 @@ public class GuiBLMainMenu extends GuiMainMenu {
 	}
 
 	@Override
-	public void updateScreen() {
+	public void tick() {
 		this.ticks++;
-		this.background.updateScreen();
+		this.background.tick();
 		if (this.areRealmsNotificationsEnabled()) {
-			this.realmsNotification.updateScreen();
+			this.realmsNotification.tick();
 		}
 	}
 
@@ -237,10 +237,10 @@ public class GuiBLMainMenu extends GuiMainMenu {
 		if (this.openGLWarning1 != null && !this.openGLWarning1.isEmpty()) {
 			drawRect(this.openGLWarningX1 - 2, this.openGLWarningY1 - 2, this.openGLWarningX2 + 2, this.openGLWarningY2 - 1, 1428160512);
 			this.drawString(this.fontRenderer, this.openGLWarning1, this.openGLWarningX1, this.openGLWarningY1, -1);
-			this.drawString(this.fontRenderer, this.openGLWarning2, (this.width - this.openGLWarning2Width) / 2, (this.buttonList.get(0)).y - 12, -1);
+			this.drawString(this.fontRenderer, this.openGLWarning2, (this.width - this.openGLWarning2Width) / 2, (this.buttons.get(0)).y - 12, -1);
 		}
 
-		for (GuiButton button : this.buttonList) {
+		for (GuiButton button : this.buttons) {
 			button.drawButton(this.mc, mouseX, mouseY, partialTicks);
 		}
 

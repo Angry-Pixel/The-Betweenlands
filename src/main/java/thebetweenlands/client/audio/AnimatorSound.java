@@ -14,10 +14,10 @@ public class AnimatorSound extends TileEntitySound<TileEntityAnimator> {
 	}
 	
 	@Override
-	public void update() {
+	public void tick() {
 		if(this.volume < 0.5F && !this.isStopping()) {
 			this.volume += 0.05F;
 		}
-		super.update();
+		super.tick();
 	}
 }

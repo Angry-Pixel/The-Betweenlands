@@ -37,12 +37,12 @@ public class GuiLorePage extends GuiScreen {
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public void drawScreen(int mouseX, int mouseY, float renderPartials) {
+	public void render(int mouseX, int mouseY, float renderPartials) {
 		this.drawDefaultBackground();
-		super.drawScreen(mouseX, mouseY, renderPartials);
+		super.render(mouseX, mouseY, renderPartials);
 
 		if (this.pageTexture != null) {
-			GlStateManager.color(1F, 1F, 1F, 1F);
+			GlStateManager.color4f(1F, 1F, 1F, 1F);
 			this.mc.textureManager.bindTexture(this.pageTexture);
 			drawTexture(xStart, yStart, (int) WIDTH, (int) HEIGHT, WIDTH, HEIGHT, 0.0D, WIDTH, 0.0D, HEIGHT);
 		}
@@ -80,8 +80,9 @@ public class GuiLorePage extends GuiScreen {
 	}
 
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int button) {
+	public boolean mouseClicked(double mouseX, double mouseY, int button) {
 		this.mc.displayGuiScreen(null);
+		return true;
 	}
 
 	@Override

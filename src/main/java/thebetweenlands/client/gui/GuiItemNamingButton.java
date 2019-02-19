@@ -11,11 +11,12 @@ public class GuiItemNamingButton extends GuiButton {
     }
 
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         if (this.visible) {
+        	Minecraft mc = Minecraft.getInstance();
             FontRenderer fontrenderer = mc.fontRenderer;
             mc.getTextureManager().bindTexture(GuiItemNaming.GUI_TEXTURE);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
             this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             GlStateManager.enableBlend();
             GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
@@ -25,11 +26,11 @@ public class GuiItemNamingButton extends GuiButton {
             } else {
                 this.drawTexturedModalRect(this.x, this.y, 0, 57, 46, 18);
             }
-            this.mouseDragged(mc, mouseX, mouseY);
+            
             int j = 14737632;
 
-            if (this.packedFGColour != 0) {
-                j = this.packedFGColour;
+            if (this.packedFGColor != 0) {
+                j = this.packedFGColor;
             } else if (!this.enabled) {
                 j = 10526880;
             } else if (this.hovered) {

@@ -37,13 +37,21 @@ public class GuiWeedwoodWorkbench extends GuiContainer implements IRecipeShownLi
         widthTooNarrow = width < 379;
         recipeBookGui.func_194303_a(width, height, mc, widthTooNarrow, ((ContainerWorkbench)inventorySlots).craftMatrix);
         guiLeft = recipeBookGui.updateScreenPosition(widthTooNarrow, width, xSize);
-        recipeButton = new GuiButtonImage(10, guiLeft + 5, height / 2 - 49, 20, 18, 0, 168, 19, CRAFTING_TABLE_GUI_TEXTURES);
-        buttonList.add(recipeButton);
+        recipeButton = new GuiButtonImage(10, guiLeft + 5, height / 2 - 49, 20, 18, 0, 168, 19, CRAFTING_TABLE_GUI_TEXTURES) {
+        	@Override
+        	public void onClick(double mouseX, double mouseY) {
+        		recipeBookGui.initVisuals(widthTooNarrow, ((ContainerWorkbench)inventorySlots).craftMatrix);
+                recipeBookGui.toggleVisibility();
+                guiLeft = recipeBookGui.updateScreenPosition(widthTooNarrow, width, xSize);
+                recipeButton.setPosition(guiLeft + 5, height / 2 - 49);
+        	}
+        };
+        buttons.add(recipeButton);
     }
 
     @Override
-    public void updateScreen() {
-        super.updateScreen();
+    public void tick() {
+        super.tick();
         recipeBookGui.tick();
     }
 
@@ -63,7 +71,7 @@ public class GuiWeedwoodWorkbench extends GuiContainer implements IRecipeShownLi
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         this.drawDefaultBackground();
 
         if (this.recipeBookGui.isVisible() && widthTooNarrow) {
@@ -71,7 +79,7 @@ public class GuiWeedwoodWorkbench extends GuiContainer implements IRecipeShownLi
             recipeBookGui.render(mouseX, mouseY, partialTicks);
         } else {
             recipeBookGui.render(mouseX, mouseY, partialTicks);
-            super.drawScreen(mouseX, mouseY, partialTicks);
+            super.render(mouseX, mouseY, partialTicks);
             recipeBookGui.renderGhostRecipe(guiLeft, guiTop, true, partialTicks);
         }
 
@@ -80,17 +88,18 @@ public class GuiWeedwoodWorkbench extends GuiContainer implements IRecipeShownLi
     }
 
     @Override
-    protected boolean isPointInRegion(int rectX, int rectY, int rectWidth, int rectHeight, int pointX, int pointY) {
+    protected boolean isPointInRegion(int rectX, int rectY, int rectWidth, int rectHeight, double pointX, double pointY) {
         return (!widthTooNarrow || !recipeBookGui.isVisible()) && super.isPointInRegion(rectX, rectY, rectWidth, rectHeight, pointX, pointY);
     }
 
     @Override
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
         if (!recipeBookGui.mouseClicked(mouseX, mouseY, mouseButton)) {
             if (!widthTooNarrow || !recipeBookGui.isVisible()) {
-                super.mouseClicked(mouseX, mouseY, mouseButton);
+                return super.mouseClicked(mouseX, mouseY, mouseButton);
             }
         }
+        return false;
     }
 
     @Override
@@ -100,20 +109,11 @@ public class GuiWeedwoodWorkbench extends GuiContainer implements IRecipeShownLi
     }
 
     @Override
-    protected void actionPerformed(GuiButton button) throws IOException {
-        if (button.id == 10) {
-            recipeBookGui.initVisuals(widthTooNarrow, ((ContainerWorkbench)inventorySlots).craftMatrix);
-            recipeBookGui.toggleVisibility();
-            guiLeft = recipeBookGui.updateScreenPosition(widthTooNarrow, width, xSize);
-            recipeButton.setPosition(guiLeft + 5, height / 2 - 49);
+	public boolean keyPressed(int key, int scanCode, int modifiers) {
+        if (recipeBookGui.keyPressed(key, scanCode, modifiers)) {
+        	return true;
         }
-    }
-
-    @Override
-    protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (!recipeBookGui.keyPressed(typedChar, keyCode)) {
-            super.keyTyped(typedChar, keyCode);
-        }
+        return super.keyPressed(key, scanCode, modifiers);
     }
 
     @Override

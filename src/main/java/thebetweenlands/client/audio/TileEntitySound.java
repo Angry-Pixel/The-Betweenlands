@@ -30,8 +30,8 @@ public class TileEntitySound<T extends TileEntity> extends SafeStreamSound {
 	}
 
 	@Override
-	public void update() {
-		super.update();
+	public void tick() {
+		super.tick();
 		
 		if(this.fadeOut || this.tile == null || !this.tile.hasWorld() || !this.tile.getWorld().isBlockLoaded(this.tile.getPos())
 				|| this.tile.getWorld().getTileEntity(this.tile.getPos()) != this.tile || !this.isPlaying.test(this.tile)) {

@@ -119,7 +119,7 @@ public class AmbienceManager {
 							}
 							if(!isPlaying && typeIndex <= lowestPlayedAmbience) {
 								if(this.lastSoundPlayTicks <= 0) {
-									this.play(new AmbienceSound(type.getSound(), type.getCategory(), type, player, this), type.getDelay());
+									this.playSound(new AmbienceSound(type.getSound(), type.getCategory(), type, player, this), type.getDelay());
 									this.lastSoundPlayTicks = 1;
 								} else {
 									break;

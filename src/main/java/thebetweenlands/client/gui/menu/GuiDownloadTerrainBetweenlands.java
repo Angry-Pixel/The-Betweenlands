@@ -18,11 +18,11 @@ public class GuiDownloadTerrainBetweenlands extends GuiScreen {
 
 	@SubscribeEvent
 	public static void onGuiOpened(GuiOpenEvent event) {
-		Minecraft client = FMLClientHandler.instance().getClient();
+		Minecraft client = Minecraft.getInstance();
 		if (event.getGui() instanceof GuiDownloadTerrain && client.player != null &&
 				(client.player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId || prevDimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)) {
 			event.setGui(new GuiDownloadTerrainBetweenlands());
-			prevDimension = Minecraft.getInstance().player.dimension;
+			prevDimension = client.player.dimension;
 		}
 	}
 
@@ -42,8 +42,8 @@ public class GuiDownloadTerrainBetweenlands extends GuiScreen {
 	}
 
 	@Override
-	public void updateScreen() {
-		this.background.updateScreen();
+	public void tick() {
+		this.background.tick();
 	}
 
 	@Override
@@ -52,9 +52,9 @@ public class GuiDownloadTerrainBetweenlands extends GuiScreen {
 	}
 
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		this.background.drawScreen(mouseX, mouseY, partialTicks);
 		this.drawCenteredString(this.fontRenderer, I18n.format("multiplayer.downloadingTerrain"), this.width / 2, this.height / 2 - 50, 16777215);
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 	}
 }

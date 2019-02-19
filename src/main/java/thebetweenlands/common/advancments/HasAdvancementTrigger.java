@@ -54,7 +54,7 @@ public class HasAdvancementTrigger extends BLTrigger<HasAdvancementTrigger.Insta
 
         boolean test(EntityPlayerMP player) {
             if (player != null) {
-                Advancement adv = player.getServerWorld().getAdvancementManager().getAdvancement(advancementLocation);
+                Advancement adv = player.getServerWorld().getServer().getAdvancementManager().getAdvancement(advancementLocation);
                 return adv != null && player.getAdvancements().getProgress(adv).isDone();
             }
             return false;

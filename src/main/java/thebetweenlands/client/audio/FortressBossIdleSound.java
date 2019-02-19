@@ -7,7 +7,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class FortressBossIdleSound extends EntitySound<EntityPrimordialMalevolence> {
 	public FortressBossIdleSound(EntityPrimordialMalevolence boss) {
-		super(SoundRegistry.FORTRESS_BOSS_LIVING, SoundCategory.HOSTILE, boss, EntityLivingBase::isEntityAlive);
+		super(SoundRegistry.FORTRESS_BOSS_LIVING, SoundCategory.HOSTILE, boss, EntityLivingBase::isAlive);
 		repeat = false;
 	}
 }
