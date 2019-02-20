@@ -2,11 +2,11 @@
   "parent": "block/cube",
   "textures": {
     "particle": "thebetweenlands:block/druid_stone_4",
-    "up": "blocks/stone",
-    "down": "blocks/stone",
+    "up": "minecraft:block/stone",
+    "down": "minecraft:block/stone",
     "north": "thebetweenlands:block/druid_stone_4",
-    "east": "blocks/stone",
-    "south": "blocks/stone",
-    "west": "blocks/stone"
+    "east": "minecraft:block/stone",
+    "south": "minecraft:block/stone",
+    "west": "minecraft:block/stone"
   }
 }

@@ -6,8 +6,8 @@
         "2": "thebetweenlands:block/sulfur_furnace_dual_front",
         "3": "thebetweenlands:block/betweenstone_bricks",
         "4": "thebetweenlands:block/sulfur_furnace_top",
-        "5": "blocks/fire_layer_0",
-        "6": "blocks/fire_layer_1",
+        "5": "minecraft:block/fire_layer_0",
+        "6": "minecraft:block/fire_layer_1",
         "7": "thebetweenlands:block/sulfur_furnace_dual_inside_active",
         "particle": "thebetweenlands:block/sulfur_furnace_side"
     },

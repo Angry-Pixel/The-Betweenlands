@@ -12,9 +12,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
-import thebetweenlands.common.block.farming.BlockAspectrusCrop;
-import thebetweenlands.common.block.misc.BlockSludge;
-import thebetweenlands.common.block.plant.BlockDoublePlantBL;
+import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.lib.ModInfo;
 
 @ObjectHolder(ModInfo.ID)
@@ -31,23 +29,41 @@ public class BlockRegistry {
 	//@ObjectHolder("rubber")
 	//public static final Block RUBBER = null;
 
-	//@ObjectHolder("druid_stone_1")
-	//public static final Block DRUID_STONE_1 = null;
+	@ObjectHolder("druid_stone_1")
+	public static final Block DRUID_STONE_1 = null;
 
-	//@ObjectHolder("druid_stone_2")
-	//public static final Block DRUID_STONE_2 = null;
+	@ObjectHolder("druid_stone_2")
+	public static final Block DRUID_STONE_2 = null;
 
-	//@ObjectHolder("druid_stone_3")
-	//public static final Block DRUID_STONE_3 = null;
+	@ObjectHolder("druid_stone_3")
+	public static final Block DRUID_STONE_3 = null;
 
-	//@ObjectHolder("druid_stone_4")
-	//public static final Block DRUID_STONE_4 = null;
+	@ObjectHolder("druid_stone_4")
+	public static final Block DRUID_STONE_4 = null;
 
-	//@ObjectHolder("druid_stone_5")
-	//public static final Block DRUID_STONE_5 = null;
+	@ObjectHolder("druid_stone_5")
+	public static final Block DRUID_STONE_5 = null;
 
-	//@ObjectHolder("druid_stone_6")
-	//public static final Block DRUID_STONE_6 = null;
+	@ObjectHolder("druid_stone_6")
+	public static final Block DRUID_STONE_6 = null;
+
+	@ObjectHolder("druid_stone_1_active")
+	public static final Block DRUID_STONE_1_ACTIVE = null;
+
+	@ObjectHolder("druid_stone_2_active")
+	public static final Block DRUID_STONE_2_ACTIVE = null;
+
+	@ObjectHolder("druid_stone_3_active")
+	public static final Block DRUID_STONE_3_ACTIVE = null;
+
+	@ObjectHolder("druid_stone_4_active")
+	public static final Block DRUID_STONE_4_ACTIVE = null;
+
+	@ObjectHolder("druid_stone_5_active")
+	public static final Block DRUID_STONE_5_ACTIVE = null;
+
+	@ObjectHolder("druid_stone_6_active")
+	public static final Block DRUID_STONE_6_ACTIVE = null;
 
 	//@ObjectHolder("betweenlands_bedrock")
 	//public static final Block BETWEENLANDS_BEDROCK = null;
@@ -1126,6 +1142,18 @@ public class BlockRegistry {
 		//which can be used to set some values
 
 		reg.reg("betweenstone", new Block(Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1.5F, 10.0F)), ItemRegistry.block());
+		reg.reg("druid_stone_1", new BlockDruidStone(false), ItemRegistry.block());
+		reg.reg("druid_stone_2", new BlockDruidStone(false), ItemRegistry.block());
+		reg.reg("druid_stone_3", new BlockDruidStone(false), ItemRegistry.block());
+		reg.reg("druid_stone_4", new BlockDruidStone(false), ItemRegistry.block());
+		reg.reg("druid_stone_5", new BlockDruidStone(false), ItemRegistry.block());
+		reg.reg("druid_stone_6", new BlockDruidStone(false), ItemRegistry.block());
+		reg.reg("druid_stone_1_active", new BlockDruidStone(true), ItemRegistry.block());
+		reg.reg("druid_stone_2_active", new BlockDruidStone(true), ItemRegistry.block());
+		reg.reg("druid_stone_3_active", new BlockDruidStone(true), ItemRegistry.block());
+		reg.reg("druid_stone_4_active", new BlockDruidStone(true), ItemRegistry.block());
+		reg.reg("druid_stone_5_active", new BlockDruidStone(true), ItemRegistry.block());
+		reg.reg("druid_stone_6_active", new BlockDruidStone(true), ItemRegistry.block());
 	}
 }
 

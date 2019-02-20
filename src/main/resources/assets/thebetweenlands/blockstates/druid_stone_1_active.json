@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "thebetweenlands:block/druid_stone_1_active" },
+    "facing=south": { "model": "thebetweenlands:block/druid_stone_1_active", "y": 180 },
+    "facing=west": { "model": "thebetweenlands:block/druid_stone_1_active", "y": 270 },
+    "facing=east": { "model": "thebetweenlands:block/druid_stone_1_active", "y": 90 }
+  }
+}
