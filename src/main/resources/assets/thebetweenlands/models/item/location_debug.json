@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/location_debug"
+    "layer0": "thebetweenlands:item/location_debug"
   }
 }

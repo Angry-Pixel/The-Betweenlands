@@ -9,6 +9,6 @@
     }
   ],
   "textures": {
-    "layer0": "thebetweenlands:items/shimmer_stone"
+    "layer0": "thebetweenlands:item/shimmer_stone"
   }
 }

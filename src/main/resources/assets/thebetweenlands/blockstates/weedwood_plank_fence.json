@@ -1,9 +1,9 @@
 {
   "forge_marker": 1,
   "defaults":{
-    "model": "thebetweenlands:base_fence_post",
+    "model": "thebetweenlands:block/base_fence_post",
     "textures": {
-      "texture": "thebetweenlands:blocks/weedwood_planks"
+      "texture": "thebetweenlands:block/weedwood_planks"
     }
   },
   "variants": {

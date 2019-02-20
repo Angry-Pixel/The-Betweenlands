@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:blocks/silt_glass"
+		"layer0": "thebetweenlands:block/silt_glass"
 	}
 }

@@ -1,13 +1,13 @@
 {
     "ambientocclusion": true,
     "textures": {
-        "particle": "thebetweenlands:blocks/log_rubber_stump",
-        "north": "thebetweenlands:blocks/log_rubber_stump",
-        "south": "thebetweenlands:blocks/log_rubber_stump",
-        "east": "thebetweenlands:blocks/log_rubber_stump",
-        "west": "thebetweenlands:blocks/log_rubber_top",
-        "up": "thebetweenlands:blocks/log_rubber_stump",
-        "down": "thebetweenlands:blocks/log_rubber_stump"
+        "particle": "thebetweenlands:block/log_rubber_stump",
+        "north": "thebetweenlands:block/log_rubber_stump",
+        "south": "thebetweenlands:block/log_rubber_stump",
+        "east": "thebetweenlands:block/log_rubber_stump",
+        "west": "thebetweenlands:block/log_rubber_top",
+        "up": "thebetweenlands:block/log_rubber_stump",
+        "down": "thebetweenlands:block/log_rubber_stump"
     },
     "elements": [
         {   

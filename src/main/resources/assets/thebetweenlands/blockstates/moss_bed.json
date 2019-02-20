@@ -2,13 +2,13 @@
   "forge_marker": 1,
   "defaults": {
     "custom": {
-      "particle_texture": "thebetweenlands:blocks/moss"
+      "particle_texture": "thebetweenlands:block/moss"
     }
   },
   "variants": {
     "part": {
-      "foot": { "model": "thebetweenlands:internal/moss_bed" },
-      "head": { "model": "thebetweenlands:internal/blank" }
+      "foot": { "model": "thebetweenlands:block/internal/moss_bed" },
+      "head": { "model": "thebetweenlands:block/internal/blank" }
     },
     "facing": {
       "north": { "y": 180 },

@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:blocks/nettle_flowered"
+		"layer0": "thebetweenlands:block/nettle_flowered"
 	}
 }

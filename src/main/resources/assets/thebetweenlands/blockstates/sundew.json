@@ -2,19 +2,19 @@
     "forge_marker": 1,
     "variants": {
         "half=lower": [
-            { "model": "thebetweenlands:internal/sundew" },
-            { "model": "thebetweenlands:internal/sundew", "y": 90 },
-            { "model": "thebetweenlands:internal/sundew", "y": 180 },
-            { "model": "thebetweenlands:internal/sundew", "y": 270 }
+            { "model": "thebetweenlands:block/internal/sundew" },
+            { "model": "thebetweenlands:block/internal/sundew", "y": 90 },
+            { "model": "thebetweenlands:block/internal/sundew", "y": 180 },
+            { "model": "thebetweenlands:block/internal/sundew", "y": 270 }
         ],
         "half=upper": { 
-            "model": "thebetweenlands:internal/blank",
+            "model": "thebetweenlands:block/internal/blank",
             "custom": { 
-                "particle_texture": "thebetweenlands:blocks/sundew" 
+                "particle_texture": "thebetweenlands:block/sundew" 
             } 
         },
         "inventory": { 
-            "model": "thebetweenlands:internal/sundew",
+            "model": "thebetweenlands:block/internal/sundew",
             "transform": {
                 "gui": {
                     "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],

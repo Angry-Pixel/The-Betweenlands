@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:sludgecreep" }
+		"": { "model": "thebetweenlands:block/sludgecreep" }
 	}
 }

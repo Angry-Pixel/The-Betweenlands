@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/amulet"
+    "layer0": "thebetweenlands:item/amulet"
   },
   "overrides": [
         { "predicate": { "gem": 1.0 }, "model": "thebetweenlands:item/amulet_aqua_gem" },

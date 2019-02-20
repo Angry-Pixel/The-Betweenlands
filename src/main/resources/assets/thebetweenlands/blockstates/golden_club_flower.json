@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:golden_club_flower" }
+		"": { "model": "thebetweenlands:block/golden_club_flower" }
 	}
 }

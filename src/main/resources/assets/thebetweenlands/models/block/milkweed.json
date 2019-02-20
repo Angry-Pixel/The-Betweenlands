@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/milkweed"
+		"cross": "thebetweenlands:block/milkweed"
 	}
 }

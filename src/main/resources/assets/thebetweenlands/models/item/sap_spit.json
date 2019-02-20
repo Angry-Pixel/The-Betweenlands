@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:items/sap_spit"
+		"layer0": "thebetweenlands:item/sap_spit"
 	}
 }

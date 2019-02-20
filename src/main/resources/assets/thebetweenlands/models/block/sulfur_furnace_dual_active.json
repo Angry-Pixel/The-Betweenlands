@@ -1,15 +1,15 @@
 {
     "parent": "block/orientable",
     "textures": {
-        "0": "thebetweenlands:blocks/sulfur_furnace_dual_back",
-        "1": "thebetweenlands:blocks/sulfur_furnace_side",
-        "2": "thebetweenlands:blocks/sulfur_furnace_dual_front",
-        "3": "thebetweenlands:blocks/betweenstone_bricks",
-        "4": "thebetweenlands:blocks/sulfur_furnace_top",
+        "0": "thebetweenlands:block/sulfur_furnace_dual_back",
+        "1": "thebetweenlands:block/sulfur_furnace_side",
+        "2": "thebetweenlands:block/sulfur_furnace_dual_front",
+        "3": "thebetweenlands:block/betweenstone_bricks",
+        "4": "thebetweenlands:block/sulfur_furnace_top",
         "5": "blocks/fire_layer_0",
         "6": "blocks/fire_layer_1",
-        "7": "thebetweenlands:blocks/sulfur_furnace_dual_inside_active",
-        "particle": "thebetweenlands:blocks/sulfur_furnace_side"
+        "7": "thebetweenlands:block/sulfur_furnace_dual_inside_active",
+        "particle": "thebetweenlands:block/sulfur_furnace_side"
     },
     "elements": [
         {

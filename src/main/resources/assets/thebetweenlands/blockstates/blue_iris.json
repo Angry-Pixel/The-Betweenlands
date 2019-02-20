@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:blue_iris" }
+		"": { "model": "thebetweenlands:block/blue_iris" }
 	}
 }

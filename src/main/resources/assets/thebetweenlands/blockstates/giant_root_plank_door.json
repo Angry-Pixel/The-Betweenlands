@@ -2,9 +2,9 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "top": "thebetweenlands:blocks/giant_root_plank_door_top",
-      "bottom": "thebetweenlands:blocks/giant_root_plank_door_bottom",
-      "particle": "thebetweenlands:blocks/giant_root_plank_door_top"
+      "top": "thebetweenlands:block/giant_root_plank_door_top",
+      "bottom": "thebetweenlands:block/giant_root_plank_door_bottom",
+      "particle": "thebetweenlands:block/giant_root_plank_door_top"
     }
   },
   "variants": {

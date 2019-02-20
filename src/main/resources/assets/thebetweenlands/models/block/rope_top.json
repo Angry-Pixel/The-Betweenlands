@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/rope_top"
+		"cross": "thebetweenlands:block/rope_top"
 	}
 }

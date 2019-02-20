@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:nibbletwig_planks"
+    "": {
+      "model": "thebetweenlands:block/nibbletwig_planks"
     } 
   } 
 }

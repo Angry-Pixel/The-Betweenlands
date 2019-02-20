@@ -2,9 +2,9 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "top": "thebetweenlands:blocks/hearthgrove_plank_door_top",
-      "bottom": "thebetweenlands:blocks/hearthgrove_plank_door_bottom",
-      "particle": "thebetweenlands:blocks/hearthgrove_plank_door_top"
+      "top": "thebetweenlands:block/hearthgrove_plank_door_top",
+      "bottom": "thebetweenlands:block/hearthgrove_plank_door_bottom",
+      "particle": "thebetweenlands:block/hearthgrove_plank_door_top"
     }
   },
   "variants": {

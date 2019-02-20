@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "thebetweenlands:blocks/leaves_sap_tree_spook"
+		"all": "thebetweenlands:block/leaves_sap_tree_spook"
 	}
 }

@@ -1,9 +1,9 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thebetweenlands:internal/blank",
+    "model": "thebetweenlands:block/internal/blank",
     "custom": {
-      "particle_texture": "thebetweenlands:blocks/weedwood"
+      "particle_texture": "thebetweenlands:block/weedwood"
     }
   },
   "variants": {

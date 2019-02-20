@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/rubber_ball"
+    "layer0": "thebetweenlands:item/rubber_ball"
   }
 }

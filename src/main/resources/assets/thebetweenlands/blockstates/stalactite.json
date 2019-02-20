@@ -1,8 +1,8 @@
 {
   "forge_marker": 1,
   "variants": {
-    "normal": {
-      "model": "thebetweenlands:internal/stalactite"
+    "": {
+      "model": "thebetweenlands:block/internal/stalactite"
     }
   }
 }

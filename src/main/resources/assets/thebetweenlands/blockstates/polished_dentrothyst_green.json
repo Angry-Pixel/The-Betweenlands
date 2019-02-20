@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "thebetweenlands:polished_dentrothyst_green"
+    "": {
+      "model": "thebetweenlands:block/polished_dentrothyst_green"
     }
   }
 }

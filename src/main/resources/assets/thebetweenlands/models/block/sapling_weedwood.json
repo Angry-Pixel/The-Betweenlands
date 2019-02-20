@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/sapling_weedwood"
+		"cross": "thebetweenlands:block/sapling_weedwood"
 	}
 }

@@ -3,8 +3,8 @@
   "defaults": {
     "model": "glass_pane_post",
     "textures": {
-      "edge": "thebetweenlands:blocks/silt_glass_pane_top",
-      "pane": "thebetweenlands:blocks/silt_glass"
+      "edge": "thebetweenlands:block/silt_glass_pane_top",
+      "pane": "thebetweenlands:block/silt_glass"
     }
   },
   "variants": {

@@ -1,9 +1,9 @@
 {
     "parent": "block/block",
     "textures": {
-        "log": "thebetweenlands:blocks/log_spirit_tree",
-        "carved": "thebetweenlands:blocks/log_spirit_tree_carved_2",
-        "particle": "thebetweenlands:blocks/log_spirit_tree"
+        "log": "thebetweenlands:block/log_spirit_tree",
+        "carved": "thebetweenlands:block/log_spirit_tree_carved_2",
+        "particle": "thebetweenlands:block/log_spirit_tree"
     },
     "elements": [
         {   

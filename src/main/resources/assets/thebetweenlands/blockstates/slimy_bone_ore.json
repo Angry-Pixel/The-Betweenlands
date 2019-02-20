@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:slimy_bone_ore"
+    "": {
+      "model": "thebetweenlands:block/slimy_bone_ore"
     } 
   } 
 }

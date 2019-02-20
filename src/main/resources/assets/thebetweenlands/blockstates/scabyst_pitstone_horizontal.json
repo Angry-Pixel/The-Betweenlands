@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:scabyst_pitstone_horizontal"
+    "": {
+      "model": "thebetweenlands:block/scabyst_pitstone_horizontal"
     } 
   } 
 }

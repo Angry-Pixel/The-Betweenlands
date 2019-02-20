@@ -1,10 +1,10 @@
 {
     "variants": {
-        "normal": [
-            { "model": "thebetweenlands:coarse_swamp_dirt" },
-            { "model": "thebetweenlands:coarse_swamp_dirt", "y": 90 },
-            { "model": "thebetweenlands:coarse_swamp_dirt", "y": 180 },
-            { "model": "thebetweenlands:coarse_swamp_dirt", "y": 270 }
+        "": [
+            { "model": "thebetweenlands:block/coarse_swamp_dirt" },
+            { "model": "thebetweenlands:block/coarse_swamp_dirt", "y": 90 },
+            { "model": "thebetweenlands:block/coarse_swamp_dirt", "y": 180 },
+            { "model": "thebetweenlands:block/coarse_swamp_dirt", "y": 270 }
         ]
     }
 }

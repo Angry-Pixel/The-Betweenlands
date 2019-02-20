@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:blocks/sapling_hearthgrove"
+		"layer0": "thebetweenlands:block/sapling_hearthgrove"
 	}
 }

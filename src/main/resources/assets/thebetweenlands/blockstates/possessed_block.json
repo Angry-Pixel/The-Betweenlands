@@ -1,8 +1,8 @@
 {
     "variants": {
-        "facing=north": { "model": "thebetweenlands:possessed_block", "y": 180 },
-        "facing=south": { "model": "thebetweenlands:possessed_block" },
-        "facing=west":  { "model": "thebetweenlands:possessed_block", "y": 90 },
-        "facing=east":  { "model": "thebetweenlands:possessed_block", "y": 270 }
+        "facing=north": { "model": "thebetweenlands:block/possessed_block", "y": 180 },
+        "facing=south": { "model": "thebetweenlands:block/possessed_block" },
+        "facing=west":  { "model": "thebetweenlands:block/possessed_block", "y": 90 },
+        "facing=east":  { "model": "thebetweenlands:block/possessed_block", "y": 270 }
     }
 }

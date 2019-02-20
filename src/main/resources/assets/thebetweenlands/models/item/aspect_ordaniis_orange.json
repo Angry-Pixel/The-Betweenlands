@@ -2,6 +2,6 @@
   "parent": "thebetweenlands:item/aspect_vial_orange",
   "textures": {
 
-    "layer2": "thebetweenlands:items/strictly_herblore/misc/aspect_ordaniis"
+    "layer2": "thebetweenlands:item/strictly_herblore/misc/aspect_ordaniis"
   }
 }

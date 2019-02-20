@@ -1,10 +1,10 @@
 {
   "variants": {
     "type=green": {
-      "model": "thebetweenlands:dentrothyst_green"
+      "model": "thebetweenlands:block/dentrothyst_green"
     },
     "type=orange": {
-      "model": "thebetweenlands:dentrothyst_orange"
+      "model": "thebetweenlands:block/dentrothyst_orange"
     }
   }
 }

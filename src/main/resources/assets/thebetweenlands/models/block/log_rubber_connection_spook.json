@@ -1,9 +1,9 @@
 {
     "ambientocclusion": true,
     "textures": {
-        "particle": "thebetweenlands:blocks/log_rubber_stump_spook",
-        "bark": "thebetweenlands:blocks/log_rubber_stump_spook",
-        "top": "thebetweenlands:blocks/log_rubber_top_spook"
+        "particle": "thebetweenlands:block/log_rubber_stump_spook",
+        "bark": "thebetweenlands:block/log_rubber_stump_spook",
+        "top": "thebetweenlands:block/log_rubber_top_spook"
     },
     "elements": [
         {   

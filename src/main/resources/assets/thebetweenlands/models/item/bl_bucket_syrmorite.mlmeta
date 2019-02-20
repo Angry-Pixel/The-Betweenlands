@@ -2,8 +2,8 @@
   "source": "thebetweenlands:bl_bucket_syrmorite",
   "inherit_overrides": false,
   "custom": {
-    "base_texture": "thebetweenlands:items/syrmorite_bucket_base",
-    "liquid_template": "thebetweenlands:items/syrmorite_bucket_base",
-    "cover_texture": "thebetweenlands:items/syrmorite_bucket_cover"
+    "base_texture": "thebetweenlands:item/syrmorite_bucket_base",
+    "liquid_template": "thebetweenlands:item/syrmorite_bucket_base",
+    "cover_texture": "thebetweenlands:item/syrmorite_bucket_cover"
   }
 }

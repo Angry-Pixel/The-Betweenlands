@@ -1,18 +1,18 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thebetweenlands:internal/blank"
+    "model": "thebetweenlands:block/internal/blank"
   },
   "variants": {
     "type": {
       "green": {
         "custom": {
-          "particle_texture": "thebetweenlands:blocks/dentrothyst_green"
+          "particle_texture": "thebetweenlands:block/dentrothyst_green"
         }
       },
       "orange": {
         "custom": {
-          "particle_texture": "thebetweenlands:blocks/dentrothyst_orange"
+          "particle_texture": "thebetweenlands:block/dentrothyst_orange"
         }
       }
     },

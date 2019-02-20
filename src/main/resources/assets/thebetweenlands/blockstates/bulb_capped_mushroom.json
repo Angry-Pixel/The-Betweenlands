@@ -1,14 +1,14 @@
 {
     "forge_marker": 1,
     "variants": {
-        "normal": [
-            { "model": "thebetweenlands:internal/bulb_capped_mushroom" },
-            { "model": "thebetweenlands:internal/bulb_capped_mushroom", "y": 90 },
-            { "model": "thebetweenlands:internal/bulb_capped_mushroom", "y": 180 },
-            { "model": "thebetweenlands:internal/bulb_capped_mushroom", "y": 270 }
+        "": [
+            { "model": "thebetweenlands:block/internal/bulb_capped_mushroom" },
+            { "model": "thebetweenlands:block/internal/bulb_capped_mushroom", "y": 90 },
+            { "model": "thebetweenlands:block/internal/bulb_capped_mushroom", "y": 180 },
+            { "model": "thebetweenlands:block/internal/bulb_capped_mushroom", "y": 270 }
         ],
         "inventory": { 
-            "model": "thebetweenlands:internal/bulb_capped_mushroom",
+            "model": "thebetweenlands:block/internal/bulb_capped_mushroom",
             "transform": {
                 "gui": {
                     "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],

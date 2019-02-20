@@ -1,10 +1,10 @@
 {
   "ambientocclusion": false,
   "textures": {
-    "particle": "thebetweenlands:blocks/syrmorite_hopper_outside",
-    "top": "thebetweenlands:blocks/syrmorite_hopper_top",
-    "side": "thebetweenlands:blocks/syrmorite_hopper_outside",
-    "inside": "thebetweenlands:blocks/syrmorite_hopper_inside"
+    "particle": "thebetweenlands:block/syrmorite_hopper_outside",
+    "top": "thebetweenlands:block/syrmorite_hopper_top",
+    "side": "thebetweenlands:block/syrmorite_hopper_outside",
+    "inside": "thebetweenlands:block/syrmorite_hopper_inside"
   },
   "elements": [
     {   "from": [ 0, 10, 0 ],

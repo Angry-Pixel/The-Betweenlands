@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:inactive_glowing_smooth_cragrock"
+    "": {
+      "model": "thebetweenlands:block/inactive_glowing_smooth_cragrock"
     } 
   } 
 }

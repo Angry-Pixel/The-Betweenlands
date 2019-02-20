@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:mossy_betweenstone_tiles"
+    "": {
+      "model": "thebetweenlands:block/mossy_betweenstone_tiles"
     } 
   } 
 }

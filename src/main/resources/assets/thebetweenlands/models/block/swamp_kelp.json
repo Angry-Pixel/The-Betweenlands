@@ -1,6 +1,6 @@
 {
     "parent": "block/cross",
     "textures": {
-        "cross": "thebetweenlands:blocks/swamp_kelp"
+        "cross": "thebetweenlands:block/swamp_kelp"
     }
 }

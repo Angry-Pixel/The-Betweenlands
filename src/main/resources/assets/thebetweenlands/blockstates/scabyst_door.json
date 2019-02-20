@@ -2,9 +2,9 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "top": "thebetweenlands:blocks/scabyst_door_top",
-      "bottom": "thebetweenlands:blocks/scabyst_door_bottom",
-      "particle": "thebetweenlands:blocks/scabyst_door_top"
+      "top": "thebetweenlands:block/scabyst_door_top",
+      "bottom": "thebetweenlands:block/scabyst_door_bottom",
+      "particle": "thebetweenlands:block/scabyst_door_top"
     }
   },
   "variants": {

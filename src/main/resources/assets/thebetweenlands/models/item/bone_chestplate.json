@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/bone_chestplate"
+    "layer0": "thebetweenlands:item/bone_chestplate"
   },
   "overrides": [
         { "predicate": { "gem": 1.0 }, "model": "thebetweenlands:item/bone_chestplate_aqua_gem" },

@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/cragrock_bricks"
+    "all": "thebetweenlands:block/cragrock_bricks"
   } 
 }

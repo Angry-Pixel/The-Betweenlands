@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/valonite_shard"
+    "layer0": "thebetweenlands:item/valonite_shard"
   }
 }

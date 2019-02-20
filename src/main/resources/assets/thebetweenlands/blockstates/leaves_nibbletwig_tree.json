@@ -1,8 +1,8 @@
 {
 	"forge_marker": 1,
 	"variants": {
-		"normal": {
-			"model": "thebetweenlands:leaves_nibbletwig_tree"
+		"": {
+			"model": "thebetweenlands:block/leaves_nibbletwig_tree"
 		}
 	}
 }

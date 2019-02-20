@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:cave_grass" }
+		"": { "model": "thebetweenlands:block/cave_grass" }
 	}
 }

@@ -2,6 +2,8 @@ package thebetweenlands.common.registries;
 
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.EntityType;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -102,7 +104,7 @@ public class EntityRegistry {
 	@ObjectHolder("mire_snail")
 	public static final EntityType<EntityMireSnail> MIRE_SNAIL = null;
 
-	@ObjectHolder("EntityMireSnailEgg")
+	@ObjectHolder("mire_snail_egg")
 	public static final EntityType<EntityMireSnailEgg> MIRE_SNAIL_EGG = null;
 
 	@ObjectHolder("bl_arrow")
@@ -250,7 +252,7 @@ public class EntityRegistry {
 
 		register(new RegistryHelper<EntityType.Builder<?>>() {
 			@Override
-			public <F extends EntityType.Builder<?>> F reg(String regName, F obj, Consumer<F> callback) {
+			public <F extends EntityType.Builder<?>> F reg(String regName, F obj, @Nullable Consumer<F> callback) {
 				EntityType<?> type = obj.build(ModInfo.ID + ":" + regName);
 				if(!type.hasCustomTracking()) {
 					obj.tracker(64, 3, true);

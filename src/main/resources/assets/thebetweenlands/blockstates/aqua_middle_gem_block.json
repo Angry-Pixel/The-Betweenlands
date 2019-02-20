@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:aqua_middle_gem_block"
+    "": {
+      "model": "thebetweenlands:block/aqua_middle_gem_block"
     } 
   } 
 }

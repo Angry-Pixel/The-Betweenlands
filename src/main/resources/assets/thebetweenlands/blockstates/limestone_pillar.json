@@ -1,10 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thebetweenlands:base_pillar",
+    "model": "thebetweenlands:block/base_pillar",
     "textures": {
-      "side": "thebetweenlands:blocks/limestone_pillar",
-      "end": "thebetweenlands:blocks/limestone_pillar_top"
+      "side": "thebetweenlands:block/limestone_pillar",
+      "end": "thebetweenlands:block/limestone_pillar_top"
     }
   },
   "variants": {
@@ -20,7 +20,7 @@
       }
     },
     "inventory": {
-      "model": "thebetweenlands:base_pillar"
+      "model": "thebetweenlands:block/base_pillar"
     }
   }
 }

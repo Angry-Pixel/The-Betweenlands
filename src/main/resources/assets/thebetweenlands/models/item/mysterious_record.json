@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/record_16612"
+    "layer0": "thebetweenlands:item/record_16612"
   }
 }

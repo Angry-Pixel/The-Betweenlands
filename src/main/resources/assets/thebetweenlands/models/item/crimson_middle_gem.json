@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/crimson_middle_gem"
+    "layer0": "thebetweenlands:item/crimson_middle_gem"
   }
 }

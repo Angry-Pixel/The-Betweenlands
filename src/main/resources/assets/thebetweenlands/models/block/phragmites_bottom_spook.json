@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/phragmites_bottom_spook"
+		"cross": "thebetweenlands:block/phragmites_bottom_spook"
 	}
 }

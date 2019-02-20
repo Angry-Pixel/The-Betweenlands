@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:wood_chip_path"
+    "": {
+      "model": "thebetweenlands:block/wood_chip_path"
     } 
   } 
 }

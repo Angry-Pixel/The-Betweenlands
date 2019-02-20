@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "thebetweenlands:items/hag_hacker"
+    "layer0": "thebetweenlands:item/hag_hacker"
   }
 }

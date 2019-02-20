@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/root_pod"
+		"cross": "thebetweenlands:block/root_pod"
 	}
 }

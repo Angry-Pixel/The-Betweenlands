@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:compost_block"
+    "": {
+      "model": "thebetweenlands:block/compost_block"
     } 
   } 
 }

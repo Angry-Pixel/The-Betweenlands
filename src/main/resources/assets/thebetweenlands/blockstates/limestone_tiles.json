@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:limestone_tiles"
+    "": {
+      "model": "thebetweenlands:block/limestone_tiles"
     } 
   } 
 }

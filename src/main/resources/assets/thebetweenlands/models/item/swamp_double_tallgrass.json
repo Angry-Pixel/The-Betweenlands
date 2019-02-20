@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:blocks/swamp_double_tallgrass_top"
+		"layer0": "thebetweenlands:block/swamp_double_tallgrass_top"
 	}
 }

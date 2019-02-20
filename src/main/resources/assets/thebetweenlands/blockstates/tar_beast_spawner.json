@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:tar_solid"
+    "": {
+      "model": "thebetweenlands:block/tar_solid"
     } 
   } 
 }

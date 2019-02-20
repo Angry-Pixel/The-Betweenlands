@@ -2,19 +2,19 @@
     "forge_marker": 1,
     "variants": {
         "blooming=true": [
-            { "model": "thebetweenlands:internal/venus_fly_trap_blooming" },
-            { "model": "thebetweenlands:internal/venus_fly_trap_blooming", "y": 90 },
-            { "model": "thebetweenlands:internal/venus_fly_trap_blooming", "y": 180 },
-            { "model": "thebetweenlands:internal/venus_fly_trap_blooming", "y": 270 }
+            { "model": "thebetweenlands:block/internal/venus_fly_trap_blooming" },
+            { "model": "thebetweenlands:block/internal/venus_fly_trap_blooming", "y": 90 },
+            { "model": "thebetweenlands:block/internal/venus_fly_trap_blooming", "y": 180 },
+            { "model": "thebetweenlands:block/internal/venus_fly_trap_blooming", "y": 270 }
         ],
         "blooming=false": [ 
-            { "model": "thebetweenlands:internal/venus_fly_trap" },
-            { "model": "thebetweenlands:internal/venus_fly_trap", "y": 90 },
-            { "model": "thebetweenlands:internal/venus_fly_trap", "y": 180 },
-            { "model": "thebetweenlands:internal/venus_fly_trap", "y": 270 }
+            { "model": "thebetweenlands:block/internal/venus_fly_trap" },
+            { "model": "thebetweenlands:block/internal/venus_fly_trap", "y": 90 },
+            { "model": "thebetweenlands:block/internal/venus_fly_trap", "y": 180 },
+            { "model": "thebetweenlands:block/internal/venus_fly_trap", "y": 270 }
         ],
         "inventory": { 
-            "model": "thebetweenlands:internal/venus_fly_trap",
+            "model": "thebetweenlands:block/internal/venus_fly_trap",
             "transform": {
                 "gui": {
                     "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],

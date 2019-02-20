@@ -1,6 +1,6 @@
 {
 	"variants": {
-		"stage=0": { "model": "thebetweenlands:sapling_rubber" },
-		"stage=1": { "model": "thebetweenlands:sapling_rubber" }
+		"stage=0": { "model": "thebetweenlands:block/sapling_rubber" },
+		"stage=1": { "model": "thebetweenlands:block/sapling_rubber" }
 	}
 }

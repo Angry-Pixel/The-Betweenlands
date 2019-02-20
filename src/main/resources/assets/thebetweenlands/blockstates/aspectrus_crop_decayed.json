@@ -1,10 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thebetweenlands:base_fence_post",
+    "model": "thebetweenlands:block/base_fence_post",
     "textures": {
-      "texture": "thebetweenlands:blocks/rubber_tree_planks",
-      "particle": "thebetweenlands:blocks/moss"
+      "texture": "thebetweenlands:block/rubber_tree_planks",
+      "particle": "thebetweenlands:block/moss"
     }
   },
   "variants": {

@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:silt_glass"
+    "": {
+      "model": "thebetweenlands:block/silt_glass"
     } 
   } 
 }

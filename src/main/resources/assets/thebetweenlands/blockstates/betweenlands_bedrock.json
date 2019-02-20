@@ -1,7 +1,7 @@
 {
   "variants": {
-    "normal": {
-      "model": "thebetweenlands:betweenlands_bedrock"
+    "": {
+      "model": "thebetweenlands:block/betweenlands_bedrock"
     }
   }
 }

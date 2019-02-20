@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:bog_bean_flower" }
+		"": { "model": "thebetweenlands:block/bog_bean_flower" }
 	}
 }

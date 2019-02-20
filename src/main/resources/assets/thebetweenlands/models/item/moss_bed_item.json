@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:items/moss_bed"
+		"layer0": "thebetweenlands:item/moss_bed"
 	}
 }

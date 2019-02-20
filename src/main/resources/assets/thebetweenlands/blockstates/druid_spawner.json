@@ -1,8 +1,8 @@
 {
   "forge_marker": 1,
   "variants": {
-    "normal": {
-      "model": "thebetweenlands:internal/blank",
+    "": {
+      "model": "thebetweenlands:block/internal/blank",
       "custom": {
         "particle_texture": "thebetweenlands:tiles/druid_spawner_particle"
       }

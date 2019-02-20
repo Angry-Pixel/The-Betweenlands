@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/broomsedge_bottom"
+		"cross": "thebetweenlands:block/broomsedge_bottom"
 	}
 }

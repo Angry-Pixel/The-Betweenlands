@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:green_middle_gem_ore"
+    "": {
+      "model": "thebetweenlands:block/green_middle_gem_ore"
     } 
   } 
 }

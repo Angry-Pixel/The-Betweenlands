@@ -2,7 +2,7 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "torch": "thebetweenlands:blocks/sulfur_torch"
+      "torch": "thebetweenlands:block/sulfur_torch"
     }
   },
   "variants": {

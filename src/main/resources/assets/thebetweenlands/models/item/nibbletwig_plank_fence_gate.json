@@ -1,6 +1,6 @@
 {
     "parent": "block/fence_gate_closed",
     "textures": {
-        "texture": "thebetweenlands:blocks/nibbletwig_planks"
+        "texture": "thebetweenlands:block/nibbletwig_planks"
     }
 }

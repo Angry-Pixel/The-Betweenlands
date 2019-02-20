@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/lurker_skin_boots"
+    "layer0": "thebetweenlands:item/lurker_skin_boots"
   },
   "overrides": [
         { "predicate": { "gem": 1.0 }, "model": "thebetweenlands:item/lurker_skin_boots_aqua_gem" },

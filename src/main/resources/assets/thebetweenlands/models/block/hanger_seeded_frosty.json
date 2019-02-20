@@ -1,6 +1,6 @@
 {
   "parent": "block/cross",
   "textures": {
-    "cross": "thebetweenlands:blocks/hanger_seeded_frosty"
+    "cross": "thebetweenlands:block/hanger_seeded_frosty"
   }
 }

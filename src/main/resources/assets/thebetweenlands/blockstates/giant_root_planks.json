@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:giant_root_planks"
+    "": {
+      "model": "thebetweenlands:block/giant_root_planks"
     } 
   } 
 }

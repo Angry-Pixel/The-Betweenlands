@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/deep_water_coral_block"
+    "all": "thebetweenlands:block/deep_water_coral_block"
   } 
 }

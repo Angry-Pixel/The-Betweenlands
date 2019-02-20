@@ -1,6 +1,6 @@
 {
     "parent": "block/fence_gate_closed",
     "textures": {
-        "texture": "thebetweenlands:blocks/weedwood_planks"
+        "texture": "thebetweenlands:block/weedwood_planks"
     }
 }

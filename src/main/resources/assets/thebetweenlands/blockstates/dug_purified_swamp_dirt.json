@@ -1,23 +1,23 @@
 {
   "forge_marker": 1,
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:internal/model_combined",
+    "": {
+      "model": "thebetweenlands:block/internal/model_combined",
       "custom": {
         "model_base": "thebetweenlands:block/dug_purified_swamp_dirt_base",
         "model_additional": "thebetweenlands:block/internal/connected_texture",
         "model_additional_data": {
-          "particle_texture": "thebetweenlands:blocks/purified_swamp_dirt",
+          "particle_texture": "thebetweenlands:block/purified_swamp_dirt",
           "ambient_occlusion": true,
           "connected_texture_faces": [
             {
               "cullface": "up",
               "connected_textures": [
-                "thebetweenlands:blocks/dug_purified_swamp_dirt_0",
-                "thebetweenlands:blocks/dug_purified_swamp_dirt_1",
-                "thebetweenlands:blocks/dug_purified_swamp_dirt_2",
-                "thebetweenlands:blocks/dug_purified_swamp_dirt_3",
-                "thebetweenlands:blocks/dug_purified_swamp_dirt_4"
+                "thebetweenlands:block/dug_purified_swamp_dirt_0",
+                "thebetweenlands:block/dug_purified_swamp_dirt_1",
+                "thebetweenlands:block/dug_purified_swamp_dirt_2",
+                "thebetweenlands:block/dug_purified_swamp_dirt_3",
+                "thebetweenlands:block/dug_purified_swamp_dirt_4"
               ],
               "indices": [
                 "top_north_west_index",
@@ -37,10 +37,10 @@
       }
     },
     "inventory": {
-      "model": "thebetweenlands:dug_dirt_inventory",
+      "model": "thebetweenlands:block/dug_dirt_inventory",
       "textures": {
-        "all": "thebetweenlands:blocks/purified_swamp_dirt",
-        "top": "thebetweenlands:blocks/dug_purified_swamp_dirt_0"
+        "all": "thebetweenlands:block/purified_swamp_dirt",
+        "top": "thebetweenlands:block/dug_purified_swamp_dirt_0"
       }
     }
   } 

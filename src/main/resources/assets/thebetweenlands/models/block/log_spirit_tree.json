@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "thebetweenlands:blocks/log_spirit_tree"
+		"all": "thebetweenlands:block/log_spirit_tree"
 	}
 }

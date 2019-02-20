@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "thebetweenlands:blocks/leaves_rubber_tree_frosty"
+		"all": "thebetweenlands:block/leaves_rubber_tree_frosty"
 	}
 }

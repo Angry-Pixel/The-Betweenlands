@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thebetweenlands:internal/winter_event",
+    "model": "thebetweenlands:block/internal/winter_event",
     "custom": {
       "model_base": "thebetweenlands:block/internal/spook_event",
       "model_base_data": {
@@ -16,7 +16,7 @@
       "true": {
         "submodel": {
           "connection_north": {
-            "model": "thebetweenlands:internal/winter_event",
+            "model": "thebetweenlands:block/internal/winter_event",
             "custom": {
 			  "model_base": "thebetweenlands:block/internal/spook_event",
               "model_base_data": {
@@ -36,7 +36,7 @@
       "true": {
         "submodel": {
           "connection_east": {
-            "model": "thebetweenlands:internal/winter_event",
+            "model": "thebetweenlands:block/internal/winter_event",
             "custom": {
 			  "model_base": "thebetweenlands:block/internal/spook_event",
               "model_base_data": {
@@ -57,7 +57,7 @@
       "true": {
         "submodel": {
           "connection_south": {
-            "model": "thebetweenlands:internal/winter_event",
+            "model": "thebetweenlands:block/internal/winter_event",
             "custom": {
 			  "model_base": "thebetweenlands:block/internal/spook_event",
               "model_base_data": {
@@ -78,7 +78,7 @@
       "true": {
         "submodel": {
           "connection_west": {
-            "model": "thebetweenlands:internal/winter_event",
+            "model": "thebetweenlands:block/internal/winter_event",
             "custom": {
 			  "model_base": "thebetweenlands:block/internal/spook_event",
               "model_base_data": {
@@ -99,7 +99,7 @@
       "true": {
         "submodel": {
           "connection_up": {
-            "model": "thebetweenlands:internal/winter_event",
+            "model": "thebetweenlands:block/internal/winter_event",
             "custom": {
 			  "model_base": "thebetweenlands:block/internal/spook_event",
               "model_base_data": {
@@ -118,7 +118,7 @@
       "true": {
         "submodel": {
           "connection_down": {
-            "model": "thebetweenlands:internal/winter_event",
+            "model": "thebetweenlands:block/internal/winter_event",
             "custom": {
 			  "model_base": "thebetweenlands:block/internal/spook_event",
               "model_base_data": {
@@ -135,7 +135,7 @@
       "false": { }
     },
     "down=false,east=true,north=false,south=false,up=false,west=false": {
-      "model": "thebetweenlands:internal/winter_event",
+      "model": "thebetweenlands:block/internal/winter_event",
       "custom": {
         "model_base": "thebetweenlands:block/internal/spook_event",
         "model_base_data": {
@@ -146,7 +146,7 @@
       }
     },
     "down=false,east=false,north=false,south=false,up=false,west=true": {
-      "model": "thebetweenlands:internal/winter_event",
+      "model": "thebetweenlands:block/internal/winter_event",
       "custom": {
         "model_base": "thebetweenlands:block/internal/spook_event",
         "model_base_data": {
@@ -157,7 +157,7 @@
       }
     },
     "down=false,east=false,north=true,south=false,up=false,west=false": {
-      "model": "thebetweenlands:internal/winter_event",
+      "model": "thebetweenlands:block/internal/winter_event",
       "custom": {
         "model_base": "thebetweenlands:block/internal/spook_event",
         "model_base_data": {
@@ -168,7 +168,7 @@
       }
     },
     "down=false,east=false,north=false,south=true,up=false,west=false": {
-      "model": "thebetweenlands:internal/winter_event",
+      "model": "thebetweenlands:block/internal/winter_event",
       "custom": {
         "model_base": "thebetweenlands:block/internal/spook_event",
         "model_base_data": {
@@ -179,7 +179,7 @@
       }
     },
     "down=true,east=false,north=false,south=false,up=false,west=false": {
-      "model": "thebetweenlands:internal/winter_event",
+      "model": "thebetweenlands:block/internal/winter_event",
       "custom": {
         "model_base": "thebetweenlands:block/internal/spook_event",
         "model_base_data": {
@@ -190,7 +190,7 @@
       }
     },
     "down=false,east=false,north=false,south=false,up=true,west=false": {
-      "model": "thebetweenlands:internal/winter_event",
+      "model": "thebetweenlands:block/internal/winter_event",
       "custom": {
         "model_base": "thebetweenlands:block/internal/spook_event",
         "model_base_data": {
@@ -201,10 +201,10 @@
       }
     },
     "inventory": { 
-      "model": "thebetweenlands:log_rubber_center",
+      "model": "thebetweenlands:block/log_rubber_center",
       "textures": {
-        "up": "thebetweenlands:blocks/log_rubber_top",
-        "down": "thebetweenlands:blocks/log_rubber_top"
+        "up": "thebetweenlands:block/log_rubber_top",
+        "down": "thebetweenlands:block/log_rubber_top"
       },
       "transform": "forge:default-block"
     }

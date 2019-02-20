@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:octine_block"
+    "": {
+      "model": "thebetweenlands:block/octine_block"
     } 
   } 
 }

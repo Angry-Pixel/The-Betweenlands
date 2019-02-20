@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:blocks/marsh_mallow"
+		"layer0": "thebetweenlands:block/marsh_mallow"
 	}
 }

@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/limestone_tiles"
+    "all": "thebetweenlands:block/limestone_tiles"
   } 
 }

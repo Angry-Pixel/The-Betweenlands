@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/hearthgrove_planks"
+    "all": "thebetweenlands:block/hearthgrove_planks"
   } 
 }

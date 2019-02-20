@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_column",
   "textures": {
-    "side": "thebetweenlands:blocks/log_hearthgrove_tarred",
-    "end": "thebetweenlands:blocks/log_hearthgrove_top"
+    "side": "thebetweenlands:block/log_hearthgrove_tarred",
+    "end": "thebetweenlands:block/log_hearthgrove_top"
   }
 }

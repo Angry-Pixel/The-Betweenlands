@@ -2,32 +2,32 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "top": "thebetweenlands:blocks/weedwood_trapdoor",
-      "side": "thebetweenlands:blocks/weedwood_trapdoor_side"
+      "top": "thebetweenlands:block/weedwood_trapdoor",
+      "side": "thebetweenlands:block/weedwood_trapdoor_side"
     }
   },
   "variants": {
-    "facing=north,half=bottom,open=false": { "model": "thebetweenlands:trapdoor_bottom", "y": 180 },
-    "facing=south,half=bottom,open=false": { "model": "thebetweenlands:trapdoor_bottom" },
-    "facing=east,half=bottom,open=false": { "model": "thebetweenlands:trapdoor_bottom", "y": 270 },
-    "facing=west,half=bottom,open=false": { "model": "thebetweenlands:trapdoor_bottom", "y": 90 },
-    "facing=north,half=top,open=false": { "model": "thebetweenlands:trapdoor_top", "y": 180 },
-    "facing=south,half=top,open=false": { "model": "thebetweenlands:trapdoor_top" },
-    "facing=east,half=top,open=false": { "model": "thebetweenlands:trapdoor_top", "y": 270 },
-    "facing=west,half=top,open=false": { "model": "thebetweenlands:trapdoor_top", "y": 90 },
-    "facing=north,half=bottom,open=true": { "model": "thebetweenlands:trapdoor_open_bottom" },
-    "facing=south,half=bottom,open=true": { "model": "thebetweenlands:trapdoor_open_bottom", "y": 180 },
-    "facing=east,half=bottom,open=true": { "model": "thebetweenlands:trapdoor_open_bottom", "y": 90 },
-    "facing=west,half=bottom,open=true": { "model": "thebetweenlands:trapdoor_open_bottom", "y": 270 },
-    "facing=north,half=top,open=true": { "model": "thebetweenlands:trapdoor_open_top" },
-    "facing=south,half=top,open=true": { "model": "thebetweenlands:trapdoor_open_top", "y": 180 },
-    "facing=east,half=top,open=true": { "model": "thebetweenlands:trapdoor_open_top", "y": 90 },
-    "facing=west,half=top,open=true": { "model": "thebetweenlands:trapdoor_open_top", "y": 270 },
+    "facing=north,half=bottom,open=false": { "model": "thebetweenlands:block/trapdoor_bottom", "y": 180 },
+    "facing=south,half=bottom,open=false": { "model": "thebetweenlands:block/trapdoor_bottom" },
+    "facing=east,half=bottom,open=false": { "model": "thebetweenlands:block/trapdoor_bottom", "y": 270 },
+    "facing=west,half=bottom,open=false": { "model": "thebetweenlands:block/trapdoor_bottom", "y": 90 },
+    "facing=north,half=top,open=false": { "model": "thebetweenlands:block/trapdoor_top", "y": 180 },
+    "facing=south,half=top,open=false": { "model": "thebetweenlands:block/trapdoor_top" },
+    "facing=east,half=top,open=false": { "model": "thebetweenlands:block/trapdoor_top", "y": 270 },
+    "facing=west,half=top,open=false": { "model": "thebetweenlands:block/trapdoor_top", "y": 90 },
+    "facing=north,half=bottom,open=true": { "model": "thebetweenlands:block/trapdoor_open_bottom" },
+    "facing=south,half=bottom,open=true": { "model": "thebetweenlands:block/trapdoor_open_bottom", "y": 180 },
+    "facing=east,half=bottom,open=true": { "model": "thebetweenlands:block/trapdoor_open_bottom", "y": 90 },
+    "facing=west,half=bottom,open=true": { "model": "thebetweenlands:block/trapdoor_open_bottom", "y": 270 },
+    "facing=north,half=top,open=true": { "model": "thebetweenlands:block/trapdoor_open_top" },
+    "facing=south,half=top,open=true": { "model": "thebetweenlands:block/trapdoor_open_top", "y": 180 },
+    "facing=east,half=top,open=true": { "model": "thebetweenlands:block/trapdoor_open_top", "y": 90 },
+    "facing=west,half=top,open=true": { "model": "thebetweenlands:block/trapdoor_open_top", "y": 270 },
     "inventory": {
-      "model": "thebetweenlands:trapdoor_bottom",
+      "model": "thebetweenlands:block/trapdoor_bottom",
       "textures": {
-        "top": "thebetweenlands:blocks/weedwood_trapdoor",
-        "side": "thebetweenlands:blocks/weedwood_trapdoor_side"
+        "top": "thebetweenlands:block/weedwood_trapdoor",
+        "side": "thebetweenlands:block/weedwood_trapdoor_side"
       }
     }
   }

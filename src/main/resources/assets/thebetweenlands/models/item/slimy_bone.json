@@ -1,6 +1,6 @@
 {
   "parent": "item/handheld",
   "textures": {
-    "layer0": "thebetweenlands:items/slimy_bone"
+    "layer0": "thebetweenlands:item/slimy_bone"
   }
 }

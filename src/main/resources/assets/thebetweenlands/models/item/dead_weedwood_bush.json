@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:blocks/dead_weedwood_bush"
+		"layer0": "thebetweenlands:block/dead_weedwood_bush"
 	}
 }

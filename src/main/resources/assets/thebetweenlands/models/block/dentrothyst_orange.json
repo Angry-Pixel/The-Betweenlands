@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/dentrothyst_orange"
+    "all": "thebetweenlands:block/dentrothyst_orange"
   }
 }

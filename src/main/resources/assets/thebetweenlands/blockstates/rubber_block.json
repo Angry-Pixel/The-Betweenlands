@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:rubber_block"
+    "": {
+      "model": "thebetweenlands:block/rubber_block"
     } 
   } 
 }

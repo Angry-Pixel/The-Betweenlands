@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/valonite_leggings"
+    "layer0": "thebetweenlands:item/valonite_leggings"
   },
   "overrides": [
         { "predicate": { "gem": 1.0 }, "model": "thebetweenlands:item/valonite_leggings_aqua_gem" },

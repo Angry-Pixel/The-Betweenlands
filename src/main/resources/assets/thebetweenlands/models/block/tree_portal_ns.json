@@ -1,7 +1,7 @@
 {
     "textures": {
-        "particle": "thebetweenlands:blocks/portal",
-        "portal": "thebetweenlands:blocks/portal"
+        "particle": "thebetweenlands:block/portal",
+        "portal": "thebetweenlands:block/portal"
     },
     "elements": [
         {   

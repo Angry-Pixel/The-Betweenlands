@@ -1,8 +1,8 @@
 {
     "ambientocclusion": false,
     "textures": {
-        "moss": "thebetweenlands:blocks/cave_moss",
-        "particle": "thebetweenlands:blocks/cave_moss"
+        "moss": "thebetweenlands:block/cave_moss",
+        "particle": "thebetweenlands:block/cave_moss"
     },
     "elements": [
         {   "from": [ 4, -1, 0 ],

@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/marsh_hibiscus"
+		"cross": "thebetweenlands:block/marsh_hibiscus"
 	}
 }

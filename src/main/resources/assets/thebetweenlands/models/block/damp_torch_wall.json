@@ -1,6 +1,6 @@
 {
   "parent": "block/torch_wall",
   "textures": {
-      "torch": "thebetweenlands:blocks/damp_torch"
+      "torch": "thebetweenlands:block/damp_torch"
   }
 }

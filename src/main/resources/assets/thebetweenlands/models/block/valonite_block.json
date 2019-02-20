@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/valonite_block"
+    "all": "thebetweenlands:block/valonite_block"
   } 
 }

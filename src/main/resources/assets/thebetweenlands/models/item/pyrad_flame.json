@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/pyrad_flame"
+    "layer0": "thebetweenlands:item/pyrad_flame"
   }
 }

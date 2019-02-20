@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/valonite_chestplate_crimson_gem"
+    "layer0": "thebetweenlands:item/valonite_chestplate_crimson_gem"
   }
 }

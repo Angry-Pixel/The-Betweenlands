@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thebetweenlands:internal/thatch_roof"
+    "model": "thebetweenlands:block/internal/thatch_roof"
   },
   "variants": { 
     "half": {
@@ -22,7 +22,7 @@
       "west": { }
     },
     "inventory": { 
-      "model": "thebetweenlands:internal/thatch_roof",
+      "model": "thebetweenlands:block/internal/thatch_roof",
       "transform": {
                 "gui": {
                     "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],

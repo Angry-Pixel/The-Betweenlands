@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:bottle_brush_grass" }
+		"": { "model": "thebetweenlands:block/bottle_brush_grass" }
 	}
 }

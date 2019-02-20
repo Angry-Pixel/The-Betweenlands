@@ -2,6 +2,6 @@
   "forge_marker": 1,
   "parent":"thebetweenlands:block/base_stairs",
   "textures": {
-    "all": "thebetweenlands:blocks/pitstone_bricks"
+    "all": "thebetweenlands:block/pitstone_bricks"
   }
 }

@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "thebetweenlands:blocks/log_sap"
+		"all": "thebetweenlands:block/log_sap"
 	}
 }

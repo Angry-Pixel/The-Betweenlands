@@ -1,12 +1,12 @@
 {
   "forge_marker": 1,
   "variants": {
-    "facing=north": { "model": "thebetweenlands:internal/walkway", "y": 180 },
-    "facing=south": { "model": "thebetweenlands:internal/walkway" },
-    "facing=west":  { "model": "thebetweenlands:internal/walkway", "y": 90 },
-    "facing=east":  { "model": "thebetweenlands:internal/walkway", "y": 270 },
+    "facing=north": { "model": "thebetweenlands:block/internal/walkway", "y": 180 },
+    "facing=south": { "model": "thebetweenlands:block/internal/walkway" },
+    "facing=west":  { "model": "thebetweenlands:block/internal/walkway", "y": 90 },
+    "facing=east":  { "model": "thebetweenlands:block/internal/walkway", "y": 270 },
     "inventory": { 
-      "model": "thebetweenlands:internal/walkway",
+      "model": "thebetweenlands:block/internal/walkway",
       "transform": {
                 "gui": {
                     "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],

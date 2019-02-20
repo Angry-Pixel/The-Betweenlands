@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/cattail_frosty"
+		"cross": "thebetweenlands:block/cattail_frosty"
 	}
 }

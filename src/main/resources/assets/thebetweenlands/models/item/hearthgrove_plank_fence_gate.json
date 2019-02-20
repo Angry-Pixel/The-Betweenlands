@@ -1,6 +1,6 @@
 {
     "parent": "block/fence_gate_closed",
     "textures": {
-        "texture": "thebetweenlands:blocks/hearthgrove_planks"
+        "texture": "thebetweenlands:block/hearthgrove_planks"
     }
 }

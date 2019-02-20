@@ -1,6 +1,6 @@
 {
 	"variants": {
-		"stage=0": { "model": "thebetweenlands:sapling_nibbletwig" },
-		"stage=1": { "model": "thebetweenlands:sapling_nibbletwig" }
+		"stage=0": { "model": "thebetweenlands:block/sapling_nibbletwig" },
+		"stage=1": { "model": "thebetweenlands:block/sapling_nibbletwig" }
 	}
 }

@@ -2,8 +2,8 @@
   "source": "thebetweenlands:bl_bucket_weedwood",
   "inherit_overrides": false,
   "custom": {
-    "base_texture": "thebetweenlands:items/weedwood_bucket_base",
-    "liquid_template": "thebetweenlands:items/weedwood_bucket_base",
-    "cover_texture": "thebetweenlands:items/weedwood_bucket_cover"
+    "base_texture": "thebetweenlands:item/weedwood_bucket_base",
+    "liquid_template": "thebetweenlands:item/weedwood_bucket_base",
+    "cover_texture": "thebetweenlands:item/weedwood_bucket_cover"
   }
 }

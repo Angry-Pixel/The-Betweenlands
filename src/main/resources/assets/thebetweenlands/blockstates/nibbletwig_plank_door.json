@@ -2,9 +2,9 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "top": "thebetweenlands:blocks/nibbletwig_plank_door_top",
-      "bottom": "thebetweenlands:blocks/nibbletwig_plank_door_bottom",
-      "particle": "thebetweenlands:blocks/nibbletwig_plank_door_top"
+      "top": "thebetweenlands:block/nibbletwig_plank_door_top",
+      "bottom": "thebetweenlands:block/nibbletwig_plank_door_bottom",
+      "particle": "thebetweenlands:block/nibbletwig_plank_door_top"
     }
   },
   "variants": {

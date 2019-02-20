@@ -2,6 +2,8 @@ package thebetweenlands.common.registries;
 
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -44,10 +46,10 @@ public class BiomeRegistry {
 
 		register(new RegistryHelper<Biome>() {
 			@Override
-			public <F extends Biome> F reg(String regName, F obj, Consumer<F> callback) {
+			public <F extends Biome> F reg(String regName, F obj, @Nullable Consumer<F> callback) {
 				obj.setRegistryName(ModInfo.ID, regName);
 				registry.register(obj);
-				callback.accept(obj);
+				if(callback != null) callback.accept(obj);
 				return obj;
 			}
 		});

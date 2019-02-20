@@ -1,7 +1,7 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "thebetweenlands:log_hearthgrove"
+		"model": "thebetweenlands:block/log_hearthgrove"
 	},
 	"variants": {
 		"axis": {
@@ -16,15 +16,15 @@
 				"y": 90
 			},
 			"none": {
-				"model": "thebetweenlands:log_hearthgrove_bark"
+				"model": "thebetweenlands:block/log_hearthgrove_bark"
 			}
 		},
 		"tarred": {
 			"false": {},
 			"true": {
 				"textures": {
-					"side": "thebetweenlands:blocks/log_hearthgrove_tarred",
-					"all": "thebetweenlands:blocks/log_hearthgrove_tarred"
+					"side": "thebetweenlands:block/log_hearthgrove_tarred",
+					"all": "thebetweenlands:block/log_hearthgrove_tarred"
 				}
 			}
 		}

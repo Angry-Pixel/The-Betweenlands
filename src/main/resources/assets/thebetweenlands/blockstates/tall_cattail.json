@@ -3,7 +3,7 @@
 	"variants": {
 		"half": {
 			"lower": {
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/spook_event",
 					"model_base_data": {
@@ -14,7 +14,7 @@
 				}
 			},
 			"upper": {
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/spook_event",
 					"model_base_data": {

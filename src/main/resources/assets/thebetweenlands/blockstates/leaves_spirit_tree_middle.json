@@ -1,8 +1,8 @@
 {
 	"forge_marker": 1,
 	"variants": {
-		"normal": {
-			"model": "thebetweenlands:leaves_spirit_tree_middle"
+		"": {
+			"model": "thebetweenlands:block/leaves_spirit_tree_middle"
 		}
 	}
 }

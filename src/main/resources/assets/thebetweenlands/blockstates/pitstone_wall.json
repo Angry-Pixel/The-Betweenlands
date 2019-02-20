@@ -1,12 +1,12 @@
 {
   "forge_marker": 1,
   "defaults":{
-    "model": "thebetweenlands:internal/blank",
+    "model": "thebetweenlands:block/internal/blank",
     "custom": {
-      "particle_texture": "thebetweenlands:blocks/pitstone"
+      "particle_texture": "thebetweenlands:block/pitstone"
     },
     "textures": {
-      "wall": "thebetweenlands:blocks/pitstone"
+      "wall": "thebetweenlands:block/pitstone"
     }
   },
   "variants": {

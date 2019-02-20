@@ -1,6 +1,6 @@
 {
     "parent": "block/fence_inventory",
     "textures": {
-        "texture": "thebetweenlands:blocks/nibbletwig_planks"
+        "texture": "thebetweenlands:block/nibbletwig_planks"
     }
 }

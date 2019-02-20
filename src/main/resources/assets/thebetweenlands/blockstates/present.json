@@ -1,7 +1,7 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "thebetweenlands:internal/present"
+		"model": "thebetweenlands:block/internal/present"
 	},
 	"variants": {
 		"color": {
@@ -55,7 +55,7 @@
 			}
 		},
 		"inventory": { 
-            "model": "thebetweenlands:internal/present",
+            "model": "thebetweenlands:block/internal/present",
             "transform": {
                 "gui": {
                     "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],

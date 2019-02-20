@@ -1,6 +1,6 @@
 {
 	"parent": "block/leaves",
 	"textures": {
-		"all": "thebetweenlands:blocks/leaves_rubber_tree"
+		"all": "thebetweenlands:block/leaves_rubber_tree"
 	}
 }

@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/cardinal_flower_bottom"
+		"cross": "thebetweenlands:block/cardinal_flower_bottom"
 	}
 }

@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:limestone_bricks"
+    "": {
+      "model": "thebetweenlands:block/limestone_bricks"
     } 
   } 
 }

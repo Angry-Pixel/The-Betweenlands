@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/sapling_nibbletwig"
+		"cross": "thebetweenlands:block/sapling_nibbletwig"
 	}
 }

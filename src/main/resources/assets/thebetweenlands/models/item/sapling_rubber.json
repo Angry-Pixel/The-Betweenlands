@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:blocks/sapling_rubber"
+		"layer0": "thebetweenlands:block/sapling_rubber"
 	}
 }

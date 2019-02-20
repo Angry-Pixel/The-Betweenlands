@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/glowing_smooth_cragrock"
+    "all": "thebetweenlands:block/glowing_smooth_cragrock"
   } 
 }

@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "defaults":{
         "textures": {
-            "texture": "thebetweenlands:blocks/weedwood_planks"
+            "texture": "thebetweenlands:block/weedwood_planks"
         }
     },
     "variants": {

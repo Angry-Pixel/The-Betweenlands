@@ -1,12 +1,12 @@
 {
   "forge_marker": 1,
   "defaults":{
-    "model": "thebetweenlands:internal/blank",
+    "model": "thebetweenlands:block/internal/blank",
     "custom": {
-      "particle_texture": "thebetweenlands:blocks/temple_bricks"
+      "particle_texture": "thebetweenlands:block/temple_bricks"
     },
     "textures": {
-      "wall": "thebetweenlands:blocks/temple_bricks"
+      "wall": "thebetweenlands:block/temple_bricks"
     }
   },
   "variants": {

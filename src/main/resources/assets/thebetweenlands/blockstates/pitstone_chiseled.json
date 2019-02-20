@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:pitstone_chiseled"
+    "": {
+      "model": "thebetweenlands:block/pitstone_chiseled"
     } 
   } 
 }

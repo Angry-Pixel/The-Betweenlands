@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:pickerel_weed" }
+		"": { "model": "thebetweenlands:block/pickerel_weed" }
 	}
 }

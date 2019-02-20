@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:mud_bricks"
+    "": {
+      "model": "thebetweenlands:block/mud_bricks"
     } 
   } 
 }

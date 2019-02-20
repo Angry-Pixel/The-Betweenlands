@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/bone_leggings"
+    "layer0": "thebetweenlands:item/bone_leggings"
   },
   "overrides": [
         { "predicate": { "gem": 1.0 }, "model": "thebetweenlands:item/bone_leggings_aqua_gem" },

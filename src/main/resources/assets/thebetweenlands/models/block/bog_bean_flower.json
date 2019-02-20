@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/bog_bean_flower"
+		"cross": "thebetweenlands:block/bog_bean_flower"
 	}
 }

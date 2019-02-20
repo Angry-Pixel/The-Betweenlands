@@ -1,9 +1,9 @@
 {
     "parent": "block/block",
     "textures": {
-        "sides": "thebetweenlands:blocks/leaves_spirit_tree_top",
-        "top": "thebetweenlands:blocks/leaves_spirit_tree_top_top",
-        "particle": "thebetweenlands:blocks/leaves_spirit_tree_top"
+        "sides": "thebetweenlands:block/leaves_spirit_tree_top",
+        "top": "thebetweenlands:block/leaves_spirit_tree_top_top",
+        "particle": "thebetweenlands:block/leaves_spirit_tree_top"
     },
     "elements": [
         {   

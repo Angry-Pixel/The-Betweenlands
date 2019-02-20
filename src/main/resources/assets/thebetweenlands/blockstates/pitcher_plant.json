@@ -2,19 +2,19 @@
     "forge_marker": 1,
     "variants": {
         "half=lower": [
-            { "model": "thebetweenlands:internal/pitcher_plant" },
-            { "model": "thebetweenlands:internal/pitcher_plant", "y": 90 },
-            { "model": "thebetweenlands:internal/pitcher_plant", "y": 180 },
-            { "model": "thebetweenlands:internal/pitcher_plant", "y": 270 }
+            { "model": "thebetweenlands:block/internal/pitcher_plant" },
+            { "model": "thebetweenlands:block/internal/pitcher_plant", "y": 90 },
+            { "model": "thebetweenlands:block/internal/pitcher_plant", "y": 180 },
+            { "model": "thebetweenlands:block/internal/pitcher_plant", "y": 270 }
         ],
         "half=upper": { 
-            "model": "thebetweenlands:internal/blank",
+            "model": "thebetweenlands:block/internal/blank",
             "custom": { 
-                "particle_texture": "thebetweenlands:blocks/pitcher_plant" 
+                "particle_texture": "thebetweenlands:block/pitcher_plant" 
             } 
         },
         "inventory": { 
-            "model": "thebetweenlands:internal/pitcher_plant",
+            "model": "thebetweenlands:block/internal/pitcher_plant",
             "transform": {
                 "gui": {
                     "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],

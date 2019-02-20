@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:weedwood_workbench"
+    "": {
+      "model": "thebetweenlands:block/weedwood_workbench"
     } 
   } 
 }

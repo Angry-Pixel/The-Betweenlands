@@ -1,8 +1,8 @@
 {
     "ambientocclusion": true,
     "textures": {
-        "particle": "thebetweenlands:blocks/moss",
-        "moss": "thebetweenlands:blocks/moss"
+        "particle": "thebetweenlands:block/moss",
+        "moss": "thebetweenlands:block/moss"
     },
     "elements": [
         {   

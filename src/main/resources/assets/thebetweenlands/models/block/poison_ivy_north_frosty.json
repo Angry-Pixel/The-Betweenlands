@@ -1,8 +1,8 @@
 {
     "ambientocclusion": false,
     "textures": {
-        "particle": "thebetweenlands:blocks/poison_ivy_frosty",
-        "vine": "thebetweenlands:blocks/poison_ivy_frosty"
+        "particle": "thebetweenlands:block/poison_ivy_frosty",
+        "vine": "thebetweenlands:block/poison_ivy_frosty"
     },
     "elements": [
         {   

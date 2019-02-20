@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/blood_snail_shell"
+    "layer0": "thebetweenlands:item/blood_snail_shell"
   }
 }

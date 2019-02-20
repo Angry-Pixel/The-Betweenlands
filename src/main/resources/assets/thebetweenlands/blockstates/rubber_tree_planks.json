@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:rubber_tree_planks"
+    "": {
+      "model": "thebetweenlands:block/rubber_tree_planks"
     } 
   } 
 }

@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:cragrock_chiseled"
+    "": {
+      "model": "thebetweenlands:block/cragrock_chiseled"
     } 
   } 
 }

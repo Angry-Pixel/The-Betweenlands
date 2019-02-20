@@ -1,12 +1,22 @@
 package thebetweenlands.common.registries;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.Item.Properties;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemGroup;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
+import thebetweenlands.common.item.BLItemGroups;
 import thebetweenlands.common.item.food.ItemRottenFood;
 import thebetweenlands.common.item.food.ItemTaintedPotion;
 import thebetweenlands.common.item.herblore.ItemAspectVial;
@@ -591,10 +601,10 @@ public class ItemRegistry {
 
 		register(new RegistryHelper<Item>() {
 			@Override
-			public <F extends Item> F reg(String regName, F obj, Consumer<F> callback) {
+			public <F extends Item> F reg(String regName, F obj, @Nullable Consumer<F> callback) {
 				obj.setRegistryName(ModInfo.ID, regName);
 				registry.register(obj);
-				callback.accept(obj);
+				if(callback != null) callback.accept(obj);
 				return obj;
 			}
 		});
@@ -608,6 +618,36 @@ public class ItemRegistry {
 		//});
 		//which can be used to set some values
 
+		//Register items here
 
+		for(Consumer<RegistryHelper<Item>> blockItem : blockItems) {
+			blockItem.accept(reg);
+		}
+	}
+
+	private static List<Consumer<RegistryHelper<Item>>> blockItems = new ArrayList<>();
+
+	static Consumer<Block> block(ItemGroup group) {
+		return block(group, null);
+	}
+
+	static Consumer<Block> block() {
+		return block((Consumer<Properties>) null);
+	}
+
+	static Consumer<Block> block(@Nullable Consumer<Properties> props) {
+		return block(BLItemGroups.BLOCKS, null);
+	}
+
+	static Consumer<Block> block(ItemGroup group, @Nullable Consumer<Properties> props) {
+		return block -> blockItems.add(reg -> {
+			Properties itemProps = new Properties().group(group);
+			if(props != null) props.accept(itemProps);
+			reg.reg(block.getRegistryName().getPath(), new ItemBlock(block, itemProps));
+		});
+	}
+
+	static Consumer<Block> block(Function<Block, Item> item) {
+		return block -> blockItems.add(reg -> reg.reg(block.getRegistryName().getPath(), item.apply(block)));
 	}
 }

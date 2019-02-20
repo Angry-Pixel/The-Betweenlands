@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:weedwood_planks"
+    "": {
+      "model": "thebetweenlands:block/weedwood_planks"
     } 
   } 
 }

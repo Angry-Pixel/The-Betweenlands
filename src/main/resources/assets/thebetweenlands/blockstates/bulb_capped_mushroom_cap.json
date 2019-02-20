@@ -1,5 +1,5 @@
 {
   "variants": {
-    "normal": { "model": "thebetweenlands:bulb_capped_mushroom_cap" }
+    "": { "model": "thebetweenlands:block/bulb_capped_mushroom_cap" }
   }
 }

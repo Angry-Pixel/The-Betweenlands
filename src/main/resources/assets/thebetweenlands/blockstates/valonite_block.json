@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:valonite_block"
+    "": {
+      "model": "thebetweenlands:block/valonite_block"
     } 
   } 
 }

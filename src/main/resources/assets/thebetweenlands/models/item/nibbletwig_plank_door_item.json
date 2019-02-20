@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": { 
-    "layer0": "thebetweenlands:items/door_nibbletwig"
+    "layer0": "thebetweenlands:item/door_nibbletwig"
   }
 }

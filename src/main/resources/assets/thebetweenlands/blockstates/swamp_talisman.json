@@ -5,37 +5,37 @@
     "swamp_talisman_0": {
       "model": "forge:item-layer",
       "textures": {
-        "layer0": "thebetweenlands:items/swamp_talisman_0"
+        "layer0": "thebetweenlands:item/swamp_talisman_0"
       }
     },
     "swamp_talisman_1":{
       "model": "forge:item-layer",
       "textures": {
-        "layer0": "thebetweenlands:items/swamp_talisman_1"
+        "layer0": "thebetweenlands:item/swamp_talisman_1"
       }
     },
     "swamp_talisman_2":{
       "model": "forge:item-layer",
       "textures": {
-        "layer0": "thebetweenlands:items/swamp_talisman_2"
+        "layer0": "thebetweenlands:item/swamp_talisman_2"
       }
     },
     "swamp_talisman_3":{
       "model": "forge:item-layer",
       "textures": {
-        "layer0": "thebetweenlands:items/swamp_talisman_3"
+        "layer0": "thebetweenlands:item/swamp_talisman_3"
       }
     },
     "swamp_talisman_4":{
       "model": "forge:item-layer",
       "textures": {
-        "layer0": "thebetweenlands:items/swamp_talisman_4"
+        "layer0": "thebetweenlands:item/swamp_talisman_4"
       }
     },
     "swamp_talisman_5":{
       "model": "forge:item-layer",
       "textures": {
-        "layer0": "thebetweenlands:items/swamp_talisman_5"
+        "layer0": "thebetweenlands:item/swamp_talisman_5"
       }
     }
   }

@@ -2,6 +2,6 @@
   "parent": "thebetweenlands:item/aspect_vial_green",
   "textures": {
 
-    "layer2": "thebetweenlands:items/strictly_herblore/misc/aspect_yihinren"
+    "layer2": "thebetweenlands:item/strictly_herblore/misc/aspect_yihinren"
   }
 }

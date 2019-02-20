@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:blocks/mire_coral"
+    "layer0": "thebetweenlands:block/mire_coral"
   }
 }

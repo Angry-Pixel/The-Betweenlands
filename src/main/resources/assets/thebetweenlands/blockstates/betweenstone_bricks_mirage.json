@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:betweenstone_bricks_mirage"
+    "": {
+      "model": "thebetweenlands:block/betweenstone_bricks_mirage"
     } 
   } 
 }

@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/silt_frosty"
+    "all": "thebetweenlands:block/silt_frosty"
   } 
 }

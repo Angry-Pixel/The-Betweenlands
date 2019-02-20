@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/record_christmas_on_the_marsh"
+    "layer0": "thebetweenlands:item/record_christmas_on_the_marsh"
   }
 }

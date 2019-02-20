@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/sapling_hearthgrove"
+		"cross": "thebetweenlands:block/sapling_hearthgrove"
 	}
 }

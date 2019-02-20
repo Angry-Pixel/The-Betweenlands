@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:mire_coral_block"
+    "": {
+      "model": "thebetweenlands:block/mire_coral_block"
     } 
   } 
 }

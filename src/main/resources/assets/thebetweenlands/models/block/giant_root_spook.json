@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/root_middle_spook"
+    "all": "thebetweenlands:block/root_middle_spook"
   } 
 }

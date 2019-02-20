@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/peat_frosty"
+    "all": "thebetweenlands:block/peat_frosty"
   }
 }

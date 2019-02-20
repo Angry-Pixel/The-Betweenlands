@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:cragrock_bricks"
+    "": {
+      "model": "thebetweenlands:block/cragrock_bricks"
     } 
   } 
 }

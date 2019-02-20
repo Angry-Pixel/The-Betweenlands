@@ -1,8 +1,8 @@
 {
     "ambientocclusion": false,
     "textures": {
-        "particle": "thebetweenlands:blocks/poison_ivy_spook",
-        "vine": "thebetweenlands:blocks/poison_ivy_spook"
+        "particle": "thebetweenlands:block/poison_ivy_spook",
+        "vine": "thebetweenlands:block/poison_ivy_spook"
     },
     "elements": [
         {   

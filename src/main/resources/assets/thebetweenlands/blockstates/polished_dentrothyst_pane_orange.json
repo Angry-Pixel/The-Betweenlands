@@ -3,8 +3,8 @@
   "defaults": {
     "model": "glass_pane_post",
     "textures": {
-      "edge": "thebetweenlands:blocks/polished_dentrothyst_orange_pane_top",
-      "pane": "thebetweenlands:blocks/polished_dentrothyst_orange"
+      "edge": "thebetweenlands:block/polished_dentrothyst_orange_pane_top",
+      "pane": "thebetweenlands:block/polished_dentrothyst_orange"
     }
   },
   "variants": {

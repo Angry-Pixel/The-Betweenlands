@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:glowing_betweenstone_tile"
+    "": {
+      "model": "thebetweenlands:block/glowing_betweenstone_tile"
     } 
   } 
 }

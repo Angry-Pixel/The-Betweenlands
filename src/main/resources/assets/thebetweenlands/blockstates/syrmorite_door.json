@@ -2,9 +2,9 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "top": "thebetweenlands:blocks/syrmorite_door_top",
-      "bottom": "thebetweenlands:blocks/syrmorite_door_bottom",
-      "particle": "thebetweenlands:blocks/syrmorite_door_top"
+      "top": "thebetweenlands:block/syrmorite_door_top",
+      "bottom": "thebetweenlands:block/syrmorite_door_bottom",
+      "particle": "thebetweenlands:block/syrmorite_door_top"
     }
   },
   "variants": {

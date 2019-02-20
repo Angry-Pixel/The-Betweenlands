@@ -1,6 +1,6 @@
 {
 	"variants": {
-		"stage=0": { "model": "thebetweenlands:sapling_sap" },
-		"stage=1": { "model": "thebetweenlands:sapling_sap" }
+		"stage=0": { "model": "thebetweenlands:block/sapling_sap" },
+		"stage=1": { "model": "thebetweenlands:block/sapling_sap" }
 	}
 }

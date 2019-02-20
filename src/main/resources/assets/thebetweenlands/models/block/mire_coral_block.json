@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/mire_coral_block"
+    "all": "thebetweenlands:block/mire_coral_block"
   } 
 }

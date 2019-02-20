@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/betweenstone_bricks"
+    "all": "thebetweenlands:block/betweenstone_bricks"
   } 
 }

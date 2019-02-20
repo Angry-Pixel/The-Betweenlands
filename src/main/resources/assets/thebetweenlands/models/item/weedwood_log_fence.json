@@ -1,6 +1,6 @@
 {
     "parent": "block/fence_inventory",
     "textures": {
-        "texture": "thebetweenlands:blocks/log_weedwood"
+        "texture": "thebetweenlands:block/log_weedwood"
     }
 }

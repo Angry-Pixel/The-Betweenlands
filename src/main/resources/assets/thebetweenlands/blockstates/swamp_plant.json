@@ -1,53 +1,53 @@
 {
 	"forge_marker": 1,
 	"variants": {
-		"normal": [
+		"": [
 			{
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/swamp_plant",
 					"model_active": "thebetweenlands:block/internal/swamp_plant",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/swamp_plant_frosty"
+						"texture": "thebetweenlands:block/swamp_plant_frosty"
 					}
 				}
 			},
 			{
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/swamp_plant",
 					"model_active": "thebetweenlands:block/internal/swamp_plant",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/swamp_plant_frosty"
+						"texture": "thebetweenlands:block/swamp_plant_frosty"
 					}
 				},
 				"y": 90
 			},
 			{
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/swamp_plant",
 					"model_active": "thebetweenlands:block/internal/swamp_plant",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/swamp_plant_frosty"
+						"texture": "thebetweenlands:block/swamp_plant_frosty"
 					}
 				},
 				"y": 180
 			},
 			{
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/swamp_plant",
 					"model_active": "thebetweenlands:block/internal/swamp_plant",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/swamp_plant_frosty"
+						"texture": "thebetweenlands:block/swamp_plant_frosty"
 					}
 				},
 				"y": 270
 			}
 		],
 		"inventory": {
-			"model": "thebetweenlands:internal/swamp_plant",
+			"model": "thebetweenlands:block/internal/swamp_plant",
 			"transform": {
 				"gui": {
 					"rotation": [

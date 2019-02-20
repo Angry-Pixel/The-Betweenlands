@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:copper_iris" }
+		"": { "model": "thebetweenlands:block/copper_iris" }
 	}
 }

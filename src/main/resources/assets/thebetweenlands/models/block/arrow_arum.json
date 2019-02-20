@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/arrow_arum"
+		"cross": "thebetweenlands:block/arrow_arum"
 	}
 }

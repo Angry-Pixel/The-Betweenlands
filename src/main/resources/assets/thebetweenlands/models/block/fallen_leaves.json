@@ -1,7 +1,7 @@
 {
     "textures": {
-        "texture": "thebetweenlands:blocks/fallen_leaves",
-        "particle": "thebetweenlands:blocks/fallen_leaves"
+        "texture": "thebetweenlands:block/fallen_leaves",
+        "particle": "thebetweenlands:block/fallen_leaves"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],

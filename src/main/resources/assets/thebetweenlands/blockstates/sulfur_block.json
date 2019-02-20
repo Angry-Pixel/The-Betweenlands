@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:sulfur_block"
+    "": {
+      "model": "thebetweenlands:block/sulfur_block"
     } 
   } 
 }

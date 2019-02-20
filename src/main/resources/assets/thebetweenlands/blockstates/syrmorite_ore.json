@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:syrmorite_ore"
+    "": {
+      "model": "thebetweenlands:block/syrmorite_ore"
     } 
   } 
 }

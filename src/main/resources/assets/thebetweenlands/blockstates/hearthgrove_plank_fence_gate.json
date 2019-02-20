@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "defaults":{
         "textures": {
-            "texture": "thebetweenlands:blocks/hearthgrove_planks"
+            "texture": "thebetweenlands:block/hearthgrove_planks"
         }
     },
     "variants": {

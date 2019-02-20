@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/record_dj_wights_mixtape"
+    "layer0": "thebetweenlands:item/record_dj_wights_mixtape"
   }
 }

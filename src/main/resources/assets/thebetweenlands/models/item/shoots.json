@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:blocks/shoots"
+		"layer0": "thebetweenlands:block/shoots"
 	}
 }

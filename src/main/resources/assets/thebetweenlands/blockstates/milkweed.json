@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:milkweed" }
+		"": { "model": "thebetweenlands:block/milkweed" }
 	}
 }

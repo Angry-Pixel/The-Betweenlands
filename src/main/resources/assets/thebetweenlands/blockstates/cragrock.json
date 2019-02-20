@@ -3,14 +3,14 @@
 	"variants": {
 		"variant": {
 			"default": {
-				"model": "thebetweenlands:internal/spook_event",
+				"model": "thebetweenlands:block/internal/spook_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/cragrock_default",
 					"model_active": "thebetweenlands:block/cragrock_default_spook"
 				}
 			},
 			"mossy_1": {
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/spook_event",
 					"model_base_data": {
@@ -21,7 +21,7 @@
 				}
 			},
 			"mossy_2": {
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/spook_event",
 					"model_base_data": {

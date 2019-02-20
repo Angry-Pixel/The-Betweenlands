@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/dentrothyst_shard_green"
+    "layer0": "thebetweenlands:item/dentrothyst_shard_green"
   }
 }

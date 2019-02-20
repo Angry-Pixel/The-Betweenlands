@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/sludge_jello"
+    "layer0": "thebetweenlands:item/sludge_jello"
   }
 }

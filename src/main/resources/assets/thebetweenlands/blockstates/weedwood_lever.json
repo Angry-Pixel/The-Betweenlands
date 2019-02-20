@@ -2,9 +2,9 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "base": "thebetweenlands:blocks/log_weedwood",
-      "lever": "thebetweenlands:blocks/weedwood_lever",
-      "particle": "thebetweenlands:blocks/log_weedwood"
+      "base": "thebetweenlands:block/log_weedwood",
+      "lever": "thebetweenlands:block/weedwood_lever",
+      "particle": "thebetweenlands:block/log_weedwood"
     }
   },
   "variants": {

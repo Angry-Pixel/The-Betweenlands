@@ -1,7 +1,7 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/valonite_chestplate"
+    "layer0": "thebetweenlands:item/valonite_chestplate"
   },
   "overrides": [
         { "predicate": { "gem": 1.0 }, "model": "thebetweenlands:item/valonite_chestplate_aqua_gem" },

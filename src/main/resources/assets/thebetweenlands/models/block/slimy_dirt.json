@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/slimy_dirt"
+    "all": "thebetweenlands:block/slimy_dirt"
   } 
 }

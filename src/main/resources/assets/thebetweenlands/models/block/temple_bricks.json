@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/temple_bricks"
+    "all": "thebetweenlands:block/temple_bricks"
   } 
 }

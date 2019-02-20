@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/jam_donut"
+    "layer0": "thebetweenlands:item/jam_donut"
   }
 }

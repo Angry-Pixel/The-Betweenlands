@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:temple_bricks"
+    "": {
+      "model": "thebetweenlands:block/temple_bricks"
     } 
   } 
 }

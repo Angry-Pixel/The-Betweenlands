@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:marsh_mallow" }
+		"": { "model": "thebetweenlands:block/marsh_mallow" }
 	}
 }

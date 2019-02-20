@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/amulet_socket"
+    "layer0": "thebetweenlands:item/amulet_socket"
   }
 }

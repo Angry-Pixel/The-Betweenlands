@@ -1,7 +1,7 @@
 { 
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:scabyst_chiseled_1"
+    "": {
+      "model": "thebetweenlands:block/scabyst_chiseled_1"
     } 
   } 
 }

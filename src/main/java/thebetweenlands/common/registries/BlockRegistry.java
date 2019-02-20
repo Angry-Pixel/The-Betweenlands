@@ -2,7 +2,12 @@ package thebetweenlands.common.registries;
 
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
+import net.minecraft.block.Block.Properties;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -1103,10 +1108,10 @@ public class BlockRegistry {
 
 		register(new RegistryHelper<Block>() {
 			@Override
-			public <F extends Block> F reg(String regName, F obj, Consumer<F> callback) {
+			public <F extends Block> F reg(String regName, F obj, @Nullable  Consumer<F> callback) {
 				obj.setRegistryName(ModInfo.ID, regName);
 				registry.register(obj);
-				callback.accept(obj);
+				if(callback != null) callback.accept(obj);
 				return obj;
 			}
 		});
@@ -1120,7 +1125,7 @@ public class BlockRegistry {
 		//});
 		//which can be used to set some values
 
-
+		reg.reg("betweenstone", new Block(Properties.create(Material.ROCK).sound(SoundType.STONE).hardnessAndResistance(1.5F, 10.0F)), ItemRegistry.block());
 	}
 }
 

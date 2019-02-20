@@ -20,6 +20,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.compat.tmg.TMGEquipmentInventory;
 
@@ -57,8 +59,9 @@ public class TheBetweenlands {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupCommon);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
 		
-		FMLJavaModLoadingContext.get().getModEventBus().register(TheBetweenlands.class);
-
+		FMLJavaModLoadingContext.get().getModEventBus().register(BlockRegistry.class);
+		FMLJavaModLoadingContext.get().getModEventBus().register(ItemRegistry.class);
+		
 		instance = this;
 	}
 

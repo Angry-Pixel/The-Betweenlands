@@ -1,6 +1,6 @@
 { 
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/sulfur_block"
+    "all": "thebetweenlands:block/sulfur_block"
   } 
 }

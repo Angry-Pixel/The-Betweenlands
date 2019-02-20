@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/blue_iris"
+		"cross": "thebetweenlands:block/blue_iris"
 	}
 }

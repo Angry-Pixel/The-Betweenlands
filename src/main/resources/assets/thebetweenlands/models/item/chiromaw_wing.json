@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:items/chiromaw_wing"
+    "layer0": "thebetweenlands:item/chiromaw_wing"
   }
 }

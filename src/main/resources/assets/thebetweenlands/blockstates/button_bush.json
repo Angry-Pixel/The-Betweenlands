@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:button_bush" }
+		"": { "model": "thebetweenlands:block/button_bush" }
 	}
 }

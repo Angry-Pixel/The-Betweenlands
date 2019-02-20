@@ -1,8 +1,8 @@
 {
     "parent": "block/block",
     "textures": {
-        "all": "thebetweenlands:blocks/leaves_spirit_tree_bottom",
-        "particle": "thebetweenlands:blocks/leaves_spirit_tree_bottom"
+        "all": "thebetweenlands:block/leaves_spirit_tree_bottom",
+        "particle": "thebetweenlands:block/leaves_spirit_tree_bottom"
     },
     "elements": [
         {   

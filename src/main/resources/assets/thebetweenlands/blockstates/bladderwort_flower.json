@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:bladderwort_flower" }
+		"": { "model": "thebetweenlands:block/bladderwort_flower" }
 	}
 }

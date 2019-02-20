@@ -1,12 +1,12 @@
 { 
   "parent": "block/cube",
   "textures": {
-    "up": "thebetweenlands:blocks/pitstone_bricks",
-    "down": "thebetweenlands:blocks/pitstone_bricks",
-    "north": "thebetweenlands:blocks/scabyst_pitstone_dotted",
-    "south": "thebetweenlands:blocks/scabyst_pitstone_dotted",
-    "east": "thebetweenlands:blocks/scabyst_pitstone_dotted",
-    "west": "thebetweenlands:blocks/scabyst_pitstone_dotted",
-    "particle": "thebetweenlands:blocks/scabyst_pitstone_dotted"
+    "up": "thebetweenlands:block/pitstone_bricks",
+    "down": "thebetweenlands:block/pitstone_bricks",
+    "north": "thebetweenlands:block/scabyst_pitstone_dotted",
+    "south": "thebetweenlands:block/scabyst_pitstone_dotted",
+    "east": "thebetweenlands:block/scabyst_pitstone_dotted",
+    "west": "thebetweenlands:block/scabyst_pitstone_dotted",
+    "particle": "thebetweenlands:block/scabyst_pitstone_dotted"
   } 
 }

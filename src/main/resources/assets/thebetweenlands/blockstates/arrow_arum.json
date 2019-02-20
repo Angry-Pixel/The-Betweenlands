@@ -1,5 +1,5 @@
 {
 	"variants": {
-		"normal": { "model": "thebetweenlands:arrow_arum" }
+		"": { "model": "thebetweenlands:block/arrow_arum" }
 	}
 }

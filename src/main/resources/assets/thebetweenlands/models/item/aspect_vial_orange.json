@@ -1,7 +1,7 @@
 {
   "parent": "thebetweenlands:item/aspect_vial_green",
   "textures": {
-    "layer1": "thebetweenlands:items/strictly_herblore/misc/vial_orange"
+    "layer1": "thebetweenlands:item/strictly_herblore/misc/vial_orange"
   },
   "overrides": [
     { "predicate": { "aspect": 1 }, "model": "thebetweenlands:item/aspect_azuwynn_orange" },

@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/mossy_cragrock_side_2"
+    "all": "thebetweenlands:block/mossy_cragrock_side_2"
   }
 }

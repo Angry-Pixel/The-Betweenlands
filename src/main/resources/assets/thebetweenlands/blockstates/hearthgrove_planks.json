@@ -1,7 +1,7 @@
 {
   "variants": { 
-    "normal": {
-      "model": "thebetweenlands:hearthgrove_planks"
+    "": {
+      "model": "thebetweenlands:block/hearthgrove_planks"
     } 
   } 
 }

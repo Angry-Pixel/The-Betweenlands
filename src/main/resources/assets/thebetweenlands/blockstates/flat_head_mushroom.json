@@ -1,96 +1,96 @@
 {
 	"forge_marker": 1,
 	"variants": {
-		"normal": [
+		"": [
 			{
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_1",
 					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_1",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/flat_head_mushroom_1_frosty"
+						"texture": "thebetweenlands:block/flat_head_mushroom_1_frosty"
 					}
 				}
 			},
 			{
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_1",
 					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_1",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/flat_head_mushroom_1_frosty"
+						"texture": "thebetweenlands:block/flat_head_mushroom_1_frosty"
 					}
 				},
 				"y": 90
 			},
 			{
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_1",
 					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_1",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/flat_head_mushroom_1_frosty"
+						"texture": "thebetweenlands:block/flat_head_mushroom_1_frosty"
 					}
 				},
 				"y": 180
 			},
 			{
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_1",
 					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_1",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/flat_head_mushroom_1_frosty"
+						"texture": "thebetweenlands:block/flat_head_mushroom_1_frosty"
 					}
 				},
 				"y": 270
 			},
 			{
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_2",
 					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_2",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/flat_head_mushroom_2_frosty"
+						"texture": "thebetweenlands:block/flat_head_mushroom_2_frosty"
 					}
 				}
 			},
 			{
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_2",
 					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_2",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/flat_head_mushroom_2_frosty"
+						"texture": "thebetweenlands:block/flat_head_mushroom_2_frosty"
 					}
 				},
 				"y": 90
 			},
 			{
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_2",
 					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_2",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/flat_head_mushroom_2_frosty"
+						"texture": "thebetweenlands:block/flat_head_mushroom_2_frosty"
 					}
 				},
 				"y": 180
 			},
 			{
-				"model": "thebetweenlands:internal/winter_event",
+				"model": "thebetweenlands:block/internal/winter_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_2",
 					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_2",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/flat_head_mushroom_2_frosty"
+						"texture": "thebetweenlands:block/flat_head_mushroom_2_frosty"
 					}
 				},
 				"y": 270
 			}
 		],
 		"inventory": {
-			"model": "thebetweenlands:internal/flat_head_mushroom_1",
+			"model": "thebetweenlands:block/internal/flat_head_mushroom_1",
 			"transform": {
 				"gui": {
 					"rotation": [

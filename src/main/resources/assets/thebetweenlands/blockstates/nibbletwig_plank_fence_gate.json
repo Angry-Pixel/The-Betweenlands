@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "defaults":{
         "textures": {
-            "texture": "thebetweenlands:blocks/nibbletwig_planks"
+            "texture": "thebetweenlands:block/nibbletwig_planks"
         }
     },
     "variants": {

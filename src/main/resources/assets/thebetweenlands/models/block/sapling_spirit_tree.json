@@ -1,6 +1,6 @@
 {
 	"parent": "block/cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/sapling_spirit_tree"
+		"cross": "thebetweenlands:block/sapling_spirit_tree"
 	}
 }

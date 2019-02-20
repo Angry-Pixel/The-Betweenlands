@@ -1,6 +1,6 @@
 {
 	"parent": "block/leaves",
 	"textures": {
-		"all": "thebetweenlands:blocks/leaves_weedwood_tree"
+		"all": "thebetweenlands:block/leaves_weedwood_tree"
 	}
 }

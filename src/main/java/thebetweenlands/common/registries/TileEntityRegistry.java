@@ -2,6 +2,8 @@ package thebetweenlands.common.registries;
 
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import com.mojang.datafixers.DataFixUtils;
 import com.mojang.datafixers.types.Type;
 
@@ -156,7 +158,7 @@ public class TileEntityRegistry {
 
 		register(new RegistryHelper<TileEntityType.Builder<?>>() {
 			@Override
-			public <F extends TileEntityType.Builder<?>> F reg(String regName, F obj, Consumer<F> callback) {
+			public <F extends TileEntityType.Builder<?>> F reg(String regName, F obj, @Nullable Consumer<F> callback) {
 				Type<?> fixerType = null;
 
 				//TODO 1.13 Entity registering like this? Or use TileEntityType.register(...)?
