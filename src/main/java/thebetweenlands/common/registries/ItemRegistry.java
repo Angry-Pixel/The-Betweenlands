@@ -26,7 +26,7 @@ import thebetweenlands.common.item.misc.ItemOctineIngot;
 import thebetweenlands.common.item.tools.ItemBLBucket;
 import thebetweenlands.common.lib.ModInfo;
 
-//@ObjectHolder(ModInfo.ID)
+@ObjectHolder(ModInfo.ID)
 public class ItemRegistry {
 	//@ObjectHolder("items_misc")
 	//public static final Item ITEMS_MISC = null;

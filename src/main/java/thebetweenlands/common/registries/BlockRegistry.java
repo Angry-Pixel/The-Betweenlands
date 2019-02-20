@@ -17,7 +17,7 @@ import thebetweenlands.common.block.misc.BlockSludge;
 import thebetweenlands.common.block.plant.BlockDoublePlantBL;
 import thebetweenlands.common.lib.ModInfo;
 
-//@ObjectHolder(ModInfo.ID)
+@ObjectHolder(ModInfo.ID)
 public class BlockRegistry {
 	//@ObjectHolder("swamp_water")
 	//public static final Block SWAMP_WATER = null;
