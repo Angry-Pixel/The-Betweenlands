@@ -52,7 +52,7 @@ public abstract class LoaderExtension {
 	 * @return
 	 */
 	@Nullable
-	public abstract IUnbakedModel loadModel(IModel original, ResourceLocation location, String arg);
+	public abstract IUnbakedModel loadModel(IUnbakedModel original, ResourceLocation location, String arg);
 
 	/**
 	 * Returns a replacement for the specified resource location and baked model.

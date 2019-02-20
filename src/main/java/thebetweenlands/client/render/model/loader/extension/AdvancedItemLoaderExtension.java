@@ -6,14 +6,13 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonParser;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import thebetweenlands.client.render.model.baked.BakedModelItemWrapper;
 import thebetweenlands.client.render.model.loader.CustomModelLoader;
@@ -62,7 +61,7 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 	}
 
 	@Override
-	public IUnbakedModel loadModel(IModel original, ResourceLocation location, String arg) {
+	public IUnbakedModel loadModel(IUnbakedModel original, ResourceLocation location, String arg) {
 		ModelContext context = this.parseContextData(location, this.readMetadata(arg));
 		this.modelContexts.put(context.source, context);
 		return this.getItemDummyModel();
@@ -124,7 +123,7 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 			}
 
 			//Retrieve replacement model
-			IModel replacementModel;
+			IUnbakedModel replacementModel;
 			try {
 				//Makes sure that the model is loaded through the model loader and that the textures are registered properly
 				replacementModel = ModelLoaderRegistry.getModel(replacementModelLocation);
@@ -133,9 +132,9 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 			}
 
 			//Bake replacement model
-			IBakedModel bakedModel = replacementModel.bake(replacementModel.getDefaultState(), DefaultVertexFormats.ITEM, 
-					(loc) -> Minecraft.getInstance().getTextureMap().getAtlasSprite(loc.toString()));
-
+			//TODO 1.13 Model baking uvlock temporarily set to false
+			IBakedModel bakedModel = replacementModel.bake(ModelLoader.defaultModelGetter(), ModelLoader.defaultTextureGetter(), replacementModel.getDefaultState(), false, DefaultVertexFormats.ITEM);
+			
 			//Return wrapped model
 			return new BakedModelItemWrapper(original, bakedModel).setInheritOverrides(context.inheritOverrides).setCacheOverrideModels(context.cacheOverrides);
 		}

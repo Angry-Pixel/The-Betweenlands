@@ -17,7 +17,7 @@ public class Registries {
 		LootTableRegistry.preInit();
 
 		DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> {
-			ModelRegistry.preInit();
+			ModelRegistry.registerModels();
 			AmbienceRegistry.preInit();
 		});
 	}

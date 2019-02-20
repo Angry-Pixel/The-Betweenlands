@@ -1,7 +1,6 @@
 package thebetweenlands.client.render.model.loader;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -22,10 +21,8 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.resources.IResourceManager;
 import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.IRegistry;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.model.ICustomModelLoader;
-import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import thebetweenlands.client.render.model.loader.extension.AdvancedItemLoaderExtension;
@@ -154,7 +151,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 				accepted = true;
 
 				//Load actual model
-				IModel model = ModelLoaderRegistry.getModel(result.actualLocation);
+				IUnbakedModel model = ModelLoaderRegistry.getModel(result.actualLocation);
 
 				//Let the extension process the model
 				LoaderExtension loaderExtension = result.extension;
@@ -244,27 +241,27 @@ public final class CustomModelLoader implements ICustomModelLoader {
 
 	@SubscribeEvent
 	public void onModelBake(ModelBakeEvent event) {
-		IRegistry<ModelResourceLocation, IBakedModel> modelRegistry = event.getModelRegistry();
+		Map<ModelResourceLocation, IBakedModel> modelRegistry = event.getModelRegistry();
 		List<Pair<ModelResourceLocation, IBakedModel>> loadedModels = new ArrayList<Pair<ModelResourceLocation, IBakedModel>>();
 
 		for(Pair<ModelResourceLocation, IBakedModel> loadedModel : loadedModels) {
 			if(loadedModel.getValue() != null) {
 				if(BetweenlandsConfig.DEBUG.debugModelLoader) TheBetweenlands.logger.info(String.format("Registering additional baked model %s", loadedModel.getKey()));
-				modelRegistry.putObject(loadedModel.getKey(), loadedModel.getValue());
+				modelRegistry.put(loadedModel.getKey(), loadedModel.getValue());
 			} else {
 				if(BetweenlandsConfig.DEBUG.debugModelLoader) TheBetweenlands.logger.warn(String.format("Additional baked model %s is null!", loadedModel.getKey()));
 			}
 		}
 
 		//Replace loader extensions models
-		Set<ModelResourceLocation> keys = modelRegistry.getKeys();
+		Set<ModelResourceLocation> keys = modelRegistry.keySet();
 		Map<ModelResourceLocation, IBakedModel> replacementMap = new HashMap<>();
 
 		//Get model replacements from extensions
 		for(LoaderExtension extension : this.loaderExtensions) {
 			for(ModelResourceLocation loc : keys) {
 				try {
-					IBakedModel replacement = extension.getModelReplacement(loc, modelRegistry.getObject(loc));
+					IBakedModel replacement = extension.getModelReplacement(loc, modelRegistry.get(loc));
 					if(replacement != null) {
 						replacementMap.put(loc, replacement);
 					}
@@ -295,10 +292,10 @@ public final class CustomModelLoader implements ICustomModelLoader {
 	 * @param registry
 	 * @param map
 	 */
-	private <K, T> void replaceRegistryObjects(IRegistry<K, T> registry, Map<K, T> map) {
+	private <K, T> void replaceRegistryObjects(Map<K, T> registry, Map<K, T> map) {
 		for(Entry<K, T> e : map.entrySet()) {
 			if(BetweenlandsConfig.DEBUG.debugModelLoader) TheBetweenlands.logger.info(String.format("Replaced model %s", e.getKey()));
-			registry.putObject(e.getKey(), e.getValue());
+			registry.put(e.getKey(), e.getValue());
 		}
 
 		//This doesn't work anymore since fml.skipFirstModelBake was introduced -.-

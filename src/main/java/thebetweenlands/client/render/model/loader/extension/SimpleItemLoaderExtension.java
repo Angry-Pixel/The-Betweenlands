@@ -3,13 +3,12 @@ package thebetweenlands.client.render.model.loader.extension;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import thebetweenlands.client.render.model.baked.BakedModelItemWrapper;
 
@@ -25,7 +24,7 @@ public class SimpleItemLoaderExtension extends LoaderExtension {
 	}
 
 	@Override
-	public IUnbakedModel loadModel(IModel original, ResourceLocation location, String arg) {
+	public IUnbakedModel loadModel(IUnbakedModel original, ResourceLocation location, String arg) {
 		ResourceLocation childModel = new ResourceLocation(arg);
 		this.dummyReplacementMap.put(new ModelResourceLocation(new ResourceLocation(childModel.getNamespace(), childModel.getPath()), "inventory"), location);
 		return this.getItemDummyModel();
@@ -45,8 +44,8 @@ public class SimpleItemLoaderExtension extends LoaderExtension {
 			}
 
 			//Bake replacement model
-			IBakedModel bakedModel = replacementModel.bake(replacementModel.getDefaultState(), DefaultVertexFormats.ITEM, 
-					(loc) -> Minecraft.getInstance().getTextureMap().getAtlasSprite(loc.toString()));
+			//TODO 1.13 Model baking uvlock temporarily set to false
+			IBakedModel bakedModel = replacementModel.bake(ModelLoader.defaultModelGetter(), ModelLoader.defaultTextureGetter(), replacementModel.getDefaultState(), false, DefaultVertexFormats.ITEM);
 
 			//Return wrapped model
 			return new BakedModelItemWrapper(original, bakedModel);

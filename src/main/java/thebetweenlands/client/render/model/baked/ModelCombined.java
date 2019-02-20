@@ -3,6 +3,9 @@ package thebetweenlands.client.render.model.baked;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.function.Function;
 
 import javax.vecmath.Matrix4f;
 
@@ -14,6 +17,7 @@ import com.google.gson.JsonParser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.model.ItemOverrideList;
@@ -22,53 +26,53 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import thebetweenlands.client.render.model.loader.extension.LoaderExtension;
 
-public class ModelCombined implements IModel {
-	private IModel baseModel;
-	private IModel additionalModel;
+public class ModelCombined implements IUnbakedModel {
+	private IUnbakedModel baseModel;
+	private IUnbakedModel additionalModel;
 
 	public ModelCombined() {
 	}
 
-	public ModelCombined(IModel baseModel, IModel additionalModel) {
+	public ModelCombined(IUnbakedModel baseModel, IUnbakedModel additionalModel) {
 		this.baseModel = baseModel;
 		this.additionalModel = additionalModel;
 	}
-
+	
 	@Override
-	public Collection<ResourceLocation> getDependencies() {
+	public Collection<ResourceLocation> getOverrideLocations() {
 		List<ResourceLocation> dependencies = new ArrayList<ResourceLocation>();
 		if (this.baseModel != null)
-			dependencies.addAll(this.baseModel.getDependencies());
+			dependencies.addAll(this.baseModel.getOverrideLocations());
 		if (this.additionalModel != null)
-			dependencies.addAll(this.additionalModel.getDependencies());
+			dependencies.addAll(this.additionalModel.getOverrideLocations());
 		return dependencies;
 	}
-
+	
 	@Override
-	public Collection<ResourceLocation> getTextures() {
+	public Collection<ResourceLocation> getTextures(Function<ResourceLocation, IUnbakedModel> modelGetter, Set<String> missingTextureErrors) {
 		List<ResourceLocation> textures = new ArrayList<ResourceLocation>();
 		if (this.baseModel != null)
-			textures.addAll(this.baseModel.getTextures());
+			textures.addAll(this.baseModel.getTextures(modelGetter, missingTextureErrors));
 		if (this.additionalModel != null)
-			textures.addAll(this.additionalModel.getTextures());
+			textures.addAll(this.additionalModel.getTextures(modelGetter, missingTextureErrors));
 		return textures;
 	}
-
+	
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-
+	public IBakedModel bake(Function<ResourceLocation, IUnbakedModel> modelGetter,
+			Function<ResourceLocation, TextureAtlasSprite> spriteGetter, IModelState state, boolean uvlock,
+			VertexFormat format) {
 		if(baseModel != null && additionalModel != null) {
-			IBakedModel baseBakedModel = this.baseModel.bake(state, format, bakedTextureGetter);
-			IBakedModel additionalBakedModel = this.additionalModel.bake(state, format, bakedTextureGetter);
+			IBakedModel baseBakedModel = this.baseModel.bake(modelGetter, spriteGetter, state, uvlock, format);
+			IBakedModel additionalBakedModel = this.additionalModel.bake(modelGetter, spriteGetter, state, uvlock, format);
 			return new BakedCombinedModel(baseBakedModel, additionalBakedModel);
 		} else {
-			return ModelLoaderRegistry.getMissingModel().bake(state, format, bakedTextureGetter);
+			return ModelLoaderRegistry.getMissingModel().bake(modelGetter, spriteGetter, state, uvlock, format);
 		}
 	}
 
@@ -78,10 +82,10 @@ public class ModelCombined implements IModel {
 	}
 
 	@Override
-	public IModel process(ImmutableMap<String, String> customData) {
+	public IUnbakedModel process(ImmutableMap<String, String> customData) {
 		JsonParser parser = new JsonParser();
 
-		IModel baseModel = this.baseModel;
+		IUnbakedModel baseModel = this.baseModel;
 		
 		if(customData.containsKey("model_base") || baseModel == null) {
 			ResourceLocation baseModelLocation = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("model_base")), "model_base"));
@@ -92,7 +96,7 @@ public class ModelCombined implements IModel {
 			baseModel = baseModel.process(LoaderExtension.parseJsonElementList(parser, customData.get("model_base_data"), "model_base_data"));
 		}
 
-		IModel additionalModel = this.additionalModel;
+		IUnbakedModel additionalModel = this.additionalModel;
 
 		if(customData.containsKey("model_additional") || additionalModel == null) {
 			ResourceLocation additionalModelLocation = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("model_additional")), "model_additional"));
@@ -116,7 +120,7 @@ public class ModelCombined implements IModel {
 		}
 
 		@Override
-		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, Random rand) {
 			List<BakedQuad> quads = new ArrayList<BakedQuad>();
 			quads.addAll(this.baseBakedModel.getQuads(state, side, rand));
 			quads.addAll(this.additionalBakedModel.getQuads(state, side, rand));

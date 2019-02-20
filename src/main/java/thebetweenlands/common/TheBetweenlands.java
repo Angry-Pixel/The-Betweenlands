@@ -19,9 +19,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.compat.tmg.TMGEquipmentInventory;
 
@@ -122,6 +124,13 @@ public class TheBetweenlands {
 		//Renderers
 		//proxy.registerItemAndBlockRenderers();
 		//proxy.preInit();
+		
+		DeferredWorkQueue.runLater(() -> {
+			//ModelLoaderRegistry#registerLoader isn't thread safe atm
+			CustomModelManager.INSTANCE.registerLoader();
+			
+			ModelRegistry.registerModels();
+		});
 	}
 
 	private void postSetup() {

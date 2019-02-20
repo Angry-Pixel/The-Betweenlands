@@ -3,7 +3,10 @@ package thebetweenlands.client.render.model.baked;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.function.BooleanSupplier;
+import java.util.function.Function;
 
 import javax.vecmath.Matrix4f;
 
@@ -15,6 +18,7 @@ import com.google.gson.JsonParser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.model.ItemOverrideList;
@@ -23,15 +27,14 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import thebetweenlands.client.render.model.loader.extension.LoaderExtension;
 
-public class ModelEventSelection implements IModel {
-	private IModel baseModel;
-	private IModel altModel;
+public class ModelEventSelection implements IUnbakedModel {
+	private IUnbakedModel baseModel;
+	private IUnbakedModel altModel;
 
 	private BooleanSupplier predicate;
 
@@ -40,14 +43,14 @@ public class ModelEventSelection implements IModel {
 	public ModelEventSelection() {
 		this(null, null);
 	}
-	
-	public ModelEventSelection(IModel baseModel, IModel altModel) {
+
+	public ModelEventSelection(IUnbakedModel baseModel, IUnbakedModel altModel) {
 		this.baseModel = baseModel;
 		this.altModel = altModel;
 		this.predicate = () -> this.isActive();
 	}
 
-	public ModelEventSelection(BooleanSupplier predicate, IModel baseModel, IModel altModel) {
+	public ModelEventSelection(BooleanSupplier predicate, IUnbakedModel baseModel, IUnbakedModel altModel) {
 		this.baseModel = baseModel;
 		this.altModel = altModel;
 		this.predicate = predicate;
@@ -62,33 +65,35 @@ public class ModelEventSelection implements IModel {
 	}
 
 	@Override
-	public Collection<ResourceLocation> getDependencies() {
+	public Collection<ResourceLocation> getOverrideLocations() {
 		List<ResourceLocation> dependencies = new ArrayList<ResourceLocation>();
 		if (this.baseModel != null)
-			dependencies.addAll(this.baseModel.getDependencies());
+			dependencies.addAll(this.baseModel.getOverrideLocations());
 		if (this.altModel != null)
-			dependencies.addAll(this.altModel.getDependencies());
+			dependencies.addAll(this.altModel.getOverrideLocations());
 		return dependencies;
 	}
 
 	@Override
-	public Collection<ResourceLocation> getTextures() {
+	public Collection<ResourceLocation> getTextures(Function<ResourceLocation, IUnbakedModel> modelGetter, Set<String> missingTextureErrors) {
 		List<ResourceLocation> textures = new ArrayList<ResourceLocation>();
 		if (this.baseModel != null)
-			textures.addAll(this.baseModel.getTextures());
+			textures.addAll(this.baseModel.getTextures(modelGetter, missingTextureErrors));
 		if (this.altModel != null)
-			textures.addAll(this.altModel.getTextures());
+			textures.addAll(this.altModel.getTextures(modelGetter, missingTextureErrors));
 		return textures;
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+	public IBakedModel bake(Function<ResourceLocation, IUnbakedModel> modelGetter,
+			Function<ResourceLocation, TextureAtlasSprite> spriteGetter, IModelState state, boolean uvlock,
+			VertexFormat format) {
 		if(baseModel != null && altModel != null) {
-			IBakedModel baseBakedModel = this.baseModel.bake(state, format, bakedTextureGetter);
-			IBakedModel altBakedModel = this.altModel.bake(state, format, bakedTextureGetter);
+			IBakedModel baseBakedModel = this.baseModel.bake(modelGetter, spriteGetter, state, uvlock, format);
+			IBakedModel altBakedModel = this.altModel.bake(modelGetter, spriteGetter, state, uvlock, format);
 			return new BakedEventSelectionModel(this.predicate, baseBakedModel, altBakedModel);
 		} else {
-			return ModelLoaderRegistry.getMissingModel().bake(state, format, bakedTextureGetter);
+			return ModelLoaderRegistry.getMissingModel().bake(modelGetter, spriteGetter, state, uvlock, format);
 		}
 	}
 
@@ -98,10 +103,10 @@ public class ModelEventSelection implements IModel {
 	}
 
 	@Override
-	public IModel process(ImmutableMap<String, String> customData) {
+	public IUnbakedModel process(ImmutableMap<String, String> customData) {
 		JsonParser parser = new JsonParser();
 
-		IModel baseModel = this.baseModel;
+		IUnbakedModel baseModel = this.baseModel;
 
 		if(customData.containsKey("model_base") || baseModel == null) {
 			ResourceLocation baseModelLocation = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("model_base")), "model_base"));
@@ -112,7 +117,7 @@ public class ModelEventSelection implements IModel {
 			baseModel = baseModel.process(LoaderExtension.parseJsonElementList(parser, customData.get("model_base_data"), "model_base_data"));
 		}
 
-		IModel altModel = this.altModel;
+		IUnbakedModel altModel = this.altModel;
 
 		if(customData.containsKey("model_active") || altModel == null) {
 			ResourceLocation additionalModelLocation = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("model_active")), "model_active"));
@@ -138,7 +143,7 @@ public class ModelEventSelection implements IModel {
 		}
 
 		@Override
-		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, Random rand) {
 			if(this.isActive.getAsBoolean()) {
 				return this.altBakedModel.getQuads(state, side, rand);
 			}

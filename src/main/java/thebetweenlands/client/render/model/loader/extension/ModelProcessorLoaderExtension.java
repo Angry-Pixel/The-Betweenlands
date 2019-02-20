@@ -4,9 +4,9 @@ import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
 
 /**
  * Loads a model and processes it with custom data if applicable
@@ -18,8 +18,8 @@ public class ModelProcessorLoaderExtension extends LoaderExtension {
 	}
 
 	@Override
-	public IModel loadModel(IModel original, ResourceLocation location, String arg) {
-		IModel processedModel = original;
+	public IUnbakedModel loadModel(IUnbakedModel original, ResourceLocation location, String arg) {
+		IUnbakedModel processedModel = original;
 		String metadata = this.readMetadata(arg);
 		JsonParser parser = new JsonParser();
 		JsonObject json = JsonUtils.getJsonObject(parser.parse(metadata), location.toString() + " model metadata");
@@ -46,12 +46,13 @@ public class ModelProcessorLoaderExtension extends LoaderExtension {
 			processedModel = processedModel.gui3d(JsonUtils.getBoolean(json.get("gui3d"), "gui3d"));
 		}
 
-		if(json.has("uvlock")) {
+		//TODO 1.13 Model baking uvlock can no longer be done in post
+		/*if(json.has("uvlock")) {
 			if(original == null) {
 				this.throwLoaderException("Specified model " + location + " does not support uvlock");
 			}
 			processedModel = processedModel.uvlock(JsonUtils.getBoolean(json.get("uvlock"), "uvlock"));
-		}
+		}*/
 
 		if(json.has("textures")) {
 			if(original == null) {

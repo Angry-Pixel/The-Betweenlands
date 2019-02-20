@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.function.Function;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -12,29 +15,29 @@ import com.google.gson.JsonParser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.client.renderer.texture.MissingTextureSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
-public class ModelBlank implements IModel {
+public class ModelBlank implements IUnbakedModel {
 	private final ResourceLocation particleTexture;
 	private final List<ResourceLocation> texturesToLoad = new ArrayList<ResourceLocation>();
 
 	public ModelBlank() {
-		this.particleTexture = TextureMap.LOCATION_MISSING_TEXTURE;
+		this.particleTexture = MissingTextureSprite.getLocation();
 	}
 
 	public ModelBlank(ResourceLocation texture) {
 		if(texture == null) {
-			this.particleTexture = TextureMap.LOCATION_MISSING_TEXTURE;
+			this.particleTexture = MissingTextureSprite.getLocation();
 		} else {
 			this.particleTexture = texture;
 		}
@@ -46,12 +49,12 @@ public class ModelBlank implements IModel {
 	}
 
 	@Override
-	public Collection<ResourceLocation> getDependencies() {
+	public Collection<ResourceLocation> getOverrideLocations() {
 		return Collections.emptySet();
 	}
 
 	@Override
-	public Collection<ResourceLocation> getTextures() {
+	public Collection<ResourceLocation> getTextures(Function<ResourceLocation, IUnbakedModel> modelGetter, Set<String> missingTextureErrors) {
 		List<ResourceLocation> textures = new ArrayList<ResourceLocation>();
 		if(this.particleTexture != null)
 			textures.add(this.particleTexture);
@@ -61,8 +64,10 @@ public class ModelBlank implements IModel {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		return new ModelBakedBlank(bakedTextureGetter.apply(this.particleTexture));
+	public IBakedModel bake(Function<ResourceLocation, IUnbakedModel> modelGetter,
+			Function<ResourceLocation, TextureAtlasSprite> spriteGetter, IModelState state, boolean uvlock,
+			VertexFormat format) {
+		return new ModelBakedBlank(spriteGetter.apply(this.particleTexture));
 	}
 
 	@Override
@@ -79,7 +84,7 @@ public class ModelBlank implements IModel {
 		}
 
 		@Override
-		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, Random rand) {
 			return this.noQuads;
 		}
 
@@ -110,12 +115,12 @@ public class ModelBlank implements IModel {
 
 		@Override
 		public ItemOverrideList getOverrides() {
-			return ItemOverrideList.NONE;
+			return ItemOverrideList.EMPTY;
 		}
 	}
 
 	@Override
-	public IModel process(ImmutableMap<String, String> customData) {
+	public IUnbakedModel process(ImmutableMap<String, String> customData) {
 		JsonParser parser = new JsonParser();
 
 		ResourceLocation particleTextureLocation = this.particleTexture;
@@ -125,7 +130,7 @@ public class ModelBlank implements IModel {
 		}
 
 		if(particleTextureLocation == null) {
-			particleTextureLocation = TextureMap.LOCATION_MISSING_TEXTURE;
+			particleTextureLocation = MissingTextureSprite.getLocation();
 		}
 
 		return new ModelBlank(particleTextureLocation);

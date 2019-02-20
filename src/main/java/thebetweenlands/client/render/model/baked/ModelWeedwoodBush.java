@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
+import java.util.function.Function;
 
 import javax.vecmath.Matrix4f;
 
@@ -22,16 +24,16 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.model.BakedQuad;
 import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.IUnbakedModel;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.client.renderer.texture.MissingTextureSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
@@ -40,7 +42,7 @@ import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.QuadBuilder;
 
-public class ModelWeedwoodBush implements IModel {
+public class ModelWeedwoodBush implements IUnbakedModel {
 	private final ResourceLocation leavesTexture;
 	private final ResourceLocation sticksTexture;
 	private final int leavesTintIndex;
@@ -58,19 +60,21 @@ public class ModelWeedwoodBush implements IModel {
 	}
 
 	@Override
-	public Collection<ResourceLocation> getDependencies() {
+	public Collection<ResourceLocation> getOverrideLocations() {
 		return Collections.emptyList();
 	}
-
+	
 	@Override
-	public Collection<ResourceLocation> getTextures() {
+	public Collection<ResourceLocation> getTextures(Function<ResourceLocation, IUnbakedModel> modelGetter, Set<String> missingTextureErrors) {
 		return Collections.unmodifiableCollection(Arrays.asList(new ResourceLocation[]{this.leavesTexture, this.sticksTexture}));
 	}
-
+	
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+	public IBakedModel bake(Function<ResourceLocation, IUnbakedModel> modelGetter,
+			Function<ResourceLocation, TextureAtlasSprite> spriteGetter, IModelState state, boolean uvlock,
+			VertexFormat format) {
 		ImmutableMap<TransformType, TRSRTransformation> map = PerspectiveMapWrapper.getTransforms(state);
-		return new ModelBakedWeedwoodBush(format, state.apply(Optional.empty()), map, bakedTextureGetter.apply(this.leavesTexture), bakedTextureGetter.apply(this.sticksTexture), this.leavesTintIndex);
+		return new ModelBakedWeedwoodBush(format, state.apply(Optional.empty()), map, spriteGetter.apply(this.leavesTexture), spriteGetter.apply(this.sticksTexture), this.leavesTintIndex);
 	}
 
 	@Override
@@ -89,7 +93,7 @@ public class ModelWeedwoodBush implements IModel {
 		}
 
 		if(leaves == null) {
-			leaves = TextureMap.LOCATION_MISSING_TEXTURE;
+			leaves = MissingTextureSprite.getLocation();
 		}
 
 		ResourceLocation sticks = this.sticksTexture;
@@ -99,7 +103,7 @@ public class ModelWeedwoodBush implements IModel {
 		}
 
 		if(sticks == null) {
-			sticks = TextureMap.LOCATION_MISSING_TEXTURE;
+			sticks = MissingTextureSprite.getLocation();
 		}	
 
 		int leavesTintIndex = this.leavesTintIndex;
@@ -342,7 +346,7 @@ public class ModelWeedwoodBush implements IModel {
 		}
 
 		@Override
-		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, long rand) {
+		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, Random rand) {
 			IExtendedBlockState state = (IExtendedBlockState) stateOld;
 
 			if(side == null) {
@@ -363,9 +367,9 @@ public class ModelWeedwoodBush implements IModel {
 						index |= 1 << 4;
 					if (state.get(BlockWeedwoodBush.SOUTH))
 						index |= 1 << 5;
-					posX = state.get(BlockWeedwoodBush.POS_X);
-					posY = state.get(BlockWeedwoodBush.POS_Y);
-					posZ = state.get(BlockWeedwoodBush.POS_Z);
+					posX = state.getValue(BlockWeedwoodBush.POS_X);
+					posY = state.getValue(BlockWeedwoodBush.POS_Y);
+					posZ = state.getValue(BlockWeedwoodBush.POS_Z);
 				} catch(Exception ex) {
 					//how should this handle item rendering gracefully? :(
 				}
@@ -448,7 +452,7 @@ public class ModelWeedwoodBush implements IModel {
 
 		@Override
 		public ItemOverrideList getOverrides() {
-			return ItemOverrideList.NONE;
+			return ItemOverrideList.EMPTY;
 		}
 
 		@Override
