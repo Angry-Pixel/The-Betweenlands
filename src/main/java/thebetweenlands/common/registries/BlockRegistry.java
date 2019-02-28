@@ -133,6 +133,7 @@ import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.block.structure.BlockDungeonWallCandle;
 import thebetweenlands.common.block.structure.BlockEnergyBarrier;
+import thebetweenlands.common.block.structure.BlockEnergyBarrierMud;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.block.structure.BlockFenceGateBetweenlands;
 import thebetweenlands.common.block.structure.BlockItemCage;
@@ -579,6 +580,8 @@ public class BlockRegistry {
 	public static final Block LOG_ROTTEN_BARK_CARVED_14 = new BlockRottenBarkCarved();
 	public static final Block LOG_ROTTEN_BARK_CARVED_15 = new BlockRottenBarkCarved();
 	public static final Block LOG_ROTTEN_BARK_CARVED_16 = new BlockRottenBarkCarved();
+	public static final Block ENERGY_BARRIER_MUD = new BlockEnergyBarrierMud();
+
 	//Winter Event
     public static final Block PRESENT = new BlockPresent();
     
