@@ -27,7 +27,7 @@ import thebetweenlands.client.render.model.tile.ModelStone;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.util.LightingUtil;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 @SideOnly(Side.CLIENT)
 public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidAltar> {
@@ -112,7 +112,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 
 		//Animate the 4 talisman pieces
 		double yOff = 1.2D;
-		if (TileEntityHelper.getStatePropertySafely(tile, BlockDruidAltar.class, BlockDruidAltar.ACTIVE, false) && tile.craftingProgress != 0) {
+		if (StatePropertyHelper.getStatePropertySafely(tile, BlockDruidAltar.class, BlockDruidAltar.ACTIVE, false) && tile.craftingProgress != 0) {
 			yOff = Math.min(tile.renderYOffset + (tile.renderYOffset - tile.prevRenderYOffset) * partialTicks, TileEntityDruidAltar.FINAL_HEIGHT + 1.0D);
 
 			GlStateManager.pushMatrix();

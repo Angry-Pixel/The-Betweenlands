@@ -42,7 +42,7 @@ import thebetweenlands.common.block.property.PropertyBlockStateUnlisted;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 public class BlockMudFlowerPot extends BlockContainer {
 	protected static final AxisAlignedBB FLOWER_POT_AABB = new AxisAlignedBB(0.3125D, 0.0D, 0.3125D, 0.6875D, 0.375D, 0.6875D);
@@ -97,7 +97,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		state = ((IExtendedBlockState)state).withProperty(FLOWER, Blocks.AIR.getDefaultState());
 
-		TileEntityMudFlowerPot te = TileEntityHelper.getTileEntityThreadSafe(world, pos, TileEntityMudFlowerPot.class);
+		TileEntityMudFlowerPot te = StatePropertyHelper.getTileEntityThreadSafe(world, pos, TileEntityMudFlowerPot.class);
 
 		if(te != null && !te.getFlowerItemStack().isEmpty()) {
 			IBlockState blockState = this.getPlantBlockStateFromItem(te.getFlowerItemStack());

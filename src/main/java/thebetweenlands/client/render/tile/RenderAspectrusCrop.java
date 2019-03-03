@@ -20,7 +20,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityAspectrusCrop;
 import thebetweenlands.util.ColorUtils;
 import thebetweenlands.util.LightingUtil;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 public class RenderAspectrusCrop extends TileEntitySpecialRenderer<TileEntityAspectrusCrop> {
 	protected static final ModelAspectrusCrop1 MODEL1 = new ModelAspectrusCrop1();
@@ -54,13 +54,13 @@ public class RenderAspectrusCrop extends TileEntitySpecialRenderer<TileEntityAsp
 		GlStateManager.rotate(rndRot * 90.0F, 0, 1, 0);
 		GlStateManager.disableCull();
 
-		int index = TileEntityHelper.getStatePropertySafely(tile, BlockAspectrusCrop.class, BlockRegistry.ASPECTRUS_CROP.getStageProperty(), 0, true, false) / 2;
+		int index = StatePropertyHelper.getStatePropertySafely(tile, BlockAspectrusCrop.class, BlockRegistry.ASPECTRUS_CROP.getStageProperty(), 0, true, false) / 2;
 		if(index <= 4) {
 			index = index / 2;
 		} else {
 			index = index - 2;
 		}
-		if(index >= 5 && TileEntityHelper.getStatePropertySafely(tile, BlockAspectrusCrop.class, BlockGenericCrop.DECAYED, false, true, false)) {
+		if(index >= 5 && StatePropertyHelper.getStatePropertySafely(tile, BlockAspectrusCrop.class, BlockGenericCrop.DECAYED, false, true, false)) {
 			index = 6;
 		}
 
