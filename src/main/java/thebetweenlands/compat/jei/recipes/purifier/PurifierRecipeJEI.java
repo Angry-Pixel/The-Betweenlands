@@ -29,6 +29,6 @@ public class PurifierRecipeJEI implements IRecipeWrapper {
         inputs.add(ItemMisc.EnumItemMisc.SULFUR.create(1));
         ingredients.setInputs(VanillaTypes.ITEM, inputs);
         ingredients.setOutput(VanillaTypes.ITEM, output);
-        ingredients.setInput(VanillaTypes.FLUID, new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
+        ingredients.setInput(VanillaTypes.FLUID, new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME / 4));
     }
 }
