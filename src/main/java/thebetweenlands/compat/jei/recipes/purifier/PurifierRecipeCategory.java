@@ -64,7 +64,7 @@ public class PurifierRecipeCategory implements IRecipeCategory {
         recipeLayout.getItemStacks().init(0, true, 24, 1);
         recipeLayout.getItemStacks().init(1, true, 24, 41);
         recipeLayout.getItemStacks().init(2, false, 84, 21);
-        recipeLayout.getFluidStacks().init(3, true, 1, 1, 10, 58, Fluid.BUCKET_VOLUME * 16, true, tank);
+        recipeLayout.getFluidStacks().init(3, true, 1, 1, 10, 58, Fluid.BUCKET_VOLUME * 4, true, tank);
 
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
         recipeLayout.getItemStacks().set(1, ingredients.getInputs(VanillaTypes.ITEM).get(1));
