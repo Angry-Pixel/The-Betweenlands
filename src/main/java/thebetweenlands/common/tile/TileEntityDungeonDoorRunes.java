@@ -28,7 +28,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable, IEntityScreenShake {
 
-	public int top_code = -1, mid_code = -1, bottom_code = -1;
+	public int top_code = -1, mid_code = -1, bottom_code = -1; // set back to -1
 	public int top_state = 0, mid_state = 0, bottom_state = 0;
 	public int top_state_prev = 0, mid_state_prev = 0, bottom_state_prev = 0;
 	public int top_rotate = 0, mid_rotate = 0, bottom_rotate = 0;

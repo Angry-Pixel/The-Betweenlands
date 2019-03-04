@@ -10,7 +10,6 @@ import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.common.tile.TileEntityAspectrusCrop;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
-import thebetweenlands.common.tile.TileEntityBeamLock;
 import thebetweenlands.common.tile.TileEntityBeamOrigin;
 import thebetweenlands.common.tile.TileEntityBeamRelay;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
@@ -90,7 +89,6 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityWormDungeonDoorWood.class, "worm_dungeon_door_wood");
 		registerTileEntity(TileEntityBeamOrigin.class, "beam_origin");
 		registerTileEntity(TileEntityBeamRelay.class, "beam_relay");
-		registerTileEntity(TileEntityBeamLock.class, "beam_lock");
 		registerTileEntity(TileEntityMudBricksSpawnerHole.class, "mud_bricks_spawner_hole");
 		registerTileEntity(TileEntityWaystone.class, "waystone");
 		registerTileEntity(TileEntityMudBricksAlcove.class, "mud_bricks_alcove");

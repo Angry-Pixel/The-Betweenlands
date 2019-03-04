@@ -12,9 +12,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.structure.BlockBeamLock;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
+import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.block.structure.BlockEnergyBarrierMud;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
@@ -80,13 +80,14 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 			}
 		}
 
-		if (stateofTarget.getBlock() instanceof BlockBeamLock) {
-			if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamLock) {
-				TileEntityBeamLock targetTile = (TileEntityBeamLock) getWorld().getTileEntity(targetPos);
-				if (!getWorld().getBlockState(targetPos).getValue(BlockBeamLock.POWERED)) {
-					stateofTarget = stateofTarget.cycleProperty(BlockBeamLock.POWERED);
-					getWorld().setBlockState(targetPos, stateofTarget, 3);
-				}
+		if (stateofTarget.getBlock() instanceof BlockDungeonDoorRunes) {
+			if (getWorld().getTileEntity(targetPos) instanceof TileEntityDungeonDoorRunes) {
+				TileEntityDungeonDoorRunes targetTile = (TileEntityDungeonDoorRunes) getWorld().getTileEntity(targetPos);
+				targetTile.top_state_prev = targetTile.top_code;
+				targetTile.mid_state_prev = targetTile.mid_code;
+				targetTile.bottom_state_prev = targetTile.bottom_code;
+				getWorld().setBlockState(targetPos, stateofTarget, 3);
+				//TODO turn off beam here as it's no longer needed
 			}
 		}
 	}
