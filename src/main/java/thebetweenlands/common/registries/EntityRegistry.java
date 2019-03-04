@@ -1,12 +1,19 @@
 package thebetweenlands.common.registries;
 
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Pair;
+
+import com.google.common.collect.ImmutableMap;
+
 import net.minecraft.entity.EntityType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.ObjectHolder;
 import thebetweenlands.common.entity.EntityAngryPebble;
@@ -265,46 +272,87 @@ public class EntityRegistry {
 		});
 	}
 
-	private static void register(RegistryHelper<EntityType.Builder<?>> reg) {
-		//TODO 1.13 Spawn eggs are now flattened, need to register a spawn egg for each entity!
+	public static Supplier<EntityType<?>> getBlEntityType(String name) {
+		return () -> {
+			EntityType<?> type = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(ModInfo.ID, name));
+			if(type == null) {
+				throw new NullPointerException(String.format("Betweenlands entity type '%s' does not exist or was not yet initialized", name));
+			}
+			return type;
+		};
+	}
 
-		reg.reg("dark_druid", EntityType.Builder.create(EntityDarkDruid.class, EntityDarkDruid::new)); //0x000000, 0xFF0000
-		reg.reg("angler", EntityType.Builder.create(EntityAngler.class, EntityAngler::new)); //0x243B0B, 0x00FFFF
-		reg.reg("sludge", EntityType.Builder.create(EntitySludge.class, EntitySludge::new)); //0x3A2F0B, 0x5F4C0B
-		reg.reg("swamp_hag", EntityType.Builder.create(EntitySwampHag.class, EntitySwampHag::new)); //0x0B3B0B, 0xDBA901
-		reg.reg("wight", EntityType.Builder.create(EntityWight.class, EntityWight::new)); //0xECF8E0, 0x243B0B
-		reg.reg("firefly", EntityType.Builder.create(EntityFirefly.class, EntityFirefly::new)); //0xFFB300, 0xFFD000
-		reg.reg("sporeling", EntityType.Builder.create(EntitySporeling.class, EntitySporeling::new).tracker(64, 1 /*TODO 1.13 Does sporeling really need to send update each tick?...*/, true)); //0x696144, 0xFFFB00
-		reg.reg("leech", EntityType.Builder.create(EntityLeech.class, EntityLeech::new)); //0x804E3D, 0x635940
-		reg.reg("dragonfly", EntityType.Builder.create(EntityDragonFly.class, EntityDragonFly::new)); //0x31B53C, 0x779E3C
-		reg.reg("blood_snail", EntityType.Builder.create(EntityBloodSnail.class, EntityBloodSnail::new)); //0x8E9456, 0xB3261E
-		reg.reg("mire_snail", EntityType.Builder.create(EntityMireSnail.class, EntityMireSnail::new)); //0x8E9456, 0xF2FA96
+	public static final ImmutableMap<String, Pair<Integer, Integer>> SPAWN_EGGS = ImmutableMap.<String, Pair<Integer, Integer>>builder()
+			.put("dark_druid", Pair.of(0x000000, 0xFF0000))
+			.put("angler", Pair.of(0x243B0B, 0x00FFFF))
+			.put("sludge", Pair.of(0x3A2F0B, 0x5F4C0B))
+			.put("swamp_hag", Pair.of(0x0B3B0B, 0xDBA901))
+			.put("wight", Pair.of(0xECF8E0, 0x243B0B))
+			.put("firefly", Pair.of(0xFFB300, 0xFFD000))
+			.put("sporeling", Pair.of(0x696144, 0xFFFB00))
+			.put("leech", Pair.of(0x804E3D, 0x635940))
+			.put("dragonfly", Pair.of(0x31B53C, 0x779E3C))
+			.put("blood_snail", Pair.of(0x8E9456, 0xB3261E))
+			.put("mire_snail", Pair.of(0x8E9456, 0xF2FA96))
+			.put("lurker", Pair.of(0x283320, 0x827856))
+			.put("gecko", Pair.of(0xFF8000, 0x22E0B1))
+			.put("termite", Pair.of(0xD9D7A7, 0xD99830))
+			.put("harlequin_toad", Pair.of(0x405C3B, 0x7ABA45))
+			.put("blind_cave_fish", Pair.of(0xD0D1C2, 0xECEDDF))
+			.put("chiromaw", Pair.of(0x3F5A69, 0xA16A77))
+			.put("frog", Pair.of(0x559653, 0xC72C2C))
+			.put("shallowbreath", Pair.of(0xFFB300, 0xFFD000))
+			.put("tar_beast", Pair.of(0x000000, 0x202020))
+			.put("silt_crab", Pair.of(0x086A87, 0xB43104))
+			.put("pyrad", Pair.of(0x5E4726, 0x2D4231))
+			.put("peat_mummy", Pair.of(0x524D3A, 0x69463F))
+			.put("tarminion", Pair.of(0x000000, 0x2E2E2E))
+			.put("primordial_malevolence", Pair.of(0x000000, 0x00FFFA))
+			.put("dreadful_peat_mummy", Pair.of(0x000000, 0x591E08))
+			.put("smoll_sludge", Pair.of(0x3A2F0B, 0x5F4C0B))
+			.put("greebling", Pair.of(0xD9D7A7, 0xD99830))
+			.put("boulder_sprite", Pair.of(0x6f7784, 0x535559))
+			.put("root_sprite", Pair.of(0x686868, 0x9fe530))
+			.build();
+
+	private static void register(RegistryHelper<EntityType.Builder<?>> reg) {
+		reg.reg("dark_druid", EntityType.Builder.create(EntityDarkDruid.class, EntityDarkDruid::new));
+		reg.reg("angler", EntityType.Builder.create(EntityAngler.class, EntityAngler::new));
+		reg.reg("sludge", EntityType.Builder.create(EntitySludge.class, EntitySludge::new));
+		reg.reg("swamp_hag", EntityType.Builder.create(EntitySwampHag.class, EntitySwampHag::new));
+		reg.reg("wight", EntityType.Builder.create(EntityWight.class, EntityWight::new));
+		reg.reg("firefly", EntityType.Builder.create(EntityFirefly.class, EntityFirefly::new));
+		reg.reg("sporeling", EntityType.Builder.create(EntitySporeling.class, EntitySporeling::new).tracker(64, 1 /*TODO 1.13 Does sporeling really need to send update each tick?...*/, true));
+		reg.reg("leech", EntityType.Builder.create(EntityLeech.class, EntityLeech::new));
+		reg.reg("dragonfly", EntityType.Builder.create(EntityDragonFly.class, EntityDragonFly::new));
+		reg.reg("blood_snail", EntityType.Builder.create(EntityBloodSnail.class, EntityBloodSnail::new));
+		reg.reg("mire_snail", EntityType.Builder.create(EntityMireSnail.class, EntityMireSnail::new));
 		reg.reg("mire_snail_egg", EntityType.Builder.create(EntityMireSnailEgg.class, EntityMireSnailEgg::new));
 		reg.reg("bl_arrow", EntityType.Builder.create(EntityBLArrow.class, EntityBLArrow::new).tracker(64, 20, true));
 		reg.reg("snail_poison_jet", EntityType.Builder.create(EntitySnailPoisonJet.class, EntitySnailPoisonJet::new));
-		reg.reg("lurker", EntityType.Builder.create(EntityLurker.class, EntityLurker::new)); //0x283320, 0x827856
-		reg.reg("gecko", EntityType.Builder.create(EntityGecko.class, EntityGecko::new).tracker(64, 1, true)); //0xFF8000, 0x22E0B1
-		reg.reg("termite", EntityType.Builder.create(EntityTermite.class, EntityTermite::new)); //0xD9D7A7, 0xD99830
-		reg.reg("harlequin_toad", EntityType.Builder.create(EntityHarlequinToad.class, EntityHarlequinToad::new)); //0x405C3B, 0x7ABA45
-		reg.reg("blind_cave_fish", EntityType.Builder.create(EntityBlindCaveFish.class, EntityBlindCaveFish::new)); //0xD0D1C2, 0xECEDDF
-		reg.reg("chiromaw", EntityType.Builder.create(EntityChiromaw.class, EntityChiromaw::new)); //0x3F5A69, 0xA16A77
-		reg.reg("frog", EntityType.Builder.create(EntityFrog.class, EntityFrog::new).tracker(64, 20, true)); //0x559653, 0xC72C2C
+		reg.reg("lurker", EntityType.Builder.create(EntityLurker.class, EntityLurker::new));
+		reg.reg("gecko", EntityType.Builder.create(EntityGecko.class, EntityGecko::new).tracker(64, 1, true));
+		reg.reg("termite", EntityType.Builder.create(EntityTermite.class, EntityTermite::new));
+		reg.reg("harlequin_toad", EntityType.Builder.create(EntityHarlequinToad.class, EntityHarlequinToad::new));
+		reg.reg("blind_cave_fish", EntityType.Builder.create(EntityBlindCaveFish.class, EntityBlindCaveFish::new));
+		reg.reg("chiromaw", EntityType.Builder.create(EntityChiromaw.class, EntityChiromaw::new));
+		reg.reg("frog", EntityType.Builder.create(EntityFrog.class, EntityFrog::new).tracker(64, 20, true));
 		reg.reg("sword_energy", EntityType.Builder.create(EntitySwordEnergy.class, EntitySwordEnergy::new));
 		reg.reg("shockwave_sword_item", EntityType.Builder.create(EntityShockwaveSwordItem.class, EntityShockwaveSwordItem::new));
 		reg.reg("shockwave_block", EntityType.Builder.create(EntityShockwaveBlock.class, EntityShockwaveBlock::new));
-		reg.reg("shallowbreath", EntityType.Builder.create(EntityShallowbreath.class, EntityShallowbreath::new)); //0xFFB300, 0xFFD000
+		reg.reg("shallowbreath", EntityType.Builder.create(EntityShallowbreath.class, EntityShallowbreath::new));
 		reg.reg("volatile_soul", EntityType.Builder.create(EntityVolatileSoul.class, EntityVolatileSoul::new));
-		reg.reg("tar_beast", EntityType.Builder.create(EntityTarBeast.class, EntityTarBeast::new)); //0x000000, 0x202020
-		reg.reg("silt_crab", EntityType.Builder.create(EntitySiltCrab.class, EntitySiltCrab::new)); //0x086A87, 0xB43104
-		reg.reg("pyrad", EntityType.Builder.create(EntityPyrad.class, EntityPyrad::new).tracker(64, 3, true)); //0x5E4726, 0x2D4231
+		reg.reg("tar_beast", EntityType.Builder.create(EntityTarBeast.class, EntityTarBeast::new));
+		reg.reg("silt_crab", EntityType.Builder.create(EntitySiltCrab.class, EntitySiltCrab::new));
+		reg.reg("pyrad", EntityType.Builder.create(EntityPyrad.class, EntityPyrad::new).tracker(64, 3, true));
 		reg.reg("pyrad_flame", EntityType.Builder.create(EntityPyradFlame.class, EntityPyradFlame::new));
-		reg.reg("peat_mummy", EntityType.Builder.create(EntityPeatMummy.class, EntityPeatMummy::new).tracker(64, 1, true)); //0x524D3A, 0x69463F
-		reg.reg("tarminion", EntityType.Builder.create(EntityTarMinion.class, EntityTarMinion::new).tracker(64, 1, true)); //0x000000, 0x2E2E2E
+		reg.reg("peat_mummy", EntityType.Builder.create(EntityPeatMummy.class, EntityPeatMummy::new).tracker(64, 1, true));
+		reg.reg("tarminion", EntityType.Builder.create(EntityTarMinion.class, EntityTarMinion::new).tracker(64, 1, true));
 		reg.reg("thrown_tarminion", EntityType.Builder.create(EntityThrownTarminion.class, EntityThrownTarminion::new).tracker(64, 10, true));
 		reg.reg("rope_node", EntityType.Builder.create(EntityRopeNode.class, EntityRopeNode::new).tracker(64, 1, true));
 		reg.reg("mummy_arm", EntityType.Builder.create(EntityMummyArm.class, EntityMummyArm::new).tracker(64, 20, false));
 		reg.reg("angry_pebble", EntityType.Builder.create(EntityAngryPebble.class, EntityAngryPebble::new));
-		reg.reg("primordial_malevolence", EntityType.Builder.create(EntityPrimordialMalevolence.class, EntityPrimordialMalevolence::new).tracker(64, 1, true)); //0x000000, 0x00FFFA
+		reg.reg("primordial_malevolence", EntityType.Builder.create(EntityPrimordialMalevolence.class, EntityPrimordialMalevolence::new).tracker(64, 1, true));
 		reg.reg("primordial_malevolence_spawner", EntityType.Builder.create(EntityPrimordialMalevolenceSpawner.class, EntityPrimordialMalevolenceSpawner::new).tracker(64, 20, false));
 		reg.reg("primordial_malevolence_blockade", EntityType.Builder.create(EntityPrimordialMalevolenceBlockade.class, EntityPrimordialMalevolenceBlockade::new).tracker(64, 20, false));
 		reg.reg("primordial_malevolence_projectile", EntityType.Builder.create(EntityPrimordialMalevolenceProjectile.class, EntityPrimordialMalevolenceProjectile::new).tracker(64, 5, true));
@@ -312,11 +360,11 @@ public class EntityRegistry {
 		reg.reg("primordial_malevolence_teleporter", EntityType.Builder.create(EntityPrimordialMalevolenceTeleporter.class, EntityPrimordialMalevolenceTeleporter::new).tracker(64, 5, false));
 		reg.reg("weedwood_rowboat", EntityType.Builder.create(EntityWeedwoodRowboat.class, EntityWeedwoodRowboat::new));
 		reg.reg("bl_elexir", EntityType.Builder.create(EntityElixir.class, EntityElixir::new).tracker(64, 20, true));
-		reg.reg("dreadful_peat_mummy", EntityType.Builder.create(EntityDreadfulPeatMummy.class, EntityDreadfulPeatMummy::new).tracker(64, 1, true)); //0x000000, 0x591E08
+		reg.reg("dreadful_peat_mummy", EntityType.Builder.create(EntityDreadfulPeatMummy.class, EntityDreadfulPeatMummy::new).tracker(64, 1, true));
 		reg.reg("sludge_ball", EntityType.Builder.create(EntitySludgeBall.class, EntitySludgeBall::new).tracker(64, 20, true));
-		reg.reg("smoll_sludge", EntityType.Builder.create(EntitySmollSludge.class, EntitySmollSludge::new)); //0x3A2F0B, 0x5F4C0B
-		reg.reg("greebling", EntityType.Builder.create(EntityGreebling.class, EntityGreebling::new)); //0xD9D7A7, 0xD99830
-		reg.reg("boulder_sprite", EntityType.Builder.create(EntityBoulderSprite.class, EntityBoulderSprite::new)); //0x6f7784, 0x535559
+		reg.reg("smoll_sludge", EntityType.Builder.create(EntitySmollSludge.class, EntitySmollSludge::new));
+		reg.reg("greebling", EntityType.Builder.create(EntityGreebling.class, EntityGreebling::new));
+		reg.reg("boulder_sprite", EntityType.Builder.create(EntityBoulderSprite.class, EntityBoulderSprite::new));
 		reg.reg("spirit_tree_face_small", EntityType.Builder.create(EntitySpiritTreeFaceSmall.class, EntitySpiritTreeFaceSmall::new));
 		reg.reg("spirit_tree_face_large", EntityType.Builder.create(EntitySpiritTreeFaceLarge.class, EntitySpiritTreeFaceLarge::new));
 		reg.reg("tamed_spirit_tree_face", EntityType.Builder.create(EntityTamedSpiritTreeFace.class, EntityTamedSpiritTreeFace::new));
@@ -324,7 +372,7 @@ public class EntityRegistry {
 		reg.reg("root_spike_wave", EntityType.Builder.create(EntityRootSpikeWave.class, EntityRootSpikeWave::new));
 		reg.reg("root_grabber", EntityType.Builder.create(EntityRootGrabber.class, EntityRootGrabber::new));
 		reg.reg("spirit_tree_face_mask", EntityType.Builder.create(EntitySpiritTreeFaceMask.class, EntitySpiritTreeFaceMask::new).tracker(64, 20, false));
-		reg.reg("root_sprite", EntityType.Builder.create(EntityRootSprite.class, EntityRootSprite::new)); //0x686868, 0x9fe530
+		reg.reg("root_sprite", EntityType.Builder.create(EntityRootSprite.class, EntityRootSprite::new));
 		reg.reg("lurker_skin_raft", EntityType.Builder.create(EntityLurkerSkinRaft.class, EntityLurkerSkinRaft::new));
 	}
 }

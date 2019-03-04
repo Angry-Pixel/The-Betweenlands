@@ -7,6 +7,8 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
@@ -110,6 +112,8 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 	private int deathTicks = 0;
 
 	private ISound currentIdleSound;
+	
+	private Object2IntMap<Entity> deflectionDamageCooldowns = new Object2IntOpenHashMap<>();
 
 	public EntityPrimordialMalevolence(World world) {
 		super(EntityRegistry.PRIMORDIAL_MALEVOLENCE, world);
@@ -354,9 +358,9 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 			
 			if(isDeflected) {
 				if(!this.world.isRemote()) {
-					this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_NOPE, SoundCategory.HOSTILE, 1, 1);
+					boolean damaged = false;
 					
-					if(sourceEntity != null) {
+					if(sourceEntity != null && !this.deflectionDamageCooldowns.containsKey(sourceEntity)) {
 						double dx = sourceEntity.posX - this.posX;
 						double dy = sourceEntity.posY - this.posY;
 						double dz = sourceEntity.posZ - this.posZ;
@@ -366,9 +370,12 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 						sourceEntity.motionZ = dz / len * 0.8F;
 						sourceEntity.velocityChanged = sourceEntity.isAirBorne = true;
 						sourceEntity.attackEntityFrom(DamageSource.MAGIC, 2);
+						
+						this.deflectionDamageCooldowns.put(sourceEntity, 10);
+						damaged = true;
 					}
 					
-					if(immediateEntity != null) {
+					if(immediateEntity != null && !this.deflectionDamageCooldowns.containsKey(immediateEntity)) {
 						double dx = immediateEntity.posX - this.posX;
 						double dy = immediateEntity.posY - this.posY;
 						double dz = immediateEntity.posZ - this.posZ;
@@ -378,6 +385,13 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 						immediateEntity.motionZ = dz / len * 0.8F;
 						immediateEntity.velocityChanged = immediateEntity.isAirBorne = true;
 						immediateEntity.attackEntityFrom(DamageSource.MAGIC, 2);
+						
+						this.deflectionDamageCooldowns.put(immediateEntity, 10);
+						damaged = true;
+					}
+					
+					if(damaged) {
+						this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_NOPE, SoundCategory.HOSTILE, 1, 1);
 					}
 				}
 				
@@ -521,6 +535,17 @@ public class EntityPrimordialMalevolence extends EntityMob implements IEntityBL,
 	public void tick() {
 		super.tick();
 
+		Iterator<Object2IntMap.Entry<Entity>> cooldownIt = this.deflectionDamageCooldowns.object2IntEntrySet().iterator();
+		while(cooldownIt.hasNext()) {
+			Object2IntMap.Entry<Entity> entry = cooldownIt.next();
+			
+			if(entry.getIntValue() > 0) {
+				this.deflectionDamageCooldowns.put(entry.getKey(), entry.getIntValue() - 1);
+			} else {
+				cooldownIt.remove();
+			}
+		}
+		
 		EntityPlayer closestPlayer = this.world.getNearestAttackablePlayer(this, 32.0D, 16.0D);
 		if(closestPlayer != null) {
 			this.faceEntity(closestPlayer, 360.0F, 360.0F);

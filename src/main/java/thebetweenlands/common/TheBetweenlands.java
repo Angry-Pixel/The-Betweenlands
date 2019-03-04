@@ -11,6 +11,7 @@ import net.minecraft.world.dimension.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.ModDimension;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModList;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.EntityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.registries.Registries;
@@ -57,12 +59,15 @@ public class TheBetweenlands {
 		//Load config before it is changed
 		//ConfigHelper.loadExistingConfig();
 
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onFingerprintViolation);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupCommon);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setupClient);
+		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 		
-		FMLJavaModLoadingContext.get().getModEventBus().register(BlockRegistry.class);
-		FMLJavaModLoadingContext.get().getModEventBus().register(ItemRegistry.class);
+		modBus.addListener(this::onFingerprintViolation);
+		modBus.addListener(this::setupCommon);
+		modBus.addListener(this::setupClient);
+		
+		modBus.register(BlockRegistry.class);
+		modBus.register(ItemRegistry.class);
+		modBus.register(EntityRegistry.class);
 		
 		instance = this;
 	}
