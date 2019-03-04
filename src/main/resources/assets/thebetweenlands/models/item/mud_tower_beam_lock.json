@@ -1,5 +1,5 @@
 {
-    "parent": "thebetweenlands:block/betweenstone_bricks_lens_inactive",
+    "parent": "thebetweenlands:block/mud_tower_lens_inactive",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

@@ -1,9 +1,9 @@
 {
     "parent": "block/cube",
     "textures": {
-        "0": "thebetweenlands:blocks/betweenstone_bricks_lens",
-        "1": "thebetweenlands:blocks/betweenstone_bricks_eye_active",
-        "particle": "thebetweenlands:blocks/betweenstone_bricks_eye_active"
+        "0": "thebetweenlands:blocks/mud_tower_lens",
+        "1": "thebetweenlands:blocks/mud_tower_eye_inactive",
+        "particle": "thebetweenlands:blocks/mud_tower_eye_inactive"
     },
     "elements": [
         {
