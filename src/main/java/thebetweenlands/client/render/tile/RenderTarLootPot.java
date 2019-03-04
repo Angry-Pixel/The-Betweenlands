@@ -13,7 +13,7 @@ import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.block.container.BlockTarLootPot;
 import thebetweenlands.common.tile.TileEntityLootPot;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 public abstract class RenderTarLootPot extends TileEntitySpecialRenderer<TileEntityLootPot> {
 	private static final ModelTarLootPot1 LOOT_POT = new ModelTarLootPot1();
@@ -29,7 +29,7 @@ public abstract class RenderTarLootPot extends TileEntitySpecialRenderer<TileEnt
 	@Override
 	public void render(TileEntityLootPot te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		EnumLootPot type = this.getType();
-		EnumFacing rotation = TileEntityHelper.getStatePropertySafely(te, BlockTarLootPot.class, BlockLootPot.FACING, EnumFacing.NORTH);
+		EnumFacing rotation = StatePropertyHelper.getStatePropertySafely(te, BlockTarLootPot.class, BlockLootPot.FACING, EnumFacing.NORTH);
 		int offset = 0;
 
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);

@@ -287,15 +287,15 @@ public class ScreenRenderHandler extends Gui {
 
 					EnumHandSide offhand = player.getPrimaryHand().opposite();
 					
-					int yOffset = 0;
+					int posX = 0;
+					int posY = 0;
 
-					for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
-						IInventory inv = capability.getInventory(type);
-
-						boolean isOnOppositeSide = BetweenlandsConfig.GENERAL.equipmentHotbarSide == 1;
-						boolean showOnRightSide = (offhand == EnumHandSide.LEFT) != isOnOppositeSide;
-						
-						int posX;
+					boolean isOnOppositeSide = BetweenlandsConfig.GENERAL.equipmentHotbarSide == 1;
+					boolean showOnRightSide = (offhand == EnumHandSide.LEFT) != isOnOppositeSide;
+					
+					switch(BetweenlandsConfig.GENERAL.equipmentZone) {
+					default:
+					case 0:
 						if(showOnRightSide) {
 							posX = width / 2 + 93;
 							if(isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
@@ -307,8 +307,52 @@ public class ScreenRenderHandler extends Gui {
 								posX -= 30;
 							}
 						}
-						int posY = height + yOffset - 19;
+						posY = height - 19;
+						break;
+					case 1:
+						posX = 0;
+						posY = 0;
+						break;
+					case 2:
+						posX = width - 18;
+						posY = 0;
+						break;
+					case 3:
+						posX = width - 18;
+						posY = height - 18;
+						break;
+					case 4:
+						posX = 0;
+						posY = height - 18;
+						break;
+					case 5:
+						posX = 0;
+						posY = height / 2;
+						break;
+					case 6:
+						posX = width / 2;
+						posY = 0;
+						break;
+					case 7:
+						posX = width - 18;
+						posY = height / 2;
+						break;
+					case 8:
+						posX = width / 2;
+						posY = height - 18;
+						break;
+					}
+					
+					posX += BetweenlandsConfig.GENERAL.equipmentOffsetX;
+					posY += BetweenlandsConfig.GENERAL.equipmentOffsetY;
+					
+					int yOffset = 0;
 
+					for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
+						IInventory inv = capability.getInventory(type);
+
+						int xOffset = 0;
+						
 						boolean hadItem = false;
 
 						for(int i = 0; i < inv.getSizeInventory(); i++) {
@@ -318,7 +362,7 @@ public class ScreenRenderHandler extends Gui {
 								float scale = 1.0F;
 
 								GlStateManager.pushMatrix();
-								GlStateManager.translate(posX, posY, 0);
+								GlStateManager.translate(posX + xOffset, posY + yOffset, 0);
 								GlStateManager.color(1, 1, 1, 1);
 								GlStateManager.enableBlend();
 								GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -338,9 +382,9 @@ public class ScreenRenderHandler extends Gui {
 								GlStateManager.popMatrix();
 
 								if(showOnRightSide) {
-									posX += 8;
+									xOffset += BetweenlandsConfig.GENERAL.equipmentHorizontalSpacing;
 								} else {
-									posX -= 8;
+									xOffset -= BetweenlandsConfig.GENERAL.equipmentHorizontalSpacing;
 								}
 
 								hadItem = true;
@@ -348,7 +392,7 @@ public class ScreenRenderHandler extends Gui {
 						}
 
 						if(hadItem) {
-							yOffset -= 13;
+							yOffset += BetweenlandsConfig.GENERAL.equipmentVerticalSpacing;
 						}
 					}
 				}

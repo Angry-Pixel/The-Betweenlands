@@ -9,7 +9,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.structure.BlockWaystone;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 public class TileEntityWaystone extends TileEntity {
 	private float rotation;
@@ -76,7 +76,7 @@ public class TileEntityWaystone extends TileEntity {
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB aabb = super.getRenderBoundingBox();
 
-		if(TileEntityHelper.getStatePropertySafely(this, BlockWaystone.class, BlockWaystone.ACTIVE, false)) {
+		if(StatePropertyHelper.getStatePropertySafely(this, BlockWaystone.class, BlockWaystone.ACTIVE, false)) {
 			aabb = aabb.grow(5.5f);
 		}
 

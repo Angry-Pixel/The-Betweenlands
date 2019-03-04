@@ -17,7 +17,7 @@ import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.util.ColorUtils;
 import thebetweenlands.util.LightingUtil;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 @SideOnly(Side.CLIENT)
 public class RenderAspectVial extends TileEntitySpecialRenderer<TileEntityAspectVial> {
@@ -28,7 +28,7 @@ public class RenderAspectVial extends TileEntitySpecialRenderer<TileEntityAspect
 
 	@Override
 	public void render(TileEntityAspectVial te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		BlockDentrothyst.EnumDentrothyst type = TileEntityHelper.getStatePropertySafely(te, BlockAspectVial.class, BlockAspectVial.TYPE, EnumDentrothyst.GREEN);
+		BlockDentrothyst.EnumDentrothyst type = StatePropertyHelper.getStatePropertySafely(te, BlockAspectVial.class, BlockAspectVial.TYPE, EnumDentrothyst.GREEN);
 		switch(type) {
 		default:
 		case GREEN:
@@ -42,7 +42,7 @@ public class RenderAspectVial extends TileEntitySpecialRenderer<TileEntityAspect
 		float randX = 0;
 		float randZ = 0;
 		
-		if(TileEntityHelper.getStatePropertySafely(te, BlockAspectVial.class, BlockAspectVial.RANDOM_POSITION, true)) {
+		if(StatePropertyHelper.getStatePropertySafely(te, BlockAspectVial.class, BlockAspectVial.RANDOM_POSITION, true)) {
 			long posRand = (long)(te.getPos().getY() * 224856) ^ (te.getPos().getX() * 3129871) ^ (long)te.getPos().getZ() * 116129781L;
 			posRand = posRand * posRand * 42317861L + posRand * 11L;
 			randX = (((float)(posRand >> 16 & 15L) / 15.0F) - 0.5F) * 0.45F;
