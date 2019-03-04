@@ -346,6 +346,43 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "equipment_visible")
 		@Comment("Whether equipment should be shown on the HUD")
 		public boolean equipmentVisible = true;
+		
+		@Name("equipment_horziontal_spacing")
+		@LangKey(LANG_PREFIX + "equipment_horziontal_spacing")
+		@Comment("Horizontal spacing between equipment items")
+		@RangeInt(min = -32, max = 32)
+		public int equipmentHorizontalSpacing = 8;
+		
+		@Name("equipment_vertical_spacing")
+		@LangKey(LANG_PREFIX + "equipment_vertical_spacing")
+		@Comment("Vertical spacing between equipment items")
+		@RangeInt(min = -32, max = 32)
+		public int equipmentVerticalSpacing = -13;
+		
+		@Name("equipment_zone")
+		@LangKey(LANG_PREFIX + "equipment_zone")
+		@Comment("Zone in which the equipment items are shown on the HUD.\n"
+				+ "0: Hotbar\n"
+				+ "1: Top left\n"
+				+ "2: Top right\n"
+				+ "3: Bottom right\n"
+				+ "4: Bottom left\n"
+				+ "5: Center left\n"
+				+ "6: Center top\n"
+				+ "7: Center right\n"
+				+ "8: Center bottom")
+		@RangeInt(min = 0, max = 8)
+		public int equipmentZone = 0;
+		
+		@Name("equipment_zone_offset_x")
+		@LangKey(LANG_PREFIX + "equipment_zone_offset_x")
+		@Comment("X offset of the equipment items relative to the equipment zone")
+		public int equipmentOffsetX = 0;
+		
+		@Name("equipment_zone_offset_y")
+		@LangKey(LANG_PREFIX + "equipment_zone_offset_y")
+		@Comment("Y offset of the equipment items relative to the equipment zone")
+		public int equipmentOffsetY = 0;
 	}
 
 	@Name("mob_spawning")
