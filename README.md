@@ -42,6 +42,16 @@ If you do not follow these rules your issues will be closed and ignored.
   <img src="http://i.imgur.com/5AgEXax.png">
 </p>
 
+<p align="center"><b>Contributing</b></p>
+
+If you intend to contribute via pull request please read our [contributing instructions](CONTRIBUTING.md).
+
+<br>
+
+<p align="center">
+  <img src="http://i.imgur.com/5AgEXax.png">
+</p>
+
 <p align="center"><b>Common Issues</b></p>
 
 <p align="center">
