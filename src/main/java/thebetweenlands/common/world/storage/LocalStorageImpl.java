@@ -108,6 +108,17 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 
 		return nbt;
 	}
+	
+	@Override
+	public void readInitialPacket(NBTTagCompound nbt) {
+		this.readReferenceChunks(nbt);
+	}
+	
+	@Override
+	public NBTTagCompound writeInitialPacket(NBTTagCompound nbt) {
+		this.writeReferenceChunks(nbt);
+		return nbt;
+	}
 
 	protected final void writeReferenceChunks(NBTTagCompound nbt) {
 		NBTTagList referenceChunkList = new NBTTagList();
