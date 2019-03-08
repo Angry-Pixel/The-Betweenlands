@@ -57,7 +57,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.finish("World_Locations");
 */		
 		timer.start("Pit");
-		generateDecayPit(world, rand, pos.down(43).add(14, 0, 14));
+		generateDecayPit(world, rand, pos.down(44).add(14, 0, 14));
 		timer.finish("Pit");
 
 		timer.finish("Full_Mudgeon");
@@ -178,8 +178,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	public void makeMaze(World world, Random rand, BlockPos pos) {
 		for (int level = 0; level <= 7; level++) {
 			int yy = -6 -(level * 6);
-		/*	if (level == 7) {
-				for(int xx = 0; xx <= 28; xx++) {
+			if (level == 7) {
+			/*	for(int xx = 0; xx <= 28; xx++) {
 					for(int zz = 0; zz <= 28; zz++) {
 						for(int yUp = yy - 2; yUp < yy + 6; yUp++) {
 							world.setBlockState(pos.add(xx, yUp, 0), getMudBricksForLevel(rand, level, yUp), 2);
@@ -191,16 +191,16 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						}
 					}
 				}
-				buildFloor(world, pos.add(0, yy - 3, 0), rand, 7, 7, true, true, level);
+				buildFloor(world, pos.add(0, yy - 3, 0), rand, 7, 7, true, true, level);*/
 				buildRoof(world, pos.add(0, yy - 3, 0).up(8), rand, 7, 7, level);
 			}
-*/
+
 			if (level < 7 && level >= 0)
 				generateMaze(world, rand, pos.add(0, yy, 0), level);
 
-			if (level < 7) {
+			if (level <= 7) {
 				// create STAIRS
-				if (level == 1 || level == 3 || level == 5) { // || level == 7TODO seven won't need this, leaving for now
+				if (level == 1 || level == 3 || level == 5|| level == 7) { // TODO seven won't need this, leaving for now
 					world.setBlockState(pos.add(1, yy + 5, 0), blockHelper.MUD_BRICKS_CLIMBABLE_SOUTH, 2);
 					world.setBlockState(pos.add(27, yy + 0, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
 					world.setBlockState(pos.add(27, yy + 1, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
