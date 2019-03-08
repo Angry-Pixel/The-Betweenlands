@@ -1,21 +1,16 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.Random;
-import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import thebetweenlands.api.storage.LocalRegion;
-import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
@@ -23,15 +18,14 @@ import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
+import thebetweenlands.util.TimeMeasurement;
 
 public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	private SludgeWormMazeMicroBuilds microBuild = new SludgeWormMazeMicroBuilds();
 	private LightTowerBuildParts lightTowerBuild = new LightTowerBuildParts();
-
+	TimeMeasurement timer = new TimeMeasurement();
 	public WorldGenSludgeWormDungeon() {
 		super(true);
 	}
@@ -39,9 +33,18 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
 		//conditions blah, blah...
-		makeMaze(world, rand, pos);
+		timer.start("Full_Mudgeon");
 
+		timer.start("Maze");
+		makeMaze(world, rand, pos);
+		timer.finish("Maze");
+
+		timer.start("Tower");
+		generateTower(world, rand, pos.down().add(12, 0, 12));
+		timer.finish("Tower");
+/*
 		//locations blah, blah, blah...
+		timer.start("World_Locations");
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 		LocationSludgeWormDungeon location = new LocationSludgeWormDungeon(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos));
 		location.addBounds(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 29, pos.getY() - 8 * 6 - 3, pos.getZ() + 29));
@@ -51,7 +54,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		location.setStructurePos(pos);
 		location.setDirty(true);
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
+		timer.finish("World_Locations");
+*/		
+		timer.start("Pit");
+		generateDecayPit(world, rand, pos.down(43).add(14, 0, 14));
+		timer.finish("Pit");
 
+		timer.finish("Full_Mudgeon");
 		return true;
 	}
 
@@ -67,56 +76,57 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		int level2 = 8;
 		int level3 = 16;
 
-		// main
-		for (int i = radiusMud * -1; i <= radiusMud; ++i) {
+/*		for (int i = radiusMud * -1; i <= radiusMud; ++i) {
 			for (int j = radiusMud * -1; j <= radiusMud; ++j) {
 				double dSq = i * i + j * j;
 				if (Math.round(Math.sqrt(dSq)) > radius && Math.round(Math.sqrt(dSq)) <= radiusMud)
 					world.setBlockState(new BlockPos(x + i, y, z + j), blockHelper.MUD, 2);
 			}
 		}
-
+*/
 		for (int yy = y; y + height >= yy; yy++) {
 			for (int i = radius * -1; i <= radius; ++i) {
 				for (int j = radius * -1; j <= radius; ++j) {
 					double dSq = i * i + j * j;
+
 					if (Math.round(Math.sqrt(dSq)) == radius && yy - y < level2)
 						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.PITSTONE_BRICKS, 2);
 
 					if (Math.round(Math.sqrt(dSq)) == radius && yy - y > level2 && yy - y < level3)
 						world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getMudBricksForLevel(rand, 0, 1), 2);
 
-					if (yy == y + level1) {
+					if (yy == y + level1)
 						if (Math.round(Math.sqrt(dSq)) <= radius - 8)
 							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.PITSTONE_TILES, 2);
-						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level1, 0);
-						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level1, 0);
-						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level1, 0);
-						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.WEST, rand, level1, 0);
-					}
 
 					if (yy == y + level2) {
 						if (Math.round(Math.sqrt(dSq)) == radius - 8)
 							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.PITSTONE_TILES, 2);
 						if (Math.round(Math.sqrt(dSq)) == radius)
 							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getRandomBeam(EnumFacing.SOUTH, rand, 0, 0, false), 2);
-						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level2, 0);
-						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level2, 0);
-						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level2, 0);
-						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.WEST, rand, level2, 0);
 					}
 
-					if (yy == y + level3) {
+					if (yy == y + level3)
 						if (Math.round(Math.sqrt(dSq)) == radius)
 							world.setBlockState(new BlockPos(x + i, yy, z + j), blockHelper.getRandomBeam(EnumFacing.SOUTH, rand, 0, 0, false), 2);
-						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level3, 0);
-						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level3, 0);
-						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level3, 0);
-						lightTowerBuild.addTowerFloor(world, pos, EnumFacing.WEST, rand, level3, 0);
-					}
 				}
-			} 
+			}
 		}
+
+		lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level1, 0);
+		lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level1, 0);
+		lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level1, 0);
+		lightTowerBuild.addTowerFloor(world, pos, EnumFacing.WEST, rand, level1, 0);
+
+		lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level2, 0);
+		lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level2, 0);
+		lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level2, 0);
+		lightTowerBuild.addTowerFloor(world, pos, EnumFacing.WEST, rand, level2, 0);
+
+		lightTowerBuild.addTowerFloor(world, pos, EnumFacing.SOUTH, rand, level3, 0);
+		lightTowerBuild.addTowerFloor(world, pos, EnumFacing.EAST, rand, level3, 0);
+		lightTowerBuild.addTowerFloor(world, pos, EnumFacing.NORTH, rand, level3, 0);
+		lightTowerBuild.addTowerFloor(world, pos, EnumFacing.WEST, rand, level3, 0);
 
 		lightTowerBuild.addTowerDoorways(world, pos, EnumFacing.SOUTH, rand, level1, 0);
 		lightTowerBuild.addTowerDoorways(world, pos, EnumFacing.SOUTH, rand, level2, 0);
@@ -145,21 +155,21 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		lightTowerBuild.addLightBeams(world, pos, EnumFacing.SOUTH, rand, level3, 0);
 	}
 
-	private void generateDecayPit(World world, BlockPos pos) {
-		for (int xx = - 16; xx <= 16; xx++) {
-			for (int zz = - 16; zz <= 16; zz++) {
+	private void generateDecayPit(World world, Random rand, BlockPos pos) {
+		for (int xx = - 14; xx <= 14; xx++) {
+			for (int zz = - 14; zz <= 14; zz++) {
 				for (int yy = 0; yy > -16; yy--) {
 					double dSqDome = Math.pow(xx, 2.0D) + Math.pow(zz, 2.0D) + Math.pow(yy, 2.0D);
-					if (Math.round(Math.sqrt(dSqDome)) < 17)
-						if (dSqDome >= Math.pow(15, 2.0D))
+					if (Math.round(Math.sqrt(dSqDome)) < 15)
+						if (dSqDome >= Math.pow(13, 2.0D))
 							world.setBlockState(pos.add(xx, yy, zz), blockHelper.MUD_TILES_DECAY, 2);
 						else
 							world.setBlockToAir(pos.add(xx, yy, zz));
 				
-				if(xx < -12 || xx > 12)
-					world.setBlockToAir(pos.add(xx, yy, zz));
-				if(zz < -12 || zz > 12)
-					world.setBlockToAir(pos.add(xx, yy, zz));
+			//	if(xx < -12 || xx > 12)
+			//		world.setBlockToAir(pos.add(xx, yy, zz));
+				//if(zz < -12 || zz > 12)
+				//	world.setBlockToAir(pos.add(xx, yy, zz));
 				}
 			}
 		}
@@ -168,7 +178,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	public void makeMaze(World world, Random rand, BlockPos pos) {
 		for (int level = 0; level <= 7; level++) {
 			int yy = -6 -(level * 6);
-			if (level == 7) {
+		/*	if (level == 7) {
 				for(int xx = 0; xx <= 28; xx++) {
 					for(int zz = 0; zz <= 28; zz++) {
 						for(int yUp = yy - 2; yUp < yy + 6; yUp++) {
@@ -184,13 +194,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				buildFloor(world, pos.add(0, yy - 3, 0), rand, 7, 7, true, true, level);
 				buildRoof(world, pos.add(0, yy - 3, 0).up(8), rand, 7, 7, level);
 			}
-
+*/
 			if (level < 7 && level >= 0)
 				generateMaze(world, rand, pos.add(0, yy, 0), level);
 
-			if (level <= 7) {
+			if (level < 7) {
 				// create STAIRS
-				if (level == 1 || level == 3 || level == 5 || level == 7) { //TODO seven won't need this, leaving for now
+				if (level == 1 || level == 3 || level == 5) { // || level == 7TODO seven won't need this, leaving for now
 					world.setBlockState(pos.add(1, yy + 5, 0), blockHelper.MUD_BRICKS_CLIMBABLE_SOUTH, 2);
 					world.setBlockState(pos.add(27, yy + 0, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
 					world.setBlockState(pos.add(27, yy + 1, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);

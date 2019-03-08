@@ -1,10 +1,5 @@
 package thebetweenlands.common.item.misc;
 
-import java.util.Random;
-
-
-import net.minecraft.block.state.IBlockState;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
@@ -12,21 +7,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
-
-import thebetweenlands.common.block.farming.BlockGenericDugSoil;
-import thebetweenlands.common.tile.TileEntityDugSoil;
-import thebetweenlands.common.world.gen.feature.WorldGenSmallSpiritTree;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallPortal;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallRuins;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTree;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 
 
 //MINE!!
@@ -113,8 +95,8 @@ public class TestItemChimp extends Item {
 		*/
 			WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 			//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
-			//dungeon.generate(worldIn, itemRand, pos);
-			dungeon.generateTower(worldIn, itemRand, pos);
+			dungeon.generate(worldIn, itemRand, pos.up(58).add(3, 0, 3));
+			//dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
 
 		/*
 			WorldGenNibbletwigTree tree = new WorldGenNibbletwigTree();
