@@ -7,6 +7,8 @@ import net.minecraft.inventory.IInventory;
 public enum EnumEquipmentInventory {
 	MISC(3, 32), AMULET(1, 3), RING(2, 2);
 
+	public static final EnumEquipmentInventory[] VALUES = EnumEquipmentInventory.values();
+
 	/**
 	 * The ID of this inventory
 	 */
