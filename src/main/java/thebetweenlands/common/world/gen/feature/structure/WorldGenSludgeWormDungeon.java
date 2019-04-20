@@ -42,6 +42,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.start("Tower");
 		generateTower(world, rand, pos.down().add(12, 0, 12));
 		timer.finish("Tower");
+
 /*
 		//locations blah, blah, blah...
 		timer.start("World_Locations");
@@ -153,6 +154,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		lightTowerBuild.addLightBeams(world, pos, EnumFacing.SOUTH, rand, level1, 0);
 		lightTowerBuild.addLightBeams(world, pos, EnumFacing.SOUTH, rand, level2, 0);
 		lightTowerBuild.addLightBeams(world, pos, EnumFacing.SOUTH, rand, level3, 0);
+		
+		lightTowerBuild.buildsMazeGate(world, pos.add(12, 0, 10), EnumFacing.WEST, rand, level1, 0);
+		
 	}
 
 	private void generateDecayPit(World world, Random rand, BlockPos pos) {
