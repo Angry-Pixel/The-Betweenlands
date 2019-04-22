@@ -67,6 +67,7 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_4 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_4);
 	public IBlockState WORM_DUNGEON_PILLAR_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_VERTICAL_DECAY_FULL);
 	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_FULL);
+	public IBlockState MUD_BRICKS_SPAWNER_HOLE = BlockRegistry.MUD_BRICKS_SPAWNER_HOLE.getDefaultState();
 
 	public IBlockState MUD_TILES = BlockRegistry.MUD_TILES.getDefaultState();
 	public IBlockState MUD_TILES_DECAY = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY);
@@ -342,7 +343,12 @@ public class SludgeWormMazeBlockHelper {
 			if(layer == 3)
 				return WORM_DUNGEON_PILLAR_TOP_DECAY_FULL;
 		case 7:
-			return null;
+			if(layer == 1)
+				return WORM_DUNGEON_PILLAR_DECAY_FULL;
+			if(layer == 2)
+				return WORM_DUNGEON_PILLAR_DECAY_4;
+			if(layer == 3)
+				return WORM_DUNGEON_PILLAR_TOP_DECAY_FULL;
 		}
 		return WORM_DUNGEON_PILLAR;
 	}
