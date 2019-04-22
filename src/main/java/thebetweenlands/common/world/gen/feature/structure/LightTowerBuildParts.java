@@ -21,6 +21,29 @@ public class LightTowerBuildParts {
 	public LightTowerBuildParts() {
 	}
 	
+	public void buildPitEntrance(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		rotatedCubeVolume(world, rand, pos, -7, 12 + level, 4, blockHelper.getMudBricksForLevel(rand, 7, 1), 1, 1, 4, facing);
+		rotatedCubeVolume(world, rand, pos, -7, 13 + level, 4, blockHelper.getMudBricksForLevel(rand, 7, 2), 1, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, -7, 14 + level, 4, blockHelper.getMudBricksForLevel(rand, 7, 3), 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, -7, 15 + level, 4, blockHelper.getMudBricksForLevel(rand, 7, 1), 1, 1, 3, facing);
+
+		rotatedCubeVolume(world, rand, pos, -7, 12 + level, 3, blockHelper.getMudBricksForLevel(rand, 7, 1), 5, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -7, 13 + level, 3, blockHelper.getMudBricksForLevel(rand, 7, 2), 5, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -7, 14 + level, 3, blockHelper.getMudBricksForLevel(rand, 7, 3), 5, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -7, 15 + level, 3, blockHelper.getMudBricksForLevel(rand, 7, 1), 5, 1, 1, facing);
+
+		rotatedCubeVolume(world, rand, pos, -3, 12 + level, 4, blockHelper.getMudBricksForLevel(rand, 7, 1), 1, 1, 10, facing);
+		rotatedCubeVolume(world, rand, pos, -3, 13 + level, 4, blockHelper.getMudBricksForLevel(rand, 7, 2), 1, 1, 10, facing);
+		rotatedCubeVolume(world, rand, pos, -3, 14 + level, 4, blockHelper.getMudBricksForLevel(rand, 7, 3), 1, 1, 10, facing);
+		rotatedCubeVolume(world, rand, pos, -3, 15 + level, 4, blockHelper.getMudBricksForLevel(rand, 7, 1), 1, 1, 10, facing);
+
+		rotatedCubeVolume(world, rand, pos, -4, 15 + level, 5, blockHelper.getStairsForLevel(rand, 7, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 6, facing);
+
+		rotatedCubeVolume(world, rand, pos, -6, 12 + level, 7, Blocks.AIR.getDefaultState(), 3, 3, 4, facing);
+		rotatedCubeVolume(world, rand, pos, -7, 11 + level, 3, blockHelper.MUD_TILES_DECAY, 5, 1, 7, facing);
+		rotatedCubeVolume(world, rand, pos, -4, 11 + level, 10, blockHelper.MUD_TILES_DECAY, 2, 1, 2, facing);
+	}
+
 	public void buildsMazeGate(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
 		rotatedCubeVolume(world, rand, pos, 1, 0 + level, -2, blockHelper.getMudBricksForLevel(rand, 0, 0), 6, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 0 + level, -4, blockHelper.getMudBricksForLevel(rand, 0, 0), 6, 1, 1, facing);

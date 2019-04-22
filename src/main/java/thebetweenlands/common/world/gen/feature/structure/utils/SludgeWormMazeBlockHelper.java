@@ -251,7 +251,12 @@ public class SludgeWormMazeBlockHelper {
 			if(layer == 3)
 				return MUD_BRICKS_CARVED_EDGE_DECAY_4;
 		case 7:
-			return MUD_BRICKS;
+			if(layer == 1)
+				return MUD_BRICKS_DECAY_4;
+			if(layer == 2)
+				return MUD_BRICKS_CARVED_DECAY_4;
+			if(layer == 3)
+				return MUD_BRICKS_CARVED_EDGE_DECAY_4;
 		}
 		return MUD_BRICKS;
 	}
@@ -446,10 +451,8 @@ public class SludgeWormMazeBlockHelper {
 				state = MUD_BRICK_STAIRS_DECAY_3;
 			break;
 		case 6:
-			state = MUD_BRICK_STAIRS_DECAY_3;
-			break;
 		case 7:
-			state = MUD_BRICK_STAIRS;
+			state = MUD_BRICK_STAIRS_DECAY_3;
 			break;
 		}
 		return state.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, half);

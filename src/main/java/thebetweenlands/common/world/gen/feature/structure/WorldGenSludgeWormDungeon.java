@@ -42,7 +42,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.start("Tower");
 		generateTower(world, rand, pos.down().add(12, 0, 12));
 		timer.finish("Tower");
-
 /*
 		//locations blah, blah, blah...
 		timer.start("World_Locations");
@@ -60,6 +59,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.start("Pit");
 		generateDecayPit(world, rand, pos.down(44).add(14, 0, 14));
 		timer.finish("Pit");
+		
+		generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
 
 		timer.finish("Full_Mudgeon");
 		return true;
@@ -150,13 +151,12 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.WEST, rand, level1, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.SOUTH, rand, level2, 0, false);
 		lightTowerBuild.buildsSpiralStairPart(world, pos, EnumFacing.EAST, rand, level3, 0, true);
-		
+
 		lightTowerBuild.addLightBeams(world, pos, EnumFacing.SOUTH, rand, level1, 0);
 		lightTowerBuild.addLightBeams(world, pos, EnumFacing.SOUTH, rand, level2, 0);
 		lightTowerBuild.addLightBeams(world, pos, EnumFacing.SOUTH, rand, level3, 0);
-		
+
 		lightTowerBuild.buildsMazeGate(world, pos.add(12, 0, 10), EnumFacing.WEST, rand, level1, 0);
-		
 	}
 
 	private void generateDecayPit(World world, Random rand, BlockPos pos) {
@@ -177,6 +177,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				}
 			}
 		}
+	}
+
+	public void generateDecayPitEntrance(World world, Random rand, BlockPos pos) {
+		lightTowerBuild.buildPitEntrance(world, pos, EnumFacing.EAST, rand, 0, 0);
 	}
 
 	public void makeMaze(World world, Random rand, BlockPos pos) {
@@ -206,11 +210,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				// create STAIRS
 				if (level == 1 || level == 3 || level == 5|| level == 7) { // TODO seven won't need this, leaving for now
 					world.setBlockState(pos.add(1, yy + 5, 0), blockHelper.MUD_BRICKS_CLIMBABLE_SOUTH, 2);
-					world.setBlockState(pos.add(27, yy + 0, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
-					world.setBlockState(pos.add(27, yy + 1, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
-					world.setBlockState(pos.add(27, yy + 2, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
-					world.setBlockState(pos.add(27, yy + 3, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
-					world.setBlockState(pos.add(27, yy + 4, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
+					if (level != 7) {
+						world.setBlockState(pos.add(27, yy + 0, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
+						world.setBlockState(pos.add(27, yy + 1, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
+						world.setBlockState(pos.add(27, yy + 2, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
+						world.setBlockState(pos.add(27, yy + 3, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
+						world.setBlockState(pos.add(27, yy + 4, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
+					}
 					world.setBlockState(pos.add(1, yy + 1, 1), getMudBricksForLevel(rand, level, 1), 2);
 					world.setBlockState(pos.add(1, yy + 2, 1), getMudBricksForLevel(rand, level, 2), 2);
 					world.setBlockState(pos.add(1, yy + 3, 1), getMudBricksForLevel(rand, level, 3), 2);
