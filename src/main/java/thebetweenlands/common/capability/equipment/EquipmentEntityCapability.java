@@ -170,17 +170,10 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 
 	@Override
 	public void tickInventories() {
-		for(EnumEquipmentInventory invType : EnumEquipmentInventory.VALUES) {
-			// Avoids instantiating inventories if they have not been lazily initialized yet
-			IInventory inventory = this.inventories.get(invType);
-
+		for(IInventory inventory : this.inventories.values()) {
 			// Also doubles as a null check!
 			if(inventory instanceof ITickable) {
 				((ITickable) inventory).update();
-			}
-
-			if(inventory.isEmpty()) {
-				this.inventories.remove(invType);
 			}
 		}
 	}
