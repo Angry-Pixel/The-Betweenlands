@@ -136,15 +136,17 @@ public class ItemRingOfSummoning extends ItemRing {
 	public static boolean isRingActive(Entity entity) {
 		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-			IInventory inv = cap.getInventory(EnumEquipmentInventory.RING);
+			IInventory inv = cap.getInventoryIfPresent(EnumEquipmentInventory.RING);
 
 			boolean hasRing = false;
 
-			for(int i = 0; i < inv.getSizeInventory(); i++) {
-				ItemStack stack = inv.getStackInSlot(i);
-				if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_SUMMONING && ((ItemRing) stack.getItem()).canBeUsed(stack)) {
-					hasRing = true;
-					break;
+			if (inv != null) {
+				for(int i = 0; i < inv.getSizeInventory(); i++) {
+					ItemStack stack = inv.getStackInSlot(i);
+					if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_SUMMONING && ((ItemRing) stack.getItem()).canBeUsed(stack)) {
+						hasRing = true;
+						break;
+					}
 				}
 			}
 

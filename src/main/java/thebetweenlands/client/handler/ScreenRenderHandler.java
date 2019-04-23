@@ -349,7 +349,11 @@ public class ScreenRenderHandler extends Gui {
 					int yOffset = 0;
 
 					for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
-						IInventory inv = capability.getInventory(type);
+						IInventory inv = capability.getInventoryIfPresent(type);
+
+						if (inv == null) {
+							continue;
+						}
 
 						int xOffset = 0;
 						

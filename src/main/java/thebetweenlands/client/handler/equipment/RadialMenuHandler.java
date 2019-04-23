@@ -160,7 +160,10 @@ public class RadialMenuHandler {
 
 				//Unequippable items
 				for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
-					IInventory inv = cap.getInventory(type);
+					IInventory inv = cap.getInventoryIfPresent(type);
+					if (inv == null) {
+						continue;
+					}
 
 					for(int i = 0; i < inv.getSizeInventory(); i++) {
 						ItemStack stack = inv.getStackInSlot(i);

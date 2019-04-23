@@ -96,10 +96,12 @@ public interface IEquippable {
 			public float apply(ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
 				if(stack.getItem() instanceof IEquippable && entity != null && entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 					IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-					IInventory inv = cap.getInventory(((IEquippable) stack.getItem()).getEquipmentCategory(stack));
-					for(int i = 0; i < inv.getSizeInventory(); i++) {
-						if(stack == inv.getStackInSlot(i)) {
-							return 1;
+					IInventory inv = cap.getInventoryIfPresent(((IEquippable) stack.getItem()).getEquipmentCategory(stack));
+					if (inv != null) {
+						for(int i = 0; i < inv.getSizeInventory(); i++) {
+							if(stack == inv.getStackInSlot(i)) {
+								return 1;
+							}
 						}
 					}
 				}

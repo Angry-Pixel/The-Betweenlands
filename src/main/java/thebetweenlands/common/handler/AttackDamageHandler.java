@@ -133,21 +133,23 @@ public class AttackDamageHandler {
 
 			if(attacker.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				IEquipmentCapability cap = attacker.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-				IInventory inv = cap.getInventory(EnumEquipmentInventory.RING);
-				int rings = 0;
+				IInventory inv = cap.getInventoryIfPresent(EnumEquipmentInventory.RING);
+				if (inv != null) {
+					int rings = 0;
 
-				for(int i = 0; i < inv.getSizeInventory(); i++) {
-					ItemStack stack = inv.getStackInSlot(i);
-					if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_POWER) {
-						rings++;
+					for(int i = 0; i < inv.getSizeInventory(); i++) {
+						ItemStack stack = inv.getStackInSlot(i);
+						if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_POWER) {
+							rings++;
+						}
 					}
-				}
 
-				if(rings > 0) {
-					TheBetweenlands.networkWrapper.sendToAllAround(new MessagePowerRingParticles(attackedEntity), new TargetPoint(attackedEntity.dimension, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 32.0D));
-				}
+					if(rings > 0) {
+						TheBetweenlands.networkWrapper.sendToAllAround(new MessagePowerRingParticles(attackedEntity), new TargetPoint(attackedEntity.dimension, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 32.0D));
+					}
 
-				damage *= 1.0F + 0.5F * rings;
+					damage *= 1.0F + 0.5F * rings;
+				}
 			}
 		}
 

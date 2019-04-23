@@ -7,8 +7,6 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -125,7 +123,10 @@ public class ItemAmulet extends Item implements IEquippable {
 		
 		if (entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-			IInventory inv = cap.getInventory(EnumEquipmentInventory.AMULET);
+			IInventory inv = cap.getInventoryIfPresent(EnumEquipmentInventory.AMULET);
+			if (inv == null) {
+				return;
+			}
 			List<ItemStack> items = new ArrayList<ItemStack>(inv.getSizeInventory());
 
 			for (int i = 0; i < inv.getSizeInventory(); i++) {

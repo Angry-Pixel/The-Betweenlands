@@ -37,12 +37,14 @@ public class TMGEquipmentInventory extends AbstractSpecialInventory {
             EnumEquipmentInventory[] equipmentInventories = EnumEquipmentInventory.values();
 
             for (EnumEquipmentInventory type : equipmentInventories) {
-                IInventory inv = equipmentCapability.getInventory(type);
+                IInventory inv = equipmentCapability.getInventoryIfPresent(type);
 
-                NBTTagList tagList = SpecialInventoryHelper.getTagListFromIInventory(inv);
-                if (tagList != null) {
-                    compound.setTag(type.ordinal() + "", tagList);
-                    setTag = true;
+                if (inv != null) {
+                    NBTTagList tagList = SpecialInventoryHelper.getTagListFromIInventory(inv);
+                    if (tagList != null) {
+                        compound.setTag(type.ordinal() + "", tagList);
+                        setTag = true;
+                    }
                 }
             }
 

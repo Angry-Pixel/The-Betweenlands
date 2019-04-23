@@ -172,12 +172,14 @@ public class ItemRingOfFlight extends ItemRing {
 
 					if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 						IEquipmentCapability equipmentCap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-						IInventory inv = equipmentCap.getInventory(EnumEquipmentInventory.RING);
-						for(int i = 0; i < inv.getSizeInventory(); i++) {
-							ItemStack stack = inv.getStackInSlot(i);
-							if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_FLIGHT) {
-								flightRing = stack;
-								break;
+						IInventory inv = equipmentCap.getInventoryIfPresent(EnumEquipmentInventory.RING);
+						if (inv != null) {
+							for(int i = 0; i < inv.getSizeInventory(); i++) {
+								ItemStack stack = inv.getStackInSlot(i);
+								if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_FLIGHT) {
+									flightRing = stack;
+									break;
+								}
 							}
 						}
 					}

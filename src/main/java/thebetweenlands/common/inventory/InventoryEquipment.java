@@ -160,7 +160,7 @@ public class InventoryEquipment implements IInventory, ITickable {
         for (int i = 0; i < this.inventory.size(); i++) {
             ItemStack stack = this.inventory.get(i);
 
-            if (!stack.isEmpty() && stack.getItem() instanceof IEquippable) {
+            if (stack.getItem() instanceof IEquippable) {
                 ((IEquippable) stack.getItem()).onEquipmentTick(stack, this.capability.getEntity(), this);
             }
         }

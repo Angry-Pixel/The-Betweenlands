@@ -1,6 +1,7 @@
 package thebetweenlands.api.capability;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,4 +56,23 @@ public interface IEquipmentCapability {
 	 * @param slots
 	 */
 	public void setAmuletSlots(int slots);
+
+	/**
+	 * Performs a tick for all {@link ITickable} inventories. Called for every entity with this capability
+	 * on {@link net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent}.
+	 */
+	void tickInventories();
+
+	/**
+	 * Returns the inventory for the specified type if it has been lazily initialized. This is useful for avoiding
+	 * instantiation when we're only querying in render code or on tick. This should be used instead of
+	 * {@link IEquipmentCapability#getInventory(EnumEquipmentInventory)} when not modifying an inventory.
+	 *
+	 * See {@link IEquipmentCapability#getInventory(EnumEquipmentInventory)} for additional information.
+	 * 
+ 	 * @param type The {@link EnumEquipmentInventory} of the inventory
+	 * @return The inventory belonging to {@param type} if it has been lazily initialized, otherwise null
+	 */
+	@Nullable
+	IInventory getInventoryIfPresent(EnumEquipmentInventory type);
 }

@@ -10,17 +10,21 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.ISerializableCapability;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.inventory.InventoryEquipment;
 import thebetweenlands.common.inventory.InventoryEquipmentAmulets;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
+
+import javax.annotation.Nullable;
 
 public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityCapability, IEquipmentCapability, EntityPlayer> implements IEquipmentCapability, ISerializableCapability {
 	private Map<EnumEquipmentInventory, NonNullList<ItemStack>> allInventoryStacks = new EnumMap<>(EnumEquipmentInventory.class);
@@ -162,5 +166,28 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 	@Override
 	public void setAmuletSlots(int slots) {
 		this.amuletSlots = slots;
+	}
+
+	@Override
+	public void tickInventories() {
+		for(EnumEquipmentInventory invType : EnumEquipmentInventory.VALUES) {
+			// Avoids instantiating inventories if they have not been lazily initialized yet
+			IInventory inventory = this.inventories.get(invType);
+
+			// Also doubles as a null check!
+			if(inventory instanceof ITickable) {
+				((ITickable) inventory).update();
+			}
+
+			if(inventory.isEmpty()) {
+				this.inventories.remove(invType);
+			}
+		}
+	}
+
+	@Nullable
+	@Override
+	public IInventory getInventoryIfPresent(EnumEquipmentInventory type) {
+		return this.inventories.get(type);
 	}
 }

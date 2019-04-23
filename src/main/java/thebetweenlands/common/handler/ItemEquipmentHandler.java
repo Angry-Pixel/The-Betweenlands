@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
@@ -33,13 +32,7 @@ public class ItemEquipmentHandler {
 			return;
 		}
 
-		for(EnumEquipmentInventory invType : EnumEquipmentInventory.VALUES) {
-			IInventory inventory = cap.getInventory(invType);
-
-			if(inventory instanceof ITickable) {
-				((ITickable) inventory).update();
-			}
-		}
+		cap.tickInventories();
 	}
 
 
@@ -157,7 +150,11 @@ public class ItemEquipmentHandler {
 				IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 
 				for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
-					IInventory inv = cap.getInventory(type);
+					IInventory inv = cap.getInventoryIfPresent(type);
+
+					if (inv == null) {
+						continue;
+					}
 
 					for(int i = 0; i < inv.getSizeInventory(); i++) {
 						ItemStack stack = inv.getStackInSlot(i);

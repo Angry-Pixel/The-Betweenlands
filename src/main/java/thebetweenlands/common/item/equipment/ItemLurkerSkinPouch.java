@@ -79,12 +79,14 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
     public static ItemStack getFirstPouch(EntityPlayer player) {
         if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
             IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-            IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
+            IInventory inv = cap.getInventoryIfPresent(EnumEquipmentInventory.MISC);
 
-            for (int i = 0; i < inv.getSizeInventory(); i++) {
-                ItemStack stack = inv.getStackInSlot(i);
-                if (!stack.isEmpty() && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
-                    return stack;
+            if (inv != null) {
+                for (int i = 0; i < inv.getSizeInventory(); i++) {
+                    ItemStack stack = inv.getStackInSlot(i);
+                    if (!stack.isEmpty() && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+                        return stack;
+                    }
                 }
             }
         }
@@ -186,17 +188,19 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 	private static void renderPouch(EntityPlayer player, double x, double y, double z, float partialTicks) {
 		if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 			IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-			IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
+			IInventory inv = cap.getInventoryIfPresent(EnumEquipmentInventory.MISC);
 
 			ItemStack pouch = null;
 
-			for(int i = 0; i < inv.getSizeInventory(); i++) {
-				ItemStack stack = inv.getStackInSlot(i);
-				if(stack != null && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
-					pouch = stack;
-					break;
-				}
-			}
+			if (inv != null) {
+                for(int i = 0; i < inv.getSizeInventory(); i++) {
+                    ItemStack stack = inv.getStackInSlot(i);
+                    if(stack != null && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+                        pouch = stack;
+                        break;
+                    }
+                }
+            }
 
 			if(pouch != null) {
 				TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
