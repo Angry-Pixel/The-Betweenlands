@@ -581,6 +581,11 @@ public class BlockRegistry {
 	public static final Block LOG_ROTTEN_BARK_CARVED_15 = new BlockRottenBarkCarved();
 	public static final Block LOG_ROTTEN_BARK_CARVED_16 = new BlockRottenBarkCarved();
 	public static final Block ENERGY_BARRIER_MUD = new BlockEnergyBarrierMud();
+	
+	//Place-Holders for stuffs and things
+	public static final Block MUD_TOWER_BRAZIER = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block DECAY_PIT_STATUE_WINDER = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block DECAY_PIT_CAPSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 
 	//Winter Event
     public static final Block PRESENT = new BlockPresent();
