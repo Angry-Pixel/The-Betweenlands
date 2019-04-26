@@ -1082,6 +1082,7 @@ entity.thebetweenlands.spirit_tree_face_mask.name=Spirit Tree Face Mask
 entity.thebetweenlands.root_sprite.name=Root Sprite
 entity.thebetweenlands.greebling.name=Greebling
 entity.thebetweenlands.lurker_skin_raft.name=Lurker Skin Raft
+entity.thebetweenlands.crypt_crawler.name=Crypt Crawler
 
 
 # Equipment

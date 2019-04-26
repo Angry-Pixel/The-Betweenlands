@@ -18,6 +18,7 @@ import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
 import thebetweenlands.common.entity.mobs.EntityDarkLight;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
@@ -141,6 +142,7 @@ public class EntityRegistry {
 		
 		registerEntity(EntityShambler.class, "shambler", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityWallLamprey.class, "wall_lamprey", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityCryptCrawler.class, "crypt_crawler", 0x0B3B0B, 0xDBA901);
 
 	}
 
