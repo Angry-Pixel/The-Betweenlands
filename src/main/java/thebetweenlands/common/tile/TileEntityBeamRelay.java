@@ -12,12 +12,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.structure.BlockBeamOrigin;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.block.structure.BlockEnergyBarrierMud;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class TileEntityBeamRelay extends TileEntity implements ITickable {
 	public boolean active;
@@ -95,18 +97,21 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 	public void deactivateBlock() {
 		IBlockState state = getWorld().getBlockState(getPos());
 		EnumFacing facing = state.getValue(BlockBeamRelay.FACING);
+		if (state.getValue(BlockBeamOrigin.POWERED)) {
+			getWorld().setBlockState(getPos(), BlockRegistry.MUD_TOWER_BEAM_RELAY.getDefaultState().withProperty(BlockBeamRelay.FACING, facing).withProperty(BlockBeamRelay.POWERED, false));
 
-		BlockPos targetPos = getPos().offset(facing, getDistanceToObstruction(facing));
-		IBlockState stateofTarget = getWorld().getBlockState(targetPos);
-		if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
-			if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {
-				TileEntityBeamRelay targetTile = (TileEntityBeamRelay) getWorld().getTileEntity(targetPos);
-				targetTile.setTargetIncomingBeam(facing.getOpposite(), false);
-				if (!targetTile.isGettingBeamed())
-					if (getWorld().getBlockState(targetPos).getValue(BlockBeamRelay.POWERED)) {
-						stateofTarget = stateofTarget.cycleProperty(BlockBeamRelay.POWERED);
-						getWorld().setBlockState(targetPos, stateofTarget, 3);
-					}
+			BlockPos targetPos = getPos().offset(facing, getDistanceToObstruction(facing));
+			IBlockState stateofTarget = getWorld().getBlockState(targetPos);
+			if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
+				if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {
+					TileEntityBeamRelay targetTile = (TileEntityBeamRelay) getWorld().getTileEntity(targetPos);
+					targetTile.setTargetIncomingBeam(facing.getOpposite(), false);
+					if (!targetTile.isGettingBeamed())
+						if (getWorld().getBlockState(targetPos).getValue(BlockBeamRelay.POWERED)) {
+							stateofTarget = stateofTarget.cycleProperty(BlockBeamRelay.POWERED);
+							getWorld().setBlockState(targetPos, stateofTarget, 3);
+						}
+				}
 			}
 		}
 	}

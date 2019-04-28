@@ -1,16 +1,6 @@
 {
     "variants": {
-        "facing=down,powered=false": { "model": "thebetweenlands:mud_tower_lens_inactive", "x": 270 },
-        "facing=up,powered=false": { "model": "thebetweenlands:mud_tower_lens_inactive", "x": 90 },
-        "facing=north,powered=false": { "model": "thebetweenlands:mud_tower_lens_inactive", "y": 180 },
-        "facing=south,powered=false": { "model": "thebetweenlands:mud_tower_lens_inactive" },
-        "facing=west,powered=false":  { "model": "thebetweenlands:mud_tower_lens_inactive", "y": 90},
-        "facing=east,powered=false":  { "model": "thebetweenlands:mud_tower_lens_inactive" , "y": 270 },
-        "facing=down,powered=true": { "model": "thebetweenlands:mud_tower_lens_active", "x": 270 },
-        "facing=up,powered=true": { "model": "thebetweenlands:mud_tower_lens_active", "x": 90 },
-        "facing=north,powered=true": { "model": "thebetweenlands:mud_tower_lens_active", "y": 180 },
-        "facing=south,powered=true": { "model": "thebetweenlands:mud_tower_lens_active" },
-        "facing=west,powered=true":  { "model": "thebetweenlands:mud_tower_lens_active", "y": 90},
-        "facing=east,powered=true":  { "model": "thebetweenlands:mud_tower_lens_active" , "y": 270 }
+        "powered=false": { "model": "thebetweenlands:mud_tower_lens_inactive", "x": 270 },
+        "powered=true": { "model": "thebetweenlands:mud_tower_lens_active", "x": 270 }
     }
 }
