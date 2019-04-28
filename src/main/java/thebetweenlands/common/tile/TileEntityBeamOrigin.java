@@ -113,6 +113,7 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 
 		if (getWorld().getTotalWorldTime() % 10 == 0)
 			sendParticleMessage(facing);
+
 		if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
 			if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {
 				TileEntityBeamRelay targetTile = (TileEntityBeamRelay) getWorld().getTileEntity(targetPos);
