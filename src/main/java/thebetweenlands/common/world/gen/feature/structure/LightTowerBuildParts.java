@@ -13,6 +13,7 @@ import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.block.terrain.BlockRottenLog;
+import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
 public class LightTowerBuildParts {
@@ -61,8 +62,12 @@ public class LightTowerBuildParts {
 	}
 
 	public void buildsMazeGate(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		
 		rotatedCubeVolume(world, rand, pos, 1, 0 + level, -2, blockHelper.getMudBricksForLevel(rand, 0, 0), 6, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, 0 + level, -4, blockHelper.getMudBricksForLevel(rand, 0, 0), 6, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 0 + level, -4, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0 + level, -4, blockHelper.getMudBricksForLevel(rand, 0, 0), 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 0 + level, -4, blockHelper.getTilesForLevel(rand, 0), 3, 1, 1, facing);
+		
 		rotatedCubeVolume(world, rand, pos, 4, 0 + level, -1, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 4, 0 + level, 0, blockHelper.getMudSlabsForLevel(rand, 0, BlockSlabBetweenlands.EnumBlockHalfBL.BOTTOM), 2, 1, 4, facing);
 		rotatedCubeVolume(world, rand, pos, 4, 4 + level, -3, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 4, 1, facing);
@@ -159,6 +164,16 @@ public class LightTowerBuildParts {
 		rotatedCubeVolume(world, rand, pos, 5, 5 + level, -4, blockHelper.getStairsForLevel(rand, 0, facing.rotateY(), BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 5, 6 + level, -4, blockHelper.getStairsForLevel(rand, 0, facing.rotateY(), BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 3, 1 + level, -4, blockHelper.MUD_BRICK_WALL, 3, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 0 + level, -3, Blocks.AIR.getDefaultState(), 3, 1, 1, facing);  //Not sure if this is needed
+
+		world.setBlockState(pos.add(3, 2 + level, 4), blockHelper.DUNGEON_DOOR_WEST, 2);
+		TileEntityDungeonDoorRunes tileLock = (TileEntityDungeonDoorRunes) world.getTileEntity(pos.add(3, 2 + level, 4));
+		if (tileLock instanceof TileEntityDungeonDoorRunes) {
+			tileLock.top_code = 1;
+			tileLock.mid_code = 1;
+			tileLock.bottom_code = 1;
+			tileLock.is_in_dungeon = true;
+		}
 	}
 
 	public void buildsSpiralStairPart(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer, boolean topEnd) {
@@ -313,6 +328,7 @@ public class LightTowerBuildParts {
 
 	public void addTowerFloor(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
 		if (level == 0 || level == 8) {
+			rotatedCubeVolume(world, rand, pos, 0, 1 + level, 0, blockHelper.ENERGY_BARRIER_MUD, 1, 7, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 8, 0 + level, 0, blockHelper.getStairsForTowerLevel(rand, level, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.BOTTOM, level == 0 ? false : true), 1, 1, 3, facing);
 			rotatedCubeVolume(world, rand, pos, 7, 0 + level, 2, blockHelper.getStairsForTowerLevel(rand, level, facing, BlockStairsBetweenlands.EnumHalf.BOTTOM, level == 0 ? false : true), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 7, 0 + level, 3, blockHelper.getStairsForTowerLevel(rand, level, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.BOTTOM, level == 0 ? false : true), 1, 1, 2, facing);
@@ -368,7 +384,15 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, -4, 0 + level, 2, blockHelper.getRandomBeam(facing, rand, level, 0, false), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -3, 0 + level, 5, blockHelper.LOG_ROTTEN_BARK.withProperty(BlockRottenLog.LOG_AXIS, BlockRottenLog.EnumAxis.fromFacingAxis(facing.getAxis())), 1, 1, 3, facing);
 			rotatedCubeVolume(world, rand, pos, -7, 0 + level, 3, blockHelper.LOG_ROTTEN_BARK.withProperty(BlockRottenLog.LOG_AXIS, BlockRottenLog.EnumAxis.fromFacingAxis(facing.rotateY().getAxis())), 3, 1, 1, facing);
+
 			rotatedCubeVolume(world, rand, pos, -3, 0 + level, 3, blockHelper.SCABYST_PITSTONE_DOTTED, 1, 1, 1, facing); //braziers go above this
+			rotatedCubeVolume(world, rand, pos, -3, 1 + level, 3, blockHelper.BRAZIER_BOTTOM, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -3, 2 + level, 3, blockHelper.BRAZIER_TOP, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -3, 3 + level, 3, blockHelper.PEAT, 1, 1, 1, facing); 
+			rotatedCubeVolume(world, rand, pos, -4, 1 + level, 3, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -4, 2 + level, 3, blockHelper.getStairsForTowerLevel(rand, level, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.BOTTOM, true), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -5, 1 + level, 3, blockHelper.getStairsForTowerLevel(rand, level, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.BOTTOM, true), 1, 1, 1, facing);
+
 			rotatedCubeVolume(world, rand, pos, -5, 0 + level, 6, blockHelper.PITSTONE_BRICKS, 1, 1, 2, facing);
 			rotatedCubeVolume(world, rand, pos, -7, 0 + level, 5, blockHelper.PITSTONE_BRICKS, 2, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -2, 0 + level, 8, blockHelper.PITSTONE_BRICKS, 3, 1, 1, facing);
@@ -573,6 +597,7 @@ public class LightTowerBuildParts {
 		}
 		
 		if(level == 16) {
+			rotatedCubeVolume(world, rand, pos, 0, 5 + level, 0, blockHelper.MUD_TOWER_BEAM_ORIGIN, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 0, 0 + level, 0, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -7, 1 + level, 4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -7, -1 + level, 4, blockHelper.ENERGY_BARRIER_MUD, 1, 2, 1, facing);

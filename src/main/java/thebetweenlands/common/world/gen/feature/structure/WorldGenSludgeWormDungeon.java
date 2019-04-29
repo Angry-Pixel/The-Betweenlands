@@ -78,14 +78,16 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		int level2 = 8;
 		int level3 = 16;
 
-/*		for (int i = radiusMud * -1; i <= radiusMud; ++i) {
+		for (int i = radiusMud * -1; i <= radiusMud; ++i) {
 			for (int j = radiusMud * -1; j <= radiusMud; ++j) {
 				double dSq = i * i + j * j;
-				if (Math.round(Math.sqrt(dSq)) > radius && Math.round(Math.sqrt(dSq)) <= radiusMud)
-					world.setBlockState(new BlockPos(x + i, y, z + j), blockHelper.MUD, 2);
+				if (Math.round(Math.sqrt(dSq)) == radiusMud -1)
+					world.setBlockState(new BlockPos(x + i, y, z + j), blockHelper.getMudBricksForLevel(rand, 0, 1), 2);
+				if (Math.round(Math.sqrt(dSq)) == radiusMud)
+					world.setBlockState(new BlockPos(x + i, y, z + j), rand.nextInt(3) == 0 ? blockHelper.getMudSlabsForLevel(rand, 0, EnumBlockHalfBL.BOTTOM) : blockHelper.getMudBricksForLevel(rand, 0, 1), 2);
 			}
 		}
-*/
+
 		for (int yy = y; y + height >= yy; yy++) {
 			for (int i = radius * -1; i <= radius; ++i) {
 				for (int j = radius * -1; j <= radius; ++j) {
