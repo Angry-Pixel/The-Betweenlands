@@ -82,6 +82,7 @@ import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderAngryPebble;
 import thebetweenlands.client.render.entity.RenderBLArrow;
+import thebetweenlands.client.render.entity.RenderBarrishee;
 import thebetweenlands.client.render.entity.RenderBlindCaveFish;
 import thebetweenlands.client.render.entity.RenderBloodSnail;
 import thebetweenlands.client.render.entity.RenderBoulderSprite;
@@ -197,6 +198,7 @@ import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.mobs.EntityAngler;
+import thebetweenlands.common.entity.mobs.EntityBarrishee;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
@@ -538,7 +540,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityShambler.class, RenderShambler::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityWallLamprey.class, RenderWallLamprey::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCryptCrawler.class, RenderCryptCrawler::new);
-		
+		RenderingRegistry.registerEntityRenderingHandler(EntityBarrishee.class, RenderBarrishee::new);
+
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
 		resourceManager.registerReloadListener(new FoodSickness.ResourceReloadListener());

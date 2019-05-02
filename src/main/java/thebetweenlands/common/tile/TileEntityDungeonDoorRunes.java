@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -23,18 +24,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
+import thebetweenlands.common.entity.mobs.EntityBarrishee;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable, IEntityScreenShake {
 
-	public int top_code = -1, mid_code = -1, bottom_code = -1; // set back to -1
+	public int top_code = 1, mid_code = 1, bottom_code = 1; // set back to -1
 	public int top_state = 0, mid_state = 0, bottom_state = 0;
 	public int top_state_prev = 0, mid_state_prev = 0, bottom_state_prev = 0;
 	public int top_rotate = 0, mid_rotate = 0, bottom_rotate = 0;
 	public int lastTickTopRotate = 0, lastTickMidRotate = 0, lastTickBottomRotate = 0;
 	public int renderTicks = 0;
-	public boolean mimic = false;
+	public boolean mimic = true;
 	public boolean animate_open = false;
 	public boolean animate_open_recess = false;
 	public boolean animate_tile_recess = false;
@@ -127,7 +129,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity = list.get(i);
 			if (entity != null)
-				if (entity instanceof EntityLivingBase)
+				if (entity instanceof EntityLivingBase && !(entity instanceof EntityBarrishee))
 					if (!getWorld().isRemote)
 						entity.attackEntityFrom(DamageSource.FALLING_BLOCK, 10F); // dunno what damage to do yet...
 		}
@@ -264,8 +266,22 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		if (animate_open) {
 			if (mimic) {
 				if (slate_1_rotate <= 0)
-					if (!getWorld().isRemote)
+					if (!getWorld().isRemote) {
 						playTrapFallingSound();
+
+						IBlockState state = getWorld().getBlockState(getPos());
+						EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
+
+						//TODO make this shit work properly
+						BlockPos offsetPos = getPos().offset(facing.getOpposite());
+						EntityBarrishee entity = new EntityBarrishee(getWorld()); // door golem here :P
+						entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.down().getY(), offsetPos.getZ() + 0.5D, 0F, 0.0F);
+						entity.rotationYawHead = entity.rotationYaw;
+						entity.renderYawOffset = entity.rotationYaw;
+						//entity.move(MoverType.SELF, 0F, 0F, 0F);
+						getWorld().spawnEntity(entity);
+						
+					}
 				slate_1_rotate += 4 + (last_tick_slate_1_rotate < 8 ? 0 : last_tick_slate_1_rotate / 8);
 				slate_2_rotate += 2 + (last_tick_slate_2_rotate < 6 ? 0 : last_tick_slate_2_rotate / 6);
 				slate_3_rotate += 2 + (last_tick_slate_3_rotate < 8 ? 0 : last_tick_slate_3_rotate / 8);
@@ -357,12 +373,14 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 						breakAllDoorBlocks(state, facing, false, false);
 				else {
 					breakAllDoorBlocks(state, facing, false, false);
-				/*
+				/*	//TODO make this shit work properly
 					BlockPos offsetPos = getPos().offset(facing);
-					EntityChicken entity = new EntityChicken(getWorld()); // door golem here :P
-					entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.getY(), offsetPos.getZ() + 0.5D, 0.0F, 0.0F);
-					getWorld().spawnEntity(entity);
-				*/
+					EntityBarrishee entity = new EntityBarrishee(getWorld()); // door golem here :P
+					entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.down().getY(), offsetPos.getZ() + 0.5D, 90F, 0.0F);
+					entity.rotationYawHead = entity.rotationYaw;
+					entity.renderYawOffset = entity.rotationYaw;
+					//entity.move(MoverType.SELF, 0F, 0F, 0F);
+					getWorld().spawnEntity(entity);*/
 				}
 			}
 

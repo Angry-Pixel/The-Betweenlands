@@ -5,8 +5,10 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
-
+@SideOnly(Side.CLIENT)
 public class ModelCryptCrawler extends ModelBase {
     ModelRenderer body_main;
     ModelRenderer neck;
