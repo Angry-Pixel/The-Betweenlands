@@ -277,6 +277,9 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 						entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.down().getY(), offsetPos.getZ() + 0.5D, 0F, 0.0F);
 						entity.rotationYawHead = entity.rotationYaw;
 						entity.renderYawOffset = entity.rotationYaw;
+						entity.setIsAmbushSpawn(true);
+						entity.setIsScreaming(true);
+						entity.setScreamTimer(0);
 						getWorld().spawnEntity(entity);
 						
 					}

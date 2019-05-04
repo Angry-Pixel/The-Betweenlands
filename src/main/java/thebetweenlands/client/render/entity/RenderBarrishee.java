@@ -21,7 +21,11 @@ public class RenderBarrishee extends RenderLiving<EntityBarrishee> {
 
 	@Override
 	protected void preRenderCallback(EntityBarrishee entity, float partialTickTime) {
-		GlStateManager.translate(0F, -0.5F + entity.standingAngle * 0.5F, 0F);
+		if(entity.isAmbushSpawn())
+			if(entity.isScreaming())
+				GlStateManager.translate(0F, -0.5F + entity.standingAngle * 0.5F - 0.0625F, 0F);
+			else
+				GlStateManager.translate(0F, -0.5F + entity.standingAngle * 0.5F, 0F);
 	}
 
 	@Override

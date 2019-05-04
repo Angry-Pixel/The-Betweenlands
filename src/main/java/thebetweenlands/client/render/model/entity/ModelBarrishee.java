@@ -376,6 +376,7 @@ public class ModelBarrishee extends ModelBase {
 		float animation2 = MathHelper.sin((limbSwing) * 0.5F) * 0.4F * limbSwingAngle * 2.5F;
 
 		float standingAngle = barrishee.smoothedAngle(partialRenderTicks);
+		float flap = MathHelper.sin((barrishee.ticksExisted) * 0.6F) * 0.8F;
 
 		if ((barrishee.standingAngle > 0)) {
 			base_rotation_bit.rotateAngleX = convertDegtoRad(-65) + (convertDegtoRad(65) * standingAngle);
@@ -383,53 +384,116 @@ public class ModelBarrishee extends ModelBase {
 			head_main.rotateAngleX = convertDegtoRad(5) - (convertDegtoRad(5) * standingAngle);
 			belly_1.rotateAngleX = convertDegtoRad(30) - (convertDegtoRad(70) * standingAngle);
 		}
-		if ((barrishee.standingAngle == 1)) {
-	    gear_1.rotateAngleX = 0.39269908169872414F +animation;
-	    gear_2.rotateAngleX = 0.7853981633974483F + animation;
-	    gear_3.rotateAngleX = 1.1780972450961724F + animation;
-	    gear_4.rotateAngleX = 0F + animation;
-	    
-	   // head_main.rotateAngleX = 0F - animation2 * 0.25F;
-	    head_main.rotateAngleZ = 0F + animation2 * 0.25F;
-	    jaw1.rotateAngleX  = 0F;
 
-	    shoulder_left.rotateAngleX = 0F + animation2 * 0.5F;
-	    shoulder_right.rotateAngleX = 0F - animation2 * 0.5F;
-	    arm_left_2.rotateAngleX = 0F + animation2;
-	    arm_right_2.rotateAngleX = 0F - animation2;
-	    
-	    hand_left_1.rotateAngleX = 0.4363323129985824F - shoulder_left.rotateAngleX - arm_left_2.rotateAngleX - animation2 * 0.5F;
-	    hand_right_1.rotateAngleX = 0.4363323129985824F - shoulder_right.rotateAngleX - arm_right_2.rotateAngleX + animation2 * 0.5F;
+		if (barrishee.isScreaming() && barrishee.getScreamTimer() >= 20 && barrishee.getScreamTimer() <= 30) {
+			int fudge = barrishee.getScreamTimer() - 20;
+			base_rotation_bit.rotateAngleX = convertDegtoRad(0) - (convertDegtoRad(10) * fudge * 0.1F);
+			belly_1.rotateAngleX = convertDegtoRad(-40) + (convertDegtoRad(10) * fudge * 0.1F);
+			neck.rotateAngleX = convertDegtoRad(0) - (convertDegtoRad(45) * fudge * 0.1F);
+			head_main.rotateAngleX = convertDegtoRad(0) + (convertDegtoRad(25) * fudge * 0.1F);
 
-	    finger_left_inner.rotateAngleX = -0.17453292519943295F + animation2;
-	    finger_left_inner_1.rotateAngleX = 0.7853981633974483F + animation2;
-	    finger_left_inner_2.rotateAngleX = -0.5235987755982988F - animation2;
+			jaw_back.rotateAngleX = convertDegtoRad(0) + (convertDegtoRad(10) * fudge * 0.1F);
+			jaw1.rotateAngleX = convertDegtoRad(20) + (convertDegtoRad(45) * fudge * 0.1F);
 
-	    finger_left_mid.rotateAngleX = -0.17453292519943295F + animation2;
-	    finger_left_mid_1.rotateAngleX = 0.7853981633974483F + animation2;
-	    finger_left_mid_2.rotateAngleX = -0.5235987755982988F - animation2;
+			shoulder_right.rotateAngleX = convertDegtoRad(0) + (convertDegtoRad(30) * fudge * 0.1F);
+			shoulder_right.rotateAngleZ = convertDegtoRad(-25) + (convertDegtoRad(-5) * fudge * 0.1F);
 
-	    finger_left_outer.rotateAngleX = -0.17453292519943295F + animation2;
-	    finger_left_outer_1.rotateAngleX = 0.7853981633974483F + animation2;
-	    finger_left_outer_2.rotateAngleX = -0.5235987755982988F - animation2;
+			shoulder_left.rotateAngleX = convertDegtoRad(0) + (convertDegtoRad(30) * fudge * 0.1F);
+			shoulder_left.rotateAngleZ = convertDegtoRad(25) + (convertDegtoRad(5) * fudge * 0.1F);
 
-	    finger_right_inner.rotateAngleX = -0.17453292519943295F - animation2;
-	    finger_right_inner_1.rotateAngleX = 0.7853981633974483F - animation2;
-	    finger_right_inner_2.rotateAngleX = -0.5235987755982988F + animation2;
-	    
-	    finger_right_mid.rotateAngleX = -0.17453292519943295F - animation2;
-	    finger_right_mid_1.rotateAngleX = 0.7853981633974483F - animation2;
-	    finger_right_mid_2.rotateAngleX = -0.5235987755982988F + animation2;
+			hand_right_1.rotateAngleX = convertDegtoRad(25) - (convertDegtoRad(20) * fudge * 0.1F);
+			hand_left_1.rotateAngleX = convertDegtoRad(25) - (convertDegtoRad(20) * fudge * 0.1F);
+		}
+		
+		if (barrishee.isScreaming() && barrishee.getScreamTimer() > 30 && barrishee.getScreamTimer() < 40) {
+			int fudge = barrishee.getScreamTimer() - 20;
+			base_rotation_bit.rotateAngleX = convertDegtoRad(-10);
+			belly_1.rotateAngleX = convertDegtoRad(-30);
+			neck.rotateAngleX = convertDegtoRad(-45);
+			//head_main.rotateAngleX = convertDegtoRad(25) + flap * 0.25F;
 
-	    finger_right_outer.rotateAngleX = -0.17453292519943295F - animation2;
-	    finger_right_outer_1.rotateAngleX = 0.7853981633974483F - animation2;
-	    finger_right_outer_2.rotateAngleX = -0.5235987755982988F + animation2;
-	    
-	    base_rotation_bit.rotateAngleX = 0F - animation2 * 0.125F;
-	    base_rotation_bit.rotateAngleZ = 0F - animation2 * 0.125F;
-	    
-	    belly_1.rotateAngleX = -0.6829473363053812F + animation2 * 0.125F;
-	    belly_1.rotateAngleZ = -0.08726646259971647F + animation2 * 0.125F;
+			jaw_back.rotateAngleX = convertDegtoRad(10);
+			jaw1.rotateAngleX = convertDegtoRad(65);
+
+			shoulder_right.rotateAngleX = convertDegtoRad(30);
+			shoulder_right.rotateAngleZ = convertDegtoRad(-30);
+
+			shoulder_left.rotateAngleX = convertDegtoRad(30);
+			shoulder_left.rotateAngleZ = convertDegtoRad(30);
+
+			hand_right_1.rotateAngleX = convertDegtoRad(5);
+			hand_left_1.rotateAngleX = convertDegtoRad(5);
+			
+			head_main.rotateAngleZ = 0F + animation2 * 0.25F + flap * 0.25F;
+		}
+
+		if (barrishee.isScreaming() && barrishee.getScreamTimer() >= 40) {
+			int fudge = barrishee.getScreamTimer() - 40;
+			base_rotation_bit.rotateAngleX = convertDegtoRad(-10) + (convertDegtoRad(10) * fudge * 0.1F);
+			belly_1.rotateAngleX = convertDegtoRad(-30) - (convertDegtoRad(10) * fudge * 0.1F);
+			neck.rotateAngleX = convertDegtoRad(-45) + (convertDegtoRad(45) * fudge * 0.1F);
+			head_main.rotateAngleX = convertDegtoRad(25) - (convertDegtoRad(25) * fudge * 0.1F);
+
+			jaw_back.rotateAngleX = convertDegtoRad(10) - (convertDegtoRad(10) * fudge * 0.1F);
+			jaw1.rotateAngleX = convertDegtoRad(65) - (convertDegtoRad(45) * fudge * 0.1F);
+
+			shoulder_right.rotateAngleX = convertDegtoRad(30) - (convertDegtoRad(30) * fudge * 0.1F);
+			shoulder_right.rotateAngleZ = convertDegtoRad(-30) + (convertDegtoRad(5) * fudge * 0.1F);
+
+			shoulder_left.rotateAngleX = convertDegtoRad(30) - (convertDegtoRad(30) * fudge * 0.1F);
+			shoulder_left.rotateAngleZ = convertDegtoRad(30) - (convertDegtoRad(5) * fudge * 0.1F);
+
+			hand_right_1.rotateAngleX = convertDegtoRad(5) + (convertDegtoRad(20) * fudge * 0.1F);
+			hand_left_1.rotateAngleX = convertDegtoRad(5) + (convertDegtoRad(20) * fudge * 0.1F);
+		}
+
+		if (!barrishee.isAmbushSpawn() && !barrishee.isScreaming() || barrishee.isAmbushSpawn() && barrishee.standingAngle == 1 && !barrishee.isScreaming()) {
+			gear_1.rotateAngleX = 0.39269908169872414F + animation;
+			gear_2.rotateAngleX = 0.7853981633974483F + animation;
+			gear_3.rotateAngleX = 1.1780972450961724F + animation;
+			gear_4.rotateAngleX = 0F + animation;
+
+			// head_main.rotateAngleX = 0F - animation2 * 0.25F;
+			head_main.rotateAngleZ = 0F + animation2 * 0.25F;
+			jaw1.rotateAngleX = convertDegtoRad(20);
+
+			shoulder_left.rotateAngleX = 0F + animation2 * 0.5F;
+			shoulder_right.rotateAngleX = 0F - animation2 * 0.5F;
+			arm_left_2.rotateAngleX = 0F + animation2;
+			arm_right_2.rotateAngleX = 0F - animation2;
+
+			hand_left_1.rotateAngleX = 0.4363323129985824F - shoulder_left.rotateAngleX - arm_left_2.rotateAngleX - animation2 * 0.5F;
+			hand_right_1.rotateAngleX = 0.4363323129985824F - shoulder_right.rotateAngleX - arm_right_2.rotateAngleX + animation2 * 0.5F;
+
+			finger_left_inner.rotateAngleX = -0.17453292519943295F + animation2;
+			finger_left_inner_1.rotateAngleX = 0.7853981633974483F + animation2;
+			finger_left_inner_2.rotateAngleX = -0.5235987755982988F - animation2;
+
+			finger_left_mid.rotateAngleX = -0.17453292519943295F + animation2;
+			finger_left_mid_1.rotateAngleX = 0.7853981633974483F + animation2;
+			finger_left_mid_2.rotateAngleX = -0.5235987755982988F - animation2;
+
+			finger_left_outer.rotateAngleX = -0.17453292519943295F + animation2;
+			finger_left_outer_1.rotateAngleX = 0.7853981633974483F + animation2;
+			finger_left_outer_2.rotateAngleX = -0.5235987755982988F - animation2;
+
+			finger_right_inner.rotateAngleX = -0.17453292519943295F - animation2;
+			finger_right_inner_1.rotateAngleX = 0.7853981633974483F - animation2;
+			finger_right_inner_2.rotateAngleX = -0.5235987755982988F + animation2;
+
+			finger_right_mid.rotateAngleX = -0.17453292519943295F - animation2;
+			finger_right_mid_1.rotateAngleX = 0.7853981633974483F - animation2;
+			finger_right_mid_2.rotateAngleX = -0.5235987755982988F + animation2;
+
+			finger_right_outer.rotateAngleX = -0.17453292519943295F - animation2;
+			finger_right_outer_1.rotateAngleX = 0.7853981633974483F - animation2;
+			finger_right_outer_2.rotateAngleX = -0.5235987755982988F + animation2;
+
+			base_rotation_bit.rotateAngleX = 0F - animation2 * 0.125F;
+			base_rotation_bit.rotateAngleZ = 0F - animation2 * 0.125F;
+
+			belly_1.rotateAngleX = -0.6829473363053812F + animation2 * 0.125F;
+			belly_1.rotateAngleZ = -0.08726646259971647F + animation2 * 0.125F;
 		}
 	}
 
