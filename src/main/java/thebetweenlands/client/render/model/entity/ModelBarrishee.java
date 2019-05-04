@@ -3,8 +3,11 @@ package thebetweenlands.client.render.model.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.mobs.EntityBarrishee;
 @SideOnly(Side.CLIENT)
 public class ModelBarrishee extends ModelBase {
     ModelRenderer base_rotation_bit;
@@ -364,6 +367,75 @@ public class ModelBarrishee extends ModelBase {
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
         base_rotation_bit.render(scale);
     }
+
+	@Override
+	public void setLivingAnimations(EntityLivingBase entity, float limbSwing, float limbSwingAngle, float partialRenderTicks) {
+
+		EntityBarrishee barrishee = (EntityBarrishee) entity;
+		float animation = limbSwing * 0.1F;
+		float animation2 = MathHelper.sin((limbSwing) * 0.5F) * 0.4F * limbSwingAngle * 2.5F;
+
+		float standingAngle = barrishee.smoothedAngle(partialRenderTicks);
+
+		if ((barrishee.standingAngle > 0)) {
+			base_rotation_bit.rotateAngleX = convertDegtoRad(-65) + (convertDegtoRad(65) * standingAngle);
+			neck.rotateAngleX = convertDegtoRad(60) - (convertDegtoRad(60) * standingAngle);
+			head_main.rotateAngleX = convertDegtoRad(5) - (convertDegtoRad(5) * standingAngle);
+			belly_1.rotateAngleX = convertDegtoRad(30) - (convertDegtoRad(70) * standingAngle);
+		}
+		if ((barrishee.standingAngle == 1)) {
+	    gear_1.rotateAngleX = 0.39269908169872414F +animation;
+	    gear_2.rotateAngleX = 0.7853981633974483F + animation;
+	    gear_3.rotateAngleX = 1.1780972450961724F + animation;
+	    gear_4.rotateAngleX = 0F + animation;
+	    
+	   // head_main.rotateAngleX = 0F - animation2 * 0.25F;
+	    head_main.rotateAngleZ = 0F + animation2 * 0.25F;
+	    jaw1.rotateAngleX  = 0F;
+
+	    shoulder_left.rotateAngleX = 0F + animation2 * 0.5F;
+	    shoulder_right.rotateAngleX = 0F - animation2 * 0.5F;
+	    arm_left_2.rotateAngleX = 0F + animation2;
+	    arm_right_2.rotateAngleX = 0F - animation2;
+	    
+	    hand_left_1.rotateAngleX = 0.4363323129985824F - shoulder_left.rotateAngleX - arm_left_2.rotateAngleX - animation2 * 0.5F;
+	    hand_right_1.rotateAngleX = 0.4363323129985824F - shoulder_right.rotateAngleX - arm_right_2.rotateAngleX + animation2 * 0.5F;
+
+	    finger_left_inner.rotateAngleX = -0.17453292519943295F + animation2;
+	    finger_left_inner_1.rotateAngleX = 0.7853981633974483F + animation2;
+	    finger_left_inner_2.rotateAngleX = -0.5235987755982988F - animation2;
+
+	    finger_left_mid.rotateAngleX = -0.17453292519943295F + animation2;
+	    finger_left_mid_1.rotateAngleX = 0.7853981633974483F + animation2;
+	    finger_left_mid_2.rotateAngleX = -0.5235987755982988F - animation2;
+
+	    finger_left_outer.rotateAngleX = -0.17453292519943295F + animation2;
+	    finger_left_outer_1.rotateAngleX = 0.7853981633974483F + animation2;
+	    finger_left_outer_2.rotateAngleX = -0.5235987755982988F - animation2;
+
+	    finger_right_inner.rotateAngleX = -0.17453292519943295F - animation2;
+	    finger_right_inner_1.rotateAngleX = 0.7853981633974483F - animation2;
+	    finger_right_inner_2.rotateAngleX = -0.5235987755982988F + animation2;
+	    
+	    finger_right_mid.rotateAngleX = -0.17453292519943295F - animation2;
+	    finger_right_mid_1.rotateAngleX = 0.7853981633974483F - animation2;
+	    finger_right_mid_2.rotateAngleX = -0.5235987755982988F + animation2;
+
+	    finger_right_outer.rotateAngleX = -0.17453292519943295F - animation2;
+	    finger_right_outer_1.rotateAngleX = 0.7853981633974483F - animation2;
+	    finger_right_outer_2.rotateAngleX = -0.5235987755982988F + animation2;
+	    
+	    base_rotation_bit.rotateAngleX = 0F - animation2 * 0.125F;
+	    base_rotation_bit.rotateAngleZ = 0F - animation2 * 0.125F;
+	    
+	    belly_1.rotateAngleX = -0.6829473363053812F + animation2 * 0.125F;
+	    belly_1.rotateAngleZ = -0.08726646259971647F + animation2 * 0.125F;
+		}
+	}
+
+	public float convertDegtoRad(int angleIn) {
+		return angleIn * ((float) Math.PI / 180F);
+	}
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;

@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.MoverType;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -278,7 +277,6 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 						entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.down().getY(), offsetPos.getZ() + 0.5D, 0F, 0.0F);
 						entity.rotationYawHead = entity.rotationYaw;
 						entity.renderYawOffset = entity.rotationYaw;
-						//entity.move(MoverType.SELF, 0F, 0F, 0F);
 						getWorld().spawnEntity(entity);
 						
 					}
@@ -373,14 +371,6 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 						breakAllDoorBlocks(state, facing, false, false);
 				else {
 					breakAllDoorBlocks(state, facing, false, false);
-				/*	//TODO make this shit work properly
-					BlockPos offsetPos = getPos().offset(facing);
-					EntityBarrishee entity = new EntityBarrishee(getWorld()); // door golem here :P
-					entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.down().getY(), offsetPos.getZ() + 0.5D, 90F, 0.0F);
-					entity.rotationYawHead = entity.rotationYaw;
-					entity.renderYawOffset = entity.rotationYaw;
-					//entity.move(MoverType.SELF, 0F, 0F, 0F);
-					getWorld().spawnEntity(entity);*/
 				}
 			}
 
