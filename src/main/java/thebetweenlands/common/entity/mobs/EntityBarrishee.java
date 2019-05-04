@@ -134,7 +134,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake {
 			if (getScreamTimer() == 0) {
 				setIsScreaming(true);
 				setScreamTimer(1);
-				this.spawnEffect(getPosition().up(), 5);
+			//	this.spawnEffect(getPosition().up(), 5); // TODO Particles and stuffs go here
 			}
 
 			if (getScreamTimer() > 0 && getScreamTimer() <= SCREAMING_TIMER_MAX) {
