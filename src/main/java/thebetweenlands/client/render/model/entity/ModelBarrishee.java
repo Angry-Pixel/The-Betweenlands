@@ -406,11 +406,9 @@ public class ModelBarrishee extends ModelBase {
 		}
 		
 		if (barrishee.isScreaming() && barrishee.getScreamTimer() > 30 && barrishee.getScreamTimer() < 40) {
-			int fudge = barrishee.getScreamTimer() - 20;
 			base_rotation_bit.rotateAngleX = convertDegtoRad(-10);
 			belly_1.rotateAngleX = convertDegtoRad(-30);
 			neck.rotateAngleX = convertDegtoRad(-45);
-			//head_main.rotateAngleX = convertDegtoRad(25) + flap * 0.25F;
 
 			jaw_back.rotateAngleX = convertDegtoRad(10);
 			jaw1.rotateAngleX = convertDegtoRad(65);
