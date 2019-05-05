@@ -391,6 +391,7 @@ public class ModelBarrishee extends MowzieModelBase {
 
 		float standingAngle = barrishee.smoothedAngle(partialRenderTicks);
 		float flap = MathHelper.sin((barrishee.ticksExisted) * 0.6F) * 0.8F;
+		float flap2 = MathHelper.sin((barrishee.ticksExisted) * 0.3F) * 0.8F;
 
 		if ((barrishee.standingAngle > 0)) {
 			base_rotation_bit.rotateAngleX = convertDegtoRad(-65F) + (convertDegtoRad(65F) * standingAngle);
@@ -465,9 +466,11 @@ public class ModelBarrishee extends MowzieModelBase {
 			gear_3.rotateAngleX = 1.1780972450961724F + animation;
 			gear_4.rotateAngleX = 0F + animation;
 
-			// head_main.rotateAngleX = 0F - animation2 * 0.25F;
+			neck.rotateAngleX = 0F - flap2 * 0.0625F;
+			head_main.rotateAngleX = 0F + flap2 * 0.0625F;
 			head_main.rotateAngleZ = 0F + animation2 * 0.25F;
-			jaw1.rotateAngleX = convertDegtoRad(20F);
+			jaw_back.rotateAngleX = 0F + - flap2 * 0.125F;
+			jaw1.rotateAngleX = convertDegtoRad(20F) - flap2 * 0.0625F;
 
 			shoulder_left.rotateAngleX = 0F + animation2 * 0.5F;
 			shoulder_right.rotateAngleX = 0F - animation2 * 0.5F;

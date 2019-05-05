@@ -13,6 +13,7 @@ import thebetweenlands.common.entity.mobs.EntityBarrishee;
 @SideOnly(Side.CLIENT)
 public class RenderBarrishee extends RenderLiving<EntityBarrishee> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/barrishee.png");
+	public int fudge = 0;
 
 	public RenderBarrishee(RenderManager renderManagerIn) {
         super(renderManagerIn, new ModelBarrishee(), 2.5F);
@@ -21,7 +22,6 @@ public class RenderBarrishee extends RenderLiving<EntityBarrishee> {
 
 	@Override
 	protected void preRenderCallback(EntityBarrishee entity, float partialTickTime) {
-		int fudge = 0;
 		if(entity.isAmbushSpawn())
 			if(entity.isScreaming())
 				GlStateManager.translate(0F, -0.5F + entity.standingAngle * 0.5F - 0.0625F, 0F);
