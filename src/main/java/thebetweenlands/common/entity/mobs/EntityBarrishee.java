@@ -116,9 +116,9 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake {
 
 	@Override
 	public void onLivingUpdate() {
-		//Test Scream
-		//if(getEntityWorld().getTotalWorldTime()%200 == 0)
-		//	setScreamTimer(0);
+		//Test Scream remove once testing is over
+		if(getEntityWorld().getTotalWorldTime()%200 == 0)
+			setScreamTimer(0);
 
 		if (getEntityWorld().isRemote) {
 			prevStandingAngle = standingAngle;
