@@ -59,7 +59,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 
 	public EntityShambler(World world) {
 		super(world);
-		this.setSize(1.0F, 1.25F);
+		this.setSize(0.95F, 1.25F);
 		tongue_array = new MultiPartEntityPart[] {tongue_end, tongue_1, tongue_2, tongue_3, tongue_4, tongue_5, tongue_6, tongue_7, tongue_8, tongue_9, tongue_10, tongue_11, tongue_12, tongue_13, tongue_14, tongue_15};
 	}
 
@@ -180,7 +180,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	public void onLivingUpdate() {
 		if (!getEntityWorld().isRemote) {
 
-			if (getAttackTarget() != null) {
+			if (getAttackTarget() != null && canEntityBeSeen(getAttackTarget())) {
 				faceEntity(getAttackTarget(), 10.0F, 20.0F);
 				double distance = getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
 
@@ -192,7 +192,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 					}
 				}
 
-				if (distance <= 5.0D && distance >= 2) {
+				if (distance <= 5.0D && distance >= 1) {
 					if (!jawsAreOpen()) {
 						setOpenJaws(true);
 						if (!isExtendingTongue())
