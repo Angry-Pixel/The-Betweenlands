@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -609,14 +608,14 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					setRandomCombinations(world, pos.add(1, 0, 2), pos.add(26, 0, 1), rand, true);
 					for(int x = -1; x <= 1; x++)
 						for(int y = -1; y <= 1; y++)
-							world.setBlockState(pos.add(26 + x, y, 0), Blocks.AIR.getDefaultState(), 2);
+							world.setBlockToAir(pos.add(26 + x, y, 0));
 				}
 				if(level == 5) {
 					world.setBlockState(pos.add(1, 0, 26), blockHelper.DUNGEON_DOOR_EAST, 2);  //TODO This will be Crypt Crawler entrance
 					setRandomCombinations(world, pos.add(1, 0, 2), pos.add(1, 0, 26), rand, true);
 					for(int z = -1; z <= 1; z++)
 						for(int y = -1; y <= 1; y++)
-							world.setBlockState(pos.add(0, y, 26 + z), Blocks.AIR.getDefaultState(), 2);
+							world.setBlockToAir(pos.add(0, y, 26 + z));
 				}
 
 			} else {
