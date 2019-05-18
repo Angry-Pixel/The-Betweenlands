@@ -145,6 +145,7 @@ import thebetweenlands.common.block.structure.BlockMudBricksClimbable;
 import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
 import thebetweenlands.common.block.structure.BlockMudBricksSpikeTrap;
 import thebetweenlands.common.block.structure.BlockMudTiles;
+import thebetweenlands.common.block.structure.BlockMudTilesSpikeTrap;
 import thebetweenlands.common.block.structure.BlockMudTilesWater;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
@@ -583,6 +584,7 @@ public class BlockRegistry {
 	public static final Block LOG_ROTTEN_BARK_CARVED_16 = new BlockRottenBarkCarved();
 	public static final Block ENERGY_BARRIER_MUD = new BlockEnergyBarrierMud();
 	public static final Block MUD_BRICKS_SPIKE_TRAP = new BlockMudBricksSpikeTrap();
+	public static final Block MUD_TILES_SPIKE_TRAP = new BlockMudTilesSpikeTrap();
 	
 	//Place-Holders for stuffs and things
 	public static final Block MUD_TOWER_BRAZIER = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);

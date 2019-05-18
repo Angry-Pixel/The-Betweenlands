@@ -169,6 +169,7 @@ import thebetweenlands.client.render.tile.RenderLootUrn;
 import thebetweenlands.client.render.tile.RenderMudBricksAlcove;
 import thebetweenlands.client.render.tile.RenderMudBricksSpikeTrap;
 import thebetweenlands.client.render.tile.RenderMudFlowerPot;
+import thebetweenlands.client.render.tile.RenderMudTilesSpikeTrap;
 import thebetweenlands.client.render.tile.RenderPestleAndMortar;
 import thebetweenlands.client.render.tile.RenderPossessedBlock;
 import thebetweenlands.client.render.tile.RenderPurifier;
@@ -290,6 +291,7 @@ import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
 import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
+import thebetweenlands.common.tile.TileEntityMudTilesSpikeTrap;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPuffshroom;
 import thebetweenlands.common.tile.TileEntityPurifier;
@@ -612,6 +614,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDungeonDoorRunes.class, new RenderDungeonDoorRunes());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDungeonDoorCombination.class, new RenderDungeonDoorCombination());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudBricksSpikeTrap.class, new RenderMudBricksSpikeTrap());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudTilesSpikeTrap.class, new RenderMudTilesSpikeTrap());
 
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);

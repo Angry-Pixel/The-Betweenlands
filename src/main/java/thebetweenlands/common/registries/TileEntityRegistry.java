@@ -30,6 +30,7 @@ import thebetweenlands.common.tile.TileEntityMossBed;
 import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
 import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
+import thebetweenlands.common.tile.TileEntityMudTilesSpikeTrap;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPresent;
 import thebetweenlands.common.tile.TileEntityPuffshroom;
@@ -97,6 +98,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityDungeonDoorRunes.class, "dungeon_door_runes");
 		registerTileEntity(TileEntityDungeonDoorCombination.class, "dungeon_door_combination");
 		registerTileEntity(TileEntityMudBricksSpikeTrap.class, "mud_bricks_spike_trap");
+		registerTileEntity(TileEntityMudTilesSpikeTrap.class, "mud_tiles_spike_trap");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
