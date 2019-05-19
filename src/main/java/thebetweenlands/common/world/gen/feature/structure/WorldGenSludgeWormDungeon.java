@@ -288,7 +288,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					break;
 				case 3:
 					buildLevel(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
-					//addFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer); //nothing specific here yet
 					break;
 				case 4:
 					buildLevel(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
@@ -298,6 +297,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					buildRoof(world, pos.up(layer), rand, mazeWidth, mazeHeight, level);
 					addMazeCellFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
 					buildFloor(world, pos, rand, mazeWidth, mazeHeight, true, false, level);
+					addFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer); //nothing specific here yet
 					break;
 			}
 	//	System.out.println("Generated Maze At: X: " + pos.getX() + " Y: " + pos.getY() + " Z: " + pos.getZ());
@@ -488,10 +488,12 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		for (int i = 0; i < h; i++) {
 			for (int j = 0; j < w; j++) {
 				if ((maze[j][i] & 1) == 0) {
-					if (layer == 1) {
+					if (layer == 5) {
 						if (rand.nextInt(3) == 0)
-							if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -3, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -3, 2 + i * 4)) && !isBlackListedForGenSpecial(pos.add(26, 0, 2), pos.add(2 + j * 4, -3, 2 + i * 4), level == 3 ? true : false) && !isBlackListedForGenSpecial(pos.add(2, 0, 26), pos.add(2 + j * 4, -3, 2 + i * 4), level == 5 ? true : false))
-								setRandomRoot(world, pos.add(1 + j * 4, 0, 1 + rand.nextInt(2) + i * 4), rand);
+							if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -6, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -6, 2 + i * 4)) && !isBlackListedForGenSpecial(pos.add(26, 0, 2), pos.add(2 + j * 4, -6, 2 + i * 4), level == 3 ? true : false) && !isBlackListedForGenSpecial(pos.add(2, 0, 26), pos.add(2 + j * 4, -6, 2 + i * 4), level == 5 ? true : false)) {
+								if(world.isAirBlock(pos.add(1 + j * 4, -4, 1 + rand.nextInt(2) + i * 4)))
+									setRandomRoot(world, pos.add(1 + j * 4, -4, 1 + rand.nextInt(2) + i * 4), rand);
+							}
 					}
 					if (layer == 2) {
 						if (!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -3, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -3, 2 + i * 4)) && !isBlackListedForGenSpecial(pos.add(26, 0, 2), pos.add(2 + j * 4, -3, 2 + i * 4), level == 3 ? true : false) && !isBlackListedForGenSpecial(pos.add(2, 0, 26), pos.add(2 + j * 4, -3, 2 + i * 4), level == 5 ? true : false))

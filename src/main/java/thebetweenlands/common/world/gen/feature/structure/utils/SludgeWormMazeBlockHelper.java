@@ -585,24 +585,30 @@ public class SludgeWormMazeBlockHelper {
 	}
 
 	public void setRandomRoot(World world, BlockPos pos, Random rand) {
-		if (!isSolidStructureBlock(world.getBlockState(pos)) && world.getBlockState(pos.down()).getBlock() instanceof BlockMudTiles) {
-			int rnd = rand.nextInt(30);
-			if (rnd < 10) {
-				world.setBlockState(pos, ROOT, 2);
-			} else if (rnd < 20) {
-				world.setBlockState(pos, ROOT, 2);
-				world.setBlockState(pos.up(1), ROOT, 2);
-			} else if (rnd < 25) {
-				world.setBlockState(pos, ROOT, 2);
-				world.setBlockState(pos.up(1), ROOT, 2);
-				world.setBlockState(pos.up(2), ROOT, 2);
-			} else {
-				world.setBlockState(pos, ROOT, 2);
-				world.setBlockState(pos.up(1), ROOT, 2);
-				world.setBlockState(pos.up(2), ROOT, 2);
-				world.setBlockState(pos.up(3), ROOT, 2);
+			if (!isSolidStructureBlock(world.getBlockState(pos)) && world.getBlockState(pos.down()).getBlock() instanceof BlockMudTiles) {
+				int rnd = rand.nextInt(32);
+				if (rnd < 8) {
+					world.setBlockState(pos, ROOT, 2);
+				} else if (rnd < 16) {
+					world.setBlockState(pos, ROOT, 2);
+					if (world.isAirBlock(pos.up(1)))
+						world.setBlockState(pos.up(1), ROOT, 2);
+				} else if (rnd < 24) {
+					world.setBlockState(pos, ROOT, 2);
+					if (world.isAirBlock(pos.up(1)) && world.isAirBlock(pos.up(2))) {
+						world.setBlockState(pos.up(1), ROOT, 2);
+						world.setBlockState(pos.up(2), ROOT, 2);
+					}
+				} else {
+
+					world.setBlockState(pos, ROOT, 2);
+					if (world.isAirBlock(pos.up(1)) && world.isAirBlock(pos.up(2)) && world.isAirBlock(pos.up(3))) {
+						world.setBlockState(pos.up(1), ROOT, 2);
+						world.setBlockState(pos.up(2), ROOT, 2);
+						world.setBlockState(pos.up(3), ROOT, 2);
+					}
+				}
 			}
-		}
 	}
 
 	public IBlockState getRandomLootUrn(Random rand, EnumFacing facing) {
