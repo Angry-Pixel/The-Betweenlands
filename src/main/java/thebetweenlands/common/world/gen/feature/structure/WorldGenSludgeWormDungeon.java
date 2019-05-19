@@ -173,11 +173,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 							world.setBlockState(pos.add(xx, yy, zz), blockHelper.MUD_TILES_DECAY, 2);
 						else
 							world.setBlockToAir(pos.add(xx, yy, zz));
-				
-			//	if(xx < -12 || xx > 12)
-			//		world.setBlockToAir(pos.add(xx, yy, zz));
-				//if(zz < -12 || zz > 12)
-				//	world.setBlockToAir(pos.add(xx, yy, zz));
 				}
 			}
 		}
@@ -190,29 +185,15 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	public void makeMaze(World world, Random rand, BlockPos pos) {
 		for (int level = 0; level <= 7; level++) {
 			int yy = -6 -(level * 6);
-			if (level == 7) {
-			/*	for(int xx = 0; xx <= 28; xx++) {
-					for(int zz = 0; zz <= 28; zz++) {
-						for(int yUp = yy - 2; yUp < yy + 6; yUp++) {
-							world.setBlockState(pos.add(xx, yUp, 0), getMudBricksForLevel(rand, level, yUp), 2);
-							world.setBlockState(pos.add(xx, yUp, 28), getMudBricksForLevel(rand, level, yUp), 2);
-							world.setBlockState(pos.add(0, yUp, zz), getMudBricksForLevel(rand, level, yUp), 2);
-							world.setBlockState(pos.add(28, yUp, zz), getMudBricksForLevel(rand, level, yUp), 2);
-							if (!isSolidStructureBlock(world.getBlockState(pos.add(xx, yUp, zz))) && !(world.getBlockState(pos.add(xx, yUp, zz)) instanceof BlockStairs))
-								world.setBlockToAir(pos.add(xx, yUp, zz));
-						}
-					}
-				}
-				buildFloor(world, pos.add(0, yy - 3, 0), rand, 7, 7, true, true, level);*/
+			if (level == 7)
 				buildRoof(world, pos.add(0, yy - 3, 0).up(8), rand, 7, 7, level);
-			}
 
 			if (level < 7 && level >= 0)
 				generateMaze(world, rand, pos.add(0, yy, 0), level);
 
 			if (level <= 7) {
 				// create STAIRS
-				if (level == 1 || level == 3 || level == 5|| level == 7) { // TODO seven won't need this, leaving for now
+				if (level == 1 || level == 3 || level == 5|| level == 7) {
 					world.setBlockState(pos.add(1, yy + 5, 0), blockHelper.MUD_BRICKS_CLIMBABLE_SOUTH, 2);
 					if (level != 7) {
 						world.setBlockState(pos.add(27, yy + 0, 28), blockHelper.MUD_BRICKS_CLIMBABLE_NORTH, 2);
@@ -261,14 +242,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 	// Maze generation layers
 	public void generateMaze(World world, Random rand, BlockPos pos, int level) {
-		int sizeX = 16;
 		int sizeY = 6;
-		int sizeZ = 16;
 		int mazeWidth = 7;
 		int mazeHeight = 7;
-
-		if (mazeWidth < 2 || mazeHeight < 2 || sizeY < 1)
-			return;
 
 		int[][] maze = null;
 		MazeGenerator generator = new PerfectMazeGenerator(mazeWidth, mazeHeight);
