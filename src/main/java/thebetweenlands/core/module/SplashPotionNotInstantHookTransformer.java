@@ -40,8 +40,8 @@ public class SplashPotionNotInstantHookTransformer extends TransformerModule {
 				LabelNode jumpToEndTarget = new LabelNode();
 
 				insertionsBefore.add(new VarInsnNode(Opcodes.ALOAD, 0));
-				insertionsBefore.add(new VarInsnNode(Opcodes.ALOAD, 6)); //entitylivingbase from "for (EntityLivingBase entitylivingbase : list)"
-				insertionsBefore.add(new VarInsnNode(Opcodes.ALOAD, 12)); //potioneffect from "for (PotionEffect potioneffect : p_190543_2_)"
+				insertionsBefore.add(new VarInsnNode(Opcodes.ALOAD, isBukkitServer ? 9 : 6)); //entitylivingbase from "for (EntityLivingBase entitylivingbase : list)"
+				insertionsBefore.add(new VarInsnNode(Opcodes.ALOAD, isBukkitServer ? 13 : 12)); //potioneffect from "for (PotionEffect potioneffect : p_190543_2_)"
 				insertionsBefore.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "thebetweenlands/common/CommonHooks", "onSplashAddPotionEffect", this.getMappedName("(Laez;Lvp;Lva;)Z", "(Lnet/minecraft/entity/projectile/EntityPotion;Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/potion/PotionEffect;)Z"), false));
 				insertionsBefore.add(new JumpInsnNode(Opcodes.IFNE, jumpIfFalseTarget));
 

@@ -464,7 +464,7 @@ public class BlockRegistry {
     public static final Block POSSESSED_BLOCK = new BlockPossessedBlock();
     public static final Block ITEM_CAGE = new BlockItemCage();
     public static final Block ITEM_SHELF = new BlockItemShelf();
-    public static final Block THATCH = new BasicBlock(Material.PLANTS).setSoundType2(SoundType.PLANT).setDefaultCreativeTab().setHardness(0.5F);
+    public static final Block THATCH = new BasicBlock(Material.GRASS).setSoundType2(SoundType.PLANT).setDefaultCreativeTab().setHardness(0.5F);
     public static final Block CRAGROCK_SLAB = new BlockSlabBetweenlands(CRAGROCK);
     public static final Block PITSTONE_SLAB = new BlockSlabBetweenlands(PITSTONE);
     public static final Block BETWEENSTONE_SLAB = new BlockSlabBetweenlands(BETWEENSTONE);

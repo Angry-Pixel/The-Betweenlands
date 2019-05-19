@@ -20,7 +20,7 @@ import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.tile.TileEntityWisp;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 	@Override
@@ -42,7 +42,7 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 			if(System.nanoTime() - ((TileEntityWisp)tileEntity).lastSpawn >= (500f - 500.0f * BetweenlandsConfig.RENDERING.wispQuality / 150.0f) * 1000000L) {
 				((TileEntityWisp)tileEntity).lastSpawn = System.nanoTime();
 
-				int colorIndex = TileEntityHelper.getStatePropertySafely(tileEntity, BlockWisp.class, BlockWisp.COLOR, 0);
+				int colorIndex = StatePropertyHelper.getStatePropertySafely(tileEntity, BlockWisp.class, BlockWisp.COLOR, 0);
 
 				int color = BlockWisp.COLORS[colorIndex * 2];
 				float r = (color >> 16 & 0xFF) / 255F;

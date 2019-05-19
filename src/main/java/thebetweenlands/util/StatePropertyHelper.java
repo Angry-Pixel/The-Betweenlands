@@ -1,5 +1,7 @@
 package thebetweenlands.util;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
@@ -13,7 +15,35 @@ import net.minecraft.world.chunk.Chunk.EnumCreateEntityType;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 
-public class TileEntityHelper {
+public class StatePropertyHelper {
+	/**
+	 * Returns an {@link Optional} wrapping the value that is mapped to the specified property. If the specified block state is null then an empty Optional is returned.
+	 * @param state
+	 * @param property
+	 * @return
+	 */
+	public static <P extends IProperty<T>, T extends Comparable<T>> Optional<T> getPropertyOptional(@Nullable IBlockState state, P property) {
+		if(state != null) {
+			return Optional.of(state.getValue(property));
+		}
+		return Optional.empty();
+	}
+	
+	/**
+	 * Returns an {@link Optional} wrapping the value that is mapped to the specified property. Unlike {@link IExtendedBlockState#getValue(IUnlistedProperty)} this
+	 * will not thrown an exception when the property or value is not present but instead return an empty Optional. If the specified block state is not an {@link IExtendedBlockState} then
+	 * an empty Optional is returned.
+	 * @param state
+	 * @param property
+	 * @return
+	 */
+	public static <P extends IUnlistedProperty<T>, T> Optional<T> getPropertyOptional(@Nullable IBlockState state, P property) {
+		if(state instanceof IExtendedBlockState) {
+			return ((IExtendedBlockState) state).getUnlistedProperties().get(property).map(o -> property.getType().cast(o));
+		}
+		return Optional.empty();
+	}
+	
 	/**
 	 * Safely gets a block state property of the block at the TileEntity
 	 * @param te
@@ -47,7 +77,7 @@ public class TileEntityHelper {
 				state = state.getBlock().getExtendedState(state, te.getWorld(), te.getPos());
 			}
 			if(state instanceof IExtendedBlockState) {
-				return ((IExtendedBlockState)state).getValue(property);
+				return ((IExtendedBlockState)state).getUnlistedProperties().get(property).map(o -> property.getType().cast(o)).orElse(defaultVal);
 			}
 		}
 		return defaultVal;
