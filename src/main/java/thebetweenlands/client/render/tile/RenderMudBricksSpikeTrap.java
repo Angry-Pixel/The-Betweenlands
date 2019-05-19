@@ -9,6 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.tile.ModelDungeonSpoopLayer;
 import thebetweenlands.client.render.model.tile.ModelSpikeBlock;
 import thebetweenlands.common.block.structure.BlockMudBricksSpikeTrap;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -18,7 +19,9 @@ import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 public class RenderMudBricksSpikeTrap extends TileEntitySpecialRenderer<TileEntityMudBricksSpikeTrap> {
 	private static final ResourceLocation ACTIVE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/mud_bricks_spike_block_active.png");
 	private static final ResourceLocation INACTIVE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/mud_bricks_spike_block_inactive.png");
+	private static final ResourceLocation SPOOP_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/mud_bricks_spike_block_spoop_layer.png");
 	private static final ModelSpikeBlock MODEL = new ModelSpikeBlock();
+	private static final ModelDungeonSpoopLayer MODEL_SPOOP = new ModelDungeonSpoopLayer();
 
 	@Override
 	public void render(TileEntityMudBricksSpikeTrap tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -68,6 +71,8 @@ public class RenderMudBricksSpikeTrap extends TileEntitySpecialRenderer<TileEnti
 		GlStateManager.translate(0F, -1F, 0F);
 		GlStateManager.disableCull();
 		MODEL.renderSpikes(tile, partialTicks);
+		bindTexture(SPOOP_TEXTURE);
+		MODEL_SPOOP.renderSpoop(tile, partialTicks);
 		GlStateManager.enableCull();;
 		GlStateManager.popMatrix();
 	}
