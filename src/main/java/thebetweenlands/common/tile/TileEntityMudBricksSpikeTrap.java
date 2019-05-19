@@ -1,8 +1,5 @@
 package thebetweenlands.common.tile;
 
-import net.minecraft.util.SoundCategory;
-import thebetweenlands.common.registries.SoundRegistry;
-
 public class TileEntityMudBricksSpikeTrap extends TileEntitySpikeTrap {
 	public int prevSpoopAnimationTicks;
 	public int spoopAnimationTicks;
