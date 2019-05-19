@@ -59,6 +59,18 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	}
 
 	@Override
+	protected void writeSharedNbt(NBTTagCompound nbt) {
+		super.writeSharedNbt(nbt);
+		nbt.setLong("structurePos", this.structurePos.toLong());
+	}
+	
+	@Override
+	protected void readSharedNbt(NBTTagCompound nbt) {
+		super.readSharedNbt(nbt);
+		this.structurePos = BlockPos.fromLong(nbt.getLong("structurePos"));
+	}
+	
+	@Override
 	public void update() {
 		super.update();
 

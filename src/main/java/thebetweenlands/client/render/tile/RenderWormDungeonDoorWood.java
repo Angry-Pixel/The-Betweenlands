@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.tile.ModelWormDungeonDoorWood;
 import thebetweenlands.common.block.structure.BlockWormDungeonDoorWood;
 import thebetweenlands.common.tile.TileEntityWormDungeonDoorWood;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 @SideOnly(Side.CLIENT)
 public class RenderWormDungeonDoorWood extends TileEntitySpecialRenderer<TileEntityWormDungeonDoorWood> {
@@ -19,7 +19,7 @@ public class RenderWormDungeonDoorWood extends TileEntitySpecialRenderer<TileEnt
     @Override
     public void render(TileEntityWormDungeonDoorWood te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 
-        EnumFacing facing = TileEntityHelper.getStatePropertySafely(te, BlockWormDungeonDoorWood.class, BlockWormDungeonDoorWood.FACING, EnumFacing.NORTH);
+        EnumFacing facing = StatePropertyHelper.getStatePropertySafely(te, BlockWormDungeonDoorWood.class, BlockWormDungeonDoorWood.FACING, EnumFacing.NORTH);
 
         bindTexture(TEXTURE);
         GlStateManager.pushMatrix();
