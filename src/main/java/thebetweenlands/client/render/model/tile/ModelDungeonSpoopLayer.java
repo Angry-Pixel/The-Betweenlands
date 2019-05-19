@@ -3,8 +3,11 @@ package thebetweenlands.client.render.model.tile;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 
+@SideOnly(Side.CLIENT)
 public class ModelDungeonSpoopLayer extends ModelBase {
     ModelRenderer face;
 
