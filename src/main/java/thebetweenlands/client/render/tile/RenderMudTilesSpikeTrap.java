@@ -43,7 +43,7 @@ public class RenderMudTilesSpikeTrap extends TileEntitySpecialRenderer<TileEntit
 
 		switch (facing) {
 		case UP:
-			GlStateManager.rotate(0F, 0.0F, 1F, 0F);
+			GlStateManager.rotate(-90F, 0.0F, 1F, 0F);
 			break;
 		case DOWN:
 			GlStateManager.rotate(180F, 1F, 0F, 0F);
@@ -53,12 +53,15 @@ public class RenderMudTilesSpikeTrap extends TileEntitySpecialRenderer<TileEntit
 			break;
 		case SOUTH:
 			GlStateManager.rotate(-90F, 1.0F, 0F, 0F);
+			GlStateManager.rotate(180F, 0.0F, 1F, 0F);
 			break;
 		case WEST:
 			GlStateManager.rotate(90F, 0.0F, 0F, 1F);
+			GlStateManager.rotate(-90F, 0.0F, 1F, 0F);
 			break;
 		case EAST:
 			GlStateManager.rotate(-90F, 0.0F, 0F, 1F);
+			GlStateManager.rotate(90F, 0.0F, 1F, 0F);
 			break;
 		}
 

@@ -28,7 +28,7 @@ public class BlockSpikeTrap extends BlockDirectional implements ITileEntityProvi
 
 	public BlockSpikeTrap() {
 		super(Material.ROCK);
-		setDefaultState(this.getBlockState().getBaseState());
+		setDefaultState(this.getBlockState().getBaseState().withProperty(FACING, EnumFacing.UP));
 		setSoundType(SoundType.STONE);
 		setHardness(10F);
 		setResistance(2000.0F);

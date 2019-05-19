@@ -43,7 +43,7 @@ public class SludgeWormMazeBlockHelper {
 	
 	public IBlockState MOB_SPAWNER = BlockRegistry.MOB_SPAWNER.getDefaultState();
 	public IBlockState BLACK_HAT_MUSHROOM = BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState();
-	public IBlockState BULB_CAPPED_MUSHROOM = BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState();
+	public IBlockState SLUDGECREEP = BlockRegistry.SLUDGECREEP.getDefaultState();
 	public IBlockState FLAT_HEAD_MUSHROOM = BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState();
 
 	public IBlockState STAGNANT_WATER = BlockRegistry.STAGNANT_WATER.getDefaultState();
@@ -100,7 +100,9 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState MUD_BRICKS_CARVED_EDGE_DECAY_2 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_EDGE_DECAY_2);
 	public IBlockState MUD_BRICKS_CARVED_EDGE_DECAY_3 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_EDGE_DECAY_3);
 	public IBlockState MUD_BRICKS_CARVED_EDGE_DECAY_4 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_EDGE_DECAY_4);
-
+	public IBlockState MUD_BRICKS_SPIKE_TRAP = BlockRegistry.MUD_BRICKS_SPIKE_TRAP.getDefaultState();
+	public IBlockState MUD_TILES_SPIKE_TRAP = BlockRegistry.MUD_TILES_SPIKE_TRAP.getDefaultState();
+	
 	public IBlockState MUD = BlockRegistry.MUD.getDefaultState();
 	public IBlockState DRIPPING_MUD = BlockRegistry.DRIPPING_MUD.getDefaultState();
 	public IBlockState PUFFSHROOM = BlockRegistry.PUFFSHROOM.getDefaultState();
@@ -553,12 +555,12 @@ public class SludgeWormMazeBlockHelper {
 
 	public IBlockState getRandomMushroom(Random rand) {
 		int type = rand.nextInt(30);
-		if(type < 14) {
+		if(type < 10) {
 			return FLAT_HEAD_MUSHROOM;
-		} else if(type < 28) {
+		} else if(type < 20) {
 			return BLACK_HAT_MUSHROOM;
 		} else {
-			return BULB_CAPPED_MUSHROOM;
+			return SLUDGECREEP; // will be rot bulbs
 		}
 	}
 
@@ -583,7 +585,7 @@ public class SludgeWormMazeBlockHelper {
 	}
 
 	public void setRandomRoot(World world, BlockPos pos, Random rand) {
-		if (!isSolidStructureBlock(world.getBlockState(pos))) {
+		if (!isSolidStructureBlock(world.getBlockState(pos)) && world.getBlockState(pos.down()).getBlock() instanceof BlockMudTiles) {
 			int rnd = rand.nextInt(30);
 			if (rnd < 10) {
 				world.setBlockState(pos, ROOT, 2);
@@ -728,6 +730,8 @@ public class SludgeWormMazeBlockHelper {
 			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_15, true);
 			STRUCTURE_BLOCKS.put(LOG_ROTTEN_BARK_CARVED_16, true);
 			STRUCTURE_BLOCKS.put(CHEST, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_SPIKE_TRAP, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_SPIKE_TRAP, true);
 		}
 	}
 }
