@@ -26,14 +26,14 @@ public class RenderBarrishee extends RenderLiving<EntityBarrishee> {
 	protected void preRenderCallback(EntityBarrishee entity, float partialTickTime) {
 		if(entity.isAmbushSpawn())
 			if(entity.isScreaming()) {
-				GlStateManager.translate(0F, -0.5F + entity.standingAngle * 0.5F - 0.0625F, 0F);
+				GlStateManager.translate(0F, -0.5F + entity.standingAngle * 0.5F - getTimerFudge(entity) * 0.00625F - 0.0625F, 0F);
 				lightUpStuff(entity, partialTickTime);
 			}
 			else
 				GlStateManager.translate(0F, -0.5F + entity.standingAngle * 0.5F, 0F);
 		else {
 			if(entity.isScreaming()) {
-				GlStateManager.translate(0F, 0F - getTimerFudge(entity) * 0.00625F, 0F);
+				GlStateManager.translate(0F, 0F - getTimerFudge(entity) * 0.00625F - 0.0625F , 0F);
 				lightUpStuff(entity, partialTickTime);
 			}
 		}
