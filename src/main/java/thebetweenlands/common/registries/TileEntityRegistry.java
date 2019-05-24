@@ -45,7 +45,6 @@ import thebetweenlands.common.tile.TileEntityWaystone;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
-import thebetweenlands.common.tile.TileEntityWormDungeonDoorWood;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.tile.spawner.TileEntityMudBricksSpawnerHole;
 import thebetweenlands.common.tile.spawner.TileEntityTarBeastSpawner;
@@ -88,7 +87,6 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityRepeller.class, "repeller");
 		registerTileEntity(TileEntityPresent.class, "present");
 		registerTileEntity(TileEntityPuffshroom.class, "puffshroom");
-		registerTileEntity(TileEntityWormDungeonDoorWood.class, "worm_dungeon_door_wood");
 		registerTileEntity(TileEntityBeamOrigin.class, "beam_origin");
 		registerTileEntity(TileEntityBeamRelay.class, "beam_relay");
 		registerTileEntity(TileEntityMudBricksSpawnerHole.class, "mud_bricks_spawner_hole");

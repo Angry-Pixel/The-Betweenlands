@@ -1,0 +1,24 @@
+{
+   "forge_marker": 1,
+   "defaults": {
+      "model": "forge:multi-layer",
+      "custom": {
+         "base": "thebetweenlands:edge_shroom#base",
+         "Solid": "thebetweenlands:edge_shroom#base",
+         "Translucent": "thebetweenlands:edge_shroom#trans"
+      },
+      "transform": "forge:default-block"
+   },
+   "variants": {
+      "normal": [{}],
+      "inventory": [{}],
+      "facing": {
+         "north": { },
+         "south": { "y": 180 },
+         "west": { "y": 270 },
+         "east": { "y": 90 }
+      },
+      "base": [{ "model": "thebetweenlands:edge_shroom" }],
+      "trans": [{ "model": "thebetweenlands:edge_shroom_wall_part" }]
+   }
+}

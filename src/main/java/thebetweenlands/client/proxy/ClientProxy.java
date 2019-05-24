@@ -183,7 +183,6 @@ import thebetweenlands.client.render.tile.RenderWaystone;
 import thebetweenlands.client.render.tile.RenderWeedwoodSign;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
 import thebetweenlands.client.render.tile.RenderWisp;
-import thebetweenlands.client.render.tile.RenderWormDungeonDoorWood;
 import thebetweenlands.client.render.tile.TileEntityPuffshroomRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
@@ -304,7 +303,6 @@ import thebetweenlands.common.tile.TileEntityWaystone;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
-import thebetweenlands.common.tile.TileEntityWormDungeonDoorWood;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.world.event.EventSpoopy;
 import thebetweenlands.common.world.event.EventWinter;
@@ -607,7 +605,6 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAspectrusCrop.class, new RenderAspectrusCrop());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRepeller.class, new RenderRepeller());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPuffshroom.class, new TileEntityPuffshroomRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWormDungeonDoorWood.class, new RenderWormDungeonDoorWood());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWaystone.class, new RenderWaystone());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudBricksAlcove.class, new RenderMudBricksAlcove());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootUrn.class, new RenderLootUrn());
@@ -637,7 +634,6 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ALEMBIC), 0, TileEntityAlembic.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ITEM_SHELF), 0, TileEntityItemShelf.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.REPELLER), 0, TileEntityRepeller.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.WORM_DUNGEON_DOOR_WOOD), 0, TileEntityWormDungeonDoorWood.class);
 		for(EnumFacing facing : EnumFacing.HORIZONTALS) {
 			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT), EnumLootPot.POT_1.getMetadata(facing), TileEntityTarLootPot1.class);
 			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT), EnumLootPot.POT_2.getMetadata(facing), TileEntityTarLootPot2.class);
