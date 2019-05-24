@@ -1,6 +1,7 @@
 {
    "textures": {
-    "0": "thebetweenlands:blocks/edge_shroom"
+    "0": "thebetweenlands:blocks/edge_shroom",
+    "particle": "thebetweenlands:blocks/edge_shroom"
     },
     "elements": [
         {

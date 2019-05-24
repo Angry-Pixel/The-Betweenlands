@@ -18,7 +18,7 @@
          "west": { "y": 90 },
          "east": { "y": 270 }
       },
-      "base": [{ "model": "thebetweenlands:edge_shroom" }],
+      "base": [{ "model": "thebetweenlands:edge_shroom" }, { "model": "thebetweenlands:edge_shroom_1" }, { "model": "thebetweenlands:edge_shroom_2" }],
       "trans": [{ "model": "thebetweenlands:edge_shroom_wall_part" }]
    }
 }
