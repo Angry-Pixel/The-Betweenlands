@@ -123,6 +123,7 @@ import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeepingBlue;
 import thebetweenlands.common.block.structure.BlockBeamOrigin;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
+import thebetweenlands.common.block.structure.BlockBeamTube;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockChipPath;
@@ -554,6 +555,7 @@ public class BlockRegistry {
     public static final Block EDGE_SHROOM = new BlockEdgeShroom();
     public static final Block MUD_TOWER_BEAM_ORIGIN = new BlockBeamOrigin();
     public static final Block MUD_TOWER_BEAM_RELAY = new BlockBeamRelay();
+    public static final Block MUD_TOWER_BEAM_TUBE = new BlockBeamTube();
     public static final Block DIAGONAL_ENERGY_BARRIER = new BlockDiagonalEnergyBarrier();
     public static final Block MUD_BRICKS_SPAWNER_HOLE = new BlockMudBricksSpawnerHole();
     public static final Block MUD_BRICKS_ALCOVE = new BlockMudBricksAlcove();
