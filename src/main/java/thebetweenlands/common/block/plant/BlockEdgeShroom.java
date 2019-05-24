@@ -75,14 +75,8 @@ public class BlockEdgeShroom extends Block {
     
 	@Override
     public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        return true;
+		return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.TRANSLUCENT;
-	}
 
     @Override
     public boolean isOpaqueCube(IBlockState state) {
