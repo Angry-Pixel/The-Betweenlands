@@ -1,6 +1,9 @@
 package thebetweenlands.common.block.plant;
 
+import java.util.List;
 import java.util.Random;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -9,6 +12,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
@@ -16,6 +20,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,6 +37,11 @@ public class BlockEdgeShroom extends Block {
         setHardness(0.1F);
         setCreativeTab(BLCreativeTabs.BLOCKS);
     }
+
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
+		//No solid collision
+	}
 
     @Override
     protected BlockStateContainer createBlockState() {

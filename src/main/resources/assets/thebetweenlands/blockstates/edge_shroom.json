@@ -13,10 +13,10 @@
       "normal": [{}],
       "inventory": [{}],
       "facing": {
-         "north": { },
-         "south": { "y": 180 },
-         "west": { "y": 270 },
-         "east": { "y": 90 }
+         "north": { "y": 180},
+         "south": { },
+         "west": { "y": 90 },
+         "east": { "y": 270 }
       },
       "base": [{ "model": "thebetweenlands:edge_shroom" }],
       "trans": [{ "model": "thebetweenlands:edge_shroom_wall_part" }]
