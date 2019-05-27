@@ -20,12 +20,12 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.tile.TileEntityBeamRelay;
+import thebetweenlands.util.AdvancedStateMap.Builder;
 
-public class BlockBeamRelay extends BlockDirectional implements ITileEntityProvider {
+public class BlockBeamRelay extends BlockDirectional implements ITileEntityProvider, IStateMappedBlock {
 	public static final PropertyBool POWERED = PropertyBool.create("powered");
 
 	public BlockBeamRelay() {
@@ -36,21 +36,20 @@ public class BlockBeamRelay extends BlockDirectional implements ITileEntityProvi
 		setSoundType(SoundType.STONE);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
-	
+
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getRenderLayer() {
-		return BlockRenderLayer.SOLID;
-	}
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
+    }
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -125,4 +124,9 @@ public class BlockBeamRelay extends BlockDirectional implements ITileEntityProvi
 			tile.deactivateBlock();
 		}
     }
+
+	@Override
+	public void setStateMapper(Builder builder) {
+		builder.ignore(new IProperty[] {POWERED}).build();
+	}
 }
