@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.structure.BlockBeamLensSupport;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockBeamTube;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
@@ -157,6 +158,7 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 			if (state != Blocks.AIR.getDefaultState()
 					&& !(state.getBlock() instanceof BlockDiagonalEnergyBarrier) 
 					&& !(state.getBlock() instanceof BlockEnergyBarrierMud)
+					&& !(state.getBlock() instanceof BlockBeamLensSupport)
 					&& !isValidBeamTubeLens(state, facing))
 				break;
 		}

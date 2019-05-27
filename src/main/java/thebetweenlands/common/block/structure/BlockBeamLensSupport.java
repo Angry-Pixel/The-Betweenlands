@@ -34,7 +34,7 @@ public class BlockBeamLensSupport extends BlockDirectional {
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
-		return true;
+		return false;
 	}
 
 
@@ -52,7 +52,7 @@ public class BlockBeamLensSupport extends BlockDirectional {
 
 	@Override
 	 public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		return this.getDefaultState().withProperty(FACING, getFacingFromEntity(pos, placer));
+		return this.getDefaultState().withProperty(FACING, facing.getOpposite());
 	}
 
 	public static EnumFacing getFacingFromEntity(BlockPos pos, EntityLivingBase entity) {

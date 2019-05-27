@@ -557,7 +557,7 @@ public class BlockRegistry {
     public static final Block MUD_TOWER_BEAM_ORIGIN = new BlockBeamOrigin();
     public static final Block MUD_TOWER_BEAM_RELAY = new BlockBeamRelay();
     public static final Block MUD_TOWER_BEAM_TUBE = new BlockBeamTube();
-    public static final Block MUD_TOWER_BEAM_LENS_SUPPORT = new BlockBeamLensSupport();
+    public static final Block MUD_TOWER_BEAM_LENS_SUPPORTS = new BlockBeamLensSupport();
     public static final Block DIAGONAL_ENERGY_BARRIER = new BlockDiagonalEnergyBarrier();
     public static final Block MUD_BRICKS_SPAWNER_HOLE = new BlockMudBricksSpawnerHole();
     public static final Block MUD_BRICKS_ALCOVE = new BlockMudBricksAlcove();
