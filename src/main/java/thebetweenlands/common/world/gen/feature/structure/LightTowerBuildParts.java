@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
+import thebetweenlands.common.block.structure.BlockBeamTube;
 import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
@@ -513,8 +514,8 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 7, 1 + level, -4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 
 			rotatedCubeVolume(world, rand, pos, 7, 6 + level, -1, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 8, 6 + level, -1, blockHelper.ENERGY_BARRIER_MUD, 1, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 9, 6 + level, -1, blockHelper.ENERGY_BARRIER_MUD, 1, 1, 1, facing);
+			//rotatedCubeVolume(world, rand, pos, 8, 6 + level, -1, blockHelper.MUD_TOWER_BEAM_TUBE, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 9, 6 + level, -1, blockHelper.MUD_TOWER_BEAM_TUBE.withProperty(BlockBeamTube.FACING, facing.rotateY()), 1, 1, 1, facing);
 
 			rotatedCubeVolume(world, rand, pos, 5, 1 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 5, 2 + level, 4, blockHelper.PITSTONE_PILLAR, 1, 5, 1, facing);
@@ -537,11 +538,11 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 0, 2 + level, 0, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 0, 1 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 0, 2 + level, 4, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 2, 0 + level, 4, blockHelper.ENERGY_BARRIER_MUD, 1, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, -2, 0 + level, 4, blockHelper.ENERGY_BARRIER_MUD, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 2, 0 + level, 4, blockHelper.MUD_TOWER_BEAM_TUBE, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -2, 0 + level, 4, blockHelper.MUD_TOWER_BEAM_TUBE, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -2, 2 + level, 4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 2, 2 + level, 4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, -7, -1 + level, 4, blockHelper.ENERGY_BARRIER_MUD, 1, 2, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, -1 + level, 4, blockHelper.MUD_TOWER_BEAM_TUBE, 1, 2, 1, facing);
 			
 			rotatedCubeVolume(world, rand, pos, -7, 2 + level, 4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -7, 3 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
@@ -549,7 +550,7 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, -7, 5 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -7, 6 + level, 4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 			
-			rotatedCubeVolume(world, rand, pos, 7, -1 + level, 4, blockHelper.ENERGY_BARRIER_MUD, 1, 2, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, -1 + level, 4, blockHelper.MUD_TOWER_BEAM_TUBE, 1, 2, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 7, 6 + level, 4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 7, 7 + level, 4, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 7, 8 + level, 4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
@@ -563,11 +564,11 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 0, 1 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 0, 2 + level, -4, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
 			
-			rotatedCubeVolume(world, rand, pos, 2, 0 + level, -4, blockHelper.ENERGY_BARRIER_MUD, 1, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, -2, 0 + level, -4, blockHelper.ENERGY_BARRIER_MUD, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 2, 0 + level, -4, blockHelper.MUD_TOWER_BEAM_TUBE, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -2, 0 + level, -4, blockHelper.MUD_TOWER_BEAM_TUBE, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -2, 2 + level, -4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 2, 2 + level, -4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, -7, -1 + level, -4, blockHelper.ENERGY_BARRIER_MUD, 1, 2, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, -1 + level, -4, blockHelper.MUD_TOWER_BEAM_TUBE, 1, 2, 1, facing);
 			
 			rotatedCubeVolume(world, rand, pos, -7, 2 + level, -4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -7, 3 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
@@ -576,7 +577,7 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, -7, 6 + level, -4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 			
 			rotatedCubeVolume(world, rand, pos, 7, 6 + level, -1, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 7, -1 + level, -1, blockHelper.ENERGY_BARRIER_MUD, 1, 2, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, -1 + level, -1, blockHelper.MUD_TOWER_BEAM_TUBE, 1, 2, 1, facing);
 			
 			
 			rotatedCubeVolume(world, rand, pos, 7, 1 + level, 0, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
@@ -593,16 +594,16 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 7, 4 + level, -4, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 7, 5 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 7, 6 + level, -4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 7, -1 + level, -4, blockHelper.ENERGY_BARRIER_MUD, 1, 2, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 7, -1 + level, -4, blockHelper.MUD_TOWER_BEAM_TUBE, 1, 2, 1, facing);
 		}
 		
 		if(level == 16) {
 			rotatedCubeVolume(world, rand, pos, 0, 5 + level, 0, blockHelper.MUD_TOWER_BEAM_ORIGIN, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 0, 0 + level, 0, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -7, 1 + level, 4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, -7, -1 + level, 4, blockHelper.ENERGY_BARRIER_MUD, 1, 2, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, -1 + level, 4, blockHelper.MUD_TOWER_BEAM_TUBE, 1, 2, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -7, 1 + level, -4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, -7, -1 + level, -4, blockHelper.ENERGY_BARRIER_MUD, 1, 2, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -7, -1 + level, -4, blockHelper.MUD_TOWER_BEAM_TUBE, 1, 2, 1, facing);
 		}
 	}
 

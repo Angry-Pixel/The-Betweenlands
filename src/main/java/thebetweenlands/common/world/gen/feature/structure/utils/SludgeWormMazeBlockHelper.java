@@ -198,6 +198,8 @@ public class SludgeWormMazeBlockHelper {
     public IBlockState DIAGONAL_ENERGY_BARRIER = BlockRegistry.DIAGONAL_ENERGY_BARRIER.getDefaultState();
     public IBlockState MUD_TOWER_BEAM_ORIGIN = BlockRegistry.MUD_TOWER_BEAM_ORIGIN.getDefaultState();
     public IBlockState MUD_TOWER_BEAM_RELAY = BlockRegistry.MUD_TOWER_BEAM_RELAY.getDefaultState();
+    public IBlockState MUD_TOWER_BEAM_TUBE = BlockRegistry.MUD_TOWER_BEAM_TUBE.getDefaultState();
+    public IBlockState MUD_TOWER_BEAM_LENS_SUPPORTS = BlockRegistry.MUD_TOWER_BEAM_LENS_SUPPORTS.getDefaultState();
     public IBlockState BRAZIER_TOP = BlockRegistry.MUD_TOWER_BRAZIER.getDefaultState(); //TODO Top Property
     public IBlockState BRAZIER_BOTTOM = BlockRegistry.MUD_TOWER_BRAZIER.getDefaultState(); //TODO Bottom Property
     public IBlockState PEAT = BlockRegistry.PEAT.getDefaultState();
