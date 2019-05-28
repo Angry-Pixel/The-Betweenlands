@@ -552,7 +552,8 @@ public class SludgeWormMazeBlockHelper {
 	}
 
 	public IBlockState getRandomLitCandle(Random rand) {
-		return rand.nextBoolean() ? MUD_FLOWER_POT_CANDLE_UNLIT : MUD_FLOWER_POT_CANDLE_LIT;
+		//return rand.nextBoolean() ? MUD_FLOWER_POT_CANDLE_UNLIT : MUD_FLOWER_POT_CANDLE_LIT;
+		return MUD_FLOWER_POT_CANDLE_UNLIT; // lighting updates kill atm
 	}
 
 	public IBlockState getRandomMushroom(Random rand) {

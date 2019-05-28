@@ -50,7 +50,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.start("Tower");
 		generateTower(world, rand, pos.down().add(12, 0, 12));
 		timer.finish("Tower");
-
+/*
 		//locations blah, blah, blah...
 		timer.start("World_Locations");
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
@@ -63,7 +63,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		location.setDirty(true);
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 		timer.finish("World_Locations");
-
+*/
 		timer.start("Pit");
 		generateDecayPit(world, rand, pos.down(44).add(14, 0, 14));
 		timer.finish("Pit");
@@ -701,7 +701,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						else if (rand.nextInt(6) == 0 && addSpawners)
 							world.setBlockState(pos.add(j, 0, i), blockHelper.SPAWNER_TYPE_2, 2);
 						else
-							if (rand.nextBoolean() && level != 2)
+							if (rand.nextBoolean() && rand.nextBoolean() && level != 2)
 								world.setBlockState(pos.add(j, 0, i), blockHelper.PUFFSHROOM, 2);
 					}
 				} 
