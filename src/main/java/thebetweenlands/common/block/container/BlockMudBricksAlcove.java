@@ -123,6 +123,8 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 				if (tileInv != null)
 					((TileEntityLootInventory) tileInv).fillInventoryWithLoot(null);
 			}
+			if (tile.facing <= 1)
+				tile.setFacing(state.getValue(FACING).getIndex());
 		}
 		world.notifyBlockUpdate(pos, state, state, 3);
 	}

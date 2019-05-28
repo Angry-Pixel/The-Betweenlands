@@ -1,7 +1,6 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.Random;
-import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -9,12 +8,9 @@ import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import thebetweenlands.api.storage.LocalRegion;
-import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
@@ -24,8 +20,6 @@ import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.util.TimeMeasurement;
 
 public class WorldGenSludgeWormDungeon extends WorldGenerator {
@@ -482,13 +476,17 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 							if (rand.nextInt(25) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, 0, 1 + i * 4))) && world.getBlockState(pos.add(2 + j * 4, 0, i * 4)).getBlock() instanceof BlockCarvedMudBrick)
 								world.setBlockState(pos.add(2 + j * 4, 0, 1 + i * 4), blockHelper.DUNGEON_WALL_CANDLE_SOUTH, 2);
 							else {
+
 								if (rand.nextInt(5) == 0 && level != 2)
-									setAlcoveForLevel(world, pos.add(2 + j * 4, 0, i * 4), blockHelper.MUD_BRICKS_ALCOVE_SOUTH, rand, level);
+									if(world.getBlockState(pos.add(2 + j * 4, 0, i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+										setAlcoveForLevel(world, pos.add(2 + j * 4, 0, i * 4), blockHelper.MUD_BRICKS_ALCOVE_SOUTH, rand, level);
 								if (rand.nextInt(5) == 0)
-									setAlcoveForLevel(world, pos.add(1 + j * 4, 0, i * 4), blockHelper.MUD_BRICKS_ALCOVE_SOUTH, rand, level);
+									if(world.getBlockState(pos.add(1 + j * 4, 0, i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+										setAlcoveForLevel(world, pos.add(1 + j * 4, 0, i * 4), blockHelper.MUD_BRICKS_ALCOVE_SOUTH, rand, level);
 								if (rand.nextInt(5) == 0)
-									setAlcoveForLevel(world, pos.add(3 + j * 4, 0, i * 4), blockHelper.MUD_BRICKS_ALCOVE_SOUTH, rand, level);
-							}
+									if(world.getBlockState(pos.add(3 + j * 4, 0, i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+										setAlcoveForLevel(world, pos.add(3 + j * 4, 0, i * 4), blockHelper.MUD_BRICKS_ALCOVE_SOUTH, rand, level);
+								}
 					}
 					if (layer == 3) {
 					}
@@ -511,11 +509,14 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 								world.setBlockState(pos.add(1 + j * 4, 0, 2 + i * 4), blockHelper.DUNGEON_WALL_CANDLE_EAST, 2);
 							else {
 								if (rand.nextInt(5) == 0 && level != 2)
-									setAlcoveForLevel(world, pos.add(j * 4, 0, 2 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_EAST, rand, level);
+									if(world.getBlockState(pos.add(j * 4, 0, 2 + i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+										setAlcoveForLevel(world, pos.add(j * 4, 0, 2 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_EAST, rand, level);
 								if (rand.nextInt(5) == 0)
-									setAlcoveForLevel(world, pos.add(j * 4, 0, 1 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_EAST, rand, level);
+									if(world.getBlockState(pos.add(j * 4, 0, 1 + i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+										setAlcoveForLevel(world, pos.add(j * 4, 0, 1 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_EAST, rand, level);
 								if (rand.nextInt(5) == 0)
-									setAlcoveForLevel(world, pos.add(j * 4, 0, 3 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_EAST, rand, level);
+									if(world.getBlockState(pos.add(j * 4, 0, 3 + i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+										setAlcoveForLevel(world, pos.add(j * 4, 0, 3 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_EAST, rand, level);
 							}
 					}
 					if (layer == 3) {
@@ -539,11 +540,14 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 								world.setBlockState(pos.add(3 + j * 4, 0, 2 + i * 4), blockHelper.DUNGEON_WALL_CANDLE_WEST, 2);
 							else {
 								if (rand.nextInt(5) == 0 && level != 2)
-									setAlcoveForLevel(world, pos.add(4 + j * 4, 0, 2 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_WEST, rand, level);
+									if(world.getBlockState(pos.add(4 + j * 4, 0, 2 + i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+										setAlcoveForLevel(world, pos.add(4 + j * 4, 0, 2 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_WEST, rand, level);
 								if (rand.nextInt(5) == 0)
-									setAlcoveForLevel(world, pos.add(4 + j * 4, 0, 1 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_WEST, rand, level);
+									if(world.getBlockState(pos.add(4 + j * 4, 0, 1 + i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+										setAlcoveForLevel(world, pos.add(4 + j * 4, 0, 1 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_WEST, rand, level);
 								if (rand.nextInt(5) == 0)
-									setAlcoveForLevel(world, pos.add(4 + j * 4, 0, 3 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_WEST, rand, level);
+									if(world.getBlockState(pos.add(4 + j * 4, 0,  3 + i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+										setAlcoveForLevel(world, pos.add(4 + j * 4, 0, 3 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_WEST, rand, level);
 							}
 					}
 					if (layer == 3) {
@@ -567,12 +571,14 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 								world.setBlockState(pos.add(2 + j * 4, 0, 3 + i * 4), blockHelper.DUNGEON_WALL_CANDLE_NORTH, 2);
 							else {
 								if (rand.nextInt(5) == 0 && level != 2)
-									setAlcoveForLevel(world, pos.add(2 + j * 4, 0, 4 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_NORTH, rand, level);
+									if(world.getBlockState(pos.add(2 + j * 4, 0, 4 + i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+										setAlcoveForLevel(world, pos.add(2 + j * 4, 0, 4 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_NORTH, rand, level);
 								if (rand.nextInt(5) == 0)
-									setAlcoveForLevel(world, pos.add(1 + j * 4, 0, 4 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_NORTH, rand, level);
-								if (rand.nextInt(5) == 0) {
-									setAlcoveForLevel(world, pos.add(3 + j * 4, 0, 4 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_NORTH, rand, level);
-								}
+									if(world.getBlockState(pos.add(1 + j * 4, 0, 4 + i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+										setAlcoveForLevel(world, pos.add(1 + j * 4, 0, 4 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_NORTH, rand, level);
+								if (rand.nextInt(5) == 0)
+									if(world.getBlockState(pos.add(3 + j * 4, 0, 4 + i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+										setAlcoveForLevel(world, pos.add(3 + j * 4, 0, 4 + i * 4), blockHelper.MUD_BRICKS_ALCOVE_NORTH, rand, level);
 							}
 					}
 					if (layer == 3) {

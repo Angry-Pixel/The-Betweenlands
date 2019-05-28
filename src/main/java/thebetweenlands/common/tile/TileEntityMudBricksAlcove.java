@@ -9,6 +9,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 public class TileEntityMudBricksAlcove extends TileEntityLootInventory {
 	public boolean has_urn, greebled, top_web, bottom_web, small_candle, big_candle, out_crop;
 	public int urn_type = 0, rotationOffset = 0, dungeon_level = 0;
+	public int facing = 0;
 
 	public TileEntityMudBricksAlcove() {
 		super(1, "container.mud_bricks_alcove");
@@ -36,6 +37,11 @@ public class TileEntityMudBricksAlcove extends TileEntityLootInventory {
 		dungeon_level = level;
 	}
 
+	public void setFacing(int index) {
+		/** Ordering index for D-U-N-S-W-E */
+		facing = index;
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
@@ -49,6 +55,7 @@ public class TileEntityMudBricksAlcove extends TileEntityLootInventory {
 		big_candle = nbt.getBoolean("big_candle");
 		out_crop = nbt.getBoolean("out_crop");
 		dungeon_level = nbt.getInteger("dungeon_level");
+		facing = nbt.getInteger("facing");
 	}
 
 	@Override
@@ -64,6 +71,7 @@ public class TileEntityMudBricksAlcove extends TileEntityLootInventory {
 		nbt.setBoolean("big_candle", big_candle );
 		nbt.setBoolean("out_crop", out_crop);
 		nbt.setInteger("dungeon_level", dungeon_level);
+		nbt.setInteger("facing", facing);
 		return nbt;
 	}
 
