@@ -1,5 +1,6 @@
 package thebetweenlands.client.render.model.baked;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +37,9 @@ import thebetweenlands.util.ModelConverter.Box;
 import thebetweenlands.util.ModelConverter.Model;
 import thebetweenlands.util.ModelConverter.Quad;
 import thebetweenlands.util.QuadBuilder;
+import thebetweenlands.util.TexturePacker;
+import thebetweenlands.util.TexturePacker.TextureQuad;
+import thebetweenlands.util.TexturePacker.TextureQuadMap;
 import thebetweenlands.util.Vec3UV;
 
 public class ModelFromModelBase implements IModel {
@@ -112,6 +116,43 @@ public class ModelFromModelBase implements IModel {
 	public IModelState getDefaultState() {
 		return TRSRTransformation.identity();
 	}
+	
+	
+	//TODO Remove
+	public int addToPacker(TexturePacker packer) {
+		List<TextureQuad> quads = new ArrayList<>();
+		
+		int area = 0;
+		
+		ModelConverter converter = new ModelConverter(this.model, 0.0625D, false);
+		Model convertedModel = converter.getModel();
+		for(Box box : convertedModel.getBoxes()) {
+			for(Quad quad : box.getQuads()) {
+				int minU = Integer.MAX_VALUE;
+				int minV = Integer.MAX_VALUE;
+				int maxU = 0;
+				int maxV = 0;
+				
+				for(int i = 0; i < quad.getVertices().length; i++) {
+					Vec3UV vert = quad.getVertices()[i];
+					
+					minU = Math.min(minU, (int)Math.floor(vert.u * vert.uw));
+					minV = Math.min(minV, (int)Math.floor(vert.v * vert.vw));
+					maxU = Math.max(maxU, (int)Math.floor(vert.u * vert.uw));
+					maxV = Math.max(maxV, (int)Math.floor(vert.v * vert.vw));
+				}
+				
+				area += (maxU - minU) * (maxV - minV);
+				
+				quads.add(new TextureQuad(this.texture, (int)minU, (int)minV, (int)(maxU - minU), (int)(maxV - minV)));
+			}
+		}
+		
+		packer.addTextureMap(new TextureQuadMap(quads));
+		
+		return area;
+	}
+	
 
 	public static class ModelBakedModelBase implements IBakedModel {
 		protected final TRSRTransformation transformation;

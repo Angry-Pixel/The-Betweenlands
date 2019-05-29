@@ -1,10 +1,18 @@
 package thebetweenlands.common.registries;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import javax.imageio.ImageIO;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
@@ -20,8 +28,8 @@ import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
 import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
 import thebetweenlands.client.render.model.baked.ModelRubberTapLiquid;
-import thebetweenlands.client.render.model.baked.ModelStalactite;
 import thebetweenlands.client.render.model.baked.ModelSlant;
+import thebetweenlands.client.render.model.baked.ModelStalactite;
 import thebetweenlands.client.render.model.baked.ModelWalkway;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodBush;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodShieldBurning;
@@ -67,6 +75,7 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ModelConverter.Box;
 import thebetweenlands.util.ModelConverter.Quad;
 import thebetweenlands.util.QuadBuilder;
+import thebetweenlands.util.TexturePacker;
 import thebetweenlands.util.Vec3UV;
 
 public class ModelRegistry {
@@ -211,6 +220,42 @@ public class ModelRegistry {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		
+		int currentArea = 0;
+		
+		int totalArea = 0;
+		
+		//TODO Remove
+		TexturePacker packer = new TexturePacker(new ResourceLocation(ModInfo.ID, "packed_model_texture"));
+		for(IModel m : MODELS) {
+			if(m instanceof ModelFromModelBase) {
+				totalArea += ((ModelFromModelBase)m).addToPacker(packer);
+				
+				currentArea += ((ModelFromModelBase)m).width * ((ModelFromModelBase)m).height;
+			}
+		}
+		
+		System.out.println("PACKING TEXTURES");
+		Map<ResourceLocation, BufferedImage> packedTextures = packer.pack(Minecraft.getMinecraft().getResourceManager());
+		
+		int usedArea = 0;
+		
+		System.out.println("PACKED TEXTURES: " + packedTextures.size());
+		for(Entry<ResourceLocation, BufferedImage> packed : packedTextures.entrySet()) {
+			usedArea += packed.getValue().getWidth() * packed.getValue().getHeight();
+			
+			try {
+				File f = new File("packed_textures/" + packed.getKey().getPath() + ".png");
+				f.mkdirs();
+				ImageIO.write(packed.getValue(), "PNG", f);
+				System.out.println("WRITE PACKED TEXTURES: " + f.getAbsolutePath());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		System.out.println("Optimal footprint: " + totalArea + " Packed footprint: " + usedArea + " Current footprint: " + currentArea);
 	}
 
 	private static void registerModel(IModel model, ResourceLocation location) {
