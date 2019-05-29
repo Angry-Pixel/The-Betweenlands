@@ -17,6 +17,8 @@ import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockLootUrn.EnumLootUrn;
 import thebetweenlands.common.block.container.BlockMudBricksAlcove;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
+import thebetweenlands.common.block.structure.BlockBrazier;
+import thebetweenlands.common.block.structure.BlockBrazier.EnumBrazierHalf;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
@@ -200,8 +202,8 @@ public class SludgeWormMazeBlockHelper {
     public IBlockState MUD_TOWER_BEAM_RELAY = BlockRegistry.MUD_TOWER_BEAM_RELAY.getDefaultState();
     public IBlockState MUD_TOWER_BEAM_TUBE = BlockRegistry.MUD_TOWER_BEAM_TUBE.getDefaultState();
     public IBlockState MUD_TOWER_BEAM_LENS_SUPPORTS = BlockRegistry.MUD_TOWER_BEAM_LENS_SUPPORTS.getDefaultState();
-    public IBlockState BRAZIER_TOP = BlockRegistry.MUD_TOWER_BRAZIER.getDefaultState(); //TODO Top Property
-    public IBlockState BRAZIER_BOTTOM = BlockRegistry.MUD_TOWER_BRAZIER.getDefaultState(); //TODO Bottom Property
+    public IBlockState BRAZIER_TOP = BlockRegistry.MUD_TOWER_BRAZIER.getDefaultState().withProperty(BlockBrazier.HALF, EnumBrazierHalf.UPPER);
+    public IBlockState BRAZIER_BOTTOM = BlockRegistry.MUD_TOWER_BRAZIER.getDefaultState().withProperty(BlockBrazier.HALF, EnumBrazierHalf.LOWER);
     public IBlockState PEAT = BlockRegistry.PEAT.getDefaultState();
 
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();

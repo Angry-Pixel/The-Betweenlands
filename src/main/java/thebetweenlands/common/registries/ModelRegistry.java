@@ -40,6 +40,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop4Decay
 import thebetweenlands.client.render.model.baked.modelbase.ModelMossBed;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPot;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPotCandle;
+import thebetweenlands.client.render.model.baked.modelbase.ModelMudTowerBrazier;
 import thebetweenlands.client.render.model.baked.modelbase.ModelPitcherPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelPresent;
 import thebetweenlands.client.render.model.baked.modelbase.ModelRubberTapPouring;
@@ -172,6 +173,7 @@ public class ModelRegistry {
 	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_1 = new ModelFromModelBase(new ModelWoodSupportBeam1(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_1"), 64, 64);
 	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_2 = new ModelFromModelBase(new ModelWoodSupportBeam2(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_2"), 64, 64);
 	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_3 = new ModelFromModelBase(new ModelWoodSupportBeam3(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_3"), 64, 64);
+	public static final IModel MUD_TOWER_BRAZIER = new ModelFromModelBase(new ModelMudTowerBrazier(), new ResourceLocation("thebetweenlands:blocks/mud_tower_brazier"), 128, 128);
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

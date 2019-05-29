@@ -121,10 +121,11 @@ import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.plant.BlockWaterWeeds;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeepingBlue;
+import thebetweenlands.common.block.structure.BlockBeamLensSupport;
 import thebetweenlands.common.block.structure.BlockBeamOrigin;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
-import thebetweenlands.common.block.structure.BlockBeamLensSupport;
 import thebetweenlands.common.block.structure.BlockBeamTube;
+import thebetweenlands.common.block.structure.BlockBrazier;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockChipPath;
@@ -591,7 +592,7 @@ public class BlockRegistry {
 	public static final Block MUD_TILES_SPIKE_TRAP = new BlockMudTilesSpikeTrap();
 	
 	//Place-Holders for stuffs and things
-	public static final Block MUD_TOWER_BRAZIER = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block MUD_TOWER_BRAZIER = new BlockBrazier();
 	public static final Block DECAY_PIT_STATUE_WINDER = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block DECAY_PIT_CAPSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 

@@ -84,11 +84,8 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 		int distance = 4;
 		Vec3d vector = new Vec3d((getPos().getX() + 0.5D) - (targetPos.getX() + 0.5D), (getPos().getY() + 0.5D) - (targetPos.getY() + 0.5D), (getPos().getZ() + 0.5D) - (targetPos.getZ() + 0.5D));
 		vector = vector.normalize();
-		for (float i = 0; i < distance; i += 0.125F)
-			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.FLAME, targetPos.getX() + 0.5F + ((float) vector.x * i), targetPos.getY() + 0.5F + ((float) vector.y * i), targetPos.getZ() + 0.5F + ((float) vector.z * i), 0F));
-		for (float i = 0; i < distance; i += 0.25F) {
+		for (float i = 0; i < distance; i += 0.25F)
 			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.BEAM_YELLOW, targetPos.getX() + 0.5F + ((float) vector.x * i), targetPos.getY() + 0.5F + ((float) vector.y * i), targetPos.getZ() + 0.5F + ((float) vector.z * i), 2.75F));
-		}
 	}
 
 	//Temp particles
