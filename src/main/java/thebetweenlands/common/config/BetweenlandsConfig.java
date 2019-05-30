@@ -503,5 +503,10 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "debug_recipe_overrides")
 		@Comment("If true, enables the recipe overrides debug logger")
 		public boolean debugRecipeOverrides = false;
+		
+		@Name("dump_packed_textures")
+		@LangKey(LANG_PREFIX + "dump_packed_textures")
+		@Comment("If true, mod will dump the packed model textures on startup")
+		public boolean dumpPackedTextures = false;
 	}
 }
