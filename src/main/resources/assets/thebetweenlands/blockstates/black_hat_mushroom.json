@@ -8,7 +8,8 @@
 					"model_base": "thebetweenlands:block/internal/black_hat_mushroom_1",
 					"model_active": "thebetweenlands:block/internal/black_hat_mushroom_1",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/black_hat_mushroom_1_frosty"
+						"texture": "thebetweenlands:blocks/black_hat_mushroom_1_frosty",
+						"particle_texture": "thebetweenlands:particle/block/black_hat_mushroom_frosty_particle"
 					}
 				}
 			},
@@ -18,7 +19,8 @@
 					"model_base": "thebetweenlands:block/internal/black_hat_mushroom_1",
 					"model_active": "thebetweenlands:block/internal/black_hat_mushroom_1",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/black_hat_mushroom_1_frosty"
+						"texture": "thebetweenlands:blocks/black_hat_mushroom_1_frosty",
+						"particle_texture": "thebetweenlands:particle/block/black_hat_mushroom_frosty_particle"
 					}
 				},
 				"y": 90
@@ -29,7 +31,8 @@
 					"model_base": "thebetweenlands:block/internal/black_hat_mushroom_1",
 					"model_active": "thebetweenlands:block/internal/black_hat_mushroom_1",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/black_hat_mushroom_1_frosty"
+						"texture": "thebetweenlands:blocks/black_hat_mushroom_1_frosty",
+						"particle_texture": "thebetweenlands:particle/block/black_hat_mushroom_frosty_particle"
 					}
 				},
 				"y": 180
@@ -40,7 +43,8 @@
 					"model_base": "thebetweenlands:block/internal/black_hat_mushroom_1",
 					"model_active": "thebetweenlands:block/internal/black_hat_mushroom_1",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/black_hat_mushroom_1_frosty"
+						"texture": "thebetweenlands:blocks/black_hat_mushroom_1_frosty",
+						"particle_texture": "thebetweenlands:particle/block/black_hat_mushroom_frosty_particle"
 					}
 				},
 				"y": 270
@@ -51,7 +55,8 @@
 					"model_base": "thebetweenlands:block/internal/black_hat_mushroom_2",
 					"model_active": "thebetweenlands:block/internal/black_hat_mushroom_2",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/black_hat_mushroom_2_frosty"
+						"texture": "thebetweenlands:blocks/black_hat_mushroom_2_frosty",
+						"particle_texture": "thebetweenlands:particle/block/black_hat_mushroom_frosty_particle"
 					}
 				}
 			},
@@ -61,7 +66,8 @@
 					"model_base": "thebetweenlands:block/internal/black_hat_mushroom_2",
 					"model_active": "thebetweenlands:block/internal/black_hat_mushroom_2",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/black_hat_mushroom_2_frosty"
+						"texture": "thebetweenlands:blocks/black_hat_mushroom_2_frosty",
+						"particle_texture": "thebetweenlands:particle/block/black_hat_mushroom_frosty_particle"
 					}
 				},
 				"y": 90
@@ -72,7 +78,8 @@
 					"model_base": "thebetweenlands:block/internal/black_hat_mushroom_2",
 					"model_active": "thebetweenlands:block/internal/black_hat_mushroom_2",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/black_hat_mushroom_2_frosty"
+						"texture": "thebetweenlands:blocks/black_hat_mushroom_2_frosty",
+						"particle_texture": "thebetweenlands:particle/block/black_hat_mushroom_frosty_particle"
 					}
 				},
 				"y": 180
@@ -83,7 +90,8 @@
 					"model_base": "thebetweenlands:block/internal/black_hat_mushroom_2",
 					"model_active": "thebetweenlands:block/internal/black_hat_mushroom_2",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/black_hat_mushroom_2_frosty"
+						"texture": "thebetweenlands:blocks/black_hat_mushroom_2_frosty",
+						"particle_texture": "thebetweenlands:particle/block/black_hat_mushroom_frosty_particle"
 					}
 				},
 				"y": 270
@@ -94,7 +102,8 @@
 					"model_base": "thebetweenlands:block/internal/black_hat_mushroom_3",
 					"model_active": "thebetweenlands:block/internal/black_hat_mushroom_3",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/black_hat_mushroom_3_frosty"
+						"texture": "thebetweenlands:blocks/black_hat_mushroom_3_frosty",
+						"particle_texture": "thebetweenlands:particle/block/black_hat_mushroom_frosty_particle"
 					}
 				}
 			},
@@ -104,7 +113,8 @@
 					"model_base": "thebetweenlands:block/internal/black_hat_mushroom_3",
 					"model_active": "thebetweenlands:block/internal/black_hat_mushroom_3",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/black_hat_mushroom_3_frosty"
+						"texture": "thebetweenlands:blocks/black_hat_mushroom_3_frosty",
+						"particle_texture": "thebetweenlands:particle/block/black_hat_mushroom_frosty_particle"
 					}
 				},
 				"y": 90
@@ -115,7 +125,8 @@
 					"model_base": "thebetweenlands:block/internal/black_hat_mushroom_3",
 					"model_active": "thebetweenlands:block/internal/black_hat_mushroom_3",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/black_hat_mushroom_3_frosty"
+						"texture": "thebetweenlands:blocks/black_hat_mushroom_3_frosty",
+						"particle_texture": "thebetweenlands:particle/block/black_hat_mushroom_frosty_particle"
 					}
 				},
 				"y": 180
@@ -126,7 +137,8 @@
 					"model_base": "thebetweenlands:block/internal/black_hat_mushroom_3",
 					"model_active": "thebetweenlands:block/internal/black_hat_mushroom_3",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/black_hat_mushroom_3_frosty"
+						"texture": "thebetweenlands:blocks/black_hat_mushroom_3_frosty",
+						"particle_texture": "thebetweenlands:particle/block/black_hat_mushroom_frosty_particle"
 					}
 				},
 				"y": 270

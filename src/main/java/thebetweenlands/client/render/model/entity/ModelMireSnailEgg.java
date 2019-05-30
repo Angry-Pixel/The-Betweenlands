@@ -2,10 +2,12 @@ package thebetweenlands.client.render.model.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class ModelMireSnailEgg extends ModelBase {
@@ -26,14 +28,18 @@ public class ModelMireSnailEgg extends ModelBase {
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
         super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
-        GL11.glPushMatrix();
+       
+        GlStateManager.pushMatrix();
+        
         this.inners.render(unitPixel);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+        
         this.shell.render(unitPixel);
-        GL11.glDisable(GL11.GL_BLEND);
+        
+        GlStateManager.disableBlend();
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
-
 }

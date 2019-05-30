@@ -3,7 +3,7 @@
   "defaults": {
     "model": "thebetweenlands:internal/blank",
     "custom": {
-      "particle_texture": "thebetweenlands:tiles/alembic_particle"
+      "particle_texture": "thebetweenlands:particle/block/alembic_particle"
     }
   },
   "variants": {
