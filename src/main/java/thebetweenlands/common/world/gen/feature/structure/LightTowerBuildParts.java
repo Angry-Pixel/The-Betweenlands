@@ -498,13 +498,20 @@ public class LightTowerBuildParts {
 		rotatedCubeVolume(world, rand, pos, 0, 1 + level, 9, Blocks.AIR.getDefaultState(), 1, 3, 1, facing);
 		rotatedCubeVolume(world, rand, pos, -1, 1 + level, 9, Blocks.AIR.getDefaultState(), 1, 2, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 1 + level, 9, Blocks.AIR.getDefaultState(), 1, 2, 1, facing);
+		
 		if(level == 0) {
 			rotatedCubeVolume(world, rand, pos, 1, 3 + level, 9, blockHelper.getStairsForTowerLevel(rand, level, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.TOP, true), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -1, 3 + level, 9, blockHelper.getStairsForTowerLevel(rand, level, facing.rotateY(), BlockStairsBetweenlands.EnumHalf.TOP, true), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 0, 3 + level, 9, blockHelper.PITSTONE_BRICK_SLAB_UPPER, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 0, 4 + level, 9,  blockHelper.PITSTONE_BRICK_SLAB_UPPER, 1, 1, 1, facing);
 		}
 		if(level == 8) {
 			rotatedCubeVolume(world, rand, pos, 1, 3 + level, 9, blockHelper.getStairsForLevel(rand, 0, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -1, 3 + level, 9, blockHelper.getStairsForLevel(rand, 0, facing.rotateY(), BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, -3, 1 + level, 8, blockHelper.getPillarsForLevel(rand, 0, 1), 1, 5, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 3, 1 + level, 8, blockHelper.getPillarsForLevel(rand, 0, 1), 1, 5, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 0, 3 + level, 9, blockHelper.getMudSlabsForLevel(rand, 0, BlockSlabBetweenlands.EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 0, 4 + level, 9, blockHelper.getMudSlabsForLevel(rand, 0, BlockSlabBetweenlands.EnumBlockHalfBL.TOP), 1, 1, 1, facing);
 		}
 	}
 
