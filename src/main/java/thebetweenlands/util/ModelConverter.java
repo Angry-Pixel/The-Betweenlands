@@ -1,16 +1,21 @@
 package thebetweenlands.util;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.model.TexturedQuad;
+import net.minecraft.util.ResourceLocation;
+import thebetweenlands.util.TexturePacker.ITexturePackable;
+import thebetweenlands.util.TexturePacker.TextureQuad;
+import thebetweenlands.util.TexturePacker.TextureQuadMap;
 
 public class ModelConverter {
 	//Holds the rotation matrix
@@ -53,7 +58,6 @@ public class ModelConverter {
 			this.rx = Math.toDegrees(Math.acos(up.dot(new Vec3UV(0, dirH.y, dirH.z))));
 			Vec3UV fwd = new Vec3UV(0, 0, 1);
 			this.rz = Math.toDegrees(Math.acos(up.dot(new Vec3UV(dirH.x, dirH.y, 0))));
-			Vec3UV side = new Vec3UV(1, 0, 0);
 			this.ry = Math.toDegrees(Math.acos(fwd.dot(new Vec3UV(dirW.x, 0, dirW.z))));
 		}
 	}
@@ -305,18 +309,34 @@ public class ModelConverter {
 	//The constructed model
 	private Model model;
 
-	/**
-	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices and UVs.
-	 * @param model					The model
-	 * @param scale					Scale of the model (usually 0.065)
-	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
-	 */
-	public ModelConverter(ModelBase model, double scale, boolean renderDoubleFace) {
-		this(model, scale, renderDoubleFace, 0, 0, 0);
+	private final Packing packing;
+
+	public static class Packing {
+		public final ResourceLocation texture;
+		public final TexturePacker packer;
+		public final ITexturePackable owner;
+
+		public Packing(ResourceLocation texture, TexturePacker packer, ITexturePackable owner) {
+			this.texture = texture;
+			this.packer = packer;
+			this.owner = owner;
+		}
 	}
 
 	/**
 	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices and UVs.
+	 * @param packing				The texture packing
+	 * @param model					The model
+	 * @param scale					Scale of the model (usually 0.065)
+	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
+	 */
+	public ModelConverter(@Nullable Packing packing, ModelBase model, double scale, boolean renderDoubleFace) {
+		this(packing, model, scale, renderDoubleFace, 0, 0, 0);
+	}
+
+	/**
+	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices and UVs.
+	 * @param packing				The texture packing
 	 * @param model					The model
 	 * @param scale					Scale of the model (usually 0.065)
 	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
@@ -324,12 +344,13 @@ public class ModelConverter {
 	 * @param rotationY				Rotation around Y axis (degrees)
 	 * @param rotationZ				Rotation around Z axis (degrees)
 	 */
-	public ModelConverter(ModelBase model, double scale, boolean renderDoubleFace, float rotationX, float rotationY, float rotationZ) {
-		this(model, scale, renderDoubleFace, rotationX, rotationY, rotationZ, new Vec3UV(0, 0, 0));
+	public ModelConverter(@Nullable Packing packing, ModelBase model, double scale, boolean renderDoubleFace, float rotationX, float rotationY, float rotationZ) {
+		this(packing, model, scale, renderDoubleFace, rotationX, rotationY, rotationZ, new Vec3UV(0, 0, 0));
 	}
 
 	/**
 	 * Creates a new ModelConverter that converts a minecraft model to a list of vertices and UVs.
+	 * @param packing				The texture packing
 	 * @param model					The model
 	 * @param scale					Scale of the model (usually 0.065)
 	 * @param renderDoubleFace		Set to true if the faces should be rendered in both directions
@@ -338,7 +359,8 @@ public class ModelConverter {
 	 * @param rotationZ				Rotation around Z axis (degrees)
 	 * @param rotationCenter		Center of the rotation
 	 */
-	public ModelConverter(ModelBase model, double scale, boolean renderDoubleFace, float rotationX, float rotationY, float rotationZ, Vec3UV rotationCenter) {
+	public ModelConverter(@Nullable Packing packing, ModelBase model, double scale, boolean renderDoubleFace, float rotationX, float rotationY, float rotationZ, Vec3UV rotationCenter) {
+		this.packing = packing;
 		this.constructModel(model, scale, renderDoubleFace);
 		this.rotate(1.0F, rotationX + 180.0F, rotationY, rotationZ, rotationCenter);
 	}
@@ -427,6 +449,8 @@ public class ModelConverter {
 	private void constructModel(ModelBase modelBase, double modelScale, boolean renderDoubleFace) {
 		this.modelBoxList.clear();
 
+		List<TextureQuad> packerQuads = new ArrayList<>();
+
 		//Model texture width/height
 		double modelWidth = modelBase.textureWidth;
 		double modelHeight = modelBase.textureHeight;
@@ -476,7 +500,8 @@ public class ModelConverter {
 				ArrayList<Quad> quadList = new ArrayList<Quad>(12);
 
 				//Face 1
-				Quad face1 = new Quad(
+				this.addQuadFace(o, oy, oxy, ox, mbVertices5[0], mbVertices5[3], mbVertices5[2], mbVertices5[1], modelWidth, modelHeight, renderDoubleFace, quadList, packerQuads);
+				/*Quad face1 = new Quad(
 						new Vec3UV(o, mbVertices5[0].texturePositionX, mbVertices5[0].texturePositionY, modelWidth, modelHeight),
 						new Vec3UV(oy, mbVertices5[3].texturePositionX, mbVertices5[3].texturePositionY, modelWidth, modelHeight),
 						new Vec3UV(oxy, mbVertices5[2].texturePositionX, mbVertices5[2].texturePositionY, modelWidth, modelHeight),
@@ -489,10 +514,11 @@ public class ModelConverter {
 							new Vec3UV(oxy, mbVertices5[2].texturePositionX, mbVertices5[2].texturePositionY, modelWidth, modelHeight),
 							new Vec3UV(oy, mbVertices5[3].texturePositionX, mbVertices5[3].texturePositionY, modelWidth, modelHeight));
 					quadList.add(face1d);
-				}
+				}*/
 
 				//Face 2
-				Quad face2 = new Quad(
+				this.addQuadFace(oz, oxz, oxyz, oyz, mbVertices6[1], mbVertices6[0], mbVertices6[3], mbVertices6[2], modelWidth, modelHeight, renderDoubleFace, quadList, packerQuads);
+				/*Quad face2 = new Quad(
 						new Vec3UV(oz, mbVertices6[1].texturePositionX, mbVertices6[1].texturePositionY, modelWidth, modelHeight),
 						new Vec3UV(oxz, mbVertices6[0].texturePositionX, mbVertices6[0].texturePositionY, modelWidth, modelHeight),
 						new Vec3UV(oxyz, mbVertices6[3].texturePositionX, mbVertices6[3].texturePositionY, modelWidth, modelHeight),
@@ -505,10 +531,11 @@ public class ModelConverter {
 							new Vec3UV(oxyz, mbVertices6[3].texturePositionX, mbVertices6[3].texturePositionY, modelWidth, modelHeight),
 							new Vec3UV(oxz, mbVertices6[0].texturePositionX, mbVertices6[0].texturePositionY, modelWidth, modelHeight));
 					quadList.add(face2d);
-				}
+				}*/
 
 				//Face 3
-				Quad face3 = new Quad(
+				this.addQuadFace(oy, oyz, oxyz, oxy, mbVertices4[1], mbVertices4[2], mbVertices4[3], mbVertices4[0], modelWidth, modelHeight, renderDoubleFace, quadList, packerQuads);
+				/*Quad face3 = new Quad(
 						new Vec3UV(oy, mbVertices4[1].texturePositionX, mbVertices4[1].texturePositionY, modelWidth, modelHeight),
 						new Vec3UV(oyz, mbVertices4[2].texturePositionX, mbVertices4[2].texturePositionY, modelWidth, modelHeight),
 						new Vec3UV(oxyz, mbVertices4[3].texturePositionX, mbVertices4[3].texturePositionY, modelWidth, modelHeight),
@@ -521,10 +548,11 @@ public class ModelConverter {
 							new Vec3UV(oxyz, mbVertices4[3].texturePositionX, mbVertices4[3].texturePositionY, modelWidth, modelHeight),
 							new Vec3UV(oyz, mbVertices4[2].texturePositionX, mbVertices4[2].texturePositionY, modelWidth, modelHeight));
 					quadList.add(face3d);
-				}
+				}*/
 
 				//Face 4
-				Quad face4 = new Quad(
+				this.addQuadFace(o, ox, oxz, oz, mbVertices3[2], mbVertices3[3], mbVertices3[0], mbVertices3[1], modelWidth, modelHeight, renderDoubleFace, quadList, packerQuads);
+				/*Quad face4 = new Quad(
 						new Vec3UV(o, mbVertices3[2].texturePositionX, mbVertices3[2].texturePositionY, modelWidth, modelHeight),
 						new Vec3UV(ox, mbVertices3[3].texturePositionX, mbVertices3[3].texturePositionY, modelWidth, modelHeight),
 						new Vec3UV(oxz, mbVertices3[0].texturePositionX, mbVertices3[0].texturePositionY, modelWidth, modelHeight),
@@ -537,10 +565,11 @@ public class ModelConverter {
 							new Vec3UV(oxz, mbVertices3[0].texturePositionX, mbVertices3[0].texturePositionY, modelWidth, modelHeight),
 							new Vec3UV(ox, mbVertices3[3].texturePositionX, mbVertices3[3].texturePositionY, modelWidth, modelHeight));
 					quadList.add(face4d);
-				}
+				}*/
 
 				//Face 5
-				Quad face5 = new Quad(
+				this.addQuadFace(ox, oxy, oxyz, oxz, mbVertices1[1], mbVertices1[2], mbVertices1[3], mbVertices1[0], modelWidth, modelHeight, renderDoubleFace, quadList, packerQuads);
+				/*Quad face5 = new Quad(
 						new Vec3UV(ox, mbVertices1[1].texturePositionX, mbVertices1[1].texturePositionY, modelWidth, modelHeight),
 						new Vec3UV(oxy, mbVertices1[2].texturePositionX, mbVertices1[2].texturePositionY, modelWidth, modelHeight),
 						new Vec3UV(oxyz, mbVertices1[3].texturePositionX, mbVertices1[3].texturePositionY, modelWidth, modelHeight),
@@ -553,10 +582,11 @@ public class ModelConverter {
 							new Vec3UV(oxyz, mbVertices1[3].texturePositionX, mbVertices1[3].texturePositionY, modelWidth, modelHeight),
 							new Vec3UV(oxy, mbVertices1[2].texturePositionX, mbVertices1[2].texturePositionY, modelWidth, modelHeight));
 					quadList.add(face5d);
-				}
+				}*/
 
 				//Face 6
-				Quad face6 = new Quad(
+				this.addQuadFace(o, oz, oyz, oy, mbVertices2[0], mbVertices2[1], mbVertices2[2], mbVertices2[3], modelWidth, modelHeight, renderDoubleFace, quadList, packerQuads);
+				/*Quad face6 = new Quad(
 						new Vec3UV(o, mbVertices2[0].texturePositionX, mbVertices2[0].texturePositionY, modelWidth, modelHeight),
 						new Vec3UV(oz, mbVertices2[1].texturePositionX, mbVertices2[1].texturePositionY, modelWidth, modelHeight),
 						new Vec3UV(oyz, mbVertices2[2].texturePositionX, mbVertices2[2].texturePositionY, modelWidth, modelHeight),
@@ -569,7 +599,7 @@ public class ModelConverter {
 							new Vec3UV(oyz, mbVertices2[2].texturePositionX, mbVertices2[2].texturePositionY, modelWidth, modelHeight),
 							new Vec3UV(oz, mbVertices2[1].texturePositionX, mbVertices2[1].texturePositionY, modelWidth, modelHeight));
 					quadList.add(face6d);
-				}
+				}*/
 
 				Quad[] quads = quadList.toArray(new Quad[0]);
 				this.addBox(new Box(quads, modelRenderer, modelBox));
@@ -607,6 +637,85 @@ public class ModelConverter {
 		}
 
 		this.model = new Model(this.modelBoxList, this.fwdVec, this.upVec);
+
+		if(this.packing != null) {
+			this.packing.packer.addTextureMap(new TextureQuadMap(packerQuads, this.packing.owner));
+		}
+	}
+
+	private void addQuadFace(Vec3UV v1, Vec3UV v2, Vec3UV v3, Vec3UV v4, 
+			PositionTextureVertex tv1, PositionTextureVertex tv2, PositionTextureVertex tv3, PositionTextureVertex tv4,
+			double modelWidth, double modelHeight, boolean renderDoubleFace, List<Quad> quadList, List<TextureQuad> packerQuads) {
+
+		if(this.packing != null) {
+			int minU = Integer.MAX_VALUE;
+			int minV = Integer.MAX_VALUE;
+			int maxU = 0;
+			int maxV = 0;
+
+			PositionTextureVertex[] verts = new PositionTextureVertex[] {tv1, tv2, tv3, tv4};
+
+			int maxUVertex1 = 0;
+			int maxUVertex2 = 0;
+			int maxVVertex1 = 0;
+			int maxVVertex2 = 0;
+
+			for(int i = 0; i < verts.length; i++) {
+				PositionTextureVertex vert = verts[i];
+
+				if((int)Math.floor(vert.texturePositionX * modelWidth) >= maxU) {
+					maxUVertex2 = maxUVertex1;
+					maxUVertex1 = i;
+				}
+				if((int)Math.floor(vert.texturePositionY * modelHeight) >= maxV) {
+					maxVVertex2 = maxVVertex1;
+					maxVVertex1 = i;
+				}
+
+				minU = Math.min(minU, (int)Math.floor(vert.texturePositionX * modelWidth));
+				minV = Math.min(minV, (int)Math.floor(vert.texturePositionY * modelHeight));
+				maxU = Math.max(maxU, (int)Math.floor(vert.texturePositionX * modelWidth));
+				maxV = Math.max(maxV, (int)Math.floor(vert.texturePositionY * modelHeight));
+			}
+
+			TextureQuad packerQuad = new TextureQuad(this.packing.texture, minU, minV, maxU - minU, maxV - minV);
+
+			Quad face = new Quad(
+					new Vec3UV(v1, packerQuad, maxUVertex1 == 0 || maxUVertex2 == 0, maxVVertex1 == 0 || maxVVertex2 == 0, modelWidth, modelHeight),
+					new Vec3UV(v4, packerQuad, maxUVertex1 == 3 || maxUVertex2 == 3, maxVVertex1 == 3 || maxVVertex2 == 3, modelWidth, modelHeight),
+					new Vec3UV(v3, packerQuad, maxUVertex1 == 2 || maxUVertex2 == 2, maxVVertex1 == 2 || maxVVertex2 == 2, modelWidth, modelHeight),
+					new Vec3UV(v2, packerQuad, maxUVertex1 == 1 || maxUVertex2 == 1, maxVVertex1 == 1 || maxVVertex2 == 1, modelWidth, modelHeight) 
+					);
+			quadList.add(face);
+			if(renderDoubleFace) {
+				Quad doubleFace = new Quad(
+						new Vec3UV(v1, packerQuad, maxUVertex1 == 0 || maxUVertex2 == 0, maxVVertex1 == 0 || maxVVertex2 == 0, modelWidth, modelHeight),
+						new Vec3UV(v2, packerQuad, maxUVertex1 == 1 || maxUVertex2 == 1, maxVVertex1 == 1 || maxVVertex2 == 1, modelWidth, modelHeight),
+						new Vec3UV(v3, packerQuad, maxUVertex1 == 2 || maxUVertex2 == 2, maxVVertex1 == 2 || maxVVertex2 == 2, modelWidth, modelHeight),
+						new Vec3UV(v4, packerQuad, maxUVertex1 == 3 || maxUVertex2 == 3, maxVVertex1 == 3 || maxVVertex2 == 3, modelWidth, modelHeight) 
+						);
+				quadList.add(doubleFace);
+			}
+
+			packerQuads.add(packerQuad);
+		} else {
+			Quad face = new Quad(
+					new Vec3UV(v1, tv1.texturePositionX, tv1.texturePositionY, modelWidth, modelHeight),
+					new Vec3UV(v4, tv4.texturePositionX, tv4.texturePositionY, modelWidth, modelHeight),
+					new Vec3UV(v3, tv3.texturePositionX, tv3.texturePositionY, modelWidth, modelHeight),
+					new Vec3UV(v2, tv2.texturePositionX, tv2.texturePositionY, modelWidth, modelHeight)
+					);
+			quadList.add(face);
+			if(renderDoubleFace) {
+				Quad doubleFace = new Quad(
+						new Vec3UV(v1, tv1.texturePositionX, tv1.texturePositionY, modelWidth, modelHeight),
+						new Vec3UV(v2, tv2.texturePositionX, tv2.texturePositionY, modelWidth, modelHeight),
+						new Vec3UV(v3, tv3.texturePositionX, tv3.texturePositionY, modelWidth, modelHeight),
+						new Vec3UV(v4, tv4.texturePositionX, tv4.texturePositionY, modelWidth, modelHeight)
+						);
+				quadList.add(doubleFace);
+			}
+		}
 	}
 
 	/**

@@ -227,6 +227,33 @@ public class ScreenRenderHandler extends Gui {
 			
 			GlStateManager.popMatrix();*/
 			
+			GlStateManager.pushMatrix();
+
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+			
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1, 1, 1, 1);
+			
+			GlStateManager.enableTexture2D();
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).getGlTextureId());
+			
+			Tessellator t = Tessellator.getInstance();
+			BufferBuilder b = t.getBuffer();
+			b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			
+			b.pos(0, -80, 0).tex(0, 1).endVertex();
+			b.pos(0, event.getResolution().getScaledHeight()/1.1-80, 0).tex(0, 0).endVertex();
+			b.pos(event.getResolution().getScaledWidth()/2, event.getResolution().getScaledHeight()/1.1-80, 0).tex(1, 0).endVertex();
+			b.pos(event.getResolution().getScaledWidth()/2, -80, 0).tex(1, 1).endVertex();
+			
+			t.draw();
+			
+			GlStateManager.enableBlend();
+			
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			
+			GlStateManager.popMatrix();
+			
 			if(BetweenlandsConfig.GENERAL.cavingRopeIndicator && player != null) {
 				boolean connected = false;
 				List<EntityRopeNode> ropeNodes = player.world.getEntitiesWithinAABB(EntityRopeNode.class, player.getEntityBoundingBox().grow(32, 32, 32));

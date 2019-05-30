@@ -2,7 +2,6 @@ package thebetweenlands.client.render.model.baked;
 
 import java.util.Collection;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonParser;
 
@@ -15,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
 import thebetweenlands.client.render.model.baked.modelbase.ModelRubberTap;
+import thebetweenlands.common.registries.ModelRegistry;
 
 public class ModelRubberTapCombined implements IModel {
 	private final IModel tapModel;
@@ -23,12 +23,13 @@ public class ModelRubberTapCombined implements IModel {
 	private final ResourceLocation particleTexture;
 	private final ResourceLocation fluidTexture;
 
-	public ModelRubberTapCombined(ResourceLocation texture) {
-		this(texture, texture, null, 0);
+	public ModelRubberTapCombined(ResourceLocation texture, ResourceLocation particle) {
+		this(texture, particle, null, 0);
 	}
 
 	public ModelRubberTapCombined(ResourceLocation texture, ResourceLocation particleTexture, ResourceLocation fluidTexture, int height) {
-		this.tapModel = new ModelCombined(new ModelFromModelBase(new ModelRubberTap(), texture, particleTexture, 128, 128), new ModelRubberTapLiquid(fluidTexture, height));
+		//TODO Pass in texture packer
+		this.tapModel = new ModelCombined(new ModelFromModelBase(ModelRegistry.MODEL_TEXTURE_PACKER, new ModelRubberTap(), texture, particleTexture, 128, 128), new ModelRubberTapLiquid(fluidTexture, height));
 		this.tapTexture = texture;
 		this.particleTexture = particleTexture;
 		this.height = height;
@@ -81,6 +82,9 @@ public class ModelRubberTapCombined implements IModel {
 			particleTexture = new ResourceLocation(JsonUtils.getString(parser.parse(particleTextureJsonStr), "particle_texture"));
 		}
 
-		return new ModelRubberTapCombined(this.tapTexture, particleTexture, fluidTexture, height);
+		//TODO Fix this
+		//Pass and reuse already constructed model so that textures aren't packed again
+		//return new ModelRubberTapCombined(this.tapTexture, particleTexture, fluidTexture, height);
+		return this;
 	}
 }
