@@ -45,11 +45,6 @@ public class BlockCarvedMudBrick extends BasicBlock implements ICustomItemBlock,
 	}
 
 	@Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-	@Override
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
 		return new ItemStack(this, 1, ((EnumCarvedMudBrickType)state.getValue(VARIANT)).getMetadata());
 	}

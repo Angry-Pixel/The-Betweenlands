@@ -45,11 +45,6 @@ public class BlockWormDungeonPillar extends BasicBlock implements ICustomItemBlo
 	}
 
 	@Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-	@Override
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
 		return new ItemStack(this, 1, ((EnumWormPillarType)state.getValue(VARIANT)).getMetadata());
 	}

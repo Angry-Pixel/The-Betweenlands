@@ -57,11 +57,6 @@ public class BlockMudTiles extends Block implements ICustomItemBlock, ISubtypeIt
 	}
 
 	@Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return true;
-    }
-
-	@Override
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
 		return new ItemStack(this, 1, ((EnumMudTileType)state.getValue(VARIANT)).getMetadata());
 	}
