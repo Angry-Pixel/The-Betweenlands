@@ -401,46 +401,95 @@ public class ScreenRenderHandler extends Gui {
 					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
 					if(capability.isDecayEnabled()) {
-						int startX = (width / 2) - (27 / 2) + 23;
-						int startY = height - 49;
+						int startX = 0;
+						int startY = 0;
 
-						//Erebus compatibility
-						if (player.getEntityData().hasKey("antivenomDuration")) {
-							int duration = player.getEntityData().getInteger("antivenomDuration");
-							if (duration > 0) {
-								startY -= 12;
+						switch(BetweenlandsConfig.GENERAL.decayBarZone) {
+						default:
+						case 0:
+							startX = (width / 2) - (27 / 2) + 23;
+							startY = height - 49;
+							
+							//Erebus compatibility
+							if (player.getEntityData().hasKey("antivenomDuration")) {
+								int duration = player.getEntityData().getInteger("antivenomDuration");
+								if (duration > 0) {
+									startY -= 12;
+								}
 							}
+							
+							//TaN compatibility
+							if(TheBetweenlands.isToughAsNailsModInstalled) {
+								startY -= 10;
+							}
+							
+							//Ridden entity hearts offset
+							Entity ridingEntity = player.getRidingEntity();
+							if(ridingEntity != null && ridingEntity instanceof EntityLivingBase) {
+								EntityLivingBase riddenEntity = (EntityLivingBase)ridingEntity;
+								float maxEntityHealth = riddenEntity.getMaxHealth();
+								int maxHealthHearts = (int)(maxEntityHealth + 0.5F) / 2;
+								if (maxHealthHearts > 30) {
+									maxHealthHearts = 30;
+								}
+								int guiOffsetY = 0;
+								while(maxHealthHearts > 0) {
+									int renderedHearts = Math.min(maxHealthHearts, 10);
+									maxHealthHearts -= renderedHearts;
+									guiOffsetY -= 10;
+								}
+								startY += guiOffsetY;
+							}
+							
+							//Air bar offset
+							if(player.isInsideOfMaterial(Material.WATER)) {
+								startY -= 10;
+							}
+							
+							break;
+						case 1:
+							startX = 0;
+							startY = 0;
+							break;
+						case 2:
+							startX = width;
+							startY = 0;
+							break;
+						case 3:
+							startX = width;
+							startY = height;
+							break;
+						case 4:
+							startX = 0;
+							startY = height;
+							break;
+						case 5:
+							startX = 0;
+							startY = height / 2;
+							break;
+						case 6:
+							startX = width / 2;
+							startY = 0;
+							break;
+						case 7:
+							startX = width;
+							startY = height / 2;
+							break;
+						case 8:
+							startX = width / 2;
+							startY = height;
+							break;
 						}
 						
-						//TaN compatibility
-						if(TheBetweenlands.isToughAsNailsModInstalled) {
-							startY -= 10;
-						}
-
-						//Ridden entity hearts offset
-						Entity ridingEntity = player.getRidingEntity();
-						if(ridingEntity != null && ridingEntity instanceof EntityLivingBase) {
-							EntityLivingBase riddenEntity = (EntityLivingBase)ridingEntity;
-							float maxEntityHealth = riddenEntity.getMaxHealth();
-							int maxHealthHearts = (int)(maxEntityHealth + 0.5F) / 2;
-							if (maxHealthHearts > 30) {
-								maxHealthHearts = 30;
-							}
-							int guiOffsetY = 0;
-							while(maxHealthHearts > 0) {
-								int renderedHearts = Math.min(maxHealthHearts, 10);
-								maxHealthHearts -= renderedHearts;
-								guiOffsetY -= 10;
-							}
-							startY += guiOffsetY;
-						}
+						startX += BetweenlandsConfig.GENERAL.decayBarOffsetX;
+						startY += BetweenlandsConfig.GENERAL.decayBarOffsetY;
 
 						int decay = 20 - capability.getDecayStats().getDecayLevel();
 
 						Minecraft.getMinecraft().getTextureManager().bindTexture(DECAY_BAR_TEXTURE);
 
 						for (int i = 0; i < 10; i++) {
-							int offsetY = player.isInsideOfMaterial(Material.WATER) ? -10 : 0;
+							int offsetY = 0;
 
 							if (this.updateCounter % (decay * 3 + 1) == 0) 
 								offsetY += this.random.nextInt(3) - 1;

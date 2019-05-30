@@ -89,7 +89,7 @@ public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessE
 
 	@Override
 	public void increaseFoodHatred(Item food, int amount, int decreaseForOthers) {
-		if (!FoodSicknessHandler.isFoodSicknessEnabled())
+		if (!FoodSicknessHandler.isFoodSicknessEnabled(this.getEntity().getEntityWorld()))
 			return;
 		int finalMaxHatred = FoodSickness.VALUES[Math.max(FoodSickness.VALUES.length - 1, 0)].maxHatred;
 		if (this.hatredMap.containsKey(food)) {

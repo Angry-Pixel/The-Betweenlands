@@ -174,9 +174,14 @@ public class BetweenlandsConfig {
 
 		@Name("use_food_sickness")
 		@LangKey(LANG_PREFIX + "use_food_sickness")
-		@Comment("If true the food sickness system will be enabled")
-		public boolean useFoodSickness = true;
+		@Comment("If true the food sickness system will be enabled in the Betweenlands")
+		public boolean useFoodSicknessInBetweenlands = true;
 
+		@Name("use_food_sickness_outside_betweenlands")
+		@LangKey(LANG_PREFIX + "use_food_sickness_outside_betweenlands")
+		@Comment("If true the food sickness system will be enabled outside the Betweenlands")
+		public boolean useFoodSicknessOutsideBetweenlands = false;
+		
 		@Name("reverse_rotten_food")
 		@LangKey(LANG_PREFIX + "reverse_rotten_food")
 		@Comment("Whether rotten food should turn back into normal food when leaving the dimension")
@@ -383,6 +388,31 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "equipment_zone_offset_y")
 		@Comment("Y offset of the equipment items relative to the equipment zone")
 		public int equipmentOffsetY = 0;
+		
+		@Name("decay_bar_zone")
+		@LangKey(LANG_PREFIX + "decay_bar_zone")
+		@Comment("Zone in which the decay bar is shown on the HUD.\n"
+				+ "0: Hotbar\n"
+				+ "1: Top left\n"
+				+ "2: Top right\n"
+				+ "3: Bottom right\n"
+				+ "4: Bottom left\n"
+				+ "5: Center left\n"
+				+ "6: Center top\n"
+				+ "7: Center right\n"
+				+ "8: Center bottom")
+		@RangeInt(min = 0, max = 8)
+		public int decayBarZone = 0;
+		
+		@Name("decay_bar_zone_offset_x")
+		@LangKey(LANG_PREFIX + "decay_bar_zone_offset_x")
+		@Comment("X offset of the decay bar relative to the decay zone")
+		public int decayBarOffsetX = 0;
+		
+		@Name("decay_bar_zone_offset_y")
+		@LangKey(LANG_PREFIX + "decay_bar_zone_offset_y")
+		@Comment("Y offset of the decay bar relative to the decay zone")
+		public int decayBarOffsetY = 0;
 	}
 
 	@Name("mob_spawning")
