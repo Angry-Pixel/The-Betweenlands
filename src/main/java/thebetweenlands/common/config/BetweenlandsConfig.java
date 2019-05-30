@@ -174,9 +174,14 @@ public class BetweenlandsConfig {
 
 		@Name("use_food_sickness")
 		@LangKey(LANG_PREFIX + "use_food_sickness")
-		@Comment("If true the food sickness system will be enabled")
-		public boolean useFoodSickness = true;
+		@Comment("If true the food sickness system will be enabled in the Betweenlands")
+		public boolean useFoodSicknessInBetweenlands = true;
 
+		@Name("use_food_sickness_outside_betweenlands")
+		@LangKey(LANG_PREFIX + "use_food_sickness_outside_betweenlands")
+		@Comment("If true the food sickness system will be enabled outside the Betweenlands")
+		public boolean useFoodSicknessOutsideBetweenlands = false;
+		
 		@Name("reverse_rotten_food")
 		@LangKey(LANG_PREFIX + "reverse_rotten_food")
 		@Comment("Whether rotten food should turn back into normal food when leaving the dimension")
