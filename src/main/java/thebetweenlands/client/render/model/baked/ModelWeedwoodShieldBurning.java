@@ -23,13 +23,13 @@ import thebetweenlands.client.render.model.baked.modelbase.shields.ModelWeedwood
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.util.ModelConverter.Model;
 import thebetweenlands.util.QuadBuilder;
+import thebetweenlands.util.TexturePacker;
 
 public class ModelWeedwoodShieldBurning extends ModelFromModelBase {
 	public static final ResourceLocation FIRE_TEXTURE_LOCATION = new ResourceLocation("minecraft:blocks/fire_layer_0");
 
-	public ModelWeedwoodShieldBurning() {
-		//TODO Pass in texture packer
-		super(ModelRegistry.MODEL_TEXTURE_PACKER, new ModelWeedwoodShield(), new ResourceLocation("thebetweenlands:items/shields/weedwood_shield"), new ResourceLocation("thebetweenlands:particle/item/weedwood_shield_particle"), 64, 64, ModelRegistry.SHIELD_VERTEX_PROCESSOR);
+	public ModelWeedwoodShieldBurning(TexturePacker packer) {
+		super(packer, new ModelWeedwoodShield(), new ResourceLocation("thebetweenlands:items/shields/weedwood_shield"), new ResourceLocation("thebetweenlands:particle/item/weedwood_shield_particle"), 64, 64, ModelRegistry.SHIELD_VERTEX_PROCESSOR);
 		this.usedTextures.add(FIRE_TEXTURE_LOCATION);
 	}
 

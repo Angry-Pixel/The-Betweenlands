@@ -1,6 +1,7 @@
 package thebetweenlands.util;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,9 +13,11 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.imageio.ImageIO;
 
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.common.TheBetweenlands;
 
 public class TexturePacker {
 	public static interface ITexturePackable {
@@ -110,6 +113,11 @@ public class TexturePacker {
 
 	private int packedTextureID = 0;
 
+	private final BufferedImage missingTexture;
+
+	private int optimalFootprint;
+	private int packedFootprint;
+
 	public TexturePacker(ResourceLocation textureName) {
 		this(textureName, new ArrayList<>());
 	}
@@ -117,6 +125,9 @@ public class TexturePacker {
 	public TexturePacker(ResourceLocation textureName, List<TextureQuadMap> textureMaps) {
 		this.textureName = textureName;
 		this.textureMaps = textureMaps;
+
+		this.missingTexture = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+		System.arraycopy(TextureUtil.MISSING_TEXTURE.getTextureData(), 0, ((DataBufferInt) this.missingTexture.getRaster().getDataBuffer()).getData(), 0, 16*16);
 	}
 
 	public void addTextureMap(TextureQuadMap map) {
@@ -139,14 +150,17 @@ public class TexturePacker {
 			try(IResource resource = manager.getResource(new ResourceLocation(location.getNamespace(), "textures/" + location.getPath() + ".png"))) {
 				this.cachedTextures.put(location, cached = ImageIO.read(resource.getInputStream()));
 			} catch (IOException e) {
-				//TODO Log and use missing texture.
-				throw new RuntimeException("Failed loading model texture '" + location + "'", e);
+				TheBetweenlands.logger.error("Failed loading model texture to pack. Location: " + location, e);
+				this.cachedTextures.put(location, cached = this.missingTexture);
 			}
 		}
 		return cached;
 	}
 
 	public Map<ResourceLocation, BufferedImage> pack(IResourceManager manager) {
+		this.optimalFootprint = 0;
+		this.packedFootprint = 0;
+
 		List<TextureQuad> quads = new ArrayList<>();
 		for(TextureQuadMap map : this.textureMaps) {
 			quads.addAll(map.getQuads());
@@ -155,6 +169,8 @@ public class TexturePacker {
 		Collections.sort(quads, (q1, q2) -> q2.h - q1.h);
 
 		for(TextureQuad quad : quads) {
+			this.optimalFootprint += quad.w * quad.h;
+
 			boolean packed = false;
 
 			for(TextureBin bin : this.textureBins) {
@@ -171,6 +187,8 @@ public class TexturePacker {
 				TextureBin bin = new TextureBin(this.generateNewTextureLocation(), binSize, binSize);
 
 				this.textureBins.add(bin);
+
+				this.packedFootprint += binSize * binSize;
 
 				if(!this.packIntoBin(quad, bin, manager)) {
 					throw new RuntimeException("Was unable to pack texture quad into new bin. This should not happen!");
@@ -198,22 +216,19 @@ public class TexturePacker {
 		for(int py = 0; py < h; py++) {
 			for(int px = 0; px < w; px++) {
 				for(int i = 0; i < srcRaster.getNumBands(); i++) {
-					//TODO Figure out why it goes out of bounds in rare cases
-					int sample = 0;
-					try {
-						sample = srcRaster.getSample(x + px, y + py, i);
-					} catch(ArrayIndexOutOfBoundsException e) {
-						System.out.println("Reading sample");
-						System.out.println("X: " + (x + px) + " Y: " + (y + py) + " W: " + source.getWidth() + " H: " + source.getHeight());
-						//e.printStackTrace();
+					int sx = x + px;
+					if(sx < 0) {
+						sx = source.getWidth() + sx % source.getWidth();
+					} else {
+						sx = sx % source.getWidth();
 					}
-					try {
-						destRaster.setSample(x2 + px, y2 + py, i, sample);
-					} catch(ArrayIndexOutOfBoundsException e) {
-						System.out.println("Writing sample");
-						System.out.println("X: " + (x2 + px) + " Y: " + (y2 + py) + " W: " + dest.getWidth() + " H: " + dest.getHeight());
-						//e.printStackTrace();
+					int sy = y + py;
+					if(sy < 0) {
+						sy = source.getHeight() + sy % source.getHeight();
+					} else {
+						sy = sy % source.getHeight();
 					}
+					destRaster.setSample(x2 + px, y2 + py, i, srcRaster.getSample(sx, sy, i));
 				}
 			}
 		}
@@ -242,10 +257,6 @@ public class TexturePacker {
 			quad.packedLocation = bin.location;
 
 			if(quad.w == space.w && quad.h == space.h) {
-				/*TextureBin.Space last = spaces.remove(spaces.size() - 1);
-				if(i < spaces.size()) {
-					spaces.set(i, last);
-				}*/
 				spaces.remove(i);
 			} else if(quad.h == space.h) {
 				space.x += quad.w;
@@ -263,5 +274,13 @@ public class TexturePacker {
 		}
 
 		return false;
+	}
+
+	public int getOptimalFootprint() {
+		return this.optimalFootprint;
+	}
+
+	public int getPackedFootprint() {
+		return this.packedFootprint;
 	}
 }

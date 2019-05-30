@@ -3,10 +3,10 @@ package thebetweenlands.client.render.model.baked;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWalkwayBlock;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.util.ModelConverter.Box;
 import thebetweenlands.util.ModelConverter.Quad;
 import thebetweenlands.util.QuadBuilder;
+import thebetweenlands.util.TexturePacker;
 import thebetweenlands.util.Vec3UV;
 
 public class ModelWalkway extends ModelFromModelBase {
@@ -15,9 +15,8 @@ public class ModelWalkway extends ModelFromModelBase {
 
 	public static final ModelWalkwayBlock MODEL = new ModelWalkwayBlock();
 
-	public ModelWalkway(boolean hasStands) {
-		//TODO Pass in texture packer
-		super(ModelRegistry.MODEL_TEXTURE_PACKER, MODEL, TEXTURE, PARTICLE_TEXTURE, 128, 128, new IVertexProcessor() {
+	public ModelWalkway(TexturePacker packer, boolean hasStands) {
+		super(packer, MODEL, TEXTURE, PARTICLE_TEXTURE, 128, 128, new IVertexProcessor() {
 			@Override
 			public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {
 				if(!hasStands && (box.getModelRenderer() == MODEL.standright || box.getModelRenderer() == MODEL.standleft)) {

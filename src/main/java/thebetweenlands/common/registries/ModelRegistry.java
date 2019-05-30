@@ -137,7 +137,7 @@ public class ModelRegistry {
 	public static final IModel SYRMORITE_SHIELD = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelSyrmoriteShield(), new ResourceLocation("thebetweenlands:items/shields/syrmorite_shield"), new ResourceLocation("thebetweenlands:particle/item/syrmorite_shield_particle"), 128, 128, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel VALONITE_SHIELD = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelValoniteShield(), new ResourceLocation("thebetweenlands:items/shields/valonite_shield"), new ResourceLocation("thebetweenlands:particle/item/valonite_shield_particle"), 128, 128, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel WEEDWOOD_SHIELD = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelWeedwoodShield(), new ResourceLocation("thebetweenlands:items/shields/weedwood_shield"), new ResourceLocation("thebetweenlands:particle/item/weedwood_shield_particle"), 64, 64, SHIELD_VERTEX_PROCESSOR);
-	public static final IModel WEEDWOOD_SHIELD_BURNING = new ModelWeedwoodShieldBurning();
+	public static final IModel WEEDWOOD_SHIELD_BURNING = new ModelWeedwoodShieldBurning(MODEL_TEXTURE_PACKER);
 	public static final IModel DENTROTHYST_SHIELD_GREEN = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_green"), new ResourceLocation("thebetweenlands:particle/item/dentrothyst_shield_green_particle"), 64, 64, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel DENTROTHYST_SHIELD_GREEN_POLISHED = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_green_polished"), new ResourceLocation("thebetweenlands:particle/item/dentrothyst_shield_green_polished_particle"), 64, 64, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel DENTROTHYST_SHIELD_ORANGE = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_orange"), new ResourceLocation("thebetweenlands:particle/item/dentrothyst_shield_orange_particle"), 64, 64, SHIELD_VERTEX_PROCESSOR);
@@ -160,13 +160,13 @@ public class ModelRegistry {
 	public static final IModel ROOT_SPOOK = new ModelRoot(new ResourceLocation(ModInfo.ID, "blocks/root_top_spook"), new ResourceLocation(ModInfo.ID, "blocks/root_middle_spook"), new ResourceLocation(ModInfo.ID, "blocks/root_bottom_spook"));
 	public static final IModel RUBBER_TAP_LIQUID = new ModelRubberTapLiquid(null, 0);
 	public static final IModel RUBBER_TAP_POURING = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelRubberTapPouring(), new ResourceLocation(ModInfo.ID, "fluids/rubber_flowing"), 64, 64);
-	public static final IModel WEEDWOOD_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/weedwood_rubber_tap"), new ResourceLocation("thebetweenlands:particle/block/weedwood_rubber_tap_particle"));
-	public static final IModel SYRMORITE_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/syrmorite_rubber_tap"), new ResourceLocation("thebetweenlands:particle/block/syrmorite_rubber_tap_particle"));
+	public static final IModel WEEDWOOD_RUBBER_TAP = new ModelRubberTapCombined(MODEL_TEXTURE_PACKER, new ResourceLocation("thebetweenlands:blocks/weedwood_rubber_tap"), new ResourceLocation("thebetweenlands:particle/block/weedwood_rubber_tap_particle"));
+	public static final IModel SYRMORITE_RUBBER_TAP = new ModelRubberTapCombined(MODEL_TEXTURE_PACKER, new ResourceLocation("thebetweenlands:blocks/syrmorite_rubber_tap"), new ResourceLocation("thebetweenlands:particle/block/syrmorite_rubber_tap_particle"));
 	public static final IModel MUD_FLOWER_POT_BASE = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelMudFlowerPot(), new ResourceLocation("thebetweenlands:blocks/mud_flower_pot"), 32, 32);
 	public static final IModel MUD_FLOWER_POT_CANDLE = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelMudFlowerPotCandle(), new ResourceLocation("thebetweenlands:blocks/mud_flower_pot_candle"), 32, 32);
 	public static final IModel MOSS_BED = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelMossBed(), new ResourceLocation("thebetweenlands:blocks/moss_bed"), new ResourceLocation("thebetweenlands:particle/block/moss_bed_particle"), 128, 128);
-	public static final IModel WALKWAY = new ModelWalkway(true);
-	public static final IModel WALKWAY_NO_STANDS = new ModelWalkway(false);
+	public static final IModel WALKWAY = new ModelWalkway(MODEL_TEXTURE_PACKER, true);
+	public static final IModel WALKWAY_NO_STANDS = new ModelWalkway(MODEL_TEXTURE_PACKER, false);
 	public static final IModel THATCH_ROOF = new ModelSlant(new ResourceLocation(ModInfo.ID, "blocks/thatch"));
 	public static final IModel MUD_BRICK_ROOF = new ModelSlant(new ResourceLocation(ModInfo.ID, "blocks/mud_brick_roof"));
 	public static final IModel PRESENT = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelPresent(), new ResourceLocation("thebetweenlands:blocks/present"), 64, 64, new IVertexProcessor() {

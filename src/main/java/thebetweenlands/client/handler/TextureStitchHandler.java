@@ -34,6 +34,7 @@ import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
 import thebetweenlands.client.render.sprite.TextureFromData;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.util.TexturePacker.TextureQuadMap;
@@ -60,42 +61,12 @@ public class TextureStitchHandler {
 			return;
 		}
 
-		//Packed textures
-		//TODO Clean this up
-		int currentArea = 0;
-
-		int totalArea = 0;
-
-		//TODO Remove
-		/*for(IModel m : MODELS) {
-			if(m instanceof ModelFromModelBase) {
-				totalArea += ((ModelFromModelBase)m).addToPacker(packer);
-
-				currentArea += ((ModelFromModelBase)m).width * ((ModelFromModelBase)m).height;
-			}
-		}*/
-
-		System.out.println("PACKING TEXTURES");
+		//Pack model textures and stitch onto atlas
+		long packingStartTime = System.nanoTime();
 		Map<ResourceLocation, BufferedImage> packedTextures = ModelRegistry.MODEL_TEXTURE_PACKER.pack(Minecraft.getMinecraft().getResourceManager());
 
-		int usedArea = 0;
-
-		System.out.println("PACKED TEXTURES: " + packedTextures.size());
-		for(Entry<ResourceLocation, BufferedImage> packed : packedTextures.entrySet()) {
-			usedArea += packed.getValue().getWidth() * packed.getValue().getHeight();
-
-			try {
-				File f = new File("packed_textures/" + packed.getKey().getPath() + ".png");
-				f.mkdirs();
-				ImageIO.write(packed.getValue(), "PNG", f);
-				System.out.println("WRITE PACKED TEXTURES: " + f.getAbsolutePath());
-			} catch (IOException ex) {
-				// TODO Auto-generated catch block
-				ex.printStackTrace();
-			}
-		}
-
-		System.out.println("Optimal footprint: " + totalArea + " Packed footprint: " + usedArea + " Current footprint: " + currentArea);
+		TheBetweenlands.logger.info("Packed model textures in " + ((System.nanoTime() - packingStartTime) / 1000000.0f) + "ms");
+		TheBetweenlands.logger.info("Optimal footprint: " + ModelRegistry.MODEL_TEXTURE_PACKER.getOptimalFootprint() + "px^2, Packed footprint: " + ModelRegistry.MODEL_TEXTURE_PACKER.getPackedFootprint() + "px^2");
 
 		for(TextureQuadMap map : ModelRegistry.MODEL_TEXTURE_PACKER.getTextureMaps()) {
 			if(map.getOwner() != null) {

@@ -14,23 +14,28 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
 import thebetweenlands.client.render.model.baked.modelbase.ModelRubberTap;
-import thebetweenlands.common.registries.ModelRegistry;
+import thebetweenlands.util.TexturePacker;
 
 public class ModelRubberTapCombined implements IModel {
-	private final IModel tapModel;
+	private final ModelFromModelBase tapModel;
+	private final IModel combinedTapModel;
 	private final int height;
-	private final ResourceLocation tapTexture;
 	private final ResourceLocation particleTexture;
 	private final ResourceLocation fluidTexture;
 
-	public ModelRubberTapCombined(ResourceLocation texture, ResourceLocation particle) {
-		this(texture, particle, null, 0);
+	public ModelRubberTapCombined(TexturePacker packer, ResourceLocation texture, ResourceLocation particle) {
+		this(packer, texture, particle, null, 0);
 	}
 
-	public ModelRubberTapCombined(ResourceLocation texture, ResourceLocation particleTexture, ResourceLocation fluidTexture, int height) {
-		//TODO Pass in texture packer
-		this.tapModel = new ModelCombined(new ModelFromModelBase(ModelRegistry.MODEL_TEXTURE_PACKER, new ModelRubberTap(), texture, particleTexture, 128, 128), new ModelRubberTapLiquid(fluidTexture, height));
-		this.tapTexture = texture;
+	public ModelRubberTapCombined(TexturePacker packer, ResourceLocation texture, ResourceLocation particleTexture, ResourceLocation fluidTexture, int height) {
+		this.combinedTapModel = new ModelCombined(this.tapModel = new ModelFromModelBase(packer, new ModelRubberTap(), texture, particleTexture, 128, 128), new ModelRubberTapLiquid(fluidTexture, height));
+		this.particleTexture = particleTexture;
+		this.height = height;
+		this.fluidTexture = fluidTexture;
+	}
+
+	protected ModelRubberTapCombined(ModelFromModelBase parent, ResourceLocation particleTexture, ResourceLocation fluidTexture, int height) {
+		this.combinedTapModel = new ModelCombined(this.tapModel = new ModelFromModelBase(parent, particleTexture, 128, 128, null), new ModelRubberTapLiquid(fluidTexture, height));
 		this.particleTexture = particleTexture;
 		this.height = height;
 		this.fluidTexture = fluidTexture;
@@ -38,22 +43,22 @@ public class ModelRubberTapCombined implements IModel {
 
 	@Override
 	public Collection<ResourceLocation> getDependencies() {
-		return this.tapModel.getDependencies();
+		return this.combinedTapModel.getDependencies();
 	}
 
 	@Override
 	public Collection<ResourceLocation> getTextures() {
-		return this.tapModel.getTextures();
+		return this.combinedTapModel.getTextures();
 	}
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		return this.tapModel.bake(state, format, bakedTextureGetter);
+		return this.combinedTapModel.bake(state, format, bakedTextureGetter);
 	}
 
 	@Override
 	public IModelState getDefaultState() {
-		return this.tapModel.getDefaultState();
+		return this.combinedTapModel.getDefaultState();
 	}
 
 	@Override
@@ -61,11 +66,11 @@ public class ModelRubberTapCombined implements IModel {
 		JsonParser parser = new JsonParser();
 
 		ResourceLocation fluidTexture = this.fluidTexture;
-		
+
 		if(customData.containsKey("fluid_texture")) {
 			fluidTexture = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("fluid_texture")), "fluid_texture"));
 		}
-		
+
 		if(fluidTexture == null) {
 			fluidTexture = TextureMap.LOCATION_MISSING_TEXTURE;
 		}
@@ -82,9 +87,6 @@ public class ModelRubberTapCombined implements IModel {
 			particleTexture = new ResourceLocation(JsonUtils.getString(parser.parse(particleTextureJsonStr), "particle_texture"));
 		}
 
-		//TODO Fix this
-		//Pass and reuse already constructed model so that textures aren't packed again
-		//return new ModelRubberTapCombined(this.tapTexture, particleTexture, fluidTexture, height);
-		return this;
+		return new ModelRubberTapCombined(this.tapModel, particleTexture, fluidTexture, height);
 	}
 }

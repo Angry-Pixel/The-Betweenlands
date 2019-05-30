@@ -1,10 +1,11 @@
 package thebetweenlands.client.render.model.baked;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -14,8 +15,8 @@ import javax.vecmath.Matrix4f;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonParser;
 
 import net.minecraft.block.state.IBlockState;
@@ -43,8 +44,6 @@ import thebetweenlands.util.ModelConverter.Quad;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.TexturePacker;
 import thebetweenlands.util.TexturePacker.ITexturePackable;
-import thebetweenlands.util.TexturePacker.TextureQuad;
-import thebetweenlands.util.TexturePacker.TextureQuadMap;
 import thebetweenlands.util.Vec3UV;
 
 public class ModelFromModelBase implements IModel, ITexturePackable {
@@ -52,7 +51,6 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 		Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder);
 	}
 
-	public final ModelBase model;
 	public final ResourceLocation texture;
 	public final ResourceLocation particleTexture;
 	public final int width;
@@ -60,9 +58,65 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 	public final IVertexProcessor vertexProcessor;
 	private boolean ambientOcclusion = true;
 
+	public final ModelBase model;
+	
 	public final Model convertedModel;
 	
+	@Nullable
+	protected final TexturePacker packer;
+	
 	protected final Set<ResourceLocation> usedTextures = new HashSet<>();
+	
+	private static class ModelCacheKey {
+		private final String model;
+		private final ResourceLocation texture;
+		private final String vertexProcessor;
+		
+		private ModelCacheKey(ModelBase model, ResourceLocation texture, IVertexProcessor vertexProcessor) {
+			this.model = model.getClass().getName();
+			this.texture = texture;
+			this.vertexProcessor = vertexProcessor == null ? "null" : vertexProcessor.getClass().getName();
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((model == null) ? 0 : model.hashCode());
+			result = prime * result + ((texture == null) ? 0 : texture.hashCode());
+			result = prime * result + ((vertexProcessor == null) ? 0 : vertexProcessor.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			ModelCacheKey other = (ModelCacheKey) obj;
+			if (model == null) {
+				if (other.model != null)
+					return false;
+			} else if (!model.equals(other.model))
+				return false;
+			if (texture == null) {
+				if (other.texture != null)
+					return false;
+			} else if (!texture.equals(other.texture))
+				return false;
+			if (vertexProcessor == null) {
+				if (other.vertexProcessor != null)
+					return false;
+			} else if (!vertexProcessor.equals(other.vertexProcessor))
+				return false;
+			return true;
+		}
+	}
+	
+	protected final Map<ModelCacheKey, Model> derivativeModelCache;
 	
 	public ModelFromModelBase(TexturePacker packer, ModelBase model, ResourceLocation texture, int width, int height) {
 		this(packer, model, texture, texture, width, height, null);
@@ -77,6 +131,28 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 	}
 
 	public ModelFromModelBase(TexturePacker packer, ModelBase model, ResourceLocation texture, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
+		this(new HashMap<>(), packer, model, texture, particleTexture, width, height, vertexProcessor);
+	}
+	
+	/**
+	 * Constructor to create derived models with changing the main texture.
+	 */
+	public ModelFromModelBase(ModelFromModelBase parent, ResourceLocation texture, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
+		this(parent.derivativeModelCache, parent.packer, parent.model, texture, particleTexture, width, height, vertexProcessor);
+	}
+	
+	/**
+	 * Constructor used to create derived models without changing the main texture (i.e. reusing the already converted model).
+	 */
+	public ModelFromModelBase(ModelFromModelBase parent, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
+		this(parent.derivativeModelCache, parent.model, parent.convertedModel, parent.texture, particleTexture, width, height, vertexProcessor);
+	}
+	
+	private ModelFromModelBase(Map<ModelCacheKey, Model> modelCache, TexturePacker packer, ModelBase model, ResourceLocation texture, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
+		Preconditions.checkNotNull(packer, "Texture packer must not be null for non-derived models");
+		
+		this.derivativeModelCache = modelCache;
+		this.packer = packer;
 		this.model = model;
 		this.texture = texture;
 		this.width = width;
@@ -84,8 +160,15 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 		this.vertexProcessor = vertexProcessor;
 		this.particleTexture = particleTexture;
 		
-		ModelConverter converter = new ModelConverter(new Packing(texture, packer, this), model, 0.0625D, true);
-		this.convertedModel = converter.getModel();
+		//Converted models are cached such that their textures are not
+		//packed onto the atlas multiple times.
+		ModelCacheKey key = new ModelCacheKey(model, texture, vertexProcessor);
+		Model cachedConvertedModel = this.derivativeModelCache.get(key);
+		if(cachedConvertedModel == null) {
+			ModelConverter converter = new ModelConverter(new Packing(texture, packer, this), model, 0.0625D, true);
+			this.derivativeModelCache.put(key, cachedConvertedModel = converter.getModel());
+		}
+		this.convertedModel = cachedConvertedModel;
 		
 		//Textures are collected right after the model is loaded, but at
 		//that point the packed textures aren't created yet so best we can
@@ -95,7 +178,23 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 			this.usedTextures.add(this.particleTexture);
 		}
 	}
-
+	
+	private ModelFromModelBase(Map<ModelCacheKey, Model> modelCache, ModelBase model, Model convertedModel, ResourceLocation texture, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
+		this.derivativeModelCache = modelCache;
+		this.packer = null;
+		this.model = model;
+		this.texture = texture;
+		this.width = width;
+		this.height = height;
+		this.vertexProcessor = vertexProcessor;
+		this.particleTexture = particleTexture;
+		this.convertedModel = convertedModel;
+		
+		if(this.particleTexture != null) {
+			this.usedTextures.add(this.particleTexture);
+		}
+	}
+	
 	/**
 	 * Sets whether ambient occlusion should be used
 	 * @param ao
@@ -146,42 +245,6 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 		return TRSRTransformation.identity();
 	}
 	
-	
-	//TODO Remove
-	public int addToPacker(TexturePacker packer) {
-		List<TextureQuad> quads = new ArrayList<>();
-		
-		int area = 0;
-		
-		ModelConverter converter = new ModelConverter(null, this.model, 0.0625D, false);
-		Model convertedModel = converter.getModel();
-		for(Box box : convertedModel.getBoxes()) {
-			for(Quad quad : box.getQuads()) {
-				int minU = Integer.MAX_VALUE;
-				int minV = Integer.MAX_VALUE;
-				int maxU = 0;
-				int maxV = 0;
-				
-				for(int i = 0; i < quad.getVertices().length; i++) {
-					Vec3UV vert = quad.getVertices()[i];
-					
-					minU = Math.min(minU, (int)Math.floor(vert.u * vert.uw));
-					minV = Math.min(minV, (int)Math.floor(vert.v * vert.vw));
-					maxU = Math.max(maxU, (int)Math.floor(vert.u * vert.uw));
-					maxV = Math.max(maxV, (int)Math.floor(vert.v * vert.vw));
-				}
-				
-				area += (maxU - minU) * (maxV - minV);
-				
-				quads.add(new TextureQuad(this.texture, (int)minU, (int)minV, (int)(maxU - minU), (int)(maxV - minV)));
-			}
-		}
-		
-		packer.addTextureMap(new TextureQuadMap(quads, this));
-		
-		return area;
-	}
-
 	public static class ModelBakedModelBase implements IBakedModel {
 		protected final TRSRTransformation transformation;
 		protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
@@ -295,10 +358,10 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 			texture = TextureMap.LOCATION_MISSING_TEXTURE;
 		}
 
-		//TODO Fix this
-		//Pass and reuse already constructed model so that textures aren't packed again,
-		//unless the texture was changed.
-		//return new ModelFromModelBase(ModelRegistry.MODEL_TEXTURE_PACKER, this.model, texture, particleTexture, this.width, this.height, this.vertexProcessor).setAmbientOcclusion(ambientOcclusion);
-		return this;
+		if(texture == this.texture) {
+			return new ModelFromModelBase(this.derivativeModelCache, this.model, this.convertedModel, texture, particleTexture, this.width, this.height, this.vertexProcessor).setAmbientOcclusion(ambientOcclusion);
+		} else {
+			return new ModelFromModelBase(this.derivativeModelCache, this.packer, this.model, texture, particleTexture, this.width, this.height, this.vertexProcessor).setAmbientOcclusion(ambientOcclusion);
+		}
 	}
 }
