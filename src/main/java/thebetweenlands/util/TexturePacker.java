@@ -210,26 +210,23 @@ public class TexturePacker {
 	}
 
 	protected static void copySubImage(BufferedImage source, int x, int y, int w, int h, BufferedImage dest, int x2, int y2) {
-		WritableRaster srcRaster = source.getRaster();
-		WritableRaster destRaster = dest.getRaster();
-
 		for(int py = 0; py < h; py++) {
 			for(int px = 0; px < w; px++) {
-				for(int i = 0; i < srcRaster.getNumBands(); i++) {
-					int sx = x + px;
-					if(sx < 0) {
-						sx = source.getWidth() + sx % source.getWidth();
-					} else {
-						sx = sx % source.getWidth();
-					}
-					int sy = y + py;
-					if(sy < 0) {
-						sy = source.getHeight() + sy % source.getHeight();
-					} else {
-						sy = sy % source.getHeight();
-					}
-					destRaster.setSample(x2 + px, y2 + py, i, srcRaster.getSample(sx, sy, i));
+				int sx = x + px;
+				if(sx < 0) {
+					sx = source.getWidth() + sx % source.getWidth();
+				} else {
+					sx = sx % source.getWidth();
 				}
+				
+				int sy = y + py;
+				if(sy < 0) {
+					sy = source.getHeight() + sy % source.getHeight();
+				} else {
+					sy = sy % source.getHeight();
+				}
+				
+				dest.setRGB(x2 + px, y2 + py, source.getRGB(sx, sy));
 			}
 		}
 	}
