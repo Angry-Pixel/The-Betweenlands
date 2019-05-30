@@ -182,11 +182,11 @@ public class ModelRegistry {
 		}
 	});
 
-	public static final IModel DUNGEON_WALL_CANDLE = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelDungeonWallCandle(), new ResourceLocation("thebetweenlands:blocks/dungeon_wall_candle"), new ResourceLocation("thebetweenlands:particle/item/dungeon_wall_candle_particle"), 32, 32);
-	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_1 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelWoodSupportBeam1(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_1"), new ResourceLocation("thebetweenlands:particle/item/wood_support_beam_particle"), 64, 64);
-	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_2 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelWoodSupportBeam2(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_2"), new ResourceLocation("thebetweenlands:particle/item/wood_support_beam_particle"), 64, 64);
-	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_3 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelWoodSupportBeam3(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_3"), new ResourceLocation("thebetweenlands:particle/item/wood_support_beam_particle"), 64, 64);
-	public static final IModel MUD_TOWER_BRAZIER = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelMudTowerBrazier(), new ResourceLocation("thebetweenlands:blocks/mud_tower_brazier"), new ResourceLocation("thebetweenlands:particle/item/mud_tower_brazier_particle"), 128, 128);
+	public static final IModel DUNGEON_WALL_CANDLE = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelDungeonWallCandle(), new ResourceLocation("thebetweenlands:blocks/dungeon_wall_candle"), new ResourceLocation("thebetweenlands:particle/block/dungeon_wall_candle_particle"), 32, 32);
+	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_1 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelWoodSupportBeam1(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_1"), new ResourceLocation("thebetweenlands:particle/block/wood_support_beam_particle"), 64, 64);
+	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_2 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelWoodSupportBeam2(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_2"), new ResourceLocation("thebetweenlands:particle/block/wood_support_beam_particle"), 64, 64);
+	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_3 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelWoodSupportBeam3(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_3"), new ResourceLocation("thebetweenlands:particle/block/wood_support_beam_particle"), 64, 64);
+	public static final IModel MUD_TOWER_BRAZIER = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelMudTowerBrazier(), new ResourceLocation("thebetweenlands:blocks/mud_tower_brazier"), new ResourceLocation("thebetweenlands:particle/block/mud_tower_brazier_particle"), 128, 128);
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 
