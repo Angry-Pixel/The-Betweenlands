@@ -3,7 +3,7 @@
   "defaults": {
     "model": "thebetweenlands:internal/blank",
     "custom": {
-      "particle_texture": "thebetweenlands:tiles/repeller_particle"
+      "particle_texture": "thebetweenlands:particle/block/repeller_particle"
     }
   },
   "variants": {
