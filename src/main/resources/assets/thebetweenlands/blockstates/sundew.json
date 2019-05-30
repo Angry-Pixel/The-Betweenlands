@@ -10,7 +10,7 @@
         "half=upper": { 
             "model": "thebetweenlands:internal/blank",
             "custom": { 
-                "particle_texture": "thebetweenlands:blocks/sundew" 
+                "particle_texture": "thebetweenlands:particle/block/sundew_particle" 
             } 
         },
         "inventory": { 

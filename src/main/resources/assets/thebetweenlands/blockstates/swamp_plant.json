@@ -8,7 +8,8 @@
 					"model_base": "thebetweenlands:block/internal/swamp_plant",
 					"model_active": "thebetweenlands:block/internal/swamp_plant",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/swamp_plant_frosty"
+						"texture": "thebetweenlands:blocks/swamp_plant_frosty",
+						"particle_texture": "thebetweenlands:particle/block/swamp_plant_frosty_particle"
 					}
 				}
 			},
@@ -18,7 +19,8 @@
 					"model_base": "thebetweenlands:block/internal/swamp_plant",
 					"model_active": "thebetweenlands:block/internal/swamp_plant",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/swamp_plant_frosty"
+						"texture": "thebetweenlands:blocks/swamp_plant_frosty",
+						"particle_texture": "thebetweenlands:particle/block/swamp_plant_frosty_particle"
 					}
 				},
 				"y": 90
@@ -29,7 +31,8 @@
 					"model_base": "thebetweenlands:block/internal/swamp_plant",
 					"model_active": "thebetweenlands:block/internal/swamp_plant",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/swamp_plant_frosty"
+						"texture": "thebetweenlands:blocks/swamp_plant_frosty",
+						"particle_texture": "thebetweenlands:particle/block/swamp_plant_frosty_particle"
 					}
 				},
 				"y": 180
@@ -40,7 +43,8 @@
 					"model_base": "thebetweenlands:block/internal/swamp_plant",
 					"model_active": "thebetweenlands:block/internal/swamp_plant",
 					"model_active_data": {
-						"texture": "thebetweenlands:blocks/swamp_plant_frosty"
+						"texture": "thebetweenlands:blocks/swamp_plant_frosty",
+						"particle_texture": "thebetweenlands:particle/block/swamp_plant_frosty_particle"
 					}
 				},
 				"y": 270

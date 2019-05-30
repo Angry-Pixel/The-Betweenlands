@@ -4,7 +4,7 @@
     "normal": {
       "model": "thebetweenlands:internal/blank",
       "custom": {
-        "particle_texture": "thebetweenlands:tiles/spawner_crystal_particle"
+        "particle_texture": "thebetweenlands:particle/block/spawner_crystal_particle"
       }
     }
   }

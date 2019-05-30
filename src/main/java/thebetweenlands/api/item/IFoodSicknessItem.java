@@ -8,7 +8,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
-import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.handler.FoodSicknessHandler;
 
 public interface IFoodSicknessItem {
 	/**
@@ -18,7 +18,7 @@ public interface IFoodSicknessItem {
 	 * @return
 	 */
 	default boolean canGetSickOf(@Nullable EntityPlayer player, ItemStack stack) {
-		return player != null ? player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId : false;
+		return player != null ? FoodSicknessHandler.isFoodSicknessEnabled(player.getEntityWorld()) : false;
 	}
 
 	/**

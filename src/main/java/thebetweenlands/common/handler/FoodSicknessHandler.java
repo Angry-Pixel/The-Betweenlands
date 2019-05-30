@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -33,8 +34,16 @@ public class FoodSicknessHandler {
 	private static ItemStack lastUsedItem = ItemStack.EMPTY;
 	private static FoodSickness lastSickness = null;
 
-	public static boolean isFoodSicknessEnabled() {
-		return BetweenlandsConfig.GENERAL.useFoodSickness && GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_FOOD_SICKNESS);
+	public static boolean isFoodSicknessEnabled(World world) {
+		if(GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_FOOD_SICKNESS)) {
+			if(world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && BetweenlandsConfig.GENERAL.useFoodSicknessInBetweenlands) {
+				return true;
+			} else if(world.provider.getDimension() != BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && BetweenlandsConfig.GENERAL.useFoodSicknessOutsideBetweenlands) {
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -63,7 +72,7 @@ public class FoodSicknessHandler {
 		EntityPlayer player = event.getEntity() instanceof EntityPlayer ? (EntityPlayer) event.getEntity() : null;
 		ItemStack itemStack = event.getItem();
 
-		if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled() && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(player, itemStack)) {
+		if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled(event.getEntity().getEntityWorld()) && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(player, itemStack)) {
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 				Item item = itemStack.getItem();
@@ -83,7 +92,7 @@ public class FoodSicknessHandler {
 			EntityPlayer player = event.getEntity() instanceof EntityPlayer ? (EntityPlayer) event.getEntity() : null;
 			ItemStack itemStack = event.getItem();
 
-			if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled() && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(player, itemStack)) {
+			if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled(event.getEntity().getEntityWorld()) && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(player, itemStack)) {
 				if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 					IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 
