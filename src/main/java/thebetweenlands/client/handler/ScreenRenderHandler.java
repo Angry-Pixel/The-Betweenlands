@@ -401,8 +401,51 @@ public class ScreenRenderHandler extends Gui {
 					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
 					if(capability.isDecayEnabled()) {
-						int startX = (width / 2) - (27 / 2) + 23;
-						int startY = height - 49;
+						int startX = 0;
+						int startY = 0;
+
+						switch(BetweenlandsConfig.GENERAL.decayBarZone) {
+						default:
+						case 0:
+							startX = (width / 2) - (27 / 2) + 23;
+							startY = height - 49;
+							break;
+						case 1:
+							startX = 0;
+							startY = 0;
+							break;
+						case 2:
+							startX = width;
+							startY = 0;
+							break;
+						case 3:
+							startX = width;
+							startY = height;
+							break;
+						case 4:
+							startX = 0;
+							startY = height;
+							break;
+						case 5:
+							startX = 0;
+							startY = height / 2;
+							break;
+						case 6:
+							startX = width / 2;
+							startY = 0;
+							break;
+						case 7:
+							startX = width;
+							startY = height / 2;
+							break;
+						case 8:
+							startX = width / 2;
+							startY = height;
+							break;
+						}
+						
+						startX += BetweenlandsConfig.GENERAL.decayBarOffsetX;
+						startY += BetweenlandsConfig.GENERAL.decayBarOffsetY;
 
 						//Erebus compatibility
 						if (player.getEntityData().hasKey("antivenomDuration")) {
