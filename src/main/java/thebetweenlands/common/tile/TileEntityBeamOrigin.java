@@ -13,8 +13,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.structure.BlockBeamLensSupport;
 import thebetweenlands.common.block.structure.BlockBeamOrigin;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
+import thebetweenlands.common.block.structure.BlockBeamTube;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockEnergyBarrierMud;
 import thebetweenlands.common.network.clientbound.PacketParticle;
@@ -160,10 +162,24 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 		int distance = 0;
 		for (distance = 1; distance < 14; distance++) {
 			IBlockState state = getWorld().getBlockState(getPos().offset(facing, distance));
-			if (state != Blocks.AIR.getDefaultState() && !(state.getBlock() instanceof BlockDiagonalEnergyBarrier) && !(state.getBlock() instanceof BlockEnergyBarrierMud))
+			if (state != Blocks.AIR.getDefaultState()
+					&& !(state.getBlock() instanceof BlockDiagonalEnergyBarrier) 
+					&& !(state.getBlock() instanceof BlockEnergyBarrierMud)
+					&& !(state.getBlock() instanceof BlockBeamLensSupport)
+					&& !isValidBeamTubeLens(state, facing))
 				break;
 		}
 		return distance;
+	}
+
+	private boolean isValidBeamTubeLens(IBlockState state, EnumFacing facing) {
+		if(!(state.getBlock() instanceof BlockBeamTube))
+			return false;
+		if(state.getValue(BlockBeamTube.FACING) == facing)
+			return true;
+		if(state.getValue(BlockBeamTube.FACING) == facing.getOpposite())
+			return true;
+		return false;
 	}
 
 	@Override
