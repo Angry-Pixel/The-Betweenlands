@@ -447,6 +447,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		top_state++;
 		if (top_state > 7)
 			top_state = 0;
+		this.markDirty();
 		playLockSound();
 	}
 
@@ -455,6 +456,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		mid_state++;
 		if (mid_state > 7)
 			mid_state = 0;
+		this.markDirty();
 		playLockSound();
 	}
 
@@ -463,6 +465,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		bottom_state++;
 		if (bottom_state > 7)
 			bottom_state = 0;
+		this.markDirty();
 		playLockSound();
 	}
 

@@ -55,4 +55,24 @@ public class TileEntityDungeonDoorCombination extends TileEntity implements ITic
 		this.renderTicks++;
 	}
 
+	public void cycleTopState() {
+		top_code++;
+		if (top_code > 7)
+			top_code = 0;
+		this.markDirty();
+	}
+
+	public void cycleMidState() {
+		mid_code++;
+		if (mid_code > 7)
+			mid_code = 0;
+		this.markDirty();
+	}
+
+	public void cycleBottomState() {
+		bottom_code++;
+		if (bottom_code > 7)
+			bottom_code = 0;
+		this.markDirty();
+	}
 }

@@ -13,9 +13,11 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -23,6 +25,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
+import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 
 public class BlockDungeonDoorCombination extends BasicBlock implements ITileEntityProvider {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -112,4 +115,22 @@ public class BlockDungeonDoorCombination extends BasicBlock implements ITileEnti
     public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (!world.isRemote && player.capabilities.isCreativeMode) {
+			TileEntityDungeonDoorCombination tile = getTileEntity(world, pos);
+			if (facing == state.getValue(FACING)) {
+				if(hitY >= 0.0625F && hitY < 0.375F)
+					tile.cycleBottomState();
+				if(hitY >= 0.375F && hitY < 0.625F)
+					tile.cycleMidState();
+				if(hitY >= 0.625F && hitY <= 0.9375F)
+					tile.cycleTopState();
+				world.notifyBlockUpdate(pos, state, state, 3);
+				return true;
+			}
+		}
+		return false;
+	}
 }
