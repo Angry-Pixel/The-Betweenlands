@@ -611,14 +611,14 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				setRandomCombinations(world, pos.add(1, 0, 2), pos.add(27, 0, 26), rand, false);
 
 				if(level == 3) {
-					world.setBlockState(pos.add(26, 0, 1), blockHelper.DUNGEON_DOOR_SOUTH, 2);
+					world.setBlockState(pos.add(26, 0, 1), blockHelper.DUNGEON_DOOR_MIMIC_SOUTH, 2);
 					setRandomCombinations(world, pos.add(1, 0, 2), pos.add(26, 0, 1), rand, true);
 					for(int x = -1; x <= 1; x++)
 						for(int y = -1; y <= 1; y++)
 							world.setBlockToAir(pos.add(26 + x, y, 0));
 				}
 				if(level == 5) {
-					world.setBlockState(pos.add(1, 0, 26), blockHelper.DUNGEON_DOOR_EAST, 2);  //TODO This will be Crypt Crawler entrance
+					world.setBlockState(pos.add(1, 0, 26), blockHelper.DUNGEON_DOOR_MIMIC_EAST, 2);  //TODO This will be Crypt Crawler entrance
 					setRandomCombinations(world, pos.add(1, 0, 2), pos.add(1, 0, 26), rand, true);
 					for(int z = -1; z <= 1; z++)
 						for(int y = -1; y <= 1; y++)
@@ -635,7 +635,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			world.setBlockState(pos.add(1, 0, 2), getMudBricksForLevel(rand, level, 2));
 	}
 
-	public void setRandomCombinations(World world, BlockPos codePos, BlockPos lockPos, Random rand, Boolean isMimic) {
+	public void setRandomCombinations(World world, BlockPos codePos, BlockPos lockPos, Random rand, boolean isMimic) {
 		IBlockState codeState = world.getBlockState(codePos);
 		IBlockState lockState = world.getBlockState(lockPos);
 		TileEntityDungeonDoorCombination tileCode = (TileEntityDungeonDoorCombination) world.getTileEntity(codePos);
@@ -651,7 +651,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				tileLock.mid_code = tileCode.mid_code;
 				tileLock.bottom_code = tileCode.bottom_code;
 				tileLock.is_in_dungeon = true;
-				tileLock.mimic = isMimic;
 			}
 		}
 		world.notifyBlockUpdate(codePos, codeState, codeState, 3);

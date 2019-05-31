@@ -34,7 +34,7 @@ public class RenderDungeonDoorRunes extends TileEntitySpecialRenderer<TileEntity
 	
 	public void renderTile(TileEntityDungeonDoorRunes tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
 		IBlockState state = tile.getWorld().getBlockState(tile.getPos());
-		if (state == null || state.getBlock() != BlockRegistry.DUNGEON_DOOR_RUNES)
+		if (state == null || state.getBlock() instanceof BlockDungeonDoorRunes == false)
 			return;
 		EnumFacing facing = state.getValue(BlockDungeonDoorRunes.FACING);
 		boolean invisiBlock = state.getValue(BlockDungeonDoorRunes.INVISIBLE);

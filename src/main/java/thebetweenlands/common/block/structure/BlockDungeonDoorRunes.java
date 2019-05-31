@@ -13,13 +13,16 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
@@ -31,16 +34,19 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public static final PropertyBool INVISIBLE = PropertyBool.create("invisible");
 
-	public BlockDungeonDoorRunes() {
-		this(Material.ROCK);
+	public final boolean mimic;
+	
+	public BlockDungeonDoorRunes(boolean mimic) {
+		this(Material.ROCK, mimic);
 	}
 
-	public BlockDungeonDoorRunes(Material material) {
+	public BlockDungeonDoorRunes(Material material, boolean mimic) {
 		super(material);
 		setHardness(0.4F);
 		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(INVISIBLE, false));
+		this.mimic = mimic;
 	}
 	
 	@Nullable
@@ -70,7 +76,7 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		if(!getStateFromMeta(meta).getValue(INVISIBLE))
-			return new TileEntityDungeonDoorRunes();
+			return new TileEntityDungeonDoorRunes(this.mimic);
 		return null;
 	}
 
@@ -169,18 +175,20 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote && !state.getValue(INVISIBLE)) {
 			TileEntityDungeonDoorRunes tile = getTileEntity(world, pos);
-			if (tile instanceof TileEntityDungeonDoorRunes) {
-				TileEntityDungeonDoorRunes tileDoor = (TileEntityDungeonDoorRunes) tile;
-				if (facing == state.getValue(FACING)) {
-					if(hitY >= 0.0625F && hitY < 0.375F && tileDoor.bottom_rotate == 0)
-						 tileDoor.cycleBottomState();
-					if(hitY >= 0.375F && hitY < 0.625F && tileDoor.mid_rotate == 0)
-						 tileDoor.cycleMidState();
-					if(hitY >= 0.625F && hitY <= 0.9375F &&  tileDoor.top_rotate == 0)
-						 tileDoor.cycleTopState();
-					world.notifyBlockUpdate(pos, state, state, 3);
-					return true;
+			if (tile != null && facing == state.getValue(FACING)) {
+				if(player.capabilities.isCreativeMode && player.isSneaking()) {
+					tile.enterLockCode();
+					player.sendStatusMessage(new TextComponentTranslation("chat.dungeon_door_runes.locked"), true);
+				} else {
+					if(hitY >= 0.0625F && hitY < 0.375F && tile.bottom_rotate == 0)
+						tile.cycleBottomState();
+					if(hitY >= 0.375F && hitY < 0.625F && tile.mid_rotate == 0)
+						tile.cycleMidState();
+					if(hitY >= 0.625F && hitY <= 0.9375F &&  tile.top_rotate == 0)
+						tile.cycleTopState();
 				}
+				world.notifyBlockUpdate(pos, state, state, 3);
+				return true;
 			}
 		} else 
 			return true;

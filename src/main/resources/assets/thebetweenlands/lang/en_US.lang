@@ -435,6 +435,8 @@ tile.thebetweenlands.log_rotten_bark_carved_14.name=Carved Rotten Bark
 tile.thebetweenlands.log_rotten_bark_carved_15.name=Carved Rotten Bark
 tile.thebetweenlands.log_rotten_bark_carved_16.name=Carved Rotten Bark
 tile.thebetweenlands.mud_tower_brazier.name=Brazier
+tile.thebetweenlands.dungeon_door_runes.name=Dungeon Door
+tile.thebetweenlands.dungeon_door_runes_mimic.name=Dungeon Door Mimic
 
 
 # Items
@@ -646,6 +648,7 @@ item.thebetweenlands.tar_beast_heart.name=Tar Beast Heart
 item.thebetweenlands.tar_beast_heart_animated.name=Animated Tar Beast Heart
 item.thebetweenlands.tar_drip.name=Tar Drip
 item.thebetweenlands.test_item.name=Test Item
+item.thebetweenlands.test_item_chimp.name=Test Banana
 item.thebetweenlands.location_debug.name=Location Debug
 item.thebetweenlands.the_explorer.name=Explorer's Disc
 item.thebetweenlands.thorns_item.name=Thorn Branch
@@ -1031,6 +1034,8 @@ chat.equipment.equipped=Equipped %s
 chat.equipment.unequipped=Unequipped %s
 
 chat.waystone.obstructed=Menhir is obstructed
+
+chat.dungeon_door_runes.locked=Dungeon door code set!
 
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath

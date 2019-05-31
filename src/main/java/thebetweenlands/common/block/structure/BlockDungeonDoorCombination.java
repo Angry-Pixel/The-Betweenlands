@@ -14,12 +14,14 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -120,13 +122,14 @@ public class BlockDungeonDoorCombination extends BasicBlock implements ITileEnti
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote && player.capabilities.isCreativeMode) {
 			TileEntityDungeonDoorCombination tile = getTileEntity(world, pos);
-			if (facing == state.getValue(FACING)) {
+			if (tile != null && facing == state.getValue(FACING)) {
 				if(hitY >= 0.0625F && hitY < 0.375F)
 					tile.cycleBottomState();
 				if(hitY >= 0.375F && hitY < 0.625F)
 					tile.cycleMidState();
 				if(hitY >= 0.625F && hitY <= 0.9375F)
 					tile.cycleTopState();
+				world.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 1F, 1.0F);
 				world.notifyBlockUpdate(pos, state, state, 3);
 				return true;
 			}

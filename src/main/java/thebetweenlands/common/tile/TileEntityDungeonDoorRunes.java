@@ -7,6 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -28,14 +29,14 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable, IEntityScreenShake {
-
+	public final boolean mimic; // true = Barrishee
+	
 	public int top_code = -1, mid_code = -1, bottom_code = -1; // set back to -1
 	public int top_state = 0, mid_state = 0, bottom_state = 0;
 	public int top_state_prev = 0, mid_state_prev = 0, bottom_state_prev = 0;
 	public int top_rotate = 0, mid_rotate = 0, bottom_rotate = 0;
 	public int lastTickTopRotate = 0, lastTickMidRotate = 0, lastTickBottomRotate = 0;
 	public int renderTicks = 0;
-	public boolean mimic = false; // true = Barrishee
 	public boolean animate_open = false;
 	public boolean animate_open_recess = false;
 	public boolean animate_tile_recess = false;
@@ -66,8 +67,9 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 
 	private static int SHAKING_TIMER_MAX = 240;
 
-	public TileEntityDungeonDoorRunes() {
+	public TileEntityDungeonDoorRunes(boolean mimic) {
 		super();
+		this.mimic = mimic;
 	}
 
 	@Override
@@ -468,6 +470,17 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		this.markDirty();
 		playLockSound();
 	}
+	
+	public void enterLockCode() {
+		top_code = top_state;
+		mid_code = mid_state;
+		bottom_code = bottom_state;
+		top_state_prev = top_state = 0;
+		mid_state_prev = mid_state = 0;
+		bottom_state_prev = bottom_state = 0;
+		getWorld().playSound(null, getPos(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 1F, 1.0F);
+		this.markDirty();
+	}
 
 	private void playLockSound() {
 		getWorld().playSound(null, getPos(), SoundRegistry.MUD_DOOR_LOCK, SoundCategory.BLOCKS, 1F, 1.0F);
@@ -497,7 +510,6 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		top_state_prev = nbt.getInteger("top_state_prev");
 		mid_state_prev = nbt.getInteger("mid_state_prev");
 		bottom_state_prev = nbt.getInteger("bottom_state_prev");
-		mimic = nbt.getBoolean("mimic");
 		animate_open = nbt.getBoolean("animate_open");
 		animate_open_recess = nbt.getBoolean("animate_open_recess");
 		animate_tile_recess = nbt.getBoolean("animate_tile_recess");
@@ -522,7 +534,6 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		nbt.setInteger("top_state_prev", top_state_prev);
 		nbt.setInteger("mid_state_prev", mid_state_prev);
 		nbt.setInteger("bottom_state_prev", bottom_state_prev);
-		nbt.setBoolean("mimic", mimic);
 		nbt.setBoolean("animate_open", animate_open);
 		nbt.setBoolean("animate_open_recess", animate_open_recess);
 		nbt.setBoolean("animate_tile_recess", animate_tile_recess);

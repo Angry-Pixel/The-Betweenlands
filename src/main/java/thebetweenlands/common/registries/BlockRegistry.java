@@ -563,7 +563,8 @@ public class BlockRegistry {
     public static final Block MUD_BRICKS_SPAWNER_HOLE = new BlockMudBricksSpawnerHole();
     public static final Block MUD_BRICKS_ALCOVE = new BlockMudBricksAlcove();
     public static final Block LOOT_URN = new BlockLootUrn();
-	public static final Block DUNGEON_DOOR_RUNES = new BlockDungeonDoorRunes();
+	public static final Block DUNGEON_DOOR_RUNES = new BlockDungeonDoorRunes(false);
+	public static final Block DUNGEON_DOOR_RUNES_MIMIC = new BlockDungeonDoorRunes(true);
 	public static final Block DUNGEON_DOOR_COMBINATION = new BlockDungeonDoorCombination();
 	public static final Block MUD_BRICKS_CLIMBABLE = new BlockMudBricksClimbable();
 	public static final Block MUD_TILES_WATER = new BlockMudTilesWater();

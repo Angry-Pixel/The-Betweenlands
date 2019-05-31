@@ -121,6 +121,11 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState DUNGEON_DOOR_NORTH = BlockRegistry.DUNGEON_DOOR_RUNES.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.NORTH);
 	public IBlockState DUNGEON_DOOR_SOUTH = BlockRegistry.DUNGEON_DOOR_RUNES.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.SOUTH);
 
+	public IBlockState DUNGEON_DOOR_MIMIC_EAST = BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.EAST);
+	public IBlockState DUNGEON_DOOR_MIMIC_WEST = BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.WEST);
+
+	public IBlockState DUNGEON_DOOR_MIMIC_NORTH = BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.NORTH);
+	public IBlockState DUNGEON_DOOR_MIMIC_SOUTH = BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.SOUTH);
 	
 	private IBlockState LOOT_URN_1 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_1);
 	private IBlockState LOOT_URN_2 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_2);
