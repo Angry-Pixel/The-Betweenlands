@@ -105,18 +105,18 @@ public class ModelDungeonDoorRunes extends ModelBase {
 		mid.rotateAngleX = 0F + (tile.lastTickMidRotate + (tile.mid_rotate - tile.lastTickMidRotate) * partialTicks) / (180F / (float) Math.PI);
 		bottom.rotateAngleX = 0F + (tile.lastTickBottomRotate + (tile.bottom_rotate - tile.lastTickBottomRotate) * partialTicks) / (180F / (float) Math.PI);
 
-		if(tile.mimic) {
+		if(tile.isMimic()) {
 			slate1.rotateAngleX = 0F + (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks) / (180F / (float) Math.PI);
 			slate2.rotateAngleX = 0F + (tile.last_tick_slate_2_rotate + (tile.slate_2_rotate - tile.last_tick_slate_2_rotate) * partialTicks) / (180F / (float) Math.PI);
 			slate3.rotateAngleX = 0F + (tile.last_tick_slate_3_rotate + (tile.slate_3_rotate - tile.last_tick_slate_3_rotate) * partialTicks) / (180F / (float) Math.PI);
 		}
-		if(!tile.mimic) {
+		if(!tile.isMimic()) {
 			slate1.rotateAngleX = 0F;
 			slate2.rotateAngleX = 0F;
 			slate3.rotateAngleX = 0F;
 		}
 		if(!tile.hide_slate_1) {
-			if(!tile.mimic) {
+			if(!tile.isMimic()) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks) * scale, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks) * scale);
 				slate1.render(scale);
@@ -126,7 +126,7 @@ public class ModelDungeonDoorRunes extends ModelBase {
 				slate1.render(scale);
 		}
 		if(!tile.hide_slate_2) {
-			if(!tile.mimic) {
+			if(!tile.isMimic()) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_2_rotate + (tile.slate_2_rotate - tile.last_tick_slate_2_rotate) * partialTicks) * scale, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks) * scale);
 				slate2.render(scale);
@@ -136,7 +136,7 @@ public class ModelDungeonDoorRunes extends ModelBase {
 			slate2.render(scale);
 		}
 		if(!tile.hide_slate_3) {
-			if(!tile.mimic) {
+			if(!tile.isMimic()) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_3_rotate + (tile.slate_3_rotate - tile.last_tick_slate_3_rotate) * partialTicks) * scale, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks) * scale);
 				slate3.render(scale);
@@ -146,7 +146,7 @@ public class ModelDungeonDoorRunes extends ModelBase {
 				slate3.render(scale);
 		}
 		if (!tile.hide_lock) {
-			if(!tile.mimic) {
+			if(!tile.isMimic()) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks) * scale, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks) * scale);
 				renderLockParts(scale);
@@ -157,7 +157,7 @@ public class ModelDungeonDoorRunes extends ModelBase {
 			}
 		}
 		if (!tile.hide_back_wall) {
-			if(!tile.mimic) {
+			if(!tile.isMimic()) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks) * scale, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks) * scale);
 				GlStateManager.scale(0.99F, 1F, 1F);
@@ -172,7 +172,7 @@ public class ModelDungeonDoorRunes extends ModelBase {
 			}
 		}
 
-		if(!tile.mimic && tile.is_in_dungeon) {
+		if(!tile.isMimic() && tile.is_in_dungeon) {
 			if(tile.animate_tile_recess) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(0F, 0F, 0F + 0.275F * (tile.last_tick_recess_pos_tile_1 + (tile.tile_1_recess_pos - tile.last_tick_recess_pos_tile_1) * partialTicks) * scale);

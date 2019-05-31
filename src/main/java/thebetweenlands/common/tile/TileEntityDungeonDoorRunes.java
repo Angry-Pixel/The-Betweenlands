@@ -29,7 +29,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable, IEntityScreenShake {
-	public final boolean mimic; // true = Barrishee
+	private boolean mimic; // true = Barrishee
 	
 	public int top_code = -1, mid_code = -1, bottom_code = -1; // set back to -1
 	public int top_state = 0, mid_state = 0, bottom_state = 0;
@@ -72,6 +72,10 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		this.mimic = mimic;
 	}
 
+	public TileEntityDungeonDoorRunes() {
+		super();
+	}
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
@@ -510,6 +514,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		top_state_prev = nbt.getInteger("top_state_prev");
 		mid_state_prev = nbt.getInteger("mid_state_prev");
 		bottom_state_prev = nbt.getInteger("bottom_state_prev");
+		mimic = nbt.getBoolean("mimic");
 		animate_open = nbt.getBoolean("animate_open");
 		animate_open_recess = nbt.getBoolean("animate_open_recess");
 		animate_tile_recess = nbt.getBoolean("animate_tile_recess");
@@ -534,6 +539,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		nbt.setInteger("top_state_prev", top_state_prev);
 		nbt.setInteger("mid_state_prev", mid_state_prev);
 		nbt.setInteger("bottom_state_prev", bottom_state_prev);
+		nbt.setBoolean("mimic", mimic);
 		nbt.setBoolean("animate_open", animate_open);
 		nbt.setBoolean("animate_open_recess", animate_open_recess);
 		nbt.setBoolean("animate_tile_recess", animate_tile_recess);
@@ -594,4 +600,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		return 1.0F / SHAKING_TIMER_MAX * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
 	}
 
+	public boolean isMimic() {
+		return this.mimic;
+	}
 }
