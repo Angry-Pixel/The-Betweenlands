@@ -107,7 +107,7 @@ public class LightTowerBuildParts {
 		rotatedCubeVolume(world, rand, pos, 3, 5 + level, 5, blockHelper.getRandomSupportBeam(facing.getOpposite().rotateY(), true, rand), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 3, 6 + level, 5, blockHelper.getStairsForLevel(rand, 0, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 5, 2 + level, 5, blockHelper.getRandomSupportBeam(facing.rotateY(), false, rand), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 4, 2 + level, 5, blockHelper.MUD_TOWER_BEAM_RELAY.withProperty(BlockBeamRelay.FACING, facing.getOpposite()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 2 + level, 5, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 3, 2 + level, 5, blockHelper.getRandomSupportBeam(facing.getOpposite().rotateY(), false, rand), 1, 1, 1, facing);
 
 		// FL
@@ -546,7 +546,6 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, -5, 1 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -5, 2 + level, -4, blockHelper.PITSTONE_PILLAR, 1, 5, 1, facing);
 			rotatedCubeVolume(world, rand, pos, -5, 7 + level, -4, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
-
 		}
 		
 		if(level == 8) {
@@ -609,9 +608,6 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 7, 0 + level, 2, blockHelper.PITSTONE_BRICKS, 1, 2, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 7, 2 + level, 2, blockHelper.PITSTONE_PILLAR, 1, 5, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 7, 7 + level, 2, blockHelper.PITSTONE_BRICKS, 1, 1, 1, facing);
-
-			rotatedCubeVolume(world, rand, pos, 7, 0 + level, -2, blockHelper.PITSTONE_BRICKS, 1, 2, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 7, 2 + level, -2, blockHelper.PITSTONE_PILLAR, 1, 1, 1, facing);
 
 			rotatedCubeVolume(world, rand, pos, 7, 2 + level, -4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 7, 1 + level, -4, blockHelper.MUD_TOWER_BEAM_LENS_SUPPORTS, 1, 1, 1, facing);
