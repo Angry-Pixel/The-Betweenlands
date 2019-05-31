@@ -19,6 +19,8 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -163,7 +165,35 @@ public class BlockDiagonalEnergyBarrier extends Block implements IConnectedTextu
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, CORNER_SW_AABB);
 		}
 	}
-
+    
+    @Override
+    public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
+    	RayTraceResult result = super.collisionRayTrace(blockState, worldIn, pos, start, end);
+    	
+    	if(result != null) {
+    		//Got intersection with full AABB, now check for intersection with
+    		//plane
+    		
+    		Vec3d diff = end.subtract(start);
+    		Vec3d dir = diff.normalize();
+    		
+    		Vec3d p0 = new Vec3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+    		Vec3d n = blockState.getValue(FLIPPED) ? new Vec3d(0.70710678118D, 0, -0.70710678118D) : new Vec3d(0.70710678118D, 0, 0.70710678118D);
+    		
+    		double d = p0.subtract(start).dotProduct(n) / (dir.dotProduct(n));
+    		
+    		Vec3d intercept = start.add(dir.scale(d));
+    		
+    		if(intercept.x >= pos.getX() && intercept.x <= pos.getX() + 1 &&
+    				intercept.y >= pos.getY() && intercept.y <= pos.getY() + 1 &&
+    				intercept.z >= pos.getZ() && intercept.z <= pos.getZ() + 1) {
+    			return new RayTraceResult(intercept, result.sideHit, result.getBlockPos());
+    		}
+    	}
+    	
+    	return null;
+    }
+    
 	@Override
 	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
 		/*if (entity instanceof EntityPlayer) {
