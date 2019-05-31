@@ -28,7 +28,7 @@ import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
 public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProvider, IStateMappedBlock {
-	public static final PropertyDirection FACING = PropertyDirection.create("facing");
+	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public static final PropertyBool INVISIBLE = PropertyBool.create("invisible");
 
 	public BlockDungeonDoorRunes() {
@@ -76,7 +76,7 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta)).withProperty(INVISIBLE, Boolean.valueOf((meta & 8) > 0));
+		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta & 0b111)).withProperty(INVISIBLE, Boolean.valueOf((meta & 8) > 0));
 	}
 
 	@Override
