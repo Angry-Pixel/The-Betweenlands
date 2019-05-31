@@ -1,8 +1,54 @@
 {
+  "forge_marker": 1,
   "variants": {
     "facing=north": { "model": "thebetweenlands:internal/mud_bricks_alcove" },
     "facing=south": { "model": "thebetweenlands:internal/mud_bricks_alcove", "y": 180 },
     "facing=west": { "model": "thebetweenlands:internal/mud_bricks_alcove", "y": 270 },
-    "facing=east": { "model": "thebetweenlands:internal/mud_bricks_alcove", "y": 90 }
+    "facing=east": { "model": "thebetweenlands:internal/mud_bricks_alcove", "y": 90 },
+		"inventory": {
+			"model": "thebetweenlands:internal/mud_bricks_alcove",
+			"transform": {
+				"gui": {
+		            "rotation": [ 30, 225, 0 ],
+		            "translation": [ 0, 0, 0],
+		            "scale":[ 0.625, 0.625, 0.625 ]
+		        },
+		        "ground": {
+		            "rotation": [ 0, 90, 0 ],
+		            "translation": [ 0, 0, 0],
+		            "scale":[ 0.25, 0.25, 0.25 ]
+		        },
+		        "head": {
+		            "rotation": [ 0, 270, 0 ],
+		            "translation": [ 0, 0, 0],
+		            "scale":[ 1, 1, 1 ]
+		        },
+		        "fixed": {
+		            "rotation": [ 0, 0, 0 ],
+		            "translation": [ 0, 0, -0.05 ],
+		            "scale":[ 0.5, 0.5, 0.5 ]
+		        },
+		        "thirdperson_righthand": {
+		            "rotation": [ 75, 45, 0 ],
+		            "translation": [ 0, 0, 0],
+		            "scale": [ 0.375, 0.375, 0.375 ]
+		        },
+		        "firstperson_righthand": {
+		            "rotation": [ 0, 45, 0 ],
+		            "translation": [ 0, 0, 0],
+		            "scale": [ 0.4, 0.4, 0.4 ]
+		        },
+		        "thirdperson_lefthand": {
+		            "rotation": [ 75, 45, 0 ],
+		            "translation": [ 0, 0, 0],
+		            "scale": [ 0.375, 0.375, 0.375 ]
+		        },
+		        "firstperson_lefthand": {
+		            "rotation": [ 0, 45, 0 ],
+		            "translation": [ 0, 0, 0],
+		            "scale": [ 0.4, 0.4, 0.4 ]
+		        }
+			}
+		}
   }
 }

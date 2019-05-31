@@ -612,32 +612,6 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudBricksSpikeTrap.class, new RenderMudBricksSpikeTrap());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudTilesSpikeTrap.class, new RenderMudTilesSpikeTrap());
 
-		//item models
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.COMPOST_BIN), 0, TileEntityCompostBin.class);
-		//ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_SPAWNER), 0, TileEntityDruidSpawner.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.PURIFIER), 0, TileEntityPurifier.class);
-		for(EnumFacing facing : EnumFacing.HORIZONTALS) {
-			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_1.getMetadata(facing), TileEntityLootPot.class);
-			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_2.getMetadata(facing), TileEntityLootPot.class);
-			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_3.getMetadata(facing), TileEntityLootPot.class);
-		}
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MOB_SPAWNER), 0, TileEntityMobSpawnerBetweenlands.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.SPIKE_TRAP), 0, TileEntitySpikeTrap.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.POSSESSED_BLOCK), 0, TileEntityPossessedBlock.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ITEM_CAGE), 0, TileEntityItemCage.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.GECKO_CAGE), 0, TileEntityGeckoCage.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.INFUSER), 0, TileEntityInfuser.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MORTAR), 0, TileEntityMortar.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ANIMATOR), 0, TileEntityAnimator.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ALEMBIC), 0, TileEntityAlembic.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ITEM_SHELF), 0, TileEntityItemShelf.class);
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.REPELLER), 0, TileEntityRepeller.class);
-		for(EnumFacing facing : EnumFacing.HORIZONTALS) {
-			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT), EnumLootPot.POT_1.getMetadata(facing), TileEntityTarLootPot1.class);
-			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT), EnumLootPot.POT_2.getMetadata(facing), TileEntityTarLootPot2.class);
-			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT), EnumLootPot.POT_3.getMetadata(facing), TileEntityTarLootPot3.class);
-		}
 
 		Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityDruidAltar.class));
 		Item.getItemFromBlock(BlockRegistry.COMPOST_BIN).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCompostBin.class));
@@ -662,18 +636,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		}));
 		ItemRegistry.LIVING_WEEDWOOD_SHIELD.setTileEntityItemStackRenderer(new RenderLivingWeedwoodShield());
 		Item.getItemFromBlock(BlockRegistry.WAYSTONE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityWaystone.class));
-
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MUD_BRICKS_ALCOVE), 0, TileEntityMudBricksAlcove.class);
-
-		for(EnumFacing facing : EnumFacing.HORIZONTALS) {
-			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_URN), EnumLootUrn.URN_1.getMetadata(facing), TileEntityLootUrn.class);
-			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_URN), EnumLootUrn.URN_2.getMetadata(facing), TileEntityLootUrn.class);
-			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_URN), EnumLootUrn.URN_3.getMetadata(facing), TileEntityLootUrn.class);
-		}
-
-		Item.getItemFromBlock(BlockRegistry.DUNGEON_DOOR_RUNES).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityDungeonDoorRunes.class));
-		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DUNGEON_DOOR_COMBINATION), 0, TileEntityDungeonDoorCombination.class);
-
+		Item.getItemFromBlock(BlockRegistry.LOOT_URN).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityLootUrn.class));
+		Item.getItemFromBlock(BlockRegistry.WEEDWOOD_CHEST).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityChestBetweenlands.class));
+		
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
 			if (block instanceof ITintedBlock) {

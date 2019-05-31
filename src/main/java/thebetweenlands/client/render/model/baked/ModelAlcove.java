@@ -6,7 +6,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 
+import javax.vecmath.Matrix4f;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.state.IBlockState;
@@ -15,11 +20,13 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProcessor;
@@ -132,8 +139,8 @@ public class ModelAlcove implements IModel {
 			bakedSmallCandleModel[i] = this.smallCandleModel[i].bake(state, format, bakedTextureGetter);
 			bakedBigCandleModel[i] = this.bigCandleModel[i].bake(state, format, bakedTextureGetter);
 		}
-
-		return new ModelBakedAlcove(bakedBaseModel, bakedTopCobwedModel, bakedBottomCobwebModel, bakedSmallCandleModel, bakedBigCandleModel, bakedTextureGetter.apply(this.particleTexture));
+		
+		return new ModelBakedAlcove(PerspectiveMapWrapper.getTransforms(state), bakedBaseModel, bakedTopCobwedModel, bakedBottomCobwebModel, bakedSmallCandleModel, bakedBigCandleModel, bakedTextureGetter.apply(this.particleTexture));
 	}
 
 	@Override
@@ -142,6 +149,8 @@ public class ModelAlcove implements IModel {
 	}
 
 	public static class ModelBakedAlcove implements IBakedModel {
+		private final ImmutableMap<TransformType, TRSRTransformation> transforms;
+		
 		private final IBakedModel[] bakedBaseModel;
 		private final IBakedModel[] bakedTopCobwebModel;
 		private final IBakedModel[] bakedBottomCobwebModel;
@@ -150,8 +159,9 @@ public class ModelAlcove implements IModel {
 
 		private final TextureAtlasSprite particleTexture;
 
-		private ModelBakedAlcove(IBakedModel[] bakedBaseModel, IBakedModel[] bakedTopCobwedModel, IBakedModel[] bakedBottomCobwebMode,
+		private ModelBakedAlcove(ImmutableMap<TransformType, TRSRTransformation> transforms, IBakedModel[] bakedBaseModel, IBakedModel[] bakedTopCobwedModel, IBakedModel[] bakedBottomCobwebMode,
 				IBakedModel[] bakedSmallCandleModel, IBakedModel[] bakedBigCandleModel, TextureAtlasSprite particleTexture) {
+			this.transforms = transforms;
 			this.bakedBaseModel = bakedBaseModel;
 			this.bakedTopCobwebModel = bakedTopCobwedModel;
 			this.bakedBottomCobwebModel = bakedBottomCobwebMode;
@@ -226,6 +236,11 @@ public class ModelAlcove implements IModel {
 		@Override
 		public ItemOverrideList getOverrides() {
 			return ItemOverrideList.NONE;
+		}
+		
+		@Override
+		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type) {
+			return PerspectiveMapWrapper.handlePerspective(this, this.transforms, type);
 		}
 	}
 }
