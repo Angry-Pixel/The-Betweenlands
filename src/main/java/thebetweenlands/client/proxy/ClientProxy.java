@@ -606,7 +606,6 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRepeller.class, new RenderRepeller());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPuffshroom.class, new TileEntityPuffshroomRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWaystone.class, new RenderWaystone());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudBricksAlcove.class, new RenderMudBricksAlcove());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootUrn.class, new RenderLootUrn());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDungeonDoorRunes.class, new RenderDungeonDoorRunes());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDungeonDoorCombination.class, new RenderDungeonDoorCombination());

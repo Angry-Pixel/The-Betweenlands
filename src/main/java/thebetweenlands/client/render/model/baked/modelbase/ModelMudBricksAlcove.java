@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.model.tile;
+package thebetweenlands.client.render.model.baked.modelbase;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -9,28 +9,28 @@ import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
 
 @SideOnly(Side.CLIENT)
 public class ModelMudBricksAlcove extends ModelBase {
-	ModelRenderer backwall;
-	ModelRenderer outcrop_a;
-	ModelRenderer candle1;
-	ModelRenderer candle2;
-	ModelRenderer cobweb1;
-	ModelRenderer cobweb2;
-	ModelRenderer top;
-	ModelRenderer left1;
-	ModelRenderer right1;
-	ModelRenderer back;
-	ModelRenderer backleft1;
-	ModelRenderer backright1;
-	ModelRenderer left2;
-	ModelRenderer left3;
-	ModelRenderer right2;
-	ModelRenderer right3;
-	ModelRenderer outcrop_b;
-	ModelRenderer wicker1;
-	ModelRenderer drip_texture1;
-	ModelRenderer wicker2;
-	ModelRenderer drip_texture2;
-	ModelRenderer cobweb2b;
+	public final ModelRenderer backwall;
+	public final ModelRenderer outcrop_a;
+	public final ModelRenderer candle1;
+	public final ModelRenderer candle2;
+	public final ModelRenderer cobweb1;
+	public final ModelRenderer cobweb2;
+	public final ModelRenderer top;
+	public final ModelRenderer left1;
+	public final ModelRenderer right1;
+	public final ModelRenderer back;
+	public final ModelRenderer backleft1;
+	public final ModelRenderer backright1;
+	public final ModelRenderer left2;
+	public final ModelRenderer left3;
+	public final ModelRenderer right2;
+	public final ModelRenderer right3;
+	public final ModelRenderer outcrop_b;
+	public final ModelRenderer wicker1;
+	public final ModelRenderer drip_texture1;
+	public final ModelRenderer wicker2;
+	public final ModelRenderer drip_texture2;
+	public final ModelRenderer cobweb2b;
 
 	public ModelMudBricksAlcove() {
 		textureWidth = 128;

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "thebetweenlands:internal/mud_bricks_alcove" },
+    "facing=south": { "model": "thebetweenlands:internal/mud_bricks_alcove", "y": 180 },
+    "facing=west": { "model": "thebetweenlands:internal/mud_bricks_alcove", "y": 270 },
+    "facing=east": { "model": "thebetweenlands:internal/mud_bricks_alcove", "y": 90 }
+  }
+}

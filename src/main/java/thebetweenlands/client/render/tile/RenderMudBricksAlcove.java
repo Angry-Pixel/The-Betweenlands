@@ -5,10 +5,10 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.baked.modelbase.ModelMudBricksAlcove;
 import thebetweenlands.client.render.model.tile.ModelLootUrn1;
 import thebetweenlands.client.render.model.tile.ModelLootUrn2;
 import thebetweenlands.client.render.model.tile.ModelLootUrn3;
-import thebetweenlands.client.render.model.tile.ModelMudBricksAlcove;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
 
@@ -31,7 +31,8 @@ public class RenderMudBricksAlcove extends TileEntitySpecialRenderer<TileEntityM
 	private static final ResourceLocation TEXTURE_3 = new ResourceLocation("thebetweenlands:textures/tiles/loot_urn_3.png");
 
 	public void renderTile(TileEntityMudBricksAlcove tile, double x, double y, double z, float partialTick, int destroyStage, float alpha) {
-
+		if(true) return;
+		
 		if(tile.dungeon_level <= 2)
 			bindTexture(ALCOVE_TEXTURE_0);
 		if(tile.dungeon_level == 3)

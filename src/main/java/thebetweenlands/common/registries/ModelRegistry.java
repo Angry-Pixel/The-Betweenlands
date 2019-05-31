@@ -18,6 +18,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import thebetweenlands.client.handler.TextureStitchHandler;
 import thebetweenlands.client.handler.TextureStitchHandler.TextureStitcher;
+import thebetweenlands.client.render.model.baked.ModelAlcove;
 import thebetweenlands.client.render.model.baked.ModelBlank;
 import thebetweenlands.client.render.model.baked.ModelCombined;
 import thebetweenlands.client.render.model.baked.ModelConnectedTexture;
@@ -187,6 +188,13 @@ public class ModelRegistry {
 	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_2 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelWoodSupportBeam2(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_2"), new ResourceLocation("thebetweenlands:particle/block/wood_support_beam_particle"), 64, 64);
 	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_3 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelWoodSupportBeam3(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_3"), new ResourceLocation("thebetweenlands:particle/block/wood_support_beam_particle"), 64, 64);
 	public static final IModel MUD_TOWER_BRAZIER = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelMudTowerBrazier(), new ResourceLocation("thebetweenlands:blocks/mud_tower_brazier"), new ResourceLocation("thebetweenlands:particle/block/mud_tower_brazier_particle"), 128, 128);
+	public static final IModel MUD_BRICKS_ALCOVE = new ModelAlcove(MODEL_TEXTURE_PACKER, new ResourceLocation[] {
+			new ResourceLocation("thebetweenlands:blocks/mud_bricks_alcove_0"),
+			new ResourceLocation("thebetweenlands:blocks/mud_bricks_alcove_1"),
+			new ResourceLocation("thebetweenlands:blocks/mud_bricks_alcove_2"),
+			new ResourceLocation("thebetweenlands:blocks/mud_bricks_alcove_3"),
+			new ResourceLocation("thebetweenlands:blocks/mud_bricks_alcove_4")
+			}, new ResourceLocation("N/A"), 128, 128);
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 
