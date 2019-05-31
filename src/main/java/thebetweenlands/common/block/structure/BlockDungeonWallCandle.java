@@ -5,7 +5,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -31,7 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
-public class BlockDungeonWallCandle extends BlockDirectional {
+public class BlockDungeonWallCandle extends BlockHorizontal {
 
 	protected static final AxisAlignedBB CANDLE_WEST_AABB = new AxisAlignedBB(0.25D, 0D, 0.25D, 1, 0.875D, 0.75D);
 	protected static final AxisAlignedBB CANDLE_EAST_AABB = new AxisAlignedBB(0D, 0D, 0.25D, 0.75D, 0.875D, 0.75D);
@@ -88,6 +88,7 @@ public class BlockDungeonWallCandle extends BlockDirectional {
 	}
 
 	@Nullable
+	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return NULL_AABB;
 	}
@@ -199,6 +200,7 @@ public class BlockDungeonWallCandle extends BlockDirectional {
 		return getDefaultState().withProperty(FACING, facing).withProperty(LIT, Boolean.valueOf((meta & 8) > 0));
 	}
 
+	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
 		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();
