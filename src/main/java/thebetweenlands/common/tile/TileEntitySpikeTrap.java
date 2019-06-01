@@ -80,12 +80,12 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 
 	public void setActive(boolean isActive) {
 		active = isActive;
-		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 2);
 	}
 
 	public void setType(byte blockType) {
 		type = blockType;
-		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 2);
 	}
 
 	protected Entity activateBlock() {

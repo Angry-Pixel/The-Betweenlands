@@ -24,6 +24,6 @@ public class TileEntityMudBricksSpikeTrap extends TileEntitySpikeTrap {
 
 	public void setActiveSpoop(boolean isActive) {
 		activeSpoop = isActive;
-		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 2);
 	}
 }
