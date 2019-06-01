@@ -1,23 +1,13 @@
 package thebetweenlands.common.registries;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import javax.imageio.ImageIO;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import thebetweenlands.client.handler.TextureStitchHandler;
-import thebetweenlands.client.handler.TextureStitchHandler.TextureStitcher;
+import net.minecraftforge.common.model.TRSRTransformation;
 import thebetweenlands.client.render.model.baked.ModelAlcove;
 import thebetweenlands.client.render.model.baked.ModelBlank;
 import thebetweenlands.client.render.model.baked.ModelCombined;
@@ -33,6 +23,7 @@ import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
 import thebetweenlands.client.render.model.baked.ModelRubberTapLiquid;
 import thebetweenlands.client.render.model.baked.ModelSlant;
 import thebetweenlands.client.render.model.baked.ModelStalactite;
+import thebetweenlands.client.render.model.baked.ModelTransform;
 import thebetweenlands.client.render.model.baked.ModelWalkway;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodBush;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodShieldBurning;
@@ -79,6 +70,12 @@ import thebetweenlands.client.render.model.baked.modelbase.shields.ModelValonite
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelWeedwoodShield;
 import thebetweenlands.client.render.model.entity.ModelMireSnailEgg;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
+import thebetweenlands.client.render.model.tile.ModelLootPot1;
+import thebetweenlands.client.render.model.tile.ModelLootPot2;
+import thebetweenlands.client.render.model.tile.ModelLootPot3;
+import thebetweenlands.client.render.model.tile.ModelLootUrn1;
+import thebetweenlands.client.render.model.tile.ModelLootUrn2;
+import thebetweenlands.client.render.model.tile.ModelLootUrn3;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ModelConverter.Box;
 import thebetweenlands.util.ModelConverter.Quad;
@@ -94,6 +91,7 @@ public class ModelRegistry {
 	//Generic
 	public static final IModel BLANK = new ModelBlank();
 	public static final IModel MODEL_COMBINED = new ModelCombined();
+	public static final IModel MODEL_TRANSFORM = new ModelTransform(BLANK, TRSRTransformation.identity());
 	public static final IModel CONNECTED_TEXTURE = new ModelConnectedTexture();
 	public static final IModel LAYER_SELECTION = new ModelLayerSelection();
 	public static final ModelEventSelection SPOOK_EVENT = new ModelEventSelection();
@@ -188,6 +186,12 @@ public class ModelRegistry {
 			new ResourceLocation("thebetweenlands:blocks/mud_bricks_alcove_3"),
 			new ResourceLocation("thebetweenlands:blocks/mud_bricks_alcove_4")
 			}, new ResourceLocation("thebetweenlands:particle/block/mud_bricks_alcove_particle"), 128, 128);
+	public static final ModelFromModelBase LOOT_URN_1 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootUrn1(), new ResourceLocation("thebetweenlands:blocks/loot_urn_1"), new ResourceLocation("thebetweenlands:particle/block/loot_urn_particle"), 64, 32);
+	public static final ModelFromModelBase LOOT_URN_2 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootUrn2(), new ResourceLocation("thebetweenlands:blocks/loot_urn_2"), new ResourceLocation("thebetweenlands:particle/block/loot_urn_particle"), 64, 32);
+	public static final ModelFromModelBase LOOT_URN_3 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootUrn3(), new ResourceLocation("thebetweenlands:blocks/loot_urn_3"), new ResourceLocation("thebetweenlands:particle/block/loot_urn_particle"), 64, 32);
+	public static final ModelFromModelBase LOOT_POT_1 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootPot1(), new ResourceLocation("thebetweenlands:blocks/loot_pot_1"), new ResourceLocation("thebetweenlands:particle/block/loot_pot_1_particle"), 64, 32);
+	public static final ModelFromModelBase LOOT_POT_2 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootPot2(), new ResourceLocation("thebetweenlands:blocks/loot_pot_2"), new ResourceLocation("thebetweenlands:particle/block/loot_pot_2_particle"), 64, 32);
+	public static final ModelFromModelBase LOOT_POT_3 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootPot3(), new ResourceLocation("thebetweenlands:blocks/loot_pot_3"), new ResourceLocation("thebetweenlands:particle/block/loot_pot_3_particle"), 64, 32);
 	
 	
 	
