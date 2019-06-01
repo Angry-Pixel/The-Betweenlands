@@ -54,7 +54,7 @@ public enum CustomModelManager {
 	 * @param modelLocation
 	 * @param modelGetter
 	 */
-	private void registerModelProvider(@Nonnull ResourceLocation modelLocation, @Nonnull Function<ResourceLocation, IModel> modelGetter) {
+	public void registerModelProvider(@Nonnull ResourceLocation modelLocation, @Nonnull Function<ResourceLocation, IModel> modelGetter) {
 		Validate.notNull(modelLocation);
 		Validate.notNull(modelGetter);
 		this.registeredModelProviders.put(modelLocation, modelGetter);

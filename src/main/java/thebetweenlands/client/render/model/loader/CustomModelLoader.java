@@ -1,13 +1,19 @@
 package thebetweenlands.client.render.model.loader;
 
 import com.google.common.base.Function;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -229,10 +235,41 @@ public final class CustomModelLoader implements ICustomModelLoader {
 	}
 
 	@SubscribeEvent
+	public void onTextureStitch(TextureStitchEvent.Pre event) {
+		//Register FastTESR baked model textures
+		for(TileEntitySpecialRenderer<?> renderer : TileEntityRendererDispatcher.instance.renderers.values()) {
+			if(renderer instanceof IFastTESRBakedModels) {
+				Collection<ModelResourceLocation> locations = ((IFastTESRBakedModels) renderer).getModelLocations();
+				
+				for(ModelResourceLocation location : locations) {
+					IModel model = ModelLoaderRegistry.getModelOrLogError(location, "Failed loading model '" + location + "' for FastTESR");
+					for(ResourceLocation texture : model.getTextures()) {
+						event.getMap().registerSprite(texture);
+					}
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
 	public void onModelBake(ModelBakeEvent event) {
 		IRegistry<ModelResourceLocation, IBakedModel> modelRegistry = event.getModelRegistry();
 		List<Pair<ModelResourceLocation, IBakedModel>> loadedModels = new ArrayList<Pair<ModelResourceLocation, IBakedModel>>();
 
+		//Register FastTESR baked models
+		for(TileEntitySpecialRenderer<?> renderer : TileEntityRendererDispatcher.instance.renderers.values()) {
+			if(renderer instanceof IFastTESRBakedModels) {
+				Collection<ModelResourceLocation> locations = ((IFastTESRBakedModels) renderer).getModelLocations();
+				
+				for(ModelResourceLocation location : locations) {
+					IModel model = ModelLoaderRegistry.getModelOrLogError(location, "Failed loading model '" + location + "' for FastTESR");
+					IBakedModel bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, (loc) -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(loc.toString()));
+					modelRegistry.putObject(location, bakedModel);
+					((IFastTESRBakedModels) renderer).onModelBaked(location, bakedModel);
+				}
+			}
+		}
+		
 		for(ModelResourceLocation modelLocation : modelRegistry.getKeys()) {
 			IBakedModel model = modelRegistry.getObject(modelLocation);
 

@@ -152,4 +152,8 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 		readFromNBT(packet.getNbtCompound());
 	}
 
+	@Override
+	public boolean hasFastRenderer() {
+		return true;
+	}
 }

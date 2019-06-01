@@ -1,6 +1,12 @@
-{ 
-  "parent": "block/cube_all",
+{
+  "parent": "block/cube",
   "textures": {
-    "all": "thebetweenlands:blocks/mud_bricks"
-  } 
+    "particle": "thebetweenlands:blocks/mud_bricks",
+    "down": "thebetweenlands:blocks/mud_bricks",
+    "up": "thebetweenlands:blocks/mud_bricks_spike_block_inactive_top",
+    "north": "thebetweenlands:blocks/mud_bricks",
+    "east": "thebetweenlands:blocks/mud_bricks",
+    "south": "thebetweenlands:blocks/mud_bricks",
+    "west": "thebetweenlands:blocks/mud_bricks"
+  }
 }
