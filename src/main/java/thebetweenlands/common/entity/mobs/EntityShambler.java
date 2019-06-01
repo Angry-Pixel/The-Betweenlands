@@ -27,6 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityShambler extends EntityMob implements IEntityMultiPart, IEntityBL {
 
@@ -162,18 +163,17 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return null;
-
+		return SoundRegistry.SHAMBLER_LIVING;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSource) {
-		return null;
+		return SoundRegistry.SHAMBLER_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return null;
+		return SoundRegistry.SHAMBLER_DEATH;
 	}
 
 	@Override
@@ -272,8 +272,8 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	public void updatePassenger(Entity entity) {
 		if (entity instanceof EntityLivingBase) {
 			double a = Math.toRadians(rotationYaw);
-			double offSetX = Math.sin(a) * getTongueLength() > 0 ? -0.125D : -0.25D;
-			double offSetZ = -Math.cos(a) * getTongueLength() > 0 ? -0.125D : -0.25D;
+			double offSetX = Math.sin(a) * getTongueLength() > 0 ? -0.125D : -0.35D;
+			double offSetZ = -Math.cos(a) * getTongueLength() > 0 ? -0.125D : -0.35D;
 			entity.setPosition(tongue_end.posX + offSetX, tongue_end.posY - entity.height * 0.3D, tongue_end.posZ + offSetZ);
 		}
 	}

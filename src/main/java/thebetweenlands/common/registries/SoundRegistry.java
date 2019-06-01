@@ -143,6 +143,9 @@ public class SoundRegistry {
     public static final BLSoundEvent SPIRIT_TREE_SPIKE_TRAP_EMERGE = reg("spirit_tree_spike_trap_emerge");
     public static final BLSoundEvent SPIRIT_TREE_SPIKES = reg("spirit_tree_spikes");
     public static final BLSoundEvent ROOT_SPIKE_PARTICLE_HIT = reg("root_spike_particle_hit");
+    public static final BLSoundEvent SHAMBLER_DEATH = reg("shambler_death");
+    public static final BLSoundEvent SHAMBLER_HURT = reg("shambler_hurt");
+    public static final BLSoundEvent SHAMBLER_LIVING = reg("shambler_living");
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");

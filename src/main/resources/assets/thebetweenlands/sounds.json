@@ -671,6 +671,25 @@
       "thebetweenlands:root_sprite_living_3"
     ]
   },
+    "shambler_living": {
+    "sounds": [
+      "thebetweenlands:shambler_living_1",
+      "thebetweenlands:shambler_living_2",
+      "thebetweenlands:shambler_living_3",
+      "thebetweenlands:shambler_living_4"
+    ]
+  },
+  "shambler_hurt": {
+    "sounds": [
+      "thebetweenlands:shambler_hurt_1",
+      "thebetweenlands:shambler_hurt_2"
+    ]
+  },
+  "shambler_death": {
+    "sounds": [
+      "thebetweenlands:shambler_death"
+    ]
+  },
   "greebling_vanish": {
     "sounds": [
       "thebetweenlands:greebling_vanish"
