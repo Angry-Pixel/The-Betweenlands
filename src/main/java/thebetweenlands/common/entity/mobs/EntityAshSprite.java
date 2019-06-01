@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.Random;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.EntityLiving;
@@ -19,6 +21,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -52,6 +55,15 @@ public class EntityAshSprite extends EntityMob {
 		super.onUpdate();
 		noClip = false;
 		setNoGravity(true);
+		if (getEntityWorld().isRemote)
+			spawnParticles(getEntityWorld(), getPosition(), rand);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void spawnParticles(World worldIn, BlockPos pos, Random rand) {
+		for(int i = 0; i < 8; i++) {
+			worldIn.spawnParticle(EnumParticleTypes.SUSPENDED_DEPTH, pos.getX() + 0.5D + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 1), pos.getY() + 0.5D + rand.nextFloat() * 2 - 1, pos.getZ() + 0.5D + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 1), 0, 0.2D, 0);
+		}
 	}
 
 	@Override
@@ -63,7 +75,7 @@ public class EntityAshSprite extends EntityMob {
 		tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 3.0F, 1.0F));
 		tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
 		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[] { EntityAshSprite.class }));
-		targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
+		targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityPlayer.class, false));
 	}
 
 	@Override
@@ -94,6 +106,13 @@ public class EntityAshSprite extends EntityMob {
 			compound.setInteger("BoundY", boundOrigin.getY());
 			compound.setInteger("BoundZ", boundOrigin.getZ());
 		}
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if (source.equals(DamageSource.IN_WALL) || source.equals(DamageSource.DROWN))
+			return false;
+		return super.attackEntityFrom(source, damage);
 	}
 
 	@Nullable
