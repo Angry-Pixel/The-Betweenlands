@@ -40,28 +40,15 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 
 	public MultiPartEntityPart[] tongue_array; // we may want to make more tongue parts
 	public MultiPartEntityPart tongue_end = new MultiPartEntityPart(this, "tongue_end", 0.5F, 0.5F);
-	public MultiPartEntityPart tongue_1 = new MultiPartEntityPart(this, "tongue_1", 0.125F, 0.125F);
-	public MultiPartEntityPart tongue_2 = new MultiPartEntityPart(this, "tongue_2", 0.125F, 0.125F);
-	public MultiPartEntityPart tongue_3 = new MultiPartEntityPart(this, "tongue_3", 0.125F, 0.125F);
-	public MultiPartEntityPart tongue_4 = new MultiPartEntityPart(this, "tongue_4", 0.125F, 0.125F);
-	public MultiPartEntityPart tongue_5 = new MultiPartEntityPart(this, "tongue_5", 0.125F, 0.125F);
-	
-	public MultiPartEntityPart tongue_6 = new MultiPartEntityPart(this, "tongue_6", 0.125F, 0.125F);
-	public MultiPartEntityPart tongue_7 = new MultiPartEntityPart(this, "tongue_7", 0.125F, 0.125F);
-	public MultiPartEntityPart tongue_8 = new MultiPartEntityPart(this, "tongue_8", 0.125F, 0.125F);
-	public MultiPartEntityPart tongue_9 = new MultiPartEntityPart(this, "tongue_9", 0.125F, 0.125F);
-	public MultiPartEntityPart tongue_10 = new MultiPartEntityPart(this, "tongue_10", 0.125F, 0.125F);
-	
-	public MultiPartEntityPart tongue_11 = new MultiPartEntityPart(this, "tongue_11", 0.125F, 0.125F);
-	public MultiPartEntityPart tongue_12 = new MultiPartEntityPart(this, "tongue_12", 0.125F, 0.125F);
-	public MultiPartEntityPart tongue_13 = new MultiPartEntityPart(this, "tongue_13", 0.125F, 0.125F);
-	public MultiPartEntityPart tongue_14 = new MultiPartEntityPart(this, "tongue_14", 0.125F, 0.125F);
-	public MultiPartEntityPart tongue_15 = new MultiPartEntityPart(this, "tongue_15", 0.125F, 0.125F);
 
 	public EntityShambler(World world) {
 		super(world);
 		this.setSize(0.95F, 1.25F);
-		tongue_array = new MultiPartEntityPart[] {tongue_end, tongue_1, tongue_2, tongue_3, tongue_4, tongue_5, tongue_6, tongue_7, tongue_8, tongue_9, tongue_10, tongue_11, tongue_12, tongue_13, tongue_14, tongue_15};
+		tongue_array = new MultiPartEntityPart[16];
+		for(int i = 0; i < tongue_array.length - 1; i++) {
+			tongue_array[i] = new MultiPartEntityPart(this, "tongue_" + i, 0.125F, 0.125F);
+		}
+		tongue_array[tongue_array.length - 1] = tongue_end;
 	}
 
 	@Override
@@ -255,26 +242,29 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		double offSetX = Math.sin(a) * -0.25D;
 		double offSetZ = -Math.cos(a) * -0.25D;
 		Vec3d vector = getLookVec();
-		tongue_end.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.5D), (posY + 0.90625D - 0.3125D) + ((double) vector.y * getTongueLength() * 0.5D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.5D), rotationYaw, rotationPitch);
-		tongue_1.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.03125D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.03125D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.03125D), rotationYaw, rotationPitch);
-		tongue_2.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.0625D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.0625D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.0625D), rotationYaw, rotationPitch);
-		tongue_3.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.09375D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.09375D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.09375D), rotationYaw, rotationPitch);
-		tongue_4.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.125D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.125D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.125D), rotationYaw, rotationPitch);
-		tongue_5.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.15625D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.15625D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.15625D), rotationYaw, rotationPitch);
-		tongue_6.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.1875D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.1875D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.1875D), rotationYaw, rotationPitch);
-		tongue_7.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.21875D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.21875D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.21875D), rotationYaw, rotationPitch);
-		tongue_8.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.25D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.25D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.25D), rotationYaw, rotationPitch);
-		tongue_9.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.28125D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.28125D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.28125D), rotationYaw, rotationPitch);
-		tongue_10.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.3125D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.3125D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.3125D), rotationYaw, rotationPitch);
-		tongue_11.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.34375D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.34375D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.34375D), rotationYaw, rotationPitch);
-		tongue_12.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.375D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.375D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.375D), rotationYaw, rotationPitch);
-		tongue_13.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.40625D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.40625D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.40625D), rotationYaw, rotationPitch);
-		tongue_14.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.4375D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.4375D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.4375D), rotationYaw, rotationPitch);
-		tongue_15.setLocationAndAngles(posX + offSetX + ((double) vector.x * getTongueLength() * 0.46875D), (posY + 0.90625D - 0.125D) + ((double) vector.y * getTongueLength() * 0.46875D), posZ + offSetZ + ((double) vector.z * getTongueLength() * 0.46875D), rotationYaw, rotationPitch);
-
+		
+		double lengthIncrement = 0.5D / tongue_array.length;
+		
+		double tongueLength = lengthIncrement;
+		
+		for(MultiPartEntityPart part : tongue_array) {
+			part.prevRotationYaw = part.rotationYaw;
+			part.prevRotationPitch = part.rotationPitch;
+			
+			part.lastTickPosX = part.prevPosX = part.posX;
+			part.lastTickPosY = part.prevPosY = part.posY;
+			part.lastTickPosZ = part.prevPosZ = part.posZ;
+			
+			part.setPosition(posX + offSetX + ((double) vector.x * getTongueLength() * tongueLength), (posY + 0.90625D - 0.3125D) + ((double) vector.y * getTongueLength() * tongueLength), posZ + offSetZ + ((double) vector.z * getTongueLength() * tongueLength));
+			part.rotationYaw = this.rotationYaw;
+			part.rotationPitch = this.rotationPitch;
+		
+			tongueLength += lengthIncrement;
+		}
+		
 		checkCollision();
     }
-
+	
 	@Override
 	public void updatePassenger(Entity entity) {
 		if (entity instanceof EntityLivingBase) {

@@ -291,8 +291,7 @@ public class ModelShambler extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ticksExisted, float rotationYaw, float rotationPitch, float scale) {
-		EntityShambler shambler = (EntityShambler) entity;
-		float flap = MathHelper.sin((shambler.ticksExisted) * 0.3F) * 0.8F;
+		float flap = MathHelper.sin(ticksExisted * 0.3F) * 0.8F;
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0F, 0F - flap * 0.0625F, 0F);
 		body_base.render(scale);
@@ -318,7 +317,7 @@ public class ModelShambler extends ModelBase {
 		EntityShambler shambler = (EntityShambler) entity;
 		float animation = MathHelper.cos((limbSwing * 1.2F) * 0.75F) * 0.3F * limbSwingAmount * 0.5F;
 		float animation2 = MathHelper.sin((limbSwing * 1.2F) * 0.75F) * 0.3F * limbSwingAmount * 0.5F;
-		float flap = MathHelper.sin((shambler.ticksExisted) * 0.3F) * 0.8F;
+		float flap = MathHelper.sin((shambler.ticksExisted + partialTickTime) * 0.3F) * 0.8F;
 		float smoothedAngle = shambler.smoothedAngle(partialTickTime);
 		float headX = 0F + shambler.rotationPitch / (180F / (float) Math.PI);
 

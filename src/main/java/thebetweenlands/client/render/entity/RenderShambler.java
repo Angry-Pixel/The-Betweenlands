@@ -53,8 +53,9 @@ public class RenderShambler extends RenderLiving<EntityShambler> {
 	        double ry = ey - y;
 	        double rz = ez - z;
 
-	        for(int i = 0; i < entity.tongue_array.length; i++)
-	        renderTonguePart(entity, entity.tongue_array[i], rx, ry, rz, partialTicks);
+	        for(int i = 0; i < entity.tongue_array.length; i++) {
+	        	renderTonguePart(entity, entity.tongue_array[i], rx, ry, rz, partialTicks);
+	        }
 		}
 	}
 
@@ -71,14 +72,11 @@ public class RenderShambler extends RenderLiving<EntityShambler> {
         float pitch = entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks;
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
-		if(part.partName == "tongue_end")
-			GlStateManager.translate(x, y - 0.6625D, z);
-		else
-			GlStateManager.translate(x, y - 0.85D, z);
+		GlStateManager.translate(x, y - 0.85D, z);
 		GlStateManager.scale(-1F, -1F, 1F);
 		GlStateManager.rotate(180F + yaw, 0F, 1F, 0F);
 		GlStateManager.rotate(180F + pitch, 1F, 0F, 0F);
-		if(part.partName == "tongue_end")
+		if(part == entity.tongue_end)
 			model.renderTongueEnd(0.0625F);
 		else
 			model.renderTonguePart(0.0625F);
