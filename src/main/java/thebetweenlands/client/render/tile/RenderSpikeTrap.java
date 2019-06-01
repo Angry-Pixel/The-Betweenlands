@@ -163,8 +163,6 @@ public class RenderSpikeTrap extends TileEntitySpecialRenderer<TileEntitySpikeTr
 	@Override
 	public void renderTileEntityFast(TileEntitySpikeTrap tile, double x, double y, double z, float partialTicks,
 			int destroyStage, float partial, BufferBuilder buffer) {
-		this.renderSpikes(tile, x, y, z, partialTicks, destroyStage, 1);
-
 		if(tile.type != 0) {
 			if(blockRenderer == null) {
 				blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
