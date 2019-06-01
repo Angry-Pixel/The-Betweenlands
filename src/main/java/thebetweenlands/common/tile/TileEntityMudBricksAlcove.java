@@ -2,6 +2,7 @@ package thebetweenlands.common.tile;
 
 import java.util.Random;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -91,5 +92,7 @@ public class TileEntityMudBricksAlcove extends TileEntityLootInventory {
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		readFromNBT(packet.getNbtCompound());
+		IBlockState state = this.world.getBlockState(this.pos);
+		this.world.notifyBlockUpdate(pos, state, state, 1);
 	}
 }

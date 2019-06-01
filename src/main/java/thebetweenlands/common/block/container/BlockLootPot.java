@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.Block.EnumOffsetType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -72,11 +73,21 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+		return EnumBlockRenderType.MODEL;
+	}
+	
+	@Override
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isBlockNormalCube(IBlockState state) {
 		return false;
 	}
 

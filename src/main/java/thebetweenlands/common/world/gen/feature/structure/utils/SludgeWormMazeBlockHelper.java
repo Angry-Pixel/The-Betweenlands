@@ -639,7 +639,6 @@ public class SludgeWormMazeBlockHelper {
 		if (lootUrn != null) {
 			// TODO Make proper shared loot tables
 			lootUrn.setLootTable(LootTableRegistry.DUNGEON_POT_LOOT, rand.nextLong());
-			lootUrn.setModelRotationOffset(world.rand.nextInt(41) - 20);
 			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 		}
 	}

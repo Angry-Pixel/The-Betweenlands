@@ -9,6 +9,7 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -50,6 +51,8 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 	public static final IUnlistedProperty<Boolean> SMALL_CANDLE = new PropertyBoolUnlisted("small_candle");
 	public static final IUnlistedProperty<Boolean> BIG_CANDLE = new PropertyBoolUnlisted("big_candle");
 	
+	public static final IProperty<Boolean> HAS_URN = PropertyBool.create("urn");
+	
 	public BlockMudBricksAlcove() {
 		this(Material.ROCK);
 	}
@@ -60,7 +63,7 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 		setHardness(0.4f);
 		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
-		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(HAS_URN, true));
 	}
 	
 	@Nullable
@@ -74,9 +77,18 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 	
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new ExtendedBlockState(this, new IProperty[] {FACING}, new IUnlistedProperty[] {LEVEL, TOP_COBWEB, BOTTOM_COBWEB, SMALL_CANDLE, BIG_CANDLE});
+		return new ExtendedBlockState(this, new IProperty[] {FACING, HAS_URN}, new IUnlistedProperty[] {LEVEL, TOP_COBWEB, BOTTOM_COBWEB, SMALL_CANDLE, BIG_CANDLE});
 	}
 
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		TileEntityMudBricksAlcove tile = StatePropertyHelper.getTileEntityThreadSafe(worldIn, pos, TileEntityMudBricksAlcove.class);
+		if(tile != null) {
+			state = state.withProperty(HAS_URN, tile.has_urn);
+		}
+		return state;
+	}
+	
 	@Override
 	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos) {
 		IExtendedBlockState extended = (IExtendedBlockState) oldState;
@@ -165,10 +177,10 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote) {
-			TileEntityMudBricksAlcove tile = getTileEntity(world, pos);
-			if (tile instanceof TileEntityMudBricksAlcove) {
-				if (tile.has_urn && facing == state.getValue(FACING)) {
+		TileEntityMudBricksAlcove tile = getTileEntity(world, pos);
+		if (tile instanceof TileEntityMudBricksAlcove) {
+			if (tile.has_urn && facing == state.getValue(FACING)) {
+				if (!world.isRemote) {
 					BlockPos offsetPos = pos.offset(facing);
 					IInventory tileInv = (IInventory) tile;
 					if (tileInv != null)
@@ -181,12 +193,11 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 					world.playSound(null, pos, blockSoundType.getBreakSound(), SoundCategory.BLOCKS, 0.5F, 1F);
 					world.playEvent(null, 2001, pos, Block.getIdFromBlock(BlockRegistry.MUD_FLOWER_POT)); //this will do unless we want specific particles
 					tile.has_urn = false;
-					world.notifyBlockUpdate(pos, state, state, 3);
-					return true;
+					world.notifyBlockUpdate(pos, state, state, 2);
 				}
+				return true;
 			}
-		} else 
-			return true;
+		}
 		return false;
 	}
 

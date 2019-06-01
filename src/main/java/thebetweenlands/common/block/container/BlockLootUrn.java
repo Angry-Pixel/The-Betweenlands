@@ -23,6 +23,7 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -74,7 +75,17 @@ public class BlockLootUrn extends BasicBlock implements ITileEntityProvider, ICu
 
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+		return EnumBlockRenderType.MODEL;
+	}
+	
+	@Override
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
+	
+	@Override
+	public EnumOffsetType getOffsetType() {
+		return EnumOffsetType.XZ;
 	}
 
 	@Override
@@ -82,6 +93,11 @@ public class BlockLootUrn extends BasicBlock implements ITileEntityProvider, ICu
 		return false;
 	}
 
+	@Override
+	public boolean isBlockNormalCube(IBlockState state) {
+		return false;
+	}
+	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityLootUrn();
@@ -127,7 +143,6 @@ public class BlockLootUrn extends BasicBlock implements ITileEntityProvider, ICu
 		worldIn.setBlockState(pos, state, 3);
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile instanceof TileEntityLootUrn) {
-			((TileEntityLootUrn) tile).setModelRotationOffset(worldIn.rand.nextInt(41) - 20);
 			((TileEntityLootUrn) tile).setLootTable(LootTableRegistry.COMMON_POT_LOOT, worldIn.rand.nextLong());
 			tile.markDirty();
 		}
