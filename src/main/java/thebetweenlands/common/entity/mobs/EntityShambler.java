@@ -255,7 +255,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 			part.lastTickPosY = part.prevPosY = part.posY;
 			part.lastTickPosZ = part.prevPosZ = part.posZ;
 			
-			part.setPosition(posX + offSetX + ((double) vector.x * getTongueLength() * tongueLength), (posY + 0.90625D - 0.3125D) + ((double) vector.y * getTongueLength() * tongueLength), posZ + offSetZ + ((double) vector.z * getTongueLength() * tongueLength));
+			part.setPosition(posX + offSetX + ((double) vector.x * getTongueLength() * tongueLength), (posY + 0.90625D - 0.18D) + ((double) vector.y * getTongueLength() * tongueLength), posZ + offSetZ + ((double) vector.z * getTongueLength() * tongueLength));
 			part.rotationYaw = this.rotationYaw;
 			part.rotationPitch = this.rotationPitch;
 		
