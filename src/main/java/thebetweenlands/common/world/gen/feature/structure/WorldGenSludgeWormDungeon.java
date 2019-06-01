@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.Random;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -8,9 +9,12 @@ import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
@@ -20,6 +24,8 @@ import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.util.TimeMeasurement;
 
 public class WorldGenSludgeWormDungeon extends WorldGenerator {
@@ -44,7 +50,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.start("Tower");
 		generateTower(world, rand, pos.down().add(12, 0, 12));
 		timer.finish("Tower");
-/*
+
 		//locations blah, blah, blah...
 		timer.start("World_Locations");
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
@@ -57,7 +63,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		location.setDirty(true);
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 		timer.finish("World_Locations");
-*/
+
 		timer.start("Pit");
 		generateDecayPit(world, rand, pos.down(44).add(14, 0, 14));
 		timer.finish("Pit");
