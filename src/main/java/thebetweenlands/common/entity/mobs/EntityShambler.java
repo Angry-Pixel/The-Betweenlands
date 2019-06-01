@@ -195,8 +195,10 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 				if (distance <= 5.0D && distance >= 1) {
 					if (!jawsAreOpen()) {
 						setOpenJaws(true);
-						if (!isExtendingTongue())
+						if (!isExtendingTongue()) {
 							setExtendingTongue(true);
+							playSound(SoundRegistry.SPIRIT_TREE_FACE_SMALL_SPIT, 1.5F, 2F + this.rand.nextFloat() * 0.3F);
+						}
 					}
 				}
 			}
