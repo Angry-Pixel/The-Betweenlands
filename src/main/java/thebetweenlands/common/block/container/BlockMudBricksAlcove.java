@@ -203,6 +203,13 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 
 	@Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
-    	return BlockFaceShape.UNDEFINED;
+		EnumFacing facing = state.getValue(FACING);
+    	return facing.getOpposite() == face ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		EnumFacing facing = base_state.getValue(FACING);
+    	return facing.getOpposite() == side;
+	}
 }

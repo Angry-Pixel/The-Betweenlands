@@ -33,6 +33,7 @@ public class BlockMud extends Block {
 		setSoundType(SoundType.GROUND);
 		setHarvestLevel("shovel", 0);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
+		setLightOpacity(255);
 	}
 
 	public boolean canEntityWalkOnMud(Entity entity) {

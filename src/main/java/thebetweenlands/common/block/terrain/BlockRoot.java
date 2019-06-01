@@ -107,6 +107,11 @@ public class BlockRoot extends BasicBlock implements ICustomItemBlock {
     }
 	
 	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return false;
+	}
+	
+	@Override
 	public ItemBlock getItemBlock() {
 		return new ItemBlockRoot();
 	}

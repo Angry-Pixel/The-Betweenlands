@@ -46,6 +46,8 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(INVISIBLE, false));
+		setLightOpacity(255);
+		useNeighborBrightness = true;
 		this.mimic = mimic;
 	}
 	

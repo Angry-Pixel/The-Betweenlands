@@ -7,6 +7,7 @@ import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -51,6 +52,7 @@ public class BlockWoodenSupportBeam extends BlockDirectional {
         return isBurning(world, pos) ? PathNodeType.DAMAGE_FIRE : PathNodeType.OPEN;
     }
 
+    @Override
     public boolean isPassable(IBlockAccess world, BlockPos pos) {
         return true;
     }
@@ -70,6 +72,16 @@ public class BlockWoodenSupportBeam extends BlockDirectional {
 		return false;
 	}
 
+	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return false;
+	}
+	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return BlockFaceShape.UNDEFINED;
+	}
+	
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
@@ -115,6 +127,7 @@ public class BlockWoodenSupportBeam extends BlockDirectional {
 		return getDefaultState().withProperty(FACING, facing).withProperty(TOP, Boolean.valueOf((meta & 8) > 0));
 	}
 
+	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
 		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();

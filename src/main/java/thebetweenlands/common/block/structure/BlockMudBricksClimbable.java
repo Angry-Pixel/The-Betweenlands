@@ -42,6 +42,7 @@ public class BlockMudBricksClimbable extends BasicBlock {
 		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		setLightOpacity(191);
 	}
 
 	@Override
