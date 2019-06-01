@@ -22,7 +22,7 @@ public class ModelWoodSupportBeam1 extends ModelBase {
         this.setRotateAngle(beampart1, 0.5462880558742251F, 0.0F, 0.0F);
         this.beampart2 = new ModelRenderer(this, 0, 15);
         this.beampart2.setRotationPoint(0.0F, -8.0F, 6.0F);
-        this.beampart2.addBox(-3.0F, -10.0F, -6.0F, 6, 10, 6, 0.0F);
+        this.beampart2.addBox(-3.05F, -10.0F, -6.0F, 6, 10, 6, 0.0F);
         this.setRotateAngle(beampart2, 0.36425021489121656F, 0.0F, 0.0F);
         this.beampart3 = new ModelRenderer(this, 0, 32);
         this.beampart3.setRotationPoint(0.0F, -10.0F, 0.0F);

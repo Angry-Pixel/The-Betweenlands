@@ -21,7 +21,7 @@ public class ModelWoodSupportBeam3 extends ModelBase {
         this.setRotateAngle(beampart5, 0.40980330836826856F, 0.0F, 0.0F);
         this.beampart4 = new ModelRenderer(this, 0, 35);
         this.beampart4.setRotationPoint(3.0F, -3.0F, -6.0F);
-        this.beampart4.addBox(-3.0F, -4.0F, 0.0F, 6, 4, 6, 0.0F);
+        this.beampart4.addBox(-3.05F, -3.95F, 0.0F, 6, 4, 6, 0.0F);
         this.setRotateAngle(beampart4, -0.136659280431156F, 0.0F, 0.0F);
         this.ropeboi = new ModelRenderer(this, 25, 0);
         this.ropeboi.setRotationPoint(0.0F, -5.0F, 0.0F);
@@ -29,11 +29,11 @@ public class ModelWoodSupportBeam3 extends ModelBase {
         this.setRotateAngle(ropeboi, 0.18203784098300857F, 0.0F, -0.091106186954104F);
         this.beampart2 = new ModelRenderer(this, 0, 15);
         this.beampart2.setRotationPoint(0.0F, -8.0F, 6.0F);
-        this.beampart2.addBox(-3.0F, -3.0F, -6.0F, 6, 3, 6, 0.0F);
+        this.beampart2.addBox(-3.1F, -3.0F, -6.05F, 6, 3, 6, 0.0F);
         this.setRotateAngle(beampart2, 0.40980330836826856F, 0.0F, 0.0F);
         this.beampart3 = new ModelRenderer(this, 0, 25);
         this.beampart3.setRotationPoint(-3.0F, -3.0F, 0.0F);
-        this.beampart3.addBox(0.0F, -3.0F, -6.0F, 6, 3, 6, 0.0F);
+        this.beampart3.addBox(0.0F, -3.0F, -6.08F, 6, 3, 6, 0.0F);
         this.setRotateAngle(beampart3, 0.0F, 0.0F, 0.136659280431156F);
         this.beampart1 = new ModelRenderer(this, 0, 0);
         this.beampart1.setRotationPoint(0.0F, 24.0F, 8.5F);
