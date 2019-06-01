@@ -146,6 +146,7 @@ public class SoundRegistry {
     public static final BLSoundEvent SHAMBLER_DEATH = reg("shambler_death");
     public static final BLSoundEvent SHAMBLER_HURT = reg("shambler_hurt");
     public static final BLSoundEvent SHAMBLER_LIVING = reg("shambler_living");
+    public static final BLSoundEvent SHAMBLER_LICK = reg("shambler_lick");
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");

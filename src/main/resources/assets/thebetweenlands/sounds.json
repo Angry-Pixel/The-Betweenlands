@@ -690,6 +690,11 @@
       "thebetweenlands:shambler_death"
     ]
   },
+  "shambler_lick": {
+    "sounds": [
+      "thebetweenlands:shambler_lick"
+    ]
+  },
   "greebling_vanish": {
     "sounds": [
       "thebetweenlands:greebling_vanish"

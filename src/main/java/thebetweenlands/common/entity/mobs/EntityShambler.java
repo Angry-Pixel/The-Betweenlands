@@ -160,6 +160,11 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	public int getMaxSpawnedInChunk() {
 		return 3;
 	}
+	
+	@Override
+	protected float getSoundPitch() {
+		return super.getSoundPitch() * 1.5F;
+	}
 
 	@Override
 	protected SoundEvent getAmbientSound() {
@@ -197,7 +202,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 						setOpenJaws(true);
 						if (!isExtendingTongue()) {
 							setExtendingTongue(true);
-							playSound(SoundRegistry.SPIRIT_TREE_FACE_SMALL_SPIT, 1.5F, 2F + this.rand.nextFloat() * 0.3F);
+							playSound(SoundRegistry.SHAMBLER_LICK, 1F, 1F + this.rand.nextFloat() * 0.3F);
 						}
 					}
 				}
