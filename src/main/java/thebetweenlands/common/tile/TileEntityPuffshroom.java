@@ -37,7 +37,7 @@ public class TileEntityPuffshroom extends TileEntity implements ITickable {
 		prev_animation_4 = animation_4;
 		prev_renderTicks = renderTicks;
 
-		if (!getWorld().isRemote && cooldown <= 0)
+		if (!getWorld().isRemote && cooldown <= 0 && getWorld().getTotalWorldTime()%5 == 0)
 			findEnemyToAttack();
 
 		if (active_1 || active_5) {
