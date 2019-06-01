@@ -15,7 +15,6 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
@@ -36,6 +35,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.property.PropertyBoolUnlisted;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
+import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootInventory;
@@ -186,8 +186,9 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 					if (tileInv != null)
 						InventoryHelper.dropInventoryItems(world, offsetPos, tileInv);
 					if (world.rand.nextInt(3) == 0) {
-						EntityChicken entity = new EntityChicken(world); //ash sprite here :P
+						EntityAshSprite entity = new EntityAshSprite (world); //ash sprite here :P
 						entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.getY(), offsetPos.getZ() + 0.5D, 0.0F, 0.0F);
+						entity.setBoundOrigin(offsetPos);
 						world.spawnEntity(entity);
 					}
 					world.playSound(null, pos, blockSoundType.getBreakSound(), SoundCategory.BLOCKS, 0.5F, 1F);
