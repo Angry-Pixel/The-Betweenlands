@@ -1,12 +1,12 @@
 package thebetweenlands.common.entity;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
-public abstract class EntityProximitySpawner extends EntityLiving {
+public abstract class EntityProximitySpawner extends EntityMob {
 
 	@Override
 	protected void applyEntityAttributes() {
