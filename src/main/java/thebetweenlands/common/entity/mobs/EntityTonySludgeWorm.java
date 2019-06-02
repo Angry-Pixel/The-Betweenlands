@@ -37,6 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.entity.EntityTonyWormEggSac;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -163,7 +164,7 @@ public class EntityTonySludgeWorm extends EntityMob implements IEntityMultiPart,
 	@Override
 	@SuppressWarnings("rawtypes")
 	public boolean canAttackClass(Class entity) {
-		return EntityTonySludgeWorm.class != entity && EntitySmolSludgeWorm.class != entity;
+		return EntityTonySludgeWorm.class != entity && EntityTonyWormEggSac.class != entity && EntitySmolSludgeWorm.class != entity;
 	}
 
 	@Override

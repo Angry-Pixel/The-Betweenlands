@@ -86,7 +86,7 @@ public class EntityTonyWormEggSac extends EntityProximitySpawner {
 	protected float getProximityHorizontal() {
 		return 3F;
 	}
-	
+
 	@Override
 	protected float getProximityVertical() {
 		return 1F;
