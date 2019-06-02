@@ -13,6 +13,7 @@ import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.entity.EntitySwordEnergy;
+import thebetweenlands.common.entity.EntityTonyWormEggSac;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
@@ -141,6 +142,7 @@ public class EntityRegistry {
 
 		registerEntity(EntitySmolSludgeWorm.class, "smol_sludge_worm", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntityTonySludgeWorm.class, "tony_sludge_worm", 0x3A2F0B, 0x5F4C0B);
+		registerEntity(EntityTonyWormEggSac.class, "tony_worm_egg_sac");
 
 		registerEntity(EntityLurkerSkinRaft.class, "lurker_skin_raft");
 		

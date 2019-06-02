@@ -140,6 +140,7 @@ import thebetweenlands.client.render.entity.RenderTarminion;
 import thebetweenlands.client.render.entity.RenderTermite;
 import thebetweenlands.client.render.entity.RenderThrownTarminion;
 import thebetweenlands.client.render.entity.RenderTonySludgeWorm;
+import thebetweenlands.client.render.entity.RenderTonyWormEggSac;
 import thebetweenlands.client.render.entity.RenderVolatileSoul;
 import thebetweenlands.client.render.entity.RenderWallLamprey;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
@@ -195,6 +196,7 @@ import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.entity.EntitySwordEnergy;
+import thebetweenlands.common.entity.EntityTonyWormEggSac;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
@@ -541,6 +543,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityBarrishee.class, RenderBarrishee::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityAshSprite.class, RenderAshSprite::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityTonySludgeWorm.class, RenderTonySludgeWorm::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityTonyWormEggSac.class, RenderTonyWormEggSac::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
