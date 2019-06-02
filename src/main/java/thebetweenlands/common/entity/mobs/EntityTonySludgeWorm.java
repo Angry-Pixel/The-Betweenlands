@@ -17,21 +17,30 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart, IMob, IEntityBL {
+public class EntityTonySludgeWorm extends EntityMob implements IEntityMultiPart, IMob, IEntityBL {
 
 	public MultiPartEntityPart[] sludge_worm_Array;
 	public MultiPartEntityPart sludge_worm_1;
@@ -40,33 +49,26 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 	public MultiPartEntityPart sludge_worm_4;
 	public MultiPartEntityPart sludge_worm_5;
 	public MultiPartEntityPart sludge_worm_6;
-	public MultiPartEntityPart sludge_worm_7;
-	public MultiPartEntityPart sludge_worm_8;
-	public MultiPartEntityPart sludge_worm_9;
-
 	public boolean debugHitboxes = false;
-
 	Random rand = new Random();
-
 	private AxisAlignedBB renderBoundingBox;
-	
-	public EntitySmolSludgeWorm(World world) {
+	private static final DataParameter<Boolean> IS_SQUASHED = EntityDataManager.<Boolean>createKey(EntityTonySludgeWorm.class, DataSerializers.BOOLEAN);
+
+	public EntityTonySludgeWorm(World world) {
 		super(world);
-		setSize(0.4375F, 0.3125F);
+		setSize(0.3125F, 0.3125F);
 		isImmuneToFire = true;
 		maxHurtResistantTime = 40;
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
 		sludge_worm_Array = new MultiPartEntityPart[] {
-				sludge_worm_1 = new MultiPartEntityPart(this, "part1", 0.4375F, 0.3125F),
-				sludge_worm_2 = new MultiPartEntityPart(this, "part2", 0.3125F, 0.3125F),
-				sludge_worm_3 = new MultiPartEntityPart(this, "part3", 0.3125F, 0.3125F),
-				sludge_worm_4 = new MultiPartEntityPart(this, "part4", 0.3125F, 0.3125F),
-				sludge_worm_5 = new MultiPartEntityPart(this, "part5", 0.3125F, 0.3125F),
-				sludge_worm_6 = new MultiPartEntityPart(this, "part6", 0.3125F, 0.3125F),
-				sludge_worm_7 = new MultiPartEntityPart(this, "part7", 0.3125F, 0.3125F),
-				sludge_worm_8 = new MultiPartEntityPart(this, "part8", 0.3125F, 0.3125F),
-				sludge_worm_9 = new MultiPartEntityPart(this, "part9", 0.3125F, 0.3125F) };
+				sludge_worm_1 = new MultiPartEntityPart(this, "part1", 0.1875F, 0.1875F),
+				sludge_worm_2 = new MultiPartEntityPart(this, "part2", 0.1875F, 0.1875F),
+				sludge_worm_3 = new MultiPartEntityPart(this, "part3", 0.1875F, 0.1875F),
+				sludge_worm_4 = new MultiPartEntityPart(this, "part4", 0.1875F, 0.1875F),
+				sludge_worm_5 = new MultiPartEntityPart(this, "part5", 0.1875F, 0.1875F),
+				sludge_worm_6 = new MultiPartEntityPart(this, "part6", 0.1875F, 0.1875F),
+		};
 		// tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
 		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
@@ -75,14 +77,19 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		
 		this.renderBoundingBox = this.getEntityBoundingBox();
 	}
+	
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		dataManager.register(IS_SQUASHED, false);
+	}
 
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
-		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.1D);
 	}
 
 	// stuns the mob - dunno if we want this
@@ -156,11 +163,73 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 	@Override
 	@SuppressWarnings("rawtypes")
 	public boolean canAttackClass(Class entity) {
-		return EntitySmolSludgeWorm.class != entity && EntityTonySludgeWorm.class != entity;
+		return EntityTonySludgeWorm.class != entity && EntitySmolSludgeWorm.class != entity;
+	}
+
+	@Override
+	public void onCollideWithPlayer(EntityPlayer player) {
+		byte duration = 0;
+		if (!getEntityWorld().isRemote) {
+			for (MultiPartEntityPart part : this.sludge_worm_Array) {
+				if (player.getEntityBoundingBox().maxY >= part.getEntityBoundingBox().minY
+						&& player.getEntityBoundingBox().minY <= part.getEntityBoundingBox().maxY
+						&& player.getEntityBoundingBox().maxX >= part.getEntityBoundingBox().minX
+						&& player.getEntityBoundingBox().minX <= part.getEntityBoundingBox().maxX
+						&& player.getEntityBoundingBox().maxZ >= part.getEntityBoundingBox().minZ
+						&& player.getEntityBoundingBox().minZ <= part.getEntityBoundingBox().maxZ
+						&& player.prevPosY > player.posY) {
+					if (getEntityWorld().getDifficulty() == EnumDifficulty.NORMAL)
+						duration = 7;
+					else if (getEntityWorld().getDifficulty() == EnumDifficulty.HARD)
+						duration = 15;
+					if (duration > 0)
+						player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, duration * 20, 0));
+					if (!getIsSquashed())
+						setIsSquashed(true);
+				}
+			}
+			if (getIsSquashed()) {
+				setDead();
+				onDeathUpdate();
+			}
+		}
+	}
+
+	public void setIsSquashed(boolean squashed) {
+		dataManager.set(IS_SQUASHED, squashed);
+	}
+
+	private boolean getIsSquashed() {
+		return dataManager.get(IS_SQUASHED);
 	}
 
 	protected boolean damageWorm(DamageSource source, float ammount) {
 		return super.attackEntityFrom(source, ammount);
+	}
+
+	@Override
+	public void onDeathUpdate() {
+		super.onDeathUpdate();
+		if (getIsSquashed()) {
+			if(getEntityWorld().isRemote) {
+				for(int i = 0; i < 200; i++) {
+					Random rnd = this.world.rand;
+					float rx = rnd.nextFloat() * 1.0F - 0.5F;
+					float ry = rnd.nextFloat() * 1.0F - 0.5F;
+					float rz = rnd.nextFloat() * 1.0F - 0.5F;
+					Vec3d vec = new Vec3d(rx, ry, rz);
+					vec = vec.normalize();
+					BLParticles.SPLASH_TAR.spawn(getEntityWorld(), this.posX + rx + 0.1F, this.posY + ry + 0.1F, this.posZ + rz + 0.1F, ParticleArgs.get().withMotion(vec.x * 0.4F, vec.y * 0.4F, vec.z * 0.4F)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+				}
+			}
+			getEntityWorld().playSound((EntityPlayer)null, getPosition(), getJumpedOnSound(), SoundCategory.NEUTRAL, 1.0F, 0.5F);
+			getEntityWorld().playSound((EntityPlayer)null, getPosition(), getDeathSound(), SoundCategory.NEUTRAL, 1.0F, 0.7F);
+			if (!getEntityWorld().isRemote) {
+				if (rand.nextInt(200) == 0)
+					entityDropItem(new ItemStack(ItemRegistry.LIFE_CRYSTAL), 0.0F);
+				entityDropItem(new ItemStack(ItemRegistry.SLUDGE_BALL), 0.0F);
+			}
+		}
 	}
 
 	@Override
@@ -176,9 +245,6 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 			sludge_worm_4.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
 			sludge_worm_5.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
 			sludge_worm_6.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
-			sludge_worm_7.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
-			sludge_worm_8.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
-			sludge_worm_9.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0F);
 		}
 
 		sludge_worm_1.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0);
@@ -209,9 +275,6 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 		movePiecePos(sludge_worm_4, sludge_worm_3, 4.5F, 2F);
 		movePiecePos(sludge_worm_5, sludge_worm_4, 4.5F, 2F);
 		movePiecePos(sludge_worm_6, sludge_worm_5, 4.5F, 2F);
-		movePiecePos(sludge_worm_7, sludge_worm_6, 4.5F, 2F);
-		movePiecePos(sludge_worm_8, sludge_worm_7, 4.5F, 2F);
-		movePiecePos(sludge_worm_9, sludge_worm_8, 4.5F, 2F);
 	}
 
 	public void movePiecePos(MultiPartEntityPart targetPart, MultiPartEntityPart destinationPart, float speed, float yawSpeed) {
@@ -220,7 +283,7 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
 			speed = 1.5F;
 		
 		double movementTolerance = 0.05D;
-		double maxDist = 0.3D;
+		double maxDist = 0.175D;
 		
 		boolean correctY = false;
 		
@@ -299,6 +362,10 @@ public class EntitySmolSludgeWorm extends EntityMob implements IEntityMultiPart,
     protected void playStepSound(BlockPos pos, Block blockIn) {
        playSound(SoundRegistry.SNAIL_LIVING, 0.5F, 1F);
     }
+	
+	protected SoundEvent getJumpedOnSound() {
+		return SoundRegistry.SQUISH;
+	}
 
 	@SideOnly(Side.CLIENT)
 	@Override

@@ -60,6 +60,7 @@ import thebetweenlands.common.entity.mobs.EntityTamedSpiritTreeFace;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.entity.mobs.EntityTarminion;
 import thebetweenlands.common.entity.mobs.EntityTermite;
+import thebetweenlands.common.entity.mobs.EntityTonySludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.entity.mobs.EntityWight;
@@ -139,6 +140,7 @@ public class EntityRegistry {
 		registerEntity(EntityRootSprite.class, "root_sprite", 0x686868, 0x9fe530);
 
 		registerEntity(EntitySmolSludgeWorm.class, "smol_sludge_worm", 0x3A2F0B, 0x5F4C0B);
+		registerEntity(EntityTonySludgeWorm.class, "tony_sludge_worm", 0x3A2F0B, 0x5F4C0B);
 
 		registerEntity(EntityLurkerSkinRaft.class, "lurker_skin_raft");
 		
