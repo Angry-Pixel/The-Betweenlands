@@ -272,6 +272,8 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 			double offSetX = Math.sin(a) * getTongueLength() > 0 ? -0.125D : -0.35D;
 			double offSetZ = -Math.cos(a) * getTongueLength() > 0 ? -0.125D : -0.35D;
 			entity.setPosition(tongue_end.posX + offSetX, tongue_end.posY - entity.height * 0.3D, tongue_end.posZ + offSetZ);
+			if (entity.isSneaking())
+				entity.setSneaking(false);
 		}
 	}
 
