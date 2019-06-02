@@ -3,7 +3,7 @@ package thebetweenlands.common.block.structure;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -22,8 +22,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
-public class BlockWoodenSupportBeam extends BlockDirectional {
-
+public class BlockWoodenSupportBeam extends BlockHorizontal {
 	public static final PropertyBool TOP = PropertyBool.create("top");
 
 	public BlockWoodenSupportBeam() {
@@ -89,7 +88,7 @@ public class BlockWoodenSupportBeam extends BlockDirectional {
 
 	@Override
 	 public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		IBlockState state = getDefaultState().withProperty(FACING, facing);
+		IBlockState state = getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 		if (canPlaceAt(world, pos, facing))
 			 return facing != EnumFacing.DOWN && (facing == EnumFacing.UP || (double)hitY <= 0.5D) ? state.withProperty(TOP, false) : state.withProperty(TOP, true);
 		return this.getDefaultState();
@@ -121,19 +120,19 @@ public class BlockWoodenSupportBeam extends BlockDirectional {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing facing = EnumFacing.byIndex(meta);
+		EnumFacing facing = EnumFacing.byHorizontalIndex(meta & 0b11);
 		if (facing.getAxis() == EnumFacing.Axis.Y)
 			facing = EnumFacing.NORTH;
-		return getDefaultState().withProperty(FACING, facing).withProperty(TOP, Boolean.valueOf((meta & 8) > 0));
+		return getDefaultState().withProperty(FACING, facing).withProperty(TOP, Boolean.valueOf((meta & 0b100) > 0));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
-		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();
+		meta = meta | ((EnumFacing) state.getValue(FACING)).getHorizontalIndex();
 
 		if (((Boolean) state.getValue(TOP)).booleanValue())
-			meta |= 8;
+			meta |= 0b100;
 
 		return meta;
 	}
