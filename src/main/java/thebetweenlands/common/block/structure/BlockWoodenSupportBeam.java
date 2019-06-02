@@ -16,6 +16,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -23,6 +24,11 @@ import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class BlockWoodenSupportBeam extends BlockHorizontal {
+	private static final AxisAlignedBB[] SELECTION_AABB = new AxisAlignedBB[] {
+		new AxisAlignedBB(0.28D, 0, 0, 0.72D, 1, 1), //north/south
+		new AxisAlignedBB(0, 0, 0.28D, 1, 1, 0.72D)  //east/west
+	};
+	
 	public static final PropertyBool TOP = PropertyBool.create("top");
 
 	public BlockWoodenSupportBeam() {
@@ -43,7 +49,13 @@ public class BlockWoodenSupportBeam extends BlockHorizontal {
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return NULL_AABB;
 	}
-
+    
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    	EnumFacing facing = state.getValue(FACING);
+    	return SELECTION_AABB[facing.getAxis() == Axis.Z ? 0 : 1];
+    }
+    
     // Entities should be able to path and walk through this otherwise it blocks the dungeon in some areas.
     @Override
     @Nullable
