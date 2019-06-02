@@ -7,12 +7,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 
-public class TileEntityMudBricksAlcove extends TileEntityLootInventory {
+public class TileEntityMudBrickAlcove extends TileEntityLootInventory {
 	public boolean has_urn, greebled, top_web, bottom_web, small_candle, big_candle, out_crop;
 	public int urn_type = 0, rotationOffset = 0, dungeon_level = 0;
 	public int facing = 0;
 
-	public TileEntityMudBricksAlcove() {
+	public TileEntityMudBrickAlcove() {
 		super(1, "container.mud_bricks_alcove");
 	}
 

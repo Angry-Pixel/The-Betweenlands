@@ -164,7 +164,7 @@ import thebetweenlands.client.render.tile.RenderItemCage;
 import thebetweenlands.client.render.tile.RenderItemShelf;
 import thebetweenlands.client.render.tile.RenderItemStackAsTileEntity;
 import thebetweenlands.client.render.tile.RenderLivingWeedwoodShield;
-import thebetweenlands.client.render.tile.RenderMudBricksSpikeTrap;
+import thebetweenlands.client.render.tile.RenderMudBrickSpikeTrap;
 import thebetweenlands.client.render.tile.RenderMudFlowerPot;
 import thebetweenlands.client.render.tile.RenderMudTilesSpikeTrap;
 import thebetweenlands.client.render.tile.RenderPestleAndMortar;
@@ -568,7 +568,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWaystone.class, new RenderWaystone());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDungeonDoorRunes.class, new RenderDungeonDoorRunes());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDungeonDoorCombination.class, new RenderDungeonDoorCombination());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudBricksSpikeTrap.class, new RenderMudBricksSpikeTrap());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudBricksSpikeTrap.class, new RenderMudBrickSpikeTrap());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudTilesSpikeTrap.class, new RenderMudTilesSpikeTrap());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());

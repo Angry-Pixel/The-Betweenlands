@@ -9,7 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.block.container.BlockLootUrn;
-import thebetweenlands.common.block.structure.BlockMudBricksSpikeTrap;
+import thebetweenlands.common.block.structure.BlockMudBrickSpikeTrap;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
@@ -64,8 +64,8 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, -1, -1, 1, blockHelper.MUD_TILES_SPIKE_TRAP, 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, -1, -1, -1, blockHelper.MUD_TILES_SPIKE_TRAP, 1, 1, 1, facing);
 		
-		rotatedCubeVolume(world, rand, pos, 2, 1, 0, blockHelper.MUD_BRICKS_SPIKE_TRAP.withProperty(BlockMudBricksSpikeTrap.FACING, facing.rotateY()), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, -2, 1, 0, blockHelper.MUD_BRICKS_SPIKE_TRAP.withProperty(BlockMudBricksSpikeTrap.FACING, facing.getOpposite().rotateY()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 1, 0, blockHelper.MUD_BRICKS_SPIKE_TRAP.withProperty(BlockMudBrickSpikeTrap.FACING, facing.rotateY()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -2, 1, 0, blockHelper.MUD_BRICKS_SPIKE_TRAP.withProperty(BlockMudBrickSpikeTrap.FACING, facing.getOpposite().rotateY()), 1, 1, 1, facing);
 	}
 
 	private void buildCryptBench1(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {

@@ -1,7 +1,7 @@
 {
   "textures": {
-    "particle": "thebetweenlands:tiles/mud_bricks_spike_block_active_top",
-    "overlay": "thebetweenlands:tiles/mud_bricks_spike_block_active_top"
+    "particle": "thebetweenlands:tiles/mud_brick_spike_block_active_top",
+    "overlay": "thebetweenlands:tiles/mud_brick_spike_block_active_top"
   },
   "elements": [
     {

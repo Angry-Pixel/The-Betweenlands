@@ -17,12 +17,12 @@ import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.util.StatePropertyHelper;
 
 @SideOnly(Side.CLIENT)
-public class RenderMudBricksSpikeTrap extends RenderSpikeTrap {
-	private static final ResourceLocation SPOOP_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/mud_bricks_spike_block_spoop_layer.png");
+public class RenderMudBrickSpikeTrap extends RenderSpikeTrap {
+	private static final ResourceLocation SPOOP_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/mud_brick_spike_block_spoop_layer.png");
 	private static final ModelDungeonSpoopLayer MODEL_SPOOP = new ModelDungeonSpoopLayer();
 
-	public RenderMudBricksSpikeTrap() {
-		super(new ResourceLocation("thebetweenlands:mud_bricks_spike_trap"), new ResourceLocation("thebetweenlands:textures/tiles/spike_block_spikes_2.png"));
+	public RenderMudBrickSpikeTrap() {
+		super(new ResourceLocation("thebetweenlands:mud_brick_spike_trap"), new ResourceLocation("thebetweenlands:textures/tiles/spike_block_spikes_2.png"));
 	}
 
 	@Override

@@ -5,9 +5,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 
-public class BlockMudBricksSpikeTrap extends BlockSpikeTrap {
+public class BlockMudBrickSpikeTrap extends BlockSpikeTrap {
 
-	public BlockMudBricksSpikeTrap() {
+	public BlockMudBrickSpikeTrap() {
 		super();
 		setDefaultState(this.getBlockState().getBaseState().withProperty(FACING, EnumFacing.UP));
 	}

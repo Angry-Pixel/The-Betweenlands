@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockLootUrn.EnumLootUrn;
-import thebetweenlands.common.block.container.BlockMudBricksAlcove;
+import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
 import thebetweenlands.common.block.structure.BlockBrazier;
 import thebetweenlands.common.block.structure.BlockBrazier.EnumBrazierHalf;
@@ -69,7 +69,7 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_4 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_4);
 	public IBlockState WORM_DUNGEON_PILLAR_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_VERTICAL_DECAY_FULL);
 	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_FULL);
-	public IBlockState MUD_BRICKS_SPAWNER_HOLE = BlockRegistry.MUD_BRICKS_SPAWNER_HOLE.getDefaultState();
+	public IBlockState MUD_BRICKS_SPAWNER_HOLE = BlockRegistry.MUD_BRICK_SPAWNER_HOLE.getDefaultState();
 
 	public IBlockState MUD_TILES = BlockRegistry.MUD_TILES.getDefaultState();
 	public IBlockState MUD_TILES_DECAY = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY);
@@ -102,7 +102,7 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState MUD_BRICKS_CARVED_EDGE_DECAY_2 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_EDGE_DECAY_2);
 	public IBlockState MUD_BRICKS_CARVED_EDGE_DECAY_3 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_EDGE_DECAY_3);
 	public IBlockState MUD_BRICKS_CARVED_EDGE_DECAY_4 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED_EDGE_DECAY_4);
-	public IBlockState MUD_BRICKS_SPIKE_TRAP = BlockRegistry.MUD_BRICKS_SPIKE_TRAP.getDefaultState();
+	public IBlockState MUD_BRICKS_SPIKE_TRAP = BlockRegistry.MUD_BRICK_SPIKE_TRAP.getDefaultState();
 	public IBlockState MUD_TILES_SPIKE_TRAP = BlockRegistry.MUD_TILES_SPIKE_TRAP.getDefaultState();
 	
 	public IBlockState MUD = BlockRegistry.MUD.getDefaultState();
@@ -131,10 +131,10 @@ public class SludgeWormMazeBlockHelper {
 	private IBlockState LOOT_URN_2 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_2);
 	private IBlockState LOOT_URN_3 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_3);
 
-	public IBlockState MUD_BRICKS_ALCOVE_NORTH = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.NORTH);
-	public IBlockState MUD_BRICKS_ALCOVE_EAST = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.EAST);
-	public IBlockState MUD_BRICKS_ALCOVE_SOUTH = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.SOUTH);
-	public IBlockState MUD_BRICKS_ALCOVE_WEST = BlockRegistry.MUD_BRICKS_ALCOVE.getDefaultState().withProperty(BlockMudBricksAlcove.FACING, EnumFacing.WEST);
+	public IBlockState MUD_BRICKS_ALCOVE_NORTH = BlockRegistry.MUD_BRICK_ALCOVE.getDefaultState().withProperty(BlockMudBrickAlcove.FACING, EnumFacing.NORTH);
+	public IBlockState MUD_BRICKS_ALCOVE_EAST = BlockRegistry.MUD_BRICK_ALCOVE.getDefaultState().withProperty(BlockMudBrickAlcove.FACING, EnumFacing.EAST);
+	public IBlockState MUD_BRICKS_ALCOVE_SOUTH = BlockRegistry.MUD_BRICK_ALCOVE.getDefaultState().withProperty(BlockMudBrickAlcove.FACING, EnumFacing.SOUTH);
+	public IBlockState MUD_BRICKS_ALCOVE_WEST = BlockRegistry.MUD_BRICK_ALCOVE.getDefaultState().withProperty(BlockMudBrickAlcove.FACING, EnumFacing.WEST);
 
 	public IBlockState MUD_BRICKS_CLIMBABLE_NORTH = BlockRegistry.MUD_BRICKS_CLIMBABLE.getDefaultState().withProperty(BlockMudBricksClimbable.FACING, EnumFacing.NORTH);
 	public IBlockState MUD_BRICKS_CLIMBABLE_EAST = BlockRegistry.MUD_BRICKS_CLIMBABLE.getDefaultState().withProperty(BlockMudBricksClimbable.FACING, EnumFacing.EAST);

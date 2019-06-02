@@ -1,7 +1,7 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "thebetweenlands:mud_bricks_spike_trap"
+		"model": "thebetweenlands:mud_brick_spike_trap"
 	},
 	"variants": {
 		"facing": {
@@ -27,27 +27,27 @@
 			}
 		},
 		"facing=up,overlay=true": {
-			"model": "thebetweenlands:mud_bricks_spike_trap_overlay"
+			"model": "thebetweenlands:mud_brick_spike_trap_overlay"
 		},
 		"facing=down,overlay=true": {
-			"model": "thebetweenlands:mud_bricks_spike_trap_overlay",
+			"model": "thebetweenlands:mud_brick_spike_trap_overlay",
 			"z": 180
 		},
 		"facing=north,overlay=true": {
-			"model": "thebetweenlands:mud_bricks_spike_trap_overlay",
+			"model": "thebetweenlands:mud_brick_spike_trap_overlay",
 			"x": 90
 		},
 		"facing=south,overlay=true": {
-			"model": "thebetweenlands:mud_bricks_spike_trap_overlay",
+			"model": "thebetweenlands:mud_brick_spike_trap_overlay",
 			"x": 270
 		},
 		"facing=east,overlay=true": {
-			"model": "thebetweenlands:mud_bricks_spike_trap_overlay",
+			"model": "thebetweenlands:mud_brick_spike_trap_overlay",
 			"x": 90,
 			"y": 90
 		},
 		"facing=west,overlay=true": {
-			"model": "thebetweenlands:mud_bricks_spike_trap_overlay",
+			"model": "thebetweenlands:mud_brick_spike_trap_overlay",
 			"x": 90,
 			"y": 270
 		}

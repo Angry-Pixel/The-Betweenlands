@@ -39,10 +39,10 @@ import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootInventory;
-import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
+import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.util.StatePropertyHelper;
 
-public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvider {
+public class BlockMudBrickAlcove extends BasicBlock implements ITileEntityProvider {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 
 	public static final IUnlistedProperty<Integer> LEVEL = new PropertyIntegerUnlisted("level");
@@ -53,11 +53,11 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 	
 	public static final IProperty<Boolean> HAS_URN = PropertyBool.create("urn");
 	
-	public BlockMudBricksAlcove() {
+	public BlockMudBrickAlcove() {
 		this(Material.ROCK);
 	}
 
-	public BlockMudBricksAlcove(Material material) {
+	public BlockMudBrickAlcove(Material material) {
 		super(material);
 		setLightOpacity(255);
 		setHardness(0.4f);
@@ -67,10 +67,10 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 	}
 	
 	@Nullable
-	public static TileEntityMudBricksAlcove getTileEntity(IBlockAccess world, BlockPos pos) {
+	public static TileEntityMudBrickAlcove getTileEntity(IBlockAccess world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof TileEntityMudBricksAlcove) {
-			return (TileEntityMudBricksAlcove) tile;
+		if(tile instanceof TileEntityMudBrickAlcove) {
+			return (TileEntityMudBrickAlcove) tile;
 		}
 		return null;
 	}
@@ -82,7 +82,7 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		TileEntityMudBricksAlcove tile = StatePropertyHelper.getTileEntityThreadSafe(worldIn, pos, TileEntityMudBricksAlcove.class);
+		TileEntityMudBrickAlcove tile = StatePropertyHelper.getTileEntityThreadSafe(worldIn, pos, TileEntityMudBrickAlcove.class);
 		if(tile != null) {
 			state = state.withProperty(HAS_URN, tile.has_urn);
 		}
@@ -93,7 +93,7 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos) {
 		IExtendedBlockState extended = (IExtendedBlockState) oldState;
 		
-		TileEntityMudBricksAlcove tile = StatePropertyHelper.getTileEntityThreadSafe(worldIn, pos, TileEntityMudBricksAlcove.class);
+		TileEntityMudBrickAlcove tile = StatePropertyHelper.getTileEntityThreadSafe(worldIn, pos, TileEntityMudBrickAlcove.class);
 		if(tile != null) {
 			extended = extended.withProperty(TOP_COBWEB, tile.top_web)
 					.withProperty(BOTTOM_COBWEB, tile.bottom_web)
@@ -122,7 +122,7 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityMudBricksAlcove();
+		return new TileEntityMudBrickAlcove();
 	}
 
 	@Override
@@ -159,11 +159,11 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-		TileEntityMudBricksAlcove tile = getTileEntity(world, pos);
-		if (tile instanceof TileEntityMudBricksAlcove) {
+		TileEntityMudBrickAlcove tile = getTileEntity(world, pos);
+		if (tile instanceof TileEntityMudBrickAlcove) {
 			if (!tile.greebled)
 				tile.setUpGreeble();
-			((TileEntityMudBricksAlcove) tile).setLootTable(LootTableRegistry.ANIMATOR_SCROLL, world.rand.nextLong());
+			((TileEntityMudBrickAlcove) tile).setLootTable(LootTableRegistry.ANIMATOR_SCROLL, world.rand.nextLong());
 			if (tile.has_urn) {
 				IInventory tileInv = (IInventory) tile;
 				if (tileInv != null)
@@ -177,8 +177,8 @@ public class BlockMudBricksAlcove extends BasicBlock implements ITileEntityProvi
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		TileEntityMudBricksAlcove tile = getTileEntity(world, pos);
-		if (tile instanceof TileEntityMudBricksAlcove) {
+		TileEntityMudBrickAlcove tile = getTileEntity(world, pos);
+		if (tile instanceof TileEntityMudBrickAlcove) {
 			if (tile.has_urn && facing == state.getValue(FACING)) {
 				if (!world.isRemote) {
 					BlockPos offsetPos = pos.offset(facing);

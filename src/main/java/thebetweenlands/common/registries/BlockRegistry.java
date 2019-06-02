@@ -51,7 +51,7 @@ import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockMortar;
-import thebetweenlands.common.block.container.BlockMudBricksAlcove;
+import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockRepeller;
@@ -147,7 +147,7 @@ import thebetweenlands.common.block.structure.BlockMudBrickShingleSlab;
 import thebetweenlands.common.block.structure.BlockMudBricks;
 import thebetweenlands.common.block.structure.BlockMudBricksClimbable;
 import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
-import thebetweenlands.common.block.structure.BlockMudBricksSpikeTrap;
+import thebetweenlands.common.block.structure.BlockMudBrickSpikeTrap;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockMudTilesSpikeTrap;
 import thebetweenlands.common.block.structure.BlockMudTilesWater;
@@ -560,8 +560,8 @@ public class BlockRegistry {
     public static final Block MUD_TOWER_BEAM_TUBE = new BlockBeamTube();
     public static final Block MUD_TOWER_BEAM_LENS_SUPPORTS = new BlockBeamLensSupport();
     public static final Block DIAGONAL_ENERGY_BARRIER = new BlockDiagonalEnergyBarrier();
-    public static final Block MUD_BRICKS_SPAWNER_HOLE = new BlockMudBricksSpawnerHole();
-    public static final Block MUD_BRICKS_ALCOVE = new BlockMudBricksAlcove();
+    public static final Block MUD_BRICK_SPAWNER_HOLE = new BlockMudBricksSpawnerHole();
+    public static final Block MUD_BRICK_ALCOVE = new BlockMudBrickAlcove();
     public static final Block LOOT_URN = new BlockLootUrn();
 	public static final Block DUNGEON_DOOR_RUNES = new BlockDungeonDoorRunes(false);
 	public static final Block DUNGEON_DOOR_RUNES_MIMIC = new BlockDungeonDoorRunes(true);
@@ -589,7 +589,7 @@ public class BlockRegistry {
 	public static final Block LOG_ROTTEN_BARK_CARVED_15 = new BlockRottenBarkCarved();
 	public static final Block LOG_ROTTEN_BARK_CARVED_16 = new BlockRottenBarkCarved();
 	public static final Block ENERGY_BARRIER_MUD = new BlockEnergyBarrierMud();
-	public static final Block MUD_BRICKS_SPIKE_TRAP = new BlockMudBricksSpikeTrap();
+	public static final Block MUD_BRICK_SPIKE_TRAP = new BlockMudBrickSpikeTrap();
 	public static final Block MUD_TILES_SPIKE_TRAP = new BlockMudTilesSpikeTrap();
 	
 	//Place-Holders for stuffs and things

@@ -3,7 +3,7 @@
   "textures": {
     "particle": "thebetweenlands:blocks/mud_bricks",
     "down": "thebetweenlands:blocks/mud_bricks",
-    "up": "thebetweenlands:blocks/mud_bricks_spike_block_inactive_top",
+    "up": "thebetweenlands:blocks/mud_brick_spike_block_inactive_top",
     "north": "thebetweenlands:blocks/mud_bricks",
     "east": "thebetweenlands:blocks/mud_bricks",
     "south": "thebetweenlands:blocks/mud_bricks",

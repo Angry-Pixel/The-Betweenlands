@@ -27,7 +27,7 @@ import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityLootUrn;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMossBed;
-import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
+import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
 import thebetweenlands.common.tile.TileEntityMudTilesSpikeTrap;
@@ -91,7 +91,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityBeamRelay.class, "beam_relay");
 		registerTileEntity(TileEntityMudBricksSpawnerHole.class, "mud_bricks_spawner_hole");
 		registerTileEntity(TileEntityWaystone.class, "waystone");
-		registerTileEntity(TileEntityMudBricksAlcove.class, "mud_bricks_alcove");
+		registerTileEntity(TileEntityMudBrickAlcove.class, "mud_bricks_alcove");
 		registerTileEntity(TileEntityLootUrn.class, "loot_urn");
 		registerTileEntity(TileEntityDungeonDoorRunes.class, "dungeon_door_runes");
 		registerTileEntity(TileEntityDungeonDoorCombination.class, "dungeon_door_combination");

@@ -31,7 +31,7 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProcessor;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudBricksAlcove;
-import thebetweenlands.common.block.container.BlockMudBricksAlcove;
+import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.util.ModelConverter.Box;
 import thebetweenlands.util.ModelConverter.Quad;
 import thebetweenlands.util.QuadBuilder;
@@ -173,7 +173,7 @@ public class ModelAlcove implements IModel {
 		@Override
 		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 			if(side == null) {
-				int level = StatePropertyHelper.getPropertyOptional(state, BlockMudBricksAlcove.LEVEL).orElse(0);
+				int level = StatePropertyHelper.getPropertyOptional(state, BlockMudBrickAlcove.LEVEL).orElse(0);
 
 				//wtf
 				if(level <= 2) level = 0;
@@ -186,19 +186,19 @@ public class ModelAlcove implements IModel {
 
 				List<BakedQuad> quads = new ArrayList<>(this.bakedBaseModel[level].getQuads(state, side, rand));
 
-				if(StatePropertyHelper.getPropertyOptional(state, BlockMudBricksAlcove.TOP_COBWEB).orElse(true)) {
+				if(StatePropertyHelper.getPropertyOptional(state, BlockMudBrickAlcove.TOP_COBWEB).orElse(true)) {
 					quads.addAll(this.bakedTopCobwebModel[level].getQuads(state, side, rand));
 				}
 
-				if(StatePropertyHelper.getPropertyOptional(state, BlockMudBricksAlcove.BOTTOM_COBWEB).orElse(true)) {
+				if(StatePropertyHelper.getPropertyOptional(state, BlockMudBrickAlcove.BOTTOM_COBWEB).orElse(true)) {
 					quads.addAll(this.bakedBottomCobwebModel[level].getQuads(state, side, rand));
 				}
 
-				if(StatePropertyHelper.getPropertyOptional(state, BlockMudBricksAlcove.SMALL_CANDLE).orElse(true)) {
+				if(StatePropertyHelper.getPropertyOptional(state, BlockMudBrickAlcove.SMALL_CANDLE).orElse(true)) {
 					quads.addAll(this.bakedSmallCandleModel[level].getQuads(state, side, rand));
 				}
 
-				if(StatePropertyHelper.getPropertyOptional(state, BlockMudBricksAlcove.BIG_CANDLE).orElse(true)) {
+				if(StatePropertyHelper.getPropertyOptional(state, BlockMudBrickAlcove.BIG_CANDLE).orElse(true)) {
 					quads.addAll(this.bakedBigCandleModel[level].getQuads(state, side, rand));
 				}
 

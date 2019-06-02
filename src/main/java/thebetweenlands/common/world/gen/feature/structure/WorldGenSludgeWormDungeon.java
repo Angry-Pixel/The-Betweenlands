@@ -20,7 +20,7 @@ import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
-import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
+import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
@@ -751,7 +751,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	// Places alcoves and sets TE level (used for textures atm)
 	public void setAlcoveForLevel(World world, BlockPos pos, IBlockState state, Random rand, int level) {
 		world.setBlockState(pos, state, 2);
-		TileEntityMudBricksAlcove alcove = (TileEntityMudBricksAlcove) world.getTileEntity(pos);
+		TileEntityMudBrickAlcove alcove = (TileEntityMudBrickAlcove) world.getTileEntity(pos);
 		if (alcove != null)
 			alcove.setDungeonLevel(level);
 	}

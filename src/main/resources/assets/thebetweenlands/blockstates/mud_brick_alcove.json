@@ -1,13 +1,13 @@
 {
   "forge_marker": 1,
   "variants": {
-    "facing=north,urn=false": { "model": "thebetweenlands:internal/mud_bricks_alcove" },
-    "facing=south,urn=false": { "model": "thebetweenlands:internal/mud_bricks_alcove", "y": 180 },
-    "facing=west,urn=false": { "model": "thebetweenlands:internal/mud_bricks_alcove", "y": 270 },
-    "facing=east,urn=false": { "model": "thebetweenlands:internal/mud_bricks_alcove", "y": 90 },
+    "facing=north,urn=false": { "model": "thebetweenlands:internal/mud_brick_alcove" },
+    "facing=south,urn=false": { "model": "thebetweenlands:internal/mud_brick_alcove", "y": 180 },
+    "facing=west,urn=false": { "model": "thebetweenlands:internal/mud_brick_alcove", "y": 270 },
+    "facing=east,urn=false": { "model": "thebetweenlands:internal/mud_brick_alcove", "y": 90 },
     "facing=north,urn=true": [
 	    {
-	    	"model": "thebetweenlands:internal/mud_bricks_alcove",
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
 	    	"submodel": {
 	    		"urn_north": {
 	    			"model": "thebetweenlands:internal/model_transform",
@@ -23,7 +23,7 @@
 	    	}
 		},
 		{
-	    	"model": "thebetweenlands:internal/mud_bricks_alcove",
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
 	    	"submodel": {
 	    		"urn_north": {
 	    			"model": "thebetweenlands:internal/model_transform",
@@ -41,7 +41,7 @@
 	],
     "facing=south,urn=true": [
     	{
-	    	"model": "thebetweenlands:internal/mud_bricks_alcove",
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
 	    	"y": 180,
 	    	"submodel": {
 	    		"urn_north": {
@@ -58,7 +58,7 @@
 	    	}
 		},
 		{
-	    	"model": "thebetweenlands:internal/mud_bricks_alcove",
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
 	    	"y": 180,
 	    	"submodel": {
 	    		"urn_north": {
@@ -77,7 +77,7 @@
     ],
     "facing=west,urn=true": [
     	{
-	    	"model": "thebetweenlands:internal/mud_bricks_alcove",
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
 	    	"y": 270,
 	    	"submodel": {
 	    		"urn_north": {
@@ -94,7 +94,7 @@
 	    	}
 		},
 		{
-	    	"model": "thebetweenlands:internal/mud_bricks_alcove",
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
 	    	"y": 270,
 	    	"submodel": {
 	    		"urn_north": {
@@ -113,7 +113,7 @@
     ],
     "facing=east,urn=true": [
     	{
-	    	"model": "thebetweenlands:internal/mud_bricks_alcove",
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
 	    	"y": 90,
 	    	"submodel": {
 	    		"urn_north": {
@@ -130,7 +130,7 @@
 	    	}
 		},
 		{
-	    	"model": "thebetweenlands:internal/mud_bricks_alcove",
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
 	    	"y": 90,
 	    	"submodel": {
 	    		"urn_north": {
@@ -148,7 +148,7 @@
 		}
     ],
 	"inventory": {
-		"model": "thebetweenlands:internal/mud_bricks_alcove",
+		"model": "thebetweenlands:internal/mud_brick_alcove",
 		"transform": {
 			"gui": {
 	            "rotation": [ 30, 225, 0 ],

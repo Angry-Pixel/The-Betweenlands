@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.tile.TileEntityMudBricksAlcove;
+import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 
 
 @SideOnly(Side.CLIENT)
@@ -128,7 +128,7 @@ public class ModelMudBricksAlcove extends ModelBase {
 		backwall.addChild(left1);
 	}
 
-	public void render(TileEntityMudBricksAlcove tile, float scale) {
+	public void render(TileEntityMudBrickAlcove tile, float scale) {
 		backwall.render(scale);
 		if (tile.out_crop)
 			outcrop_a.render(scale);
