@@ -1,20 +1,36 @@
 package thebetweenlands.common.entity;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
-public abstract class EntityProximitySpawner extends Entity {
+public abstract class EntityProximitySpawner extends EntityLiving {
+
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
+	}
 
 	public EntityProximitySpawner(World world) {
 		super(world);
 	}
 	/**
-	 * Amount to extend proximity area
+	 * Amount to extend proximity area in XZ axis
 	 *
 	 * @return amount to expand proximity box all around in the x & z axis.
 	 */
-	protected abstract float getProximityRadius();
+	protected abstract float getProximityHorizontal();
+	
+	/**
+	 * Amount to extend proximity area in Y axis
+	 *
+	 * @return amount to expand proximity box all around in the y axis.
+	 */
+	protected abstract float getProximityVertical();
 
 	/**
 	 * Test if entity can sneak past

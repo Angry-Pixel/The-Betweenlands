@@ -6,10 +6,8 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.mobs.EntityTonySludgeWorm;
 
@@ -18,6 +16,11 @@ public class EntityTonyWormEggSac extends EntityProximitySpawner {
 	public EntityTonyWormEggSac(World world) {
 		super(world);
 		setSize(1F, 0.5F);
+	}
+
+	@Override
+	public void setNoAI(boolean disable) {
+		super.setNoAI(true);
 	}
 
 	@Override
@@ -52,9 +55,22 @@ public class EntityTonyWormEggSac extends EntityProximitySpawner {
 		return null;
 	}
 
-    public boolean canEntityBeSeen(Entity entity) {
-        return this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double)this.getEyeHeight(), this.posZ), new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight(), entity.posZ), false, true, false) == null;
+	@Override
+	protected boolean isMovementBlocked() {
+		return true;
+	}
+
+	@Override
+    public boolean canBePushed() {
+        return false;
     }
+
+	@Override
+	public void addVelocity(double x, double y, double z) {
+		motionX = 0;
+		motionY += y;
+		motionZ = 0;
+	}
 
 	@Override
 	public boolean getIsInvulnerable() {
@@ -67,25 +83,13 @@ public class EntityTonyWormEggSac extends EntityProximitySpawner {
 	}
 
 	@Override
-	public void onCollideWithPlayer(EntityPlayer player) {
-
+	protected float getProximityHorizontal() {
+		return 3F;
 	}
-
+	
 	@Override
-	protected void entityInit() {
-	}
-
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
-	}
-
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
-	}
-
-	@Override
-	protected float getProximityRadius() {
-		return 3;
+	protected float getProximityVertical() {
+		return 1F;
 	}
 
 	@Override
@@ -120,7 +124,7 @@ public class EntityTonyWormEggSac extends EntityProximitySpawner {
 
 	@Override
 	protected AxisAlignedBB proximityBox() {
-		return new AxisAlignedBB (getPosition()).grow(getProximityRadius(), 0D, getProximityRadius());
+		return new AxisAlignedBB (getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal());
 	}
 
 }

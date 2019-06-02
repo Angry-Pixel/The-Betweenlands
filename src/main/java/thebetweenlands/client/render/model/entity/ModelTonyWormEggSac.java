@@ -166,7 +166,8 @@ public class ModelTonyWormEggSac extends ModelBase {
         webbing2a.addChild(webbing2a2);
     }
 
-    public void render(float scale) {
+    @Override
+    public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
         egg5.render(scale);
         egg8.render(scale);
         egg4.render(scale);
