@@ -2,106 +2,100 @@ package thebetweenlands.monkeytest;
 
 import java.util.Random;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
 
 @SideOnly(Side.CLIENT)
-public class ParticlePuzzleBeam extends Particle implements IParticleTracked {
+public class ParticlePuzzleBeam extends Particle implements IParticleSpriteReceiver {
+	private float initScale = 0;
+	private float initAlpha = 0;
 
-  public float colorR = 0;
-  public float colorG = 0;
-  public float colorB = 0;
-  public float initScale = 0;
-  public float initAlpha = 0;
-  public static ResourceLocation texture = new ResourceLocation(ModInfo.ID, "particle/particle_beam");
+	public ParticlePuzzleBeam(World worldIn, double x, double y, double z, double vx, double vy, double vz, float scale, int lifetime) {
+		super(worldIn, x, y, z, 0, 0, 0);
+		this.particleMaxAge = (int) ((float) lifetime * 0.5f);
+		this.particleScale = scale;
+		this.initScale = scale;
+		this.motionX = vx * 2.0f;
+		this.motionY = vy * 2.0f;
+		this.motionZ = vz * 2.0f;
+		this.particleAngle = 2.0f * (float) Math.PI;
+	}
 
-  public ParticlePuzzleBeam(World worldIn, double x, double y, double z, double vx, double vy, double vz, float r, float g, float b, float a, float scale, int lifetime) {
-    super(worldIn, x, y, z, 0, 0, 0);
-    this.colorR = r;
-    this.colorG = g;
-    this.colorB = b;
-    if (this.colorR > 1.0) {
-      this.colorR = this.colorR / 255.0f;
-    }
-    if (this.colorG > 1.0) {
-      this.colorG = this.colorG / 255.0f;
-    }
-    if (this.colorB > 1.0) {
-      this.colorB = this.colorB / 255.0f;
-    }
-    this.setRBGColorF(colorR, colorG, colorB);
-    this.particleMaxAge = (int) ((float) lifetime * 0.5f);
-    this.particleScale = scale;
-    this.initScale = scale;
-    this.motionX = vx * 2.0f;
-    this.motionY = vy * 2.0f;
-    this.motionZ = vz * 2.0f;
-    this.initAlpha = a;
-    this.particleAngle = 2.0f * (float) Math.PI;
-    TextureAtlasSprite sprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(texture.toString());
-    this.setParticleTexture(sprite);
-  }
+	@Override
+	public void setAlphaF(float alpha) {
+		super.setAlphaF(alpha);
+		this.initAlpha = alpha;
+	}
 
-  @Override
-  public int getBrightnessForRender(float pTicks) {
-    return 255;
-  }
+	@Override
+	public int getBrightnessForRender(float pTicks) {
+		return 255;
+	}
 
-  @Override
-  public boolean shouldDisableDepth() {
-    return true;
-  }
+	@Override
+	public boolean shouldDisableDepth() {
+		return true;
+	}
 
-  @Override
-  public int getFXLayer() {
-    return 1;
-  }
+	@Override
+	public int getFXLayer() {
+		return 1;
+	}
 
-  public static Random random = new Random();
+	@Override
+	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX,
+			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+		if(this.particleRed > 1) {
+			this.particleRed /= 255.0f;
+		}
 
-  @Override
-  public void onUpdate() {
-    super.onUpdate();
-    if (random.nextInt(6) == 0) {
-      this.particleAge++;
-    }
-    float lifeCoeff = (float) this.particleAge / (float) this.particleMaxAge;
-    this.particleScale = initScale - initScale * lifeCoeff;
-    this.particleAlpha = initAlpha * (1.0f - lifeCoeff);
-    this.prevParticleAngle = particleAngle;
-    particleAngle += 1.0f;
-  }
+		if(this.particleGreen > 1) {
+			this.particleGreen /= 255.0f;
+		}
 
-  @Override
-  public boolean alive() {
-    return this.particleAge < this.particleMaxAge;
-  }
+		if(this.particleBlue > 1) {
+			this.particleBlue /= 255.0f;
+		}
+		
+		super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
+	}
+	
+	public static Random random = new Random();
 
-  @Override
-  public boolean isAdditive() {
-    return true;
-  }
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		if (random.nextInt(6) == 0) {
+			this.particleAge++;
+		}
+		float lifeCoeff = (float) this.particleAge / (float) this.particleMaxAge;
+		this.particleScale = initScale - initScale * lifeCoeff;
+		this.particleAlpha = initAlpha * (1.0f - lifeCoeff);
+		this.prevParticleAngle = particleAngle;
+		particleAngle += 1.0f;
+	}
 
-  @Override
-  public boolean renderThroughBlocks() {
-    return false;
-  }
+	public static final class Factory extends ParticleFactory<Factory, ParticlePuzzleBeam> {
+		public Factory() {
+			super(ParticlePuzzleBeam.class, ParticleTextureStitcher.create(ParticlePuzzleBeam.class, new ResourceLocation("thebetweenlands:particle/particle_beam")));
+		}
 
-  @Override
-  public void renderParticle(BufferBuilder buffer, EntityPlayer player, float partialTicks, float f, float f4, float f1, float f2, float f3) {
-    super.renderParticle(buffer, player, partialTicks, f, f4, f1, f2, f3);
-  }
+		@Override
+		public ParticlePuzzleBeam createParticle(ImmutableParticleArgs args) {
+			return new ParticlePuzzleBeam(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale, args.data.getInt(0));
+		}
 
-  @Override
-  public boolean ignoreDepth() {
-    return false;
-  }
+		@Override
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withData(20);
+		}
+	}
 }

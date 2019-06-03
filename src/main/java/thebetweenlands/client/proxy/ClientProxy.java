@@ -304,15 +304,12 @@ import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.world.event.EventSpoopy;
 import thebetweenlands.common.world.event.EventWinter;
-import thebetweenlands.monkeytest.ParticleRenderer;
 import thebetweenlands.util.GLUProjection;
 
 public class ClientProxy extends CommonProxy implements IResourceManagerReloadListener {
 	public static Render<EntityDragonFly> dragonFlyRenderer;
 
 	private final List<RiftVariant> riftVariants = new ArrayList<>();
-
-	public static ParticleRenderer particleRenderer = new ParticleRenderer(); // Temp
 	  
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
