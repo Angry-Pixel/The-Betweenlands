@@ -3,8 +3,11 @@ package thebetweenlands.client.render.model.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.mobs.EntityAshSprite;
 
 @SideOnly(Side.CLIENT)
 public class ModelAshSprite extends ModelBase {
@@ -187,6 +190,38 @@ public class ModelAshSprite extends ModelBase {
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
     	head_base.render(scale);
     }
+    
+    @Override
+	public void setLivingAnimations(EntityLivingBase entity, float limbSwing, float limbSwingAngle, float partialRenderTicks) {
+    	EntityAshSprite sprite = (EntityAshSprite) entity;
+    	float flap = MathHelper.sin((sprite.ticksExisted) * 0.6F) * 0.8F;
+    	float flapJaw = MathHelper.sin((sprite.ticksExisted) * 0.4F) * 0.75F;
+    	jaw_lower.rotateAngleX = convertDegtoRad(26F) - flapJaw * 0.5F;
+    	cloth_left_back1.rotateAngleZ = convertDegtoRad(0F) - flap * 0.0625F;
+    	cloth_left_back2.rotateAngleZ = convertDegtoRad(-13F) + flap * 0.25F;
+    	cloth_left_back3.rotateAngleZ = convertDegtoRad(-13F) - flap * 0.5F;
+
+    	cloth_right_back1.rotateAngleZ = convertDegtoRad(0F) + flap * 0.0625F;
+    	cloth_right_back2.rotateAngleZ = convertDegtoRad(13F) - flap * 0.25F;
+    	cloth_right_back3.rotateAngleZ = convertDegtoRad(13F) + flap * 0.5F;
+
+    	cloth_left_front1.rotateAngleZ = convertDegtoRad(-16F) - flap * 0.0625F;
+    	cloth_left_front2.rotateAngleZ = convertDegtoRad(16F) + flap * 0.25F;
+
+    	cloth_right_front1.rotateAngleZ = convertDegtoRad(16F) + flap * 0.0625F;
+    	cloth_right_front2.rotateAngleZ = convertDegtoRad(-16F) - flap * 0.25F;
+
+    	if(sprite.motionY < 0) {
+    		cloth_left_back1.rotateAngleZ = (float) (convertDegtoRad(0F) - flap * 0.0625F + sprite.motionY * 4F);
+    		cloth_right_back1.rotateAngleZ = (float) (convertDegtoRad(0F) + flap * 0.0625F - sprite.motionY * 4F);
+    		cloth_left_front1.rotateAngleZ = (float) (convertDegtoRad(-16F) - flap * 0.0625F + sprite.motionY * 4F);
+    		cloth_right_front1.rotateAngleZ = (float) (convertDegtoRad(16F) + flap * 0.0625F + sprite.motionY * 4F);
+    	}
+    }
+    
+	public float convertDegtoRad(float angleIn) {
+		return angleIn * ((float) Math.PI / 180F);
+	}
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
