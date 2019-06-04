@@ -166,16 +166,6 @@ public class EntityAshSprite extends EntityMob {
 		return LootTableList.ASH_SPRITE_LOOT;
 	}
 */
-	@SideOnly(Side.CLIENT)
-	@Override
-	public int getBrightnessForRender() {
-		return 15728880;
-	}
-
-	@Override
-	public float getBrightness() {
-		return 1.0F;
-	}
 
 	class AIChargeAttack extends EntityAIBase {
 		private final EntityAshSprite ash_sprite;
