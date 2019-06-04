@@ -61,8 +61,8 @@ public class EntityAshSprite extends EntityMob {
 
 	@SideOnly(Side.CLIENT)
 	public void spawnParticles(World worldIn, BlockPos pos, Random rand) {
-		for(int i = 0; i < 8; i++) {
-			worldIn.spawnParticle(EnumParticleTypes.SUSPENDED_DEPTH, pos.getX() + 0.5D + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 1), pos.getY() + 0.5D + rand.nextFloat() * 2 - 1, pos.getZ() + 0.5D + (rand.nextBoolean() ? -1 : 1) * Math.pow(rand.nextFloat(), 1), 0, 0.2D, 0);
+		for(int i = 0; i < 4; i++) {
+			worldIn.spawnParticle(EnumParticleTypes.SUSPENDED_DEPTH, pos.getX() + 0.5D + (rand.nextBoolean() ? -0.5F : 0.5F) * Math.pow(rand.nextFloat(), 1F), pos.getY() + 0.5D + rand.nextFloat() - 0.5F, pos.getZ() + 0.5D + (rand.nextBoolean() ? -0.5F : 0.5F) * Math.pow(rand.nextFloat(), 1F), 0, 0.2D, 0);
 		}
 	}
 
