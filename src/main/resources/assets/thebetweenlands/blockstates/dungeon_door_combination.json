@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "thebetweenlands:dungeon_door_combination", "y": 180 },
+        "facing=south": { "model": "thebetweenlands:dungeon_door_combination" },
+        "facing=west":  { "model": "thebetweenlands:dungeon_door_combination", "y": 90 },
+        "facing=east":  { "model": "thebetweenlands:dungeon_door_combination", "y": 270 }
+    }
+}

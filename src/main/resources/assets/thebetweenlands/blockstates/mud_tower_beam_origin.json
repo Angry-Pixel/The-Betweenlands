@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "powered=false": { "model": "thebetweenlands:mud_tower_lens_inactive", "x": 270 },
+        "powered=true": { "model": "thebetweenlands:mud_tower_lens_active", "x": 270 }
+    }
+}

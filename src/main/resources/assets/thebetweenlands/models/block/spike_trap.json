@@ -1,6 +1,12 @@
-{ 
-  "parent": "block/cube_all",
+{
+  "parent": "block/cube",
   "textures": {
-    "all": "thebetweenlands:blocks/polished_limestone"
-  } 
+    "particle": "thebetweenlands:blocks/polished_limestone",
+    "down": "thebetweenlands:blocks/polished_limestone",
+    "up": "thebetweenlands:blocks/spike_block_inactive_top",
+    "north": "thebetweenlands:blocks/polished_limestone",
+    "east": "thebetweenlands:blocks/polished_limestone",
+    "south": "thebetweenlands:blocks/polished_limestone",
+    "west": "thebetweenlands:blocks/polished_limestone"
+  }
 }

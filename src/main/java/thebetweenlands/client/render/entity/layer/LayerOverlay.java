@@ -47,7 +47,7 @@ public class LayerOverlay<T extends EntityLivingBase> implements LayerRenderer<T
 				float green = this.getGreen();
 				float blue = this.getBlue();
 
-				GlStateManager.doPolygonOffset(0, -3.0F);
+				GlStateManager.doPolygonOffset(-0.01F, -3.0F);
 				GlStateManager.enablePolygonOffset();
 
 				GlStateManager.enableBlend();
@@ -55,6 +55,14 @@ public class LayerOverlay<T extends EntityLivingBase> implements LayerRenderer<T
 				GlStateManager.depthMask(false);
 				GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 				GlStateManager.color(red, green, blue, alpha);
+
+				if(this.getGlow()) {
+					int i = 61680;
+					int j = i % 65536;
+					int k = i / 65536;
+					OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+					GlStateManager.enableLighting();
+			    }
 
 				this.renderOverlay(entity, model, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
 
@@ -86,7 +94,7 @@ public class LayerOverlay<T extends EntityLivingBase> implements LayerRenderer<T
 	}
 
 	protected void renderOverlay(T entity, ModelBase model, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		model.setLivingAnimations(entity, limbSwingAmount, ageInTicks, partialTicks);
+		//model.setLivingAnimations(entity, limbSwingAmount, ageInTicks, partialTicks); // this messes up stuff and not in a good way :P
 		model.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 		model.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 	}

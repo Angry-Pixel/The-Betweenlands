@@ -13,6 +13,7 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -35,14 +36,18 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.IParticleCollidable;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 
-public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
+public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock, IParticleCollidable {
+
 	private final boolean isBurning;
 	private static boolean keepInventory;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
@@ -56,6 +61,16 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
         if(!isBurning)
         	setCreativeTab(BLCreativeTabs.BLOCKS);
     }
+
+	@Override
+	public void onParticleCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, EnumFacing side, Particle particle) {
+		EnumFacing facing = state.getValue(FACING);
+		int fx = facing.getXOffset();
+		int fz = facing.getZOffset();
+		double mx = 0.4 * fx;
+		double mz = 0.4 * fz;
+		BLParticles.BEAM.spawn(worldIn, pos.getX() + (mx == 0? 0.5: Math.max(0, fx)), pos.getY() + 0.5, pos.getZ() +  (mz == 0? 0.5: Math.max(0, fz)), ParticleFactory.ParticleArgs.get().withMotion(mx, 0, mz));
+	}
 
 	@Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {

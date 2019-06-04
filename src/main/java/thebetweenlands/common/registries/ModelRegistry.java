@@ -1,23 +1,14 @@
 package thebetweenlands.common.registries;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import javax.imageio.ImageIO;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import thebetweenlands.client.handler.TextureStitchHandler;
-import thebetweenlands.client.handler.TextureStitchHandler.TextureStitcher;
+import net.minecraftforge.common.model.TRSRTransformation;
+import thebetweenlands.client.render.model.baked.ModelAlcove;
 import thebetweenlands.client.render.model.baked.ModelBlank;
 import thebetweenlands.client.render.model.baked.ModelCombined;
 import thebetweenlands.client.render.model.baked.ModelConnectedTexture;
@@ -32,6 +23,7 @@ import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
 import thebetweenlands.client.render.model.baked.ModelRubberTapLiquid;
 import thebetweenlands.client.render.model.baked.ModelSlant;
 import thebetweenlands.client.render.model.baked.ModelStalactite;
+import thebetweenlands.client.render.model.baked.ModelTransform;
 import thebetweenlands.client.render.model.baked.ModelWalkway;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodBush;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodShieldBurning;
@@ -39,6 +31,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom2;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom3;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBulbCappedMushroom;
+import thebetweenlands.client.render.model.baked.modelbase.ModelDungeonWallCandle;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFlatHeadMushroom1;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFlatHeadMushroom2;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop1;
@@ -49,6 +42,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop4Decay
 import thebetweenlands.client.render.model.baked.modelbase.ModelMossBed;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPot;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPotCandle;
+import thebetweenlands.client.render.model.baked.modelbase.ModelMudTowerBrazier;
 import thebetweenlands.client.render.model.baked.modelbase.ModelPitcherPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelPresent;
 import thebetweenlands.client.render.model.baked.modelbase.ModelRubberTapPouring;
@@ -64,6 +58,9 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop4;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop5;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop6;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop6Decayed;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWoodSupportBeam1;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWoodSupportBeam2;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWoodSupportBeam3;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelBoneShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelDentrothystShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelLurkerSkinShield;
@@ -73,6 +70,12 @@ import thebetweenlands.client.render.model.baked.modelbase.shields.ModelValonite
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelWeedwoodShield;
 import thebetweenlands.client.render.model.entity.ModelMireSnailEgg;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
+import thebetweenlands.client.render.model.tile.ModelLootPot1;
+import thebetweenlands.client.render.model.tile.ModelLootPot2;
+import thebetweenlands.client.render.model.tile.ModelLootPot3;
+import thebetweenlands.client.render.model.tile.ModelLootUrn1;
+import thebetweenlands.client.render.model.tile.ModelLootUrn2;
+import thebetweenlands.client.render.model.tile.ModelLootUrn3;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ModelConverter.Box;
 import thebetweenlands.util.ModelConverter.Quad;
@@ -88,6 +91,7 @@ public class ModelRegistry {
 	//Generic
 	public static final IModel BLANK = new ModelBlank();
 	public static final IModel MODEL_COMBINED = new ModelCombined();
+	public static final IModel MODEL_TRANSFORM = new ModelTransform(BLANK, TRSRTransformation.identity());
 	public static final IModel CONNECTED_TEXTURE = new ModelConnectedTexture();
 	public static final IModel LAYER_SELECTION = new ModelLayerSelection();
 	public static final ModelEventSelection SPOOK_EVENT = new ModelEventSelection();
@@ -144,13 +148,6 @@ public class ModelRegistry {
 	public static final IModel DENTROTHYST_SHIELD_ORANGE_POLISHED = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_orange_polished"), new ResourceLocation("thebetweenlands:particle/item/dentrothyst_shield_orange_polished_particle"), 64, 64, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel LURKER_SKIN_SHIELD = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLurkerSkinShield(), new ResourceLocation("thebetweenlands:items/shields/lurker_skin_shield"), new ResourceLocation("thebetweenlands:particle/item/lurker_skin_shield_particle"), 128, 128, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel BUCKET = new ModelDynBucketBL();
-	public static final IModel WEEDWOOD_CHEST = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelChest(), new ResourceLocation("thebetweenlands:tiles/weedwood_chest"), 64, 32,
-			new IVertexProcessor() {
-		@Override
-		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {
-			return new Vec3UV(vertexIn.x - 0.5D, vertexIn.y + 0.5D, -vertexIn.z + 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
-		}
-	});
 	public static final IModel MIRE_SNAIL_EGG = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelMireSnailEgg(), new ResourceLocation("thebetweenlands:items/mire_snail_egg"), 16, 16);
 
 	//Misc
@@ -177,6 +174,27 @@ public class ModelRegistry {
 		}
 	});
 
+	public static final IModel DUNGEON_WALL_CANDLE = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelDungeonWallCandle(), new ResourceLocation("thebetweenlands:blocks/dungeon_wall_candle"), new ResourceLocation("thebetweenlands:particle/block/dungeon_wall_candle_particle"), 32, 32);
+	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_1 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelWoodSupportBeam1(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_1"), new ResourceLocation("thebetweenlands:particle/block/wood_support_beam_particle"), 64, 64);
+	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_2 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelWoodSupportBeam2(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_2"), new ResourceLocation("thebetweenlands:particle/block/wood_support_beam_particle"), 64, 64);
+	public static final IModel WOODEN_SUPPORT_BEAM_ROTTEN_3 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelWoodSupportBeam3(), new ResourceLocation("thebetweenlands:blocks/wooden_support_beam_rotten_3"), new ResourceLocation("thebetweenlands:particle/block/wood_support_beam_particle"), 64, 64);
+	public static final IModel MUD_TOWER_BRAZIER = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelMudTowerBrazier(), new ResourceLocation("thebetweenlands:blocks/mud_tower_brazier"), new ResourceLocation("thebetweenlands:particle/block/mud_tower_brazier_particle"), 128, 128);
+	public static final IModel MUD_BRICK_ALCOVE = new ModelAlcove(MODEL_TEXTURE_PACKER, new ResourceLocation[] {
+			new ResourceLocation("thebetweenlands:blocks/mud_brick_alcove_0"),
+			new ResourceLocation("thebetweenlands:blocks/mud_brick_alcove_1"),
+			new ResourceLocation("thebetweenlands:blocks/mud_brick_alcove_2"),
+			new ResourceLocation("thebetweenlands:blocks/mud_brick_alcove_3"),
+			new ResourceLocation("thebetweenlands:blocks/mud_brick_alcove_4")
+			}, new ResourceLocation("thebetweenlands:particle/block/mud_brick_alcove_particle"), 128, 128);
+	public static final ModelFromModelBase LOOT_URN_1 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootUrn1(), new ResourceLocation("thebetweenlands:blocks/loot_urn_1"), new ResourceLocation("thebetweenlands:particle/block/loot_urn_particle"), 64, 32);
+	public static final ModelFromModelBase LOOT_URN_2 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootUrn2(), new ResourceLocation("thebetweenlands:blocks/loot_urn_2"), new ResourceLocation("thebetweenlands:particle/block/loot_urn_particle"), 64, 32);
+	public static final ModelFromModelBase LOOT_URN_3 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootUrn3(), new ResourceLocation("thebetweenlands:blocks/loot_urn_3"), new ResourceLocation("thebetweenlands:particle/block/loot_urn_particle"), 64, 32);
+	public static final ModelFromModelBase LOOT_POT_1 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootPot1(), new ResourceLocation("thebetweenlands:blocks/loot_pot_1"), new ResourceLocation("thebetweenlands:particle/block/loot_pot_1_particle"), 64, 32);
+	public static final ModelFromModelBase LOOT_POT_2 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootPot2(), new ResourceLocation("thebetweenlands:blocks/loot_pot_2"), new ResourceLocation("thebetweenlands:particle/block/loot_pot_2_particle"), 64, 32);
+	public static final ModelFromModelBase LOOT_POT_3 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootPot3(), new ResourceLocation("thebetweenlands:blocks/loot_pot_3"), new ResourceLocation("thebetweenlands:particle/block/loot_pot_3_particle"), 64, 32);
+	
+	
+	
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 
 	private static final ICustomRegistrar DEFAULT_REGISTRAR = new DefaultRegistrar(CustomModelManager.INSTANCE);

@@ -1,6 +1,10 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.Random;
+
+
 import net.minecraft.block.state.IBlockState;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
@@ -8,6 +12,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
+
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.world.gen.feature.WorldGenSmallSpiritTree;
@@ -20,20 +28,23 @@ import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 
+
 //MINE!!
 public class TestItem extends Item {
 	public TestItem() {
 		this.setMaxStackSize(1);
+		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!worldIn.isRemote) {
-			IBlockState state = worldIn.getBlockState(pos);
+			if (!worldIn.isRemote) {
+		/*	IBlockState state = worldIn.getBlockState(pos);
 			if (state.getBlock() instanceof BlockGenericDugSoil) {
 				TileEntityDugSoil te = (TileEntityDugSoil) worldIn.getTileEntity(pos);
 				te.setDecay(20);
 			}
+		/*	
 		/*
 			WorldGenTarPoolDungeon gen = new WorldGenTarPoolDungeon();
 			gen.generate(worldIn, itemRand, pos.up());
@@ -50,10 +61,10 @@ public class TestItem extends Item {
             WorldGenSpawnerStructure smallRuins = new WorldGenSpawnerStructure();
             smallRuins.generate(worldIn, itemRand, pos.up());
 		*/
-		
+		/*
 			WorldGenWightFortress fortress = new WorldGenWightFortress();
 			fortress.generate(worldIn, itemRand, pos.up());
-		
+		*/
 		/*
 			WorldGenSmallRuins ruins = new WorldGenSmallRuins();
 			ruins.generate(worldIn, itemRand, pos.up());
@@ -90,12 +101,20 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
+		
+		/*	WorldGenCragrockTower tower = new WorldGenCragrockTower();
+
 		/*
 			WorldGenCragrockTower tower = new WorldGenCragrockTower();
+
 			if(tower.generate(worldIn, itemRand, pos.up(8).add(8, 0, 0))) {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
+			WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
+			//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
+			dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
+
 		/*
 			WorldGenNibbletwigTree tree = new WorldGenNibbletwigTree();
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
@@ -119,7 +138,8 @@ public class TestItem extends Item {
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
 				//playerIn.setHeldItem(hand, null);
 			}
-		*/
+
+		
 		/*
 			ItemStack stack = player.getHeldItem(hand);
 			NBTTagCompound nbt = stack.getOrCreateSubCompound("pos");

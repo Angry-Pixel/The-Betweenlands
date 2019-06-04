@@ -43,6 +43,8 @@ public class RenderChestBetweenlands extends TileEntitySpecialRenderer<TileEntit
 		int i;
 
 		if(te == null) {
+			this.bindTexture(TEXTURE_WEEDWOOD);
+			
 			GlStateManager.pushMatrix();
 			GlStateManager.enableRescaleNormal();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);

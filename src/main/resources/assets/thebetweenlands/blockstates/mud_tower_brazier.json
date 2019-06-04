@@ -1,0 +1,14 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "custom": {
+      "particle_texture": "thebetweenlands:blocks/rotten_bark"
+    }
+  },
+  "variants": {
+      "half": {
+        "upper": { "model": "thebetweenlands:internal/blank" },
+        "lower": { "model": "thebetweenlands:internal/mud_tower_brazier"}
+      }
+  }
+}

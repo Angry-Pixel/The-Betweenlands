@@ -47,6 +47,6 @@ public class DefaultParticleBatches {
 	//Specific batches (might be rendered from somewhere else than the main particle renderer)
 	public static final ParticleBatch WISPS = BatchedParticleRenderer.INSTANCE.registerBatchType(TRANSLUCENT_GLOWING.type());
 	public static final ParticleBatch GAS_CLOUDS = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().depthMaskPass(true).texture(null).end().build(), false);
-	public static final ParticleBatch HEAT_HAZE_PARTICLE_ATLAS = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().texture(PARTICLE_ATLAS).end().filter(SHADER_FILTER).build(), false);
-	public static final ParticleBatch HEAT_HAZE_BLOCK_ATLAS = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().texture(BLOCK_ATLAS).end().filter(SHADER_FILTER).build(), false);
+	public static final ParticleBatch HEAT_HAZE_PARTICLE_ATLAS = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().blend(SourceFactor.SRC_ALPHA, DestFactor.ONE).depthMaskPass(true).texture(PARTICLE_ATLAS).end().filter(SHADER_FILTER).build(), false);
+	public static final ParticleBatch HEAT_HAZE_BLOCK_ATLAS = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().blend(SourceFactor.SRC_ALPHA, DestFactor.ONE).depthMaskPass(true).texture(BLOCK_ATLAS).end().filter(SHADER_FILTER).build(), false);
 }

@@ -10,21 +10,30 @@ import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.common.tile.TileEntityAspectrusCrop;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
+import thebetweenlands.common.tile.TileEntityBeamOrigin;
+import thebetweenlands.common.tile.TileEntityBeamRelay;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityDugSoil;
+import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
+import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.common.tile.TileEntityHopperBetweenlands;
 import thebetweenlands.common.tile.TileEntityInfuser;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityItemShelf;
 import thebetweenlands.common.tile.TileEntityLootPot;
+import thebetweenlands.common.tile.TileEntityLootUrn;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMossBed;
+import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
+import thebetweenlands.common.tile.TileEntityMudBricksSpikeTrap;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
+import thebetweenlands.common.tile.TileEntityMudTilesSpikeTrap;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPresent;
+import thebetweenlands.common.tile.TileEntityPuffshroom;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntityRubberTap;
@@ -37,6 +46,7 @@ import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
+import thebetweenlands.common.tile.spawner.TileEntityMudBricksSpawnerHole;
 import thebetweenlands.common.tile.spawner.TileEntityTarBeastSpawner;
 
 public class TileEntityRegistry {
@@ -76,7 +86,17 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityAspectrusCrop.class, "aspectrus_crop");
 		registerTileEntity(TileEntityRepeller.class, "repeller");
 		registerTileEntity(TileEntityPresent.class, "present");
+		registerTileEntity(TileEntityPuffshroom.class, "puffshroom");
+		registerTileEntity(TileEntityBeamOrigin.class, "beam_origin");
+		registerTileEntity(TileEntityBeamRelay.class, "beam_relay");
+		registerTileEntity(TileEntityMudBricksSpawnerHole.class, "mud_bricks_spawner_hole");
 		registerTileEntity(TileEntityWaystone.class, "waystone");
+		registerTileEntity(TileEntityMudBrickAlcove.class, "mud_bricks_alcove");
+		registerTileEntity(TileEntityLootUrn.class, "loot_urn");
+		registerTileEntity(TileEntityDungeonDoorRunes.class, "dungeon_door_runes");
+		registerTileEntity(TileEntityDungeonDoorCombination.class, "dungeon_door_combination");
+		registerTileEntity(TileEntityMudBricksSpikeTrap.class, "mud_bricks_spike_trap");
+		registerTileEntity(TileEntityMudTilesSpikeTrap.class, "mud_tiles_spike_trap");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

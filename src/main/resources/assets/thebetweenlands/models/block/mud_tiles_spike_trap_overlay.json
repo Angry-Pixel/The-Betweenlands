@@ -1,0 +1,15 @@
+{
+  "textures": {
+    "particle": "thebetweenlands:tiles/mud_tiles_spike_block_active_top",
+    "overlay": "thebetweenlands:tiles/mud_tiles_spike_block_active_top"
+  },
+  "elements": [
+    {
+      "from": [ 0, 16.025, 0 ],
+      "to": [ 16, 16.025, 16 ],
+      "faces": {
+        "up":    { "uv": [ 0,  0, 16, 16 ], "texture": "#overlay" }
+      }
+    }
+  ]
+}
