@@ -194,8 +194,8 @@ public class ModelAshSprite extends ModelBase {
     @Override
 	public void setLivingAnimations(EntityLivingBase entity, float limbSwing, float limbSwingAngle, float partialRenderTicks) {
     	EntityAshSprite sprite = (EntityAshSprite) entity;
-    	float flap = MathHelper.sin((sprite.ticksExisted) * 0.6F) * 0.8F;
-    	float flapJaw = MathHelper.sin((sprite.ticksExisted) * 0.4F) * 0.75F;
+    	float flap = MathHelper.sin((sprite.ticksExisted + partialRenderTicks) * 0.6F) * 0.8F;
+    	float flapJaw = MathHelper.sin((sprite.ticksExisted + partialRenderTicks) * 0.4F) * 0.75F;
     	jaw_lower.rotateAngleX = convertDegtoRad(26F) - flapJaw * 0.5F;
     	cloth_left_back1.rotateAngleZ = convertDegtoRad(0F) - flap * 0.0625F;
     	cloth_left_back2.rotateAngleZ = convertDegtoRad(-13F) + flap * 0.25F;
