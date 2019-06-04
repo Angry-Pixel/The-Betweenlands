@@ -8,7 +8,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelAshSprite;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
-import thebetweenlands.common.entity.mobs.EntityBarrishee;
 import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)

@@ -2,6 +2,7 @@ package thebetweenlands.client.render.model.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
@@ -188,7 +189,11 @@ public class ModelAshSprite extends ModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
+    	GlStateManager.pushMatrix();
+    	GlStateManager.enableCull();
     	head_base.render(scale);
+    	GlStateManager.disableCull();
+    	GlStateManager.popMatrix();
     }
     
     @Override
