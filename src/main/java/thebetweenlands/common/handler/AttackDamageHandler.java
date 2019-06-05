@@ -83,9 +83,10 @@ public class AttackDamageHandler {
 		DamageSource source = event.getSource();
 		float damage = event.getAmount();
 
-		if(attackedEntity instanceof IEntityBL && source.getTrueSource() instanceof EntityLivingBase && ((EntityLivingBase) source.getTrueSource()).getActiveHand() != null) {
+		Entity entity = source.getTrueSource();
+		if(attackedEntity instanceof IEntityBL && entity instanceof EntityLivingBase && ((EntityLivingBase) entity).getActiveHand() != null) {
 			//BL mobs overworld item resistance
-			EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
+			EntityLivingBase attacker = (EntityLivingBase) entity;
 			ItemStack heldItem = attacker.getHeldItem(attacker.getActiveHand());
 
 			if (heldItem.isEmpty() || OverworldItemHandler.isToolWeakened(heldItem)) {
@@ -128,11 +129,9 @@ public class AttackDamageHandler {
 
 		damage = CircleGemHelper.handleAttack(source, attackedEntity, damage);
 
-		if(source.getTrueSource() instanceof EntityLivingBase) {
-			EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
-
-			if(attacker.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = attacker.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		if(entity instanceof EntityLivingBase) {
+			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+			if(cap != null) {
 				IInventory inv = cap.getInventory(EnumEquipmentInventory.RING);
 				int rings = 0;
 

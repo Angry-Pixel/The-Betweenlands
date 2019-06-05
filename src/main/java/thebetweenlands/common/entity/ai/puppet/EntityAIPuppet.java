@@ -1,11 +1,5 @@
 package thebetweenlands.common.entity.ai.puppet;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,6 +8,11 @@ import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
 
 public class EntityAIPuppet extends EntityAIBase {
 	protected final EntityLivingBase taskOwner;
@@ -72,9 +71,9 @@ public class EntityAIPuppet extends EntityAIBase {
 
 			if(target == this.puppeteer.get()) {
 				creature.setAttackTarget(null);
-			} else if(target != null && target.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
-				IPuppetCapability targetCap = target.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
-				if(targetCap.getPuppeteer() == this.puppeteer.get()) {
+			} else if(target != null) {
+				IPuppetCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+				if(cap != null && cap.getPuppeteer() == this.puppeteer.get()) {
 					creature.setAttackTarget(null);
 				}
 			}

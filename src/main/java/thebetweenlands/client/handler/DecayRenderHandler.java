@@ -1,10 +1,5 @@
 package thebetweenlands.client.handler;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Predicate;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelBase;
@@ -30,6 +25,11 @@ import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.RenderUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Predicate;
 
 public class DecayRenderHandler {
 	public static final ResourceLocation PLAYER_DECAY_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/player_decay.png");
@@ -58,8 +58,8 @@ public class DecayRenderHandler {
 
 		@Override
 		public void doRenderLayer(AbstractClientPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-				IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+			IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+			if(cap != null) {
 				if(cap.isDecayEnabled()) {
 					int decay = cap.getDecayStats().getDecayLevel();
 					if(decay > 0) {
@@ -100,9 +100,9 @@ public class DecayRenderHandler {
 	public static void onPreRenderPlayer(RenderPlayerEvent.Pre event) {
 		EntityPlayer player = event.getEntityPlayer();
 
-		if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-			IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-			if(capability.isDecayEnabled() && capability.getDecayStats().getDecayLevel() > 0) {
+		IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+		if(cap != null) {
+			if(cap.isDecayEnabled() && cap.getDecayStats().getDecayLevel() > 0) {
 				if(!RenderUtils.doesRendererHaveLayer(event.getRenderer(), LayerDecay.class, false)) {
 					event.getRenderer().addLayer(new LayerDecay(event.getRenderer()));
 				}
@@ -113,13 +113,12 @@ public class DecayRenderHandler {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRenderHand(RenderSpecificHandEvent event) {
 		GlStateManager.pushMatrix();
-
 		EntityPlayer player = Minecraft.getMinecraft().player;
 
-		if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-			IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-			if(capability.isDecayEnabled() && capability.getDecayStats().getDecayLevel() > 0) {
-				int decay = capability.getDecayStats().getDecayLevel();
+		if(player != null) {
+			IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+			if(cap != null && cap.isDecayEnabled() && cap.getDecayStats().getDecayLevel() > 0) {
+				int decay = cap.getDecayStats().getDecayLevel();
 				boolean isMainHand = event.getHand() == EnumHand.MAIN_HAND;
 				if(isMainHand && !player.isInvisible() && event.getItemStack().isEmpty()) {
 					EnumHandSide enumhandside = isMainHand ? player.getPrimaryHand() : player.getPrimaryHand().opposite();

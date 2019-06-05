@@ -1,11 +1,5 @@
 package thebetweenlands.client.handler;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
@@ -20,10 +14,15 @@ import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
-import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ItemTooltipHandler {
 public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.##");
@@ -58,10 +57,10 @@ public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.#
 		
 		if(player != null) {
 			if(FoodSicknessHandler.isFoodSicknessEnabled(player.getEntityWorld()) && stack.getItem() instanceof ItemFood && stack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)stack.getItem()).canGetSickOf(player, stack)) {
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
-					IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
-					FoodSickness sickness = cap.getSickness((ItemFood)stack.getItem());
-					int hatred = cap.getFoodHatred((ItemFood)stack.getItem());
+				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
+				if(cap != null) {
+					FoodSickness sickness = cap.getSickness(stack.getItem());
+					int hatred = cap.getFoodHatred(stack.getItem());
 					((IFoodSicknessItem)stack.getItem()).getSicknessTooltip(stack, sickness, hatred, event.getFlags().isAdvanced(), toolTip);
 				}
 			}

@@ -1,16 +1,11 @@
 package thebetweenlands.common.item.food;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -22,6 +17,9 @@ import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.TranslationHelper;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 
 public class ItemChiromawWing extends ItemBLFood {
@@ -35,8 +33,8 @@ public class ItemChiromawWing extends ItemBLFood {
 	protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
 		super.onFoodEaten(stack, world, player);
 
-		if (!world.isRemote && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
-			IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
+		IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
+		if (!world.isRemote && cap != null) {
 			if (FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK) {
 				cap.increaseFoodHatred(this, FoodSickness.SICK.maxHatred, FoodSickness.SICK.maxHatred);
 				if(player instanceof EntityPlayerMP) {
@@ -52,12 +50,14 @@ public class ItemChiromawWing extends ItemBLFood {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
 		EntityPlayer player = FMLClientHandler.instance().getClientPlayerEntity();
-		if (player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
+		if (player != null) {
 			IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
-			if (FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK) {
-				tooltip.add(TranslationHelper.translateToLocal("tooltip.chiromaw_wing.eat"));
-			} else {
-				tooltip.add(TranslationHelper.translateToLocal("tooltip.chiromaw_wing.dont_eat"));
+			if (cap != null) {
+				if (FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK) {
+					tooltip.add(TranslationHelper.translateToLocal("tooltip.chiromaw_wing.eat"));
+				} else {
+					tooltip.add(TranslationHelper.translateToLocal("tooltip.chiromaw_wing.dont_eat"));
+				}
 			}
 		}
 	}

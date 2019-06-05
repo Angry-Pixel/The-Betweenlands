@@ -1,7 +1,6 @@
 package thebetweenlands.common.handler;
 
 import com.google.common.collect.ImmutableList;
-
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
@@ -36,18 +35,17 @@ public class PlayerDecayHandler {
 		EntityPlayer player = event.player;
 
 		if(!player.world.isRemote && event.phase == Phase.START) {
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-
-				DecayStats stats = capability.getDecayStats();
+			IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+			if(cap != null) {
+				DecayStats stats = cap.getDecayStats();
 
 				IAttributeInstance attr = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
 				
 				if(attr != null) {
 					int currentMaxHealth = (int) attr.getBaseValue();
 
-					int decayMaxHealth = (int)(capability.getMaxPlayerHealth(stats.getDecayLevel()) / 2.0F) * 2;
-					int prevDecayMaxHealth = (int)(capability.getMaxPlayerHealth(stats.getPrevDecayLevel()) / 2.0F) * 2;
+					int decayMaxHealth = (int)(cap.getMaxPlayerHealth(stats.getDecayLevel()) / 2.0F) * 2;
+					int prevDecayMaxHealth = (int)(cap.getMaxPlayerHealth(stats.getPrevDecayLevel()) / 2.0F) * 2;
 					int healthDiff = decayMaxHealth - prevDecayMaxHealth;
 
 					if(healthDiff != 0) {
@@ -57,7 +55,7 @@ public class PlayerDecayHandler {
 						healthDiff = newHealth - currentMaxHealth;
 
 						//Don't give more health back than was removed
-						healthDiff = Math.min(healthDiff, capability.getRemovedHealth());
+						healthDiff = Math.min(healthDiff, cap.getRemovedHealth());
 
 						//Update health
 						attr.setBaseValue(currentMaxHealth + healthDiff);
@@ -66,11 +64,11 @@ public class PlayerDecayHandler {
 						}
 
 						//Keep track of how much was removed
-						capability.setRemovedHealth(capability.getRemovedHealth() - healthDiff);
+						cap.setRemovedHealth(cap.getRemovedHealth() - healthDiff);
 					}
 				}
 
-				if(capability.isDecayEnabled()) {
+				if(cap.isDecayEnabled()) {
 					int decay = stats.getDecayLevel();
 
 					if (decay >= 16) {
@@ -124,10 +122,10 @@ public class PlayerDecayHandler {
 		if(!event.getEntityLiving().world.isRemote && event.getEntityLiving() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+			IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+			if(cap != null) {
 				float decayBaseSpeed = getDecayBaseSpeed(player.world.getDifficulty());
-				capability.getDecayStats().addDecayAcceleration(decayBaseSpeed * 60);
+				cap.getDecayStats().addDecayAcceleration(decayBaseSpeed * 60);
 			}
 		}
 	}
@@ -166,10 +164,10 @@ public class PlayerDecayHandler {
 		if(!event.getEntityLiving().getEntityWorld().isRemote && event.getDuration() <= 1) {
 			if (!event.getItem().isEmpty() && event.getItem().getItem() instanceof IDecayFood && event.getEntityLiving() instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+				IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+				if(cap != null) {
 					IDecayFood food = (IDecayFood) event.getItem().getItem();
-					capability.getDecayStats().addStats(-food.getDecayHealAmount(event.getItem()), food.getDecayHealSaturation(event.getItem()));
+					cap.getDecayStats().addStats(-food.getDecayHealAmount(event.getItem()), food.getDecayHealSaturation(event.getItem()));
 				}
 			}
 		}
@@ -183,9 +181,9 @@ public class PlayerDecayHandler {
 			if(isDecayFood) {
 				boolean canEatFood = player.getFoodStats().needFood() && event.getItem().getItem() instanceof ItemFood && ((ItemFood)event.getItem().getItem()).getHealAmount(event.getItem()) > 0;
 				boolean canEatDecayFood = false;
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-					canEatDecayFood = capability.getDecayStats().getDecayLevel() > 0;
+				IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+				if(cap != null) {
+					canEatDecayFood = cap.getDecayStats().getDecayLevel() > 0;
 				}
 				if (!canEatFood && !canEatDecayFood) {
 					event.setDuration(-1);

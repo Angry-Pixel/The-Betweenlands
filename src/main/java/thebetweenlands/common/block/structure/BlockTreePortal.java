@@ -1,10 +1,5 @@
 package thebetweenlands.common.block.structure;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -31,12 +26,16 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.teleporter.TeleporterHandler;
+
+import javax.annotation.Nullable;
+import java.util.List;
+import java.util.Random;
 
 public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.<EnumFacing.Axis>create("axis", EnumFacing.Axis.class, new EnumFacing.Axis[]{EnumFacing.Axis.X, EnumFacing.Axis.Z});
@@ -246,8 +245,8 @@ public class BlockTreePortal extends BasicBlock implements ICustomItemBlock {
 					targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDefaultReturnDimension;
 				}
 				if(targetDim != entityIn.dimension) {
-					if (entityIn.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
-						IPortalCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
+					IPortalCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
+					if (cap != null) {
 						cap.setInPortal(true);
 					} else if (!worldIn.isRemote && worldIn instanceof WorldServer) {
 

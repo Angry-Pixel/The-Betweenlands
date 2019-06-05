@@ -34,9 +34,8 @@ public class MessageUpdateSummoningState extends MessageBase {
 	public IMessage process(MessageContext ctx) {
 		if(ctx.getServerHandler() != null) {
 			EntityPlayer player = ctx.getServerHandler().player;
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {
-				ISummoningCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SUMMON, null);
-
+			ISummoningCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SUMMON, null);
+			if (cap != null) {
 				if(!this.active && cap.isActive()) {
 					cap.setActive(false);
 					cap.setCooldownTicks(ItemRingOfSummoning.USE_COOLDOWN);

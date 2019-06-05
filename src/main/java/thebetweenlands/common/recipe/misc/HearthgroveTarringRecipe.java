@@ -70,8 +70,8 @@ public class HearthgroveTarringRecipe extends IForgeRegistryEntry.Impl<IRecipe> 
 		NonNullList<ItemStack> ret = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 		for(int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if(stack.getItem().hasContainerItem(stack) && stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
-				IFluidHandlerItem cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+			IFluidHandlerItem cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+			if(cap != null && stack.getItem().hasContainerItem(stack)) {
 				cap.drain(new FluidStack(FluidRegistry.TAR, Fluid.BUCKET_VOLUME), true);
 				ret.set(i, cap.getContainer()); //Leave container handling up to the fluid handler
 			}
