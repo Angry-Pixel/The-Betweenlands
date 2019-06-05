@@ -15,10 +15,10 @@ public class ElixirDecay extends ElixirEffect {
 	protected void performEffect(EntityLivingBase entity, int strength) {
 		if(!entity.world.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-				if(capability.isDecayEnabled()) {
-					capability.getDecayStats().addDecayAcceleration(4.0F);
+			IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+			if(cap != null) {
+				if(cap.isDecayEnabled()) {
+					cap.getDecayStats().addDecayAcceleration(4.0F);
 				}
 			}
 		}

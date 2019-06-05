@@ -34,9 +34,8 @@ public class TMGEquipmentInventory extends AbstractSpecialInventory {
         if (equipmentCapability != null) {
             NBTTagCompound compound = new NBTTagCompound();
             boolean setTag = false;
-            EnumEquipmentInventory[] equipmentInventories = EnumEquipmentInventory.values();
 
-            for (EnumEquipmentInventory type : equipmentInventories) {
+            for (EnumEquipmentInventory type : EnumEquipmentInventory.VALUES) {
                 IInventory inv = equipmentCapability.getInventory(type);
 
                 NBTTagList tagList = SpecialInventoryHelper.getTagListFromIInventory(inv);
@@ -58,12 +57,11 @@ public class TMGEquipmentInventory extends AbstractSpecialInventory {
     @Override
     public void insertInventory(EntityPlayer player, NBTBase compound, boolean shouldForce) {
         if (compound instanceof NBTTagCompound) {
-            EnumEquipmentInventory[] equipmentInventories = EnumEquipmentInventory.values();
             IEquipmentCapability equipmentCapability = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 
             if (equipmentCapability != null) {
 
-                for (EnumEquipmentInventory type : equipmentInventories) {
+                for (EnumEquipmentInventory type : EnumEquipmentInventory.VALUES) {
                     if (((NBTTagCompound) compound).hasKey(type.ordinal() + "")) {
                         NBTTagList tagList = (NBTTagList) ((NBTTagCompound) compound).getTag(type.ordinal() + "");
 
@@ -103,8 +101,7 @@ public class TMGEquipmentInventory extends AbstractSpecialInventory {
         List<ItemStack> ret = new ArrayList<>();
 
         if (compound instanceof NBTTagCompound) {
-            EnumEquipmentInventory[] equipmentInventories = EnumEquipmentInventory.values();
-            for (EnumEquipmentInventory type : equipmentInventories) {
+            for (EnumEquipmentInventory type : EnumEquipmentInventory.VALUES) {
                 if (((NBTTagCompound) compound).hasKey(type.ordinal() + "")) {
                     NBTTagList tagList = (NBTTagList) ((NBTTagCompound) compound).getTag(type.ordinal() + "");
 

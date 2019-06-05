@@ -1,10 +1,5 @@
 package thebetweenlands.client.render.block;
 
-import java.util.BitSet;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -22,6 +17,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.BitSet;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class IsolatedBlockModelRenderer {
@@ -147,10 +146,10 @@ public class IsolatedBlockModelRenderer {
 
 	private boolean renderModelSmooth(BlockPos pos, IBakedModel model, IBlockState state, BufferBuilder buffer, long rand) {
 		boolean flag = false;
-		float[] blockBounds = new float[EnumFacing.values().length * 2];
+		float[] blockBounds = new float[EnumFacing.VALUES.length * 2];
 		BitSet bitset = new BitSet(3);
 
-		for (EnumFacing facing : EnumFacing.values()) {
+		for (EnumFacing facing : EnumFacing.VALUES) {
 			List<BakedQuad> list = model.getQuads(state, facing, rand);
 
 			if (!list.isEmpty() && (culler == null || culler.shouldSideBeRendered(state, facing))) {
@@ -173,7 +172,7 @@ public class IsolatedBlockModelRenderer {
 		boolean flag = false;
 		BitSet bitset = new BitSet(3);
 
-		for (EnumFacing facing : EnumFacing.values()) {
+		for (EnumFacing facing : EnumFacing.VALUES) {
 			List<BakedQuad> list = model.getQuads(state, facing, rand);
 
 			if (!list.isEmpty() && (culler == null || culler.shouldSideBeRendered(state, facing))) {
@@ -347,12 +346,12 @@ public class IsolatedBlockModelRenderer {
 			blockBounds[EnumFacing.UP.getIndex()] = f4;
 			blockBounds[EnumFacing.NORTH.getIndex()] = f2;
 			blockBounds[EnumFacing.SOUTH.getIndex()] = f5;
-			blockBounds[EnumFacing.WEST.getIndex() + EnumFacing.values().length] = 1.0F - f;
-			blockBounds[EnumFacing.EAST.getIndex() + EnumFacing.values().length] = 1.0F - f3;
-			blockBounds[EnumFacing.DOWN.getIndex() + EnumFacing.values().length] = 1.0F - f1;
-			blockBounds[EnumFacing.UP.getIndex() + EnumFacing.values().length] = 1.0F - f4;
-			blockBounds[EnumFacing.NORTH.getIndex() + EnumFacing.values().length] = 1.0F - f2;
-			blockBounds[EnumFacing.SOUTH.getIndex() + EnumFacing.values().length] = 1.0F - f5;
+			blockBounds[EnumFacing.WEST.getIndex() + EnumFacing.VALUES.length] = 1.0F - f;
+			blockBounds[EnumFacing.EAST.getIndex() + EnumFacing.VALUES.length] = 1.0F - f3;
+			blockBounds[EnumFacing.DOWN.getIndex() + EnumFacing.VALUES.length] = 1.0F - f1;
+			blockBounds[EnumFacing.UP.getIndex() + EnumFacing.VALUES.length] = 1.0F - f4;
+			blockBounds[EnumFacing.NORTH.getIndex() + EnumFacing.VALUES.length] = 1.0F - f2;
+			blockBounds[EnumFacing.SOUTH.getIndex() + EnumFacing.VALUES.length] = 1.0F - f5;
 		}
 
 		switch (facing) {
@@ -605,7 +604,7 @@ public class IsolatedBlockModelRenderer {
 		private final int shape;
 
 		private Orientation(EnumFacing p_i46233_3_, boolean p_i46233_4_) {
-			this.shape = p_i46233_3_.getIndex() + (p_i46233_4_ ? EnumFacing.values().length : 0);
+			this.shape = p_i46233_3_.getIndex() + (p_i46233_4_ ? EnumFacing.VALUES.length : 0);
 		}
 	}
 

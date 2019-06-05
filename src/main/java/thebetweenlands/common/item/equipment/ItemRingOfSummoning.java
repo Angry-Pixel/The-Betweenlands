@@ -1,13 +1,8 @@
 package thebetweenlands.common.item.equipment;
 
-import java.util.List;
-
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.world.World;
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IEquipmentCapability;
@@ -33,6 +29,7 @@ import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.NBTHelper;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemRingOfSummoning extends ItemRing {
 	public static final int MAX_USE_TIME = 100;
@@ -57,65 +54,62 @@ public class ItemRingOfSummoning extends ItemRing {
 
 	@Override
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
-		if(!entity.world.isRemote && entity instanceof EntityPlayer && entity.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {
+		if(!entity.world.isRemote && entity instanceof EntityPlayer) {
 			ISummoningCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_SUMMON, null);
+			if (cap != null) {
+				NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 
-			NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+				if (cap.getCooldownTicks() > 0) {
+					cap.setCooldownTicks(cap.getCooldownTicks() - 1);
+					nbt.setBoolean("ringActive", false);
+				} else {
+					if (cap.isActive()) {
+						cap.setActiveTicks(cap.getActiveTicks() + 1);
 
-			if(cap.getCooldownTicks() > 0) {
-				cap.setCooldownTicks(cap.getCooldownTicks() - 1);
-				nbt.setBoolean("ringActive", false);
-			} else {
-				if(cap.isActive()) {
-					cap.setActiveTicks(cap.getActiveTicks() + 1);
+						nbt.setBoolean("ringActive", true);
 
-					nbt.setBoolean("ringActive", true);
+						if (cap.getActiveTicks() > MAX_USE_TIME) {
+							cap.setActive(false);
+							cap.setCooldownTicks(USE_COOLDOWN);
+						} else {
+							int arms = entity.world.getEntitiesWithinAABB(EntityMummyArm.class, entity.getEntityBoundingBox().grow(18), e -> e.getDistance(entity) <= 18.0D).size();
 
-					if(cap.getActiveTicks() > MAX_USE_TIME) {
-						cap.setActive(false);
-						cap.setCooldownTicks(USE_COOLDOWN);
-					} else {
-						int arms = entity.world.getEntitiesWithinAABB(EntityMummyArm.class, entity.getEntityBoundingBox().grow(18), e -> e.getDistance(entity) <= 18.0D).size();
+							if (arms < MAX_ARMS) {
+								List<EntityLivingBase> targets = entity.world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(16), e -> e instanceof EntityLiving && e.getDistance(entity) <= 16.0D && e != entity && (e instanceof EntityMob || e instanceof IMob));
 
-						if(arms < MAX_ARMS) {
-							List<EntityLivingBase> targets = entity.world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(16),
-									e -> e instanceof EntityLiving && e.getDistance(entity) <= 16.0D && e != entity && (e instanceof EntityMob || e instanceof IMob));
+								BlockPos targetPos = null;
 
-							BlockPos targetPos = null;
-
-							if(!targets.isEmpty()) {
-								EntityLivingBase target = targets.get(entity.world.rand.nextInt(targets.size()));
-								boolean isAttacked = !entity.world.getEntitiesWithinAABB(EntityMummyArm.class, target.getEntityBoundingBox()).isEmpty();
-								if(!isAttacked) {
-									targetPos = target.getPosition();
+								if (!targets.isEmpty()) {
+									EntityLivingBase target = targets.get(entity.world.rand.nextInt(targets.size()));
+									boolean isAttacked = !entity.world.getEntitiesWithinAABB(EntityMummyArm.class, target.getEntityBoundingBox()).isEmpty();
+									if (!isAttacked) {
+										targetPos = target.getPosition();
+									}
 								}
-							}
 
-							if(targetPos == null && entity.world.rand.nextInt(3) == 0) {
-								targetPos = entity.getPosition().add(
-										entity.world.rand.nextInt(16) - 8, 
-										entity.world.rand.nextInt(6) - 3, 
-										entity.world.rand.nextInt(16) - 8);
-								boolean isAttacked = !entity.world.getEntitiesWithinAABB(EntityMummyArm.class, new AxisAlignedBB(targetPos)).isEmpty();
-								if(isAttacked) {
-									targetPos = null;
+								if (targetPos == null && entity.world.rand.nextInt(3) == 0) {
+									targetPos = entity.getPosition().add(entity.world.rand.nextInt(16) - 8, entity.world.rand.nextInt(6) - 3, entity.world.rand.nextInt(16) - 8);
+									boolean isAttacked = !entity.world.getEntitiesWithinAABB(EntityMummyArm.class, new AxisAlignedBB(targetPos)).isEmpty();
+									if (isAttacked) {
+										targetPos = null;
+									}
 								}
-							}
 
-							if(targetPos != null && entity.world.getBlockState(targetPos.down()).isSideSolid(entity.world, targetPos.down(), EnumFacing.UP)) {
-								EntityMummyArm arm = new EntityMummyArm(entity.world);
-								arm.setLocationAndAngles(targetPos.getX() + 0.5D, targetPos.getY(), targetPos.getZ() + 0.5D, 0, 0);
+								if (targetPos != null && entity.world.getBlockState(targetPos.down()).isSideSolid(entity.world, targetPos.down(), EnumFacing.UP)) {
+									EntityMummyArm arm = new EntityMummyArm(entity.world);
+									arm.setLocationAndAngles(targetPos.getX() + 0.5D, targetPos.getY(), targetPos.getZ() + 0.5D, 0, 0);
 
-								if(arm.world.getCollisionBoxes(arm, arm.getEntityBoundingBox()).isEmpty()) {
-									this.drainPower(stack, entity);
-									arm.setOwner(entity);
-									entity.world.spawnEntity(arm);
+									if (arm.world.getCollisionBoxes(arm, arm.getEntityBoundingBox()).isEmpty()) {
+										this.drainPower(stack, entity);
+										arm.setOwner(entity);
+										entity.world.spawnEntity(arm);
+									}
 								}
 							}
 						}
+					} else {
+						nbt.setBoolean("ringActive", false);
 					}
-				} else {
-					nbt.setBoolean("ringActive", false);
 				}
 			}
 		}
@@ -134,10 +128,9 @@ public class ItemRingOfSummoning extends ItemRing {
 	}
 
 	public static boolean isRingActive(Entity entity) {
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		if(cap != null) {
 			IInventory inv = cap.getInventory(EnumEquipmentInventory.RING);
-
 			boolean hasRing = false;
 
 			for(int i = 0; i < inv.getSizeInventory(); i++) {

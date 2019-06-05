@@ -1,12 +1,12 @@
 package thebetweenlands.common.world.gen.feature.tree;
 
-import java.util.Random;
-
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.plant.BlockVineBL;
+
+import java.util.Random;
 
 public class WorldGenGiantTreeDead extends WorldGenGiantTreeTrunk {
 	private static final float TILT_SCALE = 0.2F;
@@ -55,7 +55,7 @@ public class WorldGenGiantTreeDead extends WorldGenGiantTreeTrunk {
 	}
 
 	public void addVineToRandomBlockSide(World world, Random rand, int x, int y, int z) {
-		EnumFacing direction = EnumFacing.values()[2 + rand.nextInt(3)];
+		EnumFacing direction = EnumFacing.VALUES[2 + rand.nextInt(3)];
 		if (world.getBlockState(new BlockPos(x + direction.getXOffset(), y, z + direction.getZOffset())).getMaterial().isReplaceable()) {
 			world.setBlockState(new BlockPos(x + direction.getXOffset(), y, z + direction.getZOffset()), IVY.withProperty(BlockVineBL.getPropertyFor(direction.getOpposite()), Boolean.valueOf(true)), 2);
 		}

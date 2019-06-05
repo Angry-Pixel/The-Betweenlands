@@ -1,18 +1,11 @@
 package thebetweenlands.common.item.misc;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,26 +17,22 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.util.NBTHelper;
 
+import java.util.List;
+import java.util.Random;
+
 public class ItemShimmerStone extends Item {
 	private static final int MAX_SHIMMER_TICKS = 8;
 
 	public ItemShimmerStone() {
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
-		this.addPropertyOverride(new ResourceLocation("shimmer"), new IItemPropertyGetter() {
-			@Override
-			@SideOnly(Side.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return NBTHelper.getStackNBTSafe(stack).getBoolean("shimmering") ? 1.0F : 0.0F;
-			}
-		});
+		this.addPropertyOverride(new ResourceLocation("shimmer"), (stack, worldIn, entityIn) ->
+				NBTHelper.getStackNBTSafe(stack).getBoolean("shimmering") ? 1.0F : 0.0F);
 		this.setMaxStackSize(1);
 	}
 	
@@ -129,7 +118,7 @@ public class ItemShimmerStone extends Item {
 			this.triggerAdvancement(player);
 		}
 
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 	
 	protected void triggerAdvancement(EntityPlayer player) {

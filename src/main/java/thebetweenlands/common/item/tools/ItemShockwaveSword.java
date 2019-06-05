@@ -1,33 +1,21 @@
 package thebetweenlands.common.item.tools;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -42,16 +30,16 @@ import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	public ItemShockwaveSword(ToolMaterial material) {
 		super(material);
-		this.addPropertyOverride(new ResourceLocation("charging"), new IItemPropertyGetter() {
-			@Override
-			public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
-				return stack.getTagCompound() != null && stack.getTagCompound().getInteger("cooldown") < 60 ? 1 : 0;
-			}
-		});
+		this.addPropertyOverride(new ResourceLocation("charging"), (stack, worldIn, entityIn) ->
+				stack.getTagCompound() != null && stack.getTagCompound().getInteger("cooldown") < 60 ? 1 : 0);
 	}
 
 	@SideOnly(Side.CLIENT)

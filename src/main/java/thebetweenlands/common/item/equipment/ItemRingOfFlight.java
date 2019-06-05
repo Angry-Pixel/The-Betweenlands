@@ -1,15 +1,10 @@
 package thebetweenlands.common.item.equipment;
 
-import java.util.List;
-
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.world.World;
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -18,7 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.common.util.Constants;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -38,6 +33,7 @@ import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.NBTHelper;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemRingOfFlight extends ItemRing {
 	public ItemRingOfFlight() {
@@ -60,8 +56,8 @@ public class ItemRingOfFlight extends ItemRing {
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
 		if(entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null)) {
-				IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
+			IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
+			if(cap != null) {
 				cap.setFlightRing(true);
 				if(!cap.canFlyWithoutRing(player) && cap.canFlyWithRing(player, stack)) {
 					double flightHeight = 3.5D;
@@ -159,19 +155,17 @@ public class ItemRingOfFlight extends ItemRing {
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event) {
 		if(event.player != null) {
-			EntityPlayer player = (EntityPlayer) event.player;
+			EntityPlayer player = event.player;
 			if(!player.capabilities.isCreativeMode) {
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null)) {
-					IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
-
+				IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
+				if(cap != null) {
 					if(cap.isFlying()) {
 						cap.setFlightTime(cap.getFlightTime() + 1);
 					}
-
 					ItemStack flightRing = ItemStack.EMPTY;
 
-					if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-						IEquipmentCapability equipmentCap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+					IEquipmentCapability equipmentCap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+					if(equipmentCap != null) {
 						IInventory inv = equipmentCap.getInventory(EnumEquipmentInventory.RING);
 						for(int i = 0; i < inv.getSizeInventory(); i++) {
 							ItemStack stack = inv.getStackInSlot(i);

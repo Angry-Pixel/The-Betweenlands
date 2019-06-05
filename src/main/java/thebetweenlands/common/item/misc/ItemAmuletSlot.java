@@ -37,7 +37,7 @@ public class ItemAmuletSlot extends Item {
 				addAmuletSlot(player, stack, player);
 			}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
 	@Override
@@ -57,8 +57,8 @@ public class ItemAmuletSlot extends Item {
 	}
 
 	public static boolean addAmuletSlot(EntityPlayer player, ItemStack stack, EntityLivingBase entity) {
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		if(cap != null) {
 
 			if(cap.getAmuletSlots() < 3 || player.capabilities.isCreativeMode) {
 				cap.setAmuletSlots(cap.getAmuletSlots() + 1);
@@ -82,8 +82,8 @@ public class ItemAmuletSlot extends Item {
 	}
 
 	public static void removeAmuletSlot(EntityLivingBase entity) {
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		if(cap != null) {
 			if(cap.getAmuletSlots() > 1) {
 				cap.setAmuletSlots(cap.getAmuletSlots() - 1);
 			}
