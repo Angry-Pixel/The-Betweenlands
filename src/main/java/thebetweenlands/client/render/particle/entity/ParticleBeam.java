@@ -1,173 +1,93 @@
 package thebetweenlands.client.render.particle.entity;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import thebetweenlands.client.render.particle.ParticleFactory;
-import thebetweenlands.client.render.particle.ParticleTextureStitcher;
-import thebetweenlands.common.block.IParticleCollidable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.List;
+@SideOnly(Side.CLIENT)
+public class ParticleBeam extends Particle {
+	protected Vec3d end = new Vec3d(0, 0, 0);
+	protected float prevTexUOffset = 0.0f;
+	protected float texUOffset = 0.0f;
+	protected float texUScale = 1.0f;
 
-public class ParticleBeam extends Particle implements ParticleTextureStitcher.IParticleSpriteReceiver {
+	public ParticleBeam(World worldIn, double x, double y, double z, double vx, double vy, double vz, Vec3d end) {
+		super(worldIn, x, y, z, vx, vy, vz);
+		this.end = end;
+	}
 
-    private double preMoveY = posY;
-    private double preMoveX = posX;
-    private double preMoveZ = posZ;
-    private boolean colliding = false;
+	@Override
+	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX,
+			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+		float renderScale = 0.1F * this.particleScale;
 
-    private ParticleBeam(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double p_i46347_8_, double p_i46347_10_, double p_i46347_12_)
-    {
-        this(worldIn, xCoordIn, yCoordIn, zCoordIn, p_i46347_8_, p_i46347_10_, p_i46347_12_, 1.0F);
-    }
+		float rx = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
+		float ry = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
+		float rz = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
 
-    protected ParticleBeam(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double p_i46348_8_, double p_i46348_10_, double p_i46348_12_, float p_i46348_14_) {
-        super(worldIn, xCoordIn, yCoordIn, zCoordIn, 0.0D, 0.0D, 0.0D);
-        this.motionX = p_i46348_8_;
-        this.motionY = p_i46348_10_;
-        this.motionZ = p_i46348_12_;
-        this.particleScale = 1.5F;
-        this.particleMaxAge = 25;
-    }
+		int i = this.getBrightnessForRender(partialTicks);
+		int j = i >> 16 & 65535;
+		int k = i & 65535;
 
-    @Override
-    public void onUpdate() {
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
+		double len = this.end.length();
 
-        if (this.particleAge++ >= this.particleMaxAge)
-        {
-            this.setExpired();
-        }
+		Vec3d v1 = new Vec3d((double)(-rotationX - rotationXY), (double)(-rotationZ), (double)(-rotationYZ - rotationXZ));
+		Vec3d v2 = new Vec3d((double)(-rotationX + rotationXY), (double)(rotationZ), (double)(-rotationYZ + rotationXZ));
 
-        this.motionY += (motionY > 0 ? 0.004D: 0);
-        this.move(this.motionX, this.motionY, this.motionZ);
+		Vec3d facing = v1.crossProduct(v2);
 
-        if (this.posY == this.prevPosY)
-        {
-            this.motionX *= 1.0D;
-            this.motionZ *= 1.0D;
-        }
+		Vec3d perpendicularDir = this.end.crossProduct(facing).normalize();
 
-        this.motionX *= 0.9599999785423279D;
-        this.motionY *= 0.9599999785423279D;
-        this.motionZ *= 0.9599999785423279D;
+		if(perpendicularDir.length() < 1.0E-4D) {
+			//Special case where facing and particle direction perfectly match.
+			//Instead of using the crossproduct we can just directly use the v1 and v2 vectors
+			//to get the correct result
+			facing = v2.subtract(v1).normalize();
+			perpendicularDir = this.end.crossProduct(facing).normalize();
+		}
 
-        if (this.onGround)
-        {
-            this.motionX *= 0.699999988079071D;
-            this.motionZ *= 0.699999988079071D;
-        }
-    }
+		Vec3d perpendicularDir2 = perpendicularDir.crossProduct(this.end).normalize();
 
-    @Override
-    public void move(double x, double y, double z) {
-        double d0 = y;
-        double origX = x;
-        double origZ = z;
+		Vec3d[] offsets = new Vec3d[] { perpendicularDir.scale(renderScale), perpendicularDir.scale(-renderScale) };
+		Vec3d[] offsets2 = new Vec3d[] { perpendicularDir2.scale(renderScale), perpendicularDir2.scale(-renderScale) };
 
-        if (colliding) {
-            setExpired();
-            return;
-        }
+		float x1 = rx;
+		float y1 = ry;
+		float z1 = rz;
 
-        if (this.canCollide)
-        {
-            List<AxisAlignedBB> list = this.world.getCollisionBoxes((Entity)null, this.getBoundingBox().expand(x, y, z));
+		float x2 = (float)(rx + this.end.x);
+		float y2 = (float)(ry + this.end.y);
+		float z2 = (float)(rz + this.end.z);
 
-            for (AxisAlignedBB axisalignedbb : list)
-            {
-                y = axisalignedbb.calculateYOffset(this.getBoundingBox(), y);
-                if (y == 0 && preMoveY != posY) {
-                    colliding = true;
-                    Vec3d p = axisalignedbb.getCenter();
-                    BlockPos pos = new BlockPos(Math.floor(p.x), Math.floor(p.y), Math.floor(p.z));
-                    IBlockState state = world.getBlockState(pos);
-                    if (state.getBlock() instanceof IParticleCollidable) {
-                        RayTraceResult ray = axisalignedbb.calculateIntercept(axisalignedbb.getCenter(), getBoundingBox().getCenter());
-                        ((IParticleCollidable) state.getBlock()).onParticleCollidedWithBlock(world, pos, state, ray.sideHit, this);
-                    }
-                }
-            }
+		float texUOffset = this.prevTexUOffset + (this.texUOffset - this.prevTexUOffset) * partialTicks;
 
-            this.setBoundingBox(this.getBoundingBox().offset(0.0D, y, 0.0D));
+		//br
+		buffer.pos((double)x2 + offsets[0].x, (double)y2 + offsets[0].y, (double)z2 + offsets[0].z).tex(texUOffset + len / (0.2 * this.texUScale), 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		//tr                                                                                    
+		buffer.pos((double)x2 + offsets[1].x, (double)y2 + offsets[1].y, (double)z2 + offsets[1].z).tex(texUOffset + len / (0.2 * this.texUScale), 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		//tl                                                                                    
+		buffer.pos((double)x1 + offsets[1].x, (double)y1 + offsets[1].y, (double)z1 + offsets[1].z).tex(texUOffset, 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		//bl                                                                                    
+		buffer.pos((double)x1 + offsets[0].x, (double)y1 + offsets[0].y, (double)z1 + offsets[0].z).tex(texUOffset, 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
 
-            for (AxisAlignedBB axisalignedbb1 : list)
-            {
-                x = axisalignedbb1.calculateXOffset(this.getBoundingBox(), x);
-                if (x != origX && preMoveX != posX) {
-                    colliding = true;
-                    Vec3d p = axisalignedbb1.getCenter();
-                    BlockPos pos = new BlockPos(Math.floor(p.x), Math.floor(p.y), Math.floor(p.z));
-                    IBlockState state = world.getBlockState(pos);
-                    if (state.getBlock() instanceof IParticleCollidable) {
-                        RayTraceResult ray = axisalignedbb1.calculateIntercept(axisalignedbb1.getCenter(), getBoundingBox().getCenter());
-                        ((IParticleCollidable) state.getBlock()).onParticleCollidedWithBlock(world, pos, state, ray.sideHit, this);
-                    }
-                }
-            }
+		//br
+		buffer.pos((double)x2 + offsets2[0].x, (double)y2 + offsets2[0].y, (double)z2 + offsets2[0].z).tex(texUOffset + len / (0.2 * this.texUScale), 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		//tr                                                                                    
+		buffer.pos((double)x2 + offsets2[1].x, (double)y2 + offsets2[1].y, (double)z2 + offsets2[1].z).tex(texUOffset + len / (0.2 * this.texUScale), 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		//tl                                                                                    
+		buffer.pos((double)x1 + offsets2[1].x, (double)y1 + offsets2[1].y, (double)z1 + offsets2[1].z).tex(texUOffset, 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		//bl                                                                                    
+		buffer.pos((double)x1 + offsets2[0].x, (double)y1 + offsets2[0].y, (double)z1 + offsets2[0].z).tex(texUOffset, 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+	}
 
-            this.setBoundingBox(this.getBoundingBox().offset(x, 0.0D, 0.0D));
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
 
-            for (AxisAlignedBB axisalignedbb2 : list)
-            {
-                z = axisalignedbb2.calculateZOffset(this.getBoundingBox(), z);
-                if (z != origZ && preMoveZ != posZ) {
-                    colliding = true;
-                    Vec3d p = axisalignedbb2.getCenter();
-                    BlockPos pos = new BlockPos(Math.floor(p.x), Math.floor(p.y), Math.floor(p.z));
-                    IBlockState state = world.getBlockState(pos);
-                    if (state.getBlock() instanceof IParticleCollidable) {
-                        RayTraceResult ray = axisalignedbb2.calculateIntercept(axisalignedbb2.getCenter(), getBoundingBox().getCenter());
-                        ((IParticleCollidable) state.getBlock()).onParticleCollidedWithBlock(world, pos, state, ray.sideHit, this);
-                    }
-                }
-            }
-
-            this.setBoundingBox(this.getBoundingBox().offset(0.0D, 0.0D, z));
-        }
-        else
-        {
-            this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
-        }
-
-        preMoveX = posX;
-        preMoveY = posY;
-        preMoveZ = posZ;
-        this.resetPositionToBB();
-        this.onGround = d0 != y && d0 < 0.0D;
-
-        if (origX != x)
-        {
-            this.motionX = 0.0D;
-        }
-
-        if (origZ != z)
-        {
-            this.motionZ = 0.0D;
-        }
-    }
-
-    @Override
-    public int getFXLayer() {
-        return 1;
-    }
-
-    public static final class Factory extends ParticleFactory<Factory, ParticleBeam> {
-        public Factory() {
-            super(ParticleBeam.class, ParticleTextureStitcher.create(ParticleBeam.class, new ResourceLocation("thebetweenlands:particle/beam")));
-        }
-
-        @Override
-        protected ParticleBeam createParticle(ImmutableParticleArgs args) {
-            return new ParticleBeam(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ);
-        }
-    }
+		this.prevTexUOffset = this.texUOffset;
+	}
 }

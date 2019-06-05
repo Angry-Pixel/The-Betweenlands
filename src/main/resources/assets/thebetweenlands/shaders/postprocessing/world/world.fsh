@@ -179,7 +179,6 @@ void main() {
         bool inBack = fragCamDist <= gasFragCamDist;
         if(!inBack) {
 			distortionMultiplier += 20.0F * applyFog(gasFragPos, gasParticlesBuffCol).a;
-			colorMultiplier += applyFog(gasFragPos, gasParticlesBuffCol).a;
 		}
 	}
 	

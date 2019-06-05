@@ -2,8 +2,6 @@ package thebetweenlands.common.block.container;
 
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
@@ -13,7 +11,6 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -36,17 +33,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.block.IParticleCollidable;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 
-public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock, IParticleCollidable {
+public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 
 	private final boolean isBurning;
 	private static boolean keepInventory;
@@ -61,16 +55,6 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock, 
         if(!isBurning)
         	setCreativeTab(BLCreativeTabs.BLOCKS);
     }
-
-	@Override
-	public void onParticleCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, EnumFacing side, Particle particle) {
-		EnumFacing facing = state.getValue(FACING);
-		int fx = facing.getXOffset();
-		int fz = facing.getZOffset();
-		double mx = 0.4 * fx;
-		double mz = 0.4 * fz;
-		BLParticles.BEAM.spawn(worldIn, pos.getX() + (mx == 0? 0.5: Math.max(0, fx)), pos.getY() + 0.5, pos.getZ() +  (mz == 0? 0.5: Math.max(0, fz)), ParticleFactory.ParticleArgs.get().withMotion(mx, 0, mz));
-	}
 
 	@Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
@@ -189,7 +173,6 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock, 
     }
 
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		if (this.isBurning) {
@@ -197,7 +180,6 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock, 
 			double d0 = (double) pos.getX() + 0.5D;
 			double d1 = (double) pos.getY() + 0.25D + rand.nextDouble() * 6.0D / 16.0D;
 			double d2 = (double) pos.getZ() + 0.5D;
-			double d3 = 0.52D;
 			double d4 = rand.nextDouble() * 0.6D - 0.3D;
 
 			if (rand.nextDouble() < 0.1D) {

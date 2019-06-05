@@ -98,7 +98,6 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
             prevStackSize = isSlotInUse(0) ? inventory.get(0).getCount() : 0;
             updateContainingBlockInfo();
         } else {
-            BLParticles.BEAM.spawn(world, getPos().getX() + 0.5, getPos().getY() + 1.3, getPos().getZ() + 0.5, ParticleFactory.ParticleArgs.get().withMotion(0, 0.5, 0));
             if (this.isRunning() && !this.soundPlaying) {
                 this.playAnimatorSound();
                 this.soundPlaying = true;

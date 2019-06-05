@@ -1,4 +1,4 @@
-package thebetweenlands.monkeytest;
+package thebetweenlands.client.render.particle.entity;
 
 import java.util.Random;
 
@@ -65,6 +65,14 @@ public class ParticlePuzzleBeam extends Particle implements IParticleSpriteRecei
 			this.particleBlue /= 255.0f;
 		}
 		
+		if(this.particleAge > this.particleMaxAge - 10) {
+			this.particleAlpha = (this.particleMaxAge - this.particleAge) / 10.0F * this.initAlpha;
+		} else if(this.particleAge < 10) {
+			this.particleAlpha = this.particleAge / 10.0F * this.initAlpha;
+		} else {
+			this.particleAlpha = this.initAlpha;
+		}
+		
 		super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
 	}
 	
@@ -78,9 +86,8 @@ public class ParticlePuzzleBeam extends Particle implements IParticleSpriteRecei
 		}
 		float lifeCoeff = (float) this.particleAge / (float) this.particleMaxAge;
 		this.particleScale = initScale - initScale * lifeCoeff;
-		this.particleAlpha = initAlpha * (1.0f - lifeCoeff);
 		this.prevParticleAngle = particleAngle;
-		particleAngle += 1.0f;
+		particleAngle += 0.5f;
 	}
 
 	public static final class Factory extends ParticleFactory<Factory, ParticlePuzzleBeam> {

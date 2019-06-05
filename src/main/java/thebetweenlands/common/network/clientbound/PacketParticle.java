@@ -14,11 +14,13 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.monkeytest.ParticlePuzzleBeam;
 
 public class PacketParticle implements IMessage, IMessageHandler<PacketParticle, IMessage> {
-
+	//TODO Delet this
+	
+	
 	public static enum ParticleType {
 		SPORE_JET,
 		FLAME,

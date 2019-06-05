@@ -11,15 +11,19 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import thebetweenlands.common.TheBetweenlands;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.block.structure.BlockBeamLensSupport;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockBeamTube;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.block.structure.BlockEnergyBarrierMud;
-import thebetweenlands.common.network.clientbound.PacketParticle;
-import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 
 public class TileEntityBeamRelay extends TileEntity implements ITickable {
 	public boolean active;
@@ -43,54 +47,63 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 			}
 		}
 
-		if (!getWorld().isRemote) {
-			if (active)
-				activateBlock();
-			else
-				deactivateBlock();
-		}
+		if (active)
+			activateBlock();
+		else
+			deactivateBlock();
 	}
 
-	//Temp particles
-	private void sendParticleMessage(EnumFacing facing) {
-		int distance = getDistanceToObstruction(facing);
-		BlockPos targetPos = getPos().offset(facing, distance);
-		Vec3d vector = new Vec3d((targetPos.getX() + 0.5D) - (getPos().getX() + 0.5D), (targetPos.getY() + 0.5D) - (getPos().getY() + 0.5D), (targetPos.getZ() + 0.5D) - (getPos().getZ() + 0.5D));
-		vector = vector.normalize();
-		for (float i = 0; i < distance; i += 0.25F) {
-			//TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.BEAM, getPos().getX() + 0.5F + ((float) vector.x * i), getPos().getY() + 0.5F + ((float) vector.y * i), getPos().getZ() + 0.5F + ((float) vector.z * i), i * 0.5F));
-			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.BEAM, getPos().getX() + 0.5F + ((float) vector.x * i), getPos().getY() + 0.5F + ((float) vector.y * i), getPos().getZ() + 0.5F + ((float) vector.z * i), 3.75F));
+	@SideOnly(Side.CLIENT)
+	private void spawnBeamParticles(Vec3d target) {
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, BLParticles.PUZZLE_BEAM_2.create(world, this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5, ParticleArgs.get().withMotion(0, 0, 0).withColor(57F, 255F, 56F, 1F).withScale(2.5F).withData(30, target)));
+		for(int i = 0; i < 3; i++) {
+			float offsetLen = this.world.rand.nextFloat();
+			Vec3d offset = new Vec3d(target.x * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f, target.y * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f, target.z * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f);
+			float vx = (world.rand.nextFloat() * 2f - 1) * 0.0025f;
+			float vy = (world.rand.nextFloat() * 2f - 1) * 0.0025f + 0.008f;
+			float vz = (world.rand.nextFloat() * 2f - 1) * 0.0025f;
+			float scale = 0.5f + world.rand.nextFloat();
+			if(ShaderHelper.INSTANCE.canUseShaders() && world.rand.nextBoolean()) {
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS, BLParticles.SMOOTH_SMOKE.create(world, this.pos.getX() + 0.5 + offset.x, this.pos.getY() + 0.5 + offset.y, this.pos.getZ() + 0.5 + offset.z, ParticleArgs.get().withMotion(vx, vy, vz).withColor(1, 1, 1, 0.2F).withScale(scale * 8).withData(80, true, 0.0F, true)));
+			} else {
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, this.pos.getX() + 0.5 + offset.x, this.pos.getY() + 0.5 + offset.y, this.pos.getZ() + 0.5 + offset.z, ParticleArgs.get().withMotion(vx, vy, vz).withColor(57F, 255F, 56F, 1F).withScale(scale).withData(100)));
+			}
 		}
 	}
-
+	
 	public void activateBlock() {
 		IBlockState state = getWorld().getBlockState(getPos());
 		EnumFacing facing = state.getValue(BlockBeamRelay.FACING);
 		BlockPos targetPos = getPos().offset(facing, getDistanceToObstruction(facing));
-		IBlockState stateofTarget = getWorld().getBlockState(targetPos);
+		
+		if(world.isRemote) {
+			if (getWorld().getTotalWorldTime() % 20 == 0) {
+				spawnBeamParticles(new Vec3d(targetPos.getX() - pos.getX(), targetPos.getY() - pos.getY(), targetPos.getZ() - pos.getZ()));
+			}
+		} else {
+			IBlockState stateofTarget = getWorld().getBlockState(targetPos);
 
-		if (getWorld().getTotalWorldTime()%10 == 0)
-			sendParticleMessage(facing);
 
-		if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
-			if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {
-				TileEntityBeamRelay targetTile = (TileEntityBeamRelay) getWorld().getTileEntity(targetPos);
-				targetTile.setTargetIncomingBeam(facing.getOpposite(), true);
-				if (!getWorld().getBlockState(targetPos).getValue(BlockBeamRelay.POWERED)) {
-					stateofTarget = stateofTarget.cycleProperty(BlockBeamRelay.POWERED);
-					getWorld().setBlockState(targetPos, stateofTarget, 3);
+			if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
+				if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {
+					TileEntityBeamRelay targetTile = (TileEntityBeamRelay) getWorld().getTileEntity(targetPos);
+					targetTile.setTargetIncomingBeam(facing.getOpposite(), true);
+					if (!getWorld().getBlockState(targetPos).getValue(BlockBeamRelay.POWERED)) {
+						stateofTarget = stateofTarget.cycleProperty(BlockBeamRelay.POWERED);
+						getWorld().setBlockState(targetPos, stateofTarget, 3);
+					}
 				}
 			}
-		}
 
-		if (stateofTarget.getBlock() instanceof BlockDungeonDoorRunes) {
-			if (getWorld().getTileEntity(targetPos) instanceof TileEntityDungeonDoorRunes) {
-				TileEntityDungeonDoorRunes targetTile = (TileEntityDungeonDoorRunes) getWorld().getTileEntity(targetPos);
-				targetTile.top_state_prev = targetTile.top_code;
-				targetTile.mid_state_prev = targetTile.mid_code;
-				targetTile.bottom_state_prev = targetTile.bottom_code;
-				getWorld().setBlockState(targetPos, stateofTarget, 3);
-				//TODO turn off beam here as it's no longer needed
+			if (stateofTarget.getBlock() instanceof BlockDungeonDoorRunes) {
+				if (getWorld().getTileEntity(targetPos) instanceof TileEntityDungeonDoorRunes) {
+					TileEntityDungeonDoorRunes targetTile = (TileEntityDungeonDoorRunes) getWorld().getTileEntity(targetPos);
+					targetTile.top_state_prev = targetTile.top_code;
+					targetTile.mid_state_prev = targetTile.mid_code;
+					targetTile.bottom_state_prev = targetTile.bottom_code;
+					getWorld().setBlockState(targetPos, stateofTarget, 3);
+					//TODO turn off beam here as it's no longer needed
+				}
 			}
 		}
 	}
