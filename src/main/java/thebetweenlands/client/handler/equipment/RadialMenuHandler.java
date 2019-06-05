@@ -1,12 +1,5 @@
 package thebetweenlands.client.handler.equipment;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.Gui;
@@ -29,6 +22,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.event.EquipmentChangedEvent;
 import thebetweenlands.api.item.IEquippable;
@@ -39,6 +34,10 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.GuiUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 public class RadialMenuHandler {
@@ -134,11 +133,10 @@ public class RadialMenuHandler {
 
 			List<Category> categories = new ArrayList<Category>();
 
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-
+			IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+			if(cap != null) {
 				//Equippable items
-				for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
+				for(EnumEquipmentInventory type : EnumEquipmentInventory.VALUES) {
 					for(int i = 0; i < inventory.getSizeInventory(); i++) {
 						ItemStack stack = inventory.getStackInSlot(i);
 
@@ -159,7 +157,7 @@ public class RadialMenuHandler {
 				}
 
 				//Unequippable items
-				for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
+				for(EnumEquipmentInventory type : EnumEquipmentInventory.VALUES) {
 					IInventory inv = cap.getInventory(type);
 
 					for(int i = 0; i < inv.getSizeInventory(); i++) {

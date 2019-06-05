@@ -73,8 +73,8 @@ public class FoodSicknessHandler {
 		ItemStack itemStack = event.getItem();
 
 		if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled(event.getEntity().getEntityWorld()) && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(player, itemStack)) {
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
-				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
+			IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
+			if(cap != null) {
 				Item item = itemStack.getItem();
 				FoodSickness sickness = cap.getSickness(item);
 
@@ -93,9 +93,8 @@ public class FoodSicknessHandler {
 			ItemStack itemStack = event.getItem();
 
 			if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled(event.getEntity().getEntityWorld()) && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(player, itemStack)) {
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
-					IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
-
+				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
+				if(cap != null) {
 					Item item = itemStack.getItem();
 
 					FoodSickness lastSickness = cap.getLastSickness();
@@ -125,18 +124,20 @@ public class FoodSicknessHandler {
 							}
 						}
 
-						if(itemStack.getItem() instanceof IDecayFood && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+						if(itemStack.getItem() instanceof IDecayFood) {
 							IDecayCapability decayCap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-							int decayLevel = ((IDecayFood)itemStack.getItem()).getDecayHealAmount(itemStack);
-							DecayStats decayStats = decayCap.getDecayStats();
-							double decayLoss = 1.0D / 3.0D * 2.0;
+							if(decayCap != null) {
+								int decayLevel = ((IDecayFood) itemStack.getItem()).getDecayHealAmount(itemStack);
+								DecayStats decayStats = decayCap.getDecayStats();
+								double decayLoss = 1.0D / 3.0D * 2.0;
 
-							if(player.world.isRemote) {
-								//Remove all gained decay on client side and wait for sync
-								decayStats.addStats(-Math.min(MathHelper.ceil(decayLevel * decayLoss), decayLevel), 0.0F);
-							} else {
-								int minDecayGain = player.world.rand.nextInt(4) == 0 ? 1 : 0;
-								decayStats.addStats(-Math.min(MathHelper.ceil(decayLevel * decayLoss), Math.max(decayLevel - minDecayGain, 0)), 0.0F);
+								if (player.world.isRemote) {
+									//Remove all gained decay on client side and wait for sync
+									decayStats.addStats(-Math.min(MathHelper.ceil(decayLevel * decayLoss), decayLevel), 0.0F);
+								} else {
+									int minDecayGain = player.world.rand.nextInt(4) == 0 ? 1 : 0;
+									decayStats.addStats(-Math.min(MathHelper.ceil(decayLevel * decayLoss), Math.max(decayLevel - minDecayGain, 0)), 0.0F);
+								}
 							}
 						}
 

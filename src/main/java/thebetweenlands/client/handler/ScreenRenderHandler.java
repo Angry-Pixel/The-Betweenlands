@@ -1,11 +1,5 @@
 package thebetweenlands.client.handler;
 
-import java.util.List;
-import java.util.Random;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -40,6 +34,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.api.capability.IDecayCapability;
@@ -64,6 +60,9 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.AspectIconRenderer;
 import thebetweenlands.util.ColorUtils;
+
+import java.util.List;
+import java.util.Random;
 
 public class ScreenRenderHandler extends Gui {
 	private ScreenRenderHandler() { }
@@ -282,125 +281,127 @@ public class ScreenRenderHandler extends Gui {
 			}
 		} else if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
 			if(player != null && !player.isSpectator()) {
-				if (BetweenlandsConfig.GENERAL.equipmentVisible && player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+				if (BetweenlandsConfig.GENERAL.equipmentVisible) {
 					IEquipmentCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+					if (capability != null) {
 
-					EnumHandSide offhand = player.getPrimaryHand().opposite();
-					
-					int posX = 0;
-					int posY = 0;
+						EnumHandSide offhand = player.getPrimaryHand().opposite();
 
-					boolean isOnOppositeSide = BetweenlandsConfig.GENERAL.equipmentHotbarSide == 1;
-					boolean showOnRightSide = (offhand == EnumHandSide.LEFT) != isOnOppositeSide;
-					
-					switch(BetweenlandsConfig.GENERAL.equipmentZone) {
-					default:
-					case 0:
-						if(showOnRightSide) {
-							posX = width / 2 + 93;
-							if(isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
-								posX += 30;
-							}
-						} else {
-							posX = width / 2 - 93 - 16;
-							if(isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
-								posX -= 30;
-							}
-						}
-						posY = height - 19;
-						break;
-					case 1:
-						posX = 0;
-						posY = 0;
-						break;
-					case 2:
-						posX = width - 18;
-						posY = 0;
-						break;
-					case 3:
-						posX = width - 18;
-						posY = height - 18;
-						break;
-					case 4:
-						posX = 0;
-						posY = height - 18;
-						break;
-					case 5:
-						posX = 0;
-						posY = height / 2;
-						break;
-					case 6:
-						posX = width / 2;
-						posY = 0;
-						break;
-					case 7:
-						posX = width - 18;
-						posY = height / 2;
-						break;
-					case 8:
-						posX = width / 2;
-						posY = height - 18;
-						break;
-					}
-					
-					posX += BetweenlandsConfig.GENERAL.equipmentOffsetX;
-					posY += BetweenlandsConfig.GENERAL.equipmentOffsetY;
-					
-					int yOffset = 0;
+						int posX = 0;
+						int posY = 0;
 
-					for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
-						IInventory inv = capability.getInventory(type);
+						boolean isOnOppositeSide = BetweenlandsConfig.GENERAL.equipmentHotbarSide == 1;
+						boolean showOnRightSide = (offhand == EnumHandSide.LEFT) != isOnOppositeSide;
 
-						int xOffset = 0;
-						
-						boolean hadItem = false;
-
-						for(int i = 0; i < inv.getSizeInventory(); i++) {
-							ItemStack stack = inv.getStackInSlot(i);
-
-							if(!stack.isEmpty()) {
-								float scale = 1.0F;
-
-								GlStateManager.pushMatrix();
-								GlStateManager.translate(posX + xOffset, posY + yOffset, 0);
-								GlStateManager.color(1, 1, 1, 1);
-								GlStateManager.enableBlend();
-								GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-								GlStateManager.scale(scale, scale, scale);
-
-								mc.getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
-								mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, stack, 0, 0, null);
-
-								GlStateManager.disableAlpha();
-								GlStateManager.disableRescaleNormal();
-								GlStateManager.disableLighting();
-								GlStateManager.color(1, 1, 1, 1);
-								GlStateManager.enableBlend();
-								GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-								GlStateManager.enableTexture2D();
-								GlStateManager.color(1, 1, 1, 1);
-								GlStateManager.popMatrix();
-
-								if(showOnRightSide) {
-									xOffset += BetweenlandsConfig.GENERAL.equipmentHorizontalSpacing;
+						switch (BetweenlandsConfig.GENERAL.equipmentZone) {
+							default:
+							case 0:
+								if (showOnRightSide) {
+									posX = width / 2 + 93;
+									if (isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
+										posX += 30;
+									}
 								} else {
-									xOffset -= BetweenlandsConfig.GENERAL.equipmentHorizontalSpacing;
+									posX = width / 2 - 93 - 16;
+									if (isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
+										posX -= 30;
+									}
 								}
-
-								hadItem = true;
-							}
+								posY = height - 19;
+								break;
+							case 1:
+								posX = 0;
+								posY = 0;
+								break;
+							case 2:
+								posX = width - 18;
+								posY = 0;
+								break;
+							case 3:
+								posX = width - 18;
+								posY = height - 18;
+								break;
+							case 4:
+								posX = 0;
+								posY = height - 18;
+								break;
+							case 5:
+								posX = 0;
+								posY = height / 2;
+								break;
+							case 6:
+								posX = width / 2;
+								posY = 0;
+								break;
+							case 7:
+								posX = width - 18;
+								posY = height / 2;
+								break;
+							case 8:
+								posX = width / 2;
+								posY = height - 18;
+								break;
 						}
 
-						if(hadItem) {
-							yOffset += BetweenlandsConfig.GENERAL.equipmentVerticalSpacing;
+						posX += BetweenlandsConfig.GENERAL.equipmentOffsetX;
+						posY += BetweenlandsConfig.GENERAL.equipmentOffsetY;
+
+						int yOffset = 0;
+
+						for (EnumEquipmentInventory type : EnumEquipmentInventory.VALUES) {
+							IInventory inv = capability.getInventory(type);
+
+							int xOffset = 0;
+
+							boolean hadItem = false;
+
+							for (int i = 0; i < inv.getSizeInventory(); i++) {
+								ItemStack stack = inv.getStackInSlot(i);
+
+								if (!stack.isEmpty()) {
+									float scale = 1.0F;
+
+									GlStateManager.pushMatrix();
+									GlStateManager.translate(posX + xOffset, posY + yOffset, 0);
+									GlStateManager.color(1, 1, 1, 1);
+									GlStateManager.enableBlend();
+									GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+									GlStateManager.scale(scale, scale, scale);
+
+									mc.getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
+									mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, stack, 0, 0, null);
+
+									GlStateManager.disableAlpha();
+									GlStateManager.disableRescaleNormal();
+									GlStateManager.disableLighting();
+									GlStateManager.color(1, 1, 1, 1);
+									GlStateManager.enableBlend();
+									GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+									GlStateManager.enableTexture2D();
+									GlStateManager.color(1, 1, 1, 1);
+									GlStateManager.popMatrix();
+
+									if (showOnRightSide) {
+										xOffset += BetweenlandsConfig.GENERAL.equipmentHorizontalSpacing;
+									} else {
+										xOffset -= BetweenlandsConfig.GENERAL.equipmentHorizontalSpacing;
+									}
+
+									hadItem = true;
+								}
+							}
+
+							if (hadItem) {
+								yOffset += BetweenlandsConfig.GENERAL.equipmentVerticalSpacing;
+							}
 						}
 					}
 				}
 
-				if (PlayerDecayHandler.isDecayEnabled() && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+				if (PlayerDecayHandler.isDecayEnabled()) {
 					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
-					if(capability.isDecayEnabled()) {
+					if(capability != null && capability.isDecayEnabled()) {
 						int startX = 0;
 						int startY = 0;
 
@@ -551,10 +552,10 @@ public class ScreenRenderHandler extends Gui {
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 			}
 		} else if(event.getType() == ElementType.PORTAL) {
-			if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
+			if(player != null) {
 				IPortalCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
 				
-				if(cap.isInPortal()) {
+				if(cap != null && cap.isInPortal()) {
 					this.renderPortal(mc, MathHelper.clamp((1.0F - cap.getTicksUntilTeleport() / (float)PlayerPortalHandler.MAX_PORTAL_TIME), 0, 1), event.getResolution());
 				}
 			}

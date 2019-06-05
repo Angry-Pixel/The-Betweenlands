@@ -1,19 +1,10 @@
 package thebetweenlands.common.item.shields;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -24,17 +15,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 
+import java.util.List;
+
 public class ItemSwatShield extends ItemBLShield {
 	public ItemSwatShield(ToolMaterial material) {
 		super(material);
 
-		this.addPropertyOverride(new ResourceLocation("charging"), new IItemPropertyGetter() {
-			@Override
-			@SideOnly(Side.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack && (getRemainingChargeTicks(stack, entityIn) > 0 || isPreparingCharge(stack, entityIn)) ? 1.0F : 0.0F;
-			}
-		});
+		this.addPropertyOverride(new ResourceLocation("charging"), (stack, worldIn, entityIn) ->
+				entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack && (getRemainingChargeTicks(stack, entityIn) > 0 || isPreparingCharge(stack, entityIn)) ? 1.0F : 0.0F);
 	}
 
 	/**

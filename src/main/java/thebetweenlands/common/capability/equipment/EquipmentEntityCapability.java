@@ -1,8 +1,5 @@
 package thebetweenlands.common.capability.equipment;
 
-import java.util.EnumMap;
-import java.util.Map;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,13 +19,16 @@ import thebetweenlands.common.inventory.InventoryEquipmentAmulets;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityCapability, IEquipmentCapability, EntityPlayer> implements IEquipmentCapability, ISerializableCapability {
 	private Map<EnumEquipmentInventory, NonNullList<ItemStack>> allInventoryStacks = new EnumMap<>(EnumEquipmentInventory.class);
 	private Map<EnumEquipmentInventory, IInventory> inventories = new EnumMap<>(EnumEquipmentInventory.class);
 	private int amuletSlots = 1;
 
 	public EquipmentEntityCapability() {
-		for (EnumEquipmentInventory inventory : EnumEquipmentInventory.values()) {
+		for (EnumEquipmentInventory inventory : EnumEquipmentInventory.VALUES) {
 			this.allInventoryStacks.put(inventory, NonNullList.withSize(inventory.maxSize, ItemStack.EMPTY));
 		}
 	}
@@ -84,7 +84,7 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("amuletSlots", this.amuletSlots);
 		NBTTagList inventoryList = new NBTTagList();
-		for (EnumEquipmentInventory inventoryType : EnumEquipmentInventory.values()) {
+		for (EnumEquipmentInventory inventoryType : EnumEquipmentInventory.VALUES) {
 			NonNullList<ItemStack> inventoryStacks = this.allInventoryStacks.get(inventoryType);
 			NBTTagCompound inventoryNbt = new NBTTagCompound();
 			NBTTagList slotList = new NBTTagList();
@@ -110,7 +110,7 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.inventories.clear();
-		for (EnumEquipmentInventory inventory : EnumEquipmentInventory.values()) {
+		for (EnumEquipmentInventory inventory : EnumEquipmentInventory.VALUES) {
 			this.allInventoryStacks.put(inventory, NonNullList.withSize(inventory.maxSize, ItemStack.EMPTY));
 		}
 		if (nbt.hasKey("amuletSlots")) {

@@ -1,7 +1,5 @@
 package thebetweenlands.common.capability.recruitment;
 
-import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,6 +10,8 @@ import thebetweenlands.api.capability.IPuppeteerCapability;
 import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
+
+import java.util.List;
 
 public class EntityPuppeteerCapability extends EntityCapability<EntityPuppeteerCapability, IPuppeteerCapability, EntityPlayer> implements IPuppeteerCapability {
 	@Override
@@ -48,13 +48,8 @@ public class EntityPuppeteerCapability extends EntityCapability<EntityPuppeteerC
 	@Override
 	public List<Entity> getPuppets() {
 		return this.getEntity().getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntity().getEntityBoundingBox().grow(24.0D, 24.0D, 24.0D), entity -> {
-			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
-				IPuppetCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
-				if(cap.getPuppeteer() == this.getEntity()) {
-					return true;
-				}
-			}
-			return false;
+			IPuppetCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+			return cap != null && cap.getPuppeteer() == this.getEntity();
 		});
 	}
 

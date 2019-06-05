@@ -1,19 +1,15 @@
 package thebetweenlands.common.item.equipment;
 
-import java.util.List;
-
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.world.World;
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IEquipmentCapability;
@@ -26,6 +22,7 @@ import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.NBTHelper;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemRingOfRecruitment extends ItemRing {
 	public ItemRingOfRecruitment() {
@@ -49,8 +46,8 @@ public class ItemRingOfRecruitment extends ItemRing {
 		if(!entity.world.isRemote && entity instanceof EntityPlayer) {
 			int tickRate = 80;
 
-			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
-				IPuppeteerCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
+			IPuppeteerCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
+			if(cap != null) {
 				int puppets = cap.getPuppets().size();
 				NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 				if(puppets == 0) {
@@ -86,8 +83,8 @@ public class ItemRingOfRecruitment extends ItemRing {
 			return false;
 		}
 
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		if(cap != null) {
 			IInventory inv = cap.getInventory(EnumEquipmentInventory.RING);
 
 			boolean hasRing = false;

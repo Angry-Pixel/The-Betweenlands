@@ -1,9 +1,6 @@
 package thebetweenlands.common.item.shields;
 
-import javax.annotation.Nullable;
-
 import com.google.common.collect.ImmutableList;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -11,24 +8,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -37,13 +24,8 @@ import thebetweenlands.util.NBTHelper;
 public class ItemWeedwoodShield extends ItemBLShield {
 	public ItemWeedwoodShield() {
 		super(BLMaterialRegistry.TOOL_WEEDWOOD);
-		this.addPropertyOverride(new ResourceLocation("burning"), new IItemPropertyGetter() {
-			@Override
-			@SideOnly(Side.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return ((ItemWeedwoodShield)stack.getItem()).getBurningTicks(stack) > 0 ? 1.0F : 0.0F;
-			}
-		});
+		this.addPropertyOverride(new ResourceLocation("burning"), (stack, worldIn, entityIn) ->
+				((ItemWeedwoodShield)stack.getItem()).getBurningTicks(stack) > 0 ? 1.0F : 0.0F);
 	}
 
 	public void setBurningTicks(ItemStack stack, int ticks) {
