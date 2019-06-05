@@ -12,6 +12,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
+import thebetweenlands.client.render.shader.LightSource;
+import thebetweenlands.client.render.shader.ShaderHelper;
 
 @SideOnly(Side.CLIENT)
 public class ParticlePuzzleBeam extends Particle implements IParticleSpriteReceiver {
@@ -72,6 +74,21 @@ public class ParticlePuzzleBeam extends Particle implements IParticleSpriteRecei
 		} else {
 			this.particleAlpha = this.initAlpha;
 		}
+		
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			double distFromCam = entityIn.getDistance(this.posX, this.posY, this.posZ);
+			if(distFromCam < 8) {
+	        	ShaderHelper.INSTANCE.require();
+	        	
+	        	float strength = 1.0f * Math.min(1, (2.0f - (float)(distFromCam - 6.0f)) / 2.0f) * this.particleAlpha * 3.5f;
+	        	
+	        	double rx = this.prevPosX + (this.posX - this.prevPosX) * partialTicks;
+				double ry = this.prevPosY + (this.posY - this.prevPosY) * partialTicks;
+				double rz = this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks;
+	            ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(rx, ry, rz,
+	                    2.6f, this.particleRed * strength, this.particleGreen * strength, this.particleBlue * strength));
+			}
+        }
 		
 		super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
 	}
