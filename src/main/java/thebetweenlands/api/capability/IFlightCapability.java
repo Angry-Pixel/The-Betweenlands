@@ -48,7 +48,7 @@ public interface IFlightCapability {
 	 * @return
 	 */
 	public default boolean canFlyWithRing(EntityPlayer player, ItemStack ring) {
-		return player.experienceTotal > 0 && !player.isRiding();
+		return (player.experienceTotal > 0 || player.experience > 0 || player.experienceLevel > 0) && !player.isRiding();
 	}
 	
 	/**
