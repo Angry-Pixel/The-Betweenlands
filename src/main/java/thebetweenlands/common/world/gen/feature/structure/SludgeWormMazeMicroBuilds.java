@@ -7,6 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.structure.BlockMudBrickSpikeTrap;
@@ -116,7 +117,7 @@ public class SludgeWormMazeMicroBuilds {
 	private void buildWallPillarCentral(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
 		rotatedCubeVolume(world, rand, pos, 0, 0, 1, blockHelper.MUD_BRICK_WALL, 1, 3, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 0, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 0, 0, 0, blockHelper.CHEST.withProperty(BlockItemShelf.FACING, facing.getOpposite()), 1, 1, 1, facing);  //loot?
+		rotatedCubeVolume(world, rand, pos, 0, 0, 0, blockHelper.CHEST.withProperty(BlockChestBetweenlands.FACING, facing.getOpposite()), 1, 1, 1, facing);  //loot?
 	}
 
 	private void buildBigPillarTableRoom(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
@@ -202,6 +203,49 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 0, 3, 1, blockHelper.getMudBricksForLevel(rand, level, 1), 1, 1, 1, facing);
 	}
 
+	public void addBarrisheeCubby(World world, BlockPos pos, EnumFacing facing, Random rand, int level) {
+		for (int x = 0; x < 9; x++) {
+			for (int z = 0; z < 3; z++) {
+				for (int y = 1; y <= 3; y++) {
+					if (x > 0 && x < 8)
+						if (z > 0 && z < 3)
+						world.setBlockToAir(pos.add(x, y, z));
+				}
+				world.setBlockState(pos.add(x, 0, z), blockHelper.getTilesForLevel(rand, 3), 2);
+				world.setBlockState(pos.add(x, 4, z), blockHelper.getMudBricksForLevel(rand, 3, 1), 2);
+				world.setBlockState(pos.add(x, -1, z), blockHelper.MUD, 2);
+				if (x == 0 || x == 8) {
+					if (z > 0) {
+						for (int y = 1; y <= 3; y++)
+							world.setBlockState(pos.add(x, y, z), blockHelper.getMudBricksForLevel(rand, 3, y), 2);
+					}
+				}
+				if (z == 0) {
+					for (int y = 1; y <= 3; y++)
+						world.setBlockState(pos.add(x, y, 0), blockHelper.getMudBricksForLevel(rand, 3, y), 2);
+				}
+			}
+		}
+		world.setBlockState(pos.add(7, 0, 1), blockHelper.MUD_TILES_WATER, 2);
+		world.setBlockState(pos.add(3, 0, 2), blockHelper.MUD_TILES_WATER, 2);
+		world.setBlockState(pos.add(3, 0, 1), blockHelper.MUD, 2);
+		world.setBlockState(pos.add(2, 0, 1), blockHelper.MUD, 2);
+		world.setBlockState(pos.add(2, 0, 2), blockHelper.MUD, 2);
+		world.setBlockState(pos.add(3, 1, 1), blockHelper.SLUDGECREEP, 2);
+		world.setBlockState(pos.add(2, 1, 1), blockHelper.getRandomMushroom(rand), 2);
+		world.setBlockState(pos.add(2, 1, 2), blockHelper.SLUDGECREEP, 2);
+		world.setBlockState(pos.add(5, 1, 1), blockHelper.getRandomLootUrn(rand, facing.getOpposite()), 2);
+		world.setBlockState(pos.add(1, 1, 1), blockHelper.CHEST.withProperty(BlockChestBetweenlands.FACING, facing.rotateYCCW()), 2);
+		world.setBlockState(pos.add(1, 1, 2), blockHelper.CHEST.withProperty(BlockChestBetweenlands.FACING, facing.rotateYCCW()), 2);
+		world.setBlockState(pos.add(1, 3, 1), blockHelper.getMudBricksForLevel(rand, level, 0), 2);
+		world.setBlockState(pos.add(1, 3, 2), blockHelper.getMudBricksForLevel(rand, level, 0), 2);
+		
+		world.setBlockState(pos.add(1, 2, 1), blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP), 2);
+		world.setBlockState(pos.add(1, 2, 2), blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP), 2);
+		world.setBlockState(pos.add(2, 3, 1), blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP), 2);
+		world.setBlockState(pos.add(2, 3, 2), blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP), 2);
+	}
+
 	@SuppressWarnings("incomplete-switch")
 	public void rotatedCubeVolume(World world, Random rand, BlockPos pos, int offsetA, int offsetB, int offsetC, IBlockState state, int sizeWidth, int sizeHeight, int sizeDepth, EnumFacing facing) {
 
@@ -210,7 +254,7 @@ public class SludgeWormMazeMicroBuilds {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int xx = offsetA; xx < offsetA + sizeWidth; xx++)
 					for (int zz = offsetC; zz < offsetC + sizeDepth; zz++) {
-						world.setBlockState(pos.add(xx, yy, zz), state, 16);
+						world.setBlockState(pos.add(xx, yy, zz), state, 2);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
@@ -219,7 +263,7 @@ public class SludgeWormMazeMicroBuilds {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int zz = -offsetA; zz > -offsetA - sizeWidth; zz--)
 					for (int xx = offsetC; xx < offsetC + sizeDepth; xx++) {
-						world.setBlockState(pos.add(xx, yy, zz), state, 16);
+						world.setBlockState(pos.add(xx, yy, zz), state, 2);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
@@ -228,7 +272,7 @@ public class SludgeWormMazeMicroBuilds {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int xx = -offsetA; xx > -offsetA - sizeWidth; xx--)
 					for (int zz = -offsetC; zz > -offsetC - sizeDepth; zz--) {
-						world.setBlockState(pos.add(xx, yy, zz), state, 16);
+						world.setBlockState(pos.add(xx, yy, zz), state, 2);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
@@ -237,12 +281,11 @@ public class SludgeWormMazeMicroBuilds {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int zz = offsetA; zz < offsetA + sizeWidth; zz++)
 					for (int xx = -offsetC; xx > -offsetC - sizeDepth; xx--) {
-						world.setBlockState(pos.add(xx, yy, zz), state, 16);
+						world.setBlockState(pos.add(xx, yy, zz), state, 2);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
 			break;
 		}
 	}
-
 }

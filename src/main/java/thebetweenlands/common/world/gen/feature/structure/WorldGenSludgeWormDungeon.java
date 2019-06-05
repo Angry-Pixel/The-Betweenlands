@@ -622,6 +622,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					for(int x = -1; x <= 1; x++)
 						for(int y = -1; y <= 1; y++)
 							world.setBlockToAir(pos.add(26 + x, y, 0));
+					microBuild.addBarrisheeCubby(world, pos.add(20, -2, -3), EnumFacing.SOUTH, rand, level);
 				}
 				if(level == 5) {
 					world.setBlockState(pos.add(1, 0, 26), blockHelper.DUNGEON_DOOR_MIMIC_EAST, 2);  //TODO This will be Crypt Crawler entrance
