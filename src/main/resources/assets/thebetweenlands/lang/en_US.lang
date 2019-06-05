@@ -1639,3 +1639,13 @@ config.thebetweenlands.dump_packed_textures=Dump packed textures
 # Damage sources
 death.attack.bl.shockwave=%1$s was killed by a shockwave
 death.attack.bl.spikewave=%1$s was impaled by roots
+
+#Dev thing
+item.thebetweenlands.test_item_chimp_ruler.name=Test Ruler
+tooltip.chimp_ruler.homex=Home X: %s
+tooltip.chimp_ruler.homey=Home Y: %s
+tooltip.chimp_ruler.homez=Home Z: %s
+
+chat.chimp_ruler_x=Target X: %s
+chat.chimp_ruler_y=Target Y: %s
+chat.chimp_ruler_z=Target Z: %s
