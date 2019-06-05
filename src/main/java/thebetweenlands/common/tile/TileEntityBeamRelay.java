@@ -55,7 +55,12 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 
 	@SideOnly(Side.CLIENT)
 	private void spawnBeamParticles(Vec3d target) {
-		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, BLParticles.PUZZLE_BEAM_2.create(world, this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5, ParticleArgs.get().withMotion(0, 0, 0).withColor(57F, 255F, 56F, 1F).withScale(2.5F).withData(30, target)));
+		Vec3d dir = target.normalize();
+		float beamScale = 2.5F;
+		float beamScaleInset = 0.75f;
+		Vec3d beamStart = new Vec3d(this.pos.getX() + 0.5 - dir.x * beamScale * beamScaleInset * 0.1f, this.pos.getY() + 0.5 - dir.y * beamScale * beamScaleInset * 0.1f, this.pos.getZ() + 0.5 - dir.z * beamScale * beamScaleInset * 0.1f);
+		Vec3d beamEnd = new Vec3d(target.x + dir.x * beamScale * beamScaleInset * 0.1f * 2, target.y + dir.y * beamScale * beamScaleInset * 0.1f * 2, target.z + dir.z * beamScale * beamScaleInset * 0.1f * 2);
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, BLParticles.PUZZLE_BEAM_2.create(world, beamStart.x, beamStart.y, beamStart.z, ParticleArgs.get().withMotion(0, 0, 0).withColor(57F, 255F, 56F, 1F).withScale(beamScale).withData(30, beamEnd)));
 		for(int i = 0; i < 3; i++) {
 			float offsetLen = this.world.rand.nextFloat();
 			Vec3d offset = new Vec3d(target.x * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f, target.y * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f, target.z * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f);
