@@ -72,6 +72,17 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 	}
 
 	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		
+		if(this.isAnchored()) {
+			this.setSize(0.9F, 0.9F);
+		} else {
+			this.setSize(0.9F, 0.2F);
+		}
+	}
+	
+	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
 		nbt.setInteger("variant", this.getVariant());

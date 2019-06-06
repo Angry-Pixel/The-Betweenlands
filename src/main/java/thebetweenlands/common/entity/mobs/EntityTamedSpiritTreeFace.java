@@ -64,12 +64,10 @@ public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 
 	@Override
 	protected void fixUnsuitablePosition(int violatedChecks) {
-		if((violatedChecks & AnchorChecks.ANCHOR_BLOCKS) != 0 || (violatedChecks & AnchorChecks.FACE_BLOCKS) != 0) {
-			this.onDeath(DamageSource.OUT_OF_WORLD);
-			this.setDead();
-		} else {
-			super.fixUnsuitablePosition(violatedChecks);
+		if(this.isAnchored() && (violatedChecks & AnchorChecks.BLOCKS) != 0) {
+			this.setAnchored(false);
 		}
+		super.fixUnsuitablePosition(violatedChecks);
 	}
 
 	@Override

@@ -397,6 +397,12 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	public void onUpdate() {
 		super.onUpdate();
 
+		if(this.isAnchored()) {
+			this.setSize(1.8F, 1.8F);
+		} else {
+			this.setSize(1.8F, 0.2F);
+		}
+		
 		if(this.dataManager.get(BLOW_STATE) != 0 || this.dataManager.get(ROTATING_WAVE_STATE) != 0 || this.dataManager.get(CRAWLING_WAVE_STATE) != 0 || this.dataManager.get(SPIT_STATE) != 0) {
 			this.setGlowTicks(20);
 		}

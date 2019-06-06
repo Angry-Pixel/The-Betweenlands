@@ -1614,6 +1614,9 @@ config.thebetweenlands.equipment_zone_offset_y=Equipment Y Offset
 config.thebetweenlands.decay_bar_zone=Decay Bar Zone
 config.thebetweenlands.decay_bar_zone_offset_x=Decay Bar X Offset
 config.thebetweenlands.decay_bar_zone_offset_y=Decay Bar Y Offset
+config.thebetweenlands.decay_percentage=Use percentual decay
+config.thebetweenlands.decay_min_health=Minimum decay health
+config.thebetweenlands.decay_min_health_percent=Minimum percentual decay health
 
 config.thebetweenlands.mob_spawning=Mob Spawning
 config.thebetweenlands.max_entities_per_loaded_area=Max. entities per loaded area

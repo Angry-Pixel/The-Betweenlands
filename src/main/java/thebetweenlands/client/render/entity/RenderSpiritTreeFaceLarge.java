@@ -96,7 +96,11 @@ public class RenderSpiritTreeFaceLarge extends RenderWallFace<EntitySpiritTreeFa
 		float scale = 0.8F + entity.getHalfMovementProgress(partialTicks) * entity.getHalfMovementProgress(partialTicks) * 0.2F;
 		GlStateManager.scale(scale, scale, scale);
 
-		GlStateManager.translate(0, 0.15D, -0.7D);
+		if(entity.isAnchored()) {
+			GlStateManager.translate(0, 0.15D, -0.7D);
+		} else {
+			GlStateManager.translate(0, 0.15D, 0.9D);
+		}
 	}
 
 	@Override
