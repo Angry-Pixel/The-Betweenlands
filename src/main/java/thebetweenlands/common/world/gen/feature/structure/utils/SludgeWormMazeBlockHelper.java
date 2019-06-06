@@ -106,7 +106,7 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState MUD_TILES_SPIKE_TRAP = BlockRegistry.MUD_TILES_SPIKE_TRAP.getDefaultState();
 	
 	public IBlockState MUD = BlockRegistry.MUD.getDefaultState();
-	public IBlockState DRIPPING_MUD = BlockRegistry.DRIPPING_MUD.getDefaultState();
+	public IBlockState COMPACTED_MUD = BlockRegistry.COMPACTED_MUD.getDefaultState();
 	public IBlockState PUFFSHROOM = BlockRegistry.PUFFSHROOM.getDefaultState();
 	public IBlockState ROTTEN_BARK = BlockRegistry.LOG_ROTTEN_BARK.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, EnumAxis.NONE);
 
@@ -663,13 +663,13 @@ public class SludgeWormMazeBlockHelper {
 
 	private void initStuctureBlockMap() {
 		if (STRUCTURE_BLOCKS.isEmpty()) {
-			STRUCTURE_BLOCKS.put(DRIPPING_MUD, true);
+			STRUCTURE_BLOCKS.put(MUD, true);
 			STRUCTURE_BLOCKS.put(ROTTEN_BARK, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICK_SLAB, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICK_SLAB_DECAY_1, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICK_SLAB_DECAY_2, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICK_SLAB_DECAY_3, true);
-			STRUCTURE_BLOCKS.put(MUD, true);
+			STRUCTURE_BLOCKS.put(COMPACTED_MUD, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICKS, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICKS_DECAY_1, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICKS_DECAY_2, true);

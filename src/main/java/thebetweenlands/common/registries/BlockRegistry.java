@@ -131,7 +131,7 @@ import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudB
 import thebetweenlands.common.block.structure.BlockChipPath;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
-import thebetweenlands.common.block.structure.BlockDrippingMud;
+import thebetweenlands.common.block.structure.BlockCompactedMud;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
@@ -544,7 +544,7 @@ public class BlockRegistry {
     
     //Worm Dungeon
     public static final Block WORM_DUNGEON_PILLAR = new BlockWormDungeonPillar();
-    public static final Block DRIPPING_MUD = new BlockDrippingMud();
+    public static final Block COMPACTED_MUD = new BlockCompactedMud();
     public static final Block MUD_TILES = new BlockMudTiles();
     public static final Block PUFFSHROOM = new BlockPuffshroom();
     public static final Block MUD_BRICKS_CARVED = new BlockCarvedMudBrick();

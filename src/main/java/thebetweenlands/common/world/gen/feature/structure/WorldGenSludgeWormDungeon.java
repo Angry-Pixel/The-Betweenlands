@@ -69,9 +69,17 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.finish("Pit");
 		
 		generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
+		
+		timer.start("Crypt");
+		generateCryptCrawlerDungeon(world, rand, pos.down(44).add(14, 0, 14));
+		timer.finish("Crypt");
 
 		timer.finish("Full_Mudgeon");
 		return true;
+	}
+	
+	private void generateCryptCrawlerDungeon(World world, Random rand, BlockPos pos) {
+		// TODO Stuff
 	}
 
 	public void generateTower(World world, Random rand, BlockPos pos) {
@@ -631,7 +639,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						for(int y = -1; y <= 1; y++)
 							world.setBlockToAir(pos.add(0, y, 26 + z));
 				}
-
 			} else {
 				world.setBlockState(pos.add(27, 0, 26), blockHelper.DUNGEON_DOOR_COMBINATION_WEST, 2);
 				world.setBlockState(pos.add(1, 0, 2), blockHelper.DUNGEON_DOOR_EAST, 2);
@@ -737,7 +744,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		for (int i = 0; i <= h * 4; i++)
 			for (int j = 0; j <= w * 4; j++)
 				//if (world.isAirBlock(pos.add(j, 0, i)))
-					world.setBlockState(pos.add(j, 0, i), blockHelper.DRIPPING_MUD, 2);
+					world.setBlockState(pos.add(j, 0, i), blockHelper.MUD, 2);
 	}
 
 	// Places chests
