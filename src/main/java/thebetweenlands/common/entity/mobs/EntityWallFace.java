@@ -27,6 +27,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
@@ -85,7 +86,6 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
 		this.dataManager.set(ANCHOR, new BlockPos(this));
-		this.dataManager.set(ANCHORED, false);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 
@@ -237,7 +237,11 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		this.dataManager.set(FACING, EnumFacing.byIndex(nbt.getInteger("facing")));
 		this.dataManager.set(FACING_UP, EnumFacing.byIndex(nbt.getInteger("facingUp")));
 		this.dataManager.set(ANCHOR, BlockPos.fromLong(nbt.getLong("anchor")));
-		this.setAnchored(nbt.getBoolean("anchored"));
+		if(!nbt.hasKey("anchored", Constants.NBT.TAG_BYTE)) {
+			this.setAnchored(true);
+		} else {
+			this.setAnchored(nbt.getBoolean("anchored"));
+		}
 	}
 
 	@Override
