@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.structure;
 
 import net.minecraft.block.SoundType;
+import net.minecraft.entity.Entity;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.terrain.BlockMud;
 
@@ -13,5 +14,10 @@ public class BlockCompactedMud extends BlockMud { // Keeping this it's own class
 		setHarvestLevel("shovel", 0);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setLightOpacity(255);
+	}
+
+	@Override
+	public boolean canEntityWalkOnMud(Entity entity) {
+		return true;
 	}
 }
