@@ -48,8 +48,6 @@ public class PlayerDecayHandler {
 
 				IAttributeInstance attr = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
 
-				attr.setBaseValue(80);
-				
 				if(attr != null) {
 					if(BetweenlandsConfig.GENERAL.decayPercentual) {
 						float decayMaxBaseHealthPercentage = cap.getMaxPlayerHealthPercentage(stats.getDecayLevel());   
