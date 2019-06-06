@@ -79,8 +79,11 @@ public class ItemRingOfRecruitment extends ItemRing {
 	}
 
 	public static boolean isRingActive(Entity entity) {
-		if(entity instanceof EntityPlayer && ((EntityPlayer) entity).experienceTotal <= 0) {
-			return false;
+		if(entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entity;
+			if (player.experienceTotal <= 0 && player.experienceLevel <= 0 && player.experience <= 0) {
+				return false;
+			}
 		}
 
 		IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);

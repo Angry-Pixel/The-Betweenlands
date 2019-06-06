@@ -42,49 +42,43 @@ public class ItemRing extends Item implements IEquippable {
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 		if(!player.isSneaking()) {
-			if(stack.getItemDamage() > 0 && player.experienceTotal > 0) {
+			if(stack.getItemDamage() > 0 && (player.experienceTotal > 0 || player.experienceLevel > 0 || player.experience > 0)) {
 				if(!world.isRemote) {
 					int repairPerClick = 40;
 					float conversion = this.getXPConversionRate(stack, player);
 					float requiredRepair = Math.min(repairPerClick, stack.getItemDamage() / conversion);
-					stack.setItemDamage(Math.max(0, stack.getItemDamage() - MathHelper.ceil(Math.min(repairPerClick, player.experienceTotal) * conversion)));
-					removeXp(player, MathHelper.ceil(Math.min(requiredRepair, player.experienceTotal)));
+					stack.setItemDamage(Math.max(0, stack.getItemDamage() - MathHelper.ceil(MathHelper.abs(removeXp(player, MathHelper.ceil(requiredRepair))) * conversion)));
 				}
 
-				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+				return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 			}
 		}
 
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+		return new ActionResult<>(EnumActionResult.PASS, stack);
 	}
 
 	public static int removeXp(EntityPlayer player, int amount) {
-		int startAmount = amount;
-		while(amount > 0) {
-			int barCap = player.xpBarCap();
-			int barXp = (int) (barCap * player.experience);
-			int removeXp = Math.min(barXp, amount);
-			int newBarXp = barXp - removeXp;
-			amount -= removeXp;
-			player.experienceTotal -= removeXp;
-			if(player.experienceTotal < 0) {
-				player.experienceTotal = 0;
-			}
-			if(newBarXp == 0 && amount > 0) {
-				player.experienceLevel--;
-				if(player.experienceLevel < 0) {
-					player.experienceLevel = 0;
-					player.experienceTotal = 0;
-					player.experience = 0;
-					break;
-				} else {
-					player.experience = 1.0F;
-				}
+		int change = amount;
+
+		float playerXp = player.experience * (float)player.xpBarCap();
+		player.addScore(-amount);
+		player.experience -= (float) amount / (float) player.xpBarCap();
+		player.experienceTotal = MathHelper.clamp(player.experienceTotal - amount, 0, Integer.MAX_VALUE);
+
+		while (player.experience < 0) {
+			float xp = player.experience * (float)player.xpBarCap();
+
+			if (player.experienceLevel > 0) {
+				player.addExperienceLevel(-1);
+				player.experience = 1.0F + xp / (float)player.xpBarCap();
 			} else {
-				player.experience = newBarXp / (float) barCap;
+				player.addExperienceLevel(-1);
+				change = MathHelper.absFloor((float)amount - playerXp);
+				player.experience = 0.0F;
 			}
 		}
-		return startAmount - amount;
+
+		return change;
 	}
 
 	@Override
@@ -94,7 +88,7 @@ public class ItemRing extends Item implements IEquippable {
 
 	@Override
 	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target) {
-		return stack.getItemDamage() == 0 || player.experienceTotal == 0 || player.isSneaking();
+		return stack.getItemDamage() == 0 || player.experienceTotal == 0 || player.experience == 0 || player.experienceLevel == 0 || player.isSneaking();
 	}
 
 	@Override

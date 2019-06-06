@@ -60,7 +60,7 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 		float beamScaleInset = 0.75f;
 		Vec3d beamStart = new Vec3d(this.pos.getX() + 0.5 - dir.x * beamScale * beamScaleInset * 0.1f, this.pos.getY() + 0.5 - dir.y * beamScale * beamScaleInset * 0.1f, this.pos.getZ() + 0.5 - dir.z * beamScale * beamScaleInset * 0.1f);
 		Vec3d beamEnd = new Vec3d(target.x + dir.x * beamScale * beamScaleInset * 0.1f * 2, target.y + dir.y * beamScale * beamScaleInset * 0.1f * 2, target.z + dir.z * beamScale * beamScaleInset * 0.1f * 2);
-		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, BLParticles.PUZZLE_BEAM_2.create(world, beamStart.x, beamStart.y, beamStart.z, ParticleArgs.get().withMotion(0, 0, 0).withColor(57F, 255F, 56F, 1F).withScale(beamScale).withData(30, beamEnd)));
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, BLParticles.PUZZLE_BEAM_2.create(world, beamStart.x, beamStart.y, beamStart.z, ParticleArgs.get().withMotion(0, 0, 0).withColor(40F, 220F, 130F, 1F).withScale(beamScale).withData(30, beamEnd)));
 		for(int i = 0; i < 3; i++) {
 			float offsetLen = this.world.rand.nextFloat();
 			Vec3d offset = new Vec3d(target.x * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f, target.y * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f, target.z * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f);
@@ -71,7 +71,7 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 			if(ShaderHelper.INSTANCE.canUseShaders() && world.rand.nextBoolean()) {
 				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS, BLParticles.SMOOTH_SMOKE.create(world, this.pos.getX() + 0.5 + offset.x, this.pos.getY() + 0.5 + offset.y, this.pos.getZ() + 0.5 + offset.z, ParticleArgs.get().withMotion(vx, vy, vz).withColor(1, 1, 1, 0.2F).withScale(scale * 8).withData(80, true, 0.0F, true)));
 			} else {
-				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, this.pos.getX() + 0.5 + offset.x, this.pos.getY() + 0.5 + offset.y, this.pos.getZ() + 0.5 + offset.z, ParticleArgs.get().withMotion(vx, vy, vz).withColor(57F, 255F, 56F, 1F).withScale(scale).withData(100)));
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, this.pos.getX() + 0.5 + offset.x, this.pos.getY() + 0.5 + offset.y, this.pos.getZ() + 0.5 + offset.z, ParticleArgs.get().withMotion(vx, vy, vz).withColor(40F, 220F, 130F, 1F).withScale(scale).withData(100)));
 			}
 		}
 	}
