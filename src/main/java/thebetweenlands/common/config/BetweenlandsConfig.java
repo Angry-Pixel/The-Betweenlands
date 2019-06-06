@@ -7,6 +7,7 @@ import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.Ignore;
 import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.Name;
+import net.minecraftforge.common.config.Config.RangeDouble;
 import net.minecraftforge.common.config.Config.RangeInt;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import thebetweenlands.common.config.properties.IntSetProperty;
@@ -413,6 +414,23 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "decay_bar_zone_offset_y")
 		@Comment("Y offset of the decay bar relative to the decay zone")
 		public int decayBarOffsetY = 0;
+		
+		@Name("decay_percentage")
+		@LangKey(LANG_PREFIX + "decay_percentage")
+		@Comment("Whether the decay health reduction should be percentual")
+		public boolean decayPercentual = false;
+		
+		@Name("decay_min_health")
+		@LangKey(LANG_PREFIX + "decay_min_health")
+		@Comment("Minimum player health when absolute decay is applied")
+		@RangeDouble(min = 0, max = Float.MAX_VALUE)
+		public float decayMinHealth = 6.0f;
+		
+		@Name("decay_min_health_percent")
+		@LangKey(LANG_PREFIX + "decay_min_health_percent")
+		@Comment("Minimum player health percentage when percentual decay is applied")
+		@RangeDouble(min = 0, max = Float.MAX_VALUE)
+		public float decayMinHealthPercentage = 0.15f;
 	}
 
 	@Name("mob_spawning")

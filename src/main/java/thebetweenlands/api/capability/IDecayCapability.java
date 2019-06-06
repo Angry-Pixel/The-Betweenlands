@@ -17,6 +17,15 @@ public interface IDecayCapability {
 	public float getMaxPlayerHealth(int decayLevel);
 
 	/**
+	 * Returns the percentage of the maximum player health with the specified decay level
+	 * @param decayLevel
+	 * @return
+	 */
+	public default float getMaxPlayerHealthPercentage(int decayLevel) {
+		return this.getMaxPlayerHealth(decayLevel) / 20.0f;
+	}
+	
+	/**
 	 * Returns whether decay is currently enabled for this player
 	 * @return
 	 */
