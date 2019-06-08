@@ -15,9 +15,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
+import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
@@ -71,7 +73,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
 		
 		timer.start("Crypt");
-		generateCryptCrawlerDungeon(world, rand, pos.down(44).add(14, 0, 14));
+		generateCryptCrawlerDungeon(world, rand, pos.down(25).add(-3, 0, -3));
 		timer.finish("Crypt");
 
 		timer.finish("Full_Mudgeon");
@@ -79,7 +81,105 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	}
 	
 	private void generateCryptCrawlerDungeon(World world, Random rand, BlockPos pos) {
-		// TODO Stuff
+		for (int x = 0; x < 32; x ++)
+			for (int z = 0; z < 3; z ++)
+				for (int y = -18; y < 0; y ++)
+				world.setBlockToAir(pos.add(x, y, z));
+		
+		for (int x = 0; x < 3; x ++)
+			for (int z = 3; z < 32; z ++)
+				for (int y = -18; y < 0; y ++)
+				world.setBlockToAir(pos.add(x, y, z));
+
+		//S
+		for (int x = 1; x < 32; x++)
+			for (int z = 1; z < 3; z++) {
+				world.setBlockState(pos.add(x, 0, z), blockHelper.MUD, 2);
+				world.setBlockState(pos.add(x, -6, z), blockHelper.MUD, 2);
+				world.setBlockState(pos.add(x, -12, z), blockHelper.MUD, 2);
+				world.setBlockState(pos.add(x, -18, z), blockHelper.MUD, 2);
+
+				if (rand.nextBoolean())
+					world.setBlockState(pos.add(x, -1, z), blockHelper.MUD, 2);
+				if (rand.nextBoolean())
+					world.setBlockState(pos.add(x, -7, z), blockHelper.MUD, 2);
+				if (rand.nextBoolean())
+					world.setBlockState(pos.add(x, -13, z), blockHelper.MUD, 2);
+
+				world.setBlockState(pos.add(x, -5, z), blockHelper.COMPACTED_MUD, 2);
+				world.setBlockState(pos.add(x, -11, z), blockHelper.COMPACTED_MUD, 2);
+				world.setBlockState(pos.add(x, -17, z), blockHelper.COMPACTED_MUD, 2);
+			}
+		//E
+		for (int x = 1; x < 3; x++)
+			for (int z = 3; z < 32; z++) {
+				world.setBlockState(pos.add(x, 0, z), blockHelper.MUD, 2);
+				world.setBlockState(pos.add(x, -6, z), blockHelper.MUD, 2);
+				world.setBlockState(pos.add(x, -12, z), blockHelper.MUD, 2);
+				world.setBlockState(pos.add(x, -18, z), blockHelper.MUD, 2);
+
+				if (rand.nextBoolean())
+					world.setBlockState(pos.add(x, -1, z), blockHelper.MUD, 2);
+				if (rand.nextBoolean())
+					world.setBlockState(pos.add(x, -7, z), blockHelper.MUD, 2);
+				if (rand.nextBoolean())
+					world.setBlockState(pos.add(x, -13, z), blockHelper.MUD, 2);
+
+				world.setBlockState(pos.add(x, -5, z), blockHelper.COMPACTED_MUD, 2);
+				world.setBlockState(pos.add(x, -11, z), blockHelper.COMPACTED_MUD, 2);
+				world.setBlockState(pos.add(x, -17, z), blockHelper.COMPACTED_MUD, 2);
+			}
+
+		microBuild.buildCryptCrawlerWalkways(world, pos, EnumFacing.SOUTH, rand);
+
+		//S
+		for (int x = 1; x < 32; x++)
+			for (int z = 1; z < 3; z++) {
+				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, 0, z)))
+					world.setBlockState(pos.add(x, -1, z), BlockRegistry.HANGER.getDefaultState(), 2);
+				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -6, z)))
+					world.setBlockState(pos.add(x, -7, z), BlockRegistry.HANGER.getDefaultState(), 2);
+				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -12, z)))
+					world.setBlockState(pos.add(x, -13, z), BlockRegistry.HANGER.getDefaultState(), 2);
+
+				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -5, z)))
+					world.setBlockState(pos.add(x, -4, z), blockHelper.getRandomMushroom(rand), 2);
+				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -11, z)))
+					world.setBlockState(pos.add(x, -10, z), blockHelper.getRandomMushroom(rand), 2);
+				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
+					world.setBlockState(pos.add(x, -16, z), blockHelper.getRandomMushroom(rand), 2);
+			}
+		// E
+		for (int x = 1; x < 3; x++)
+			for (int z = 3; z < 32; z++) {
+				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, 0, z)))
+					world.setBlockState(pos.add(x, -1, z), BlockRegistry.HANGER.getDefaultState(), 2);
+				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -6, z)))
+					world.setBlockState(pos.add(x, -7, z), BlockRegistry.HANGER.getDefaultState(), 2);
+				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -12, z)))
+					world.setBlockState(pos.add(x, -13, z), BlockRegistry.HANGER.getDefaultState(), 2);
+
+				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -5, z)))
+					world.setBlockState(pos.add(x, -4, z), blockHelper.getRandomMushroom(rand), 2);
+				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -11, z)))
+					world.setBlockState(pos.add(x, -10, z), blockHelper.getRandomMushroom(rand), 2);
+				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
+					world.setBlockState(pos.add(x, -16, z), blockHelper.getRandomMushroom(rand), 2);
+			}
+	}
+
+	public boolean plantingChance(Random rand) {
+		return rand.nextBoolean() && rand.nextBoolean();
+	}
+
+	public boolean isPlantableAbove(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		return SoilHelper.canSustainPlant(state) && world.isAirBlock(pos.up());
+	}
+
+	public boolean isPlantableBelow(World world, BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		return SoilHelper.canSustainPlant(state) && world.isAirBlock(pos.down());
 	}
 
 	public void generateTower(World world, Random rand, BlockPos pos) {

@@ -695,6 +695,24 @@
       "thebetweenlands:shambler_lick"
     ]
   },
+    "crypt_crawler_living": {
+    "sounds": [
+      "thebetweenlands:crypt_crawler_living_1",
+      "thebetweenlands:crypt_crawler_living_2",
+      "thebetweenlands:crypt_crawler_living_3"
+    ]
+  },
+  "crypt_crawler_hurt": {
+    "sounds": [
+      "thebetweenlands:crypt_crawler_hurt_1",
+      "thebetweenlands:crypt_crawler_hurt_2"
+    ]
+  },
+  "crypt_crawler_death": {
+    "sounds": [
+      "thebetweenlands:crypt_crawler_death"
+    ]
+  },
   "greebling_vanish": {
     "sounds": [
       "thebetweenlands:greebling_vanish"

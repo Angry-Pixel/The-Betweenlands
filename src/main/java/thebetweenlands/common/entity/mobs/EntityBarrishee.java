@@ -17,11 +17,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.MessageSoundRipple;
 
-public class EntityBarrishee extends EntityMob implements IEntityScreenShake {
+public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IEntityBL {
 
 	private static final DataParameter<Boolean> AMBUSH_SPAWNED = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> SCREAM = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);

@@ -213,7 +213,6 @@ public class SludgeWormMazeMicroBuilds {
 				}
 				world.setBlockState(pos.add(x, 0, z), blockHelper.getTilesForLevel(rand, 3), 2);
 				world.setBlockState(pos.add(x, 4, z), blockHelper.getMudBricksForLevel(rand, 3, 1), 2);
-				world.setBlockState(pos.add(x, -1, z), blockHelper.MUD, 2);
 				if (x == 0 || x == 8) {
 					if (z > 0) {
 						for (int y = 1; y <= 3; y++)
@@ -239,11 +238,79 @@ public class SludgeWormMazeMicroBuilds {
 		world.setBlockState(pos.add(1, 1, 2), blockHelper.CHEST.withProperty(BlockChestBetweenlands.FACING, facing.rotateYCCW()), 2);
 		world.setBlockState(pos.add(1, 3, 1), blockHelper.getMudBricksForLevel(rand, level, 0), 2);
 		world.setBlockState(pos.add(1, 3, 2), blockHelper.getMudBricksForLevel(rand, level, 0), 2);
-		
 		world.setBlockState(pos.add(1, 2, 1), blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP), 2);
 		world.setBlockState(pos.add(1, 2, 2), blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP), 2);
 		world.setBlockState(pos.add(2, 3, 1), blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP), 2);
 		world.setBlockState(pos.add(2, 3, 2), blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP), 2);
+	}
+
+	public void buildCryptCrawlerWalkways(World world, BlockPos pos, EnumFacing facing, Random rand) {
+		buildCryptCrawlerWalkwaysStairsNormal(world, pos.add(20, -10, 1), facing, rand);
+		buildCryptCrawlerWalkwaysStairsNormal(world, pos.add(8, -10, 2), facing.getOpposite(), rand);
+		buildCryptCrawlerWalkwaysStairsNormal(world, pos.add(25, -10, 2), facing.getOpposite(), rand);
+		buildCryptCrawlerWalkwaysStairsNormal(world, pos.add(28, -16, 1), facing, rand);
+		buildCryptCrawlerWalkwaysStairsNormal(world, pos.add(8, -16, 2), facing, rand);
+		buildCryptCrawlerWalkwaysStairsNormal(world, pos.add(1, -10, 10), facing.rotateYCCW(), rand);
+		buildCryptCrawlerWalkwaysStairsNormal(world, pos.add(2, -10, 22), facing.getOpposite().rotateYCCW(), rand);
+		buildCryptCrawlerWalkwaysStairsNormal(world, pos.add(1, -10, 25), facing.rotateYCCW(), rand);
+		buildCryptCrawlerWalkwaysStairsNormal(world, pos.add(2, -16, 2), facing.rotateYCCW(), rand);
+
+		rotatedCubeVolume(world, rand, pos, 1, -18, 27, blockHelper.AIR, 1, 2, 4, facing);
+
+		//South walls
+		rotatedCubeVolume(world, rand, pos, 14, -4, 1, blockHelper.MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 31, -4, 1, blockHelper.MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 6, -10, 1, blockHelper.MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 22, -10, 1, blockHelper.MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 31, -10, 1, blockHelper.MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 3, -16, 1, blockHelper.MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 31, -16, 1, blockHelper.MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 0, -18, 0, blockHelper.MUD, 32, 19, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, -18, 1, blockHelper.MUD, 1, 19, 31, facing);
+
+		//East walls
+		rotatedCubeVolume(world, rand, pos, 1, -4, 16, blockHelper.MUD, 2, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -4, 31, blockHelper.MUD, 2, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -10, 8, blockHelper.MUD, 2, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -10, 24, blockHelper.MUD, 2, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -10, 31, blockHelper.MUD, 2, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -16, 31, blockHelper.MUD, 2, 4, 1, facing);
+
+		//extra roots
+		rotatedCubeVolume(world, rand, pos, 1, -4, 1, blockHelper.ROOT, 1, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 14, -8, 1, blockHelper.ROOT, 1, 2, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 22, -14, 1, blockHelper.ROOT, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 21, -14, 2, blockHelper.ROOT, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 19, -16, 2, blockHelper.ROOT, 1, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -8, 16, blockHelper.ROOT, 2, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -16, 10, blockHelper.ROOT, 1, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -14, 9, blockHelper.ROOT, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, -14, 8, blockHelper.ROOT, 1, 2, 1, facing);
+	}
+	
+	public void buildCryptCrawlerWalkwaysStairsNormal(World world, BlockPos pos, EnumFacing facing, Random rand) {
+		//TODO change to rotten stairs
+		rotatedCubeVolume(world, rand, pos, 0, 0, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateY(), EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateYCCW(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 1, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateY(), EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -2, 1, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateYCCW(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -2, 2, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateY(), EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -3, 2, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateYCCW(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -3, 3, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateY(), EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -4, 3, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateYCCW(), EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -4, 4, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateY(), EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -5, 5, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateY(), EnumHalf.BOTTOM), 1, 1, 1, facing);
+
+		// air gaps
+		rotatedCubeVolume(world, rand, pos, -4, 5, 0, blockHelper.AIR, 3, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -3, 4, 0, blockHelper.AIR, 3, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -2, 3, 0, blockHelper.AIR, 3, 1, 1, facing);
+
+		// roots
+		rotatedCubeVolume(world, rand, pos, -2, 0, 0, blockHelper.ROOT, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -3, 0, 0, blockHelper.ROOT, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -4, 0, 0, blockHelper.ROOT, 1, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -5, 0, 0, blockHelper.ROOT, 1, 4, 1, facing);
 	}
 
 	@SuppressWarnings("incomplete-switch")
@@ -288,4 +355,5 @@ public class SludgeWormMazeMicroBuilds {
 			break;
 		}
 	}
+
 }

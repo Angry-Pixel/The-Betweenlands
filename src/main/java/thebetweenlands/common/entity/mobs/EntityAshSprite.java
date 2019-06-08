@@ -29,8 +29,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.IEntityBL;
 
-public class EntityAshSprite extends EntityMob {
+public class EntityAshSprite extends EntityMob implements IEntityBL {
 	protected static final DataParameter<Byte> ASH_SPRITE_FLAGS = EntityDataManager.<Byte>createKey(EntityAshSprite.class, DataSerializers.BYTE);
 	@Nullable
 	private BlockPos boundOrigin;

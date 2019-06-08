@@ -43,6 +43,7 @@ import thebetweenlands.common.tile.TileEntityLootUrn;
 
 public class SludgeWormMazeBlockHelper {
 	
+	public IBlockState AIR = Blocks.AIR.getDefaultState();
 	public IBlockState MOB_SPAWNER = BlockRegistry.MOB_SPAWNER.getDefaultState();
 	public IBlockState BLACK_HAT_MUSHROOM = BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState();
 	public IBlockState SLUDGECREEP = BlockRegistry.SLUDGECREEP.getDefaultState();

@@ -293,7 +293,7 @@ public class ModelCryptCrawler extends ModelBase {
 
 			body_main.rotateAngleX = 0.091106186954104F - (standingAngle) - animation2 * 2F;
 
-			body_main.rotateAngleZ = (standingAngle * 0.125F * flap);
+			//body_main.rotateAngleZ = (standingAngle * 0.125F * flap);
 
 			body_lower.rotateAngleX = -0.22759093446006054F - (standingAngle * 0.5F)+ animation2 * 2F;
 

@@ -1,6 +1,5 @@
 package thebetweenlands.common.entity.mobs;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -14,26 +13,26 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityCryptCrawler extends EntityMob {
+public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	private static final DataParameter<Boolean> IS_STANDING = EntityDataManager.createKey(EntityCryptCrawler.class, DataSerializers.BOOLEAN);
 	public float standingAngle, prevStandingAngle;
 
 	public EntityCryptCrawler(World world) {
 		super(world);
-		setSize(1.25F, 1.25F);
+		setSize(1F, 1.25F);
 		stepHeight = 1F;
 	}
 
@@ -58,7 +57,7 @@ public class EntityCryptCrawler extends EntityMob {
 		tasks.addTask(3, new EntityAIWander(this, 0.6D));
 		tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		tasks.addTask(5, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget(this, EntityZombie.class, 0, true, true, null));
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget(this, EntityZombie.class, 0, false, true, null));
 		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
 	}
 
@@ -110,7 +109,7 @@ public class EntityCryptCrawler extends EntityMob {
 
 		super.onLivingUpdate();
 	}
-	
+
     @SideOnly(Side.CLIENT)
     public float smoothedAngle(float partialTicks) {
         return prevStandingAngle + (standingAngle - prevStandingAngle) * partialTicks;
@@ -145,31 +144,27 @@ public class EntityCryptCrawler extends EntityMob {
 			if (hasHitTarget) {
 				entity.addVelocity(-MathHelper.sin(rotationYaw * 3.141593F / 180.0F) * 0.5F, 0.2D, MathHelper.cos(rotationYaw * 3.141593F / 180.0F) * 0.5F);
 				if (!getEntityWorld().isRemote)
-					getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_POLAR_BEAR_WARNING, SoundCategory.HOSTILE, 1F, 1F);
+					getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundRegistry.CRYPT_CRAWLER_LIVING, SoundCategory.HOSTILE, 1F, 0.5F);
 			}
 			return hasHitTarget;
 		}
 		return false;
 	}
-// Temp sounds
+
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_POLAR_BEAR_AMBIENT;
+		return SoundRegistry.CRYPT_CRAWLER_LIVING;
 	}
 
 	protected SoundEvent getHurtSound() {
-		return SoundEvents.ENTITY_POLAR_BEAR_HURT;
+		return SoundRegistry.CRYPT_CRAWLER_HURT;
 	}
 
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_POLAR_BEAR_DEATH;
-	}
-
-	protected void playStepSound(BlockPos pos, Block blockIn) {
-		this.playSound(SoundEvents.ENTITY_POLAR_BEAR_STEP, 0.15F, 1.0F);
+		return SoundRegistry.CRYPT_CRAWLER_DEATH;
 	}
 
 	static class AICryptCrawlerAttack extends EntityAIAttackMelee {
-		
+
 		public AICryptCrawlerAttack(EntityCryptCrawler crypt_crawler) {
 			super(crypt_crawler, 0.6D, false);
 		}
