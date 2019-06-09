@@ -288,7 +288,7 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 1, -14, 9, blockHelper.ROOT, 1, 2, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 2, -14, 8, blockHelper.ROOT, 1, 2, 1, facing);
 	}
-	
+
 	public void buildCryptCrawlerWalkwaysStairsNormal(World world, BlockPos pos, EnumFacing facing, Random rand) {
 		rotatedCubeVolume(world, rand, pos, 0, 0, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateY()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, -1, 0, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateYCCW()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.TOP), 1, 1, 1, facing);
@@ -319,19 +319,97 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 6, 1, 3, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 26, 2, 2, blockHelper.AIR, 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 25, 1, 3, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
-		
+
 		rotatedCubeVolume(world, rand, pos, 6, 0, 1, blockHelper.COMPACTED_MUD, 20, 1, 3, facing);
 		rotatedCubeVolume(world, rand, pos, 6, 1, 4, blockHelper.COMPACTED_MUD, 20, 3, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 6, 1, 0, blockHelper.COMPACTED_MUD, 20, 3, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 6, 4, 1, blockHelper.COMPACTED_MUD, 20, 1, 3, facing);
-		
+		rotatedCubeVolume(world, rand, pos, 6, 4, 1, blockHelper.COMPACTED_MUD, 20, 1, 3, facing); //roof
+
 		rotatedCubeVolume(world, rand, pos, 6, 1, 1, blockHelper.COMPACTED_MUD, 4, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 6, 1, 2, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
-		
+
 		rotatedCubeVolume(world, rand, pos, 22, 1, 1, blockHelper.COMPACTED_MUD, 4, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 24, 1, 2, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 13, 1, 3, blockHelper.COMPACTED_MUD, 6, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 14, 2, 3, blockHelper.COMPACTED_MUD, 4, 1, 1, facing);
+		if (facing != EnumFacing.EAST) {
+			rotatedCubeVolume(world, rand, pos, 13, 1, 3, blockHelper.COMPACTED_MUD, 6, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 14, 2, 3, blockHelper.COMPACTED_MUD, 4, 1, 1, facing);
+		}
+	}
+
+	public void buildCryptCrawlerTunnelsConnect(World world, BlockPos pos, EnumFacing facing, Random rand) {
+		rotatedCubeVolume(world, rand, pos, 1, 4, 9, blockHelper.AIR, 3, 1, 7, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 8, 31, blockHelper.COMPACTED_MUD, 8, 7, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 8, 28, blockHelper.COMPACTED_MUD, 1, 7, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 9, 28, blockHelper.COMPACTED_MUD, 3, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 8, 27, blockHelper.COMPACTED_MUD, 7, 1, 4, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 9, 27, blockHelper.COMPACTED_MUD, 1, 5, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 9, 26, blockHelper.COMPACTED_MUD, 1, 6, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 8, 25, blockHelper.COMPACTED_MUD, 1, 5, 1, facing);
+
+		//stairs
+		rotatedCubeVolume(world, rand, pos, 1, 9, 30, blockHelper.COMPACTED_MUD, 3, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 10, 30, blockHelper.COMPACTED_MUD, 4, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 11, 30, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 12, 29, blockHelper.COMPACTED_MUD, 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 13, 26, blockHelper.COMPACTED_MUD, 1, 1, 4, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 14, 26, blockHelper.COMPACTED_MUD, 1, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 15, 27, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+
+		rotatedCubeVolume(world, rand, pos, 1, 12, 23, blockHelper.COMPACTED_MUD, 3, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 11, 21, blockHelper.COMPACTED_MUD, 3, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 10, 19, blockHelper.COMPACTED_MUD, 3, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 9, 17, blockHelper.COMPACTED_MUD, 3, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 8, 15, blockHelper.COMPACTED_MUD, 3, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 7, 13, blockHelper.COMPACTED_MUD, 3, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 6, 11, blockHelper.COMPACTED_MUD, 3, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 5, 9, blockHelper.COMPACTED_MUD, 3, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 4, 7, blockHelper.COMPACTED_MUD, 3, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 8, 25, blockHelper.COMPACTED_MUD, 1, 7, 6, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 7, 25, blockHelper.COMPACTED_MUD, 1, 8, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 14, 25, blockHelper.COMPACTED_MUD, 3, 1, 4, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 14, 29, blockHelper.COMPACTED_MUD, 4, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 14, 27, blockHelper.COMPACTED_MUD, 2, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 7, 22, blockHelper.COMPACTED_MUD, 4, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 6, 21, blockHelper.COMPACTED_MUD, 4, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 6, 20, blockHelper.COMPACTED_MUD, 3, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 5, 18, blockHelper.COMPACTED_MUD, 3, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 4, 16, blockHelper.COMPACTED_MUD, 6, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 4, 15, blockHelper.COMPACTED_MUD, 4, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 15, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 14, blockHelper.COMPACTED_MUD, 6, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 3, 13, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, 12, blockHelper.COMPACTED_MUD, 2, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 11, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 10, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 12, 26, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 13, 28, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 9, 27, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 9, 29, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 9, 29, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 13, 25, blockHelper.COMPACTED_MUD, 3, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 7, 24, blockHelper.COMPACTED_MUD, 1, 6, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 8, 23, blockHelper.COMPACTED_MUD, 1, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 8, 22, blockHelper.COMPACTED_MUD, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 10, 22, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 7, 21, blockHelper.COMPACTED_MUD, 1, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 7, 20, blockHelper.COMPACTED_MUD, 1, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 6, 19, blockHelper.COMPACTED_MUD, 1, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 6, 18, blockHelper.COMPACTED_MUD, 1, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 5, 17, blockHelper.COMPACTED_MUD, 1, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 5, 15, blockHelper.COMPACTED_MUD, 1, 3, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 4, 9, blockHelper.COMPACTED_MUD, 1, 2, 5, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 3, 14, blockHelper.COMPACTED_MUD, 1, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 6, 13, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+
+		//side caps
+		rotatedCubeVolume(world, rand, pos, 0, 4, 9, blockHelper.COMPACTED_MUD, 1, 1, 7, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 5, 11, blockHelper.COMPACTED_MUD, 1, 1, 7, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 6, 13, blockHelper.COMPACTED_MUD, 1, 1, 7, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 7, 15, blockHelper.COMPACTED_MUD, 1, 1, 7, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 8, 17, blockHelper.COMPACTED_MUD, 1, 1, 8, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 9, 19, blockHelper.COMPACTED_MUD, 1, 1, 6, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 10, 21, blockHelper.COMPACTED_MUD, 1, 1, 4, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 11, 23, blockHelper.COMPACTED_MUD, 1, 1, 2, facing);
 	}
 
 	@SuppressWarnings("incomplete-switch")
