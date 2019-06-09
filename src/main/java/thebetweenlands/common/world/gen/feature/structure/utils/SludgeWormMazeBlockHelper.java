@@ -108,6 +108,7 @@ public class SludgeWormMazeBlockHelper {
 	
 	public IBlockState MUD = BlockRegistry.MUD.getDefaultState();
 	public IBlockState COMPACTED_MUD = BlockRegistry.COMPACTED_MUD.getDefaultState();
+	public IBlockState COMPACTED_MUD_SLOPE = BlockRegistry.COMPACTED_MUD_SLOPE.getDefaultState();
 	public IBlockState PUFFSHROOM = BlockRegistry.PUFFSHROOM.getDefaultState();
 	public IBlockState ROTTEN_BARK = BlockRegistry.LOG_ROTTEN_BARK.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, EnumAxis.NONE);
 

@@ -166,6 +166,7 @@ public class ModelRegistry {
 	public static final IModel WALKWAY_NO_STANDS = new ModelWalkway(MODEL_TEXTURE_PACKER, false);
 	public static final IModel THATCH_ROOF = new ModelSlant(new ResourceLocation(ModInfo.ID, "blocks/thatch"));
 	public static final IModel MUD_BRICK_ROOF = new ModelSlant(new ResourceLocation(ModInfo.ID, "blocks/mud_brick_roof"));
+	public static final IModel COMPACTED_MUD_SLOPE = new ModelSlant(new ResourceLocation(ModInfo.ID, "blocks/compacted_mud"));
 	public static final IModel PRESENT = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelPresent(), new ResourceLocation("thebetweenlands:blocks/present"), 64, 64, new IVertexProcessor() {
 		@Override
 		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {

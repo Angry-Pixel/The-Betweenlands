@@ -132,6 +132,7 @@ import thebetweenlands.common.block.structure.BlockChipPath;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockCompactedMud;
+import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
@@ -591,6 +592,7 @@ public class BlockRegistry {
 	public static final Block ENERGY_BARRIER_MUD = new BlockEnergyBarrierMud();
 	public static final Block MUD_BRICK_SPIKE_TRAP = new BlockMudBrickSpikeTrap();
 	public static final Block MUD_TILES_SPIKE_TRAP = new BlockMudTilesSpikeTrap();
+	public static final Block COMPACTED_MUD_SLOPE = new BlockCompactedMudSlope();
 	
 	//Place-Holders for stuffs and things
 	public static final Block MUD_TOWER_BRAZIER = new BlockBrazier();

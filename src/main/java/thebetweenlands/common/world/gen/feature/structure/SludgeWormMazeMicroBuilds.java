@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.block.container.BlockLootUrn;
+import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.block.structure.BlockMudBrickSpikeTrap;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
@@ -289,17 +290,16 @@ public class SludgeWormMazeMicroBuilds {
 	}
 	
 	public void buildCryptCrawlerWalkwaysStairsNormal(World world, BlockPos pos, EnumFacing facing, Random rand) {
-		//TODO change to rotten stairs
-		rotatedCubeVolume(world, rand, pos, 0, 0, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateY(), EnumHalf.BOTTOM), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, -1, 0, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateYCCW(), EnumHalf.TOP), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, -1, 1, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateY(), EnumHalf.BOTTOM), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, -2, 1, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateYCCW(), EnumHalf.TOP), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, -2, 2, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateY(), EnumHalf.BOTTOM), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, -3, 2, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateYCCW(), EnumHalf.TOP), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, -3, 3, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateY(), EnumHalf.BOTTOM), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, -4, 3, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateYCCW(), EnumHalf.TOP), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, -4, 4, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateY(), EnumHalf.BOTTOM), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, -5, 5, 0, blockHelper.getStairsForLevel(rand, 1, facing.rotateY(), EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 0, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateY()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 0, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateYCCW()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 1, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateY()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -2, 1, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateYCCW()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -2, 2, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateY()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -3, 2, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateYCCW()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -3, 3, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateY()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -4, 3, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateYCCW()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -4, 4, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateY()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -5, 5, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateY()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
 
 		// air gaps
 		rotatedCubeVolume(world, rand, pos, -4, 5, 0, blockHelper.AIR, 3, 1, 1, facing);
@@ -311,6 +311,27 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, -3, 0, 0, blockHelper.ROOT, 1, 2, 1, facing);
 		rotatedCubeVolume(world, rand, pos, -4, 0, 0, blockHelper.ROOT, 1, 3, 1, facing);
 		rotatedCubeVolume(world, rand, pos, -5, 0, 0, blockHelper.ROOT, 1, 4, 1, facing);
+	}
+
+	public void buildCryptCrawlerBottomTunnels(World world, BlockPos pos, EnumFacing facing, Random rand) {
+		rotatedCubeVolume(world, rand, pos, 6, 1, 1, blockHelper.AIR, 20, 3, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 2, 2, blockHelper.AIR, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 1, 3, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 26, 2, 2, blockHelper.AIR, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 25, 1, 3, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+		
+		rotatedCubeVolume(world, rand, pos, 6, 0, 1, blockHelper.COMPACTED_MUD, 20, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 1, 4, blockHelper.COMPACTED_MUD, 20, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 1, 0, blockHelper.COMPACTED_MUD, 20, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 4, 1, blockHelper.COMPACTED_MUD, 20, 1, 3, facing);
+		
+		rotatedCubeVolume(world, rand, pos, 6, 1, 1, blockHelper.COMPACTED_MUD, 4, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 1, 2, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
+		
+		rotatedCubeVolume(world, rand, pos, 22, 1, 1, blockHelper.COMPACTED_MUD, 4, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 24, 1, 2, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 13, 1, 3, blockHelper.COMPACTED_MUD, 6, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 14, 2, 3, blockHelper.COMPACTED_MUD, 4, 1, 1, facing);
 	}
 
 	@SuppressWarnings("incomplete-switch")

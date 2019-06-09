@@ -65,23 +65,23 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		location.setDirty(true);
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 		timer.finish("World_Locations");
-
+		
+		timer.start("Crypt");
+		generateCryptCrawlerDungeon(world, rand, pos.down(25).add(-3, 0, -3));
+		timer.finish("Crypt");
+		
 		timer.start("Pit");
 		generateDecayPit(world, rand, pos.down(44).add(14, 0, 14));
 		timer.finish("Pit");
 		
 		generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
-		
-		timer.start("Crypt");
-		generateCryptCrawlerDungeon(world, rand, pos.down(25).add(-3, 0, -3));
-		timer.finish("Crypt");
 
 		timer.finish("Full_Mudgeon");
 		return true;
 	}
 	
 	private void generateCryptCrawlerDungeon(World world, Random rand, BlockPos pos) {
-		for (int x = 0; x < 32; x ++)
+/*	for (int x = 0; x < 32; x ++)
 			for (int z = 0; z < 3; z ++)
 				for (int y = -18; y < 0; y ++)
 				world.setBlockToAir(pos.add(x, y, z));
@@ -90,7 +90,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			for (int z = 3; z < 32; z ++)
 				for (int y = -18; y < 0; y ++)
 				world.setBlockToAir(pos.add(x, y, z));
-
+*/
+		//temp
+		for (int x = 0; x < 32; x ++)
+			for (int z = 0; z < 32; z ++)
+				for (int y = -33; y < 0; y ++)
+				world.setBlockToAir(pos.add(x, y, z));
+		
 		//S
 		for (int x = 1; x < 32; x++)
 			for (int z = 1; z < 3; z++) {
@@ -166,6 +172,32 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
 					world.setBlockState(pos.add(x, -16, z), blockHelper.getRandomMushroom(rand), 2);
 			}
+
+		 	addSphericalChamber (world, rand, pos.add(4, -29, 27)); //entrance
+		 	addSphericalChamber (world, rand, pos.add(4, -29, 4)); 
+		 	
+			addSphericalChamber (world, rand, pos.add(27, -29, 4)); 
+			addSphericalChamber (world, rand, pos.add(27, -29, 27));
+			
+			microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(0, -33, 0), EnumFacing.SOUTH, rand);//zeros
+			microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(0, -33, 31), EnumFacing.EAST, rand);
+			microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(31, -33, 0), EnumFacing.WEST, rand);
+			microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(31, -33, 31), EnumFacing.NORTH, rand);
+	}
+
+	public void addSphericalChamber(World world, Random rand, BlockPos pos) {
+		for (int xx = - 4; xx <= 4; xx++) {
+			for (int zz = - 4; zz <= 4; zz++) {
+				for (int yy = -4; yy <= 4; yy++) {
+					double dSqSphere = Math.pow(xx, 2.0D) + Math.pow(zz, 2.0D) + Math.pow(yy, 2.0D);
+					if (Math.round(Math.sqrt(dSqSphere)) <= 4)
+						if (dSqSphere >= Math.pow(3, 2.0D))
+							world.setBlockState(pos.add(xx, yy, zz), blockHelper.COMPACTED_MUD, 2);
+						else
+							world.setBlockToAir(pos.add(xx, yy, zz));
+				}
+			}
+		}
 	}
 
 	public boolean plantingChance(Random rand) {
