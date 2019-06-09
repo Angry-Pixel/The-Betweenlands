@@ -79,7 +79,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.finish("Full_Mudgeon");
 		return true;
 	}
-
+	
 	private void generateCryptCrawlerDungeon(World world, Random rand, BlockPos pos) {
 	for (int x = 0; x < 32; x ++)
 			for (int z = 0; z < 3; z ++)
@@ -91,11 +91,12 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				for (int y = -18; y < 0; y ++)
 				world.setBlockToAir(pos.add(x, y, z));
 
-	/*	//temp
+	//temp
 		for (int x = 0; x < 32; x ++)
 			for (int z = 0; z < 32; z ++)
-				for (int y = -33; y < 0; y ++)
-				world.setBlockToAir(pos.add(x, y, z));*/
+				for (int y = -33; y < -19; y ++)
+				world.setBlockToAir(pos.add(x, y, z));
+
 
 		//S
 		for (int x = 1; x < 32; x++)

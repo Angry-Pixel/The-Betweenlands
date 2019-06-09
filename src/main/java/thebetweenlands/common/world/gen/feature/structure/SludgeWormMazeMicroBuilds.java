@@ -373,10 +373,10 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 1, 6, 21, blockHelper.COMPACTED_MUD, 4, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 6, 20, blockHelper.COMPACTED_MUD, 3, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 5, 18, blockHelper.COMPACTED_MUD, 3, 1, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 1, 4, 16, blockHelper.COMPACTED_MUD, 6, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 4, 15, blockHelper.COMPACTED_MUD, 6, 1, 3, facing);
 		rotatedCubeVolume(world, rand, pos, 3, 4, 15, blockHelper.COMPACTED_MUD, 4, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, 3, 15, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 3, 14, blockHelper.COMPACTED_MUD, 6, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 13, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 3, 3, 13, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 2, 12, blockHelper.COMPACTED_MUD, 2, 1, 2, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 1, 11, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
@@ -410,6 +410,28 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 0, 9, 19, blockHelper.COMPACTED_MUD, 1, 1, 6, facing);
 		rotatedCubeVolume(world, rand, pos, 0, 10, 21, blockHelper.COMPACTED_MUD, 1, 1, 4, facing);
 		rotatedCubeVolume(world, rand, pos, 0, 11, 23, blockHelper.COMPACTED_MUD, 1, 1, 2, facing);
+		
+		//hoard room
+		rotatedCubeVolume(world, rand, pos, 4, 1, 15, blockHelper.AIR, 3, 3, 9, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 0, 15, blockHelper.COMPACTED_MUD, 4, 1, 9, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 0, 20, blockHelper.COMPACTED_MUD, 1, 1, 4, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 0, 24, blockHelper.COMPACTED_MUD, 3, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 1, 14, blockHelper.COMPACTED_MUD, 3, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 1, 15, blockHelper.COMPACTED_MUD, 1, 2, 5, facing);
+		rotatedCubeVolume(world, rand, pos, 9, 1, 20, blockHelper.COMPACTED_MUD, 1, 2, 4, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 1, 23, blockHelper.COMPACTED_MUD, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 1, 24, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 10, 1, 24, blockHelper.COMPACTED_MUD, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 1, 25, blockHelper.COMPACTED_MUD, 3, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 3, 15, blockHelper.COMPACTED_MUD, 1, 1, 9, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 3, 20, blockHelper.COMPACTED_MUD, 1, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 3, 24, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 4, 18, blockHelper.COMPACTED_MUD, 3, 1, 5, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 12, blockHelper.COMPACTED_MUD, 2, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, 14, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
+
+		rotatedCubeVolume(world, rand, pos, 3, 1, 13, blockHelper.COMPACTED_MUD_MIRAGE_BLOCK, 1, 2, 2, facing); //mirage blocks
+		rotatedCubeVolume(world, rand, pos, 7, 1, 24, blockHelper.COMPACTED_MUD_MIRAGE_BLOCK, 1, 2, 1, facing);
 	}
 
 	@SuppressWarnings("incomplete-switch")
