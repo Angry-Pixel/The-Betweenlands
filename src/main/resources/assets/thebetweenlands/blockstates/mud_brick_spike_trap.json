@@ -15,7 +15,7 @@
 				"x": 90
 			},
 			"south": {
-				"x": 270
+				"x": 90, "y":180
 			},
 			"east": {
 				"x": 90,
@@ -39,7 +39,7 @@
 		},
 		"facing=south,overlay=true": {
 			"model": "thebetweenlands:mud_brick_spike_trap_overlay",
-			"x": 270
+			"x": 90, "y":180
 		},
 		"facing=east,overlay=true": {
 			"model": "thebetweenlands:mud_brick_spike_trap_overlay",
