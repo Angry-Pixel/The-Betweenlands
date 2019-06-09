@@ -103,6 +103,7 @@ import thebetweenlands.common.item.misc.ItemEmptyAmateMap;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemGemSinger;
 import thebetweenlands.common.item.misc.ItemGlue;
+import thebetweenlands.common.item.misc.ItemGrapplingHook;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.item.misc.ItemLoreScrap;
 import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
@@ -377,6 +378,7 @@ public class ItemRegistry {
     public static final Item AMULET_SLOT = new ItemAmuletSlot();
     public static final Item LURKER_SKIN_POUCH = new ItemLurkerSkinPouch();
     public static final Item CAVING_ROPE = new ItemCavingRope();
+    public static final Item GRAPPLING_HOOK = new ItemGrapplingHook();
     public static final Item ROPE_ITEM = new ItemRope();
     public static final Item RING_OF_POWER = new ItemRingOfPower();
     public static final Item RING_OF_FLIGHT = new ItemRingOfFlight();

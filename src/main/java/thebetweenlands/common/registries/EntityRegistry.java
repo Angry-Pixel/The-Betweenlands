@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
@@ -113,6 +114,7 @@ public class EntityRegistry {
 		registerEntity(EntityTarminion.class, "tarminion", 0x000000, 0x2E2E2E, 64, 1, true);
 		registerEntity(EntityThrownTarminion.class, "thrown_tarminion", 64, 10, true);
 		registerEntity(EntityRopeNode.class, "rope_node", 64, 1, true);
+		registerEntity(EntityGrapplingHookNode.class, "grapping_hook_node", 64, 1, true);
 		registerEntity(EntityMummyArm.class, "mummy_arm", 64, 20, false);
 		registerEntity(EntityAngryPebble.class, "angry_pebble");
 		registerEntity(EntityFortressBoss.class, "fortress_boss", 0x000000, 0x00FFFA, 64, 1, true);
