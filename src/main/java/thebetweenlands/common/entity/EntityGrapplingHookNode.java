@@ -14,7 +14,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
@@ -185,7 +188,7 @@ public class EntityGrapplingHookNode extends Entity {
 			this.handleWaterMovement();
 			this.move(MoverType.SELF, this.motionX + this.correctionX, this.motionY + this.correctionY, this.motionZ + this.correctionZ);
 			this.pushOutOfBlocks(this.posX, this.posY, this.posZ);
-			
+
 			//Check if it is now attached after move and should play sound
 			if(this.isAttached()) {
 				this.playSound(SoundEvents.BLOCK_STONE_PLACE, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
@@ -244,6 +247,8 @@ public class EntityGrapplingHookNode extends Entity {
 			this.motionY = 0.0D;
 			this.motionZ = 0.0D;
 		}
+
+		this.checkForEntityCollisions(prevNode, nextNode);
 
 		this.climbing = false;
 
@@ -356,9 +361,41 @@ public class EntityGrapplingHookNode extends Entity {
 		}
 	}
 
+	protected void checkForEntityCollisions(Entity prevNode, Entity nextNode) {
+		if(!this.world.isRemote && prevNode != null) {
+			double motion = Math.sqrt(this.motionX*this.motionX + this.motionY*this.motionY + this.motionZ*this.motionZ);
+
+			Entity user = this.getUser();
+
+			if(motion > 0.5D) {
+				List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(this.posX, this.posY, this.posZ, prevNode.posX, prevNode.posY, prevNode.posZ));
+
+				for(EntityLivingBase entity : entities) {
+					if(entity != user) {
+						RayTraceResult intersect = entity.getEntityBoundingBox().calculateIntercept(new Vec3d(this.posX, this.posY, this.posZ), new Vec3d(prevNode.posX, prevNode.posY, prevNode.posZ));
+						
+						if(intersect != null) {
+							DamageSource source;
+							
+							if(user instanceof EntityPlayer) {
+								source = new EntityDamageSourceIndirect("player", this, user);
+							} else if(user != null) {
+								source = new EntityDamageSourceIndirect("mob", this, user);
+							} else {
+								source = new EntityDamageSource("mob", this);
+							}
+							
+							entity.attackEntityFrom(source, 3.0F + (float) Math.min((motion - 0.5D) * 2, 4));
+						}
+					}
+				}
+			}
+		}
+	}
+
 	@Override
 	public boolean canBeCollidedWith() {
-		return false;
+		return !this.isMountNode();
 	}
 
 	@Override
@@ -555,5 +592,21 @@ public class EntityGrapplingHookNode extends Entity {
 
 	public void setCurrentRopeLength(float length) {
 		this.dataManager.set(DW_CURRENT_ROPE_LENGTH, length);
+	}
+
+	//TODO Cache this somehow?
+	public Entity getUser() {
+		Entity node = this;
+		while(node instanceof EntityGrapplingHookNode) {
+			EntityGrapplingHookNode hookNode = (EntityGrapplingHookNode) node;
+
+			if(hookNode.isMountNode()) {
+				return hookNode.getControllingPassenger();
+			}
+
+			node = hookNode.getNextNode();
+		}
+
+		return null;
 	}
 }
