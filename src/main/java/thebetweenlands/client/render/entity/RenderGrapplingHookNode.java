@@ -2,6 +2,7 @@ package thebetweenlands.client.render.entity;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -14,14 +15,16 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import thebetweenlands.client.render.model.entity.ModelRopeNode;
+import thebetweenlands.client.render.particle.entity.ParticleBeam;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.util.LightingUtil;
 
 public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 	private Frustum frustum;
 
-	protected static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/blocks/bulb_capped_mushroom.png");
+	protected static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/grappling_hook_rope.png");
 	
 	protected static final ModelRopeNode nodeModel = new ModelRopeNode();
 	
@@ -127,11 +130,21 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 			double diffY = (double)((float)(endY - startY));
 			double diffZ = (double)((float)(endZ - startZ));
 
-			GlStateManager.disableTexture2D();
+			GlStateManager.enableTexture2D();
 			GlStateManager.disableLighting();
 			GlStateManager.disableCull();
 
-			buffer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_COLOR);
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+			
+			ParticleBeam.buildBeam(x + diffX, y + diffY, z + diffZ, new Vec3d(-diffX, -diffY, -diffZ), 0.05F, 0, 2F,
+					ActiveRenderInfo.getRotationX(), ActiveRenderInfo.getRotationZ(), ActiveRenderInfo.getRotationYZ(), ActiveRenderInfo.getRotationXY(), ActiveRenderInfo.getRotationXZ(),
+					(vx, vy, vz, u, v) -> {
+						buffer.pos(vx, vy, vz).tex(u, v).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+					});
+			
+			tessellator.draw();
+			
+			/*buffer.begin(GL11.GL_TRIANGLE_STRIP, DefaultVertexFormats.POSITION_COLOR);
 			for (int i = 0; i <= 24; ++i) {
 				float r;
 				float g;
@@ -177,10 +190,9 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 				buffer.pos(x + diffX * (double)percentage + 0.0D, y + diffY * (double)(yMult + percentage) * 0.5D + 0.1D, z + diffZ * (double)percentage).color(r, g, b, 1).endVertex();
 				buffer.pos(x + diffX * (double)percentage + 0.1D, y + diffY * (double)(yMult + percentage) * 0.5D, z + diffZ * (double)percentage + 0.025D).color(r, g, b, 1).endVertex();
 			}
-			tessellator.draw();
+			tessellator.draw();*/
 
 			GlStateManager.enableLighting();
-			GlStateManager.enableTexture2D();
 			GlStateManager.enableCull();
 		}
 	}

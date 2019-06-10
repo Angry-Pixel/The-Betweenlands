@@ -23,65 +23,78 @@ public class ParticleBeam extends Particle {
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		float renderScale = 0.1F * this.particleScale;
-
 		float rx = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)partialTicks - interpPosX);
 		float ry = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)partialTicks - interpPosY);
 		float rz = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)partialTicks - interpPosZ);
+
+		float renderScale = 0.1F * this.particleScale;
 
 		int i = this.getBrightnessForRender(partialTicks);
 		int j = i >> 16 & 65535;
 		int k = i & 65535;
 
-		double len = this.end.length();
+		float texUOffset = this.prevTexUOffset + (this.texUOffset - this.prevTexUOffset) * partialTicks;
+
+		buildBeam(rx, ry, rz, this.end, renderScale, texUOffset, this.texUScale, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ,
+				(vx, vy, vz, u, v) -> {
+					buffer.pos(vx, vy, vz).tex(u, v).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+				});
+	}
+
+	@FunctionalInterface
+	public static interface BeamVertexConsumer {
+		public void emit(double x, double y, double z, double u, double v);
+	}
+
+	public static void buildBeam(double rx, double ry, double rz, Vec3d end, float scale, float texUOffset, float texUScale,
+			float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ, BeamVertexConsumer consumer) {
+		double len = end.length();
 
 		Vec3d v1 = new Vec3d((double)(-rotationX - rotationXY), (double)(-rotationZ), (double)(-rotationYZ - rotationXZ));
 		Vec3d v2 = new Vec3d((double)(-rotationX + rotationXY), (double)(rotationZ), (double)(-rotationYZ + rotationXZ));
 
 		Vec3d facing = v1.crossProduct(v2);
 
-		Vec3d perpendicularDir = this.end.crossProduct(facing).normalize();
+		Vec3d perpendicularDir = end.crossProduct(facing).normalize();
 
 		if(perpendicularDir.length() < 1.0E-4D) {
 			//Special case where facing and particle direction perfectly match.
 			//Instead of using the crossproduct we can just directly use the v1 and v2 vectors
 			//to get the correct result
 			facing = v2.subtract(v1).normalize();
-			perpendicularDir = this.end.crossProduct(facing).normalize();
+			perpendicularDir = end.crossProduct(facing).normalize();
 		}
 
-		Vec3d perpendicularDir2 = perpendicularDir.crossProduct(this.end).normalize();
+		Vec3d perpendicularDir2 = perpendicularDir.crossProduct(end).normalize();
 
-		Vec3d[] offsets = new Vec3d[] { perpendicularDir.scale(renderScale), perpendicularDir.scale(-renderScale) };
-		Vec3d[] offsets2 = new Vec3d[] { perpendicularDir2.scale(renderScale), perpendicularDir2.scale(-renderScale) };
+		Vec3d[] offsets = new Vec3d[] { perpendicularDir.scale(scale), perpendicularDir.scale(-scale) };
+		Vec3d[] offsets2 = new Vec3d[] { perpendicularDir2.scale(scale), perpendicularDir2.scale(-scale) };
 
-		float x1 = rx;
-		float y1 = ry;
-		float z1 = rz;
+		double x1 = rx;
+		double y1 = ry;
+		double z1 = rz;
 
-		float x2 = (float)(rx + this.end.x);
-		float y2 = (float)(ry + this.end.y);
-		float z2 = (float)(rz + this.end.z);
-
-		float texUOffset = this.prevTexUOffset + (this.texUOffset - this.prevTexUOffset) * partialTicks;
+		double x2 = rx + end.x;
+		double y2 = ry + end.y;
+		double z2 = rz + end.z;
 
 		//br
-		buffer.pos((double)x2 + offsets[0].x, (double)y2 + offsets[0].y, (double)z2 + offsets[0].z).tex(texUOffset + len / (0.2 * this.texUScale), 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		consumer.emit((double)x2 + offsets[0].x, (double)y2 + offsets[0].y, (double)z2 + offsets[0].z, texUOffset + len / (0.2 * texUScale), 0);
 		//tr                                                                                    
-		buffer.pos((double)x2 + offsets[1].x, (double)y2 + offsets[1].y, (double)z2 + offsets[1].z).tex(texUOffset + len / (0.2 * this.texUScale), 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		consumer.emit((double)x2 + offsets[1].x, (double)y2 + offsets[1].y, (double)z2 + offsets[1].z, texUOffset + len / (0.2 * texUScale), 1);
 		//tl                                                                                    
-		buffer.pos((double)x1 + offsets[1].x, (double)y1 + offsets[1].y, (double)z1 + offsets[1].z).tex(texUOffset, 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		consumer.emit((double)x1 + offsets[1].x, (double)y1 + offsets[1].y, (double)z1 + offsets[1].z, texUOffset, 1);
 		//bl                                                                                    
-		buffer.pos((double)x1 + offsets[0].x, (double)y1 + offsets[0].y, (double)z1 + offsets[0].z).tex(texUOffset, 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		consumer.emit((double)x1 + offsets[0].x, (double)y1 + offsets[0].y, (double)z1 + offsets[0].z, texUOffset, 0);
 
 		//br
-		buffer.pos((double)x2 + offsets2[0].x, (double)y2 + offsets2[0].y, (double)z2 + offsets2[0].z).tex(texUOffset + len / (0.2 * this.texUScale), 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		consumer.emit((double)x2 + offsets2[0].x, (double)y2 + offsets2[0].y, (double)z2 + offsets2[0].z, texUOffset + len / (0.2 * texUScale), 0);
 		//tr                                                                                    
-		buffer.pos((double)x2 + offsets2[1].x, (double)y2 + offsets2[1].y, (double)z2 + offsets2[1].z).tex(texUOffset + len / (0.2 * this.texUScale), 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		consumer.emit((double)x2 + offsets2[1].x, (double)y2 + offsets2[1].y, (double)z2 + offsets2[1].z, texUOffset + len / (0.2 * texUScale), 1);
 		//tl                                                                                    
-		buffer.pos((double)x1 + offsets2[1].x, (double)y1 + offsets2[1].y, (double)z1 + offsets2[1].z).tex(texUOffset, 1).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		consumer.emit((double)x1 + offsets2[1].x, (double)y1 + offsets2[1].y, (double)z1 + offsets2[1].z, texUOffset, 1);
 		//bl                                                                                    
-		buffer.pos((double)x1 + offsets2[0].x, (double)y1 + offsets2[0].y, (double)z1 + offsets2[0].z).tex(texUOffset, 0).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(j, k).endVertex();
+		consumer.emit((double)x1 + offsets2[0].x, (double)y1 + offsets2[0].y, (double)z1 + offsets2[0].z, texUOffset, 0);
 	}
 
 	@Override
