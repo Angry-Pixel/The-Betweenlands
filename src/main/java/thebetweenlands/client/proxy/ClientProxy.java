@@ -724,6 +724,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(ArmSwingSpeedHandler.class);
         MinecraftForge.EVENT_BUS.register(BLSkyRenderer.class);
         MinecraftForge.EVENT_BUS.register(ItemBarkAmulet.class);
+        MinecraftForge.EVENT_BUS.register(RenderGrapplingHookNode.class);
 	}
 
 	private static FontRenderer pixelLove;
