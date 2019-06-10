@@ -18,6 +18,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
@@ -31,6 +32,10 @@ public class EntityGrapplingHookNode extends Entity {
 	private static final DataParameter<Integer> DW_NEXT_NODE = EntityDataManager.createKey(EntityGrapplingHookNode.class, DataSerializers.VARINT);
 	private static final DataParameter<Float> DW_CURRENT_ROPE_LENGTH = EntityDataManager.createKey(EntityGrapplingHookNode.class, DataSerializers.FLOAT);
 	private static final DataParameter<Boolean> DW_ATTACHED = EntityDataManager.createKey(EntityGrapplingHookNode.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<BlockPos> DW_ATTACHMENT_POS = EntityDataManager.createKey(EntityGrapplingHookNode.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<Float> DW_ATTACHMENT_POS_X = EntityDataManager.createKey(EntityGrapplingHookNode.class, DataSerializers.FLOAT);
+	private static final DataParameter<Float> DW_ATTACHMENT_POS_Y = EntityDataManager.createKey(EntityGrapplingHookNode.class, DataSerializers.FLOAT);
+	private static final DataParameter<Float> DW_ATTACHMENT_POS_Z = EntityDataManager.createKey(EntityGrapplingHookNode.class, DataSerializers.FLOAT);
 
 	public static final double DEFAULT_ROPE_LENGTH = 2.0D;
 	public static final double ROPE_LENGTH_MAX = 12.0D;
@@ -64,6 +69,10 @@ public class EntityGrapplingHookNode extends Entity {
 		this.cachedNextNodeDW = -1;
 		this.getDataManager().register(DW_CURRENT_ROPE_LENGTH, (float) DEFAULT_ROPE_LENGTH);
 		this.getDataManager().register(DW_ATTACHED, false);
+		this.getDataManager().register(DW_ATTACHMENT_POS, BlockPos.ORIGIN);
+		this.getDataManager().register(DW_ATTACHMENT_POS_X, 0.0F);
+		this.getDataManager().register(DW_ATTACHMENT_POS_Y, 0.0F);
+		this.getDataManager().register(DW_ATTACHMENT_POS_Z, 0.0F);
 	}
 
 	@Override
@@ -101,7 +110,26 @@ public class EntityGrapplingHookNode extends Entity {
 
 		boolean attached = this.isAttached();
 
-		this.getDataManager().set(DW_ATTACHED, attached);
+		if(!this.world.isRemote) {
+			this.getDataManager().set(DW_ATTACHED, attached);
+
+			if(attached) {
+				BlockPos pos = new BlockPos(this);
+				this.getDataManager().set(DW_ATTACHMENT_POS, pos);
+				this.getDataManager().set(DW_ATTACHMENT_POS_X, (float)(this.posX - pos.getX()));
+				this.getDataManager().set(DW_ATTACHMENT_POS_Y, (float)(this.posY - pos.getY()));
+				this.getDataManager().set(DW_ATTACHMENT_POS_Z, (float)(this.posZ - pos.getZ()));
+			}
+		} else if(this.isAttached()) {
+			//TODO For some reason positions don't sync properly so this
+			//is a workaround for now
+			BlockPos pos = this.getDataManager().get(DW_ATTACHMENT_POS);
+			if(pos.getX() != 0 && pos.getY() != 0 && pos.getZ() != 0) {
+				this.posX = pos.getX() + this.getDataManager().get(DW_ATTACHMENT_POS_X);
+				this.posY = pos.getY() + this.getDataManager().get(DW_ATTACHMENT_POS_Y);
+				this.posZ = pos.getZ() + this.getDataManager().get(DW_ATTACHMENT_POS_Z);
+			}
+		}
 
 		Entity nextNode;
 		Entity prevNode;
