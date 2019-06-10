@@ -48,7 +48,7 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 
 		AxisAlignedBB boundingBox = entity.getEntityBoundingBox().offset(-entity.posX, -entity.posY, -entity.posZ);
 
-		if(entity.getNextNode() == null) {
+		if(entity.getNextNodeClient() == null) {
 			boundingBox = boundingBox.grow(0.025D, 0.025D, 0.025D);
 			GlStateManager.color(0.25F, 1.0F, 0.25F, 0.35F);
 		}
@@ -70,7 +70,7 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 
 		this.frustum.setPosition(camPosX, camPosY, camPosZ);
 
-		Entity prevNode = entity.getPreviousNode();
+		Entity prevNode = entity.getPreviousNodeClient();
 
 		if(prevNode != null) {
 			if(!this.renderManager.getEntityRenderObject(prevNode).shouldRender(prevNode, this.frustum, camPosX, camPosY, camPosZ)) {
@@ -85,7 +85,7 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 			}
 		}
 
-		Entity nextNode = entity.getNextNode();
+		Entity nextNode = entity.getNextNodeClient();
 
 		if(nextNode != null) {
 			this.renderConnection(entity, nextNode, tessellator, buffer, x, y, z, partialTicks);

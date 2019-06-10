@@ -37,8 +37,8 @@ public class ItemGrapplingHook extends Item {
 				EntityGrapplingHookNode node = new EntityGrapplingHookNode(world);
 				node.setLocationAndAngles(player.posX, player.posY + player.getEyeHeight(), player.posZ, 0, 0);
 				
-				float velocity = 1.0F * (0.15F + i / (float)nodes * 0.85F);
-				float upwardsVelocity = 1.0F * (float) Math.sin(Math.PI / 2 / nodes * i);
+				float velocity = 1.0F * (0.7F + 0.3F * i / (float)nodes);
+				float upwardsVelocity = 1.0F * (0.7F + 0.3F * (float) Math.sin(Math.PI / 2 / nodes * i));
 				
 				node.motionX = player.motionX + dir.x * velocity;
 				node.motionY = player.motionY + dir.y * velocity + upwardsVelocity + 0.5D;

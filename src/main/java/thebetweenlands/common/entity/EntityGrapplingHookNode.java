@@ -13,9 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
@@ -30,7 +27,7 @@ public class EntityGrapplingHookNode extends Entity {
 	private static final DataParameter<Float> DW_CURRENT_ROPE_LENGTH = EntityDataManager.createKey(EntityGrapplingHookNode.class, DataSerializers.FLOAT);
 	private static final DataParameter<Boolean> DW_ATTACHED = EntityDataManager.createKey(EntityGrapplingHookNode.class, DataSerializers.BOOLEAN);
 
-	public static final double DEFAULT_ROPE_LENGTH = 1.0D;
+	public static final double DEFAULT_ROPE_LENGTH = 2.0D;
 	public static final double ROPE_LENGTH_MAX = 12.0D;
 
 	private UUID nextNodeUUID;
@@ -124,8 +121,8 @@ public class EntityGrapplingHookNode extends Entity {
 				this.cachedPrevNodeDW = -1;
 			}
 		} else {
-			nextNode = this.getNextNode();
-			prevNode = this.getPreviousNode();
+			nextNode = this.getNextNodeClient();
+			prevNode = this.getPreviousNodeClient();
 		}
 
 		if(!this.isMountNode() || prevNode == null) {
@@ -134,7 +131,7 @@ public class EntityGrapplingHookNode extends Entity {
 
 		if(!this.world.isRemote) {
 			if(nextNode != null) {
-				
+
 				//TODO Add extension limit, should be same number as entities spawned by item
 				if(nextNode instanceof EntityGrapplingHookNode && ((EntityGrapplingHookNode) nextNode).isMountNode() && ((EntityGrapplingHookNode) nextNode).isExtending && nextNode.posY < this.posY && nextNode.getDistance(this.posX, this.posY, this.posZ) > DEFAULT_ROPE_LENGTH - 0.2D) {
 					Vec3d connection = this.getConnectionToNext();
@@ -167,9 +164,9 @@ public class EntityGrapplingHookNode extends Entity {
 				}
 			}
 		}
-		
+
 		float friction = 1.0F;
-		
+
 		if(this.onGround || this.collidedHorizontally || this.collidedVertically) {
 			friction = 0.5F;
 		}
@@ -187,164 +184,22 @@ public class EntityGrapplingHookNode extends Entity {
 			this.move(MoverType.SELF, this.motionX + this.correctionX, this.motionY + this.correctionY, this.motionZ + this.correctionZ);
 			this.pushOutOfBlocks(this.posX, this.posY, this.posZ);
 		}
-		
-		boolean isMovable = this.isMovable();
 
-		/*if(nextNode != null && this.getDistance(nextNode) >= this.getCurrentRopeLength()) {
-				Vec3d connection = this.getConnectionToNext();
-				if(connection != null) {
-					double mx = connection.x * 0.02D;
-					double my = connection.y * 0.02D;
-					double mz = connection.z * 0.02D;
-					double len = Math.sqrt(mx*mx + my*my + mz*mz);
-					if(len > 0.5D) {
-						mx /= len * 0.5D;
-						my /= len * 0.5D;
-						mz /= len * 0.5D;
-					}
-					if(prevNode != null && prevNode.getDistance(this.posX + mx, this.posY + my, this.posZ + mz) < this.getCurrentRopeLength() + 1) {
-						this.motionX += mx;
-						this.motionZ += mz;
-						this.motionY += my;
-					}
-				}
-			}*/
+		boolean isMovable = this.isMovable();
 
 		if(isMovable && !this.climbing) {
 			this.motionY -= 0.08D;
 		}
 
-
-		//			/*if(nextNode != null && nextNode instanceof EntityGrapplingHookNode) {
-		//				double mx = this.motionX;
-		//				double my = this.motionY;
-		//				double mz = this.motionZ;
-		//				Vec3d nextPoint = new Vec3d(this.posX + mx, this.posY + my, this.posZ + mz);
-		//				Vec3d tetherPoint = new Vec3d(nextNode.posX, nextNode.posY, nextNode.posZ);
-		//				float currentRopeLength = this.getCurrentRopeLength();
-		//				if(tetherPoint.distanceTo(nextPoint) >= currentRopeLength) {
-		//					Vec3d constrainedPoint = nextPoint.subtract(tetherPoint).normalize();
-		//					constrainedPoint = new Vec3d(
-		//							constrainedPoint.x * currentRopeLength, 
-		//							constrainedPoint.y * currentRopeLength, 
-		//							constrainedPoint.z * currentRopeLength).add(tetherPoint.x, tetherPoint.y, tetherPoint.z);
-		//					Vec3d diff = new Vec3d(this.posX, this.posY, this.posZ).subtract(constrainedPoint);
-		//					this.motionX += -diff.x;
-		//					this.motionY += -diff.y;
-		//					this.motionZ += -diff.z;
-		//				}
-		//			}*/
-		//
-		//			if((!this.isMountNode() || this.getCurrentRopeLength() < DEFAULT_ROPE_LENGTH - 0.05D) && prevNode != null) {
-		//				double mx = this.motionX;
-		//				double my = this.motionY;
-		//				double mz = this.motionZ;
-		//				Vec3d nextPoint = new Vec3d(this.posX + mx, this.posY + my, this.posZ + mz);
-		//				Vec3d tetherPoint = new Vec3d(prevNode.posX, prevNode.posY, prevNode.posZ);
-		//				float currentRopeLength = this.getCurrentRopeLength();
-		//				if(tetherPoint.distanceTo(nextPoint) >= currentRopeLength) {
-		//					Vec3d constrainedPoint = nextPoint.subtract(tetherPoint).normalize();
-		//					constrainedPoint = new Vec3d(
-		//							constrainedPoint.x * currentRopeLength, 
-		//							constrainedPoint.y * currentRopeLength, 
-		//							constrainedPoint.z * currentRopeLength).add(tetherPoint.x, tetherPoint.y, tetherPoint.z);
-		//					Vec3d diff = new Vec3d(this.posX, this.posY, this.posZ).subtract(constrainedPoint).scale(this.isMountNode() ? 1 : 0.8D);
-		//					this.motionX = -diff.x;
-		//					this.motionY = -diff.y;
-		//					this.motionZ = -diff.z;
-		//				}
-		//			}
-		//
-		//			double speed = Math.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
-		//			this.motionX *= Math.min(speed, 0.1D) / 0.1D;
-		//			this.motionY *= Math.min(speed, 0.1D) / 0.1D;
-		//			this.motionZ *= Math.min(speed, 0.1D) / 0.1D;
-
-		//			if((!this.isMountNode() || this.getCurrentRopeLength() < DEFAULT_ROPE_LENGTH - 0.05D) && prevNode != null) {
-		//				Vec3d nextPoint = new Vec3d(this.posX + this.motionX - prevNode.motionX, this.posY + this.motionY - prevNode.motionY, this.posZ + this.motionZ - prevNode.motionZ);
-		//				Vec3d tetherPoint = new Vec3d(prevNode.posX, prevNode.posY, prevNode.posZ);
-		//				float currentRopeLength = this.getCurrentRopeLength();
-		//				
-		//				if(tetherPoint.distanceTo(nextPoint) >= currentRopeLength) {
-		//					Vec3d constrainedPoint = nextPoint.subtract(tetherPoint).normalize();
-		//					
-		//					constrainedPoint = constrainedPoint.scale(currentRopeLength).add(tetherPoint.x, tetherPoint.y, tetherPoint.z);
-		//					
-		//					Vec3d diff = nextPoint.subtract(constrainedPoint).scale(this.isMountNode() ? 1 : 0.8D);
-		//					
-		//					Vec3d fwd = diff.scale(-1).normalize();
-		//					
-		//					Vec3d relMotion = new Vec3d(this.motionX - prevNode.motionX, this.motionY - prevNode.motionY, this.motionZ - prevNode.motionZ);
-		//					
-		//					Vec3d side = fwd.crossProduct(new Vec3d(0, 1, 0)).normalize();
-		//					Vec3d up = side.crossProduct(fwd).normalize();
-		//					
-		//					Vec3d newMotion = side.scale(side.dotProduct(relMotion)).add(up.scale(up.dotProduct(relMotion)));
-		//					
-		//					this.motionX = prevNode.motionX + newMotion.x;
-		//					this.motionY = prevNode.motionY + newMotion.y;
-		//					this.motionZ = prevNode.motionZ + newMotion.z;
-		//					
-		//					/*Vec3d forceVec1 = new Vec3d(this.posX, this.posY, this.posZ).subtract(constrainedPoint).scale(0.1D);
-		//					Vec3d forceVec2 = new Vec3d(prevNode.posX, prevNode.posY, prevNode.posZ).subtract(constrainedPoint).scale(0.05D);
-		//					
-		//					this.motionX += -forceVec1.x;
-		//					this.motionY += -forceVec1.y;
-		//					this.motionZ += -forceVec1.z;
-		//					
-		//					prevNode.motionX += -forceVec2.x;
-		//					prevNode.motionY += -forceVec2.y;
-		//					prevNode.motionZ += -forceVec2.z;*/
-		//					
-		//					Vec3d forceVec = new Vec3d(this.posX, this.posY, this.posZ).subtract(constrainedPoint).scale(0.05D);
-		//					this.motionX += -forceVec.x;
-		//					//this.motionY += -forceVec.y;
-		//					this.motionZ += -forceVec.z;
-		//					
-		//					Vec3d forceVec2 = new Vec3d(prevNode.posX, prevNode.posY, prevNode.posZ).subtract(constrainedPoint).scale(0.05D);
-		//					prevNode.motionX += -forceVec2.x;
-		//					//prevNode.motionY += -forceVec2.y;
-		//					prevNode.motionZ += -forceVec2.z;
-		//					
-		//					this.velocityChanged = true;
-		//				}
-		//			}
-
 		if(prevNode instanceof EntityGrapplingHookNode) {
 			boolean isPullable = this.isPullable();
 
 			if(isPullable && isMovable) {
-				Vec3d nextPoint = new Vec3d(this.posX + this.motionX - prevNode.motionX, this.posY + this.height + this.motionY - prevNode.motionY, this.posZ + this.motionZ - prevNode.motionZ);
-
-				Vec3d tetherPoint = new Vec3d(prevNode.posX, prevNode.posY + prevNode.height, prevNode.posZ);
-				float currentRopeLength = this.getCurrentRopeLength();
-
-				if(tetherPoint.distanceTo(nextPoint) >= currentRopeLength) {
-					Vec3d constrainedPoint = nextPoint.subtract(tetherPoint).normalize();
-
-					constrainedPoint = constrainedPoint.scale(currentRopeLength).add(tetherPoint.x, tetherPoint.y, tetherPoint.z);
-
-					Vec3d diff = nextPoint.subtract(constrainedPoint).scale(this.isMountNode() ? 1 : 0.8D);
-
-					Vec3d fwd = diff.scale(-1).normalize();
-
-					Vec3d relMotion = new Vec3d(this.motionX - prevNode.motionX, this.motionY - prevNode.motionY, this.motionZ - prevNode.motionZ);
-
-					Vec3d side = fwd.crossProduct(new Vec3d(0, 1, 0)).normalize();
-					Vec3d up = side.crossProduct(fwd).normalize();
-
-					Vec3d newMotion = side.scale(side.dotProduct(relMotion) * 1F).add(up.scale(up.dotProduct(relMotion) * 1F)).add(fwd.scale(fwd.dotProduct(relMotion) * 0.25F));
-
-					double ropeFriction = 0.98D;
-
-					if(this.isMountNode()) {
-						ropeFriction = 0.9D;
-					}
-
-					this.motionX = prevNode.motionX * ropeFriction + newMotion.x * 0.98D;
-					this.motionY = prevNode.motionY * ropeFriction + newMotion.y * 0.98D;
-					this.motionZ = prevNode.motionZ * ropeFriction + newMotion.z * 0.98D;
+				if(nextNode instanceof EntityGrapplingHookNode) {
+					this.constrainMotion(prevNode, nextNode, 0.99D, 0.0D, 1.0D);
 				}
+
+				this.constrainMotion(prevNode, prevNode, 0.99D, -Double.MAX_VALUE, 0.1D);
 			}
 
 			Vec3d diff = prevNode.getPositionVector().add(0, prevNode.height, 0).subtract(this.getPositionVector().add(0, this.height, 0));
@@ -352,17 +207,15 @@ public class EntityGrapplingHookNode extends Entity {
 			if(diff.length() > this.getCurrentRopeLength()) {
 				double correction = diff.length() - this.getCurrentRopeLength();
 
-				//TODO Fix this
-
-				Vec3d forceVec = diff.normalize().scale(correction * 0.25D);
+				Vec3d forceVec = diff.normalize().scale(correction * 0.5D);
 
 				EntityGrapplingHookNode other = (EntityGrapplingHookNode) prevNode;
-				
+
 				boolean isThisCorrectable = isPullable && isMovable;
 				boolean isOtherCorrectable = other.isPullable() && other.isMovable();
-				
+
 				float factor = !isThisCorrectable || !isOtherCorrectable ? 2.0f : 1.0f;
-				
+
 				if(isThisCorrectable) {
 					this.correctionX += forceVec.x * factor;
 					this.correctionY += forceVec.y * factor;
@@ -377,28 +230,8 @@ public class EntityGrapplingHookNode extends Entity {
 			}
 		}
 
-		/*if(nextNode != null) {
-				Vec3d diff = nextNode.getPositionVector().add(0, nextNode.height, 0).subtract(this.getPositionVector().add(0, this.height, 0));
-
-				if(diff.length() > this.getCurrentRopeLength()) {
-					double correction = diff.length() - this.getCurrentRopeLength();
-
-					//TODO Fix this
-
-					Vec3d forceVec = diff.normalize().scale(correction * 0.15D);
-
-					this.correctionX += -forceVec.x;
-					this.correctionY += -forceVec.y;
-					this.correctionZ += -forceVec.z;
-
-					((EntityGrapplingHookNode) nextNode).correctionX += forceVec.x;
-					((EntityGrapplingHookNode) nextNode).correctionY += forceVec.y;
-					((EntityGrapplingHookNode) nextNode).correctionZ += forceVec.z;
-				}
-			}*/
-
 		this.velocityChanged = true;
-		
+
 		if(!this.isMovable()) {
 			this.motionX = 0.0D;
 			this.motionY = 0.0D;
@@ -418,6 +251,32 @@ public class EntityGrapplingHookNode extends Entity {
 		}
 	}
 
+	protected void constrainMotion(Entity parentNode, Entity constraintNode, double ropeFriction, double constraintMin, double constraintDampening) {
+		Vec3d nextPoint = new Vec3d(this.posX + this.motionX - parentNode.motionX, this.posY + this.height + this.motionY - parentNode.motionY, this.posZ + this.motionZ - parentNode.motionZ);
+
+		Vec3d tetherPoint = new Vec3d(constraintNode.posX, constraintNode.posY + constraintNode.height, constraintNode.posZ);
+		float currentRopeLength = this.getCurrentRopeLength();
+
+		if(tetherPoint.distanceTo(nextPoint) >= currentRopeLength) {
+			Vec3d constrainedPoint = nextPoint.subtract(tetherPoint).normalize();
+
+			constrainedPoint = constrainedPoint.scale(currentRopeLength).add(tetherPoint.x, tetherPoint.y, tetherPoint.z);
+
+			Vec3d fwd = tetherPoint.subtract(constrainedPoint).normalize();
+
+			Vec3d relMotion = new Vec3d(this.motionX - parentNode.motionX, this.motionY - parentNode.motionY, this.motionZ - parentNode.motionZ);
+
+			Vec3d side = fwd.crossProduct(new Vec3d(0, 1, 0)).normalize();
+			Vec3d up = side.crossProduct(fwd).normalize();
+
+			Vec3d newMotion = side.scale(side.dotProduct(relMotion) * 1F).add(up.scale(up.dotProduct(relMotion) * 1F)).add(fwd.scale(Math.max(constraintMin, fwd.dotProduct(relMotion) * constraintDampening)));
+
+			this.motionX = (parentNode.motionX + newMotion.x) * ropeFriction;
+			this.motionY = (parentNode.motionY + newMotion.y) * ropeFriction;
+			this.motionZ = (parentNode.motionZ + newMotion.z) * ropeFriction;
+		}
+	}
+
 	protected boolean isMovable() {
 		return !this.isAttached() && !this.onGround && !this.inWater;
 	}
@@ -430,7 +289,7 @@ public class EntityGrapplingHookNode extends Entity {
 		this.isExtending = false;
 
 		controller.fallDistance = 0;
-		
+
 		if(!this.world.isRemote) {
 			if(controller.moveStrafing > 0) {
 				Entity prevNode = this.getPreviousNode();
@@ -440,19 +299,19 @@ public class EntityGrapplingHookNode extends Entity {
 
 					float prevStepHeight = this.stepHeight;
 					this.stepHeight = 1.25f;
-					
+
 					//On ground required for step to work
 					this.onGround = true;
 					this.move(MoverType.SELF, dir.x * 0.25D, dir.y * 0.25D, dir.z * 0.52D);
-					
+
 					if(this.collidedHorizontally && dir.y > 0) {
 						this.onGround = true;
 						this.move(MoverType.SELF, 0, 0.2D, 0);
 						this.climbing = true;
 					}
-					
+
 					this.stepHeight = prevStepHeight;
-					
+
 					if(prevNode.getEntityBoundingBox().intersects(this.getEntityBoundingBox())) {
 						((EntityGrapplingHookNode) prevNode).removeNode(this);
 						this.setCurrentRopeLength((float) DEFAULT_ROPE_LENGTH - 0.1F);
@@ -516,14 +375,19 @@ public class EntityGrapplingHookNode extends Entity {
 	public boolean shouldRiderSit() {
 		return false;
 	}
-	
+
 	@Override
 	protected void removePassenger(Entity passenger) {
 		super.removePassenger(passenger);
 
-		passenger.motionX = this.motionX * 2;
-		passenger.motionY = this.motionY * 2;
-		passenger.motionZ = this.motionZ * 2;
+		passenger.motionX = this.motionX * 1.5D;
+		passenger.motionY = this.motionY;
+		passenger.motionZ = this.motionZ * 1.5D;
+	}
+
+	@Override
+	public void fall(float distance, float damageMultiplier) {
+		//No fall damage to node or rider
 	}
 
 	public void removeNode(Entity nextConnectionNode) {
@@ -565,7 +429,7 @@ public class EntityGrapplingHookNode extends Entity {
 	public Vec3d getConnectionToNext() {
 		Entity nextNode;
 		if(this.world.isRemote) {
-			nextNode = this.getNextNode();
+			nextNode = this.getNextNodeClient();
 		} else {
 			nextNode = this.getNextNodeByUUID();
 		}
@@ -630,7 +494,7 @@ public class EntityGrapplingHookNode extends Entity {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public Entity getNextNode() {
+	public Entity getNextNodeClient() {
 		if(this.cachedNextNodeEntity == null || !this.cachedNextNodeEntity.isEntityAlive() || this.cachedNextNodeEntity.getEntityId() != this.getDataManager().get(DW_NEXT_NODE)) {
 			Entity entity = this.world.getEntityByID(this.getDataManager().get(DW_NEXT_NODE));
 			this.cachedNextNodeEntity = entity;
@@ -640,13 +504,29 @@ public class EntityGrapplingHookNode extends Entity {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public Entity getPreviousNode() {
+	public Entity getPreviousNodeClient() {
 		if(this.cachedPrevNodeEntity == null || !this.cachedPrevNodeEntity.isEntityAlive() || this.cachedPrevNodeEntity.getEntityId() != this.getDataManager().get(DW_PREV_NODE)) {
 			Entity entity = this.world.getEntityByID(this.getDataManager().get(DW_PREV_NODE));
 			this.cachedPrevNodeEntity = entity;
 			return entity;
 		}
 		return this.cachedPrevNodeEntity;
+	}
+
+	public Entity getNextNode() {
+		if(this.world.isRemote) {
+			return this.getNextNodeClient();
+		} else {
+			return this.getNextNodeByUUID();
+		}
+	}
+
+	public Entity getPreviousNode() {
+		if(this.world.isRemote) {
+			return this.getPreviousNodeClient();
+		} else {
+			return this.getPreviousNodeByUUID();
+		}
 	}
 
 	private Entity getEntityByUUID(UUID uuid) {
