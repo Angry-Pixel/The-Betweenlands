@@ -223,6 +223,9 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 				Vec3d offset = new Vec3d(rotX, 1.1D + (controller.getHeldEquipment().iterator().hasNext() && !controller.getHeldEquipment().iterator().next().isEmpty() ? 0.2D : 0), rotZ);
 				
 				//Below is the same as this, and as the rotation in onPlayerRenderPre
+				/*GlStateManager.rotate(-bodyYaw, 0, 1, 0);
+				GlStateManager.translate(0.6D, 0, -0.4D);
+				GlStateManager.rotate(bodyYaw, 0, 1, 0);*/
 				/*GlStateManager.rotate(yaw, 0, 1, 0);
 				GlStateManager.rotate(pitch, 0, 0, 1);
 				GlStateManager.rotate(yaw, 0, -1, 0);*/
@@ -242,6 +245,9 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 				
 				RotationMatrix matrix = new RotationMatrix();
 				
+				matrix.setRotations(0, -(float)Math.toRadians(yaw), 0);
+				offset = offset.add(matrix.transformVec(new Vec3d(0.6D, 0, -0.4D), Vec3d.ZERO));
+				
 				matrix.setRotations(0, -(float)Math.toRadians(rotYaw), 0);
 				offset = matrix.transformVec(offset, Vec3d.ZERO);
 				
@@ -250,7 +256,6 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 				
 				matrix.setRotations(0, (float)Math.toRadians(rotYaw), 0);
 				offset = matrix.transformVec(offset, Vec3d.ZERO);
-				
 				
 				endX = interpolate(controller.lastTickPosX - camPosX, controller.posX - camPosX, partialTicks) + offset.x;
 				endY = interpolate(controller.lastTickPosY - camPosY, controller.posY - camPosY, partialTicks) + offset.y;
@@ -315,7 +320,13 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 				
 				GlStateManager.rotate(yaw, 0, 1, 0);
 				GlStateManager.rotate(pitch, 0, 0, 1);
-				GlStateManager.rotate(yaw, 0, -1, 0);
+				GlStateManager.rotate(-yaw, 0, 1, 0);
+				
+				float bodyYaw = (float) interpolate(player.prevRenderYawOffset, player.renderYawOffset, partialTicks);
+				
+				GlStateManager.rotate(-bodyYaw, 0, 1, 0);
+				GlStateManager.translate(0.6D, 0, -0.4D);
+				GlStateManager.rotate(bodyYaw, 0, 1, 0);
 				
 				player.swingingHand = EnumHand.MAIN_HAND;
 				player.swingProgress = 0.12f;
