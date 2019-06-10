@@ -15,7 +15,7 @@ import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.block.structure.BlockWaystone;
 import thebetweenlands.common.tile.TileEntityWaystone;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 public class RenderWaystone extends TileEntitySpecialRenderer<TileEntityWaystone> {
 	private static final ModelWaystone MODEL = new ModelWaystone();
@@ -26,8 +26,8 @@ public class RenderWaystone extends TileEntitySpecialRenderer<TileEntityWaystone
 
 	@Override
 	public void render(TileEntityWaystone te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		BlockWaystone.Part part = TileEntityHelper.getStatePropertySafely(te, BlockWaystone.class, BlockWaystone.PART, BlockWaystone.Part.BOTTOM);
-		boolean active = TileEntityHelper.getStatePropertySafely(te, BlockWaystone.class, BlockWaystone.ACTIVE, false);
+		BlockWaystone.Part part = StatePropertyHelper.getStatePropertySafely(te, BlockWaystone.class, BlockWaystone.PART, BlockWaystone.Part.BOTTOM);
+		boolean active = StatePropertyHelper.getStatePropertySafely(te, BlockWaystone.class, BlockWaystone.ACTIVE, false);
 
 		if(destroyStage < 0 || te == null) {
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -134,6 +134,6 @@ public class RenderWaystone extends TileEntitySpecialRenderer<TileEntityWaystone
 
 	@Override
 	public boolean isGlobalRenderer(TileEntityWaystone te) {
-		return TileEntityHelper.getStatePropertySafely(te, BlockWaystone.class, BlockWaystone.ACTIVE, false);
+		return StatePropertyHelper.getStatePropertySafely(te, BlockWaystone.class, BlockWaystone.ACTIVE, false);
 	}
 }

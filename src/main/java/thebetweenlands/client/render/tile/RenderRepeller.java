@@ -22,7 +22,7 @@ import thebetweenlands.client.render.model.tile.ModelRepeller;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.block.container.BlockRepeller;
 import thebetweenlands.common.tile.TileEntityRepeller;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller> {
 	protected static final ModelRepeller MODEL = new ModelRepeller();
@@ -36,10 +36,10 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 	
 	@Override
 	public void render(TileEntityRepeller tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		EnumFacing facing = TileEntityHelper.getStatePropertySafely(tile, BlockRepeller.class, BlockRepeller.FACING, EnumFacing.NORTH);
+		EnumFacing facing = StatePropertyHelper.getStatePropertySafely(tile, BlockRepeller.class, BlockRepeller.FACING, EnumFacing.NORTH);
 
-		double xOff = -facing.getFrontOffsetX() * 0.12F;
-		double zOff = facing.getFrontOffsetZ() * 0.12F;
+		double xOff = -facing.getXOffset() * 0.12F;
+		double zOff = facing.getZOffset() * 0.12F;
 
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();

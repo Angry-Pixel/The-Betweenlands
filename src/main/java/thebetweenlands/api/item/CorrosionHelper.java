@@ -1,33 +1,26 @@
 package thebetweenlands.api.item;
 
-import java.util.List;
-import java.util.UUID;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.GameruleRegistry;
 import thebetweenlands.util.NBTHelper;
+
+import java.util.List;
+import java.util.UUID;
 
 public class CorrosionHelper {
 	/**
@@ -50,13 +43,7 @@ public class CorrosionHelper {
 	 * @param item
 	 */
 	public static void addCorrosionPropertyOverrides(Item item) {
-		item.addPropertyOverride(new ResourceLocation("corrosion"), new IItemPropertyGetter() {
-			@Override
-			@SideOnly(Side.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return getCorrosionStage(stack);
-			}
-		});
+		item.addPropertyOverride(new ResourceLocation("corrosion"), (stack, worldIn, entityIn) -> getCorrosionStage(stack));
 	}
 
 	/**
@@ -166,9 +153,9 @@ public class CorrosionHelper {
 					if (holder instanceof EntityPlayer) {
 						EntityPlayer player = (EntityPlayer) holder;
 						probability *= (isHeldItem && !player.getActiveItemStack().isEmpty() ? 2.8F : 1.0F);
-						if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-							IDecayCapability decay = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-							float playerCorruption = decay.getDecayStats().getDecayLevel() / 20.0F;
+						IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+						if(cap != null) {
+							float playerCorruption = cap.getDecayStats().getDecayLevel() / 20.0F;
 							probability *= (1 - Math.pow(playerCorruption, 2) * 0.9F);
 						}
 					}

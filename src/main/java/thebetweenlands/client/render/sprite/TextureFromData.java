@@ -1,5 +1,7 @@
 package thebetweenlands.client.render.sprite;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferInt;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -27,6 +29,13 @@ public class TextureFromData extends TextureAtlasSprite {
 		this.frameData = frameData;
 		this.width = width;
 		this.height = height;
+	}
+	
+	public TextureFromData(String spriteName, BufferedImage image) {
+		super(spriteName);
+		this.frameData = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
+		this.width = image.getWidth();
+		this.height = image.getHeight();
 	}
 
 	/**

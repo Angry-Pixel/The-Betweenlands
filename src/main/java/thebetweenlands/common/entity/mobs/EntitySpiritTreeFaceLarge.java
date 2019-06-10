@@ -218,9 +218,9 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			Vec3d frontCenter = this.getFrontCenter();
 			for(int i = 0; i < 64; i++) {
 				Random rnd = world.rand;
-				float rx = rnd.nextFloat() * 6.0F - 3.0F + this.getFacing().getFrontOffsetX() * 2;
-				float ry = rnd.nextFloat() * 6.0F - 3.0F + this.getFacing().getFrontOffsetY() * 2;
-				float rz = rnd.nextFloat() * 6.0F - 3.0F + this.getFacing().getFrontOffsetZ() * 2;
+				float rx = rnd.nextFloat() * 6.0F - 3.0F + this.getFacing().getXOffset() * 2;
+				float ry = rnd.nextFloat() * 6.0F - 3.0F + this.getFacing().getYOffset() * 2;
+				float rz = rnd.nextFloat() * 6.0F - 3.0F + this.getFacing().getZOffset() * 2;
 				Vec3d vec = new Vec3d(rx, ry, rz);
 				vec = vec.normalize();
 				ParticleRootSpike particle = (ParticleRootSpike) BLParticles.ROOT_SPIKE.spawn(world, frontCenter.x, frontCenter.y - 0.25D, frontCenter.z, ParticleArgs.get().withMotion(vec.x * 0.45F, vec.y * 0.45F + 0.2F, vec.z * 0.45F));
@@ -229,9 +229,9 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			frontCenter = this.getFrontCenter();
 			for(int i = 0; i < 32; i++) {
 				Random rnd = world.rand;
-				float rx = rnd.nextFloat() - 0.5F + this.getFacing().getFrontOffsetX() * 0.5F;
-				float ry = rnd.nextFloat() - 0.5F + this.getFacing().getFrontOffsetY() * 0.5F;
-				float rz = rnd.nextFloat() - 0.5F + this.getFacing().getFrontOffsetZ() * 0.5F;
+				float rx = rnd.nextFloat() - 0.5F + this.getFacing().getXOffset() * 0.5F;
+				float ry = rnd.nextFloat() - 0.5F + this.getFacing().getYOffset() * 0.5F;
+				float rz = rnd.nextFloat() - 0.5F + this.getFacing().getZOffset() * 0.5F;
 				Vec3d vec = new Vec3d(rx, ry, rz);
 				vec = vec.normalize();
 				BLParticles.MOTION_ITEM_BREAKING.spawn(world, frontCenter.x, frontCenter.y - 0.25D, frontCenter.z, ParticleArgs.get().withMotion(vec.x * 0.25F, vec.y * 0.25F, vec.z * 0.25F).withData(ItemRegistry.SAP_SPIT, 0));
@@ -397,6 +397,12 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	public void onUpdate() {
 		super.onUpdate();
 
+		if(this.isAnchored()) {
+			this.setSize(1.8F, 1.8F);
+		} else {
+			this.setSize(1.8F, 0.2F);
+		}
+		
 		if(this.dataManager.get(BLOW_STATE) != 0 || this.dataManager.get(ROTATING_WAVE_STATE) != 0 || this.dataManager.get(CRAWLING_WAVE_STATE) != 0 || this.dataManager.get(SPIT_STATE) != 0) {
 			this.setGlowTicks(20);
 		}
@@ -576,9 +582,9 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 				Vec3d frontCenter = this.getFrontCenter();
 				for(int i = 0; i < 4; i++) {
 					Random rnd = world.rand;
-					float rx = rnd.nextFloat() * 4.0F - 2.0F + this.getFacing().getFrontOffsetX() * 4;
-					float ry = rnd.nextFloat() * 4.0F - 2.0F + this.getFacing().getFrontOffsetY() * 4;
-					float rz = rnd.nextFloat() * 4.0F - 2.0F + this.getFacing().getFrontOffsetZ() * 4;
+					float rx = rnd.nextFloat() * 4.0F - 2.0F + this.getFacing().getXOffset() * 4;
+					float ry = rnd.nextFloat() * 4.0F - 2.0F + this.getFacing().getYOffset() * 4;
+					float rz = rnd.nextFloat() * 4.0F - 2.0F + this.getFacing().getZOffset() * 4;
 					Vec3d vec = new Vec3d(rx, ry, rz);
 					vec = vec.normalize();
 					this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, frontCenter.x + rx, frontCenter.y - 0.75D + ry, frontCenter.z + rz, -vec.x * 0.5F, -vec.y * 0.5F, -vec.z * 0.5F);
@@ -630,7 +636,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			Vec3d center = this.getFrontCenter();
 			Vec3d targetCenter = new Vec3d(target.posX, target.posY + target.getEyeHeight(), target.posZ);
 			Vec3d dir = targetCenter.subtract(center).normalize();
-			Vec3d facing = new Vec3d(this.getFacing().getFrontOffsetX(), this.getFacing().getFrontOffsetY(), this.getFacing().getFrontOffsetZ());
+			Vec3d facing = new Vec3d(this.getFacing().getXOffset(), this.getFacing().getYOffset(), this.getFacing().getZOffset());
 			float angle = (float)(Math.acos(facing.dotProduct(dir)) / 2 / Math.PI) * 360.0F;
 			return angle >= 0.0F && angle <= 90.0F;
 		}
@@ -798,7 +804,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 	@Override
 	public Vec3d getMiniBossTagOffset(float partialTicks) {
-		return new Vec3d(this.getFacing().getFrontOffsetX() * (this.width / 2), this.height + 0.5D, this.getFacing().getFrontOffsetZ() * (this.width / 2));
+		return new Vec3d(this.getFacing().getXOffset() * (this.width / 2), this.height + 0.5D, this.getFacing().getZOffset() * (this.width / 2));
 	}
 
 	public static class AIRespawnSmallFaces extends EntityAIBase {

@@ -1,16 +1,6 @@
 package thebetweenlands.common.capability.base;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.concurrent.Callable;
-
 import com.google.common.base.Preconditions;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -36,6 +26,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.api.capability.ISerializableCapability;
+
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.concurrent.Callable;
 
 public class EntityCapabilityHandler {
 	private static final List<EntityCapability<?, ?, ? extends Entity>> REGISTERED_CAPABILITIES = new ArrayList<EntityCapability<?, ?, ? extends Entity>>();
@@ -72,7 +66,7 @@ public class EntityCapabilityHandler {
 	@SuppressWarnings("unchecked")
 	public static <E extends Entity> EntityCapability<?, ?, E> getCapability(ResourceLocation id, E entity) {
 		EntityCapability<?, ?, ?> entityCapability = ID_CAPABILITY_MAP.get(id);
-		if(entityCapability != null && entity.hasCapability(entityCapability.getCapability(), null)) {
+		if(entityCapability != null) {
 			return (EntityCapability<?, ?, E>) entity.getCapability(entityCapability.getCapability(), null);
 		}
 		return null;

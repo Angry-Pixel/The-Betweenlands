@@ -1,15 +1,13 @@
 package thebetweenlands.common.registries;
 
-import net.minecraft.util.SoundEvent;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.sound.BLSoundEvent;
-
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.util.SoundEvent;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.common.sound.BLSoundEvent;
 
 public class SoundRegistry {
     public static final List<SoundEvent> SOUNDS = new ArrayList<>();
@@ -145,6 +143,13 @@ public class SoundRegistry {
     public static final BLSoundEvent SPIRIT_TREE_SPIKE_TRAP_EMERGE = reg("spirit_tree_spike_trap_emerge");
     public static final BLSoundEvent SPIRIT_TREE_SPIKES = reg("spirit_tree_spikes");
     public static final BLSoundEvent ROOT_SPIKE_PARTICLE_HIT = reg("root_spike_particle_hit");
+    public static final BLSoundEvent SHAMBLER_DEATH = reg("shambler_death");
+    public static final BLSoundEvent SHAMBLER_HURT = reg("shambler_hurt");
+    public static final BLSoundEvent SHAMBLER_LIVING = reg("shambler_living");
+    public static final BLSoundEvent SHAMBLER_LICK = reg("shambler_lick");
+    public static final BLSoundEvent CRYPT_CRAWLER_DEATH = reg("crypt_crawler_death");
+    public static final BLSoundEvent CRYPT_CRAWLER_HURT = reg("crypt_crawler_hurt");
+    public static final BLSoundEvent CRYPT_CRAWLER_LIVING = reg("crypt_crawler_living");
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");
@@ -185,6 +190,12 @@ public class SoundRegistry {
     public static final BLSoundEvent PORTAL_ACTIVATE = reg("portal_activate");
     public static final BLSoundEvent PORTAL_TRAVEL = reg("portal_travel");
     public static final BLSoundEvent PORTAL_TRIGGER = reg("portal_trigger");
+    public static final BLSoundEvent PUFF_SHROOM = reg("puff_shroom");
+    public static final BLSoundEvent MUD_DOOR_1 = reg("mud_door_1");
+    public static final BLSoundEvent MUD_DOOR_2 = reg("mud_door_2");
+    public static final BLSoundEvent MUD_DOOR_LOCK = reg("mud_door_lock");
+    public static final BLSoundEvent MUD_DOOR_TRAP = reg("mud_door_trap");
+    
     private SoundRegistry() {
     }
 

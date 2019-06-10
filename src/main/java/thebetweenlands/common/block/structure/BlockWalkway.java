@@ -57,7 +57,7 @@ public class BlockWalkway extends Block implements IStateMappedBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
@@ -73,7 +73,7 @@ public class BlockWalkway extends Block implements IStateMappedBlock {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
 		if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
 			enumfacing = EnumFacing.NORTH;
@@ -119,7 +119,7 @@ public class BlockWalkway extends Block implements IStateMappedBlock {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		if(entityIn instanceof EntityLivingBase) {
 			((EntityLivingBase)entityIn).addPotionEffect(new PotionEffect(MobEffects.SPEED, 1, 1, false, false));
 		}

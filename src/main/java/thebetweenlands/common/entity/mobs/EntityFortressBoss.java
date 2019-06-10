@@ -8,6 +8,8 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 
+import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
@@ -111,6 +113,8 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 
 	private ISound currentIdleSound;
 
+	private Object2IntMap<Entity> deflectionDamageCooldowns = new Object2IntOpenHashMap<>();
+	
 	public EntityFortressBoss(World world) {
 		super(world);
 		float width = 1.9F;
@@ -249,9 +253,9 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 			Vec3d vert1 = new Vec3d(v1[0]+v1Normalized.x*vertexExplode, v1[1]+v1Normalized.y*vertexExplode, v1[2]+v1Normalized.z*vertexExplode);
 			Vec3d vert2 = new Vec3d(v2[0]+v2Normalized.x*vertexExplode, v2[1]+v2Normalized.y*vertexExplode, v2[2]+v2Normalized.z*vertexExplode);
 			Vec3d vert3 = new Vec3d(v3[0]+v3Normalized.x*vertexExplode, v3[1]+v3Normalized.y*vertexExplode, v3[2]+v3Normalized.z*vertexExplode);
-			vert1 = vert1.addVector(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
-			vert2 = vert2.addVector(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
-			vert3 = vert3.addVector(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
+			vert1 = vert1.add(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
+			vert2 = vert2.add(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
+			vert3 = vert3.add(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
 			Vec3d normal = vert2.subtract(vert1).crossProduct(vert3.subtract(vert1));
 
 			if(rayTraceTriangle(pos, ray, vert1, vert2, vert3) && (back || normal.normalize().dotProduct(ray.normalize()) < Math.cos(Math.toRadians(90)))) {
@@ -310,51 +314,105 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if(!this.isEntityAlive()) {
+			return false;
+		}
+		
 		if(source instanceof EntityDamageSource) {
-			if(((EntityDamageSource)source).getTrueSource() instanceof Entity) {
-				Entity entity = (Entity) ((EntityDamageSource)source).getTrueSource();
-				if(source instanceof EntityDamageSourceIndirect && ((EntityDamageSourceIndirect)source).getTrueSource() != null)
-					entity = ((EntityDamageSourceIndirect)source).getTrueSource();
-				if(entity == null)
-					return false;
-				Vec3d ray = entity.getLookVec();
-				if(entity instanceof EntityLivingBase == false) {
-					ray = new Vec3d(entity.motionX, entity.motionY, entity.motionZ).normalize();
+			EntityDamageSource entityDamage = (EntityDamageSource) source;
+			
+			Entity sourceEntity = entityDamage.getTrueSource();
+			Entity immediateEntity = entityDamage.getImmediateSource();
+
+			Entity attackingEntity = immediateEntity != null ? immediateEntity : sourceEntity;
+			
+			boolean isDeflected = false;
+			
+			Vec3d ray = null;
+			Vec3d pos = null;
+			
+			if(attackingEntity == null) {
+				isDeflected = true;
+			} else {
+				if(attackingEntity instanceof EntityLivingBase) {
+					ray = attackingEntity.getLookVec();
+				} else {
+					ray = new Vec3d(attackingEntity.motionX, attackingEntity.motionY, attackingEntity.motionZ).normalize();
 				}
 				ray = ray.scale(64.0D);
-				Vec3d pos = new Vec3d(entity.posX, entity.posY + entity.getEyeHeight() + (entity instanceof EntityPlayer && ((EntityPlayer)entity).isSneaking() ? -0.08D : 0.0D), entity.posZ);
-				if(this.hasShield() && (entity instanceof EntityPlayer == false || !((EntityPlayer)entity).capabilities.isCreativeMode) || entity.isSneaking()) {
+				
+				pos = new Vec3d(attackingEntity.posX, attackingEntity.posY + attackingEntity.getEyeHeight(), attackingEntity.posZ);
+				
+				if(this.hasShield() && (attackingEntity instanceof EntityPlayer == false || !((EntityPlayer)attackingEntity).capabilities.isCreativeMode) || attackingEntity.isSneaking()) {
 					int shieldHit = this.rayTraceShield(pos, ray, false);
+					
 					if(shieldHit >= 0) {
-						if(!this.world.isRemote && entity.isSneaking() && ((EntityPlayer)entity).capabilities.isCreativeMode) {
+						if(!this.world.isRemote && attackingEntity.isSneaking() && ((EntityPlayer)attackingEntity).capabilities.isCreativeMode) {
 							this.setShieldActive(shieldHit, false);
 						}
+						
 						if(this.world.isRemote) {
 							this.shieldAnimationTicks[shieldHit] = 20;
 						}
-						this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_NOPE, SoundCategory.HOSTILE, 1, 1);
-						double dx = entity.posX - this.posX;
-						double dy = entity.posY - this.posY;
-						double dz = entity.posZ - this.posZ;
-						double len = Math.sqrt(dx*dx+dy*dy+dz*dz);
-						entity.motionX = dx / len * 0.8F;
-						entity.motionY = dy / len * 0.8F;
-						entity.motionZ = dz / len * 0.8F;
-						entity.attackEntityFrom(DamageSource.MAGIC, 2);
-						return false;
+						
+						isDeflected = true;
 					}
 				}
-				RayTraceResult result = this.coreBoundingBox.offset(this.posX, this.posY, this.posZ).calculateIntercept(pos, ray.addVector(pos.x, pos.y, pos.z));
-				if(result != null) {
+			}
+			
+			if(isDeflected) {
+				if(!this.world.isRemote) {
+					boolean damaged = false;
+					
+					if(sourceEntity != null && !this.deflectionDamageCooldowns.containsKey(sourceEntity)) {
+						double dx = sourceEntity.posX - this.posX;
+						double dy = sourceEntity.posY - this.posY;
+						double dz = sourceEntity.posZ - this.posZ;
+						double len = Math.sqrt(dx*dx+dy*dy+dz*dz);
+						sourceEntity.motionX = dx / len * 0.8F;
+						sourceEntity.motionY = dy / len * 0.8F;
+						sourceEntity.motionZ = dz / len * 0.8F;
+						sourceEntity.velocityChanged = sourceEntity.isAirBorne = true;
+						sourceEntity.attackEntityFrom(DamageSource.MAGIC, 2);
+						
+						this.deflectionDamageCooldowns.put(sourceEntity, 10);
+						damaged = true;
+					}
+					
+					if(immediateEntity != null && !this.deflectionDamageCooldowns.containsKey(immediateEntity)) {
+						double dx = immediateEntity.posX - this.posX;
+						double dy = immediateEntity.posY - this.posY;
+						double dz = immediateEntity.posZ - this.posZ;
+						double len = Math.sqrt(dx*dx+dy*dy+dz*dz);
+						immediateEntity.motionX = dx / len * 0.8F;
+						immediateEntity.motionY = dy / len * 0.8F;
+						immediateEntity.motionZ = dz / len * 0.8F;
+						immediateEntity.velocityChanged = immediateEntity.isAirBorne = true;
+						immediateEntity.attackEntityFrom(DamageSource.MAGIC, 2);
+						
+						this.deflectionDamageCooldowns.put(immediateEntity, 10);
+						damaged = true;
+					}
+					
+					if(damaged) {
+						this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_NOPE, SoundCategory.HOSTILE, 1, 1);
+					}
+				}
+				
+				return false;
+			} else {
+				if(pos != null && ray != null && this.coreBoundingBox.offset(this.posX, this.posY, this.posZ).calculateIntercept(pos, ray.add(pos.x, pos.y, pos.z)) != null) {
 					return super.attackEntityFrom(source, damage);
 				} else {
 					return false;
 				}
 			}
 		}
+		
 		if(DamageSource.OUT_OF_WORLD.getDamageType().equals(source.getDamageType())) {
 			return super.attackEntityFrom(source, damage);
 		}
+		
 		return false;
 	}
 
@@ -481,6 +539,17 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 	public void onUpdate() {
 		super.onUpdate();
 
+		Iterator<Object2IntMap.Entry<Entity>> cooldownIt = this.deflectionDamageCooldowns.object2IntEntrySet().iterator();
+		while(cooldownIt.hasNext()) {
+			Object2IntMap.Entry<Entity> entry = cooldownIt.next();
+			
+			if(entry.getIntValue() > 0) {
+				this.deflectionDamageCooldowns.put(entry.getKey(), entry.getIntValue() - 1);
+			} else {
+				cooldownIt.remove();
+			}
+		}
+		
 		EntityPlayer closestPlayer = this.world.getNearestAttackablePlayer(this, 32.0D, 16.0D);
 		if(closestPlayer != null) {
 			this.faceEntity(closestPlayer, 360.0F, 360.0F);

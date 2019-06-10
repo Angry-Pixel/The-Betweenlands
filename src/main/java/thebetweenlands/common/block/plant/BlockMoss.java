@@ -68,12 +68,12 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.getFront(meta));
+        return this.getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return ((EnumFacing) state.getValue(FACING)).getIndex();
+        return state.getValue(FACING).getIndex();
     }
 
     @Override
@@ -81,7 +81,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
         if (this.canPlaceAt(world, pos, facing)) {
             return this.getDefaultState().withProperty(FACING, facing);
         } else {
-            for (EnumFacing enumfacing : EnumFacing.values()) {
+            for (EnumFacing enumfacing : EnumFacing.VALUES) {
                 if (world.isSideSolid(pos.offset(enumfacing.getOpposite()), enumfacing, true)) {
                     return this.getDefaultState().withProperty(FACING, enumfacing);
                 }
@@ -236,7 +236,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
 
     @Override
     @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
@@ -280,7 +280,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
 					continue;
 				BlockPos offsetPos = new BlockPos(xx, yy, zz);
 				if (world.isAirBlock(offsetPos)) {
-					EnumFacing facing = EnumFacing.getFront(rand.nextInt(EnumFacing.VALUES.length));
+					EnumFacing facing = EnumFacing.byIndex(rand.nextInt(EnumFacing.VALUES.length));
 					EnumFacing.Axis axis = facing.getAxis();
 					EnumFacing oppositeFacing = facing.getOpposite();
 					boolean isInvalid = false;

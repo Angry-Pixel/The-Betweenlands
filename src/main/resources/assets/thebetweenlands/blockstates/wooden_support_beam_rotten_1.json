@@ -1,0 +1,210 @@
+{
+   "forge_marker":1,
+   "defaults":{
+      "custom":{
+         "particle_texture":"thebetweenlands:blocks/rotten_bark"
+      }
+   },
+   "variants":{
+      "facing=east,top=false":{
+         "model":"thebetweenlands:internal/wooden_support_beam_rotten_1",
+         "y":270,
+         "x":180
+      },
+      "facing=east,top=true":{
+         "model":"thebetweenlands:internal/wooden_support_beam_rotten_1",
+         "y":90
+      },
+      "facing=west,top=false":{
+         "model":"thebetweenlands:internal/wooden_support_beam_rotten_1",
+         "y":90,
+         "x":180
+      },
+      "facing=west,top=true":{
+         "model":"thebetweenlands:internal/wooden_support_beam_rotten_1",
+         "y":270
+      },
+      "facing=south,top=false":{
+         "model":"thebetweenlands:internal/wooden_support_beam_rotten_1",
+         "x":180
+      },
+      "facing=south,top=true":{
+         "model":"thebetweenlands:internal/wooden_support_beam_rotten_1",
+         "y":180
+      },
+      "facing=north,top=false":{
+         "model":"thebetweenlands:internal/wooden_support_beam_rotten_1",
+         "x":180,
+         "y":180
+      },
+      "facing=north,top=true":{
+         "model":"thebetweenlands:internal/wooden_support_beam_rotten_1"
+      },
+		"inventory": {
+			"model": "thebetweenlands:internal/wooden_support_beam_rotten_1",
+			"transform": {
+				"gui": {
+					"rotation": [
+						{
+							"x": 120
+						},
+						{
+							"y": 30
+						},
+						{
+							"z": 20
+						}
+					],
+					"translation": [
+						0,
+						0.15,
+						0
+					],
+					"scale": [
+						0.725,
+						0.725,
+						0.725
+					]
+				},
+				"ground": {
+					"rotation": [
+						{
+							"x": 90
+						},
+						{
+							"y": 0
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.2,
+						0
+					],
+					"scale": [
+						0.3,
+						0.3,
+						0.3
+					]
+				},
+				"fixed": {
+					"rotation": [
+						{
+							"x": 90
+						},
+						{
+							"y": 0
+						},
+						{
+							"z": 90
+						}
+					],
+					"translation": [
+						0,
+						0.1,
+						0
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"thirdperson_righthand": {
+					"rotation": [
+						{
+							"x": 90
+						},
+						{
+							"y": 0
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.35,
+						0.15
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"thirdperson_lefthand": {
+					"rotation": [
+						{
+							"x": 90
+						},
+						{
+							"y": 0
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.35,
+						0.15
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"firstperson_righthand": {
+					"rotation": [
+						{
+							"x": 90
+						},
+						{
+							"y": 45
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.35,
+						0
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"firstperson_lefthand": {
+					"rotation": [
+						{
+							"x": 90
+						},
+						{
+							"y": -315
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.35,
+						0
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				}
+			}
+		}
+   }
+}

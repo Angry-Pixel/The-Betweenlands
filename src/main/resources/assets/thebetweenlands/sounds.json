@@ -671,6 +671,48 @@
       "thebetweenlands:root_sprite_living_3"
     ]
   },
+    "shambler_living": {
+    "sounds": [
+      "thebetweenlands:shambler_living_1",
+      "thebetweenlands:shambler_living_2",
+      "thebetweenlands:shambler_living_3",
+      "thebetweenlands:shambler_living_4"
+    ]
+  },
+  "shambler_hurt": {
+    "sounds": [
+      "thebetweenlands:shambler_hurt_1",
+      "thebetweenlands:shambler_hurt_2"
+    ]
+  },
+  "shambler_death": {
+    "sounds": [
+      "thebetweenlands:shambler_death"
+    ]
+  },
+  "shambler_lick": {
+    "sounds": [
+      "thebetweenlands:shambler_lick"
+    ]
+  },
+    "crypt_crawler_living": {
+    "sounds": [
+      "thebetweenlands:crypt_crawler_living_1",
+      "thebetweenlands:crypt_crawler_living_2",
+      "thebetweenlands:crypt_crawler_living_3"
+    ]
+  },
+  "crypt_crawler_hurt": {
+    "sounds": [
+      "thebetweenlands:crypt_crawler_hurt_1",
+      "thebetweenlands:crypt_crawler_hurt_2"
+    ]
+  },
+  "crypt_crawler_death": {
+    "sounds": [
+      "thebetweenlands:crypt_crawler_death"
+    ]
+  },
   "greebling_vanish": {
     "sounds": [
       "thebetweenlands:greebling_vanish"
@@ -1077,6 +1119,31 @@
   "damage_reduction": {
     "sounds": [
       "thebetweenlands:damage_reduction"
+    ]
+  },
+  "puff_shroom": {
+    "sounds": [
+      "thebetweenlands:puff_shroom"
+    ]
+  },
+  "mud_door_1": {
+    "sounds": [
+      "thebetweenlands:mud_door_1"
+    ]
+  },
+  "mud_door_2": {
+    "sounds": [
+      "thebetweenlands:mud_door_2"
+    ]
+  },
+  "mud_door_lock": {
+    "sounds": [
+      "thebetweenlands:mud_door_lock"
+    ]
+  },
+  "mud_door_trap": {
+    "sounds": [
+      "thebetweenlands:mud_door_trap"
     ]
   }
 }

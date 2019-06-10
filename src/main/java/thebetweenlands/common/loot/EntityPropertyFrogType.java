@@ -38,7 +38,7 @@ public class EntityPropertyFrogType implements EntityProperty {
 
 		@Override
 		public EntityPropertyFrogType deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
-			return new EntityPropertyFrogType(JsonUtils.getInt(element, this.getName().getResourcePath()));
+			return new EntityPropertyFrogType(JsonUtils.getInt(element, this.getName().getPath()));
 		}
 	}
 }

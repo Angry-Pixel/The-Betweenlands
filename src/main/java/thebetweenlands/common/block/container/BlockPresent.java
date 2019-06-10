@@ -105,7 +105,7 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 		super.harvestBlock(worldIn, player, pos, state, te, stack);
 		IInventory tile = (IInventory) worldIn.getTileEntity(pos);
 		if (tile != null) {
-			((TileEntityLootInventory) tile).fillWithLoot(player);
+			((TileEntityLootInventory) tile).fillInventoryWithLoot(player);
 		}
 	}
 
@@ -148,7 +148,7 @@ public class BlockPresent extends BasicBlock implements ITileEntityProvider, ITi
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

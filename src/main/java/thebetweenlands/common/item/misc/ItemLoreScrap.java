@@ -1,17 +1,8 @@
 package thebetweenlands.common.item.misc;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumRarity;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.*;
@@ -23,6 +14,11 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.ItemRegistry;
 
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
 public class ItemLoreScrap extends Item implements ItemRegistry.IMultipleItemModelDefinition {
 	public static final String[] PAGE_NAMES = new String[]{"them", "mutants", "shadows", "ruins", "heads", "tar", "dungeon", "pitstone", "tower", "fort"};
 
@@ -30,12 +26,7 @@ public class ItemLoreScrap extends Item implements ItemRegistry.IMultipleItemMod
 		this.maxStackSize = 1;
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 
-		this.addPropertyOverride(new ResourceLocation("page"), new IItemPropertyGetter() {
-			@Override
-			public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
-				return getPage(stack);
-			}
-		});
+		this.addPropertyOverride(new ResourceLocation("page"), (stack, worldIn, entityIn) -> getPage(stack));
 	}
 
 	public static ItemStack createStack(int page) {
@@ -93,12 +84,12 @@ public class ItemLoreScrap extends Item implements ItemRegistry.IMultipleItemMod
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		String pageName = getPageName(stack);
 		if(pageName != null) {
-			return super.getUnlocalizedName() + "." + pageName;
+			return super.getTranslationKey() + "." + pageName;
 		}
-		return super.getUnlocalizedName();
+		return super.getTranslationKey();
 	}
 
 	@Override
@@ -106,9 +97,9 @@ public class ItemLoreScrap extends Item implements ItemRegistry.IMultipleItemMod
 		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		if (getPage(itemStackIn) != -1) {
 			playerIn.openGui(TheBetweenlands.instance, CommonProxy.GUI_LORE, worldIn, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+		return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
 	}
 
 	@Override

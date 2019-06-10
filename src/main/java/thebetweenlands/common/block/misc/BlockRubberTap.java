@@ -32,7 +32,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.tile.TileEntityRubberTap;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 public abstract class BlockRubberTap extends BlockHorizontal implements ITileEntityProvider, ICustomItemBlock {
 	public static final PropertyInteger AMOUNT = PropertyInteger.create("amount", 0, 15);
@@ -176,13 +176,13 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
+		return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
 	}
 
 	@Override
@@ -192,7 +192,7 @@ public abstract class BlockRubberTap extends BlockHorizontal implements ITileEnt
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		TileEntityRubberTap te = TileEntityHelper.getTileEntityThreadSafe(worldIn, pos, TileEntityRubberTap.class);
+		TileEntityRubberTap te = StatePropertyHelper.getTileEntityThreadSafe(worldIn, pos, TileEntityRubberTap.class);
 		if(te != null) {
 			FluidStack drained = ((TileEntityRubberTap)te).drain(Fluid.BUCKET_VOLUME, false);
 			if(drained != null) {

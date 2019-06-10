@@ -1,6 +1,5 @@
 package thebetweenlands.common.handler;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -10,15 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.TheBetweenlands;
@@ -31,36 +26,14 @@ public class ItemEquipmentHandler {
 	private ItemEquipmentHandler() { }
 
 	@SubscribeEvent
-	public static void onWorldTick(TickEvent.WorldTickEvent event) {
-		if(event.phase == Phase.END) {
-			tickEquipmentInventories(event.world);
-		}
-	}
+	public static void onLivingUpdated(LivingEvent.LivingUpdateEvent event) {
+		IEquipmentCapability cap = event.getEntity().getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		if (cap != null) {
+			for (EnumEquipmentInventory invType : EnumEquipmentInventory.VALUES) {
+				IInventory inventory = cap.getInventory(invType);
 
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public static void onClientTick(TickEvent.ClientTickEvent event) {
-		if(event.phase == Phase.END) {
-			World world = TheBetweenlands.proxy.getClientWorld();
-			if(world != null && !Minecraft.getMinecraft().isGamePaused()) {
-				tickEquipmentInventories(world);
-			}
-		}
-	}
-
-	private static void tickEquipmentInventories(World world) {
-		for(int i = 0; i < world.loadedEntityList.size(); i++) {
-			Entity entity = world.loadedEntityList.get(i);
-
-			if(entity instanceof EntityLivingBase && entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-
-				for(EnumEquipmentInventory invType : EnumEquipmentInventory.values()) {
-					IInventory inventory = cap.getInventory(invType);
-
-					if(inventory instanceof ITickable) {
-						((ITickable) inventory).update();
-					}
+				if (inventory instanceof ITickable) {
+					((ITickable) inventory).update();
 				}
 			}
 		}
@@ -159,7 +132,7 @@ public class ItemEquipmentHandler {
 
 							player.swingArm(hand);
 
-							player.sendStatusMessage(new TextComponentTranslation("chat.equipment.equipped", new TextComponentTranslation(heldItem.getUnlocalizedName() + ".name")), true);
+							player.sendStatusMessage(new TextComponentTranslation("chat.equipment.equipped", new TextComponentTranslation(heldItem.getTranslationKey() + ".name")), true);
 
 							return true;
 						}
@@ -176,10 +149,9 @@ public class ItemEquipmentHandler {
 		EntityLivingBase entity = event.getEntityLiving();
 
 		if(entity != null && !entity.world.isRemote && !entity.world.getGameRules().getBoolean("keepInventory")) {
-			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-
-				for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
+			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+			if(cap != null) {
+				for(EnumEquipmentInventory type : EnumEquipmentInventory.VALUES) {
 					IInventory inv = cap.getInventory(type);
 
 					for(int i = 0; i < inv.getSizeInventory(); i++) {

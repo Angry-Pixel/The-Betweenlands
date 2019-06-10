@@ -36,13 +36,12 @@ public class MessageFlightState extends MessageBase {
 	public IMessage process(MessageContext ctx) {
 		if(ctx.getServerHandler() != null) {
 			EntityPlayer player = ctx.getServerHandler().player;
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null)) {
-				IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
-
+			IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
+			if(cap != null) {
 				boolean canPlayerFly = false;
 
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-					IEquipmentCapability equipmentCap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+				IEquipmentCapability equipmentCap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+				if(equipmentCap != null) {
 					IInventory inv = equipmentCap.getInventory(EnumEquipmentInventory.RING);
 					for(int i = 0; i < inv.getSizeInventory(); i++) {
 						ItemStack stack = inv.getStackInSlot(i);

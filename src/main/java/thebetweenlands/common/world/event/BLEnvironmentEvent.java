@@ -181,7 +181,7 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 
 	@Override
 	public String getLocalizationEventName() {
-		return "event." + getEventName().getResourceDomain() + "." + getEventName().getResourcePath() + ".name";
+		return "event." + getEventName().getNamespace() + "." + getEventName().getPath() + ".name";
 	}
 
 	@Override

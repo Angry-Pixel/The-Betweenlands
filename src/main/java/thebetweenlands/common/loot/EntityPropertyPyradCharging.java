@@ -38,7 +38,7 @@ public class EntityPropertyPyradCharging implements EntityProperty {
 
 		@Override
 		public EntityPropertyPyradCharging deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
-			return new EntityPropertyPyradCharging(JsonUtils.getBoolean(element, this.getName().getResourcePath()));
+			return new EntityPropertyPyradCharging(JsonUtils.getBoolean(element, this.getName().getPath()));
 		}
 	}
 }

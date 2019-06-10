@@ -2,6 +2,7 @@ package thebetweenlands.common.block.terrain;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,7 +14,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.BLMaterialRegistry;
@@ -22,6 +26,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Random;
 
 
 public class BlockMud extends Block {
@@ -33,6 +38,7 @@ public class BlockMud extends Block {
 		setSoundType(SoundType.GROUND);
 		setHarvestLevel("shovel", 0);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
+		setLightOpacity(255);
 	}
 
 	public boolean canEntityWalkOnMud(Entity entity) {
@@ -67,7 +73,7 @@ public class BlockMud extends Block {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity){
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity){
 		if (!canEntityWalkOnMud(entity)) {
 			entity.motionX *= 0.08D;
 			if(!entity.isInWater() && entity.motionY < 0 && entity.onGround) entity.motionY = -0.1D;
@@ -97,5 +103,22 @@ public class BlockMud extends Block {
 	@Override
 	public boolean isOpaqueCube(IBlockState blockState) {
 		return true;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		double d0 = (double) pos.getX();
+		double d1 = (double) pos.getY();
+		double d2 = (double) pos.getZ();
+
+		if (rand.nextInt(10) == 0) {
+			Material material = world.getBlockState(pos.down()).getMaterial();
+			if (!material.blocksMovement() && !material.isLiquid()) {
+				double d3 = d0 + (double) rand.nextFloat();
+				double d5 = d1 - 0.05D;
+				double d7 = d2 + (double) rand.nextFloat();
+				BLParticles.CAVE_WATER_DRIP.spawn(world, d3, d5, d7).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+			}
+		}
 	}
 }

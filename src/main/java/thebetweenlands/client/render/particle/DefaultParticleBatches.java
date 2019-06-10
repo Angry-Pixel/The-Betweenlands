@@ -20,6 +20,7 @@ public class DefaultParticleBatches {
 
 	private static final ResourceLocation PARTICLE_ATLAS = new ResourceLocation("textures/particle/particles.png");
 	private static final ResourceLocation BLOCK_ATLAS = TextureMap.LOCATION_BLOCKS_TEXTURE;
+	private static final ResourceLocation BEAM_TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/beam.png");
 
 	//Generic batches
 	public static final ParticleBatch TRANSLUCENT_GLOWING = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass()
@@ -47,6 +48,13 @@ public class DefaultParticleBatches {
 	//Specific batches (might be rendered from somewhere else than the main particle renderer)
 	public static final ParticleBatch WISPS = BatchedParticleRenderer.INSTANCE.registerBatchType(TRANSLUCENT_GLOWING.type());
 	public static final ParticleBatch GAS_CLOUDS = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().depthMaskPass(true).texture(null).end().build(), false);
-	public static final ParticleBatch HEAT_HAZE_PARTICLE_ATLAS = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().texture(PARTICLE_ATLAS).end().filter(SHADER_FILTER).build(), false);
-	public static final ParticleBatch HEAT_HAZE_BLOCK_ATLAS = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().texture(BLOCK_ATLAS).end().filter(SHADER_FILTER).build(), false);
+	public static final ParticleBatch HEAT_HAZE_PARTICLE_ATLAS = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().blend(SourceFactor.SRC_ALPHA, DestFactor.ONE).depthMaskPass(true).texture(PARTICLE_ATLAS).end().filter(SHADER_FILTER).build(), false);
+	public static final ParticleBatch HEAT_HAZE_BLOCK_ATLAS = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().blend(SourceFactor.SRC_ALPHA, DestFactor.ONE).depthMaskPass(true).texture(BLOCK_ATLAS).end().filter(SHADER_FILTER).build(), false);
+	public static final ParticleBatch BEAM = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass()
+			.blend(SourceFactor.SRC_ALPHA, DestFactor.ONE)
+			.depthMask(false)
+			.texture(BEAM_TEXTURE)
+			.blur(true)
+			.cull(false)
+			.end().build());
 }

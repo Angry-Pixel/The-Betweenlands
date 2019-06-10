@@ -139,7 +139,7 @@ public class FogHandler {
 
 		if(world != null && player != null) {
 			if(farPlaneDistance != 0.0F && world.provider instanceof WorldProviderBetweenlands) {
-				state.update(world, player.getPositionVector().addVector(0, player.getEyeHeight(), 0), farPlaneDistance, 0);
+				state.update(world, player.getPositionVector().add(0, player.getEyeHeight(), 0), farPlaneDistance, 0);
 			}
 
 			Biome biome = world.getBiome(player.getPosition());

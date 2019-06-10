@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
@@ -50,7 +49,9 @@ import thebetweenlands.common.block.container.BlockHopperBetweenlands;
 import thebetweenlands.common.block.container.BlockInfuser;
 import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.block.container.BlockLootPot;
+import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockMortar;
+import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockRepeller;
@@ -95,6 +96,7 @@ import thebetweenlands.common.block.plant.BlockBulbCappedMushroomStalk;
 import thebetweenlands.common.block.plant.BlockCaveGrass;
 import thebetweenlands.common.block.plant.BlockCaveMoss;
 import thebetweenlands.common.block.plant.BlockDoublePlantBL;
+import thebetweenlands.common.block.plant.BlockEdgeShroom;
 import thebetweenlands.common.block.plant.BlockFlatheadMushroom;
 import thebetweenlands.common.block.plant.BlockGoldenClubFlower;
 import thebetweenlands.common.block.plant.BlockGoldenClubStalk;
@@ -119,10 +121,24 @@ import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.plant.BlockWaterWeeds;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeepingBlue;
+import thebetweenlands.common.block.structure.BlockBeamLensSupport;
+import thebetweenlands.common.block.structure.BlockBeamOrigin;
+import thebetweenlands.common.block.structure.BlockBeamRelay;
+import thebetweenlands.common.block.structure.BlockBeamTube;
+import thebetweenlands.common.block.structure.BlockBrazier;
+import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
+import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockChipPath;
+import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
+import thebetweenlands.common.block.structure.BlockCompactedMud;
+import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.block.structure.BlockDruidStone;
+import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
+import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
+import thebetweenlands.common.block.structure.BlockDungeonWallCandle;
 import thebetweenlands.common.block.structure.BlockEnergyBarrier;
+import thebetweenlands.common.block.structure.BlockEnergyBarrierMud;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.block.structure.BlockFenceGateBetweenlands;
 import thebetweenlands.common.block.structure.BlockItemCage;
@@ -130,8 +146,16 @@ import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.block.structure.BlockMudBrickRoof;
 import thebetweenlands.common.block.structure.BlockMudBrickShingleSlab;
 import thebetweenlands.common.block.structure.BlockMudBricks;
+import thebetweenlands.common.block.structure.BlockMudBricksClimbable;
+import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
+import thebetweenlands.common.block.structure.BlockMudBrickSpikeTrap;
+import thebetweenlands.common.block.structure.BlockMudTiles;
+import thebetweenlands.common.block.structure.BlockMudTilesSpikeTrap;
+import thebetweenlands.common.block.structure.BlockMudTilesWater;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
+import thebetweenlands.common.block.structure.BlockPuffshroom;
+import thebetweenlands.common.block.structure.BlockRottenBarkCarved;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSpikeTrap;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
@@ -144,6 +168,8 @@ import thebetweenlands.common.block.structure.BlockWalkway;
 import thebetweenlands.common.block.structure.BlockWallBetweenlands;
 import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
 import thebetweenlands.common.block.structure.BlockWaystone;
+import thebetweenlands.common.block.structure.BlockWoodenSupportBeam;
+import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockBlackIce;
 import thebetweenlands.common.block.terrain.BlockCircleGem;
@@ -176,7 +202,6 @@ import thebetweenlands.common.block.terrain.BlockSludgyDirt;
 import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
 import thebetweenlands.common.block.terrain.BlockSpreadingRottenLog;
 import thebetweenlands.common.block.terrain.BlockSpreadingSludgyDirt;
-import thebetweenlands.common.block.terrain.BlockSpreadingDeath;
 import thebetweenlands.common.block.terrain.BlockStagnantWater;
 import thebetweenlands.common.block.terrain.BlockStalactite;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
@@ -191,7 +216,6 @@ import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.gen.feature.WorldGenRootPodRoots;
-import thebetweenlands.common.world.gen.feature.WorldGenSmallSpiritTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenRubberTree;
@@ -444,7 +468,7 @@ public class BlockRegistry {
     public static final Block POSSESSED_BLOCK = new BlockPossessedBlock();
     public static final Block ITEM_CAGE = new BlockItemCage();
     public static final Block ITEM_SHELF = new BlockItemShelf();
-    public static final Block THATCH = new BasicBlock(Material.PLANTS).setSoundType2(SoundType.PLANT).setDefaultCreativeTab().setHardness(0.5F);
+    public static final Block THATCH = new BasicBlock(Material.GRASS).setSoundType2(SoundType.PLANT).setDefaultCreativeTab().setHardness(0.5F);
     public static final Block CRAGROCK_SLAB = new BlockSlabBetweenlands(CRAGROCK);
     public static final Block PITSTONE_SLAB = new BlockSlabBetweenlands(PITSTONE);
     public static final Block BETWEENSTONE_SLAB = new BlockSlabBetweenlands(BETWEENSTONE);
@@ -518,7 +542,66 @@ public class BlockRegistry {
     public static final Block BETWEENSTONE_BUTTON = new BlockButtonBetweenlands(false);
     public static final Block WEEDWOOD_LADDER = new BlockLadderBetweenlands();
     public static final Block WEEDWOOD_LEVER = new BlockLeverBetweenlands();
+    
+    //Worm Dungeon
+    public static final Block WORM_DUNGEON_PILLAR = new BlockWormDungeonPillar();
+    public static final Block COMPACTED_MUD = new BlockCompactedMud();
+    public static final Block MUD_TILES = new BlockMudTiles();
+    public static final Block PUFFSHROOM = new BlockPuffshroom();
+    public static final Block MUD_BRICKS_CARVED = new BlockCarvedMudBrick();
+    public static final Block MUD_BRICK_STAIRS_DECAY_1 = new BlockStairsBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_1));
+    public static final Block MUD_BRICK_STAIRS_DECAY_2 = new BlockStairsBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_2));
+    public static final Block MUD_BRICK_STAIRS_DECAY_3 = new BlockStairsBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3));
+    public static final Block MUD_BRICK_SLAB_DECAY_1 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_1).getBlock());
+    public static final Block MUD_BRICK_SLAB_DECAY_2 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_2).getBlock());
+    public static final Block MUD_BRICK_SLAB_DECAY_3 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3).getBlock());
+    public static final Block EDGE_SHROOM = new BlockEdgeShroom();
+    public static final Block MUD_TOWER_BEAM_ORIGIN = new BlockBeamOrigin();
+    public static final Block MUD_TOWER_BEAM_RELAY = new BlockBeamRelay();
+    public static final Block MUD_TOWER_BEAM_TUBE = new BlockBeamTube();
+    public static final Block MUD_TOWER_BEAM_LENS_SUPPORTS = new BlockBeamLensSupport();
+    public static final Block DIAGONAL_ENERGY_BARRIER = new BlockDiagonalEnergyBarrier();
+    public static final Block MUD_BRICK_SPAWNER_HOLE = new BlockMudBricksSpawnerHole();
+    public static final Block MUD_BRICK_ALCOVE = new BlockMudBrickAlcove();
+    public static final Block LOOT_URN = new BlockLootUrn();
+	public static final Block DUNGEON_DOOR_RUNES = new BlockDungeonDoorRunes(false);
+	public static final Block DUNGEON_DOOR_RUNES_MIMIC = new BlockDungeonDoorRunes(true);
+	public static final Block DUNGEON_DOOR_COMBINATION = new BlockDungeonDoorCombination();
+	public static final Block MUD_BRICKS_CLIMBABLE = new BlockMudBricksClimbable();
+	public static final Block MUD_TILES_WATER = new BlockMudTilesWater();
+	public static final Block DUNGEON_WALL_CANDLE = new BlockDungeonWallCandle();
+	public static final Block WOODEN_SUPPORT_BEAM_ROTTEN_1 = new BlockWoodenSupportBeam();
+	public static final Block WOODEN_SUPPORT_BEAM_ROTTEN_2 = new BlockWoodenSupportBeam();
+	public static final Block WOODEN_SUPPORT_BEAM_ROTTEN_3 = new BlockWoodenSupportBeam();
+	public static final Block LOG_ROTTEN_BARK_CARVED_1 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_2 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_3 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_4 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_5 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_6 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_7 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_8 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_9 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_10 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_11 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_12 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_13 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_14 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_15 = new BlockRottenBarkCarved();
+	public static final Block LOG_ROTTEN_BARK_CARVED_16 = new BlockRottenBarkCarved();
+	public static final Block ENERGY_BARRIER_MUD = new BlockEnergyBarrierMud();
+	public static final Block MUD_BRICK_SPIKE_TRAP = new BlockMudBrickSpikeTrap();
+	public static final Block MUD_TILES_SPIKE_TRAP = new BlockMudTilesSpikeTrap();
+	public static final Block COMPACTED_MUD_SLOPE = new BlockCompactedMudSlope();
+	
+	//Place-Holders for stuffs and things
+	public static final Block MUD_TOWER_BRAZIER = new BlockBrazier();
+	public static final Block DECAY_PIT_STATUE_WINDER = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block DECAY_PIT_CAPSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+
+	//Winter Event
     public static final Block PRESENT = new BlockPresent();
+    
     //Plants
     public static final BlockDoublePlantBL PITCHER_PLANT = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PITCHER_PLANT_TRAP.create(1));
     public static final BlockDoublePlantBL WEEPING_BLUE = new BlockWeepingBlue();
@@ -602,7 +685,7 @@ public class BlockRegistry {
     public static final Block DUG_PURIFIED_SWAMP_GRASS = new BlockDugGrass(true).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
     public static final Block BLACK_ICE = new BlockBlackIce();
     public static final Block SNOW = new BlockSnowBetweenlands();
-    
+
     //Misc
     public static final Block LOG_PORTAL = new BlockLogBetweenlands() {
     	@Override
@@ -732,7 +815,7 @@ public class BlockRegistry {
 
     public static void registerBlock(String name, Block block) {
         BLOCKS.add(block);
-        block.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.ID + "." + name);
+        block.setRegistryName(ModInfo.ID, name).setTranslationKey(ModInfo.ID + "." + name);
 
         ItemBlock item = null;
         if (block instanceof ICustomItemBlock)
@@ -741,11 +824,11 @@ public class BlockRegistry {
             item = new ItemBlock(block);
         if(item != null) {
         	ITEM_BLOCKS.add(item);
-        	item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.ID + "." + name);
+        	item.setRegistryName(ModInfo.ID, name).setTranslationKey(ModInfo.ID + "." + name);
         	
         	if (BetweenlandsConfig.DEBUG.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-                if (block.getCreativeTabToDisplayOn() == null)
-                    TheBetweenlands.logger.warn(String.format("Block %s doesn't have a creative tab", block.getUnlocalizedName()));
+                if (block.getCreativeTab() == null)
+                    TheBetweenlands.logger.warn(String.format("Block %s doesn't have a creative tab", block.getTranslationKey()));
             }
         }
     }
@@ -778,7 +861,7 @@ public class BlockRegistry {
 	                ISubtypeItemBlockModelDefinition subtypeBlock = (ISubtypeItemBlockModelDefinition) block;
 	                for (int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
 	                    int meta = subtypeBlock.getSubtypeMeta(i);
-	                    ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(name.getResourceDomain() + ":" + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
+	                    ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(name.getNamespace() + ":" + String.format(subtypeBlock.getSubtypeName(meta), name.getPath()), "inventory"));
 	                }
 	            } else {
 	                ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(name, "inventory"));

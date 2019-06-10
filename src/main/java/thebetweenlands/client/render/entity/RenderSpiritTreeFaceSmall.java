@@ -90,10 +90,16 @@ public class RenderSpiritTreeFaceSmall extends RenderWallFace<EntitySpiritTreeFa
 		int variant = entity.getVariant();
 		if(variant == 0) {
 			this.mainModel = this.model1;
-			GlStateManager.translate(0, 1, -0.25D);
+			if(entity.isAnchored()) {
+				GlStateManager.translate(0, 1, -0.25D);
+			} else {
+				GlStateManager.translate(0, 1, 0.45D);
+			}
 		} else {
 			this.mainModel = this.model2;
-			GlStateManager.translate(0, 0, -0.74D);
+			if(entity.isAnchored()) {
+				GlStateManager.translate(0, 0, -0.74D);
+			}
 		}
 	}
 

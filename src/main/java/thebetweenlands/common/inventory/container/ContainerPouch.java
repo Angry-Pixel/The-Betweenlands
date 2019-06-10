@@ -1,7 +1,5 @@
 package thebetweenlands.common.inventory.container;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -14,6 +12,8 @@ import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.slot.SlotPouch;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.registries.CapabilityRegistry;
+
+import javax.annotation.Nullable;
 
 public class ContainerPouch extends Container {
 	@Nullable
@@ -63,14 +63,14 @@ public class ContainerPouch extends Container {
 		if(this.inventory == null) {
 			return true; //Renaming pouch
 		}
-		
+
 		if(this.getItemInventory().getInventoryItemStack().isEmpty()) {
 			return false;
 		}
-		
+
 		//Check if pouch is in equipment
-		if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-            IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		if (cap != null) {
             IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
 
             for (int i = 0; i < inv.getSizeInventory(); i++) {
@@ -79,21 +79,21 @@ public class ContainerPouch extends Container {
                 }
             }
         }
-		
+
 		//Check if pouch is in main inventory
 		for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
 			if(player.inventory.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
 		ItemStack stack = ItemStack.EMPTY;
-		Slot slot = (Slot) this.inventorySlots.get(slotIndex);
+		Slot slot = this.inventorySlots.get(slotIndex);
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack slotStack = slot.getStack();

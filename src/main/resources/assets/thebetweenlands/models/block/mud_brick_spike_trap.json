@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "thebetweenlands:blocks/mud_bricks",
+    "down": "thebetweenlands:blocks/mud_bricks_carved",
+    "up": "thebetweenlands:blocks/mud_brick_spike_block_inactive_top",
+    "north": "thebetweenlands:blocks/mud_bricks_carved",
+    "east": "thebetweenlands:blocks/mud_bricks_carved",
+    "south": "thebetweenlands:blocks/mud_bricks_carved",
+    "west": "thebetweenlands:blocks/mud_bricks_carved"
+  }
+}

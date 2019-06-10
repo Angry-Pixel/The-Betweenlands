@@ -1,0 +1,117 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "flipped": {
+      "false": {
+        "model": "thebetweenlands:internal/connected_texture",
+        "custom": {
+          "particle_texture": "thebetweenlands:blocks/diagonal_energy_barrier_ct_0",
+          "ambient_occlusion": true,
+          "connected_texture_faces": [
+            {
+              "connected_textures": [
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_0",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_1",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_2",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_3",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_4"
+              ],
+              "maxU": 0.71875,
+              "maxV": 0.5,
+              "indices": [
+                "north_up_east_index",
+                "north_down_east_index",
+                "west_down_south_index",
+                "west_up_south_index"
+              ],
+              "vertices": [
+                { "x": 1.0, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
+                { "x": 1.0, "y": 0.0, "z": 0.0, "u": 0, "v": 1 },
+                { "x": 0.0, "y": 0.0, "z": 1.0, "u": 1, "v": 1 },
+                { "x": 0.0, "y": 1.0, "z": 1.0, "u": 1, "v": 0 }
+              ]
+            },
+            {
+              "connected_textures": [
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_0",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_1",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_2",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_3",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_4"
+              ],
+              "maxU": 0.71875,
+              "maxV": 0.5,
+              "indices": [
+                "south_up_west_index",
+                "south_down_west_index",
+                "east_down_north_index",
+                "east_up_north_index"
+              ],
+              "vertices": [
+                { "x": 0.0, "y": 1.0, "z": 1.0, "u": 0, "v": 0 },
+                { "x": 0.0, "y": 0.0, "z": 1.0, "u": 0, "v": 1 },
+                { "x": 1.0, "y": 0.0, "z": 0.0, "u": 1, "v": 1 },
+                { "x": 1.0, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
+              ]
+            }
+          ]
+        }
+      },
+      "true": {
+        "model": "thebetweenlands:internal/connected_texture",
+        "custom": {
+          "particle_texture": "thebetweenlands:blocks/diagonal_energy_barrier_ct_0",
+          "ambient_occlusion": true,
+          "connected_texture_faces": [
+            {
+              "connected_textures": [
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_0",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_1",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_2",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_3",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_4"
+              ],
+              "maxU": 0.71875,
+              "maxV": 0.5,
+              "indices": [
+                "west_up_north_index",
+                "west_down_north_index",
+                "south_down_east_index",
+                "south_up_east_index"
+              ],
+              "vertices": [
+                { "x": 0.0, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
+                { "x": 0.0, "y": 0.0, "z": 0.0, "u": 0, "v": 1 },
+                { "x": 1.0, "y": 0.0, "z": 1.0, "u": 1, "v": 1 },
+                { "x": 1.0, "y": 1.0, "z": 1.0, "u": 1, "v": 0 }
+              ]
+            },
+            {
+              "connected_textures": [
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_0",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_1",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_2",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_3",
+                "thebetweenlands:blocks/diagonal_energy_barrier_ct_4"
+              ],
+              "maxU": 0.71875,
+              "maxV": 0.5,
+              "indices": [
+                "east_up_south_index",
+                "east_down_south_index",
+                "north_down_west_index",
+                "north_up_west_index"
+              ],
+              "vertices": [
+                { "x": 1.0, "y": 1.0, "z": 1.0, "u": 0, "v": 0 },
+                { "x": 1.0, "y": 0.0, "z": 1.0, "u": 0, "v": 1 },
+                { "x": 0.0, "y": 0.0, "z": 0.0, "u": 1, "v": 1 },
+                { "x": 0.0, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  }
+}

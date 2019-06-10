@@ -1,9 +1,5 @@
 package thebetweenlands.common.item.equipment;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -20,15 +16,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -55,18 +46,16 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamableItem {
     public ItemLurkerSkinPouch() {
         this.setMaxStackSize(1);
         this.setCreativeTab(BLCreativeTabs.ITEMS);
         this.setMaxDamage(3);
 
-        this.addPropertyOverride(new ResourceLocation("pouch_size"), new IItemPropertyGetter() {
-            @Override
-            public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
-                return stack.getItemDamage();
-            }
-        });
+        this.addPropertyOverride(new ResourceLocation("pouch_size"), (stack, worldIn, entityIn) -> stack.getItemDamage());
         IEquippable.addEquippedPropertyOverrides(this);
     }
 
@@ -77,8 +66,8 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
      * @return
      */
     public static ItemStack getFirstPouch(EntityPlayer player) {
-        if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-            IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+        IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+        if (cap != null) {
             IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
 
             for (int i = 0; i < inv.getSizeInventory(); i++) {
@@ -129,15 +118,17 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
     			if(!world.isRemote) {
 	    			InventoryItem inventory = new InventoryItem(heldItem, 9 + (heldItem.getItemDamage() * 9), "Lurker Skin Pouch");
 	    			TileEntity tile = world.getTileEntity(pos);
-	        		if(tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
+	        		if(tile != null) {
 	        			IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);
-	        			for(int i = 0; i < inventory.getSizeInventory(); i++) {
-	        				ItemStack stack = inventory.getStackInSlot(i);
-	        				if(!stack.isEmpty()) {
-	        					stack = ItemHandlerHelper.insertItemStacked(itemHandler, stack, false);
-	        					inventory.setInventorySlotContents(i, stack);
-	        				}
-	        			}
+	        			if (itemHandler != null) {
+                            for (int i = 0; i < inventory.getSizeInventory(); i++) {
+                                ItemStack stack = inventory.getStackInSlot(i);
+                                if (!stack.isEmpty()) {
+                                    stack = ItemHandlerHelper.insertItemStacked(itemHandler, stack, false);
+                                    inventory.setInventorySlotContents(i, stack);
+                                }
+                            }
+                        }
 	        		}
     			}
         		return EnumActionResult.SUCCESS;
@@ -184,10 +175,9 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
 
 	@SideOnly(Side.CLIENT)
 	private static void renderPouch(EntityPlayer player, double x, double y, double z, float partialTicks) {
-		if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+        IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+        if(cap != null) {
 			IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
-
 			ItemStack pouch = null;
 
 			for(int i = 0; i < inv.getSizeInventory(); i++) {

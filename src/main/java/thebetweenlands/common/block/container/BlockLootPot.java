@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.Block.EnumOffsetType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -72,11 +73,21 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+		return EnumBlockRenderType.MODEL;
+	}
+	
+	@Override
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isBlockNormalCube(IBlockState state) {
 		return false;
 	}
 
@@ -99,7 +110,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(VARIANT, EnumLootPot.byMetadata(meta)).withProperty(FACING, EnumFacing.getHorizontal(meta & 3));
+		return this.getDefaultState().withProperty(VARIANT, EnumLootPot.byMetadata(meta)).withProperty(FACING, EnumFacing.byHorizontalIndex(meta & 3));
 	}
 
 	@Override
@@ -120,7 +131,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		int rotation = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		state = state.withProperty(FACING, EnumFacing.getHorizontal(rotation));
+		state = state.withProperty(FACING, EnumFacing.byHorizontalIndex(rotation));
 		state = state.withProperty(VARIANT, EnumLootPot.byMetadata(stack.getItemDamage()));
 		worldIn.setBlockState(pos, state, 3);
 		TileEntity tile = worldIn.getTileEntity(pos);
@@ -172,7 +183,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 		super.harvestBlock(worldIn, player, pos, state, te, stack);
 		IInventory tile = (IInventory) worldIn.getTileEntity(pos);
 		if (tile != null) {
-			((TileEntityLootInventory) tile).fillWithLoot(player);
+			((TileEntityLootInventory) tile).fillInventoryWithLoot(player);
 		}
 	}
 
@@ -186,7 +197,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	}
 
 	@Override
-	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
+	public void onPlayerDestroy(World worldIn, BlockPos pos, IBlockState state) {
 		if (!worldIn.isRemote) {
 			if (worldIn.rand.nextInt(3) == 0) {
 				EntityTermite entity = new EntityTermite(worldIn);
@@ -195,7 +206,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 				worldIn.spawnEntity(entity);
 			}
 		}
-		super.onBlockDestroyedByPlayer(worldIn, pos, state);
+		super.onPlayerDestroy(worldIn, pos, state);
 	}
 
 	@Override
@@ -267,4 +278,9 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return false;
+	}
 }

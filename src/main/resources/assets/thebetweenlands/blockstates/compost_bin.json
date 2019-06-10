@@ -3,7 +3,7 @@
   "defaults": {
     "model": "thebetweenlands:internal/blank",
     "custom": {
-      "particle_texture": "thebetweenlands:tiles/compost_bin_particle"
+      "particle_texture": "thebetweenlands:particle/block/compost_bin_particle"
     }
   },
   "variants": {

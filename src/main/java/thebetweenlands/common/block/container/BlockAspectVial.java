@@ -201,7 +201,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
 
     @SideOnly(Side.CLIENT)
     @Override
-    public BlockRenderLayer getBlockLayer() {
+    public BlockRenderLayer getRenderLayer() {
         return BlockRenderLayer.TRANSLUCENT;
     }
 

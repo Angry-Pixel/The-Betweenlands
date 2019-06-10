@@ -98,11 +98,10 @@ public class BLMaterial extends Material {
      * immobility and stop pistons.
      */
     @Override
-    public EnumPushReaction getMobilityFlag()
+    public EnumPushReaction getPushReaction()
     {
         return this.mobilityFlag;
     }
-
 
     /**
      * This type of material can't be pushed, but pistons can move over it.

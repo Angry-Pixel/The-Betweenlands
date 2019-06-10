@@ -35,6 +35,7 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import thebetweenlands.common.block.structure.BlockSlanted;
 import thebetweenlands.util.QuadBuilder;
+import thebetweenlands.util.StatePropertyHelper;
 import thebetweenlands.util.QuadBuilder.Quads;
 
 public class ModelSlant implements IModel {
@@ -124,7 +125,7 @@ public class ModelSlant implements IModel {
 			boolean cornerSE = (key & 0x4) != 0;
 			boolean cornerSW = (key & 0x8) != 0;
 			boolean upsidedown = (key & 0x10) != 0;
-			EnumFacing slantDir = EnumFacing.getHorizontal(key >> 5);
+			EnumFacing slantDir = EnumFacing.byHorizontalIndex(key >> 5);
 
 			float cornerHeightNW = cornerNW ? 1.0F : this.slopeEdge;
 			float cornerHeightNE = cornerNE ? 1.0F : this.slopeEdge;
@@ -478,20 +479,11 @@ public class ModelSlant implements IModel {
 			boolean cornerSW = false;
 			EnumFacing slantDir = EnumFacing.NORTH;
 
-			if(state instanceof IExtendedBlockState) {
-				IExtendedBlockState extendedState = (IExtendedBlockState) state;
-				cornerNW = extendedState.getValue(BlockSlanted.CORNER_NORTH_WEST);
-				cornerNE = extendedState.getValue(BlockSlanted.CORNER_NORTH_EAST);
-				cornerSE = extendedState.getValue(BlockSlanted.CORNER_SOUTH_EAST);
-				cornerSW = extendedState.getValue(BlockSlanted.CORNER_SOUTH_WEST);
-				slantDir = state.getValue(BlockSlanted.FACING);
-			} else {
-				cornerNW = true;
-				cornerNE = false;
-				cornerSE = false;
-				cornerSW = true;
-				slantDir = EnumFacing.WEST;
-			}
+			cornerNW = StatePropertyHelper.getPropertyOptional(state, BlockSlanted.CORNER_NORTH_WEST).orElse(true);
+			cornerNE = StatePropertyHelper.getPropertyOptional(state, BlockSlanted.CORNER_NORTH_EAST).orElse(false);
+			cornerSE = StatePropertyHelper.getPropertyOptional(state, BlockSlanted.CORNER_SOUTH_EAST).orElse(false);
+			cornerSW = StatePropertyHelper.getPropertyOptional(state, BlockSlanted.CORNER_SOUTH_WEST).orElse(true);
+			slantDir = StatePropertyHelper.getPropertyOptional(state, BlockSlanted.FACING).orElse(EnumFacing.WEST);
 
 			int index = 0;
 			if(cornerNW) index |= 0x1;

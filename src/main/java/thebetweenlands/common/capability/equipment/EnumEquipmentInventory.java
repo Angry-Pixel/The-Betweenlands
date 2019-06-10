@@ -1,11 +1,14 @@
 package thebetweenlands.common.capability.equipment;
 
-import javax.annotation.Nullable;
-
+import com.google.common.collect.ImmutableList;
 import net.minecraft.inventory.IInventory;
+
+import javax.annotation.Nullable;
 
 public enum EnumEquipmentInventory {
 	MISC(3, 32), AMULET(1, 3), RING(2, 2);
+
+	public static final ImmutableList<EnumEquipmentInventory> VALUES = ImmutableList.copyOf(EnumEquipmentInventory.values());
 
 	/**
 	 * The ID of this inventory
@@ -24,7 +27,7 @@ public enum EnumEquipmentInventory {
 
 	@Nullable
 	public static EnumEquipmentInventory fromID(int id) {
-		for(EnumEquipmentInventory inv : EnumEquipmentInventory.values()) {
+		for(EnumEquipmentInventory inv : EnumEquipmentInventory.VALUES) {
 			if(inv.id == id) {
 				return inv;
 			}

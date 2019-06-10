@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
@@ -13,7 +14,58 @@ import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.entity.EntitySwordEnergy;
-import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.EntityTonyWormEggSac;
+import thebetweenlands.common.entity.mobs.EntityAngler;
+import thebetweenlands.common.entity.mobs.EntityAshSprite;
+import thebetweenlands.common.entity.mobs.EntityBarrishee;
+import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
+import thebetweenlands.common.entity.mobs.EntityDarkDruid;
+import thebetweenlands.common.entity.mobs.EntityDarkLight;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
+import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityFortressBoss;
+import thebetweenlands.common.entity.mobs.EntityFortressBossBlockade;
+import thebetweenlands.common.entity.mobs.EntityFortressBossProjectile;
+import thebetweenlands.common.entity.mobs.EntityFortressBossSpawner;
+import thebetweenlands.common.entity.mobs.EntityFortressBossTeleporter;
+import thebetweenlands.common.entity.mobs.EntityFortressBossTurret;
+import thebetweenlands.common.entity.mobs.EntityFrog;
+import thebetweenlands.common.entity.mobs.EntityGasCloud;
+import thebetweenlands.common.entity.mobs.EntityGecko;
+import thebetweenlands.common.entity.mobs.EntityGiantToad;
+import thebetweenlands.common.entity.mobs.EntityGreebling;
+import thebetweenlands.common.entity.mobs.EntityLeech;
+import thebetweenlands.common.entity.mobs.EntityLurker;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntityMummyArm;
+import thebetweenlands.common.entity.mobs.EntityPeatMummy;
+import thebetweenlands.common.entity.mobs.EntityPyrad;
+import thebetweenlands.common.entity.mobs.EntityPyradFlame;
+import thebetweenlands.common.entity.mobs.EntityRootSprite;
+import thebetweenlands.common.entity.mobs.EntityShambler;
+import thebetweenlands.common.entity.mobs.EntitySiltCrab;
+import thebetweenlands.common.entity.mobs.EntitySludge;
+import thebetweenlands.common.entity.mobs.EntitySmolSludgeWorm;
+import thebetweenlands.common.entity.mobs.EntitySmollSludge;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
+import thebetweenlands.common.entity.mobs.EntitySporeJet;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityTamedSpiritTreeFace;
+import thebetweenlands.common.entity.mobs.EntityTarBeast;
+import thebetweenlands.common.entity.mobs.EntityTarminion;
+import thebetweenlands.common.entity.mobs.EntityTermite;
+import thebetweenlands.common.entity.mobs.EntityTonySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
+import thebetweenlands.common.entity.mobs.EntityWallLamprey;
+import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
@@ -62,6 +114,7 @@ public class EntityRegistry {
 		registerEntity(EntityTarminion.class, "tarminion", 0x000000, 0x2E2E2E, 64, 1, true);
 		registerEntity(EntityThrownTarminion.class, "thrown_tarminion", 64, 10, true);
 		registerEntity(EntityRopeNode.class, "rope_node", 64, 1, true);
+		registerEntity(EntityGrapplingHookNode.class, "grapping_hook_node", 64, 1, true);
 		registerEntity(EntityMummyArm.class, "mummy_arm", 64, 20, false);
 		registerEntity(EntityAngryPebble.class, "angry_pebble");
 		registerEntity(EntityFortressBoss.class, "fortress_boss", 0x000000, 0x00FFFA, 64, 1, true);
@@ -74,6 +127,8 @@ public class EntityRegistry {
 		registerEntity(EntityElixir.class, "bl_elexir", 64, 20, true);
 		registerEntity(EntityDreadfulMummy.class, "dreadful_mummy", 0x000000, 0x591E08, 64, 1, true);
 		registerEntity(EntitySludgeBall.class, "sludge_ball", 64, 20, true);
+		registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
+		registerEntity(EntitySporeJet.class, "spore_jet", 64, 1, true);
 		//registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
 		registerEntity(EntitySmollSludge.class, "smoll_sludge", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntityGreebling.class, "greebling", 0xD9D7A7, 0xD99830);
@@ -86,7 +141,20 @@ public class EntityRegistry {
 		registerEntity(EntityRootGrabber.class, "root_grabber");
 		registerEntity(EntitySpiritTreeFaceMask.class, "spirit_tree_face_mask", 64, 20, false);
 		registerEntity(EntityRootSprite.class, "root_sprite", 0x686868, 0x9fe530);
+
+		registerEntity(EntitySmolSludgeWorm.class, "smol_sludge_worm", 0x3A2F0B, 0x5F4C0B);
+		registerEntity(EntityTonySludgeWorm.class, "tony_sludge_worm", 0x3A2F0B, 0x5F4C0B);
+		registerEntity(EntityTonyWormEggSac.class, "tony_worm_egg_sac");
+
 		registerEntity(EntityLurkerSkinRaft.class, "lurker_skin_raft");
+		
+		registerEntity(EntityShambler.class, "shambler", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityWallLamprey.class, "wall_lamprey", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityCryptCrawler.class, "crypt_crawler", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityBarrishee.class, "barrishee", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityAshSprite.class, "ash_sprite", 0x0B3B0B, 0xDBA901);
+
+
 	}
 
 	private static int id = 0;

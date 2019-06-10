@@ -1,0 +1,20 @@
+{
+  "parent":"block/cube",
+  "textures": {
+    "particle": "thebetweenlands:blocks/rotten_bark"
+  },
+  "elements":[
+    {
+      "from": [ 0, 0, 0 ],
+      "to": [ 16, 16, 16 ],
+      "faces": {
+        "north": { "texture": "#north", "uv": [ 0.0, 0.0, 16.0, 16.0 ], "cullface": "north" },
+        "east": { "texture": "#east", "uv": [  0.0, 0.0, 16.0, 16.0  ], "cullface": "east" },
+        "south": { "texture": "#south", "uv": [  0.0, 0.0, 16.0, 16.0  ], "cullface": "south" },
+        "west": { "texture": "#west", "uv": [ 0.0, 0.0, 16.0, 16.0  ], "cullface": "west" },
+        "up": { "texture": "#up", "uv": [ 0.0, 0.0, 16.0, 16.0 ], "cullface": "up" },
+        "down": { "texture": "#down", "uv": [ 0.0, 0.0, 16.0, 16.0 ], "cullface": "down" }
+      }
+    }
+  ]
+}

@@ -30,7 +30,7 @@ public class BlockSulfurTorch extends BlockTorch {
 
 		if (enumfacing.getAxis().isHorizontal()) {
 			EnumFacing enumfacing1 = enumfacing.getOpposite();
-			BLParticles.SULFUR_TORCH.spawn(world, px + 0.27D * (double)enumfacing1.getFrontOffsetX(), py + 0.22D, pz + 0.27D * (double)enumfacing1.getFrontOffsetZ());
+			BLParticles.SULFUR_TORCH.spawn(world, px + 0.27D * (double)enumfacing1.getXOffset(), py + 0.22D, pz + 0.27D * (double)enumfacing1.getZOffset());
 		} else {
 			BLParticles.SULFUR_TORCH.spawn(world, px, py, pz);
 		}

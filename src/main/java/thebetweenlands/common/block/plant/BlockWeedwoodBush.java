@@ -1,13 +1,6 @@
 package thebetweenlands.common.block.plant;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.ImmutableList;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -58,6 +51,11 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+
+import javax.annotation.Nullable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarvestable, ITintedBlock, IFarmablePlant {
 	public static final PropertyBool NORTH = PropertyBool.create("north");
@@ -171,8 +169,8 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer() {
-		return Blocks.LEAVES.getBlockLayer();
+	public BlockRenderLayer getRenderLayer() {
+		return Blocks.LEAVES.getRenderLayer();
 	}
 
 	@Override
@@ -184,7 +182,7 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity){
+	public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity){
 		if(entity instanceof EntityPlayer) {
 			entity.motionX *= 0.06D;
 			entity.motionZ *= 0.06D;
@@ -219,8 +217,8 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	@SubscribeEvent
 	public static void onLivingUpdate(LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_CUSTOM_STEP_SOUND, null)) {
-			ICustomStepSoundCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_CUSTOM_STEP_SOUND, null);
+		ICustomStepSoundCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_CUSTOM_STEP_SOUND, null);
+		if(cap != null) {
 			if(entity.distanceWalkedOnStepModified > cap.getNextWeedwoodBushStep()) {
 				boolean inBush = false;
 				AxisAlignedBB aabb = entity.getEntityBoundingBox();

@@ -1,11 +1,6 @@
 package thebetweenlands.common.handler;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import com.google.common.collect.ImmutableList;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -34,6 +29,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.capability.IPuppeteerCapability;
 import thebetweenlands.client.handler.WorldRenderHandler;
@@ -50,6 +46,8 @@ import thebetweenlands.common.item.equipment.ItemRingOfRecruitment;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.RenderUtils;
 
+import java.util.List;
+
 public class PuppetHandler {
 	private PuppetHandler() { }
 
@@ -57,11 +55,10 @@ public class PuppetHandler {
 	public static void onUpdateLiving(LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 
-		if(entity instanceof EntityLiving && entity.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
+		if(entity instanceof EntityLiving) {
 			IPuppetCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
-			EntityLiving living = (EntityLiving) entity;
-
-			if(cap.hasPuppeteer()) {
+			if(cap != null && cap.hasPuppeteer()) {
+				EntityLiving living = (EntityLiving) entity;
 				if(!entity.world.isRemote) {
 					cap.setRemainingTicks(cap.getRemainingTicks() - 1);
 
@@ -95,12 +92,12 @@ public class PuppetHandler {
 							} else {
 								EntityAIAttackOnCollide aiAttack = new EntityAIAttackOnCollide(living, true);
 								aiAttack.setMutexBits(2); //10
-								
+
 								EntityAIPuppet.addPuppetAI(() -> cap.getPuppeteer(), living, living.targetTasks,
 										ImmutableList.of(aiAttack));
 							}
 						}
-						
+
 						if(EntityAIPuppet.getPuppetAI(living.tasks) == null) {
 							EntityAIStay aiStay = new EntityAIStay(living);
 							aiStay.setMutexBits(3); //11
@@ -125,8 +122,8 @@ public class PuppetHandler {
 					if(entity.world.rand.nextInt(5) == 0) {
 						BLParticles.SPAWNER.spawn(living.world, living.posX + living.motionX * 2, living.posY + living.height / 2.0D, living.posZ + living.motionZ * 2,
 								ParticleArgs.get().withMotion(
-										living.motionX + (living.world.rand.nextFloat() - 0.5F) / 8.0F * entity.width, 
-										(living.world.rand.nextFloat() - 0.5F) / 8.0F * entity.height, 
+										living.motionX + (living.world.rand.nextFloat() - 0.5F) / 8.0F * entity.width,
+										(living.world.rand.nextFloat() - 0.5F) / 8.0F * entity.height,
 										living.motionZ + (living.world.rand.nextFloat() - 0.5F) / 8.0F * entity.width
 										).withData(40).withColor(0.2F, 0.8F, 0.4F, 1));
 					}
@@ -141,14 +138,16 @@ public class PuppetHandler {
 		if(!attackedEntity.world.isRemote) {
 			DamageSource source = event.getSource();
 
-			if(source.getTrueSource() instanceof EntityPlayer && source.getTrueSource().hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
+			if(source.getTrueSource() instanceof EntityPlayer) {
 				IPuppeteerCapability cap = source.getTrueSource().getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
-				List<Entity> puppets = cap.getPuppets();
+				if (cap != null) {
+					List<Entity> puppets = cap.getPuppets();
 
-				if(!puppets.contains(attackedEntity)) {
-					for(Entity entity : puppets) {
-						if(entity instanceof EntityLiving) {
-							((EntityLiving) entity).setAttackTarget(attackedEntity);
+					if (!puppets.contains(attackedEntity)) {
+						for (Entity entity : puppets) {
+							if (entity instanceof EntityLiving) {
+								((EntityLiving) entity).setAttackTarget(attackedEntity);
+							}
 						}
 					}
 				}
@@ -171,39 +170,40 @@ public class PuppetHandler {
 		EntityPlayer player = event.getEntityPlayer();
 		Entity target = event.getTarget();
 
-		if(event.getHand() == EnumHand.MAIN_HAND && player != null && target instanceof EntityLiving && ItemRingOfRecruitment.isRingActive(player) && target.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
+		if(event.getHand() == EnumHand.MAIN_HAND && player != null && target instanceof EntityLiving && ItemRingOfRecruitment.isRingActive(player)) {
 			IPuppetCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
-			EntityLiving living = (EntityLiving) target;
+			if (cap != null) {
+				EntityLiving living = (EntityLiving) target;
+				if (cap.hasPuppeteer()) {
+					Entity puppeteer = cap.getPuppeteer();
 
-			if(cap.hasPuppeteer()) {
-				Entity puppeteer = cap.getPuppeteer();
-
-				if(player == puppeteer) {
-					if(player.isSneaking()) {
-						if(!player.world.isRemote) {
-							cap.setRemainingTicks(0);
-						}
-						player.swingArm(EnumHand.MAIN_HAND);
-					} else {
-						if(!player.world.isRemote){
-							EntityAIPuppet puppetAI = EntityAIPuppet.getPuppetAI(living.tasks);
-							if(puppetAI != null) {
-								EntityAIStay aiStay = getAI(EntityAIStay.class, puppetAI.getSubTasks());
-								if(aiStay != null) {
-									aiStay.setStay(!aiStay.getStay());
-									living.setAttackTarget(null);
+					if (player == puppeteer) {
+						if (player.isSneaking()) {
+							if (!player.world.isRemote) {
+								cap.setRemainingTicks(0);
+							}
+							player.swingArm(EnumHand.MAIN_HAND);
+						} else {
+							if (!player.world.isRemote) {
+								EntityAIPuppet puppetAI = EntityAIPuppet.getPuppetAI(living.tasks);
+								if (puppetAI != null) {
+									EntityAIStay aiStay = getAI(EntityAIStay.class, puppetAI.getSubTasks());
+									if (aiStay != null) {
+										aiStay.setStay(!aiStay.getStay());
+										living.setAttackTarget(null);
+									}
 								}
 							}
+							player.swingArm(EnumHand.MAIN_HAND);
 						}
-						player.swingArm(EnumHand.MAIN_HAND);
 					}
-				}
-			} else if(!player.world.isRemote) {
-				if(ItemRingOfRecruitment.isRingActive(player) && player.hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
-					IPuppeteerCapability capPlayer = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
-					if(capPlayer.getActivatingEntity() == null) {
-						capPlayer.setActivatingEntity(living);
-						capPlayer.setActivatingTicks(0);
+				} else if (!player.world.isRemote) {
+					if (ItemRingOfRecruitment.isRingActive(player)) {
+						IPuppeteerCapability capPlayer = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
+						if (capPlayer != null && capPlayer.getActivatingEntity() == null) {
+							capPlayer.setActivatingEntity(living);
+							capPlayer.setActivatingTicks(0);
+						}
 					}
 				}
 			}
@@ -212,49 +212,47 @@ public class PuppetHandler {
 
 	@SubscribeEvent
 	public static void onPlayerUpdate(PlayerTickEvent event) {
-		if(event.phase == Phase.END && event.player.hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
+		if(event.phase == Phase.END) {
 			IPuppeteerCapability cap = event.player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
-			Entity activatingEntity = cap.getActivatingEntity();
+			if (cap != null) {
+				Entity activatingEntity = cap.getActivatingEntity();
 
-			if(activatingEntity instanceof EntityLiving) {
-				EntityLiving living = (EntityLiving) activatingEntity;
+				if (activatingEntity instanceof EntityLiving) {
+					EntityLiving living = (EntityLiving) activatingEntity;
 
-				if(!event.player.world.isRemote) {
-					if(living.getDistance(event.player) > 5.0D) {
-						cap.setActivatingEntity(null);
-						cap.setActivatingTicks(0);
-					} else {
-						cap.setActivatingTicks(cap.getActivatingTicks() + 1);
-
-						if(cap.getActivatingTicks() > living.getMaxHealth()) {
-							if(ItemRingOfRecruitment.isRingActive(event.player) && living.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
-								IPuppetCapability puppetCap = living.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
-
-								if(puppetCap.getPuppeteer() == null) {
-									puppetCap.setPuppeteer(event.player);
-									puppetCap.setRemainingTicks(12000);
-								}
-							}
-
+					if (!event.player.world.isRemote) {
+						if (living.getDistance(event.player) > 5.0D) {
 							cap.setActivatingEntity(null);
 							cap.setActivatingTicks(0);
-						}
-					}
-				} else {
-					Vec3d vec = new Vec3d(living.posX - event.player.posX, (living.posY + living.getEyeHeight() * 0.8F) - (event.player.posY + event.player.getEyeHeight() * 0.8F), living.posZ - event.player.posZ);
-					vec = vec.normalize();
-					vec = vec.addVector((event.player.world.rand.nextFloat() - 0.5F) / 3.0F, 
-							(event.player.world.rand.nextFloat() - 0.5F) / 3.0F, 
-							(event.player.world.rand.nextFloat() - 0.5F) / 3.0F);
-					vec = vec.normalize();
-					double dist = event.player.getDistance(living);
-					vec = vec.scale(dist / 15.0F);
-					BLParticles.SPAWNER.spawn(event.player.world, event.player.posX, event.player.posY + event.player.getEyeHeight() * 0.8F, event.player.posZ, 
-							ParticleArgs.get().withData(40).withColor(0.2F, 0.8F, 0.4F, 1).withMotion(vec.x, vec.y, vec.z));
-				}
+						} else {
+							cap.setActivatingTicks(cap.getActivatingTicks() + 1);
 
-				event.player.motionX *= 0.05D;
-				event.player.motionZ *= 0.05D;
+							if (cap.getActivatingTicks() > living.getMaxHealth()) {
+								if (ItemRingOfRecruitment.isRingActive(event.player)) {
+									IPuppetCapability puppetCap = living.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+									if (puppetCap != null && puppetCap.getPuppeteer() == null) {
+										puppetCap.setPuppeteer(event.player);
+										puppetCap.setRemainingTicks(12000);
+									}
+								}
+
+								cap.setActivatingEntity(null);
+								cap.setActivatingTicks(0);
+							}
+						}
+					} else {
+						Vec3d vec = new Vec3d(living.posX - event.player.posX, (living.posY + living.getEyeHeight() * 0.8F) - (event.player.posY + event.player.getEyeHeight() * 0.8F), living.posZ - event.player.posZ);
+						vec = vec.normalize();
+						vec = vec.add((event.player.world.rand.nextFloat() - 0.5F) / 3.0F, (event.player.world.rand.nextFloat() - 0.5F) / 3.0F, (event.player.world.rand.nextFloat() - 0.5F) / 3.0F);
+						vec = vec.normalize();
+						double dist = event.player.getDistance(living);
+						vec = vec.scale(dist / 15.0F);
+						BLParticles.SPAWNER.spawn(event.player.world, event.player.posX, event.player.posY + event.player.getEyeHeight() * 0.8F, event.player.posZ, ParticleArgs.get().withData(40).withColor(0.2F, 0.8F, 0.4F, 1).withMotion(vec.x, vec.y, vec.z));
+					}
+
+					event.player.motionX *= 0.05D;
+					event.player.motionZ *= 0.05D;
+				}
 			}
 		}
 	}
@@ -264,8 +262,8 @@ public class PuppetHandler {
 		if(event.getHand() == EnumHand.MAIN_HAND && event instanceof PlayerInteractEvent.RightClickBlock && ItemRingOfRecruitment.isRingActive(event.getEntityPlayer())) {
 			EntityPlayer player = event.getEntityPlayer();
 
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
-				IPuppeteerCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
+			IPuppeteerCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
+			if (cap != null) {
 				List<Entity> puppets = cap.getPuppets();
 				BlockPos target = event.getPos().offset(event.getFace());
 
@@ -311,12 +309,10 @@ public class PuppetHandler {
 	public static void onRenderLivingPre(RenderLivingEvent.Pre<EntityLivingBase> event) {
 		EntityLivingBase living = event.getEntity();
 
-		if(living.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
-			IPuppetCapability cap = living.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
-			if(cap.hasPuppeteer()) {
-				if(!RenderUtils.doesRendererHaveLayer(event.getRenderer(), LayerPuppetOverlay.class, false)) {
-					event.getRenderer().addLayer(new LayerPuppetOverlay(event.getRenderer()));
-				}
+		IPuppetCapability cap = living.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+		if (cap != null && cap.hasPuppeteer()) {
+			if (!RenderUtils.doesRendererHaveLayer(event.getRenderer(), LayerPuppetOverlay.class, false)) {
+				event.getRenderer().addLayer(new LayerPuppetOverlay(event.getRenderer()));
 			}
 		}
 	}
@@ -326,68 +322,63 @@ public class PuppetHandler {
 	public static void onRenderLivingPost(RenderLivingEvent.Post<EntityLivingBase> event) {
 		EntityLivingBase living = event.getEntity();
 
-		if(living.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
-			IPuppetCapability cap = living.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
-			if(cap.hasPuppeteer()) {
-				Entity puppeteer = cap.getPuppeteer();
-				if(puppeteer != null) {
-					event.getRenderer().bindTexture(LayerPuppetOverlay.OVERLAY_TEXTURE);
+		IPuppetCapability cap = living.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+		if (cap != null && cap.hasPuppeteer()) {
+			Entity puppeteer = cap.getPuppeteer();
+			if (puppeteer != null) {
+				event.getRenderer().bindTexture(LayerPuppetOverlay.OVERLAY_TEXTURE);
 
-					GlStateManager.matrixMode(GL11.GL_TEXTURE);
-					GlStateManager.loadIdentity();
-					GlStateManager.translate((living.ticksExisted + WorldRenderHandler.getPartialTicks()) / 40.0F, 0, 0.0F);
-					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-					GlStateManager.enableBlend();
-					GlStateManager.color(1, 1, 1, 0.25F);
-					GlStateManager.disableLighting();
-					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-					GlStateManager.enableTexture2D();
-					GlStateManager.disableCull();
-					GlStateManager.depthMask(false);
+				GlStateManager.matrixMode(GL11.GL_TEXTURE);
+				GlStateManager.loadIdentity();
+				GlStateManager.translate((living.ticksExisted + WorldRenderHandler.getPartialTicks()) / 40.0F, 0, 0.0F);
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+				GlStateManager.enableBlend();
+				GlStateManager.color(1, 1, 1, 0.25F);
+				GlStateManager.disableLighting();
+				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+				GlStateManager.enableTexture2D();
+				GlStateManager.disableCull();
+				GlStateManager.depthMask(false);
 
-					double dx = puppeteer.lastTickPosX + (puppeteer.posX - puppeteer.lastTickPosX) * WorldRenderHandler.getPartialTicks() - (living.lastTickPosX + (living.posX - living.lastTickPosX) * WorldRenderHandler.getPartialTicks());
-					double dy = -living.height / 2.0F + puppeteer.height / 2.0D + puppeteer.lastTickPosY + (puppeteer.posY - puppeteer.lastTickPosY) * WorldRenderHandler.getPartialTicks() - (living.lastTickPosY + (living.posY - living.lastTickPosY) * WorldRenderHandler.getPartialTicks());
-					double dz = puppeteer.lastTickPosZ + (puppeteer.posZ - puppeteer.lastTickPosZ) * WorldRenderHandler.getPartialTicks() - (living.lastTickPosZ + (living.posZ - living.lastTickPosZ) * WorldRenderHandler.getPartialTicks());
+				double dx = puppeteer.lastTickPosX + (puppeteer.posX - puppeteer.lastTickPosX) * WorldRenderHandler.getPartialTicks() - (living.lastTickPosX + (living.posX - living.lastTickPosX) * WorldRenderHandler.getPartialTicks());
+				double dy = -living.height / 2.0F + puppeteer.height / 2.0D + puppeteer.lastTickPosY + (puppeteer.posY - puppeteer.lastTickPosY) * WorldRenderHandler.getPartialTicks() - (living.lastTickPosY + (living.posY - living.lastTickPosY) * WorldRenderHandler.getPartialTicks());
+				double dz = puppeteer.lastTickPosZ + (puppeteer.posZ - puppeteer.lastTickPosZ) * WorldRenderHandler.getPartialTicks() - (living.lastTickPosZ + (living.posZ - living.lastTickPosZ) * WorldRenderHandler.getPartialTicks());
 
-					double sx = event.getX();
-					double sy = event.getY() + living.height / 2.0F;
-					double sz = event.getZ();
+				double sx = event.getX();
+				double sy = event.getY() + living.height / 2.0F;
+				double sz = event.getZ();
 
-					float sw = 0.03F;
-					float ew = 0.01F;
+				float sw = 0.03F;
+				float ew = 0.01F;
 
-					double ticks = (living.ticksExisted + WorldRenderHandler.getPartialTicks()) / 5.0F;
+				double ticks = (living.ticksExisted + WorldRenderHandler.getPartialTicks()) / 5.0F;
 
-					double prevXOffset = 0.0D;
-					double prevYOffset = 0.0D;
-					double prevZOffset = 0.0D;
+				double prevXOffset = 0.0D;
+				double prevYOffset = 0.0D;
+				double prevZOffset = 0.0D;
 
-					int iter = Minecraft.isFancyGraphicsEnabled() ? 8 : 4;
-					for(int i = 0; i < iter; i++) {
-						double multiplier = (1.0D - Math.abs((i + 1) - iter / 2.0D) / iter * 2.0D) * 0.15D;
-						double xOffset = Math.cos((i + 1) * 4.0F / iter + ticks) * multiplier;
-						double yOffset = Math.cos((i + 1) * 4.0F / iter + ticks + Math.PI) * multiplier;
-						double zOffset = Math.sin((i + 1) * 4.0F / iter + ticks) * multiplier;
+				int iter = Minecraft.isFancyGraphicsEnabled() ? 8 : 4;
+				for (int i = 0; i < iter; i++) {
+					double multiplier = (1.0D - Math.abs((i + 1) - iter / 2.0D) / iter * 2.0D) * 0.15D;
+					double xOffset = Math.cos((i + 1) * 4.0F / iter + ticks) * multiplier;
+					double yOffset = Math.cos((i + 1) * 4.0F / iter + ticks + Math.PI) * multiplier;
+					double zOffset = Math.sin((i + 1) * 4.0F / iter + ticks) * multiplier;
 
-						RenderSwordEnergy.renderBeam(
-								new Vec3d(sx + prevXOffset + dx / iter * i, sy + prevYOffset + dy / iter * i, sz + prevZOffset + dz / iter * i), 
-								new Vec3d(sx + xOffset + dx / iter * (i + 1), sy + yOffset + dy / iter * (i + 1), sz + zOffset + dz / iter * (i + 1)), 
-								ew + sw - sw / iter * i, ew + sw - sw / iter * (i + 1), i == 0, i == iter - 1);
+					RenderSwordEnergy.renderBeam(new Vec3d(sx + prevXOffset + dx / iter * i, sy + prevYOffset + dy / iter * i, sz + prevZOffset + dz / iter * i), new Vec3d(sx + xOffset + dx / iter * (i + 1), sy + yOffset + dy / iter * (i + 1), sz + zOffset + dz / iter * (i + 1)), ew + sw - sw / iter * i, ew + sw - sw / iter * (i + 1), i == 0, i == iter - 1);
 
-						prevXOffset = xOffset;
-						prevYOffset = yOffset;
-						prevZOffset = zOffset;
-					}
-
-					GlStateManager.depthMask(true);
-					GlStateManager.enableCull();
-					GlStateManager.enableTexture2D();
-					GlStateManager.matrixMode(GL11.GL_TEXTURE);
-					GlStateManager.loadIdentity();
-					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-					GlStateManager.enableLighting();
-					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+					prevXOffset = xOffset;
+					prevYOffset = yOffset;
+					prevZOffset = zOffset;
 				}
+
+				GlStateManager.depthMask(true);
+				GlStateManager.enableCull();
+				GlStateManager.enableTexture2D();
+				GlStateManager.matrixMode(GL11.GL_TEXTURE);
+				GlStateManager.loadIdentity();
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+				GlStateManager.enableLighting();
+				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			}
 		}
 	}

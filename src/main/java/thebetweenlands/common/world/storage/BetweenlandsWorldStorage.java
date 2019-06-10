@@ -1,22 +1,11 @@
 package thebetweenlands.common.world.storage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
 import gnu.trove.map.TObjectLongMap;
 import gnu.trove.map.hash.TObjectLongHashMap;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Biomes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
@@ -42,6 +31,9 @@ import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	private BLEnvironmentEventRegistry environmentEventRegistry;
@@ -191,7 +183,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 						int bx = chunkpos.x * 16;
 						int bz = chunkpos.z * 16;
 
-						Chunk chunk = this.getWorld().getChunkFromChunkCoords(chunkpos.x, chunkpos.z);
+						Chunk chunk = this.getWorld().getChunk(chunkpos.x, chunkpos.z);
 
 						if(this.playAmbientCaveSounds(player, bx, bz, chunk)) {
 							break;
@@ -243,11 +235,9 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	@Nullable
 	public static BetweenlandsWorldStorage forWorldNullable(World world) {
-		if(world.hasCapability(CAPABILITY_INSTANCE, null)) {
-			IWorldStorage storage = world.getCapability(CAPABILITY_INSTANCE, null);
-			if(storage instanceof BetweenlandsWorldStorage) {
-				return (BetweenlandsWorldStorage) storage;
-			}
+		IWorldStorage storage = world.getCapability(CAPABILITY_INSTANCE, null);
+		if(storage instanceof BetweenlandsWorldStorage) {
+			return (BetweenlandsWorldStorage) storage;
 		}
 		return null;
 	}

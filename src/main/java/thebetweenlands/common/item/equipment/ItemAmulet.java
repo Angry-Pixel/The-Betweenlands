@@ -1,14 +1,5 @@
 package thebetweenlands.common.item.equipment;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
-import org.lwjgl.input.Keyboard;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -58,8 +49,14 @@ import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.LightingUtil;
 import thebetweenlands.util.NBTHelper;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 public class ItemAmulet extends Item implements IEquippable {
-	public static final Set<Class<? extends EntityLivingBase>> SUPPORTED_ENTITIES = new HashSet<Class<? extends EntityLivingBase>>();
+	public static final Set<Class<? extends EntityLivingBase>> SUPPORTED_ENTITIES = new HashSet<>();
 
 	static {
 		SUPPORTED_ENTITIES.add(EntityTarminion.class);
@@ -122,11 +119,11 @@ public class ItemAmulet extends Item implements IEquippable {
 		if(entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator()) {
 			return;
 		}
-		
-		if (entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+
+		IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		if (cap != null) {
 			IInventory inv = cap.getInventory(EnumEquipmentInventory.AMULET);
-			List<ItemStack> items = new ArrayList<ItemStack>(inv.getSizeInventory());
+			List<ItemStack> items = new ArrayList<>(inv.getSizeInventory());
 
 			for (int i = 0; i < inv.getSizeInventory(); i++) {
 				ItemStack stack = inv.getStackInSlot(i);
@@ -256,16 +253,16 @@ public class ItemAmulet extends Item implements IEquippable {
 
 	@Override
 	public void onEquip(ItemStack stack, Entity entity, IInventory inventory) {
-		if (entity.hasCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null)) {
-			ICircleGemCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null);
+		ICircleGemCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null);
+		if (cap != null) {
 			cap.addGem(new CircleGem(CircleGemHelper.getGem(stack), CombatType.BOTH));
 		}
 	}
 
 	@Override
 	public void onUnequip(ItemStack stack, Entity entity, IInventory inventory) {
-		if (entity.hasCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null)) {
-			ICircleGemCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null);
+		ICircleGemCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null);
+		if (cap != null) {
 			List<CircleGem> gems = cap.getGems();
 			CircleGemType type = CircleGemHelper.getGem(stack);
 

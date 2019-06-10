@@ -40,8 +40,8 @@ public class WorldGenNibbletwigTree extends WorldGenHelper {
 				int bzo = i == 0 ? 0 : zo[i-1];
 				if(i == bend1 || i == bend2) {
 					EnumFacing randOffset = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
-					bxo += randOffset.getFrontOffsetX();
-					bzo += randOffset.getFrontOffsetZ();
+					bxo += randOffset.getXOffset();
+					bzo += randOffset.getZOffset();
 				}
 				xo[i] = bxo;
 				zo[i] = bzo;
@@ -50,12 +50,12 @@ public class WorldGenNibbletwigTree extends WorldGenHelper {
 
 			this.rotatedCubeVolume(world, setPos -> world.isAirBlock(setPos), xo[canopy1] + x, y + canopy1, zo[canopy1] + z, -1, 0, -1, leaves, 3, 1, 3, 0);
 			for(EnumFacing offset : EnumFacing.HORIZONTALS) {
-				BlockPos offsetPos = pos.add(xo[canopy1] + offset.getFrontOffsetX(), canopy1 + 1, zo[canopy1] + offset.getFrontOffsetZ());
+				BlockPos offsetPos = pos.add(xo[canopy1] + offset.getXOffset(), canopy1 + 1, zo[canopy1] + offset.getZOffset());
 				if(world.isAirBlock(offsetPos)) {
 					this.setBlockAndNotifyAdequately(world, offsetPos, leaves);
 				}
 
-				BlockPos droopPos = pos.add(xo[canopy1] + offset.getFrontOffsetX()*2, canopy1, zo[canopy1] + offset.getFrontOffsetZ()*2);
+				BlockPos droopPos = pos.add(xo[canopy1] + offset.getXOffset()*2, canopy1, zo[canopy1] + offset.getZOffset()*2);
 				int droopLength = rand.nextInt(2) + 2;
 				for(int yo = 0; yo < droopLength; yo++) {
 					BlockPos droopPosY = droopPos.down(yo);
@@ -65,7 +65,7 @@ public class WorldGenNibbletwigTree extends WorldGenHelper {
 				}
 
 				if(rand.nextInt(3) == 0) {
-					BlockPos ivyPos = pos.add(xo[canopy1] + offset.getFrontOffsetX()*3, canopy1, zo[canopy1] + offset.getFrontOffsetZ()*3);
+					BlockPos ivyPos = pos.add(xo[canopy1] + offset.getXOffset()*3, canopy1, zo[canopy1] + offset.getZOffset()*3);
 					int ivyLength = rand.nextInt(5) + 3;
 					for(int yo = 0; yo < ivyLength; yo++) {
 						BlockPos ivyPosY = ivyPos.down(yo);
@@ -117,7 +117,7 @@ public class WorldGenNibbletwigTree extends WorldGenHelper {
 					}
 
 					EnumFacing ivyOffset = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
-					BlockPos ivyPos = pos.add(xo[height-1] + droopXO + ivyOffset.getFrontOffsetX(), height-1, zo[height-1] + droopZO + ivyOffset.getFrontOffsetZ());
+					BlockPos ivyPos = pos.add(xo[height-1] + droopXO + ivyOffset.getXOffset(), height-1, zo[height-1] + droopZO + ivyOffset.getZOffset());
 					int ivyLength = rand.nextInt(9) + 3;
 					for(int yo = 0; yo < ivyLength; yo++) {
 						BlockPos ivyPosY = ivyPos.down(yo);

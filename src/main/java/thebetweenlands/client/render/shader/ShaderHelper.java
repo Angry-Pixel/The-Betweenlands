@@ -1,23 +1,17 @@
 package thebetweenlands.client.render.shader;
 
-import net.minecraft.client.renderer.BufferBuilder;
-import org.lwjgl.opengl.ARBMultitexture;
-import org.lwjgl.opengl.ContextCapabilities;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GLContext;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.*;
+import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.client.render.shader.postprocessing.Tonemapper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -320,8 +314,11 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 			return true;
 		}
 		Minecraft mc = Minecraft.getMinecraft();
-		if(mc.player != null && mc.player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null) && mc.player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null).isInPortal()) {
-			return true;
+		if(mc.player != null) {
+			IPortalCapability cap = mc.player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
+			if (cap != null && cap.isInPortal()) {
+				return true;
+			}
 		}
 		return mc.world != null && mc.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
 	}

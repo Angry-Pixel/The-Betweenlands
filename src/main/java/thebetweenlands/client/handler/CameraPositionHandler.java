@@ -1,12 +1,9 @@
 package thebetweenlands.client.handler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -22,6 +19,10 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class CameraPositionHandler {
 	public static CameraPositionHandler INSTANCE = new CameraPositionHandler();
 
@@ -33,6 +34,13 @@ public class CameraPositionHandler {
 			for(Entity entity : (List<Entity>) world.loadedEntityList) {
 				if(entity instanceof IEntityScreenShake) {
 					IEntityScreenShake shake = (IEntityScreenShake) entity;
+					screenShake += shake.getShakeIntensity(renderViewEntity, delta);
+				}
+			}
+
+			for(TileEntity tile : (List<TileEntity>) world.loadedTileEntityList) {
+				if(tile instanceof IEntityScreenShake) {
+					IEntityScreenShake shake = (IEntityScreenShake) tile;
 					screenShake += shake.getShakeIntensity(renderViewEntity, delta);
 				}
 			}
@@ -75,9 +83,8 @@ public class CameraPositionHandler {
 			List<EntityPlayer> nearbyPlayers = renderViewEntity.world.getEntitiesWithinAABB(EntityPlayer.class, renderViewEntity.getEntityBoundingBox().grow(32, 32, 32), entity -> entity.getDistance(renderViewEntity) <= 32.0D);
 
 			for(EntityPlayer player : nearbyPlayers) {
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {
-					ISummoningCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SUMMON, null);
-
+				ISummoningCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SUMMON, null);
+				if (cap != null) {
 					if(cap.isActive()) {
 						shakeStrength += (ItemRingOfSummoning.MAX_USE_TIME - cap.getActiveTicks()) / (float)ItemRingOfSummoning.MAX_USE_TIME * 0.1F + 0.01F;
 					}

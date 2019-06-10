@@ -107,7 +107,7 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 		IBlockState blockState = world.getBlockState(pos);
 		boolean removed = blockState.getBlock().removedByPlayer(blockState, world, pos, player, canHarvest);
 		if (removed) {
-			blockState.getBlock().onBlockDestroyedByPlayer(world, pos, blockState);
+			blockState.getBlock().onPlayerDestroy(world, pos, blockState);
 		}
 		return removed;
 	}
@@ -126,7 +126,7 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 
 	/**
 	 * Returns true if the specified block should be considered as the same plant
-	 * @param block
+	 * @param blockState
 	 * @return
 	 */
 	protected boolean isSamePlant(IBlockState blockState) {

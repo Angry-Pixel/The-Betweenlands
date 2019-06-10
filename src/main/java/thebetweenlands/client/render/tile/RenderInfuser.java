@@ -27,7 +27,7 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityInfuser;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 @SideOnly(Side.CLIENT)
 public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> {
@@ -51,7 +51,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 		}
 
 		BlockPos pos = infuser.getPos();
-		EnumFacing facing = TileEntityHelper.getStatePropertySafely(infuser, BlockInfuser.class, BlockInfuser.FACING, EnumFacing.NORTH);
+		EnumFacing facing = StatePropertyHelper.getStatePropertySafely(infuser, BlockInfuser.class, BlockInfuser.FACING, EnumFacing.NORTH);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);

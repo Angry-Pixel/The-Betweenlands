@@ -93,17 +93,14 @@ public class Categories {
 		@Override
 		public boolean onClicked(int mouseX, int mouseY, int mouseButton) {
 			EntityPlayer sender = Minecraft.getMinecraft().player;
+			ItemStack unequipped = EquipmentHelper.unequipItem(sender, sender, this.inventory, this.slot, false);
 
-			if(sender.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				ItemStack unequipped = EquipmentHelper.unequipItem(sender, sender, this.inventory, this.slot, false);
+			if(!unequipped.isEmpty()) {
+				TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(sender, this.inventory, this.slot));
 
-				if(!unequipped.isEmpty()) {
-					TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(sender, this.inventory, this.slot));
+				sender.inventory.addItemStackToInventory(unequipped);
 
-					sender.inventory.addItemStackToInventory(unequipped);
-
-					RadialMenuHandler.INSTANCE.updateMenu();
-				}
+				RadialMenuHandler.INSTANCE.updateMenu();
 			}
 
 			return mouseButton == 0;

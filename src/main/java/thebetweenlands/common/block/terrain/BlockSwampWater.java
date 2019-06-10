@@ -69,7 +69,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		}
 		if (densityDir > 0) return vec;
         Vec3d vec_flow = this.getFlowVector(world, pos);
-        return vec.addVector(
+        return vec.add(
                 vec_flow.x,
                 vec_flow.y,
                 vec_flow.z);
@@ -189,21 +189,21 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 					if (otherDecay >= 0)
 					{
 						int power = otherDecay - (decay - quantaPerBlock);
-						vec = vec.addVector((pos2.getX() - pos.getX()) * power, 0, (pos2.getZ() - pos.getZ()) * power);
+						vec = vec.add((pos2.getX() - pos.getX()) * power, 0, (pos2.getZ() - pos.getZ()) * power);
 					}
 				}
 			}
 			else if (otherDecay >= 0)
 			{
 				int power = otherDecay - decay;
-				vec = vec.addVector((pos2.getX() - pos.getX()) * power, 0, (pos2.getZ() - pos.getZ()) * power);
+				vec = vec.add((pos2.getX() - pos.getX()) * power, 0, (pos2.getZ() - pos.getZ()) * power);
 			}
 		}
 		
 		if (!this.isSourceBlock(world, pos) && world.getBlockState(pos.up()).getBlock() instanceof BlockSwampWater) {
             for (EnumFacing dir : EnumFacing.Plane.HORIZONTAL) {
                 if (this.causesDownwardCurrent(world, pos.offset(dir), dir) || this.causesDownwardCurrent(world, pos.offset(dir).up(), dir)) {
-                	vec = vec.normalize().addVector(0.0D, -6.0D, 0.0D);
+                	vec = vec.normalize().add(0.0D, -6.0D, 0.0D);
                     break;
                 }
             }
@@ -219,7 +219,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
         Block block = state.getBlock();
         Material material = state.getMaterial();
 
-        if (material == this.blockMaterial) {
+        if (material == this.material) {
             return false;
         } else if (side == EnumFacing.UP) {
             return true;

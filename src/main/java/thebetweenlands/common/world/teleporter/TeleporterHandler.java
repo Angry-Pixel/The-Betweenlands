@@ -37,7 +37,7 @@ public final class TeleporterHandler {
 			if (entity instanceof EntityPlayerMP) {
 				EntityPlayerMP player = (EntityPlayerMP) entity;
 				player.invulnerableDimensionChange = true;
-				player.mcServer.getPlayerList().transferPlayerToDimension(player, dimensionId, new TeleporterBetweenlands(world.provider.getDimension(), aabb, toWorld, makePortal, setSpawn));
+				player.server.getPlayerList().transferPlayerToDimension(player, dimensionId, new TeleporterBetweenlands(world.provider.getDimension(), aabb, toWorld, makePortal, setSpawn));
 				player.timeUntilPortal = 0;
 			} else {
 				entity.setDropItemsWhenDead(false);

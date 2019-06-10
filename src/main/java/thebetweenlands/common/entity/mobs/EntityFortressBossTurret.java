@@ -244,7 +244,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	public boolean isObstructedByBoss() {
 		Vec3d ray = this.getLookVec().normalize();
 		Vec3d currentPos = new Vec3d(this.posX, this.posY, this.posZ);
-		Vec3d nextPos = currentPos.addVector(ray.x * 64.0D, ray.y * 64.0D, ray.z * 64.0D);
+		Vec3d nextPos = currentPos.add(ray.x * 64.0D, ray.y * 64.0D, ray.z * 64.0D);
 		Entity hitEntity = null;
 		List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(64, 64, 64));
 		double minDist = 0.0D;

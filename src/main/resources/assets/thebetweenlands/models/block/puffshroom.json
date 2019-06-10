@@ -1,0 +1,35 @@
+{
+  "parent": "block/block",
+  "textures":
+  {
+    "face_up": "thebetweenlands:blocks/mud_tiles_cracked",
+    "face": "thebetweenlands:blocks/mud_tiles",
+    "overlay": "thebetweenlands:blocks/mud_tiles_cracked_layer",
+    "particle": "thebetweenlands:blocks/mud_tiles_cracked"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "shade": true,
+      "faces":
+      {
+        "down":   {"texture": "#face", "cullface": "down"},
+        "up":     {"texture": "#face_up", "cullface": "up"},
+        "north":  {"texture": "#face", "cullface": "north"},
+        "south":  {"texture": "#face", "cullface": "south"},
+        "west":   {"texture": "#face", "cullface": "west"},
+        "east":   {"texture": "#face", "cullface": "east"}
+      }
+    },
+    {
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "shade": false,
+      "faces":
+      {
+        "up":     {"texture": "#overlay", "cullface": "up"}
+      }
+    }
+  ]
+}

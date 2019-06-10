@@ -108,6 +108,17 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 
 		return nbt;
 	}
+	
+	@Override
+	public void readInitialPacket(NBTTagCompound nbt) {
+		this.readReferenceChunks(nbt);
+	}
+	
+	@Override
+	public NBTTagCompound writeInitialPacket(NBTTagCompound nbt) {
+		this.writeReferenceChunks(nbt);
+		return nbt;
+	}
 
 	protected final void writeReferenceChunks(NBTTagCompound nbt) {
 		NBTTagList referenceChunkList = new NBTTagList();
@@ -251,7 +262,7 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 		ChunkPos pos = null;
 		while(it.hasNext()) {
 			pos = it.next();
-			Chunk chunk = this.worldStorage.getWorld().getChunkFromChunkCoords(pos.x, pos.z);
+			Chunk chunk = this.worldStorage.getWorld().getChunk(pos.x, pos.z);
 			IChunkStorage chunkData = this.worldStorage.getChunkStorage(chunk);
 			if(chunkData == null || !chunkData.unlinkLocalStorage(this)) {
 				allUnlinked = false;

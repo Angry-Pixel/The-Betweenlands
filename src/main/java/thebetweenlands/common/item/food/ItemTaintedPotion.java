@@ -1,7 +1,5 @@
 package thebetweenlands.common.item.food;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -18,6 +16,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+
+import javax.annotation.Nullable;
 
 public class ItemTaintedPotion extends Item {
 	public ItemTaintedPotion() {
@@ -41,7 +41,7 @@ public class ItemTaintedPotion extends Item {
 	public String getItemStackDisplayName(ItemStack stack) {
 		ItemStack originalStack = this.getOriginalStack(stack);
 		if(!originalStack.isEmpty() && originalStack.getItem() != Items.AIR) {
-			return net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".name", originalStack.getRarity().rarityColor + originalStack.getDisplayName() + TextFormatting.RESET).trim();
+			return net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".name", originalStack.getRarity().color + originalStack.getDisplayName() + TextFormatting.RESET).trim();
 		}
 		return net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + "_empty.name").trim();
 	}

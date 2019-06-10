@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "thebetweenlands:mud_tiles_water", "y": 180 },
+        "facing=south": { "model": "thebetweenlands:mud_tiles_water" },
+        "facing=west":  { "model": "thebetweenlands:mud_tiles_water", "y": 90 },
+        "facing=east":  { "model": "thebetweenlands:mud_tiles_water", "y": 270 }
+    }
+}

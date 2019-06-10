@@ -1,39 +1,32 @@
 package thebetweenlands.client.render.model.loader;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
-
-import org.apache.commons.lang3.Validate;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.base.Function;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.client.render.model.loader.extension.AdvancedItemLoaderExtension;
-import thebetweenlands.client.render.model.loader.extension.LoaderExtension;
-import thebetweenlands.client.render.model.loader.extension.LoaderExtensionException;
-import thebetweenlands.client.render.model.loader.extension.ModelProcessorLoaderExtension;
-import thebetweenlands.client.render.model.loader.extension.SimpleItemLoaderExtension;
+import org.apache.commons.lang3.Validate;
+import org.apache.commons.lang3.tuple.Pair;
+import thebetweenlands.client.render.model.loader.extension.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
+
+import javax.annotation.Nonnull;
+import java.util.*;
+import java.util.Map.Entry;
 
 public final class CustomModelLoader implements ICustomModelLoader {
 	private static enum LoaderType {
@@ -51,10 +44,10 @@ public final class CustomModelLoader implements ICustomModelLoader {
 			this.type = type;
 			this.extension = extension;
 			this.args = args;
-			if(location != null && location.getResourcePath().startsWith("models/")) {
-				String path = location.getResourcePath();
+			if(location != null && location.getPath().startsWith("models/")) {
+				String path = location.getPath();
 				path = path.substring("models/".length());
-				location = new ResourceLocation(location.getResourceDomain(), path);
+				location = new ResourceLocation(location.getNamespace(), path);
 			}
 			this.actualLocation = location;
 		}
@@ -116,7 +109,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
 		//Check for loader extensions
-		if(modelLocation.getResourcePath().contains("$")) {
+		if(modelLocation.getPath().contains("$")) {
 			LoaderResult result = this.getLoaderResult(modelLocation);
 			if(result.type != LoaderType.NORMAL) {
 				if(BetweenlandsConfig.DEBUG.debugModelLoader) TheBetweenlands.logger.info(String.format("Accepting model %s (full path: %s) through loader extension %s with args %s", result.actualLocation, modelLocation, result.extension.getName(), result.args));
@@ -127,8 +120,8 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		//Check for registered model providers
 		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
 			ResourceLocation registeredModel = entry.getKey();
-			if(registeredModel.getResourceDomain().equals(modelLocation.getResourceDomain()) && modelLocation.getResourcePath().startsWith(registeredModel.getResourcePath())) {
-				String suffix = modelLocation.getResourcePath().substring(registeredModel.getResourcePath().length());
+			if(registeredModel.getNamespace().equals(modelLocation.getNamespace()) && modelLocation.getPath().startsWith(registeredModel.getPath())) {
+				String suffix = modelLocation.getPath().substring(registeredModel.getPath().length());
 
 				//Only accept if path fully matches or is a variant
 				if(suffix.length() == 0 || suffix.startsWith("#")) {
@@ -146,7 +139,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		boolean accepted = false;
 
 		//Check for loader extensions
-		if(modelLocation.getResourcePath().contains("$")) {
+		if(modelLocation.getPath().contains("$")) {
 			LoaderResult result = this.getLoaderResult(modelLocation);
 
 			if(result.type == LoaderType.EXTENSION) {
@@ -178,8 +171,8 @@ public final class CustomModelLoader implements ICustomModelLoader {
 			//Check for registered model providers
 			for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
 				ResourceLocation registeredModel = entry.getKey();
-				if(registeredModel.getResourceDomain().equals(modelLocation.getResourceDomain()) && modelLocation.getResourcePath().startsWith(registeredModel.getResourcePath())) {
-					String suffix = modelLocation.getResourcePath().substring(registeredModel.getResourcePath().length());
+				if(registeredModel.getNamespace().equals(modelLocation.getNamespace()) && modelLocation.getPath().startsWith(registeredModel.getPath())) {
+					String suffix = modelLocation.getPath().substring(registeredModel.getPath().length());
 
 					//Only accept if path fully matches or is a variant
 					if(suffix.length() == 0 || suffix.startsWith("#")) {
@@ -205,7 +198,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 	 * @return
 	 */
 	private LoaderResult getLoaderResult(ResourceLocation modelLocation) {
-		String fullModelPath = modelLocation.getResourcePath();
+		String fullModelPath = modelLocation.getPath();
 		String modelPath = fullModelPath.substring(0, fullModelPath.indexOf("$"));
 		String suffix = fullModelPath.substring(fullModelPath.indexOf("$"));
 
@@ -230,7 +223,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 			}
 		}
 
-		ResourceLocation actualLocation = new ResourceLocation(modelLocation.getResourceDomain(), modelPath + suffix);
+		ResourceLocation actualLocation = new ResourceLocation(modelLocation.getNamespace(), modelPath + suffix);
 
 		//Extension loader
 		if(loaderExtension != null) {
@@ -242,10 +235,41 @@ public final class CustomModelLoader implements ICustomModelLoader {
 	}
 
 	@SubscribeEvent
+	public void onTextureStitch(TextureStitchEvent.Pre event) {
+		//Register FastTESR baked model textures
+		for(TileEntitySpecialRenderer<?> renderer : TileEntityRendererDispatcher.instance.renderers.values()) {
+			if(renderer instanceof IFastTESRBakedModels) {
+				Collection<ModelResourceLocation> locations = ((IFastTESRBakedModels) renderer).getModelLocations();
+				
+				for(ModelResourceLocation location : locations) {
+					IModel model = ModelLoaderRegistry.getModelOrLogError(location, "Failed loading model '" + location + "' for FastTESR");
+					for(ResourceLocation texture : model.getTextures()) {
+						event.getMap().registerSprite(texture);
+					}
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
 	public void onModelBake(ModelBakeEvent event) {
 		IRegistry<ModelResourceLocation, IBakedModel> modelRegistry = event.getModelRegistry();
 		List<Pair<ModelResourceLocation, IBakedModel>> loadedModels = new ArrayList<Pair<ModelResourceLocation, IBakedModel>>();
 
+		//Register FastTESR baked models
+		for(TileEntitySpecialRenderer<?> renderer : TileEntityRendererDispatcher.instance.renderers.values()) {
+			if(renderer instanceof IFastTESRBakedModels) {
+				Collection<ModelResourceLocation> locations = ((IFastTESRBakedModels) renderer).getModelLocations();
+				
+				for(ModelResourceLocation location : locations) {
+					IModel model = ModelLoaderRegistry.getModelOrLogError(location, "Failed loading model '" + location + "' for FastTESR");
+					IBakedModel bakedModel = model.bake(model.getDefaultState(), DefaultVertexFormats.BLOCK, (loc) -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(loc.toString()));
+					modelRegistry.putObject(location, bakedModel);
+					((IFastTESRBakedModels) renderer).onModelBaked(location, bakedModel);
+				}
+			}
+		}
+		
 		for(ModelResourceLocation modelLocation : modelRegistry.getKeys()) {
 			IBakedModel model = modelRegistry.getObject(modelLocation);
 
@@ -259,7 +283,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 					IBakedModel bakedModel = modelRegistry.getObject(dependencyLocation);
 
 					if(bakedModel == null) {
-						ResourceLocation dependencyLocationNoVariants = new ResourceLocation(dependencyLocation.getResourceDomain(), dependencyLocation.getResourcePath());
+						ResourceLocation dependencyLocationNoVariants = new ResourceLocation(dependencyLocation.getNamespace(), dependencyLocation.getPath());
 						try {
 							IModel externalModel = ModelLoaderRegistry.getModel(dependencyLocationNoVariants);
 							bakedModel = externalModel.bake(dependant.getModelState(externalModel), dependant.getVertexFormat(externalModel), dependant.getTextureGetter(externalModel));
@@ -311,7 +335,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 
 	/**
 	 * Throws a {@link LoaderExtensionException}
-	 * @param reason
+	 * @param extension
 	 * @param cause
 	 */
 	private void throwLoaderException(LoaderExtension extension, Throwable cause) {

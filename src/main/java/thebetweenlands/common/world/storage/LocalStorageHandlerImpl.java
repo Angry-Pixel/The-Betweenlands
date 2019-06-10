@@ -137,7 +137,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		List<T> storages = new ArrayList<>();
 		int cx = MathHelper.floor(x) >> 4;
 		int cz = MathHelper.floor(z) >> 4;
-		Chunk chunk = this.world.getChunkFromChunkCoords(cx, cz);
+		Chunk chunk = this.world.getChunk(cx, cz);
 		IChunkStorage chunkStorage = this.getWorldStorage().getChunkStorage(chunk);
 		if(chunkStorage != null) {
 			for(LocalStorageReference ref : chunkStorage.getLocalStorageReferences()) {
@@ -163,7 +163,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		int ez = MathHelper.floor(aabb.maxZ) >> 4;
 		for(int cx = sx; cx <= ex; cx++) {
 			for(int cz = sz; cz <= ez; cz++) {
-				Chunk chunk = this.world.getChunkFromChunkCoords(cx, cz);
+				Chunk chunk = this.world.getChunk(cx, cz);
 				IChunkStorage chunkStorage = this.getWorldStorage().getChunkStorage(chunk);
 				if(chunkStorage != null) {
 					for(LocalStorageReference ref : chunkStorage.getLocalStorageReferences()) {

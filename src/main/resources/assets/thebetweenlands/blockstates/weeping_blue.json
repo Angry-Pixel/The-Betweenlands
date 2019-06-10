@@ -10,7 +10,7 @@
         "half=upper": { 
             "model": "thebetweenlands:internal/blank",
             "custom": { 
-                "particle_texture": "thebetweenlands:blocks/weeping_blue" 
+                "particle_texture": "thebetweenlands:particle/block/weeping_blue_particle" 
             } 
         },
         "inventory": { 

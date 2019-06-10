@@ -1,0 +1,12 @@
+{
+  "forge_marker": 1,
+  "parent":"thebetweenlands:block/log_rotten_bark_carved",
+  "textures": {
+    "up": "thebetweenlands:blocks/rotten_bark_rotated",
+    "down": "thebetweenlands:blocks/rotten_bark_rotated",
+    "north": "thebetweenlands:blocks/rotten_bark_carved_6",
+    "east": "thebetweenlands:blocks/rotten_bark_carved_6",
+    "south": "thebetweenlands:blocks/rotten_bark_carved_6",
+    "west": "thebetweenlands:blocks/rotten_bark_carved_6"
+  }
+}

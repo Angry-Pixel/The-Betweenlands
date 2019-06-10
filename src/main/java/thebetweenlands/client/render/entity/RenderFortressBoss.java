@@ -314,9 +314,9 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 				Vec3d vec1 = new Vec3d(v1[0]+centerX/len*explode, v1[1]+centerY/len*explode, v1[2]+centerZ/len*explode);
 				Vec3d vec2 = new Vec3d(v2[0]+centerX/len*explode, v2[1]+centerY/len*explode, v2[2]+centerZ/len*explode);
 				Vec3d vec3 = new Vec3d(v3[0]+centerX/len*explode, v3[1]+centerY/len*explode, v3[2]+centerZ/len*explode);
-				vec1 = vec1.addVector(entity.posX, entity.posY, entity.posZ);
-				vec2 = vec2.addVector(entity.posX, entity.posY, entity.posZ);
-				vec3 = vec3.addVector(entity.posX, entity.posY, entity.posZ);
+				vec1 = vec1.add(entity.posX, entity.posY, entity.posZ);
+				vec2 = vec2.add(entity.posX, entity.posY, entity.posZ);
+				vec3 = vec3.add(entity.posX, entity.posY, entity.posZ);
 				buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
 				buffer.pos(v1[0]+centerX/len*explode, v1[1]+centerY/len*explode, v1[2]+centerZ/len*explode).color(0F, 0F, 0F, 1.0F).endVertex();
 				buffer.pos(v2[0]+centerX/len*explode, v2[1]+centerY/len*explode, v2[2]+centerZ/len*explode).color(0F, 0F, 0F, 1.0F).endVertex();

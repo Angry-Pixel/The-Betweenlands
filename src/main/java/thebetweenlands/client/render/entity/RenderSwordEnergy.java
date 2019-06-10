@@ -155,11 +155,11 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder vertexbuffer = tessellator.getBuffer();
 
-		double maxVStart = diff.lengthVector() / 8.0D;
-		double maxVEnd = diff.lengthVector() / 8.0D;
+		double maxVStart = diff.length() / 8.0D;
+		double maxVEnd = diff.length() / 8.0D;
 		double minVStart = 0.0D;
 		double minVEnd = 0.0D;
-		double maxU = diff.lengthVector() / 2.0D;
+		double maxU = diff.length() / 2.0D;
 
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		vertexbuffer.pos(start.x + (localSide.x + localUp.x) * startWidth, start.y + (localSide.y + localUp.y) * startWidth, start.z + (localSide.z + localUp.z) * startWidth).tex(0, minVStart).endVertex();

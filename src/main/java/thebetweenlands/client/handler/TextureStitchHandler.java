@@ -1,13 +1,18 @@
 package thebetweenlands.client.handler;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
+import javax.imageio.ImageIO;
 
 import com.google.common.collect.Lists;
 
@@ -29,7 +34,11 @@ import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
 import thebetweenlands.client.render.sprite.TextureFromData;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.ModelRegistry;
+import thebetweenlands.util.TexturePacker.TextureQuadMap;
 
 public class TextureStitchHandler {
 	public static final TextureStitchHandler INSTANCE = new TextureStitchHandler();
@@ -52,7 +61,36 @@ public class TextureStitchHandler {
 			//Only stitch to the main texture map
 			return;
 		}
-		
+
+		//Pack model textures and stitch onto atlas
+		long packingStartTime = System.nanoTime();
+		Map<ResourceLocation, BufferedImage> packedTextures = ModelRegistry.MODEL_TEXTURE_PACKER.pack(Minecraft.getMinecraft().getResourceManager());
+
+		TheBetweenlands.logger.info("Packed model textures in " + ((System.nanoTime() - packingStartTime) / 1000000.0f) + "ms");
+		TheBetweenlands.logger.info("Optimal footprint: " + ModelRegistry.MODEL_TEXTURE_PACKER.getOptimalFootprint() + "px^2, Packed footprint: " + ModelRegistry.MODEL_TEXTURE_PACKER.getPackedFootprint() + "px^2");
+
+		if(BetweenlandsConfig.DEBUG.dumpPackedTextures) {
+			for(Entry<ResourceLocation, BufferedImage> packed : packedTextures.entrySet()) {
+				try {
+					File f = new File("betweenlands/packed_textures/" + packed.getKey().getPath() + ".png");
+					f.mkdirs();
+					ImageIO.write(packed.getValue(), "PNG", f);
+				} catch (IOException ex) {
+					TheBetweenlands.logger.error("Failed dumping packed texture", ex);
+				}
+			}
+		}
+
+		for(TextureQuadMap map : ModelRegistry.MODEL_TEXTURE_PACKER.getTextureMaps()) {
+			if(map.getOwner() != null) {
+				map.getOwner().onPacked();
+			}
+		}
+
+		for(Entry<ResourceLocation, BufferedImage> packedTexture : packedTextures.entrySet()) {
+			e.getMap().setTextureEntry(new TextureFromData(packedTexture.getKey().toString(), packedTexture.getValue()));
+		}
+
 		//Corrosion
 		this.stitchedCorrosionSprites.clear();
 		Map<String, TextureAtlasSprite> mapRegisteredSprites;
@@ -66,7 +104,7 @@ public class TextureStitchHandler {
 				ResourceLocation[] variants = ICorrodible.getItemCorrodibleVariants((Item & ICorrodible) item);
 				for(ResourceLocation variant : variants) {
 					try {
-						ResourceLocation modelLocation = new ResourceLocation(variant.getResourceDomain(), "item/" + variant.getResourcePath());
+						ResourceLocation modelLocation = new ResourceLocation(variant.getNamespace(), "item/" + variant.getPath());
 						IModel model = ModelLoaderRegistry.getModel(modelLocation);
 						List<ResourceLocation> textures = Lists.newArrayList();
 						textures.addAll(model.getTextures());
@@ -79,15 +117,15 @@ public class TextureStitchHandler {
 							}
 						}
 						for(ResourceLocation texture : textures) {
-							String path = texture.getResourcePath();
+							String path = texture.getPath();
 							if(path.contains("/")) {
 								String corrodibleSuffix = "_corrodible";
-								String fileName = texture.getResourcePath().substring(texture.getResourcePath().lastIndexOf("/") + 1);
+								String fileName = texture.getPath().substring(texture.getPath().lastIndexOf("/") + 1);
 								if(fileName.endsWith(corrodibleSuffix)) {
-									ResourceLocation completeBaseTextureLocation = new ResourceLocation(texture.getResourceDomain(), String.format("textures/%s.png", texture.getResourcePath()));
+									ResourceLocation completeBaseTextureLocation = new ResourceLocation(texture.getNamespace(), String.format("textures/%s.png", texture.getPath()));
 									for (int n = 0; n < CorrosionHelper.CORROSION_STAGE_COUNT; n++) {
-										String corrosionSpriteName = texture.getResourceDomain() + ":" + path.substring(0, path.length() - corrodibleSuffix.length()) + "_corrosion_" + n;
-										TextureCorrosion corrosionTexture = new TextureCorrosion(corrosionSpriteName, completeBaseTextureLocation, n, item.getUnlocalizedName().hashCode());
+										String corrosionSpriteName = texture.getNamespace() + ":" + path.substring(0, path.length() - corrodibleSuffix.length()) + "_corrosion_" + n;
+										TextureCorrosion corrosionTexture = new TextureCorrosion(corrosionSpriteName, completeBaseTextureLocation, n, item.getTranslationKey().hashCode());
 										//Forcibly sets the texture entry because TextureMap#setTextureEntry doesn't allow 
 										//overwriting a previously added sprite (usually set in ModelLoader#setupModelRegistry).
 										//Maybe find a better way to do this, if at all possible anyways
@@ -173,7 +211,7 @@ public class TextureStitchHandler {
 
 	private ResourceLocation getResourceLocation(String basePath, TextureAtlasSprite sprite) {
 		ResourceLocation resourcelocation = new ResourceLocation(sprite.getIconName());
-		return new ResourceLocation(resourcelocation.getResourceDomain(), String.format("%s/%s%s", basePath, resourcelocation.getResourcePath(), ".png"));
+		return new ResourceLocation(resourcelocation.getNamespace(), String.format("%s/%s%s", basePath, resourcelocation.getPath(), ".png"));
 	}
 
 	@SubscribeEvent
@@ -182,7 +220,7 @@ public class TextureStitchHandler {
 			//Only stitch to the main texture map
 			return;
 		}
-		
+
 		//Corrosion
 		TextureMap map = e.getMap();
 		for(TextureCorrosion corrosionSprite : this.stitchedCorrosionSprites) {

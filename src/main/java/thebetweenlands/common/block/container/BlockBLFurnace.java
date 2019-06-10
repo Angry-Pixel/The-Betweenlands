@@ -2,8 +2,6 @@ package thebetweenlands.common.block.container;
 
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
@@ -43,6 +41,7 @@ import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 
 public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
+
 	private final boolean isBurning;
 	private static boolean keepInventory;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
@@ -75,7 +74,7 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 
@@ -174,7 +173,6 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
     }
 
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings("incomplete-switch")
 	@Override
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		if (this.isBurning) {
@@ -182,7 +180,6 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 			double d0 = (double) pos.getX() + 0.5D;
 			double d1 = (double) pos.getY() + 0.25D + rand.nextDouble() * 6.0D / 16.0D;
 			double d2 = (double) pos.getZ() + 0.5D;
-			double d3 = 0.52D;
 			double d4 = rand.nextDouble() * 0.6D - 0.3D;
 
 			if (rand.nextDouble() < 0.1D) {
@@ -226,7 +223,7 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
 		if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
 			enumfacing = EnumFacing.NORTH;

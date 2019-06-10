@@ -1,7 +1,5 @@
 package thebetweenlands.common.block.container;
 
-import java.util.Random;
-
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -14,11 +12,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -41,6 +35,8 @@ import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityPurifier;
 
+import java.util.Random;
+
 public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
@@ -48,7 +44,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 		super(Material.ROCK);
 		setHardness(2.0F);
 		setResistance(5.0F);
-		setUnlocalizedName("thebetweenlands.purifier");
+		setTranslationKey("thebetweenlands.purifier");
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
@@ -77,9 +73,9 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 			}
 
 			if (!heldItem.isEmpty()) {
-				if(heldItem.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+				IFluidHandler handler = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+				if(handler != null) {
 					Fluid fluid = FluidRegistry.SWAMP_WATER;
-					IFluidHandler handler = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 					FluidStack bucketFluid = handler.drain(new FluidStack(fluid, Fluid.BUCKET_VOLUME), false);
 
 					if (bucketFluid != null) {
@@ -168,7 +164,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing facing = EnumFacing.getFront(meta);
+		EnumFacing facing = EnumFacing.byIndex(meta);
 
 		if (facing.getAxis() == EnumFacing.Axis.Y) {
 			facing = EnumFacing.NORTH;
@@ -179,7 +175,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 

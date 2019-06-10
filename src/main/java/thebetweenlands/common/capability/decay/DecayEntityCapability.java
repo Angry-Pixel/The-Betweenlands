@@ -64,9 +64,14 @@ public class DecayEntityCapability extends EntityCapability<DecayEntityCapabilit
 	
 	@Override
 	public float getMaxPlayerHealth(int decayLevel) {
-		return Math.min(26f - decayLevel, 20f);
+		return Math.min(20f + BetweenlandsConfig.GENERAL.decayMinHealth - decayLevel, 20f);
 	}
 
+	@Override
+	public float getMaxPlayerHealthPercentage(int decayLevel) {
+		return BetweenlandsConfig.GENERAL.decayMinHealthPercentage + (1.0f - BetweenlandsConfig.GENERAL.decayMinHealthPercentage) * (Math.min(26f - decayLevel, 20f) - 6f) / (20.0f - 6f);
+	}
+	
 	@Override
 	public boolean isDecayEnabled() {
 		return this.getEntity().getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL && 

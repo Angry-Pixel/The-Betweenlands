@@ -195,7 +195,7 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack stack) {
+	public String getTranslationKey(ItemStack stack) {
 		try {
 			switch (stack.getItemDamage()) {
 			case 0:

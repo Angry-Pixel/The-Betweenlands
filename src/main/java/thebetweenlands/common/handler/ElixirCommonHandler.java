@@ -158,7 +158,7 @@ public class ElixirCommonHandler {
             }
         }
 
-        if(entityLivingBase.isInWater() && ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive(entityLivingBase)) {
+        if(ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive(entityLivingBase) && entityLivingBase.isInWater()) {
             if(entityLivingBase.motionY > -0.1F) {
             	entityLivingBase.motionY -= 0.005F + 0.035F / 5.0F *  (1 + ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.getStrength(entityLivingBase));
             }

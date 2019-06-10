@@ -16,9 +16,9 @@ public abstract class RenderWallFace<T extends EntityWallFace> extends RenderLiv
 
 	@Override
 	protected void preRenderCallback(T entity, float partialTickTime) {
-		GlStateManager.translate(0, -entity.getEyeHeight(), 0);
-		GlStateManager.rotate(entity.rotationPitch, 1, 0, 0);
-		GlStateManager.translate(0, entity.getEyeHeight(), 0);
+		GlStateManager.translate(0, -entity.width / 2, 0);
+		GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTickTime, 1, 0, 0);
+		GlStateManager.translate(0, entity.width / 2, 0);
 	}
 
 	@Override

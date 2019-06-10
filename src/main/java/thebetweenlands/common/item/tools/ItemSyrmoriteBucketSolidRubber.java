@@ -33,7 +33,9 @@ public class ItemSyrmoriteBucketSolidRubber extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		player.addStat(StatList.getObjectUseStats(this));
-		player.setHeldItem(hand, new ItemStack(ItemRegistry.BL_BUCKET, 1, 1));
+		ItemStack bucket = new ItemStack(ItemRegistry.BL_BUCKET, 1, 1);
+		bucket.getItem().onCreated(bucket, world, player);
+		player.setHeldItem(hand, bucket);
 		ItemStack rubber = EnumItemMisc.RUBBER_BALL.create(3);
 		if (player.addItemStackToInventory(rubber))
 			player.dropItem(rubber, false);

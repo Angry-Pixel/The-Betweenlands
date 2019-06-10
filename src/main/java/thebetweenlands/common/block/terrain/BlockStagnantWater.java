@@ -27,13 +27,15 @@ public class BlockStagnantWater extends BlockFluidClassic implements IStateMappe
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		if (entityIn instanceof EntityPlayer && !worldIn.isRemote && !((EntityPlayer)entityIn).isPotionActive(ElixirEffectRegistry.EFFECT_DECAY.getPotionEffect())) {
 			((EntityPlayer)entityIn).addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(60, 3));
 		}
-		if(!worldIn.isRemote && entityIn.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+		if(!worldIn.isRemote ) {
 			IDecayCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-			cap.getDecayStats().addDecayAcceleration(0.1F);
+			if (cap != null) {
+				cap.getDecayStats().addDecayAcceleration(0.1F);
+			}
 		}
 	}
 
