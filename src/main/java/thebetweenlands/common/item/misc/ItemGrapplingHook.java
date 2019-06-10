@@ -29,7 +29,7 @@ public class ItemGrapplingHook extends Item {
 			
 			player.startRiding(mountNode);
 			
-			int nodes = 24;
+			int nodes = 16;
 			
 			EntityGrapplingHookNode prevNode = null;
 			
@@ -37,8 +37,8 @@ public class ItemGrapplingHook extends Item {
 				EntityGrapplingHookNode node = new EntityGrapplingHookNode(world);
 				node.setLocationAndAngles(player.posX, player.posY + player.getEyeHeight(), player.posZ, 0, 0);
 				
-				float velocity = 1.0F * (0.7F + 0.3F * i / (float)nodes);
-				float upwardsVelocity = 1.0F * (0.7F + 0.3F * (float) Math.sin(Math.PI / 2 / nodes * i));
+				float velocity = 1.5F * (0.4F + 1F * i / (float)nodes);
+				float upwardsVelocity = 1.0F * (0.4F + 0.6F * (float) Math.sin(Math.PI / 2 / nodes * i));
 				
 				node.motionX = player.motionX + dir.x * velocity;
 				node.motionY = player.motionY + dir.y * velocity + upwardsVelocity + 0.5D;
@@ -60,28 +60,6 @@ public class ItemGrapplingHook extends Item {
 			mountNode.setNextNode(player);
 
 			world.spawnEntity(mountNode);
-			
-			/*EntityGrapplingHookNode node = new EntityGrapplingHookNode(world);
-			node.setLocationAndAngles(player.posX, player.posY + player.getEyeHeight(), player.posZ, 0, 0);
-
-			EntityGrapplingHookNode mountNode = new EntityGrapplingHookNode(world);
-			mountNode.setLocationAndAngles(player.posX, player.posY + player.getEyeHeight(), player.posZ, 0, 0);
-			
-			player.startRiding(mountNode);
-			
-			float velocity = 1.5F;
-
-			node.motionX = dir.x * velocity;
-			node.motionY = (dir.y + 0.5) * velocity;
-			node.motionZ = dir.z * velocity;
-
-			node.setNextNode(mountNode);
-			mountNode.setPreviousNode(node);
-			
-			mountNode.setNextNode(player);
-
-			world.spawnEntity(mountNode);
-			world.spawnEntity(node);*/
 		}
 
 		return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));

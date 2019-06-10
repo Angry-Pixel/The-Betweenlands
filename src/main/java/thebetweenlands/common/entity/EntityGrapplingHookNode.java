@@ -9,10 +9,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
@@ -183,6 +185,11 @@ public class EntityGrapplingHookNode extends Entity {
 			this.handleWaterMovement();
 			this.move(MoverType.SELF, this.motionX + this.correctionX, this.motionY + this.correctionY, this.motionZ + this.correctionZ);
 			this.pushOutOfBlocks(this.posX, this.posY, this.posZ);
+			
+			//Check if it is now attached after move and should play sound
+			if(this.isAttached()) {
+				this.playSound(SoundEvents.BLOCK_STONE_PLACE, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+			}
 		}
 
 		boolean isMovable = this.isMovable();
@@ -357,7 +364,7 @@ public class EntityGrapplingHookNode extends Entity {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean isInRangeToRenderDist(double distance) {
-		return distance < 1024.0D;
+		return distance < 4096.0D;
 	}
 
 	@Override
