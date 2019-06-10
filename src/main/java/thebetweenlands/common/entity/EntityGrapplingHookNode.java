@@ -303,54 +303,80 @@ public class EntityGrapplingHookNode extends Entity {
 		controller.fallDistance = 0;
 
 		if(!this.world.isRemote) {
-			if(controller.moveStrafing > 0) {
-				Entity prevNode = this.getPreviousNode();
+			if(controller.isJumping) {
+				if(controller.moveForward > 0) {
+					Entity prevNode = this.getPreviousNode();
 
-				if(prevNode instanceof EntityGrapplingHookNode) {
-					Vec3d dir = prevNode.getPositionVector().subtract(this.getPositionVector()).normalize();
+					if(prevNode instanceof EntityGrapplingHookNode) {
+						Vec3d dir = prevNode.getPositionVector().subtract(this.getPositionVector()).normalize();
 
-					float prevStepHeight = this.stepHeight;
-					this.stepHeight = 1.25f;
+						float prevStepHeight = this.stepHeight;
+						this.stepHeight = 1.25f;
 
-					//On ground required for step to work
-					this.onGround = true;
-					this.move(MoverType.SELF, dir.x * 0.25D, dir.y * 0.25D, dir.z * 0.52D);
-
-					if(this.collidedHorizontally && dir.y > 0) {
+						//On ground required for step to work
 						this.onGround = true;
-						this.move(MoverType.SELF, 0, 0.2D, 0);
-						this.climbing = true;
-					}
+						this.move(MoverType.SELF, dir.x * 0.25D, dir.y * 0.25D, dir.z * 0.52D);
 
-					this.stepHeight = prevStepHeight;
+						if(this.collidedHorizontally && dir.y > 0) {
+							this.onGround = true;
+							this.move(MoverType.SELF, 0, 0.2D, 0);
+							this.climbing = true;
+						}
 
-					if(prevNode.getEntityBoundingBox().intersects(this.getEntityBoundingBox())) {
-						((EntityGrapplingHookNode) prevNode).removeNode(this);
-						this.setCurrentRopeLength((float) DEFAULT_ROPE_LENGTH - 0.1F);
-					} else {
-						this.setCurrentRopeLength(Math.min((float) DEFAULT_ROPE_LENGTH - 0.1F, (float) prevNode.getDistance(this.posX, this.posY + this.height - prevNode.height, this.posZ)));
+						this.stepHeight = prevStepHeight;
+
+						if(prevNode.getEntityBoundingBox().intersects(this.getEntityBoundingBox())) {
+							((EntityGrapplingHookNode) prevNode).removeNode(this);
+							this.setCurrentRopeLength((float) DEFAULT_ROPE_LENGTH - 0.1F);
+						} else {
+							this.setCurrentRopeLength(Math.min((float) DEFAULT_ROPE_LENGTH - 0.1F, (float) prevNode.getDistance(this.posX, this.posY + this.height - prevNode.height, this.posZ)));
+						}
 					}
+				} else if(controller.moveForward < 0) {
+					this.setCurrentRopeLength(Math.min((float) DEFAULT_ROPE_LENGTH - 0.1F, this.getCurrentRopeLength() + 0.2F));
+					this.isExtending = true;
 				}
-			}
-			if(controller.moveStrafing < 0) {
-				this.setCurrentRopeLength(Math.min((float) DEFAULT_ROPE_LENGTH - 0.1F, this.getCurrentRopeLength() + 0.2F));
-				this.isExtending = true;
-			}
-			if(Math.abs(controller.moveForward) > 0.05D && !this.onGround) {
-				double swingX = Math.cos(Math.toRadians(controller.rotationYaw + 90));
-				double swingZ = Math.sin(Math.toRadians(controller.rotationYaw + 90));
+			} else if((Math.abs(controller.moveForward) > 0.05D || Math.abs(controller.moveStrafing) > 0.05D) && !this.onGround) {
+				int count = 0;
+
+				double swingX = 0;
+				double swingZ = 0;
+
+				if(controller.moveForward > 0) {
+					swingX += Math.cos(Math.toRadians(controller.rotationYaw + 90));
+					swingZ += Math.sin(Math.toRadians(controller.rotationYaw + 90));
+					count++;
+				}
+				if(controller.moveForward < 0) {
+					swingX += Math.cos(Math.toRadians(controller.rotationYaw - 90));
+					swingZ += Math.sin(Math.toRadians(controller.rotationYaw - 90));
+					count++;
+				}
+				if(controller.moveStrafing > 0) {
+					swingX += Math.cos(Math.toRadians(controller.rotationYaw));
+					swingZ += Math.sin(Math.toRadians(controller.rotationYaw));
+					count++;
+				} 
+				if(controller.moveStrafing < 0){
+					swingX += Math.cos(Math.toRadians(controller.rotationYaw + 180));
+					swingZ += Math.sin(Math.toRadians(controller.rotationYaw + 180));
+					count++;
+				}
+
+				swingX /= count;
+				swingZ /= count;
 
 				double swingStrength = 0.05D;
 
-				this.motionX += swingX * swingStrength * Math.signum(controller.moveForward);
-				this.motionZ += swingZ * swingStrength * Math.signum(controller.moveForward);
+				this.motionX += swingX * swingStrength;
+				this.motionZ += swingZ * swingStrength;
 
 				int incr = 0;
 				Entity prev = this.getPreviousNode();
 				while(prev instanceof EntityGrapplingHookNode && !((EntityGrapplingHookNode) prev).isAttached()) {
 					if(!prev.onGround) {
-						prev.motionX += swingX * swingStrength * Math.signum(controller.moveForward) / (1 + incr * 2);
-						prev.motionZ += swingZ * swingStrength * Math.signum(controller.moveForward) / (1 + incr * 2);
+						prev.motionX += swingX * swingStrength / (1 + incr * 2);
+						prev.motionZ += swingZ * swingStrength / (1 + incr * 2);
 					}
 
 					prev = ((EntityGrapplingHookNode) prev).getPreviousNode();
@@ -363,20 +389,20 @@ public class EntityGrapplingHookNode extends Entity {
 
 	protected void checkForEntityCollisions(Entity prevNode, Entity nextNode) {
 		if(!this.world.isRemote && prevNode != null) {
-			double motion = Math.sqrt(this.motionX*this.motionX + this.motionY*this.motionY + this.motionZ*this.motionZ);
+			double velocity = Math.sqrt((this.posX-this.prevPosX)*(this.posX-this.prevPosX) + (this.posY-this.prevPosY)*(this.posY-this.prevPosY) + (this.posZ-this.prevPosZ)*(this.posZ-this.prevPosZ));
 
 			Entity user = this.getUser();
 
-			if(motion > 0.5D) {
+			if(velocity > 0.25D) {
 				List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(this.posX, this.posY, this.posZ, prevNode.posX, prevNode.posY, prevNode.posZ));
 
 				for(EntityLivingBase entity : entities) {
 					if(entity != user) {
 						RayTraceResult intersect = entity.getEntityBoundingBox().calculateIntercept(new Vec3d(this.posX, this.posY, this.posZ), new Vec3d(prevNode.posX, prevNode.posY, prevNode.posZ));
-						
+
 						if(intersect != null) {
 							DamageSource source;
-							
+
 							if(user instanceof EntityPlayer) {
 								source = new EntityDamageSourceIndirect("player", this, user);
 							} else if(user != null) {
@@ -384,8 +410,8 @@ public class EntityGrapplingHookNode extends Entity {
 							} else {
 								source = new EntityDamageSource("mob", this);
 							}
-							
-							entity.attackEntityFrom(source, 3.0F + (float) Math.min((motion - 0.5D) * 2, 4));
+
+							entity.attackEntityFrom(source, 3.0F + (float) Math.min((velocity - 0.25D) * 1.5D, 4));
 						}
 					}
 				}
