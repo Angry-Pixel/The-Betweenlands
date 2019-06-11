@@ -1,11 +1,14 @@
 package thebetweenlands.common.entity;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 public class EntityDecayPitChainOuter extends Entity {
@@ -14,17 +17,21 @@ public class EntityDecayPitChainOuter extends Entity {
 	private static final DataParameter<Boolean> IS_RAISING = EntityDataManager.createKey(EntityDecayPitChainOuter.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_MOVING = EntityDataManager.createKey(EntityDecayPitChainOuter.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> FACING = EntityDataManager.createKey(EntityDecayPitChainOuter.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> LENGTH = EntityDataManager.createKey(EntityDecayPitChainOuter.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> IS_HANGING = EntityDataManager.createKey(EntityDecayPitChainOuter.class, DataSerializers.BOOLEAN);
 
 	public EntityDecayPitChainOuter(World world) {
 		super(world);
-		setSize(1F, 4F);
+		setSize(1F, 1F);
 	}
 
 	@Override
 	protected void entityInit() {
 		dataManager.register(IS_RAISING, false);
 		dataManager.register(IS_MOVING, false);
+		dataManager.register(IS_HANGING, false);
 		dataManager.register(FACING, 0);
+		dataManager.register(LENGTH, 1);
 	}
 
 	@Override
@@ -36,6 +43,49 @@ public class EntityDecayPitChainOuter extends Entity {
 		if (animationTicksPrev >= 16) {
 			animationTicks = animationTicksPrev = 0;
 			setMoving(false);
+			if (isHanging()) {
+				if (!isRaising())
+					if (getLength() < 7) {
+						setLength(getLength() + 1);
+						setPositionAndUpdate(posX, posY - 1D, posZ);
+					}
+				if (isRaising()) {
+					if (getLength() > 1) {
+						setLength(getLength() - 1);
+						setPositionAndUpdate(posX, posY + 1D, posZ);
+					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+		if (!player.isSneaking() && !isMoving() && getLength() > 1) {
+			setRaising(true);
+			setMoving(true);
+			return true;
+		}
+		if (player.isSneaking() && !isMoving()) {
+			setRaising(false);
+			setMoving(true);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void notifyDataManagerChange(DataParameter<?> key) {
+		if (LENGTH.equals(key))
+			setNewLength((float)getLength());
+		super.notifyDataManagerChange(key);
+	}
+
+	protected void setNewLength(float height) {
+		if (this.height != height) {
+			this.height = height;
+			AxisAlignedBB axisalignedbb = getEntityBoundingBox();
+			setEntityBoundingBox(new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + 1D, axisalignedbb.minY + (double) height, axisalignedbb.minZ + 1D));
 		}
 	}
 
@@ -63,9 +113,30 @@ public class EntityDecayPitChainOuter extends Entity {
 		return dataManager.get(FACING);
 	}
 
+	public void setLength(int length) {
+		dataManager.set(LENGTH, length);
+	}
+
+	public int getLength() {
+		return dataManager.get(LENGTH);
+	}
+
+	public void setHanging(boolean hanging) {
+		dataManager.set(IS_HANGING, hanging);
+	}
+
+	public boolean isHanging() {
+		return dataManager.get(IS_HANGING);
+	}
+
 	@Override
 	public boolean canBePushed() {
 		return false;
+	}
+
+	@Override
+	public boolean canBeCollidedWith() {
+		return true;
 	}
 
 	@Override

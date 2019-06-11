@@ -23,40 +23,24 @@ public class RenderDecayPitChainOuter extends Render<EntityDecayPitChainOuter> {
 
 		if(entity.isMoving()) {
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x, (entity.isRaising() ? y + 0.5F + scroll : y + 5.5F - scroll) , z);
+			if(entity.isRaising() && !entity.isHanging())
+				GlStateManager.translate(x, y + 0.5F + scroll, z);
+			if(!entity.isRaising())
+				GlStateManager.translate(x, y + entity.getLength() + 1.5F - scroll , z);
 			GlStateManager.scale(-1F, -1F, 1F);
 			GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
 			CHAIN_MODEL.render(entity, 0.0625F);
 			GlStateManager.popMatrix();
 		}
 
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + 1.5F + (entity.isRaising() ? scroll : - scroll) , z);
-		GlStateManager.scale(-1F, -1F, 1F);
-		GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
-		CHAIN_MODEL.render(entity, 0.0625F);
-		GlStateManager.popMatrix();
-
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + 2.5F + (entity.isRaising() ? scroll : - scroll) , z);
-		GlStateManager.scale(-1F, -1F, 1F);
-		GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
-		CHAIN_MODEL.render(entity, 0.0625F);
-		GlStateManager.popMatrix();
-
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + 3.5F + (entity.isRaising() ? scroll : - scroll) , z);
-		GlStateManager.scale(-1F, -1F, 1F);
-		GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
-		CHAIN_MODEL.render(entity, 0.0625F);
-		GlStateManager.popMatrix();
-
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + 4.5F + (entity.isRaising() ? scroll : - scroll) , z);
-		GlStateManager.scale(-1F, -1F, 1F);
-		GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
-		CHAIN_MODEL.render(entity, 0.0625F);
-		GlStateManager.popMatrix();
+		for (int len = 1; len <= entity.getLength(); len++) {
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x, y + len + 0.5F + (entity.isRaising() ? scroll : -scroll), z);
+			GlStateManager.scale(-1F, -1F, 1F);
+			GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
+			CHAIN_MODEL.render(entity, 0.0625F);
+			GlStateManager.popMatrix();
+		}
     }
 
 	@Override
