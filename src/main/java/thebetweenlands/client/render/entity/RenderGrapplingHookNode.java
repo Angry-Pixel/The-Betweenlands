@@ -31,6 +31,7 @@ import thebetweenlands.client.render.model.entity.ModelRopeNode;
 import thebetweenlands.client.render.model.entity.ModelShambler;
 import thebetweenlands.client.render.particle.entity.ParticleBeam;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
+import thebetweenlands.common.item.misc.ItemGrapplingHook;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.util.LightingUtil;
 import thebetweenlands.util.RotationMatrix;
@@ -176,7 +177,7 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 				GlStateManager.popMatrix();
 
 				GlStateManager.enableLighting();
-				
+
 				GlStateManager.popMatrix();
 			}
 
@@ -214,14 +215,35 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 					yaw = interpolate(controller.prevRotationYaw, controller.rotationYaw, partialTicks);
 				}
 
-				double rotX = -Math.cos(Math.toRadians(-yaw)) * 0.6D;
-				double rotZ = Math.sin(Math.toRadians(-yaw)) * 0.6D;
+				EnumHand activeHand = EnumHand.MAIN_HAND;
+				if(controller instanceof EntityLivingBase) {
+					activeHand = !((EntityLivingBase) controller).getHeldItem(EnumHand.OFF_HAND).isEmpty() && ((EntityLivingBase) controller).getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGrapplingHook ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
+				}
+
+				double rotX = 0;
+				double rotZ = 0;
+
+				if(activeHand == EnumHand.MAIN_HAND) {
+					rotX += -Math.cos(Math.toRadians(-yaw)) * 0.6D;
+					rotZ += Math.sin(Math.toRadians(-yaw)) * 0.6D; 
+				} else {
+					rotX += -Math.cos(Math.toRadians(-yaw)) * -0.6D;
+					rotZ += Math.sin(Math.toRadians(-yaw)) * -0.6D; 
+				}
 
 				rotX += -Math.cos(Math.toRadians(-yaw + 90)) * 0.4D;
 				rotZ += Math.sin(Math.toRadians(-yaw + 90)) * 0.4D;
-				
-				Vec3d offset = new Vec3d(rotX, 1.1D + (controller.getHeldEquipment().iterator().hasNext() && !controller.getHeldEquipment().iterator().next().isEmpty() ? 0.2D : 0), rotZ);
-				
+
+				double yOffset = 0;
+				if(controller instanceof EntityLivingBase && !((EntityLivingBase) controller).getHeldItem(activeHand).isEmpty()) {
+					yOffset += 0.2D;
+				}
+				if(activeHand == EnumHand.OFF_HAND) {
+					yOffset += 0.2D;
+				}
+
+				Vec3d offset = new Vec3d(rotX, 1.1D + yOffset, rotZ);
+
 				//Below is the same as this, and as the rotation in onPlayerRenderPre
 				/*GlStateManager.rotate(-bodyYaw, 0, 1, 0);
 				GlStateManager.translate(0.6D, 0, -0.4D);
@@ -229,34 +251,34 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 				/*GlStateManager.rotate(yaw, 0, 1, 0);
 				GlStateManager.rotate(pitch, 0, 0, 1);
 				GlStateManager.rotate(yaw, 0, -1, 0);*/
-				
+
 				double dx = (interpolate(node1.lastTickPosX, node1.posX, partialTicks) - interpolate(node2.lastTickPosX, node2.posX, partialTicks));
 				double dy = (interpolate(node1.lastTickPosY, node1.posY, partialTicks) - interpolate(node2.lastTickPosY, node2.posY, partialTicks));
 				double dz = (interpolate(node1.lastTickPosZ, node1.posZ, partialTicks) - interpolate(node2.lastTickPosZ, node2.posZ, partialTicks));
-	
+
 				float rotYaw = -(float)Math.toDegrees(Math.atan2(dz, dx));
 				float rotPitch = (float)Math.toDegrees(Math.atan2(Math.sqrt(dx * dx + dz * dz), -dy)) - 180;
-				
+
 				float pitchMin = -30.0F;
 				float pitchMax = 30.0F;
-				
+
 				float t = (rotPitch - pitchMin) / (pitchMax - pitchMin);
 				rotPitch = (pitchMin + (pitchMax - pitchMin) * (1.0F / (1.0F + (float)Math.pow(200.0F, 0.5F - t))));
-				
+
 				RotationMatrix matrix = new RotationMatrix();
-				
+
 				matrix.setRotations(0, -(float)Math.toRadians(yaw), 0);
-				offset = offset.add(matrix.transformVec(new Vec3d(0.6D, 0, -0.4D), Vec3d.ZERO));
-				
+				offset = offset.add(matrix.transformVec(new Vec3d(activeHand == EnumHand.MAIN_HAND ? 0.6D : -0.6D, 0, -0.4D), Vec3d.ZERO));
+
 				matrix.setRotations(0, -(float)Math.toRadians(rotYaw), 0);
 				offset = matrix.transformVec(offset, Vec3d.ZERO);
-				
+
 				matrix.setRotations(0, 0, (float)Math.toRadians(rotPitch));
 				offset = matrix.transformVec(offset, Vec3d.ZERO);
-				
+
 				matrix.setRotations(0, (float)Math.toRadians(rotYaw), 0);
 				offset = matrix.transformVec(offset, Vec3d.ZERO);
-				
+
 				endX = interpolate(controller.lastTickPosX - camPosX, controller.posX - camPosX, partialTicks) + offset.x;
 				endY = interpolate(controller.lastTickPosY - camPosY, controller.posY - camPosY, partialTicks) + offset.y;
 				endZ = interpolate(controller.lastTickPosZ - camPosZ, controller.posZ - camPosZ, partialTicks) + offset.z;
@@ -289,51 +311,54 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 	protected ResourceLocation getEntityTexture(EntityGrapplingHookNode entity) {
 		return TEXTURE_ROPE;
 	}
-	
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onPlayerRenderPre(RenderPlayerEvent.Pre event) {
 		GlStateManager.pushMatrix();
-		
+
 		EntityPlayer player = event.getEntityPlayer();
-		
+
 		Entity ridingEntity = player.getRidingEntity();
-		
+
 		if(ridingEntity instanceof EntityGrapplingHookNode) {
 			EntityGrapplingHookNode node = (EntityGrapplingHookNode) ridingEntity;
 			Entity prevNode = node.getPreviousNode();
-			
+
 			if(prevNode != null) {
 				float partialTicks = event.getPartialRenderTick();
-				
+
 				double dx = (interpolate(prevNode.lastTickPosX, prevNode.posX, partialTicks) - interpolate(node.lastTickPosX, node.posX, partialTicks));
 				double dy = (interpolate(prevNode.lastTickPosY, prevNode.posY, partialTicks) - interpolate(node.lastTickPosY, node.posY, partialTicks));
 				double dz = (interpolate(prevNode.lastTickPosZ, prevNode.posZ, partialTicks) - interpolate(node.lastTickPosZ, node.posZ, partialTicks));
-	
+
 				float yaw = -(float)Math.toDegrees(Math.atan2(dz, dx));
 				float pitch = (float)Math.toDegrees(Math.atan2(Math.sqrt(dx * dx + dz * dz), -dy)) - 180;
-				
+
 				float pitchMin = -30.0F;
 				float pitchMax = 30.0F;
-				
+
 				float t = (pitch - pitchMin) / (pitchMax - pitchMin);
 				pitch = (pitchMin + (pitchMax - pitchMin) * (1.0F / (1.0F + (float)Math.pow(200.0F, 0.5F - t))));
-				
+
 				GlStateManager.rotate(yaw, 0, 1, 0);
 				GlStateManager.rotate(pitch, 0, 0, 1);
 				GlStateManager.rotate(-yaw, 0, 1, 0);
-				
+
 				float bodyYaw = (float) interpolate(player.prevRenderYawOffset, player.renderYawOffset, partialTicks);
+
+				EnumHand activeHand = !player.getHeldItem(EnumHand.OFF_HAND).isEmpty() && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGrapplingHook ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
+
 				
 				GlStateManager.rotate(-bodyYaw, 0, 1, 0);
-				GlStateManager.translate(0.6D, 0, -0.4D);
+				GlStateManager.translate(activeHand == EnumHand.MAIN_HAND ? 0.6D : -0.6D, 0, -0.4D);
 				GlStateManager.rotate(bodyYaw, 0, 1, 0);
-				
-				player.swingingHand = EnumHand.MAIN_HAND;
+
+				player.swingingHand = activeHand;
 				player.swingProgress = 0.12f;
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onPlayerRenderPost(RenderPlayerEvent.Post event) {
 		GlStateManager.popMatrix();

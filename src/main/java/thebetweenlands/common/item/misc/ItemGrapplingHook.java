@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -16,6 +17,18 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class ItemGrapplingHook extends Item {
 	public ItemGrapplingHook() {
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
+
+		this.setMaxStackSize(1);
+		
+		this.addPropertyOverride(new ResourceLocation("extended"), (stack, worldIn, entityIn) -> {
+			if(entityIn != null && entityIn.getRidingEntity() instanceof EntityGrapplingHookNode) {
+				boolean isMainHand = stack == entityIn.getHeldItem(EnumHand.MAIN_HAND);
+				boolean isOffHand = stack == entityIn.getHeldItem(EnumHand.OFF_HAND);
+				boolean hasOffHand = !entityIn.getHeldItem(EnumHand.OFF_HAND).isEmpty() && entityIn.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGrapplingHook;
+				return (isMainHand || isOffHand) && ((isMainHand && !hasOffHand) || isOffHand) ? 1 : 0;
+			}
+			return 0;
+		});
 	}
 
 	@Override
@@ -23,30 +36,30 @@ public class ItemGrapplingHook extends Item {
 		if(!world.isRemote) {
 			if(!player.isRiding()) {
 				Vec3d dir = player.getLookVec();
-	
+
 				int nodes = 16;
-				
+
 				EntityGrapplingHookNode mountNode = new EntityGrapplingHookNode(world, nodes + 1);
 				mountNode.setLocationAndAngles(player.posX - player.width / 2, player.posY, player.posZ - player.width / 2, 0, 0);
 				mountNode.motionX = player.motionX;
 				mountNode.motionY = player.motionY;
 				mountNode.motionZ = player.motionZ;
-				
+
 				player.startRiding(mountNode);
-				
+
 				EntityGrapplingHookNode prevNode = null;
-				
+
 				for(int i = 0; i < nodes; i++) {
 					EntityGrapplingHookNode node = new EntityGrapplingHookNode(world);
 					node.setLocationAndAngles(player.posX, player.posY + player.getEyeHeight(), player.posZ, 0, 0);
-					
+
 					float velocity = 1.5F * (0.4F + 1F * i / (float)nodes);
 					float upwardsVelocity = 1.0F * (0.4F + 0.6F * (float) Math.sin(Math.PI / 2 / nodes * i));
-					
+
 					node.motionX = player.motionX + dir.x * velocity;
 					node.motionY = player.motionY + dir.y * velocity + upwardsVelocity + 0.5D;
 					node.motionZ = player.motionZ + dir.z * velocity;
-		
+
 					if(prevNode == null) {
 						node.setNextNode(mountNode);
 						mountNode.setPreviousNode(node);
@@ -54,16 +67,16 @@ public class ItemGrapplingHook extends Item {
 						prevNode.setPreviousNode(node);
 						node.setNextNode(prevNode);
 					}
-					
+
 					world.spawnEntity(node);
-					
+
 					prevNode = node;
 				}
-				
+
 				mountNode.setNextNode(player);
-	
+
 				world.spawnEntity(mountNode);
-				
+
 				world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.ROPE_THROW, SoundCategory.PLAYERS, 1.5F, 0.8F + world.rand.nextFloat() * 0.3F);
 			}
 		}
