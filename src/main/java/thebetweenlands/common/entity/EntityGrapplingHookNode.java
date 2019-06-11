@@ -17,6 +17,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
@@ -25,6 +26,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityGrapplingHookNode extends Entity {
 	private static final DataParameter<Integer> DW_PREV_NODE = EntityDataManager.createKey(EntityGrapplingHookNode.class, DataSerializers.VARINT);
@@ -50,6 +52,8 @@ public class EntityGrapplingHookNode extends Entity {
 	protected double correctionX;
 	protected double correctionY;
 	protected double correctionZ;
+
+	protected int pullCounter = 0;
 
 	public EntityGrapplingHookNode(World world) {
 		super(world);
@@ -344,57 +348,69 @@ public class EntityGrapplingHookNode extends Entity {
 						} else {
 							this.setCurrentRopeLength(Math.min((float) DEFAULT_ROPE_LENGTH - 0.1F, (float) prevNode.getDistance(this.posX, this.posY + this.height - prevNode.height, this.posZ)));
 						}
+
+						if(this.pullCounter % 24 == 0) {
+							this.world.playSound(null, controller.posX, controller.posY, controller.posZ, SoundRegistry.ROPE_PULL, SoundCategory.PLAYERS, 1.5F, 1);
+						}
+
+						this.pullCounter++;
 					}
 				} else if(controller.moveForward < 0) {
+					this.pullCounter = 0;
+
 					this.setCurrentRopeLength(Math.min((float) DEFAULT_ROPE_LENGTH - 0.1F, this.getCurrentRopeLength() + 0.2F));
 					this.isExtending = true;
 				}
-			} else if((Math.abs(controller.moveForward) > 0.05D || Math.abs(controller.moveStrafing) > 0.05D) && !this.onGround) {
-				int count = 0;
+			} else {
+				this.pullCounter = 0;
+				
+				if((Math.abs(controller.moveForward) > 0.05D || Math.abs(controller.moveStrafing) > 0.05D) && !this.onGround) {
+					int count = 0;
 
-				double swingX = 0;
-				double swingZ = 0;
+					double swingX = 0;
+					double swingZ = 0;
 
-				if(controller.moveForward > 0) {
-					swingX += Math.cos(Math.toRadians(controller.rotationYaw + 90));
-					swingZ += Math.sin(Math.toRadians(controller.rotationYaw + 90));
-					count++;
-				}
-				if(controller.moveForward < 0) {
-					swingX += Math.cos(Math.toRadians(controller.rotationYaw - 90));
-					swingZ += Math.sin(Math.toRadians(controller.rotationYaw - 90));
-					count++;
-				}
-				if(controller.moveStrafing > 0) {
-					swingX += Math.cos(Math.toRadians(controller.rotationYaw));
-					swingZ += Math.sin(Math.toRadians(controller.rotationYaw));
-					count++;
-				} 
-				if(controller.moveStrafing < 0){
-					swingX += Math.cos(Math.toRadians(controller.rotationYaw + 180));
-					swingZ += Math.sin(Math.toRadians(controller.rotationYaw + 180));
-					count++;
-				}
-
-				swingX /= count;
-				swingZ /= count;
-
-				double swingStrength = 0.05D;
-
-				this.motionX += swingX * swingStrength;
-				this.motionZ += swingZ * swingStrength;
-
-				int incr = 0;
-				Entity prev = this.getPreviousNode();
-				while(prev instanceof EntityGrapplingHookNode && !((EntityGrapplingHookNode) prev).isAttached()) {
-					if(!prev.onGround) {
-						prev.motionX += swingX * swingStrength / (1 + incr * 2);
-						prev.motionZ += swingZ * swingStrength / (1 + incr * 2);
+					if(controller.moveForward > 0) {
+						swingX += Math.cos(Math.toRadians(controller.rotationYaw + 90));
+						swingZ += Math.sin(Math.toRadians(controller.rotationYaw + 90));
+						count++;
+					}
+					if(controller.moveForward < 0) {
+						swingX += Math.cos(Math.toRadians(controller.rotationYaw - 90));
+						swingZ += Math.sin(Math.toRadians(controller.rotationYaw - 90));
+						count++;
+					}
+					if(controller.moveStrafing > 0) {
+						swingX += Math.cos(Math.toRadians(controller.rotationYaw));
+						swingZ += Math.sin(Math.toRadians(controller.rotationYaw));
+						count++;
+					} 
+					if(controller.moveStrafing < 0){
+						swingX += Math.cos(Math.toRadians(controller.rotationYaw + 180));
+						swingZ += Math.sin(Math.toRadians(controller.rotationYaw + 180));
+						count++;
 					}
 
-					prev = ((EntityGrapplingHookNode) prev).getPreviousNode();
+					swingX /= count;
+					swingZ /= count;
 
-					incr++;
+					double swingStrength = 0.05D;
+
+					this.motionX += swingX * swingStrength;
+					this.motionZ += swingZ * swingStrength;
+
+					int incr = 0;
+					Entity prev = this.getPreviousNode();
+					while(prev instanceof EntityGrapplingHookNode && !((EntityGrapplingHookNode) prev).isAttached()) {
+						if(!prev.onGround) {
+							prev.motionX += swingX * swingStrength / (1 + incr * 2);
+							prev.motionZ += swingZ * swingStrength / (1 + incr * 2);
+						}
+
+						prev = ((EntityGrapplingHookNode) prev).getPreviousNode();
+
+						incr++;
+					}
 				}
 			}
 		}

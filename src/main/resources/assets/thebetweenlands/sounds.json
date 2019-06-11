@@ -831,6 +831,21 @@
       "thebetweenlands:gem_singer_echo"
     ]
   },
+  "rope_throw": {
+    "sounds": [
+      "thebetweenlands:rope_throw"
+    ]
+  },
+  "rope_pull": {
+    "sounds": [
+      "thebetweenlands:rope_pull"
+    ]
+  },
+  "rope_swing": {
+    "sounds": [
+      "thebetweenlands:rope_swing"
+    ]
+  },
   "rejected": {
     "sounds": [
       "thebetweenlands:rejected"

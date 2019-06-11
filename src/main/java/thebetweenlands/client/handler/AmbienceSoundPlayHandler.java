@@ -16,9 +16,7 @@ public class AmbienceSoundPlayHandler {
 	@SubscribeEvent
 	public static void onPlayerCltTick(PlayerTickEvent event) {
 		if(event.phase == Phase.START && event.side == Side.CLIENT && event.player == TheBetweenlands.proxy.getClientPlayer()) {
-			if(event.player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
-				AmbienceManager.INSTANCE.update();
-			}
+			AmbienceManager.INSTANCE.update();
 		}
 	}
 

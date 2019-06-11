@@ -6,10 +6,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class ItemGrapplingHook extends Item {
 	public ItemGrapplingHook() {
@@ -61,6 +63,8 @@ public class ItemGrapplingHook extends Item {
 				mountNode.setNextNode(player);
 	
 				world.spawnEntity(mountNode);
+				
+				world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.ROPE_THROW, SoundCategory.PLAYERS, 1.5F, 0.8F + world.rand.nextFloat() * 0.3F);
 			}
 		}
 

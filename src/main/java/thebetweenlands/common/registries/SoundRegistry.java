@@ -181,6 +181,9 @@ public class SoundRegistry {
     public static final BLSoundEvent VOODOO_DOLL = reg("voodoo_doll");
     public static final BLSoundEvent GEM_SINGER = reg("gem_singer");
     public static final BLSoundEvent GEM_SINGER_ECHO = reg("gem_singer_echo");
+    public static final BLSoundEvent ROPE_THROW = reg("rope_throw");
+    public static final BLSoundEvent ROPE_PULL = reg("rope_pull");
+    public static final BLSoundEvent ROPE_SWING = reg("rope_swing");
     // Blocks
     public static final BLSoundEvent GRIND = reg("grind");
     public static final BLSoundEvent INFUSER_FINISHED = reg("infuser_finished");
