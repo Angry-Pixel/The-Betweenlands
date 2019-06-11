@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityDecayPitChainOuter;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityRootGrabber;
@@ -153,7 +154,7 @@ public class EntityRegistry {
 		registerEntity(EntityCryptCrawler.class, "crypt_crawler", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityBarrishee.class, "barrishee", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityAshSprite.class, "ash_sprite", 0x0B3B0B, 0xDBA901);
-
+		registerEntity(EntityDecayPitChainOuter.class, "decay_pit_chain_outer");
 
 	}
 
