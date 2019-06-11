@@ -9,7 +9,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -24,6 +23,7 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -36,6 +36,8 @@ public class EntityGrapplingHookNode extends Entity {
 
 	public static final double DEFAULT_ROPE_LENGTH = 2.0D;
 	public static final double ROPE_LENGTH_MAX = 12.0D;
+
+	public static final int MAX_ROPE_NODES = 32;
 
 	private UUID nextNodeUUID;
 	private UUID prevNodeUUID;
@@ -55,9 +57,21 @@ public class EntityGrapplingHookNode extends Entity {
 
 	protected int pullCounter = 0;
 
+	/**
+	 * Number of nodes the grappling hook rope has.
+	 * Only updated on mount node!
+	 */
+	protected int nodeCount = 0;
+
 	public EntityGrapplingHookNode(World world) {
 		super(world);
 		this.setSize(0.1F, 0.1F);
+	}
+
+	public EntityGrapplingHookNode(World world, int nodeCount) {
+		super(world);
+		this.setSize(0.1F, 0.1F);
+		this.nodeCount = nodeCount;
 	}
 
 	@Override
@@ -74,6 +88,12 @@ public class EntityGrapplingHookNode extends Entity {
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
 		this.setNextNodeUUID(nbt.hasUniqueId("nextNodeUUID") ? nbt.getUniqueId("nextNodeUUID") : null);
 		this.setPreviousNodeUUID(nbt.hasUniqueId("previousNodeUUID") ? nbt.getUniqueId("previousNodeUUID") : null);
+		if(nbt.hasKey("ropeLength", Constants.NBT.TAG_FLOAT)) {
+			this.setCurrentRopeLength(nbt.getFloat("ropeLength"));
+		} else {
+			this.setCurrentRopeLength((float) DEFAULT_ROPE_LENGTH);
+		}
+		this.nodeCount = nbt.getInteger("nodeCount");
 	}
 
 	@Override
@@ -84,6 +104,8 @@ public class EntityGrapplingHookNode extends Entity {
 		if(this.getPreviousNodeUUID() != null) {
 			nbt.setUniqueId("previousNodeUUID", this.getPreviousNodeUUID());
 		}
+		nbt.setFloat("ropeLength", this.getCurrentRopeLength());
+		nbt.setInteger("nodeCount", this.nodeCount);
 	}
 
 	@Override
@@ -152,34 +174,52 @@ public class EntityGrapplingHookNode extends Entity {
 		if(!this.world.isRemote) {
 			if(nextNode != null) {
 
-				//TODO Add extension limit, should be same number as entities spawned by item
-				if(nextNode instanceof EntityGrapplingHookNode && ((EntityGrapplingHookNode) nextNode).isMountNode() && ((EntityGrapplingHookNode) nextNode).isExtending && nextNode.posY < this.posY && nextNode.getDistance(this.posX, this.posY, this.posZ) > DEFAULT_ROPE_LENGTH - 0.2D) {
-					Vec3d connection = this.getConnectionToNext();
-					if(connection != null) {
-						Vec3d newPos = nextNode.getPositionVector().add(connection.scale(-0.5D)).add(0, 0.1D, 0);
+				if(nextNode instanceof EntityGrapplingHookNode && ((EntityGrapplingHookNode) nextNode).isMountNode()) {
+					EntityGrapplingHookNode mountNode = ((EntityGrapplingHookNode) nextNode);
 
-						RayTraceResult result = this.world.rayTraceBlocks(nextNode.getPositionVector().add(0, nextNode.height, 0), newPos, false);
+					if(mountNode.isExtending && nextNode.posY < this.posY && nextNode.getDistance(this.posX, this.posY, this.posZ) > DEFAULT_ROPE_LENGTH - 0.2D) {
+						if(mountNode.nodeCount < MAX_ROPE_NODES) {
+							Vec3d connection = this.getConnectionToNext();
+							if(connection != null) {
+								Vec3d newPos = mountNode.getPositionVector().add(connection.scale(-0.5D)).add(0, 0.1D, 0);
 
-						if(result != null && result.typeOfHit == Type.BLOCK && result.hitVec.squareDistanceTo(nextNode.getPositionVector().add(0, nextNode.height, 0)) < newPos.squareDistanceTo(nextNode.getPositionVector().add(0, nextNode.height, 0))) {
-							newPos = result.hitVec.add(result.hitVec.subtract(this.getPositionVector().add(0, this.height, 0)).normalize().scale(0.1D));
-						}
+								RayTraceResult result = this.world.rayTraceBlocks(mountNode.getPositionVector().add(0, mountNode.height, 0), newPos, false);
 
-						EntityGrapplingHookNode newNode = this.extendRope(nextNode, newPos.x, newPos.y, newPos.z);
+								if(result != null && result.typeOfHit == Type.BLOCK && result.hitVec.squareDistanceTo(mountNode.getPositionVector().add(0, mountNode.height, 0)) < newPos.squareDistanceTo(mountNode.getPositionVector().add(0, mountNode.height, 0))) {
+									newPos = result.hitVec.add(result.hitVec.subtract(this.getPositionVector().add(0, this.height, 0)).normalize().scale(0.1D));
+								}
 
-						newNode.setCurrentRopeLength((float) connection.length() / 4);
-						this.setCurrentRopeLength((float) connection.length() / 4);
+								EntityGrapplingHookNode newNode = this.extendRope(mountNode, newPos.x, newPos.y, newPos.z);
 
-						if(((EntityGrapplingHookNode) nextNode).getCurrentRopeLength() < DEFAULT_ROPE_LENGTH - 0.05F) {
-							//TODO This should only happen when reeling in
-							((EntityGrapplingHookNode) nextNode).setCurrentRopeLength(0.05F);
+								if(newNode != null) {
+									newNode.setCurrentRopeLength((float) connection.length() / 4);
+									this.setCurrentRopeLength((float) connection.length() / 4);
+
+									if(mountNode.getCurrentRopeLength() < DEFAULT_ROPE_LENGTH - 0.05F) {
+										//TODO This should only happen when reeling in
+										mountNode.setCurrentRopeLength(0.05F);
+									}
+								}
+							}
+						} else {
+							Entity controller = mountNode.getControllingPassenger();
+							if(controller instanceof EntityPlayer) {
+								((EntityPlayer) controller).sendStatusMessage(new TextComponentTranslation("chat.grappling_hook.max_length"), true);
+							}
 						}
 					}
 				}
 
 				if(nextNode.getDistance(this.posX, this.posY + this.height - nextNode.height, this.posZ) > ROPE_LENGTH_MAX) {
-					if(nextNode instanceof EntityPlayer) {
-						((EntityPlayer) nextNode).sendStatusMessage(new TextComponentTranslation("chat.grappling_hook.disconnected"), true);
+					EntityGrapplingHookNode mountNode = this.getMountNode();
+					if(mountNode != null) {
+						Entity controller = mountNode.getControllingPassenger();
+
+						if(controller instanceof EntityPlayer) {
+							((EntityPlayer) controller).sendStatusMessage(new TextComponentTranslation("chat.grappling_hook.disconnected"), true);
+						}
 					}
+
 					this.setNextNode(null);
 				}
 			}
@@ -206,7 +246,7 @@ public class EntityGrapplingHookNode extends Entity {
 
 			//Check if it is now attached after move and should play sound
 			if(this.isAttached()) {
-				this.playSound(SoundEvents.BLOCK_STONE_PLACE, 0.8F, 0.8F + this.world.rand.nextFloat() * 0.4F);
+				this.playSound(SoundRegistry.ROPE_GRAB, 0.6F, 0.8F + this.world.rand.nextFloat() * 0.3F);
 			}
 		}
 
@@ -322,38 +362,54 @@ public class EntityGrapplingHookNode extends Entity {
 		if(!this.world.isRemote) {
 			if(controller.isJumping) {
 				if(controller.moveForward > 0) {
-					Entity prevNode = this.getPreviousNode();
-
-					if(prevNode instanceof EntityGrapplingHookNode) {
-						Vec3d dir = prevNode.getPositionVector().subtract(this.getPositionVector()).normalize();
-
-						float prevStepHeight = this.stepHeight;
-						this.stepHeight = 1.25f;
-
-						//On ground required for step to work
-						this.onGround = true;
-						this.move(MoverType.SELF, dir.x * 0.25D, dir.y * 0.25D, dir.z * 0.52D);
-
-						if(this.collidedHorizontally && dir.y > 0) {
+					boolean canReelIn = false;
+					
+					//Only let player reel in once at least one node has attached.
+					//To prevent the grappling hook from being abused for flight.
+					Entity checkRopeNode = this.getPreviousNode();
+					while(checkRopeNode instanceof EntityGrapplingHookNode) {
+						if(((EntityGrapplingHookNode) checkRopeNode).isAttached()) {
+							canReelIn = true;
+							break;
+						}
+						
+						checkRopeNode = ((EntityGrapplingHookNode) checkRopeNode).getPreviousNode();
+					}
+					
+					if(canReelIn) {
+						Entity prevNode = this.getPreviousNode();
+	
+						if(prevNode instanceof EntityGrapplingHookNode) {
+							Vec3d dir = prevNode.getPositionVector().subtract(this.getPositionVector()).normalize();
+	
+							float prevStepHeight = this.stepHeight;
+							this.stepHeight = 1.25f;
+	
+							//On ground required for step to work
 							this.onGround = true;
-							this.move(MoverType.SELF, 0, 0.2D, 0);
-							this.climbing = true;
+							this.move(MoverType.SELF, dir.x * 0.25D, dir.y * 0.25D, dir.z * 0.52D);
+	
+							if(this.collidedHorizontally && dir.y > 0) {
+								this.onGround = true;
+								this.move(MoverType.SELF, 0, 0.2D, 0);
+								this.climbing = true;
+							}
+	
+							this.stepHeight = prevStepHeight;
+	
+							if(prevNode.getEntityBoundingBox().intersects(this.getEntityBoundingBox())) {
+								((EntityGrapplingHookNode) prevNode).removeNode(this);
+								this.setCurrentRopeLength((float) DEFAULT_ROPE_LENGTH - 0.1F);
+							} else {
+								this.setCurrentRopeLength(Math.min((float) DEFAULT_ROPE_LENGTH - 0.1F, (float) prevNode.getDistance(this.posX, this.posY + this.height - prevNode.height, this.posZ)));
+							}
+	
+							if(this.pullCounter % 24 == 0) {
+								this.world.playSound(null, controller.posX, controller.posY, controller.posZ, SoundRegistry.ROPE_PULL, SoundCategory.PLAYERS, 1.5F, 1);
+							}
+	
+							this.pullCounter++;
 						}
-
-						this.stepHeight = prevStepHeight;
-
-						if(prevNode.getEntityBoundingBox().intersects(this.getEntityBoundingBox())) {
-							((EntityGrapplingHookNode) prevNode).removeNode(this);
-							this.setCurrentRopeLength((float) DEFAULT_ROPE_LENGTH - 0.1F);
-						} else {
-							this.setCurrentRopeLength(Math.min((float) DEFAULT_ROPE_LENGTH - 0.1F, (float) prevNode.getDistance(this.posX, this.posY + this.height - prevNode.height, this.posZ)));
-						}
-
-						if(this.pullCounter % 24 == 0) {
-							this.world.playSound(null, controller.posX, controller.posY, controller.posZ, SoundRegistry.ROPE_PULL, SoundCategory.PLAYERS, 1.5F, 1);
-						}
-
-						this.pullCounter++;
 					}
 				} else if(controller.moveForward < 0) {
 					this.pullCounter = 0;
@@ -363,7 +419,7 @@ public class EntityGrapplingHookNode extends Entity {
 				}
 			} else {
 				this.pullCounter = 0;
-				
+
 				if((Math.abs(controller.moveForward) > 0.05D || Math.abs(controller.moveStrafing) > 0.05D) && !this.onGround) {
 					int count = 0;
 
@@ -420,27 +476,30 @@ public class EntityGrapplingHookNode extends Entity {
 		if(!this.world.isRemote && prevNode != null) {
 			double velocity = Math.sqrt((this.posX-this.prevPosX)*(this.posX-this.prevPosX) + (this.posY-this.prevPosY)*(this.posY-this.prevPosY) + (this.posZ-this.prevPosZ)*(this.posZ-this.prevPosZ));
 
-			Entity user = this.getUser();
+			Entity mountNode = this.getMountNode();
+			if(mountNode != null) {
+				Entity user = mountNode.getControllingPassenger();
 
-			if(velocity > 0.25D) {
-				List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(this.posX, this.posY, this.posZ, prevNode.posX, prevNode.posY, prevNode.posZ));
+				if(velocity > 0.25D) {
+					List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(this.posX, this.posY, this.posZ, prevNode.posX, prevNode.posY, prevNode.posZ));
 
-				for(EntityLivingBase entity : entities) {
-					if(entity != user) {
-						RayTraceResult intersect = entity.getEntityBoundingBox().calculateIntercept(new Vec3d(this.posX, this.posY, this.posZ), new Vec3d(prevNode.posX, prevNode.posY, prevNode.posZ));
+					for(EntityLivingBase entity : entities) {
+						if(entity != user) {
+							RayTraceResult intersect = entity.getEntityBoundingBox().calculateIntercept(new Vec3d(this.posX, this.posY, this.posZ), new Vec3d(prevNode.posX, prevNode.posY, prevNode.posZ));
 
-						if(intersect != null) {
-							DamageSource source;
+							if(intersect != null) {
+								DamageSource source;
 
-							if(user instanceof EntityPlayer) {
-								source = new EntityDamageSourceIndirect("player", this, user);
-							} else if(user != null) {
-								source = new EntityDamageSourceIndirect("mob", this, user);
-							} else {
-								source = new EntityDamageSource("mob", this);
+								if(user instanceof EntityPlayer) {
+									source = new EntityDamageSourceIndirect("player", this, user);
+								} else if(user != null) {
+									source = new EntityDamageSourceIndirect("mob", this, user);
+								} else {
+									source = new EntityDamageSource("mob", this);
+								}
+
+								entity.attackEntityFrom(source, 3.0F + (float) Math.min((velocity - 0.25D) * 1.5D, 4));
 							}
-
-							entity.attackEntityFrom(source, 3.0F + (float) Math.min((velocity - 0.25D) * 1.5D, 4));
 						}
 					}
 				}
@@ -489,18 +548,6 @@ public class EntityGrapplingHookNode extends Entity {
 		//No fall damage to node or rider
 	}
 
-	public void removeNode(Entity nextConnectionNode) {
-		Entity prevNode = this.getPreviousNodeByUUID();
-		if(prevNode != null && prevNode instanceof EntityGrapplingHookNode) {
-			((EntityGrapplingHookNode)prevNode).setNextNode(nextConnectionNode);
-
-			if(nextConnectionNode instanceof EntityGrapplingHookNode) {
-				((EntityGrapplingHookNode) nextConnectionNode).setPreviousNode(prevNode);
-			}
-		}
-		this.onKillCommand();
-	}
-
 	public boolean isAttached() {
 		if(this.world.isRemote) {
 			return this.getDataManager().get(DW_ATTACHED);
@@ -509,20 +556,48 @@ public class EntityGrapplingHookNode extends Entity {
 	}
 
 	public EntityGrapplingHookNode extendRope(Entity entity, double x, double y, double z) {
-		EntityGrapplingHookNode ropeNode = new EntityGrapplingHookNode(this.world);
-		ropeNode.setLocationAndAngles(x, y, z, 0, 0);
+		EntityGrapplingHookNode mountNode = this.getMountNode();
 
-		ropeNode.setPreviousNode(this);
-		this.setNextNode(ropeNode);
+		if(mountNode != null && mountNode.nodeCount < MAX_ROPE_NODES) {
+			EntityGrapplingHookNode ropeNode = new EntityGrapplingHookNode(this.world);
+			ropeNode.setLocationAndAngles(x, y, z, 0, 0);
 
-		ropeNode.setNextNode(entity);
+			ropeNode.setPreviousNode(this);
+			this.setNextNode(ropeNode);
 
-		if(entity instanceof EntityGrapplingHookNode) {
-			((EntityGrapplingHookNode) entity).setPreviousNode(ropeNode);
+			ropeNode.setNextNode(entity);
+
+			if(entity instanceof EntityGrapplingHookNode) {
+				((EntityGrapplingHookNode) entity).setPreviousNode(ropeNode);
+			}
+
+			this.world.spawnEntity(ropeNode);
+
+			mountNode.nodeCount++;
+
+			return ropeNode;
 		}
 
-		this.world.spawnEntity(ropeNode);
-		return ropeNode;
+		return null;
+	}
+
+	public void removeNode(Entity nextConnectionNode) {
+		Entity prevNode = this.getPreviousNodeByUUID();
+
+		if(prevNode != null && prevNode instanceof EntityGrapplingHookNode) {
+			((EntityGrapplingHookNode)prevNode).setNextNode(nextConnectionNode);
+
+			if(nextConnectionNode instanceof EntityGrapplingHookNode) {
+				((EntityGrapplingHookNode) nextConnectionNode).setPreviousNode(prevNode);
+			}
+		}
+
+		EntityGrapplingHookNode mountNode = this.getMountNode();
+		if(mountNode != null) {
+			mountNode.nodeCount = Math.max(0, mountNode.nodeCount - 1);
+		}
+
+		this.onKillCommand();
 	}
 
 	public Vec3d getConnectionToNext() {
@@ -650,13 +725,13 @@ public class EntityGrapplingHookNode extends Entity {
 	}
 
 	//TODO Cache this somehow?
-	public Entity getUser() {
+	public EntityGrapplingHookNode getMountNode() {
 		Entity node = this;
 		while(node instanceof EntityGrapplingHookNode) {
 			EntityGrapplingHookNode hookNode = (EntityGrapplingHookNode) node;
 
 			if(hookNode.isMountNode()) {
-				return hookNode.getControllingPassenger();
+				return hookNode;
 			}
 
 			node = hookNode.getNextNode();

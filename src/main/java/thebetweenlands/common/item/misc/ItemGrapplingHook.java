@@ -24,15 +24,15 @@ public class ItemGrapplingHook extends Item {
 			if(!player.isRiding()) {
 				Vec3d dir = player.getLookVec();
 	
-				EntityGrapplingHookNode mountNode = new EntityGrapplingHookNode(world);
+				int nodes = 16;
+				
+				EntityGrapplingHookNode mountNode = new EntityGrapplingHookNode(world, nodes + 1);
 				mountNode.setLocationAndAngles(player.posX - player.width / 2, player.posY, player.posZ - player.width / 2, 0, 0);
 				mountNode.motionX = player.motionX;
 				mountNode.motionY = player.motionY;
 				mountNode.motionZ = player.motionZ;
 				
 				player.startRiding(mountNode);
-				
-				int nodes = 16;
 				
 				EntityGrapplingHookNode prevNode = null;
 				

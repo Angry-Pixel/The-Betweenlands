@@ -1041,6 +1041,9 @@ chat.waystone.obstructed=Menhir is obstructed
 
 chat.dungeon_door_runes.locked=Dungeon door code set!
 
+chat.grappling_hook.max_length=Maximum rope length reached!
+chat.grappling_hook.disconnected=The grappling hook was ripped!
+
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
 

@@ -846,6 +846,11 @@
       "thebetweenlands:rope_swing"
     ]
   },
+  "rope_grab": {
+    "sounds": [
+      "thebetweenlands:rope_grab"
+    ]
+  },
   "rejected": {
     "sounds": [
       "thebetweenlands:rejected"
