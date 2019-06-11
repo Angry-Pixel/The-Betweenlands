@@ -146,38 +146,37 @@ public class ModelDecayPitChain extends ModelBase {
         setRotateAngle(fancy_topchain_back_left, 0.0F, 0.091106186954104F, 0.0F);
     }
 
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        fancy_bottomchain_front_left.render(f5);
-        fancy_topchain_back_right.render(f5);
-        chain_top_cornerpiece_bottomback.render(f5);
-        chain_mid_rightpiece.render(f5);
-        chain_top_cornerpiece_bottomfront.render(f5);
-        fancy_bottomchain_back_left.render(f5);
-        chain_top_backpiece.render(f5);
-        chain_mid_cornerpiece_topleft.render(f5);
-        chain_mid_cornerpiece_topright.render(f5);
-        chain_mid_cornerpiece_bottomleft.render(f5);
-        chain_top_bottompiece.render(f5);
-        fancy_topchain_front_right.render(f5);
-        chain_bottom_cornerpiece_topfront.render(f5);
-        fancy_midchain_left_front.render(f5);
-        fancy_bottomchain_back_right.render(f5);
-        chain_mid_cornerpiece_bottomright.render(f5);
-        chain_bottom_cornerpiece_topback.render(f5);
-        chain_mid_leftpiece.render(f5);
-        chain_mid_bottompiece.render(f5);
-        fancy_topchain_front_left.render(f5);
-        chain_bottom_frontpiece.render(f5);
-        fancy_bottomchain_front_right.render(f5);
-        chain_bottom_backpiece.render(f5);
-        chain_bottom_toppiece.render(f5);
-        fancy_midchain_left_back.render(f5);
-        fancy_midchain_right_back.render(f5);
-        chain_top_frontpiece.render(f5);
-        fancy_midchain_right_front.render(f5);
-        chain_mid_toppiece.render(f5);
-        fancy_topchain_back_left.render(f5);
+    public void render(Entity entity, float scale) { 
+        fancy_bottomchain_front_left.render(scale);
+        fancy_topchain_back_right.render(scale);
+        chain_top_cornerpiece_bottomback.render(scale);
+        chain_mid_rightpiece.render(scale);
+        chain_top_cornerpiece_bottomfront.render(scale);
+        fancy_bottomchain_back_left.render(scale);
+        chain_top_backpiece.render(scale);
+        chain_mid_cornerpiece_topleft.render(scale);
+        chain_mid_cornerpiece_topright.render(scale);
+        chain_mid_cornerpiece_bottomleft.render(scale);
+        chain_top_bottompiece.render(scale);
+        fancy_topchain_front_right.render(scale);
+        chain_bottom_cornerpiece_topfront.render(scale);
+        fancy_midchain_left_front.render(scale);
+        fancy_bottomchain_back_right.render(scale);
+        chain_mid_cornerpiece_bottomright.render(scale);
+        chain_bottom_cornerpiece_topback.render(scale);
+        chain_mid_leftpiece.render(scale);
+        chain_mid_bottompiece.render(scale);
+        fancy_topchain_front_left.render(scale);
+        chain_bottom_frontpiece.render(scale);
+        fancy_bottomchain_front_right.render(scale);
+        chain_bottom_backpiece.render(scale);
+        chain_bottom_toppiece.render(scale);
+        fancy_midchain_left_back.render(scale);
+        fancy_midchain_right_back.render(scale);
+        chain_top_frontpiece.render(scale);
+        fancy_midchain_right_front.render(scale);
+        chain_mid_toppiece.render(scale);
+        fancy_topchain_back_left.render(scale);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
