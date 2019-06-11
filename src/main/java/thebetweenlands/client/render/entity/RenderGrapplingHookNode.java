@@ -17,16 +17,23 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.client.render.model.entity.ModelRopeNode;
 import thebetweenlands.client.render.model.entity.ModelShambler;
 import thebetweenlands.client.render.particle.entity.ParticleBeam;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.util.LightingUtil;
+import thebetweenlands.util.RotationMatrix;
 
 public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 	private Frustum frustum;
@@ -76,9 +83,9 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableLighting();
 
-		double camPosX = this.interpolate(entity.lastTickPosX, entity.posX, partialTicks) - x;
-		double camPosY = this.interpolate(entity.lastTickPosY, entity.posY, partialTicks) - y;
-		double camPosZ = this.interpolate(entity.lastTickPosZ, entity.posZ, partialTicks) - z;
+		double camPosX = interpolate(entity.lastTickPosX, entity.posX, partialTicks) - x;
+		double camPosY = interpolate(entity.lastTickPosY, entity.posY, partialTicks) - y;
+		double camPosZ = interpolate(entity.lastTickPosZ, entity.posZ, partialTicks) - z;
 
 		this.frustum.setPosition(camPosX, camPosY, camPosZ);
 
@@ -88,9 +95,9 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 			if(!this.renderManager.getEntityRenderObject(prevNode).shouldRender(prevNode, this.frustum, camPosX, camPosY, camPosZ)) {
 				//Previous node not rendered, render rope
 				GlStateManager.pushMatrix();
-				double renderOffsetX = this.interpolate(prevNode.lastTickPosX - entity.lastTickPosX, prevNode.posX - entity.posX, partialTicks);
-				double renderOffsetY = this.interpolate(prevNode.lastTickPosY - entity.lastTickPosY, prevNode.posY - entity.posY, partialTicks);
-				double renderOffsetZ = this.interpolate(prevNode.lastTickPosZ - entity.lastTickPosZ, prevNode.posZ - entity.posZ, partialTicks);
+				double renderOffsetX = interpolate(prevNode.lastTickPosX - entity.lastTickPosX, prevNode.posX - entity.posX, partialTicks);
+				double renderOffsetY = interpolate(prevNode.lastTickPosY - entity.lastTickPosY, prevNode.posY - entity.posY, partialTicks);
+				double renderOffsetZ = interpolate(prevNode.lastTickPosZ - entity.lastTickPosZ, prevNode.posZ - entity.posZ, partialTicks);
 				GlStateManager.translate(renderOffsetX, renderOffsetY, renderOffsetZ);
 				this.renderConnection(prevNode, entity, tessellator, buffer, x, y, z, partialTicks);
 				GlStateManager.popMatrix();
@@ -102,9 +109,9 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 		if(nextNode instanceof EntityGrapplingHookNode) {
 			this.renderConnection(entity, nextNode, tessellator, buffer, x, y, z, partialTicks);
 
-			double dx = this.interpolate(entity.lastTickPosX, entity.posX, partialTicks) - this.interpolate(nextNode.lastTickPosX, nextNode.posX, partialTicks);
-			double dy = this.interpolate(entity.lastTickPosY, entity.posY, partialTicks) - this.interpolate(nextNode.lastTickPosY, nextNode.posY, partialTicks);
-			double dz = this.interpolate(entity.lastTickPosZ, entity.posZ, partialTicks) - this.interpolate(nextNode.lastTickPosZ, nextNode.posZ, partialTicks);
+			double dx = interpolate(entity.lastTickPosX, entity.posX, partialTicks) - interpolate(nextNode.lastTickPosX, nextNode.posX, partialTicks);
+			double dy = interpolate(entity.lastTickPosY, entity.posY, partialTicks) - interpolate(nextNode.lastTickPosY, nextNode.posY, partialTicks);
+			double dz = interpolate(entity.lastTickPosZ, entity.posZ, partialTicks) - interpolate(nextNode.lastTickPosZ, nextNode.posZ, partialTicks);
 
 			GlStateManager.pushMatrix();
 
@@ -181,33 +188,78 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 		GlStateManager.popMatrix();
 	}
 
-	protected double interpolate(double prev, double now, double partialTicks) {
+	protected static double interpolate(double prev, double now, double partialTicks) {
 		return prev + (now - prev) * partialTicks;
 	}
 
 	protected void renderConnection(Entity node1, Entity node2, Tessellator tessellator, BufferBuilder buffer, double x, double y, double z, float partialTicks) {
 		if(node2 != null) {
-			double camPosX = this.interpolate(node1.prevPosX - x, node1.posX - x, partialTicks);
-			double camPosY = this.interpolate(node1.prevPosY - y, node1.posY - y, partialTicks);
-			double camPosZ = this.interpolate(node1.prevPosZ - z, node1.posZ - z, partialTicks);
+			double camPosX = interpolate(node1.prevPosX - x, node1.posX - x, partialTicks);
+			double camPosY = interpolate(node1.prevPosY - y, node1.posY - y, partialTicks);
+			double camPosZ = interpolate(node1.prevPosZ - z, node1.posZ - z, partialTicks);
 
 			double startX = x;
 			double startY = y;
 			double startZ = z;
-			double endX = this.interpolate(node2.prevPosX - camPosX, node2.posX - camPosX, partialTicks);
-			double endY = this.interpolate(node2.prevPosY - camPosY, node2.posY - camPosY, partialTicks);
-			double endZ = this.interpolate(node2.prevPosZ - camPosZ, node2.posZ - camPosZ, partialTicks);
+			double endX = interpolate(node2.prevPosX - camPosX, node2.posX - camPosX, partialTicks);
+			double endY = interpolate(node2.prevPosY - camPosY, node2.posY - camPosY, partialTicks);
+			double endZ = interpolate(node2.prevPosZ - camPosZ, node2.posZ - camPosZ, partialTicks);
 			if(node2.getControllingPassenger() != null) {
 				Entity controller = node2.getControllingPassenger();
 
-				double yaw = this.interpolate(controller.prevRotationYaw, controller.rotationYaw, partialTicks);
+				double yaw;
+				if(controller instanceof EntityLivingBase) {
+					yaw = interpolate(((EntityLivingBase) controller).prevRenderYawOffset, ((EntityLivingBase) controller).renderYawOffset, partialTicks);
+				} else {
+					yaw = interpolate(controller.prevRotationYaw, controller.rotationYaw, partialTicks);
+				}
 
-				double rotX = -Math.cos(Math.toRadians(-yaw)) * 0.25D;
-				double rotZ = Math.sin(Math.toRadians(-yaw)) * 0.25D;
+				double rotX = -Math.cos(Math.toRadians(-yaw)) * 0.6D;
+				double rotZ = Math.sin(Math.toRadians(-yaw)) * 0.6D;
 
-				endX = this.interpolate(controller.lastTickPosX - camPosX, controller.posX - camPosX, partialTicks) + rotX;
-				endY = this.interpolate(controller.lastTickPosY - camPosY, controller.posY - camPosY, partialTicks) + controller.height / 2;
-				endZ = this.interpolate(controller.lastTickPosZ - camPosZ, controller.posZ - camPosZ, partialTicks) + rotZ;
+				rotX += -Math.cos(Math.toRadians(-yaw + 90)) * 0.4D;
+				rotZ += Math.sin(Math.toRadians(-yaw + 90)) * 0.4D;
+				
+				Vec3d offset = new Vec3d(rotX, 1.1D + (controller.getHeldEquipment().iterator().hasNext() && !controller.getHeldEquipment().iterator().next().isEmpty() ? 0.2D : 0), rotZ);
+				
+				//Below is the same as this, and as the rotation in onPlayerRenderPre
+				/*GlStateManager.rotate(-bodyYaw, 0, 1, 0);
+				GlStateManager.translate(0.6D, 0, -0.4D);
+				GlStateManager.rotate(bodyYaw, 0, 1, 0);*/
+				/*GlStateManager.rotate(yaw, 0, 1, 0);
+				GlStateManager.rotate(pitch, 0, 0, 1);
+				GlStateManager.rotate(yaw, 0, -1, 0);*/
+				
+				double dx = (interpolate(node1.lastTickPosX, node1.posX, partialTicks) - interpolate(node2.lastTickPosX, node2.posX, partialTicks));
+				double dy = (interpolate(node1.lastTickPosY, node1.posY, partialTicks) - interpolate(node2.lastTickPosY, node2.posY, partialTicks));
+				double dz = (interpolate(node1.lastTickPosZ, node1.posZ, partialTicks) - interpolate(node2.lastTickPosZ, node2.posZ, partialTicks));
+	
+				float rotYaw = -(float)Math.toDegrees(Math.atan2(dz, dx));
+				float rotPitch = (float)Math.toDegrees(Math.atan2(Math.sqrt(dx * dx + dz * dz), -dy)) - 180;
+				
+				float pitchMin = -30.0F;
+				float pitchMax = 30.0F;
+				
+				float t = (rotPitch - pitchMin) / (pitchMax - pitchMin);
+				rotPitch = (pitchMin + (pitchMax - pitchMin) * (1.0F / (1.0F + (float)Math.pow(200.0F, 0.5F - t))));
+				
+				RotationMatrix matrix = new RotationMatrix();
+				
+				matrix.setRotations(0, -(float)Math.toRadians(yaw), 0);
+				offset = offset.add(matrix.transformVec(new Vec3d(0.6D, 0, -0.4D), Vec3d.ZERO));
+				
+				matrix.setRotations(0, -(float)Math.toRadians(rotYaw), 0);
+				offset = matrix.transformVec(offset, Vec3d.ZERO);
+				
+				matrix.setRotations(0, 0, (float)Math.toRadians(rotPitch));
+				offset = matrix.transformVec(offset, Vec3d.ZERO);
+				
+				matrix.setRotations(0, (float)Math.toRadians(rotYaw), 0);
+				offset = matrix.transformVec(offset, Vec3d.ZERO);
+				
+				endX = interpolate(controller.lastTickPosX - camPosX, controller.posX - camPosX, partialTicks) + offset.x;
+				endY = interpolate(controller.lastTickPosY - camPosY, controller.posY - camPosY, partialTicks) + offset.y;
+				endZ = interpolate(controller.lastTickPosZ - camPosZ, controller.posZ - camPosZ, partialTicks) + offset.z;
 			}
 
 			double diffX = (double)((float)(endX - startX));
@@ -236,5 +288,54 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 	@Override
 	protected ResourceLocation getEntityTexture(EntityGrapplingHookNode entity) {
 		return TEXTURE_ROPE;
+	}
+	
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onPlayerRenderPre(RenderPlayerEvent.Pre event) {
+		GlStateManager.pushMatrix();
+		
+		EntityPlayer player = event.getEntityPlayer();
+		
+		Entity ridingEntity = player.getRidingEntity();
+		
+		if(ridingEntity instanceof EntityGrapplingHookNode) {
+			EntityGrapplingHookNode node = (EntityGrapplingHookNode) ridingEntity;
+			Entity prevNode = node.getPreviousNode();
+			
+			if(prevNode != null) {
+				float partialTicks = event.getPartialRenderTick();
+				
+				double dx = (interpolate(prevNode.lastTickPosX, prevNode.posX, partialTicks) - interpolate(node.lastTickPosX, node.posX, partialTicks));
+				double dy = (interpolate(prevNode.lastTickPosY, prevNode.posY, partialTicks) - interpolate(node.lastTickPosY, node.posY, partialTicks));
+				double dz = (interpolate(prevNode.lastTickPosZ, prevNode.posZ, partialTicks) - interpolate(node.lastTickPosZ, node.posZ, partialTicks));
+	
+				float yaw = -(float)Math.toDegrees(Math.atan2(dz, dx));
+				float pitch = (float)Math.toDegrees(Math.atan2(Math.sqrt(dx * dx + dz * dz), -dy)) - 180;
+				
+				float pitchMin = -30.0F;
+				float pitchMax = 30.0F;
+				
+				float t = (pitch - pitchMin) / (pitchMax - pitchMin);
+				pitch = (pitchMin + (pitchMax - pitchMin) * (1.0F / (1.0F + (float)Math.pow(200.0F, 0.5F - t))));
+				
+				GlStateManager.rotate(yaw, 0, 1, 0);
+				GlStateManager.rotate(pitch, 0, 0, 1);
+				GlStateManager.rotate(-yaw, 0, 1, 0);
+				
+				float bodyYaw = (float) interpolate(player.prevRenderYawOffset, player.renderYawOffset, partialTicks);
+				
+				GlStateManager.rotate(-bodyYaw, 0, 1, 0);
+				GlStateManager.translate(0.6D, 0, -0.4D);
+				GlStateManager.rotate(bodyYaw, 0, 1, 0);
+				
+				player.swingingHand = EnumHand.MAIN_HAND;
+				player.swingProgress = 0.12f;
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onPlayerRenderPost(RenderPlayerEvent.Post event) {
+		GlStateManager.popMatrix();
 	}
 }
