@@ -13,6 +13,7 @@ import thebetweenlands.client.audio.ambience.list.PresentAmbienceType;
 import thebetweenlands.client.audio.ambience.list.SnowFallAmbienceType;
 import thebetweenlands.client.audio.ambience.list.SpiritTreeAmbienceType;
 import thebetweenlands.client.audio.ambience.list.SurfaceAmbienceType;
+import thebetweenlands.client.audio.ambience.list.SwingingAmbienceType;
 import thebetweenlands.client.audio.ambience.list.WaterAmbienceType;
 import thebetweenlands.common.world.event.EventBloodSky;
 import thebetweenlands.common.world.event.EventSpoopy;
@@ -27,7 +28,8 @@ public class AmbienceRegistry {
 		AmbienceManager.INSTANCE.registerAmbience(new SurfaceAmbienceType());
 		AmbienceManager.INSTANCE.registerAmbience(new CaveAmbienceType());
 		AmbienceManager.INSTANCE.registerAmbience(new WaterAmbienceType());
-
+		AmbienceManager.INSTANCE.registerAmbience(new SwingingAmbienceType());
+		
 		//Locations
 		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, SoundRegistry.AMBIENT_WIGHT_FORTRESS) {
 			@Override
