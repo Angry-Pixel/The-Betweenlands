@@ -22,7 +22,7 @@ public class EntityDecayPitChainOuter extends Entity {
 
 	public EntityDecayPitChainOuter(World world) {
 		super(world);
-		setSize(1F, 1F);
+		setSize(0.625F, 1F);
 	}
 
 	@Override
@@ -40,15 +40,30 @@ public class EntityDecayPitChainOuter extends Entity {
 		animationTicksPrev = animationTicks;
 		if (isMoving())
 			animationTicks++;
+		/*  meh bit janky 
+			if (animationTicksPrev < 16) {
+				if (isHanging()) {
+					if (!isRaising())
+						if (getLength() < 7)
+							setHangingLength(getLength(), (float) animationTicks * 0.003125F);
+
+					if (isRaising())
+						if (getLength() > 1)
+							setHangingLength(getLength(), -(float) animationTicks * 0.003125F);
+
+				}
+			}
+		*/
 		if (animationTicksPrev >= 16) {
 			animationTicks = animationTicksPrev = 0;
 			setMoving(false);
 			if (isHanging()) {
-				if (!isRaising())
+				if (!isRaising()) {
 					if (getLength() < 7) {
 						setLength(getLength() + 1);
 						setPositionAndUpdate(posX, posY - 1D, posZ);
 					}
+				}
 				if (isRaising()) {
 					if (getLength() > 1) {
 						setLength(getLength() - 1);
@@ -56,6 +71,7 @@ public class EntityDecayPitChainOuter extends Entity {
 					}
 				}
 			}
+
 		}
 	}
 
@@ -85,10 +101,19 @@ public class EntityDecayPitChainOuter extends Entity {
 		if (this.height != height) {
 			this.height = height;
 			AxisAlignedBB axisalignedbb = getEntityBoundingBox();
-			setEntityBoundingBox(new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + 1D, axisalignedbb.minY + (double) height, axisalignedbb.minZ + 1D));
+			setEntityBoundingBox(new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + 0.625D, axisalignedbb.minY + (double) height, axisalignedbb.minZ + 0.625D));
 		}
 	}
-
+	
+	/* meh bit janky 
+	protected void setHangingLength(float height, float extended) {
+		if (this.height != height + extended) {
+			this.height = height;
+			AxisAlignedBB axisalignedbb = getEntityBoundingBox();
+			setEntityBoundingBox(axisalignedbb.grow(0, extended, 0).offset(0, -extended, 0));
+		}
+	}
+	*/
 	public void setRaising(boolean raising) {
 		dataManager.set(IS_RAISING, raising);
 	}
