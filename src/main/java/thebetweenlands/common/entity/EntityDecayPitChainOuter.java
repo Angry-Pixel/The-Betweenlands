@@ -181,7 +181,7 @@ public class EntityDecayPitChainOuter extends Entity {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (source instanceof EntityDamageSourceIndirect)
+		if (source instanceof EntityDamageSourceIndirect) // may want to remove this line so it 'dinks' on all damage attempts
 			getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 0.5F, 3F);
 		return false;
 	}
