@@ -187,11 +187,19 @@ public class EntityDecayPitChainOuter extends Entity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
+	protected void readEntityFromNBT(NBTTagCompound nbt) {
+		setLength(nbt.getInteger("length"));
+		setHanging(nbt.getBoolean("hanging"));
+		setRaising(nbt.getBoolean("raising"));
+		setFacing(nbt.getInteger("facing"));
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
+	protected void writeEntityToNBT(NBTTagCompound nbt) {
+		nbt.setInteger("length", getLength());
+		nbt.setBoolean("hanging", isHanging());
+		nbt.setBoolean("raising", isRaising());
+		nbt.setInteger("facing", getFacingRender());
 	}
 
 }
