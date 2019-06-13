@@ -27,14 +27,14 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		super(world);
 		setSize(1F, 1F);
 		shield_array = new EntityDecayPitTargetPart[] {
-				shield_1 = new EntityDecayPitTargetPart(this, "part1", 0.625F, 1F),
-				shield_2 = new EntityDecayPitTargetPart(this, "part2", 0.625F, 1F),
-				shield_3 = new EntityDecayPitTargetPart(this, "part3", 0.625F, 1F),
-				shield_4 = new EntityDecayPitTargetPart(this, "part4", 0.6255F, 1F),
-				shield_5 = new EntityDecayPitTargetPart(this, "part5", 0.625F, 1F),
-				shield_6 = new EntityDecayPitTargetPart(this, "part6", 0.625F, 1F),
-				shield_7 = new EntityDecayPitTargetPart(this, "part7", 0.625F, 1F),
-				shield_8 = new EntityDecayPitTargetPart(this, "part8", 0.625F, 1F)
+				shield_1 = new EntityDecayPitTargetPart(this, "part1", 0.75F, 1F),
+				shield_2 = new EntityDecayPitTargetPart(this, "part2", 0.75F, 1F),
+				shield_3 = new EntityDecayPitTargetPart(this, "part3", 0.75F, 1F),
+				shield_4 = new EntityDecayPitTargetPart(this, "part4", 0.75F, 1F),
+				shield_5 = new EntityDecayPitTargetPart(this, "part5", 0.75F, 1F),
+				shield_6 = new EntityDecayPitTargetPart(this, "part6", 0.75F, 1F),
+				shield_7 = new EntityDecayPitTargetPart(this, "part7", 0.75F, 1F),
+				shield_8 = new EntityDecayPitTargetPart(this, "part8", 0.75F, 1F)
 				};
 	}
 
@@ -46,8 +46,8 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public void onUpdate() {
 		super.onUpdate();
 		animationTicksPrev = animationTicks;
-		animationTicks += 3;
-		if (animationTicks >= 357)
+		animationTicks += 5;
+		if (animationTicks >= 355)
 			animationTicks = animationTicksPrev = 0;
 		setNewShieldHitboxPos(animationTicks, shield_1);
 		setNewShieldHitboxPos(animationTicks + 45, shield_2);
@@ -61,10 +61,17 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 	protected void setNewShieldHitboxPos(int animationTicks, EntityDecayPitTargetPart shield) {
 		double a = Math.toRadians(animationTicks);
-		double offSetX = -Math.sin(a) * 1.5D;
-		double offSetZ = Math.cos(a) * 1.5D;
-		float wobble = MathHelper.cos((float) ((animationTicks) * 0.07F)) * 0.49F;
+		double offSetX = -Math.sin(a) * 2.5D;
+		double offSetZ = Math.cos(a) * 2.5D;
+		float wobble = 0F;
+
+		if(shield == shield_1 || shield == shield_3 || shield == shield_5 || shield == shield_7)
+			wobble = MathHelper.sin((float) ((animationTicks) * 0.07F)) * 0.25F;
+		else
+			wobble = MathHelper.cos((float) ((animationTicks) * 0.07F)) * 0.25F;
+
 		shield.setPosition(posX + offSetX, posY + wobble , posZ + offSetZ);
+		shield.setEntityBoundingBox(new AxisAlignedBB(shield.posX - (double)shield.width / 2.0D, shield.posY + wobble, shield.posZ - (double)shield.width / 2.0D, shield.posX + (double)shield.width / 2.0D, shield.posY + wobble + (double)shield.height, shield.posZ + (double)shield.width / 2.0D));
 		List<Entity> entities = getEntityWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(shield.posX - (double)shield.width / 2.0D, shield.posY + wobble, shield.posZ - (double)shield.width / 2.0D, shield.posX + (double)shield.width / 2.0D, shield.posY + wobble + (double)shield.height, shield.posZ + (double)shield.width / 2.0D));
 		for (Entity entity : entities)
 			if (entity != null)
