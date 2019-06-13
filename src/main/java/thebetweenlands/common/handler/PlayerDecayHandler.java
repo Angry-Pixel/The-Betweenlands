@@ -13,7 +13,6 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemFood;
 import net.minecraft.network.play.server.SPacketEntityProperties;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -29,6 +28,7 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.GameruleRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.util.MathUtils;
 
 public class PlayerDecayHandler {
 	public static final UUID DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID = UUID.fromString("033f5f10-67b3-42f3-8511-67a575fbb099");
@@ -55,7 +55,7 @@ public class PlayerDecayHandler {
 
 						AttributeModifier currentDecayModifier = attr.getModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
 
-						if(!MathHelper.epsilonEquals(decayMaxBaseHealthPercentage, prevDecayMaxBaseHealthPercentage) || (currentDecayModifier == null && decayMaxBaseHealthPercentage < 1)) {
+						if(!MathUtils.epsilonEquals(decayMaxBaseHealthPercentage, prevDecayMaxBaseHealthPercentage) || (currentDecayModifier == null && decayMaxBaseHealthPercentage < 1)) {
 							attr.removeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
 
 							if(decayMaxBaseHealthPercentage < 1) {
