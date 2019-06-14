@@ -261,6 +261,7 @@ import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
+import thebetweenlands.common.handler.ExtendedReachHandler;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
 import thebetweenlands.common.inventory.InventoryItem;
@@ -731,6 +732,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(BLSkyRenderer.class);
         MinecraftForge.EVENT_BUS.register(ItemBarkAmulet.class);
         MinecraftForge.EVENT_BUS.register(RenderGrapplingHookNode.class);
+        MinecraftForge.EVENT_BUS.register(ExtendedReachHandler.class);
 	}
 
 	private static FontRenderer pixelLove;

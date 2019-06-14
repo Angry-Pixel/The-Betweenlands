@@ -107,6 +107,10 @@ public final class MathUtils {
         return mod(-a + b + range / 2, range) - range / 2;
     }
 
+    public static boolean epsilonEquals(float a, float b) {
+        return MathHelper.abs(b - a) < 1.0E-5F;
+    }
+
     public static float adjustAngleForInterpolation(float angle, float prevAngle) {
         return adjustValueForInterpolation(angle, prevAngle, -180, 180);
     }

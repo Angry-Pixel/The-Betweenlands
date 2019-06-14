@@ -26,7 +26,6 @@ import thebetweenlands.common.network.serverbound.MessageExtendedReach;
 import java.util.List;
 import java.util.function.Consumer;
 
-@Mod.EventBusSubscriber
 public class ExtendedReachHandler {
 
     @SubscribeEvent

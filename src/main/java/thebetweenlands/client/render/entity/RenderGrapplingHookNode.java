@@ -27,13 +27,13 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.client.handler.DebugHandlerClient;
 import thebetweenlands.client.render.model.entity.ModelRopeNode;
 import thebetweenlands.client.render.model.entity.ModelShambler;
 import thebetweenlands.client.render.particle.entity.ParticleBeam;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.item.misc.ItemGrapplingHook;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.util.LightingUtil;
 import thebetweenlands.util.RotationMatrix;
 
 public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
@@ -68,25 +68,25 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableLighting();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 0.35F);
-		LightingUtil.INSTANCE.setLighting(255);
-
-		AxisAlignedBB boundingBox = entity.getEntityBoundingBox().offset(-entity.posX, -entity.posY, -entity.posZ);
-
-		if(entity.getNextNodeClient() == null) {
-			boundingBox = boundingBox.grow(0.025D, 0.025D, 0.025D);
-			GlStateManager.color(0.25F, 1.0F, 0.25F, 0.35F);
-		}
-
-		GlStateManager.color(1, 1, 1, 1);
-
-		LightingUtil.INSTANCE.revert();
-		GlStateManager.enableTexture2D();
-		GlStateManager.enableLighting();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		double camPosX = interpolate(entity.lastTickPosX, entity.posX, partialTicks) - x;
 		double camPosY = interpolate(entity.lastTickPosY, entity.posY, partialTicks) - y;
 		double camPosZ = interpolate(entity.lastTickPosZ, entity.posZ, partialTicks) - z;
+
+		if(this.getRenderManager().isDebugBoundingBox() && entity.isMountNode()) {
+			Vec3d weightPos = entity.getWeightPos(partialTicks);
+
+			GlStateManager.disableLighting();
+			GlStateManager.disableBlend();
+			GlStateManager.disableTexture2D();
+			GlStateManager.color(0.5F, 0, 0, 1);
+			DebugHandlerClient.drawBoundingBox(new AxisAlignedBB(weightPos.x - 0.1D, weightPos.y - 0.1D, weightPos.z - 0.1D, weightPos.x + 0.1D, weightPos.y + 0.1D, weightPos.z + 0.1D).offset(-camPosX, -camPosY, -camPosZ));
+			GlStateManager.color(1, 1, 1, 1);
+			GlStateManager.enableTexture2D();
+			GlStateManager.enableBlend();
+			GlStateManager.enableLighting();
+		}
 
 		this.frustum.setPosition(camPosX, camPosY, camPosZ);
 
@@ -133,7 +133,9 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 
 				GlStateManager.translate(0, -1, 0.1D);
 
+				GlStateManager.disableCull();
 				shamblerModel.renderTongueEnd(0.0625F);
+				GlStateManager.enableCull();
 
 				GlStateManager.popMatrix();
 			} else {
@@ -205,7 +207,7 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 			double endX = interpolate(node2.prevPosX - camPosX, node2.posX - camPosX, partialTicks);
 			double endY = interpolate(node2.prevPosY - camPosY, node2.posY - camPosY, partialTicks);
 			double endZ = interpolate(node2.prevPosZ - camPosZ, node2.posZ - camPosZ, partialTicks);
-			if(node2.getControllingPassenger() != null) {
+			if(node2 instanceof EntityGrapplingHookNode && ((EntityGrapplingHookNode) node2).isMountNode() && node2.getControllingPassenger() != null) {
 				Entity controller = node2.getControllingPassenger();
 
 				double yaw;
@@ -252,9 +254,11 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 				GlStateManager.rotate(pitch, 0, 0, 1);
 				GlStateManager.rotate(yaw, 0, -1, 0);*/
 
-				double dx = (interpolate(node1.lastTickPosX, node1.posX, partialTicks) - interpolate(node2.lastTickPosX, node2.posX, partialTicks));
-				double dy = (interpolate(node1.lastTickPosY, node1.posY, partialTicks) - interpolate(node2.lastTickPosY, node2.posY, partialTicks));
-				double dz = (interpolate(node1.lastTickPosZ, node1.posZ, partialTicks) - interpolate(node2.lastTickPosZ, node2.posZ, partialTicks));
+				Vec3d weightPos = ((EntityGrapplingHookNode) node2).getWeightPos(partialTicks);
+
+				double dx = interpolate(node2.lastTickPosX, node2.posX, partialTicks) - weightPos.x;
+				double dy = (interpolate(node2.lastTickPosY, node2.posY, partialTicks) + node2.height) - weightPos.y;
+				double dz = interpolate(node2.lastTickPosZ, node2.posZ, partialTicks) - weightPos.z;
 
 				float rotYaw = -(float)Math.toDegrees(Math.atan2(dz, dx));
 				float rotPitch = (float)Math.toDegrees(Math.atan2(Math.sqrt(dx * dx + dz * dz), -dy)) - 180;
@@ -274,11 +278,13 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 				offset = matrix.transformVec(offset, Vec3d.ZERO);
 
 				matrix.setRotations(0, 0, (float)Math.toRadians(rotPitch));
-				offset = matrix.transformVec(offset, Vec3d.ZERO);
+				offset = matrix.transformVec(offset.add(0, -1.4D, 0), Vec3d.ZERO);
 
 				matrix.setRotations(0, (float)Math.toRadians(rotYaw), 0);
 				offset = matrix.transformVec(offset, Vec3d.ZERO);
 
+				offset = offset.add(0, 1.4D, 0);
+				
 				endX = interpolate(controller.lastTickPosX - camPosX, controller.posX - camPosX, partialTicks) + offset.x;
 				endY = interpolate(controller.lastTickPosY - camPosY, controller.posY - camPosY, partialTicks) + offset.y;
 				endZ = interpolate(controller.lastTickPosZ - camPosZ, controller.posZ - camPosZ, partialTicks) + offset.z;
@@ -327,9 +333,11 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 			if(prevNode != null) {
 				float partialTicks = event.getPartialRenderTick();
 
-				double dx = (interpolate(prevNode.lastTickPosX, prevNode.posX, partialTicks) - interpolate(node.lastTickPosX, node.posX, partialTicks));
-				double dy = (interpolate(prevNode.lastTickPosY, prevNode.posY, partialTicks) - interpolate(node.lastTickPosY, node.posY, partialTicks));
-				double dz = (interpolate(prevNode.lastTickPosZ, prevNode.posZ, partialTicks) - interpolate(node.lastTickPosZ, node.posZ, partialTicks));
+				Vec3d weightPos = node.getWeightPos(partialTicks);
+
+				double dx = interpolate(node.lastTickPosX, node.posX, partialTicks) - weightPos.x;
+				double dy = interpolate(node.lastTickPosY, node.posY, partialTicks) + node.height - weightPos.y;
+				double dz = interpolate(node.lastTickPosZ, node.posZ, partialTicks) - weightPos.z;
 
 				float yaw = -(float)Math.toDegrees(Math.atan2(dz, dx));
 				float pitch = (float)Math.toDegrees(Math.atan2(Math.sqrt(dx * dx + dz * dz), -dy)) - 180;
@@ -340,19 +348,26 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 				float t = (pitch - pitchMin) / (pitchMax - pitchMin);
 				pitch = (pitchMin + (pitchMax - pitchMin) * (1.0F / (1.0F + (float)Math.pow(200.0F, 0.5F - t))));
 
+				//Make sure origin is at feet when rotating
+				GlStateManager.translate(event.getX(), event.getY(), event.getZ());
+				
+				GlStateManager.translate(0, 1.4D, 0);
+				
 				GlStateManager.rotate(yaw, 0, 1, 0);
 				GlStateManager.rotate(pitch, 0, 0, 1);
 				GlStateManager.rotate(-yaw, 0, 1, 0);
-
+				
 				float bodyYaw = (float) interpolate(player.prevRenderYawOffset, player.renderYawOffset, partialTicks);
 
 				EnumHand activeHand = !player.getHeldItem(EnumHand.OFF_HAND).isEmpty() && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGrapplingHook ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
 
-				
 				GlStateManager.rotate(-bodyYaw, 0, 1, 0);
-				GlStateManager.translate(activeHand == EnumHand.MAIN_HAND ? 0.6D : -0.6D, 0, -0.4D);
+				GlStateManager.translate(activeHand == EnumHand.MAIN_HAND ? 0.6D : -0.6D, -1.4D, -0.4D);
 				GlStateManager.rotate(bodyYaw, 0, 1, 0);
 
+				//Undo previous offset
+				GlStateManager.translate(-event.getX(), -event.getY(), -event.getZ());
+				
 				player.swingingHand = activeHand;
 				player.swingProgress = 0.12f;
 			}
