@@ -346,12 +346,15 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 				float t = (pitch - pitchMin) / (pitchMax - pitchMin);
 				pitch = (pitchMin + (pitchMax - pitchMin) * (1.0F / (1.0F + (float)Math.pow(200.0F, 0.5F - t))));
 
+				//Make sure origin is at feet when rotating
+				GlStateManager.translate(event.getX(), event.getY(), event.getZ());
+				
 				GlStateManager.translate(0, 1.4D, 0);
 				
 				GlStateManager.rotate(yaw, 0, 1, 0);
 				GlStateManager.rotate(pitch, 0, 0, 1);
 				GlStateManager.rotate(-yaw, 0, 1, 0);
-
+				
 				float bodyYaw = (float) interpolate(player.prevRenderYawOffset, player.renderYawOffset, partialTicks);
 
 				EnumHand activeHand = !player.getHeldItem(EnumHand.OFF_HAND).isEmpty() && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGrapplingHook ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
@@ -360,6 +363,9 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 				GlStateManager.translate(activeHand == EnumHand.MAIN_HAND ? 0.6D : -0.6D, -1.4D, -0.4D);
 				GlStateManager.rotate(bodyYaw, 0, 1, 0);
 
+				//Undo previous offset
+				GlStateManager.translate(-event.getX(), -event.getY(), -event.getZ());
+				
 				player.swingingHand = activeHand;
 				player.swingProgress = 0.12f;
 			}
