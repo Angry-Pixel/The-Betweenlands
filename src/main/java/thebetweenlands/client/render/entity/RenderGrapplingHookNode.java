@@ -133,7 +133,9 @@ public class RenderGrapplingHookNode extends Render<EntityGrapplingHookNode> {
 
 				GlStateManager.translate(0, -1, 0.1D);
 
+				GlStateManager.disableCull();
 				shamblerModel.renderTongueEnd(0.0625F);
+				GlStateManager.enableCull();
 
 				GlStateManager.popMatrix();
 			} else {
