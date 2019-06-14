@@ -1,12 +1,10 @@
 package thebetweenlands.common.entity;
 
-import java.util.List;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -22,10 +20,11 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public EntityDecayPitTargetPart shield_6;
 	public EntityDecayPitTargetPart shield_7;
 	public EntityDecayPitTargetPart shield_8;
+	public EntityDecayPitTargetPart target;
 
 	public EntityDecayPitTarget(World world) {
 		super(world);
-		setSize(1F, 1F);
+		setSize(5F, 5F);
 		shield_array = new EntityDecayPitTargetPart[] {
 				shield_1 = new EntityDecayPitTargetPart(this, "part1", 0.75F, 1F),
 				shield_2 = new EntityDecayPitTargetPart(this, "part2", 0.75F, 1F),
@@ -34,8 +33,8 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				shield_5 = new EntityDecayPitTargetPart(this, "part5", 0.75F, 1F),
 				shield_6 = new EntityDecayPitTargetPart(this, "part6", 0.75F, 1F),
 				shield_7 = new EntityDecayPitTargetPart(this, "part7", 0.75F, 1F),
-				shield_8 = new EntityDecayPitTargetPart(this, "part8", 0.75F, 1F)
-				};
+				shield_8 = new EntityDecayPitTargetPart(this, "part8", 0.75F, 1F),
+				target = new EntityDecayPitTargetPart(this, "target", 1F, 1F) };
 	}
 
 	@Override
@@ -57,6 +56,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		setNewShieldHitboxPos(animationTicks + 225, shield_6);
 		setNewShieldHitboxPos(animationTicks + 270, shield_7);
 		setNewShieldHitboxPos(animationTicks + 315, shield_8);
+		target.setPosition(posX, posY + height / 2.0D - target.height / 2.0D, posZ);
 	}
 
 	protected void setNewShieldHitboxPos(int animationTicks, EntityDecayPitTargetPart shield) {
@@ -65,37 +65,34 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		double offSetZ = Math.cos(a) * 2.5D;
 		float wobble = 0F;
 
-		if(shield == shield_1 || shield == shield_3 || shield == shield_5 || shield == shield_7)
-			wobble = MathHelper.sin((float) ((animationTicks) * 0.07F)) * 0.25F;
+		if (shield == shield_1 || shield == shield_3 || shield == shield_5 || shield == shield_7)
+			wobble = MathHelper.sin((float) ((animationTicks) * 0.07F)) * 0.45F;
 		else
-			wobble = MathHelper.cos((float) ((animationTicks) * 0.07F)) * 0.25F;
+			wobble = MathHelper.cos((float) ((animationTicks) * 0.07F)) * 0.7F;
 
-		shield.setPosition(posX + offSetX, posY + wobble , posZ + offSetZ);
-		shield.setEntityBoundingBox(new AxisAlignedBB(shield.posX - (double)shield.width / 2.0D, shield.posY + wobble, shield.posZ - (double)shield.width / 2.0D, shield.posX + (double)shield.width / 2.0D, shield.posY + wobble + (double)shield.height, shield.posZ + (double)shield.width / 2.0D));
-		List<Entity> entities = getEntityWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(shield.posX - (double)shield.width / 2.0D, shield.posY + wobble, shield.posZ - (double)shield.width / 2.0D, shield.posX + (double)shield.width / 2.0D, shield.posY + wobble + (double)shield.height, shield.posZ + (double)shield.width / 2.0D));
-		for (Entity entity : entities)
-			if (entity != null)
-				if (entity instanceof EntityArrow) {
-					moveUp();
-					entity.setDead();
-				}
+		shield.setPosition(posX + offSetX, posY + height / 2.0D - shield.height / 2.0D + wobble, posZ + offSetZ);
 	}
 
 	@Override
 	public boolean canBePushed() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean canBeCollidedWith() {
-		return true;
+		return false;
+	}
+
+	@Nullable
+	public Entity[] getParts() {
+		return shield_array;
 	}
 
 	@Override
 	public void addVelocity(double x, double y, double z) {
-	//	motionX = 0;
-	//	motionY = 0;
-	//	motionZ = 0;
+		motionX = 0;
+		motionY = 0;
+		motionZ = 0;
 	}
 
 	@Override
@@ -105,15 +102,19 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		moveDown();
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean attackEntityFromPart(EntityDecayPitTargetPart part, DamageSource source, float damage) {
-	//	if(part == shield_1 || part == shield_2 || part == shield_3 || part == shield_4)
-		//	moveDown();
-		return false;
+		if (!getEntityWorld().isRemote) {
+			if (part != target)
+				moveUp();
+
+			if (part == target)
+				moveDown();
+		}
+		return true;
 	}
 
 	private void moveUp() {
@@ -125,15 +126,15 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbt) {
-	}
-
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbt) {
-	}
-
-	@Override
 	public World getWorld() {
 		return getEntityWorld();
+	}
+
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound compound) {
+	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound compound) {
 	}
 }

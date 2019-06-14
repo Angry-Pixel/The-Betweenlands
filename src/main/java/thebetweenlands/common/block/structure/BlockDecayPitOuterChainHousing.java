@@ -38,7 +38,7 @@ public class BlockDecayPitOuterChainHousing extends BlockHorizontal {
 		// S = 0, W = 1, N = 2, E = 3
 		if (!world.isRemote) {
 			EntityDecayPitTarget entity = new EntityDecayPitTarget(world);
-			entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, 0F, 0F);
+			entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 4D, pos.getZ() + 0.5D, 0F, 0F);
 			//entity.setFacing(state.getValue(FACING).getHorizontalIndex());
 			//entity.setLength(7);
 			//entity.setHanging(true); // change this if you want to see hanging or scroll chains
@@ -48,12 +48,12 @@ public class BlockDecayPitOuterChainHousing extends BlockHorizontal {
 
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		if(!world.isRemote) {
+		/*if(!world.isRemote) {
 			// made it 10 up because it needs to find it or poopy stuff happens (test only) don't stack them ;P
 			EntityDecayPitTarget entity = (EntityDecayPitTarget) world.getEntitiesWithinAABB(EntityDecayPitTarget.class, new AxisAlignedBB(pos).grow(0D, 10D, 0D)).get(0);
 			if(entity != null)
 				entity.setDead();
-		}
+		}*/
     }
 
 	@Override

@@ -23,14 +23,6 @@ public class EntityDecayPitTargetPart extends Entity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
-	}
-
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
-	}
-
-	@Override
 	public boolean canBeCollidedWith() {
 		return true;
 	}
@@ -43,6 +35,13 @@ public class EntityDecayPitTargetPart extends Entity {
 	@Override
 	public boolean getIsInvulnerable() {
 		return false;
+	}
+
+	@Override
+	public void addVelocity(double x, double y, double z) {
+		motionX = 0;
+		motionY = 0;
+		motionZ = 0;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -63,12 +62,19 @@ public class EntityDecayPitTargetPart extends Entity {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		System.out.println("Hello? Is this thing on?");
-		return isEntityInvulnerable(source) ? false : parent.attackEntityFromPart(this, source, amount);
+		return parent.attackEntityFromPart(this, source, amount);
 	}
 
 	@Override
 	public boolean isEntityEqual(Entity entity) {
 		return this == entity || parent == entity;
+	}
+
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound compound) {
+	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound compound) {
 	}
 }
