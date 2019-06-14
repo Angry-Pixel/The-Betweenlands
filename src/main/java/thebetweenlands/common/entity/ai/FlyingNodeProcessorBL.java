@@ -1,13 +1,6 @@
 package thebetweenlands.common.entity.ai;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
 import com.google.common.collect.Sets;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.pathfinding.NodeProcessor;
@@ -18,6 +11,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class FlyingNodeProcessorBL extends NodeProcessor {
 	public int preferredMinHeight = -1;
@@ -63,7 +61,7 @@ public class FlyingNodeProcessorBL extends NodeProcessor {
 	@Override
 	public int findPathOptions(PathPoint[] pathOptions, PathPoint currentPoint, PathPoint targetPoint, float maxDistance) {
 		int i = 0;
-		for (EnumFacing enumfacing : EnumFacing.values()) {
+		for (EnumFacing enumfacing : EnumFacing.VALUES) {
 			PathPoint pathpoint = this.getAirNode(currentPoint.x + enumfacing.getXOffset(), currentPoint.y + enumfacing.getYOffset(), currentPoint.z + enumfacing.getZOffset(), targetPoint);
 			if (pathpoint != null && !pathpoint.visited && pathpoint.distanceTo(targetPoint) < maxDistance) {
 				pathOptions[i++] = pathpoint;

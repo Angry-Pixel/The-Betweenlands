@@ -3,7 +3,7 @@
   "defaults": {
     "model": "thebetweenlands:internal/blank",
     "custom": {
-      "particle_texture": "thebetweenlands:tiles/druid_altar_particle"
+      "particle_texture": "thebetweenlands:particle/block/druid_altar_particle"
     }
   },
   "variants": {

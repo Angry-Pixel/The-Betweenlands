@@ -22,7 +22,7 @@ import net.minecraftforge.client.model.pipeline.ForgeBlockModelRenderer;
 import thebetweenlands.client.render.block.VertexLighterFlatNoOffsets;
 import thebetweenlands.common.block.misc.BlockMudFlowerPot;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 public class RenderMudFlowerPot extends TileEntitySpecialRenderer<TileEntityMudFlowerPot> {
 	private static final VertexLighterFlatNoOffsets FLAT_LIGHTER = new VertexLighterFlatNoOffsets(Minecraft.getMinecraft().getBlockColors());
@@ -31,7 +31,7 @@ public class RenderMudFlowerPot extends TileEntitySpecialRenderer<TileEntityMudF
 	public void render(TileEntityMudFlowerPot te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		BlockPos pos = te.getPos();
 
-		IBlockState flowerBlockState = TileEntityHelper.getStatePropertySafely(te, BlockMudFlowerPot.class, BlockMudFlowerPot.FLOWER, null, false, true);
+		IBlockState flowerBlockState = StatePropertyHelper.getStatePropertySafely(te, BlockMudFlowerPot.class, BlockMudFlowerPot.FLOWER, null, false, true);
 
 		if(flowerBlockState != null && flowerBlockState.getBlock() != Blocks.AIR) {
 			IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(flowerBlockState);

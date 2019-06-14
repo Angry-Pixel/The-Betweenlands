@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.tile.ModelPossessedBlock;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 @SideOnly(Side.CLIENT)
 public class RenderPossessedBlock extends TileEntitySpecialRenderer<TileEntityPossessedBlock> {
@@ -21,7 +21,7 @@ public class RenderPossessedBlock extends TileEntitySpecialRenderer<TileEntityPo
     @Override
     public void render(TileEntityPossessedBlock te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 
-        EnumFacing facing = TileEntityHelper.getStatePropertySafely(te, BlockPossessedBlock.class, BlockPossessedBlock.FACING, EnumFacing.NORTH);
+        EnumFacing facing = StatePropertyHelper.getStatePropertySafely(te, BlockPossessedBlock.class, BlockPossessedBlock.FACING, EnumFacing.NORTH);
 
         GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

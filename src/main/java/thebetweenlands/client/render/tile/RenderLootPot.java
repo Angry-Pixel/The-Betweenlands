@@ -12,7 +12,7 @@ import thebetweenlands.client.render.model.tile.ModelLootPot3;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.tile.TileEntityLootPot;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 public class RenderLootPot extends TileEntitySpecialRenderer<TileEntityLootPot> {
 
@@ -26,8 +26,8 @@ public class RenderLootPot extends TileEntitySpecialRenderer<TileEntityLootPot> 
 
 	@Override
 	public void render(TileEntityLootPot te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		EnumLootPot type = TileEntityHelper.getStatePropertySafely(te, BlockLootPot.class, BlockLootPot.VARIANT, EnumLootPot.POT_1);
-		EnumFacing rotation = TileEntityHelper.getStatePropertySafely(te, BlockLootPot.class, BlockLootPot.FACING, EnumFacing.NORTH);
+		EnumLootPot type = StatePropertyHelper.getStatePropertySafely(te, BlockLootPot.class, BlockLootPot.VARIANT, EnumLootPot.POT_1);
+		EnumFacing rotation = StatePropertyHelper.getStatePropertySafely(te, BlockLootPot.class, BlockLootPot.FACING, EnumFacing.NORTH);
 		int offset = te.getModelRotationOffset();
 
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);

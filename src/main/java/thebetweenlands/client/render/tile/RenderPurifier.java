@@ -25,7 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.tile.ModelPurifier;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.tile.TileEntityPurifier;
-import thebetweenlands.util.TileEntityHelper;
+import thebetweenlands.util.StatePropertyHelper;
 
 @SideOnly(Side.CLIENT)
 public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier> {
@@ -53,7 +53,7 @@ public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);
-		int rotation = TileEntityHelper.getStatePropertySafely(tile, BlockPurifier.class, BlockPurifier.FACING, EnumFacing.NORTH).getHorizontalIndex() * 90;
+		int rotation = StatePropertyHelper.getStatePropertySafely(tile, BlockPurifier.class, BlockPurifier.FACING, EnumFacing.NORTH).getHorizontalIndex() * 90;
 		GlStateManager.rotate(rotation - 180, 0, 1, 0);
 		MODEL.renderAll();
 		if (tile.isPurifying() && tile.lightOn)

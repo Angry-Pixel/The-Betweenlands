@@ -7,6 +7,7 @@ import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.Ignore;
 import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.Name;
+import net.minecraftforge.common.config.Config.RangeDouble;
 import net.minecraftforge.common.config.Config.RangeInt;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import thebetweenlands.common.config.properties.IntSetProperty;
@@ -174,9 +175,14 @@ public class BetweenlandsConfig {
 
 		@Name("use_food_sickness")
 		@LangKey(LANG_PREFIX + "use_food_sickness")
-		@Comment("If true the food sickness system will be enabled")
-		public boolean useFoodSickness = true;
+		@Comment("If true the food sickness system will be enabled in the Betweenlands")
+		public boolean useFoodSicknessInBetweenlands = true;
 
+		@Name("use_food_sickness_outside_betweenlands")
+		@LangKey(LANG_PREFIX + "use_food_sickness_outside_betweenlands")
+		@Comment("If true the food sickness system will be enabled outside the Betweenlands")
+		public boolean useFoodSicknessOutsideBetweenlands = false;
+		
 		@Name("reverse_rotten_food")
 		@LangKey(LANG_PREFIX + "reverse_rotten_food")
 		@Comment("Whether rotten food should turn back into normal food when leaving the dimension")
@@ -346,6 +352,85 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "equipment_visible")
 		@Comment("Whether equipment should be shown on the HUD")
 		public boolean equipmentVisible = true;
+		
+		@Name("equipment_horziontal_spacing")
+		@LangKey(LANG_PREFIX + "equipment_horziontal_spacing")
+		@Comment("Horizontal spacing between equipment items")
+		@RangeInt(min = -32, max = 32)
+		public int equipmentHorizontalSpacing = 8;
+		
+		@Name("equipment_vertical_spacing")
+		@LangKey(LANG_PREFIX + "equipment_vertical_spacing")
+		@Comment("Vertical spacing between equipment items")
+		@RangeInt(min = -32, max = 32)
+		public int equipmentVerticalSpacing = -13;
+		
+		@Name("equipment_zone")
+		@LangKey(LANG_PREFIX + "equipment_zone")
+		@Comment("Zone in which the equipment items are shown on the HUD.\n"
+				+ "0: Hotbar\n"
+				+ "1: Top left\n"
+				+ "2: Top right\n"
+				+ "3: Bottom right\n"
+				+ "4: Bottom left\n"
+				+ "5: Center left\n"
+				+ "6: Center top\n"
+				+ "7: Center right\n"
+				+ "8: Center bottom")
+		@RangeInt(min = 0, max = 8)
+		public int equipmentZone = 0;
+		
+		@Name("equipment_zone_offset_x")
+		@LangKey(LANG_PREFIX + "equipment_zone_offset_x")
+		@Comment("X offset of the equipment items relative to the equipment zone")
+		public int equipmentOffsetX = 0;
+		
+		@Name("equipment_zone_offset_y")
+		@LangKey(LANG_PREFIX + "equipment_zone_offset_y")
+		@Comment("Y offset of the equipment items relative to the equipment zone")
+		public int equipmentOffsetY = 0;
+		
+		@Name("decay_bar_zone")
+		@LangKey(LANG_PREFIX + "decay_bar_zone")
+		@Comment("Zone in which the decay bar is shown on the HUD.\n"
+				+ "0: Hotbar\n"
+				+ "1: Top left\n"
+				+ "2: Top right\n"
+				+ "3: Bottom right\n"
+				+ "4: Bottom left\n"
+				+ "5: Center left\n"
+				+ "6: Center top\n"
+				+ "7: Center right\n"
+				+ "8: Center bottom")
+		@RangeInt(min = 0, max = 8)
+		public int decayBarZone = 0;
+		
+		@Name("decay_bar_zone_offset_x")
+		@LangKey(LANG_PREFIX + "decay_bar_zone_offset_x")
+		@Comment("X offset of the decay bar relative to the decay zone")
+		public int decayBarOffsetX = 0;
+		
+		@Name("decay_bar_zone_offset_y")
+		@LangKey(LANG_PREFIX + "decay_bar_zone_offset_y")
+		@Comment("Y offset of the decay bar relative to the decay zone")
+		public int decayBarOffsetY = 0;
+		
+		@Name("decay_percentage")
+		@LangKey(LANG_PREFIX + "decay_percentage")
+		@Comment("Whether the decay health reduction should be percentual")
+		public boolean decayPercentual = false;
+		
+		@Name("decay_min_health")
+		@LangKey(LANG_PREFIX + "decay_min_health")
+		@Comment("Minimum player health when absolute decay is applied")
+		@RangeDouble(min = 0, max = Float.MAX_VALUE)
+		public float decayMinHealth = 6.0f;
+		
+		@Name("decay_min_health_percent")
+		@LangKey(LANG_PREFIX + "decay_min_health_percent")
+		@Comment("Minimum player health percentage when percentual decay is applied")
+		@RangeDouble(min = 0, max = Float.MAX_VALUE)
+		public float decayMinHealthPercentage = 0.15f;
 	}
 
 	@Name("mob_spawning")
@@ -436,5 +521,10 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "debug_recipe_overrides")
 		@Comment("If true, enables the recipe overrides debug logger")
 		public boolean debugRecipeOverrides = false;
+		
+		@Name("dump_packed_textures")
+		@LangKey(LANG_PREFIX + "dump_packed_textures")
+		@Comment("If true, mod will dump the packed model textures on startup")
+		public boolean dumpPackedTextures = false;
 	}
 }

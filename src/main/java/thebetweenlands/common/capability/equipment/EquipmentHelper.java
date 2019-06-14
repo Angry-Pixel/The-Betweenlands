@@ -1,8 +1,5 @@
 package thebetweenlands.common.capability.equipment;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -14,9 +11,10 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
-import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
+
+import javax.annotation.Nullable;
 
 public class EquipmentHelper {
 	/**
@@ -26,8 +24,8 @@ public class EquipmentHelper {
 	 * @return
 	 */
 	public static ItemStack getEquipment(EnumEquipmentInventory inventory, Entity entity, Item item) {
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		if(cap != null) {
 			IInventory mainInv = cap.getInventory(inventory);
 			for(int i = 0; i < mainInv.getSizeInventory(); i++) {
 				ItemStack stack = mainInv.getStackInSlot(i);
@@ -47,12 +45,10 @@ public class EquipmentHelper {
 	 * @param stack
 	 * @return
 	 */
-	@Nonnull
 	public static ItemStack equipItem(@Nullable EntityPlayer player, Entity target, ItemStack stack, boolean simulate) {
 		if(stack.getItem() instanceof IEquippable) {
-			if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-
+			IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+			if(cap != null) {
 				IEquippable equippable = (IEquippable) stack.getItem();
 
 				if(equippable.canEquip(stack, player, target)) {
@@ -93,12 +89,10 @@ public class EquipmentHelper {
 	 * @param simulate
 	 * @return
 	 */
-	@Nullable
 	public static ItemStack equipItem(@Nullable EntityPlayer player, Entity target, ItemStack stack, int slot, boolean simulate) {
 		if(slot >= 0 && stack.getItem() instanceof IEquippable) {
-			if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-
+			IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+			if(cap != null) {
 				IEquippable equippable = (IEquippable) stack.getItem();
 
 				if(equippable.canEquip(stack, player, target)) {
@@ -138,12 +132,10 @@ public class EquipmentHelper {
 	 * @param target
 	 * @return
 	 */
-	@Nullable
 	public static ItemStack unequipItem(@Nullable EntityPlayer player, Entity target, boolean simulate) {
-		if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-
-			for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
+		IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		if(cap != null) {
+			for(EnumEquipmentInventory type : EnumEquipmentInventory.VALUES) {
 				IInventory inv = cap.getInventory(type);
 
 				for(int i = 0; i < inv.getSizeInventory(); i++) {
@@ -180,10 +172,9 @@ public class EquipmentHelper {
 	 * @param slot
 	 * @return
 	 */
-	@Nullable
 	public static ItemStack unequipItem(@Nullable EntityPlayer player, Entity target, EnumEquipmentInventory type, int slot, boolean simulate) {
-		if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+		if(cap != null) {
 			IInventory inv = cap.getInventory(type);
 
 			if(slot >= 0 && slot < inv.getSizeInventory()) {
@@ -208,7 +199,7 @@ public class EquipmentHelper {
 			}
 		}
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	/**

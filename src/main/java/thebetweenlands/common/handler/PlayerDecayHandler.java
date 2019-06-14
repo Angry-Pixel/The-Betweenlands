@@ -1,8 +1,11 @@
 package thebetweenlands.common.handler;
 
+import java.util.UUID;
+
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -25,52 +28,77 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.GameruleRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.util.MathUtils;
 
 public class PlayerDecayHandler {
+	public static final UUID DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID = UUID.fromString("033f5f10-67b3-42f3-8511-67a575fbb099");
+
 	public static boolean isDecayEnabled() {
 		return GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_DECAY) && BetweenlandsConfig.GENERAL.useDecay;
 	}
-	
+
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		EntityPlayer player = event.player;
 
 		if(!player.world.isRemote && event.phase == Phase.START) {
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-
-				DecayStats stats = capability.getDecayStats();
+			IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+			if(cap != null) {
+				DecayStats stats = cap.getDecayStats();
 
 				IAttributeInstance attr = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
-				
+
 				if(attr != null) {
-					int currentMaxHealth = (int) attr.getBaseValue();
+					if(BetweenlandsConfig.GENERAL.decayPercentual) {
+						float decayMaxBaseHealthPercentage = cap.getMaxPlayerHealthPercentage(stats.getDecayLevel());   
+						float prevDecayMaxBaseHealthPercentage = cap.getMaxPlayerHealthPercentage(stats.getPrevDecayLevel());
 
-					int decayMaxHealth = (int)(capability.getMaxPlayerHealth(stats.getDecayLevel()) / 2.0F) * 2;
-					int prevDecayMaxHealth = (int)(capability.getMaxPlayerHealth(stats.getPrevDecayLevel()) / 2.0F) * 2;
-					int healthDiff = decayMaxHealth - prevDecayMaxHealth;
+						AttributeModifier currentDecayModifier = attr.getModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
 
-					if(healthDiff != 0) {
-						//Don't go below 3 hearts
-						int newHealth = Math.max(currentMaxHealth + healthDiff, 6);
+						if(!MathUtils.epsilonEquals(decayMaxBaseHealthPercentage, prevDecayMaxBaseHealthPercentage) || (currentDecayModifier == null && decayMaxBaseHealthPercentage < 1)) {
+							attr.removeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
 
-						healthDiff = newHealth - currentMaxHealth;
-
-						//Don't give more health back than was removed
-						healthDiff = Math.min(healthDiff, capability.getRemovedHealth());
-
-						//Update health
-						attr.setBaseValue(currentMaxHealth + healthDiff);
-						if(player.getHealth() > attr.getAttributeValue()) {
-							player.setHealth((float)attr.getAttributeValue());
+							if(decayMaxBaseHealthPercentage < 1) {
+								attr.applyModifier(new AttributeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID, "Decay health modifier", -1 + decayMaxBaseHealthPercentage, 2));
+							}
 						}
+					} else {
+						int currentMaxHealth = (int) attr.getAttributeValue();
 
-						//Keep track of how much was removed
-						capability.setRemovedHealth(capability.getRemovedHealth() - healthDiff);
+						int decayMaxBaseHealth = (int)(cap.getMaxPlayerHealth(stats.getDecayLevel()) / 2.0F) * 2;   
+						int prevDecayMaxBaseHealth = (int)(cap.getMaxPlayerHealth(stats.getPrevDecayLevel()) / 2.0F) * 2;
+
+						boolean decayHealthChange = (decayMaxBaseHealth - prevDecayMaxBaseHealth) != 0;
+
+						int decayHealthDiff = decayMaxBaseHealth - 20;
+
+						AttributeModifier currentDecayModifier = attr.getModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
+
+						//Only change modifier if deay modifier is missing, decay health modifier value has changed or if player has less than 3 hearts (in which case decay modifier should be reduced or removed)
+						if((currentMaxHealth > BetweenlandsConfig.GENERAL.decayMinHealth && decayHealthDiff != 0 && (currentDecayModifier == null || decayHealthDiff != (int)currentDecayModifier.getAmount())) ||
+								decayHealthChange ||
+								(currentMaxHealth < BetweenlandsConfig.GENERAL.decayMinHealth && currentDecayModifier != null)) {
+							attr.removeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID);
+
+							//Get current max health without the decay modifier
+							currentMaxHealth = (int) attr.getAttributeValue();
+
+							//Don't go below 3 hearts
+							int newHealth = (int) Math.max(currentMaxHealth + decayHealthDiff, BetweenlandsConfig.GENERAL.decayMinHealth);
+
+							int attributeHealth = newHealth - currentMaxHealth;
+
+							if(attributeHealth < 0) {
+								attr.applyModifier(new AttributeModifier(DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID, "Decay health modifier", attributeHealth, 0));
+								cap.setRemovedHealth(-attributeHealth);
+							} else {
+								cap.setRemovedHealth(0);
+							}
+						}
 					}
 				}
 
-				if(capability.isDecayEnabled()) {
+				if(cap.isDecayEnabled()) {
 					int decay = stats.getDecayLevel();
 
 					if (decay >= 16) {
@@ -124,10 +152,10 @@ public class PlayerDecayHandler {
 		if(!event.getEntityLiving().world.isRemote && event.getEntityLiving() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+			IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+			if(cap != null) {
 				float decayBaseSpeed = getDecayBaseSpeed(player.world.getDifficulty());
-				capability.getDecayStats().addDecayAcceleration(decayBaseSpeed * 60);
+				cap.getDecayStats().addDecayAcceleration(decayBaseSpeed * 60);
 			}
 		}
 	}
@@ -166,10 +194,10 @@ public class PlayerDecayHandler {
 		if(!event.getEntityLiving().getEntityWorld().isRemote && event.getDuration() <= 1) {
 			if (!event.getItem().isEmpty() && event.getItem().getItem() instanceof IDecayFood && event.getEntityLiving() instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+				IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+				if(cap != null) {
 					IDecayFood food = (IDecayFood) event.getItem().getItem();
-					capability.getDecayStats().addStats(-food.getDecayHealAmount(event.getItem()), food.getDecayHealSaturation(event.getItem()));
+					cap.getDecayStats().addStats(-food.getDecayHealAmount(event.getItem()), food.getDecayHealSaturation(event.getItem()));
 				}
 			}
 		}
@@ -183,9 +211,9 @@ public class PlayerDecayHandler {
 			if(isDecayFood) {
 				boolean canEatFood = player.getFoodStats().needFood() && event.getItem().getItem() instanceof ItemFood && ((ItemFood)event.getItem().getItem()).getHealAmount(event.getItem()) > 0;
 				boolean canEatDecayFood = false;
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-					canEatDecayFood = capability.getDecayStats().getDecayLevel() > 0;
+				IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+				if(cap != null) {
+					canEatDecayFood = cap.getDecayStats().getDecayLevel() > 0;
 				}
 				if (!canEatFood && !canEatDecayFood) {
 					event.setDuration(-1);

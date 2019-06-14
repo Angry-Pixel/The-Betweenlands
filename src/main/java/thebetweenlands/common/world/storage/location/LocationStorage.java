@@ -394,11 +394,13 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 
 	@Override
 	public void readInitialPacket(NBTTagCompound nbt) {
+		super.readInitialPacket(nbt);
 		this.readSharedNbt(nbt);
 	}
 
 	@Override
 	public NBTTagCompound writeInitialPacket(NBTTagCompound nbt) {
+		super.writeInitialPacket(nbt);
 		this.writeSharedNbt(nbt);
 		return nbt;
 	}

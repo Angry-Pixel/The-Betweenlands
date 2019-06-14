@@ -1,25 +1,15 @@
 package thebetweenlands.common.item.misc;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.EntityAngryPebble;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -27,20 +17,10 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class ItemAngryPebble extends Item {
 	public ItemAngryPebble() {
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
-		this.addPropertyOverride(new ResourceLocation("charge"), new IItemPropertyGetter() {
-			@Override
-			@SideOnly(Side.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? (float)(stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
-			}
-		});
-		this.addPropertyOverride(new ResourceLocation("charging"), new IItemPropertyGetter() {
-			@Override
-			@SideOnly(Side.CLIENT)
-			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
-			}
-		});
+		this.addPropertyOverride(new ResourceLocation("charge"), (stack, worldIn, entityIn) ->
+				entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? (float)(stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F);
+		this.addPropertyOverride(new ResourceLocation("charging"), (stack, worldIn, entityIn) ->
+				entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F);
 	}
 
 	@Override
@@ -57,7 +37,7 @@ public class ItemAngryPebble extends Item {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		playerIn.setActiveHand(handIn);
 		worldIn.playSound(null, playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_CREEPER_PRIMED, SoundCategory.PLAYERS, 1.0F, 0.5F);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
 	@Override

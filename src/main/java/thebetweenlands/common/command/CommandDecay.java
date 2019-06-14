@@ -1,11 +1,5 @@
 package thebetweenlands.common.command;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
@@ -14,6 +8,11 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CommandDecay extends CommandBase {
 	@Override
@@ -60,8 +59,8 @@ public class CommandDecay extends CommandBase {
 				throw new CommandException("command.decay_saturation.noint");
 			}
 		}
-		if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-			IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+		IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+		if(cap != null) {
 			cap.getDecayStats().setDecayLevel(decay);
 			if(saturation != -1) {
 				cap.getDecayStats().setDecaySaturationLevel(Math.max(saturation, 0));

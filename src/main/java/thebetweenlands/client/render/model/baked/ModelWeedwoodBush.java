@@ -39,6 +39,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.QuadBuilder;
+import thebetweenlands.util.StatePropertyHelper;
 
 public class ModelWeedwoodBush implements IModel {
 	private final ResourceLocation leavesTexture;
@@ -342,33 +343,28 @@ public class ModelWeedwoodBush implements IModel {
 		}
 
 		@Override
-		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, long rand) {
-			IExtendedBlockState state = (IExtendedBlockState) stateOld;
-
+		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 			if(side == null) {
 				int posX = 0, posY = 0, posZ = 0;
 
 				long index = 0;
 
-				try {
-					if (state.getValue(BlockWeedwoodBush.WEST))
-						index |= 1;
-					if (state.getValue(BlockWeedwoodBush.EAST))
-						index |= 1 << 1;
-					if (state.getValue(BlockWeedwoodBush.DOWN))
-						index |= 1 << 2;
-					if (state.getValue(BlockWeedwoodBush.UP))
-						index |= 1 << 3;
-					if (state.getValue(BlockWeedwoodBush.NORTH))
-						index |= 1 << 4;
-					if (state.getValue(BlockWeedwoodBush.SOUTH))
-						index |= 1 << 5;
-					posX = state.getValue(BlockWeedwoodBush.POS_X);
-					posY = state.getValue(BlockWeedwoodBush.POS_Y);
-					posZ = state.getValue(BlockWeedwoodBush.POS_Z);
-				} catch(Exception ex) {
-					//how should this handle item rendering gracefully? :(
-				}
+				if (StatePropertyHelper.getPropertyOptional(state, BlockWeedwoodBush.WEST).orElse(false))
+					index |= 1;
+				if (StatePropertyHelper.getPropertyOptional(state, BlockWeedwoodBush.EAST).orElse(false))
+					index |= 1 << 1;
+				if (StatePropertyHelper.getPropertyOptional(state, BlockWeedwoodBush.DOWN).orElse(false))
+					index |= 1 << 2;
+				if (StatePropertyHelper.getPropertyOptional(state, BlockWeedwoodBush.UP).orElse(false))
+					index |= 1 << 3;
+				if (StatePropertyHelper.getPropertyOptional(state, BlockWeedwoodBush.NORTH).orElse(false))
+					index |= 1 << 4;
+				if (StatePropertyHelper.getPropertyOptional(state, BlockWeedwoodBush.SOUTH).orElse(false))
+					index |= 1 << 5;
+				
+				posX = StatePropertyHelper.getPropertyOptional(state, BlockWeedwoodBush.POS_X).orElse(0);
+				posY = StatePropertyHelper.getPropertyOptional(state, BlockWeedwoodBush.POS_Y).orElse(0);
+				posZ = StatePropertyHelper.getPropertyOptional(state, BlockWeedwoodBush.POS_Z).orElse(0);
 
 				ModelBakedWeedwoodBush model = this.modelCache.getUnchecked(index);
 
