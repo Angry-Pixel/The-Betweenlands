@@ -3,6 +3,7 @@ package thebetweenlands.common.entity;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
@@ -21,7 +22,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public EntityDecayPitTargetPart shield_7;
 	public EntityDecayPitTargetPart shield_8;
 	public EntityDecayPitTargetPart target;
-
+	public EntityDecayPitTargetPart bottom;
 	public EntityDecayPitTarget(World world) {
 		super(world);
 		setSize(5F, 3F);
@@ -34,7 +35,9 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				shield_6 = new EntityDecayPitTargetPart(this, "part6", 0.75F, 1F),
 				shield_7 = new EntityDecayPitTargetPart(this, "part7", 0.75F, 1F),
 				shield_8 = new EntityDecayPitTargetPart(this, "part8", 0.75F, 1F),
-				target = new EntityDecayPitTargetPart(this, "target", 1F, 1F) };
+				target = new EntityDecayPitTargetPart(this, "target", 2F, 1.75F),
+				bottom = new EntityDecayPitTargetPart(this, "bottom", 3F, 1.25F)
+				};
 	}
 
 	@Override
@@ -56,13 +59,14 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		setNewShieldHitboxPos(animationTicks + 225, shield_6);
 		setNewShieldHitboxPos(animationTicks + 270, shield_7);
 		setNewShieldHitboxPos(animationTicks + 315, shield_8);
-		target.setPosition(posX, posY + height / 2.0D - target.height / 2.0D, posZ);
+		target.setPosition(posX, posY + 1.25, posZ);
+		bottom.setPosition(posX, posY, posZ);
 	}
 
 	protected void setNewShieldHitboxPos(int animationTicks, EntityDecayPitTargetPart shield) {
 		double a = Math.toRadians(animationTicks);
-		double offSetX = -Math.sin(a) * 2.5D;
-		double offSetZ = Math.cos(a) * 2.5D;
+		double offSetX = -Math.sin(a) * 2.825D;
+		double offSetZ = Math.cos(a) * 2.825D;
 		float wobble = 0F;
 
 		if (shield == shield_1 || shield == shield_3 || shield == shield_5 || shield == shield_7)
@@ -70,7 +74,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		else
 			wobble = MathHelper.cos((float) ((animationTicks) * 0.07F)) * 0.7F;
 
-		shield.setPosition(posX + offSetX, posY + height / 2.0D - shield.height / 2.0D + wobble, posZ + offSetZ);
+		shield.setPosition(posX + offSetX, target.posY + target.height / 2.0D - shield.height / 2.0D + wobble, posZ + offSetZ);
 	}
 
 	@Override
@@ -108,7 +112,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	@Override
 	public boolean attackEntityFromPart(EntityDecayPitTargetPart part, DamageSource source, float damage) {
 		if (!getEntityWorld().isRemote) {
-			if (part != target)
+			if (part != target && part != bottom)
 				moveUp();
 
 			if (part == target)
@@ -118,11 +122,12 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	}
 
 	private void moveUp() {
-		setPosition(posX, posY + 1, posZ);
+		move(MoverType.SELF, 0D, 1, 0D);
+		//setPosition(posX, posY + 1, posZ);
 	}
 
 	private void moveDown() {
-		setPosition(posX, posY - 1, posZ);
+		move(MoverType.SELF, 0D, - 1, 0D);
 	}
 
 	@Override
