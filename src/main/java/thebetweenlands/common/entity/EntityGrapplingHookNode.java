@@ -14,7 +14,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -62,6 +61,9 @@ public class EntityGrapplingHookNode extends Entity {
 	 * Only updated on mount node!
 	 */
 	protected int nodeCount = 0;
+
+	protected Vec3d prevWeightPos;
+	protected Vec3d weightPos;
 
 	public EntityGrapplingHookNode(World world) {
 		super(world);
@@ -305,6 +307,10 @@ public class EntityGrapplingHookNode extends Entity {
 
 		this.checkForEntityCollisions(prevNode, nextNode);
 
+		if(this.world.isRemote && this.isMountNode()) {
+			this.updateWeight();
+		}
+
 		this.climbing = false;
 
 		Entity controller = this.getControllingPassenger();
@@ -318,6 +324,24 @@ public class EntityGrapplingHookNode extends Entity {
 		}
 
 		this.firstUpdate = false;
+	}
+
+	protected void updateWeight() {
+		final double weightRopeLength = 2D;
+
+		Vec3d tether = this.getPositionVector().add(0, this.height, 0);
+
+		if(this.weightPos == null) {
+			this.prevWeightPos = this.weightPos = tether.add(0, -weightRopeLength, 0);
+		}
+
+		this.prevWeightPos = this.weightPos;
+
+		this.weightPos = this.weightPos.add(0, -0.5D, 0);
+
+		if(this.weightPos.distanceTo(tether) > weightRopeLength) {
+			this.weightPos = tether.add(this.weightPos.subtract(tether).normalize().scale(weightRopeLength));
+		}
 	}
 
 	protected void constrainMotion(Entity parentNode, Entity constraintNode, double ropeFriction, double constraintMin, double constraintDampening) {
@@ -363,7 +387,7 @@ public class EntityGrapplingHookNode extends Entity {
 			if(controller.isJumping) {
 				if(controller.moveForward > 0) {
 					boolean canReelIn = false;
-					
+
 					//Only let player reel in once at least one node has attached.
 					//To prevent the grappling hook from being abused for flight.
 					Entity checkRopeNode = this.getPreviousNode();
@@ -372,42 +396,42 @@ public class EntityGrapplingHookNode extends Entity {
 							canReelIn = true;
 							break;
 						}
-						
+
 						checkRopeNode = ((EntityGrapplingHookNode) checkRopeNode).getPreviousNode();
 					}
-					
+
 					if(canReelIn) {
 						Entity prevNode = this.getPreviousNode();
-	
+
 						if(prevNode instanceof EntityGrapplingHookNode) {
 							Vec3d dir = prevNode.getPositionVector().subtract(this.getPositionVector()).normalize();
-	
+
 							float prevStepHeight = this.stepHeight;
 							this.stepHeight = 1.25f;
-	
+
 							//On ground required for step to work
 							this.onGround = true;
 							this.move(MoverType.SELF, dir.x * 0.25D, dir.y * 0.25D, dir.z * 0.52D);
-	
+
 							if(this.collidedHorizontally && dir.y > 0) {
 								this.onGround = true;
 								this.move(MoverType.SELF, 0, 0.2D, 0);
 								this.climbing = true;
 							}
-	
+
 							this.stepHeight = prevStepHeight;
-	
+
 							if(prevNode.getEntityBoundingBox().intersects(this.getEntityBoundingBox())) {
 								((EntityGrapplingHookNode) prevNode).removeNode(this);
 								this.setCurrentRopeLength((float) DEFAULT_ROPE_LENGTH - 0.1F);
 							} else {
 								this.setCurrentRopeLength(Math.min((float) DEFAULT_ROPE_LENGTH - 0.1F, (float) prevNode.getDistance(this.posX, this.posY + this.height - prevNode.height, this.posZ)));
 							}
-	
+
 							if(this.pullCounter % 24 == 0) {
 								this.world.playSound(null, controller.posX, controller.posY, controller.posZ, SoundRegistry.ROPE_PULL, SoundCategory.PLAYERS, 1.5F, 1);
 							}
-	
+
 							this.pullCounter++;
 						}
 					}
@@ -480,7 +504,7 @@ public class EntityGrapplingHookNode extends Entity {
 			if(mountNode != null) {
 				Entity user = mountNode.getControllingPassenger();
 
-				if(velocity > 0.25D) {
+				if(user != null && velocity > 0.25D) {
 					List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(this.posX, this.posY, this.posZ, prevNode.posX, prevNode.posY, prevNode.posZ));
 
 					for(EntityLivingBase entity : entities) {
@@ -492,10 +516,8 @@ public class EntityGrapplingHookNode extends Entity {
 
 								if(user instanceof EntityPlayer) {
 									source = new EntityDamageSourceIndirect("player", this, user);
-								} else if(user != null) {
-									source = new EntityDamageSourceIndirect("mob", this, user);
 								} else {
-									source = new EntityDamageSource("mob", this);
+									source = new EntityDamageSourceIndirect("mob", this, user);
 								}
 
 								entity.attackEntityFrom(source, 3.0F + (float) Math.min((velocity - 0.25D) * 1.5D, 4));
@@ -738,5 +760,13 @@ public class EntityGrapplingHookNode extends Entity {
 		}
 
 		return null;
+	}
+
+	public Vec3d getWeightPos(float partialTicks) {
+		if(this.weightPos == null) {
+			return new Vec3d(this.prevPosX + (this.posX - this.prevPosX) * partialTicks, this.prevPosY + (this.posY - this.prevPosY) * partialTicks, this.prevPosZ + (this.posZ - this.prevPosZ) * partialTicks);
+		} else {
+			return this.prevWeightPos.add(this.weightPos.subtract(this.prevWeightPos).scale(partialTicks));
+		}
 	}
 }
