@@ -4,20 +4,22 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.client.render.model.tile.ModelDecayPitChain;
-import thebetweenlands.common.entity.EntityDecayPitChainOuter;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.entity.ModelDecayPitChain;
+import thebetweenlands.common.entity.EntityDecayPitChain;
 import thebetweenlands.common.lib.ModInfo;
-
-public class RenderDecayPitChainOuter extends Render<EntityDecayPitChainOuter> {
+@SideOnly(Side.CLIENT)
+public class RenderDecayPitChain extends Render<EntityDecayPitChain> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_chain.png");
 	private final ModelDecayPitChain CHAIN_MODEL = new ModelDecayPitChain();
 
-	public RenderDecayPitChainOuter(RenderManager manager) {
+	public RenderDecayPitChain(RenderManager manager) {
 		super(manager);
 	}
 
 	@Override
-    public void doRender(EntityDecayPitChainOuter entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    public void doRender(EntityDecayPitChain entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		float scroll = entity.animationTicksPrev * 0.0625F + (entity.animationTicks * 0.0625F - entity.animationTicksPrev * 0.0625F) * partialTicks;
 		bindTexture(TEXTURE);
 
@@ -44,7 +46,7 @@ public class RenderDecayPitChainOuter extends Render<EntityDecayPitChainOuter> {
     }
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityDecayPitChainOuter entity) {
+	protected ResourceLocation getEntityTexture(EntityDecayPitChain entity) {
 		return TEXTURE;
 	}
 

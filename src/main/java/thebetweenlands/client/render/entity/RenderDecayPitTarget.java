@@ -7,10 +7,16 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.entity.ModelDecayPitPlug;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityDecayPitTargetPart;
-
+import thebetweenlands.common.lib.ModInfo;
+@SideOnly(Side.CLIENT)
 public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
+	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_plug.png");
+	private final ModelDecayPitPlug PLUG_MODEL = new ModelDecayPitPlug();
 
 	public RenderDecayPitTarget(RenderManager manager) {
 		super(manager);
@@ -18,11 +24,17 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 
 	@Override
     public void doRender(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		//super.doRender(entity, x, y, z, entityYaw, partialTicks);
 		for(EntityDecayPitTargetPart part : entity.shield_array)
 			renderDebugBoundingBox(part, x, y, z, entityYaw, partialTicks, part.posX - entity.posX, part.posY - entity.posY, part.posZ - entity.posZ);
-		renderDebugBoundingBox(entity, x, y, z, entityYaw, partialTicks, 0F, 0F, 0F);
-		}
+		//renderDebugBoundingBox(entity, x, y, z, entityYaw, partialTicks, 0F, 0F, 0F);
+		bindTexture(TEXTURE);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x, y + 0.5F, z);
+		GlStateManager.scale(-1F, -1F, 1F);
+		PLUG_MODEL.render(entity, 0.0625F);
+		GlStateManager.popMatrix();	
+	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityDecayPitTarget entity) {

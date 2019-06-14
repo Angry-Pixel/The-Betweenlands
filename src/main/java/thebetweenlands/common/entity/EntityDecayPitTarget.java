@@ -24,7 +24,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 	public EntityDecayPitTarget(World world) {
 		super(world);
-		setSize(5F, 5F);
+		setSize(5F, 3F);
 		shield_array = new EntityDecayPitTargetPart[] {
 				shield_1 = new EntityDecayPitTargetPart(this, "part1", 0.75F, 1F),
 				shield_2 = new EntityDecayPitTargetPart(this, "part2", 0.75F, 1F),

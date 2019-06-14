@@ -14,16 +14,16 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
-public class EntityDecayPitChainOuter extends Entity {
+public class EntityDecayPitChain extends Entity {
 	public int animationTicks = 0;
 	public int animationTicksPrev = 0;
-	private static final DataParameter<Boolean> IS_RAISING = EntityDataManager.createKey(EntityDecayPitChainOuter.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> IS_MOVING = EntityDataManager.createKey(EntityDecayPitChainOuter.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> FACING = EntityDataManager.createKey(EntityDecayPitChainOuter.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> LENGTH = EntityDataManager.createKey(EntityDecayPitChainOuter.class, DataSerializers.VARINT);
-	private static final DataParameter<Boolean> IS_HANGING = EntityDataManager.createKey(EntityDecayPitChainOuter.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_RAISING = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_MOVING = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> FACING = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> LENGTH = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> IS_HANGING = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.BOOLEAN);
 
-	public EntityDecayPitChainOuter(World world) {
+	public EntityDecayPitChain(World world) {
 		super(world);
 		setSize(0.625F, 1F);
 	}
