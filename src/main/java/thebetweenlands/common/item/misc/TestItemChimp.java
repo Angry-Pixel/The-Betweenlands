@@ -8,7 +8,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
+import thebetweenlands.common.entity.EntityDecayPitChain;
+import thebetweenlands.common.entity.EntityDecayPitTarget;
 
 
 //MINE!!
@@ -151,15 +152,69 @@ public class TestItemChimp extends Item {
 			}
 		*/
 	
-
+/*
 				WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 				//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
 				dungeon.generate(worldIn, itemRand, pos.up(59).add(3, 0, 3));
 				//dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
- /*	
-				EntityTonyWormEggSac spawn = new EntityTonyWormEggSac(worldIn);
-				spawn.setPosition(pos.getX() + 0.5F, pos.getY() + 1F, pos.getZ() + 0.5F);
-				worldIn.spawnEntity(spawn);*/
+ */	
+				EntityDecayPitTarget target = new EntityDecayPitTarget(worldIn);
+				EntityDecayPitChain chain1 = new EntityDecayPitChain(worldIn);
+				EntityDecayPitChain chain2 = new EntityDecayPitChain(worldIn);
+				EntityDecayPitChain chain3 = new EntityDecayPitChain(worldIn);
+				EntityDecayPitChain chain4 = new EntityDecayPitChain(worldIn);
+				EntityDecayPitChain chain5 = new EntityDecayPitChain(worldIn);
+				EntityDecayPitChain chain6 = new EntityDecayPitChain(worldIn);
+				EntityDecayPitChain chain7 = new EntityDecayPitChain(worldIn);
+				EntityDecayPitChain chain8 = new EntityDecayPitChain(worldIn);
+				chain1.setHanging(true);
+				chain2.setHanging(true);
+				chain3.setHanging(true);
+				chain4.setHanging(true);
+				chain5.setHanging(false);
+				chain6.setHanging(false);
+				chain7.setHanging(false);
+				chain8.setHanging(false);
+				
+				chain1.setLength(2);
+				chain2.setLength(2);
+				chain3.setLength(2);
+				chain4.setLength(2);
+				chain5.setLength(5);
+				chain6.setLength(5);
+				chain7.setLength(5);
+				chain8.setLength(5);
+
+				// S = 0, W = 1, N = 2, E = 3
+				chain1.setFacing(1);
+				chain2.setFacing(0);
+				chain3.setFacing(3);
+				chain4.setFacing(2);
+				chain5.setFacing(1);
+				chain6.setFacing(0);
+				chain7.setFacing(3);
+				chain8.setFacing(2);
+				
+				chain1.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() - 0.5F);
+				chain2.setPosition(pos.getX() + 1.5F, pos.getY(), pos.getZ() + 0.5F);
+				chain3.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 1.5F);
+				chain4.setPosition(pos.getX() - 0.5F, pos.getY(), pos.getZ() + 0.5F);
+				chain5.setPosition(pos.getX() + 0.5F, pos.getY() -3F, pos.getZ() - 10.5F);
+				chain6.setPosition(pos.getX() + 11.5F, pos.getY() -3F, pos.getZ() + 0.5F);
+				chain7.setPosition(pos.getX() + 0.5F, pos.getY() -3F, pos.getZ() + 11.5F);
+				chain8.setPosition(pos.getX() - 10.5F, pos.getY() -3F, pos.getZ() + 0.5F);
+
+				target.setPosition(pos.getX() + 0.5F, pos.getY() -3F, pos.getZ() + 0.5F);
+				
+				worldIn.spawnEntity(target);
+				worldIn.spawnEntity(chain1);
+				worldIn.spawnEntity(chain2);
+				worldIn.spawnEntity(chain3);
+				worldIn.spawnEntity(chain4);
+				worldIn.spawnEntity(chain5);
+				worldIn.spawnEntity(chain6);
+				worldIn.spawnEntity(chain7);
+				worldIn.spawnEntity(chain8);
 		}
 
 		return EnumActionResult.SUCCESS;

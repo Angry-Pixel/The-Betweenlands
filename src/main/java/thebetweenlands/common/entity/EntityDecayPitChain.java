@@ -134,6 +134,7 @@ public class EntityDecayPitChain extends Entity {
 	}
 
 	public void setFacing(int direction) {
+		// S = 0, W = 1, N = 2, E = 3
 		dataManager.set(FACING, direction);
 	}
 
