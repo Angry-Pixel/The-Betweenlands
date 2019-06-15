@@ -57,7 +57,7 @@ public class WindAmbienceType extends AmbienceType {
 	public float getPitch() {
 		Entity ridingEntity = this.getPlayer().getRidingEntity();
 		if(ridingEntity != null) {
-			return 0.9F + (1.0F - (float) Math.pow(1.0F - Math.min((float) this.getVelocity(ridingEntity) * 1.5F, 4.0F) / 2.0F, 1 / 2.0F)) * 0.8F * (float)(1 - this.getSoundVariation(this.getPlayer()) * 0.5D);
+			return 0.9F + (1.0F - (float) Math.pow(1.0F - Math.min((float) this.getVelocity(ridingEntity) * 1.5F, 4.0F) / 4.0F, 1 / 2.0F)) * 1.8F * (float)(1 - this.getSoundVariation(this.getPlayer()) * 0.5D);
 		}
 		return 1.0F;
 	}
