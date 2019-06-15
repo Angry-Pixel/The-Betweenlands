@@ -118,7 +118,7 @@ public class EntityRegistry {
 		registerEntity(EntityThrownTarminion.class, "thrown_tarminion", 64, 10, true);
 		registerEntity(EntityRopeNode.class, "rope_node", 64, 1, true);
 		registerEntity(EntityGrapplingHookNode.class, "grapping_hook_node", 64, 1, true);
-		registerEntity(EntityVolarkite.class, "volarkite", 64, 20, true);
+		registerEntity(EntityVolarkite.class, "volarkite", 256, 20, false);
 		registerEntity(EntityMummyArm.class, "mummy_arm", 64, 20, false);
 		registerEntity(EntityAngryPebble.class, "angry_pebble");
 		registerEntity(EntityFortressBoss.class, "fortress_boss", 0x000000, 0x00FFFA, 64, 1, true);

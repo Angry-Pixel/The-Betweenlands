@@ -1,9 +1,13 @@
 package thebetweenlands.client.render.entity;
 
+import java.nio.FloatBuffer;
+
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -23,6 +27,8 @@ public class RenderVolarkite extends Render<EntityVolarkite> {
 	protected static RenderPlayer renderPlayerSmallArmsVolarkite;
 	protected static RenderPlayer renderPlayerNormalArmsVolarkite;
 
+	protected final FloatBuffer brightnessBuffer = GLAllocation.createDirectFloatBuffer(4);
+
 	public RenderVolarkite(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -31,10 +37,11 @@ public class RenderVolarkite extends Render<EntityVolarkite> {
 	public void doRender(EntityVolarkite entity, double x, double y, double z, float yaw, float partialTicks) {
 		this.bindEntityTexture(entity);
 
+		GlStateManager.enableRescaleNormal();
+
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.enableTexture2D();
-		GlStateManager.enableLighting();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		GlStateManager.pushMatrix();
@@ -46,10 +53,11 @@ public class RenderVolarkite extends Render<EntityVolarkite> {
 		GlStateManager.rotate((float)-interpolate(entity.prevRotationRoll, entity.rotationRoll, partialTicks), 0, 0, 1);
 		GlStateManager.rotate((float)-interpolate(entity.prevRotationPitch, entity.rotationPitch, partialTicks), 1, 0, 0);
 		GlStateManager.translate(0, 0.5D, 0);
-		
+
 		GlStateManager.translate(0, 0, 0.14D);
-		
-		GlStateManager.enableRescaleNormal();
+
+		RenderHelper.enableStandardItemLighting();
+
 		GlStateManager.scale(-1, -1, 1);
 		MODEL.render();
 		GlStateManager.disableRescaleNormal();
@@ -75,11 +83,11 @@ public class RenderVolarkite extends Render<EntityVolarkite> {
 
 			if(ridingEntity instanceof EntityVolarkite && event.getRenderer() instanceof RenderPlayerVolarkite == false) {
 				event.setCanceled(true);
-				
+
 				EntityVolarkite kite = (EntityVolarkite) ridingEntity;
 
 				GlStateManager.pushMatrix();
-				
+
 				//Make sure origin is at feet when rotating
 				GlStateManager.translate(event.getX(), event.getY(), event.getZ());
 
@@ -114,6 +122,8 @@ public class RenderVolarkite extends Render<EntityVolarkite> {
 				}
 
 				playerRenderer.doRender(player, event.getX(), event.getY(), event.getZ(), (float)interpolate(player.prevRotationYaw, player.rotationYaw, event.getPartialRenderTick()), event.getPartialRenderTick());
+
+				RenderHelper.enableStandardItemLighting();
 
 				GlStateManager.popMatrix();
 			}
