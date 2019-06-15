@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.misc;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
@@ -8,6 +9,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.EntityDecayPitChain;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 
@@ -16,7 +18,6 @@ import thebetweenlands.common.entity.EntityDecayPitTarget;
 public class TestItemChimp extends Item {
 	public TestItemChimp() {
 		this.setMaxStackSize(1);
-		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
 
 	@Override
@@ -218,5 +219,10 @@ public class TestItemChimp extends Item {
 		}
 
 		return EnumActionResult.SUCCESS;
+	}
+	
+	@Override
+	public CreativeTabs getCreativeTab() {
+		return BetweenlandsConfig.DEBUG.debug ? BLCreativeTabs.SPECIALS : null;
 	}
 }
