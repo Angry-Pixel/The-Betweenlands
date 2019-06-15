@@ -119,6 +119,7 @@ import thebetweenlands.common.item.misc.ItemShimmerStone;
 import thebetweenlands.common.item.misc.ItemSpiritTreeFaceMaskSmallAnimated;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.ItemTarminion;
+import thebetweenlands.common.item.misc.ItemVolarkite;
 import thebetweenlands.common.item.misc.ItemWeedwoodRowboat;
 import thebetweenlands.common.item.misc.ItemWeedwoodSign;
 import thebetweenlands.common.item.misc.LocationDebugItem;
@@ -381,6 +382,7 @@ public class ItemRegistry {
     public static final Item LURKER_SKIN_POUCH = new ItemLurkerSkinPouch();
     public static final Item CAVING_ROPE = new ItemCavingRope();
     public static final Item GRAPPLING_HOOK = new ItemGrapplingHook();
+    public static final Item VOLARKITE = new ItemVolarkite();
     public static final Item ROPE_ITEM = new ItemRope();
     public static final Item RING_OF_POWER = new ItemRingOfPower();
     public static final Item RING_OF_FLIGHT = new ItemRingOfFlight();
