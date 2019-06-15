@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
@@ -124,11 +126,39 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	private void moveUp() {
 		move(MoverType.SELF, 0D, 1, 0D);
 		//setPosition(posX, posY + 1, posZ);
+		for (EntityDecayPitChain chain : getChains()) {
+			if(!chain.isMoving()) {
+				if(chain.isHanging()) {
+					chain.setRaising(true);
+					chain.setMoving(true);
+				}
+				if(!chain.isHanging()) {
+					chain.setRaising(false);
+					chain.setMoving(true);
+				}
+			}
+		}
 	}
 
 	private void moveDown() {
 		move(MoverType.SELF, 0D, - 1, 0D);
+		for (EntityDecayPitChain chain : getChains()) {
+			if(!chain.isMoving()) {
+				if(chain.isHanging()) {
+					chain.setRaising(false);
+					chain.setMoving(true);
+				}
+				if(!chain.isHanging()) {
+					chain.setRaising(true);
+					chain.setMoving(true);
+				}
+			}
+		}
 	}
+	
+	public List<EntityDecayPitChain> getChains() {
+		return getWorld().<EntityDecayPitChain>getEntitiesWithinAABB(EntityDecayPitChain.class, getEntityBoundingBox().grow(10D, 8D, 10D));
+    }
 
 	@Override
 	public World getWorld() {
