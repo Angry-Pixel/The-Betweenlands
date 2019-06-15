@@ -144,6 +144,7 @@ import thebetweenlands.client.render.entity.RenderTermite;
 import thebetweenlands.client.render.entity.RenderThrownTarminion;
 import thebetweenlands.client.render.entity.RenderTonySludgeWorm;
 import thebetweenlands.client.render.entity.RenderTonyWormEggSac;
+import thebetweenlands.client.render.entity.RenderVolarkite;
 import thebetweenlands.client.render.entity.RenderVolatileSoul;
 import thebetweenlands.client.render.entity.RenderWallLamprey;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
@@ -203,6 +204,7 @@ import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.EntityTonyWormEggSac;
+import thebetweenlands.common.entity.EntityVolarkite;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
@@ -530,7 +532,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         RenderingRegistry.registerEntityRenderingHandler(EntitySporeJet.class, RenderSporeJet::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySmollSludge.class, RenderSmollSludge::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreebling.class, RenderGreebling::new);
-
+		RenderingRegistry.registerEntityRenderingHandler(EntityVolarkite.class, RenderVolarkite::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBoulderSprite.class, RenderBoulderSprite::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceSmall.class, RenderSpiritTreeFaceSmall::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceLarge.class, RenderSpiritTreeFaceLarge::new);
@@ -733,6 +735,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(ItemBarkAmulet.class);
         MinecraftForge.EVENT_BUS.register(RenderGrapplingHookNode.class);
         MinecraftForge.EVENT_BUS.register(ExtendedReachHandler.class);
+        MinecraftForge.EVENT_BUS.register(RenderVolarkite.class);
 	}
 
 	private static FontRenderer pixelLove;

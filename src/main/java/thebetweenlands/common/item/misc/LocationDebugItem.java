@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -18,6 +19,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
+import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
@@ -90,5 +93,10 @@ public class LocationDebugItem extends Item {
 		}
 
 		return EnumActionResult.SUCCESS;
+	}
+	
+	@Override
+	public CreativeTabs getCreativeTab() {
+		return BetweenlandsConfig.DEBUG.debug ? BLCreativeTabs.SPECIALS : null;
 	}
 }

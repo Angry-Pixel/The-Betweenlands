@@ -1,0 +1,12 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:items/volarkite"
+  },
+  "overrides": [
+    {
+      "predicate": { "using": 1.0 },
+      "model": "thebetweenlands:item/volarkite_using"
+    }
+  ]
+}

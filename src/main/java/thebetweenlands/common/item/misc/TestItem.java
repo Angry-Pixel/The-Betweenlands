@@ -4,7 +4,7 @@ import java.util.Random;
 
 
 import net.minecraft.block.state.IBlockState;
-
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
@@ -17,6 +17,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
 
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.world.gen.feature.WorldGenSmallSpiritTree;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
@@ -33,7 +34,6 @@ import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure
 public class TestItem extends Item {
 	public TestItem() {
 		this.setMaxStackSize(1);
-		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
 
 	@Override
@@ -174,5 +174,10 @@ public class TestItem extends Item {
 		}
 
 		return EnumActionResult.SUCCESS;
+	}
+	
+	@Override
+	public CreativeTabs getCreativeTab() {
+		return BetweenlandsConfig.DEBUG.debug ? BLCreativeTabs.SPECIALS : null;
 	}
 }

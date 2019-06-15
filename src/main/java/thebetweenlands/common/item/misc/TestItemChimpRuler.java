@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,13 +21,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 //MINE!!
 public class TestItemChimpRuler extends Item {
 	public TestItemChimpRuler() {
 		this.setMaxStackSize(1);
-		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flag) {
@@ -71,5 +73,10 @@ public class TestItemChimpRuler extends Item {
 			return false;
 		}
 		return true;
+	}
+	
+	@Override
+	public CreativeTabs getCreativeTab() {
+		return BetweenlandsConfig.DEBUG.debug ? BLCreativeTabs.SPECIALS : null;
 	}
 }
