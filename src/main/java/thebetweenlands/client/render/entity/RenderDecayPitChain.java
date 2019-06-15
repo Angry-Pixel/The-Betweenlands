@@ -20,18 +20,24 @@ public class RenderDecayPitChain extends Render<EntityDecayPitChain> {
 
 	@Override
     public void doRender(EntityDecayPitChain entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		float scroll = entity.animationTicksPrev * 0.0625F + (entity.animationTicks * 0.0625F - entity.animationTicksPrev * 0.0625F) * partialTicks;
+		float scroll = entity.animationTicksPrev * 0.0078125F + (entity.animationTicks * 0.0078125F - entity.animationTicksPrev * 0.0078125F) * partialTicks;
 		bindTexture(TEXTURE);
 
 		if(entity.isMoving()) {
 			GlStateManager.pushMatrix();
-			if(entity.isRaising() && !entity.isHanging())
+			if(entity.isRaising() && !entity.isHanging()) {
 				GlStateManager.translate(x, y + 0.5F + scroll, z);
-			if(!entity.isRaising())
+				GlStateManager.scale(-1F, -1F, 1F);
+				GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
+				CHAIN_MODEL.render(entity, 0.0625F);
+			}
+			if(!entity.isRaising()){
 				GlStateManager.translate(x, y + entity.getLength() + 1.5F - scroll , z);
-			GlStateManager.scale(-1F, -1F, 1F);
-			GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
-			CHAIN_MODEL.render(entity, 0.0625F);
+				GlStateManager.scale(-1F, -1F, 1F);
+				GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
+				CHAIN_MODEL.render(entity, 0.0625F);
+			}
+
 			GlStateManager.popMatrix();
 		}
 

@@ -32,11 +32,12 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 		GlStateManager.scale(-1F, -1F, 1F);
 		PLUG_MODEL.render(entity, 0.0625F);
 		GlStateManager.popMatrix();	
-		
+		GlStateManager.pushMatrix();
 		for(EntityDecayPitTargetPart part : entity.shield_array)
 			if(part != entity.bottom)
 				renderDebugBoundingBox(part, x, y, z, entityYaw, partialTicks, part.posX - entity.posX, part.posY - entity.posY, part.posZ - entity.posZ);
 		//renderDebugBoundingBox(entity, x, y, z, entityYaw, partialTicks, 0F, 0F, 0F);
+		GlStateManager.popMatrix();	
 	}
 
 	@Override

@@ -11,11 +11,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.entity.EntityDecayPitChain;
 
 public class BlockDecayPitOuterChainHousing extends BlockHorizontal {
 //TODO This block will be removed once the entity is sorted - for now it's just a quick way of setting one in the world
@@ -37,11 +36,11 @@ public class BlockDecayPitOuterChainHousing extends BlockHorizontal {
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
 		// S = 0, W = 1, N = 2, E = 3
 		if (!world.isRemote) {
-			EntityDecayPitTarget entity = new EntityDecayPitTarget(world);
+			EntityDecayPitChain entity = new EntityDecayPitChain(world);
 			entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 4D, pos.getZ() + 0.5D, 0F, 0F);
-			//entity.setFacing(state.getValue(FACING).getHorizontalIndex());
-			//entity.setLength(7);
-			//entity.setHanging(true); // change this if you want to see hanging or scroll chains
+			entity.setFacing(state.getValue(FACING).getHorizontalIndex());
+			entity.setLength(7);
+			entity.setHanging(true); // change this if you want to see hanging or scroll chains
 			world.spawnEntity(entity);
 		}
 	}
