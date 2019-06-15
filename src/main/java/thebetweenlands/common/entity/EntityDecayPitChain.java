@@ -19,6 +19,7 @@ public class EntityDecayPitChain extends Entity {
 	public int animationTicksPrev = 0;
 	private static final DataParameter<Boolean> IS_RAISING = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_MOVING = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_SLOW = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> FACING = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> LENGTH = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> IS_HANGING = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.BOOLEAN);
@@ -33,6 +34,7 @@ public class EntityDecayPitChain extends Entity {
 		dataManager.register(IS_RAISING, false);
 		dataManager.register(IS_MOVING, false);
 		dataManager.register(IS_HANGING, false);
+		dataManager.register(IS_SLOW, true);
 		dataManager.register(FACING, 0);
 		dataManager.register(LENGTH, 1);
 	}
@@ -41,46 +43,49 @@ public class EntityDecayPitChain extends Entity {
 	public void onUpdate() {
 		super.onUpdate();
 		animationTicksPrev = animationTicks;
-		if (isMoving())
-			animationTicks++;
-		/*  meh bit janky 
-			if (animationTicksPrev < 16) {
+		if (isMoving()) {
+			if(isSlow())
+				animationTicks++;
+			else
+				animationTicks += 8;
+		// meh bit janky this here is the cuase of all the desync
+			if (animationTicksPrev < (isSlow() ? 127 : 120)) {
 				if (isHanging()) {
 					if (!isRaising())
 						if (getLength() < 7)
-							setHangingLength(getLength(), (float) animationTicks * 0.003125F);
+							setHangingLength(getLength(), (float) animationTicks * 0.0078125F);
 
 					if (isRaising())
-						if (getLength() > 1)
-							setHangingLength(getLength(), -(float) animationTicks * 0.003125F);
+						if (getLength() > 2)
+							setHangingLength(getLength(), -(float) animationTicks * 0.0078125F);
 
 				}
 			}
-		*/
-		if (animationTicksPrev >= 16) {
+		
+		if (animationTicksPrev >= 128) {
 			animationTicks = animationTicksPrev = 0;
 			setMoving(false);
 			if (isHanging()) {
 				if (!isRaising()) {
 					if (getLength() < 7) {
-						setLength(getLength() + 1);
 						setPositionAndUpdate(posX, posY - 1D, posZ);
+						setLength(getLength() + 1);
 					}
 				}
 				if (isRaising()) {
-					if (getLength() > 1) {
-						setLength(getLength() - 1);
+					if (getLength() > 2) {
 						setPositionAndUpdate(posX, posY + 1D, posZ);
+						setLength(getLength() - 1);
 					}
 				}
 			}
-
+		}
 		}
 	}
 
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-		if (!player.isSneaking() && !isMoving() && getLength() > 1) {
+	/*	if (!player.isSneaking() && !isMoving() && getLength() > 1) {
 			setRaising(true);
 			setMoving(true);
 			return true;
@@ -90,6 +95,7 @@ public class EntityDecayPitChain extends Entity {
 			setMoving(true);
 			return true;
 		}
+		*/
 		return false;
 	}
 
@@ -103,20 +109,19 @@ public class EntityDecayPitChain extends Entity {
 	protected void setNewLength(float height) {
 		if (this.height != height) {
 			this.height = height;
-			AxisAlignedBB axisalignedbb = getEntityBoundingBox();
-			setEntityBoundingBox(new AxisAlignedBB(axisalignedbb.minX, axisalignedbb.minY, axisalignedbb.minZ, axisalignedbb.minX + 0.625D, axisalignedbb.minY + (double) height, axisalignedbb.minZ + 0.625D));
+			AxisAlignedBB axisalignedbb = new AxisAlignedBB(this.posX - this.width * 0.5D, this.posY, this.posZ - this.width * 0.5D, this.posX + this.width * 0.5D, this.posY + this.height, this.posZ + this.width * 0.5D);
+			setEntityBoundingBox(axisalignedbb);
 		}
 	}
-	
-	/* meh bit janky 
+
 	protected void setHangingLength(float height, float extended) {
 		if (this.height != height + extended) {
 			this.height = height;
-			AxisAlignedBB axisalignedbb = getEntityBoundingBox();
-			setEntityBoundingBox(axisalignedbb.grow(0, extended, 0).offset(0, -extended, 0));
+			AxisAlignedBB axisalignedbb = new AxisAlignedBB(this.posX - this.width * 0.5D, this.posY, this.posZ - this.width * 0.5D, this.posX + this.width * 0.5D, this.posY + this.height, this.posZ + this.width * 0.5D);
+			setEntityBoundingBox(axisalignedbb.grow(0, extended * 0.5D, 0).offset(0, -extended * 0.5D, 0));
 		}
 	}
-	*/
+
 	public void setRaising(boolean raising) {
 		dataManager.set(IS_RAISING, raising);
 	}
@@ -127,6 +132,14 @@ public class EntityDecayPitChain extends Entity {
 
 	public void setMoving(boolean moving) {
 		dataManager.set(IS_MOVING, moving);
+	}
+
+	public void setSlow(boolean slow) {
+		dataManager.set(IS_SLOW, slow);
+	}
+
+	public boolean isSlow() {
+		return dataManager.get(IS_SLOW);
 	}
 
 	public boolean isMoving() {

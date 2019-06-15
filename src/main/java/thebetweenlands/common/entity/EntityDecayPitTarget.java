@@ -63,6 +63,21 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		setNewShieldHitboxPos(animationTicks + 315, shield_8);
 		target.setPosition(posX, posY + 1.25, posZ);
 		bottom.setPosition(posX, posY, posZ);
+		setMainPosition();
+
+	}
+
+	private void setMainPosition() {
+		for (EntityDecayPitChain chain : getChains()) {
+				if(chain.isHanging()) {
+					setPosition(posX, chain.getEntityBoundingBox().minY - height, posZ);
+					if(chain.getLength() > 2)
+						if(!getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%128 == 0) {
+							moveUp();
+						}
+					break;
+				}
+		}
 	}
 
 	protected void setNewShieldHitboxPos(int animationTicks, EntityDecayPitTargetPart shield) {
@@ -114,8 +129,8 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	@Override
 	public boolean attackEntityFromPart(EntityDecayPitTargetPart part, DamageSource source, float damage) {
 		if (!getEntityWorld().isRemote) {
-			if (part != target && part != bottom)
-				moveUp();
+			//if (part != target && part != bottom)
+			//	moveUp();
 
 			if (part == target)
 				moveDown();
@@ -124,36 +139,37 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	}
 
 	private void moveUp() {
-		move(MoverType.SELF, 0D, 1, 0D);
-		//setPosition(posX, posY + 1, posZ);
 		for (EntityDecayPitChain chain : getChains()) {
-			if(!chain.isMoving()) {
+			//if(!chain.isMoving()) {
 				if(chain.isHanging()) {
 					chain.setRaising(true);
 					chain.setMoving(true);
+					chain.setSlow(true);
 				}
 				if(!chain.isHanging()) {
 					chain.setRaising(false);
 					chain.setMoving(true);
+					chain.setSlow(true);
 				}
 			}
-		}
+		//}
 	}
 
 	private void moveDown() {
-		move(MoverType.SELF, 0D, - 1, 0D);
 		for (EntityDecayPitChain chain : getChains()) {
-			if(!chain.isMoving()) {
+			//if(!chain.isMoving()) {
 				if(chain.isHanging()) {
 					chain.setRaising(false);
 					chain.setMoving(true);
+					chain.setSlow(false);
 				}
 				if(!chain.isHanging()) {
 					chain.setRaising(true);
 					chain.setMoving(true);
+					chain.setSlow(false);
 				}
 			}
-		}
+		//}
 	}
 	
 	public List<EntityDecayPitChain> getChains() {
