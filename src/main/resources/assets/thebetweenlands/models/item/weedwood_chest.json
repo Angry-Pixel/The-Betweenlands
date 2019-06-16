@@ -1,5 +1,5 @@
 {
-    "parent": "thebetweenlands:item/internal/weedwood_chest$from_item(thebetweenlands:weedwood_chest)",
+    "parent": "builtin/entity",
     "display": {
         "gui": {
             "rotation": [ 30, 45, 0 ],

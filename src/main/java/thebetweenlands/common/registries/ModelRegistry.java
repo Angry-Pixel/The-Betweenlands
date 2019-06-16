@@ -1,23 +1,12 @@
 package thebetweenlands.common.registries;
 
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import javax.imageio.ImageIO;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import thebetweenlands.client.handler.TextureStitchHandler;
-import thebetweenlands.client.handler.TextureStitchHandler.TextureStitcher;
 import thebetweenlands.client.render.model.baked.ModelBlank;
 import thebetweenlands.client.render.model.baked.ModelCombined;
 import thebetweenlands.client.render.model.baked.ModelConnectedTexture;
@@ -144,13 +133,6 @@ public class ModelRegistry {
 	public static final IModel DENTROTHYST_SHIELD_ORANGE_POLISHED = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_orange_polished"), new ResourceLocation("thebetweenlands:particle/item/dentrothyst_shield_orange_polished_particle"), 64, 64, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel LURKER_SKIN_SHIELD = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLurkerSkinShield(), new ResourceLocation("thebetweenlands:items/shields/lurker_skin_shield"), new ResourceLocation("thebetweenlands:particle/item/lurker_skin_shield_particle"), 128, 128, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel BUCKET = new ModelDynBucketBL();
-	public static final IModel WEEDWOOD_CHEST = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelChest(), new ResourceLocation("thebetweenlands:tiles/weedwood_chest"), 64, 32,
-			new IVertexProcessor() {
-		@Override
-		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {
-			return new Vec3UV(vertexIn.x - 0.5D, vertexIn.y + 0.5D, -vertexIn.z + 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
-		}
-	});
 	public static final IModel MIRE_SNAIL_EGG = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelMireSnailEgg(), new ResourceLocation("thebetweenlands:items/mire_snail_egg"), 16, 16);
 
 	//Misc
