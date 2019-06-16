@@ -223,7 +223,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	}
 
 	public List<EntityDecayPitChain> getChains() {
-		return getWorld().<EntityDecayPitChain>getEntitiesWithinAABB(EntityDecayPitChain.class, getEntityBoundingBox().grow(10D, 8D, 10D));
+		return getWorld().<EntityDecayPitChain>getEntitiesWithinAABB(EntityDecayPitChain.class, getEntityBoundingBox().grow(10D, 0D, 10D));
     }
 	
 	@Override
