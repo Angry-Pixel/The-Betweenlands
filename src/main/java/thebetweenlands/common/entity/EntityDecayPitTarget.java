@@ -98,14 +98,14 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		setNewShieldHitboxPos(animationTicks + 225, shield_6);
 		setNewShieldHitboxPos(animationTicks + 270, shield_7);
 		setNewShieldHitboxPos(animationTicks + 315, shield_8);
-		target.setPosition(posX, getEntityBoundingBox().maxY - getProgress() + 1.25, posZ);
-		bottom.setPosition(posX, getEntityBoundingBox().maxY - getProgress(), posZ);
-		chain_1.setPosition(posX, getEntityBoundingBox().maxY - getProgress(), posZ - 1D);
-		chain_2.setPosition(posX, getEntityBoundingBox().maxY - getProgress(), posZ + 1D);
-		chain_3.setPosition(posX + 1D, getEntityBoundingBox().maxY - getProgress(), posZ);
-		chain_4.setPosition(posX - 1D, getEntityBoundingBox().maxY - getProgress(), posZ);
-		target.setPosition(posX, chain_1.getEntityBoundingBox().minY - 1.75D, posZ);
-		bottom.setPosition(posX, chain_1.getEntityBoundingBox().minY - 3D, posZ);
+		target.setPosition(posX, posY + height - getProgress() + 1.25, posZ);
+		bottom.setPosition(posX, posY + height - getProgress(), posZ);
+		chain_1.setPosition(posX, posY + height - getProgress(), posZ - 1D);
+		chain_2.setPosition(posX, posY + height - getProgress(), posZ + 1D);
+		chain_3.setPosition(posX + 1D, posY + height - getProgress(), posZ);
+		chain_4.setPosition(posX - 1D, posY + height - getProgress(), posZ);
+		target.setPosition(posX, chain_1.posY - 1.75D, posZ);
+		bottom.setPosition(posX, chain_1.posY - 3D, posZ);
 
 		if (isMoving()) {
 			if (isSlow())
