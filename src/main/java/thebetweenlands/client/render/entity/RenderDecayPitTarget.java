@@ -28,20 +28,20 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	@Override
     public void doRender(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		float scroll = entity.animationTicksChainPrev * 0.0078125F + (entity.animationTicksChain * 0.0078125F - entity.animationTicksChainPrev * 0.0078125F) * partialTicks;
-		double offsetY = 4D + entity.getEntityBoundingBox().minY - entity.getProgress();
+		double offsetY = entity.height - entity.getProgress();
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + offsetY + 1.5F, z);
+		GlStateManager.translate(x, y + offsetY -1.5D, z);
 		GlStateManager.scale(-1F, -1F, 1F);
 		PLUG_MODEL.render(entity, 0.0625F);
 		GlStateManager.popMatrix();	
 
 		bindTexture(CHAIN_TEXTURE);
 		for (int len = 0; len <= entity.getLength(); len++) {
-			renderChainpart(entity, x + 1D, y  + offsetY + len + 4.5D, z, 0F, 0F);
-			renderChainpart(entity, x - 1D, y + offsetY + len + 4.5D, z, 0F, 180F);
-			renderChainpart(entity, x, y + offsetY + len + 4.5D, z + 1F, 0F, 90F);
-			renderChainpart(entity, x, y + offsetY + len + 4.5D, z - 1F, 0F, 270F);
+			renderChainpart(entity, x + 1D, y + offsetY + len + 1.5D, z, 0F, 0F);
+			renderChainpart(entity, x - 1D, y + offsetY + len + 1.5D, z, 0F, 180F);
+			renderChainpart(entity, x, y + offsetY + len + 1.5D, z + 1D, 0F, 90F);
+			renderChainpart(entity, x, y + offsetY + len + 1.5D, z - 1D, 0F, 270F);
 		}
 
 		// debug boxes for parts without models
