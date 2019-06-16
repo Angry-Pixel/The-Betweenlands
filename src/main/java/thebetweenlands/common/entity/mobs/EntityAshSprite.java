@@ -179,92 +179,94 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 	}
 
 	class AIChargeAttack extends EntityAIBase {
-		private final EntityAshSprite ash_sprite;
+		private final EntityAshSprite ashSprite;
 
 		public AIChargeAttack(EntityAshSprite ash_sprite) {
 			setMutexBits(1);
-			this.ash_sprite = ash_sprite;
+			this.ashSprite = ash_sprite;
 		}
 
 		@Override
 		public boolean shouldExecute() {
-			if (ash_sprite.getAttackTarget() != null && !ash_sprite.getMoveHelper().isUpdating() && ash_sprite.rand.nextInt(7) == 0)
-				return ash_sprite.getDistanceSq(ash_sprite.getAttackTarget()) > 4.0D;
+			if (ashSprite.getAttackTarget() != null && !ashSprite.getMoveHelper().isUpdating() && ashSprite.rand.nextInt(7) == 0)
+				return ashSprite.getDistanceSq(ashSprite.getAttackTarget()) > 4.0D;
 			else
 				return false;
 		}
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return ash_sprite.getMoveHelper().isUpdating() && ash_sprite.isCharging() && ash_sprite.getAttackTarget() != null && ash_sprite.getAttackTarget().isEntityAlive();
+			return ashSprite.getMoveHelper().isUpdating() && ashSprite.isCharging() && ashSprite.getAttackTarget() != null && ashSprite.getAttackTarget().isEntityAlive();
 		}
 
 		@Override
 		public void startExecuting() {
-			EntityLivingBase entitylivingbase = ash_sprite.getAttackTarget();
+			EntityLivingBase entitylivingbase = ashSprite.getAttackTarget();
 			Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
-			ash_sprite.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
-			ash_sprite.setCharging(true);
+			ashSprite.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+			ashSprite.setCharging(true);
 			//ash_sprite.playSound(SoundEvents.ASH_SPRITE_ATTACK, 1.0F, 1.0F);
 		}
 
 		@Override
 		public void resetTask() {
-			ash_sprite.setCharging(false);
+			ashSprite.setCharging(false);
 		}
 
 		@Override
 		public void updateTask() {
-			EntityLivingBase entitylivingbase = ash_sprite.getAttackTarget();
+			EntityLivingBase target = ashSprite.getAttackTarget();
 
-			if (ash_sprite.getEntityBoundingBox().intersects(entitylivingbase.getEntityBoundingBox())) {
-				ash_sprite.attackEntityAsMob(entitylivingbase);
-				ash_sprite.setCharging(false);
-			} else {
-				double d0 = ash_sprite.getDistanceSq(entitylivingbase);
-				if (d0 < 9.0D) {
-					Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
-					ash_sprite.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+			if(target != null) {
+				if (ashSprite.getEntityBoundingBox().intersects(target.getEntityBoundingBox())) {
+					ashSprite.attackEntityAsMob(target);
+					ashSprite.setCharging(false);
+				} else {
+					double d0 = ashSprite.getDistanceSq(target);
+					if (d0 < 9.0D) {
+						Vec3d vec3d = target.getPositionEyes(1.0F);
+						ashSprite.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+					}
 				}
 			}
 		}
 	}
 
 	class AIMoveControl extends EntityMoveHelper {
-		private final EntityAshSprite ash_sprite;
+		private final EntityAshSprite ashSprite;
 
 		public AIMoveControl(EntityAshSprite ash_sprite) {
 			super(ash_sprite);
-			this.ash_sprite = ash_sprite;
+			this.ashSprite = ash_sprite;
 		}
 
 		@Override
 		public void onUpdateMoveHelper() {
 			if (action == EntityMoveHelper.Action.MOVE_TO) {
-				double d0 = posX - ash_sprite.posX;
-				double d1 = posY - ash_sprite.posY;
-				double d2 = posZ - ash_sprite.posZ;
+				double d0 = posX - ashSprite.posX;
+				double d1 = posY - ashSprite.posY;
+				double d2 = posZ - ashSprite.posZ;
 				double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 				d3 = (double) MathHelper.sqrt(d3);
 
-				if (d3 < ash_sprite.getEntityBoundingBox().getAverageEdgeLength()) {
+				if (d3 < ashSprite.getEntityBoundingBox().getAverageEdgeLength()) {
 					action = EntityMoveHelper.Action.WAIT;
-					ash_sprite.motionX *= 0.5D;
-					ash_sprite.motionY *= 0.5D;
-					ash_sprite.motionZ *= 0.5D;
+					ashSprite.motionX *= 0.5D;
+					ashSprite.motionY *= 0.5D;
+					ashSprite.motionZ *= 0.5D;
 				} else {
-					ash_sprite.motionX += d0 / d3 * 0.05D * speed;
-					ash_sprite.motionY += d1 / d3 * 0.05D * speed;
-					ash_sprite.motionZ += d2 / d3 * 0.05D * speed;
+					ashSprite.motionX += d0 / d3 * 0.05D * speed;
+					ashSprite.motionY += d1 / d3 * 0.05D * speed;
+					ashSprite.motionZ += d2 / d3 * 0.05D * speed;
 
-					if (ash_sprite.getAttackTarget() == null) {
-						ash_sprite.rotationYaw = -((float) MathHelper.atan2(ash_sprite.motionX, ash_sprite.motionZ)) * (180F / (float) Math.PI);
-						ash_sprite.renderYawOffset = ash_sprite.rotationYaw;
+					if (ashSprite.getAttackTarget() == null) {
+						ashSprite.rotationYaw = -((float) MathHelper.atan2(ashSprite.motionX, ashSprite.motionZ)) * (180F / (float) Math.PI);
+						ashSprite.renderYawOffset = ashSprite.rotationYaw;
 					} else {
-						double d4 = ash_sprite.getAttackTarget().posX - ash_sprite.posX;
-						double d5 = ash_sprite.getAttackTarget().posZ - ash_sprite.posZ;
-						ash_sprite.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
-						ash_sprite.renderYawOffset = ash_sprite.rotationYaw;
+						double d4 = ashSprite.getAttackTarget().posX - ashSprite.posX;
+						double d5 = ashSprite.getAttackTarget().posZ - ashSprite.posZ;
+						ashSprite.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
+						ashSprite.renderYawOffset = ashSprite.rotationYaw;
 					}
 				}
 			}
@@ -272,16 +274,16 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 	}
 
 	class AIMoveRandom extends EntityAIBase {
-		private final EntityAshSprite ash_sprite;
+		private final EntityAshSprite ashSprite;
 
 		public AIMoveRandom(EntityAshSprite ash_sprite) {
 			setMutexBits(1);
-			this.ash_sprite = ash_sprite;
+			this.ashSprite = ash_sprite;
 		}
 
 		@Override
 		public boolean shouldExecute() {
-			return !ash_sprite.getMoveHelper().isUpdating() && ash_sprite.rand.nextInt(7) == 0;
+			return !ashSprite.getMoveHelper().isUpdating() && ashSprite.rand.nextInt(7) == 0;
 		}
 
 		@Override
@@ -291,20 +293,20 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 
 		@Override
 		public void updateTask() {
-			BlockPos blockpos = ash_sprite.getBoundOrigin();
+			BlockPos blockpos = ashSprite.getBoundOrigin();
 
 			if (blockpos == null) {
-				blockpos = new BlockPos(ash_sprite);
+				blockpos = new BlockPos(ashSprite);
 			}
 
 			for (int i = 0; i < 3; ++i) {
-				BlockPos blockpos1 = blockpos.add(ash_sprite.rand.nextInt(15) - 7, ash_sprite.rand.nextInt(11) - 5, ash_sprite.rand.nextInt(15) - 7);
+				BlockPos blockpos1 = blockpos.add(ashSprite.rand.nextInt(15) - 7, ashSprite.rand.nextInt(11) - 5, ashSprite.rand.nextInt(15) - 7);
 
-				if (ash_sprite.world.isAirBlock(blockpos1)) {
-					ash_sprite.moveHelper.setMoveTo((double) blockpos1.getX() + 0.5D, (double) blockpos1.getY() + 0.5D, (double) blockpos1.getZ() + 0.5D, 0.25D);
+				if (ashSprite.world.isAirBlock(blockpos1)) {
+					ashSprite.moveHelper.setMoveTo((double) blockpos1.getX() + 0.5D, (double) blockpos1.getY() + 0.5D, (double) blockpos1.getZ() + 0.5D, 0.25D);
 
-					if (ash_sprite.getAttackTarget() == null) {
-						ash_sprite.getLookHelper().setLookPosition((double) blockpos1.getX() + 0.5D, (double) blockpos1.getY() + 0.5D, (double) blockpos1.getZ() + 0.5D, 180.0F, 20.0F);
+					if (ashSprite.getAttackTarget() == null) {
+						ashSprite.getLookHelper().setLookPosition((double) blockpos1.getX() + 0.5D, (double) blockpos1.getY() + 0.5D, (double) blockpos1.getZ() + 0.5D, 180.0F, 20.0F);
 					}
 					break;
 				}
