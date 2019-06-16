@@ -358,7 +358,9 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 		@Override
 		public void updateTask() {
-			if(!this.entity.isAttacking()) {
+			EntityLivingBase target = this.entity.getAttackTarget();
+			
+			if(target != null && !this.entity.isAttacking()) {
 				if(this.findWoodCooldown <= 0 && (this.woodBlocks == null || this.woodBlocks.isEmpty())) {
 					this.findWoodCooldown = 20 + this.entity.rand.nextInt(40);
 					this.woodBlocks = this.entity.findNearbyWoodBlocks();
@@ -374,13 +376,13 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 
 						BlockPos pos = this.woodBlocks.remove(this.entity.rand.nextInt(this.woodBlocks.size()));
 
-						if(!this.stayInRange || this.entity.getAttackTarget().getDistanceSqToCenter(pos) <= this.maxRangeSq) {
+						if(!this.stayInRange || target.getDistanceSqToCenter(pos) <= this.maxRangeSq) {
 							Vec3d center = new Vec3d(pos.getX() + this.entity.getBlockWidth() / 2.0D, pos.getY() + this.entity.getBlockHeight() / 2.0D, pos.getZ() + this.entity.getBlockWidth() / 2.0D);
-							Vec3d lookDir = this.entity.getAttackTarget().getPositionVector().add(0, this.entity.getAttackTarget().getEyeHeight(), 0).subtract(center);
+							Vec3d lookDir = target.getPositionVector().add(0, target.getEyeHeight(), 0).subtract(center);
 
 							EnumFacing facing = EnumFacing.getFacingFromVector((float)lookDir.x, (float)lookDir.y, (float)lookDir.z);
 
-							if(this.canSeeFrom(pos, facing, this.entity.getAttackTarget()) && this.entity.checkAnchorAt(center, lookDir, AnchorChecks.ALL) == 0) {
+							if(this.canSeeFrom(pos, facing, target) && this.entity.checkAnchorAt(center, lookDir, AnchorChecks.ALL) == 0) {
 								this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
 								this.entity.lookHelper.setLookDirection(facing.getXOffset(), facing.getYOffset(), facing.getZOffset());
 								break;
@@ -389,7 +391,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 									if(otherFacing != facing) {
 										lookDir = new Vec3d(otherFacing.getXOffset(), 0, otherFacing.getZOffset());
 
-										if(this.canSeeFrom(pos, otherFacing, this.entity.getAttackTarget()) && this.entity.checkAnchorAt(center, lookDir, AnchorChecks.ALL) == 0) {
+										if(this.canSeeFrom(pos, otherFacing, target) && this.entity.checkAnchorAt(center, lookDir, AnchorChecks.ALL) == 0) {
 											this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
 											this.entity.lookHelper.setLookDirection(otherFacing.getXOffset(), otherFacing.getYOffset(), otherFacing.getZOffset());
 											break;

@@ -325,8 +325,11 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 
 		@Override
 		public void updateTask() {
-			this.sludge.faceEntity(this.sludge.getAttackTarget(), 10.0F, 10.0F);
-			((EntitySludge.SludgeMoveHelper)this.sludge.getMoveHelper()).setDirection(this.sludge.rotationYaw, true);
+			EntityLivingBase target = this.sludge.getAttackTarget();
+			if(target != null) {
+				this.sludge.faceEntity(target, 10.0F, 10.0F);
+				((EntitySludge.SludgeMoveHelper)this.sludge.getMoveHelper()).setDirection(this.sludge.rotationYaw, true);
+			}
 		}
 	}
 
