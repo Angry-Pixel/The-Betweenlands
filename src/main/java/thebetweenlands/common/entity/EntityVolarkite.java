@@ -32,7 +32,7 @@ public class EntityVolarkite extends Entity {
 
 	public EntityVolarkite(World world) {
 		super(world);
-		this.setSize(0.6F, 1.7F);
+		this.setSize(0.6F, 1.8F);
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class EntityVolarkite extends Entity {
 
 	@Override
 	public double getMountedYOffset() {
-		return 0.325D;
+		return 0.01D + (this.getControllingPassenger() != null ? -this.getControllingPassenger().getYOffset() : 0);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class EntityVolarkite extends Entity {
 
 		double rotIncr = 0;
 
-		boolean hasEquipment = false;
+		boolean hasValidUser = false;
 
 		if(controller != null) {
 			controller.fallDistance = 0;
@@ -116,8 +116,8 @@ public class EntityVolarkite extends Entity {
 			Iterator<ItemStack> it = controller.getHeldEquipment().iterator();
 			while(it.hasNext()) {
 				ItemStack stack = it.next();
-				if(!stack.isEmpty() && stack.getItem() instanceof ItemVolarkite) {
-					hasEquipment = true;
+				if(!stack.isEmpty() && stack.getItem() instanceof ItemVolarkite && ((ItemVolarkite) stack.getItem()).canRideKite(stack, controller)) {
+					hasValidUser = true;
 					break;
 				}
 			}
@@ -154,7 +154,7 @@ public class EntityVolarkite extends Entity {
 			this.velocityChanged = true;
 		}
 
-		if(!this.world.isRemote && !hasEquipment) {
+		if(!this.world.isRemote && !hasValidUser) {
 			this.onKillCommand();
 		}
 

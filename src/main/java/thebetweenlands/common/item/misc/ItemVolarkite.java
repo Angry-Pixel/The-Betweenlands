@@ -93,4 +93,8 @@ public class ItemVolarkite extends Item {
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
 		return oldStack.getItem() != newStack.getItem() || slotChanged;
 	}
+	
+	public boolean canRideKite(ItemStack stack, Entity entity) {
+		return true;
+	}
 }

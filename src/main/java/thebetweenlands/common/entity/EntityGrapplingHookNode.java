@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -25,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.item.misc.ItemGrapplingHook;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityGrapplingHookNode extends Entity {
@@ -112,7 +115,7 @@ public class EntityGrapplingHookNode extends Entity {
 
 	@Override
 	public double getMountedYOffset() {
-		return 0.325D;
+		return 0.01D + (this.getControllingPassenger() != null ? -this.getControllingPassenger().getYOffset() : 0);
 	}
 
 	@Override
@@ -127,7 +130,7 @@ public class EntityGrapplingHookNode extends Entity {
 		}
 
 		if(this.isMountNode()) {
-			this.setSize(0.6F, 1.7F);
+			this.setSize(0.6F, 1.8F);
 		} else {
 			this.setSize(0.1F, 0.1F);
 		}
@@ -319,7 +322,20 @@ public class EntityGrapplingHookNode extends Entity {
 			this.handleControllerMovement((EntityLivingBase) controller);
 		}
 
-		if(!this.world.isRemote && (nextNode == null || (this.isMountNode() && (this.getControllingPassenger() == null || prevNode == null)))) {
+		boolean hasValidUser = false;
+
+		if(controller != null && this.isMountNode()) {
+			Iterator<ItemStack> it = controller.getHeldEquipment().iterator();
+			while(it.hasNext()) {
+				ItemStack stack = it.next();
+				if(!stack.isEmpty() && stack.getItem() instanceof ItemGrapplingHook && ((ItemGrapplingHook) stack.getItem()).canRideGrapplingHook(stack, controller)) {
+					hasValidUser = true;
+					break;
+				}
+			}
+		}
+
+		if(!this.world.isRemote && (nextNode == null || (this.isMountNode() && (!hasValidUser || prevNode == null)))) {
 			this.onKillCommand();
 		}
 
