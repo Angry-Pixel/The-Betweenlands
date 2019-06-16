@@ -83,6 +83,13 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		animationTicks += 5;
 		if (animationTicks >= 355)
 			animationTicks = animationTicksPrev = 0;
+		
+		for(EntityDecayPitTargetPart part :shield_array) {
+			part.prevPosX = part.lastTickPosX = part.posX;
+			part.prevPosY = part.lastTickPosY = part.posY;
+			part.prevPosZ = part.lastTickPosZ = part.posZ;
+		}
+		
 		setNewShieldHitboxPos(animationTicks, shield_1);
 		setNewShieldHitboxPos(animationTicks + 45, shield_2);
 		setNewShieldHitboxPos(animationTicks + 90, shield_3);
