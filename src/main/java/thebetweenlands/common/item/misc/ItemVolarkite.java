@@ -69,7 +69,7 @@ public class ItemVolarkite extends Item {
 			boolean isOffHand = stack == living.getHeldItem(EnumHand.OFF_HAND);
 			boolean hasOffHand = !living.getHeldItem(EnumHand.OFF_HAND).isEmpty() && living.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemVolarkite;
 			if((isMainHand || isOffHand) && ((isMainHand && !hasOffHand) || isOffHand)) {
-				if(entity.ticksExisted % 20 == 0) {
+				if(!world.isRemote && entity.ticksExisted % 20 == 0) {
 					stack.damageItem(1, (EntityLivingBase) entity);
 				}
 
