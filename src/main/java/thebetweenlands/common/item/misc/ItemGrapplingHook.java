@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.misc;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -82,5 +83,9 @@ public class ItemGrapplingHook extends Item {
 		}
 
 		return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+	}
+	
+	public boolean canRideGrapplingHook(ItemStack stack, Entity entity) {
+		return true;
 	}
 }

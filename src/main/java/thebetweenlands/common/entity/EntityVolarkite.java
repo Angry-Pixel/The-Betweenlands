@@ -11,10 +11,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -32,7 +32,7 @@ public class EntityVolarkite extends Entity {
 
 	public EntityVolarkite(World world) {
 		super(world);
-		this.setSize(0.6F, 1.7F);
+		this.setSize(0.6F, 1.8F);
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class EntityVolarkite extends Entity {
 
 	@Override
 	public double getMountedYOffset() {
-		return 0.325D;
+		return 0.01D + (this.getControllingPassenger() != null ? -this.getControllingPassenger().getYOffset() : 0);
 	}
 
 	@Override
@@ -71,7 +71,13 @@ public class EntityVolarkite extends Entity {
 		float invFriction = 1.0F;
 
 		if(this.onGround) {
-			invFriction = 0.8F;
+			invFriction *= 0.8F;
+		}
+		if(this.isInWater() || this.isInLava()) {
+			invFriction *= 0.8F;
+			if(this.world.getBlockState(new BlockPos(this.posX, this.posY + this.height + 0.75D, this.posZ)).getMaterial().isLiquid()) {
+				invFriction *= 0.5F; 
+			}
 		}
 
 		this.motionX *= invFriction;
@@ -84,7 +90,7 @@ public class EntityVolarkite extends Entity {
 
 		double rotIncr = 0;
 
-		boolean hasEquipment = false;
+		boolean hasValidUser = false;
 
 		if(controller != null) {
 			controller.fallDistance = 0;
@@ -116,8 +122,8 @@ public class EntityVolarkite extends Entity {
 			Iterator<ItemStack> it = controller.getHeldEquipment().iterator();
 			while(it.hasNext()) {
 				ItemStack stack = it.next();
-				if(!stack.isEmpty() && stack.getItem() instanceof ItemVolarkite) {
-					hasEquipment = true;
+				if(!stack.isEmpty() && stack.getItem() instanceof ItemVolarkite && ((ItemVolarkite) stack.getItem()).canRideKite(stack, controller)) {
+					hasValidUser = true;
 					break;
 				}
 			}
@@ -154,7 +160,7 @@ public class EntityVolarkite extends Entity {
 			this.velocityChanged = true;
 		}
 
-		if(!this.world.isRemote && !hasEquipment) {
+		if(!this.world.isRemote && !hasValidUser) {
 			this.onKillCommand();
 		}
 
@@ -165,8 +171,9 @@ public class EntityVolarkite extends Entity {
 		int range = 10;
 
 		boolean hasUpdraft = false;
+		boolean hasDowndraft = false;
 
-		int updraftPos = 0;
+		int sourcePos = 0;
 
 		PooledMutableBlockPos pos = PooledMutableBlockPos.retain();
 		pos.setPos(MathHelper.floor(this.posX), MathHelper.floor(this.posY), MathHelper.floor(this.posZ));
@@ -180,15 +187,19 @@ public class EntityVolarkite extends Entity {
 				Fluid fluid = ((IFluidBlock) block).getFluid();
 				if(fluid.getTemperature() > 373 /*roughly 100°C*/) {
 					hasUpdraft = true;
+				} else if(fluid.getTemperature() < 272.15 /*roughly -1°C*/) {
+					hasDowndraft = true;
 				}
 			} else if(state.getMaterial() == Material.FIRE || state.getMaterial() == Material.LAVA || block instanceof BlockFire || block == BlockRegistry.OCTINE_ORE || block == BlockRegistry.OCTINE_BLOCK) {
 				hasUpdraft = true;
+			} else if(state.getMaterial() == Material.ICE || state.getMaterial() == Material.SNOW || state.getMaterial() == Material.CRAFTED_SNOW || state.getMaterial() == Material.PACKED_ICE) {
+				hasDowndraft = true;
 			} else if(!block.isAir(state, this.world, pos)) {
 				break;
 			}
 
-			if(hasUpdraft) {
-				updraftPos = pos.getY();
+			if(hasUpdraft || hasDowndraft) {
+				sourcePos = pos.getY();
 				break;
 			}
 
@@ -197,13 +208,13 @@ public class EntityVolarkite extends Entity {
 
 		pos.release();
 
-		if(hasUpdraft) {
+		if(hasUpdraft || hasDowndraft) {
 			if(this.motionY < 1.0D) {
-				this.motionY += 0.1D;
+				this.motionY += hasDowndraft ? -0.03D : 0.1D;
 			}
 
 			if(this.world.isRemote) {
-				for(int i = 0; i < 10; i++) {
+				for(int i = 0; i < (hasDowndraft ? 2 : 10); i++) {
 					float offsetX = this.world.rand.nextFloat() - 0.5F;
 					float offsetZ = this.world.rand.nextFloat() - 0.5F;
 
@@ -212,7 +223,7 @@ public class EntityVolarkite extends Entity {
 					offsetX /= len;
 					offsetZ /= len;
 
-					this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + offsetX, updraftPos + (this.posY + 1 - updraftPos) * this.world.rand.nextFloat(), this.posZ + offsetZ, this.motionX, this.motionY + 0.25D, this.motionZ);
+					this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + offsetX, sourcePos + (this.posY + (hasDowndraft ? 2.4D : 1) - sourcePos) * this.world.rand.nextFloat(), this.posZ + offsetZ, this.motionX, this.motionY + (hasDowndraft ? -0.15D : 0.25D), this.motionZ);
 				}
 			}
 		}
