@@ -735,8 +735,10 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		@Override
 		public void startExecuting() {
 			Entity target = this.entity.getAttackTarget();
-			this.rollDir = new Vec3d(target.posX - this.entity.posX, 0, target.posZ - this.entity.posZ).normalize();
-			this.entity.startRolling(160, 35, 15, this.rollDir, 1.8D);
+			if(target != null) {
+				this.rollDir = new Vec3d(target.posX - this.entity.posX, 0, target.posZ - this.entity.posZ).normalize();
+				this.entity.startRolling(160, 35, 15, this.rollDir, 1.8D);
+			}
 		}
 
 		@Override
@@ -993,18 +995,22 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 		public void updateTask() {
 			Entity target = this.entity.getAttackTarget();
 
-			if(this.entity.getRollingTicks() <= 0) {
-				if(!this.shouldExecute()) {
-					this.finished = true;
+			if(target != null) {
+				if(this.entity.getRollingTicks() <= 0) {
+					if(!this.shouldExecute()) {
+						this.finished = true;
+					} else {
+						this.rollDir = new Vec3d(target.posX - this.entity.posX, 0, target.posZ - this.entity.posZ).normalize();
+						this.entity.startRolling(80, 10, 10, this.rollDir, this.rollSpeed);
+						this.entity.isAiHiding = false;
+						this.entity.setHideout(null);
+					}
+				} else if(this.rollDir != null && target != null) {
+					double overshoot = this.rollDir.dotProduct(new Vec3d(this.entity.posX - target.posX, 0, this.entity.posZ - target.posZ));
+					if(overshoot >= 2) {
+						this.entity.stopRolling();
+					}
 				} else {
-					this.rollDir = new Vec3d(target.posX - this.entity.posX, 0, target.posZ - this.entity.posZ).normalize();
-					this.entity.startRolling(80, 10, 10, this.rollDir, this.rollSpeed);
-					this.entity.isAiHiding = false;
-					this.entity.setHideout(null);
-				}
-			} else if(this.rollDir != null && target != null) {
-				double overshoot = this.rollDir.dotProduct(new Vec3d(this.entity.posX - target.posX, 0, this.entity.posZ - target.posZ));
-				if(overshoot >= 2) {
 					this.entity.stopRolling();
 				}
 			} else {

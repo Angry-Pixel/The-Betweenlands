@@ -434,49 +434,52 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 		public void updateTask() {
 			--this.attackTime;
 			EntityLivingBase target = this.pyrad.getAttackTarget();
-			double distSq = this.pyrad.getDistanceSq(target);
-
-			if (distSq < 4.0D) {
-				if (this.attackTime <= 0) {
-					this.attackTime = 20;
-					this.pyrad.attackEntityAsMob(target);
-				}
-
-				this.pyrad.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, 1.0D);
-			} else if (distSq < 256.0D) {
-				double dx = target.posX - this.pyrad.posX;
-				double dy = target.getEntityBoundingBox().minY + (double)(target.height / 2.0F) - (this.pyrad.posY + (double)(this.pyrad.height / 2.0F));
-				double dz = target.posZ - this.pyrad.posZ;
-
-				if (this.attackTime <= 0) {
-					++this.attackStep;
-
-					if (this.attackStep == 1) {
-						this.attackTime = 20 + this.pyrad.rand.nextInt(40);
-						this.pyrad.setCharging(true);
-					} else if (this.attackStep <= 4) {
-						this.attackTime = 6;
-					} else {
-						this.attackTime = 60 + this.pyrad.rand.nextInt(40);
-						this.attackStep = 0;
-						this.pyrad.setCharging(false);
+			
+			if(target != null) {
+				double distSq = this.pyrad.getDistanceSq(target);
+	
+				if (distSq < 4.0D) {
+					if (this.attackTime <= 0) {
+						this.attackTime = 20;
+						this.pyrad.attackEntityAsMob(target);
 					}
-
-					if (this.attackStep > 1) {
-						float f = MathHelper.sqrt(MathHelper.sqrt(distSq)) * 0.8F;
-						this.pyrad.world.playEvent((EntityPlayer)null, 1018, new BlockPos((int)this.pyrad.posX, (int)this.pyrad.posY, (int)this.pyrad.posZ), 0);
-
-						int numberFlames = (int)this.pyrad.getEntityAttribute(FLAMES_PER_ATTACK).getAttributeValue();
-
-						for (int i = 0; i < (numberFlames > 1 ? this.pyrad.rand.nextInt(numberFlames) : 0) + 1; ++i) {
-							EntityPyradFlame flame = new EntityPyradFlame(this.pyrad.world, this.pyrad, dx + this.pyrad.getRNG().nextGaussian() * (double)f, dy, dz + this.pyrad.getRNG().nextGaussian() * (double)f);
-							flame.posY = this.pyrad.posY + (double)(this.pyrad.height / 2.0F) + 0.5D;
-							this.pyrad.world.spawnEntity(flame);
+	
+					this.pyrad.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, 1.0D);
+				} else if (distSq < 256.0D) {
+					double dx = target.posX - this.pyrad.posX;
+					double dy = target.getEntityBoundingBox().minY + (double)(target.height / 2.0F) - (this.pyrad.posY + (double)(this.pyrad.height / 2.0F));
+					double dz = target.posZ - this.pyrad.posZ;
+	
+					if (this.attackTime <= 0) {
+						++this.attackStep;
+	
+						if (this.attackStep == 1) {
+							this.attackTime = 20 + this.pyrad.rand.nextInt(40);
+							this.pyrad.setCharging(true);
+						} else if (this.attackStep <= 4) {
+							this.attackTime = 6;
+						} else {
+							this.attackTime = 60 + this.pyrad.rand.nextInt(40);
+							this.attackStep = 0;
+							this.pyrad.setCharging(false);
+						}
+	
+						if (this.attackStep > 1) {
+							float f = MathHelper.sqrt(MathHelper.sqrt(distSq)) * 0.8F;
+							this.pyrad.world.playEvent((EntityPlayer)null, 1018, new BlockPos((int)this.pyrad.posX, (int)this.pyrad.posY, (int)this.pyrad.posZ), 0);
+	
+							int numberFlames = (int)this.pyrad.getEntityAttribute(FLAMES_PER_ATTACK).getAttributeValue();
+	
+							for (int i = 0; i < (numberFlames > 1 ? this.pyrad.rand.nextInt(numberFlames) : 0) + 1; ++i) {
+								EntityPyradFlame flame = new EntityPyradFlame(this.pyrad.world, this.pyrad, dx + this.pyrad.getRNG().nextGaussian() * (double)f, dy, dz + this.pyrad.getRNG().nextGaussian() * (double)f);
+								flame.posY = this.pyrad.posY + (double)(this.pyrad.height / 2.0F) + 0.5D;
+								this.pyrad.world.spawnEntity(flame);
+							}
 						}
 					}
+	
+					this.pyrad.getLookHelper().setLookPositionWithEntity(target, 10.0F, 10.0F);
 				}
-
-				this.pyrad.getLookHelper().setLookPositionWithEntity(target, 10.0F, 10.0F);
 			}
 
 			super.updateTask();
