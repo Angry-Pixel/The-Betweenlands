@@ -51,7 +51,7 @@ public class RenderLivingWeedwoodShield extends TileEntityItemStackRenderer {
 		atlas.restoreLastBlurMipmap();
 
 		mc.getRenderItem().renderItem(this.normalShield, TransformType.NONE);
-
+		
 		textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		atlas.setBlurMipmap(false, false);
 
@@ -98,5 +98,12 @@ public class RenderLivingWeedwoodShield extends TileEntityItemStackRenderer {
 		}
 
 		GlStateManager.popMatrix();
+		
+		//Reset GL state to what GUI item rendering expects
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.enableRescaleNormal();
+        GlStateManager.alphaFunc(516, 0.1F);
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 	}
 }
