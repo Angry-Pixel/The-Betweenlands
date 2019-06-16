@@ -22,7 +22,6 @@ public class EntityDecayPitChain extends Entity {
 	private static final DataParameter<Boolean> IS_SLOW = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> FACING = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> LENGTH = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.VARINT);
-	private static final DataParameter<Boolean> IS_HANGING = EntityDataManager.createKey(EntityDecayPitChain.class, DataSerializers.BOOLEAN);
 
 	public EntityDecayPitChain(World world) {
 		super(world);
@@ -33,7 +32,6 @@ public class EntityDecayPitChain extends Entity {
 	protected void entityInit() {
 		dataManager.register(IS_RAISING, false);
 		dataManager.register(IS_MOVING, false);
-		dataManager.register(IS_HANGING, false);
 		dataManager.register(IS_SLOW, true);
 		dataManager.register(FACING, 0);
 		dataManager.register(LENGTH, 1);
@@ -48,38 +46,11 @@ public class EntityDecayPitChain extends Entity {
 				animationTicks++;
 			else
 				animationTicks += 8;
-		// meh bit janky this here is the cuase of all the desync
-			if (animationTicksPrev < (isSlow() ? 127 : 120)) {
-				if (isHanging()) {
-					if (!isRaising())
-						if (getLength() < 7)
-							setHangingLength(getLength(), (float) animationTicks * 0.0078125F);
+		}
 
-					if (isRaising())
-						if (getLength() > 2)
-							setHangingLength(getLength(), -(float) animationTicks * 0.0078125F);
-
-				}
-			}
-		
 		if (animationTicksPrev >= 128) {
 			animationTicks = animationTicksPrev = 0;
 			setMoving(false);
-			if (isHanging()) {
-				if (!isRaising()) {
-					if (getLength() < 7) {
-						setPositionAndUpdate(posX, posY - 1D, posZ);
-						setLength(getLength() + 1);
-					}
-				}
-				if (isRaising()) {
-					if (getLength() > 2) {
-						setPositionAndUpdate(posX, posY + 1D, posZ);
-						setLength(getLength() - 1);
-					}
-				}
-			}
-		}
 		}
 	}
 
@@ -114,14 +85,6 @@ public class EntityDecayPitChain extends Entity {
 		}
 	}
 
-	protected void setHangingLength(float height, float extended) {
-		if (this.height != height + extended) {
-			this.height = height;
-			AxisAlignedBB axisalignedbb = new AxisAlignedBB(this.posX - this.width * 0.5D, this.posY, this.posZ - this.width * 0.5D, this.posX + this.width * 0.5D, this.posY + this.height, this.posZ + this.width * 0.5D);
-			setEntityBoundingBox(axisalignedbb.grow(0, extended * 0.5D, 0).offset(0, -extended * 0.5D, 0));
-		}
-	}
-
 	public void setRaising(boolean raising) {
 		dataManager.set(IS_RAISING, raising);
 	}
@@ -133,6 +96,10 @@ public class EntityDecayPitChain extends Entity {
 	public void setMoving(boolean moving) {
 		dataManager.set(IS_MOVING, moving);
 	}
+	
+	public boolean isMoving() {
+		return dataManager.get(IS_MOVING);
+	}
 
 	public void setSlow(boolean slow) {
 		dataManager.set(IS_SLOW, slow);
@@ -140,10 +107,6 @@ public class EntityDecayPitChain extends Entity {
 
 	public boolean isSlow() {
 		return dataManager.get(IS_SLOW);
-	}
-
-	public boolean isMoving() {
-		return dataManager.get(IS_MOVING);
 	}
 
 	public void setFacing(int direction) {
@@ -161,14 +124,6 @@ public class EntityDecayPitChain extends Entity {
 
 	public int getLength() {
 		return dataManager.get(LENGTH);
-	}
-
-	public void setHanging(boolean hanging) {
-		dataManager.set(IS_HANGING, hanging);
-	}
-
-	public boolean isHanging() {
-		return dataManager.get(IS_HANGING);
 	}
 
 	@Override
@@ -203,14 +158,12 @@ public class EntityDecayPitChain extends Entity {
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
 		setLength(nbt.getInteger("length"));
-		setHanging(nbt.getBoolean("hanging"));
 		setFacing(nbt.getInteger("facing"));
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("length", getLength());
-		nbt.setBoolean("hanging", isHanging());
 		nbt.setInteger("facing", getFacingRender());
 	}
 

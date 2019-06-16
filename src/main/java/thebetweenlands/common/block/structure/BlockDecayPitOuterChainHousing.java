@@ -40,7 +40,6 @@ public class BlockDecayPitOuterChainHousing extends BlockHorizontal {
 			entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 4D, pos.getZ() + 0.5D, 0F, 0F);
 			entity.setFacing(state.getValue(FACING).getHorizontalIndex());
 			entity.setLength(7);
-			entity.setHanging(true); // change this if you want to see hanging or scroll chains
 			world.spawnEntity(entity);
 		}
 	}

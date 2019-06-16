@@ -25,7 +25,7 @@ public class RenderDecayPitChain extends Render<EntityDecayPitChain> {
 
 		if(entity.isMoving()) {
 			GlStateManager.pushMatrix();
-			if(entity.isRaising() && !entity.isHanging()) {
+			if(entity.isRaising()) {
 				GlStateManager.translate(x, y + 0.5F + scroll, z);
 				GlStateManager.scale(-1F, -1F, 1F);
 				GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
@@ -37,7 +37,6 @@ public class RenderDecayPitChain extends Render<EntityDecayPitChain> {
 				GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
 				CHAIN_MODEL.render(entity, 0.0625F);
 			}
-
 			GlStateManager.popMatrix();
 		}
 
