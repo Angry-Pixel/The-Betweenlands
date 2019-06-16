@@ -11,10 +11,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -71,7 +71,13 @@ public class EntityVolarkite extends Entity {
 		float invFriction = 1.0F;
 
 		if(this.onGround) {
-			invFriction = 0.8F;
+			invFriction *= 0.8F;
+		}
+		if(this.isInWater() || this.isInLava()) {
+			invFriction *= 0.8F;
+			if(this.world.getBlockState(new BlockPos(this.posX, this.posY + this.height + 0.75D, this.posZ)).getMaterial().isLiquid()) {
+				invFriction *= 0.5F; 
+			}
 		}
 
 		this.motionX *= invFriction;
