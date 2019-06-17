@@ -1,16 +1,5 @@
 package thebetweenlands.common.registries;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -70,6 +59,7 @@ import thebetweenlands.common.block.misc.BlockCavingRopeLight;
 import thebetweenlands.common.block.misc.BlockDampTorch;
 import thebetweenlands.common.block.misc.BlockDentrothystPane;
 import thebetweenlands.common.block.misc.BlockGlassBetweenlands;
+import thebetweenlands.common.block.misc.BlockGroundItem;
 import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
 import thebetweenlands.common.block.misc.BlockLeverBetweenlands;
 import thebetweenlands.common.block.misc.BlockMossBed;
@@ -129,11 +119,11 @@ import thebetweenlands.common.block.structure.BlockBrazier;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockChipPath;
-import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
-import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockCompactedMud;
 import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.block.structure.BlockDecayPitOuterChainHousing;
+import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
+import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
@@ -146,10 +136,10 @@ import thebetweenlands.common.block.structure.BlockItemCage;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.block.structure.BlockMudBrickRoof;
 import thebetweenlands.common.block.structure.BlockMudBrickShingleSlab;
+import thebetweenlands.common.block.structure.BlockMudBrickSpikeTrap;
 import thebetweenlands.common.block.structure.BlockMudBricks;
 import thebetweenlands.common.block.structure.BlockMudBricksClimbable;
 import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
-import thebetweenlands.common.block.structure.BlockMudBrickSpikeTrap;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockMudTilesSpikeTrap;
 import thebetweenlands.common.block.structure.BlockMudTilesWater;
@@ -223,6 +213,10 @@ import thebetweenlands.common.world.gen.feature.tree.WorldGenRubberTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
 import thebetweenlands.util.AdvancedStateMap;
+
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class BlockRegistry {
     public static final Block SWAMP_WATER = new BlockSwampWater(FluidRegistry.SWAMP_WATER, Material.WATER);
@@ -792,6 +786,7 @@ public class BlockRegistry {
     public static final Block REPELLER = new BlockRepeller();
     public static final Block WAYSTONE = new BlockWaystone();
     public static final Block CAVING_ROPE_LIGHT = new BlockCavingRopeLight();
+    public static final Block GROUND_ITEM = new BlockGroundItem();
     
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();

@@ -2,11 +2,11 @@ package thebetweenlands.client.render.tile;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
-import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
@@ -14,7 +14,6 @@ import net.minecraft.util.math.BlockPos;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class RenderWeedwoodWorkbench extends TileEntitySpecialRenderer<TileEntityWeedwoodWorkbench> {
-	private final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
 	@Override
 	public void render(TileEntityWeedwoodWorkbench table, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -43,7 +42,8 @@ public class RenderWeedwoodWorkbench extends TileEntitySpecialRenderer<TileEntit
 					GlStateManager.scale(0.5F, 0.5F, 0.5F);
 					GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
 					RenderHelper.disableStandardItemLighting();
-					this.renderItem.renderItem(stack, this.renderItem.getItemModelWithOverrides(stack, null, null));
+					RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+					renderItem.renderItem(stack, renderItem.getItemModelWithOverrides(stack, null, null));
 					GlStateManager.popMatrix();
 				}
 			}

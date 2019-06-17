@@ -2,10 +2,10 @@ package thebetweenlands.client.render.tile;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemSkull;
@@ -21,7 +21,6 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 	public static final ModelItemShelf MODEL = new ModelItemShelf();
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/item_shelf.png");
 
-	protected final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
 	@Override
 	public void render(TileEntityItemShelf te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -107,6 +106,7 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 		ItemStack stack = te.getStackInSlot(slot);
 
 		if (!stack.isEmpty()) {
+			RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 			GlStateManager.pushMatrix();
 			GlStateManager.pushAttrib();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -115,11 +115,11 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 			GlStateManager.scale(0.4F, 0.4F, 0.4F);
 			RenderHelper.enableStandardItemLighting();
 
-			if (!this.renderItem.shouldRenderItemIn3D(stack) || stack.getItem() instanceof ItemSkull) {
+			if (!renderItem.shouldRenderItemIn3D(stack) || stack.getItem() instanceof ItemSkull) {
 				GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 			}
 
-			this.renderItem.renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
+			renderItem.renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
 
 			RenderHelper.disableStandardItemLighting();
 			GlStateManager.popAttrib();

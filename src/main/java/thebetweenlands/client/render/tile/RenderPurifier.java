@@ -1,18 +1,12 @@
 package thebetweenlands.client.render.tile;
 
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -22,17 +16,18 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.model.tile.ModelPurifier;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.util.StatePropertyHelper;
 
+import java.util.Random;
+
 @SideOnly(Side.CLIENT)
 public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/purifier.png");
 	public static final ModelPurifier MODEL = new ModelPurifier();
-
-	private final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
 	@Override
 	public void render(TileEntityPurifier tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -79,7 +74,7 @@ public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier
 				GlStateManager.rotate(-90, 1, 0, 0);
 				GlStateManager.rotate(rand.nextFloat() * 360.0F, 0, 0, 1);
 				ItemStack stack = tile.getStackInSlot(2);
-				this.renderItem.renderItem(stack, TransformType.FIXED);
+				Minecraft.getMinecraft().getRenderItem().renderItem(stack, TransformType.FIXED);
 				GlStateManager.popMatrix();
 			}
 			GlStateManager.popMatrix();

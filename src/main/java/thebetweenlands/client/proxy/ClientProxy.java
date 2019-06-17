@@ -1,18 +1,8 @@
 package thebetweenlands.client.proxy;
 
-import java.io.InputStreamReader;
-import java.net.Proxy;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -165,6 +155,7 @@ import thebetweenlands.client.render.tile.RenderDruidAltar;
 import thebetweenlands.client.render.tile.RenderDungeonDoorCombination;
 import thebetweenlands.client.render.tile.RenderDungeonDoorRunes;
 import thebetweenlands.client.render.tile.RenderGeckoCage;
+import thebetweenlands.client.render.tile.RenderGroundItem;
 import thebetweenlands.client.render.tile.RenderInfuser;
 import thebetweenlands.client.render.tile.RenderItemCage;
 import thebetweenlands.client.render.tile.RenderItemShelf;
@@ -291,6 +282,7 @@ import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
+import thebetweenlands.common.tile.TileEntityGroundItem;
 import thebetweenlands.common.tile.TileEntityInfuser;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityItemShelf;
@@ -314,6 +306,11 @@ import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.world.event.EventSpoopy;
 import thebetweenlands.common.world.event.EventWinter;
 import thebetweenlands.util.GLUProjection;
+
+import java.io.InputStreamReader;
+import java.net.Proxy;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class ClientProxy extends CommonProxy implements IResourceManagerReloadListener {
 	public static Render<EntityDragonFly> dragonFlyRenderer;
@@ -585,7 +582,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDungeonDoorCombination.class, new RenderDungeonDoorCombination());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudBricksSpikeTrap.class, new RenderMudBrickSpikeTrap());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudTilesSpikeTrap.class, new RenderMudTilesSpikeTrap());
-		
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGroundItem.class, new RenderGroundItem());
+
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
 		resourceManager.registerReloadListener(new FoodSickness.ResourceReloadListener());

@@ -1,18 +1,15 @@
 package thebetweenlands.client.render.tile;
 
-import java.util.Random;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -24,15 +21,16 @@ import thebetweenlands.client.render.model.tile.ModelCompostBin;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 
+import java.util.Random;
+
 public class RenderCompostBin extends TileEntitySpecialRenderer<TileEntityCompostBin> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/compost_bin.png");
 	public static final ModelCompostBin MODEL = new ModelCompostBin();
 
-	private final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-
 	@Override
 	public void render(TileEntityCompostBin te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		int meta = te != null ? te.getBlockMetadata() : 0;
+		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
 		float compostHeight = te != null ? Math.min(te.getCompostedAmount() / (float) TileEntityCompostBin.MAX_COMPOST_AMOUNT, 0.82f) : 0;
 
@@ -95,7 +93,7 @@ public class RenderCompostBin extends TileEntitySpecialRenderer<TileEntityCompos
 					GlStateManager.rotate(new Random(i * 12315).nextFloat() * 360f, 0, 1, 0);
 					GlStateManager.rotate(90.0f, 1, 0, 0);
 
-					this.renderItem.renderItem(stack, TransformType.FIXED);
+					renderItem.renderItem(stack, TransformType.FIXED);
 
 					GlStateManager.popMatrix();
 				}

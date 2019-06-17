@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "custom": {
+      "particle_texture": "thebetweenlands:blocks/swamp_dirt"
+    }
+  },
+  "variants": {
+    "normal": {
+      "model": "thebetweenlands:internal/blank"
+    }
+  }
+}
