@@ -189,8 +189,13 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	@Override
 	public boolean attackEntityFromPart(EntityDecayPitTargetPart part, DamageSource source, float damage) {
 		if (!getEntityWorld().isRemote) {
-			//if (part != target && part != bottom && part != chain_1 && part != chain_2 && part != chain_3 && part != chain_4)
-			//	moveUp();
+			if (part != target && part != bottom && part != chain_1 && part != chain_2 && part != chain_3 && part != chain_4) {
+				if (source instanceof EntityDamageSourceIndirect) {
+					EntityRootGrabber grabber = new EntityRootGrabber(getEntityWorld());
+					grabber.setPosition(source.getTrueSource().getPosition().down(), 40);
+					getEntityWorld().spawnEntity(grabber);
+				}
+			}
 
 			if (part == target)
 				moveDown();
