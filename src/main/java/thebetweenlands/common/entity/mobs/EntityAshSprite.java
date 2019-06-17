@@ -201,11 +201,13 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 
 		@Override
 		public void startExecuting() {
-			EntityLivingBase entitylivingbase = ashSprite.getAttackTarget();
-			Vec3d vec3d = entitylivingbase.getPositionEyes(1.0F);
-			ashSprite.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
-			ashSprite.setCharging(true);
-			//ash_sprite.playSound(SoundEvents.ASH_SPRITE_ATTACK, 1.0F, 1.0F);
+			EntityLivingBase target = ashSprite.getAttackTarget();
+			if(target != null) {
+				Vec3d vec3d = target.getPositionEyes(1.0F);
+				ashSprite.moveHelper.setMoveTo(vec3d.x, vec3d.y, vec3d.z, 1.0D);
+				ashSprite.setCharging(true);
+				//ash_sprite.playSound(SoundEvents.ASH_SPRITE_ATTACK, 1.0F, 1.0F);
+			}
 		}
 
 		@Override
