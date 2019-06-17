@@ -9,7 +9,6 @@ import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -57,6 +56,7 @@ import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.recipe.misc.HearthgroveTarringRecipe;
 import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.misc.RecipeClearBoneWayfinder;
+import thebetweenlands.common.recipe.misc.RecipeGrapplingHookUpgrades;
 import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
 import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
 import thebetweenlands.common.recipe.misc.RecipeMummyBait;
@@ -85,6 +85,7 @@ public class RecipeRegistry {
 	public static final ResourceLocation HEARTHGROVE_LOG_TARRING = new ResourceLocation(ModInfo.ID, "hearthgrove_log_tarring");
 	public static final ResourceLocation CLEAR_BONE_WAYFINDER = new ResourceLocation(ModInfo.ID, "clear_bone_wayfinder");
 	public static final ResourceLocation SAP_SPIT_CLEAN_TOOL = new ResourceLocation(ModInfo.ID, "sap_spit_clean_tool");
+	public static final ResourceLocation GRAPPLING_HOOK_UPGRADE = new ResourceLocation(ModInfo.ID, "grappling_hook_upgrade");
 	
 	private RecipeRegistry() { }
 
@@ -210,6 +211,7 @@ public class RecipeRegistry {
 		registry.register(new HearthgroveTarringRecipe().setRegistryName(HEARTHGROVE_LOG_TARRING));
 		registry.register(new RecipeClearBoneWayfinder().setRegistryName(CLEAR_BONE_WAYFINDER));
 		registry.register(new RecipeSapSpitCleanTool().setRegistryName(SAP_SPIT_CLEAN_TOOL));
+		registry.register(new RecipeGrapplingHookUpgrades().setRegistryName(GRAPPLING_HOOK_UPGRADE));
 	}
 
 	private static void registerSmelting() {

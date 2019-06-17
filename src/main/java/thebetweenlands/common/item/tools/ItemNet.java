@@ -17,7 +17,7 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 	public ItemNet() {
 		this.maxStackSize = 1;
 		this.setMaxDamage(32);
-		this.setCreativeTab(BLCreativeTabs.ITEMS);
+		this.setCreativeTab(BLCreativeTabs.GEARS);
 	}
 
 	@Override

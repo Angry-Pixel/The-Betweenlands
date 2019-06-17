@@ -19,7 +19,7 @@ import thebetweenlands.util.NBTHelper;
 
 public class ItemVolarkite extends Item {
 	public ItemVolarkite() {
-		this.setCreativeTab(BLCreativeTabs.ITEMS);
+		this.setCreativeTab(BLCreativeTabs.GEARS);
 
 		this.setMaxStackSize(1);
 		this.setMaxDamage(300);

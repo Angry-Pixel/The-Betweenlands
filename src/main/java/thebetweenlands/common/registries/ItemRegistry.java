@@ -291,6 +291,12 @@ public class ItemRegistry {
     public static final Item VOODOO_DOLL = new ItemVoodooDoll();
     public static final Item SWIFT_PICK = new ItemSwiftPick();
     public static final Item ANCIENT_GREATSWORD = new ItemAncientGreatsword();
+    public static final Item PESTLE = new ItemPestle();
+    public static final Item NET = new ItemNet();
+    public static final Item LURKER_SKIN_POUCH = new ItemLurkerSkinPouch();
+    public static final Item CAVING_ROPE = new ItemCavingRope();
+    public static final Item GRAPPLING_HOOK = new ItemGrapplingHook();
+    public static final Item VOLARKITE = new ItemVolarkite();
     //BUCKETS
     public static final ItemBLBucket BL_BUCKET = new ItemBLBucket();
     public static final Item BL_BUCKET_RUBBER = new ItemSpecificBucket(FluidRegistry.RUBBER);
@@ -359,14 +365,12 @@ public class ItemRegistry {
     public static final Item CRIMSON_MIDDLE_GEM = new ItemGem(CircleGemType.CRIMSON);
     public static final Item AQUA_MIDDLE_GEM = new ItemGem(CircleGemType.AQUA);
     public static final Item GREEN_MIDDLE_GEM = new ItemGem(CircleGemType.GREEN);
-    public static final Item PESTLE = new ItemPestle();
     public static final Item LIFE_CRYSTAL = new ItemLifeCrystal();
     public static final Item TEST_ITEM = new TestItem();
     public static final Item TEST_ITEM_CHIMP = new TestItemChimp();
     public static final Item TEST_ITEM_CHIMP_RULER = new TestItemChimpRuler();
     public static final Item LOCATION_DEBUG = new LocationDebugItem().setCreativeTab(null);
     public static final Item PYRAD_FLAME = new ItemPyradFlame();
-    public static final Item NET = new ItemNet();
     public static final Item GECKO = new ItemMob("gecko");
     public static final Item FIREFLY = new ItemMob("firefly");
     public static final Item SHIMMER_STONE = new ItemShimmerStone();
@@ -379,10 +383,6 @@ public class ItemRegistry {
     public static final Item GLUE = new ItemGlue();
     public static final Item AMULET = new ItemAmulet();
     public static final Item AMULET_SLOT = new ItemAmuletSlot();
-    public static final Item LURKER_SKIN_POUCH = new ItemLurkerSkinPouch();
-    public static final Item CAVING_ROPE = new ItemCavingRope();
-    public static final Item GRAPPLING_HOOK = new ItemGrapplingHook();
-    public static final Item VOLARKITE = new ItemVolarkite();
     public static final Item ROPE_ITEM = new ItemRope();
     public static final Item RING_OF_POWER = new ItemRingOfPower();
     public static final Item RING_OF_FLIGHT = new ItemRingOfFlight();
@@ -400,6 +400,7 @@ public class ItemRegistry {
     public static final Item BONE_WAYFINDER = new ItemBoneWayfinder();
     public static final Item MAGIC_ITEM_MAGNET = new ItemMagicItemMagnet();
     public static final Item GEM_SINGER = new ItemGemSinger();
+    public static final Item SHAMBLER_TONGUE = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();

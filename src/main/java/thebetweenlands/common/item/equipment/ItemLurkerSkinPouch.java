@@ -52,7 +52,7 @@ import java.util.List;
 public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamableItem {
     public ItemLurkerSkinPouch() {
         this.setMaxStackSize(1);
-        this.setCreativeTab(BLCreativeTabs.ITEMS);
+        this.setCreativeTab(BLCreativeTabs.GEARS);
         this.setMaxDamage(3);
 
         this.addPropertyOverride(new ResourceLocation("pouch_size"), (stack, worldIn, entityIn) -> stack.getItemDamage());

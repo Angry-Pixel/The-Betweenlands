@@ -784,6 +784,7 @@ item.thebetweenlands.bark_amulet.name=Bark Amulet
 item.thebetweenlands.grappling_hook.name=Grappling Hook
 item.thebetweenlands.ancient_greatsword.name=Ancient Greatsword
 item.thebetweenlands.volarkite.name=Volarkite
+item.thebetweenlands.shambler_tongue.name=Shambler Tongue
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -902,6 +903,9 @@ tooltip.infusion.empty=Empty
 tooltip.bone_wayfinder=Must be linked to a Menhir
 tooltip.bone_wayfinder_linked=Requires sufficient XP to use.\nLinked to Menhir\nX: %s\nY: %s\nZ: %s
 tooltip.lurker_skin_shield=Can also be used as a raft
+tooltip.grappling_hook=Reach: %3$s segments, ca. %1$s blocks\nLength: %4$s segments, ca. %2$s blocks
+tooltip.grappling_hook.more_info=Use '%1$s + %2$s' and '%1$s + %3$s'\nto retract or extend the rope.\nSwing with regular movement keys.
+tooltip.grappling_hook.upgrade=Craft with two Angler Teeth and a\nShambler Tongue to upgrade.
 
 tooltip.bl.elixir.potency=§9Potency: %s
 tooltip.bl.elixir.duration=§9Duration: %s (%s)
