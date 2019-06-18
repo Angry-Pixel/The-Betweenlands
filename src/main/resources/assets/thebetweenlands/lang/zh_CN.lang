@@ -783,6 +783,7 @@ item.thebetweenlands.bark_amulet.name=树皮护身符
 item.thebetweenlands.grappling_hook.name=抓钩
 item.thebetweenlands.ancient_greatsword.name=上古巨剑
 item.thebetweenlands.volarkite.name=伞莲风筝
+item.thebetweenlands.shambler_tongue.name=蹒跚者舌头
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=绿色木晶药瓶
@@ -901,6 +902,9 @@ tooltip.infusion.empty=空
 tooltip.bone_wayfinder=必须与巨石柱链接才能使用。
 tooltip.bone_wayfinder_linked=需要充足的经验值才能使用。\n链接到此处的巨石柱：\nX: %s\nY: %s\nZ: %s
 tooltip.lurker_skin_shield=可以当做船使用！
+tooltip.grappling_hook=范围:%3$s段,%1$s方块\n长度:%4$s段,%2$s方块
+tooltip.grappling_hook.more_info=使用'%1$s + %2$s'和'%1$s + %3$s'\n来收回或延长绳子。\n使用正常的移动键来摇摆。
+tooltip.grappling_hook.upgrade=与两个鮟鱇牙齿和\n一个蹒跚者舌头合成来升级。
 
 tooltip.bl.elixir.potency=§9效果: %s
 tooltip.bl.elixir.duration=§9时长: %s (%s)
