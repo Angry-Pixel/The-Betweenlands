@@ -149,6 +149,7 @@ import thebetweenlands.client.render.tile.RenderAlembic;
 import thebetweenlands.client.render.tile.RenderAnimator;
 import thebetweenlands.client.render.tile.RenderAspectVial;
 import thebetweenlands.client.render.tile.RenderAspectrusCrop;
+import thebetweenlands.client.render.tile.RenderBeamOrigin;
 import thebetweenlands.client.render.tile.RenderChestBetweenlands;
 import thebetweenlands.client.render.tile.RenderCompostBin;
 import thebetweenlands.client.render.tile.RenderDruidAltar;
@@ -276,6 +277,7 @@ import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.common.tile.TileEntityAspectrusCrop;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
+import thebetweenlands.common.tile.TileEntityBeamOrigin;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
@@ -583,7 +585,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudBricksSpikeTrap.class, new RenderMudBrickSpikeTrap());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudTilesSpikeTrap.class, new RenderMudTilesSpikeTrap());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGroundItem.class, new RenderGroundItem());
-
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBeamOrigin.class, new RenderBeamOrigin());
+		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
 		resourceManager.registerReloadListener(new FoodSickness.ResourceReloadListener());
