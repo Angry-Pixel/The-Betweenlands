@@ -58,7 +58,8 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			double smoothedY = part.prevPosY  + (part.posY - part.prevPosY ) * partialTicks;
 			double smoothedZ = part.prevPosZ  + (part.posZ - part.prevPosZ ) * partialTicks;
 			if (part != entity.target && part != entity.bottom && part != entity.chain_1 && part != entity.chain_2 && part != entity.chain_3 && part != entity.chain_4)
-				renderCogShield(part, x + smoothedX - smoothedMainX, y + smoothedY - smoothedMainY, z + smoothedZ - smoothedMainZ, floatate);
+				if (part != entity.shield_1_a && part != entity.shield_1_b && part != entity.shield_1_a_outer && part != entity.shield_1_b_outer)
+					renderCogShield(part, x + smoothedX - smoothedMainX, y + smoothedY - smoothedMainY, z + smoothedZ - smoothedMainZ, floatate);
 		}
 
 		// debug boxes for parts without models
