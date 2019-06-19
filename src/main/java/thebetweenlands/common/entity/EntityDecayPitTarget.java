@@ -57,15 +57,15 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		super(world);
 		setSize(5F, 13F);
 		shield_array = new EntityDecayPitTargetPart[] {
-				shield_1 = new EntityDecayPitTargetPart(this, "part1", 0.75F, 1F),
-				shield_2 = new EntityDecayPitTargetPart(this, "part2", 0.75F, 1F),
-				shield_3 = new EntityDecayPitTargetPart(this, "part3", 0.75F, 1F),
-				shield_4 = new EntityDecayPitTargetPart(this, "part4", 0.75F, 1F),
-				shield_5 = new EntityDecayPitTargetPart(this, "part5", 0.75F, 1F),
-				shield_6 = new EntityDecayPitTargetPart(this, "part6", 0.75F, 1F),
-				shield_7 = new EntityDecayPitTargetPart(this, "part7", 0.75F, 1F),
-				shield_8 = new EntityDecayPitTargetPart(this, "part8", 0.75F, 1F),
-				target = new EntityDecayPitTargetPart(this, "target", 2F, 1.75F),
+				shield_1 = new EntityDecayPitTargetPart(this, "part1", 1F, 1F),
+				shield_2 = new EntityDecayPitTargetPart(this, "part2", 1F, 1F),
+				shield_3 = new EntityDecayPitTargetPart(this, "part3", 1F, 1F),
+				shield_4 = new EntityDecayPitTargetPart(this, "part4", 1F, 1F),
+				shield_5 = new EntityDecayPitTargetPart(this, "part5", 1F, 1F),
+				shield_6 = new EntityDecayPitTargetPart(this, "part6", 1F, 1F),
+				shield_7 = new EntityDecayPitTargetPart(this, "part7", 1F, 1F),
+				shield_8 = new EntityDecayPitTargetPart(this, "part8", 1F, 1F),
+				target = new EntityDecayPitTargetPart(this, "target", 2.1875F, 2F),
 				bottom = new EntityDecayPitTargetPart(this, "bottom", 3F, 1F),
 				chain_1 = new EntityDecayPitTargetPart(this, "chain_1", 0.625F, 2F),
 				chain_2 = new EntityDecayPitTargetPart(this, "chain_2", 0.625F, 2F),
@@ -112,8 +112,8 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		chain_2.setPosition(posX, posY + height - getProgress(), posZ + 1D);
 		chain_3.setPosition(posX + 1D, posY + height - getProgress(), posZ);
 		chain_4.setPosition(posX - 1D, posY + height - getProgress(), posZ);
-		target.setPosition(posX, chain_1.posY - 1.75D, posZ);
-		bottom.setPosition(posX, chain_1.posY - 3D, posZ);
+		target.setPosition(posX, chain_1.posY - 2D, posZ);
+		bottom.setPosition(posX, chain_1.posY - 5D, posZ);
 
 		if (isMoving()) {
 			if (isSlow())
@@ -159,6 +159,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		else
 			wobble = MathHelper.cos((float) ((animationTicks) * 0.07F)) * 0.7F;
 		shield.setPosition(posX + offSetX, target.posY + target.height / 2.0D - shield.height / 2.0D + wobble, posZ + offSetZ);
+		shield.rotationYaw = animationTicks + 180F;
 		shield.onUpdate();
 	}
 
@@ -205,8 +206,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				}
 			}
 
-			if (part == target)
+			if (part == target) {
 				moveDown();
+				return true;
+			}
 
 			if (part == chain_1 || part == chain_2 || part == chain_3 || part == chain_4)
 				if (source instanceof EntityDamageSourceIndirect) // may want to remove this line so it 'dinks' on all damage attempts
@@ -219,7 +222,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				shootBeamsAtThings(new Vec3d(0D, -4.5D + getProgress(), 11D));
 				shootBeamsAtThings(new Vec3d(-11D, -4.5D + getProgress(), 0D));
 			}
-		return true;
+		return false;
 	}
 
 	private void moveUp() {
@@ -237,7 +240,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	}
 
 	private void moveDown() {
-		if (getProgress() < 9) {
+		if (getProgress() < 7) {
 			for (EntityDecayPitChain chain : getChains()) {
 				chain.setRaising(true);
 				chain.setMoving(true);

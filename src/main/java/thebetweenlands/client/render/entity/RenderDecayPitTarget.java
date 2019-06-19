@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelDecayPitChain;
 import thebetweenlands.client.render.model.entity.ModelDecayPitPlug;
+import thebetweenlands.client.render.model.entity.ModelShieldCog;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityDecayPitTargetPart;
 import thebetweenlands.common.lib.ModInfo;
@@ -20,6 +21,8 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	private final ModelDecayPitPlug PLUG_MODEL = new ModelDecayPitPlug();
 	public static final ResourceLocation CHAIN_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_chain.png");
 	private final ModelDecayPitChain CHAIN_MODEL = new ModelDecayPitChain();
+	public static final ResourceLocation COG_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/barrishee.png");
+	private final ModelShieldCog COG_MODEL = new ModelShieldCog();
 
 	public RenderDecayPitTarget(RenderManager manager) {
 		super(manager);
@@ -29,9 +32,13 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
     public void doRender(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		float scroll = entity.animationTicksChainPrev * 0.0078125F + (entity.animationTicksChain * 0.0078125F - entity.animationTicksChainPrev * 0.0078125F) * partialTicks;
 		double offsetY = entity.height - entity.getProgress();
+		double smoothedMainX = entity.prevPosX + (entity.posX - entity.prevPosX ) * partialTicks;
+		double smoothedMainY = entity.prevPosY + (entity.posY - entity.prevPosY ) * partialTicks;
+		double smoothedMainZ = entity.prevPosZ + (entity.posZ - entity.prevPosZ ) * partialTicks;
+
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + offsetY -1.5D, z);
+		GlStateManager.translate(x, y + offsetY -3.5D, z);
 		GlStateManager.scale(-1F, -1F, 1F);
 		PLUG_MODEL.render(entity, 0.0625F);
 		GlStateManager.popMatrix();	
@@ -44,11 +51,30 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			renderChainpart(entity, x, y + offsetY + len + 1.5D, z - 1D, 0F, 270F);
 		}
 
+		bindTexture(COG_TEXTURE);
+		for (EntityDecayPitTargetPart part : entity.shield_array) {
+			float floatate = part.prevRotationYaw + (part.rotationYaw - part.prevRotationYaw) * partialTicks;
+			double smoothedX = part.prevPosX  + (part.posX - part.prevPosX ) * partialTicks;
+			double smoothedY = part.prevPosY  + (part.posY - part.prevPosY ) * partialTicks;
+			double smoothedZ = part.prevPosZ  + (part.posZ - part.prevPosZ ) * partialTicks;
+			if (part != entity.target && part != entity.bottom && part != entity.chain_1 && part != entity.chain_2 && part != entity.chain_3 && part != entity.chain_4)
+				renderCogShield(part, x + smoothedX - smoothedMainX, y + smoothedY - smoothedMainY, z + smoothedZ - smoothedMainZ, floatate);
+		}
+
 		// debug boxes for parts without models
 		GlStateManager.pushMatrix();
 		for (EntityDecayPitTargetPart part : entity.shield_array)
-			if (part != entity.bottom && part != entity.chain_1 && part != entity.chain_2 && part != entity.chain_3 && part != entity.chain_4)
+			if (part == entity.target)
 				renderDebugBoundingBox(part, x, y, z, entityYaw, partialTicks, part.posX - entity.posX, part.posY - entity.posY, part.posZ - entity.posZ);
+		GlStateManager.popMatrix();
+	}
+
+	private void renderCogShield(EntityDecayPitTargetPart entity, double x, double y, double z, float angle) {
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x, y + 1.5F, z);
+		GlStateManager.scale(-1F, -1F, 1F);
+		GlStateManager.rotate(angle, 0F, 1F, 0F);
+		COG_MODEL.render(0.0625F);
 		GlStateManager.popMatrix();
 	}
 
