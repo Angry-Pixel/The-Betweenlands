@@ -33,10 +33,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public int animationTicksChainPrev = 0;
 	public EntityDecayPitTargetPart[] shield_array;
 	public EntityDecayPitTargetPart shield_1;
-	public EntityDecayPitTargetPart shield_1_a;
-	public EntityDecayPitTargetPart shield_1_b;
-	public EntityDecayPitTargetPart shield_1_a_outer;
-	public EntityDecayPitTargetPart shield_1_b_outer;
 	public EntityDecayPitTargetPart shield_2;
 	public EntityDecayPitTargetPart shield_3;
 	public EntityDecayPitTargetPart shield_4;
@@ -61,18 +57,14 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		super(world);
 		setSize(5F, 13F);
 		shield_array = new EntityDecayPitTargetPart[] {
-				shield_1 = new EntityDecayPitTargetPart(this, "part1", 0.1875F, 1F),
-				shield_1_a = new EntityDecayPitTargetPart(this, "part1_a", 0.1875F, 1F),
-				shield_1_b = new EntityDecayPitTargetPart(this, "part1_b", 0.1875F, 1F),
-				shield_1_a_outer = new EntityDecayPitTargetPart(this, "part1_a_outer", 0.1875F, 0.625F),
-				shield_1_b_outer = new EntityDecayPitTargetPart(this, "part1_b_outer", 0.1875F, 0.625F),
-				shield_2 = new EntityDecayPitTargetPart(this, "part2", 0.1875F, 1F),
-				shield_3 = new EntityDecayPitTargetPart(this, "part3", 0.1875F, 1F),
-				shield_4 = new EntityDecayPitTargetPart(this, "part4", 0.1875F, 1F),
-				shield_5 = new EntityDecayPitTargetPart(this, "part5", 0.1875F, 1F),
-				shield_6 = new EntityDecayPitTargetPart(this, "part6", 0.1875F, 1F),
-				shield_7 = new EntityDecayPitTargetPart(this, "part7", 0.1875F, 1F),
-				shield_8 = new EntityDecayPitTargetPart(this, "part8", 0.1875F, 1F),
+				shield_1 = new EntityDecayPitTargetPart(this, "part1", 1F, 1F),
+				shield_2 = new EntityDecayPitTargetPart(this, "part2", 1F, 1F),
+				shield_3 = new EntityDecayPitTargetPart(this, "part3", 1F, 1F),
+				shield_4 = new EntityDecayPitTargetPart(this, "part4", 1F, 1F),
+				shield_5 = new EntityDecayPitTargetPart(this, "part5", 1F, 1F),
+				shield_6 = new EntityDecayPitTargetPart(this, "part6", 1F, 1F),
+				shield_7 = new EntityDecayPitTargetPart(this, "part7", 1F, 1F),
+				shield_8 = new EntityDecayPitTargetPart(this, "part8", 1F, 1F),
 				target = new EntityDecayPitTargetPart(this, "target", 2.1875F, 2F),
 				bottom = new EntityDecayPitTargetPart(this, "bottom", 3F, 1F),
 				chain_1 = new EntityDecayPitTargetPart(this, "chain_1", 0.625F, 2F),
@@ -107,10 +99,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		}
 		
 		setNewShieldHitboxPos(animationTicks, shield_1);
-		setNewShieldHitboxPos(animationTicks + 4, shield_1_a);
-		setNewShieldHitboxPos(animationTicks - 4, shield_1_b);
-		setNewShieldHitboxPos(animationTicks + 8, shield_1_a_outer);
-		setNewShieldHitboxPos(animationTicks - 8, shield_1_b_outer);
 		setNewShieldHitboxPos(animationTicks + 45, shield_2);
 		setNewShieldHitboxPos(animationTicks + 90, shield_3);
 		setNewShieldHitboxPos(animationTicks + 135, shield_4);
@@ -168,16 +156,9 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		float wobble = 0F;
 		if (shield == shield_1 || shield == shield_3 || shield == shield_5 || shield == shield_7)
 			wobble = MathHelper.sin((float) ((animationTicks) * 0.07F)) * 0.45F;
-		else if (shield == shield_1_a)
-			wobble = MathHelper.sin((float) ((animationTicks - 4) * 0.07F)) * 0.45F;
-		else if (shield == shield_1_b)
-			wobble = MathHelper.sin((float) ((animationTicks + 4) * 0.07F)) * 0.45F;
-		else if (shield == shield_1_a_outer)
-			wobble = MathHelper.sin((float) ((animationTicks - 8) * 0.07F)) * 0.45F;
-		else if (shield == shield_1_b_outer)
-			wobble = MathHelper.sin((float) ((animationTicks + 8) * 0.07F)) * 0.45F;
 		else
 			wobble = MathHelper.cos((float) ((animationTicks) * 0.07F)) * 0.7F;
+		//double squarePoint = Math.signum(wobble);
 		shield.setPosition(posX + offSetX, target.posY + target.height / 2.0D - shield.height / 2.0D + wobble, posZ + offSetZ);
 		shield.rotationYaw = animationTicks + 180F;
 		shield.onUpdate();
