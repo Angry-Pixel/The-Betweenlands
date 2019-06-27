@@ -1,9 +1,14 @@
 package thebetweenlands.client.render.entity;
 
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -23,6 +28,10 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	private final ModelDecayPitChain CHAIN_MODEL = new ModelDecayPitChain();
 	public static final ResourceLocation COG_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/barrishee.png");
 	private final ModelShieldCog COG_MODEL = new ModelShieldCog();
+
+	public static final ResourceLocation OUTER_RING_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/outer_ring.png");
+	public static final ResourceLocation INNER_RING_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/inner_ring.png");
+	public static final ResourceLocation MASK_HACK_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/gear_mask.png");
 
 	public RenderDecayPitTarget(RenderManager manager) {
 		super(manager);
@@ -57,8 +66,15 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			double smoothedX = part.prevPosX  + (part.posX - part.prevPosX ) * partialTicks;
 			double smoothedY = part.prevPosY  + (part.posY - part.prevPosY ) * partialTicks;
 			double smoothedZ = part.prevPosZ  + (part.posZ - part.prevPosZ ) * partialTicks;
-			if (part != entity.target && part != entity.bottom && part != entity.chain_1 && part != entity.chain_2 && part != entity.chain_3 && part != entity.chain_4)
+			if (part != entity.target && part != entity.bottom && part != entity.chain_1 && part != entity.chain_2 && part != entity.chain_3 && part != entity.chain_4 && part != entity.inner_ring && part != entity.outer_ring)
 				renderCogShield(part, x + smoothedX - smoothedMainX, y + smoothedY - smoothedMainY, z + smoothedZ - smoothedMainZ, floatate);
+		}
+
+		float ring_rotate = entity.animationTicksPrev + (entity.animationTicks - entity.animationTicksPrev) * partialTicks;
+
+		for (int part = 0; part < 24; part++) {
+			rendertopVertex(entity, x, y + 1 + 0.001F, z, 15F * part, 6.5D, 6.5D, 4.25D, 4.25D, true, ring_rotate);
+			rendertopVertex(entity, x, y + 0.001F, z, 15F *part, 4.25D, 4.25D, 2.25D, 2.25D, false, -ring_rotate);
 		}
 
 		// debug boxes for parts without models
@@ -67,6 +83,86 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			if (part == entity.target)
 				renderDebugBoundingBox(part, x, y, z, entityYaw, partialTicks, part.posX - entity.posX, part.posY - entity.posY, part.posZ - entity.posZ);
 		GlStateManager.popMatrix();
+	}
+	
+	private void rendertopVertex(EntityDecayPitTarget entity, double x, double y, double z, double angle, double offsetXOuter, double offsetZOuter, double offsetXInner, double offsetZInner, boolean renderVertical, float rotate) {
+
+		double startAngle = Math.toRadians(angle);
+		double endAngle = Math.toRadians(angle + 15D);
+		double offSetXOut1 = -Math.sin(startAngle) * offsetXOuter;
+		double offSetZOut1 = Math.cos(startAngle) * offsetZOuter;
+		double offSetXIn1 = -Math.sin(startAngle) * offsetXInner;
+		double offSetZIn1 = Math.cos(startAngle) * offsetZInner;
+
+		double offSetXOut2 = -Math.sin(endAngle) * offsetXOuter;
+		double offSetZOut2 = Math.cos(endAngle) * offsetXOuter;
+		double offSetXIn2 = -Math.sin(endAngle) * offsetXInner;
+		double offSetZIn2 = Math.cos(endAngle) * offsetXInner;
+
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+		// GlStateManager.disableLighting();
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x, y, z);
+
+		GL11.glEnable(GL11.GL_STENCIL_TEST);
+		if (angle >= 360)
+			GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+		GL11.glStencilMask(0xFF);
+		GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+		GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+
+		bindTexture(MASK_HACK_TEXTURE);
+		GlStateManager.color(0F, 0F, 0F, 1.0F);
+
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		if (!renderVertical) {
+			buffer.pos(offSetXOut1, 0F, offSetZOut1).tex(1, 0).endVertex();
+			buffer.pos(offSetXIn1, 0F, offSetZIn1).tex(0, 0).endVertex();
+			buffer.pos(offSetXIn2, 0F, offSetZIn2).tex(0, 1).endVertex();
+			buffer.pos(offSetXOut2, 0F, offSetZOut2).tex(1, 1).endVertex();
+		}
+		if (renderVertical) {
+			buffer.pos(offSetXOut1, 0F, offSetZOut1).tex(1, 0).endVertex();
+			buffer.pos(offSetXIn1, 0F, offSetZIn1).tex(0, 0).endVertex();
+			buffer.pos(offSetXIn2, 0F, offSetZIn2).tex(0, 1).endVertex();
+			buffer.pos(offSetXOut2, 0F, offSetZOut2).tex(1, 1).endVertex();
+
+			buffer.pos(offSetXIn1, 0F, offSetZIn1).tex(1, 0).endVertex();
+			buffer.pos(offSetXIn1, -1F, offSetZIn1).tex(0, 0).endVertex();
+			buffer.pos(offSetXIn2, -1F, offSetZIn2).tex(0, 1).endVertex();
+			buffer.pos(offSetXIn2, 0F, offSetZIn2).tex(1, 1).endVertex();
+		}
+		tessellator.draw();
+
+		if (angle >= 360)
+			GL11.glStencilMask(0x00);
+		GL11.glStencilFunc(GL11.GL_NOTEQUAL, 0, 0xFF);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		if (renderVertical) {
+			GlStateManager.rotate(rotate, 0F, 1F, 0F);
+			bindTexture(OUTER_RING_TEXTURE);
+			buffer.pos(6.5D, 0.01F, 6.5D).tex(1, 0).endVertex();
+			buffer.pos(6.5D, 0.01F, -6.5D).tex(0, 0).endVertex();
+			buffer.pos(-6.5D, 0.01F, -6.5D).tex(0, 1).endVertex();
+			buffer.pos(-6.5D, 0.01F, 6.5D).tex(1, 1).endVertex();
+		}
+		if (!renderVertical) {
+			GlStateManager.rotate(rotate, 0F, 1F, 0F);
+			bindTexture(INNER_RING_TEXTURE);
+			buffer.pos(4.25D, 0.01F, 4.25D).tex(1, 0).endVertex();
+			buffer.pos(4.25D, 0.01F, -4.25D).tex(0, 0).endVertex();
+			buffer.pos(-4.25D, 0.01F, -4.25D).tex(0, 1).endVertex();
+			buffer.pos(-4.25D, 0.01F, 4.25D).tex(1, 1).endVertex();
+		}
+		tessellator.draw();
+
+		GL11.glDisable(GL11.GL_STENCIL_TEST);
+
+		GlStateManager.popMatrix();
+		// GlStateManager.enableLighting();
 	}
 
 	private void renderCogShield(EntityDecayPitTargetPart entity, double x, double y, double z, float angle) {

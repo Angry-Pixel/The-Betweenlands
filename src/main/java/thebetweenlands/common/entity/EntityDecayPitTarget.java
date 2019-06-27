@@ -54,6 +54,8 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public EntityDecayPitTargetPart chain_2;
 	public EntityDecayPitTargetPart chain_3;
 	public EntityDecayPitTargetPart chain_4;
+	public EntityDecayPitTargetPart inner_ring;
+	public EntityDecayPitTargetPart outer_ring;
 	
 	private static final DataParameter<Boolean> IS_RAISING = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_MOVING = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
@@ -63,7 +65,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 	public EntityDecayPitTarget(World world) {
 		super(world);
-		setSize(5F, 13F);
+		setSize(13F, 13F);
 		shield_array = new EntityDecayPitTargetPart[] {
 				shield_1 = new EntityDecayPitTargetPart(this, "part1", 1F, 1F),
 				shield_2 = new EntityDecayPitTargetPart(this, "part2", 1F, 1F),
@@ -86,7 +88,9 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				chain_1 = new EntityDecayPitTargetPart(this, "chain_1", 0.625F, 2F),
 				chain_2 = new EntityDecayPitTargetPart(this, "chain_2", 0.625F, 2F),
 				chain_3 = new EntityDecayPitTargetPart(this, "chain_3", 0.625F, 2F),
-				chain_4 = new EntityDecayPitTargetPart(this, "chain_4", 0.625F, 2F)
+				chain_4 = new EntityDecayPitTargetPart(this, "chain_4", 0.625F, 2F),
+				inner_ring = new EntityDecayPitTargetPart(this, "inner_ring", 9F, 0.0625F),
+				outer_ring = new EntityDecayPitTargetPart(this, "outer_ring", 13F, 0.0625F)
 				};
 	}
 
@@ -140,6 +144,8 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		chain_4.setPosition(posX - 1D, posY + height - getProgress(), posZ);
 		target.setPosition(posX, chain_1.posY - 2D, posZ);
 		bottom.setPosition(posX, chain_1.posY - 5D, posZ);
+		inner_ring.setPosition(posX, posY, posZ);
+		outer_ring.setPosition(posX, posY + 1D, posZ);
 
 		if (isMoving()) {
 			if (isSlow())
