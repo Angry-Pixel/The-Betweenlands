@@ -87,8 +87,8 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 		for (int part = 0; part < 24; part++) {
 			rendertopVertex(entity, x, y + 1 + 0.001F, z, 15F * part, 6.5D, 6.5D, 4.25D, 4.25D, true);
 			rendertopVertex(entity, x, y + 0.001F, z, 15F * part, 4.25D, 4.25D, 2.25D, 2.25D, false);
-			
 		}
+
 		if(ring_rotate >=360)
 			GL11.glStencilMask(0x00);
 		GL11.glStencilFunc(GL11.GL_NOTEQUAL, 0, 0xFF);
