@@ -109,7 +109,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		animationTicksPrev = animationTicks;
 		animationTicksChainPrev = animationTicksChain;
 		animationTicks += 1F;
-		if (animationTicks >= 359F)
+		if (animationTicks >= 360F)
 			animationTicks = animationTicksPrev = 0;
 
 		for(EntityDecayPitTargetPart part :shield_array) {
