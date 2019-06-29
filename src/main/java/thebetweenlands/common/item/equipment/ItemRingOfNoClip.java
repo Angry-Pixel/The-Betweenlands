@@ -11,7 +11,6 @@ import thebetweenlands.util.NBTHelper;
 
 public class ItemRingOfNoClip extends ItemRing {
 	public static final String NBT_PHASING = "ring_of_no_clip.phasing";
-	public static final String NBT_VIEW_OBSTRUCTED = "ring_of_no_clip.view_obstructed";
 
 	public ItemRingOfNoClip() {
 		this.setMaxDamage(1800);

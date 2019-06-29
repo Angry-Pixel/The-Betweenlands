@@ -84,7 +84,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 
 			if(item.canPhase(player, stack)) {
 				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(player.world);
-				AxisAlignedBB locationAABB = aabb.expand(8, 8, 8);
+				AxisAlignedBB locationAABB = aabb.grow(8);
 				List<LocationStorage> guardedLocations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, locationAABB, (location) -> {
 					return location.intersects(locationAABB) && location.getGuard() != null;
 				});

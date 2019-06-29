@@ -3,9 +3,12 @@ package thebetweenlands.common.entity;
 import java.util.List;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
 
@@ -51,18 +54,32 @@ public class EntityDecayPitBigFloor extends Entity {
 	}
 
 	private Entity checkSurfaceCollisions() {
-		for (Entity entity : getEntityAbove())
+		for (Entity entity : getEntityAbove()) {
 			if (entity != null) {
 				if (getDistance(entity) >= 4.25F - entity.width * 0.5F && getDistance(entity) <= 7.5F + entity.width * 0.5F) {
 					if (entity.posY <= posY + height - 0.0625D) {
 						entity.motionX = 0D;
 						entity.motionY = 0.2D;
 						entity.motionZ = 0D;
+					} else if(entity.motionY < 0) {
+						entity.motionY = 0;
 					}
-					else if(entity.motionY < 0 )
-							entity.motionY = 0;
+				
+					Vec3d center = new Vec3d(this.posX, 0, this.posZ);
+					Vec3d entityOffset = new Vec3d(entity.posX, 0, entity.posZ);
+					
+					double dist = entityOffset.distanceTo(center);
+					double circumference = 2 * Math.PI * dist;
+					double speed = circumference / 360 * 1 /*angle per tick*/;
+					
+					Vec3d push = new Vec3d(0, 1, 0).crossProduct(entityOffset.subtract(center).normalize()).normalize().scale(speed);
+					
+					if(!entity.world.isRemote || entity instanceof EntityPlayer) {
+						entity.move(MoverType.SELF, push.x, 0, push.z);
+					}
 				}
 			}
+		}
 		return null;
 	}
 
