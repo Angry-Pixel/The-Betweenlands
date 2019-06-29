@@ -94,7 +94,8 @@ public class RenderDecayPitBigFloor extends Render<EntityDecayPitBigFloor> {
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 
 		GlStateManager.disableBlend();
-
+		GlStateManager.enableLighting();
+		
 		GlStateManager.popMatrix();
 	}
 
