@@ -25,7 +25,6 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.common.entity.mobs.EntitySludgeJet;
 
 public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitTarget {
 	public float animationTicks = 0;
@@ -167,28 +166,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 		if (!getEntityWorld().isRemote && getProgress() > 2F && getEntityWorld().getTotalWorldTime() % 60 == 0) // upsy-daisy
 			moveUp();
-
-		if (!getEntityWorld().isRemote) {
-			if(animationTicks == 60) {
-				spawnSludgeJet(posX + 2D, posY + 1, posZ -5.5D);
-			}
-			if(animationTicks == 150) {
-				spawnSludgeJet(posX - 5.5D, posY + 1, posZ -2D);
-			}
-			if(animationTicks == 240) {
-				spawnSludgeJet(posX - 2D, posY + 1, posZ  + 5.5D);
-			}
-			if(animationTicks == 330) {
-				spawnSludgeJet(posX + 5.5D, posY + 1, posZ + 2D);
-			}
-		}
-	}
-
-	private void spawnSludgeJet(double posX, double posY, double posZ) {
-		System.out.println("HERE!");
-		EntitySludgeJet jet = new EntitySludgeJet(getWorld());
-		jet.setPosition(posX, posY, posZ);
-		getWorld().spawnEntity(jet);
 	}
 
 	protected void setHangingLength(EntityDecayPitTargetPart chain, float extended) {
