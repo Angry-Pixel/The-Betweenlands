@@ -90,6 +90,7 @@ import thebetweenlands.client.render.entity.RenderChiromaw;
 import thebetweenlands.client.render.entity.RenderCryptCrawler;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderDarkLight;
+import thebetweenlands.client.render.entity.RenderDecayPitBigFloor;
 import thebetweenlands.client.render.entity.RenderDecayPitChain;
 import thebetweenlands.client.render.entity.RenderDecayPitTarget;
 import thebetweenlands.client.render.entity.RenderDragonFly;
@@ -195,6 +196,7 @@ import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityDecayPitBigFloor;
 import thebetweenlands.common.entity.EntityDecayPitChain;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
@@ -560,6 +562,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityDecayPitChain.class, RenderDecayPitChain::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityDecayPitTarget.class, RenderDecayPitTarget::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySludgeJet.class, RenderSludgeJet::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityDecayPitBigFloor.class, RenderDecayPitBigFloor::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

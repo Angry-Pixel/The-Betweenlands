@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityDecayPitBigFloor;
 import thebetweenlands.common.entity.EntityDecayPitChain;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
@@ -161,6 +162,7 @@ public class EntityRegistry {
 		registerEntity(EntityDecayPitChain.class, "decay_pit_chain_outer");
 		registerEntity(EntityDecayPitTarget.class, "decay_pit_target");
 		registerEntity(EntitySludgeJet.class, "sludge_jet", 64, 1, true);
+		registerEntity(EntityDecayPitBigFloor.class, "decay_pit_big_floor");
 
 	}
 
