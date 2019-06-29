@@ -11,11 +11,11 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.util.LightingUtil;
+import thebetweenlands.util.Stencil;
 
 @SideOnly(Side.CLIENT)
 public class ModelDungeonDoorRunesLayer extends ModelBase {
@@ -83,58 +83,44 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 
 		Framebuffer fbo = Minecraft.getMinecraft().getFramebuffer();
 
-		boolean useStencil = false;
-		int stencilBit = MinecraftForgeClient.reserveStencilBit();
-		int stencilMask = 1 << stencilBit;
+		try(Stencil stencil = Stencil.reserve(fbo)) {
+			if(stencil.valid()) {
+				GL11.glEnable(GL11.GL_STENCIL_TEST);
 
-		if(stencilBit >= 0) {
-			useStencil = fbo.isStencilEnabled() ? true : fbo.enableStencil();
+				stencil.clear(false);
+
+				stencil.func(GL11.GL_ALWAYS, true);
+				stencil.op(GL11.GL_REPLACE);
+
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+
+				GlStateManager.color(1, 1, 1, 1);
+
+				GlStateManager.depthMask(false);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+
+				//Render rune mask
+				box.render(scale);
+
+				GlStateManager.depthMask(true);
+
+				stencil.func(GL11.GL_EQUAL, true);
+				stencil.op(GL11.GL_KEEP);
+
+				//Render glowy stuff
+				Minecraft.getMinecraft().getTextureManager().bindTexture(glow);
+				this.renderRuneGlow(box, ticks, scale, partialTicks);
+
+				GL11.glDisable(GL11.GL_STENCIL_TEST);
+
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			} else {
+				//No fancy runes for toasters
+				box.render(scale);
+			}
 		}
-
-		if(useStencil) {
-			GL11.glEnable(GL11.GL_STENCIL_TEST);
-
-			//Clear our stencil bit to 0
-			GL11.glStencilMask(stencilMask);
-			GL11.glClearStencil(0);
-			GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-			GL11.glStencilMask(~0);
-
-			GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
-			GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
-
-			GlStateManager.enableBlend();
-			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-
-			GlStateManager.color(1, 1, 1, 1);
-
-			GlStateManager.depthMask(false);
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-
-			//Render rune mask
-			box.render(scale);
-
-			GlStateManager.depthMask(true);
-
-			GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
-			GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-
-			//Render glowy stuff
-			Minecraft.getMinecraft().getTextureManager().bindTexture(glow);
-			this.renderRuneGlow(box, ticks, scale, partialTicks);
-
-			GL11.glDisable(GL11.GL_STENCIL_TEST);
-
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-		} else {
-			//No fancy runes for toasters
-			box.render(scale);
-		}
-
-		if(stencilBit >= 0) {
-			MinecraftForgeClient.releaseStencilBit(stencilBit);
-		}
-
+		
 		GlStateManager.disablePolygonOffset();
 	}
 
