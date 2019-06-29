@@ -76,6 +76,12 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 
+		GL11.glEnable(GL11.GL_STENCIL_TEST);
+		if(ring_rotate >=360)
+			GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+		GL11.glStencilMask(0xFF);
+		GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+		GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1F, 1F, 1F, 1F);
 
@@ -83,6 +89,10 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			rendertopVertex(entity, x, y + 1 + 0.001F, z, 15F * part, 7.5D, 7.5D, 4.25D, 4.25D, true);
 			rendertopVertex(entity, x, y + 0.001F, z, 15F * part, 4.25D, 4.25D, 2.75D, 2.75D, false);
 		}
+
+		if(ring_rotate >=360)
+			GL11.glStencilMask(0x00);
+		GL11.glStencilFunc(GL11.GL_NOTEQUAL, 0, 0xFF);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
@@ -112,6 +122,7 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 		GlStateManager.popMatrix();
 
 		GlStateManager.disableBlend();
+		GL11.glDisable(GL11.GL_STENCIL_TEST);
 
 		GlStateManager.popMatrix();
 
