@@ -1,5 +1,6 @@
 package thebetweenlands.common.handler;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
@@ -7,46 +8,60 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.border.WorldBorder;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.GetCollisionBoxesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
+import thebetweenlands.api.capability.IEntityCustomCollisionsCapability.BlockCollisionPredicate;
+import thebetweenlands.api.capability.IEntityCustomCollisionsCapability.CollisionBoxHelper;
+import thebetweenlands.api.capability.IEntityCustomCollisionsCapability.EntityCollisionPredicate;
 import thebetweenlands.api.entity.IEntityCustomBlockCollisions;
+import thebetweenlands.common.registries.CapabilityRegistry;
 
 public final class CustomEntityBlockCollisionsHandler {
+	public static final class Helper implements CollisionBoxHelper {
+		private Helper() { }
+
+		@Override
+		public void getCollisionBoxes(Entity entity, AxisAlignedBB aabb, EntityCollisionPredicate entityPredicate,
+				BlockCollisionPredicate blockPredicate, List<AxisAlignedBB> collisionBoxes) {
+			CustomEntityBlockCollisionsHandler.getCollisionBoxes(entity, aabb, entityPredicate, blockPredicate, collisionBoxes);
+		}
+	}
+
+	public static final Helper HELPER = new Helper();
+
 	private CustomEntityBlockCollisionsHandler() {}
 
 	private static boolean gathering = false;
 
 	@SubscribeEvent
 	public static void onGatherCollisionBoxes(GetCollisionBoxesEvent event) {
-		if(!gathering && event.getEntity() instanceof IEntityCustomBlockCollisions) {
-			gathering = true;
-			((IEntityCustomBlockCollisions) event.getEntity()).getCustomCollisionBoxes(event.getAabb(), event.getCollisionBoxesList());
-			gathering = false;
+		if(!gathering) {
+			Entity entity = event.getEntity();
+			if(entity != null) {
+				IEntityCustomCollisionsCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
+
+				if(cap != null || entity instanceof IEntityCustomBlockCollisions) {
+					gathering = true;
+					try {
+						if(cap != null) {
+							cap.getCustomCollisionBoxes(HELPER, event.getAabb(), event.getCollisionBoxesList());
+						} else {
+							((IEntityCustomBlockCollisions) event.getEntity()).getCustomCollisionBoxes(event.getAabb(), event.getCollisionBoxesList());
+						}
+					} finally {
+						gathering = false;
+					}
+				}
+			}
 		}
 	}
 
-	@FunctionalInterface
-	public static interface EntityCollisionPredicate {
-		public static EntityCollisionPredicate ALL = (entity, aabb, otherEntity, otherAabb) -> true;
-		public static EntityCollisionPredicate NONE = (entity, aabb, otherEntity, otherAabb) -> false;
-
-		public boolean isColliding(Entity entity, AxisAlignedBB aabb, Entity otherEntity, AxisAlignedBB otherAabb);
-	}
-
-	@FunctionalInterface
-	public static interface BlockCollisionPredicate {
-		public static EntityCollisionPredicate ALL = (entity, aabb, pos, state) -> true;
-		public static EntityCollisionPredicate NONE = (entity, aabb, pos, state) -> false;
-
-		public boolean isColliding(Entity entity, AxisAlignedBB aabb, MutableBlockPos pos, IBlockState state);
-	}
-
-	public static void getCollisionBoxes(Entity entity, AxisAlignedBB aabb, EntityCollisionPredicate entityPredicate, BlockCollisionPredicate blockPredicate, List<AxisAlignedBB> collisionBoxes) {
+	private static void getCollisionBoxes(Entity entity, AxisAlignedBB aabb, EntityCollisionPredicate entityPredicate, BlockCollisionPredicate blockPredicate, List<AxisAlignedBB> collisionBoxes) {
 		getBlockCollisionBoxes(entity, aabb, blockPredicate, collisionBoxes);
 		getEntityCollisionBoxes(entity, aabb, entityPredicate, collisionBoxes);
 		MinecraftForge.EVENT_BUS.post(new net.minecraftforge.event.world.GetCollisionBoxesEvent(entity.world, entity, aabb, collisionBoxes));
@@ -110,8 +125,14 @@ public final class CustomEntityBlockCollisionsHandler {
 									state = world.getBlockState(checkPos);
 								}
 
-								if(blockPredicate.isColliding(entity, aabb, checkPos, state)) {
-									state.addCollisionBoxToList(world, checkPos, aabb, collisionBoxes, entity, false);
+								if(blockPredicate.isColliding(entity, aabb, checkPos, state, null)) {
+									List<AxisAlignedBB> blockBoxes = new ArrayList<>();
+									state.addCollisionBoxToList(world, checkPos, aabb, blockBoxes, entity, false);
+									for(AxisAlignedBB blockAabb : blockBoxes) {
+										if(blockPredicate.isColliding(entity, aabb, checkPos, state, blockAabb)) {
+											collisionBoxes.add(blockAabb);
+										}
+									}
 								}
 							}
 						}

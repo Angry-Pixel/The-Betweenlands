@@ -25,6 +25,7 @@ import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
+import thebetweenlands.common.capability.collision.RingOfNoClipEntityCapability;
 import thebetweenlands.common.command.CommandAspectDiscovery;
 import thebetweenlands.common.command.CommandBLEvent;
 import thebetweenlands.common.command.CommandDecay;
@@ -247,5 +248,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(ItemMagicItemMagnet.class);
 		MinecraftForge.EVENT_BUS.register(EntityWeedwoodRowboat.class);
 		MinecraftForge.EVENT_BUS.register(GameruleRegistry.class);
+		MinecraftForge.EVENT_BUS.register(RingOfNoClipEntityCapability.class);
 	}
 }

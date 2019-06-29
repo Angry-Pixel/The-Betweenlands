@@ -52,6 +52,7 @@ import thebetweenlands.common.item.armor.ItemValoniteArmor;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
+import thebetweenlands.common.item.equipment.ItemRingOfNoClip;
 import thebetweenlands.common.item.equipment.ItemRingOfPower;
 import thebetweenlands.common.item.equipment.ItemRingOfRecruitment;
 import thebetweenlands.common.item.equipment.ItemRingOfSummoning;
@@ -388,6 +389,7 @@ public class ItemRegistry {
     public static final Item RING_OF_FLIGHT = new ItemRingOfFlight();
     public static final Item RING_OF_RECRUITMENT = new ItemRingOfRecruitment();
     public static final Item RING_OF_SUMMONING = new ItemRingOfSummoning();
+    public static final Item RING_OF_NO_CLIP = new ItemRingOfNoClip();
     public static final Item ANGRY_PEBBLE = new ItemAngryPebble();
     public static final Item LORE_SCRAP = new ItemLoreScrap();
     public static final ItemTaintedPotion TAINTED_POTION = new ItemTaintedPotion();
