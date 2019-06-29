@@ -96,7 +96,8 @@ public class TestItem extends Item {
 		*/
 			WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 			//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
-			dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
+			//dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
+			dungeon.generate(worldIn, itemRand, pos.up().add(1, 0, 1));
 
 
 			//BlockGroundItem.create(worldIn, pos.up(), new ItemStack(ItemRegistry.ANCIENT_GREATSWORD));
