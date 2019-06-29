@@ -15,12 +15,11 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.pipeline.ForgeBlockModelRenderer;
 import net.minecraftforge.client.model.pipeline.VertexBufferConsumer;
 import thebetweenlands.client.render.block.VertexLighterFlatNoOffsets;
@@ -28,6 +27,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityBeamOrigin;
 import thebetweenlands.util.LightingUtil;
 import thebetweenlands.util.RotationMatrix;
+import thebetweenlands.util.Stencil;
 
 public class RenderBeamOrigin extends TileEntitySpecialRenderer<TileEntityBeamOrigin> {
 	private static final VertexLighterFlatNoOffsets FLAT_LIGHTER = new VertexLighterFlatNoOffsets(Minecraft.getMinecraft().getBlockColors());
@@ -54,13 +54,13 @@ public class RenderBeamOrigin extends TileEntitySpecialRenderer<TileEntityBeamOr
 		Vec3d v0 = new Vec3d(-w, 0, 0).add(w, 1, 0);
 		Vec3d v1 = new Vec3d(0, h, w).add(w, 1, 0);
 		Vec3d v2 = new Vec3d(0, h, -w).add(w, 1, 0);
-		
+
 		Vec3d mid = Vec3d.ZERO;
 
-		this.renderMirror(te, m.transformVec(v0, mid), m.transformVec(v1, mid), m.transformVec(v2, mid), partialTicks);
-		this.renderMirror(te, m.transformVec(v0, mid), m.transformVec(v1.add(-w*2, 0, 0), mid), m.transformVec(v2.add(0, 0, w*2), mid), partialTicks);
-		this.renderMirror(te, m.transformVec(v0, mid), m.transformVec(v1.add(-w*2, 0, -w*2), mid), m.transformVec(v2.add(-w*2, 0, w*2), mid), partialTicks);
-		this.renderMirror(te, m.transformVec(v0, mid), m.transformVec(v1.add(0, 0, -w*2), mid), m.transformVec(v2.add(-w*2, 0, 0), mid), partialTicks);
+		this.renderMirrorTri(te, m.transformVec(v0, mid), m.transformVec(v1, mid), m.transformVec(v2, mid), partialTicks);
+		this.renderMirrorTri(te, m.transformVec(v0, mid), m.transformVec(v1.add(-w*2, 0, 0), mid), m.transformVec(v2.add(0, 0, w*2), mid), partialTicks);
+		this.renderMirrorTri(te, m.transformVec(v0, mid), m.transformVec(v1.add(-w*2, 0, -w*2), mid), m.transformVec(v2.add(-w*2, 0, w*2), mid), partialTicks);
+		this.renderMirrorTri(te, m.transformVec(v0, mid), m.transformVec(v1.add(0, 0, -w*2), mid), m.transformVec(v2.add(-w*2, 0, 0), mid), partialTicks);
 
 		RenderHelper.enableStandardItemLighting();
 
@@ -81,9 +81,21 @@ public class RenderBeamOrigin extends TileEntitySpecialRenderer<TileEntityBeamOr
 		return true;
 	}
 
-	protected void renderMirror(TileEntityBeamOrigin te, Vec3d v0, Vec3d v1, Vec3d v2, float partialTicks) {
-		Vec3d normal = v0.subtract(v1).crossProduct(v0.subtract(v2)).normalize();
+	protected void renderMirrorTri(TileEntityBeamOrigin te, Vec3d v0, Vec3d v1, Vec3d v2, float partialTicks) {
+		Vec3d normal = v1.subtract(v0).crossProduct(v2.subtract(v0)).normalize();
 
+		Runnable mirrorRenderer = () -> {
+			GlStateManager.glBegin(GL11.GL_TRIANGLES);
+			GlStateManager.glVertex3f((float)v0.x, (float)v0.y, (float)v0.z);
+			GlStateManager.glVertex3f((float)v1.x, (float)v1.y, (float)v1.z);
+			GlStateManager.glVertex3f((float)v2.x, (float)v2.y, (float)v2.z);
+			GlStateManager.glEnd();
+		};
+
+		this.renderMirror(te, v0, normal, mirrorRenderer, partialTicks);
+	}
+
+	protected void renderMirror(TileEntityBeamOrigin te, Vec3d planePos, Vec3d planeNormal, Runnable mirrorRenderer, float partialTicks) {
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(0, 0, 0, 1);
@@ -92,11 +104,7 @@ public class RenderBeamOrigin extends TileEntitySpecialRenderer<TileEntityBeamOr
 		GlStateManager.depthMask(false);
 		GlStateManager.disableCull();
 
-		GlStateManager.glBegin(GL11.GL_TRIANGLES);
-		GlStateManager.glVertex3f((float)v0.x, (float)v0.y, (float)v0.z);
-		GlStateManager.glVertex3f((float)v1.x, (float)v1.y, (float)v1.z);
-		GlStateManager.glVertex3f((float)v2.x, (float)v2.y, (float)v2.z);
-		GlStateManager.glEnd();
+		mirrorRenderer.run();
 
 		GlStateManager.enableCull();
 		GlStateManager.depthMask(true);
@@ -108,119 +116,83 @@ public class RenderBeamOrigin extends TileEntitySpecialRenderer<TileEntityBeamOr
 
 		Framebuffer fbo = Minecraft.getMinecraft().getFramebuffer();
 
-		boolean useStencil = false;
-		int stencilBit = MinecraftForgeClient.reserveStencilBit();
-		int stencilMask = 1 << stencilBit;
-		int stencilBit2 = MinecraftForgeClient.reserveStencilBit();
-		int stencilMask2 = 1 << stencilBit2;
+		try(Stencil stencil1 = Stencil.reserve(fbo); Stencil stencil2 = Stencil.reserve(fbo)) {
+			if(stencil1.valid() && stencil2.valid()) {
+				GL11.glEnable(GL11.GL_STENCIL_TEST);
 
-		if(stencilBit >= 0 && stencilMask2 >= 0) {
-			useStencil = fbo.isStencilEnabled() ? true : fbo.enableStencil();
-		}
+				stencil1.clear(false);
+				stencil2.clear(false);
 
-		if(useStencil) {
-			GL11.glEnable(GL11.GL_STENCIL_TEST);
+				stencil1.func(GL11.GL_ALWAYS, true);
+				stencil1.op(GL11.GL_REPLACE);
 
-			//Clear our stencil bit to 0
-			GL11.glStencilMask(stencilMask);
-			GL11.glClearStencil(0);
-			GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-			GL11.glStencilMask(~0);
+				GlStateManager.cullFace(CullFace.FRONT);
 
-			//Clear our stencil bit to 0
-			GL11.glStencilMask(stencilMask2);
-			GL11.glClearStencil(0);
-			GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-			GL11.glStencilMask(~0);
+				{
+					GlStateManager.disableTexture2D();
+					GlStateManager.colorMask(false, false, false, false);
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
 
-			GL11.glStencilMask(stencilMask);
-			GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
-			GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+					mirrorRenderer.run();
 
-			GlStateManager.cullFace(CullFace.FRONT);
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+					GlStateManager.colorMask(true, true, true, true);
+					GlStateManager.enableTexture2D();
+				}
 
-			{
-				GlStateManager.disableTexture2D();
-				GlStateManager.colorMask(false, false, false, false);
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
+				GlStateManager.pushMatrix();
+				mirrorTransform(planePos, planeNormal);
 
-				GlStateManager.glBegin(GL11.GL_TRIANGLES);
-				GlStateManager.glVertex3f((float)v0.x, (float)v0.y, (float)v0.z);
-				GlStateManager.glVertex3f((float)v1.x, (float)v1.y, (float)v1.z);
-				GlStateManager.glVertex3f((float)v2.x, (float)v2.y, (float)v2.z);
-				GlStateManager.glEnd();
-
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-				GlStateManager.colorMask(true, true, true, true);
 				GlStateManager.enableTexture2D();
+
+				GlStateManager.depthFunc(GL11.GL_GEQUAL);
+
+				stencil2.func(GL11.GL_ALWAYS, true);
+				stencil2.op(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
+
+				GlStateManager.colorMask(false, false, false, false);
+				this.renderMirrorWorld(te, partialTicks);
+				GlStateManager.colorMask(true, true, true, true);
+
+				GlStateManager.popMatrix();
+
+				stencil1.func(GL11.GL_EQUAL, true);
+				stencil1.op(GL11.GL_KEEP);
+
+				GlStateManager.enablePolygonOffset();
+				GlStateManager.doPolygonOffset(1, 100000000);
+				{
+					GlStateManager.disableTexture2D();
+					GlStateManager.colorMask(false, false, false, false);
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
+
+					mirrorRenderer.run();
+
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+					GlStateManager.colorMask(true, true, true, true);
+					GlStateManager.enableTexture2D();
+				}
+				GlStateManager.disablePolygonOffset();
+
+				GlStateManager.pushMatrix();
+				mirrorTransform(planePos, planeNormal);
+
+				GlStateManager.depthFunc(GL11.GL_LEQUAL);
+
+				GL11.glStencilMask(stencil1.mask | stencil2.mask);
+				GL11.glStencilFunc(GL11.GL_EQUAL, stencil1.mask | stencil2.mask, stencil1.mask | stencil2.mask);
+				GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+
+				//TODO Debug
+				//GL11.glDisable(GL11.GL_STENCIL_TEST);
+
+				this.renderMirrorWorld(te, partialTicks);
+
+				GlStateManager.popMatrix();
+
+				GlStateManager.cullFace(CullFace.BACK);
 			}
 
-			GlStateManager.pushMatrix();
-			mirrorTransform(v0, normal);
-
-			GlStateManager.enableTexture2D();
-
-			GlStateManager.depthFunc(GL11.GL_GEQUAL);
-
-			GL11.glStencilMask(stencilMask2);
-			GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask2, stencilMask2);
-			GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);
-
-			GlStateManager.colorMask(false, false, false, false);
-			this.renderMirrorWorld(te, partialTicks);
-			GlStateManager.colorMask(true, true, true, true);
-
-			GlStateManager.popMatrix();
-
-			GL11.glStencilMask(stencilMask);
-			GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
-			GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-
-			GlStateManager.enablePolygonOffset();
-			GlStateManager.doPolygonOffset(1, 100000000);
-			{
-				GlStateManager.disableTexture2D();
-				GlStateManager.colorMask(false, false, false, false);
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
-
-				GlStateManager.glBegin(GL11.GL_TRIANGLES);
-				GlStateManager.glVertex3f((float)v0.x, (float)v0.y, (float)v0.z);
-				GlStateManager.glVertex3f((float)v1.x, (float)v1.y, (float)v1.z);
-				GlStateManager.glVertex3f((float)v2.x, (float)v2.y, (float)v2.z);
-				GlStateManager.glEnd();
-
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-				GlStateManager.colorMask(true, true, true, true);
-				GlStateManager.enableTexture2D();
-			}
-			GlStateManager.disablePolygonOffset();
-
-			GlStateManager.pushMatrix();
-			mirrorTransform(v0, normal);
-
-			GlStateManager.depthFunc(GL11.GL_LEQUAL);
-
-			GL11.glStencilMask(stencilMask | stencilMask2);
-			GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask | stencilMask2, stencilMask | stencilMask2);
-			GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-
-			//TODO Debug
-			//GL11.glDisable(GL11.GL_STENCIL_TEST);
-			
-			this.renderMirrorWorld(te, partialTicks);
-
-			GlStateManager.popMatrix();
-
-			GlStateManager.cullFace(CullFace.BACK);
-		}
-
-		if(stencilBit >= 0) {
-			MinecraftForgeClient.releaseStencilBit(stencilBit);
-		}
-		if(stencilBit2 >= 0) {
-			MinecraftForgeClient.releaseStencilBit(stencilBit2);
-		}
-		if(useStencil) {
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
 		}
 
@@ -230,11 +202,7 @@ public class RenderBeamOrigin extends TileEntitySpecialRenderer<TileEntityBeamOr
 			GlStateManager.colorMask(false, false, false, false);
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
 
-			GlStateManager.glBegin(GL11.GL_TRIANGLES);
-			GlStateManager.glVertex3f((float)v0.x, (float)v0.y, (float)v0.z);
-			GlStateManager.glVertex3f((float)v1.x, (float)v1.y, (float)v1.z);
-			GlStateManager.glVertex3f((float)v2.x, (float)v2.y, (float)v2.z);
-			GlStateManager.glEnd();
+			mirrorRenderer.run();
 
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 			GlStateManager.colorMask(true, true, true, true);
@@ -259,8 +227,8 @@ public class RenderBeamOrigin extends TileEntitySpecialRenderer<TileEntityBeamOr
 
 		GlStateManager.pushMatrix();
 
-		for(EntityLivingBase entity : te.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(te.getPos()).grow(20))) {
-			Render<EntityLivingBase> renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
+		for(EntityPlayer entity : te.getWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(te.getPos()).grow(20))) {
+			Render<EntityPlayer> renderer = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(entity);
 			if(renderer != null) {
 				GlStateManager.pushMatrix();
 
@@ -292,7 +260,7 @@ public class RenderBeamOrigin extends TileEntitySpecialRenderer<TileEntityBeamOr
 		FLAT_LIGHTER.setParent(new VertexBufferConsumer(vertexBuffer));
 
 		//TODO Create buffer once
-		
+
 		vertexBuffer.setTranslation(-0.5D + firePos.x - 4, -0.5D + firePos.y, -0.5D + firePos.z - 4);
 		ForgeBlockModelRenderer.render(FLAT_LIGHTER, te.getWorld(), modelFire, stateFire, te.getPos(), vertexBuffer, false, MathHelper.getPositionRandom(te.getPos()));
 
@@ -304,19 +272,19 @@ public class RenderBeamOrigin extends TileEntitySpecialRenderer<TileEntityBeamOr
 
 		vertexBuffer.setTranslation(-0.5D + brazierPos.x - 4, -0.5D + brazierPos.y, -0.5D + brazierPos.z + 4);
 		ForgeBlockModelRenderer.render(FLAT_LIGHTER, te.getWorld(), modelBrazier, stateBrazier, te.getPos(), vertexBuffer, false, MathHelper.getPositionRandom(te.getPos()));
-		
+
 		vertexBuffer.setTranslation(-0.5D + firePos.x + 4, -0.5D + firePos.y, -0.5D + firePos.z + 4);
 		ForgeBlockModelRenderer.render(FLAT_LIGHTER, te.getWorld(), modelFire, stateFire, te.getPos(), vertexBuffer, false, MathHelper.getPositionRandom(te.getPos()));
 
 		vertexBuffer.setTranslation(-0.5D + brazierPos.x + 4, -0.5D + brazierPos.y, -0.5D + brazierPos.z + 4);
 		ForgeBlockModelRenderer.render(FLAT_LIGHTER, te.getWorld(), modelBrazier, stateBrazier, te.getPos(), vertexBuffer, false, MathHelper.getPositionRandom(te.getPos()));
-		
+
 		vertexBuffer.setTranslation(-0.5D + firePos.x+ 4, -0.5D + firePos.y, -0.5D + firePos.z - 4);
 		ForgeBlockModelRenderer.render(FLAT_LIGHTER, te.getWorld(), modelFire, stateFire, te.getPos(), vertexBuffer, false, MathHelper.getPositionRandom(te.getPos()));
 
 		vertexBuffer.setTranslation(-0.5D + brazierPos.x + 4, -0.5D + brazierPos.y, -0.5D + brazierPos.z - 4);
 		ForgeBlockModelRenderer.render(FLAT_LIGHTER, te.getWorld(), modelBrazier, stateBrazier, te.getPos(), vertexBuffer, false, MathHelper.getPositionRandom(te.getPos()));
-		
+
 		vertexBuffer.setTranslation(0, 0, 0);
 		tessellator.draw();
 
