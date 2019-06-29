@@ -1,8 +1,18 @@
 package thebetweenlands.client.proxy;
 
+import java.io.InputStreamReader;
+import java.net.Proxy;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -117,6 +127,7 @@ import thebetweenlands.client.render.entity.RenderShockwaveSwordItem;
 import thebetweenlands.client.render.entity.RenderSiltCrab;
 import thebetweenlands.client.render.entity.RenderSludge;
 import thebetweenlands.client.render.entity.RenderSludgeBall;
+import thebetweenlands.client.render.entity.RenderSludgeJet;
 import thebetweenlands.client.render.entity.RenderSmolSludgeWorm;
 import thebetweenlands.client.render.entity.RenderSmollSludge;
 import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
@@ -233,6 +244,7 @@ import thebetweenlands.common.entity.mobs.EntityRootSprite;
 import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
+import thebetweenlands.common.entity.mobs.EntitySludgeJet;
 import thebetweenlands.common.entity.mobs.EntitySmolSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
@@ -308,11 +320,6 @@ import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.world.event.EventSpoopy;
 import thebetweenlands.common.world.event.EventWinter;
 import thebetweenlands.util.GLUProjection;
-
-import java.io.InputStreamReader;
-import java.net.Proxy;
-import java.util.*;
-import java.util.Map.Entry;
 
 public class ClientProxy extends CommonProxy implements IResourceManagerReloadListener {
 	public static Render<EntityDragonFly> dragonFlyRenderer;
@@ -552,6 +559,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityTonyWormEggSac.class, RenderTonyWormEggSac::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityDecayPitChain.class, RenderDecayPitChain::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityDecayPitTarget.class, RenderDecayPitTarget::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySludgeJet.class, RenderSludgeJet::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

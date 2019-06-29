@@ -28,7 +28,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -38,6 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.BossType;
 import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.util.Stencil;
 
 public class BossHandler<T extends Entity & IBLBoss> {
 	private BossHandler() { }
@@ -230,55 +230,48 @@ public class BossHandler<T extends Entity & IBLBoss> {
 					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 					GlStateManager.depthMask(false);
 
-					boolean useStencil = false;
+					/*boolean useStencil = false;
 					int stencilBit = MinecraftForgeClient.reserveStencilBit();
 					int stencilMask = 1 << stencilBit;
 
 					if(stencilBit >= 0) {
 						useStencil = fbo.isStencilEnabled() ? true : fbo.enableStencil();
-					}
+					}*/
 
 					double width = boss.getMiniBossTagSize(event.getPartialRenderTick());
 					double height = width;
 
-					if(useStencil) {
-						GL11.glEnable(GL11.GL_STENCIL_TEST);
+					try(Stencil stencil = Stencil.reserve(fbo)) {
+						if(stencil.valid()) {
+							GL11.glEnable(GL11.GL_STENCIL_TEST);
+							
+							stencil.clear(false);
+							
+							stencil.func(GL11.GL_ALWAYS, true);
+							stencil.op(GL11.GL_REPLACE);
+							
+							GlStateManager.colorMask(false, false, false, false);
+							GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
 
-						//Clear our stencil bit to 0
-						GL11.glStencilMask(stencilMask);
-						GL11.glClearStencil(0);
-						GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-						GL11.glStencilMask(~0);
+							renderTagQuad(tessellator, -width, -height - (height - 0.2D) * emptyPercentage, width, height - height * emptyPercentage, 0, 0.5D, 0.5D, 1);
 
-						GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
-						GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+							GlStateManager.colorMask(true, true, true, true);
+							GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+							
+							stencil.func(GL11.GL_EQUAL, true);
+							stencil.op(GL11.GL_KEEP);
+						}
 
+						renderTag(tessellator, fbo, textureManager, width, height, emptyPercentage, stencil);
+
+						GlStateManager.depthMask(true);
 						GlStateManager.colorMask(false, false, false, false);
-						GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
 
-						renderTagQuad(tessellator, -width, -height - (height - 0.2D) * emptyPercentage, width, height - height * emptyPercentage, 0, 0.5D, 0.5D, 1);
-
-						GlStateManager.colorMask(true, true, true, true);
-						GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-
-						GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
-						GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-					}
-
-					renderTag(tessellator, fbo, textureManager, width, height, emptyPercentage, useStencil);
-
-					GlStateManager.depthMask(true);
-					GlStateManager.colorMask(false, false, false, false);
-
-					renderTag(tessellator, fbo, textureManager, width, height, emptyPercentage, useStencil);
-
-					if(stencilBit >= 0) {
-						MinecraftForgeClient.releaseStencilBit(stencilBit);
-					}
-					if(useStencil) {
+						renderTag(tessellator, fbo, textureManager, width, height, emptyPercentage, stencil);
+						
 						GL11.glDisable(GL11.GL_STENCIL_TEST);
 					}
-
+					
 					GlStateManager.colorMask(true, true, true, true);
 					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 					GlStateManager.enableLighting();
@@ -291,18 +284,18 @@ public class BossHandler<T extends Entity & IBLBoss> {
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static void renderTag(Tessellator tessellator, Framebuffer fbo, TextureManager textureManager, double width, double height, double emptyPercentage, boolean useStencil) {
+	private static void renderTag(Tessellator tessellator, Framebuffer fbo, TextureManager textureManager, double width, double height, double emptyPercentage, Stencil stencil) {
 		GL11.glDisable(GL11.GL_STENCIL_TEST);
 
 		renderTagQuad(tessellator, -width, -height, width, height, 0, 0, 0.5D, 0.5D);
 
-		if(useStencil) {
+		if(stencil.valid()) {
 			GL11.glEnable(GL11.GL_STENCIL_TEST);
 		}
 
 		renderTagQuad(tessellator, -width, -height, width, height, 0.5D, 0, 1, 0.5D);
 
-		if(useStencil) {
+		if(stencil.valid()) {
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
 		}
 	}

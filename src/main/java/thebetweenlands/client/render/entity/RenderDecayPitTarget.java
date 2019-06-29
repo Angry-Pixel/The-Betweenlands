@@ -1,9 +1,14 @@
 package thebetweenlands.client.render.entity;
 
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -11,6 +16,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelDecayPitChain;
 import thebetweenlands.client.render.model.entity.ModelDecayPitPlug;
+import thebetweenlands.client.render.model.entity.ModelShieldCog;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityDecayPitTargetPart;
 import thebetweenlands.common.lib.ModInfo;
@@ -20,7 +26,14 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	private final ModelDecayPitPlug PLUG_MODEL = new ModelDecayPitPlug();
 	public static final ResourceLocation CHAIN_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_chain.png");
 	private final ModelDecayPitChain CHAIN_MODEL = new ModelDecayPitChain();
+	public static final ResourceLocation COG_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/barrishee.png");
+	private final ModelShieldCog COG_MODEL = new ModelShieldCog();
 
+	public static final ResourceLocation OUTER_RING_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/outer_ring.png");
+	public static final ResourceLocation INNER_RING_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/inner_ring.png");
+	public static final ResourceLocation MASK_MUD_TILE_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/gear_mask.png");
+	public static final ResourceLocation MASK_MUD_TILE_TEXTURE_HOLE = new ResourceLocation("thebetweenlands:textures/entity/gear_mask_hole.png");
+	public static final ResourceLocation VERTICAL_RING_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/vertical_ring.png");
 	public RenderDecayPitTarget(RenderManager manager) {
 		super(manager);
 	}
@@ -29,9 +42,13 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
     public void doRender(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		float scroll = entity.animationTicksChainPrev * 0.0078125F + (entity.animationTicksChain * 0.0078125F - entity.animationTicksChainPrev * 0.0078125F) * partialTicks;
 		double offsetY = entity.height - entity.getProgress();
+		double smoothedMainX = entity.prevPosX + (entity.posX - entity.prevPosX ) * partialTicks;
+		double smoothedMainY = entity.prevPosY + (entity.posY - entity.prevPosY ) * partialTicks;
+		double smoothedMainZ = entity.prevPosZ + (entity.posZ - entity.prevPosZ ) * partialTicks;
+
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + offsetY -1.5D, z);
+		GlStateManager.translate(x, y + offsetY -3.5D, z);
 		GlStateManager.scale(-1F, -1F, 1F);
 		PLUG_MODEL.render(entity, 0.0625F);
 		GlStateManager.popMatrix();	
@@ -44,11 +61,124 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			renderChainpart(entity, x, y + offsetY + len + 1.5D, z - 1D, 0F, 270F);
 		}
 
+		bindTexture(COG_TEXTURE);
+		for (EntityDecayPitTargetPart part : entity.shield_array) {
+			float floatate = part.prevRotationYaw + (part.rotationYaw - part.prevRotationYaw) * partialTicks;
+			double smoothedX = part.prevPosX  + (part.posX - part.prevPosX ) * partialTicks;
+			double smoothedY = part.prevPosY  + (part.posY - part.prevPosY ) * partialTicks;
+			double smoothedZ = part.prevPosZ  + (part.posZ - part.prevPosZ ) * partialTicks;
+			if (part != entity.target && part != entity.bottom && part != entity.chain_1 && part != entity.chain_2 && part != entity.chain_3 && part != entity.chain_4 && part != entity.inner_ring && part != entity.outer_ring)
+				renderCogShield(part, x + smoothedX - smoothedMainX, y + smoothedY - smoothedMainY, z + smoothedZ - smoothedMainZ, floatate);
+		}
+
+		float ring_rotate = entity.animationTicksPrev + (entity.animationTicks - entity.animationTicksPrev) * partialTicks;
+
+		GlStateManager.pushMatrix();
+		GlStateManager.enableBlend();
+
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1F, 1F, 1F, 1F);
+
+		for (int part = 0; part < 24; part++) {
+			rendertopVertex(entity, x, y + 1 + 0.001F, z, 15F * part, 7.5D, 7.5D, 4.25D, 4.25D, true);
+			rendertopVertex(entity, x, y + 0.001F, z, 15F * part, 4.25D, 4.25D, 2.75D, 2.75D, false);
+		}
+
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x, y + 1D, z);
+		GlStateManager.rotate(ring_rotate, 0F, 1F, 0F);
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		bindTexture(OUTER_RING_TEXTURE);
+		buffer.pos(7.5D, 0.01F, 7.5D).tex(1, 0).endVertex();
+		buffer.pos(7.5D, 0.01F, -7.5D).tex(0, 0).endVertex();
+		buffer.pos(-7.5D, 0.01F, -7.5D).tex(0, 1).endVertex();
+		buffer.pos(-7.5D, 0.01F, 7.5D).tex(1, 1).endVertex();
+		tessellator.draw();
+		GlStateManager.popMatrix();
+
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x, y, z);
+		GlStateManager.rotate(-ring_rotate, 0F, 1F, 0F);
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		bindTexture(INNER_RING_TEXTURE);
+		buffer.pos(4.25D, 0.01F, 4.25D).tex(1, 0).endVertex();
+		buffer.pos(4.25D, 0.01F, -4.25D).tex(0, 0).endVertex();
+		buffer.pos(-4.25D, 0.01F, -4.25D).tex(0, 1).endVertex();
+		buffer.pos(-4.25D, 0.01F, 4.25D).tex(1, 1).endVertex();
+		tessellator.draw();
+		GlStateManager.popMatrix();
+
+		GlStateManager.disableBlend();
+
+		GlStateManager.popMatrix();
+
 		// debug boxes for parts without models
 		GlStateManager.pushMatrix();
 		for (EntityDecayPitTargetPart part : entity.shield_array)
-			if (part != entity.bottom && part != entity.chain_1 && part != entity.chain_2 && part != entity.chain_3 && part != entity.chain_4)
+			if (part == entity.target)
 				renderDebugBoundingBox(part, x, y, z, entityYaw, partialTicks, part.posX - entity.posX, part.posY - entity.posY, part.posZ - entity.posZ);
+		GlStateManager.popMatrix();
+	}
+	
+	private void rendertopVertex(EntityDecayPitTarget entity, double x, double y, double z, double angle, double offsetXOuter, double offsetZOuter, double offsetXInner, double offsetZInner, boolean renderVertical) {
+
+		double startAngle = Math.toRadians(angle);
+		double endAngle = Math.toRadians(angle + 15D);
+		double offSetXOut1 = -Math.sin(startAngle) * offsetXOuter;
+		double offSetZOut1 = Math.cos(startAngle) * offsetZOuter;
+		double offSetXIn1 = -Math.sin(startAngle) * offsetXInner;
+		double offSetZIn1 = Math.cos(startAngle) * offsetZInner;
+
+		double offSetXOut2 = -Math.sin(endAngle) * offsetXOuter;
+		double offSetZOut2 = Math.cos(endAngle) * offsetXOuter;
+		double offSetXIn2 = -Math.sin(endAngle) * offsetXInner;
+		double offSetZIn2 = Math.cos(endAngle) * offsetXInner;
+
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder buffer = tessellator.getBuffer();
+		
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x, y, z);
+		if (!renderVertical) {
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			bindTexture(MASK_MUD_TILE_TEXTURE);
+			buffer.pos(offSetXOut1, 0F, offSetZOut1).tex(1, 0).endVertex();
+			buffer.pos(offSetXIn1, 0F, offSetZIn1).tex(0, 0).endVertex();
+			buffer.pos(offSetXIn2, 0F, offSetZIn2).tex(0, 1).endVertex();
+			buffer.pos(offSetXOut2, 0F, offSetZOut2).tex(1, 1).endVertex();
+			tessellator.draw();
+		}
+		if (renderVertical) {
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			if(angle != 15 && angle != 105 && angle != 195 && angle != 285)
+				bindTexture(MASK_MUD_TILE_TEXTURE);
+			else
+				bindTexture(MASK_MUD_TILE_TEXTURE_HOLE);
+			buffer.pos(offSetXOut1, 0F, offSetZOut1).tex(1, 0).endVertex();
+			buffer.pos(offSetXIn1, 0F, offSetZIn1).tex(0, 0).endVertex();
+			buffer.pos(offSetXIn2, 0F, offSetZIn2).tex(0, 1).endVertex();
+			buffer.pos(offSetXOut2, 0F, offSetZOut2).tex(1, 1).endVertex();
+			tessellator.draw();
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			bindTexture(VERTICAL_RING_TEXTURE);
+			buffer.pos(offSetXIn1, 0F, offSetZIn1).tex(1, 1).endVertex();
+			buffer.pos(offSetXIn1, -1F, offSetZIn1).tex(1, 0).endVertex();
+			buffer.pos(offSetXIn2, -1F, offSetZIn2).tex(0, 0).endVertex();
+			buffer.pos(offSetXIn2, 0F, offSetZIn2).tex(0, 1).endVertex();
+			tessellator.draw();
+		}
+		GlStateManager.popMatrix();
+	}
+
+	private void renderCogShield(EntityDecayPitTargetPart entity, double x, double y, double z, float angle) {
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x, y + 1.5F, z);
+		GlStateManager.scale(-1F, -1F, 1F);
+		GlStateManager.rotate(angle, 0F, 1F, 0F);
+		COG_MODEL.render(0.0625F);
 		GlStateManager.popMatrix();
 	}
 

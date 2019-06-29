@@ -54,6 +54,7 @@ import thebetweenlands.common.entity.mobs.EntityRootSprite;
 import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
+import thebetweenlands.common.entity.mobs.EntitySludgeJet;
 import thebetweenlands.common.entity.mobs.EntitySmolSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
@@ -159,6 +160,7 @@ public class EntityRegistry {
 		registerEntity(EntityAshSprite.class, "ash_sprite", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityDecayPitChain.class, "decay_pit_chain_outer");
 		registerEntity(EntityDecayPitTarget.class, "decay_pit_target");
+		registerEntity(EntitySludgeJet.class, "sludge_jet", 64, 1, true);
 
 	}
 

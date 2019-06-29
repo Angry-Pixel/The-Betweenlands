@@ -14,7 +14,6 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam;
 import thebetweenlands.common.TheBetweenlands;
 
 public class PacketParticle implements IMessage, IMessageHandler<PacketParticle, IMessage> {
@@ -23,6 +22,7 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 	
 	public static enum ParticleType {
 		SPORE_JET,
+		SLUDGE_JET,
 		FLAME,
 		BEAM,
 		BEAM_YELLOW;
@@ -92,6 +92,25 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
 						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d5, d6, d7, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
 						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, d0, d1, d2, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(105F, 70F, 40F, 1F).withScale(1.5F).withData(100)));
+					}
+					break;
+				case SLUDGE_JET:
+					for (double yy = message.posY; yy < message.posY + 2.5D; yy += 0.5D) {
+						double d0 = message.posX - 0.075F;
+						double d1 = yy;
+						double d2 = message.posZ - 0.075F;
+						double d3 = message.posX + 0.075F;
+						double d4 = message.posZ + 0.075F;
+						double d5 = message.posX;
+						double d6 = yy + 0.25F;
+						double d7 = message.posZ;
+
+						BLParticles.TAR_BEAST_DRIP.spawn(world, d0, d1, d4, ParticleArgs.get().withMotion(4f * yy * (rand.nextFloat() - 0.5f), 4f * yy, 4f * yy * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.TAR_BEAST_DRIP.spawn(world, d3, d1, d2, ParticleArgs.get().withMotion(4f * yy * (rand.nextFloat() - 0.5f), 4f * yy, 4f * yy * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.TAR_BEAST_DRIP.spawn(world, d3, d1, d4, ParticleArgs.get().withMotion(4f * yy * (rand.nextFloat() - 0.5f), 4f * yy, 4f * yy * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.TAR_BEAST_DRIP.spawn(world, d0, d1, d2, ParticleArgs.get().withMotion(4f * yy * (rand.nextFloat() - 0.5f), 4f * yy, 4f * yy * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.TAR_BEAST_DRIP.spawn(world, d5, d6, d7, ParticleArgs.get().withMotion(4f * yy * (rand.nextFloat() - 0.5f), 4f * yy, 4f * yy * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.TAR_BEAST_DRIP.spawn(world, d0, d1, d2, ParticleArgs.get().withMotion(4f * yy * (rand.nextFloat() - 0.5f), 4f * yy, 4f * yy * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
 					}
 					break;
 				case FLAME:

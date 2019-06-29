@@ -25,10 +25,11 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.common.entity.mobs.EntitySludgeJet;
 
 public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitTarget {
-	public int animationTicks = 0;
-	public int animationTicksPrev = 0;
+	public float animationTicks = 0;
+	public float animationTicksPrev = 0;
 	public int animationTicksChain = 0;
 	public int animationTicksChainPrev = 0;
 	public EntityDecayPitTargetPart[] shield_array;
@@ -40,12 +41,22 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public EntityDecayPitTargetPart shield_6;
 	public EntityDecayPitTargetPart shield_7;
 	public EntityDecayPitTargetPart shield_8;
+	public EntityDecayPitTargetPart shield_9;
+	public EntityDecayPitTargetPart shield_10;
+	public EntityDecayPitTargetPart shield_11;
+	public EntityDecayPitTargetPart shield_12;
+	public EntityDecayPitTargetPart shield_13;
+	public EntityDecayPitTargetPart shield_14;
+	public EntityDecayPitTargetPart shield_15;
+	public EntityDecayPitTargetPart shield_16;
 	public EntityDecayPitTargetPart target;
 	public EntityDecayPitTargetPart bottom;
 	public EntityDecayPitTargetPart chain_1;
 	public EntityDecayPitTargetPart chain_2;
 	public EntityDecayPitTargetPart chain_3;
 	public EntityDecayPitTargetPart chain_4;
+	public EntityDecayPitTargetPart inner_ring;
+	public EntityDecayPitTargetPart outer_ring;
 	
 	private static final DataParameter<Boolean> IS_RAISING = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_MOVING = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
@@ -55,22 +66,32 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 	public EntityDecayPitTarget(World world) {
 		super(world);
-		setSize(5F, 13F);
+		setSize(13F, 13F);
 		shield_array = new EntityDecayPitTargetPart[] {
-				shield_1 = new EntityDecayPitTargetPart(this, "part1", 0.75F, 1F),
-				shield_2 = new EntityDecayPitTargetPart(this, "part2", 0.75F, 1F),
-				shield_3 = new EntityDecayPitTargetPart(this, "part3", 0.75F, 1F),
-				shield_4 = new EntityDecayPitTargetPart(this, "part4", 0.75F, 1F),
-				shield_5 = new EntityDecayPitTargetPart(this, "part5", 0.75F, 1F),
-				shield_6 = new EntityDecayPitTargetPart(this, "part6", 0.75F, 1F),
-				shield_7 = new EntityDecayPitTargetPart(this, "part7", 0.75F, 1F),
-				shield_8 = new EntityDecayPitTargetPart(this, "part8", 0.75F, 1F),
-				target = new EntityDecayPitTargetPart(this, "target", 2F, 1.75F),
+				shield_1 = new EntityDecayPitTargetPart(this, "part1", 1F, 1F),
+				shield_2 = new EntityDecayPitTargetPart(this, "part2", 1F, 1F),
+				shield_3 = new EntityDecayPitTargetPart(this, "part3", 1F, 1F),
+				shield_4 = new EntityDecayPitTargetPart(this, "part4", 1F, 1F),
+				shield_5 = new EntityDecayPitTargetPart(this, "part5", 1F, 1F),
+				shield_6 = new EntityDecayPitTargetPart(this, "part6", 1F, 1F),
+				shield_7 = new EntityDecayPitTargetPart(this, "part7", 1F, 1F),
+				shield_8 = new EntityDecayPitTargetPart(this, "part8", 1F, 1F),
+				shield_9 = new EntityDecayPitTargetPart(this, "part9", 1F, 1F),
+				shield_10 = new EntityDecayPitTargetPart(this, "part10", 1F, 1F),
+				shield_11 = new EntityDecayPitTargetPart(this, "part11", 1F, 1F),
+				shield_12 = new EntityDecayPitTargetPart(this, "part12", 1F, 1F),
+				shield_13 = new EntityDecayPitTargetPart(this, "part13", 1F, 1F),
+				shield_14 = new EntityDecayPitTargetPart(this, "part16", 1F, 1F),
+				shield_15 = new EntityDecayPitTargetPart(this, "part15", 1F, 1F),
+				shield_16 = new EntityDecayPitTargetPart(this, "part16", 1F, 1F),
+				target = new EntityDecayPitTargetPart(this, "target", 2.1875F, 2F),
 				bottom = new EntityDecayPitTargetPart(this, "bottom", 3F, 1F),
 				chain_1 = new EntityDecayPitTargetPart(this, "chain_1", 0.625F, 2F),
 				chain_2 = new EntityDecayPitTargetPart(this, "chain_2", 0.625F, 2F),
 				chain_3 = new EntityDecayPitTargetPart(this, "chain_3", 0.625F, 2F),
-				chain_4 = new EntityDecayPitTargetPart(this, "chain_4", 0.625F, 2F)
+				chain_4 = new EntityDecayPitTargetPart(this, "chain_4", 0.625F, 2F),
+				inner_ring = new EntityDecayPitTargetPart(this, "inner_ring", 9F, 0.0625F),
+				outer_ring = new EntityDecayPitTargetPart(this, "outer_ring", 13F, 0.0625F)
 				};
 	}
 
@@ -88,32 +109,44 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		super.onUpdate();
 		animationTicksPrev = animationTicks;
 		animationTicksChainPrev = animationTicksChain;
-		animationTicks += 5;
-		if (animationTicks >= 355)
+		animationTicks += 1F;
+		if (animationTicks >= 360F)
 			animationTicks = animationTicksPrev = 0;
-		
+
 		for(EntityDecayPitTargetPart part :shield_array) {
 			part.prevPosX = part.lastTickPosX = part.posX;
 			part.prevPosY = part.lastTickPosY = part.posY;
 			part.prevPosZ = part.lastTickPosZ = part.posZ;
 		}
-		
+
 		setNewShieldHitboxPos(animationTicks, shield_1);
-		setNewShieldHitboxPos(animationTicks + 45, shield_2);
-		setNewShieldHitboxPos(animationTicks + 90, shield_3);
-		setNewShieldHitboxPos(animationTicks + 135, shield_4);
-		setNewShieldHitboxPos(animationTicks + 180, shield_5);
-		setNewShieldHitboxPos(animationTicks + 225, shield_6);
-		setNewShieldHitboxPos(animationTicks + 270, shield_7);
-		setNewShieldHitboxPos(animationTicks + 315, shield_8);
+		setNewShieldHitboxPos(-animationTicks + 22.5F, shield_2);
+		setNewShieldHitboxPos(animationTicks + 45F, shield_3);
+		setNewShieldHitboxPos(-animationTicks + 67.5F, shield_4);
+		setNewShieldHitboxPos(animationTicks + 90F, shield_5);
+		setNewShieldHitboxPos(-animationTicks + 112.5F, shield_6);
+		setNewShieldHitboxPos(animationTicks + 135F, shield_7);
+		setNewShieldHitboxPos(-animationTicks + 157F, shield_8);
+
+		setNewShieldHitboxPos(animationTicks + 180F, shield_9);
+		setNewShieldHitboxPos(-animationTicks + 202.5F, shield_10);
+		setNewShieldHitboxPos(animationTicks + 225F, shield_11);
+		setNewShieldHitboxPos(-animationTicks + 247.5F, shield_12);
+		setNewShieldHitboxPos(animationTicks + 270F, shield_13);
+		setNewShieldHitboxPos(-animationTicks + 292.5F, shield_14);
+		setNewShieldHitboxPos(animationTicks + 315F, shield_15);
+		setNewShieldHitboxPos(-animationTicks + 337.5F, shield_16);
+
 		target.setPosition(posX, posY + height - getProgress() + 1.25, posZ);
 		bottom.setPosition(posX, posY + height - getProgress(), posZ);
 		chain_1.setPosition(posX, posY + height - getProgress(), posZ - 1D);
 		chain_2.setPosition(posX, posY + height - getProgress(), posZ + 1D);
 		chain_3.setPosition(posX + 1D, posY + height - getProgress(), posZ);
 		chain_4.setPosition(posX - 1D, posY + height - getProgress(), posZ);
-		target.setPosition(posX, chain_1.posY - 1.75D, posZ);
-		bottom.setPosition(posX, chain_1.posY - 3D, posZ);
+		target.setPosition(posX, chain_1.posY - 2D, posZ);
+		bottom.setPosition(posX, chain_1.posY - 5D, posZ);
+		inner_ring.setPosition(posX, posY, posZ);
+		outer_ring.setPosition(posX, posY + 1D, posZ);
 
 		if (isMoving()) {
 			if (isSlow())
@@ -140,6 +173,28 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 		if (!getEntityWorld().isRemote && getProgress() > 2F && getEntityWorld().getTotalWorldTime() % 60 == 0) // upsy-daisy
 			moveUp();
+
+		if (!getEntityWorld().isRemote) {
+			if(animationTicks == 60) {
+				spawnSludgeJet(posX + 2D, posY + 1, posZ -5.5D);
+			}
+			if(animationTicks == 150) {
+				spawnSludgeJet(posX - 5.5D, posY + 1, posZ -2D);
+			}
+			if(animationTicks == 240) {
+				spawnSludgeJet(posX - 2D, posY + 1, posZ  + 5.5D);
+			}
+			if(animationTicks == 330) {
+				spawnSludgeJet(posX + 5.5D, posY + 1, posZ + 2D);
+			}
+		}
+	}
+
+	private void spawnSludgeJet(double posX, double posY, double posZ) {
+		System.out.println("HERE!");
+		EntitySludgeJet jet = new EntitySludgeJet(getWorld());
+		jet.setPosition(posX, posY, posZ);
+		getWorld().spawnEntity(jet);
 	}
 
 	protected void setHangingLength(EntityDecayPitTargetPart chain, float extended) {
@@ -149,16 +204,20 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		chain.onUpdate();
 	}
 
-	protected void setNewShieldHitboxPos(int animationTicks, EntityDecayPitTargetPart shield) {
+	protected void setNewShieldHitboxPos(float animationTicks, EntityDecayPitTargetPart shield) {
 		double a = Math.toRadians(animationTicks);
 		double offSetX = -Math.sin(a) * 2.825D;
 		double offSetZ = Math.cos(a) * 2.825D;
 		float wobble = 0F;
-		if (shield == shield_1 || shield == shield_3 || shield == shield_5 || shield == shield_7)
-			wobble = MathHelper.sin((float) ((animationTicks) * 0.07F)) * 0.45F;
+		if (shield == shield_1 || shield == shield_3 || shield == shield_5 || shield == shield_7 || shield == shield_9 || shield == shield_11 || shield == shield_13 || shield == shield_15)
+			wobble = MathHelper.sin(animationTicks * 0.14F) * 1.2F;
 		else
-			wobble = MathHelper.cos((float) ((animationTicks) * 0.07F)) * 0.7F;
-		shield.setPosition(posX + offSetX, target.posY + target.height / 2.0D - shield.height / 2.0D + wobble, posZ + offSetZ);
+			wobble = -MathHelper.sin(animationTicks * 0.14F) * 1.2F;
+		float squarePoint = Math.signum(wobble);
+		if(squarePoint == -1F)
+			wobble = 0F;
+		shield.setPosition(posX + offSetX, target.posY + target.height / 2.0D - shield.height + wobble, posZ + offSetZ);
+		shield.rotationYaw = animationTicks + 180F;
 		shield.onUpdate();
 	}
 
@@ -205,8 +264,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				}
 			}
 
-			if (part == target)
+			if (part == target) {
 				moveDown();
+				return true;
+			}
 
 			if (part == chain_1 || part == chain_2 || part == chain_3 || part == chain_4)
 				if (source instanceof EntityDamageSourceIndirect) // may want to remove this line so it 'dinks' on all damage attempts
@@ -219,7 +280,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				shootBeamsAtThings(new Vec3d(0D, -4.5D + getProgress(), 11D));
 				shootBeamsAtThings(new Vec3d(-11D, -4.5D + getProgress(), 0D));
 			}
-		return true;
+		return false;
 	}
 
 	private void moveUp() {
@@ -237,7 +298,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	}
 
 	private void moveDown() {
-		if (getProgress() < 9) {
+		if (getProgress() < 7) {
 			for (EntityDecayPitChain chain : getChains()) {
 				chain.setRaising(true);
 				chain.setMoving(true);
