@@ -18,7 +18,7 @@ public class EntityDecayPitBigFloor extends Entity {
 
 	public EntityDecayPitBigFloor(World world) {
 		super(world);
-		setSize(15F, 1F);
+		setSize(15F, 1.0625F);
 		ignoreFrustumCheck = true;
 	}
 
@@ -36,18 +36,27 @@ public class EntityDecayPitBigFloor extends Entity {
 			animationTicks = animationTicksPrev = 0;
 
 		if (!getEntityWorld().isRemote) {
-			if (animationTicks == 60) {
+
+			if (animationTicks == 15 || animationTicks == 195) {
+				spawnSludgeJet(posX + 5.5D, posY + 1D, posZ - 2D);
+				spawnSludgeJet(posX - 5.5D, posY + 1D, posZ + 2D);
+			}
+
+			if (animationTicks == 60 || animationTicks == 240) {
 				spawnSludgeJet(posX + 2D, posY + 1D, posZ - 5.5D);
-			}
-			if (animationTicks == 150) {
-				spawnSludgeJet(posX - 5.5D, posY + 1D, posZ - 2D);
-			}
-			if (animationTicks == 240) {
 				spawnSludgeJet(posX - 2D, posY + 1D, posZ + 5.5D);
 			}
-			if (animationTicks == 330) {
+
+			if (animationTicks == 105 || animationTicks == 285) {
+				spawnSludgeJet(posX - 2D, posY + 1D, posZ - 5.5D);
+				spawnSludgeJet(posX + 2D, posY + 1D, posZ + 5.5D);
+			}
+
+			if (animationTicks == 150 || animationTicks == 330) {
+				spawnSludgeJet(posX - 5.5D, posY + 1D, posZ - 2D);
 				spawnSludgeJet(posX + 5.5D, posY + 1D, posZ + 2D);
 			}
+
 		}
 
 		checkSurfaceCollisions();
@@ -55,11 +64,11 @@ public class EntityDecayPitBigFloor extends Entity {
 
 	private Entity checkSurfaceCollisions() {
 		for (Entity entity : getEntityAbove()) {
-			if (entity != null) {
+			if (entity != null && !(entity instanceof EntitySludgeJet)) {
 				if (getDistance(entity) >= 4.25F - entity.width * 0.5F && getDistance(entity) <= 7.5F + entity.width * 0.5F) {
 					if (entity.posY <= posY + height - 0.0625D) {
 						entity.motionX = 0D;
-						entity.motionY = 0.2D;
+						entity.motionY = 0.1D;
 						entity.motionZ = 0D;
 					} else if(entity.motionY < 0) {
 						entity.motionY = 0;
@@ -70,7 +79,7 @@ public class EntityDecayPitBigFloor extends Entity {
 					
 					double dist = entityOffset.distanceTo(center);
 					double circumference = 2 * Math.PI * dist;
-					double speed = circumference / 360 * 1 /*angle per tick*/;
+					double speed = circumference / 360 * 0.75D /*angle per tick*/;
 					
 					Vec3d push = new Vec3d(0, 1, 0).crossProduct(entityOffset.subtract(center).normalize()).normalize().scale(speed);
 					
