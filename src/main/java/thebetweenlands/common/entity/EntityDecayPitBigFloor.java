@@ -78,16 +78,14 @@ public class EntityDecayPitBigFloor extends Entity {
 						entity.motionZ = 0D;
 					} else if (entity.motionY < 0) {
 						entity.motionY = 0;
-						if (entity.getEntityWorld().isRemote && entity instanceof EntityPlayer) {
-							boolean jump = Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
-							if (jump)
-								((EntityPlayer) entity).jump();
-						}
+						checkJumpOnTopOfAABB(entity);
 					}
 				}
 
-				if (getDistance(entity) < 4.25F - entity.width * 0.5F && getDistance(entity) >= 2.5F + entity.width * 0.5F)
+				if (getDistance(entity) < 4.25F - entity.width * 0.5F && getDistance(entity) >= 2.5F + entity.width * 0.5F) {
 					reverse = true;
+					checkJumpOnTopOfAABB(entity);
+				}
 
 				if (getDistance(entity) >= 2.5F + entity.width * 0.5F) {
 					Vec3d center = new Vec3d(this.posX, 0, this.posZ);
@@ -106,6 +104,14 @@ public class EntityDecayPitBigFloor extends Entity {
 			}
 		}
 		return null;
+	}
+
+	public void checkJumpOnTopOfAABB(Entity entity) {
+		if (entity.getEntityWorld().isRemote && entity instanceof EntityPlayer) {
+			boolean jump = Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
+			if (jump)
+				((EntityPlayer) entity).jump();
+		}
 	}
 
 	public List<Entity> getEntityAbove() {
