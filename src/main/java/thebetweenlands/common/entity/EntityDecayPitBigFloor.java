@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
@@ -69,7 +70,9 @@ public class EntityDecayPitBigFloor extends Entity {
 	private Entity checkSurfaceCollisions() {
 		boolean reverse = false;
 		for (Entity entity : getEntityAbove()) {
-			if (entity != null && !(entity instanceof EntitySludgeJet)) {
+			if (entity != null && !(entity instanceof EntitySludgeJet) && !(entity instanceof EntityRootGrabber)) {
+				if(entity instanceof EntityArrow)
+					entity.setDead();
 				if (getDistance(entity) >= 4.25F - entity.width * 0.5F && getDistance(entity) <= 7.5F + entity.width * 0.5F) {
 					reverse = false;
 					if (entity.posY <= posY + height - 0.0625D) {
