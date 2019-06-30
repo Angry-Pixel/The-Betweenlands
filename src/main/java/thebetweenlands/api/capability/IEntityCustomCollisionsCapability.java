@@ -32,4 +32,10 @@ public interface IEntityCustomCollisionsCapability {
 	}
 
 	public void getCustomCollisionBoxes(CollisionBoxHelper collisionBoxHelper, AxisAlignedBB aabb, List<AxisAlignedBB> collisionBoxes);
+	
+	public boolean isPhasing();
+	
+	public boolean isViewObstructed();
+	
+	public double getObstructionDistance();
 }
