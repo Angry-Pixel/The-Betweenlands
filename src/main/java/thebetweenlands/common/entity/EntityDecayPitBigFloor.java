@@ -2,6 +2,7 @@ package thebetweenlands.common.entity;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,6 +11,9 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
 
 public class EntityDecayPitBigFloor extends Entity {
@@ -72,8 +76,14 @@ public class EntityDecayPitBigFloor extends Entity {
 						entity.motionX = 0D;
 						entity.motionY = 0.1D;
 						entity.motionZ = 0D;
-					} else if (entity.motionY < 0)
+					} else if (entity.motionY < 0) {
 						entity.motionY = 0;
+						if (entity.getEntityWorld().isRemote && entity instanceof EntityPlayer) {
+							boolean jump = Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
+							if (jump)
+								((EntityPlayer) entity).jump();
+						}
+					}
 				}
 
 				if (getDistance(entity) < 4.25F - entity.width * 0.5F && getDistance(entity) >= 2.5F + entity.width * 0.5F)
@@ -143,4 +153,11 @@ public class EntityDecayPitBigFloor extends Entity {
 	protected void writeEntityToNBT(NBTTagCompound compound) {
 	}
 
+	@SubscribeEvent (priority = EventPriority.LOWEST)
+	public void onClientTick(TickEvent.ClientTickEvent event) throws Exception {
+		boolean jump = Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown();
+				if(jump){
+					System.out.println("jumping");
+		}
+	}
 }
