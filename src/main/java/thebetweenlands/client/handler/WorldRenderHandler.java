@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Sphere;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -28,6 +29,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.client.render.entity.RenderGasCloud;
+import thebetweenlands.client.render.entity.RenderPlayerColored;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.shader.GeometryBuffer;
@@ -47,6 +49,9 @@ public class WorldRenderHandler {
 	private static float partialTicks;
 
 	private static int sphereDispList = -2;
+
+	private static RenderPlayerColored renderPlayerSmallArmsColored;
+	private static RenderPlayerColored renderPlayerNormalArmsColored;
 
 	@SubscribeEvent
 	public static void onRenderTick(RenderTickEvent event) {
@@ -97,13 +102,14 @@ public class WorldRenderHandler {
 				gBuffer.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
 				if(gBuffer != null && gBuffer.isInitialized()) {
 					gBuffer.bind();
-					gBuffer.clear(1.0F, 0.0F, 0.0F, 1.0F);
+					gBuffer.clear(0.0F, 0.0F, 0.0F, 1.0F);
+
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 
 					if(!REPELLER_SHIELDS.isEmpty()) {
 						GlStateManager.depthMask(true);
 						GlStateManager.disableTexture2D();
 						GlStateManager.disableBlend();
-						GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 						GlStateManager.color(0.0F, 0.4F + (float)(Math.sin(System.nanoTime() / 500000000.0F) + 1.0F) * 0.2F, 0.8F - (float)(Math.cos(System.nanoTime() / 400000000.0F) + 1.0F) * 0.2F, 1.0F);
 						GlStateManager.disableCull();
 
@@ -119,56 +125,34 @@ public class WorldRenderHandler {
 
 						GlStateManager.enableTexture2D();
 						GlStateManager.enableCull();
-						GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 						GlStateManager.color(1, 1, 1, 1);
 					}
-					
+
 					World world = MC.world;
-					
+
 					if(world != null) {
 						for(EntityPlayer player : MC.world.playerEntities) {
-							IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
-							
-							if(cap != null) {
-								double obstructionDistance = cap.getObstructionDistance();
-								
-								if(obstructionDistance < 0) {
-									float alpha = Math.min((float)-obstructionDistance * 2, 1);
-									
-									GlStateManager.color(alpha, alpha, alpha, 1f);
-									
-									//From MC.getRenderManager().renderEntityStatic(player, event.getPartialTicks(), false);
-									//without setting color to 1, 1, 1, 1
-									
-									if (player.ticksExisted == 0)
-							        {
-							            player.lastTickPosX = player.posX;
-							            player.lastTickPosY = player.posY;
-							            player.lastTickPosZ = player.posZ;
-							        }
-		
-							        double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)event.getPartialTicks();
-							        double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)event.getPartialTicks();
-							        double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)event.getPartialTicks();
-							        float f = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * event.getPartialTicks();
-							        int i = player.getBrightnessForRender();
-		
-							        if (player.isBurning())
-							        {
-							            i = 15728880;
-							        }
-		
-							        int j = i % 65536;
-							        int k = i / 65536;
-							        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
-									
-							        MC.getRenderManager().renderEntity(player, d0 - MC.getRenderManager().renderPosX, d1 - MC.getRenderManager().renderPosY, d2 - MC.getRenderManager().renderPosZ, f, event.getPartialTicks(), false);
-							        
-									GlStateManager.color(1, 1, 1, 1);
+							if(player instanceof AbstractClientPlayer) {
+								AbstractClientPlayer clientPlayer = (AbstractClientPlayer) player;
+
+								IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
+
+								if(cap != null) {
+									double obstructionDistance = cap.getObstructionDistance();
+
+									if(obstructionDistance < 0) {
+										ShaderHelper.INSTANCE.require();
+
+										float alpha = Math.min((float)-obstructionDistance * 2, 1);
+
+										renderPlayerGlow(clientPlayer, alpha, event.getPartialTicks());
+									}
 								}
 							}
 						}
 					}
+
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 
 					gBuffer.updateDepthBuffer();
 
@@ -253,5 +237,56 @@ public class WorldRenderHandler {
 				}
 			}
 		}
+	}
+
+	private static void renderPlayerGlow(AbstractClientPlayer player, float strength, float partialTicks) {
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+
+		//From MC.getRenderManager().renderEntityStatic(player, partialTicks, false);
+
+		if (player.ticksExisted == 0)
+		{
+			player.lastTickPosX = player.posX;
+			player.lastTickPosY = player.posY;
+			player.lastTickPosZ = player.posZ;
+		}
+
+		double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
+		double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
+		double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
+		float f = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * partialTicks;
+
+		GlStateManager.color(1, 1, 1, 1);
+
+		boolean isSmallArms = "slim".equals(player.getSkinType());
+
+		RenderPlayerColored playerRenderer;
+
+		if(isSmallArms) {
+			if(renderPlayerSmallArmsColored == null) {
+				renderPlayerSmallArmsColored = new RenderPlayerColored(MC.getRenderManager(), true);
+			}
+			playerRenderer = renderPlayerSmallArmsColored;
+		} else {
+			if(renderPlayerNormalArmsColored == null) {
+				renderPlayerNormalArmsColored = new RenderPlayerColored(MC.getRenderManager(), false);
+			}
+			playerRenderer = renderPlayerNormalArmsColored;
+		}
+
+		//Set alpha < 0.99 so that shader inverts inBack check
+		playerRenderer.setColor(strength, strength, strength, 0.98F);
+
+		GlStateManager.disableLighting();
+
+		//Polygon offset is necessary for inBack check in shader
+		GlStateManager.enablePolygonOffset();
+		GlStateManager.doPolygonOffset(0, -5);
+
+		playerRenderer.doRender(player, d0 - MC.getRenderManager().renderPosX, d1 - MC.getRenderManager().renderPosY, d2 - MC.getRenderManager().renderPosZ, f, partialTicks);
+
+		GlStateManager.disablePolygonOffset();
+
+		GlStateManager.disableLighting();
 	}
 }

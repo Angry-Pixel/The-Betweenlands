@@ -237,7 +237,7 @@ public class ScreenRenderHandler extends Gui {
 			GlStateManager.color(1, 1, 1, 1);
 
 			GlStateManager.enableTexture2D();
-			WorldProviderBetweenlands.getBLSkyRenderer().overworldSkyFbo.getFramebuffer(mc.getFramebuffer().framebufferWidth, mc.getFramebuffer().framebufferHeight).bindFramebufferTexture();
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHelper.INSTANCE.getWorldShader().getRepellerShieldBuffer().getDiffuseTexture());
 
 			Tessellator t = Tessellator.getInstance();
 			BufferBuilder b = t.getBuffer();

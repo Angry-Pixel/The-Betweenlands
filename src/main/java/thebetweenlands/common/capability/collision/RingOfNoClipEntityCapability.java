@@ -19,10 +19,12 @@ import net.minecraftforge.client.event.PlayerSPPushOutOfBlocksEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.item.equipment.ItemRingOfNoClip;
@@ -225,6 +227,21 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 
 			if(item.canPhase(player, stack)) {
 				event.setCanceled(true);
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerUpdate(PlayerTickEvent event) {
+		EntityPlayer player = event.player;
+
+		if(player != TheBetweenlands.proxy.getClientPlayer()) {
+			IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
+
+			if(cap != null) {
+				//For other players than the client player the collision logic isn't run
+				//so we need to force it to be run to do the obstruction distance calculations
+				player.world.getCollisionBoxes(player, player.getEntityBoundingBox());
 			}
 		}
 	}
