@@ -1,6 +1,7 @@
 package thebetweenlands.common.capability.collision;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.annotation.Nullable;
 
@@ -56,6 +57,30 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 		return entity instanceof EntityPlayer;
 	}
 
+
+
+
+
+
+	private boolean isPhasing;
+	private boolean isViewObstructed;
+	private double obstructionDistance;
+
+	@Override
+	public boolean isPhasing() {
+		return this.isPhasing;
+	}
+
+	@Override
+	public boolean isViewObstructed() {
+		return this.isViewObstructed;
+	}
+
+	@Override
+	public double getObstructionDistance() {
+		return this.obstructionDistance;
+	}
+
 	private static ItemStack getRing(EntityPlayer player) {
 		IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 		if (cap != null) {
@@ -76,43 +101,104 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 	@Override
 	public void getCustomCollisionBoxes(CollisionBoxHelper collisionBoxHelper, AxisAlignedBB aabb,
 			List<AxisAlignedBB> collisionBoxes) {
+
+		this.isPhasing = false;
+		this.isViewObstructed = false;
+		this.obstructionDistance = Double.MAX_VALUE;
+
 		EntityPlayer player = this.getEntity();
 		ItemStack stack = getRing(player);
 
 		if(!stack.isEmpty()) {
 			ItemRingOfNoClip item = (ItemRingOfNoClip) stack.getItem();
 
+			AtomicBoolean ringActiveState = new AtomicBoolean(false);
+
 			if(item.canPhase(player, stack)) {
 				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(player.world);
-				AxisAlignedBB locationAABB = aabb.grow(8);
-				List<LocationStorage> guardedLocations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, locationAABB, (location) -> {
-					return location.intersects(locationAABB) && location.getGuard() != null;
+				final AxisAlignedBB locationCheckAabb = aabb.grow(8);
+				List<LocationStorage> guardedLocations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, locationCheckAabb, (location) -> {
+					return location.intersects(locationCheckAabb) && location.getGuard() != null;
 				});
 
+				//Remove all normally collected collision boxes because they
+				//need to be filtered
 				collisionBoxes.clear();
+
 				final double floor = player.posY + 0.001D;
-				collisionBoxHelper.getCollisionBoxes(player, aabb, EntityCollisionPredicate.ALL, new BlockCollisionPredicate() {
+
+				final AxisAlignedBB originalAabb = aabb;
+
+				final double checkReach = 1.0D;
+
+				collisionBoxHelper.getCollisionBoxes(player, aabb.grow(checkReach, 0, checkReach).expand(0, checkReach, 0), EntityCollisionPredicate.ALL, new BlockCollisionPredicate() {
 					@Override
 					public boolean isColliding(Entity entity, AxisAlignedBB aabb, MutableBlockPos pos, IBlockState state, @Nullable AxisAlignedBB blockAabb) {
-						if(blockAabb == null || blockAabb.maxY <= floor) {
+						if(blockAabb == null) {
 							return true;
 						}
 
-						for(LocationStorage location : guardedLocations) {
-							if(location.getGuard().isGuarded(player.world, player, pos)) {
-								return true;
+						boolean isCollisionForced = false;
+
+						if(blockAabb.maxY <= floor) {
+							isCollisionForced = true;
+						}
+
+						if(!isCollisionForced && state.getPlayerRelativeBlockHardness(player, player.world, pos) < 0.0001F) {
+							isCollisionForced = true;
+						}
+
+						if(!isCollisionForced) {
+							for(LocationStorage location : guardedLocations) {
+								if(location.getGuard().isGuarded(player.world, player, pos)) {
+									isCollisionForced = true;
+								}
 							}
 						}
 
-						item.setPhasing(stack);
+						if(!isCollisionForced) {
+							double dist;
 
-						if(player.world.isRemote && blockAabb != null) {
-							RingOfNoClipEntityCapability.this.checkAndSetViewObstruction(player, item, stack, blockAabb);
+							if(blockAabb.intersects(originalAabb)) {
+								double dx = Math.max(blockAabb.minX - originalAabb.maxX, originalAabb.minX - blockAabb.maxX);
+								double dy = Math.max(blockAabb.minY - originalAabb.maxY, originalAabb.minY - blockAabb.maxY);
+								double dz = Math.max(blockAabb.minZ - originalAabb.maxZ, originalAabb.minZ - blockAabb.maxZ);
+								dist = Math.max(dx, Math.max(dy, dz));
+							} else {
+								double dx = Math.max(0, Math.max(blockAabb.minX - originalAabb.maxX, originalAabb.minX - blockAabb.maxX));
+								double dy = Math.max(0, Math.max(blockAabb.minY - originalAabb.maxY, originalAabb.minY - blockAabb.maxY));
+								double dz = Math.max(0, Math.max(blockAabb.minZ - originalAabb.maxZ, originalAabb.minZ - blockAabb.maxZ));
+								dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+							}
+
+							if(dist < RingOfNoClipEntityCapability.this.obstructionDistance) {
+								RingOfNoClipEntityCapability.this.obstructionDistance = dist;
+							}
+						}
+
+						if(originalAabb.intersects(blockAabb)) {
+							if(isCollisionForced) {
+								return true;
+							}
+
+							ringActiveState.set(true);
+							RingOfNoClipEntityCapability.this.isPhasing = true;
+
+							if(player.world.isRemote) {
+								RingOfNoClipEntityCapability.this.checkAndSetViewObstruction(player, item, stack, blockAabb);
+							}
+
+							return false;
 						}
 
 						return false;
 					}
 				}, collisionBoxes);
+			}
+
+			boolean newRingActiveState = ringActiveState.get();
+			if(item.isActive(stack) != newRingActiveState) {
+				item.setActive(stack, newRingActiveState);
 			}
 		}
 	}
@@ -120,7 +206,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 	@SideOnly(Side.CLIENT)
 	private void checkAndSetViewObstruction(EntityPlayer player, ItemRingOfNoClip item, ItemStack stack, AxisAlignedBB blockAabb) {
 		if(blockAabb.contains(ActiveRenderInfo.projectViewFromEntity(player, 1))) {
-			//TODO Set view obstruction and render overlay
+			this.isViewObstructed = true;
 		}
 	}
 
