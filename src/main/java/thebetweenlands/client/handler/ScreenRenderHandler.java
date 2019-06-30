@@ -1,5 +1,11 @@
 package thebetweenlands.client.handler;
 
+import java.util.List;
+import java.util.Random;
+
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -31,14 +37,15 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.api.capability.IDecayCapability;
+import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.common.TheBetweenlands;
@@ -52,6 +59,7 @@ import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextPage;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextSegment;
+import thebetweenlands.common.item.armor.ItemBLArmor;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -61,15 +69,17 @@ import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.AspectIconRenderer;
 import thebetweenlands.util.ColorUtils;
 
-import java.util.List;
-import java.util.Random;
-
 public class ScreenRenderHandler extends Gui {
 	private ScreenRenderHandler() { }
 
 	public static ScreenRenderHandler INSTANCE = new ScreenRenderHandler();
 
 	private static final ResourceLocation DECAY_BAR_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/decay_bar.png");
+	private static final ResourceLocation RING_OF_NO_CLIP_OVERLAY_TOP_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_no_clip_overlay_top.png");
+	private static final ResourceLocation RING_OF_NO_CLIP_OVERLAY_SIDE_TOP_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_no_clip_overlay_side_top.png");
+	private static final ResourceLocation RING_OF_NO_CLIP_OVERLAY_BOTTOM_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_no_clip_overlay_bottom.png");
+	private static final ResourceLocation RING_OF_NO_CLIP_OVERLAY_SIDE_BOTTOM_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_no_clip_overlay_side_bottom.png");
+	private static final ResourceLocation VIGNETTE_TEXTURE = new ResourceLocation("textures/misc/vignette.png");
 
 	private Random random = new Random();
 	private int updateCounter;
@@ -81,12 +91,12 @@ public class ScreenRenderHandler extends Gui {
 
 	private int cavingRopeConnectTicks = 0;
 	private int cavingRopeCount = 0;
-	
+
 	public static final ResourceLocation TITLE_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/location_title.png");
 
 	public static final ResourceLocation CAVING_ROPE_CONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_connected.png");
 	public static final ResourceLocation CAVING_ROPE_DISCONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_disconnected.png");
-	
+
 	public static List<LocationStorage> getVisibleLocations(Entity entity) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(entity.world);
 		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, entity.posX, entity.posZ, location -> location.isInside(entity.getPositionEyes(1)) && location.isVisible(entity));
@@ -100,14 +110,14 @@ public class ScreenRenderHandler extends Gui {
 			if(this.titleTicks > 0) {
 				this.titleTicks--;
 			}
-			
+
 			this.cavingRopeCount = 0;
 			if(this.cavingRopeConnectTicks > 0) {
 				this.cavingRopeConnectTicks--;
 			}
 
 			EntityPlayer player = Minecraft.getMinecraft().player;
-			
+
 			if(player != null) {
 				if(BetweenlandsConfig.GENERAL.cavingRopeIndicator) {
 					for(ItemStack stack : player.inventory.mainInventory) {
@@ -116,10 +126,10 @@ public class ScreenRenderHandler extends Gui {
 						}
 					}
 				}
-				
+
 				if(player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 					String prevLocation = this.currentLocation;
-	
+
 					List<LocationStorage> locations = getVisibleLocations(player);
 					if(locations.isEmpty()) {
 						String location;
@@ -155,7 +165,7 @@ public class ScreenRenderHandler extends Gui {
 							highestLocation.setTitleDisplayCooldown(player, displayCooldown); //Keep cooldown up until player leaves location
 						}
 					}
-	
+
 					if(this.currentLocation.length() > 0) {
 						if(this.currentLocation.contains(":")) {
 							int startIndex = this.currentLocation.indexOf(":");
@@ -197,35 +207,35 @@ public class ScreenRenderHandler extends Gui {
 		EntityPlayer player = mc.player;
 		int width = event.getResolution().getScaledWidth();
 		int height = event.getResolution().getScaledHeight();
-		
+
 		if (event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
 			/*GlStateManager.pushMatrix();
 
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-			
+
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.color(1, 1, 1, 1);
-			
+
 			GlStateManager.enableTexture2D();
 			WorldProviderBetweenlands.getBLSkyRenderer().overworldSkyFbo.getFramebuffer(mc.getFramebuffer().framebufferWidth, mc.getFramebuffer().framebufferHeight).bindFramebufferTexture();
-			
+
 			Tessellator t = Tessellator.getInstance();
 			BufferBuilder b = t.getBuffer();
 			b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			
+
 			b.pos(0, 0, 0).tex(0, 1).endVertex();
 			b.pos(0, event.getResolution().getScaledHeight(), 0).tex(0, 0).endVertex();
 			b.pos(event.getResolution().getScaledWidth(), event.getResolution().getScaledHeight(), 0).tex(1, 0).endVertex();
 			b.pos(event.getResolution().getScaledWidth(), 0, 0).tex(1, 1).endVertex();
-			
+
 			t.draw();
-			
+
 			GlStateManager.enableBlend();
-			
+
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-			
+
 			GlStateManager.popMatrix();*/
-			
+
 			if(BetweenlandsConfig.GENERAL.cavingRopeIndicator && player != null) {
 				boolean connected = false;
 				List<EntityRopeNode> ropeNodes = player.world.getEntitiesWithinAABB(EntityRopeNode.class, player.getEntityBoundingBox().grow(32, 32, 32));
@@ -237,26 +247,26 @@ public class ScreenRenderHandler extends Gui {
 				}
 				if(connected) {
 					this.cavingRopeConnectTicks = 80;
-					
+
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(width / 2, height / 2, 0);
 					GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 					GlStateManager.disableBlend();
-					
+
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(14, 14, 0);
 					GlStateManager.scale(0.5D, 0.5D, 1);
 					mc.fontRenderer.drawString(String.valueOf(this.cavingRopeCount), 0, 0, 0xFFFFFFFF);
 					GlStateManager.popMatrix();
-					
+
 					Minecraft.getMinecraft().renderEngine.bindTexture(CAVING_ROPE_CONNECTED);
-					
+
 					Tessellator tessellator = Tessellator.getInstance();
 					BufferBuilder buffer = tessellator.getBuffer();
 					buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 					this.renderTexturedRect(buffer, 2, 2, 18, 18, 0, 1, 0, 1);
 					tessellator.draw();
-					
+
 					GlStateManager.enableBlend();
 					GlStateManager.popMatrix();
 				} else if(!connected && this.cavingRopeConnectTicks > 0) {
@@ -266,15 +276,15 @@ public class ScreenRenderHandler extends Gui {
 					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 					GlStateManager.enableBlend();
 					GlStateManager.color(1.0F, 1.0F, 1.0F, MathHelper.clamp(this.cavingRopeConnectTicks / 80.0F * (0.8F + 0.2F * (float)Math.sin((this.cavingRopeConnectTicks + 1 - event.getPartialTicks()) / 2.0F)), 0, 1));
-					
+
 					Minecraft.getMinecraft().renderEngine.bindTexture(CAVING_ROPE_DISCONNECTED);
-					
+
 					Tessellator tessellator = Tessellator.getInstance();
 					BufferBuilder buffer = tessellator.getBuffer();
 					buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 					this.renderTexturedRect(buffer, 2, 2, 18, 18, 0, 1, 0, 1);
 					tessellator.draw();
-					
+
 					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 					GlStateManager.popMatrix();
 				}
@@ -294,53 +304,53 @@ public class ScreenRenderHandler extends Gui {
 						boolean showOnRightSide = (offhand == EnumHandSide.LEFT) != isOnOppositeSide;
 
 						switch (BetweenlandsConfig.GENERAL.equipmentZone) {
-							default:
-							case 0:
-								if (showOnRightSide) {
-									posX = width / 2 + 93;
-									if (isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
-										posX += 30;
-									}
-								} else {
-									posX = width / 2 - 93 - 16;
-									if (isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
-										posX -= 30;
-									}
+						default:
+						case 0:
+							if (showOnRightSide) {
+								posX = width / 2 + 93;
+								if (isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
+									posX += 30;
 								}
-								posY = height - 19;
-								break;
-							case 1:
-								posX = 0;
-								posY = 0;
-								break;
-							case 2:
-								posX = width - 18;
-								posY = 0;
-								break;
-							case 3:
-								posX = width - 18;
-								posY = height - 18;
-								break;
-							case 4:
-								posX = 0;
-								posY = height - 18;
-								break;
-							case 5:
-								posX = 0;
-								posY = height / 2;
-								break;
-							case 6:
-								posX = width / 2;
-								posY = 0;
-								break;
-							case 7:
-								posX = width - 18;
-								posY = height / 2;
-								break;
-							case 8:
-								posX = width / 2;
-								posY = height - 18;
-								break;
+							} else {
+								posX = width / 2 - 93 - 16;
+								if (isOnOppositeSide && !player.getHeldItem(EnumHand.OFF_HAND).isEmpty()) {
+									posX -= 30;
+								}
+							}
+							posY = height - 19;
+							break;
+						case 1:
+							posX = 0;
+							posY = 0;
+							break;
+						case 2:
+							posX = width - 18;
+							posY = 0;
+							break;
+						case 3:
+							posX = width - 18;
+							posY = height - 18;
+							break;
+						case 4:
+							posX = 0;
+							posY = height - 18;
+							break;
+						case 5:
+							posX = 0;
+							posY = height / 2;
+							break;
+						case 6:
+							posX = width / 2;
+							posY = 0;
+							break;
+						case 7:
+							posX = width - 18;
+							posY = height / 2;
+							break;
+						case 8:
+							posX = width / 2;
+							posY = height - 18;
+							break;
 						}
 
 						posX += BetweenlandsConfig.GENERAL.equipmentOffsetX;
@@ -410,7 +420,7 @@ public class ScreenRenderHandler extends Gui {
 						case 0:
 							startX = (width / 2) - (27 / 2) + 23;
 							startY = height - 49;
-							
+
 							//Erebus compatibility
 							if (player.getEntityData().hasKey("antivenomDuration")) {
 								int duration = player.getEntityData().getInteger("antivenomDuration");
@@ -418,12 +428,12 @@ public class ScreenRenderHandler extends Gui {
 									startY -= 12;
 								}
 							}
-							
+
 							//TaN compatibility
 							if(TheBetweenlands.isToughAsNailsModInstalled) {
 								startY -= 10;
 							}
-							
+
 							//Ridden entity hearts offset
 							Entity ridingEntity = player.getRidingEntity();
 							if(ridingEntity != null && ridingEntity instanceof EntityLivingBase) {
@@ -441,12 +451,12 @@ public class ScreenRenderHandler extends Gui {
 								}
 								startY += guiOffsetY;
 							}
-							
+
 							//Air bar offset
 							if(player.isInsideOfMaterial(Material.WATER)) {
 								startY -= 10;
 							}
-							
+
 							break;
 						case 1:
 							startX = 0;
@@ -481,7 +491,7 @@ public class ScreenRenderHandler extends Gui {
 							startY = height;
 							break;
 						}
-						
+
 						startX += BetweenlandsConfig.GENERAL.decayBarOffsetX;
 						startY += BetweenlandsConfig.GENERAL.decayBarOffsetY;
 
@@ -554,7 +564,7 @@ public class ScreenRenderHandler extends Gui {
 		} else if(event.getType() == ElementType.PORTAL) {
 			if(player != null) {
 				IPortalCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
-				
+
 				if(cap != null && cap.isInPortal()) {
 					this.renderPortal(mc, MathHelper.clamp((1.0F - cap.getTicksUntilTeleport() / (float)PlayerPortalHandler.MAX_PORTAL_TIME), 0, 1), event.getResolution());
 				}
@@ -562,38 +572,148 @@ public class ScreenRenderHandler extends Gui {
 		}
 	}
 
-	protected void renderPortal(Minecraft mc, float timeInPortal, ScaledResolution scaledRes)
-    {
-        if (timeInPortal < 1.0F) {
-            timeInPortal = timeInPortal * timeInPortal;
-            timeInPortal = timeInPortal * 0.8F + 0.2F;
-        }
-
-        GlStateManager.disableAlpha();
-        GlStateManager.disableDepth();
-        GlStateManager.depthMask(false);
-        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, timeInPortal);
-        mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        TextureAtlasSprite textureatlassprite = mc.getBlockRendererDispatcher().getBlockModelShapes().getTexture(BlockRegistry.TREE_PORTAL.getDefaultState());
-        float f = textureatlassprite.getMinU();
-        float f1 = textureatlassprite.getMinV();
-        float f2 = textureatlassprite.getMaxU();
-        float f3 = textureatlassprite.getMaxV();
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferbuilder.pos(0.0D, (double)scaledRes.getScaledHeight(), -90.0D).tex((double)f, (double)f3).endVertex();
-        bufferbuilder.pos((double)scaledRes.getScaledWidth(), (double)scaledRes.getScaledHeight(), -90.0D).tex((double)f2, (double)f3).endVertex();
-        bufferbuilder.pos((double)scaledRes.getScaledWidth(), 0.0D, -90.0D).tex((double)f2, (double)f1).endVertex();
-        bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex((double)f, (double)f1).endVertex();
-        tessellator.draw();
-        GlStateManager.depthMask(true);
-        GlStateManager.enableDepth();
-        GlStateManager.enableAlpha();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    }
+	@SubscribeEvent
+	public void onRenderGameOverlay(RenderGameOverlayEvent.Pre event) {
+		if(event.getType() == ElementType.ALL) {
+			Minecraft mc = Minecraft.getMinecraft();
+			EntityPlayer player = mc.player;
+			
+			if(player != null) {
+				this.renderNoClipRingOverlay(mc, player, false);
+			}
+		}
+	}
 	
+	//Render the untextured black quad in world s.t. it can't be disabled
+	//by F1 or other GUIs
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+	public void onRenderWorldLast(RenderWorldLastEvent event) {
+		Minecraft mc = Minecraft.getMinecraft();
+		EntityPlayer player = mc.player;
+
+		if(player != null) {
+			GlStateManager.matrixMode(GL11.GL_PROJECTION);
+			GlStateManager.pushMatrix();
+			
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+			GlStateManager.pushMatrix();
+			
+	        mc.entityRenderer.setupOverlayRendering();
+	        
+			this.renderNoClipRingOverlay(mc, player, true);
+			
+			GlStateManager.disableBlend();
+			
+			GlStateManager.matrixMode(GL11.GL_PROJECTION);
+			GlStateManager.popMatrix();
+			
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+			GlStateManager.popMatrix();
+		}
+	}
+	
+	private void renderNoClipRingOverlay(Minecraft mc, EntityPlayer player, boolean untexturedQuad) {
+		IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
+
+		if(cap != null) {
+			double fadeStartDistance = Math.min(cap.getObstructionCheckDistance(), 1.0D);
+			double obstructionDistance = cap.getObstructionDistance();
+
+			if(obstructionDistance < fadeStartDistance) {
+				ScaledResolution res = new ScaledResolution(mc);
+				
+				float alpha = (float) Math.min(1, Math.max(0, 1 - obstructionDistance / fadeStartDistance));
+
+				GlStateManager.disableAlpha();
+				GlStateManager.disableTexture2D();
+				GlStateManager.depthMask(false);
+
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+
+				GlStateManager.color(0, 0, 0, alpha);
+
+				Tessellator tessellator = Tessellator.getInstance();
+				BufferBuilder bufferbuilder = tessellator.getBuffer();
+				
+				if(untexturedQuad) {
+					bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+					bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), 0.0D).endVertex();
+					bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), 0.0D).endVertex();
+					bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, 0.0D).endVertex();
+					bufferbuilder.pos(0.0D, 0.0D, 0.0D).endVertex();
+					tessellator.draw();
+				} else {
+					float brightness = 0.5F + (1 - alpha) * 0.5F;
+	
+					GlStateManager.color(brightness, brightness, brightness, alpha);
+					GlStateManager.enableTexture2D();
+	
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(0, -res.getScaledHeight_double() + res.getScaledHeight_double() / 2 * alpha, 0);
+					ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_NO_CLIP_OVERLAY_TOP_TEXTURE, RING_OF_NO_CLIP_OVERLAY_SIDE_TOP_TEXTURE, RING_OF_NO_CLIP_OVERLAY_SIDE_TOP_TEXTURE);
+					GlStateManager.popMatrix();
+	
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(0, res.getScaledHeight_double() - res.getScaledHeight_double() / 2 * alpha, 0);
+					ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_NO_CLIP_OVERLAY_BOTTOM_TEXTURE, RING_OF_NO_CLIP_OVERLAY_SIDE_BOTTOM_TEXTURE, RING_OF_NO_CLIP_OVERLAY_SIDE_BOTTOM_TEXTURE);
+					GlStateManager.popMatrix();
+	
+					GlStateManager.color((1 - brightness) * 2, (1 - brightness) * 2, (1 - brightness) * 2, 1);
+					
+					//Vignette
+					mc.getTextureManager().bindTexture(VIGNETTE_TEXTURE);
+					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+			        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+			        bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 1.0D).endVertex();
+			        bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 1.0D).endVertex();
+			        bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
+			        bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
+			        tessellator.draw();
+					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+				}
+				
+				GlStateManager.color(1, 1, 1, 1);
+
+				GlStateManager.enableTexture2D();
+				GlStateManager.enableAlpha();
+				GlStateManager.depthMask(true);
+			}
+		}
+	}
+
+	protected void renderPortal(Minecraft mc, float timeInPortal, ScaledResolution scaledRes)
+	{
+		if (timeInPortal < 1.0F) {
+			timeInPortal = timeInPortal * timeInPortal;
+			timeInPortal = timeInPortal * 0.8F + 0.2F;
+		}
+
+		GlStateManager.disableAlpha();
+		GlStateManager.disableDepth();
+		GlStateManager.depthMask(false);
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, timeInPortal);
+		mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		TextureAtlasSprite textureatlassprite = mc.getBlockRendererDispatcher().getBlockModelShapes().getTexture(BlockRegistry.TREE_PORTAL.getDefaultState());
+		float f = textureatlassprite.getMinU();
+		float f1 = textureatlassprite.getMinV();
+		float f2 = textureatlassprite.getMaxU();
+		float f3 = textureatlassprite.getMaxV();
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+		bufferbuilder.pos(0.0D, (double)scaledRes.getScaledHeight(), -90.0D).tex((double)f, (double)f3).endVertex();
+		bufferbuilder.pos((double)scaledRes.getScaledWidth(), (double)scaledRes.getScaledHeight(), -90.0D).tex((double)f2, (double)f3).endVertex();
+		bufferbuilder.pos((double)scaledRes.getScaledWidth(), 0.0D, -90.0D).tex((double)f2, (double)f1).endVertex();
+		bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex((double)f, (double)f1).endVertex();
+		tessellator.draw();
+		GlStateManager.depthMask(true);
+		GlStateManager.enableDepth();
+		GlStateManager.enableAlpha();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+	}
+
 	private void renderTexturedRect(BufferBuilder buffer, double x, double y, double x2, double y2, double umin, double umax, double vmin, double vmax) {
 		buffer.pos(x, y2, 0.0D).tex(umin, vmax).endVertex();
 		buffer.pos(x2, y2, 0.0D).tex(umax, vmax).endVertex();

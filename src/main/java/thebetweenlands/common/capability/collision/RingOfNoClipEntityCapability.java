@@ -81,6 +81,11 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 		return this.obstructionDistance;
 	}
 
+	@Override
+	public double getObstructionCheckDistance() {
+		return 1.0D;
+	}
+
 	private static ItemStack getRing(EntityPlayer player) {
 		IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 		if (cap != null) {
@@ -129,7 +134,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 
 				final AxisAlignedBB originalAabb = aabb;
 
-				final double checkReach = 1.0D;
+				final double checkReach = this.getObstructionCheckDistance();
 
 				collisionBoxHelper.getCollisionBoxes(player, aabb.grow(checkReach, 0, checkReach).expand(0, checkReach, 0), EntityCollisionPredicate.ALL, new BlockCollisionPredicate() {
 					@Override
