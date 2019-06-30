@@ -83,7 +83,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 
 	@Override
 	public double getObstructionCheckDistance() {
-		return 1.0D;
+		return 0.25D;
 	}
 
 	private static ItemStack getRing(EntityPlayer player) {

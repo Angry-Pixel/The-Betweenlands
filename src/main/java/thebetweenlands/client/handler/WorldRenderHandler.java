@@ -16,13 +16,16 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
+import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.client.render.entity.RenderGasCloud;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
@@ -30,6 +33,7 @@ import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.util.RenderUtils;
@@ -117,6 +121,53 @@ public class WorldRenderHandler {
 						GlStateManager.enableCull();
 						GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 						GlStateManager.color(1, 1, 1, 1);
+					}
+					
+					World world = MC.world;
+					
+					if(world != null) {
+						for(EntityPlayer player : MC.world.playerEntities) {
+							IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
+							
+							if(cap != null) {
+								double obstructionDistance = cap.getObstructionDistance();
+								
+								if(obstructionDistance < 0) {
+									float alpha = Math.min((float)-obstructionDistance * 2, 1);
+									
+									GlStateManager.color(alpha, alpha, alpha, 1f);
+									
+									//From MC.getRenderManager().renderEntityStatic(player, event.getPartialTicks(), false);
+									//without setting color to 1, 1, 1, 1
+									
+									if (player.ticksExisted == 0)
+							        {
+							            player.lastTickPosX = player.posX;
+							            player.lastTickPosY = player.posY;
+							            player.lastTickPosZ = player.posZ;
+							        }
+		
+							        double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)event.getPartialTicks();
+							        double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)event.getPartialTicks();
+							        double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)event.getPartialTicks();
+							        float f = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * event.getPartialTicks();
+							        int i = player.getBrightnessForRender();
+		
+							        if (player.isBurning())
+							        {
+							            i = 15728880;
+							        }
+		
+							        int j = i % 65536;
+							        int k = i / 65536;
+							        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+									
+							        MC.getRenderManager().renderEntity(player, d0 - MC.getRenderManager().renderPosX, d1 - MC.getRenderManager().renderPosY, d2 - MC.getRenderManager().renderPosZ, f, event.getPartialTicks(), false);
+							        
+									GlStateManager.color(1, 1, 1, 1);
+								}
+							}
+						}
 					}
 
 					gBuffer.updateDepthBuffer();

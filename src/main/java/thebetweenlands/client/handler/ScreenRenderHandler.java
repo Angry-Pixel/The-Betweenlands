@@ -83,6 +83,9 @@ public class ScreenRenderHandler extends Gui {
 
 	private Random random = new Random();
 	private int updateCounter;
+	
+	private double obstructionPercentage = 0;
+	private double prevObstructionPercentage = 0;
 
 	private TextContainer titleContainer = null;
 	private String currentLocation = "";
@@ -119,6 +122,23 @@ public class ScreenRenderHandler extends Gui {
 			EntityPlayer player = Minecraft.getMinecraft().player;
 
 			if(player != null) {
+				IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
+				
+				if(cap != null) {
+					this.prevObstructionPercentage = this.obstructionPercentage;
+					
+					double fadeStartDistance = Math.min(cap.getObstructionCheckDistance(), 0.25D);
+					double obstructionDistance = cap.getObstructionDistance();
+					
+					if(obstructionDistance < fadeStartDistance) {
+						this.obstructionPercentage = 1.0D - obstructionDistance / fadeStartDistance;
+					} else {
+						this.obstructionPercentage = 0.0D;
+					}
+				} else {
+					this.obstructionPercentage = this.prevObstructionPercentage = 0.0D;
+				}
+				
 				if(BetweenlandsConfig.GENERAL.cavingRopeIndicator) {
 					for(ItemStack stack : player.inventory.mainInventory) {
 						if(!stack.isEmpty() && stack.getItem() == ItemRegistry.CAVING_ROPE) {
@@ -579,7 +599,7 @@ public class ScreenRenderHandler extends Gui {
 			EntityPlayer player = mc.player;
 			
 			if(player != null) {
-				this.renderNoClipRingOverlay(mc, player, false);
+				this.renderNoClipRingOverlay(mc, player, false, event.getPartialTicks());
 			}
 		}
 	}
@@ -600,7 +620,7 @@ public class ScreenRenderHandler extends Gui {
 			
 	        mc.entityRenderer.setupOverlayRendering();
 	        
-			this.renderNoClipRingOverlay(mc, player, true);
+			this.renderNoClipRingOverlay(mc, player, true, event.getPartialTicks());
 			
 			GlStateManager.disableBlend();
 			
@@ -612,17 +632,17 @@ public class ScreenRenderHandler extends Gui {
 		}
 	}
 	
-	private void renderNoClipRingOverlay(Minecraft mc, EntityPlayer player, boolean untexturedQuad) {
+	private void renderNoClipRingOverlay(Minecraft mc, EntityPlayer player, boolean untexturedQuad, float partialTicks) {
 		IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
 
 		if(cap != null) {
-			double fadeStartDistance = Math.min(cap.getObstructionCheckDistance(), 1.0D);
+			double fadeStartDistance = Math.min(cap.getObstructionCheckDistance(), 0.25D);
 			double obstructionDistance = cap.getObstructionDistance();
 
 			if(obstructionDistance < fadeStartDistance) {
 				ScaledResolution res = new ScaledResolution(mc);
 				
-				float alpha = (float) Math.min(1, Math.max(0, 1 - obstructionDistance / fadeStartDistance));
+				float alpha = (float) Math.min(1, Math.max(0, this.prevObstructionPercentage + (this.obstructionPercentage - this.prevObstructionPercentage) * partialTicks));
 
 				GlStateManager.disableAlpha();
 				GlStateManager.disableTexture2D();
