@@ -83,8 +83,10 @@ public class EntityDecayPitBigFloor extends Entity {
 				}
 
 				if (getDistance(entity) < 4.25F - entity.width * 0.5F && getDistance(entity) >= 2.5F + entity.width * 0.5F) {
+					if (entity.posY <= posY + 0.0625D) {
 					reverse = true;
 					checkJumpOnTopOfAABB(entity);
+					}
 				}
 
 				if (getDistance(entity) >= 2.5F + entity.width * 0.5F) {
