@@ -35,7 +35,9 @@ public interface IEntityCustomCollisionsCapability {
 	
 	public boolean isPhasing();
 	
-	public boolean isViewObstructed();
+	public double getViewObstructionCheckDistance();
+	
+	public double getViewObstructionDistance();
 	
 	public double getObstructionCheckDistance();
 	

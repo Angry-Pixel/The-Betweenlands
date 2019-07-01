@@ -6,7 +6,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -20,8 +19,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.common.TheBetweenlands;
@@ -65,7 +62,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 
 
 	private boolean isPhasing;
-	private boolean isViewObstructed;
+	private double viewObstructionDistance;
 	private double obstructionDistance;
 
 	@Override
@@ -74,8 +71,13 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 	}
 
 	@Override
-	public boolean isViewObstructed() {
-		return this.isViewObstructed;
+	public double getViewObstructionDistance() {
+		return this.viewObstructionDistance;
+	}
+
+	@Override
+	public double getViewObstructionCheckDistance() {
+		return 0.25D;
 	}
 
 	@Override
@@ -105,12 +107,30 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 		return ItemStack.EMPTY;
 	}
 
+	private double calculateAABBDistance(AxisAlignedBB aabb1, AxisAlignedBB aabb2) {
+		double dist;
+
+		if(aabb1.intersects(aabb2)) {
+			double dx = Math.max(aabb1.minX - aabb2.maxX, aabb2.minX - aabb1.maxX);
+			double dy = Math.max(aabb1.minY - aabb2.maxY, aabb2.minY - aabb1.maxY);
+			double dz = Math.max(aabb1.minZ - aabb2.maxZ, aabb2.minZ - aabb1.maxZ);
+			dist = Math.max(dx, Math.max(dy, dz));
+		} else {
+			double dx = Math.max(0, Math.max(aabb1.minX - aabb2.maxX, aabb2.minX - aabb1.maxX));
+			double dy = Math.max(0, Math.max(aabb1.minY - aabb2.maxY, aabb2.minY - aabb1.maxY));
+			double dz = Math.max(0, Math.max(aabb1.minZ - aabb2.maxZ, aabb2.minZ - aabb1.maxZ));
+			dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+		}
+
+		return dist;
+	}
+
 	@Override
 	public void getCustomCollisionBoxes(CollisionBoxHelper collisionBoxHelper, AxisAlignedBB aabb,
 			List<AxisAlignedBB> collisionBoxes) {
 
 		this.isPhasing = false;
-		this.isViewObstructed = false;
+		this.viewObstructionDistance = Double.MAX_VALUE;
 		this.obstructionDistance = Double.MAX_VALUE;
 
 		EntityPlayer player = this.getEntity();
@@ -135,6 +155,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 				final double floor = player.posY + 0.001D;
 
 				final AxisAlignedBB originalAabb = aabb;
+				final AxisAlignedBB viewAabb = new AxisAlignedBB(player.posX, player.posY + player.getEyeHeight(), player.posZ, player.posX, player.posY + player.getEyeHeight(), player.posZ).grow(0.25D);
 
 				final double checkReach = this.getObstructionCheckDistance();
 
@@ -164,22 +185,16 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 						}
 
 						if(!isCollisionForced) {
-							double dist;
+							double playerDist = RingOfNoClipEntityCapability.this.calculateAABBDistance(blockAabb, originalAabb);
 
-							if(blockAabb.intersects(originalAabb)) {
-								double dx = Math.max(blockAabb.minX - originalAabb.maxX, originalAabb.minX - blockAabb.maxX);
-								double dy = Math.max(blockAabb.minY - originalAabb.maxY, originalAabb.minY - blockAabb.maxY);
-								double dz = Math.max(blockAabb.minZ - originalAabb.maxZ, originalAabb.minZ - blockAabb.maxZ);
-								dist = Math.max(dx, Math.max(dy, dz));
-							} else {
-								double dx = Math.max(0, Math.max(blockAabb.minX - originalAabb.maxX, originalAabb.minX - blockAabb.maxX));
-								double dy = Math.max(0, Math.max(blockAabb.minY - originalAabb.maxY, originalAabb.minY - blockAabb.maxY));
-								double dz = Math.max(0, Math.max(blockAabb.minZ - originalAabb.maxZ, originalAabb.minZ - blockAabb.maxZ));
-								dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
+							if(playerDist < RingOfNoClipEntityCapability.this.obstructionDistance) {
+								RingOfNoClipEntityCapability.this.obstructionDistance = playerDist;
 							}
 
-							if(dist < RingOfNoClipEntityCapability.this.obstructionDistance) {
-								RingOfNoClipEntityCapability.this.obstructionDistance = dist;
+							double viewDist = RingOfNoClipEntityCapability.this.calculateAABBDistance(blockAabb, viewAabb);
+
+							if(viewDist < RingOfNoClipEntityCapability.this.getViewObstructionCheckDistance() && viewDist < RingOfNoClipEntityCapability.this.viewObstructionDistance) {
+								RingOfNoClipEntityCapability.this.viewObstructionDistance = viewDist;
 							}
 						}
 
@@ -190,10 +205,6 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 
 							ringActiveState.set(true);
 							RingOfNoClipEntityCapability.this.isPhasing = true;
-
-							if(player.world.isRemote) {
-								RingOfNoClipEntityCapability.this.checkAndSetViewObstruction(player, item, stack, blockAabb);
-							}
 
 							return false;
 						}
@@ -210,23 +221,21 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	private void checkAndSetViewObstruction(EntityPlayer player, ItemRingOfNoClip item, ItemStack stack, AxisAlignedBB blockAabb) {
-		if(blockAabb.contains(ActiveRenderInfo.projectViewFromEntity(player, 1))) {
-			this.isViewObstructed = true;
-		}
-	}
-
 	@SubscribeEvent
 	public static void onSPPlayerPushOut(PlayerSPPushOutOfBlocksEvent event) {
 		EntityPlayer player = event.getEntityPlayer();
-		ItemStack stack = getRing(player);
 
-		if(!stack.isEmpty()) {
-			ItemRingOfNoClip item = (ItemRingOfNoClip) stack.getItem();
+		IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
 
-			if(item.canPhase(player, stack)) {
-				event.setCanceled(true);
+		if(cap != null && cap.isPhasing()) {
+			ItemStack stack = getRing(player);
+
+			if(!stack.isEmpty()) {
+				ItemRingOfNoClip item = (ItemRingOfNoClip) stack.getItem();
+
+				if(item.canPhase(player, stack)) {
+					event.setCanceled(true);
+				}
 			}
 		}
 	}
@@ -250,13 +259,18 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 	public static void onLivingAttacked(LivingAttackEvent event) {
 		if(event.getEntity() instanceof EntityPlayer && event.getSource().getDamageType().equals(DamageSource.IN_WALL.getDamageType())) {
 			EntityPlayer player = (EntityPlayer) event.getEntity();
-			ItemStack stack = getRing(player);
 
-			if(!stack.isEmpty()) {
-				ItemRingOfNoClip item = (ItemRingOfNoClip) stack.getItem();
+			IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
 
-				if(item.canPhase(player, stack)) {
-					event.setCanceled(true);
+			if(cap != null && cap.isPhasing()) {
+				ItemStack stack = getRing(player);
+
+				if(!stack.isEmpty()) {
+					ItemRingOfNoClip item = (ItemRingOfNoClip) stack.getItem();
+
+					if(item.canPhase(player, stack)) {
+						event.setCanceled(true);
+					}
 				}
 			}
 		}

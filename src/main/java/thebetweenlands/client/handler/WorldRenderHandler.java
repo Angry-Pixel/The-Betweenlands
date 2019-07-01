@@ -35,6 +35,7 @@ import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
@@ -132,7 +133,7 @@ public class WorldRenderHandler {
 
 					if(world != null) {
 						for(EntityPlayer player : MC.world.playerEntities) {
-							if(player instanceof AbstractClientPlayer) {
+							if(player instanceof AbstractClientPlayer && (player != TheBetweenlands.proxy.getClientPlayer() || Minecraft.getMinecraft().gameSettings.thirdPersonView != 0)) {
 								AbstractClientPlayer clientPlayer = (AbstractClientPlayer) player;
 
 								IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
@@ -143,9 +144,11 @@ public class WorldRenderHandler {
 									if(obstructionDistance < 0) {
 										ShaderHelper.INSTANCE.require();
 
-										float alpha = Math.min((float)-obstructionDistance * 2, 1);
+										float strength = Math.min((float)-obstructionDistance * 2, 1);
 
-										renderPlayerGlow(clientPlayer, alpha, event.getPartialTicks());
+										GlStateManager.disableLighting();
+										renderPlayerGlow(clientPlayer, strength, 0.98F, event.getPartialTicks());
+										GlStateManager.disableLighting();
 									}
 								}
 							}
@@ -239,7 +242,7 @@ public class WorldRenderHandler {
 		}
 	}
 
-	private static void renderPlayerGlow(AbstractClientPlayer player, float strength, float partialTicks) {
+	public static void renderPlayerGlow(AbstractClientPlayer player, float strength, float alpha, float partialTicks) {
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
 		//From MC.getRenderManager().renderEntityStatic(player, partialTicks, false);
@@ -275,9 +278,7 @@ public class WorldRenderHandler {
 		}
 
 		//Set alpha < 0.99 so that shader inverts inBack check
-		playerRenderer.setColor(strength, strength, strength, 0.98F);
-
-		GlStateManager.disableLighting();
+		playerRenderer.setColor(strength, strength, strength, alpha);
 
 		//Polygon offset is necessary for inBack check in shader
 		GlStateManager.enablePolygonOffset();
@@ -286,7 +287,5 @@ public class WorldRenderHandler {
 		playerRenderer.doRender(player, d0 - MC.getRenderManager().renderPosX, d1 - MC.getRenderManager().renderPosY, d2 - MC.getRenderManager().renderPosZ, f, partialTicks);
 
 		GlStateManager.disablePolygonOffset();
-
-		GlStateManager.disableLighting();
 	}
 }

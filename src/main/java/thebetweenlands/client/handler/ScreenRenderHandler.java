@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -32,6 +33,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
@@ -48,6 +50,8 @@ import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IPortalCapability;
+import thebetweenlands.client.render.block.RingOfNoClipWorldRenderer;
+import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -83,9 +87,12 @@ public class ScreenRenderHandler extends Gui {
 
 	private Random random = new Random();
 	private int updateCounter;
-	
+
 	private double obstructionPercentage = 0;
 	private double prevObstructionPercentage = 0;
+
+	private final ResizableFramebuffer ringOfNoClipWorldFramebuffer = new ResizableFramebuffer(true);
+	private final RingOfNoClipWorldRenderer ringOfNoClipWorldRenderer = new RingOfNoClipWorldRenderer(5);
 
 	private TextContainer titleContainer = null;
 	private String currentLocation = "";
@@ -123,13 +130,13 @@ public class ScreenRenderHandler extends Gui {
 
 			if(player != null) {
 				IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
-				
+
 				if(cap != null) {
 					this.prevObstructionPercentage = this.obstructionPercentage;
-					
-					double fadeStartDistance = Math.min(cap.getObstructionCheckDistance(), 0.25D);
-					double obstructionDistance = cap.getObstructionDistance();
-					
+
+					double fadeStartDistance = Math.min(cap.getViewObstructionCheckDistance(), 0.25D);
+					double obstructionDistance = cap.getViewObstructionDistance();
+
 					if(obstructionDistance < fadeStartDistance) {
 						this.obstructionPercentage = 1.0D - obstructionDistance / fadeStartDistance;
 					} else {
@@ -138,7 +145,7 @@ public class ScreenRenderHandler extends Gui {
 				} else {
 					this.obstructionPercentage = this.prevObstructionPercentage = 0.0D;
 				}
-				
+
 				if(BetweenlandsConfig.GENERAL.cavingRopeIndicator) {
 					for(ItemStack stack : player.inventory.mainInventory) {
 						if(!stack.isEmpty() && stack.getItem() == ItemRegistry.CAVING_ROPE) {
@@ -597,13 +604,13 @@ public class ScreenRenderHandler extends Gui {
 		if(event.getType() == ElementType.ALL) {
 			Minecraft mc = Minecraft.getMinecraft();
 			EntityPlayer player = mc.player;
-			
+
 			if(player != null) {
 				this.renderNoClipRingOverlay(mc, player, false, event.getPartialTicks());
 			}
 		}
 	}
-	
+
 	//Render the untextured black quad in world s.t. it can't be disabled
 	//by F1 or other GUIs
 	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
@@ -614,34 +621,34 @@ public class ScreenRenderHandler extends Gui {
 		if(player != null) {
 			GlStateManager.matrixMode(GL11.GL_PROJECTION);
 			GlStateManager.pushMatrix();
-			
+
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 			GlStateManager.pushMatrix();
-			
-	        mc.entityRenderer.setupOverlayRendering();
-	        
+
+			mc.entityRenderer.setupOverlayRendering();
+
 			this.renderNoClipRingOverlay(mc, player, true, event.getPartialTicks());
-			
+
 			GlStateManager.disableBlend();
-			
+
 			GlStateManager.matrixMode(GL11.GL_PROJECTION);
 			GlStateManager.popMatrix();
-			
+
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 			GlStateManager.popMatrix();
 		}
 	}
-	
-	private void renderNoClipRingOverlay(Minecraft mc, EntityPlayer player, boolean untexturedQuad, float partialTicks) {
+
+	private void renderNoClipRingOverlay(Minecraft mc, EntityPlayer player, boolean untexturedQuadOnly, float partialTicks) {
 		IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
 
 		if(cap != null) {
-			double fadeStartDistance = Math.min(cap.getObstructionCheckDistance(), 0.25D);
-			double obstructionDistance = cap.getObstructionDistance();
+			double fadeStartDistance = Math.min(cap.getViewObstructionCheckDistance(), 0.25D);
+			double obstructionDistance = cap.getViewObstructionDistance();
 
 			if(obstructionDistance < fadeStartDistance) {
 				ScaledResolution res = new ScaledResolution(mc);
-				
+
 				float alpha = (float) Math.min(1, Math.max(0, this.prevObstructionPercentage + (this.obstructionPercentage - this.prevObstructionPercentage) * partialTicks));
 
 				GlStateManager.disableAlpha();
@@ -655,8 +662,8 @@ public class ScreenRenderHandler extends Gui {
 
 				Tessellator tessellator = Tessellator.getInstance();
 				BufferBuilder bufferbuilder = tessellator.getBuffer();
-				
-				if(untexturedQuad) {
+
+				if(untexturedQuadOnly) {
 					bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 					bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), 0.0D).endVertex();
 					bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), 0.0D).endVertex();
@@ -664,35 +671,94 @@ public class ScreenRenderHandler extends Gui {
 					bufferbuilder.pos(0.0D, 0.0D, 0.0D).endVertex();
 					tessellator.draw();
 				} else {
+					bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+					bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), 0.0D).endVertex();
+					bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), 0.0D).endVertex();
+					bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, 0.0D).endVertex();
+					bufferbuilder.pos(0.0D, 0.0D, 0.0D).endVertex();
+					tessellator.draw();
+
 					float brightness = 0.5F + (1 - alpha) * 0.5F;
-	
+
+					//Render some blocks around player
+					GlStateManager.matrixMode(GL11.GL_PROJECTION);
+					GlStateManager.pushMatrix();
+
+					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+					GlStateManager.pushMatrix();
+
+					mc.entityRenderer.setupCameraTransform(partialTicks, 0);
+
+					this.ringOfNoClipWorldRenderer.setPos(new BlockPos(player.getPositionVector()));
+					this.ringOfNoClipWorldRenderer.setWorld(player.world);
+
+					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+					GlStateManager.enableDepth();
+					GlStateManager.depthMask(true);
+
+					Framebuffer mainFbo = mc.getFramebuffer();
+
+					Framebuffer fbo = this.ringOfNoClipWorldFramebuffer.getFramebuffer(mainFbo.framebufferWidth, mainFbo.framebufferHeight);
+
+					fbo.framebufferClear();
+					fbo.bindFramebuffer(true);
+
+					this.ringOfNoClipWorldRenderer.render();
+
+					mainFbo.bindFramebuffer(true);
+
+					GlStateManager.disableDepth();
+
+					GlStateManager.matrixMode(GL11.GL_PROJECTION);
+					GlStateManager.popMatrix();
+
+					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+					GlStateManager.popMatrix();
+
+
+					GlStateManager.enableBlend();
+					GlStateManager.disableLighting();
 					GlStateManager.color(brightness, brightness, brightness, alpha);
 					GlStateManager.enableTexture2D();
-	
+
+					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
+					//Render surrounding blocks overlay
+					GlStateManager.bindTexture(fbo.framebufferTexture);
+					bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+					bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 0.0D).endVertex();
+					bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 0.0D).endVertex();
+					bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 1.0D).endVertex();
+					bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 1.0D).endVertex();
+					tessellator.draw();
+
+					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
+					//Render blinds
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(0, -res.getScaledHeight_double() + res.getScaledHeight_double() / 2 * alpha, 0);
 					ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_NO_CLIP_OVERLAY_TOP_TEXTURE, RING_OF_NO_CLIP_OVERLAY_SIDE_TOP_TEXTURE, RING_OF_NO_CLIP_OVERLAY_SIDE_TOP_TEXTURE);
 					GlStateManager.popMatrix();
-	
+
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(0, res.getScaledHeight_double() - res.getScaledHeight_double() / 2 * alpha, 0);
 					ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_NO_CLIP_OVERLAY_BOTTOM_TEXTURE, RING_OF_NO_CLIP_OVERLAY_SIDE_BOTTOM_TEXTURE, RING_OF_NO_CLIP_OVERLAY_SIDE_BOTTOM_TEXTURE);
 					GlStateManager.popMatrix();
-	
+
 					GlStateManager.color((1 - brightness) * 2, (1 - brightness) * 2, (1 - brightness) * 2, 1);
-					
+
 					//Vignette
 					mc.getTextureManager().bindTexture(VIGNETTE_TEXTURE);
 					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-			        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-			        bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 1.0D).endVertex();
-			        bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 1.0D).endVertex();
-			        bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
-			        bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
-			        tessellator.draw();
+					bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+					bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 1.0D).endVertex();
+					bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 1.0D).endVertex();
+					bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
+					bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
+					tessellator.draw();
 					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 				}
-				
+
 				GlStateManager.color(1, 1, 1, 1);
 
 				GlStateManager.enableTexture2D();
