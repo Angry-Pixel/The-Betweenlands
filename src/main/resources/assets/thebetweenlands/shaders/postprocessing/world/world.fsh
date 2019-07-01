@@ -128,11 +128,14 @@ void main() {
 		
         //Get depth (distance to camera) and distance between fragments
         float dist = distance(shieldFragPos, fragPos);
-        float fragCamDist = length(fragPos);
-        float shieldFragCamDist = length(shieldFragPos);
+        float fragCamDist = length(fragPos - u_viewPos);
+        float shieldFragCamDist = length(shieldFragPos - u_viewPos);
         
         //Check if repeller shield is behind or in front of the diffuse fragment
         bool inBack = fragCamDist <= shieldFragCamDist;
+        if(repellerShieldBuffCol.a < 0.99F) {
+        	inBack = fragCamDist > shieldFragCamDist;
+        }
         if(!inBack) {
             //Calculate distortion and color multiplier
             //distortionMultiplier += 1.5F / (pow(shieldFragCamDist - fragCamDist, 2) / 100.0F + 1.0F);

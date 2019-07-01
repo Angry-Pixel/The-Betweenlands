@@ -37,5 +37,7 @@ public interface IEntityCustomCollisionsCapability {
 	
 	public boolean isViewObstructed();
 	
+	public double getObstructionCheckDistance();
+	
 	public double getObstructionDistance();
 }
