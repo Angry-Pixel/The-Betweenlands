@@ -92,7 +92,7 @@ public class ScreenRenderHandler extends Gui {
 	private double prevObstructionPercentage = 0;
 
 	private final ResizableFramebuffer ringOfNoClipWorldFramebuffer = new ResizableFramebuffer(true);
-	private final RingOfNoClipWorldRenderer ringOfNoClipWorldRenderer = new RingOfNoClipWorldRenderer(5);
+	private final RingOfNoClipWorldRenderer ringOfNoClipWorldRenderer = new RingOfNoClipWorldRenderer(6, 6);
 
 	private TextContainer titleContainer = null;
 	private String currentLocation = "";
@@ -718,7 +718,7 @@ public class ScreenRenderHandler extends Gui {
 
 					GlStateManager.enableBlend();
 					GlStateManager.disableLighting();
-					GlStateManager.color(brightness, brightness, brightness, alpha);
+					GlStateManager.color(brightness, brightness, brightness, alpha * alpha * alpha * 0.75F);
 					GlStateManager.enableTexture2D();
 
 					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
@@ -732,6 +732,7 @@ public class ScreenRenderHandler extends Gui {
 					bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 1.0D).endVertex();
 					tessellator.draw();
 
+					GlStateManager.color(brightness, brightness, brightness, alpha);
 					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
 					//Render blinds

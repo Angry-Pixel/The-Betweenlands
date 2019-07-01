@@ -30,6 +30,7 @@ public class RingOfNoClipWorldRenderer {
 	private final FloatBuffer fogColor = BufferUtils.createFloatBuffer(4);
 
 	private int rangeXZ;
+	private int rangeY;
 
 	private World world;
 
@@ -40,8 +41,9 @@ public class RingOfNoClipWorldRenderer {
 	private final Map<BlockRenderLayer, BufferBuilder> bufferBuilders = new EnumMap<>(BlockRenderLayer.class);
 	private final Map<BlockRenderLayer, VertexBuffer> vertexBuffers = new EnumMap<>(BlockRenderLayer.class);
 
-	public RingOfNoClipWorldRenderer(int rangeXZ) {
+	public RingOfNoClipWorldRenderer(int rangeXZ, int rangeY) {
 		this.rangeXZ = rangeXZ;
+		this.rangeY = rangeY;
 		this.fogColor.put(new float[4]);
 	}
 
@@ -139,7 +141,8 @@ public class RingOfNoClipWorldRenderer {
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		RenderHelper.disableStandardItemLighting();
 
-		mc.entityRenderer.enableLightmap();
+		//mc.entityRenderer.enableLightmap();
+		mc.entityRenderer.disableLightmap();
 
 		//TODO Replace magic constants
 
@@ -194,9 +197,9 @@ public class RingOfNoClipWorldRenderer {
 			this.getBufferBuilder(layer).begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 		}
 
-		for(int xo = -5; xo <= 5; xo++) {
-			for(int yo = -1; yo <= 0; yo++) {
-				for(int zo = -5; zo <= 5; zo++) {
+		for(int xo = -this.rangeXZ; xo <= this.rangeXZ; xo++) {
+			for(int yo = -this.rangeY; yo <= 0; yo++) {
+				for(int zo = -this.rangeXZ; zo <= this.rangeXZ; zo++) {
 					BlockPos pos = new BlockPos(this.renderedPos.add(xo, yo, zo));
 					IBlockState state = this.world.getBlockState(pos);
 
