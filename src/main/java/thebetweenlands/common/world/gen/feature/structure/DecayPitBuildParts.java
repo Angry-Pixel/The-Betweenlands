@@ -31,11 +31,11 @@ public class DecayPitBuildParts {
 		rotatedCubeVolume(world, rand, pos, 1, 1, 5, blockHelper.MUD_TILES_DECAY, 4, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 1, 6, blockHelper.MUD_TILES_DECAY, 2, 1, 1, facing);
 
-		rotatedCubeVolume(world, rand, pos, 6, 2, 0, blockHelper.MUD_TILES_DECAY, 3, 1, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 6, 2, 2, blockHelper.MUD_TILES_DECAY, 2, 1, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 5, 2, 3, blockHelper.MUD_TILES_DECAY, 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 4, 2, 4, blockHelper.MUD_TILES_DECAY, 4, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 3, 2, 5, blockHelper.MUD_TILES_DECAY, 4, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 2, 0, blockHelper.MUD_TILES_DECAY, 4, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 2, 2, blockHelper.MUD_TILES_DECAY, 3, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 2, 3, blockHelper.MUD_TILES_DECAY, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 2, 4, blockHelper.MUD_TILES_DECAY, 5, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, 5, blockHelper.MUD_TILES_DECAY, 6, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 2, 6, blockHelper.MUD_TILES_DECAY, 5, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 2, 7, blockHelper.MUD_TILES_DECAY, 4, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 2, 8, blockHelper.MUD_TILES_DECAY, 1, 1, 1, facing);

@@ -37,23 +37,23 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		if (!getWorld().isRemote) {
 
 			if (animationTicks == 15 || animationTicks == 195) {
-				spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 2D, getPos().getZ() - 2D);
-				spawnSludgeJet(getPos().getX() - 5.5D, getPos().getY() + 2D, getPos().getZ() + 2D);
+				spawnSludgeJet(getPos().getX() + 6D, getPos().getY() + 2.5D, getPos().getZ() - 1.5D);
+				spawnSludgeJet(getPos().getX() - 5D, getPos().getY() + 2.5D, getPos().getZ() + 2.5D);
 			}
 
 			if (animationTicks == 60 || animationTicks == 240) {
-				spawnSludgeJet(getPos().getX() + 2D, getPos().getY() + 2D, getPos().getZ() - 5.5D);
-				spawnSludgeJet(getPos().getX() - 2D, getPos().getY() + 2D, getPos().getZ() + 5.5D);
+				spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 2.5D, getPos().getZ() - 5D);
+				spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 2.5D, getPos().getZ() + 6D);
 			}
 
 			if (animationTicks == 105 || animationTicks == 285) {
-				spawnSludgeJet(getPos().getX() - 2D, getPos().getY() + 2D, getPos().getZ() - 5.5D);
-				spawnSludgeJet(getPos().getX() + 2D, getPos().getY() + 2D, getPos().getZ() + 5.5D);
+				spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 2.5D, getPos().getZ() - 5D);
+				spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 2.5D, getPos().getZ() + 6D);
 			}
 
 			if (animationTicks == 150 || animationTicks == 330) {
-				spawnSludgeJet(getPos().getX() - 5.5D, getPos().getY() + 2D, getPos().getZ() - 2D);
-				spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 2D, getPos().getZ() + 2D);
+				spawnSludgeJet(getPos().getX() - 5D, getPos().getY() + 2.5D, getPos().getZ() - 1.5D);
+				spawnSludgeJet(getPos().getX() + 6D, getPos().getY() + 2.5D, getPos().getZ() + 2.5D);
 			}
 
 		}
@@ -109,7 +109,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
     public float getDistance(Entity entityIn)
     {
         float f = (float)(getPos().getX() + 0.5D - entityIn.posX);
-        float f1 = (float)(getPos().getY() + 0.5D - entityIn.posY);
+        float f1 = (float)(getPos().getY() + 2D - entityIn.posY);
         float f2 = (float)(getPos().getZ() + 0.5D - entityIn.posZ);
         return MathHelper.sqrt(f * f + f1 * f1 + f2 * f2);
     }
