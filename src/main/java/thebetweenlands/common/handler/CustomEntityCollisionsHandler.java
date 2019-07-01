@@ -1,6 +1,7 @@
 package thebetweenlands.common.handler;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
@@ -19,22 +20,23 @@ import thebetweenlands.api.capability.IEntityCustomCollisionsCapability.BlockCol
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability.CollisionBoxHelper;
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability.EntityCollisionPredicate;
 import thebetweenlands.api.entity.IEntityCustomBlockCollisions;
+import thebetweenlands.api.entity.ProcessedEntityCollisionBox;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
-public final class CustomEntityBlockCollisionsHandler {
+public final class CustomEntityCollisionsHandler {
 	public static final class Helper implements CollisionBoxHelper {
 		private Helper() { }
 
 		@Override
 		public void getCollisionBoxes(Entity entity, AxisAlignedBB aabb, EntityCollisionPredicate entityPredicate,
 				BlockCollisionPredicate blockPredicate, List<AxisAlignedBB> collisionBoxes) {
-			CustomEntityBlockCollisionsHandler.getCollisionBoxes(entity, aabb, entityPredicate, blockPredicate, collisionBoxes);
+			CustomEntityCollisionsHandler.getCollisionBoxes(entity, aabb, entityPredicate, blockPredicate, collisionBoxes);
 		}
 	}
 
 	public static final Helper HELPER = new Helper();
 
-	private CustomEntityBlockCollisionsHandler() {}
+	private CustomEntityCollisionsHandler() {}
 
 	private static boolean gathering = false;
 
@@ -42,21 +44,44 @@ public final class CustomEntityBlockCollisionsHandler {
 	public static void onGatherCollisionBoxes(GetCollisionBoxesEvent event) {
 		if(!gathering) {
 			Entity entity = event.getEntity();
-			if(entity != null) {
-				IEntityCustomCollisionsCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
+			gathering = true;
+			try {
+				if(entity != null) {
+					IEntityCustomCollisionsCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
 
-				if(cap != null || entity instanceof IEntityCustomBlockCollisions) {
-					gathering = true;
-					try {
+					if(cap != null || entity instanceof IEntityCustomBlockCollisions) {
 						if(cap != null) {
 							cap.getCustomCollisionBoxes(HELPER, event.getAabb(), event.getCollisionBoxesList());
 						} else {
 							((IEntityCustomBlockCollisions) event.getEntity()).getCustomCollisionBoxes(event.getAabb(), event.getCollisionBoxesList());
 						}
-					} finally {
-						gathering = false;
 					}
 				}
+
+				/*List<AxisAlignedBB> processedAabbList = null;
+
+				Iterator<AxisAlignedBB> it = event.getCollisionBoxesList().iterator();
+				while(it.hasNext()) {
+					AxisAlignedBB aabb = it.next();
+					if(aabb instanceof ProcessedEntityCollisionBox) {
+						it.remove();
+
+						AxisAlignedBB processedAabb = ((ProcessedEntityCollisionBox<?>) aabb).process(event.getEntity(), event.getAabb());
+						if(processedAabb != null) {
+							if(processedAabbList == null) {
+								processedAabbList = new ArrayList<>();
+							}
+
+							processedAabbList.add(processedAabb);
+						}
+					}
+				}
+
+				if(processedAabbList != null) {
+					event.getCollisionBoxesList().addAll(processedAabbList);
+				}*/
+			} finally {
+				gathering = false;
 			}
 		}
 	}

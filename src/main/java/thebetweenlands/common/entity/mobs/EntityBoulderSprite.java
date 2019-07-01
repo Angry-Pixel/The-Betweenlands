@@ -67,7 +67,7 @@ import thebetweenlands.api.entity.IEntityCustomBlockCollisions;
 import thebetweenlands.api.entity.IEntityWithLootModifier;
 import thebetweenlands.client.render.model.SpikeRenderer;
 import thebetweenlands.client.render.model.entity.ModelBoulderSprite;
-import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler;
+import thebetweenlands.common.handler.CustomEntityCollisionsHandler;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -399,7 +399,7 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	public void getCustomCollisionBoxes(AxisAlignedBB aabb, List<AxisAlignedBB> collisionBoxes) {
 		collisionBoxes.clear();
 		final int floor = MathHelper.floor(aabb.minY) + 1;
-		CustomEntityBlockCollisionsHandler.HELPER.getCollisionBoxes(this, aabb, EntityCollisionPredicate.ALL, new BlockCollisionPredicate() {
+		CustomEntityCollisionsHandler.HELPER.getCollisionBoxes(this, aabb, EntityCollisionPredicate.ALL, new BlockCollisionPredicate() {
 			@Override
 			public boolean isColliding(Entity entity, AxisAlignedBB aabb, MutableBlockPos pos, IBlockState state, @Nullable AxisAlignedBB blockAabb) {
 				return !EntityBoulderSprite.this.isHiddenOrInWall() || pos.getY() < floor || !EntityBoulderSprite.this.isValidHideoutBlock(pos);
