@@ -1,5 +1,16 @@
 package thebetweenlands.common.registries;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -121,6 +132,7 @@ import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudB
 import thebetweenlands.common.block.structure.BlockChipPath;
 import thebetweenlands.common.block.structure.BlockCompactedMud;
 import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
+import thebetweenlands.common.block.structure.BlockDecayPitControl;
 import thebetweenlands.common.block.structure.BlockDecayPitOuterChainHousing;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
@@ -213,10 +225,6 @@ import thebetweenlands.common.world.gen.feature.tree.WorldGenRubberTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
 import thebetweenlands.util.AdvancedStateMap;
-
-import javax.annotation.Nullable;
-import java.lang.reflect.Field;
-import java.util.*;
 
 public class BlockRegistry {
     public static final Block SWAMP_WATER = new BlockSwampWater(FluidRegistry.SWAMP_WATER, Material.WATER);
@@ -588,7 +596,8 @@ public class BlockRegistry {
 	public static final Block MUD_BRICK_SPIKE_TRAP = new BlockMudBrickSpikeTrap();
 	public static final Block MUD_TILES_SPIKE_TRAP = new BlockMudTilesSpikeTrap();
 	public static final Block COMPACTED_MUD_SLOPE = new BlockCompactedMudSlope();
-	
+	public static final Block DECAY_PIT_CONTROL = new BlockDecayPitControl();
+
 	//Place-Holders for stuffs and things
 	public static final Block MUD_TOWER_BRAZIER = new BlockBrazier();
 	public static final Block DECAY_PIT_OUTER_CHAIN_HOUSING = new BlockDecayPitOuterChainHousing();

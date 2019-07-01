@@ -155,11 +155,11 @@ public class TestItemChimp extends Item {
 
 				WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 				//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
-				dungeon.generate(worldIn, itemRand, pos.up(59).add(3, 0, 3));
+			//	dungeon.generate(worldIn, itemRand, pos.up(59).add(3, 0, 3));
 				//dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
-				//dungeon.generateDecayPit(worldIn, itemRand, pos.up());
-
-	/*	EntityDecayPitTarget target = new EntityDecayPitTarget(worldIn);
+				dungeon.generateDecayPit(worldIn, itemRand, pos.up(14));
+/*
+		EntityDecayPitTarget target = new EntityDecayPitTarget(worldIn);
 			
 				EntityDecayPitChain chain5 = new EntityDecayPitChain(worldIn);
 				EntityDecayPitChain chain6 = new EntityDecayPitChain(worldIn);
@@ -192,10 +192,7 @@ public class TestItemChimp extends Item {
 				worldIn.spawnEntity(chain7);
 				worldIn.spawnEntity(chain8);
 
-				EntityDecayPitBigFloor floor = new EntityDecayPitBigFloor(worldIn);
-				floor.setPosition(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
-				worldIn.spawnEntity(floor);
-*/
+	*/	
 		}
 
 		return EnumActionResult.SUCCESS;

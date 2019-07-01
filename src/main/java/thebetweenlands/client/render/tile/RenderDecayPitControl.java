@@ -1,19 +1,18 @@
-package thebetweenlands.client.render.entity;
+package thebetweenlands.client.render.tile;
 
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.entity.EntityDecayPitBigFloor;
+import thebetweenlands.common.tile.TileEntityDecayPitControl;
 @SideOnly(Side.CLIENT)
-public class RenderDecayPitBigFloor extends Render<EntityDecayPitBigFloor> {
+public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityDecayPitControl > {
 
 	public static final ResourceLocation OUTER_RING_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_outer_ring.png");
 	public static final ResourceLocation INNER_RING_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_inner_ring.png");
@@ -22,13 +21,12 @@ public class RenderDecayPitBigFloor extends Render<EntityDecayPitBigFloor> {
 	public static final ResourceLocation MASK_MUD_TILE_TEXTURE_HOLE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_gear_mask_hole.png");
 	public static final ResourceLocation VERTICAL_RING_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_vertical_ring.png");
 
-	public RenderDecayPitBigFloor(RenderManager manager) {
-		super(manager);
-	}
-
 	@Override
-	public void doRender(EntityDecayPitBigFloor entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		float ring_rotate = entity.animationTicksPrev + (entity.animationTicks - entity.animationTicksPrev) * partialTicks;
+	public void render(TileEntityDecayPitControl tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+		if(tile == null || !tile.hasWorld())
+			return;
+
+		float ring_rotate = tile.animationTicksPrev + (tile.animationTicks - tile.animationTicksPrev) * partialTicks;
 
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
@@ -43,21 +41,21 @@ public class RenderDecayPitBigFloor extends Render<EntityDecayPitBigFloor> {
 		bindTexture(OUTER_MASK_MUD_TILE_TEXTURE);
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		for (int part = 0; part < 24; part++) {
-			buildRingQuads(buffer, x, y + 1D + 0.001D, z, 15F * part, 7.5D, 7.5D, 4.25D, 4.25D, false);
+			buildRingQuads(buffer, x + 0.5D, y + 3D + 0.001D, z + 0.5D, 15F * part, 7.5D, 7.5D, 4.25D, 4.25D, false);
 		}
 		tessellator.draw();
 
 		bindTexture(INNER_MASK_MUD_TILE_TEXTURE);
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		for (int part = 0; part < 24; part++) {
-			buildRingQuads(buffer, x, y + 0.001F, z, 15F * part, 4.25D, 4.25D, 2.75D, 2.75D, false);
+			buildRingQuads(buffer, x + 0.5D, y + 2D + 0.001F, z + 0.5D, 15F * part, 4.25D, 4.25D, 2.75D, 2.75D, false);
 		}
 		tessellator.draw();
 
 		bindTexture(VERTICAL_RING_TEXTURE);
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		for (int part = 0; part < 24; part++) {
-			buildRingQuads(buffer, x, y + 1D + 0.001D, z, 15F * part, 7.5D, 7.5D, 4.25D, 4.25D, true);
+			buildRingQuads(buffer, x + 0.5D, y + 3D + 0.001D, z + 0.5D, 15F * part, 7.5D, 7.5D, 4.25D, 4.25D, true);
 		}
 		tessellator.draw();
 
@@ -71,7 +69,7 @@ public class RenderDecayPitBigFloor extends Render<EntityDecayPitBigFloor> {
 		bindTexture(OUTER_RING_TEXTURE);
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		for (int part = 0; part < 24; part++) {
-			buildRingQuads(buffer, x, y + 1D + 0.003D, z, 15F * part, 7.5D, 7.5D, 4.24D, 4.24D, false);
+			buildRingQuads(buffer, x + 0.5D, y + 3D + 0.003D, z + 0.5D, 15F * part, 7.5D, 7.5D, 4.24D, 4.24D, false);
 		}
 		tessellator.draw();
 
@@ -85,7 +83,7 @@ public class RenderDecayPitBigFloor extends Render<EntityDecayPitBigFloor> {
 		bindTexture(INNER_RING_TEXTURE);
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		for (int part = 0; part < 24; part++) {
-			buildRingQuads(buffer, x, y + 0.003F, z, 15F * part, 4.25D, 4.25D, 2.75D, 2.75D, false);
+			buildRingQuads(buffer, x + 0.5D, y + 2D + 0.003F, z + 0.5D, 15F * part, 4.25D, 4.25D, 2.75D, 2.75D, false);
 		}
 		tessellator.draw();
 
@@ -126,7 +124,7 @@ public class RenderDecayPitBigFloor extends Render<EntityDecayPitBigFloor> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityDecayPitBigFloor entity) {
-		return null;
+	public boolean isGlobalRenderer(TileEntityDecayPitControl tile) {
+		return true;
 	}
 }
