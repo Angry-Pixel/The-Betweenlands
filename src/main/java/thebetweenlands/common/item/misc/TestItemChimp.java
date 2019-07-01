@@ -10,9 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.EntityDecayPitBigFloor;
-import thebetweenlands.common.entity.EntityDecayPitChain;
-import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
 
 
 //MINE!!
@@ -154,13 +152,14 @@ public class TestItemChimp extends Item {
 			}
 		*/
 	
-/*
+
 				WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 				//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
 				dungeon.generate(worldIn, itemRand, pos.up(59).add(3, 0, 3));
 				//dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
- */	
-		EntityDecayPitTarget target = new EntityDecayPitTarget(worldIn);
+				//dungeon.generateDecayPit(worldIn, itemRand, pos.up());
+
+	/*	EntityDecayPitTarget target = new EntityDecayPitTarget(worldIn);
 			
 				EntityDecayPitChain chain5 = new EntityDecayPitChain(worldIn);
 				EntityDecayPitChain chain6 = new EntityDecayPitChain(worldIn);
@@ -179,10 +178,10 @@ public class TestItemChimp extends Item {
 				chain7.setFacing(3);
 				chain8.setFacing(2);
 				
-				chain5.setPosition(pos.getX() + 0.5F, pos.getY() +9F, pos.getZ() - 10.5F);
-				chain6.setPosition(pos.getX() + 11.5F, pos.getY() +9F, pos.getZ() + 0.5F);
-				chain7.setPosition(pos.getX() + 0.5F, pos.getY() +9F, pos.getZ() + 11.5F);
-				chain8.setPosition(pos.getX() - 10.5F, pos.getY() +9F, pos.getZ() + 0.5F);
+				chain5.setPosition(pos.getX() + 0.5F, pos.getY() +9F, pos.getZ() - 11.5F);
+				chain6.setPosition(pos.getX() + 12.5F, pos.getY() +9F, pos.getZ() + 0.5F);
+				chain7.setPosition(pos.getX() + 0.5F, pos.getY() +9F, pos.getZ() + 12.5F);
+				chain8.setPosition(pos.getX() - 11.5F, pos.getY() +9F, pos.getZ() + 0.5F);
 
 				target.setPosition(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
 				
@@ -196,6 +195,7 @@ public class TestItemChimp extends Item {
 				EntityDecayPitBigFloor floor = new EntityDecayPitBigFloor(worldIn);
 				floor.setPosition(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
 				worldIn.spawnEntity(floor);
+*/
 		}
 
 		return EnumActionResult.SUCCESS;

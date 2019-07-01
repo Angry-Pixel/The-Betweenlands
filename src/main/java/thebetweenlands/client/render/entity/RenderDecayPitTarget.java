@@ -64,8 +64,8 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 		// debug boxes for parts without models
 		GlStateManager.pushMatrix();
 		for (EntityDecayPitTargetPart part : entity.shield_array)
-			if (part == entity.target)
-				renderDebugBoundingBox(part, x, y, z, entityYaw, partialTicks, part.posX - entity.posX, part.posY - entity.posY, part.posZ - entity.posZ);
+			if (part == entity.target);
+			//	renderDebugBoundingBox(part, x, y, z, entityYaw, partialTicks, part.posX - entity.posX, part.posY - entity.posY, part.posZ - entity.posZ);
 		GlStateManager.popMatrix();
 	}
 
