@@ -334,6 +334,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.EAST, rand, 0, 0);
 		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.NORTH, rand, 0, 0);
 		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.WEST, rand, 0, 0);
+		world.setBlockState(pos.down(14), BlockRegistry.DECAY_PIT_CONTROL.getDefaultState());
 	}
 
 	public void generateDecayPitEntrance(World world, Random rand, BlockPos pos) {
