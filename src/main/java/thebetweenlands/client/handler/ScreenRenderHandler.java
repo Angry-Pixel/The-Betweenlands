@@ -50,9 +50,10 @@ import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IPortalCapability;
-import thebetweenlands.client.render.block.RingOfNoClipWorldRenderer;
+import thebetweenlands.client.render.block.RingOfDispersionWorldRenderer;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.EntityRopeNode;
@@ -64,6 +65,7 @@ import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextPage;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextSegment;
 import thebetweenlands.common.item.armor.ItemBLArmor;
+import thebetweenlands.common.item.equipment.ItemRingOfDispersion;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -79,10 +81,11 @@ public class ScreenRenderHandler extends Gui {
 	public static ScreenRenderHandler INSTANCE = new ScreenRenderHandler();
 
 	private static final ResourceLocation DECAY_BAR_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/decay_bar.png");
-	private static final ResourceLocation RING_OF_NO_CLIP_OVERLAY_TOP_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_no_clip_overlay_top.png");
-	private static final ResourceLocation RING_OF_NO_CLIP_OVERLAY_SIDE_TOP_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_no_clip_overlay_side_top.png");
-	private static final ResourceLocation RING_OF_NO_CLIP_OVERLAY_BOTTOM_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_no_clip_overlay_bottom.png");
-	private static final ResourceLocation RING_OF_NO_CLIP_OVERLAY_SIDE_BOTTOM_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_no_clip_overlay_side_bottom.png");
+	private static final ResourceLocation RING_OF_DISPERSION_OVERLAY_TOP_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_dispersion_overlay_top.png");
+	private static final ResourceLocation RING_OF_DISPERSION_OVERLAY_SIDE_TOP_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_dispersion_overlay_side_top.png");
+	private static final ResourceLocation RING_OF_DISPERSION_OVERLAY_BOTTOM_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_dispersion_overlay_bottom.png");
+	private static final ResourceLocation RING_OF_DISPERSION_OVERLAY_SIDE_BOTTOM_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_dispersion_overlay_side_bottom.png");
+	private static final ResourceLocation RING_OF_DISPERSION_INDICATOR_OVERLAY_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_dispersion_indicator_overlay.png");
 	private static final ResourceLocation VIGNETTE_TEXTURE = new ResourceLocation("textures/misc/vignette.png");
 
 	private Random random = new Random();
@@ -90,9 +93,11 @@ public class ScreenRenderHandler extends Gui {
 
 	private double obstructionPercentage = 0;
 	private double prevObstructionPercentage = 0;
+	private double dispersionIndicatorPercentage = 0;
+	private double prevDispersionIndicatorPercentage = 0;
 
-	private final ResizableFramebuffer ringOfNoClipWorldFramebuffer = new ResizableFramebuffer(true);
-	private final RingOfNoClipWorldRenderer ringOfNoClipWorldRenderer = new RingOfNoClipWorldRenderer(6, 6);
+	private final ResizableFramebuffer ringOfDispersionWorldFramebuffer = new ResizableFramebuffer(true);
+	private final RingOfDispersionWorldRenderer ringOfDispersionWorldRenderer = new RingOfDispersionWorldRenderer(6, 6);
 
 	private TextContainer titleContainer = null;
 	private String currentLocation = "";
@@ -144,6 +149,28 @@ public class ScreenRenderHandler extends Gui {
 					}
 				} else {
 					this.obstructionPercentage = this.prevObstructionPercentage = 0.0D;
+				}
+
+				this.prevDispersionIndicatorPercentage = this.dispersionIndicatorPercentage;
+
+				ItemStack ring = RingOfDispersionEntityCapability.getRing(player);
+				if(!ring.isEmpty()) {
+					ItemRingOfDispersion item = (ItemRingOfDispersion) ring.getItem();
+					float targetPercentage = item.getTimer(ring) / (float)item.getMaxPhasingDuration(ring);
+
+					if(this.dispersionIndicatorPercentage < targetPercentage) {
+						this.dispersionIndicatorPercentage += 0.01D;
+						if(this.dispersionIndicatorPercentage > targetPercentage) {
+							this.dispersionIndicatorPercentage = targetPercentage;
+						}
+					} else if(this.dispersionIndicatorPercentage > targetPercentage) {
+						this.dispersionIndicatorPercentage -= 0.01D;
+						if(this.dispersionIndicatorPercentage < targetPercentage) {
+							this.dispersionIndicatorPercentage = targetPercentage;
+						}
+					}
+				} else {
+					this.dispersionIndicatorPercentage = 0;
 				}
 
 				if(BetweenlandsConfig.GENERAL.cavingRopeIndicator) {
@@ -606,7 +633,7 @@ public class ScreenRenderHandler extends Gui {
 			EntityPlayer player = mc.player;
 
 			if(player != null) {
-				this.renderNoClipRingOverlay(mc, player, false, event.getPartialTicks());
+				this.renderDispersionRingOverlay(mc, player, false, event.getPartialTicks());
 			}
 		}
 	}
@@ -627,7 +654,7 @@ public class ScreenRenderHandler extends Gui {
 
 			mc.entityRenderer.setupOverlayRendering();
 
-			this.renderNoClipRingOverlay(mc, player, true, event.getPartialTicks());
+			this.renderDispersionRingOverlay(mc, player, true, event.getPartialTicks());
 
 			GlStateManager.disableBlend();
 
@@ -639,7 +666,7 @@ public class ScreenRenderHandler extends Gui {
 		}
 	}
 
-	private void renderNoClipRingOverlay(Minecraft mc, EntityPlayer player, boolean untexturedQuadOnly, float partialTicks) {
+	private void renderDispersionRingOverlay(Minecraft mc, EntityPlayer player, boolean untexturedQuadOnly, float partialTicks) {
 		IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
 
 		if(cap != null) {
@@ -689,8 +716,8 @@ public class ScreenRenderHandler extends Gui {
 
 					mc.entityRenderer.setupCameraTransform(partialTicks, 0);
 
-					this.ringOfNoClipWorldRenderer.setPos(new BlockPos(player.getPositionVector()));
-					this.ringOfNoClipWorldRenderer.setWorld(player.world);
+					this.ringOfDispersionWorldRenderer.setPos(new BlockPos(player.getPositionVector()));
+					this.ringOfDispersionWorldRenderer.setWorld(player.world);
 
 					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 					GlStateManager.enableDepth();
@@ -698,12 +725,12 @@ public class ScreenRenderHandler extends Gui {
 
 					Framebuffer mainFbo = mc.getFramebuffer();
 
-					Framebuffer fbo = this.ringOfNoClipWorldFramebuffer.getFramebuffer(mainFbo.framebufferWidth, mainFbo.framebufferHeight);
+					Framebuffer fbo = this.ringOfDispersionWorldFramebuffer.getFramebuffer(mainFbo.framebufferWidth, mainFbo.framebufferHeight);
 
 					fbo.framebufferClear();
 					fbo.bindFramebuffer(true);
 
-					this.ringOfNoClipWorldRenderer.render();
+					this.ringOfDispersionWorldRenderer.render();
 
 					mainFbo.bindFramebuffer(true);
 
@@ -738,13 +765,30 @@ public class ScreenRenderHandler extends Gui {
 					//Render blinds
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(0, -res.getScaledHeight_double() + res.getScaledHeight_double() / 2 * alpha, 0);
-					ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_NO_CLIP_OVERLAY_TOP_TEXTURE, RING_OF_NO_CLIP_OVERLAY_SIDE_TOP_TEXTURE, RING_OF_NO_CLIP_OVERLAY_SIDE_TOP_TEXTURE);
+					ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_DISPERSION_OVERLAY_TOP_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_TOP_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_TOP_TEXTURE);
 					GlStateManager.popMatrix();
 
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(0, res.getScaledHeight_double() - res.getScaledHeight_double() / 2 * alpha, 0);
-					ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_NO_CLIP_OVERLAY_BOTTOM_TEXTURE, RING_OF_NO_CLIP_OVERLAY_SIDE_BOTTOM_TEXTURE, RING_OF_NO_CLIP_OVERLAY_SIDE_BOTTOM_TEXTURE);
+					ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_DISPERSION_OVERLAY_BOTTOM_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_BOTTOM_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_BOTTOM_TEXTURE);
 					GlStateManager.popMatrix();
+
+					float indicatorAlpha = (float)(this.prevDispersionIndicatorPercentage + (this.dispersionIndicatorPercentage - this.prevDispersionIndicatorPercentage) * partialTicks);
+
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
+
+					GlStateManager.color(indicatorAlpha, indicatorAlpha, indicatorAlpha, indicatorAlpha);
+
+					//Indicator overlay
+					mc.getTextureManager().bindTexture(RING_OF_DISPERSION_INDICATOR_OVERLAY_TEXTURE);
+					bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+					bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 1.0D).endVertex();
+					bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 1.0D).endVertex();
+					bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
+					bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
+					tessellator.draw();
+
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 
 					GlStateManager.color((1 - brightness) * 2, (1 - brightness) * 2, (1 - brightness) * 2, 1);
 

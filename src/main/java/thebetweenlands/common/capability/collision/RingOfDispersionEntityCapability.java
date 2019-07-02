@@ -24,16 +24,16 @@ import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
-import thebetweenlands.common.item.equipment.ItemRingOfNoClip;
+import thebetweenlands.common.item.equipment.ItemRingOfDispersion;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
-public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipEntityCapability, IEntityCustomCollisionsCapability, EntityPlayer> implements IEntityCustomCollisionsCapability {
+public class RingOfDispersionEntityCapability extends EntityCapability<RingOfDispersionEntityCapability, IEntityCustomCollisionsCapability, EntityPlayer> implements IEntityCustomCollisionsCapability {
 	@Override
 	public ResourceLocation getID() {
-		return new ResourceLocation(ModInfo.ID, "ring_of_no_clip");
+		return new ResourceLocation(ModInfo.ID, "ring_of_dispersion");
 	}
 
 	@Override
@@ -47,8 +47,8 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 	}
 
 	@Override
-	protected RingOfNoClipEntityCapability getDefaultCapabilityImplementation() {
-		return new RingOfNoClipEntityCapability();
+	protected RingOfDispersionEntityCapability getDefaultCapabilityImplementation() {
+		return new RingOfDispersionEntityCapability();
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 		return 0.25D;
 	}
 
-	private static ItemStack getRing(EntityPlayer player) {
+	public static ItemStack getRing(EntityPlayer player) {
 		IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 		if (cap != null) {
 			IInventory inv = cap.getInventory(EnumEquipmentInventory.RING);
@@ -98,7 +98,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 			for(int i = 0; i < inv.getSizeInventory(); i++) {
 				ItemStack stack = inv.getStackInSlot(i);
 
-				if(!stack.isEmpty() && stack.getItem() instanceof ItemRingOfNoClip) {
+				if(!stack.isEmpty() && stack.getItem() instanceof ItemRingOfDispersion) {
 					return stack;
 				}
 			}
@@ -137,7 +137,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 		ItemStack stack = getRing(player);
 
 		if(!stack.isEmpty()) {
-			ItemRingOfNoClip item = (ItemRingOfNoClip) stack.getItem();
+			ItemRingOfDispersion item = (ItemRingOfDispersion) stack.getItem();
 
 			AtomicBoolean ringActiveState = new AtomicBoolean(false);
 
@@ -152,12 +152,12 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 				//need to be filtered
 				collisionBoxes.clear();
 
-				final double floor = player.posY + 0.001D;
+				final double floor = player.posY + 0.01D;
 
 				final AxisAlignedBB originalAabb = aabb;
 				final AxisAlignedBB viewAabb = new AxisAlignedBB(player.posX, player.posY + player.getEyeHeight(), player.posZ, player.posX, player.posY + player.getEyeHeight(), player.posZ).grow(0.25D);
 
-				final double checkReach = this.getObstructionCheckDistance();
+				final double checkReach = Math.max(this.getViewObstructionCheckDistance(), this.getObstructionCheckDistance());
 
 				collisionBoxHelper.getCollisionBoxes(player, aabb.grow(checkReach, 0, checkReach).expand(0, checkReach, 0), EntityCollisionPredicate.ALL, new BlockCollisionPredicate() {
 					@Override
@@ -168,7 +168,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 
 						boolean isCollisionForced = false;
 
-						if(blockAabb.maxY <= floor) {
+						if(blockAabb.maxY < floor) {
 							isCollisionForced = true;
 						}
 
@@ -185,16 +185,16 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 						}
 
 						if(!isCollisionForced) {
-							double playerDist = RingOfNoClipEntityCapability.this.calculateAABBDistance(blockAabb, originalAabb);
+							double playerDist = RingOfDispersionEntityCapability.this.calculateAABBDistance(blockAabb, originalAabb);
 
-							if(playerDist < RingOfNoClipEntityCapability.this.obstructionDistance) {
-								RingOfNoClipEntityCapability.this.obstructionDistance = playerDist;
+							if(playerDist < RingOfDispersionEntityCapability.this.getObstructionCheckDistance() && playerDist < RingOfDispersionEntityCapability.this.obstructionDistance) {
+								RingOfDispersionEntityCapability.this.obstructionDistance = playerDist;
 							}
 
-							double viewDist = RingOfNoClipEntityCapability.this.calculateAABBDistance(blockAabb, viewAabb);
+							double viewDist = RingOfDispersionEntityCapability.this.calculateAABBDistance(blockAabb, viewAabb);
 
-							if(viewDist < RingOfNoClipEntityCapability.this.getViewObstructionCheckDistance() && viewDist < RingOfNoClipEntityCapability.this.viewObstructionDistance) {
-								RingOfNoClipEntityCapability.this.viewObstructionDistance = viewDist;
+							if(viewDist < RingOfDispersionEntityCapability.this.getViewObstructionCheckDistance() && viewDist < RingOfDispersionEntityCapability.this.viewObstructionDistance) {
+								RingOfDispersionEntityCapability.this.viewObstructionDistance = viewDist;
 							}
 						}
 
@@ -204,7 +204,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 							}
 
 							ringActiveState.set(true);
-							RingOfNoClipEntityCapability.this.isPhasing = true;
+							RingOfDispersionEntityCapability.this.isPhasing = true;
 
 							return false;
 						}
@@ -231,7 +231,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 			ItemStack stack = getRing(player);
 
 			if(!stack.isEmpty()) {
-				ItemRingOfNoClip item = (ItemRingOfNoClip) stack.getItem();
+				ItemRingOfDispersion item = (ItemRingOfDispersion) stack.getItem();
 
 				if(item.canPhase(player, stack)) {
 					event.setCanceled(true);
@@ -266,7 +266,7 @@ public class RingOfNoClipEntityCapability extends EntityCapability<RingOfNoClipE
 				ItemStack stack = getRing(player);
 
 				if(!stack.isEmpty()) {
-					ItemRingOfNoClip item = (ItemRingOfNoClip) stack.getItem();
+					ItemRingOfDispersion item = (ItemRingOfDispersion) stack.getItem();
 
 					if(item.canPhase(player, stack)) {
 						event.setCanceled(true);

@@ -26,7 +26,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class RingOfNoClipWorldRenderer {
+public class RingOfDispersionWorldRenderer {
 	private final FloatBuffer fogColor = BufferUtils.createFloatBuffer(4);
 
 	private int rangeXZ;
@@ -41,7 +41,7 @@ public class RingOfNoClipWorldRenderer {
 	private final Map<BlockRenderLayer, BufferBuilder> bufferBuilders = new EnumMap<>(BlockRenderLayer.class);
 	private final Map<BlockRenderLayer, VertexBuffer> vertexBuffers = new EnumMap<>(BlockRenderLayer.class);
 
-	public RingOfNoClipWorldRenderer(int rangeXZ, int rangeY) {
+	public RingOfDispersionWorldRenderer(int rangeXZ, int rangeY) {
 		this.rangeXZ = rangeXZ;
 		this.rangeY = rangeY;
 		this.fogColor.put(new float[4]);

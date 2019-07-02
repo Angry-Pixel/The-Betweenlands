@@ -18,7 +18,7 @@ import thebetweenlands.common.capability.CustomStepSoundCapability;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
 import thebetweenlands.common.capability.circlegem.CircleGemEntityCapability;
-import thebetweenlands.common.capability.collision.RingOfNoClipEntityCapability;
+import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 import thebetweenlands.common.capability.decay.DecayEntityCapability;
 import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
 import thebetweenlands.common.capability.flight.FlightEntityCapability;
@@ -80,7 +80,7 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new PortalEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new FoodSicknessEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new CustomStepSoundCapability());
-		EntityCapabilityHandler.registerEntityCapability(new RingOfNoClipEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new RingOfDispersionEntityCapability());
 		
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		
