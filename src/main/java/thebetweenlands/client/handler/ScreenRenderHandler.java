@@ -670,10 +670,16 @@ public class ScreenRenderHandler extends Gui {
 		IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
 
 		if(cap != null) {
-			double fadeStartDistance = Math.min(cap.getViewObstructionCheckDistance(), 0.25D);
-			double obstructionDistance = cap.getViewObstructionDistance();
+			double viewFadeStartDistance = Math.min(cap.getViewObstructionCheckDistance(), 0.25D);
+			double viewObstructionDistance = cap.getViewObstructionDistance();
 
-			if(obstructionDistance < fadeStartDistance) {
+			double fadeStartDistance = Math.min(cap.getObstructionCheckDistance(), 0.25D);
+			double obstructionDistance = cap.getObstructionDistance();
+
+			boolean isViewObstructed = viewObstructionDistance < viewFadeStartDistance;
+			boolean isObstructed = obstructionDistance < fadeStartDistance;
+
+			if(isViewObstructed || isObstructed) {
 				ScaledResolution res = new ScaledResolution(mc);
 
 				float alpha = (float) Math.min(1, Math.max(0, this.prevObstructionPercentage + (this.obstructionPercentage - this.prevObstructionPercentage) * partialTicks));
@@ -691,87 +697,98 @@ public class ScreenRenderHandler extends Gui {
 				BufferBuilder bufferbuilder = tessellator.getBuffer();
 
 				if(untexturedQuadOnly) {
-					bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-					bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), 0.0D).endVertex();
-					bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), 0.0D).endVertex();
-					bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, 0.0D).endVertex();
-					bufferbuilder.pos(0.0D, 0.0D, 0.0D).endVertex();
-					tessellator.draw();
+					if(isViewObstructed) {
+						bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+						bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), 0.0D).endVertex();
+						bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), 0.0D).endVertex();
+						bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, 0.0D).endVertex();
+						bufferbuilder.pos(0.0D, 0.0D, 0.0D).endVertex();
+						tessellator.draw();
+					}
 				} else {
-					bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
-					bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), 0.0D).endVertex();
-					bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), 0.0D).endVertex();
-					bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, 0.0D).endVertex();
-					bufferbuilder.pos(0.0D, 0.0D, 0.0D).endVertex();
-					tessellator.draw();
+					if(isViewObstructed) {
+						bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+						bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), 0.0D).endVertex();
+						bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), 0.0D).endVertex();
+						bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, 0.0D).endVertex();
+						bufferbuilder.pos(0.0D, 0.0D, 0.0D).endVertex();
+						tessellator.draw();
+					}
 
 					float brightness = 0.5F + (1 - alpha) * 0.5F;
 
-					//Render some blocks around player
-					GlStateManager.matrixMode(GL11.GL_PROJECTION);
-					GlStateManager.pushMatrix();
+					Framebuffer dispersionWorldFbo = null;
 
-					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-					GlStateManager.pushMatrix();
+					if(isViewObstructed) {
+						//Render some blocks around player
+						GlStateManager.matrixMode(GL11.GL_PROJECTION);
+						GlStateManager.pushMatrix();
 
-					mc.entityRenderer.setupCameraTransform(partialTicks, 0);
+						GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+						GlStateManager.pushMatrix();
 
-					this.ringOfDispersionWorldRenderer.setPos(new BlockPos(player.getPositionVector()));
-					this.ringOfDispersionWorldRenderer.setWorld(player.world);
+						mc.entityRenderer.setupCameraTransform(partialTicks, 0);
 
-					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-					GlStateManager.enableDepth();
-					GlStateManager.depthMask(true);
+						this.ringOfDispersionWorldRenderer.setPos(new BlockPos(player.getPositionVector()));
+						this.ringOfDispersionWorldRenderer.setWorld(player.world);
 
-					Framebuffer mainFbo = mc.getFramebuffer();
+						GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+						GlStateManager.enableDepth();
+						GlStateManager.depthMask(true);
 
-					Framebuffer fbo = this.ringOfDispersionWorldFramebuffer.getFramebuffer(mainFbo.framebufferWidth, mainFbo.framebufferHeight);
+						Framebuffer mainFbo = mc.getFramebuffer();
 
-					fbo.framebufferClear();
-					fbo.bindFramebuffer(true);
+						dispersionWorldFbo = this.ringOfDispersionWorldFramebuffer.getFramebuffer(mainFbo.framebufferWidth, mainFbo.framebufferHeight);
 
-					this.ringOfDispersionWorldRenderer.render();
+						dispersionWorldFbo.framebufferClear();
+						dispersionWorldFbo.bindFramebuffer(true);
 
-					mainFbo.bindFramebuffer(true);
+						this.ringOfDispersionWorldRenderer.render();
 
-					GlStateManager.disableDepth();
+						mainFbo.bindFramebuffer(true);
 
-					GlStateManager.matrixMode(GL11.GL_PROJECTION);
-					GlStateManager.popMatrix();
+						GlStateManager.disableDepth();
 
-					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-					GlStateManager.popMatrix();
+						GlStateManager.matrixMode(GL11.GL_PROJECTION);
+						GlStateManager.popMatrix();
 
+						GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+						GlStateManager.popMatrix();
+					}
 
 					GlStateManager.enableBlend();
 					GlStateManager.disableLighting();
 					GlStateManager.color(brightness, brightness, brightness, alpha * alpha * alpha * 0.75F);
 					GlStateManager.enableTexture2D();
 
-					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+					if(isViewObstructed && dispersionWorldFbo != null) {
+						GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
-					//Render surrounding blocks overlay
-					GlStateManager.bindTexture(fbo.framebufferTexture);
-					bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-					bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 0.0D).endVertex();
-					bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 0.0D).endVertex();
-					bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 1.0D).endVertex();
-					bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 1.0D).endVertex();
-					tessellator.draw();
+						//Render surrounding blocks overlay
+						GlStateManager.bindTexture(dispersionWorldFbo.framebufferTexture);
+						bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+						bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 0.0D).endVertex();
+						bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 0.0D).endVertex();
+						bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 1.0D).endVertex();
+						bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 1.0D).endVertex();
+						tessellator.draw();
 
-					GlStateManager.color(brightness, brightness, brightness, alpha);
+						GlStateManager.color(brightness, brightness, brightness, alpha);
+						GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+
+						//Render blinds
+						GlStateManager.pushMatrix();
+						GlStateManager.translate(0, -res.getScaledHeight_double() + res.getScaledHeight_double() / 2 * alpha, 0);
+						ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_DISPERSION_OVERLAY_TOP_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_TOP_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_TOP_TEXTURE);
+						GlStateManager.popMatrix();
+
+						GlStateManager.pushMatrix();
+						GlStateManager.translate(0, res.getScaledHeight_double() - res.getScaledHeight_double() / 2 * alpha, 0);
+						ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_DISPERSION_OVERLAY_BOTTOM_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_BOTTOM_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_BOTTOM_TEXTURE);
+						GlStateManager.popMatrix();
+					}
+
 					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-
-					//Render blinds
-					GlStateManager.pushMatrix();
-					GlStateManager.translate(0, -res.getScaledHeight_double() + res.getScaledHeight_double() / 2 * alpha, 0);
-					ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_DISPERSION_OVERLAY_TOP_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_TOP_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_TOP_TEXTURE);
-					GlStateManager.popMatrix();
-
-					GlStateManager.pushMatrix();
-					GlStateManager.translate(0, res.getScaledHeight_double() - res.getScaledHeight_double() / 2 * alpha, 0);
-					ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_DISPERSION_OVERLAY_BOTTOM_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_BOTTOM_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_BOTTOM_TEXTURE);
-					GlStateManager.popMatrix();
 
 					float indicatorAlpha = (float)(this.prevDispersionIndicatorPercentage + (this.dispersionIndicatorPercentage - this.prevDispersionIndicatorPercentage) * partialTicks);
 
@@ -790,18 +807,20 @@ public class ScreenRenderHandler extends Gui {
 
 					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 
-					GlStateManager.color((1 - brightness) * 2, (1 - brightness) * 2, (1 - brightness) * 2, 1);
+					if(isViewObstructed) {
+						GlStateManager.color((1 - brightness) * 2, (1 - brightness) * 2, (1 - brightness) * 2, 1);
 
-					//Vignette
-					mc.getTextureManager().bindTexture(VIGNETTE_TEXTURE);
-					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-					bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-					bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 1.0D).endVertex();
-					bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 1.0D).endVertex();
-					bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
-					bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
-					tessellator.draw();
-					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+						//Vignette
+						mc.getTextureManager().bindTexture(VIGNETTE_TEXTURE);
+						GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+						bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+						bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 1.0D).endVertex();
+						bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 1.0D).endVertex();
+						bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
+						bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
+						tessellator.draw();
+						GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+					}
 				}
 
 				GlStateManager.color(1, 1, 1, 1);
