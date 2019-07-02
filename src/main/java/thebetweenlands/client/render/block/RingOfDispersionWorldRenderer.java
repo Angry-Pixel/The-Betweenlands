@@ -203,7 +203,9 @@ public class RingOfDispersionWorldRenderer {
 					BlockPos pos = new BlockPos(this.renderedPos.add(xo, yo, zo));
 					IBlockState state = this.world.getBlockState(pos);
 
-					if(!state.getBlock().isAir(state, this.world, pos) && state.getRenderType() == EnumBlockRenderType.MODEL) {
+					EnumBlockRenderType renderType = state.getRenderType();
+
+					if(!state.getBlock().isAir(state, this.world, pos) && (renderType == EnumBlockRenderType.MODEL || renderType == EnumBlockRenderType.LIQUID)) {
 						state = state.getActualState(this.world, pos);
 
 						IBakedModel blockModel = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(state);
@@ -217,7 +219,14 @@ public class RingOfDispersionWorldRenderer {
 
 									bufferBuilder.setTranslation(-this.renderedPos.getX(), -this.renderedPos.getY(), -this.renderedPos.getZ());
 
-									blockRenderer.getBlockModelRenderer().renderModel(this.world, blockModel, state, pos, bufferBuilder, layer == BlockRenderLayer.TRANSLUCENT);
+									switch(renderType) {
+									case MODEL:
+										blockRenderer.getBlockModelRenderer().renderModel(this.world, blockModel, state, pos, bufferBuilder, layer == BlockRenderLayer.TRANSLUCENT);
+										break;
+									case LIQUID:
+										blockRenderer.renderBlock(state, pos, this.world, bufferBuilder);
+										break;
+									}
 
 									bufferBuilder.setTranslation(0, 0, 0);
 								}
