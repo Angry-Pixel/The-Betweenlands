@@ -61,7 +61,6 @@ public class ItemRing extends Item implements IEquippable {
 		int change = amount;
 
 		float playerXp = player.experience * (float)player.xpBarCap();
-		player.addScore(-amount);
 		player.experience -= (float) amount / (float) player.xpBarCap();
 		player.experienceTotal = MathHelper.clamp(player.experienceTotal - amount, 0, Integer.MAX_VALUE);
 
@@ -71,9 +70,10 @@ public class ItemRing extends Item implements IEquippable {
 			if (player.experienceLevel > 0) {
 				player.addExperienceLevel(-1);
 				player.experience = 1.0F + xp / (float)player.xpBarCap();
+				playerXp += 1.0F * (float) player.xpBarCap();
 			} else {
 				player.addExperienceLevel(-1);
-				change = MathHelper.absFloor((float)amount - playerXp);
+				change = MathHelper.abs(Math.round(playerXp));
 				player.experience = 0.0F;
 			}
 		}
