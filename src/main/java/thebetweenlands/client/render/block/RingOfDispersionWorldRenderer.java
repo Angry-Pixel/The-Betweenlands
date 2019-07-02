@@ -25,6 +25,8 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraftforge.client.MinecraftForgeClient;
 
 public class RingOfDispersionWorldRenderer {
 	private final FloatBuffer fogColor = BufferUtils.createFloatBuffer(4);
@@ -215,6 +217,12 @@ public class RingOfDispersionWorldRenderer {
 						if(blockModel != null) {
 							for(BlockRenderLayer layer : BlockRenderLayer.values()) {
 								if(state.getBlock().canRenderInLayer(state, layer)) {
+									int prevPass = MinecraftForgeClient.getRenderPass();
+									BlockRenderLayer prevLayer = MinecraftForgeClient.getRenderLayer();
+
+									ForgeHooksClient.setRenderPass(0);
+									ForgeHooksClient.setRenderLayer(layer);
+
 									BufferBuilder bufferBuilder = this.getBufferBuilder(layer);
 
 									bufferBuilder.setTranslation(-this.renderedPos.getX(), -this.renderedPos.getY(), -this.renderedPos.getZ());
@@ -229,6 +237,9 @@ public class RingOfDispersionWorldRenderer {
 									}
 
 									bufferBuilder.setTranslation(0, 0, 0);
+
+									ForgeHooksClient.setRenderPass(prevPass);
+									ForgeHooksClient.setRenderLayer(prevLayer);
 								}
 							}
 						}
