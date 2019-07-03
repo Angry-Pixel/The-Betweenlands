@@ -75,11 +75,11 @@ public class ItemRingOfDispersion extends ItemRing {
 
 	@Override
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
-		if(this.isActive(stack) && entity.ticksExisted % 20 == 0) {
-			this.drainPower(stack, entity);
-		}
-
 		if(!entity.world.isRemote) {
+			if(this.isActive(stack) && entity.ticksExisted % 20 == 0) {
+				this.drainPower(stack, entity);
+			}
+			
 			BlockPos currentPos = new BlockPos(entity);
 			BlockPos storedPos = this.getLastValidPos(stack);
 
