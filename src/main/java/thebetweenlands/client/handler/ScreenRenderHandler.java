@@ -64,7 +64,6 @@ import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextPage;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextSegment;
-import thebetweenlands.common.item.armor.ItemBLArmor;
 import thebetweenlands.common.item.equipment.ItemRingOfDispersion;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
@@ -81,6 +80,7 @@ public class ScreenRenderHandler extends Gui {
 	public static ScreenRenderHandler INSTANCE = new ScreenRenderHandler();
 
 	private static final ResourceLocation DECAY_BAR_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/decay_bar.png");
+	private static final ResourceLocation RING_OF_DISPERSION_OVERLAY_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_dispersion_overlay.png");
 	private static final ResourceLocation RING_OF_DISPERSION_OVERLAY_TOP_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_dispersion_overlay_top.png");
 	private static final ResourceLocation RING_OF_DISPERSION_OVERLAY_SIDE_TOP_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_dispersion_overlay_side_top.png");
 	private static final ResourceLocation RING_OF_DISPERSION_OVERLAY_BOTTOM_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/overlay/ring_of_dispersion_overlay_bottom.png");
@@ -763,14 +763,60 @@ public class ScreenRenderHandler extends Gui {
 					GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
 					//Render blinds
+					float centerPieceWidth = (float)(res.getScaledHeight_double() / 2.0D);
+					float centerStart = (float)(res.getScaledWidth_double() / 2.0D - centerPieceWidth / 2.0D);
+					float centerEnd = (float)(res.getScaledWidth_double() / 2.0D + centerPieceWidth / 2.0D);
+
+					mc.getTextureManager().bindTexture(RING_OF_DISPERSION_OVERLAY_TEXTURE);
+
 					GlStateManager.pushMatrix();
-					GlStateManager.translate(0, -res.getScaledHeight_double() + res.getScaledHeight_double() / 2 * alpha, 0);
-					ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_DISPERSION_OVERLAY_TOP_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_TOP_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_TOP_TEXTURE);
+					GlStateManager.translate(0, -res.getScaledHeight_double() / 2 + res.getScaledHeight_double() / 2 * alpha, 0);
+
+					bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+
+					//top left
+					bufferbuilder.pos(0.0D, res.getScaledHeight_double() / 2, -90.0D).tex(0.0D, 0.5D).endVertex();
+					bufferbuilder.pos(centerStart, res.getScaledHeight_double() / 2, -90.0D).tex(0.333D, 0.5D).endVertex();
+					bufferbuilder.pos(centerStart, 0.0D, -90.0D).tex(0.333D, 0.0D).endVertex();
+					bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
+					//top center
+					bufferbuilder.pos(centerStart, res.getScaledHeight_double() / 2, -90.0D).tex(0.333D, 0.5D).endVertex();
+					bufferbuilder.pos(centerEnd, res.getScaledHeight_double() / 2, -90.0D).tex(0.666D, 0.5D).endVertex();
+					bufferbuilder.pos(centerEnd, 0.0D, -90.0D).tex(0.666D, 0.0D).endVertex();
+					bufferbuilder.pos(centerStart, 0.0D, -90.0D).tex(0.333D, 0.0D).endVertex();
+					//top right
+					bufferbuilder.pos(centerEnd, res.getScaledHeight_double() / 2, -90.0D).tex(0.666D, 0.5D).endVertex();
+					bufferbuilder.pos(res.getScaledWidth_double(), res.getScaledHeight_double() / 2, -90.0D).tex(1.0D, 0.5D).endVertex();
+					bufferbuilder.pos(res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
+					bufferbuilder.pos(centerEnd, 0.0D, -90.0D).tex(0.666D, 0.0D).endVertex();
+
+					tessellator.draw();
+
 					GlStateManager.popMatrix();
 
 					GlStateManager.pushMatrix();
-					GlStateManager.translate(0, res.getScaledHeight_double() - res.getScaledHeight_double() / 2 * alpha, 0);
-					ItemBLArmor.renderRepeatingOverlay((float)res.getScaledWidth_double(), (float)res.getScaledHeight_double(), RING_OF_DISPERSION_OVERLAY_BOTTOM_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_BOTTOM_TEXTURE, RING_OF_DISPERSION_OVERLAY_SIDE_BOTTOM_TEXTURE);
+					GlStateManager.translate(0, res.getScaledHeight_double() / 2 - res.getScaledHeight_double() / 2 * alpha, 0);
+
+					bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+
+					//bottom left
+					bufferbuilder.pos(0.0D, res.getScaledHeight_double(), -90.0D).tex(0.0D, 1.0D).endVertex();
+					bufferbuilder.pos(centerStart, res.getScaledHeight_double(), -90.0D).tex(0.333D, 1.0D).endVertex();
+					bufferbuilder.pos(centerStart, res.getScaledHeight_double() / 2, -90.0D).tex(0.333D, 0.5D).endVertex();
+					bufferbuilder.pos(0.0D, res.getScaledHeight_double() / 2, -90.0D).tex(0.0D, 0.5D).endVertex();
+					//bottom center
+					bufferbuilder.pos(centerStart, res.getScaledHeight_double(), -90.0D).tex(0.333D, 1.0D).endVertex();
+					bufferbuilder.pos(centerEnd, res.getScaledHeight_double(), -90.0D).tex(0.666D, 1.0D).endVertex();
+					bufferbuilder.pos(centerEnd, res.getScaledHeight_double() / 2, -90.0D).tex(0.666D, 0.5D).endVertex();
+					bufferbuilder.pos(centerStart, res.getScaledHeight_double() / 2, -90.0D).tex(0.333D, 0.5D).endVertex();
+					//bottom right
+					bufferbuilder.pos(centerEnd, res.getScaledHeight_double(), -90.0D).tex(0.666D, 1.0D).endVertex();
+					bufferbuilder.pos(res.getScaledWidth_double(), res.getScaledHeight_double(), -90.0D).tex(1.0D, 1.0D).endVertex();
+					bufferbuilder.pos(res.getScaledWidth_double(), res.getScaledHeight_double() / 2, -90.0D).tex(1.0D, 0.5D).endVertex();
+					bufferbuilder.pos(centerEnd, res.getScaledHeight_double() / 2, -90.0D).tex(0.666D, 0.5D).endVertex();
+
+					tessellator.draw();
+
 					GlStateManager.popMatrix();
 
 					GlStateManager.color((1 - brightness) * 2, (1 - brightness) * 2, (1 - brightness) * 2, 1);

@@ -27,8 +27,6 @@ import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.item.equipment.ItemRingOfDispersion;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class RingOfDispersionEntityCapability extends EntityCapability<RingOfDispersionEntityCapability, IEntityCustomCollisionsCapability, EntityPlayer> implements IEntityCustomCollisionsCapability {
 	@Override
@@ -142,12 +140,6 @@ public class RingOfDispersionEntityCapability extends EntityCapability<RingOfDis
 			AtomicBoolean ringActiveState = new AtomicBoolean(false);
 
 			if(item.canPhase(player, stack)) {
-				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(player.world);
-				final AxisAlignedBB locationCheckAabb = aabb.grow(8);
-				List<LocationStorage> guardedLocations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, locationCheckAabb, (location) -> {
-					return location.intersects(locationCheckAabb) && location.getGuard() != null;
-				});
-
 				//Remove all normally collected collision boxes because they
 				//need to be filtered
 				collisionBoxes.clear();
@@ -174,14 +166,6 @@ public class RingOfDispersionEntityCapability extends EntityCapability<RingOfDis
 
 						if(!isCollisionForced && state.getPlayerRelativeBlockHardness(player, player.world, pos) < 0.0001F) {
 							isCollisionForced = true;
-						}
-
-						if(!isCollisionForced) {
-							for(LocationStorage location : guardedLocations) {
-								if(location.getGuard().isGuarded(player.world, player, pos)) {
-									isCollisionForced = true;
-								}
-							}
 						}
 
 						if(!isCollisionForced) {
