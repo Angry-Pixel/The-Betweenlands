@@ -2,7 +2,6 @@ package thebetweenlands.client.render.model.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -146,7 +145,7 @@ public class ModelDecayPitChain extends ModelBase {
         setRotateAngle(fancy_topchain_back_left, 0.0F, 0.091106186954104F, 0.0F);
     }
 
-    public void render(Entity entity, float scale) { 
+    public void render(float scale) { 
         fancy_bottomchain_front_left.render(scale);
         fancy_topchain_back_right.render(scale);
         chain_top_cornerpiece_bottomback.render(scale);

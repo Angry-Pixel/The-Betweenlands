@@ -29,13 +29,13 @@ public class RenderDecayPitChain extends Render<EntityDecayPitChain> {
 				GlStateManager.translate(x, y + 0.5F + scroll, z);
 				GlStateManager.scale(-1F, -1F, 1F);
 				GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
-				CHAIN_MODEL.render(entity, 0.0625F);
+				CHAIN_MODEL.render(0.0625F);
 			}
 			if(!entity.isRaising()){
 				GlStateManager.translate(x, y + entity.getLength() + 1.5F - scroll , z);
 				GlStateManager.scale(-1F, -1F, 1F);
 				GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
-				CHAIN_MODEL.render(entity, 0.0625F);
+				CHAIN_MODEL.render(0.0625F);
 			}
 			GlStateManager.popMatrix();
 		}
@@ -45,7 +45,7 @@ public class RenderDecayPitChain extends Render<EntityDecayPitChain> {
 			GlStateManager.translate(x, y + len + 0.5F + (entity.isRaising() ? scroll : -scroll), z);
 			GlStateManager.scale(-1F, -1F, 1F);
 			GlStateManager.rotate(entity.getFacingRender() * 90F, 0F, 1F, 0F);
-			CHAIN_MODEL.render(entity, 0.0625F);
+			CHAIN_MODEL.render(0.0625F);
 			GlStateManager.popMatrix();
 		}
     }

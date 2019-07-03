@@ -133,7 +133,7 @@ import thebetweenlands.common.block.structure.BlockChipPath;
 import thebetweenlands.common.block.structure.BlockCompactedMud;
 import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.block.structure.BlockDecayPitControl;
-import thebetweenlands.common.block.structure.BlockDecayPitOuterChainHousing;
+import thebetweenlands.common.block.structure.BlockDecayPitHangingChain;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockDruidStone;
@@ -600,7 +600,7 @@ public class BlockRegistry {
 
 	//Place-Holders for stuffs and things
 	public static final Block MUD_TOWER_BRAZIER = new BlockBrazier();
-	public static final Block DECAY_PIT_OUTER_CHAIN_HOUSING = new BlockDecayPitOuterChainHousing();
+	public static final Block DECAY_PIT_HANGING_CHAIN = new BlockDecayPitHangingChain();
 	public static final Block DECAY_PIT_CAPSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 
 	//Winter Event

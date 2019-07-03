@@ -10,7 +10,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
+import thebetweenlands.common.entity.EntityDecayPitChain;
+import thebetweenlands.common.entity.EntityDecayPitTarget;
 
 
 //MINE!!
@@ -153,12 +154,16 @@ public class TestItemChimp extends Item {
 		*/
 	
 
+/*
 				WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 				//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
 				dungeon.generate(worldIn, itemRand, pos.up(59).add(3, 0, 3));
 				//dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
 			//	dungeon.generateDecayPit(worldIn, itemRand, pos.up(14));
-/*
+
+
+
+*/
 		EntityDecayPitTarget target = new EntityDecayPitTarget(worldIn);
 			
 				EntityDecayPitChain chain5 = new EntityDecayPitChain(worldIn);
@@ -183,7 +188,7 @@ public class TestItemChimp extends Item {
 				chain7.setPosition(pos.getX() + 0.5F, pos.getY() +9F, pos.getZ() + 12.5F);
 				chain8.setPosition(pos.getX() - 11.5F, pos.getY() +9F, pos.getZ() + 0.5F);
 
-				target.setPosition(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
+				target.setPosition(pos.getX() + 0.5F, pos.getY() + 7, pos.getZ() + 0.5F);
 				
 				worldIn.spawnEntity(target);
 
@@ -192,7 +197,7 @@ public class TestItemChimp extends Item {
 				worldIn.spawnEntity(chain7);
 				worldIn.spawnEntity(chain8);
 
-	*/	
+		
 		}
 
 		return EnumActionResult.SUCCESS;

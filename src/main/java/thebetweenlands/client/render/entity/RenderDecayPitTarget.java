@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelDecayPitChain;
@@ -31,33 +32,31 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	@Override
     public void doRender(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		float scroll = entity.animationTicksChainPrev * 0.0078125F + (entity.animationTicksChain * 0.0078125F - entity.animationTicksChainPrev * 0.0078125F) * partialTicks;
-		double offsetY = entity.height - entity.getProgress();
+		double offsetY = entity.height;
 		double smoothedMainX = entity.prevPosX + (entity.posX - entity.prevPosX ) * partialTicks;
 		double smoothedMainY = entity.prevPosY + (entity.posY - entity.prevPosY ) * partialTicks;
 		double smoothedMainZ = entity.prevPosZ + (entity.posZ - entity.prevPosZ ) * partialTicks;
 
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + offsetY -3.5D, z);
+		GlStateManager.translate(x, y + 1.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);
 		PLUG_MODEL.render(entity, 0.0625F);
 		GlStateManager.popMatrix();	
-
-		bindTexture(CHAIN_TEXTURE);
-		for (int len = 0; len <= entity.getLength(); len++) {
+		
+		for (int len = 0; len <= 2 + MathHelper.floor(entity.getProgress() * 0.0078125F); len++) {
 			renderChainpart(entity, x + 1D, y + offsetY + len + 1.5D, z, 0F, 0F);
 			renderChainpart(entity, x - 1D, y + offsetY + len + 1.5D, z, 0F, 180F);
 			renderChainpart(entity, x, y + offsetY + len + 1.5D, z + 1D, 0F, 90F);
 			renderChainpart(entity, x, y + offsetY + len + 1.5D, z - 1D, 0F, 270F);
 		}
 
-		bindTexture(COG_TEXTURE);
 		for (EntityDecayPitTargetPart part : entity.shield_array) {
 			float floatate = part.prevRotationYaw + (part.rotationYaw - part.prevRotationYaw) * partialTicks;
 			double smoothedX = part.prevPosX  + (part.posX - part.prevPosX ) * partialTicks;
 			double smoothedY = part.prevPosY  + (part.posY - part.prevPosY ) * partialTicks;
 			double smoothedZ = part.prevPosZ  + (part.posZ - part.prevPosZ ) * partialTicks;
-			if (part != entity.target && part != entity.bottom && part != entity.chain_1 && part != entity.chain_2 && part != entity.chain_3 && part != entity.chain_4)
+			if (part != entity.target && part != entity.bottom)// && part != entity.chain_1 && part != entity.chain_2 && part != entity.chain_3 && part != entity.chain_4)
 				renderCogShield(part, x + smoothedX - smoothedMainX, y + smoothedY - smoothedMainY, z + smoothedZ - smoothedMainZ, floatate);
 		}
 
@@ -71,6 +70,7 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 
 	private void renderCogShield(EntityDecayPitTargetPart entity, double x, double y, double z, float angle) {
 		GlStateManager.pushMatrix();
+		bindTexture(COG_TEXTURE);
 		GlStateManager.translate(x, y + 1.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);
 		GlStateManager.rotate(angle, 0F, 1F, 0F);
@@ -80,10 +80,11 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 
 	private void renderChainpart(EntityDecayPitTarget entity, double x, double y, double z, float scroll, float angle) {
 		GlStateManager.pushMatrix();
+		bindTexture(CHAIN_TEXTURE);
 		GlStateManager.translate(x, y + scroll, z);
 		GlStateManager.scale(-1F, -1F, 1F);
 		GlStateManager.rotate(angle, 0F, 1F, 0F);
-		CHAIN_MODEL.render(entity, 0.0625F);
+		CHAIN_MODEL.render(0.0625F);
 		GlStateManager.popMatrix();
 	}
 
