@@ -37,23 +37,23 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		if (!getWorld().isRemote) {
 
 			if (animationTicks == 15 || animationTicks == 195) {
-				spawnSludgeJet(getPos().getX() + 6D, getPos().getY() + 2.5D, getPos().getZ() - 1.5D);
-				spawnSludgeJet(getPos().getX() - 5D, getPos().getY() + 2.5D, getPos().getZ() + 2.5D);
+				spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 3D, getPos().getZ() - 1.5D);
+				spawnSludgeJet(getPos().getX() - 4.5D, getPos().getY() + 3D, getPos().getZ() + 2.5D);
 			}
 
 			if (animationTicks == 60 || animationTicks == 240) {
-				spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 2.5D, getPos().getZ() - 5D);
-				spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 2.5D, getPos().getZ() + 6D);
+				spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 3D, getPos().getZ() - 4.5D);
+				spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 3D, getPos().getZ() + 5.5D);
 			}
 
 			if (animationTicks == 105 || animationTicks == 285) {
-				spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 2.5D, getPos().getZ() - 5D);
-				spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 2.5D, getPos().getZ() + 6D);
+				spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 3D, getPos().getZ() - 4.5D);
+				spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 3D, getPos().getZ() + 5.5D);
 			}
 
 			if (animationTicks == 150 || animationTicks == 330) {
-				spawnSludgeJet(getPos().getX() - 5D, getPos().getY() + 2.5D, getPos().getZ() - 1.5D);
-				spawnSludgeJet(getPos().getX() + 6D, getPos().getY() + 2.5D, getPos().getZ() + 2.5D);
+				spawnSludgeJet(getPos().getX() - 4.5D, getPos().getY() + 3D, getPos().getZ() - 1.5D);
+				spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 3D, getPos().getZ() + 2.5D);
 			}
 
 		}
