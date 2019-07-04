@@ -80,7 +80,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		tasks.addTask(4, new EntityAIWander(this, 0.25D));
 		tasks.addTask(5, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
-		targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
+		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
 	}
 
 	private static final int SPAWN_MUMMY_COOLDOWN = 350;
@@ -282,7 +282,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 				if ((getSpawningState() - breakPoint / 2 - 1) % breakPoint == 0) {
 					BlockPos pos = new BlockPos(this.posX, this.posY - 1, this.posZ);
 					IBlockState blockState = this.world.getBlockState(pos);
-					playSound(blockState.getBlock().getSoundType().getBreakSound(), this.rand.nextFloat() * 0.3F + 0.3F, this.rand.nextFloat() * 0.15F + 0.7F);
+					playSound(blockState.getBlock().getSoundType(blockState, this.world, pos, this).getBreakSound(), this.rand.nextFloat() * 0.3F + 0.3F, this.rand.nextFloat() * 0.15F + 0.7F);
 				}
 
 				if(getAttackTarget() != null) faceEntity(getAttackTarget(), 360, 360);
@@ -369,7 +369,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 
 	@Override
 	public boolean attackEntityAsMob(Entity target) {
-		if(getSpawningProgress() < 1.0F)
+		if(getSpawningProgress() < 1.0F || this.getHealth() <= 0.0F)
 			return false;
 		boolean attacked = super.attackEntityAsMob(target);
 		if (attacked && rand.nextInt(6) == 0 && target != currentEatPrey && target instanceof EntityLivingBase && !(target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.isCreativeMode) && !getEntityWorld().isRemote) {
