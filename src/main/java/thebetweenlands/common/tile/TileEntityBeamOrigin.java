@@ -29,8 +29,13 @@ import thebetweenlands.common.block.structure.BlockEnergyBarrierMud;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class TileEntityBeamOrigin extends TileEntity implements ITickable {
-
 	public boolean active;
+
+	public float prevVisibility = 0.0f;
+	public float visibility = 0.0f;
+
+	public float prevRotation = (float)Math.PI / 4;
+	public float rotation = (float)Math.PI / 4;
 
 	public TileEntityBeamOrigin() {
 		super();
@@ -38,29 +43,27 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
+		int litBraziers = this.checkForLitBraziers();
+		
 		if (getWorld().getBlockState(getPos()).getBlock() != null) {
-			if (checkForLitBrazierAll()) {
+			if (litBraziers == 4) {
 				if (!active)
 					setActive(true);
-			}
-			if (!checkForLitBrazierAll()) {
+			} else {
 				if (active)
 					setActive(false);
 			}
 		}
 
-		if (active)
-			activateBlock();
-		else
-			deactivateBlock();
-		
 		if (world.isRemote) {
 			if (getWorld().getTotalWorldTime() % 20 == 0) {
-				if (checkForLitBrazier(getPos().add(3, -1, 3)))
+				if (checkForLitBrazier(getPos().add(3, -1, 3))) {
 					spawnBrazierParticles(new Vec3d(3, -1, 3));
+				}
 
-				if (checkForLitBrazier(getPos().add(3, -1, -3)))
+				if (checkForLitBrazier(getPos().add(3, -1, -3))) {
 					spawnBrazierParticles(new Vec3d(3, -1, -3));
+				}
 
 				if (checkForLitBrazier(getPos().add(-3, -1, 3)))
 					spawnBrazierParticles(new Vec3d(-3, -1, 3));
@@ -69,15 +72,40 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 					spawnBrazierParticles(new Vec3d(-3, -1, -3));
 			}
 		}
+
+		this.prevVisibility = this.visibility;
+		this.prevRotation = this.rotation;
+		
+		this.rotation += litBraziers * 0.0025f;
+		
+		float targetVisibility = 0.2f + 0.8f * litBraziers / 4.0f;
+		
+		if(this.visibility < targetVisibility) {
+			this.visibility += 0.02f;
+			if(this.visibility > targetVisibility) {
+				this.visibility = targetVisibility;
+			}
+		} else if(this.visibility > targetVisibility) {
+			this.visibility -= 0.02f;
+			if(this.visibility < targetVisibility) {
+				this.visibility = targetVisibility;
+			}
+		}
+		
+		if (active) {
+			activateBlock();
+		} else {
+			deactivateBlock();
+		}
 	}
 
-	public boolean checkForLitBrazierAll() {
-		if(checkForLitBrazier(getPos().add(3, -1, 3)))
-			if(checkForLitBrazier(getPos().add(3, -1, -3)))
-				if(checkForLitBrazier(getPos().add(-3, -1, 3)))
-					if(checkForLitBrazier(getPos().add(-3, -1, -3)))
-						return true;
-		return false;
+	public int checkForLitBraziers() {
+		int braziers = 0;
+		if(checkForLitBrazier(getPos().add(3, -1, 3))) braziers++;
+		if(checkForLitBrazier(getPos().add(3, -1, -3))) braziers++;
+		if(checkForLitBrazier(getPos().add(-3, -1, 3))) braziers++;
+		if(checkForLitBrazier(getPos().add(-3, -1, -3))) braziers++;
+		return braziers;
 	}
 
 	public boolean checkForLitBrazier(BlockPos targetPos) {
@@ -86,7 +114,7 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 			return true;
 		return false;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private void spawnBrazierParticles(Vec3d target) {
 		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, BLParticles.PUZZLE_BEAM_2.create(world, this.pos.getX() + 0.5 + target.x, this.pos.getY() + 0.5 + target.y, this.pos.getZ() + 0.5 + target.z, ParticleArgs.get().withMotion(0, 0, 0).withColor(255F, 102F, 0F, 1F).withScale(1.5F).withData(30, target.scale(-1))));
@@ -104,7 +132,7 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 			}
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private void spawnBeamParticles(Vec3d target) {
 		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, BLParticles.PUZZLE_BEAM_2.create(world, this.pos.getX() + 0.5, this.pos.getY() + 0.5, this.pos.getZ() + 0.5, ParticleArgs.get().withMotion(0, 0, 0).withColor(40F, 220F, 130F, 1F).withScale(2.5F).withData(30, target)));
@@ -132,14 +160,14 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 
 		EnumFacing facing = EnumFacing.DOWN;
 		BlockPos targetPos = getPos().offset(facing, getDistanceToObstruction(facing));
-		
+
 		if(world.isRemote) {
 			if (getWorld().getTotalWorldTime() % 20 == 0) {
 				spawnBeamParticles(new Vec3d(targetPos.getX() - pos.getX(), targetPos.getY() - pos.getY(), targetPos.getZ() - pos.getZ()));
 			}
 		} else {
 			IBlockState stateofTarget = getWorld().getBlockState(targetPos);
-	
+
 			if (stateofTarget.getBlock() instanceof BlockBeamRelay) {
 				if (getWorld().getTileEntity(targetPos) instanceof TileEntityBeamRelay) {
 					TileEntityBeamRelay targetTile = (TileEntityBeamRelay) getWorld().getTileEntity(targetPos);
@@ -224,10 +252,10 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 	}
 
 	@Override
-    public NBTTagCompound getUpdateTag() {
+	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound nbt = new NBTTagCompound();
-        return writeToNBT(nbt);
-    }
+		return writeToNBT(nbt);
+	}
 
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
@@ -240,7 +268,7 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		readFromNBT(packet.getNbtCompound());
 	}
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return super.getRenderBoundingBox().grow(10);

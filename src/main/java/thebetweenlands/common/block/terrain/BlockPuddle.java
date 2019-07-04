@@ -130,7 +130,9 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
 
     @Override
     public boolean canPlaceBlockAt(World world, BlockPos pos) {
-        return world.isSideSolid(pos.down(), EnumFacing.UP);
+    	IBlockState state = world.getBlockState(pos);
+    	Block block = state.getBlock();
+        return (block.isReplaceable(world, pos) || block instanceof BlockGenericCrop) && world.isSideSolid(pos.down(), EnumFacing.UP) && world.getBlockState(pos.down()).getBlockFaceShape(world, pos.down(), EnumFacing.UP) == BlockFaceShape.SOLID;
     }
 
     @Override

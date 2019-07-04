@@ -58,7 +58,7 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 						int cbx = world.rand.nextInt(16);
 						int cbz = world.rand.nextInt(16);
 						BlockPos pos = chunk.getPrecipitationHeight(new BlockPos(chunk.getPos().getXStart() + cbx, -999, chunk.getPos().getZStart() + cbz));
-						if(world.getBlockState(pos.add(0, -1, 0)).getBlock() != BlockRegistry.PUDDLE && (world.isAirBlock(pos) || world.getBlockState(pos).getBlock() instanceof BlockGenericCrop) && BlockRegistry.PUDDLE.canPlaceBlockAt(world, pos)) {
+						if(world.getBlockState(pos.add(0, -1, 0)).getBlock() != BlockRegistry.PUDDLE && BlockRegistry.PUDDLE.canPlaceBlockAt(world, pos)) {
 							world.setBlockState(pos, BlockRegistry.PUDDLE.getDefaultState());
 						}
 					}

@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -153,15 +154,27 @@ public class BlockBrazier extends Block {
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, new IProperty[] {HALF});
     }
+	
+	@Override
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return side == EnumFacing.UP && state.getValue(HALF) == EnumBrazierHalf.UPPER;
+	}
 
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return face == EnumFacing.UP && state.getValue(HALF) == EnumBrazierHalf.UPPER ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+	}
+	
     public static enum EnumBrazierHalf implements IStringSerializable {
         UPPER,
         LOWER;
 
+    	@Override
         public String toString() {
             return getName();
         }
 
+    	@Override
         public String getName() {
             return this == UPPER ? "upper" : "lower";
         }

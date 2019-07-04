@@ -70,7 +70,7 @@ public class ItemRingOfDispersion extends ItemRing {
 	}
 
 	public boolean canPhase(EntityPlayer player, ItemStack stack) {
-		return stack.getItemDamage() < stack.getMaxDamage() && player.isSneaking() && !player.getCooldownTracker().hasCooldown(this);
+		return stack.getItemDamage() < stack.getMaxDamage() && !player.isSpectator() && player.isSneaking() && !player.getCooldownTracker().hasCooldown(this);
 	}
 
 	@Override

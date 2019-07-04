@@ -149,9 +149,9 @@ public class IsolatedBlockModelRenderer {
 		float[] blockBounds = new float[EnumFacing.VALUES.length * 2];
 		BitSet bitset = new BitSet(3);
 
+		List<BakedQuad> list = model.getQuads(state, null, rand);
+		
 		for (EnumFacing facing : EnumFacing.VALUES) {
-			List<BakedQuad> list = model.getQuads(state, facing, rand);
-
 			if (!list.isEmpty() && (culler == null || culler.shouldSideBeRendered(state, facing))) {
 				this.renderQuadsSmooth(pos, state, buffer, list, blockBounds, bitset);
 				flag = true;
@@ -172,9 +172,9 @@ public class IsolatedBlockModelRenderer {
 		boolean flag = false;
 		BitSet bitset = new BitSet(3);
 
+		List<BakedQuad> list = model.getQuads(state, null, rand);
+		
 		for (EnumFacing facing : EnumFacing.VALUES) {
-			List<BakedQuad> list = model.getQuads(state, facing, rand);
-
 			if (!list.isEmpty() && (culler == null || culler.shouldSideBeRendered(state, facing))) {
 				int i = lighting != null ? lighting.getPackedLightmapCoords(state, facing) : 0;
 				this.renderQuadsFlat(state, pos, i, false, buffer, list, bitset, lighting);
