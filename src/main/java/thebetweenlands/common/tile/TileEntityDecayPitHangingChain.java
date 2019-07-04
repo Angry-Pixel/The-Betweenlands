@@ -1,13 +1,18 @@
 package thebetweenlands.common.tile;
 
+import java.util.List;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityDecayPitHangingChain extends TileEntity implements ITickable {
 
@@ -31,10 +36,17 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 
 		}
 
-		getHangingLength(getPos().getX() +1, getPos().getZ(), getPos().getY() - 2F + getProgress() * MOVE_UNIT);
-		getHangingLength(getPos().getX() -1, getPos().getZ(), getPos().getY() - 2F + getProgress() * MOVE_UNIT);
-		getHangingLength(getPos().getX(), getPos().getZ() +1, getPos().getY() - 2F + getProgress() * MOVE_UNIT);
-		getHangingLength(getPos().getX(), getPos().getZ() -1, getPos().getY() - 2F + getProgress() * MOVE_UNIT);
+		if (getEntityCollidedWithChains(getHangingLengthCollision(1, 0, 2F + getProgress() * MOVE_UNIT)) != null)
+			checkCollisions(getEntityCollidedWithChains(getHangingLengthCollision(1, 0, 2F + getProgress() * MOVE_UNIT)));
+
+		if (getEntityCollidedWithChains(getHangingLengthCollision(-1, 0, 2F + getProgress() * MOVE_UNIT)) != null)
+			checkCollisions(getEntityCollidedWithChains(getHangingLengthCollision(-1, 0, 2F + getProgress() * MOVE_UNIT)));
+
+		if (getEntityCollidedWithChains(getHangingLengthCollision(0, 1, 2F + getProgress() * MOVE_UNIT)) != null)
+			checkCollisions(getEntityCollidedWithChains(getHangingLengthCollision(0, 1, 2F + getProgress() * MOVE_UNIT)));
+
+		if (getEntityCollidedWithChains(getHangingLengthCollision(0, -1, 2F + getProgress() * MOVE_UNIT)) != null)
+			checkCollisions(getEntityCollidedWithChains(getHangingLengthCollision(0, -1, 2F + getProgress() * MOVE_UNIT)));
 
 		if (animationTicksChainPrev >= 128) {
 			animationTicksChain = animationTicksChainPrev = 0;
@@ -43,8 +55,28 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 
 	}
 
-	public AxisAlignedBB getHangingLength(double offX, double offZ, float extended) {
-		return new AxisAlignedBB( offX + 0.1875D, - extended,  offZ + 0.1875D, offX + 0.8125D, 0D, offZ + 0.8125D);
+	public List<Entity> getEntityCollidedWithChains(AxisAlignedBB chainBox) {
+		return getWorld().<Entity>getEntitiesWithinAABB(Entity.class, chainBox);
+    }
+
+	private void checkCollisions(List<Entity> list) {
+		for (Entity entity : list) {
+			if (entity instanceof EntityArrow) { // just arrows for now
+				Entity arrow = ((EntityArrow) entity);
+				arrow.setPositionAndUpdate(arrow.prevPosX, arrow.prevPosY, arrow.prevPosZ);
+				arrow.motionX *= -0.10000000149011612D;
+				arrow.motionY *= -0.10000000149011612D;
+				arrow.motionZ *= -0.10000000149011612D;
+				arrow.rotationYaw += 180.0F;
+				arrow.prevRotationYaw += 180.0F;
+				getWorld().playSound((EntityPlayer) null, arrow.posX, arrow.posY, arrow.posZ, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 0.5F, 3F);
+				// this.ticksInAir = 0;
+			}
+		}
+	}
+
+	public AxisAlignedBB getHangingLengthCollision(double offX, double offZ, float extended) {
+		return new AxisAlignedBB( getPos().getX() + offX + 0.1875D, getPos().getY() - extended,  getPos().getZ() + offZ +0.1875D, getPos().getX() + offX + 0.8125D, getPos().getY(), getPos().getZ() + offZ +0.8125D);
 	}
 
 	public void setProgress(int progress) {
@@ -112,26 +144,6 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		readFromNBT(packet.getNbtCompound());
-	}
-
-	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getAABBForRender1() {
-		return 	getHangingLength(1D, 0D, 2F + getProgress() * MOVE_UNIT);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getAABBForRender2() {
-		return 	getHangingLength(-1D, 0D, 2F + getProgress() * MOVE_UNIT);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getAABBForRender3() {
-		return 	getHangingLength(0D, 1D, 2F + getProgress() * MOVE_UNIT);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getAABBForRender4() {
-		return 	getHangingLength(0D, -1D, 2F + getProgress() * MOVE_UNIT);
 	}
 
 	@Override
