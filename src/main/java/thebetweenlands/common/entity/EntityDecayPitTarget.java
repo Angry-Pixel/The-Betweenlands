@@ -6,16 +6,12 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -56,15 +52,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public EntityDecayPitTargetPart shield_16;
 	public EntityDecayPitTargetPart target;
 	public EntityDecayPitTargetPart bottom;
-	public EntityDecayPitTargetPart chain_1;
-	public EntityDecayPitTargetPart chain_2;
-	public EntityDecayPitTargetPart chain_3;
-	public EntityDecayPitTargetPart chain_4;
 	
 	private static final DataParameter<Boolean> IS_RAISING = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_MOVING = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_SLOW = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> LENGTH = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> PROGRESS = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.VARINT);
 
 	public EntityDecayPitTarget(World world) {
@@ -87,12 +78,8 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				shield_14 = new EntityDecayPitTargetPart(this, "part16", 1F, 1F),
 				shield_15 = new EntityDecayPitTargetPart(this, "part15", 1F, 1F),
 				shield_16 = new EntityDecayPitTargetPart(this, "part16", 1F, 1F),
-				target = new EntityDecayPitTargetPart(this, "target", 2.1875F, 2F),
+				target = new EntityDecayPitTargetPart(this, "target", 2F, 2F),
 				bottom = new EntityDecayPitTargetPart(this, "bottom", 3F, 1F),
-				chain_1 = new EntityDecayPitTargetPart(this, "chain_1", 0.625F, 2F),
-				chain_2 = new EntityDecayPitTargetPart(this, "chain_2", 0.625F, 2F),
-				chain_3 = new EntityDecayPitTargetPart(this, "chain_3", 0.625F, 2F),
-				chain_4 = new EntityDecayPitTargetPart(this, "chain_4", 0.625F, 2F),
 				};
 	}
 
@@ -102,7 +89,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		dataManager.register(IS_MOVING, false);
 		dataManager.register(IS_SLOW, true);
 		dataManager.register(PROGRESS, 0);
-		dataManager.register(LENGTH, 2);
 	}
 
 	@Override
@@ -138,10 +124,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		setNewShieldHitboxPos(animationTicks + 315F, shield_15);
 		setNewShieldHitboxPos(-animationTicks + 337.5F, shield_16);
 
-		chain_1.setPosition(posX, posY + height, posZ - 1D);
-		chain_2.setPosition(posX, posY + height, posZ + 1D);
-		chain_3.setPosition(posX + 1D, posY + height, posZ);
-		chain_4.setPosition(posX - 1D, posY + height, posZ);
 		target.setPosition(posX, posY + 3D, posZ);
 		bottom.setPosition(posX, posY, posZ);
 
@@ -172,11 +154,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 					getHangingChains().setSlow(true);
 				}
 			}
-
-			setHangingLength(chain_1, 2F + getProgress() * MOVE_UNIT);
-			setHangingLength(chain_2, 2F + getProgress() * MOVE_UNIT);
-			setHangingLength(chain_3, 2F + getProgress() * MOVE_UNIT);
-			setHangingLength(chain_4, 2F + getProgress() * MOVE_UNIT);
 		}
 
 		if (animationTicksChainPrev >= 128) {
@@ -184,8 +161,11 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			setMoving(false);
 		}
 
-		if (getProgress() > MAX_PROGRESS)
+		if (getProgress() >= MAX_PROGRESS)
 			setProgress(MAX_PROGRESS);
+		
+		if (getProgress() <= MIN_PROGRESS)
+			setProgress(MIN_PROGRESS);
 
 		if (!getEntityWorld().isRemote && getProgress() > MIN_PROGRESS && getEntityWorld().getTotalWorldTime() % 60 == 0) // upsy-daisy
 			moveUp();
@@ -250,7 +230,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	@Override
 	public boolean attackEntityFromPart(EntityDecayPitTargetPart part, DamageSource source, float damage) {
 		if (!getEntityWorld().isRemote) {
-			if (part != target && part != bottom) {// && part != chain_1 && part != chain_2 && part != chain_3 && part != chain_4) {
+			if (part != target && part != bottom) {
 				if (source instanceof EntityDamageSourceIndirect) {
 					EntityRootGrabber grabber = new EntityRootGrabber(getEntityWorld());
 					grabber.setPosition(source.getTrueSource().getPosition().down(), 40);
@@ -262,11 +242,11 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				moveDown();
 				return true;
 			}
-
+			/*
 			if (part == chain_1 || part == chain_2 || part == chain_3 || part == chain_4)
 				if (source instanceof EntityDamageSourceIndirect) // may want to remove this line so it 'dinks' on all damage attempts
 					getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 0.5F, 3F);
-		
+		*/
 		}
 		if (getEntityWorld().isRemote)
 			if (part == target) {
@@ -289,13 +269,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			setRaising(true);
 			setMoving(true);
 			setSlow(true);
-
-		/*	if (getHangingChains() != null) {
-				System.out.println("Found A tile");
-				getHangingChains().setRaising(false);
-				getHangingChains().setMoving(true);
-				getHangingChains().setSlow(true);
-			}*/
 		}
 	}
 
@@ -309,11 +282,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			setRaising(false);
 			setMoving(true);
 			setSlow(false);
-	/*		if (getHangingChains() != null) {
-				getHangingChains().setRaising(true);
-				getHangingChains().setMoving(true);
-				getHangingChains().setSlow(false);
-			}*/
 		}
 	}
 
@@ -341,9 +309,9 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	
 	public TileEntityDecayPitHangingChain getHangingChains() {
 		TileEntityDecayPitHangingChain tile = null;
-		for (int x = -10; x < 10; x++)
-			for (int y = -10; y < 10; y++)
-				for (int z = -10; z < 10; z++) {
+		for (int x = -1; x < 1; x++)
+			for (int y = 0; y < 18; y++)
+				for (int z = -1; z < 1; z++) {
 					if (getWorld().getTileEntity(getPosition().add(x, y, z)) instanceof TileEntityDecayPitHangingChain) {
 						tile = (TileEntityDecayPitHangingChain) getWorld().getTileEntity(getPosition().add(x, y, z));
 						tile.setProgress(getProgress());

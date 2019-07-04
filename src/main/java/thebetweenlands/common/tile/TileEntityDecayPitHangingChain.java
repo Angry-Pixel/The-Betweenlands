@@ -28,9 +28,11 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 				animationTicksChain++;
 			else
 				animationTicksChain += 8;
-			
+
 		}
+
 		getHangingLength(2F + getProgress() * MOVE_UNIT);
+
 		if (animationTicksChainPrev >= 128) {
 			animationTicksChain = animationTicksChainPrev = 0;
 			setMoving(false);
@@ -41,10 +43,9 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 	public AxisAlignedBB getHangingLength(float extended) {
 		return new AxisAlignedBB(0.1875D, - extended,  0.1875D, 0.8125D, 0D, 0.8125D);
 	}
-	
+
 	public void setProgress(int progress) {
 		PROGRESS = progress;
-		System.out.println("Progress is: " + PROGRESS);
 	}
 
 	public int getProgress() {
@@ -109,7 +110,7 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		readFromNBT(packet.getNbtCompound());
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getAABBForRender() {
 		return getHangingLength(2F + getProgress() * MOVE_UNIT);
