@@ -30,7 +30,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public float animationTicksPrev = 0;
 	public int animationTicksChain = 0;
 	public int animationTicksChainPrev = 0;
-	public final int MAX_PROGRESS = 1152; // max distance of travel from origin so; 1152 * 0.0078125F = 9 Blocks
+	public final int MAX_PROGRESS = 768; // max distance of travel from origin so; 768 * 0.0078125F = 6 Blocks
 	public final int MIN_PROGRESS = 0;
 	public final float MOVE_UNIT = 0.0078125F; // unit of movement 
 	public EntityDecayPitTargetPart[] shield_array;
@@ -132,23 +132,22 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				animationTicksChain++;
 			else
 				animationTicksChain += 8;
-
-			if (!isRaising()) {
+			if(getHangingChains() != null)
+				getHangingChains().setProgress(getProgress()); 
+			if (!isRaising() && getProgress() < MAX_PROGRESS ) {
 				move(MoverType.SELF, 0D, - MOVE_UNIT * 8D, 0D);
 				setProgress(getProgress() + 8);
 				if(getHangingChains() != null) {
-					getHangingChains().setProgress(getProgress()); 
 					getHangingChains().setRaising(true);
 					getHangingChains().setMoving(true);
 					getHangingChains().setSlow(false);	
 					}
 			}
 
-			if (isRaising()) {
+			if (isRaising() && getProgress() > MIN_PROGRESS) {
 				move(MoverType.SELF, 0D, + MOVE_UNIT, 0D);
 				setProgress(getProgress() - 1);
 				if(getHangingChains() != null) {
-					getHangingChains().setProgress(getProgress());
 					getHangingChains().setRaising(false);
 					getHangingChains().setMoving(true);
 					getHangingChains().setSlow(true);
@@ -161,10 +160,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			setMoving(false);
 		}
 
-		if (getProgress() >= MAX_PROGRESS)
+		if (getProgress() > MAX_PROGRESS)
 			setProgress(MAX_PROGRESS);
 		
-		if (getProgress() <= MIN_PROGRESS)
+		if (getProgress() < MIN_PROGRESS)
 			setProgress(MIN_PROGRESS);
 
 		if (!getEntityWorld().isRemote && getProgress() > MIN_PROGRESS && getEntityWorld().getTotalWorldTime() % 60 == 0) // upsy-daisy
@@ -310,7 +309,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public TileEntityDecayPitHangingChain getHangingChains() {
 		TileEntityDecayPitHangingChain tile = null;
 		for (int x = -1; x < 1; x++)
-			for (int y = 0; y < 18; y++)
+			for (int y = 0; y < 15; y++)
 				for (int z = -1; z < 1; z++) {
 					if (getWorld().getTileEntity(getPosition().add(x, y, z)) instanceof TileEntityDecayPitHangingChain) {
 						tile = (TileEntityDecayPitHangingChain) getWorld().getTileEntity(getPosition().add(x, y, z));

@@ -55,8 +55,14 @@ public class RenderDecayPitHangingChain extends TileEntitySpecialRenderer<TileEn
 		int j = i % 65536;
 		int k = i / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
-		RenderGlobal.renderFilledBox(tile.getAABBForRender(), 0F, 0F, 1F, 0.75F);
-		RenderGlobal.drawSelectionBoundingBox(tile.getAABBForRender(), 1F, 1F, 1F, 1F);
+		RenderGlobal.renderFilledBox(tile.getAABBForRender1(), 0F, 0F, 1F, 0.75F);
+		RenderGlobal.drawSelectionBoundingBox(tile.getAABBForRender1(), 1F, 1F, 1F, 1F);
+		RenderGlobal.renderFilledBox(tile.getAABBForRender2(), 0F, 0F, 1F, 0.75F);
+		RenderGlobal.drawSelectionBoundingBox(tile.getAABBForRender2(), 1F, 1F, 1F, 1F);
+		RenderGlobal.renderFilledBox(tile.getAABBForRender3(), 0F, 0F, 1F, 0.75F);
+		RenderGlobal.drawSelectionBoundingBox(tile.getAABBForRender3(), 1F, 1F, 1F, 1F);
+		RenderGlobal.renderFilledBox(tile.getAABBForRender4(), 0F, 0F, 1F, 0.75F);
+		RenderGlobal.drawSelectionBoundingBox(tile.getAABBForRender4(), 1F, 1F, 1F, 1F);
 		GlStateManager.enableCull();
 		GlStateManager.enableLighting();
 		GlStateManager.enableTexture2D();

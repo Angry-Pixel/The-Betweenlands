@@ -188,7 +188,7 @@ public class TestItemChimp extends Item {
 				chain7.setPosition(pos.getX() + 0.5F, pos.getY() +9F, pos.getZ() + 12.5F);
 				chain8.setPosition(pos.getX() - 11.5F, pos.getY() +9F, pos.getZ() + 0.5F);
 
-				target.setPosition(pos.getX() + 0.5F, pos.getY() + 7, pos.getZ() + 0.5F);
+				target.setPosition(pos.getX() + 0.5F, pos.getY() + 8, pos.getZ() + 0.5F);
 				
 				worldIn.spawnEntity(target);
 

@@ -31,7 +31,10 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 
 		}
 
-		getHangingLength(2F + getProgress() * MOVE_UNIT);
+		getHangingLength(getPos().getX() +1, getPos().getZ(), getPos().getY() - 2F + getProgress() * MOVE_UNIT);
+		getHangingLength(getPos().getX() -1, getPos().getZ(), getPos().getY() - 2F + getProgress() * MOVE_UNIT);
+		getHangingLength(getPos().getX(), getPos().getZ() +1, getPos().getY() - 2F + getProgress() * MOVE_UNIT);
+		getHangingLength(getPos().getX(), getPos().getZ() -1, getPos().getY() - 2F + getProgress() * MOVE_UNIT);
 
 		if (animationTicksChainPrev >= 128) {
 			animationTicksChain = animationTicksChainPrev = 0;
@@ -40,8 +43,8 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 
 	}
 
-	public AxisAlignedBB getHangingLength(float extended) {
-		return new AxisAlignedBB(0.1875D, - extended,  0.1875D, 0.8125D, 0D, 0.8125D);
+	public AxisAlignedBB getHangingLength(double offX, double offZ, float extended) {
+		return new AxisAlignedBB( offX + 0.1875D, - extended,  offZ + 0.1875D, offX + 0.8125D, 0D, offZ + 0.8125D);
 	}
 
 	public void setProgress(int progress) {
@@ -112,8 +115,23 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 	}
 
 	@SideOnly(Side.CLIENT)
-	public AxisAlignedBB getAABBForRender() {
-		return getHangingLength(2F + getProgress() * MOVE_UNIT);
+	public AxisAlignedBB getAABBForRender1() {
+		return 	getHangingLength(1D, 0D, 2F + getProgress() * MOVE_UNIT);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getAABBForRender2() {
+		return 	getHangingLength(-1D, 0D, 2F + getProgress() * MOVE_UNIT);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getAABBForRender3() {
+		return 	getHangingLength(0D, 1D, 2F + getProgress() * MOVE_UNIT);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getAABBForRender4() {
+		return 	getHangingLength(0D, -1D, 2F + getProgress() * MOVE_UNIT);
 	}
 
 	@Override
