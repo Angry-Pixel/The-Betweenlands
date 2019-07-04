@@ -138,7 +138,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				move(MoverType.SELF, 0D, - MOVE_UNIT * 8D, 0D);
 				setProgress(getProgress() + 8);
 				if(getHangingChains() != null) {
-					getHangingChains().setRaising(true);
 					getHangingChains().setMoving(true);
 					getHangingChains().setSlow(false);	
 					}
@@ -148,7 +147,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				move(MoverType.SELF, 0D, + MOVE_UNIT, 0D);
 				setProgress(getProgress() - 1);
 				if(getHangingChains() != null) {
-					getHangingChains().setRaising(false);
 					getHangingChains().setMoving(true);
 					getHangingChains().setSlow(true);
 				}
@@ -241,18 +239,14 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				moveDown();
 				return true;
 			}
-			/*
-			if (part == chain_1 || part == chain_2 || part == chain_3 || part == chain_4)
-				if (source instanceof EntityDamageSourceIndirect) // may want to remove this line so it 'dinks' on all damage attempts
-					getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.BLOCK_ANVIL_LAND, SoundCategory.BLOCKS, 0.5F, 3F);
-		*/
 		}
+
 		if (getEntityWorld().isRemote)
 			if (part == target) {
-				shootBeamsAtThings(new Vec3d(0D, -4.5D + getProgress() * MOVE_UNIT, -11D));
-				shootBeamsAtThings(new Vec3d(11D, -4.5D + getProgress() * MOVE_UNIT, 0D));
-				shootBeamsAtThings(new Vec3d(0D, -4.5D + getProgress() * MOVE_UNIT, 11D));
-				shootBeamsAtThings(new Vec3d(-11D, -4.5D + getProgress() * MOVE_UNIT, 0D));
+				shootBeamsAtThings(new Vec3d(0D, -2.5D + getProgress() * MOVE_UNIT, -12D));
+				shootBeamsAtThings(new Vec3d(12D, -2.5D + getProgress() * MOVE_UNIT, 0D));
+				shootBeamsAtThings(new Vec3d(0D, -2.5D + getProgress() * MOVE_UNIT, 12D));
+				shootBeamsAtThings(new Vec3d(-12D, -2.5D + getProgress() * MOVE_UNIT, 0D));
 			}
 		return false;
 	}
@@ -305,7 +299,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public List<EntityDecayPitChain> getChains() {
 		return getWorld().<EntityDecayPitChain>getEntitiesWithinAABB(EntityDecayPitChain.class, getEntityBoundingBox().grow(10D, 0D, 10D));
     }
-	
+
 	public TileEntityDecayPitHangingChain getHangingChains() {
 		TileEntityDecayPitHangingChain tile = null;
 		for (int x = -1; x < 1; x++)

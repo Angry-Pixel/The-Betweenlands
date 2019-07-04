@@ -183,10 +183,10 @@ public class TestItemChimp extends Item {
 				chain7.setFacing(3);
 				chain8.setFacing(2);
 				
-				chain5.setPosition(pos.getX() + 0.5F, pos.getY() +9F, pos.getZ() - 11.5F);
-				chain6.setPosition(pos.getX() + 12.5F, pos.getY() +9F, pos.getZ() + 0.5F);
-				chain7.setPosition(pos.getX() + 0.5F, pos.getY() +9F, pos.getZ() + 12.5F);
-				chain8.setPosition(pos.getX() - 11.5F, pos.getY() +9F, pos.getZ() + 0.5F);
+				chain5.setPosition(pos.getX() + 0.5F, pos.getY() +10F, pos.getZ() - 11.5F);
+				chain6.setPosition(pos.getX() + 12.5F, pos.getY() +10F, pos.getZ() + 0.5F);
+				chain7.setPosition(pos.getX() + 0.5F, pos.getY() +10F, pos.getZ() + 12.5F);
+				chain8.setPosition(pos.getX() - 11.5F, pos.getY() +10F, pos.getZ() + 0.5F);
 
 				target.setPosition(pos.getX() + 0.5F, pos.getY() + 8, pos.getZ() + 0.5F);
 				

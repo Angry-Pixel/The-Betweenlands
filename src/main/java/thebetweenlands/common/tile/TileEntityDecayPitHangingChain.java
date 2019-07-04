@@ -20,7 +20,6 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 	public int animationTicksChainPrev = 0;
 	public int PROGRESS = 0;
 	public final float MOVE_UNIT = 0.0078125F; // unit of movement 
-	public boolean IS_RAISING = false;
 	public boolean IS_MOVING = false;
 	public boolean IS_SLOW = false;
 
@@ -85,14 +84,6 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 
 	public int getProgress() {
 		return PROGRESS;
-	}
-
-	public void setRaising(boolean raising) {
-		IS_RAISING = raising;
-	}
-
-	public boolean isRaising() {
-		return IS_RAISING;
 	}
 
 	public void setMoving(boolean moving) {
