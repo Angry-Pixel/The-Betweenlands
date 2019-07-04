@@ -15,12 +15,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.FogMode;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.VertexBufferUploader;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexBuffer;
-import net.minecraft.client.renderer.vertex.VertexFormatElement;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.BlockPos;
@@ -39,9 +36,10 @@ public class RingOfDispersionWorldRenderer {
 	private BlockPos pos = BlockPos.ORIGIN;
 	private BlockPos renderedPos = BlockPos.ORIGIN;
 
-	private final VertexBufferUploader vertexBufferUploader = new VertexBufferUploader();
+	private boolean currentlyUsingVbos = false;
+
 	private final Map<BlockRenderLayer, BufferBuilder> bufferBuilders = new EnumMap<>(BlockRenderLayer.class);
-	private final Map<BlockRenderLayer, VertexBuffer> vertexBuffers = new EnumMap<>(BlockRenderLayer.class);
+	private final Map<BlockRenderLayer, VertexBatchRenderer> batchRenderers = new EnumMap<>(BlockRenderLayer.class);
 
 	public RingOfDispersionWorldRenderer(int rangeXZ, int rangeY) {
 		this.rangeXZ = rangeXZ;
@@ -65,18 +63,23 @@ public class RingOfDispersionWorldRenderer {
 		return builder;
 	}
 
-	protected VertexBuffer getVertexBuffer(BlockRenderLayer layer) {
-		VertexBuffer buffer = this.vertexBuffers.get(layer);
-		if(buffer == null) {
-			this.vertexBuffers.put(layer, buffer = new VertexBuffer(DefaultVertexFormats.BLOCK));
+	protected VertexBatchRenderer getBatchRenderer(BlockRenderLayer layer) {
+		VertexBatchRenderer renderer = this.batchRenderers.get(layer);
+		if(renderer == null) {
+			this.batchRenderers.put(layer, renderer = new VertexBatchRenderer(DefaultVertexFormats.BLOCK, OpenGlHelper.useVbo()));
 		}
-		return buffer;
+		return renderer;
 	}
 
 	public void render() {
 		if(this.world == null) {
 			return;
 		}
+
+		if(this.currentlyUsingVbos != OpenGlHelper.useVbo()) {
+			this.deleteBuffers();
+		}
+		this.currentlyUsingVbos = OpenGlHelper.useVbo();
 
 		if(!this.pos.equals(this.renderedPos)) {
 			this.renderedPos = this.pos;
@@ -138,7 +141,8 @@ public class RingOfDispersionWorldRenderer {
 	}
 
 	protected void renderLayerBuffer(Minecraft mc, BlockRenderLayer layer) {
-		VertexBuffer buffer = this.getVertexBuffer(layer);
+		//VertexBuffer buffer = this.getVertexBuffer(layer);
+		VertexBatchRenderer batchRenderer = this.getBatchRenderer(layer);
 
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		RenderHelper.disableStandardItemLighting();
@@ -146,48 +150,7 @@ public class RingOfDispersionWorldRenderer {
 		//mc.entityRenderer.enableLightmap();
 		mc.entityRenderer.disableLightmap();
 
-		//TODO Replace magic constants
-
-		GlStateManager.glEnableClientState(32884);
-		OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
-		GlStateManager.glEnableClientState(32888);
-		OpenGlHelper.setClientActiveTexture(OpenGlHelper.lightmapTexUnit);
-		GlStateManager.glEnableClientState(32888);
-		OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
-		GlStateManager.glEnableClientState(32886);
-
-		buffer.bindBuffer();
-
-		GlStateManager.glVertexPointer(3, 5126, 28, 0);
-		GlStateManager.glColorPointer(4, 5121, 28, 12);
-		GlStateManager.glTexCoordPointer(2, 5126, 28, 16);
-		OpenGlHelper.setClientActiveTexture(OpenGlHelper.lightmapTexUnit);
-		GlStateManager.glTexCoordPointer(2, 5122, 28, 24);
-		OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
-
-		buffer.drawArrays(GL11.GL_QUADS);
-
-		buffer.unbindBuffer();
-		GlStateManager.resetColor();
-
-		for (VertexFormatElement element : DefaultVertexFormats.BLOCK.getElements()) {
-			VertexFormatElement.EnumUsage usage = element.getUsage();
-			int index = element.getIndex();
-
-			switch (usage) {
-			case POSITION:
-				GlStateManager.glDisableClientState(32884);
-				break;
-			case UV:
-				OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit + index);
-				GlStateManager.glDisableClientState(32888);
-				OpenGlHelper.setClientActiveTexture(OpenGlHelper.defaultTexUnit);
-				break;
-			case COLOR:
-				GlStateManager.glDisableClientState(32886);
-				GlStateManager.resetColor();
-			}
-		}
+		batchRenderer.render();
 
 		mc.entityRenderer.disableLightmap();
 	}
@@ -257,18 +220,17 @@ public class RingOfDispersionWorldRenderer {
 				bufferBuilder.sortVertexData(0, 2, 0);
 			}
 
-			bufferBuilder.finishDrawing();
-			this.vertexBufferUploader.setVertexBuffer(this.getVertexBuffer(layer));
-			this.vertexBufferUploader.draw(bufferBuilder);
+			VertexBatchRenderer batchRenderer = this.getBatchRenderer(layer);
+			batchRenderer.compile(bufferBuilder);
 		}
 	}
 
 	public void deleteBuffers() {
 		this.bufferBuilders.clear();
 
-		for(VertexBuffer vertexBuffer : this.vertexBuffers.values()) {
-			vertexBuffer.deleteGlBuffers();
+		for(VertexBatchRenderer batchRenderer : this.batchRenderers.values()) {
+			batchRenderer.deleteBuffers();
 		}
-		this.vertexBuffers.clear();
+		this.batchRenderers.clear();
 	}
 }
