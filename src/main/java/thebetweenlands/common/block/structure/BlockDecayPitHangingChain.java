@@ -1,24 +1,25 @@
 package thebetweenlands.common.block.structure;
 
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.EntityDecayPitChain;
+import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
 
-public class BlockDecayPitOuterChainHousing extends BlockHorizontal {
-//TODO This block will be removed once the entity is sorted - for now it's just a quick way of setting one in the world
-	public BlockDecayPitOuterChainHousing() {
+public class BlockDecayPitHangingChain extends BlockHorizontal implements ITileEntityProvider {
+
+	public BlockDecayPitHangingChain() {
 		super(Material.ROCK);
 		setHardness(10.0F);
 		setResistance(2000.0F);
@@ -33,34 +34,14 @@ public class BlockDecayPitOuterChainHousing extends BlockHorizontal {
 	}
 
 	@Override
-	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-		// S = 0, W = 1, N = 2, E = 3
-		if (!world.isRemote) {
-			EntityDecayPitChain entity = new EntityDecayPitChain(world);
-			entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 4D, pos.getZ() + 0.5D, 0F, 0F);
-			entity.setFacing(state.getValue(FACING).getHorizontalIndex());
-			entity.setLength(7);
-			world.spawnEntity(entity);
-		}
-	}
-
-	@Override
-	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		/*if(!world.isRemote) {
-			// made it 10 up because it needs to find it or poopy stuff happens (test only) don't stack them ;P
-			EntityDecayPitTarget entity = (EntityDecayPitTarget) world.getEntitiesWithinAABB(EntityDecayPitTarget.class, new AxisAlignedBB(pos).grow(0D, 10D, 0D)).get(0);
-			if(entity != null)
-				entity.setDead();
-		}*/
-    }
-
-	@Override
 	public IBlockState getStateFromMeta(int meta) {
+		// S = 0, W = 1, N = 2, E = 3
 		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
+		// S = 0, W = 1, N = 2, E = 3
 		int meta = 0;
 		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();
 		return meta;
@@ -84,5 +65,10 @@ public class BlockDecayPitOuterChainHousing extends BlockHorizontal {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {FACING});
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return new TileEntityDecayPitHangingChain();
 	}
 }

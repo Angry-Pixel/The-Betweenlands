@@ -1165,5 +1165,10 @@
     "sounds": [
       "thebetweenlands:mud_door_trap"
     ]
+  },
+  "ring_of_dispersion_teleport": {
+    "sounds": [
+      "thebetweenlands:fortress_boss_teleport"
+    ]
   }
 }

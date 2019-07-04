@@ -35,6 +35,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	private SludgeWormMazeMicroBuilds microBuild = new SludgeWormMazeMicroBuilds();
 	private LightTowerBuildParts lightTowerBuild = new LightTowerBuildParts();
+	private DecayPitBuildParts decayPitBuild = new DecayPitBuildParts();
+
 	TimeMeasurement timer = new TimeMeasurement();
 	public WorldGenSludgeWormDungeon() {
 		super(true);
@@ -92,11 +94,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				world.setBlockToAir(pos.add(x, y, z));
 
 	//temp
-		for (int x = 0; x < 32; x ++)
+/*		for (int x = 0; x < 32; x ++)
 			for (int z = 0; z < 32; z ++)
 				for (int y = -33; y < -19; y ++)
 				world.setBlockToAir(pos.add(x, y, z));
-
+*/
 
 		//S
 		for (int x = 1; x < 32; x++)
@@ -318,19 +320,21 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		lightTowerBuild.buildsMazeGate(world, pos.add(12, 0, 10), EnumFacing.WEST, rand, level1, 0);
 	}
 
-	private void generateDecayPit(World world, Random rand, BlockPos pos) {
+	public void generateDecayPit(World world, Random rand, BlockPos pos) {
 		for (int xx = - 14; xx <= 14; xx++) {
 			for (int zz = - 14; zz <= 14; zz++) {
 				for (int yy = 0; yy > -16; yy--) {
 					double dSqDome = Math.pow(xx, 2.0D) + Math.pow(zz, 2.0D) + Math.pow(yy, 2.0D);
 					if (Math.round(Math.sqrt(dSqDome)) < 15)
-						if (dSqDome >= Math.pow(13, 2.0D))
-							world.setBlockState(pos.add(xx, yy, zz), blockHelper.MUD_TILES_DECAY, 2);
-						else
-							world.setBlockToAir(pos.add(xx, yy, zz));
+						world.setBlockToAir(pos.add(xx, yy, zz));
 				}
 			}
 		}
+		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.SOUTH, rand, 0, 0);
+		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.EAST, rand, 0, 0);
+		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.NORTH, rand, 0, 0);
+		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.WEST, rand, 0, 0);
+		world.setBlockState(pos.down(14), BlockRegistry.DECAY_PIT_CONTROL.getDefaultState());
 	}
 
 	public void generateDecayPitEntrance(World world, Random rand, BlockPos pos) {

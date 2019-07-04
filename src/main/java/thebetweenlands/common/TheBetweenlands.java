@@ -25,6 +25,7 @@ import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
+import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 import thebetweenlands.common.command.CommandAspectDiscovery;
 import thebetweenlands.common.command.CommandBLEvent;
 import thebetweenlands.common.command.CommandDecay;
@@ -40,7 +41,7 @@ import thebetweenlands.common.handler.AspectSyncHandler;
 import thebetweenlands.common.handler.AttackDamageHandler;
 import thebetweenlands.common.handler.BlockBreakHandler;
 import thebetweenlands.common.handler.BossHandler;
-import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler;
+import thebetweenlands.common.handler.CustomEntityCollisionsHandler;
 import thebetweenlands.common.handler.ElixirCommonHandler;
 import thebetweenlands.common.handler.EntitySpawnHandler;
 import thebetweenlands.common.handler.EnvironmentEventHandler;
@@ -241,11 +242,12 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(FuelHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerJoinWorldHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerRespawnHandler.class);
-		MinecraftForge.EVENT_BUS.register(CustomEntityBlockCollisionsHandler.class);
+		MinecraftForge.EVENT_BUS.register(CustomEntityCollisionsHandler.class);
 		MinecraftForge.EVENT_BUS.register(PotionRootBound.class);
 		MinecraftForge.EVENT_BUS.register(BossHandler.class);
 		MinecraftForge.EVENT_BUS.register(ItemMagicItemMagnet.class);
 		MinecraftForge.EVENT_BUS.register(EntityWeedwoodRowboat.class);
 		MinecraftForge.EVENT_BUS.register(GameruleRegistry.class);
+		MinecraftForge.EVENT_BUS.register(RingOfDispersionEntityCapability.class);
 	}
 }

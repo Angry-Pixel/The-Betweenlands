@@ -6,6 +6,7 @@ import thebetweenlands.api.capability.ICircleGemCapability;
 import thebetweenlands.api.capability.ICustomStepSoundCapability;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEntityCircleGemCapability;
+import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.IFlightCapability;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
@@ -17,6 +18,7 @@ import thebetweenlands.common.capability.CustomStepSoundCapability;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
 import thebetweenlands.common.capability.circlegem.CircleGemEntityCapability;
+import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 import thebetweenlands.common.capability.decay.DecayEntityCapability;
 import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
 import thebetweenlands.common.capability.flight.FlightEntityCapability;
@@ -64,6 +66,9 @@ public class CapabilityRegistry {
 	@CapabilityInject(ILivingWeedwoodShieldCapability.class)
 	public static final Capability<ILivingWeedwoodShieldCapability> CAPABILITY_LIVING_WEEDWOOD_SHIELD = null;
 	
+	@CapabilityInject(IEntityCustomCollisionsCapability.class)
+	public static final Capability<IEntityCustomCollisionsCapability> CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS = null;
+	
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new CircleGemEntityCapability());
@@ -75,6 +80,7 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new PortalEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new FoodSicknessEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new CustomStepSoundCapability());
+		EntityCapabilityHandler.registerEntityCapability(new RingOfDispersionEntityCapability());
 		
 		ItemCapabilityHandler.registerItemCapability(new LivingWeedwoodShieldItemCapability());
 		

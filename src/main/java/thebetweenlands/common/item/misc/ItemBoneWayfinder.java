@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -113,12 +114,12 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 						this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
 					}
 
-					entity.setLocationAndAngles(spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
-
-					if(entity instanceof EntityPlayerMP) {
-						((EntityPlayerMP) entity).connection.setPlayerLocation(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
-					}
-
+					if(entity.isRiding()) {
+						entity.dismountRidingEntity();
+	                }
+					entity.setPositionAndUpdate(spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
+					entity.fallDistance = 0.0F;
+					
 					this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
 
 					entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 1));
