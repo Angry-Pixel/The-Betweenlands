@@ -16,7 +16,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
-import thebetweenlands.common.entity.mobs.EntitySmolSludgeWorm;
+import thebetweenlands.common.entity.mobs.EntitySludgeWorm;
 
 public class TileEntityMudBricksSpawnerHole extends TileEntity implements ITickable {
 	private int spawnDelay = 20;
@@ -52,7 +52,7 @@ public class TileEntityMudBricksSpawnerHole extends TileEntity implements ITicka
 				}
 				boolean reset = false;
 				for (int i = 0; i < spawnCount; ++i) {
-					Entity entity = new EntitySmolSludgeWorm(getWorld());
+					Entity entity = new EntitySludgeWorm(getWorld());
 
 					int k = getWorld().getEntitiesWithinAABB(entity.getClass(), (new AxisAlignedBB((double) getPos().getX(), (double) getPos().getY(), (double) getPos().getZ(), (double) (getPos().getX() + 1), (double) (getPos().getY() + 1), (double) (getPos().getZ() + 1))).grow((double) spawnRange)).size();
 

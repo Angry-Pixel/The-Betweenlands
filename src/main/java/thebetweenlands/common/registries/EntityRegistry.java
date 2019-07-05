@@ -55,7 +55,7 @@ import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
-import thebetweenlands.common.entity.mobs.EntitySmolSludgeWorm;
+import thebetweenlands.common.entity.mobs.EntitySludgeWorm;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
@@ -147,7 +147,7 @@ public class EntityRegistry {
 		registerEntity(EntitySpiritTreeFaceMask.class, "spirit_tree_face_mask", 64, 20, false);
 		registerEntity(EntityRootSprite.class, "root_sprite", 0x686868, 0x9fe530);
 
-		registerEntity(EntitySmolSludgeWorm.class, "smol_sludge_worm", 0x3A2F0B, 0x5F4C0B);
+		registerEntity(EntitySludgeWorm.class, "smol_sludge_worm", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntityTonySludgeWorm.class, "tony_sludge_worm", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntityTonyWormEggSac.class, "tony_worm_egg_sac");
 

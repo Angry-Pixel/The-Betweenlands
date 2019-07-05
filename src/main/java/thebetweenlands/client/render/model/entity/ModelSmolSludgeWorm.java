@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.entity.mobs.EntitySmolSludgeWorm;
+import thebetweenlands.common.entity.mobs.EntitySludgeWorm;
 
 @SideOnly(Side.CLIENT)
 public class ModelSmolSludgeWorm extends ModelBase {
@@ -68,7 +68,7 @@ public class ModelSmolSludgeWorm extends ModelBase {
         butt.addChild(pincer_thingy_i_guess_a);
 	}
 
-	public void renderHead(EntitySmolSludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
+	public void renderHead(EntitySludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
 		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength;
 		float jaw_wibble = MathHelper.sin(1F + (smoothedTicks) * 0.5F) * 0.5F;
@@ -81,7 +81,7 @@ public class ModelSmolSludgeWorm extends ModelBase {
 	    mouth_left.rotateAngleY = 0F + jaw_wibble;
 	}
 
-	public void renderBody(EntitySmolSludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
+	public void renderBody(EntitySludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
 		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength;
 		GlStateManager.translate(0F, 0F - wibble, 0F - wibble * 2F);
@@ -89,7 +89,7 @@ public class ModelSmolSludgeWorm extends ModelBase {
 		body1.render(0.0625F);
 	}
 	
-	public void renderTail(EntitySmolSludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
+	public void renderTail(EntitySludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
 		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength;
 		GlStateManager.translate(0F, - 0.0625F - wibble * 0.5F, - 0.0625F + wibble * 2F);
