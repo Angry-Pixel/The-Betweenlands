@@ -25,6 +25,12 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 				new MultiPartEntityPart(this, "part3", 0.8F, 0.8F),
 				new MultiPartEntityPart(this, "part4", 0.8F, 0.8F),
 				new MultiPartEntityPart(this, "part5", 0.8F, 0.8F),
+				new MultiPartEntityPart(this, "part6", 0.8F, 0.8F),
+				new MultiPartEntityPart(this, "part1", 0.8F, 0.8F), //TODO Remove
+				new MultiPartEntityPart(this, "part2", 0.8F, 0.8F),
+				new MultiPartEntityPart(this, "part3", 0.8F, 0.8F),
+				new MultiPartEntityPart(this, "part4", 0.8F, 0.8F),
+				new MultiPartEntityPart(this, "part5", 0.8F, 0.8F),
 				new MultiPartEntityPart(this, "part6", 0.8F, 0.8F)
 		};
 		// tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
