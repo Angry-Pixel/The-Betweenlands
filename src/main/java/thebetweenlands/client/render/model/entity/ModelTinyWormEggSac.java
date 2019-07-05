@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelTonyWormEggSac extends ModelBase {
+public class ModelTinyWormEggSac extends ModelBase {
     ModelRenderer egg1;
     ModelRenderer egg2;
     ModelRenderer egg3;
@@ -36,7 +36,7 @@ public class ModelTonyWormEggSac extends ModelBase {
     ModelRenderer webbing7b;
     ModelRenderer webbing8a;
 
-    public ModelTonyWormEggSac() {
+    public ModelTinyWormEggSac() {
         textureWidth = 128;
         textureHeight = 128;
         webbing1b = new ModelRenderer(this, 26, 0);

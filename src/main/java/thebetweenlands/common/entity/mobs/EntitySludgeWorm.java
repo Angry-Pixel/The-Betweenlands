@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.common.entity.EntityTonyWormEggSac;
+import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMob, IEntityBL {
@@ -148,7 +148,7 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 
 	@Override
 	public boolean canAttackClass(Class<? extends EntityLivingBase> entity) {
-		return EntitySludgeWorm.class != entity && EntityTonySludgeWorm.class != entity && EntityTonyWormEggSac.class != entity;
+		return !EntitySludgeWorm.class.isAssignableFrom(entity) && EntityTinyWormEggSac.class != entity;
 	}
 
 	protected boolean damageWorm(DamageSource source, float ammount) {

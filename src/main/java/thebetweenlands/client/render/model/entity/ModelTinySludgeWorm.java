@@ -6,10 +6,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.entity.mobs.EntityTonySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 
 @SideOnly(Side.CLIENT)
-public class ModelTonySludgeWorm extends ModelBase {
+public class ModelTinySludgeWorm extends ModelBase {
 
 	ModelRenderer head;
 	ModelRenderer beak_right;
@@ -18,7 +18,7 @@ public class ModelTonySludgeWorm extends ModelBase {
 	ModelRenderer cute_lil_butt;
 	ModelRenderer spoopy_stinger;
 
-	public ModelTonySludgeWorm() {
+	public ModelTinySludgeWorm() {
 		textureWidth = 32;
 		textureHeight = 32;
 		head = new ModelRenderer(this, 0, 0);
@@ -50,7 +50,7 @@ public class ModelTonySludgeWorm extends ModelBase {
 		cute_lil_butt.addChild(spoopy_stinger);
 	}
 
-	public void renderHead(EntityTonySludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
+	public void renderHead(EntityTinySludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
 		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength;
 		float jaw_wibble = MathHelper.sin(1F + (smoothedTicks) * 0.5F) * 0.5F;
@@ -61,7 +61,7 @@ public class ModelTonySludgeWorm extends ModelBase {
 		beak_right.rotateAngleY = 0F + jaw_wibble;
 	}
 
-	public void renderBody(EntityTonySludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
+	public void renderBody(EntityTinySludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
 		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength;
 		GlStateManager.translate(0F, -0.125F - wibble, 0F - wibble * 2F);
@@ -69,7 +69,7 @@ public class ModelTonySludgeWorm extends ModelBase {
 		dat_detailed_hot_bod.render(0.0625F);
 	}
 
-	public void renderTail(EntityTonySludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
+	public void renderTail(EntityTinySludgeWorm worm, int frame, float wibbleStrength, float partialTicks) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
 		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength;
 		GlStateManager.translate(0F, -0.0625F - wibble * 0.5F, -0.0625F + wibble * 2F);

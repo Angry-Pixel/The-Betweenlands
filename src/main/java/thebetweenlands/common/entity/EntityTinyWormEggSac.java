@@ -9,11 +9,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
-import thebetweenlands.common.entity.mobs.EntityTonySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 
-public class EntityTonyWormEggSac extends EntityProximitySpawner {
+public class EntityTinyWormEggSac extends EntityProximitySpawner {
 
-	public EntityTonyWormEggSac(World world) {
+	public EntityTinyWormEggSac(World world) {
 		super(world);
 		setSize(1F, 0.5F);
 	}
@@ -30,13 +30,12 @@ public class EntityTonyWormEggSac extends EntityProximitySpawner {
 			checkArea();
 	}
 
-	@SuppressWarnings("unchecked")
 	protected Entity checkArea() {
 		List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
 		for (int entityCount = 0; entityCount < list.size(); entityCount++) {
 			Entity entity = list.get(entityCount);
 			if (entity != null)
-				if (entity instanceof EntityPlayer) {
+				if (entity instanceof EntityPlayer && !((EntityPlayer) entity).isSpectator() && !((EntityPlayer) entity).isCreative()) {
 					if (canSneakPast() && entity.isSneaking())
 						return null;
 					else if (checkSight() && !canEntityBeSeen(entity))
@@ -104,7 +103,7 @@ public class EntityTonyWormEggSac extends EntityProximitySpawner {
 
 	@Override
 	protected Entity getEntitySpawned() {
-		return new EntityTonySludgeWorm(getEntityWorld());
+		return new EntityTinySludgeWorm(getEntityWorld());
 	}
 
 	@Override

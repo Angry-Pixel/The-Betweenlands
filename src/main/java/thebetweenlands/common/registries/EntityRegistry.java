@@ -16,7 +16,7 @@ import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.entity.EntitySwordEnergy;
-import thebetweenlands.common.entity.EntityTonyWormEggSac;
+import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.EntityVolarkite;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
@@ -42,6 +42,7 @@ import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.entity.mobs.EntityGiantToad;
 import thebetweenlands.common.entity.mobs.EntityGreebling;
+import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
@@ -66,7 +67,7 @@ import thebetweenlands.common.entity.mobs.EntityTamedSpiritTreeFace;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.entity.mobs.EntityTarminion;
 import thebetweenlands.common.entity.mobs.EntityTermite;
-import thebetweenlands.common.entity.mobs.EntityTonySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.entity.mobs.EntityWight;
@@ -147,9 +148,10 @@ public class EntityRegistry {
 		registerEntity(EntitySpiritTreeFaceMask.class, "spirit_tree_face_mask", 64, 20, false);
 		registerEntity(EntityRootSprite.class, "root_sprite", 0x686868, 0x9fe530);
 
-		registerEntity(EntitySludgeWorm.class, "smol_sludge_worm", 0x3A2F0B, 0x5F4C0B);
-		registerEntity(EntityTonySludgeWorm.class, "tony_sludge_worm", 0x3A2F0B, 0x5F4C0B);
-		registerEntity(EntityTonyWormEggSac.class, "tony_worm_egg_sac");
+		registerEntity(EntitySludgeWorm.class, "small_sludge_worm", 0x3A2F0B, 0x5F4C0B);
+		registerEntity(EntityTinySludgeWorm.class, "tiny_sludge_worm", 0x3A2F0B, 0x5F4C0B);
+		registerEntity(EntityLargeSludgeWorm.class, "large_sludge_worm", 0x3A2F0B, 0x5F4C0B);
+		registerEntity(EntityTinyWormEggSac.class, "tiny_worm_egg_sac");
 
 		registerEntity(EntityLurkerSkinRaft.class, "lurker_skin_raft");
 		

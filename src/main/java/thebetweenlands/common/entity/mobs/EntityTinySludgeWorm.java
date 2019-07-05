@@ -24,14 +24,13 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.common.entity.EntityTonyWormEggSac;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityTonySludgeWorm extends EntitySludgeWorm {
-	private static final DataParameter<Boolean> IS_SQUASHED = EntityDataManager.<Boolean>createKey(EntityTonySludgeWorm.class, DataSerializers.BOOLEAN);
+public class EntityTinySludgeWorm extends EntitySludgeWorm {
+	private static final DataParameter<Boolean> IS_SQUASHED = EntityDataManager.<Boolean>createKey(EntityTinySludgeWorm.class, DataSerializers.BOOLEAN);
 
-	public EntityTonySludgeWorm(World world) {
+	public EntityTinySludgeWorm(World world) {
 		super(world);
 		setSize(0.3125F, 0.3125F);
 		isImmuneToFire = true;
@@ -77,15 +76,10 @@ public class EntityTonySludgeWorm extends EntitySludgeWorm {
 		return false;
 		// }
 	}
-	
+
 	@Override
 	protected double getMaxPieceDistance() {
 		return 0.2D;
-	}
-
-	@Override
-	public boolean canAttackClass(Class<? extends EntityLivingBase> entity) {
-		return EntityTonySludgeWorm.class != entity && EntityTonyWormEggSac.class != entity && EntitySludgeWorm.class != entity;
 	}
 
 	@Override
