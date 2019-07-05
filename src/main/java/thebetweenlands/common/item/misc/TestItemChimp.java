@@ -12,6 +12,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.EntityDecayPitChain;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
 
 
 //MINE!!
@@ -154,7 +155,7 @@ public class TestItemChimp extends Item {
 		*/
 	
 
-/*
+
 				WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 				//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
 				dungeon.generate(worldIn, itemRand, pos.up(59).add(3, 0, 3));
@@ -162,8 +163,8 @@ public class TestItemChimp extends Item {
 			//	dungeon.generateDecayPit(worldIn, itemRand, pos.up(14));
 
 
+/*
 
-*/
 		EntityDecayPitTarget target = new EntityDecayPitTarget(worldIn);
 			
 				EntityDecayPitChain chain5 = new EntityDecayPitChain(worldIn);
@@ -197,7 +198,7 @@ public class TestItemChimp extends Item {
 				worldIn.spawnEntity(chain7);
 				worldIn.spawnEntity(chain8);
 
-		
+		*/
 		}
 
 		return EnumActionResult.SUCCESS;
