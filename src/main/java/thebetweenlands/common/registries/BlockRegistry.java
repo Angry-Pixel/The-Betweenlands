@@ -134,6 +134,7 @@ import thebetweenlands.common.block.structure.BlockCompactedMud;
 import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.block.structure.BlockDecayPitControl;
 import thebetweenlands.common.block.structure.BlockDecayPitHangingChain;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlock;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockDruidStone;
@@ -601,7 +602,7 @@ public class BlockRegistry {
 	//Place-Holders for stuffs and things
 	public static final Block MUD_TOWER_BRAZIER = new BlockBrazier();
 	public static final Block DECAY_PIT_HANGING_CHAIN = new BlockDecayPitHangingChain();
-	public static final Block DECAY_PIT_CAPSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK = new BlockDecayPitInvisibleFloorBlock();
 
 	//Winter Event
     public static final Block PRESENT = new BlockPresent();
