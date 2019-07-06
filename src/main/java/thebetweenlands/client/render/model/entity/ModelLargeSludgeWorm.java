@@ -30,9 +30,9 @@ public class ModelLargeSludgeWorm extends ModelBase {
 	public ModelRenderer lowerjaw_right;
 	public ModelRenderer artery2;
 	public ModelRenderer artery3;
-	public ModelRenderer heart1;
+	public HeartModelRenderer heart1;
 	public ModelRenderer artery5;
-	public ModelRenderer heart2;
+	public HeartModelRenderer heart2;
 	public ModelRenderer artery4;
 	public ModelRenderer artery6;
 	public ModelRenderer artery7;
@@ -49,6 +49,51 @@ public class ModelLargeSludgeWorm extends ModelBase {
 	public ModelRenderer sludge_mid3;
 	public ModelRenderer sludge_back2;
 	public ModelRenderer sludge_back3;
+
+	private static class HeartModelRenderer extends ModelRenderer {
+		private EntityLargeSludgeWorm entity;
+		private float partialTicks;
+		private float tickOffset;
+
+		public HeartModelRenderer(ModelBase model, int texOffX, int texOffY) {
+			super(model, texOffX, texOffY);
+		}
+
+		public void update(EntityLargeSludgeWorm entity, float tickOffset, float partialTicks) {
+			this.entity = entity;
+			this.partialTicks = partialTicks;
+			this.tickOffset = tickOffset;
+		}
+
+		@Override
+		public void render(float scale) {
+			GlStateManager.pushMatrix();
+
+			if(this.entity != null) {
+				float x = (this.entity.ticksExisted + this.tickOffset + this.partialTicks) * 0.15F;
+
+				float L = 2.8F;
+
+				x = x - (float)Math.ceil(x / L - 0.5F) * L;
+
+				float s = 0.035F;
+				float h = 3.5F;
+				float d = 1.4F;
+				float w = 0.01F;
+				float a = 0.03F;
+
+				float beat = (float) (a * (Math.exp(-(x+d)*(x+d) / (2*w)) + Math.exp(-(x-d)*(x-d) / (2*w)) + (h - Math.abs(x/s) - x) * Math.exp(-(7*x)*(7*x) / 2)));
+
+				float heartScale = 1.0F + beat;
+
+				GlStateManager.scale(heartScale, heartScale, heartScale);
+			}
+
+			super.render(scale);
+
+			GlStateManager.popMatrix();
+		}
+	}
 
 	public ModelLargeSludgeWorm() {
 		this.textureWidth = 256;
@@ -109,7 +154,7 @@ public class ModelLargeSludgeWorm extends ModelBase {
 		this.head1.setRotationPoint(0.0F, 0.0F, -2.0F);
 		this.head1.addBox(-4.0F, -5.0F, -8.0F, 8, 5, 8, 0.0F);
 		this.setRotateAngle(head1, -0.045553093477052F, 0.0F, 0.0F);
-		this.heart1 = new ModelRenderer(this, 44, 110);
+		this.heart1 = new HeartModelRenderer(this, 44, 110);
 		this.heart1.setRotationPoint(0.0F, -1.0F, 1.6F);
 		this.heart1.addBox(-1.0F, -1.0F, 0.0F, 2, 2, 3, 0.0F);
 		this.setRotateAngle(heart1, -0.7285004297824331F, 0.0F, 0.36425021489121656F);
@@ -164,7 +209,7 @@ public class ModelLargeSludgeWorm extends ModelBase {
 		this.midpiece_spine4.setRotationPoint(0.0F, 16.0F, 11.0F);
 		this.midpiece_spine4.addBox(-1.0F, -1.0F, -1.0F, 2, 2, 2, 0.0F);
 		this.setRotateAngle(midpiece_spine4, 0.0F, 0.0F, 0.27314402793711257F);
-		this.heart2 = new ModelRenderer(this, 55, 110);
+		this.heart2 = new HeartModelRenderer(this, 55, 110);
 		this.heart2.setRotationPoint(-1.0F, 0.0F, 0.0F);
 		this.heart2.addBox(-1.0F, -1.0F, 0.0F, 1, 2, 2, 0.0F);
 		this.setRotateAngle(heart2, 0.0F, 0.136659280431156F, 0.0F);
@@ -255,8 +300,19 @@ public class ModelLargeSludgeWorm extends ModelBase {
 
 		this.head1.rotateAngleX = -0.045553093477052F - jawWibbleLeft * 0.1F;
 
+		this.heart1.update(worm, 0, partialTicks);
+		this.heart2.update(worm, 15, partialTicks);
+
 		if(renderSolids) {
+			GlStateManager.pushMatrix();
+			
+			GlStateManager.translate(0, 1, 0.8D);
+			GlStateManager.rotate(MathHelper.sin(smoothedTicks * 0.25F) * 3, 1, 0, 0);
+			GlStateManager.rotate(MathHelper.sin(smoothedTicks * 0.125F) * 13, 0, 0, 1);
+			GlStateManager.translate(0, -0.96D, -0.8D);
+			
 			this.body_base.render(0.0625F);
+			GlStateManager.popMatrix();
 		} else {
 			this.sludge_front1.render(0.0625F);
 		}
@@ -294,7 +350,16 @@ public class ModelLargeSludgeWorm extends ModelBase {
 
 	public void renderTail(EntityLargeSludgeWorm worm, int frame, float wibbleStrength, float partialTicks, boolean renderSolids) {
 		if(renderSolids) {
+			float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
+			
+			GlStateManager.pushMatrix();
+			
+			GlStateManager.translate(0, 1, 1.6D);
+			GlStateManager.rotate(MathHelper.sin(smoothedTicks * 0.25F) * 6, 1, 0, 0);
+			GlStateManager.translate(0, -1, -1.6D);
+			
 			this.endpiece_spine10.render(0.0625F);
+			GlStateManager.popMatrix();
 		} else {
 			this.sludge_back1.render(0.0625F);
 		}
