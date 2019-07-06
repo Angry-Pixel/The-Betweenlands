@@ -151,7 +151,14 @@ public class IsolatedBlockModelRenderer {
 
 		List<BakedQuad> list = model.getQuads(state, null, rand);
 		
+		if (!list.isEmpty()) {
+			this.renderQuadsSmooth(pos, state, buffer, list, blockBounds, bitset);
+			flag = true;
+		}
+		
 		for (EnumFacing facing : EnumFacing.VALUES) {
+			list = model.getQuads(state, facing, rand);
+			
 			if (!list.isEmpty() && (culler == null || culler.shouldSideBeRendered(state, facing))) {
 				this.renderQuadsSmooth(pos, state, buffer, list, blockBounds, bitset);
 				flag = true;
@@ -174,7 +181,14 @@ public class IsolatedBlockModelRenderer {
 
 		List<BakedQuad> list = model.getQuads(state, null, rand);
 		
+		if (!list.isEmpty()) {
+			this.renderQuadsFlat(state, pos, -1, true, buffer, list, bitset, lighting);
+			flag = true;
+		}
+		
 		for (EnumFacing facing : EnumFacing.VALUES) {
+			list = model.getQuads(state, facing, rand);
+			
 			if (!list.isEmpty() && (culler == null || culler.shouldSideBeRendered(state, facing))) {
 				int i = lighting != null ? lighting.getPackedLightmapCoords(state, facing) : 0;
 				this.renderQuadsFlat(state, pos, i, false, buffer, list, bitset, lighting);

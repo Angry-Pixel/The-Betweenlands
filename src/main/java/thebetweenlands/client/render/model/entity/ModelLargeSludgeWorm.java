@@ -189,23 +189,23 @@ public class ModelLargeSludgeWorm extends ModelBase {
 		this.sludge_mid3 = new ModelRenderer(this, 130, 35);
 		this.sludge_mid3.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.sludge_mid3.addBox(-7.0F, 7.0F, 0.0F, 14, 2, 16, 0.0F);
-		this.midpiece_spine4.addChild(this.spine5);
+		//this.midpiece_spine4.addChild(this.spine5);
 		this.artery3.addChild(this.artery5);
 		this.head2.addChild(this.lowerjaw_left);
 		this.spine1.addChild(this.spine3);
 		this.artery2.addChild(this.artery3);
 		this.sludge_front1.addChild(this.sludge_front2);
 		this.spine1.addChild(this.spine2);
-		this.spine6.addChild(this.spine7);
+		//this.spine6.addChild(this.spine7);
 		this.sludge_back1.addChild(this.sludge_back3);
 		this.artery5.addChild(this.artery6);
-		this.spine5.addChild(this.spine6);
+		//this.spine5.addChild(this.spine6);
 		this.sludge_mid1.addChild(this.sludgemid_2);
 		this.spine3.addChild(this.head1);
 		this.artery3.addChild(this.heart1);
 		this.artery6.addChild(this.artery7);
 		this.head1.addChild(this.upperjaw);
-		this.spine8.addChild(this.spine9);
+		//this.spine8.addChild(this.spine9);
 		this.sludge_back1.addChild(this.sludge_back2);
 		this.artery1.addChild(this.artery2);
 		this.sludge_front1.addChild(this.sludge_front3);
@@ -213,7 +213,7 @@ public class ModelLargeSludgeWorm extends ModelBase {
 		this.endpiece_spine10.addChild(this.tailbone1);
 		this.artery7.addChild(this.artery8);
 		this.spine1.addChild(this.artery1);
-		this.spine7.addChild(this.spine8);
+		//this.spine7.addChild(this.spine8);
 		this.heart1.addChild(this.heart2);
 		this.head1.addChild(this.head2);
 		this.head2.addChild(this.lowerjaw_right);
@@ -224,12 +224,12 @@ public class ModelLargeSludgeWorm extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-		/*this.endpiece_spine10.render(f5);
+		this.endpiece_spine10.render(f5);
 		this.sludge_front1.render(f5);
 		this.body_base.render(f5);
 		this.sludge_back1.render(f5);
 		this.midpiece_spine4.render(f5);
-		this.sludge_mid1.render(f5);*/
+		this.sludge_mid1.render(f5);
 	}
 
 	/**
@@ -243,83 +243,57 @@ public class ModelLargeSludgeWorm extends ModelBase {
 
 	public void renderHead(EntityLargeSludgeWorm worm, int frame, float wibbleStrength, float partialTicks, boolean renderSolids) {
 		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
-		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength;
-		
+
 		float jawWibbleLeft = MathHelper.sin(1F + (smoothedTicks) * 0.5F) * 0.5F;
 		float jawWibbleRight = MathHelper.sin(1F + (smoothedTicks) * 0.5F + 0.1F) * 0.5F;
-		
-		GlStateManager.translate(0F, -0.0625F - wibble * 0.5F - 0.05D, 0F + wibble * 2F);
 
 		this.lowerjaw_left.rotateAngleX = 0.5918411493512771F - 0.2F + jawWibbleLeft * 0.8F;
 		this.lowerjaw_left.rotateAngleY = -0.18203784098300857F - jawWibbleRight * 0.2F;
-		
+
 		this.lowerjaw_right.rotateAngleX = 0.5918411493512771F - 0.2F + jawWibbleRight * 0.8F;
 		this.lowerjaw_right.rotateAngleY = 0.18203784098300857F + jawWibbleRight * 0.2F;
-		
+
 		this.head1.rotateAngleX = -0.045553093477052F - jawWibbleLeft * 0.1F;
-		
+
 		if(renderSolids) {
-			float wave = (float)Math.sin(frame * Math.PI / 2 + smoothedTicks / 4.0f);
-			float waveAngle = wave * 8.0F;
-			
-			GlStateManager.translate(0, 1D, 0.3D);
-			GlStateManager.rotate(-waveAngle, 1, 0, 0);
-			GlStateManager.translate(0, -1D, -0.3D);
-			
 			this.body_base.render(0.0625F);
 		} else {
 			this.sludge_front1.render(0.0625F);
 		}
-		
-		/*head.render(0.0625F);
-		head.rotateAngleX = worm.rotationPitch / (180F / (float) Math.PI);
-		beak_left.rotateAngleY = 0F - jaw_wibble;
-		beak_right.rotateAngleY = 0F + jaw_wibble;*/
 	}
 
-	public void renderBody(EntityLargeSludgeWorm worm, int frame, float wibbleStrength, float partialTicks, boolean renderSolids) {
-		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
-		
-		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength;
-		
-		GlStateManager.translate(0, 0.8D + 0.05D, -1.0D);
-		
-		GlStateManager.translate(0F, wibble * 0.5F, -wibble * 2F);
-		
-		//GlStateManager.translate(0F, -0.125F - wibble, 0F - wibble * 2F);
-		//GlStateManager.scale(1F + wibble * 2F, 1F + wibble, 1.25F - wibble * 1.5F);
-		//dat_detailed_hot_bod.render(0.0625F);
-		
-		if(renderSolids) {
-			float prevWave = (float)Math.sin((frame-1) * Math.PI / 2 + smoothedTicks / 4.0f);
-			float wave = (float)Math.sin(frame * Math.PI / 2 + smoothedTicks / 3.0f);
-			float waveAngle = wave * 4.0F;
-			
-			GlStateManager.translate(0, Math.sin(Math.toRadians(prevWave)) * 2 - 0.1D, 0);
-			
-			GlStateManager.translate(0, 1D, 1.0D);
-			GlStateManager.rotate(waveAngle, 1, 0, 0);
-			GlStateManager.translate(0, -1D, -1.0D);
-			
-			this.midpiece_spine4.render(0.0625F);
-		} else {
-			this.sludge_mid1.render(0.0625F);
+	public void renderSpinePiece(int piece, float boneYaw) {
+		GlStateManager.pushMatrix();
+
+		GlStateManager.rotate(boneYaw, 0, 1, 0);
+
+		switch(piece) {
+		default:
+		case 0:
+			//GlStateManager.translate(0.35D, -1D, 0.48D);
+			//this.midpiece_spine4.render(0.0625F);
+			break;
+		case 1:
+			this.spine5.render(0.0625F);
+			break;
+		case 2:
+			this.spine6.render(0.0625F);
+			break;
+		case 3:
+			this.spine7.render(0.0625F);
+			break;
+		case 4:
+			this.spine8.render(0.0625F);
+			break;
+		case 5:
+			this.spine9.render(0.0625F);
+			break;
 		}
+		GlStateManager.popMatrix();
 	}
 
 	public void renderTail(EntityLargeSludgeWorm worm, int frame, float wibbleStrength, float partialTicks, boolean renderSolids) {
-		float smoothedTicks = worm.ticksExisted + frame + (worm.ticksExisted + frame - (worm.ticksExisted + frame - 1)) * partialTicks;
-		float wibble = MathHelper.sin(1F + (smoothedTicks) * 0.25F) * 0.125F * wibbleStrength;
-		
-		GlStateManager.translate(0, 0.05D - 0.05D, -1.95D);
-		
-		GlStateManager.translate(0F, -0.0625F - wibble * 0.5F, -0.0625F + wibble * 2F);
-		
 		if(renderSolids) {
-			float prevWave = (float)Math.sin((frame-1) * Math.PI / 2 + smoothedTicks / 4.0f);
-			
-			GlStateManager.translate(0, -Math.sin(Math.toRadians(prevWave)) * 4 - 0.05D, -0.3D);
-			
 			this.endpiece_spine10.render(0.0625F);
 		} else {
 			this.sludge_back1.render(0.0625F);
