@@ -17,12 +17,15 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelLargeSludgeWorm;
+import thebetweenlands.client.render.model.entity.ModelTinyWormEggSac;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
+import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)
 public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 	public static final ResourceLocation MODEL_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/large_sludge_worm.png");
 	public static final ResourceLocation HULL_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/large_sludge_worm_hull.png");
+	public static final ResourceLocation EGG_SAC_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/worm_egg_sac.png");
 
 	protected static final float HULL_OUTER_WIDTH = 0.58F;
 	protected static final float HULL_INNER_WIDTH = 0.44F;
@@ -42,6 +45,7 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 	};
 
 	private final ModelLargeSludgeWorm model;
+	private final ModelTinyWormEggSac modelEggSac = new ModelTinyWormEggSac();
 
 	public RenderLargeSludgeWorm(RenderManager manager) {
 		super(manager, new ModelLargeSludgeWorm(), 0.0F);
@@ -144,6 +148,30 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 
 		if(renderSolids) {
 			this.renderSpine(entity, partialTicks);
+
+			this.renderEggSac(entity, partialTicks);
+		}
+	}
+
+	protected void renderEggSac(EntityLargeSludgeWorm entity, float partialTicks) {
+		if(entity.eggSacPosition != null && entity.prevEggSacPosition != null) {
+			this.bindTexture(EGG_SAC_TEXTURE);
+
+			Vec3d pos = lerp(entity.prevEggSacPosition, entity.eggSacPosition, partialTicks);
+
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(pos.x, pos.y - 0.4D + Math.sin((entity.ticksExisted + partialTicks) * 0.25D) * 0.025D, pos.z);
+			GlStateManager.scale(-1, -1, 1);
+
+			float scale = Math.max(0, Math.min(1, entity.getEggSacPercentage()));
+
+			GlStateManager.scale(scale, scale, scale);
+
+			GlStateManager.translate(0, -1.5D, 0);
+
+			this.modelEggSac.render(0.0625F);
+
+			GlStateManager.popMatrix();
 		}
 	}
 

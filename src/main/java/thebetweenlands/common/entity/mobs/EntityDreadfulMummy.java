@@ -80,7 +80,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		tasks.addTask(4, new EntityAIWander(this, 0.25D));
 		tasks.addTask(5, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
-		targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
+		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
 	}
 
 	private static final int SPAWN_MUMMY_COOLDOWN = 350;

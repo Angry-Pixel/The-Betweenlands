@@ -7,18 +7,26 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.util.CatmullRomSpline;
 import thebetweenlands.util.ReparameterizedSpline;
 
 public class EntityLargeSludgeWorm extends EntitySludgeWorm {
+	private static final DataParameter<Float> EGG_SAC_PERCENTAGE = EntityDataManager.<Float>createKey(EntityLargeSludgeWorm.class, DataSerializers.FLOAT);
+
 	public boolean segmentsAvailable = false;
 
 	public ReparameterizedSpline spineySpliney;
@@ -33,6 +41,11 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 
 	public final List<Vec3d> prevSpineDirs = new ArrayList<>();
 	public final List<Vec3d> spineDirs = new ArrayList<>();
+
+	public Vec3d prevEggSacPosition = null;
+	public Vec3d eggSacPosition = null;
+
+	protected int eggSacMovementCooldown = 0;
 
 	public EntityLargeSludgeWorm(World world) {
 		super(world);
@@ -57,20 +70,27 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 		this.prevSegmentDirs = new Vec3d[numSegments];
 		this.segmentDirs = new Vec3d[numSegments];
 
-		// tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
-		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
-		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
-		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
-		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
+		this.tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
+		this.tasks.addTask(4, new AILayEggSac(this));
+
+		this.targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
+		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
+		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
+	}
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		this.getDataManager().register(EGG_SAC_PERCENTAGE, -1.0F);
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.1D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
 	}
 
 	@Override
@@ -82,9 +102,45 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 	public void onUpdate() {
 		super.onUpdate();
 
-		if(this.world.isRemote) {
+		if(!this.world.isRemote) {
+			if(this.isEntityAlive()) {
+				if(this.eggSacMovementCooldown > 0) {
+					this.eggSacMovementCooldown--;
+				} else if(this.getEggSacPercentage() >= 0) {
+					float percentage = Math.max(this.getEggSacPercentage(), 0) + 0.001F;
+
+					if(percentage >= 1.0F) {
+						MultiPartEntityPart tailPart = this.parts[this.parts.length - 1];
+
+						EntityTinyWormEggSac eggSac = new EntityTinyWormEggSac(this.world);
+						eggSac.setLocationAndAngles(tailPart.posX, tailPart.posY, tailPart.posZ, 0, 0);
+
+						this.world.spawnEntity(eggSac);
+
+						this.setEggSacPercentage(-1);
+					} else {
+						this.setEggSacPercentage(percentage);
+					}
+				}
+			}
+		} else {
 			this.updateSegmentPositions();
+
+			float eggSackPercentage = this.getEggSacPercentage();
+
+			if(eggSackPercentage >= 0) {
+				this.prevEggSacPosition = this.eggSacPosition;
+				this.eggSacPosition = this.spineySpliney.interpolate(eggSackPercentage);
+			} else {
+				this.prevEggSacPosition = this.eggSacPosition = null;
+			}
 		}
+	}
+
+	@Override
+	protected boolean damageWorm(DamageSource source, float ammount) {
+		this.eggSacMovementCooldown = 120;
+		return super.damageWorm(source, ammount);
 	}
 
 	protected void updateSegmentPositions() {
@@ -174,6 +230,70 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 
 			this.spinePositions.add(bonePos);
 			this.spineDirs.add(boneDir);
+		}
+	}
+
+	/**
+	 * Sets the egg sac laying progress percentage.
+	 * Use value < 0 if no egg sac.
+	 * @param percentage
+	 */
+	public void setEggSacPercentage(float percentage) {
+		this.getDataManager().set(EGG_SAC_PERCENTAGE, percentage);
+	}
+
+	/**
+	 * Returns the egg sac laying progress percentage.
+	 * Value < 0 means no egg sac.
+	 * @return
+	 */
+	public float getEggSacPercentage() {
+		return this.getDataManager().get(EGG_SAC_PERCENTAGE);
+	}
+
+	public void startLayingEggSac() {
+		if(this.getEggSacPercentage() < 0) {
+			this.setEggSacPercentage(0.00001F);
+		}
+	}
+
+	public static class AILayEggSac extends EntityAIBase {
+		protected final EntityLargeSludgeWorm entity;
+
+		protected int cooldown = 30;
+
+		public AILayEggSac(EntityLargeSludgeWorm entity) {
+			this.entity = entity;
+			this.setMutexBits(0);
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			boolean canLay = this.entity.isEntityAlive() && this.entity.getAttackTarget() != null && this.entity.getEggSacPercentage() < 0;
+			if(canLay) {
+				if(this.cooldown-- <= 0) {
+					List<EntityTinyWormEggSac> nearbyEggSacs = this.entity.world.getEntitiesWithinAABB(EntityTinyWormEggSac.class, this.entity.getEntityBoundingBox().grow(16.0D));
+					List<EntityTinySludgeWorm> nearbyTinyWorms = this.entity.world.getEntitiesWithinAABB(EntityTinySludgeWorm.class, this.entity.getEntityBoundingBox().grow(16.0D));
+
+					if(nearbyEggSacs.size() < 5 && nearbyTinyWorms.size() < 8) {
+						this.cooldown = 133 + this.entity.rand.nextInt(80);
+						return true;
+					} else {
+						this.cooldown = 40 + this.entity.rand.nextInt(30);
+					}
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public void startExecuting() {
+			this.entity.startLayingEggSac();
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return false;
 		}
 	}
 }

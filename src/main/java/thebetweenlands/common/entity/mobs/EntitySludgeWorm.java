@@ -141,7 +141,7 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source instanceof EntityDamageSource && ((EntityDamageSource) source).getIsThornsDamage())
+		if (source == DamageSource.OUT_OF_WORLD || source instanceof EntityDamageSource && ((EntityDamageSource) source).getIsThornsDamage())
 			damageWorm(source, amount);
 		return true;
 	}

@@ -168,16 +168,20 @@ public class ModelTinyWormEggSac extends ModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
-        egg5.render(scale);
-        egg8.render(scale);
-        egg4.render(scale);
-        egg7.render(scale);
-        egg1.render(scale);
-        egg3.render(scale);
-        egg6.render(scale);
-        egg2.render(scale);
+        this.render(scale);
     }
 
+    public void render(float scale) {
+    	 egg5.render(scale);
+         egg8.render(scale);
+         egg4.render(scale);
+         egg7.render(scale);
+         egg1.render(scale);
+         egg3.render(scale);
+         egg6.render(scale);
+         egg2.render(scale);
+    }
+    
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
         modelRenderer.rotateAngleY = y;
