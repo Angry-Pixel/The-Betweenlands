@@ -148,11 +148,11 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 
 	@Override
 	public boolean canAttackClass(Class<? extends EntityLivingBase> entity) {
-		return !EntitySludgeWorm.class.isAssignableFrom(entity) && EntityTinyWormEggSac.class != entity;
+		return !IEntityBL.class.isAssignableFrom(entity) && EntityTinyWormEggSac.class != entity;
 	}
 
-	protected boolean damageWorm(DamageSource source, float ammount) {
-		return super.attackEntityFrom(source, ammount);
+	protected boolean damageWorm(DamageSource source, float amount) {
+		return super.attackEntityFrom(source, amount);
 	}
 
 	@Override

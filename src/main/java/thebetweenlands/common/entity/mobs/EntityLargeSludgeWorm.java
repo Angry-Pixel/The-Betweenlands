@@ -18,6 +18,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -161,9 +162,19 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 	}
 
 	@Override
-	protected boolean damageWorm(DamageSource source, float ammount) {
+	protected boolean damageWorm(DamageSource source, float amount) {
 		this.eggSacMovementCooldown = 120;
-		return super.damageWorm(source, ammount);
+
+		if(!this.world.isRemote && source instanceof EntityDamageSource && this.world.rand.nextInt(6) == 0 && amount > 0.5F) {
+			MultiPartEntityPart spawnPart = this.parts[this.rand.nextInt(this.parts.length)];
+
+			EntitySmollSludge entity = new EntitySmollSludge(this.world);
+			entity.setLocationAndAngles(spawnPart.posX, spawnPart.posY, spawnPart.posZ, this.rand.nextFloat() * 360.0F, 0);
+
+			this.world.spawnEntity(entity);
+		}
+
+		return super.damageWorm(source, amount);
 	}
 
 	protected void updateSegmentPositions() {
