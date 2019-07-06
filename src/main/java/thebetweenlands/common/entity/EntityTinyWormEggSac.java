@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
@@ -16,11 +17,6 @@ public class EntityTinyWormEggSac extends EntityProximitySpawner {
 	public EntityTinyWormEggSac(World world) {
 		super(world);
 		setSize(1F, 0.5F);
-	}
-
-	@Override
-	public void setNoAI(boolean disable) {
-		super.setNoAI(true);
 	}
 
 	@Override
@@ -78,6 +74,12 @@ public class EntityTinyWormEggSac extends EntityProximitySpawner {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if(source instanceof EntityDamageSource) {
+			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
+			if(sourceEntity instanceof EntityPlayer && ((EntityPlayer) sourceEntity).isCreative()) {
+				this.setDead();
+			}
+		}
 		return false;
 	}
 

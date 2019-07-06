@@ -9,7 +9,6 @@ import thebetweenlands.common.lib.ModInfo;
 
 public class RenderTinyWormEggSac extends RenderLiving<EntityTinyWormEggSac> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/worm_egg_sac.png");
-	private final ModelTinyWormEggSac EGG_SAC = new ModelTinyWormEggSac();
 
 	public RenderTinyWormEggSac(RenderManager manager) {
 		super(manager, new ModelTinyWormEggSac(), 0.5F);

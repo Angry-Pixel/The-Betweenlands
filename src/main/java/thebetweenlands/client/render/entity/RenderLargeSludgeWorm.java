@@ -17,12 +17,15 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelLargeSludgeWorm;
+import thebetweenlands.client.render.model.entity.ModelTinyWormEggSac;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
+import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)
 public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 	public static final ResourceLocation MODEL_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/large_sludge_worm.png");
 	public static final ResourceLocation HULL_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/large_sludge_worm_hull.png");
+	public static final ResourceLocation EGG_SAC_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/worm_egg_sac.png");
 
 	protected static final float HULL_OUTER_WIDTH = 0.58F;
 	protected static final float HULL_INNER_WIDTH = 0.44F;
@@ -42,6 +45,7 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 	};
 
 	private final ModelLargeSludgeWorm model;
+	private final ModelTinyWormEggSac modelEggSac = new ModelTinyWormEggSac();
 
 	public RenderLargeSludgeWorm(RenderManager manager) {
 		super(manager, new ModelLargeSludgeWorm(), 0.0F);
@@ -50,6 +54,15 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 
 	@Override
 	public void doRender(EntityLargeSludgeWorm entity, double x, double y, double z, float yaw, float partialTicks) {
+		this.renderPass(entity, x, y, z, yaw, partialTicks, false);
+	}
+
+	@Override
+	public void renderMultipass(EntityLargeSludgeWorm entity, double x, double y, double z, float yaw, float partialTicks) {
+		this.renderPass(entity, x, y, z, yaw, partialTicks, true);
+	}
+
+	protected void renderPass(EntityLargeSludgeWorm entity, double x, double y, double z, float yaw, float partialTicks, boolean isMultiPass) {
 		if(!entity.segmentsAvailable) {
 			return;
 		}
@@ -76,12 +89,12 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + 0.55D, z);
 
-		if(!this.renderOutlines) {
+		if(isMultiPass && !this.renderOutlines) {
 			GlStateManager.enableCull();
 			GlStateManager.cullFace(CullFace.FRONT);
 			GlStateManager.depthMask(false);
 
-			this.renderPass(entity, false, partialTicks);
+			this.renderParts(entity, false, partialTicks);
 		}
 
 		GlStateManager.disableCull();
@@ -96,7 +109,9 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
 		}
 
-		this.renderPass(entity, true, partialTicks);
+		if(!isMultiPass) {
+			this.renderParts(entity, true, partialTicks);
+		}
 
 		if(this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
@@ -108,8 +123,8 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 		}
 
 		GlStateManager.enableCull();
-		if(!this.renderOutlines) {
-			this.renderPass(entity, false, partialTicks);
+		if(isMultiPass && !this.renderOutlines) {
+			this.renderParts(entity, false, partialTicks);
 		}
 
 		GlStateManager.popMatrix();
@@ -123,12 +138,12 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 			this.unsetBrightness();
 		}
 
-		if(!this.renderOutlines) {
+		if(!isMultiPass && !this.renderOutlines) {
 			this.renderLeash(entity, x, y, z, yaw, partialTicks);
 		}
 	}
 
-	protected void renderPass(EntityLargeSludgeWorm entity, boolean renderSolids, float partialTicks) {
+	protected void renderParts(EntityLargeSludgeWorm entity, boolean renderSolids, float partialTicks) {
 		this.renderHead(entity, renderSolids, partialTicks);
 
 		this.renderTail(entity, renderSolids, partialTicks);
@@ -144,6 +159,30 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 
 		if(renderSolids) {
 			this.renderSpine(entity, partialTicks);
+
+			this.renderEggSac(entity, partialTicks);
+		}
+	}
+
+	protected void renderEggSac(EntityLargeSludgeWorm entity, float partialTicks) {
+		if(entity.eggSacPosition != null && entity.prevEggSacPosition != null) {
+			this.bindTexture(EGG_SAC_TEXTURE);
+
+			Vec3d pos = lerp(entity.prevEggSacPosition, entity.eggSacPosition, partialTicks);
+
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(pos.x, pos.y - 0.4D + Math.sin((entity.ticksExisted + partialTicks) * 0.25D) * 0.025D, pos.z);
+			GlStateManager.scale(-1, -1, 1);
+
+			float scale = Math.max(0, Math.min(1, entity.getEggSacPercentage()));
+
+			GlStateManager.scale(scale, scale, scale);
+
+			GlStateManager.translate(0, -1.5D, 0);
+
+			this.modelEggSac.render(0.0625F);
+
+			GlStateManager.popMatrix();
 		}
 	}
 
@@ -303,5 +342,10 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 	@Override
 	protected ResourceLocation getEntityTexture(EntityLargeSludgeWorm entity) {
 		return MODEL_TEXTURE;
+	}
+
+	@Override
+	public boolean isMultipass() {
+		return true;
 	}
 }
