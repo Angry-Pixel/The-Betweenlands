@@ -64,7 +64,7 @@ public class BlockDecayPitInvisibleFloorBlock extends BlockHorizontal {
 
 	@Override
 	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
-		return true;
+		return false;
 	}
 
 	@Override
