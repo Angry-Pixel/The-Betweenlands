@@ -135,6 +135,7 @@ import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.block.structure.BlockDecayPitControl;
 import thebetweenlands.common.block.structure.BlockDecayPitHangingChain;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlock;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockDiagonal;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL1;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL2;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockR1;
@@ -610,7 +611,7 @@ public class BlockRegistry {
 	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2 = new BlockDecayPitInvisibleFloorBlockR2();
 	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1 = new BlockDecayPitInvisibleFloorBlockL1();
 	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2 = new BlockDecayPitInvisibleFloorBlockL2();
-
+	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL = new BlockDecayPitInvisibleFloorBlockDiagonal();
 	//Winter Event
     public static final Block PRESENT = new BlockPresent();
     
