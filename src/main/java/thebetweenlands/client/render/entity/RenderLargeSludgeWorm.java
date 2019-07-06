@@ -175,9 +175,12 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 			Vec3d[] s1 = new Vec3d[HULL_CROSS_SECTION.length];
 			Vec3d[] s2 = new Vec3d[HULL_CROSS_SECTION.length];
 
+			float contraction1 = this.calculateHullContraction(entity, i / (float)(entity.prevSegmentPositions.length - 2), partialTicks);
+			float contraction2 = this.calculateHullContraction(entity, (i + 1) / (float)(entity.prevSegmentPositions.length - 2), partialTicks);
+
 			for(int j = 0; j < HULL_CROSS_SECTION.length; j++) {
-				s1[j] = getModelVertex(pos1, right1, up1, HULL_CROSS_SECTION[j][0], HULL_CROSS_SECTION[j][1]);
-				s2[j] = getModelVertex(pos2, right2, up2, HULL_CROSS_SECTION[j][0], HULL_CROSS_SECTION[j][1]);
+				s1[j] = getModelVertex(pos1, right1, up1, HULL_CROSS_SECTION[j][0] * contraction1, HULL_CROSS_SECTION[j][1] * contraction1);
+				s2[j] = getModelVertex(pos2, right2, up2, HULL_CROSS_SECTION[j][0] * contraction2, HULL_CROSS_SECTION[j][1] * contraction2);
 			}
 
 			float maxUW = 0;
@@ -214,6 +217,20 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 		}
 
 		tessellator.draw();
+	}
+
+	protected float calculateHullContraction(EntityLargeSludgeWorm entity, float percent, float partialTicks) {
+		double arcLength = entity.spineySpliney.getArcLength();
+		float minBound = 1.8F / (float)arcLength;
+		float maxBound = 1.0F - minBound;
+		float lerp = 1;
+		if(percent < minBound) {
+			lerp = percent / minBound;
+		} else if(percent > maxBound) {
+			lerp = 1 - (percent - maxBound) / minBound;
+		}
+		float contraction = ((float)Math.sin(percent * entity.spineySpliney.getArcLength() * 4 - (entity.ticksExisted + partialTicks) * 0.25F) + 1.0F) / 2.0F * 0.2F + 0.8F;
+		return 1 + (contraction - 1) * lerp;
 	}
 
 	protected void renderSpine(EntityLargeSludgeWorm entity, float partialTicks) {
