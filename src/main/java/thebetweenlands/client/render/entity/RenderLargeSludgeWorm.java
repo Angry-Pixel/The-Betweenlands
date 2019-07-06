@@ -54,6 +54,15 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 
 	@Override
 	public void doRender(EntityLargeSludgeWorm entity, double x, double y, double z, float yaw, float partialTicks) {
+		this.renderPass(entity, x, y, z, yaw, partialTicks, false);
+	}
+
+	@Override
+	public void renderMultipass(EntityLargeSludgeWorm entity, double x, double y, double z, float yaw, float partialTicks) {
+		this.renderPass(entity, x, y, z, yaw, partialTicks, true);
+	}
+
+	protected void renderPass(EntityLargeSludgeWorm entity, double x, double y, double z, float yaw, float partialTicks, boolean isMultiPass) {
 		if(!entity.segmentsAvailable) {
 			return;
 		}
@@ -80,12 +89,12 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + 0.55D, z);
 
-		if(!this.renderOutlines) {
+		if(isMultiPass && !this.renderOutlines) {
 			GlStateManager.enableCull();
 			GlStateManager.cullFace(CullFace.FRONT);
 			GlStateManager.depthMask(false);
 
-			this.renderPass(entity, false, partialTicks);
+			this.renderParts(entity, false, partialTicks);
 		}
 
 		GlStateManager.disableCull();
@@ -100,7 +109,9 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
 		}
 
-		this.renderPass(entity, true, partialTicks);
+		if(!isMultiPass) {
+			this.renderParts(entity, true, partialTicks);
+		}
 
 		if(this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
@@ -112,8 +123,8 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 		}
 
 		GlStateManager.enableCull();
-		if(!this.renderOutlines) {
-			this.renderPass(entity, false, partialTicks);
+		if(isMultiPass && !this.renderOutlines) {
+			this.renderParts(entity, false, partialTicks);
 		}
 
 		GlStateManager.popMatrix();
@@ -127,12 +138,12 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 			this.unsetBrightness();
 		}
 
-		if(!this.renderOutlines) {
+		if(!isMultiPass && !this.renderOutlines) {
 			this.renderLeash(entity, x, y, z, yaw, partialTicks);
 		}
 	}
 
-	protected void renderPass(EntityLargeSludgeWorm entity, boolean renderSolids, float partialTicks) {
+	protected void renderParts(EntityLargeSludgeWorm entity, boolean renderSolids, float partialTicks) {
 		this.renderHead(entity, renderSolids, partialTicks);
 
 		this.renderTail(entity, renderSolids, partialTicks);
@@ -331,5 +342,10 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 	@Override
 	protected ResourceLocation getEntityTexture(EntityLargeSludgeWorm entity) {
 		return MODEL_TEXTURE;
+	}
+
+	@Override
+	public boolean isMultipass() {
+		return true;
 	}
 }

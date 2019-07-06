@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -20,6 +21,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.util.CatmullRomSpline;
 import thebetweenlands.util.ReparameterizedSpline;
@@ -97,6 +99,27 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 	protected double getMaxPieceDistance() {
 		return 0.95D;
 	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+
+		nbt.setFloat("eggSacPercentage", this.getEggSacPercentage());
+		nbt.setInteger("eggSacCooldown", this.eggSacMovementCooldown);
+	}	
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+
+		if(nbt.hasKey("eggSacPercentage", Constants.NBT.TAG_FLOAT)) {
+			this.setEggSacPercentage(nbt.getFloat("eggSacPercentage"));
+		}
+		if(nbt.hasKey("eggSacCooldown", Constants.NBT.TAG_INT)) {
+			this.eggSacMovementCooldown = nbt.getInteger("eggSacCooldown");
+		}
+	}
+
 
 	@Override
 	public void onUpdate() {
