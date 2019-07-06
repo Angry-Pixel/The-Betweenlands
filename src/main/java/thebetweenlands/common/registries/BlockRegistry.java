@@ -135,6 +135,10 @@ import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.block.structure.BlockDecayPitControl;
 import thebetweenlands.common.block.structure.BlockDecayPitHangingChain;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlock;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL1;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL2;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockR1;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockR2;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockDruidStone;
@@ -599,10 +603,13 @@ public class BlockRegistry {
 	public static final Block COMPACTED_MUD_SLOPE = new BlockCompactedMudSlope();
 	public static final Block DECAY_PIT_CONTROL = new BlockDecayPitControl();
 
-	//Place-Holders for stuffs and things
 	public static final Block MUD_TOWER_BRAZIER = new BlockBrazier();
 	public static final Block DECAY_PIT_HANGING_CHAIN = new BlockDecayPitHangingChain();
 	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK = new BlockDecayPitInvisibleFloorBlock();
+	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_1 = new BlockDecayPitInvisibleFloorBlockR1();
+	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2 = new BlockDecayPitInvisibleFloorBlockR2();
+	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1 = new BlockDecayPitInvisibleFloorBlockL1();
+	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2 = new BlockDecayPitInvisibleFloorBlockL2();
 
 	//Winter Event
     public static final Block PRESENT = new BlockPresent();
