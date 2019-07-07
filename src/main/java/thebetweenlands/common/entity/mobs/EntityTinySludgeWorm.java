@@ -17,6 +17,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
@@ -25,8 +26,10 @@ import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
+//TODO Loot tables
 public class EntityTinySludgeWorm extends EntitySludgeWorm {
 	private static final DataParameter<Boolean> IS_SQUASHED = EntityDataManager.<Boolean>createKey(EntityTinySludgeWorm.class, DataSerializers.BOOLEAN);
 
@@ -136,15 +139,15 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 			}
 			getEntityWorld().playSound((EntityPlayer)null, getPosition(), getJumpedOnSound(), SoundCategory.NEUTRAL, 1.0F, 0.5F);
 			getEntityWorld().playSound((EntityPlayer)null, getPosition(), getDeathSound(), SoundCategory.NEUTRAL, 1.0F, 0.7F);
-			if (!getEntityWorld().isRemote) {
-				if (rand.nextInt(200) == 0)
-					entityDropItem(new ItemStack(ItemRegistry.LIFE_CRYSTAL), 0.0F);
-				entityDropItem(new ItemStack(ItemRegistry.SLUDGE_BALL), 0.0F);
-			}
 		}
 	}
 
 	protected SoundEvent getJumpedOnSound() {
 		return SoundRegistry.SQUISH;
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.TINY_SLUDGE_WORM;
 	}
 }

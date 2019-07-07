@@ -13,6 +13,7 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -21,7 +22,9 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.MessageSoundRipple;
+import thebetweenlands.common.registries.LootTableRegistry;
 
+//TODO Loot tables
 public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IEntityBL {
 
 	private static final DataParameter<Boolean> AMBUSH_SPAWNED = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
@@ -48,6 +51,11 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		dataManager.register(AMBUSH_SPAWNED, false);
 		dataManager.register(SCREAM, false);
 		dataManager.register(SCREAM_TIMER, 50);
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.BARRISHEE;
 	}
 
 	public boolean isAmbushSpawn() {
@@ -81,7 +89,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		tasks.addTask(3, new EntityAIWander(this, 0.4D, 20));
 		//tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		//tasks.addTask(5, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget(this, EntityZombie.class, 0, true, true, null));
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, true, true, null));
 		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
 	}
 

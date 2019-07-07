@@ -20,6 +20,7 @@ import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 
+//TODO Loot tables
 //TODO Don't extent spirit tree face
 public class EntityWallLamprey extends EntitySpiritTreeFace {
 	private static final DataParameter<Boolean> HIDDEN = EntityDataManager.createKey(EntityWallLamprey.class, DataSerializers.BOOLEAN);
@@ -85,7 +86,7 @@ public class EntityWallLamprey extends EntitySpiritTreeFace {
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return LootTableRegistry.SPIRIT_TREE_FACE_SMALL;
+		return LootTableRegistry.WALL_LAMPREY;
 	}
 
 	@Override

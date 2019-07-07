@@ -19,6 +19,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -29,8 +30,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
+//TODO Loot tables
 public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMob, IEntityBL {
 
 	public MultiPartEntityPart[] parts;
@@ -289,5 +292,10 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return this.renderBoundingBox;
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.SMALL_SLUDGE_WORM;
 	}
 }

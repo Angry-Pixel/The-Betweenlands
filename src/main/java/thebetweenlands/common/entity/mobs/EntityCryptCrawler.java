@@ -17,6 +17,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
@@ -24,8 +25,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
+//TODO Loot tables
 public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	private static final DataParameter<Boolean> IS_STANDING = EntityDataManager.createKey(EntityCryptCrawler.class, DataSerializers.BOOLEAN);
 	public float standingAngle, prevStandingAngle;
@@ -57,7 +60,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		tasks.addTask(3, new EntityAIWander(this, 0.6D));
 		tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		tasks.addTask(5, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget(this, EntityZombie.class, 0, false, true, null));
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, false, true, null));
 		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
 	}
 
@@ -71,6 +74,11 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.75D);
 	}
 
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.CRYPT_CRAWLER;
+	}
+	
 	@Override
 	public void onLivingUpdate() {
 
@@ -151,14 +159,17 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		return false;
 	}
 
+	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundRegistry.CRYPT_CRAWLER_LIVING;
 	}
-
-	protected SoundEvent getHurtSound() {
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundRegistry.CRYPT_CRAWLER_HURT;
 	}
-
+	
+	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundRegistry.CRYPT_CRAWLER_DEATH;
 	}

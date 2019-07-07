@@ -22,6 +22,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -30,7 +31,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.registries.LootTableRegistry;
 
+//TODO Loot tables
 public class EntityAshSprite extends EntityMob implements IEntityBL {
 	protected static final DataParameter<Byte> ASH_SPRITE_FLAGS = EntityDataManager.<Byte>createKey(EntityAshSprite.class, DataSerializers.BYTE);
 	@Nullable
@@ -76,7 +79,7 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 		tasks.addTask(9, new EntityAIWatchClosest(this, EntityPlayer.class, 3.0F, 1.0F));
 		tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
 		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[] { EntityAshSprite.class }));
-		targetTasks.addTask(3, new EntityAINearestAttackableTarget(this, EntityPlayer.class, false));
+		targetTasks.addTask(3, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
 	}
 
 	@Override
@@ -90,6 +93,11 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(ASH_SPRITE_FLAGS, Byte.valueOf((byte) 0));
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.ASH_SPRITE;
 	}
 
 	@Override
@@ -157,6 +165,7 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 		return null;
 	}
 
+	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return null;
 	}

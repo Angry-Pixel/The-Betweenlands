@@ -133,7 +133,6 @@ public class EntityRegistry {
 		registerEntity(EntityElixir.class, "bl_elexir", 64, 20, true);
 		registerEntity(EntityDreadfulMummy.class, "dreadful_mummy", 0x000000, 0x591E08, 64, 1, true);
 		registerEntity(EntitySludgeBall.class, "sludge_ball", 64, 20, true);
-		registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
 		registerEntity(EntitySporeJet.class, "spore_jet", 64, 1, true);
 		//registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
 		registerEntity(EntitySmollSludge.class, "smoll_sludge", 0x3A2F0B, 0x5F4C0B);

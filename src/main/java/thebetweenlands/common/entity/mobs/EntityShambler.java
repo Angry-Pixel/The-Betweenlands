@@ -20,6 +20,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -27,8 +28,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
+//TODO Loot tables
 public class EntityShambler extends EntityMob implements IEntityMultiPart, IEntityBL {
 
 	private static final DataParameter<Boolean> JAWS_OPEN = EntityDataManager.createKey(EntityShambler.class, DataSerializers.BOOLEAN);
@@ -79,6 +82,11 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		dataManager.register(JAW_ANGLE_PREV, 0);
 		dataManager.register(TONGUE_LENGTH, 0);
 		dataManager.register(TONGUE_LENGTH_PREV, 0);
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.SHAMBLER;
 	}
 
 	public boolean jawsAreOpen() {

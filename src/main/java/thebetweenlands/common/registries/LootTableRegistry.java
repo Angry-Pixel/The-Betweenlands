@@ -91,6 +91,14 @@ public class LootTableRegistry {
     public static final ResourceLocation SPIRIT_TREE_FACE_LARGE = register("entities/spirit_tree_face_large");
     public static final ResourceLocation BOULDER_SPRITE = register("entities/boulder_sprite");
     public static final ResourceLocation ROOT_SPRITE = register("entities/root_sprite");
+    public static final ResourceLocation WALL_LAMPREY = register("entities/wall_lamprey");
+    public static final ResourceLocation TINY_SLUDGE_WORM = register("entities/tiny_sludge_worm");
+    public static final ResourceLocation SMALL_SLUDGE_WORM = register("entities/small_sludge_worm");
+    public static final ResourceLocation LARGE_SLUDGE_WORM = register("entities/large_sludge_worm");
+    public static final ResourceLocation SHAMBLER = register("entities/shambler");
+    public static final ResourceLocation ASH_SPRITE = register("entities/ash_sprite");
+    public static final ResourceLocation BARRISHEE = register("entities/barrishee");
+    public static final ResourceLocation CRYPT_CRAWLER = register("entities/crypt_crawler");
     
     //BOSSES
     public static final ResourceLocation FORTRESS_BOSS = register("entities/fortress_boss");

@@ -19,14 +19,17 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.util.CatmullRomSpline;
 import thebetweenlands.util.ReparameterizedSpline;
 
+//TODO Loot tables
 public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 	private static final DataParameter<Float> EGG_SAC_PERCENTAGE = EntityDataManager.<Float>createKey(EntityLargeSludgeWorm.class, DataSerializers.FLOAT);
 
@@ -178,6 +181,11 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
 	}
 
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.LARGE_SLUDGE_WORM;
+	}
+	
 	@Override
 	protected double getMaxPieceDistance() {
 		return 0.95D;
