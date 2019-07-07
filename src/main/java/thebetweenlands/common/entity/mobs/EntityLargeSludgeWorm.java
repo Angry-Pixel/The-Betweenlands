@@ -34,21 +34,106 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 
 	public ReparameterizedSpline spineySpliney;
 
-	public final Vec3d[] prevSegmentPositions;
-	public final Vec3d[] segmentPositions;
-	public final Vec3d[] prevSegmentDirs;
-	public final Vec3d[] segmentDirs;
-
-	public final List<Vec3d> prevSpinePositions = new ArrayList<>();
-	public final List<Vec3d> spinePositions = new ArrayList<>();
-
-	public final List<Vec3d> prevSpineDirs = new ArrayList<>();
-	public final List<Vec3d> spineDirs = new ArrayList<>();
+	public final HullSegment[] segments;
+	public final List<SpineBone> bones = new ArrayList<>();
 
 	public Vec3d prevEggSacPosition = null;
 	public Vec3d eggSacPosition = null;
 
 	protected int eggSacMovementCooldown = 0;
+
+	protected static final float HULL_OUTER_WIDTH = 0.58F;
+	protected static final float HULL_INNER_WIDTH = 0.44F;
+	protected static final float[][] HULL_CROSS_SECTION = new float[][] {
+		{-HULL_OUTER_WIDTH, HULL_INNER_WIDTH},
+		{-HULL_OUTER_WIDTH, -HULL_INNER_WIDTH},
+		{-HULL_INNER_WIDTH, -HULL_INNER_WIDTH},
+		{-HULL_INNER_WIDTH, -HULL_OUTER_WIDTH},
+		{HULL_INNER_WIDTH, -HULL_OUTER_WIDTH},
+		{HULL_INNER_WIDTH, -HULL_INNER_WIDTH},
+		{HULL_OUTER_WIDTH, -HULL_INNER_WIDTH},
+		{HULL_OUTER_WIDTH, HULL_INNER_WIDTH},
+		{HULL_INNER_WIDTH, HULL_INNER_WIDTH},
+		{HULL_INNER_WIDTH, HULL_OUTER_WIDTH},
+		{-HULL_INNER_WIDTH, HULL_OUTER_WIDTH},
+		{-HULL_INNER_WIDTH, HULL_INNER_WIDTH},
+	};
+
+	public static class HullSegment {
+		private static final Vec3d WORLD_UP = new Vec3d(0, 1, 0);
+
+		public Vec3d prevPos, pos;
+		public float prevYaw, yaw;
+		public final float[] offsetX, offsetY, offsetZ;
+
+		public HullSegment() {
+			this.offsetX = new float[HULL_CROSS_SECTION.length];
+			this.offsetY = new float[HULL_CROSS_SECTION.length];
+			this.offsetZ = new float[HULL_CROSS_SECTION.length];
+		}
+
+		public void update(Vec3d newPos, Vec3d splineDir) {
+			this.prevPos = this.pos;
+			this.pos = newPos;
+
+			this.prevYaw = this.yaw;
+			this.yaw = (float)Math.toDegrees(Math.atan2(splineDir.z, splineDir.x)) - 90;
+
+			if(this.prevPos == null) {
+				this.prevPos = this.pos;
+				this.prevYaw = this.yaw;
+			}
+
+			while(this.yaw - this.prevYaw < -180.0F) {
+				this.prevYaw -= 360.0F;
+			}
+
+			while(this.yaw - this.prevYaw >= 180.0F) {
+				this.prevYaw += 360.0F;
+			}
+
+			Vec3d right = splineDir.crossProduct(WORLD_UP).normalize();
+			Vec3d up = right.crossProduct(splineDir).normalize();
+
+			int i = 0;
+			for(float[] hullCrossSection : HULL_CROSS_SECTION) {
+				float hullX = hullCrossSection[0];
+				float hullY = hullCrossSection[1];
+
+				this.offsetX[i] = (float) (right.x * hullX + up.x * hullY);
+				this.offsetY[i] = (float) (right.y * hullX + up.y * hullY);
+				this.offsetZ[i] = (float) (right.z * hullX + up.z * hullY);
+
+				i++;
+			}
+		}
+	}
+
+	public static class SpineBone {
+		public Vec3d prevPos, pos;
+		public float prevYaw, yaw;
+
+		public void update(Vec3d newPos, Vec3d splineDir) {
+			this.prevPos = this.pos;
+			this.pos = newPos;
+
+			this.prevYaw = this.yaw;
+			this.yaw = -(float)Math.toDegrees(Math.atan2(splineDir.z, splineDir.x)) + 90;
+
+			if(this.prevPos == null) {
+				this.prevPos = this.pos;
+				this.prevYaw = this.yaw;
+			}
+
+			while(this.yaw - this.prevYaw < -180.0F) {
+				this.prevYaw -= 360.0F;
+			}
+
+			while(this.yaw - this.prevYaw >= 180.0F) {
+				this.prevYaw += 360.0F;
+			}
+		}
+	}
 
 	public EntityLargeSludgeWorm(World world) {
 		super(world);
@@ -68,10 +153,7 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 
 		final int numSegments = 3 * this.parts.length;
 
-		this.prevSegmentPositions = new Vec3d[numSegments];
-		this.segmentPositions = new Vec3d[numSegments];
-		this.prevSegmentDirs = new Vec3d[numSegments];
-		this.segmentDirs = new Vec3d[numSegments];
+		this.segments = new HullSegment[numSegments];
 
 		this.tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
 		this.tasks.addTask(4, new AILayEggSac(this));
@@ -228,42 +310,36 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 		points[this.parts.length + 1] = endPoint;
 
 		this.spineySpliney = new ReparameterizedSpline(new CatmullRomSpline(points));
-		this.spineySpliney.init(this.segmentPositions.length * 2, 3);
+		this.spineySpliney.init(this.segments.length * 2, 3);
 
-		for(int i = 0; i < this.segmentPositions.length; i++) {
-			Vec3d pos = this.spineySpliney.interpolate(i / (float)(this.segmentPositions.length - 1));
-			Vec3d dir = this.spineySpliney.derivative(i / (float)(this.segmentPositions.length - 1));
-
-			this.prevSegmentPositions[i] = this.segmentPositions[i];
-			this.segmentPositions[i] = pos;
-			if(this.prevSegmentPositions[i] == null) {
-				this.prevSegmentPositions[i] = pos;
+		for(int i = 0; i < this.segments.length; i++) {
+			HullSegment segment = this.segments[i];
+			if(segment == null) {
+				this.segments[i] = segment = new HullSegment();
 			}
 
-			this.prevSegmentDirs[i] = this.segmentDirs[i];
-			this.segmentDirs[i] = dir;
-			if(this.prevSegmentDirs[i] == null) {
-				this.prevSegmentDirs[i] = dir;
-			}
+			Vec3d pos = this.spineySpliney.interpolate(i / (float)(this.segments.length - 1));
+			Vec3d dir = this.spineySpliney.derivative(i / (float)(this.segments.length - 1));
+
+			segment.update(pos, dir);
 		}
-
-		this.prevSpinePositions.clear();
-		this.prevSpinePositions.addAll(this.spinePositions);
-
-		this.prevSpineDirs.clear();
-		this.prevSpineDirs.addAll(this.spineDirs);
-
-		this.spinePositions.clear();
-		this.spineDirs.clear();
 
 		int spineBones = MathHelper.ceil(this.spineySpliney.getArcLength() * 12);
 
-		for(int i = 0; i < spineBones; i++) {
-			Vec3d bonePos = this.spineySpliney.interpolate(i / (float)(spineBones - 1));
-			Vec3d boneDir = this.spineySpliney.derivative(i / (float)(spineBones - 1));
+		for(int i = spineBones - this.bones.size(); i > 0; i--) {
+			this.bones.add(new SpineBone());
+		}
+		for(int i = this.bones.size() - spineBones; i > 0; i--) {
+			this.bones.remove(this.bones.size() - 1);
+		}
 
-			this.spinePositions.add(bonePos);
-			this.spineDirs.add(boneDir);
+		for(int i = 0; i < this.bones.size(); i++) {
+			SpineBone bone = this.bones.get(i);
+
+			Vec3d pos = this.spineySpliney.interpolate(i / (float)(this.bones.size() - 1));
+			Vec3d dir = this.spineySpliney.derivative(i / (float)(this.bones.size() - 1));
+
+			bone.update(pos, dir);
 		}
 	}
 

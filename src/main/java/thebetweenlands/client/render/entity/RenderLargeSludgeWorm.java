@@ -13,12 +13,15 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelLargeSludgeWorm;
 import thebetweenlands.client.render.model.entity.ModelTinyWormEggSac;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm.HullSegment;
+import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm.SpineBone;
 import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)
@@ -26,23 +29,6 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 	public static final ResourceLocation MODEL_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/large_sludge_worm.png");
 	public static final ResourceLocation HULL_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/large_sludge_worm_hull.png");
 	public static final ResourceLocation EGG_SAC_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/worm_egg_sac.png");
-
-	protected static final float HULL_OUTER_WIDTH = 0.58F;
-	protected static final float HULL_INNER_WIDTH = 0.44F;
-	protected static final float[][] HULL_CROSS_SECTION = new float[][] {
-		{-HULL_OUTER_WIDTH, HULL_INNER_WIDTH},
-		{-HULL_OUTER_WIDTH, -HULL_INNER_WIDTH},
-		{-HULL_INNER_WIDTH, -HULL_INNER_WIDTH},
-		{-HULL_INNER_WIDTH, -HULL_OUTER_WIDTH},
-		{HULL_INNER_WIDTH, -HULL_OUTER_WIDTH},
-		{HULL_INNER_WIDTH, -HULL_INNER_WIDTH},
-		{HULL_OUTER_WIDTH, -HULL_INNER_WIDTH},
-		{HULL_OUTER_WIDTH, HULL_INNER_WIDTH},
-		{HULL_INNER_WIDTH, HULL_INNER_WIDTH},
-		{HULL_INNER_WIDTH, HULL_OUTER_WIDTH},
-		{-HULL_INNER_WIDTH, HULL_OUTER_WIDTH},
-		{-HULL_INNER_WIDTH, HULL_INNER_WIDTH},
-	};
 
 	private final ModelLargeSludgeWorm model;
 	private final ModelTinyWormEggSac modelEggSac = new ModelTinyWormEggSac();
@@ -168,10 +154,15 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 		if(entity.eggSacPosition != null && entity.prevEggSacPosition != null) {
 			this.bindTexture(EGG_SAC_TEXTURE);
 
-			Vec3d pos = lerp(entity.prevEggSacPosition, entity.eggSacPosition, partialTicks);
+			Vec3d pos = entity.eggSacPosition;
+			Vec3d prevPos = entity.prevEggSacPosition;
+
+			double x = lerp(prevPos.x, pos.x, partialTicks);
+			double y = lerp(prevPos.y, pos.y, partialTicks);
+			double z = lerp(prevPos.z, pos.z, partialTicks);
 
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(pos.x, pos.y - 0.4D + Math.sin((entity.ticksExisted + partialTicks) * 0.25D) * 0.025D, pos.z);
+			GlStateManager.translate(x, y - 0.4D + Math.sin((entity.ticksExisted + partialTicks) * 0.25D) * 0.025D, z);
 			GlStateManager.scale(-1, -1, 1);
 
 			float scale = Math.max(0, Math.min(1, entity.getEggSacPercentage()));
@@ -192,67 +183,96 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferBuilder = tessellator.getBuffer();
 
-		Vec3d worldUp = new Vec3d(0, 1, 0);
-
 		bufferBuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
 
 		float uOffset = 0;
 
-		for(int i = 0; i < entity.prevSegmentPositions.length - 1; i++) {
-			Vec3d pos1 = lerp(entity.prevSegmentPositions[i], entity.segmentPositions[i], partialTicks);
-			Vec3d dir1 = lerp(entity.prevSegmentDirs[i], entity.segmentDirs[i], partialTicks);
+		int i = 0;
 
-			Vec3d pos2 = lerp(entity.prevSegmentPositions[i + 1], entity.segmentPositions[i + 1], partialTicks);
-			Vec3d dir2 = lerp(entity.prevSegmentDirs[i + 1], entity.segmentDirs[i + 1], partialTicks);
+		double pos1X = 0, pos1Y = 0, pos1Z = 0;
+		HullSegment segment1 = null;
+		for(HullSegment segment2 : entity.segments) {
+			Vec3d pos = segment2.pos;
+			Vec3d prevPos = segment2.prevPos;
 
-			Vec3d right1 = dir1.crossProduct(worldUp).normalize();
-			Vec3d up1 = right1.crossProduct(dir1).normalize();
+			double pos2X = lerp(prevPos.x, pos.x, partialTicks);
+			double pos2Y = lerp(prevPos.y, pos.y, partialTicks);
+			double pos2Z = lerp(prevPos.z, pos.z, partialTicks);
 
-			Vec3d right2 = dir2.crossProduct(worldUp).normalize();
-			Vec3d up2 = right2.crossProduct(dir2).normalize();
+			if(segment1 != null) {
+				float maxUW = 0;
 
-			Vec3d[] s1 = new Vec3d[HULL_CROSS_SECTION.length];
-			Vec3d[] s2 = new Vec3d[HULL_CROSS_SECTION.length];
+				int hullVerts = Math.min(segment1.offsetX.length, segment2.offsetX.length);
 
-			float contraction1 = this.calculateHullContraction(entity, i / (float)(entity.prevSegmentPositions.length - 2), partialTicks);
-			float contraction2 = this.calculateHullContraction(entity, (i + 1) / (float)(entity.prevSegmentPositions.length - 2), partialTicks);
+				for(int vertIndex = 0; vertIndex < hullVerts; vertIndex++) {
+					int nextVertIndex = (vertIndex + 1) % hullVerts;
 
-			for(int j = 0; j < HULL_CROSS_SECTION.length; j++) {
-				s1[j] = getModelVertex(pos1, right1, up1, HULL_CROSS_SECTION[j][0] * contraction1, HULL_CROSS_SECTION[j][1] * contraction1);
-				s2[j] = getModelVertex(pos2, right2, up2, HULL_CROSS_SECTION[j][0] * contraction2, HULL_CROSS_SECTION[j][1] * contraction2);
+					float contraction1 = this.calculateHullContraction(entity, (i - 1) / (float)(entity.segments.length - 1), partialTicks);
+					float contraction2 = this.calculateHullContraction(entity, i / (float)(entity.segments.length - 1), partialTicks);
+
+					double v11x = pos1X + segment1.offsetX[vertIndex] * contraction1;
+					double v11y = pos1Y + segment1.offsetY[vertIndex] * contraction1;
+					double v11z = pos1Z + segment1.offsetZ[vertIndex] * contraction1;
+
+					double v12x = pos1X + segment1.offsetX[nextVertIndex] * contraction1;
+					double v12y = pos1Y + segment1.offsetY[nextVertIndex] * contraction1;
+					double v12z = pos1Z + segment1.offsetZ[nextVertIndex] * contraction1;
+
+					double v21x = pos2X + segment2.offsetX[vertIndex] * contraction2;
+					double v21y = pos2Y + segment2.offsetY[vertIndex] * contraction2;
+					double v21z = pos2Z + segment2.offsetZ[vertIndex] * contraction2;
+
+					double v22x = pos2X + segment2.offsetX[nextVertIndex] * contraction2;
+					double v22y = pos2Y + segment2.offsetY[nextVertIndex] * contraction2;
+					double v22z = pos2Z + segment2.offsetZ[nextVertIndex] * contraction2;
+
+					float uw1 = dist(v12x, v12y, v12z, v11x, v11y, v11z) * 0.5F;
+					float vw1 = dist(v21x, v21y, v21z, v11x, v11y, v11z);
+
+					float uw2 = dist(v22x, v22y, v22z, v21x, v21y, v21z) * 0.5F;
+					float vw2 = dist(v22x, v22y, v22z, v12x, v12y, v12z);
+
+					float uw = Math.max(uw1, uw2);
+					float vw = Math.max(vw1, vw2);
+
+					float d1x = (float) (v21x - v12x);
+					float d1y = (float) (v21y - v12y);
+					float d1z = (float) (v21z - v12z);
+
+					float d2x = (float) (v22x - v11x);
+					float d2y = (float) (v22y - v11y);
+					float d2z = (float) (v22z - v11z);
+
+					float nx = d1y * d2z - d1z * d2y;
+					float ny = d1z * d2x - d1x * d2z;
+					float nz = d1x * d2y - d1y * d2x;
+
+					float len = len(nx, ny, nz);
+
+					nx /= len;
+					ny /= len;
+					nz /= len;
+
+					float us = uOffset;
+					float vs = 0;
+
+					bufferBuilder.pos(v11x, v11y, v11z).tex(us, vs).normal(nx, ny, nz).endVertex();
+					bufferBuilder.pos(v21x, v21y, v21z).tex(us, vs + vw).normal(nx, ny, nz).endVertex();
+					bufferBuilder.pos(v22x, v22y, v22z).tex(us + uw, vs + vw).normal(nx, ny, nz).endVertex();
+					bufferBuilder.pos(v12x, v12y, v12z).tex(us + uw, vs).normal(nx, ny, nz).endVertex();
+
+					maxUW = Math.max(maxUW, uw);
+				}
+
+				uOffset += maxUW;
 			}
 
-			float maxUW = 0;
+			segment1 = segment2;
+			pos1X = pos2X;
+			pos1Y = pos2Y;
+			pos1Z = pos2Z;
 
-			for(int j = 0; j < HULL_CROSS_SECTION.length; j++) {
-				Vec3d v11 = s1[j];
-				Vec3d v12 = s1[(j + 1) % HULL_CROSS_SECTION.length];
-				Vec3d v21 = s2[j];
-				Vec3d v22 = s2[(j + 1) % HULL_CROSS_SECTION.length];
-
-				float uw1 = (float)v12.subtract(v11).length() * 0.5F;
-				float vw1 = (float)v21.subtract(v11).length();
-
-				float uw2 = (float)v22.subtract(v21).length() * 0.5F;
-				float vw2 = (float)v22.subtract(v12).length();
-
-				float uw = Math.max(uw1, uw2);
-				float vw = Math.max(vw1, vw2);
-
-				Vec3d normal = v21.subtract(v12).crossProduct(v22.subtract(v11)).normalize();
-
-				float us = uOffset;
-				float vs = 0;
-
-				bufferBuilder.pos(v11.x, v11.y, v11.z).tex(us, vs).normal((float)normal.x, (float)normal.y, (float)normal.z).endVertex();
-				bufferBuilder.pos(v21.x, v21.y, v21.z).tex(us, vs + vw).normal((float)normal.x, (float)normal.y, (float)normal.z).endVertex();
-				bufferBuilder.pos(v22.x, v22.y, v22.z).tex(us + uw, vs + vw).normal((float)normal.x, (float)normal.y, (float)normal.z).endVertex();
-				bufferBuilder.pos(v12.x, v12.y, v12.z).tex(us + uw, vs).normal((float)normal.x, (float)normal.y, (float)normal.z).endVertex();
-
-				maxUW = Math.max(maxUW, uw);
-			}
-
-			uOffset += maxUW;
+			i++;
 		}
 
 		tessellator.draw();
@@ -269,22 +289,29 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 			lerp = 1 - (percent - maxBound) / minBound;
 		}
 		float contraction = ((float)Math.sin(percent * entity.spineySpliney.getArcLength() * 4 - (entity.ticksExisted + partialTicks) * 0.25F) + 1.0F) / 2.0F * 0.2F + 0.8F;
-		return 1 + (contraction - 1) * lerp;
+		return 0.99F + (contraction - 0.99F) * lerp;
 	}
 
 	protected void renderSpine(EntityLargeSludgeWorm entity, float partialTicks) {
 		this.bindTexture(MODEL_TEXTURE);
 
-		for(int i = 0; i < Math.min(entity.spinePositions.size(), entity.prevSpinePositions.size()); i++) {
-			Vec3d bonePos = lerp(entity.prevSpinePositions.get(i), entity.spinePositions.get(i), partialTicks);
-			Vec3d boneDir = lerp(entity.prevSpineDirs.get(i), entity.spineDirs.get(i), partialTicks);
+		int i = 0;
+		for(SpineBone bone : entity.bones) {
+			Vec3d pos = bone.pos;
+			Vec3d prevPos = bone.prevPos;
 
-			float boneYaw = -(float)Math.toDegrees(Math.atan2(boneDir.z, boneDir.x)) + 90;
+			double x = lerp(prevPos.x, pos.x, partialTicks);
+			double y = lerp(prevPos.y, pos.y, partialTicks);
+			double z = lerp(prevPos.z, pos.z, partialTicks);
+
+			float boneYaw = lerp(bone.prevYaw, bone.yaw, partialTicks);
 
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(bonePos.x, bonePos.y + Math.sin(-(entity.ticksExisted + partialTicks) * 0.25F + i * 0.2F) * 0.05F, bonePos.z);
+			GlStateManager.translate(x, y + Math.sin(-(entity.ticksExisted + partialTicks) * 0.25F + i * 0.2F) * 0.05F, z);
 			this.model.renderSpinePiece(i % 6, boneYaw);
 			GlStateManager.popMatrix();
+
+			i++;
 		}
 	}
 
@@ -293,11 +320,11 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 
 		GlStateManager.pushMatrix();
 
+		HullSegment headSegment = entity.segments[0];
+
+		float headYaw = lerp(headSegment.prevYaw, headSegment.yaw, partialTicks);
+
 		GlStateManager.scale(-1, -1, 1);
-
-		Vec3d headDir = lerp(entity.prevSegmentDirs[0], entity.segmentDirs[0], partialTicks);
-
-		float headYaw = (float)Math.toDegrees(Math.atan2(headDir.z, headDir.x)) - 90;
 
 		GlStateManager.rotate(headYaw, 0, 1, 0);
 
@@ -313,14 +340,20 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 
 		GlStateManager.pushMatrix();
 
-		Vec3d tailPos = lerp(entity.prevSegmentPositions[entity.segmentDirs.length - 1], entity.segmentPositions[entity.segmentDirs.length - 1], partialTicks);
-		Vec3d tailDir = lerp(entity.prevSegmentDirs[entity.segmentDirs.length - 1], entity.segmentDirs[entity.segmentDirs.length - 1], partialTicks);
+		HullSegment tailSegment = entity.segments[entity.segments.length - 1];
 
-		GlStateManager.translate(tailPos.x, tailPos.y, tailPos.z);
+		Vec3d pos = tailSegment.pos;
+		Vec3d prevPos = tailSegment.prevPos;
+
+		double x = lerp(prevPos.x, pos.x, partialTicks);
+		double y = lerp(prevPos.y, pos.y, partialTicks);
+		double z = lerp(prevPos.z, pos.z, partialTicks);
+
+		float tailYaw = lerp(tailSegment.prevYaw, tailSegment.yaw, partialTicks);
+
+		GlStateManager.translate(x, y, z);
 
 		GlStateManager.scale(-1, -1, 1);
-
-		float tailYaw = (float)Math.toDegrees(Math.atan2(tailDir.z, tailDir.x)) - 90;
 
 		GlStateManager.rotate(tailYaw, 0, 1, 0);
 
@@ -331,12 +364,20 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 		GlStateManager.popMatrix();
 	}
 
-	protected static Vec3d getModelVertex(Vec3d pos, Vec3d rightVec, Vec3d upVec, float right, float up) {
-		return new Vec3d(pos.x + rightVec.x * right + upVec.x * up, pos.y + rightVec.y * right + upVec.y * up, pos.z + rightVec.z * right + upVec.z * up);
+	protected static float dist(double x1, double y1, double z1, double x2, double y2, double z2) {
+		return len(x2 - x1, y2 - y1, z2 - z2);
 	}
 
-	protected static Vec3d lerp(Vec3d start, Vec3d end, float delta) {
-		return new Vec3d(start.x + (end.x - start.x) * delta, start.y + (end.y - start.y) * delta, start.z + (end.z - start.z) * delta);
+	protected static float len(double x, double y, double z) {
+		return MathHelper.sqrt(x * x + y * y + z * z);
+	}
+
+	protected static float lerp(float start, float end, float delta) {
+		return start + (end - start) * delta;
+	}
+
+	protected static double lerp(double start, double end, float delta) {
+		return start + (end - start) * delta;
 	}
 
 	@Override
