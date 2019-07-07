@@ -365,7 +365,7 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 	}
 
 	protected static float dist(double x1, double y1, double z1, double x2, double y2, double z2) {
-		return len(x2 - x1, y2 - y1, z2 - z2);
+		return len(x2 - x1, y2 - y1, z2 - z1);
 	}
 
 	protected static float len(double x, double y, double z) {
