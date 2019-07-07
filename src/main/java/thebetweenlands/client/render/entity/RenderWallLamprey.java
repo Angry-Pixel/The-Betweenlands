@@ -14,6 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.entity.layer.LayerOverlay;
+import thebetweenlands.client.render.model.entity.ModelWallLamprey;
 import thebetweenlands.client.render.model.entity.ModelWallLampreyHole;
 import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.lib.ModInfo;
@@ -23,20 +24,26 @@ import thebetweenlands.util.Stencil;
 public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 	protected static final ResourceLocation[] DESTROY_STAGES = new ResourceLocation[] {new ResourceLocation("textures/blocks/destroy_stage_0.png"), new ResourceLocation("textures/blocks/destroy_stage_1.png"), new ResourceLocation("textures/blocks/destroy_stage_2.png"), new ResourceLocation("textures/blocks/destroy_stage_3.png"), new ResourceLocation("textures/blocks/destroy_stage_4.png"), new ResourceLocation("textures/blocks/destroy_stage_5.png"), new ResourceLocation("textures/blocks/destroy_stage_6.png"), new ResourceLocation("textures/blocks/destroy_stage_7.png"), new ResourceLocation("textures/blocks/destroy_stage_8.png"), new ResourceLocation("textures/blocks/destroy_stage_9.png")};
 
-	private static final ResourceLocation TEXTURE_OVERLAY = new ResourceLocation(ModInfo.ID, "textures/entity/wall_lamprey_hole_overlay.png");
+	private static final ResourceLocation WALL_TEXTURE_OVERLAY = new ResourceLocation(ModInfo.ID, "textures/entity/wall_lamprey_hole_overlay.png");
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/blocks/mud_bricks.png");
+	private static final ResourceLocation WALL_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/blocks/mud_bricks.png");
+	private static final ResourceLocation MODEL_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/wall_lamprey.png");
 
 	private final ModelWallLampreyHole modelBlockTextured;
 	private final ModelWallLampreyHole modelNormal;
+	private final ModelWallLamprey model;
+
+	private boolean renderWall = false;
+	private int renderPass = 0;
 
 	public RenderWallLamprey(RenderManager renderManager) {
-		super(renderManager, new ModelWallLampreyHole(true), 0);
+		super(renderManager, new ModelWallLamprey(), 0);
 
-		this.modelBlockTextured = (ModelWallLampreyHole) this.mainModel;
+		this.model = (ModelWallLamprey) this.mainModel;
+		this.modelBlockTextured = new ModelWallLampreyHole(true);
 		this.modelNormal = new ModelWallLampreyHole(false);
 
-		this.addLayer(new LayerOverlay<EntityWallLamprey>(this, TEXTURE_OVERLAY) {
+		this.addLayer(new LayerOverlay<EntityWallLamprey>(this, WALL_TEXTURE_OVERLAY) {
 			@Override
 			protected ModelBase[] getModels(EntityWallLamprey entity) {
 				return new ModelBase[] { RenderWallLamprey.this.modelNormal };
@@ -44,6 +51,11 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 		});
 
 		this.addLayer(new LayerOverlay<EntityWallLamprey>(this) {
+			@Override
+			protected ModelBase[] getModels(EntityWallLamprey entity) {
+				return new ModelBase[] { RenderWallLamprey.this.modelNormal };
+			}
+
 			@Override
 			protected ResourceLocation getTexture(EntityWallLamprey entity, int index) {
 				int damage = MathHelper.ceil((1.0F - entity.getHealth() / entity.getMaxHealth()) * 10.0F);
@@ -68,6 +80,12 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 				GlStateManager.enableAlpha();
+
+				GlStateManager.matrixMode(GL11.GL_TEXTURE);
+				GlStateManager.pushMatrix();
+				GlStateManager.loadIdentity();
+				GlStateManager.scale(4f, 4f, 0);
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 			}
 
 			private void postRenderDamagedBlocks() {
@@ -76,6 +94,10 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 				GlStateManager.depthMask(true);
 				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+				GlStateManager.matrixMode(GL11.GL_TEXTURE);
+				GlStateManager.popMatrix();
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 			}
 		});
 	}
@@ -114,6 +136,8 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 				//Render window through which the hole will be visible
 				this.modelBlockTextured.frontPiece1.showModel = false;
 				this.modelBlockTextured.window.showModel = true;
+				this.modelBlockTextured.setWindowZOffsetPercent(-0.001F);
+				this.renderPass = 0;
 				super.doRender(entity, x, y, z, entityYaw, partialTicks);
 				this.modelBlockTextured.frontPiece1.showModel = true;
 				this.modelBlockTextured.window.showModel = false;
@@ -136,6 +160,7 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 			GlStateManager.depthFunc(GL11.GL_GEQUAL);
 			GlStateManager.colorMask(false, false, false, false);
 
+			this.renderPass = 1;
 			super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
 			GlStateManager.colorMask(true, true, true, true);
@@ -143,13 +168,38 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 
 			GL11.glDisable(GL11.GL_STENCIL_TEST);
 		}
-		
+
 		//Render visible pass
+		this.renderPass = 2;
+
+		this.modelBlockTextured.window.showModel = true;
+		this.modelBlockTextured.setWindowZOffsetPercent(entity.getHoleDepthPercent(partialTicks));
+
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+
+		this.modelBlockTextured.window.showModel = false;
+	}
+
+	@Override
+	protected void renderModel(EntityWallLamprey entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+		this.mainModel = this.modelBlockTextured;
+		this.renderWall = true;
+
+		super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+
+		this.mainModel = this.model;
+		this.renderWall = false;
+
+		if(this.renderPass == 2) {
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0, -0.55D, -0.3D);
+			super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+			GlStateManager.popMatrix();
+		}
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityWallLamprey entity) {
-		return TEXTURE;
+		return this.renderWall ? WALL_TEXTURE : MODEL_TEXTURE;
 	}
 }

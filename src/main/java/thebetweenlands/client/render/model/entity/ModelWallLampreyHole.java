@@ -7,6 +7,7 @@ import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.model.TextureOffset;
 import net.minecraft.client.model.TexturedQuad;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -230,6 +231,8 @@ public class ModelWallLampreyHole extends ModelBase {
 	public ModelRenderer back;
 	public ModelRenderer window;
 
+	private float windowZOffsetPercent = 0.0f;
+
 	public ModelWallLampreyHole(boolean blockTextured) {
 		this.textureWidth = blockTextured ? 16 : 64;
 		this.textureHeight = blockTextured ? 16 : 64;
@@ -333,7 +336,23 @@ public class ModelWallLampreyHole extends ModelBase {
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
 		this.frontPiece1.render(f5);
+
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0, 0, 0.0001F + this.windowZOffsetPercent * 0.61F);
+
+		float brightness = 1.0F - this.windowZOffsetPercent;
+
+		GlStateManager.color(brightness, brightness, brightness, 1);
+
 		this.window.render(f5);
+
+		GlStateManager.color(1, 1, 1, 1);
+
+		GlStateManager.popMatrix();
+	}
+
+	public void setWindowZOffsetPercent(float percent) {
+		this.windowZOffsetPercent = percent;
 	}
 
 	/**

@@ -131,12 +131,12 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace implements IMo
 	}
 
 	@Override
-	public boolean canResideInBlock(BlockPos pos) {
+	public boolean canResideInBlock(BlockPos pos, EnumFacing facing, EnumFacing facingUp) {
 		return this.world.getBlockState(pos).getBlock() == BlockRegistry.LOG_SPIRIT_TREE;
 	}
 
 	@Override
-	public boolean canMoveFaceInto(BlockPos pos) {
+	public boolean canMoveFaceInto(BlockPos pos, EnumFacing facing, EnumFacing facingUp) {
 		IBlockState state = this.world.getBlockState(pos);
 		if(state.getMaterial().isLiquid() || state.getBlock().isAir(state, this.world, pos)) {
 			return true;
