@@ -27,6 +27,7 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -174,32 +175,34 @@ public class BlockMudBrickAlcove extends BasicBlock implements ITileEntityProvid
 		}
 		world.notifyBlockUpdate(pos, state, state, 3);
 	}
-
+	
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		TileEntityMudBrickAlcove tile = getTileEntity(world, pos);
-		if (tile instanceof TileEntityMudBrickAlcove) {
-			if (tile.has_urn && facing == state.getValue(FACING)) {
-				if (!world.isRemote) {
-					BlockPos offsetPos = pos.offset(facing);
-					IInventory tileInv = (IInventory) tile;
-					if (tileInv != null)
-						InventoryHelper.dropInventoryItems(world, offsetPos, tileInv);
-					if (world.rand.nextInt(3) == 0) {
-						EntityAshSprite entity = new EntityAshSprite (world); //ash sprite here :P
-						entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.getY(), offsetPos.getZ() + 0.5D, 0.0F, 0.0F);
-						entity.setBoundOrigin(offsetPos);
-						world.spawnEntity(entity);
+	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
+		if (!world.isRemote) {
+			TileEntityMudBrickAlcove tile = getTileEntity(world, pos);
+			if (tile instanceof TileEntityMudBrickAlcove) {
+				if (tile.has_urn) {
+					IBlockState state = world.getBlockState(pos);
+					RayTraceResult ray = this.rayTrace(pos, player.getPositionEyes(1), player.getPositionEyes(1).add(player.getLookVec().scale(10)), state.getBoundingBox(world, pos));
+					if(ray != null && state.getValue(FACING) == ray.sideHit) {
+						BlockPos offsetPos = pos.offset(ray.sideHit);
+						IInventory tileInv = (IInventory) tile;
+						if (tileInv != null)
+							InventoryHelper.dropInventoryItems(world, offsetPos, tileInv);
+						if (world.rand.nextInt(3) == 0) {
+							EntityAshSprite entity = new EntityAshSprite (world); //ash sprite here :P
+							entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.getY(), offsetPos.getZ() + 0.5D, 0.0F, 0.0F);
+							entity.setBoundOrigin(offsetPos);
+							world.spawnEntity(entity);
+						}
+						world.playSound(null, pos, blockSoundType.getBreakSound(), SoundCategory.BLOCKS, 0.5F, 1F);
+						world.playEvent(null, 2001, pos, Block.getIdFromBlock(BlockRegistry.MUD_FLOWER_POT)); //this will do unless we want specific particles
+						tile.has_urn = false;
+						world.notifyBlockUpdate(pos, state, state, 2);
 					}
-					world.playSound(null, pos, blockSoundType.getBreakSound(), SoundCategory.BLOCKS, 0.5F, 1F);
-					world.playEvent(null, 2001, pos, Block.getIdFromBlock(BlockRegistry.MUD_FLOWER_POT)); //this will do unless we want specific particles
-					tile.has_urn = false;
-					world.notifyBlockUpdate(pos, state, state, 2);
 				}
-				return true;
 			}
 		}
-		return false;
 	}
 
 	@Override
