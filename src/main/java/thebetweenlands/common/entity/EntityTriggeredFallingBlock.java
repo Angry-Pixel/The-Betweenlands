@@ -1,12 +1,16 @@
 package thebetweenlands.common.entity;
 
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -24,7 +28,28 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 		super.onUpdate();
 		if (!getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%5 == 0)
 			checkArea();
+		
+			if (getEntityWorld().isRemote)
+				dustParticles();
 	}
+
+	public void dustParticles() {
+		if (rand.nextInt(20) == 0) {
+			BlockPos blockpos = getPosition().down();
+			if (canFallThrough(getEntityWorld().getBlockState(blockpos))) {
+				double d0 = (double) ((float) getPosition().getX() + rand.nextFloat());
+				double d1 = (double) getPosition().getY() - 0.05D;
+				double d2 = (double) ((float) getPosition().getZ() + rand.nextFloat());
+				getEntityWorld().spawnParticle(EnumParticleTypes.FALLING_DUST, d0, d1, d2, 0.0D, 0.0D, 0.0D, Block.getStateId(getBlockType(getEntityWorld(), getPosition())));
+			}
+		}
+	}
+
+    public static boolean canFallThrough(IBlockState state) {
+        Block block = state.getBlock();
+        Material material = state.getMaterial();
+        return block == Blocks.FIRE || material == Material.AIR || material == Material.WATER || material == Material.LAVA;
+    }
 
 	@Override
 	protected void performPreSpawnaction(Entity entity) {
