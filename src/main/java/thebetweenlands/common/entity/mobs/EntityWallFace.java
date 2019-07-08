@@ -500,6 +500,9 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		facing[0] = dir;
 		if(dir == EnumFacing.DOWN || dir == EnumFacing.UP) {
 			facing[1] = EnumFacing.getFacingFromVector((float)lookDir.x, 0, (float)lookDir.z);
+			if(dir == EnumFacing.UP) {
+				facing[1] = facing[1].getOpposite();
+			}
 		} else {
 			facing[1] = EnumFacing.UP;
 		}

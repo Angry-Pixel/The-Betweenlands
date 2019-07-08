@@ -150,6 +150,8 @@ public class SoundRegistry {
     public static final BLSoundEvent CRYPT_CRAWLER_DEATH = reg("crypt_crawler_death");
     public static final BLSoundEvent CRYPT_CRAWLER_HURT = reg("crypt_crawler_hurt");
     public static final BLSoundEvent CRYPT_CRAWLER_LIVING = reg("crypt_crawler_living");
+    public static final BLSoundEvent WALL_LAMPREY_SUCK = reg("wall_lamprey_suck");
+    public static final BLSoundEvent WALL_LAMPREY_ATTACK = reg("wall_lamprey_attack");
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");

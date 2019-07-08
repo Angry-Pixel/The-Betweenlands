@@ -105,7 +105,7 @@ public class RingOfDispersionEntityCapability extends EntityCapability<RingOfDis
 		return ItemStack.EMPTY;
 	}
 
-	private double calculateAABBDistance(AxisAlignedBB aabb1, AxisAlignedBB aabb2) {
+	public static double calculateAABBDistance(AxisAlignedBB aabb1, AxisAlignedBB aabb2) {
 		double dist;
 
 		if(aabb1.intersects(aabb2)) {
@@ -169,13 +169,13 @@ public class RingOfDispersionEntityCapability extends EntityCapability<RingOfDis
 						}
 
 						if(!isCollisionForced) {
-							double playerDist = RingOfDispersionEntityCapability.this.calculateAABBDistance(blockAabb, originalAabb);
+							double playerDist = calculateAABBDistance(blockAabb, originalAabb);
 
 							if(playerDist < RingOfDispersionEntityCapability.this.getObstructionCheckDistance() && playerDist < RingOfDispersionEntityCapability.this.obstructionDistance) {
 								RingOfDispersionEntityCapability.this.obstructionDistance = playerDist;
 							}
 
-							double viewDist = RingOfDispersionEntityCapability.this.calculateAABBDistance(blockAabb, viewAabb);
+							double viewDist = calculateAABBDistance(blockAabb, viewAabb);
 
 							if(viewDist < RingOfDispersionEntityCapability.this.getViewObstructionCheckDistance() && viewDist < RingOfDispersionEntityCapability.this.viewObstructionDistance) {
 								RingOfDispersionEntityCapability.this.viewObstructionDistance = viewDist;

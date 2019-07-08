@@ -713,6 +713,18 @@
       "thebetweenlands:crypt_crawler_death"
     ]
   },
+  "wall_lamprey_suck": {
+    "sounds": [
+      "thebetweenlands:wall_lamprey_suck"
+    ]
+  },
+  "wall_lamprey_attack": {
+    "sounds": [
+      "thebetweenlands:wall_lamprey_attack_1",
+      "thebetweenlands:wall_lamprey_attack_2",
+      "thebetweenlands:wall_lamprey_attack_3"
+    ]
+  },
   "greebling_vanish": {
     "sounds": [
       "thebetweenlands:greebling_vanish"

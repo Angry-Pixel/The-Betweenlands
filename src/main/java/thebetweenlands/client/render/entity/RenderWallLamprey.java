@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.entity.layer.LayerOverlay;
@@ -35,6 +36,8 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 
 	private boolean renderWall = false;
 	private int renderPass = 0;
+
+	private float partialTicks;
 
 	public RenderWallLamprey(RenderManager renderManager) {
 		super(renderManager, new ModelWallLamprey(), 0);
@@ -110,6 +113,8 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 
 	@Override
 	public void doRender(EntityWallLamprey entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		this.partialTicks = partialTicks;
+
 		Framebuffer fbo = Minecraft.getMinecraft().getFramebuffer();
 
 		try(Stencil stencil = Stencil.reserve(fbo)) {
@@ -193,9 +198,36 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 		if(this.renderPass == 2) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(0, -0.55D, -0.3D);
+			this.applyDeathAndEasterEggRotations(entity);
 			super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 			GlStateManager.popMatrix();
 		}
+	}
+
+	protected void applyDeathAndEasterEggRotations(EntityWallLamprey entity) {
+		float yOffset = 1.1F;
+
+		GlStateManager.translate(0, yOffset, 0);
+
+		if (entity.deathTime > 0) {
+			float deathPercent = ((float)entity.deathTime + this.partialTicks - 1.0F) / 20.0F * 1.6F;
+			deathPercent = MathHelper.sqrt(deathPercent);
+
+			if (deathPercent > 1.0F) {
+				deathPercent = 1.0F;
+			}
+
+			GlStateManager.rotate(deathPercent * this.getDeathMaxRotation(entity) * (1 - entity.getLampreyHiddenPercent(this.partialTicks)), 0.0F, 0.0F, 1.0F);
+		} else {
+			String s = TextFormatting.getTextWithoutFormattingCodes(entity.getName());
+
+			if (s != null && ("Dinnerbone".equals(s) || "Grumm".equals(s))) {
+				GlStateManager.translate(0.0F, entity.height + 0.1F, 0.0F);
+				GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+			}
+		}
+
+		GlStateManager.translate(0, -yOffset, 0);
 	}
 
 	@Override

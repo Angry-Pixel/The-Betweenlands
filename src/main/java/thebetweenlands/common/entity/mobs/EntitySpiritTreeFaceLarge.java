@@ -114,7 +114,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true));
 		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
 
-		this.tasks.addTask(0, new AITrackTarget(this));
+		this.tasks.addTask(0, new AITrackTargetSpiritTreeFace(this));
 		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
 		this.tasks.addTask(2, new AISpit(this, 4.5F) {
 			@Override
@@ -164,9 +164,9 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		builder.put("strength", this.dataManager.get(WISP_STRENGTH_MODIFIER));
 		return builder.build();
 	}
-
+	
 	@Override
-	public List<BlockPos> findNearbyWoodBlocks() {
+	public List<BlockPos> findNearbyBlocksForMovement() {
 		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
 		if(!locations.isEmpty()) {
 			List<BlockPos> positions = new ArrayList<>();
@@ -175,7 +175,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 				return positions;
 			}
 		}
-		return super.findNearbyWoodBlocks();
+		return super.findNearbyBlocksForMovement();
 	}
 
 	protected List<BlockPos> findSmallFacesBlocks() {
@@ -186,7 +186,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 				return positions;
 			}
 		}
-		return super.findNearbyWoodBlocks();
+		return this.findNearbyBlocksForMovement();
 	}
 
 	@Override

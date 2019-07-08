@@ -1178,6 +1178,7 @@ entity.thebetweenlands.crypt_crawler.name=Crypt Crawler
 entity.thebetweenlands.large_sludge_worm.name=Large Sludge Worm
 entity.thebetweenlands.small_sludge_worm.name=Small Sludge Worm
 entity.thebetweenlands.tiny_sludge_worm.name=Tiny Sludge Worm
+entity.thebetweenlands.wall_lamprey.name=Lamprey
 
 
 # Equipment

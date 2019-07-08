@@ -204,11 +204,29 @@ public class ModelWallLamprey extends MowzieModelBase {
 
 		EntityWallLamprey lamprey = (EntityWallLamprey) entity;
 
+		float hidePercent = lamprey.getLampreyHiddenPercent(partialTicks);
+
+		float[] relHeadLook = lamprey.getRelativeHeadLookAngles(partialTicks);
+
+		double relYaw = Math.toRadians(relHeadLook[0]) * (1 - hidePercent);
+		double relPitch = Math.toRadians(relHeadLook[1]) * (1 - hidePercent);
+
+		relYaw = this.easeOutCubic(Math.min(Math.PI * 0.7F, Math.abs(relYaw)) / (Math.PI * 0.7F)) * 0.61F * Math.signum(relYaw) / 4.0F;
+		relPitch = this.easeOutCubic(Math.min(Math.PI * 0.7F, Math.abs(relPitch)) / (Math.PI * 0.7F)) * 0.61F * Math.signum(relPitch) / 4.0F;
+
+		this.body_base.rotateAngleY += relYaw;
+		this.head_base.rotateAngleY += relYaw;
+		this.head_mid.rotateAngleY += relYaw;
+		this.head_front.rotateAngleY += relYaw;
+
+		this.body_base.rotateAngleX += relPitch;
+		this.head_base.rotateAngleX += relPitch;
+		this.head_mid.rotateAngleX += relPitch;
+		this.head_front.rotateAngleX += relPitch;
+
 		float frame = entity.ticksExisted + partialTicks;
 
 		bob(body_base, 0.07f, 0.1f, false, frame, 1);
-
-		float hidePercent = lamprey.getLampreyHiddenPercent(partialTicks);
 
 		float walkDrive = frame * 0.15F + limbSwing * limbSwingAmount * 0.25F;
 		float walkDegree = 0.05F * (1 - hidePercent);
@@ -242,6 +260,11 @@ public class ModelWallLamprey extends MowzieModelBase {
 		this.teeth2.rotationPointZ += Math.sin(frame + 0.8F) * 0.1F;
 		this.teeth3.rotationPointZ += Math.sin(frame + 1.6F) * 0.1F;
 		this.teeth4.rotationPointZ += Math.sin(frame + 2.4F) * 0.1F;
+	}
+
+	private double easeOutCubic(double t) {
+		t -= 1;
+		return (t * t * t + 1);
 	}
 
 	/**

@@ -22,7 +22,7 @@ public abstract class RenderWallFace<T extends EntityWallFace> extends RenderLiv
 	}
 
 	@Override
-	protected void applyRotations(T entityLiving, float thisFieldWasObfuscatedAndICantBeBotheredToCheckWhatItIs, float rotationYaw, float partialTicks) {
+	protected void applyRotations(T entityLiving, float ageInTicks, float rotationYaw, float partialTicks) {
 		GlStateManager.rotate(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
 	}
 }

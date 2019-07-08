@@ -1,32 +1,53 @@
 package thebetweenlands.common.entity.mobs;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
+import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO Loot tables
-//TODO Don't extent spirit tree face
-public class EntityWallLamprey extends EntitySpiritTreeFace {
+public class EntityWallLamprey extends EntityMovingWallFace {
+	public static final byte EVENT_START_THE_SUCC = 80;
+
 	private static final DataParameter<Boolean> HIDDEN = EntityDataManager.createKey(EntityWallLamprey.class, DataSerializers.BOOLEAN);
+
+	private static final DataParameter<Float> LOOK_X = EntityDataManager.createKey(EntityWallLamprey.class, DataSerializers.FLOAT);
+	private static final DataParameter<Float> LOOK_Y = EntityDataManager.createKey(EntityWallLamprey.class, DataSerializers.FLOAT);
+	private static final DataParameter<Float> LOOK_Z = EntityDataManager.createKey(EntityWallLamprey.class, DataSerializers.FLOAT);
 
 	private float prevHiddenPercent = 1.0F;
 	private float hiddenPercent = 1.0F;
+
+	private Vec3d prevHeadLook = Vec3d.ZERO;
+	private Vec3d headLook = Vec3d.ZERO;
+
+	private boolean clientHeadLookChanged = false;
+
+	private int suckTimer = 0;
 
 	public EntityWallLamprey(World world) {
 		super(world);
@@ -37,6 +58,9 @@ public class EntityWallLamprey extends EntitySpiritTreeFace {
 		super.entityInit();
 
 		this.dataManager.register(HIDDEN, true);
+		this.dataManager.register(LOOK_X, 0.0F);
+		this.dataManager.register(LOOK_Y, 0.0F);
+		this.dataManager.register(LOOK_Z, 0.0F);
 	}
 
 	@Override
@@ -46,23 +70,54 @@ public class EntityWallLamprey extends EntitySpiritTreeFace {
 		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true));
 		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
 
-		this.tasks.addTask(0, new AITrackTarget(this, true, 28.0D));
+		this.tasks.addTask(0, new AITrackTargetLamprey(this, true, 28.0D));
 		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
+		this.tasks.addTask(2, new AISuck(this));
+		this.tasks.addTask(3, new AISpit(this, 3.0F));
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.08D);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
 	}
 
 	@Override
+	public void notifyDataManagerChange(DataParameter<?> key) {
+		super.notifyDataManagerChange(key);
+
+		if(key == LOOK_X || key == LOOK_Y || key == LOOK_Z) {
+			this.clientHeadLookChanged = true;
+		}
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox() {
+		return null;
+	}
+
+	@Override
 	public void onUpdate() {
+		this.prevHeadLook = this.headLook;
+
 		super.onUpdate();
 
+		if(this.clientHeadLookChanged) {
+			this.headLook = new Vec3d(this.dataManager.get(LOOK_X), this.dataManager.get(LOOK_Y), this.dataManager.get(LOOK_Z));
+			this.clientHeadLookChanged = false;
+		}
+
 		if(!this.world.isRemote) {
-			this.dataManager.set(HIDDEN, this.getAttackTarget() == null);
+			EntityLivingBase attackTarget = this.getAttackTarget();
+
+			this.dataManager.set(HIDDEN, attackTarget == null);
+
+			if(attackTarget != null) {
+				this.setHeadLook(attackTarget.getPositionEyes(1).subtract(this.getPositionEyes(1)));
+			} else {
+				this.setHeadLook(new Vec3d(this.getFacing().getDirectionVec()));
+			}
 		} else {
 			this.prevHiddenPercent = this.hiddenPercent;
 
@@ -82,6 +137,59 @@ public class EntityWallLamprey extends EntitySpiritTreeFace {
 				}
 			}
 		}
+
+		if(this.isSucking()) {
+			this.suckTimer--;
+
+			if(!this.world.isRemote) {
+				List<Entity> affectedEntities = (List<Entity>)this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(4.0F, 4.0F, 4.0F));
+				for(Entity e : affectedEntities) {
+					if(e == this || e.getDistance(this) > 4.0F || !this.canEntityBeSeen(e) || e instanceof IEntityBL) {
+						continue;
+					}
+					Vec3d vec = new Vec3d(this.posX - e.posX, this.posY - e.posY, this.posZ - e.posZ);
+					vec = vec.normalize();
+					float dst = e.getDistance(this);
+					float mod = (float) Math.pow(1.0F - dst / 6.0F, 1.2D);
+					if(e instanceof EntityPlayer) {
+						if(((EntityPlayer)e).isActiveItemStackBlocking()) mod *= 0.18F;
+					}
+					e.motionX += vec.x * 0.18F * mod;
+					e.motionY += vec.y * 0.18F * mod;
+					e.motionZ += vec.z * 0.18F * mod;
+					e.velocityChanged = true;
+				}
+			} else {
+				Vec3d fwd = this.getHeadLook(1);
+				Vec3d up = new Vec3d(this.getFacingUp().getDirectionVec());
+				Vec3d right = fwd.crossProduct(up);
+
+				Vec3d front = this.getFrontCenter().add(fwd.scale(0.3D)).add(up.scale(-0.3D));
+
+				for(int i = 0; i < 3; i++) {
+					Random rnd = this.world.rand;
+
+					Vec3d vec = fwd.scale(rnd.nextFloat() * 4).add(up.scale((rnd.nextFloat() - 0.5F) * 1.2F)).add(right.scale((rnd.nextFloat() - 0.5F) * 1.2F));
+
+					float rx = (float)vec.x;
+					float ry = (float)vec.y;
+					float rz = (float)vec.z;
+
+					vec = vec.normalize();
+
+					this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, front.x + rx, front.y + ry, front.z + rz, -vec.x * 0.5F, -vec.y * 0.5F, -vec.z * 0.5F);
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean attackEntityAsMob(Entity entityIn) {
+		boolean attacked;
+		if(attacked = super.attackEntityAsMob(entityIn)) {
+			this.playSound(SoundRegistry.WALL_LAMPREY_ATTACK, 1, 1);
+		}
+		return attacked;
 	}
 
 	@Override
@@ -91,38 +199,14 @@ public class EntityWallLamprey extends EntitySpiritTreeFace {
 
 	@Override
 	public boolean canResideInBlock(BlockPos pos, EnumFacing facing, EnumFacing facingUp) {
-		return this.canResideInState(this.world.getBlockState(pos)) && this.canResideInState(this.world.getBlockState(pos.offset(facingUp.getOpposite())));
-	}
-
-	protected boolean canResideInState(IBlockState state) {
-		return state.getBlock() == BlockRegistry.MUD_BRICKS ||
-				state.getBlock() == BlockRegistry.MUD_BRICKS_CARVED ||
-				state.getBlock() == BlockRegistry.MUD_TILES;
+		return this.isValidBlockForMovement(this.world.getBlockState(pos)) && this.isValidBlockForMovement(this.world.getBlockState(pos.offset(facingUp.getOpposite())));
 	}
 
 	@Override
-	public List<BlockPos> findNearbyWoodBlocks() {
-		final int radius = 8;
-		BlockPos center = new BlockPos(this);
-		List<BlockPos> blocks = new ArrayList<>();
-		MutableBlockPos pos = new MutableBlockPos();
-
-		for (int dx = -radius; dx <= radius; dx++) {
-			for (int dy = -radius; dy <= radius; dy++) {
-				for (int dz = -radius; dz <= radius; dz++) {
-					pos.setPos(center.getX() + dx, center.getY() + dy, center.getZ() + dz);
-					IBlockState state = this.world.getBlockState(pos);
-
-					if (state.getBlock() == BlockRegistry.MUD_BRICKS ||
-							state.getBlock() == BlockRegistry.MUD_BRICKS_CARVED ||
-							state.getBlock() == BlockRegistry.MUD_TILES) {
-						blocks.add(pos.toImmutable());
-					}
-				}
-			}
-		}
-
-		return blocks;
+	protected boolean isValidBlockForMovement(IBlockState state) {
+		return state.getBlock() == BlockRegistry.MUD_BRICKS ||
+				state.getBlock() == BlockRegistry.MUD_BRICKS_CARVED ||
+				state.getBlock() == BlockRegistry.MUD_TILES;
 	}
 
 	@Override
@@ -141,5 +225,199 @@ public class EntityWallLamprey extends EntitySpiritTreeFace {
 	private float easeInOut(float percent) {
 		float sq = percent * percent;
 		return sq / (2.0f * (sq - percent) + 1.0f);
+	}
+
+	public void setHeadLook(Vec3d look) {
+		look = look.normalize();
+		Vec3d curr = this.headLook;
+		if(Math.abs(curr.x - look.x) >= 0.01F || Math.abs(curr.y - look.y) >= 0.01F || Math.abs(curr.z - look.z) >= 0.01F) {
+			if(!this.world.isRemote) {
+				this.dataManager.set(LOOK_X, (float) look.x);
+				this.dataManager.set(LOOK_Y, (float) look.y);
+				this.dataManager.set(LOOK_Z, (float) look.z);
+			}
+			this.headLook = look;
+		}
+	}
+
+	public Vec3d getHeadLook(float partialTicks) {
+		return new Vec3d(
+				this.prevHeadLook.x + (this.headLook.x - this.prevHeadLook.x) * partialTicks,
+				this.prevHeadLook.y + (this.headLook.y - this.prevHeadLook.y) * partialTicks,
+				this.prevHeadLook.z + (this.headLook.z - this.prevHeadLook.z) * partialTicks
+				);
+	}
+
+	public float[] getRelativeHeadLookAngles(float partialTicks) {
+		Vec3d headLook = this.getHeadLook(partialTicks);
+
+		Vec3d fwdAxis = new Vec3d(this.getFacing().getDirectionVec());
+		Vec3d upAxis = new Vec3d(this.getFacingUp().getDirectionVec());
+		Vec3d rightAxis = fwdAxis.crossProduct(upAxis);
+
+		double fwd = fwdAxis.dotProduct(headLook);
+		double up = upAxis.dotProduct(headLook);
+		double right = rightAxis.dotProduct(headLook);
+
+		return new float[] {(float)Math.toDegrees(Math.atan2(right, fwd)), (float)Math.toDegrees(Math.atan2(fwd, up)) * (float)Math.signum(fwd) - 90.0F};
+	}
+
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+
+		if(id == EVENT_START_THE_SUCC) {
+			this.startSucking();
+		}
+	}
+
+	public void startSucking() {
+		if(!this.world.isRemote) {
+			this.world.setEntityState(this, EVENT_START_THE_SUCC);
+			this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.WALL_LAMPREY_SUCK, SoundCategory.HOSTILE, 0.8F, this.world.rand.nextFloat() * 0.3F + 0.8F);
+		}
+		this.suckTimer = 30;
+	}
+
+	public boolean isSucking() {
+		return this.suckTimer > 0;
+	}
+
+	public void startSpit(float spitDamage) {
+		Entity target = this.getAttackTarget();
+		if(target != null) {
+			EnumFacing facing = this.getFacing();
+
+			EntitySapSpit spit = new EntitySapSpit(this.world, this, spitDamage);
+			spit.setPosition(this.posX + facing.getXOffset() * (this.width / 2 + 0.1F), this.posY + this.height / 2.0F + facing.getYOffset() * (this.height / 2 + 0.1F), this.posZ + facing.getZOffset() * (this.width / 2 + 0.1F));
+
+			double dx = target.posX - spit.posX;
+			double dy = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - spit.posY;
+			double dz = target.posZ - spit.posZ;
+			double dist = (double)MathHelper.sqrt(dx * dx + dz * dz);
+			spit.shoot(dx, dy + dist * 0.20000000298023224D, dz, 1, 1);
+
+			this.world.spawnEntity(spit);
+		}
+	}
+
+	public static class AITrackTargetLamprey extends AITrackTarget<EntityWallLamprey> {
+		public AITrackTargetLamprey(EntityWallLamprey entity, boolean stayInRange, double maxRange) {
+			super(entity, stayInRange, maxRange);
+		}
+
+		public AITrackTargetLamprey(EntityWallLamprey entity) {
+			super(entity);
+		}
+
+		@Override
+		protected boolean canMove() {
+			return !this.entity.isSucking();
+		}
+	}
+
+	protected static class AISuck extends EntityAIBase {
+		protected final EntityWallLamprey entity;
+		protected int minCooldown;
+		protected int maxCooldown;
+
+		protected int cooldown = 0;
+
+		public AISuck(EntityWallLamprey entity) {
+			this(entity, 50, 170);
+		}
+
+		public AISuck(EntityWallLamprey entity, int minCooldown, int maxCooldown) {
+			this.entity = entity;
+			this.minCooldown = minCooldown;
+			this.maxCooldown = maxCooldown;
+			this.setMutexBits(0);
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return this.entity.getFacing() != EnumFacing.DOWN && !this.entity.isSucking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() &&
+					this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && this.entity.getDistance(this.entity.getAttackTarget()) < 5.0F;
+		}
+
+		@Override
+		public void startExecuting() {
+			this.cooldown = 20 + this.entity.rand.nextInt(40);
+		}
+
+		@Override
+		public void updateTask() {
+			if(!this.entity.isSucking()) {
+				if(this.cooldown <= 0) {
+					this.cooldown = this.minCooldown + this.entity.rand.nextInt(this.maxCooldown - this.minCooldown + 1);
+					this.entity.startSucking();
+				}
+				this.cooldown--;
+			}
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return this.shouldExecute();
+		}
+	}
+
+	protected static class AISpit extends EntityAIBase {
+		protected final EntityWallLamprey entity;
+		protected int minCooldown;
+		protected int maxCooldown;
+
+		protected int cooldown = 0;
+
+		protected float spitDamage;
+
+		public AISpit(EntityWallLamprey entity, float spitDamage) {
+			this(entity, spitDamage, 50, 170);
+		}
+
+		public AISpit(EntityWallLamprey entity, float spitDamage, int minCooldown, int maxCooldown) {
+			this.entity = entity;
+			this.minCooldown = minCooldown;
+			this.maxCooldown = maxCooldown;
+			this.spitDamage = spitDamage;
+			this.setMutexBits(0);
+		}
+
+		protected boolean isInRange(EntityLivingBase target) {
+			final Vec3d down = new Vec3d(0, -1, 0);
+			Vec3d dir = target.getPositionVector().subtract(this.entity.getPositionVector()).normalize();
+			return Math.acos(down.dotProduct(dir)) < 0.733D /*~42°*/;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return this.entity.getFacing() == EnumFacing.DOWN && !this.entity.isSucking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() &&
+					this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && this.isInRange(this.entity.getAttackTarget());
+		}
+
+		@Override
+		public void startExecuting() {
+			this.cooldown = 20 + this.entity.rand.nextInt(40);
+		}
+
+		@Override
+		public void updateTask() {
+			if(!this.entity.isSucking()) {
+				if(this.cooldown <= 0) {
+					this.cooldown = this.minCooldown + this.entity.rand.nextInt(this.maxCooldown - this.minCooldown + 1);
+					this.entity.startSpit(this.getSpitDamage());
+				}
+				this.cooldown--;
+			}
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return this.shouldExecute();
+		}
+
+		protected float getSpitDamage() {
+			return this.spitDamage;
+		}
 	}
 }
