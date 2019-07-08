@@ -1,8 +1,14 @@
 package thebetweenlands.common.entity;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
@@ -79,6 +85,38 @@ public abstract class EntityProximitySpawner extends EntityMob {
 	 *
 	 * @return an AxisAlignedBB for the proximity area.
 	 */
-	protected abstract AxisAlignedBB proximityBox();
+	protected AxisAlignedBB proximityBox() {
+		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal());
 
+	}
+
+	/**
+	 * Generic area checking code and spawning.
+	 *
+	 * @return returns a null :( - bad modder.
+	 */
+	@Nullable
+	protected Entity checkArea() {
+		List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
+		for (int entityCount = 0; entityCount < list.size(); entityCount++) {
+			Entity entity = list.get(entityCount);
+			if (entity != null)
+				if (entity instanceof EntityPlayer && !((EntityPlayer) entity).isSpectator() && !((EntityPlayer) entity).isCreative()) {
+					if (canSneakPast() && entity.isSneaking())
+						return null;
+					else if (checkSight() && !canEntityBeSeen(entity))
+						return null;
+					else {
+						for (int count = 0; count < getEntitySpawnCount(); count++) {
+							Entity spawn = getEntitySpawned();
+							spawn.setPosition(getPosition().getX() + 0.5F, getPosition().getY(), getPosition().getZ() + 0.5F);
+							getEntityWorld().spawnEntity(spawn);
+						}
+						if (isSingleUse())
+							setDead();
+					}
+				}
+		}
+		return null;
+	}
 }
