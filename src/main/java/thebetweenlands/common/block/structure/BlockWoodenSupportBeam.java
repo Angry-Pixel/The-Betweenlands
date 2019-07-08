@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -37,13 +38,19 @@ public class BlockWoodenSupportBeam extends BlockHorizontal {
 
 	public BlockWoodenSupportBeam(Material material) {
 		super(material);
-		setHardness(0.1F);
+		setHardness(2.0F);
 		setHarvestLevel("axe", 0);
 		setCreativeTab(BLCreativeTabs.PLANTS);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(TOP, false));
 		setCreativeTab(BLCreativeTabs.BLOCKS);
+		setSoundType(SoundType.WOOD);
 	}
 
+	@Override
+	public boolean isWood(IBlockAccess world, BlockPos pos) {
+		return true;
+	}
+	
     @Override
 	@Nullable
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
