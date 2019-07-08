@@ -17,6 +17,7 @@ import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
+import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.entity.EntityVolarkite;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
@@ -27,7 +28,6 @@ import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
-import thebetweenlands.common.entity.mobs.EntityDarkLight;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
@@ -162,6 +162,7 @@ public class EntityRegistry {
 		registerEntity(EntityDecayPitChain.class, "decay_pit_chain_outer");
 		registerEntity(EntityDecayPitTarget.class, "decay_pit_target");
 		registerEntity(EntitySludgeJet.class, "sludge_jet", 64, 1, true);
+		registerEntity(EntityTriggeredFallingBlock.class, "triggerd_falling_block");
 
 	}
 

@@ -55,8 +55,9 @@ public abstract class EntityProximitySpawner extends EntityMob {
 	/**
 	 * Which entity should be spawned on activation
 	 *
-	 * @return an Entity.
+	 * @return an Entity or null.
 	 */
+	@Nullable
 	protected abstract Entity getEntitySpawned();
 
 	/**
@@ -81,13 +82,33 @@ public abstract class EntityProximitySpawner extends EntityMob {
 	protected abstract int maxUseCount();
 	
 	/**
+	 * Action to happen just before entity spawns
+	 *
+	 * Can be used for setting Spawned Entities' position or attributes etc
+	 * By default sets the spawned entity to the same pos as the proximity spawner was.
+	 * Override to change.
+	 */
+
+	protected void performPreSpawnaction(Entity entity) {
+		entity.setPosition(getPosition().getX() + 0.5F, getPosition().getY(), getPosition().getZ() + 0.5F);
+	}
+	
+	/**
+	 * Action to happen just after entity spawns
+	 *
+	 * Entity can be null
+	 */
+
+	protected void performPostSpawnaction(@Nullable Entity entity) { }
+	
+	/**
 	 * The Proximity box used
 	 *
 	 * @return an AxisAlignedBB for the proximity area.
 	 */
+
 	protected AxisAlignedBB proximityBox() {
 		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal());
-
 	}
 
 	/**
@@ -109,10 +130,13 @@ public abstract class EntityProximitySpawner extends EntityMob {
 					else {
 						for (int count = 0; count < getEntitySpawnCount(); count++) {
 							Entity spawn = getEntitySpawned();
-							spawn.setPosition(getPosition().getX() + 0.5F, getPosition().getY(), getPosition().getZ() + 0.5F);
-							getEntityWorld().spawnEntity(spawn);
+							if (spawn != null) {
+								performPreSpawnaction(spawn);
+								getEntityWorld().spawnEntity(spawn);
+								performPostSpawnaction(spawn);
+							}
 						}
-						if (isSingleUse())
+						if (!isDead && isSingleUse())
 							setDead();
 					}
 				}
