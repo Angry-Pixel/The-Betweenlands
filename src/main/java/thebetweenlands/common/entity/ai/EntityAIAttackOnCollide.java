@@ -75,19 +75,30 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 	}
 
 	/**
-	 * Attacks the target with the standard attack implementation of {@link EntityMob#attackEntityAsMob(Entity)}
+	 * See {@link #useStandardAttack(EntityLiving, Entity, float)}
 	 * @param attacker
 	 * @param target
 	 * @return
 	 */
 	public static boolean useStandardAttack(EntityLiving attacker, Entity target) {
 		float attackDamage;
+		
 		if(attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE) != null) {
 			attackDamage = (float)attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 		} else {
 			attackDamage = 2.0F;
 		}
-
+		
+		return useStandardAttack(attacker, target, attackDamage);
+	}
+	
+	/**
+	 * Attacks the target with the standard attack implementation of {@link EntityMob#attackEntityAsMob(Entity)}
+	 * @param attacker
+	 * @param target
+	 * @return
+	 */
+	public static boolean useStandardAttack(EntityLiving attacker, Entity target, float attackDamage) {
 		int knockBackModifier = 0;
 
 		if (target instanceof EntityLivingBase) {

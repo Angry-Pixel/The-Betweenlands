@@ -3,12 +3,14 @@ package thebetweenlands.common.entity.mobs;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -22,15 +24,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.capability.decay.DecayStats;
+import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO Loot tables
-public class EntityWallLamprey extends EntityMovingWallFace {
+public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 	public static final byte EVENT_START_THE_SUCC = 80;
 
 	private static final DataParameter<Boolean> HIDDEN = EntityDataManager.createKey(EntityWallLamprey.class, DataSerializers.BOOLEAN);
@@ -51,6 +57,7 @@ public class EntityWallLamprey extends EntityMovingWallFace {
 
 	public EntityWallLamprey(World world) {
 		super(world);
+		this.experienceValue = 5;
 	}
 
 	@Override
@@ -90,11 +97,6 @@ public class EntityWallLamprey extends EntityMovingWallFace {
 		if(key == LOOK_X || key == LOOK_Y || key == LOOK_Z) {
 			this.clientHeadLookChanged = true;
 		}
-	}
-
-	@Override
-	public AxisAlignedBB getCollisionBoundingBox() {
-		return null;
 	}
 
 	@Override
@@ -142,21 +144,21 @@ public class EntityWallLamprey extends EntityMovingWallFace {
 			this.suckTimer--;
 
 			if(!this.world.isRemote) {
-				List<Entity> affectedEntities = (List<Entity>)this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(4.0F, 4.0F, 4.0F));
+				List<Entity> affectedEntities = (List<Entity>)this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(6.0F, 6.0F, 6.0F));
 				for(Entity e : affectedEntities) {
-					if(e == this || e.getDistance(this) > 4.0F || !this.canEntityBeSeen(e) || e instanceof IEntityBL) {
+					if(e == this || e.getDistance(this) > 6.0F || !this.canEntityBeSeen(e) || e instanceof IEntityBL) {
 						continue;
 					}
 					Vec3d vec = new Vec3d(this.posX - e.posX, this.posY - e.posY, this.posZ - e.posZ);
 					vec = vec.normalize();
 					float dst = e.getDistance(this);
-					float mod = (float) Math.pow(1.0F - dst / 6.0F, 1.2D);
+					float mod = (float) Math.pow(1.0F - dst / 7.0F, 1.2D);
 					if(e instanceof EntityPlayer) {
 						if(((EntityPlayer)e).isActiveItemStackBlocking()) mod *= 0.18F;
 					}
-					e.motionX += vec.x * 0.18F * mod;
-					e.motionY += vec.y * 0.18F * mod;
-					e.motionZ += vec.z * 0.18F * mod;
+					e.motionX += vec.x * 0.05F * mod;
+					e.motionY += vec.y * 0.05F * mod;
+					e.motionZ += vec.z * 0.05F * mod;
 					e.velocityChanged = true;
 				}
 			} else {
@@ -169,7 +171,7 @@ public class EntityWallLamprey extends EntityMovingWallFace {
 				for(int i = 0; i < 3; i++) {
 					Random rnd = this.world.rand;
 
-					Vec3d vec = fwd.scale(rnd.nextFloat() * 4).add(up.scale((rnd.nextFloat() - 0.5F) * 1.2F)).add(right.scale((rnd.nextFloat() - 0.5F) * 1.2F));
+					Vec3d vec = fwd.scale(rnd.nextFloat() * 5).add(up.scale((rnd.nextFloat() - 0.5F) * 1.2F)).add(right.scale((rnd.nextFloat() - 0.5F) * 1.2F));
 
 					float rx = (float)vec.x;
 					float ry = (float)vec.y;
@@ -184,12 +186,27 @@ public class EntityWallLamprey extends EntityMovingWallFace {
 	}
 
 	@Override
-	public boolean attackEntityAsMob(Entity entityIn) {
-		boolean attacked;
-		if(attacked = super.attackEntityAsMob(entityIn)) {
+	public boolean attackEntityAsMob(Entity entity) {
+		boolean hasAttacked = false;
+
+		IDecayCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+		if(cap != null && cap.isDecayEnabled()) {
+			if(EntityAIAttackOnCollide.useStandardAttack(this, entity, 0.001F)) {
+				hasAttacked = true;
+
+				DecayStats stats = cap.getDecayStats();
+
+				stats.addDecayAcceleration((float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2.0F);
+			}
+		} else {
+			hasAttacked = super.attackEntityAsMob(entity);
+		}
+
+		if(hasAttacked) {
 			this.playSound(SoundRegistry.WALL_LAMPREY_ATTACK, 1, 1);
 		}
-		return attacked;
+
+		return hasAttacked;
 	}
 
 	@Override
@@ -204,9 +221,9 @@ public class EntityWallLamprey extends EntityMovingWallFace {
 
 	@Override
 	protected boolean isValidBlockForMovement(IBlockState state) {
-		return state.getBlock() == BlockRegistry.MUD_BRICKS ||
-				state.getBlock() == BlockRegistry.MUD_BRICKS_CARVED ||
-				state.getBlock() == BlockRegistry.MUD_TILES;
+		Block block = state.getBlock();
+		return block == BlockRegistry.MUD_BRICKS || block == BlockRegistry.MUD_BRICKS_CARVED ||
+				block == BlockRegistry.MUD_TILES;
 	}
 
 	@Override
@@ -337,7 +354,7 @@ public class EntityWallLamprey extends EntityMovingWallFace {
 		@Override
 		public boolean shouldExecute() {
 			return this.entity.getFacing() != EnumFacing.DOWN && !this.entity.isSucking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() &&
-					this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && this.entity.getDistance(this.entity.getAttackTarget()) < 5.0F;
+					this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && this.entity.getDistance(this.entity.getAttackTarget()) < 6.0F;
 		}
 
 		@Override

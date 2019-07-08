@@ -13,7 +13,6 @@ import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -24,7 +23,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 
-public abstract class EntityMovingWallFace extends EntityWallFace implements IMob {
+public abstract class EntityMovingWallFace extends EntityWallFace {
 	public static final IAttribute BLOCK_TRACKING_SEARCH_RANGE = (new RangedAttribute((IAttribute)null, "bl.blockTrackingSearchRange", 8.0D, 0.0D, 32.0D)).setDescription("Block Tracking Search Range");
 	public static final IAttribute BLOCK_FIX_SEARCH_RANGE = (new RangedAttribute((IAttribute)null, "bl.blockFixSearchRange", 8.0D, 0.0D, 32.0D)).setDescription("Block Fix Search Range");
 
@@ -318,7 +317,7 @@ public abstract class EntityMovingWallFace extends EntityWallFace implements IMo
 		}
 
 		protected boolean isInReach(EntityLivingBase enemy, double reach) {
-			double dist = RingOfDispersionEntityCapability.calculateAABBDistance(this.attacker.getEntityBoundingBox(), enemy.getEntityBoundingBox());
+			double dist = Math.max(0, RingOfDispersionEntityCapability.calculateAABBDistance(this.attacker.getEntityBoundingBox(), enemy.getEntityBoundingBox()));
 			return dist <= reach;
 		}
 

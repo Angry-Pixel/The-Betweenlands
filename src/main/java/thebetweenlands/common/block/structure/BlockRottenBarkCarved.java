@@ -1,5 +1,6 @@
 package thebetweenlands.common.block.structure;
 
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -11,6 +12,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
@@ -24,12 +26,19 @@ public class BlockRottenBarkCarved extends BasicBlock {
 
 	public BlockRottenBarkCarved(Material material) {
 		super(material);
+		setHardness(2.0F);
 		setHarvestLevel("axe", 0);
 		setCreativeTab(BLCreativeTabs.PLANTS);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		setCreativeTab(BLCreativeTabs.BLOCKS);
+		setSoundType(SoundType.WOOD);
 	}
 
+	@Override
+	public boolean isWood(IBlockAccess world, BlockPos pos) {
+		return true;
+	}
+	
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
