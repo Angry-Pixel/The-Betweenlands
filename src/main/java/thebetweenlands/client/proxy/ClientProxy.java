@@ -129,6 +129,7 @@ import thebetweenlands.client.render.entity.RenderSiltCrab;
 import thebetweenlands.client.render.entity.RenderSludge;
 import thebetweenlands.client.render.entity.RenderSludgeBall;
 import thebetweenlands.client.render.entity.RenderSludgeJet;
+import thebetweenlands.client.render.entity.RenderSludgeWallJet;
 import thebetweenlands.client.render.entity.RenderSludgeWorm;
 import thebetweenlands.client.render.entity.RenderSmollSludge;
 import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
@@ -270,6 +271,7 @@ import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
+import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
@@ -570,6 +572,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityDecayPitTarget.class, RenderDecayPitTarget::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySludgeJet.class, RenderSludgeJet::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityTriggeredFallingBlock.class, RenderTriggeredFallingBlock::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySludgeWallJet.class, RenderSludgeWallJet::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

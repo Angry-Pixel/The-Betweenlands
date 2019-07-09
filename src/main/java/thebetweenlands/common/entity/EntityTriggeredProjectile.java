@@ -3,11 +3,11 @@ package thebetweenlands.common.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 
 public class EntityTriggeredProjectile extends EntityProximitySpawner {
 
@@ -28,8 +28,8 @@ public class EntityTriggeredProjectile extends EntityProximitySpawner {
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
 		if(targetEntity instanceof EntityPlayer) {
 			double direction = Math.toRadians(targetEntity.rotationYaw + 180F);
-			((EntityTippedArrow) entitySpawned).setPosition(posX - Math.sin(direction) * 1F, posY + height * 0.5D , posZ + Math.cos(direction) * 1F);
-			((EntityTippedArrow) entitySpawned).shoot(targetEntity.posX - posX, targetEntity.posY + targetEntity.height - posY, targetEntity.posZ - posZ, 0.5F, 0F);
+			((EntitySludgeWallJet) entitySpawned).setPosition(posX - Math.sin(direction) * 0.825F, posY + height * 0.5D , posZ + Math.cos(direction) * 0.825F);
+			((EntitySludgeWallJet) entitySpawned).shoot(targetEntity.posX - posX, targetEntity.posY + targetEntity.height - posY, targetEntity.posZ - posZ, 0.5F, 0F);
 		}
 	}
 
@@ -98,7 +98,7 @@ public class EntityTriggeredProjectile extends EntityProximitySpawner {
 
 	@Override
 	protected Entity getEntitySpawned() {
-		EntityTippedArrow entity = new EntityTippedArrow(getEntityWorld());
+		EntitySludgeWallJet entity = new EntitySludgeWallJet(getEntityWorld());
 		return entity;
 	}
 

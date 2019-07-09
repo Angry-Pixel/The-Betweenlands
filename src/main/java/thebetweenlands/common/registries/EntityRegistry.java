@@ -76,6 +76,7 @@ import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
+import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
@@ -165,6 +166,7 @@ public class EntityRegistry {
 		registerEntity(EntitySludgeJet.class, "sludge_jet", 64, 1, true);
 		registerEntity(EntityTriggeredFallingBlock.class, "triggerd_falling_block");
 		registerEntity(EntityTriggeredProjectile.class, "triggerd_projectile");
+		registerEntity(EntitySludgeWallJet.class, "sludge_wall_jet", 64, 1, true);
 	}
 
 	private static int id = 0;
