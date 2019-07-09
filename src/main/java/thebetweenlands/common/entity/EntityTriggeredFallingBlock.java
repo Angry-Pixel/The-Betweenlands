@@ -34,13 +34,13 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	}
 
 	public void dustParticles() {
-		if (rand.nextInt(20) == 0) {
+		if (rand.nextInt(16) == 0) {
 			BlockPos blockpos = getPosition().down();
 			if (canFallThrough(getEntityWorld().getBlockState(blockpos))) {
 				double d0 = (double) ((float) getPosition().getX() + rand.nextFloat());
 				double d1 = (double) getPosition().getY() - 0.05D;
 				double d2 = (double) ((float) getPosition().getZ() + rand.nextFloat());
-				getEntityWorld().spawnParticle(EnumParticleTypes.FALLING_DUST, d0, d1, d2, 0.0D, 0.0D, 0.0D, Block.getStateId(getBlockType(getEntityWorld(), getPosition())));
+				getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, d0, d1, d2, 0.0D, 0.0D, 0.0D, Block.getStateId(getBlockType(getEntityWorld(), getPosition())));
 			}
 		}
 	}
@@ -52,8 +52,8 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
     }
 
 	@Override
-	protected void performPreSpawnaction(Entity entity) {
-		((EntityFallingBlock) entity).setHurtEntities(true);
+	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
+		((EntityFallingBlock)entitySpawned).setHurtEntities(true);
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	}
 
 	protected AxisAlignedBB proximityBox() {
-		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, - getProximityHorizontal() * 2, 0D);
+		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, - getProximityVertical() * 2, 0D);
 	}
 
 	@Override

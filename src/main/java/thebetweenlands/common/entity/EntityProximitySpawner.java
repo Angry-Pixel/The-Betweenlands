@@ -89,8 +89,8 @@ public abstract class EntityProximitySpawner extends EntityMob {
 	 * Override to change.
 	 */
 
-	protected void performPreSpawnaction(Entity entity) {
-		entity.setPosition(getPosition().getX() + 0.5F, getPosition().getY(), getPosition().getZ() + 0.5F);
+	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
+		entitySpawned.setPosition(getPosition().getX() + 0.5F, getPosition().getY(), getPosition().getZ() + 0.5F);
 	}
 	
 	/**
@@ -99,7 +99,7 @@ public abstract class EntityProximitySpawner extends EntityMob {
 	 * Entity can be null
 	 */
 
-	protected void performPostSpawnaction(@Nullable Entity entity) { }
+	protected void performPostSpawnaction(Entity targetEntity, @Nullable Entity entitySpawned) { }
 	
 	/**
 	 * The Proximity box used
@@ -131,9 +131,9 @@ public abstract class EntityProximitySpawner extends EntityMob {
 						for (int count = 0; count < getEntitySpawnCount(); count++) {
 							Entity spawn = getEntitySpawned();
 							if (spawn != null) {
-								performPreSpawnaction(spawn);
+								performPreSpawnaction(entity, spawn);
 								getEntityWorld().spawnEntity(spawn);
-								performPostSpawnaction(spawn);
+								performPostSpawnaction(entity, spawn);
 							}
 						}
 						if (!isDead && isSingleUse())
