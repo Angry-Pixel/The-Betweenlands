@@ -27,8 +27,7 @@ public class EntityTriggeredProjectile extends EntityProximitySpawner {
 	@Override
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
 		if(targetEntity instanceof EntityPlayer) {
-			double direction = Math.toRadians(targetEntity.rotationYaw + 180F);
-			((EntitySludgeWallJet) entitySpawned).setPosition(posX - Math.sin(direction) * 0.825F, posY + height * 0.5D , posZ + Math.cos(direction) * 0.825F);
+			((EntitySludgeWallJet) entitySpawned).setPosition(posX, posY + height * 0.5D , posZ);
 			((EntitySludgeWallJet) entitySpawned).shoot(targetEntity.posX - posX, targetEntity.posY + targetEntity.height - posY, targetEntity.posZ - posZ, 0.5F, 0F);
 		}
 	}
@@ -98,7 +97,7 @@ public class EntityTriggeredProjectile extends EntityProximitySpawner {
 
 	@Override
 	protected Entity getEntitySpawned() {
-		EntitySludgeWallJet entity = new EntitySludgeWallJet(getEntityWorld());
+		EntitySludgeWallJet entity = new EntitySludgeWallJet(getEntityWorld(), this);
 		return entity;
 	}
 
