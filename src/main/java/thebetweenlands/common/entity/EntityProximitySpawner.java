@@ -132,7 +132,8 @@ public abstract class EntityProximitySpawner extends EntityMob {
 							Entity spawn = getEntitySpawned();
 							if (spawn != null) {
 								performPreSpawnaction(entity, spawn);
-								getEntityWorld().spawnEntity(spawn);
+								if (!spawn.isDead) //just in case of pre-emptive removal
+									getEntityWorld().spawnEntity(spawn);
 								performPostSpawnaction(entity, spawn);
 							}
 						}
