@@ -2,11 +2,9 @@ package thebetweenlands.common.entity;
 
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -38,16 +36,16 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
 		if(targetEntity instanceof EntityPlayer) {
 			float rotation = MathHelper.wrapDegrees(rotationYaw) * 2F;
-			float maxRot = 270;
-			float minRot = 90;
+			float maxRot = 135;
+			float minRot = 0;
 			float rotationTarget = MathHelper.wrapDegrees(targetEntity.rotationYaw) + 180F;
-			if(rotation - MathHelper.wrapDegrees(rotationTarget) >= minRot && rotation - MathHelper.wrapDegrees(rotationTarget) <= maxRot) {
+			if( rotationTarget >= rotation + minRot && rotationTarget <= rotation + maxRot) {
+				((EntitySludgeWallJet) entitySpawned).setDead();
+			}
+			else {
 				((EntitySludgeWallJet) entitySpawned).setPosition(posX, posY + height * 0.5D , posZ);
 				((EntitySludgeWallJet) entitySpawned).shoot(targetEntity.posX - posX, targetEntity.posY + targetEntity.height - posY, targetEntity.posZ - posZ, 0.2F, 0F);
-			
 			}
-			else
-				((EntitySludgeWallJet) entitySpawned).setDead();
 		}
 	}
 
@@ -83,22 +81,18 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 		if(source instanceof EntityDamageSource) {
 			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
 			if(sourceEntity instanceof EntityPlayer) {
-				
 				float rotation = MathHelper.wrapDegrees(rotationYaw) * 2F;
-				float maxRot = 270;
-				float minRot = 90;
-				float rotationHitter = MathHelper.wrapDegrees(sourceEntity.rotationYaw) + 180F;
-				System.out.println("This rotation: " + (rotation));
-				if(rotation - MathHelper.wrapDegrees(rotationHitter) >= minRot && rotation - MathHelper.wrapDegrees(rotationHitter) <= maxRot) {
-					System.out.println("Shooting For real at: " + (rotation - MathHelper.wrapDegrees(rotationHitter)));
-					//damageEntity(source, 5F);
+				float maxRot = 90;
+				float minRot = 0;
+				float rotationHitter = MathHelper.wrapDegrees(sourceEntity.rotationYaw) + 180F ;
+				if(rotationHitter >= rotation + minRot &&  rotationHitter <= rotation + maxRot) {
+					if(!getEntityWorld().isRemote)
+						damageEntity(source, 5F);
 					return true;
 				}
 				else {
-					
 					return false;
 				}	
-				
 			}
 		}
 		return false;

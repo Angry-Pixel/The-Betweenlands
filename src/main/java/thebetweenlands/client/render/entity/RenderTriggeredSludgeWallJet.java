@@ -18,7 +18,7 @@ public class RenderTriggeredSludgeWallJet extends RenderLiving<EntityTriggeredSl
     @Override
     protected void preRenderCallback(EntityTriggeredSludgeWallJet wall_jet, float partialTickTime) {
     	float angle = wall_jet.animationTicksPrev + (wall_jet.animationTicks - wall_jet.animationTicksPrev) * partialTickTime;
-        GlStateManager.rotate(angle, 0F, 1F, 0F);
+        GlStateManager.rotate(angle + 45F, 0F, 1F, 0F); //
     }
 
 	@Override
