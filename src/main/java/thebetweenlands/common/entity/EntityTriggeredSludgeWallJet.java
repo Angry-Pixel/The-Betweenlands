@@ -105,18 +105,17 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if(source instanceof EntityDamageSource) {
-			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
-			if(sourceEntity instanceof EntityPlayer) {
-				float rotation = MathHelper.wrapDegrees(rotationYaw) * 2F;
-				float maxRot = 90;
-				float minRot = 0;
-				float rotationHitter = MathHelper.wrapDegrees(sourceEntity.rotationYaw) + 180F ;
-				if(rotationHitter >= rotation + minRot &&  rotationHitter <= rotation + maxRot) {
-					if(!getEntityWorld().isRemote)
+			Entity immediateSource = ((EntityDamageSource) source).getImmediateSource();
+			if(immediateSource != null) {
+				float angle = (float) Math.toDegrees(Math.atan2(immediateSource.posX - this.posX, immediateSource.posZ - this.posZ));
+				float angleDiff = Math.abs(MathHelper.wrapDegrees(MathHelper.wrapDegrees(angle) - MathHelper.wrapDegrees(-this.rotationYaw)));
+				
+				if(angleDiff > 65) {
+					if(!this.world.isRemote) {
 						damageEntity(source, 5F);
+					}
 					return true;
-				}
-				else {
+				} else {
 					return false;
 				}	
 			}
