@@ -15,16 +15,16 @@ import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 
 public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 	private static final DataParameter<Integer> ANIMATION_TICKS_SYNC = EntityDataManager.createKey(EntityTriggeredSludgeWallJet.class, DataSerializers.VARINT);
-	
+
 	public int animationTicks = 0;
 	public int animationTicksPrev = 0;
-	
+
 	public EntityTriggeredSludgeWallJet(World world) {
 		super(world);
 		setSize(0.5F, 0.5F);
 		setNoGravity(true);
 	}
-	
+
 	@Override
 	protected void entityInit() {
 		super.entityInit();
@@ -35,18 +35,16 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 	public void onUpdate() {
 		super.onUpdate();
 		
-		if(!this.world.isRemote && this.ticksExisted % 40 == 0) {
+		if(!getEntityWorld().isRemote && this.ticksExisted % 40 == 0)
 			checkArea();
-		}
 
 		animationTicksPrev = animationTicks;
 		animationTicks++;
 		rotationYaw = renderYawOffset = MathHelper.wrapDegrees(animationTicks);
 		
-		if(!this.world.isRemote && this.ticksExisted % 20 == 0) {
+		if(!getEntityWorld().isRemote && this.ticksExisted % 20 == 0)
 			this.dataManager.set(ANIMATION_TICKS_SYNC, this.animationTicks);
-		}
-		
+
 		if (animationTicks >= 360)
 			animationTicks = animationTicksPrev = 0;
 	}
@@ -54,10 +52,8 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 	@Override
 	public void notifyDataManagerChange(DataParameter<?> key) {
 		super.notifyDataManagerChange(key);
-		
-		if(this.world.isRemote && key == ANIMATION_TICKS_SYNC) {
+		if(getEntityWorld().isRemote && key == ANIMATION_TICKS_SYNC)
 			this.animationTicks = this.animationTicksPrev = this.dataManager.get(ANIMATION_TICKS_SYNC);
-		}
 	}
 	
 	@Override
@@ -84,7 +80,7 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 				float angleDiff = Math.abs(MathHelper.wrapDegrees(MathHelper.wrapDegrees(angle) - MathHelper.wrapDegrees(-this.rotationYaw)));
 
 				if (angleDiff < 55) {
-					if (!this.world.isRemote)
+					if (!getEntityWorld().isRemote)
 						damageEntity(source, 5F);
 					return true;
 				} else
