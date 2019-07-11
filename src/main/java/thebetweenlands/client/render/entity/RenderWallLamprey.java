@@ -195,7 +195,7 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 		this.mainModel = this.model;
 		this.renderWall = false;
 
-		if(this.renderPass == 2) {
+		if(this.renderPass == 2 && entity.getLampreyHiddenPercent(this.partialTicks) < 0.99F) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(0, -0.55D, -0.3D);
 			this.applyDeathAndEasterEggRotations(entity);
