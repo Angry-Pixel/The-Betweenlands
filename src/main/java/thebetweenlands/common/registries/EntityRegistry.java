@@ -164,8 +164,8 @@ public class EntityRegistry {
 		registerEntity(EntityDecayPitChain.class, "decay_pit_chain_outer");
 		registerEntity(EntityDecayPitTarget.class, "decay_pit_target");
 		registerEntity(EntitySludgeJet.class, "sludge_jet", 64, 1, true);
-		registerEntity(EntityTriggeredFallingBlock.class, "triggerd_falling_block");
-		registerEntity(EntityTriggeredSludgeWallJet.class, "triggerd_sludge_wall_jet");
+		registerEntity(EntityTriggeredFallingBlock.class, "triggered_falling_block");
+		registerEntity(EntityTriggeredSludgeWallJet.class, "triggered_sludge_wall_jet");
 		registerEntity(EntitySludgeWallJet.class, "sludge_wall_jet", 64, 1, true);
 	}
 

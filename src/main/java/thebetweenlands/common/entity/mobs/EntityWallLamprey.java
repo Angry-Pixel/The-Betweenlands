@@ -28,7 +28,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.capability.decay.DecayStats;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
-import thebetweenlands.common.entity.projectiles.EntitySapSpit;
+import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -310,16 +310,16 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 		if(target != null) {
 			EnumFacing facing = this.getFacing();
 
-			EntitySapSpit spit = new EntitySapSpit(this.world, this, spitDamage);
-			spit.setPosition(this.posX + facing.getXOffset() * (this.width / 2 + 0.1F), this.posY + this.height / 2.0F + facing.getYOffset() * (this.height / 2 + 0.1F), this.posZ + facing.getZOffset() * (this.width / 2 + 0.1F));
+			EntitySludgeWallJet jet = new EntitySludgeWallJet(this.world, this);
+			jet.setPosition(this.posX + facing.getXOffset() * (this.width / 2 + 0.1F), this.posY + this.height / 2.0F + facing.getYOffset() * (this.height / 2 + 0.1F), this.posZ + facing.getZOffset() * (this.width / 2 + 0.1F));
 
-			double dx = target.posX - spit.posX;
-			double dy = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - spit.posY;
-			double dz = target.posZ - spit.posZ;
+			double dx = target.posX - jet.posX;
+			double dy = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - jet.posY;
+			double dz = target.posZ - jet.posZ;
 			double dist = (double)MathHelper.sqrt(dx * dx + dz * dz);
-			spit.shoot(dx, dy + dist * 0.20000000298023224D, dz, 1, 1);
+			jet.shoot(dx, dy + dist * 0.2D, dz, 1, 1);
 
-			this.world.spawnEntity(spit);
+			this.world.spawnEntity(jet);
 		}
 	}
 

@@ -78,7 +78,7 @@ public class EntitySludgeWallJet extends EntityThrowable {
 				setDead();
 			if (mop.entityHit != null) {
 				if (mop.typeOfHit != null && mop.typeOfHit == RayTraceResult.Type.ENTITY && mop.entityHit != thrower) {
-					mop.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, getThrower()), 1F);
+					mop.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, getThrower()), 2F);
 					getEntityWorld().setEntityState(this, (byte) 3);
 					setDead();
 				}
