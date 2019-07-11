@@ -673,6 +673,7 @@ public class BlockRegistry {
     public static final BlockDoublePlantBL PHRAGMITES = new BlockPhragmites().setReplaceable(true);
     public static final Block SHOOTS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SHOOT_LEAVES.create(1)).setReplaceable(true);
     public static final Block SLUDGECREEP = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SLUDGECREEP_LEAVES.create(1)).setReplaceable(true);
+    public static final Block TALL_SLUDGECREEP = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SLUDGECREEP_LEAVES.create(1)).setReplaceable(true);
     public static final Block SOFT_RUSH = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SOFT_RUSH_LEAVES.create(1)).setReplaceable(true);
     public static final Block SWAMP_REED = new BlockSwampReed();
     public static final Block SWAMP_REED_UNDERWATER = new BlockSwampReedUnderwater();
@@ -685,6 +686,8 @@ public class BlockRegistry {
     public static final Block CAVE_MOSS = new BlockCaveMoss();
     public static final Block CRYPTWEED = new BlockHangingPlant();
     public static final Block STRING_ROOTS = new BlockHangingPlant();
+    public static final Block PALE_GRASS = new BlockPlant().setReplaceable(true);
+    public static final Block ROTBULB = new BlockPlant().setReplaceable(true);
     public static final Block MOSS = new BlockMoss().setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
     public static final Block LICHEN = new BlockMoss(){
     	@Override

@@ -60,7 +60,6 @@ public class BlockHangingPlant extends BlockBush implements ISickleHarvestable, 
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		boolean isTop = worldIn.getBlockState(pos.up()).getBlock() != this;
 		boolean isBottom = worldIn.getBlockState(pos.down()).getBlock() != this;
-		System.out.println(isBottom);
 		return state.withProperty(IS_TOP, isTop).withProperty(IS_BOTTOM, isBottom);
 	}
 
