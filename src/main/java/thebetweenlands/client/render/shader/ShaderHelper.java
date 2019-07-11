@@ -1,5 +1,12 @@
 package thebetweenlands.client.render.shader;
 
+import org.lwjgl.opengl.ARBMultitexture;
+import org.lwjgl.opengl.ContextCapabilities;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.opengl.GLContext;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,13 +17,12 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.math.MathHelper;
-import org.lwjgl.opengl.*;
 import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.client.render.shader.postprocessing.Tonemapper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.util.RenderUtils;
+import thebetweenlands.util.FramebufferStack;
 
 public class ShaderHelper implements IResourceManagerReloadListener {
 	private ShaderHelper() { }
@@ -153,7 +159,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 			}
 		}
 	}
-	
+
 	/**
 	 * Updates the main shader
 	 */
@@ -180,50 +186,48 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	public void renderShaders(float partialTicks) {
 		if(this.shadersUpdated && this.worldShader != null && this.isRequired() && this.canUseShaders()) {
 			Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
-			int parentFboId = -1;
-			if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
-				parentFboId = RenderUtils.getBoundFramebuffer();
+
+			Framebuffer blitFramebuffer;
+			Framebuffer targetFramebuffer1;
+			Framebuffer targetFramebuffer2;
+
+			try(FramebufferStack.State state = FramebufferStack.push()) {
+				blitFramebuffer = this.blitBuffer.getFramebuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);;
+				targetFramebuffer1 = mainFramebuffer;
+				targetFramebuffer2 = blitFramebuffer;
+
+				int renderPasses = MathHelper.floor(this.worldShader.getLightSourcesAmount() / WorldShader.MAX_LIGHT_SOURCES_PER_PASS) + 1;
+				renderPasses = 1; //Multiple render passes are currently not recommended
+
+				Minecraft.getMinecraft().entityRenderer.setupOverlayRendering();
+
+				targetFramebuffer2.framebufferClear();
+
+				GlStateManager.disableAlpha();
+
+				for(int i = 0; i < renderPasses; i++) {
+					//Renders the shader to the blitBuffer
+					this.worldShader.setRenderPass(i);
+					this.worldShader.create(targetFramebuffer2)
+					.setSource(targetFramebuffer1.framebufferTexture)
+					.setRestoreGlState(true)
+					.setMirrorY(false)
+					.setClearDepth(true)
+					.setClearColor(false)
+					.render(partialTicks);
+
+					//Ping-pong FBOs
+					Framebuffer previous = targetFramebuffer2;
+					targetFramebuffer2 = targetFramebuffer1;
+					targetFramebuffer1 = previous;
+				}
+
+				//Make sure texture unit is set to default
+				GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 			}
-			if(parentFboId == -1) {
-				parentFboId = mainFramebuffer.framebufferObject;
-			}
-			Framebuffer blitFramebuffer = this.blitBuffer.getFramebuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);;
-			Framebuffer targetFramebuffer1 = mainFramebuffer;
-			Framebuffer targetFramebuffer2 = blitFramebuffer;
-
-			int renderPasses = MathHelper.floor(this.worldShader.getLightSourcesAmount() / WorldShader.MAX_LIGHT_SOURCES_PER_PASS) + 1;
-			renderPasses = 1; //Multiple render passes are currently not recommended
-
-			Minecraft.getMinecraft().entityRenderer.setupOverlayRendering();
-
-			targetFramebuffer2.framebufferClear();
-
-			GlStateManager.disableAlpha();
-
-			for(int i = 0; i < renderPasses; i++) {
-				//Renders the shader to the blitBuffer
-				this.worldShader.setRenderPass(i);
-				this.worldShader.create(targetFramebuffer2)
-				.setSource(targetFramebuffer1.framebufferTexture)
-				.setRestoreGlState(true)
-				.setMirrorY(false)
-				.setClearDepth(true)
-				.setClearColor(false)
-				.render(partialTicks);
-
-				//Ping-pong FBOs
-				Framebuffer previous = targetFramebuffer2;
-				targetFramebuffer2 = targetFramebuffer1;
-				targetFramebuffer1 = previous;
-			}
-
-			//Make sure texture unit is set to default
-			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
 			//Render last pass to the main framebuffer if necessary
 			if(targetFramebuffer1 != mainFramebuffer) {
-				OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
-				
 				float renderWidth = (float)targetFramebuffer1.framebufferTextureWidth;
 				float renderHeight = (float)targetFramebuffer1.framebufferTextureHeight;
 

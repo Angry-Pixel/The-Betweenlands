@@ -39,10 +39,9 @@ import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
-import thebetweenlands.common.world.event.EventAuroras;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.util.FramebufferStack;
 import thebetweenlands.util.Mesh;
-import thebetweenlands.util.RenderUtils;
 import thebetweenlands.util.Mesh.Triangle;
 import thebetweenlands.util.Mesh.Triangle.Vertex;
 import thebetweenlands.util.Mesh.Triangle.Vertex.Vector3D;
@@ -374,26 +373,20 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 			GlStateManager.disableFog();
 			GlStateManager.color(1, 1, 1, 1);
 
-			int parentFboId = RenderUtils.getBoundFramebuffer();
-			
-			Framebuffer mcFbo = mc.getFramebuffer();
-			clipPlaneBuffer.updateGeometryBuffer(mcFbo.framebufferWidth, mcFbo.framebufferHeight);
-			clipPlaneBuffer.bind();
-			clipPlaneBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
-
-			vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-			vertexBuffer.pos(-9000.0D, -90.0D, -9000.0D).color(255, 255, 255, 255).endVertex();
-			vertexBuffer.pos(-9000.0D, -90.0D, 9000.0D).color(255, 255, 255, 255).endVertex();
-			vertexBuffer.pos(9000.0D, -90.0D, 9000.0D).color(255, 255, 255, 255).endVertex();
-			vertexBuffer.pos(9000.0D, -90.0D, -9000.0D).color(255, 255, 255, 255).endVertex();
-			tessellator.draw();
-
-			clipPlaneBuffer.updateDepthBuffer();
-			
-			if(parentFboId != -1) {
-				OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
-			} else {
-				mcFbo.bindFramebuffer(true);
+			try(FramebufferStack.State state = FramebufferStack.push()) {
+				Framebuffer mcFbo = mc.getFramebuffer();
+				clipPlaneBuffer.updateGeometryBuffer(mcFbo.framebufferWidth, mcFbo.framebufferHeight);
+				clipPlaneBuffer.bind();
+				clipPlaneBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
+	
+				vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+				vertexBuffer.pos(-9000.0D, -90.0D, -9000.0D).color(255, 255, 255, 255).endVertex();
+				vertexBuffer.pos(-9000.0D, -90.0D, 9000.0D).color(255, 255, 255, 255).endVertex();
+				vertexBuffer.pos(9000.0D, -90.0D, 9000.0D).color(255, 255, 255, 255).endVertex();
+				vertexBuffer.pos(9000.0D, -90.0D, -9000.0D).color(255, 255, 255, 255).endVertex();
+				tessellator.draw();
+	
+				clipPlaneBuffer.updateDepthBuffer();
 			}
 
 			GlStateManager.color(1, 1, 1, 1);

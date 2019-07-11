@@ -8,6 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -176,7 +177,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 							}
 						}
 					}
-					if(entity instanceof IProjectile) {
+					if(entity instanceof IProjectile || entity instanceof EntityFireball) {
 						Vec3d closestPoint = this.getClosestAABBCorner(entity.getEntityBoundingBox(), centerX, centerY, centerZ);
 						if(closestPoint.squareDistanceTo(centerX, centerY, centerZ) < this.radius*this.radius) {
 							double velocity = Math.sqrt(entity.motionX*entity.motionX + entity.motionY*entity.motionY + entity.motionZ*entity.motionZ);
@@ -188,7 +189,9 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 							entity.motionX = (float)(diffX / len) * velocity;
 							entity.motionY = (float)(diffY / len) * velocity;
 							entity.motionZ = (float)(diffZ / len) * velocity;
-							((IProjectile)entity).shoot(diffX / len, diffY / len, diffZ / len, 1.0F, 1.0F);
+							if(entity instanceof IProjectile) {
+								((IProjectile)entity).shoot(diffX / len, diffY / len, diffZ / len, 1.0F, 1.0F);
+							}
 							entity.velocityChanged = true;
 							if(!entity.collidedHorizontally && !entity.collidedVertically && !entity.onGround) {
 								fuelCost += 0.0004F * (this.radiusState / 1.5F + 1);

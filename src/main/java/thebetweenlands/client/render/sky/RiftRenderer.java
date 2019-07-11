@@ -19,6 +19,7 @@ import thebetweenlands.api.sky.IRiftSkyRenderer;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.common.world.event.EventRift;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.util.FramebufferStack;
 import thebetweenlands.util.RenderUtils;
 
 public class RiftRenderer implements IRiftRenderer {
@@ -69,62 +70,58 @@ public class RiftRenderer implements IRiftRenderer {
 			EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
 
 			if(rift.getActivationTicks() > 0 && rift.getVisibility(partialTicks) > 0) {
-				int parentFboId = RenderUtils.getBoundFramebuffer();
-
-				Framebuffer mcFbo = mc.getFramebuffer();
-				Framebuffer skyFbo = overworldSkyFbo.getFramebuffer(mcFbo.framebufferWidth, mcFbo.framebufferHeight);
-
-				skyFbo.setFramebufferColor(0, 0, 0, 0);
-				skyFbo.framebufferClear();
-				skyFbo.bindFramebuffer(false);
-
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
-				GlStateManager.enableCull();
-				GlStateManager.enableDepth();
-				GlStateManager.depthMask(true);
-				GlStateManager.enableAlpha();
-				GlStateManager.enableBlend();
-				GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
-				GlStateManager.disableTexture2D();
-
-				//Render rift sky
-				GlStateManager.pushMatrix();
-				this.riftSkyRenderer.setClearColor(partialTicks, world, mc);
-				GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-				this.riftSkyRenderer.render(partialTicks, world, mc);
-				GlStateManager.popMatrix();
+				Framebuffer skyFbo;
+				float skyBrightness;
 				
-				float skyBrightness = this.riftSkyRenderer.getSkyBrightness(partialTicks, world, mc);
-
-				GlStateManager.enableAlpha();
-				GlStateManager.enableBlend();
-				GlStateManager.enableTexture2D();
-				RenderHelper.disableStandardItemLighting();
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-				GlStateManager.disableFog();
-				GlStateManager.depthMask(false);
-				GlStateManager.color(1, 1, 1, 1);
-
-				//Set all alpha to 1 for mask blending
-				GlStateManager.colorMask(false, false, false, true);
-				GlStateManager.clearColor(0, 0, 0, 1);
-				GlStateManager.clearDepth(1.0D);
-				GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-				GlStateManager.colorMask(true, true, true, true);
-
-				//Render mask
-				if(OpenGlHelper.openGL14) {
-					GlStateManager.tryBlendFuncSeparate(SourceFactor.ZERO, DestFactor.ONE, SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA);
-				} else {
-					GlStateManager.blendFunc(SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA); //Still decent looking fallback
-				}
-
-				this.riftMaskRenderer.renderMask(partialTicks, world, mc, skyBrightness);
-
-				if(parentFboId != -1) {
-					OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
-				} else {
-					mcFbo.bindFramebuffer(true);
+				try(FramebufferStack.State state = FramebufferStack.push()) {
+					skyFbo = overworldSkyFbo.getFramebuffer(state.getMinecraftFbo().framebufferWidth, state.getMinecraftFbo().framebufferHeight);
+	
+					skyFbo.setFramebufferColor(0, 0, 0, 0);
+					skyFbo.framebufferClear();
+					skyFbo.bindFramebuffer(false);
+	
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
+					GlStateManager.enableCull();
+					GlStateManager.enableDepth();
+					GlStateManager.depthMask(true);
+					GlStateManager.enableAlpha();
+					GlStateManager.enableBlend();
+					GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+					GlStateManager.disableTexture2D();
+	
+					//Render rift sky
+					GlStateManager.pushMatrix();
+					this.riftSkyRenderer.setClearColor(partialTicks, world, mc);
+					GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+					this.riftSkyRenderer.render(partialTicks, world, mc);
+					GlStateManager.popMatrix();
+					
+					skyBrightness = this.riftSkyRenderer.getSkyBrightness(partialTicks, world, mc);
+	
+					GlStateManager.enableAlpha();
+					GlStateManager.enableBlend();
+					GlStateManager.enableTexture2D();
+					RenderHelper.disableStandardItemLighting();
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+					GlStateManager.disableFog();
+					GlStateManager.depthMask(false);
+					GlStateManager.color(1, 1, 1, 1);
+	
+					//Set all alpha to 1 for mask blending
+					GlStateManager.colorMask(false, false, false, true);
+					GlStateManager.clearColor(0, 0, 0, 1);
+					GlStateManager.clearDepth(1.0D);
+					GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+					GlStateManager.colorMask(true, true, true, true);
+	
+					//Render mask
+					if(OpenGlHelper.openGL14) {
+						GlStateManager.tryBlendFuncSeparate(SourceFactor.ZERO, DestFactor.ONE, SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA);
+					} else {
+						GlStateManager.blendFunc(SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA); //Still decent looking fallback
+					}
+	
+					this.riftMaskRenderer.renderMask(partialTicks, world, mc, skyBrightness);
 				}
 
 				//Reset fog to this world's fog

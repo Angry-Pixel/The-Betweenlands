@@ -30,7 +30,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 
 public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpawnData {
-	private static final DataParameter<String> OWNER_DW = EntityDataManager.<String>createKey(EntitySwordEnergy.class, DataSerializers.STRING);
+	private static final DataParameter<String> OWNER_DW = EntityDataManager.<String>createKey(EntityShockwaveBlock.class, DataSerializers.STRING);
 
 	public Block block;
 	public int blockMeta;

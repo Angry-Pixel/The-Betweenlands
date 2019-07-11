@@ -46,8 +46,8 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 	public static final IAttribute FLAMES_PER_ATTACK = (new RangedAttribute(null, "bl.flamesPerAttack", 6.0D, 1.0D, 64.0D)).setDescription("Number range of flames per attack");
 	public static final IAttribute AGRESSIVE = (new BooleanAttribute(null, "bl.pyradAgressive", false)).setDescription("Whether the Pyrad is agressive and doesn't go inactive");
 
-	private static final DataParameter<Boolean> CHARGING = EntityDataManager.<Boolean>createKey(EntityBlaze.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> ACTIVE = EntityDataManager.<Boolean>createKey(EntityBlaze.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> CHARGING = EntityDataManager.<Boolean>createKey(EntityPyrad.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> ACTIVE = EntityDataManager.<Boolean>createKey(EntityPyrad.class, DataSerializers.BOOLEAN);
 
 	private List<EntityAIBase> activeTasks;
 	private List<EntityAIBase> activeTargetTasks;

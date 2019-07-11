@@ -11,7 +11,7 @@ public class InstancedIntCache {
 	private final List<int[]> freeLargeArrays = Lists.<int[]>newArrayList();
 	private final List<int[]> inUseLargeArrays = Lists.<int[]>newArrayList();
 
-	public int[] getIntCache(int size) {
+	public synchronized int[] getIntCache(int size) {
 		if (size <= 256) {
 			if (freeSmallArrays.isEmpty()) {
 				int[] aint4 = new int[256];
@@ -40,7 +40,7 @@ public class InstancedIntCache {
 		}
 	}
 
-	public void resetIntCache() {
+	public synchronized void resetIntCache() {
 		if (!freeLargeArrays.isEmpty()) {
 			freeLargeArrays.remove(freeLargeArrays.size() - 1);
 		}

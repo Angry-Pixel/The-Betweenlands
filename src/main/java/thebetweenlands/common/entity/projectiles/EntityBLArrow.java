@@ -17,7 +17,7 @@ import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for shooter sync*/ {
-	private static final DataParameter<String> DW_TYPE = EntityDataManager.<String>createKey(EntityArrow.class, DataSerializers.STRING);
+	private static final DataParameter<String> DW_TYPE = EntityDataManager.<String>createKey(EntityBLArrow.class, DataSerializers.STRING);
 
 	public EntityBLArrow(World worldIn) {
 		super(worldIn);

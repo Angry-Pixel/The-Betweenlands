@@ -25,6 +25,7 @@ import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.layer.IntCache;
 import thebetweenlands.common.block.structure.BlockTreePortal;
@@ -259,8 +260,38 @@ public final class TeleporterBetweenlands extends Teleporter {
 		validBiomes.add(BiomeRegistry.SWAMPLANDS);
 		validBiomes.add(BiomeRegistry.PATCHY_ISLANDS);
 
-		BlockPos suitablePos = this.toWorld.getBiomeProvider().findBiomePosition(start.getX(), start.getZ(), BetweenlandsConfig.WORLD_AND_DIMENSION.portalBiomeSearchRange, validBiomes, this.toWorld.rand);
+		int range = BetweenlandsConfig.WORLD_AND_DIMENSION.portalBiomeSearchRange;
 
+		IntCache.resetIntCache();
+		int searchStartX = start.getX() - range >> 2;
+		int searchStartZ = start.getZ() - range >> 2;
+		int searchEndX = start.getX() + range >> 2;
+		int searchEndZ = start.getZ() + range >> 2;
+		int searchWidth = searchEndX - searchStartX + 1;
+		int searchDepth = searchEndZ - searchStartZ + 1;
+
+		WorldBorder border = this.toWorld.getWorldBorder();
+		
+		Biome[] biomes = this.toWorld.getBiomeProvider().getBiomesForGeneration(new Biome[0], searchStartX, searchStartZ, searchWidth, searchDepth);
+
+		BlockPos suitablePos = null;
+
+		int counter = 0;
+
+		for (int i = 0; i < searchWidth * searchDepth; ++i) {
+			int bx = searchStartX + i % searchWidth << 2;
+			int bz = searchStartZ + i / searchWidth << 2;
+
+			Biome biome = biomes[i];
+
+			if (validBiomes.contains(biome) &&
+					bx > border.minX() + 16 && bz > border.minZ() + 16 && bx < border.maxX() - 16 && bz < border.maxZ() - 16 &&
+					(suitablePos == null || this.toWorld.rand.nextInt(counter + 1) == 0)) {
+				suitablePos = new BlockPos(bx, 0, bz);
+				++counter;
+			}
+		}
+		
 		BlockPos selectedPos;
 		if(suitablePos != null) {
 			selectedPos = suitablePos;
@@ -295,31 +326,35 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 		IntCache.resetIntCache();
 		int searchStartX = start.getX() - range >> 2;
-				int searchStartZ = start.getZ() - range >> 2;
+		int searchStartZ = start.getZ() - range >> 2;
 		int searchEndX = start.getX() + range >> 2;
 		int searchEndZ = start.getZ() + range >> 2;
-							int searchWidth = searchEndX - searchStartX + 1;
-							int searchDepth = searchEndZ - searchStartZ + 1;
+		int searchWidth = searchEndX - searchStartX + 1;
+		int searchDepth = searchEndZ - searchStartZ + 1;
 
-							Biome[] biomes = this.toWorld.getBiomeProvider().getBiomesForGeneration(new Biome[0], searchStartX, searchStartZ, searchWidth, searchDepth);
+		WorldBorder border = this.toWorld.getWorldBorder();
+		
+		Biome[] biomes = this.toWorld.getBiomeProvider().getBiomesForGeneration(new Biome[0], searchStartX, searchStartZ, searchWidth, searchDepth);
 
-							BlockPos suitablePos = null;
+		BlockPos suitablePos = null;
 
-							int counter = 0;
+		int counter = 0;
 
-							for (int i = 0; i < searchWidth * searchDepth; ++i) {
-								int bx = searchStartX + i % searchWidth << 2;
-								int by = searchStartZ + i / searchWidth << 2;
+		for (int i = 0; i < searchWidth * searchDepth; ++i) {
+			int bx = searchStartX + i % searchWidth << 2;
+			int bz = searchStartZ + i / searchWidth << 2;
 
-								Biome biome = biomes[i];
+			Biome biome = biomes[i];
 
-								if (!unsafeBiomes.contains(biome.getRegistryName().toString()) && (suitablePos == null || this.toWorld.rand.nextInt(counter + 1) == 0)) {
-									suitablePos = new BlockPos(bx, 0, by);
-									++counter;
-								}
-							}
+			if (!unsafeBiomes.contains(biome.getRegistryName().toString()) &&
+					bx > border.minX() + 16 && bz > border.minZ() + 16 && bx < border.maxX() - 16 && bz < border.maxZ() - 16 &&
+					(suitablePos == null || this.toWorld.rand.nextInt(counter + 1) == 0)) {
+				suitablePos = new BlockPos(bx, 0, bz);
+				++counter;
+			}
+		}
 
-							return suitablePos;
+		return suitablePos;
 	}
 
 	/**
@@ -418,13 +453,17 @@ public final class TeleporterBetweenlands extends Teleporter {
 		WorldGenWeedwoodPortalTree genTree = new WorldGenWeedwoodPortalTree();
 
 		return this.spiralGenerate(center, 64, 0, 0, checkPos -> {
-			Chunk chunk = this.getDecoratedChunk(this.toWorld, checkPos); //Force chunk to generate
-			checkPos.setY(chunk.getHeight(checkPos) - 1);
-
-			if(SurfaceType.MIXED_GROUND.matches(this.toWorld.getBlockState(checkPos)) && this.toWorld.isAirBlock(checkPos.up()) && this.canGeneratePortalTree(this.toWorld, checkPos)) {
-				if(genTree.generate(this.toWorld, this.toWorld.rand, checkPos.toImmutable())) {
-					this.lonkPortalsTogetherAndTeleport(entity, checkPos, 0.5D, 2.0D, 0.5D);
-					return true;
+			WorldBorder border = this.toWorld.getWorldBorder();
+	
+			if(checkPos.getX() > border.minX() + 16 && checkPos.getZ() > border.minZ() + 16 && checkPos.getX() < border.maxX() - 16 && checkPos.getZ() < border.maxZ() - 16) {
+				Chunk chunk = this.getDecoratedChunk(this.toWorld, checkPos); //Force chunk to generate
+				checkPos.setY(chunk.getHeight(checkPos) - 1);
+	
+				if(SurfaceType.MIXED_GROUND.matches(this.toWorld.getBlockState(checkPos)) && this.toWorld.isAirBlock(checkPos.up()) && this.canGeneratePortalTree(this.toWorld, checkPos)) {
+					if(genTree.generate(this.toWorld, this.toWorld.rand, checkPos.toImmutable())) {
+						this.lonkPortalsTogetherAndTeleport(entity, checkPos, 0.5D, 2.0D, 0.5D);
+						return true;
+					}
 				}
 			}
 
@@ -436,7 +475,10 @@ public final class TeleporterBetweenlands extends Teleporter {
 		WorldGenWeedwoodPortalTree genTree = new WorldGenWeedwoodPortalTree();
 
 		return this.spiralGenerate(center, 64, Math.min(center.getY() - 2, 8), 8, checkPos -> {
-			if(this.toWorld.getBlockState(checkPos).isNormalCube() && this.toWorld.isAirBlock(checkPos.up()) && this.canGeneratePortalTree(this.toWorld, checkPos)) {
+			WorldBorder border = this.toWorld.getWorldBorder();
+			
+			if(checkPos.getX() > border.minX() + 16 && checkPos.getZ() > border.minZ() + 16 && checkPos.getX() < border.maxX() - 16 && checkPos.getZ() < border.maxZ() - 16 &&
+					this.toWorld.getBlockState(checkPos).isNormalCube() && this.toWorld.isAirBlock(checkPos.up()) && this.canGeneratePortalTree(this.toWorld, checkPos)) {
 				BlockPos pos = checkPos.toImmutable();
 				if(genTree.generate(this.toWorld, this.toWorld.rand, pos)) {
 					this.lonkPortalsTogetherAndTeleport(entity, pos, 0.5D, 2.0D, 0.5D);
@@ -455,7 +497,10 @@ public final class TeleporterBetweenlands extends Teleporter {
 		WorldGenSmallPortal genPortal = new WorldGenSmallPortal(EnumFacing.NORTH);
 
 		if(this.spiralGenerate(center, 64, Math.min(center.getY() - 2, 8), 8, checkPos -> {
-			if(this.toWorld.getBlockState(checkPos).isNormalCube() && this.toWorld.isAirBlock(checkPos.up()) && this.canGenerateSmallPortalInOpen(this.toWorld, checkPos.up())) {
+			WorldBorder border = this.toWorld.getWorldBorder();
+			
+			if(checkPos.getX() > border.minX() + 6 && checkPos.getZ() > border.minZ() + 6 && checkPos.getX() < border.maxX() - 6 && checkPos.getZ() < border.maxZ() - 6 &&
+					this.toWorld.getBlockState(checkPos).isNormalCube() && this.toWorld.isAirBlock(checkPos.up()) && this.canGenerateSmallPortalInOpen(this.toWorld, checkPos.up())) {
 				BlockPos pos = checkPos.toImmutable().up();
 				if(genPortal.generate(this.toWorld, this.toWorld.rand, pos)) {
 					this.lonkPortalsTogetherAndTeleport(entity, pos, 0.5D, 1.0D, -0.5D);
@@ -472,7 +517,10 @@ public final class TeleporterBetweenlands extends Teleporter {
 		}
 
 		if(this.spiralGenerate(center, 32, Math.min(center.getY() - 2, 8), 8, checkPos -> {
-			if(this.toWorld.getBlockState(checkPos).isNormalCube() && !this.isSmallPortalObstructedByOthersOrLiquid(this.toWorld, checkPos)) {
+			WorldBorder border = this.toWorld.getWorldBorder();
+			
+			if(checkPos.getX() > border.minX() + 6 && checkPos.getZ() > border.minZ() + 6 && checkPos.getX() < border.maxX() - 6 && checkPos.getZ() < border.maxZ() - 6 &&
+					this.toWorld.getBlockState(checkPos).isNormalCube() && !this.isSmallPortalObstructedByOthersOrLiquid(this.toWorld, checkPos)) {
 				BlockPos pos = checkPos.toImmutable().up();
 				if(genPortal.generate(this.toWorld, this.toWorld.rand, pos)) {
 					this.lonkPortalsTogetherAndTeleport(entity, pos, 0.5D, 1.0D, -0.5D);
