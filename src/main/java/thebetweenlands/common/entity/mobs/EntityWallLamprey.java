@@ -19,7 +19,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -57,6 +56,7 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 
 	public EntityWallLamprey(World world) {
 		super(world);
+		this.lookMoveSpeedMultiplier = 15.0F;
 		this.experienceValue = 5;
 	}
 
@@ -97,6 +97,11 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 		if(key == LOOK_X || key == LOOK_Y || key == LOOK_Z) {
 			this.clientHeadLookChanged = true;
 		}
+	}
+
+	@Override
+	protected boolean isMovementBlocked() {
+		return super.isMovementBlocked() || this.isSucking();
 	}
 
 	@Override
