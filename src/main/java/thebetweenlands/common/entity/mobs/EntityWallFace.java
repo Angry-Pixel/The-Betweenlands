@@ -224,7 +224,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		super.writeEntityToNBT(nbt);
 
 		nbt.setInteger("facing", this.getFacing().getIndex());
-		nbt.setInteger("facingUp", this.getFacing().getIndex());
+		nbt.setInteger("facingUp", this.getFacingUp().getIndex());
 		nbt.setLong("anchor", this.getAnchor().toLong());
 		nbt.setBoolean("anchored", this.isAnchored());
 	}
