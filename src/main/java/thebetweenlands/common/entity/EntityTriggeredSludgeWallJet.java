@@ -3,6 +3,9 @@ package thebetweenlands.common.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -11,38 +14,61 @@ import net.minecraft.world.World;
 import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 
 public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
-	public float animationTicks = 0;
-	public float animationTicksPrev = 0;
+	private static final DataParameter<Integer> ANIMATION_TICKS_SYNC = EntityDataManager.createKey(EntityTriggeredSludgeWallJet.class, DataSerializers.VARINT);
+	
+	public int animationTicks = 0;
+	public int animationTicksPrev = 0;
+	
 	public EntityTriggeredSludgeWallJet(World world) {
 		super(world);
 		setSize(0.5F, 0.5F);
 		setNoGravity(true);
 	}
+	
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(ANIMATION_TICKS_SYNC, 0);
+	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%40 == 0)
+		
+		if(!this.world.isRemote && this.ticksExisted % 40 == 0) {
 			checkArea();
+		}
 
 		animationTicksPrev = animationTicks;
-		animationTicks += 1F;
-		rotationYaw = MathHelper.wrapDegrees(animationTicks * 0.5F);
-		if (animationTicks >= 360F)
+		animationTicks++;
+		rotationYaw = renderYawOffset = MathHelper.wrapDegrees(animationTicks);
+		
+		if(!this.world.isRemote && this.ticksExisted % 20 == 0) {
+			this.dataManager.set(ANIMATION_TICKS_SYNC, this.animationTicks);
+		}
+		
+		if (animationTicks >= 360)
 			animationTicks = animationTicksPrev = 0;
 	}
 
 	@Override
+	public void notifyDataManagerChange(DataParameter<?> key) {
+		super.notifyDataManagerChange(key);
+		
+		if(this.world.isRemote && key == ANIMATION_TICKS_SYNC) {
+			this.animationTicks = this.animationTicksPrev = this.dataManager.get(ANIMATION_TICKS_SYNC);
+		}
+	}
+	
+	@Override
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
 		if(targetEntity instanceof EntityPlayer) {
-			float rotation = MathHelper.wrapDegrees(rotationYaw) * 2F;
-			float maxRot = 135;
-			float minRot = 0;
-			float rotationTarget = MathHelper.wrapDegrees(targetEntity.rotationYaw) + 180F;
-			if( rotationTarget >= rotation + minRot && rotationTarget <= rotation + maxRot) {
+			float angle = (float) Math.toDegrees(Math.atan2(targetEntity.posX - this.posX, targetEntity.posZ - this.posZ));
+			float angleDiff = Math.abs(MathHelper.wrapDegrees(MathHelper.wrapDegrees(angle) - MathHelper.wrapDegrees(-this.rotationYaw)));
+			
+			if(angleDiff < 55) {
 				((EntitySludgeWallJet) entitySpawned).setDead();
-			}
-			else {
+			} else {
 				((EntitySludgeWallJet) entitySpawned).setPosition(posX, posY + height * 0.5D , posZ);
 				((EntitySludgeWallJet) entitySpawned).shoot(targetEntity.posX - posX, targetEntity.posY + targetEntity.height - posY, targetEntity.posZ - posZ, 0.5F, 0F);
 			}
@@ -108,6 +134,7 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 		return 1F;
 	}
 
+	@Override
 	protected AxisAlignedBB proximityBox() {
 		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal());
 	}

@@ -62,6 +62,7 @@ public class EntitySludgeWallJet extends EntityThrowable {
 				getEntityWorld().spawnParticle(EnumParticleTypes.ITEM_CRACK, posX, posY, posZ, 0.0D, 0.0D, 0.0D, Item.getIdFromItem(Item.getItemFromBlock(BlockRegistry.MUD_BRICK_STAIRS_DECAY_3)));
 	}
 
+	@Override
 	protected SoundEvent getSplashSound() {
 		return SoundEvents.ENTITY_BOBBER_SPLASH;
 	}

@@ -757,20 +757,20 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 				this.face.targetFacingTimeout = 30 + this.face.world.rand.nextInt(30);
 				this.face.targetFacing = facing[0];
 				this.face.targetFacingUp = facing[1];
-				this.setSpeed();
+				this.setSpeed(1);
 			} else if(this.lookingMode == 2) {
 				EnumFacing[] facing = this.face.getFacingForLookDir(new Vec3d(this.x, this.y, this.z));
 				this.face.targetFacingTimeout = 30 + this.face.world.rand.nextInt(30);
 				this.face.targetFacing = facing[0];
 				this.face.targetFacingUp = facing[1];
-				this.setSpeed();
+				this.setSpeed(1);
 			}
 			this.lookingMode = 0;
 		}
 
-		private void setSpeed() {
+		public void setSpeed(double speed) {
 			if(!this.face.isMoving() && this.face.targetAnchor == null) {
-				this.face.setAIMoveSpeed((float)(this.face.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+				this.face.setAIMoveSpeed((float)(speed * this.face.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
 			}
 		}
 	}
@@ -790,17 +790,17 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 				int strafeDir = -(int)Math.signum(this.moveStrafe);
 				this.face.targetAnchorTimeout = 30 + this.entity.world.rand.nextInt(30);
 				this.face.targetAnchor = this.face.getAnchor().add(horDir.getX() * strafeDir, horDir.getY() * strafeDir, horDir.getZ() * strafeDir);
-				this.setSpeed();
+				this.setSpeed(this.speed);
 			} else if(this.action == EntityMoveHelper.Action.MOVE_TO) {
 				this.face.targetAnchorTimeout = 30 + this.entity.world.rand.nextInt(30);
 				this.face.targetAnchor = new BlockPos(this.posX - this.face.getBlockWidth() / 2.0D, this.posY - this.face.getBlockHeight() / 2.0D, this.posZ - this.face.getBlockWidth() / 2.0D);
-				this.setSpeed();
+				this.setSpeed(this.speed);
 			}
 			this.action = EntityMoveHelper.Action.WAIT;
 		}
 
-		private void setSpeed() {
-			this.face.setAIMoveSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+		public void setSpeed(double speed) {
+			this.face.setAIMoveSpeed((float)(speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
 		}
 	}
 }
