@@ -1,0 +1,6 @@
+{
+  "parent": "thebetweenlands:block/string_roots",
+  "textures": {
+    "block": "thebetweenlands:blocks/string_roots_bottom"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:cryptweed"
+  },
+  "variants": {
+    "is_top": {
+      "true": { },
+      "false": { }
+    },
+    "is_bottom": {
+      "true": {
+        "model": "thebetweenlands:cryptweed_bottom"
+      },
+      "false": { }
+    }
+  }
+}
