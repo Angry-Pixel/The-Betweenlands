@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
 public abstract class EntityProximitySpawner extends EntityCreature {
@@ -92,7 +93,7 @@ public abstract class EntityProximitySpawner extends EntityCreature {
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
 		entitySpawned.setPosition(getPosition().getX() + 0.5F, getPosition().getY(), getPosition().getZ() + 0.5F);
 	}
-	
+
 	/**
 	 * Action to happen just after entity spawns
 	 *
@@ -118,29 +119,31 @@ public abstract class EntityProximitySpawner extends EntityCreature {
 	 */
 	@Nullable
 	protected Entity checkArea() {
-		List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
-		for (int entityCount = 0; entityCount < list.size(); entityCount++) {
-			Entity entity = list.get(entityCount);
-			if (entity != null)
-				if (entity instanceof EntityPlayer && !((EntityPlayer) entity).isSpectator() && !((EntityPlayer) entity).isCreative()) {
-					if (canSneakPast() && entity.isSneaking())
-						return null;
-					else if (checkSight() && !canEntityBeSeen(entity))
-						return null;
-					else {
-						for (int count = 0; count < getEntitySpawnCount(); count++) {
-							Entity spawn = getEntitySpawned();
-							if (spawn != null) {
-								performPreSpawnaction(entity, spawn);
-								if (!spawn.isDead) //just in case of pre-emptive removal
-									getEntityWorld().spawnEntity(spawn);
-								performPostSpawnaction(entity, spawn);
+		if (!getEntityWorld().isRemote && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
+			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
+			for (int entityCount = 0; entityCount < list.size(); entityCount++) {
+				Entity entity = list.get(entityCount);
+				if (entity != null)
+					if (entity instanceof EntityPlayer && !((EntityPlayer) entity).isSpectator() && !((EntityPlayer) entity).isCreative()) {
+						if (canSneakPast() && entity.isSneaking())
+							return null;
+						else if (checkSight() && !canEntityBeSeen(entity))
+							return null;
+						else {
+							for (int count = 0; count < getEntitySpawnCount(); count++) {
+								Entity spawn = getEntitySpawned();
+								if (spawn != null) {
+									performPreSpawnaction(entity, spawn);
+									if (!spawn.isDead) // just in case of pre-emptive removal
+										getEntityWorld().spawnEntity(spawn);
+									performPostSpawnaction(entity, spawn);
+								}
 							}
+							if (!isDead && isSingleUse())
+								setDead();
 						}
-						if (!isDead && isSingleUse())
-							setDead();
 					}
-				}
+			}
 		}
 		return null;
 	}
