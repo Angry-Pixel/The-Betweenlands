@@ -65,14 +65,33 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 		if(targetEntity instanceof EntityPlayer) {
 			float angle = (float) Math.toDegrees(Math.atan2(targetEntity.posX - this.posX, targetEntity.posZ - this.posZ));
 			float angleDiff = Math.abs(MathHelper.wrapDegrees(MathHelper.wrapDegrees(angle) - MathHelper.wrapDegrees(-this.rotationYaw)));
-			
-			if(angleDiff < 55) {
+
+			if(angleDiff < 55)
 				((EntitySludgeWallJet) entitySpawned).setDead();
-			} else {
+			else {
 				((EntitySludgeWallJet) entitySpawned).setPosition(posX, posY + height * 0.5D , posZ);
 				((EntitySludgeWallJet) entitySpawned).shoot(targetEntity.posX - posX, targetEntity.posY + targetEntity.height - posY, targetEntity.posZ - posZ, 0.5F, 0F);
 			}
 		}
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if(source instanceof EntityDamageSource) {
+			Entity immediateSource = ((EntityDamageSource) source).getImmediateSource();
+			if(immediateSource != null) {
+				float angle = (float) Math.toDegrees(Math.atan2(immediateSource.posX - this.posX, immediateSource.posZ - this.posZ));
+				float angleDiff = Math.abs(MathHelper.wrapDegrees(MathHelper.wrapDegrees(angle) - MathHelper.wrapDegrees(-this.rotationYaw)));
+
+				if (angleDiff < 55) {
+					if (!this.world.isRemote)
+						damageEntity(source, 5F);
+					return true;
+				} else
+					return false;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -99,27 +118,6 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 
 	@Override
 	public boolean getIsInvulnerable() {
-		return false;
-	}
-
-	@Override
-	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if(source instanceof EntityDamageSource) {
-			Entity immediateSource = ((EntityDamageSource) source).getImmediateSource();
-			if(immediateSource != null) {
-				float angle = (float) Math.toDegrees(Math.atan2(immediateSource.posX - this.posX, immediateSource.posZ - this.posZ));
-				float angleDiff = Math.abs(MathHelper.wrapDegrees(MathHelper.wrapDegrees(angle) - MathHelper.wrapDegrees(-this.rotationYaw)));
-				
-				if(angleDiff > 65) {
-					if(!this.world.isRemote) {
-						damageEntity(source, 5F);
-					}
-					return true;
-				} else {
-					return false;
-				}	
-			}
-		}
 		return false;
 	}
 
