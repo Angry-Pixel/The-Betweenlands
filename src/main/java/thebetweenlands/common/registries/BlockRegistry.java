@@ -101,6 +101,7 @@ import thebetweenlands.common.block.plant.BlockEdgeShroom;
 import thebetweenlands.common.block.plant.BlockFlatheadMushroom;
 import thebetweenlands.common.block.plant.BlockGoldenClubFlower;
 import thebetweenlands.common.block.plant.BlockGoldenClubStalk;
+import thebetweenlands.common.block.plant.BlockHangingPlant;
 import thebetweenlands.common.block.plant.BlockHollowLog;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldFlower;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldStalk;
@@ -672,6 +673,7 @@ public class BlockRegistry {
     public static final BlockDoublePlantBL PHRAGMITES = new BlockPhragmites().setReplaceable(true);
     public static final Block SHOOTS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SHOOT_LEAVES.create(1)).setReplaceable(true);
     public static final Block SLUDGECREEP = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SLUDGECREEP_LEAVES.create(1)).setReplaceable(true);
+    public static final Block TALL_SLUDGECREEP = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SLUDGECREEP_LEAVES.create(1)).setReplaceable(true);
     public static final Block SOFT_RUSH = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SOFT_RUSH_LEAVES.create(1)).setReplaceable(true);
     public static final Block SWAMP_REED = new BlockSwampReed();
     public static final Block SWAMP_REED_UNDERWATER = new BlockSwampReedUnderwater();
@@ -682,6 +684,10 @@ public class BlockRegistry {
     public static final Block WEEDWOOD_BUSH = new BlockWeedwoodBush();
     public static final Block HOLLOW_LOG = new BlockHollowLog();
     public static final Block CAVE_MOSS = new BlockCaveMoss();
+    public static final Block CRYPTWEED = new BlockHangingPlant();
+    public static final Block STRING_ROOTS = new BlockHangingPlant();
+    public static final Block PALE_GRASS = new BlockPlant().setReplaceable(true);
+    public static final Block ROTBULB = new BlockPlant().setReplaceable(true);
     public static final Block MOSS = new BlockMoss().setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
     public static final Block LICHEN = new BlockMoss(){
     	@Override

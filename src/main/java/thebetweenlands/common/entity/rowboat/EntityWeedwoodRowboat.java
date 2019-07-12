@@ -1003,24 +1003,29 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     // Inheried methods not needed
 
     @Override
-    public float getWaterLevelAbove() { throw ohnoes(); }
-
-    @Override
-    public float getBoatGlide() { throw ohnoes(); }
-
-    @Override
-    public void setBoatType(Type boatType) { throw ohnoes(); }
-
-    @Override
-    public Type getBoatType() { throw ohnoes(); }
-
-    @Override
-    public float getRowingTime(int oar, float limbSwing) { throw ohnoes(); }
-
-    private RuntimeException ohnoes() {
-        return new UnsupportedOperationException("OH NOES!");
+    public float getWaterLevelAbove() {
+        return 0.0F;
     }
-    
+
+    @Override
+    public float getBoatGlide() {
+        return 0.0F;
+    }
+
+    @Override
+    public void setBoatType(Type boatType) {
+    }
+
+    @Override
+    public Type getBoatType() {
+        return Type.OAK;
+    }
+
+    @Override
+    public float getRowingTime(int oar, float limbSwing) {
+        return 0.0F;
+    }
+
     @SubscribeEvent
     public static void onLivingAttacked(LivingAttackEvent event) {
         Entity ridingEntity = event.getEntityLiving().getRidingEntity();
