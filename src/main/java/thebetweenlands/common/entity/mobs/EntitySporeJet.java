@@ -48,7 +48,7 @@ public class EntitySporeJet extends Entity {
 			if (player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY)
 				if (player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX)
 					if (player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
-						((EntityLivingBase) player).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
+						//((EntityLivingBase) player).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
 						ItemStack stack = player.getHeldItemMainhand();
 						if (!stack.isEmpty())
 							player.dropItem(true);
