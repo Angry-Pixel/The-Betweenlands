@@ -10,8 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
-import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
+import thebetweenlands.common.entity.EntitySplodeshroom;
 
 
 //MINE!!
@@ -204,9 +203,9 @@ public class TestItemChimp extends Item {
 				worldIn.spawnEntity(sac);
 
 			*/	
-				EntityTriggeredFallingBlock trap = new EntityTriggeredFallingBlock(worldIn);
+				EntitySplodeshroom trap = new EntitySplodeshroom(worldIn);
 				BlockPos offset = pos.offset(facing);
-				trap.setPosition(offset.getX() + 0.5F, offset.getY() + 1, offset.getZ() + 0.5F);
+				trap.setPosition(offset.getX() + 0.5F, offset.getY(), offset.getZ() + 0.5F);
 				worldIn.spawnEntity(trap);
 				
 		}

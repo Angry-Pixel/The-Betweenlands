@@ -15,6 +15,7 @@ import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
+import thebetweenlands.common.entity.EntitySplodeshroom;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
@@ -167,6 +168,7 @@ public class EntityRegistry {
 		registerEntity(EntityTriggeredFallingBlock.class, "triggered_falling_block");
 		registerEntity(EntityTriggeredSludgeWallJet.class, "triggered_sludge_wall_jet");
 		registerEntity(EntitySludgeWallJet.class, "sludge_wall_jet", 64, 1, true);
+		registerEntity(EntitySplodeshroom.class, "splodeshroom");
 	}
 
 	private static int id = 0;
