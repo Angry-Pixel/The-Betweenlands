@@ -84,6 +84,11 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	}
 
 	@Override
+	public void onKillCommand() {
+		this.setDead();
+	}
+	
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if(source instanceof EntityDamageSource) {
 			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
