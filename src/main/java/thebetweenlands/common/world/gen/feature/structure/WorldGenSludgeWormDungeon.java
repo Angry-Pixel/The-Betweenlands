@@ -21,6 +21,7 @@ import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.entity.EntityDecayPitChain;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
@@ -558,7 +559,19 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				if (!isSolidStructureBlock(world.getBlockState(pos.offset(facing, count))) && world.isAirBlock(pos.offset(facing, count)))
 					if (isWithinMazeAreaForGen(posOrigin, pos.offset(facing, count)))
 						world.setBlockState(pos.offset(facing, count), getRandomBeam(facing.rotateY(), rand, level, count, false));
+			if(level>= 5 && rand.nextBoolean())
+				addFallingBlockEntity(world, pos.offset(facing, 1));
+			if(level>= 5 && rand.nextBoolean())
+				addFallingBlockEntity(world, pos.offset(facing, 2));
+			if(level>= 5 && rand.nextBoolean())
+				addFallingBlockEntity(world, pos.offset(facing, 3));
 		}
+	}
+
+	private void addFallingBlockEntity(World world, BlockPos pos) {
+		EntityTriggeredFallingBlock falling_block = new EntityTriggeredFallingBlock(world);
+		falling_block.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+		world.spawnEntity(falling_block);
 	}
 
 	// Ceiling Slabs

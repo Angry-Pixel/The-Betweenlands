@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.EntitySplodeshroom;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
 
 
 //MINE!!
@@ -152,14 +152,14 @@ public class TestItemChimp extends Item {
 			}
 		*/
 	
-/*
+
 
 				WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 				//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
 				dungeon.generate(worldIn, itemRand, pos.up(59).add(3, 0, 3));
 				//dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
 			//	dungeon.generateDecayPit(worldIn, itemRand, pos.up(14));
-
+/*
 
 
 
@@ -202,11 +202,11 @@ public class TestItemChimp extends Item {
 				sac.setPosition(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
 				worldIn.spawnEntity(sac);
 
-			*/	
+				
 				EntitySplodeshroom trap = new EntitySplodeshroom(worldIn);
 				BlockPos offset = pos.offset(facing);
 				trap.setPosition(offset.getX() + 0.5F, offset.getY(), offset.getZ() + 0.5F);
-				worldIn.spawnEntity(trap);
+				worldIn.spawnEntity(trap);*/
 				
 		}
 
