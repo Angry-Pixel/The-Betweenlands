@@ -430,8 +430,8 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 1, 1, 12, blockHelper.COMPACTED_MUD, 2, 1, 3, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 2, 14, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
 
-		rotatedCubeVolume(world, rand, pos, 3, 1, 13, blockHelper.COMPACTED_MUD_MIRAGE_BLOCK, 1, 2, 2, facing); //mirage blocks
-		rotatedCubeVolume(world, rand, pos, 7, 1, 24, blockHelper.COMPACTED_MUD_MIRAGE_BLOCK, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 1, 13, blockHelper.COMPACTED_MUD_MIRAGE, 1, 2, 2, facing); //mirage blocks
+		rotatedCubeVolume(world, rand, pos, 7, 1, 24, blockHelper.COMPACTED_MUD_MIRAGE, 1, 2, 1, facing);
 	}
 
 	@SuppressWarnings("incomplete-switch")

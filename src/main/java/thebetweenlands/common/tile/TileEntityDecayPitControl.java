@@ -68,7 +68,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 			if (entity != null && !(entity instanceof EntitySludgeJet) && !(entity instanceof EntityRootGrabber)&& !(entity instanceof IEntityBL)) {
 				if(entity instanceof EntityArrow)
 					entity.setDead();
-				if (getDistance(entity) >= 4.25F - entity.width * 0.5F && getDistance(entity) <= 7.5F + entity.width * 0.5F) {
+				if (getDistance(entity) >= 4.25F - entity.width * 0.5F && getDistance(entity) <= 7F + entity.width * 0.5F) {
 					reverse = false;
 					if (entity.posY <= getPos().getY() + 3D) {
 						entity.motionX = 0D;
@@ -127,7 +127,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
     }
 
 	private AxisAlignedBB getFloorEntityBoundingBox() {
-		return new AxisAlignedBB(getPos()).grow(7.5D, 0.0625D, 7.5D).offset(0D, 2D, 0D);
+		return new AxisAlignedBB(getPos()).grow(7D, 0.0625D, 7D).offset(0D, 2D, 0D);
 	}
 
 	private void spawnSludgeJet(double posX, double posY, double posZ) {

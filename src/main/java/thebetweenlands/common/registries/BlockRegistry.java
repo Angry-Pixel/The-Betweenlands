@@ -603,6 +603,8 @@ public class BlockRegistry {
 	public static final Block MUD_BRICK_SPIKE_TRAP = new BlockMudBrickSpikeTrap();
 	public static final Block MUD_TILES_SPIKE_TRAP = new BlockMudTilesSpikeTrap();
 	public static final Block COMPACTED_MUD_SLOPE = new BlockCompactedMudSlope();
+	public static final Block COMPACTED_MUD_SLAB = new BlockSlabBetweenlands(COMPACTED_MUD);
+	public static final Block COMPACTED_MUD_MIRAGE = new BlockGenericMirage(Material.CIRCUITS).setSoundType2(SoundType.GROUND).setHardness(1.5F).setResistance(10.0F);
 	public static final Block DECAY_PIT_CONTROL = new BlockDecayPitControl();
 
 	public static final Block MUD_TOWER_BRAZIER = new BlockBrazier();
@@ -814,6 +816,7 @@ public class BlockRegistry {
     
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
+
     
     private BlockRegistry() {
     }

@@ -51,11 +51,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.start("Full_Mudgeon");
 
 		timer.start("Maze");
-		makeMaze(world, rand, pos);
+	//	makeMaze(world, rand, pos);
 		timer.finish("Maze");
 
 		timer.start("Tower");
-		generateTower(world, rand, pos.down().add(12, 0, 12));
+	//	generateTower(world, rand, pos.down().add(12, 0, 12));
 		timer.finish("Tower");
 
 		//locations blah, blah, blah...
@@ -155,6 +155,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					world.setBlockState(pos.add(x, -13, z), getRandomHangingPlant(rand), 2);
 
 				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -5, z)))
+					world.setBlockState(pos.add(x, -5, z), blockHelper.COMPACTED_MUD_SLAB, 2);
+				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -11, z)))
+					world.setBlockState(pos.add(x, -11, z), blockHelper.COMPACTED_MUD_SLAB, 2);
+				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
+					world.setBlockState(pos.add(x, -17, z), blockHelper.COMPACTED_MUD_SLAB, 2);
+
+				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -5, z)))
 					world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -11, z)))
 					world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
@@ -170,6 +177,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					world.setBlockState(pos.add(x, -7, z), getRandomHangingPlant(rand), 2);
 				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -12, z)))
 					world.setBlockState(pos.add(x, -13, z), getRandomHangingPlant(rand), 2);
+
+				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -5, z)))
+					world.setBlockState(pos.add(x, -5, z), blockHelper.COMPACTED_MUD_SLAB, 2);
+				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -11, z)))
+					world.setBlockState(pos.add(x, -11, z), blockHelper.COMPACTED_MUD_SLAB, 2);
+				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
+					world.setBlockState(pos.add(x, -17, z), blockHelper.COMPACTED_MUD_SLAB, 2);
 
 				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -5, z)))
 					world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);

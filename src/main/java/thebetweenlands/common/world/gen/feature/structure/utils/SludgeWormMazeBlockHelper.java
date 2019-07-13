@@ -221,7 +221,8 @@ public class SludgeWormMazeBlockHelper {
     public IBlockState MUD_TOWER_BEAM_LENS_SUPPORTS = BlockRegistry.MUD_TOWER_BEAM_LENS_SUPPORTS.getDefaultState();
     public IBlockState BRAZIER_TOP = BlockRegistry.MUD_TOWER_BRAZIER.getDefaultState().withProperty(BlockBrazier.HALF, EnumBrazierHalf.UPPER);
     public IBlockState BRAZIER_BOTTOM = BlockRegistry.MUD_TOWER_BRAZIER.getDefaultState().withProperty(BlockBrazier.HALF, EnumBrazierHalf.LOWER);
-    public IBlockState COMPACTED_MUD_MIRAGE_BLOCK = BlockRegistry.BETWEENSTONE_BRICKS_MIRAGE.getDefaultState(); //TODO Mud Version
+    public IBlockState COMPACTED_MUD_MIRAGE = BlockRegistry.COMPACTED_MUD_MIRAGE.getDefaultState();
+    public IBlockState COMPACTED_MUD_SLAB = BlockRegistry.COMPACTED_MUD_SLAB.getDefaultState();
 
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
