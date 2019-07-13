@@ -62,7 +62,7 @@ public class EntityLurkerSkinRaft extends EntityBoat {
 
 	@Override
 	protected void removePassenger(Entity passenger) {
-		if(!this.world.isRemote && this.getPassengers().indexOf(passenger) == 0) {
+		if(!this.world.isRemote && this.isEntityAlive() && this.getPassengers().indexOf(passenger) == 0) {
 			ItemStack drop = this.getBoatDrop();
 
 			boolean itemReturned = false;
