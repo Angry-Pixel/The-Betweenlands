@@ -1,0 +1,41 @@
+{
+    "parent": "thebetweenlands:item/valonite_greataxe_base",
+    "overrides": [
+        {
+            "predicate": {
+                "corrosion": 0
+            },
+            "model": "thebetweenlands:item/valonite_greataxe_corrosion_0"
+        },
+        {
+            "predicate": {
+                "corrosion": 1
+            },
+            "model": "thebetweenlands:item/valonite_greataxe_corrosion_1"
+        },
+        {
+            "predicate": {
+                "corrosion": 2
+            },
+            "model": "thebetweenlands:item/valonite_greataxe_corrosion_2"
+        },
+        {
+            "predicate": {
+                "corrosion": 3
+            },
+            "model": "thebetweenlands:item/valonite_greataxe_corrosion_3"
+        },
+        {
+            "predicate": {
+                "corrosion": 4
+            },
+            "model": "thebetweenlands:item/valonite_greataxe_corrosion_4"
+        },
+        {
+            "predicate": {
+                "corrosion": 5
+            },
+            "model": "thebetweenlands:item/valonite_greataxe_corrosion_5"
+        }
+    ]
+}

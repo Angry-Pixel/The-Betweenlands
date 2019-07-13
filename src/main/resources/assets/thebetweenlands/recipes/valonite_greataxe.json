@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  A",
+    " X ",
+    "X  "
+  ],
+  "key": {
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "A": {
+      "item": "thebetweenlands:valonite_axe"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:valonite_greataxe"
+  }
+}

@@ -11,6 +11,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
@@ -30,11 +31,11 @@ import thebetweenlands.common.item.BLMaterialRegistry;
 public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach {
 	public ItemAncientGreatsword(ToolMaterial mat) {
 		super(mat);
+		setCreativeTab(BLCreativeTabs.GEARS);
 	}
 
 	public ItemAncientGreatsword() {
-		this(BLMaterialRegistry.TOOL_OCTINE);
-		setCreativeTab(BLCreativeTabs.GEARS);
+		this(BLMaterialRegistry.TOOL_VALONITE);
 	}
 
 	protected double getAoEReach(EntityLivingBase entityLiving, ItemStack stack) {
@@ -128,6 +129,11 @@ public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach
 		return true;
 	}
 
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.RARE;
+	}
+	
 	private static boolean renderingHand = false;
 
 	@SubscribeEvent

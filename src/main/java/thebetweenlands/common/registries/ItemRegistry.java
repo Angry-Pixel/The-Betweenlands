@@ -143,6 +143,7 @@ import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.item.tools.ItemBLShovel;
 import thebetweenlands.common.item.tools.ItemBLSword;
 import thebetweenlands.common.item.tools.ItemBucketInfusion;
+import thebetweenlands.common.item.tools.ItemGreataxe;
 import thebetweenlands.common.item.tools.ItemHagHacker;
 import thebetweenlands.common.item.tools.ItemLootSword;
 import thebetweenlands.common.item.tools.ItemNet;
@@ -265,6 +266,7 @@ public class ItemRegistry {
     public static final Item VALONITE_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item VALONITE_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item VALONITE_AXE = new ItemBLAxe(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item VALONITE_GREATAXE = new ItemGreataxe(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item VALONITE_PICKAXE = new ItemBLPickaxe(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item OCTINE_SHIELD = new ItemOctineShield();
     public static final Item VALONITE_SHIELD = new ItemValoniteShield();
