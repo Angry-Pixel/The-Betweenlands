@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.tools.bow;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -15,7 +19,11 @@ import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -28,9 +36,6 @@ import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairable {
 	public ItemBLBow() {
@@ -126,7 +131,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairab
 							entityArrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 						}
 
-						world.spawnEntity(entityArrow);
+						this.fireArrow(player, stack, entityArrow, strength);
 					}
 
 					world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + strength * 0.5F);
@@ -143,6 +148,10 @@ public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairab
 				}
 			}
 		}
+	}
+
+	protected void fireArrow(EntityPlayer player, ItemStack stack, EntityArrow arrow, float strength) {
+		player.world.spawnEntity(arrow);
 	}
 
 	public static float getArrowVelocity(int charge) {
@@ -203,7 +212,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairab
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onUpdateFov(FOVUpdateEvent event) {
