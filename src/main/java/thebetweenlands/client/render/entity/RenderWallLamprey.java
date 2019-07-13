@@ -8,6 +8,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -190,7 +192,23 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 		this.mainModel = this.modelBlockTextured;
 		this.renderWall = true;
 
+		TextureAtlasSprite wallSprite = entity.getWallSprite();
+
+		if(wallSprite != null) {
+			GlStateManager.matrixMode(GL11.GL_TEXTURE);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(wallSprite.getMinU(), wallSprite.getMinV(), 0);
+			GlStateManager.scale(wallSprite.getMaxU() - wallSprite.getMinU(), wallSprite.getMaxV() - wallSprite.getMinV(), 1);
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+		}
+
 		super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+
+		if(wallSprite != null) {
+			GlStateManager.matrixMode(GL11.GL_TEXTURE);
+			GlStateManager.popMatrix();
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+		}
 
 		this.mainModel = this.model;
 		this.renderWall = false;
@@ -232,6 +250,14 @@ public class RenderWallLamprey extends RenderWallFace<EntityWallLamprey> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityWallLamprey entity) {
-		return this.renderWall ? WALL_TEXTURE : MODEL_TEXTURE;
+		if(this.renderWall) {
+			if(entity.getWallSprite() != null) {
+				return TextureMap.LOCATION_BLOCKS_TEXTURE;
+			} else {
+				return WALL_TEXTURE;
+			}
+		} else {
+			return MODEL_TEXTURE;
+		}
 	}
 }

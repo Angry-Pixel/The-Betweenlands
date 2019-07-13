@@ -3,8 +3,12 @@ package thebetweenlands.common.entity.mobs;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -23,6 +27,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.capability.decay.DecayStats;
@@ -53,6 +59,9 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 	private boolean clientHeadLookChanged = false;
 
 	private int suckTimer = 0;
+
+	@SideOnly(Side.CLIENT)
+	private TextureAtlasSprite wallSprite;
 
 	public EntityWallLamprey(World world) {
 		super(world);
@@ -143,6 +152,8 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 					}
 				}
 			}
+
+			this.updateWallSprite();
 		}
 
 		if(this.isSucking()) {
@@ -190,6 +201,26 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
+	protected void updateWallSprite() {
+		this.wallSprite = null;
+
+		BlockPos pos = this.getPosition();
+
+		IBlockState state = this.world.getBlockState(pos);
+		state = state.getActualState(this.world, pos);
+
+		if(state.isFullCube()) {
+			this.wallSprite = Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
+		}
+	}
+
+	@Nullable
+	@SideOnly(Side.CLIENT)
+	public TextureAtlasSprite getWallSprite() {
+		return this.wallSprite;
+	}
+
 	@Override
 	public boolean attackEntityAsMob(Entity entity) {
 		boolean hasAttacked = false;
@@ -222,6 +253,20 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 	@Override
 	public boolean canResideInBlock(BlockPos pos, EnumFacing facing, EnumFacing facingUp) {
 		return this.isValidBlockForMovement(this.world.getBlockState(pos)) && this.isValidBlockForMovement(this.world.getBlockState(pos.offset(facingUp.getOpposite())));
+	}
+
+	@Override
+	public int checkAnchorAt(BlockPos anchor, EnumFacing facing, EnumFacing facingUp, int checks) {
+		int violations = super.checkAnchorAt(anchor, facing, facingUp, checks);
+
+		//Check "below" (relative to facingUp) for entities
+		if((checks & AnchorChecks.ENTITIES) != 0) {
+			if(!this.world.getEntitiesWithinAABB(EntityWallFace.class, this.getEntityBoundingBox().offset(anchor.subtract(this.getAnchor()).offset(facingUp.getOpposite())).expand(facing.getXOffset() * this.getPeek(), facing.getYOffset() * this.getPeek(), facing.getZOffset() * this.getPeek()), e -> e != this).isEmpty()) {
+				violations |= AnchorChecks.ENTITIES;
+			}
+		}
+
+		return violations;
 	}
 
 	@Override

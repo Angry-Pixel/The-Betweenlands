@@ -321,7 +321,7 @@ public class ModelWallLampreyHole extends ModelBase {
 		this.frontPiece1.addChild(this.frontPiece10);
 		this.frontPiece1.addChild(this.bottom);
 
-		this.window = new BlockTexturedModelRenderer(this, 0, 0, false);
+		this.window = new ModelRenderer(this, 0, 0);
 		this.window.setRotationPoint(-8.0F, 0.0F, -8.0F);
 		this.window.addBox(0.0F, 0.0F, 0.0F, 16, 16, 0, 0.0F);
 
@@ -344,7 +344,9 @@ public class ModelWallLampreyHole extends ModelBase {
 
 		GlStateManager.color(brightness, brightness, brightness, 1);
 
+		GlStateManager.enableCull();
 		this.window.render(f5);
+		GlStateManager.disableCull();
 
 		GlStateManager.color(1, 1, 1, 1);
 
