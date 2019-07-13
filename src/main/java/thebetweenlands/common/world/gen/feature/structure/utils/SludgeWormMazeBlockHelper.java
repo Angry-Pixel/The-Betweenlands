@@ -45,9 +45,12 @@ public class SludgeWormMazeBlockHelper {
 	
 	public IBlockState AIR = Blocks.AIR.getDefaultState();
 	public IBlockState MOB_SPAWNER = BlockRegistry.MOB_SPAWNER.getDefaultState();
+
 	public IBlockState BLACK_HAT_MUSHROOM = BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState();
-	public IBlockState SLUDGECREEP = BlockRegistry.SLUDGECREEP.getDefaultState();
 	public IBlockState FLAT_HEAD_MUSHROOM = BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState();
+	public IBlockState ROTBULB = BlockRegistry.ROTBULB.getDefaultState();
+	
+	public IBlockState SLUDGECREEP = BlockRegistry.SLUDGECREEP.getDefaultState();
 
 	public IBlockState STAGNANT_WATER = BlockRegistry.STAGNANT_WATER.getDefaultState();
 	public IBlockState SPAWNER_TYPE_1 = Blocks.PRISMARINE.getDefaultState();
@@ -572,7 +575,7 @@ public class SludgeWormMazeBlockHelper {
 		} else if(type < 20) {
 			return BLACK_HAT_MUSHROOM;
 		} else {
-			return SLUDGECREEP; // will be rot bulbs
+			return ROTBULB;
 		}
 	}
 
