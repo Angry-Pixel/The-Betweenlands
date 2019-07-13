@@ -46,11 +46,18 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState AIR = Blocks.AIR.getDefaultState();
 	public IBlockState MOB_SPAWNER = BlockRegistry.MOB_SPAWNER.getDefaultState();
 
+	//shrooms
 	public IBlockState BLACK_HAT_MUSHROOM = BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState();
 	public IBlockState FLAT_HEAD_MUSHROOM = BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState();
 	public IBlockState ROTBULB = BlockRegistry.ROTBULB.getDefaultState();
-	
+
+	//floor plants
 	public IBlockState SLUDGECREEP = BlockRegistry.SLUDGECREEP.getDefaultState();
+	public IBlockState PALE_GRASS = BlockRegistry.PALE_GRASS.getDefaultState();
+
+	//hanging plants
+	public IBlockState CRYPTWEED = BlockRegistry.CRYPTWEED.getDefaultState();
+	public IBlockState STRING_ROOTS = BlockRegistry.STRING_ROOTS.getDefaultState();
 
 	public IBlockState STAGNANT_WATER = BlockRegistry.STAGNANT_WATER.getDefaultState();
 	public IBlockState SPAWNER_TYPE_1 = Blocks.PRISMARINE.getDefaultState();
@@ -570,13 +577,20 @@ public class SludgeWormMazeBlockHelper {
 
 	public IBlockState getRandomMushroom(Random rand) {
 		int type = rand.nextInt(30);
-		if(type < 10) {
+		if (type < 10)
 			return FLAT_HEAD_MUSHROOM;
-		} else if(type < 20) {
+		else if (type < 20)
 			return BLACK_HAT_MUSHROOM;
-		} else {
+		else
 			return ROTBULB;
-		}
+	}
+
+	public IBlockState getRandomFloorPlant(Random rand) {
+		return rand.nextBoolean() ? SLUDGECREEP : PALE_GRASS;
+	}
+
+	public IBlockState getRandomHangingPlant(Random rand) {
+		return rand.nextBoolean() ? CRYPTWEED : STRING_ROOTS;
 	}
 
 	public IBlockState getMudTilesWater(Random rand) {
