@@ -62,6 +62,7 @@ import thebetweenlands.common.herblore.elixir.PotionRootBound;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
 import thebetweenlands.common.item.shields.ItemDentrothystShield;
+import thebetweenlands.common.item.tools.ItemAncientGreatsword;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.clientbound.PacketParticle;
@@ -249,5 +250,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(EntityWeedwoodRowboat.class);
 		MinecraftForge.EVENT_BUS.register(GameruleRegistry.class);
 		MinecraftForge.EVENT_BUS.register(RingOfDispersionEntityCapability.class);
+		MinecraftForge.EVENT_BUS.register(ItemAncientGreatsword.class);
 	}
 }
