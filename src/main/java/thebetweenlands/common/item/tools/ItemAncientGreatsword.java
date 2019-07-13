@@ -12,9 +12,12 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
+import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -121,7 +124,46 @@ public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach
 		return 0.35F;
 	}
 
+	protected boolean doesBlockShieldUse(EntityLivingBase entity, ItemStack stack) {
+		return true;
+	}
+
 	private static boolean renderingHand = false;
+
+	@SubscribeEvent
+	public static void onStartUsingItem(LivingEntityUseItemEvent.Start event) {
+		if(handleItemUse(event.getEntityLiving(), event.getItem())) {
+			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onStartUsingItem(PlayerInteractEvent.RightClickItem event) {
+		if(handleItemUse(event.getEntityLiving(), event.getEntityLiving().getHeldItem(event.getHand()))) {
+			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onItemUsing(LivingEntityUseItemEvent.Tick event) {
+		if(handleItemUse(event.getEntityLiving(), event.getItem())) {
+			event.setCanceled(true);
+		}
+	}
+
+	private static boolean handleItemUse(EntityLivingBase entity, ItemStack useStack) {
+		if(!useStack.isEmpty() && useStack.getItem().isShield(useStack, entity)) {
+			for(EnumHand hand : EnumHand.values()) {
+				ItemStack stack = entity.getHeldItem(hand);
+
+				if(!stack.isEmpty() && stack.getItem() instanceof ItemAncientGreatsword && ((ItemAncientGreatsword) stack.getItem()).doesBlockShieldUse(entity, stack)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
