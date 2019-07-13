@@ -134,6 +134,7 @@ import thebetweenlands.common.item.shields.ItemOctineShield;
 import thebetweenlands.common.item.shields.ItemSyrmoriteShield;
 import thebetweenlands.common.item.shields.ItemValoniteShield;
 import thebetweenlands.common.item.shields.ItemWeedwoodShield;
+import thebetweenlands.common.item.tools.ItemAncientBattleAxe;
 import thebetweenlands.common.item.tools.ItemAncientGreatsword;
 import thebetweenlands.common.item.tools.ItemBLAxe;
 import thebetweenlands.common.item.tools.ItemBLBucket;
@@ -292,6 +293,7 @@ public class ItemRegistry {
     public static final Item VOODOO_DOLL = new ItemVoodooDoll();
     public static final Item SWIFT_PICK = new ItemSwiftPick();
     public static final Item ANCIENT_GREATSWORD = new ItemAncientGreatsword();
+    public static final Item ANCIENT_BATTLE_AXE = new ItemAncientBattleAxe();
     public static final Item PESTLE = new ItemPestle();
     public static final Item NET = new ItemNet();
     public static final Item LURKER_SKIN_POUCH = new ItemLurkerSkinPouch();

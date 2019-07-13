@@ -25,9 +25,21 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
 
 public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach {
+	public ItemAncientGreatsword(ToolMaterial mat) {
+		super(mat);
+	}
+
 	public ItemAncientGreatsword() {
-		super(BLMaterialRegistry.TOOL_OCTINE);
+		this(BLMaterialRegistry.TOOL_OCTINE);
 		setCreativeTab(BLCreativeTabs.GEARS);
+	}
+
+	protected double getAoEReach(EntityLivingBase entityLiving, ItemStack stack) {
+		return 2.75D;
+	}
+
+	protected double getAoEHalfAngle(EntityLivingBase entityLiving, ItemStack stack) {
+		return 40.0D;
 	}
 
 	@Override
@@ -35,8 +47,8 @@ public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach
 		if(entityLiving instanceof EntityPlayer && !entityLiving.world.isRemote) {
 			EntityPlayer player = (EntityPlayer) entityLiving;
 
-			double aoeReach = 2.25D;
-			double aoeHalfAngle = 35.0D;
+			double aoeReach = this.getAoEReach(entityLiving, stack);
+			double aoeHalfAngle = this.getAoEHalfAngle(entityLiving, stack);
 
 			List<EntityLivingBase> others = entityLiving.world.getEntitiesWithinAABB(EntityLivingBase.class, entityLiving.getEntityBoundingBox().grow(aoeReach));
 			for(EntityLivingBase entity : others) {
@@ -105,6 +117,10 @@ public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach
 		return 5.5;
 	}
 
+	protected float getSwingSpeedMultiplier(EntityLivingBase entity, ItemStack stack) {
+		return 0.35F;
+	}
+
 	private static boolean renderingHand = false;
 
 	@SideOnly(Side.CLIENT)
@@ -116,7 +132,7 @@ public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach
 			ItemStack stack = entity.getHeldItem(entity.swingingHand);
 
 			if(!stack.isEmpty() && stack.getItem() instanceof ItemAncientGreatsword) {
-				event.setSpeed(event.getSpeed() * 0.35F);
+				event.setSpeed(event.getSpeed() * ((ItemAncientGreatsword) stack.getItem()).getSwingSpeedMultiplier(entity, stack));
 			}
 		}
 	}
