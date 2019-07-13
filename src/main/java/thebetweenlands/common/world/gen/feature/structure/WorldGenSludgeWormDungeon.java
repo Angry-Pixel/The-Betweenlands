@@ -51,11 +51,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.start("Full_Mudgeon");
 
 		timer.start("Maze");
-	//	makeMaze(world, rand, pos);
+		makeMaze(world, rand, pos);
 		timer.finish("Maze");
 
 		timer.start("Tower");
-	//	generateTower(world, rand, pos.down().add(12, 0, 12));
+		generateTower(world, rand, pos.down().add(12, 0, 12));
 		timer.finish("Tower");
 
 		//locations blah, blah, blah...
