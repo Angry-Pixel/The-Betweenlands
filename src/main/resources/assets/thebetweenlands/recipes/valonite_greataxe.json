@@ -1,8 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "  A",
-    " X ",
+    " VA",
+    " XV",
     "X  "
   ],
   "key": {
@@ -12,6 +12,10 @@
     },
     "A": {
       "item": "thebetweenlands:valonite_axe"
+    },
+    "V": {
+      "item": "thebetweenlands:items_misc",
+      "data": 19
     }
   },
   "result": {
