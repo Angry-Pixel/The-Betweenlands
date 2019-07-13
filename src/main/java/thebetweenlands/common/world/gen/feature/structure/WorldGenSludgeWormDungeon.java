@@ -148,35 +148,35 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		for (int x = 1; x < 32; x++)
 			for (int z = 1; z < 3; z++) {
 				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, 0, z)))
-					world.setBlockState(pos.add(x, -1, z), blockHelper.getRandomHangingPlant(rand), 2);
+					world.setBlockState(pos.add(x, -1, z), getRandomHangingPlant(rand), 2);
 				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -6, z)))
-					world.setBlockState(pos.add(x, -7, z), blockHelper.getRandomHangingPlant(rand), 2);
+					world.setBlockState(pos.add(x, -7, z), getRandomHangingPlant(rand), 2);
 				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -12, z)))
-					world.setBlockState(pos.add(x, -13, z), blockHelper.getRandomHangingPlant(rand), 2);
+					world.setBlockState(pos.add(x, -13, z), getRandomHangingPlant(rand), 2);
 
 				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -5, z)))
-					world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? blockHelper.getRandomMushroom(rand) : blockHelper.getRandomFloorPlant(rand), 2);
+					world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -11, z)))
-					world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? blockHelper.getRandomMushroom(rand) : blockHelper.getRandomFloorPlant(rand), 2);
+					world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
-					world.setBlockState(pos.add(x, -16, z), rand.nextBoolean() ? blockHelper.getRandomMushroom(rand) : blockHelper.getRandomFloorPlant(rand), 2);
+					world.setBlockState(pos.add(x, -16, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 			}
 		// E
 		for (int x = 1; x < 3; x++)
 			for (int z = 3; z < 32; z++) {
 				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, 0, z)))
-					world.setBlockState(pos.add(x, -1, z), blockHelper.getRandomHangingPlant(rand), 2);
+					world.setBlockState(pos.add(x, -1, z), getRandomHangingPlant(rand), 2);
 				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -6, z)))
-					world.setBlockState(pos.add(x, -7, z), blockHelper.getRandomHangingPlant(rand), 2);
+					world.setBlockState(pos.add(x, -7, z), getRandomHangingPlant(rand), 2);
 				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -12, z)))
-					world.setBlockState(pos.add(x, -13, z), blockHelper.getRandomHangingPlant(rand), 2);
+					world.setBlockState(pos.add(x, -13, z), getRandomHangingPlant(rand), 2);
 
 				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -5, z)))
-					world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? blockHelper.getRandomMushroom(rand) : blockHelper.getRandomFloorPlant(rand), 2);
+					world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -11, z)))
-					world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? blockHelper.getRandomMushroom(rand) : blockHelper.getRandomFloorPlant(rand), 2);
+					world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
-					world.setBlockState(pos.add(x, -16, z), rand.nextBoolean() ? blockHelper.getRandomMushroom(rand) : blockHelper.getRandomFloorPlant(rand), 2);
+					world.setBlockState(pos.add(x, -16, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 			}
 
 		 	addSphericalChamber (world, rand, pos.add(4, -29, 27)); //entrance
