@@ -20,6 +20,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -688,7 +689,18 @@ public class BlockRegistry {
     public static final Block CAVE_MOSS = new BlockCaveMoss();
     public static final Block CRYPTWEED = new BlockHangingPlant();
     public static final Block STRING_ROOTS = new BlockHangingPlant();
-    public static final Block PALE_GRASS = new BlockPlant().setReplaceable(true);
+    public static final Block PALE_GRASS = new BlockPlant() {
+    	@Override
+        @SideOnly(Side.CLIENT)
+        public BlockRenderLayer getRenderLayer() {
+            return BlockRenderLayer.TRANSLUCENT;
+        }
+
+    	@Override
+    	public BlockPlant setReplaceable(boolean replaceable) {
+    		return super.setReplaceable(true);
+    	}
+    };
     public static final Block ROTBULB = new BlockPlant().setReplaceable(true);
     public static final Block MOSS = new BlockMoss().setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
     public static final Block LICHEN = new BlockMoss(){
