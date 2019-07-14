@@ -188,6 +188,7 @@ public class SoundRegistry {
     public static final BLSoundEvent ROPE_SWING = reg("rope_swing");
     public static final BLSoundEvent ROPE_GRAB = reg("rope_grab");
     public static final BLSoundEvent RING_OF_DISPERSION_TELEPORT = reg("ring_of_dispersion_teleport");
+    public static final BLSoundEvent LONG_SWING = reg("long_swing");
     // Blocks
     public static final BLSoundEvent GRIND = reg("grind");
     public static final BLSoundEvent INFUSER_FINISHED = reg("infuser_finished");

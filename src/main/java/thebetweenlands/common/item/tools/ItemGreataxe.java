@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.common.collect.Multimap;
 
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -21,7 +22,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
-public class ItemGreataxe extends ItemAncientGreatsword {
+public class ItemGreataxe extends ItemGreatsword {
 	public ItemGreataxe(ToolMaterial material) {
 		super(material);
 		this.setHarvestLevel("axe", 0);
@@ -66,9 +67,9 @@ public class ItemGreataxe extends ItemAncientGreatsword {
 									if(entityLiving.getLookVec().y * distXZ + entityLiving.posY + entityLiving.height / 2 + 0.25D > pos.getY() - 0.25D && entityLiving.getLookVec().y * distXZ + entityLiving.posY + entityLiving.height / 2 + 0.25D < pos.getY() + 1.25D) {
 										IBlockState state = entityLiving.world.getBlockState(pos);
 
-										if(state.getBlock().isWood(entityLiving.world, pos) && state.getBlockHardness(entityLiving.world, pos) <= 2.25F &&
+										if((state.getBlock().isWood(entityLiving.world, pos) || state.getMaterial() == Material.WOOD) && state.getBlockHardness(entityLiving.world, pos) <= 2.25F &&
 												state.getPlayerRelativeBlockHardness(player, entityLiving.world, pos) > 0.01F) {
-											
+
 											if(player.interactionManager.tryHarvestBlock(pos)) {
 												blockSoundTypes.add(state.getBlock().getSoundType(state, player.world, pos, player));
 											}

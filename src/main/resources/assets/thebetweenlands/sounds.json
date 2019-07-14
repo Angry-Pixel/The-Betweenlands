@@ -1182,5 +1182,10 @@
     "sounds": [
       "thebetweenlands:fortress_boss_teleport"
     ]
+  },
+  "long_swing": {
+    "sounds": [
+      "thebetweenlands:long_swing"
+    ]
   }
 }

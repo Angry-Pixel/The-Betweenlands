@@ -14,6 +14,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
@@ -27,14 +28,15 @@ import thebetweenlands.api.event.ArmSwingSpeedEvent;
 import thebetweenlands.api.item.IExtendedReach;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
-public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach {
-	public ItemAncientGreatsword(ToolMaterial mat) {
+public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
+	public ItemGreatsword(ToolMaterial mat) {
 		super(mat);
 		setCreativeTab(BLCreativeTabs.GEARS);
 	}
 
-	public ItemAncientGreatsword() {
+	public ItemGreatsword() {
 		this(BLMaterialRegistry.TOOL_VALONITE);
 	}
 
@@ -75,9 +77,15 @@ public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach
 					}
 				}
 			}
+		} else if(entityLiving instanceof EntityPlayer && entityLiving.world.isRemote && (!entityLiving.isSwingInProgress || entityLiving.swingProgressInt >= entityLiving.getArmSwingAnimationEnd() / 2 || entityLiving.swingProgressInt < 0)) {
+			this.playSwingSound((EntityPlayer) entityLiving, stack);
 		}
 
 		return super.onEntitySwing(entityLiving, stack);
+	}
+
+	protected void playSwingSound(EntityPlayer player, ItemStack stack) {
+		player.world.playSound(player, player.posX, player.posY, player.posZ, SoundRegistry.LONG_SWING, SoundCategory.PLAYERS, 1.2F, 0.925F * ((0.65F + this.getSwingSpeedMultiplier(player, stack)) * 0.66F + 0.33F) + player.world.rand.nextFloat() * 0.15F);
 	}
 
 	@Override
@@ -133,7 +141,7 @@ public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach
 	public EnumRarity getRarity(ItemStack stack) {
 		return EnumRarity.RARE;
 	}
-	
+
 	private static boolean renderingHand = false;
 
 	@SubscribeEvent
@@ -162,7 +170,7 @@ public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach
 			for(EnumHand hand : EnumHand.values()) {
 				ItemStack stack = entity.getHeldItem(hand);
 
-				if(!stack.isEmpty() && stack.getItem() instanceof ItemAncientGreatsword && ((ItemAncientGreatsword) stack.getItem()).doesBlockShieldUse(entity, stack)) {
+				if(!stack.isEmpty() && stack.getItem() instanceof ItemGreatsword && ((ItemGreatsword) stack.getItem()).doesBlockShieldUse(entity, stack)) {
 					return true;
 				}
 			}
@@ -179,8 +187,8 @@ public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach
 		if(entity.isSwingInProgress && entity.swingingHand != null) {
 			ItemStack stack = entity.getHeldItem(entity.swingingHand);
 
-			if(!stack.isEmpty() && stack.getItem() instanceof ItemAncientGreatsword) {
-				event.setSpeed(event.getSpeed() * ((ItemAncientGreatsword) stack.getItem()).getSwingSpeedMultiplier(entity, stack));
+			if(!stack.isEmpty() && stack.getItem() instanceof ItemGreatsword) {
+				event.setSpeed(event.getSpeed() * ((ItemGreatsword) stack.getItem()).getSwingSpeedMultiplier(entity, stack));
 			}
 		}
 	}
@@ -191,7 +199,7 @@ public class ItemAncientGreatsword extends ItemBLSword implements IExtendedReach
 		if(!renderingHand) {
 			ItemStack stack = event.getItemStack();
 
-			if(!stack.isEmpty() && stack.getItem() instanceof ItemAncientGreatsword) {
+			if(!stack.isEmpty() && stack.getItem() instanceof ItemGreatsword) {
 				event.setCanceled(true);
 
 				renderingHand = true;
