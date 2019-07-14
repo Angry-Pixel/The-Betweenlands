@@ -12,7 +12,9 @@ import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.block.structure.BlockMudBrickSpikeTrap;
+import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
+import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
 public class SludgeWormMazeMicroBuilds {
@@ -430,8 +432,160 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 1, 1, 12, blockHelper.COMPACTED_MUD, 2, 1, 3, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 2, 14, blockHelper.COMPACTED_MUD, 2, 1, 1, facing);
 
-		rotatedCubeVolume(world, rand, pos, 3, 1, 13, blockHelper.COMPACTED_MUD_MIRAGE, 1, 2, 2, facing); //mirage blocks
-		rotatedCubeVolume(world, rand, pos, 7, 1, 24, blockHelper.COMPACTED_MUD_MIRAGE, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 1, 13, blockHelper.COMPACTED_MUD_MIRAGE, 1, 2, 1, facing); //mirage blocks
+		rotatedCubeVolume(world, rand, pos, 7, 1, 24, blockHelper.COMPACTED_MUD_MIRAGE, 1, 3, 1, facing);
+
+		//floor
+		rotatedCubeVolume(world, rand, pos, 1, 0, 16, blockHelper.MUD_TILES_DECAY, 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, 18, blockHelper.MUD_TILES, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, 21, blockHelper.MUD_TILES, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 0, 22, blockHelper.MUD_TILES_DECAY, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 0, 15, blockHelper.MUD_TILES, 1, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 0, 16, blockHelper.MUD_TILES_DECAY, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 0, 16, blockHelper.MUD_TILES_DECAY, 2, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 0, 17, blockHelper.MUD_TILES_DECAY, 2, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 0, 18, blockHelper.MUD_TILES_DECAY, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 0, 17, blockHelper.MUD_TILES, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 0, 18, blockHelper.MUD_TILES, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 0, 19, blockHelper.MUD_TILES_CRACKED, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 0, 20, blockHelper.MUD_TILES_DECAY, 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 0, 22, blockHelper.MUD_TILES, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 0, 23, blockHelper.MUD_TILES_DECAY, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 0, 19, blockHelper.MUD_TILES_DECAY, 1, 1, 4, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 0, 24, blockHelper.MUD_TILES_DECAY, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 0, 19, blockHelper.MUD_TILES, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 0, 19, blockHelper.MUD_TILES, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 0, 20, blockHelper.MUD_TILES_DECAY, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 0, 21, blockHelper.MUD_TILES_CRACKED, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 0, 20, blockHelper.MUD_TILES, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 0, 20, blockHelper.MUD_TILES_DECAY, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 0, 20, blockHelper.MUD_TILES, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 0, 21, blockHelper.MUD_TILES_DECAY, 3, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 0, 22, blockHelper.MUD_TILES_DECAY, 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 0, 22, blockHelper.MUD_TILES_DECAY, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 0, 23, blockHelper.MUD_TILES_DECAY, 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 0, 23, blockHelper.MUD_BRICKS_CARVED_DECAY_4, 1, 1, 2, facing);
+
+		//solids
+		rotatedCubeVolume(world, rand, pos, 0, 1, 15, blockHelper.MUD_BRICKS, 1, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 14, blockHelper.MUD_BRICKS, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 1, 16, blockHelper.MUD_BRICKS_CARVED_DECAY_4, 1, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 1, 19, blockHelper.MUD_BRICKS, 1, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 3, 20, blockHelper.MUD_BRICKS, 1, 1, 5, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 24, blockHelper.MUD_BRICKS, 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 3, 24, blockHelper.MUD_BRICKS, 3, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 3, 22, blockHelper.MUD_BRICKS, 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 3, 15, blockHelper.MUD_BRICKS, 1, 1, 6, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 3, 14, blockHelper.MUD_BRICKS, 4, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 3, 14, blockHelper.MUD_BRICKS_CARVED_DECAY_1, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 15, blockHelper.MUD_BRICKS, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 3, 16, blockHelper.MUD_BRICKS, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 3, 17, blockHelper.MUD_BRICKS_CARVED_DECAY_1, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 3, 18, blockHelper.MUD_BRICKS_CARVED_DECAY_2, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 3, 15, blockHelper.MUD_BRICKS, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 3, 15, blockHelper.MUD_BRICKS, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 19, blockHelper.MUD_BRICKS, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 23, blockHelper.MUD_BRICKS, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 3, 23, blockHelper.MUD_BRICKS, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 3, 21, blockHelper.MUD_BRICKS_CARVED_DECAY_2, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 3, 19, blockHelper.MUD_BRICKS, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 2, 16, blockHelper.MUD_BRICKS_CARVED_DECAY_2, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 2, 18, blockHelper.MUD_BRICKS_CARVED_DECAY_3, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 2, 22, blockHelper.MUD_BRICKS_CARVED_DECAY_2, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 1, 23, blockHelper.MUD_BRICKS, 1, 2, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, 23, blockHelper.MUD_BRICKS_CARVED_DECAY_2, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, 24, blockHelper.MUD_BRICKS_CARVED_DECAY_1, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 23, blockHelper.MUD_BRICKS_CARVED_DECAY_4, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 24, blockHelper.MUD_BRICKS, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 2, 24, blockHelper.MUD_BRICKS_CARVED_DECAY_1, 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 1, 24, blockHelper.MUD_BRICKS_CARVED_DECAY_4, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 2, 20, blockHelper.MUD_BRICKS_CARVED_DECAY_3, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 1, 20, blockHelper.MUD_BRICKS_CARVED_DECAY_4, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 1, 19, blockHelper.MUD_BRICKS, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 1, 19, blockHelper.MUD_BRICKS_CARVED_DECAY_3, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 2, 19, blockHelper.MUD_BRICKS_CARVED_DECAY_1, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 1, 18, blockHelper.MUD_BRICKS_CARVED_EDGE_DECAY_4, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 2, 18, blockHelper.MUD_BRICKS_CARVED_DECAY_2, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 1, 17, blockHelper.MUD_BRICKS_CARVED_DECAY_3, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 2, 16, blockHelper.MUD_BRICKS_CARVED_DECAY_1, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 1, 15, blockHelper.MUD_BRICKS, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 1, 15, blockHelper.MUD_BRICKS_CARVED_DECAY_4, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 2, 15, blockHelper.MUD_BRICKS_CARVED_DECAY_2, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 1, 14, blockHelper.MUD_BRICKS, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 1, 14, blockHelper.MUD_BRICKS_CARVED_DECAY_2, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 2, 14, blockHelper.MUD_BRICKS, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 1, 14, blockHelper.MUD_BRICKS_CARVED_DECAY_3, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 2, 14, blockHelper.MUD_BRICKS_CARVED_DECAY_2, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 1, 14, blockHelper.MUD_BRICKS, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 15, blockHelper.MUD_BRICKS_CARVED_DECAY_2, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, 15, blockHelper.MUD_BRICKS_CARVED, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 19, blockHelper.MUD_BRICKS_CARVED_DECAY_3, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, 19, blockHelper.MUD_BRICKS_CARVED_DECAY_1, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 1, 23, blockHelper.MUD_BRICKS_CARVED_DECAY_1, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 1, 19, blockHelper.MUD_BRICKS_CARVED_DECAY_2, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 2, 19, blockHelper.MUD_BRICKS_CARVED, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 3, 19, blockHelper.MUD_BRICKS, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 2, 15, blockHelper.MUD_BRICK_WALL, 1, 1, 1, facing);
+
+		//stairs
+		rotatedCubeVolume(world, rand, pos, 1, 3, 18, blockHelper.MUD_BRICK_STAIRS_DECAY_1.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 22, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 3, 18, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 3, 22, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 3, 18, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+
+		rotatedCubeVolume(world, rand, pos, 2, 1, 14, blockHelper.MUD_BRICK_STAIRS_DECAY_3.withProperty(BlockStairsBetweenlands.FACING, facing.rotateY()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 3, 15, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing.rotateY()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 3, 19, blockHelper.MUD_BRICK_STAIRS_DECAY_1.withProperty(BlockStairsBetweenlands.FACING, facing.rotateY()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 3, 23, blockHelper.MUD_BRICK_STAIRS_DECAY_2.withProperty(BlockStairsBetweenlands.FACING, facing.rotateY()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 1, 22, blockHelper.MUD_BRICK_STAIRS_DECAY_3.withProperty(BlockStairsBetweenlands.FACING, facing.rotateY()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 1, 24, blockHelper.MUD_BRICK_STAIRS_DECAY_3.withProperty(BlockStairsBetweenlands.FACING, facing.rotateY()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 3, 19, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing.rotateY()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 3, 23, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing.rotateY()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+
+		rotatedCubeVolume(world, rand, pos, 2, 2, 14, blockHelper.MUD_BRICK_STAIRS_DECAY_2.withProperty(BlockStairsBetweenlands.FACING, facing.getOpposite()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 16, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing.getOpposite()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 3, 20, blockHelper.MUD_BRICK_STAIRS_DECAY_1.withProperty(BlockStairsBetweenlands.FACING, facing.getOpposite()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 1, 15, blockHelper.MUD_BRICK_STAIRS_DECAY_2.withProperty(BlockStairsBetweenlands.FACING, facing.getOpposite()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 3, 20, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing.getOpposite()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 3, 16, blockHelper.MUD_BRICK_STAIRS_DECAY_1.withProperty(BlockStairsBetweenlands.FACING, facing.getOpposite()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 3, 20, blockHelper.MUD_BRICK_STAIRS_DECAY_2.withProperty(BlockStairsBetweenlands.FACING, facing.getOpposite()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+
+		rotatedCubeVolume(world, rand, pos, 4, 2, 14, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing.rotateYCCW()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 3, 15, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing.rotateYCCW()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 2, 24, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing.rotateYCCW()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 3, 24, blockHelper.MUD_BRICK_STAIRS_DECAY_1.withProperty(BlockStairsBetweenlands.FACING, facing.rotateYCCW()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 3, 19, blockHelper.MUD_BRICK_STAIRS.withProperty(BlockStairsBetweenlands.FACING, facing.rotateYCCW()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 1, 16, blockHelper.MUD_BRICK_STAIRS_DECAY_3.withProperty(BlockStairsBetweenlands.FACING, facing.rotateYCCW()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 1, 21, blockHelper.MUD_BRICK_STAIRS_DECAY_3.withProperty(BlockStairsBetweenlands.FACING, facing.rotateYCCW()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.BOTTOM), 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 1, 24, blockHelper.MUD_BRICK_STAIRS_DECAY_2.withProperty(BlockStairsBetweenlands.FACING, facing.rotateYCCW()).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+
+		//slabs
+		rotatedCubeVolume(world, rand, pos, 1, 1, 20, blockHelper.MUD_BRICK_SLAB_DECAY_3.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 1, 23, blockHelper.MUD_BRICK_SLAB_DECAY_3.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 3, 15, blockHelper.MUD_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 3, 16, blockHelper.MUD_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 3, 19, blockHelper.MUD_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 3, 23, blockHelper.MUD_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 3, 23, blockHelper.MUD_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+
+		//alcoves and urns - may need loot
+		rotatedCubeVolume(world, rand, pos, 0, 2, 17, blockHelper.MUD_BRICKS_ALCOVE_EAST, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 2, 21, blockHelper.MUD_BRICKS_ALCOVE_EAST, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 2, 17, blockHelper.MUD_BRICKS_ALCOVE_WEST, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 2, 21, blockHelper.MUD_BRICKS_ALCOVE_WEST, 1, 1, 1, facing);
+
+		rotatedCubeVolume(world, rand, pos, 5, 1, 15, blockHelper.getRandomLootUrn(rand, facing.getOpposite()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 1, 16, blockHelper.getRandomLootUrn(rand, facing.rotateY()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 1, 20, blockHelper.getRandomLootUrn(rand, facing.rotateY()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 18, blockHelper.getRandomLootUrn(rand, facing.rotateYCCW()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 22, blockHelper.getRandomLootUrn(rand, facing.rotateYCCW()), 1, 1, 1, facing);
+
+		rotatedCubeVolume(world, rand, pos, 2, 1, 25, blockHelper.AIR, 3, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 1, 26, blockHelper.AIR, 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 2, 25, blockHelper.AIR, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 2, 22, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 3, 22, blockHelper.COMPACTED_MUD_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
 	}
 
 	@SuppressWarnings("incomplete-switch")

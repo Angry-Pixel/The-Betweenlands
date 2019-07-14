@@ -1,10 +1,14 @@
 package thebetweenlands.common.item.misc;
 
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -53,18 +57,32 @@ public class TestItemChimpRuler extends Item {
 		}
 
 		if (hasTag(stack) && stack.getTagCompound().hasKey("homeX") && !player.isSneaking() && hand.equals(EnumHand.MAIN_HAND)) {
-			Block block = world.getBlockState(pos).getBlock();
-			if (!world.isRemote && block != null) {
+			IBlockState state = world.getBlockState(pos);
+			if (!world.isRemote && state.getBlock() != null) {
 				int x = pos.getX() - stack.getTagCompound().getInteger("homeX");
 				int y = pos.getY() - stack.getTagCompound().getInteger("homeY");
 				int z = pos.getZ() - stack.getTagCompound().getInteger("homeZ");
 				player.sendStatusMessage(new TextComponentTranslation("chat.chimp_ruler_x", x), false);
 				player.sendStatusMessage(new TextComponentTranslation("chat.chimp_ruler_y", y), false);
 				player.sendStatusMessage(new TextComponentTranslation("chat.chimp_ruler_z", z), false);
+			//	String[] name = state.getBlock().getRegistryName().toString().toUpperCase().split(":");
+			//	CopytoClipboard("rotatedCubeVolume(world, rand, pos, " + x + ", "+ y + ", " + z + ", blockHelper." + name[1] + ", 1, 1, 1, facing);");
 				return EnumActionResult.SUCCESS;
 			}
 		}
 		return EnumActionResult.FAIL;
+	}
+
+	public static boolean CopytoClipboard(String string) {
+		try {
+			StringSelection selection = new StringSelection(string);
+			Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+			clipboard.setContents(selection, selection);
+			return true;
+		} catch (Exception e) {
+			System.out.println("Poo-poo, pee-pee bum.");
+			return false;
+		}
 	}
 
 	private boolean hasTag(ItemStack stack) {
