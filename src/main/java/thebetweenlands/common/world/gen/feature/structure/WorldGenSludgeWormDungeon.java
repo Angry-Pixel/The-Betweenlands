@@ -16,6 +16,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.SoilHelper;
+import thebetweenlands.common.block.plant.BlockMoss;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
@@ -161,12 +162,26 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
 					world.setBlockState(pos.add(x, -17, z), blockHelper.COMPACTED_MUD_SLAB, 2);
 
-				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -5, z)))
-					world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
-				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -11, z)))
-					world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
-				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
-					world.setBlockState(pos.add(x, -16, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
+					if(isPlantableAbove(world, pos.add(x, -5, z)))
+						if (plantingChance(rand))
+							world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
+						else
+							if(rand.nextBoolean())
+								world.setBlockState(pos.add(x, -4, z), BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+
+					if (isPlantableAbove(world, pos.add(x, -11, z)))
+						if (plantingChance(rand))
+							world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
+						else
+							if(rand.nextBoolean())
+								world.setBlockState(pos.add(x, -10, z), BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+
+					if (isPlantableAbove(world, pos.add(x, -17, z)))
+						if (plantingChance(rand))
+							world.setBlockState(pos.add(x, -16, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
+						else
+							if(rand.nextBoolean())
+								world.setBlockState(pos.add(x, -16, z), BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
 			}
 		// E
 		for (int x = 1; x < 3; x++)
@@ -185,12 +200,26 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
 					world.setBlockState(pos.add(x, -17, z), blockHelper.COMPACTED_MUD_SLAB, 2);
 
-				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -5, z)))
-					world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
-				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -11, z)))
-					world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
-				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
-					world.setBlockState(pos.add(x, -16, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
+				if (isPlantableAbove(world, pos.add(x, -5, z)))
+						if (plantingChance(rand))
+							world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
+						else
+							if(rand.nextBoolean())
+								world.setBlockState(pos.add(x, -4, z), BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+
+				if (isPlantableAbove(world, pos.add(x, -11, z)))
+					if (plantingChance(rand))
+						world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
+					else
+						if(rand.nextBoolean())
+							world.setBlockState(pos.add(x, -10, z), BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+
+				if (isPlantableAbove(world, pos.add(x, -17, z)))
+					if (plantingChance(rand))
+						world.setBlockState(pos.add(x, -16, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
+					else
+						if(rand.nextBoolean())
+							world.setBlockState(pos.add(x, -16, z), BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
 			}
 
 		 	addSphericalChamber (world, rand, pos.add(4, -29, 27)); //entrance
