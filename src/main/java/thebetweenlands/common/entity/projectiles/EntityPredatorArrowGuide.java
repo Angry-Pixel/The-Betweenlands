@@ -2,27 +2,40 @@ package thebetweenlands.common.entity.projectiles;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityPredatorArrowGuide extends Entity {
+	private static final DataParameter<Integer> TARGET = EntityDataManager.createKey(EntityPredatorArrowGuide.class, DataSerializers.VARINT);
+
+	private int cachedTargetId = -1;
+	private Entity cachedTarget;
+
 	public EntityPredatorArrowGuide(World world) {
 		super(world);
 		this.setSize(0.1F, 0.1F);
 	}
 
 	@Override
-	public boolean canBeCollidedWith() {
-		return false;
+	protected void entityInit() {
+		this.dataManager.register(TARGET, -1);
 	}
 
 	@Override
-	protected void entityInit() {
-
+	public boolean canBeCollidedWith() {
+		return false;
 	}
 
 	@Override
@@ -49,39 +62,86 @@ public class EntityPredatorArrowGuide extends Entity {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		Entity ridingEntity = this.getRidingEntity();
+		return ridingEntity != null ? ridingEntity.getRenderBoundingBox() : super.getRenderBoundingBox();
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean isInRangeToRender3d(double x, double y, double z) {
+		Entity ridingEntity = this.getRidingEntity();
+		return ridingEntity != null ? ridingEntity.isInRangeToRender3d(x, y, z) : super.isInRangeToRender3d(x, y, z);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean isInRangeToRenderDist(double distance) {
+		Entity ridingEntity = this.getRidingEntity();
+		return ridingEntity != null ? ridingEntity.isInRangeToRenderDist(distance) : super.isInRangeToRenderDist(distance);
+	}
+
+	public void setTarget(@Nullable Entity target) {
+		this.dataManager.set(TARGET, target == null ? -1 : target.getEntityId());
+	}
+
+	public Entity getTarget() {
+		int targetId = this.dataManager.get(TARGET);
+		if(targetId >= 0) {
+			if(targetId == this.cachedTargetId) {
+				return this.cachedTarget;
+			} else {
+				return this.cachedTarget = this.world.getEntityByID(this.cachedTargetId = targetId);
+			}
+		}
+		this.cachedTarget = null;
+		this.cachedTargetId = -1;
+		return null;
+	}
+
 	protected void updateHomingTrajectory(Entity mountedEntity) {
 		if(!this.world.isRemote) {
+			Vec3d motion = new Vec3d(mountedEntity.motionX, mountedEntity.motionY, mountedEntity.motionZ);
+			double speed = motion.length();
+
+			EntityLivingBase bestTarget = null;
+
 			float maxFollowReach = 24.0F;
 
 			float maxFollowAngle = 20.0F;
 
 			float correctionMultiplier = 0.15F;
 
-			Vec3d motion = new Vec3d(mountedEntity.motionX, mountedEntity.motionY, mountedEntity.motionZ);
-			double speed = motion.length();
-			Vec3d heading = motion.normalize();
+			double distanceMovedSq = (mountedEntity.prevPosX - mountedEntity.posX) * (mountedEntity.prevPosX - mountedEntity.posX) + (mountedEntity.prevPosY - mountedEntity.posY) * (mountedEntity.prevPosY - mountedEntity.posY) + (mountedEntity.prevPosZ - mountedEntity.posZ) * (mountedEntity.prevPosZ - mountedEntity.posZ);
 
-			List<EntityLivingBase> nearbyEntities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(maxFollowReach), entity -> entity.isEntityAlive() && entity instanceof IMob);
+			if(speed > 0.1D && distanceMovedSq > 0.01D && !mountedEntity.onGround) {
+				Vec3d heading = motion.normalize();
 
-			EntityLivingBase bestTarget = null;
-			double bestTargetScore = Double.MAX_VALUE;
+				List<EntityLivingBase> nearbyEntities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(maxFollowReach), entity -> entity.isEntityAlive() && entity instanceof IMob);
 
-			for(EntityLivingBase entity : nearbyEntities) {
-				double dist = entity.getDistance(mountedEntity);
-				if(dist < maxFollowReach) {
-					Vec3d dir = entity.getPositionEyes(1).subtract(mountedEntity.getPositionEyes(1)).normalize();
+				double bestTargetScore = Double.MAX_VALUE;
 
-					double angle = Math.toDegrees(Math.acos(heading.dotProduct(dir)));
-					if(angle < maxFollowAngle) {
-						double score = dist * Math.max(angle, 0.01D);
+				for(EntityLivingBase entity : nearbyEntities) {
+					double dist = entity.getDistance(mountedEntity);
+					if(dist < maxFollowReach) {
+						Vec3d dir = entity.getPositionEyes(1).subtract(mountedEntity.getPositionEyes(1)).normalize();
 
-						if(bestTarget == null || score < bestTargetScore) {
-							bestTarget = entity;
-							bestTargetScore = score;
+						double angle = Math.toDegrees(Math.acos(heading.dotProduct(dir)));
+						if(angle < maxFollowAngle) {
+							double score = dist * Math.max(angle, 0.01D);
+
+							if(bestTarget == null || score < bestTargetScore) {
+								bestTarget = entity;
+								bestTargetScore = score;
+							}
 						}
 					}
 				}
 			}
+
+			this.setTarget(bestTarget);
 
 			if(bestTarget != null) {
 				Vec3d newMotion = bestTarget.getPositionEyes(1).subtract(mountedEntity.getPositionEyes(1)).normalize().scale(speed * correctionMultiplier).add(motion.scale(1 - correctionMultiplier));

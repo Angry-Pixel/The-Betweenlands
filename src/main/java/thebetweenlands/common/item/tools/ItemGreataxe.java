@@ -68,9 +68,10 @@ public class ItemGreataxe extends ItemAncientGreatsword {
 
 										if(state.getBlock().isWood(entityLiving.world, pos) && state.getBlockHardness(entityLiving.world, pos) <= 2.25F &&
 												state.getPlayerRelativeBlockHardness(player, entityLiving.world, pos) > 0.01F) {
-											blockSoundTypes.add(state.getBlock().getSoundType(state, player.world, pos, player));
-
-											player.interactionManager.tryHarvestBlock(pos);
+											
+											if(player.interactionManager.tryHarvestBlock(pos)) {
+												blockSoundTypes.add(state.getBlock().getSoundType(state, player.world, pos, player));
+											}
 										}
 									}
 								}
