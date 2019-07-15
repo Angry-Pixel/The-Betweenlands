@@ -133,8 +133,10 @@ public class EntityPredatorArrowGuide extends Entity {
 							double score = dist * Math.max(angle, 0.01D);
 
 							if(bestTarget == null || score < bestTargetScore) {
-								bestTarget = entity;
-								bestTargetScore = score;
+								if(entity.canEntityBeSeen(mountedEntity)) {
+									bestTarget = entity;
+									bestTargetScore = score;
+								}
 							}
 						}
 					}
