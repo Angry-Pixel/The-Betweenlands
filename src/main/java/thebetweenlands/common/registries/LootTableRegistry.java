@@ -58,6 +58,7 @@ public class LootTableRegistry {
     public static final ResourceLocation MUSIC_DISC = register("loot/music_disc");
     public static final ResourceLocation ANIMATOR_SCROLL = register("animator/scroll");
     public static final ResourceLocation PRESENT = register("loot/present_loot");
+    public static final ResourceLocation PUFFSHROOM = register("loot/puffshroom");
     
     public static final ResourceLocation SHARED_LOOT_POOL_TEST = register("loot/shared_loot_pool_test");
     

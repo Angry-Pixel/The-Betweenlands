@@ -1,8 +1,7 @@
 package thebetweenlands.common.block.structure;
 
 import java.util.List;
-
-import com.google.common.collect.ImmutableList;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
@@ -17,26 +16,27 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.structure.BlockMudTiles.EnumMudTileType;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityPuffshroom;
 
-public class BlockPuffshroom extends Block implements ITileEntityProvider, IShearable {
-
+public class BlockPuffshroom extends Block implements ITileEntityProvider {
 	public BlockPuffshroom() {
 		super(Material.ROCK);
 		setSoundType(SoundType.STONE);
-		setBlockUnbreakable();
-		setResistance(6000000.0F);
+		setHardness(8);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
@@ -63,34 +63,68 @@ public class BlockPuffshroom extends Block implements ITileEntityProvider, IShea
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		ItemStack stack = player.inventory.getCurrentItem();
-		if (!world.isRemote && stack.getItem() instanceof ItemShears) {
-			TileEntityPuffshroom tile = (TileEntityPuffshroom) world.getTileEntity(pos);
-			if (tile instanceof TileEntityPuffshroom)
-				if (tile.animation_1 >= 1) {
-					spawnAsEntity(world, pos, new ItemStack(ItemRegistry.KRAKEN_TENTACLE, 1, 0));
-					world.setBlockState(pos, BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED), 3);
-					world.playSound(null, pos, blockSoundType.getBreakSound(), SoundCategory.BLOCKS, 0.5F, 1F);
-					world.playEvent(null, 2001, pos, Block.getIdFromBlock(BlockRegistry.MUD_FLOWER_POT));
-					world.notifyBlockUpdate(pos, state, state, 3);
+		return this.tryHarvestWithShears(world, pos, state, player, player.getHeldItem(hand));
+	}
+	
+	@Override
+	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
+		this.tryHarvestWithShears(world, pos, world.getBlockState(pos), player, player.getHeldItemMainhand());
+	}
+	
+	protected boolean tryHarvestWithShears(World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack stack) {
+		if(!stack.isEmpty() && stack.getItem() instanceof ItemShears) {
+			TileEntity tile = world.getTileEntity(pos);
+			
+			if(tile instanceof TileEntityPuffshroom) {
+				TileEntityPuffshroom puffshroom = (TileEntityPuffshroom) tile;
+				
+				if(puffshroom.animation_1 >= 1) {
+					if(!world.isRemote && world instanceof WorldServer) {
+						LootTable lootTable = ((WorldServer) world).getLootTableManager().getLootTableFromLocation(LootTableRegistry.PUFFSHROOM);
+						LootContext.Builder lootBuilder = new LootContext.Builder((WorldServer) world);
+						
+						List<ItemStack> loot = lootTable.generateLootForPools(((WorldServer) world).rand, lootBuilder.build());
+						
+						for(ItemStack lootStack : loot) {
+							spawnAsEntity(world, pos.up(), lootStack);
+						}
+						
+						world.setBlockState(pos, BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED), 3);
+						
+						world.playSound(null, pos, blockSoundType.getBreakSound(), SoundCategory.BLOCKS, 0.5F, 1F);
+						world.playEvent(null, 2001, pos, Block.getIdFromBlock(BlockRegistry.MUD_FLOWER_POT));
+						
+						world.notifyBlockUpdate(pos, state, state, 3);
+						
+						stack.damageItem(1, player);
+					}
+					
 					return true;
 				}
+			}
 		}
+		
 		return false;
+	}
+	
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		this.onBlockHarvested(world, pos, state, player);
+        return world.setBlockState(pos, BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED), world.isRemote ? 11 : 3);
 	}
 
 	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
-		TileEntityPuffshroom tile = (TileEntityPuffshroom) world.getTileEntity(pos);
-		if (tile instanceof TileEntityPuffshroom)
-			if (tile.animation_1 >= 1)
-				return true;
-		return false;
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		
 	}
 
 	@Override
-	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		return ImmutableList.of(new ItemStack(ItemRegistry.KRAKEN_TENTACLE, 1, 0));
+	public int quantityDropped(Random random) {
+		return 0;
 	}
-
+	
+	@Override
+	public int quantityDropped(IBlockState state, int fortune, Random random) {
+		return 0;
+	}
 }

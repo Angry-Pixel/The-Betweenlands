@@ -18,14 +18,14 @@ public class EntitySporeJet extends Entity {
 
 	public EntitySporeJet(World world) {
 		super(world);
-		setSize(2F, 2.5F);
+		setSize(1.6F, 2.5F);
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		if (!getEntityWorld().isRemote) {
-			if (ticksExisted > 40)
+			if (ticksExisted > 15)
 				setDead();
 			if (ticksExisted == 1)
 				TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.SPORE_JET, (float) posX, (float)posY + 0.625F, (float)posZ, 0F));
