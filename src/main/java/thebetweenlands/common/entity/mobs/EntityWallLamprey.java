@@ -6,6 +6,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -252,7 +253,7 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 
 	@Override
 	public boolean canResideInBlock(BlockPos pos, EnumFacing facing, EnumFacing facingUp) {
-		return this.isValidBlockForMovement(this.world.getBlockState(pos)) && this.isValidBlockForMovement(this.world.getBlockState(pos.offset(facingUp.getOpposite())));
+		return this.isValidBlockForMovement(pos, this.world.getBlockState(pos)) && this.isValidBlockForMovement(pos.offset(facingUp.getOpposite()), this.world.getBlockState(pos.offset(facingUp.getOpposite())));
 	}
 
 	@Override
@@ -270,10 +271,8 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 	}
 
 	@Override
-	protected boolean isValidBlockForMovement(IBlockState state) {
-		Block block = state.getBlock();
-		return block == BlockRegistry.MUD_BRICKS || block == BlockRegistry.MUD_BRICKS_CARVED ||
-				block == BlockRegistry.MUD_TILES;
+	protected boolean isValidBlockForMovement(BlockPos pos, IBlockState state) {
+		return state.isOpaqueCube() && state.isNormalCube() && state.isFullCube() && state.getBlockHardness(this.world, pos) > 0 && state.getMaterial() == Material.ROCK;
 	}
 
 	@Override

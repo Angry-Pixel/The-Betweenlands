@@ -102,7 +102,7 @@ public abstract class EntityMovingWallFace extends EntityWallFace {
 		}
 	}
 
-	protected abstract boolean isValidBlockForMovement(IBlockState state);
+	protected abstract boolean isValidBlockForMovement(BlockPos pos, IBlockState state);
 
 	public List<BlockPos> findNearbyBlocksForMovement() {
 		final int radius = MathHelper.ceil(this.getEntityAttribute(BLOCK_TRACKING_SEARCH_RANGE).getAttributeValue());
@@ -114,7 +114,7 @@ public abstract class EntityMovingWallFace extends EntityWallFace {
 				for (int dz = -radius; dz <= radius; dz++) {
 					pos.setPos(center.getX() + dx, center.getY() + dy, center.getZ() + dz);
 					IBlockState state = this.world.getBlockState(pos);
-					if (this.isValidBlockForMovement(state)) {
+					if (this.isValidBlockForMovement(pos, state)) {
 						blocks.add(pos.toImmutable());
 					}
 				}

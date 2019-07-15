@@ -212,7 +212,7 @@ public abstract class EntitySpiritTreeFace extends EntityMovingWallFace implemen
 	}
 
 	@Override
-	protected boolean isValidBlockForMovement(IBlockState state) {
+	protected boolean isValidBlockForMovement(BlockPos pos, IBlockState state) {
 		return state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE;
 	}
 
