@@ -37,6 +37,8 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 	public float prevRotation = (float)Math.PI / 4;
 	public float rotation = (float)Math.PI / 4;
 
+	private int particleTimer = 0;
+	
 	public TileEntityBeamOrigin() {
 		super();
 	}
@@ -162,7 +164,8 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 		BlockPos targetPos = getPos().offset(facing, getDistanceToObstruction(facing));
 
 		if(world.isRemote) {
-			if (getWorld().getTotalWorldTime() % 20 == 0) {
+			if(this.particleTimer++ >= 20) {
+				this.particleTimer = 0;
 				spawnBeamParticles(new Vec3d(targetPos.getX() - pos.getX(), targetPos.getY() - pos.getY(), targetPos.getZ() - pos.getZ()));
 			}
 		} else {

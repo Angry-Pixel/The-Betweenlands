@@ -29,6 +29,8 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 	public boolean active;
 	public boolean in_down, in_up, in_north, in_south, in_west, in_east;
 
+	private int particleTimer = 0;
+	
 	public TileEntityBeamRelay() {
 		super();
 	}
@@ -82,7 +84,8 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 		BlockPos targetPos = getPos().offset(facing, getDistanceToObstruction(facing));
 		
 		if(world.isRemote) {
-			if (getWorld().getTotalWorldTime() % 20 == 0) {
+			if(this.particleTimer++ >= 20) {
+				this.particleTimer = 0;
 				spawnBeamParticles(new Vec3d(targetPos.getX() - pos.getX(), targetPos.getY() - pos.getY(), targetPos.getZ() - pos.getZ()));
 			}
 		} else {
