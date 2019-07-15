@@ -154,20 +154,19 @@ public class TileEntityPuffshroom extends TileEntity implements ITickable {
         this.getWorld().notifyBlockUpdate(this.getPos(), state, state, 3);
     }
 
-	@SuppressWarnings("unchecked")
 	protected Entity findEnemyToAttack() {
-		List<EntityLivingBase> list = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(getPos()).grow(2D, 2D, 2D));
-			for (int i = 0; i < list.size(); i++) {
-				Entity entity = list.get(i);
-				if (entity != null)
-					if (entity instanceof EntityPlayer)
-						if (!active_1 && animation_1 == 0) {
-							active_1 = true;
-							cooldown = 120;
-							pause = true;
-							markForUpdate();
-						}
+		if(!active_1 && animation_1 == 0) {
+			List<EntityPlayer> list = getWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(getPos()).grow(2D, 2D, 2D));
+			for(EntityPlayer player : list) {
+				if (!player.isCreative() && !player.isSpectator()) {
+					active_1 = true;
+					cooldown = 120;
+					pause = true;
+					markForUpdate();
+					return player;
+				}
 			}
+		}
 		return null;
 	}
 
