@@ -104,6 +104,7 @@ import thebetweenlands.common.block.plant.BlockGoldenClubFlower;
 import thebetweenlands.common.block.plant.BlockGoldenClubStalk;
 import thebetweenlands.common.block.plant.BlockHangingPlant;
 import thebetweenlands.common.block.plant.BlockHollowLog;
+import thebetweenlands.common.block.plant.BlockLichen;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldFlower;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldStalk;
 import thebetweenlands.common.block.plant.BlockMoss;
@@ -695,18 +696,12 @@ public class BlockRegistry {
         public BlockRenderLayer getRenderLayer() {
             return BlockRenderLayer.TRANSLUCENT;
         }
-
-    	@Override
-    	public BlockPlant setReplaceable(boolean replaceable) {
-    		return super.setReplaceable(true);
-    	}
-    };
+    }.setReplaceable(true);
     public static final Block ROTBULB = new BlockPlant().setReplaceable(true);
-    public static final Block MOSS = new BlockMoss().setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
-    public static final Block LICHEN = new BlockMoss(){
-    	@Override
-    	public int getColorMultiplier(IBlockState state, net.minecraft.world.IBlockAccess worldIn, net.minecraft.util.math.BlockPos pos, int tintIndex) { return 0xFFFFFF; }
-    }.setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
+    public static final Block MOSS = new BlockMoss(true).setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
+    public static final Block DEAD_MOSS = new BlockMoss(false).setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
+    public static final Block LICHEN = new BlockLichen(true).setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
+    public static final Block DEAD_LICHEN = new BlockLichen(false).setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
     public static final Block HANGER = new BlockHanger();
     public static final Block MIDDLE_FRUIT_BUSH = new BlockMiddleFruitBush();
     public static final Block FUNGUS_CROP = new BlockFungusCrop();

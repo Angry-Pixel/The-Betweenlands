@@ -17,6 +17,7 @@ import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockLootUrn.EnumLootUrn;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
+import thebetweenlands.common.block.plant.BlockHangingPlant;
 import thebetweenlands.common.block.structure.BlockBrazier;
 import thebetweenlands.common.block.structure.BlockBrazier.EnumBrazierHalf;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
@@ -54,10 +55,14 @@ public class SludgeWormMazeBlockHelper {
 	//floor plants
 	public IBlockState SLUDGECREEP = BlockRegistry.SLUDGECREEP.getDefaultState();
 	public IBlockState PALE_GRASS = BlockRegistry.PALE_GRASS.getDefaultState();
-
+	
+	//wall plants
+	public IBlockState MOSS = BlockRegistry.DEAD_MOSS.getDefaultState();
+	public IBlockState LICHEN = BlockRegistry.DEAD_LICHEN.getDefaultState();
+	
 	//hanging plants
-	public IBlockState CRYPTWEED = BlockRegistry.CRYPTWEED.getDefaultState();
-	public IBlockState STRING_ROOTS = BlockRegistry.STRING_ROOTS.getDefaultState();
+	public IBlockState CRYPTWEED = BlockRegistry.CRYPTWEED.getDefaultState().withProperty(BlockHangingPlant.CAN_GROW, false);
+	public IBlockState STRING_ROOTS = BlockRegistry.STRING_ROOTS.getDefaultState().withProperty(BlockHangingPlant.CAN_GROW, false);
 
 	public IBlockState STAGNANT_WATER = BlockRegistry.STAGNANT_WATER.getDefaultState();
 	public IBlockState SPAWNER_TYPE_1 = Blocks.PRISMARINE.getDefaultState();

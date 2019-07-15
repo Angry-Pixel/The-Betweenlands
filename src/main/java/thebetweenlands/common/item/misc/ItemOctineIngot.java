@@ -135,6 +135,8 @@ public class ItemOctineIngot extends Item {
 			return block == BlockRegistry.CAVE_MOSS || 
 					block == BlockRegistry.MOSS ||
 					block == BlockRegistry.LICHEN ||
+					block == BlockRegistry.DEAD_MOSS ||
+					block == BlockRegistry.DEAD_LICHEN ||
 					block == BlockRegistry.THORNS;
 		}
 		if(!stack.isEmpty()) {

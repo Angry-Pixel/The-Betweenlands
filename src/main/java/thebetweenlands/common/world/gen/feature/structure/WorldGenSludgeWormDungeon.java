@@ -167,21 +167,21 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 							world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 						else
 							if(rand.nextBoolean())
-								world.setBlockState(pos.add(x, -4, z), BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+								world.setBlockState(pos.add(x, -4, z), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
 
 					if (isPlantableAbove(world, pos.add(x, -11, z)))
 						if (plantingChance(rand))
 							world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 						else
 							if(rand.nextBoolean())
-								world.setBlockState(pos.add(x, -10, z), BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+								world.setBlockState(pos.add(x, -10, z), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
 
 					if (isPlantableAbove(world, pos.add(x, -17, z)))
 						if (plantingChance(rand))
 							world.setBlockState(pos.add(x, -16, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 						else
 							if(rand.nextBoolean())
-								world.setBlockState(pos.add(x, -16, z), BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+								world.setBlockState(pos.add(x, -16, z), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
 			}
 		// E
 		for (int x = 1; x < 3; x++)
@@ -205,21 +205,21 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 							world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 						else
 							if(rand.nextBoolean())
-								world.setBlockState(pos.add(x, -4, z), BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+								world.setBlockState(pos.add(x, -4, z), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
 
 				if (isPlantableAbove(world, pos.add(x, -11, z)))
 					if (plantingChance(rand))
 						world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 					else
 						if(rand.nextBoolean())
-							world.setBlockState(pos.add(x, -10, z), BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+							world.setBlockState(pos.add(x, -10, z), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
 
 				if (isPlantableAbove(world, pos.add(x, -17, z)))
 					if (plantingChance(rand))
 						world.setBlockState(pos.add(x, -16, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 					else
 						if(rand.nextBoolean())
-							world.setBlockState(pos.add(x, -16, z), BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+							world.setBlockState(pos.add(x, -16, z), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
 			}
 
 		 	addSphericalChamber (world, rand, pos.add(4, -29, 27)); //entrance
