@@ -37,10 +37,11 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	private static final DataParameter<Boolean> JAWS_OPEN = EntityDataManager.createKey(EntityShambler.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> TONGUE_EXTEND = EntityDataManager.createKey(EntityShambler.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> JAW_ANGLE = EntityDataManager.createKey(EntityShambler.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> JAW_ANGLE_PREV = EntityDataManager.createKey(EntityShambler.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> TONGUE_LENGTH = EntityDataManager.createKey(EntityShambler.class, DataSerializers.VARINT);
-	private static final DataParameter<Integer> TONGUE_LENGTH_PREV = EntityDataManager.createKey(EntityShambler.class, DataSerializers.VARINT);
 
+	private int prevJawAngle;
+	private int prevTongueLength;
+	
 	public MultiPartEntityPart[] tongue_array; // we may want to make more tongue parts
 	public MultiPartEntityPart tongue_end = new MultiPartEntityPart(this, "tongue_end", 0.5F, 0.5F);
 
@@ -79,9 +80,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		dataManager.register(JAWS_OPEN, false);
 		dataManager.register(TONGUE_EXTEND, false);
 		dataManager.register(JAW_ANGLE, 0);
-		dataManager.register(JAW_ANGLE_PREV, 0);
 		dataManager.register(TONGUE_LENGTH, 0);
-		dataManager.register(TONGUE_LENGTH_PREV, 0);
 	}
 	
 	@Override
@@ -110,7 +109,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	}
 
 	public void setJawAnglePrev(int count) {
-		dataManager.set(JAW_ANGLE_PREV, count);
+		prevJawAngle = count;
 	}
 
 	public void setTongueLength(int count) {
@@ -118,7 +117,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	}
 
 	public void setTongueLengthPrev(int count) {
-		dataManager.set(TONGUE_LENGTH, count);
+		prevTongueLength = count;
 	}
 
 	public int getJawAngle() {
@@ -126,7 +125,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	}
 
 	public int getJawAnglePrev() {
-		return dataManager.get(JAW_ANGLE_PREV);
+		return prevJawAngle;
 	}
 
 	public int getTongueLength() {
@@ -134,7 +133,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	}
 
 	public int getTongueLengthPrev() {
-		return dataManager.get(TONGUE_LENGTH);
+		return prevTongueLength;
 	}
 
 	@Override
@@ -178,8 +177,10 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 
 	@Override
 	public void onLivingUpdate() {
+		setJawAnglePrev(getJawAngle());
+		setTongueLengthPrev(getTongueLength());
+		
 		if (!getEntityWorld().isRemote) {
-
 			if (getAttackTarget() != null && canEntityBeSeen(getAttackTarget())) {
 				faceEntity(getAttackTarget(), 10.0F, 20.0F);
 				double distance = getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
@@ -209,9 +210,6 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 				if (isExtendingTongue())
 					setExtendingTongue(false);
 			}
-
-			setJawAnglePrev(getJawAngle());
-			setTongueLengthPrev(getTongueLength());
 
 			if (getJawAngle() > 0 && !jawsAreOpen())
 				setJawAngle(getJawAngle() - 1);
@@ -245,11 +243,12 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	@Override
     public void onUpdate() {
 		super.onUpdate();
-		renderYawOffset = rotationYaw;
-		double a = Math.toRadians(rotationYaw);
-		double offSetX = Math.sin(a) * -0.25D;
-		double offSetZ = -Math.cos(a) * -0.25D;
-		Vec3d vector = getLookVec();
+		
+		Vec3d vector = getLook(1);
+		
+		double offSetX = vector.x * -0.25D;
+		double offsetY = vector.y * -0.25D;
+		double offSetZ = vector.z * -0.25D;
 		
 		double lengthIncrement = 0.5D / tongue_array.length;
 		
@@ -263,7 +262,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 			part.lastTickPosY = part.prevPosY = part.posY;
 			part.lastTickPosZ = part.prevPosZ = part.posZ;
 			
-			part.setPosition(posX + offSetX + ((double) vector.x * getTongueLength() * tongueLength), (posY + 0.90625D - 0.18D) + ((double) vector.y * getTongueLength() * tongueLength), posZ + offSetZ + ((double) vector.z * getTongueLength() * tongueLength));
+			part.setPosition(posX + offSetX + ((double) vector.x * getTongueLength() * tongueLength), posY + this.getEyeHeight() - 0.32 + offsetY + ((double) vector.y * getTongueLength() * tongueLength), posZ + offSetZ + ((double) vector.z * getTongueLength() * tongueLength));
 			part.rotationYaw = this.rotationYaw;
 			part.rotationPitch = this.rotationPitch;
 		
@@ -295,7 +294,6 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		return false;
 	}
 
-	@SuppressWarnings("unchecked")
 	protected Entity checkCollision() {
 		List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, tongue_end.getEntityBoundingBox());
 		for (int i = 0; i < list.size(); i++) {

@@ -313,6 +313,12 @@ public class ModelShambler extends ModelBase {
 	}
 	
 	@Override
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
+			float headPitch, float scaleFactor, Entity entityIn) {
+		head1.rotateAngleY = (float)MathHelper.clamp(Math.toRadians(netHeadYaw), -60, 60);
+	}
+	
+	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTickTime ) {
 		EntityShambler shambler = (EntityShambler) entity;
 		float animation = MathHelper.cos((limbSwing * 1.2F) * 0.75F) * 0.3F * limbSwingAmount * 0.5F;
