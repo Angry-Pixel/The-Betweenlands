@@ -38,10 +38,10 @@ public class GuiBLFurnace extends GuiContainer {
 		int l = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.ySize);
 
-		if (this.tileFurnace.isBurning()) {
-			int i1 = this.tileFurnace.getBurnTimeRemainingScaled(13);
+		if (this.tileFurnace.isBurning(0)) {
+			int i1 = this.tileFurnace.getBurnTimeRemainingScaled(0, 13);
 			this.drawTexturedModalRect(k + 56, l + 36 + 12 - i1, 176, 12 - i1, 14, i1 + 1);
-			i1 = this.tileFurnace.getCookProgressScaled(24);
+			i1 = this.tileFurnace.getCookProgressScaled(0, 24);
 			this.drawTexturedModalRect(k + 79, l + 34, 176, 14, i1 + 1, 16);
 		}
 
