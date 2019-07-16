@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 
@@ -654,6 +655,25 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + textureUnit);
 			GlStateManager.enableTexture2D();
 			GlStateManager.bindTexture(texture);
+			OpenGlHelper.glUniform1i(uniform, textureUnit);
+			GlStateManager.disableTexture2D();
+			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+		}
+	}
+	
+	/**
+	 * Uploads a sampler.
+	 * Texture unit 0 is reserved for the default diffuse sampler
+	 * @param uniform
+	 * @param texture
+	 * @param textureUnit
+	 */
+	protected final void uploadSampler(int uniform, ResourceLocation texture, int textureUnit) {
+		if(uniform >= 0 && textureUnit >= 0) {
+			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + textureUnit);
+			GlStateManager.enableTexture2D();
+			TextureManager manager = Minecraft.getMinecraft().getTextureManager();
+			manager.bindTexture(texture);
 			OpenGlHelper.glUniform1i(uniform, textureUnit);
 			GlStateManager.disableTexture2D();
 			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);

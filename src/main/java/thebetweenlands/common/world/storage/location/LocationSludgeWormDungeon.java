@@ -92,8 +92,8 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 				float floorStrength = globalStrength / 7.0f * (floor + 1);
 				
 				float fogBrightness = 0.25F;
-				float inScattering = 0.035F - 0.025F * floorStrength;
-				float extinction = 6.0F - 5.0F * floorStrength;
+				float inScattering = 0.035F - 0.015F * floorStrength;
+				float extinction = 6.0F - 4.2F * floorStrength;
 				
 				float height = 4.0f + 8.0f * floorStrength;
 				

@@ -5,12 +5,16 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.common.lib.ModInfo;
 
 public class GroundFog extends PostProcessingEffect<GroundFog> {
+	public static final ResourceLocation TEXTURE_GROUND_FOG_HEIGHT_MAP = new ResourceLocation(ModInfo.ID, "textures/shaders/ground_fog_height_map.png");
+
 	public static final int MAX_FOG_VOLUMES = 16;
 
 	public static class GroundFogVolume {
@@ -41,13 +45,14 @@ public class GroundFog extends PostProcessingEffect<GroundFog> {
 
 	//Uniforms
 	private int depthUniformID = -1;
+	private int heightMapUniformID = -1;
 	private int invMVPUniformID = -1;
 	private int msTimeUniformID = -1;
 	private int worldTimeUniformID = -1;
 	private int renderPosUniformID = -1;
 	private int viewPosUniformID = -1;
 	private int fogVolumeAmountUniformIDs = -1;
-
+	
 	private int depthBufferTexture = -1;
 
 	private List<GroundFogVolume> volumes = Collections.emptyList();
@@ -70,6 +75,7 @@ public class GroundFog extends PostProcessingEffect<GroundFog> {
 	@Override
 	protected boolean initEffect() {
 		this.depthUniformID = this.getUniform("s_diffuse_depth");
+		this.heightMapUniformID = this.getUniform("s_height_map");
 		this.invMVPUniformID = this.getUniform("u_INVMVP");
 		this.msTimeUniformID = this.getUniform("u_msTime");
 		this.worldTimeUniformID = this.getUniform("u_worldTime");
@@ -95,6 +101,8 @@ public class GroundFog extends PostProcessingEffect<GroundFog> {
 
 		this.uploadSampler(this.depthUniformID, shader.getDepthBuffer().getGlTextureId(), 1);
 
+		this.uploadSampler(this.heightMapUniformID, TEXTURE_GROUND_FOG_HEIGHT_MAP, 2);
+		
 		this.uploadMatrix4f(this.invMVPUniformID, shader.getInvertedModelviewProjectionMatrix());
 
 		final double renderPosX = Minecraft.getMinecraft().getRenderManager().viewerPosX;
