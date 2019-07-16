@@ -5,8 +5,14 @@ buildscript {
 			name = 'forge'
 			url = 'http://files.minecraftforge.net/maven'
 		}
+		maven {
+			url 'https://plugins.gradle.org/m2/'
+		}
 	}
-	dependencies { classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT' }
+	dependencies { 
+		classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+		classpath 'com.wynprice.cursemaven:CurseMaven:1.1.0'
+	}
 }
 
 //Returns whether the private keystore for signing is available and if the jar should be signed
@@ -76,6 +82,7 @@ allprojects {
 	if(!isDeploymentRelease) version = version + (!project.isDeploymentRelease ? ((project.isDeploymentEnv ? ('-' + project.buildnumber) : '') + '-SNAPSHOT') : '')
 
 	apply plugin: 'net.minecraftforge.gradle.forge'
+	apply plugin: 'com.wynprice.cursemaven'
 	
 	minecraft {
 		version = "1.12.2-14.23.5.2768"

@@ -24,11 +24,11 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	protected NonNullList<ItemStack> inventory;
 	protected final ItemStackHandler inventoryHandler;
 
-	public TileEntityBasicInventory(int invtSize, String name) {
-		this.inventoryHandler = new ItemStackHandler(this.inventory = NonNullList.withSize(invtSize, ItemStack.EMPTY)) {
+	public TileEntityBasicInventory(int invSize, String name) {
+		this.inventoryHandler = new ItemStackHandler(this.inventory = NonNullList.withSize(invSize, ItemStack.EMPTY)) {
 			@Override
 			public void setSize(int size) {
-				this.stacks = TileEntityBasicInventory.this.inventory = NonNullList.withSize(invtSize, ItemStack.EMPTY);
+				this.stacks = TileEntityBasicInventory.this.inventory = NonNullList.withSize(invSize, ItemStack.EMPTY);
 			}
 
 			@Override
@@ -91,7 +91,6 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 		this.accessSlot(slot);
 		return this.inventoryHandler.getStackInSlot(slot);
 	}
-
 
 	@Override
 	public int getInventoryStackLimit() {

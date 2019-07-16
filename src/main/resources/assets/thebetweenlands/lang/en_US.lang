@@ -805,12 +805,19 @@ item.thebetweenlands.aspect_vial.green.name=Green Dentrothyst Aspect Vial
 item.thebetweenlands.aspect_vial.orange.name=Orange Dentrothyst Aspect Vial
 item.thebetweenlands.aspect_vial.green.filled.name=%s (%s)
 item.thebetweenlands.aspect_vial.orange.filled.name=%s (%s)
+item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
+item.thebetweenlands.elixir.dentrothyst_vial.orange.name=Orange Dentrothyst Vial
+item.thebetweenlands.elixir.dentrothyst_vial.green.filled.name=Green Dentrothyst Vial (%s)
+item.thebetweenlands.elixir.dentrothyst_vial.orange.filled.name=Orange Dentrothyst Vial (%s)
+item.thebetweenlands.elixir.dentrothyst_vial.green.fluid.fog.name=Bottled Fog
+item.thebetweenlands.elixir.dentrothyst_vial.orange.fluid.fog.name=Bottled Fog
 
 # Fluids
 fluid.swamp_water=Swamp Water
 fluid.tar=Tar
 fluid.stagnant_water=Stagnant Water
 fluid.rubber=Rubber
+fluid.fog=Fog
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
@@ -1062,6 +1069,8 @@ chat.dungeon_door_runes.locked=Dungeon door code set!
 
 chat.grappling_hook.max_length=Maximum rope length reached!
 chat.grappling_hook.disconnected=The grappling hook was ripped!
+
+chat.not_enough_fog_for_vial=There is not enough fog on this floor to fill the vial
 
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath

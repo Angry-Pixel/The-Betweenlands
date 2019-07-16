@@ -1,8 +1,13 @@
 package thebetweenlands.client.handler;
 
+import java.util.List;
 import java.util.Random;
 import java.util.stream.StreamSupport;
 
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.Slot;
+import net.minecraftforge.client.event.GuiContainerEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -305,6 +310,26 @@ public class DebugHandlerClient {
 									ChunkGeneratorBetweenlands.debugRecord ? "enabled" : "disabled")));
 				}
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onGuiDrawPost(GuiContainerEvent.DrawForeground event) {
+		if (BetweenlandsConfig.DEBUG.debug) {
+			Container container = event.getGuiContainer().inventorySlots;
+			List<Slot> slots = container.inventorySlots;
+			FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
+			GlStateManager.pushMatrix();
+			GlStateManager.enableBlend();
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			RenderHelper.disableStandardItemLighting();
+			for (Slot slot : slots) {
+				renderer.drawString(String.valueOf(slot.slotNumber), slot.xPos, slot.yPos, 0xDDADADAD, false);
+			}
+			RenderHelper.enableStandardItemLighting();
+			GlStateManager.disableBlend();
+			GlStateManager.popMatrix();
 		}
 	}
 }

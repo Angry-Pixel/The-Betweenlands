@@ -29,6 +29,7 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelLoaderRegistry.LoaderException;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
@@ -36,6 +37,7 @@ import thebetweenlands.client.render.sprite.TextureCorrosion;
 import thebetweenlands.client.render.sprite.TextureFromData;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.util.TexturePacker.TextureQuadMap;
@@ -61,6 +63,13 @@ public class TextureStitchHandler {
 			//Only stitch to the main texture map
 			return;
 		}
+		
+		//Stich fluid textures onto atlas
+		for(Fluid fluid : FluidRegistry.REGISTERED_FLUIDS) {
+			e.getMap().registerSprite(fluid.getFlowing());
+			e.getMap().registerSprite(fluid.getStill());
+		}
+		
 
 		//Pack model textures and stitch onto atlas
 		long packingStartTime = System.nanoTime();

@@ -1185,7 +1185,16 @@
   },
   "long_swing": {
     "sounds": [
-      "thebetweenlands:long_swing"
+      "thebetweenlands:long_swing_1",
+      "thebetweenlands:long_swing_2",
+      "thebetweenlands:long_swing_3"
+    ]
+  },
+  "long_slice": {
+    "sounds": [
+      "thebetweenlands:long_slice_1",
+      "thebetweenlands:long_slice_2",
+      "thebetweenlands:long_slice_3"
     ]
   }
 }

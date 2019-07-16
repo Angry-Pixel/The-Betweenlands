@@ -87,6 +87,7 @@ import thebetweenlands.common.item.food.ItemWeepingBluePetalSalad;
 import thebetweenlands.common.item.food.ItemWightHeart;
 import thebetweenlands.common.item.herblore.ItemAspectVial;
 import thebetweenlands.common.item.herblore.ItemCrushed;
+import thebetweenlands.common.item.herblore.ItemDentrothystFluidVial;
 import thebetweenlands.common.item.herblore.ItemDentrothystVial;
 import thebetweenlands.common.item.herblore.ItemElixir;
 import thebetweenlands.common.item.herblore.ItemManualHL;
@@ -386,6 +387,7 @@ public class ItemRegistry {
     public static final Item SLUDGE_BALL = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final ItemElixir ELIXIR = new ItemElixir();
     public static final ItemDentrothystVial DENTROTHYST_VIAL = new ItemDentrothystVial();
+    public static final ItemDentrothystFluidVial DENTROTHYST_FLUID_VIAL = new ItemDentrothystFluidVial();
     public static final ItemAspectVial ASPECT_VIAL = new ItemAspectVial();
     public static final Item GLUE = new ItemGlue();
     public static final Item AMULET = new ItemAmulet();

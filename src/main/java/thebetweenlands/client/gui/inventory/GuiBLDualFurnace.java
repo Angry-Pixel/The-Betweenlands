@@ -38,17 +38,17 @@ public class GuiBLDualFurnace extends GuiContainer {
         int l = (height - ySize) / 2;
         drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
 
-        if (tileFurnace.isBurning()) {
-            int i1 = tileFurnace.getBurnTimeRemainingScaled(13);
+        if (tileFurnace.isBurning(0)) {
+            int i1 = tileFurnace.getBurnTimeRemainingScaled(0, 13);
             drawTexturedModalRect(k + 56, l + 40 + 12 - i1, 176, 12 - i1, 14, i1 + 1);
-            i1 = tileFurnace.getCookProgressScaled(24);
+            i1 = tileFurnace.getCookProgressScaled(0, 24);
             drawTexturedModalRect(k + 79, l + 38, 176, 14, i1 + 1, 16);
         }
         
-        if (tileFurnace.isBurning2()) {
-            int i1 = tileFurnace.getBurnTimeRemainingScaled2(13);
+        if (tileFurnace.isBurning(1)) {
+            int i1 = tileFurnace.getBurnTimeRemainingScaled(1, 13);
             drawTexturedModalRect(k + 56, l + 111 + 12 - i1, 176, 12 - i1, 14, i1 + 1);
-            i1 = tileFurnace.getCookProgressScaled2(24);
+            i1 = tileFurnace.getCookProgressScaled(1, 24);
             drawTexturedModalRect(k + 79, l + 109, 176, 14, i1 + 1, 16);
         }
 	}

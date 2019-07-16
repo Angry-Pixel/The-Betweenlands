@@ -41,7 +41,8 @@ public class FluidRegistry {
 	public static final Fluid STAGNANT_WATER = new Fluid("stagnant_water", new ResourceLocation("thebetweenlands:fluids/stagnant_water_still"), new ResourceLocation("thebetweenlands:fluids/stagnant_water_flowing")).setDensity(1000).setViscosity(1000);
 	public static final Fluid TAR = new Fluid("tar", new ResourceLocation("thebetweenlands:fluids/tar_still"), new ResourceLocation("thebetweenlands:fluids/tar_flowing")).setDensity(2000).setViscosity(2000).setTemperature(330);
 	public static final Fluid RUBBER = new Fluid("rubber", new ResourceLocation("thebetweenlands:fluids/rubber_still"), new ResourceLocation("thebetweenlands:fluids/rubber_flowing")).setDensity(1200).setViscosity(1500);
-
+	public static final Fluid FOG = new Fluid("fog", new ResourceLocation("thebetweenlands:fluids/fog"), new ResourceLocation("thebetweenlands:fluids/fog")).setDensity(2).setViscosity(10).setGaseous(true);
+	
 
 	public static final List<Fluid> REGISTERED_FLUIDS = new ArrayList<Fluid>();
 
@@ -52,7 +53,9 @@ public class FluidRegistry {
 				if (obj instanceof Fluid) {
 					Fluid fluid = (Fluid) obj;
 					net.minecraftforge.fluids.FluidRegistry.registerFluid(fluid);
-					net.minecraftforge.fluids.FluidRegistry.addBucketForFluid(fluid);
+					if(fluid != FOG) {
+						net.minecraftforge.fluids.FluidRegistry.addBucketForFluid(fluid);
+					}
 					REGISTERED_FLUIDS.add((Fluid)obj);
 				}
 			}

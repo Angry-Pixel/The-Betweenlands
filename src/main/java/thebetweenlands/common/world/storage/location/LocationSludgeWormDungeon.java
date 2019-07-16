@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -42,7 +43,12 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	public BlockPos getStructurePos() {
 		return this.structurePos;
 	}
-
+	
+	public boolean hasGroundFog(BlockPos pos) {
+		//TODO Check if pos is in maze bounding box
+		return this.dataManager.get(GROUND_FOG_STRENGTH) > 0.01F;
+	}
+	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
@@ -79,16 +85,28 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 
 	@SideOnly(Side.CLIENT)
 	public boolean addGroundFogVolumesToShader(WorldShader shader) {
-		float strength = this.dataManager.get(GROUND_FOG_STRENGTH);
+		float globalStrength = this.dataManager.get(GROUND_FOG_STRENGTH);
 
-		if(strength > 0) {
+		if(globalStrength > 0) {
 			for(int floor = 0; floor < 7; floor++) {
-				shader.addGroundFogVolume(new GroundFogVolume(new Vec3d(this.structurePos.getX(), this.structurePos.getY() - 5.2D - floor * 6, this.structurePos.getZ()), new Vec3d(29, 6, 29), 0.035F, 6.0F, 0.5F * strength, 0.5F * strength, 0.5F * strength));
+				float floorStrength = globalStrength / 7.0f * (floor + 1);
+				
+				float fogBrightness = 0.25F;
+				float inScattering = 0.035F - 0.025F * floorStrength;
+				float extinction = 6.0F - 5.0F * floorStrength;
+				
+				float height = 4.0f + 8.0f * floorStrength;
+				
+				shader.addGroundFogVolume(new GroundFogVolume(new Vec3d(this.structurePos.getX(), this.structurePos.getY() - 5.2D - floor * 6, this.structurePos.getZ()), new Vec3d(29, height, 29), inScattering, extinction, fogBrightness, fogBrightness, fogBrightness));
 			}
 
 			return true;
 		}
 
 		return false;
+	}
+	
+	public int getFloor(BlockPos pos) {
+		return (this.structurePos.getY() - 1 - pos.getY()) / 6;
 	}
 }

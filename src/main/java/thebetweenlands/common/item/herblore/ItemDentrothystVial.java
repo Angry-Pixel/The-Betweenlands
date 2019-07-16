@@ -1,21 +1,31 @@
 package thebetweenlands.common.item.herblore;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.items.ItemHandlerHelper;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class ItemDentrothystVial extends Item implements ItemRegistry.IBlockStateItemModelDefinition {
 
@@ -96,6 +106,30 @@ public class ItemDentrothystVial extends Item implements ItemRegistry.IBlockStat
                 }
                 return EnumActionResult.SUCCESS;
             }
+        } else if(!player.isSneaking() && stack.getItemDamage() != 1) {
+        	List<LocationStorage> locations = LocationStorage.getLocations(world, new AxisAlignedBB(pos));
+        	
+        	for(LocationStorage location : locations) {
+        		if(location instanceof LocationSludgeWormDungeon) {
+        			LocationSludgeWormDungeon dungeon = (LocationSludgeWormDungeon) location;
+        			
+        			if(dungeon.hasGroundFog(pos)) {
+	        			int floor = dungeon.getFloor(pos);
+	        			
+	        			if(floor == 5 || floor == 6) {
+	        				if(!world.isRemote) {
+	        					stack.shrink(1);
+	        					world.playSound(null, pos, FluidRegistry.FOG.getFillSound(new FluidStack(FluidRegistry.FOG, 1000)), SoundCategory.BLOCKS, 1.0F, 1.0F);
+	        					ItemHandlerHelper.giveItemToPlayer(player, ItemRegistry.DENTROTHYST_FLUID_VIAL.withFluid(stack.getItemDamage() == 2 ? 1 : 0, FluidRegistry.FOG));
+	        				}
+	        				
+	        				return EnumActionResult.SUCCESS;
+	        			} else if(!world.isRemote) {
+	        				player.sendStatusMessage(new TextComponentTranslation("chat.not_enough_fog_for_vial"), true);
+	        			}
+        			}
+        		}
+        	}
         }
         return EnumActionResult.FAIL;
     }
