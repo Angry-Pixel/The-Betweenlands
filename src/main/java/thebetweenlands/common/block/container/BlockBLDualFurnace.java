@@ -2,8 +2,6 @@ package thebetweenlands.common.block.container;
 
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
@@ -158,7 +156,7 @@ public class BlockBLDualFurnace extends BlockContainer implements ICustomItemBlo
 		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 
 		if (stack.hasDisplayName())
-			((TileEntityBLDualFurnace)world.getTileEntity(pos)).getStackDisplayName(stack.getDisplayName());
+			((TileEntityBLDualFurnace)world.getTileEntity(pos)).setStackDisplayName(stack.getDisplayName());
 	}
 
 	@Override

@@ -156,7 +156,7 @@ public class BlockBLFurnace extends BlockContainer implements ICustomItemBlock {
 		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 
 		if (stack.hasDisplayName())
-			((TileEntityBLFurnace)world.getTileEntity(pos)).getStackDisplayName(stack.getDisplayName());
+			((TileEntityBLFurnace)world.getTileEntity(pos)).setStackDisplayName(stack.getDisplayName());
 	}
 
 	@Override

@@ -2,33 +2,28 @@ package thebetweenlands.common.inventory.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.inventory.slot.SlotBLFurnaceFuel;
 import thebetweenlands.common.inventory.slot.SlotRestriction;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 
-public class ContainerBLFurnace extends Container {
-    private TileEntityBLFurnace tileFurnace;
-    private int lastCookTime;
-    private int lastBurnTime;
-    private int lastItemBurnTime;
+public class ContainerBLFurnace extends ContainerAbstractBLFurnace {
 
     public ContainerBLFurnace(InventoryPlayer inventory, TileEntityBLFurnace tile) {
-        tileFurnace = tile;
+        super(tile);
+
         addSlotToContainer(new Slot(tile, 0, 56, 17));
         addSlotToContainer(new SlotBLFurnaceFuel(tile, 1, 56, 53));
         addSlotToContainer(new SlotFurnaceOutput(inventory.player, tile, 2, 116, 35));
-        Slot fluxSlot = new SlotRestriction(tile, 3, 26, 35, EnumItemMisc.LIMESTONE_FLUX.create(1), 64, this);
-        addSlotToContainer(fluxSlot);
-        int i;
+        addSlotToContainer(new SlotRestriction(tile, 3, 26, 35, EnumItemMisc.LIMESTONE_FLUX.create(1), 64, this));
 
+        int i;
         for (i = 0; i < 3; ++i)
             for (int j = 0; j < 9; ++j)
                 addSlotToContainer(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
@@ -36,58 +31,11 @@ public class ContainerBLFurnace extends Container {
         for (i = 0; i < 9; ++i)
             addSlotToContainer(new Slot(inventory, i, 8 + i * 18, 142));
     }
-	
-	@Override
-	public void addListener(IContainerListener listener) {
-		super.addListener(listener);
-		listener.sendWindowProperty(this, 0, tileFurnace.furnaceCookTime);
-		listener.sendWindowProperty(this, 1, tileFurnace.furnaceBurnTime);
-		listener.sendWindowProperty(this, 2, tileFurnace.currentItemBurnTime);
-	}
-
-	@Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
-
-        for (IContainerListener listener : listeners) {
-
-            if (lastCookTime != tileFurnace.furnaceCookTime)
-            	listener.sendWindowProperty(this, 0, tileFurnace.furnaceCookTime);
-
-            if (lastBurnTime != tileFurnace.furnaceBurnTime)
-            	listener.sendWindowProperty(this, 1, tileFurnace.furnaceBurnTime);
-
-            if (lastItemBurnTime != tileFurnace.currentItemBurnTime)
-            	listener.sendWindowProperty(this, 2, tileFurnace.currentItemBurnTime);
-        }
-
-        lastCookTime = tileFurnace.furnaceCookTime;
-        lastBurnTime = tileFurnace.furnaceBurnTime;
-        lastItemBurnTime = tileFurnace.currentItemBurnTime;
-    }
-
-	@Override
-    @SideOnly(Side.CLIENT)
-    public void updateProgressBar(int id, int value) {
-        if (id == 0)
-            tileFurnace.furnaceCookTime = value;
-
-        if (id == 1)
-            tileFurnace.furnaceBurnTime = value;
-
-        if (id == 2)
-            tileFurnace.currentItemBurnTime = value;
-    }
-
-	@Override
-    public boolean canInteractWith(EntityPlayer player) {
-        return tileFurnace.isUsableByPlayer(player);
-    }
 
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
         ItemStack itemstack = ItemStack.EMPTY;
-        Slot slot = (Slot)inventorySlots.get(slotIndex);
+        Slot slot = inventorySlots.get(slotIndex);
 
         if (slot != null && slot.getHasStack()) {
             ItemStack itemstack1 = slot.getStack();
