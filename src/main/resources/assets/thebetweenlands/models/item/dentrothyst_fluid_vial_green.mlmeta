@@ -1,0 +1,9 @@
+{
+  "source": "thebetweenlands:dentrothyst_fluid_vial_green",
+  "inherit_overrides": false,
+  "custom": {
+    "base_texture": "thebetweenlands:items/strictly_herblore/misc/fluid_vial_green_cover",
+    "liquid_template": "thebetweenlands:items/strictly_herblore/misc/fluid_vial_template",
+    "cover_texture": "thebetweenlands:items/strictly_herblore/misc/fluid_vial_green_cover"
+  }
+}

@@ -64,6 +64,7 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 	public IModel loadModel(IModel original, ResourceLocation location, String arg) {
 		ModelContext context = this.parseContextData(location, this.readMetadata(arg));
 		this.modelContexts.put(context.source, context);
+		this.findReplacementModelAndRegister(location, context);
 		return this.getItemDummyModel();
 	}
 
@@ -115,21 +116,7 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 	public IBakedModel getModelReplacement(ModelResourceLocation location, IBakedModel original) {
 		ModelContext context = this.modelContexts.get(location);
 		if(context != null) {
-			ResourceLocation replacementModelLocation = context.replacement;
-
-			if(context.hasCustomData()) {
-				//Makes the loader process the model with custom data
-				replacementModelLocation = CustomModelLoader.MODEL_PROCESSOR_LOADER_EXTENSION.getLocationWithExtension(replacementModelLocation, "{\"custom\": " + context.customData + "}");
-			}
-
-			//Retrieve replacement model
-			IModel replacementModel;
-			try {
-				//Makes sure that the model is loaded through the model loader and that the textures are registered properly
-				replacementModel = ModelLoaderRegistry.getModel(replacementModelLocation);
-			} catch (Exception ex) {
-				throw new RuntimeException("Failed to load model " + replacementModelLocation + " for child model " + location, ex);
-			}
+			IModel replacementModel = this.findReplacementModelAndRegister(location, context);
 
 			//Bake replacement model
 			IBakedModel bakedModel = replacementModel.bake(replacementModel.getDefaultState(), DefaultVertexFormats.ITEM, 
@@ -140,5 +127,22 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 		}
 		//Nothing to replace
 		return null;
+	}
+	
+	private IModel findReplacementModelAndRegister(ResourceLocation location, ModelContext context) {
+		ResourceLocation replacementModelLocation = context.replacement;
+
+		if(context.hasCustomData()) {
+			//Makes the loader process the model with custom data
+			replacementModelLocation = CustomModelLoader.MODEL_PROCESSOR_LOADER_EXTENSION.getLocationWithExtension(replacementModelLocation, "{\"custom\": " + context.customData + "}");
+		}
+
+		//Retrieve replacement model
+		try {
+			//Makes sure that the model is loaded through the model loader and that the textures are registered properly
+			return ModelLoaderRegistry.getModel(replacementModelLocation);
+		} catch (Exception ex) {
+			throw new RuntimeException("Failed to load model " + replacementModelLocation + " for child model " + location, ex);
+		}
 	}
 }
