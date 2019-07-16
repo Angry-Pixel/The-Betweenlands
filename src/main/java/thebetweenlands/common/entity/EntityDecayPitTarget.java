@@ -78,7 +78,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				shield_14 = new EntityDecayPitTargetPart(this, "part16", 1F, 1F),
 				shield_15 = new EntityDecayPitTargetPart(this, "part15", 1F, 1F),
 				shield_16 = new EntityDecayPitTargetPart(this, "part16", 1F, 1F),
-				target = new EntityDecayPitTargetPart(this, "target", 2F, 2F),
+				target = new EntityDecayPitTargetPart(this, "target", 3F, 2F),
 				bottom = new EntityDecayPitTargetPart(this, "bottom", 3F, 1F),
 				};
 	}

@@ -1,15 +1,13 @@
 package thebetweenlands.client.render.entity;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelDecayPitPlug;
+import thebetweenlands.client.render.model.entity.ModelDecayPitTarget;
 import thebetweenlands.client.render.model.entity.ModelShieldCog;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityDecayPitTargetPart;
@@ -20,6 +18,8 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	private final ModelDecayPitPlug PLUG_MODEL = new ModelDecayPitPlug();
 	public static final ResourceLocation COG_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/barrishee.png");
 	private final ModelShieldCog COG_MODEL = new ModelShieldCog();
+	private final ModelDecayPitTarget TARGET_MODEL = new ModelDecayPitTarget();
+	public static final ResourceLocation TARGET_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_target.png");
 
 	public RenderDecayPitTarget(RenderManager manager) {
 		super(manager);
@@ -48,13 +48,13 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			if (part != entity.target && part != entity.bottom)
 				renderCogShield(part, x + smoothedX - smoothedMainX, y + smoothedY - smoothedMainY, z + smoothedZ - smoothedMainZ, floatate);
 		}
-
-		// debug boxes for parts without models
+		
+		bindTexture(TARGET_TEXTURE);
 		GlStateManager.pushMatrix();
-		for (EntityDecayPitTargetPart part : entity.shield_array)
-			if (part == entity.target)
-				renderDebugBoundingBox(part, x, y, z, entityYaw, partialTicks, part.posX - entity.posX, part.posY - entity.posY, part.posZ - entity.posZ);
-		GlStateManager.popMatrix();
+		GlStateManager.translate(x, y + 4.5F, z);
+		GlStateManager.scale(-1F, -1F, 1F);
+		TARGET_MODEL.render(entity, 0.0625F);
+		GlStateManager.popMatrix();	
 	}
 
 	private void renderCogShield(EntityDecayPitTargetPart entity, double x, double y, double z, float angle) {
@@ -71,21 +71,4 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	protected ResourceLocation getEntityTexture(EntityDecayPitTarget entity) {
 		return null;
 	}
-
-	private void renderDebugBoundingBox(Entity entity, double x, double y, double z, float yaw, float partialTicks, double xOff, double yOff, double zOff) {
-		GlStateManager.depthMask(false);
-		GlStateManager.disableTexture2D();
-		GlStateManager.disableLighting();
-		GlStateManager.disableCull();
-		GlStateManager.disableBlend();
-		AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox();
-		AxisAlignedBB axisalignedbb1 = new AxisAlignedBB(axisalignedbb.minX - entity.posX + x + xOff, axisalignedbb.minY - entity.posY + y + yOff, axisalignedbb.minZ - entity.posZ + z + zOff, axisalignedbb.maxX - entity.posX + x + xOff, axisalignedbb.maxY - entity.posY + y + yOff, axisalignedbb.maxZ - entity.posZ + z + zOff);
-		RenderGlobal.drawSelectionBoundingBox(axisalignedbb1, 1F, 1F, 1F, 1F);
-		GlStateManager.enableTexture2D();
-		GlStateManager.enableLighting();
-		GlStateManager.enableCull();
-		GlStateManager.disableBlend();
-		GlStateManager.depthMask(true);
-	}
-
 }
