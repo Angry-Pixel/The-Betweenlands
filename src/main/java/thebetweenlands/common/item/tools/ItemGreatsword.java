@@ -50,7 +50,9 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-		if(entityLiving instanceof EntityPlayer && !entityLiving.world.isRemote) {
+		if(entityLiving instanceof EntityPlayer) {
+			boolean enemiesInReach = false;
+			
 			EntityPlayer player = (EntityPlayer) entityLiving;
 
 			double aoeReach = this.getAoEReach(entityLiving, stack);
@@ -70,15 +72,25 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 
 							if(entityLiving.getLookVec().y * distXZ + entityLiving.posY + entityLiving.height / 2 > entity.getEntityBoundingBox().minY && entityLiving.getLookVec().y * distXZ + entityLiving.posY + entityLiving.height / 2 < entity.getEntityBoundingBox().maxY) {
 								if(player.world.rayTraceBlocks(player.getPositionVector().add(0, player.getEyeHeight(), 0), entity.getPositionVector().add(0, entity.height / 2, 0), false, true, false) == null) {
-									player.attackTargetEntityWithCurrentItem(entity);
+									if(!entityLiving.world.isRemote) {
+										player.attackTargetEntityWithCurrentItem(entity);
+									}
+									
+									enemiesInReach = true;
 								}
 							}
 						}
 					}
 				}
 			}
-		} else if(entityLiving instanceof EntityPlayer && entityLiving.world.isRemote && (!entityLiving.isSwingInProgress || entityLiving.swingProgressInt >= entityLiving.getArmSwingAnimationEnd() / 2 || entityLiving.swingProgressInt < 0)) {
-			this.playSwingSound((EntityPlayer) entityLiving, stack);
+			
+			if(entityLiving.world.isRemote && (!entityLiving.isSwingInProgress || entityLiving.swingProgressInt >= entityLiving.getArmSwingAnimationEnd() / 2 || entityLiving.swingProgressInt < 0)) {
+				this.playSwingSound(player, stack);
+				
+				if(enemiesInReach) {
+					this.playSliceSound(player, stack);
+				}
+			}
 		}
 
 		return super.onEntitySwing(entityLiving, stack);
@@ -88,6 +100,10 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 		player.world.playSound(player, player.posX, player.posY, player.posZ, SoundRegistry.LONG_SWING, SoundCategory.PLAYERS, 1.2F, 0.925F * ((0.65F + this.getSwingSpeedMultiplier(player, stack)) * 0.66F + 0.33F) + player.world.rand.nextFloat() * 0.15F);
 	}
 
+	protected void playSliceSound(EntityPlayer player, ItemStack stack) {
+		player.world.playSound(player, player.posX, player.posY, player.posZ, SoundRegistry.LONG_SLICE, SoundCategory.PLAYERS, 1.2F, 0.925F * ((0.65F + this.getSwingSpeedMultiplier(player, stack)) * 0.66F + 0.33F) + player.world.rand.nextFloat() * 0.15F);
+	}
+	
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		target.knockBack(attacker, 0.8F, (double) MathHelper.sin(attacker.rotationYaw * 0.017453292F), (double)(-MathHelper.cos(attacker.rotationYaw * 0.017453292F)));
