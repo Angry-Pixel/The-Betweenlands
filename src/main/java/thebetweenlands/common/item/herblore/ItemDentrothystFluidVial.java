@@ -160,4 +160,12 @@ public class ItemDentrothystFluidVial extends UniversalBucket implements ItemReg
 	public ItemStack getEmpty(ItemStack stack) {
 		return stack.getMetadata() == 1 ? new ItemStack(ItemRegistry.DENTROTHYST_VIAL, stack.getCount(), 2) : new ItemStack(ItemRegistry.DENTROTHYST_VIAL, stack.getCount(), 0);
 	}
+	
+	public ItemStack withFluid(int meta, Fluid fluid) {
+        final FluidStack fs = new FluidStack(fluid, getCapacity());
+        final ItemStack stack = new ItemStack(this, 1, meta);
+        final IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+        fluidHandler.fill(fs, true);
+        return fluidHandler.getContainer();
+    }
 }

@@ -6,6 +6,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -42,7 +43,12 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	public BlockPos getStructurePos() {
 		return this.structurePos;
 	}
-
+	
+	public boolean hasGroundFog(BlockPos pos) {
+		//TODO Check if pos is in maze bounding box
+		return this.dataManager.get(GROUND_FOG_STRENGTH) > 0.01F;
+	}
+	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
@@ -98,5 +104,9 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 		}
 
 		return false;
+	}
+	
+	public int getFloor(BlockPos pos) {
+		return (this.structurePos.getY() - 1 - pos.getY()) / 6;
 	}
 }

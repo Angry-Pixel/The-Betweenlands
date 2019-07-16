@@ -1070,6 +1070,8 @@ chat.dungeon_door_runes.locked=Dungeon door code set!
 chat.grappling_hook.max_length=Maximum rope length reached!
 chat.grappling_hook.disconnected=The grappling hook was ripped!
 
+chat.not_enough_fog_for_vial=There is not enough fog on this floor to fill the vial
+
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
 
