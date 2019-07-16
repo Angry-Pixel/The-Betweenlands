@@ -6,9 +6,10 @@ import java.util.List;
 
 import com.google.common.collect.Multimap;
 
-import net.minecraft.block.SoundType;
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -16,10 +17,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class ItemGreataxe extends ItemGreatsword {
@@ -38,41 +39,55 @@ public class ItemGreataxe extends ItemGreatsword {
 	}
 
 	@Override
-	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
-		if(entityLiving instanceof EntityPlayerMP && !entityLiving.world.isRemote) {
-			EntityPlayerMP player = (EntityPlayerMP) entityLiving;
+	public void onUpdate(ItemStack stack, World world, Entity holder, int slot, boolean isHeldItem) {
+		super.onUpdate(stack, world, holder, slot, isHeldItem);
 
-			if(player.getCooledAttackStrength(0) > 0.85F) {
-				double breakReach = this.getBlockBreakReach(entityLiving, stack);
+		if(holder instanceof EntityPlayerMP && !holder.world.isRemote) {
+			EntityPlayerMP player = (EntityPlayerMP) holder;
+
+			if(player.getHeldItemMainhand() == stack && this.isLongSwingInProgress(stack) && this.getSwingStartCooledAttackStrength(stack) > 0.85F) {
+				int ticksElapsed = player.ticksExisted - this.getSwingStartTicks(stack);
+				float longSwingProgressStart = ticksElapsed / this.getLongSwingDuration(player, stack);
+				float longSwingProgressEnd = (ticksElapsed + 1) / this.getLongSwingDuration(player, stack);
+
+				double breakReach = this.getBlockBreakReach(player, stack);
 				int blockReach = MathHelper.ceil(breakReach);
 
-				double breakHalfAngle = this.getBlockBreakHalfAngle(entityLiving, stack);
+				double breakHalfAngle = this.getBlockBreakHalfAngle(player, stack);
 
-				List<SoundType> blockSoundTypes = new ArrayList<>();
+				double minAngle = -breakHalfAngle + breakHalfAngle * 2 * longSwingProgressStart;
+				double maxAngle = -breakHalfAngle + breakHalfAngle * 2 * longSwingProgressEnd;
+
+				List<BlockPos> targetBlocks = new ArrayList<>();
+
+				Vec3d lookVec = player.getLookVec();
+				Vec3d rightVec = lookVec.crossProduct(new Vec3d(0, 1, 0)).normalize();
 
 				for(int xo = -blockReach; xo <= blockReach; xo++) {
 					for(int yo = -blockReach; yo <= blockReach; yo++) {
 						for(int zo = -blockReach; zo <= blockReach; zo++) {
-							BlockPos pos = new BlockPos(entityLiving.posX + xo, entityLiving.posY + entityLiving.height * 0.5D + yo, entityLiving.posZ + zo);
+							BlockPos pos = new BlockPos(player.posX + xo, player.posY + player.height * 0.5D + yo, player.posZ + zo);
 							Vec3d center = new Vec3d(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
 
-							double dist = center.distanceTo(entityLiving.getPositionEyes(1));
+							double dist = center.distanceTo(player.getPositionEyes(1));
 
 							if(dist < breakReach) {
-								double angle = Math.toDegrees(Math.acos(center.subtract(entityLiving.getPositionEyes(1)).normalize().dotProduct(entityLiving.getLookVec())));
+								Vec3d dir = center.subtract(player.getPositionEyes(1)).normalize();
 
-								if(angle < breakHalfAngle) {
-									double distXZ = Math.sqrt((center.x - entityLiving.posX)*(center.x - entityLiving.posX) + (center.z - entityLiving.posZ)*(center.z - entityLiving.posZ));
+								double py = lookVec.dotProduct(dir);
+								double px = rightVec.dotProduct(dir);
 
-									if(entityLiving.getLookVec().y * distXZ + entityLiving.posY + entityLiving.height / 2 + 0.25D > pos.getY() - 0.25D && entityLiving.getLookVec().y * distXZ + entityLiving.posY + entityLiving.height / 2 + 0.25D < pos.getY() + 1.25D) {
-										IBlockState state = entityLiving.world.getBlockState(pos);
+								double angle = Math.toDegrees(-Math.atan2(px, py));
 
-										if((state.getBlock().isWood(entityLiving.world, pos) || state.getMaterial() == Material.WOOD) && state.getBlockHardness(entityLiving.world, pos) <= 2.25F &&
-												state.getPlayerRelativeBlockHardness(player, entityLiving.world, pos) > 0.01F) {
+								if(angle >= minAngle && angle < maxAngle) {
+									double distXZ = Math.sqrt((center.x - player.posX)*(center.x - player.posX) + (center.z - player.posZ)*(center.z - player.posZ));
 
-											if(player.interactionManager.tryHarvestBlock(pos)) {
-												blockSoundTypes.add(state.getBlock().getSoundType(state, player.world, pos, player));
-											}
+									if(player.getLookVec().y * distXZ + player.posY + player.height / 2 + 0.25D > pos.getY() - 0.25D && player.getLookVec().y * distXZ + player.posY + player.height / 2 + 0.25D < pos.getY() + 1.25D) {
+										IBlockState state = player.world.getBlockState(pos);
+
+										if((state.getBlock().isWood(player.world, pos) || state.getMaterial() == Material.WOOD) && state.getBlockHardness(player.world, pos) <= 2.25F &&
+												state.getPlayerRelativeBlockHardness(player, player.world, pos) > 0.01F) {
+											targetBlocks.add(pos);
 										}
 									}
 								}
@@ -81,22 +96,22 @@ public class ItemGreataxe extends ItemGreatsword {
 					}
 				}
 
-				if(!blockSoundTypes.isEmpty()) {
-					Collections.shuffle(blockSoundTypes, player.world.rand);
+				if(!targetBlocks.isEmpty()) {
+					Collections.shuffle(targetBlocks, player.world.rand);
 
-					int playedSounds = 0;
-					for(SoundType blockSoundType : blockSoundTypes) {
-						player.world.playSound(null, player.posX, player.posY, player.posZ, blockSoundType.getBreakSound(), SoundCategory.BLOCKS, (blockSoundType.getVolume() + 1.0F) / 1.3F, blockSoundType.getPitch() * 0.8F + player.world.rand.nextFloat() * 0.2F - 0.1F);
+					int playedEffects = 0;
+					for(BlockPos pos : targetBlocks) {
+						IBlockState state = player.world.getBlockState(pos);
 
-						if(++playedSounds >= 3) {
-							break;
+						if(player.interactionManager.tryHarvestBlock(pos)) {
+							if(++playedEffects <= 3) {
+								player.world.playEvent(null, 2001, pos, Block.getStateId(state));
+							}
 						}
 					}
 				}
 			}
 		}
-
-		return super.onEntitySwing(entityLiving, stack);
 	}
 
 	@Override

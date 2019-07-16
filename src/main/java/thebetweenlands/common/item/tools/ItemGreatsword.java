@@ -6,6 +6,7 @@ import com.google.common.collect.Multimap;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -13,11 +14,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagByte;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagFloat;
+import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -31,6 +38,10 @@ import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
+	protected static final String NBT_SWING_START_COOLDOWN = "swingStartCooldownState";
+	protected static final String NBT_SWING_START_TICKS = "swingStartTicks";
+	protected static final String NBT_LONG_SWING_STATE = "longSwingState";
+
 	public ItemGreatsword(ToolMaterial mat) {
 		super(mat);
 		setCreativeTab(BLCreativeTabs.GEARS);
@@ -52,8 +63,14 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
 		if(entityLiving instanceof EntityPlayer) {
 			boolean enemiesInReach = false;
-			
+
 			EntityPlayer player = (EntityPlayer) entityLiving;
+
+			if(!player.world.isRemote && !entityLiving.isSwingInProgress) {
+				stack.setTagInfo(NBT_SWING_START_COOLDOWN, new NBTTagFloat(player.getCooledAttackStrength(0)));
+				stack.setTagInfo(NBT_SWING_START_TICKS, new NBTTagInt(player.ticksExisted));
+				stack.setTagInfo(NBT_LONG_SWING_STATE, new NBTTagByte((byte) 1));
+			}
 
 			double aoeReach = this.getAoEReach(entityLiving, stack);
 			double aoeHalfAngle = this.getAoEHalfAngle(entityLiving, stack);
@@ -75,7 +92,7 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 									if(!entityLiving.world.isRemote) {
 										player.attackTargetEntityWithCurrentItem(entity);
 									}
-									
+
 									enemiesInReach = true;
 								}
 							}
@@ -83,10 +100,10 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 					}
 				}
 			}
-			
+
 			if(entityLiving.world.isRemote && (!entityLiving.isSwingInProgress || entityLiving.swingProgressInt >= entityLiving.getArmSwingAnimationEnd() / 2 || entityLiving.swingProgressInt < 0)) {
 				this.playSwingSound(player, stack);
-				
+
 				if(enemiesInReach) {
 					this.playSliceSound(player, stack);
 				}
@@ -96,6 +113,53 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 		return super.onEntitySwing(entityLiving, stack);
 	}
 
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity holder, int slot, boolean isHeldItem) {
+		super.onUpdate(stack, world, holder, slot, isHeldItem);
+
+		if(!world.isRemote) {
+			boolean swingInProgress = this.isLongSwingInProgress(stack);
+			boolean newSwingInProgress = false;
+
+			if(holder instanceof EntityLivingBase && ((EntityLivingBase) holder).getHeldItemMainhand() == stack) {
+				int ticksElapsed = holder.ticksExisted - this.getSwingStartTicks(stack);
+				newSwingInProgress = ticksElapsed >= 0 && ticksElapsed < this.getLongSwingDuration((EntityLivingBase) holder, stack);
+			}
+
+			if(swingInProgress != newSwingInProgress) {
+				stack.setTagInfo(NBT_LONG_SWING_STATE, new NBTTagByte(newSwingInProgress ? (byte) 1 : (byte) 0));
+			}
+		}
+	}
+
+	protected float getSwingStartCooledAttackStrength(ItemStack stack) {
+		NBTTagCompound tag = stack.getTagCompound();
+		if(tag != null && tag.hasKey(NBT_SWING_START_COOLDOWN, Constants.NBT.TAG_FLOAT)) {
+			return tag.getFloat(NBT_SWING_START_COOLDOWN);
+		}
+		return 0.0f;
+	}
+
+	protected int getSwingStartTicks(ItemStack stack) {
+		NBTTagCompound tag = stack.getTagCompound();
+		if(tag != null && tag.hasKey(NBT_SWING_START_TICKS, Constants.NBT.TAG_INT)) {
+			return tag.getInteger(NBT_SWING_START_TICKS);
+		}
+		return 0;
+	}
+
+	protected boolean isLongSwingInProgress(ItemStack stack) {
+		NBTTagCompound tag = stack.getTagCompound();
+		if(tag != null && tag.hasKey(NBT_LONG_SWING_STATE, Constants.NBT.TAG_BYTE)) {
+			return tag.getBoolean(NBT_LONG_SWING_STATE);
+		}
+		return false;
+	}
+
+	protected float getLongSwingDuration(EntityLivingBase entity, ItemStack stack) {
+		return entity.getArmSwingAnimationEnd() / 3.0f / this.getSwingSpeedMultiplier(entity, stack);
+	}
+
 	protected void playSwingSound(EntityPlayer player, ItemStack stack) {
 		player.world.playSound(player, player.posX, player.posY, player.posZ, SoundRegistry.LONG_SWING, SoundCategory.PLAYERS, 1.2F, 0.925F * ((0.65F + this.getSwingSpeedMultiplier(player, stack)) * 0.66F + 0.33F) + player.world.rand.nextFloat() * 0.15F);
 	}
@@ -103,7 +167,7 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 	protected void playSliceSound(EntityPlayer player, ItemStack stack) {
 		player.world.playSound(player, player.posX, player.posY, player.posZ, SoundRegistry.LONG_SLICE, SoundCategory.PLAYERS, 1.2F, 0.925F * ((0.65F + this.getSwingSpeedMultiplier(player, stack)) * 0.66F + 0.33F) + player.world.rand.nextFloat() * 0.15F);
 	}
-	
+
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		target.knockBack(attacker, 0.8F, (double) MathHelper.sin(attacker.rotationYaw * 0.017453292F), (double)(-MathHelper.cos(attacker.rotationYaw * 0.017453292F)));
