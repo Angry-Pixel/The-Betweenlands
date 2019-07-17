@@ -18,9 +18,11 @@ public class RenderCenser extends TileEntitySpecialRenderer<TileEntityCenser> {
 		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			ShaderHelper.INSTANCE.require();
 
+			float strength = te.getFogStrength(partialTicks);
+
 			float fogBrightness = 0.85F;
-			float inScattering = 0.025F;
-			float extinction = 2.5F;
+			float inScattering = 0.025F * strength;
+			float extinction = 2.5F + 5.0F * (1 - strength);
 
 			AxisAlignedBB fogArea = te.getFogRenderArea();
 

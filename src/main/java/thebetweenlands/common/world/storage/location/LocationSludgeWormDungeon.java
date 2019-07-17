@@ -16,6 +16,7 @@ import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.client.render.shader.postprocessing.GroundFog.GroundFogVolume;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
+import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 
 public class LocationSludgeWormDungeon extends LocationGuarded {
 	protected static final DataParameter<Float> GROUND_FOG_STRENGTH = GenericDataManager.createKey(LocationSludgeWormDungeon.class, DataSerializers.FLOAT);
@@ -25,6 +26,7 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	public LocationSludgeWormDungeon(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		super(worldStorage, id, region, "sludge_worm_dungeon", EnumLocationType.DUNGEON);
 		this.dataManager.register(GROUND_FOG_STRENGTH, 1.0F);
+		this.setAmbience(new LocationAmbience(EnumLocationAmbience.SLUDGE_WORM_DUNGEON));
 	}
 
 	/**

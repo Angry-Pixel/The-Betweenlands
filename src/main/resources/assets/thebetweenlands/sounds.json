@@ -44,6 +44,14 @@
       }
     ]
   },
+  "ambient_sludge_worm_dungeon": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/sludge_worm_dungeon_ambience",
+        "stream": true
+      }
+    ]
+  },
   "ambient_water": {
     "sounds": [
       {

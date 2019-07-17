@@ -4,7 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class LocationAmbience {
 	public static enum EnumLocationAmbience {
-		NONE("none"), WIGHT_TOWER("wightTower"), OTHER("other");
+		NONE("none"), WIGHT_TOWER("wightTower"), SLUDGE_WORM_DUNGEON("sludgeWormDungeon"), OTHER("other");
 
 		public static EnumLocationAmbience[] TYPES = EnumLocationAmbience.values();
 
