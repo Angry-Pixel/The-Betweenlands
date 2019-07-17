@@ -25,6 +25,7 @@ import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.common.inventory.container.ContainerBLFurnace;
+import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
@@ -35,11 +36,11 @@ import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
+import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
-import thebetweenlands.common.tile.TileEntityWisp;
 
 public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRUID_ALTAR = 1;
@@ -55,7 +56,8 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_LURKER_POUCH = 11;
 	public static final int GUI_ITEM_RENAMING = 13;
 	public static final int GUI_LURKER_POUCH_KEYBIND = 14;
-
+	public static final int GUI_CENSER = 15;
+	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
@@ -125,6 +127,11 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_ITEM_RENAMING:
 			return new ContainerItemNaming();
 
+		case GUI_CENSER:
+			if (tile instanceof TileEntityCenser) {
+				return new ContainerCenser(player.inventory, (TileEntityCenser) tile);
+			}
+			break;
 		}
 		return null;
 	}

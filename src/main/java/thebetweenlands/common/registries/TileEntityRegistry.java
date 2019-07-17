@@ -12,6 +12,7 @@ import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityBeamOrigin;
 import thebetweenlands.common.tile.TileEntityBeamRelay;
+import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDecayPitControl;
@@ -103,6 +104,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityGroundItem.class, "ground_item");
 		registerTileEntity(TileEntityDecayPitControl.class, "decay_pit_control");
 		registerTileEntity(TileEntityDecayPitHangingChain.class, "decay_pit_hanging_chain");
+		registerTileEntity(TileEntityCenser.class, "censer");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

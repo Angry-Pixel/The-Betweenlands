@@ -81,7 +81,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 					if (bucketFluid != null) {
 						IItemHandler playerInventory = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 						if (playerInventory != null) {
-							FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainerAndStow(heldItem, tile, playerInventory, Integer.MAX_VALUE, player);
+							FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainerAndStow(heldItem, tile, playerInventory, Integer.MAX_VALUE, player, true);
 
 							if (fluidActionResult.isSuccess()) {
 								player.setHeldItem(hand, fluidActionResult.getResult());

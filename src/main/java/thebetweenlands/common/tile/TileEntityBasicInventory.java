@@ -17,6 +17,9 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
 import javax.annotation.Nonnull;
 
 public class TileEntityBasicInventory extends TileEntity implements ISidedInventory {
@@ -39,6 +42,12 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 				}
 			}
 		};
+		this.name = name;
+	}
+	
+	public TileEntityBasicInventory(String name, NonNullList<ItemStack> inventory, BiFunction<TileEntityBasicInventory, NonNullList<ItemStack>, ItemStackHandler> handler) {
+		this.inventoryHandler = handler.apply(this, inventory);
+		this.inventory = inventory;
 		this.name = name;
 	}
 

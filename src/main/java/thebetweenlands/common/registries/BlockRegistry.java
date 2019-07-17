@@ -42,6 +42,7 @@ import thebetweenlands.common.block.container.BlockAnimator;
 import thebetweenlands.common.block.container.BlockAspectVial;
 import thebetweenlands.common.block.container.BlockBLDualFurnace;
 import thebetweenlands.common.block.container.BlockBLFurnace;
+import thebetweenlands.common.block.container.BlockCenser;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
@@ -807,6 +808,7 @@ public class BlockRegistry {
     public static final Block INFUSER = new BlockInfuser();
     public static final Block ASPECT_VIAL_BLOCK = new BlockAspectVial();
     public static final Block MORTAR = new BlockMortar();
+    public static final Block CENSER = new BlockCenser();
     public static final Block ANIMATOR = new BlockAnimator();
     public static final Block ALEMBIC = new BlockAlembic();
     public static final Block MOSS_BED = new BlockMossBed();
