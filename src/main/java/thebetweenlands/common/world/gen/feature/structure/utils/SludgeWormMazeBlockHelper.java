@@ -10,6 +10,7 @@ import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -39,7 +40,9 @@ import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar.EnumWormPillarType;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.tile.TileEntityGroundItem;
 import thebetweenlands.common.tile.TileEntityLootUrn;
 
 public class SludgeWormMazeBlockHelper {
@@ -228,6 +231,7 @@ public class SludgeWormMazeBlockHelper {
     public IBlockState BRAZIER_BOTTOM = BlockRegistry.MUD_TOWER_BRAZIER.getDefaultState().withProperty(BlockBrazier.HALF, EnumBrazierHalf.LOWER);
     public IBlockState COMPACTED_MUD_MIRAGE = BlockRegistry.COMPACTED_MUD_MIRAGE.getDefaultState();
     public IBlockState COMPACTED_MUD_SLAB = BlockRegistry.COMPACTED_MUD_SLAB.getDefaultState();
+    public IBlockState GROUND_ITEM = BlockRegistry.GROUND_ITEM.getDefaultState();
 
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
@@ -664,6 +668,14 @@ public class SludgeWormMazeBlockHelper {
 		if (lootUrn != null) {
 			// TODO Make proper shared loot tables
 			lootUrn.setLootTable(LootTableRegistry.DUNGEON_POT_LOOT, rand.nextLong());
+			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+		}
+	}
+
+	public void setGreatSword(World world, Random rand, BlockPos pos) {
+		TileEntityGroundItem groundItem = (TileEntityGroundItem) world.getTileEntity(pos);
+		if (groundItem != null) {
+			groundItem.setStack(new ItemStack(ItemRegistry.ANCIENT_GREATSWORD));
 			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 		}
 	}

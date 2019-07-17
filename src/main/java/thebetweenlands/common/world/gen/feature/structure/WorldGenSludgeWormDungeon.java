@@ -52,11 +52,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.start("Full_Mudgeon");
 
 		timer.start("Maze");
-	//	makeMaze(world, rand, pos);
+		makeMaze(world, rand, pos);
 		timer.finish("Maze");
 
 		timer.start("Tower");
-	//	generateTower(world, rand, pos.down().add(12, 0, 12));
+		generateTower(world, rand, pos.down().add(12, 0, 12));
 		timer.finish("Tower");
 
 		//locations blah, blah, blah...
@@ -77,10 +77,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.finish("Crypt");
 		
 		timer.start("Pit");
-	//	generateDecayPit(world, rand, pos.down(44).add(14, 0, 14));
+		generateDecayPit(world, rand, pos.down(44).add(14, 0, 14));
 		timer.finish("Pit");
 		
-	//	generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
+		generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
 
 		timer.finish("Full_Mudgeon");
 		return true;
@@ -176,8 +176,14 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(31, -33, 31), EnumFacing.NORTH, rand);
 
 		microBuild.buildCryptCrawlerTunnelsConnect(world, pos.add(0, -33, 0), EnumFacing.SOUTH, rand);
+
+		for (int y = -33; y < -23; y++)
+			addGroundPlants(world, pos.add(1, y, 1), rand, 32, 0, 32, false);
+		for (int y = -26; y < -18; y++)
+			addHangingPlants(world, pos.add(1, y, 1), rand, 32, 0, 32);
+
 	}
-	
+
 	public void addGroundPlants(World world, BlockPos pos, Random rand, int x, int y, int z, boolean addMudNoise) {
 		for (int horizontalX = 0; horizontalX < x; horizontalX++)
 			for (int horizontalZ = 0; horizontalZ < z; horizontalZ++) {
