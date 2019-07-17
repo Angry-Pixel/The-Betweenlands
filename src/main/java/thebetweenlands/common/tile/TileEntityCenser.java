@@ -9,6 +9,8 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -239,5 +241,21 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
 			return (T) this;
 		return super.getCapability(capability, facing);
+	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return this.getFogRenderArea();
+	}
+	
+	public float getFogStrength(float partialTicks) {
+		return 1.0F;
+	}
+	
+	public AxisAlignedBB getFogRenderArea() {
+		float width = 13.0F;
+		float height = 12.0F;
+		BlockPos pos = this.getPos();
+		return new AxisAlignedBB(pos.getX() + 0.5D - width / 2, pos.getY() - 0.1D, pos.getZ() + 0.5D - width / 2, pos.getX() + 0.5D + width / 2, pos.getY() - 0.1D + height, pos.getZ() + 0.5D + width / 2);
 	}
 }

@@ -49,6 +49,7 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
+import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.util.AdvancedStateMap;
 
@@ -262,6 +263,8 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
         if (!world.isRemote) {
+        	state = this.updateFoggedState(world, pos, state);
+        	
             TileEntityDugSoil te = getTile(world, pos);
 
             if (te != null) {
@@ -349,6 +352,36 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
         }
     }
 
+    /**
+	 * Updates the fogged state, i.e. whether a nearby censer is producing fog or not. Pretty much
+	 * like farmland and water.
+	 * @param world
+	 * @param pos
+	 * @param state
+	 * @return
+	 */
+	protected IBlockState updateFoggedState(World world, BlockPos pos, IBlockState state) {
+		boolean shouldBeFogged = false;
+
+		for(BlockPos.MutableBlockPos checkPos : BlockPos.getAllInBoxMutable(pos.add(-6, 0, -6), pos.add(6, 1, 6))) {
+			if(world.isBlockLoaded(checkPos)) {
+				TileEntity te = world.getTileEntity(checkPos);
+
+				if(te instanceof TileEntityCenser && ((TileEntityCenser) te).getFogStrength(1) >= 0.1F) {
+					shouldBeFogged = true;
+					break;
+				}
+			}
+		}
+
+		if(shouldBeFogged != state.getValue(FOGGED)) {
+			state = state.withProperty(FOGGED, shouldBeFogged);
+			world.setBlockState(pos, state, 3);
+		}
+
+		return state;
+	}
+    
     /**
      * Returns the decay chance
      *
