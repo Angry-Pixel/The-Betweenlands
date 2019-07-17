@@ -52,11 +52,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.start("Full_Mudgeon");
 
 		timer.start("Maze");
-		makeMaze(world, rand, pos);
+	//	makeMaze(world, rand, pos);
 		timer.finish("Maze");
 
 		timer.start("Tower");
-		generateTower(world, rand, pos.down().add(12, 0, 12));
+	//	generateTower(world, rand, pos.down().add(12, 0, 12));
 		timer.finish("Tower");
 
 		//locations blah, blah, blah...
@@ -77,10 +77,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.finish("Crypt");
 		
 		timer.start("Pit");
-		generateDecayPit(world, rand, pos.down(44).add(14, 0, 14));
+	//	generateDecayPit(world, rand, pos.down(44).add(14, 0, 14));
 		timer.finish("Pit");
 		
-		generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
+	//	generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
 
 		timer.finish("Full_Mudgeon");
 		return true;
@@ -144,96 +144,67 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			}
 
 		microBuild.buildCryptCrawlerWalkways(world, pos, EnumFacing.SOUTH, rand);
+		
+		// Plants S
+		addHangingPlants(world, pos.add(1, 0, 1), rand, 32, 0, 3);
+		addHangingPlants(world, pos.add(1, 0, 1), rand, 32, -6, 3);
+		addHangingPlants(world, pos.add(1, 0, 1), rand, 32, -12, 3);
 
-		//S
-		for (int x = 1; x < 32; x++)
-			for (int z = 1; z < 3; z++) {
-				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, 0, z)))
-					world.setBlockState(pos.add(x, -1, z), getRandomHangingPlant(rand), 2);
-				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -6, z)))
-					world.setBlockState(pos.add(x, -7, z), getRandomHangingPlant(rand), 2);
-				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -12, z)))
-					world.setBlockState(pos.add(x, -13, z), getRandomHangingPlant(rand), 2);
+		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -5, 3, true);
+		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -11, 3, true);
+		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -17, 3, true);
 
-				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -5, z)))
-					world.setBlockState(pos.add(x, -5, z), blockHelper.COMPACTED_MUD_SLAB, 2);
-				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -11, z)))
-					world.setBlockState(pos.add(x, -11, z), blockHelper.COMPACTED_MUD_SLAB, 2);
-				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
-					world.setBlockState(pos.add(x, -17, z), blockHelper.COMPACTED_MUD_SLAB, 2);
+		//Plants E
+		addHangingPlants(world, pos.add(1, 0, 3), rand, 3, 0, 32);
+		addHangingPlants(world, pos.add(1, 0, 3), rand, 3, -6, 32);
+		addHangingPlants(world, pos.add(1, 0, 3), rand, 32, -12, 3);
 
-					if(isPlantableAbove(world, pos.add(x, -5, z)))
-						if (plantingChance(rand))
-							world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
-						else
-							if(rand.nextBoolean())
-								world.setBlockState(pos.add(x, -4, z), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -5, 32, true);
+		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -11, 32, true);
+		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -17, 32, true);
 
-					if (isPlantableAbove(world, pos.add(x, -11, z)))
-						if (plantingChance(rand))
-							world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
-						else
-							if(rand.nextBoolean())
-								world.setBlockState(pos.add(x, -10, z), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
 
-					if (isPlantableAbove(world, pos.add(x, -17, z)))
-						if (plantingChance(rand))
-							world.setBlockState(pos.add(x, -16, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
-						else
-							if(rand.nextBoolean())
-								world.setBlockState(pos.add(x, -16, z), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
-			}
-		// E
-		for (int x = 1; x < 3; x++)
-			for (int z = 3; z < 32; z++) {
-				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, 0, z)))
-					world.setBlockState(pos.add(x, -1, z), getRandomHangingPlant(rand), 2);
-				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -6, z)))
-					world.setBlockState(pos.add(x, -7, z), getRandomHangingPlant(rand), 2);
-				if (plantingChance(rand) && isPlantableBelow(world, pos.add(x, -12, z)))
-					world.setBlockState(pos.add(x, -13, z), getRandomHangingPlant(rand), 2);
+		addSphericalChamber(world, rand, pos.add(4, -29, 27)); // entrance
+		addSphericalChamber(world, rand, pos.add(4, -29, 4));
 
-				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -5, z)))
-					world.setBlockState(pos.add(x, -5, z), blockHelper.COMPACTED_MUD_SLAB, 2);
-				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -11, z)))
-					world.setBlockState(pos.add(x, -11, z), blockHelper.COMPACTED_MUD_SLAB, 2);
-				if (plantingChance(rand) && isPlantableAbove(world, pos.add(x, -17, z)))
-					world.setBlockState(pos.add(x, -17, z), blockHelper.COMPACTED_MUD_SLAB, 2);
+		addSphericalChamber(world, rand, pos.add(27, -29, 4));
+		addSphericalChamber(world, rand, pos.add(27, -29, 27));
 
-				if (isPlantableAbove(world, pos.add(x, -5, z)))
-						if (plantingChance(rand))
-							world.setBlockState(pos.add(x, -4, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
-						else
-							if(rand.nextBoolean())
-								world.setBlockState(pos.add(x, -4, z), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+		microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(0, -33, 0), EnumFacing.SOUTH, rand);// zeros
+		microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(0, -33, 31), EnumFacing.EAST, rand);
+		microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(31, -33, 0), EnumFacing.WEST, rand);
+		microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(31, -33, 31), EnumFacing.NORTH, rand);
 
-				if (isPlantableAbove(world, pos.add(x, -11, z)))
+		microBuild.buildCryptCrawlerTunnelsConnect(world, pos.add(0, -33, 0), EnumFacing.SOUTH, rand);
+	}
+	
+	public void addGroundPlants(World world, BlockPos pos, Random rand, int x, int y, int z, boolean addMudNoise) {
+		for (int horizontalX = 0; horizontalX < x; horizontalX++)
+			for (int horizontalZ = 0; horizontalZ < z; horizontalZ++) {
+				if (addMudNoise)
+					if (plantingChance(rand) && isPlantableAbove(world, pos.add(horizontalX, y, horizontalZ)))
+						world.setBlockState(pos.add(horizontalX, y, horizontalZ), blockHelper.COMPACTED_MUD_SLAB, 2);
+				if (isPlantableAbove(world, pos.add(horizontalX, y, horizontalZ)))
 					if (plantingChance(rand))
-						world.setBlockState(pos.add(x, -10, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
-					else
-						if(rand.nextBoolean())
-							world.setBlockState(pos.add(x, -10, z), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
-
-				if (isPlantableAbove(world, pos.add(x, -17, z)))
-					if (plantingChance(rand))
-						world.setBlockState(pos.add(x, -16, z), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
-					else
-						if(rand.nextBoolean())
-							world.setBlockState(pos.add(x, -16, z), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
+						world.setBlockState(pos.add(horizontalX, y + 1, horizontalZ), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
+					else if (rand.nextBoolean())
+						world.setBlockState(pos.add(horizontalX, y + 1, horizontalZ), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
 			}
+	}
 
-		 	addSphericalChamber (world, rand, pos.add(4, -29, 27)); //entrance
-		 	addSphericalChamber (world, rand, pos.add(4, -29, 4)); 
-		 	
-			addSphericalChamber (world, rand, pos.add(27, -29, 4)); 
-			addSphericalChamber (world, rand, pos.add(27, -29, 27));
-			
-			microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(0, -33, 0), EnumFacing.SOUTH, rand);//zeros
-			microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(0, -33, 31), EnumFacing.EAST, rand);
-			microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(31, -33, 0), EnumFacing.WEST, rand);
-			microBuild.buildCryptCrawlerBottomTunnels(world, pos.add(31, -33, 31), EnumFacing.NORTH, rand);
-			
-			microBuild.buildCryptCrawlerTunnelsConnect(world, pos.add(0, -33, 0), EnumFacing.SOUTH, rand);
+	public void addHangingPlants(World world, BlockPos pos, Random rand, int x, int y, int z) {
+		for (int horizontalX = 0; horizontalX < x; horizontalX++)
+			for (int horizontalZ = 0; horizontalZ < z; horizontalZ++) {
+				if (plantingChance(rand) && isPlantableBelow(world, pos.add(horizontalX, y, horizontalZ))) {
+					IBlockState plant = getRandomHangingPlant(rand);
+					world.setBlockState(pos.add(horizontalX, y - 1, horizontalZ), plant, 2);
+					if (plantingChance(rand) && world.isAirBlock(pos.add(horizontalX, y - 2, horizontalZ))) {
+						world.setBlockState(pos.add(horizontalX, y - 2, horizontalZ), plant, 2);
+						if (plantingChance(rand) && world.isAirBlock(pos.add(horizontalX, y - 3, horizontalZ)))
+							world.setBlockState(pos.add(horizontalX, y - 3, horizontalZ), plant, 2);
+					}
+				}
+			}
 	}
 
 	public void addSphericalChamber(World world, Random rand, BlockPos pos) {
