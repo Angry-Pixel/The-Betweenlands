@@ -586,6 +586,7 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 4, 2, 25, blockHelper.AIR, 1, 2, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 8, 2, 22, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 7, 3, 22, blockHelper.COMPACTED_MUD_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 2, 20, blockHelper.DUNGEON_WALL_CANDLE_SOUTH, 1, 1, 1, facing);
 	}
 
 	@SuppressWarnings("incomplete-switch")
