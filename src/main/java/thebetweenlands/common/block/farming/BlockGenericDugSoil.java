@@ -55,7 +55,8 @@ import thebetweenlands.util.AdvancedStateMap;
 public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEntityProvider, ISubtypeItemBlockModelDefinition, IStateMappedBlock, ICustomItemBlock, IConnectedTextureBlock {
     public static final PropertyBool COMPOSTED = PropertyBool.create("composted");
     public static final PropertyBool DECAYED = PropertyBool.create("decayed");
-
+    public static final PropertyBool FOGGED = PropertyBool.create("fogged");
+    
     private final boolean purified;
 
     public BlockGenericDugSoil(Material material) {
@@ -68,7 +69,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
         this.setSoundType(SoundType.GROUND);
         this.setHardness(0.5F);
         this.setHarvestLevel("shovel", 0);
-        this.setDefaultState(this.getBlockState().getBaseState().withProperty(COMPOSTED, false).withProperty(DECAYED, false));
+        this.setDefaultState(this.getBlockState().getBaseState().withProperty(COMPOSTED, false).withProperty(DECAYED, false).withProperty(FOGGED, false));
         this.purified = purified;
     }
 
@@ -144,27 +145,35 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return this.getConnectedTextureBlockStateContainer(new ExtendedBlockState(this, new IProperty[]{COMPOSTED, DECAYED}, new IUnlistedProperty[0]));
+        return this.getConnectedTextureBlockStateContainer(new ExtendedBlockState(this, new IProperty[]{COMPOSTED, DECAYED, FOGGED}, new IUnlistedProperty[0]));
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return !this.purified && state.getValue(DECAYED) ? 2 : state.getValue(COMPOSTED) ? 1 : 0;
+    	int meta = 0;
+    	if(!this.purified && state.getValue(DECAYED)) {
+    		meta |= 0b010;
+    	} else if(state.getValue(COMPOSTED)) {
+    		meta |= 0b001;
+    	}
+    	if(state.getValue(FOGGED)) {
+    		meta |= 0b100;
+    	}
+        return meta;
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        switch (meta) {
-            default:
-            case 0:
-                return this.getDefaultState();
-            case 1:
-                return this.getDefaultState().withProperty(COMPOSTED, true);
-            case 2:
-                if (this.purified)
-                    return this.getDefaultState();
-                return this.getDefaultState().withProperty(DECAYED, true);
-        }
+    	IBlockState state = this.getDefaultState();
+    	if(!this.purified && (meta & 0b010) != 0) {
+    		state = state.withProperty(DECAYED, true);
+    	} else if((meta & 0b001) != 0) {
+    		state = state.withProperty(COMPOSTED, true);
+    	}
+    	if((meta & 0b100) != 0) {
+    		state = state.withProperty(FOGGED, true);
+    	}
+    	return state;
     }
 
     @Override
