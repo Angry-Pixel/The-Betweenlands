@@ -386,7 +386,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 
 		@Override
 		public boolean matchesInput(FluidStack stack) {
-			return stack.getFluid() == FluidRegistry.FOG;
+			return stack.getFluid() == FluidRegistry.FOG || stack.getFluid() == FluidRegistry.SWAMP_WATER;
 		}
 
 		@Override
