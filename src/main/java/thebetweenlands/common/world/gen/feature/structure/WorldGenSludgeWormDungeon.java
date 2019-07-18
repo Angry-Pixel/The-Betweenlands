@@ -107,17 +107,17 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		//S
 		for (int x = 1; x < 32; x++)
 			for (int z = 1; z < 3; z++) {
-				world.setBlockState(pos.add(x, 0, z), blockHelper.MUD, 2);
-				world.setBlockState(pos.add(x, -6, z), blockHelper.MUD, 2);
-				world.setBlockState(pos.add(x, -12, z), blockHelper.MUD, 2);
-				world.setBlockState(pos.add(x, -18, z), blockHelper.MUD, 2);
+				world.setBlockState(pos.add(x, 0, z), blockHelper.COMPACTED_MUD, 2);
+				world.setBlockState(pos.add(x, -6, z), blockHelper.COMPACTED_MUD, 2);
+				world.setBlockState(pos.add(x, -12, z), blockHelper.COMPACTED_MUD, 2);
+				world.setBlockState(pos.add(x, -18, z), blockHelper.COMPACTED_MUD, 2);
 
 				if (rand.nextBoolean())
-					world.setBlockState(pos.add(x, -1, z), blockHelper.MUD, 2);
+					world.setBlockState(pos.add(x, -1, z), blockHelper.COMPACTED_MUD, 2);
 				if (rand.nextBoolean())
-					world.setBlockState(pos.add(x, -7, z), blockHelper.MUD, 2);
+					world.setBlockState(pos.add(x, -7, z), blockHelper.COMPACTED_MUD, 2);
 				if (rand.nextBoolean())
-					world.setBlockState(pos.add(x, -13, z), blockHelper.MUD, 2);
+					world.setBlockState(pos.add(x, -13, z), blockHelper.COMPACTED_MUD, 2);
 
 				world.setBlockState(pos.add(x, -5, z), blockHelper.COMPACTED_MUD, 2);
 				world.setBlockState(pos.add(x, -11, z), blockHelper.COMPACTED_MUD, 2);
@@ -126,17 +126,17 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		//E
 		for (int x = 1; x < 3; x++)
 			for (int z = 3; z < 32; z++) {
-				world.setBlockState(pos.add(x, 0, z), blockHelper.MUD, 2);
-				world.setBlockState(pos.add(x, -6, z), blockHelper.MUD, 2);
-				world.setBlockState(pos.add(x, -12, z), blockHelper.MUD, 2);
-				world.setBlockState(pos.add(x, -18, z), blockHelper.MUD, 2);
+				world.setBlockState(pos.add(x, 0, z), blockHelper.COMPACTED_MUD, 2);
+				world.setBlockState(pos.add(x, -6, z), blockHelper.COMPACTED_MUD, 2);
+				world.setBlockState(pos.add(x, -12, z), blockHelper.COMPACTED_MUD, 2);
+				world.setBlockState(pos.add(x, -18, z), blockHelper.COMPACTED_MUD, 2);
 
 				if (rand.nextBoolean())
-					world.setBlockState(pos.add(x, -1, z), blockHelper.MUD, 2);
+					world.setBlockState(pos.add(x, -1, z), blockHelper.COMPACTED_MUD, 2);
 				if (rand.nextBoolean())
-					world.setBlockState(pos.add(x, -7, z), blockHelper.MUD, 2);
+					world.setBlockState(pos.add(x, -7, z), blockHelper.COMPACTED_MUD, 2);
 				if (rand.nextBoolean())
-					world.setBlockState(pos.add(x, -13, z), blockHelper.MUD, 2);
+					world.setBlockState(pos.add(x, -13, z), blockHelper.COMPACTED_MUD, 2);
 
 				world.setBlockState(pos.add(x, -5, z), blockHelper.COMPACTED_MUD, 2);
 				world.setBlockState(pos.add(x, -11, z), blockHelper.COMPACTED_MUD, 2);
@@ -452,6 +452,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				if (level != 7)
 					addCeilingSlabs(world, pos.add(0, yy + 4, 0), 7, 7, rand, level);
 				stairsAir(world, rand, pos.add(0, yy, 0), level);
+				addHangingPlants(world, pos.add(1, yy + 5, 1), rand, 28, 0, 28);
 			}
 		//	System.out.println("Y height is: " + (pos.getY() + yy) + " level: " + level);
 		}
@@ -955,7 +956,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		for (int i = 0; i <= h * 4; i++)
 			for (int j = 0; j <= w * 4; j++)
 				//if (world.isAirBlock(pos.add(j, 0, i)))
-					world.setBlockState(pos.add(j, 0, i), blockHelper.MUD, 2);
+					world.setBlockState(pos.add(j, 0, i), blockHelper.COMPACTED_MUD, 2);
 	}
 
 	// Places chests

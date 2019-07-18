@@ -700,7 +700,7 @@ public class SludgeWormMazeBlockHelper {
 
 	private void initStuctureBlockMap() {
 		if (STRUCTURE_BLOCKS.isEmpty()) {
-			STRUCTURE_BLOCKS.put(MUD, true);
+			STRUCTURE_BLOCKS.put(COMPACTED_MUD, true);
 			STRUCTURE_BLOCKS.put(ROTTEN_BARK, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICK_SLAB, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICK_SLAB_DECAY_1, true);

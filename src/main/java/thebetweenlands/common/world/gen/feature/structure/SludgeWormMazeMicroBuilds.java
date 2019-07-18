@@ -230,9 +230,9 @@ public class SludgeWormMazeMicroBuilds {
 		}
 		world.setBlockState(pos.add(7, 0, 1), blockHelper.MUD_TILES_WATER, 2);
 		world.setBlockState(pos.add(3, 0, 2), blockHelper.MUD_TILES_WATER, 2);
-		world.setBlockState(pos.add(3, 0, 1), blockHelper.MUD, 2);
-		world.setBlockState(pos.add(2, 0, 1), blockHelper.MUD, 2);
-		world.setBlockState(pos.add(2, 0, 2), blockHelper.MUD, 2);
+		world.setBlockState(pos.add(3, 0, 1), blockHelper.COMPACTED_MUD, 2);
+		world.setBlockState(pos.add(2, 0, 1), blockHelper.COMPACTED_MUD, 2);
+		world.setBlockState(pos.add(2, 0, 2), blockHelper.COMPACTED_MUD, 2);
 		world.setBlockState(pos.add(3, 1, 1), blockHelper.SLUDGECREEP, 2);
 		world.setBlockState(pos.add(2, 1, 1), blockHelper.getRandomMushroom(rand), 2);
 		world.setBlockState(pos.add(2, 1, 2), blockHelper.SLUDGECREEP, 2);
@@ -261,23 +261,23 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 1, -18, 27, blockHelper.AIR, 1, 2, 4, facing);
 
 		//South walls
-		rotatedCubeVolume(world, rand, pos, 14, -4, 1, blockHelper.MUD, 1, 4, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 31, -4, 1, blockHelper.MUD, 1, 4, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 6, -10, 1, blockHelper.MUD, 1, 4, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 22, -10, 1, blockHelper.MUD, 1, 4, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 31, -10, 1, blockHelper.MUD, 1, 4, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 3, -16, 1, blockHelper.MUD, 1, 4, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 31, -16, 1, blockHelper.MUD, 1, 4, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 0, -18, 0, blockHelper.MUD, 32, 19, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 0, -18, 1, blockHelper.MUD, 1, 19, 31, facing);
+		rotatedCubeVolume(world, rand, pos, 14, -4, 1, blockHelper.COMPACTED_MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 31, -4, 1, blockHelper.COMPACTED_MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 6, -10, 1, blockHelper.COMPACTED_MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 22, -10, 1, blockHelper.COMPACTED_MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 31, -10, 1, blockHelper.COMPACTED_MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 3, -16, 1, blockHelper.COMPACTED_MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 31, -16, 1, blockHelper.COMPACTED_MUD, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 0, -18, 0, blockHelper.COMPACTED_MUD, 32, 19, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, -18, 1, blockHelper.COMPACTED_MUD, 1, 19, 31, facing);
 
 		//East walls
-		rotatedCubeVolume(world, rand, pos, 1, -4, 16, blockHelper.MUD, 2, 4, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, -4, 31, blockHelper.MUD, 2, 4, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, -10, 8, blockHelper.MUD, 2, 4, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, -10, 24, blockHelper.MUD, 2, 4, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, -10, 31, blockHelper.MUD, 2, 4, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, -16, 31, blockHelper.MUD, 2, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -4, 16, blockHelper.COMPACTED_MUD, 2, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -4, 31, blockHelper.COMPACTED_MUD, 2, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -10, 8, blockHelper.COMPACTED_MUD, 2, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -10, 24, blockHelper.COMPACTED_MUD, 2, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -10, 31, blockHelper.COMPACTED_MUD, 2, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, -16, 31, blockHelper.COMPACTED_MUD, 2, 4, 1, facing);
 
 		//extra roots
 		rotatedCubeVolume(world, rand, pos, 1, -4, 1, blockHelper.ROOT, 1, 4, 1, facing);
@@ -584,11 +584,52 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 2, 1, 25, blockHelper.AIR, 3, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 3, 1, 26, blockHelper.AIR, 2, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 4, 2, 25, blockHelper.AIR, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 2, 16, blockHelper.AIR, 1, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 1, 17, blockHelper.AIR, 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 1, 12, blockHelper.AIR, 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 2, 20, blockHelper.AIR, 1, 1, 4, facing);
+		rotatedCubeVolume(world, rand, pos, 7, 1, 21, blockHelper.AIR, 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 8, 1, 24, blockHelper.AIR, 2, 2, 1, facing); // second set is armour gap
+
+		rotatedCubeVolume(world, rand, pos, 1, 5, 11, blockHelper.AIR, 3, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 6, 13, blockHelper.AIR, 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 5, 14, blockHelper.AIR, 2, 2, 4, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 6, 18, blockHelper.AIR, 2, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 7, 15, blockHelper.AIR, 2, 1, 7, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 8, 17, blockHelper.AIR, 2, 1, 8, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 9, 19, blockHelper.AIR, 2, 1, 6, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 10, 21, blockHelper.AIR, 2, 1, 4, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 8, 22, blockHelper.AIR, 1, 2, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 10, 23, blockHelper.AIR, 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 11, 23, blockHelper.AIR, 3, 1, 2, facing);
+
+		rotatedCubeVolume(world, rand, pos, 2, 9, 25, blockHelper.AIR, 2, 4, 5, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 10, 25, blockHelper.AIR, 2, 3, 5, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 8, 25, blockHelper.AIR, 2, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 8, 26, blockHelper.AIR, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 9, 25, blockHelper.AIR, 1, 1, 4, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 9, 25, blockHelper.AIR, 1, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 5, 10, 27, blockHelper.AIR, 1, 4, 4, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 10, 28, blockHelper.AIR, 1, 3, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 13, 29, blockHelper.AIR, 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 8, 26, blockHelper.AIR, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 9, 26, blockHelper.AIR, 1, 3, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 10, 29, blockHelper.AIR, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 12, 27, blockHelper.AIR, 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 13, 26, blockHelper.AIR, 4, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 13, 29, blockHelper.AIR, 3, 1, 2, facing);
+
+		rotatedCubeVolume(world, rand, pos, 3, 11, 30, blockHelper.AIR, 2, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 14, 29, blockHelper.AIR, 2, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 12, 30, blockHelper.AIR, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 13, 30, blockHelper.AIR, 1, 1, 1, facing);
+
 		rotatedCubeVolume(world, rand, pos, 8, 2, 22, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 7, 3, 22, blockHelper.COMPACTED_MUD_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 4, 2, 20, blockHelper.DUNGEON_WALL_CANDLE_SOUTH, 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 6, 1, 15, blockHelper.GROUND_ITEM, 1, 1, 1, facing);
 		blockHelper.setGreatSword(world, rand, pos.add(6, 1, 15));
+		
 
 	}
 
