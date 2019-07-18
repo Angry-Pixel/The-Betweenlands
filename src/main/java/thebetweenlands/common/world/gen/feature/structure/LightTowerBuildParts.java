@@ -3,7 +3,6 @@ package thebetweenlands.common.world.gen.feature.structure;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -48,7 +47,7 @@ public class LightTowerBuildParts {
 		rotatedCubeVolume(world, rand, pos, -4, 15 + level, 5, blockHelper.getStairsForLevel(rand, 7, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 2, facing);
 		rotatedCubeVolume(world, rand, pos, -4, 15 + level, 8, blockHelper.getStairsForLevel(rand, 7, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 3, facing);
 		
-		rotatedCubeVolume(world, rand, pos, -6, 12 + level, 7, Blocks.AIR.getDefaultState(), 3, 3, 4, facing);
+		rotatedCubeVolume(world, rand, pos, -6, 12 + level, 7, blockHelper.AIR, 3, 3, 4, facing);
 		rotatedCubeVolume(world, rand, pos, -7, 11 + level, 3, blockHelper.MUD_TILES_DECAY, 5, 1, 7, facing);
 		rotatedCubeVolume(world, rand, pos, -4, 11 + level, 10, blockHelper.MUD_TILES_DECAY, 2, 1, 2, facing);
 
@@ -61,6 +60,14 @@ public class LightTowerBuildParts {
 		rotatedCubeVolume(world, rand, pos, -6, 14 + level, 7, blockHelper.getRandomSupportBeam(facing.getOpposite().rotateY(), true, rand), 1, 1, 1, facing);
 
 		rotatedCubeVolume(world, rand, pos, -5, 15 + level, 8, blockHelper.MUD_BRICKS_SPAWNER_HOLE.withProperty(BlockMudBricksSpawnerHole.FACING, facing.DOWN), 1, 1, 1, facing);
+		
+		rotatedCubeVolume(world, rand, pos, -4, 12 + level, 5, blockHelper.AIR, 1, 3, 2, facing);
+		rotatedCubeVolume(world, rand, pos, -5, 12 + level, 5, blockHelper.AIR, 1, 4, 2, facing);
+		rotatedCubeVolume(world, rand, pos, -6, 13 + level, 5, blockHelper.AIR, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -6, 12 + level, 6, blockHelper.AIR, 1, 4, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -5, 12 + level, 4, blockHelper.AIR, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -7, 14 + level, 6, blockHelper.AIR, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -4, 12 + level, 11, blockHelper.AIR, 1, 1, 1, facing);
 	}
 
 	public void buildsMazeGate(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
@@ -166,7 +173,7 @@ public class LightTowerBuildParts {
 		rotatedCubeVolume(world, rand, pos, 5, 5 + level, -4, blockHelper.getStairsForLevel(rand, 0, facing.rotateY(), BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 5, 6 + level, -4, blockHelper.getStairsForLevel(rand, 0, facing.rotateY(), BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 3, 1 + level, -4, blockHelper.MUD_BRICK_WALL, 3, 3, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 3, 0 + level, -3, Blocks.AIR.getDefaultState(), 3, 1, 1, facing);  //Not sure if this is needed
+		rotatedCubeVolume(world, rand, pos, 3, 0 + level, -3, blockHelper.AIR, 3, 1, 1, facing);  //Not sure if this is needed
 
 		world.setBlockState(pos.add(3, 2 + level, 4), blockHelper.DUNGEON_DOOR_WEST, 2);
 		TileEntityDungeonDoorRunes tileLock = (TileEntityDungeonDoorRunes) world.getTileEntity(pos.add(3, 2 + level, 4));
@@ -482,9 +489,9 @@ public class LightTowerBuildParts {
 	}
 
 	public void addTowerDoorways(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
-		rotatedCubeVolume(world, rand, pos, 0, 1 + level, 9, Blocks.AIR.getDefaultState(), 1, 3, 1, facing);
-		rotatedCubeVolume(world, rand, pos, -1, 1 + level, 9, Blocks.AIR.getDefaultState(), 1, 2, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, 1 + level, 9, Blocks.AIR.getDefaultState(), 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 0, 1 + level, 9, blockHelper.AIR, 1, 3, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 1 + level, 9, blockHelper.AIR, 1, 2, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1 + level, 9, blockHelper.AIR, 1, 2, 1, facing);
 		
 		if(level == 0) {
 			rotatedCubeVolume(world, rand, pos, 1, 3 + level, 9, blockHelper.getStairsForTowerLevel(rand, level, facing.getOpposite().rotateY(), BlockStairsBetweenlands.EnumHalf.TOP, true), 1, 1, 1, facing);
@@ -513,7 +520,7 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 7, 1 + level, 4, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
 
 			rotatedCubeVolume(world, rand, pos, 15, 6 + level, -1, blockHelper.MUD_TOWER_BEAM_RELAY, 1, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 14, 6 + level, -1, Blocks.AIR.getDefaultState(), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 14, 6 + level, -1, blockHelper.AIR, 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 14, 7 + level, -1, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 15, 7 + level, -1, blockHelper.getRandomSupportBeam(facing.getOpposite().rotateY(), false, rand), 1, 1, 1, facing);
 
