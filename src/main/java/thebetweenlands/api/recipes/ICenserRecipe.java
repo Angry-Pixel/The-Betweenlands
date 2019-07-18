@@ -1,5 +1,7 @@
 package thebetweenlands.api.recipes;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.item.ItemStack;
@@ -7,6 +9,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface ICenserRecipe<Context> {
 	/**
@@ -82,8 +86,51 @@ public interface ICenserRecipe<Context> {
 	 * @param censer
 	 */
 	public void update(@Nullable Context context, int amountLeft, TileEntity censer);
-	
+
+	/**
+	 * Returns how long it takes in ticks until some of the input is consumed.
+	 * @param context
+	 * @param amountLeft
+	 * @param censer
+	 * @return
+	 */
 	public int getConsumptionDuration(@Nullable Context context, int amountLeft, TileEntity censer);
-	
+
+	/**
+	 * Returns how many units of the input are consumed.
+	 * @param context
+	 * @param amountLeft
+	 * @param censer
+	 * @return
+	 */
 	public int getConsumptionAmount(@Nullable Context context, int amountLeft, TileEntity censer);
+
+	/**
+	 * Returns the localized text that describes the effect
+	 * @param context
+	 * @param amountLeft
+	 * @param censer
+	 * @return
+	 */
+	@SideOnly(Side.CLIENT)
+	public void getLocalizedEffectText(@Nullable Context context, int amountLeft, TileEntity censer, List<String> tooltip);
+	
+	/**
+	 * Returns the effect color.
+	 * Used e.g. to color the censer's progress bar.
+	 * @param context
+	 * @param amountLeft
+	 * @param censer
+	 * @return
+	 */
+	public int getEffectColor(@Nullable Context context, int amountLeft, TileEntity censer);
+	
+	/**
+	 * Whether this recipe/effect creates fog
+	 * @param context
+	 * @param amountLeft
+	 * @param censer
+	 * @return
+	 */
+	public boolean isCreatingFog(@Nullable Context context, int amountLeft, TileEntity censer);
 }
