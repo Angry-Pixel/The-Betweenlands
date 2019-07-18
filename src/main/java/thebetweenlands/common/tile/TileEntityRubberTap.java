@@ -12,6 +12,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.FluidTankPropertiesWrapper;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import thebetweenlands.common.block.misc.BlockRubberTap;
@@ -20,45 +21,14 @@ import thebetweenlands.common.registries.FluidRegistry;
 public class TileEntityRubberTap extends TileEntity implements IFluidHandler, ITickable {
 	private final FluidTank tank;
 
-	private final IFluidTankProperties[] properties = new IFluidTankProperties[] { 
-			new IFluidTankProperties() {
-				@Override
-				public FluidStack getContents() {
-					return TileEntityRubberTap.this.tank.getFluid();
-				}
-
-				@Override
-				public int getCapacity() {
-					return TileEntityRubberTap.this.tank.getCapacity();
-				}
-
-				@Override
-				public boolean canFill() {
-					return TileEntityRubberTap.this.tank.canFill();
-				}
-
-				@Override
-				public boolean canDrain() {
-					return TileEntityRubberTap.this.tank.canDrain();
-				}
-
-				@Override
-				public boolean canFillFluidType(FluidStack fluidStack) {
-					return TileEntityRubberTap.this.tank.canFillFluidType(fluidStack);
-				}
-
-				@Override
-				public boolean canDrainFluidType(FluidStack fluidStack) {
-					return TileEntityRubberTap.this.tank.canDrainFluidType(fluidStack);
-				}
-			}
-	};
+	private final IFluidTankProperties[] properties = new IFluidTankProperties[1];
 
 	private int fillProgress = 0;
 
 	public TileEntityRubberTap() {
 		this.tank = new FluidTank(FluidRegistry.RUBBER, 0, Fluid.BUCKET_VOLUME);
 		this.tank.setTileEntity(this);
+		this.properties[0] = new FluidTankPropertiesWrapper(this.tank);
 	}
 
 	@Override
