@@ -1,39 +1,65 @@
 package thebetweenlands.common.inventory.container;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.api.item.ICorrodible;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.inventory.slot.SlotRestriction;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.tile.TileEntityCenser;
 
 public class ContainerCenser extends Container {
 	public static final int SLOT_FUEL = 0;
 	public static final int SLOT_INPUT = 1;
 	public static final int SLOT_INTERNAL = 2;
-	
+
 	protected TileEntityCenser censer;
 
 	public ContainerCenser(InventoryPlayer inventory, TileEntityCenser tileentity) {
 		censer = tileentity;
 
-		addSlotToContainer(new SlotRestriction(tileentity, 0, 61, 54, EnumItemMisc.SULFUR.create(1), 64, this));
-		addSlotToContainer(new Slot(tileentity, 1, 61, 14));
-		addSlotToContainer(new Slot(tileentity, 2, 90, 14)); //TODO Remove slot
-		
+		int yOffset = 91;
+
+		addSlotToContainer(new SlotRestriction(tileentity, 0, 80, 48 + yOffset, EnumItemMisc.SULFUR.create(1), 64, this));
+		addSlotToContainer(new Slot(tileentity, 1, 44, 12 + yOffset));
+		addSlotToContainer(new Slot(tileentity, 2, 80, 12 + yOffset) {
+			@Override
+			@SideOnly(Side.CLIENT)
+			public boolean isEnabled() {
+				return false;
+			}
+
+			@Override
+			public boolean canTakeStack(EntityPlayer playerIn) {
+				return false;
+			}
+
+			@Override
+			public ItemStack decrStackSize(int amount) {
+				return ItemStack.EMPTY;
+			}
+
+			@Override
+			public boolean isItemValid(ItemStack stack) {
+				return false;
+			}
+
+			@Override
+			public void putStack(ItemStack stack) {
+			}
+		});
+
 		for (int i = 0; i < 3; ++i) {
 			for (int j = 0; j < 9; ++j) {
-				addSlotToContainer(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				addSlotToContainer(new Slot(inventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18 + yOffset));
 			}
 		}
 		for (int i = 0; i < 9; ++i) {
-			addSlotToContainer(new Slot(inventory, i, 8 + i * 18, 142));
+			addSlotToContainer(new Slot(inventory, i, 8 + i * 18, 142 + yOffset));
 		}
 	}
 
