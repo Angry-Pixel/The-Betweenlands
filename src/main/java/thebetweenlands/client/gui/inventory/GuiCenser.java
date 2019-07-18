@@ -63,6 +63,8 @@ public class GuiCenser extends GuiContainer {
 
 		ICenserRecipe<Object> currentRecipe = this.censer.getCurrentRecipe();
 
+		int fuelTicks = this.censer.getFuelTicks();
+		
 		if(currentRecipe != null) {
 			List<String> effect = new ArrayList<>();
 			currentRecipe.getLocalizedEffectText(this.censer.getCurrentRecipeContext(), this.censer.getCurrentRecipeInputAmount(), this.censer, effect);
@@ -74,7 +76,7 @@ public class GuiCenser extends GuiContainer {
 			}
 
 			int amount = this.censer.getCurrentRecipeInputAmount();
-			if(amount > 0) {
+			if(amount > 0 && fuelTicks > 0) {
 				int maxAmount = this.censer.getMaxCurrentRecipeInputAmount();
 				int effectColor = currentRecipe.getEffectColor(this.censer.getCurrentRecipeContext(), this.censer.getCurrentRecipeInputAmount(), this.censer);
 
@@ -115,7 +117,6 @@ public class GuiCenser extends GuiContainer {
 			}
 		}
 
-		int fuelTicks = this.censer.getFuelTicks();
 		if(fuelTicks > 0) {
 			int maxFuelTicks = this.censer.getMaxFuelTicks();
 
