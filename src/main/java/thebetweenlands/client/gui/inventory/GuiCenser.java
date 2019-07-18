@@ -165,6 +165,31 @@ public class GuiCenser extends GuiContainer {
 			if(this.isPointInRegion(internalSlot.xPos, internalSlot.yPos, 16, 16, mouseX, mouseY)) {
 				this.renderToolTipWithMore(internalStack, mouseX, mouseY, effectTooltip);
 			}
+		} else {
+			//Render internal slot cover
+
+			this.zLevel = 100.0F;
+			this.itemRender.zLevel = 100.0F;
+
+			GlStateManager.disableLighting();
+
+			GlStateManager.enableRescaleNormal();
+			GlStateManager.enableAlpha();
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.enableTexture2D();
+
+			this.mc.getTextureManager().bindTexture(CENSER_GUI_TEXTURE);
+			this.drawTexturedModalRect(this.guiLeft + internalSlot.xPos - 1, this.guiTop + internalSlot.yPos - 1, 176, 1, 18, 18);
+
+			GlStateManager.disableAlpha();
+			GlStateManager.disableRescaleNormal();
+			GlStateManager.enableLighting();
+
+			this.itemRender.zLevel = 0.0F;
+			this.zLevel = 0.0F;
 		}
 
 		FluidStack fluidStack = this.censer.getTankProperties()[0].getContents();
