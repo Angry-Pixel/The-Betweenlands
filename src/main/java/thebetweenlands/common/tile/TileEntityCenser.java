@@ -1,5 +1,9 @@
 package thebetweenlands.common.tile;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.ItemStack;
@@ -7,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
@@ -43,6 +48,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 	private float prevFogStrength = 0.0f;
 	private float fogStrength = 0.0f;
 
+	private int maxConsumptionTicks;
 	private int consumptionTicks;
 
 	private boolean isFluidRecipe;
@@ -50,6 +56,9 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 	private ICenserRecipe<Object> currentRecipe;
 
 	private boolean internalSlotChanged = false;
+
+	private int maxFuelTicks;
+	private int fuelTicks; 
 
 	public TileEntityCenser() {
 		super("container.censer", NonNullList.withSize(INV_SIZE, ItemStack.EMPTY), (te, inv) -> new ItemStackHandler(inv) {
@@ -94,7 +103,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 				return slot == ContainerCenser.SLOT_INTERNAL ? ItemStack.EMPTY : super.extractItem(slot, amount, simulate);
 			}
 		});
-		this.fluidTank = new FluidTank(null, Fluid.BUCKET_VOLUME * 4) {
+		this.fluidTank = new FluidTank(null, Fluid.BUCKET_VOLUME * 8) {
 			@Override
 			public boolean canFillFluidType(FluidStack fluid) {
 				return super.canFillFluidType(fluid) && TileEntityCenser.this.getEffect(fluid) != null;
@@ -110,6 +119,9 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		this.fluidTank.readFromNBT(nbt.getCompoundTag("fluidTank"));
 		this.remainingItemAmount = nbt.getInteger("remainingItemAmount");
 		this.consumptionTicks = nbt.getInteger("consumptionTicks");
+		this.maxConsumptionTicks = nbt.getInteger("maxConsumptionTicks");
+		this.fuelTicks = nbt.getInteger("fuelTicks");
+		this.maxFuelTicks = nbt.getInteger("maxFuelTicks");
 		this.readRecipeNbt(nbt);
 	}
 
@@ -148,6 +160,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 				}
 			} else {
 				this.consumptionTicks = -1;
+				this.maxConsumptionTicks = -1;
 			}
 		}
 	}
@@ -158,6 +171,9 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		nbt.setTag("fluidTank", this.fluidTank.writeToNBT(new NBTTagCompound()));
 		nbt.setInteger("remainingItemAmount", this.remainingItemAmount);
 		nbt.setInteger("consumptionTicks", this.consumptionTicks);
+		nbt.setInteger("maxConsumptionTicks", this.maxConsumptionTicks);
+		nbt.setInteger("fuelTicks", this.fuelTicks);
+		nbt.setInteger("maxFuelTicks", this.maxFuelTicks);
 		this.writeRecipeNbt(nbt);
 		return nbt;
 	}
@@ -193,6 +209,9 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		nbt.setTag("fluidTank", fluidTank.writeToNBT(new NBTTagCompound()));
 		nbt.setInteger("remainingItemAmount", this.remainingItemAmount);
 		nbt.setInteger("consumptionTicks", this.consumptionTicks);
+		nbt.setInteger("maxConsumptionTicks", this.maxConsumptionTicks);
+		nbt.setInteger("fuelTicks", this.fuelTicks);
+		nbt.setInteger("maxFuelTicks", this.maxFuelTicks);
 		this.writeRecipeNbt(nbt);
 		return nbt;
 	}
@@ -202,6 +221,9 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		this.fluidTank.readFromNBT(nbt.getCompoundTag("fluidTank"));
 		this.remainingItemAmount = nbt.getInteger("remainingItemAmount");
 		this.consumptionTicks = nbt.getInteger("consumptionTicks");
+		this.maxConsumptionTicks = nbt.getInteger("maxConsumptionTicks");
+		this.fuelTicks = nbt.getInteger("fuelTicks");
+		this.maxFuelTicks = nbt.getInteger("maxFuelTicks");
 		this.readRecipeNbt(nbt);
 	}
 
@@ -228,12 +250,28 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 				this.fluidTank.getFluid().amount = value;
 			}
 			break;
+		case 2:
+			this.consumptionTicks = value;
+			break;
+		case 3:
+			this.maxConsumptionTicks = value;
+			break;
+		case 4:
+			this.fuelTicks = value;
+			break;
+		case 5:
+			this.maxFuelTicks = value;
+			break;
 		}
 	}
 
 	public void sendGUIData(ContainerCenser censer, IContainerListener craft) {
 		craft.sendWindowProperty(censer, 0, this.remainingItemAmount);
 		craft.sendWindowProperty(censer, 1, this.fluidTank.getFluid() != null ? this.fluidTank.getFluid().amount : 0);
+		craft.sendWindowProperty(censer, 2, this.consumptionTicks);
+		craft.sendWindowProperty(censer, 3, this.maxConsumptionTicks);
+		craft.sendWindowProperty(censer, 4, this.fuelTicks);
+		craft.sendWindowProperty(censer, 5, this.maxFuelTicks);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -258,6 +296,13 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 			}
 		}
 
+		if(this.fuelTicks > 0) {
+			this.fuelTicks--;
+			this.markDirty();
+		} else {
+			this.fuelTicks = 0;
+		}
+
 		if(this.currentRecipe == null) {
 			if(!this.world.isRemote) {
 				FluidStack fluid = this.fluidTank.getFluid();
@@ -269,7 +314,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 						this.currentRecipe = (ICenserRecipe<Object>)recipe;
 						this.currentRecipeContext = recipe.createContext(fluid);
 						this.currentRecipe.onStart(this.currentRecipeContext);
-						this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+						this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
 						this.markDirty();
 						IBlockState stat = this.world.getBlockState(this.pos);
 						this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
@@ -281,7 +326,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 						this.currentRecipe = (ICenserRecipe<Object>)recipe;
 						this.currentRecipeContext = recipe.createContext(internalStack);
 						this.currentRecipe.onStart(this.currentRecipeContext);
-						this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+						this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
 						this.markDirty();
 						IBlockState stat = this.world.getBlockState(this.pos);
 						this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
@@ -289,30 +334,52 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 				}
 			}
 		} else {
+			if(!this.world.isRemote && this.fuelTicks <= 0 && this.isFilled()) {
+				ItemStack fuelStack = this.getStackInSlot(ContainerCenser.SLOT_FUEL);
+				if(!fuelStack.isEmpty() && TileEntityFurnace.isItemFuel(fuelStack)) {
+					this.maxFuelTicks = this.fuelTicks = TileEntityFurnace.getItemBurnTime(fuelStack) * 3;
+
+					fuelStack.shrink(1);
+					if(fuelStack.getCount() <= 0) {
+						this.setInventorySlotContents(ContainerCenser.SLOT_FUEL, ItemStack.EMPTY);
+					}
+
+					this.markDirty();
+				}
+			}
+
 			if(!this.canRecipeRun(this.isFluidRecipe, this.currentRecipe)) {
 				if(!this.world.isRemote) {
 					this.currentRecipe.onStop(this.currentRecipeContext);
 					this.currentRecipe = null;
 					this.currentRecipeContext = null;
-					this.consumptionTicks = -1;
+					this.maxConsumptionTicks = this.consumptionTicks = -1;
 					this.markDirty();
 					IBlockState stat = this.world.getBlockState(this.pos);
 					this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
 				}
 			} else {
-				this.currentRecipe.update(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+				if(this.fuelTicks > 0) {
+					this.currentRecipe.update(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
 
-				if(--this.consumptionTicks <= 0) {
-					int toRemove = this.currentRecipe.getConsumptionAmount(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
-					if(this.isFluidRecipe) {
-						this.fluidTank.drainInternal(toRemove, true);
+					if(!this.world.isRemote) {
+						if(--this.consumptionTicks <= 0) {
+							int toRemove = this.currentRecipe.getConsumptionAmount(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+							if(this.isFluidRecipe) {
+								this.fluidTank.drainInternal(toRemove, true);
+							} else {
+								this.remainingItemAmount = Math.max(0, this.remainingItemAmount - toRemove);
+								if(this.remainingItemAmount <= 0) {
+									this.setInventorySlotContents(ContainerCenser.SLOT_INTERNAL, ItemStack.EMPTY);
+								}
+							}
+							this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+						}
 					} else {
-						this.remainingItemAmount = Math.max(0, this.remainingItemAmount - toRemove);
-						if(this.remainingItemAmount <= 0) {
-							this.setInventorySlotContents(ContainerCenser.SLOT_INTERNAL, ItemStack.EMPTY);
+						if(this.consumptionTicks > 0) {
+							this.consumptionTicks--;
 						}
 					}
-					this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
 				}
 			}
 		}
@@ -328,13 +395,15 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 			}
 		}
 
+		boolean isCreatingFog = this.fuelTicks > 0 && this.currentRecipe != null && this.currentRecipe.isCreatingFog(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+
 		this.prevFogStrength = this.fogStrength;
-		if(this.isFilled() && this.fogStrength < 1.0F) {
+		if(isCreatingFog && this.fogStrength < 1.0F) {
 			this.fogStrength += 0.01F;
 			if(this.fogStrength > 1.0F) {
 				this.fogStrength = 1.0F;
 			}
-		} else if(!this.isFilled() && this.fogStrength > 0.0F) {
+		} else if(!isCreatingFog && this.fogStrength > 0.0F) {
 			this.fogStrength -= 0.01F;
 			if(this.fogStrength < 0.0F) {
 				this.fogStrength = 0.0F;
@@ -345,10 +414,6 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 	protected boolean canRecipeRun(boolean isFluidRecipe, ICenserRecipe<?> recipe) {
 		return !((isFluidRecipe && (this.fluidTank.getFluidAmount() <= 0 || !recipe.matchesInput(this.fluidTank.getFluid()))) ||
 				(!isFluidRecipe && (this.getStackInSlot(ContainerCenser.SLOT_INTERNAL).isEmpty() || this.remainingItemAmount <= 0 || !recipe.matchesInput(this.getStackInSlot(ContainerCenser.SLOT_INTERNAL)))));
-	}
-
-	protected int getCurrentRecipeInputAmount() {
-		return this.isFluidRecipe ? this.fluidTank.getFluidAmount() : this.remainingItemAmount;
 	}
 
 	private static class TestRecipeContext {
@@ -411,30 +476,45 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 
 		@Override
 		public void save(TestRecipeContext context, NBTTagCompound nbt) {
-			System.out.println("SAVE RECIPE: " + context);
+			System.out.println("SAVE RECIPE: " + context.ticks + " "  + context);
 			nbt.setInteger("ticks", context.ticks);
 		}
 
 		@Override
 		public void read(TestRecipeContext context, NBTTagCompound nbt) {
-			System.out.println("READ RECIPE: " + context);
+			System.out.println("READ RECIPE: " + context.ticks + " " + context);
 			context.ticks = nbt.getInteger("ticks");
 		}
 
 		@Override
 		public void update(TestRecipeContext context, int amountLeft, TileEntity censer) {
-			System.out.println("UPDATE RECIPE: " + context.ticks + " " + context);
+			//System.out.println("UPDATE RECIPE: " + context.ticks + " " + context);
 			context.ticks++;
 		}
 
 		@Override
 		public int getConsumptionDuration(TestRecipeContext context, int amountLeft, TileEntity censer) {
-			return 1;
+			return 3;
 		}
 
 		@Override
 		public int getConsumptionAmount(TestRecipeContext context, int amountLeft, TileEntity censer) {
-			return 1;
+			return 20;
+		}
+
+		@Override
+		public void getLocalizedEffectText(TestRecipeContext context, int amountLeft, TileEntity censer, List<String> tooltip) {
+			tooltip.add("Test effect text");
+		}
+
+		@Override
+		public int getEffectColor(TestRecipeContext context, int amountLeft, TileEntity censer) {
+			return 0xFF99CCFF;
+		}
+
+		@Override
+		public boolean isCreatingFog(TestRecipeContext context, int amountLeft, TileEntity censer) {
+			return context.fluid != null;
 		}
 	}
 
@@ -461,6 +541,32 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 
 	public boolean hasFuel() {
 		return !getStackInSlot(ContainerCenser.SLOT_FUEL).isEmpty() && EnumItemMisc.SULFUR.isItemOf(getStackInSlot(ContainerCenser.SLOT_FUEL)) && getStackInSlot(ContainerCenser.SLOT_FUEL).getCount() >= 1;
+	}
+
+	@Nullable
+	public ICenserRecipe<Object> getCurrentRecipe() {
+		return this.currentRecipe;
+	}
+
+	@Nullable
+	public Object getCurrentRecipeContext() {
+		return this.currentRecipeContext;
+	}
+
+	public int getCurrentRecipeInputAmount() {
+		return this.isFluidRecipe ? this.fluidTank.getFluidAmount() : this.remainingItemAmount;
+	}
+
+	public int getMaxCurrentRecipeInputAmount() {
+		return this.isFluidRecipe ? this.fluidTank.getCapacity() : 1000;
+	}
+
+	public int getMaxFuelTicks() {
+		return this.maxFuelTicks;
+	}
+
+	public int getFuelTicks() {
+		return this.fuelTicks;
 	}
 
 	@Override
