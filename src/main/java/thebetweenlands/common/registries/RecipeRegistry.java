@@ -49,6 +49,11 @@ import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
+import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
+import thebetweenlands.common.recipe.censer.CenserRecipeDungeonFog;
+import thebetweenlands.common.recipe.censer.CenserRecipePlantTonic;
+import thebetweenlands.common.recipe.censer.CenserRecipeSapBall;
+import thebetweenlands.common.recipe.censer.CenserRecipeStagnantWater;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.BookMergeRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
@@ -100,6 +105,7 @@ public class RecipeRegistry {
 		registerCompostRecipes();
 		registerDruidAltarRecipes();
 		registerAnimatorRecipes();
+		registerCenserRecipes();
 
 		ElixirRecipes.init();
 
@@ -525,5 +531,12 @@ public class RecipeRegistry {
 				return output;
 			}
 		});
+	}
+	
+	private static void registerCenserRecipes() {
+		AbstractCenserRecipe.addRecipe(new CenserRecipeDungeonFog());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeSapBall());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeStagnantWater());
+		AbstractCenserRecipe.addRecipe(new CenserRecipePlantTonic());
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -40,6 +41,7 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.block.IDungeonFogBlock;
 import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.BasicBlock;
@@ -49,7 +51,6 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
-import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.util.AdvancedStateMap;
 
@@ -365,9 +366,9 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 
 		for(BlockPos.MutableBlockPos checkPos : BlockPos.getAllInBoxMutable(pos.add(-6, 0, -6), pos.add(6, 1, 6))) {
 			if(world.isBlockLoaded(checkPos)) {
-				TileEntity te = world.getTileEntity(checkPos);
-
-				if(te instanceof TileEntityCenser && ((TileEntityCenser) te).getFogStrength(1) >= 0.1F) {
+				IBlockState offsetState = world.getBlockState(checkPos);
+				Block offsetBlock = offsetState.getBlock();
+				if(offsetBlock instanceof IDungeonFogBlock && ((IDungeonFogBlock) offsetBlock).isCreatingDungeonFog(world, checkPos, offsetState)) {
 					shouldBeFogged = true;
 					break;
 				}

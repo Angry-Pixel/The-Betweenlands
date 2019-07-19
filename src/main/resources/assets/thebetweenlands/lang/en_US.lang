@@ -960,6 +960,11 @@ tooltip.bl.elixir.nimblefeet.effect=Enhances muscle swiftness and nimbleness,\ni
 tooltip.bl.elixir.weakness.effect=Weakens the muscles, reducing one's\ndamage output when they attack.
 tooltip.bl.elixir.strength.effect=Increases raw physical strength, causing\none to deal more damage when they attack.
 
+tooltip.bl.censer.sap_ball=Gradually heals decay in\na large area
+tooltip.bl.censer.plant_tonic=Prevents crops from decaying\nin a small area
+tooltip.bl.censer.stagnant_water=Causes decay to be accelerated\nin a small area
+tooltip.bl.censer.dungeon_fog=Increases crop growth and\nallows sludge dungeon plants\nto grow in a small area
+
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
 chat.foodSickness.fine.1=Finally, something different to eat

@@ -28,6 +28,15 @@ public interface ICenserRecipe<Context> {
 	public boolean matchesInput(ItemStack stack);
 
 	/**
+	 * Called when an input item stack is consumed.
+	 * Returns the item stack that is left over.
+	 * Usually decreases the stack size by one or returns a
+	 * container item.
+	 * @param stack
+	 */
+	public ItemStack consumeInput(ItemStack stack);
+	
+	/**
 	 * Returns whether this recipes matches the fluid stack
 	 * @param stack
 	 * @return
@@ -68,24 +77,28 @@ public interface ICenserRecipe<Context> {
 	 * Called when the censer saves its data and context is not null
 	 * @param context
 	 * @param nbt
+	 * @param packet
 	 */
-	public void save(Context context, NBTTagCompound nbt);
+	public void save(Context context, NBTTagCompound nbt, boolean packet);
 
 	/**
 	 * Called when the censer reads its data and context is not null
 	 * @param context
 	 * @param nbt
+	 * @param packet
 	 */
-	public void read(Context context, NBTTagCompound nbt);
+	public void read(Context context, NBTTagCompound nbt, boolean packet);
 
 	/**
 	 * Called every tick while the recipe is running.
 	 * Create and apply effects here.
+	 * Can return a value > 0 to consume from the input.
 	 * @param context
 	 * @param amountLeft
 	 * @param censer
+	 * @return
 	 */
-	public void update(@Nullable Context context, int amountLeft, TileEntity censer);
+	public int update(@Nullable Context context, int amountLeft, TileEntity censer);
 
 	/**
 	 * Returns how long it takes in ticks until some of the input is consumed.
@@ -114,7 +127,7 @@ public interface ICenserRecipe<Context> {
 	 */
 	@SideOnly(Side.CLIENT)
 	public void getLocalizedEffectText(@Nullable Context context, int amountLeft, TileEntity censer, List<String> tooltip);
-	
+
 	/**
 	 * Returns the effect color.
 	 * Used e.g. to color the censer's progress bar.
@@ -124,13 +137,23 @@ public interface ICenserRecipe<Context> {
 	 * @return
 	 */
 	public int getEffectColor(@Nullable Context context, int amountLeft, TileEntity censer);
-	
+
 	/**
-	 * Whether this recipe/effect creates fog
+	 * Called when the censer is rendered with this recipe active
+	 * @param context
+	 * @param amountLeft
+	 * @param censer
+	 * @param partialTicks
+	 */
+	public void render(@Nullable Context context, int amountLeft, TileEntity censer, double x, double y, double z, float partialTicks);
+
+	/**
+	 * Whether this recipe/effect creates dungeon fog that accelerates
+	 * plant/crop growth and allows sludge worm dungeon plants to grow
 	 * @param context
 	 * @param amountLeft
 	 * @param censer
 	 * @return
 	 */
-	public boolean isCreatingFog(@Nullable Context context, int amountLeft, TileEntity censer);
+	public boolean isCreatingDungeonFog(@Nullable Context context, int amountLeft, TileEntity censer);
 }

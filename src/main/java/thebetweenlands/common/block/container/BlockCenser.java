@@ -27,6 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import thebetweenlands.api.block.IDungeonFogBlock;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
@@ -34,7 +35,7 @@ import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.tile.TileEntityCenser;
 
-public class BlockCenser extends BasicBlock implements ITileEntityProvider {
+public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDungeonFogBlock {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
 	public BlockCenser() {
@@ -160,5 +161,14 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING);
+	}
+
+	@Override
+	public boolean isCreatingDungeonFog(IBlockAccess world, BlockPos pos, IBlockState state) {
+		TileEntity te = world.getTileEntity(pos);
+		if(te instanceof TileEntityCenser) {
+			return ((TileEntityCenser) te).getDungeonFogStrength(1) >= 0.1F;
+		}
+		return false;
 	}
 }
