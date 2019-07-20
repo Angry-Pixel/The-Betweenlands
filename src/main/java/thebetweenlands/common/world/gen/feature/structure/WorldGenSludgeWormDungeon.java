@@ -282,6 +282,14 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		int level2 = 8;
 		int level3 = 16;
 
+		for (int yy = y + 1; y + 1 + height >= yy; yy++) {
+			for (int i = radiusMud * -1; i <= radiusMud; ++i) {
+				for (int j = radiusMud * -1; j <= radiusMud; ++j) {
+					world.setBlockToAir(new BlockPos(x + i, yy, z + j));
+				}
+			}
+		}
+
 		for (int i = radiusMud * -1; i <= radiusMud; ++i) {
 			for (int j = radiusMud * -1; j <= radiusMud; ++j) {
 				double dSq = i * i + j * j;
