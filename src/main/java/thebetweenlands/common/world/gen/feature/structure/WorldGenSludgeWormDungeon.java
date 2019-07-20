@@ -71,27 +71,27 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		location.setDirty(true);
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 		timer.finish("World_Locations");
-		
+
 		timer.start("Crypt");
 		generateCryptCrawlerDungeon(world, rand, pos.down(25).add(-3, 0, -3));
 		timer.finish("Crypt");
-		
+
 		timer.start("Pit");
 		generateDecayPit(world, rand, pos.down(44).add(14, 0, 14));
 		timer.finish("Pit");
-		
+
 		generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
 
 		timer.finish("Full_Mudgeon");
 		return true;
 	}
-	
+
 	private void generateCryptCrawlerDungeon(World world, Random rand, BlockPos pos) {
 	for (int x = 0; x < 32; x ++)
 			for (int z = 0; z < 3; z ++)
 				for (int y = -18; y < 0; y ++)
 				world.setBlockToAir(pos.add(x, y, z));
-		
+
 		for (int x = 0; x < 3; x ++)
 			for (int z = 3; z < 32; z ++)
 				for (int y = -18; y < 0; y ++)
@@ -144,7 +144,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			}
 
 		microBuild.buildCryptCrawlerWalkways(world, pos, EnumFacing.SOUTH, rand);
-		
+
 		// Plants S
 		addHangingPlants(world, pos.add(1, 0, 1), rand, 32, 0, 3);
 		addHangingPlants(world, pos.add(1, 0, 1), rand, 32, -6, 3);
@@ -153,6 +153,14 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -5, 3, true);
 		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -11, 3, true);
 		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -17, 3, true);
+
+		addWallPlants(world, pos.add(0, -3, 0), rand, 32, 2, 1, EnumFacing.SOUTH);
+		addWallPlants(world, pos.add(0, -9, 0), rand, 32, 2, 1, EnumFacing.SOUTH);
+		addWallPlants(world, pos.add(0, -15, 0), rand, 32, 2, 1, EnumFacing.SOUTH);
+
+		addWallPlants(world, pos.add(0, -3, 3), rand, 32, 2, 1, EnumFacing.NORTH);
+		addWallPlants(world, pos.add(0, -9, 3), rand, 32, 2, 1, EnumFacing.NORTH);
+		addWallPlants(world, pos.add(0, -15, 3), rand, 32 ,2, 1, EnumFacing.NORTH);
 
 		//Plants E
 		addHangingPlants(world, pos.add(1, 0, 3), rand, 3, 0, 32);
@@ -163,6 +171,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -11, 32, true);
 		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -17, 32, true);
 
+		addWallPlants(world, pos.add(0, -3, 0), rand, 1, 2, 32, EnumFacing.EAST);
+		addWallPlants(world, pos.add(0, -9, 0), rand, 1, 2, 32, EnumFacing.EAST);
+		addWallPlants(world, pos.add(0, -15, 0), rand, 1, 2, 32, EnumFacing.EAST);
+
+		addWallPlants(world, pos.add(3, -3, 3), rand, 1, 2, 32 ,EnumFacing.WEST);
+		addWallPlants(world, pos.add(3, -9, 3), rand, 1, 2, 32, EnumFacing.WEST);
+		addWallPlants(world, pos.add(3, -15, 3), rand, 1, 2, 32, EnumFacing.WEST);
 
 		addSphericalChamber(world, rand, pos.add(4, -29, 27)); // entrance
 		addSphericalChamber(world, rand, pos.add(4, -29, 4));
@@ -213,6 +228,14 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			}
 	}
 
+	public void addWallPlants(World world, BlockPos pos, Random rand, int x, int y, int z, EnumFacing facing) {
+		for (int horizontalX = 0; horizontalX < x; horizontalX++)
+			for (int horizontalZ = 0; horizontalZ < z; horizontalZ++)
+				for (int vertical = 0; vertical < y; vertical++)
+					if (plantingChance(rand) && isPlantableWall(world, pos.add(horizontalX, vertical, horizontalZ), facing))
+						world.setBlockState(pos.add(horizontalX, vertical, horizontalZ).offset(facing), blockHelper.MOSS.withProperty(BlockMoss.FACING, facing), 2);
+	}
+
 	public void addSphericalChamber(World world, Random rand, BlockPos pos) {
 		for (int xx = - 4; xx <= 4; xx++) {
 			for (int zz = - 4; zz <= 4; zz++) {
@@ -240,6 +263,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	public boolean isPlantableBelow(World world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
 		return SoilHelper.canSustainPlant(state) && world.isAirBlock(pos.down());
+	}
+
+	public boolean isPlantableWall(World world, BlockPos pos, EnumFacing facing) {
+		IBlockState state = world.getBlockState(pos);
+		return state.isFullBlock() && world.isAirBlock(pos.offset(facing));
 	}
 
 	public void generateTower(World world, Random rand, BlockPos pos) {
@@ -353,13 +381,14 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				}
 			}
 		}
+
 		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.SOUTH, rand, 0, 0);
 		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.EAST, rand, 0, 0);
 		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.NORTH, rand, 0, 0);
 		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.WEST, rand, 0, 0);
 		world.setBlockState(pos.down(14), BlockRegistry.DECAY_PIT_CONTROL.getDefaultState());
 		world.setBlockState(pos.up(1), BlockRegistry.DECAY_PIT_HANGING_CHAIN.getDefaultState());
-		
+
 		EntityDecayPitTarget target = new EntityDecayPitTarget(world);
 
 		EntityDecayPitChain chain5 = new EntityDecayPitChain(world);
@@ -392,7 +421,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		world.spawnEntity(chain6);
 		world.spawnEntity(chain7);
 		world.spawnEntity(chain8);
-		
+
 	}
 
 	public void generateDecayPitEntrance(World world, Random rand, BlockPos pos) {
@@ -660,7 +689,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			return true;
 		return false;
 	}
-	
+
 	private boolean isBlackListedForGenSpecial(BlockPos pos, BlockPos posIn, boolean crapCheck) {
 		if(posIn.getX() == pos.getX() && posIn.getZ() == pos.getZ() && crapCheck)
 			return true;
@@ -674,7 +703,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					return true;
 		return false;
 	}
-	
+
 	private boolean isBlackListedAreaForGenSpecial(BlockPos pos, BlockPos posIn, int radius, boolean crapCheck) {
 		for (int x = -radius; x <= radius; x++)
 			for (int z = -radius; z <= radius; z++)
