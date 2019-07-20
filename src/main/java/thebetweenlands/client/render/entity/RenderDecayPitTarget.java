@@ -8,7 +8,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelDecayPitPlug;
 import thebetweenlands.client.render.model.entity.ModelDecayPitTarget;
-import thebetweenlands.client.render.model.entity.ModelShieldCog;
+import thebetweenlands.client.render.model.entity.ModelDecayPitTargetShield;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityDecayPitTargetPart;
 import thebetweenlands.common.lib.ModInfo;
@@ -16,8 +16,8 @@ import thebetweenlands.common.lib.ModInfo;
 public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_plug.png");
 	private final ModelDecayPitPlug PLUG_MODEL = new ModelDecayPitPlug();
-	public static final ResourceLocation COG_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/barrishee.png");
-	private final ModelShieldCog COG_MODEL = new ModelShieldCog();
+	public static final ResourceLocation SHIELD_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_target_shield.png");
+	private final ModelDecayPitTargetShield SHIELD_MODEL = new ModelDecayPitTargetShield();
 	private final ModelDecayPitTarget TARGET_MODEL = new ModelDecayPitTarget();
 	public static final ResourceLocation TARGET_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_target.png");
 
@@ -59,11 +59,11 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 
 	private void renderCogShield(EntityDecayPitTargetPart entity, double x, double y, double z, float angle) {
 		GlStateManager.pushMatrix();
-		bindTexture(COG_TEXTURE);
+		bindTexture(SHIELD_TEXTURE);
 		GlStateManager.translate(x, y + 1.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);
 		GlStateManager.rotate(angle, 0F, 1F, 0F);
-		COG_MODEL.render(0.0625F);
+		SHIELD_MODEL.render(0.0625F);
 		GlStateManager.popMatrix();
 	}
 
