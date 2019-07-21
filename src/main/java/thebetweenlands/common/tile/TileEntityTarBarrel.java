@@ -6,6 +6,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -23,6 +25,11 @@ public class TileEntityTarBarrel extends TileEntity implements IFluidHandler {
 		this.fluidTank = new FluidTank(null, Fluid.BUCKET_VOLUME * 8);
 		this.fluidTank.setTileEntity(this);
 		this.properties[0] = new FluidTankPropertiesWrapper(this.fluidTank);
+	}
+	
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package thebetweenlands.common.block.container;
 
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -9,12 +12,16 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -29,10 +36,12 @@ import net.minecraftforge.items.IItemHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.item.misc.ItemTarBarrel;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.tile.TileEntityTarBarrel;
 
-public class BlockTarBarrel extends BasicBlock implements ITileEntityProvider {
+public class BlockTarBarrel extends BasicBlock implements ITileEntityProvider, ICustomItemBlock {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
 	public BlockTarBarrel() {
@@ -149,5 +158,33 @@ public class BlockTarBarrel extends BasicBlock implements ITileEntityProvider {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING);
+	}
+
+	@Override
+	public ItemBlock getItemBlock() {
+		return new ItemTarBarrel(this);
+	}
+
+	@Override
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+	}
+
+	@Override
+	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+		if(!worldIn.isRemote && !player.isCreative() && worldIn.getGameRules().getBoolean("doTileDrops")) {
+			TileEntity te = worldIn.getTileEntity(pos);
+
+			if(te instanceof TileEntityTarBarrel) {
+				Item item = Item.getItemFromBlock(worldIn.getBlockState(pos).getBlock());
+				if(item instanceof ItemTarBarrel) {
+					InventoryHelper.spawnItemStack(worldIn, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, ((ItemTarBarrel) item).fromBarrel((TileEntityTarBarrel) te));
+				}
+			}
+		}
 	}
 }
