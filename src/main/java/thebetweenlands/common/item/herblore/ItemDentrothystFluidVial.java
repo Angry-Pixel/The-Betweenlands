@@ -27,8 +27,8 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemDentrothystFluidVial extends UniversalBucket implements ItemRegistry.IMultipleItemModelDefinition {
-	private static final class FluidDentrothystVialFluidHandler extends FluidHandlerItemStackSimple {
-		public FluidDentrothystVialFluidHandler(final ItemStack container, final int capacity) {
+	private static final class DentrothystFluidVialFluidHandler extends FluidHandlerItemStackSimple {
+		public DentrothystFluidVialFluidHandler(final ItemStack container, final int capacity) {
 			super(container, capacity);
 		}
 
@@ -87,7 +87,7 @@ public class ItemDentrothystFluidVial extends UniversalBucket implements ItemReg
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
-		return new FluidDentrothystVialFluidHandler(stack, getCapacity());
+		return new DentrothystFluidVialFluidHandler(stack, getCapacity());
 	}
 
 	@Override
