@@ -118,6 +118,7 @@ import thebetweenlands.common.block.plant.BlockPlantUnderwater;
 import thebetweenlands.common.block.plant.BlockPoisonIvy;
 import thebetweenlands.common.block.plant.BlockSaplingBetweenlands;
 import thebetweenlands.common.block.plant.BlockSaplingSpiritTree;
+import thebetweenlands.common.block.plant.BlockSludgeDungeonPlant;
 import thebetweenlands.common.block.plant.BlockSundew;
 import thebetweenlands.common.block.plant.BlockSwampKelp;
 import thebetweenlands.common.block.plant.BlockSwampReed;
@@ -679,7 +680,7 @@ public class BlockRegistry {
     public static final BlockDoublePlantBL PHRAGMITES = new BlockPhragmites().setReplaceable(true);
     public static final Block SHOOTS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SHOOT_LEAVES.create(1)).setReplaceable(true);
     public static final Block SLUDGECREEP = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SLUDGECREEP_LEAVES.create(1)).setReplaceable(true);
-    public static final Block TALL_SLUDGECREEP = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SLUDGECREEP_LEAVES.create(1)).setReplaceable(true);
+    public static final Block TALL_SLUDGECREEP = new BlockSludgeDungeonPlant().setSickleDrop(EnumItemPlantDrop.SLUDGECREEP_LEAVES.create(1)).setReplaceable(true);
     public static final Block SOFT_RUSH = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SOFT_RUSH_LEAVES.create(1)).setReplaceable(true);
     public static final Block SWAMP_REED = new BlockSwampReed();
     public static final Block SWAMP_REED_UNDERWATER = new BlockSwampReedUnderwater();
@@ -692,14 +693,14 @@ public class BlockRegistry {
     public static final Block CAVE_MOSS = new BlockCaveMoss();
     public static final Block CRYPTWEED = new BlockHangingPlant();
     public static final Block STRING_ROOTS = new BlockHangingPlant();
-    public static final Block PALE_GRASS = new BlockPlant() {
+    public static final Block PALE_GRASS = new BlockSludgeDungeonPlant() {
     	@Override
         @SideOnly(Side.CLIENT)
         public BlockRenderLayer getRenderLayer() {
             return BlockRenderLayer.TRANSLUCENT;
         }
     }.setReplaceable(true);
-    public static final Block ROTBULB = new BlockPlant().setReplaceable(true);
+    public static final Block ROTBULB = new BlockSludgeDungeonPlant().setReplaceable(true);
     public static final Block MOSS = new BlockMoss(true).setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
     public static final Block DEAD_MOSS = new BlockMoss(false).setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
     public static final Block LICHEN = new BlockLichen(true).setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
