@@ -66,9 +66,9 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 	public boolean hide_slate_3 = false;
 	public boolean hide_lock = false;
 	public boolean hide_back_wall = false;
-	public boolean is_in_dungeon = true;
+	public boolean is_in_dungeon = false;
 
-	public boolean is_gate_entrance = true;
+	public boolean is_gate_entrance = false;
 
 	private final ItemStack renderStack = new ItemStack(BlockRegistry.MUD_TOWER_BEAM_RELAY.getDefaultState().getBlock());
 
