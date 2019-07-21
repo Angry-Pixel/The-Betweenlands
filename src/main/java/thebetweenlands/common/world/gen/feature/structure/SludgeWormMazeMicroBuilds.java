@@ -233,9 +233,9 @@ public class SludgeWormMazeMicroBuilds {
 		world.setBlockState(pos.add(3, 0, 1), blockHelper.COMPACTED_MUD, 2);
 		world.setBlockState(pos.add(2, 0, 1), blockHelper.COMPACTED_MUD, 2);
 		world.setBlockState(pos.add(2, 0, 2), blockHelper.COMPACTED_MUD, 2);
-		world.setBlockState(pos.add(3, 1, 1), blockHelper.SLUDGECREEP, 2);
+		world.setBlockState(pos.add(3, 1, 1), blockHelper.TALL_SLUDGECREEP, 2);
 		world.setBlockState(pos.add(2, 1, 1), blockHelper.getRandomMushroom(rand), 2);
-		world.setBlockState(pos.add(2, 1, 2), blockHelper.SLUDGECREEP, 2);
+		world.setBlockState(pos.add(2, 1, 2), blockHelper.TALL_SLUDGECREEP, 2);
 		world.setBlockState(pos.add(5, 1, 1), blockHelper.getRandomLootUrn(rand, facing.getOpposite()), 2);
 		world.setBlockState(pos.add(1, 1, 1), blockHelper.CHEST.withProperty(BlockChestBetweenlands.FACING, facing.rotateYCCW()), 2);
 		world.setBlockState(pos.add(1, 1, 2), blockHelper.CHEST.withProperty(BlockChestBetweenlands.FACING, facing.rotateYCCW()), 2);

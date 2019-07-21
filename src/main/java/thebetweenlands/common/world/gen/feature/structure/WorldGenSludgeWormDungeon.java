@@ -649,7 +649,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	}
 
 	private void addMazeCellFeature(World world, BlockPos pos, Random rand, int w, int h, int[][] maze, int level, int layer) {
-		// TODO add features here for end of tunnels
 		// byte directions 1 = SOUTH, 2 = NORTH, 4 = WEST, 8 = EAST
 
 		for (int i = 0; i < h; i++) {

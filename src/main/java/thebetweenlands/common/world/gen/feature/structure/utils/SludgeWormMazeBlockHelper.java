@@ -56,7 +56,7 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState ROTBULB = BlockRegistry.ROTBULB.getDefaultState();
 
 	//floor plants
-	public IBlockState SLUDGECREEP = BlockRegistry.SLUDGECREEP.getDefaultState();
+	public IBlockState TALL_SLUDGECREEP = BlockRegistry.TALL_SLUDGECREEP.getDefaultState();
 	public IBlockState PALE_GRASS = BlockRegistry.PALE_GRASS.getDefaultState();
 	
 	//wall plants
@@ -596,7 +596,7 @@ public class SludgeWormMazeBlockHelper {
 	}
 
 	public IBlockState getRandomFloorPlant(Random rand) {
-		return rand.nextBoolean() ? SLUDGECREEP : PALE_GRASS;
+		return rand.nextBoolean() ? TALL_SLUDGECREEP : PALE_GRASS;
 	}
 
 	public IBlockState getRandomHangingPlant(Random rand) {
