@@ -315,7 +315,7 @@ public class DebugHandlerClient {
 
 	@SubscribeEvent
 	public static void onGuiDrawPost(GuiContainerEvent.DrawForeground event) {
-		if (BetweenlandsConfig.DEBUG.debug) {
+		if (BetweenlandsConfig.DEBUG.debug && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
 			Container container = event.getGuiContainer().inventorySlots;
 			List<Slot> slots = container.inventorySlots;
 			FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
@@ -323,11 +323,11 @@ public class DebugHandlerClient {
 			GlStateManager.enableBlend();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			RenderHelper.disableStandardItemLighting();
+			GlStateManager.disableLighting();
 			for (Slot slot : slots) {
 				renderer.drawString(String.valueOf(slot.slotNumber), slot.xPos, slot.yPos, 0xDDADADAD, false);
 			}
-			RenderHelper.enableStandardItemLighting();
+			GlStateManager.enableLighting();
 			GlStateManager.disableBlend();
 			GlStateManager.popMatrix();
 		}
