@@ -1,6 +1,7 @@
 package thebetweenlands.client.gui.inventory;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidUtil;
@@ -22,15 +23,15 @@ public class GuiPurifier extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture(PURIFIER_GUI_TEXTURE);
+    	GlStateManager.color(1, 1, 1, 1);
+    	mc.renderEngine.bindTexture(PURIFIER_GUI_TEXTURE);
         int xx = (width - xSize) / 2;
         int yy = (height - ySize) / 2;
         drawTexturedModalRect(xx, yy, 0, 0, xSize, ySize);
 
 
-        int water = purifier.getScaledWaterAmount(60);
-        drawTexturedModalRect(xx + 34, yy + 72 - water, 176, 74 - water, 11, water);
+        int water = purifier.getScaledWaterAmount(65);
+        drawTexturedModalRect(xx + 34, yy + 10 + 65 - water, 206, 65 - water, 12, water);
 
         if (purifier.isPurifying()) {
             int count = purifier.getPurifyingProgress();

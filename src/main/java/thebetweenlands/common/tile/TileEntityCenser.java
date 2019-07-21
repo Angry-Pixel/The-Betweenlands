@@ -307,7 +307,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 						this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
 						this.markDirty();
 						IBlockState stat = this.world.getBlockState(this.pos);
-						this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
+						this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
 					}
 				} else if(!internalStack.isEmpty()) {
 					ICenserRecipe<?> recipe = this.getEffect(internalStack);
@@ -320,7 +320,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 						this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
 						this.markDirty();
 						IBlockState stat = this.world.getBlockState(this.pos);
-						this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
+						this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
 					}
 				}
 			}
@@ -349,7 +349,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 					this.maxConsumptionTicks = this.consumptionTicks = -1;
 					this.markDirty();
 					IBlockState stat = this.world.getBlockState(this.pos);
-					this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
+					this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
 				}
 			} else {
 				if(this.fuelTicks > 0) {
@@ -383,7 +383,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 
 				ItemStack inputStack = this.getStackInSlot(ContainerCenser.SLOT_INPUT);
 				if(!inputStack.isEmpty()) {
-					FluidActionResult fillResult;;
+					FluidActionResult fillResult;
 
 					if(this.getStackInSlot(ContainerCenser.SLOT_INTERNAL).isEmpty() && (fillResult = FluidUtil.tryEmptyContainer(inputStack, this, Integer.MAX_VALUE, null, true)).isSuccess()) {
 						this.setInventorySlotContents(ContainerCenser.SLOT_INPUT, fillResult.getResult());
@@ -415,7 +415,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 				this.internalSlotChanged = false;
 				BlockPos pos = this.getPos();
 				IBlockState stat = this.getWorld().getBlockState(pos);
-				this.getWorld().notifyBlockUpdate(pos, stat, stat, 3);
+				this.getWorld().notifyBlockUpdate(pos, stat, stat, 2);
 			}
 		}
 
@@ -508,7 +508,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		if (doFill) {
 			this.markDirty();
 			IBlockState stat = this.world.getBlockState(this.pos);
-			this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
+			this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
 
 			this.checkInternalSlotForRecipes = true;
 			this.checkInputSlotForTransfer = true;
@@ -521,7 +521,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		if (doDrain) {
 			this.markDirty();
 			IBlockState stat = this.world.getBlockState(this.pos);
-			this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
+			this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
 
 			this.checkInternalSlotForRecipes = true;
 			this.checkInputSlotForTransfer = true;
@@ -534,7 +534,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		if (doDrain) {
 			this.markDirty();
 			IBlockState stat = this.world.getBlockState(this.pos);
-			this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
+			this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
 
 			this.checkInternalSlotForRecipes = true;
 			this.checkInputSlotForTransfer = true;

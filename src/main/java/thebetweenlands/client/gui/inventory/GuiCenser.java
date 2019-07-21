@@ -43,7 +43,7 @@ public class GuiCenser extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1, 1, 1, 1);
 		mc.renderEngine.bindTexture(CENSER_GUI_TEXTURE);
 		int xx = (width - xSize) / 2;
 		int yy = (height - ySize) / 2;

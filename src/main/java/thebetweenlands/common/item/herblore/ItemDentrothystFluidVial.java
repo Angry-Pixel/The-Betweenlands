@@ -27,6 +27,28 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemDentrothystFluidVial extends UniversalBucket implements ItemRegistry.IMultipleItemModelDefinition {
+	private static final class FluidDentrothystVialFluidHandler extends FluidHandlerItemStackSimple {
+		public FluidDentrothystVialFluidHandler(final ItemStack container, final int capacity) {
+			super(container, capacity);
+		}
+
+		@Override
+		public boolean canFillFluidType(FluidStack fluid) {
+			return ((ItemDentrothystFluidVial) container.getItem()).canFillWith(container, fluid);
+		}
+
+		@Nullable
+		@Override
+		public FluidStack getFluid() {
+			return ((ItemDentrothystFluidVial) container.getItem()).getFluid(container);
+		}
+
+		@Override
+		protected void setContainerToEmpty() {
+			container = ((ItemDentrothystFluidVial) container.getItem()).getEmpty(container).copy();
+		}
+	}
+	
 	public ItemDentrothystFluidVial() {
 		super(Fluid.BUCKET_VOLUME, ItemStack.EMPTY, true);
 		this.setHasSubtypes(true);
@@ -53,28 +75,6 @@ public class ItemDentrothystFluidVial extends UniversalBucket implements ItemReg
 		return models;
 	}
 
-	private static final class FluidBLBucketHandler extends FluidHandlerItemStackSimple {
-		public FluidBLBucketHandler(final ItemStack container, final int capacity) {
-			super(container, capacity);
-		}
-
-		@Override
-		public boolean canFillFluidType(FluidStack fluid) {
-			return fluid.getFluid() == thebetweenlands.common.registries.FluidRegistry.FOG;
-		}
-
-		@Nullable
-		@Override
-		public FluidStack getFluid() {
-			return ((ItemDentrothystFluidVial) container.getItem()).getFluid(container);
-		}
-
-		@Override
-		protected void setContainerToEmpty() {
-			container = ((ItemDentrothystFluidVial) container.getItem()).getEmpty(container).copy();
-		}
-	}
-
 	@Override
 	public int getItemStackLimit(ItemStack stack) {
 		FluidStack fluidStack = getFluid(stack);
@@ -87,7 +87,7 @@ public class ItemDentrothystFluidVial extends UniversalBucket implements ItemReg
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
-		return new FluidBLBucketHandler(stack, getCapacity());
+		return new FluidDentrothystVialFluidHandler(stack, getCapacity());
 	}
 
 	@Override
@@ -160,12 +160,16 @@ public class ItemDentrothystFluidVial extends UniversalBucket implements ItemReg
 	public ItemStack getEmpty(ItemStack stack) {
 		return stack.getMetadata() == 1 ? new ItemStack(ItemRegistry.DENTROTHYST_VIAL, stack.getCount(), 2) : new ItemStack(ItemRegistry.DENTROTHYST_VIAL, stack.getCount(), 0);
 	}
-	
+
 	public ItemStack withFluid(int meta, Fluid fluid) {
-        final FluidStack fs = new FluidStack(fluid, getCapacity());
-        final ItemStack stack = new ItemStack(this, 1, meta);
-        final IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
-        fluidHandler.fill(fs, true);
-        return fluidHandler.getContainer();
-    }
+		final FluidStack fs = new FluidStack(fluid, getCapacity());
+		final ItemStack stack = new ItemStack(this, 1, meta);
+		final IFluidHandlerItem fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+		fluidHandler.fill(fs, true);
+		return fluidHandler.getContainer();
+	}
+
+	public boolean canFillWith(ItemStack stack, FluidStack fluid) {
+		return fluid.getFluid() == thebetweenlands.common.registries.FluidRegistry.FOG;
+	}
 }

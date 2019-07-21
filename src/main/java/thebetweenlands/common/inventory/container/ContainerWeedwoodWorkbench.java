@@ -5,6 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ContainerWorkbench;
 import net.minecraft.inventory.Slot;
 import net.minecraft.inventory.SlotCrafting;
+import net.minecraft.util.math.BlockPos;
 import thebetweenlands.common.inventory.InventoryWeedwoodWorkbench;
 import thebetweenlands.common.inventory.InventoryWeedwoodWorkbenchResult;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -52,8 +53,12 @@ public class ContainerWeedwoodWorkbench extends ContainerWorkbench {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return this.tile.getWorld().getBlockState(this.tile.getPos()).getBlock() == BlockRegistry.WEEDWOOD_WORKBENCH && 
-				playerIn.getDistanceSq((double)this.tile.getPos().getX() + 0.5D, (double)this.tile.getPos().getY() + 0.5D, (double)this.tile.getPos().getZ() + 0.5D) <= 64.0D;
+		BlockPos pos = this.tile.getPos();
+		if(playerIn.world.getTileEntity(pos) != this.tile) {
+			return false;
+		} else {
+			return playerIn.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64.0D;
+		}
 	}
 
 	@Override

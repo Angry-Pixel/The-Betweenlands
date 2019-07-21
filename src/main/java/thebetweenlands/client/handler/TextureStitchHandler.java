@@ -35,6 +35,7 @@ import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
 import thebetweenlands.client.render.sprite.TextureFromData;
+import thebetweenlands.client.render.tile.RenderTarBarrel;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.FluidRegistry;
@@ -70,7 +71,10 @@ public class TextureStitchHandler {
 			e.getMap().registerSprite(fluid.getStill());
 		}
 		
+		
+		e.getMap().registerSprite(RenderTarBarrel.WHITE_SPRITE_PATH);
 
+		
 		//Pack model textures and stitch onto atlas
 		long packingStartTime = System.nanoTime();
 		Map<ResourceLocation, BufferedImage> packedTextures = ModelRegistry.MODEL_TEXTURE_PACKER.pack(Minecraft.getMinecraft().getResourceManager());

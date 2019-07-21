@@ -129,11 +129,6 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
             world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
     }
 
-    @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
-        return false;
-    }
-
     public boolean isCrystalInslot() {
         return isSlotInUse(1) && inventory.get(1).getItem() == ItemRegistry.LIFE_CRYSTAL && inventory.get(1).getItemDamage() < inventory.get(1).getMaxDamage();
     }

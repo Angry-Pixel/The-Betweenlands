@@ -42,6 +42,7 @@ import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntityRubberTap;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
+import thebetweenlands.common.tile.TileEntityTarBarrel;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
 import thebetweenlands.common.tile.TileEntityTarLootPot3;
@@ -105,6 +106,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityDecayPitControl.class, "decay_pit_control");
 		registerTileEntity(TileEntityDecayPitHangingChain.class, "decay_pit_hanging_chain");
 		registerTileEntity(TileEntityCenser.class, "censer");
+		registerTileEntity(TileEntityTarBarrel.class, "tar_barrel");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

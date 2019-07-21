@@ -1,0 +1,14 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:wood_chip_path"
+  },
+  "variants": {
+    "facing": {
+      "north": {},
+      "south": {},
+      "east": {},
+      "west": {}
+    }
+  } 
+}

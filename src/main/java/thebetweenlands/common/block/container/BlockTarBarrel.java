@@ -2,14 +2,13 @@ package thebetweenlands.common.block.container;
 
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -27,19 +26,18 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import thebetweenlands.api.block.IDungeonFogBlock;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
-import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.proxy.CommonProxy;
-import thebetweenlands.common.tile.TileEntityCenser;
+import thebetweenlands.common.tile.TileEntityTarBarrel;
 
-public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDungeonFogBlock {
+public class BlockTarBarrel extends BasicBlock implements ITileEntityProvider {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
-	public BlockCenser() {
-		super(Material.ROCK);
+	public BlockTarBarrel() {
+		super(Material.WOOD);
+		setSoundType(SoundType.WOOD);
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
@@ -60,52 +58,44 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
 
-		if (world.getTileEntity(pos) instanceof TileEntityCenser) {
-			TileEntityCenser tile = (TileEntityCenser) world.getTileEntity(pos);
+		if(world.getTileEntity(pos) instanceof TileEntityTarBarrel) {
+			TileEntityTarBarrel tile = (TileEntityTarBarrel) world.getTileEntity(pos);
 
-			if (player.isSneaking()) {
+			if(player.isSneaking()) {
 				return false;
 			}
 
-			if (!heldItem.isEmpty()) {
+			if(!heldItem.isEmpty()) {
 				IFluidHandler handler = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 				if(handler != null) {
 					IItemHandler playerInventory = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-					if (playerInventory != null) {
+					if(playerInventory != null) {
 						FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainerAndStow(heldItem, tile, playerInventory, Integer.MAX_VALUE, player, !world.isRemote);
 
-						if (fluidActionResult.isSuccess()) {
-							if (!world.isRemote) {
+						if(fluidActionResult.isSuccess()) {
+							if(!world.isRemote) {
 								player.setHeldItem(hand, fluidActionResult.getResult());
 							}
 							return true;
+						} else {
+							fluidActionResult = FluidUtil.tryFillContainerAndStow(heldItem, tile, playerInventory, Integer.MAX_VALUE, player, !world.isRemote);
+							if(fluidActionResult.isSuccess()) {
+								if(!world.isRemote) {
+									player.setHeldItem(hand, fluidActionResult.getResult());
+								}
+								return true;
+							}
 						}
 					}
 				}
 			}
 
-			if (!world.isRemote && tile != null) {
-				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_CENSER, world, pos.getX(), pos.getY(), pos.getZ());
+			if(!world.isRemote && tile != null) {
+				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_TAR_BARREL, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 		}
+
 		return true;
-	}
-
-	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		TileEntity tileEntity = worldIn.getTileEntity(pos);
-
-		if (tileEntity instanceof IInventory) {
-			IInventory inventory = (IInventory) tileEntity;
-			if(ContainerCenser.SLOT_INTERNAL < inventory.getSizeInventory()) {
-				//Destroy contents of internal slot since they shouldn't be dropped
-				inventory.setInventorySlotContents(ContainerCenser.SLOT_INTERNAL, ItemStack.EMPTY);
-			}
-			InventoryHelper.dropInventoryItems(worldIn, pos, inventory);
-			worldIn.updateComparatorOutputLevel(pos, this);
-		}
-
-		super.breakBlock(worldIn, pos, state);
 	}
 
 	@Override
@@ -147,7 +137,7 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityCenser();
+		return new TileEntityTarBarrel();
 	}
 
 	@Override
@@ -159,14 +149,5 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING);
-	}
-
-	@Override
-	public boolean isCreatingDungeonFog(IBlockAccess world, BlockPos pos, IBlockState state) {
-		TileEntity te = world.getTileEntity(pos);
-		if(te instanceof TileEntityCenser) {
-			return ((TileEntityCenser) te).getDungeonFogStrength(1) >= 0.1F;
-		}
-		return false;
 	}
 }
