@@ -58,7 +58,11 @@ public class ItemDentrothystVial extends Item implements ItemRegistry.IBlockStat
 
 		@Override
 		public int fill(FluidStack resource, boolean doFill) {
-			ItemStack fluidVial = new ItemStack(ItemRegistry.DENTROTHYST_FLUID_VIAL);
+			if(this.container.getItemDamage() == 1) {
+				//Dirty vial can't be filled
+				return 0;
+			}
+			ItemStack fluidVial = new ItemStack(ItemRegistry.DENTROTHYST_FLUID_VIAL, 1, this.container.getItemDamage() == 2 ? 1 : 0);
 			IFluidHandlerItem handler = FluidUtil.getFluidHandler(fluidVial);
 			int filled = handler.fill(resource, doFill);
 			if(filled > 0 && doFill) {
