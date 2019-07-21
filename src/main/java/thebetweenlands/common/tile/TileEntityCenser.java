@@ -282,44 +282,46 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update() {
-		if(this.fuelTicks > 0) {
-			this.fuelTicks--;
-			this.markDirty();
-		} else {
-			this.fuelTicks = 0;
-		}
+		if(!this.world.isRemote) {
+			if(this.fuelTicks > 0) {
+				this.fuelTicks--;
+				this.markDirty();
+			} else {
+				this.fuelTicks = 0;
+			}
 
-		if(!this.world.isRemote && this.checkInternalSlotForRecipes) {
-			this.checkInternalSlotForRecipes = false;
+			if(this.checkInternalSlotForRecipes) {
+				this.checkInternalSlotForRecipes = false;
 
-			FluidStack fluid = this.fluidTank.getFluid();
-			ItemStack internalStack = this.getStackInSlot(ContainerCenser.SLOT_INTERNAL);
+				FluidStack fluid = this.fluidTank.getFluid();
+				ItemStack internalStack = this.getStackInSlot(ContainerCenser.SLOT_INTERNAL);
 
-			if(fluid != null && fluid.amount > 0) {
-				ICenserRecipe<?> recipe = this.getEffect(fluid);
+				if(fluid != null && fluid.amount > 0) {
+					ICenserRecipe<?> recipe = this.getEffect(fluid);
 
-				if(recipe != null && recipe.matchesInput(fluid)) {
-					this.isFluidRecipe = true;
-					this.currentRecipe = (ICenserRecipe<Object>)recipe;
-					this.currentRecipeContext = recipe.createContext(fluid);
-					this.currentRecipe.onStart(this.currentRecipeContext);
-					this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
-					this.markDirty();
-					IBlockState stat = this.world.getBlockState(this.pos);
-					this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
-				}
-			} else if(!internalStack.isEmpty()) {
-				ICenserRecipe<?> recipe = this.getEffect(internalStack);
+					if(recipe != null && recipe.matchesInput(fluid)) {
+						this.isFluidRecipe = true;
+						this.currentRecipe = (ICenserRecipe<Object>)recipe;
+						this.currentRecipeContext = recipe.createContext(fluid);
+						this.currentRecipe.onStart(this.currentRecipeContext);
+						this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+						this.markDirty();
+						IBlockState stat = this.world.getBlockState(this.pos);
+						this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
+					}
+				} else if(!internalStack.isEmpty()) {
+					ICenserRecipe<?> recipe = this.getEffect(internalStack);
 
-				if(recipe != null && recipe.matchesInput(internalStack)) {
-					this.isFluidRecipe = false;
-					this.currentRecipe = (ICenserRecipe<Object>)recipe;
-					this.currentRecipeContext = recipe.createContext(internalStack);
-					this.currentRecipe.onStart(this.currentRecipeContext);
-					this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
-					this.markDirty();
-					IBlockState stat = this.world.getBlockState(this.pos);
-					this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
+					if(recipe != null && recipe.matchesInput(internalStack)) {
+						this.isFluidRecipe = false;
+						this.currentRecipe = (ICenserRecipe<Object>)recipe;
+						this.currentRecipeContext = recipe.createContext(internalStack);
+						this.currentRecipe.onStart(this.currentRecipeContext);
+						this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+						this.markDirty();
+						IBlockState stat = this.world.getBlockState(this.pos);
+						this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
+					}
 				}
 			}
 		}
@@ -369,10 +371,6 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 								}
 							}
 							this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
-						}
-					} else {
-						if(this.consumptionTicks > 0) {
-							this.consumptionTicks--;
 						}
 					}
 				}
