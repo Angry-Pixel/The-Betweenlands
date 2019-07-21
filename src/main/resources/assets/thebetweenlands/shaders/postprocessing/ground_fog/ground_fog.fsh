@@ -177,7 +177,7 @@ void main() {
             
     	    float volFog = clamp(volFog(volume.inScattering, volume.extinction, volume.size.y, h0, alpha, interaction), 0, 1);
     	    
-    	    color = mix(color, applyFog(fragPos, vec4(volume.color, 0)), volFog);
+    	    color = mix(color, vec4(volume.color, 0), volFog * (1 - getFogMultiplier(fragPos)));
         }
     }
     
