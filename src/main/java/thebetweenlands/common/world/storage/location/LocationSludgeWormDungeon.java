@@ -26,7 +26,7 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	public LocationSludgeWormDungeon(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		super(worldStorage, id, region, "sludge_worm_dungeon", EnumLocationType.DUNGEON);
 		this.dataManager.register(GROUND_FOG_STRENGTH, 1.0F);
-		this.setAmbience(new LocationAmbience(EnumLocationAmbience.SLUDGE_WORM_DUNGEON));
+		this.setAmbience(new LocationAmbience(EnumLocationAmbience.SLUDGE_WORM_DUNGEON).setCaveFog(false));
 	}
 
 	/**

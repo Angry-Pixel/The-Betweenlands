@@ -210,6 +210,13 @@ public class FogHandler {
 		Fog biomeFog = event.getBiomeFog();
 		MutableFog fog = new MutableFog(event.getAmbientFog());
 
+		LocationAmbience ambience = LocationStorage.getAmbience(world, position);
+		
+		if(ambience != null && !ambience.hasCaveFog()) {
+			fog.setStart(biomeFog.getStart());
+			fog.setEnd(biomeFog.getEnd());
+		}
+		
 		float fogBrightness = 0;
 
 		float uncloudedStrength = 0.0F;
@@ -268,8 +275,6 @@ public class FogHandler {
 			fog.setDistanceIncrementMultiplier(4.0F);
 		}
 		
-		LocationAmbience ambience = LocationStorage.getAmbience(world, position);
-
 		if(ambience != null) {
 			if(ambience.hasFogBrightness()) {
 				fogBrightness = ambience.getFogBrightness();

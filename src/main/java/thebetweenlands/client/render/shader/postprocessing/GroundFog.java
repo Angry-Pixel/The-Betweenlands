@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
+import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -52,6 +53,7 @@ public class GroundFog extends PostProcessingEffect<GroundFog> {
 	private int renderPosUniformID = -1;
 	private int viewPosUniformID = -1;
 	private int fogVolumeAmountUniformIDs = -1;
+	private int fogModeUniformID = -1;
 	
 	private int depthBufferTexture = -1;
 
@@ -81,6 +83,7 @@ public class GroundFog extends PostProcessingEffect<GroundFog> {
 		this.worldTimeUniformID = this.getUniform("u_worldTime");
 		this.viewPosUniformID = this.getUniform("u_viewPos");
 		this.renderPosUniformID = this.getUniform("u_renderPos");
+		this.fogModeUniformID = this.getUniform("u_fogMode");
 
 		for(int i = 0; i < MAX_FOG_VOLUMES; i++) {
 			this.fogVolumePositionUniformIDs[i] = this.getUniform("u_fogVolumes[" + i + "].position");
@@ -130,5 +133,7 @@ public class GroundFog extends PostProcessingEffect<GroundFog> {
 			this.uploadFloat(this.fogVolumeExtinctionUniformIDs[i], (float)volume.extinction);
 			this.uploadFloat(this.fogVolumeInScatteringUniformIDs[i], (float)volume.inScattering);
 		}
+		
+		this.uploadInt(this.fogModeUniformID, FogHandler.getCurrentFogMode());
 	}
 }

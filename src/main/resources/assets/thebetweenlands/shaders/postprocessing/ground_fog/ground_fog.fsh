@@ -1,5 +1,10 @@
 #version 120
 
+//Definitions
+#define CONST_EXP 2048
+#define CONST_EXP2 2049
+#define CONST_LINEAR 9729
+
 //Sampler that holds the rendered world
 uniform sampler2D s_diffuse;
 
@@ -21,6 +26,9 @@ struct FogVolume {
 };
 uniform FogVolume u_fogVolumes[16];
 uniform int u_fogVolumesAmount;
+
+//Fog mode
+uniform int u_fogMode;
 
 //View pos (i.e. the "eye"), relative to the render position
 uniform vec3 u_viewPos;
@@ -48,6 +56,26 @@ vec3 getFragPos(sampler2D depthMap) {
     fragRelPos.xyz /= fragRelPos.w;
     
     return fragRelPos.xyz;
+}
+
+//Returns the fog color multiplier for a fragment
+float getFogMultiplier(vec3 fragPos) {
+    if(u_fogMode == CONST_LINEAR) {
+        //Calculate linear fog
+        return clamp((length(fragPos) - gl_Fog.start) * gl_Fog.scale, 0.0F, 1.0F);
+    } else if(u_fogMode == CONST_EXP) {
+        //Calculate exponential fog
+        return 1.0F - clamp(exp(-gl_Fog.density * length(fragPos)), 0.0F, 1.0F);
+    } else if(u_fogMode == CONST_EXP2) {
+        //Calculate exponential^2 fog
+        return 1.0F - clamp(exp(-pow(gl_Fog.density * length(fragPos), 2.0F)), 0.0F, 1.0F);
+    }
+    return 0.0F;
+}
+
+//Applies fog to the color of a fragment
+vec4 applyFog(vec3 fragPos, vec4 color) {
+    return mix(color, vec4(0.0F, 0.0F, 0.0F, 0.0F), getFogMultiplier(fragPos));
 }
 
 //http://iquilezles.org/www/articles/spheredensity/spheredensity.htm
@@ -149,7 +177,7 @@ void main() {
             
     	    float volFog = clamp(volFog(volume.inScattering, volume.extinction, volume.size.y, h0, alpha, interaction), 0, 1);
     	    
-    	    color = mix(color, vec4(volume.color, 0), volFog);
+    	    color = mix(color, applyFog(fragPos, vec4(volume.color, 0)), volFog);
         }
     }
     
