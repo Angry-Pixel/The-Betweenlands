@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -27,8 +28,10 @@ import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.gen.feature.structure.LightTowerBuildParts;
 
 public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable, IEntityScreenShake {
+	private LightTowerBuildParts lightTowerBuild = new LightTowerBuildParts();
 	private boolean mimic; // true = Barrishee
 	
 	public int top_code = -1, mid_code = -1, bottom_code = -1; // set back to -1
@@ -63,7 +66,11 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 	public boolean hide_slate_3 = false;
 	public boolean hide_lock = false;
 	public boolean hide_back_wall = false;
-	public boolean is_in_dungeon = false;
+	public boolean is_in_dungeon = true;
+
+	public boolean is_gate_entrance = true;
+
+	private final ItemStack renderStack = new ItemStack(BlockRegistry.MUD_TOWER_BEAM_RELAY.getDefaultState().getBlock());
 
 	private static int SHAKING_TIMER_MAX = 240;
 
@@ -297,8 +304,13 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 			}
 			if (!mimic) {
 				if (slate_1_rotate == 0)
-					if (!getWorld().isRemote)
+					if (!getWorld().isRemote) {
 						playOpenSinkingSound();
+						if(is_gate_entrance) {
+							lightTowerBuild.destroyGateBeamLenses(getWorld(), getPos());
+							lightTowerBuild.destroyTowerBeamLenses(getWorld(), getPos().add(-15, -2, -14)); // centre stone of tower  bottom floor
+						}
+					}
 				slate_1_rotate += 4;
 				slate_2_rotate += 3;
 				slate_3_rotate += 3;
@@ -525,6 +537,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		hide_lock = nbt.getBoolean("hide_lock");
 		hide_back_wall = nbt.getBoolean("hide_back_wall");
 		is_in_dungeon = nbt.getBoolean("is_in_dungeon");
+		is_gate_entrance = nbt.getBoolean("is_gate_entrance");
 	}
 
 	@Override
@@ -550,6 +563,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		nbt.setBoolean("hide_lock", hide_lock);
 		nbt.setBoolean("hide_back_wall", hide_back_wall);
 		nbt.setBoolean("is_in_dungeon", is_in_dungeon);
+		nbt.setBoolean("is_gate_entrance", is_gate_entrance);
 		return nbt;
 	}
 
@@ -602,5 +616,9 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 
 	public boolean isMimic() {
 		return this.mimic;
+	}
+
+	public ItemStack cachedStack() {
+		return renderStack;
 	}
 }

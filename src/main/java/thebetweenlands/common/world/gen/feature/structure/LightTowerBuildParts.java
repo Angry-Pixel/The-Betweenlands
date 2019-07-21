@@ -182,6 +182,7 @@ public class LightTowerBuildParts {
 			tileLock.mid_code = 1;
 			tileLock.bottom_code = 1;
 			tileLock.is_in_dungeon = true;
+			tileLock.is_gate_entrance = true;
 		}
 	}
 
@@ -678,6 +679,50 @@ public class LightTowerBuildParts {
 					}
 			break;
 		}
+	}
+
+	public void destroyTowerBeamLenses(World world, BlockPos pos) {
+			removeblock(world, pos, -2, 2, 4);
+			removeblock(world, pos, 2, 2, 4);
+			removeblock(world, pos, -7, 1, 4);
+			removeblock(world, pos, 7, 1, 4);
+			removeblock(world, pos, 15, 6, -1);
+			removeblock(world, pos, -2, 3, -4);
+			removeblock(world, pos, 2, 3, -4);
+			removeblock(world, pos, -7, 1, -4);
+			removeblock(world, pos, 7, 1, -4);
+			removeblock(world, pos, 7, 6, -1);
+
+			removeblock(world, pos, 0, 10, 0);
+			removeblock(world, pos, -2, 11, 4);
+			removeblock(world, pos, 2, 10, 4);
+			removeblock(world, pos, -7, 11, 4);
+			removeblock(world, pos, -7, 14, 4);
+			removeblock(world, pos, 7, 14, 4);
+			removeblock(world, pos, 2, 10, 0);
+			removeblock(world, pos, -2, 12, -4);
+			removeblock(world, pos, 2, 10, -4);
+			removeblock(world, pos, -7, 12, -4);
+			removeblock(world, pos, -7, 14, -4);
+			removeblock(world, pos, 7, 14, -1);
+			removeblock(world, pos, 7, 10, -4);
+			removeblock(world, pos, 7, 14, -4);
+
+			removeblock(world, pos, 0, 21, 0);
+			removeblock(world, pos, -7, 18, 4);
+			removeblock(world, pos, -7, 18, -4);
+	}
+
+	public void destroyGateBeamLenses(World world, BlockPos pos) {
+		removeblock(world, pos, -8, 0, 0);
+		removeblock(world, pos, -8, 4, 0);
+		removeblock(world, pos, -1, 4, 0);
+		removeblock(world, pos, 0, 4, 0);
+		removeblock(world, pos, 0, 4, -1);
+	}
+
+	private void removeblock(World world, BlockPos pos, int x, int y, int z) {
+		world.destroyBlock(pos.add(x, y, z), false);
 	}
 
 }

@@ -149,11 +149,11 @@ public class ModelDungeonDoorRunes extends ModelBase {
 			if(!tile.isMimic()) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTicks) * scale, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTicks) * scale);
-				renderLockParts(scale);
+				renderLockParts(tile, scale);
 				GlStateManager.popMatrix();
 			}
 			else {
-				renderLockParts(scale);
+				renderLockParts(tile, scale);
 			}
 		}
 		if (!tile.hide_back_wall) {
@@ -195,14 +195,16 @@ public class ModelDungeonDoorRunes extends ModelBase {
 		}
 	}
 
-	public void renderLockParts(float scale) {
-		frame_right.render(scale);
-		frame_left.render(scale);
-		frame_top.render(scale);
-		frame_bottom.render(scale);
-		top.render(scale);
-		mid.render(scale);
-		bottom.render(scale);
+	public void renderLockParts(TileEntityDungeonDoorRunes tile, float scale) {
+		if (!tile.is_gate_entrance) {
+			frame_right.render(scale);
+			frame_left.render(scale);
+			frame_top.render(scale);
+			frame_bottom.render(scale);
+			top.render(scale);
+			mid.render(scale);
+			bottom.render(scale);
+		}
 	}
 
 	public void renderItem(float scale) {

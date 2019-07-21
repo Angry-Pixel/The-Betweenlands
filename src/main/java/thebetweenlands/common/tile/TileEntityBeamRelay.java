@@ -106,11 +106,12 @@ public class TileEntityBeamRelay extends TileEntity implements ITickable {
 			if (stateofTarget.getBlock() instanceof BlockDungeonDoorRunes) {
 				if (getWorld().getTileEntity(targetPos) instanceof TileEntityDungeonDoorRunes) {
 					TileEntityDungeonDoorRunes targetTile = (TileEntityDungeonDoorRunes) getWorld().getTileEntity(targetPos);
-					targetTile.top_state_prev = targetTile.top_code;
-					targetTile.mid_state_prev = targetTile.mid_code;
-					targetTile.bottom_state_prev = targetTile.bottom_code;
-					getWorld().setBlockState(targetPos, stateofTarget, 3);
-					//TODO turn off beam here as it's no longer needed
+					if (targetTile.is_gate_entrance) {
+						targetTile.top_state_prev = targetTile.top_code;
+						targetTile.mid_state_prev = targetTile.mid_code;
+						targetTile.bottom_state_prev = targetTile.bottom_code;
+						getWorld().setBlockState(targetPos, stateofTarget, 3);
+					}
 				}
 			}
 		}

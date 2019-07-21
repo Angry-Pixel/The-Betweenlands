@@ -1,10 +1,18 @@
 package thebetweenlands.client.render.tile;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.tile.ModelDungeonDoorRunes;
@@ -65,18 +73,32 @@ public class RenderDungeonDoorRunes extends TileEntitySpecialRenderer<TileEntity
 			GlStateManager.translate(0F, 0F + 0.1375F * (tile.last_tick_slate_1_rotate + (tile.slate_1_rotate - tile.last_tick_slate_1_rotate) * partialTick) * 0.0625F, 0F + 0.275F * (tile.last_tick_recess_pos + (tile.recess_pos - tile.last_tick_recess_pos) * partialTick) * 0.0625F);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		if(!tile.is_gate_entrance) {
+			bindTexture(getTextureFromRotationIndex(tile.top_state_prev));
+			RUNE_BLOCK_LAYER.renderTopOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.0625F, partialTick);
 
-		bindTexture(getTextureFromRotationIndex(tile.top_state_prev));
-		RUNE_BLOCK_LAYER.renderTopOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.0625F, partialTick);
+			bindTexture(getTextureFromRotationIndex(tile.mid_state_prev));
+			RUNE_BLOCK_LAYER.renderMidOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.0625F, partialTick);
 
-		bindTexture(getTextureFromRotationIndex(tile.mid_state_prev));
-		RUNE_BLOCK_LAYER.renderMidOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.0625F, partialTick);
-
-		bindTexture(getTextureFromRotationIndex(tile.bottom_state_prev));
-		RUNE_BLOCK_LAYER.renderBottomOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.0625F, partialTick);
-
+			bindTexture(getTextureFromRotationIndex(tile.bottom_state_prev));
+			RUNE_BLOCK_LAYER.renderBottomOverlay(tile, TEXTURE_RUNE_GLOW, tile.renderTicks, 0.0625F, partialTick);
+		}
+		
+		if(tile.is_gate_entrance && tile.slate_1_rotate <= 270) {
+			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+			RenderHelper.disableStandardItemLighting();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GlStateManager.scale(1.03125F, 1.03125F, 1.03125F);
+			Minecraft.getMinecraft().getRenderItem().renderItem(tile.cachedStack(), Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(tile.cachedStack(), (World) null, (EntityLivingBase) null));
+			GlStateManager.enableLighting();
+			GlStateManager.disableBlend();
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		}
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
+
 	}
 
 	@Override
