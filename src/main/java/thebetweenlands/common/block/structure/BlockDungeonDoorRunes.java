@@ -13,6 +13,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -24,6 +25,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.item.misc.ItemRuneDoorKey;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.util.AdvancedStateMap.Builder;
@@ -173,9 +175,21 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = player.getHeldItem(hand);
 		if (!world.isRemote && !state.getValue(INVISIBLE)) {
 			TileEntityDungeonDoorRunes tile = getTileEntity(world, pos);
 			if (tile != null && facing == state.getValue(FACING) && !tile.is_gate_entrance) {
+
+				if (stack.getItem() instanceof ItemRuneDoorKey) {
+					tile.top_state = tile.top_code;
+					tile.mid_state = tile.mid_code;
+					tile.bottom_state = tile.bottom_code;
+					if(!player.capabilities.isCreativeMode)
+						stack.shrink(1);
+					world.notifyBlockUpdate(pos, state, state, 3);
+					return true;
+				}
+
 				if(player.capabilities.isCreativeMode && player.isSneaking()) {
 					tile.enterLockCode();
 					player.sendStatusMessage(new TextComponentTranslation("chat.dungeon_door_runes.locked"), true);
