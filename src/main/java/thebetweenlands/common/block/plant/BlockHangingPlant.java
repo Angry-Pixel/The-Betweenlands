@@ -161,8 +161,12 @@ public class BlockHangingPlant extends BlockBush implements ISickleHarvestable, 
 
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if(rand.nextInt(16) == 0 && state.getValue(CAN_GROW) && worldIn.isAirBlock(pos.down())) {
+		if(rand.nextInt(16) == 0 && worldIn.isAirBlock(pos.down()) && this.canGrowAt(worldIn, pos, state)) {
 			worldIn.setBlockState(pos.down(), this.getDefaultState());
 		}
+	}
+	
+	protected boolean canGrowAt(World world, BlockPos pos, IBlockState state) {
+		return state.getValue(CAN_GROW);
 	}
 }

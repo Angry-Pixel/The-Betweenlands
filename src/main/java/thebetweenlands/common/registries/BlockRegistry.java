@@ -118,6 +118,7 @@ import thebetweenlands.common.block.plant.BlockPlantUnderwater;
 import thebetweenlands.common.block.plant.BlockPoisonIvy;
 import thebetweenlands.common.block.plant.BlockSaplingBetweenlands;
 import thebetweenlands.common.block.plant.BlockSaplingSpiritTree;
+import thebetweenlands.common.block.plant.BlockSludgeDungeonHangingPlant;
 import thebetweenlands.common.block.plant.BlockSludgeDungeonPlant;
 import thebetweenlands.common.block.plant.BlockSundew;
 import thebetweenlands.common.block.plant.BlockSwampKelp;
@@ -691,8 +692,8 @@ public class BlockRegistry {
     public static final Block WEEDWOOD_BUSH = new BlockWeedwoodBush();
     public static final Block HOLLOW_LOG = new BlockHollowLog();
     public static final Block CAVE_MOSS = new BlockCaveMoss();
-    public static final Block CRYPTWEED = new BlockHangingPlant();
-    public static final Block STRING_ROOTS = new BlockHangingPlant();
+    public static final Block CRYPTWEED = new BlockSludgeDungeonHangingPlant();
+    public static final Block STRING_ROOTS = new BlockSludgeDungeonHangingPlant();
     public static final Block PALE_GRASS = new BlockSludgeDungeonPlant() {
     	@Override
         @SideOnly(Side.CLIENT)
