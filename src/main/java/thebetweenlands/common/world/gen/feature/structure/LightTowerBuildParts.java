@@ -191,8 +191,8 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 13, 0 + level, -2, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 12, 0 + level, -3, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 9, 0 + level, -4, blockHelper.getMudBricksForLevel(rand, 0, 0), 3, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 10, 1 + level, -2, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 3, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 10, 1 + level, -3, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 2, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 10, 1 + level, -2, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 3, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 10, 1 + level, -3, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 2, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 13, 1 + level, -2, blockHelper.getRandomBeam(facing.rotateY(), rand, level, 0, false), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 12, 1 + level, -3, blockHelper.getRandomBeam(facing.rotateY(), rand, level, 0, false), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 11, 1 + level, -4, blockHelper.getRandomBeam(facing.rotateY(), rand, level, 0, false), 1, 1, 1, facing);
@@ -204,8 +204,8 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 12, 3 + level, -3, blockHelper.ROOT, 1, 5, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 10, 3 + level, -4, blockHelper.ROOT, 1, 5, 1, facing);
 		}
-		rotatedCubeVolume(world, rand, pos, 10, 0 + level, 0, blockHelper.GIANT_ROOT_PLANK_SLAB_UPPER, 4, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 10, 1 + level, -1, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 4, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 10, 0 + level, 0, blockHelper.ROTTEN_PLANK_SLAB_UPPER, 4, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 10, 1 + level, -1, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 4, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 14, -1 + level, 0, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 14, 0 + level, -1, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 14, 0 + level, 0, blockHelper.getRandomBeam(facing.rotateY(), rand, level, 0, false), 1, 1, 1, facing);
@@ -219,10 +219,10 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 8, 5 + level, -6, blockHelper.getRandomLootUrn(rand, facing), 1, 1, 1, facing);
 		}
 		if (level == 0) {
-			rotatedCubeVolume(world, rand, pos, 10, level, 1, blockHelper.GIANT_ROOT_PLANKS, 6, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 10, level, 2, blockHelper.GIANT_ROOT_PLANKS, 5, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 10, level, 3, blockHelper.GIANT_ROOT_PLANKS, 4, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 11, level, 4, blockHelper.GIANT_ROOT_PLANKS, 2, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 10, level, 1, blockHelper.ROTTEN_PLANKS, 6, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 10, level, 2, blockHelper.ROTTEN_PLANKS, 5, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 10, level, 3, blockHelper.ROTTEN_PLANKS, 4, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 11, level, 4, blockHelper.ROTTEN_PLANKS, 2, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 13, 1 + level, -5, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 13, 1 + level, -6, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 12, 1 + level, -7, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 2, 1, facing);
@@ -235,11 +235,11 @@ public class LightTowerBuildParts {
 		}
 
 		if(!topEnd) {
-			rotatedCubeVolume(world, rand, pos, 10, 1 + level, -2, blockHelper.GIANT_ROOT_PLANK_SLAB_UPPER, 4, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 10, 2 + level, -3, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 4, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 9, 2 + level, -4, blockHelper.GIANT_ROOT_PLANK_SLAB_UPPER, 4, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 9, 3 + level, -5, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 4, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 9, 3 + level, -6, blockHelper.GIANT_ROOT_PLANK_SLAB_UPPER, 4, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 10, 1 + level, -2, blockHelper.ROTTEN_PLANK_SLAB_UPPER, 4, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 10, 2 + level, -3, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 4, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 9, 2 + level, -4, blockHelper.ROTTEN_PLANK_SLAB_UPPER, 4, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 9, 3 + level, -5, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 4, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 9, 3 + level, -6, blockHelper.ROTTEN_PLANK_SLAB_UPPER, 4, 1, 1, facing);
 
 			rotatedCubeVolume(world, rand, pos, 14, 2 + level, -2, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 14, 3 + level, -3, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
@@ -262,10 +262,10 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 14, 4 + level, -3, blockHelper.ROOT, 1, 5, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 13, 5 + level, -5, blockHelper.ROOT, 1, 5, 1, facing);
 
-			rotatedCubeVolume(world, rand, pos, 9, 4 + level, -7, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 3, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 9, 4 + level, -8, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 2, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 9, 4 + level, -9, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 2, 1, 1, facing);
-			rotatedCubeVolume(world, rand, pos, 9, 4 + level, -10, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 9, 4 + level, -7, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 3, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 9, 4 + level, -8, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 2, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 9, 4 + level, -9, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 2, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 9, 4 + level, -10, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 1, 1, 1, facing);
 
 			rotatedCubeVolume(world, rand, pos, 12, 3 + level, -7, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 11, 3 + level, -8, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
@@ -289,9 +289,9 @@ public class LightTowerBuildParts {
 			rotatedCubeVolume(world, rand, pos, 11, 6 + level, -9, blockHelper.ROOT, 1, 5, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 9, 6 + level, -10, blockHelper.ROOT, 1, 5, 1, facing);
 
-			rotatedCubeVolume(world, rand, pos, 8, 4 + level, -10, blockHelper.GIANT_ROOT_PLANK_SLAB_UPPER, 1, 1, 4, facing);
-			rotatedCubeVolume(world, rand, pos, 7, 5 + level, -11, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 1, 1, 5, facing);
-			rotatedCubeVolume(world, rand, pos, 6, 5 + level, -12, blockHelper.GIANT_ROOT_PLANK_SLAB_UPPER, 1, 1, 5, facing);
+			rotatedCubeVolume(world, rand, pos, 8, 4 + level, -10, blockHelper.ROTTEN_PLANK_SLAB_UPPER, 1, 1, 4, facing);
+			rotatedCubeVolume(world, rand, pos, 7, 5 + level, -11, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 1, 1, 5, facing);
+			rotatedCubeVolume(world, rand, pos, 6, 5 + level, -12, blockHelper.ROTTEN_PLANK_SLAB_UPPER, 1, 1, 5, facing);
 
 			rotatedCubeVolume(world, rand, pos, 8, 3 + level, -11, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 7, 4 + level, -12, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
@@ -307,11 +307,11 @@ public class LightTowerBuildParts {
 
 			rotatedCubeVolume(world, rand, pos, 7, 7 + level, -12, blockHelper.ROOT, 1, 5, 1, facing);
 
-			rotatedCubeVolume(world, rand, pos, 5, 6 + level, -12, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 1, 1, 4, facing);
-			rotatedCubeVolume(world, rand, pos, 4, 6 + level, -12, blockHelper.GIANT_ROOT_PLANK_SLAB_UPPER, 1, 1, 4, facing);
-			rotatedCubeVolume(world, rand, pos, 3, 7 + level, -13, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 1, 1, 4, facing);
-			rotatedCubeVolume(world, rand, pos, 2, 7 + level, -13, blockHelper.GIANT_ROOT_PLANK_SLAB_UPPER, 1, 1, 4, facing);
-			rotatedCubeVolume(world, rand, pos, 1, 8 + level, -13, blockHelper.GIANT_ROOT_PLANK_SLAB_LOWER, 1, 1, 4, facing);
+			rotatedCubeVolume(world, rand, pos, 5, 6 + level, -12, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 1, 1, 4, facing);
+			rotatedCubeVolume(world, rand, pos, 4, 6 + level, -12, blockHelper.ROTTEN_PLANK_SLAB_UPPER, 1, 1, 4, facing);
+			rotatedCubeVolume(world, rand, pos, 3, 7 + level, -13, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 1, 1, 4, facing);
+			rotatedCubeVolume(world, rand, pos, 2, 7 + level, -13, blockHelper.ROTTEN_PLANK_SLAB_UPPER, 1, 1, 4, facing);
+			rotatedCubeVolume(world, rand, pos, 1, 8 + level, -13, blockHelper.ROTTEN_PLANK_SLAB_LOWER, 1, 1, 4, facing);
 
 			rotatedCubeVolume(world, rand, pos, 5, 5 + level, -13, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
 			rotatedCubeVolume(world, rand, pos, 4, 5 + level, -13, blockHelper.getMudBricksForLevel(rand, 0, 0), 1, 1, 1, facing);
