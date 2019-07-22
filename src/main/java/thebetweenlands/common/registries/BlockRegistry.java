@@ -104,7 +104,6 @@ import thebetweenlands.common.block.plant.BlockEdgeShroom;
 import thebetweenlands.common.block.plant.BlockFlatheadMushroom;
 import thebetweenlands.common.block.plant.BlockGoldenClubFlower;
 import thebetweenlands.common.block.plant.BlockGoldenClubStalk;
-import thebetweenlands.common.block.plant.BlockHangingPlant;
 import thebetweenlands.common.block.plant.BlockHollowLog;
 import thebetweenlands.common.block.plant.BlockLichen;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldFlower;
@@ -612,7 +611,9 @@ public class BlockRegistry {
 	public static final Block COMPACTED_MUD_SLAB = new BlockSlabBetweenlands(COMPACTED_MUD);
 	public static final Block COMPACTED_MUD_MIRAGE = new BlockGenericMirage(Material.CIRCUITS).setSoundType2(SoundType.GROUND).setHardness(1.5F).setResistance(10.0F);
 	public static final Block DECAY_PIT_CONTROL = new BlockDecayPitControl();
-
+	public static final Block ROTTEN_PLANKS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.5F).setResistance(4.0F);
+	public static final Block ROTTEN_PLANK_SLAB = new BlockSlabBetweenlands(ROTTEN_PLANKS);
+	 
 	public static final Block MUD_TOWER_BRAZIER = new BlockBrazier();
 	public static final Block DECAY_PIT_HANGING_CHAIN = new BlockDecayPitHangingChain();
 	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK = new BlockDecayPitInvisibleFloorBlock();
