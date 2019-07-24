@@ -1,6 +1,9 @@
 package thebetweenlands.common.world.gen.biome.decorator;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
@@ -37,6 +40,7 @@ import thebetweenlands.common.world.gen.feature.WorldGenWeedwoodBush;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenIdolHeads;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenMudStructures;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallRuins;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawner;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawnerStructure;
@@ -118,6 +122,7 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_MUD_STRUCTURES = new WorldGenMudStructures();
 	public static final WorldGenerator GEN_TAR_POOL_DUNGEON = new WorldGenTarPoolDungeon();
 	public static final WorldGenerator GEN_SPIRIT_TREE_STRUCTURE = new WorldGenSpiritTreeStructure();
+	public static final WorldGenerator GEN_SLUDGE_WORM_DUNGEON = new WorldGenSludgeWormDungeon();
 	
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -861,33 +866,46 @@ public class DecorationHelper {
 		return false;
 	}
 	
-	public static boolean generateSwamplandsClearingSpiritTree(DecoratorPositionProvider decorator) {
+	private static boolean generateSubBiomeStructure(DecoratorPositionProvider decorator, WorldGenerator generator, int offsetX, int offsetZ, int biomeCheckRange, Biome biome, SurfaceType surface) {
 		MutableBlockPos pos = new MutableBlockPos();
-		int checkRadius = 36;
-		for(int xo = 0; xo < 32; xo += 4) {
-			for(int zo = 0; zo < 32; zo += 4) {
-				Biome biomeN = decorator.getWorld().getBiome(pos.setPos(decorator.getX() + xo, decorator.getY(), decorator.getZ() + zo - checkRadius));
-				Biome biomeE = decorator.getWorld().getBiome(pos.setPos(decorator.getX() + xo + checkRadius, decorator.getY(), decorator.getZ() + zo));
-				Biome biomeS = decorator.getWorld().getBiome(pos.setPos(decorator.getX() + xo, decorator.getY(), decorator.getZ() + zo + checkRadius));
-				Biome biomeW = decorator.getWorld().getBiome(pos.setPos(decorator.getX() + xo - checkRadius, decorator.getY(), decorator.getZ() + zo));
-				if(biomeN == BiomeRegistry.SWAMPLANDS_CLEARING && biomeE == BiomeRegistry.SWAMPLANDS_CLEARING && biomeS == BiomeRegistry.SWAMPLANDS_CLEARING
-						&& biomeW == BiomeRegistry.SWAMPLANDS_CLEARING) {
+		List<BlockPos> potentialPositions = new ArrayList<>();
+		for(int xo = 0; xo < 32; xo += 3) {
+			for(int zo = 0; zo < 32; zo += 3) {
+				Biome biomeN = decorator.getWorld().getBiome(pos.setPos(decorator.getX() + xo, decorator.getY(), decorator.getZ() + zo - biomeCheckRange));
+				Biome biomeE = decorator.getWorld().getBiome(pos.setPos(decorator.getX() + xo + biomeCheckRange, decorator.getY(), decorator.getZ() + zo));
+				Biome biomeS = decorator.getWorld().getBiome(pos.setPos(decorator.getX() + xo, decorator.getY(), decorator.getZ() + zo + biomeCheckRange));
+				Biome biomeW = decorator.getWorld().getBiome(pos.setPos(decorator.getX() + xo - biomeCheckRange, decorator.getY(), decorator.getZ() + zo));
+				if(biomeN == biome && biomeE == biome && biomeS == biome && biomeW == biome) {
 					pos.setPos(decorator.getX() + xo, decorator.getY(), decorator.getZ() + zo);
 					pos.setY(decorator.getWorld().getChunk(pos).getHeightValue(pos.getX() & 15, pos.getY() & 15));
 					BlockPos genPos = null;
 					for(int i = 0; i > -8; i--) {
-						if(SurfaceType.MIXED_GROUND.matches(decorator.getWorld().getBlockState(pos))) {
+						if(surface.matches(decorator.getWorld().getBlockState(pos))) {
 							genPos = pos.toImmutable().up();
 							break;
 						}
 						pos.setY(pos.getY() - 1);
 					}
 					if(genPos != null) {
-						return GEN_SPIRIT_TREE_STRUCTURE.generate(decorator.getWorld(), decorator.getRand(), genPos);
+						potentialPositions.add(genPos);
 					}
 				}
 			}
 		}
+		Collections.shuffle(potentialPositions, decorator.getRand());
+		for(BlockPos genPos : potentialPositions) {
+			if(generator.generate(decorator.getWorld(), decorator.getRand(), genPos.add(-offsetX, 0, -offsetZ))) {
+				return true;
+			}
+		}
 		return false;
+	}
+	
+	public static boolean generateSwamplandsClearingSpiritTree(DecoratorPositionProvider decorator) {
+		return generateSubBiomeStructure(decorator, GEN_SPIRIT_TREE_STRUCTURE, 0, 0, 36, BiomeRegistry.SWAMPLANDS_CLEARING, SurfaceType.MIXED_GROUND);
+	}
+	
+	public static boolean generateSludgePlainsClearingDungeon(DecoratorPositionProvider decorator) {
+		return generateSubBiomeStructure(decorator, GEN_SLUDGE_WORM_DUNGEON, 16, 16, 45, BiomeRegistry.SLUDGE_PLAINS_CLEARING, SurfaceType.MIXED_GROUND);
 	}
 }

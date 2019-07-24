@@ -11,6 +11,7 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.api.storage.LocalRegion;
@@ -48,6 +49,20 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
+		//Check for other sludge dungeons' towers but ignore small stuff below +10
+		int checkRange = 30;
+		MutableBlockPos checkPos = new MutableBlockPos();
+		for(int zo = -checkRange / 2; zo <= checkRange / 2; zo++) {
+			for(int yo = 0; yo <= 8; yo += 3) {
+				for(int xo = -checkRange / 2; xo <= checkRange / 2; xo++) {
+					checkPos.setPos(pos.getX() + 16 + xo, pos.getY() + 10 + yo, pos.getZ() + 16 + zo);
+					if(!world.isBlockLoaded(checkPos) || !world.getBlockState(checkPos).getBlock().isReplaceable(world, checkPos)) {
+						return false;
+					}
+				}
+			}
+		}
+		
 		//conditions blah, blah...
 		timer.start("Full_Mudgeon");
 

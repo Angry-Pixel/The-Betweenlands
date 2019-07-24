@@ -14,6 +14,7 @@ import thebetweenlands.common.world.biome.BiomeDeepWaters;
 import thebetweenlands.common.world.biome.BiomeMarsh;
 import thebetweenlands.common.world.biome.BiomePatchyIslands;
 import thebetweenlands.common.world.biome.BiomeSludgePlains;
+import thebetweenlands.common.world.biome.BiomeSludgePlainsClearing;
 import thebetweenlands.common.world.biome.BiomeSwamplands;
 import thebetweenlands.common.world.biome.BiomeSwamplandsClearing;
 
@@ -27,6 +28,7 @@ public class BiomeRegistry {
     public static final BiomeBetweenlands MARSH_1 = new BiomeMarsh(1);
     
     public static final BiomeBetweenlands SWAMPLANDS_CLEARING = new BiomeSwamplandsClearing();
+    public static final BiomeBetweenlands SLUDGE_PLAINS_CLEARING = new BiomeSludgePlainsClearing();
     
     public static final List<BiomeBetweenlands> REGISTERED_BIOMES = new ArrayList<BiomeBetweenlands>();
 

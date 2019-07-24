@@ -5,21 +5,23 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.tile.ModelDungeonDoorRunes;
 import thebetweenlands.client.render.model.tile.ModelDungeonDoorRunesLayer;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 
 @SideOnly(Side.CLIENT)
@@ -86,15 +88,32 @@ public class RenderDungeonDoorRunes extends TileEntitySpecialRenderer<TileEntity
 		
 		if(tile.is_gate_entrance && tile.slate_1_rotate <= 270) {
 			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
-			RenderHelper.disableStandardItemLighting();
+			
+			ITextureObject texture = Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			texture.setBlurMipmap(false, false);
+			
+			RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+			
+			GlStateManager.enableLighting();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			
+			GlStateManager.pushMatrix();
 			GlStateManager.scale(1.03125F, 1.03125F, 1.03125F);
-			Minecraft.getMinecraft().getRenderItem().renderItem(tile.cachedStack(), Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(tile.cachedStack(), (World) null, (EntityLivingBase) null));
+			
+			IBakedModel itemModel = renderItem.getItemModelWithOverrides(tile.cachedStack(), (World) null, (EntityLivingBase) null);
+			itemModel = ForgeHooksClient.handleCameraTransforms(itemModel, ItemCameraTransforms.TransformType.NONE, false);
+			
+			renderItem.renderItem(tile.cachedStack(), itemModel);
+			
+			GlStateManager.popMatrix();
+			
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GlStateManager.enableLighting();
 			GlStateManager.disableBlend();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			
+			texture.restoreLastBlurMipmap();
 		}
 		GlStateManager.disableBlend();
 		GlStateManager.popMatrix();
