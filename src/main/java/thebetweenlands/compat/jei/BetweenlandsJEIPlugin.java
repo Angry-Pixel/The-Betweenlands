@@ -112,6 +112,8 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
 
         if (!BetweenlandsConfig.DEBUG.debug) {
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TEST_ITEM));
+            blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TEST_ITEM_CHIMP));
+            blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TEST_ITEM_CHIMP_RULER));
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.LOCATION_DEBUG));
         }
     }

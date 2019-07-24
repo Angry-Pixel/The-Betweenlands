@@ -39,9 +39,8 @@ public class BlockCarvedMudBrick extends BasicBlock implements ICustomItemBlock,
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		if (tab == BLCreativeTabs.BLOCKS)
-			for (EnumCarvedMudBrickType type : EnumCarvedMudBrickType.values())
-				list.add(new ItemStack(this, 1, type.ordinal()));
+		for (EnumCarvedMudBrickType type : EnumCarvedMudBrickType.values())
+			list.add(new ItemStack(this, 1, type.ordinal()));
 	}
 
 	@Override

@@ -33,15 +33,14 @@ public class BlockWormDungeonPillar extends BasicBlock implements ICustomItemBlo
 		setHardness(1.5F);
 		setResistance(10.0F);
 		setSoundType(SoundType.STONE);
-		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		setDefaultCreativeTab();
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		if (tab == BLCreativeTabs.BLOCKS)
-			for (EnumWormPillarType type : EnumWormPillarType.values())
-				list.add(new ItemStack(this, 1, type.ordinal()));
+		for (EnumWormPillarType type : EnumWormPillarType.values())
+			list.add(new ItemStack(this, 1, type.ordinal()));
 	}
 
 	@Override

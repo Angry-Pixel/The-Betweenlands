@@ -51,9 +51,8 @@ public class BlockMudTiles extends Block implements ICustomItemBlock, ISubtypeIt
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-		if (tab == BLCreativeTabs.BLOCKS)
-			for (EnumMudTileType type : EnumMudTileType.values())
-				list.add(new ItemStack(this, 1, type.ordinal()));
+		for (EnumMudTileType type : EnumMudTileType.values())
+			list.add(new ItemStack(this, 1, type.ordinal()));
 	}
 
 	@Override
