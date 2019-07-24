@@ -42,17 +42,6 @@ public class CompostRecipeCategory implements IRecipeCategory {
         return background;
     }
 
-    @Nullable
-    @Override
-    public IDrawable getIcon() {
-        return null;
-    }
-
-    @Override
-    public void drawExtras(Minecraft minecraft) {
-    }
-
-
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 0, 1);
@@ -60,10 +49,5 @@ public class CompostRecipeCategory implements IRecipeCategory {
 
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
         recipeLayout.getItemStacks().set(1, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-    }
-
-    @Override
-    public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return new ArrayList<>();
     }
 }

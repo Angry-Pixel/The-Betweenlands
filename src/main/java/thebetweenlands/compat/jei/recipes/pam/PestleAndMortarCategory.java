@@ -39,17 +39,6 @@ public class PestleAndMortarCategory implements IRecipeCategory {
         return background;
     }
 
-    @Nullable
-    @Override
-    public IDrawable getIcon() {
-        return null;
-    }
-
-    @Override
-    public void drawExtras(Minecraft minecraft) {
-
-    }
-
     @Override
     public String getModName() {
         return ModInfo.NAME;
@@ -68,10 +57,5 @@ public class PestleAndMortarCategory implements IRecipeCategory {
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(VanillaTypes.ITEM).get(0));
         recipeLayout.getItemStacks().set(1, pestle);
         recipeLayout.getItemStacks().set(2, ingredients.getOutputs(VanillaTypes.ITEM).get(0));
-    }
-
-    @Override
-    public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return new ArrayList<>();
     }
 }

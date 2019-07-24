@@ -15,6 +15,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
+import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.List;
 
@@ -40,13 +41,15 @@ public class ItemWeedwoodRowboat extends Item {
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
         if (this.isInCreativeTab(tab)) {
             list.add(new ItemStack(this));
-
-            ItemStack tarred = new ItemStack(this);
-            NBTTagCompound attrs = new NBTTagCompound();
-            attrs.setBoolean("isTarred", true);
-            tarred.setTagInfo("attributes", attrs);
-            list.add(tarred);
+            list.add(getTarred());
         }
+    }
+    public static ItemStack getTarred() {
+        ItemStack tarred = new ItemStack(ItemRegistry.WEEDWOOD_ROWBOAT);
+        NBTTagCompound attrs = new NBTTagCompound();
+        attrs.setBoolean("isTarred", true);
+        tarred.setTagInfo("attributes", attrs);
+        return tarred;
     }
 
     @Override
@@ -57,26 +60,26 @@ public class ItemWeedwoodRowboat extends Item {
         Vec3d lookExtent = pos.add(look.x * REACH, look.y * REACH, look.z * REACH);
         RayTraceResult hit = world.rayTraceBlocks(pos, lookExtent, true);
         if (hit == null) {
-            return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+            return new ActionResult<>(EnumActionResult.PASS, stack);
         }
         List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(player, player.getEntityBoundingBox().grow(look.x * REACH, look.y * REACH, look.z * REACH).grow(1, 1, 1));
         for (Entity entity : list) {
             if (entity.canBeCollidedWith()) {
                 AxisAlignedBB axisalignedbb = entity.getEntityBoundingBox().grow(entity.getCollisionBorderSize(), entity.getCollisionBorderSize(), entity.getCollisionBorderSize());
                 if (axisalignedbb.contains(pos)) {
-                    return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+                    return new ActionResult<>(EnumActionResult.PASS, stack);
                 }
             }
         }
         if (hit.typeOfHit != RayTraceResult.Type.BLOCK) {
-            return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
+            return new ActionResult<>(EnumActionResult.PASS, stack);
         }
         IBlockState block = world.getBlockState(hit.getBlockPos());
         boolean liquid = block.getMaterial().isLiquid();
         EntityWeedwoodRowboat rowboat = new EntityWeedwoodRowboat(world, hit.hitVec.x, liquid ? hit.hitVec.y - 0.3 : hit.hitVec.y, hit.hitVec.z);
         rowboat.rotationYaw = player.rotationYaw;
         if (!world.getCollisionBoxes(rowboat, rowboat.getEntityBoundingBox().grow(-0.1, -0.1, -0.1)).isEmpty()) {
-            return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
+            return new ActionResult<>(EnumActionResult.FAIL, stack);
         }
         if (!world.isRemote) {
             NBTTagCompound attrs = stack.getSubCompound("attributes");
@@ -89,6 +92,6 @@ public class ItemWeedwoodRowboat extends Item {
             stack.shrink(1);
         }
         player.addStat(StatList.getObjectUseStats(this));
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, stack);
     }
 }

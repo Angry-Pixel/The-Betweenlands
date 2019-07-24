@@ -11,7 +11,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.ItemHandlerHelper;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.TranslationHelper;
@@ -21,6 +21,7 @@ import java.util.List;
 
 public class ItemSyrmoriteBucketSolidRubber extends Item {
 	public ItemSyrmoriteBucketSolidRubber() {
+		this.setCreativeTab(BLCreativeTabs.GEARS);
 		this.setMaxStackSize(1);
 	}
 

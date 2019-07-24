@@ -2,22 +2,16 @@ package thebetweenlands.common.item.food;
 
 import java.util.List;
 
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
-import net.minecraft.world.World;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.ItemAspectContainer;
-import thebetweenlands.client.handler.ScreenRenderHandler;
-
-import javax.annotation.Nullable;
+import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class ItemAspectrusFruit extends Item {
 	public ItemAspectrusFruit() {
-		this.setCreativeTab(null);
+		this.setCreativeTab(BLCreativeTabs.HERBLORE);
 	}
 
 	@Override

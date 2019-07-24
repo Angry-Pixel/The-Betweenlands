@@ -1,6 +1,5 @@
 package thebetweenlands.common.item.tools;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -8,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
-
-import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -28,7 +25,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -37,6 +33,7 @@ import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
@@ -47,6 +44,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistry.IMultipleItemModelDefinition {
 
 	public ItemBucketInfusion() {
+		this.setCreativeTab(BLCreativeTabs.GEARS);
 		this.setMaxStackSize(1);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
