@@ -1,5 +1,6 @@
 package thebetweenlands.compat.jei.recipes.animator;
 
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
@@ -11,8 +12,8 @@ import java.util.List;
 
 public class AnimatorRecipeMaker {
     @Nonnull
-    public static List<AnimatorRecipeJEI> getRecipes() {
-        ArrayList<AnimatorRecipeJEI> recipes = new ArrayList<AnimatorRecipeJEI>();
+    public static List<IRecipeWrapper> getRecipes() {
+        ArrayList<IRecipeWrapper> recipes = new ArrayList<>();
         for (IAnimatorRecipe recipe : AnimatorRecipe.getRecipes()) {
             if (recipe instanceof AnimatorRecipe || (recipe instanceof ToolRepairAnimatorRecipe && isValidToolRecipe((ToolRepairAnimatorRecipe) recipe)))
                 //if (((AnimatorRecipe) recipe).getLootTable() == null)

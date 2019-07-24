@@ -40,16 +40,6 @@ public class AnimatorRecipeCategory implements IRecipeCategory {
         return background;
     }
 
-    @Nullable
-    @Override
-    public IDrawable getIcon() {
-        return null;
-    }
-
-    @Override
-    public void drawExtras(Minecraft minecraft) {
-    }
-
     @Override
     public String getModName() {
         return ModInfo.NAME;
@@ -83,10 +73,5 @@ public class AnimatorRecipeCategory implements IRecipeCategory {
                 tooltip.add("Output amount: " + min + " -> " + max);
             }
         });
-    }
-
-    @Override
-    public List<String> getTooltipStrings(int mouseX, int mouseY) {
-        return new ArrayList<>();
     }
 }

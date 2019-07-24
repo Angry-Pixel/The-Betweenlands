@@ -1251,6 +1251,8 @@ jei.thebetweenlands.time.minutes=Process time: %d minutes
 jei.thebetweenlands.time.seconds=Process time: %d seconds
 jei.thebetweenlands.animator.life=Life amount: %d
 jei.thebetweenlands.animator.fuel=Fuel amount: %d
+jei.thebetweenlands.tarred_weedwood_boat=Clicking a boat with a Tar Drip will make it tarred. A tarred boat will stay in place and is easier to direct and control.
+jei.thebetweenlands.druid_circle_reactivate=Reactivates Druid Spawner
 
 # Commands
 command.generic.noplayer=You must be a player

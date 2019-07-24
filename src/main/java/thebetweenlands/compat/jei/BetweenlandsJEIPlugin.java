@@ -4,6 +4,7 @@ import mezz.jei.api.*;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.ingredients.IIngredientRegistry;
+import mezz.jei.api.ingredients.VanillaTypes;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
@@ -20,11 +21,12 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
+import thebetweenlands.client.gui.inventory.*;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.misc.ItemBoneWayfinder;
 import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.item.misc.ItemWeedwoodRowboat;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe.ShapedOverrideDummyRecipe;
@@ -50,7 +52,14 @@ import java.util.List;
 import java.util.function.Function;
 
 @JEIPlugin
-public class BetweenlandsJEIPlugin implements IModPlugin{
+public class BetweenlandsJEIPlugin implements IModPlugin {
+
+    public static final String PURIFIER_CATEGORY_UID = ModInfo.ID + ":purifier";
+    public static final String POM_CATEGORY_UID = ModInfo.ID + ":pestle_and_mortar";
+    public static final String DRUID_ALTAR_CATEGORY_UID = ModInfo.ID + ":druid_altar";
+    public static final String ANIMATOR_CATEGORY_UID = ModInfo.ID + ":animator";
+    public static final String COMPOST_CATEGORY_UID = ModInfo.ID + ":compost";
+
     public static IJeiHelpers jeiHelper;
     public static IJeiRuntime jeiRuntime;
     public static IIngredientRegistry ingredientRegistry;
@@ -60,25 +69,37 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         ingredientRegistry = registry.getIngredientRegistry();
     	MinecraftForge.EVENT_BUS.register(DynamicJEIRecipeHandler.class);
 
-        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.COMPOST_BIN), ModInfo.ID + ":compost");
-        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.ANIMATOR), ModInfo.ID + ":animator");
-        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.DRUID_ALTAR), ModInfo.ID + ":druid_altar");
-        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.MORTAR), ModInfo.ID + ":pestle_and_mortar");
-        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.PURIFIER), ModInfo.ID + ":purifier");
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.COMPOST_BIN), COMPOST_CATEGORY_UID);
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.ANIMATOR), ANIMATOR_CATEGORY_UID);
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.DRUID_ALTAR), DRUID_ALTAR_CATEGORY_UID);
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.MORTAR), POM_CATEGORY_UID);
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.PURIFIER), PURIFIER_CATEGORY_UID);
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.WEEDWOOD_WORKBENCH), VanillaRecipeCategoryUid.CRAFTING);
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.SULFUR_FURNACE), VanillaRecipeCategoryUid.SMELTING);
+        registry.addRecipeCatalyst(new ItemStack(BlockRegistry.SULFUR_FURNACE_DUAL), VanillaRecipeCategoryUid.SMELTING);
 
-        registry.addRecipes(CompostRecipeMaker.getRecipes(), ModInfo.ID + ":compost");
-        registry.addRecipes(AnimatorRecipeMaker.getRecipes(), ModInfo.ID + ":animator");
-        registry.addRecipes(DruidAltarRecipeMaker.getRecipes(), ModInfo.ID + ":druid_altar");
-        registry.addRecipes(PestleAndMortarRecipeMaker.getRecipes(), ModInfo.ID + ":pestle_and_mortar");
-        registry.addRecipes(PurifierRecipeMaker.getRecipes(), ModInfo.ID + ":purifier");
+        registry.addRecipes(CompostRecipeMaker.getRecipes(), COMPOST_CATEGORY_UID);
+        registry.addRecipes(AnimatorRecipeMaker.getRecipes(), ANIMATOR_CATEGORY_UID);
+        registry.addRecipes(DruidAltarRecipeMaker.getRecipes(), DRUID_ALTAR_CATEGORY_UID);
+        registry.addRecipes(PestleAndMortarRecipeMaker.getRecipes(), POM_CATEGORY_UID);
+        registry.addRecipes(PurifierRecipeMaker.getRecipes(), PURIFIER_CATEGORY_UID);
 
         registry.handleRecipes(ShapelessOverrideDummyRecipe.class, recipe -> new ShapelessOverrideRecipeJEI(jeiHelper, recipe), VanillaRecipeCategoryUid.CRAFTING);
         registry.handleRecipes(ShapedOverrideDummyRecipe.class, recipe -> new ShapedOverrideRecipeJEI(jeiHelper, recipe), VanillaRecipeCategoryUid.CRAFTING);
-        
+
+        registry.addIngredientInfo(ItemWeedwoodRowboat.getTarred(), VanillaTypes.ITEM, "jei.thebetweenlands.tarred_weedwood_boat");
         addDynamicRecipes(registry);
 
         registry.addRecipeClickArea(GuiWeedwoodWorkbench.class, 88, 32, 28, 23, VanillaRecipeCategoryUid.CRAFTING);
+        registry.addRecipeClickArea(GuiBLFurnace.class, 77, 31, 28, 23, VanillaRecipeCategoryUid.SMELTING);
+        registry.addRecipeClickArea(GuiBLDualFurnace.class, 77, 36, 28, 92, VanillaRecipeCategoryUid.SMELTING);
+        registry.addRecipeClickArea(GuiPurifier.class, 81, 31, 28, 23, PURIFIER_CATEGORY_UID);
+        registry.addRecipeClickArea(GuiMortar.class, 43, 66, 90, 14, POM_CATEGORY_UID);
+        registry.addRecipeClickArea(GuiAnimator.class, 51, 49, 72, 25, ANIMATOR_CATEGORY_UID);
+        registry.addRecipeClickArea(GuiDruidAltar.class, 70, 5, 38, 27, DRUID_ALTAR_CATEGORY_UID);
+        registry.addRecipeClickArea(GuiDruidAltar.class, 52, 24, 27, 38, DRUID_ALTAR_CATEGORY_UID);
+        registry.addRecipeClickArea(GuiDruidAltar.class, 99, 24, 27, 38, DRUID_ALTAR_CATEGORY_UID);
+        registry.addRecipeClickArea(GuiDruidAltar.class, 70, 51, 38, 27, DRUID_ALTAR_CATEGORY_UID);
 
         IRecipeTransferRegistry recipeTranferRegistry = registry.getRecipeTransferRegistry();
         recipeTranferRegistry.addRecipeTransferHandler(ContainerWeedwoodWorkbench.class, VanillaRecipeCategoryUid.CRAFTING, 1, 9, 10, 36);

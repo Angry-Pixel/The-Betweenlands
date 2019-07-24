@@ -16,6 +16,6 @@ repositories {
 dependencies {
 	deobfCompile curse.resolve("tombmanygraves-2-api", "2563073") // 1.0.0
 
-	deobfCompile 'mezz.jei:jei_1.12.2:4.13.1.225:api'
-	runtime 'mezz.jei:jei_1.12.2:4.13.1.225'
+	deobfCompile 'mezz.jei:jei_1.12.2:4.15.0.268:api'
+	runtime 'mezz.jei:jei_1.12.2:4.15.0.268'
 }
