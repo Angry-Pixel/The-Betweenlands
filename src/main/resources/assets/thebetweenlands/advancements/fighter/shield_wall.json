@@ -42,6 +42,16 @@
         ]
       }
     },
+    "living_weedwood_shield": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:living_weedwood_shield"
+          }
+        ]
+      }
+    },
     "valonite_shield": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
@@ -118,6 +128,7 @@
       "octine_shield",
       "bone_shield",
       "weedwood_shield",
+      "living_weedwood_shield",
       "valonite_shield",
       "syrmorite_shield",
       "lurker_skin_shield",
