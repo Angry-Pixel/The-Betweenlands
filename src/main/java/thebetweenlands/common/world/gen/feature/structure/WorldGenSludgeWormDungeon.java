@@ -918,7 +918,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		TileEntityDungeonDoorCombination tileCode = (TileEntityDungeonDoorCombination) world.getTileEntity(codePos);
 		if (tileCode instanceof TileEntityDungeonDoorCombination) {
 			if(!isMimic) {
-				tileCode.top_code = 1;//world.rand.nextInt(8);
+				tileCode.top_code = 1;//world.rand.nextInt(8); //TODO HOLY SHIT DON'T FORGET TO CHANGE THIS BACK!
 				tileCode.mid_code = 1;//world.rand.nextInt(8);
 				tileCode.bottom_code = 1;//world.rand.nextInt(8);
 			}
@@ -983,7 +983,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				if (rand.nextInt(15) == 0 && addFeature && !isSolidStructureBlock(world.getBlockState(pos.add(j, 1, i))) && world.getBlockState(pos.add(j, 0, i)).getBlock() instanceof BlockMudTiles) {
 					if (!isBlackListedAreaForGen(pos.add(2, 0, 2), pos.add(j, 0, i), 1) && !isBlackListedAreaForGen(pos.add(26, 0, 26), pos.add(j, 0, i), 1) && !isBlackListedAreaForGenSpecial(pos.add(26, 0, 2), pos.add(j, 0, i), 1, level == 3 ? true : false) && !isBlackListedAreaForGenSpecial(pos.add(2, 0, 26), pos.add(j, 0, i), 1, level == 5 ? true : false)) {
 						if (rand.nextBoolean() && rand.nextBoolean())
-							world.setBlockState(pos.add(j, 0, i), blockHelper.getMudTilesWater(rand), 2); // change this
+							world.setBlockState(pos.add(j, 0, i), blockHelper.getMudTilesWater(rand), 2);
 						else if (rand.nextInt(10) == 0 && addSpawners)
 							world.setBlockState(pos.add(j, 0, i), blockHelper.SPAWNER_TYPE_1, 2);
 						else if (rand.nextInt(6) == 0 && addSpawners)
@@ -1015,7 +1015,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		world.setBlockState(pos, state, 2);
 		TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
 		if (chest != null) {
-			//add loot here
+			// TODO add loot here
 		}
 	}
 
