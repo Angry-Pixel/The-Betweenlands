@@ -23,8 +23,8 @@ public class TileEntityMudBricksSpawnerHole extends TileEntity implements ITicka
 	private int minSpawnDelay = 100;
 	private int maxSpawnDelay = 400;
 	private int spawnCount = 1;
-	private int maxNearbyEntities = 6;
-	private int activatingRangeFromPlayer = 16;
+	private int maxNearbyEntities = 2;
+	private int activatingRangeFromPlayer = 8;
 	private int spawnRange = 4;
 
 	private boolean isActivated() {

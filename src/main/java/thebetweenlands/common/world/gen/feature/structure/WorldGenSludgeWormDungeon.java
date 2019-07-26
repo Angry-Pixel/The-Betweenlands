@@ -19,6 +19,8 @@ import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.plant.BlockMoss;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
+import thebetweenlands.common.block.structure.BlockCompactedMud;
+import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.entity.EntityDecayPitChain;
@@ -36,7 +38,6 @@ import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.util.TimeMeasurement;
 
 public class WorldGenSludgeWormDungeon extends WorldGenerator {
-
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	private SludgeWormMazeMicroBuilds microBuild = new SludgeWormMazeMicroBuilds();
 	private LightTowerBuildParts lightTowerBuild = new LightTowerBuildParts();
@@ -534,6 +535,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					break;
 				case 3:
 					buildLevel(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
+					addFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
 					break;
 				case 4:
 					buildLevel(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
@@ -543,7 +545,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					buildRoof(world, pos.up(layer), rand, mazeWidth, mazeHeight, level);
 					addMazeCellFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
 					buildFloor(world, pos, rand, mazeWidth, mazeHeight, true, false, level);
-					addFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer); //nothing specific here yet
+					addFeature(world, pos.up(layer), rand, mazeWidth, mazeHeight, maze, level, layer);
 					break;
 			}
 	//	System.out.println("Generated Maze At: X: " + pos.getX() + " Y: " + pos.getY() + " Z: " + pos.getZ());
@@ -639,7 +641,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					addFallingBlockEntity(world, pos.offset(facing, 2));
 				if (level >= 5 && rand.nextInt(level == 5 ? 25 : 20) == 0)
 					addFallingBlockEntity(world, pos.offset(facing, 3));
-			}
+				}
 		}
 	}
 
@@ -753,13 +755,15 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 								if(world.isAirBlock(pos.add(1 + j * 4, -4, 1 + rand.nextInt(2) + i * 4)))
 									setRandomRoot(world, pos.add(1 + j * 4, -4, 1 + rand.nextInt(2) + i * 4), rand);
 							}
+						if (level >= 5 && rand.nextInt(level == 5 ? 10 : 5) == 0)
+							if(world.isAirBlock(pos.add(2 + j * 4, -1, 2 + i * 4)) && world.getBlockState(pos.add(2 + j * 4, 0, 2 + i * 4)).getBlock() instanceof BlockCompactedMud)
+								world.setBlockState(pos.add(2 + j * 4, 0, 2 + i * 4), blockHelper.MUD_BRICKS_SPAWNER_HOLE.withProperty(BlockMudBricksSpawnerHole.FACING, EnumFacing.DOWN));
 					}
 					if (layer == 2) {
 						if (!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -3, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -3, 2 + i * 4)) && !isBlackListedForGenSpecial(pos.add(26, 0, 2), pos.add(2 + j * 4, -3, 2 + i * 4), level == 3 ? true : false) && !isBlackListedForGenSpecial(pos.add(2, 0, 26), pos.add(2 + j * 4, -3, 2 + i * 4), level == 5 ? true : false))
 							if (rand.nextInt(25) == 0 && !isSolidStructureBlock(world.getBlockState(pos.add(2 + j * 4, 0, 1 + i * 4))) && world.getBlockState(pos.add(2 + j * 4, 0, i * 4)).getBlock() instanceof BlockCarvedMudBrick)
 								world.setBlockState(pos.add(2 + j * 4, 0, 1 + i * 4), blockHelper.DUNGEON_WALL_CANDLE_SOUTH, 2);
 							else {
-
 								if (rand.nextInt(5) == 0 && level != 2)
 									if(world.getBlockState(pos.add(2 + j * 4, 0, i * 4)).getBlock() instanceof BlockCarvedMudBrick)
 										setAlcoveForLevel(world, pos.add(2 + j * 4, 0, i * 4), blockHelper.MUD_BRICKS_ALCOVE_SOUTH, rand, level);
@@ -772,6 +776,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 								}
 					}
 					if (layer == 3) {
+						if (rand.nextInt(35) == 0)
+							if(world.getBlockState(pos.add(2 + j * 4, 0, i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+								if(world.isAirBlock(pos.add(2 + j * 4, 0, i * 4).offset(EnumFacing.SOUTH, 1)))
+									world.setBlockState(pos.add(2 + j * 4, 0, i * 4), blockHelper.MUD_BRICKS_SPAWNER_HOLE.withProperty(BlockMudBricksSpawnerHole.FACING, EnumFacing.SOUTH));
 					}
 					if (layer == 4) {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j *  4, 0, 1 + i * 4))))
@@ -803,6 +811,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 							}
 					}
 					if (layer == 3) {
+						if (rand.nextInt(35) == 0)
+							if(world.getBlockState(pos.add(j * 4, 0, 2 + i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+								if(world.isAirBlock(pos.add(j * 4, 0, 2 + i * 4).offset(EnumFacing.EAST, 1)))
+									world.setBlockState(pos.add(j * 4, 0, 2 + i * 4), blockHelper.MUD_BRICKS_SPAWNER_HOLE.withProperty(BlockMudBricksSpawnerHole.FACING, EnumFacing.EAST));
 					}
 					if (layer == 4) {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 1 + i * 4))))
@@ -811,6 +823,12 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 							world.setBlockState(pos.add(1 + j * 4, 0, 2 + i * 4), getStairsForLevel(rand, level, EnumFacing.WEST, EnumHalf.TOP), 2);
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 3 + i * 4))))
 							world.setBlockState(pos.add(1 + j * 4, 0, 3 + i * 4), getStairsForLevel(rand, level, EnumFacing.WEST, EnumHalf.TOP), 2);
+					}
+					
+					if (layer == 5) {
+						if (level >= 5 && rand.nextInt(level == 5 ? 10 : 5) == 0)
+							if(world.isAirBlock(pos.add(2 + j * 4, -1, 2 + i * 4)) && world.getBlockState(pos.add(2 + j * 4, 0, 2 + i * 4)).getBlock() instanceof BlockCompactedMud)
+								world.setBlockState(pos.add(2 + j * 4, 0, 2 + i * 4), blockHelper.MUD_BRICKS_SPAWNER_HOLE.withProperty(BlockMudBricksSpawnerHole.FACING, EnumFacing.DOWN));
 					}
 				}
 
@@ -834,6 +852,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 							}
 					}
 					if (layer == 3) {
+						if (rand.nextInt(35) == 0)
+							if(world.getBlockState(pos.add(4 + j * 4, 0, 2 + i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+								if(world.isAirBlock(pos.add(4 + j * 4, 0, 2 + i * 4).offset(EnumFacing.WEST, 1)))
+									world.setBlockState(pos.add(4 + j * 4, 0, 2 + i * 4), blockHelper.MUD_BRICKS_SPAWNER_HOLE.withProperty(BlockMudBricksSpawnerHole.FACING, EnumFacing.WEST));
 					}
 					if (layer == 4) {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, 0, 1 + i * 4))))
@@ -865,6 +887,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 							}
 					}
 					if (layer == 3) {
+						if (rand.nextInt(35) == 0)
+							if(world.getBlockState(pos.add(2 + j * 4, 0, 4 + i * 4)).getBlock() instanceof BlockCarvedMudBrick)
+								if(world.isAirBlock(pos.add(2 + j * 4, 0, 4 + i * 4).offset(EnumFacing.NORTH, 1)))
+									world.setBlockState(pos.add(2 + j * 4, 0, 4 + i * 4), blockHelper.MUD_BRICKS_SPAWNER_HOLE.withProperty(BlockMudBricksSpawnerHole.FACING, EnumFacing.NORTH));
 					}
 					if (layer == 4) {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 3 + i * 4))))
@@ -989,7 +1015,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						else if (rand.nextInt(6) == 0 && addSpawners)
 							world.setBlockState(pos.add(j, 0, i), blockHelper.SPAWNER_TYPE_2, 2);
 						else
-							if (rand.nextBoolean() && rand.nextBoolean() && level != 2)
+							if (rand.nextBoolean() && rand.nextBoolean() && level >= 4)
 								world.setBlockState(pos.add(j, 0, i), blockHelper.PUFFSHROOM, 2);
 					}
 				} 

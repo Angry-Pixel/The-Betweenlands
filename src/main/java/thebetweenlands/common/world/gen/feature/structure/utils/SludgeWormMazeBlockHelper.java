@@ -784,6 +784,7 @@ public class SludgeWormMazeBlockHelper {
 			STRUCTURE_BLOCKS.put(CHEST, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICKS_SPIKE_TRAP, true);
 			STRUCTURE_BLOCKS.put(MUD_TILES_SPIKE_TRAP, true);
+			STRUCTURE_BLOCKS.put(MUD_BRICKS_SPAWNER_HOLE, true);
 		}
 	}
 }

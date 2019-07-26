@@ -17,6 +17,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.block.structure.BlockSpikeTrap;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -97,7 +98,7 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 			for (int i = 0; i < list.size(); i++) {
 				Entity entity = list.get(i);
 				if (entity != null)
-					//if (entity instanceof EntityPlayer)
+					if (!(entity instanceof IEntityBL))
 						((EntityLivingBase) entity).attackEntityFrom(DamageSource.GENERIC, 2);
 			}
 		return null;
@@ -111,7 +112,7 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity = list.get(i);
 			if (entity != null)
-				//if (entity instanceof EntityPlayer)
+				if (!(entity instanceof IEntityBL))
 					return entity;
 		}
 		return null;
