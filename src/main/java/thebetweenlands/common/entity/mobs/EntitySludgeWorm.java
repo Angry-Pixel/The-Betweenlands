@@ -138,7 +138,8 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 			return true;
 		} else {
 			dmg *= 0.5F;
-			return false;
+			damageWorm(source, dmg);
+			return true;
 		}
 	}
 
