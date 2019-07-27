@@ -106,7 +106,7 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 
 	@SideOnly(Side.CLIENT)
 	private void initParticleBatch() {
-		this.particleBatch = BatchedParticleRenderer.INSTANCE.createBatchType(new ParticleBatchTypeBuilder().pass().depthMaskPass(true).texture((ResourceLocation)null).end().build());
+		this.particleBatch = BatchedParticleRenderer.INSTANCE.createBatchType(new ParticleBatchTypeBuilder().pass().depthMaskPass(true).lit(true).texture((ResourceLocation)null).end().build());
 	}
 	
 	@Override

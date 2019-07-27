@@ -62,7 +62,7 @@ public class DefaultParticleBatches {
 			//Use static texture
 			return GAS_CLOUD_TEXTURE;
 		}
-	}).end().build());
+	}).lit(true).end().build());
 	public static final ParticleBatch GAS_CLOUDS_HEAT_HAZE = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().depthMaskPass(true).texture((ResourceLocation)null).end().build(), false);
 	public static final ParticleBatch HEAT_HAZE_PARTICLE_ATLAS = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().blend(SourceFactor.SRC_ALPHA, DestFactor.ONE).depthMaskPass(true).texture(PARTICLE_ATLAS).end().filter(SHADER_FILTER).build(), false);
 	public static final ParticleBatch HEAT_HAZE_BLOCK_ATLAS = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass().blend(SourceFactor.SRC_ALPHA, DestFactor.ONE).depthMaskPass(true).texture(BLOCK_ATLAS).end().filter(SHADER_FILTER).build(), false);

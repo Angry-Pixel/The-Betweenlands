@@ -672,7 +672,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 
 	private void updateGasParticlesTexture(World world, float partialTicks) {
-		boolean hasCloud = BatchedParticleRenderer.INSTANCE.getParticleCount(DefaultParticleBatches.GAS_CLOUDS_TEXTURED) > 0 || BatchedParticleRenderer.INSTANCE.getParticleCount(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE) > 0;
+		boolean hasCloud = DefaultParticleBatches.GAS_CLOUDS_TEXTURED.getParticles().size() > 0 || DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE.getParticles().size() > 0;
 		if(!hasCloud) {
 			for (Entity entity : Minecraft.getMinecraft().world.loadedEntityList) {
 				if (entity instanceof EntityGasCloud) {

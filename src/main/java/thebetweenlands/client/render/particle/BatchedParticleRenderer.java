@@ -11,10 +11,12 @@ import java.util.Queue;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -146,10 +148,6 @@ public class BatchedParticleRenderer {
 			}
 		}
 	}
-
-	public int getParticleCount(ParticleBatch batch) {
-		return batch.particles.size();
-	}
 	
 	public void renderAll(Entity entity, float partialTicks) {
 		for(ParticleBatch batch : this.renderedBatches) {
@@ -176,11 +174,13 @@ public class BatchedParticleRenderer {
 
 			Tessellator tessellator = Tessellator.getInstance();
 
+			RenderHelper.disableStandardItemLighting();
+			Minecraft.getMinecraft().entityRenderer.enableLightmap();
+			
 			GlStateManager.pushMatrix();
 			GlStateManager.enableDepth();
 			GlStateManager.enableBlend();
 			GlStateManager.depthMask(true);
-			GlStateManager.enableLighting();
 			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.004F);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -222,8 +222,9 @@ public class BatchedParticleRenderer {
 			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.disableBlend();
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-			GlStateManager.disableLighting();
 			GlStateManager.popMatrix();
+			
+			RenderHelper.disableStandardItemLighting();
 		}
 	}
 }

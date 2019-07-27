@@ -203,9 +203,9 @@ public class ParticleBatchTypeBuilder {
 				GlStateManager.colorMask(pass.colorMaskR, pass.colorMaskG, pass.colorMaskB, pass.colormaskA);
 
 				if(pass.lit) {
-					GlStateManager.enableLighting();
+					Minecraft.getMinecraft().entityRenderer.enableLightmap();
 				} else {
-					GlStateManager.disableLighting();
+					Minecraft.getMinecraft().entityRenderer.disableLightmap();
 				}
 
 				if(pass.blend) {
