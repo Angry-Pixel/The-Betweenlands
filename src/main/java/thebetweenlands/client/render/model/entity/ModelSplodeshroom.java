@@ -56,20 +56,24 @@ public class ModelSplodeshroom extends ModelBase {
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
 		EntitySplodeshroom splodeshroom = (EntitySplodeshroom) entity;
-		float swell = splodeshroom.getSwellCount() * 0.02F;
-		GlStateManager.pushMatrix();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.depthMask(true);
-		stem1.render(scale);
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(0F, 0F - swell * 0.25F, 0F);
-		GlStateManager.scale(1F + swell, 1F + swell * 0.25F, 1F + swell);
-		
-        hat_main.render(scale);
-        GlStateManager.popMatrix();
-		GlStateManager.disableBlend();
-		GlStateManager.popMatrix();
+		if (!splodeshroom.getHasExploded()) {
+			float swell = splodeshroom.getSwellCount() * 0.02F;
+			GlStateManager.pushMatrix();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GlStateManager.depthMask(true);
+			stem1.render(scale);
+
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0F, 0F - swell * 0.25F, 0F);
+			GlStateManager.scale(1F + swell, 1F + swell * 0.25F, 1F + swell);
+
+			hat_main.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.disableBlend();
+			GlStateManager.popMatrix();
+		}
 	}
 
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
