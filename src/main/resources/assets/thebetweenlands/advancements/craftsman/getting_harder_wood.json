@@ -62,6 +62,26 @@
           }
         ]
       }
+    },
+    "log_hearthgrove": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:log_hearthgrove"
+          }
+        ]
+      }
+    },
+    "log_nibbletwig": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:log_nibbletwig"
+          }
+        ]
+      }
     }
   },
   "requirements": [
@@ -70,7 +90,9 @@
       "log_weedwood",
       "log_rubber",
       "log_sap",
-      "giant_root"
+      "giant_root",
+      "log_hearthgrove",
+      "log_nibbletwig"
     ]
   ]
 }
