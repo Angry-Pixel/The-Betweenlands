@@ -10,7 +10,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
-import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 
@@ -42,7 +41,7 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 		}
 
 		if(Minecraft.getMinecraft().getRenderViewEntity() != null) {
-			BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.GAS_CLOUDS, Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
+			BatchedParticleRenderer.INSTANCE.renderBatch(entity.getParticleBatch(), Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
 		}
 		
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);

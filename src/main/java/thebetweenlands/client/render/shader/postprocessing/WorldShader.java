@@ -24,12 +24,15 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.handler.FogHandler;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.shader.DepthBuffer;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.client.render.shader.postprocessing.GroundFog.GroundFogVolume;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
+import thebetweenlands.client.render.sprite.GLTextureObjectWrapper;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.lib.ModInfo;
@@ -51,6 +54,8 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	public static final ResourceLocation CLIP_PLANE_DIFFUSE_TEXTURE = new ResourceLocation(ModInfo.ID, "clip_plane_diffuse");
 	public static final ResourceLocation CLIP_PLANE_DEPTH_TEXTURE = new ResourceLocation(ModInfo.ID, "clip_plane_depth");
 
+	public static final ResourceLocation GAS_PARTICLE_TEXTURE = new ResourceLocation(ModInfo.ID, "gas_particle");
+	
 	private DepthBuffer depthBuffer;
 	private ResizableFramebuffer blitBuffer;
 	private ResizableFramebuffer occlusionBuffer;
@@ -190,6 +195,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 		//Initialize gas textures and effect
 		this.gasTextureFramebuffer = new Framebuffer(64, 64, false);
+		Minecraft.getMinecraft().getTextureManager().loadTexture(GAS_PARTICLE_TEXTURE, new GLTextureObjectWrapper(this.gasTextureFramebuffer.framebufferTexture));
 		this.gasTextureBaseFramebuffer = new Framebuffer(64, 64, false);
 		this.gasWarpEffect = new Warp().setTimeScale(0.00004F).setScale(40.0F).setMultiplier(3.55F).init();
 
@@ -666,11 +672,13 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 
 	private void updateGasParticlesTexture(World world, float partialTicks) {
-		boolean hasCloud = false;
-		for (Entity entity : Minecraft.getMinecraft().world.loadedEntityList) {
-			if (entity instanceof EntityGasCloud) {
-				hasCloud = true;
-				break;
+		boolean hasCloud = BatchedParticleRenderer.INSTANCE.getParticleCount(DefaultParticleBatches.GAS_CLOUDS_TEXTURED) > 0 || BatchedParticleRenderer.INSTANCE.getParticleCount(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE) > 0;
+		if(!hasCloud) {
+			for (Entity entity : Minecraft.getMinecraft().world.loadedEntityList) {
+				if (entity instanceof EntityGasCloud) {
+					hasCloud = true;
+					break;
+				}
 			}
 		}
 		if (hasCloud) {

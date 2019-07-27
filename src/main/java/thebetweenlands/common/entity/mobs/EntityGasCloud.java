@@ -28,6 +28,8 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer.ParticleBatch;
+import thebetweenlands.client.render.particle.ParticleBatchTypeBuilder;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
@@ -46,6 +48,9 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 
 	public static final DamageSource damageSourceSuffocation = (new DamageSource("suffocation")).setDamageBypassesArmor();
 
+	@SideOnly(Side.CLIENT)
+	private ParticleBatch particleBatch;
+	
 	public EntityGasCloud(World world) {
 		super(world);
 		this.setSize(1.75F, 1.75F);
@@ -93,8 +98,17 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 		setPathPriority(PathNodeType.WATER, -8F);
 		setPathPriority(PathNodeType.BLOCKED, -8.0F);
 		setPathPriority(PathNodeType.OPEN, 8.0F);
+		
+		if(this.world.isRemote) {
+			this.initParticleBatch();
+		}
 	}
 
+	@SideOnly(Side.CLIENT)
+	private void initParticleBatch() {
+		this.particleBatch = BatchedParticleRenderer.INSTANCE.createBatchType(new ParticleBatchTypeBuilder().pass().depthMaskPass(true).texture((ResourceLocation)null).end().build());
+	}
+	
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAIFlyRandomly<EntityGasCloud>(this) {
@@ -203,6 +217,7 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 
 		if (this.world.isRemote) {
 			this.spawnCloudParticle(false);
+			this.updateParticleBatch();
 		}
 
 		if (this.isInWater()) {
@@ -224,6 +239,11 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 			}
 		}
 	}
+	
+	@SideOnly(Side.CLIENT)
+	private void updateParticleBatch() {
+		BatchedParticleRenderer.INSTANCE.updateBatch(this.particleBatch);
+	}
 
 	@SideOnly(Side.CLIENT)
 	private void spawnCloudParticle(boolean strongMotion) {
@@ -239,7 +259,8 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 							.withMotion((this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F)
 							.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
 
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS, particle);
+			BatchedParticleRenderer.INSTANCE.addParticle(this.particleBatch, particle);
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE, particle);
 		} else {
 			double x = this.posX + this.motionX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
 			double y = this.posY + this.height / 2.0D + this.motionY + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
@@ -255,8 +276,14 @@ public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 							.withMotion(mx, my, mz)
 							.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
 
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS, particle);
+			BatchedParticleRenderer.INSTANCE.addParticle(this.particleBatch, particle);
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE, particle);
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public ParticleBatch getParticleBatch() {
+		return this.particleBatch;
 	}
 
 	@Override

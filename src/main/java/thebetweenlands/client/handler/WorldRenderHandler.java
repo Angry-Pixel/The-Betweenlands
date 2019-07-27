@@ -197,10 +197,10 @@ public class WorldRenderHandler {
 					fbo.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
 					fbo.clear(0, 0, 0, 0, 1);
 
-					if(!DefaultParticleBatches.GAS_CLOUDS.isEmpty()) {
+					if(!DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE.isEmpty()) {
 						MC.getTextureManager().bindTexture(RenderGasCloud.TEXTURE);
 
-						BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.GAS_CLOUDS, MC.getRenderViewEntity(), event.getPartialTicks());
+						BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE, MC.getRenderViewEntity(), event.getPartialTicks());
 					}
 
 					if(!DefaultParticleBatches.HEAT_HAZE_PARTICLE_ATLAS.isEmpty()) {

@@ -104,6 +104,10 @@ public class BatchedParticleRenderer {
 		}
 		return batch;
 	}
+	
+	public ParticleBatch createBatchType(ParticleBatchType type) {
+		return new ParticleBatch(type);
+	}
 
 	public boolean addParticle(ParticleBatch batch, Particle particle) {
 		if(batch.type.filter(particle)) {
@@ -115,30 +119,38 @@ public class BatchedParticleRenderer {
 
 	public void update() {
 		for(ParticleBatch batch : this.batches) {
-			Iterator<Particle> it = batch.particles.iterator();
+			this.updateBatch(batch);
+		}
+	}
+	
+	public void updateBatch(ParticleBatch batch) {
+		Iterator<Particle> it = batch.particles.iterator();
 
-			while(it.hasNext()) {
-				Particle particle = it.next();
+		while(it.hasNext()) {
+			Particle particle = it.next();
 
-				particle.onUpdate();
+			particle.onUpdate();
 
-				if(!particle.isAlive()) {
-					it.remove();
-				}
+			if(!particle.isAlive()) {
+				it.remove();
 			}
+		}
 
-			if(!batch.queue.isEmpty()) {
-				for(Particle particle = batch.queue.poll(); particle != null; particle = batch.queue.poll()) {
-					if(batch.particles.size() >= batch.type.maxParticles()) {
-						batch.particles.removeFirst();
-					}
-
-					batch.particles.add(particle);
+		if(!batch.queue.isEmpty()) {
+			for(Particle particle = batch.queue.poll(); particle != null; particle = batch.queue.poll()) {
+				if(batch.particles.size() >= batch.type.maxParticles()) {
+					batch.particles.removeFirst();
 				}
+
+				batch.particles.add(particle);
 			}
 		}
 	}
 
+	public int getParticleCount(ParticleBatch batch) {
+		return batch.particles.size();
+	}
+	
 	public void renderAll(Entity entity, float partialTicks) {
 		for(ParticleBatch batch : this.renderedBatches) {
 			this.renderBatch(batch, entity, partialTicks);

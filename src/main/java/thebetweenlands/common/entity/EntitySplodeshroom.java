@@ -275,22 +275,31 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 	
 	@SideOnly(Side.CLIENT)
 	private void spawnCloudParticle() {
+		double x = this.posX + this.motionX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+		double y = this.posY + 0.1D;
+		double z = this.posZ + this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+		double mx = this.motionX + (this.world.rand.nextFloat() - 0.5F) / 12.0F;
+		double my = this.motionY + (this.world.rand.nextFloat() - 0.5F) / 16.0F * 0.1F;
+		double mz = this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 12.0F;
+		int[] color = {100, 100, 0, 255};
 
-			double x = this.posX + this.motionX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-			double y = this.posY + this.height / 2.0D + this.motionY + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-			double z = this.posZ + this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-			double mx = this.motionX + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
-			double my = this.motionY + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
-			double mz = this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
-			int[] color = {100, 100, 0, 255};
+		ParticleGasCloud hazeParticle = (ParticleGasCloud) BLParticles.GAS_CLOUD
+				.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
+						.withData(null)
+						.withMotion(mx, my, mz)
+						.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
+						.withScale(8f));
+		
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE, hazeParticle);
+		
+		ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
+				.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
+						.withData(null)
+						.withMotion(mx, my, mz)
+						.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
+						.withScale(4f));
 
-			ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
-					.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
-							.withData(new EntityGasCloud(world))
-							.withMotion(mx, my, mz)
-							.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
-
-			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS, particle);
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_TEXTURED, particle);
 	}
 
 	@Override
