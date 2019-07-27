@@ -174,9 +174,6 @@ public class BatchedParticleRenderer {
 
 			Tessellator tessellator = Tessellator.getInstance();
 
-			RenderHelper.disableStandardItemLighting();
-			Minecraft.getMinecraft().entityRenderer.enableLightmap();
-			
 			GlStateManager.pushMatrix();
 			GlStateManager.enableDepth();
 			GlStateManager.enableBlend();
@@ -223,8 +220,6 @@ public class BatchedParticleRenderer {
 			GlStateManager.disableBlend();
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 			GlStateManager.popMatrix();
-			
-			RenderHelper.disableStandardItemLighting();
 		}
 	}
 }

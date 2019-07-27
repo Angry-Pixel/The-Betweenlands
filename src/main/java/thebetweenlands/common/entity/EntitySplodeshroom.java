@@ -275,12 +275,12 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 	
 	@SideOnly(Side.CLIENT)
 	private void spawnCloudParticle() {
-		double x = this.posX + this.motionX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+		double x = this.posX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
 		double y = this.posY + 0.1D;
-		double z = this.posZ + this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
-		double mx = this.motionX + (this.world.rand.nextFloat() - 0.5F) / 12.0F;
-		double my = this.motionY + (this.world.rand.nextFloat() - 0.5F) / 16.0F * 0.1F;
-		double mz = this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 12.0F;
+		double z = this.posZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+		double mx = (this.world.rand.nextFloat() - 0.5F) / 12.0F;
+		double my = (this.world.rand.nextFloat() - 0.5F) / 16.0F * 0.1F;
+		double mz = (this.world.rand.nextFloat() - 0.5F) / 12.0F;
 		int[] color = {100, 100, 0, 255};
 
 		ParticleGasCloud hazeParticle = (ParticleGasCloud) BLParticles.GAS_CLOUD

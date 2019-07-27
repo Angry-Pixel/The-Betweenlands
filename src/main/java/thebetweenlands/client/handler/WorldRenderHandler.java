@@ -11,6 +11,7 @@ import org.lwjgl.util.glu.Sphere;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -182,7 +183,13 @@ public class WorldRenderHandler {
 		REPELLER_SHIELDS.clear();
 
 		if(MC.getRenderViewEntity() != null) {
+			RenderHelper.disableStandardItemLighting();
+			Minecraft.getMinecraft().entityRenderer.enableLightmap();
+			
 			BatchedParticleRenderer.INSTANCE.renderAll(MC.getRenderViewEntity(), event.getPartialTicks());
+			
+			RenderHelper.disableStandardItemLighting();
+			Minecraft.getMinecraft().entityRenderer.enableLightmap();
 		}
 
 		if(ShaderHelper.INSTANCE.isWorldShaderActive() && (!DefaultParticleBatches.HEAT_HAZE_PARTICLE_ATLAS.isEmpty() || !DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS.isEmpty())) {
@@ -197,6 +204,9 @@ public class WorldRenderHandler {
 					fbo.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
 					fbo.clear(0, 0, 0, 0, 1);
 
+					RenderHelper.disableStandardItemLighting();
+					Minecraft.getMinecraft().entityRenderer.enableLightmap();
+					
 					if(!DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE.isEmpty()) {
 						MC.getTextureManager().bindTexture(RenderGasCloud.TEXTURE);
 
@@ -211,6 +221,9 @@ public class WorldRenderHandler {
 						BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS, MC.getRenderViewEntity(), event.getPartialTicks());
 					}
 
+					RenderHelper.disableStandardItemLighting();
+					Minecraft.getMinecraft().entityRenderer.enableLightmap();
+					
 					//Update gas particles depth buffer
 					fbo.updateDepthBuffer();
 				}
