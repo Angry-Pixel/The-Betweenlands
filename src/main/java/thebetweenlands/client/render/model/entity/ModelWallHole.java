@@ -12,7 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ModelWallLampreyHole extends ModelBase {
+public class ModelWallHole extends ModelBase {
 	public static class BlockTexturedModelRenderer extends ModelRenderer {
 		private int textureOffsetX;
 		private int textureOffsetY;
@@ -233,7 +233,7 @@ public class ModelWallLampreyHole extends ModelBase {
 
 	private float windowZOffsetPercent = 0.0f;
 
-	public ModelWallLampreyHole(boolean blockTextured) {
+	public ModelWallHole(boolean blockTextured) {
 		this.textureWidth = blockTextured ? 16 : 64;
 		this.textureHeight = blockTextured ? 16 : 64;
 

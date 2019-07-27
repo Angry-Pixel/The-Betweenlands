@@ -153,7 +153,7 @@ public abstract class EntityMovingWallFace extends EntityWallFace {
 
 		@Override
 		public boolean shouldExecute() {
-			return this.canMove() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && !this.isTargetVisibleAndInRange();
+			return this.entity.isEntityAlive() && this.canMove() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().isEntityAlive() && !this.isTargetVisibleAndInRange();
 		}
 
 		@Override

@@ -49,6 +49,7 @@ import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntityMovingSpawnerHole;
 import thebetweenlands.common.entity.mobs.EntityMummyArm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
@@ -161,6 +162,7 @@ public class EntityRegistry {
 		
 		registerEntity(EntityShambler.class, "shambler", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityWallLamprey.class, "wall_lamprey", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityMovingSpawnerHole.class, "moving_spawner_hole", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityCryptCrawler.class, "crypt_crawler", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityBarrishee.class, "barrishee", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityAshSprite.class, "ash_sprite", 0x0B3B0B, 0xDBA901);
