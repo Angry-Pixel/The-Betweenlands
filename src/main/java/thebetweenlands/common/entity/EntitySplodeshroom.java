@@ -229,7 +229,8 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
 			if (sourceEntity instanceof EntityPlayer) {
 				if (!getEntityWorld().isRemote) {
-					explode();
+					if(!getHasExploded())
+						explode();
 				}
 			}
 			return true;
