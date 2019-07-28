@@ -12,8 +12,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import thebetweenlands.api.entity.IEntityBL;
 
-public abstract class EntityProximitySpawner extends EntityCreature {
+public abstract class EntityProximitySpawner extends EntityCreature implements IEntityBL {
 
 	@Override
 	protected void applyEntityAttributes() {
