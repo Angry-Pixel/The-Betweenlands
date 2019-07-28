@@ -26,7 +26,8 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 		FLAME,
 		BEAM,
 		BEAM_YELLOW,
-		GOOP_SPLAT;
+		GOOP_SPLAT, 
+		SPLODE_SHROOM;
 		static final ParticleType[] values = values();
 	}
 
@@ -130,6 +131,10 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 				case GOOP_SPLAT:
 					for (int count = 0; count <= 200; ++count)
 						TheBetweenlands.proxy.spawnCustomParticle("slime", world, message.posX + (world.rand.nextDouble() - 0.5D) , message.posY + world.rand.nextDouble(), message.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0);
+					break;
+				case SPLODE_SHROOM:
+					for (int count = 0; count <= 200; ++count)
+						TheBetweenlands.proxy.spawnCustomParticle("splode_shroom", world, message.posX + (world.rand.nextDouble() - 0.5D) , message.posY + world.rand.nextDouble(), message.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0);
 					break;
 				default:
 			}

@@ -826,6 +826,11 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		if (particleName.equals("slime"))
 			fx = new ParticleBreaking.SlimeFactory().createParticle(EnumParticleTypes.SLIME.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
 
+		if (particleName.equals("splode_shroom")) {
+			fx = new ParticleBreaking.SnowballFactory().createParticle(EnumParticleTypes.SNOWBALL.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
+			fx.setRBGColorF(128F, 203F, 175F);
+		}
+
 		if (fx != null)
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 	}
