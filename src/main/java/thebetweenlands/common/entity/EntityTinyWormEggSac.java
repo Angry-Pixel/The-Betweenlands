@@ -68,7 +68,7 @@ public class EntityTinyWormEggSac extends EntityProximitySpawner {
 	@Override
 	protected void performPostSpawnaction(Entity targetEntity, @Nullable Entity entitySpawned) {
 		if(!entitySpawned.getEntityWorld().isRemote)
-			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.GOOP_SPLAT, (float) posX, (float)posY + 0.625F, (float)posZ, 0F));
+			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.GOOP_SPLAT, (float) posX, (float)posY + 0.25F, (float)posZ, 0F));
 	}
 
 	@Override
