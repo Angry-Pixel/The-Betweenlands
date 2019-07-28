@@ -17,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleBreaking;
 import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.particle.ParticleSpell;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -821,6 +822,9 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 
 		if (particleName.equals("flame"))
 			fx = new ParticleFlame.Factory().createParticle(EnumParticleTypes.FLAME.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
+
+		if (particleName.equals("slime"))
+			fx = new ParticleBreaking.SlimeFactory().createParticle(EnumParticleTypes.SLIME.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
 
 		if (fx != null)
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);

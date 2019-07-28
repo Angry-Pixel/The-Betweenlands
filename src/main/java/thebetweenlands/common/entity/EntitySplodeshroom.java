@@ -24,7 +24,10 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
+import thebetweenlands.common.network.clientbound.PacketParticle;
+import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 
 public class EntitySplodeshroom extends EntityProximitySpawner {
 	public int MAX_SWELL = 40;
@@ -135,6 +138,7 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 
 	private void explode() {
 		//TODO whiz bang particles
+		TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.GOOP_SPLAT, (float) posX, (float)posY + 0.625F, (float)posZ, 0F));
 		setHasExploded(true);
 	}
 

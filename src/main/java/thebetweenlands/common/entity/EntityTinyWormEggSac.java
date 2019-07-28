@@ -1,12 +1,17 @@
 package thebetweenlands.common.entity;
 
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.world.World;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.network.clientbound.PacketParticle;
+import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 
 public class EntityTinyWormEggSac extends EntityProximitySpawner {
 
@@ -58,6 +63,12 @@ public class EntityTinyWormEggSac extends EntityProximitySpawner {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	protected void performPostSpawnaction(Entity targetEntity, @Nullable Entity entitySpawned) {
+		if(!entitySpawned.getEntityWorld().isRemote)
+			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.GOOP_SPLAT, (float) posX, (float)posY + 0.625F, (float)posZ, 0F));
 	}
 
 	@Override

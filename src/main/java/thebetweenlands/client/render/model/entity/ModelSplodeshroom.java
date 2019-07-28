@@ -58,6 +58,7 @@ public class ModelSplodeshroom extends ModelBase {
 		EntitySplodeshroom splodeshroom = (EntitySplodeshroom) entity;
 		if (!splodeshroom.getHasExploded()) {
 			float swell = splodeshroom.getSwellCount() * 0.02F;
+			float shake = (splodeshroom.getEntityWorld().rand.nextFloat() - splodeshroom.getEntityWorld().rand.nextFloat() * 0.5F) * swell;
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -65,9 +66,10 @@ public class ModelSplodeshroom extends ModelBase {
 			stem1.render(scale);
 
 			GlStateManager.pushMatrix();
+			GlStateManager.rotate(shake * 10F, 1F, 1F, 1F);
 			GlStateManager.translate(0F, 0F - swell * 0.25F, 0F);
 			GlStateManager.scale(1F + swell, 1F + swell * 0.25F, 1F + swell);
-
+			
 			hat_main.render(scale);
 			GlStateManager.popMatrix();
 

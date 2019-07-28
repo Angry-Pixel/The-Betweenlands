@@ -17,7 +17,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
 
 public class PacketParticle implements IMessage, IMessageHandler<PacketParticle, IMessage> {
-	//TODO Delet this
+	//TODO Delete this
 	
 	
 	public static enum ParticleType {
@@ -25,7 +25,8 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 		SLUDGE_JET,
 		FLAME,
 		BEAM,
-		BEAM_YELLOW;
+		BEAM_YELLOW,
+		GOOP_SPLAT;
 		static final ParticleType[] values = values();
 	}
 
@@ -126,6 +127,10 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 					    if (counter % (Minecraft.getMinecraft().gameSettings.particleSetting == 0 ? 1 : 2 * Minecraft.getMinecraft().gameSettings.particleSetting) == 0);
 					    BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, message.posX, message.posY, message.posZ, ParticleArgs.get().withMotion(0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f), 0.0125f * (rand.nextFloat() - 0.5f)).withColor(255F, 102F, 0F, 1F).withScale(0.5F + message.scale).withData(100)));
 				break;
+				case GOOP_SPLAT:
+					for (int count = 0; count <= 200; ++count)
+						TheBetweenlands.proxy.spawnCustomParticle("slime", world, message.posX + (world.rand.nextDouble() - 0.5D) , message.posY + world.rand.nextDouble(), message.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0);
+					break;
 				default:
 			}
 		}
