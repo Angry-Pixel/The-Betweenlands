@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
-import thebetweenlands.common.entity.EntitySplodeshroom;
+import thebetweenlands.common.entity.EntityTinyWormEggSac;
 
 
 //MINE!!
@@ -198,17 +198,17 @@ public class TestItemChimp extends Item {
 				worldIn.spawnEntity(chain8);
 
 		*/
-/*
+
 				EntityTinyWormEggSac sac = new EntityTinyWormEggSac(worldIn);
 				sac.setPosition(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
 				worldIn.spawnEntity(sac);
-*/
-				
+
+		/*		
 				EntitySplodeshroom trap = new EntitySplodeshroom(worldIn);
 				BlockPos offset = pos.offset(facing);
 				trap.setPosition(offset.getX() + 0.5F, offset.getY(), offset.getZ() + 0.5F);
 				worldIn.spawnEntity(trap);
-				
+			*/	
 		}
 
 		return EnumActionResult.SUCCESS;
