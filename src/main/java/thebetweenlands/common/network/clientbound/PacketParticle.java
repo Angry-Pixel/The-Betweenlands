@@ -130,7 +130,7 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 				break;
 				case GOOP_SPLAT:
 					for (int count = 0; count <= 200; ++count)
-						TheBetweenlands.proxy.spawnCustomParticle("slime", world, message.posX + (world.rand.nextDouble() - 0.5D) , message.posY + world.rand.nextDouble(), message.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0);
+						TheBetweenlands.proxy.spawnCustomParticle("egg_sac", world, message.posX + (world.rand.nextDouble() - 0.5D) , message.posY + world.rand.nextDouble(), message.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0);
 					break;
 				case SPLODE_SHROOM:
 					for (int count = 0; count <= 200; ++count)

@@ -823,8 +823,10 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		if (particleName.equals("flame"))
 			fx = new ParticleFlame.Factory().createParticle(EnumParticleTypes.FLAME.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
 
-		if (particleName.equals("slime"))
-			fx = new ParticleBreaking.SlimeFactory().createParticle(EnumParticleTypes.SLIME.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
+		if (particleName.equals("egg_sac")) {
+			fx = new ParticleBreaking.SnowballFactory().createParticle(EnumParticleTypes.SNOWBALL.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
+			fx.setRBGColorF(48F, 64F, 91F);
+		}
 
 		if (particleName.equals("splode_shroom")) {
 			fx = new ParticleBreaking.SnowballFactory().createParticle(EnumParticleTypes.SNOWBALL.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
