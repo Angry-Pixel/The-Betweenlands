@@ -139,6 +139,7 @@ import thebetweenlands.common.block.structure.BlockChipPath;
 import thebetweenlands.common.block.structure.BlockCompactedMud;
 import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.block.structure.BlockDecayPitControl;
+import thebetweenlands.common.block.structure.BlockDecayPitGroundChain;
 import thebetweenlands.common.block.structure.BlockDecayPitHangingChain;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlock;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockDiagonal;
@@ -616,6 +617,7 @@ public class BlockRegistry {
 	 
 	public static final Block MUD_TOWER_BRAZIER = new BlockBrazier();
 	public static final Block DECAY_PIT_HANGING_CHAIN = new BlockDecayPitHangingChain();
+	public static final Block DECAY_PIT_GROUND_CHAIN = new BlockDecayPitGroundChain();
 	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK = new BlockDecayPitInvisibleFloorBlock();
 	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_1 = new BlockDecayPitInvisibleFloorBlockR1();
 	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2 = new BlockDecayPitInvisibleFloorBlockR2();

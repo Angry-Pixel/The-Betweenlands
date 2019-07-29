@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -13,6 +14,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -23,6 +25,7 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.common.tile.TileEntityDecayPitGroundChain;
 import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
 
 public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitTarget {
@@ -133,22 +136,41 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			else
 				animationTicksChain += 8;
 			if(getHangingChains() != null)
-				getHangingChains().setProgress(getProgress()); 
-			if (!isRaising() && getProgress() < MAX_PROGRESS ) {
-				move(MoverType.SELF, 0D, - MOVE_UNIT * 8D, 0D);
+				getHangingChains().setProgress(getProgress());
+
+			if (!isRaising() && getProgress() < MAX_PROGRESS) {
+				move(MoverType.SELF, 0D, -MOVE_UNIT * 8D, 0D);
 				setProgress(getProgress() + 8);
-				if(getHangingChains() != null) {
+
+				if (getHangingChains() != null) {
 					getHangingChains().setMoving(true);
-					getHangingChains().setSlow(false);	
+					getHangingChains().setSlow(false);
+				}
+
+				if (getGroundChains() != null) {
+					for (TileEntityDecayPitGroundChain chain : getGroundChains()) {
+						chain.setRaising(true);
+						chain.setMoving(true);
+						chain.setSlow(false);
 					}
+				}
 			}
 
 			if (isRaising() && getProgress() > MIN_PROGRESS) {
-				move(MoverType.SELF, 0D, + MOVE_UNIT, 0D);
+				move(MoverType.SELF, 0D, +MOVE_UNIT, 0D);
 				setProgress(getProgress() - 1);
-				if(getHangingChains() != null) {
+
+				if (getHangingChains() != null) {
 					getHangingChains().setMoving(true);
 					getHangingChains().setSlow(true);
+				}
+
+				if (getGroundChains() != null) {
+					for (TileEntityDecayPitGroundChain chain : getGroundChains()) {
+						chain.setRaising(false);
+						chain.setMoving(true);
+						chain.setSlow(true);
+					}
 				}
 			}
 		}
@@ -253,12 +275,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 	private void moveUp() {
 		if (getProgress() > MIN_PROGRESS) {
-			for (EntityDecayPitChain chain : getChains()) {
-				chain.setRaising(false);
-				chain.setMoving(true);
-				chain.setSlow(true);
-
-			}
 			setRaising(true);
 			setMoving(true);
 			setSlow(true);
@@ -267,11 +283,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 	private void moveDown() {
 		if (getProgress() < MAX_PROGRESS) {
-			for (EntityDecayPitChain chain : getChains()) {
-				chain.setRaising(true);
-				chain.setMoving(true);
-				chain.setSlow(false);
-			}
 			setRaising(false);
 			setMoving(true);
 			setSlow(false);
@@ -296,10 +307,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		}
 	}
 
-	public List<EntityDecayPitChain> getChains() {
-		return getWorld().<EntityDecayPitChain>getEntitiesWithinAABB(EntityDecayPitChain.class, getEntityBoundingBox().grow(10D, 0D, 10D));
-    }
-
 	public TileEntityDecayPitHangingChain getHangingChains() {
 		TileEntityDecayPitHangingChain tile = null;
 		for (int x = -1; x < 1; x++)
@@ -312,6 +319,19 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 					}
 				}
 		return tile;
+	}
+
+	public List<TileEntityDecayPitGroundChain> getGroundChains() {
+		TileEntityDecayPitGroundChain tile = null;
+		List<TileEntityDecayPitGroundChain> chains = new ArrayList<TileEntityDecayPitGroundChain>();
+		BlockPos posEntity = getPosition();
+		Iterable<BlockPos> blocks = BlockPos.getAllInBox(posEntity.add(-12.0F, 3F, -12F), posEntity.add(12F, 9F, 12F));
+		for (BlockPos pos : blocks)
+			if (getWorld().getTileEntity(pos) instanceof TileEntityDecayPitGroundChain) {
+				tile = (TileEntityDecayPitGroundChain) getWorld().getTileEntity(pos);
+				chains.add(tile);
+			}
+		return chains;
 	}
 
 	public void setProgress(int progress) {

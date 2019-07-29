@@ -19,9 +19,9 @@ import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.plant.BlockMoss;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
+import thebetweenlands.common.block.structure.BlockDecayPitGroundChain;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
-import thebetweenlands.common.entity.EntityDecayPitChain;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -411,39 +411,16 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		world.setBlockState(pos.down(14), BlockRegistry.DECAY_PIT_CONTROL.getDefaultState());
 		world.setBlockState(pos.up(1), BlockRegistry.DECAY_PIT_HANGING_CHAIN.getDefaultState());
 
-		EntityDecayPitTarget target = new EntityDecayPitTarget(world);
-
-		EntityDecayPitChain chain5 = new EntityDecayPitChain(world);
-		EntityDecayPitChain chain6 = new EntityDecayPitChain(world);
-		EntityDecayPitChain chain7 = new EntityDecayPitChain(world);
-		EntityDecayPitChain chain8 = new EntityDecayPitChain(world);
-
-		chain5.setLength(5);
-		chain6.setLength(5);
-		chain7.setLength(5);
-		chain8.setLength(5);
-
 		// S = 0, W = 1, N = 2, E = 3
 
-		chain5.setFacing(1);
-		chain6.setFacing(0);
-		chain7.setFacing(3);
-		chain8.setFacing(2);
+		world.setBlockState(pos.add(0, -4, -12F), BlockRegistry.DECAY_PIT_GROUND_CHAIN.getDefaultState().withProperty(BlockDecayPitGroundChain.FACING, EnumFacing.WEST), 2);
+		world.setBlockState(pos.add(12, -4, 0), BlockRegistry.DECAY_PIT_GROUND_CHAIN.getDefaultState().withProperty(BlockDecayPitGroundChain.FACING, EnumFacing.SOUTH), 2);
+		world.setBlockState(pos.add(0, -4, 12), BlockRegistry.DECAY_PIT_GROUND_CHAIN.getDefaultState().withProperty(BlockDecayPitGroundChain.FACING, EnumFacing.EAST), 2);
+		world.setBlockState(pos.add(-12, -4, 0), BlockRegistry.DECAY_PIT_GROUND_CHAIN.getDefaultState().withProperty(BlockDecayPitGroundChain.FACING, EnumFacing.NORTH), 2);
 
-		chain5.setPosition(pos.getX() + 0.5F, pos.down(4).getY(), pos.getZ() - 11.5F);
-		chain6.setPosition(pos.getX() + 12.5F, pos.down(4).getY(), pos.getZ() + 0.5F);
-		chain7.setPosition(pos.getX() + 0.5F, pos.down(4).getY(), pos.getZ() + 12.5F);
-		chain8.setPosition(pos.getX() - 11.5F, pos.down(4).getY(), pos.getZ() + 0.5F);
-
+		EntityDecayPitTarget target = new EntityDecayPitTarget(world);
 		target.setPosition(pos.getX() + 0.5F, pos.down(6).getY(), pos.getZ() + 0.5F);
-
 		world.spawnEntity(target);
-
-		world.spawnEntity(chain5);
-		world.spawnEntity(chain6);
-		world.spawnEntity(chain7);
-		world.spawnEntity(chain8);
-
 	}
 
 	public void generateDecayPitEntrance(World world, Random rand, BlockPos pos) {

@@ -16,6 +16,7 @@ import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDecayPitControl;
+import thebetweenlands.common.tile.TileEntityDecayPitGroundChain;
 import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityDugSoil;
@@ -105,6 +106,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityGroundItem.class, "ground_item");
 		registerTileEntity(TileEntityDecayPitControl.class, "decay_pit_control");
 		registerTileEntity(TileEntityDecayPitHangingChain.class, "decay_pit_hanging_chain");
+		registerTileEntity(TileEntityDecayPitGroundChain.class, "decay_pit_ground_chain");
 		registerTileEntity(TileEntityCenser.class, "censer");
 		registerTileEntity(TileEntityTarBarrel.class, "tar_barrel");
 	}
