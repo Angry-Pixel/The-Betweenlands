@@ -108,7 +108,7 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		bindTexture(DECAY_HOLE_TEXTURE_2);
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		for (int part = 0; part < 24; part++) {
-			buildRingQuads(buffer, x + 0.5D, y + 1.2F + 0.003F, z + 0.5D, 15F * part, 2.25D, 2.25D, 0D, 0D, false);
+			buildRingQuads(buffer, x + 0.5D, y + 1.5F + 0.003F, z + 0.5D, 15F * part, 2D, 2D, 0D, 0D, false);
 		}
 		tessellator.draw();
 		
@@ -122,7 +122,7 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		bindTexture(DECAY_HOLE_TEXTURE_3);
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		for (int part = 0; part < 24; part++) {
-			buildRingQuads(buffer, x + 0.5D, y + 1.4F + 0.003F, z + 0.5D, 15F * part, 2.25D, 2.25D, 0D, 0D, false);
+			buildRingQuads(buffer, x + 0.5D, y + 1.75F + 0.003F, z + 0.5D, 15F * part, 2.25D, 2.25D, 0D, 0D, false);
 		}
 		tessellator.draw();
 
