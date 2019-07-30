@@ -104,7 +104,7 @@
                 {
                     "conditions": [],
                     "type": "item",
-                    "entryName": "syrmorite_ingot",
+                    "entryName": "syrmorite_nugget",
                     "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
@@ -118,7 +118,7 @@
                         {
                             "conditions": [],
                             "function": "set_data",
-                            "data": 11
+                            "data": 41
                         }
                     ],
                     "weight": 28,
@@ -127,7 +127,8 @@
                 {
                     "conditions": [],
                     "type": "item",
-                    "name": "thebetweenlands:octine_ingot",
+                    "entryName": "octine_nugget",
+                    "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
                             "conditions": [],
@@ -136,6 +137,11 @@
                                 "min": 4,
                                 "max": 16
                             }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 42
                         }
                     ],
                     "weight": 28,
@@ -176,7 +182,7 @@
                 {
                     "conditions": [],
                     "type": "item",
-                    "entryName": "valonite_shard",
+                    "entryName": "valonite_splinter",
                     "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
@@ -190,7 +196,7 @@
                         {
                             "conditions": [],
                             "function": "set_data",
-                            "data": 19
+                            "data": 43
                         }
                     ],
                     "weight": 12,
