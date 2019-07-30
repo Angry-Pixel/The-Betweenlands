@@ -20,7 +20,11 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 	public static final ResourceLocation INNER_MASK_MUD_TILE_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_inner_gear_mask.png");
 	public static final ResourceLocation MASK_MUD_TILE_TEXTURE_HOLE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_gear_mask_hole.png");
 	public static final ResourceLocation VERTICAL_RING_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_vertical_ring.png");
+	public static final ResourceLocation DECAY_HOLE_TEXTURE_1 = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_hole_1.png");
+	public static final ResourceLocation DECAY_HOLE_TEXTURE_2 = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_hole_2.png");
+	public static final ResourceLocation DECAY_HOLE_TEXTURE_3 = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_hole_3.png");
 
+	
 	@Override
 	public void render(TileEntityDecayPitControl tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if(tile == null || !tile.hasWorld())
@@ -59,6 +63,13 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		}
 		tessellator.draw();
 
+		bindTexture(DECAY_HOLE_TEXTURE_1);
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		for (int part = 0; part < 24; part++) {
+			buildRingQuads(buffer, x + 0.5D, y + 1F + 0.003F, z + 0.5D, 15F * part, 2.25D, 2.25D, 0D, 0D, false);
+		}
+		tessellator.draw();
+
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
 		GlStateManager.translate(0.5, 0.5, 0);
@@ -86,11 +97,39 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 			buildRingQuads(buffer, x + 0.5D, y + 2D + 0.003F, z + 0.5D, 15F * part, 4.25D, 4.25D, 2.75D, 2.75D, false);
 		}
 		tessellator.draw();
+		
+		GlStateManager.matrixMode(GL11.GL_TEXTURE);
+		GlStateManager.loadIdentity();
+		GlStateManager.translate(0.5, 0.5, 0);
+		GlStateManager.rotate(ring_rotate, 0, 0, 1);
+		GlStateManager.translate(-0.5, -0.5, 0);
+		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+
+		bindTexture(DECAY_HOLE_TEXTURE_2);
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		for (int part = 0; part < 24; part++) {
+			buildRingQuads(buffer, x + 0.5D, y + 1.2F + 0.003F, z + 0.5D, 15F * part, 2.25D, 2.25D, 0D, 0D, false);
+		}
+		tessellator.draw();
+		
+		GlStateManager.matrixMode(GL11.GL_TEXTURE);
+		GlStateManager.loadIdentity();
+		GlStateManager.translate(0.5, 0.5, 0);
+		GlStateManager.rotate(-ring_rotate, 0, 0, 1);
+		GlStateManager.translate(-0.5, -0.5, 0);
+		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+
+		bindTexture(DECAY_HOLE_TEXTURE_3);
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+		for (int part = 0; part < 24; part++) {
+			buildRingQuads(buffer, x + 0.5D, y + 1.4F + 0.003F, z + 0.5D, 15F * part, 2.25D, 2.25D, 0D, 0D, false);
+		}
+		tessellator.draw();
 
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-
+		
 		GlStateManager.disableBlend();
 		GlStateManager.enableLighting();
 		
