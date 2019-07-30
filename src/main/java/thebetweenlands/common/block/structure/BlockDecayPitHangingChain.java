@@ -39,7 +39,7 @@ public class BlockDecayPitHangingChain extends BlockHorizontal implements ITileE
 
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.INVISIBLE;
+		return EnumBlockRenderType.MODEL;
 	}
 
 	@Override
