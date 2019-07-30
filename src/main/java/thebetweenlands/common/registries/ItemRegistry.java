@@ -416,7 +416,8 @@ public class ItemRegistry {
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
-
+    private static final List<ItemStack> NUGGETS = new ArrayList<ItemStack>();
+ 
     private ItemRegistry() {
 
     }
@@ -458,6 +459,10 @@ public class ItemRegistry {
         INGOTS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.SULFUR.getID()));
         INGOTS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.VALONITE_SHARD.getID()));
         //INGOTS.add(new ItemStack(LIFE_CRYSTAL));
+
+        NUGGETS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.SYRMORITE_NUGGET.getID()));
+        NUGGETS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.OCTINE_NUGGET.getID()));
+        NUGGETS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()));
     }
     
     private static void registerOreDictionary() {
@@ -471,7 +476,11 @@ public class ItemRegistry {
 		OreDictionary.registerOre("oreCrimsonMiddleGem", new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE));
 		OreDictionary.registerOre("oreLifeCrystal", new ItemStack(BlockRegistry.LIFE_CRYSTAL_STALACTITE, 1, BlockLifeCrystalStalactite.EnumLifeCrystalType.ORE.getMetadata()));
 		OreDictionary.registerOre("oreScabyst", new ItemStack(BlockRegistry.SCABYST_ORE));
-		
+
+		OreDictionary.registerOre("nuggetSyrmorite", new ItemStack(ITEMS_MISC, 1, EnumItemMisc.SYRMORITE_NUGGET.getID()));
+		OreDictionary.registerOre("nuggetOctine", new ItemStack(ITEMS_MISC, 1, EnumItemMisc.OCTINE_NUGGET.getID()));
+		OreDictionary.registerOre("nuggetValonite", new ItemStack(ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()));
+
 		OreDictionary.registerOre("blockSulfur", new ItemStack(BlockRegistry.SULFUR_BLOCK));
 		OreDictionary.registerOre("blockSyrmorite", new ItemStack(BlockRegistry.SYRMORITE_BLOCK));
 		OreDictionary.registerOre("blockBone", new ItemStack(BlockRegistry.SLIMY_BONE_BLOCK));
@@ -619,6 +628,11 @@ public class ItemRegistry {
     public static boolean isIngot(ItemStack stack) {
         if (stack.isEmpty()) return false;
         return containsItem(INGOTS, stack);
+    }
+    
+    public static boolean isNugget(ItemStack stack) {
+        if (stack.isEmpty()) return false;
+        return containsItem(NUGGETS, stack);
     }
 
     @SubscribeEvent

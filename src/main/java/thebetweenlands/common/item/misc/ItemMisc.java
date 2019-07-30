@@ -94,7 +94,10 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		SHOCKWAVE_SWORD_4(36),
 		AMULET_SOCKET(38),
 		SCABYST(39),
-		SCROLL(40);
+		SCROLL(40),
+		SYRMORITE_NUGGET(41),
+		OCTINE_NUGGET(42),
+		VALONITE_SPLINTER(43);
 
 		private final int id;
 		private final String unlocalizedName;
