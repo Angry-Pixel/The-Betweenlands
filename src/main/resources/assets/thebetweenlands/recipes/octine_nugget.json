@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:octine_ingot"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:items_misc",
+    "data": 42,
+    "count": 9
+  }
+}
