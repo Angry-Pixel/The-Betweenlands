@@ -52,7 +52,7 @@
                     "weight": 20,
                     "quality": 0
                 },
-				{
+                {
                     "conditions": [],
                     "type": "item",
                     "entryName": "octine_nugget",
