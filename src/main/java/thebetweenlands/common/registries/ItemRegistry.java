@@ -629,7 +629,7 @@ public class ItemRegistry {
         if (stack.isEmpty()) return false;
         return containsItem(INGOTS, stack);
     }
-    
+ 
     public static boolean isNugget(ItemStack stack) {
         if (stack.isEmpty()) return false;
         return containsItem(NUGGETS, stack);
