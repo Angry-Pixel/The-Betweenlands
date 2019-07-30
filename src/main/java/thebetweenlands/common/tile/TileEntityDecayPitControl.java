@@ -56,10 +56,17 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 				spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 3D, getPos().getZ() + 2.5D);
 			}
 
+			//TODO remove ghetto syncing
+			if(getWorld().getTotalWorldTime() % 20 == 0)
+				updateBlock();
 		}
 
 		checkSurfaceCollisions();
 
+	}
+
+	private void updateBlock() {
+		getWorld().notifyBlockUpdate(pos, getWorld().getBlockState(pos), getWorld().getBlockState(pos), 3);
 	}
 
 	private Entity checkSurfaceCollisions() {
