@@ -13,8 +13,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 4,
-                                "max": 30
+                                "min": 2,
+                                "max": 15
                             }
                         }
                     ],
@@ -103,7 +103,7 @@
                 {
                     "conditions": [],
                     "type": "item",
-                    "entryName": "valonite_shard",
+                    "entryName": "valonite_splinter",
                     "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
@@ -117,10 +117,25 @@
                         {
                             "conditions": [],
                             "function": "set_data",
-                            "data": 19
+                            "data": 43
                         }
                     ],
                     "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "valonite_shard",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 19
+                        }
+                    ],
+                    "weight": 5,
                     "quality": 0
                 },
                 {

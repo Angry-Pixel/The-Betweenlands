@@ -101,7 +101,7 @@
                 {
                     "conditions": [],
                     "type": "item",
-                    "entryName": "syrmorite_ingot",
+                    "entryName": "syrmorite_nugget",
                     "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
@@ -115,7 +115,7 @@
                         {
                             "conditions": [],
                             "function": "set_data",
-                            "data": 11
+                            "data": 41
                         }
                     ],
                     "weight": 30,
@@ -124,7 +124,8 @@
                 {
                     "conditions": [],
                     "type": "item",
-                    "name": "thebetweenlands:octine_ingot",
+                    "entryName": "octine_nugget",
+                    "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
                             "conditions": [],
@@ -133,6 +134,11 @@
                                 "min": 4,
                                 "max": 16
                             }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 42
                         }
                     ],
                     "weight": 30,
@@ -312,10 +318,50 @@
                     "weight": 11,
                     "quality": 0
                 },
+				{
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "syrmorite_ingot",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 11
+                        }
+                    ],
+                    "weight": 10,
+                    "quality": 0
+                },
+				{
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:octine_ingot",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ],
+                    "weight": 10,
+                    "quality": 0
+                },
                 {
                     "conditions": [],
                     "type": "item",
-                    "entryName": "valonite_shard",
+                    "entryName": "valonite_splinter",
                     "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
@@ -329,7 +375,7 @@
                         {
                             "conditions": [],
                             "function": "set_data",
-                            "data": 19
+                            "data": 43
                         }
                     ],
                     "weight": 8,
@@ -352,6 +398,21 @@
                     "weight": 8,
                     "quality": 0
                 }
+				{
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "valonite_shard",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 19
+                        }
+                    ],
+                    "weight": 6,
+                    "quality": 0
+                },
             ],
             "rolls": {
                 "min": 4,

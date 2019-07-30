@@ -32,7 +32,7 @@
                 {
                     "conditions": [],
                     "type": "item",
-                    "entryName": "syrmorite_ingot",
+                    "entryName": "syrmorite_nugget",
                     "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
@@ -46,7 +46,7 @@
                         {
                             "conditions": [],
                             "function": "set_data",
-                            "data": 11
+                            "data": 41
                         }
                     ],
                     "weight": 20,
@@ -55,7 +55,8 @@
                 {
                     "conditions": [],
                     "type": "item",
-                    "name": "thebetweenlands:octine_ingot",
+                    "entryName": "octine_nugget",
+                    "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
                             "conditions": [],
@@ -64,6 +65,11 @@
                                 "min": 4,
                                 "max": 16
                             }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 42
                         }
                     ],
                     "weight": 20,
@@ -193,6 +199,46 @@
                         }
                     ],
                     "weight": 12,
+                    "quality": 0
+                },
+				{
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:octine_ingot",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ],
+                    "weight": 8,
+                    "quality": 0
+                },
+				{
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "syrmorite_ingot",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 11
+                        }
+                    ],
+                    "weight": 8,
                     "quality": 0
                 },
                 {
