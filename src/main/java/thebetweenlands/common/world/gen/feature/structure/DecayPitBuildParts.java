@@ -2,11 +2,13 @@ package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.Random;
 
+import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.container.BlockLootUrn;
+import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlock;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockDiagonal;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL1;
@@ -237,11 +239,12 @@ public class DecayPitBuildParts {
 		rotatedCubeVolume(world, rand, pos, 7, 13, 8, blockHelper.getStairsForLevel(rand, 7, facing.getOpposite(), BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 7, 13, 9, blockHelper.getMudSlabsForLevel(rand, 7, BlockSlabBetweenlands.EnumBlockHalfBL.TOP), 1, 1, 2, facing);
 		rotatedCubeVolume(world, rand, pos, 7, 13, 11, blockHelper.getStairsForLevel(rand, 7, facing, BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 2, 1, 0, blockHelper.getStairsForLevel(rand, 7, facing.rotateYCCW(), BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 3, 1, 0, blockHelper.getMudBricksForLevel(rand, 7, 1), 1, 1, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 2, 1, 2, blockHelper.getMudBricksForLevel(rand, 7, 1), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, 1, 2, blockHelper.getStairsForLevel(rand, 7, facing, BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, 1, 3, blockHelper.getMudBricksForLevel(rand, 7, 1), 1, 1, 1, facing);
+		
+		
+		rotatedCubeVolume(world, rand, pos, 2, 1, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateYCCW()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM), 1, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 2, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 1, 0, blockHelper.COMPACTED_MUD, 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 3, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
 
 		rotatedCubeVolume(world, rand, pos, 1, 0, 0, blockHelper.COMPACTED_MUD, 1, 1, 2, facing);
 
