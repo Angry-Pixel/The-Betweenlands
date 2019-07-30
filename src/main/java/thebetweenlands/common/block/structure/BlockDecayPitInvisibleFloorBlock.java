@@ -13,6 +13,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -25,8 +26,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 
-public class BlockDecayPitInvisibleFloorBlock extends BlockHorizontal {
+public class BlockDecayPitInvisibleFloorBlock extends BlockHorizontal implements ICustomItemBlock {
 
 	public BlockDecayPitInvisibleFloorBlock() {
 		super(Material.ROCK);
@@ -138,4 +140,9 @@ public class BlockDecayPitInvisibleFloorBlock extends BlockHorizontal {
 	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
 	}
+	
+	@Override
+	public ItemBlock getItemBlock() {
+        return null;
+    }
 }
