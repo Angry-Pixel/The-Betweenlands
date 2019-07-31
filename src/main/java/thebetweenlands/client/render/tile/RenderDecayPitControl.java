@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -30,6 +31,13 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		if(tile == null || !tile.hasWorld())
 			return;
 
+		//Use lighting values from block above
+		int i = tile.getWorld().getCombinedLight(tile.getPos().up(), 0);
+		int j = i % 65536;
+		int k = i / 65536;
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
 		float ring_rotate = tile.animationTicksPrev + (tile.animationTicks - tile.animationTicksPrev) * partialTicks;
 
 		GlStateManager.pushMatrix();
