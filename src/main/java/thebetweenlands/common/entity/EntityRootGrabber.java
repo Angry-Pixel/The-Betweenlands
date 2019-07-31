@@ -10,6 +10,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,6 +23,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -33,6 +36,7 @@ import thebetweenlands.client.render.model.SpikeRenderer;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
+import thebetweenlands.client.render.tile.RenderDecayPitHangingChain;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -67,15 +71,28 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 
 	@SideOnly(Side.CLIENT)
 	public static class RootPart {
-		public SpikeRenderer renderer;
 		public float x, y, z;
 		public float yaw, pitch;
+		public float texWidth, texHeight;
+		public float texU, texV;
+		public ResourceLocation texture;
+		
+		public void render() {
+			
+		}
 	}
+	
+	private boolean isChains = false;
 
-	public EntityRootGrabber(World world) {
+	public EntityRootGrabber(World world, boolean isGears) {
 		super(world);
 		this.setSize(2, 2);
 		this.noClip = true;
+		this.isChains = isGears;
+	}
+	
+	public EntityRootGrabber(World world) {
+		this(world, false);
 	}
 
 	@Override
@@ -116,20 +133,81 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 
 			for(int j = 0; j < rings; j++) {
 				float radius = (this.width - 0.5F) / rings * j;
-				int roots = 5 + this.world.rand.nextInt(5);
+				int roots = this.isChains ? (2 + this.world.rand.nextInt(3)) : (5 + this.world.rand.nextInt(5));
 
 				for(int i = 0; i < roots; i++) {
 					float scale = 0.6F + this.rand.nextFloat() * 0.2F;
 					double angle = i * Math.PI * 2 / roots;
+					
 					Vec3d offset = new Vec3d(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
-					SpikeRenderer renderer = new SpikeRenderer(3, scale * 0.5F, scale, 1, this.rand.nextLong(), -scale * 0.5F * 1.5F, 0, -scale * 0.5F * 1.5F).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(ParticleRootSpike.SPRITE.toString()));
-					RootPart part = new RootPart();
-					part.renderer = renderer;
+					
+					RootPart part;
+					
+					if(!this.isChains) {
+						final SpikeRenderer renderer = new SpikeRenderer(3, scale * 0.5F, scale, 1, this.rand.nextLong(), -scale * 0.5F * 1.5F, 0, -scale * 0.5F * 1.5F).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(ParticleRootSpike.SPRITE.toString()));
+						
+						part = new RootPart() {
+							@Override
+							public void render() {
+								renderer.render();
+							}
+						};
+
+						part.texture = TextureMap.LOCATION_BLOCKS_TEXTURE;
+						
+						part.texWidth = renderer.getSprite().getMaxU() - renderer.getSprite().getMinU();
+						part.texU = renderer.getSprite().getMinU();
+						part.texHeight = renderer.getSprite().getMaxV() - renderer.getSprite().getMinV();
+						part.texV = renderer.getSprite().getMinV();
+						
+						part.pitch = 30.0F;
+					} else {
+						final float[] yaws = new float[5];
+						final float[] pitches = new float[5];
+						
+						for(int k = 0; k < 5; k++) {
+							yaws[k] = (this.rand.nextFloat() - 0.5F) * 360.0F;
+							pitches[k] = (this.rand.nextFloat() - 0.5F) * 40.0F;
+						}
+						
+						part = new RootPart() {
+							@Override
+							public void render() {
+								final float scale = 0.3F;
+								
+								GlStateManager.pushMatrix();
+								GlStateManager.scale(scale, scale, scale);
+								
+								for(int w = 0; w < 5; w++) {
+									GlStateManager.translate(0, 1, 0);
+									GlStateManager.rotate(yaws[w], 0, 1, 0);
+									GlStateManager.rotate(pitches[w], 1, 0, 0);
+									GlStateManager.translate(0, -1, 0);
+									
+									RenderDecayPitHangingChain.CHAIN_MODEL.render(0.0625F);
+									
+									GlStateManager.translate(0, 1, 0);
+								}
+								
+								GlStateManager.popMatrix();
+							}
+						};
+						
+						part.texture = RenderDecayPitHangingChain.CHAIN_TEXTURE;
+						
+						part.texWidth = 1;
+						part.texU = 0;
+						part.texHeight = 1;
+						part.texV = 0;
+						
+						part.pitch = 15.0F;
+					}
+					
 					part.x = (float)offset.x;
 					part.y = (float)offset.y;
 					part.z = (float)offset.z;
 					part.yaw = -(float)Math.toDegrees(angle);
-					part.pitch = 30.0F;
+					
 					this.modelParts.add(part);
 				}
 			}
@@ -252,29 +330,33 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 
 	@SideOnly(Side.CLIENT)
 	protected void spawnExtendParticles() {
-		for(int i = 0; i < 64; i++) {
-			double dx = (this.rand.nextDouble() * 2 - 1) * this.width / 2;
-			double dy = this.height / 2.0D - 0.5D;
-			double dz = (this.rand.nextDouble() * 2 - 1) * this.width / 2;
-			double mx = (this.rand.nextDouble() - 0.5D) * 0.15D;
-			double my = (this.rand.nextDouble() - 0.5D) * 0.15D + 0.3D;
-			double mz = (this.rand.nextDouble() - 0.5D) * 0.15D;
-			BlockPos pos = new BlockPos(this.posX + dx, MathHelper.floor(this.posY + dy), this.posZ + dz);
-			IBlockState state = this.world.getBlockState(pos);
-			if(!state.getBlock().isAir(state, this.world, pos)) {
-				this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + dx, MathHelper.floor(this.posY + dy) + 1 + this.rand.nextDouble() * 0.5D, this.posZ + dz, mx, my, mz, Block.getStateId(state));
+		if(!this.isChains) {
+			for(int i = 0; i < 64; i++) {
+				double dx = (this.rand.nextDouble() * 2 - 1) * this.width / 2;
+				double dy = this.height / 2.0D - 0.5D;
+				double dz = (this.rand.nextDouble() * 2 - 1) * this.width / 2;
+				double mx = (this.rand.nextDouble() - 0.5D) * 0.15D;
+				double my = (this.rand.nextDouble() - 0.5D) * 0.15D + 0.3D;
+				double mz = (this.rand.nextDouble() - 0.5D) * 0.15D;
+				BlockPos pos = new BlockPos(this.posX + dx, MathHelper.floor(this.posY + dy), this.posZ + dz);
+				IBlockState state = this.world.getBlockState(pos);
+				if(!state.getBlock().isAir(state, this.world, pos)) {
+					this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, this.posX + dx, MathHelper.floor(this.posY + dy) + 1 + this.rand.nextDouble() * 0.5D, this.posZ + dz, mx, my, mz, Block.getStateId(state));
+				}
 			}
-		}
-
-		for(int i = 0; i < 8; i++) {
-			double dx = (this.rand.nextDouble() * 2 - 1) * this.width / 2;
-			double dy = this.height / 2.0D - 0.5D;
-			double dz = (this.rand.nextDouble() * 2 - 1) * this.width / 2;
-			double mx = (this.rand.nextDouble() - 0.5D) * 0.2D;
-			double my = (this.rand.nextDouble() - 0.5D) * 0.2D + 0.4D;
-			double mz = (this.rand.nextDouble() - 0.5D) * 0.2D;
-			ParticleRootSpike particle = (ParticleRootSpike) BLParticles.ROOT_SPIKE.spawn(this.world, this.posX + dx, this.posY + dy, this.posZ + dz, ParticleArgs.get().withMotion(mx, my, mz).withScale(0.4F));
-			particle.setUseSound(this.rand.nextInt(3) == 0);
+	
+			for(int i = 0; i < 8; i++) {
+				double dx = (this.rand.nextDouble() * 2 - 1) * this.width / 2;
+				double dy = this.height / 2.0D - 0.5D;
+				double dz = (this.rand.nextDouble() * 2 - 1) * this.width / 2;
+				double mx = (this.rand.nextDouble() - 0.5D) * 0.2D;
+				double my = (this.rand.nextDouble() - 0.5D) * 0.2D + 0.4D;
+				double mz = (this.rand.nextDouble() - 0.5D) * 0.2D;
+				ParticleRootSpike particle = (ParticleRootSpike) BLParticles.ROOT_SPIKE.spawn(this.world, this.posX + dx, this.posY + dy, this.posZ + dz, ParticleArgs.get().withMotion(mx, my, mz).withScale(0.4F));
+				particle.setUseSound(this.rand.nextInt(3) == 0);
+			}
+		} else {
+			this.spawnBlockDust();
 		}
 	}
 
@@ -293,6 +375,10 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 				this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + dx, MathHelper.floor(this.posY + dy) + 1, this.posZ + dz, mx, my, mz, Block.getStateId(state));
 			}
 		}
+	}
+	
+	public boolean isChains() {
+		return this.isChains;
 	}
 
 	@Override
@@ -367,6 +453,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		data.writeLong(this.origin.toLong());
 		data.writeInt(this.delay);
 		data.writeInt(this.attackTicks);
+		data.writeBoolean(this.isChains);
 	}
 
 	@Override
@@ -374,6 +461,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		this.origin = BlockPos.fromLong(data.readLong());
 		this.delay = data.readInt();
 		this.attackTicks = data.readInt();
+		this.isChains = data.readBoolean();
 	}
 
 	@Override
@@ -382,6 +470,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		this.origin = BlockPos.fromLong(nbt.getLong("origin"));
 		this.attackTicks = nbt.getInteger("attackTicks");
 		this.dataManager.set(DAMAGE, nbt.getFloat("damage"));
+		this.isChains = nbt.getBoolean("isChains");
 	}
 
 	@Override
@@ -390,5 +479,6 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 		nbt.setLong("origin", this.origin.toLong());
 		nbt.setInteger("attackTicks", this.attackTicks);
 		nbt.setFloat("damage", this.dataManager.get(DAMAGE));
+		nbt.setBoolean("isChains", this.isChains);
 	}
 }

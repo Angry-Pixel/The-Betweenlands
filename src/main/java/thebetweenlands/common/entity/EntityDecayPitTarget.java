@@ -313,7 +313,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			if(!this.world.isRemote && source instanceof EntityDamageSourceIndirect) {
 				Entity sourceEntity = ((EntityDamageSourceIndirect) source).getTrueSource();
 				if(sourceEntity != null && !world.isAirBlock(sourceEntity.getPosition().down())) {
-					EntityRootGrabber grabber = new EntityRootGrabber(getEntityWorld());
+					EntityRootGrabber grabber = new EntityRootGrabber(this.world, true);
 					grabber.setPosition(source.getTrueSource().getPosition().down(), 40);
 					getEntityWorld().spawnEntity(grabber);
 				}

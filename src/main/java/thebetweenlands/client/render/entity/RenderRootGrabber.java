@@ -7,7 +7,6 @@ import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -45,7 +44,7 @@ public class RenderRootGrabber extends Render<EntityRootGrabber> {
 			for(RootPart part : entity.modelParts) {
 				GlStateManager.pushMatrix();
 
-				this.bindEntityTexture(entity);
+				this.bindTexture(part.texture);
 
 				GlStateManager.translate(part.x, part.y, part.z);
 
@@ -54,28 +53,28 @@ public class RenderRootGrabber extends Render<EntityRootGrabber> {
 
 				GlStateManager.translate(0, entity.getRootYOffset(partialTicks), 0);
 
-				float animationTicks = entity.ticksExisted + partialTicks;
-				GlStateManager.rotate((float)Math.cos(animationTicks / 4) * 0.5F, 0, 0, 1);
-				GlStateManager.rotate((float)Math.sin(animationTicks / 5) * 0.8F, 1, 0, 0);
+				if(!entity.isChains()) {
+					float animationTicks = entity.ticksExisted + partialTicks;
+					GlStateManager.rotate((float)Math.cos(animationTicks / 4) * 0.5F, 0, 0, 1);
+					GlStateManager.rotate((float)Math.sin(animationTicks / 5) * 0.8F, 1, 0, 0);
+				}
 
-				part.renderer.render();
+				part.render();
 
 				int damage = MathHelper.ceil(entity.getDamage() * 10.0F);
 				if(damage > 0 && damage <= 10) {
 					this.bindTexture(DESTROY_STAGES[damage - 1]);
-
-					TextureAtlasSprite sprite = part.renderer.getSprite();
 
 					this.preRenderDamagedBlocks();
 
 					GlStateManager.matrixMode(GL11.GL_TEXTURE);
 					GlStateManager.pushMatrix();
 					GlStateManager.loadIdentity();
-					GlStateManager.scale(1.0F / (sprite.getMaxU() - sprite.getMinU()), 1.0F / (sprite.getMaxV() - sprite.getMinV()), 0);
-					GlStateManager.translate(-sprite.getMinU(), -sprite.getMinV(), 0);
+					GlStateManager.scale(1.0F / part.texWidth, 1.0F / part.texHeight, 0);
+					GlStateManager.translate(-part.texU, -part.texV, 0);
 					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 
-					part.renderer.render();
+					part.render();
 
 					GlStateManager.matrixMode(GL11.GL_TEXTURE);
 					GlStateManager.popMatrix();

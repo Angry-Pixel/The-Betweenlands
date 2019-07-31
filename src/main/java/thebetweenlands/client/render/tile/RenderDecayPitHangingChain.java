@@ -12,7 +12,7 @@ import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
 @SideOnly(Side.CLIENT)
 public class RenderDecayPitHangingChain extends TileEntitySpecialRenderer<TileEntityDecayPitHangingChain > {
 	public static final ResourceLocation CHAIN_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_chain.png");
-	private final ModelDecayPitChain CHAIN_MODEL = new ModelDecayPitChain();
+	public static final ModelDecayPitChain CHAIN_MODEL = new ModelDecayPitChain();
 
 	@Override
 	public void render(TileEntityDecayPitHangingChain tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
