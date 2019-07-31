@@ -10,12 +10,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntityDecayPitTargetPart extends Entity {
 	public IEntityMultiPartPitTarget parent;
 	public String partName;
+	public final boolean isShield;
 
-	public EntityDecayPitTargetPart(IEntityMultiPartPitTarget parent, String partName, float width, float height) {
+	public EntityDecayPitTargetPart(IEntityMultiPartPitTarget parent, String partName, float width, float height, boolean isShield) {
 		super(parent.getWorld());
 		setSize(width, height);
 		this.parent = parent;
 		this.partName = partName;
+		this.isShield = isShield;
 	}
 
 	@Override
@@ -24,7 +26,7 @@ public class EntityDecayPitTargetPart extends Entity {
 
 	@Override
 	public boolean canBeCollidedWith() {
-		return true;
+		return !this.isShield;
 	}
 
 	@Override

@@ -55,7 +55,7 @@ import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.RotationMatrix;
 
 public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss, IEntityMusic {
-	public static final RotationMatrix ROTATION_MATRIX = new RotationMatrix();
+	private final RotationMatrix rotationMatrix = new RotationMatrix();
 
 	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
 	protected static final DataParameter<Integer> SHIELD_STATE = EntityDataManager.<Integer>createKey(EntityFortressBoss.class, DataSerializers.VARINT);
@@ -219,13 +219,13 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 		double centroidY = 0;
 		double centroidZ = 0;
 
-		ROTATION_MATRIX.setRotations((float)Math.toRadians(-this.shieldRotationPitch), (float)Math.toRadians(-this.shieldRotationYaw), (float)Math.toRadians(-this.shieldRotationRoll));
+		this.rotationMatrix.setRotations((float)Math.toRadians(-this.shieldRotationPitch), (float)Math.toRadians(-this.shieldRotationYaw), (float)Math.toRadians(-this.shieldRotationRoll));
 
 		Vec3d centerPos = new Vec3d(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
 
 		//Transform position and ray to local space
-		pos = ROTATION_MATRIX.transformVec(pos, centerPos);
-		ray = ROTATION_MATRIX.transformVec(ray, new Vec3d(0, 0, 0));
+		pos = this.rotationMatrix.transformVec(pos, centerPos);
+		ray = this.rotationMatrix.transformVec(ray, new Vec3d(0, 0, 0));
 
 		for(int i = 0; i <= 19; i++) {
 			if(!this.isShieldActive(i)) {

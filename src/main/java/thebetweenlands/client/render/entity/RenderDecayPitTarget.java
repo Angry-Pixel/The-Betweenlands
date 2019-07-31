@@ -1,6 +1,9 @@
 package thebetweenlands.client.render.entity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -33,20 +36,36 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 		double smoothedMainY = entity.prevPosY + (entity.posY - entity.prevPosY ) * partialTicks;
 		double smoothedMainZ = entity.prevPosZ + (entity.posZ - entity.prevPosZ ) * partialTicks;
 
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + 1.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);
 		PLUG_MODEL.render(entity, 0.0625F);
 		GlStateManager.popMatrix();	
-
-		for (EntityDecayPitTargetPart part : entity.shield_array) {
+		
+		EntityDecayPitTargetPart hitPart = null;
+		
+		if(this.getRenderManager().isDebugBoundingBox()) {
+			hitPart = entity.rayTraceShields(Minecraft.getMinecraft().player.getPositionEyes(partialTicks), Minecraft.getMinecraft().player.getLook(partialTicks));
+		}
+		
+		for (EntityDecayPitTargetPart part : entity.parts) {
 			float floatate = part.prevRotationYaw + (part.rotationYaw - part.prevRotationYaw) * partialTicks;
 			double smoothedX = part.prevPosX  + (part.posX - part.prevPosX ) * partialTicks;
 			double smoothedY = part.prevPosY  + (part.posY - part.prevPosY ) * partialTicks;
 			double smoothedZ = part.prevPosZ  + (part.posZ - part.prevPosZ ) * partialTicks;
-			if (part != entity.target && part != entity.bottom)
+			if (part != entity.target && part != entity.bottom) {
+				if(hitPart == part) {
+					GlStateManager.color(1, 0, 0, 1);
+				}
+				
 				renderCogShield(part, x + smoothedX - smoothedMainX, y + smoothedY - smoothedMainY, z + smoothedZ - smoothedMainZ, floatate);
+				
+				GlStateManager.color(1, 1, 1, 1);
+			}
 		}
 		
 		bindTexture(TARGET_TEXTURE);

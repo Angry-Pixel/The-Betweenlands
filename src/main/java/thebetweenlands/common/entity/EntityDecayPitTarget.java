@@ -6,12 +6,14 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -25,18 +27,21 @@ import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.common.entity.mobs.EntityFortressBoss;
 import thebetweenlands.common.tile.TileEntityDecayPitGroundChain;
 import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
+import thebetweenlands.util.RotationMatrix;
 
 public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitTarget {
-	public float animationTicks = 0;
+	private final RotationMatrix rotationMatrix = new RotationMatrix();
+	
 	public float animationTicksPrev = 0;
 	public int animationTicksChain = 0;
 	public int animationTicksChainPrev = 0;
 	public final int MAX_PROGRESS = 768; // max distance of travel from origin so; 768 * 0.0078125F = 6 Blocks
 	public final int MIN_PROGRESS = 0;
 	public final float MOVE_UNIT = 0.0078125F; // unit of movement 
-	public EntityDecayPitTargetPart[] shield_array;
+	public EntityDecayPitTargetPart[] parts;
 	public EntityDecayPitTargetPart shield_1;
 	public EntityDecayPitTargetPart shield_2;
 	public EntityDecayPitTargetPart shield_3;
@@ -56,6 +61,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public EntityDecayPitTargetPart target;
 	public EntityDecayPitTargetPart bottom;
 	
+	private static final DataParameter<Float> ANIMATION_TICKS = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.FLOAT);
 	private static final DataParameter<Boolean> IS_RAISING = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_MOVING = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_SLOW = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
@@ -64,25 +70,25 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public EntityDecayPitTarget(World world) {
 		super(world);
 		setSize(5F, 5F);
-		shield_array = new EntityDecayPitTargetPart[] {
-				shield_1 = new EntityDecayPitTargetPart(this, "part1", 1F, 1F),
-				shield_2 = new EntityDecayPitTargetPart(this, "part2", 1F, 1F),
-				shield_3 = new EntityDecayPitTargetPart(this, "part3", 1F, 1F),
-				shield_4 = new EntityDecayPitTargetPart(this, "part4", 1F, 1F),
-				shield_5 = new EntityDecayPitTargetPart(this, "part5", 1F, 1F),
-				shield_6 = new EntityDecayPitTargetPart(this, "part6", 1F, 1F),
-				shield_7 = new EntityDecayPitTargetPart(this, "part7", 1F, 1F),
-				shield_8 = new EntityDecayPitTargetPart(this, "part8", 1F, 1F),
-				shield_9 = new EntityDecayPitTargetPart(this, "part9", 1F, 1F),
-				shield_10 = new EntityDecayPitTargetPart(this, "part10", 1F, 1F),
-				shield_11 = new EntityDecayPitTargetPart(this, "part11", 1F, 1F),
-				shield_12 = new EntityDecayPitTargetPart(this, "part12", 1F, 1F),
-				shield_13 = new EntityDecayPitTargetPart(this, "part13", 1F, 1F),
-				shield_14 = new EntityDecayPitTargetPart(this, "part16", 1F, 1F),
-				shield_15 = new EntityDecayPitTargetPart(this, "part15", 1F, 1F),
-				shield_16 = new EntityDecayPitTargetPart(this, "part16", 1F, 1F),
-				target = new EntityDecayPitTargetPart(this, "target", 3F, 2F),
-				bottom = new EntityDecayPitTargetPart(this, "bottom", 3F, 1F),
+		parts = new EntityDecayPitTargetPart[] {
+				shield_1 = new EntityDecayPitTargetPart(this, "part1", 1F, 1F, true),
+				shield_2 = new EntityDecayPitTargetPart(this, "part2", 1F, 1F, true),
+				shield_3 = new EntityDecayPitTargetPart(this, "part3", 1F, 1F, true),
+				shield_4 = new EntityDecayPitTargetPart(this, "part4", 1F, 1F, true),
+				shield_5 = new EntityDecayPitTargetPart(this, "part5", 1F, 1F, true),
+				shield_6 = new EntityDecayPitTargetPart(this, "part6", 1F, 1F, true),
+				shield_7 = new EntityDecayPitTargetPart(this, "part7", 1F, 1F, true),
+				shield_8 = new EntityDecayPitTargetPart(this, "part8", 1F, 1F, true),
+				shield_9 = new EntityDecayPitTargetPart(this, "part9", 1F, 1F, true),
+				shield_10 = new EntityDecayPitTargetPart(this, "part10", 1F, 1F, true),
+				shield_11 = new EntityDecayPitTargetPart(this, "part11", 1F, 1F, true),
+				shield_12 = new EntityDecayPitTargetPart(this, "part12", 1F, 1F, true),
+				shield_13 = new EntityDecayPitTargetPart(this, "part13", 1F, 1F, true),
+				shield_14 = new EntityDecayPitTargetPart(this, "part16", 1F, 1F, true),
+				shield_15 = new EntityDecayPitTargetPart(this, "part15", 1F, 1F, true),
+				shield_16 = new EntityDecayPitTargetPart(this, "part16", 1F, 1F, true),
+				target = new EntityDecayPitTargetPart(this, "target", 3F, 2F, false),
+				bottom = new EntityDecayPitTargetPart(this, "bottom", 3F, 1F, false),
 				};
 	}
 
@@ -92,23 +98,38 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		dataManager.register(IS_MOVING, false);
 		dataManager.register(IS_SLOW, true);
 		dataManager.register(PROGRESS, 0);
+		dataManager.register(ANIMATION_TICKS, 0.0F);
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		
+		float animationTicks = this.dataManager.get(ANIMATION_TICKS);
+		
 		animationTicksPrev = animationTicks;
 		animationTicksChainPrev = animationTicksChain;
-		animationTicks += 1F;
-		if (animationTicks >= 360F)
-			animationTicks = animationTicksPrev = 0;
-
-		for(EntityDecayPitTargetPart part :shield_array) {
-			part.prevPosX = part.lastTickPosX = part.posX;
-			part.prevPosY = part.lastTickPosY = part.posY;
-			part.prevPosZ = part.lastTickPosZ = part.posZ;
+		
+		if(!this.world.isRemote) {
+			if (animationTicks + 1 >= 360F) {
+				this.dataManager.set(ANIMATION_TICKS, 0.0F);
+			} else {
+				this.dataManager.set(ANIMATION_TICKS, animationTicks + 1);
+			}
 		}
 
+		while(animationTicks - this.animationTicksPrev < -180.0F) {
+			this.animationTicksPrev -= 360.0F;
+        }
+        while(animationTicks - this.animationTicksPrev >= 180.0F) {
+        	this.animationTicksPrev += 360.0F;
+        }
+		
+        //Set prev pos, rotation, etc.
+        for(Entity entity : parts) {
+        	entity.onUpdate();
+        }
+        
 		setNewShieldHitboxPos(animationTicks, shield_1);
 		setNewShieldHitboxPos(-animationTicks + 22.5F, shield_2);
 		setNewShieldHitboxPos(animationTicks + 45F, shield_3);
@@ -126,7 +147,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		setNewShieldHitboxPos(-animationTicks + 292.5F, shield_14);
 		setNewShieldHitboxPos(animationTicks + 315F, shield_15);
 		setNewShieldHitboxPos(-animationTicks + 337.5F, shield_16);
-
+		
 		target.setPosition(posX, posY + 3D, posZ);
 		bottom.setPosition(posX, posY, posZ);
 
@@ -211,7 +232,13 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			wobble = 0F;
 		shield.setPosition(posX + offSetX, target.posY + target.height / 2.0D - shield.height + wobble, posZ + offSetZ);
 		shield.rotationYaw = animationTicks + 180F;
-		shield.onUpdate();
+		
+		while(shield.rotationYaw - shield.prevRotationYaw < -180.0F) {
+			shield.prevRotationYaw -= 360.0F;
+        }
+        while(shield.rotationYaw - shield.prevRotationYaw >= 180.0F) {
+        	shield.prevRotationYaw += 360.0F;
+        }
 	}
 
 	@Override
@@ -226,7 +253,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 	@Nullable
 	public Entity[] getParts() {
-		return shield_array;
+		return parts;
 	}
 
 	@Override
@@ -248,21 +275,53 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 	@Override
 	public boolean attackEntityFromPart(EntityDecayPitTargetPart part, DamageSource source, float damage) {
-		if (!getEntityWorld().isRemote) {
-			if (part != target && part != bottom) {
-				if (source instanceof EntityDamageSourceIndirect) {
+		boolean wasBlocked = false;
+		
+		if(source instanceof EntityDamageSource) {
+			EntityDamageSource entityDamage = (EntityDamageSource) source;
+			
+			Entity sourceEntity = entityDamage.getTrueSource();
+			Entity immediateEntity = entityDamage.getImmediateSource();
+
+			Entity attackingEntity = immediateEntity != null ? immediateEntity : sourceEntity;
+			
+			if(attackingEntity == null) {
+				wasBlocked = true;
+			} else {
+				Vec3d pos = new Vec3d(attackingEntity.posX, attackingEntity.posY + attackingEntity.getEyeHeight(), attackingEntity.posZ);
+				
+				Vec3d ray;
+				if(attackingEntity instanceof EntityLivingBase) {
+					ray = attackingEntity.getLookVec();
+				} else {
+					ray = new Vec3d(attackingEntity.motionX, attackingEntity.motionY, attackingEntity.motionZ).normalize();
+				}
+				
+				EntityDecayPitTargetPart hitShield = this.rayTraceShields(pos, ray);
+				if(hitShield != null) {
+					wasBlocked = true;
+				}
+			}
+		}
+
+		if(part == target && !wasBlocked) {
+			if(!this.world.isRemote) {
+				moveDown();
+			}
+			return true;
+		} else if(wasBlocked) {
+			if(!this.world.isRemote && source instanceof EntityDamageSourceIndirect) {
+				Entity sourceEntity = ((EntityDamageSourceIndirect) source).getTrueSource();
+				if(sourceEntity != null && !world.isAirBlock(sourceEntity.getPosition().down())) {
 					EntityRootGrabber grabber = new EntityRootGrabber(getEntityWorld());
 					grabber.setPosition(source.getTrueSource().getPosition().down(), 40);
 					getEntityWorld().spawnEntity(grabber);
 				}
 			}
-
-			if (part == target) {
-				moveDown();
-				return true;
-			}
+			return false;
 		}
 
+		//TODO This should be done through entity status event sent from server side
 		if (getEntityWorld().isRemote)
 			if (part == target) {
 				shootBeamsAtThings(new Vec3d(0D, -2.5D + getProgress() * MOVE_UNIT, -12D));
@@ -273,6 +332,35 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		return false;
 	}
 
+	@Nullable
+	public EntityDecayPitTargetPart rayTraceShields(Vec3d pos, Vec3d dir) {
+		Vec3d ray = dir.normalize().scale(3);
+		
+		float shieldSize = 0.6F;
+		
+		Vec3d v0 = new Vec3d(-shieldSize, -shieldSize, 0);
+		Vec3d v1 = new Vec3d(shieldSize, -shieldSize, 0);
+		Vec3d v2 = new Vec3d(shieldSize, shieldSize, 0);
+		Vec3d v3 = new Vec3d(-shieldSize, shieldSize, 0);
+		
+		for(EntityDecayPitTargetPart shieldPart : parts) {
+			if(shieldPart.isShield) {
+				Vec3d center = shieldPart.getPositionVector().add(0, shieldPart.height / 2, 0);
+				
+				this.rotationMatrix.setRotations(0, (float)Math.toRadians(shieldPart.rotationYaw), 0);
+				
+				Vec3d relPos = this.rotationMatrix.transformVec(pos.subtract(center), Vec3d.ZERO);;
+				Vec3d relRay = this.rotationMatrix.transformVec(ray, Vec3d.ZERO);
+				
+				if(EntityFortressBoss.rayTraceTriangle(relPos, relRay, v0, v1, v2) || EntityFortressBoss.rayTraceTriangle(relPos, relRay, v2, v3, v0)) {
+					return shieldPart;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 	private void moveUp() {
 		if (getProgress() > MIN_PROGRESS) {
 			setRaising(true);
