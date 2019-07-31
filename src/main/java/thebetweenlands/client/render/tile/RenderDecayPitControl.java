@@ -106,6 +106,8 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		}
 		tessellator.draw();
 		
+		GlStateManager.depthMask(false);
+		
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
 		GlStateManager.translate(0.5, 0.5, 0);
@@ -137,6 +139,8 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+		
+		GlStateManager.depthMask(true);
 		
 		GlStateManager.disableBlend();
 		GlStateManager.enableLighting();

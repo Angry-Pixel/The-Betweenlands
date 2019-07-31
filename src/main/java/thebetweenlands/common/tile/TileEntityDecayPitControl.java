@@ -14,9 +14,17 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
 
@@ -59,10 +67,43 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 			//TODO remove ghetto syncing
 			if(getWorld().getTotalWorldTime() % 20 == 0)
 				updateBlock();
+		} else {
+			this.spawnAmbientParticles();
 		}
 
 		checkSurfaceCollisions();
 
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void spawnAmbientParticles() {
+		BlockPos pos = this.getPos();
+		
+		double x = pos.getX() + 0.5D + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+		double y = pos.getY() + 1.5D;
+		double z = pos.getZ() + 0.5D + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+		double mx = (this.world.rand.nextFloat() - 0.5F) * 0.08F;
+		double my = this.world.rand.nextFloat() * 0.175F;
+		double mz = (this.world.rand.nextFloat() - 0.5F) * 0.08F;
+		int[] color = {100, 70, 0, 255};
+
+		ParticleGasCloud hazeParticle = (ParticleGasCloud) BLParticles.GAS_CLOUD
+				.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
+						.withData(null)
+						.withMotion(mx, my, mz)
+						.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
+						.withScale(8f));
+		
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE, hazeParticle);
+		
+		ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
+				.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
+						.withData(null)
+						.withMotion(mx, my, mz)
+						.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
+						.withScale(4f));
+
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_TEXTURED, particle);
 	}
 
 	private void updateBlock() {
