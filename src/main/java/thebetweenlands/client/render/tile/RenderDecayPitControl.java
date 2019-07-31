@@ -125,7 +125,7 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
 		GlStateManager.translate(0.5, 0.5, 0);
-		GlStateManager.rotate(-ring_rotate, 0, 0, 1);
+		GlStateManager.rotate(ring_rotate * 2F, 0, 0, 1);
 		GlStateManager.translate(-0.5, -0.5, 0);
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 
