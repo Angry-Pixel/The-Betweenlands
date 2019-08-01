@@ -91,6 +91,11 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 	}
 
 	@Override
+	public void onKillCommand() {
+		this.setDead();
+	}
+
+	@Override
 	protected boolean isMovementBlocked() {
 		return true;
 	}
