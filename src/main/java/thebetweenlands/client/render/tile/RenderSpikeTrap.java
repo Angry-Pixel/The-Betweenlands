@@ -13,9 +13,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -163,24 +163,28 @@ public class RenderSpikeTrap extends TileEntitySpecialRenderer<TileEntitySpikeTr
 	@Override
 	public void renderTileEntityFast(TileEntitySpikeTrap tile, double x, double y, double z, float partialTicks,
 			int destroyStage, float partial, BufferBuilder buffer) {
-		if(tile.type != 0) {
-			if(blockRenderer == null) {
-				blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
+		BlockPos pos = tile.getPos();
+
+		IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(tile.getWorld(), pos);
+
+		IBlockState state = world.getBlockState(pos);
+
+		if(state.getBlock() instanceof BlockSpikeTrap) {
+			if(tile.type != 0) {
+				if(blockRenderer == null) {
+					blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
+				}
+
+				if(state.getBlock() instanceof BlockSpikeTrap) {
+					EnumFacing facing = state.getValue(BlockSpikeTrap.FACING);
+
+					buffer.setTranslation(x - pos.getX(), y - pos.getY(), z - pos.getZ());
+
+					blockRenderer.getBlockModelRenderer().renderModel(world, this.overlayModels[facing.ordinal()], state, pos, buffer, false);
+				}
 			}
 
-			BlockPos pos = tile.getPos();
-
-			IBlockAccess world = MinecraftForgeClient.getRegionRenderCache(tile.getWorld(), pos);
-
-			IBlockState state = world.getBlockState(pos);
-
-			EnumFacing facing = state.getValue(BlockSpikeTrap.FACING);
-
-			buffer.setTranslation(x - pos.getX(), y - pos.getY(), z - pos.getZ());
-
-			blockRenderer.getBlockModelRenderer().renderModel(world, this.overlayModels[facing.ordinal()], state, pos, buffer, false);
+			this.renderSpikes(tile, x, y, z, partialTicks, destroyStage, 1);
 		}
-
-		this.renderSpikes(tile, x, y, z, partialTicks, destroyStage, 1);
 	}
 }
