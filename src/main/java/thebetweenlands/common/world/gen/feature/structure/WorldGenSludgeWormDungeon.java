@@ -408,6 +408,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.EAST, rand, 0, 0);
 		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.NORTH, rand, 0, 0);
 		decayPitBuild.buildMainAreaPart(world, pos.down(14), EnumFacing.WEST, rand, 0, 0);
+		decayPitBuild.addSpikes(world, pos.down(14), EnumFacing.SOUTH, rand, 0, 0);
+		decayPitBuild.addSpikes(world, pos.down(14), EnumFacing.EAST, rand, 0, 0);
+		decayPitBuild.addSpikes(world, pos.down(14), EnumFacing.NORTH, rand, 0, 0);
+		decayPitBuild.addSpikes(world, pos.down(14), EnumFacing.WEST, rand, 0, 0);
 		world.setBlockState(pos.down(14), BlockRegistry.DECAY_PIT_CONTROL.getDefaultState());
 		world.setBlockState(pos.up(1), BlockRegistry.DECAY_PIT_HANGING_CHAIN.getDefaultState());
 
