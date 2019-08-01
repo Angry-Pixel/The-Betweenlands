@@ -67,7 +67,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 		return null;
 	}
 
-	private ElixirEffect getElixirFromItem(ItemStack stack) {
+	public ElixirEffect getElixirFromItem(ItemStack stack) {
 		return this.getElixirByID(stack.getItemDamage() / 2);
 	}
 
@@ -338,6 +338,16 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 			variants.put(effect.getID() * 2 + 1, "orange");
 		}
 		return variants;
+	}
+	
+	@Override
+	public boolean hasContainerItem() {
+		return true;
+	}
+	
+	@Override
+	public ItemStack getContainerItem(ItemStack stack) {
+		return ItemRegistry.DENTROTHYST_VIAL.createStack(stack.getItemDamage() % 2 == 0 ? 1 : 2);
 	}
 }
 
