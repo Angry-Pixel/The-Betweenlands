@@ -222,7 +222,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				if (isPlantableAbove(world, pos.add(horizontalX, y, horizontalZ)))
 					if (plantingChance(rand))
 						world.setBlockState(pos.add(horizontalX, y + 1, horizontalZ), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
-					else if (rand.nextBoolean())
+					else if (plantingChance(rand))
 						world.setBlockState(pos.add(horizontalX, y + 1, horizontalZ), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
 			}
 	}
@@ -414,6 +414,10 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		decayPitBuild.addSpikes(world, pos.down(14), EnumFacing.WEST, rand, 0, 0);
 		world.setBlockState(pos.down(14), BlockRegistry.DECAY_PIT_CONTROL.getDefaultState());
 		world.setBlockState(pos.up(1), BlockRegistry.DECAY_PIT_HANGING_CHAIN.getDefaultState());
+		
+		for (int y = 0; y < 7; y++)
+			addGroundPlants(world, pos.down(11).add(-11, y, -11), rand, 22, 0, 22, false);
+		addHangingPlants(world, pos.add(-11, 1, -11), rand, 22, 0, 22);
 
 		// S = 0, W = 1, N = 2, E = 3
 
