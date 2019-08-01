@@ -20,19 +20,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.client.render.particle.BatchedParticleRenderer;
-import thebetweenlands.client.render.particle.DefaultParticleBatches;
-import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.mobs.EntityFortressBoss;
 import thebetweenlands.common.tile.TileEntityDecayPitGroundChain;
 import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
 import thebetweenlands.util.RotationMatrix;
 
 public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitTarget {
+	private static final byte EVENT_ATTACK_BLOCKED = 80;
+	private static final byte EVENT_ATTACK_DAMAGE = 81;
+	
 	private final RotationMatrix rotationMatrix = new RotationMatrix();
 	
 	public float animationTicksPrev = 0;
@@ -67,6 +63,8 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	private static final DataParameter<Boolean> IS_SLOW = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> PROGRESS = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.VARINT);
 
+	public int attackDamageTicks = 0;
+	
 	public EntityDecayPitTarget(World world) {
 		super(world);
 		setSize(5F, 5F);
@@ -104,6 +102,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		
+		if(this.attackDamageTicks > 0) {
+			this.attackDamageTicks--;
+		}
 		
 		float animationTicks = this.dataManager.get(ANIMATION_TICKS);
 		
@@ -307,28 +309,28 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		if(part == target && !wasBlocked) {
 			if(!this.world.isRemote) {
 				moveDown();
+				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
 			}
+			
 			return true;
 		} else if(wasBlocked) {
-			if(!this.world.isRemote && source instanceof EntityDamageSourceIndirect) {
-				Entity sourceEntity = ((EntityDamageSourceIndirect) source).getTrueSource();
-				if(sourceEntity != null && !world.isAirBlock(sourceEntity.getPosition().down())) {
-					EntityRootGrabber grabber = new EntityRootGrabber(this.world, true);
-					grabber.setPosition(source.getTrueSource().getPosition().down(), 40);
-					getEntityWorld().spawnEntity(grabber);
+			if(!this.world.isRemote) {
+				if(source instanceof EntityDamageSourceIndirect) {
+					Entity sourceEntity = ((EntityDamageSourceIndirect) source).getTrueSource();
+					if(sourceEntity != null && !world.isAirBlock(sourceEntity.getPosition().down())) {
+						EntityRootGrabber grabber = new EntityRootGrabber(this.world, true);
+						grabber.setPosition(source.getTrueSource().getPosition().down(), 40);
+						getEntityWorld().spawnEntity(grabber);
+					}
 				}
+				
+				this.moveUp();
+				
+				this.world.setEntityState(this, EVENT_ATTACK_BLOCKED);
 			}
 			return false;
 		}
 
-		//TODO This should be done through entity status event sent from server side
-		if (getEntityWorld().isRemote)
-			if (part == target) {
-				shootBeamsAtThings(new Vec3d(0D, -2.5D + getProgress() * MOVE_UNIT, -12D));
-				shootBeamsAtThings(new Vec3d(12D, -2.5D + getProgress() * MOVE_UNIT, 0D));
-				shootBeamsAtThings(new Vec3d(0D, -2.5D + getProgress() * MOVE_UNIT, 12D));
-				shootBeamsAtThings(new Vec3d(-12D, -2.5D + getProgress() * MOVE_UNIT, 0D));
-			}
 		return false;
 	}
 
@@ -361,6 +363,15 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		return null;
 	}
 	
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+		
+		if(id == EVENT_ATTACK_DAMAGE) {
+			this.attackDamageTicks = 40;
+		}
+	}
+	
 	private void moveUp() {
 		if (getProgress() > MIN_PROGRESS) {
 			setRaising(true);
@@ -374,24 +385,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			setRaising(false);
 			setMoving(true);
 			setSlow(false);
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	private void shootBeamsAtThings(Vec3d target) {
-		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.BEAM, BLParticles.PUZZLE_BEAM_2.create(world, this.target.posX + target.x, this.target.posY + this.target.height * 0.5D + target.y, this.target.posZ + target.z, ParticleArgs.get().withMotion(0, 0, 0).withColor(255F, 102F, 0F, 1F).withScale(3.5F).withData(30, target.scale(-1))));
-		for(int i = 0; i < 2; i++) {
-			float offsetLen = this.world.rand.nextFloat();
-			Vec3d offset = new Vec3d(target.x * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f, target.y * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f, target.z * offsetLen + world.rand.nextFloat() * 0.2f - 0.1f);
-			float vx = (world.rand.nextFloat() * 2f - 1) * 0.0025f;
-			float vy = (world.rand.nextFloat() * 2f - 1) * 0.0025f + 0.008f;
-			float vz = (world.rand.nextFloat() * 2f - 1) * 0.0025f;
-			float scale = 0.5f + world.rand.nextFloat();
-			if(ShaderHelper.INSTANCE.canUseShaders() && world.rand.nextBoolean()) {
-				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS, BLParticles.SMOOTH_SMOKE.create(world, this.target.posX + offset.x, this.target.posY + this.target.height * 0.5D + offset.y, this.target.posZ + offset.z, ParticleArgs.get().withMotion(vx, vy, vz).withColor(1, 1, 1, 0.2F).withScale(scale * 8).withData(80, true, 0.0F, true)));
-			} else {
-				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.PUZZLE_BEAM.create(world, this.target.posX + offset.x, this.target.posY + this.target.height * 0.5D + offset.y, this.target.posZ + offset.z, ParticleArgs.get().withMotion(vx, vy, vz).withColor(255F, 102F, 0F, 1F).withScale(scale).withData(100)));
-			}
 		}
 	}
 
