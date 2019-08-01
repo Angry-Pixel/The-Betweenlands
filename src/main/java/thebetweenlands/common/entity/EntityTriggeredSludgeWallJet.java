@@ -11,6 +11,8 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 
 public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
@@ -47,6 +49,14 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 
 		if (animationTicks >= 360)
 			animationTicks = animationTicksPrev = 0;
+		
+		if (getEntityWorld().isRemote) {
+			if(this.rand.nextInt(4) == 0) {
+				ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
+					args.withColor(1F, 0.65F, 0.25F, 0.5F);
+				BLParticles.LEAF_SWIRL.spawn(this.world, this.posX, this.posY, this.posZ, args);
+			}
+		}
 	}
 
 	@Override
