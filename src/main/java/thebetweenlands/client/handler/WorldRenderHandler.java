@@ -189,7 +189,7 @@ public class WorldRenderHandler {
 			BatchedParticleRenderer.INSTANCE.renderAll(MC.getRenderViewEntity(), event.getPartialTicks());
 			
 			RenderHelper.disableStandardItemLighting();
-			Minecraft.getMinecraft().entityRenderer.enableLightmap();
+			Minecraft.getMinecraft().entityRenderer.disableLightmap();
 		}
 
 		if(ShaderHelper.INSTANCE.isWorldShaderActive() && (!DefaultParticleBatches.HEAT_HAZE_PARTICLE_ATLAS.isEmpty() || !DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS.isEmpty())) {
@@ -222,7 +222,7 @@ public class WorldRenderHandler {
 					}
 
 					RenderHelper.disableStandardItemLighting();
-					Minecraft.getMinecraft().entityRenderer.enableLightmap();
+					Minecraft.getMinecraft().entityRenderer.disableLightmap();
 					
 					//Update gas particles depth buffer
 					fbo.updateDepthBuffer();
