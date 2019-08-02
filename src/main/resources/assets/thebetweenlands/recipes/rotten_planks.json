@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": [
+      {
+        "item": "thebetweenlands:log_rotten_bark",
+        "data": 0
+      }
+    ]
+  },
+  "result": {
+    "item": "thebetweenlands:rotten_planks",
+    "count": 4
+  }
+}

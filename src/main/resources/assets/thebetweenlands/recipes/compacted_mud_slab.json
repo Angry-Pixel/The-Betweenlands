@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:compacted_mud"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:compacted_mud_slab",
+    "count": 6
+  }
+}

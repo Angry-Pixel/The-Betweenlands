@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:compacted_mud"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:compacted_mud_slope",
+    "count": 4
+  }
+}
