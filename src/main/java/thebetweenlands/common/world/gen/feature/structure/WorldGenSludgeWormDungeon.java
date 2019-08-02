@@ -164,9 +164,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		addHangingPlants(world, pos.add(1, 0, 1), rand, 32, -6, 3);
 		addHangingPlants(world, pos.add(1, 0, 1), rand, 32, -12, 3);
 
-		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -5, 3, true);
-		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -11, 3, true);
-		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -17, 3, true);
+		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -5, 3, true, true, true, true);
+		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -11, 3, true, true, true, true);
+		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -17, 3, true, true, true, true);
 
 		addWallPlants(world, pos.add(0, -3, 0), rand, 32, 2, 1, EnumFacing.SOUTH);
 		addWallPlants(world, pos.add(0, -9, 0), rand, 32, 2, 1, EnumFacing.SOUTH);
@@ -181,9 +181,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		addHangingPlants(world, pos.add(1, 0, 3), rand, 3, -6, 32);
 		addHangingPlants(world, pos.add(1, 0, 3), rand, 32, -12, 3);
 
-		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -5, 32, true);
-		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -11, 32, true);
-		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -17, 32, true);
+		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -5, 32, true, true, true, true);
+		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -11, 32, true, true, true, true);
+		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -17, 32, true, true, true, true);
 
 		addWallPlants(world, pos.add(0, -3, 0), rand, 1, 2, 32, EnumFacing.EAST);
 		addWallPlants(world, pos.add(0, -9, 0), rand, 1, 2, 32, EnumFacing.EAST);
@@ -207,22 +207,24 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		microBuild.buildCryptCrawlerTunnelsConnect(world, pos.add(0, -33, 0), EnumFacing.SOUTH, rand);
 
 		for (int y = -33; y < -23; y++)
-			addGroundPlants(world, pos.add(1, y, 1), rand, 32, 0, 32, false);
+			addGroundPlants(world, pos.add(1, y, 1), rand, 32, 0, 32, false, true, true, true);
 		for (int y = -26; y < -18; y++)
 			addHangingPlants(world, pos.add(1, y, 1), rand, 32, 0, 32);
 
 	}
 
-	public void addGroundPlants(World world, BlockPos pos, Random rand, int x, int y, int z, boolean addMudNoise) {
+	public void addGroundPlants(World world, BlockPos pos, Random rand, int x, int y, int z, boolean addMudNoise, boolean addMoss, boolean addWeeds, boolean addMushrooms) {
 		for (int horizontalX = 0; horizontalX < x; horizontalX++)
 			for (int horizontalZ = 0; horizontalZ < z; horizontalZ++) {
 				if (addMudNoise)
 					if (plantingChance(rand) && isPlantableAbove(world, pos.add(horizontalX, y, horizontalZ)))
 						world.setBlockState(pos.add(horizontalX, y, horizontalZ), blockHelper.COMPACTED_MUD_SLAB, 2);
 				if (isPlantableAbove(world, pos.add(horizontalX, y, horizontalZ)))
-					if (plantingChance(rand))
-						world.setBlockState(pos.add(horizontalX, y + 1, horizontalZ), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
-					else if (plantingChance(rand))
+					if (addWeeds && plantingChance(rand))
+						world.setBlockState(pos.add(horizontalX, y + 1, horizontalZ), getRandomFloorPlant(rand), 2);
+					else if (addMushrooms && plantingChance(rand))
+						world.setBlockState(pos.add(horizontalX, y + 1, horizontalZ), getRandomMushroom(rand), 2);
+					else if (addMoss && rand.nextBoolean())
 						world.setBlockState(pos.add(horizontalX, y + 1, horizontalZ), blockHelper.MOSS.withProperty(BlockMoss.FACING, EnumFacing.UP), 2);
 			}
 	}
@@ -416,7 +418,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		world.setBlockState(pos.up(1), BlockRegistry.DECAY_PIT_HANGING_CHAIN.getDefaultState());
 		
 		for (int y = 0; y < 7; y++)
-			addGroundPlants(world, pos.down(11).add(-11, y, -11), rand, 22, 0, 22, false);
+			addGroundPlants(world, pos.down(11).add(-11, y, -11), rand, 22, 0, 22, false, false, true, false);
 		addHangingPlants(world, pos.add(-11, 1, -11), rand, 22, 0, 22);
 
 		// S = 0, W = 1, N = 2, E = 3
