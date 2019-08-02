@@ -44,6 +44,8 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 
 	@Override
     public void doRender(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		this.renderBeams(entity, x, y, z, entityYaw, partialTicks, true);
+		
 		double smoothedMainX = entity.prevPosX + (entity.posX - entity.prevPosX ) * partialTicks;
 		double smoothedMainY = entity.prevPosY + (entity.posY - entity.prevPosY ) * partialTicks;
 		double smoothedMainZ = entity.prevPosZ + (entity.posZ - entity.prevPosZ ) * partialTicks;
@@ -93,6 +95,10 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	
 	@Override
 	public void renderMultipass(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		this.renderBeams(entity, x, y, z, entityYaw, partialTicks, false);
+	}
+	
+	private void renderBeams(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks, boolean innerBeams) {
 		if(entity.attackDamageTicks > 0) {
 			float interpAttackDamageTicks = entity.attackDamageTicks - partialTicks;
 			
@@ -101,9 +107,9 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			double yStart = entity.height - 1D;
 			
 			for(int i = 0; i < 4; i++) {
-				double diffX2 = i == 0 ? 1.6D : i == 1 ? -1.6D : 0;
+				double diffX2 = i == 0 ? 1.7D : i == 1 ? -1.7D : 0;
 				double diffY2 = 0;
-				double diffZ2 = i == 2 ? 1.6D : i == 3 ? -1.6D : 0;
+				double diffZ2 = i == 2 ? 1.7D : i == 3 ? -1.7D : 0;
 				
 				double diffX = i == 0 ? 12 : i == 1 ? -12 : 0;
 				double diffY = 2.5D + entity.getProgress() * entity.MOVE_UNIT - yStart;
@@ -129,18 +135,20 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 				
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 	
-				ParticleBeam.buildBeam(diffX2, diffY2, diffZ2, new Vec3d(-diffX2, -diffY2, -diffZ2), 0.4F, 0, 4F,
-						ActiveRenderInfo.getRotationX(), ActiveRenderInfo.getRotationZ(), ActiveRenderInfo.getRotationYZ(), ActiveRenderInfo.getRotationXY(), ActiveRenderInfo.getRotationXZ(),
-						(vx, vy, vz, u, v) -> {
-							buffer.pos(vx, vy, vz).tex(u + (entity.ticksExisted + partialTicks) * 0.15F, v).color(255, 255, 255, (int)(beamAlpha * 255)).endVertex();
-						});
+				if(innerBeams) {
+					ParticleBeam.buildBeam(diffX2, diffY2, diffZ2, new Vec3d(-diffX2, -diffY2, -diffZ2), 0.4F, 0, 4F,
+							ActiveRenderInfo.getRotationX(), ActiveRenderInfo.getRotationZ(), ActiveRenderInfo.getRotationYZ(), ActiveRenderInfo.getRotationXY(), ActiveRenderInfo.getRotationXZ(),
+							(vx, vy, vz, u, v) -> {
+								buffer.pos(vx, vy, vz).tex(u + (entity.ticksExisted + partialTicks) * 0.15F, v).color(255, 255, 255, (int)(beamAlpha * 255)).endVertex();
+							});
+				} else {
+					ParticleBeam.buildBeam(diffX, diffY, diffZ, new Vec3d(-(diffX - diffX2), -(diffY - diffY2), -(diffZ - diffZ2)), 0.4F, 0, 4F,
+							ActiveRenderInfo.getRotationX(), ActiveRenderInfo.getRotationZ(), ActiveRenderInfo.getRotationYZ(), ActiveRenderInfo.getRotationXY(), ActiveRenderInfo.getRotationXZ(),
+							(vx, vy, vz, u, v) -> {
+								buffer.pos(vx, vy, vz).tex(u + (entity.ticksExisted + partialTicks) * 0.15F, v).color(255, 255, 255, (int)(beamAlpha * 255)).endVertex();
+							});
+				}
 				
-				ParticleBeam.buildBeam(diffX, diffY, diffZ, new Vec3d(-(diffX - diffX2), -(diffY - diffY2), -(diffZ - diffZ2)), 0.4F, 0, 4F,
-						ActiveRenderInfo.getRotationX(), ActiveRenderInfo.getRotationZ(), ActiveRenderInfo.getRotationYZ(), ActiveRenderInfo.getRotationXY(), ActiveRenderInfo.getRotationXZ(),
-						(vx, vy, vz, u, v) -> {
-							buffer.pos(vx, vy, vz).tex(u + (entity.ticksExisted + partialTicks) * 0.15F, v).color(255, 255, 255, (int)(beamAlpha * 255)).endVertex();
-						});
-	
 				tessellator.draw();
 				
 				GlStateManager.alphaFunc(GL11.GL_GREATER, Math.max(0, 0.5f + (beamAlpha - 1) * 0.5f));
@@ -150,17 +158,19 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 				
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 	
-				ParticleBeam.buildBeam(diffX2, diffY2, diffZ2, new Vec3d(-diffX2, -diffY2, -diffZ2), 0.4F, 0, 4F,
-						ActiveRenderInfo.getRotationX(), ActiveRenderInfo.getRotationZ(), ActiveRenderInfo.getRotationYZ(), ActiveRenderInfo.getRotationXY(), ActiveRenderInfo.getRotationXZ(),
-						(vx, vy, vz, u, v) -> {
-							buffer.pos(vx, vy, vz).tex(u + (entity.ticksExisted + partialTicks) * 0.15F, v).color(255, 255, 255, (int)(beamAlpha * 255)).endVertex();
-						});
-				
-				ParticleBeam.buildBeam(diffX, diffY, diffZ, new Vec3d(-(diffX - diffX2), -(diffY - diffY2), -(diffZ - diffZ2)), 0.4F, 0, 4F,
-						ActiveRenderInfo.getRotationX(), ActiveRenderInfo.getRotationZ(), ActiveRenderInfo.getRotationYZ(), ActiveRenderInfo.getRotationXY(), ActiveRenderInfo.getRotationXZ(),
-						(vx, vy, vz, u, v) -> {
-							buffer.pos(vx, vy, vz).tex(u + (entity.ticksExisted + partialTicks) * 0.15F, v).color(255, 255, 255, (int)(beamAlpha * 255)).endVertex();
-						});
+				if(innerBeams) {
+					ParticleBeam.buildBeam(diffX2, diffY2, diffZ2, new Vec3d(-diffX2, -diffY2, -diffZ2), 0.4F, 0, 4F,
+							ActiveRenderInfo.getRotationX(), ActiveRenderInfo.getRotationZ(), ActiveRenderInfo.getRotationYZ(), ActiveRenderInfo.getRotationXY(), ActiveRenderInfo.getRotationXZ(),
+							(vx, vy, vz, u, v) -> {
+								buffer.pos(vx, vy, vz).tex(u + (entity.ticksExisted + partialTicks) * 0.15F, v).color(255, 255, 255, (int)(beamAlpha * 255)).endVertex();
+							});
+				} else {
+					ParticleBeam.buildBeam(diffX, diffY, diffZ, new Vec3d(-(diffX - diffX2), -(diffY - diffY2), -(diffZ - diffZ2)), 0.4F, 0, 4F,
+							ActiveRenderInfo.getRotationX(), ActiveRenderInfo.getRotationZ(), ActiveRenderInfo.getRotationYZ(), ActiveRenderInfo.getRotationXY(), ActiveRenderInfo.getRotationXZ(),
+							(vx, vy, vz, u, v) -> {
+								buffer.pos(vx, vy, vz).tex(u + (entity.ticksExisted + partialTicks) * 0.15F, v).color(255, 255, 255, (int)(beamAlpha * 255)).endVertex();
+							});
+				}
 	
 				tessellator.draw();
 				
