@@ -14,10 +14,19 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.EntityRootGrabber;
+import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
 
 public class TileEntityDecayPitControl extends TileEntity implements ITickable {
@@ -59,10 +68,72 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 			//TODO remove ghetto syncing
 			if(getWorld().getTotalWorldTime() % 20 == 0)
 				updateBlock();
+
+			if(getWorld().getTotalWorldTime() % 1200 == 0) { //once a minute
+				//S
+				checkTurretSpawn(4, 12, 11);
+				checkTurretSpawn(-4, 12, 11);
+				//E
+				checkTurretSpawn(11, 12, 4);
+				checkTurretSpawn(11, 12, -4);
+				//N
+				checkTurretSpawn(4, 12, -11);
+				checkTurretSpawn(-4, 12, -11);
+				//W
+				checkTurretSpawn(-11, 12, -4);
+				checkTurretSpawn(-11, 12, 4);
+			}
+		} else {
+			this.spawnAmbientParticles();
 		}
-
 		checkSurfaceCollisions();
+	}
 
+	private void checkTurretSpawn(int x, int y, int z) {
+		BlockPos checkPos = getPos().add(x, y, z);
+		AxisAlignedBB checkBox = new AxisAlignedBB(checkPos);
+		List<EntityTriggeredSludgeWallJet> entityList = getWorld().getEntitiesWithinAABB(EntityTriggeredSludgeWallJet.class, checkBox);
+		for (EntityTriggeredSludgeWallJet entity : entityList) {
+			if (entity instanceof EntityTriggeredSludgeWallJet) {
+				break;
+			}
+		}
+		if (entityList.isEmpty()) {
+			EntityTriggeredSludgeWallJet jet = new EntityTriggeredSludgeWallJet(getWorld());
+			jet.setPosition(checkPos.getX() + 0.5D, checkPos.getY(), checkPos.getZ() + 0.5D);
+			getWorld().spawnEntity(jet);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void spawnAmbientParticles() {
+		BlockPos pos = this.getPos();
+		
+		double x = pos.getX() + 0.5D + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+		double y = pos.getY() + 1.5D;
+		double z = pos.getZ() + 0.5D + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+		double mx = (this.world.rand.nextFloat() - 0.5F) * 0.08F;
+		double my = this.world.rand.nextFloat() * 0.175F;
+		double mz = (this.world.rand.nextFloat() - 0.5F) * 0.08F;
+		int[] color = {100, 70, 0, 255};
+
+		ParticleGasCloud hazeParticle = (ParticleGasCloud) BLParticles.GAS_CLOUD
+				.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
+						.withData(null)
+						.withMotion(mx, my, mz)
+						.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
+						.withScale(8f));
+		
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE, hazeParticle);
+		
+		ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
+				.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
+						.withData(null)
+						.withMotion(mx, my, mz)
+						.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
+						.withScale(4f));
+
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_TEXTURED, particle);
 	}
 
 	private void updateBlock() {

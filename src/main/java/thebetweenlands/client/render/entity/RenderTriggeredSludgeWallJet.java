@@ -16,6 +16,11 @@ public class RenderTriggeredSludgeWallJet extends RenderLiving<EntityTriggeredSl
 	}
 
 	@Override
+	protected void applyRotations(EntityTriggeredSludgeWallJet entityLiving, float ageInTicks, float rotationYaw, float partialTicks) {
+        GlStateManager.rotate(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
+    }
+	
+	@Override
 	protected ResourceLocation getEntityTexture(EntityTriggeredSludgeWallJet entity) {
 		return TEXTURE;
 	}

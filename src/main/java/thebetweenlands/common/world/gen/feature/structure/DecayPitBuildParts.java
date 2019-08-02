@@ -2,17 +2,21 @@ package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.Random;
 
+import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.container.BlockLootUrn;
+import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlock;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockDiagonal;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL1;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL2;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockR1;
 import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockR2;
+import thebetweenlands.common.block.structure.BlockMudBrickSpikeTrap;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -237,11 +241,12 @@ public class DecayPitBuildParts {
 		rotatedCubeVolume(world, rand, pos, 7, 13, 8, blockHelper.getStairsForLevel(rand, 7, facing.getOpposite(), BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 7, 13, 9, blockHelper.getMudSlabsForLevel(rand, 7, BlockSlabBetweenlands.EnumBlockHalfBL.TOP), 1, 1, 2, facing);
 		rotatedCubeVolume(world, rand, pos, 7, 13, 11, blockHelper.getStairsForLevel(rand, 7, facing, BlockStairsBetweenlands.EnumHalf.TOP), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 2, 1, 0, blockHelper.getStairsForLevel(rand, 7, facing.rotateYCCW(), BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 3, 1, 0, blockHelper.getMudBricksForLevel(rand, 7, 1), 1, 1, 2, facing);
-		rotatedCubeVolume(world, rand, pos, 2, 1, 2, blockHelper.getMudBricksForLevel(rand, 7, 1), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, 1, 2, blockHelper.getStairsForLevel(rand, 7, facing, BlockStairsBetweenlands.EnumHalf.BOTTOM), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, 1, 3, blockHelper.getMudBricksForLevel(rand, 7, 1), 1, 1, 1, facing);
+		
+		
+		rotatedCubeVolume(world, rand, pos, 2, 1, 0, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing.rotateYCCW()).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM), 1, 1, 3, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 2, blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, facing).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 3, 1, 0, blockHelper.COMPACTED_MUD, 1, 1, 2, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 1, 3, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
 
 		rotatedCubeVolume(world, rand, pos, 1, 0, 0, blockHelper.COMPACTED_MUD, 1, 1, 2, facing);
 
@@ -256,6 +261,16 @@ public class DecayPitBuildParts {
 		rotatedCubeVolume(world, rand, pos, 1, 2, 4, BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1.getDefaultState().withProperty(BlockDecayPitInvisibleFloorBlockL1.FACING, facing.getOpposite()), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 2, 2, 4, BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2.getDefaultState().withProperty(BlockDecayPitInvisibleFloorBlockL2.FACING, facing.getOpposite()), 1, 1, 1, facing);
 
+		rotatedCubeVolume(world, rand, pos, 6, 4, 6, blockHelper.BRAZIER_BOTTOM, 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 6, 5, 6, blockHelper.BRAZIER_TOP, 1, 1, 1, facing); 
+		rotatedCubeVolume(world, rand, pos, 6, 6, 6, Blocks.FIRE.getDefaultState(), 1, 1, 1, facing);
+	}
+
+	public void addSpikes(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
+		rotatedCubeVolume(world, rand, pos, -2, 7, 12, blockHelper.MUD_BRICKS_SPIKE_TRAP.withProperty(BlockMudBrickSpikeTrap.FACING, facing.getOpposite()), 5, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -2, 8, 12, blockHelper.MUD_BRICKS_SPIKE_TRAP.withProperty(BlockMudBrickSpikeTrap.FACING, facing.getOpposite()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 8, 12, blockHelper.MUD_BRICKS_SPIKE_TRAP.withProperty(BlockMudBrickSpikeTrap.FACING, facing.getOpposite()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, -1, 5, 11, blockHelper.MUD_TILES_SPIKE_TRAP, 3, 1, 1, facing);
 	}
 
 	@SuppressWarnings("incomplete-switch")

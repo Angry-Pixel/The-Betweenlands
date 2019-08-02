@@ -397,7 +397,7 @@
                     ],
                     "weight": 8,
                     "quality": 0
-                }
+                },
 				{
                     "conditions": [],
                     "type": "item",
@@ -412,7 +412,7 @@
                     ],
                     "weight": 6,
                     "quality": 0
-                },
+                }
             ],
             "rolls": {
                 "min": 4,
