@@ -15,9 +15,11 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 
@@ -65,6 +67,8 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	@Override
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
 		((EntityFallingBlock)entitySpawned).setHurtEntities(true);
+		 if (!world.isRemote)
+			 targetEntity.getEntityWorld().playSound(null, targetEntity.getPosition(), SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.5F, 1.0F);
 	}
 
 	@Override
