@@ -14,6 +14,7 @@ import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.block.terrain.BlockRottenLog;
+import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
@@ -649,6 +650,9 @@ public class LightTowerBuildParts {
 						world.setBlockState(pos.add(xx, yy, zz), state, 2);//16);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
+						 if (state == blockHelper.ROTTEN_PLANK_SLAB_LOWER)
+							 if(rand.nextInt(10) == 0)
+								 addTriggeredFallingBlockEntity(world, pos.add(xx, yy, zz));
 					}
 			break;
 		case EAST:
@@ -658,6 +662,9 @@ public class LightTowerBuildParts {
 						world.setBlockState(pos.add(xx, yy, zz), state, 2);//16);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
+						 if (state == blockHelper.ROTTEN_PLANK_SLAB_LOWER)
+							 if(rand.nextInt(10) == 0)
+								 addTriggeredFallingBlockEntity(world, pos.add(xx, yy, zz));
 					}
 			break;
 		case NORTH:
@@ -667,6 +674,9 @@ public class LightTowerBuildParts {
 						world.setBlockState(pos.add(xx, yy, zz), state, 2);//16);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
+						 if (state == blockHelper.ROTTEN_PLANK_SLAB_LOWER)
+							 if(rand.nextInt(10) == 0)
+								 addTriggeredFallingBlockEntity(world, pos.add(xx, yy, zz));
 					}
 			break;
 		case WEST:
@@ -676,9 +686,19 @@ public class LightTowerBuildParts {
 						world.setBlockState(pos.add(xx, yy, zz), state, 2);//16);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
+						 if (state == blockHelper.ROTTEN_PLANK_SLAB_LOWER)
+							 if(rand.nextInt(10) == 0)
+								 addTriggeredFallingBlockEntity(world, pos.add(xx, yy, zz));
 					}
 			break;
 		}
+	}
+
+	private void addTriggeredFallingBlockEntity(World world, BlockPos pos) {
+		EntityTriggeredFallingBlock trap = new EntityTriggeredFallingBlock(world);
+		trap.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+		trap.setWalkway(true);
+		world.spawnEntity(trap);
 	}
 
 	public void destroyTowerBeamLenses(World world, BlockPos pos) {
