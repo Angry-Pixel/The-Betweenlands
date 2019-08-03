@@ -9,7 +9,9 @@ import javax.annotation.Nullable;
 import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.init.Blocks;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -39,6 +41,8 @@ import thebetweenlands.common.block.structure.BlockWoodenSupportBeam;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar.EnumWormPillarType;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
+import thebetweenlands.common.capability.circlegem.CircleGemHelper;
+import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -678,6 +682,29 @@ public class SludgeWormMazeBlockHelper {
 			groundItem.setStack(new ItemStack(ItemRegistry.ANCIENT_GREATSWORD));
 			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 		}
+	}
+
+	public void placeArmourStandLoot(World world, BlockPos pos, EnumFacing facing, Random rand) {
+		ItemStack helm = new ItemStack(ItemRegistry.VALONITE_HELMET);
+		ItemStack chest = new ItemStack(ItemRegistry.VALONITE_CHESTPLATE);
+		ItemStack legs = new ItemStack(ItemRegistry.VALONITE_LEGGINGS);
+		ItemStack boots = new ItemStack(ItemRegistry.VALONITE_BOOTS);
+		CircleGemHelper.setGem(helm, getCircleGemType(rand));
+		CircleGemHelper.setGem(chest, getCircleGemType(rand));
+		CircleGemHelper.setGem(boots, getCircleGemType(rand));
+		CircleGemHelper.setGem(legs, getCircleGemType(rand));
+		EntityArmorStand stand = new EntityArmorStand(world);
+		stand.setPositionAndRotation(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, facing.getHorizontalAngle(), 0F);
+		stand.setItemStackToSlot(EntityEquipmentSlot.HEAD, helm);
+		stand.setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
+		stand.setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
+		stand.setItemStackToSlot(EntityEquipmentSlot.FEET, boots);
+		world.spawnEntity(stand);
+	}
+
+	private CircleGemType getCircleGemType(Random rand) {
+		int randomType = rand.nextInt(CircleGemType.values().length);
+		return CircleGemType.values()[randomType];
 	}
 
 	/// TOWER STUFF

@@ -590,6 +590,7 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 7, 2, 20, blockHelper.AIR, 1, 1, 4, facing);
 		rotatedCubeVolume(world, rand, pos, 7, 1, 21, blockHelper.AIR, 1, 1, 2, facing);
 		rotatedCubeVolume(world, rand, pos, 8, 1, 24, blockHelper.AIR, 2, 2, 1, facing); // second set is armour gap
+		blockHelper.placeArmourStandLoot(world, pos.add(9, 1, 24), facing.rotateY(), rand);
 
 		rotatedCubeVolume(world, rand, pos, 1, 5, 11, blockHelper.AIR, 3, 1, 3, facing);
 		rotatedCubeVolume(world, rand, pos, 1, 6, 13, blockHelper.AIR, 2, 1, 1, facing);
@@ -629,8 +630,6 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 4, 2, 20, blockHelper.DUNGEON_WALL_CANDLE_SOUTH, 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 6, 1, 15, blockHelper.GROUND_ITEM, 1, 1, 1, facing);
 		blockHelper.setGreatSword(world, rand, pos.add(6, 1, 15));
-		
-
 	}
 
 	@SuppressWarnings("incomplete-switch")
