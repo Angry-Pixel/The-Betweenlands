@@ -51,9 +51,16 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 			BlockPos blockpos = getPosition().down();
 			if (canFallThrough(getEntityWorld().getBlockState(blockpos))) {
 				double d0 = (double) ((float) getPosition().getX() + rand.nextFloat());
-				double d1 = (double) getPosition().getY() - 0.05D;
+				double d1 = !isWalkway() ? (double) getPosition().getY() - 0.05D : (double) getPosition().getY() + 1D;
 				double d2 = (double) ((float) getPosition().getZ() + rand.nextFloat());
-				getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, d0, d1, d2, 0.0D, 0.0D, 0.0D, Block.getStateId(getBlockType(getEntityWorld(), getPosition())));
+				if(!isWalkway())
+					getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, d0, d1, d2, 0.0D, 0.0D, 0.0D, Block.getStateId(getBlockType(getEntityWorld(), getPosition())));
+				else {
+					double motionX = getEntityWorld().rand.nextDouble() * 0.1F - 0.05F;
+					double motionY = getEntityWorld().rand.nextDouble() * 0.025F + 0.025F;
+					double motionZ = getEntityWorld().rand.nextDouble() * 0.1F - 0.05F;
+					getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, d0, d1, d2, motionX, motionY, motionZ, Block.getStateId(getBlockType(getEntityWorld(), getPosition())));
+				}
 			}
 		}
 	}
