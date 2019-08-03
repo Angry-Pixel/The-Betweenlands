@@ -249,6 +249,23 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(BlockRegistry.MOSS, new ItemStack(BlockRegistry.DEAD_MOSS), 0.1F);
 		GameRegistry.addSmelting(BlockRegistry.LICHEN, new ItemStack(BlockRegistry.DEAD_LICHEN), 0.1F);
 		GameRegistry.addSmelting(BlockRegistry.WEEDWOOD_BUSH, new ItemStack(BlockRegistry.DEAD_WEEDWOOD_BUSH), 0.1F);
+		//smelt to nuggets
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_AXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_PICKAXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_SHOVEL, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_SWORD, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_HELMET, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_CHESTPLATE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_LEGGINGS, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_BOOTS, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.OCTINE_AXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.OCTINE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.OCTINE_PICKAXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.OCTINE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.OCTINE_SHOVEL, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.OCTINE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.OCTINE_SWORD, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.OCTINE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.SYRMORITE_HELMET, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.SYRMORITE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.SYRMORITE_CHESTPLATE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.SYRMORITE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.SYRMORITE_LEGGINGS, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.SYRMORITE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.SYRMORITE_BOOTS, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.SYRMORITE_NUGGET.getID()), 0.1F);
 	}
 
 	private static void registerDruidAltarRecipes() {
