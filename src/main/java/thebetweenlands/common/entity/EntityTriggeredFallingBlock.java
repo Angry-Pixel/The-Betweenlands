@@ -121,7 +121,7 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	}
 
 	protected AxisAlignedBB proximityBox() {
-		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, isWalkway() ? getProximityVertical() * 0.25D : - getProximityVertical () * 2 , 0D);
+		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, isWalkway() ? 1D : - getProximityVertical () * 2 , 0D);
 	}
 
 	@Override
