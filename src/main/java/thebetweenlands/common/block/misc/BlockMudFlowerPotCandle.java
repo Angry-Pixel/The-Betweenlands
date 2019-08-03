@@ -12,6 +12,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
@@ -91,9 +92,18 @@ public class BlockMudFlowerPotCandle extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		worldIn.setBlockState(pos, state.cycleProperty(LIT));
-		return true;
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (world.isRemote) {
+			return true;
+		} else {
+			state = state.cycleProperty(LIT);
+			world.setBlockState(pos, state, 3);
+			if(state.getValue(LIT))
+				world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 0.05F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+			else
+				world.playSound(null, pos, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.1F, 2F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+			return true;
+		}
 	}
 
 	@Override
