@@ -8,6 +8,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -17,15 +21,22 @@ import net.minecraft.world.World;
 
 public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 
+	private static final DataParameter<Boolean> IS_WALK_WAY = EntityDataManager.createKey(EntityTriggeredFallingBlock.class, DataSerializers.BOOLEAN);
+
 	public EntityTriggeredFallingBlock(World world) {
 		super(world);
 		setSize(0.5F, 0.5F);
 		setNoGravity(true);
 	}
+	
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		dataManager.register(IS_WALK_WAY, false);
+	}
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
 		if (!getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%5 == 0)
 			checkArea();
 		
@@ -101,7 +112,7 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 
 	@Override
 	protected float getProximityHorizontal() {
-		return 1F;
+		return isWalkway() ? 0.0625F : 1F;
 	}
 
 	@Override
@@ -110,7 +121,7 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	}
 
 	protected AxisAlignedBB proximityBox() {
-		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, - getProximityVertical() * 2, 0D);
+		return new AxisAlignedBB(getPosition()).grow(getProximityHorizontal(), getProximityVertical(), getProximityHorizontal()).offset(0D, isWalkway() ? getProximityVertical() * 0.25D : - getProximityVertical () * 2 , 0D);
 	}
 
 	@Override
@@ -149,5 +160,25 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	@Override
 	protected int maxUseCount() {
 		return 0;
+	}
+
+	public void setWalkway(boolean walkway) {
+		dataManager.set(IS_WALK_WAY, walkway);
+	}
+
+	public boolean isWalkway() {
+		return dataManager.get(IS_WALK_WAY);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		setWalkway(nbt.getBoolean("walk_way"));
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		nbt.setBoolean("walk_way", isWalkway());
 	}
 }
