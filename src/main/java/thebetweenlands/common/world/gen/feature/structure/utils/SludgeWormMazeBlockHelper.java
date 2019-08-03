@@ -66,7 +66,10 @@ public class SludgeWormMazeBlockHelper {
 	//wall plants
 	public IBlockState MOSS = BlockRegistry.DEAD_MOSS.getDefaultState();
 	public IBlockState LICHEN = BlockRegistry.DEAD_LICHEN.getDefaultState();
-	
+
+	//edge plants
+	public IBlockState EDGE_SHROOM = BlockRegistry.EDGE_SHROOM.getDefaultState();
+
 	//hanging plants
 	public IBlockState CRYPTWEED = BlockRegistry.CRYPTWEED.getDefaultState().withProperty(BlockHangingPlant.CAN_GROW, false);
 	public IBlockState STRING_ROOTS = BlockRegistry.STRING_ROOTS.getDefaultState().withProperty(BlockHangingPlant.CAN_GROW, false);

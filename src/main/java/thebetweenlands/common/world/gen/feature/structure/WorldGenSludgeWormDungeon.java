@@ -17,6 +17,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.SoilHelper;
+import thebetweenlands.common.block.plant.BlockEdgeShroom;
 import thebetweenlands.common.block.plant.BlockMoss;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockDecayPitGroundChain;
@@ -250,6 +251,18 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				for (int vertical = 0; vertical < y; vertical++)
 					if (plantingChance(rand) && isPlantableWall(world, pos.add(horizontalX, vertical, horizontalZ), facing))
 						world.setBlockState(pos.add(horizontalX, vertical, horizontalZ).offset(facing), blockHelper.MOSS.withProperty(BlockMoss.FACING, facing), 2);
+	}
+	
+	public void addEdgePlant(World world, BlockPos pos, Random rand, int x, int y, int z) {
+		for (int horizontalX = 0; horizontalX < x; horizontalX++)
+			for (int horizontalZ = 0; horizontalZ < z; horizontalZ++) {
+				for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+					if (world.getBlockState(pos.add(horizontalX, y + 1, horizontalZ).offset(facing)).isSideSolid(world, pos.add(horizontalX, y + 1, horizontalZ).offset(facing), facing.getOpposite())) {
+						if (plantingChance(rand) && isPlantableAbove(world, pos.add(horizontalX, y, horizontalZ)))
+							world.setBlockState(pos.add(horizontalX, y + 1, horizontalZ), blockHelper.EDGE_SHROOM.withProperty(BlockEdgeShroom.FACING, facing.getOpposite()), 2);
+					}
+				}
+			}
 	}
 
 	public void addSphericalChamber(World world, Random rand, BlockPos pos) {
@@ -491,6 +504,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					addCeilingSlabs(world, pos.add(0, yy + 4, 0), 7, 7, rand, level);
 				stairsAir(world, rand, pos.add(0, yy, 0), level);
 				addHangingPlants(world, pos.add(1, yy + 5, 1), rand, 28, 0, 28);
+				addEdgePlant(world, pos.add(1, yy, 1), rand, 28, 0, 28);
 			}
 		//	System.out.println("Y height is: " + (pos.getY() + yy) + " level: " + level);
 		}
@@ -972,7 +986,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				} 
 
 				if (world.getBlockState(pos.add(j, 0, i)).getBlock() instanceof BlockMudTiles && world.isAirBlock(pos.add(j, 1, i)))
-					if (rand.nextInt(30) == 0)
+					if (rand.nextInt(15) == 0)
 						if (!isBlackListedAreaForGen(pos.add(2, 0, 2), pos.add(j, 0, i), 1) && !isBlackListedAreaForGen(pos.add(26, 0, 26), pos.add(j, 0, i), 1)  && !isBlackListedAreaForGenSpecial(pos.add(26, 0, 2), pos.add(j, 0, i), 1, level == 3 ? true : false) && !isBlackListedAreaForGenSpecial(pos.add(2, 0, 26), pos.add(j, 0, i), 1, level == 5 ? true : false))
 							world.setBlockState(pos.add(j, 1, i), rand.nextBoolean() ? getRandomMushroom(rand) : getRandomFloorPlant(rand), 2);
 			}
