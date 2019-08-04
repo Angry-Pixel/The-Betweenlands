@@ -20,6 +20,8 @@ import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockLootUrn.EnumLootUrn;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
+import thebetweenlands.common.block.plant.BlockEdgeLeaf;
+import thebetweenlands.common.block.plant.BlockEdgeMoss;
 import thebetweenlands.common.block.plant.BlockEdgeShroom;
 import thebetweenlands.common.block.plant.BlockHangingPlant;
 import thebetweenlands.common.block.structure.BlockBrazier;
@@ -71,6 +73,7 @@ public class SludgeWormMazeBlockHelper {
 	//edge plants
 	public IBlockState EDGE_SHROOM = BlockRegistry.EDGE_SHROOM.getDefaultState();
 	public IBlockState EDGE_MOSS = BlockRegistry.EDGE_MOSS.getDefaultState();
+	public IBlockState EDGE_LEAF = BlockRegistry.EDGE_LEAF.getDefaultState();
 
 	//hanging plants
 	public IBlockState CRYPTWEED = BlockRegistry.CRYPTWEED.getDefaultState().withProperty(BlockHangingPlant.CAN_GROW, false);
@@ -613,12 +616,14 @@ public class SludgeWormMazeBlockHelper {
 	}
 
 	public IBlockState getRandomEdgePlant(Random rand, EnumFacing facing) {
-		int type = rand.nextInt(2); //expand for more types
+		int type = rand.nextInt(3); //expand for more types
 		switch (type) {
 		case 0:
 			return EDGE_SHROOM.withProperty(BlockEdgeShroom.FACING, facing);
 		case 1:
-			return EDGE_MOSS.withProperty(BlockEdgeShroom.FACING, facing);
+			return EDGE_MOSS.withProperty(BlockEdgeMoss.FACING, facing);
+		case 2:
+			return EDGE_LEAF.withProperty(BlockEdgeLeaf.FACING, facing);
 		}
 		return EDGE_SHROOM.withProperty(BlockEdgeShroom.FACING, facing);
 	}

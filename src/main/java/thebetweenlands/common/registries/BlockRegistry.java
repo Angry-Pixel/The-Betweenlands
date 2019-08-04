@@ -100,6 +100,7 @@ import thebetweenlands.common.block.plant.BlockBulbCappedMushroomStalk;
 import thebetweenlands.common.block.plant.BlockCaveGrass;
 import thebetweenlands.common.block.plant.BlockCaveMoss;
 import thebetweenlands.common.block.plant.BlockDoublePlantBL;
+import thebetweenlands.common.block.plant.BlockEdgeLeaf;
 import thebetweenlands.common.block.plant.BlockEdgeMoss;
 import thebetweenlands.common.block.plant.BlockEdgeShroom;
 import thebetweenlands.common.block.plant.BlockFlatheadMushroom;
@@ -574,6 +575,7 @@ public class BlockRegistry {
     public static final Block MUD_BRICK_SLAB_DECAY_3 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3).getBlock());
     public static final Block EDGE_SHROOM = new BlockEdgeShroom();
     public static final Block EDGE_MOSS = new BlockEdgeMoss();
+    public static final Block EDGE_LEAF = new BlockEdgeLeaf();
     public static final Block MUD_TOWER_BEAM_ORIGIN = new BlockBeamOrigin();
     public static final Block MUD_TOWER_BEAM_RELAY = new BlockBeamRelay();
     public static final Block MUD_TOWER_BEAM_TUBE = new BlockBeamTube();
