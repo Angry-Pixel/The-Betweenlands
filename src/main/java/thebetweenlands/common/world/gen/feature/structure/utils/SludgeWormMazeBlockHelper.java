@@ -20,6 +20,7 @@ import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockLootUrn.EnumLootUrn;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
+import thebetweenlands.common.block.plant.BlockEdgeShroom;
 import thebetweenlands.common.block.plant.BlockHangingPlant;
 import thebetweenlands.common.block.structure.BlockBrazier;
 import thebetweenlands.common.block.structure.BlockBrazier.EnumBrazierHalf;
@@ -69,6 +70,7 @@ public class SludgeWormMazeBlockHelper {
 
 	//edge plants
 	public IBlockState EDGE_SHROOM = BlockRegistry.EDGE_SHROOM.getDefaultState();
+	public IBlockState EDGE_MOSS = BlockRegistry.EDGE_MOSS.getDefaultState();
 
 	//hanging plants
 	public IBlockState CRYPTWEED = BlockRegistry.CRYPTWEED.getDefaultState().withProperty(BlockHangingPlant.CAN_GROW, false);
@@ -610,6 +612,17 @@ public class SludgeWormMazeBlockHelper {
 		return rand.nextBoolean() ? CRYPTWEED : STRING_ROOTS;
 	}
 
+	public IBlockState getRandomEdgePlant(Random rand, EnumFacing facing) {
+		int type = rand.nextInt(2); //expand for more types
+		switch (type) {
+		case 0:
+			return EDGE_SHROOM.withProperty(BlockEdgeShroom.FACING, facing);
+		case 1:
+			return EDGE_MOSS.withProperty(BlockEdgeShroom.FACING, facing);
+		}
+		return EDGE_SHROOM.withProperty(BlockEdgeShroom.FACING, facing);
+	}
+
 	public IBlockState getMudTilesWater(Random rand) {
 		int randDirection = rand.nextInt(4);
 		IBlockState state = MUD_TILES_WATER;
@@ -817,4 +830,6 @@ public class SludgeWormMazeBlockHelper {
 			STRUCTURE_BLOCKS.put(MUD_BRICKS_SPAWNER_HOLE, true);
 		}
 	}
+
+
 }

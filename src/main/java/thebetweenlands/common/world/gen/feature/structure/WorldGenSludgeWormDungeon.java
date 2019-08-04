@@ -17,7 +17,6 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.SoilHelper;
-import thebetweenlands.common.block.plant.BlockEdgeShroom;
 import thebetweenlands.common.block.plant.BlockMoss;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockDecayPitGroundChain;
@@ -269,7 +268,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				for (EnumFacing facing : EnumFacing.HORIZONTALS) {
 					if (world.getBlockState(pos.add(horizontalX, y + 1, horizontalZ).offset(facing)).isSideSolid(world, pos.add(horizontalX, y + 1, horizontalZ).offset(facing), facing.getOpposite())) {
 						if (plantingChance(rand) && isPlantableAbove(world, pos.add(horizontalX, y, horizontalZ)))
-							world.setBlockState(pos.add(horizontalX, y + 1, horizontalZ), blockHelper.EDGE_SHROOM.withProperty(BlockEdgeShroom.FACING, facing.getOpposite()), 2);
+							world.setBlockState(pos.add(horizontalX, y + 1, horizontalZ), blockHelper.getRandomEdgePlant(rand, facing.getOpposite()), 2);
 					}
 				}
 			}
