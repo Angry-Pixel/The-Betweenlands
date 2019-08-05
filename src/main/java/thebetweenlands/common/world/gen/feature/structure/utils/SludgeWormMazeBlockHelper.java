@@ -159,9 +159,9 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState DUNGEON_DOOR_MIMIC_NORTH = BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.NORTH);
 	public IBlockState DUNGEON_DOOR_MIMIC_SOUTH = BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.SOUTH);
 	
-	private IBlockState LOOT_URN_1 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_1);
-	private IBlockState LOOT_URN_2 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_2);
-	private IBlockState LOOT_URN_3 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_3);
+	public IBlockState LOOT_URN_1 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_1);
+	public IBlockState LOOT_URN_2 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_2);
+	public IBlockState LOOT_URN_3 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_3);
 
 	public IBlockState MUD_BRICKS_ALCOVE_NORTH = BlockRegistry.MUD_BRICK_ALCOVE.getDefaultState().withProperty(BlockMudBrickAlcove.FACING, EnumFacing.NORTH);
 	public IBlockState MUD_BRICKS_ALCOVE_EAST = BlockRegistry.MUD_BRICK_ALCOVE.getDefaultState().withProperty(BlockMudBrickAlcove.FACING, EnumFacing.EAST);

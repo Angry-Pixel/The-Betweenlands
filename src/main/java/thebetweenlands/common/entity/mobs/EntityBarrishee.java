@@ -1,5 +1,9 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -15,6 +19,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -26,7 +32,9 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
 //TODO Loot tables
 public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IEntityBL {
@@ -35,6 +43,9 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	private static final DataParameter<Boolean> SCREAM = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SCREAM_TIMER = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.VARINT);
 	public float standingAngle, prevStandingAngle;
+
+	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
+	public final Map<IBlockState, Boolean> BREAKABLE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
 	//Scream timer is only used for the screen shake and is client side only.
 	private int prevScreamTimer;
@@ -47,6 +58,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	public EntityBarrishee(World world) {
 		super(world);
 		setSize(2.25F, 1.8F);
+		initAOEBreakableBlockMap();
 	}
 
 	@Override
@@ -161,14 +173,41 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 			else
 				setIsScreaming(true);
 		}
-		
-		if(this.world.isRemote && this.isScreaming() && getScreamTimer() <= 40) {
+
+		//TODO Disabled particles until second scream is made for AI
+		/*
+		 if(this.world.isRemote && this.isScreaming() && getScreamTimer() <= 40)
 			this.spawnScreamParticles();
-		}
+		*/
+
+		if(!this.world.isRemote && this.isScreaming() && getScreamTimer() >= 25)
+			checkCollisionsForAOEScream(getAOEScreamBounds());
 		
 		super.onLivingUpdate();
 	}
 	
+	private void checkCollisionsForAOEScream(AxisAlignedBB aoeScreamBounds) {
+		int minX = MathHelper.floor(aoeScreamBounds.minX);
+		int minY = MathHelper.floor(aoeScreamBounds.minY);
+		int minZ = MathHelper.floor(aoeScreamBounds.minZ);
+		int maxX = MathHelper.floor(aoeScreamBounds.maxX);
+		int maxY = MathHelper.floor(aoeScreamBounds.maxY);
+		int maxZ = MathHelper.floor(aoeScreamBounds.maxZ);
+
+		for (int sizeX = minX; sizeX <= maxX; ++sizeX)
+			for (int sizeZ = minZ; sizeZ <= maxZ; ++sizeZ)
+				for (int sizeY = minY; sizeY <= maxY; ++sizeY) {
+					BlockPos pos = new BlockPos(sizeX, sizeY, sizeZ);
+					IBlockState state = getEntityWorld().getBlockState(pos);
+					if (isAOEBreakableBlock(state))
+						getEntityWorld().destroyBlock(pos, true);
+				}
+	}
+
+	public boolean isAOEBreakableBlock(IBlockState state) {
+		return BREAKABLE_BLOCKS.get(state) != null;
+	}
+
 	@SideOnly(Side.CLIENT)
 	protected void spawnScreamParticles() {
 		Vec3d look = this.getLookVec();
@@ -186,6 +225,12 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 
 	public float getScreamingProgress(float delta) {
 		return 1.0F / SCREAMING_TIMER_MAX * (prevScreamTimer + (screamTimer - prevScreamTimer) * delta);
+	}
+
+	public AxisAlignedBB getAOEScreamBounds() {
+		float boxsizeUnit = 0.0275F * getScreamTimer();
+		AxisAlignedBB bounds = getEntityBoundingBox();
+		return bounds.grow(boxsizeUnit, 0, boxsizeUnit);
 	}
 
 	@Override
@@ -214,5 +259,19 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		}
 	}
 
+	//TODO - may want to move to a config one day - add blockstates to break here.
+	private void initAOEBreakableBlockMap() {
+		if (BREAKABLE_BLOCKS.isEmpty()) {
+			BREAKABLE_BLOCKS.put(blockHelper.ROOT, true);
+			BREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_NORTH, true);
+			BREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_EAST, true);
+			BREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_SOUTH, true);
+			BREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_WEST, true);
+			BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_1, true);
+			BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_2, true);
+			BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_3, true);
+			BREAKABLE_BLOCKS.put(BlockRegistry.SULFUR_TORCH.getDefaultState(), true);
+		}
+	}
 
 }
