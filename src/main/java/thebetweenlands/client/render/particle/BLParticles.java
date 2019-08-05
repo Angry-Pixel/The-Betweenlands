@@ -31,6 +31,7 @@ import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam;
 import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam2;
 import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
 import thebetweenlands.client.render.particle.entity.ParticleSimple;
+import thebetweenlands.client.render.particle.entity.ParticleSonicScream;
 import thebetweenlands.client.render.particle.entity.ParticleSoundRipple;
 import thebetweenlands.client.render.particle.entity.ParticleSpiritButterfly;
 import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
@@ -128,7 +129,8 @@ public enum BLParticles {
 	LIFE_ESSENCE(new ParticleLifeEssence.Factory()),
 	PUZZLE_BEAM(new ParticlePuzzleBeam.Factory()),
 	PUZZLE_BEAM_2(new ParticlePuzzleBeam2.Factory()),
-	SMOOTH_SMOKE(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/smooth_smoke"))),;
+	SMOOTH_SMOKE(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/smooth_smoke"))),
+	SONIC_SCREAM(new ParticleSonicScream.Factory());
 
 
 

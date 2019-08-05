@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.mobs;
 
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -15,11 +16,17 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityScreenShake;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.MessageSoundRipple;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -159,11 +166,26 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 				setIsScreaming(true);
 		}
 		
-		if (isScreaming()) {
-			motionX = motionY = motionZ = 0D;
+		if(this.world.isRemote && this.isScreaming()) {
+			this.spawnScreamParticles();
 		}
-
+		
 		super.onLivingUpdate();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	protected void spawnScreamParticles() {
+		Vec3d look = this.getLookVec();
+		float speed = 0.6f;
+		Particle particle = BLParticles.SONIC_SCREAM.create(this.world, this.posX, this.posY + 1, this.posZ, 
+				ParticleArgs.get().withMotion(look.x * speed, look.y * speed, look.z * speed).withScale(10).withData(30, MathHelper.floor(this.ticksExisted * 3.3f))
+				.withColor(1.0f, 0.9f, 0.8f, 1.0f));
+		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING, particle);
+	}
+	
+	@Override
+	protected boolean isMovementBlocked() {
+		return super.isMovementBlocked() || isScreaming() || true;
 	}
 
 	protected void spawnEffect(BlockPos target, int delay) {
