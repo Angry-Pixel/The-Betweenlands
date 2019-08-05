@@ -185,7 +185,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	
 	@Override
 	protected boolean isMovementBlocked() {
-		return super.isMovementBlocked() || isScreaming() || true;
+		return super.isMovementBlocked() || isScreaming();
 	}
 
 	protected void spawnEffect(BlockPos target, int delay) {
