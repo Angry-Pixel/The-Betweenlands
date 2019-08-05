@@ -15,7 +15,6 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -27,8 +26,6 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.network.clientbound.MessageSoundRipple;
 import thebetweenlands.common.registries.LootTableRegistry;
 
 //TODO Loot tables
@@ -153,7 +150,6 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 			if (getScreamTimer() == 0) {
 				setIsScreaming(true);
 				setScreamTimer(1);
-			//	this.spawnEffect(getPosition().up(), 5); // TODO Particles and stuffs go here
 			}
 
 			if (getScreamTimer() > 0 && getScreamTimer() <= SCREAMING_TIMER_MAX) {
@@ -166,7 +162,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 				setIsScreaming(true);
 		}
 		
-		if(this.world.isRemote && this.isScreaming()) {
+		if(this.world.isRemote && this.isScreaming() && getScreamTimer() <= 40) {
 			this.spawnScreamParticles();
 		}
 		
@@ -177,7 +173,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	protected void spawnScreamParticles() {
 		Vec3d look = this.getLookVec();
 		float speed = 0.6f;
-		Particle particle = BLParticles.SONIC_SCREAM.create(this.world, this.posX, this.posY + 1, this.posZ, 
+		Particle particle = BLParticles.SONIC_SCREAM.create(this.world, this.posX, this.posY + (getScreamTimer() < 25 ? 0.8 + (getScreamTimer() * 0.0125F) : 1.25 - (25 - getScreamTimer()) * 0.025F), this.posZ, 
 				ParticleArgs.get().withMotion(look.x * speed, look.y * speed, look.z * speed).withScale(10).withData(30, MathHelper.floor(this.ticksExisted * 3.3f))
 				.withColor(1.0f, 0.9f, 0.8f, 1.0f));
 		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING, particle);
@@ -186,10 +182,6 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	@Override
 	protected boolean isMovementBlocked() {
 		return super.isMovementBlocked() || isScreaming();
-	}
-
-	protected void spawnEffect(BlockPos target, int delay) {
-		TheBetweenlands.networkWrapper.sendToAll(new MessageSoundRipple(target, delay));
 	}
 
 	public float getScreamingProgress(float delta) {
