@@ -3,4 +3,4 @@ project(':universal').projectDir = file('build/universal')
 include ':server'
 project(':server').projectDir = file('build/server')
 
-rootProject.name = 'root'
+rootProject.name = 'The Betweenlands'
