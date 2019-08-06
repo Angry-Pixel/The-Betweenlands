@@ -3,6 +3,9 @@ package thebetweenlands.common.entity.mobs;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
@@ -15,15 +18,19 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -35,8 +42,10 @@ import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
+import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
 //TODO Loot tables
@@ -205,14 +214,44 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 					BlockPos pos = new BlockPos(sizeX, sizeY, sizeZ);
 					IBlockState state = getEntityWorld().getBlockState(pos);
 					if (isAOEBreakableBlock(state)) {
-						if (state.getBlock() instanceof BlockMudBrickAlcove)
-							if (checkAlcoveForUrn(getEntityWorld(), state))
-								spawnAshSpriteMinion(getEntityWorld(), pos, state);
 						if (state.getBlock() instanceof BlockLootUrn)
 							spawnAshSpriteMinion(getEntityWorld(), pos, state);
-						getEntityWorld().destroyBlock(pos, !dropItems(state));
+						if (state.getBlock() instanceof BlockMudBrickAlcove) {
+							if (checkAlcoveForUrn(getEntityWorld(), state)) {
+								setAlcoveUrnEmpty(getEntityWorld(), pos, state);
+							}
+						} else
+							getEntityWorld().destroyBlock(pos, !dropItems(state));
 					}
 				}
+	}
+
+	@Nullable
+	public static TileEntityMudBrickAlcove getTileEntity(IBlockAccess world, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if(tile instanceof TileEntityMudBrickAlcove) {
+			return (TileEntityMudBrickAlcove) tile;
+		}
+		return null;
+	}
+
+	private void setAlcoveUrnEmpty(World world, BlockPos pos, IBlockState state) {
+		BlockPos offsetPos = pos;
+		TileEntityMudBrickAlcove tile = getTileEntity(world, pos);
+		if (tile instanceof TileEntityMudBrickAlcove) {
+			if (tile.has_urn) {
+				IInventory tileInv = (IInventory) tile;
+				if (tileInv != null) {
+					EnumFacing facing = state.getValue(BlockMudBrickAlcove.FACING);
+					offsetPos = pos.offset(facing);
+					InventoryHelper.dropInventoryItems(world, offsetPos, tileInv);
+				}
+				spawnAshSpriteMinion(getEntityWorld(), pos, state);
+				world.playEvent(null, 2001, pos, Block.getIdFromBlock(state.getBlock()));
+				tile.has_urn = false;
+				world.notifyBlockUpdate(pos, state, state, 2);
+			}
+		}
 	}
 
 	private void spawnAshSpriteMinion(World world, BlockPos pos, IBlockState state) {
@@ -251,7 +290,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	
 	@Override
 	protected boolean isMovementBlocked() {
-		return super.isMovementBlocked() || isScreaming();
+		return super.isMovementBlocked() || isScreaming() || true;
 	}
 
 	public float getScreamingProgress(float delta) {
@@ -302,6 +341,12 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 			BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_2, true);
 			BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_3, true);
 			BREAKABLE_BLOCKS.put(BlockRegistry.SULFUR_TORCH.getDefaultState(), true);
+			for (EnumFacing facing : EnumFacing.HORIZONTALS) {
+				BREAKABLE_BLOCKS.put(BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, facing), true);
+				BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_1.withProperty(BlockLootUrn.FACING, facing), true);
+				BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_2.withProperty(BlockLootUrn.FACING, facing), true);
+				BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_3.withProperty(BlockLootUrn.FACING, facing), true);
+			}
 		}
 	}
 
