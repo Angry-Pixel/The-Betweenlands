@@ -164,9 +164,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		addHangingPlants(world, pos.add(1, 0, 1), rand, 32, -6, 3);
 		addHangingPlants(world, pos.add(1, 0, 1), rand, 32, -12, 3);
 
-		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -5, 3, true, true, true, true);
-		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -11, 3, true, true, true, true);
-		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -17, 3, true, true, true, true);
+		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -5, 3, true, false, true, true);
+		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -11, 3, true, false, true, true);
+		addGroundPlants(world, pos.add(1, 0, 1), rand, 32, -17, 3, true, false, true, true);
 		
 		addEdgePlant(world, pos.add(1, 0, 1), rand, 32, -5, 3);
 		addEdgePlant(world, pos.add(1, 0, 1), rand, 32, -11, 3);
@@ -185,9 +185,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		addHangingPlants(world, pos.add(1, 0, 3), rand, 3, -6, 32);
 		addHangingPlants(world, pos.add(1, 0, 3), rand, 32, -12, 3);
 
-		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -5, 32, true, true, true, true);
-		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -11, 32, true, true, true, true);
-		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -17, 32, true, true, true, true);
+		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -5, 32, true, false, true, true);
+		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -11, 32, true, false, true, true);
+		addGroundPlants(world, pos.add(1, 0, 3), rand, 3, -17, 32, true, false, true, true);
 
 		addEdgePlant(world, pos.add(1, 0, 3), rand, 3, -5, 32);
 		addEdgePlant(world, pos.add(1, 0, 3), rand, 3, -11, 32);
@@ -215,7 +215,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		microBuild.buildCryptCrawlerTunnelsConnect(world, pos.add(0, -33, 0), EnumFacing.SOUTH, rand);
 
 		for (int y = -33; y < -23; y++) {
-			addGroundPlants(world, pos.add(1, y, 1), rand, 32, 0, 32, false, true, true, true);
+			addGroundPlants(world, pos.add(1, y, 1), rand, 32, 0, 32, false, false, true, true);
 			addEdgePlant(world, pos.add(1, y, 1), rand, 32, 0, 32);
 		}
 
