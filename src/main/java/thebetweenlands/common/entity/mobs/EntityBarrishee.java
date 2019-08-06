@@ -337,9 +337,6 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 			BREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_EAST, true);
 			BREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_SOUTH, true);
 			BREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_WEST, true);
-			BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_1, true);
-			BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_2, true);
-			BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_3, true);
 			BREAKABLE_BLOCKS.put(BlockRegistry.SULFUR_TORCH.getDefaultState(), true);
 			for (EnumFacing facing : EnumFacing.HORIZONTALS) {
 				BREAKABLE_BLOCKS.put(BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, facing), true);
