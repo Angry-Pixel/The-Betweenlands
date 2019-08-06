@@ -18,6 +18,7 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -32,6 +33,8 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.block.container.BlockLootUrn;
+import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
@@ -46,6 +49,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	public final Map<IBlockState, Boolean> BREAKABLE_BLOCKS = new HashMap<IBlockState, Boolean>();
+	public final Map<IBlockState, Boolean> CANCEL_DROP_ITEMS = new HashMap<IBlockState, Boolean>();
 
 	//Scream timer is only used for the screen shake and is client side only.
 	private int prevScreamTimer;
@@ -59,6 +63,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		super(world);
 		setSize(2.25F, 1.8F);
 		initAOEBreakableBlockMap();
+		initCancelBlockItemDropsMap(); // using map for this atm because I don't know if we'll add a load of stuff or not
 	}
 
 	@Override
@@ -199,13 +204,39 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 				for (int sizeY = minY; sizeY <= maxY; ++sizeY) {
 					BlockPos pos = new BlockPos(sizeX, sizeY, sizeZ);
 					IBlockState state = getEntityWorld().getBlockState(pos);
-					if (isAOEBreakableBlock(state))
-						getEntityWorld().destroyBlock(pos, true);
+					if (isAOEBreakableBlock(state)) {
+						if (state.getBlock() instanceof BlockMudBrickAlcove)
+							if (checkAlcoveForUrn(getEntityWorld(), state))
+								spawnAshSpriteMinion(getEntityWorld(), pos, state);
+						if (state.getBlock() instanceof BlockLootUrn)
+							spawnAshSpriteMinion(getEntityWorld(), pos, state);
+						getEntityWorld().destroyBlock(pos, !dropItems(state));
+					}
 				}
+	}
+
+	private void spawnAshSpriteMinion(World world, BlockPos pos, IBlockState state) {
+		BlockPos offsetPos = pos;
+		if (state instanceof BlockMudBrickAlcove) {
+			EnumFacing facing = state.getValue(BlockMudBrickAlcove.FACING);
+			offsetPos = pos.offset(facing);
+		}
+		EntityAshSprite entity = new EntityAshSprite(world);
+		entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.getY(), offsetPos.getZ() + 0.5D, 0.0F, 0.0F);
+		entity.setBoundOrigin(offsetPos);
+		world.spawnEntity(entity);
+	}
+
+	private boolean checkAlcoveForUrn(World entityWorld, IBlockState state) {
+		return state.getValue(BlockMudBrickAlcove.HAS_URN);	
 	}
 
 	public boolean isAOEBreakableBlock(IBlockState state) {
 		return BREAKABLE_BLOCKS.get(state) != null;
+	}
+
+	public boolean dropItems(IBlockState state) {
+		return CANCEL_DROP_ITEMS.get(state) != null;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -271,6 +302,12 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 			BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_2, true);
 			BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_3, true);
 			BREAKABLE_BLOCKS.put(BlockRegistry.SULFUR_TORCH.getDefaultState(), true);
+		}
+	}
+
+	private void initCancelBlockItemDropsMap() {
+		if (CANCEL_DROP_ITEMS.isEmpty()) {
+			CANCEL_DROP_ITEMS.put(blockHelper.ROOT, true);
 		}
 	}
 
