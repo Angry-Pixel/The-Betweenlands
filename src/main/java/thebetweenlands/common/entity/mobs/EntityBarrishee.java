@@ -290,7 +290,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	
 	@Override
 	protected boolean isMovementBlocked() {
-		return super.isMovementBlocked() || isScreaming() || true;
+		return super.isMovementBlocked() || isScreaming();// || true;
 	}
 
 	public float getScreamingProgress(float delta) {
