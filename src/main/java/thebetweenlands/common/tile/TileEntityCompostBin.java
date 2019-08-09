@@ -273,8 +273,8 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
         if (side == EnumFacing.UP) {
-            int[] slots = new int[20];
-            for (int i = 0; i < this.inventory.size(); i++)
+            int[] slots = new int[MAX_ITEMS];
+            for (int i = 0; i < MAX_ITEMS; i++)
                 slots[i] = i;
             return slots;
         } else if (side == EnumFacing.DOWN) {
@@ -286,7 +286,7 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
     @Override
     public boolean canInsertItem(int index, @Nonnull ItemStack itemStackIn, EnumFacing direction) {
         ICompostBinRecipe recipe = CompostRecipe.getCompostRecipe(itemStackIn);
-        return recipe != null && this.open && !this.inventory.get(index).isEmpty() && !itemStackIn.isEmpty() && direction == EnumFacing.UP && addItemToBin(itemStackIn, recipe.getCompostAmount(itemStackIn), recipe.getCompostingTime(itemStackIn), true) == 1;
+        return recipe != null && this.open && !itemStackIn.isEmpty() && direction == EnumFacing.UP && addItemToBin(itemStackIn, recipe.getCompostAmount(itemStackIn), recipe.getCompostingTime(itemStackIn), true) == 1;
     }
 
     @Override
@@ -313,7 +313,9 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
     @Override
     public ItemStack getStackInSlot(int index) {
         if (index >= 0 && index < getSizeInventory()) {
-            return this.inventory.get(index);
+            ItemStack itemStack = this.inventory.get(index).copy();
+            itemStack.setCount(64); //hacky way to make hoppers not ignore stack limit set by the bin it self...
+            return itemStack;
         }
         return ItemStack.EMPTY;
     }
@@ -396,7 +398,7 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         ICompostBinRecipe recipe = CompostRecipe.getCompostRecipe(stack);
-        return recipe != null && addItemToBin(stack, recipe.getCompostAmount(stack), recipe.getCompostingTime(stack), true) == 1;
+        return recipe != null &&  addItemToBin(stack, recipe.getCompostAmount(stack), recipe.getCompostingTime(stack), true) == 1;
     }
 
     @Override
