@@ -42,7 +42,7 @@ public class LayerHeldItemCryptCrawler implements LayerRenderer<EntityLivingBase
 			GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 
 			boolean flag = handSide == EnumHandSide.LEFT;
-			GlStateManager.translate((float) (flag ? -1 : 1) / 16.0F, -0.55F, -0.35F);
+			GlStateManager.translate((float) (flag ? -1 : 1) / 16.0F, -0.575F, -0.35F);
 			GlStateManager.scale(0.75F, 0.75F, 0.75F);
 			Minecraft.getMinecraft().getItemRenderer().renderItemSide(entity, stack, transformType, flag);
 			GlStateManager.popMatrix();

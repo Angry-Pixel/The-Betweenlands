@@ -213,7 +213,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 
 			switch (randomWeapon) {
 			case 0:
-				setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
+				setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemRegistry.WIGHTS_BANE));
 				break;
 			case 1:
 				setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemRegistry.WEEDWOOD_SWORD));
@@ -229,7 +229,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 				break;
 			}
 
-			if(getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) != null) {
+			if(!getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty()) {
 				switch (randomShield) {
 				case 0:
 					setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
