@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.entity.layer.LayerHeldItemCryptCrawler;
 import thebetweenlands.client.render.model.entity.ModelCryptCrawler;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 
@@ -15,11 +16,13 @@ public class RenderCryptCrawler extends RenderLiving<EntityCryptCrawler> {
 
 	public RenderCryptCrawler(RenderManager renderManagerIn) {
         super(renderManagerIn, new ModelCryptCrawler(), 0.5F);
+        addLayer(new LayerHeldItemCryptCrawler(this));
     }
 
 	@Override
 	protected void preRenderCallback(EntityCryptCrawler entity, float partialTickTime) {
-		GlStateManager.translate(0F, 0F - entity.standingAngle*0.5F, 0F);
+		if(!entity.isBiped())
+			GlStateManager.translate(0F, 0F - entity.standingAngle * 0.5F, 0F);
 	}
 
 	@Override
