@@ -40,10 +40,10 @@ public class ModelCryptCrawler extends ModelBase {
     ModelRenderer[] tail3 = new ModelRenderer[2];
     ModelRenderer[] tail4 = new ModelRenderer[2];
     ModelRenderer[] leg_front_left2 = new ModelRenderer[2];
-    ModelRenderer[] leg_front_left3 = new ModelRenderer[2];
+    public ModelRenderer[] leg_front_left3 = new ModelRenderer[2];
     ModelRenderer[] leg_front_right2 = new ModelRenderer[2];
-    ModelRenderer[]  leg_front_right3 = new ModelRenderer[2];
-
+    public ModelRenderer[] leg_front_right3 = new ModelRenderer[2];
+    
     public ModelCryptCrawler() {
         textureWidth = 128;
         textureHeight = 64;
@@ -372,8 +372,9 @@ public class ModelCryptCrawler extends ModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
-    	EntityCryptCrawler crypt_crawler = (EntityCryptCrawler) entity;
-    	if(!crypt_crawler.isBiped())
+    	EntityCryptCrawler cryptCrawler = (EntityCryptCrawler) entity;
+    	
+    	if(!cryptCrawler.isBiped())
     		body_main[0].render(scale);
     	else
     		body_main[1].render(scale);
