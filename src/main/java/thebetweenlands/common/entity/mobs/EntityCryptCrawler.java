@@ -45,7 +45,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 
 	public EntityCryptCrawler(World world) {
 		super(world);
-		setSize(1F, 1.25F);
+		setSize(1F, 1F);
 		stepHeight = 1F;
 	}
 
@@ -71,7 +71,6 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 
 	private void setIsBiped(boolean standing) {
 		dataManager.set(IS_BIPED, standing);
-		updateAttributes();
 	}
 
 	public boolean isChief() {
@@ -80,7 +79,6 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 
 	private void setIsChief(boolean chief) {
 		dataManager.set(IS_CHIEF, chief);
-		updateAttributes();
 	}
 
 	@Override
@@ -99,37 +97,35 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		super.applyEntityAttributes();
 		updateAttributes();
 	}
-	
+
 	protected void updateAttributes() {
-		if (!getEntityWorld().isRemote) {
+		if (getEntityWorld() != null && !getEntityWorld().isRemote) {
 			if (isChief()) {
 				setSize(1.25F, 2F);
+				experienceValue = 20;
 				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100D);
-				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
 				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 				getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.75D);
-				System.out.println("CHIEF STATS SHOULD BE SET");
 			}
 			if (!isChief() && isBiped()) {
 				setSize(0.75F, 1.5F);
 				experienceValue = 10;
 				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
-				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40D);
-				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
+				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30D);
+				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 				getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.5D);
-				System.out.println("STANDING STATS SHOULD BE SET");
 			}
 			if (!isChief() && !isBiped()) {
-				setSize(1F, 1.25F);
+				setSize(1F, 1F);
 				experienceValue = 5;
-				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
-				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30D);
+				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.7D);
+				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20D);
 				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
 				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 				getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.25D);
-				System.out.println("CRAWLING STATS SHOULD BE SET");
 			}
 		}
 	}
@@ -143,7 +139,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundRegistry.CRYPT_CRAWLER_HURT;
 	}
-	
+
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundRegistry.CRYPT_CRAWLER_DEATH;
@@ -152,6 +148,13 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.CRYPT_CRAWLER;
+	}
+	
+	@Override
+	protected float getSoundPitch() {
+		if(isChief())
+			return super.getSoundPitch() * 0.5F;
+		return super.getSoundPitch();
 	}
 
 	@Override
@@ -162,7 +165,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			if (!isChief() && isBiped())
 				setSize(0.75F, 1.5F);
 			if (!isChief() && !isBiped())
-				setSize(1F, 1.25F);
+				setSize(1F - standingAngle * 0.25F, 1F + standingAngle * 0.75F);
 		}
 
 		if (!getEntityWorld().isRemote && !isBiped()) {
@@ -259,6 +262,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			setRandomEquipment();
 		}
 		updateAttributes();
+		setHealth(getMaxHealth());
 		return livingdata;
 	}
 
@@ -308,19 +312,15 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		if (isBiped())
-			nbt.setBoolean("is_biped", true);
-		if (isChief())
-			nbt.setBoolean("is_chief", true);
+		nbt.setBoolean("is_biped", isBiped());
+		nbt.setBoolean("is_chief", isChief());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		if (nbt.getBoolean("is_biped"))
-			setIsBiped(true);
-		if (nbt.getBoolean("is_chief"))
-			setIsChief(true);
+		setIsBiped(nbt.getBoolean("is_biped"));
+		setIsChief(nbt.getBoolean("is_chief"));
 	}
 
 	static class AICryptCrawlerAttack extends EntityAIAttackMelee {
