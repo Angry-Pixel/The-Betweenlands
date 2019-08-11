@@ -21,13 +21,13 @@ public class RenderCryptCrawler extends RenderLiving<EntityCryptCrawler> {
         ModelCryptCrawler model = (ModelCryptCrawler) this.getMainModel();
         
         this.addLayer(new LayerAttachedItems<EntityCryptCrawler>(model)
-        		.attach(model.leg_front_left3[1], crawler -> crawler.getHeldItemOffhand(), EnumHandSide.LEFT, 0.75f, attachment -> {
-        			attachment.rotationPointY = -2f;
-        			attachment.rotationPointZ = -3f;
+        		.attach(model.leg_front_left3[1], crawler -> crawler.getHeldItemOffhand(), EnumHandSide.LEFT, 0.75F, attachment -> {
+        			attachment.rotationPointY = -2F;
+        			attachment.rotationPointZ = -3F;
         		})
-        		.attach(model.leg_front_right3[1], crawler -> crawler.getHeldItemMainhand(), EnumHandSide.RIGHT, 0.75f, attachment -> {
-        			attachment.rotationPointY = -2f;
-        			attachment.rotationPointZ = -3f;
+        		.attach(model.leg_front_right3[1], crawler -> crawler.getHeldItemMainhand(), EnumHandSide.RIGHT, 0.75F, attachment -> {
+        			attachment.rotationPointY = -2F;
+        			attachment.rotationPointZ = -3F;
         		})
         		);
     }
@@ -36,6 +36,8 @@ public class RenderCryptCrawler extends RenderLiving<EntityCryptCrawler> {
 	protected void preRenderCallback(EntityCryptCrawler entity, float partialTickTime) {
 		if(!entity.isBiped())
 			GlStateManager.translate(0F, 0F - entity.standingAngle * 0.5F, 0F);
+		if(entity.isChief())
+			GlStateManager.scale(1.35F, 1.35F, 1.35F);
 	}
 
 	@Override
