@@ -485,6 +485,11 @@ public class ModelCryptCrawler extends ModelBase {
 		else {
 			float animation = MathHelper.sin(limbSwing * 0.4F) * limbSwingAngle * 0.2F;
 			float flap = MathHelper.sin((crypt_crawler.ticksExisted) * 0.3F) * 0.8F;
+			tail1[1].rotateAngleX = 0.36425021489121656F - animation * 0.25F;
+			tail2[1].rotateAngleX = 0.22759093446006054F - animation * 0.5F;
+			tail3[1].rotateAngleX = 0.22759093446006054F - animation * 0.75F;
+			tail4[1].rotateAngleX = 0.22759093446006054F - animation * 1F;
+			
 			leg_front_right1[1].rotateAngleX = 0.9105382707654417F - 1F + animation * 2F;
 			leg_front_left1[1].rotateAngleX = 0.9105382707654417F - 1F - animation * 2F;
 
@@ -500,21 +505,22 @@ public class ModelCryptCrawler extends ModelBase {
 			leg_front_right3[1].rotateAngleX = 1.1838568316277536F;
 			leg_front_left3[1].rotateAngleX = 1.1838568316277536F;
 
-			leg_back_right1[1].rotateAngleX = 1.6390387005478748F + animation * 5F;
-			leg_back_left1[1].rotateAngleX =  1.6390387005478748F  - animation * 5F;
+			leg_back_right1[1].rotateAngleX = 1.6390387005478748F + animation * 5F - flap * 0.05F;
+			leg_back_left1[1].rotateAngleX =  1.6390387005478748F  - animation * 5F - flap * 0.05F;
 
 			leg_back_right1[1].rotateAngleY = -0.045553093477052F;
 			leg_back_left1[1].rotateAngleY = -0.045553093477052F;
 
-			leg_back_right2[1].rotateAngleX = -1.0927506446736497F - animation * 5F;
-			leg_back_left2[1].rotateAngleX = -1.0927506446736497F + animation * 5F;
+			leg_back_right2[1].rotateAngleX = -1.0927506446736497F - animation * 5F + flap * 0.05F;
+			leg_back_left2[1].rotateAngleX = -1.0927506446736497F + animation * 5F + flap * 0.05F;
 
-			leg_back_right3[1].rotateAngleX = 0.7740535232594852F + animation * 5F;
-			leg_back_left3[1].rotateAngleX = 0.7740535232594852F - animation * 5F;
+			leg_back_right3[1].rotateAngleX = 0.7740535232594852F + animation * 5F - flap * 0.05F;
+			leg_back_left3[1].rotateAngleX = 0.7740535232594852F - animation * 5F - flap * 0.05F;
+			
 
-			body_main[1].rotateAngleX = -0.7740535232594852F - animation;
+			body_main[1].rotateAngleX = -0.7740535232594852F - animation - flap * 0.025F;
 
-			body_lower[1].rotateAngleX = -0.40980330836826856F + animation;
+			body_lower[1].rotateAngleX = -0.40980330836826856F + animation + flap * 0.05F;
 
 			head1[1].rotateAngleX = 0.5462880558742251F;
 
