@@ -4,6 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -528,6 +529,28 @@ public class ModelCryptCrawler extends ModelBase {
 				lowerjaw[1].rotateAngleX = -0.091106186954104F;
 			else
 				lowerjaw[1].rotateAngleX = 0.091106186954104F + flap * 0.5F;
+			
+			/// EEEHHH fricking annoying angles
+			if (swingProgress > 0.0F) {
+				EnumHandSide enumhandside = this.getMainHand(crypt_crawler);
+				ModelRenderer modelrenderer = this.getArmForSide(enumhandside);
+				float f1 = swingProgress;
+				body_main[1].rotateAngleY = MathHelper.sin(MathHelper.sqrt(f1) * ((float) Math.PI * 2F)) * 0.5F;
+
+				if (enumhandside == EnumHandSide.LEFT)
+					body_main[1].rotateAngleY *= -1.0F;
+
+				f1 = 1.0F - swingProgress;
+				f1 = f1 * f1;
+				f1 = f1 * f1;
+				f1 = 1.0F - f1;
+				float f2 = MathHelper.sin(f1 * (float) Math.PI);
+				float f3 = MathHelper.sin(swingProgress * (float) Math.PI) * -(head1[1].rotateAngleX + 0.7F) * 0.75F;
+				modelrenderer.rotateAngleX = (float) ((double) modelrenderer.rotateAngleX
+						- ((double) f2 * 0.8D + (double) f3));
+				modelrenderer.rotateAngleY += body_main[1].rotateAngleY;
+				modelrenderer.rotateAngleZ += MathHelper.sin(swingProgress * (float) Math.PI) * -0.4F;
+			}
 		}
 	}
 
@@ -537,6 +560,15 @@ public class ModelCryptCrawler extends ModelBase {
 
 	protected ModelRenderer getArmForSide(EnumHandSide side) {
 		return side == EnumHandSide.LEFT ? leg_front_left1[1] : leg_front_right1[1];
+	}
+	
+	protected EnumHandSide getMainHand(Entity entityIn) {
+		if (entityIn instanceof EntityLivingBase) {
+			EntityLivingBase entitylivingbase = (EntityLivingBase) entityIn;
+			EnumHandSide enumhandside = entitylivingbase.getPrimaryHand();
+			return entitylivingbase.swingingHand == EnumHand.MAIN_HAND ? enumhandside : enumhandside.opposite();
+		} else
+			return EnumHandSide.RIGHT;
 	}
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
