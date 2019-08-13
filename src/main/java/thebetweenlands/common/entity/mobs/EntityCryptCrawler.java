@@ -236,7 +236,9 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			boolean hasHitTarget = entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 
 			if (hasHitTarget) {
-				entity.addVelocity(-MathHelper.sin(rotationYaw * 3.141593F / 180.0F) * 0.5F, 0.2D, MathHelper.cos(rotationYaw * 3.141593F / 180.0F) * 0.5F);
+				if(!getHeldItemMainhand().isEmpty())
+					getHeldItemMainhand().getItem().hitEntity(getHeldItemMainhand(), (EntityLivingBase) entity, this);
+				//entity.addVelocity(-MathHelper.sin(rotationYaw * 3.141593F / 180.0F) * 0.5F, 0.2D, MathHelper.cos(rotationYaw * 3.141593F / 180.0F) * 0.5F);
 				if (!getEntityWorld().isRemote)
 					getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundRegistry.CRYPT_CRAWLER_LIVING, SoundCategory.HOSTILE, 1F, 0.5F);
 			}
