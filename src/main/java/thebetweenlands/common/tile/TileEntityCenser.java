@@ -44,6 +44,9 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 	private float prevDungeonFogStrength = 0.0f;
 	private float dungeonFogStrength = 0.0f;
 
+	private float prevEffectStrength = 0.0f;
+	private float effectStrength = 0.0f;
+
 	private int maxConsumptionTicks;
 	private int consumptionTicks;
 
@@ -118,7 +121,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		this.fluidTank.setTileEntity(this);
 		this.properties[0] = new FluidTankPropertiesWrapper(this.fluidTank);
 	}
-	
+
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		return oldState.getBlock() != newState.getBlock();
@@ -344,6 +347,8 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 					}
 
 					this.markDirty();
+					IBlockState stat = this.world.getBlockState(this.pos);
+					this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
 				}
 			}
 
@@ -425,7 +430,8 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 			}
 		}
 
-		boolean isCreatingDungeonFog = this.fuelTicks > 0 && this.currentRecipe != null && this.currentRecipe.isCreatingDungeonFog(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+		boolean isRecipeRunning = this.fuelTicks > 0 && this.currentRecipe != null;
+		boolean isCreatingDungeonFog = isRecipeRunning && this.currentRecipe.isCreatingDungeonFog(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
 
 		this.prevDungeonFogStrength = this.dungeonFogStrength;
 		if(isCreatingDungeonFog && this.dungeonFogStrength < 1.0F) {
@@ -437,6 +443,19 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 			this.dungeonFogStrength -= 0.01F;
 			if(this.dungeonFogStrength < 0.0F) {
 				this.dungeonFogStrength = 0.0F;
+			}
+		}
+
+		this.prevEffectStrength = this.effectStrength;
+		if(isRecipeRunning && this.effectStrength < 1.0F) {
+			this.effectStrength += 0.01F;
+			if(this.effectStrength > 1.0F) {
+				this.effectStrength = 1.0F;
+			}
+		} else if(!isRecipeRunning && this.effectStrength > 0.0F) {
+			this.effectStrength -= 0.01F;
+			if(this.effectStrength < 0.0F) {
+				this.effectStrength = 0.0F;
 			}
 		}
 	}
@@ -568,6 +587,10 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 
 	public float getDungeonFogStrength(float partialTicks) {
 		return this.prevDungeonFogStrength + (this.dungeonFogStrength - this.prevDungeonFogStrength) * partialTicks;
+	}
+
+	public float getEffectStrength(float partialTicks) {
+		return this.prevEffectStrength + (this.effectStrength - this.prevEffectStrength) * partialTicks;
 	}
 
 	public AxisAlignedBB getFogRenderArea() {
