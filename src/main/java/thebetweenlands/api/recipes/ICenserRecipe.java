@@ -128,15 +128,21 @@ public interface ICenserRecipe<Context> {
 	@SideOnly(Side.CLIENT)
 	public void getLocalizedEffectText(@Nullable Context context, int amountLeft, TileEntity censer, List<String> tooltip);
 
+	public static enum EffectColorType {
+		FOG,
+		GUI
+	}
+	
 	/**
 	 * Returns the effect color.
-	 * Used e.g. to color the censer's progress bar.
+	 * Used e.g. to color the censer's progress bar or the censer fog strips.
 	 * @param context
 	 * @param amountLeft
 	 * @param censer
+	 * @param type
 	 * @return
 	 */
-	public int getEffectColor(@Nullable Context context, int amountLeft, TileEntity censer);
+	public int getEffectColor(@Nullable Context context, int amountLeft, TileEntity censer, EffectColorType type);
 
 	/**
 	 * Called when the censer is rendered with this recipe active

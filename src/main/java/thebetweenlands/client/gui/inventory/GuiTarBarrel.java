@@ -1,5 +1,7 @@
 package thebetweenlands.client.gui.inventory;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +30,17 @@ public class GuiTarBarrel extends GuiContainer {
 	private TileEntityTarBarrel barrel;
 	private static final ResourceLocation TAR_BARREL_GUI_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/tar_barrel.png");
 
+	private DecimalFormat numberFormat;
+
 	public GuiTarBarrel(InventoryPlayer inv, TileEntityTarBarrel tile) {
 		super(new ContainerTarBarrel(inv, tile));
-		this.ySize = 256;
+
 		this.barrel = tile;
+
+		this.numberFormat = new DecimalFormat();
+		this.numberFormat.setMinimumFractionDigits(1);
+		this.numberFormat.setMaximumFractionDigits(1);
+		this.numberFormat.setRoundingMode(RoundingMode.DOWN);
 	}
 
 	@Override
@@ -45,6 +54,9 @@ public class GuiTarBarrel extends GuiContainer {
 
 		drawTexturedModalRect(xx, yy, 0, 0, xSize, ySize);
 
+		//bucket base
+		this.drawTexturedModalRect(xx + 140, yy + 16, 176, 64, 16, 16);
+
 		IFluidTankProperties props = this.barrel.getTankProperties()[0];
 		FluidStack fluidStack = props.getContents();
 
@@ -53,7 +65,7 @@ public class GuiTarBarrel extends GuiContainer {
 
 			int color = fluidStack.getFluid().getColor(fluidStack);
 
-			int barHeight = MathHelper.ceil(63 * fluidStack.amount / (float)props.getCapacity());
+			int barHeight = MathHelper.ceil(57 * fluidStack.amount / (float)props.getCapacity());
 
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.enableBlend();
@@ -70,10 +82,19 @@ public class GuiTarBarrel extends GuiContainer {
 
 				GlStateManager.color(r, g, b, a);
 
-				this.drawTexturedBar(xx + 83, yy + 74, sprite, 10, 10, barHeight);
+				//barrel
+				this.drawTexturedBar(xx + 64, yy + 71, sprite, 47, 57, barHeight);
+
+				//bucket
+				this.drawTexturedBar(xx + 140, yy + 32, sprite, 16, 16, 16);
 			} else {
 				GlStateManager.disableTexture2D();
-				drawRect(xx + 83, yy + 74 - barHeight, xx + 83 + 10, yy + 74, color);
+
+				//barrel
+				drawRect(xx + 64, yy + 71 - barHeight, xx + 64 + 47, yy + 71, color);
+
+				//bucket
+				drawRect(xx + 140, yy + 16, xx + 140 + 16, yy + 16 + 16, color);
 			}
 
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -81,11 +102,15 @@ public class GuiTarBarrel extends GuiContainer {
 			GlStateManager.enableTexture2D();
 			GlStateManager.color(1, 1, 1, 1);
 
-			mc.renderEngine.bindTexture(TAR_BARREL_GUI_TEXTURE);
+			this.mc.renderEngine.bindTexture(TAR_BARREL_GUI_TEXTURE);
 
-			int barForegroundHeight = barHeight + 2;
+			//barrel cover
+			this.drawTexturedModalRect(xx + 64, yy + 12, 176, 1, 47, 62);
 
-			drawTexturedModalRect(xx + 82, yy + 10 + 65 - barForegroundHeight, 206, 65 - barForegroundHeight, 12, barForegroundHeight);
+			//bucket cover
+			this.drawTexturedModalRect(xx + 140, yy + 16, 176 + 17, 64, 16, 16);
+
+			this.fontRenderer.drawString(this.numberFormat.format(fluidStack != null ? fluidStack.amount / 1000.0f : 0.0f), xx + 127, yy + 26, 0xFFFFFFFF);
 
 			GlStateManager.disableBlend();
 		}
@@ -98,8 +123,8 @@ public class GuiTarBarrel extends GuiContainer {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		this.renderHoveredToolTip(mouseX, mouseY);
-		
-		if(this.isPointInRegion(82, 12, 12, 63, mouseX, mouseY)) {
+
+		if(this.isPointInRegion(69, 16, 37, 54, mouseX, mouseY)) {
 			IFluidTankProperties props = this.barrel.getTankProperties()[0];
 			FluidStack fluidStack = props.getContents();
 

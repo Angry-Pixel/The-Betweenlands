@@ -127,8 +127,8 @@ public abstract class AbstractCenserRecipe<T> implements ICenserRecipe<T> {
 	}
 
 	@Override
-	public int getEffectColor(T context, int amountLeft, TileEntity censer) {
-		return 0xFF90BBFF;
+	public int getEffectColor(T context, int amountLeft, TileEntity censer, EffectColorType type) {
+		return type == EffectColorType.FOG ? 0xFFFFFFFF : 0xFF90BBFF;
 	}
 
 	@Override

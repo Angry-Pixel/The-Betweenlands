@@ -1,7 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thebetweenlands:octine_block"
+    "model": "thebetweenlands:internal/blank",
+    "custom": {
+      "particle_texture": "thebetweenlands:particle/block/censer_particle"
+    }
   },
   "variants": {
     "facing": {
