@@ -702,6 +702,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ItemRegistry.LIVING_WEEDWOOD_SHIELD.setTileEntityItemStackRenderer(new RenderLivingWeedwoodShield());
 		Item.getItemFromBlock(BlockRegistry.WAYSTONE).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityWaystone.class));
 		Item.getItemFromBlock(BlockRegistry.WEEDWOOD_CHEST).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityChestBetweenlands.class));
+		Item.getItemFromBlock(BlockRegistry.CENSER).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityCenser.class));
+		Item.getItemFromBlock(BlockRegistry.TAR_BARREL).setTileEntityItemStackRenderer(new RenderItemStackAsTileEntity(TileEntityTarBarrel.class));
 		
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {

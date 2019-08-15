@@ -37,4 +37,9 @@ public class CenserRecipeStagnantWater extends AbstractCenserRecipe<Void> {
 			ShaderHelper.INSTANCE.getWorldShader().addGroundFogVolume(new GroundFogVolume(new Vec3d(fogArea.minX, fogArea.minY, fogArea.minZ), new Vec3d(fogArea.maxX - fogArea.minX, fogArea.maxY - fogArea.minY, fogArea.maxZ - fogArea.minZ), inScattering, extinction, fogBrightness * 0.7F, fogBrightness * 0.7F, fogBrightness * 0.5F));
 		}
 	}
+	
+	@Override
+	public int getEffectColor(Void context, int amountLeft, TileEntity censer, EffectColorType type) {
+		return type == EffectColorType.FOG ? 0xFFFFFFAA : super.getEffectColor(context, amountLeft, censer, type);
+	}
 }

@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.recipes.ICenserRecipe;
+import thebetweenlands.api.recipes.ICenserRecipe.EffectColorType;
 import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.tile.TileEntityCenser;
 
@@ -64,7 +65,7 @@ public class GuiCenser extends GuiContainer {
 		ICenserRecipe<Object> currentRecipe = this.censer.getCurrentRecipe();
 
 		int fuelTicks = this.censer.getFuelTicks();
-		
+
 		if(currentRecipe != null) {
 			List<String> effect = new ArrayList<>();
 			currentRecipe.getLocalizedEffectText(this.censer.getCurrentRecipeContext(), this.censer.getCurrentRecipeInputAmount(), this.censer, effect);
@@ -78,7 +79,7 @@ public class GuiCenser extends GuiContainer {
 			int amount = this.censer.getCurrentRecipeInputAmount();
 			if(amount > 0 && fuelTicks > 0) {
 				int maxAmount = this.censer.getMaxCurrentRecipeInputAmount();
-				int effectColor = currentRecipe.getEffectColor(this.censer.getCurrentRecipeContext(), this.censer.getCurrentRecipeInputAmount(), this.censer);
+				int effectColor = currentRecipe.getEffectColor(this.censer.getCurrentRecipeContext(), this.censer.getCurrentRecipeInputAmount(), this.censer, EffectColorType.GUI);
 
 				float percent = (float)amount / (float)maxAmount;
 
@@ -261,7 +262,7 @@ public class GuiCenser extends GuiContainer {
 			this.itemRender.zLevel = 0.0F;
 			this.zLevel = 0.0F;
 		}
-		
+
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 
