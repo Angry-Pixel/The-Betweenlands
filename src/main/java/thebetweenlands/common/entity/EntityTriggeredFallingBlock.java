@@ -24,7 +24,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 
 	private static final DataParameter<Boolean> IS_WALK_WAY = EntityDataManager.createKey(EntityTriggeredFallingBlock.class, DataSerializers.BOOLEAN);
-
+	private static final DataParameter<Boolean> IS_HANGING = EntityDataManager.createKey(EntityTriggeredFallingBlock.class, DataSerializers.BOOLEAN);
 	public EntityTriggeredFallingBlock(World world) {
 		super(world);
 		setSize(0.5F, 0.5F);
@@ -35,15 +35,32 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(IS_WALK_WAY, false);
+		dataManager.register(IS_HANGING, false);
 	}
 
 	@Override
 	public void onUpdate() {
-		if (!getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%5 == 0)
-			checkArea();
-		
+		if (!getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%5 == 0) {
+			if(!isHanging())
+				checkArea();
+			else
+				checkBlockAbove();
+		}
 			if (getEntityWorld().isRemote)
 				dustParticles();
+	}
+
+	private void checkBlockAbove() {
+		if (getEntityWorld().isAirBlock(getPosition().up())) {
+			Entity spawn = getEntitySpawned();
+			if (spawn != null) {
+				performPreSpawnaction(this, spawn);
+				if (!spawn.isDead) // just in case of pre-emptive removal
+					getEntityWorld().spawnEntity(spawn);
+			}
+			if (!isDead && isSingleUse())
+				setDead();
+		}
 	}
 
 	public void dustParticles() {
@@ -74,7 +91,7 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	@Override
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
 		((EntityFallingBlock)entitySpawned).setHurtEntities(true);
-		 if (!world.isRemote)
+		 if (!getEntityWorld().isRemote)
 			 targetEntity.getEntityWorld().playSound(null, targetEntity.getPosition(), SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.5F, 1.0F);
 	}
 
@@ -181,15 +198,25 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 		return dataManager.get(IS_WALK_WAY);
 	}
 
+	public boolean isHanging() {
+		return dataManager.get(IS_HANGING);
+	}
+
+	public void setHanging(boolean walkway) {
+		dataManager.set(IS_HANGING, walkway);
+	}
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		setWalkway(nbt.getBoolean("walk_way"));
+		setWalkway(nbt.getBoolean("hanging"));
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
 		nbt.setBoolean("walk_way", isWalkway());
+		nbt.setBoolean("hanging", isHanging());
 	}
 }

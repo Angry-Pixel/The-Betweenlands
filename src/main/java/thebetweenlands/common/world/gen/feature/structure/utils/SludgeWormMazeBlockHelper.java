@@ -43,6 +43,7 @@ import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.block.structure.BlockWoodenSupportBeam;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar.EnumWormPillarType;
+import thebetweenlands.common.block.terrain.BlockHanger;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
@@ -78,6 +79,7 @@ public class SludgeWormMazeBlockHelper {
 	//hanging plants
 	public IBlockState CRYPTWEED = BlockRegistry.CRYPTWEED.getDefaultState().withProperty(BlockHangingPlant.CAN_GROW, false);
 	public IBlockState STRING_ROOTS = BlockRegistry.STRING_ROOTS.getDefaultState().withProperty(BlockHangingPlant.CAN_GROW, false);
+	public IBlockState HANGER = BlockRegistry.HANGER.getDefaultState().withProperty(BlockHanger.CAN_GROW, true).withProperty(BlockHanger.SEEDED, false);
 
 	public IBlockState STAGNANT_WATER = BlockRegistry.STAGNANT_WATER.getDefaultState();
 	public IBlockState SPAWNER_TYPE_1 = Blocks.PRISMARINE.getDefaultState();
@@ -139,6 +141,7 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState MUD = BlockRegistry.MUD.getDefaultState();
 	public IBlockState COMPACTED_MUD = BlockRegistry.COMPACTED_MUD.getDefaultState();
 	public IBlockState COMPACTED_MUD_SLOPE = BlockRegistry.COMPACTED_MUD_SLOPE.getDefaultState();
+	public IBlockState MUD_BRICK_ROOF = BlockRegistry.MUD_BRICK_ROOF.getDefaultState();
 	public IBlockState PUFFSHROOM = BlockRegistry.PUFFSHROOM.getDefaultState();
 	public IBlockState ROTTEN_BARK = BlockRegistry.LOG_ROTTEN_BARK.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, EnumAxis.NONE);
 

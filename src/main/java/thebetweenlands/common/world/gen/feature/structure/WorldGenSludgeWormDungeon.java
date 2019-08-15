@@ -20,6 +20,7 @@ import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.plant.BlockMoss;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockDecayPitGroundChain;
+import thebetweenlands.common.block.structure.BlockMudBrickRoof;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
@@ -287,6 +288,23 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				}
 			}
 		}
+		world.setBlockState(pos.add(0, -5, 0), blockHelper.COMPACTED_MUD, 2);
+		world.setBlockState(pos.add(0, -4, 0), blockHelper.STAGNANT_WATER, 2);
+		world.setBlockState(pos.add(0, -3, 0), blockHelper.AIR, 2);
+		world.setBlockState(pos.add(0, 2, 0), blockHelper.HANGER, 2);
+		world.setBlockState(pos.add(0, 1, 0), blockHelper.HANGER, 2);
+		world.setBlockState(pos, blockHelper.getRandomBeam(EnumFacing.NORTH, rand, 0, 2, false), 2);
+		world.setBlockState(pos.add(-1, -3, -1), blockHelper.MUD_BRICK_ROOF.withProperty(BlockMudBrickRoof.FACING, EnumFacing.NORTH).withProperty(BlockMudBrickRoof.HALF, EnumHalf.BOTTOM), 2);
+		world.setBlockState(pos.add(0, -3, -1), blockHelper.MUD_BRICK_ROOF.withProperty(BlockMudBrickRoof.FACING, EnumFacing.NORTH).withProperty(BlockMudBrickRoof.HALF, EnumHalf.BOTTOM), 2);
+		world.setBlockState(pos.add(1, -3, -1), blockHelper.MUD_BRICK_ROOF.withProperty(BlockMudBrickRoof.FACING, EnumFacing.NORTH).withProperty(BlockMudBrickRoof.HALF, EnumHalf.BOTTOM), 2);
+		world.setBlockState(pos.add(-1, -3, 1), blockHelper.MUD_BRICK_ROOF.withProperty(BlockMudBrickRoof.FACING, EnumFacing.SOUTH).withProperty(BlockMudBrickRoof.HALF, EnumHalf.BOTTOM), 2);
+		world.setBlockState(pos.add(0, -3, 1), blockHelper.MUD_BRICK_ROOF.withProperty(BlockMudBrickRoof.FACING, EnumFacing.SOUTH).withProperty(BlockMudBrickRoof.HALF, EnumHalf.BOTTOM), 2);
+		world.setBlockState(pos.add(1, -3, 1), blockHelper.MUD_BRICK_ROOF.withProperty(BlockMudBrickRoof.FACING, EnumFacing.SOUTH).withProperty(BlockMudBrickRoof.HALF, EnumHalf.BOTTOM), 2);
+		
+		world.setBlockState(pos.add(-1, -3, 0), blockHelper.MUD_BRICK_ROOF.withProperty(BlockMudBrickRoof.FACING, EnumFacing.WEST).withProperty(BlockMudBrickRoof.HALF, EnumHalf.BOTTOM), 2);
+		world.setBlockState(pos.add(1, -3, 0), blockHelper.MUD_BRICK_ROOF.withProperty(BlockMudBrickRoof.FACING, EnumFacing.EAST).withProperty(BlockMudBrickRoof.HALF, EnumHalf.BOTTOM), 2);
+	
+		addHangingBlockEntity(world, pos);
 	}
 
 	public boolean plantingChance(Random rand) {
@@ -658,6 +676,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private void addFallingBlockEntity(World world, BlockPos pos) {
 		EntityTriggeredFallingBlock falling_block = new EntityTriggeredFallingBlock(world);
 		falling_block.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+		world.spawnEntity(falling_block);
+	}
+	
+	private void addHangingBlockEntity(World world, BlockPos pos) {
+		EntityTriggeredFallingBlock falling_block = new EntityTriggeredFallingBlock(world);
+		falling_block.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+		falling_block.setHanging(true);
 		world.spawnEntity(falling_block);
 	}
 
