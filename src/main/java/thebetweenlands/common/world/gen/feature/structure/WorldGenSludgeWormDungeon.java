@@ -304,7 +304,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 		world.setBlockState(pos.add(-1, -3, 0), blockHelper.MUD_BRICK_ROOF.withProperty(BlockMudBrickRoof.FACING, EnumFacing.WEST).withProperty(BlockMudBrickRoof.HALF, EnumHalf.BOTTOM), 2);
 		world.setBlockState(pos.add(1, -3, 0), blockHelper.MUD_BRICK_ROOF.withProperty(BlockMudBrickRoof.FACING, EnumFacing.EAST).withProperty(BlockMudBrickRoof.HALF, EnumHalf.BOTTOM), 2);
-	
+
 		addHangingBlockEntity(world, pos);
 		addCCGroundSpawnerEntity(world, pos.add(0, -3, 0));
 	}
@@ -687,7 +687,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		falling_block.setHanging(true);
 		world.spawnEntity(falling_block);
 	}
-	
+
 	private void addCCGroundSpawnerEntity(World world, BlockPos pos) {
 		EntityCCGroundSpawner ground_spawner = new EntityCCGroundSpawner(world);
 		ground_spawner.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
