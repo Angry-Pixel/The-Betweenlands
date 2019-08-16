@@ -26,7 +26,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -101,7 +100,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	protected void updateAttributes() {
 		if (getEntityWorld() != null && !getEntityWorld().isRemote) {
 			if (isChief()) {
-				setSize(1.25F, 2F);
+				setSize(1.2F, 1.9F);
 				experienceValue = 20;
 				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100D);
@@ -161,7 +160,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	public void onLivingUpdate() {
 		if (getEntityWorld().isRemote) {
 			if (isChief())
-				setSize(1.25F, 2.0F);
+				setSize(1.2F, 1.9F);
 			if (!isChief() && isBiped())
 				setSize(0.75F, 1.5F);
 			if (!isChief() && !isBiped())
@@ -245,6 +244,13 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			return hasHitTarget;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if (ticksExisted < 40 && source == DamageSource.IN_WALL)
+			return false;
+		return super.attackEntityFrom(source, amount);
 	}
 
 	@Override

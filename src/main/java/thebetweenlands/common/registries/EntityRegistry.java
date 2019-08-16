@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
@@ -171,6 +172,7 @@ public class EntityRegistry {
 		registerEntity(EntityTriggeredSludgeWallJet.class, "triggered_sludge_wall_jet");
 		registerEntity(EntitySludgeWallJet.class, "sludge_wall_jet", 64, 1, true);
 		registerEntity(EntitySplodeshroom.class, "splodeshroom");
+		registerEntity(EntityCCGroundSpawner.class, "cc_ground_spawner", 0x0B3B0B, 0xDBA901);
 	}
 
 	private static int id = 0;
