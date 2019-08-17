@@ -12,7 +12,6 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -25,7 +24,6 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -145,7 +143,12 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 	protected SoundEvent getJumpedOnSound() {
 		return SoundRegistry.SQUISH;
 	}
-	
+
+	@Override
+	protected float getSoundPitch() {
+		return super.getSoundPitch() * 1.5F;
+	}
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.TINY_SLUDGE_WORM;

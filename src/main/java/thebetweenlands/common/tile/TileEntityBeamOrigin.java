@@ -2,6 +2,7 @@ package thebetweenlands.common.tile;
 
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -9,6 +10,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -27,6 +29,7 @@ import thebetweenlands.common.block.structure.BlockBeamTube;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockEnergyBarrierMud;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 	public boolean active;
@@ -156,8 +159,10 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 	public void activateBlock() {
 		if(!world.isRemote) {
 			IBlockState state = getWorld().getBlockState(getPos());
-			if(!state.getValue(BlockBeamOrigin.POWERED))
+			if(!state.getValue(BlockBeamOrigin.POWERED)) {
 				getWorld().setBlockState(getPos(), BlockRegistry.MUD_TOWER_BEAM_ORIGIN.getDefaultState().withProperty(BlockBeamOrigin.POWERED, true));
+				getWorld().playSound((EntityPlayer)null, getPos(), SoundRegistry.BEAM_ACTIVATE, SoundCategory.BLOCKS, 1F, 1F);
+			}
 		}
 
 		EnumFacing facing = EnumFacing.DOWN;

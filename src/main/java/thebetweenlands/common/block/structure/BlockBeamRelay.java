@@ -17,11 +17,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityBeamRelay;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
@@ -114,6 +116,7 @@ public class BlockBeamRelay extends BlockDirectional implements ITileEntityProvi
 		}
 		state = state.cycleProperty(FACING);
 		world.setBlockState(pos, state, 3);
+		world.playSound((EntityPlayer)null, pos, SoundRegistry.BEAM_SWITCH, SoundCategory.BLOCKS, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 		return true;
 	}
 

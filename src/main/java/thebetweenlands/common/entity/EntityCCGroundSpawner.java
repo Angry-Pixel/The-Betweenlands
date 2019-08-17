@@ -11,12 +11,15 @@ import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityCCGroundSpawner extends EntityProximitySpawner {
 
@@ -120,12 +123,17 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	}
 
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
+		getEntityWorld().playSound((EntityPlayer)null, getPosition(), getDigSound(), SoundCategory.HOSTILE, 0.5F, 1.0F);
 		entitySpawned.setPosition(getPosition().getX() + 0.5F, getPosition().getY() - 1.5F, getPosition().getZ() + 0.5F);
+	}
+
+	protected SoundEvent getDigSound() {
+		return SoundRegistry.CRYPT_CRAWLER_DIG;
 	}
 
 	@Override
 	protected void performPostSpawnaction(Entity targetEntity, @Nullable Entity entitySpawned) {
-		if(!entitySpawned.getEntityWorld().isRemote) {
+		if(!getEntityWorld().isRemote) {
 			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.GOOP_SPLAT, (float) posX, (float)posY + 0.25F, (float)posZ, 0F));
 			entitySpawned.motionY += 0.5D;
 		}

@@ -14,6 +14,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -25,9 +26,9 @@ import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySplodeshroom extends EntityProximitySpawner {
 	public int MAX_SWELL = 40;
@@ -139,6 +140,7 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 	private void explode() {
 		//TODO whiz bang particles
 		TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.SPLODE_SHROOM, (float) posX, (float)posY + 0.25F, (float)posZ, 0F));
+		getEntityWorld().playSound((EntityPlayer)null, getPosition(), SoundRegistry.SPLODESHROOM_POP, SoundCategory.HOSTILE, 1F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 		setHasExploded(true);
 	}
 
@@ -158,6 +160,11 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 
 	private void setSwelling(boolean swell) {
 		dataManager.set(IS_SWELLING, swell);
+		//probably doesn't work
+		if(swell)
+			getEntityWorld().playSound((EntityPlayer)null, getPosition(), SoundRegistry.SPLODESHROOM_WINDUP, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+		else
+			getEntityWorld().playSound((EntityPlayer)null, getPosition(), SoundRegistry.SPLODESHROOM_WINDDOWN, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 	}
 
     public boolean getSwelling() {

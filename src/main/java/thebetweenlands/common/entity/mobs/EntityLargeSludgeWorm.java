@@ -185,6 +185,11 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.LARGE_SLUDGE_WORM;
 	}
+
+	@Override
+	protected float getSoundPitch() {
+		return super.getSoundPitch() * 0.5F;
+	}
 	
 	@Override
 	protected double getMaxPieceDistance() {

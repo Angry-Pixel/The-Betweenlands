@@ -133,7 +133,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	protected SoundEvent getAmbientSound() {
 		return SoundRegistry.CRYPT_CRAWLER_LIVING;
 	}
-	
+
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundRegistry.CRYPT_CRAWLER_HURT;
@@ -148,7 +148,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.CRYPT_CRAWLER;
 	}
-	
+
 	@Override
 	protected float getSoundPitch() {
 		if(isChief())

@@ -276,12 +276,12 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSource) {
-		return SoundRegistry.SNAIL_HURT;
+		return SoundRegistry.WORM_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundRegistry.SNAIL_DEATH;
+		return SoundRegistry.WORM_DEATH;
 	}
 
 	@Override

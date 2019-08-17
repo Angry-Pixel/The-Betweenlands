@@ -91,8 +91,12 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	@Override
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
 		((EntityFallingBlock)entitySpawned).setHurtEntities(true);
-		 if (!getEntityWorld().isRemote)
-			 targetEntity.getEntityWorld().playSound(null, targetEntity.getPosition(), SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.5F, 1.0F);
+		 if (!getEntityWorld().isRemote) {
+			 if(isWalkway() || isHanging())
+				 targetEntity.getEntityWorld().playSound(null, targetEntity.getPosition(), SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.5F, 1.0F);
+			 if(!isWalkway() && !isHanging())
+				 targetEntity.getEntityWorld().playSound(null, targetEntity.getPosition(), SoundRegistry.ROOF_COLLAPSE, SoundCategory.BLOCKS, 0.5F, 1.0F);
+		 }
 	}
 
 	@Override
