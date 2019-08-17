@@ -124,7 +124,7 @@ public class EntityEmberling extends EntityMob implements IEntityBL {
 	static class AIEmberlingAttack extends EntityAIAttackMelee {
 
 		public AIEmberlingAttack(EntityEmberling emberling) {
-			super(emberling, 0.3D, false);
+			super(emberling, 0.4D, false);
 		}
 
 		@Override
