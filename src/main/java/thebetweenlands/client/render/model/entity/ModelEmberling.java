@@ -266,7 +266,7 @@ public class ModelEmberling extends ModelBase {
 		EntityEmberling emberling = (EntityEmberling) entity;
 		float animation = MathHelper.sin(limbSwing * 0.6F) * limbSwingAngle * 0.5F;
 		float flap = MathHelper.sin((emberling.ticksExisted) * 0.2F) * 0.8F;
-		
+
 		hindleg_left1.rotateAngleX = 0.5009094953223726F + animation * 2F;
 		hindleg_right1.rotateAngleX = 0.5009094953223726F - animation * 2F;
 
