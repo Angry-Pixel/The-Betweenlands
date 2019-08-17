@@ -28,6 +28,7 @@ import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockBeamTube;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockEnergyBarrierMud;
+import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -41,7 +42,12 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 	public float rotation = (float)Math.PI / 4;
 
 	private int particleTimer = 0;
-	
+
+	public boolean beam_1_active = false;
+	public boolean beam_2_active = false;
+	public boolean beam_3_active = false;
+	public boolean beam_4_active = false;
+
 	public TileEntityBeamOrigin() {
 		super();
 	}
@@ -52,29 +58,76 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 		
 		if (getWorld().getBlockState(getPos()).getBlock() != null) {
 			if (litBraziers == 4) {
-				if (!active)
+				if (!active) {
 					setActive(true);
+					if (!world.isRemote) {
+						spawnEmberling(getWorld(), getPos().add(3, -1, 3));
+						spawnEmberling(getWorld(), getPos().add(3, -1, -3));
+						spawnEmberling(getWorld(), getPos().add(-3, -1, 3));
+						spawnEmberling(getWorld(), getPos().add(-3, -1, -3));
+					}
+				}
 			} else {
 				if (active)
 					setActive(false);
 			}
 		}
 
-		if (world.isRemote) {
-			if (getWorld().getTotalWorldTime() % 20 == 0) {
-				if (checkForLitBrazier(getPos().add(3, -1, 3))) {
+		if (getWorld().getTotalWorldTime() % 10 == 0) {
+			if (checkForLitBrazier(getPos().add(3, -1, 3))) {
+				if (world.isRemote)
 					spawnBrazierParticles(new Vec3d(3, -1, 3));
-				}
+				if (!world.isRemote)
+					if (!beam_1_active) {
+						setBeam1Active(true);
+						getWorld().playSound((EntityPlayer) null, getPos().add(3, -1, 3), SoundRegistry.PORTAL_ACTIVATE, SoundCategory.BLOCKS, 0.125F, 0.25F);
+					}
+			} else {
+				if (!world.isRemote)
+					if (beam_1_active)
+						setBeam1Active(false);
+			}
 
-				if (checkForLitBrazier(getPos().add(3, -1, -3))) {
+			if (checkForLitBrazier(getPos().add(3, -1, -3))) {
+				if (world.isRemote)
 					spawnBrazierParticles(new Vec3d(3, -1, -3));
-				}
+				if (!world.isRemote)
+					if (!beam_2_active) {
+						setBeam2Active(true);
+						getWorld().playSound((EntityPlayer) null, getPos().add(3, -1, -3), SoundRegistry.PORTAL_ACTIVATE, SoundCategory.BLOCKS, 0.125F, 0.25F);
+					}
+			} else {
+				if (!world.isRemote)
+					if (beam_2_active)
+						setBeam2Active(false);
+			}
 
-				if (checkForLitBrazier(getPos().add(-3, -1, 3)))
+			if (checkForLitBrazier(getPos().add(-3, -1, 3))) {
+				if (world.isRemote)
 					spawnBrazierParticles(new Vec3d(-3, -1, 3));
+				if (!world.isRemote)
+					if (!beam_3_active) {
+						setBeam3Active(true);
+						getWorld().playSound((EntityPlayer) null, getPos().add(-3, -1, 3), SoundRegistry.PORTAL_ACTIVATE, SoundCategory.BLOCKS, 0.125F, 0.25F);
+					}
+			} else {
+				if (!world.isRemote)
+					if (beam_3_active)
+						setBeam3Active(false);
+			}
 
-				if (checkForLitBrazier(getPos().add(-3, -1, -3)))
+			if (checkForLitBrazier(getPos().add(-3, -1, -3))) {
+				if (world.isRemote)
 					spawnBrazierParticles(new Vec3d(-3, -1, -3));
+				if (!world.isRemote)
+					if (!beam_4_active) {
+						setBeam4Active(true);
+						getWorld().playSound((EntityPlayer) null, getPos().add(-3, -1, -3), SoundRegistry.PORTAL_ACTIVATE, SoundCategory.BLOCKS, 0.125F, 0.25F);
+					}
+			} else {
+				if (!world.isRemote)
+					if (beam_4_active)
+						setBeam4Active(false);
 			}
 		}
 
@@ -102,6 +155,15 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 		} else {
 			deactivateBlock();
 		}
+	}
+
+	private void spawnEmberling(World world, BlockPos pos) {
+		//Temp until Emberlings exist
+		EntityAshSprite entity = new EntityAshSprite (world);
+		entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
+		entity.setBoundOrigin(pos);
+		world.spawnEntity(entity);
+		
 	}
 
 	public int checkForLitBraziers() {
@@ -221,6 +283,26 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 		active = isActive;
 		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
 	}
+	
+	public void setBeam1Active(boolean isActive) {
+		beam_1_active = isActive;
+		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+	}
+
+	public void setBeam2Active(boolean isActive) {
+		beam_2_active = isActive;
+		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+	}
+
+	public void setBeam3Active(boolean isActive) {
+		beam_3_active = isActive;
+		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+	}
+
+	public void setBeam4Active(boolean isActive) {
+		beam_4_active = isActive;
+		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
+	}
 
 	public int getDistanceToObstruction(EnumFacing facing) {
 		int distance = 0;
@@ -250,6 +332,10 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setBoolean("active", active);
+		nbt.setBoolean("beam_1_active", beam_1_active);
+		nbt.setBoolean("beam_2_active", beam_2_active);
+		nbt.setBoolean("beam_3_active", beam_3_active);
+		nbt.setBoolean("beam_4_active", beam_4_active);
 		return nbt;
 	}
 
@@ -257,6 +343,10 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		active = nbt.getBoolean("active");
+		beam_1_active = nbt.getBoolean("beam_1_active");
+		beam_2_active = nbt.getBoolean("beam_2_active");
+		beam_3_active = nbt.getBoolean("beam_3_active");
+		beam_4_active = nbt.getBoolean("beam_4_active");
 	}
 
 	@Override
