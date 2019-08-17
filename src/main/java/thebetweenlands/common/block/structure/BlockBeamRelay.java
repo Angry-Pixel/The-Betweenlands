@@ -116,7 +116,7 @@ public class BlockBeamRelay extends BlockDirectional implements ITileEntityProvi
 		}
 		state = state.cycleProperty(FACING);
 		world.setBlockState(pos, state, 3);
-		world.playSound((EntityPlayer)null, pos, SoundRegistry.BEAM_SWITCH, SoundCategory.BLOCKS, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+		world.playSound((EntityPlayer)null, pos, SoundRegistry.BEAM_SWITCH, SoundCategory.BLOCKS, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.9F);
 		return true;
 	}
 

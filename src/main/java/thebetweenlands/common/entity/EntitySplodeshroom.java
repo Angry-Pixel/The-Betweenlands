@@ -140,7 +140,7 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 	private void explode() {
 		//TODO whiz bang particles
 		TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.SPLODE_SHROOM, (float) posX, (float)posY + 0.25F, (float)posZ, 0F));
-		getEntityWorld().playSound((EntityPlayer)null, getPosition(), SoundRegistry.SPLODESHROOM_POP, SoundCategory.HOSTILE, 1F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+		getEntityWorld().playSound((EntityPlayer)null, getPosition(), SoundRegistry.SPLODESHROOM_POP, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 		setHasExploded(true);
 	}
 
