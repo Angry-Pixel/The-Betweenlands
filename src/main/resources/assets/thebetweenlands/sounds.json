@@ -721,6 +721,11 @@
       "thebetweenlands:crypt_crawler_death"
     ]
   },
+  "crypt_crawler_dig": {
+    "sounds": [
+      "thebetweenlands:crypt_crawler_dig"
+    ]
+  },
   "wall_lamprey_suck": {
     "sounds": [
       "thebetweenlands:wall_lamprey_suck"
@@ -733,9 +738,77 @@
       "thebetweenlands:wall_lamprey_attack_3"
     ]
   },
+    "worm_emerge": {
+    "sounds": [
+      "thebetweenlands:worm_emerge"
+    ]
+  },
+  "worm_plop": {
+    "sounds": [
+      "thebetweenlands:worm_plop"
+    ]
+  },
+    "worm_hurt": {
+    "sounds": [
+      "thebetweenlands:worm_hurt_1",
+      "thebetweenlands:worm_hurt_2"
+    ]
+  },
+  "worm_death": {
+    "sounds": [
+      "thebetweenlands:worm_death"
+    ]
+  },
+    "worm_egg_sac_living": {
+    "sounds": [
+      "thebetweenlands:worm_egg_sac_living_1",
+      "thebetweenlands:worm_egg_sac_living_2",
+      "thebetweenlands:worm_egg_sac_living_3"
+    ]
+  },
+  "worm_egg_sac_squish": {
+    "sounds": [
+      "thebetweenlands:worm_egg_sac_squish"
+    ]
+  },
+  "splodeshroom_winddown": {
+    "sounds": [
+      "thebetweenlands:splodeshroom_winddown"
+    ]
+  },
+  "splodeshroom_windup": {
+    "sounds": [
+      "thebetweenlands:splodeshroom_windup"
+    ]
+  },
+  "splodeshroom_pop": {
+    "sounds": [
+      "thebetweenlands:splodeshroom_pop"
+    ]
+  },
   "greebling_vanish": {
     "sounds": [
       "thebetweenlands:greebling_vanish"
+    ]
+  },
+  "roof_collapse": {
+    "sounds": [
+      "thebetweenlands:roof_collapse"
+    ]
+  },
+  "beam_switch": {
+    "sounds": [
+      "thebetweenlands:beam_switch"
+    ]
+  },
+  "beam_activate": {
+    "sounds": [
+      "thebetweenlands:beam_activate"
+    ]
+  },
+  "brazier_light": {
+    "sounds": [
+      "thebetweenlands:brazier_light"
     ]
   },
   "sorry": {

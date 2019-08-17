@@ -56,6 +56,9 @@ public class SoundRegistry {
     public static final BLSoundEvent DAMAGE_REDUCTION = reg("damage_reduction");
     public static final BLSoundEvent RIFT_OPEN = reg("rift_open");
     public static final BLSoundEvent RIFT_CREAK = reg("rift_creak");
+    public static final BLSoundEvent ROOF_COLLAPSE = reg("roof_collapse");
+    public static final BLSoundEvent BRAZIER_LIGHT = reg("brazier_light");
+    public static final BLSoundEvent BEAM_ACTIVATE = reg("beam_activate");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
@@ -151,8 +154,18 @@ public class SoundRegistry {
     public static final BLSoundEvent CRYPT_CRAWLER_DEATH = reg("crypt_crawler_death");
     public static final BLSoundEvent CRYPT_CRAWLER_HURT = reg("crypt_crawler_hurt");
     public static final BLSoundEvent CRYPT_CRAWLER_LIVING = reg("crypt_crawler_living");
+    public static final BLSoundEvent CRYPT_CRAWLER_DIG = reg("crypt_crawler_dig");
     public static final BLSoundEvent WALL_LAMPREY_SUCK = reg("wall_lamprey_suck");
     public static final BLSoundEvent WALL_LAMPREY_ATTACK = reg("wall_lamprey_attack");
+    public static final BLSoundEvent WORM_EMERGE = reg("worm_emerge");
+    public static final BLSoundEvent WORM_PLOP = reg("worm_plop");
+    public static final BLSoundEvent WORM_HURT = reg("worm_hurt");
+    public static final BLSoundEvent WORM_DEATH = reg("worm_death");
+    public static final BLSoundEvent WORM_EGG_SAC_LIVING = reg("worm_egg_sac_living");
+    public static final BLSoundEvent WORM_EGG_SAC_SQUISH = reg("worm_egg_sac_squish");
+    public static final BLSoundEvent SPLODESHROOM_WINDDOWN = reg("splodeshroom_winddown");
+    public static final BLSoundEvent SPLODESHROOM_WINDUP = reg("splodeshroom_windup");
+    public static final BLSoundEvent SPLODESHROOM_POP = reg("splodeshroom_pop");
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");
@@ -205,6 +218,7 @@ public class SoundRegistry {
     public static final BLSoundEvent MUD_DOOR_2 = reg("mud_door_2");
     public static final BLSoundEvent MUD_DOOR_LOCK = reg("mud_door_lock");
     public static final BLSoundEvent MUD_DOOR_TRAP = reg("mud_door_trap");
+    public static final BLSoundEvent BEAM_SWITCH = reg("beam_switch");
     
     private SoundRegistry() {
     }
