@@ -264,7 +264,40 @@ public class ModelEmberling extends ModelBase {
 	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float limbSwing, float limbSwingAngle, float partialRenderTicks) {
 		EntityEmberling emberling = (EntityEmberling) entity;
-		//Stuff
+		float animation = MathHelper.sin(limbSwing * 0.6F) * limbSwingAngle * 0.5F;
+		float flap = MathHelper.sin((emberling.ticksExisted) * 0.2F) * 0.8F;
+		
+		hindleg_left1.rotateAngleX = 0.5009094953223726F + animation * 2F;
+		hindleg_right1.rotateAngleX = 0.5009094953223726F - animation * 2F;
+
+		hindleg_left2.rotateAngleX = 0.31869712141416456F;
+		hindleg_right2.rotateAngleX = 0.31869712141416456F;
+		
+		arm_right1.rotateAngleX = -0.4553564018453205F - animation;
+		arm_right1.rotateAngleY = -0.136659280431156F - animation * 2F;
+		arm_right1.rotateAngleZ = 1.3658946726107624F;
+		
+		arm_left1.rotateAngleX = 0.36425021489121656F - animation * 2F;
+		arm_left2.rotateAngleX = -1.1383037381507017F + animation;
+		arm_left1.rotateAngleY = -0.27314402793711257F + animation;
+		
+		body_base.rotateAngleX = -0.18203784098300857F - animation * 0.5F + flap * 0.025F;
+
+		body3.rotateAngleX = -0.22759093446006054F + animation * 0.5F - flap * 0.05F;
+		
+		jaw_lower.rotateAngleX = 0.40980330836826856F + flap * 0.5F;
+		
+		gillthingy_left_upper1.rotateAngleY = 0.5918411493512771F - flap * 0.125F;
+		gillthingy_left_upper2.rotateAngleY = 0.22759093446006054F - flap * 0.25F;
+		
+		gillthingy_right_upper1.rotateAngleY = -0.5918411493512771F + flap * 0.125F;
+		gillthingy_right_upper2.rotateAngleY = -0.22759093446006054F + flap * 0.25F;
+		
+		gillthingy_left_lower1.rotateAngleY = 0.8651597102135892F - flap * 0.125F;
+		gillthingy_left_lower2.rotateAngleY = 0.31869712141416456F - flap * 0.25F;
+		
+		gillthingy_right_lower1.rotateAngleY = -0.8651597102135892F + flap * 0.125F;
+		gillthingy_right_lower2.rotateAngleY = -0.31869712141416456F + flap * 0.25F;
 	}
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
