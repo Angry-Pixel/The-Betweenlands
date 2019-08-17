@@ -28,7 +28,7 @@ import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockBeamTube;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockEnergyBarrierMud;
-import thebetweenlands.common.entity.mobs.EntityAshSprite;
+import thebetweenlands.common.entity.mobs.EntityEmberling;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -158,10 +158,10 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 	}
 
 	private void spawnEmberling(World world, BlockPos pos) {
-		//Temp until Emberlings exist
-		EntityAshSprite entity = new EntityAshSprite (world);
+		EntityEmberling entity = new EntityEmberling (world);
 		entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
-		entity.setBoundOrigin(pos);
+		//entity.setBoundOrigin(pos); // may use this dunno yet...
+		entity.onInitialSpawn(world.getDifficultyForLocation(pos), null);
 		world.spawnEntity(entity);
 		
 	}
@@ -283,7 +283,7 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 		active = isActive;
 		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
 	}
-	
+
 	public void setBeam1Active(boolean isActive) {
 		beam_1_active = isActive;
 		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 3);
