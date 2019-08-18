@@ -22,11 +22,13 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -57,10 +59,11 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 	protected void initEntityAI() {
 		tasks.addTask(1, new EntityAISwimming(this));
 		tasks.addTask(2, new EntityEmberling.EntityAIHoverSpinAttack(this, 0.6F));
-		tasks.addTask(3, new EntityEmberling.AIEmberlingAttack(this));
-		tasks.addTask(4, new EntityAIWander(this, 0.4D));
-		tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		tasks.addTask(6, new EntityAILookIdle(this));
+		tasks.addTask(3, new EntityEmberling.EntityAIFireballColumn(this));
+		tasks.addTask(4, new EntityEmberling.AIEmberlingAttack(this));
+		tasks.addTask(5, new EntityAIWander(this, 0.4D));
+		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		tasks.addTask(7, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, false, true, null));
 		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[0]));
 	}
@@ -69,8 +72,8 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.25D);
 	}
@@ -207,6 +210,63 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 			return (double) (4.0F + attackTarget.width);
 		}
 	}
+	
+	static class EntityAIFireballColumn extends EntityAIBase {
+		EntityEmberling emberling;
+		EntityLivingBase target;
+		int missileCount;
+		int shootCount;
+		
+		public EntityAIFireballColumn(EntityEmberling emberling) {
+			this.emberling = emberling;
+			this.setMutexBits(5);
+		}
+
+		public boolean shouldExecute() {
+			target = emberling.getAttackTarget();
+
+			if (target == null)
+				return false;
+			else {
+				double distance = emberling.getDistanceSq(target);
+				if (distance >= 36.0D && distance <= 144.0D) {
+					if (!emberling.onGround)
+						return false;
+					else
+						return emberling.getRNG().nextInt(8) == 0;
+				} else
+					return false;
+			}
+		}
+
+		public boolean shouldContinueExecuting() {
+			return shootCount !=-1 && missileCount !=-1;
+		}
+
+		public void startExecuting() {
+			missileCount = 0;
+			shootCount = 0;
+		}
+
+		public void updateTask() {
+			emberling.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
+			float f = (float) MathHelper.atan2(target.posZ - emberling.posZ, target.posX - emberling.posX);
+			int distance = MathHelper.floor(emberling.getDistance(target));
+			missileCount++;
+			if (missileCount %5 == 0) {
+				shootCount++;
+				double d2 = 1D * (double) (shootCount);
+				EntitySmallFireball fire_ball = new EntitySmallFireball(emberling.getEntityWorld(), emberling.posX + (double) MathHelper.cos(f) * d2, emberling.posY, emberling.posZ + (double) MathHelper.sin(f) * d2, 0F, 0.000001F, 0F);
+				fire_ball.shootingEntity = emberling;
+				emberling.getEntityWorld().spawnEntity(fire_ball);
+				emberling.getEntityWorld().playEvent((EntityPlayer) null, 1018, new BlockPos((int) fire_ball.posX, (int) fire_ball.posY, (int) fire_ball.posZ), 0);
+			}
+			if (shootCount >= distance) {
+				shootCount = -1;
+				missileCount = -1;
+			}
+		}
+	}
 
 	static class EntityAIHoverSpinAttack extends EntityAIBase {
 		EntityEmberling emberling;
@@ -227,7 +287,7 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 				return false;
 			else {
 				double distance = emberling.getDistanceSq(target);
-				if (distance >= 4.0D && distance <= 64.0D) {
+				if (distance >= 4.0D && distance <= 36.0D) {
 					if (!emberling.onGround)
 						return false;
 					else
@@ -246,12 +306,10 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 			double d0 = target.posX - emberling.posX;
 			double d1 = target.posZ - emberling.posZ;
 			float f = MathHelper.sqrt(d0 * d0 + d1 * d1);
-
 			if ((double) f >= 1.0E-4D) {
 				emberling.motionX += d0 / (double) f * 0.5D * 0.800000011920929D + emberling.motionX * 0.20000000298023224D;
 				emberling.motionZ += d1 / (double) f * 0.5D * 0.800000011920929D + emberling.motionZ * 0.20000000298023224D;
 			}
-
 			emberling.motionY = (double) motionY;
 		}
 
