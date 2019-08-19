@@ -994,6 +994,14 @@
       }
     ]
   },
+  "pit_of_decay_loop": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:boss/pit_of_decay_loop",
+        "stream": true
+      }
+    ]
+  },
   "bl_menu": {
     "sounds": [
       {

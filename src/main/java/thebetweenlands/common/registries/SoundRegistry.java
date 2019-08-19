@@ -167,6 +167,7 @@ public class SoundRegistry {
     public static final BLSoundEvent SPLODESHROOM_WINDDOWN = reg("splodeshroom_winddown");
     public static final BLSoundEvent SPLODESHROOM_WINDUP = reg("splodeshroom_windup");
     public static final BLSoundEvent SPLODESHROOM_POP = reg("splodeshroom_pop");
+    public static final BLSoundEvent PIT_OF_DECAY_LOOP = reg("pit_of_decay_loop");
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");
