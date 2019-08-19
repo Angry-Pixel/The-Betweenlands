@@ -20,7 +20,6 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.nbt.NBTTagCompound;
@@ -78,7 +77,7 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 		tasks.addTask(5, new EntityAIWander(this, 0.4D));
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		tasks.addTask(7, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, false, true, null));
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 0, false, true, null));
 		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[0]));
 	}
 

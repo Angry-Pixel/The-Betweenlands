@@ -14,7 +14,6 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -87,7 +86,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		tasks.addTask(3, new EntityAIWander(this, 0.5D));
 		tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		tasks.addTask(5, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, false, true, null));
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 0, false, true, null));
 		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
 	}
 

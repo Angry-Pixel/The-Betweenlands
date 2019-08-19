@@ -13,6 +13,7 @@ import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -66,7 +67,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 		this.tasks.addTask(1, new EntityAIAttackMelee(this, 0.8D, true));
 		this.tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
 		this.tasks.addTask(3, new EntityAIWander(this, 0.75D));
-		//this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(5, new EntityAILookIdle(this));
 
 		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true));
