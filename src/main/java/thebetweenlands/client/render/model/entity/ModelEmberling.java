@@ -258,7 +258,7 @@ public class ModelEmberling extends ModelBase {
 		float headx = MathHelper.sin((rotationPitch / (180F / (float) Math.PI)) * 0.5F);
 
 		head_main.rotateAngleY = heady;
-		head_main.rotateAngleX = 0.18203784098300857F + headx;
+		head_main.rotateAngleX = 0.18203784098300857F + headx + emberling.animationTicks;
 	}
 
 	@Override
@@ -273,17 +273,18 @@ public class ModelEmberling extends ModelBase {
 		hindleg_left2.rotateAngleX = 0.31869712141416456F;
 		hindleg_right2.rotateAngleX = 0.31869712141416456F;
 		
-		arm_right1.rotateAngleX = -0.4553564018453205F - animation;
-		arm_right1.rotateAngleY = -0.136659280431156F - animation * 2F;
-		arm_right1.rotateAngleZ = 1.3658946726107624F;
-		
-		arm_left1.rotateAngleX = 0.36425021489121656F - animation * 2F;
-		arm_left2.rotateAngleX = -1.1383037381507017F + animation;
-		arm_left1.rotateAngleY = -0.27314402793711257F + animation;
-		
-		body_base.rotateAngleX = -0.18203784098300857F - animation * 0.5F + flap * 0.025F;
+			arm_right1.rotateAngleX = -0.4553564018453205F - animation;
+			arm_right1.rotateAngleY = -0.136659280431156F - animation * 2F;
+			arm_right1.rotateAngleZ = 1.3658946726107624F + emberling.smoothedAngle(partialRenderTicks);
 
-		body3.rotateAngleX = -0.22759093446006054F + animation * 0.5F - flap * 0.05F;
+			arm_left1.rotateAngleX = 0.36425021489121656F - animation * 2F;
+			arm_left2.rotateAngleX = -1.1383037381507017F + animation;
+			arm_left1.rotateAngleY = -0.27314402793711257F + animation;
+			arm_left1.rotateAngleZ = -0.22759093446006054F - emberling.smoothedAngle(partialRenderTicks);
+		
+		body_base.rotateAngleX = -0.18203784098300857F - animation * 0.5F + flap * 0.025F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+
+		body3.rotateAngleX = -0.22759093446006054F + animation * 0.5F - flap * 0.05F + emberling.smoothedAngle(partialRenderTicks) * 0.125F;
 		
 		jaw_lower.rotateAngleX = 0.40980330836826856F + flap * 0.5F;
 		

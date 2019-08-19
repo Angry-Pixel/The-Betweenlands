@@ -24,6 +24,9 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -41,6 +44,8 @@ import thebetweenlands.common.registries.LootTableRegistry;
 public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEntityBL {
 
 	public MultiPartEntityPart[] tailPart;
+	private static final DataParameter<Boolean> IS_CASTING_SPELL = EntityDataManager.<Boolean>createKey(EntityEmberling.class, DataSerializers.BOOLEAN);
+	public float animationTicks, prevAnimationTicks;
 
 	public EntityEmberling(World world) {
 		super(world);
@@ -53,6 +58,15 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 	@Override
 	protected void entityInit() {
 		super.entityInit();
+		dataManager.register(IS_CASTING_SPELL, false);
+	}
+
+	public void setIsCastingSpell(boolean casting) {
+		dataManager.set(IS_CASTING_SPELL, casting);
+	}
+
+	public boolean getIsCastingSpell() {
+		return dataManager.get(IS_CASTING_SPELL);
 	}
 
 	@Override
@@ -121,6 +135,11 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 	public int getMaxSpawnedInChunk() {
 		return 3;
 	}
+	
+    @SideOnly(Side.CLIENT)
+    public float smoothedAngle(float partialTicks) {
+        return prevAnimationTicks + (animationTicks - prevAnimationTicks) * partialTicks;
+    }
 
 	@Override
     public void onUpdate() {
@@ -136,6 +155,25 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 				flameParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
 
 		checkCollision();
+
+		if (getEntityWorld().isRemote) {
+			if (getIsCastingSpell()) {
+				prevAnimationTicks = animationTicks;
+
+				if (animationTicks <= 1F)
+					animationTicks += 0.1F;
+
+			}
+			if (!getIsCastingSpell()) {
+				prevAnimationTicks = animationTicks;
+
+				if (animationTicks >= 0.1F)
+					animationTicks -= 0.1F;
+
+				if (animationTicks < 0F)
+					animationTicks = 0F;
+			}
+		}
     }
 
 	protected Entity checkCollision() {
@@ -249,6 +287,8 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 		}
 
 		public void updateTask() {
+			if(!emberling.getIsCastingSpell())
+				emberling.setIsCastingSpell(true);
 			emberling.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
 			float f = (float) MathHelper.atan2(target.posZ - emberling.posZ, target.posX - emberling.posX);
 			int distance = MathHelper.floor(emberling.getDistance(target));
@@ -264,6 +304,8 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 			if (shootCount >= distance) {
 				shootCount = -1;
 				missileCount = -1;
+				if(emberling.getIsCastingSpell())
+					emberling.setIsCastingSpell(false);
 			}
 		}
 	}
