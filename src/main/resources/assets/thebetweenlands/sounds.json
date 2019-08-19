@@ -759,6 +759,13 @@
       "thebetweenlands:worm_death"
     ]
   },
+  "worm_living": {
+    "sounds": [
+      "thebetweenlands:worm_living_1",
+      "thebetweenlands:worm_living_2",
+      "thebetweenlands:worm_living_3"
+    ]
+  },
     "worm_egg_sac_living": {
     "sounds": [
       "thebetweenlands:worm_egg_sac_living_1",

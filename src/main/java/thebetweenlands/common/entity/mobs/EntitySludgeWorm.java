@@ -271,7 +271,7 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	// temp Sounds until we have proper ones
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundRegistry.SNAIL_LIVING;
+		return SoundRegistry.WORM_LIVING;
 	}
 
 	@Override
@@ -286,7 +286,7 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 
 	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
-		playSound(SoundRegistry.SNAIL_LIVING, 0.5F, 1F);
+		playSound(SoundRegistry.WORM_LIVING, 0.5F, 1F);
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -160,6 +160,7 @@ public class SoundRegistry {
     public static final BLSoundEvent WORM_EMERGE = reg("worm_emerge");
     public static final BLSoundEvent WORM_PLOP = reg("worm_plop");
     public static final BLSoundEvent WORM_HURT = reg("worm_hurt");
+    public static final BLSoundEvent WORM_LIVING = reg("worm_living");
     public static final BLSoundEvent WORM_DEATH = reg("worm_death");
     public static final BLSoundEvent WORM_EGG_SAC_LIVING = reg("worm_egg_sac_living");
     public static final BLSoundEvent WORM_EGG_SAC_SQUISH = reg("worm_egg_sac_squish");
