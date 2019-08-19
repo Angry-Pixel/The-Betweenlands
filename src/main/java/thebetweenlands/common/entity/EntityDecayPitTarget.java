@@ -469,13 +469,17 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 	@Override
 	public boolean isMusicActive(EntityPlayer listener) {
-		return isEntityAlive();
+		return isEntityAlive() && canEntityBeSeen(listener);
 	}
 
 	@Override
 	public int getMusicLayer(EntityPlayer listener) {
 		return EntityMusicLayers.BOSS;
 	}
+	
+    public boolean canEntityBeSeen(Entity entity) {
+        return getEntityWorld().rayTraceBlocks(new Vec3d(posX, posY + (double)getEyeHeight(), posZ), new Vec3d(entity.posX, entity.posY + (double)entity.getEyeHeight(), entity.posZ), false, true, false) == null;
+    }
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {

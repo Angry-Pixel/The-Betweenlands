@@ -206,6 +206,8 @@ public class MusicHandler {
 			return true;
 		if (SoundRegistry.DREADFUL_PEAT_MUMMY_LOOP.getSoundName().equals(sound.getSoundLocation()))
 			return true;
+		if (SoundRegistry.PIT_OF_DECAY_LOOP.getSoundName().equals(sound.getSoundLocation()))
+			return true;
 		List<Sound> betweenlandsSoundTracks = new ArrayList<>(this.getBetweenlandsMusicTracks());
 		betweenlandsSoundTracks.addAll(getBetweenlandsMenuMusicTracks());
 		for(Sound blSound : betweenlandsSoundTracks) {
