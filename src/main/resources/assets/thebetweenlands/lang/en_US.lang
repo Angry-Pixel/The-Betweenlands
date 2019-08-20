@@ -812,6 +812,9 @@ item.thebetweenlands.ancient_battle_axe.name=Ancient Battle Axe
 item.thebetweenlands.volarkite.name=Volarkite
 item.thebetweenlands.shambler_tongue.name=Shambler Tongue
 item.thebetweenlands.rune_door_key.name=Rune Door Key
+item.thebetweenlands.cremains.name=Cremains
+item.thebetweenlands.undying_ember.name=Un-dying Ember
+
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1220,8 +1223,20 @@ entity.thebetweenlands.crypt_crawler.name=Crypt Crawler
 entity.thebetweenlands.large_sludge_worm.name=Large Sludge Worm
 entity.thebetweenlands.small_sludge_worm.name=Small Sludge Worm
 entity.thebetweenlands.tiny_sludge_worm.name=Tiny Sludge Worm
+entity.thebetweenlands.tiny_worm_egg_sac.name=Sludge Worm Egg Sac
+entity.thebetweenlands.moving_spawner_hole.name=Moving Spawner Hole
 entity.thebetweenlands.wall_lamprey.name=Lamprey
-
+entity.thebetweenlands.emberling.name=Emberling
+entity.thebetweenlands.shambler.name=Shambler
+entity.thebetweenlands.barrishee.name=Barrishee
+entity.thebetweenlands.sludge_jet.name=Sludge Jet
+entity.thebetweenlands.triggered_falling_block.name=Falling Block
+entity.thebetweenlands.triggered_sludge_wall_jet.name=Sludge Jet Turret
+entity.thebetweenlands.sludge_wall_jet.name=Sludge Jet
+entity.thebetweenlands.splodeshroom.name=Splodeshroom
+entity.thebetweenlands.cc_ground_spawner.name=Crypt Crawler Tunnel Entrance
+entity.thebetweenlands.spore_jet.name=Spore Jet
+entity.thebetweenlands.decay_pit_target.name=Not A Boss
 
 # Equipment
 equipment.menu.equip=Equip %s
