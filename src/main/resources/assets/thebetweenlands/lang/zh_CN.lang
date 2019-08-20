@@ -374,19 +374,19 @@ tile.thebetweenlands.scabyst_brick_slab.name=痂壳晶砖台阶
 tile.thebetweenlands.scabyst_pitstone_dotted.name=痂壳晶斑点麻纹石
 tile.thebetweenlands.scabyst_pitstone_horizontal.name=痂壳晶条纹麻纹石
 tile.thebetweenlands.waystone.name=巨石柱
-tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_vertical.name=垂直的蠕虫柱
-tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_vertical_decay_1.name=垂直的蠕虫柱(等级 1)
-tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_vertical_decay_2.name=垂直的蠕虫柱(等级 2)
-tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_vertical_decay_3.name=垂直的蠕虫柱(等级 3)
-tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_vertical_decay_4.name=垂直的蠕虫柱(等级 4)
-tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_vertical_decay_full.name=垂直的蠕虫柱(等级 5)
+tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_vertical.name=蠕虫柱
+tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_vertical_decay_1.name=蠕虫柱(等级 1)
+tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_vertical_decay_2.name=蠕虫柱(等级 2)
+tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_vertical_decay_3.name=蠕虫柱(等级 3)
+tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_vertical_decay_4.name=蠕虫柱(等级 4)
+tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_vertical_decay_full.name=蠕虫柱(等级 5)
 tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_top.name=蠕虫柱顶
 tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_top_decay_1.name=蠕虫柱顶(等级 1)
 tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_top_decay_2.name=蠕虫柱顶(等级 2)
 tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_top_decay_3.name=蠕虫柱顶(等级 3)
 tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_top_decay_4.name=蠕虫柱顶(等级 4)
 tile.thebetweenlands.worm_dungeon_pillar.worm_pillar_top_decay_full.name=蠕虫柱顶(等级 5)
-tile.thebetweenlands.dripping_mud.name=滴落的泥巴
+tile.thebetweenlands.compacted_mud.name=紧实的泥巴
 tile.thebetweenlands.mud_tiles.mud_tiles.name=泥地砖
 tile.thebetweenlands.mud_tiles.mud_tiles_decay.name=腐朽的泥地砖
 tile.thebetweenlands.mud_tiles.mud_tiles_cracked.name=裂纹泥地砖
@@ -419,9 +419,12 @@ tile.thebetweenlands.mud_tower_beam_origin.name=光源
 tile.thebetweenlands.mud_tower_beam_relay.name=光束透镜
 tile.thebetweenlands.mud_tower_beam_tube.name=光束通道
 tile.thebetweenlands.mud_tower_beam_lens_supports.name=透镜支架
+tile.thebetweenlands.mud_brick_spawner_hole.name=烂泥蠕虫刷怪箱
+tile.thebetweenlands.mud_brick_alcove.name=地牢壁龛
 tile.thebetweenlands.loot_urn.1.name=战利品罐
 tile.thebetweenlands.loot_urn.2.name=战利品罐
 tile.thebetweenlands.loot_urn.3.name=战利品罐
+tile.thebetweenlands.mud_bricks_climbable.name=泥砖梯子
 tile.thebetweenlands.mud_tiles_water.name=破裂的泥地砖
 tile.thebetweenlands.dungeon_wall_candle.name=壁挂蜡烛
 tile.thebetweenlands.wooden_support_beam_rotten_1.name=腐烂的支柱
@@ -443,10 +446,21 @@ tile.thebetweenlands.log_rotten_bark_carved_13.name=雕刻的烂树皮
 tile.thebetweenlands.log_rotten_bark_carved_14.name=雕刻的烂树皮
 tile.thebetweenlands.log_rotten_bark_carved_15.name=雕刻的烂树皮
 tile.thebetweenlands.log_rotten_bark_carved_16.name=雕刻的烂树皮
+tile.thebetweenlands.energy_barrier_mud.name=能量屏障
+tile.thebetweenlands.compacted_mud_slope.name=紧实泥巴斜坡
+tile.thebetweenlands.compacted_mud_slab.name=紧实泥巴台阶
+tile.thebetweenlands.compacted_mud_mirage.name=幻象紧实泥巴
 tile.thebetweenlands.mud_tower_brazier.name=火盆
 tile.thebetweenlands.dungeon_door_runes.name=地牢门
 tile.thebetweenlands.dungeon_door_runes_mimic.name=地牢门模仿者
 tile.thebetweenlands.dungeon_door_combination.name=地牢门密码
+
+tile.thebetweenlands.decay_pit_control.name=残蚀之池
+tile.thebetweenlands.decay_pit_hanging_chain.name=残蚀池之链
+tile.thebetweenlands.rotten_planks.name=腐朽木板
+tile.thebetweenlands.rotten_plank_slab.name=腐朽木板台阶
+tile.thebetweenlands.censer.name=香炉
+tile.thebetweenlands.tar_barrel.name=焦油桶
 
 # Items
 
@@ -597,6 +611,7 @@ item.thebetweenlands.mire_scramble.name=沼泽炒蛋
 item.thebetweenlands.weeping_blue_petal_salad.name=哭泣蓝花瓣沙拉
 item.thebetweenlands.octine_axe.name=炽炎铁斧
 item.thebetweenlands.octine_ingot.name=炽炎铁锭
+item.thebetweenlands.octine_nugget.name=炽炎铁粒
 item.thebetweenlands.octine_pickaxe.name=炽炎铁镐
 item.thebetweenlands.octine_shield.name=炽炎铁盾
 item.thebetweenlands.octine_shovel.name=炽炎铁锹
@@ -650,6 +665,7 @@ item.thebetweenlands.syrmorite_boots.name=赛摩铜靴子
 item.thebetweenlands.syrmorite_chestplate.name=赛摩铜胸甲
 item.thebetweenlands.syrmorite_helmet.name=赛摩铜头盔
 item.thebetweenlands.syrmorite_ingot.name=赛摩铜锭
+item.thebetweenlands.syrmorite_nugget.name=赛摩铜粒
 item.thebetweenlands.syrmorite_leggings.name=赛摩铜护腿
 item.thebetweenlands.syrmorite_shield.name=赛摩铜盾
 item.thebetweenlands.tangled_root.name=缠结根须
@@ -669,6 +685,7 @@ item.thebetweenlands.valonite_helmet.name=法罗钠头盔
 item.thebetweenlands.valonite_leggings.name=法罗钠护腿
 item.thebetweenlands.valonite_pickaxe.name=法罗钠镐
 item.thebetweenlands.valonite_shard.name=法罗钠晶石碎片
+item.thebetweenlands.valonite_splinter.name=法罗钠锐利碎片
 item.thebetweenlands.valonite_shield.name=法罗钠盾
 item.thebetweenlands.valonite_shovel.name=法罗钠锹
 item.thebetweenlands.valonite_sword.name=法罗钠剑
@@ -795,6 +812,7 @@ item.thebetweenlands.ancient_greatsword.name=上古巨剑
 item.thebetweenlands.ancient_battle_axe.name=上古战斧
 item.thebetweenlands.volarkite.name=伞莲风筝
 item.thebetweenlands.shambler_tongue.name=蹒跚者舌头
+item.thebetweenlands.rune_door_key.name=符文门钥匙
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=绿色木晶药瓶
@@ -816,6 +834,7 @@ fluid.swamp_water=沼泽水
 fluid.tar=焦油
 fluid.stagnant_water=死水
 fluid.rubber=橡胶液
+fluid.fog=雾气
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=交错次元 - 方块
@@ -924,6 +943,7 @@ tooltip.lurker_skin_shield=可以当做船使用！
 tooltip.grappling_hook=范围:%3$s段,%1$s方块\n长度:%4$s段,%2$s方块
 tooltip.grappling_hook.more_info=使用'%1$s + %2$s'和'%1$s + %3$s'\n来收回或延长绳子。\n使用正常的移动键来摇摆。
 tooltip.grappling_hook.upgrade=与两个鮟鱇牙齿和\n一个蹒跚者舌头合成来升级。
+tooltip.bl.censer_effect=香炉效果:
 
 tooltip.bl.elixir.potency=§9效果: %s
 tooltip.bl.elixir.duration=§9时长: %s (%s)
@@ -956,6 +976,12 @@ tooltip.bl.elixir.healing.effect=加速身体恢复的能力，\n伤口不断得
 tooltip.bl.elixir.nimblefeet.effect=增强腿脚的肌肉，\n使你行动更敏捷
 tooltip.bl.elixir.weakness.effect=弱化持剑的手腕，\n降低攻击的伤害
 tooltip.bl.elixir.strength.effect=增强身体的力量，\n提高攻击的伤害
+
+tooltip.bl.censer.sap_ball=大范围缓慢地治愈残蚀
+tooltip.bl.censer.plant_tonic=中等范围内阻止作物腐化
+tooltip.bl.censer.elixir=大范围地施加减弱的\n该药水的药水效果
+tooltip.bl.censer.stagnant_water=小范围地加速残蚀
+tooltip.bl.censer.dungeon_fog=小范围加速作物生长\n并允许烂泥地牢植物生长
 
 # Chat
 chat.foodSickness.fine.0=啊，新鲜的食物！
@@ -1239,6 +1265,8 @@ jei.thebetweenlands.time.minutes=需用时 %d 分钟
 jei.thebetweenlands.time.seconds=需用时 %d 秒
 jei.thebetweenlands.animator.life=消耗生命水晶耐久数： %d
 jei.thebetweenlands.animator.fuel=消耗燃料数: %d
+jei.thebetweenlands.tarred_weedwood_boat=用焦油滴右键船将为其涂抹焦油。涂抹焦油的船将能够停稳，而且更容易控制。
+jei.thebetweenlands.druid_circle_reactivate=重新激活德鲁伊刷怪箱
 
 # Commands
 command.generic.noplayer=只有玩家可以使用命令。
