@@ -22,6 +22,7 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySmallFireball;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -29,8 +30,8 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -38,6 +39,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO Loot tables
 public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEntityBL {
@@ -93,20 +95,17 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return null;
-		//return SoundRegistry.EMBERLING_LIVING;
+		return SoundRegistry.EMBERLING_LIVING;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return null;
-		//return SoundRegistry.EMBERLING_HURT;
+		return SoundRegistry.EMBERLING_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return null;
-		//return SoundRegistry.EMBERLING_DEATH;
+		return SoundRegistry.EMBERLING_DEATH;
 	}
 
 	@Override
@@ -286,6 +285,7 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 		public void startExecuting() {
 			missileCount = 0;
 			shootCount = 0;
+			emberling.getEntityWorld().playSound(null, emberling.getPosition(), SoundRegistry.EMBERLING_FLAMES, SoundCategory.HOSTILE, 1F, 1F);
 		}
 
 		public void updateTask() {
@@ -301,7 +301,7 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 				EntitySmallFireball fire_ball = new EntitySmallFireball(emberling.getEntityWorld(), emberling.posX + (double) MathHelper.cos(f) * d2, emberling.posY, emberling.posZ + (double) MathHelper.sin(f) * d2, 0F, 0.000001F, 0F);
 				fire_ball.shootingEntity = emberling;
 				emberling.getEntityWorld().spawnEntity(fire_ball);
-				emberling.getEntityWorld().playEvent((EntityPlayer) null, 1018, new BlockPos((int) fire_ball.posX, (int) fire_ball.posY, (int) fire_ball.posZ), 0);
+				emberling.getEntityWorld().playSound(null, emberling.getPosition(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.HOSTILE, 0.5F, 1F + (emberling.getEntityWorld().rand.nextFloat() - emberling.getEntityWorld().rand.nextFloat()) * 0.8F);
 			}
 			if (shootCount >= distance || shootCount >= 12) {
 				shootCount = -1;
@@ -347,6 +347,7 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 		}
 
 		public void startExecuting() {
+			emberling.getEntityWorld().playSound(null, emberling.getPosition(), SoundRegistry.EMBERLING_JUMP, SoundCategory.HOSTILE, 1F, 1F);
 			double d0 = target.posX - emberling.posX;
 			double d1 = target.posZ - emberling.posZ;
 			float f = MathHelper.sqrt(d0 * d0 + d1 * d1);

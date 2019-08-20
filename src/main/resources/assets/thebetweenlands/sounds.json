@@ -793,6 +793,36 @@
       "thebetweenlands:splodeshroom_pop"
     ]
   },
+    "emberling_flames": {
+    "sounds": [
+      "thebetweenlands:emberling_flames"
+    ]
+  },
+  "emberling_jump": {
+    "sounds": [
+      "thebetweenlands:emberling_jump"
+    ]
+  },
+    "emberling_hurt": {
+    "sounds": [
+      "thebetweenlands:emberling_hurt_1",
+      "thebetweenlands:emberling_hurt_2"
+    ]
+  },
+  "emberling_death": {
+    "sounds": [
+      "thebetweenlands:emberling_death"
+    ]
+  },
+  "emberling_living": {
+    "sounds": [
+      "thebetweenlands:emberling_living_1",
+      "thebetweenlands:emberling_living_2",
+      "thebetweenlands:emberling_living_3",
+      "thebetweenlands:emberling_living_4",
+      "thebetweenlands:emberling_living_5"
+    ]
+  },
   "greebling_vanish": {
     "sounds": [
       "thebetweenlands:greebling_vanish"

@@ -168,6 +168,11 @@ public class SoundRegistry {
     public static final BLSoundEvent SPLODESHROOM_WINDUP = reg("splodeshroom_windup");
     public static final BLSoundEvent SPLODESHROOM_POP = reg("splodeshroom_pop");
     public static final BLSoundEvent PIT_OF_DECAY_LOOP = reg("pit_of_decay_loop");
+    public static final BLSoundEvent EMBERLING_FLAMES = reg("emberling_flames");
+    public static final BLSoundEvent EMBERLING_JUMP = reg("emberling_jump");
+    public static final BLSoundEvent EMBERLING_HURT = reg("emberling_hurt");
+    public static final BLSoundEvent EMBERLING_LIVING = reg("emberling_living");
+    public static final BLSoundEvent EMBERLING_DEATH = reg("emberling_death");
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");
