@@ -1226,6 +1226,7 @@ entity.thebetweenlands.tiny_sludge_worm.name=Tiny Sludge Worm
 entity.thebetweenlands.tiny_worm_egg_sac.name=Sludge Worm Egg Sac
 entity.thebetweenlands.moving_spawner_hole.name=Moving Spawner Hole
 entity.thebetweenlands.wall_lamprey.name=Lamprey
+entity.thebetweenlands.ash_sprite.name=Ash Sprite
 entity.thebetweenlands.emberling.name=Emberling
 entity.thebetweenlands.shambler.name=Shambler
 entity.thebetweenlands.barrishee.name=Barrishee
