@@ -170,9 +170,9 @@ public class EntityRegistry {
 		registerEntity(EntityDecayPitTarget.class, "decay_pit_target");
 		registerEntity(EntitySludgeJet.class, "sludge_jet", 64, 1, true);
 		registerEntity(EntityTriggeredFallingBlock.class, "triggered_falling_block");
-		registerEntity(EntityTriggeredSludgeWallJet.class, "triggered_sludge_wall_jet");
+		registerEntity(EntityTriggeredSludgeWallJet.class, "triggered_sludge_wall_jet", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntitySludgeWallJet.class, "sludge_wall_jet", 64, 1, true);
-		registerEntity(EntitySplodeshroom.class, "splodeshroom");
+		registerEntity(EntitySplodeshroom.class, "splodeshroom", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityCCGroundSpawner.class, "cc_ground_spawner");
 		registerEntity(EntityEmberling.class, "emberling", 0x0B3B0B, 0xDBA901);
 	}
