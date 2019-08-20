@@ -3,6 +3,7 @@ package thebetweenlands.common.block.structure;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -53,6 +54,11 @@ public class BlockBeamRelay extends BlockDirectional implements ITileEntityProvi
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
+
+	@Override
+    public EnumPushReaction getPushReaction(IBlockState state) {
+        return EnumPushReaction.BLOCK;
+    }
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {

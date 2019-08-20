@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
@@ -46,6 +47,11 @@ public class BlockEnergyBarrierMud extends Block {
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
+
+	@Override
+    public EnumPushReaction getPushReaction(IBlockState state) {
+        return EnumPushReaction.BLOCK;
+    }
 
 	@Nullable
 	@Override
