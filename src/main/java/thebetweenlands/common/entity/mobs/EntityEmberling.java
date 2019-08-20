@@ -347,6 +347,8 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 		}
 
 		public void startExecuting() {
+			if(emberling.getIsCastingSpell())
+				emberling.setIsCastingSpell(false);
 			emberling.getEntityWorld().playSound(null, emberling.getPosition(), SoundRegistry.EMBERLING_JUMP, SoundCategory.HOSTILE, 1F, 1F);
 			double d0 = target.posX - emberling.posX;
 			double d1 = target.posZ - emberling.posZ;
