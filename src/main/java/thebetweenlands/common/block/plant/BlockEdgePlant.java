@@ -43,7 +43,7 @@ public class BlockEdgePlant extends BlockBush implements IShearable {
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         setSoundType(SoundType.PLANT);
         setHardness(0.1F);
-        setCreativeTab(BLCreativeTabs.BLOCKS);
+        setCreativeTab(BLCreativeTabs.PLANTS);
     }
 
 	@Override
