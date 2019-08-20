@@ -47,6 +47,8 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	protected Entity checkArea() {
 		if (!getEntityWorld().isRemote && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
 			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
+			if(list.stream().filter(e -> e instanceof EntityCryptCrawler).count() >= 4)
+				return null;
 			for (int entityCount = 0; entityCount < list.size(); entityCount++) {
 				Entity entity = list.get(entityCount);
 				if (entity != null)
