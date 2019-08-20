@@ -173,6 +173,9 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 					animationTicks = 0F;
 			}
 		}
+		if (!getEntityWorld().isRemote && recentlyHit > 40)
+			if(getIsCastingSpell())
+				setIsCastingSpell(false);
     }
 
 	protected Entity checkCollision() {
@@ -300,7 +303,7 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 				emberling.getEntityWorld().spawnEntity(fire_ball);
 				emberling.getEntityWorld().playEvent((EntityPlayer) null, 1018, new BlockPos((int) fire_ball.posX, (int) fire_ball.posY, (int) fire_ball.posZ), 0);
 			}
-			if (shootCount >= distance) {
+			if (shootCount >= distance || shootCount >= 12) {
 				shootCount = -1;
 				missileCount = -1;
 				if(emberling.getIsCastingSpell())
