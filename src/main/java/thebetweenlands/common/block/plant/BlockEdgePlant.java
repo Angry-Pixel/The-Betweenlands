@@ -111,8 +111,13 @@ public class BlockEdgePlant extends BlockBush implements IShearable {
 
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return Item.getItemFromBlock(this);
+        return null;
     }
+
+	@Override
+	public int damageDropped(IBlockState state) {
+		return 0;
+	}
 
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
