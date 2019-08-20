@@ -277,7 +277,7 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 		}
 
 		public boolean shouldContinueExecuting() {
-			return shootCount !=-1 && missileCount !=-1;
+			return shootCount !=-1 && missileCount !=-1 && emberling.recentlyHit <= 40;
 		}
 
 		public void startExecuting() {
