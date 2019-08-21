@@ -490,21 +490,38 @@ public class ModelCryptCrawler extends ModelBase {
 			tail2[1].rotateAngleX = 0.22759093446006054F - animation * 0.5F;
 			tail3[1].rotateAngleX = 0.22759093446006054F - animation * 0.75F;
 			tail4[1].rotateAngleX = 0.22759093446006054F - animation * 1F;
-			
-			leg_front_right1[1].rotateAngleX = 0.9105382707654417F - 1F + animation * 2F;
-			leg_front_left1[1].rotateAngleX = 0.9105382707654417F - 1F - animation * 2F;
+			if (!crypt_crawler.isBlocking()) {
+				leg_front_right1[1].rotateAngleX = 0.9105382707654417F - 1F + animation * 2F;
+				leg_front_left1[1].rotateAngleX = 0.9105382707654417F - 1F - animation * 2F;
 
-			leg_front_right1[1].rotateAngleZ = -0.091106186954104F + 0.25F;
-			leg_front_left1[1].rotateAngleZ = 0.091106186954104F -0.25F;
+				leg_front_right1[1].rotateAngleZ = -0.091106186954104F + 0.25F;
+				leg_front_left1[1].rotateAngleZ = 0.091106186954104F - 0.25F;
 
-			leg_front_right1[1].rotateAngleY = -0.31869712141416456F;
-			leg_front_left1[1].rotateAngleY = 0.31869712141416456F;
+				leg_front_right1[1].rotateAngleY = -0.31869712141416456F;
+				leg_front_left1[1].rotateAngleY = 0.31869712141416456F;
 
-			leg_front_right2[1].rotateAngleX = -0.27314402793711257F;
-			leg_front_left2[1].rotateAngleX = -0.27314402793711257F;
+				leg_front_right2[1].rotateAngleX = -0.27314402793711257F;
+				leg_front_left2[1].rotateAngleX = -0.27314402793711257F;
 
-			leg_front_right3[1].rotateAngleX = 1.1838568316277536F;
-			leg_front_left3[1].rotateAngleX = 1.1838568316277536F;
+				leg_front_right3[1].rotateAngleX = 1.1838568316277536F;
+				leg_front_left3[1].rotateAngleX = 1.1838568316277536F;
+			}
+			else{
+				leg_front_right1[1].rotateAngleX = 0.9105382707654417F - 1F;
+				leg_front_left1[1].rotateAngleX = 0.9105382707654417F - 1F;
+
+				leg_front_right1[1].rotateAngleZ = -0.091106186954104F + 0.25F;
+				leg_front_left1[1].rotateAngleZ = 0.091106186954104F - 0.25F;
+
+				leg_front_right1[1].rotateAngleY = -0.31869712141416456F;
+				leg_front_left1[1].rotateAngleY = 0.31869712141416456F;
+
+				leg_front_right2[1].rotateAngleX = -0.27314402793711257F;
+				leg_front_left2[1].rotateAngleX = -0.27314402793711257F;
+
+				leg_front_right3[1].rotateAngleX = 1.1838568316277536F;
+				leg_front_left3[1].rotateAngleX = 1.1838568316277536F;
+			}
 
 			leg_back_right1[1].rotateAngleX = 1.6390387005478748F + animation * 5F - flap * 0.05F;
 			leg_back_left1[1].rotateAngleX =  1.6390387005478748F  - animation * 5F - flap * 0.05F;
@@ -529,11 +546,11 @@ public class ModelCryptCrawler extends ModelBase {
 				lowerjaw[1].rotateAngleX = -0.091106186954104F;
 			else
 				lowerjaw[1].rotateAngleX = 0.091106186954104F + flap * 0.5F;
-			
+
 			/// EEEHHH fricking annoying angles
+			EnumHandSide enumhandside = this.getMainHand(crypt_crawler);
+			ModelRenderer modelrenderer = this.getArmForSide(enumhandside);
 			if (swingProgress > 0.0F) {
-				EnumHandSide enumhandside = this.getMainHand(crypt_crawler);
-				ModelRenderer modelrenderer = this.getArmForSide(enumhandside);
 				float f1 = swingProgress;
 				body_main[1].rotateAngleY = MathHelper.sin(MathHelper.sqrt(f1) * ((float) Math.PI * 2F)) * 0.5F;
 
@@ -546,8 +563,7 @@ public class ModelCryptCrawler extends ModelBase {
 				f1 = 1.0F - f1;
 				float f2 = MathHelper.sin(f1 * (float) Math.PI);
 				float f3 = MathHelper.sin(swingProgress * (float) Math.PI) * -(head1[1].rotateAngleX + 0.7F) * 0.75F;
-				modelrenderer.rotateAngleX = (float) ((double) modelrenderer.rotateAngleX
-						- ((double) f2 * 0.8D + (double) f3));
+				modelrenderer.rotateAngleX = (float) ((double) modelrenderer.rotateAngleX - ((double) f2 * 0.8D + (double) f3));
 				modelrenderer.rotateAngleY += body_main[1].rotateAngleY;
 				modelrenderer.rotateAngleZ += MathHelper.sin(swingProgress * (float) Math.PI) * -0.4F;
 			}
@@ -561,7 +577,7 @@ public class ModelCryptCrawler extends ModelBase {
 	protected ModelRenderer getArmForSide(EnumHandSide side) {
 		return side == EnumHandSide.LEFT ? leg_front_left1[1] : leg_front_right1[1];
 	}
-	
+
 	protected EnumHandSide getMainHand(Entity entityIn) {
 		if (entityIn instanceof EntityLivingBase) {
 			EntityLivingBase entitylivingbase = (EntityLivingBase) entityIn;
@@ -576,4 +592,9 @@ public class ModelCryptCrawler extends ModelBase {
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
+
+	public boolean getIsBlocking() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

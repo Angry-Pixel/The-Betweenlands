@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -14,14 +15,17 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -39,6 +43,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	private static final DataParameter<Boolean> IS_BIPED = EntityDataManager.createKey(EntityCryptCrawler.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_STANDING = EntityDataManager.createKey(EntityCryptCrawler.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_CHIEF = EntityDataManager.createKey(EntityCryptCrawler.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_BLOCKING = EntityDataManager.<Boolean>createKey(EntityCryptCrawler.class, DataSerializers.BOOLEAN);
 	public float standingAngle, prevStandingAngle;
 
 	public EntityCryptCrawler(World world) {
@@ -53,6 +58,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		dataManager.register(IS_STANDING, false);
 		dataManager.register(IS_BIPED, false);
 		dataManager.register(IS_CHIEF, false);
+		dataManager.register(IS_BLOCKING, false);
 	}
 
 	public boolean isStanding() {
@@ -79,14 +85,23 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		dataManager.set(IS_CHIEF, chief);
 	}
 
+	public boolean isBlocking() {
+		return dataManager.get(IS_BLOCKING);
+	}
+
+	private void setIsBlocking(boolean blocking) {
+		dataManager.set(IS_BLOCKING, blocking);
+	}
+
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(1, new EntityAISwimming(this));
-		tasks.addTask(2, new EntityCryptCrawler.AICryptCrawlerAttack(this));
-		tasks.addTask(3, new EntityAIWander(this, 0.5D));
-		tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		tasks.addTask(5, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 0, false, true, null));
+		tasks.addTask(2, new EntityCryptCrawler.EntityAIShieldBlock(this));
+		tasks.addTask(3, new EntityCryptCrawler.AICryptCrawlerAttack(this));
+		tasks.addTask(4, new EntityAIWander(this, 0.5D));
+		tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		tasks.addTask(6, new EntityAILookIdle(this));
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, false, true, null));
 		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
 	}
 
@@ -340,6 +355,67 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		protected double getAttackReachSqr(EntityLivingBase attackTarget) {
 			return (double) (4.0F + attackTarget.width);
 		}
+	}
+
+	static class EntityAIShieldBlock extends EntityAIBase {
+		EntityCryptCrawler crawler;
+		EntityLivingBase target;
+		int blockingCount;
+		public EntityAIShieldBlock(EntityCryptCrawler crawler) {
+			this.crawler = crawler;
+			this.setMutexBits(7);
+		}
+
+		public boolean shouldExecute() {
+			ItemStack heldItem = crawler.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
+			if (heldItem.isEmpty())
+				return false;
+			else if(!(heldItem.getItem() instanceof ItemShield))
+				return false;
+
+			target = crawler.getAttackTarget();
+
+			if (target == null)
+				return false;
+			else {
+				double distance = crawler.getDistanceSq(target);
+				if (distance >= 9.0D && distance <= 64.0D) {
+					if (!crawler.onGround)
+						return false;
+					else
+						return crawler.getRNG().nextInt(5) == 0;
+				}
+				else
+					return false;
+			}
+		}
+
+		public boolean shouldContinueExecuting() {
+			return crawler.onGround && blockingCount !=-1 && crawler.recentlyHit <= 40 && !crawler.isSwingInProgress;
+		}
+
+		public void startExecuting() {
+			blockingCount = 0;
+		}
+
+	    public void updateTask() {
+	    	double distance = crawler.getDistanceSq(target);
+			if (blockingCount <= 40) {
+				blockingCount++;
+				if(!crawler.isBlocking()) {
+					crawler.setIsBlocking(true);
+					crawler.setActiveHand(EnumHand.OFF_HAND);
+				}
+			}
+			if (blockingCount > 40 || distance < 9.0D) {
+				crawler.setIsBlocking(false);
+				crawler.setActiveHand(EnumHand.MAIN_HAND);
+				blockingCount = -1;
+			}
+			crawler.getLookHelper().setLookPositionWithEntity(target, 10.0F, 10.0F);
+			crawler.getNavigator().clearPath();
+			crawler.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, 0.4D);
+	    }
 	}
 
 }
