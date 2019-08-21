@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "kkk",
+    "aaa",
+    "lll"
+  ],
+  "key": {
+    "k": {
+      "item": "thebetweenlands:swamp_kelp_item"
+    },
+    "a": {
+      "item": "thebetweenlands:angler_meat_raw"
+    },
+    "l": {
+      "item": "thebetweenlands:items_crushed",
+      "data": 34
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:sushi",
+    "count": 3
+  }
+}

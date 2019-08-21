@@ -165,6 +165,9 @@ subprojects {
 	}
 }
 
+apply plugin: 'idea'
+idea.project.modules = new ArrayList([rootProject.idea.module])
+
 if(isDeploymentEnv) println('Deployment environment found')
 if(isDeploymentRelease) println('Deploying a release build')
 
