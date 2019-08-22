@@ -387,12 +387,12 @@ public class ModelCryptCrawler extends ModelBase {
 		EntityCryptCrawler crypt_crawler = (EntityCryptCrawler) entity;
 		float heady = MathHelper.sin((rotationYaw / (180F / (float) Math.PI)) * 0.5F);
 		float headx = MathHelper.sin((rotationPitch / (180F / (float) Math.PI)) * 0.5F);
-		if(!crypt_crawler.isBiped())
+		if(!crypt_crawler.isBiped()) {
 			neck[0].rotateAngleY = heady;
-		else {
+		} else {
 			neck[1].rotateAngleY = heady;
 			neck[1].rotateAngleX = 0.36425021489121656F + headx;
-			}
+		}
 	}
 
 	@Override
@@ -404,8 +404,8 @@ public class ModelCryptCrawler extends ModelBase {
 			float animation = MathHelper.sin((limbSwing * 0.6F + 2) * 0.5F) * 0.3F * limbSwingAngle * 0.3F;
 			float animation2 = MathHelper.sin((limbSwing * 0.6F) * 0.5F) * 0.3F * limbSwingAngle * 0.3F;
 			float animation3 = MathHelper.sin((limbSwing * 0.6F + 4) * 0.5F) * 0.3F * limbSwingAngle * 0.3F;
-			float flap = MathHelper.sin((crypt_crawler.ticksExisted) * 0.3F) * 0.8F;
-			float standingAngle = crypt_crawler.smoothedAngle(partialRenderTicks); 
+			float flap = MathHelper.sin((crypt_crawler.ticksExisted + partialRenderTicks) * 0.3F) * 0.8F;
+			float standingAngle = crypt_crawler.smoothedStandingAngle(partialRenderTicks); 
 			tail1[0].rotateAngleX = -0.40980330836826856F + (standingAngle * 0.75F)- animation * 1F;
 			tail2[0].rotateAngleX = -0.22759093446006054F + (standingAngle * 0.75F)- animation * 3F;
 			tail3[0].rotateAngleX = -0.22759093446006054F + (standingAngle * 0.75F)- animation * 4F;
@@ -482,10 +482,9 @@ public class ModelCryptCrawler extends ModelBase {
 				else
 					lowerjaw[0].rotateAngleX = -0.091106186954104F + flap * 0.3F;
 			}
-		}
-		else {
+		} else {
 			float animation = MathHelper.sin(limbSwing * 0.4F) * limbSwingAngle * 0.2F;
-			float flap = MathHelper.sin((crypt_crawler.ticksExisted) * 0.3F) * 0.8F;
+			float flap = MathHelper.sin((crypt_crawler.ticksExisted + partialRenderTicks) * 0.3F) * 0.8F;
 			tail1[1].rotateAngleX = 0.36425021489121656F - animation * 0.25F;
 			tail2[1].rotateAngleX = 0.22759093446006054F - animation * 0.5F;
 			tail3[1].rotateAngleX = 0.22759093446006054F - animation * 0.75F;
@@ -505,22 +504,23 @@ public class ModelCryptCrawler extends ModelBase {
 
 				leg_front_right3[1].rotateAngleX = 1.1838568316277536F;
 				leg_front_left3[1].rotateAngleX = 1.1838568316277536F;
-			}
-			else{
+				leg_front_left3[1].rotateAngleZ = 0.0F;
+			} else {
 				leg_front_right1[1].rotateAngleX = 0.9105382707654417F - 1F;
-				leg_front_left1[1].rotateAngleX = 0.9105382707654417F - 1F;
+				leg_front_left1[1].rotateAngleX = 0.9105382707654417F - 1F - (animation - flap * 0.025F);
 
 				leg_front_right1[1].rotateAngleZ = -0.091106186954104F + 0.25F;
 				leg_front_left1[1].rotateAngleZ = 0.091106186954104F - 0.25F;
 
 				leg_front_right1[1].rotateAngleY = -0.31869712141416456F;
-				leg_front_left1[1].rotateAngleY = 0.31869712141416456F;
+				leg_front_left1[1].rotateAngleY = 0.6F;
 
 				leg_front_right2[1].rotateAngleX = -0.27314402793711257F;
 				leg_front_left2[1].rotateAngleX = -0.27314402793711257F;
 
 				leg_front_right3[1].rotateAngleX = 1.1838568316277536F;
-				leg_front_left3[1].rotateAngleX = 1.1838568316277536F;
+				leg_front_left3[1].rotateAngleX = 1.6F;
+				leg_front_left3[1].rotateAngleZ = 0.8F;
 			}
 
 			leg_back_right1[1].rotateAngleX = 1.6390387005478748F + animation * 5F - flap * 0.05F;
@@ -592,9 +592,4 @@ public class ModelCryptCrawler extends ModelBase {
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
-
-	public boolean getIsBlocking() {
-		// TODO Auto-generated method stub
-		return false;
-	}
 }

@@ -17,6 +17,7 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
@@ -40,12 +41,17 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO Loot tables
 public class EntityCryptCrawler extends EntityMob implements IEntityBL {
+	private static final byte EVENT_SHIELD_BLOCKED = 80;
+	
 	private static final DataParameter<Boolean> IS_BIPED = EntityDataManager.createKey(EntityCryptCrawler.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_STANDING = EntityDataManager.createKey(EntityCryptCrawler.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_CHIEF = EntityDataManager.createKey(EntityCryptCrawler.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_BLOCKING = EntityDataManager.<Boolean>createKey(EntityCryptCrawler.class, DataSerializers.BOOLEAN);
+	
 	public float standingAngle, prevStandingAngle;
 
+	protected boolean recentlyBlockedAttack;
+	
 	public EntityCryptCrawler(World world) {
 		super(world);
 		setSize(1F, 1F);
@@ -102,7 +108,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		tasks.addTask(6, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, false, true, null));
-		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
+		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
 	}
 
 	@Override
@@ -116,7 +122,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			if (isChief()) {
 				setSize(1.2F, 1.9F);
 				experienceValue = 20;
-				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
+				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100D);
 				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
 				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
@@ -125,7 +131,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			if (!isChief() && isBiped()) {
 				setSize(0.75F, 1.5F);
 				experienceValue = 10;
-				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
+				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30D);
 				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
@@ -134,7 +140,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			if (!isChief() && !isBiped()) {
 				setSize(1F, 1F);
 				experienceValue = 5;
-				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.7D);
+				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.36D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20D);
 				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
 				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
@@ -169,9 +175,20 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			return super.getSoundPitch() * 0.5F;
 		return super.getSoundPitch();
 	}
-
+	
 	@Override
 	public void onLivingUpdate() {
+		if(this.isBlocking() && !this.getHeldItemOffhand().isEmpty() && this.getHeldItemOffhand().getItem().isShield(this.getHeldItemOffhand(), this)) {
+			this.setActiveHand(EnumHand.OFF_HAND);
+			
+			//"Fix" for janky item pose
+			if(this.world.isRemote) {
+				this.activeItemStack = this.getHeldItemOffhand();
+			}
+		} else if(this.isHandActive() && this.getActiveHand() == EnumHand.OFF_HAND) {
+			this.stopActiveHand();
+		}
+		
 		if (getEntityWorld().isRemote) {
 			if (isChief())
 				setSize(1.2F, 1.9F);
@@ -218,7 +235,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	}
 
     @SideOnly(Side.CLIENT)
-    public float smoothedAngle(float partialTicks) {
+    public float smoothedStandingAngle(float partialTicks) {
         return prevStandingAngle + (standingAngle - prevStandingAngle) * partialTicks;
     }
 
@@ -245,13 +262,15 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entity) {
-		if (canEntityBeSeen(entity)) {
+		if(!this.isBlocking() && this.canEntityBeSeen(entity)) {
 			boolean hasHitTarget = entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float) ((int) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 
 			if (hasHitTarget) {
 				if(!getHeldItemMainhand().isEmpty())
 					getHeldItemMainhand().getItem().hitEntity(getHeldItemMainhand(), (EntityLivingBase) entity, this);
+				
 				//entity.addVelocity(-MathHelper.sin(rotationYaw * 3.141593F / 180.0F) * 0.5F, 0.2D, MathHelper.cos(rotationYaw * 3.141593F / 180.0F) * 0.5F);
+				
 				if (!getEntityWorld().isRemote)
 					getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundRegistry.CRYPT_CRAWLER_LIVING, SoundCategory.HOSTILE, 1F, 0.5F);
 			}
@@ -262,11 +281,31 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (ticksExisted < 40 && source == DamageSource.IN_WALL)
+		if (ticksExisted < 40 && source == DamageSource.IN_WALL) {
 			return false;
-		return super.attackEntityFrom(source, amount);
+		}
+		
+		boolean wasAttackBlocked = super.attackEntityFrom(source, amount);
+		
+		if(this.isBlocking() && !wasAttackBlocked) {
+			recentlyBlockedAttack = true;
+			
+			//Play shield block sound to all listeners. For some reason shield block sound from item doesn't seem to work.
+			this.world.setEntityState(this, EVENT_SHIELD_BLOCKED);
+		}
+		
+		return wasAttackBlocked;
 	}
-
+	
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+		
+		if(id == EVENT_SHIELD_BLOCKED) {
+			this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.NEUTRAL, 1.0F, 0.8F + this.world.rand.nextFloat() * 0.4F, false);
+		}
+	}
+	
 	@Override
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
@@ -345,77 +384,111 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		setIsChief(nbt.getBoolean("is_chief"));
 	}
 
+	@Override
+	public float getAIMoveSpeed() {
+		//Half move speed when blocking
+		return (this.isBlocking() ? 0.5F : 1.0F) * super.getAIMoveSpeed();
+	}
+	
 	static class AICryptCrawlerAttack extends EntityAIAttackMelee {
-
 		public AICryptCrawlerAttack(EntityCryptCrawler crypt_crawler) {
-			super(crypt_crawler, 0.6D, false);
+			super(crypt_crawler, 1.2D, false);
 		}
 
 		@Override
 		protected double getAttackReachSqr(EntityLivingBase attackTarget) {
-			return (double) (4.0F + attackTarget.width);
+			return (double) (3.0F + attackTarget.width);
 		}
 	}
 
 	static class EntityAIShieldBlock extends EntityAIBase {
-		EntityCryptCrawler crawler;
-		EntityLivingBase target;
-		int blockingCount;
+		private EntityCryptCrawler crawler;
+		private EntityLivingBase target;
+		private int blockingCount;
+		private int blockingCountMax;
+		private int meleeBlockingCounter;
+		private int meleeBlockingCounterMax;
+		
+		private int blockingCooldownCounter;
+		private int blockingCooldownCounterMax = -1;
+		
 		public EntityAIShieldBlock(EntityCryptCrawler crawler) {
 			this.crawler = crawler;
-			this.setMutexBits(7);
 		}
 
+		@Override
 		public boolean shouldExecute() {
 			ItemStack heldItem = crawler.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
-			if (heldItem.isEmpty())
+			if (heldItem.isEmpty()) {
 				return false;
-			else if(!(heldItem.getItem() instanceof ItemShield))
+			} else if(!heldItem.getItem().isShield(heldItem, this.crawler)) {
 				return false;
+			}
 
 			target = crawler.getAttackTarget();
 
-			if (target == null)
-				return false;
-			else {
-				double distance = crawler.getDistanceSq(target);
-				if (distance >= 9.0D && distance <= 64.0D) {
-					if (!crawler.onGround)
-						return false;
-					else
-						return crawler.getRNG().nextInt(5) == 0;
+			if(target != null && !crawler.isSwingInProgress && crawler.hurtResistantTime <= Math.max(0, crawler.maxHurtResistantTime - 5)) {
+				blockingCooldownCounter++;
+				
+				if(blockingCooldownCounterMax < 0) {
+					blockingCooldownCounterMax = 4 + crawler.rand.nextInt(5);
 				}
-				else
-					return false;
+				
+				return blockingCooldownCounter > blockingCooldownCounterMax;
 			}
+			
+			return false;
 		}
 
+		@Override
 		public boolean shouldContinueExecuting() {
-			return crawler.onGround && blockingCount !=-1 && crawler.recentlyHit <= 40 && !crawler.isSwingInProgress;
+			return !crawler.recentlyBlockedAttack && blockingCount != -1 && crawler.hurtResistantTime <= Math.max(0, crawler.maxHurtResistantTime - 5) && !crawler.isSwingInProgress &&
+					!(blockingCount > blockingCountMax || (meleeBlockingCounterMax >= 0 && meleeBlockingCounter > meleeBlockingCounterMax));
 		}
 
+		@Override
 		public void startExecuting() {
 			blockingCount = 0;
+			blockingCountMax = 40 + crawler.rand.nextInt(40);
+			meleeBlockingCounterMax = -1;
+			meleeBlockingCounter = 0;
+			
+			//Reset the recently blocked state
+			crawler.recentlyBlockedAttack = false;
+			
+			blockingCooldownCounter = 0;
+			blockingCooldownCounterMax = -1;
+		}
+		
+		@Override
+		public void resetTask() {
+			crawler.setIsBlocking(false);
+			blockingCount = -1;
+			meleeBlockingCounterMax = -1;
+			meleeBlockingCounter = 0;
 		}
 
+		@Override
 	    public void updateTask() {
-	    	double distance = crawler.getDistanceSq(target);
-			if (blockingCount <= 40) {
-				blockingCount++;
-				if(!crawler.isBlocking()) {
-					crawler.setIsBlocking(true);
-					crawler.setActiveHand(EnumHand.OFF_HAND);
+			if(!crawler.isBlocking()) {
+				crawler.setIsBlocking(true);
+			}
+			
+			this.blockingCount++;
+			
+			if(this.isInMeleeRange()) {
+				if(meleeBlockingCounterMax < 0) {
+					meleeBlockingCounterMax = 10 + crawler.rand.nextInt(20);
 				}
+				meleeBlockingCounter++;
+			} else {
+				meleeBlockingCounterMax = -1;
+				meleeBlockingCounter = 0;
 			}
-			if (blockingCount > 40 || distance < 9.0D) {
-				crawler.setIsBlocking(false);
-				crawler.setActiveHand(EnumHand.MAIN_HAND);
-				blockingCount = -1;
-			}
-			crawler.getLookHelper().setLookPositionWithEntity(target, 10.0F, 10.0F);
-			crawler.getNavigator().clearPath();
-			crawler.getMoveHelper().setMoveTo(target.posX, target.posY, target.posZ, 0.4D);
 	    }
+		
+		protected boolean isInMeleeRange() {
+			return crawler != null && target != null && crawler.getDistanceSq(target) < 9.0D;
+		}
 	}
-
 }

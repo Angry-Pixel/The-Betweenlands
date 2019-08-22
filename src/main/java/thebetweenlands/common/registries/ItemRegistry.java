@@ -228,6 +228,7 @@ public class ItemRegistry {
     public static final Item WEEPING_BLUE_PETAL_SALAD = new ItemWeepingBluePetalSalad();
     public static final Item NIBBLESTICK = new ItemNibblestick();
     public static final Item SPIRIT_FRUIT = new ItemSpiritFruit();
+    public static final Item SUSHI = new ItemBLFood(5, 1.0F, false);
     
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);
