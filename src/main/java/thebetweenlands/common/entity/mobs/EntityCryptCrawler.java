@@ -41,6 +41,8 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO Loot tables
 public class EntityCryptCrawler extends EntityMob implements IEntityBL {
+	protected static final int MUTEX_BLOCKING = 0b1000;
+	
 	private static final byte EVENT_SHIELD_BLOCKED = 80;
 	
 	private static final DataParameter<Boolean> IS_BIPED = EntityDataManager.createKey(EntityCryptCrawler.class, DataSerializers.BOOLEAN);
@@ -102,11 +104,12 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(1, new EntityAISwimming(this));
-		tasks.addTask(2, new EntityCryptCrawler.EntityAIShieldBlock(this));
-		tasks.addTask(3, new EntityCryptCrawler.AICryptCrawlerAttack(this));
-		tasks.addTask(4, new EntityAIWander(this, 0.5D));
-		tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		tasks.addTask(6, new EntityAILookIdle(this));
+		tasks.addTask(2, new EntityCryptCrawler.AIShieldCharge(this)); //Shield charge AI interrupts shield block AI
+		tasks.addTask(3, new EntityCryptCrawler.AIShieldBlock(this));
+		tasks.addTask(4, new EntityCryptCrawler.AICryptCrawlerAttack(this));
+		tasks.addTask(5, new EntityAIWander(this, 0.5D));
+		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		tasks.addTask(7, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, false, true, null));
 		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
 	}
@@ -400,8 +403,95 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			return (double) (3.0F + attackTarget.width);
 		}
 	}
+	
+	static class AIShieldCharge extends EntityAIBase {
+		private EntityCryptCrawler crawler;
+		
+		private int chargeCooldown;
+		private int chargeCooldownMax;
+		
+		private int chargeTimer = 0;
+		
+		public AIShieldCharge(EntityCryptCrawler crawler) {
+			this.crawler = crawler;
+			setMutexBits(MUTEX_BLOCKING);
+		}
+		
+		protected boolean isHoldingShield() {
+			if(crawler != null) {
+				ItemStack heldItem = crawler.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
+				if (heldItem.isEmpty()) {
+					return false;
+				} else if(!heldItem.getItem().isShield(heldItem, this.crawler)) {
+					return false;
+				}
+				
+				return true;
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public boolean shouldExecute() {
+			if(!crawler.isChief()) {
+				return false;
+			}
+			
+			ItemStack heldItem = crawler.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
+			if (heldItem.isEmpty()) {
+				return false;
+			} else if(!heldItem.getItem().isShield(heldItem, this.crawler)) {
+				return false;
+			}
+			
+			if(crawler.getAttackTarget() != null) {
+				if(chargeCooldownMax < 0) {
+					chargeCooldownMax = 80 + crawler.rand.nextInt(90);
+				}
+				
+				chargeCooldown++;
+				
+				return chargeCooldown > chargeCooldownMax;
+			}
+			
+			return false;
+		}
+		
+		@Override
+		public void startExecuting() {
+			this.chargeCooldown = 0;
+			this.chargeCooldownMax = -1;
+		}
+		
+		@Override
+		public boolean shouldContinueExecuting() {
+			return this.isHoldingShield() && this.chargeTimer < 60;
+		}
+		
+		@Override
+		public void resetTask() {
+			crawler.setIsBlocking(false);
+			this.chargeTimer = 0;
+		}
+		
+		@Override
+		public void updateTask() {
+			this.chargeTimer++;
+			
+			if(!crawler.isBlocking()) {
+				crawler.setIsBlocking(true);
+			}
+			
+			if(this.chargeTimer < 20) {
+				crawler.setSneaking(true);
+			} else {
+				crawler.setSneaking(false);
+			}
+		}
+	}
 
-	static class EntityAIShieldBlock extends EntityAIBase {
+	static class AIShieldBlock extends EntityAIBase {
 		private EntityCryptCrawler crawler;
 		private EntityLivingBase target;
 		private int blockingCount;
@@ -412,16 +502,33 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		private int blockingCooldownCounter;
 		private int blockingCooldownCounterMax = -1;
 		
-		public EntityAIShieldBlock(EntityCryptCrawler crawler) {
+		public AIShieldBlock(EntityCryptCrawler crawler) {
 			this.crawler = crawler;
+			setMutexBits(MUTEX_BLOCKING);
 		}
 
+		protected boolean isInMeleeRange() {
+			return crawler != null && target != null && crawler.getDistanceSq(target) < 9.0D;
+		}
+		
+		protected boolean isHoldingShield() {
+			if(crawler != null) {
+				ItemStack heldItem = crawler.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
+				if (heldItem.isEmpty()) {
+					return false;
+				} else if(!heldItem.getItem().isShield(heldItem, this.crawler)) {
+					return false;
+				}
+				
+				return true;
+			}
+			
+			return false;
+		}
+		
 		@Override
 		public boolean shouldExecute() {
-			ItemStack heldItem = crawler.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
-			if (heldItem.isEmpty()) {
-				return false;
-			} else if(!heldItem.getItem().isShield(heldItem, this.crawler)) {
+			if(!this.isHoldingShield()) {
 				return false;
 			}
 
@@ -442,7 +549,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return !crawler.recentlyBlockedAttack && blockingCount != -1 && crawler.hurtResistantTime <= Math.max(0, crawler.maxHurtResistantTime - 5) && !crawler.isSwingInProgress &&
+			return this.isHoldingShield() && !crawler.recentlyBlockedAttack && blockingCount != -1 && crawler.hurtResistantTime <= Math.max(0, crawler.maxHurtResistantTime - 5) && !crawler.isSwingInProgress &&
 					!(blockingCount > blockingCountMax || (meleeBlockingCounterMax >= 0 && meleeBlockingCounter > meleeBlockingCounterMax));
 		}
 
@@ -486,9 +593,5 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 				meleeBlockingCounter = 0;
 			}
 	    }
-		
-		protected boolean isInMeleeRange() {
-			return crawler != null && target != null && crawler.getDistanceSq(target) < 9.0D;
-		}
 	}
 }
