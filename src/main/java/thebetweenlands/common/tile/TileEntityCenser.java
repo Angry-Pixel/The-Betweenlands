@@ -294,7 +294,12 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		if(!this.world.isRemote) {
 			if(this.fuelTicks > 0) {
 				this.fuelTicks--;
+				
 				this.markDirty();
+				if(this.fuelTicks <= 0) {
+					IBlockState stat = this.world.getBlockState(this.pos);
+					this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
+				}
 			} else {
 				this.fuelTicks = 0;
 			}

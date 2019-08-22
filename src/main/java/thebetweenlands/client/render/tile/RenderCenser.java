@@ -36,7 +36,7 @@ public class RenderCenser extends TileEntitySpecialRenderer<TileEntityCenser> {
 		return true;
 	}
 
-	private void renderFogFlow(TextureAtlasSprite fogSprite, float animationTicks, int skyLight, int blockLight, int color, float alpha) {
+	private void renderFogFlow(TextureAtlasSprite fogSprite, float animationTicks, int skyLight, int blockLight, int color, float alpha, boolean flatSlope) {
 		float r = ((color >> 16) & 0xFF) / 255f;
 		float g = ((color >> 8) & 0xFF) / 255f;
 		float b = ((color >> 0) & 0xFF) / 255f;
@@ -70,8 +70,14 @@ public class RenderCenser extends TileEntitySpecialRenderer<TileEntityCenser> {
 		for(int i = 0; i < 16; i++) {
 			float slopeIndex = i + 1;
 
-			stripY -= 0.001f + Math.min(slopeIndex * slopeIndex * slopeIndex * 0.001f, onePx);
-			zOff += onePx / (i + 1);
+			float slope = 0.001f;
+			
+			if(flatSlope && (i == 3 || i == 4)) {
+				slope = 0.00019f;
+			}
+			
+			stripY -= slope + Math.min(slopeIndex * slopeIndex * slopeIndex * slope, onePx);
+			zOff += onePx / ((i + 1) * slope / 0.001f);
 
 			float wavyZOff = zOff + (float)Math.sin((i - (animationTicks) * 0.1f) * 1.1f) *  0.015f;
 
@@ -145,50 +151,69 @@ public class RenderCenser extends TileEntitySpecialRenderer<TileEntityCenser> {
 					int skyLight = (packedLightmap >> 16) & 65535;
 					int blockLight = packedLightmap & 65535;
 
+					//top fog strips
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(0.0f, 0.18f, 0.18f);
+					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.86f, skyLight, blockLight, effectColor, effectStrength, false);
+					GlStateManager.popMatrix();
+					
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(0.03f, 0.18f, 0.15f);
+					GlStateManager.rotate(90, 0, 1, 0);
+					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.94f, skyLight, blockLight, effectColor, effectStrength, true);
+					GlStateManager.popMatrix();
+					
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(-0.03f, 0.18f, 0.15f);
+					GlStateManager.rotate(-90, 0, 1, 0);
+					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.92f, skyLight, blockLight, effectColor, effectStrength, true);
+					GlStateManager.popMatrix();
+					
+					//bottom fog strips
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(0.114f, 0, 0.235f);
-					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.9f, skyLight, blockLight, effectColor, effectStrength);
+					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.9f, skyLight, blockLight, effectColor, effectStrength, false);
 					GlStateManager.popMatrix();
 
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(-0.135f, 0, 0.235f);
-					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 1.1f, skyLight, blockLight, effectColor, effectStrength);
+					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 1.1f, skyLight, blockLight, effectColor, effectStrength, false);
 					GlStateManager.popMatrix();
 
 					GlStateManager.pushMatrix();
 					GlStateManager.rotate(90, 0, 1, 0);
 					GlStateManager.translate(0.114f, 0, 0.235f);
-					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.85f, skyLight, blockLight, effectColor, effectStrength);
+					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.85f, skyLight, blockLight, effectColor, effectStrength, false);
 					GlStateManager.popMatrix();
 
 					GlStateManager.pushMatrix();
 					GlStateManager.rotate(90, 0, 1, 0);
 					GlStateManager.translate(-0.135f, 0, 0.235f);
-					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 1.15f, skyLight, blockLight, effectColor, effectStrength);
+					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 1.15f, skyLight, blockLight, effectColor, effectStrength, false);
 					GlStateManager.popMatrix();
 
 					GlStateManager.pushMatrix();
 					GlStateManager.rotate(180, 0, 1, 0);
 					GlStateManager.translate(0.114f, 0, 0.235f);
-					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.95f, skyLight, blockLight, effectColor, effectStrength);
+					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.95f, skyLight, blockLight, effectColor, effectStrength, false);
 					GlStateManager.popMatrix();
 
 					GlStateManager.pushMatrix();
 					GlStateManager.rotate(180, 0, 1, 0);
 					GlStateManager.translate(-0.135f, 0, 0.235f);
-					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 1.08f, skyLight, blockLight, effectColor, effectStrength);
+					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 1.08f, skyLight, blockLight, effectColor, effectStrength, false);
 					GlStateManager.popMatrix();
 
 					GlStateManager.pushMatrix();
 					GlStateManager.rotate(270, 0, 1, 0);
 					GlStateManager.translate(0.114f, 0, 0.235f);
-					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.88f, skyLight, blockLight, effectColor, effectStrength);
+					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.88f, skyLight, blockLight, effectColor, effectStrength, false);
 					GlStateManager.popMatrix();
 
 					GlStateManager.pushMatrix();
 					GlStateManager.rotate(270, 0, 1, 0);
 					GlStateManager.translate(-0.135f, 0, 0.235f);
-					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 1.05f, skyLight, blockLight, effectColor, effectStrength);
+					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 1.05f, skyLight, blockLight, effectColor, effectStrength, false);
 					GlStateManager.popMatrix();
 
 					GlStateManager.popMatrix();
