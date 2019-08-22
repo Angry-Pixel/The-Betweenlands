@@ -9,6 +9,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundCategory;
@@ -20,12 +24,22 @@ import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class EntityCCGroundSpawner extends EntityProximitySpawner {
+	private static final DataParameter<Boolean> IS_WORLD_SPANWED = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> SPAWN_COUNT = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.VARINT);
 
 	public EntityCCGroundSpawner(World world) {
 		super(world);
 		setSize(1F, 0.5F);
+	}
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		dataManager.register(IS_WORLD_SPANWED, true);
+		dataManager.register(SPAWN_COUNT, 0);
 	}
 
 	@Override
@@ -41,11 +55,20 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 			}
 		}
 	}
+	
+	public boolean isBloodSky(World world) {
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+        if(worldStorage.getEnvironmentEventRegistry().bloodSky.isActive())
+            return true;
+        return false;
+	}
 
 	@Override
 	@Nullable
 	protected Entity checkArea() {
 		if (!getEntityWorld().isRemote && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
+			if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
+				return null;
 			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
 			if(list.stream().filter(e -> e instanceof EntityCryptCrawler).count() >= 4)
 				return null;
@@ -125,6 +148,8 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	}
 
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
+		if(isWorldSpawned())
+			setSpawnCount(getSpawnCount() + 1);
 		getEntityWorld().playSound((EntityPlayer)null, getPosition(), getDigSound(), SoundCategory.HOSTILE, 0.5F, 1.0F);
 		entitySpawned.setPosition(getPosition().getX() + 0.5F, getPosition().getY() - 1.5F, getPosition().getZ() + 0.5F);
 	}
@@ -138,6 +163,9 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		if(!getEntityWorld().isRemote) {
 			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.GOOP_SPLAT, (float) posX, (float)posY + 0.25F, (float)posZ, 0F));
 			entitySpawned.motionY += 0.5D;
+			if(isWorldSpawned() && getSpawnCount() >= maxUseCount())
+				if (!isDead)
+					setDead();
 		}
 	}
 
@@ -180,6 +208,36 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 
 	@Override
 	protected int maxUseCount() {
-		return 0;
+		return 5;
+	}
+	
+	public void setIsWorldSpawned(boolean world_spawned) {
+		dataManager.set(IS_WORLD_SPANWED, world_spawned);
+	}
+
+	public boolean isWorldSpawned() {
+		return dataManager.get(IS_WORLD_SPANWED);
+	}
+
+	public void setSpawnCount(int spawn_count) {
+		dataManager.set(SPAWN_COUNT, spawn_count);
+	}
+
+	public int getSpawnCount() {
+		return dataManager.get(SPAWN_COUNT);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		setIsWorldSpawned(nbt.getBoolean("world_spawned"));
+		setSpawnCount(nbt.getInteger("spawn_count"));
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		nbt.setBoolean("world_spawned", isWorldSpawned());
+		nbt.setInteger("spawn_count", getSpawnCount());
 	}
 }

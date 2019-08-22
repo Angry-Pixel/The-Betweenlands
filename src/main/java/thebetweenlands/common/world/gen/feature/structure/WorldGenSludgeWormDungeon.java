@@ -691,6 +691,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private void addCCGroundSpawnerEntity(World world, BlockPos pos) {
 		EntityCCGroundSpawner ground_spawner = new EntityCCGroundSpawner(world);
 		ground_spawner.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+		ground_spawner.setIsWorldSpawned(false);
 		world.spawnEntity(ground_spawner);
 	}
 
