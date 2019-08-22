@@ -88,9 +88,9 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 					int cbz = world.rand.nextInt(16);
 					BlockPos pos = chunk.getPrecipitationHeight(new BlockPos(chunk.getPos().getXStart() + cbx, -999, chunk.getPos().getZStart() + cbz)).down();
 
-					if(world.rand.nextInt(3000) == 0 && world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 64.0D, false) == null) {
+					if(world.rand.nextInt(2000) == 0 && world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 64.0D, false) == null) {
 						IBlockState stateAbove = world.getBlockState(pos.up());
-						if(stateAbove.getBlock() == Blocks.AIR && SurfaceType.DIRT.matches(world, pos)) { // TODO better area check needed
+						if(stateAbove.getBlock() == Blocks.AIR && SurfaceType.MIXED_GROUND.matches(world, pos)) { // TODO better area check needed
 							addCCTunnel(world, pos);
 						}
 					}
@@ -127,6 +127,7 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 		world.setBlockState(pos.add(1, 0, 0), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.EAST).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
 
 		addCCGroundSpawnerEntity(world, pos);
+		//System.out.println("Generated at : " + pos);
 	}
 
 	private void addCCGroundSpawnerEntity(World world, BlockPos pos) {
