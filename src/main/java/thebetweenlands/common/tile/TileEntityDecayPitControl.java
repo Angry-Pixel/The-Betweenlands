@@ -27,13 +27,18 @@ import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
+import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
+import thebetweenlands.common.entity.mobs.EntitySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 
 public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 
 	public float animationTicks = 0;
 	public float animationTicksPrev = 0;
-
+	public int spawnType = 0;
 
 	@Override
 	public void update() {
@@ -82,6 +87,15 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 				//W
 				checkTurretSpawn(-11, 12, -4);
 				checkTurretSpawn(-11, 12, 4);
+			}
+
+			//spawn stuff here
+			if(getWorld().getTotalWorldTime() % 80 == 0) {
+				Entity thing = getEntitySpawned(getSpawnType());
+				if(thing != null) {
+					thing.setPosition(getPos().getX() + 0.5D, getPos().getY() + 1D, getPos().getZ() + 0.5D);
+					getWorld().spawnEntity(thing);
+				}
 			}
 		} else {
 			this.spawnAmbientParticles();
@@ -213,10 +227,37 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		jet.setPosition(posX, posY, posZ);
 		getWorld().spawnEntity(jet);
 	}
+	
+	public void setSpawnType(int spawn_type) {
+		spawnType = spawn_type;
+	}
+
+	public int getSpawnType() {
+		return spawnType;
+	}
+
+	protected Entity getEntitySpawned(int spawnType) {
+		Entity spawned_entity = null;
+		switch (spawnType) {
+		case 0:
+			return new EntityTinySludgeWorm(getWorld());
+		case 1:
+			return new EntitySludgeWorm(getWorld());
+		case 2:
+			return new EntitySwampHag(getWorld());
+		case 3:
+			return new EntityShambler(getWorld());
+		case 4:
+			return new EntityLargeSludgeWorm(getWorld());
+		}
+		return spawned_entity;
+	}
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setFloat("animationTicks", animationTicks);
+		nbt.setInteger("spawnType", getSpawnType());
 		return nbt;
 	}
 
@@ -224,6 +265,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		animationTicks = nbt.getFloat("animationTicks");
+		spawnType = nbt.getInteger("spawnType");
 	}
 
 	@Override

@@ -26,6 +26,7 @@ import thebetweenlands.client.audio.EntityMusicLayers;
 import thebetweenlands.common.entity.mobs.EntityFortressBoss;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.sound.BLSoundEvent;
+import thebetweenlands.common.tile.TileEntityDecayPitControl;
 import thebetweenlands.common.tile.TileEntityDecayPitGroundChain;
 import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
 import thebetweenlands.util.RotationMatrix;
@@ -185,7 +186,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			}
 
 			if (isRaising() && getProgress() > MIN_PROGRESS) {
-				move(MoverType.SELF, 0D, +MOVE_UNIT, 0D);
+				move(MoverType.SELF, 0D, + MOVE_UNIT, 0D);
 				setProgress(getProgress() - 1);
 
 				if (getHangingChains() != null) {
@@ -201,6 +202,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 					}
 				}
 			}
+
 		}
 
 		if (animationTicksChainPrev >= 128) {
@@ -214,8 +216,25 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		if (getProgress() < MIN_PROGRESS)
 			setProgress(MIN_PROGRESS);
 
-		if (!getEntityWorld().isRemote && getProgress() > MIN_PROGRESS && getEntityWorld().getTotalWorldTime() % 60 == 0) // upsy-daisy
-			moveUp();
+		if (!getEntityWorld().isRemote) { // upsy-daisy
+			if (getProgress() > MIN_PROGRESS && getEntityWorld().getTotalWorldTime() % 60 == 0)
+				moveUp();
+
+			if (getEntityWorld().getTotalWorldTime() % 10 == 0) {
+				if (getControl() != null) {
+					if (getProgress() < 128)
+						getControl().setSpawnType(0);
+					if (getProgress() >= 128 && getProgress() < 256)
+						getControl().setSpawnType(1);
+					if (getProgress() >= 256 && getProgress() < 384)
+						getControl().setSpawnType(2);
+					if (getProgress() >= 384 && getProgress() < 512)
+						getControl().setSpawnType(3);
+					if (getProgress() >= 512 && getProgress() < 640)
+						getControl().setSpawnType(4);
+				}
+			}
+		}
 	}
 
 	protected void setHangingLength(EntityDecayPitTargetPart chain, float extended) {
@@ -401,8 +420,18 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 					if (getWorld().getTileEntity(getPosition().add(x, y, z)) instanceof TileEntityDecayPitHangingChain) {
 						tile = (TileEntityDecayPitHangingChain) getWorld().getTileEntity(getPosition().add(x, y, z));
 						tile.setProgress(getProgress());
-						
 					}
+				}
+		return tile;
+	}
+
+	public TileEntityDecayPitControl getControl() {
+		TileEntityDecayPitControl tile = null;
+		for (int x = -1; x < 1; x++)
+			for (int y = -15; y < 0; y++)
+				for (int z = -1; z < 1; z++) {
+					if (getWorld().getTileEntity(getPosition().add(x, y, z)) instanceof TileEntityDecayPitControl)
+						tile = (TileEntityDecayPitControl) getWorld().getTileEntity(getPosition().add(x, y, z));
 				}
 		return tile;
 	}
