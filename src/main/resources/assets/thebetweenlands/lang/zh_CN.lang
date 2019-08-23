@@ -50,6 +50,9 @@ tile.thebetweenlands.swamp_reed.name=沼泽芦苇
 tile.thebetweenlands.swamp_reed_underwater.name=沼泽芦苇(水下)
 tile.thebetweenlands.lichen.name=地衣
 tile.thebetweenlands.dead_lichen.name=死亡地衣
+tile.thebetweenlands.edge_shroom.name=边缘蘑菇
+tile.thebetweenlands.edge_moss.name=边缘苔藓
+tile.thebetweenlands.edge_leaf.name=边缘树叶
 tile.thebetweenlands.betweenlands_bedrock.name=交错基岩
 tile.thebetweenlands.betweenstone.name=交错石
 tile.thebetweenlands.betweenstone_wall.name=交错石墙
@@ -414,7 +417,6 @@ tile.thebetweenlands.mud_brick_slab_decay_1.name=泥砖台阶(等级 1)
 tile.thebetweenlands.mud_brick_slab_decay_2.name=泥砖台阶(等级 2)
 tile.thebetweenlands.mud_brick_slab_decay_3.name=泥砖台阶(等级 3)
 tile.thebetweenlands.mud_brick_slab_decay_4.name=泥砖台阶(等级 4)
-tile.thebetweenlands.edge_shroom.name=边缘蘑菇
 tile.thebetweenlands.mud_tower_beam_origin.name=光源
 tile.thebetweenlands.mud_tower_beam_relay.name=光束透镜
 tile.thebetweenlands.mud_tower_beam_tube.name=光束通道
@@ -813,6 +815,10 @@ item.thebetweenlands.ancient_battle_axe.name=上古战斧
 item.thebetweenlands.volarkite.name=伞莲风筝
 item.thebetweenlands.shambler_tongue.name=蹒跚者舌头
 item.thebetweenlands.rune_door_key.name=符文门钥匙
+item.thebetweenlands.cremains.name=骨灰
+item.thebetweenlands.undying_ember.name=不死余烬
+
+item.thebetweenlands.sushi.name=寿司
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=绿色木晶药瓶
@@ -1220,7 +1226,21 @@ entity.thebetweenlands.crypt_crawler.name=地穴蠕行者
 entity.thebetweenlands.large_sludge_worm.name=大型烂泥蠕虫
 entity.thebetweenlands.small_sludge_worm.name=小型烂泥蠕虫
 entity.thebetweenlands.tiny_sludge_worm.name=微型烂泥蠕虫
+entity.thebetweenlands.tiny_worm_egg_sac.name=烂泥蠕虫蛋囊
+entity.thebetweenlands.moving_spawner_hole.name=移动的刷怪洞
 entity.thebetweenlands.wall_lamprey.name=七鳃鳗
+entity.thebetweenlands.ash_sprite.name=灰烬之魂
+entity.thebetweenlands.emberling.name=余烬精灵
+entity.thebetweenlands.shambler.name=蹒跚者
+entity.thebetweenlands.barrishee.name=喷火魔兽
+entity.thebetweenlands.sludge_jet.name=烂泥喷射器
+entity.thebetweenlands.triggered_falling_block.name=坠落的方块
+entity.thebetweenlands.triggered_sludge_wall_jet.name=烂泥喷射炮塔
+entity.thebetweenlands.sludge_wall_jet.name=烂泥喷射器
+entity.thebetweenlands.splodeshroom.name=爆炸蘑菇
+entity.thebetweenlands.cc_ground_spawner.name=地穴蠕行者隧道口
+entity.thebetweenlands.spore_jet.name=孢子喷射器
+entity.thebetweenlands.decay_pit_target.name=不是Boss
 
 # Equipment
 equipment.menu.equip=佩戴%s
