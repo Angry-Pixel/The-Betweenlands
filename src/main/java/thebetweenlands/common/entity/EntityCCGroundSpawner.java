@@ -46,6 +46,8 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	public void onUpdate() {
 		super.onUpdate();
 		if (!getEntityWorld().isRemote) {
+			if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
+				setDead();
 			if (getEntityWorld().getTotalWorldTime() % 60 == 0)
 				checkArea();
 			List<EntityFallingBlock> listPlug = getEntityWorld().getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox());
@@ -164,8 +166,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.GOOP_SPLAT, (float) posX, (float)posY + 0.25F, (float)posZ, 0F));
 			entitySpawned.motionY += 0.5D;
 			if(isWorldSpawned() && getSpawnCount() >= maxUseCount())
-				if (!isDead)
-					setDead();
+				setDead();
 		}
 	}
 
