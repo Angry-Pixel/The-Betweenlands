@@ -29,7 +29,6 @@ import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
-import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
@@ -91,7 +90,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 				checkTurretSpawn(-11, 12, -4);
 				checkTurretSpawn(-11, 12, 4);
 			}
-
+			
 			//spawn stuff here
 			if(getWorld().getTotalWorldTime() % 80 == 0) {
 				Entity thing = getEntitySpawned(getSpawnType());
@@ -99,6 +98,11 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 					thing.setPosition(getPos().getX() + 0.5D, getPos().getY() + 1D, getPos().getZ() + 0.5D);
 					getWorld().spawnEntity(thing);
 				}
+			}
+			if(getSpawnType() == 5) {
+				//we go bye bye now
+				getWorld().setBlockToAir(getPos());
+				getWorld().setBlockToAir(getPos().up(15));
 			}
 		} else {
 			this.spawnAmbientParticles();

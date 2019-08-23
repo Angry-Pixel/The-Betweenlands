@@ -232,7 +232,14 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 						getControl().setSpawnType(3);
 					if (getProgress() >= 512 && getProgress() < 640)
 						getControl().setSpawnType(4);
+					if (getProgress() >= 640)
+						getControl().setSpawnType(5);
+	
 				}
+			}
+			if (getControl() == null) {
+				// time to go
+				setDead();
 			}
 		}
 	}
