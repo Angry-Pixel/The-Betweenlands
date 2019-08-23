@@ -4,7 +4,9 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,6 +29,7 @@ import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
+import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
@@ -222,6 +225,10 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		return new AxisAlignedBB(getPos()).grow(7D, 0.0625D, 7D).offset(0D, 2D, 0D);
 	}
 
+	private AxisAlignedBB getSpawningBoundingBox() {
+		return new AxisAlignedBB(getPos()).grow(12D, 6D, 12D).offset(0D, 6D, 0D);
+	}
+
 	private void spawnSludgeJet(double posX, double posY, double posZ) {
 		EntitySludgeJet jet = new EntitySludgeJet(getWorld());
 		jet.setPosition(posX, posY, posZ);
@@ -237,6 +244,9 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 	}
 
 	protected Entity getEntitySpawned(int spawnType) {
+		List<EntityLivingBase> list = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, getSpawningBoundingBox());
+		if(list.stream().filter(e -> e instanceof IMob).count() >= 5 && list.stream().filter(e -> e instanceof IEntityBL).count() >= 5)
+			return null;
 		Entity spawned_entity = null;
 		switch (spawnType) {
 		case 0:
