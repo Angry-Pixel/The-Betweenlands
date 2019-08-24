@@ -99,7 +99,7 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	}
 	
 	private void renderBeams(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks, boolean innerBeams) {
-		if(entity.attackDamageTicks > 0) {
+		//if(entity.isRaising()) {
 			float interpAttackDamageTicks = entity.attackDamageTicks - partialTicks;
 			
 			float beamAlpha = interpAttackDamageTicks > 38 ? 1 - (interpAttackDamageTicks - 38) / 2.0f : interpAttackDamageTicks / 38.0f;
@@ -107,13 +107,13 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			double yStart = entity.height - 1D;
 			
 			for(int i = 0; i < 4; i++) {
-				double diffX2 = i == 0 ? 1.7D : i == 1 ? -1.7D : 0;
+				double diffX2 = i == 0 && entity.getTargetEActive() ? 1.7D : i == 1 && entity.getTargetWActive() ? -1.7D : 0;
 				double diffY2 = 0;
-				double diffZ2 = i == 2 ? 1.7D : i == 3 ? -1.7D : 0;
+				double diffZ2 = i == 2 && entity.getTargetSActive() ? 1.7D : i == 3 && entity.getTargetNActive() ? -1.7D : 0;
 				
-				double diffX = i == 0 ? 12 : i == 1 ? -12 : 0;
+				double diffX = i == 0 && entity.getTargetEActive() ? 12 : i == 1  && entity.getTargetWActive() ? -12 : 0;
 				double diffY = 2.5D + entity.getProgress() * entity.MOVE_UNIT - yStart;
-				double diffZ = i == 2 ? 12 : i == 3 ? -12 : 0;
+				double diffZ = i == 2 && entity.getTargetSActive() ? 12 : i == 3 && entity.getTargetNActive() ? -12 : 0;
 				
 				LightingUtil.INSTANCE.setLighting(255);
 	
@@ -188,7 +188,7 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	
 				LightingUtil.INSTANCE.revert();
 			}
-		}
+	//	}
 	}
 
 	private void renderCogShield(EntityDecayPitTargetPart entity, double x, double y, double z, float angle) {

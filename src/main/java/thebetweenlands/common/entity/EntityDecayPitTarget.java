@@ -234,7 +234,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			setProgress(MIN_PROGRESS);
 
 		if (!getEntityWorld().isRemote) { // upsy-daisy
-			if (getProgress() > MIN_PROGRESS && getEntityWorld().getTotalWorldTime() % 240 == 0 && attackDamageTicks == 0)
+			if (getProgress() > MIN_PROGRESS && getEntityWorld().getTotalWorldTime() % 400 == 0 && attackDamageTicks == 0)
 				moveUp();
 
 			if (getEntityWorld().getTotalWorldTime() % 10 == 0) {
