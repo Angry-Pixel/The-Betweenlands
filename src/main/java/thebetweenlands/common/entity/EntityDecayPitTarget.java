@@ -34,9 +34,9 @@ import thebetweenlands.util.RotationMatrix;
 public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitTarget, IEntityMusic {
 	private static final byte EVENT_ATTACK_BLOCKED = 80;
 	private static final byte EVENT_ATTACK_DAMAGE = 81;
-	
+
 	private final RotationMatrix rotationMatrix = new RotationMatrix();
-	
+
 	public float animationTicksPrev = 0;
 	public int animationTicksChain = 0;
 	public int animationTicksChainPrev = 0;
@@ -60,14 +60,21 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public EntityDecayPitTargetPart shield_14;
 	public EntityDecayPitTargetPart shield_15;
 	public EntityDecayPitTargetPart shield_16;
-	public EntityDecayPitTargetPart target;
+	public EntityDecayPitTargetPart target_north;
+	public EntityDecayPitTargetPart target_east;
+	public EntityDecayPitTargetPart target_west;
+	public EntityDecayPitTargetPart target_south;
 	public EntityDecayPitTargetPart bottom;
-	
+
 	private static final DataParameter<Float> ANIMATION_TICKS = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.FLOAT);
 	private static final DataParameter<Boolean> IS_RAISING = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_MOVING = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IS_SLOW = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> PROGRESS = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> TARGET_N_ACTIVE = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> TARGET_E_ACTIVE = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> TARGET_S_ACTIVE = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> TARGET_W_ACTIVE = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
 
 	public int attackDamageTicks = 0;
 	
@@ -91,7 +98,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				shield_14 = new EntityDecayPitTargetPart(this, "part16", 1F, 1F, true),
 				shield_15 = new EntityDecayPitTargetPart(this, "part15", 1F, 1F, true),
 				shield_16 = new EntityDecayPitTargetPart(this, "part16", 1F, 1F, true),
-				target = new EntityDecayPitTargetPart(this, "target", 3F, 2F, false),
+				target_north = new EntityDecayPitTargetPart(this, "target_north", 2F, 2F, false),
+				target_east = new EntityDecayPitTargetPart(this, "target_east", 2F, 2F, false),
+				target_south = new EntityDecayPitTargetPart(this, "target_south", 2F, 2F, false),
+				target_west = new EntityDecayPitTargetPart(this, "target_west", 2F, 2F, false),
 				bottom = new EntityDecayPitTargetPart(this, "bottom", 3F, 1F, false),
 				};
 	}
@@ -103,6 +113,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		dataManager.register(IS_SLOW, true);
 		dataManager.register(PROGRESS, 0);
 		dataManager.register(ANIMATION_TICKS, 0.0F);
+		dataManager.register(TARGET_N_ACTIVE, false);
+		dataManager.register(TARGET_E_ACTIVE, false);
+		dataManager.register(TARGET_W_ACTIVE, false);
+		dataManager.register(TARGET_S_ACTIVE, false);
 	}
 
 	@Override
@@ -156,7 +170,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		setNewShieldHitboxPos(animationTicks + 315F, shield_15);
 		setNewShieldHitboxPos(-animationTicks + 337.5F, shield_16);
 		
-		target.setPosition(posX, posY + 3D, posZ);
+		target_north.setPosition(posX, posY + 3D, posZ - 0.75D);
+		target_east.setPosition(posX + 0.75D, posY + 3D, posZ);
+		target_south.setPosition(posX, posY + 3D, posZ + 0.75D);
+		target_west.setPosition(posX - 0.75D, posY + 3D, posZ);
 		bottom.setPosition(posX, posY, posZ);
 
 		if (isMoving()) {
@@ -217,7 +234,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			setProgress(MIN_PROGRESS);
 
 		if (!getEntityWorld().isRemote) { // upsy-daisy
-			if (getProgress() > MIN_PROGRESS && getEntityWorld().getTotalWorldTime() % 60 == 0)
+			if (getProgress() > MIN_PROGRESS && getEntityWorld().getTotalWorldTime() % 240 == 0 && attackDamageTicks == 0)
 				moveUp();
 
 			if (getEntityWorld().getTotalWorldTime() % 10 == 0) {
@@ -232,15 +249,15 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 						getControl().setSpawnType(3);
 					if (getProgress() >= 512 && getProgress() < 640)
 						getControl().setSpawnType(4);
-					if (getProgress() >= 640)
-						getControl().setSpawnType(5);
+				//	if (getProgress() >= 640)
+				//		getControl().setSpawnType(5);
 	
 				}
 			}
-			if (getControl() == null) {
+			//if (getControl() == null) {
 				// time to go
-				setDead();
-			}
+			//	setDead();
+			//}
 		}
 	}
 
@@ -263,7 +280,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		float squarePoint = Math.signum(wobble);
 		if(squarePoint == -1F)
 			wobble = 0F;
-		shield.setPosition(posX + offSetX, target.posY + target.height / 2.0D - shield.height + wobble, posZ + offSetZ);
+		shield.setPosition(posX + offSetX, target_north.posY + target_north.height / 2.0D - shield.height + wobble, posZ + offSetZ);
 		shield.rotationYaw = animationTicks + 180F;
 		
 		while(shield.rotationYaw - shield.prevRotationYaw < -180.0F) {
@@ -337,14 +354,51 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			}
 		}
 
-		if(part == target && !wasBlocked) {
+		if(part == target_north && !wasBlocked) {
 			if(!this.world.isRemote) {
-				moveDown();
+				if(getTargetNActive())
+					setTargetNActive(false);
+				System.out.println("Hit Target NORTH");
+				if(getAllTargetsHit())
+					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
 			}
-			
 			return true;
-		} else if(wasBlocked) {
+		}
+		else if(part == target_east && !wasBlocked) {
+			if(!this.world.isRemote) {
+				if(getTargetEActive())
+					setTargetEActive(false);
+				System.out.println("Hit Target EAST");
+				if(getAllTargetsHit())
+					moveDown();
+				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
+			}
+			return true;
+		}
+		else if(part == target_south && !wasBlocked) {
+			if(!this.world.isRemote) {
+				if(getTargetSActive())
+					setTargetSActive(false);
+				System.out.println("Hit Target SOUTH");
+				if(getAllTargetsHit())
+					moveDown();
+				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
+			}
+			return true;
+		}
+		else if(part == target_west && !wasBlocked) {
+			if(!this.world.isRemote) {
+				if(getTargetWActive())
+					setTargetWActive(false);
+				System.out.println("Hit Target WEST");
+				if(getAllTargetsHit())
+					moveDown();
+				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
+			}
+			return true;
+		}
+		else if(wasBlocked) {
 			if(!this.world.isRemote) {
 				if(source instanceof EntityDamageSourceIndirect) {
 					Entity sourceEntity = ((EntityDamageSourceIndirect) source).getTrueSource();
@@ -363,6 +417,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		}
 
 		return false;
+	}
+
+	private boolean getAllTargetsHit() {
+		return !getTargetNActive() && !getTargetEActive() && !getTargetSActive() && !getTargetWActive();
 	}
 
 	@Nullable
@@ -416,6 +474,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			setRaising(false);
 			setMoving(true);
 			setSlow(false);
+			setTargetNActive(true);
+			setTargetEActive(true);
+			setTargetSActive(true);
+			setTargetWActive(true);
 		}
 	}
 
@@ -488,6 +550,38 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		return dataManager.get(IS_SLOW);
 	}
 
+	public void setTargetNActive(boolean active) {
+		dataManager.set(TARGET_N_ACTIVE, active);
+	}
+
+	public boolean getTargetNActive() {
+		return dataManager.get(TARGET_N_ACTIVE);
+	}
+
+	public void setTargetEActive(boolean active) {
+		dataManager.set(TARGET_E_ACTIVE, active);
+	}
+
+	public boolean getTargetEActive() {
+		return dataManager.get(TARGET_E_ACTIVE);
+	}
+
+	public void setTargetWActive(boolean active) {
+		dataManager.set(TARGET_W_ACTIVE, active);
+	}
+
+	public boolean getTargetWActive() {
+		return dataManager.get(TARGET_W_ACTIVE);
+	}
+
+	public void setTargetSActive(boolean active) {
+		dataManager.set(TARGET_S_ACTIVE, active);
+	}
+
+	public boolean getTargetSActive() {
+		return dataManager.get(TARGET_S_ACTIVE);
+	}
+
 	@Override
 	public World getWorld() {
 		return getEntityWorld();
@@ -520,10 +614,18 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
 		setProgress(nbt.getInteger("progress"));
+		setTargetNActive(nbt.getBoolean("target_north"));
+		setTargetEActive(nbt.getBoolean("target_east"));
+		setTargetWActive(nbt.getBoolean("target_west"));
+		setTargetSActive(nbt.getBoolean("target_south"));
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("progress", getProgress());
+		nbt.setBoolean("target_north", getTargetNActive());
+		nbt.setBoolean("target_east", getTargetEActive());
+		nbt.setBoolean("target_west", getTargetWActive());
+		nbt.setBoolean("target_south", getTargetSActive());
 	}
 }

@@ -74,7 +74,7 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			double smoothedX = part.prevPosX  + (part.posX - part.prevPosX ) * partialTicks;
 			double smoothedY = part.prevPosY  + (part.posY - part.prevPosY ) * partialTicks;
 			double smoothedZ = part.prevPosZ  + (part.posZ - part.prevPosZ ) * partialTicks;
-			if (part != entity.target && part != entity.bottom) {
+			if (part != entity.target_north  && part != entity.target_east && part != entity.target_south && part != entity.target_west && part != entity.bottom) {
 				if(hitPart == part) {
 					GlStateManager.color(1, 0, 0, 1);
 				}
