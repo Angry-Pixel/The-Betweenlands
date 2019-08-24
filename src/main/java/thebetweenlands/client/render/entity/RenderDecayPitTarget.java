@@ -99,27 +99,10 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	}
 	
 	private void renderBeams(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks, boolean innerBeams) {
-		float beamAlpha = 1.0F;
-		
 		double yStart = entity.height - 1D;
 		
 		for(int i = 0; i < 4; i++) {
-			switch(i) {
-			case 0:
-				if(!entity.getTargetEActive()) continue;
-				break;
-			case 1:
-				if(!entity.getTargetWActive()) continue;
-				break;
-			case 2:
-				if(!entity.getTargetSActive()) continue;
-				break;
-			case 3:
-				if(!entity.getTargetNActive()) continue;
-				break;
-			default:
-				continue;
-			}
+			float beamAlpha = entity.beamTransparencyTicks[i] / 15.0F;
 			
 			double diffX2 = i == 0 ? 1.7D : i == 1 ? -1.7D : 0;
 			double diffY2 = 0;

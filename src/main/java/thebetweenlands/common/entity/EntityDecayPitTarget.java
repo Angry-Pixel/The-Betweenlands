@@ -77,6 +77,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	private static final DataParameter<Boolean> TARGET_W_ACTIVE = EntityDataManager.createKey(EntityDecayPitTarget.class, DataSerializers.BOOLEAN);
 
 	public int attackDamageTicks = 0;
+	public int[] beamTransparencyTicks = new int[4];
 	
 	public EntityDecayPitTarget(World world) {
 		super(world);
@@ -125,6 +126,32 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		
 		if(this.attackDamageTicks > 0) {
 			this.attackDamageTicks--;
+		}
+		
+		boolean isMovingDown = this.isMoving() && !this.isSlow();
+		
+		if(this.getTargetEActive() && !isMovingDown) {
+			this.beamTransparencyTicks[0] = Math.min(15, this.beamTransparencyTicks[0] + 1);
+		} else {
+			this.beamTransparencyTicks[0] = Math.max(0, this.beamTransparencyTicks[0] - 1);
+		}
+		
+		if(this.getTargetWActive() && !isMovingDown) {
+			this.beamTransparencyTicks[1] = Math.min(15, this.beamTransparencyTicks[1] + 1);
+		} else {
+			this.beamTransparencyTicks[1] = Math.max(0, this.beamTransparencyTicks[1] - 1);
+		}
+		
+		if(this.getTargetSActive() && !isMovingDown) {
+			this.beamTransparencyTicks[2] = Math.min(15, this.beamTransparencyTicks[2] + 1);
+		} else {
+			this.beamTransparencyTicks[2] = Math.max(0, this.beamTransparencyTicks[2] - 1);
+		}
+		
+		if(this.getTargetNActive() && !isMovingDown) {
+			this.beamTransparencyTicks[3] = Math.min(15, this.beamTransparencyTicks[3] + 1);
+		} else {
+			this.beamTransparencyTicks[3] = Math.max(0, this.beamTransparencyTicks[3] - 1);
 		}
 		
 		float animationTicks = this.dataManager.get(ANIMATION_TICKS);
@@ -358,7 +385,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			if(!this.world.isRemote) {
 				if(getTargetNActive())
 					setTargetNActive(false);
-				System.out.println("Hit Target NORTH");
 				if(getAllTargetsHit())
 					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
@@ -369,7 +395,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			if(!this.world.isRemote) {
 				if(getTargetEActive())
 					setTargetEActive(false);
-				System.out.println("Hit Target EAST");
 				if(getAllTargetsHit())
 					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
@@ -380,7 +405,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			if(!this.world.isRemote) {
 				if(getTargetSActive())
 					setTargetSActive(false);
-				System.out.println("Hit Target SOUTH");
 				if(getAllTargetsHit())
 					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
@@ -391,7 +415,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			if(!this.world.isRemote) {
 				if(getTargetWActive())
 					setTargetWActive(false);
-				System.out.println("Hit Target WEST");
 				if(getAllTargetsHit())
 					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
