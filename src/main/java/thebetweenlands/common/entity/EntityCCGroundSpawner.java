@@ -17,6 +17,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
@@ -29,10 +31,10 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	private static final DataParameter<Boolean> IS_WORLD_SPANWED = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SPAWN_COUNT = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.VARINT);
-
+	
 	public EntityCCGroundSpawner(World world) {
 		super(world);
-		setSize(1F, 0.5F);
+		setSize(3F, 1F);
 	}
 
 	@Override
@@ -41,13 +43,25 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		dataManager.register(IS_WORLD_SPANWED, true);
 		dataManager.register(SPAWN_COUNT, 0);
 	}
+	
+	@Override
+	public boolean canBeCollidedWith() {
+		return true;
+	}
+	
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox() {
+		return this.getEntityBoundingBox();
+	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		
 		if (!getEntityWorld().isRemote) {
 			if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
 				setDead();
+			
 			if (getEntityWorld().getTotalWorldTime() % 60 == 0)
 				checkArea();
 			List<EntityFallingBlock> listPlug = getEntityWorld().getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox());
@@ -56,6 +70,11 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 				setDead();
 			}
 		}
+		
+		this.setPosition(MathHelper.floor(this.posX) + 0.5D, MathHelper.floor(this.posY), MathHelper.floor(this.posZ) + 0.5D);
+		this.prevPosX = this.lastTickPosX = this.posX;
+		this.prevPosY = this.lastTickPosY = this.posY;
+		this.prevPosZ = this.lastTickPosZ = this.posZ;
 	}
 	
 	public boolean isBloodSky(World world) {

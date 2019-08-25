@@ -93,6 +93,7 @@ public class LootTableRegistry {
     public static final ResourceLocation BOULDER_SPRITE = register("entities/boulder_sprite");
     public static final ResourceLocation ROOT_SPRITE = register("entities/root_sprite");
     public static final ResourceLocation WALL_LAMPREY = register("entities/wall_lamprey");
+    public static final ResourceLocation WALL_LIVING_ROOT = register("entities/wall_living_root");
     public static final ResourceLocation MOVING_SPAWNER_HOLE = register("entities/moving_spawner_hole");
     public static final ResourceLocation TINY_SLUDGE_WORM = register("entities/tiny_sludge_worm");
     public static final ResourceLocation SMALL_SLUDGE_WORM = register("entities/small_sludge_worm");
