@@ -74,6 +74,7 @@ import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWallLamprey;
+import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
@@ -164,6 +165,7 @@ public class EntityRegistry {
 		registerEntity(EntityShambler.class, "shambler", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityWallLamprey.class, "wall_lamprey", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityMovingSpawnerHole.class, "moving_spawner_hole", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityWallLivingRoot.class, "wall_living_root", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityCryptCrawler.class, "crypt_crawler", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityBarrishee.class, "barrishee", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityAshSprite.class, "ash_sprite", 0x0B3B0B, 0xDBA901);

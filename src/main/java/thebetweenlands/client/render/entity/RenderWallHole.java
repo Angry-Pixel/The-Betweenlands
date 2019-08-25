@@ -212,7 +212,7 @@ public abstract class RenderWallHole<T extends EntityWallFace> extends RenderWal
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 		}
 
-		super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+		this.renderEntityModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, this.partialTicks);
 
 		if(wallSprite != null) {
 			GlStateManager.matrixMode(GL11.GL_TEXTURE);
@@ -227,9 +227,13 @@ public abstract class RenderWallHole<T extends EntityWallFace> extends RenderWal
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(0, -0.55D, -0.3D);
 			this.applyDeathAndEasterEggRotations(entity);
-			super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+			this.renderEntityModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, this.partialTicks);
 			GlStateManager.popMatrix();
 		}
+	}
+	
+	protected void renderEntityModel(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, float partialTicks) {
+		super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 	}
 
 	protected void applyDeathAndEasterEggRotations(T entity) {
