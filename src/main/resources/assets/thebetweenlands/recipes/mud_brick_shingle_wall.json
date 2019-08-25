@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:mud_shingle_bricks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:mud_brick_shingle_wall",
+    "count": 6
+  }
+}

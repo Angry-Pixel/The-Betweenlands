@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:mud_bricks_decay_1"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:mud_brick_slabs_decay_1",
+    "count": 6
+  }
+}

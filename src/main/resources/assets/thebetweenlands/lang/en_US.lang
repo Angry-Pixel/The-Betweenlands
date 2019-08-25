@@ -460,6 +460,9 @@ tile.thebetweenlands.decay_pit_control.name=Pit of Decay
 tile.thebetweenlands.decay_pit_hanging_chain.name=Pit Chains
 tile.thebetweenlands.rotten_planks.name=Rotten Planks
 tile.thebetweenlands.rotten_plank_slab.name=Rotten Plank Slab
+tile.thebetweenlands.rotten_plank_stairs.name=Rotten Plank Stairs
+tile.thebetweenlands.rotten_plank_fence.name=Rotten Plank Fence
+tile.thebetweenlands.rotten_plank_fence_gate.name=Rotten Plank Fence Gate
 tile.thebetweenlands.censer.name=Censer
 tile.thebetweenlands.tar_barrel.name=Tar Barrel
 

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xSx",
+    "xSx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "S": {
+      "item": "thebetweenlands:rotten_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:rotten_plank_fence_gate"
+  }
+}

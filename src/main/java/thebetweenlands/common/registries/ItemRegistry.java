@@ -559,21 +559,24 @@ public class ItemRegistry {
 		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.GIANT_ROOT_PLANK_FENCE));
 		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.HEARTHGROVE_PLANK_FENCE));
 		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.NIBBLETWIG_PLANK_FENCE));
-		
-		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE_GATE));
+        OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.ROTTEN_PLANK_FENCE));
+
+        OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE_GATE));
 		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.WEEDWOOD_LOG_FENCE_GATE));
 		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_FENCE_GATE));
 		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.GIANT_ROOT_PLANK_FENCE_GATE));
 		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.HEARTHGROVE_PLANK_FENCE_GATE));
 		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.NIBBLETWIG_PLANK_FENCE_GATE));
-		
+
+
 		OreDictionary.registerOre("stairWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANK_STAIRS));
 		OreDictionary.registerOre("stairWood", new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_STAIRS));
 		OreDictionary.registerOre("stairWood", new ItemStack(BlockRegistry.GIANT_ROOT_PLANK_STAIRS));
 		OreDictionary.registerOre("stairWood", new ItemStack(BlockRegistry.HEARTHGROVE_PLANK_STAIRS));
 		OreDictionary.registerOre("stairWood", new ItemStack(BlockRegistry.NIBBLETWIG_PLANK_STAIRS));
-		
-		OreDictionary.registerOre("torch", new ItemStack(BlockRegistry.SULFUR_TORCH));
+        OreDictionary.registerOre("stairWood", new ItemStack(BlockRegistry.ROTTEN_PLANK_STAIRS));
+
+        OreDictionary.registerOre("torch", new ItemStack(BlockRegistry.SULFUR_TORCH));
 
 		OreDictionary.registerOre("bone", EnumItemMisc.SLIMY_BONE.create(1));
 

@@ -1,0 +1,42 @@
+{
+  "forge_marker": 1,
+  "defaults":{
+    "model": "thebetweenlands:base_fence_post",
+    "textures": {
+      "texture": "thebetweenlands:blocks/rotten_planks"
+    }
+  },
+  "variants": {
+    "north": {
+      "true": {
+        "submodel": "thebetweenlands:base_fence_side",
+        "uvlock": true
+      },
+      "false": {}
+    },
+    "east": {
+      "true": {
+        "submodel": "thebetweenlands:base_fence_side",
+        "y": 90,
+        "uvlock": true
+      },
+      "false": {}
+    },
+    "south": {
+      "true": {
+        "submodel": "thebetweenlands:base_fence_side",
+        "y": 180,
+        "uvlock": true
+      },
+      "false": {}
+    },
+    "west": {
+      "true": {
+        "submodel": "thebetweenlands:base_fence_side",
+        "y": 270,
+        "uvlock": true
+      },
+      "false": {}
+    }
+  }
+}

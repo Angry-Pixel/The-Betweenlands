@@ -511,6 +511,9 @@ public class BlockRegistry {
     public static final Block HEARTHGROVE_PLANK_SLAB = new BlockSlabBetweenlands(HEARTHGROVE_PLANKS);
     public static final Block NIBBLETWIG_PLANK_SLAB = new BlockSlabBetweenlands(NIBBLETWIG_PLANKS);
     public static final Block MUD_BRICK_SHINGLE_SLAB = new BlockMudBrickShingleSlab();
+    public static final Block MUD_BRICK_SHINGLE_STAIRS = new BlockStairsBetweenlands(MUD_BRICK_SHINGLES.getDefaultState());
+    public static final Block MUD_BRICK_SHINGLE_WALL = new BlockWallBetweenlands(MUD_BRICK_SHINGLES.getDefaultState());
+
     public static final Block THATCH_SLAB = new BlockSlabBetweenlands(THATCH).setHardness(0.5F);
     public static final Block SCABYST_BRICK_SLAB = new BlockSlabBetweenlands(SCABYST_BRICKS);
     public static final Block PITSTONE_WALL = new BlockWallBetweenlands(PITSTONE.getDefaultState());
@@ -570,9 +573,11 @@ public class BlockRegistry {
     public static final Block MUD_BRICK_STAIRS_DECAY_1 = new BlockStairsBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_1));
     public static final Block MUD_BRICK_STAIRS_DECAY_2 = new BlockStairsBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_2));
     public static final Block MUD_BRICK_STAIRS_DECAY_3 = new BlockStairsBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3));
+    public static final Block MUD_BRICK_STAIRS_DECAY_4 = new BlockStairsBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_4));
     public static final Block MUD_BRICK_SLAB_DECAY_1 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_1).getBlock());
     public static final Block MUD_BRICK_SLAB_DECAY_2 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_2).getBlock());
     public static final Block MUD_BRICK_SLAB_DECAY_3 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3).getBlock());
+    public static final Block MUD_BRICK_SLAB_DECAY_4 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_4).getBlock());
     public static final Block EDGE_SHROOM = new BlockEdgeShroom();
     public static final Block EDGE_MOSS = new BlockEdgeMoss();
     public static final Block EDGE_LEAF = new BlockEdgeLeaf();
@@ -618,8 +623,12 @@ public class BlockRegistry {
 	public static final Block DECAY_PIT_CONTROL = new BlockDecayPitControl();
 	public static final Block ROTTEN_PLANKS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.5F).setResistance(4.0F);
 	public static final Block ROTTEN_PLANK_SLAB = new BlockSlabBetweenlands(ROTTEN_PLANKS);
-	 
-	public static final Block MUD_TOWER_BRAZIER = new BlockBrazier();
+	public static final Block ROTTEN_PLANK_STAIRS = new BlockStairsBetweenlands(ROTTEN_PLANKS.getDefaultState());
+    public static final Block ROTTEN_PLANK_FENCE = new BlockFenceBetweenlands(ROTTEN_PLANKS.getDefaultState());
+    public static final Block ROTTEN_PLANK_FENCE_GATE = new BlockFenceGateBetweenlands(WEEDWOOD_PLANKS.getDefaultState());
+
+
+    public static final Block MUD_TOWER_BRAZIER = new BlockBrazier();
 	public static final Block DECAY_PIT_HANGING_CHAIN = new BlockDecayPitHangingChain();
 	public static final Block DECAY_PIT_GROUND_CHAIN = new BlockDecayPitGroundChain();
 	public static final Block DECAY_PIT_INVISIBLE_FLOOR_BLOCK = new BlockDecayPitInvisibleFloorBlock();
