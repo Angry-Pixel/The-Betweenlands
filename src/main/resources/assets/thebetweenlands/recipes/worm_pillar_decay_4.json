@@ -1,9 +1,8 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "x  ",
-    "xx ",
-    "xxx"
+    "x",
+    "x"
   ],
   "key": {
     "x": {
@@ -12,7 +11,8 @@
     }
   },
   "result": {
-    "item": "thebetweenlands:mud_brick_stairs_decay_4",
-    "count": 4
+    "item": "thebetweenlands:worm_dungeon_pillar",
+    "data": 4,
+    "count": 2
   }
 }

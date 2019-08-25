@@ -7,7 +7,8 @@
   ],
   "key": {
     "x": {
-      "item": "thebetweenlands:mud_bricks_decay_1"
+      "item": "thebetweenlands:mud_bricks_carved",
+      "data": 10
     }
   },
   "result": {

@@ -5,11 +5,12 @@
   ],
   "key": {
     "x": {
-      "item": "thebetweenlands:mud_bricks_decay_2"
+      "item": "thebetweenlands:mud_bricks_carved",
+      "data": 13
     }
   },
   "result": {
-    "item": "thebetweenlands:mud_brick_slabs_decay_2",
+    "item": "thebetweenlands:mud_brick_slab_decay_4",
     "count": 6
   }
 }
