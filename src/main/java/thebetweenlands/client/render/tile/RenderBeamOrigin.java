@@ -381,28 +381,28 @@ public class RenderBeamOrigin extends TileEntitySpecialRenderer<TileEntityBeamOr
 			BLOCK_RENDERER.setLighting((state, facing) -> 220);
 
 			bufferBuilder.setTranslation(-0.5D + firePos.x - 3, -0.5D + firePos.y, -0.5D + firePos.z - 3);
-			BLOCK_RENDERER.renderModel(te.getPos(), modelFire, stateFire, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
+			BLOCK_RENDERER.renderModel(te.getWorld(), te.getPos(), modelFire, stateFire, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
 
 			bufferBuilder.setTranslation(-0.5D + brazierPos.x - 3, -0.5D + brazierPos.y, -0.5D + brazierPos.z - 3);
-			BLOCK_RENDERER.renderModel(te.getPos(), modelBrazier, stateBrazier, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
+			BLOCK_RENDERER.renderModel(te.getWorld(), te.getPos(), modelBrazier, stateBrazier, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
 
 			bufferBuilder.setTranslation(-0.5D + firePos.x - 3, -0.5D + firePos.y, -0.5D + firePos.z + 3);
-			BLOCK_RENDERER.renderModel(te.getPos(), modelFire, stateFire, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
+			BLOCK_RENDERER.renderModel(te.getWorld(), te.getPos(), modelFire, stateFire, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
 
 			bufferBuilder.setTranslation(-0.5D + brazierPos.x - 3, -0.5D + brazierPos.y, -0.5D + brazierPos.z + 3);
-			BLOCK_RENDERER.renderModel(te.getPos(), modelBrazier, stateBrazier, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
+			BLOCK_RENDERER.renderModel(te.getWorld(), te.getPos(), modelBrazier, stateBrazier, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
 
 			bufferBuilder.setTranslation(-0.5D + firePos.x + 3, -0.5D + firePos.y, -0.5D + firePos.z + 3);
-			BLOCK_RENDERER.renderModel(te.getPos(), modelFire, stateFire, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
+			BLOCK_RENDERER.renderModel(te.getWorld(), te.getPos(), modelFire, stateFire, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
 
 			bufferBuilder.setTranslation(-0.5D + brazierPos.x + 3, -0.5D + brazierPos.y, -0.5D + brazierPos.z + 3);
-			BLOCK_RENDERER.renderModel(te.getPos(), modelBrazier, stateBrazier, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
+			BLOCK_RENDERER.renderModel(te.getWorld(), te.getPos(), modelBrazier, stateBrazier, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
 
 			bufferBuilder.setTranslation(-0.5D + firePos.x + 3, -0.5D + firePos.y, -0.5D + firePos.z - 3);
-			BLOCK_RENDERER.renderModel(te.getPos(), modelFire, stateFire, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
+			BLOCK_RENDERER.renderModel(te.getWorld(), te.getPos(), modelFire, stateFire, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
 
 			bufferBuilder.setTranslation(-0.5D + brazierPos.x + 3, -0.5D + brazierPos.y, -0.5D + brazierPos.z - 3);
-			BLOCK_RENDERER.renderModel(te.getPos(), modelBrazier, stateBrazier, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
+			BLOCK_RENDERER.renderModel(te.getWorld(), te.getPos(), modelBrazier, stateBrazier, MathHelper.getPositionRandom(te.getPos()), bufferBuilder);
 
 			bufferBuilder.setTranslation(0, 0, 0);
 
