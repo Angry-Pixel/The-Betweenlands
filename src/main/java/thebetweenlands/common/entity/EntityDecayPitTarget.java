@@ -276,15 +276,31 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 						getControl().setSpawnType(3);
 					if (getProgress() >= 512 && getProgress() < 640)
 						getControl().setSpawnType(4);
-				//	if (getProgress() >= 640)
-				//		getControl().setSpawnType(5);
+					if (getProgress() >= 640)
+						getControl().setSpawnType(5);
 	
 				}
 			}
-			//if (getControl() == null) {
-				// time to go
-			//	setDead();
-			//}
+			if (getControl().getSpawnType() == 5) {
+				if (getHangingChains() != null) {
+					getHangingChains().setBroken(true);
+					getHangingChains().setMoving(true);
+					getHangingChains().setSlow(false);
+					getHangingChains().updateBlock();
+				}
+
+				if (getGroundChains() != null) {
+					for (TileEntityDecayPitGroundChain chain : getGroundChains()) {
+						chain.setBroken(true);
+						chain.setRaising(false);
+						chain.setMoving(true);
+						chain.setSlow(false);
+						chain.updateBlock();
+					}
+				}
+				if(!getEntityWorld().isRemote)
+					setDead();
+			}
 		}
 	}
 

@@ -100,9 +100,9 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 				}
 			}
 			if(getSpawnType() == 5) {
-				//we go bye bye now
-				getWorld().setBlockToAir(getPos());
-				getWorld().setBlockToAir(getPos().up(15));
+			//	System.out.println("START DOING FUN STUFF HERE!");
+			//	getWorld().setBlockToAir(getPos());
+			//	getWorld().setBlockToAir(getPos().up(15));
 			}
 		} else {
 			this.spawnAmbientParticles();

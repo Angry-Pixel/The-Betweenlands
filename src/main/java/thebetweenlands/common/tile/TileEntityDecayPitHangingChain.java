@@ -22,6 +22,7 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 	public final float MOVE_UNIT = 0.0078125F; // unit of movement 
 	public boolean IS_MOVING = false;
 	public boolean IS_SLOW = false;
+	public boolean IS_BROKEN = false;
 
 	@Override
 	public void update() {
@@ -31,9 +32,18 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 			if (isSlow())
 				animationTicksChain++;
 			else
-				animationTicksChain += 8;
-
+				if(isBroken())
+					animationTicksChain += 32;
+				else
+					animationTicksChain += 8;
 		}
+
+		if (isBroken() && getProgress() > -512)
+			setProgress(getProgress() - 32);
+		
+		if (isBroken() && getProgress() <= -512)
+			if(!getWorld().isRemote)
+				getWorld().setBlockToAir(getPos());
 
 		if (getEntityCollidedWithChains(getHangingLengthCollision(1, 0, 2F + getProgress() * MOVE_UNIT)) != null)
 			checkCollisions(getEntityCollidedWithChains(getHangingLengthCollision(1, 0, 2F + getProgress() * MOVE_UNIT)));
@@ -49,7 +59,8 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 
 		if (animationTicksChainPrev >= 128) {
 			animationTicksChain = animationTicksChainPrev = 0;
-			setMoving(false);
+			if(!isBroken())
+				setMoving(false);
 		}
 
 	}
@@ -102,12 +113,21 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 		return IS_SLOW;
 	}
 
+	public void setBroken(boolean broken) {
+		IS_BROKEN = broken;
+	}
+
+	public boolean isBroken() {
+		return IS_BROKEN;
+	}
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setInteger("animationTicksChain", animationTicksChain);
 		nbt.setInteger("animationTicksChainPrev", animationTicksChainPrev);
 		nbt.setInteger("progress", PROGRESS);
+		nbt.setBoolean("broken", IS_BROKEN);
 		return nbt;
 	}
 
@@ -117,6 +137,7 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 		animationTicksChain = nbt.getInteger("animationTicksChain");
 		animationTicksChainPrev = nbt.getInteger("animationTicksChainPrev");
 		PROGRESS = nbt.getInteger("progress");
+		IS_BROKEN = nbt.getBoolean("broken");
 	}
 
 	@Override
@@ -140,5 +161,9 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB;
+	}
+
+	public void updateBlock() {
+		getWorld().notifyBlockUpdate(pos, getWorld().getBlockState(pos), getWorld().getBlockState(pos), 3);
 	}
 }

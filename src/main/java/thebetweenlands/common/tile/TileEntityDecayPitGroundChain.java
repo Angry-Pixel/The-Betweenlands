@@ -22,15 +22,19 @@ public class TileEntityDecayPitGroundChain extends TileEntity implements ITickab
 	public boolean IS_MOVING = false;
 	public boolean IS_SLOW = false;
 	public boolean IS_RAISING = false;
-
+	public boolean IS_BROKEN = false;
+	public int breakTimer = 0;
 	@Override
 	public void update() {
 		animationTicksChainPrev = animationTicksChain;
 		if (isMoving()) {
-			if(isSlow())
+			if (isSlow())
 				animationTicksChain++;
 			else
-				animationTicksChain += 8;
+				if(isBroken())
+					animationTicksChain += 32;
+				else
+					animationTicksChain += 8;
 		}
 
 		if (getEntityCollidedWithChains(getHangingLengthCollision(0.625F, 5F, 0.625F)) != null)
@@ -38,9 +42,22 @@ public class TileEntityDecayPitGroundChain extends TileEntity implements ITickab
 
 		if (animationTicksChainPrev >= 128) {
 			animationTicksChain = animationTicksChainPrev = 0;
-			setMoving(false);
+			if(!isBroken())
+				setMoving(false);
 		}
 
+		if (!getWorld().isRemote && isBroken()) {
+			breakTimer++;
+			if (breakTimer > 32) {
+				if (breakTimer % 4 == 0) {
+					setLength(getLength() - 1);
+					updateBlock();
+				}
+				if (getLength() <= 0) {
+					getWorld().setBlockToAir(getPos());
+				}
+			}
+		}	
 	}
 
 	public List<Entity> getEntityCollidedWithChains(AxisAlignedBB chainBox) {
@@ -99,12 +116,23 @@ public class TileEntityDecayPitGroundChain extends TileEntity implements ITickab
 		return LENGTH;
 	}
 
+	public void setBroken(boolean broken) {
+		IS_BROKEN = broken;
+	}
+
+	public boolean isBroken() {
+		return IS_BROKEN;
+	}
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setInteger("animationTicksChain", animationTicksChain);
 		nbt.setInteger("animationTicksChainPrev", animationTicksChainPrev);
 		nbt.setInteger("length", LENGTH);
+		nbt.setBoolean("raising", IS_RAISING);
+		nbt.setBoolean("moving", IS_MOVING);
+		nbt.setBoolean("broken", IS_BROKEN);
 		return nbt;
 	}
 
@@ -114,6 +142,9 @@ public class TileEntityDecayPitGroundChain extends TileEntity implements ITickab
 		animationTicksChain = nbt.getInteger("animationTicksChain");
 		animationTicksChainPrev = nbt.getInteger("animationTicksChainPrev");
 		LENGTH = nbt.getInteger("length");
+		IS_RAISING = nbt.getBoolean("raising");
+		IS_MOVING = nbt.getBoolean("moving");
+		IS_BROKEN = nbt.getBoolean("broken");
 	}
 
 	@Override
@@ -137,5 +168,9 @@ public class TileEntityDecayPitGroundChain extends TileEntity implements ITickab
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB;
+	}
+
+	public void updateBlock() {
+		getWorld().notifyBlockUpdate(pos, getWorld().getBlockState(pos), getWorld().getBlockState(pos), 3);
 	}
 }
