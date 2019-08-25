@@ -78,7 +78,7 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 					return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, null, null, tintIndex);
 			});
 
-			blockRenderer.renderModel(entity.origin, model, state, MathHelper.getPositionRandom(entity.origin), buffer);
+			blockRenderer.renderModel(entity.world, entity.origin, model, state, MathHelper.getPositionRandom(entity.origin), buffer);
 
 			tessellator.draw();
 		}
