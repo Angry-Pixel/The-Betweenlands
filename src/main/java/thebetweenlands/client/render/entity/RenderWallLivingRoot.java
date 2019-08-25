@@ -30,6 +30,11 @@ public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 	}
 
 	@Override
+	protected void preRenderCallback(EntityWallLivingRoot entity, float partialTickTime) {
+		super.preRenderCallback(entity, partialTickTime);
+	}
+
+	@Override
 	protected void renderEntityModel(EntityWallLivingRoot entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, float partialTicks) {
 		if(this.mainModel == BLANK_MODEL) {
 			this.renderRootModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, partialTicks);
@@ -42,8 +47,14 @@ public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 		this.bindEntityTexture(entity);
 
 		GlStateManager.pushMatrix();
+
+		//Undo model transforms because arms are in world space relative to entity pos
 		GlStateManager.translate(0.0F, 1.501F, 0.0F);	
+		GlStateManager.translate(0, -entity.width / 2, 0);
+		GlStateManager.rotate(-(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks), 1, 0, 0);
+		GlStateManager.translate(0, entity.width / 2, 0);
 		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
+		GlStateManager.rotate(-(180.0F - entity.renderYawOffset), 0.0F, 1.0F, 0.0F);
 
 		GlStateManager.color(1, 1, 1, 1);
 
@@ -62,7 +73,9 @@ public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 
 		int i = 0;
 
-		float uvScale = 2.0f;
+		float armSize = entity.getArmSize(partialTicks);
+
+		float uvScale = 2.0f / Math.max(0.001f, armSize);
 
 		double pos1X = 0, pos1Y = 0, pos1Z = 0;
 		ArmSegment segment1 = null;
@@ -82,8 +95,8 @@ public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 				for(int vertIndex = 0; vertIndex < hullVerts; vertIndex++) {
 					int nextVertIndex = (vertIndex + 1) % hullVerts;
 
-					float contraction1 = 1 - (i - 1) / (float)(entity.armSegments.size() - 1);
-					float contraction2 = 1 - (i) / (float)(entity.armSegments.size() - 1);
+					float contraction1 = (1 - (i - 1) / (float)(entity.armSegments.size() - 1)) * armSize;
+					float contraction2 = (1 - (i) / (float)(entity.armSegments.size() - 1)) * armSize;
 
 					double v11x = pos1X + segment1.offsetX[vertIndex] * contraction1;
 					double v11y = pos1Y + segment1.offsetY[vertIndex] * contraction1;
@@ -161,10 +174,6 @@ public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 		return MathHelper.sqrt(x * x + y * y + z * z);
 	}
 
-	protected static float lerp(float start, float end, float delta) {
-		return start + (end - start) * delta;
-	}
-
 	protected static double lerp(double start, double end, float delta) {
 		return start + (end - start) * delta;
 	}
@@ -181,6 +190,6 @@ public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 
 	@Override
 	protected float getMainModelVisibilityPercent(EntityWallLivingRoot entity, float partialTicks) {
-		return 1.0F;
+		return entity.getHoleDepthPercent(partialTicks);
 	}
 }
