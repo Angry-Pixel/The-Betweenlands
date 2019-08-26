@@ -540,7 +540,7 @@ public class ModelDecayPitTarget extends ModelBase {
         target_back_base.addChild(back_lense_edge_left);
     }
 
-    public void render(Entity entity, float scale) { 
+    public void render(float scale) { 
         target_base.render(scale);
     }
 

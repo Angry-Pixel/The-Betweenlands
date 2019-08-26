@@ -6,11 +6,16 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.entity.ModelDecayPitPlug;
+import thebetweenlands.client.render.model.entity.ModelDecayPitTarget;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.tile.TileEntityDecayPitControl;
 @SideOnly(Side.CLIENT)
 public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityDecayPitControl > {
@@ -25,19 +30,24 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 	public static final ResourceLocation DECAY_HOLE_TEXTURE_2 = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_hole_2.png");
 	public static final ResourceLocation DECAY_HOLE_TEXTURE_3 = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_hole_3.png");
 
+	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_plug.png");
+	private static final ModelDecayPitPlug PLUG_MODEL = new ModelDecayPitPlug();
+	
+	public static final ResourceLocation TARGET_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_target.png");
+	private static final ModelDecayPitTarget TARGET_MODEL = new ModelDecayPitTarget();
 	
 	@Override
 	public void render(TileEntityDecayPitControl tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if(tile == null || !tile.hasWorld())
 			return;
-
+		
 		//Use lighting values from block above
 		int i = tile.getWorld().getCombinedLight(tile.getPos().up(), 0);
 		int j = i % 65536;
 		int k = i / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		
+		if(!tile.isPlugged()) {
 		float ring_rotate = tile.animationTicksPrev + (tile.animationTicks - tile.animationTicksPrev) * partialTicks;
 
 		GlStateManager.pushMatrix();
@@ -146,6 +156,26 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		GlStateManager.enableLighting();
 		
 		GlStateManager.popMatrix();
+	}
+		if(tile.isPlugged()) {
+			GlStateManager.pushMatrix();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1, 1, 1, 1);
+
+			GlStateManager.disableCull();
+
+			bindTexture(TEXTURE);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x + 0.5D, y + 2F, z + 0.5D);
+			GlStateManager.scale(-1F, -1F, 1F);
+			PLUG_MODEL.renderJustPlug(0.0625F);
+			GlStateManager.popMatrix();
+
+			GlStateManager.enableCull();
+			GlStateManager.disableBlend();
+			GlStateManager.popMatrix();
+		}
 	}
 
 	private void buildRingQuads(BufferBuilder buffer, double x, double y, double z, double angle, double offsetXOuter, double offsetZOuter, double offsetXInner, double offsetZInner, boolean innerWall) {

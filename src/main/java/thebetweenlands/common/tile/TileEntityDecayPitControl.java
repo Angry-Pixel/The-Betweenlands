@@ -41,73 +41,83 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 	public float animationTicks = 0;
 	public float animationTicksPrev = 0;
 	public int spawnType = 0;
+	public boolean IS_PLUGGED = false;
 
 	@Override
 	public void update() {
-		animationTicksPrev = animationTicks;
+		if (!isPlugged()) {
+			animationTicksPrev = animationTicks;
 
-		animationTicks += 1F;
-		if (animationTicks >= 360F)
-			animationTicks = animationTicksPrev = 0;
+			animationTicks += 1F;
+			if (animationTicks >= 360F)
+				animationTicks = animationTicksPrev = 0;
 
-		if (!getWorld().isRemote) {
+			if (!getWorld().isRemote) {
 
-			if (animationTicks == 15 || animationTicks == 195) {
-				spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 3D, getPos().getZ() - 1.5D);
-				spawnSludgeJet(getPos().getX() - 4.5D, getPos().getY() + 3D, getPos().getZ() + 2.5D);
-			}
-
-			if (animationTicks == 60 || animationTicks == 240) {
-				spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 3D, getPos().getZ() - 4.5D);
-				spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 3D, getPos().getZ() + 5.5D);
-			}
-
-			if (animationTicks == 105 || animationTicks == 285) {
-				spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 3D, getPos().getZ() - 4.5D);
-				spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 3D, getPos().getZ() + 5.5D);
-			}
-
-			if (animationTicks == 150 || animationTicks == 330) {
-				spawnSludgeJet(getPos().getX() - 4.5D, getPos().getY() + 3D, getPos().getZ() - 1.5D);
-				spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 3D, getPos().getZ() + 2.5D);
-			}
-
-			//TODO remove ghetto syncing
-			if(getWorld().getTotalWorldTime() % 20 == 0)
-				updateBlock();
-
-			if(getWorld().getTotalWorldTime() % 1200 == 0) { //once a minute
-				//S
-				checkTurretSpawn(4, 12, 11);
-				checkTurretSpawn(-4, 12, 11);
-				//E
-				checkTurretSpawn(11, 12, 4);
-				checkTurretSpawn(11, 12, -4);
-				//N
-				checkTurretSpawn(4, 12, -11);
-				checkTurretSpawn(-4, 12, -11);
-				//W
-				checkTurretSpawn(-11, 12, -4);
-				checkTurretSpawn(-11, 12, 4);
-			}
-			
-			//spawn stuff here
-			if(getWorld().getTotalWorldTime() % 80 == 0) {
-				Entity thing = getEntitySpawned(getSpawnType());
-				if(thing != null) {
-					thing.setPosition(getPos().getX() + 0.5D, getPos().getY() + 1D, getPos().getZ() + 0.5D);
-					getWorld().spawnEntity(thing);
+				if (animationTicks == 15 || animationTicks == 195) {
+					spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 3D, getPos().getZ() - 1.5D);
+					spawnSludgeJet(getPos().getX() - 4.5D, getPos().getY() + 3D, getPos().getZ() + 2.5D);
 				}
+
+				if (animationTicks == 60 || animationTicks == 240) {
+					spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 3D, getPos().getZ() - 4.5D);
+					spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 3D, getPos().getZ() + 5.5D);
+				}
+
+				if (animationTicks == 105 || animationTicks == 285) {
+					spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 3D, getPos().getZ() - 4.5D);
+					spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 3D, getPos().getZ() + 5.5D);
+				}
+
+				if (animationTicks == 150 || animationTicks == 330) {
+					spawnSludgeJet(getPos().getX() - 4.5D, getPos().getY() + 3D, getPos().getZ() - 1.5D);
+					spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 3D, getPos().getZ() + 2.5D);
+				}
+
+				// TODO remove ghetto syncing
+				if (getWorld().getTotalWorldTime() % 20 == 0)
+					updateBlock();
+
+				if (getWorld().getTotalWorldTime() % 1200 == 0) { // once a
+																	// minute
+					// S
+					checkTurretSpawn(4, 12, 11);
+					checkTurretSpawn(-4, 12, 11);
+					// E
+					checkTurretSpawn(11, 12, 4);
+					checkTurretSpawn(11, 12, -4);
+					// N
+					checkTurretSpawn(4, 12, -11);
+					checkTurretSpawn(-4, 12, -11);
+					// W
+					checkTurretSpawn(-11, 12, -4);
+					checkTurretSpawn(-11, 12, 4);
+				}
+
+				// spawn stuff here
+				if (getWorld().getTotalWorldTime() % 80 == 0) {
+					Entity thing = getEntitySpawned(getSpawnType());
+					if (thing != null) {
+						thing.setPosition(getPos().getX() + 0.5D, getPos().getY() + 1D, getPos().getZ() + 0.5D);
+						getWorld().spawnEntity(thing);
+					}
+				}
+				if (getSpawnType() == 5) {
+					setPlugged(true); //pretty pointless because I could use the spawn type :P
+				}
+			} else {
+				this.spawnAmbientParticles();
 			}
-			if(getSpawnType() == 5) {
-			//	System.out.println("START DOING FUN STUFF HERE!");
-			//	getWorld().setBlockToAir(getPos());
-			//	getWorld().setBlockToAir(getPos().up(15));
-			}
-		} else {
-			this.spawnAmbientParticles();
+			checkSurfaceCollisions();
 		}
-		checkSurfaceCollisions();
+		if(isPlugged()) {
+			// System.out.println("START DOING FUN STUFF HERE!");
+			// render plug as animation falling in to place in the hole
+			// remove invisible blocks from edges of pit
+			// animate floor so it fades away
+			// whatever whizz bangs we add with shaders and particles
+			// spawn loots and stuff
+		}
 	}
 
 	private void checkTurretSpawn(int x, int y, int z) {
@@ -267,11 +277,20 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		return spawned_entity;
 	}
 
+	public void setPlugged(boolean plugged) {
+		IS_PLUGGED = plugged;
+	}
+
+	public boolean isPlugged() {
+		return IS_PLUGGED;
+	}
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setFloat("animationTicks", animationTicks);
 		nbt.setInteger("spawnType", getSpawnType());
+		nbt.setBoolean("plugged", isPlugged());
 		return nbt;
 	}
 
@@ -279,7 +298,8 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		animationTicks = nbt.getFloat("animationTicks");
-		spawnType = nbt.getInteger("spawnType");
+		setSpawnType(nbt.getInteger("spawnType"));
+		setPlugged(nbt.getBoolean("plugged"));
 	}
 
 	@Override

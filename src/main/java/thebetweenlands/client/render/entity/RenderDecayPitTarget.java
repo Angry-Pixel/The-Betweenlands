@@ -60,7 +60,7 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + 1.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);
-		PLUG_MODEL.render(entity, 0.0625F);
+		PLUG_MODEL.render(0.0625F);
 		GlStateManager.popMatrix();	
 		
 		EntityDecayPitTargetPart hitPart = null;
@@ -89,7 +89,7 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + 4.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);
-		TARGET_MODEL.render(entity, 0.0625F);
+		TARGET_MODEL.render(0.0625F);
 		GlStateManager.popMatrix();	
 	}
 	
