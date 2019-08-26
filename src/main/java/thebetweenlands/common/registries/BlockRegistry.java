@@ -102,7 +102,7 @@ import thebetweenlands.common.block.plant.BlockCaveMoss;
 import thebetweenlands.common.block.plant.BlockDoublePlantBL;
 import thebetweenlands.common.block.plant.BlockEdgeLeaf;
 import thebetweenlands.common.block.plant.BlockEdgeMoss;
-import thebetweenlands.common.block.plant.BlockEdgeShroom;
+import thebetweenlands.common.block.plant.BlockEdgePlant;
 import thebetweenlands.common.block.plant.BlockFlatheadMushroom;
 import thebetweenlands.common.block.plant.BlockGoldenClubFlower;
 import thebetweenlands.common.block.plant.BlockGoldenClubStalk;
@@ -578,7 +578,7 @@ public class BlockRegistry {
     public static final Block MUD_BRICK_SLAB_DECAY_2 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_2).getBlock());
     public static final Block MUD_BRICK_SLAB_DECAY_3 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3).getBlock());
     public static final Block MUD_BRICK_SLAB_DECAY_4 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_4).getBlock());
-    public static final Block EDGE_SHROOM = new BlockEdgeShroom();
+    public static final Block EDGE_SHROOM = new BlockEdgePlant();
     public static final Block EDGE_MOSS = new BlockEdgeMoss();
     public static final Block EDGE_LEAF = new BlockEdgeLeaf();
     public static final Block MUD_TOWER_BEAM_ORIGIN = new BlockBeamOrigin();

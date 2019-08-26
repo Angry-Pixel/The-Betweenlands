@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
@@ -16,7 +17,9 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
@@ -31,25 +34,22 @@ import net.minecraftforge.common.IShearable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 
-public class BlockEdgePlant extends BlockBush implements IShearable {
+public class BlockEdgePlant extends BlockPlant implements ICustomItemBlock {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
+    
     protected static final AxisAlignedBB PLANT_AABB_NORTH = new AxisAlignedBB(0D, 0D, 0.5D, 1D, 0.25D, 1D);
     protected static final AxisAlignedBB PLANT_AABB_SOUTH = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.25D, 0.5D);
     protected static final AxisAlignedBB PLANT_AABB_EAST = new AxisAlignedBB(0.0D, 0D, 0D, 0.5D, 0.25D, 1D);
     protected static final AxisAlignedBB PLANT_AABB_WEST = new AxisAlignedBB(0.5D, 0D, 0D, 1D, 0.25D, 1D);
+    
     public BlockEdgePlant() {
-        super(Material.PLANTS);
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         setSoundType(SoundType.PLANT);
         setHardness(0.1F);
         setCreativeTab(BLCreativeTabs.PLANTS);
     }
-
-	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
-		//No solid collision
-	}
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -67,16 +67,6 @@ public class BlockEdgePlant extends BlockBush implements IShearable {
 		default:
 			return PLANT_AABB_NORTH;
 		}
-	}
-
-	@Override
-	protected boolean canSustainBush(IBlockState state) {
-		return SoilHelper.canSustainPlant(state);
-	}
-
-	@Override
-	public boolean canPlaceBlockAt(World world, BlockPos pos) {
-		return super.canPlaceBlockAt(world, pos) && world.isAirBlock(pos.up()) && this.canBlockStay(world, pos, world.getBlockState(pos));
 	}
 
 	@Override
@@ -109,16 +99,6 @@ public class BlockEdgePlant extends BlockBush implements IShearable {
         return getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
 
-    @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return null;
-    }
-
-	@Override
-	public int damageDropped(IBlockState state) {
-		return 0;
-	}
-
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
@@ -128,24 +108,49 @@ public class BlockEdgePlant extends BlockBush implements IShearable {
     public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
 		return layer == BlockRenderLayer.SOLID || layer == BlockRenderLayer.TRANSLUCENT;
     }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-    @Override
-    public boolean isFullCube(IBlockState state) {
-        return false;
-    }
-
+	
 	@Override
-	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
-		return item.getItem() == ItemRegistry.SYRMORITE_SHEARS;
+	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
+		boolean hasSupportBlock;
+		
+		if(state.getBlock().isAir(state, worldIn, pos)) {
+			//Block is air during placement
+			hasSupportBlock = true;
+		} else {
+			EnumFacing facing = state.getValue(FACING);
+			hasSupportBlock = this.hasSupportBlock(worldIn, pos, facing);
+		}
+		
+		return hasSupportBlock && super.canBlockStay(worldIn, pos, state);
 	}
-
+	
+	protected boolean hasSupportBlock(World world, BlockPos pos, EnumFacing facing) {
+		BlockPos supportPos = pos.offset(facing.getOpposite());
+		return world.getBlockState(supportPos).isSideSolid(world, supportPos, facing);
+	}
+	
 	@Override
-	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		return ImmutableList.of(new ItemStack(Item.getItemFromBlock(this)));
+	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		return rand.nextFloat() <= 0.25F && world.isAirBlock(targetPos) && this.hasSupportBlock(world, targetPos, state.getValue(FACING));
 	}
-
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return new ItemBlockEdgePlant(this);
+	}
+	
+	//why does this need a custom item class
+	private static class ItemBlockEdgePlant extends ItemBlock {
+		private final BlockEdgePlant block;
+		
+		public ItemBlockEdgePlant(BlockEdgePlant block) {
+			super(block);
+			this.block = block;
+		}
+		
+		@Override
+		public boolean placeBlockAt(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, IBlockState newState) {
+			return this.block.canBlockStay(world, pos, newState) && super.placeBlockAt(stack, player, world, pos, side, hitX, hitY, hitZ, newState);
+		}
+	}
 }

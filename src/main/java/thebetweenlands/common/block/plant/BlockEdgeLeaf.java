@@ -17,7 +17,6 @@ public class BlockEdgeLeaf extends BlockEdgePlant implements ITintedBlock {
         setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
         setSoundType(SoundType.PLANT);
         setHardness(0.1F);
-        setCreativeTab(BLCreativeTabs.BLOCKS);
     }
 
     @Override

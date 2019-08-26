@@ -22,7 +22,7 @@ import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
 import thebetweenlands.common.block.plant.BlockEdgeLeaf;
 import thebetweenlands.common.block.plant.BlockEdgeMoss;
-import thebetweenlands.common.block.plant.BlockEdgeShroom;
+import thebetweenlands.common.block.plant.BlockEdgePlant;
 import thebetweenlands.common.block.plant.BlockHangingPlant;
 import thebetweenlands.common.block.structure.BlockBrazier;
 import thebetweenlands.common.block.structure.BlockBrazier.EnumBrazierHalf;
@@ -622,13 +622,13 @@ public class SludgeWormMazeBlockHelper {
 		int type = rand.nextInt(3); //expand for more types
 		switch (type) {
 		case 0:
-			return EDGE_SHROOM.withProperty(BlockEdgeShroom.FACING, facing);
+			return EDGE_SHROOM.withProperty(BlockEdgePlant.FACING, facing);
 		case 1:
 			return EDGE_MOSS.withProperty(BlockEdgeMoss.FACING, facing);
 		case 2:
 			return EDGE_LEAF.withProperty(BlockEdgeLeaf.FACING, facing);
 		}
-		return EDGE_SHROOM.withProperty(BlockEdgeShroom.FACING, facing);
+		return EDGE_SHROOM.withProperty(BlockEdgePlant.FACING, facing);
 	}
 
 	public IBlockState getMudTilesWater(Random rand) {
