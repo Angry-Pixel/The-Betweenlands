@@ -104,6 +104,8 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 				}
 				if (getSpawnType() == 5) {
 					setPlugged(true); //pretty pointless because I could use the spawn type :P
+					animationTicks = 0;
+					updateBlock();
 				}
 			} else {
 				this.spawnAmbientParticles();
@@ -111,6 +113,11 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 			checkSurfaceCollisions();
 		}
 		if(isPlugged()) {
+			animationTicksPrev = animationTicks;
+			if (animationTicks < 1.6F)
+				animationTicks += 0.2F;
+			if (animationTicks >= 1.6F && animationTicks <= 2)
+				animationTicks += 0.1F;
 			// System.out.println("START DOING FUN STUFF HERE!");
 			// render plug as animation falling in to place in the hole
 			// remove invisible blocks from edges of pit

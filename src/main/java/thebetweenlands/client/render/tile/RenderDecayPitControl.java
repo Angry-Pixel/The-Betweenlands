@@ -4,10 +4,10 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
@@ -158,6 +158,7 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		GlStateManager.popMatrix();
 	}
 		if(tile.isPlugged()) {
+			float fall = tile.animationTicksPrev + (tile.animationTicks - tile.animationTicksPrev) * partialTicks;
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -167,7 +168,7 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 
 			bindTexture(TEXTURE);
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x + 0.5D, y + 2F, z + 0.5D);
+			GlStateManager.translate(x + 0.5D, y + 4F - fall, z + 0.5D);//
 			GlStateManager.scale(-1F, -1F, 1F);
 			PLUG_MODEL.renderJustPlug(0.0625F);
 			GlStateManager.popMatrix();
