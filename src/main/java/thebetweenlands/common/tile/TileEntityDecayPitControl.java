@@ -3,6 +3,7 @@ package thebetweenlands.common.tile;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -33,11 +34,15 @@ import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityShambler;
+import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
 import thebetweenlands.common.entity.mobs.EntitySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
@@ -317,15 +322,16 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		if(list.stream().filter(e -> e instanceof IMob).count() >= 5 && list.stream().filter(e -> e instanceof IEntityBL).count() >= 5)
 			return null;
 		Entity spawned_entity = null;
+		Random rand = getWorld().rand;
 		switch (spawnType) {
 		case 0:
-			return new EntityTinySludgeWorm(getWorld());
+			return rand.nextBoolean() ? new EntityTinySludgeWorm(getWorld()) : rand.nextBoolean() ? new EntitySmollSludge(getWorld()) : new EntityTermite(getWorld());
 		case 1:
-			return new EntitySludgeWorm(getWorld());
+			return rand.nextBoolean() ? new EntitySludgeWorm(getWorld()) : new EntityChiromaw(getWorld());
 		case 2:
-			return new EntitySwampHag(getWorld());
+			return rand.nextBoolean() ? new EntitySwampHag(getWorld()) : new EntitySludge(getWorld());
 		case 3:
-			return new EntityShambler(getWorld());
+			return rand.nextBoolean() ? new EntityShambler(getWorld()) : new EntityChiromaw(getWorld());
 		case 4:
 			return new EntityLargeSludgeWorm(getWorld());
 		}
