@@ -20,7 +20,6 @@ import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockLootUrn.EnumLootUrn;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
-import thebetweenlands.common.block.plant.BlockEdgeLeaf;
 import thebetweenlands.common.block.plant.BlockEdgeMoss;
 import thebetweenlands.common.block.plant.BlockEdgePlant;
 import thebetweenlands.common.block.plant.BlockHangingPlant;
@@ -637,9 +636,9 @@ public class SludgeWormMazeBlockHelper {
 		case 0:
 			return EDGE_SHROOM.withProperty(BlockEdgePlant.FACING, facing);
 		case 1:
-			return EDGE_MOSS.withProperty(BlockEdgeMoss.FACING, facing);
+			return EDGE_MOSS.withProperty(BlockEdgePlant.FACING, facing);
 		case 2:
-			return EDGE_LEAF.withProperty(BlockEdgeLeaf.FACING, facing);
+			return EDGE_LEAF.withProperty(BlockEdgePlant.FACING, facing);
 		}
 		return EDGE_SHROOM.withProperty(BlockEdgePlant.FACING, facing);
 	}

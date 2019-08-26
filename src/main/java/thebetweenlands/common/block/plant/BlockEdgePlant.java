@@ -36,7 +36,7 @@ import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 
-public class BlockEdgePlant extends BlockPlant implements ICustomItemBlock {
+public class BlockEdgePlant extends BlockSludgeDungeonPlant implements ICustomItemBlock {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
     
     protected static final AxisAlignedBB PLANT_AABB_NORTH = new AxisAlignedBB(0D, 0D, 0.5D, 1D, 0.25D, 1D);
@@ -132,6 +132,16 @@ public class BlockEdgePlant extends BlockPlant implements ICustomItemBlock {
 	@Override
 	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
 		return rand.nextFloat() <= 0.25F && world.isAirBlock(targetPos) && this.hasSupportBlock(world, targetPos, state.getValue(FACING));
+	}
+	
+	@Override
+	public void spreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		world.setBlockState(targetPos, this.getDefaultState().withProperty(FACING, state.getValue(FACING)));
+	}
+	
+	@Override
+	public EnumOffsetType getOffsetType() {
+		return EnumOffsetType.NONE;
 	}
 	
 	@Override
