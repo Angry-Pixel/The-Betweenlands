@@ -27,6 +27,12 @@ import thebetweenlands.common.block.plant.BlockHangingPlant;
 import thebetweenlands.common.block.structure.BlockBrazier;
 import thebetweenlands.common.block.structure.BlockBrazier.EnumBrazierHalf;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlock;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockDiagonal;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL1;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL2;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockR1;
+import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockR2;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
@@ -247,6 +253,13 @@ public class SludgeWormMazeBlockHelper {
     public IBlockState COMPACTED_MUD_MIRAGE = BlockRegistry.COMPACTED_MUD_MIRAGE.getDefaultState();
     public IBlockState COMPACTED_MUD_SLAB = BlockRegistry.COMPACTED_MUD_SLAB.getDefaultState();
     public IBlockState GROUND_ITEM = BlockRegistry.GROUND_ITEM.getDefaultState();
+
+    public IBlockState DECAY_PIT_INVISIBLE_FLOOR_BLOCK = BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK.getDefaultState();
+    public IBlockState DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_1 = BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_1.getDefaultState();
+    public IBlockState DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2 = BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2.getDefaultState();
+    public IBlockState DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL = BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL.getDefaultState();
+    public IBlockState DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1 = BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1.getDefaultState();
+    public IBlockState DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2 = BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2.getDefaultState();
 
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 

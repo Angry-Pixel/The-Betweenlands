@@ -1,7 +1,10 @@
 package thebetweenlands.common.tile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,6 +22,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
@@ -35,6 +39,7 @@ import thebetweenlands.common.entity.mobs.EntitySludgeJet;
 import thebetweenlands.common.entity.mobs.EntitySludgeWorm;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
 public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 
@@ -42,6 +47,27 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 	public float animationTicksPrev = 0;
 	public int spawnType = 0;
 	public boolean IS_PLUGGED = false;
+	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
+	public final Map<Block, Boolean> INVISIBLE_BLOCKS = new HashMap<Block, Boolean>(); // dont need states so blocks will do
+
+	public TileEntityDecayPitControl()  {
+		initInvisiBlockMap();
+	}
+
+	private void initInvisiBlockMap() {
+		if (INVISIBLE_BLOCKS.isEmpty()) {
+			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK.getBlock(), true);
+			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL.getBlock(), true);
+			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1.getBlock(), true);
+			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2.getBlock(), true);
+			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_1.getBlock(), true);
+			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2.getBlock(), true);
+		}
+	}
+
+	public boolean isInvisibleBlock(Block block) {
+		return INVISIBLE_BLOCKS.get(block) != null;
+	}
 
 	@Override
 	public void update() {
@@ -104,20 +130,37 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 				}
 				if (getSpawnType() == 5) {
 					setPlugged(true); //pretty pointless because I could use the spawn type :P
+					animationTicks = 0;
+					removeInvisiBlocks(getWorld(), getPos());
+					updateBlock();
 				}
 			} else {
 				this.spawnAmbientParticles();
 			}
 			checkSurfaceCollisions();
 		}
+
 		if(isPlugged()) {
-			// System.out.println("START DOING FUN STUFF HERE!");
-			// render plug as animation falling in to place in the hole
-			// remove invisible blocks from edges of pit
+			animationTicksPrev = animationTicks;
+			if (animationTicks < 1.6F)
+				animationTicks += 0.2F;
+			if (animationTicks >= 1.6F && animationTicks <= 2)
+				animationTicks += 0.1F;	
+
+			// TODO;
+			// render plug as animation falling in to place in the hole *DONE
+			// remove invisible blocks from edges of pit *DONE
 			// animate floor so it fades away
 			// whatever whizz bangs we add with shaders and particles
 			// spawn loots and stuff
 		}
+	}
+
+	private void removeInvisiBlocks(World world, BlockPos pos) {
+		Iterable<BlockPos> blocks = BlockPos.getAllInBox(pos.add(-4F, 2F, -4F), pos.add(4F, 2F, 4F));
+		for (BlockPos posIteration : blocks)
+			if (isInvisibleBlock(getWorld().getBlockState(posIteration).getBlock()))
+				world.setBlockToAir(posIteration);
 	}
 
 	private void checkTurretSpawn(int x, int y, int z) {
