@@ -19,7 +19,6 @@ import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockR2
 import thebetweenlands.common.block.structure.BlockMudBrickSpikeTrap;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
 public class DecayPitBuildParts {
@@ -250,16 +249,16 @@ public class DecayPitBuildParts {
 
 		rotatedCubeVolume(world, rand, pos, 1, 0, 0, blockHelper.COMPACTED_MUD, 1, 1, 2, facing);
 
-		rotatedCubeVolume(world, rand, pos, 4, 2, 0, BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK.getDefaultState().withProperty(BlockDecayPitInvisibleFloorBlock.FACING, facing.rotateY()), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 4, 2, 1, BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_1.getDefaultState().withProperty(BlockDecayPitInvisibleFloorBlockR1.FACING, facing.rotateY()), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 4, 2, 2, BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2.getDefaultState().withProperty(BlockDecayPitInvisibleFloorBlockR2.FACING, facing.rotateY()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 2, 0, blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK.withProperty(BlockDecayPitInvisibleFloorBlock.FACING, facing.rotateY()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 2, 1, blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_1.withProperty(BlockDecayPitInvisibleFloorBlockR1.FACING, facing.rotateY()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 4, 2, 2, blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2.withProperty(BlockDecayPitInvisibleFloorBlockR2.FACING, facing.rotateY()), 1, 1, 1, facing);
 
 		if (facing == EnumFacing.SOUTH || facing == EnumFacing.NORTH)
-			rotatedCubeVolume(world, rand, pos, 3, 2, 3, BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL.getDefaultState().withProperty(BlockDecayPitInvisibleFloorBlockDiagonal.FLIPPED, false), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 3, 2, 3, blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL.withProperty(BlockDecayPitInvisibleFloorBlockDiagonal.FLIPPED, false), 1, 1, 1, facing);
 		else
-			rotatedCubeVolume(world, rand, pos, 3, 2, 3, BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL.getDefaultState().withProperty(BlockDecayPitInvisibleFloorBlockDiagonal.FLIPPED, true), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 1, 2, 4, BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1.getDefaultState().withProperty(BlockDecayPitInvisibleFloorBlockL1.FACING, facing.getOpposite()), 1, 1, 1, facing);
-		rotatedCubeVolume(world, rand, pos, 2, 2, 4, BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2.getDefaultState().withProperty(BlockDecayPitInvisibleFloorBlockL2.FACING, facing.getOpposite()), 1, 1, 1, facing);
+			rotatedCubeVolume(world, rand, pos, 3, 2, 3, blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL.withProperty(BlockDecayPitInvisibleFloorBlockDiagonal.FLIPPED, true), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 1, 2, 4, blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1.withProperty(BlockDecayPitInvisibleFloorBlockL1.FACING, facing.getOpposite()), 1, 1, 1, facing);
+		rotatedCubeVolume(world, rand, pos, 2, 2, 4, blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2.withProperty(BlockDecayPitInvisibleFloorBlockL2.FACING, facing.getOpposite()), 1, 1, 1, facing);
 
 		rotatedCubeVolume(world, rand, pos, 6, 4, 6, blockHelper.BRAZIER_BOTTOM, 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 6, 5, 6, blockHelper.BRAZIER_TOP, 1, 1, 1, facing); 
