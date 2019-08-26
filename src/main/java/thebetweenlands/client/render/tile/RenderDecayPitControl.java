@@ -47,9 +47,9 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		int k = i / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		float floor_fade = tile.floorFadeTicksPrev + (tile.floorFadeTicks - tile.floorFadeTicksPrev) * partialTicks;
 		if(tile.getShowFloor()) {
 		float ring_rotate = tile.animationTicksPrev + (tile.animationTicks - tile.animationTicksPrev) * partialTicks;
-		float floor_fade = tile.floorFadeTicksPrev + (tile.floorFadeTicks - tile.floorFadeTicksPrev) * partialTicks;
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.disableLighting();
@@ -169,7 +169,7 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 
 			bindTexture(TEXTURE);
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x + 0.5D, y + 4F - fall, z + 0.5D);//
+			GlStateManager.translate(x + 0.5D, y + 4F - fall, z + 0.5D);
 			GlStateManager.scale(-1F, -1F, 1F);
 			PLUG_MODEL.renderJustPlug(0.0625F);
 			GlStateManager.popMatrix();
@@ -177,6 +177,45 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 			GlStateManager.enableCull();
 			GlStateManager.disableBlend();
 			GlStateManager.popMatrix();
+
+			if(tile.getShowFloor()) {
+				GlStateManager.pushMatrix();
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+				GlStateManager.color(1, 1, 1, 1 - floor_fade);
+
+				GlStateManager.disableCull();
+
+				bindTexture(TEXTURE);
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(x + 0.5D, y + 4F - fall, z + 0.5D);
+				GlStateManager.scale(-1F, -1F, 1F);
+				PLUG_MODEL.renderJustChains(0.0625F);
+				GlStateManager.popMatrix();
+
+				GlStateManager.enableCull();
+				GlStateManager.disableBlend();
+				GlStateManager.popMatrix();
+				
+				
+				GlStateManager.pushMatrix();
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+				GlStateManager.color(1, 1, 1, 1 - floor_fade);
+
+				GlStateManager.disableCull();
+
+				bindTexture(TEXTURE);
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(x + 0.5D, y + 7F - fall, z + 0.5D);
+				GlStateManager.scale(-1F, -1F, 1F);
+				TARGET_MODEL.render(0.0625F);
+				GlStateManager.popMatrix();
+
+				GlStateManager.enableCull();
+				GlStateManager.disableBlend();
+				GlStateManager.popMatrix();
+			}
 		}
 	}
 

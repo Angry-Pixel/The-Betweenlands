@@ -1357,6 +1357,17 @@ public class ModelDecayPitPlug extends ModelBase {
         lid_base_front.render(scale);
         base_bottom.render(scale);
     }
+    
+    public void renderJustChains(float scale) { 
+        topconnection_left1.render(scale);
+        topconnection_front1.render(scale);
+        topconnection_back1.render(scale);
+        chainconnection_upper_right.render(scale);
+        chainconnection_upper_back.render(scale);
+        chainconnection_upper_left.render(scale);
+        topconnection_right1.render(scale);
+        chainconnection_upper_front.render(scale);
+    }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
         modelRenderer.rotateAngleX = x;
