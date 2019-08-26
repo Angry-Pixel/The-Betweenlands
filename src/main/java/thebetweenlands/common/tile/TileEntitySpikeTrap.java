@@ -18,6 +18,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.block.misc.BlockSludge;
 import thebetweenlands.common.block.structure.BlockSpikeTrap;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -35,7 +36,7 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 			EnumFacing facing = state.getValue(BlockSpikeTrap.FACING);
 
 			IBlockState stateFacing = getWorld().getBlockState(getPos().offset(facing, 1));
-			if (stateFacing.getBlock() != Blocks.AIR && stateFacing.getBlockHardness(getWorld(), getPos().offset(facing, 1)) >= 0.0F) {
+			if (stateFacing.getBlock() != Blocks.AIR && stateFacing.getBlockHardness(getWorld(), getPos().offset(facing, 1)) >= 0.0F && !(stateFacing.getBlock() instanceof BlockSludge)) {
 				setType((byte) 1);
 				setActive(true);
 				Block block = stateFacing.getBlock();
@@ -44,7 +45,7 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 				getWorld().setBlockToAir(getPos().offset(facing, 1));
 			}
 			IBlockState stateFacing2 = getWorld().getBlockState(getPos().offset(facing, 2));
-			if (stateFacing2.getBlock() != Blocks.AIR && stateFacing2.getBlockHardness(getWorld(), getPos().offset(facing, 2)) >= 0.0F) {
+			if (stateFacing2.getBlock() != Blocks.AIR && stateFacing2.getBlockHardness(getWorld(), getPos().offset(facing, 2)) >= 0.0F && !(stateFacing.getBlock() instanceof BlockSludge)) {
 				setType((byte) 1);
 				setActive(true);
 				Block block = stateFacing2.getBlock();
