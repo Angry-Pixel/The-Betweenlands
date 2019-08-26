@@ -45,6 +45,8 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 
 	public float animationTicks = 0;
 	public float animationTicksPrev = 0;
+	public float plugDropTicks = 0;
+	public float plugDropTicksPrev = 0;
 	public float floorFadeTicks = 0;
 	public float floorFadeTicksPrev = 0;
 	public int spawnType = 0;
@@ -133,7 +135,6 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 				}
 				if (getSpawnType() == 5) {
 					setPlugged(true); //pretty pointless because I could use the spawn type :P
-					animationTicks = 0;
 					removeInvisiBlocks(getWorld(), getPos());
 					updateBlock();
 				}
@@ -144,13 +145,13 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		}
 
 		if (isPlugged()) {
-			animationTicksPrev = animationTicks;
+			plugDropTicksPrev = plugDropTicks;
 			floorFadeTicksPrev = floorFadeTicks;
-			if (animationTicks < 1.6F)
-				animationTicks += 0.2F;
-			if (animationTicks >= 1.6F && animationTicks <= 2)
-				animationTicks += 0.1F;
-			if (animationTicks >= 2)
+			if (plugDropTicks < 1.6F)
+				plugDropTicks += 0.2F;
+			if (plugDropTicks >= 1.6F && plugDropTicks <= 2)
+				plugDropTicks += 0.1F;
+			if (plugDropTicks >= 2)
 				if (getShowFloor())
 					floorFadeTicks += 0.025F;
 			if (floorFadeTicks >= 1)
@@ -352,6 +353,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		super.writeToNBT(nbt);
 		nbt.setFloat("animationTicks", animationTicks);
 		nbt.setInteger("spawnType", getSpawnType());
+		nbt.setFloat("plugDropTicks", plugDropTicks);
 		nbt.setBoolean("plugged", isPlugged());
 		nbt.setBoolean("showFloor", getShowFloor());
 		return nbt;
@@ -362,6 +364,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		super.readFromNBT(nbt);
 		animationTicks = nbt.getFloat("animationTicks");
 		setSpawnType(nbt.getInteger("spawnType"));
+		plugDropTicks = nbt.getFloat("plugDropTicks");
 		setPlugged(nbt.getBoolean("plugged"));
 		setShowFloor(nbt.getBoolean("showFloor"));
 	}

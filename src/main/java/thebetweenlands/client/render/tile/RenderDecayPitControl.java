@@ -159,7 +159,7 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		}
 	}
 		if(tile.isPlugged()) {
-			float fall = tile.animationTicksPrev + (tile.animationTicks - tile.animationTicksPrev) * partialTicks;
+			float fall = tile.plugDropTicksPrev + (tile.plugDropTicks - tile.plugDropTicksPrev) * partialTicks;
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
