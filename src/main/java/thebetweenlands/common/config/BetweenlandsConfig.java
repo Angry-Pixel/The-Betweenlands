@@ -134,6 +134,15 @@ public class BetweenlandsConfig {
 		@Comment("Some features in the Betweenlands use shaders for special effects. If you don't have a dedicated graphics card or want to use other mods with shaders you should set this to false. May have an impact on performance depending on your computer. Forces FBOs to be enabled")
 		public boolean useShader = true;
 
+		@Name("shader_priority")
+		@LangKey(LANG_PREFIX + "shader_priority")
+		@Comment("Shader rendering priority. Some other mods are not compatible with Betweenlands shaders (e.g. LadyLib/Dissolution) due to order conflicts. If you run into such an incompatibility try using a different priority. However rendering the shader earlier may introduce other rendering artifacts so this should be left as default if there are no conflicts.\n"
+				+ "0: Late (Default)\n"
+				+ "1: Normal\n"
+				+ "2: Early")
+		@RangeInt(min = 0, max = 2)
+		public int shaderPriority = 0;
+		
 		@Name("dimension_shader_only")
 		@LangKey(LANG_PREFIX + "dimension_shader_only")
 		@Comment("Whether the shaders should only be active in the Betweenlands dimension (if they are enabled)")
