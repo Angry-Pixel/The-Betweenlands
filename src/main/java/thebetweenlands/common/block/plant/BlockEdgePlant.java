@@ -140,6 +140,11 @@ public class BlockEdgePlant extends BlockSludgeDungeonPlant implements ICustomIt
 	}
 	
 	@Override
+	public EnumOffsetType getOffsetType() {
+		return EnumOffsetType.NONE;
+	}
+	
+	@Override
 	public ItemBlock getItemBlock() {
 		return new ItemBlockEdgePlant(this);
 	}
