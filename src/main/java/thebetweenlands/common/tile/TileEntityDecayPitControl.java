@@ -45,8 +45,11 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 
 	public float animationTicks = 0;
 	public float animationTicksPrev = 0;
+	public float floorFadeTicks = 0;
+	public float floorFadeTicksPrev = 0;
 	public int spawnType = 0;
 	public boolean IS_PLUGGED = false;
+	public boolean SHOW_FLOOR = true;
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	public final Map<Block, Boolean> INVISIBLE_BLOCKS = new HashMap<Block, Boolean>(); // dont need states so blocks will do
 
@@ -140,17 +143,25 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 			checkSurfaceCollisions();
 		}
 
-		if(isPlugged()) {
+		if (isPlugged()) {
 			animationTicksPrev = animationTicks;
+			floorFadeTicksPrev = floorFadeTicks;
 			if (animationTicks < 1.6F)
 				animationTicks += 0.2F;
 			if (animationTicks >= 1.6F && animationTicks <= 2)
-				animationTicks += 0.1F;	
-
+				animationTicks += 0.1F;
+			if (animationTicks >= 2)
+				if (getShowFloor())
+					floorFadeTicks += 0.025F;
+			if (floorFadeTicks >= 1)
+				if (!getWorld().isRemote) {
+					setShowFloor(false);
+					updateBlock();
+				}
 			// TODO;
 			// render plug as animation falling in to place in the hole *DONE
 			// remove invisible blocks from edges of pit *DONE
-			// animate floor so it fades away
+			// animate floor so it fades away *DONE
 			// whatever whizz bangs we add with shaders and particles
 			// spawn loots and stuff
 		}
@@ -327,6 +338,14 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 	public boolean isPlugged() {
 		return IS_PLUGGED;
 	}
+	
+	public void setShowFloor(boolean show_floor) {
+		SHOW_FLOOR = show_floor;
+	}
+
+	public boolean getShowFloor() {
+		return SHOW_FLOOR;
+	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
@@ -334,6 +353,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		nbt.setFloat("animationTicks", animationTicks);
 		nbt.setInteger("spawnType", getSpawnType());
 		nbt.setBoolean("plugged", isPlugged());
+		nbt.setBoolean("showFloor", getShowFloor());
 		return nbt;
 	}
 
@@ -343,6 +363,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		animationTicks = nbt.getFloat("animationTicks");
 		setSpawnType(nbt.getInteger("spawnType"));
 		setPlugged(nbt.getBoolean("plugged"));
+		setShowFloor(nbt.getBoolean("showFloor"));
 	}
 
 	@Override

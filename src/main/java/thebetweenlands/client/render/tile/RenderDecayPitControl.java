@@ -47,19 +47,19 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		int k = i / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		if(!tile.isPlugged()) {
+		if(tile.getShowFloor()) {
 		float ring_rotate = tile.animationTicksPrev + (tile.animationTicks - tile.animationTicksPrev) * partialTicks;
-
+		float floor_fade = tile.floorFadeTicksPrev + (tile.floorFadeTicks - tile.floorFadeTicksPrev) * partialTicks;
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.disableLighting();
 
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1F, 1F, 1F, 1F);
+		GlStateManager.color(1F, 1F, 1F, 1F - floor_fade);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
-
+		if(tile.getShowFloor()) {
 		bindTexture(OUTER_MASK_MUD_TILE_TEXTURE);
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		for (int part = 0; part < 24; part++) {
@@ -156,6 +156,7 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		GlStateManager.enableLighting();
 		
 		GlStateManager.popMatrix();
+		}
 	}
 		if(tile.isPlugged()) {
 			float fall = tile.animationTicksPrev + (tile.animationTicks - tile.animationTicksPrev) * partialTicks;
