@@ -18,6 +18,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -44,6 +45,7 @@ import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
 public class TileEntityDecayPitControl extends TileEntity implements ITickable {
@@ -150,6 +152,12 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		}
 
 		if (isPlugged()) {
+			if(getWorld().isRemote) {
+				chainBreakParticles(getWorld(), getPos().add(1, 5, 0));
+				chainBreakParticles(getWorld(), getPos().add(-1, 5, 0));
+				chainBreakParticles(getWorld(), getPos().add(0, 5, 1));
+				chainBreakParticles(getWorld(), getPos().add(0, 5, -1));
+			}
 			plugDropTicksPrev = plugDropTicks;
 			floorFadeTicksPrev = floorFadeTicks;
 			if (plugDropTicks < 1.6F)
@@ -170,6 +178,21 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 			// animate floor so it fades away *DONE
 			// whatever whizz bangs we add with shaders and particles
 			// spawn loots and stuff
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void chainBreakParticles(World world, BlockPos pos) {
+		double px = getPos().getX() + 0.5D;
+		double py = getPos().getY() + 0.5D;
+		double pz = getPos().getZ() + 0.5D;
+		for (int i = 0, amount = 5 + getWorld().rand.nextInt(2); i < amount; i++) {
+			double ox = getWorld().rand.nextDouble() * 0.1F - 0.05F;
+			double oz = getWorld().rand.nextDouble() * 0.1F - 0.05F;
+			double motionX = getWorld().rand.nextDouble() * 0.2F - 0.1F;
+			double motionY = 0;
+			double motionZ = getWorld().rand.nextDouble() * 0.2F - 0.1F;
+			world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(BlockRegistry.DECAY_PIT_HANGING_CHAIN.getDefaultState()));
 		}
 	}
 
