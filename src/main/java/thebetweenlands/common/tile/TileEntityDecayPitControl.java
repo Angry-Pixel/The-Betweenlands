@@ -13,6 +13,7 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -20,6 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -46,6 +48,7 @@ import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
 public class TileEntityDecayPitControl extends TileEntity implements ITickable {
@@ -144,6 +147,10 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 					setPlugged(true); //pretty pointless because I could use the spawn type :P
 					removeInvisiBlocks(getWorld(), getPos());
 					updateBlock();
+					getWorld().playSound(null, getPos().add(1, 6, 0), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+					getWorld().playSound(null, getPos().add(-1, 6, 0), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+					getWorld().playSound(null, getPos().add(0, 6, 1), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+					getWorld().playSound(null, getPos().add(0, 6, -1), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 				}
 			} else {
 				this.spawnAmbientParticles();
@@ -152,28 +159,36 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		}
 
 		if (isPlugged()) {
-			plugDropTicksPrev = plugDropTicks;
-			floorFadeTicksPrev = floorFadeTicks;
-			if(getWorld().isRemote) {
-				if (plugDropTicks <= 0.8F) {
-					chainBreakParticles(getWorld(), getPos().add(1, 6, 0));
-					chainBreakParticles(getWorld(), getPos().add(-1, 6, 0));
-					chainBreakParticles(getWorld(), getPos().add(0, 6, 1));
-					chainBreakParticles(getWorld(), getPos().add(0, 6, -1));
+				plugDropTicksPrev = plugDropTicks;
+				floorFadeTicksPrev = floorFadeTicks;
+				if (getWorld().isRemote) {
+					if (plugDropTicks <= 0.8F) {
+						chainBreakParticles(getWorld(), getPos().add(1, 6, 0));
+						chainBreakParticles(getWorld(), getPos().add(-1, 6, 0));
+						chainBreakParticles(getWorld(), getPos().add(0, 6, 1));
+						chainBreakParticles(getWorld(), getPos().add(0, 6, -1));
+					}
 				}
-			}
-			if (plugDropTicks < 1.6F)
-				plugDropTicks += 0.2F;
-			if (plugDropTicks >= 1.6F && plugDropTicks <= 2)
-				plugDropTicks += 0.1F;
-			if (plugDropTicks >= 2)
-				if (getShowFloor())
-					floorFadeTicks += 0.025F;
-			if (floorFadeTicks >= 1)
-				if (!getWorld().isRemote) {
-					setShowFloor(false);
-					updateBlock();
-				}
+
+				if (plugDropTicks <= 1.6F)
+					plugDropTicks += 0.2F;
+
+				if (plugDropTicks == 0.6F)
+					if (!getWorld().isRemote)
+						getWorld().playSound(null, getPos(), SoundRegistry.PLUG_LOCK, SoundCategory.HOSTILE, 1F, 1F);
+
+				if (plugDropTicks > 1.6F && plugDropTicks <= 2)
+					plugDropTicks += 0.1F;
+
+				if (plugDropTicks >= 2)
+					if (getShowFloor())
+						floorFadeTicks += 0.025F;
+
+				if (floorFadeTicks >= 1)
+					if (!getWorld().isRemote) {
+						setShowFloor(false);
+						updateBlock();
+					}
 			// TODO;
 			// render plug as animation falling in to place in the hole *DONE
 			// remove invisible blocks from edges of pit *DONE

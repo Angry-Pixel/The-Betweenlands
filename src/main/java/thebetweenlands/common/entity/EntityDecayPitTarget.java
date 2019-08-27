@@ -16,6 +16,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -78,7 +79,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 	public int attackDamageTicks = 0;
 	public int[] beamTransparencyTicks = new int[4];
-	
+
 	public EntityDecayPitTarget(World world) {
 		super(world);
 		setSize(5F, 5F);
@@ -299,7 +300,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 					}
 				}
 				if(!getEntityWorld().isRemote)
-					setDead();
+					setDead(); // TODO some particles to show the bobbing shields break
 			}
 		}
 	}
@@ -399,8 +400,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 		if(part == target_north && !wasBlocked) {
 			if(!this.world.isRemote) {
-				if(getTargetNActive())
+				if(getTargetNActive()) {
 					setTargetNActive(false);
+					playHitSound(getWorld(), target_north.getPosition());
+				}
 				if(getAllTargetsHit())
 					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
@@ -409,8 +412,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		}
 		else if(part == target_east && !wasBlocked) {
 			if(!this.world.isRemote) {
-				if(getTargetEActive())
+				if(getTargetEActive()) {
 					setTargetEActive(false);
+					playHitSound(getWorld(), target_east.getPosition());
+				}
 				if(getAllTargetsHit())
 					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
@@ -419,8 +424,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		}
 		else if(part == target_south && !wasBlocked) {
 			if(!this.world.isRemote) {
-				if(getTargetSActive())
+				if(getTargetSActive()) {
 					setTargetSActive(false);
+					playHitSound(getWorld(), target_south.getPosition());
+				}
 				if(getAllTargetsHit())
 					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
@@ -429,8 +436,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		}
 		else if(part == target_west && !wasBlocked) {
 			if(!this.world.isRemote) {
-				if(getTargetWActive())
+				if(getTargetWActive()) {
 					setTargetWActive(false);
+					playHitSound(getWorld(), target_west.getPosition());
+				}
 				if(getAllTargetsHit())
 					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
@@ -447,15 +456,21 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 						getEntityWorld().spawnEntity(grabber);
 					}
 				}
-				
 				this.moveUp();
-				
 				this.world.setEntityState(this, EVENT_ATTACK_BLOCKED);
 			}
 			return false;
 		}
 
 		return false;
+	}
+	
+	public void playHitSound(World world, BlockPos pos) {
+		getWorld().playSound(null, getPosition(), SoundRegistry.BEAM_ACTIVATE, SoundCategory.HOSTILE, 1F, 1F);
+	}
+
+	public void playDropSound(World world, BlockPos pos) {
+		getWorld().playSound(null, getPosition(), SoundRegistry.PLUG_HIT, SoundCategory.HOSTILE, 1F, 1F);
 	}
 
 	private boolean getAllTargetsHit() {
@@ -506,6 +521,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			setMoving(true);
 			setSlow(true);
 		}
+		//getWorld().playSound(null, getPosition(), SoundRegistry.CHAIN_LONG, SoundCategory.HOSTILE, 1F, 1.2F);
 	}
 
 	private void moveDown() {
@@ -518,6 +534,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			setTargetSActive(true);
 			setTargetWActive(true);
 		}
+		playDropSound(getWorld(), getPosition());
 	}
 
 	public TileEntityDecayPitHangingChain getHangingChains() {

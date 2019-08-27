@@ -2,6 +2,8 @@ package thebetweenlands.common.tile;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -13,6 +15,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import thebetweenlands.client.audio.DecayPitChainSound;
 
 public class TileEntityDecayPitHangingChain extends TileEntity implements ITickable {
 
@@ -23,7 +28,7 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 	public boolean IS_MOVING = false;
 	public boolean IS_SLOW = false;
 	public boolean IS_BROKEN = false;
-
+	public boolean playChainSound = true;
 	@Override
 	public void update() {
 		animationTicksChainPrev = animationTicksChain;
@@ -31,11 +36,10 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 		if (isMoving()) {
 			if (isSlow())
 				animationTicksChain++;
-			else
-				if(isBroken())
-					animationTicksChain += 32;
-				else
-					animationTicksChain += 8;
+			else if (isBroken())
+				animationTicksChain += 32;
+			else 
+				animationTicksChain += 8;
 		}
 
 		if (isBroken() && getProgress() > -512)
@@ -63,8 +67,22 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 				setMoving(false);
 		}
 
-	}
+		if (animationTicksChainPrev == 0 && isMoving() && isSlow())
+			if (!playChainSound)
+				playChainSound = true;
 
+		if(getWorld().isRemote && playChainSound) {
+			playChainSoundSound(getWorld(), getPos());
+			playChainSound = false;
+		}
+
+	}
+	
+	public void playChainSoundSound(World world, BlockPos pos) {
+		ISound chain_sound = new DecayPitChainSound(this);
+		Minecraft.getMinecraft().getSoundHandler().playSound(chain_sound);
+	}
+	
 	public List<Entity> getEntityCollidedWithChains(AxisAlignedBB chainBox) {
 		return getWorld().<Entity>getEntitiesWithinAABB(Entity.class, chainBox);
     }
@@ -111,6 +129,10 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 
 	public boolean isSlow() {
 		return IS_SLOW;
+	}
+
+	public boolean isFast() {
+		return !IS_SLOW;
 	}
 
 	public void setBroken(boolean broken) {

@@ -62,6 +62,7 @@ public class SoundRegistry {
     public static final BLSoundEvent PLUG_HIT = reg("plug_hit");
     public static final BLSoundEvent PLUG_LOCK = reg("plug_lock");
     public static final BLSoundEvent CHAIN = reg("chain");
+    public static final BLSoundEvent CHAIN_LONG = reg("chain_long");
     public static final BLSoundEvent GEARS = reg("gears");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");

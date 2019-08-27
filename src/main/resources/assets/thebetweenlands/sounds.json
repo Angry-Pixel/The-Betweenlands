@@ -1338,6 +1338,11 @@
       "thebetweenlands:chain"
     ]
   },
+  "chain_long": {
+    "sounds": [
+      "thebetweenlands:chain_long"
+    ]
+  },
   "gears": {
     "sounds": [
       "thebetweenlands:gears"
