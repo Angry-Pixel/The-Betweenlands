@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "particle": "thebetweenlands:blocks/chain_particles",
+    "all": "thebetweenlands:blocks/compacted_mud"
+  }
+}
