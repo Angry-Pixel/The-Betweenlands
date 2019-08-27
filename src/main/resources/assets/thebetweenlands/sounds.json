@@ -1322,5 +1322,25 @@
       "thebetweenlands:long_slice_2",
       "thebetweenlands:long_slice_3"
     ]
+  },
+  "plug_hit": {
+    "sounds": [
+      "thebetweenlands:plug_hit"
+    ]
+  },
+  "plug_lock": {
+    "sounds": [
+      "thebetweenlands:plug_lock"
+    ]
+  },
+  "chain": {
+    "sounds": [
+      "thebetweenlands:chain"
+    ]
+  },
+  "gears": {
+    "sounds": [
+      "thebetweenlands:gears"
+    ]
   }
 }

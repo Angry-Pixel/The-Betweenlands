@@ -59,6 +59,10 @@ public class SoundRegistry {
     public static final BLSoundEvent ROOF_COLLAPSE = reg("roof_collapse");
     public static final BLSoundEvent BRAZIER_LIGHT = reg("brazier_light");
     public static final BLSoundEvent BEAM_ACTIVATE = reg("beam_activate");
+    public static final BLSoundEvent PLUG_HIT = reg("plug_hit");
+    public static final BLSoundEvent PLUG_LOCK = reg("plug_lock");
+    public static final BLSoundEvent CHAIN = reg("chain");
+    public static final BLSoundEvent GEARS = reg("gears");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
