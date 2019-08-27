@@ -152,14 +152,16 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		}
 
 		if (isPlugged()) {
-			if(getWorld().isRemote) {
-				chainBreakParticles(getWorld(), getPos().add(1, 5, 0));
-				chainBreakParticles(getWorld(), getPos().add(-1, 5, 0));
-				chainBreakParticles(getWorld(), getPos().add(0, 5, 1));
-				chainBreakParticles(getWorld(), getPos().add(0, 5, -1));
-			}
 			plugDropTicksPrev = plugDropTicks;
 			floorFadeTicksPrev = floorFadeTicks;
+			if(getWorld().isRemote) {
+				if (plugDropTicks <= 0.8F) {
+					chainBreakParticles(getWorld(), getPos().add(1, 6, 0));
+					chainBreakParticles(getWorld(), getPos().add(-1, 6, 0));
+					chainBreakParticles(getWorld(), getPos().add(0, 6, 1));
+					chainBreakParticles(getWorld(), getPos().add(0, 6, -1));
+				}
+			}
 			if (plugDropTicks < 1.6F)
 				plugDropTicks += 0.2F;
 			if (plugDropTicks >= 1.6F && plugDropTicks <= 2)
@@ -183,15 +185,15 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 
 	@SideOnly(Side.CLIENT)
 	public void chainBreakParticles(World world, BlockPos pos) {
-		double px = getPos().getX() + 0.5D;
-		double py = getPos().getY() + 0.5D;
-		double pz = getPos().getZ() + 0.5D;
-		for (int i = 0, amount = 5 + getWorld().rand.nextInt(2); i < amount; i++) {
-			double ox = getWorld().rand.nextDouble() * 0.1F - 0.05F;
-			double oz = getWorld().rand.nextDouble() * 0.1F - 0.05F;
-			double motionX = getWorld().rand.nextDouble() * 0.2F - 0.1F;
-			double motionY = 0;
-			double motionZ = getWorld().rand.nextDouble() * 0.2F - 0.1F;
+		double px = pos.getX() + 0.5D;
+		double py = pos.getY() + 0.5D;
+		double pz = pos.getZ() + 0.5D;
+		for (int i = 0, amount = 10; i < amount; i++) {
+			double ox = getWorld().rand.nextDouble() * 0.6F - 0.3F;
+			double oz = getWorld().rand.nextDouble() * 0.6F - 0.3F;
+			double motionX = getWorld().rand.nextDouble() * 0.4F - 0.2F;
+			double motionY = getWorld().rand.nextDouble() * 0.3F + 0.075F;
+			double motionZ = getWorld().rand.nextDouble() * 0.4F - 0.2F;
 			world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(BlockRegistry.DECAY_PIT_HANGING_CHAIN.getDefaultState()));
 		}
 	}
