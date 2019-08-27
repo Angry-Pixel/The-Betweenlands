@@ -70,17 +70,29 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 		if (animationTicksChainPrev == 0 && isMoving() && isSlow())
 			if (!playChainSound)
 				playChainSound = true;
+		
+		if (isBroken() && getProgress() >= 640)
+			if (!playChainSound)
+				playChainSound = true;
 
 		if(getWorld().isRemote && playChainSound) {
-			playChainSoundSound(getWorld(), getPos());
+			if(!isBroken())
+				playChainSound(getWorld(), getPos());
+			else
+				playChainSoundFinal(getWorld(), getPos());
 			playChainSound = false;
 		}
 
 	}
-	
-	public void playChainSoundSound(World world, BlockPos pos) {
+
+	public void playChainSound(World world, BlockPos pos) {
 		ISound chain_sound = new DecayPitChainSound(this);
 		Minecraft.getMinecraft().getSoundHandler().playSound(chain_sound);
+	}
+
+	public void playChainSoundFinal(World world, BlockPos pos) {
+		//TODO Add final chain sound 
+	
 	}
 	
 	public List<Entity> getEntityCollidedWithChains(AxisAlignedBB chainBox) {
@@ -129,10 +141,6 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 
 	public boolean isSlow() {
 		return IS_SLOW;
-	}
-
-	public boolean isFast() {
-		return !IS_SLOW;
 	}
 
 	public void setBroken(boolean broken) {

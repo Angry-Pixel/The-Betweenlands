@@ -470,7 +470,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	}
 
 	public void playDropSound(World world, BlockPos pos) {
-		getWorld().playSound(null, getPosition(), SoundRegistry.PLUG_HIT, SoundCategory.HOSTILE, 1F, 1F);
+		getWorld().playSound(null, getPosition(), SoundRegistry.PLUG_HIT, SoundCategory.HOSTILE, 0.5F, 1F);
 	}
 
 	private boolean getAllTargetsHit() {
