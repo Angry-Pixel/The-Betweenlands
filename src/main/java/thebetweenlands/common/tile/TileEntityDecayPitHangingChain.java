@@ -70,7 +70,7 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 		if (animationTicksChainPrev == 0 && isMoving() && isSlow())
 			if (!playChainSound)
 				playChainSound = true;
-		
+
 		if (isBroken() && getProgress() >= 640)
 			if (!playChainSound)
 				playChainSound = true;
@@ -82,7 +82,6 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 				playChainSoundFinal(getWorld(), getPos());
 			playChainSound = false;
 		}
-
 	}
 
 	public void playChainSound(World world, BlockPos pos) {
@@ -91,8 +90,7 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 	}
 
 	public void playChainSoundFinal(World world, BlockPos pos) {
-		//TODO Add final chain sound 
-	
+		//TODO Add final chain sound/other thing
 	}
 	
 	public List<Entity> getEntityCollidedWithChains(AxisAlignedBB chainBox) {
