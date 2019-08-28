@@ -1,4 +1,4 @@
-# Blocks
+﻿# Blocks
 
 tile.thebetweenlands.angry_betweenstone.name=Angry Betweenstone
 tile.thebetweenlands.aqua_middle_gem_ore.name=Aqua Middle Gem Ore
@@ -423,7 +423,6 @@ tile.thebetweenlands.mud_tower_beam_origin.name=Beam Origin
 tile.thebetweenlands.mud_tower_beam_relay.name=Beam Lens
 tile.thebetweenlands.mud_tower_beam_tube.name=Beam Passage
 tile.thebetweenlands.mud_tower_beam_lens_supports.name=Beam Lens Support
-tile.thebetweenlands.mud_brick_spawner_hole.name=Sludge Worm Spawner
 tile.thebetweenlands.mud_brick_alcove.name=Dungeon Alcove
 tile.thebetweenlands.loot_urn.1.name=Loot Urn
 tile.thebetweenlands.loot_urn.2.name=Loot Urn
