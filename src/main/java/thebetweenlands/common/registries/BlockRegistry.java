@@ -165,7 +165,6 @@ import thebetweenlands.common.block.structure.BlockMudBrickShingleSlab;
 import thebetweenlands.common.block.structure.BlockMudBrickSpikeTrap;
 import thebetweenlands.common.block.structure.BlockMudBricks;
 import thebetweenlands.common.block.structure.BlockMudBricksClimbable;
-import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
 import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockMudTilesSpikeTrap;
 import thebetweenlands.common.block.structure.BlockMudTilesWater;
@@ -585,7 +584,6 @@ public class BlockRegistry {
     public static final Block MUD_TOWER_BEAM_TUBE = new BlockBeamTube();
     public static final Block MUD_TOWER_BEAM_LENS_SUPPORTS = new BlockBeamLensSupport();
     public static final Block DIAGONAL_ENERGY_BARRIER = new BlockDiagonalEnergyBarrier();
-    public static final Block MUD_BRICK_SPAWNER_HOLE = new BlockMudBricksSpawnerHole();
     public static final Block MUD_BRICK_ALCOVE = new BlockMudBrickAlcove();
     public static final Block LOOT_URN = new BlockLootUrn();
 	public static final Block DUNGEON_DOOR_RUNES = new BlockDungeonDoorRunes(false);

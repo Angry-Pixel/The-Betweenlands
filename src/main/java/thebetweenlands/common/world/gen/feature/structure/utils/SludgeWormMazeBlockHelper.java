@@ -20,18 +20,11 @@ import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockLootUrn.EnumLootUrn;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
-import thebetweenlands.common.block.plant.BlockEdgeMoss;
 import thebetweenlands.common.block.plant.BlockEdgePlant;
 import thebetweenlands.common.block.plant.BlockHangingPlant;
 import thebetweenlands.common.block.structure.BlockBrazier;
 import thebetweenlands.common.block.structure.BlockBrazier.EnumBrazierHalf;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
-import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlock;
-import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockDiagonal;
-import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL1;
-import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockL2;
-import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockR1;
-import thebetweenlands.common.block.structure.BlockDecayPitInvisibleFloorBlockR2;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockDungeonDoorCombination;
@@ -107,7 +100,6 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_4 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_4);
 	public IBlockState WORM_DUNGEON_PILLAR_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_VERTICAL_DECAY_FULL);
 	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_FULL);
-	public IBlockState MUD_BRICKS_SPAWNER_HOLE = BlockRegistry.MUD_BRICK_SPAWNER_HOLE.getDefaultState();
 
 	public IBlockState MUD_TILES = BlockRegistry.MUD_TILES.getDefaultState();
 	public IBlockState MUD_TILES_DECAY = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY);
@@ -847,7 +839,6 @@ public class SludgeWormMazeBlockHelper {
 			STRUCTURE_BLOCKS.put(CHEST, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICKS_SPIKE_TRAP, true);
 			STRUCTURE_BLOCKS.put(MUD_TILES_SPIKE_TRAP, true);
-			STRUCTURE_BLOCKS.put(MUD_BRICKS_SPAWNER_HOLE, true);
 		}
 	}
 

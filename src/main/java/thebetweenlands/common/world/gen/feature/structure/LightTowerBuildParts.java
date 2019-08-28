@@ -10,7 +10,6 @@ import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.structure.BlockBeamLensSupport;
 import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockBeamTube;
-import thebetweenlands.common.block.structure.BlockMudBricksSpawnerHole;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.block.terrain.BlockRottenLog;
@@ -60,7 +59,6 @@ public class LightTowerBuildParts {
 		rotatedCubeVolume(world, rand, pos, -4, 14 + level, 7, blockHelper.getRandomSupportBeam(facing.rotateY(), true, rand), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, -6, 14 + level, 7, blockHelper.getRandomSupportBeam(facing.getOpposite().rotateY(), true, rand), 1, 1, 1, facing);
 
-		rotatedCubeVolume(world, rand, pos, -5, 15 + level, 8, blockHelper.MUD_BRICKS_SPAWNER_HOLE.withProperty(BlockMudBricksSpawnerHole.FACING, facing.DOWN), 1, 1, 1, facing);
 		
 		rotatedCubeVolume(world, rand, pos, -4, 12 + level, 5, blockHelper.AIR, 1, 3, 2, facing);
 		rotatedCubeVolume(world, rand, pos, -5, 12 + level, 5, blockHelper.AIR, 1, 4, 2, facing);
