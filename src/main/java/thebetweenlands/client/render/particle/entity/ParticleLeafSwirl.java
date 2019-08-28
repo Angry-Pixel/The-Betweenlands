@@ -68,4 +68,36 @@ public class ParticleLeafSwirl extends ParticleSwirl implements IParticleSpriteR
 			args.withData(400, 0.0F, null);
 		}
 	}
+	
+	public static final class FactoryEmberSwirl extends ParticleFactory<FactoryEmberSwirl, ParticleLeafSwirl> {
+		public FactoryEmberSwirl() {
+			super(ParticleLeafSwirl.class, ParticleTextureStitcher.create(ParticleLeafSwirl.class, new ResourceLocation("thebetweenlands:particle/ember_swirl")).setSplitAnimations(true));
+		}
+
+		@Override
+		public ParticleLeafSwirl createParticle(ImmutableParticleArgs args) {
+			return new ParticleLeafSwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2));
+		}
+
+		@Override
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withData(400, 0.0F, null);
+		}
+	}
+	
+	public static final class FactorySludgeSwirl extends ParticleFactory<FactorySludgeSwirl, ParticleLeafSwirl> {
+		public FactorySludgeSwirl() {
+			super(ParticleLeafSwirl.class, ParticleTextureStitcher.create(ParticleLeafSwirl.class, new ResourceLocation("thebetweenlands:particle/smooth_smoke")));
+		}
+
+		@Override
+		public ParticleLeafSwirl createParticle(ImmutableParticleArgs args) {
+			return new ParticleLeafSwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2));
+		}
+
+		@Override
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withData(400, 0.0F, null);
+		}
+	}
 }

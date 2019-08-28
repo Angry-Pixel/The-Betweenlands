@@ -20,6 +20,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.init.SoundEvents;
@@ -38,6 +39,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -79,7 +82,7 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 		tasks.addTask(5, new EntityAIWander(this, 0.4D));
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		tasks.addTask(7, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 0, false, true, null));
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, false, true, null));
 		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[0]));
 	}
 
@@ -175,6 +178,15 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 		if (!getEntityWorld().isRemote && recentlyHit > 40)
 			if(getIsCastingSpell())
 				setIsCastingSpell(false);
+		
+		if (getEntityWorld().isRemote) {
+			if(rand.nextInt(4) == 0) {
+				ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
+					args.withColor(1F, 1F, 1F, 1F);
+					args.withScale(0.75F + rand.nextFloat() * 0.75F);
+				BLParticles.EMBER_SWIRL.spawn(getEntityWorld(), posX, posY, posZ, args);
+			}
+		}
     }
 
 	protected Entity checkCollision() {

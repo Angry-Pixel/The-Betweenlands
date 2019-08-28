@@ -54,7 +54,7 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 			if(this.rand.nextInt(4) == 0) {
 				ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
 					args.withColor(1F, 0.65F, 0.25F, 0.5F);
-				BLParticles.LEAF_SWIRL.spawn(this.world, this.posX, this.posY, this.posZ, args);
+				BLParticles.SLUDGE_SWIRL.spawn(this.world, this.posX, this.posY, this.posZ, args);
 			}
 		}
 	}

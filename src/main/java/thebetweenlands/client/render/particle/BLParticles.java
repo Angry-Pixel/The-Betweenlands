@@ -130,9 +130,9 @@ public enum BLParticles {
 	PUZZLE_BEAM(new ParticlePuzzleBeam.Factory()),
 	PUZZLE_BEAM_2(new ParticlePuzzleBeam2.Factory()),
 	SMOOTH_SMOKE(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/smooth_smoke"))),
-	SONIC_SCREAM(new ParticleSonicScream.Factory());
-
-
+	SONIC_SCREAM(new ParticleSonicScream.Factory()),
+	EMBER_SWIRL(new ParticleLeafSwirl.FactoryEmberSwirl()),
+	SLUDGE_SWIRL(new ParticleLeafSwirl.FactorySludgeSwirl());
 
 	private ParticleFactory<?, ?> factory;
 
