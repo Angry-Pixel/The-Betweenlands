@@ -36,20 +36,20 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		
+
 		if(!getEntityWorld().isRemote && this.ticksExisted % 40 == 0)
 			checkArea();
 
 		animationTicksPrev = animationTicks;
 		animationTicks++;
 		rotationYaw = renderYawOffset = MathHelper.wrapDegrees(animationTicks);
-		
+
 		if(!getEntityWorld().isRemote && this.ticksExisted % 20 == 0)
 			this.dataManager.set(ANIMATION_TICKS_SYNC, this.animationTicks);
 
 		if (animationTicks >= 360)
 			animationTicks = animationTicksPrev = 0;
-		
+
 		if (getEntityWorld().isRemote) {
 			if(this.rand.nextInt(4) == 0) {
 				ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
@@ -66,7 +66,7 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 		if(getEntityWorld().isRemote && key == ANIMATION_TICKS_SYNC)
 			this.animationTicks = this.animationTicksPrev = this.dataManager.get(ANIMATION_TICKS_SYNC);
 	}
-	
+
 	@Override
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
 		if(targetEntity instanceof EntityPlayer) {
