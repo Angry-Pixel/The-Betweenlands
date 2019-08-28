@@ -299,8 +299,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 						chain.updateBlock();
 					}
 				}
-				if(!getEntityWorld().isRemote)
-					setDead(); // TODO some particles to show the bobbing shields break
+				setDead(); // TODO some particles to show the bobbing shields break
 			}
 		}
 	}
@@ -333,6 +332,17 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
         while(shield.rotationYaw - shield.prevRotationYaw >= 180.0F) {
         	shield.prevRotationYaw += 360.0F;
         }
+	}
+
+	@Override
+	public void setDead() {
+		// TODO Not this, will add something better, this is a placeholder test. ;P
+		/*
+		  for(EntityDecayPitTargetPart shieldPart : parts)
+		  	if(shieldPart.isShield)
+		  		getEntityWorld().playEvent(null, 2001, shieldPart.getPosition(), Block.getIdFromBlock(BlockRegistry.SMOOTH_PITSTONE));
+		 */
+		super.setDead();
 	}
 
 	@Override
@@ -521,7 +531,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			setMoving(true);
 			setSlow(true);
 		}
-		//getWorld().playSound(null, getPosition(), SoundRegistry.CHAIN_LONG, SoundCategory.HOSTILE, 1F, 1.2F);
 	}
 
 	private void moveDown() {
