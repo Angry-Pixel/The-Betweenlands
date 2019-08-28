@@ -30,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -51,7 +52,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
-public class TileEntityDecayPitControl extends TileEntity implements ITickable {
+public class TileEntityDecayPitControl extends TileEntity implements ITickable, IEntityScreenShake {
 
 	public float animationTicks = 0;
 	public float animationTicksPrev = 0;
@@ -62,6 +63,10 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 	public int spawnType = 0;
 	public boolean IS_PLUGGED = false;
 	public boolean SHOW_FLOOR = true;
+	private int prev_shake_timer;
+	private int shake_timer;
+	private boolean shaking = false;
+	private static int SHAKING_TIMER_MAX = 60;
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	public final Map<Block, Boolean> INVISIBLE_BLOCKS = new HashMap<Block, Boolean>(); // dont need states so blocks will do
 
@@ -173,10 +178,11 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 				if (plugDropTicks <= 1.6F)
 					plugDropTicks += 0.2F;
 
-				if (plugDropTicks == 0.6F)
+				if (plugDropTicks == 0.6F) {
+					shaking = true;
 					if (!getWorld().isRemote)
 						getWorld().playSound(null, getPos(), SoundRegistry.PLUG_LOCK, SoundCategory.HOSTILE, 1F, 1F);
-
+				}
 				if (plugDropTicks > 1.6F && plugDropTicks <= 2)
 					plugDropTicks += 0.1F;
 
@@ -189,6 +195,8 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 						setShowFloor(false);
 						updateBlock();
 					}
+				if (shaking)
+					shake(60);
 			// TODO;
 			// render plug as animation falling in to place in the hole *DONE
 			// remove invisible blocks from edges of pit *DONE
@@ -436,5 +444,50 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return super.getRenderBoundingBox().grow(10);
+	}
+
+	public void shake(int shakeTimerMax) {
+		SHAKING_TIMER_MAX = shakeTimerMax;
+		prev_shake_timer = shake_timer;
+		if(shake_timer == 0) {
+			shaking = true;
+			shake_timer = 1;
+		}
+		if(shake_timer > 0)
+			shake_timer++;
+
+		if(shake_timer >= SHAKING_TIMER_MAX)
+			shaking = false;
+		else
+			shaking = true;
+	}
+
+	@Override
+	public float getShakeIntensity(Entity viewer, float partialTicks) {
+		if(isShaking()) {
+			double dist = getShakeDistance(viewer);
+			float shakeMult = (float) (1.0F - dist / 10.0F);
+			if(dist >= 10.0F) {
+				return 0.0F;
+			}
+			return (float) ((Math.sin(getShakingProgress(partialTicks) * Math.PI) + 0.1F) * 2F * shakeMult);
+		} else {
+			return 0.0F;
+		}
+	}
+
+    public float getShakeDistance(Entity entity) {
+        float distX = (float)(getPos().getX() - entity.getPosition().getX());
+        float distY = (float)(getPos().getY() - entity.getPosition().getY());
+        float distZ = (float)(getPos().getZ() - entity.getPosition().getZ());
+        return MathHelper.sqrt(distX  * distX  + distY * distY + distZ * distZ);
+    }
+
+	public boolean isShaking() {
+		return shaking;
+	}
+
+	public float getShakingProgress(float delta) {
+		return 1.0F / SHAKING_TIMER_MAX * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
 	}
 }
