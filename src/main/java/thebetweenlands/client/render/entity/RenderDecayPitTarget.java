@@ -30,14 +30,15 @@ import thebetweenlands.util.LightingUtil;
 public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	private static final ResourceLocation BEAM_TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/chain_beam.png");
 	
-	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_plug.png");
-	public static final ResourceLocation TEXTURE_PLUG_GLOW = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_plug_glow.png");
+	public static final ResourceLocation PLUG_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_plug.png");
+	public static final ResourceLocation PLUG_TEXTURE_GLOW = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_plug_glow.png");
 	private static final ModelDecayPitPlug PLUG_MODEL = new ModelDecayPitPlug();
 	
 	public static final ResourceLocation SHIELD_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_target_shield.png");
 	private static final ModelDecayPitTargetShield SHIELD_MODEL = new ModelDecayPitTargetShield();
 	
 	public static final ResourceLocation TARGET_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_target.png");
+	public static final ResourceLocation TARGET_TEXTURE_GLOW = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_target_glow.png");
 	private static final ModelDecayPitTarget TARGET_MODEL = new ModelDecayPitTarget();
 
 	public RenderDecayPitTarget(RenderManager manager) {
@@ -58,7 +59,7 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 		
 		GlStateManager.disableCull();
 		
-		bindTexture(TEXTURE);
+		bindTexture(PLUG_TEXTURE);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + 1.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);
@@ -94,6 +95,8 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 		GlStateManager.translate(x, y + 4.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);
 		TARGET_MODEL.render(0.0625F);
+		GlStateManager.translate(0, -0.001F, 0);
+		renderTargetGlowLayer(entity, 0.0625F);
 		GlStateManager.popMatrix();	
 	}
 	
@@ -192,7 +195,7 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	}
 
 	public void renderPlugGlowLayer(EntityDecayPitTarget entity, float scale) {
-		bindTexture(TEXTURE_PLUG_GLOW);
+		bindTexture(PLUG_TEXTURE_GLOW);
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.disableAlpha();
@@ -202,18 +205,41 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			GlStateManager.depthMask(false);
 		else
 			GlStateManager.depthMask(true);
-
-		PLUG_MODEL.render(scale + 0.0001F);
+		GlStateManager.scale(1.001F, 1.001F, 1.001F);
+		PLUG_MODEL.render(scale);
 		setLightmap(entity, false);
 		GlStateManager.color(1F, 1F, 1F, 0F);
 		setLightmap(entity, true);
-		PLUG_MODEL.render(scale + 0.0001F);
+		PLUG_MODEL.render(scale);
 		GlStateManager.disableBlend();
 		GlStateManager.enableAlpha();
 		GlStateManager.popMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color(1F, 1F, 1F, 1F);
+	}
+
+	public void renderTargetGlowLayer(EntityDecayPitTarget entity, float scale) {
+		bindTexture(TARGET_TEXTURE_GLOW);
+		GlStateManager.pushMatrix();
+		GlStateManager.enableBlend();
+		GlStateManager.disableAlpha();
+
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+		
+		if (entity.isInvisible())
+			GlStateManager.depthMask(false);
+		else
+			GlStateManager.depthMask(true);
+		GlStateManager.scale(1.001F, 1.001F, 1.001F);
+		TARGET_MODEL.render(scale);
+		setLightmap(entity, false);
+		GlStateManager.color(1F, 1F, 1F, 0F);
+		setLightmap(entity, true);
+		TARGET_MODEL.render(scale);
+		GlStateManager.disableBlend();
+		GlStateManager.enableAlpha();
+		GlStateManager.popMatrix();
 	}
 
 	public void setLightmap(EntityDecayPitTarget entity, Boolean useEntityBrightness) {
