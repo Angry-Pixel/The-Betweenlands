@@ -90,9 +90,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		location.setDirty(true);
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 
-		//Crypt Walkways
+		//Barrishee Lair
 		LocationStorage locationBarrishee = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "barrishee_lair", EnumLocationType.DUNGEON);
-		location.addBounds(new AxisAlignedBB(pos.getX() + 23, pos.getY() - 23, pos.getZ() - 3, pos.getX() + 31, pos.getY() - 19, pos.getZ()));
+		location.addBounds(new AxisAlignedBB(pos.getX() + 20, pos.getY() - 24, pos.getZ() - 3, pos.getX() + 29, pos.getY() - 19, pos.getZ()));
 		location.linkChunks();
 		location.setLayer(1);
 		location.setSeed(rand.nextLong());
