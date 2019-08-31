@@ -89,17 +89,27 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		location.setStructurePos(pos);
 		location.setDirty(true);
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
-		
+
 		//Crypt Walkways
-		LocationStorage locationWalkays = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "cc_winding_walkways", EnumLocationType.DUNGEON);
-		location.addBounds(new AxisAlignedBB(pos.getX() - 3, pos.getY() - 43, pos.getZ() - 3, pos.getX(), pos.getY() - 24, pos.getZ() + 29));
-		location.addBounds(new AxisAlignedBB(pos.getX(), pos.getY() - 43, pos.getZ() - 3, pos.getX() + 29 , pos.getY() - 24, pos.getZ()));
+		LocationStorage locationBarrishee = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "barrishee_lair", EnumLocationType.DUNGEON);
+		location.addBounds(new AxisAlignedBB(pos.getX() + 23, pos.getY() - 23, pos.getZ() - 3, pos.getX() + 31, pos.getY() - 19, pos.getZ()));
 		location.linkChunks();
 		location.setLayer(1);
 		location.setSeed(rand.nextLong());
 		location.setVisible(true);
 		location.setDirty(true);
-		worldStorage.getLocalStorageHandler().addLocalStorage(location);
+		worldStorage.getLocalStorageHandler().addLocalStorage(locationBarrishee);
+
+		//Crypt Walkways
+		LocationStorage locationWalkays = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "cc_winding_walkways", EnumLocationType.DUNGEON);
+		location.addBounds(new AxisAlignedBB(pos.getX() - 3, pos.getY() - 43, pos.getZ() - 3, pos.getX(), pos.getY() - 24, pos.getZ() + 29));
+		location.addBounds(new AxisAlignedBB(pos.getX(), pos.getY() - 43, pos.getZ() - 3, pos.getX() + 29 , pos.getY() - 24, pos.getZ()));
+		location.linkChunks();
+		location.setLayer(2);
+		location.setSeed(rand.nextLong());
+		location.setVisible(true);
+		location.setDirty(true);
+		worldStorage.getLocalStorageHandler().addLocalStorage(locationWalkays);
 		timer.finish("World_Locations");
 
 		timer.start("Crypt");
