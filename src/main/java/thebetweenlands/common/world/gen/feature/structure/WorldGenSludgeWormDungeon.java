@@ -91,7 +91,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 		
 		//Crypt Walkways
-		LocationStorage locationWalkays = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "cc_winding_walkways", EnumLocationType.CC_WINDING_WALKWAYS);
+		LocationStorage locationWalkays = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "cc_winding_walkways", EnumLocationType.MUD_DUNGEON);
 		location.addBounds(new AxisAlignedBB(pos.getX() - 3, pos.getY() - 43, pos.getZ() - 3, pos.getX(), pos.getY() - 24, pos.getZ() + 29));
 		location.addBounds(new AxisAlignedBB(pos.getX(), pos.getY() - 43, pos.getZ() - 3, pos.getX() + 29 , pos.getY() - 24, pos.getZ()));
 		location.linkChunks();
