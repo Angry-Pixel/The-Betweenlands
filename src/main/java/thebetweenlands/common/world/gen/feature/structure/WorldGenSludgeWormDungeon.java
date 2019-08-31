@@ -34,7 +34,9 @@ import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.TimeMeasurement;
 
 public class WorldGenSludgeWormDungeon extends WorldGenerator {
@@ -77,6 +79,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 		//locations blah, blah, blah...
 		timer.start("World_Locations");
+		//Mazes?
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 		LocationSludgeWormDungeon location = new LocationSludgeWormDungeon(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos));
 		location.addBounds(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 29, pos.getY() - 8 * 6 - 3, pos.getZ() + 29));
@@ -84,6 +87,17 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		location.setLayer(0);
 		location.setSeed(rand.nextLong());
 		location.setStructurePos(pos);
+		location.setDirty(true);
+		worldStorage.getLocalStorageHandler().addLocalStorage(location);
+		
+		//Crypt Walkways
+		LocationStorage locationWalkays = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "cc_winding_walkways", EnumLocationType.CC_WINDING_WALKWAYS);
+		location.addBounds(new AxisAlignedBB(pos.getX() - 3, pos.getY() - 43, pos.getZ() - 3, pos.getX(), pos.getY() - 24, pos.getZ() + 29));
+		location.addBounds(new AxisAlignedBB(pos.getX(), pos.getY() - 43, pos.getZ() - 3, pos.getX() + 29 , pos.getY() - 24, pos.getZ()));
+		location.linkChunks();
+		location.setLayer(1);
+		location.setSeed(rand.nextLong());
+		location.setVisible(true);
 		location.setDirty(true);
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 		timer.finish("World_Locations");

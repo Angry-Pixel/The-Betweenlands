@@ -873,6 +873,7 @@ location.wight_tower_boss.name=80:Primordial Malevolence
 location.abandoned_shack.name=<scale:1.75>Ruins</scale>
 location.underground_ruins.name=80:Underground Ruins
 location.spirit_tree.name=80:Spirit Tree
+location.cc_winding_walkways.name=80:Winding Walkways
 
 # Tooltips
 tooltip.arrow.octine=Use with caution!
