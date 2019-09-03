@@ -35,12 +35,13 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 	public static final PropertyBool INVISIBLE = PropertyBool.create("invisible");
 
 	public final boolean mimic;
+	public final boolean barrishee;
 	
-	public BlockDungeonDoorRunes(boolean mimic) {
-		this(Material.ROCK, mimic);
+	public BlockDungeonDoorRunes(boolean mimic, boolean barrishee) {
+		this(Material.ROCK, mimic, barrishee);
 	}
 
-	public BlockDungeonDoorRunes(Material material, boolean mimic) {
+	public BlockDungeonDoorRunes(Material material, boolean mimic, boolean barrishee) {
 		super(material);
 		setHardness(0.4F);
 		setSoundType(SoundType.STONE);
@@ -49,6 +50,7 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 		setLightOpacity(255);
 		useNeighborBrightness = true;
 		this.mimic = mimic;
+		this.barrishee = barrishee;
 	}
 	
 	@Nullable
@@ -78,7 +80,7 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		if(!getStateFromMeta(meta).getValue(INVISIBLE))
-			return new TileEntityDungeonDoorRunes(this.mimic);
+			return new TileEntityDungeonDoorRunes(this.mimic, barrishee);
 		return null;
 	}
 

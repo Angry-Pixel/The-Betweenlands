@@ -586,8 +586,9 @@ public class BlockRegistry {
     public static final Block DIAGONAL_ENERGY_BARRIER = new BlockDiagonalEnergyBarrier();
     public static final Block MUD_BRICK_ALCOVE = new BlockMudBrickAlcove();
     public static final Block LOOT_URN = new BlockLootUrn();
-	public static final Block DUNGEON_DOOR_RUNES = new BlockDungeonDoorRunes(false);
-	public static final Block DUNGEON_DOOR_RUNES_MIMIC = new BlockDungeonDoorRunes(true);
+	public static final Block DUNGEON_DOOR_RUNES = new BlockDungeonDoorRunes(false, false);
+	public static final Block DUNGEON_DOOR_RUNES_MIMIC = new BlockDungeonDoorRunes(true, true);
+	public static final Block DUNGEON_DOOR_RUNES_CRAWLER = new BlockDungeonDoorRunes(true, false);
 	public static final Block DUNGEON_DOOR_COMBINATION = new BlockDungeonDoorCombination();
 	public static final Block MUD_BRICKS_CLIMBABLE = new BlockMudBricksClimbable();
 	public static final Block MUD_TILES_WATER = new BlockMudTilesWater();

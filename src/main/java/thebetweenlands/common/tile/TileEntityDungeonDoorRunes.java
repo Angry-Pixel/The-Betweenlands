@@ -26,14 +26,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.common.block.structure.BlockDungeonDoorRunes;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
+import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.feature.structure.LightTowerBuildParts;
 
 public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable, IEntityScreenShake {
 	private LightTowerBuildParts lightTowerBuild = new LightTowerBuildParts();
-	private boolean mimic; // true = Barrishee
-	
+	private boolean mimic; // true = trap
+	private boolean barrishee; // true = Barrishee / false = Crypt Crawler Chief
 	public int top_code = -1, mid_code = -1, bottom_code = -1; // set back to -1
 	public int top_state = 0, mid_state = 0, bottom_state = 0;
 	public int top_state_prev = 0, mid_state_prev = 0, bottom_state_prev = 0;
@@ -74,9 +75,10 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 
 	private static int SHAKING_TIMER_MAX = 240;
 
-	public TileEntityDungeonDoorRunes(boolean mimic) {
+	public TileEntityDungeonDoorRunes(boolean mimic, boolean barishee) {
 		super();
 		this.mimic = mimic;
+		this.barrishee = barishee;
 	}
 
 	public TileEntityDungeonDoorRunes() {
@@ -286,14 +288,26 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 
 						//TODO make this shit work properly
 						BlockPos offsetPos = getPos().offset(facing.getOpposite());
-						EntityBarrishee entity = new EntityBarrishee(getWorld()); // door golem here :P
-						entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.down().getY(), offsetPos.getZ() + 0.5D, 0F, 0.0F);
-						entity.rotationYawHead = entity.rotationYaw;
-						entity.renderYawOffset = entity.rotationYaw;
-						entity.setIsAmbushSpawn(true);
-						entity.setIsScreaming(true);
-						entity.setScreamTimer(0);
-						getWorld().spawnEntity(entity);
+						if (barrishee) {
+							EntityBarrishee entity = new EntityBarrishee(getWorld());
+							entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.down().getY(), offsetPos.getZ() + 0.5D, 0F, 0.0F);
+							entity.rotationYawHead = entity.rotationYaw;
+							entity.renderYawOffset = entity.rotationYaw;
+							entity.setIsAmbushSpawn(true);
+							entity.setIsScreaming(true);
+							entity.setScreamTimer(0);
+							getWorld().spawnEntity(entity);
+						}
+						else {
+							EntityCryptCrawler entity = new EntityCryptCrawler(getWorld());
+							entity.setLocationAndAngles(offsetPos.getX() + 0.5D, offsetPos.down().getY(), offsetPos.getZ() + 0.5D, 0F, 0.0F);
+							entity.rotationYawHead = entity.rotationYaw;
+							entity.renderYawOffset = entity.rotationYaw;
+							entity.setIsBiped(true);
+							entity.setIsChief(true);
+							entity.onInitialSpawn(getWorld().getDifficultyForLocation(getPos()), null);
+							getWorld().spawnEntity(entity);
+						}
 						
 					}
 				slate_1_rotate += 4 + (last_tick_slate_1_rotate < 8 ? 0 : last_tick_slate_1_rotate / 8);
@@ -527,6 +541,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		mid_state_prev = nbt.getInteger("mid_state_prev");
 		bottom_state_prev = nbt.getInteger("bottom_state_prev");
 		mimic = nbt.getBoolean("mimic");
+		barrishee = nbt.getBoolean("barrishee");
 		animate_open = nbt.getBoolean("animate_open");
 		animate_open_recess = nbt.getBoolean("animate_open_recess");
 		animate_tile_recess = nbt.getBoolean("animate_tile_recess");
@@ -553,6 +568,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		nbt.setInteger("mid_state_prev", mid_state_prev);
 		nbt.setInteger("bottom_state_prev", bottom_state_prev);
 		nbt.setBoolean("mimic", mimic);
+		nbt.setBoolean("barrishee", barrishee);
 		nbt.setBoolean("animate_open", animate_open);
 		nbt.setBoolean("animate_open_recess", animate_open_recess);
 		nbt.setBoolean("animate_tile_recess", animate_tile_recess);
