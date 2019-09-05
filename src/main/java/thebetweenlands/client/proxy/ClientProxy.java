@@ -100,6 +100,7 @@ import thebetweenlands.client.render.entity.RenderDreadfulMummy;
 import thebetweenlands.client.render.entity.RenderElixir;
 import thebetweenlands.client.render.entity.RenderEmberling;
 import thebetweenlands.client.render.entity.RenderFirefly;
+import thebetweenlands.client.render.entity.RenderFlameJet;
 import thebetweenlands.client.render.entity.RenderFortressBoss;
 import thebetweenlands.client.render.entity.RenderFortressBossBlockade;
 import thebetweenlands.client.render.entity.RenderFortressBossProjectile;
@@ -242,6 +243,7 @@ import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityFlameJet;
 import thebetweenlands.common.entity.mobs.EntityFortressBoss;
 import thebetweenlands.common.entity.mobs.EntityFortressBossBlockade;
 import thebetweenlands.common.entity.mobs.EntityFortressBossProjectile;
@@ -612,6 +614,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityPredatorArrowGuide.class, RenderPredatorArrowGuide::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCCGroundSpawner.class, RenderCCGroundSpawner::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberling.class, RenderEmberling::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlameJet.class, RenderFlameJet::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

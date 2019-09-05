@@ -27,7 +27,8 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 		BEAM,
 		BEAM_YELLOW,
 		GOOP_SPLAT, 
-		SPLODE_SHROOM;
+		SPLODE_SHROOM,
+		FLAME_JET;
 		static final ParticleType[] values = values();
 	}
 
@@ -106,13 +107,14 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 						double d5 = message.posX;
 						double d6 = yy + 0.25F;
 						double d7 = message.posZ;
+						double d8 = message.posY;
 
-						BLParticles.TAR_BEAST_DRIP.spawn(world, d0, d1, d4, ParticleArgs.get().withMotion(4f * yy * (rand.nextFloat() - 0.5f), 4f * yy, 4f * yy * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
-						BLParticles.TAR_BEAST_DRIP.spawn(world, d3, d1, d2, ParticleArgs.get().withMotion(4f * yy * (rand.nextFloat() - 0.5f), 4f * yy, 4f * yy * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
-						BLParticles.TAR_BEAST_DRIP.spawn(world, d3, d1, d4, ParticleArgs.get().withMotion(4f * yy * (rand.nextFloat() - 0.5f), 4f * yy, 4f * yy * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
-						BLParticles.TAR_BEAST_DRIP.spawn(world, d0, d1, d2, ParticleArgs.get().withMotion(4f * yy * (rand.nextFloat() - 0.5f), 4f * yy, 4f * yy * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
-						BLParticles.TAR_BEAST_DRIP.spawn(world, d5, d6, d7, ParticleArgs.get().withMotion(4f * yy * (rand.nextFloat() - 0.5f), 4f * yy, 4f * yy * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
-						BLParticles.TAR_BEAST_DRIP.spawn(world, d0, d1, d2, ParticleArgs.get().withMotion(4f * yy * (rand.nextFloat() - 0.5f), 4f * yy, 4f * yy * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.TAR_BEAST_DRIP.spawn(world, d0, d1, d4, ParticleArgs.get().withMotion(10f * (yy - d8) * (rand.nextFloat() - 0.5f), 4f * (yy - d8), 10f * (yy - d8) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.TAR_BEAST_DRIP.spawn(world, d3, d1, d2, ParticleArgs.get().withMotion(10f * (yy - d8) * (rand.nextFloat() - 0.5f), 4f * (yy - d8), 10f * (yy - d8) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.TAR_BEAST_DRIP.spawn(world, d3, d1, d4, ParticleArgs.get().withMotion(10f * (yy - d8) * (rand.nextFloat() - 0.5f), 4f * (yy - d8), 10f * (yy - d8) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.TAR_BEAST_DRIP.spawn(world, d0, d1, d2, ParticleArgs.get().withMotion(10f * (yy - d8) * (rand.nextFloat() - 0.5f), 4f * (yy - d8), 10f * (yy - d8) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.TAR_BEAST_DRIP.spawn(world, d5, d6, d7, ParticleArgs.get().withMotion(10f * (yy - d8) * (rand.nextFloat() - 0.5f), 4f * (yy - d8), 10f * (yy - d8) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+						BLParticles.TAR_BEAST_DRIP.spawn(world, d0, d1, d2, ParticleArgs.get().withMotion(10f * (yy - d8) * (rand.nextFloat() - 0.5f), 4f * (yy - d8), 10f * (yy - d8) * (rand.nextFloat() - 0.5f)).withScale(2.5F).withData(100)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
 					}
 					break;
 				case FLAME:
@@ -135,6 +137,23 @@ public class PacketParticle implements IMessage, IMessageHandler<PacketParticle,
 				case SPLODE_SHROOM:
 					for (int count = 0; count <= 200; ++count)
 						TheBetweenlands.proxy.spawnCustomParticle("splode_shroom", world, message.posX + (world.rand.nextDouble() - 0.5D) , message.posY + world.rand.nextDouble(), message.posZ + (world.rand.nextDouble() - 0.5D), 0, 0, 0);
+					break;
+				case FLAME_JET:
+					for (double yy = message.posY; yy < message.posY + 2D; yy += 0.5D) {
+						double d0 = message.posX - 0.075F;
+						double d1 = yy;
+						double d2 = message.posZ - 0.075F;
+						double d3 = message.posX + 0.075F;
+						double d4 = message.posZ + 0.075F;
+						double d5 = message.posX;
+						double d6 = yy + 0.25F;
+						double d7 = message.posZ;
+						TheBetweenlands.proxy.spawnCustomParticle("flame", world, d0, d1, d2, 0.0D, 0.01D, 0.0D);
+						TheBetweenlands.proxy.spawnCustomParticle("flame", world, d0, d1, d4, 0.0D, 0.01D, 0.0D);
+						TheBetweenlands.proxy.spawnCustomParticle("flame", world, d3, d1, d2, 0.0D, 0.01D, 0.0D);
+						TheBetweenlands.proxy.spawnCustomParticle("flame", world, d3, d1, d4, 0.0D, 0.01D, 0.0D);
+						TheBetweenlands.proxy.spawnCustomParticle("flame", world, d5, d6, d7, 0.0D, 0.01D, 0.0D);
+					}
 					break;
 				default:
 			}

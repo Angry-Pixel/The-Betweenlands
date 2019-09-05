@@ -22,7 +22,6 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -310,9 +309,9 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 			if (missileCount %5 == 0) {
 				shootCount++;
 				double d2 = 1D * (double) (shootCount);
-				EntitySmallFireball fire_ball = new EntitySmallFireball(emberling.getEntityWorld(), emberling.posX + (double) MathHelper.cos(f) * d2, emberling.posY, emberling.posZ + (double) MathHelper.sin(f) * d2, 0F, 0.000001F, 0F);
-				fire_ball.shootingEntity = emberling;
-				emberling.getEntityWorld().spawnEntity(fire_ball);
+				EntityFlameJet flame_jet = new EntityFlameJet(emberling.getEntityWorld(), emberling);
+				flame_jet.setPosition(emberling.posX + (double) MathHelper.cos(f) * d2, emberling.posY, emberling.posZ + (double) MathHelper.sin(f) * d2);
+				emberling.getEntityWorld().spawnEntity(flame_jet);
 				emberling.getEntityWorld().playSound(null, emberling.getPosition(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.HOSTILE, 0.5F, 1F + (emberling.getEntityWorld().rand.nextFloat() - emberling.getEntityWorld().rand.nextFloat()) * 0.8F);
 			}
 			if (shootCount >= distance || shootCount >= 12) {
