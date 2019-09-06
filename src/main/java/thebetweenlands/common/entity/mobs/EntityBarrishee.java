@@ -1,6 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -19,8 +20,6 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.projectile.EntitySmallFireball;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.network.datasync.DataParameter;
@@ -129,8 +128,8 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(1, new EntityAISwimming(this));
-		//tasks.addTask(2, new EntityBarrishee.AIBarrisheeAttack(this));
-		tasks.addTask(3, new EntityBarrishee.AISonicAttack(this));
+		tasks.addTask(2, new EntityBarrishee.AISonicAttack(this));
+		tasks.addTask(3, new EntityBarrishee.AIBarrisheeAttack(this));
 		tasks.addTask(4, new EntityAIWander(this, 0.4D, 20));
 		//tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		//tasks.addTask(6, new EntityAILookIdle(this));
@@ -364,11 +363,11 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 				return false;
 			else {
 				double distance = barrishee.getDistanceSq(target);
-				if (distance >= 36.0D && distance <= 144.0D) {
+				if (distance >= 9.0D && distance <= 144.0D) {
 					if (!barrishee.onGround)
 						return false;
 					else
-						return barrishee.getRNG().nextInt(5) == 0;
+						return barrishee.getRNG().nextInt(20) == 0;
 				} else
 					return false;
 			}
@@ -393,22 +392,33 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		}
 
 		public void updateTask() {
+			int distance = MathHelper.floor(barrishee.getDistance(target));
 			if (barrishee.getScreamTimer() >= 25 && barrishee.isLookingAtAttackTarget(target)) {
 				if (!barrishee.isScreamingBeam())
 					barrishee.setIsScreamingBeam(true);
+
 				float f = (float) MathHelper.atan2(target.posZ - barrishee.posZ, target.posX - barrishee.posX);
-				int distance = MathHelper.floor(barrishee.getDistance(target));
 				missileCount++;
 				if (missileCount % 2 == 0) {
 					shootCount++;
 					double d2 = 2D + 1D * (double) (shootCount);
-					EntitySmallFireball fire_ball = new EntitySmallFireball(barrishee.getEntityWorld(), barrishee.posX + (double) MathHelper.cos(f) * d2, barrishee.posY, barrishee.posZ + (double) MathHelper.sin(f) * d2, 0F, 0.000001F, 0F);
-					//fire_ball.shootingEntity = barrishee;
-					barrishee.getEntityWorld().spawnEntity(fire_ball);
-					barrishee.getEntityWorld().playSound(null, barrishee.getPosition(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.HOSTILE, 0.5F, 1F + (barrishee.getEntityWorld().rand.nextFloat() - barrishee.getEntityWorld().rand.nextFloat()) * 0.8F);
+					checkIfBeamHitsAnyone(barrishee.getEntityWorld(), new BlockPos(barrishee.posX + (double) MathHelper.cos(f) * d2, barrishee.posY + barrishee.getEyeHeight(), barrishee.posZ + (double) MathHelper.sin(f) * d2));
 				}
-				if (shootCount >= distance || shootCount >= 12)
-					resetTask();
+			}
+			if (shootCount >= distance || shootCount >= 12 || target.isDead)
+				resetTask();
+		}
+
+		public void checkIfBeamHitsAnyone(World world, BlockPos pos) {
+			AxisAlignedBB hitBox = new AxisAlignedBB(pos).grow(0D, 0.25D, 0D);
+			List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, hitBox);
+			for (int entityCount = 0; entityCount < list.size(); entityCount++) {
+				Entity entity = list.get(entityCount);
+				if (entity != null)
+					if (entity instanceof EntityLivingBase) {
+						barrishee.attackEntityAsMob(entity);
+						entity.addVelocity(-MathHelper.sin(barrishee.rotationYaw * 3.141593F / 180.0F) * 0.25D, 0D, MathHelper.cos(barrishee.rotationYaw * 3.141593F / 180.0F) * 0.25D);
+					}
 			}
 		}
 	}
