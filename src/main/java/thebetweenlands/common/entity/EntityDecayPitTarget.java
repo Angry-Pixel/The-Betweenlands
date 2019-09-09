@@ -265,29 +265,32 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			if (getProgress() > MIN_PROGRESS && getEntityWorld().getTotalWorldTime() % 400 == 0 && attackDamageTicks == 0)
 				moveUp();
 
-			if (getEntityWorld().getTotalWorldTime() % 10 == 0) {
-				if (getControl() != null) {
-					if (getProgress() < 128)
-						getControl().setSpawnType(0);
-					if (getProgress() >= 128 && getProgress() < 256)
-						getControl().setSpawnType(1);
-					if (getProgress() >= 256 && getProgress() < 384)
-						getControl().setSpawnType(2);
-					if (getProgress() >= 384 && getProgress() < 512)
-						getControl().setSpawnType(3);
-					if (getProgress() >= 512 && getProgress() < 640)
-						getControl().setSpawnType(4);
-					if (getProgress() >= 640)
-						getControl().setSpawnType(5);
+			TileEntityDecayPitControl control = this.getControl();
+			
+			if (control != null && getEntityWorld().getTotalWorldTime() % 10 == 0) {
+				if (getProgress() < 128)
+					control.setSpawnType(0);
+				if (getProgress() >= 128 && getProgress() < 256)
+					control.setSpawnType(1);
+				if (getProgress() >= 256 && getProgress() < 384)
+					control.setSpawnType(2);
+				if (getProgress() >= 384 && getProgress() < 512)
+					control.setSpawnType(3);
+				if (getProgress() >= 512 && getProgress() < 640)
+					control.setSpawnType(4);
+				if (getProgress() >= 640)
+					control.setSpawnType(5);
 	
-				}
 			}
-			if (getControl().getSpawnType() == 5) {
-				if (getHangingChains() != null) {
-					getHangingChains().setBroken(true);
-					getHangingChains().setMoving(true);
-					getHangingChains().setSlow(false);
-					getHangingChains().updateBlock();
+			
+			if (control == null || control.getSpawnType() == 5) {
+				TileEntityDecayPitHangingChain hangingChains = this.getHangingChains();
+				
+				if (hangingChains != null) {
+					hangingChains.setBroken(true);
+					hangingChains.setMoving(true);
+					hangingChains.setSlow(false);
+					hangingChains.updateBlock();
 				}
 
 				if (getGroundChains() != null) {
