@@ -283,7 +283,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	
 			}
 			
-			if (control == null || control.getSpawnType() == 5) {
+			if (control != null && control.getSpawnType() == 5) {
 				TileEntityDecayPitHangingChain hangingChains = this.getHangingChains();
 				
 				if (hangingChains != null) {
