@@ -36,11 +36,15 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.gen.*;
+import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.gen.MapGenBase;
+import net.minecraft.world.gen.NoiseGeneratorOctaves;
+import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import net.minecraftforge.event.ForgeEventFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
-import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
+import thebetweenlands.common.world.biome.spawning.WorldMobSpawner;
 import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
@@ -510,10 +514,10 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 				decorator.decorate(this.worldObj, this, this.rand, bx, bz);
 			}
 			if(this.worldObj instanceof WorldServer) {
-				MobSpawnHandler.INSTANCE.populateChunk((WorldServer) this.worldObj, x, z);
-				MobSpawnHandler.INSTANCE.populateChunk((WorldServer) this.worldObj, x+1, z);
-				MobSpawnHandler.INSTANCE.populateChunk((WorldServer) this.worldObj, x+1, z+1);
-				MobSpawnHandler.INSTANCE.populateChunk((WorldServer) this.worldObj, x, z+1);
+				WorldMobSpawner.INSTANCE.populateChunk((WorldServer) this.worldObj, x, z);
+				WorldMobSpawner.INSTANCE.populateChunk((WorldServer) this.worldObj, x+1, z);
+				WorldMobSpawner.INSTANCE.populateChunk((WorldServer) this.worldObj, x+1, z+1);
+				WorldMobSpawner.INSTANCE.populateChunk((WorldServer) this.worldObj, x, z+1);
 			}
 		} else {
 			biome.decorate(this.worldObj, this.rand, new BlockPos(bx, 0, bz));

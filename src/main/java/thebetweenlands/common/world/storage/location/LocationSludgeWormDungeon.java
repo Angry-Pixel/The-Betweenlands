@@ -5,9 +5,11 @@ import javax.annotation.Nullable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.IWorldStorage;
@@ -15,7 +17,14 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.client.render.shader.postprocessing.GroundFog.GroundFogVolume;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityShambler;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.biome.spawning.BoxMobSpawner;
+import thebetweenlands.common.world.biome.spawning.spawners.SludgeDungeonSpawnEntry;
 import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 
 public class LocationSludgeWormDungeon extends LocationGuarded {
@@ -23,10 +32,22 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 
 	private BlockPos structurePos;
 
+	private final BoxMobSpawner dungeonMobSpawner;
+	
 	public LocationSludgeWormDungeon(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		super(worldStorage, id, region, "sludge_worm_dungeon", EnumLocationType.DUNGEON);
+		
 		this.dataManager.register(GROUND_FOG_STRENGTH, 1.0F);
+		
 		this.setAmbience(new LocationAmbience(EnumLocationAmbience.SLUDGE_WORM_DUNGEON).setCaveFog(false));
+		
+		this.dungeonMobSpawner = new BoxMobSpawner();
+		this.dungeonMobSpawner.setMaxAreaEntities(64);
+		
+		this.dungeonMobSpawner.addSpawnEntry(new SludgeDungeonSpawnEntry(-1, EntityShambler.class, (short) 100, 0).setGroupSize(1, 3).setHostile(true));
+		this.dungeonMobSpawner.addSpawnEntry(new SludgeDungeonSpawnEntry(-1, EntitySwampHag.class, (short) 100, 1).setGroupSize(1, 3).setHostile(true));
+		this.dungeonMobSpawner.addSpawnEntry(new SludgeDungeonSpawnEntry(-1, EntityChiromaw.class, (short) 100, 2).setGroupSize(1, 3).setHostile(true));
+		this.dungeonMobSpawner.addSpawnEntry(new SludgeDungeonSpawnEntry(-1, EntityWight.class, (short) 100, 3).setGroupSize(1, 3).setHostile(true));
 	}
 
 	/**
@@ -82,6 +103,21 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	public void update() {
 		super.update();
 
+		World world = this.getWorldStorage().getWorld();
+		
+		if(world instanceof WorldServer && world.provider instanceof WorldProviderBetweenlands && world.getGameRules().getBoolean("doMobSpawning") && world.getTotalWorldTime() % 4 == 0) {
+			boolean spawnHostiles = ((WorldProviderBetweenlands)world.provider).getCanSpawnHostiles();
+			boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
+			
+			this.dungeonMobSpawner.clearAreas();
+			//TODO May need different AABBs for spawning purposes
+			for(AxisAlignedBB aabb : this.getBounds()) {
+				this.dungeonMobSpawner.addArea(aabb);
+			}
+			
+			this.dungeonMobSpawner.populate((WorldServer) world, spawnHostiles, spawnAnimals);
+		}
+		
 		//TODO Clear fog strength when dungeon is conquered
 	}
 

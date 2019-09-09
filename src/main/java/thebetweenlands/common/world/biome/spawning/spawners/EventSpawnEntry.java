@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.AreaMobSpawner.BLSpawnEntry;
 
 public class EventSpawnEntry extends BLSpawnEntry {
 	private final BLSpawnEntry parent;
