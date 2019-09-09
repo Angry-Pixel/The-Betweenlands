@@ -5,8 +5,10 @@ import javax.annotation.Nullable;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 
@@ -47,45 +49,56 @@ public class LayerOverlay<T extends EntityLivingBase> implements LayerRenderer<T
 				float green = this.getGreen();
 				float blue = this.getBlue();
 
-				GlStateManager.doPolygonOffset(-0.01F, -3.0F);
-				GlStateManager.enablePolygonOffset();
-
-				GlStateManager.enableBlend();
-				GlStateManager.enableAlpha();
-				GlStateManager.depthMask(false);
-				GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-				GlStateManager.color(red, green, blue, alpha);
-
-				if(this.getGlow()) {
-					int i = 61680;
-					int j = i % 65536;
-					int k = i / 65536;
-					OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
-					GlStateManager.enableLighting();
-			    }
-
-				this.renderOverlay(entity, model, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
-
-				if(this.getGlow()) {
-					GlStateManager.depthMask(!entity.isInvisible());
-					GlStateManager.color(red * alpha, green * alpha, blue * alpha, alpha);
-					GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-
+				renderOverlay(entity, () -> {
 					this.renderOverlay(entity, model, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
-
-					this.setLightmap(entity, partialTicks);
-				}
-
-				GlStateManager.depthMask(true);
-				GlStateManager.disableBlend();
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
-				GlStateManager.doPolygonOffset(0.0F, 0.0F);
-				GlStateManager.disablePolygonOffset();
+				}, this.getGlow(), red, green, blue, alpha);
 			}
 
 			index++;
 		}
+	}
+	
+	public static void renderOverlay(@Nullable Entity entity, Runnable renderer, boolean glow, float red, float green, float blue, float alpha) {
+		GlStateManager.doPolygonOffset(-0.01F, -3.0F);
+		GlStateManager.enablePolygonOffset();
+
+		GlStateManager.enableBlend();
+		GlStateManager.enableAlpha();
+		GlStateManager.depthMask(false);
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(red, green, blue, alpha);
+		
+		if(glow) {
+			int i = 61680;
+			int j = i % 65536;
+			int k = i / 65536;
+			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+			GlStateManager.disableLighting();
+	    }
+		
+		renderer.run();
+		
+		if(glow) {
+			GlStateManager.depthMask(entity == null || !entity.isInvisible());
+			GlStateManager.color(red * alpha, green * alpha, blue * alpha, alpha);
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
+
+			renderer.run();
+			
+			if(entity != null) {
+				setLightmap(entity);
+			}
+		}
+
+		GlStateManager.enableLighting();
+		
+		GlStateManager.depthMask(true);
+		GlStateManager.disableBlend();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
+		GlStateManager.doPolygonOffset(0.0F, 0.0F);
+		GlStateManager.disablePolygonOffset();
 	}
 
 	protected void renderOverlay(T entity, ModelBase model, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
@@ -110,11 +123,10 @@ public class LayerOverlay<T extends EntityLivingBase> implements LayerRenderer<T
 
 	/**
 	 * Updates the lighting map for the position of the specified entity
-	 * @param entityLivingIn
-	 * @param partialTicks
+	 * @param entity
 	 */
-	protected void setLightmap(T entityLivingIn, float partialTicks) {
-		int i = entityLivingIn.getBrightnessForRender();
+	protected static void setLightmap(Entity entity) {
+		int i = entity.getBrightnessForRender();
 		int j = i % 65536;
 		int k = i / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);

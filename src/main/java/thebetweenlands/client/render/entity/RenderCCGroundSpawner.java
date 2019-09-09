@@ -50,7 +50,6 @@ public class RenderCCGroundSpawner extends Render<EntityCCGroundSpawner> {
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
 
 				GlStateManager.disableAlpha();
-				GlStateManager.disableBlend();
 				GlStateManager.disableTexture2D();
 
 				//Polygon offset required so that there's no z fighting with the window and background wall
@@ -63,7 +62,6 @@ public class RenderCCGroundSpawner extends Render<EntityCCGroundSpawner> {
 				GlStateManager.disablePolygonOffset();
 
 				GlStateManager.enableAlpha();
-				GlStateManager.enableBlend();
 				GlStateManager.enableTexture2D();
 
 				GlStateManager.depthMask(true);

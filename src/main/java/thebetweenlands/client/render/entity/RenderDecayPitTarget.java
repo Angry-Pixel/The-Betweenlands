@@ -17,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.entity.layer.LayerOverlay;
 import thebetweenlands.client.render.model.entity.ModelDecayPitPlug;
 import thebetweenlands.client.render.model.entity.ModelDecayPitTarget;
 import thebetweenlands.client.render.model.entity.ModelDecayPitTargetShield;
@@ -59,13 +60,15 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 		
 		GlStateManager.disableCull();
 		
-		bindTexture(PLUG_TEXTURE);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + 1.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);
+		
+		bindTexture(PLUG_TEXTURE);
 		PLUG_MODEL.render(0.0625F);
-		GlStateManager.translate(0, -0.001F, 0);
+		
 		renderPlugGlowLayer(entity, 0.0625F);
+		
 		GlStateManager.popMatrix();	
 		
 		EntityDecayPitTargetPart hitPart = null;
@@ -90,14 +93,18 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			}
 		}
 		
-		bindTexture(TARGET_TEXTURE);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + 4.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);
+		
+		bindTexture(TARGET_TEXTURE);
 		TARGET_MODEL.render(0.0625F);
-		GlStateManager.translate(0, -0.001F, 0);
+		
 		renderTargetGlowLayer(entity, 0.0625F);
+		
 		GlStateManager.popMatrix();	
+		
+		GlStateManager.disableBlend();
 	}
 	
 	@Override
@@ -196,50 +203,14 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 
 	public void renderPlugGlowLayer(EntityDecayPitTarget entity, float scale) {
 		bindTexture(PLUG_TEXTURE_GLOW);
-		GlStateManager.pushMatrix();
-		GlStateManager.enableBlend();
-		GlStateManager.disableAlpha();
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		
-		if (entity.isInvisible())
-			GlStateManager.depthMask(false);
-		else
-			GlStateManager.depthMask(true);
-		GlStateManager.scale(1.001F, 1.001F, 1.001F);
-		PLUG_MODEL.render(scale);
-		setLightmap(entity, false);
-		GlStateManager.color(1F, 1F, 1F, 0F);
-		setLightmap(entity, true);
-		PLUG_MODEL.render(scale);
-		GlStateManager.disableBlend();
-		GlStateManager.enableAlpha();
-		GlStateManager.popMatrix();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1F, 1F, 1F, 1F);
+		LayerOverlay.renderOverlay(entity, () -> PLUG_MODEL.render(scale), true, 1, 1, 1, 1);
 	}
 
 	public void renderTargetGlowLayer(EntityDecayPitTarget entity, float scale) {
 		bindTexture(TARGET_TEXTURE_GLOW);
-		GlStateManager.pushMatrix();
-		GlStateManager.enableBlend();
-		GlStateManager.disableAlpha();
-
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		
-		if (entity.isInvisible())
-			GlStateManager.depthMask(false);
-		else
-			GlStateManager.depthMask(true);
-		GlStateManager.scale(1.001F, 1.001F, 1.001F);
-		TARGET_MODEL.render(scale);
-		setLightmap(entity, false);
-		GlStateManager.color(1F, 1F, 1F, 0F);
-		setLightmap(entity, true);
-		TARGET_MODEL.render(scale);
-		GlStateManager.disableBlend();
-		GlStateManager.enableAlpha();
-		GlStateManager.popMatrix();
+		LayerOverlay.renderOverlay(entity, () -> TARGET_MODEL.render(scale), true, 1, 1, 1, 1);
 	}
 
 	public void setLightmap(EntityDecayPitTarget entity, Boolean useEntityBrightness) {
