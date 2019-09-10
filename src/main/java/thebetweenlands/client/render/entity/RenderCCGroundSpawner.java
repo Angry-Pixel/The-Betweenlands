@@ -118,6 +118,9 @@ public class RenderCCGroundSpawner extends Render<EntityCCGroundSpawner> {
 
 		this.bindTexture(TEXTURE);
 		
+		GlStateManager.doPolygonOffset(0.05F, 3.0F);
+		GlStateManager.enablePolygonOffset();
+		
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
 
 		//north
@@ -167,6 +170,9 @@ public class RenderCCGroundSpawner extends Render<EntityCCGroundSpawner> {
 		tessellator.draw();
 
 		this.bindTexture(HOLE_TEXTURE);
+		
+		GlStateManager.doPolygonOffset(0, 0);
+		GlStateManager.disablePolygonOffset();
 		
 		GlStateManager.enableCull();
 		
