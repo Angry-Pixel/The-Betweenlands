@@ -19,8 +19,10 @@ import thebetweenlands.util.Stencil;
 
 @SideOnly(Side.CLIENT)
 public class RenderCCGroundSpawner extends Render<EntityCCGroundSpawner> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/blocks/compacted_mud.png");
-
+	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/cc_ground_spawner_shingles.png");
+	private static final ResourceLocation HOLE_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/cc_ground_spawner_hole.png");
+	private static final ResourceLocation GROUND_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/cc_ground_spawner_ground.png");
+	
 	public RenderCCGroundSpawner(RenderManager renderManagerIn) {
 		super(renderManagerIn);
 	}
@@ -114,13 +116,9 @@ public class RenderCCGroundSpawner extends Render<EntityCCGroundSpawner> {
 
 		BufferBuilder buffer = tessellator.getBuffer();
 
+		this.bindTexture(TEXTURE);
+		
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
-
-		//ground
-		buffer.pos(-1, 0, 2).tex(0, 3).normal(0, 1, 0).endVertex();
-		buffer.pos(-1, 0, -1).tex(0, 0).normal(0, 1, 0).endVertex();
-		buffer.pos(2, 0, -1).tex(3, 0).normal(0, 1, 0).endVertex();
-		buffer.pos(2, 0, 2).tex(3, 3).normal(0, 1, 0).endVertex();
 
 		//north
 		buffer.pos(-1, 1, -1).tex(0, 1).normal(0, 0, -1).endVertex();
@@ -129,8 +127,8 @@ public class RenderCCGroundSpawner extends Render<EntityCCGroundSpawner> {
 		buffer.pos(2, 1, -1).tex(3, 1).normal(0, 0, -1).endVertex();
 		//slope
 		buffer.pos(-1, 1, -1).tex(0, 0).normal(0, 0, -1).endVertex();
-		buffer.pos(-1, 0, 0).tex(0, 1.4142f).normal(0, 0, -1).endVertex();
-		buffer.pos(2, 0, 0).tex(3, 1.4142f).normal(0, 0.5f, -1).endVertex();
+		buffer.pos(-1, 0, 0).tex(0, 1.0f).normal(0, 0, -1).endVertex();
+		buffer.pos(2, 0, 0).tex(3, 1.0f).normal(0, 0.5f, -1).endVertex();
 		buffer.pos(2, 1, -1).tex(3, 0).normal(0, 0.5f, -1).endVertex();
 
 		//south
@@ -140,8 +138,8 @@ public class RenderCCGroundSpawner extends Render<EntityCCGroundSpawner> {
 		buffer.pos(2, 1, 2).tex(3, 1).normal(0, 0, 1).endVertex();
 		//slope
 		buffer.pos(-1, 1, 2).tex(0, 0).normal(0, 0, 1).endVertex();
-		buffer.pos(-1, 0, 1).tex(0, 1.4142f).normal(0, 0, 1).endVertex();
-		buffer.pos(2, 0, 1).tex(3, 1.4142f).normal(0, 0.5f, 1).endVertex();
+		buffer.pos(-1, 0, 1).tex(0, 1.0f).normal(0, 0, 1).endVertex();
+		buffer.pos(2, 0, 1).tex(3, 1.0f).normal(0, 0.5f, 1).endVertex();
 		buffer.pos(2, 1, 2).tex(3, 0).normal(0, 0.5f, 1).endVertex();
 
 		//west
@@ -151,8 +149,8 @@ public class RenderCCGroundSpawner extends Render<EntityCCGroundSpawner> {
 		buffer.pos(-1, 1, 2).tex(3, 1).normal(-1, 0, 0).endVertex();
 		//slope
 		buffer.pos(-1, 1, -1).tex(0, 0).normal(-1, 0, 0).endVertex();
-		buffer.pos(0, 0, -1).tex(0, 1.4142f).normal(-1, 0, 0).endVertex();
-		buffer.pos(0, 0, 2).tex(3, 1.4142f).normal(-1, 0.5f, 0).endVertex();
+		buffer.pos(0, 0, -1).tex(0, 1.0f).normal(-1, 0, 0).endVertex();
+		buffer.pos(0, 0, 2).tex(3, 1.0f).normal(-1, 0.5f, 0).endVertex();
 		buffer.pos(-1, 1, 2).tex(3, 0).normal(-1, 0.5f, 0).endVertex();
 
 		//east
@@ -162,13 +160,37 @@ public class RenderCCGroundSpawner extends Render<EntityCCGroundSpawner> {
 		buffer.pos(2, 1, 2).tex(3, 1).normal(1, 0, 0).endVertex();
 		//slope
 		buffer.pos(2, 1, -1).tex(0, 0).normal(1, 0, 0).endVertex();
-		buffer.pos(1, 0, -1).tex(0, 1.4142f).normal(1, 0, 0).endVertex();
-		buffer.pos(1, 0, 2).tex(3, 1.4142f).normal(1, 0.5f, 0).endVertex();
+		buffer.pos(1, 0, -1).tex(0, 1.0f).normal(1, 0, 0).endVertex();
+		buffer.pos(1, 0, 2).tex(3, 1.0f).normal(1, 0.5f, 0).endVertex();
 		buffer.pos(2, 1, 2).tex(3, 0).normal(1, 0.5f, 0).endVertex();
 
 		tessellator.draw();
 
+		this.bindTexture(HOLE_TEXTURE);
+		
 		GlStateManager.enableCull();
+		
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
+		
+		//ground
+		buffer.pos(-1, 0, -1).tex(0, 0).normal(0, 1, 0).endVertex();
+		buffer.pos(-1, 0, 2).tex(0, 1).normal(0, 1, 0).endVertex();
+		buffer.pos(2, 0, 2).tex(1, 1).normal(0, 1, 0).endVertex();
+		buffer.pos(2, 0, -1).tex(1, 0).normal(0, 1, 0).endVertex();
+
+		tessellator.draw();
+		
+		this.bindTexture(GROUND_TEXTURE);
+		
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
+		
+		//ground
+		buffer.pos(-1, 0, 2).tex(0, 1).normal(0, 1, 0).endVertex();
+		buffer.pos(-1, 0, -1).tex(0, 0).normal(0, 1, 0).endVertex();
+		buffer.pos(2, 0, -1).tex(1, 0).normal(0, 1, 0).endVertex();
+		buffer.pos(2, 0, 2).tex(1, 1).normal(0, 1, 0).endVertex();
+
+		tessellator.draw();
 	}
 
 	@Override

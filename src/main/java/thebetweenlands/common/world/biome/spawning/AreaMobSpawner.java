@@ -411,7 +411,7 @@ public abstract class AreaMobSpawner {
 					totalWeight += spawnEntry.getWeight();
 				}
 
-				if(possibleSpawns.isEmpty())
+				if(possibleSpawns.isEmpty() || totalWeight == 0)
 					continue;
 
 				WeightedList<ICustomSpawnEntry> weightedPossibleSpawns = new WeightedList<>();
