@@ -162,7 +162,7 @@ public abstract class AreaMobSpawner {
 
 		@Override
 		public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
-			return surfaceBlockState.isNormalCube();
+			return !blockState.isNormalCube() && surfaceBlockState.isNormalCube();
 		}
 
 		@Override
@@ -385,11 +385,6 @@ public abstract class AreaMobSpawner {
 				if(world.rand.nextFloat() > biome.getSpawningChance() || biome instanceof ICustomSpawnEntriesProvider == false) 
 					continue;
 
-				IBlockState centerSpawnBlockState = world.getBlockState(spawnPos);
-
-				if(centerSpawnBlockState.isNormalCube()) 
-					continue;
-
 				int totalBaseWeight = 0;
 				int totalWeight = 0;
 
@@ -500,9 +495,6 @@ public abstract class AreaMobSpawner {
 							continue;
 
 						IBlockState spawnBlockState = world.getBlockState(entitySpawnPos);
-
-						if(spawnBlockState.isNormalCube())
-							continue;
 
 						int spawnSegmentY = entitySpawnPos.getY() / 16;
 						Chunk spawnChunk = world.getChunk(entitySpawnPos);

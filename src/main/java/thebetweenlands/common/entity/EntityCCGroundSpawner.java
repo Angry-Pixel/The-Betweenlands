@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
@@ -18,14 +19,18 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class EntityCCGroundSpawner extends EntityProximitySpawner {
@@ -42,6 +47,44 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		super.entityInit();
 		dataManager.register(IS_WORLD_SPANWED, true);
 		dataManager.register(SPAWN_COUNT, 0);
+	}
+	
+	@Override
+	public boolean getCanSpawnHere() {
+		int solidCount = 0;
+		BlockPos pos = new BlockPos(this);
+		
+		if(pos.getY() < WorldProviderBetweenlands.CAVE_START) {
+			return false;
+		}
+		
+		for(int xo = -1; xo <= 1; xo++) {
+			for(int zo = -1; zo <= 1; zo++) {
+				BlockPos offsetPos = pos.add(xo, 0, zo);
+				IBlockState state = this.world.getBlockState(offsetPos);
+				
+				if(state.getMaterial().isLiquid()) {
+					return false;
+				}
+				
+				if(SurfaceType.MIXED_GROUND.apply(state)) {
+					solidCount++;
+				} else if(xo == 0 && zo == 0) {
+					return false;
+				}
+				
+				if(!this.world.isAirBlock(offsetPos.up())) {
+					return false;
+				}
+			}
+		}
+		
+		return solidCount >= 6;
+	}
+	
+	@Override
+	public boolean isNotColliding() {
+		return true;
 	}
 	
 	@Override
@@ -168,11 +211,14 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 				setDead();
 	}
 
+	@Override
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
 		if(isWorldSpawned())
 			setSpawnCount(getSpawnCount() + 1);
 		getEntityWorld().playSound((EntityPlayer)null, getPosition(), getDigSound(), SoundCategory.HOSTILE, 0.5F, 1.0F);
-		entitySpawned.setPosition(getPosition().getX() + 0.5F, getPosition().getY() - 1.5F, getPosition().getZ() + 0.5F);
+		entitySpawned.setPosition(getPosition().getX() + 0.5F, getPosition().getY() + 0.25F, getPosition().getZ() + 0.5F);
+		entitySpawned.motionY = 0.1f;
+		entitySpawned.velocityChanged = true;
 	}
 
 	protected SoundEvent getDigSound() {
@@ -250,7 +296,9 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		setIsWorldSpawned(nbt.getBoolean("world_spawned"));
+		if(nbt.hasKey("world_spawned", Constants.NBT.TAG_BYTE)) {
+			setIsWorldSpawned(nbt.getBoolean("world_spawned"));
+		}
 		setSpawnCount(nbt.getInteger("spawn_count"));
 	}
 

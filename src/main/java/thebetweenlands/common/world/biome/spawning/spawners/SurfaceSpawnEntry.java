@@ -59,8 +59,9 @@ public class SurfaceSpawnEntry extends BLSpawnEntry {
 
 	@Override
 	public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState spawnBlockState, IBlockState surfaceBlockState) {
-		return (this.surfaceBlockPredicate.apply(surfaceBlockState) && !spawnBlockState.getMaterial().isLiquid()) ||
+		return !spawnBlockState.isNormalCube() &&
+				((this.surfaceBlockPredicate.apply(surfaceBlockState) && !spawnBlockState.getMaterial().isLiquid()) ||
 				(this.canSpawnInWater && spawnBlockState.getMaterial().isLiquid()) || 
-				(this.canSpawnOnWater && surfaceBlockState.getMaterial().isLiquid() && !spawnBlockState.getMaterial().isLiquid());
+				(this.canSpawnOnWater && surfaceBlockState.getMaterial().isLiquid() && !spawnBlockState.getMaterial().isLiquid()));
 	}
 }

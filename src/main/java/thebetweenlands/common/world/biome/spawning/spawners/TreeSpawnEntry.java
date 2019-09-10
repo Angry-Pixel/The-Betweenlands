@@ -35,6 +35,6 @@ public class TreeSpawnEntry extends BLSpawnEntry {
 
 	@Override
 	public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
-		return surfaceBlockState.getBlock() == BlockRegistry.SHELF_FUNGUS;
+		return !blockState.isNormalCube() && surfaceBlockState.getBlock() == BlockRegistry.SHELF_FUNGUS;
 	}
 }

@@ -61,6 +61,7 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 	@Override
 	public void update(World world) {
 		super.update(world);
+		
 		if(world.isRemote) {
 			if(this.isActive()) {
 				if(this.skyTransparency < 1.0F) {
@@ -78,25 +79,6 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 				}
 			}
 		}
-
-		if(!world.isRemote && this.isActive()) {
-			if(world.provider instanceof WorldProviderBetweenlands && world instanceof WorldServer && world.rand.nextInt(10) == 0) {
-				WorldServer worldServer = (WorldServer)world;
-				for (Iterator<Chunk> iterator = worldServer.getPersistentChunkIterable(worldServer.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
-					Chunk chunk = iterator.next();
-					int cbx = world.rand.nextInt(16);
-					int cbz = world.rand.nextInt(16);
-					BlockPos pos = chunk.getPrecipitationHeight(new BlockPos(chunk.getPos().getXStart() + cbx, -999, chunk.getPos().getZStart() + cbz)).down();
-
-					if(world.rand.nextInt(2000) == 0 && world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 64.0D, false) == null) {
-						IBlockState stateAbove = world.getBlockState(pos.up());
-						if(stateAbove.getBlock() == Blocks.AIR && SurfaceType.MIXED_GROUND.matches(world, pos)) { // TODO better area check needed
-							addCCTunnel(world, pos);
-						}
-					}
-				}
-			}
-		}
 	}
 
 	@Override
@@ -111,29 +93,5 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 		} else {
 			this.soundPlayed = false;
 		}
-	}
-
-	//sneaking this in here because I don't know if it needs it's own class
-	public void addCCTunnel(World world, BlockPos pos) {
-		world.setBlockState(pos, blockHelper.AIR);
-		world.setBlockState(pos.add(0, -1, 0), blockHelper.COMPACTED_MUD);
-		world.setBlockState(pos.add(-1, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.NORTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-		world.setBlockState(pos.add(0, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.NORTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-		world.setBlockState(pos.add(1, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.NORTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-		world.setBlockState(pos.add(-1, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.SOUTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-		world.setBlockState(pos.add(0, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.SOUTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-		world.setBlockState(pos.add(1, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.SOUTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-		world.setBlockState(pos.add(-1, 0, 0), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.WEST).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-		world.setBlockState(pos.add(1, 0, 0), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.EAST).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
-
-		addCCGroundSpawnerEntity(world, pos);
-		//System.out.println("Generated at : " + pos);
-	}
-
-	private void addCCGroundSpawnerEntity(World world, BlockPos pos) {
-		EntityCCGroundSpawner ground_spawner = new EntityCCGroundSpawner(world);
-		ground_spawner.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
-		ground_spawner.setIsWorldSpawned(true);
-		world.spawnEntity(ground_spawner);
 	}
 }

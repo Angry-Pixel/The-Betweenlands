@@ -20,6 +20,7 @@ import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.entity.spawning.IWeightProvider;
 import thebetweenlands.api.event.InitializeBetweenlandsBiomeEvent;
+import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
@@ -29,6 +30,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.biome.spawning.spawners.ConditionalSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.LocationSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.WallSpawnEntry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
@@ -89,11 +91,12 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 				return entity;
 			}
 		}.setHostile(true).setSpawnCheckRadius(20.0D));
+		entries.add(new ConditionalSpawnEntry(804, new WallSpawnEntry(-1, EntityCCGroundSpawner.class, (short) 120), bloodSkyPredicate).setSpawnCheckRadius(32.0D).setGroupSize(1, 1).setHostile(true));
 
 		entries.add(new LocationSpawnEntry(803, EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE) {
 			@Override
 			public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
-				return SurfaceType.MIXED_GROUND.matches(surfaceBlockState);
+				return !blockState.isNormalCube() && SurfaceType.MIXED_GROUND.matches(surfaceBlockState);
 			};
 		}.setHostile(true).setSpawnCheckRadius(50.0D).setSpawningInterval(5000));
 	}
