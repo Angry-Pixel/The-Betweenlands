@@ -216,9 +216,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		if(isWorldSpawned())
 			setSpawnCount(getSpawnCount() + 1);
 		getEntityWorld().playSound((EntityPlayer)null, getPosition(), getDigSound(), SoundCategory.HOSTILE, 0.5F, 1.0F);
-		entitySpawned.setPosition(getPosition().getX() + 0.5F, getPosition().getY() + 0.25F, getPosition().getZ() + 0.5F);
-		entitySpawned.motionY = 0.1f;
-		entitySpawned.velocityChanged = true;
+		entitySpawned.setPosition(getPosition().getX() + 0.5F, getPosition().getY() - 1.5F, getPosition().getZ() + 0.5F);
 	}
 
 	protected SoundEvent getDigSound() {
