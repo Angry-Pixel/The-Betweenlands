@@ -21,7 +21,7 @@ public class WorldMobSpawner extends AreaMobSpawner {
 	public static final WorldMobSpawner INSTANCE = new WorldMobSpawner();
 
 	//How many times a chunk should be populated with mobs when it generates
-	private static final int CHUNK_GEN_SPAWN_RUNS = 128;
+	private static final int CHUNK_GEN_SPAWN_RUNS = 10;
 
 	//Maximum distance from the player where mobs spawn
 	private static final int SPAWN_CHUNK_MAX_RANGE = 8;
@@ -30,6 +30,10 @@ public class WorldMobSpawner extends AreaMobSpawner {
 	//Number of spawn chunks in one fully loaded area
 	private static final int MAX_SPAWN_CHUNKS_PER_AREA = (SPAWN_CHUNK_MAX_RANGE * 2 + 1)*(SPAWN_CHUNK_MAX_RANGE * 2 + 1) - (SPAWN_CHUNK_MIN_RANGE * 2 + 1) * (SPAWN_CHUNK_MIN_RANGE * 2 + 1);
 
+	public WorldMobSpawner() {
+		this.setStrictDynamicLimit(false);
+	}
+	
 	@Override
 	public float getMaxEntitiesPerSpawnChunkFraction(int spawnerChunks) {
 		return (float)BetweenlandsConfig.MOB_SPAWNING.maxEntitiesPerLoadedArea / (float)MAX_SPAWN_CHUNKS_PER_AREA;

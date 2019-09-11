@@ -42,6 +42,17 @@ public abstract class AreaMobSpawner {
 	@Nullable
 	protected Predicate<EntityLivingBase> entityCountFilter = null;
 
+	protected boolean strictDynamicLimit = true;
+
+	/**
+	 * Sets whether the dynamic limit is strict, i.e. enforced and not
+	 * just approximated by randomness and weight.
+	 * @param strict
+	 */
+	public void setStrictDynamicLimit(boolean strict) {
+		this.strictDynamicLimit = strict;
+	}
+
 	/**
 	 * Sets the entity count filter. The entity count filter determines which
 	 * entities are supposed to be counted towards the entity count.
@@ -377,7 +388,7 @@ public abstract class AreaMobSpawner {
 		Collections.shuffle(spawnerChunks);
 
 		//The approximate number of loaded areas (one area is the area loaded by one player)
-		float loadedAreas = this.getLoadedAreasCount(spawnerChunks.size());
+		float loadedAreas = Math.max(1.0f, this.getLoadedAreasCount(spawnerChunks.size()));
 
 		for(ChunkPos chunkPos : spawnerChunks) {
 			this.populateChunk(world, chunkPos, spawnHostiles, spawnAnimals, true, false, 
@@ -387,7 +398,10 @@ public abstract class AreaMobSpawner {
 
 	public int populateChunk(World world, ChunkPos chunkPos, boolean spawnHostiles, boolean spawnAnimals, boolean loadChunks, boolean ignoreRestrictions,
 			int attemptsPerChunk, int maxSpawnsPerChunk, int attemptsPerGroup, int entityLimit, float loadedAreas) {
+		loadedAreas = Math.max(1.0f, loadedAreas);
+		
 		int attempts = 0, chunkSpawnedEntities = 0;
+		
 		spawnLoop:
 			while(attempts++ < attemptsPerChunk && chunkSpawnedEntities < maxSpawnsPerChunk) {
 				BlockPos spawnPos = this.getRandomSpawnPosition(world, chunkPos);
@@ -418,7 +432,7 @@ public abstract class AreaMobSpawner {
 					totalWeight += spawnEntry.getWeight();
 				}
 
-				if(possibleSpawns.isEmpty() || totalWeight == 0)
+				if(possibleSpawns.isEmpty() || totalWeight == 0 || totalBaseWeight == 0)
 					continue;
 
 				WeightedList<ICustomSpawnEntry> weightedPossibleSpawns = new WeightedList<>();
@@ -435,7 +449,9 @@ public abstract class AreaMobSpawner {
 
 				int spawnEntityCount = this.entityCounts.get(spawnEntry.getEntityType());
 
-				if(spawnEntityCount >= Math.max(dynamicLimit, dynamicLimitBase) || (spawnEntry.getWorldLimit() >= 0 && spawnEntityCount >= spawnEntry.getWorldLimit())) {
+				int spawnEntityCountLimit = this.strictDynamicLimit ? Math.min(dynamicLimit, dynamicLimitBase) : Math.max(dynamicLimit, dynamicLimitBase);
+
+				if(spawnEntityCount >= spawnEntityCountLimit || (spawnEntry.getWorldLimit() >= 0 && spawnEntityCount >= spawnEntry.getWorldLimit())) {
 					//Entity reached world spawning limit
 					continue;
 				}
@@ -551,15 +567,19 @@ public abstract class AreaMobSpawner {
 									if (!ForgeEventFactory.doSpecialSpawn(newEntity, world, (float)sx, (float)sy, (float)sz, null)) {
 										groupData = newEntity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(sx, sy, sz)), groupData);
 									}
-									
+
 									if(newEntity.isNotColliding()) {
 										world.spawnEntity(newEntity);
 
 										spawnEntry.onSpawned(newEntity);
+
+										if(this.isCountedEntity(world, newEntity)) {
+											this.entityCounts.adjustOrPutValue(newEntity.getClass(), 1, 1);
+										}
 									} else {
 										newEntity.setDead();
 									}
-									
+
 									if (groupSpawnedEntities >= ForgeEventFactory.getMaxSpawnPackSize(newEntity))  {
 										break;
 									}
@@ -612,13 +632,16 @@ public abstract class AreaMobSpawner {
 
 				for(ClassInheritanceMultiMap<Entity> entityList : entityLists) {
 					for(Entity entity : entityList) {
-						if(entity instanceof EntityLivingBase && this.isInsideSpawningArea(world, entity.getPosition(), true) &&
-								(this.entityCountFilter == null || this.entityCountFilter.test((EntityLivingBase) entity))) {
+						if(this.isCountedEntity(world, entity)) {
 							this.entityCounts.adjustOrPutValue(entity.getClass(), 1, 1);
 						}
 					}
 				}
 			}
 		}
+	}
+
+	private boolean isCountedEntity(World world, Entity entity) {
+		return entity instanceof EntityLivingBase && this.isInsideSpawningArea(world, entity.getPosition(), true) && (this.entityCountFilter == null || this.entityCountFilter.test((EntityLivingBase) entity));
 	}
 }
