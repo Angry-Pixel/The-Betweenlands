@@ -85,7 +85,7 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 		super.initEntityAI();
 
 		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true));
-		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
+		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true).setUnseenMemoryTicks(120));
 
 		this.tasks.addTask(0, new AITrackTargetLamprey(this, true, 28.0D));
 		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
