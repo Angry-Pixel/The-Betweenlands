@@ -7,6 +7,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.block.state.IBlockState;
@@ -36,6 +39,18 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage.BiomeSpawnE
 import thebetweenlands.util.WeightedList;
 
 public abstract class AreaMobSpawner {
+	@Nullable
+	protected Predicate<EntityLivingBase> entityCountFilter = null;
+
+	/**
+	 * Sets the entity count filter. The entity count filter determines which
+	 * entities are supposed to be counted towards the entity count.
+	 * @param filter
+	 */
+	public void setEntityCountFilter(@Nullable Predicate<EntityLivingBase> filter) {
+		this.entityCountFilter = filter;
+	}
+
 	/**
 	 * Returns whether the specified position is within this area mob spawner's area
 	 * @param world
@@ -99,8 +114,8 @@ public abstract class AreaMobSpawner {
 	 * @param provider
 	 * @return
 	 */
-	public List<ICustomSpawnEntry> getSpawnEntries(World world, BlockPos pos, ICustomSpawnEntriesProvider provider) {
-		return provider.getCustomSpawnEntries();
+	public List<ICustomSpawnEntry> getSpawnEntries(World world, BlockPos pos, @Nullable ICustomSpawnEntriesProvider provider) {
+		return provider != null ? provider.getCustomSpawnEntries() : Collections.emptyList();
 	}
 
 	/**
@@ -382,15 +397,12 @@ public abstract class AreaMobSpawner {
 
 				Biome biome = world.getBiome(spawnPos);
 
-				if(world.rand.nextFloat() > biome.getSpawningChance() || biome instanceof ICustomSpawnEntriesProvider == false) 
-					continue;
-
 				int totalBaseWeight = 0;
 				int totalWeight = 0;
 
 				//Get possible spawn entries and update weights
 				List<ICustomSpawnEntry> possibleSpawns = new ArrayList<>();
-				possibleSpawns.addAll(this.getSpawnEntries(world, spawnPos, (ICustomSpawnEntriesProvider) biome));
+				possibleSpawns.addAll(this.getSpawnEntries(world, spawnPos, biome instanceof ICustomSpawnEntriesProvider ? (ICustomSpawnEntriesProvider) biome : null));
 
 				Iterator<ICustomSpawnEntry> spawnEntriesIT = possibleSpawns.iterator();
 				while(spawnEntriesIT.hasNext()) {
@@ -491,9 +503,6 @@ public abstract class AreaMobSpawner {
 						if(!this.isInsideSpawningArea(world, entitySpawnPos, false))
 							continue;
 
-						if(world.getClosestPlayer(entitySpawnPos.getX(), entitySpawnPos.getY(), entitySpawnPos.getZ(), 24D, false) != null)
-							continue;
-
 						IBlockState spawnBlockState = world.getBlockState(entitySpawnPos);
 
 						int spawnSegmentY = entitySpawnPos.getY() / 16;
@@ -539,14 +548,18 @@ public abstract class AreaMobSpawner {
 									NBTTagCompound entityNBT = newEntity.getEntityData();
 									entityNBT.setBoolean("naturallySpawned", true);
 
-									world.spawnEntity(newEntity);
-
 									if (!ForgeEventFactory.doSpecialSpawn(newEntity, world, (float)sx, (float)sy, (float)sz, null)) {
 										groupData = newEntity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(sx, sy, sz)), groupData);
 									}
+									
+									if(newEntity.isNotColliding()) {
+										world.spawnEntity(newEntity);
 
-									spawnEntry.onSpawned(newEntity);
-
+										spawnEntry.onSpawned(newEntity);
+									} else {
+										newEntity.setDead();
+									}
+									
 									if (groupSpawnedEntities >= ForgeEventFactory.getMaxSpawnPackSize(newEntity))  {
 										break;
 									}
@@ -599,7 +612,8 @@ public abstract class AreaMobSpawner {
 
 				for(ClassInheritanceMultiMap<Entity> entityList : entityLists) {
 					for(Entity entity : entityList) {
-						if(entity instanceof EntityLivingBase && this.isInsideSpawningArea(world, entity.getPosition(), true)) {
+						if(entity instanceof EntityLivingBase && this.isInsideSpawningArea(world, entity.getPosition(), true) &&
+								(this.entityCountFilter == null || this.entityCountFilter.test((EntityLivingBase) entity))) {
 							this.entityCounts.adjustOrPutValue(entity.getClass(), 1, 1);
 						}
 					}

@@ -17,15 +17,23 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.client.render.shader.postprocessing.GroundFog.GroundFogVolume;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
+import thebetweenlands.common.entity.EntitySplodeshroom;
+import thebetweenlands.common.entity.EntityTinyWormEggSac;
+import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
+import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
+import thebetweenlands.common.entity.mobs.EntityMovingSpawnerHole;
 import thebetweenlands.common.entity.mobs.EntityShambler;
-import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityWallLamprey;
+import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.AreaMobSpawner.BLSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.BoxMobSpawner;
 import thebetweenlands.common.world.biome.spawning.spawners.ConditionalSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.WallSpawnEntry;
 import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 
 public class LocationSludgeWormDungeon extends LocationGuarded {
@@ -44,11 +52,27 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 
 		this.dungeonMobSpawner = new BoxMobSpawner();
 		this.dungeonMobSpawner.setMaxAreaEntities(64);
-
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntityShambler.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(0)).setGroupSize(1, 3).setHostile(true));
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntitySwampHag.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(1)).setGroupSize(1, 3).setHostile(true));
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntityChiromaw.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2)).setGroupSize(1, 3).setHostile(true));
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntityWight.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(3)).setGroupSize(1, 3).setHostile(true));
+		this.dungeonMobSpawner.setEntityCountFilter(entity -> entity instanceof EntityTriggeredFallingBlock == false); //Ignore falling blocks
+		
+		//floor 1
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new WallSpawnEntry(-1, EntityMovingSpawnerHole.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(0)).setGroupSize(1, 1).setHostile(true));
+		
+		//floor 2
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntityShambler.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(1)).setGroupSize(1, 3).setHostile(true));
+		
+		//floor 3
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new WallSpawnEntry(-1, EntityWallLamprey.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2)).setGroupSize(1, 1).setHostile(true));
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntityTinyWormEggSac.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2)).setGroupSize(1, 1).setHostile(true));
+		
+		//floor 4
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntityTriggeredSludgeWallJet.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(3)).setGroupSize(1, 1).setHostile(true));
+		
+		//floor 5
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new WallSpawnEntry(-1, EntityWallLivingRoot.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(4)).setGroupSize(1, 1).setHostile(true));
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntitySplodeshroom.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(4)).setGroupSize(1, 1).setHostile(true));
+		
+		//floor 6
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntityCryptCrawler.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(5)).setGroupSize(1, 3).setHostile(true));
 	}
 
 	/**

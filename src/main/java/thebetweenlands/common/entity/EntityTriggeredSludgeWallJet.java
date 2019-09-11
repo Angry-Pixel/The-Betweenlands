@@ -2,6 +2,7 @@ package thebetweenlands.common.entity;
 
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -10,6 +11,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -33,6 +35,12 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 		this.dataManager.register(ANIMATION_TICKS_SYNC, 0);
 	}
 
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+		this.setPosition(this.posX, this.posY + 1.0F, this.posZ);
+		return super.onInitialSpawn(difficulty, livingdata);
+	}
+	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
