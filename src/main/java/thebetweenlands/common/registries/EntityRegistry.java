@@ -9,6 +9,7 @@ import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
+import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
@@ -179,6 +180,7 @@ public class EntityRegistry {
 		registerEntity(EntityCCGroundSpawner.class, "cc_ground_spawner");
 		registerEntity(EntityEmberling.class, "emberling", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityFlameJet.class, "flame_jet", 64, 1, true);
+		registerEntity(EntityMovingWall.class, "moving_wall", 64, 1, true);
 	}
 
 	private static int id = 0;
