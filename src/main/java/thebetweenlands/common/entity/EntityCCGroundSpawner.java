@@ -113,14 +113,14 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		
 		if (!getEntityWorld().isRemote) {
 		/*	if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
-				setCanBeRemovedSafely(true);*/
+				setDead();*/
 			
 			if (getEntityWorld().getTotalWorldTime() % 60 == 0)
 				checkArea();
 			List<EntityFallingBlock> listPlug = getEntityWorld().getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox());
 			if (!listPlug.isEmpty()) {
 				getEntityWorld().setBlockToAir(getPosition());
-				setCanBeRemovedSafely(true);
+				setDead();
 			}
 		}
 		
