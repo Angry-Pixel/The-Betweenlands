@@ -1,45 +1,52 @@
 package thebetweenlands.common.entity;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.structure.BlockCompactedMudSlope;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
+import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	private static final DataParameter<Boolean> IS_WORLD_SPANWED = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SPAWN_COUNT = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.VARINT);
-	
+	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	public EntityCCGroundSpawner(World world) {
 		super(world);
-		setSize(3F, 1F);
+		setSize(1F, 0.5F);
 	}
 
 	@Override
@@ -86,7 +93,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	public boolean isNotColliding() {
 		return true;
 	}
-	
+	/*
 	@Override
 	public boolean canBeCollidedWith() {
 		return true;
@@ -96,28 +103,28 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	public AxisAlignedBB getCollisionBoundingBox() {
 		return this.getEntityBoundingBox();
 	}
-
+*/
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 		
 		if (!getEntityWorld().isRemote) {
-			if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
-				setDead();
+		/*	if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
+				setDead();*/
 			
 			if (getEntityWorld().getTotalWorldTime() % 60 == 0)
 				checkArea();
 			List<EntityFallingBlock> listPlug = getEntityWorld().getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox());
 			if (!listPlug.isEmpty()) {
-				getEntityWorld().setBlockToAir(getPosition().down());
+				getEntityWorld().setBlockToAir(getPosition());
 				setDead();
 			}
 		}
 		
-		this.setPosition(MathHelper.floor(this.posX) + 0.5D, MathHelper.floor(this.posY), MathHelper.floor(this.posZ) + 0.5D);
+	/*	this.setPosition(MathHelper.floor(this.posX) + 0.5D, MathHelper.floor(this.posY), MathHelper.floor(this.posZ) + 0.5D);
 		this.prevPosX = this.lastTickPosX = this.posX;
 		this.prevPosY = this.lastTickPosY = this.posY;
-		this.prevPosZ = this.lastTickPosZ = this.posZ;
+		this.prevPosZ = this.lastTickPosZ = this.posZ;*/
 	}
 	
 	public boolean isBloodSky(World world) {
@@ -131,8 +138,8 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	@Nullable
 	protected Entity checkArea() {
 		if (!getEntityWorld().isRemote && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
-			if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
-				return null;
+			//if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
+			//	return null;
 			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
 			if(list.stream().filter(e -> e instanceof EntityCryptCrawler).count() >= 4)
 				return null;
@@ -165,12 +172,12 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
     public float getEyeHeight() {
         return height + 0.5F; // sort of needed so it can see a bit further
     }
-
+/*
 	@Override
 	protected boolean isMovementBlocked() {
 		return true;
 	}
-
+*/
 	@Override
     public boolean canBePushed() {
         return false;
@@ -179,7 +186,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	@Override
 	public void addVelocity(double x, double y, double z) {
 		motionX = 0;
-		motionY += y;
+		motionY = 0;
 		motionZ = 0;
 	}
 
@@ -289,6 +296,67 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 
 	public int getSpawnCount() {
 		return dataManager.get(SPAWN_COUNT);
+	}
+
+	@Override
+    public void setDead() {
+		if(!getEntityWorld().isRemote) {
+			if(isWorldSpawned())
+				if(getEntityData().hasKey("tempBlockTypes"))
+					loadOriginBlocks(getEntityWorld(), getPosition(), getEntityData());
+		}
+        super.setDead();
+    }
+
+	@Nullable
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+		if (!getEntityWorld().isRemote) {
+			getOriginBlocks(getEntityWorld(), getPosition());
+			getEntityWorld().setBlockState(getPosition(), blockHelper.AIR);
+			getEntityWorld().setBlockState(getPosition().add(0, -1, 0), blockHelper.COMPACTED_MUD);
+			getEntityWorld().setBlockState(getPosition().add(-1, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.NORTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
+			getEntityWorld().setBlockState(getPosition().add(0, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.NORTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
+			getEntityWorld().setBlockState(getPosition().add(1, 0, -1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.NORTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
+			getEntityWorld().setBlockState(getPosition().add(-1, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.SOUTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
+			getEntityWorld().setBlockState(getPosition().add(0, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.SOUTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
+			getEntityWorld().setBlockState(getPosition().add(1, 0, 1), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.SOUTH).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
+			getEntityWorld().setBlockState(getPosition().add(-1, 0, 0), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.WEST).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
+			getEntityWorld().setBlockState(getPosition().add(1, 0, 0), blockHelper.COMPACTED_MUD_SLOPE.withProperty(BlockCompactedMudSlope.FACING, EnumFacing.EAST).withProperty(BlockCompactedMudSlope.HALF, EnumHalf.BOTTOM));
+		}
+		return livingdata;
+	}
+
+	private void getOriginBlocks(World world, BlockPos pos) {
+		NBTTagList tagList = new NBTTagList();
+		NBTTagCompound entityNbt = getEntityData();
+		for (int x = -1; x <= 1; x ++)
+			for (int z = -1; z <= 1; z++) {
+				IBlockState state = world.getBlockState(pos.add(x, 0, z));
+				NBTTagCompound tag = new NBTTagCompound();
+				NBTUtil.writeBlockState(tag, state);
+				tagList.appendTag(tag);
+			}
+		if (!tagList.isEmpty())
+			entityNbt.setTag("tempBlockTypes", tagList);
+		writeEntityToNBT(entityNbt);
+	}
+
+	public void loadOriginBlocks(World world, BlockPos pos, NBTTagCompound tag) {
+		List<IBlockState> list = new ArrayList<IBlockState>();
+		NBTTagCompound entityNbt = getEntityData();
+		NBTTagList tagList = entityNbt.getTagList("tempBlockTypes", Constants.NBT.TAG_COMPOUND);
+		for (int indexCount = 0; indexCount < tagList.tagCount(); ++indexCount) {
+			NBTTagCompound nbttagcompound = tagList.getCompoundTagAt(indexCount);
+			IBlockState state = NBTUtil.readBlockState(nbttagcompound);
+			list.add(indexCount, state);
+		}
+
+		int a = 0;
+		for (int x = -1; x <= 1; x++)
+			for (int z = -1; z <= 1; z++) {
+				world.setBlockState(pos.add(x, 0, z), list.get(a++), 3);
+			}	
 	}
 
 	@Override
