@@ -24,6 +24,7 @@ import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
@@ -43,6 +44,7 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	private static final DataParameter<Boolean> IS_WORLD_SPANWED = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SPAWN_COUNT = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> CAN_BE_REMOVED_SAFELY = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.BOOLEAN);
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	public EntityCCGroundSpawner(World world) {
 		super(world);
@@ -54,6 +56,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		super.entityInit();
 		dataManager.register(IS_WORLD_SPANWED, true);
 		dataManager.register(SPAWN_COUNT, 0);
+		dataManager.register(CAN_BE_REMOVED_SAFELY, false);
 	}
 	
 	@Override
@@ -110,14 +113,14 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		
 		if (!getEntityWorld().isRemote) {
 		/*	if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
-				setDead();*/
+				setCanBeRemovedSafely(true);*/
 			
 			if (getEntityWorld().getTotalWorldTime() % 60 == 0)
 				checkArea();
 			List<EntityFallingBlock> listPlug = getEntityWorld().getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox());
 			if (!listPlug.isEmpty()) {
 				getEntityWorld().setBlockToAir(getPosition());
-				setDead();
+				setCanBeRemovedSafely(true);
 			}
 		}
 		
@@ -137,36 +140,48 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	@Override
 	@Nullable
 	protected Entity checkArea() {
-		if (!getEntityWorld().isRemote && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
-			//if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
-			//	return null;
-			List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
-			if(list.stream().filter(e -> e instanceof EntityCryptCrawler).count() >= 4)
-				return null;
-			for (int entityCount = 0; entityCount < list.size(); entityCount++) {
-				Entity entity = list.get(entityCount);
-				if (entity != null)
-					if (entity instanceof EntityPlayer && !((EntityPlayer) entity).isSpectator() && !((EntityPlayer) entity).isCreative()) {
-						if (canSneakPast() && entity.isSneaking())
-							return null;
-						else if (checkSight() && !canEntityBeSeen(entity))
-							return null;
-						else {
-							for (int count = 0; count < getEntitySpawnCount(); count++) {
-								Entity spawn = getEntitySpawned();
-								if (spawn != null) {
-									performPreSpawnaction(entity, spawn);
-									if (!spawn.isDead) // just in case of pre-emptive removal
-										getEntityWorld().spawnEntity(spawn);
-									performPostSpawnaction(entity, spawn);
+		if (!getEntityWorld().isRemote) {
+			if(getCanBeRemovedSafely() && canBeRemovedNow())
+				setDead();
+			if (getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
+				//if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
+				//	return null;
+				List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
+				if(list.stream().filter(e -> e instanceof EntityCryptCrawler).count() >= 4)
+					return null;
+				for (int entityCount = 0; entityCount < list.size(); entityCount++) {
+					Entity entity = list.get(entityCount);
+					if (entity != null)
+						if (entity instanceof EntityPlayer && !((EntityPlayer) entity).isSpectator() && !((EntityPlayer) entity).isCreative()) {
+							if (canSneakPast() && entity.isSneaking())
+								return null;
+							else if (checkSight() && !canEntityBeSeen(entity) || getCanBeRemovedSafely())
+								return null;
+							else {
+								for (int count = 0; count < getEntitySpawnCount(); count++) {
+									Entity spawn = getEntitySpawned();
+									if (spawn != null) {
+										performPreSpawnaction(entity, spawn);
+										if (!spawn.isDead) // just in case of pre-emptive removal
+											getEntityWorld().spawnEntity(spawn);
+										performPostSpawnaction(entity, spawn);
+									}
 								}
 							}
 						}
-					}
+				}
 			}
 		}
 		return null;
 	}
+
+    public boolean canBeRemovedNow() {
+    	AxisAlignedBB dead_zone = getEntityBoundingBox().grow(1D, 1D, 1D).offset(0D, -0.5D, 0D);
+		List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, dead_zone);
+		if(list.stream().filter(e -> e instanceof EntityCryptCrawler).count() >= 1)
+			return false;
+        return true;
+    }
 
 	@Override
     public float getEyeHeight() {
@@ -199,13 +214,13 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	public void onKillCommand() {
 		this.setDead();
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if(source instanceof EntityDamageSource) {
 			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
 			if(sourceEntity instanceof EntityPlayer && ((EntityPlayer) sourceEntity).isCreative()) {
-				setDead();
+				setCanBeRemovedSafely(true);
 			}
 		}
 		return false;
@@ -215,7 +230,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	public void applyEntityCollision(Entity entity) {
 		if (entity instanceof EntityFallingBlock)
 			if (!getEntityWorld().isRemote)
-				setDead();
+				setCanBeRemovedSafely(true);
 	}
 
 	@Override
@@ -236,7 +251,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 			TheBetweenlands.networkWrapper.sendToAll(new PacketParticle(ParticleType.GOOP_SPLAT, (float) posX, (float)posY + 0.25F, (float)posZ, 0F));
 			entitySpawned.motionY += 0.5D;
 			if(isWorldSpawned() && getSpawnCount() >= maxUseCount())
-				setDead();
+				setCanBeRemovedSafely(true);
 		}
 	}
 
@@ -298,6 +313,14 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		return dataManager.get(SPAWN_COUNT);
 	}
 
+	public void setCanBeRemovedSafely(boolean safe) {
+		dataManager.set(CAN_BE_REMOVED_SAFELY, safe);
+	}
+
+	public boolean getCanBeRemovedSafely() {
+		return dataManager.get(CAN_BE_REMOVED_SAFELY);
+	}
+
 	@Override
     public void setDead() {
 		if(!getEntityWorld().isRemote) {
@@ -356,15 +379,17 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		for (int x = -1; x <= 1; x++)
 			for (int z = -1; z <= 1; z++) {
 				world.setBlockState(pos.add(x, 0, z), list.get(a++), 3);
-			}	
+			}
+		getEntityWorld().playSound((EntityPlayer)null, getPosition(), SoundRegistry.ROOF_COLLAPSE, SoundCategory.BLOCKS, 1F, 1.0F);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		if(nbt.hasKey("world_spawned", Constants.NBT.TAG_BYTE)) {
+		if(nbt.hasKey("world_spawned", Constants.NBT.TAG_BYTE))
 			setIsWorldSpawned(nbt.getBoolean("world_spawned"));
-		}
+		if(nbt.hasKey("remove_safely", Constants.NBT.TAG_BYTE))
+			setCanBeRemovedSafely(nbt.getBoolean("remove_safely"));
 		setSpawnCount(nbt.getInteger("spawn_count"));
 	}
 
@@ -372,6 +397,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
 		nbt.setBoolean("world_spawned", isWorldSpawned());
+		nbt.setBoolean("remove_safely", getCanBeRemovedSafely());
 		nbt.setInteger("spawn_count", getSpawnCount());
 	}
 }
