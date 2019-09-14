@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockStairs.EnumHalf;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,6 +27,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -46,9 +48,10 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	private static final DataParameter<Integer> SPAWN_COUNT = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> CAN_BE_REMOVED_SAFELY = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.BOOLEAN);
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
+
 	public EntityCCGroundSpawner(World world) {
 		super(world);
-		setSize(1F, 0.5F);
+		setSize(3F, 0.5F);
 	}
 
 	@Override
@@ -58,50 +61,60 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		dataManager.register(SPAWN_COUNT, 0);
 		dataManager.register(CAN_BE_REMOVED_SAFELY, false);
 	}
-	
+
 	@Override
 	public boolean getCanSpawnHere() {
 		int solidCount = 0;
 		BlockPos pos = new BlockPos(this);
-		
+
 		if(pos.getY() < WorldProviderBetweenlands.CAVE_START) {
 			return false;
 		}
-		
+
 		for(int xo = -1; xo <= 1; xo++) {
 			for(int zo = -1; zo <= 1; zo++) {
 				BlockPos offsetPos = pos.add(xo, 0, zo);
 				IBlockState state = this.world.getBlockState(offsetPos);
-				
+
 				if(state.getMaterial().isLiquid()) {
 					return false;
 				}
-				
+
 				if(SurfaceType.MIXED_GROUND.apply(state)) {
 					solidCount++;
 				} else if(xo == 0 && zo == 0) {
 					return false;
 				}
-				
+
 				if(!this.world.isAirBlock(offsetPos.up())) {
 					return false;
 				}
 			}
 		}
-		
+
 		return solidCount >= 6;
 	}
-	
+
 	@Override
 	public boolean isNotColliding() {
 		return true;
 	}
-	/*
+
+	@Override
+    public EnumPushReaction getPushReaction() {
+        return EnumPushReaction.IGNORE;
+    }
+
 	@Override
 	public boolean canBeCollidedWith() {
 		return true;
 	}
-	
+
+	@Override
+    public boolean canBePushed() {
+        return false;
+    }
+/*
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox() {
 		return this.getEntityBoundingBox();
@@ -110,11 +123,11 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		
+
 		if (!getEntityWorld().isRemote) {
-		/*	if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
-				setDead();*/
-			
+			if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
+				setDead();
+
 			if (getEntityWorld().getTotalWorldTime() % 60 == 0)
 				checkArea();
 			List<EntityFallingBlock> listPlug = getEntityWorld().getEntitiesWithinAABB(EntityFallingBlock.class, getEntityBoundingBox());
@@ -123,13 +136,13 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 				setDead();
 			}
 		}
-		
-	/*	this.setPosition(MathHelper.floor(this.posX) + 0.5D, MathHelper.floor(this.posY), MathHelper.floor(this.posZ) + 0.5D);
+
+		this.setPosition(MathHelper.floor(this.posX) + 0.5D, MathHelper.floor(this.posY), MathHelper.floor(this.posZ) + 0.5D);
 		this.prevPosX = this.lastTickPosX = this.posX;
 		this.prevPosY = this.lastTickPosY = this.posY;
-		this.prevPosZ = this.lastTickPosZ = this.posZ;*/
+		this.prevPosZ = this.lastTickPosZ = this.posZ;
 	}
-	
+
 	public boolean isBloodSky(World world) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
         if(worldStorage.getEnvironmentEventRegistry().bloodSky.isActive())
@@ -144,8 +157,8 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 			if(getCanBeRemovedSafely() && canBeRemovedNow())
 				setDead();
 			if (getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL) {
-				//if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
-				//	return null;
+				if(isWorldSpawned() && !isBloodSky(getEntityWorld()))
+					return null;
 				List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, proximityBox());
 				if(list.stream().filter(e -> e instanceof EntityCryptCrawler).count() >= 4)
 					return null;
@@ -176,7 +189,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	}
 
     public boolean canBeRemovedNow() {
-    	AxisAlignedBB dead_zone = getEntityBoundingBox().grow(1D, 1D, 1D).offset(0D, -0.5D, 0D);
+    	AxisAlignedBB dead_zone = getEntityBoundingBox().grow(0D, 1D, 0D).offset(0D, -0.5D, 0D);
 		List<EntityLivingBase> list = getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, dead_zone);
 		if(list.stream().filter(e -> e instanceof EntityCryptCrawler).count() >= 1)
 			return false;
@@ -193,11 +206,6 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		return true;
 	}
 */
-	@Override
-    public boolean canBePushed() {
-        return false;
-    }
-
 	@Override
 	public void addVelocity(double x, double y, double z) {
 		motionX = 0;
@@ -296,7 +304,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	protected int maxUseCount() {
 		return 5;
 	}
-	
+
 	public void setIsWorldSpawned(boolean world_spawned) {
 		dataManager.set(IS_WORLD_SPANWED, world_spawned);
 	}
