@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,21 +13,27 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityMovingWall extends Entity {
     public Entity ignoreEntity;
     private int ignoreTime;
+    private static final DataParameter<Boolean> IS_NEW_SPAWN = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.BOOLEAN);
 	private final ItemStack renderStack1 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 8);
 	private final ItemStack renderStack2 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 2);
 	private final ItemStack renderStack3 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 12);
@@ -39,6 +46,11 @@ public class EntityMovingWall extends Entity {
 	}
 
 	@Override
+	protected void entityInit() {
+		dataManager.register(IS_NEW_SPAWN, true);
+	}
+
+	@Override
 	public void onKillCommand() {
 		this.setDead();
 	}
@@ -46,9 +58,12 @@ public class EntityMovingWall extends Entity {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!getEntityWorld().isRemote)
+		if (!getEntityWorld().isRemote) {
 			if (getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL)
 				setDead();
+			if(ticksExisted == 1 && isNewSpawn())
+				checkSpawnArea();
+		}
 
 		calculateAllCollisions(posX, posY + 0.5D, posZ);
 		calculateAllCollisions(posX, posY - 0.5D, posZ);
@@ -77,6 +92,25 @@ public class EntityMovingWall extends Entity {
 		rotationYaw = (float) (MathHelper.atan2(-motionX, motionZ) * (180D / Math.PI));
 		setPosition(posX, posY, posZ);
 	    setEntityBoundingBox(getCollisionBoundingBox());
+	}
+
+	private void checkSpawnArea() {
+		List<Block> chains = new ArrayList<Block>();
+		BlockPos posEntity = getPosition();
+		Iterable<BlockPos> blocks = BlockPos.getAllInBox(posEntity.add(-1F, -1F, -1F), posEntity.add(1F, 1F, 1F));
+		for (BlockPos pos : blocks)
+			if (isUnBreakableBlock(getEntityWorld().getBlockState(pos).getBlock()))
+				setDead();
+		if(isUnBreakableBlock(getEntityWorld().getBlockState(posEntity.add(2, 0, 0)).getBlock()) && isUnBreakableBlock(getEntityWorld().getBlockState(posEntity.add(-2, 0, 0)).getBlock())) {
+			motionZ = 0.05F;
+			setIsNewSpawn(false);
+		}
+		else if(isUnBreakableBlock(getEntityWorld().getBlockState(posEntity.add(0, 0, 2)).getBlock()) && isUnBreakableBlock(getEntityWorld().getBlockState(posEntity.add(0, 0, -2)).getBlock())) {
+			motionX = 0.05F;
+			setIsNewSpawn(false);
+		}	
+		else
+			setDead();
 	}
 
 	public void calculateAllCollisions(double posX, double posY, double posZ) {
@@ -183,6 +217,14 @@ public class EntityMovingWall extends Entity {
 	public AxisAlignedBB getCollisionBoundingBox() {
 		return getEntityBoundingBox();
 	}
+	
+	public void setIsNewSpawn(boolean new_spawn) {
+		dataManager.set(IS_NEW_SPAWN, new_spawn);
+	}
+
+	public boolean isNewSpawn() {
+		return dataManager.get(IS_NEW_SPAWN);
+	}
 
 	public ItemStack cachedStackTop() {
 		return renderStack1;
@@ -230,15 +272,14 @@ public class EntityMovingWall extends Entity {
 	}
 
 	@Override
-	protected void entityInit() {
+	protected void readEntityFromNBT(NBTTagCompound nbt) {
+		if(nbt.hasKey("new_spawn", Constants.NBT.TAG_BYTE))
+			setIsNewSpawn(nbt.getBoolean("new_spawn"));
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
-	}
-
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
+	protected void writeEntityToNBT(NBTTagCompound nbt) {
+		nbt.setBoolean("new_spawn", isNewSpawn());
 	}
 
 }
