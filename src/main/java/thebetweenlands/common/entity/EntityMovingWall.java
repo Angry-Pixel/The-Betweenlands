@@ -23,7 +23,6 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
 public class EntityMovingWall extends Entity {
     public Entity ignoreEntity;
@@ -31,7 +30,6 @@ public class EntityMovingWall extends Entity {
 	private final ItemStack renderStack1 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 8);
 	private final ItemStack renderStack2 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 2);
 	private final ItemStack renderStack3 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 12);
-	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	public final Map<Block, Boolean> UNBREAKABLE_BLOCKS = new HashMap<Block, Boolean>();
 
 	public EntityMovingWall(World world) {
@@ -205,25 +203,29 @@ public class EntityMovingWall extends Entity {
 	//TODO - May want to move to a config one day - add blocks not to break here. Removed state sensitivity because its a pita and would need all states
 	private void initUnBreakableBlockMap() {
 		if (UNBREAKABLE_BLOCKS.isEmpty()) {
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_NORTH.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.WORM_DUNGEON_PILLAR.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_TILES.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_TILES_WATER.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_STAIRS.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_STAIRS_DECAY_1.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_STAIRS_DECAY_2.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_STAIRS_DECAY_3.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_STAIRS_DECAY_4.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_SLAB.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_SLAB_DECAY_1.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_SLAB_DECAY_2.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_SLAB_DECAY_3.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_SLAB_DECAY_4.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_DECAY_1.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_SPIKE_TRAP.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_TILES_SPIKE_TRAP.getBlock(), true);
-			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_CLIMBABLE_NORTH.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_ALCOVE, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.WORM_DUNGEON_PILLAR, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_TILES, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_TILES_WATER, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_STAIRS, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_STAIRS_DECAY_1, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_STAIRS_DECAY_2, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_STAIRS_DECAY_3, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_STAIRS_DECAY_4, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_SLAB, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_SLAB_DECAY_1, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_SLAB_DECAY_2, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_SLAB_DECAY_3, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_SLAB_DECAY_4, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICKS, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICKS_CARVED, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_SPIKE_TRAP, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_TILES_SPIKE_TRAP, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICKS_CLIMBABLE, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.DUNGEON_DOOR_COMBINATION, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.DUNGEON_DOOR_RUNES, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC, true);
+			UNBREAKABLE_BLOCKS.put(BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER, true);
 		}
 	}
 
