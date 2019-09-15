@@ -111,11 +111,13 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState MUD_BRICK_STAIRS_DECAY_1 = BlockRegistry.MUD_BRICK_STAIRS_DECAY_1.getDefaultState();
 	public IBlockState MUD_BRICK_STAIRS_DECAY_2 = BlockRegistry.MUD_BRICK_STAIRS_DECAY_2.getDefaultState();
 	public IBlockState MUD_BRICK_STAIRS_DECAY_3 = BlockRegistry.MUD_BRICK_STAIRS_DECAY_3.getDefaultState();
+	public IBlockState MUD_BRICK_STAIRS_DECAY_4 = BlockRegistry.MUD_BRICK_STAIRS_DECAY_4.getDefaultState();
 
 	public IBlockState MUD_BRICK_SLAB = BlockRegistry.MUD_BRICK_SLAB.getDefaultState();
 	public IBlockState MUD_BRICK_SLAB_DECAY_1 = BlockRegistry.MUD_BRICK_SLAB_DECAY_1.getDefaultState();
 	public IBlockState MUD_BRICK_SLAB_DECAY_2 = BlockRegistry.MUD_BRICK_SLAB_DECAY_2.getDefaultState();
 	public IBlockState MUD_BRICK_SLAB_DECAY_3 = BlockRegistry.MUD_BRICK_SLAB_DECAY_3.getDefaultState();
+	public IBlockState MUD_BRICK_SLAB_DECAY_4 = BlockRegistry.MUD_BRICK_SLAB_DECAY_4.getDefaultState();
 
 	public IBlockState MUD_BRICKS = BlockRegistry.MUD_BRICKS.getDefaultState();
 	public IBlockState MUD_BRICKS_DECAY_1 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_1);

@@ -1,11 +1,15 @@
 package thebetweenlands.common.entity;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -19,6 +23,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
 public class EntityMovingWall extends Entity {
     public Entity ignoreEntity;
@@ -26,10 +31,13 @@ public class EntityMovingWall extends Entity {
 	private final ItemStack renderStack1 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 8);
 	private final ItemStack renderStack2 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 2);
 	private final ItemStack renderStack3 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 12);
+	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
+	public final Map<Block, Boolean> UNBREAKABLE_BLOCKS = new HashMap<Block, Boolean>();
 
 	public EntityMovingWall(World world) {
 		super(world);
 		setSize(1F, 1F);
+		initUnBreakableBlockMap();// using map for this atm because I don't know if we'll add a load of stuff or not
 	}
 
 	@Override
@@ -44,25 +52,25 @@ public class EntityMovingWall extends Entity {
 			if (getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL)
 				setDead();
 
-		calculateAllCollisions(posX, posY, posZ);
-		calculateAllCollisions(posX, posY - 1D, posZ);
-		calculateAllCollisions(posX, posY + 1D, posZ);
+		calculateAllCollisions(posX, posY + 0.5D, posZ);
+		calculateAllCollisions(posX, posY - 0.5D, posZ);
+		calculateAllCollisions(posX, posY + 1.5D, posZ);
 
 		if (getHorizontalFacing() == EnumFacing.NORTH || getHorizontalFacing() == EnumFacing.SOUTH) {
-			calculateAllCollisions(posX - 1D, posY, posZ);
-			calculateAllCollisions(posX - 1D, posY - 1D, posZ);
-			calculateAllCollisions(posX - 1D, posY + 1D, posZ);
-			calculateAllCollisions(posX + 1D, posY, posZ);
-			calculateAllCollisions(posX + 1D, posY - 1D, posZ);
-			calculateAllCollisions(posX + 1D, posY + 1D, posZ);
+			calculateAllCollisions(posX - 1D, posY + 0.5D, posZ);
+			calculateAllCollisions(posX - 1D, posY - 0.5D, posZ);
+			calculateAllCollisions(posX - 1D, posY + 1.5D, posZ);
+			calculateAllCollisions(posX + 1D, posY + 0.5D, posZ);
+			calculateAllCollisions(posX + 1D, posY - 0.5D, posZ);
+			calculateAllCollisions(posX + 1D, posY + 1.5D, posZ);
 		}
 		else {
-			calculateAllCollisions(posX, posY, posZ - 1D);
-			calculateAllCollisions(posX, posY - 1D, posZ - 1D);
-			calculateAllCollisions(posX, posY + 1D, posZ - 1D);
-			calculateAllCollisions(posX, posY, posZ + 1D);
-			calculateAllCollisions(posX, posY - 1D, posZ + 1D);
-			calculateAllCollisions(posX, posY + 1D, posZ + 1D);
+			calculateAllCollisions(posX, posY + 0.5D, posZ - 1D);
+			calculateAllCollisions(posX, posY - 0.5D, posZ - 1D);
+			calculateAllCollisions(posX, posY + 1.5D, posZ - 1D);
+			calculateAllCollisions(posX, posY + 0.5D, posZ + 1D);
+			calculateAllCollisions(posX, posY - 0.5D, posZ + 1D);
+			calculateAllCollisions(posX, posY + 1.5D, posZ + 1D);
 		}
 
 		posX += motionX;
@@ -131,13 +139,19 @@ public class EntityMovingWall extends Entity {
 	protected void onImpact(RayTraceResult result) {
 		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
 			IBlockState state = getEntityWorld().getBlockState(result.getBlockPos());
-			if (state.getBlock().canCollideCheck(state, false)) {
+			if (isUnBreakableBlock(state.getBlock())) { // not sure of all the different states so default will do
 				if (result.sideHit.getIndex() == 2 || result.sideHit.getIndex() == 3) {
 					motionZ *= -1D;
 					velocityChanged = true;
 				} else if (result.sideHit.getIndex() == 4 || result.sideHit.getIndex() == 5) {
 					motionX *= -1D;
 					velocityChanged = true;
+				}
+			}
+			else {
+				if (state.getBlock() != Blocks.BEDROCK) {
+					getEntityWorld().destroyBlock(result.getBlockPos(), false);
+					getEntityWorld().notifyNeighborsOfStateChange(result.getBlockPos(), state.getBlock(), true);
 				}
 			}
 		}
@@ -182,6 +196,35 @@ public class EntityMovingWall extends Entity {
 
 	public ItemStack cachedStackBot() {
 		return renderStack3;
+	}
+
+	public boolean isUnBreakableBlock(Block block) {
+		return UNBREAKABLE_BLOCKS.get(block) != null;
+	}
+
+	//TODO - May want to move to a config one day - add blocks not to break here. Removed state sensitivity because its a pita and would need all states
+	private void initUnBreakableBlockMap() {
+		if (UNBREAKABLE_BLOCKS.isEmpty()) {
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_NORTH.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.WORM_DUNGEON_PILLAR.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_TILES.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_TILES_WATER.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_STAIRS.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_STAIRS_DECAY_1.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_STAIRS_DECAY_2.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_STAIRS_DECAY_3.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_STAIRS_DECAY_4.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_SLAB.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_SLAB_DECAY_1.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_SLAB_DECAY_2.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_SLAB_DECAY_3.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICK_SLAB_DECAY_4.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_DECAY_1.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_SPIKE_TRAP.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_TILES_SPIKE_TRAP.getBlock(), true);
+			UNBREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_CLIMBABLE_NORTH.getBlock(), true);
+		}
 	}
 
 	@Override
