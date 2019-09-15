@@ -184,7 +184,7 @@ public class TestItemChimp extends Item {
 	*/
 				EntityMovingWall wall = new EntityMovingWall(worldIn);
 				wall.setPosition(pos.getX() + 0.5F, pos.getY() +1F, pos.getZ() + 0.5F);
-				wall.motionX = 0.1F; //X or Z movement - renderer rotates automagic atm
+				wall.motionZ = 0.05F; //X or Z movement - renderer rotates automagic atm
 				worldIn.spawnEntity(wall);
 		}
 

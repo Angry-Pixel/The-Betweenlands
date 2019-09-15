@@ -9,6 +9,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -43,8 +44,38 @@ public class EntityMovingWall extends Entity {
 			if (getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL)
 				setDead();
 
+		calculateAllCollisions(posX, posY, posZ);
+		calculateAllCollisions(posX, posY - 1D, posZ);
+		calculateAllCollisions(posX, posY + 1D, posZ);
+
+		if (getHorizontalFacing() == EnumFacing.NORTH || getHorizontalFacing() == EnumFacing.SOUTH) {
+			calculateAllCollisions(posX - 1D, posY, posZ);
+			calculateAllCollisions(posX - 1D, posY - 1D, posZ);
+			calculateAllCollisions(posX - 1D, posY + 1D, posZ);
+			calculateAllCollisions(posX + 1D, posY, posZ);
+			calculateAllCollisions(posX + 1D, posY - 1D, posZ);
+			calculateAllCollisions(posX + 1D, posY + 1D, posZ);
+		}
+		else {
+			calculateAllCollisions(posX, posY, posZ - 1D);
+			calculateAllCollisions(posX, posY - 1D, posZ - 1D);
+			calculateAllCollisions(posX, posY + 1D, posZ - 1D);
+			calculateAllCollisions(posX, posY, posZ + 1D);
+			calculateAllCollisions(posX, posY - 1D, posZ + 1D);
+			calculateAllCollisions(posX, posY + 1D, posZ + 1D);
+		}
+
+		posX += motionX;
+		posY += motionY;
+		posZ += motionZ;
+		rotationYaw = (float) (MathHelper.atan2(-motionX, motionZ) * (180D / Math.PI));
+		setPosition(posX, posY, posZ);
+	    setEntityBoundingBox(getCollisionBoundingBox());
+	}
+
+	public void calculateAllCollisions(double posX, double posY, double posZ) {
         Vec3d vec3d = new Vec3d(posX, posY, posZ);
-        Vec3d vec3d1 = new Vec3d(posX + motionX * 6D, posY + motionY, posZ + motionZ * 6D);
+        Vec3d vec3d1 = new Vec3d(posX + motionX * 12D, posY + motionY, posZ + motionZ * 12D); //adjust multiplier higher for slower speeds
         RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d1);
         vec3d = new Vec3d(posX, posY, posZ);
         vec3d1 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
@@ -53,7 +84,7 @@ public class EntityMovingWall extends Entity {
             vec3d1 = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
 
         Entity entity = null;
-        List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(motionX, motionY, motionZ).grow(1.0D));
+        List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, getCollisionBoundingBox().expand(motionX, motionY, motionZ).grow(1.0D));
         double d0 = 0.0D;
         boolean ignore = false;
 
@@ -95,14 +126,8 @@ public class EntityMovingWall extends Entity {
 
 		if (raytraceresult != null)
 			onImpact(raytraceresult);
-
-		posX += motionX;
-		posY += motionY;
-		posZ += motionZ;
-		rotationYaw = (float) (MathHelper.atan2(-motionX, motionZ) * (180D / Math.PI));
-		setPosition(posX, posY, posZ);
 	}
-
+	
 	protected void onImpact(RayTraceResult result) {
 		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
 			IBlockState state = getEntityWorld().getBlockState(result.getBlockPos());
@@ -133,6 +158,13 @@ public class EntityMovingWall extends Entity {
 	@Override
     public boolean canBePushed() {
         return false;
+    }
+
+	@Override
+    public AxisAlignedBB getEntityBoundingBox() {
+		if (getHorizontalFacing() == EnumFacing.NORTH || getHorizontalFacing() == EnumFacing.SOUTH)
+			return new AxisAlignedBB(posX - 0.5D, posY - 0.5D, posZ - 0.5D, posX + 0.5D, posY + 0.5D, posZ + 0.5D).grow(1D, 1D, 0D).offset(0D, 0.5D, 0D);
+		return new AxisAlignedBB(posX - 0.5D, posY - 0.5D, posZ - 0.5D, posX + 0.5D, posY + 0.5D, posZ + 0.5D).grow(0D, 1D, 1D).offset(0D, 0.5D, 0D);
     }
 
 	@Override
