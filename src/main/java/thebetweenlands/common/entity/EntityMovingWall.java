@@ -27,13 +27,20 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityMovingWall extends Entity {
+public class EntityMovingWall extends Entity implements IEntityScreenShake {
     public Entity ignoreEntity;
     private int ignoreTime;
-    private static final DataParameter<Boolean> IS_NEW_SPAWN = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.BOOLEAN);
+    private int holdCount;
+	private int prev_shake_timer;
+	private int shake_timer;
+	private boolean shaking = false;
+	private static int SHAKING_TIMER_MAX = 20;
+    private static final DataParameter<Boolean> IS_NEW_SPAWN = EntityDataManager.createKey(EntityMovingWall.class, DataSerializers.BOOLEAN);
+    private static final DataParameter<Boolean> HOLD_STILL = EntityDataManager.createKey(EntityMovingWall.class, DataSerializers.BOOLEAN);
 	private final ItemStack renderStack1 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 8);
 	private final ItemStack renderStack2 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 2);
 	private final ItemStack renderStack3 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 12);
@@ -48,6 +55,7 @@ public class EntityMovingWall extends Entity {
 	@Override
 	protected void entityInit() {
 		dataManager.register(IS_NEW_SPAWN, true);
+		dataManager.register(HOLD_STILL, false);
 	}
 
 	@Override
@@ -63,6 +71,13 @@ public class EntityMovingWall extends Entity {
 				setDead();
 			if(ticksExisted == 1 && isNewSpawn())
 				checkSpawnArea();
+			if(isHoldingStill()) {
+				holdCount--;
+				if (holdCount <= 0) {
+					setHoldStill(false);
+					holdCount = 20;
+				}
+			}
 		}
 
 		calculateAllCollisions(posX, posY + 0.5D, posZ);
@@ -86,12 +101,18 @@ public class EntityMovingWall extends Entity {
 			calculateAllCollisions(posX, posY + 1.5D, posZ + 1D);
 		}
 
-		posX += motionX;
-		posY += motionY;
-		posZ += motionZ;
+		if(!isHoldingStill()) {
+			posX += motionX;
+			posY += motionY;
+			posZ += motionZ;
+		}
+
 		rotationYaw = (float) (MathHelper.atan2(-motionX, motionZ) * (180D / Math.PI));
 		setPosition(posX, posY, posZ);
 	    setEntityBoundingBox(getCollisionBoundingBox());
+
+		if (isShaking())
+			shake(20);
 	}
 
 	private void checkSpawnArea() {
@@ -167,17 +188,27 @@ public class EntityMovingWall extends Entity {
 		if (raytraceresult != null)
 			onImpact(raytraceresult);
 	}
-	
+
 	protected void onImpact(RayTraceResult result) {
 		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
 			IBlockState state = getEntityWorld().getBlockState(result.getBlockPos());
 			if (isUnBreakableBlock(state.getBlock())) { // not sure of all the different states so default will do
 				if (result.sideHit.getIndex() == 2 || result.sideHit.getIndex() == 3) {
+					shaking = true;
 					motionZ *= -1D;
 					velocityChanged = true;
+					if(!getEntityWorld().isRemote) {
+						setHoldStill(true);
+						holdCount = 20;
+					}
 				} else if (result.sideHit.getIndex() == 4 || result.sideHit.getIndex() == 5) {
+					shaking = true;
 					motionX *= -1D;
 					velocityChanged = true;
+					if(!getEntityWorld().isRemote) {
+						setHoldStill(true);
+						holdCount = 20;
+					}
 				}
 			}
 			else {
@@ -207,6 +238,15 @@ public class EntityMovingWall extends Entity {
     }
 
 	@Override
+	public void addVelocity(double x, double y, double z) {
+		if (isHoldingStill()) {
+			motionX = 0;
+			motionY = 0;
+			motionZ = 0;
+		}
+	}
+
+	@Override
     public AxisAlignedBB getEntityBoundingBox() {
 		if (getHorizontalFacing() == EnumFacing.NORTH || getHorizontalFacing() == EnumFacing.SOUTH)
 			return new AxisAlignedBB(posX - 0.5D, posY - 0.5D, posZ - 0.5D, posX + 0.5D, posY + 0.5D, posZ + 0.5D).grow(1D, 1D, 0D).offset(0D, 0.5D, 0D);
@@ -217,13 +257,21 @@ public class EntityMovingWall extends Entity {
 	public AxisAlignedBB getCollisionBoundingBox() {
 		return getEntityBoundingBox();
 	}
-	
+
 	public void setIsNewSpawn(boolean new_spawn) {
 		dataManager.set(IS_NEW_SPAWN, new_spawn);
 	}
 
 	public boolean isNewSpawn() {
 		return dataManager.get(IS_NEW_SPAWN);
+	}
+
+	private void setHoldStill(boolean hold_still) {
+		dataManager.set(HOLD_STILL, hold_still);
+	}
+
+	public boolean isHoldingStill() {
+		return dataManager.get(HOLD_STILL);
 	}
 
 	public ItemStack cachedStackTop() {
@@ -280,6 +328,51 @@ public class EntityMovingWall extends Entity {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setBoolean("new_spawn", isNewSpawn());
+	}
+
+	public void shake(int shakeTimerMax) {
+		SHAKING_TIMER_MAX = shakeTimerMax;
+		prev_shake_timer = shake_timer;
+		if(shake_timer == 0) {
+			shaking = true;
+			shake_timer = 1;
+		}
+		if(shake_timer > 0)
+			shake_timer++;
+
+		if(shake_timer >= SHAKING_TIMER_MAX)
+			shaking = false;
+		else
+			shaking = true;
+	}
+
+	@Override
+	public float getShakeIntensity(Entity viewer, float partialTicks) {
+		if(isShaking()) {
+			double dist = getDistance(viewer);
+			float shakeMult = (float) (1.0F - dist / 16.0F);
+			if(dist >= 16.0F) {
+				return 0.0F;
+			}
+			return (float) ((Math.sin(getShakingProgress(partialTicks) * Math.PI) + 0.1F) * 0.075F * shakeMult);
+		} else {
+			return 0.0F;
+		}
+	}
+
+    public float getShakeDistance(Entity entity) {
+        float distX = (float)(getPosition().getX() - entity.getPosition().getX());
+        float distY = (float)(getPosition().getY() - entity.getPosition().getY());
+        float distZ = (float)(getPosition().getZ() - entity.getPosition().getZ());
+        return MathHelper.sqrt(distX * distX + distY * distY + distZ * distZ);
+    }
+
+	public boolean isShaking() {
+		return shaking;
+	}
+
+	public float getShakingProgress(float delta) {
+		return 1.0F / SHAKING_TIMER_MAX * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
 	}
 
 }
