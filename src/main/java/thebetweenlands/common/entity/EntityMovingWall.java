@@ -112,7 +112,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 	    setEntityBoundingBox(getCollisionBoundingBox());
 
 		if (isShaking())
-			shake(20);
+			shake(10);
 	}
 
 	private void checkSpawnArea() {
@@ -201,6 +201,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 					if(!getEntityWorld().isRemote) {
 						setHoldStill(true);
 						holdCount = 20;
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.MUD_DOOR_LOCK, SoundCategory.BLOCKS, 2F, 0.75F);
 					}
 				} else if (result.sideHit.getIndex() == 4 || result.sideHit.getIndex() == 5) {
 					shaking = true;
@@ -210,6 +211,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 					if(!getEntityWorld().isRemote) {
 						setHoldStill(true);
 						holdCount = 20;
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.MUD_DOOR_LOCK, SoundCategory.BLOCKS, 2F, 0.75F);
 					}
 				}
 			}
@@ -224,7 +226,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 			if (result.entityHit instanceof EntityLivingBase) {
 				((EntityLivingBase) result.entityHit).attackEntityFrom(DamageSource.GENERIC, 4F);
 				if (!getEntityWorld().isRemote)
-					getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundRegistry.REJECTED, SoundCategory.HOSTILE, 1F, 1F);
+					getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundRegistry.REJECTED, SoundCategory.HOSTILE, 0.25F, 1F);
 			}
 		}
 	}
