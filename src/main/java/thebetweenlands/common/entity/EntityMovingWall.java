@@ -195,6 +195,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 			if (isUnBreakableBlock(state.getBlock())) { // not sure of all the different states so default will do
 				if (result.sideHit.getIndex() == 2 || result.sideHit.getIndex() == 3) {
 					shaking = true;
+					shake_timer = 0;
 					motionZ *= -1D;
 					velocityChanged = true;
 					if(!getEntityWorld().isRemote) {
@@ -203,6 +204,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 					}
 				} else if (result.sideHit.getIndex() == 4 || result.sideHit.getIndex() == 5) {
 					shaking = true;
+					shake_timer = 0;
 					motionX *= -1D;
 					velocityChanged = true;
 					if(!getEntityWorld().isRemote) {
