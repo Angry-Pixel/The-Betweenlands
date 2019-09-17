@@ -7,6 +7,8 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -28,6 +30,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.entity.IEntityScreenShake;
+import thebetweenlands.client.audio.MovingWallSound;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -35,6 +38,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
     public Entity ignoreEntity;
     private int ignoreTime;
     private int holdCount;
+    public boolean playSlideSound = true;
 	private int prev_shake_timer;
 	private int shake_timer;
 	private boolean shaking = false;
@@ -113,6 +117,18 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 
 		if (isShaking())
 			shake(10);
+
+		if (getEntityWorld().isRemote) {
+			if (isHoldingStill())
+				if (!playSlideSound)
+					playSlideSound = true;
+
+			if (!isHoldingStill())
+				if (playSlideSound) {
+					playChainSound(getEntityWorld(), getPosition());
+					playSlideSound = false;
+				}
+		}
 	}
 
 	private void checkSpawnArea() {
@@ -231,6 +247,11 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		}
 	}
 
+	public void playChainSound(World world, BlockPos pos) {
+		ISound wall_slide = new MovingWallSound(this);
+		Minecraft.getMinecraft().getSoundHandler().playSound(wall_slide);
+	}
+
 	@Override
 	public boolean canBeCollidedWith() {
 		return true;
@@ -276,6 +297,10 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 
 	public boolean isHoldingStill() {
 		return dataManager.get(HOLD_STILL);
+	}
+
+	public boolean isMoving() {
+		return !isHoldingStill();
 	}
 
 	public ItemStack cachedStackTop() {

@@ -64,6 +64,7 @@ public class SoundRegistry {
     public static final BLSoundEvent CHAIN = reg("chain");
     public static final BLSoundEvent CHAIN_LONG = reg("chain_long");
     public static final BLSoundEvent GEARS = reg("gears");
+    public static final BLSoundEvent WALL_SLIDE = reg("wall_slide");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");

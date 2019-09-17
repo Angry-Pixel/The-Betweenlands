@@ -1347,5 +1347,10 @@
     "sounds": [
       "thebetweenlands:gears"
     ]
+  },
+  "wall_slide": {
+    "sounds": [
+      "thebetweenlands:wall_slide"
+    ]
   }
 }
