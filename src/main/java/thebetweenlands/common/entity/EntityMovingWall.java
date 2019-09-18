@@ -1,17 +1,15 @@
 package thebetweenlands.common.entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.MoverType;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -35,25 +33,53 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityMovingWall extends Entity implements IEntityScreenShake {
-    public Entity ignoreEntity;
-    private int ignoreTime;
-    private int holdCount;
-    public boolean playSlideSound = true;
+	private static final DataParameter<Boolean> IS_NEW_SPAWN = EntityDataManager.createKey(EntityMovingWall.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> HOLD_STILL = EntityDataManager.createKey(EntityMovingWall.class, DataSerializers.BOOLEAN);
+
+	public Entity ignoreEntity;
+	private int ignoreTime;
+	private int holdCount;
+	public boolean playSlideSound = true;
 	private int prev_shake_timer;
 	private int shake_timer;
 	private boolean shaking = false;
-	private static int SHAKING_TIMER_MAX = 20;
-    private static final DataParameter<Boolean> IS_NEW_SPAWN = EntityDataManager.createKey(EntityMovingWall.class, DataSerializers.BOOLEAN);
-    private static final DataParameter<Boolean> HOLD_STILL = EntityDataManager.createKey(EntityMovingWall.class, DataSerializers.BOOLEAN);
+	private int shakingTimerMax = 20;
+
 	private final ItemStack renderStack1 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 8);
 	private final ItemStack renderStack2 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 2);
 	private final ItemStack renderStack3 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 12);
-	public final Map<Block, Boolean> UNBREAKABLE_BLOCKS = new HashMap<Block, Boolean>();
+
+	public static final Set<Block> UNBREAKABLE_BLOCKS = new HashSet<Block>();
+
+	static {
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_ALCOVE);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.WORM_DUNGEON_PILLAR);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_TILES);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_TILES_WATER);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_STAIRS);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_STAIRS_DECAY_1);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_STAIRS_DECAY_2);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_STAIRS_DECAY_3);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_STAIRS_DECAY_4);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_SLAB);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_SLAB_DECAY_1);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_SLAB_DECAY_2);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_SLAB_DECAY_3);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_SLAB_DECAY_4);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICKS);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICKS_CARVED);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_SPIKE_TRAP);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_TILES_SPIKE_TRAP);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICKS_CLIMBABLE);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_COMBINATION);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER);
+	}
 
 	public EntityMovingWall(World world) {
 		super(world);
 		setSize(1F, 1F);
-		initUnBreakableBlockMap();// using map for this atm because I don't know if we'll add a load of stuff or not
 	}
 
 	@Override
@@ -109,11 +135,13 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 			posX += motionX;
 			posY += motionY;
 			posZ += motionZ;
+
+			this.pushEntitiesAway();
 		}
 
 		rotationYaw = (float) (MathHelper.atan2(-motionX, motionZ) * (180D / Math.PI));
 		setPosition(posX, posY, posZ);
-	    setEntityBoundingBox(getCollisionBoundingBox());
+		setEntityBoundingBox(getCollisionBoundingBox());
 
 		if (isShaking())
 			shake(10);
@@ -131,39 +159,100 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		}
 	}
 
+	protected void pushEntitiesAway() {
+		AxisAlignedBB collisionAABB = this.getCollisionBoundingBox();
+		if(collisionAABB != null) {
+			List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, collisionAABB);
+
+			for(Entity entity : entities) {
+				boolean squished = false;
+
+				AxisAlignedBB entityAABB = entity.getEntityBoundingBox();
+
+				double dx = Math.max(collisionAABB.minX - entityAABB.maxX, entityAABB.minX - collisionAABB.maxX);
+				double dz = Math.max(collisionAABB.minZ - entityAABB.maxZ, entityAABB.minZ - collisionAABB.maxZ);
+
+				if(Math.abs(dz) < Math.abs(dx)) {
+					entity.move(MoverType.PISTON, 0, 0, (dz - 0.01D) * Math.signum(this.posZ - entity.posZ));
+
+					entityAABB = entity.getEntityBoundingBox();
+					dz = Math.max(collisionAABB.minZ - entityAABB.maxZ, entityAABB.minZ - collisionAABB.maxZ);
+
+					if(Math.abs(dz) > 0.01D) {
+						squished = true;
+
+						this.posZ -= (dz - 0.05D) * Math.signum(this.posZ - entity.posZ);
+					}
+				} else {
+					entity.move(MoverType.PISTON, (dx - 0.01D) * Math.signum(this.posX - entity.posX), 0, 0);
+
+					entityAABB = entity.getEntityBoundingBox();
+					dx = Math.max(collisionAABB.minX - entityAABB.maxX, entityAABB.minX - collisionAABB.maxX);
+
+					if(Math.abs(dx) > 0.01D) {
+						squished = true;
+
+						this.posX -= (dx - 0.05D) * Math.signum(this.posX - entity.posX);
+					}
+				}
+
+				//Move slightly towards ground to update onGround state etc.
+				entity.move(MoverType.PISTON, 0, -0.01D, 0);
+
+				if(squished) {
+					shaking = true;
+					shake_timer = 0;
+					motionX *= -1D;
+					motionZ *= -1D;
+					velocityChanged = true;
+
+					if(!this.world.isRemote) {
+						entity.attackEntityFrom(DamageSource.IN_WALL, 10F);
+
+						setHoldStill(true);
+						holdCount = 20;
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.MUD_DOOR_LOCK, SoundCategory.BLOCKS, 2F, 0.75F);
+					}
+				}
+			}
+		}
+	}
+
 	private void checkSpawnArea() {
-		List<Block> chains = new ArrayList<Block>();
 		BlockPos posEntity = getPosition();
 		Iterable<BlockPos> blocks = BlockPos.getAllInBox(posEntity.add(-1F, -1F, -1F), posEntity.add(1F, 1F, 1F));
-		for (BlockPos pos : blocks)
-			if (isUnBreakableBlock(getEntityWorld().getBlockState(pos).getBlock()))
+		for (BlockPos pos : blocks) {
+			if (isUnbreakableBlock(getEntityWorld().getBlockState(pos).getBlock())) {
 				setDead();
-		if(isUnBreakableBlock(getEntityWorld().getBlockState(posEntity.add(2, 0, 0)).getBlock()) && isUnBreakableBlock(getEntityWorld().getBlockState(posEntity.add(-2, 0, 0)).getBlock())) {
+			}
+		}
+		if(isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(2, 0, 0)).getBlock()) && isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(-2, 0, 0)).getBlock())) {
 			motionZ = 0.05F;
 			setIsNewSpawn(false);
 		}
-		else if(isUnBreakableBlock(getEntityWorld().getBlockState(posEntity.add(0, 0, 2)).getBlock()) && isUnBreakableBlock(getEntityWorld().getBlockState(posEntity.add(0, 0, -2)).getBlock())) {
+		else if(isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(0, 0, 2)).getBlock()) && isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(0, 0, -2)).getBlock())) {
 			motionX = 0.05F;
 			setIsNewSpawn(false);
 		}	
-		else
+		else {
 			setDead();
+		}
 	}
 
 	public void calculateAllCollisions(double posX, double posY, double posZ) {
-        Vec3d vec3d = new Vec3d(posX, posY, posZ);
-        Vec3d vec3d1 = new Vec3d(posX + motionX * 12D, posY + motionY, posZ + motionZ * 12D); //adjust multiplier higher for slower speeds
-        RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d1);
-        vec3d = new Vec3d(posX, posY, posZ);
-        vec3d1 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
+		Vec3d vec3d = new Vec3d(posX, posY, posZ);
+		Vec3d vec3d1 = new Vec3d(posX + motionX * 12D, posY + motionY, posZ + motionZ * 12D); //adjust multiplier higher for slower speeds
+		RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d1);
+		vec3d = new Vec3d(posX, posY, posZ);
+		vec3d1 = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
 
-        if (raytraceresult != null)
-            vec3d1 = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
+		if (raytraceresult != null)
+			vec3d1 = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
 
-        Entity entity = null;
-        List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, getCollisionBoundingBox().expand(motionX, motionY, motionZ).grow(1.0D));
-        double d0 = 0.0D;
-        boolean ignore = false;
+		Entity entity = null;
+		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, getCollisionBoundingBox().expand(motionX, motionY, motionZ).grow(1.0D));
+		double d0 = 0.0D;
+		boolean ignore = false;
 
 		for (int entityCount = 0; entityCount < list.size(); ++entityCount) {
 			Entity entity1 = list.get(entityCount);
@@ -208,7 +297,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 	protected void onImpact(RayTraceResult result) {
 		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
 			IBlockState state = getEntityWorld().getBlockState(result.getBlockPos());
-			if (isUnBreakableBlock(state.getBlock())) { // not sure of all the different states so default will do
+			if (isUnbreakableBlock(state.getBlock())) { // not sure of all the different states so default will do
 				if (result.sideHit.getIndex() == 2 || result.sideHit.getIndex() == 3) {
 					shaking = true;
 					shake_timer = 0;
@@ -238,13 +327,6 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 				}
 			}
 		}
-		if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
-			if (result.entityHit instanceof EntityLivingBase) {
-				((EntityLivingBase) result.entityHit).attackEntityFrom(DamageSource.GENERIC, 4F);
-				if (!getEntityWorld().isRemote)
-					getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundRegistry.REJECTED, SoundCategory.HOSTILE, 0.25F, 1F);
-			}
-		}
 	}
 
 	public void playChainSound(World world, BlockPos pos) {
@@ -258,9 +340,9 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 	}
 
 	@Override
-    public boolean canBePushed() {
-        return false;
-    }
+	public boolean canBePushed() {
+		return false;
+	}
 
 	@Override
 	public void addVelocity(double x, double y, double z) {
@@ -272,11 +354,11 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 	}
 
 	@Override
-    public AxisAlignedBB getEntityBoundingBox() {
+	public AxisAlignedBB getEntityBoundingBox() {
 		if (getHorizontalFacing() == EnumFacing.NORTH || getHorizontalFacing() == EnumFacing.SOUTH)
 			return new AxisAlignedBB(posX - 0.5D, posY - 0.5D, posZ - 0.5D, posX + 0.5D, posY + 0.5D, posZ + 0.5D).grow(1D, 1D, 0D).offset(0D, 0.5D, 0D);
 		return new AxisAlignedBB(posX - 0.5D, posY - 0.5D, posZ - 0.5D, posX + 0.5D, posY + 0.5D, posZ + 0.5D).grow(0D, 1D, 1D).offset(0D, 0.5D, 0D);
-    }
+	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox() {
@@ -315,37 +397,8 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		return renderStack3;
 	}
 
-	public boolean isUnBreakableBlock(Block block) {
-		return UNBREAKABLE_BLOCKS.get(block) != null;
-	}
-
-	//TODO - May want to move to a config one day - add blocks not to break here. Removed state sensitivity because its a pita and would need all states
-	private void initUnBreakableBlockMap() {
-		if (UNBREAKABLE_BLOCKS.isEmpty()) {
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_ALCOVE, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.WORM_DUNGEON_PILLAR, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_TILES, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_TILES_WATER, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_STAIRS, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_STAIRS_DECAY_1, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_STAIRS_DECAY_2, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_STAIRS_DECAY_3, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_STAIRS_DECAY_4, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_SLAB, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_SLAB_DECAY_1, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_SLAB_DECAY_2, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_SLAB_DECAY_3, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_SLAB_DECAY_4, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICKS, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICKS_CARVED, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICK_SPIKE_TRAP, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_TILES_SPIKE_TRAP, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.MUD_BRICKS_CLIMBABLE, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.DUNGEON_DOOR_COMBINATION, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.DUNGEON_DOOR_RUNES, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC, true);
-			UNBREAKABLE_BLOCKS.put(BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER, true);
-		}
+	public boolean isUnbreakableBlock(Block block) {
+		return UNBREAKABLE_BLOCKS.contains(block);
 	}
 
 	@Override
@@ -360,7 +413,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 	}
 
 	public void shake(int shakeTimerMax) {
-		SHAKING_TIMER_MAX = shakeTimerMax;
+		shakingTimerMax = shakeTimerMax;
 		prev_shake_timer = shake_timer;
 		if(shake_timer == 0) {
 			shaking = true;
@@ -369,7 +422,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		if(shake_timer > 0)
 			shake_timer++;
 
-		if(shake_timer >= SHAKING_TIMER_MAX)
+		if(shake_timer >= shakingTimerMax)
 			shaking = false;
 		else
 			shaking = true;
@@ -389,19 +442,19 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		}
 	}
 
-    public float getShakeDistance(Entity entity) {
-        float distX = (float)(getPosition().getX() - entity.getPosition().getX());
-        float distY = (float)(getPosition().getY() - entity.getPosition().getY());
-        float distZ = (float)(getPosition().getZ() - entity.getPosition().getZ());
-        return MathHelper.sqrt(distX * distX + distY * distY + distZ * distZ);
-    }
+	public float getShakeDistance(Entity entity) {
+		float distX = (float)(getPosition().getX() - entity.getPosition().getX());
+		float distY = (float)(getPosition().getY() - entity.getPosition().getY());
+		float distZ = (float)(getPosition().getZ() - entity.getPosition().getZ());
+		return MathHelper.sqrt(distX * distX + distY * distY + distZ * distZ);
+	}
 
 	public boolean isShaking() {
 		return shaking;
 	}
 
 	public float getShakingProgress(float delta) {
-		return 1.0F / SHAKING_TIMER_MAX * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
+		return 1.0F / shakingTimerMax * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
 	}
 
 }
