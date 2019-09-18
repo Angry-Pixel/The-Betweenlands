@@ -333,6 +333,11 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		ISound wall_slide = new MovingWallSound(this);
 		Minecraft.getMinecraft().getSoundHandler().playSound(wall_slide);
 	}
+	
+	@Override
+	public void move(MoverType type, double x, double y, double z) {
+		//No regular moving
+	}
 
 	@Override
 	public boolean canBeCollidedWith() {
