@@ -14,8 +14,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 4,
-                                "max": 8
+                                "min": 1,
+                                "max": 5
                             }
                         },
                         {
@@ -37,8 +37,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 8,
-                                "max": 16
+                                "min": 2,
+                                "max": 6
                             }
                         },
                         {
@@ -59,8 +59,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 8,
-                                "max": 32
+                                "min": 3,
+                                "max": 9
                             }
                         }
                     ],
@@ -159,24 +159,7 @@
                             "data": 40
                         }
                     ],
-                    "weight": 35,
-                    "quality": 0
-                },
-                {
-                    "conditions": [],
-                    "type": "item",
-                    "name": "thebetweenlands:angry_pebble",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                                "min": 8,
-                                "max": 16
-                            }
-                        }
-                    ],
-                    "weight": 15,
+                    "weight": 20,
                     "quality": 0
                 },
                 {
@@ -231,23 +214,13 @@
                             }
                         }
                     ],
-                    "weight": 4,
+                    "weight": 8,
                     "quality": 0
                 },
                 {
                     "conditions": [],
                     "type": "item",
                     "name": "thebetweenlands:jam_donut",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                                "min": 2,
-                                "max": 4
-                            }
-                        }
-                    ],
                     "weight": 28,
                     "quality": 0
                 },
@@ -260,8 +233,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 2,
-                                "max": 4
+                                "min": 1,
+                                "max": 2
                             }
                         }
                     ],
