@@ -21,7 +21,7 @@
                     "weight": 20,
                     "quality": 0
                 },
-				{
+                {
                     "conditions": [],
                     "type": "item",
                     "entryName": "syrmorite_ingot",
@@ -77,7 +77,7 @@
                     "weight": 10,
                     "quality": 0
                 },
-				{
+                {
                     "conditions": [],
                     "type": "item",
                     "name": "thebetweenlands:swift_pick",
@@ -85,7 +85,7 @@
                     "weight": 12,
                     "quality": 0
                 },
-				{
+                {
                     "conditions": [],
                     "type": "item",
                     "name": "thebetweenlands:wights_bane",
@@ -123,7 +123,7 @@
                     "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
-						    "conditions": [],
+                            "conditions": [],
                             "function": "set_count",
                             "count": {
                                 "min": 1,
