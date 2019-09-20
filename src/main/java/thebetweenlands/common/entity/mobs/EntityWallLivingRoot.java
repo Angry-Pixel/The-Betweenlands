@@ -11,29 +11,39 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.registries.LootTableRegistry;
 
 //TODO Loot tables
 public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, IEntityMultiPart {
+	public static final IAttribute MAX_ARM_LENGTH = (new RangedAttribute(null, "bl.maxRootArmLength", 2.0D, 0.0D, 16.0D)).setDescription("Maximum length of root arm").setShouldWatch(true);
+
 	protected static final float ARM_FULL_WIDTH = 0.2F;
 	protected static final float[][] ARM_CROSS_SECTION = new float[][] {
 		{-ARM_FULL_WIDTH, ARM_FULL_WIDTH},
@@ -85,6 +95,8 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	private static final DataParameter<Integer> REL_TIP_Y = EntityDataManager.createKey(EntityWallLivingRoot.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> REL_TIP_Z = EntityDataManager.createKey(EntityWallLivingRoot.class, DataSerializers.VARINT);
 
+	private boolean rootTipPositionSet = false;
+
 	public final MultiPartEntityPart rootTip;
 	private MultiPartEntityPart[] parts;
 
@@ -95,6 +107,8 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	@SideOnly(Side.CLIENT)
 	private TextureAtlasSprite wallSprite;
 
+	private int armMovementTicks;
+
 	public EntityWallLivingRoot(World world) {
 		super(world);
 
@@ -104,6 +118,12 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		this.parts = new MultiPartEntityPart[] {
 				this.rootTip = new MultiPartEntityPart(this, "rootTip", 0.3F, 0.3F)
 		};
+	}
+
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+		this.armMovementTicks = this.world.rand.nextInt(10000);
+		return super.onInitialSpawn(difficulty, livingdata);
 	}
 
 	@Override
@@ -118,8 +138,8 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	protected void initEntityAI() {
 		super.initEntityAI();
 
-		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true));
-		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
+		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, false));
+		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true).setUnseenMemoryTicks(120));
 
 		this.tasks.addTask(0, new AITrackTarget<EntityWallLivingRoot>(this, true, 28.0D) {
 			@Override
@@ -127,13 +147,15 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 				return true;
 			}
 		});
+		this.tasks.addTask(1, new AIArmAttack(this));
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.08D);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.5D);
+		this.getAttributeMap().registerAttribute(MAX_ARM_LENGTH);
 	}
 
 	public Vec3d getTipPos() {
@@ -150,7 +172,11 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	public void onUpdate() {
 		super.onUpdate();
 
-		float maxArmLength = 2.0F * this.getArmSize(1);
+		float flailingStrength = this.isSwingInProgress ? (1 - this.swingProgress) : this.hurtTime > 0 ? (this.hurtTime / (float)this.maxHurtTime) * 0.5F : 0.0f;
+
+		this.armMovementTicks += 1 + (int)(flailingStrength * 10);
+
+		float maxArmLength = (float)this.getEntityAttribute(MAX_ARM_LENGTH).getAttributeValue() * this.getArmSize(1);
 
 		int numSegments = 8;
 
@@ -161,14 +187,22 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 
 		Vec3d armStart = new Vec3d(0, this.height / 2, 0).add(-dirFwd.x * (this.width / 2 - 0.1f), -dirFwd.y * (this.height / 2 - 0.1f), -dirFwd.z * (this.width / 2 - 0.1f));
 		Vec3d ikArmStart = new Vec3d(0, this.height / 2, 0).add(dirFwd.scale(0.1f));
-		Vec3d armEnd = this.rootTip.getPositionVector().add(0, this.rootTip.height / 2, 0).subtract(this.getPositionVector());
 
 		this.rootTip.onUpdate();
 
+		if(!this.rootTipPositionSet) {
+			Vec3d tipPos = this.getPositionVector().add(armStart.add(dirFwd.scale(maxArmLength)).add(0, -this.rootTip.height / 2, 0));
+			this.setTipPos(tipPos);
+			this.rootTip.setPosition(tipPos.x, tipPos.y, tipPos.z);
+			this.rootTipPositionSet = true;
+		}
+
+		Vec3d armEnd = this.rootTip.getPositionVector().add(0, this.rootTip.height / 2, 0).subtract(this.getPositionVector());
+
 		if(!this.world.isRemote) {
-			float idleX = MathHelper.cos(this.ticksExisted / 9.0f) * 0.75F;
-			float idleY = MathHelper.sin(this.ticksExisted / 7.0f) * 0.75F;
-			float idleZ = (MathHelper.cos(this.ticksExisted / 15.0f) + 1) * 0.25f;
+			float idleX = MathHelper.cos(this.armMovementTicks / 9.0f) * 0.75F;
+			float idleY = MathHelper.sin(this.armMovementTicks / 7.0f) * 0.75F;
+			float idleZ = (MathHelper.cos(this.armMovementTicks / 15.0f) + 1) * 0.25f;
 
 			Vec3d armStartWorld = this.getPositionVector().add(ikArmStart);
 
@@ -191,7 +225,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 			targetTipPos = targetTipPos.add(dirUp.scale(idleY)).add(dirFwd.crossProduct(dirUp).scale(idleX)).add(dirFwd.scale(offsetZ - idleZ));
 
 			Vec3d tipDiff = targetTipPos.subtract(tipPos);
-			tipPos = tipPos.add(tipDiff.normalize().scale(Math.min(tipDiff.length(), 0.1D)));
+			tipPos = tipPos.add(tipDiff.normalize().scale(Math.min(tipDiff.length(), 0.1D + flailingStrength * 0.9D)));
 
 			//Clamp to max reach sphere
 			tipPos = armStartWorld.add(tipPos.subtract(armStartWorld).normalize().scale(Math.min(tipPos.subtract(armStartWorld).length(), maxArmLength)));
@@ -262,6 +296,12 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		}
 	}
 
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		this.updateArmSwingProgress();
+	}
+
 	@SideOnly(Side.CLIENT)
 	protected void updateWallSprite() {
 		this.wallSprite = null;
@@ -280,6 +320,18 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	@SideOnly(Side.CLIENT)
 	public TextureAtlasSprite getWallSprite() {
 		return this.wallSprite;
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		this.armMovementTicks = nbt.getInteger("armMovementTicks");
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		nbt.setInteger("armMovementTicks", this.armMovementTicks);
 	}
 
 	@Override
@@ -323,5 +375,32 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
 		return this.attackEntityFrom(source, damage);
+	}
+
+	protected static class AIArmAttack extends EntityAIBase {
+		protected final EntityWallLivingRoot entity;
+		protected int attackTicks;
+
+		public AIArmAttack(EntityWallLivingRoot entity) {
+			this.entity = entity;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			return this.entity.getAttackTarget() != null;
+		}
+
+		@Override
+		public void updateTask() {
+			Entity target = this.entity.getAttackTarget();
+
+			if(this.attackTicks > 0) {
+				this.attackTicks--;
+			} else if(target != null && target.getEntityBoundingBox().intersects(this.entity.rootTip.getEntityBoundingBox())) {
+				EntityAIAttackOnCollide.useStandardAttack(this.entity, target);
+				this.entity.swingArm(EnumHand.MAIN_HAND);
+				this.attackTicks = 20;
+			}
+		}
 	}
 }

@@ -8,7 +8,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.AreaMobSpawner.BLSpawnEntry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
 /**
@@ -59,8 +59,9 @@ public class SurfaceSpawnEntry extends BLSpawnEntry {
 
 	@Override
 	public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState spawnBlockState, IBlockState surfaceBlockState) {
-		return (this.surfaceBlockPredicate.apply(surfaceBlockState) && !spawnBlockState.getMaterial().isLiquid()) ||
+		return !spawnBlockState.isNormalCube() &&
+				((this.surfaceBlockPredicate.apply(surfaceBlockState) && !spawnBlockState.getMaterial().isLiquid()) ||
 				(this.canSpawnInWater && spawnBlockState.getMaterial().isLiquid()) || 
-				(this.canSpawnOnWater && surfaceBlockState.getMaterial().isLiquid() && !spawnBlockState.getMaterial().isLiquid());
+				(this.canSpawnOnWater && surfaceBlockState.getMaterial().isLiquid() && !spawnBlockState.getMaterial().isLiquid()));
 	}
 }

@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.AreaMobSpawner.BLSpawnEntry;
 
 /**
  * Spawns entities above the surface, usually on trees.
@@ -35,6 +35,6 @@ public class TreeSpawnEntry extends BLSpawnEntry {
 
 	@Override
 	public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
-		return surfaceBlockState.getBlock() == BlockRegistry.SHELF_FUNGUS;
+		return !blockState.isNormalCube() && surfaceBlockState.getBlock() == BlockRegistry.SHELF_FUNGUS;
 	}
 }

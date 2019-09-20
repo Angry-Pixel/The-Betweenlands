@@ -20,9 +20,7 @@ import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockLootUrn.EnumLootUrn;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.misc.BlockMudFlowerPotCandle;
-import thebetweenlands.common.block.plant.BlockEdgeLeaf;
-import thebetweenlands.common.block.plant.BlockEdgeMoss;
-import thebetweenlands.common.block.plant.BlockEdgeShroom;
+import thebetweenlands.common.block.plant.BlockEdgePlant;
 import thebetweenlands.common.block.plant.BlockHangingPlant;
 import thebetweenlands.common.block.structure.BlockBrazier;
 import thebetweenlands.common.block.structure.BlockBrazier.EnumBrazierHalf;
@@ -102,7 +100,6 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_4 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_4);
 	public IBlockState WORM_DUNGEON_PILLAR_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_VERTICAL_DECAY_FULL);
 	public IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_FULL);
-	public IBlockState MUD_BRICKS_SPAWNER_HOLE = BlockRegistry.MUD_BRICK_SPAWNER_HOLE.getDefaultState();
 
 	public IBlockState MUD_TILES = BlockRegistry.MUD_TILES.getDefaultState();
 	public IBlockState MUD_TILES_DECAY = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY);
@@ -114,11 +111,13 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState MUD_BRICK_STAIRS_DECAY_1 = BlockRegistry.MUD_BRICK_STAIRS_DECAY_1.getDefaultState();
 	public IBlockState MUD_BRICK_STAIRS_DECAY_2 = BlockRegistry.MUD_BRICK_STAIRS_DECAY_2.getDefaultState();
 	public IBlockState MUD_BRICK_STAIRS_DECAY_3 = BlockRegistry.MUD_BRICK_STAIRS_DECAY_3.getDefaultState();
+	public IBlockState MUD_BRICK_STAIRS_DECAY_4 = BlockRegistry.MUD_BRICK_STAIRS_DECAY_4.getDefaultState();
 
 	public IBlockState MUD_BRICK_SLAB = BlockRegistry.MUD_BRICK_SLAB.getDefaultState();
 	public IBlockState MUD_BRICK_SLAB_DECAY_1 = BlockRegistry.MUD_BRICK_SLAB_DECAY_1.getDefaultState();
 	public IBlockState MUD_BRICK_SLAB_DECAY_2 = BlockRegistry.MUD_BRICK_SLAB_DECAY_2.getDefaultState();
 	public IBlockState MUD_BRICK_SLAB_DECAY_3 = BlockRegistry.MUD_BRICK_SLAB_DECAY_3.getDefaultState();
+	public IBlockState MUD_BRICK_SLAB_DECAY_4 = BlockRegistry.MUD_BRICK_SLAB_DECAY_4.getDefaultState();
 
 	public IBlockState MUD_BRICKS = BlockRegistry.MUD_BRICKS.getDefaultState();
 	public IBlockState MUD_BRICKS_DECAY_1 = BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_1);
@@ -161,7 +160,13 @@ public class SludgeWormMazeBlockHelper {
 
 	public IBlockState DUNGEON_DOOR_MIMIC_NORTH = BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.NORTH);
 	public IBlockState DUNGEON_DOOR_MIMIC_SOUTH = BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.SOUTH);
-	
+
+	public IBlockState DUNGEON_DOOR_CRAWLER_EAST = BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.EAST);
+	public IBlockState DUNGEON_DOOR_CRAWLER_WEST = BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.WEST);
+
+	public IBlockState DUNGEON_DOOR_CRAWLER_NORTH = BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.NORTH);
+	public IBlockState DUNGEON_DOOR_CRAWLER_SOUTH = BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER.getDefaultState().withProperty(BlockDungeonDoorRunes.FACING, EnumFacing.SOUTH);
+
 	public IBlockState LOOT_URN_1 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_1);
 	public IBlockState LOOT_URN_2 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_2);
 	public IBlockState LOOT_URN_3 = BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, EnumLootUrn.URN_3);
@@ -247,6 +252,13 @@ public class SludgeWormMazeBlockHelper {
     public IBlockState COMPACTED_MUD_MIRAGE = BlockRegistry.COMPACTED_MUD_MIRAGE.getDefaultState();
     public IBlockState COMPACTED_MUD_SLAB = BlockRegistry.COMPACTED_MUD_SLAB.getDefaultState();
     public IBlockState GROUND_ITEM = BlockRegistry.GROUND_ITEM.getDefaultState();
+
+    public IBlockState DECAY_PIT_INVISIBLE_FLOOR_BLOCK = BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK.getDefaultState();
+    public IBlockState DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_1 = BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_1.getDefaultState();
+    public IBlockState DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2 = BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2.getDefaultState();
+    public IBlockState DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL = BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL.getDefaultState();
+    public IBlockState DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1 = BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1.getDefaultState();
+    public IBlockState DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2 = BlockRegistry.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2.getDefaultState();
 
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
@@ -622,13 +634,13 @@ public class SludgeWormMazeBlockHelper {
 		int type = rand.nextInt(3); //expand for more types
 		switch (type) {
 		case 0:
-			return EDGE_SHROOM.withProperty(BlockEdgeShroom.FACING, facing);
+			return EDGE_SHROOM.withProperty(BlockEdgePlant.FACING, facing);
 		case 1:
-			return EDGE_MOSS.withProperty(BlockEdgeMoss.FACING, facing);
+			return EDGE_MOSS.withProperty(BlockEdgePlant.FACING, facing);
 		case 2:
-			return EDGE_LEAF.withProperty(BlockEdgeLeaf.FACING, facing);
+			return EDGE_LEAF.withProperty(BlockEdgePlant.FACING, facing);
 		}
-		return EDGE_SHROOM.withProperty(BlockEdgeShroom.FACING, facing);
+		return EDGE_SHROOM.withProperty(BlockEdgePlant.FACING, facing);
 	}
 
 	public IBlockState getMudTilesWater(Random rand) {
@@ -835,7 +847,6 @@ public class SludgeWormMazeBlockHelper {
 			STRUCTURE_BLOCKS.put(CHEST, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICKS_SPIKE_TRAP, true);
 			STRUCTURE_BLOCKS.put(MUD_TILES_SPIKE_TRAP, true);
-			STRUCTURE_BLOCKS.put(MUD_BRICKS_SPAWNER_HOLE, true);
 		}
 	}
 

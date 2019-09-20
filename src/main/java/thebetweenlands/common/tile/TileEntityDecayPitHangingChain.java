@@ -2,6 +2,8 @@ package thebetweenlands.common.tile;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -13,6 +15,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import thebetweenlands.client.audio.DecayPitChainSound;
 
 public class TileEntityDecayPitHangingChain extends TileEntity implements ITickable {
 
@@ -22,7 +27,8 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 	public final float MOVE_UNIT = 0.0078125F; // unit of movement 
 	public boolean IS_MOVING = false;
 	public boolean IS_SLOW = false;
-
+	public boolean IS_BROKEN = false;
+	public boolean playChainSound = true;
 	@Override
 	public void update() {
 		animationTicksChainPrev = animationTicksChain;
@@ -30,10 +36,18 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 		if (isMoving()) {
 			if (isSlow())
 				animationTicksChain++;
-			else
+			else if (isBroken())
+				animationTicksChain += 32;
+			else 
 				animationTicksChain += 8;
-
 		}
+
+		if (isBroken() && getProgress() > -512)
+			setProgress(getProgress() - 32);
+		
+		if (isBroken() && getProgress() <= -512)
+			if(!getWorld().isRemote)
+				getWorld().setBlockToAir(getPos());
 
 		if (getEntityCollidedWithChains(getHangingLengthCollision(1, 0, 2F + getProgress() * MOVE_UNIT)) != null)
 			checkCollisions(getEntityCollidedWithChains(getHangingLengthCollision(1, 0, 2F + getProgress() * MOVE_UNIT)));
@@ -49,11 +63,36 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 
 		if (animationTicksChainPrev >= 128) {
 			animationTicksChain = animationTicksChainPrev = 0;
-			setMoving(false);
+			if(!isBroken())
+				setMoving(false);
 		}
 
+		if (animationTicksChainPrev == 0 && isMoving() && isSlow())
+			if (!playChainSound)
+				playChainSound = true;
+
+		if (isBroken() && getProgress() >= 640)
+			if (!playChainSound)
+				playChainSound = true;
+
+		if(getWorld().isRemote && playChainSound) {
+			if(!isBroken())
+				playChainSound(getWorld(), getPos());
+			else
+				playChainSoundFinal(getWorld(), getPos());
+			playChainSound = false;
+		}
 	}
 
+	public void playChainSound(World world, BlockPos pos) {
+		ISound chain_sound = new DecayPitChainSound(this);
+		Minecraft.getMinecraft().getSoundHandler().playSound(chain_sound);
+	}
+
+	public void playChainSoundFinal(World world, BlockPos pos) {
+		//TODO Add final chain sound/other thing
+	}
+	
 	public List<Entity> getEntityCollidedWithChains(AxisAlignedBB chainBox) {
 		return getWorld().<Entity>getEntitiesWithinAABB(Entity.class, chainBox);
     }
@@ -102,12 +141,21 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 		return IS_SLOW;
 	}
 
+	public void setBroken(boolean broken) {
+		IS_BROKEN = broken;
+	}
+
+	public boolean isBroken() {
+		return IS_BROKEN;
+	}
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setInteger("animationTicksChain", animationTicksChain);
 		nbt.setInteger("animationTicksChainPrev", animationTicksChainPrev);
 		nbt.setInteger("progress", PROGRESS);
+		nbt.setBoolean("broken", IS_BROKEN);
 		return nbt;
 	}
 
@@ -117,6 +165,7 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 		animationTicksChain = nbt.getInteger("animationTicksChain");
 		animationTicksChainPrev = nbt.getInteger("animationTicksChainPrev");
 		PROGRESS = nbt.getInteger("progress");
+		IS_BROKEN = nbt.getBoolean("broken");
 	}
 
 	@Override
@@ -140,5 +189,9 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return INFINITE_EXTENT_AABB;
+	}
+
+	public void updateBlock() {
+		getWorld().notifyBlockUpdate(pos, getWorld().getBlockState(pos), getWorld().getBlockState(pos), 3);
 	}
 }

@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.client.render.entity.layer.LayerOverlay;
 import thebetweenlands.client.render.model.entity.ModelSludgeWallJet;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
 import thebetweenlands.common.lib.ModInfo;
@@ -13,6 +14,7 @@ public class RenderTriggeredSludgeWallJet extends RenderLiving<EntityTriggeredSl
 
 	public RenderTriggeredSludgeWallJet(RenderManager manager) {
 		super(manager, new ModelSludgeWallJet(), 0.5F);
+		 addLayer(new LayerOverlay<EntityTriggeredSludgeWallJet>(this, new ResourceLocation(ModInfo.ID, "textures/entity/sludge_wall_jet_glow.png")).setGlow(true));
 	}
 
 	@Override

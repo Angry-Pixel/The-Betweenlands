@@ -57,7 +57,7 @@ public class EntityMovingSpawnerHole extends EntityMovingWallFace implements IMo
 	protected void initEntityAI() {
 		super.initEntityAI();
 
-		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
+		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true).setUnseenMemoryTicks(120));
 
 		this.tasks.addTask(0, new AITrackTarget<EntityMovingSpawnerHole>(this, true, 28.0D) {
 			@Override

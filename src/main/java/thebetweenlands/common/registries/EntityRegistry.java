@@ -9,6 +9,7 @@ import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
+import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
@@ -34,6 +35,7 @@ import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityFlameJet;
 import thebetweenlands.common.entity.mobs.EntityFortressBoss;
 import thebetweenlands.common.entity.mobs.EntityFortressBossBlockade;
 import thebetweenlands.common.entity.mobs.EntityFortressBossProjectile;
@@ -177,6 +179,8 @@ public class EntityRegistry {
 		registerEntity(EntitySplodeshroom.class, "splodeshroom", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityCCGroundSpawner.class, "cc_ground_spawner");
 		registerEntity(EntityEmberling.class, "emberling", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityFlameJet.class, "flame_jet", 64, 1, true);
+		registerEntity(EntityMovingWall.class, "moving_wall", 64, 1, true);
 	}
 
 	private static int id = 0;

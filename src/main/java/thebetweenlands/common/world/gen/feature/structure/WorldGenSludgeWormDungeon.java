@@ -34,7 +34,9 @@ import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.TimeMeasurement;
 
 public class WorldGenSludgeWormDungeon extends WorldGenerator {
@@ -77,15 +79,37 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 		//locations blah, blah, blah...
 		timer.start("World_Locations");
+		//Mazes?
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 		LocationSludgeWormDungeon location = new LocationSludgeWormDungeon(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos));
-		location.addBounds(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 29, pos.getY() - 8 * 6 - 3, pos.getZ() + 29));
+		location.addBounds(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 29, pos.getY() - 8 * 5 - 3, pos.getZ() + 29));
 		location.linkChunks();
 		location.setLayer(0);
 		location.setSeed(rand.nextLong());
 		location.setStructurePos(pos);
 		location.setDirty(true);
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
+
+		//Barrishee Lair
+		LocationStorage locationBarrishee = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "barrishee_lair", EnumLocationType.DUNGEON);
+		location.addBounds(new AxisAlignedBB(pos.getX() + 20, pos.getY() - 24, pos.getZ() - 3, pos.getX() + 29, pos.getY() - 19, pos.getZ()));
+		location.linkChunks();
+		location.setLayer(1);
+		location.setSeed(rand.nextLong());
+		location.setVisible(true);
+		location.setDirty(true);
+		worldStorage.getLocalStorageHandler().addLocalStorage(locationBarrishee);
+
+		//Crypt Walkways
+		LocationStorage locationWalkays = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "cc_winding_walkways", EnumLocationType.DUNGEON);
+		location.addBounds(new AxisAlignedBB(pos.getX() - 3, pos.getY() - 43, pos.getZ() - 3, pos.getX(), pos.getY() - 24, pos.getZ() + 29));
+		location.addBounds(new AxisAlignedBB(pos.getX(), pos.getY() - 43, pos.getZ() - 3, pos.getX() + 29 , pos.getY() - 24, pos.getZ()));
+		location.linkChunks();
+		location.setLayer(2);
+		location.setSeed(rand.nextLong());
+		location.setVisible(true);
+		location.setDirty(true);
+		worldStorage.getLocalStorageHandler().addLocalStorage(locationWalkays);
 		timer.finish("World_Locations");
 
 		timer.start("Crypt");
@@ -932,7 +956,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					microBuild.addBarrisheeCubby(world, pos.add(20, -2, -3), EnumFacing.SOUTH, rand, level);
 				}
 				if(level == 5) {
-					world.setBlockState(pos.add(1, 0, 26), blockHelper.DUNGEON_DOOR_MIMIC_EAST, 2);  //TODO This will be Crypt Crawler entrance
+					world.setBlockState(pos.add(1, 0, 26), blockHelper.DUNGEON_DOOR_CRAWLER_EAST, 2);  //TODO This will be Crypt Crawler entrance
 					setRandomCombinations(world, pos.add(1, 0, 2), pos.add(1, 0, 26), rand, true);
 					for(int z = -1; z <= 1; z++)
 						for(int y = -1; y <= 1; y++)

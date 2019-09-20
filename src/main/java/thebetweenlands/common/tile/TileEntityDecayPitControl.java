@@ -1,7 +1,11 @@
 package thebetweenlands.common.tile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,19 +13,24 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -29,85 +38,194 @@ import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityShambler;
+import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
 import thebetweenlands.common.entity.mobs.EntitySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
-public class TileEntityDecayPitControl extends TileEntity implements ITickable {
+public class TileEntityDecayPitControl extends TileEntity implements ITickable, IEntityScreenShake {
 
 	public float animationTicks = 0;
 	public float animationTicksPrev = 0;
+	public float plugDropTicks = 0;
+	public float plugDropTicksPrev = 0;
+	public float floorFadeTicks = 0;
+	public float floorFadeTicksPrev = 0;
 	public int spawnType = 0;
+	public boolean IS_PLUGGED = false;
+	public boolean SHOW_FLOOR = true;
+	private int prev_shake_timer;
+	private int shake_timer;
+	private boolean shaking = false;
+	private static int SHAKING_TIMER_MAX = 60;
+	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
+	public final Map<Block, Boolean> INVISIBLE_BLOCKS = new HashMap<Block, Boolean>(); // dont need states so blocks will do
+
+	public TileEntityDecayPitControl()  {
+		initInvisiBlockMap();
+	}
+
+	private void initInvisiBlockMap() {
+		if (INVISIBLE_BLOCKS.isEmpty()) {
+			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK.getBlock(), true);
+			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL.getBlock(), true);
+			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1.getBlock(), true);
+			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2.getBlock(), true);
+			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_1.getBlock(), true);
+			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2.getBlock(), true);
+		}
+	}
+
+	public boolean isInvisibleBlock(Block block) {
+		return INVISIBLE_BLOCKS.get(block) != null;
+	}
 
 	@Override
 	public void update() {
-		animationTicksPrev = animationTicks;
+		if (!isPlugged()) {
+			animationTicksPrev = animationTicks;
 
-		animationTicks += 1F;
-		if (animationTicks >= 360F)
-			animationTicks = animationTicksPrev = 0;
+			animationTicks += 1F;
+			if (animationTicks >= 360F)
+				animationTicks = animationTicksPrev = 0;
 
-		if (!getWorld().isRemote) {
+			if (!getWorld().isRemote) {
 
-			if (animationTicks == 15 || animationTicks == 195) {
-				spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 3D, getPos().getZ() - 1.5D);
-				spawnSludgeJet(getPos().getX() - 4.5D, getPos().getY() + 3D, getPos().getZ() + 2.5D);
-			}
-
-			if (animationTicks == 60 || animationTicks == 240) {
-				spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 3D, getPos().getZ() - 4.5D);
-				spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 3D, getPos().getZ() + 5.5D);
-			}
-
-			if (animationTicks == 105 || animationTicks == 285) {
-				spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 3D, getPos().getZ() - 4.5D);
-				spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 3D, getPos().getZ() + 5.5D);
-			}
-
-			if (animationTicks == 150 || animationTicks == 330) {
-				spawnSludgeJet(getPos().getX() - 4.5D, getPos().getY() + 3D, getPos().getZ() - 1.5D);
-				spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 3D, getPos().getZ() + 2.5D);
-			}
-
-			//TODO remove ghetto syncing
-			if(getWorld().getTotalWorldTime() % 20 == 0)
-				updateBlock();
-
-			if(getWorld().getTotalWorldTime() % 1200 == 0) { //once a minute
-				//S
-				checkTurretSpawn(4, 12, 11);
-				checkTurretSpawn(-4, 12, 11);
-				//E
-				checkTurretSpawn(11, 12, 4);
-				checkTurretSpawn(11, 12, -4);
-				//N
-				checkTurretSpawn(4, 12, -11);
-				checkTurretSpawn(-4, 12, -11);
-				//W
-				checkTurretSpawn(-11, 12, -4);
-				checkTurretSpawn(-11, 12, 4);
-			}
-			
-			//spawn stuff here
-			if(getWorld().getTotalWorldTime() % 80 == 0) {
-				Entity thing = getEntitySpawned(getSpawnType());
-				if(thing != null) {
-					thing.setPosition(getPos().getX() + 0.5D, getPos().getY() + 1D, getPos().getZ() + 0.5D);
-					getWorld().spawnEntity(thing);
+				if (animationTicks == 15 || animationTicks == 195) {
+					spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 3D, getPos().getZ() - 1.5D);
+					spawnSludgeJet(getPos().getX() - 4.5D, getPos().getY() + 3D, getPos().getZ() + 2.5D);
 				}
+
+				if (animationTicks == 60 || animationTicks == 240) {
+					spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 3D, getPos().getZ() - 4.5D);
+					spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 3D, getPos().getZ() + 5.5D);
+				}
+
+				if (animationTicks == 105 || animationTicks == 285) {
+					spawnSludgeJet(getPos().getX() - 1.5D, getPos().getY() + 3D, getPos().getZ() - 4.5D);
+					spawnSludgeJet(getPos().getX() + 2.5D, getPos().getY() + 3D, getPos().getZ() + 5.5D);
+				}
+
+				if (animationTicks == 150 || animationTicks == 330) {
+					spawnSludgeJet(getPos().getX() - 4.5D, getPos().getY() + 3D, getPos().getZ() - 1.5D);
+					spawnSludgeJet(getPos().getX() + 5.5D, getPos().getY() + 3D, getPos().getZ() + 2.5D);
+				}
+
+				// TODO remove ghetto syncing
+				if (getWorld().getTotalWorldTime() % 20 == 0)
+					updateBlock();
+
+				if (getWorld().getTotalWorldTime() % 1200 == 0) { // once a
+																	// minute
+					// S
+					checkTurretSpawn(4, 12, 11);
+					checkTurretSpawn(-4, 12, 11);
+					// E
+					checkTurretSpawn(11, 12, 4);
+					checkTurretSpawn(11, 12, -4);
+					// N
+					checkTurretSpawn(4, 12, -11);
+					checkTurretSpawn(-4, 12, -11);
+					// W
+					checkTurretSpawn(-11, 12, -4);
+					checkTurretSpawn(-11, 12, 4);
+				}
+
+				// spawn stuff here
+				if (getWorld().getTotalWorldTime() % 80 == 0) {
+					Entity thing = getEntitySpawned(getSpawnType());
+					if (thing != null) {
+						thing.setPosition(getPos().getX() + 0.5D, getPos().getY() + 1D, getPos().getZ() + 0.5D);
+						getWorld().spawnEntity(thing);
+					}
+				}
+				if (getSpawnType() == 5) {
+					setPlugged(true); //pretty pointless because I could use the spawn type :P
+					removeInvisiBlocks(getWorld(), getPos());
+					updateBlock();
+					getWorld().playSound(null, getPos().add(1, 6, 0), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+					getWorld().playSound(null, getPos().add(-1, 6, 0), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+					getWorld().playSound(null, getPos().add(0, 6, 1), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+					getWorld().playSound(null, getPos().add(0, 6, -1), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+				}
+			} else {
+				this.spawnAmbientParticles();
 			}
-			if(getSpawnType() == 5) {
-				//we go bye bye now
-				getWorld().setBlockToAir(getPos());
-				getWorld().setBlockToAir(getPos().up(15));
-			}
-		} else {
-			this.spawnAmbientParticles();
+			checkSurfaceCollisions();
 		}
-		checkSurfaceCollisions();
+
+		if (isPlugged()) {
+				plugDropTicksPrev = plugDropTicks;
+				floorFadeTicksPrev = floorFadeTicks;
+				if (getWorld().isRemote) {
+					if (plugDropTicks <= 0.8F) {
+						chainBreakParticles(getWorld(), getPos().add(1, 6, 0));
+						chainBreakParticles(getWorld(), getPos().add(-1, 6, 0));
+						chainBreakParticles(getWorld(), getPos().add(0, 6, 1));
+						chainBreakParticles(getWorld(), getPos().add(0, 6, -1));
+					}
+				}
+
+				if (plugDropTicks <= 1.6F)
+					plugDropTicks += 0.2F;
+
+				if (plugDropTicks == 0.6F) {
+					shaking = true;
+					if (!getWorld().isRemote)
+						getWorld().playSound(null, getPos(), SoundRegistry.PLUG_LOCK, SoundCategory.HOSTILE, 1F, 1F);
+				}
+				if (plugDropTicks > 1.6F && plugDropTicks <= 2)
+					plugDropTicks += 0.1F;
+
+				if (plugDropTicks >= 2)
+					if (getShowFloor())
+						floorFadeTicks += 0.025F;
+
+				if (floorFadeTicks >= 1)
+					if (!getWorld().isRemote) {
+						setShowFloor(false);
+						updateBlock();
+					}
+				if (shaking)
+					shake(60);
+			// TODO;
+			// render plug as animation falling in to place in the hole *DONE
+			// remove invisible blocks from edges of pit *DONE
+			// animate floor so it fades away *DONE
+			// whatever whizz bangs we add with shaders and particles
+			// spawn loots and stuff
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void chainBreakParticles(World world, BlockPos pos) {
+		double px = pos.getX() + 0.5D;
+		double py = pos.getY() + 0.5D;
+		double pz = pos.getZ() + 0.5D;
+		for (int i = 0, amount = 10; i < amount; i++) {
+			double ox = getWorld().rand.nextDouble() * 0.6F - 0.3F;
+			double oz = getWorld().rand.nextDouble() * 0.6F - 0.3F;
+			double motionX = getWorld().rand.nextDouble() * 0.4F - 0.2F;
+			double motionY = getWorld().rand.nextDouble() * 0.3F + 0.075F;
+			double motionZ = getWorld().rand.nextDouble() * 0.4F - 0.2F;
+			world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(BlockRegistry.DECAY_PIT_HANGING_CHAIN.getDefaultState()));
+		}
+	}
+
+	private void removeInvisiBlocks(World world, BlockPos pos) {
+		Iterable<BlockPos> blocks = BlockPos.getAllInBox(pos.add(-4F, 2F, -4F), pos.add(4F, 2F, 4F));
+		for (BlockPos posIteration : blocks)
+			if (isInvisibleBlock(getWorld().getBlockState(posIteration).getBlock()))
+				world.setBlockToAir(posIteration);
 	}
 
 	private void checkTurretSpawn(int x, int y, int z) {
@@ -252,19 +370,36 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		if(list.stream().filter(e -> e instanceof IMob).count() >= 5 && list.stream().filter(e -> e instanceof IEntityBL).count() >= 5)
 			return null;
 		Entity spawned_entity = null;
+		Random rand = getWorld().rand;
 		switch (spawnType) {
 		case 0:
-			return new EntityTinySludgeWorm(getWorld());
+			return rand.nextBoolean() ? new EntityTinySludgeWorm(getWorld()) : rand.nextBoolean() ? new EntitySmollSludge(getWorld()) : new EntityTermite(getWorld());
 		case 1:
-			return new EntitySludgeWorm(getWorld());
+			return rand.nextBoolean() ? new EntitySludgeWorm(getWorld()) : new EntityChiromaw(getWorld());
 		case 2:
-			return new EntitySwampHag(getWorld());
+			return rand.nextBoolean() ? new EntitySwampHag(getWorld()) : new EntitySludge(getWorld());
 		case 3:
-			return new EntityShambler(getWorld());
+			return rand.nextBoolean() ? new EntityShambler(getWorld()) : new EntityChiromaw(getWorld());
 		case 4:
 			return new EntityLargeSludgeWorm(getWorld());
 		}
 		return spawned_entity;
+	}
+
+	public void setPlugged(boolean plugged) {
+		IS_PLUGGED = plugged;
+	}
+
+	public boolean isPlugged() {
+		return IS_PLUGGED;
+	}
+	
+	public void setShowFloor(boolean show_floor) {
+		SHOW_FLOOR = show_floor;
+	}
+
+	public boolean getShowFloor() {
+		return SHOW_FLOOR;
 	}
 
 	@Override
@@ -272,6 +407,9 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 		super.writeToNBT(nbt);
 		nbt.setFloat("animationTicks", animationTicks);
 		nbt.setInteger("spawnType", getSpawnType());
+		nbt.setFloat("plugDropTicks", plugDropTicks);
+		nbt.setBoolean("plugged", isPlugged());
+		nbt.setBoolean("showFloor", getShowFloor());
 		return nbt;
 	}
 
@@ -279,7 +417,10 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		animationTicks = nbt.getFloat("animationTicks");
-		spawnType = nbt.getInteger("spawnType");
+		setSpawnType(nbt.getInteger("spawnType"));
+		plugDropTicks = nbt.getFloat("plugDropTicks");
+		setPlugged(nbt.getBoolean("plugged"));
+		setShowFloor(nbt.getBoolean("showFloor"));
 	}
 
 	@Override
@@ -303,5 +444,50 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable {
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return super.getRenderBoundingBox().grow(10);
+	}
+
+	public void shake(int shakeTimerMax) {
+		SHAKING_TIMER_MAX = shakeTimerMax;
+		prev_shake_timer = shake_timer;
+		if(shake_timer == 0) {
+			shaking = true;
+			shake_timer = 1;
+		}
+		if(shake_timer > 0)
+			shake_timer++;
+
+		if(shake_timer >= SHAKING_TIMER_MAX)
+			shaking = false;
+		else
+			shaking = true;
+	}
+
+	@Override
+	public float getShakeIntensity(Entity viewer, float partialTicks) {
+		if(isShaking()) {
+			double dist = getShakeDistance(viewer);
+			float shakeMult = (float) (1.0F - dist / 10.0F);
+			if(dist >= 10.0F) {
+				return 0.0F;
+			}
+			return (float) ((Math.sin(getShakingProgress(partialTicks) * Math.PI) + 0.1F) * 2F * shakeMult);
+		} else {
+			return 0.0F;
+		}
+	}
+
+    public float getShakeDistance(Entity entity) {
+        float distX = (float)(getPos().getX() - entity.getPosition().getX());
+        float distY = (float)(getPos().getY() - entity.getPosition().getY());
+        float distZ = (float)(getPos().getZ() - entity.getPosition().getZ());
+        return MathHelper.sqrt(distX  * distX  + distY * distY + distZ * distZ);
+    }
+
+	public boolean isShaking() {
+		return shaking;
+	}
+
+	public float getShakingProgress(float delta) {
+		return 1.0F / SHAKING_TIMER_MAX * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
 	}
 }

@@ -1,8 +1,8 @@
 {
     "variants": {
-        "facing=north": { "model": "thebetweenlands:compacted_mud", "y": 180 },
-        "facing=south": { "model": "thebetweenlands:compacted_mud" },
-        "facing=west":  { "model": "thebetweenlands:compacted_mud", "y": 90 },
-        "facing=east":  { "model": "thebetweenlands:compacted_mud", "y": 270 }
+        "facing=north": { "model": "thebetweenlands:decay_pit_hanging_chain", "y": 180 },
+        "facing=south": { "model": "thebetweenlands:decay_pit_hanging_chain" },
+        "facing=west":  { "model": "thebetweenlands:decay_pit_hanging_chain", "y": 90 },
+        "facing=east":  { "model": "thebetweenlands:decay_pit_hanging_chain", "y": 270 }
     }
 }

@@ -127,7 +127,7 @@ public class SharedLootPool implements ISharedLootPool {
 
 	@Override
 	public float getGuaranteePercentage() {
-		int lootInventories = this.location != null ? this.location.getLootInventories() : 0;
+		int lootInventories = this.location != null ? this.location.getLootInventories(this.lootTableLocation) : 0;
 		return lootInventories <= 0 ? 1.0F : Math.min((float)this.getGuaranteeCounter() / (float)lootInventories, 1.0F);
 	}
 

@@ -53,7 +53,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	private long locationSeed = 0L;
 
 	private Map<ResourceLocation, SharedLootPool> sharedLootPools = new HashMap<>();
-	private int lootInventories = 0;
+	private TObjectIntMap<ResourceLocation> lootInventories = new TObjectIntHashMap<>();
 	private boolean hasSharedLootPools = true;
 
 	protected GenericDataManager dataManager;
@@ -293,6 +293,13 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 				this.sharedLootPools.put(lootTable, sharedLootPool);
 			}
 		}
+		
+		this.lootInventories.clear();
+		NBTTagList lootInventoriesNbt = nbt.getTagList("lootInventories", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < lootInventoriesNbt.tagCount(); i++) {
+			NBTTagCompound entryNbt = lootInventoriesNbt.getCompoundTagAt(i);
+			this.lootInventories.put(new ResourceLocation(entryNbt.getString("table")), entryNbt.getInteger("count"));
+		}
 	}
 
 	protected void readSharedNbt(NBTTagCompound nbt) {
@@ -350,6 +357,18 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 			}
 
 			nbt.setTag("sharedLootPools", sharedLootPoolsNbt);
+		}
+		
+		if(!this.lootInventories.isEmpty()) {
+			NBTTagList lootInventoriesNbt = new NBTTagList();
+			this.lootInventories.forEachEntry((table, count) -> {
+				NBTTagCompound entryNbt = new NBTTagCompound();
+				entryNbt.setString("table", table.toString());
+				entryNbt.setInteger("count", count);
+				lootInventoriesNbt.appendTag(entryNbt);
+				return true;
+			});
+			nbt.setTag("lootInventories", lootInventoriesNbt);
 		}
 
 		return nbt;
@@ -672,12 +691,16 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 
 	}
 
-	public int getLootInventories() {
-		return this.lootInventories;
+	public int getLootInventories(ResourceLocation lootTable) {
+		return this.lootInventories.get(lootTable);
 	}
 
-	public void setLootInventories(int inventories) {
-		this.lootInventories = inventories;
+	public void registerLootInventory(ResourceLocation lootTable) {
+		this.lootInventories.increment(lootTable);
+	}
+	
+	public void setLootInventories(ResourceLocation lootTable, int inventories) {
+		this.lootInventories.put(lootTable, inventories);
 		this.markDirty();
 	}
 

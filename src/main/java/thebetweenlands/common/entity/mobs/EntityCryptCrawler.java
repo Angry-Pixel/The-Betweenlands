@@ -19,7 +19,6 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -81,7 +80,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		return dataManager.get(IS_BIPED);
 	}
 
-	private void setIsBiped(boolean standing) {
+	public void setIsBiped(boolean standing) {
 		dataManager.set(IS_BIPED, standing);
 	}
 
@@ -89,7 +88,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		return dataManager.get(IS_CHIEF);
 	}
 
-	private void setIsChief(boolean chief) {
+	public void setIsChief(boolean chief) {
 		dataManager.set(IS_CHIEF, chief);
 	}
 
@@ -107,7 +106,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		tasks.addTask(2, new EntityCryptCrawler.AIShieldCharge(this)); //Shield charge AI interrupts shield block AI
 		tasks.addTask(3, new EntityCryptCrawler.AIShieldBlock(this));
 		tasks.addTask(4, new EntityCryptCrawler.AICryptCrawlerAttack(this));
-		tasks.addTask(5, new EntityAIWander(this, 0.5D));
+		tasks.addTask(5, new EntityAIWander(this, 1D));
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		tasks.addTask(7, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, false, true, null));

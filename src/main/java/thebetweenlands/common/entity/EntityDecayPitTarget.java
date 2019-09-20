@@ -16,6 +16,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -78,7 +79,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 	public int attackDamageTicks = 0;
 	public int[] beamTransparencyTicks = new int[4];
-	
+
 	public EntityDecayPitTarget(World world) {
 		super(world);
 		setSize(5F, 5F);
@@ -264,27 +265,45 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			if (getProgress() > MIN_PROGRESS && getEntityWorld().getTotalWorldTime() % 400 == 0 && attackDamageTicks == 0)
 				moveUp();
 
-			if (getEntityWorld().getTotalWorldTime() % 10 == 0) {
-				if (getControl() != null) {
-					if (getProgress() < 128)
-						getControl().setSpawnType(0);
-					if (getProgress() >= 128 && getProgress() < 256)
-						getControl().setSpawnType(1);
-					if (getProgress() >= 256 && getProgress() < 384)
-						getControl().setSpawnType(2);
-					if (getProgress() >= 384 && getProgress() < 512)
-						getControl().setSpawnType(3);
-					if (getProgress() >= 512 && getProgress() < 640)
-						getControl().setSpawnType(4);
-				//	if (getProgress() >= 640)
-				//		getControl().setSpawnType(5);
+			TileEntityDecayPitControl control = this.getControl();
+			
+			if (control != null && getEntityWorld().getTotalWorldTime() % 10 == 0) {
+				if (getProgress() < 128)
+					control.setSpawnType(0);
+				if (getProgress() >= 128 && getProgress() < 256)
+					control.setSpawnType(1);
+				if (getProgress() >= 256 && getProgress() < 384)
+					control.setSpawnType(2);
+				if (getProgress() >= 384 && getProgress() < 512)
+					control.setSpawnType(3);
+				if (getProgress() >= 512 && getProgress() < 640)
+					control.setSpawnType(4);
+				if (getProgress() >= 640)
+					control.setSpawnType(5);
 	
-				}
 			}
-			//if (getControl() == null) {
-				// time to go
-			//	setDead();
-			//}
+			
+			if (control != null && control.getSpawnType() == 5) {
+				TileEntityDecayPitHangingChain hangingChains = this.getHangingChains();
+				
+				if (hangingChains != null) {
+					hangingChains.setBroken(true);
+					hangingChains.setMoving(true);
+					hangingChains.setSlow(false);
+					hangingChains.updateBlock();
+				}
+
+				if (getGroundChains() != null) {
+					for (TileEntityDecayPitGroundChain chain : getGroundChains()) {
+						chain.setBroken(true);
+						chain.setRaising(false);
+						chain.setMoving(true);
+						chain.setSlow(false);
+						chain.updateBlock();
+					}
+				}
+				setDead(); // TODO some particles to show the bobbing shields break
+			}
 		}
 	}
 
@@ -316,6 +335,17 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
         while(shield.rotationYaw - shield.prevRotationYaw >= 180.0F) {
         	shield.prevRotationYaw += 360.0F;
         }
+	}
+
+	@Override
+	public void setDead() {
+		// TODO Not this, will add something better, this is a placeholder test. ;P
+		/*
+		  for(EntityDecayPitTargetPart shieldPart : parts)
+		  	if(shieldPart.isShield)
+		  		getEntityWorld().playEvent(null, 2001, shieldPart.getPosition(), Block.getIdFromBlock(BlockRegistry.SMOOTH_PITSTONE));
+		 */
+		super.setDead();
 	}
 
 	@Override
@@ -383,8 +413,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 
 		if(part == target_north && !wasBlocked) {
 			if(!this.world.isRemote) {
-				if(getTargetNActive())
+				if(getTargetNActive()) {
 					setTargetNActive(false);
+					playHitSound(getWorld(), target_north.getPosition());
+				}
 				if(getAllTargetsHit())
 					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
@@ -393,8 +425,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		}
 		else if(part == target_east && !wasBlocked) {
 			if(!this.world.isRemote) {
-				if(getTargetEActive())
+				if(getTargetEActive()) {
 					setTargetEActive(false);
+					playHitSound(getWorld(), target_east.getPosition());
+				}
 				if(getAllTargetsHit())
 					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
@@ -403,8 +437,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		}
 		else if(part == target_south && !wasBlocked) {
 			if(!this.world.isRemote) {
-				if(getTargetSActive())
+				if(getTargetSActive()) {
 					setTargetSActive(false);
+					playHitSound(getWorld(), target_south.getPosition());
+				}
 				if(getAllTargetsHit())
 					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
@@ -413,8 +449,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		}
 		else if(part == target_west && !wasBlocked) {
 			if(!this.world.isRemote) {
-				if(getTargetWActive())
+				if(getTargetWActive()) {
 					setTargetWActive(false);
+					playHitSound(getWorld(), target_west.getPosition());
+				}
 				if(getAllTargetsHit())
 					moveDown();
 				this.world.setEntityState(this, EVENT_ATTACK_DAMAGE);
@@ -431,15 +469,21 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 						getEntityWorld().spawnEntity(grabber);
 					}
 				}
-				
 				this.moveUp();
-				
 				this.world.setEntityState(this, EVENT_ATTACK_BLOCKED);
 			}
 			return false;
 		}
 
 		return false;
+	}
+	
+	public void playHitSound(World world, BlockPos pos) {
+		getWorld().playSound(null, getPosition(), SoundRegistry.BEAM_ACTIVATE, SoundCategory.HOSTILE, 1F, 1F);
+	}
+
+	public void playDropSound(World world, BlockPos pos) {
+		getWorld().playSound(null, getPosition(), SoundRegistry.PLUG_HIT, SoundCategory.HOSTILE, 0.5F, 1F);
 	}
 
 	private boolean getAllTargetsHit() {
@@ -502,6 +546,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 			setTargetSActive(true);
 			setTargetWActive(true);
 		}
+		playDropSound(getWorld(), getPosition());
 	}
 
 	public TileEntityDecayPitHangingChain getHangingChains() {

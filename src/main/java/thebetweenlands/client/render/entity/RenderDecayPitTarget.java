@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -16,6 +17,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.entity.layer.LayerOverlay;
 import thebetweenlands.client.render.model.entity.ModelDecayPitPlug;
 import thebetweenlands.client.render.model.entity.ModelDecayPitTarget;
 import thebetweenlands.client.render.model.entity.ModelDecayPitTargetShield;
@@ -29,15 +31,17 @@ import thebetweenlands.util.LightingUtil;
 public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	private static final ResourceLocation BEAM_TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/chain_beam.png");
 	
-	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_plug.png");
+	public static final ResourceLocation PLUG_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_plug.png");
+	public static final ResourceLocation PLUG_TEXTURE_GLOW = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_plug_glow.png");
 	private static final ModelDecayPitPlug PLUG_MODEL = new ModelDecayPitPlug();
 	
 	public static final ResourceLocation SHIELD_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_target_shield.png");
 	private static final ModelDecayPitTargetShield SHIELD_MODEL = new ModelDecayPitTargetShield();
 	
 	public static final ResourceLocation TARGET_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_target.png");
+	public static final ResourceLocation TARGET_TEXTURE_GLOW = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_target_glow.png");
 	private static final ModelDecayPitTarget TARGET_MODEL = new ModelDecayPitTarget();
-	
+
 	public RenderDecayPitTarget(RenderManager manager) {
 		super(manager);
 	}
@@ -56,11 +60,15 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 		
 		GlStateManager.disableCull();
 		
-		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + 1.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);
-		PLUG_MODEL.render(entity, 0.0625F);
+		
+		bindTexture(PLUG_TEXTURE);
+		PLUG_MODEL.render(0.0625F);
+		
+		renderPlugGlowLayer(entity, 0.0625F);
+		
 		GlStateManager.popMatrix();	
 		
 		EntityDecayPitTargetPart hitPart = null;
@@ -85,12 +93,18 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			}
 		}
 		
-		bindTexture(TARGET_TEXTURE);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + 4.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);
-		TARGET_MODEL.render(entity, 0.0625F);
+		
+		bindTexture(TARGET_TEXTURE);
+		TARGET_MODEL.render(0.0625F);
+		
+		renderTargetGlowLayer(entity, 0.0625F);
+		
 		GlStateManager.popMatrix();	
+		
+		GlStateManager.disableBlend();
 	}
 	
 	@Override
@@ -185,6 +199,27 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 
 			LightingUtil.INSTANCE.revert();
 		}
+	}
+
+	public void renderPlugGlowLayer(EntityDecayPitTarget entity, float scale) {
+		bindTexture(PLUG_TEXTURE_GLOW);
+		
+		LayerOverlay.renderOverlay(entity, () -> PLUG_MODEL.render(scale), true, 1, 1, 1, 1);
+	}
+
+	public void renderTargetGlowLayer(EntityDecayPitTarget entity, float scale) {
+		bindTexture(TARGET_TEXTURE_GLOW);
+		
+		LayerOverlay.renderOverlay(entity, () -> TARGET_MODEL.render(scale), true, 1, 1, 1, 1);
+	}
+
+	public void setLightmap(EntityDecayPitTarget entity, Boolean useEntityBrightness) {
+		int i = 61680;
+		if (useEntityBrightness)
+			i = entity.getBrightnessForRender();
+		int j = i % 65536;
+		int k = i / 65536;
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) j, (float) k);
 	}
 
 	private void renderCogShield(EntityDecayPitTargetPart entity, double x, double y, double z, float angle) {

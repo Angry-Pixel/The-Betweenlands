@@ -3,6 +3,7 @@ package thebetweenlands.common.world.biome;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiPredicate;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -19,15 +20,17 @@ import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.entity.spawning.IWeightProvider;
 import thebetweenlands.api.event.InitializeBetweenlandsBiomeEvent;
+import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.biome.spawning.spawners.EventSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.ConditionalSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.LocationSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.WallSpawnEntry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
@@ -67,8 +70,10 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 	 * Adds the entity spawn entries
 	 */
 	protected void addSpawnEntries(List<ICustomSpawnEntry> entries) {
-		entries.add(new EventSpawnEntry(800, new SurfaceSpawnEntry(-1, EntityFirefly.class, (short) 280), new ResourceLocation(ModInfo.ID, "blood_sky")).setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
-		entries.add(new EventSpawnEntry(801, new SurfaceSpawnEntry(-1, EntitySwampHag.class, (short) 250), new ResourceLocation(ModInfo.ID, "blood_sky")) {
+		BiPredicate<World, BlockPos> bloodSkyPredicate = ConditionalSpawnEntry.createEventPredicate(new ResourceLocation(ModInfo.ID, "blood_sky"));
+		
+		entries.add(new ConditionalSpawnEntry(800, new SurfaceSpawnEntry(-1, EntityFirefly.class, (short) 280), bloodSkyPredicate).setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
+		entries.add(new ConditionalSpawnEntry(801, new SurfaceSpawnEntry(-1, EntitySwampHag.class, (short) 250), bloodSkyPredicate) {
 			@Override
 			public EntityLiving createEntity(World world) {
 				EntityLiving entity = super.createEntity(world);
@@ -77,7 +82,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 				return entity;
 			}
 		}.setHostile(true));
-		entries.add(new EventSpawnEntry(802, new SurfaceSpawnEntry(-1, EntityPeatMummy.class, (short) 65), new ResourceLocation(ModInfo.ID, "blood_sky")) {
+		entries.add(new ConditionalSpawnEntry(802, new SurfaceSpawnEntry(-1, EntityPeatMummy.class, (short) 65), bloodSkyPredicate) {
 			@Override
 			public EntityLiving createEntity(World world) {
 				EntityLiving entity = super.createEntity(world);
@@ -86,11 +91,12 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustom
 				return entity;
 			}
 		}.setHostile(true).setSpawnCheckRadius(20.0D));
+		entries.add(new ConditionalSpawnEntry(804, new WallSpawnEntry(-1, EntityCCGroundSpawner.class, (short) 120), bloodSkyPredicate).setSpawnCheckRadius(32.0D).setGroupSize(1, 1).setHostile(true));
 
 		entries.add(new LocationSpawnEntry(803, EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE) {
 			@Override
 			public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
-				return SurfaceType.MIXED_GROUND.matches(surfaceBlockState);
+				return !blockState.isNormalCube() && SurfaceType.MIXED_GROUND.matches(surfaceBlockState);
 			};
 		}.setHostile(true).setSpawnCheckRadius(50.0D).setSpawningInterval(5000));
 	}

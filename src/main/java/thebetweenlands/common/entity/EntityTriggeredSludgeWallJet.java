@@ -2,6 +2,7 @@ package thebetweenlands.common.entity;
 
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -10,6 +11,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -34,27 +36,34 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 	}
 
 	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+		this.setPosition(this.posX, this.posY + 1.0F, this.posZ);
+		return super.onInitialSpawn(difficulty, livingdata);
+	}
+	
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		
+
 		if(!getEntityWorld().isRemote && this.ticksExisted % 40 == 0)
 			checkArea();
 
 		animationTicksPrev = animationTicks;
 		animationTicks++;
 		rotationYaw = renderYawOffset = MathHelper.wrapDegrees(animationTicks);
-		
+
 		if(!getEntityWorld().isRemote && this.ticksExisted % 20 == 0)
 			this.dataManager.set(ANIMATION_TICKS_SYNC, this.animationTicks);
 
 		if (animationTicks >= 360)
 			animationTicks = animationTicksPrev = 0;
-		
+
 		if (getEntityWorld().isRemote) {
 			if(this.rand.nextInt(4) == 0) {
 				ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
-					args.withColor(1F, 0.65F, 0.25F, 0.5F);
-				BLParticles.LEAF_SWIRL.spawn(this.world, this.posX, this.posY, this.posZ, args);
+					args.withColor(1F, 0.65F, 0.25F, 0.75F);
+					args.withScale(0.5F + rand.nextFloat());
+				BLParticles.SLUDGE_SWIRL.spawn(this.world, this.posX, this.posY, this.posZ, args);
 			}
 		}
 	}
@@ -65,7 +74,7 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 		if(getEntityWorld().isRemote && key == ANIMATION_TICKS_SYNC)
 			this.animationTicks = this.animationTicksPrev = this.dataManager.get(ANIMATION_TICKS_SYNC);
 	}
-	
+
 	@Override
 	protected void performPreSpawnaction(Entity targetEntity, Entity entitySpawned) {
 		if(targetEntity instanceof EntityPlayer) {

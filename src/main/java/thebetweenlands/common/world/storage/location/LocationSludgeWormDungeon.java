@@ -5,9 +5,11 @@ import javax.annotation.Nullable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.IWorldStorage;
@@ -15,7 +17,23 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.client.render.shader.postprocessing.GroundFog.GroundFogVolume;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
+import thebetweenlands.common.entity.EntitySplodeshroom;
+import thebetweenlands.common.entity.EntityTinyWormEggSac;
+import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
+import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
+import thebetweenlands.common.entity.mobs.EntityMovingSpawnerHole;
+import thebetweenlands.common.entity.mobs.EntityShambler;
+import thebetweenlands.common.entity.mobs.EntityWallLamprey;
+import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
+import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.biome.spawning.AreaMobSpawner.BLSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.BoxMobSpawner;
+import thebetweenlands.common.world.biome.spawning.spawners.ConditionalSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.WallSpawnEntry;
 import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 
 public class LocationSludgeWormDungeon extends LocationGuarded {
@@ -23,10 +41,38 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 
 	private BlockPos structurePos;
 
+	private final BoxMobSpawner dungeonMobSpawner;
+
 	public LocationSludgeWormDungeon(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		super(worldStorage, id, region, "sludge_worm_dungeon", EnumLocationType.DUNGEON);
+
 		this.dataManager.register(GROUND_FOG_STRENGTH, 1.0F);
+
 		this.setAmbience(new LocationAmbience(EnumLocationAmbience.SLUDGE_WORM_DUNGEON).setCaveFog(false));
+
+		this.dungeonMobSpawner = new BoxMobSpawner();
+		this.dungeonMobSpawner.setMaxAreaEntities(64);
+		this.dungeonMobSpawner.setEntityCountFilter(entity -> entity instanceof EntityTriggeredFallingBlock == false); //Ignore falling blocks
+		
+		//floor 1
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new WallSpawnEntry(-1, EntityMovingSpawnerHole.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(0)).setGroupSize(1, 1).setHostile(true));
+		
+		//floor 2
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntityShambler.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(1)).setGroupSize(1, 3).setHostile(true));
+		
+		//floor 3
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new WallSpawnEntry(-1, EntityWallLamprey.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2)).setGroupSize(1, 1).setHostile(true));
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntityTinyWormEggSac.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2)).setGroupSize(1, 1).setHostile(true));
+		
+		//floor 4
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntityTriggeredSludgeWallJet.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(3)).setGroupSize(1, 1).setHostile(true));
+		
+		//floor 5
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new WallSpawnEntry(-1, EntityWallLivingRoot.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(4)).setGroupSize(1, 1).setHostile(true));
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntitySplodeshroom.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(4)).setGroupSize(1, 1).setHostile(true));
+		
+		//floor 6
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(-1, new BLSpawnEntry(-1, EntityCryptCrawler.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(5)).setGroupSize(1, 3).setHostile(true));
 	}
 
 	/**
@@ -45,12 +91,12 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	public BlockPos getStructurePos() {
 		return this.structurePos;
 	}
-	
+
 	public boolean hasGroundFog(BlockPos pos) {
 		//TODO Check if pos is in maze bounding box
 		return this.dataManager.get(GROUND_FOG_STRENGTH) > 0.01F;
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
@@ -71,16 +117,31 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 		super.writeSharedNbt(nbt);
 		nbt.setLong("structurePos", this.structurePos.toLong());
 	}
-	
+
 	@Override
 	protected void readSharedNbt(NBTTagCompound nbt) {
 		super.readSharedNbt(nbt);
 		this.structurePos = BlockPos.fromLong(nbt.getLong("structurePos"));
 	}
-	
+
 	@Override
 	public void update() {
 		super.update();
+
+		World world = this.getWorldStorage().getWorld();
+
+		if(world instanceof WorldServer && world.provider instanceof WorldProviderBetweenlands && world.getGameRules().getBoolean("doMobSpawning") && world.getTotalWorldTime() % 4 == 0) {
+			boolean spawnHostiles = ((WorldProviderBetweenlands)world.provider).getCanSpawnHostiles();
+			boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
+
+			this.dungeonMobSpawner.clearAreas();
+			//TODO May need different AABBs for spawning purposes
+			for(AxisAlignedBB aabb : this.getBounds()) {
+				this.dungeonMobSpawner.addArea(aabb);
+			}
+
+			this.dungeonMobSpawner.populate((WorldServer) world, spawnHostiles, spawnAnimals);
+		}
 
 		//TODO Clear fog strength when dungeon is conquered
 	}
@@ -92,13 +153,13 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 		if(globalStrength > 0) {
 			for(int floor = 0; floor < 7; floor++) {
 				float floorStrength = globalStrength / 7.0f * (floor + 1);
-				
+
 				float fogBrightness = 0.25F;
 				float inScattering = 0.035F - 0.015F * floorStrength;
 				float extinction = 6.0F - 4.2F * floorStrength;
-				
+
 				float height = 4.0f + 8.0f * floorStrength;
-				
+
 				shader.addGroundFogVolume(new GroundFogVolume(new Vec3d(this.structurePos.getX(), this.structurePos.getY() - 5.2D - floor * 6, this.structurePos.getZ()), new Vec3d(29, height, 29), inScattering, extinction, fogBrightness, fogBrightness, fogBrightness));
 			}
 
@@ -107,7 +168,7 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 
 		return false;
 	}
-	
+
 	public int getFloor(BlockPos pos) {
 		return (this.structurePos.getY() - 1 - pos.getY()) / 6;
 	}

@@ -1,5 +1,12 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -92,10 +99,26 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		this.dataManager.set(ANCHOR, new BlockPos(this));
+		BlockPos anchor = new BlockPos(this);
+		EnumFacing[] randomFacing = this.findRandomValidFacingAt(anchor);
+		if(randomFacing == null) {
+			randomFacing = new EnumFacing[] {EnumFacing.NORTH, EnumFacing.UP};
+		}
+		this.setPositionToAnchor(anchor, randomFacing[0], randomFacing[1]);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 
+	@Override
+	public boolean getCanSpawnHere() {
+		IBlockState surfaceState = this.world.getBlockState((new BlockPos(this)).down());
+		return surfaceState.canEntitySpawn(this) && this.findRandomValidFacingAt(new BlockPos(this)) != null;
+	}
+	
+	@Override
+	public boolean isNotColliding() {
+		return true;
+	}
+	
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
@@ -599,6 +622,33 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		public static final int ALL = BLOCKS | ENTITIES;
 	}
 
+	@Nullable
+	protected EnumFacing[] findRandomValidFacingAt(BlockPos anchor) {
+		List<EnumFacing> forwardFacings = new ArrayList<>();
+		forwardFacings.addAll(Arrays.asList(EnumFacing.VALUES));
+		Collections.shuffle(forwardFacings, this.rand);
+		
+		List<EnumFacing> horizontalFacings = new ArrayList<>();
+		horizontalFacings.addAll(Arrays.asList(EnumFacing.HORIZONTALS));
+		Collections.shuffle(horizontalFacings, this.rand);
+		
+		for(EnumFacing forwardFacing : forwardFacings) {
+			if(forwardFacing.getAxis() == EnumFacing.Axis.Y) {
+				for(EnumFacing horizontalFacing : horizontalFacings) {
+					if(this.checkAnchorAt(anchor, forwardFacing, horizontalFacing, AnchorChecks.ALL) == 0) {
+						return new EnumFacing[] {forwardFacing, horizontalFacing};
+					}
+				}
+			} else {
+				if(this.checkAnchorAt(anchor, forwardFacing, EnumFacing.UP, AnchorChecks.ALL) == 0) {
+					return new EnumFacing[] {forwardFacing, EnumFacing.UP};
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 	public int checkAnchorAt(Vec3d pos, Vec3d lookDir, int checks) {
 		EnumFacing[] facing = this.getFacingForLookDir(lookDir);
 		BlockPos anchor = new BlockPos(pos.x - (this.getBlockWidth() / 2), pos.y - (this.getBlockHeight() / 2), pos.z - (this.getBlockWidth() / 2));

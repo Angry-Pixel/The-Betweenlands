@@ -1,6 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -12,6 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -26,6 +28,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -45,6 +48,7 @@ import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 
@@ -54,6 +58,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	private static final DataParameter<Boolean> AMBUSH_SPAWNED = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> SCREAM = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SCREAM_TIMER = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> SCREAM_BEAM = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	public float standingAngle, prevStandingAngle;
 
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
@@ -63,7 +68,6 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	//Scream timer is only used for the screen shake and is client side only.
 	private int prevScreamTimer;
 	public int screamTimer;
-	private boolean screaming;
 
 	//Adjust to length of screaming sound
 	private static final int SCREAMING_TIMER_MAX = 50;
@@ -81,6 +85,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		dataManager.register(AMBUSH_SPAWNED, false);
 		dataManager.register(SCREAM, false);
 		dataManager.register(SCREAM_TIMER, 50);
+		dataManager.register(SCREAM_BEAM, false);
 	}
 	
 	@Override
@@ -112,13 +117,22 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		return dataManager.get(SCREAM_TIMER);
 	}
 
+	public void setIsScreamingBeam(boolean scream_beam) {
+		dataManager.set(SCREAM_BEAM, scream_beam);
+	}
+
+	public boolean isScreamingBeam() {
+		return dataManager.get(SCREAM_BEAM);
+	}
+
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(1, new EntityAISwimming(this));
-		tasks.addTask(2, new EntityBarrishee.AIBarrisheeAttack(this));
-		tasks.addTask(3, new EntityAIWander(this, 0.4D, 20));
-		//tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		//tasks.addTask(5, new EntityAILookIdle(this));
+		tasks.addTask(2, new EntityBarrishee.AISonicAttack(this));
+		tasks.addTask(3, new EntityBarrishee.AIBarrisheeAttack(this));
+		tasks.addTask(4, new EntityAIWander(this, 0.4D, 20));
+		//tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		//tasks.addTask(6, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, true, true, null));
 		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
 	}
@@ -128,7 +142,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(200D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.75D);
 	}
@@ -156,7 +170,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	@Override
 	public void onLivingUpdate() {
 		//Test Scream remove once testing is over
-		if(getEntityWorld().getTotalWorldTime()%200 == 0)
+		if(getEntityWorld().getTotalWorldTime()%200 == 0 && !isScreamingBeam())
 			setScreamTimer(0);
 
 		if (getEntityWorld().isRemote) {
@@ -186,16 +200,21 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 				setIsScreaming(false);
 			else
 				setIsScreaming(true);
+			
+			if(getAttackTarget() != null) {
+				getLookHelper().setLookPositionWithEntity(getAttackTarget(), 100F, 100F);
+
+			if(isScreaming())
+				getNavigator().setPath(getNavigator().getPathToEntityLiving(getAttackTarget()), 0);
+			}
 		}
 
-		//TODO Disabled particles until second scream is made for AI
-		/*
-		 if(this.world.isRemote && this.isScreaming() && getScreamTimer() <= 40)
-			this.spawnScreamParticles();
-		*/
+		 if(this.world.isRemote && this.isScreamingBeam())
+			 this.spawnScreamParticles();
 
 		if(!this.world.isRemote && this.isScreaming() && getScreamTimer() >= 25)
 			checkCollisionsForAOEScream(getAOEScreamBounds());
+
 		
 		super.onLivingUpdate();
 	}
@@ -280,17 +299,26 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 
 	@SideOnly(Side.CLIENT)
 	protected void spawnScreamParticles() {
-		Vec3d look = this.getLookVec();
+		Vec3d look = getLook(1.0F).normalize();
 		float speed = 0.6f;
 		Particle particle = BLParticles.SONIC_SCREAM.create(this.world, this.posX, this.posY + (getScreamTimer() < 25 ? 0.8 + (getScreamTimer() * 0.0125F) : 1.25 - (25 - getScreamTimer()) * 0.025F), this.posZ, 
 				ParticleArgs.get().withMotion(look.x * speed, look.y * speed, look.z * speed).withScale(10).withData(30, MathHelper.floor(this.ticksExisted * 3.3f))
 				.withColor(1.0f, 0.9f, 0.8f, 1.0f));
 		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING, particle);
 	}
+
+	private boolean isLookingAtAttackTarget(Entity entity) {
+		Vec3d vec3d = getLook(1.0F).normalize();
+		Vec3d vec3d1 = new Vec3d(entity.posX - posX, entity.getEntityBoundingBox().minY + (double) entity.getEyeHeight() - (posY + (double) getEyeHeight()), entity.posZ - posZ);
+		double d0 = vec3d1.length();
+		vec3d1 = vec3d1.normalize();
+		double d1 = vec3d.dotProduct(vec3d1);
+		return d1 > 1.0D - 0.025D / d0 ? canEntityBeSeen(entity) : false;
+	}
 	
 	@Override
 	protected boolean isMovementBlocked() {
-		return super.isMovementBlocked() || isScreaming();// || true;
+		return super.isMovementBlocked();// || isScreaming() && !isScreamingBeam();// || true;
 	}
 
 	public float getScreamingProgress(float delta) {
@@ -314,6 +342,84 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 			return (float) ((Math.sin(getScreamingProgress(partialTicks) * Math.PI) + 0.1F) * 0.15F * screamMult);
 		} else {
 			return 0.0F;
+		}
+	}
+
+	static class AISonicAttack extends EntityAIBase {
+		EntityBarrishee barrishee;
+		EntityLivingBase target;
+		int missileCount;
+		int shootCount;
+		
+		public AISonicAttack(EntityBarrishee barrishee) {
+			this.barrishee = barrishee;
+			this.setMutexBits(5);
+		}
+
+		public boolean shouldExecute() {
+			target = barrishee.getAttackTarget();
+
+			if (target == null)
+				return false;
+			else {
+				double distance = barrishee.getDistanceSq(target);
+				if (distance >= 9.0D && distance <= 144.0D) {
+					if (!barrishee.onGround)
+						return false;
+					else
+						return barrishee.getRNG().nextInt(20) == 0;
+				} else
+					return false;
+			}
+		}
+
+		public boolean shouldContinueExecuting() {
+			return shootCount !=-1 && missileCount !=-1 && barrishee.recentlyHit <= 40;
+		}
+
+		public void startExecuting() {
+			missileCount = 0;
+			shootCount = 0;
+			barrishee.getEntityWorld().playSound(null, barrishee.getPosition(), SoundRegistry.EMBERLING_FLAMES, SoundCategory.HOSTILE, 1F, 1F);
+			barrishee.setScreamTimer(0);
+		}
+
+		public void resetTask() {
+			shootCount = -1;
+			missileCount = -1;
+			if (barrishee.isScreamingBeam())
+				barrishee.setIsScreamingBeam(false);
+		}
+
+		public void updateTask() {
+			int distance = MathHelper.floor(barrishee.getDistance(target));
+			if (barrishee.getScreamTimer() >= 25 && barrishee.isLookingAtAttackTarget(target)) {
+				if (!barrishee.isScreamingBeam())
+					barrishee.setIsScreamingBeam(true);
+
+				float f = (float) MathHelper.atan2(target.posZ - barrishee.posZ, target.posX - barrishee.posX);
+				missileCount++;
+				if (missileCount % 2 == 0) {
+					shootCount++;
+					double d2 = 2D + 1D * (double) (shootCount);
+					checkIfBeamHitsAnyone(barrishee.getEntityWorld(), new BlockPos(barrishee.posX + (double) MathHelper.cos(f) * d2, barrishee.posY + barrishee.getEyeHeight(), barrishee.posZ + (double) MathHelper.sin(f) * d2));
+				}
+			}
+			if (shootCount >= distance || shootCount >= 12 || target.isDead)
+				resetTask();
+		}
+
+		public void checkIfBeamHitsAnyone(World world, BlockPos pos) {
+			AxisAlignedBB hitBox = new AxisAlignedBB(pos).grow(0D, 0.25D, 0D);
+			List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, hitBox);
+			for (int entityCount = 0; entityCount < list.size(); entityCount++) {
+				Entity entity = list.get(entityCount);
+				if (entity != null)
+					if (entity instanceof EntityLivingBase) {
+						barrishee.attackEntityAsMob(entity);
+						entity.addVelocity(-MathHelper.sin(barrishee.rotationYaw * 3.141593F / 180.0F) * 0.25D, 0D, MathHelper.cos(barrishee.rotationYaw * 3.141593F / 180.0F) * 0.25D);
+					}
+			}
 		}
 	}
 

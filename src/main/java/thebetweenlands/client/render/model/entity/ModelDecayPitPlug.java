@@ -2,7 +2,6 @@ package thebetweenlands.client.render.model.entity;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -1333,7 +1332,7 @@ public class ModelDecayPitPlug extends ModelBase {
         chain_front_right5a.addChild(chain_front_right5b);
     }
 
-    public void render(Entity entity, float scale) { 
+    public void render(float scale) { 
         base_mid.render(scale);
         topconnection_left1.render(scale);
         topconnection_front1.render(scale);
@@ -1348,6 +1347,26 @@ public class ModelDecayPitPlug extends ModelBase {
         topconnection_right1.render(scale);
         chainconnection_upper_front.render(scale);
         base_bottom.render(scale);
+    }
+    
+    public void renderJustPlug(float scale) { 
+        base_mid.render(scale);
+        lid_base_back.render(scale);
+        base_top.render(scale);
+        lid_base_mid.render(scale);
+        lid_base_front.render(scale);
+        base_bottom.render(scale);
+    }
+    
+    public void renderJustChains(float scale) { 
+        topconnection_left1.render(scale);
+        topconnection_front1.render(scale);
+        topconnection_back1.render(scale);
+        chainconnection_upper_right.render(scale);
+        chainconnection_upper_back.render(scale);
+        chainconnection_upper_left.render(scale);
+        topconnection_right1.render(scale);
+        chainconnection_upper_front.render(scale);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

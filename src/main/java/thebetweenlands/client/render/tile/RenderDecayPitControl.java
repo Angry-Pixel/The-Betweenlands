@@ -4,6 +4,8 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -11,6 +13,9 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.entity.ModelDecayPitPlug;
+import thebetweenlands.client.render.model.entity.ModelDecayPitTarget;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.tile.TileEntityDecayPitControl;
 @SideOnly(Side.CLIENT)
 public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityDecayPitControl > {
@@ -25,31 +30,36 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 	public static final ResourceLocation DECAY_HOLE_TEXTURE_2 = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_hole_2.png");
 	public static final ResourceLocation DECAY_HOLE_TEXTURE_3 = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_hole_3.png");
 
+	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_plug.png");
+	private static final ModelDecayPitPlug PLUG_MODEL = new ModelDecayPitPlug();
+	
+	public static final ResourceLocation TARGET_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/decay_pit_target.png");
+	private static final ModelDecayPitTarget TARGET_MODEL = new ModelDecayPitTarget();
 	
 	@Override
 	public void render(TileEntityDecayPitControl tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if(tile == null || !tile.hasWorld())
 			return;
-
+		
 		//Use lighting values from block above
 		int i = tile.getWorld().getCombinedLight(tile.getPos().up(), 0);
 		int j = i % 65536;
 		int k = i / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		
+		float floor_fade = tile.floorFadeTicksPrev + (tile.floorFadeTicks - tile.floorFadeTicksPrev) * partialTicks;
+		if(tile.getShowFloor()) {
 		float ring_rotate = tile.animationTicksPrev + (tile.animationTicks - tile.animationTicksPrev) * partialTicks;
-
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.disableLighting();
 
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1F, 1F, 1F, 1F);
+		GlStateManager.color(1F, 1F, 1F, 1F - floor_fade);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
-
+		if(tile.getShowFloor()) {
 		bindTexture(OUTER_MASK_MUD_TILE_TEXTURE);
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		for (int part = 0; part < 24; part++) {
@@ -146,6 +156,67 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		GlStateManager.enableLighting();
 		
 		GlStateManager.popMatrix();
+		}
+	}
+		if(tile.isPlugged()) {
+			float fall = tile.plugDropTicksPrev + (tile.plugDropTicks - tile.plugDropTicksPrev) * partialTicks;
+			GlStateManager.pushMatrix();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1, 1, 1, 1);
+
+			GlStateManager.disableCull();
+
+			bindTexture(TEXTURE);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x + 0.5D, y + 4F - fall, z + 0.5D);
+			GlStateManager.scale(-1F, -1F, 1F);
+			PLUG_MODEL.renderJustPlug(0.0625F);
+			GlStateManager.popMatrix();
+
+			GlStateManager.enableCull();
+			GlStateManager.disableBlend();
+			GlStateManager.popMatrix();
+
+			if(tile.getShowFloor()) {
+				GlStateManager.pushMatrix();
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+				GlStateManager.color(1, 1, 1, 1 - floor_fade);
+
+				GlStateManager.disableCull();
+
+				bindTexture(TEXTURE);
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(x + 0.5D, y + 4F - fall, z + 0.5D);
+				GlStateManager.scale(-1F, -1F, 1F);
+				PLUG_MODEL.renderJustChains(0.0625F);
+				GlStateManager.popMatrix();
+
+				GlStateManager.enableCull();
+				GlStateManager.disableBlend();
+				GlStateManager.popMatrix();
+				
+				
+				GlStateManager.pushMatrix();
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+				GlStateManager.color(1, 1, 1, 1 - floor_fade);
+
+				GlStateManager.disableCull();
+
+				bindTexture(TEXTURE);
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(x + 0.5D, y + 7F - fall, z + 0.5D);
+				GlStateManager.scale(-1F, -1F, 1F);
+				TARGET_MODEL.render(0.0625F);
+				GlStateManager.popMatrix();
+
+				GlStateManager.enableCull();
+				GlStateManager.disableBlend();
+				GlStateManager.popMatrix();
+			}
+		}
 	}
 
 	private void buildRingQuads(BufferBuilder buffer, double x, double y, double z, double angle, double offsetXOuter, double offsetZOuter, double offsetXInner, double offsetZInner, boolean innerWall) {

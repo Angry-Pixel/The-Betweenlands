@@ -18,7 +18,7 @@ public class RenderBarrishee extends RenderLiving<EntityBarrishee> {
 	public int fudge = 0;
 
 	public RenderBarrishee(RenderManager renderManagerIn) {
-        super(renderManagerIn, new ModelBarrishee(), 2.5F);
+        super(renderManagerIn, new ModelBarrishee(), 1F);
         addLayer(new LayerOverlay<EntityBarrishee>(this, new ResourceLocation("thebetweenlands:textures/entity/barrishee_face.png")).setGlow(true));
     }
 

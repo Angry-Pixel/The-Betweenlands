@@ -1,5 +1,4 @@
 # Blocks
-
 tile.thebetweenlands.angry_betweenstone.name=Angry Betweenstone
 tile.thebetweenlands.aqua_middle_gem_ore.name=Aqua Middle Gem Ore
 tile.thebetweenlands.arrow_arum.name=Arrow Arum
@@ -423,7 +422,6 @@ tile.thebetweenlands.mud_tower_beam_origin.name=Beam Origin
 tile.thebetweenlands.mud_tower_beam_relay.name=Beam Lens
 tile.thebetweenlands.mud_tower_beam_tube.name=Beam Passage
 tile.thebetweenlands.mud_tower_beam_lens_supports.name=Beam Lens Support
-tile.thebetweenlands.mud_brick_spawner_hole.name=Sludge Worm Spawner
 tile.thebetweenlands.mud_brick_alcove.name=Dungeon Alcove
 tile.thebetweenlands.loot_urn.1.name=Loot Urn
 tile.thebetweenlands.loot_urn.2.name=Loot Urn
@@ -457,6 +455,7 @@ tile.thebetweenlands.compacted_mud_mirage.name=Compacted Mud Mirage
 tile.thebetweenlands.mud_tower_brazier.name=Brazier
 tile.thebetweenlands.dungeon_door_runes.name=Dungeon Door
 tile.thebetweenlands.dungeon_door_runes_mimic.name=Dungeon Door Mimic
+tile.thebetweenlands.dungeon_door_runes_crawler.name=Dungeon Door Crypt
 tile.thebetweenlands.dungeon_door_combination.name=Dungeon Door Code
 tile.thebetweenlands.decay_pit_control.name=Pit of Decay
 tile.thebetweenlands.decay_pit_hanging_chain.name=Pit Chains
@@ -875,6 +874,8 @@ location.wight_tower_boss.name=80:Primordial Malevolence
 location.abandoned_shack.name=<scale:1.75>Ruins</scale>
 location.underground_ruins.name=80:Underground Ruins
 location.spirit_tree.name=80:Spirit Tree
+location.cc_winding_walkways.name=80:Winding Walkways
+location.barrishee_lair.name=80:Barrishee Lair
 
 # Tooltips
 tooltip.arrow.octine=Use with caution!
