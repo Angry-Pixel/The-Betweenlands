@@ -37,7 +37,6 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 		super(world);
 		setSize(0.3125F, 0.3125F);
 		isImmuneToFire = true;
-		maxHurtResistantTime = 40;
 		this.parts = new MultiPartEntityPart[] {
 				new MultiPartEntityPart(this, "part1", 0.1875F, 0.1875F),
 				new MultiPartEntityPart(this, "part2", 0.1875F, 0.1875F),
