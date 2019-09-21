@@ -14,12 +14,8 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -149,7 +145,7 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 		super.handleStatusUpdate(id);
 		
 		if(id == EVENT_SQUASHED) {
-			for(int i = 0; i < 200; i++) {
+			for(int i = 0; i < 100; i++) {
 				Random rnd = this.world.rand;
 				float rx = rnd.nextFloat() * 1.0F - 0.5F;
 				float ry = rnd.nextFloat() * 1.0F - 0.5F;
