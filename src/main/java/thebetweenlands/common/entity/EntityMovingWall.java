@@ -160,60 +160,85 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 	}
 
 	protected void pushEntitiesAway() {
+		boolean collision = false;
+		
+		double maxReverseX = -1;
+		double maxReverseZ = -1;
+		
 		AxisAlignedBB collisionAABB = this.getCollisionBoundingBox();
 		if(collisionAABB != null) {
 			List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, collisionAABB);
 
 			for(Entity entity : entities) {
-				boolean squished = false;
-
-				AxisAlignedBB entityAABB = entity.getEntityBoundingBox();
-
-				double dx = Math.max(collisionAABB.minX - entityAABB.maxX, entityAABB.minX - collisionAABB.maxX);
-				double dz = Math.max(collisionAABB.minZ - entityAABB.maxZ, entityAABB.minZ - collisionAABB.maxZ);
-
-				if(Math.abs(dz) < Math.abs(dx)) {
-					entity.move(MoverType.PISTON, 0, 0, (dz - 0.01D) * Math.signum(this.posZ - entity.posZ));
-
-					entityAABB = entity.getEntityBoundingBox();
-					dz = Math.max(collisionAABB.minZ - entityAABB.maxZ, entityAABB.minZ - collisionAABB.maxZ);
-
-					if(Math.abs(dz) > 0.01D) {
-						squished = true;
-
-						this.posZ -= (dz - 0.05D) * Math.signum(this.posZ - entity.posZ);
-					}
-				} else {
-					entity.move(MoverType.PISTON, (dx - 0.01D) * Math.signum(this.posX - entity.posX), 0, 0);
-
-					entityAABB = entity.getEntityBoundingBox();
-					dx = Math.max(collisionAABB.minX - entityAABB.maxX, entityAABB.minX - collisionAABB.maxX);
-
-					if(Math.abs(dx) > 0.01D) {
-						squished = true;
-
-						this.posX -= (dx - 0.05D) * Math.signum(this.posX - entity.posX);
+				if(entity.canBeCollidedWith()) {
+					if(!entity.canBePushed() && entity instanceof EntityMovingWall == false) {
+						collision = true;
+					} else {
+						AxisAlignedBB entityAABB = entity.getEntityBoundingBox();
+						
+						boolean squished = false;
+		
+						double dx = Math.max(collisionAABB.minX - entityAABB.maxX, entityAABB.minX - collisionAABB.maxX);
+						double dz = Math.max(collisionAABB.minZ - entityAABB.maxZ, entityAABB.minZ - collisionAABB.maxZ);
+		
+						if(Math.abs(dz) < Math.abs(dx)) {
+							entity.move(MoverType.PISTON, 0, 0, (dz - 0.005D) * Math.signum(this.posZ - entity.posZ));
+		
+							entityAABB = entity.getEntityBoundingBox();
+							dz = Math.max(collisionAABB.minZ - entityAABB.maxZ, entityAABB.minZ - collisionAABB.maxZ);
+		
+							if(-dz > 0.025D) {
+								squished = true;
+		
+								maxReverseZ = Math.max(-dz, maxReverseZ);
+							}
+						} else {
+							entity.move(MoverType.PISTON, (dx - 0.005D) * Math.signum(this.posX - entity.posX), 0, 0);
+		
+							entityAABB = entity.getEntityBoundingBox();
+							dx = Math.max(collisionAABB.minX - entityAABB.maxX, entityAABB.minX - collisionAABB.maxX);
+		
+							if(-dx > 0.025D) {
+								squished = true;
+		
+								maxReverseX = Math.max(-dx, maxReverseX);
+							}
+						}
+		
+						//Move slightly towards ground to update onGround state etc.
+						entity.move(MoverType.PISTON, 0, -0.01D, 0);
+		
+						if(squished) {
+							collision = true;
+		
+							if(!this.world.isRemote) {
+								entity.attackEntityFrom(DamageSource.IN_WALL, 10F);
+		
+								setHoldStill(true);
+								holdCount = 20;
+								getEntityWorld().playSound(null, getPosition(), SoundRegistry.MUD_DOOR_LOCK, SoundCategory.BLOCKS, 2F, 0.75F);
+							}
+						}
 					}
 				}
-
-				//Move slightly towards ground to update onGround state etc.
-				entity.move(MoverType.PISTON, 0, -0.01D, 0);
-
-				if(squished) {
-					shaking = true;
-					shake_timer = 0;
-					motionX *= -1D;
-					motionZ *= -1D;
-					velocityChanged = true;
-
-					if(!this.world.isRemote) {
-						entity.attackEntityFrom(DamageSource.IN_WALL, 10F);
-
-						setHoldStill(true);
-						holdCount = 20;
-						getEntityWorld().playSound(null, getPosition(), SoundRegistry.MUD_DOOR_LOCK, SoundCategory.BLOCKS, 2F, 0.75F);
-					}
-				}
+			}
+		}
+		
+		if(collision) {
+			if(maxReverseZ > 0) {
+				this.posZ -= (maxReverseZ + 0.05D) * Math.signum(this.motionZ);
+			}
+			if(maxReverseX > 0) {
+				this.posX -= (maxReverseX + 0.05D) * Math.signum(this.motionX);
+			}
+			
+			shaking = true;
+			shake_timer = 0;
+			
+			if(!this.world.isRemote) {
+				motionX *= -1D;
+				motionZ *= -1D;
+				velocityChanged = true;
 			}
 		}
 	}
