@@ -41,6 +41,11 @@ public class EntityTinyWormEggSac extends EntityProximitySpawner {
     }
 
 	@Override
+    public boolean canBeCollidedWith() {
+        return true;
+    }
+
+	@Override
 	public void addVelocity(double x, double y, double z) {
 		motionX = 0;
 		motionY += y;
@@ -87,7 +92,7 @@ public class EntityTinyWormEggSac extends EntityProximitySpawner {
 
 	@Override
 	protected float getProximityHorizontal() {
-		return 3F;
+		return 2F;
 	}
 
 	@Override

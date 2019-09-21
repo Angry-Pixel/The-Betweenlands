@@ -36,7 +36,6 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 			}
 			else  {
 				receivedItem = new ItemStack(ItemRegistry.SLUDGE_WORM_EGG_SAC);
-				receivedItem.setTagCompound(new NBTTagCompound());
 			}
 			if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == this && !player.world.isRemote) {
 				if (!target.getCustomNameTag().isEmpty()) {
