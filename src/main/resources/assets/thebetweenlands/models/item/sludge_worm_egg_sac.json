@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": { 
-    "layer0": "thebetweenlands:blocks/sludge_worm_egg_sac"
+    "layer0": "thebetweenlands:items/sludge_worm_egg_sac"
   }
 }
