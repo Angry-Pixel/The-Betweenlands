@@ -35,7 +35,7 @@ public class RenderSludgeWorm<T extends EntitySludgeWorm> extends RenderLiving<T
 
 		GlStateManager.pushMatrix();
 
-		if (entity.hurtResistantTime <= 40 && entity.hurtResistantTime >= 35) {
+		if (entity.hurtResistantTime <= 20 && entity.hurtResistantTime >= 10) {
 			float red = 0.8F;
 			float green = 0.2F;
 			float blue = 0.2F;
