@@ -142,9 +142,6 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 		super(world);
 		setSize(0.8F, 0.8F);
 		isImmuneToFire = true;
-		maxHurtResistantTime = 40;
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
 
 		this.parts = new MultiPartEntityPart[] {
 				new MultiPartEntityPart(this, "part1", 0.8F, 0.8F),
@@ -157,19 +154,23 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 		final int numSegments = 3 * this.parts.length;
 
 		this.segments = new HullSegment[numSegments];
-
-		this.tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
-		this.tasks.addTask(4, new AILayEggSac(this));
-
-		this.targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
-		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
-		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
 	}
 
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 		this.getDataManager().register(EGG_SAC_PERCENTAGE, -1.0F);
+	}
+
+	@Override
+	protected void initEntityAI() {
+		tasks.addTask(0, new EntityAISwimming(this));
+		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
+		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
+		tasks.addTask(4, new AILayEggSac(this));
+		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
+		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
+		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
 	}
 
 	@Override

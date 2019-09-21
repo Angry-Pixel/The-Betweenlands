@@ -2,11 +2,13 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.Random;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -35,9 +37,6 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 		super(world);
 		setSize(0.3125F, 0.3125F);
 		isImmuneToFire = true;
-		maxHurtResistantTime = 40;
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
 		this.parts = new MultiPartEntityPart[] {
 				new MultiPartEntityPart(this, "part1", 0.1875F, 0.1875F),
 				new MultiPartEntityPart(this, "part2", 0.1875F, 0.1875F),
@@ -46,17 +45,23 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 				new MultiPartEntityPart(this, "part5", 0.1875F, 0.1875F),
 				new MultiPartEntityPart(this, "part6", 0.1875F, 0.1875F),
 		};
-		// tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
-		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
-		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
-		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
-		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
 	}
 
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(IS_SQUASHED, false);
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4F));
+		tasks.addTask(2, new EntityAIAttackMelee(this, 0.5D, false));
+		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
+		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
+		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
+		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
 	}
 
 	@Override
@@ -81,6 +86,14 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 	@Override
 	protected double getMaxPieceDistance() {
 		return 0.2D;
+	}
+
+	@Override
+	public boolean attackEntityAsMob(Entity entity) {
+		if (canEntityBeSeen(entity) && entity.onGround)
+			if (super.attackEntityAsMob(entity))
+				return true;
+		return false;
 	}
 
 	@Override

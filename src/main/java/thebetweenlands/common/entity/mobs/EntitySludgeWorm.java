@@ -48,9 +48,6 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 		super(world);
 		setSize(0.4375F, 0.3125F);
 		isImmuneToFire = true;
-		maxHurtResistantTime = 40;
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
 		parts = new MultiPartEntityPart[] {
 				new MultiPartEntityPart(this, "part1", 0.4375F, 0.3125F),
 				new MultiPartEntityPart(this, "part2", 0.3125F, 0.3125F),
@@ -61,13 +58,17 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 				new MultiPartEntityPart(this, "part7", 0.3125F, 0.3125F),
 				new MultiPartEntityPart(this, "part8", 0.3125F, 0.3125F),
 				new MultiPartEntityPart(this, "part9", 0.3125F, 0.3125F) };
-		// tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
+		this.renderBoundingBox = this.getEntityBoundingBox();
+	}
+
+	@Override
+	protected void initEntityAI() {
+		tasks.addTask(0, new EntityAISwimming(this));
+		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
 		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
 		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
-
-		this.renderBoundingBox = this.getEntityBoundingBox();
 	}
 
 	@Override
