@@ -133,20 +133,18 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	// can be set to any part(s) - dunno if we want this either
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float dmg) {
-		if (part != this.parts[0]) {
-			damageWorm(source, dmg);
-			return true;
-		} else {
-			dmg *= 0.5F;
-			damageWorm(source, dmg);
-			return true;
-		}
+		damageWorm(source, dmg);
+		return true;
 	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (source == DamageSource.OUT_OF_WORLD || source instanceof EntityDamageSource && ((EntityDamageSource) source).getIsThornsDamage())
 			damageWorm(source, amount);
+		else {
+			amount *= 0.5F;
+			damageWorm(source, amount);
+		}
 		return true;
 	}
 
