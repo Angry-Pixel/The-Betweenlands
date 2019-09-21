@@ -108,10 +108,10 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 			this.clientHeadLookChanged = true;
 		}
 	}
-
+	
 	@Override
-	protected boolean isMovementBlocked() {
-		return super.isMovementBlocked() || this.isSucking();
+	protected boolean isTravelBlocked() {
+		return super.isTravelBlocked() || this.isSucking();
 	}
 
 	@Override
@@ -173,9 +173,9 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 					if(e instanceof EntityPlayer) {
 						if(((EntityPlayer)e).isActiveItemStackBlocking()) mod *= 0.18F;
 					}
-					e.motionX += vec.x * 0.05F * mod;
-					e.motionY += vec.y * 0.05F * mod;
-					e.motionZ += vec.z * 0.05F * mod;
+					e.motionX += vec.x * 0.1F * mod;
+					e.motionY += vec.y * 0.25F * mod;
+					e.motionZ += vec.z * 0.1F * mod;
 					e.velocityChanged = true;
 				}
 			} else {
@@ -228,12 +228,14 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 
 		IDecayCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 		if(cap != null && cap.isDecayEnabled()) {
-			if(EntityAIAttackOnCollide.useStandardAttack(this, entity, 0.001F)) {
+			float attackDamage = (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+			
+			if(EntityAIAttackOnCollide.useStandardAttack(this, entity, attackDamage / 3.0F)) {
 				hasAttacked = true;
 
 				DecayStats stats = cap.getDecayStats();
 
-				stats.addDecayAcceleration((float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 2.0F);
+				stats.addDecayAcceleration(attackDamage * 2.0F);
 			}
 		} else {
 			hasAttacked = super.attackEntityAsMob(entity);
@@ -342,7 +344,7 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 			this.world.setEntityState(this, EVENT_START_THE_SUCC);
 			this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.WALL_LAMPREY_SUCK, SoundCategory.HOSTILE, 0.8F, this.world.rand.nextFloat() * 0.3F + 0.8F);
 		}
-		this.suckTimer = 30;
+		this.suckTimer = 30 + this.world.rand.nextInt(20);
 	}
 
 	public boolean isSucking() {
@@ -390,7 +392,7 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 		protected int cooldown = 0;
 
 		public AISuck(EntityWallLamprey entity) {
-			this(entity, 50, 170);
+			this(entity, 40, 130);
 		}
 
 		public AISuck(EntityWallLamprey entity, int minCooldown, int maxCooldown) {

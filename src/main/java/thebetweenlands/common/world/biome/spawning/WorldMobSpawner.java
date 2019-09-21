@@ -7,15 +7,21 @@ import java.util.Set;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.management.PlayerChunkMapEntry;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
+import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class WorldMobSpawner extends AreaMobSpawner {
 	public static final WorldMobSpawner INSTANCE = new WorldMobSpawner();
@@ -33,7 +39,7 @@ public class WorldMobSpawner extends AreaMobSpawner {
 	public WorldMobSpawner() {
 		this.setStrictDynamicLimit(false);
 	}
-	
+
 	@Override
 	public float getMaxEntitiesPerSpawnChunkFraction(int spawnerChunks) {
 		return (float)BetweenlandsConfig.MOB_SPAWNING.maxEntitiesPerLoadedArea / (float)MAX_SPAWN_CHUNKS_PER_AREA;
@@ -42,6 +48,17 @@ public class WorldMobSpawner extends AreaMobSpawner {
 	@Override
 	public float getLoadedAreasCount(int spawnerChunks) {
 		return spawnerChunks / (float)MAX_SPAWN_CHUNKS_PER_AREA;
+	}
+
+	@Override
+	public IBiomeSpawnEntriesData getSpawnEntriesData(World world, BlockPos pos, ICustomSpawnEntriesProvider provider) {
+		if(provider instanceof Biome) {
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+			if(worldStorage != null) {
+				return worldStorage.getBiomeSpawnEntriesData((Biome) provider);
+			}
+		}
+		return null;
 	}
 
 	@Override

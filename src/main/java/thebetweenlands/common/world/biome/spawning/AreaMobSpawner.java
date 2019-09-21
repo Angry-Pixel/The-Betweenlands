@@ -30,12 +30,11 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage.BiomeSpawnEntriesData;
 import thebetweenlands.util.WeightedList;
 
 public abstract class AreaMobSpawner {
@@ -127,6 +126,18 @@ public abstract class AreaMobSpawner {
 	 */
 	public List<ICustomSpawnEntry> getSpawnEntries(World world, BlockPos pos, @Nullable ICustomSpawnEntriesProvider provider) {
 		return provider != null ? provider.getCustomSpawnEntries() : Collections.emptyList();
+	}
+
+	/**
+	 * Returns the spawn entry data, such as spawning cooldowns etc.
+	 * @param world
+	 * @param pos
+	 * @param provider
+	 * @return
+	 */
+	@Nullable
+	public IBiomeSpawnEntriesData getSpawnEntriesData(World world, BlockPos pos, @Nullable ICustomSpawnEntriesProvider provider) {
+		return null;
 	}
 
 	/**
@@ -399,9 +410,9 @@ public abstract class AreaMobSpawner {
 	public int populateChunk(World world, ChunkPos chunkPos, boolean spawnHostiles, boolean spawnAnimals, boolean loadChunks, boolean ignoreRestrictions,
 			int attemptsPerChunk, int maxSpawnsPerChunk, int attemptsPerGroup, int entityLimit, float loadedAreas) {
 		loadedAreas = Math.max(1.0f, loadedAreas);
-		
+
 		int attempts = 0, chunkSpawnedEntities = 0;
-		
+
 		spawnLoop:
 			while(attempts++ < attemptsPerChunk && chunkSpawnedEntities < maxSpawnsPerChunk) {
 				BlockPos spawnPos = this.getRandomSpawnPosition(world, chunkPos);
@@ -489,13 +500,8 @@ public abstract class AreaMobSpawner {
 					int groupSpawnedEntities = 0, groupSpawnAttempts = 0;
 					int maxGroupSpawnAttempts = attemptsPerGroup + desiredGroupSize * 2;
 
-					BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-					BiomeSpawnEntriesData spawnEntriesData = null;
-					long lastSpawn = -1;
-					if(worldStorage != null) {
-						spawnEntriesData = worldStorage.getBiomeSpawnEntriesData(biome);
-						lastSpawn = spawnEntriesData.getLastSpawn(spawnEntry);
-					}
+					IBiomeSpawnEntriesData spawnEntriesData = this.getSpawnEntriesData(world, spawnPos, biome instanceof ICustomSpawnEntriesProvider ? (ICustomSpawnEntriesProvider) biome : null);
+					long lastSpawn = spawnEntriesData != null ? spawnEntriesData.getLastSpawn(spawnEntry) : -1;
 
 					if(!ignoreRestrictions && lastSpawn >= 0) {
 						//Adjust intervals for MP when there are multiple players and the loaded area is bigger -> smaller intervals

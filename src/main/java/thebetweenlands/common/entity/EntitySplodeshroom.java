@@ -215,7 +215,7 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 
 	@Override
     public boolean canBeCollidedWith() {
-        return true;
+        return !this.getHasExploded();
     }
 
 	@Override
