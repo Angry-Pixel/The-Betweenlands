@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -22,15 +23,20 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
-		if (target instanceof EntityFirefly || target instanceof EntityGecko) {
+		if (target instanceof EntityFirefly || target instanceof EntityGecko || target instanceof EntityTinyWormEggSac ) {
 			ItemStack receivedItem;
 			if (target instanceof EntityFirefly) {
 				receivedItem = new ItemStack(ItemRegistry.FIREFLY);
-			} else {
+			}
+			else if (target instanceof EntityGecko){
 				receivedItem = new ItemStack(ItemRegistry.GECKO);
 				if (receivedItem.getTagCompound() == null)
 					receivedItem.setTagCompound(new NBTTagCompound());
 				receivedItem.getTagCompound().setFloat("Health", target.getHealth());
+			}
+			else  {
+				receivedItem = new ItemStack(ItemRegistry.SLUDGE_WORM_EGG_SAC);
+				receivedItem.setTagCompound(new NBTTagCompound());
 			}
 			if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == this && !player.world.isRemote) {
 				if (!target.getCustomNameTag().isEmpty()) {
