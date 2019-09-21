@@ -7,6 +7,46 @@
                 {
                     "conditions": [],
                     "type": "item",
+                    "name": "thebetweenlands:octine_ingot",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 6
+                            }
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "syrmorite_ingot",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 6
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 11
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
                     "name": "thebetweenlands:angry_pebble",
                     "functions": [
                         {
@@ -14,11 +54,11 @@
                             "function": "set_count",
                             "count": {
                                 "min": 2,
-                                "max": 15
+                                "max": 6
                             }
                         }
                     ],
-                    "weight": 8,
+                    "weight": 16,
                     "quality": 0
                 },
                 {
@@ -26,7 +66,7 @@
                     "type": "item",
                     "name": "thebetweenlands:voodoo_doll",
                     "functions": [],
-                    "weight": 28,
+                    "weight": 10,
                     "quality": 0
                 },
                 {
@@ -42,7 +82,15 @@
                     "type": "item",
                     "name": "thebetweenlands:swift_pick",
                     "functions": [],
-                    "weight": 10,
+                    "weight": 12,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:wights_bane",
+                    "functions": [],
+                    "weight": 12,
                     "quality": 0
                 },
                 {
@@ -51,38 +99,6 @@
                     "name": "thebetweenlands:skull_mask",
                     "functions": [],
                     "weight": 16,
-                    "quality": 0
-                },
-                {
-                    "conditions": [],
-                    "type": "item",
-                    "name": "thebetweenlands:wights_bane",
-                    "functions": [],
-                    "weight": 16,
-                    "quality": 0
-                },
-                {
-                    "conditions": [],
-                    "type": "item",
-                    "name": "thebetweenlands:sludge_slicer",
-                    "functions": [],
-                    "weight": 20,
-                    "quality": 0
-                },
-                {
-                    "conditions": [],
-                    "type": "item",
-                    "name": "thebetweenlands:critter_cruncher",
-                    "functions": [],
-                    "weight": 20,
-                    "quality": 0
-                },
-                {
-                    "conditions": [],
-                    "type": "item",
-                    "name": "thebetweenlands:hag_hacker",
-                    "functions": [],
-                    "weight": 20,
                     "quality": 0
                 },
                 {
@@ -97,30 +113,7 @@
                             "data": 38
                         }
                     ],
-                    "weight": 20,
-                    "quality": 0
-                },
-                {
-                    "conditions": [],
-                    "type": "item",
-                    "entryName": "valonite_splinter",
-                    "name": "thebetweenlands:items_misc",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                                "min": 3,
-                                "max": 8
-                            }
-                        },
-                        {
-                            "conditions": [],
-                            "function": "set_data",
-                            "data": 43
-                        }
-                    ],
-                    "weight": 20,
+                    "weight": 16,
                     "quality": 0
                 },
                 {
@@ -131,11 +124,19 @@
                     "functions": [
                         {
                             "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "conditions": [],
                             "function": "set_data",
                             "data": 19
                         }
                     ],
-                    "weight": 5,
+                    "weight": 12,
                     "quality": 0
                 },
                 {
@@ -143,7 +144,7 @@
                     "type": "item",
                     "name": "thebetweenlands:ring_of_power",
                     "functions": [],
-                    "weight": 5,
+                    "weight": 10,
                     "quality": 0
                 },
                 {
@@ -151,7 +152,7 @@
                     "type": "loot_table",
                     "name": "thebetweenlands:loot/music_disc",
                     "functions": [],
-                    "weight": 2,
+                    "weight": 5,
                     "quality": 0
                 }
             ],

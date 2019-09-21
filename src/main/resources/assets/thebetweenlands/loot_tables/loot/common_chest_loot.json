@@ -22,8 +22,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 2,
-                                "max": 4
+                                "min": 1,
+                                "max": 2
                             }
                         },
                         {
@@ -68,8 +68,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 4,
-                                "max": 8
+                                "min": 1,
+                                "max": 3
                             }
                         },
                         {
@@ -90,8 +90,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 12,
-                                "max": 16
+                                "min": 8,
+                                "max": 12
                             }
                         }
                     ],
@@ -118,7 +118,7 @@
                             "data": 41
                         }
                     ],
-                    "weight": 30,
+                    "weight": 25,
                     "quality": 0
                 },
                 {
@@ -141,7 +141,7 @@
                             "data": 42
                         }
                     ],
-                    "weight": 30,
+                    "weight": 25,
                     "quality": 0
                 },
                 {
@@ -149,7 +149,7 @@
                     "type": "item",
                     "name": "thebetweenlands:marshmallow",
                     "functions": [],
-                    "weight": 18,
+                    "weight": 24,
                     "quality": 0
                 },
                 {
@@ -161,8 +161,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 2,
-                                "max": 4
+                                "min": 1,
+                                "max": 2
                             }
                         }
                     ],
@@ -173,16 +173,6 @@
                     "conditions": [],
                     "type": "item",
                     "name": "thebetweenlands:jam_donut",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                                "min": 2,
-                                "max": 4
-                            }
-                        }
-                    ],
                     "weight": 18,
                     "quality": 0
                 },
@@ -198,7 +188,7 @@
                             "data": 38
                         }
                     ],
-                    "weight": 18,
+                    "weight": 15,
                     "quality": 0
                 },
                 {
@@ -225,12 +215,12 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 8,
-                                "max": 16
+                                "min": 2,
+                                "max": 8
                             }
                         }
                     ],
-                    "weight": 13,
+                    "weight": 18,
                     "quality": 0
                 },
                 {
@@ -242,8 +232,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 8,
-                                "max": 16
+                                "min": 4,
+                                "max": 8
                             }
                         }
                     ],
@@ -260,7 +250,7 @@
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 3
+                                "max": 2
                             }
                         }
                     ],
@@ -276,8 +266,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 2,
-                                "max": 8
+                                "min": 1,
+                                "max": 3
                             }
                         }
                     ],
@@ -293,8 +283,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 8,
-                                "max": 16
+                                "min": 4,
+                                "max": 8
                             }
                         }
                     ],
@@ -310,7 +300,7 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 6,
+                                "min": 4,
                                 "max": 8
                             }
                         }
@@ -338,7 +328,7 @@
                             "data": 11
                         }
                     ],
-                    "weight": 10,
+                    "weight": 15,
                     "quality": 0
                 },
 				{
@@ -355,6 +345,30 @@
                             }
                         }
                     ],
+                    "weight": 15,
+                    "quality": 0
+                },
+				{
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:angry_pebble",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ],
+                    "weight": 12,
+                    "quality": 0
+                },
+				{
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:bone_wayfinder",
                     "weight": 10,
                     "quality": 0
                 },

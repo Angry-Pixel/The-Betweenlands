@@ -14,8 +14,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 2,
-                                "max": 6
+                                "min": 1,
+                                "max": 3
                             }
                         },
                         {
@@ -37,8 +37,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 8,
-                                "max": 16
+                                "min": 2,
+                                "max": 4
                             }
                         },
                         {
@@ -59,8 +59,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 2,
-                                "max": 6
+                                "min": 1,
+                                "max": 4
                             }
                         }
                     ],
@@ -112,7 +112,7 @@
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 4
+                                "max": 2
                             }
                         },
                         {
@@ -133,8 +133,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 6,
-                                "max": 16
+                                "min": 4,
+                                "max": 12
                             }
                         }
                     ],
@@ -161,7 +161,7 @@
                             "data": 41
                         }
                     ],
-                    "weight": 1,
+                    "weight": 11,
                     "quality": 0
                 },
                 {
@@ -211,8 +211,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 6,
-                                "max": 14
+                                "min": 4,
+                                "max": 10
                             }
                         }
                     ],
@@ -228,8 +228,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 6,
-                                "max": 16
+                                "min": 4,
+                                "max": 10
                             }
                         }
                     ],
@@ -240,16 +240,6 @@
                     "conditions": [],
                     "type": "item",
                     "name": "thebetweenlands:wight_heart",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                                "min": 1,
-                                "max": 3
-                            }
-                        }
-                    ],
                     "weight": 6,
                     "quality": 0
                 },
@@ -262,7 +252,7 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 4,
+                                "min": 2,
                                 "max": 8
                             }
                         }
@@ -274,16 +264,6 @@
                     "conditions": [],
                     "type": "item",
                     "name": "thebetweenlands:weeping_blue_petal",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                                "min": 1,
-                                "max": 3
-                            }
-                        }
-                    ],
                     "weight": 6,
                     "quality": 0
                 },
@@ -339,7 +319,7 @@
                             }
                         }
                     ],
-                    "weight": 4,
+                    "weight": 5,
                     "quality": 0
                 },
                 {
@@ -352,7 +332,7 @@
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 4
+                                "max": 2
                             }
                         }
                     ],
@@ -363,7 +343,7 @@
                     "conditions": [],
                     "type": "item",
                     "name": "thebetweenlands:bone_wayfinder",
-                    "weight": 5,
+                    "weight": 6,
                     "quality": 0
                 }
             ],
