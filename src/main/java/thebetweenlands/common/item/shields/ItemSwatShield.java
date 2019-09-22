@@ -127,7 +127,7 @@ public class ItemSwatShield extends ItemBLShield {
 		}
 		
 		if(attacked) {
-			enemy.knockBack(user, 6.0F, -rammingDir.x, -rammingDir.z);
+			enemy.knockBack(user, 2.0F, -rammingDir.x, -rammingDir.z);
 		}
 	}
 
@@ -184,6 +184,8 @@ public class ItemSwatShield extends ItemBLShield {
 			this.setRemainingChargeTicks(stack, user, this.getChargeTime(stack, user, this.getPreparingChargeTicks(stack, user)));
 			this.setPreparingChargeTicks(stack, user, 0);
 			this.setPreparingCharge(stack, user, false);
+			
+			this.onStartedCharging(stack, user);
 		} else if(!preparing && user.isSneaking()) {
 			this.setRemainingChargeTicks(stack, user, 0);
 			this.setPreparingChargeTicks(stack, user, 0);
@@ -193,20 +195,37 @@ public class ItemSwatShield extends ItemBLShield {
 		if(runningTicks > 0) {
 			this.onChargingUpdate(stack, user);
 			this.setRemainingChargeTicks(stack, user, --runningTicks);
-			if(runningTicks == 0) {
+			if(runningTicks <= 0) {
 				user.stopActiveHand();
+				this.onStoppedCharging(stack, user);
 			}
 		}
 
 		super.onUsingTick(stack, user, count);
 	}
 
+	protected void onStartedCharging(ItemStack stack, EntityLivingBase user) {
+		
+	}
+	
+	protected void onStoppedCharging(ItemStack stack, EntityLivingBase user) {
+		if(user instanceof EntityPlayer) {
+			((EntityPlayer) user).getCooldownTracker().setCooldown(this, 8 * 20);
+		}
+	}
+	
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
+		
+		if(this.getRemainingChargeTicks(stack, entityLiving) > 0) {
+			this.onStoppedCharging(stack, entityLiving);
+		}
+		
 		this.setPreparingChargeTicks(stack, entityLiving, 0);
 		this.setRemainingChargeTicks(stack, entityLiving, 0);
 		this.setPreparingCharge(stack, entityLiving, false);
+		
 		if (entityLiving instanceof EntityPlayerMP)
 			AdvancementCriterionRegistry.SWAT_SHIELD.revert((EntityPlayerMP) entityLiving);
 	}
