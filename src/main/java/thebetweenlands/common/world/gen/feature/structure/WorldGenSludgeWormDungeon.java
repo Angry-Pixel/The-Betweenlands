@@ -25,6 +25,7 @@ import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
@@ -755,7 +756,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGenSpecial(pos.add(26, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4), level == 3 ? true : false) && !isBlackListedForGenSpecial(pos.add(2, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4), level == 5 ? true : false))
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, -4, 2 + i * 4))))
 							microBuild.selectFeature(world, pos.add(2 + j * 4, -4, 2 + i * 4), EnumFacing.WEST, rand, level, layer);
-
 				}
 				if ((maze[j][i] & 1) == 0 && (maze[j][i] & 2) == 0 && (maze[j][i] & 8) == 0) {
 					// WEST
@@ -763,6 +763,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, -4, 2 + i * 4))))
 							microBuild.selectFeature(world, pos.add(2 + j * 4, -4, 2 + i * 4), EnumFacing.EAST, rand, level, layer);
 				}
+
 				if (level == 2) {
 					if ((maze[j][i] & 1) == 0 && (maze[j][i] & 2) == 0 && (maze[j][i] & 4) != 0 && (maze[j][i] & 8) != 0)
 						if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)))
@@ -772,8 +773,24 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)))
 							microBuild.spikeFeature(world, pos.add(2 + j * 4, -4, 2 + i * 4), EnumFacing.NORTH, rand, level, layer);
 				}
+
+				if (level == 6) {
+					if ((maze[j][i] & 1) == 0 && (maze[j][i] & 2) == 0 && (maze[j][i] & 4) != 0 && (maze[j][i] & 8) != 0)
+						if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)))
+							spawnMovingWall(world, pos.add(2 + j * 4, -3, 2 + i * 4));
+					
+					if ((maze[j][i] & 1) != 0 && (maze[j][i] & 2) != 0 && (maze[j][i] & 4) == 0 && (maze[j][i] & 8) == 0)
+						if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)))
+							spawnMovingWall(world, pos.add(2 + j * 4, -3, 2 + i * 4));
+				}
 			}
 		}
+	}
+
+	private void spawnMovingWall(World world, BlockPos pos) {
+		EntityMovingWall wall = new EntityMovingWall(world);
+		wall.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+		world.spawnEntity(wall);
 	}
 
 	private boolean isBlackListedForGen(BlockPos pos, BlockPos posIn) {

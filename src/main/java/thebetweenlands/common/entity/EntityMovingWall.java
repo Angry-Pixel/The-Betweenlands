@@ -75,6 +75,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES);
 		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC);
 		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER);
 	}
 
 	public EntityMovingWall(World world) {
@@ -101,6 +102,10 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 				setDead();
 			if(ticksExisted == 1 && isNewSpawn())
 				checkSpawnArea();
+			
+			if(ticksExisted == 2) //needs to have moved 1 tick for direction to work
+				doJankSafetyCheck();
+
 			if(isHoldingStill()) {
 				holdCount--;
 				if (holdCount <= 0) {
@@ -261,6 +266,24 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		}	
 		else {
 			setDead();
+		}
+	}
+
+	private void doJankSafetyCheck() {
+		EnumFacing facing = getHorizontalFacing();
+		Vec3d vec3d = new Vec3d(getPosition());
+		Vec3d vec3d1 = new Vec3d(getPosition().offset(facing, 28)); //should be long enough
+		RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d1);
+		if (raytraceresult != null) {
+			vec3d1 = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
+			BlockPos hitpos = new BlockPos(vec3d1);
+			AxisAlignedBB rayBox = new AxisAlignedBB(getPosition(), hitpos);
+			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, rayBox);
+			for (int entityCount = 0; entityCount < list.size(); ++entityCount) {
+				Entity entity = list.get(entityCount);
+				if (entity != null && entity instanceof EntityMovingWall)
+					entity.setDead();
+			}
 		}
 	}
 
