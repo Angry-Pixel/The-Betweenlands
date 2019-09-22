@@ -140,13 +140,17 @@ public class ItemSwatShield extends ItemBLShield {
 		if(user.onGround && !user.isSneaking()) {
 			Vec3d dir = user.getLookVec();
 			dir = new Vec3d(dir.x, 0, dir.z).normalize();
-			user.motionX += dir.x * 0.35D;
-			user.motionZ += dir.z * 0.35D;
+			
+			double speed = user instanceof EntityPlayer ? 0.35D : 0.2D;
+			
+			user.motionX += dir.x * speed;
+			user.motionZ += dir.z * speed;
 
 			if(user instanceof EntityPlayer) {
 				((EntityPlayer) user).getFoodStats().addExhaustion(0.15F);
 			}
 		}
+		
 		if(Math.sqrt(user.motionX*user.motionX + user.motionZ*user.motionZ) > 0.2D) {
 			Vec3d moveDir = new Vec3d(user.motionX, user.motionY, user.motionZ).normalize();
 			
