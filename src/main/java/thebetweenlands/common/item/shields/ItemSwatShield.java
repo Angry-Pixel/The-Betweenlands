@@ -209,7 +209,7 @@ public class ItemSwatShield extends ItemBLShield {
 	}
 	
 	protected void onStoppedCharging(ItemStack stack, EntityLivingBase user) {
-		if(user instanceof EntityPlayer) {
+		if(!user.world.isRemote && user instanceof EntityPlayer) {
 			((EntityPlayer) user).getCooldownTracker().setCooldown(this, 8 * 20);
 		}
 	}
