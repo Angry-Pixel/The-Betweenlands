@@ -15,7 +15,6 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -315,6 +314,11 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
     public float smoothedAngle(float partialTicks) {
         return getJawAnglePrev() + (getJawAngle() - getJawAnglePrev()) * partialTicks;
     }
+
+	@Override
+	public boolean attackEntityAsMob(Entity entity) {
+		return canEntityBeSeen(entity) ? super.attackEntityAsMob(entity) : false;
+	}
 
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float dmg) {
