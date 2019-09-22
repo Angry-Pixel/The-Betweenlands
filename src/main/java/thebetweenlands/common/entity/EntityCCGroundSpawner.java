@@ -362,33 +362,40 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		NBTTagList tagList = new NBTTagList();
 		NBTTagCompound entityNbt = getEntityData();
 		for (int x = -1; x <= 1; x ++)
-			for (int z = -1; z <= 1; z++) {
-				IBlockState state = world.getBlockState(pos.add(x, 0, z));
+			for (int z = -1; z <= 1; z++) 
+				for(int y = 0; y <= 1; y++) {
+				IBlockState state = world.getBlockState(pos.add(x, -y, z));
 				NBTTagCompound tag = new NBTTagCompound();
 				NBTUtil.writeBlockState(tag, state);
 				tagList.appendTag(tag);
 			}
-		if (!tagList.isEmpty())
+
+		if (!tagList.isEmpty()) {
 			entityNbt.setTag("tempBlockTypes", tagList);
+			entityNbt.setTag("originPos", NBTUtil.createPosTag(pos));
+		}
 		writeEntityToNBT(entityNbt);
 	}
 
 	public void loadOriginBlocks(World world, BlockPos pos, NBTTagCompound tag) {
-		List<IBlockState> list = new ArrayList<IBlockState>();
 		NBTTagCompound entityNbt = getEntityData();
+		NBTTagList tagListPos = entityNbt.getTagList("originPos", Constants.NBT.TAG_COMPOUND);
+		NBTTagCompound nbttagcompoundPos = tagListPos.getCompoundTagAt(0);
+		BlockPos origin = NBTUtil.getPosFromTag(nbttagcompoundPos);
+		List<IBlockState> list = new ArrayList<IBlockState>();
 		NBTTagList tagList = entityNbt.getTagList("tempBlockTypes", Constants.NBT.TAG_COMPOUND);
 		for (int indexCount = 0; indexCount < tagList.tagCount(); ++indexCount) {
 			NBTTagCompound nbttagcompound = tagList.getCompoundTagAt(indexCount);
 			IBlockState state = NBTUtil.readBlockState(nbttagcompound);
 			list.add(indexCount, state);
 		}
-
 		int a = 0;
 		for (int x = -1; x <= 1; x++)
-			for (int z = -1; z <= 1; z++) {
-				world.setBlockState(pos.add(x, 0, z), list.get(a++), 3);
+			for (int z = -1; z <= 1; z++)
+				for(int y = 0; y <= 1; y++) {
+				world.setBlockState(origin.add(x, -y, z), list.get(a++), 3);
 			}
-		getEntityWorld().playSound((EntityPlayer)null, getPosition(), SoundRegistry.ROOF_COLLAPSE, SoundCategory.BLOCKS, 1F, 1.0F);
+		getEntityWorld().playSound((EntityPlayer)null, origin, SoundRegistry.ROOF_COLLAPSE, SoundCategory.BLOCKS, 1F, 1.0F);
 	}
 
 	@Override
