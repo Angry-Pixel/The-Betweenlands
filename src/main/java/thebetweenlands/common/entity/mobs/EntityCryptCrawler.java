@@ -40,7 +40,8 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO Loot tables
 public class EntityCryptCrawler extends EntityMob implements IEntityBL {
-	protected static final int MUTEX_BLOCKING = 0b1000;
+	protected static final int MUTEX_BLOCKING  = 0b01000;
+	protected static final int MUTEX_ATTACKING = 0b10000;
 	
 	private static final byte EVENT_SHIELD_BLOCKED = 80;
 	
@@ -103,7 +104,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(1, new EntityAISwimming(this));
-		tasks.addTask(2, new EntityCryptCrawler.AIShieldCharge(this)); //Shield charge AI interrupts shield block AI
+		tasks.addTask(2, new EntityCryptCrawler.AIShieldCharge(this)); //Shield charge AI interrupts shield block AI and attack AI
 		tasks.addTask(3, new EntityCryptCrawler.AIShieldBlock(this));
 		tasks.addTask(4, new EntityCryptCrawler.AICryptCrawlerAttack(this));
 		tasks.addTask(5, new EntityAIWander(this, 1D));
@@ -396,6 +397,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	static class AICryptCrawlerAttack extends EntityAIAttackMelee {
 		public AICryptCrawlerAttack(EntityCryptCrawler crypt_crawler) {
 			super(crypt_crawler, 1.2D, false);
+			this.setMutexBits(this.getMutexBits() | MUTEX_ATTACKING);
 		}
 
 		@Override
@@ -414,7 +416,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		
 		public AIShieldCharge(EntityCryptCrawler crawler) {
 			this.crawler = crawler;
-			setMutexBits(MUTEX_BLOCKING);
+			setMutexBits(3 | MUTEX_BLOCKING | MUTEX_ATTACKING);
 		}
 		
 		protected boolean isHoldingShield() {
@@ -487,6 +489,11 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 				crawler.setSneaking(true);
 			} else {
 				crawler.setSneaking(false);
+			}
+			
+			EntityLivingBase target = this.crawler.getAttackTarget();
+			if(target != null) {
+				this.crawler.faceEntity(target, 15, 15);
 			}
 		}
 	}
