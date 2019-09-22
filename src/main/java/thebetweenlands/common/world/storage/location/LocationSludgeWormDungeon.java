@@ -53,31 +53,31 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 		this.dungeonMobSpawner.setEntityCountFilter(entity -> entity instanceof EntityTriggeredFallingBlock == false); //Ignore falling blocks
 
 		//floor 1
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(0, new WallSpawnEntry(0, EntityMovingSpawnerHole.class, (short) 90), ConditionalSpawnEntry.createSludgeDungeonPredicate(0))
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(0, new WallSpawnEntry(0, EntityMovingSpawnerHole.class, EntityMovingSpawnerHole::new, (short) 90), ConditionalSpawnEntry.createSludgeDungeonPredicate(0))
 				.setGroupSize(1, 1).setSpawnCheckRadius(8.0D).setSpawningInterval(5 * 20).setHostile(true));
 
 		//floor 2
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(1, new BLSpawnEntry(1, EntityShambler.class, (short) 50), ConditionalSpawnEntry.createSludgeDungeonPredicate(1))
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(1, new BLSpawnEntry(1, EntityShambler.class, EntityShambler::new, (short) 50), ConditionalSpawnEntry.createSludgeDungeonPredicate(1))
 				.setGroupSize(1, 3).setSpawnCheckRadius(14.0D).setSpawningInterval(10 * 20).setHostile(true));
 
 		//floor 3
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(2, new WallSpawnEntry(2, EntityWallLamprey.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2))
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(2, new WallSpawnEntry(2, EntityWallLamprey.class, EntityWallLamprey::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2))
 				.setGroupSize(1, 1).setSpawnCheckRadius(8.0D).setSpawningInterval(2 * 20).setHostile(true));
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(3, new BLSpawnEntry(3, EntityTinyWormEggSac.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2))
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(3, new BLSpawnEntry(3, EntityTinyWormEggSac.class, EntityTinyWormEggSac::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2))
 				.setGroupSize(1, 1).setSpawnCheckRadius(8.0D).setSpawningInterval(8 * 20).setHostile(true));
 
 		//floor 4
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(4, new BLSpawnEntry(4, EntityTriggeredSludgeWallJet.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(3))
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(4, new BLSpawnEntry(4, EntityTriggeredSludgeWallJet.class, EntityTriggeredSludgeWallJet::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(3))
 				.setGroupSize(1, 1).setSpawnCheckRadius(10.0D).setSpawningInterval(2 * 20).setHostile(true));
 
 		//floor 5
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(5, new WallSpawnEntry(5, EntityWallLivingRoot.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(4))
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(5, new WallSpawnEntry(5, EntityWallLivingRoot.class ,EntityWallLivingRoot::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(4))
 				.setGroupSize(1, 1).setSpawnCheckRadius(8.0D).setSpawningInterval(2 * 20).setHostile(true));
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(6, new BLSpawnEntry(6, EntitySplodeshroom.class, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(4))
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(6, new BLSpawnEntry(6, EntitySplodeshroom.class, EntitySplodeshroom::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(4))
 				.setGroupSize(1, 1).setSpawnCheckRadius(8.0D).setSpawningInterval(2 * 20).setHostile(true));
 
 		//floor 6
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(7, new BLSpawnEntry(7, EntityCryptCrawler.class, (short) 50), ConditionalSpawnEntry.createSludgeDungeonPredicate(5))
+		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(7, new BLSpawnEntry(7, EntityCryptCrawler.class, EntityCryptCrawler::new, (short) 50), ConditionalSpawnEntry.createSludgeDungeonPredicate(5))
 				.setGroupSize(1, 3).setSpawnCheckRadius(12.0D).setSpawningInterval(12 * 20).setHostile(true));
 	}
 

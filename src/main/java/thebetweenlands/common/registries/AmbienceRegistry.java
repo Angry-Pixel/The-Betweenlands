@@ -25,12 +25,14 @@ import thebetweenlands.common.world.storage.location.LocationStorage;
 @SideOnly(Side.CLIENT)
 public class AmbienceRegistry {
 	public static final AmbienceLayer BASE_LAYER = new AmbienceLayer(new ResourceLocation("base_layer"));
-
+	public static final AmbienceLayer DETAIL_LAYER = new AmbienceLayer(new ResourceLocation("detail_layer"));
+	
 	public static void preInit() {
 		//Base ambience
 		AmbienceManager.INSTANCE.registerAmbience(new SurfaceAmbienceType());
 		AmbienceManager.INSTANCE.registerAmbience(new CaveAmbienceType());
-		AmbienceManager.INSTANCE.registerAmbience(new WaterAmbienceType());
+		AmbienceManager.INSTANCE.registerAmbience(new WaterAmbienceType(true));
+		AmbienceManager.INSTANCE.registerAmbience(new WaterAmbienceType(false));
 		AmbienceManager.INSTANCE.registerAmbience(new WindAmbienceType());
 
 		//Locations

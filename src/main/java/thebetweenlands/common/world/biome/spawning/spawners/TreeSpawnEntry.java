@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.biome.spawning.spawners;
 
+import java.util.function.Function;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.BlockPos;
@@ -14,12 +16,12 @@ import thebetweenlands.common.world.biome.spawning.AreaMobSpawner.BLSpawnEntry;
  * Used for sporeling.
  */
 public class TreeSpawnEntry extends BLSpawnEntry {
-	public TreeSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
-		super(id, entityType);
+	public TreeSpawnEntry(int id, Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor) {
+		super(id, entityType, entityCtor);
 	}
 
-	public TreeSpawnEntry(int id, Class<? extends EntityLiving> entityType, short weight) {
-		super(id, entityType, weight);
+	public TreeSpawnEntry(int id, Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor, short weight) {
+		super(id, entityType, entityCtor, weight);
 	}
 
 	@Override

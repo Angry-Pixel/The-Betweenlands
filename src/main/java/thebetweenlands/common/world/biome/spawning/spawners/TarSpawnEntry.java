@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.biome.spawning.spawners;
 
+import java.util.function.Function;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.BlockPos;
@@ -12,12 +14,12 @@ import thebetweenlands.common.registries.BlockRegistry;
  *
  */
 public class TarSpawnEntry extends SurfaceSpawnEntry {
-	public TarSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
-		super(id, entityType);
+	public TarSpawnEntry(int id, Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor) {
+		super(id, entityType, entityCtor);
 	}
 
-	public TarSpawnEntry(int id, Class<? extends EntityLiving> entityType, short weight) {
-		super(id, entityType, weight);
+	public TarSpawnEntry(int id, Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor, short weight) {
+		super(id, entityType, entityCtor, weight);
 	}
 
 	@Override

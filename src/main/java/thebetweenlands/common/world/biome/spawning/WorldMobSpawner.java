@@ -113,9 +113,9 @@ public class WorldMobSpawner extends AreaMobSpawner {
 				boolean spawnHostiles = ((WorldProviderBetweenlands)world.provider).getCanSpawnHostiles();
 				boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
 
-				//long start = System.nanoTime();
+				long start = System.nanoTime();
 				this.populate(world, spawnHostiles, spawnAnimals);
-				//System.out.println("Time: " + (System.nanoTime() - start) / 1000000.0F);
+				System.out.println("Time: " + (System.nanoTime() - start) / 1000000.0F);
 			}
 		}
 	}

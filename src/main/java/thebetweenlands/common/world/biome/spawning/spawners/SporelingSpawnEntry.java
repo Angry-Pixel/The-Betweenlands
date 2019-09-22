@@ -1,13 +1,16 @@
 package thebetweenlands.common.world.biome.spawning.spawners;
 
+import java.util.function.Function;
+
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 
 public class SporelingSpawnEntry extends TreeSpawnEntry {
-	public SporelingSpawnEntry(int id, Class<? extends EntityLiving> entityType, short weight) {
-		super(id, entityType, weight);
+	public SporelingSpawnEntry(int id, Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor, short weight) {
+		super(id, entityType, entityCtor, weight);
 	}
 
 	@Override

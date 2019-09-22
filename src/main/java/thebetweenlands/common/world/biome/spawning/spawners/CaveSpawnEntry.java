@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.biome.spawning.spawners;
 
+import java.util.function.Function;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.BlockPos;
@@ -20,12 +22,12 @@ public class CaveSpawnEntry extends BLSpawnEntry {
 	protected boolean canSpawnOnWater = false;
 	protected boolean canSpawnInWater = false;
 
-	public CaveSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
-		super(id, entityType);
+	public CaveSpawnEntry(int id, Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor) {
+		super(id, entityType, entityCtor);
 	}
 
-	public CaveSpawnEntry(int id, Class<? extends EntityLiving> entityType, short baseWeight) {
-		super(id, entityType, baseWeight);
+	public CaveSpawnEntry(int id, Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor, short baseWeight) {
+		super(id, entityType, entityCtor, baseWeight);
 	}
 
 	public CaveSpawnEntry setCanSpawnOnWater(boolean spawnOnWater) {
