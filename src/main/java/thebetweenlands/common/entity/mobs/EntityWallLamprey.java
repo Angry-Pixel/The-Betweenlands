@@ -20,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -85,7 +86,7 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 		super.initEntityAI();
 
 		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, false));
-		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true).setUnseenMemoryTicks(120));
+		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 0, true, false, null).setUnseenMemoryTicks(120));
 
 		this.tasks.addTask(0, new AITrackTargetLamprey(this, true, 28.0D));
 		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
@@ -162,20 +163,27 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 
 			if(!this.world.isRemote) {
 				List<Entity> affectedEntities = (List<Entity>)this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(6.0F, 6.0F, 6.0F));
+				
 				for(Entity e : affectedEntities) {
-					if(e == this || e.getDistance(this) > 6.0F || !this.canEntityBeSeen(e) || e instanceof IEntityBL) {
+					float dst = e.getDistance(this);
+					
+					if(e == this || dst > 6.0F || !this.canEntityBeSeen(e) || e instanceof IEntityBL) {
 						continue;
 					}
+					
 					Vec3d vec = new Vec3d(this.posX - e.posX, this.posY - e.posY, this.posZ - e.posZ);
 					vec = vec.normalize();
-					float dst = e.getDistance(this);
-					float mod = (float) Math.pow(1.0F - dst / 7.0F, 1.2D);
+					
+					float mod = (float) Math.pow(1.0F - dst / 6.0F, 1.3D);
+					
 					if(e instanceof EntityPlayer) {
 						if(((EntityPlayer)e).isActiveItemStackBlocking()) mod *= 0.18F;
 					}
+					
 					e.motionX += vec.x * 0.1F * mod;
-					e.motionY += vec.y * 0.25F * mod;
+					e.motionY += vec.y * 0.215F * mod;
 					e.motionZ += vec.z * 0.1F * mod;
+					
 					e.velocityChanged = true;
 				}
 			} else {
@@ -230,7 +238,7 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 		if(cap != null && cap.isDecayEnabled()) {
 			float attackDamage = (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 			
-			if(EntityAIAttackOnCollide.useStandardAttack(this, entity, attackDamage / 3.0F)) {
+			if(EntityAIAttackOnCollide.useStandardAttack(this, entity, attackDamage / 3.0F, !this.isSucking())) {
 				hasAttacked = true;
 
 				DecayStats stats = cap.getDecayStats();
@@ -392,7 +400,7 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 		protected int cooldown = 0;
 
 		public AISuck(EntityWallLamprey entity) {
-			this(entity, 40, 130);
+			this(entity, 50, 140);
 		}
 
 		public AISuck(EntityWallLamprey entity, int minCooldown, int maxCooldown) {

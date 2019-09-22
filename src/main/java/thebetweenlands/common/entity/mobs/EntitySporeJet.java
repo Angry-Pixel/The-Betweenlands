@@ -18,7 +18,7 @@ public class EntitySporeJet extends Entity {
 
 	public EntitySporeJet(World world) {
 		super(world);
-		setSize(1.6F, 2.5F);
+		setSize(1.6F, 3.0F);
 	}
 
 	@Override
