@@ -1061,10 +1061,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (!isBlackListedAreaForGen(pos.add(2, 0, 2), pos.add(j, 0, i), 1) && !isBlackListedAreaForGen(pos.add(26, 0, 26), pos.add(j, 0, i), 1) && !isBlackListedAreaForGenSpecial(pos.add(26, 0, 2), pos.add(j, 0, i), 1, level == 3 ? true : false) && !isBlackListedAreaForGenSpecial(pos.add(2, 0, 26), pos.add(j, 0, i), 1, level == 5 ? true : false)) {
 						if (rand.nextBoolean() && rand.nextBoolean())
 							world.setBlockState(pos.add(j, 0, i), blockHelper.getMudTilesWater(rand), 2);
-						else if (rand.nextInt(10) == 0 && addSpawners)
-							world.setBlockState(pos.add(j, 0, i), blockHelper.SPAWNER_TYPE_1, 2);
-						else if (rand.nextInt(6) == 0 && addSpawners)
-							world.setBlockState(pos.add(j, 0, i), blockHelper.SPAWNER_TYPE_2, 2);
 						else
 							if (rand.nextBoolean() && rand.nextBoolean() && level >= 4)
 								world.setBlockState(pos.add(j, 0, i), blockHelper.PUFFSHROOM, 2);
