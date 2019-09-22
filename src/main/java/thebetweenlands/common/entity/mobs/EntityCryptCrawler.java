@@ -29,6 +29,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -126,7 +127,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			if (isChief()) {
 				setSize(1.2F, 1.9F);
 				experienceValue = 20;
-				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.28D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100D);
 				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
 				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
@@ -135,7 +136,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			if (!isChief() && isBiped()) {
 				setSize(0.75F, 1.5F);
 				experienceValue = 10;
-				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.29D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30D);
 				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
@@ -144,7 +145,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			if (!isChief() && !isBiped()) {
 				setSize(1F, 1F);
 				experienceValue = 5;
-				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.36D);
+				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.31D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20D);
 				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
 				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
@@ -203,36 +204,37 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		}
 
 		if (!getEntityWorld().isRemote && !isBiped()) {
-
 			if (getAttackTarget() != null) {
-				faceEntity(getAttackTarget(), 10.0F, 20.0F);
 				double distance = getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
 
-				if (distance > 5.0D)
-					setIsStanding(false);
-
-				if (distance <= 5.0D)
-					setIsStanding(true);
+				setIsStanding(distance <= 3.0D);
 			}
 	
-			if (getAttackTarget() == null)
+			if (getAttackTarget() == null) {
 				setIsStanding(false);
+			}
 		}
 
 		if (getEntityWorld().isRemote && !isBiped()) {
 			prevStandingAngle = standingAngle;
 
-			if (standingAngle > 0 && !isStanding())
+			if (standingAngle > 0 && !isStanding()) {
 				standingAngle -= 0.1F;
+			}
 
-			if (isStanding() && standingAngle <= 1F)
+			if (isStanding() && standingAngle <= 1F) {
 				standingAngle += 0.1F;
+			}
 			
-			if (standingAngle < 0 && !isStanding())
+			if (standingAngle < 0 && !isStanding()) {
 				standingAngle = 0F;
+			}
 
-			if (isStanding() && standingAngle > 1F)
+			if (isStanding() && standingAngle > 1F) {
 				standingAngle = 1F;
+			}
+			
+			standingAngle = MathHelper.clamp(standingAngle, 0, 1);
 		}
 
 		super.onLivingUpdate();
