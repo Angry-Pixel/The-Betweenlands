@@ -46,7 +46,9 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 
 		this.dataManager.register(GROUND_FOG_STRENGTH, 1.0F);
 
-		this.setAmbience(new LocationAmbience(EnumLocationAmbience.SLUDGE_WORM_DUNGEON).setCaveFog(false));
+		this.setAmbience(new LocationAmbience(EnumLocationAmbience.SLUDGE_WORM_DUNGEON)
+				.setFogColor(new int[] {120, 120, 120}).setFogRange(4.0f, 45.0f)
+				.setCaveFog(false));
 
 		this.dungeonMobSpawner = new BoxMobSpawner();
 		this.dungeonMobSpawner.setMaxAreaEntities(80);
