@@ -334,7 +334,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		if(!getEntityWorld().isRemote) {
 			if(isWorldSpawned())
 				if(getEntityData().hasKey("tempBlockTypes"))
-					loadOriginBlocks(getEntityWorld(), getPosition(), getEntityData());
+					loadOriginBlocks(getEntityWorld(), getEntityData());
 		}
         super.setDead();
     }
@@ -377,7 +377,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 		writeEntityToNBT(entityNbt);
 	}
 
-	public void loadOriginBlocks(World world, BlockPos pos, NBTTagCompound tag) {
+	public void loadOriginBlocks(World world, NBTTagCompound tag) {
 		NBTTagCompound entityNbt = getEntityData();
 		NBTTagList tagListPos = entityNbt.getTagList("originPos", Constants.NBT.TAG_COMPOUND);
 		NBTTagCompound nbttagcompoundPos = tagListPos.getCompoundTagAt(0);
