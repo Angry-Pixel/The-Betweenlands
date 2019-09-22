@@ -372,15 +372,15 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 
 		if (!tagList.isEmpty()) {
 			entityNbt.setTag("tempBlockTypes", tagList);
-			entityNbt.setTag("originPos", NBTUtil.createPosTag(pos));
+			NBTTagCompound nbttagcompoundPos = NBTUtil.createPosTag(pos);
+			entityNbt.setTag("originPos", nbttagcompoundPos);
 		}
 		writeEntityToNBT(entityNbt);
 	}
 
 	public void loadOriginBlocks(World world, NBTTagCompound tag) {
 		NBTTagCompound entityNbt = getEntityData();
-		NBTTagList tagListPos = entityNbt.getTagList("originPos", Constants.NBT.TAG_COMPOUND);
-		NBTTagCompound nbttagcompoundPos = tagListPos.getCompoundTagAt(0);
+		NBTTagCompound nbttagcompoundPos = entityNbt.getCompoundTag("originPos");
 		BlockPos origin = NBTUtil.getPosFromTag(nbttagcompoundPos);
 		List<IBlockState> list = new ArrayList<IBlockState>();
 		NBTTagList tagList = entityNbt.getTagList("tempBlockTypes", Constants.NBT.TAG_COMPOUND);
