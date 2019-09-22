@@ -57,7 +57,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	
 	public EntityCryptCrawler(World world) {
 		super(world);
-		setSize(1F, 1F);
+		setSize(0.5F, 1.0F); //Width must be < 1 otherwise path finder will not path through one block wide gaps!!
 		stepHeight = 1F;
 	}
 
@@ -125,7 +125,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	protected void updateAttributes() {
 		if (getEntityWorld() != null && !getEntityWorld().isRemote) {
 			if (isChief()) {
-				setSize(1.2F, 1.9F);
+				setSize(0.98F, 1.9F);
 				experienceValue = 20;
 				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.28D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100D);
@@ -143,7 +143,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 				getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.5D);
 			}
 			if (!isChief() && !isBiped()) {
-				setSize(1F, 1F);
+				setSize(0.95F, 1F);
 				experienceValue = 5;
 				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.31D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20D);
@@ -200,7 +200,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			if (!isChief() && isBiped())
 				setSize(0.75F, 1.5F);
 			if (!isChief() && !isBiped())
-				setSize(1F - standingAngle * 0.25F, 1F + standingAngle * 0.75F);
+				setSize(0.95F - standingAngle * 0.2F, 1F + standingAngle * 0.75F);
 		}
 
 		if (!getEntityWorld().isRemote && !isBiped()) {
