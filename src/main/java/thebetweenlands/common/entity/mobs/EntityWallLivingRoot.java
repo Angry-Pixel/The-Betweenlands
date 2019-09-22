@@ -42,7 +42,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 
 //TODO Loot tables
 public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, IEntityMultiPart {
-	public static final IAttribute MAX_ARM_LENGTH = (new RangedAttribute(null, "bl.maxRootArmLength", 2.0D, 0.0D, 16.0D)).setDescription("Maximum length of root arm").setShouldWatch(true);
+	public static final IAttribute MAX_ARM_LENGTH = (new RangedAttribute(null, "bl.maxRootArmLength", 2.5D, 0.0D, 16.0D)).setDescription("Maximum length of root arm").setShouldWatch(true);
 
 	protected static final float ARM_FULL_WIDTH = 0.2F;
 	protected static final float[][] ARM_CROSS_SECTION = new float[][] {
@@ -91,6 +91,8 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		}
 	}
 
+	protected static final int NUM_SEGMENTS = 8;
+
 	private static final DataParameter<Integer> REL_TIP_X = EntityDataManager.createKey(EntityWallLivingRoot.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> REL_TIP_Y = EntityDataManager.createKey(EntityWallLivingRoot.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> REL_TIP_Z = EntityDataManager.createKey(EntityWallLivingRoot.class, DataSerializers.VARINT);
@@ -115,9 +117,11 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		this.lookMoveSpeedMultiplier = 8.0F;
 		this.experienceValue = 5;
 
-		this.parts = new MultiPartEntityPart[] {
-				this.rootTip = new MultiPartEntityPart(this, "rootTip", 0.3F, 0.3F)
-		};
+		this.parts = new MultiPartEntityPart[NUM_SEGMENTS + 1];
+		this.parts[0] = this.rootTip = new MultiPartEntityPart(this, "rootTip", 0.3F, 0.3F);
+		for(int i = 0; i < NUM_SEGMENTS; i++) {
+			this.parts[i + 1] = new MultiPartEntityPart(this, "rootNode" + i, 0.3F, 0.3F);
+		}
 	}
 
 	@Override
@@ -138,8 +142,13 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	protected void initEntityAI() {
 		super.initEntityAI();
 
-		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, false));
-		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true).setUnseenMemoryTicks(120));
+		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true) {
+			@Override
+			protected double getTargetDistance() {
+				return 8.0D;
+			}
+		});
+		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 0, true, false, null).setUnseenMemoryTicks(120));
 
 		this.tasks.addTask(0, new AITrackTarget<EntityWallLivingRoot>(this, true, 28.0D) {
 			@Override
@@ -178,9 +187,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 
 		float maxArmLength = (float)this.getEntityAttribute(MAX_ARM_LENGTH).getAttributeValue() * this.getArmSize(1);
 
-		int numSegments = 8;
-
-		float segmentLength = maxArmLength / (float)(numSegments - 2);
+		float segmentLength = maxArmLength / (float)(NUM_SEGMENTS - 2);
 
 		Vec3d dirFwd = new Vec3d(this.getFacing().getXOffset(), this.getFacing().getYOffset(), this.getFacing().getZOffset());;
 		Vec3d dirUp = new Vec3d(this.getFacingUp().getXOffset(), this.getFacingUp().getYOffset(), this.getFacingUp().getZOffset());
@@ -188,7 +195,9 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		Vec3d armStart = new Vec3d(0, this.height / 2, 0).add(-dirFwd.x * (this.width / 2 - 0.1f), -dirFwd.y * (this.height / 2 - 0.1f), -dirFwd.z * (this.width / 2 - 0.1f));
 		Vec3d ikArmStart = new Vec3d(0, this.height / 2, 0).add(dirFwd.scale(0.1f));
 
-		this.rootTip.onUpdate();
+		for(MultiPartEntityPart part : this.parts) {
+			part.onUpdate();
+		}
 
 		if(!this.rootTipPositionSet) {
 			Vec3d tipPos = this.getPositionVector().add(armStart.add(dirFwd.scale(maxArmLength)).add(0, -this.rootTip.height / 2, 0));
@@ -236,63 +245,69 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 			Vec3d tipPos = this.getTipPos();
 			this.rootTip.setPosition(tipPos.x, tipPos.y, tipPos.z);
 
-			if(this.armSegments.size() != numSegments || this.getFacing() != this.segmentsFacing) {
-				this.armSegments.clear();
-
-				for(int i = 0; i < numSegments; i++) {
-					ArmSegment segment = new ArmSegment();
-					float dist = maxArmLength / (float)(numSegments - 1) * i;
-					segment.update(dirUp, ikArmStart.add(dirFwd.x * dist, dirFwd.y * dist, dirFwd.z * dist), dirFwd);
-					this.armSegments.add(segment);
-				}
-
-				this.segmentsFacing = this.getFacing();
-			}
-
-			for(ArmSegment segment : this.armSegments) {
-				segment.updatePrev();
-			}
-
-			for(int i = numSegments - 2; i >= 2; i--) {
-				ArmSegment segment = this.armSegments.get(i);
-
-				Vec3d target;
-				if(i == numSegments - 2) {
-					target = armEnd;
-				} else {
-					target = this.armSegments.get(i + 1).pos;
-				}
-
-				Vec3d dir = segment.pos.subtract(target).normalize();
-
-				segment.update(dirUp, target.add(dir.scale(segmentLength)), dir.scale(-1));
-			}
-
-			for(int i = 2; i < numSegments - 1; i++) {
-				ArmSegment segment = this.armSegments.get(i);
-
-				Vec3d target;
-				if(i == 0) {
-					target = ikArmStart;
-				} else {
-					target = this.armSegments.get(i - 1).pos;
-				}
-
-				Vec3d dir = segment.pos.subtract(target).normalize();
-
-				segment.update(dirUp, target.add(dir.scale(segmentLength)), dir.scale(-1));
-			}
-
-			ArmSegment startSegment = this.armSegments.get(0);
-			startSegment.update(dirUp, armStart, new Vec3d(-dirFwd.x, -dirFwd.y, -dirFwd.z));
-
-			ArmSegment startSegment2 = this.armSegments.get(1);
-			startSegment2.update(dirUp, ikArmStart, new Vec3d(-dirFwd.x, -dirFwd.y, -dirFwd.z));
-
-			ArmSegment endSegment = this.armSegments.get(this.armSegments.size() - 1);
-			endSegment.update(dirUp, armEnd, armEnd.subtract(this.armSegments.get(this.armSegments.size() - 2).pos).normalize());
-
 			this.updateWallSprite();
+		}
+
+		if(this.armSegments.size() != NUM_SEGMENTS || this.getFacing() != this.segmentsFacing) {
+			this.armSegments.clear();
+
+			for(int i = 0; i < NUM_SEGMENTS; i++) {
+				ArmSegment segment = new ArmSegment();
+				float dist = maxArmLength / (float)(NUM_SEGMENTS - 1) * i;
+				segment.update(dirUp, ikArmStart.add(dirFwd.x * dist, dirFwd.y * dist, dirFwd.z * dist), dirFwd);
+				this.armSegments.add(segment);
+			}
+
+			this.segmentsFacing = this.getFacing();
+		}
+
+		for(ArmSegment segment : this.armSegments) {
+			segment.updatePrev();
+		}
+
+		for(int i = NUM_SEGMENTS - 2; i >= 2; i--) {
+			ArmSegment segment = this.armSegments.get(i);
+
+			Vec3d target;
+			if(i == NUM_SEGMENTS - 2) {
+				target = armEnd;
+			} else {
+				target = this.armSegments.get(i + 1).pos;
+			}
+
+			Vec3d dir = segment.pos.subtract(target).normalize();
+
+			segment.update(dirUp, target.add(dir.scale(segmentLength)), dir.scale(-1));
+		}
+
+		for(int i = 2; i < NUM_SEGMENTS - 1; i++) {
+			ArmSegment segment = this.armSegments.get(i);
+
+			Vec3d target;
+			if(i == 0) {
+				target = ikArmStart;
+			} else {
+				target = this.armSegments.get(i - 1).pos;
+			}
+
+			Vec3d dir = segment.pos.subtract(target).normalize();
+
+			segment.update(dirUp, target.add(dir.scale(segmentLength)), dir.scale(-1));
+		}
+
+		ArmSegment startSegment = this.armSegments.get(0);
+		startSegment.update(dirUp, armStart, new Vec3d(-dirFwd.x, -dirFwd.y, -dirFwd.z));
+
+		ArmSegment startSegment2 = this.armSegments.get(1);
+		startSegment2.update(dirUp, ikArmStart, new Vec3d(-dirFwd.x, -dirFwd.y, -dirFwd.z));
+
+		ArmSegment endSegment = this.armSegments.get(this.armSegments.size() - 1);
+		endSegment.update(dirUp, armEnd, armEnd.subtract(this.armSegments.get(this.armSegments.size() - 2).pos).normalize());
+
+		for(int i = 0; i < NUM_SEGMENTS; i++) {
+			ArmSegment segment = this.armSegments.get(i);
+			Vec3d pos = segment.pos;
+			this.parts[i + 1].setPosition(this.posX + pos.x, this.posY + pos.y - this.parts[i + 1].height / 2.0f, this.posZ + pos.z);
 		}
 	}
 

@@ -24,6 +24,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -92,7 +93,6 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
-		byte duration = 0;
 		if (!getEntityWorld().isRemote) {
 			for (MultiPartEntityPart part : this.parts) {
 				if (player.getEntityBoundingBox().maxY >= part.getEntityBoundingBox().minY
@@ -102,14 +102,13 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 						&& player.getEntityBoundingBox().maxZ >= part.getEntityBoundingBox().minZ
 						&& player.getEntityBoundingBox().minZ <= part.getEntityBoundingBox().maxZ
 						&& player.prevPosY > player.posY) {
-					if (getEntityWorld().getDifficulty() == EnumDifficulty.NORMAL) {
-						duration = 7;
-					} else if (getEntityWorld().getDifficulty() == EnumDifficulty.HARD) {
-						duration = 15;
-					}
 					
-					if (duration > 0) {
-						player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, duration * 20, 0));
+					player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 80, 0));
+					
+					if (getEntityWorld().getDifficulty() == EnumDifficulty.NORMAL) {
+						player.addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(80, 1));
+					} else if (getEntityWorld().getDifficulty() == EnumDifficulty.HARD) {
+						player.addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(160, 1));
 					}
 					
 					this.isSquashed = true;
