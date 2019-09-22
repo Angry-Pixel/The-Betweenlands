@@ -43,6 +43,8 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	Random rand = new Random();
 
 	private AxisAlignedBB renderBoundingBox;
+	
+	private int wallInvulnerabilityTicks = 40;
 
 	public EntitySludgeWorm(World world) {
 		super(world);
@@ -109,10 +111,15 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		
 		if(this.world.isRemote && this.ticksExisted % 10 == 0) {
 			this.spawnParticles(this.world, this.posX, this.posY, this.posZ, this.rand);
 		}
 
+		if(this.wallInvulnerabilityTicks > 0) {
+			this.wallInvulnerabilityTicks--;
+		}
+		
 		motionY *= this.getHeadMotionYMultiplier();
 
 		this.renderBoundingBox = this.getEntityBoundingBox();
@@ -142,6 +149,8 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (source == DamageSource.OUT_OF_WORLD || (source instanceof EntityDamageSource && ((EntityDamageSource) source).getIsThornsDamage())) {
 			damageWorm(source, amount);
+		} else if(source == DamageSource.IN_WALL && this.wallInvulnerabilityTicks > 0) {
+			return false;
 		} else {
 			amount *= 0.5F;
 			damageWorm(source, amount);

@@ -115,13 +115,19 @@ public class ItemSwatShield extends ItemBLShield {
 	 * @param rammingDir
 	 */
 	public void onEnemyRammed(ItemStack stack, EntityLivingBase user, EntityLivingBase enemy, Vec3d rammingDir) {
-		enemy.knockBack(user, 6.0F, -rammingDir.x, -rammingDir.z);
+		boolean attacked = false;
+		
 		if(user instanceof EntityPlayer) {
-			enemy.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)user), 10.0F);
+			attacked = enemy.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)user), 10.0F);
+			
 			if (user instanceof EntityPlayerMP)
 				AdvancementCriterionRegistry.SWAT_SHIELD.trigger((EntityPlayerMP) user, enemy);
 		} else {
-			enemy.attackEntityFrom(DamageSource.causeMobDamage(user), 10.0F);
+			attacked = enemy.attackEntityFrom(DamageSource.causeMobDamage(user), 10.0F);
+		}
+		
+		if(attacked) {
+			enemy.knockBack(user, 6.0F, -rammingDir.x, -rammingDir.z);
 		}
 	}
 
@@ -143,9 +149,16 @@ public class ItemSwatShield extends ItemBLShield {
 		}
 		if(Math.sqrt(user.motionX*user.motionX + user.motionZ*user.motionZ) > 0.2D) {
 			Vec3d moveDir = new Vec3d(user.motionX, user.motionY, user.motionZ).normalize();
+			
 			List<EntityLivingBase> targets = user.world.getEntitiesWithinAABB(EntityLivingBase.class, user.getEntityBoundingBox().grow(1), e -> e != user);
+			
 			for(EntityLivingBase target : targets) {
-				this.onEnemyRammed(stack, user, target, moveDir);
+				Vec3d dir = target.getPositionVector().subtract(user.getPositionVector()).normalize();
+				
+				//45° angle range
+				if(target.canBeCollidedWith() && Math.toDegrees(Math.acos(moveDir.dotProduct(dir))) < 45) {
+					this.onEnemyRammed(stack, user, target, moveDir);
+				}
 			}
 		}
 	}
