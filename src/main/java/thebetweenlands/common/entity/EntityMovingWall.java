@@ -76,6 +76,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC);
 		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER);
 		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_WALL);
 	}
 
 	public EntityMovingWall(World world) {
