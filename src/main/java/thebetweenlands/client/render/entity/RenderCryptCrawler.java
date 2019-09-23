@@ -34,10 +34,9 @@ public class RenderCryptCrawler extends RenderLiving<EntityCryptCrawler> {
 
 	@Override
 	protected void preRenderCallback(EntityCryptCrawler entity, float partialTickTime) {
-		if(!entity.isBiped())
-			GlStateManager.translate(0F, 0F - entity.standingAngle * 0.5F, 0F);
-		if(entity.isChief())
+		if(entity.isChief()) {
 			GlStateManager.scale(1.35F, 1.35F, 1.35F);
+		}
 	}
 
 	@Override
