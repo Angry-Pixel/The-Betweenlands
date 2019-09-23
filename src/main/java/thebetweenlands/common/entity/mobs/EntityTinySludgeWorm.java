@@ -157,7 +157,7 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 	}
 
 	protected SoundEvent getJumpedOnSound() {
-		return SoundRegistry.SQUISH;
+		return SoundRegistry.WORM_SPLAT;
 	}
 
 	@Override
