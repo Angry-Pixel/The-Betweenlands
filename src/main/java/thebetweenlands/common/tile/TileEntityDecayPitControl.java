@@ -7,6 +7,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -31,6 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityScreenShake;
+import thebetweenlands.client.audio.DecayPitGearsSound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -67,6 +69,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	private int shake_timer;
 	private boolean shaking = false;
 	private static int SHAKING_TIMER_MAX = 60;
+	public boolean playGearSound = true;
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	public final Map<Block, Boolean> INVISIBLE_BLOCKS = new HashMap<Block, Boolean>(); // dont need states so blocks will do
 
@@ -149,7 +152,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 					}
 				}
 				if (getSpawnType() == 5) {
-					setPlugged(true); //pretty pointless because I could use the spawn type :P
+					setPlugged(true);
 					removeInvisiBlocks(getWorld(), getPos());
 					updateBlock();
 					getWorld().playSound(null, getPos().add(1, 6, 0), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
@@ -204,6 +207,19 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			// whatever whizz bangs we add with shaders and particles
 			// spawn loots and stuff
 		}
+
+		if (getWorld().isRemote) {
+			if (!isPlugged())
+				if (playGearSound) {
+					playGearsSound(getWorld(), getPos());
+					playGearSound = false;
+				}
+		}
+	}
+
+	public void playGearsSound(World world, BlockPos pos) {
+		ISound chain_sound = new DecayPitGearsSound(this);
+		Minecraft.getMinecraft().getSoundHandler().playSound(chain_sound);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -393,7 +409,11 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	public boolean isPlugged() {
 		return IS_PLUGGED;
 	}
-	
+
+	public boolean isUnPlugged() {
+		return !IS_PLUGGED;
+	}
+
 	public void setShowFloor(boolean show_floor) {
 		SHOW_FLOOR = show_floor;
 	}
