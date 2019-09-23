@@ -212,7 +212,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 								entity.attackEntityFrom(DamageSource.IN_WALL, 10F);
 								setHoldStill(true);
 								holdCount = 20;
-								getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 1F);
+								getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 0.5F, 0.75F);
 							}
 						}
 					}
@@ -345,7 +345,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 					if(!getEntityWorld().isRemote) {
 						setHoldStill(true);
 						holdCount = 20;
-						getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 1F);
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 0.5F, 0.75F);
 					}
 				} else if (result.sideHit.getIndex() == 4 || result.sideHit.getIndex() == 5) {
 					shaking = true;
@@ -355,7 +355,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 					if(!getEntityWorld().isRemote) {
 						setHoldStill(true);
 						holdCount = 20;
-						getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 1F);
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 0.5F, 0.75F);
 					}
 				}
 			}

@@ -27,6 +27,7 @@ public class BlockDecayPitHangingChain extends BlockHorizontal implements ITileE
 		super(Material.ROCK);
 		setHardness(10.0F);
 		setResistance(2000.0F);
+		setLightLevel(0.5F);
 		setSoundType(SoundType.STONE);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
