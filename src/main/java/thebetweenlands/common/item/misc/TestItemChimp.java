@@ -159,14 +159,14 @@ public class TestItemChimp extends Item {
 			//dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
 			//dungeon.generateDecayPit(worldIn, itemRand, pos.up(14));
 	
-			
+		/*	
 	
 			EntityDecayPitTarget target = new EntityDecayPitTarget(worldIn);
 			target.setPosition(pos.getX() + 0.5F, pos.getY() + 8, pos.getZ() + 0.5F);
 			worldIn.spawnEntity(target);
 	
 			
-	/*
+	
 			EntityTinyWormEggSac sac = new EntityTinyWormEggSac(worldIn);
 			sac.setPosition(pos.getX() + 0.5F, pos.getY() + 1, pos.getZ() + 0.5F);
 			worldIn.spawnEntity(sac);

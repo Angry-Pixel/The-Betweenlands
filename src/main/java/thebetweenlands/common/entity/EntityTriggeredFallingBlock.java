@@ -167,6 +167,7 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	protected Entity getEntitySpawned() {
 		if(getBlockType(getEntityWorld(), getPosition()).getBlock() != null) {
 			EntityFallingBlock entity = new EntityFallingBlock(getEntityWorld(), posX, posY, posZ, getBlockType(getEntityWorld(), getPosition()));
+			entity.shouldDropItem = false;
 			return entity;
 		}
 		return null;

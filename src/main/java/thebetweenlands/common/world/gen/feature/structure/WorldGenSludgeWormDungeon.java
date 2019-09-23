@@ -690,11 +690,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (isWithinMazeAreaForGen(posOrigin, pos.offset(facing, count)))
 						world.setBlockState(pos.offset(facing, count), getRandomBeam(facing.rotateY(), rand, level, count, false));
 			if (isWithinMazeAreaForGen(posOrigin, pos.offset(facing, 3))) {
-				if (level >= 5 && rand.nextInt(level == 5 ? 25 : 20) == 0)
+				if (level >= 5 && rand.nextInt(level == 5 ? 30 : 25) == 0)
 					addFallingBlockEntity(world, pos.offset(facing, 1));
-				if (level >= 5 && rand.nextInt(level == 5 ? 25 : 20) == 0)
+				if (level >= 5 && rand.nextInt(level == 5 ? 30 : 25) == 0)
 					addFallingBlockEntity(world, pos.offset(facing, 2));
-				if (level >= 5 && rand.nextInt(level == 5 ? 25 : 20) == 0)
+				if (level >= 5 && rand.nextInt(level == 5 ? 30 : 25) == 0)
 					addFallingBlockEntity(world, pos.offset(facing, 3));
 				}
 		}
