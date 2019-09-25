@@ -389,13 +389,13 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		Random rand = getWorld().rand;
 		switch (spawnType) {
 		case 0:
-			return rand.nextBoolean() ? new EntityTinySludgeWorm(getWorld()) : rand.nextBoolean() ? new EntitySmollSludge(getWorld()) : new EntityTermite(getWorld());
+			return rand.nextBoolean() ? new EntityLargeSludgeWorm(getWorld()) : rand.nextBoolean() ? new EntityTinySludgeWorm(getWorld()) : rand.nextBoolean() ? new EntitySmollSludge(getWorld()) : new EntityTermite(getWorld());
 		case 1:
-			return rand.nextBoolean() ? new EntitySludgeWorm(getWorld()) : new EntityChiromaw(getWorld());
+			return rand.nextBoolean() ? new EntityLargeSludgeWorm(getWorld()) : rand.nextBoolean() ? new EntitySludgeWorm(getWorld()) : new EntityChiromaw(getWorld());
 		case 2:
-			return rand.nextBoolean() ? new EntitySwampHag(getWorld()) : new EntitySludge(getWorld());
+			return rand.nextBoolean() ? new EntityLargeSludgeWorm(getWorld()) : rand.nextBoolean() ? new EntitySwampHag(getWorld()) : new EntitySludge(getWorld());
 		case 3:
-			return rand.nextBoolean() ? new EntityShambler(getWorld()) : new EntityChiromaw(getWorld());
+			return rand.nextBoolean() ? new EntityLargeSludgeWorm(getWorld()) : rand.nextBoolean() ? new EntityShambler(getWorld()) : new EntityChiromaw(getWorld());
 		case 4:
 			return new EntityLargeSludgeWorm(getWorld());
 		}
