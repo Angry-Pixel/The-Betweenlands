@@ -68,7 +68,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	private int prev_shake_timer;
 	private int shake_timer;
 	private boolean shaking = false;
-	private static int SHAKING_TIMER_MAX = 60;
+	private int shakingTimerMax = 60;
 	public boolean playGearSound = true;
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	public final Map<Block, Boolean> INVISIBLE_BLOCKS = new HashMap<Block, Boolean>(); // dont need states so blocks will do
@@ -467,7 +467,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	}
 
 	public void shake(int shakeTimerMax) {
-		SHAKING_TIMER_MAX = shakeTimerMax;
+		shakingTimerMax = shakeTimerMax;
 		prev_shake_timer = shake_timer;
 		if(shake_timer == 0) {
 			shaking = true;
@@ -476,7 +476,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		if(shake_timer > 0)
 			shake_timer++;
 
-		if(shake_timer >= SHAKING_TIMER_MAX)
+		if(shake_timer >= shakingTimerMax)
 			shaking = false;
 		else
 			shaking = true;
@@ -508,6 +508,6 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	}
 
 	public float getShakingProgress(float delta) {
-		return 1.0F / SHAKING_TIMER_MAX * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
+		return 1.0F / shakingTimerMax * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
 	}
 }

@@ -70,7 +70,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	public int screamTimer;
 
 	//Adjust to length of screaming sound
-	private static final int SCREAMING_TIMER_MAX = 50;
+	private int screamingTimerMax = 50;
 
 	public EntityBarrishee(World world) {
 		super(world);
@@ -192,11 +192,11 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 				setScreamTimer(1);
 			}
 
-			if (getScreamTimer() > 0 && getScreamTimer() <= SCREAMING_TIMER_MAX) {
+			if (getScreamTimer() > 0 && getScreamTimer() <= screamingTimerMax) {
 				setScreamTimer(getScreamTimer() + 1);
 			}
 
-			if (getScreamTimer() >= SCREAMING_TIMER_MAX)
+			if (getScreamTimer() >= screamingTimerMax)
 				setIsScreaming(false);
 			else
 				setIsScreaming(true);
@@ -322,7 +322,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	}
 
 	public float getScreamingProgress(float delta) {
-		return 1.0F / SCREAMING_TIMER_MAX * (prevScreamTimer + (screamTimer - prevScreamTimer) * delta);
+		return 1.0F / screamingTimerMax * (prevScreamTimer + (screamTimer - prevScreamTimer) * delta);
 	}
 
 	public AxisAlignedBB getAOEScreamBounds() {

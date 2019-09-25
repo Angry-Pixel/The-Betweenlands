@@ -73,7 +73,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 
 	private final ItemStack renderStack = new ItemStack(BlockRegistry.MUD_TOWER_BEAM_RELAY.getDefaultState().getBlock());
 
-	private static int SHAKING_TIMER_MAX = 240;
+	private int shakingTimerMax = 240;
 
 	public TileEntityDungeonDoorRunes(boolean mimic, boolean barishee) {
 		super();
@@ -415,7 +415,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 	}
 
 	public void shake(int shakeTimerMax) {
-		SHAKING_TIMER_MAX = shakeTimerMax;
+		shakingTimerMax = shakeTimerMax;
 		prev_shake_timer = shake_timer;
 		if(shake_timer == 0) {
 			shaking = true;
@@ -424,7 +424,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 		if(shake_timer > 0)
 			shake_timer++;
 
-		if(shake_timer >= SHAKING_TIMER_MAX)
+		if(shake_timer >= shakingTimerMax)
 			shaking = false;
 		else
 			shaking = true;
@@ -627,7 +627,7 @@ public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable,
 	}
 
 	public float getShakingProgress(float delta) {
-		return 1.0F / SHAKING_TIMER_MAX * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
+		return 1.0F / shakingTimerMax * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
 	}
 
 	public boolean isMimic() {
