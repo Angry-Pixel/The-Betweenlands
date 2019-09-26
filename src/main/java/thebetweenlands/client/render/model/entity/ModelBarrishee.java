@@ -625,7 +625,7 @@ public class ModelBarrishee extends MowzieModelBase {
 			hand_left_1.rotateAngleX = convertDegtoRad(5F) + (convertDegtoRad(20F) * fudge * 0.1F);
 		}
 
-		if (!barrishee.isAmbushSpawn() && !barrishee.isScreaming() || barrishee.isAmbushSpawn() && barrishee.standingAngle == 1 && !barrishee.isScreaming()) {
+		if (!barrishee.isAmbushSpawn() && !barrishee.isScreaming() && !barrishee.isSlamming() || barrishee.isAmbushSpawn() && barrishee.standingAngle == 1 && !barrishee.isScreaming() && !barrishee.isSlamming()) {
 			cogbeam.rotateAngleX = 0F + animation;
 			neck.rotateAngleX = 0F - flap2 * 0.0625F;
 			head_main.rotateAngleX = 0F + flap2 * 0.0625F;
