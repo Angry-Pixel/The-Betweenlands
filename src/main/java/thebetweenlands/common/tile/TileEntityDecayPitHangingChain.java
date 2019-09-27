@@ -18,6 +18,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.audio.DecayPitChainSound;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class TileEntityDecayPitHangingChain extends TileEntity implements ITickable {
 
@@ -47,7 +48,7 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 		
 		if (isBroken() && getProgress() <= -512)
 			if(!getWorld().isRemote)
-				getWorld().setBlockToAir(getPos());
+				getWorld().setBlockState(getPos(), BlockRegistry.STAGNANT_WATER.getDefaultState(), 3);
 
 		if (getEntityCollidedWithChains(getHangingLengthCollision(1, 0, 2F + getProgress() * MOVE_UNIT)) != null)
 			checkCollisions(getEntityCollidedWithChains(getHangingLengthCollision(1, 0, 2F + getProgress() * MOVE_UNIT)));

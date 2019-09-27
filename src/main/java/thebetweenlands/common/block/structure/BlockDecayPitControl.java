@@ -11,6 +11,7 @@ import thebetweenlands.common.tile.TileEntityDecayPitControl;
 public class BlockDecayPitControl extends BasicBlock implements ITileEntityProvider {
 	public BlockDecayPitControl() {
 		super(Material.ROCK);
+		setLightLevel(0.5F);
 		this.setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	}
 

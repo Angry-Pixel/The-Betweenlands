@@ -7,6 +7,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -31,6 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityScreenShake;
+import thebetweenlands.client.audio.DecayPitGearsSound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -66,7 +68,8 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	private int prev_shake_timer;
 	private int shake_timer;
 	private boolean shaking = false;
-	private static int SHAKING_TIMER_MAX = 60;
+	private int shakingTimerMax = 60;
+	public boolean playGearSound = true;
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
 	public final Map<Block, Boolean> INVISIBLE_BLOCKS = new HashMap<Block, Boolean>(); // dont need states so blocks will do
 
@@ -149,7 +152,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 					}
 				}
 				if (getSpawnType() == 5) {
-					setPlugged(true); //pretty pointless because I could use the spawn type :P
+					setPlugged(true);
 					removeInvisiBlocks(getWorld(), getPos());
 					updateBlock();
 					getWorld().playSound(null, getPos().add(1, 6, 0), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
@@ -204,6 +207,19 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			// whatever whizz bangs we add with shaders and particles
 			// spawn loots and stuff
 		}
+
+		if (getWorld().isRemote) {
+			if (!isPlugged())
+				if (playGearSound) {
+					playGearsSound(getWorld(), getPos());
+					playGearSound = false;
+				}
+		}
+	}
+
+	public void playGearsSound(World world, BlockPos pos) {
+		ISound chain_sound = new DecayPitGearsSound(this);
+		Minecraft.getMinecraft().getSoundHandler().playSound(chain_sound);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -373,13 +389,13 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		Random rand = getWorld().rand;
 		switch (spawnType) {
 		case 0:
-			return rand.nextBoolean() ? new EntityTinySludgeWorm(getWorld()) : rand.nextBoolean() ? new EntitySmollSludge(getWorld()) : new EntityTermite(getWorld());
+			return rand.nextBoolean() ? new EntityTinySludgeWorm(getWorld()) : rand.nextBoolean() ? new EntitySmollSludge(getWorld()) : rand.nextBoolean() ? new EntityTermite(getWorld()) : new EntityLargeSludgeWorm(getWorld());
 		case 1:
-			return rand.nextBoolean() ? new EntitySludgeWorm(getWorld()) : new EntityChiromaw(getWorld());
+			return rand.nextBoolean() ? new EntitySludgeWorm(getWorld()) : rand.nextBoolean() ? new EntityChiromaw(getWorld()) : new EntityLargeSludgeWorm(getWorld());
 		case 2:
-			return rand.nextBoolean() ? new EntitySwampHag(getWorld()) : new EntitySludge(getWorld());
+			return rand.nextBoolean() ? new EntitySwampHag(getWorld()) : rand.nextBoolean() ? new EntitySludge(getWorld()) : new EntityLargeSludgeWorm(getWorld());
 		case 3:
-			return rand.nextBoolean() ? new EntityShambler(getWorld()) : new EntityChiromaw(getWorld());
+			return rand.nextBoolean() ? new EntityShambler(getWorld()) : rand.nextBoolean() ? new EntityChiromaw(getWorld()) : new EntityLargeSludgeWorm(getWorld());
 		case 4:
 			return new EntityLargeSludgeWorm(getWorld());
 		}
@@ -393,7 +409,11 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	public boolean isPlugged() {
 		return IS_PLUGGED;
 	}
-	
+
+	public boolean isUnPlugged() {
+		return !IS_PLUGGED;
+	}
+
 	public void setShowFloor(boolean show_floor) {
 		SHOW_FLOOR = show_floor;
 	}
@@ -447,7 +467,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	}
 
 	public void shake(int shakeTimerMax) {
-		SHAKING_TIMER_MAX = shakeTimerMax;
+		shakingTimerMax = shakeTimerMax;
 		prev_shake_timer = shake_timer;
 		if(shake_timer == 0) {
 			shaking = true;
@@ -456,7 +476,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		if(shake_timer > 0)
 			shake_timer++;
 
-		if(shake_timer >= SHAKING_TIMER_MAX)
+		if(shake_timer >= shakingTimerMax)
 			shaking = false;
 		else
 			shaking = true;
@@ -488,6 +508,6 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	}
 
 	public float getShakingProgress(float delta) {
-		return 1.0F / SHAKING_TIMER_MAX * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
+		return 1.0F / shakingTimerMax * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
 	}
 }

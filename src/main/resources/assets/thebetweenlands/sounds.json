@@ -766,6 +766,11 @@
       "thebetweenlands:worm_living_3"
     ]
   },
+  "worm_splat": {
+    "sounds": [
+      "thebetweenlands:worm_splat"
+    ]
+  },
     "worm_egg_sac_living": {
     "sounds": [
       "thebetweenlands:worm_egg_sac_living_1",
@@ -1351,6 +1356,11 @@
   "wall_slide": {
     "sounds": [
       "thebetweenlands:wall_slide"
+    ]
+  },
+  "wall_slam": {
+    "sounds": [
+      "thebetweenlands:wall_slam"
     ]
   }
 }

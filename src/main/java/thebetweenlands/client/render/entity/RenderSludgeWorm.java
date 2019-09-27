@@ -1,7 +1,10 @@
 package thebetweenlands.client.render.entity;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.MultiPartEntityPart;
@@ -33,14 +36,28 @@ public class RenderSludgeWorm<T extends EntitySludgeWorm> extends RenderLiving<T
 	public void doRender(T entity, double x, double y, double z, float yaw, float partialTicks) {
 		super.doRender(entity, x, y, z, yaw, partialTicks);
 
-		GlStateManager.pushMatrix();
+		boolean isVisible = this.isVisible(entity);
+		boolean isTranslucentToPlayer = !isVisible && !entity.isInvisibleToPlayer(Minecraft.getMinecraft().player);
 
-		if (entity.hurtResistantTime <= 40 && entity.hurtResistantTime >= 35) {
-			float red = 0.8F;
-			float green = 0.2F;
-			float blue = 0.2F;
-			GlStateManager.color(red, green, blue);
+		if(!isVisible && !isTranslucentToPlayer) {
+			return;
 		}
+
+		boolean useBrightness = this.setDoRenderBrightness(entity, partialTicks);
+
+		if(isTranslucentToPlayer) {
+			GlStateManager.enableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+		}
+		
+		boolean useTeamColors = false;
+
+		if(this.renderOutlines) {
+			useTeamColors = this.setScoreTeamColor(entity);
+			GlStateManager.enableColorMaterial();
+			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
+		}
+		
+		GlStateManager.pushMatrix();
 
 		float totalAngleDiff = 0.0f;
 
@@ -80,6 +97,23 @@ public class RenderSludgeWorm<T extends EntitySludgeWorm> extends RenderLiving<T
 		renderTailPart(entity, entity.parts[entity.parts.length - 1], entity.parts[entity.parts.length - 2], rx, ry, rz, entity.parts.length - 1, avgWibbleStrength, partialTicks);
 
 		GlStateManager.popMatrix();
+		
+		if(this.renderOutlines) {
+			GlStateManager.disableOutlineMode();
+			GlStateManager.disableColorMaterial();
+		}
+
+		if(useTeamColors) {
+			this.unsetScoreTeamColor();
+		}
+
+		if(isTranslucentToPlayer) {
+			GlStateManager.disableBlendProfile(GlStateManager.Profile.TRANSPARENT_MODEL);
+		}
+
+		if(useBrightness) {
+			this.unsetBrightness();
+		}
 	}
 
 	private void renderHead(T entity, int frame, double x, double y, double z, float yaw, float avgWibbleStrength, float partialTicks) {

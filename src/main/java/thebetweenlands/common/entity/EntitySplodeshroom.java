@@ -26,6 +26,7 @@ import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.network.clientbound.PacketParticle.ParticleType;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -130,8 +131,13 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 			for (int entityCount = 0; entityCount < list.size(); entityCount++) {
 				entity = list.get(entityCount);
 				if (entity != null)
-					if (entity instanceof EntityPlayer && !((EntityPlayer) entity).isSpectator() && !((EntityPlayer) entity).isCreative())
-						((EntityPlayer) entity).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60));
+					if (entity instanceof EntityPlayer) {
+						EntityPlayer player = (EntityPlayer) entity;
+						if(!player.isSpectator() && !player.isCreative()) {
+							player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60));
+							player.addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(40, 1));
+						}
+					}
 				}
 			}
 		return entity;
@@ -215,7 +221,7 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 
 	@Override
     public boolean canBeCollidedWith() {
-        return true;
+        return !this.getHasExploded();
     }
 
 	@Override

@@ -126,7 +126,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(0.1D, 0.1D, 0.1D));
 			for(EntityLivingBase entity : entities) {      
 				if (entity != null) {                      
-					if (entity instanceof EntityLivingBase) {
+					if (entity instanceof EntityLivingBase && entity != getOwner()) { // needs null check on owner?
 						if(entity.attackEntityFrom(damageSource, 10F)) {
 							float knockback = 1.5F;
 							Vec3d dir = new Vec3d(this.posX - this.waveStartX, 0, this.posZ - this.waveStartZ);

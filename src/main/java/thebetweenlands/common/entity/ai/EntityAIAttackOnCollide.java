@@ -81,6 +81,16 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 	 * @return
 	 */
 	public static boolean useStandardAttack(EntityLiving attacker, Entity target) {
+		return useStandardAttack(attacker, target, true);
+	}
+	
+	/**
+	 * See {@link #useStandardAttack(EntityLiving, Entity, float)}
+	 * @param attacker
+	 * @param target
+	 * @return
+	 */
+	public static boolean useStandardAttack(EntityLiving attacker, Entity target, boolean knockback) {
 		float attackDamage;
 		
 		if(attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE) != null) {
@@ -89,7 +99,7 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 			attackDamage = 2.0F;
 		}
 		
-		return useStandardAttack(attacker, target, attackDamage);
+		return useStandardAttack(attacker, target, attackDamage, knockback);
 	}
 	
 	/**
@@ -98,7 +108,7 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 	 * @param target
 	 * @return
 	 */
-	public static boolean useStandardAttack(EntityLiving attacker, Entity target, float attackDamage) {
+	public static boolean useStandardAttack(EntityLiving attacker, Entity target, float attackDamage, boolean knockback) {
 		int knockBackModifier = 0;
 
 		if (target instanceof EntityLivingBase) {
@@ -106,10 +116,20 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 			knockBackModifier += EnchantmentHelper.getKnockbackModifier(attacker);
 		}
 
+		double prevMotionX = target.motionX;
+		double prevMotionY = target.motionY;
+		double prevMotionZ = target.motionZ;
+		
 		boolean attacked = target.attackEntityFrom(DamageSource.causeMobDamage(attacker), attackDamage);
 
+		if(!knockback) {
+			target.motionX = prevMotionX;
+			target.motionY = prevMotionY;
+			target.motionZ = prevMotionZ;
+		}
+		
 		if (attacked) {
-			if (knockBackModifier > 0 && target instanceof EntityLivingBase) {
+			if (knockback && knockBackModifier > 0 && target instanceof EntityLivingBase) {
 				((EntityLivingBase)target).knockBack(attacker, (float)knockBackModifier * 0.5F, (double)MathHelper.sin(attacker.rotationYaw * 0.017453292F), (double)(-MathHelper.cos(attacker.rotationYaw * 0.017453292F)));
 				attacker.motionX *= 0.6D;
 				attacker.motionZ *= 0.6D;

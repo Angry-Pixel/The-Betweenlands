@@ -17,7 +17,7 @@ public class GreeblingSpawnEntry extends SurfaceSpawnEntry {
 	private EnumFacing facing = EnumFacing.NORTH;
 
 	public GreeblingSpawnEntry(int id, short weight) {
-		super(id, EntityGreebling.class, weight);
+		super(id, EntityGreebling.class, EntityGreebling::new, weight);
 	}
 
 	@Override

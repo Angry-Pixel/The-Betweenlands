@@ -43,14 +43,13 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	Random rand = new Random();
 
 	private AxisAlignedBB renderBoundingBox;
+	
+	private int wallInvulnerabilityTicks = 40;
 
 	public EntitySludgeWorm(World world) {
 		super(world);
 		setSize(0.4375F, 0.3125F);
 		isImmuneToFire = true;
-		maxHurtResistantTime = 40;
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
 		parts = new MultiPartEntityPart[] {
 				new MultiPartEntityPart(this, "part1", 0.4375F, 0.3125F),
 				new MultiPartEntityPart(this, "part2", 0.3125F, 0.3125F),
@@ -61,13 +60,17 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 				new MultiPartEntityPart(this, "part7", 0.3125F, 0.3125F),
 				new MultiPartEntityPart(this, "part8", 0.3125F, 0.3125F),
 				new MultiPartEntityPart(this, "part9", 0.3125F, 0.3125F) };
-		// tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
+		this.renderBoundingBox = this.getEntityBoundingBox();
+	}
+
+	@Override
+	protected void initEntityAI() {
+		tasks.addTask(0, new EntityAISwimming(this));
+		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
 		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
 		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
-
-		this.renderBoundingBox = this.getEntityBoundingBox();
 	}
 
 	@Override
@@ -108,10 +111,15 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		
 		if(this.world.isRemote && this.ticksExisted % 10 == 0) {
 			this.spawnParticles(this.world, this.posX, this.posY, this.posZ, this.rand);
 		}
 
+		if(this.wallInvulnerabilityTicks > 0) {
+			this.wallInvulnerabilityTicks--;
+		}
+		
 		motionY *= this.getHeadMotionYMultiplier();
 
 		this.renderBoundingBox = this.getEntityBoundingBox();
@@ -133,20 +141,20 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	// can be set to any part(s) - dunno if we want this either
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float dmg) {
-		if (part != this.parts[0]) {
-			damageWorm(source, dmg);
-			return true;
-		} else {
-			dmg *= 0.5F;
-			damageWorm(source, dmg);
-			return true;
-		}
+		damageWorm(source, dmg);
+		return true;
 	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source == DamageSource.OUT_OF_WORLD || source instanceof EntityDamageSource && ((EntityDamageSource) source).getIsThornsDamage())
+		if (source == DamageSource.OUT_OF_WORLD || (source instanceof EntityDamageSource && ((EntityDamageSource) source).getIsThornsDamage())) {
 			damageWorm(source, amount);
+		} else if(source == DamageSource.IN_WALL && this.wallInvulnerabilityTicks > 0) {
+			return false;
+		} else {
+			amount *= 0.5F;
+			damageWorm(source, amount);
+		}
 		return true;
 	}
 

@@ -20,7 +20,7 @@ public class WindAmbienceType extends AmbienceType {
 
 	@Override
 	public AmbienceLayer getAmbienceLayer() {
-		return AmbienceRegistry.BASE_LAYER;
+		return AmbienceRegistry.DETAIL_LAYER;
 	}
 
 	@Override

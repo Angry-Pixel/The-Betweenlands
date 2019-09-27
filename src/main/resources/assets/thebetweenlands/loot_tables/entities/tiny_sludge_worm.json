@@ -1,0 +1,35 @@
+{
+	"pools": [
+		{
+			"name": "squashed_drops",
+			"rolls": 1,
+			"conditions": [
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:sludge_worm_squashed": "true"
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "item",
+					"name": "minecraft:diamond",
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "regular_drops",
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "empty",
+					"name": "nothing",
+					"weight": 1
+				}
+			]
+		}
+	]
+}

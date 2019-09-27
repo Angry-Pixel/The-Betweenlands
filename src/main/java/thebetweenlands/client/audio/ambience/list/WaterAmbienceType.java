@@ -10,6 +10,12 @@ import thebetweenlands.common.registries.AmbienceRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class WaterAmbienceType extends AmbienceType {
+	private final boolean baseLayer;
+	
+	public WaterAmbienceType(boolean baseLayer) {
+		this.baseLayer = baseLayer;
+	}
+	
 	@Override
 	public boolean isActive() {
 		//Get the view block
@@ -22,9 +28,14 @@ public class WaterAmbienceType extends AmbienceType {
 
 	@Override
 	public AmbienceLayer getAmbienceLayer() {
-		return AmbienceRegistry.BASE_LAYER;
+		return this.baseLayer ? AmbienceRegistry.BASE_LAYER : AmbienceRegistry.DETAIL_LAYER;
 	}
 
+	@Override
+	public float getVolume() {
+		return this.baseLayer ? 0.0f : 1.0f;
+	}
+	
 	@Override
 	public int getPriority() {
 		return 2;

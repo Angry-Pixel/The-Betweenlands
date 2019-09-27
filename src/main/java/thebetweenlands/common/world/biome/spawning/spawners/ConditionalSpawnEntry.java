@@ -22,7 +22,7 @@ public class ConditionalSpawnEntry extends BLSpawnEntry {
 	private final BLSpawnEntry parent;
 
 	public ConditionalSpawnEntry(int id, BLSpawnEntry parent, BiPredicate<World, BlockPos> condition) {
-		super(id, parent.getEntityType(), parent.getBaseWeight());
+		super(id, parent.getEntityType(), parent.getEntityCtor(), parent.getBaseWeight());
 		this.parent = parent;
 		this.condition = condition;
 	}

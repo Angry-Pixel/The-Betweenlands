@@ -65,6 +65,7 @@ public class SoundRegistry {
     public static final BLSoundEvent CHAIN_LONG = reg("chain_long");
     public static final BLSoundEvent GEARS = reg("gears");
     public static final BLSoundEvent WALL_SLIDE = reg("wall_slide");
+    public static final BLSoundEvent WALL_SLAM = reg("wall_slam");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
@@ -168,6 +169,7 @@ public class SoundRegistry {
     public static final BLSoundEvent WORM_HURT = reg("worm_hurt");
     public static final BLSoundEvent WORM_LIVING = reg("worm_living");
     public static final BLSoundEvent WORM_DEATH = reg("worm_death");
+    public static final BLSoundEvent WORM_SPLAT = reg("worm_splat");
     public static final BLSoundEvent WORM_EGG_SAC_LIVING = reg("worm_egg_sac_living");
     public static final BLSoundEvent WORM_EGG_SAC_SQUISH = reg("worm_egg_sac_squish");
     public static final BLSoundEvent SPLODESHROOM_WINDDOWN = reg("splodeshroom_winddown");

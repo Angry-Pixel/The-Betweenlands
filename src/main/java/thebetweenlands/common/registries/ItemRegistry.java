@@ -29,6 +29,7 @@ import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityLeech;
@@ -295,7 +296,7 @@ public class ItemRegistry {
     public static final Item PREDATOR_BOW = new ItemPredatorBow();
     public static final Item WIGHTS_BANE = new ItemLootSword(BLMaterialRegistry.TOOL_WEEDWOOD).addInstantKills(EntityWight.class).setMaxDamage(32);
     public static final Item SLUDGE_SLICER = new ItemLootSword(BLMaterialRegistry.TOOL_WEEDWOOD).addInstantKills(EntitySludge.class, EntitySmollSludge.class).setMaxDamage(32);
-    public static final Item CRITTER_CRUNCHER = new ItemLootSword(BLMaterialRegistry.TOOL_WEEDWOOD).addInstantKills(EntityBloodSnail.class, EntityDragonFly.class, EntityFirefly.class, EntityLeech.class, EntityMireSnail.class, EntitySporeling.class, EntityTermite.class).setMaxDamage(32);
+    public static final Item CRITTER_CRUNCHER = new ItemLootSword(BLMaterialRegistry.TOOL_WEEDWOOD).addInstantKills(EntityBloodSnail.class, EntityDragonFly.class, EntityFirefly.class, EntityLeech.class, EntityMireSnail.class, EntitySporeling.class, EntityTermite.class, EntityChiromaw.class).setMaxDamage(32);
     public static final Item HAG_HACKER = new ItemHagHacker();
     public static final Item VOODOO_DOLL = new ItemVoodooDoll();
     public static final Item SWIFT_PICK = new ItemSwiftPick();
@@ -383,6 +384,7 @@ public class ItemRegistry {
     public static final Item PYRAD_FLAME = new ItemPyradFlame();
     public static final Item GECKO = new ItemMob("gecko");
     public static final Item FIREFLY = new ItemMob("firefly");
+    public static final Item SLUDGE_WORM_EGG_SAC = new ItemMob("sludge_worm_egg_sac");
     public static final Item SHIMMER_STONE = new ItemShimmerStone();
     public static final Item TARMINION = new ItemTarminion();
     public static final Item MOSS_BED_ITEM = new ItemMossBed();

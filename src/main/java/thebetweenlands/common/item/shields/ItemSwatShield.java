@@ -115,13 +115,19 @@ public class ItemSwatShield extends ItemBLShield {
 	 * @param rammingDir
 	 */
 	public void onEnemyRammed(ItemStack stack, EntityLivingBase user, EntityLivingBase enemy, Vec3d rammingDir) {
-		enemy.knockBack(user, 6.0F, -rammingDir.x, -rammingDir.z);
+		boolean attacked = false;
+		
 		if(user instanceof EntityPlayer) {
-			enemy.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)user), 10.0F);
+			attacked = enemy.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)user), 10.0F);
+			
 			if (user instanceof EntityPlayerMP)
 				AdvancementCriterionRegistry.SWAT_SHIELD.trigger((EntityPlayerMP) user, enemy);
 		} else {
-			enemy.attackEntityFrom(DamageSource.causeMobDamage(user), 10.0F);
+			attacked = enemy.attackEntityFrom(DamageSource.causeMobDamage(user), 10.0F);
+		}
+		
+		if(attacked) {
+			enemy.knockBack(user, 2.0F, -rammingDir.x, -rammingDir.z);
 		}
 	}
 
@@ -134,18 +140,29 @@ public class ItemSwatShield extends ItemBLShield {
 		if(user.onGround && !user.isSneaking()) {
 			Vec3d dir = user.getLookVec();
 			dir = new Vec3d(dir.x, 0, dir.z).normalize();
-			user.motionX += dir.x * 0.35D;
-			user.motionZ += dir.z * 0.35D;
+			
+			double speed = user instanceof EntityPlayer ? 0.35D : 0.2D;
+			
+			user.motionX += dir.x * speed;
+			user.motionZ += dir.z * speed;
 
 			if(user instanceof EntityPlayer) {
 				((EntityPlayer) user).getFoodStats().addExhaustion(0.15F);
 			}
 		}
+		
 		if(Math.sqrt(user.motionX*user.motionX + user.motionZ*user.motionZ) > 0.2D) {
 			Vec3d moveDir = new Vec3d(user.motionX, user.motionY, user.motionZ).normalize();
+			
 			List<EntityLivingBase> targets = user.world.getEntitiesWithinAABB(EntityLivingBase.class, user.getEntityBoundingBox().grow(1), e -> e != user);
+			
 			for(EntityLivingBase target : targets) {
-				this.onEnemyRammed(stack, user, target, moveDir);
+				Vec3d dir = target.getPositionVector().subtract(user.getPositionVector()).normalize();
+				
+				//45° angle range
+				if(target.canBeCollidedWith() && Math.toDegrees(Math.acos(moveDir.dotProduct(dir))) < 45) {
+					this.onEnemyRammed(stack, user, target, moveDir);
+				}
 			}
 		}
 	}
@@ -171,6 +188,8 @@ public class ItemSwatShield extends ItemBLShield {
 			this.setRemainingChargeTicks(stack, user, this.getChargeTime(stack, user, this.getPreparingChargeTicks(stack, user)));
 			this.setPreparingChargeTicks(stack, user, 0);
 			this.setPreparingCharge(stack, user, false);
+			
+			this.onStartedCharging(stack, user);
 		} else if(!preparing && user.isSneaking()) {
 			this.setRemainingChargeTicks(stack, user, 0);
 			this.setPreparingChargeTicks(stack, user, 0);
@@ -180,20 +199,37 @@ public class ItemSwatShield extends ItemBLShield {
 		if(runningTicks > 0) {
 			this.onChargingUpdate(stack, user);
 			this.setRemainingChargeTicks(stack, user, --runningTicks);
-			if(runningTicks == 0) {
+			if(runningTicks <= 0) {
 				user.stopActiveHand();
+				this.onStoppedCharging(stack, user);
 			}
 		}
 
 		super.onUsingTick(stack, user, count);
 	}
 
+	protected void onStartedCharging(ItemStack stack, EntityLivingBase user) {
+		
+	}
+	
+	protected void onStoppedCharging(ItemStack stack, EntityLivingBase user) {
+		if(!user.world.isRemote && user instanceof EntityPlayer) {
+			((EntityPlayer) user).getCooldownTracker().setCooldown(this, 8 * 20);
+		}
+	}
+	
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
+		
+		if(this.getRemainingChargeTicks(stack, entityLiving) > 0) {
+			this.onStoppedCharging(stack, entityLiving);
+		}
+		
 		this.setPreparingChargeTicks(stack, entityLiving, 0);
 		this.setRemainingChargeTicks(stack, entityLiving, 0);
 		this.setPreparingCharge(stack, entityLiving, false);
+		
 		if (entityLiving instanceof EntityPlayerMP)
 			AdvancementCriterionRegistry.SWAT_SHIELD.revert((EntityPlayerMP) entityLiving);
 	}

@@ -12,7 +12,7 @@ public class DecayPitChainSound extends TileEntitySound<TileEntityDecayPitHangin
 	}
 	@Override
 	public float getVolume() {
-		return 1F;
+		return 2F;
 	}
 	
 	@Override

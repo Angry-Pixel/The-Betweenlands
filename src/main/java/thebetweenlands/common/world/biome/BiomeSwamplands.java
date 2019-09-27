@@ -73,27 +73,27 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 	protected void addSpawnEntries(List<ICustomSpawnEntry> entries) {
 		super.addSpawnEntries(entries);
 
-		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, (short) 95).setCanSpawnOnWater(true).setSpawnCheckRadius(32.0D));
-		entries.add(new SurfaceSpawnEntry(1, EntityGecko.class, (short) 40).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(600));
-		entries.add(new SurfaceSpawnEntry(2, EntityMireSnail.class, (short) 60).setGroupSize(1, 5).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
-		entries.add(new SurfaceSpawnEntry(3, EntityFrog.class, (short) 26).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
-		entries.add(new CaveSpawnEntry(4, EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
-		entries.add(new SporelingSpawnEntry(5, EntitySporeling.class, (short) 120).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
-		entries.add(new SurfaceSpawnEntry(6, EntityGiantToad.class, (short) 12).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
-		entries.add(new CaveSpawnEntry(7, EntityGiantToad.class, (short) 8).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
+		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, EntityFirefly::new, (short) 95).setCanSpawnOnWater(true).setSpawnCheckRadius(32.0D));
+		entries.add(new SurfaceSpawnEntry(1, EntityGecko.class, EntityGecko::new, (short) 40).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(600));
+		entries.add(new SurfaceSpawnEntry(2, EntityMireSnail.class, EntityMireSnail::new, (short) 60).setGroupSize(1, 5).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
+		entries.add(new SurfaceSpawnEntry(3, EntityFrog.class, EntityFrog::new, (short) 26).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
+		entries.add(new CaveSpawnEntry(4, EntityBlindCaveFish.class, EntityBlindCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
+		entries.add(new SporelingSpawnEntry(5, EntitySporeling.class, EntitySporeling::new, (short) 120).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
+		entries.add(new SurfaceSpawnEntry(6, EntityGiantToad.class, EntityGiantToad::new, (short) 12).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
+		entries.add(new CaveSpawnEntry(7, EntityGiantToad.class, EntityGiantToad::new, (short) 8).setSpawnCheckRadius(64.0D).setSpawningInterval(800));
 		entries.add(new GreeblingSpawnEntry(20, (short) 20).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setGroupSpawnRadius(4).setSpawningInterval(24000));
 		
-		entries.add(new TarSpawnEntry(8, EntityTarBeast.class, (short) 80).setHostile(true));
-		entries.add(new SurfaceSpawnEntry(9, EntityLeech.class, (short) 35).setHostile(true).setSpawnCheckRadius(24.0D).setSpawningInterval(1000));
-		entries.add(new SurfaceSpawnEntry(10, EntityAngler.class, (short) 40).setCanSpawnInWater(true).setHostile(true));
-		entries.add(new CaveSpawnEntry(11, EntityAngler.class, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
-		entries.add(new SurfaceSpawnEntry(12, EntitySwampHag.class, (short) 90).setHostile(true));
+		entries.add(new TarSpawnEntry(8, EntityTarBeast.class, EntityTarBeast::new, (short) 80).setHostile(true));
+		entries.add(new SurfaceSpawnEntry(9, EntityLeech.class, EntityLeech::new, (short) 35).setHostile(true).setSpawnCheckRadius(24.0D).setSpawningInterval(1000));
+		entries.add(new SurfaceSpawnEntry(10, EntityAngler.class, EntityAngler::new, (short) 40).setCanSpawnInWater(true).setHostile(true));
+		entries.add(new CaveSpawnEntry(11, EntityAngler.class, EntityAngler::new, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
+		entries.add(new SurfaceSpawnEntry(12, EntitySwampHag.class, EntitySwampHag::new, (short) 90).setHostile(true));
 		entries.add(new SwampHagCaveSpawnEntry(13, (short) 140).setHostile(true).setSpawnCheckRadius(24.0D).setGroupSize(1, 3));
-		entries.add(new SurfaceSpawnEntry(14, EntityWight.class, (short) 24).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16.0D).setSpawningInterval(6000));
-		entries.add(new CaveSpawnEntry(15, EntityWight.class, (short) 28).setHostile(true).setSpawnCheckRadius(64.0D));
-		entries.add(new SurfaceSpawnEntry(16, EntityBloodSnail.class, (short) 25).setHostile(true).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
-		entries.add(new SurfaceSpawnEntry(17, EntityChiromaw.class, (short) 40).setHostile(true).setSpawnCheckRadius(30.0D));
-		entries.add(new CaveSpawnEntry(18, EntityChiromaw.class, (short) 60).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
-		entries.add(new BetweenstoneCaveSpawnEntry(19, EntityBoulderSprite.class, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
+		entries.add(new SurfaceSpawnEntry(14, EntityWight.class, EntityWight::new, (short) 24).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(16.0D).setSpawningInterval(6000));
+		entries.add(new CaveSpawnEntry(15, EntityWight.class, EntityWight::new, (short) 28).setHostile(true).setSpawnCheckRadius(64.0D));
+		entries.add(new SurfaceSpawnEntry(16, EntityBloodSnail.class, EntityBloodSnail::new, (short) 25).setHostile(true).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
+		entries.add(new SurfaceSpawnEntry(17, EntityChiromaw.class, EntityChiromaw::new, (short) 40).setHostile(true).setSpawnCheckRadius(30.0D));
+		entries.add(new CaveSpawnEntry(18, EntityChiromaw.class, EntityChiromaw::new, (short) 60).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
+		entries.add(new BetweenstoneCaveSpawnEntry(19, EntityBoulderSprite.class, EntityBoulderSprite::new, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
 	}
 }

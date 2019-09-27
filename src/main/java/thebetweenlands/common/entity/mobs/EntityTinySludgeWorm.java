@@ -2,20 +2,20 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.Random;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -24,20 +24,20 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO Loot tables
 public class EntityTinySludgeWorm extends EntitySludgeWorm {
-	private static final DataParameter<Boolean> IS_SQUASHED = EntityDataManager.<Boolean>createKey(EntityTinySludgeWorm.class, DataSerializers.BOOLEAN);
+	public static final byte EVENT_SQUASHED = 80;
 
+	protected boolean isSquashed = false;
+	
 	public EntityTinySludgeWorm(World world) {
 		super(world);
 		setSize(0.3125F, 0.3125F);
 		isImmuneToFire = true;
-		maxHurtResistantTime = 40;
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
 		this.parts = new MultiPartEntityPart[] {
 				new MultiPartEntityPart(this, "part1", 0.1875F, 0.1875F),
 				new MultiPartEntityPart(this, "part2", 0.1875F, 0.1875F),
@@ -46,17 +46,17 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 				new MultiPartEntityPart(this, "part5", 0.1875F, 0.1875F),
 				new MultiPartEntityPart(this, "part6", 0.1875F, 0.1875F),
 		};
-		// tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4F));
+		tasks.addTask(2, new EntityAIAttackMelee(this, 0.5D, false));
 		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
 		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
-	}
-
-	@Override
-	protected void entityInit() {
-		super.entityInit();
-		dataManager.register(IS_SQUASHED, false);
 	}
 
 	@Override
@@ -84,8 +84,15 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 	}
 
 	@Override
+	public boolean attackEntityAsMob(Entity entity) {
+		if (canEntityBeSeen(entity) && entity.onGround)
+			if (super.attackEntityAsMob(entity))
+				return true;
+		return false;
+	}
+
+	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
-		byte duration = 0;
 		if (!getEntityWorld().isRemote) {
 			for (MultiPartEntityPart part : this.parts) {
 				if (player.getEntityBoundingBox().maxY >= part.getEntityBoundingBox().minY
@@ -95,53 +102,62 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 						&& player.getEntityBoundingBox().maxZ >= part.getEntityBoundingBox().minZ
 						&& player.getEntityBoundingBox().minZ <= part.getEntityBoundingBox().maxZ
 						&& player.prevPosY > player.posY) {
-					if (getEntityWorld().getDifficulty() == EnumDifficulty.NORMAL)
-						duration = 7;
-					else if (getEntityWorld().getDifficulty() == EnumDifficulty.HARD)
-						duration = 15;
-					if (duration > 0)
-						player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, duration * 20, 0));
-					if (!isSquashed())
-						setSquashed(true);
+					
+					player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 80, 0));
+					
+					if (getEntityWorld().getDifficulty() == EnumDifficulty.NORMAL) {
+						player.addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(80, 1));
+					} else if (getEntityWorld().getDifficulty() == EnumDifficulty.HARD) {
+						player.addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(160, 1));
+					}
+					
+					this.isSquashed = true;
 				}
 			}
-			if (isSquashed()) {
-				setDead();
-				onDeathUpdate();
+			
+			if (this.isSquashed) {
+				this.world.setEntityState(this, EVENT_SQUASHED);
+				
+				this.world.playSound(null, this.posX, this.posY, this.posZ, getJumpedOnSound(), SoundCategory.NEUTRAL, 1.0F, 0.5F);
+				this.world.playSound(null, this.posX, this.posY, this.posZ, getDeathSound(), SoundCategory.NEUTRAL, 1.0F, 0.5F);
+				
+				this.damageWorm(DamageSource.causePlayerDamage(player), this.getHealth());
 			}
 		}
 	}
 
-	public void setSquashed(boolean squashed) {
-		dataManager.set(IS_SQUASHED, squashed);
+	public boolean isSquashed() {
+		return this.isSquashed;
 	}
-
-	private boolean isSquashed() {
-		return dataManager.get(IS_SQUASHED);
-	}
-
+	
 	@Override
 	public void onDeathUpdate() {
+		if (this.isSquashed) {
+			this.deathTime = 19;
+		}
+		
 		super.onDeathUpdate();
-		if (isSquashed()) {
-			if(getEntityWorld().isRemote) {
-				for(int i = 0; i < 200; i++) {
-					Random rnd = this.world.rand;
-					float rx = rnd.nextFloat() * 1.0F - 0.5F;
-					float ry = rnd.nextFloat() * 1.0F - 0.5F;
-					float rz = rnd.nextFloat() * 1.0F - 0.5F;
-					Vec3d vec = new Vec3d(rx, ry, rz);
-					vec = vec.normalize();
-					BLParticles.SPLASH_TAR.spawn(getEntityWorld(), this.posX + rx + 0.1F, this.posY + ry + 0.1F, this.posZ + rz + 0.1F, ParticleArgs.get().withMotion(vec.x * 0.4F, vec.y * 0.4F, vec.z * 0.4F)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
-				}
+	}
+	
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+		
+		if(id == EVENT_SQUASHED) {
+			for(int i = 0; i < 100; i++) {
+				Random rnd = this.world.rand;
+				float rx = rnd.nextFloat() * 1.0F - 0.5F;
+				float ry = rnd.nextFloat() * 1.0F - 0.5F;
+				float rz = rnd.nextFloat() * 1.0F - 0.5F;
+				Vec3d vec = new Vec3d(rx, ry, rz);
+				vec = vec.normalize();
+				BLParticles.SPLASH_TAR.spawn(getEntityWorld(), this.posX + rx + 0.1F, this.posY + ry + 0.1F, this.posZ + rz + 0.1F, ParticleArgs.get().withMotion(vec.x * 0.4F, vec.y * 0.4F, vec.z * 0.4F)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
 			}
-			getEntityWorld().playSound((EntityPlayer)null, getPosition(), getJumpedOnSound(), SoundCategory.NEUTRAL, 1.0F, 0.5F);
-			getEntityWorld().playSound((EntityPlayer)null, getPosition(), getDeathSound(), SoundCategory.NEUTRAL, 1.0F, 0.7F);
 		}
 	}
 
 	protected SoundEvent getJumpedOnSound() {
-		return SoundRegistry.SQUISH;
+		return SoundRegistry.WORM_SPLAT;
 	}
 
 	@Override

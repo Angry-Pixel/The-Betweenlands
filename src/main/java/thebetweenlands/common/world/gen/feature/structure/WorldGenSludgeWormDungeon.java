@@ -25,6 +25,7 @@ import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
@@ -689,11 +690,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (isWithinMazeAreaForGen(posOrigin, pos.offset(facing, count)))
 						world.setBlockState(pos.offset(facing, count), getRandomBeam(facing.rotateY(), rand, level, count, false));
 			if (isWithinMazeAreaForGen(posOrigin, pos.offset(facing, 3))) {
-				if (level >= 5 && rand.nextInt(level == 5 ? 25 : 20) == 0)
+				if (level >= 5 && rand.nextInt(level == 5 ? 30 : 25) == 0)
 					addFallingBlockEntity(world, pos.offset(facing, 1));
-				if (level >= 5 && rand.nextInt(level == 5 ? 25 : 20) == 0)
+				if (level >= 5 && rand.nextInt(level == 5 ? 30 : 25) == 0)
 					addFallingBlockEntity(world, pos.offset(facing, 2));
-				if (level >= 5 && rand.nextInt(level == 5 ? 25 : 20) == 0)
+				if (level >= 5 && rand.nextInt(level == 5 ? 30 : 25) == 0)
 					addFallingBlockEntity(world, pos.offset(facing, 3));
 				}
 		}
@@ -755,7 +756,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGenSpecial(pos.add(26, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4), level == 3 ? true : false) && !isBlackListedForGenSpecial(pos.add(2, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4), level == 5 ? true : false))
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, -4, 2 + i * 4))))
 							microBuild.selectFeature(world, pos.add(2 + j * 4, -4, 2 + i * 4), EnumFacing.WEST, rand, level, layer);
-
 				}
 				if ((maze[j][i] & 1) == 0 && (maze[j][i] & 2) == 0 && (maze[j][i] & 8) == 0) {
 					// WEST
@@ -763,6 +763,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, -4, 2 + i * 4))))
 							microBuild.selectFeature(world, pos.add(2 + j * 4, -4, 2 + i * 4), EnumFacing.EAST, rand, level, layer);
 				}
+
 				if (level == 2) {
 					if ((maze[j][i] & 1) == 0 && (maze[j][i] & 2) == 0 && (maze[j][i] & 4) != 0 && (maze[j][i] & 8) != 0)
 						if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)))
@@ -772,8 +773,24 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)))
 							microBuild.spikeFeature(world, pos.add(2 + j * 4, -4, 2 + i * 4), EnumFacing.NORTH, rand, level, layer);
 				}
+
+				if (level == 6) {
+					if ((maze[j][i] & 1) == 0 && (maze[j][i] & 2) == 0 && (maze[j][i] & 4) != 0 && (maze[j][i] & 8) != 0)
+						if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)))
+							spawnMovingWall(world, pos.add(2 + j * 4, -3, 2 + i * 4));
+					
+					if ((maze[j][i] & 1) != 0 && (maze[j][i] & 2) != 0 && (maze[j][i] & 4) == 0 && (maze[j][i] & 8) == 0)
+						if(!isBlackListedForGen(pos.add(2, 0, 2), pos.add(2 + j * 4, -4, 2 + i * 4)) && !isBlackListedForGen(pos.add(26, 0, 26), pos.add(2 + j * 4, -4, 2 + i * 4)))
+							spawnMovingWall(world, pos.add(2 + j * 4, -3, 2 + i * 4));
+				}
 			}
 		}
+	}
+
+	private void spawnMovingWall(World world, BlockPos pos) {
+		EntityMovingWall wall = new EntityMovingWall(world);
+		wall.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
+		world.spawnEntity(wall);
 	}
 
 	private boolean isBlackListedForGen(BlockPos pos, BlockPos posIn) {
@@ -956,7 +973,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					microBuild.addBarrisheeCubby(world, pos.add(20, -2, -3), EnumFacing.SOUTH, rand, level);
 				}
 				if(level == 5) {
-					world.setBlockState(pos.add(1, 0, 26), blockHelper.DUNGEON_DOOR_CRAWLER_EAST, 2);  //TODO This will be Crypt Crawler entrance
+					world.setBlockState(pos.add(1, 0, 26), blockHelper.DUNGEON_DOOR_CRAWLER_EAST, 2);
 					setRandomCombinations(world, pos.add(1, 0, 2), pos.add(1, 0, 26), rand, true);
 					for(int z = -1; z <= 1; z++)
 						for(int y = -1; y <= 1; y++)
@@ -978,9 +995,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		TileEntityDungeonDoorCombination tileCode = (TileEntityDungeonDoorCombination) world.getTileEntity(codePos);
 		if (tileCode instanceof TileEntityDungeonDoorCombination) {
 			if(!isMimic) {
-				tileCode.top_code = 1;//world.rand.nextInt(8); //TODO HOLY SHIT DON'T FORGET TO CHANGE THIS BACK!
-				tileCode.mid_code = 1;//world.rand.nextInt(8);
-				tileCode.bottom_code = 1;//world.rand.nextInt(8);
+				tileCode.top_code = world.rand.nextInt(8);
+				tileCode.mid_code = world.rand.nextInt(8);
+				tileCode.bottom_code = world.rand.nextInt(8);
 			}
 			TileEntityDungeonDoorRunes tileLock = (TileEntityDungeonDoorRunes) world.getTileEntity(lockPos);
 			if (tileLock instanceof TileEntityDungeonDoorRunes) {
@@ -1044,10 +1061,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if (!isBlackListedAreaForGen(pos.add(2, 0, 2), pos.add(j, 0, i), 1) && !isBlackListedAreaForGen(pos.add(26, 0, 26), pos.add(j, 0, i), 1) && !isBlackListedAreaForGenSpecial(pos.add(26, 0, 2), pos.add(j, 0, i), 1, level == 3 ? true : false) && !isBlackListedAreaForGenSpecial(pos.add(2, 0, 26), pos.add(j, 0, i), 1, level == 5 ? true : false)) {
 						if (rand.nextBoolean() && rand.nextBoolean())
 							world.setBlockState(pos.add(j, 0, i), blockHelper.getMudTilesWater(rand), 2);
-						else if (rand.nextInt(10) == 0 && addSpawners)
-							world.setBlockState(pos.add(j, 0, i), blockHelper.SPAWNER_TYPE_1, 2);
-						else if (rand.nextInt(6) == 0 && addSpawners)
-							world.setBlockState(pos.add(j, 0, i), blockHelper.SPAWNER_TYPE_2, 2);
 						else
 							if (rand.nextBoolean() && rand.nextBoolean() && level >= 4)
 								world.setBlockState(pos.add(j, 0, i), blockHelper.PUFFSHROOM, 2);

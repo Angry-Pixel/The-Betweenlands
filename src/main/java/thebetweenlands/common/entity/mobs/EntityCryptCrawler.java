@@ -29,6 +29,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -40,7 +41,8 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO Loot tables
 public class EntityCryptCrawler extends EntityMob implements IEntityBL {
-	protected static final int MUTEX_BLOCKING = 0b1000;
+	protected static final int MUTEX_BLOCKING  = 0b01000;
+	protected static final int MUTEX_ATTACKING = 0b10000;
 	
 	private static final byte EVENT_SHIELD_BLOCKED = 80;
 	
@@ -55,7 +57,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	
 	public EntityCryptCrawler(World world) {
 		super(world);
-		setSize(1F, 1F);
+		setSize(0.5F, 1.0F); //Width must be < 1 otherwise path finder will not path through one block wide gaps!!
 		stepHeight = 1F;
 	}
 
@@ -103,13 +105,14 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(1, new EntityAISwimming(this));
-		tasks.addTask(2, new EntityCryptCrawler.AIShieldCharge(this)); //Shield charge AI interrupts shield block AI
+		tasks.addTask(2, new EntityCryptCrawler.AIShieldCharge(this)); //Shield charge AI interrupts shield block AI and attack AI
 		tasks.addTask(3, new EntityCryptCrawler.AIShieldBlock(this));
 		tasks.addTask(4, new EntityCryptCrawler.AICryptCrawlerAttack(this));
 		tasks.addTask(5, new EntityAIWander(this, 1D));
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		tasks.addTask(7, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, false, true, null));
+		
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 3, true, true, null).setUnseenMemoryTicks(120));
 		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
 	}
 
@@ -122,30 +125,30 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	protected void updateAttributes() {
 		if (getEntityWorld() != null && !getEntityWorld().isRemote) {
 			if (isChief()) {
-				setSize(1.2F, 1.9F);
+				setSize(0.98F, 1.9F);
 				experienceValue = 20;
-				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.28D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100D);
 				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
-				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
 				getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.75D);
 			}
 			if (!isChief() && isBiped()) {
 				setSize(0.75F, 1.5F);
 				experienceValue = 10;
-				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
+				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.29D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30D);
 				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
-				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
 				getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.5D);
 			}
 			if (!isChief() && !isBiped()) {
-				setSize(1F, 1F);
+				setSize(0.95F, 1F);
 				experienceValue = 5;
-				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.36D);
+				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.31D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20D);
 				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
-				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
 				getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.25D);
 			}
 		}
@@ -197,40 +200,41 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 			if (!isChief() && isBiped())
 				setSize(0.75F, 1.5F);
 			if (!isChief() && !isBiped())
-				setSize(1F - standingAngle * 0.25F, 1F + standingAngle * 0.75F);
+				setSize(0.95F - standingAngle * 0.2F, 1F + standingAngle * 0.75F);
 		}
 
 		if (!getEntityWorld().isRemote && !isBiped()) {
-
 			if (getAttackTarget() != null) {
-				faceEntity(getAttackTarget(), 10.0F, 20.0F);
 				double distance = getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
 
-				if (distance > 5.0D)
-					setIsStanding(false);
-
-				if (distance <= 5.0D)
-					setIsStanding(true);
+				setIsStanding(distance <= 3.0D);
 			}
 	
-			if (getAttackTarget() == null)
+			if (getAttackTarget() == null) {
 				setIsStanding(false);
+			}
 		}
 
 		if (getEntityWorld().isRemote && !isBiped()) {
 			prevStandingAngle = standingAngle;
 
-			if (standingAngle > 0 && !isStanding())
+			if (standingAngle > 0 && !isStanding()) {
 				standingAngle -= 0.1F;
+			}
 
-			if (isStanding() && standingAngle <= 1F)
+			if (isStanding() && standingAngle <= 1F) {
 				standingAngle += 0.1F;
+			}
 			
-			if (standingAngle < 0 && !isStanding())
+			if (standingAngle < 0 && !isStanding()) {
 				standingAngle = 0F;
+			}
 
-			if (isStanding() && standingAngle > 1F)
+			if (isStanding() && standingAngle > 1F) {
 				standingAngle = 1F;
+			}
+			
+			standingAngle = MathHelper.clamp(standingAngle, 0, 1);
 		}
 
 		super.onLivingUpdate();
@@ -395,6 +399,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	static class AICryptCrawlerAttack extends EntityAIAttackMelee {
 		public AICryptCrawlerAttack(EntityCryptCrawler crypt_crawler) {
 			super(crypt_crawler, 1.2D, false);
+			this.setMutexBits(this.getMutexBits() | MUTEX_ATTACKING);
 		}
 
 		@Override
@@ -413,7 +418,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 		
 		public AIShieldCharge(EntityCryptCrawler crawler) {
 			this.crawler = crawler;
-			setMutexBits(MUTEX_BLOCKING);
+			setMutexBits(3 | MUTEX_BLOCKING | MUTEX_ATTACKING);
 		}
 		
 		protected boolean isHoldingShield() {
@@ -486,6 +491,11 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 				crawler.setSneaking(true);
 			} else {
 				crawler.setSneaking(false);
+			}
+			
+			EntityLivingBase target = this.crawler.getAttackTarget();
+			if(target != null) {
+				this.crawler.faceEntity(target, 15, 15);
 			}
 		}
 	}

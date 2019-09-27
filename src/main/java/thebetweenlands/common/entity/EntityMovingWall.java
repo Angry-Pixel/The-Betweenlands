@@ -24,7 +24,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.entity.IEntityScreenShake;
@@ -75,6 +74,8 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES);
 		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES_MIMIC);
 		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER);
+		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_WALL);
 	}
 
 	public EntityMovingWall(World world) {
@@ -97,10 +98,12 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 	public void onUpdate() {
 		super.onUpdate();
 		if (!getEntityWorld().isRemote) {
-			if (getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL)
-				setDead();
 			if(ticksExisted == 1 && isNewSpawn())
 				checkSpawnArea();
+
+			if(ticksExisted == 2) //needs to have moved 1 tick for direction to work
+				doJankSafetyCheck();
+
 			if(isHoldingStill()) {
 				holdCount--;
 				if (holdCount <= 0) {
@@ -153,67 +156,85 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 
 			if (!isHoldingStill())
 				if (playSlideSound) {
-					playChainSound(getEntityWorld(), getPosition());
+					playSlidingSound(getEntityWorld(), getPosition());
 					playSlideSound = false;
 				}
 		}
 	}
 
 	protected void pushEntitiesAway() {
+		boolean collision = false;
+
+		double maxReverseX = -1;
+		double maxReverseZ = -1;
+
 		AxisAlignedBB collisionAABB = this.getCollisionBoundingBox();
 		if(collisionAABB != null) {
 			List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, collisionAABB);
 
 			for(Entity entity : entities) {
-				boolean squished = false;
+				if(entity.canBeCollidedWith()) {
+					if(!entity.canBePushed() && entity instanceof EntityMovingWall == false) {
+						collision = true;
+					} else {
+						AxisAlignedBB entityAABB = entity.getEntityBoundingBox();
+						boolean squished = false;
+						double dx = Math.max(collisionAABB.minX - entityAABB.maxX, entityAABB.minX - collisionAABB.maxX);
+						double dz = Math.max(collisionAABB.minZ - entityAABB.maxZ, entityAABB.minZ - collisionAABB.maxZ);
 
-				AxisAlignedBB entityAABB = entity.getEntityBoundingBox();
+						if(Math.abs(dz) < Math.abs(dx)) {
+							entity.move(MoverType.PISTON, 0, 0, (dz - 0.005D) * Math.signum(this.posZ - entity.posZ));
+							entityAABB = entity.getEntityBoundingBox();
+							dz = Math.max(collisionAABB.minZ - entityAABB.maxZ, entityAABB.minZ - collisionAABB.maxZ);
 
-				double dx = Math.max(collisionAABB.minX - entityAABB.maxX, entityAABB.minX - collisionAABB.maxX);
-				double dz = Math.max(collisionAABB.minZ - entityAABB.maxZ, entityAABB.minZ - collisionAABB.maxZ);
+							if(-dz > 0.025D) {
+								squished = true;
+								maxReverseZ = Math.max(-dz, maxReverseZ);
+							}
+						} else {
+							entity.move(MoverType.PISTON, (dx - 0.005D) * Math.signum(this.posX - entity.posX), 0, 0);
+							entityAABB = entity.getEntityBoundingBox();
+							dx = Math.max(collisionAABB.minX - entityAABB.maxX, entityAABB.minX - collisionAABB.maxX);
 
-				if(Math.abs(dz) < Math.abs(dx)) {
-					entity.move(MoverType.PISTON, 0, 0, (dz - 0.01D) * Math.signum(this.posZ - entity.posZ));
+							if(-dx > 0.025D) {
+								squished = true;
+								maxReverseX = Math.max(-dx, maxReverseX);
+							}
+						}
 
-					entityAABB = entity.getEntityBoundingBox();
-					dz = Math.max(collisionAABB.minZ - entityAABB.maxZ, entityAABB.minZ - collisionAABB.maxZ);
+						//Move slightly towards ground to update onGround state etc.
+						entity.move(MoverType.PISTON, 0, -0.01D, 0);
 
-					if(Math.abs(dz) > 0.01D) {
-						squished = true;
+						if(squished) {
+							collision = true;
 
-						this.posZ -= (dz - 0.05D) * Math.signum(this.posZ - entity.posZ);
-					}
-				} else {
-					entity.move(MoverType.PISTON, (dx - 0.01D) * Math.signum(this.posX - entity.posX), 0, 0);
-
-					entityAABB = entity.getEntityBoundingBox();
-					dx = Math.max(collisionAABB.minX - entityAABB.maxX, entityAABB.minX - collisionAABB.maxX);
-
-					if(Math.abs(dx) > 0.01D) {
-						squished = true;
-
-						this.posX -= (dx - 0.05D) * Math.signum(this.posX - entity.posX);
-					}
-				}
-
-				//Move slightly towards ground to update onGround state etc.
-				entity.move(MoverType.PISTON, 0, -0.01D, 0);
-
-				if(squished) {
-					shaking = true;
-					shake_timer = 0;
-					motionX *= -1D;
-					motionZ *= -1D;
-					velocityChanged = true;
-
-					if(!this.world.isRemote) {
-						entity.attackEntityFrom(DamageSource.IN_WALL, 10F);
-
-						setHoldStill(true);
-						holdCount = 20;
-						getEntityWorld().playSound(null, getPosition(), SoundRegistry.MUD_DOOR_LOCK, SoundCategory.BLOCKS, 2F, 0.75F);
+							if(!this.world.isRemote) {
+								entity.attackEntityFrom(DamageSource.IN_WALL, 10F);
+								setHoldStill(true);
+								holdCount = 20;
+								getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 0.5F, 0.75F);
+							}
+						}
 					}
 				}
+			}
+		}
+
+		if(collision) {
+			if(maxReverseZ > 0) {
+				this.posZ -= (maxReverseZ + 0.05D) * Math.signum(this.motionZ);
+			}
+			if(maxReverseX > 0) {
+				this.posX -= (maxReverseX + 0.05D) * Math.signum(this.motionX);
+			}
+
+			shaking = true;
+			shake_timer = 0;
+			
+			if(!this.world.isRemote) {
+				motionX *= -1D;
+				motionZ *= -1D;
+				velocityChanged = true;
 			}
 		}
 	}
@@ -236,6 +257,24 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		}	
 		else {
 			setDead();
+		}
+	}
+
+	private void doJankSafetyCheck() {
+		EnumFacing facing = getHorizontalFacing();
+		Vec3d vec3d = new Vec3d(getPosition());
+		Vec3d vec3d1 = new Vec3d(getPosition().offset(facing, 28)); //should be long enough
+		RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d, vec3d1);
+		if (raytraceresult != null) {
+			vec3d1 = new Vec3d(raytraceresult.hitVec.x, raytraceresult.hitVec.y, raytraceresult.hitVec.z);
+			BlockPos hitpos = new BlockPos(vec3d1);
+			AxisAlignedBB rayBox = new AxisAlignedBB(getPosition(), hitpos);
+			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, rayBox);
+			for (int entityCount = 0; entityCount < list.size(); ++entityCount) {
+				Entity entity = list.get(entityCount);
+				if (entity != null && entity instanceof EntityMovingWall)
+					entity.setDead();
+			}
 		}
 	}
 
@@ -306,7 +345,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 					if(!getEntityWorld().isRemote) {
 						setHoldStill(true);
 						holdCount = 20;
-						getEntityWorld().playSound(null, getPosition(), SoundRegistry.MUD_DOOR_LOCK, SoundCategory.BLOCKS, 2F, 0.75F);
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 0.5F, 0.75F);
 					}
 				} else if (result.sideHit.getIndex() == 4 || result.sideHit.getIndex() == 5) {
 					shaking = true;
@@ -316,7 +355,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 					if(!getEntityWorld().isRemote) {
 						setHoldStill(true);
 						holdCount = 20;
-						getEntityWorld().playSound(null, getPosition(), SoundRegistry.MUD_DOOR_LOCK, SoundCategory.BLOCKS, 2F, 0.75F);
+						getEntityWorld().playSound(null, getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 0.5F, 0.75F);
 					}
 				}
 			}
@@ -329,11 +368,11 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		}
 	}
 
-	public void playChainSound(World world, BlockPos pos) {
+	public void playSlidingSound(World world, BlockPos pos) {
 		ISound wall_slide = new MovingWallSound(this);
 		Minecraft.getMinecraft().getSoundHandler().playSound(wall_slide);
 	}
-	
+
 	@Override
 	public void move(MoverType type, double x, double y, double z) {
 		//No regular moving

@@ -393,7 +393,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 					this.targetAnchor = null;
 				}
 
-				if(!this.isMovementBlocked() && !this.isMoving() && (this.targetFacing != null || this.targetAnchor != null)) {
+				if(!this.isTravelBlocked() && !this.isMoving() && (this.targetFacing != null || this.targetAnchor != null)) {
 					EnumFacing targetFacing = this.targetFacing != null ? this.targetFacing : facing;
 					EnumFacing targetFacingUp = this.targetFacingUp != null ? this.targetFacingUp : facingUp;
 					BlockPos targetAnchor = this.targetAnchor != null ? this.targetAnchor : this.getAnchor();
@@ -435,6 +435,10 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 			Vec3d position = this.getCenter().add(offset);
 			this.setPosition(position.x, position.y - this.height / 2.0D, position.z);
 		}
+	}
+	
+	protected boolean isTravelBlocked() {
+		return this.isMovementBlocked();
 	}
 
 	protected void updateMovement() {

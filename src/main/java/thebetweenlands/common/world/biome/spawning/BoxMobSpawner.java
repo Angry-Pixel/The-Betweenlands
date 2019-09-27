@@ -4,16 +4,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import gnu.trove.map.TObjectLongMap;
+import gnu.trove.map.hash.TObjectLongHashMap;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 
 public class BoxMobSpawner extends AreaMobSpawner {
+	private static class SimpleSpawnEntriesData implements IBiomeSpawnEntriesData {
+		private final TObjectLongMap<ResourceLocation> lastSpawnMap = new TObjectLongHashMap<>();
+
+		@Override
+		public long getLastSpawn(ICustomSpawnEntry spawnEntry) {
+			return this.lastSpawnMap.containsKey(spawnEntry.getID()) ? this.lastSpawnMap.get(spawnEntry.getID()) : -1;
+		}
+
+		@Override
+		public void setLastSpawn(ICustomSpawnEntry spawnEntry, long lastSpawn) {
+			this.lastSpawnMap.put(spawnEntry.getID(), lastSpawn);
+		}
+
+		@Override
+		public long removeLastSpawn(ICustomSpawnEntry spawnEntry) {
+			return this.lastSpawnMap.remove(spawnEntry.getID());
+		}
+	}
+
+	private final IBiomeSpawnEntriesData spawnEntriesData = new SimpleSpawnEntriesData();
 	private List<AxisAlignedBB> areas = new ArrayList<>();
 	private List<ICustomSpawnEntry> spawnEntries = new ArrayList<>();
 	private int maxEntities;
@@ -42,7 +66,7 @@ public class BoxMobSpawner extends AreaMobSpawner {
 	public int getHardEntityLimit() {
 		return Integer.MAX_VALUE;
 	}
-	
+
 	@Override
 	public List<ICustomSpawnEntry> getSpawnEntries(World world, BlockPos pos, ICustomSpawnEntriesProvider provider) {
 		return this.spawnEntries;
@@ -54,6 +78,11 @@ public class BoxMobSpawner extends AreaMobSpawner {
 			return this.maxEntities / (float)spawnerChunks;
 		}
 		return 0.0f;
+	}
+
+	@Override
+	public IBiomeSpawnEntriesData getSpawnEntriesData(World world, BlockPos pos, ICustomSpawnEntriesProvider provider) {
+		return this.spawnEntriesData;
 	}
 
 	@Override

@@ -1,12 +1,12 @@
 package thebetweenlands.common.world.biome.spawning;
 
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
@@ -30,12 +30,11 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage.BiomeSpawnEntriesData;
 import thebetweenlands.util.WeightedList;
 
 public abstract class AreaMobSpawner {
@@ -78,7 +77,7 @@ public abstract class AreaMobSpawner {
 	 * @return
 	 */
 	public int getSpawningAttemptsPerGroup() {
-		return 32;
+		return 24;
 	}
 
 	/**
@@ -130,11 +129,23 @@ public abstract class AreaMobSpawner {
 	}
 
 	/**
+	 * Returns the spawn entry data, such as spawning cooldowns etc.
+	 * @param world
+	 * @param pos
+	 * @param provider
+	 * @return
+	 */
+	@Nullable
+	public IBiomeSpawnEntriesData getSpawnEntriesData(World world, BlockPos pos, @Nullable ICustomSpawnEntriesProvider provider) {
+		return null;
+	}
+
+	/**
 	 * Default spawning weight is 100
 	 */
 	public static class BLSpawnEntry implements ICustomSpawnEntry {
 		private final Class<? extends EntityLiving> entityType;
-		private final Constructor<? extends EntityLiving> entityCtor;
+		private final Function<World, ? extends EntityLiving> entityCtor;
 		private final short baseWeight;
 		private short weight;
 		private boolean hostile = false;
@@ -152,26 +163,22 @@ public abstract class AreaMobSpawner {
 		 */
 		public final ResourceLocation id;
 
-		public BLSpawnEntry(Class<? extends EntityLiving> entityType) {
-			this(-1, entityType, (short) 100);
+		public BLSpawnEntry(Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor) {
+			this(-1, entityType, entityCtor, (short) 100);
 		}
 
-		public BLSpawnEntry(Class<? extends EntityLiving> entityType, short weight) {
-			this(-1, entityType, weight);
+		public BLSpawnEntry(Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor, short weight) {
+			this(-1, entityType, entityCtor, weight);
 		}
 
-		public BLSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
-			this(id, entityType, (short) 100);
+		public BLSpawnEntry(int id, Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor) {
+			this(id, entityType, entityCtor, (short) 100);
 		}
 
-		public BLSpawnEntry(int id, Class<? extends EntityLiving> entityType, short weight) {
+		public BLSpawnEntry(int id, Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor, short weight) {
 			this.id = new ResourceLocation(ModInfo.ID, String.valueOf(id));
 			this.entityType = entityType;
-			try {
-				this.entityCtor = this.entityType.getConstructor(World.class);
-			} catch (NoSuchMethodException | SecurityException e) {
-				throw new RuntimeException("Can't find or access entity constructor (World) of entity: " + entityType.getName());
-			}
+			this.entityCtor = entityCtor;
 			this.weight = weight;
 			this.baseWeight = weight;
 		}
@@ -326,7 +333,7 @@ public abstract class AreaMobSpawner {
 		@Override
 		public EntityLiving createEntity(World world) {
 			try {
-				return this.entityCtor.newInstance(world);
+				return this.entityCtor.apply(world);
 			} catch(Exception ex) {
 				ex.printStackTrace();
 			}
@@ -336,6 +343,10 @@ public abstract class AreaMobSpawner {
 		@Override
 		public final Class<? extends EntityLiving> getEntityType() {
 			return this.entityType;
+		}
+
+		public final Function<World, ? extends EntityLiving> getEntityCtor() {
+			return this.entityCtor;
 		}
 
 		@Override
@@ -399,15 +410,16 @@ public abstract class AreaMobSpawner {
 	public int populateChunk(World world, ChunkPos chunkPos, boolean spawnHostiles, boolean spawnAnimals, boolean loadChunks, boolean ignoreRestrictions,
 			int attemptsPerChunk, int maxSpawnsPerChunk, int attemptsPerGroup, int entityLimit, float loadedAreas) {
 		loadedAreas = Math.max(1.0f, loadedAreas);
-		
+
 		int attempts = 0, chunkSpawnedEntities = 0;
-		
+
 		spawnLoop:
 			while(attempts++ < attemptsPerChunk && chunkSpawnedEntities < maxSpawnsPerChunk) {
 				BlockPos spawnPos = this.getRandomSpawnPosition(world, chunkPos);
 
-				if(!this.isInsideSpawningArea(world, spawnPos, false))
+				if(!this.isInsideSpawningArea(world, spawnPos, false)) {
 					continue;
+				}
 
 				Biome biome = world.getBiome(spawnPos);
 
@@ -432,8 +444,9 @@ public abstract class AreaMobSpawner {
 					totalWeight += spawnEntry.getWeight();
 				}
 
-				if(possibleSpawns.isEmpty() || totalWeight == 0 || totalBaseWeight == 0)
+				if(possibleSpawns.isEmpty() || totalWeight == 0 || totalBaseWeight == 0) {
 					continue;
+				}
 
 				WeightedList<ICustomSpawnEntry> weightedPossibleSpawns = new WeightedList<>();
 				weightedPossibleSpawns.addAll(possibleSpawns);
@@ -489,13 +502,8 @@ public abstract class AreaMobSpawner {
 					int groupSpawnedEntities = 0, groupSpawnAttempts = 0;
 					int maxGroupSpawnAttempts = attemptsPerGroup + desiredGroupSize * 2;
 
-					BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-					BiomeSpawnEntriesData spawnEntriesData = null;
-					long lastSpawn = -1;
-					if(worldStorage != null) {
-						spawnEntriesData = worldStorage.getBiomeSpawnEntriesData(biome);
-						lastSpawn = spawnEntriesData.getLastSpawn(spawnEntry);
-					}
+					IBiomeSpawnEntriesData spawnEntriesData = this.getSpawnEntriesData(world, spawnPos, biome instanceof ICustomSpawnEntriesProvider ? (ICustomSpawnEntriesProvider) biome : null);
+					long lastSpawn = spawnEntriesData != null ? spawnEntriesData.getLastSpawn(spawnEntry) : -1;
 
 					if(!ignoreRestrictions && lastSpawn >= 0) {
 						//Adjust intervals for MP when there are multiple players and the loaded area is bigger -> smaller intervals
@@ -508,16 +516,20 @@ public abstract class AreaMobSpawner {
 
 					IEntityLivingData groupData = null;
 
+					EntityLiving cachedEntity = null;
+
 					while(groupSpawnAttempts++ < maxGroupSpawnAttempts && groupSpawnedEntities < desiredGroupSize) {
 						BlockPos entitySpawnPos = this.getRandomSpawnPosition(world, spawnPos, MathHelper.floor(groupSpawnRadius));
 
 						boolean inChunk = (entitySpawnPos.getX() >> 4) == chunkPos.x && (entitySpawnPos.getZ() >> 4) == chunkPos.z;
 
-						if(!loadChunks && !inChunk)
+						if(!loadChunks && !inChunk) {
 							continue;
+						}
 
-						if(!this.isInsideSpawningArea(world, entitySpawnPos, false))
+						if(!this.isInsideSpawningArea(world, entitySpawnPos, false)) {
 							continue;
+						}
 
 						IBlockState spawnBlockState = world.getBlockState(entitySpawnPos);
 
@@ -534,15 +546,17 @@ public abstract class AreaMobSpawner {
 								}
 							}
 							if(l == spawnSegmentY) {
-								if(spawnEntry.getSubChunkLimit() >= 0 && subChunkEntityCount >= spawnEntry.getSubChunkLimit())
+								if(spawnEntry.getSubChunkLimit() >= 0 && subChunkEntityCount >= spawnEntry.getSubChunkLimit()) {
 									//Entity reached sub chunk limit
 									continue;
+								}
 							}
 						}
 
-						if(spawnEntry.getChunkLimit() >= 0 && chunkEntityCount >= spawnEntry.getChunkLimit())
+						if(spawnEntry.getChunkLimit() >= 0 && chunkEntityCount >= spawnEntry.getChunkLimit()) {
 							//Entity reached chunk limit
 							continue;
+						}
 
 						IBlockState surfaceBlockState = spawnChunk.getBlockState(entitySpawnPos.getX() - spawnChunk.x * 16, entitySpawnPos.getY() - 1, entitySpawnPos.getZ() - spawnChunk.z * 16);
 
@@ -552,40 +566,58 @@ public abstract class AreaMobSpawner {
 							double sz = entitySpawnPos.getZ() + 0.5D;
 							float yaw = world.rand.nextFloat() * 360.0F;
 
-							EntityLiving newEntity = spawnEntry.createEntity(world);
-							if(newEntity != null) {
-								newEntity.setLocationAndAngles(sx, sy, sz, yaw, 0.0F);
+							EntityLiving spawningEntity;
 
-								Result canSpawn = ForgeEventFactory.canEntitySpawn(newEntity, world, (float)sx, (float)sy, (float)sz, null);
-								if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && newEntity.getCanSpawnHere() && newEntity.isNotColliding())) {
-									groupSpawnedEntities++;
-									chunkSpawnedEntities++;
+							//If a a previous attempt created an entity but it was not used then we
+							//can reuse it for this attempt, since the spawnEntry doesn't change during group spawning
+							if(cachedEntity != null) {
+								spawningEntity = cachedEntity;
+							} else {
+								spawningEntity = cachedEntity = spawnEntry.createEntity(world);
+							}
 
-									NBTTagCompound entityNBT = newEntity.getEntityData();
+							if(spawningEntity != null) {
+								spawningEntity.setLocationAndAngles(sx, sy, sz, yaw, 0.0F);
+
+								Result canSpawn = ForgeEventFactory.canEntitySpawn(spawningEntity, world, (float)sx, (float)sy, (float)sz, null);
+								if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && spawningEntity.getCanSpawnHere() && spawningEntity.isNotColliding())) {
+									NBTTagCompound entityNBT = spawningEntity.getEntityData();
 									entityNBT.setBoolean("naturallySpawned", true);
 
-									if (!ForgeEventFactory.doSpecialSpawn(newEntity, world, (float)sx, (float)sy, (float)sz, null)) {
-										groupData = newEntity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(sx, sy, sz)), groupData);
+									if (!ForgeEventFactory.doSpecialSpawn(spawningEntity, world, (float)sx, (float)sy, (float)sz, null)) {
+										groupData = spawningEntity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(sx, sy, sz)), groupData);
 									}
 
-									if(newEntity.isNotColliding()) {
-										world.spawnEntity(newEntity);
+									if(spawningEntity.isNotColliding()) {
+										groupSpawnedEntities++;
+										chunkSpawnedEntities++;
 
-										spawnEntry.onSpawned(newEntity);
+										world.spawnEntity(spawningEntity);
 
-										if(this.isCountedEntity(world, newEntity)) {
-											this.entityCounts.adjustOrPutValue(newEntity.getClass(), 1, 1);
+										spawnEntry.onSpawned(spawningEntity);
+
+										if(this.isCountedEntity(world, spawningEntity)) {
+											this.entityCounts.adjustOrPutValue(spawningEntity.getClass(), 1, 1);
 										}
-									} else {
-										newEntity.setDead();
+
+										//Entity was spawned so it can't be reused!
+										cachedEntity = null;
+									} else if(cachedEntity != null) {
+										//Cached entity was onInitialSpawned but not spawned so it can't be reused and must be killed.
+										cachedEntity.setDead();
+										cachedEntity = null;
 									}
 
-									if (groupSpawnedEntities >= ForgeEventFactory.getMaxSpawnPackSize(newEntity))  {
+									if (groupSpawnedEntities >= ForgeEventFactory.getMaxSpawnPackSize(spawningEntity))  {
 										break;
 									}
 								}
 							}
 						}
+					}
+
+					if(cachedEntity != null) {
+						cachedEntity.setDead();
 					}
 
 					if(spawnEntriesData != null && !ignoreRestrictions && groupSpawnedEntities > 0) {

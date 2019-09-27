@@ -55,16 +55,16 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 	protected void addSpawnEntries(List<ICustomSpawnEntry> entries) {
 		super.addSpawnEntries(entries);
 
-		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, (short) 10).setSpawnCheckRadius(32.0D));
-		entries.add(new SporelingSpawnEntry(1, EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
-		entries.add(new CaveSpawnEntry(2, EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
+		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, EntityFirefly::new, (short) 10).setSpawnCheckRadius(32.0D));
+		entries.add(new SporelingSpawnEntry(1, EntitySporeling.class, EntitySporeling::new, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
+		entries.add(new CaveSpawnEntry(2, EntityBlindCaveFish.class, EntityBlindCaveFish::new, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
 
-		entries.add(new SurfaceSpawnEntry(3, EntityLurker.class, (short) 35).setCanSpawnInWater(true).setHostile(true).setSpawnCheckRadius(16.0D));
-		entries.add(new SurfaceSpawnEntry(4, EntityAngler.class, (short) 45).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
-		entries.add(new CaveSpawnEntry(5, EntityAngler.class, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
+		entries.add(new SurfaceSpawnEntry(3, EntityLurker.class, EntityLurker::new, (short) 35).setCanSpawnInWater(true).setHostile(true).setSpawnCheckRadius(16.0D));
+		entries.add(new SurfaceSpawnEntry(4, EntityAngler.class, EntityAngler::new, (short) 45).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
+		entries.add(new CaveSpawnEntry(5, EntityAngler.class, EntityAngler::new, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
 		entries.add(new SwampHagCaveSpawnEntry(6, (short) 120).setHostile(true).setSpawnCheckRadius(24.0D).setGroupSize(1, 3));
-		entries.add(new CaveSpawnEntry(7, EntityWight.class, (short) 18).setHostile(true).setSpawnCheckRadius(64.0D));
-		entries.add(new CaveSpawnEntry(8, EntityChiromaw.class, (short) 60).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
-		entries.add(new BetweenstoneCaveSpawnEntry(9, EntityBoulderSprite.class, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
+		entries.add(new CaveSpawnEntry(7, EntityWight.class, EntityWight::new, (short) 18).setHostile(true).setSpawnCheckRadius(64.0D));
+		entries.add(new CaveSpawnEntry(8, EntityChiromaw.class, EntityChiromaw::new, (short) 60).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
+		entries.add(new BetweenstoneCaveSpawnEntry(9, EntityBoulderSprite.class, EntityBoulderSprite::new, (short) 60).setHostile(true).setSpawnCheckRadius(16.0D).setSpawnCheckRangeY(8));
 	}
 }

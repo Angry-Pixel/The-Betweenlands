@@ -401,11 +401,13 @@ public class ModelCryptCrawler extends ModelBase {
 		EntityCryptCrawler crypt_crawler = (EntityCryptCrawler) entity;
 
 		if(!crypt_crawler.isBiped()) {
-			float animation = MathHelper.sin((limbSwing * 0.6F + 2) * 0.5F) * 0.3F * limbSwingAngle * 0.3F;
-			float animation2 = MathHelper.sin((limbSwing * 0.6F) * 0.5F) * 0.3F * limbSwingAngle * 0.3F;
-			float animation3 = MathHelper.sin((limbSwing * 0.6F + 4) * 0.5F) * 0.3F * limbSwingAngle * 0.3F;
+			float animation = MathHelper.sin((limbSwing * 1.1F + 2) * 0.5F) * 0.3F * limbSwingAngle * 0.3F;
+			float animation2 = MathHelper.sin((limbSwing * 1.1F) * 0.5F) * 0.3F * limbSwingAngle * 0.3F;
+			float animation3 = MathHelper.sin((limbSwing * 1.1F + 4) * 0.5F) * 0.3F * limbSwingAngle * 0.3F;
+			
 			float flap = MathHelper.sin((crypt_crawler.ticksExisted + partialRenderTicks) * 0.3F) * 0.8F;
 			float standingAngle = crypt_crawler.smoothedStandingAngle(partialRenderTicks); 
+			
 			tail1[0].rotateAngleX = -0.40980330836826856F + (standingAngle * 0.75F)- animation * 1F;
 			tail2[0].rotateAngleX = -0.22759093446006054F + (standingAngle * 0.75F)- animation * 3F;
 			tail3[0].rotateAngleX = -0.22759093446006054F + (standingAngle * 0.75F)- animation * 4F;
@@ -415,8 +417,7 @@ public class ModelCryptCrawler extends ModelBase {
 		    tinyurn2[0].rotateAngleX = 0.136659280431156F + (standingAngle);
 		    tinyurn3[0].rotateAngleX = 0.136659280431156F + (standingAngle);
 	
-			if (!(crypt_crawler.standingAngle > 0)) {
-
+			if (crypt_crawler.standingAngle < 0.01f) {
 				leg_front_right1[0].rotateAngleX = 0.27314402793711257F + (animation2 * 8F) + flap * 0.05F;
 				leg_front_right2[0].rotateAngleX = -0.5918411493512771F + (animation2 * 6F) - flap * 0.025F;
 				leg_front_right3[0].rotateAngleX = 0.5918411493512771F -(standingAngle*1.25F) -0.17453292519943295F - animation2 * 18F + flap * 0.05F;
@@ -445,7 +446,8 @@ public class ModelCryptCrawler extends ModelBase {
 				neck[0].rotateAngleX = 0.27314402793711257F -(standingAngle * 0.5F) -0.17453292519943295F + (animation2 * 2.9F) + flap * 0.025F;
 				head1[0].rotateAngleX = -(standingAngle * 0.5F) + 0.17453292519943295F;
 				head1[0].rotateAngleZ = -(standingAngle * 0.1F * flap * 6F);
-	
+			
+				body_main[0].rotationPointY = 12.0f;
 			} else {
 				leg_front_right1[0].rotateAngleX = 0.27314402793711257F + (standingAngle * 0.5F * flap) + animation2 * 6F;
 				leg_front_left1[0].rotateAngleX = 0.27314402793711257F + (standingAngle * 0.5F * flap) + animation * 6F;
@@ -473,14 +475,19 @@ public class ModelCryptCrawler extends ModelBase {
 
 				neck[0].rotateAngleX = 0.27314402793711257F + (standingAngle * 0.25F) -0.17453292519943295F + animation2 * 2.9F;
 				head1[0].rotateAngleX = 0.17453292519943295F + (standingAngle * 0.5F);
+				
+				body_main[0].rotateAngleZ = 0F - animation2 * 1.5F * (1 - standingAngle);
+				
+				body_main[0].rotationPointY = 12.0f - standingAngle * 5.8f;
 			}
-			if (!crypt_crawler.onGround)
+			if (!crypt_crawler.onGround) {
 				lowerjaw[0].rotateAngleX = -0.091106186954104F;
-			else {
-				if (standingAngle > 0)
+			} else {
+				if (standingAngle > 0) {
 					lowerjaw[0].rotateAngleX = 0.091106186954104F + flap * 0.5F;
-				else
+				} else {
 					lowerjaw[0].rotateAngleX = -0.091106186954104F + flap * 0.3F;
+				}
 			}
 		} else {
 			float animation = MathHelper.sin(limbSwing * 0.4F) * limbSwingAngle * 0.2F;

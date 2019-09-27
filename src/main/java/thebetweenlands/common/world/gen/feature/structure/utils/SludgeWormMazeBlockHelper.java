@@ -80,8 +80,6 @@ public class SludgeWormMazeBlockHelper {
 	public IBlockState HANGER = BlockRegistry.HANGER.getDefaultState().withProperty(BlockHanger.CAN_GROW, true).withProperty(BlockHanger.SEEDED, false);
 
 	public IBlockState STAGNANT_WATER = BlockRegistry.STAGNANT_WATER.getDefaultState();
-	public IBlockState SPAWNER_TYPE_1 = Blocks.PRISMARINE.getDefaultState();
-	public IBlockState SPAWNER_TYPE_2 = Blocks.PURPUR_BLOCK.getDefaultState();
 
 	public IBlockState DUNGEON_WALL_CANDLE_NORTH = BlockRegistry.DUNGEON_WALL_CANDLE.getDefaultState().withProperty(BlockDungeonWallCandle.FACING, EnumFacing.NORTH);
 	public IBlockState DUNGEON_WALL_CANDLE_EAST = BlockRegistry.DUNGEON_WALL_CANDLE.getDefaultState().withProperty(BlockDungeonWallCandle.FACING, EnumFacing.EAST);
