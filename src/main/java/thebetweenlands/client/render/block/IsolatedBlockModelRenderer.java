@@ -14,6 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -129,12 +130,12 @@ public class IsolatedBlockModelRenderer {
 	 * @param buffer Vertex buffer
 	 * @return
 	 */
-	public boolean renderModel(BlockPos pos, IBakedModel model, IBlockState state, long rand, BufferBuilder buffer) {
+	public boolean renderModel(IBlockAccess world, BlockPos pos, IBakedModel model, IBlockState state, long rand, BufferBuilder buffer) {
 		@SuppressWarnings("deprecation")
 		boolean useAO = Minecraft.isAmbientOcclusionEnabled() && state.getLightValue() == 0 && model.isAmbientOcclusion() && this.ao != null;
 
 		try {
-			return useAO ? this.renderModelSmooth(pos, model, state, buffer, rand) : this.renderModelFlat(pos, model, state, buffer, rand);
+			return useAO ? this.renderModelSmooth(world, pos, model, state, buffer, rand) : this.renderModelFlat(world, pos, model, state, buffer, rand);
 		} catch (Throwable throwable) {
 			CrashReport crashreport = CrashReport.makeCrashReport(throwable, "Tesselating block model");
 			CrashReportCategory crashreportcategory = crashreport.makeCategory("Block model being tesselated");
@@ -144,16 +145,23 @@ public class IsolatedBlockModelRenderer {
 		}
 	}
 
-	private boolean renderModelSmooth(BlockPos pos, IBakedModel model, IBlockState state, BufferBuilder buffer, long rand) {
+	private boolean renderModelSmooth(IBlockAccess world, BlockPos pos, IBakedModel model, IBlockState state, BufferBuilder buffer, long rand) {
 		boolean flag = false;
 		float[] blockBounds = new float[EnumFacing.VALUES.length * 2];
 		BitSet bitset = new BitSet(3);
 
+		List<BakedQuad> list = model.getQuads(state, null, rand);
+		
+		if (!list.isEmpty()) {
+			this.renderQuadsSmooth(world, pos, state, buffer, list, blockBounds, bitset);
+			flag = true;
+		}
+		
 		for (EnumFacing facing : EnumFacing.VALUES) {
-			List<BakedQuad> list = model.getQuads(state, facing, rand);
+			list = model.getQuads(state, facing, rand);
 
 			if (!list.isEmpty() && (culler == null || culler.shouldSideBeRendered(state, facing))) {
-				this.renderQuadsSmooth(pos, state, buffer, list, blockBounds, bitset);
+				this.renderQuadsSmooth(world, pos, state, buffer, list, blockBounds, bitset);
 				flag = true;
 			}
 		}
@@ -168,16 +176,23 @@ public class IsolatedBlockModelRenderer {
 		return flag;
 	}
 
-	private boolean renderModelFlat(BlockPos pos, IBakedModel model, IBlockState state, BufferBuilder buffer, long rand) {
+	private boolean renderModelFlat(IBlockAccess world, BlockPos pos, IBakedModel model, IBlockState state, BufferBuilder buffer, long rand) {
 		boolean flag = false;
 		BitSet bitset = new BitSet(3);
 
+		List<BakedQuad> list = model.getQuads(state, null, rand);
+		
+		if (!list.isEmpty()) {
+			this.renderQuadsFlat(world, state, pos, -1, true, buffer, list, bitset, lighting);
+			flag = true;
+		}
+		
 		for (EnumFacing facing : EnumFacing.VALUES) {
-			List<BakedQuad> list = model.getQuads(state, facing, rand);
+			list = model.getQuads(state, facing, rand);
 
 			if (!list.isEmpty() && (culler == null || culler.shouldSideBeRendered(state, facing))) {
 				int i = lighting != null ? lighting.getPackedLightmapCoords(state, facing) : 0;
-				this.renderQuadsFlat(state, pos, i, false, buffer, list, bitset, lighting);
+				this.renderQuadsFlat(world, state, pos, i, false, buffer, list, bitset, lighting);
 				flag = true;
 			}
 		}
@@ -192,21 +207,16 @@ public class IsolatedBlockModelRenderer {
 		return flag;
 	}
 
-	private void renderQuadsSmooth(BlockPos pos, IBlockState state, BufferBuilder vertexBuffer, List<BakedQuad> quads, float[] blockBounds, BitSet blockBoundsState) {
+	private void renderQuadsSmooth(IBlockAccess world, BlockPos pos, IBlockState state, BufferBuilder vertexBuffer, List<BakedQuad> quads, float[] blockBounds, BitSet blockBoundsState) {
 		double blockX = 0.0D;
 		double blockY = 0.0D;
 		double blockZ = 0.0D;
-		Block block = state.getBlock();
-		Block.EnumOffsetType offsetType = block.getOffsetType();
 
-		if (this.useRandomOffsets && offsetType != Block.EnumOffsetType.NONE) {
-			long posRand = MathHelper.getPositionRandom(pos);
-			blockX += ((double)((float)(posRand >> 16 & 15L) / 15.0F) - 0.5D) * 0.5D;
-			blockZ += ((double)((float)(posRand >> 24 & 15L) / 15.0F) - 0.5D) * 0.5D;
-
-			if (offsetType == Block.EnumOffsetType.XYZ) {
-				blockY += ((double)((float)(posRand >> 20 & 15L) / 15.0F) - 1.0D) * 0.2D;
-			}
+		if (this.useRandomOffsets) {
+			Vec3d vec3d = state.getOffset(world, pos);
+			blockX += vec3d.x;
+			blockY += vec3d.y;
+			blockZ += vec3d.z;
 		}
 
 		int l = 0;
@@ -253,25 +263,16 @@ public class IsolatedBlockModelRenderer {
 		}
 	}
 
-	private void renderQuadsFlat(IBlockState state, BlockPos pos, int brightness, boolean updateBrightness, BufferBuilder vertexBuffer, List<BakedQuad> quads, BitSet blockBoundsState, @Nullable LightingProvider lighting) {
+	private void renderQuadsFlat(IBlockAccess world, IBlockState state, BlockPos pos, int brightness, boolean updateBrightness, BufferBuilder vertexBuffer, List<BakedQuad> quads, BitSet blockBoundsState, @Nullable LightingProvider lighting) {
 		double blockX = 0.0D;
 		double blockY = 0.0D;
 		double blockZ = 0.0D;
-		Block block = state.getBlock();
-		Block.EnumOffsetType offsetType = block.getOffsetType();
 
-		if (this.useRandomOffsets && offsetType != Block.EnumOffsetType.NONE) {
-			int randX = pos.getX();
-			int randZ = pos.getZ();
-			long posRand = (long)(randX * 3129871) ^ (long)randZ * 116129781L;
-			posRand = posRand * posRand * 42317861L + posRand * 11L;
-			blockX += ((double)((float)(posRand >> 16 & 15L) / 15.0F) - 0.5D) * 0.5D;
-			blockZ += ((double)((float)(posRand >> 24 & 15L) / 15.0F) - 0.5D) * 0.5D;
-
-			if (offsetType == Block.EnumOffsetType.XYZ)
-			{
-				blockY += ((double)((float)(posRand >> 20 & 15L) / 15.0F) - 1.0D) * 0.2D;
-			}
+		if (this.useRandomOffsets) {
+			Vec3d vec3d = state.getOffset(world, pos);
+			blockX += vec3d.x;
+			blockY += vec3d.y;
+			blockZ += vec3d.z;
 		}
 
 		int l = 0;

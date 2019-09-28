@@ -31,7 +31,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 
 	private boolean checked = false;
 	private boolean shadersSupported = false;
-	private boolean floatBufferSupported = false;
+	private boolean gl30Supported = false;
 	private boolean arbFloatBufferSupported = false;
 
 	private Exception shaderError = null;
@@ -100,16 +100,24 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	 * @return
 	 */
 	public boolean isHDRSupported() {
-		return this.floatBufferSupported && this.arbFloatBufferSupported;
+		return this.isGL30Supported() && (this.isARBFloatBufferSupported() || this.isFloatBufferSupported());
 	}
 
+	/**
+	 * Returns whether GL 3.0 is supported
+	 * @return
+	 */
+	public boolean isGL30Supported() {
+		this.checkCapabilities();
+		return this.gl30Supported;
+	}
+	
 	/**
 	 * Returns whether float buffers are supported
 	 * @return
 	 */
 	public boolean isFloatBufferSupported() {
-		this.checkCapabilities();
-		return this.floatBufferSupported;
+		return this.isGL30Supported();
 	}
 
 	/**
@@ -133,7 +141,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 			int maxTextureUnits = arbMultitexture ? GL11.glGetInteger(ARBMultitexture.GL_MAX_TEXTURE_UNITS_ARB) : (!contextCapabilities.OpenGL20 ? GL11.glGetInteger(GL13.GL_MAX_TEXTURE_UNITS) : GL11.glGetInteger(GL20.GL_MAX_TEXTURE_IMAGE_UNITS));
 			boolean textureUnitsSupported = maxTextureUnits >= MIN_REQUIRED_TEX_UNITS;
 			this.shadersSupported = OpenGlHelper.areShadersSupported() && supported && OpenGlHelper.framebufferSupported && textureUnitsSupported;
-			this.floatBufferSupported = contextCapabilities.OpenGL30;
+			this.gl30Supported = contextCapabilities.OpenGL30;
 			this.arbFloatBufferSupported = contextCapabilities.GL_ARB_texture_float;
 		}
 	}

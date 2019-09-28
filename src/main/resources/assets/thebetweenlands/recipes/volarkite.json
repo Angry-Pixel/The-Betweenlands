@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "VVV",
+    "RXR",
+    " X "
+  ],
+  "key": {
+    "V": {
+      "item": "thebetweenlands:items_plant_drop",
+      "data": 36
+    },
+    "R": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    },
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:volarkite",
+    "count": 1
+  }
+}

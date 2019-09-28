@@ -705,6 +705,7 @@ item.thebetweenlands.magic_item_magnet.name=Magic Item Magnet
 item.thebetweenlands.gem_singer.name=Gem Singer
 item.thebetweenlands.bark_amulet.name=Bark Amulet
 item.thebetweenlands.sushi.name=Sushi
+item.thebetweenlands.volarkite.name=Volarkite
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1491,6 +1492,7 @@ config.thebetweenlands.generate_portal_in_end=Generate Portal Tree in End
 config.thebetweenlands.rendering=Rendering
 config.thebetweenlands.wisp_quality=Wisp Rendering Quality
 config.thebetweenlands.use_shader=Use shaders for rendering
+config.thebetweenlands.shader_priority=Shader rendering priority
 config.thebetweenlands.dimension_shader_only=Shaders in dimension only
 config.thebetweenlands.sky_texture_resolution=Sky texture resolution
 config.thebetweenlands.fullbright_blocks=Full brightness blocks
