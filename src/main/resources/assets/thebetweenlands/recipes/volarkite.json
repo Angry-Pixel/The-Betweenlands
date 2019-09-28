@@ -6,10 +6,15 @@
     " X "
   ],
   "key": {
-    "V": {
-      "item": "thebetweenlands:items_plant_drop",
-      "data": 36
-    },
+    "V": [
+      {
+        "item": "thebetweenlands:volarpad"
+      },
+      {
+        "item": "thebetweenlands:items_plant_drop",
+        "data": 36
+      }
+    ],
     "R": {
       "item": "thebetweenlands:items_misc",
       "data": 7
