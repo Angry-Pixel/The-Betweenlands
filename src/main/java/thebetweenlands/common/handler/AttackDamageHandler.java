@@ -137,7 +137,7 @@ public class AttackDamageHandler {
 
 				for(int i = 0; i < inv.getSizeInventory(); i++) {
 					ItemStack stack = inv.getStackInSlot(i);
-					if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_POWER) {
+					if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_POWER && stack.getItemDamage() < stack.getMaxDamage()) {
 						rings++;
 					}
 				}
