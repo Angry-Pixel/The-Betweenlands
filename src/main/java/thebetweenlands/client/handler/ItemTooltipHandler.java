@@ -6,6 +6,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.api.item.IEquippable;
@@ -15,6 +16,7 @@ import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.handler.FoodSicknessHandler;
+import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
@@ -37,6 +39,10 @@ public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.#
 		List<String> toolTip = event.getToolTip();
 		EntityPlayer player = event.getEntityPlayer();
 
+		if(player != null && !ItemAspectContainer.fromItem(stack, AspectManager.get(player.world)).isEmpty()) {
+			toolTip.add(I18n.format("tooltip.herblore.ingredient"));
+		}
+		
 		ICompostBinRecipe recipe = CompostRecipe.getCompostRecipe(stack);
 		if(recipe != null) {
 			String debug = "";
@@ -45,7 +51,7 @@ public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.#
 			}
 			toolTip.add(I18n.format("tooltip.compost.compostable") + debug);
 		}
-
+		
 		CircleGemType circleGem = CircleGemHelper.getGem(stack);
 		if(circleGem != CircleGemType.NONE) {
 			toolTip.add(I18n.format("tooltip.circlegem." + circleGem.name));

@@ -911,6 +911,7 @@ tooltip.life_crystal.remaining=%d remaining
 tooltip.shockwave_sword.usage=Right-click on the ground\nto create a shockwave
 tooltip.shockwave_sword.broken=The Shockwave Sword is\nbroken and needs to be\nrepaired in an Animator
 tooltip.compost.compostable=Compostable
+tooltip.herblore.ingredient=Herblore Ingredient
 tooltip.food_sickness.state.fine=Tastes good
 tooltip.food_sickness.state.half=Tastes plain
 tooltip.food_sickness.state.sick=Can't eat this anymore
