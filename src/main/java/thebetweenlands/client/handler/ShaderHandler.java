@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import thebetweenlands.api.event.PreRenderShadersEvent;
 import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 
 public class ShaderHandler {
@@ -68,22 +69,48 @@ public class ShaderHandler {
 		}
 	}
 
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onRenderWorldLastHighest(RenderWorldLastEvent event) {
+		if(BetweenlandsConfig.RENDERING.shaderPriority == 2) {
+			this.updateShaders(event);
+		}
+	}
+	
+	@SubscribeEvent(priority = EventPriority.NORMAL)
+	public void onRenderWorldLastNormal(RenderWorldLastEvent event) {
+		if(BetweenlandsConfig.RENDERING.shaderPriority == 1) {
+			this.updateShaders(event);
+		}
+	}
+	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void onRenderWorldLast(RenderWorldLastEvent event) {
+	public void onRenderWorldLastLowest(RenderWorldLastEvent event) {
+		if(BetweenlandsConfig.RENDERING.shaderPriority == 0) {
+			this.updateShaders(event);
+		}
+	}
+	
+	private void updateShaders(RenderWorldLastEvent event) {
 		if(ShaderHelper.INSTANCE.canUseShaders()) {
-			//Render hands and item to depth buffer
+			//Make sure proper matrix is used
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GlStateManager.pushMatrix();
+			
+			//Render hands and item to depth buffer
 			GlStateManager.colorMask(false, false, false, false);
 			//Don't render water overlays so they don't write to the depth buffer
 			this.cancelTransparentOverlays = true;
 			Minecraft.getMinecraft().entityRenderer.renderHand(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
 			Minecraft.getMinecraft().entityRenderer.setupCameraTransform(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
-			this.cancelTransparentOverlays = false;
-			GlStateManager.colorMask(true, true, true, true);
-			GlStateManager.popMatrix();
-
+			
 			//Initialize and update shaders and textures
 			ShaderHelper.INSTANCE.updateShaders(event.getPartialTicks());
+			
+			this.cancelTransparentOverlays = false;
+			GlStateManager.colorMask(true, true, true, true);
+			
+			GL11.glMatrixMode(GL11.GL_MODELVIEW);
+			GlStateManager.popMatrix();
 		}
 	}
 
