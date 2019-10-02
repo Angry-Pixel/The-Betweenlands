@@ -350,6 +350,9 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.BLACK_HAT_MUSHROOM));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.FLAT_HEAD_MUSHROOM));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.BULB_CAPPED_MUSHROOM));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.EDGE_LEAF));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.EDGE_MOSS));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.EDGE_SHROOM));
 		CompostRecipe.addRecipe(4, 6000, Item.getItemFromBlock(BlockRegistry.SWAMP_PLANT));
 		CompostRecipe.addRecipe(12, 10000, Item.getItemFromBlock(BlockRegistry.VENUS_FLY_TRAP));
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.VOLARPAD));
@@ -357,7 +360,9 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.THORNS));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.POISON_IVY));
 		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BlockRegistry.MOSS));
+		CompostRecipe.addRecipe(6, 3000, Item.getItemFromBlock(BlockRegistry.DEAD_MOSS));
 		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BlockRegistry.LICHEN));
+		CompostRecipe.addRecipe(6, 3000, Item.getItemFromBlock(BlockRegistry.DEAD_LICHEN));
 		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BlockRegistry.CAVE_MOSS));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.CAVE_GRASS));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.CATTAIL));
@@ -378,6 +383,11 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.BONESET));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.BOTTLE_BRUSH_GRASS));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.SLUDGECREEP));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.TALL_SLUDGECREEP));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.ROTBULB));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.PALE_GRASS));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.STRING_ROOTS));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.CRYPTWEED));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.DEAD_WEEDWOOD_BUSH));
 		CompostRecipe.addRecipe(3, 5000, Item.getItemFromBlock(BlockRegistry.HANGER));
 		CompostRecipe.addRecipe(3, 5000, Item.getItemFromBlock(BlockRegistry.ALGAE));
@@ -389,11 +399,15 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD));
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_HEARTHGROVE));
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_NIBBLETWIG));
+		CompostRecipe.addRecipe(25, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_SPIRIT_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_RUBBER_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_SAP_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_WEEDWOOD_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_HEARTHGROVE_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_NIBBLETWIG_TREE));
+		CompostRecipe.addRecipe(6, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_SPIRIT_TREE_BOTTOM));
+		CompostRecipe.addRecipe(6, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_SPIRIT_TREE_MIDDLE));
+		CompostRecipe.addRecipe(6, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_SPIRIT_TREE_TOP));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.FALLEN_LEAVES));
 		CompostRecipe.addRecipe(3, 5000, ItemRegistry.SWAMP_REED_ITEM);
 		CompostRecipe.addRecipe(3, 5000, EnumItemMisc.DRIED_SWAMP_REED.create(1));
@@ -404,6 +418,9 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(5, 8000, ItemRegistry.BLACK_HAT_MUSHROOM_ITEM);
 		CompostRecipe.addRecipe(5, 8000, ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM);
 		CompostRecipe.addRecipe(12, 10000, ItemRegistry.YELLOW_DOTTED_FUNGUS);
+		CompostRecipe.addRecipe(10, 6000, ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS);
+		CompostRecipe.addRecipe(10, 6000, ItemRegistry.SPORES);
+		CompostRecipe.addRecipe(10, 6000, ItemRegistry.ASPECTRUS_SEEDS);
 
 		for (ItemCrushed.EnumItemCrushed type : ItemCrushed.EnumItemCrushed.values()) {
 			CompostRecipe.addRecipe(3, 4000, new ItemStack(ItemRegistry.ITEMS_CRUSHED, 1, type.getID()));

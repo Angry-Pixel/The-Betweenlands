@@ -910,8 +910,6 @@ tooltip.press.shift=Hold 'shift' to view more
 tooltip.life_crystal.remaining=%d remaining
 tooltip.shockwave_sword.usage=Right-click on the ground\nto create a shockwave
 tooltip.shockwave_sword.broken=The Shockwave Sword is\nbroken and needs to be\nrepaired in an Animator
-tooltip.compost.compostable=Compostable
-tooltip.herblore.ingredient=Herblore Ingredient
 tooltip.food_sickness.state.fine=Tastes good
 tooltip.food_sickness.state.half=Tastes plain
 tooltip.food_sickness.state.sick=Can't eat this anymore
@@ -994,6 +992,13 @@ tooltip.bl.censer.plant_tonic=Prevents crops from decaying\nin a medium area
 tooltip.bl.censer.elixir=Continuously applies a weaker version\nof the elixir in a large area
 tooltip.bl.censer.stagnant_water=Causes decay to be accelerated\nin a small area
 tooltip.bl.censer.dungeon_fog=Increases crop growth and\nallows sludge dungeon plants\nto grow in a small area
+
+tooltip.recipes.used_in=§5Used in: §7%s
+tooltip.recipes.compost_bin=Compost Bin
+tooltip.recipes.aspects=Gecko Cage, Infuser
+tooltip.recipes.animator=Animator
+tooltip.recipes.censer=Censer
+tooltip.recipes.purifier=Purifier
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
@@ -1705,6 +1710,7 @@ config.thebetweenlands.decay_bar_zone_offset_y=Decay Bar Y Offset
 config.thebetweenlands.decay_percentage=Use percentual decay
 config.thebetweenlands.decay_min_health=Minimum decay health
 config.thebetweenlands.decay_min_health_percent=Minimum percentual decay health
+config.thebetweenlands.item_usage_tooltip=Item usage tooltip
 
 config.thebetweenlands.mob_spawning=Mob Spawning
 config.thebetweenlands.max_entities_per_loaded_area=Max. entities per loaded area

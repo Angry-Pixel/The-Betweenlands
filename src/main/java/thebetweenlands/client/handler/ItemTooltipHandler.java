@@ -15,9 +15,13 @@ import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
+import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
+import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 import java.math.RoundingMode;
@@ -25,6 +29,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 public class ItemTooltipHandler {
 public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.##");
@@ -39,19 +45,6 @@ public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.#
 		List<String> toolTip = event.getToolTip();
 		EntityPlayer player = event.getEntityPlayer();
 
-		if(player != null && !ItemAspectContainer.fromItem(stack, AspectManager.get(player.world)).isEmpty()) {
-			toolTip.add(I18n.format("tooltip.herblore.ingredient"));
-		}
-		
-		ICompostBinRecipe recipe = CompostRecipe.getCompostRecipe(stack);
-		if(recipe != null) {
-			String debug = "";
-			if(event.getFlags().isAdvanced()) {
-				debug = " (T: " + COMPOST_AMOUNT_FORMAT.format(recipe.getCompostingTime(stack) / 20.0F) + "s A: " + recipe.getCompostAmount(stack) + ")";
-			}
-			toolTip.add(I18n.format("tooltip.compost.compostable") + debug);
-		}
-		
 		CircleGemType circleGem = CircleGemHelper.getGem(stack);
 		if(circleGem != CircleGemType.NONE) {
 			toolTip.add(I18n.format("tooltip.circlegem." + circleGem.name));
@@ -73,6 +66,39 @@ public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.#
 	
 			if(stack.getItem() instanceof IEquippable && ((IEquippable)stack.getItem()).canEquip(stack, player, player)) {
 				toolTip.add(I18n.format("tooltip.item.equippable"));
+			}
+		}
+		
+		if(BetweenlandsConfig.GENERAL.itemUsageTooltip) {
+			List<String> usedInMachines = new ArrayList<>();
+			
+			if(player != null && !ItemAspectContainer.fromItem(stack, AspectManager.get(player.world)).isEmpty()) {
+				usedInMachines.add(I18n.format("tooltip.recipes.aspects"));
+			}
+			
+			if(AnimatorRecipe.getRecipe(stack) != null) {
+				usedInMachines.add(I18n.format("tooltip.recipes.animator"));
+			}
+			
+			if(AbstractCenserRecipe.getRecipe(stack) != null) {
+				usedInMachines.add(I18n.format("tooltip.recipes.censer"));
+			}
+			
+			if(!PurifierRecipe.getRecipeOutput(stack).isEmpty()) {
+				usedInMachines.add(I18n.format("tooltip.recipes.purifier"));
+			}
+			
+			ICompostBinRecipe compostRecipe = CompostRecipe.getCompostRecipe(stack);
+			if(compostRecipe != null) {
+				String debug = "";
+				if(event.getFlags().isAdvanced()) {
+					debug = " (T: " + COMPOST_AMOUNT_FORMAT.format(compostRecipe.getCompostingTime(stack) / 20.0F) + "s A: " + compostRecipe.getCompostAmount(stack) + ")";
+				}
+				usedInMachines.add(I18n.format("tooltip.recipes.compost_bin") + debug);
+			}
+			
+			if(!usedInMachines.isEmpty()) {
+				toolTip.add(I18n.format("tooltip.recipes.used_in", usedInMachines.stream().collect(Collectors.joining(", "))));
 			}
 		}
 	}

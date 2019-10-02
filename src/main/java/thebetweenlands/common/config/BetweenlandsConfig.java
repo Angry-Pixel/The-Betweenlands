@@ -440,6 +440,11 @@ public class BetweenlandsConfig {
 		@Comment("Minimum player health percentage when percentual decay is applied")
 		@RangeDouble(min = 0, max = Float.MAX_VALUE)
 		public float decayMinHealthPercentage = 0.15f;
+		
+		@Name("item_usage_tooltip")
+		@LangKey(LANG_PREFIX + "item_usage_tooltip")
+		@Comment("Whether the item usage tooltip (\"Used In: Infuser, Compost Bin\" etc.) should be shown")
+		public boolean itemUsageTooltip = true;
 	}
 
 	@Name("mob_spawning")
