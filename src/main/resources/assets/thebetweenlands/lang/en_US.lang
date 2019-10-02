@@ -995,7 +995,8 @@ tooltip.bl.censer.dungeon_fog=Increases crop growth and\nallows sludge dungeon p
 
 tooltip.recipes.used_in=§5Used in: §7%s
 tooltip.recipes.compost_bin=Compost Bin
-tooltip.recipes.aspects=Gecko Cage, Infuser
+tooltip.recipes.static_aspects=Gecko Cage
+tooltip.recipes.aspects=Infuser
 tooltip.recipes.animator=Animator
 tooltip.recipes.censer=Censer
 tooltip.recipes.purifier=Purifier

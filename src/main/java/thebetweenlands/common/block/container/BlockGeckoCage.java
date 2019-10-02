@@ -159,7 +159,7 @@ public class BlockGeckoCage extends BlockContainer {
 								AspectItem aspectItem = AspectManager.getAspectItem(heldItemStack);
 								List<Aspect> aspects = manager.getStaticAspects(aspectItem);
 								if(aspects.size() > 0) {
-									DiscoveryContainer mergedKnowledge = DiscoveryContainer.getMergedDiscoveryContainer(player);
+									DiscoveryContainer<?> mergedKnowledge = DiscoveryContainer.getMergedDiscoveryContainer(player);
 									AspectDiscovery discovery = mergedKnowledge.discover(manager, aspectItem);
 									switch(discovery.result) {
 									case NEW:

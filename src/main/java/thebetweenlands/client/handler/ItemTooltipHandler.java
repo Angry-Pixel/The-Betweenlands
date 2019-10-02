@@ -72,8 +72,16 @@ public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.#
 		if(BetweenlandsConfig.GENERAL.itemUsageTooltip) {
 			List<String> usedInMachines = new ArrayList<>();
 			
-			if(player != null && !ItemAspectContainer.fromItem(stack, AspectManager.get(player.world)).isEmpty()) {
-				usedInMachines.add(I18n.format("tooltip.recipes.aspects"));
+			if(player != null) {
+				AspectManager aspectManager = AspectManager.get(player.world);
+				
+				if(!aspectManager.getStaticAspects(stack).isEmpty()) {
+					usedInMachines.add(I18n.format("tooltip.recipes.static_aspects"));
+				}
+				
+				if(!ItemAspectContainer.fromItem(stack, aspectManager).isEmpty()) {
+					usedInMachines.add(I18n.format("tooltip.recipes.aspects"));
+				}
 			}
 			
 			if(AnimatorRecipe.getRecipe(stack) != null) {
