@@ -22,6 +22,8 @@ import thebetweenlands.common.herblore.aspect.type.AspectFirnalaz;
 import thebetweenlands.common.herblore.aspect.type.AspectFreiwynn;
 import thebetweenlands.common.herblore.aspect.type.AspectGeoliirgaz;
 import thebetweenlands.common.herblore.aspect.type.AspectOrdaniis;
+import thebetweenlands.common.herblore.aspect.type.AspectUduriis;
+import thebetweenlands.common.herblore.aspect.type.AspectWodren;
 import thebetweenlands.common.herblore.aspect.type.AspectYeowynn;
 import thebetweenlands.common.herblore.aspect.type.AspectYihinren;
 import thebetweenlands.common.herblore.aspect.type.AspectYunugaz;
@@ -46,7 +48,9 @@ public class AspectRegistry {
 	public static final IAspectType YEOWYNN = new AspectYeowynn();
 	public static final IAspectType YUNUGAZ = new AspectYunugaz();
 	public static final IAspectType YIHINREN = new AspectYihinren();
-
+	public static final IAspectType WODREN = new AspectWodren();
+	public static final IAspectType UDURIIS = new AspectUduriis();
+	
 	static {
 		try {
 			for(Field f : AspectRegistry.class.getDeclaredFields()) {

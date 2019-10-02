@@ -1071,6 +1071,8 @@ chat.aspect.discovery.armaniis=The gecko seems very calm and looks at you with l
 chat.aspect.discovery.geoliirgaz=The gecko has an empty look in its eyes and doesn't seem to respond to anything
 chat.aspect.discovery.yihinren=The gecko's scales became puffy and its head looks... different
 chat.aspect.discovery.byariis=The gecko is chewing furiously on its tail and looks around as if possessed
+chat.aspect.discovery.uduriis=The gecko runs around frantically in nonsensical patterns
+chat.aspect.discovery.wodren=The gecko's eyes flare up and for a moment it looked like it had self awareness...
 
 chat.compost.full=The compost bin is full
 chat.compost.not.compostable=This item is not compostable
@@ -1242,6 +1244,7 @@ entity.thebetweenlands.tiny_sludge_worm.name=Tiny Sludge Worm
 entity.thebetweenlands.tiny_worm_egg_sac.name=Sludge Worm Egg Sac
 entity.thebetweenlands.moving_spawner_hole.name=Moving Spawner Hole
 entity.thebetweenlands.wall_lamprey.name=Lamprey
+entity.thebetweenlands.wall_living_root.name=Living Root
 entity.thebetweenlands.ash_sprite.name=Ash Sprite
 entity.thebetweenlands.emberling.name=Emberling
 entity.thebetweenlands.shambler.name=Shambler
@@ -1375,6 +1378,8 @@ manual.enhance=Enhance
 manual.health=Health
 manual.form=Form
 manual.wind=Wind
+manual.soul=Soul
+manual.chaos=Chaos
 
 
 manual.azuwynn.description=The aspect that has effect on the muscles.<nl> Tier I aspect.
@@ -1391,6 +1396,8 @@ manual.ordaniis.description=The aspect that activates other aspects or enhances 
 manual.yeowynn.description=The aspect that influences physical health and recovery.<nl> Tier I aspect.
 manual.yunugaz.description=The aspect that correlates to the element of wind.<nl> Tier II aspect.
 manual.yihinren.description=The aspect that affects both physical and psychological form.<nl> Tier III aspect.
+manual.wodren.description=The aspect that affects the spiritual state and life force of a being.<nl> Tier III aspect.
+manual.uduriis.description=The aspect that correlates to the natural orderless state of the universe.<nl> Tier III aspect.
 
 #ground items
 manual.item.thebetweenlands.ground_algae.description=Large patches of Algae can be found quite commonly in any biome on the surface of the water.

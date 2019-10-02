@@ -738,7 +738,12 @@
       "thebetweenlands:wall_lamprey_attack_3"
     ]
   },
-    "worm_emerge": {
+  "wall_living_root_emerge": {
+    "sounds": [
+      "thebetweenlands:wall_living_root_emerge"
+    ]
+  },
+  "worm_emerge": {
     "sounds": [
       "thebetweenlands:worm_emerge"
     ]

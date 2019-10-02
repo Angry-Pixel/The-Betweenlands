@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -21,6 +22,8 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -29,6 +32,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -39,9 +43,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO Loot tables
 public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, IEntityMultiPart {
+	public static final byte EVENT_DEATH = 3;
+	public static final byte EVENT_HURT_SOUND = 82;
+
 	public static final IAttribute MAX_ARM_LENGTH = (new RangedAttribute(null, "bl.maxRootArmLength", 2.5D, 0.0D, 16.0D)).setDescription("Maximum length of root arm").setShouldWatch(true);
 
 	protected static final float ARM_FULL_WIDTH = 0.2F;
@@ -312,6 +320,21 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	}
 
 	@Override
+	protected void updateMovement() {
+		if(!this.world.isRemote && this.isMoving() && this.getMoveReason() != MoveReason.LOOK) {
+			boolean wasFirstHalf = this.getMovementProgress(1) < 0.5F;
+
+			super.updateMovement();
+
+			if(this.getMovementProgress(1) >= 0.5F && wasFirstHalf) {
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.WALL_LIVING_ROOT_EMERGE, SoundCategory.HOSTILE, 1, 1);
+			}
+		} else {
+			super.updateMovement();
+		}
+	}
+
+	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		this.updateArmSwingProgress();
@@ -350,6 +373,27 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	}
 
 	@Override
+	public SoundCategory getSoundCategory() {
+		return SoundCategory.HOSTILE;
+	}
+
+	@Override
+	protected void playHurtSound(DamageSource source) {
+		this.world.setEntityState(this, EVENT_HURT_SOUND);
+	}
+
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+
+		if(id == EVENT_HURT_SOUND || id == EVENT_DEATH) {
+			SoundType soundType = SoundType.WOOD;
+			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 1.3F, soundType.getPitch() * 0.8F, false);
+			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 4.0F, soundType.getPitch() * 0.5F, false);
+		}
+	}
+
+	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.WALL_LIVING_ROOT;
 	}
@@ -361,7 +405,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 
 	@Override
 	protected boolean isValidBlockForMovement(BlockPos pos, IBlockState state) {
-		return state.isOpaqueCube() && state.isNormalCube() && state.isFullCube() && state.getBlockHardness(this.world, pos) > 0 && state.getMaterial() == Material.ROCK;
+		return state.isOpaqueCube() && state.isNormalCube() && state.isFullCube() && state.getBlockHardness(this.world, pos) > 0 && (state.getMaterial() == Material.ROCK || state.getMaterial() == Material.WOOD);
 	}
 
 	@Override
@@ -385,6 +429,18 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	@Override
 	public Entity[] getParts() {
 		return this.parts;
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		EntityLivingBase attacker = source.getImmediateSource() instanceof EntityLivingBase ? (EntityLivingBase)source.getImmediateSource() : null;
+		if(attacker != null && attacker.getActiveHand() != null) {
+			ItemStack item = attacker.getHeldItem(attacker.getActiveHand());
+			if(!item.isEmpty() && item.getItem() instanceof ItemAxe) {
+				amount *= 2.0F;
+			}
+		}
+		return super.attackEntityFrom(source, amount);
 	}
 
 	@Override

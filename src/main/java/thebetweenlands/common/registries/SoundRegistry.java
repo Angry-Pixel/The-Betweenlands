@@ -164,6 +164,7 @@ public class SoundRegistry {
     public static final BLSoundEvent CRYPT_CRAWLER_DIG = reg("crypt_crawler_dig");
     public static final BLSoundEvent WALL_LAMPREY_SUCK = reg("wall_lamprey_suck");
     public static final BLSoundEvent WALL_LAMPREY_ATTACK = reg("wall_lamprey_attack");
+    public static final BLSoundEvent WALL_LIVING_ROOT_EMERGE = reg("wall_living_root_emerge");
     public static final BLSoundEvent WORM_EMERGE = reg("worm_emerge");
     public static final BLSoundEvent WORM_PLOP = reg("worm_plop");
     public static final BLSoundEvent WORM_HURT = reg("worm_hurt");

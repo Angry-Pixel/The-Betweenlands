@@ -255,6 +255,11 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 
 		return hasAttacked;
 	}
+	
+	@Override
+	public SoundCategory getSoundCategory() {
+		return SoundCategory.HOSTILE;
+	}
 
 	@Override
 	protected ResourceLocation getLootTable() {
@@ -282,7 +287,7 @@ public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 
 	@Override
 	protected boolean isValidBlockForMovement(BlockPos pos, IBlockState state) {
-		return state.isOpaqueCube() && state.isNormalCube() && state.isFullCube() && state.getBlockHardness(this.world, pos) > 0 && state.getMaterial() == Material.ROCK;
+		return state.isOpaqueCube() && state.isNormalCube() && state.isFullCube() && state.getBlockHardness(this.world, pos) > 0 && (state.getMaterial() == Material.ROCK || state.getMaterial() == Material.WOOD);
 	}
 
 	@Override
