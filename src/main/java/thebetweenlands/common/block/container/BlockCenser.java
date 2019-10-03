@@ -30,7 +30,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+import thebetweenlands.api.aspect.IAspectType;
+import thebetweenlands.api.block.IAspectFogBlock;
 import thebetweenlands.api.block.IDungeonFogBlock;
+import thebetweenlands.api.recipes.ICenserRecipe;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
@@ -38,7 +41,7 @@ import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.tile.TileEntityCenser;
 
-public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDungeonFogBlock {
+public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDungeonFogBlock, IAspectFogBlock {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	public static final PropertyBool ENABLED = PropertyBool.create("enabled");
 
@@ -127,18 +130,18 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 
 		return this.getDefaultState().withProperty(FACING, facing).withProperty(ENABLED, (meta & 0b1000) > 0);
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(FACING).getIndex() | (state.getValue(ENABLED) ? 0b1000 : 0);
 	}
-	
+
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		boolean enabled = !worldIn.isBlockPowered(pos);
-        if(enabled != ((Boolean)state.getValue(ENABLED)).booleanValue()) {
-            worldIn.setBlockState(pos, state.withProperty(ENABLED, enabled), 3);
-        }
+		if(enabled != ((Boolean)state.getValue(ENABLED)).booleanValue()) {
+			worldIn.setBlockState(pos, state.withProperty(ENABLED, enabled), 3);
+		}
 	}
 
 	@Override
@@ -180,6 +183,21 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 			return ((TileEntityCenser) te).getDungeonFogStrength(1) >= 0.1F;
 		}
 		return false;
+	}
+
+	@Override
+	public IAspectType getAspectFogType(IBlockAccess world, BlockPos pos, IBlockState state) {
+		TileEntity te = world.getTileEntity(pos);
+		if(te instanceof TileEntityCenser) {
+			TileEntityCenser censer = (TileEntityCenser) te;
+
+			ICenserRecipe<Object> recipe = censer.getCurrentRecipe();
+
+			if(recipe != null) {
+				return recipe.getAspectFogType(censer.getCurrentRecipeContext(), censer.getCurrentRecipeInputAmount(), censer);
+			}
+		}
+		return null;
 	}
 
 	@Override

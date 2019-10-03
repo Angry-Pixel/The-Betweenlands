@@ -50,6 +50,7 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
 import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
+import thebetweenlands.common.recipe.censer.CenserRecipeAspect;
 import thebetweenlands.common.recipe.censer.CenserRecipeDungeonFog;
 import thebetweenlands.common.recipe.censer.CenserRecipeElixir;
 import thebetweenlands.common.recipe.censer.CenserRecipePlantTonic;
@@ -574,5 +575,6 @@ public class RecipeRegistry {
 		AbstractCenserRecipe.addRecipe(new CenserRecipeStagnantWater());
 		AbstractCenserRecipe.addRecipe(new CenserRecipePlantTonic());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeElixir());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeAspect());
 	}
 }

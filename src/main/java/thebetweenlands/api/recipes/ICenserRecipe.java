@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.aspect.IAspectType;
 
 public interface ICenserRecipe<Context> {
 	/**
@@ -35,6 +36,15 @@ public interface ICenserRecipe<Context> {
 	 * @param stack
 	 */
 	public ItemStack consumeInput(ItemStack stack);
+	
+	/**
+	 * Returns the input amount for the given item stack.
+	 * The default value is 1000 for regular items.
+	 * Fluids are handled automatically.
+	 * @param stack
+	 * @return
+	 */
+	public int getInputAmount(ItemStack stack);
 	
 	/**
 	 * Returns whether this recipes matches the fluid stack
@@ -164,4 +174,14 @@ public interface ICenserRecipe<Context> {
 	 * @return
 	 */
 	public boolean isCreatingDungeonFog(@Nullable Context context, int amountLeft, TileEntity censer);
+	
+	/**
+	 * Returns which aspect fog type this recipe creates, or null if no aspect fog is created
+	 * @param context
+	 * @param amountLeft
+	 * @param censer
+	 * @return
+	 */
+	@Nullable
+	public IAspectType getAspectFogType(@Nullable Context context, int amountLeft, TileEntity censer);
 }

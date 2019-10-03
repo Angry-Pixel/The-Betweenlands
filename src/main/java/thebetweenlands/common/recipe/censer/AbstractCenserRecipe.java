@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fluids.FluidStack;
+import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.recipes.ICenserRecipe;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 
@@ -65,6 +66,11 @@ public abstract class AbstractCenserRecipe<T> implements ICenserRecipe<T> {
 		ItemStack result = stack.copy();
 		result.shrink(1);
 		return result;
+	}
+	
+	@Override
+	public int getInputAmount(ItemStack stack) {
+		return 1000;
 	}
 
 	@Override
@@ -139,5 +145,10 @@ public abstract class AbstractCenserRecipe<T> implements ICenserRecipe<T> {
 	@Override
 	public boolean isCreatingDungeonFog(T context, int amountLeft, TileEntity censer) {
 		return false;
+	}
+	
+	@Override
+	public IAspectType getAspectFogType(T context, int amountLeft, TileEntity censer) {
+		return null;
 	}
 }

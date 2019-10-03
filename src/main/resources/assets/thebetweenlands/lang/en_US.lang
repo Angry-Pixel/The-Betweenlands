@@ -788,7 +788,6 @@ item.thebetweenlands.spores.name=Spores
 item.thebetweenlands.bl_bucket_plant_tonic_syrmorite.name=Plant Tonic
 item.thebetweenlands.bl_bucket_plant_tonic_weedwood.name=Plant Tonic
 item.thebetweenlands.syrmorite_bucket_solid_rubber.name=Syrmorite Bucket with Solid Rubber
-item.thebetweenlands.aspectrus_seeds.filled.name=Aspectrus Seeds - %s (%s)
 item.thebetweenlands.aspectrus_seeds.name=Aspectrus Seeds
 item.thebetweenlands.dentrothyst_shield_green.name=Green Dentrothyst Shield
 item.thebetweenlands.dentrothyst_shield_orange.name=Orange Dentrothyst Shield
@@ -992,6 +991,7 @@ tooltip.bl.censer.plant_tonic=Prevents crops from decaying\nin a medium area
 tooltip.bl.censer.elixir=Continuously applies a weaker version\nof the elixir in a large area
 tooltip.bl.censer.stagnant_water=Causes decay to be accelerated\nin a small area
 tooltip.bl.censer.dungeon_fog=Increases crop growth and\nallows sludge dungeon plants\nto grow in a small area
+tooltip.bl.censer.aspect=Infuses Aspectrus crops with\nthe aspect and enables the crops\nto grow in a small area
 
 tooltip.recipes.used_in=§5Used in: §7%s
 tooltip.recipes.compost_bin=Compost Bin
