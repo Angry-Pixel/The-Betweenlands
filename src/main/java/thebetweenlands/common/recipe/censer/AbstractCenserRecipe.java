@@ -132,7 +132,7 @@ public abstract class AbstractCenserRecipe<T> implements ICenserRecipe<T> {
 	}
 
 	@Override
-	public void render(T context, int amountLeft, TileEntity censer, double x, double y, double z, float partialTicks) {
+	public void render(T context, int amountLeft, TileEntity censer, boolean running, float effectStrength, double x, double y, double z, float partialTicks) {
 
 	}
 

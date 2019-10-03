@@ -221,7 +221,7 @@ public class RenderCenser extends TileEntitySpecialRenderer<TileEntityCenser> {
 					GlStateManager.depthMask(true);
 				}
 
-				recipe.render(te.getCurrentRecipeContext(), te.getCurrentRecipeInputAmount(), te, x, y, z, partialTicks);
+				recipe.render(te.getCurrentRecipeContext(), te.getCurrentRecipeInputAmount(), te, te.isRecipeRunning(), te.getEffectStrength(partialTicks), x, y, z, partialTicks);
 			}
 		}
 	}

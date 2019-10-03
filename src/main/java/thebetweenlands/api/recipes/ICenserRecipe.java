@@ -142,6 +142,7 @@ public interface ICenserRecipe<Context> {
 	 * @param type
 	 * @return
 	 */
+	@SideOnly(Side.CLIENT)
 	public int getEffectColor(@Nullable Context context, int amountLeft, TileEntity censer, EffectColorType type);
 
 	/**
@@ -151,7 +152,8 @@ public interface ICenserRecipe<Context> {
 	 * @param censer
 	 * @param partialTicks
 	 */
-	public void render(@Nullable Context context, int amountLeft, TileEntity censer, double x, double y, double z, float partialTicks);
+	@SideOnly(Side.CLIENT)
+	public void render(@Nullable Context context, int amountLeft, TileEntity censer, boolean running, float effectStrength, double x, double y, double z, float partialTicks);
 
 	/**
 	 * Whether this recipe/effect creates dungeon fog that accelerates

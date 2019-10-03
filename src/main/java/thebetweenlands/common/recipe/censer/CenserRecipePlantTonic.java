@@ -10,7 +10,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.recipes.ICenserRecipe.EffectColorType;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.network.clientbound.MessageCureDecayParticles;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 
@@ -68,8 +74,12 @@ public class CenserRecipePlantTonic extends AbstractCenserRecipe<Void> {
 							if(te instanceof TileEntityDugSoil && tePos.getX() >= pos.getX() - range && tePos.getX() <= pos.getX() + range &&
 									tePos.getY() >= pos.getY() - verticalRange && tePos.getY() <= pos.getY() + verticalRange &&
 									tePos.getZ() >= pos.getZ() - range && tePos.getZ() <= pos.getZ() + range) {
-								if(((TileEntityDugSoil) te).getDecay() > 0) {
+
+								if(((TileEntityDugSoil) te).getDecay() > 5) {
 									((TileEntityDugSoil) te).setDecay(0);
+
+									TheBetweenlands.networkWrapper.sendToAllAround(new MessageCureDecayParticles(tePos.up()), new TargetPoint(world.provider.getDimension(), tePos.getX(), tePos.getY(), tePos.getZ(), 32));
+
 									applied = true;
 								}
 							}
@@ -84,5 +94,11 @@ public class CenserRecipePlantTonic extends AbstractCenserRecipe<Void> {
 		}
 
 		return 0;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public int getEffectColor(Void context, int amountLeft, TileEntity censer, EffectColorType type) {
+		return type == EffectColorType.GUI ? 0xFFEDBC40 : super.getEffectColor(context, amountLeft, censer, type);
 	}
 }

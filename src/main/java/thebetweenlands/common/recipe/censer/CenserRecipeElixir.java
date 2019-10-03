@@ -10,8 +10,12 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
+import thebetweenlands.common.item.herblore.ItemElixir;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -37,6 +41,10 @@ public class CenserRecipeElixir extends AbstractCenserRecipe<CenserRecipeElixirC
 		return new CenserRecipeElixirContext(stack);
 	}
 
+	private List<EntityLivingBase> getAffectedEntities(World world, BlockPos pos) {
+		return world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos).grow(32, 1, 32).expand(0, 16, 0));
+	}
+	
 	@Override
 	public int update(CenserRecipeElixirContext context, int amountLeft, TileEntity censer) {
 		World world = censer.getWorld();
@@ -44,20 +52,40 @@ public class CenserRecipeElixir extends AbstractCenserRecipe<CenserRecipeElixirC
 		if(!world.isRemote && world.getTotalWorldTime() % 100 == 0) {
 			Potion potion = ItemRegistry.ELIXIR.getElixirFromItem(context.elixir).getPotionEffect();
 
+			int maxDuration = ItemRegistry.ELIXIR.createPotionEffect(context.elixir, 0.25D).getDuration();
+			
 			BlockPos pos = censer.getPos();
 
-			List<EntityLivingBase> affected = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos).grow(32, 1, 32).expand(0, 16, 0));
+			List<EntityLivingBase> affected = this.getAffectedEntities(world, pos);
 			for(EntityLivingBase living : affected) {
-				living.addPotionEffect(new PotionEffect(potion, 200, 0, true, false));
+				living.addPotionEffect(new PotionEffect(potion, Math.min(maxDuration, 200), 0, true, false));
 			}
 		}
 
 		return 0;
 	}
 
+	private int getEffectiveDuration(CenserRecipeElixirContext context) {
+		PotionEffect effect = ItemRegistry.ELIXIR.createPotionEffect(context.elixir, 1.0D);
+		return 20 + effect.getDuration() * 8;
+	}
+	
 	@Override
 	public int getConsumptionDuration(CenserRecipeElixirContext context, int amountLeft, TileEntity censer) {
-		PotionEffect effect = ItemRegistry.ELIXIR.createPotionEffect(context.elixir, 1.0D);
-		return 5 + effect.getDuration() * 5;
+		return Math.max(1, MathHelper.floor(this.getEffectiveDuration(context) / 1000.0f));
+	}
+	
+	@Override
+	public int getConsumptionAmount(CenserRecipeElixirContext context, int amountLeft, TileEntity censer) {
+		if(this.getAffectedEntities(censer.getWorld(), censer.getPos()).isEmpty()) {
+			return 0;
+		}
+		return 1 + MathHelper.floor(1000.0f / this.getEffectiveDuration(context));
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public int getEffectColor(CenserRecipeElixirContext context, int amountLeft, TileEntity censer, EffectColorType type) {
+		return type == EffectColorType.GUI ? ((ItemElixir) context.elixir.getItem()).getColorMultiplier(context.elixir, 0) : super.getEffectColor(context, amountLeft, censer, type);
 	}
 }

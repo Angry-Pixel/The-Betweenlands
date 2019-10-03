@@ -23,4 +23,9 @@ public class CenserRecipeDungeonFog extends AbstractCenserRecipe<Void> {
 	public boolean isCreatingDungeonFog(Void context, int amountLeft, TileEntity censer) {
 		return true;
 	}
+	
+	@Override
+	public int getConsumptionDuration(Void context, int amountLeft, TileEntity censer) {
+		return 18;
+	}
 }

@@ -28,6 +28,19 @@ public interface IFarmablePlant {
 	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand);
 
 	/**
+	 * Returns the spreading chance between 0 and 1
+	 * @param world
+	 * @param pos
+	 * @param state
+	 * @param taretPos
+	 * @param rand
+	 * @return
+	 */
+	public default float getSpreadChance(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		return 1;
+	}
+	
+	/**
 	 * Returns how much compost is consumed when this plant spreads
 	 * @param world
 	 * @param pos

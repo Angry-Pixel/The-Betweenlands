@@ -29,6 +29,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.ItemStackHandler;
 import thebetweenlands.api.recipes.ICenserRecipe;
+import thebetweenlands.common.block.container.BlockCenser;
 import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
@@ -62,6 +63,8 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 	private boolean checkInternalSlotForRecipes = true;
 	private boolean checkInputSlotForTransfer = true;
 
+	private boolean isRecipeRunning = false;
+	
 	public TileEntityCenser() {
 		super("container.censer", NonNullList.withSize(INV_SIZE, ItemStack.EMPTY), (te, inv) -> new ItemStackHandler(inv) {
 			@Override
@@ -340,9 +343,15 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 			}
 		}
 
+		this.isRecipeRunning = false;
+		
 		if(this.currentRecipe != null) {
-			if(!this.world.isRemote && this.fuelTicks <= 0 && this.isFilled()) {
+			IBlockState state = this.world.getBlockState(this.pos);
+			boolean isDisabled = state.getBlock() instanceof BlockCenser && !state.getValue(BlockCenser.ENABLED);
+			
+			if(!this.world.isRemote && !isDisabled && this.fuelTicks <= 0 && this.isFilled()) {
 				ItemStack fuelStack = this.getStackInSlot(ContainerCenser.SLOT_FUEL);
+				
 				if(!fuelStack.isEmpty() && TileEntityFurnace.isItemFuel(fuelStack)) {
 					this.maxFuelTicks = this.fuelTicks = TileEntityFurnace.getItemBurnTime(fuelStack) * 3;
 
@@ -368,7 +377,9 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 					this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
 				}
 			} else {
-				if(this.fuelTicks > 0) {
+				if(this.fuelTicks > 0 && !isDisabled) {
+					this.isRecipeRunning = true;
+					
 					int toRemove = this.currentRecipe.update(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
 
 					if(!this.world.isRemote) {
@@ -435,8 +446,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 			}
 		}
 
-		boolean isRecipeRunning = this.fuelTicks > 0 && this.currentRecipe != null;
-		boolean isCreatingDungeonFog = isRecipeRunning && this.currentRecipe.isCreatingDungeonFog(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+		boolean isCreatingDungeonFog = this.isRecipeRunning && this.currentRecipe.isCreatingDungeonFog(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
 
 		this.prevDungeonFogStrength = this.dungeonFogStrength;
 		if(isCreatingDungeonFog && this.dungeonFogStrength < 1.0F) {
@@ -452,12 +462,12 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		}
 
 		this.prevEffectStrength = this.effectStrength;
-		if(isRecipeRunning && this.effectStrength < 1.0F) {
+		if(this.isRecipeRunning && this.effectStrength < 1.0F) {
 			this.effectStrength += 0.01F;
 			if(this.effectStrength > 1.0F) {
 				this.effectStrength = 1.0F;
 			}
-		} else if(!isRecipeRunning && this.effectStrength > 0.0F) {
+		} else if(!this.isRecipeRunning && this.effectStrength > 0.0F) {
 			this.effectStrength -= 0.01F;
 			if(this.effectStrength < 0.0F) {
 				this.effectStrength = 0.0F;
@@ -596,6 +606,10 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 
 	public float getEffectStrength(float partialTicks) {
 		return this.prevEffectStrength + (this.effectStrength - this.prevEffectStrength) * partialTicks;
+	}
+	
+	public boolean isRecipeRunning() {
+		return this.isRecipeRunning;
 	}
 
 	public AxisAlignedBB getFogRenderArea() {

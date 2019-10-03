@@ -22,20 +22,30 @@ public class ParticleSimple extends Particle implements IParticleSpriteReceiver 
 			this.motionY = ySpeedIn;
 			this.motionZ = zSpeedIn;
 		}
+		if(fade) {
+			this.particleAlpha = 0;
+		}
 	}
 
 	@Override
 	public void setAlphaF(float alpha) {
 		super.setAlphaF(alpha);
 		this.startAlpha = alpha;
+		if(this.fade) {
+			this.particleAlpha = 0;
+		}
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 
-		if(this.fade && this.particleAge > this.particleMaxAge - 40) {
-			this.particleAlpha = (this.startAlpha * (this.particleMaxAge - this.particleAge) / 40.0F);
+		if(this.fade) {
+			if(this.particleAge > this.particleMaxAge - 40) {
+				this.particleAlpha = (this.startAlpha * (this.particleMaxAge - this.particleAge) / 40.0F);
+			} else if(this.particleAge <= 10) {
+				this.particleAlpha = this.startAlpha * this.particleAge / 10.0f;
+			}
 		}
 	}
 

@@ -248,15 +248,18 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 
 	@Override
 	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
-		if(rand.nextFloat() <= 0.25F) {
-			Block block = world.getBlockState(targetPos).getBlock();
-			if(block instanceof BlockSwampWater && ((BlockSwampWater)block).isSourceBlock(world, targetPos)) {
-				return this.canPlaceBlockAt(world, targetPos);
-			}
+		Block block = world.getBlockState(targetPos).getBlock();
+		if(block instanceof BlockSwampWater && ((BlockSwampWater)block).isSourceBlock(world, targetPos)) {
+			return this.canPlaceBlockAt(world, targetPos);
 		}
 		return false;
 	}
 
+	@Override
+	public float getSpreadChance(World world, BlockPos pos, IBlockState state, BlockPos taretPos, Random rand) {
+		return 0.25F;
+	}
+	
 	@Override
 	public int getCompostCost(World world, BlockPos pos, IBlockState state, Random rand) {
 		return 4;

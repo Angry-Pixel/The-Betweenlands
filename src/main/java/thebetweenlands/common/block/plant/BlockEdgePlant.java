@@ -131,7 +131,7 @@ public class BlockEdgePlant extends BlockSludgeDungeonPlant implements ICustomIt
 	
 	@Override
 	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
-		return rand.nextFloat() <= 0.25F && world.isAirBlock(targetPos) && this.hasSupportBlock(world, targetPos, state.getValue(FACING));
+		return world.isAirBlock(targetPos) && this.hasSupportBlock(world, targetPos, state.getValue(FACING));
 	}
 	
 	@Override

@@ -1,9 +1,12 @@
 package thebetweenlands.common.block.container;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -37,13 +40,14 @@ import thebetweenlands.common.tile.TileEntityCenser;
 
 public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDungeonFogBlock {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
+	public static final PropertyBool ENABLED = PropertyBool.create("enabled");
 
 	public BlockCenser() {
 		super(Material.ROCK);
 		setHardness(2.0F);
 		setResistance(5.0F);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(ENABLED, true));
 	}
 
 	@Override
@@ -115,13 +119,26 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing facing = EnumFacing.byIndex(meta);
+		EnumFacing facing = EnumFacing.byIndex(meta & 0b111);
 
 		if (facing.getAxis() == EnumFacing.Axis.Y) {
 			facing = EnumFacing.NORTH;
 		}
 
-		return this.getDefaultState().withProperty(FACING, facing);
+		return this.getDefaultState().withProperty(FACING, facing).withProperty(ENABLED, (meta & 0b1000) > 0);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(FACING).getIndex() | (state.getValue(ENABLED) ? 0b1000 : 0);
+	}
+	
+	@Override
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		boolean enabled = !worldIn.isBlockPowered(pos);
+        if(enabled != ((Boolean)state.getValue(ENABLED)).booleanValue()) {
+            worldIn.setBlockState(pos, state.withProperty(ENABLED, enabled), 3);
+        }
 	}
 
 	@Override
@@ -141,11 +158,6 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 	}
 
 	@Override
-	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING).getIndex();
-	}
-
-	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityCenser();
 	}
@@ -158,7 +170,7 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, FACING);
+		return new BlockStateContainer(this, FACING, ENABLED);
 	}
 
 	@Override
@@ -168,5 +180,10 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 			return ((TileEntityCenser) te).getDungeonFogStrength(1) >= 0.1F;
 		}
 		return false;
+	}
+
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return BlockFaceShape.UNDEFINED;
 	}
 }

@@ -125,7 +125,12 @@ public class BlockPlant extends BlockBush implements IShearable, ISickleHarvesta
 
 	@Override
 	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
-		return rand.nextFloat() <= 0.25F && world.isAirBlock(targetPos) && this.canPlaceBlockAt(world, targetPos);
+		return world.isAirBlock(targetPos) && this.canPlaceBlockAt(world, targetPos);
+	}
+	
+	@Override
+	public float getSpreadChance(World world, BlockPos pos, IBlockState state, BlockPos taretPos, Random rand) {
+		return 0.25F;
 	}
 
 	@Override

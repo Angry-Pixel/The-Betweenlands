@@ -9,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.capability.decay.DecayStats;
 import thebetweenlands.common.lib.ModInfo;
@@ -28,24 +30,50 @@ public class CenserRecipeSapBall extends AbstractCenserRecipe<Void> {
 		return stack.getItem() == ItemRegistry.SAP_BALL;
 	}
 
+	private List<EntityLivingBase> getAffectedEntities(World world, BlockPos pos) {
+		return world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos).grow(32, 1, 32).expand(0, 16, 0));
+	}
+	
 	@Override
 	public int update(Void context, int amountLeft, TileEntity censer) {
 		World world = censer.getWorld();
 
 		if(!world.isRemote && world.getTotalWorldTime() % 100 == 0) {
+			boolean applied = false;
+			
 			BlockPos pos = censer.getPos();
 
-			List<EntityLivingBase> affected = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos).grow(32, 1, 32).expand(0, 16, 0));
+			List<EntityLivingBase> affected = this.getAffectedEntities(world, pos);
 			for(EntityLivingBase living : affected) {
 				IDecayCapability cap = living.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
 				if(cap != null) {
 					DecayStats stats = cap.getDecayStats();
-					stats.addStats(-1, 0);
+					
+					if(stats.getDecayLevel() > 0) {
+						stats.addStats(-1, 0);
+						
+						applied = true;
+					}
 				}
+			}
+			
+			if(applied) {
+				return 250;
 			}
 		}
 		
 		return 0;
+	}
+	
+	@Override
+	public int getConsumptionAmount(Void context, int amountLeft, TileEntity censer) {
+		return 0;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public int getEffectColor(Void context, int amountLeft, TileEntity censer, EffectColorType type) {
+		return type == EffectColorType.GUI ? 0xFFC98000 : super.getEffectColor(context, amountLeft, censer, type);
 	}
 }

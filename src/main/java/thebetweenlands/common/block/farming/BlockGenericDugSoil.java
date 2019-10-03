@@ -44,6 +44,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.IDungeonFogBlock;
 import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.IConnectedTextureBlock;
 import thebetweenlands.common.item.ItemBlockMeta;
@@ -275,10 +278,13 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 
                 if (te.isComposted()) {
                     IBlockState stateUp = world.getBlockState(pos.up());
+                    
                     if (stateUp.getBlock() instanceof IFarmablePlant) {
                         IFarmablePlant plant = (IFarmablePlant) stateUp.getBlock();
+                        
                         if (plant.isFarmable(world, pos.up(), stateUp)) {
                             BlockPos offsetPos = pos.up();
+                            
                             switch (rand.nextInt(4)) {
                                 case 0:
                                     offsetPos = offsetPos.north();
@@ -293,7 +299,14 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
                                     offsetPos = offsetPos.west();
                                     break;
                             }
-                            if (plant.canSpreadTo(world, pos.up(), stateUp, offsetPos, rand)) {
+                            
+                            float spreadChance = plant.getSpreadChance(world, pos.up(), stateUp, offsetPos, rand);
+                            
+                            if(state.getValue(FOGGED)) {
+                            	spreadChance *= 2;
+                            }
+                            
+                            if (rand.nextFloat() <= spreadChance && plant.canSpreadTo(world, pos.up(), stateUp, offsetPos, rand)) {
                                 plant.spreadTo(world, pos.up(), stateUp, offsetPos, rand);
                                 te.setCompost(Math.max(te.getCompost() - plant.getCompostCost(world, pos.up(), stateUp, rand), 0));
                             }
@@ -327,22 +340,20 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
                         }
                     }
 
-                    if (rand.nextInt(20) == 0) {
-                        //Spread decay
-                        for (int xo = -1; xo <= 1; xo++) {
-                            for (int zo = -1; zo <= 1; zo++) {
-                                if ((xo == 0 && zo == 0) || (zo != 0 && xo != 0) || rand.nextInt(3) != 0) {
-                                    continue;
-                                }
-                                BlockPos offset = pos.add(xo, 0, zo);
-                                IBlockState offsetState = world.getBlockState(offset);
-                                if (offsetState.getBlock() instanceof BlockGenericDugSoil) {
-                                    BlockGenericDugSoil dugDirt = (BlockGenericDugSoil) offsetState.getBlock();
-                                    if (!dugDirt.purified) {
-                                        TileEntityDugSoil offsetTe = getTile(world, offset);
-                                        if (offsetTe != null && !offsetTe.isFullyDecayed() && offsetTe.isComposted()) {
-                                            offsetTe.setDecay(offsetTe.getDecay() + 1);
-                                        }
+                    //Spread decay
+                    for (int xo = -1; xo <= 1; xo++) {
+                        for (int zo = -1; zo <= 1; zo++) {
+                            if ((xo == 0 && zo == 0) || (zo != 0 && xo != 0) || rand.nextInt(3) != 0) {
+                                continue;
+                            }
+                            BlockPos offset = pos.add(xo, 0, zo);
+                            IBlockState offsetState = world.getBlockState(offset);
+                            if (offsetState.getBlock() instanceof BlockGenericDugSoil) {
+                                BlockGenericDugSoil dugDirt = (BlockGenericDugSoil) offsetState.getBlock();
+                                if (!dugDirt.purified) {
+                                    TileEntityDugSoil offsetTe = getTile(world, offset);
+                                    if (offsetTe != null && !offsetTe.isFullyDecayed() && offsetTe.isComposted()) {
+                                        offsetTe.setDecay(offsetTe.getDecay() + 5);
                                     }
                                 }
                             }
@@ -416,6 +427,15 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    	if(stateIn.getValue(FOGGED)) {
+    		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1, pos.getZ() + rand.nextFloat(), 
+    				ParticleArgs.get()
+    				.withMotion((rand.nextFloat() - 0.5f) * 0.05f, rand.nextFloat() * 0.02F + 0.005F, (rand.nextFloat() - 0.5f) * 0.05f)
+    				.withScale(5.0f)
+    				.withColor(1, 1, 1, 0.1f)
+    				.withData(80, true, 0.0F, true)));
+    	}
+    	
         if (stateIn.getValue(DECAYED)) {
             BLParticles.DIRT_DECAY.spawn(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + rand.nextFloat());
 

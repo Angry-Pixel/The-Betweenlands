@@ -75,9 +75,9 @@ public class GuiCenser extends GuiContainer {
 				effectTooltip.add(TextFormatting.DARK_PURPLE + I18n.translateToLocalFormatted("tooltip.bl.censer_effect"));
 				effectTooltip.addAll(effect);
 			}
-
+			
 			int amount = this.censer.getCurrentRecipeInputAmount();
-			if(amount > 0 && fuelTicks > 0) {
+			if(amount > 0) {
 				int maxAmount = this.censer.getMaxCurrentRecipeInputAmount();
 				int effectColor = currentRecipe.getEffectColor(this.censer.getCurrentRecipeContext(), this.censer.getCurrentRecipeInputAmount(), this.censer, EffectColorType.GUI);
 
@@ -117,7 +117,7 @@ public class GuiCenser extends GuiContainer {
 				this.zLevel = 0.0F;
 			}
 		}
-
+		
 		if(fuelTicks > 0) {
 			int maxFuelTicks = this.censer.getMaxFuelTicks();
 
