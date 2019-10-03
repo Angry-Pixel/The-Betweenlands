@@ -986,12 +986,12 @@ tooltip.bl.elixir.nimblefeet.effect=Enhances muscle swiftness and nimbleness,\ni
 tooltip.bl.elixir.weakness.effect=Weakens the muscles, reducing one's\ndamage output when they attack.
 tooltip.bl.elixir.strength.effect=Increases raw physical strength, causing\none to deal more damage when they attack.
 
-tooltip.bl.censer.sap_ball=Gradually heals decay in\na large area
-tooltip.bl.censer.plant_tonic=Prevents crops from decaying\nin a medium area
-tooltip.bl.censer.elixir=Continuously applies a weaker version\nof the elixir in a large area
-tooltip.bl.censer.stagnant_water=Causes decay to be accelerated\nin a small area
-tooltip.bl.censer.dungeon_fog=Increases crop growth and\nallows sludge dungeon plants\nto grow in a small area
-tooltip.bl.censer.aspect=Infuses Aspectrus crops with\nthe aspect and enables the crops\nto grow in a small area
+tooltip.bl.censer.sap_ball=Gradually heals decay in\na large area.
+tooltip.bl.censer.plant_tonic=Prevents crops from decaying\nin a medium area.
+tooltip.bl.censer.elixir=Continuously applies a weak version\nof the elixir in a large area.\nPotency affects range.
+tooltip.bl.censer.stagnant_water=Causes decay to be accelerated\nin a small area.
+tooltip.bl.censer.dungeon_fog=Increases crop growth and\nallows sludge dungeon plants\nto grow in a small area.
+tooltip.bl.censer.aspect=Infuses Aspectrus crops with\nthe aspect and enables the crops\nto grow in a small area.
 
 tooltip.recipes.used_in=§5Used in: §7%s
 tooltip.recipes.compost_bin=Compost Bin
