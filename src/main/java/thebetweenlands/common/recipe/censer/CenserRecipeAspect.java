@@ -39,7 +39,8 @@ public class CenserRecipeAspect extends AbstractCenserRecipe<CenserRecipeAspectC
 
 	@Override
 	public int getConsumptionDuration(CenserRecipeAspectContext context, int amountLeft, TileEntity censer) {
-		return 8 * 5;
+		//15 min. / 1000 aspect
+		return 18 * 5;
 	}
 
 	@SideOnly(Side.CLIENT)

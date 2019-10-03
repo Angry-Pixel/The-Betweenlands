@@ -416,12 +416,14 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 						this.setInventorySlotContents(ContainerCenser.SLOT_INPUT, fillResult.getResult());
 					} else if(!this.isFilled()) {
 						ICenserRecipe<?> recipe = this.getEffect(inputStack);
+						
 						if(recipe != null) {
+							this.remainingItemAmount = Math.min(recipe.getInputAmount(inputStack), 1000);
+							
 							ItemStack internalStack = inputStack.copy();
 							internalStack.setCount(1);
 							this.setInventorySlotContents(ContainerCenser.SLOT_INTERNAL, internalStack);
 							this.setInventorySlotContents(ContainerCenser.SLOT_INPUT, recipe.consumeInput(inputStack));
-							this.remainingItemAmount = 1000;
 						}
 					}
 				}

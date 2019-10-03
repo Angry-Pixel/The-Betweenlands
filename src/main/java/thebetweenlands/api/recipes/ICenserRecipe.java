@@ -40,6 +40,7 @@ public interface ICenserRecipe<Context> {
 	/**
 	 * Returns the input amount for the given item stack.
 	 * The default value is 1000 for regular items.
+	 * Maximum amount that the censer can hold is 1000.
 	 * Fluids are handled automatically.
 	 * @param stack
 	 * @return
