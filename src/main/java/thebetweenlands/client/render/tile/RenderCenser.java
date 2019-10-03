@@ -142,6 +142,8 @@ public class RenderCenser extends TileEntitySpecialRenderer<TileEntityCenser> {
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(x + 0.5F, y + 0.7F, z + 0.5F);
 
+					GlStateManager.rotate(-StatePropertyHelper.getStatePropertySafely(te, BlockCenser.class, BlockCenser.FACING, EnumFacing.NORTH).getHorizontalAngle() - 90, 0.0F, 1F, 0F);
+					
 					this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 					TextureAtlasSprite fogSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(CENSER_FOG_PATH.toString());

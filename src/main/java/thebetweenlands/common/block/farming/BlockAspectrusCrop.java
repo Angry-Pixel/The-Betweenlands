@@ -61,28 +61,6 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		ItemStack stack = player.getHeldItem(hand);
-		if(stack.getItem() instanceof ItemAspectVial) {
-			if(this.getAspect(world, pos) == null) {
-				ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(stack);
-				List<Aspect> aspects = aspectContainer.getAspects();
-				if(!aspects.isEmpty()) {
-					Aspect aspect = aspects.get(0);
-					if(!world.isRemote) {
-						this.setAspect(world, pos, aspect);
-						if(!player.isCreative()) {
-							player.setHeldItem(hand, stack.getItem().getContainerItem(stack));
-						}
-					}
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(worldIn, pos, state, rand);
 		Aspect aspect = this.getAspect(worldIn, pos);

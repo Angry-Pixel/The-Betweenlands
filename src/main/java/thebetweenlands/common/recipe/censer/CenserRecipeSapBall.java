@@ -74,6 +74,6 @@ public class CenserRecipeSapBall extends AbstractCenserRecipe<Void> {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int getEffectColor(Void context, int amountLeft, TileEntity censer, EffectColorType type) {
-		return type == EffectColorType.GUI ? 0xFFC98000 : super.getEffectColor(context, amountLeft, censer, type);
+		return 0xFFC98000;
 	}
 }

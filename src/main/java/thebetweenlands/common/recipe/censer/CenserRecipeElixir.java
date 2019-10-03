@@ -41,8 +41,13 @@ public class CenserRecipeElixir extends AbstractCenserRecipe<CenserRecipeElixirC
 		return new CenserRecipeElixirContext(stack);
 	}
 
-	private List<EntityLivingBase> getAffectedEntities(World world, BlockPos pos) {
-		return world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos).grow(32, 1, 32).expand(0, 16, 0));
+	private List<EntityLivingBase> getAffectedEntities(World world, BlockPos pos, CenserRecipeElixirContext context) {
+		int amplifier = ItemRegistry.ELIXIR.createPotionEffect(context.elixir, 1).getAmplifier();
+		
+		int xzRange = 35 + amplifier * 15;
+		int yRange = 12 + amplifier * 4;
+		
+		return world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos).grow(xzRange, 1, xzRange).expand(0, yRange, 0));
 	}
 	
 	@Override
@@ -56,10 +61,12 @@ public class CenserRecipeElixir extends AbstractCenserRecipe<CenserRecipeElixirC
 			
 			BlockPos pos = censer.getPos();
 
-			List<EntityLivingBase> affected = this.getAffectedEntities(world, pos);
+			List<EntityLivingBase> affected = this.getAffectedEntities(world, pos, context);
 			for(EntityLivingBase living : affected) {
 				living.addPotionEffect(new PotionEffect(potion, Math.min(maxDuration, 200), 0, true, false));
 			}
+			
+			context.setConsuming(!affected.isEmpty());
 		}
 
 		return 0;
@@ -77,7 +84,7 @@ public class CenserRecipeElixir extends AbstractCenserRecipe<CenserRecipeElixirC
 	
 	@Override
 	public int getConsumptionAmount(CenserRecipeElixirContext context, int amountLeft, TileEntity censer) {
-		if(this.getAffectedEntities(censer.getWorld(), censer.getPos()).isEmpty()) {
+		if(!context.isConsuming()) {
 			return 0;
 		}
 		return 1 + MathHelper.floor(1000.0f / this.getEffectiveDuration(context));
@@ -86,6 +93,6 @@ public class CenserRecipeElixir extends AbstractCenserRecipe<CenserRecipeElixirC
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int getEffectColor(CenserRecipeElixirContext context, int amountLeft, TileEntity censer, EffectColorType type) {
-		return type == EffectColorType.GUI ? ((ItemElixir) context.elixir.getItem()).getColorMultiplier(context.elixir, 0) : super.getEffectColor(context, amountLeft, censer, type);
+		return ((ItemElixir) context.elixir.getItem()).getColorMultiplier(context.elixir, 0);
 	}
 }

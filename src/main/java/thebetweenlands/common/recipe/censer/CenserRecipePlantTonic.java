@@ -97,6 +97,6 @@ public class CenserRecipePlantTonic extends AbstractCenserRecipe<Void> {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int getEffectColor(Void context, int amountLeft, TileEntity censer, EffectColorType type) {
-		return type == EffectColorType.GUI ? 0xFFEDBC40 : super.getEffectColor(context, amountLeft, censer, type);
+		return 0xFFEDBC40;
 	}
 }
