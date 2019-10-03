@@ -544,6 +544,9 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
+		if(this.remainingItemAmount > 0) {
+			return 0;
+		}
 		//TODO Send custom packet that only updates fluid
 		if (doFill) {
 			this.markDirty();
