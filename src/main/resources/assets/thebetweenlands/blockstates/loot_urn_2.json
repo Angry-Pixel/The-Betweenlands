@@ -95,6 +95,16 @@
 	            "rotation": [ 0, 315, 0 ],
 	            "translation": [ 0, 0, 0],
 	            "scale": [ 0.4, 0.4, 0.4 ]
+	        },
+	        "thirdperson_lefthand": {
+	            "rotation": [ 75, 315, 0 ],
+	            "translation": [ 0, 0, 0],
+	            "scale": [ 0.375, 0.375, 0.375 ]
+	        },
+	        "firstperson_lefthand": {
+	            "rotation": [ 0, 315, 0 ],
+	            "translation": [ 0, 0, 0],
+	            "scale": [ 0.4, 0.4, 0.4 ]
 	        }
 		}
 	}

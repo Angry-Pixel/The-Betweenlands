@@ -41,7 +41,7 @@ public class RenderTarBarrel extends FastTESR<TileEntityTarBarrel> {
 			int skyLight = packedLightmap >> 16 & 65535;
 			int blockLight = packedLightmap & 65535;
 
-			float height = fluid.amount / (float)maxAmount;
+			float height = fluid.amount / (float)maxAmount * 0.78f;
 
 			int color = fluid.getFluid().getColor(fluid);
 
@@ -55,12 +55,18 @@ public class RenderTarBarrel extends FastTESR<TileEntityTarBarrel> {
 			float maxU = sprite.getMaxU();
 			float maxV = sprite.getMaxV();
 
+			float width = 0.56F;
+			float depth = 0.56F;
+
+			float offX = (1 - width) / 2.0f;
+			float offZ = (1 - depth) / 2.0f;
+
 			buffer.setTranslation(x, y, z);
 
-			buffer.pos(0, height, 0).color(r, g, b, a).tex(minU, maxV).lightmap(skyLight, blockLight).endVertex();
-			buffer.pos(0, height, 1).color(r, g, b, a).tex(minU, minV).lightmap(skyLight, blockLight).endVertex();
-			buffer.pos(1, height, 1).color(r, g, b, a).tex(maxU, minV).lightmap(skyLight, blockLight).endVertex();
-			buffer.pos(1, height, 0).color(r, g, b, a).tex(maxU, maxV).lightmap(skyLight, blockLight).endVertex();
+			buffer.pos(offX, height, offZ).color(r, g, b, a).tex(minU, maxV).lightmap(skyLight, blockLight).endVertex();
+			buffer.pos(offX, height, 1 - offZ).color(r, g, b, a).tex(minU, minV).lightmap(skyLight, blockLight).endVertex();
+			buffer.pos(1 - offX, height, 1 - offZ).color(r, g, b, a).tex(maxU, minV).lightmap(skyLight, blockLight).endVertex();
+			buffer.pos(1 - offX, height, offZ).color(r, g, b, a).tex(maxU, maxV).lightmap(skyLight, blockLight).endVertex();
 
 			buffer.setTranslation(0, 0, 0);
 		}

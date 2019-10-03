@@ -76,6 +76,7 @@ import thebetweenlands.client.render.model.tile.ModelLootPot3;
 import thebetweenlands.client.render.model.tile.ModelLootUrn1;
 import thebetweenlands.client.render.model.tile.ModelLootUrn2;
 import thebetweenlands.client.render.model.tile.ModelLootUrn3;
+import thebetweenlands.client.render.model.tile.ModelTarBarrel;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ModelConverter.Box;
 import thebetweenlands.util.ModelConverter.Quad;
@@ -193,6 +194,7 @@ public class ModelRegistry {
 	public static final ModelFromModelBase LOOT_POT_1 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootPot1(), new ResourceLocation("thebetweenlands:blocks/loot_pot_1"), new ResourceLocation("thebetweenlands:particle/block/loot_pot_1_particle"), 64, 32);
 	public static final ModelFromModelBase LOOT_POT_2 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootPot2(), new ResourceLocation("thebetweenlands:blocks/loot_pot_2"), new ResourceLocation("thebetweenlands:particle/block/loot_pot_2_particle"), 64, 32);
 	public static final ModelFromModelBase LOOT_POT_3 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootPot3(), new ResourceLocation("thebetweenlands:blocks/loot_pot_3"), new ResourceLocation("thebetweenlands:particle/block/loot_pot_3_particle"), 64, 32);
+	public static final ModelFromModelBase TAR_BARREL = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelTarBarrel(), new ResourceLocation("thebetweenlands:blocks/tar_barrel"), new ResourceLocation("thebetweenlands:blocks/weedwood"), 64, 32);
 	
 	
 	
