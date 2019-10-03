@@ -58,7 +58,7 @@ public class CenserRecipePlantTonic extends AbstractCenserRecipe<Void> {
 			int ex = MathHelper.floor(pos.getX() + range) >> 4;
 			int ez = MathHelper.floor(pos.getZ() + range) >> 4;
 
-			boolean applied = false;
+			int cost = 0;
 
 			for(int cx = sx; cx <= ex; cx++) {
 				for(int cz = sz; cz <= ez; cz++) {
@@ -80,7 +80,7 @@ public class CenserRecipePlantTonic extends AbstractCenserRecipe<Void> {
 
 									TheBetweenlands.networkWrapper.sendToAllAround(new MessageCureDecayParticles(tePos.up()), new TargetPoint(world.provider.getDimension(), tePos.getX(), tePos.getY(), tePos.getZ(), 32));
 
-									applied = true;
+									cost += 10;
 								}
 							}
 						}
@@ -88,9 +88,7 @@ public class CenserRecipePlantTonic extends AbstractCenserRecipe<Void> {
 				}
 			}
 
-			if(applied) {
-				return 10;
-			}
+			return cost;
 		}
 
 		return 0;
