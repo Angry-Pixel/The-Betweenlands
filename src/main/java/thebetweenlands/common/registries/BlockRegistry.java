@@ -57,7 +57,7 @@ import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockRepeller;
-import thebetweenlands.common.block.container.BlockTarBarrel;
+import thebetweenlands.common.block.container.BlockBarrel;
 import thebetweenlands.common.block.container.BlockTarLootPot;
 import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
@@ -826,7 +826,8 @@ public class BlockRegistry {
     public static final Block ASPECT_VIAL_BLOCK = new BlockAspectVial();
     public static final Block MORTAR = new BlockMortar();
     public static final Block CENSER = new BlockCenser();
-    public static final Block TAR_BARREL = new BlockTarBarrel();
+    public static final Block WEEDWOOD_BARREL = new BlockBarrel(WEEDWOOD_PLANKS.getDefaultState(), false);
+    public static final Block SYRMORITE_BARREL = new BlockBarrel(SYRMORITE_BLOCK.getDefaultState(), true);
     public static final Block ANIMATOR = new BlockAnimator();
     public static final Block ALEMBIC = new BlockAlembic();
     public static final Block MOSS_BED = new BlockMossBed();

@@ -6,16 +6,16 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import thebetweenlands.common.tile.TileEntityTarBarrel;
+import thebetweenlands.common.tile.TileEntityBarrel;
 
-public class ContainerTarBarrel extends Container {
+public class ContainerBarrel extends Container {
 	public static final int SLOT_FUEL = 0;
 	public static final int SLOT_INPUT = 1;
 	public static final int SLOT_INTERNAL = 2;
 
-	protected TileEntityTarBarrel barrel;
+	protected TileEntityBarrel barrel;
 
-	public ContainerTarBarrel(InventoryPlayer inventory, TileEntityTarBarrel tileentity) {
+	public ContainerBarrel(InventoryPlayer inventory, TileEntityBarrel tileentity) {
 		barrel = tileentity;
 
 		int yOffset = 0;

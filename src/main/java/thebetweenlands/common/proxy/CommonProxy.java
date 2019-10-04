@@ -31,7 +31,7 @@ import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
-import thebetweenlands.common.inventory.container.ContainerTarBarrel;
+import thebetweenlands.common.inventory.container.ContainerBarrel;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.tile.TileEntityAnimator;
@@ -41,7 +41,7 @@ import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
-import thebetweenlands.common.tile.TileEntityTarBarrel;
+import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class CommonProxy implements IGuiHandler {
@@ -59,7 +59,7 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_ITEM_RENAMING = 13;
 	public static final int GUI_LURKER_POUCH_KEYBIND = 14;
 	public static final int GUI_CENSER = 15;
-	public static final int GUI_TAR_BARREL = 16;
+	public static final int GUI_BARREL = 16;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -136,9 +136,9 @@ public class CommonProxy implements IGuiHandler {
 			}
 			break;
 			
-		case GUI_TAR_BARREL:
-			if (tile instanceof TileEntityTarBarrel) {
-				return new ContainerTarBarrel(player.inventory, (TileEntityTarBarrel) tile);
+		case GUI_BARREL:
+			if (tile instanceof TileEntityBarrel) {
+				return new ContainerBarrel(player.inventory, (TileEntityBarrel) tile);
 			}
 			break;
 		}

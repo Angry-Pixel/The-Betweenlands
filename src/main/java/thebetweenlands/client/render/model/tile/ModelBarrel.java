@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelTarBarrel extends ModelBase {
+public class ModelBarrel extends ModelBase {
 	public ModelRenderer base;
 	public ModelRenderer top;
 	public ModelRenderer bside1;
@@ -16,7 +16,7 @@ public class ModelTarBarrel extends ModelBase {
 	public ModelRenderer tside3;
 	public ModelRenderer tside4;
 
-	public ModelTarBarrel() {
+	public ModelBarrel() {
 		this.textureWidth = 64;
 		this.textureHeight = 32;
 		this.bside1 = new ModelRenderer(this, 0, 15);

@@ -5,11 +5,11 @@
   ],
   "key": {
     "B": {
-      "item": "thebetweenlands:tar_barrel"
+      "item": "thebetweenlands:weedwood_barrel"
     }
   },
   "result": {
-    "item": "thebetweenlands:tar_barrel",
+    "item": "thebetweenlands:weedwood_barrel",
     "count": 1
   }
 }

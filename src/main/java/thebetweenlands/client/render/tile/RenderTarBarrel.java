@@ -11,13 +11,13 @@ import net.minecraftforge.client.model.animation.FastTESR;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.tile.TileEntityTarBarrel;
+import thebetweenlands.common.tile.TileEntityBarrel;
 
-public class RenderTarBarrel extends FastTESR<TileEntityTarBarrel> {
+public class RenderTarBarrel extends FastTESR<TileEntityBarrel> {
 	public static final ResourceLocation WHITE_SPRITE_PATH = new ResourceLocation(ModInfo.ID, "tiles/white");
 
 	@Override
-	public void renderTileEntityFast(TileEntityTarBarrel te, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder buffer) {
+	public void renderTileEntityFast(TileEntityBarrel te, double x, double y, double z, float partialTicks, int destroyStage, float partial, BufferBuilder buffer) {
 		IFluidTankProperties props = te.getTankProperties()[0];
 		FluidStack fluid = props.getContents();
 
