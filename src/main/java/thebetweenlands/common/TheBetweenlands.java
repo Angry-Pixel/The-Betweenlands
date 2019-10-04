@@ -67,6 +67,7 @@ import thebetweenlands.common.item.tools.ItemGreatsword;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.recipe.censer.CenserRecipeCremains;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.GameruleRegistry;
@@ -251,5 +252,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(GameruleRegistry.class);
 		MinecraftForge.EVENT_BUS.register(RingOfDispersionEntityCapability.class);
 		MinecraftForge.EVENT_BUS.register(ItemGreatsword.class);
+		MinecraftForge.EVENT_BUS.register(CenserRecipeCremains.class);
 	}
 }

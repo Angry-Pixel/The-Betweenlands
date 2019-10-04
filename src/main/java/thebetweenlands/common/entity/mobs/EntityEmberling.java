@@ -233,13 +233,6 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
     }
 
 	@Override
-	@Nullable
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		//TODO add some spawn stuffs
-		return livingdata;
-	}
-
-	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
 	}
@@ -272,6 +265,7 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 			this.setMutexBits(5);
 		}
 
+		@Override
 		public boolean shouldExecute() {
 			target = emberling.getAttackTarget();
 
@@ -289,16 +283,19 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 			}
 		}
 
+		@Override
 		public boolean shouldContinueExecuting() {
 			return shootCount !=-1 && missileCount !=-1 && emberling.recentlyHit <= 40;
 		}
 
+		@Override
 		public void startExecuting() {
 			missileCount = 0;
 			shootCount = 0;
 			emberling.getEntityWorld().playSound(null, emberling.getPosition(), SoundRegistry.EMBERLING_FLAMES, SoundCategory.HOSTILE, 1F, 1F);
 		}
 
+		@Override
 		public void updateTask() {
 			if(!emberling.getIsCastingSpell())
 				emberling.setIsCastingSpell(true);
@@ -328,12 +325,14 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 		EntityLivingBase target;
 		float motionY;
 		float rotation;
+		
 		public EntityAIHoverSpinAttack(EntityEmberling emberling, float motionYIn) {
 			this.emberling = emberling;
 			this.motionY = motionYIn;
 			this.setMutexBits(7);
 		}
 
+		@Override
 		public boolean shouldExecute() {
 			target = emberling.getAttackTarget();
 			rotation = 0F;
@@ -353,10 +352,12 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 			}
 		}
 
+		@Override
 		public boolean shouldContinueExecuting() {
 			return !emberling.onGround;
 		}
 
+		@Override
 		public void startExecuting() {
 			if(emberling.getIsCastingSpell())
 				emberling.setIsCastingSpell(false);
@@ -371,6 +372,7 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 			emberling.motionY = (double) motionY;
 		}
 
+		@Override
 	    public void updateTask() {
 	    		rotation += 30;
 	    		emberling.setRotation(rotation, 0F);

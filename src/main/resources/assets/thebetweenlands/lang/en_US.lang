@@ -732,6 +732,7 @@ item.thebetweenlands.lore_scrap.pitstone.name=Explorer's Entries: Underground Ru
 item.thebetweenlands.lore_scrap.tower.name=Explorer's Entries: The Tower
 item.thebetweenlands.lore_scrap.fort.name=Explorer's Entries: The Fortress
 item.thebetweenlands.angry_pebble.name=Angry Pebble
+item.thebetweenlands.inanimate_angry_pebble.name=Pebble
 item.thebetweenlands.swift_pick.name=Swift Pick
 item.thebetweenlands.ring_of_summoning.name=Ring of Summoning
 item.thebetweenlands.ring_of_recruitment.name=Ring of Recruitment
@@ -993,6 +994,7 @@ tooltip.bl.censer.elixir=Continuously applies a weak version\nof the elixir in a
 tooltip.bl.censer.stagnant_water=Causes decay to be accelerated\nin a small area.
 tooltip.bl.censer.dungeon_fog=Increases crop growth and\nallows sludge dungeon plants\nto grow in a small area.
 tooltip.bl.censer.aspect=Infuses Aspectrus crops with\nthe aspect and enables the crops\nto grow in a small area.
+tooltip.bl.censer.cremains=Incinerates any living creature\nin a small area and turns them\ninto cremains.
 
 tooltip.recipes.used_in=§5Used in: §7%s
 tooltip.recipes.compost_bin=Compost Bin

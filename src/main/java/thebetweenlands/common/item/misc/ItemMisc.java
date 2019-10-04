@@ -99,7 +99,8 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		OCTINE_NUGGET(42),
 		VALONITE_SPLINTER(43),
 		CREMAINS(44),
-		UNDYING_EMBER(45);
+		UNDYING_EMBER(45),
+		INANIMATE_ANGRY_PEBBLE(46);
 
 		private final int id;
 		private final String unlocalizedName;

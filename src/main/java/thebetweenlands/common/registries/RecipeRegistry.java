@@ -51,6 +51,7 @@ import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
 import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
 import thebetweenlands.common.recipe.censer.CenserRecipeAspect;
+import thebetweenlands.common.recipe.censer.CenserRecipeCremains;
 import thebetweenlands.common.recipe.censer.CenserRecipeDungeonFog;
 import thebetweenlands.common.recipe.censer.CenserRecipeElixir;
 import thebetweenlands.common.recipe.censer.CenserRecipePlantTonic;
@@ -530,6 +531,7 @@ public class RecipeRegistry {
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPORES), 8, 4, EntitySporeling.class).setRenderEntity(new ResourceLocation("thebetweenlands:sporeling")));
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BlockRegistry.ROOT_POD), 10, 6, EntityRootSprite.class).setRenderEntity(new ResourceLocation("thebetweenlands:root_sprite")));
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPIRIT_TREE_FACE_SMALL_MASK), 24, 24, new ItemStack(ItemRegistry.SPIRIT_TREE_FACE_SMALL_MASK_ANIMATED)));
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.INANIMATE_ANGRY_PEBBLE.create(1), 1, 1, new ItemStack(ItemRegistry.ANGRY_PEBBLE)));
 		
 		for(Item item : ItemRegistry.ITEMS) {
 			if(item instanceof IAnimatorRepairable) {
@@ -576,5 +578,6 @@ public class RecipeRegistry {
 		AbstractCenserRecipe.addRecipe(new CenserRecipePlantTonic());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeElixir());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeAspect());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeCremains());
 	}
 }

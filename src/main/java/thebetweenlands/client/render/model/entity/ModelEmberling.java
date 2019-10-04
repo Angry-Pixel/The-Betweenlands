@@ -253,7 +253,9 @@ public class ModelEmberling extends ModelBase {
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
 		super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+		
 		EntityEmberling emberling = (EntityEmberling) entity;
+		
 		float heady = MathHelper.sin((rotationYaw / (180F / (float) Math.PI)) * 0.5F);
 		float headx = MathHelper.sin((rotationPitch / (180F / (float) Math.PI)) * 0.5F);
 
@@ -264,8 +266,10 @@ public class ModelEmberling extends ModelBase {
 	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float limbSwing, float limbSwingAngle, float partialRenderTicks) {
 		EntityEmberling emberling = (EntityEmberling) entity;
+		
 		float animation = MathHelper.sin(limbSwing * 0.6F) * limbSwingAngle * 0.5F;
-		float flap = MathHelper.sin((emberling.ticksExisted) * 0.2F) * 0.8F;
+		
+		float flap = MathHelper.sin((emberling.ticksExisted + partialRenderTicks) * 0.2F) * 0.8F;
 
 		hindleg_left1.rotateAngleX = 0.5009094953223726F + animation * 2F;
 		hindleg_right1.rotateAngleX = 0.5009094953223726F - animation * 2F;
@@ -273,14 +277,14 @@ public class ModelEmberling extends ModelBase {
 		hindleg_left2.rotateAngleX = 0.31869712141416456F;
 		hindleg_right2.rotateAngleX = 0.31869712141416456F;
 		
-			arm_right1.rotateAngleX = -0.4553564018453205F - animation;
-			arm_right1.rotateAngleY = -0.136659280431156F - animation * 2F;
-			arm_right1.rotateAngleZ = 1.3658946726107624F + emberling.smoothedAngle(partialRenderTicks);
+		arm_right1.rotateAngleX = -0.4553564018453205F - animation;
+		arm_right1.rotateAngleY = -0.136659280431156F - animation * 2F;
+		arm_right1.rotateAngleZ = 1.3658946726107624F + emberling.smoothedAngle(partialRenderTicks);
 
-			arm_left1.rotateAngleX = 0.36425021489121656F - animation * 2F;
-			arm_left2.rotateAngleX = -1.1383037381507017F + animation;
-			arm_left1.rotateAngleY = -0.27314402793711257F + animation;
-			arm_left1.rotateAngleZ = -0.22759093446006054F - emberling.smoothedAngle(partialRenderTicks);
+		arm_left1.rotateAngleX = 0.36425021489121656F - animation * 2F;
+		arm_left2.rotateAngleX = -1.1383037381507017F + animation;
+		arm_left1.rotateAngleY = -0.27314402793711257F + animation;
+		arm_left1.rotateAngleZ = -0.22759093446006054F - emberling.smoothedAngle(partialRenderTicks);
 		
 		body_base.rotateAngleX = -0.18203784098300857F - animation * 0.5F + flap * 0.025F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
 
