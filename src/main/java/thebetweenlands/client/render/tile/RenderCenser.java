@@ -2,7 +2,6 @@ package thebetweenlands.client.render.tile;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -71,11 +70,11 @@ public class RenderCenser extends TileEntitySpecialRenderer<TileEntityCenser> {
 			float slopeIndex = i + 1;
 
 			float slope = 0.001f;
-			
+
 			if(flatSlope && (i == 3 || i == 4)) {
 				slope = 0.00019f;
 			}
-			
+
 			stripY -= slope + Math.min(slopeIndex * slopeIndex * slopeIndex * slope, onePx);
 			zOff += onePx / ((i + 1) * slope / 0.001f);
 
@@ -143,34 +142,32 @@ public class RenderCenser extends TileEntitySpecialRenderer<TileEntityCenser> {
 					GlStateManager.translate(x + 0.5F, y + 0.7F, z + 0.5F);
 
 					GlStateManager.rotate(-StatePropertyHelper.getStatePropertySafely(te, BlockCenser.class, BlockCenser.FACING, EnumFacing.NORTH).getHorizontalAngle() - 90, 0.0F, 1F, 0F);
-					
+
 					this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 					TextureAtlasSprite fogSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(CENSER_FOG_PATH.toString());
-					IBlockState state = te.getWorld().getBlockState(te.getPos());
 
-					int packedLightmap = state.getPackedLightmapCoords(te.getWorld(), te.getPos());
-					int skyLight = (packedLightmap >> 16) & 65535;
-					int blockLight = packedLightmap & 65535;
+					int skyLight = 240;
+					int blockLight = 240;
 
 					//top fog strips
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(0.0f, 0.18f, 0.18f);
 					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.86f, skyLight, blockLight, effectColor, effectStrength, false);
 					GlStateManager.popMatrix();
-					
+
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(0.03f, 0.18f, 0.15f);
 					GlStateManager.rotate(90, 0, 1, 0);
 					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.94f, skyLight, blockLight, effectColor, effectStrength, true);
 					GlStateManager.popMatrix();
-					
+
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(-0.03f, 0.18f, 0.15f);
 					GlStateManager.rotate(-90, 0, 1, 0);
 					this.renderFogFlow(fogSprite, (te.getWorld().getTotalWorldTime() + partialTicks) * 0.92f, skyLight, blockLight, effectColor, effectStrength, true);
 					GlStateManager.popMatrix();
-					
+
 					//bottom fog strips
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(0.114f, 0, 0.235f);

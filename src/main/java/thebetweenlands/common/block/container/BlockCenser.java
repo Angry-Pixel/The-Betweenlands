@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.container;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
@@ -34,6 +36,11 @@ import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.block.IAspectFogBlock;
 import thebetweenlands.api.block.IDungeonFogBlock;
 import thebetweenlands.api.recipes.ICenserRecipe;
+import thebetweenlands.api.recipes.ICenserRecipe.EffectColorType;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
@@ -203,5 +210,35 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 	@Override
 	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		TileEntity te = worldIn.getTileEntity(pos);
+		if(te instanceof TileEntityCenser) {
+			TileEntityCenser censer = (TileEntityCenser) te;
+
+			if(censer.isRecipeRunning()) {
+				ICenserRecipe<Object> recipe = censer.getCurrentRecipe();
+
+				if(recipe != null) {
+					int fogColor = recipe.getEffectColor(censer.getCurrentRecipeContext(), censer.getCurrentRecipeInputAmount(), censer, EffectColorType.FOG);
+
+					float r = ((fogColor >> 16) & 0xFF) / 255f;
+					float g = ((fogColor >> 8) & 0xFF) / 255f;
+					float b = ((fogColor >> 0) & 0xFF) / 255f;
+
+					for(int i = 0; i < 3 + rand.nextInt(5); i++) {
+						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(worldIn, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 
+								ParticleArgs.get()
+								.withMotion((rand.nextFloat() - 0.5f) * 0.08f, rand.nextFloat() * 0.01F + 0.005F, (rand.nextFloat() - 0.5f) * 0.08f)
+								.withScale(2.0f + rand.nextFloat() * 8.0F)
+								.withColor(r, g, b, 0.1f)
+								.withData(80, true, 0.05F, true)));
+					}
+				}
+			}
+		}
 	}
 }
