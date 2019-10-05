@@ -56,7 +56,10 @@ public class CorrosionHelper {
 	public static float getModifier(ItemStack stack) {
 		if(!stack.isEmpty() && stack.getItem() instanceof ICorrodible) {
 			ICorrodible corrodible = (ICorrodible) stack.getItem();
-			return (-0.7F * (corrodible.getCorrosion(stack) / (float)corrodible.getMaxCorrosion(stack)) + 1);
+			int corrosion = corrodible.getCorrosion(stack);
+			int maxCorrosion = corrodible.getMaxCorrosion(stack);
+			int oneStage = maxCorrosion / 6;
+			return (-0.7F * Math.max(0, ((corrosion - oneStage) / (float)(maxCorrosion - oneStage))) + 1);
 		}
 		return 1.0F;
 	}

@@ -57,6 +57,7 @@ import thebetweenlands.common.recipe.censer.CenserRecipeElixir;
 import thebetweenlands.common.recipe.censer.CenserRecipePlantTonic;
 import thebetweenlands.common.recipe.censer.CenserRecipeSapBall;
 import thebetweenlands.common.recipe.censer.CenserRecipeStagnantWater;
+import thebetweenlands.common.recipe.censer.CenserRecipeWeepingBluePetal;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.BookMergeRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
@@ -574,6 +575,7 @@ public class RecipeRegistry {
 	private static void registerCenserRecipes() {
 		AbstractCenserRecipe.addRecipe(new CenserRecipeDungeonFog());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeSapBall());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeWeepingBluePetal());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeStagnantWater());
 		AbstractCenserRecipe.addRecipe(new CenserRecipePlantTonic());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeElixir());

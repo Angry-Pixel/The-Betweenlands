@@ -17,8 +17,8 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class CenserRecipeSapBall extends AbstractCenserRecipe<Void> {
-	private static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "sap_ball");
+public class CenserRecipeWeepingBluePetal extends AbstractCenserRecipe<Void> {
+	private static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "weeping_blue_petal");
 
 	@Override
 	public ResourceLocation getId() {
@@ -27,7 +27,7 @@ public class CenserRecipeSapBall extends AbstractCenserRecipe<Void> {
 
 	@Override
 	public boolean matchesInput(ItemStack stack) {
-		return stack.getItem() == ItemRegistry.SAP_BALL;
+		return stack.getItem() == ItemRegistry.WEEPING_BLUE_PETAL;
 	}
 
 	private List<EntityLivingBase> getAffectedEntities(World world, BlockPos pos) {
@@ -51,7 +51,7 @@ public class CenserRecipeSapBall extends AbstractCenserRecipe<Void> {
 					DecayStats stats = cap.getDecayStats();
 					
 					if(stats.getDecayLevel() > 0) {
-						stats.addStats(-1, 0);
+						stats.addStats(-2, 0);
 						
 						applied = true;
 					}
@@ -59,7 +59,7 @@ public class CenserRecipeSapBall extends AbstractCenserRecipe<Void> {
 			}
 			
 			if(applied) {
-				return 500;
+				return 150;
 			}
 		}
 		
@@ -74,6 +74,6 @@ public class CenserRecipeSapBall extends AbstractCenserRecipe<Void> {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int getEffectColor(Void context, int amountLeft, TileEntity censer, EffectColorType type) {
-		return 0xFFC98000;
+		return 0xFF1030AA;
 	}
 }
