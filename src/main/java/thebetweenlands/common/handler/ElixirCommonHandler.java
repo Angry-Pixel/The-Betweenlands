@@ -146,7 +146,7 @@ public class ElixirCommonHandler {
             }
         }
 
-        if(ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.isActive(entityLivingBase) && !entityLivingBase.isInWater()) {
+        if(ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.isActive(entityLivingBase) && !entityLivingBase.isInWater() && !entityLivingBase.isSneaking()) {
             IBlockState state = entityLivingBase.world.getBlockState(new BlockPos(entityLivingBase.posX, entityLivingBase.getEntityBoundingBox().minY + Math.min(-0.1D, entityLivingBase.motionY), entityLivingBase.posZ));
             if(state.getMaterial().isLiquid()) {
                 float relStrength = Math.min((ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.getStrength(entityLivingBase)) / 4.0F, 1.0F);

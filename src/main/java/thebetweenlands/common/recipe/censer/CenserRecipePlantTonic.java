@@ -13,7 +13,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.recipes.ICenserRecipe.EffectColorType;
+import thebetweenlands.api.block.ICenser;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.clientbound.MessageCureDecayParticles;
@@ -39,12 +39,12 @@ public class CenserRecipePlantTonic extends AbstractCenserRecipe<Void> {
 	}
 
 	@Override
-	public int getConsumptionAmount(Void context, int amountLeft, TileEntity censer) {
+	public int getConsumptionAmount(Void context, ICenser censer) {
 		return 0;
 	}
 
 	@Override
-	public int update(Void context, int amountLeft, TileEntity censer) {
+	public int update(Void context, ICenser censer) {
 		World world = censer.getWorld();
 
 		if(!world.isRemote && world.getTotalWorldTime() % 100 == 0) {
@@ -93,10 +93,10 @@ public class CenserRecipePlantTonic extends AbstractCenserRecipe<Void> {
 
 		return 0;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
-	public int getEffectColor(Void context, int amountLeft, TileEntity censer, EffectColorType type) {
+	public int getEffectColor(Void context, ICenser censer, EffectColorType type) {
 		return 0xFFEDBC40;
 	}
 }

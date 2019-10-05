@@ -68,18 +68,18 @@ public class GuiCenser extends GuiContainer {
 
 		if(currentRecipe != null) {
 			List<String> effect = new ArrayList<>();
-			currentRecipe.getLocalizedEffectText(this.censer.getCurrentRecipeContext(), this.censer.getCurrentRecipeInputAmount(), this.censer, effect);
+			currentRecipe.getLocalizedEffectText(this.censer.getCurrentRecipeContext(), this.censer, effect);
 			if(!effect.isEmpty()) {
 				effectTooltip = new ArrayList<>();
 				effectTooltip.add("");
 				effectTooltip.add(TextFormatting.DARK_PURPLE + I18n.translateToLocalFormatted("tooltip.bl.censer_effect"));
 				effectTooltip.addAll(effect);
 			}
-			
-			int amount = this.censer.getCurrentRecipeInputAmount();
+
+			int amount = this.censer.getCurrentRemainingInputAmount();
 			if(amount > 0) {
-				int maxAmount = this.censer.getMaxCurrentRecipeInputAmount();
-				int effectColor = currentRecipe.getEffectColor(this.censer.getCurrentRecipeContext(), this.censer.getCurrentRecipeInputAmount(), this.censer, EffectColorType.GUI);
+				int maxAmount = this.censer.getCurrentMaxInputAmount();
+				int effectColor = currentRecipe.getEffectColor(this.censer.getCurrentRecipeContext(), this.censer, EffectColorType.GUI);
 
 				float percent = (float)amount / (float)maxAmount;
 
@@ -117,7 +117,7 @@ public class GuiCenser extends GuiContainer {
 				this.zLevel = 0.0F;
 			}
 		}
-		
+
 		if(fuelTicks > 0) {
 			int maxFuelTicks = this.censer.getMaxFuelTicks();
 

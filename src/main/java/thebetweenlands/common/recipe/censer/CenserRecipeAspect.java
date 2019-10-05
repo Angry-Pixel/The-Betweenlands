@@ -1,7 +1,6 @@
 package thebetweenlands.common.recipe.censer;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
@@ -9,6 +8,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
+import thebetweenlands.api.block.ICenser;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.GroundFog.GroundFogVolume;
 import thebetweenlands.common.lib.ModInfo;
@@ -38,14 +38,16 @@ public class CenserRecipeAspect extends AbstractCenserRecipe<CenserRecipeAspectC
 	}
 
 	@Override
-	public int getConsumptionDuration(CenserRecipeAspectContext context, int amountLeft, TileEntity censer) {
+	public int getConsumptionDuration(CenserRecipeAspectContext context, ICenser censer) {
 		//15 min. / 1000 aspect
 		return 18 * 5;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void render(CenserRecipeAspectContext context, int amountLeft, TileEntity censer, boolean running, float effectStrength, double x, double y, double z, float partialTicks) {
+	public void render(CenserRecipeAspectContext context, ICenser censer, double x, double y, double z, float partialTicks) {
+		float effectStrength = censer.getEffectStrength(partialTicks);
+
 		if(effectStrength > 0.01F && ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			ShaderHelper.INSTANCE.require();
 
@@ -55,7 +57,7 @@ public class CenserRecipeAspect extends AbstractCenserRecipe<CenserRecipeAspectC
 
 			AxisAlignedBB fogArea = new AxisAlignedBB(censer.getPos()).grow(6, 0.1D, 6).expand(0, 12, 0);
 
-			int fogColor = this.getEffectColor(context, amountLeft, censer, EffectColorType.FOG);
+			int fogColor = this.getEffectColor(context, censer, EffectColorType.FOG);
 
 			float r = ((fogColor >> 16) & 0xFF) / 255f;
 			float g = ((fogColor >> 8) & 0xFF) / 255f;
@@ -67,12 +69,12 @@ public class CenserRecipeAspect extends AbstractCenserRecipe<CenserRecipeAspectC
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public int getEffectColor(CenserRecipeAspectContext context, int amountLeft, TileEntity censer, EffectColorType type) {
+	public int getEffectColor(CenserRecipeAspectContext context, ICenser censer, EffectColorType type) {
 		return context.type.getColor();
 	}
 
 	@Override
-	public IAspectType getAspectFogType(CenserRecipeAspectContext context, int amountLeft, TileEntity censer) {
+	public IAspectType getAspectFogType(CenserRecipeAspectContext context, ICenser censer) {
 		return context.type;
 	}
 }

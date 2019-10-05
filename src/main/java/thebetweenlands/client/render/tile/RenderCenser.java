@@ -131,7 +131,7 @@ public class RenderCenser extends TileEntitySpecialRenderer<TileEntityCenser> {
 			ICenserRecipe<Object> recipe = te.getCurrentRecipe();
 			if(recipe != null) {
 				if(te.hasWorld()) {
-					int effectColor = recipe.getEffectColor(te.getCurrentRecipeContext(), te.getCurrentRecipeInputAmount(), te, EffectColorType.FOG);
+					int effectColor = recipe.getEffectColor(te.getCurrentRecipeContext(), te, EffectColorType.FOG);
 					float effectStrength = te.getEffectStrength(partialTicks);
 
 					GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -220,7 +220,7 @@ public class RenderCenser extends TileEntitySpecialRenderer<TileEntityCenser> {
 					GlStateManager.depthMask(true);
 				}
 
-				recipe.render(te.getCurrentRecipeContext(), te.getCurrentRecipeInputAmount(), te, te.isRecipeRunning(), te.getEffectStrength(partialTicks), x, y, z, partialTicks);
+				recipe.render(te.getCurrentRecipeContext(), te, x, y, z, partialTicks);
 			}
 		}
 	}

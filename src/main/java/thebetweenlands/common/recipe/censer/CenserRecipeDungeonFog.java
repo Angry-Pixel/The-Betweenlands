@@ -1,8 +1,8 @@
 package thebetweenlands.common.recipe.censer;
 
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
+import thebetweenlands.api.block.ICenser;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.FluidRegistry;
 
@@ -20,12 +20,12 @@ public class CenserRecipeDungeonFog extends AbstractCenserRecipe<Void> {
 	}
 
 	@Override
-	public boolean isCreatingDungeonFog(Void context, int amountLeft, TileEntity censer) {
+	public boolean isCreatingDungeonFog(Void context, ICenser censer) {
 		return true;
 	}
-	
+
 	@Override
-	public int getConsumptionDuration(Void context, int amountLeft, TileEntity censer) {
+	public int getConsumptionDuration(Void context, ICenser censer) {
 		return 18;
 	}
 }

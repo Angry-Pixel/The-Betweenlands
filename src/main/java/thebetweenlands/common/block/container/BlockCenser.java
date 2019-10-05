@@ -201,7 +201,7 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 			ICenserRecipe<Object> recipe = censer.getCurrentRecipe();
 
 			if(recipe != null) {
-				return recipe.getAspectFogType(censer.getCurrentRecipeContext(), censer.getCurrentRecipeInputAmount(), censer);
+				return recipe.getAspectFogType(censer.getCurrentRecipeContext(), censer);
 			}
 		}
 		return null;
@@ -223,7 +223,7 @@ public class BlockCenser extends BasicBlock implements ITileEntityProvider, IDun
 				ICenserRecipe<Object> recipe = censer.getCurrentRecipe();
 
 				if(recipe != null) {
-					int fogColor = recipe.getEffectColor(censer.getCurrentRecipeContext(), censer.getCurrentRecipeInputAmount(), censer, EffectColorType.FOG);
+					int fogColor = recipe.getEffectColor(censer.getCurrentRecipeContext(), censer, EffectColorType.FOG);
 
 					float r = ((fogColor >> 16) & 0xFF) / 255f;
 					float g = ((fogColor >> 8) & 0xFF) / 255f;
