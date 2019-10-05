@@ -65,7 +65,7 @@ public class CenserRecipeElixir extends AbstractCenserRecipe<CenserRecipeElixirC
 			
 			if(!world.isRemote) {
 				for(EntityLivingBase living : affected) {
-					living.addPotionEffect(new PotionEffect(potion, Math.min(maxDuration, 200), 0, true, false));
+					living.addPotionEffect(new PotionEffect(potion, Math.min(maxDuration, 300), 0, true, false));
 				}
 			}
 			
