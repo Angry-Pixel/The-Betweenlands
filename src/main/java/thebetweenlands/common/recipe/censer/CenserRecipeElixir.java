@@ -54,7 +54,7 @@ public class CenserRecipeElixir extends AbstractCenserRecipe<CenserRecipeElixirC
 	public int update(CenserRecipeElixirContext context, int amountLeft, TileEntity censer) {
 		World world = censer.getWorld();
 
-		if(!world.isRemote && world.getTotalWorldTime() % 100 == 0) {
+		if(world.getTotalWorldTime() % 100 == 0) {
 			Potion potion = ItemRegistry.ELIXIR.getElixirFromItem(context.elixir).getPotionEffect();
 
 			int maxDuration = ItemRegistry.ELIXIR.createPotionEffect(context.elixir, 0.25D).getDuration();
@@ -62,8 +62,11 @@ public class CenserRecipeElixir extends AbstractCenserRecipe<CenserRecipeElixirC
 			BlockPos pos = censer.getPos();
 
 			List<EntityLivingBase> affected = this.getAffectedEntities(world, pos, context);
-			for(EntityLivingBase living : affected) {
-				living.addPotionEffect(new PotionEffect(potion, Math.min(maxDuration, 200), 0, true, false));
+			
+			if(!world.isRemote) {
+				for(EntityLivingBase living : affected) {
+					living.addPotionEffect(new PotionEffect(potion, Math.min(maxDuration, 200), 0, true, false));
+				}
 			}
 			
 			context.setConsuming(!affected.isEmpty());

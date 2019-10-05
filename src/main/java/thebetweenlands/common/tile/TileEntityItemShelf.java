@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 
 public class TileEntityItemShelf extends TileEntityBasicInventory {
     public TileEntityItemShelf() {
-        super(4, "container.itemShelf");
+        super(4, "container.bl.item_shelf");
     }
 
     @Override

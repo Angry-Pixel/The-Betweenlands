@@ -36,7 +36,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     private boolean soundPlaying = false;
 
     public TileEntityAnimator() {
-        super(3, "animator");
+        super(3, "container.bl.animator");
     }
 
     @Override

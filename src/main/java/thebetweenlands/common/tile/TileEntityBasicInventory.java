@@ -9,6 +9,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -124,11 +126,11 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	public boolean hasCustomName() {
 		return false;
 	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return null;
-	}
+    
+    @Override
+    public ITextComponent getDisplayName() {
+        return (ITextComponent)(this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]));
+    }
 
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {

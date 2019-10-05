@@ -13,6 +13,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -429,16 +431,16 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 
     @Override
     public String getName() {
-        return "compost_bin";
+        return "container.bl.compost_bin";
+    }
+    
+    @Override
+    public ITextComponent getDisplayName() {
+        return (ITextComponent)(this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]));
     }
 
     @Override
     public boolean hasCustomName() {
         return false;
-    }
-
-    @Override
-    public ITextComponent getDisplayName() {
-        return null;
     }
 }

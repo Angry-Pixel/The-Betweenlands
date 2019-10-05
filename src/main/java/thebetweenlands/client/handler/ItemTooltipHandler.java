@@ -119,10 +119,20 @@ public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.#
 	 */
 	public static List<String> splitTooltip(String tooltip, int indent) {
 		String indentStr = new String(new char[indent]).replace('\0', ' ');
+		return splitTooltip(tooltip, indentStr);
+	}
+	
+	/**
+	 * Splits a tooltip into multiple lines
+	 * @param tooltip
+	 * @param prefix
+	 * @return
+	 */
+	public static List<String> splitTooltip(String tooltip, String prefix) {
 		List<String> lines = new ArrayList<String>();
 		String[] splits = tooltip.split("\\\\n");
 		for(int i = 0; i < splits.length; i++) {
-			splits[i] = indentStr + splits[i];
+			splits[i] = prefix + splits[i];
 		}
 		lines.addAll(Arrays.asList(splits));
 		return lines;

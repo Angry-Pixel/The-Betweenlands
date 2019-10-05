@@ -28,7 +28,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
     public boolean countUp = true;
 
     public TileEntityMortar() {
-        super(4, "pestleAndMortar");
+        super(4, "container.bl.mortar");
     }
 
 

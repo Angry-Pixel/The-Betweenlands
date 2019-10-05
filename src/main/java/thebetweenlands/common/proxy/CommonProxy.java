@@ -113,7 +113,7 @@ public class CommonProxy implements IGuiHandler {
 				item = player.getHeldItemOffhand();
 			}
 			if(!item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
-				String name = item.hasDisplayName() ? item.getDisplayName() : "container.lurker_skin_pouch";
+				String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.lurker_skin_pouch";
 				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
 			}
 			break;
@@ -122,7 +122,7 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_LURKER_POUCH_KEYBIND: {
 			ItemStack item = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(item != null) {
-				String name = item.hasDisplayName() ? item.getDisplayName() : "container.lurker_skin_pouch";
+				String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.lurker_skin_pouch";
 				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
 			}
 		}

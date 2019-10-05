@@ -856,10 +856,22 @@ itemGroup.thebetweenlands.herblore=The Betweenlands Herblore
 
 
 # Container
-container.furnace_bl=Sulfur Furnace
-container.dual_furnace_bl=Dual Sulfur Furnace
-container.lurker_skin_pouch=Lurker Skin Pouch
-container.lurker_skin_pouch.naming.save=Save
+container.bl.syrmorite_hopper=Syrmorite Hopper
+container.bl.animator=Animator
+container.bl.druid_altar=Druid Altar
+container.bl.infuser=Infuser
+container.bl.item_shelf=Item Shelf
+container.bl.mortar=Mortar
+container.bl.purifier=Purifier
+container.bl.sulfur_furnace=Sulfur Furnace
+container.bl.dual_sulfur_furnace=Dual Sulfur Furnace
+container.bl.lurker_skin_pouch=Lurker Skin Pouch
+container.bl.item_renaming.save=Save
+container.bl.loot_pot=Loot Pot
+container.bl.loot_urn=Loot Urn
+container.bl.mud_bricks_alcove=Mud Brick Alcove
+container.bl.present=Present
+container.bl.censer=Censer
 
 
 # Locations
@@ -954,7 +966,6 @@ tooltip.lurker_skin_shield=Can also be used as a raft
 tooltip.grappling_hook=Reach: %3$s segments, ca. %1$s blocks\nLength: %4$s segments, ca. %2$s blocks
 tooltip.grappling_hook.more_info=Use '%1$s + %2$s' and '%1$s + %3$s'\nto retract or extend the rope.\nSwing with regular movement keys.
 tooltip.grappling_hook.upgrade=Craft with two Angler Teeth and a\nShambler Tongue to upgrade.
-tooltip.bl.censer_effect=Censer Effect:
 
 tooltip.bl.elixir.potency=§9Potency: %s
 tooltip.bl.elixir.duration=§9Duration: %s (%s)
@@ -988,13 +999,15 @@ tooltip.bl.elixir.nimblefeet.effect=Enhances muscle swiftness and nimbleness,\ni
 tooltip.bl.elixir.weakness.effect=Weakens the muscles, reducing one's\ndamage output when they attack.
 tooltip.bl.elixir.strength.effect=Increases raw physical strength, causing\none to deal more damage when they attack.
 
-tooltip.bl.censer.sap_ball=Gradually heals decay in\na large area.
-tooltip.bl.censer.plant_tonic=Prevents crops from decaying\nin a medium area.
-tooltip.bl.censer.elixir=Continuously applies a weak version\nof the elixir in a large area.\nPotency affects range.
-tooltip.bl.censer.stagnant_water=Causes decay to be accelerated\nin a small area.
-tooltip.bl.censer.dungeon_fog=Increases crop growth and\nallows sludge dungeon plants\nto grow in a small area.
-tooltip.bl.censer.aspect=Infuses Aspectrus crops with\nthe aspect and enables the crops\nto grow in a small area.
-tooltip.bl.censer.cremains=Incinerates any living creature\nin a small area and turns them\ninto cremains.
+tooltip.bl.censer_effect=Censer Effect:
+tooltip.bl.censer.remaining_duration=Remaining Duration:\nca. %5$s
+tooltip.bl.censer.effect.sap_ball=Gradually heals decay in\na large area.
+tooltip.bl.censer.effect.plant_tonic=Prevents crops from decaying\nin a medium area.
+tooltip.bl.censer.effect.elixir=Continuously applies a weak version\nof the elixir in a large area.\nPotency affects range.
+tooltip.bl.censer.effect.stagnant_water=Causes decay to be accelerated\nin a small area.
+tooltip.bl.censer.effect.dungeon_fog=Increases crop growth and\nallows sludge dungeon plants\nto grow in a small area.
+tooltip.bl.censer.effect.aspect=Infuses Aspectrus crops with\nthe aspect and enables the crops\nto grow in a small area.
+tooltip.bl.censer.effect.cremains=Incinerates any living creature\nin a small area and turns them\ninto cremains.
 
 tooltip.recipes.used_in=§5Used in: §7%s
 tooltip.recipes.compost_bin=Compost Bin

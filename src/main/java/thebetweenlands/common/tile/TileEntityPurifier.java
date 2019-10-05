@@ -35,7 +35,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
     private boolean isPurifyingClient = false;
 
     public TileEntityPurifier() {
-        super(3, "container.purifier");
+        super(3, "container.bl.purifier");
         this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 4);
         this.waterTank.setTileEntity(this);
         this.properties[0] = new FluidTankPropertiesWrapper(this.waterTank);

@@ -66,7 +66,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 	private boolean isRecipeRunning = false;
 
 	public TileEntityCenser() {
-		super("container.censer", NonNullList.withSize(INV_SIZE, ItemStack.EMPTY), (te, inv) -> new ItemStackHandler(inv) {
+		super("container.bl.censer", NonNullList.withSize(INV_SIZE, ItemStack.EMPTY), (te, inv) -> new ItemStackHandler(inv) {
 			@Override
 			public void setSize(int size) {
 				this.stacks = te.inventory = NonNullList.withSize(INV_SIZE, ItemStack.EMPTY);

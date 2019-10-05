@@ -421,7 +421,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				item = player.getHeldItemOffhand();
 			}
 			if(!item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
-				String name = item.hasDisplayName() ? item.getDisplayName(): I18n.format("container.lurker_skin_pouch");
+				String name = item.hasDisplayName() ? item.getDisplayName(): I18n.format("container.bl.lurker_skin_pouch");
 				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name)));
 			}
 			break;
@@ -430,7 +430,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		case GUI_LURKER_POUCH_KEYBIND: {
 			ItemStack item = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(!item.isEmpty()) {
-				String name = item.hasDisplayName() ? item.getDisplayName(): I18n.format("container.lurker_skin_pouch");
+				String name = item.hasDisplayName() ? item.getDisplayName(): I18n.format("container.bl.lurker_skin_pouch");
 				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name)));
 			}
 		}

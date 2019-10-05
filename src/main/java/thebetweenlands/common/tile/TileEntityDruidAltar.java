@@ -44,7 +44,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 	private boolean circleShouldRevert = true;
 
 	public TileEntityDruidAltar() {
-		super(5, "druid_altar");
+		super(5, "container.bl.druid_altar");
 	}
 
 	@Override

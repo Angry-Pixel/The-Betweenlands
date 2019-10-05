@@ -67,7 +67,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	public float[] currentInfusionColor = new float[4];
 
 	public TileEntityInfuser() {
-		super(MAX_INGREDIENTS + 2, "infuser");
+		super(MAX_INGREDIENTS + 2, "container.bl.infuser");
 		this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 3);
 		this.waterTank.setTileEntity(this);
 		this.properties[0] = new FluidTankPropertiesWrapper(this.waterTank);
