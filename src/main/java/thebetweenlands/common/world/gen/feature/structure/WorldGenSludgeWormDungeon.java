@@ -131,7 +131,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		//Locations below are just for segmentation and location titles
 		
 		//Maze
-		LocationStorage locationMaze = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_maze", EnumLocationType.DUNGEON);
+		LocationStorage locationMaze = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_maze", EnumLocationType.SLUDGE_WORM_DUNGEON);
 		locationMaze.addBounds(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 29, pos.getY() - 8 * 5 - 3, pos.getZ() + 29));
 		locationMaze.linkChunks();
 		locationMaze.setLayer(1);
@@ -141,7 +141,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		worldStorage.getLocalStorageHandler().addLocalStorage(locationMaze);
 
 		//Barrishee Lair
-		LocationStorage locationBarrishee = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_barrishee_lair", EnumLocationType.DUNGEON);
+		LocationStorage locationBarrishee = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_barrishee_lair", EnumLocationType.SLUDGE_WORM_DUNGEON);
 		locationBarrishee.addBounds(new AxisAlignedBB(pos.getX() + 20, pos.getY() - 24, pos.getZ() - 3, pos.getX() + 29, pos.getY() - 19, pos.getZ()));
 		locationBarrishee.linkChunks();
 		locationBarrishee.setLayer(1);
@@ -151,7 +151,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		worldStorage.getLocalStorageHandler().addLocalStorage(locationBarrishee);
 
 		//Crypt Walkways
-		LocationStorage locationWalkays = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_winding_walkways", EnumLocationType.DUNGEON);
+		LocationStorage locationWalkays = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_winding_walkways", EnumLocationType.SLUDGE_WORM_DUNGEON);
 		locationWalkays.addBounds(
 				new AxisAlignedBB(pos.getX() - 3, pos.getY() - 43, pos.getZ() - 3, pos.getX(), pos.getY() - 24, pos.getZ() + 29),
 				new AxisAlignedBB(pos.getX(), pos.getY() - 43, pos.getZ() - 3, pos.getX() + 29 , pos.getY() - 24, pos.getZ())
@@ -164,7 +164,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		worldStorage.getLocalStorageHandler().addLocalStorage(locationWalkays);
 
 		//Crypt Tunnels
-		LocationStorage locationCryptTunnels = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_crypt_tunnels", EnumLocationType.DUNGEON);
+		LocationStorage locationCryptTunnels = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_crypt_tunnels", EnumLocationType.SLUDGE_WORM_DUNGEON);
 		locationCryptTunnels.addBounds(
 				//entrance to tunnels
 				new AxisAlignedBB(pos.getX() + 4, pos.getY() - 50, pos.getZ() + 28, pos.getX() - 3, pos.getY() - 43, pos.getZ() + 23),
@@ -193,7 +193,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		worldStorage.getLocalStorageHandler().addLocalStorage(locationCryptTunnels);
 
 		//Crypt
-		LocationStorage locationCrypt = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_crypt", EnumLocationType.DUNGEON);
+		LocationStorage locationCrypt = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_crypt", EnumLocationType.SLUDGE_WORM_DUNGEON);
 		locationCrypt.addBounds(new AxisAlignedBB(pos.getX() - 3, pos.getY() - 57, pos.getZ() + 22, pos.getX() + 7, pos.getY() - 54, pos.getZ() + 12));
 		locationCrypt.linkChunks();
 		locationCrypt.setLayer(1);
@@ -203,7 +203,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		worldStorage.getLocalStorageHandler().addLocalStorage(locationCrypt);
 		
 		//Pit
-		LocationStorage locationPit = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_pit", EnumLocationType.DUNGEON);
+		LocationStorage locationPit = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_pit", EnumLocationType.SLUDGE_WORM_DUNGEON);
 		locationPit.addBounds(
 				//entrance
 				new AxisAlignedBB(pos.getX() + 1 , pos.getY() - 43, pos.getZ() + 1 , pos.getX() + 9 , pos.getY() - 48, pos.getZ() + 4 ),

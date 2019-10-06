@@ -32,6 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityScreenShake;
+import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.client.audio.DecayPitGearsSound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
@@ -53,6 +54,8 @@ import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 
 public class TileEntityDecayPitControl extends TileEntity implements ITickable, IEntityScreenShake {
 
@@ -167,39 +170,44 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		}
 
 		if (isPlugged()) {
-				plugDropTicksPrev = plugDropTicks;
-				floorFadeTicksPrev = floorFadeTicks;
-				if (getWorld().isRemote) {
-					if (plugDropTicks <= 0.8F) {
-						chainBreakParticles(getWorld(), getPos().add(1, 6, 0));
-						chainBreakParticles(getWorld(), getPos().add(-1, 6, 0));
-						chainBreakParticles(getWorld(), getPos().add(0, 6, 1));
-						chainBreakParticles(getWorld(), getPos().add(0, 6, -1));
-					}
+			plugDropTicksPrev = plugDropTicks;
+			floorFadeTicksPrev = floorFadeTicks;
+			if (getWorld().isRemote) {
+				if (plugDropTicks <= 0.8F) {
+					chainBreakParticles(getWorld(), getPos().add(1, 6, 0));
+					chainBreakParticles(getWorld(), getPos().add(-1, 6, 0));
+					chainBreakParticles(getWorld(), getPos().add(0, 6, 1));
+					chainBreakParticles(getWorld(), getPos().add(0, 6, -1));
 				}
+			}
 
-				if (plugDropTicks <= 1.6F)
-					plugDropTicks += 0.2F;
+			if (plugDropTicks <= 1.6F)
+				plugDropTicks += 0.2F;
 
-				if (plugDropTicks == 0.6F) {
-					shaking = true;
-					if (!getWorld().isRemote)
-						getWorld().playSound(null, getPos(), SoundRegistry.PLUG_LOCK, SoundCategory.HOSTILE, 1F, 1F);
+			if (plugDropTicks == 0.6F) {
+				shaking = true;
+				if (!getWorld().isRemote)
+					getWorld().playSound(null, getPos(), SoundRegistry.PLUG_LOCK, SoundCategory.HOSTILE, 1F, 1F);
+			}
+			if (plugDropTicks > 1.6F && plugDropTicks <= 2)
+				plugDropTicks += 0.1F;
+
+			if (plugDropTicks >= 2)
+				if (getShowFloor())
+					floorFadeTicks += 0.025F;
+
+			if (floorFadeTicks >= 1)
+				if (!getWorld().isRemote) {
+					setShowFloor(false);
+					updateBlock();
 				}
-				if (plugDropTicks > 1.6F && plugDropTicks <= 2)
-					plugDropTicks += 0.1F;
-
-				if (plugDropTicks >= 2)
-					if (getShowFloor())
-						floorFadeTicks += 0.025F;
-
-				if (floorFadeTicks >= 1)
-					if (!getWorld().isRemote) {
-						setShowFloor(false);
-						updateBlock();
-					}
-				if (shaking)
-					shake(60);
+			if (shaking)
+				shake(60);
+			
+			//Remove dungeon locations
+			ILocalStorageHandler storageHandler = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler();
+			storageHandler.getLocalStorages(LocationSludgeWormDungeon.class, new AxisAlignedBB(this.getPos()), l -> true).forEach(location -> location.removeLocations());
+			
 			// TODO;
 			// render plug as animation falling in to place in the hole *DONE
 			// remove invisible blocks from edges of pit *DONE

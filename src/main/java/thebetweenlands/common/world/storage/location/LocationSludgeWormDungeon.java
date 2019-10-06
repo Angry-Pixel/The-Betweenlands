@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
@@ -43,7 +44,7 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	private final BoxMobSpawner walkwaysMobSpawner;
 
 	public LocationSludgeWormDungeon(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
-		super(worldStorage, id, region, "sludge_worm_dungeon", EnumLocationType.DUNGEON);
+		super(worldStorage, id, region, "sludge_worm_dungeon", EnumLocationType.SLUDGE_WORM_DUNGEON);
 
 		this.dataManager.register(GROUND_FOG_STRENGTH, 1.0F);
 
@@ -111,8 +112,11 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	}
 
 	public boolean hasGroundFog(BlockPos pos) {
-		//TODO Check if pos is in maze bounding box
-		return this.dataManager.get(GROUND_FOG_STRENGTH) > 0.01F;
+		BlockPos structurePos = this.getStructurePos();
+
+		AxisAlignedBB mazeAabb = new AxisAlignedBB(structurePos.getX(), structurePos.getY(), structurePos.getZ(), structurePos.getX() + 29, structurePos.getY() - 8 * 5 - 3, structurePos.getZ() + 29);
+
+		return mazeAabb.intersects(new AxisAlignedBB(pos)) && this.dataManager.get(GROUND_FOG_STRENGTH) > 0.01F;
 	}
 
 	@Override
@@ -166,8 +170,6 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 			this.walkwaysMobSpawner.addArea(new AxisAlignedBB(pos.getX(), pos.getY() - 43, pos.getZ() - 3, pos.getX() + 29 , pos.getY() - 24, pos.getZ()));
 			this.walkwaysMobSpawner.populate((WorldServer) world, spawnHostiles, spawnAnimals);
 		}
-
-		//TODO Clear fog strength when dungeon is conquered
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -195,5 +197,11 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 
 	public int getFloor(BlockPos pos) {
 		return (this.structurePos.getY() - 1 - pos.getY()) / 6;
+	}
+
+	public void removeLocations() {
+		ILocalStorageHandler handler = this.getWorldStorage().getLocalStorageHandler();
+		handler.removeLocalStorage(this);
+		handler.getLocalStorages(LocationStorage.class, this.getEnclosingBounds(), l -> l.getType() == EnumLocationType.SLUDGE_WORM_DUNGEON).forEach(location -> handler.removeLocalStorage(location));
 	}
 }
