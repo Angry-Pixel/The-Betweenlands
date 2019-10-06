@@ -10,23 +10,25 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.FluidTankPropertiesWrapper;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import thebetweenlands.common.block.container.BlockBarrel;
 
-public class TileEntityTarBarrel extends TileEntity implements IFluidHandler {
+public class TileEntityBarrel extends TileEntity implements IFluidHandler {
 	private final FluidTank fluidTank;
 	private final IFluidTankProperties[] properties = new IFluidTankProperties[1];
 
-	public TileEntityTarBarrel() {
+	public TileEntityBarrel() {
 		this.fluidTank = new FluidTank(null, Fluid.BUCKET_VOLUME * 8);
 		this.fluidTank.setTileEntity(this);
 		this.properties[0] = new FluidTankPropertiesWrapper(this.fluidTank);
 	}
-	
+
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
 		return oldState.getBlock() != newState.getBlock();
@@ -77,12 +79,23 @@ public class TileEntityTarBarrel extends TileEntity implements IFluidHandler {
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if (doFill) {
-			this.markDirty();
-			IBlockState stat = this.world.getBlockState(this.pos);
-			this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
+		if(this.world != null) {
+			IBlockState state = this.world.getBlockState(this.pos);
+
+			boolean isFluidHot = resource.getFluid().getTemperature(resource) > 473.15F /*200°C*/ || resource.getFluid() == FluidRegistry.LAVA;
+
+			if(!isFluidHot || (state.getBlock() instanceof BlockBarrel && ((BlockBarrel) state.getBlock()).isHeatResistant(this.world, this.pos, state))) {
+				if (doFill) {
+					this.markDirty();
+					IBlockState stat = this.world.getBlockState(this.pos);
+					this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
+				}
+
+				return this.fluidTank.fill(resource, doFill);
+			}
 		}
-		return this.fluidTank.fill(resource, doFill);
+
+		return 0;
 	}
 
 	@Override

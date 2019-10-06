@@ -28,13 +28,14 @@ import net.minecraftforge.fluids.capability.FluidTankPropertiesWrapper;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.ItemStackHandler;
+import thebetweenlands.api.block.ICenser;
 import thebetweenlands.api.recipes.ICenserRecipe;
 import thebetweenlands.common.block.container.BlockCenser;
 import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
 
-public class TileEntityCenser extends TileEntityBasicInventory implements IFluidHandler, ITickable {
+public class TileEntityCenser extends TileEntityBasicInventory implements IFluidHandler, ITickable, ICenser {
 	private final FluidTank fluidTank;
 	private final IFluidTankProperties[] properties = new IFluidTankProperties[1];
 
@@ -64,9 +65,9 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 	private boolean checkInputSlotForTransfer = true;
 
 	private boolean isRecipeRunning = false;
-	
+
 	public TileEntityCenser() {
-		super("container.censer", NonNullList.withSize(INV_SIZE, ItemStack.EMPTY), (te, inv) -> new ItemStackHandler(inv) {
+		super("container.bl.censer", NonNullList.withSize(INV_SIZE, ItemStack.EMPTY), (te, inv) -> new ItemStackHandler(inv) {
 			@Override
 			public void setSize(int size) {
 				this.stacks = te.inventory = NonNullList.withSize(INV_SIZE, ItemStack.EMPTY);
@@ -297,7 +298,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		if(!this.world.isRemote) {
 			if(this.fuelTicks > 0) {
 				this.fuelTicks--;
-				
+
 				this.markDirty();
 				if(this.fuelTicks <= 0) {
 					IBlockState stat = this.world.getBlockState(this.pos);
@@ -321,7 +322,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 						this.currentRecipe = (ICenserRecipe<Object>)recipe;
 						this.currentRecipeContext = recipe.createContext(fluid);
 						this.currentRecipe.onStart(this.currentRecipeContext);
-						this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+						this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this);
 						this.markDirty();
 						IBlockState stat = this.world.getBlockState(this.pos);
 						this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
@@ -334,7 +335,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 						this.currentRecipe = (ICenserRecipe<Object>)recipe;
 						this.currentRecipeContext = recipe.createContext(internalStack);
 						this.currentRecipe.onStart(this.currentRecipeContext);
-						this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+						this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this);
 						this.markDirty();
 						IBlockState stat = this.world.getBlockState(this.pos);
 						this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
@@ -344,16 +345,16 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		}
 
 		this.isRecipeRunning = false;
-		
+
 		if(this.currentRecipe != null) {
 			IBlockState state = this.world.getBlockState(this.pos);
 			boolean isDisabled = state.getBlock() instanceof BlockCenser && !state.getValue(BlockCenser.ENABLED);
-			
+
 			if(!this.world.isRemote && !isDisabled && this.fuelTicks <= 0 && this.isFilled()) {
 				ItemStack fuelStack = this.getStackInSlot(ContainerCenser.SLOT_FUEL);
-				
+
 				if(!fuelStack.isEmpty() && TileEntityFurnace.isItemFuel(fuelStack)) {
-					this.maxFuelTicks = this.fuelTicks = TileEntityFurnace.getItemBurnTime(fuelStack) * 3;
+					this.maxFuelTicks = this.fuelTicks = TileEntityFurnace.getItemBurnTime(fuelStack) * 4;
 
 					fuelStack.shrink(1);
 					if(fuelStack.getCount() <= 0) {
@@ -379,12 +380,12 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 			} else {
 				if(this.fuelTicks > 0 && !isDisabled) {
 					this.isRecipeRunning = true;
-					
-					int toRemove = this.currentRecipe.update(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+
+					int toRemove = this.currentRecipe.update(this.currentRecipeContext, this);
 
 					if(!this.world.isRemote) {
 						if(--this.consumptionTicks <= 0) {
-							toRemove += this.currentRecipe.getConsumptionAmount(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+							toRemove += this.currentRecipe.getConsumptionAmount(this.currentRecipeContext, this);
 						}
 
 						if(toRemove > 0) {
@@ -397,7 +398,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 									this.setInventorySlotContents(ContainerCenser.SLOT_INTERNAL, ItemStack.EMPTY);
 								}
 							}
-							this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+							this.maxConsumptionTicks = this.consumptionTicks = this.currentRecipe.getConsumptionDuration(this.currentRecipeContext, this);
 						}
 					}
 				}
@@ -416,12 +417,14 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 						this.setInventorySlotContents(ContainerCenser.SLOT_INPUT, fillResult.getResult());
 					} else if(!this.isFilled()) {
 						ICenserRecipe<?> recipe = this.getEffect(inputStack);
+
 						if(recipe != null) {
+							this.remainingItemAmount = Math.min(recipe.getInputAmount(inputStack), 1000);
+
 							ItemStack internalStack = inputStack.copy();
 							internalStack.setCount(1);
 							this.setInventorySlotContents(ContainerCenser.SLOT_INTERNAL, internalStack);
 							this.setInventorySlotContents(ContainerCenser.SLOT_INPUT, recipe.consumeInput(inputStack));
-							this.remainingItemAmount = 1000;
 						}
 					}
 				}
@@ -446,7 +449,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 			}
 		}
 
-		boolean isCreatingDungeonFog = this.isRecipeRunning && this.currentRecipe.isCreatingDungeonFog(this.currentRecipeContext, this.getCurrentRecipeInputAmount(), this);
+		boolean isCreatingDungeonFog = this.isRecipeRunning && this.currentRecipe.isCreatingDungeonFog(this.currentRecipeContext, this);
 
 		this.prevDungeonFogStrength = this.dungeonFogStrength;
 		if(isCreatingDungeonFog && this.dungeonFogStrength < 1.0F) {
@@ -513,11 +516,13 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		return this.currentRecipeContext;
 	}
 
-	public int getCurrentRecipeInputAmount() {
+	@Override
+	public int getCurrentRemainingInputAmount() {
 		return this.isFluidRecipe ? this.fluidTank.getFluidAmount() : this.remainingItemAmount;
 	}
 
-	public int getMaxCurrentRecipeInputAmount() {
+	@Override
+	public int getCurrentMaxInputAmount() {
 		return this.isFluidRecipe ? this.fluidTank.getCapacity() : 1000;
 	}
 
@@ -531,10 +536,31 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 
 	@Override
 	public int[] getSlotsForFace(EnumFacing facing) {
-		if (facing == EnumFacing.UP) {
+		switch(facing) {
+		case DOWN:
+		case UP:
 			return new int[]{ ContainerCenser.SLOT_INPUT };
+		default:
+			return new int[]{ ContainerCenser.SLOT_FUEL };
 		}
-		return new int[]{ ContainerCenser.SLOT_FUEL };
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing side) {
+		if(super.canInsertItem(slot, stack, side)) {
+			//Only allow automatic extraction from input slot if item has no censer recipe, i.e. was used
+			if(slot == ContainerCenser.SLOT_INPUT) {
+				FluidStack fluid = FluidUtil.getFluidContained(stack);
+
+				if((fluid != null && this.getEffect(fluid) != null) || this.getEffect(stack) != null) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+
+		return false;
 	}
 
 	@Override
@@ -607,10 +633,12 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		return this.prevDungeonFogStrength + (this.dungeonFogStrength - this.prevDungeonFogStrength) * partialTicks;
 	}
 
+	@Override
 	public float getEffectStrength(float partialTicks) {
 		return this.prevEffectStrength + (this.effectStrength - this.prevEffectStrength) * partialTicks;
 	}
-	
+
+	@Override
 	public boolean isRecipeRunning() {
 		return this.isRecipeRunning;
 	}
@@ -620,5 +648,10 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 		float height = 12.0F;
 		BlockPos pos = this.getPos();
 		return new AxisAlignedBB(pos.getX() + 0.5D - width / 2, pos.getY() - 0.1D, pos.getZ() + 0.5D - width / 2, pos.getX() + 0.5D + width / 2, pos.getY() - 0.1D + height, pos.getZ() + 0.5D + width / 2);
+	}
+
+	@Override
+	public ItemStack getInputStack() {
+		return this.getStackInSlot(ContainerCenser.SLOT_INPUT);
 	}
 }

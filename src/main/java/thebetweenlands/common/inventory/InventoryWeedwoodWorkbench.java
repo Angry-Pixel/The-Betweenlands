@@ -7,6 +7,9 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class InventoryWeedwoodWorkbench extends InventoryCrafting {
@@ -41,9 +44,14 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 	}
 
 	@Override
-	public String getName() {
-		return "container.crafting";
-	}
+    public String getName() {
+        return "container.bl.weedwood_workbench";
+    }
+    
+    @Override
+    public ITextComponent getDisplayName() {
+        return (ITextComponent)(this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]));
+    }
 
 	@Override
 	public boolean hasCustomName() {

@@ -78,7 +78,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
                     for(int zo = -1; zo <= 1; zo++) {
                         BlockPos newPos = pos.add(xo, 0, zo);
                         if((xo == 0 && zo == 0) || xo*xo == zo*zo) continue;
-                        if((world.isAirBlock(newPos) || world.getBlockState(newPos).getBlock() instanceof BlockGenericCrop) && BlockRegistry.PUDDLE.canPlaceBlockAt(world, newPos)) {
+                        if((world.isAirBlock(newPos) || world.getBlockState(newPos).getBlock() instanceof BlockGenericCrop) && this.canPlaceBlockAt(world, newPos)) {
                             world.setBlockState(newPos, getDefaultState());
                         } else if(world.getBlockState(newPos).getBlock() == BlockRegistry.PUDDLE) {
                             world.setBlockState(newPos, state.withProperty(AMOUNT, Math.min(amount + rand.nextInt(6), 15)), 2);

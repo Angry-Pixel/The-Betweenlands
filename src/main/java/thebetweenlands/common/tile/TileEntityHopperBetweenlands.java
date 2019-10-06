@@ -3,6 +3,9 @@ package thebetweenlands.common.tile;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntityHopper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
 public class TileEntityHopperBetweenlands extends TileEntityHopper {
@@ -11,8 +14,13 @@ public class TileEntityHopperBetweenlands extends TileEntityHopper {
 		return oldState.getBlock() != newSate.getBlock(); //Urgh why is this even a thing
 	}
 	
-    @Override
+	@Override
     public String getName() {
-        return this.hasCustomName() ? this.customName : "tile.thebetweenlands.syrmorite_hopper.name";
+        return "container.bl.syrmorite_hopper";
+    }
+    
+    @Override
+    public ITextComponent getDisplayName() {
+        return (ITextComponent)(this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]));
     }
 }

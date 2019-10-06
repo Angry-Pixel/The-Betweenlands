@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SBS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 11
+    },
+    "B": {
+      "item": "thebetweenlands:weedwood_barrel"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:syrmorite_barrel",
+    "count": 1
+  }
+}

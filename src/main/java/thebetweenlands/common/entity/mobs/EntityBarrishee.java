@@ -64,9 +64,9 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	private static final DataParameter<Boolean> SHOCKWAVE = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	public float standingAngle, prevStandingAngle;
 
-	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
-	public final Map<IBlockState, Boolean> BREAKABLE_BLOCKS = new HashMap<IBlockState, Boolean>();
-	public final Map<IBlockState, Boolean> CANCEL_DROP_ITEMS = new HashMap<IBlockState, Boolean>();
+	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper(null);
+	protected final Map<IBlockState, Boolean> breakableBlocks = new HashMap<>();
+	protected final Map<IBlockState, Boolean> cancelDropItems = new HashMap<>();
 
 	//Scream timer is only used for the screen shake and is client side only.
 	private int prevScreamTimer;
@@ -329,11 +329,11 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	}
 
 	public boolean isAOEBreakableBlock(IBlockState state) {
-		return BREAKABLE_BLOCKS.get(state) != null;
+		return breakableBlocks.get(state) != null;
 	}
 
 	public boolean dropItems(IBlockState state) {
-		return CANCEL_DROP_ITEMS.get(state) != null;
+		return cancelDropItems.get(state) != null;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -559,25 +559,25 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 
 	//TODO - may want to move to a config one day - add blockstates to break here.
 	private void initAOEBreakableBlockMap() {
-		if (BREAKABLE_BLOCKS.isEmpty()) {
-			BREAKABLE_BLOCKS.put(blockHelper.ROOT, true);
-			BREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_NORTH, true);
-			BREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_EAST, true);
-			BREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_SOUTH, true);
-			BREAKABLE_BLOCKS.put(blockHelper.MUD_BRICKS_ALCOVE_WEST, true);
-			BREAKABLE_BLOCKS.put(BlockRegistry.SULFUR_TORCH.getDefaultState(), true);
+		if (breakableBlocks.isEmpty()) {
+			breakableBlocks.put(blockHelper.ROOT, true);
+			breakableBlocks.put(blockHelper.MUD_BRICKS_ALCOVE_NORTH, true);
+			breakableBlocks.put(blockHelper.MUD_BRICKS_ALCOVE_EAST, true);
+			breakableBlocks.put(blockHelper.MUD_BRICKS_ALCOVE_SOUTH, true);
+			breakableBlocks.put(blockHelper.MUD_BRICKS_ALCOVE_WEST, true);
+			breakableBlocks.put(BlockRegistry.SULFUR_TORCH.getDefaultState(), true);
 			for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-				BREAKABLE_BLOCKS.put(BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, facing), true);
-				BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_1.withProperty(BlockLootUrn.FACING, facing), true);
-				BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_2.withProperty(BlockLootUrn.FACING, facing), true);
-				BREAKABLE_BLOCKS.put(blockHelper.LOOT_URN_3.withProperty(BlockLootUrn.FACING, facing), true);
+				breakableBlocks.put(BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, facing), true);
+				breakableBlocks.put(blockHelper.LOOT_URN_1.withProperty(BlockLootUrn.FACING, facing), true);
+				breakableBlocks.put(blockHelper.LOOT_URN_2.withProperty(BlockLootUrn.FACING, facing), true);
+				breakableBlocks.put(blockHelper.LOOT_URN_3.withProperty(BlockLootUrn.FACING, facing), true);
 			}
 		}
 	}
 
 	private void initCancelBlockItemDropsMap() {
-		if (CANCEL_DROP_ITEMS.isEmpty()) {
-			CANCEL_DROP_ITEMS.put(blockHelper.ROOT, true);
+		if (cancelDropItems.isEmpty()) {
+			cancelDropItems.put(blockHelper.ROOT, true);
 		}
 	}
 

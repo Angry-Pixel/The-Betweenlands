@@ -105,6 +105,7 @@ public class BlockMud extends Block {
 		return true;
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 		double d0 = (double) pos.getX();

@@ -47,7 +47,7 @@ public class EntityCCGroundSpawner extends EntityProximitySpawner {
 	private static final DataParameter<Boolean> IS_WORLD_SPANWED = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SPAWN_COUNT = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> CAN_BE_REMOVED_SAFELY = EntityDataManager.createKey(EntityCCGroundSpawner.class, DataSerializers.BOOLEAN);
-	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
+	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper(null);
 
 	public EntityCCGroundSpawner(World world) {
 		super(world);

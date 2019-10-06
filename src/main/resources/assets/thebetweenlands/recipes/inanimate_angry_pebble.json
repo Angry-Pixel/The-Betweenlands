@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:items_misc",
+      "data": 44
+    },
+    {
+      "item": "thebetweenlands:items_misc",
+      "data": 18
+    },
+    {
+      "item": "thebetweenlands:betweenstone_button"
+    },
+    {
+      "item": "thebetweenlands:betweenstone"
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:items_misc",
+    "data": 46
+  }
+}

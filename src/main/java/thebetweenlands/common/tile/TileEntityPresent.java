@@ -6,6 +6,6 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 
 public class TileEntityPresent extends TileEntityLootInventory {
 	public TileEntityPresent() {
-		super(3, "container.present");
+		super(3, "container.bl.present");
 	}
 }

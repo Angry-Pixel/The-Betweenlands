@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thebetweenlands:internal/tar_barrel"
+    "model": "thebetweenlands:internal/weedwood_barrel"
   },
   "variants": {
     "facing": {
@@ -11,7 +11,7 @@
       "west": {}
     },
     "inventory": {
-      "model": "thebetweenlands:internal/tar_barrel",
+      "model": "thebetweenlands:internal/weedwood_barrel",
       "transform": {
         "gui": {
           "rotation": [ 30, 45, 0 ],

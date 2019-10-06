@@ -18,12 +18,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.tile.TileEntityTarBarrel;
+import thebetweenlands.common.tile.TileEntityBarrel;
 
-public class ItemTarBarrel extends ItemBlock {
+public class ItemBarrel extends ItemBlock {
 	private static final String NBT_FLUID_STACK = "bl.fluidStack";
 
-	public ItemTarBarrel(Block block) {
+	public ItemBarrel(Block block) {
 		super(block);
 	}
 
@@ -50,8 +50,8 @@ public class ItemTarBarrel extends ItemBlock {
 			if(fluidStack != null) {
 				TileEntity te = world.getTileEntity(pos);
 
-				if(te instanceof TileEntityTarBarrel) {
-					((TileEntityTarBarrel) te).fill(fluidStack, true);
+				if(te instanceof TileEntityBarrel) {
+					((TileEntityBarrel) te).fill(fluidStack, true);
 				}
 			}
 			return true;
@@ -67,7 +67,7 @@ public class ItemTarBarrel extends ItemBlock {
 		return null;
 	}
 
-	public ItemStack fromBarrel(TileEntityTarBarrel te) {
+	public ItemStack fromBarrel(TileEntityBarrel te) {
 		ItemStack stack = new ItemStack(this);
 
 		IFluidTankProperties props = te.getTankProperties()[0];

@@ -465,7 +465,8 @@ tile.thebetweenlands.rotten_plank_stairs.name=Rotten Plank Stairs
 tile.thebetweenlands.rotten_plank_fence.name=Rotten Plank Fence
 tile.thebetweenlands.rotten_plank_fence_gate.name=Rotten Plank Fence Gate
 tile.thebetweenlands.censer.name=Censer
-tile.thebetweenlands.tar_barrel.name=Tar Barrel
+tile.thebetweenlands.weedwood_barrel.name=Weedwood Barrel
+tile.thebetweenlands.syrmorite_barrel.name=Syrmorite Barrel
 
 # Items
 
@@ -731,6 +732,7 @@ item.thebetweenlands.lore_scrap.pitstone.name=Explorer's Entries: Underground Ru
 item.thebetweenlands.lore_scrap.tower.name=Explorer's Entries: The Tower
 item.thebetweenlands.lore_scrap.fort.name=Explorer's Entries: The Fortress
 item.thebetweenlands.angry_pebble.name=Angry Pebble
+item.thebetweenlands.inanimate_angry_pebble.name=Pebble
 item.thebetweenlands.swift_pick.name=Swift Pick
 item.thebetweenlands.ring_of_summoning.name=Ring of Summoning
 item.thebetweenlands.ring_of_recruitment.name=Ring of Recruitment
@@ -788,7 +790,6 @@ item.thebetweenlands.spores.name=Spores
 item.thebetweenlands.bl_bucket_plant_tonic_syrmorite.name=Plant Tonic
 item.thebetweenlands.bl_bucket_plant_tonic_weedwood.name=Plant Tonic
 item.thebetweenlands.syrmorite_bucket_solid_rubber.name=Syrmorite Bucket with Solid Rubber
-item.thebetweenlands.aspectrus_seeds.filled.name=Aspectrus Seeds - %s (%s)
 item.thebetweenlands.aspectrus_seeds.name=Aspectrus Seeds
 item.thebetweenlands.dentrothyst_shield_green.name=Green Dentrothyst Shield
 item.thebetweenlands.dentrothyst_shield_orange.name=Orange Dentrothyst Shield
@@ -855,10 +856,22 @@ itemGroup.thebetweenlands.herblore=The Betweenlands Herblore
 
 
 # Container
-container.furnace_bl=Sulfur Furnace
-container.dual_furnace_bl=Dual Sulfur Furnace
-container.lurker_skin_pouch=Lurker Skin Pouch
-container.lurker_skin_pouch.naming.save=Save
+container.bl.syrmorite_hopper=Syrmorite Hopper
+container.bl.animator=Animator
+container.bl.druid_altar=Druid Altar
+container.bl.infuser=Infuser
+container.bl.item_shelf=Item Shelf
+container.bl.mortar=Mortar
+container.bl.purifier=Purifier
+container.bl.sulfur_furnace=Sulfur Furnace
+container.bl.dual_sulfur_furnace=Dual Sulfur Furnace
+container.bl.lurker_skin_pouch=Lurker Skin Pouch
+container.bl.item_renaming.save=Save
+container.bl.loot_pot=Loot Pot
+container.bl.loot_urn=Loot Urn
+container.bl.mud_bricks_alcove=Mud Brick Alcove
+container.bl.present=Present
+container.bl.censer=Censer
 
 
 # Locations
@@ -875,8 +888,15 @@ location.wight_tower_boss.name=80:Primordial Malevolence
 location.abandoned_shack.name=<scale:1.75>Ruins</scale>
 location.underground_ruins.name=80:Underground Ruins
 location.spirit_tree.name=80:Spirit Tree
-location.cc_winding_walkways.name=80:Winding Walkways
-location.barrishee_lair.name=80:Barrishee Lair
+location.sludge_worm_dungeon_winding_walkways.name=80:Winding Walkways
+location.sludge_worm_dungeon_barrishee_lair.name=80:Barrishee Lair
+location.sludge_worm_dungeon_crypt_tunnels.name=80:Crypt Tunnels
+location.sludge_worm_dungeon_crypt.name=80:Crypt (name TBD)
+location.sludge_worm_dungeon_maze.name=80:Maze (name TBD)
+location.sludge_worm_dungeon.name=80:Sludge Worm Dungeon (name TBD)
+location.sludge_worm_dungeon_pit.name=80:The Pit
+
+
 
 # Tooltips
 tooltip.arrow.octine=Use with caution!
@@ -909,7 +929,7 @@ tooltip.ring.dispersion=Equip using the radial \nmenu [press '%s'], \nSneak [pre
 tooltip.press.shift=Hold 'shift' to view more
 tooltip.life_crystal.remaining=%d remaining
 tooltip.shockwave_sword.usage=Right-click on the ground\nto create a shockwave
-tooltip.shockwave_sword.broken=The Shockwave Sword is\nbroken and needs to be\nrepaired in an Animator
+tooltip.tool.broken=\n%s is broken\nand needs to be repaired in\nan Animator.
 tooltip.food_sickness.state.fine=Tastes good
 tooltip.food_sickness.state.half=Tastes plain
 tooltip.food_sickness.state.sick=Can't eat this anymore
@@ -953,7 +973,6 @@ tooltip.lurker_skin_shield=Can also be used as a raft
 tooltip.grappling_hook=Reach: %3$s segments, ca. %1$s blocks\nLength: %4$s segments, ca. %2$s blocks
 tooltip.grappling_hook.more_info=Use '%1$s + %2$s' and '%1$s + %3$s'\nto retract or extend the rope.\nSwing with regular movement keys.
 tooltip.grappling_hook.upgrade=Craft with two Angler Teeth and a\nShambler Tongue to upgrade.
-tooltip.bl.censer_effect=Censer Effect:
 
 tooltip.bl.elixir.potency=§9Potency: %s
 tooltip.bl.elixir.duration=§9Duration: %s (%s)
@@ -987,18 +1006,25 @@ tooltip.bl.elixir.nimblefeet.effect=Enhances muscle swiftness and nimbleness,\ni
 tooltip.bl.elixir.weakness.effect=Weakens the muscles, reducing one's\ndamage output when they attack.
 tooltip.bl.elixir.strength.effect=Increases raw physical strength, causing\none to deal more damage when they attack.
 
-tooltip.bl.censer.sap_ball=Gradually heals decay in\na large area
-tooltip.bl.censer.plant_tonic=Prevents crops from decaying\nin a medium area
-tooltip.bl.censer.elixir=Continuously applies a weaker version\nof the elixir in a large area
-tooltip.bl.censer.stagnant_water=Causes decay to be accelerated\nin a small area
-tooltip.bl.censer.dungeon_fog=Increases crop growth and\nallows sludge dungeon plants\nto grow in a small area
+tooltip.bl.censer_effect=Censer Effect:
+tooltip.bl.censer.remaining_duration=Remaining Duration:\nca. %5$s
+tooltip.bl.censer.effect.sap_ball=Gradually heals decay in\na large area.
+tooltip.bl.censer.effect.weeping_blue_petal=Gradually heals decay in\na large area.
+tooltip.bl.censer.effect.plant_tonic=Prevents crops from decaying\nin a medium area.
+tooltip.bl.censer.effect.elixir=Continuously applies a weak version\nof the elixir in a large area.\nPotency affects range.
+tooltip.bl.censer.effect.stagnant_water=Causes decay to be accelerated\nin a small area.
+tooltip.bl.censer.effect.dungeon_fog=Increases crop growth and\nallows sludge dungeon plants\nto grow in a small area.
+tooltip.bl.censer.effect.aspect=Infuses Aspectrus crops with\nthe aspect and enables the crops\nto grow in a small area.
+tooltip.bl.censer.effect.cremains=Incinerates any living creature\nin a small area and turns them\ninto cremains.
+tooltip.bl.censer.effect.swamp_water=Spreads steam in a large area\nthat carries the effect of the item it\nwas imbued with.\nCan be imbued with a Bark Amulet.
 
 tooltip.recipes.used_in=§5Used in: §7%s
 tooltip.recipes.compost_bin=Compost Bin
 tooltip.recipes.static_aspects=Gecko Cage
 tooltip.recipes.aspects=Infuser
 tooltip.recipes.animator=Animator
-tooltip.recipes.censer=Censer
+tooltip.recipes.censer_primary=Censer
+tooltip.recipes.censer_secondary=Censer (secondary)
 tooltip.recipes.purifier=Purifier
 
 # Chat
@@ -1177,6 +1203,7 @@ bl.elixir.duration.8=VIII
 bl.elixir.duration.n=%s
 
 bl.potion.rootBound=Root Bound
+bl.potion.enlightened=Enlightened
 
 # Entities
 entity.thebetweenlands.dark_druid.name=Dark Druid

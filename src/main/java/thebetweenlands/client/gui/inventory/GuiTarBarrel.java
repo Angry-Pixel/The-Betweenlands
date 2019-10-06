@@ -22,18 +22,18 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.inventory.container.ContainerTarBarrel;
-import thebetweenlands.common.tile.TileEntityTarBarrel;
+import thebetweenlands.common.inventory.container.ContainerBarrel;
+import thebetweenlands.common.tile.TileEntityBarrel;
 
 @SideOnly(Side.CLIENT)
 public class GuiTarBarrel extends GuiContainer {
-	private TileEntityTarBarrel barrel;
+	private TileEntityBarrel barrel;
 	private static final ResourceLocation TAR_BARREL_GUI_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/tar_barrel.png");
 
 	private DecimalFormat numberFormat;
 
-	public GuiTarBarrel(InventoryPlayer inv, TileEntityTarBarrel tile) {
-		super(new ContainerTarBarrel(inv, tile));
+	public GuiTarBarrel(InventoryPlayer inv, TileEntityBarrel tile) {
+		super(new ContainerBarrel(inv, tile));
 
 		this.barrel = tile;
 

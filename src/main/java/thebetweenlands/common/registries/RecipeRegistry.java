@@ -50,11 +50,15 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
 import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
+import thebetweenlands.common.recipe.censer.CenserRecipeAspect;
+import thebetweenlands.common.recipe.censer.CenserRecipeCremains;
 import thebetweenlands.common.recipe.censer.CenserRecipeDungeonFog;
 import thebetweenlands.common.recipe.censer.CenserRecipeElixir;
 import thebetweenlands.common.recipe.censer.CenserRecipePlantTonic;
 import thebetweenlands.common.recipe.censer.CenserRecipeSapBall;
 import thebetweenlands.common.recipe.censer.CenserRecipeStagnantWater;
+import thebetweenlands.common.recipe.censer.CenserRecipeSwampWater;
+import thebetweenlands.common.recipe.censer.CenserRecipeWeepingBluePetal;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.BookMergeRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
@@ -529,6 +533,7 @@ public class RecipeRegistry {
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPORES), 8, 4, EntitySporeling.class).setRenderEntity(new ResourceLocation("thebetweenlands:sporeling")));
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BlockRegistry.ROOT_POD), 10, 6, EntityRootSprite.class).setRenderEntity(new ResourceLocation("thebetweenlands:root_sprite")));
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPIRIT_TREE_FACE_SMALL_MASK), 24, 24, new ItemStack(ItemRegistry.SPIRIT_TREE_FACE_SMALL_MASK_ANIMATED)));
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.INANIMATE_ANGRY_PEBBLE.create(1), 1, 1, new ItemStack(ItemRegistry.ANGRY_PEBBLE)));
 		
 		for(Item item : ItemRegistry.ITEMS) {
 			if(item instanceof IAnimatorRepairable) {
@@ -571,8 +576,12 @@ public class RecipeRegistry {
 	private static void registerCenserRecipes() {
 		AbstractCenserRecipe.addRecipe(new CenserRecipeDungeonFog());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeSapBall());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeWeepingBluePetal());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeStagnantWater());
 		AbstractCenserRecipe.addRecipe(new CenserRecipePlantTonic());
 		AbstractCenserRecipe.addRecipe(new CenserRecipeElixir());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeAspect());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeCremains());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeSwampWater());
 	}
 }

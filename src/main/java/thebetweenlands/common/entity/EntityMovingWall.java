@@ -26,6 +26,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.client.audio.MovingWallSound;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -367,7 +369,8 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 			}
 		}
 	}
-
+	
+	@SideOnly(Side.CLIENT)
 	public void playSlidingSound(World world, BlockPos pos) {
 		ISound wall_slide = new MovingWallSound(this);
 		Minecraft.getMinecraft().getSoundHandler().playSound(wall_slide);

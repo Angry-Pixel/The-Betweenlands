@@ -3,7 +3,6 @@ package thebetweenlands.common.recipe.censer;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -12,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.block.ICenser;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.GroundFog.GroundFogVolume;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
@@ -33,7 +33,9 @@ public class CenserRecipeStagnantWater extends AbstractCenserRecipe<Void> {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void render(Void context, int amountLeft, TileEntity censer, boolean running, float effectStrength, double x, double y, double z, float partialTicks) {
+	public void render(Void context, ICenser censer, double x, double y, double z, float partialTicks) {
+		float effectStrength = censer.getEffectStrength(partialTicks);
+
 		if(effectStrength > 0.01F && ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			ShaderHelper.INSTANCE.require();
 
@@ -49,7 +51,7 @@ public class CenserRecipeStagnantWater extends AbstractCenserRecipe<Void> {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public int getEffectColor(Void context, int amountLeft, TileEntity censer, EffectColorType type) {
+	public int getEffectColor(Void context, ICenser censer, EffectColorType type) {
 		return 0xFFFFFFAA;
 	}
 
@@ -58,7 +60,7 @@ public class CenserRecipeStagnantWater extends AbstractCenserRecipe<Void> {
 	}
 
 	@Override
-	public int update(Void context, int amountLeft, TileEntity censer) {
+	public int update(Void context, ICenser censer) {
 		World world = censer.getWorld();
 
 		if(!world.isRemote && world.getTotalWorldTime() % 100 == 0) {
@@ -72,9 +74,9 @@ public class CenserRecipeStagnantWater extends AbstractCenserRecipe<Void> {
 
 		return 0;
 	}
-	
+
 	@Override
-	public int getConsumptionDuration(Void context, int amountLeft, TileEntity censer) {
+	public int getConsumptionDuration(Void context, ICenser censer) {
 		return 30;
 	}
 }

@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
@@ -39,10 +40,11 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 
 	private BlockPos structurePos;
 
-	private final BoxMobSpawner dungeonMobSpawner;
+	private final BoxMobSpawner mazeMobSpawner;
+	private final BoxMobSpawner walkwaysMobSpawner;
 
 	public LocationSludgeWormDungeon(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
-		super(worldStorage, id, region, "sludge_worm_dungeon", EnumLocationType.DUNGEON);
+		super(worldStorage, id, region, "sludge_worm_dungeon", EnumLocationType.SLUDGE_WORM_DUNGEON);
 
 		this.dataManager.register(GROUND_FOG_STRENGTH, 1.0F);
 
@@ -50,37 +52,46 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 				.setFogColor(new int[] {120, 120, 120}).setFogRange(4.0f, 45.0f)
 				.setCaveFog(false));
 
-		this.dungeonMobSpawner = new BoxMobSpawner();
-		this.dungeonMobSpawner.setMaxAreaEntities(80);
-		this.dungeonMobSpawner.setEntityCountFilter(entity -> entity instanceof EntityTriggeredFallingBlock == false); //Ignore falling blocks
+		this.setHasSharedLootPools(true);
+
+		this.mazeMobSpawner = new BoxMobSpawner();
+		this.mazeMobSpawner.setMaxAreaEntities(80);
+		this.mazeMobSpawner.setEntityCountFilter(entity -> entity instanceof EntityTriggeredFallingBlock == false); //Ignore falling blocks
 
 		//floor 1
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(0, new WallSpawnEntry(0, EntityMovingSpawnerHole.class, EntityMovingSpawnerHole::new, (short) 90), ConditionalSpawnEntry.createSludgeDungeonPredicate(0))
+		this.mazeMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(0, new WallSpawnEntry(0, EntityMovingSpawnerHole.class, EntityMovingSpawnerHole::new, (short) 90), ConditionalSpawnEntry.createSludgeDungeonPredicate(0))
 				.setGroupSize(1, 1).setSpawnCheckRadius(8.0D).setSpawningInterval(5 * 20).setHostile(true));
 
 		//floor 2
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(1, new BLSpawnEntry(1, EntityShambler.class, EntityShambler::new, (short) 50), ConditionalSpawnEntry.createSludgeDungeonPredicate(1))
+		this.mazeMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(1, new BLSpawnEntry(1, EntityShambler.class, EntityShambler::new, (short) 50), ConditionalSpawnEntry.createSludgeDungeonPredicate(1))
 				.setGroupSize(1, 3).setSpawnCheckRadius(14.0D).setSpawningInterval(10 * 20).setHostile(true));
 
 		//floor 3
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(2, new WallSpawnEntry(2, EntityWallLamprey.class, EntityWallLamprey::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2))
+		this.mazeMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(2, new WallSpawnEntry(2, EntityWallLamprey.class, EntityWallLamprey::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2))
 				.setGroupSize(1, 1).setSpawnCheckRadius(8.0D).setSpawningInterval(2 * 20).setHostile(true));
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(3, new BLSpawnEntry(3, EntityTinyWormEggSac.class, EntityTinyWormEggSac::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2))
+		this.mazeMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(3, new BLSpawnEntry(3, EntityTinyWormEggSac.class, EntityTinyWormEggSac::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(2))
 				.setGroupSize(1, 1).setSpawnCheckRadius(8.0D).setSpawningInterval(8 * 20).setHostile(true));
 
 		//floor 4
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(4, new BLSpawnEntry(4, EntityTriggeredSludgeWallJet.class, EntityTriggeredSludgeWallJet::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(3))
+		this.mazeMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(4, new BLSpawnEntry(4, EntityTriggeredSludgeWallJet.class, EntityTriggeredSludgeWallJet::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(3))
 				.setGroupSize(1, 1).setSpawnCheckRadius(10.0D).setSpawningInterval(2 * 20).setHostile(true));
 
 		//floor 5
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(5, new WallSpawnEntry(5, EntityWallLivingRoot.class ,EntityWallLivingRoot::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(4))
+		this.mazeMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(5, new WallSpawnEntry(5, EntityWallLivingRoot.class ,EntityWallLivingRoot::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(4))
 				.setGroupSize(1, 1).setSpawnCheckRadius(8.0D).setSpawningInterval(2 * 20).setHostile(true));
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(6, new BLSpawnEntry(6, EntitySplodeshroom.class, EntitySplodeshroom::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(4))
+		this.mazeMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(6, new BLSpawnEntry(6, EntitySplodeshroom.class, EntitySplodeshroom::new, (short) 100), ConditionalSpawnEntry.createSludgeDungeonPredicate(4))
 				.setGroupSize(1, 1).setSpawnCheckRadius(8.0D).setSpawningInterval(2 * 20).setHostile(true));
 
 		//floor 6
-		this.dungeonMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(7, new BLSpawnEntry(7, EntityCryptCrawler.class, EntityCryptCrawler::new, (short) 50), ConditionalSpawnEntry.createSludgeDungeonPredicate(5))
+		this.mazeMobSpawner.addSpawnEntry(new ConditionalSpawnEntry(7, new BLSpawnEntry(7, EntityCryptCrawler.class, EntityCryptCrawler::new, (short) 50), ConditionalSpawnEntry.createSludgeDungeonPredicate(5))
 				.setGroupSize(1, 3).setSpawnCheckRadius(12.0D).setSpawningInterval(12 * 20).setHostile(true));
+
+
+		this.walkwaysMobSpawner = new BoxMobSpawner();
+		this.walkwaysMobSpawner.setMaxAreaEntities(12);
+		this.walkwaysMobSpawner.setEntityCountFilter(entity -> entity instanceof EntityCryptCrawler == false);
+
+		this.walkwaysMobSpawner.addSpawnEntry(new BLSpawnEntry(1, EntityCryptCrawler.class, EntityCryptCrawler::new, (short) 100).setGroupSize(1, 2).setSpawnCheckRadius(8.0D).setSpawningInterval(10 * 20).setHostile(true));
 	}
 
 	/**
@@ -101,21 +112,27 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	}
 
 	public boolean hasGroundFog(BlockPos pos) {
-		//TODO Check if pos is in maze bounding box
-		return this.dataManager.get(GROUND_FOG_STRENGTH) > 0.01F;
+		BlockPos structurePos = this.getStructurePos();
+
+		AxisAlignedBB mazeAabb = new AxisAlignedBB(structurePos.getX(), structurePos.getY(), structurePos.getZ(), structurePos.getX() + 29, structurePos.getY() - 8 * 5 - 3, structurePos.getZ() + 29);
+
+		return mazeAabb.intersects(new AxisAlignedBB(pos)) && this.dataManager.get(GROUND_FOG_STRENGTH) > 0.01F;
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
+
 		nbt.setFloat("groundFogStrength", this.dataManager.get(GROUND_FOG_STRENGTH));
 		nbt.setLong("structurePos", this.structurePos.toLong());
+
 		return nbt;
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
+
 		this.dataManager.set(GROUND_FOG_STRENGTH, nbt.getFloat("groundFogStrength"));
 		this.structurePos = BlockPos.fromLong(nbt.getLong("structurePos"));
 	}
@@ -142,16 +159,17 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 			boolean spawnHostiles = ((WorldProviderBetweenlands)world.provider).getCanSpawnHostiles();
 			boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
 
-			this.dungeonMobSpawner.clearAreas();
-			//TODO May need different AABBs for spawning purposes
-			for(AxisAlignedBB aabb : this.getBounds()) {
-				this.dungeonMobSpawner.addArea(aabb);
-			}
+			BlockPos pos = this.getStructurePos();
 
-			this.dungeonMobSpawner.populate((WorldServer) world, spawnHostiles, spawnAnimals);
+			this.mazeMobSpawner.clearAreas();
+			this.mazeMobSpawner.addArea(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 29, pos.getY() - 8 * 5 - 3, pos.getZ() + 29));
+			this.mazeMobSpawner.populate((WorldServer) world, spawnHostiles, spawnAnimals);
+
+			this.walkwaysMobSpawner.clearAreas();
+			this.walkwaysMobSpawner.addArea(new AxisAlignedBB(pos.getX() - 3, pos.getY() - 43, pos.getZ() - 3, pos.getX(), pos.getY() - 24, pos.getZ() + 29));
+			this.walkwaysMobSpawner.addArea(new AxisAlignedBB(pos.getX(), pos.getY() - 43, pos.getZ() - 3, pos.getX() + 29 , pos.getY() - 24, pos.getZ()));
+			this.walkwaysMobSpawner.populate((WorldServer) world, spawnHostiles, spawnAnimals);
 		}
-
-		//TODO Clear fog strength when dungeon is conquered
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -179,5 +197,11 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 
 	public int getFloor(BlockPos pos) {
 		return (this.structurePos.getY() - 1 - pos.getY()) / 6;
+	}
+
+	public void removeLocations() {
+		ILocalStorageHandler handler = this.getWorldStorage().getLocalStorageHandler();
+		handler.removeLocalStorage(this);
+		handler.getLocalStorages(LocationStorage.class, this.getEnclosingBounds(), l -> l.getType() == EnumLocationType.SLUDGE_WORM_DUNGEON).forEach(location -> handler.removeLocalStorage(location));
 	}
 }

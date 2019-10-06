@@ -52,11 +52,11 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 	}
 
 	protected double getAoEReach(EntityLivingBase entityLiving, ItemStack stack) {
-		return 2.75D;
+		return 2.8D;
 	}
 
 	protected double getAoEHalfAngle(EntityLivingBase entityLiving, ItemStack stack) {
-		return 40.0D;
+		return 45.0D;
 	}
 
 	@Override
@@ -76,21 +76,28 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 			double aoeHalfAngle = this.getAoEHalfAngle(entityLiving, stack);
 
 			List<EntityLivingBase> others = entityLiving.world.getEntitiesWithinAABB(EntityLivingBase.class, entityLiving.getEntityBoundingBox().grow(aoeReach));
-			for(EntityLivingBase entity : others) {
-				if(entity != entityLiving) {
-					double dist = entity.getDistance(entityLiving);
+			for(EntityLivingBase target : others) {
+				if(target != entityLiving) {
+					double dist = target.getDistance(entityLiving);
 
 					if(dist < aoeReach) {
-
-						double angle = Math.toDegrees(Math.acos(entity.getPositionVector().subtract(entityLiving.getPositionVector()).normalize().dotProduct(entityLiving.getLookVec())));
+						double angle = Math.min(
+								Math.toDegrees(Math.acos(target.getPositionVector().subtract(entityLiving.getPositionVector()).normalize().dotProduct(entityLiving.getLookVec()))),
+								Math.min(
+										Math.toDegrees(Math.acos(target.getPositionVector().subtract(entityLiving.getPositionEyes(1)).normalize().dotProduct(entityLiving.getLookVec()))),
+										Math.toDegrees(Math.acos(target.getPositionVector().add(0, target.height / 2, 0).subtract(entityLiving.getPositionEyes(1)).normalize().dotProduct(entityLiving.getLookVec())))
+										)
+								);
 
 						if(angle < aoeHalfAngle) {
-							double distXZ = Math.sqrt((entity.posX - entityLiving.posX)*(entity.posX - entityLiving.posX) + (entity.posZ - entityLiving.posZ)*(entity.posZ - entityLiving.posZ));
+							double distXZ = Math.sqrt((target.posX - entityLiving.posX)*(target.posX - entityLiving.posX) + (target.posZ - entityLiving.posZ)*(target.posZ - entityLiving.posZ));
 
-							if(entityLiving.getLookVec().y * distXZ + entityLiving.posY + entityLiving.height / 2 > entity.getEntityBoundingBox().minY && entityLiving.getLookVec().y * distXZ + entityLiving.posY + entityLiving.height / 2 < entity.getEntityBoundingBox().maxY) {
-								if(player.world.rayTraceBlocks(player.getPositionVector().add(0, player.getEyeHeight(), 0), entity.getPositionVector().add(0, entity.height / 2, 0), false, true, false) == null) {
+							double hitY = entityLiving.posY + entityLiving.getEyeHeight() + entityLiving.getLookVec().y / Math.sqrt(Math.pow(entityLiving.getLookVec().x, 2) + Math.pow(entityLiving.getLookVec().z, 2) + 0.1D) * distXZ;
+
+							if(hitY > target.getEntityBoundingBox().minY - 0.25D && hitY < target.getEntityBoundingBox().maxY + 0.25D) {
+								if(player.world.rayTraceBlocks(player.getPositionVector().add(0, player.getEyeHeight(), 0), target.getPositionVector().add(0, target.height / 2, 0), false, true, false) == null) {
 									if(!entityLiving.world.isRemote) {
-										player.attackTargetEntityWithCurrentItem(entity);
+										player.attackTargetEntityWithCurrentItem(target);
 									}
 
 									enemiesInReach = true;

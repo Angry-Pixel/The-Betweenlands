@@ -23,9 +23,12 @@ import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBl
 
 public class DecayPitBuildParts {
 
-	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
-
-	public DecayPitBuildParts() {
+	private SludgeWormMazeBlockHelper blockHelper;
+	private final WorldGenSludgeWormDungeon dungeon;
+	
+	public DecayPitBuildParts(WorldGenSludgeWormDungeon dungeon) {
+		this.dungeon = dungeon;
+		this.blockHelper = new SludgeWormMazeBlockHelper(dungeon);
 	}
 
 	public void buildMainAreaPart(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
@@ -280,7 +283,7 @@ public class DecayPitBuildParts {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int xx = offsetA; xx < offsetA + sizeWidth; xx++)
 					for (int zz = offsetC; zz < offsetC + sizeDepth; zz++) {
-						world.setBlockState(pos.add(xx, yy, zz), state, 2);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
@@ -289,7 +292,7 @@ public class DecayPitBuildParts {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int zz = -offsetA; zz > -offsetA - sizeWidth; zz--)
 					for (int xx = offsetC; xx < offsetC + sizeDepth; xx++) {
-						world.setBlockState(pos.add(xx, yy, zz), state, 2);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
@@ -298,7 +301,7 @@ public class DecayPitBuildParts {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int xx = -offsetA; xx > -offsetA - sizeWidth; xx--)
 					for (int zz = -offsetC; zz > -offsetC - sizeDepth; zz--) {
-						world.setBlockState(pos.add(xx, yy, zz), state, 2);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
@@ -307,7 +310,7 @@ public class DecayPitBuildParts {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int zz = offsetA; zz < offsetA + sizeWidth; zz++)
 					for (int xx = -offsetC; xx > -offsetC - sizeDepth; xx--) {
-						world.setBlockState(pos.add(xx, yy, zz), state, 2);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}

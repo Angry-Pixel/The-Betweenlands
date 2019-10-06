@@ -37,23 +37,31 @@ import net.minecraftforge.items.IItemHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
-import thebetweenlands.common.item.misc.ItemTarBarrel;
+import thebetweenlands.common.item.misc.ItemBarrel;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
-import thebetweenlands.common.tile.TileEntityTarBarrel;
+import thebetweenlands.common.tile.TileEntityBarrel;
 
-public class BlockTarBarrel extends BasicBlock implements ITileEntityProvider, ICustomItemBlock {
+public class BlockBarrel extends BasicBlock implements ITileEntityProvider, ICustomItemBlock {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
-	public BlockTarBarrel() {
-		super(Material.WOOD);
-		setSoundType(SoundType.WOOD);
-		setHardness(2.0F);
-		setResistance(5.0F);
-		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+	private final boolean isHeatResistant;
+	
+	@SuppressWarnings("deprecation")
+	public BlockBarrel(IBlockState material, boolean isHeatResistant) {
+		super(material.getMaterial());
+		this.setSoundType(material.getBlock().getSoundType());
+		this.setHardness(2.0F);
+		this.setResistance(5.0F);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+		this.isHeatResistant = isHeatResistant;
 	}
 
+	public boolean isHeatResistant(World world, BlockPos pos, IBlockState state) {
+		return this.isHeatResistant;
+	}
+	
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
@@ -68,8 +76,8 @@ public class BlockTarBarrel extends BasicBlock implements ITileEntityProvider, I
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
 
-		if(world.getTileEntity(pos) instanceof TileEntityTarBarrel) {
-			TileEntityTarBarrel tile = (TileEntityTarBarrel) world.getTileEntity(pos);
+		if(world.getTileEntity(pos) instanceof TileEntityBarrel) {
+			TileEntityBarrel tile = (TileEntityBarrel) world.getTileEntity(pos);
 
 			if(player.isSneaking()) {
 				return false;
@@ -101,7 +109,7 @@ public class BlockTarBarrel extends BasicBlock implements ITileEntityProvider, I
 			}
 
 			if(!world.isRemote && tile != null) {
-				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_TAR_BARREL, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_BARREL, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 		}
 
@@ -147,7 +155,7 @@ public class BlockTarBarrel extends BasicBlock implements ITileEntityProvider, I
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityTarBarrel();
+		return new TileEntityBarrel();
 	}
 
 	@Override
@@ -163,7 +171,7 @@ public class BlockTarBarrel extends BasicBlock implements ITileEntityProvider, I
 
 	@Override
 	public ItemBlock getItemBlock() {
-		return new ItemTarBarrel(this);
+		return new ItemBarrel(this);
 	}
 
 	@Override
@@ -180,10 +188,10 @@ public class BlockTarBarrel extends BasicBlock implements ITileEntityProvider, I
 		if(!worldIn.isRemote && !player.isCreative() && worldIn.getGameRules().getBoolean("doTileDrops")) {
 			TileEntity te = worldIn.getTileEntity(pos);
 
-			if(te instanceof TileEntityTarBarrel) {
+			if(te instanceof TileEntityBarrel) {
 				Item item = Item.getItemFromBlock(worldIn.getBlockState(pos).getBlock());
-				if(item instanceof ItemTarBarrel) {
-					InventoryHelper.spawnItemStack(worldIn, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, ((ItemTarBarrel) item).fromBarrel((TileEntityTarBarrel) te));
+				if(item instanceof ItemBarrel) {
+					InventoryHelper.spawnItemStack(worldIn, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, ((ItemBarrel) item).fromBarrel((TileEntityBarrel) te));
 				}
 			}
 		}

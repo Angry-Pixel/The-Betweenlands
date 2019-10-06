@@ -22,6 +22,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemBarkAmulet extends Item implements IEquippable {
@@ -81,7 +82,7 @@ public class ItemBarkAmulet extends Item implements IEquippable {
 		if(!Minecraft.getMinecraft().isGamePaused()) {
 			Entity view = Minecraft.getMinecraft().getRenderViewEntity();
 			if(view != null) {
-				if(!EquipmentHelper.getEquipment(EnumEquipmentInventory.MISC, view, ItemRegistry.BARK_AMULET).isEmpty()) {
+				if(!EquipmentHelper.getEquipment(EnumEquipmentInventory.MISC, view, ItemRegistry.BARK_AMULET).isEmpty() || (view instanceof EntityLivingBase && ((EntityLivingBase) view).isPotionActive(ElixirEffectRegistry.ENLIGHTENED))) {
 					final float range = 12.0F;
 
 					List<EntityLivingBase> entities = view.world.getEntitiesWithinAABB(EntityLivingBase.class, view.getEntityBoundingBox().grow(range), e -> e.getDistanceSq(view) <= range * range);

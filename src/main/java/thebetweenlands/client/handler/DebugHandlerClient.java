@@ -46,7 +46,7 @@ public class DebugHandlerClient {
 	@SubscribeEvent
 	public static void renderWorld(RenderWorldLastEvent event) {
 		if (StreamSupport.stream(Minecraft.getMinecraft().player.getHeldEquipment().spliterator(), false)
-				.anyMatch(stack -> !stack.isEmpty() && stack.getItem() == ItemRegistry.LOCATION_DEBUG)) {
+				.anyMatch(stack -> !stack.isEmpty() && (stack.getItem() == ItemRegistry.LOCATION_DEBUG || stack.getItem() == ItemRegistry.TEST_ITEM_CHIMP_RULER))) {
 			World world = Minecraft.getMinecraft().world;
 			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 
