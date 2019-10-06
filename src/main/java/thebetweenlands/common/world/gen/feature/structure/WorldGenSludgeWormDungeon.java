@@ -40,6 +40,8 @@ import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGener
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationAmbience;
+import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
@@ -104,10 +106,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.finish("Pit");
 
 		generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
-
-
-		//TODO Remove, for location debug
-		this.setBlockAndNotifyAdequately(world, pos, Blocks.DIAMOND_BLOCK.getDefaultState());
 
 
 		timer.finish("Full_Mudgeon");
@@ -222,6 +220,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				);
 		locationPit.linkChunks();
 		locationPit.setLayer(1);
+		locationPit.setAmbience(new LocationAmbience(EnumLocationAmbience.SLUDGE_WORM_DUNGEON));
 		locationPit.setSeed(rand.nextLong());
 		locationPit.setVisible(true);
 		locationPit.setDirty(true);

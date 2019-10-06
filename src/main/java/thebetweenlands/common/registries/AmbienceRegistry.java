@@ -90,6 +90,12 @@ public class AmbienceRegistry {
 				return this.getProgressiveVolume();
 			}
 		});
+		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.SLUDGE_WORM_DUNGEON, SoundRegistry.PIT_OF_DECAY_LOOP) {
+			@Override
+			public boolean isActive() {
+				return super.isActive() && this.getAmbience().getLocation().getName().equals("sludge_worm_dungeon_pit");
+			}
+		});
 		AmbienceManager.INSTANCE.registerAmbience(new SpiritTreeAmbienceType());
 
 		//Events
