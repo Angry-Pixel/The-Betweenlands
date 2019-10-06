@@ -894,6 +894,8 @@ location.sludge_worm_dungeon_crypt_tunnels.name=80:Crypt Tunnels
 location.sludge_worm_dungeon_crypt.name=80:Crypt (name TBD)
 location.sludge_worm_dungeon_maze.name=80:Maze (name TBD)
 location.sludge_worm_dungeon.name=80:Sludge Worm Dungeon (name TBD)
+location.sludge_worm_dungeon_pit.name=80:The Pit
+
 
 
 # Tooltips

@@ -312,13 +312,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		NBTTagList boundingBoxes = nbt.getTagList("bounds", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < boundingBoxes.tagCount(); i++) {
 			NBTTagCompound boxNbt = boundingBoxes.getCompoundTagAt(i);
-			double minX = boxNbt.getDouble("minX");
-			double minY = boxNbt.getDouble("minY");
-			double minZ = boxNbt.getDouble("minZ");
-			double maxX = boxNbt.getDouble("maxX");
-			double maxY = boxNbt.getDouble("maxY");
-			double maxZ = boxNbt.getDouble("maxZ");
-			this.boundingBoxes.add(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
+			this.boundingBoxes.add(this.readAabb(boxNbt));
 		}
 		this.updateEnclosingBounds();
 		this.type = EnumLocationType.fromName(nbt.getString("type"));
@@ -331,6 +325,27 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		this.locationSeed = nbt.getLong("seed");
 	}
 
+	protected NBTTagCompound writeAabb(AxisAlignedBB aabb) {
+		NBTTagCompound boxNbt = new NBTTagCompound();
+		boxNbt.setDouble("minX", aabb.minX);
+		boxNbt.setDouble("minY", aabb.minY);
+		boxNbt.setDouble("minZ", aabb.minZ);
+		boxNbt.setDouble("maxX", aabb.maxX);
+		boxNbt.setDouble("maxY", aabb.maxY);
+		boxNbt.setDouble("maxZ", aabb.maxZ);
+		return boxNbt;
+	}
+	
+	protected AxisAlignedBB readAabb(NBTTagCompound nbt) {
+		double minX = nbt.getDouble("minX");
+		double minY = nbt.getDouble("minY");
+		double minZ = nbt.getDouble("minZ");
+		double maxX = nbt.getDouble("maxX");
+		double maxY = nbt.getDouble("maxY");
+		double maxZ = nbt.getDouble("maxZ");
+		return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
+	}
+	
 	/**
 	 * Reads the guard data from NBT
 	 * @param nbt
@@ -378,14 +393,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		nbt.setString("name", this.dataManager.get(NAME));
 		NBTTagList boundingBoxes = new NBTTagList();
 		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
-			NBTTagCompound boxNbt = new NBTTagCompound();
-			boxNbt.setDouble("minX", boundingBox.minX);
-			boxNbt.setDouble("minY", boundingBox.minY);
-			boxNbt.setDouble("minZ", boundingBox.minZ);
-			boxNbt.setDouble("maxX", boundingBox.maxX);
-			boxNbt.setDouble("maxY", boundingBox.maxY);
-			boxNbt.setDouble("maxZ", boundingBox.maxZ);
-			boundingBoxes.appendTag(boxNbt);
+			boundingBoxes.appendTag(this.writeAabb(boundingBox));
 		}
 		nbt.setTag("bounds", boundingBoxes);
 		nbt.setString("type", this.type.name);

@@ -203,6 +203,29 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		locationCrypt.setVisible(true);
 		locationCrypt.setDirty(true);
 		worldStorage.getLocalStorageHandler().addLocalStorage(locationCrypt);
+		
+		//Pit
+		LocationStorage locationPit = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_pit", EnumLocationType.DUNGEON);
+		locationPit.addBounds(
+				//entrance
+				new AxisAlignedBB(pos.getX() + 1 , pos.getY() - 43, pos.getZ() + 1 , pos.getX() + 9 , pos.getY() - 48, pos.getZ() + 4 ),
+				//dome
+				new AxisAlignedBB(pos.getX() + 1 , pos.getY() - 49, pos.getZ() + 1 , pos.getX() + 28, pos.getY() - 43, pos.getZ() + 22),
+				new AxisAlignedBB(pos.getX() + 4 , pos.getY() - 49, pos.getZ() + 22, pos.getX() + 25, pos.getY() - 43, pos.getZ() + 28),
+				new AxisAlignedBB(pos.getX() + 3 , pos.getY() - 54, pos.getZ() + 19, pos.getX() + 26, pos.getY() - 49, pos.getZ() + 9 ),
+				new AxisAlignedBB(pos.getX() + 4 , pos.getY() - 49, pos.getZ() + 9 , pos.getX() + 24, pos.getY() - 54, pos.getZ() + 4 ),
+				new AxisAlignedBB(pos.getX() + 8 , pos.getY() - 49, pos.getZ() + 3 , pos.getX() + 21, pos.getY() - 52, pos.getZ() + 4 ),
+				new AxisAlignedBB(pos.getX() + 3 , pos.getY() - 49, pos.getZ() + 19, pos.getX() + 26, pos.getY() - 54, pos.getZ() + 22),
+				new AxisAlignedBB(pos.getX() + 6 , pos.getY() - 49, pos.getZ() + 22, pos.getX() + 22, pos.getY() - 54, pos.getZ() + 26),
+				new AxisAlignedBB(pos.getX() + 22, pos.getY() - 49, pos.getZ() + 22, pos.getX() + 23, pos.getY() - 51, pos.getZ() + 23),
+				new AxisAlignedBB(pos.getX() + 21, pos.getY() - 54, pos.getZ() + 8 , pos.getX() + 8 , pos.getY() - 58, pos.getZ() + 21)
+				);
+		locationPit.linkChunks();
+		locationPit.setLayer(1);
+		locationPit.setSeed(rand.nextLong());
+		locationPit.setVisible(true);
+		locationPit.setDirty(true);
+		worldStorage.getLocalStorageHandler().addLocalStorage(locationPit);
 	}
 
 	private void generateCryptCrawlerDungeon(World world, Random rand, BlockPos pos) {
@@ -1234,7 +1257,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				&& block != BlockRegistry.POSSESSED_BLOCK && block != BlockRegistry.WEAK_POLISHED_LIMESTONE
 				&& block != BlockRegistry.WEAK_BETWEENSTONE_TILES && block != BlockRegistry.WEAK_MOSSY_BETWEENSTONE_TILES
 				&& block != BlockRegistry.LOOT_URN && block != BlockRegistry.PUFFSHROOM && block != BlockRegistry.STAGNANT_WATER
-				&& block != BlockRegistry.ROPE && block != BlockRegistry.DEAD_MOSS && block != BlockRegistry.DEAD_LICHEN && block != BlockRegistry.MUD_TILES_WATER) {
+				&& block != BlockRegistry.ROPE && block != BlockRegistry.DEAD_MOSS && block != BlockRegistry.DEAD_LICHEN && block != BlockRegistry.MUD_TILES_WATER
+				&& block != BlockRegistry.HANGER) {
 			return true;
 		}
 		return false;
