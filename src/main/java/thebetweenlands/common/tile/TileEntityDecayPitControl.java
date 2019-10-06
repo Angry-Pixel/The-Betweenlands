@@ -70,26 +70,26 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	private boolean shaking = false;
 	private int shakingTimerMax = 60;
 	public boolean playGearSound = true;
-	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
-	public final Map<Block, Boolean> INVISIBLE_BLOCKS = new HashMap<Block, Boolean>(); // dont need states so blocks will do
+	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper(null);
+	protected final Map<Block, Boolean> invisibleBlocks = new HashMap<Block, Boolean>(); // dont need states so blocks will do
 
 	public TileEntityDecayPitControl()  {
 		initInvisiBlockMap();
 	}
 
 	private void initInvisiBlockMap() {
-		if (INVISIBLE_BLOCKS.isEmpty()) {
-			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK.getBlock(), true);
-			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL.getBlock(), true);
-			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1.getBlock(), true);
-			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2.getBlock(), true);
-			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_1.getBlock(), true);
-			INVISIBLE_BLOCKS.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2.getBlock(), true);
+		if (invisibleBlocks.isEmpty()) {
+			invisibleBlocks.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK.getBlock(), true);
+			invisibleBlocks.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_DIAGONAL.getBlock(), true);
+			invisibleBlocks.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_1.getBlock(), true);
+			invisibleBlocks.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_L_2.getBlock(), true);
+			invisibleBlocks.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_1.getBlock(), true);
+			invisibleBlocks.put(blockHelper.DECAY_PIT_INVISIBLE_FLOOR_BLOCK_R_2.getBlock(), true);
 		}
 	}
 
 	public boolean isInvisibleBlock(Block block) {
-		return INVISIBLE_BLOCKS.get(block) != null;
+		return invisibleBlocks.get(block) != null;
 	}
 
 	@Override
@@ -217,6 +217,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void playGearsSound(World world, BlockPos pos) {
 		ISound chain_sound = new DecayPitGearsSound(this);
 		Minecraft.getMinecraft().getSoundHandler().playSound(chain_sound);

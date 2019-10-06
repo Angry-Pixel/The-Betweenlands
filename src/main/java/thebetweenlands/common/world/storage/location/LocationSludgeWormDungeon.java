@@ -50,6 +50,8 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 				.setFogColor(new int[] {120, 120, 120}).setFogRange(4.0f, 45.0f)
 				.setCaveFog(false));
 
+		this.setHasSharedLootPools(true);
+		
 		this.dungeonMobSpawner = new BoxMobSpawner();
 		this.dungeonMobSpawner.setMaxAreaEntities(80);
 		this.dungeonMobSpawner.setEntityCountFilter(entity -> entity instanceof EntityTriggeredFallingBlock == false); //Ignore falling blocks

@@ -888,8 +888,13 @@ location.wight_tower_boss.name=80:Primordial Malevolence
 location.abandoned_shack.name=<scale:1.75>Ruins</scale>
 location.underground_ruins.name=80:Underground Ruins
 location.spirit_tree.name=80:Spirit Tree
-location.cc_winding_walkways.name=80:Winding Walkways
-location.barrishee_lair.name=80:Barrishee Lair
+location.sludge_worm_dungeon_winding_walkways.name=80:Winding Walkways
+location.sludge_worm_dungeon_barrishee_lair.name=80:Barrishee Lair
+location.sludge_worm_dungeon_crypt_tunnels.name=80:Crypt Tunnels
+location.sludge_worm_dungeon_crypt.name=80:Crypt (name TBD)
+location.sludge_worm_dungeon_maze.name=80:Maze (name TBD)
+location.sludge_worm_dungeon.name=80:Sludge Worm Dungeon (name TBD)
+
 
 # Tooltips
 tooltip.arrow.octine=Use with caution!

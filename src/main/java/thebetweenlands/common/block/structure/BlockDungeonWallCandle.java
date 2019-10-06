@@ -200,19 +200,20 @@ public class BlockDungeonWallCandle extends BlockHorizontal {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing facing = EnumFacing.byIndex(meta);
-		if (facing.getAxis() == EnumFacing.Axis.Y)
+		EnumFacing facing = EnumFacing.byIndex(meta & 0b111);
+		if(facing.getAxis() == EnumFacing.Axis.Y) {
 			facing = EnumFacing.NORTH;
-		return getDefaultState().withProperty(FACING, facing).withProperty(LIT, Boolean.valueOf((meta & 8) > 0));
+		}
+		return getDefaultState().withProperty(FACING, facing).withProperty(LIT, (meta & 0b1000) != 0);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		int meta = 0;
-		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();
+		int meta = state.getValue(FACING).getIndex();
 
-		if (((Boolean) state.getValue(LIT)).booleanValue())
-			meta |= 8;
+		if(state.getValue(LIT)) {
+			meta |= 0b1000;
+		}
 
 		return meta;
 	}

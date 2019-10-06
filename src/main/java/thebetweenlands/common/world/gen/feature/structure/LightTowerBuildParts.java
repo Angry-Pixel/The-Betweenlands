@@ -19,9 +19,12 @@ import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBl
 
 public class LightTowerBuildParts {
 
-	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
-
-	public LightTowerBuildParts() {
+	private SludgeWormMazeBlockHelper blockHelper;
+	private final WorldGenSludgeWormDungeon dungeon;
+	
+	public LightTowerBuildParts(WorldGenSludgeWormDungeon dungeon) {
+		this.dungeon = dungeon;
+		this.blockHelper = new SludgeWormMazeBlockHelper(dungeon);
 	}
 
 	public void buildPitEntrance(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
@@ -52,7 +55,7 @@ public class LightTowerBuildParts {
 		rotatedCubeVolume(world, rand, pos, -4, 11 + level, 10, blockHelper.MUD_TILES_DECAY, 2, 1, 2, facing);
 
 		for (int count = 1; count <= 3; count++)
-			world.setBlockState(pos.add(7, 15 + level, 3).offset(facing.rotateY(), count), blockHelper.getRandomBeam(facing.rotateY(), rand, level, count, false));
+			this.dungeon.setBlockAndNotifyAdequately(world, pos.add(7, 15 + level, 3).offset(facing.rotateY(), count), blockHelper.getRandomBeam(facing.rotateY(), rand, level, count, false));
 		rotatedCubeVolume(world, rand, pos, -3, 12 + level, 7, blockHelper.getPillarsForLevel(rand, 7, 1), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, -3, 13 + level, 7, blockHelper.getPillarsForLevel(rand, 7, 2), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, -3, 14 + level, 7, blockHelper.getPillarsForLevel(rand, 7, 3), 1, 1, 1, facing);
@@ -174,7 +177,7 @@ public class LightTowerBuildParts {
 		rotatedCubeVolume(world, rand, pos, 3, 1 + level, -4, blockHelper.MUD_BRICK_WALL, 3, 3, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 3, 0 + level, -3, blockHelper.AIR, 3, 1, 1, facing);  //Not sure if this is needed
 
-		world.setBlockState(pos.add(3, 2 + level, 4), blockHelper.DUNGEON_DOOR_WEST, 2);
+		this.dungeon.setBlockAndNotifyAdequately(world, pos.add(3, 2 + level, 4), blockHelper.DUNGEON_DOOR_WEST);
 		TileEntityDungeonDoorRunes tileLock = (TileEntityDungeonDoorRunes) world.getTileEntity(pos.add(3, 2 + level, 4));
 		if (tileLock instanceof TileEntityDungeonDoorRunes) {
 			tileLock.top_code = 1;
@@ -645,7 +648,7 @@ public class LightTowerBuildParts {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int xx = offsetA; xx < offsetA + sizeWidth; xx++)
 					for (int zz = offsetC; zz < offsetC + sizeDepth; zz++) {
-						world.setBlockState(pos.add(xx, yy, zz), state, 2);//16);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 						 if (state == blockHelper.ROTTEN_PLANK_SLAB_LOWER)
@@ -657,7 +660,7 @@ public class LightTowerBuildParts {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int zz = -offsetA; zz > -offsetA - sizeWidth; zz--)
 					for (int xx = offsetC; xx < offsetC + sizeDepth; xx++) {
-						world.setBlockState(pos.add(xx, yy, zz), state, 2);//16);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 						 if (state == blockHelper.ROTTEN_PLANK_SLAB_LOWER)
@@ -669,7 +672,7 @@ public class LightTowerBuildParts {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int xx = -offsetA; xx > -offsetA - sizeWidth; xx--)
 					for (int zz = -offsetC; zz > -offsetC - sizeDepth; zz--) {
-						world.setBlockState(pos.add(xx, yy, zz), state, 2);//16);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 						 if (state == blockHelper.ROTTEN_PLANK_SLAB_LOWER)
@@ -681,7 +684,7 @@ public class LightTowerBuildParts {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int zz = offsetA; zz < offsetA + sizeWidth; zz++)
 					for (int xx = -offsetC; xx > -offsetC - sizeDepth; xx--) {
-						world.setBlockState(pos.add(xx, yy, zz), state, 2);//16);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
 						 if (state.getBlock() instanceof BlockLootUrn)
 							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 						 if (state == blockHelper.ROTTEN_PLANK_SLAB_LOWER)
@@ -700,46 +703,46 @@ public class LightTowerBuildParts {
 	}
 
 	public void destroyTowerBeamLenses(World world, BlockPos pos) {
-			removeblock(world, pos, -2, 2, 4);
-			removeblock(world, pos, 2, 2, 4);
-			removeblock(world, pos, -7, 1, 4);
-			removeblock(world, pos, 7, 1, 4);
-			removeblock(world, pos, 15, 6, -1);
-			removeblock(world, pos, -2, 3, -4);
-			removeblock(world, pos, 2, 3, -4);
-			removeblock(world, pos, -7, 1, -4);
-			removeblock(world, pos, 7, 1, -4);
-			removeblock(world, pos, 7, 6, -1);
+			removeBlock(world, pos, -2, 2, 4);
+			removeBlock(world, pos, 2, 2, 4);
+			removeBlock(world, pos, -7, 1, 4);
+			removeBlock(world, pos, 7, 1, 4);
+			removeBlock(world, pos, 15, 6, -1);
+			removeBlock(world, pos, -2, 3, -4);
+			removeBlock(world, pos, 2, 3, -4);
+			removeBlock(world, pos, -7, 1, -4);
+			removeBlock(world, pos, 7, 1, -4);
+			removeBlock(world, pos, 7, 6, -1);
 
-			removeblock(world, pos, 0, 10, 0);
-			removeblock(world, pos, -2, 11, 4);
-			removeblock(world, pos, 2, 10, 4);
-			removeblock(world, pos, -7, 11, 4);
-			removeblock(world, pos, -7, 14, 4);
-			removeblock(world, pos, 7, 14, 4);
-			removeblock(world, pos, 2, 10, 0);
-			removeblock(world, pos, -2, 12, -4);
-			removeblock(world, pos, 2, 10, -4);
-			removeblock(world, pos, -7, 12, -4);
-			removeblock(world, pos, -7, 14, -4);
-			removeblock(world, pos, 7, 14, -1);
-			removeblock(world, pos, 7, 10, -4);
-			removeblock(world, pos, 7, 14, -4);
+			removeBlock(world, pos, 0, 10, 0);
+			removeBlock(world, pos, -2, 11, 4);
+			removeBlock(world, pos, 2, 10, 4);
+			removeBlock(world, pos, -7, 11, 4);
+			removeBlock(world, pos, -7, 14, 4);
+			removeBlock(world, pos, 7, 14, 4);
+			removeBlock(world, pos, 2, 10, 0);
+			removeBlock(world, pos, -2, 12, -4);
+			removeBlock(world, pos, 2, 10, -4);
+			removeBlock(world, pos, -7, 12, -4);
+			removeBlock(world, pos, -7, 14, -4);
+			removeBlock(world, pos, 7, 14, -1);
+			removeBlock(world, pos, 7, 10, -4);
+			removeBlock(world, pos, 7, 14, -4);
 
-			removeblock(world, pos, 0, 21, 0);
-			removeblock(world, pos, -7, 18, 4);
-			removeblock(world, pos, -7, 18, -4);
+			removeBlock(world, pos, 0, 21, 0);
+			removeBlock(world, pos, -7, 18, 4);
+			removeBlock(world, pos, -7, 18, -4);
 	}
 
 	public void destroyGateBeamLenses(World world, BlockPos pos) {
-		removeblock(world, pos, -8, 0, 0);
-		removeblock(world, pos, -8, 4, 0);
-		removeblock(world, pos, -1, 4, 0);
-		removeblock(world, pos, 0, 4, 0);
-		removeblock(world, pos, 0, 4, -1);
+		removeBlock(world, pos, -8, 0, 0);
+		removeBlock(world, pos, -8, 4, 0);
+		removeBlock(world, pos, -1, 4, 0);
+		removeBlock(world, pos, 0, 4, 0);
+		removeBlock(world, pos, 0, 4, -1);
 	}
 
-	private void removeblock(World world, BlockPos pos, int x, int y, int z) {
+	private void removeBlock(World world, BlockPos pos, int x, int y, int z) {
 		world.destroyBlock(pos.add(x, y, z), false);
 	}
 

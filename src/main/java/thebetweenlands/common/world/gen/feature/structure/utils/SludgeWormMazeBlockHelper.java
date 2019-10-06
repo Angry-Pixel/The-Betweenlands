@@ -50,6 +50,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityGroundItem;
 import thebetweenlands.common.tile.TileEntityLootUrn;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
 
 public class SludgeWormMazeBlockHelper {
 	
@@ -260,8 +261,11 @@ public class SludgeWormMazeBlockHelper {
 
 	public final Map<IBlockState, Boolean> STRUCTURE_BLOCKS = new HashMap<IBlockState, Boolean>();
 
-	public SludgeWormMazeBlockHelper() {
+	private final WorldGenSludgeWormDungeon dungeon;
+	
+	public SludgeWormMazeBlockHelper(WorldGenSludgeWormDungeon dungeon) {
 		initStuctureBlockMap();
+		this.dungeon = dungeon;
 	}
 
 	public @Nullable IBlockState getMudBricksForLevel(Random rand, int level, int layer) {
@@ -665,24 +669,23 @@ public class SludgeWormMazeBlockHelper {
 			if (!isSolidStructureBlock(world.getBlockState(pos)) && world.getBlockState(pos.down()).getBlock() instanceof BlockMudTiles) {
 				int rnd = rand.nextInt(32);
 				if (rnd < 8) {
-					world.setBlockState(pos, ROOT, 2);
+					this.dungeon.setBlockAndNotifyAdequately(world, pos, ROOT);
 				} else if (rnd < 16) {
-					world.setBlockState(pos, ROOT, 2);
+					this.dungeon.setBlockAndNotifyAdequately(world, pos, ROOT);
 					if (world.isAirBlock(pos.up(1)))
-						world.setBlockState(pos.up(1), ROOT, 2);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.up(1), ROOT);
 				} else if (rnd < 24) {
-					world.setBlockState(pos, ROOT, 2);
+					this.dungeon.setBlockAndNotifyAdequately(world, pos, ROOT);
 					if (world.isAirBlock(pos.up(1)) && world.isAirBlock(pos.up(2))) {
-						world.setBlockState(pos.up(1), ROOT, 2);
-						world.setBlockState(pos.up(2), ROOT, 2);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.up(1), ROOT);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.up(2), ROOT);
 					}
 				} else {
-
-					world.setBlockState(pos, ROOT, 2);
+					this.dungeon.setBlockAndNotifyAdequately(world, pos, ROOT);
 					if (world.isAirBlock(pos.up(1)) && world.isAirBlock(pos.up(2)) && world.isAirBlock(pos.up(3))) {
-						world.setBlockState(pos.up(1), ROOT, 2);
-						world.setBlockState(pos.up(2), ROOT, 2);
-						world.setBlockState(pos.up(3), ROOT, 2);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.up(1), ROOT);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.up(2), ROOT);
+						this.dungeon.setBlockAndNotifyAdequately(world, pos.up(3), ROOT);
 					}
 				}
 			}

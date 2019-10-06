@@ -9,12 +9,15 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
@@ -30,6 +33,8 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -134,12 +139,30 @@ public class LocationHandler {
 	@SubscribeEvent
 	public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
 		EntityPlayer player = event.getEntityPlayer();
+
 		List<LocationStorage> locations = LocationStorage.getLocations(player.world, new Vec3d(event.getPos()));
+
 		for(LocationStorage location : locations) {
 			if(location != null && location.getGuard() != null && location.getGuard().isGuarded(player.world, player, event.getPos())) {
+				if(player.world.isRemote && player.swingProgressInt == 0) {
+					spawnBreakSpeedParticle(event.getPos(), player);
+				}
+
 				event.setNewSpeed(0.0F);
 				event.setCanceled(true);
 				return;
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static void spawnBreakSpeedParticle(BlockPos pos, EntityPlayer player) {
+		if(player instanceof EntityPlayerSP && Minecraft.getMinecraft().playerController.getIsHittingBlock()) {
+			RayTraceResult rayTrace = Minecraft.getMinecraft().objectMouseOver;
+
+			if(rayTrace != null && rayTrace.typeOfHit == RayTraceResult.Type.BLOCK && pos.equals(rayTrace.getBlockPos())) {
+				Vec3d hitVec = rayTrace.hitVec;
+				BLParticles.BLOCK_PROTECTION.spawn(player.world, hitVec.x + rayTrace.sideHit.getXOffset() * 0.025F, hitVec.y + rayTrace.sideHit.getYOffset() * 0.025F, hitVec.z + rayTrace.sideHit.getZOffset() * 0.025F, ParticleArgs.get().withData(rayTrace.sideHit));
 			}
 		}
 	}
@@ -174,30 +197,28 @@ public class LocationHandler {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onLeftClickBlock(LeftClickBlock event) {
 		if(!event.getEntityPlayer().isCreative()) {
 			List<LocationStorage> locations = LocationStorage.getLocations(event.getWorld(), new Vec3d(event.getPos()));
 			for(LocationStorage location : locations) {
 				if(location != null && location.getGuard() != null && location.getGuard().isGuarded(event.getWorld(), event.getEntityPlayer(), event.getPos())) {
-					if(event.getWorld().isRemote && event.getEntityPlayer().swingProgressInt == 0) {
-						Vec3d hitVec = event.getHitVec();
-						BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + event.getFace().getXOffset() * 0.025F, hitVec.y + event.getFace().getYOffset() * 0.025F, hitVec.z + event.getFace().getZOffset() * 0.025F, ParticleArgs.get().withData(event.getFace()));
-					}
-					event.setCanceled(true);
+					Vec3d hitVec = event.getHitVec();
+					BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + event.getFace().getXOffset() * 0.025F, hitVec.y + event.getFace().getYOffset() * 0.025F, hitVec.z + event.getFace().getZOffset() * 0.025F, ParticleArgs.get().withData(event.getFace()));
 					break;
 				}
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onLivingDestroyBlock(LivingDestroyBlockEvent event) {
 		if(isProtected(event.getEntityLiving().world, event.getEntityLiving(), event.getPos())) {
 			event.setCanceled(true);
 		}
 	}
-	
+
 	public static boolean isProtected(World world, @Nullable Entity entity, BlockPos pos) {
 		List<LocationStorage> locations = LocationStorage.getLocations(world, new Vec3d(pos));
 		for(LocationStorage location : locations) {

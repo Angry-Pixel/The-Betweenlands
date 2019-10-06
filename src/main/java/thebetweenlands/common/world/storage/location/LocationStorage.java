@@ -54,7 +54,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 
 	private Map<ResourceLocation, SharedLootPool> sharedLootPools = new HashMap<>();
 	private TObjectIntMap<ResourceLocation> lootInventories = new TObjectIntHashMap<>();
-	private boolean hasSharedLootPools = true;
+	private boolean hasSharedLootPools = false;
 
 	protected GenericDataManager dataManager;
 

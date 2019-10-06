@@ -17,6 +17,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.audio.DecayPitChainSound;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -30,6 +32,7 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 	public boolean IS_SLOW = false;
 	public boolean IS_BROKEN = false;
 	public boolean playChainSound = true;
+	
 	@Override
 	public void update() {
 		animationTicksChainPrev = animationTicksChain;
@@ -85,11 +88,13 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void playChainSound(World world, BlockPos pos) {
 		ISound chain_sound = new DecayPitChainSound(this);
 		Minecraft.getMinecraft().getSoundHandler().playSound(chain_sound);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void playChainSoundFinal(World world, BlockPos pos) {
 		//TODO Add final chain sound/other thing
 	}

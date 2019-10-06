@@ -15,17 +15,23 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 //MINE!!
 public class TestItemChimpRuler extends Item {
@@ -71,6 +77,26 @@ public class TestItemChimpRuler extends Item {
 			}
 		}
 		return EnumActionResult.FAIL;
+	}
+	
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		if(!worldIn.isRemote && handIn == EnumHand.OFF_HAND) {
+			ItemStack stack = playerIn.getHeldItem(handIn);
+			int x = stack.getTagCompound().getInteger("homeX");
+			int y = stack.getTagCompound().getInteger("homeY");
+			int z = stack.getTagCompound().getInteger("homeZ");
+			BlockPos home = new BlockPos(x, y, z);
+			this.doUseAction(worldIn, playerIn, home);
+		}
+		return super.onItemRightClick(worldIn, playerIn, handIn);
+	}
+	
+	protected void doUseAction(World world, EntityPlayer player, BlockPos home) {
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		ILocalStorageHandler handler = worldStorage.getLocalStorageHandler();
+		handler.getLocalStorages(LocationStorage.class, new AxisAlignedBB(home.add(-80, -80, -80), home.add(80, 80, 80)), l -> true).forEach(l -> handler.removeLocalStorage(l));
+		new WorldGenSludgeWormDungeon().generateLocations(world, world.rand, home);
 	}
 
 	public static boolean CopytoClipboard(String string) {

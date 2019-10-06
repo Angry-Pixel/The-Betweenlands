@@ -32,7 +32,8 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.feature.structure.LightTowerBuildParts;
 
 public class TileEntityDungeonDoorRunes extends TileEntity implements ITickable, IEntityScreenShake {
-	private LightTowerBuildParts lightTowerBuild = new LightTowerBuildParts();
+	private LightTowerBuildParts lightTowerBuild = new LightTowerBuildParts(null);
+	
 	private boolean mimic; // true = trap
 	private boolean barrishee; // true = Barrishee / false = Crypt Crawler Chief
 	public int top_code = -1, mid_code = -1, bottom_code = -1; // set back to -1
