@@ -60,7 +60,8 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	private static final DataParameter<Boolean> SCREAM = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SCREAM_TIMER = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> SCREAM_BEAM = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> SLAMMING = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> SLAMMING_ANIMATION = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> SHOCKWAVE = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	public float standingAngle, prevStandingAngle;
 
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper();
@@ -88,7 +89,8 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		dataManager.register(SCREAM, false);
 		dataManager.register(SCREAM_TIMER, 50);
 		dataManager.register(SCREAM_BEAM, false);
-		dataManager.register(SLAMMING, false);
+		dataManager.register(SLAMMING_ANIMATION, false);
+		dataManager.register(SHOCKWAVE, false);
 	}
 	
 	@Override
@@ -129,17 +131,24 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	}
 
 	public void setIsSlamming(boolean slamming) {
-		dataManager.set(SLAMMING, slamming);
+		dataManager.set(SLAMMING_ANIMATION, slamming);
 	}
 
 	public boolean isSlamming() {
-		return dataManager.get(SLAMMING);
+		return dataManager.get(SLAMMING_ANIMATION);
 	}
 
+	public void setDoShockWave(boolean shockwave) {
+		dataManager.set(SHOCKWAVE, shockwave);
+	}
+
+	public boolean doShockWave() {
+		return dataManager.get(SHOCKWAVE);
+	}
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(1, new EntityAISwimming(this));
-		tasks.addTask(2, new EntityBarrishee.AISonicAttack(this));
+	//	tasks.addTask(2, new EntityBarrishee.AISonicAttack(this));
 		tasks.addTask(2, new EntityBarrishee.AISlamAttack(this));
 		tasks.addTask(3, new EntityBarrishee.AIBarrisheeAttack(this));
 		tasks.addTask(4, new EntityAIWander(this, 0.4D, 20));
@@ -182,8 +191,8 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	@Override
 	public void onLivingUpdate() {
 		//Test Scream remove once testing is over
-		if(getEntityWorld().getTotalWorldTime()%200 == 0 && !isScreamingBeam())
-			setScreamTimer(0);
+	//	if(getEntityWorld().getTotalWorldTime()%200 == 0 && !isScreamingBeam())
+	//		setScreamTimer(0);
 
 		if (getEntityWorld().isRemote && !isSlamming()) {
 			prevStandingAngle = standingAngle;
@@ -195,6 +204,9 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 
 			if (standingAngle > 1F) {
 				standingAngle = 1F;
+				if (!isAmbushSpawn())
+					setDoShockWave(true);
+				
 				if (isAmbushSpawn())
 					setIsAmbushSpawn(false);
 			}
@@ -506,37 +518,43 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 			missileCount = -1;
 			if (barrishee.isSlamming())
 				barrishee.setIsSlamming(false);
+			if (barrishee.doShockWave())
+				barrishee.setDoShockWave(false);
 		}
 
 		public void updateTask() {
-			int distance = MathHelper.floor(barrishee.getDistance(target));
-			if (barrishee.isLookingAtAttackTarget(target)) {
-				float f = (float) MathHelper.atan2(target.posZ - barrishee.posZ, target.posX - barrishee.posX);
-				missileCount++;
-				if (missileCount % 2 == 0) {
-					shootCount++;
-					double d2 = 2D + 1D * (double) (shootCount);
+			
+				int distance = MathHelper.floor(barrishee.getDistance(target));
+	//			if (barrishee.doShockWave()) {
+				if (barrishee.isLookingAtAttackTarget(target)) {
+					float f = (float) MathHelper.atan2(target.posZ - barrishee.posZ, target.posX - barrishee.posX);
+					missileCount++;
+					if (missileCount % 2 == 0) {
+						shootCount++;
+/*						double d2 = 2D + 1D * (double) (shootCount);
 
-					BlockPos origin = new BlockPos(barrishee.posX + (double) MathHelper.cos(f) * d2, barrishee.posY -1D, barrishee.posZ + (double) MathHelper.sin(f) * d2);
-					IBlockState block = barrishee.getEntityWorld().getBlockState(origin);
+						BlockPos origin = new BlockPos(barrishee.posX + (double) MathHelper.cos(f) * d2,
+								barrishee.posY - 1D, barrishee.posZ + (double) MathHelper.sin(f) * d2);
+						IBlockState block = barrishee.getEntityWorld().getBlockState(origin);
 
-					if (block.isNormalCube() && !block.getBlock().hasTileEntity(block)
-							&& block.getBlockHardness(barrishee.getEntityWorld(), origin) <= 5.0F && block.getBlockHardness(barrishee.getEntityWorld(), origin) >= 0.0F
-							&& barrishee.getEntityWorld().getBlockState(origin).isOpaqueCube()) {
-		
-						EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(barrishee.getEntityWorld());
-						shockwaveBlock.setOrigin(origin, 10, origin.getX() + 0.5D, origin.getZ() + 0.5D, barrishee);
-						shockwaveBlock.setLocationAndAngles(origin.getX() + 0.5D, origin.getY(), origin.getZ() + 0.5D, 0.0F, 0.0F);
-						shockwaveBlock.setBlock(Block.getBlockById(Block.getIdFromBlock(barrishee.getEntityWorld().getBlockState(origin).getBlock())), barrishee.getEntityWorld().getBlockState(origin).getBlock().getMetaFromState(barrishee.getEntityWorld().getBlockState(origin)));
-						barrishee.getEntityWorld().spawnEntity(shockwaveBlock);
+						if (block.isNormalCube() && !block.getBlock().hasTileEntity(block)
+								&& block.getBlockHardness(barrishee.getEntityWorld(), origin) <= 5.0F
+								&& block.getBlockHardness(barrishee.getEntityWorld(), origin) >= 0.0F
+								&& barrishee.getEntityWorld().getBlockState(origin).isOpaqueCube()) {
+
+							EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(barrishee.getEntityWorld());
+							shockwaveBlock.setOrigin(origin, 10, origin.getX() + 0.5D, origin.getZ() + 0.5D, barrishee);
+							shockwaveBlock.setLocationAndAngles(origin.getX() + 0.5D, origin.getY(), origin.getZ() + 0.5D, 0.0F, 0.0F);
+							shockwaveBlock.setBlock(Block.getBlockById(Block.getIdFromBlock(barrishee.getEntityWorld().getBlockState(origin).getBlock())), barrishee.getEntityWorld().getBlockState(origin).getBlock().getMetaFromState(barrishee.getEntityWorld().getBlockState(origin)));
+							barrishee.getEntityWorld().spawnEntity(shockwaveBlock);
+						}
+*/
 					}
-					
 				}
-			}
-			if (shootCount >= distance || shootCount >= 9 || target.isDead)
-				resetTask();
+//}
+				if (shootCount >= distance || shootCount >= 9 || target.isDead)
+					resetTask();
 		}
-
 	}
 
 	//TODO - may want to move to a config one day - add blockstates to break here.
