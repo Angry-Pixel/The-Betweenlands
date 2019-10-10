@@ -209,7 +209,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	@Override
 	public void onLivingUpdate() {
 		//Test Scream remove once testing is over
-		if(getEntityWorld().getTotalWorldTime()%200 == 0 && !isScreamingBeam() && recentlyHit <= 40)
+		if(getEntityWorld().getTotalWorldTime()%200 == 0 && !isScreamingBeam() && recentlyHit <= 40 && getScreamTimer() >= screamingTimerMax)
 			setScreamTimer(0);
 
 		if (getEntityWorld().isRemote && !isSlamming()) {
