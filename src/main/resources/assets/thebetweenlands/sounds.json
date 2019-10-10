@@ -833,6 +833,35 @@
       "thebetweenlands:emberling_living_5"
     ]
   },
+    "barrishee_hurt": {
+    "sounds": [
+      "thebetweenlands:barrishee_hurt_1",
+      "thebetweenlands:barrishee_hurt_2"
+    ]
+  },
+  "barrishee_death": {
+    "sounds": [
+      "thebetweenlands:barrishee_death"
+    ]
+  },
+  "barrishee_living": {
+    "sounds": [
+      "thebetweenlands:barrishee_living_1"
+    ]
+  },
+  "barrishee_scream": {
+    "sounds": [
+      "thebetweenlands:barrishee_scream"
+    ]
+  },
+  "barrishee_step": {
+    "sounds": [
+      "thebetweenlands:barrishee_step_1",
+      "thebetweenlands:barrishee_step_2",
+      "thebetweenlands:barrishee_step_3",
+      "thebetweenlands:barrishee_step_4"
+    ]
+  },
   "greebling_vanish": {
     "sounds": [
       "thebetweenlands:greebling_vanish"

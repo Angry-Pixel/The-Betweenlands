@@ -26,9 +26,11 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -95,6 +97,30 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.BARRISHEE;
+	}
+	
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundRegistry.BARRISHEE_LIVING;
+	}
+
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundRegistry.BARRISHEE_HURT;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.BARRISHEE_DEATH;
+	}
+	
+	@Override
+	protected void playStepSound(BlockPos pos, Block blockIn) {
+		playSound(SoundRegistry.BARRISHEE_STEP, 0.5F, 1F);
+	}
+
+	protected SoundEvent getScreamSound() {
+		return SoundRegistry.BARRISHEE_SCREAM;
 	}
 
 	public boolean isAmbushSpawn() {
@@ -220,6 +246,9 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 				setIsScreaming(true);
 				setScreamTimer(1);
 			}
+
+			if (getScreamTimer()==1)
+				getEntityWorld().playSound(null, getPosition(), getScreamSound(), SoundCategory.HOSTILE, 0.75F, 0.5F);
 
 			if (getScreamTimer() > 0 && getScreamTimer() <= screamingTimerMax) {
 				setScreamTimer(getScreamTimer() + 1);
@@ -409,7 +438,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		public void startExecuting() {
 			missileCount = 0;
 			shootCount = 0;
-			barrishee.getEntityWorld().playSound(null, barrishee.getPosition(), SoundRegistry.EMBERLING_FLAMES, SoundCategory.HOSTILE, 1F, 1F);
+			barrishee.getEntityWorld().playSound(null, barrishee.getPosition(), barrishee.getScreamSound(), SoundCategory.HOSTILE, 0.75F, 0.5F);
 			barrishee.setScreamTimer(0);
 		}
 
@@ -499,7 +528,6 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		public void startExecuting() {
 			missileCount = 0;
 			shootCount = 0;
-			barrishee.getEntityWorld().playSound(null, barrishee.getPosition(), SoundRegistry.EMBERLING_FLAMES, SoundCategory.HOSTILE, 1F, 1F);
 			barrishee.setIsSlamming(true);
 		}
 
@@ -518,6 +546,8 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 					missileCount++;
 					if (missileCount % 2 == 0) {
 						shootCount++;
+						if( shootCount==1)
+							barrishee.getEntityWorld().playSound(null, barrishee.getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 1F);
 						double d2 = 2D + 1D * (double) (shootCount);
 
 						BlockPos origin = new BlockPos(barrishee.posX + (double) MathHelper.cos(f) * d2,

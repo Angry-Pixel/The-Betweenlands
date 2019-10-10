@@ -182,6 +182,11 @@ public class SoundRegistry {
     public static final BLSoundEvent EMBERLING_HURT = reg("emberling_hurt");
     public static final BLSoundEvent EMBERLING_LIVING = reg("emberling_living");
     public static final BLSoundEvent EMBERLING_DEATH = reg("emberling_death");
+    public static final BLSoundEvent BARRISHEE_HURT = reg("barrishee_hurt");
+    public static final BLSoundEvent BARRISHEE_LIVING = reg("barrishee_living");
+    public static final BLSoundEvent BARRISHEE_DEATH = reg("barrishee_death");
+    public static final BLSoundEvent BARRISHEE_STEP = reg("barrishee_step");
+    public static final BLSoundEvent BARRISHEE_SCREAM = reg("barrishee_scream");
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");
     public static final BLSoundEvent FROG_DEATH = reg("frog_death");
