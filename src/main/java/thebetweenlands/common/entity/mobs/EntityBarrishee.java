@@ -61,7 +61,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	private static final DataParameter<Integer> SCREAM_TIMER = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> SCREAM_BEAM = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> SLAMMING_ANIMATION = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> SHOCKWAVE = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
+
 	public float standingAngle, prevStandingAngle;
 
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper(null);
@@ -90,7 +90,6 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		dataManager.register(SCREAM_TIMER, 50);
 		dataManager.register(SCREAM_BEAM, false);
 		dataManager.register(SLAMMING_ANIMATION, false);
-		dataManager.register(SHOCKWAVE, false);
 	}
 	
 	@Override
@@ -138,20 +137,13 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		return dataManager.get(SLAMMING_ANIMATION);
 	}
 
-	public void setDoShockWave(boolean shockwave) {
-		dataManager.set(SHOCKWAVE, shockwave);
-	}
-
-	public boolean doShockWave() {
-		return dataManager.get(SHOCKWAVE);
-	}
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(1, new EntityAISwimming(this));
-	//	tasks.addTask(2, new EntityBarrishee.AISonicAttack(this));
+		tasks.addTask(2, new EntityBarrishee.AISonicAttack(this));
 		tasks.addTask(2, new EntityBarrishee.AISlamAttack(this));
 		tasks.addTask(3, new EntityBarrishee.AIBarrisheeAttack(this));
-		tasks.addTask(4, new EntityAIWander(this, 0.4D, 20));
+		tasks.addTask(4, new EntityAIWander(this, 0.4D, 50));
 		//tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		//tasks.addTask(6, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, true, true, null));
@@ -164,7 +156,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(200D);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.75D);
 	}
 
@@ -191,22 +183,20 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	@Override
 	public void onLivingUpdate() {
 		//Test Scream remove once testing is over
-	//	if(getEntityWorld().getTotalWorldTime()%200 == 0 && !isScreamingBeam())
-	//		setScreamTimer(0);
+		if(getEntityWorld().getTotalWorldTime()%200 == 0 && !isScreamingBeam() && recentlyHit <= 40)
+			setScreamTimer(0);
 
 		if (getEntityWorld().isRemote && !isSlamming()) {
 			prevStandingAngle = standingAngle;
 
 			if (standingAngle <= 0.1F)
-				standingAngle += isAmbushSpawn() ? 0.01F : 0.4F;
+				standingAngle += isAmbushSpawn() ? 0.01F : 0.2F;
 			if (standingAngle > 0.1F && standingAngle <= 1F)
-				standingAngle += isAmbushSpawn() ? 0.1F : 0.4F;
+				standingAngle += isAmbushSpawn() ? 0.1F : 0.2F;
 
 			if (standingAngle > 1F) {
 				standingAngle = 1F;
-				if (!isAmbushSpawn())
-					setDoShockWave(true);
-				
+
 				if (isAmbushSpawn())
 					setIsAmbushSpawn(false);
 			}
@@ -215,12 +205,12 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		if (getEntityWorld().isRemote && isSlamming()) {
 			prevStandingAngle = standingAngle;
 
-			if (standingAngle >= 0.4F && standingAngle <= 1F)
-				standingAngle -= 0.4F;
+			if (standingAngle >= 0F && standingAngle <= 1F)
+				standingAngle -= 0.2F;
 
 			if (standingAngle < 0F) {
-				standingAngle = 0F;
 				setIsSlamming(false);
+				standingAngle = 0F;
 			}
 		}
 
@@ -496,7 +486,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 					if (!barrishee.onGround || barrishee.isScreaming())
 						return false;
 					else
-						return barrishee.getRNG().nextInt(5) == 0;
+						return barrishee.getRNG().nextInt(10) == 0;
 				} else
 					return false;
 			}
@@ -518,20 +508,17 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 			missileCount = -1;
 			if (barrishee.isSlamming())
 				barrishee.setIsSlamming(false);
-			if (barrishee.doShockWave())
-				barrishee.setDoShockWave(false);
 		}
 
 		public void updateTask() {
 			
 				int distance = MathHelper.floor(barrishee.getDistance(target));
-	//			if (barrishee.doShockWave()) {
 				if (barrishee.isLookingAtAttackTarget(target)) {
 					float f = (float) MathHelper.atan2(target.posZ - barrishee.posZ, target.posX - barrishee.posX);
 					missileCount++;
 					if (missileCount % 2 == 0) {
 						shootCount++;
-/*						double d2 = 2D + 1D * (double) (shootCount);
+						double d2 = 2D + 1D * (double) (shootCount);
 
 						BlockPos origin = new BlockPos(barrishee.posX + (double) MathHelper.cos(f) * d2,
 								barrishee.posY - 1D, barrishee.posZ + (double) MathHelper.sin(f) * d2);
@@ -548,10 +535,10 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 							shockwaveBlock.setBlock(Block.getBlockById(Block.getIdFromBlock(barrishee.getEntityWorld().getBlockState(origin).getBlock())), barrishee.getEntityWorld().getBlockState(origin).getBlock().getMetaFromState(barrishee.getEntityWorld().getBlockState(origin)));
 							barrishee.getEntityWorld().spawnEntity(shockwaveBlock);
 						}
-*/
+
 					}
 				}
-//}
+
 				if (shootCount >= distance || shootCount >= 9 || target.isDead)
 					resetTask();
 		}
