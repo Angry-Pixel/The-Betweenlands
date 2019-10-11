@@ -128,14 +128,12 @@ public class BlockMudBrickAlcove extends BasicBlock implements ITileEntityProvid
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
+		return getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		int meta = 0;
-		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();
-		return meta;
+		return state.getValue(FACING).getHorizontalIndex();
 	}
 
 	@Override

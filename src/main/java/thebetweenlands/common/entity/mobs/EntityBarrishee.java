@@ -1,8 +1,6 @@
 package thebetweenlands.common.entity.mobs;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -11,15 +9,19 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.network.datasync.DataParameter;
@@ -37,6 +39,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
@@ -47,17 +50,15 @@ import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
-import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
+import thebetweenlands.common.world.storage.location.LocationGuarded;
 
 //TODO Loot tables
 public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IEntityBL {
-
 	private static final DataParameter<Boolean> AMBUSH_SPAWNED = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> SCREAM = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SCREAM_TIMER = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.VARINT);
@@ -67,8 +68,6 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	public float standingAngle, prevStandingAngle;
 
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper(null);
-	protected final Map<IBlockState, Boolean> breakableBlocks = new HashMap<>();
-	protected final Map<IBlockState, Boolean> cancelDropItems = new HashMap<>();
 
 	//Scream timer is only used for the screen shake and is client side only.
 	private int prevScreamTimer;
@@ -77,11 +76,11 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	//Adjust to length of screaming sound
 	private int screamingTimerMax = 50;
 
+	protected int actionCooldown = 0;
+
 	public EntityBarrishee(World world) {
 		super(world);
 		setSize(2.25F, 1.8F);
-		initAOEBreakableBlockMap();
-		initCancelBlockItemDropsMap(); // using map for this atm because I don't know if we'll add a load of stuff or not
 	}
 
 	@Override
@@ -93,12 +92,36 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		dataManager.register(SCREAM_BEAM, false);
 		dataManager.register(SLAMMING_ANIMATION, false);
 	}
-	
+
+	@Override
+	protected void initEntityAI() {
+		tasks.addTask(1, new EntityAISwimming(this));
+		tasks.addTask(2, new EntityBarrishee.AIBlockBreakAttack(this, 60, 100));
+		tasks.addTask(3, new EntityBarrishee.AISonicAttack(this, 35, 60));
+		tasks.addTask(4, new EntityBarrishee.AISlamAttack(this, 26, 46));
+		tasks.addTask(5, new EntityBarrishee.AIBarrisheeAttack(this));
+		tasks.addTask(6, new EntityAIWander(this, 0.4D, 50));
+		tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		tasks.addTask(8, new EntityAILookIdle(this));
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, true, true, null));
+		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
+	}
+
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(200D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0D);
+		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.75D);
+	}
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.BARRISHEE;
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundRegistry.BARRISHEE_LIVING;
@@ -113,7 +136,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	protected SoundEvent getDeathSound() {
 		return SoundRegistry.BARRISHEE_DEATH;
 	}
-	
+
 	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
 		playSound(SoundRegistry.BARRISHEE_STEP, 0.5F, 1F);
@@ -164,54 +187,22 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	}
 
 	@Override
-	protected void initEntityAI() {
-		tasks.addTask(1, new EntityAISwimming(this));
-		tasks.addTask(2, new EntityBarrishee.AISonicAttack(this));
-		tasks.addTask(2, new EntityBarrishee.AISlamAttack(this));
-		tasks.addTask(3, new EntityBarrishee.AIBarrisheeAttack(this));
-		tasks.addTask(4, new EntityAIWander(this, 0.4D, 50));
-		//tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		//tasks.addTask(6, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, true, true, null));
-		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
+	public boolean isNotColliding() {
+		return !getEntityWorld().containsAnyLiquid(getEntityBoundingBox()) && getEntityWorld().getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && getEntityWorld().checkNoEntityCollision(getEntityBoundingBox(), this);
 	}
-
-	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(200D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0D);
-		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.75D);
-	}
-
-	@Override
-	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere();
-	}
-
-	@Override
-    public boolean isNotColliding() {
-        return !getEntityWorld().containsAnyLiquid(getEntityBoundingBox()) && getEntityWorld().getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && getEntityWorld().checkNoEntityCollision(getEntityBoundingBox(), this);
-    }
 
 	@Override
 	public int getMaxSpawnedInChunk() {
 		return 1;
 	}
 
-    @SideOnly(Side.CLIENT)
-    public float smoothedAngle(float partialTicks) {
-        return prevStandingAngle + (standingAngle - prevStandingAngle) * partialTicks;
-    }
+	@SideOnly(Side.CLIENT)
+	public float getSmoothedStandingAngle(float partialTicks) {
+		return prevStandingAngle + (standingAngle - prevStandingAngle) * partialTicks;
+	}
 
 	@Override
 	public void onLivingUpdate() {
-		//Test Scream remove once testing is over
-		if(getEntityWorld().getTotalWorldTime()%200 == 0 && !isScreamingBeam() && recentlyHit <= 40 && getScreamTimer() >= screamingTimerMax)
-			setScreamTimer(0);
-
 		if (getEntityWorld().isRemote && !isSlamming()) {
 			prevStandingAngle = standingAngle;
 
@@ -227,7 +218,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 					setIsAmbushSpawn(false);
 			}
 		}
-		
+
 		if (getEntityWorld().isRemote && isSlamming()) {
 			prevStandingAngle = standingAngle;
 
@@ -247,60 +238,134 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 				setScreamTimer(1);
 			}
 
-			if (getScreamTimer()==1)
+			if (getScreamTimer() == 1) {
 				getEntityWorld().playSound(null, getPosition(), getScreamSound(), SoundCategory.HOSTILE, 0.75F, 0.5F);
+			}
 
 			if (getScreamTimer() > 0 && getScreamTimer() <= screamingTimerMax) {
 				setScreamTimer(getScreamTimer() + 1);
 			}
 
-			if (getScreamTimer() >= screamingTimerMax)
-				setIsScreaming(false);
-			else
-				setIsScreaming(true);
-			
+			setIsScreaming(getScreamTimer() < screamingTimerMax);
+
 			if(getAttackTarget() != null) {
 				getLookHelper().setLookPositionWithEntity(getAttackTarget(), 100F, 100F);
 
-			if(isScreaming())
-				getNavigator().setPath(getNavigator().getPathToEntityLiving(getAttackTarget()), 0);
+				if(isScreaming()) {
+					getNavigator().setPath(getNavigator().getPathToEntityLiving(getAttackTarget()), 0);
+				}
 			}
 		}
 
-		 if(this.world.isRemote && this.isScreamingBeam())
-			 this.spawnScreamParticles();
+		if(this.world.isRemote && this.isScreamingBeam()) {
+			this.spawnScreamParticles();
+		}
 
-		if(!this.world.isRemote && this.isScreaming() && getScreamTimer() >= 25)
-			checkCollisionsForAOEScream(getAOEScreamBounds());
+		if(!this.world.isRemote && this.isScreaming() && !this.isScreamingBeam() && this.getScreamTimer() >= 25) {
+			breakBlocksForAOEScream(getAOEScreamBounds());
+		}
 
-		
+		if(!this.world.isRemote) {
+			if(this.isDoingSpecialAttack()) {
+				this.actionCooldown = 60;
+			} else if(this.actionCooldown > 0) {
+				this.actionCooldown--;
+			}
+		}
+
 		super.onLivingUpdate();
 	}
-	
-	private void checkCollisionsForAOEScream(AxisAlignedBB aoeScreamBounds) {
-		int minX = MathHelper.floor(aoeScreamBounds.minX);
-		int minY = MathHelper.floor(aoeScreamBounds.minY);
-		int minZ = MathHelper.floor(aoeScreamBounds.minZ);
-		int maxX = MathHelper.floor(aoeScreamBounds.maxX);
-		int maxY = MathHelper.floor(aoeScreamBounds.maxY);
-		int maxZ = MathHelper.floor(aoeScreamBounds.maxZ);
 
-		for (int sizeX = minX; sizeX <= maxX; ++sizeX)
-			for (int sizeZ = minZ; sizeZ <= maxZ; ++sizeZ)
-				for (int sizeY = minY; sizeY <= maxY; ++sizeY) {
-					BlockPos pos = new BlockPos(sizeX, sizeY, sizeZ);
-					IBlockState state = getEntityWorld().getBlockState(pos);
-					if (isAOEBreakableBlock(state)) {
-						if (state.getBlock() instanceof BlockLootUrn)
-							spawnAshSpriteMinion(getEntityWorld(), pos, state);
-						if (state.getBlock() instanceof BlockMudBrickAlcove) {
-							if (checkAlcoveForUrn(getEntityWorld(), state)) {
-								setAlcoveUrnEmpty(getEntityWorld(), pos, state);
-							}
-						} else
-							getEntityWorld().destroyBlock(pos, !dropItems(state));
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+
+		this.pushEntitiesAway();
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox() {
+		return this.getEntityBoundingBox();
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBox(Entity entityIn) {
+		if(entityIn.canBeCollidedWith()) {
+			AxisAlignedBB collisionBox = entityIn.getCollisionBoundingBox();
+			return collisionBox != null ? collisionBox : entityIn.getEntityBoundingBox();
+		}
+
+		return null;
+	}
+
+	@Override
+	public boolean canBePushed() {
+		return false;
+	}
+
+	@Override
+	public void move(MoverType type, double x, double y, double z) {
+		super.move(type, x, y, z);
+	}
+
+	protected void pushEntitiesAway() {
+		AxisAlignedBB collisionAABB = this.getCollisionBoundingBox().offset(this.motionX, this.motionY, this.motionZ);
+		if(collisionAABB != null) {
+			List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, collisionAABB);
+
+			for(Entity entity : entities) {
+				if(entity.canBeCollidedWith() && entity.canBePushed()) {
+					AxisAlignedBB entityAABB = this.getCollisionBox(entity);
+
+					if(entityAABB != null) {
+						double dx = Math.max(collisionAABB.minX - entityAABB.maxX, entityAABB.minX - collisionAABB.maxX);
+						double dz = Math.max(collisionAABB.minZ - entityAABB.maxZ, entityAABB.minZ - collisionAABB.maxZ);
+
+						if(Math.abs(dz) < Math.abs(dx)) {
+							entity.move(MoverType.PISTON, 0, 0, (dz - 0.005D) * Math.signum(this.posZ - entity.posZ));
+						} else {
+							entity.move(MoverType.PISTON, (dx - 0.005D) * Math.signum(this.posX - entity.posX), 0, 0);
+						}
+
+						//Move slightly towards ground to update onGround state etc.
+						entity.move(MoverType.PISTON, 0, -0.01D, 0);
 					}
 				}
+			}
+		}
+	}
+
+	private void breakBlocksForAOEScream(AxisAlignedBB aoeScreamBounds) {
+		if(ForgeEventFactory.getMobGriefingEvent(this.world, this)) {
+			int minX = MathHelper.floor(aoeScreamBounds.minX);
+			int minY = MathHelper.floor(aoeScreamBounds.minY);
+			int minZ = MathHelper.floor(aoeScreamBounds.minZ);
+			int maxX = MathHelper.floor(aoeScreamBounds.maxX);
+			int maxY = MathHelper.floor(aoeScreamBounds.maxY);
+			int maxZ = MathHelper.floor(aoeScreamBounds.maxZ);
+
+			for (int sizeX = minX; sizeX <= maxX; ++sizeX) {
+				for (int sizeZ = minZ; sizeZ <= maxZ; ++sizeZ) {
+					for (int sizeY = minY; sizeY <= maxY; ++sizeY) {
+						BlockPos pos = new BlockPos(sizeX, sizeY, sizeZ);
+						IBlockState state = getEntityWorld().getBlockState(pos);
+
+						if(state.getBlock() instanceof BlockMudBrickAlcove && checkAlcoveForUrn(this.world, state)) {
+							setAlcoveUrnEmpty(this.world, pos, state);
+						}
+
+						if(state.getBlockHardness(this.world, pos) >= 0 && state.getBlock().canEntityDestroy(state, this.world, pos, this)) {
+							if(state.getBlock() instanceof BlockLootUrn) {
+								spawnAshSpriteMinion(getEntityWorld(), pos, state);
+								this.world.destroyBlock(pos, true);
+							} else if(!LocationGuarded.isLocationGuarded(this.world, this, pos) && ForgeEventFactory.onEntityDestroyBlock(this, pos, state)) {
+								this.world.destroyBlock(pos, true);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@Nullable
@@ -333,7 +398,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 
 	private void spawnAshSpriteMinion(World world, BlockPos pos, IBlockState state) {
 		BlockPos offsetPos = pos;
-		if (state instanceof BlockMudBrickAlcove) {
+		if (state.getBlock() instanceof BlockMudBrickAlcove) {
 			EnumFacing facing = state.getValue(BlockMudBrickAlcove.FACING);
 			offsetPos = pos.offset(facing);
 		}
@@ -345,14 +410,6 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 
 	private boolean checkAlcoveForUrn(World entityWorld, IBlockState state) {
 		return state.getValue(BlockMudBrickAlcove.HAS_URN);	
-	}
-
-	public boolean isAOEBreakableBlock(IBlockState state) {
-		return breakableBlocks.get(state) != null;
-	}
-
-	public boolean dropItems(IBlockState state) {
-		return cancelDropItems.get(state) != null;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -373,7 +430,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		double d1 = vec3d.dotProduct(vec3d1);
 		return d1 > 1.0D - 0.025D / d0 ? canEntityBeSeen(entity) : false;
 	}
-	
+
 	@Override
 	protected boolean isMovementBlocked() {
 		return super.isMovementBlocked();// || isScreaming() && !isScreamingBeam();// || true;
@@ -386,7 +443,19 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	public AxisAlignedBB getAOEScreamBounds() {
 		float boxsizeUnit = 0.0275F * getScreamTimer();
 		AxisAlignedBB bounds = getEntityBoundingBox();
-		return bounds.grow(boxsizeUnit, 0, boxsizeUnit);
+		return bounds.grow(boxsizeUnit, 0, boxsizeUnit).expand(0, 1, 0);
+	}
+
+	public boolean isDoingSpecialAttack() {
+		return this.isScreaming() || this.isScreamingBeam() || this.isSlamming();
+	}
+
+	public boolean isReadyForSpecialAttack() {
+		if(this.isDoingSpecialAttack()) {
+			return false;
+		} else {
+			return this.actionCooldown <= 0;
+		}
 	}
 
 	@Override
@@ -403,38 +472,80 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		}
 	}
 
+	protected static final int MUTEX_SPECIAL_ATTACK = 0b1000;
+
+	static class AIBlockBreakAttack extends EntityAIBase {
+		EntityBarrishee barrishee;
+		int cooldown, minCooldown, maxCooldown;
+
+		public AIBlockBreakAttack(EntityBarrishee barrishee, int minCooldown, int maxCooldown) {
+			this.barrishee = barrishee;
+			this.minCooldown = minCooldown;
+			this.maxCooldown = maxCooldown;
+			this.cooldown = minCooldown + barrishee.rand.nextInt(maxCooldown - minCooldown);
+			this.setMutexBits(MUTEX_SPECIAL_ATTACK | 1 | 2);
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			if(barrishee.getAttackTarget() != null && barrishee.isReadyForSpecialAttack()) {
+				return this.cooldown-- < 0;
+			}
+
+			return false;
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return false;
+		}
+
+		@Override
+		public void startExecuting() {
+			barrishee.setScreamTimer(0);
+		}
+
+		@Override
+		public void resetTask() {
+			cooldown = minCooldown + barrishee.rand.nextInt(maxCooldown - minCooldown);
+		}
+	}
+
 	static class AISonicAttack extends EntityAIBase {
 		EntityBarrishee barrishee;
-		EntityLivingBase target;
+		int cooldown, minCooldown, maxCooldown;
 		int missileCount;
 		int shootCount;
-		
-		public AISonicAttack(EntityBarrishee barrishee) {
+
+		public AISonicAttack(EntityBarrishee barrishee, int minCooldown, int maxCooldown) {
 			this.barrishee = barrishee;
-			this.setMutexBits(5);
+			this.minCooldown = minCooldown;
+			this.maxCooldown = maxCooldown;
+			this.cooldown = minCooldown + barrishee.rand.nextInt(maxCooldown - minCooldown);
+			this.setMutexBits(MUTEX_SPECIAL_ATTACK | 1 | 2);
 		}
 
+		@Override
 		public boolean shouldExecute() {
-			target = barrishee.getAttackTarget();
+			EntityLivingBase target = barrishee.getAttackTarget();
 
-			if (target == null)
-				return false;
-			else {
+			if(target != null) {
 				double distance = barrishee.getDistanceSq(target);
-				if (distance >= 9.0D && distance <= 144.0D) {
-					if (!barrishee.onGround)
-						return false;
-					else
-						return barrishee.getRNG().nextInt(20) == 0;
-				} else
-					return false;
+
+				if (distance >= 9.0D && distance <= 144.0D && barrishee.onGround && barrishee.isReadyForSpecialAttack()) {
+					return this.cooldown-- < 0;
+				}
 			}
+
+			return false;
 		}
 
+		@Override
 		public boolean shouldContinueExecuting() {
-			return shootCount !=-1 && missileCount !=-1 && barrishee.recentlyHit <= 40;
+			return barrishee.getAttackTarget() != null && shootCount !=-1 && missileCount !=-1 && barrishee.recentlyHit <= 40;
 		}
 
+		@Override
 		public void startExecuting() {
 			missileCount = 0;
 			shootCount = 0;
@@ -442,113 +553,127 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 			barrishee.setScreamTimer(0);
 		}
 
+		@Override
 		public void resetTask() {
+			cooldown = minCooldown + barrishee.rand.nextInt(maxCooldown - minCooldown);
 			shootCount = -1;
 			missileCount = -1;
-			if (barrishee.isScreamingBeam())
+			if (barrishee.isScreamingBeam()) {
 				barrishee.setIsScreamingBeam(false);
+			}
 		}
 
+		@Override
 		public void updateTask() {
-			int distance = MathHelper.floor(barrishee.getDistance(target));
-			if (barrishee.getScreamTimer() >= 25 && barrishee.isLookingAtAttackTarget(target)) {
-				if (!barrishee.isScreamingBeam())
-					barrishee.setIsScreamingBeam(true);
+			EntityLivingBase target = barrishee.getAttackTarget();
 
-				float f = (float) MathHelper.atan2(target.posZ - barrishee.posZ, target.posX - barrishee.posX);
-				missileCount++;
-				if (missileCount % 2 == 0) {
-					shootCount++;
-					double d2 = 2D + 1D * (double) (shootCount);
-					checkIfBeamHitsAnyone(barrishee.getEntityWorld(), new BlockPos(barrishee.posX + (double) MathHelper.cos(f) * d2, barrishee.posY + barrishee.getEyeHeight(), barrishee.posZ + (double) MathHelper.sin(f) * d2));
+			if(target != null) {
+				int distance = MathHelper.floor(barrishee.getDistance(target));
+
+				if (barrishee.getScreamTimer() >= 25 && barrishee.isLookingAtAttackTarget(target)) {
+					if (!barrishee.isScreamingBeam()) {
+						barrishee.setIsScreamingBeam(true);
+					}
+
+					float f = (float) MathHelper.atan2(target.posZ - barrishee.posZ, target.posX - barrishee.posX);
+					missileCount++;
+
+					if (missileCount % 2 == 0) {
+						shootCount++;
+						double d2 = 2D + 1D * (double) (shootCount);
+						checkIfBeamHitsAnyone(barrishee.getEntityWorld(), new BlockPos(barrishee.posX + (double) MathHelper.cos(f) * d2, barrishee.posY + barrishee.getEyeHeight(), barrishee.posZ + (double) MathHelper.sin(f) * d2));
+					}
+				}
+
+				if (shootCount >= distance || shootCount >= 12 || target.isDead) {
+					resetTask();
 				}
 			}
-			if (shootCount >= distance || shootCount >= 12 || target.isDead)
-				resetTask();
 		}
 
 		public void checkIfBeamHitsAnyone(World world, BlockPos pos) {
 			AxisAlignedBB hitBox = new AxisAlignedBB(pos).grow(0D, 0.25D, 0D);
 			List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, hitBox);
-			for (int entityCount = 0; entityCount < list.size(); entityCount++) {
-				Entity entity = list.get(entityCount);
-				if (entity != null)
-					if (entity instanceof EntityLivingBase) {
-						barrishee.attackEntityAsMob(entity);
-						entity.addVelocity(-MathHelper.sin(barrishee.rotationYaw * 3.141593F / 180.0F) * 0.25D, 0D, MathHelper.cos(barrishee.rotationYaw * 3.141593F / 180.0F) * 0.25D);
-					}
+
+			for (EntityLivingBase entity : list) {
+				if(barrishee.attackEntityAsMob(entity)) {
+					//TODO Should probably use .knockBack
+					entity.addVelocity(-MathHelper.sin(barrishee.rotationYaw * 3.141593F / 180.0F) * 0.25D, 0D, MathHelper.cos(barrishee.rotationYaw * 3.141593F / 180.0F) * 0.25D);
+				}
 			}
 		}
 	}
 
-	static class AIBarrisheeAttack extends EntityAIAttackMelee {
+	static class AISlamAttack extends EntityAIBase {
+		EntityBarrishee barrishee;
+		int cooldown, minCooldown, maxCooldown;
+		int missileCount;
+		int shootCount;
 
-		public AIBarrisheeAttack(EntityBarrishee barrishee) {
-			super(barrishee, 0.4D, false);
+		public AISlamAttack(EntityBarrishee barrishee, int minCooldown, int maxCooldown) {
+			this.barrishee = barrishee;
+			this.minCooldown = minCooldown;
+			this.maxCooldown = maxCooldown;
+			this.cooldown = minCooldown + barrishee.rand.nextInt(maxCooldown - minCooldown);
+			this.setMutexBits(MUTEX_SPECIAL_ATTACK | 1);
 		}
 
 		@Override
-		protected double getAttackReachSqr(EntityLivingBase attackTarget) {
-			return (double) (4.0F + attackTarget.width);
-		}
-	}
-	
-	static class AISlamAttack extends EntityAIBase {
-		EntityBarrishee barrishee;
-		EntityLivingBase target;
-		int missileCount;
-		int shootCount;
-		
-		public AISlamAttack(EntityBarrishee barrishee) {
-			this.barrishee = barrishee;
-			this.setMutexBits(5);
-		}
-
 		public boolean shouldExecute() {
-			target = barrishee.getAttackTarget();
+			EntityLivingBase target = barrishee.getAttackTarget();
 
-			if (target == null)
-				return false;
-			else {
+			if(target != null) {
 				double distance = barrishee.getDistanceSq(target);
-				if (distance >= 9.0D && distance <= 81.0D) {
-					if (!barrishee.onGround || barrishee.isScreaming())
-						return false;
-					else
-						return barrishee.getRNG().nextInt(10) == 0;
-				} else
-					return false;
+
+				if (distance >= 9.0D && distance <= 81.0D && barrishee.onGround && barrishee.isReadyForSpecialAttack()) {
+					return this.cooldown-- < 0;
+				}
 			}
+
+			return false;
 		}
 
+		@Override
 		public boolean shouldContinueExecuting() {
-			return shootCount !=-1 && missileCount !=-1 && barrishee.recentlyHit <= 40 && barrishee.isLookingAtAttackTarget(target);
+			EntityLivingBase target = barrishee.getAttackTarget();
+			return target != null && shootCount !=-1 && missileCount !=-1 && barrishee.recentlyHit <= 40 && barrishee.isLookingAtAttackTarget(target);
 		}
 
+		@Override
 		public void startExecuting() {
 			missileCount = 0;
 			shootCount = 0;
 			barrishee.setIsSlamming(true);
 		}
 
+		@Override
 		public void resetTask() {
+			cooldown = minCooldown + barrishee.rand.nextInt(maxCooldown - minCooldown);
 			shootCount = -1;
 			missileCount = -1;
-			if (barrishee.isSlamming())
+			if (barrishee.isSlamming()) {
 				barrishee.setIsSlamming(false);
+			}
 		}
 
+		@Override
 		public void updateTask() {
-			
+			EntityLivingBase target = barrishee.getAttackTarget();
+
+			if(target != null) {
 				int distance = MathHelper.floor(barrishee.getDistance(target));
+
 				if (barrishee.isLookingAtAttackTarget(target)) {
 					float f = (float) MathHelper.atan2(target.posZ - barrishee.posZ, target.posX - barrishee.posX);
 					missileCount++;
 					if (missileCount % 2 == 0) {
 						shootCount++;
-						if( shootCount==1)
+
+						if( shootCount==1) {
 							barrishee.getEntityWorld().playSound(null, barrishee.getPosition(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 1F);
-						double d2 = 2D + 1D * (double) (shootCount);
+						}
+
+						double d2 = 2.5D + 1D * (double) (shootCount);
 
 						BlockPos origin = new BlockPos(barrishee.posX + (double) MathHelper.cos(f) * d2,
 								barrishee.posY - 1D, barrishee.posZ + (double) MathHelper.sin(f) * d2);
@@ -569,33 +694,21 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 					}
 				}
 
-				if (shootCount >= distance || shootCount >= 9 || target.isDead)
+				if (shootCount >= distance || shootCount >= 9 || target.isDead) {
 					resetTask();
-		}
-	}
-
-	//TODO - may want to move to a config one day - add blockstates to break here.
-	private void initAOEBreakableBlockMap() {
-		if (breakableBlocks.isEmpty()) {
-			breakableBlocks.put(blockHelper.ROOT, true);
-			breakableBlocks.put(blockHelper.MUD_BRICKS_ALCOVE_NORTH, true);
-			breakableBlocks.put(blockHelper.MUD_BRICKS_ALCOVE_EAST, true);
-			breakableBlocks.put(blockHelper.MUD_BRICKS_ALCOVE_SOUTH, true);
-			breakableBlocks.put(blockHelper.MUD_BRICKS_ALCOVE_WEST, true);
-			breakableBlocks.put(BlockRegistry.SULFUR_TORCH.getDefaultState(), true);
-			for (EnumFacing facing : EnumFacing.HORIZONTALS) {
-				breakableBlocks.put(BlockRegistry.SULFUR_TORCH.getDefaultState().withProperty(BlockSulfurTorch.FACING, facing), true);
-				breakableBlocks.put(blockHelper.LOOT_URN_1.withProperty(BlockLootUrn.FACING, facing), true);
-				breakableBlocks.put(blockHelper.LOOT_URN_2.withProperty(BlockLootUrn.FACING, facing), true);
-				breakableBlocks.put(blockHelper.LOOT_URN_3.withProperty(BlockLootUrn.FACING, facing), true);
+				}
 			}
 		}
 	}
 
-	private void initCancelBlockItemDropsMap() {
-		if (cancelDropItems.isEmpty()) {
-			cancelDropItems.put(blockHelper.ROOT, true);
+	static class AIBarrisheeAttack extends EntityAIAttackMelee {
+		public AIBarrisheeAttack(EntityBarrishee barrishee) {
+			super(barrishee, 0.4D, false);
+		}
+
+		@Override
+		protected double getAttackReachSqr(EntityLivingBase attackTarget) {
+			return (double) (4.0F + attackTarget.width);
 		}
 	}
-
 }

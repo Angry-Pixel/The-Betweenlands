@@ -41,7 +41,7 @@ public class TileEntityPuffshroom extends TileEntity implements ITickable {
 			findEnemyToAttack();
 
 		if (active_1 || active_5) {
-			if (getWorld().isRemote && getWorld().isAirBlock(getPos().up())) {
+			if (getWorld().isRemote) {
 				if (animation_1 < 3) {
 					double px = getPos().getX() + 0.5D;
 					double py = getPos().getY() + 1.0625D;
@@ -59,7 +59,7 @@ public class TileEntityPuffshroom extends TileEntity implements ITickable {
 			}
 		}
 
-		if (!getWorld().isRemote && getWorld().isAirBlock(getPos().up())) {
+		if (!getWorld().isRemote) {
 			if (active_4) {
 				if (animation_4 <= 1)
 					getWorld().playSound((EntityPlayer) null, getPos().getX() + 0.5D, getPos().getY() + 1D, getPos().getZ() + 0.5D, SoundRegistry.PUFF_SHROOM, SoundCategory.BLOCKS, 0.5F, 0.95F + getWorld().rand.nextFloat() * 0.2F);

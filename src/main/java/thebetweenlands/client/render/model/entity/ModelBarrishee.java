@@ -543,7 +543,8 @@ public class ModelBarrishee extends MowzieModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
-        base_rotation_bit.render(scale);
+        head_main.rotateAngleY = (float) Math.toRadians(rotationYaw);
+    	base_rotation_bit.render(scale);
     }
     
     @Override
@@ -553,11 +554,13 @@ public class ModelBarrishee extends MowzieModelBase {
 		float animation = limbSwing * 0.1F;
 		float animation2 = MathHelper.sin((limbSwing) * 0.5F) * 0.4F * limbSwingAngle * 2.5F;
 		float animation3 = MathHelper.sin((limbSwing) * 0.5F) * 0.4F * limbSwingAngle * 0.15707963267948966F* 0.5F;
-		float standingAngle = barrishee.smoothedAngle(partialRenderTicks);
-		float flap = MathHelper.sin((barrishee.ticksExisted) * 0.6F) * 0.8F;
-		float flap2 = MathHelper.sin((barrishee.ticksExisted) * 0.3F) * 0.8F;
+		float standingAngle = barrishee.getSmoothedStandingAngle(partialRenderTicks);
+		float flap = MathHelper.sin((barrishee.ticksExisted + partialRenderTicks) * 0.6F) * 0.8F;
+		float flap2 = MathHelper.sin((barrishee.ticksExisted + partialRenderTicks) * 0.3F) * 0.8F;
+		
 		cog1_1.rotateAngleZ = 0F + animation;
 		cog1_1.rotateAngleX = 0 + animation3;
+		
 		if ((barrishee.standingAngle > 0)) {
 			base_rotation_bit.rotateAngleX = convertDegtoRad(-65F) + (convertDegtoRad(65F) * standingAngle);
 			neck.rotateAngleX = convertDegtoRad(60F) - (convertDegtoRad(60F) * standingAngle);
@@ -566,7 +569,8 @@ public class ModelBarrishee extends MowzieModelBase {
 		}
 
 		if (barrishee.isScreaming() && barrishee.getScreamTimer() >= 20 && barrishee.getScreamTimer() <= 30) {
-			int fudge = barrishee.getScreamTimer() - 20;
+			float fudge = barrishee.getScreamTimer() - 20 + partialRenderTicks;
+			
 			base_rotation_bit.rotateAngleX = convertDegtoRad(0F) - (convertDegtoRad(10F) * fudge * 0.1F);
 			belly_1.rotateAngleX = convertDegtoRad(-40F) + (convertDegtoRad(10F) * fudge * 0.1F);
 			neck.rotateAngleX = convertDegtoRad(0F) - (convertDegtoRad(45F) * fudge * 0.1F);
@@ -606,7 +610,8 @@ public class ModelBarrishee extends MowzieModelBase {
 		}
 
 		if (barrishee.isScreaming() && barrishee.getScreamTimer() >= 40) {
-			int fudge = barrishee.getScreamTimer() - 40;
+			float fudge = barrishee.getScreamTimer() - 40 + partialRenderTicks;
+			
 			base_rotation_bit.rotateAngleX = convertDegtoRad(-10F) + (convertDegtoRad(10F) * fudge * 0.1F);
 			belly_1.rotateAngleX = convertDegtoRad(-30F) - (convertDegtoRad(10F) * fudge * 0.1F);
 			neck.rotateAngleX = convertDegtoRad(-45F) + (convertDegtoRad(45F) * fudge * 0.1F);
