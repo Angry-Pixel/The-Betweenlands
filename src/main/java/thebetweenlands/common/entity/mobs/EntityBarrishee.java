@@ -532,7 +532,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 			if(target != null) {
 				double distance = barrishee.getDistanceSq(target);
 
-				if (distance >= 9.0D && distance <= 144.0D && barrishee.onGround && barrishee.isReadyForSpecialAttack()) {
+				if (distance >= 9.0D && distance <= 144.0D && barrishee.onGround && barrishee.isReadyForSpecialAttack() && barrishee.isLookingAtAttackTarget(target)) {
 					return this.cooldown-- < 0;
 				}
 			}
@@ -570,7 +570,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 			if(target != null) {
 				int distance = MathHelper.floor(barrishee.getDistance(target));
 
-				if (barrishee.getScreamTimer() >= 25 && barrishee.isLookingAtAttackTarget(target)) {
+				if (barrishee.getScreamTimer() >= 25) {
 					if (!barrishee.isScreamingBeam()) {
 						barrishee.setIsScreamingBeam(true);
 					}
