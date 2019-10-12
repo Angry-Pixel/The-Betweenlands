@@ -3,7 +3,7 @@ package thebetweenlands.common.item.tools.bow;
 import net.minecraft.util.IStringSerializable;
 
 public enum EnumArrowType implements IStringSerializable {
-	DEFAULT("default"), ANGLER_POISON("angler_poison"), OCTINE("octine"), BASILISK("basilisk");
+	DEFAULT("default"), ANGLER_POISON("angler_poison"), OCTINE("octine"), BASILISK("basilisk"), WORM("worm");
 
 	private String name;
 

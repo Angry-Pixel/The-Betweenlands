@@ -56,9 +56,8 @@ public class ModelWormArrow extends ModelBase {
         head.addChild(beak_right);
     }
 
-	@Override
-	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
-        head.render(scale);
+	public void render() {
+        head.render(0.0625F);
     }
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

@@ -107,6 +107,8 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			return new ItemStack(ItemRegistry.OCTINE_ARROW);
 		case BASILISK:
 			return new ItemStack(ItemRegistry.BASILISK_ARROW);
+		case WORM:
+			return new ItemStack(ItemRegistry.SLUDGE_WORM_ARROW);
 		case DEFAULT:
 		default:
 			return new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW);
