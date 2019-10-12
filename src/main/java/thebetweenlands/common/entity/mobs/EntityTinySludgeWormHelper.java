@@ -32,12 +32,7 @@ public class EntityTinySludgeWormHelper extends EntityTinySludgeWorm {
 		tasks.addTask(2, new EntityAIAttackMelee(this, 0.5D, false));
 		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
-		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, 2, true, true, new Predicate<Entity>()
-			{
-				public boolean apply(@Nullable Entity entity) {
-					return entity instanceof IMob;
-				}
-			}));
+		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, 2, true, true, entity -> entity instanceof IMob));
 	}
 
 	@Override

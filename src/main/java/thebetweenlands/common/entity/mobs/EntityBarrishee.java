@@ -20,13 +20,13 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -51,6 +51,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.container.BlockMudBrickAlcove;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
+import thebetweenlands.common.entity.ai.PathNavigateBarrishee;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
@@ -97,24 +98,30 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 	protected void initEntityAI() {
 		tasks.addTask(1, new EntityAISwimming(this));
 		tasks.addTask(2, new EntityBarrishee.AIBlockBreakAttack(this, 60, 100));
-		tasks.addTask(3, new EntityBarrishee.AISonicAttack(this, 35, 60));
-		tasks.addTask(4, new EntityBarrishee.AISlamAttack(this, 26, 46));
+		tasks.addTask(3, new EntityBarrishee.AISonicAttack(this, 32, 50));
+		tasks.addTask(4, new EntityBarrishee.AISlamAttack(this, 22, 40));
 		tasks.addTask(5, new EntityBarrishee.AIBarrisheeAttack(this));
-		tasks.addTask(6, new EntityAIWander(this, 0.4D, 50));
+		tasks.addTask(6, new EntityAIWander(this, 0.8D, 50));
 		tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		tasks.addTask(8, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, true, true, null));
+
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 0, true, true, null).setUnseenMemoryTicks(1200));
 		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true));
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.24D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(200D);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.75D);
+	}
+
+	@Override
+	protected PathNavigate createNavigator(World worldIn) {
+		return new PathNavigateBarrishee(this, worldIn);
 	}
 
 	@Override
@@ -458,6 +465,15 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		}
 	}
 
+	/**
+	 * Called by barrishee path navigator if a path is obstructed and the barrishee becomes stuck
+	 */
+	public void onPathingObstructed() {
+		if(this.getAttackTarget() != null && this.isReadyForSpecialAttack()) {
+			this.setScreamTimer(0);
+		}
+	}
+
 	@Override
 	public float getShakeIntensity(Entity viewer, float partialTicks) {
 		if(isScreaming()) {
@@ -542,7 +558,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return barrishee.getAttackTarget() != null && shootCount !=-1 && missileCount !=-1 && barrishee.recentlyHit <= 40;
+			return barrishee.getAttackTarget() != null && shootCount != -1 && missileCount != -1;
 		}
 
 		@Override
@@ -636,7 +652,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		@Override
 		public boolean shouldContinueExecuting() {
 			EntityLivingBase target = barrishee.getAttackTarget();
-			return target != null && shootCount !=-1 && missileCount !=-1 && barrishee.recentlyHit <= 40 && barrishee.isLookingAtAttackTarget(target);
+			return target != null && shootCount != -1 && missileCount != -1 && barrishee.isLookingAtAttackTarget(target);
 		}
 
 		@Override
@@ -703,7 +719,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 
 	static class AIBarrisheeAttack extends EntityAIAttackMelee {
 		public AIBarrisheeAttack(EntityBarrishee barrishee) {
-			super(barrishee, 0.4D, false);
+			super(barrishee, 1, true);
 		}
 
 		@Override
