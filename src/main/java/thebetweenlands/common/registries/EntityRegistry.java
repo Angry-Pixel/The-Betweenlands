@@ -74,6 +74,7 @@ import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.entity.mobs.EntityTarminion;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWallLamprey;
 import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
@@ -161,6 +162,7 @@ public class EntityRegistry {
 		registerEntity(EntityTinySludgeWorm.class, "tiny_sludge_worm", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntityLargeSludgeWorm.class, "large_sludge_worm", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntityTinyWormEggSac.class, "tiny_worm_egg_sac");
+		registerEntity(EntityTinySludgeWormHelper.class, "tiny_sludge_worm_helper", 0x3A2F0B, 0x5F4C0B);
 
 		registerEntity(EntityLurkerSkinRaft.class, "lurker_skin_raft");
 		

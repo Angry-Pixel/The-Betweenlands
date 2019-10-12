@@ -12,7 +12,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IThrowableEntity;
-import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
+import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -81,7 +81,7 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			break;
 		case WORM:
 			if (!getEntityWorld().isRemote) {
-				EntityTinySludgeWorm worm = new EntityTinySludgeWorm(getEntityWorld());
+				EntityTinySludgeWormHelper worm = new EntityTinySludgeWormHelper(getEntityWorld());
 				worm.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
 				worm.setAttackTarget(living);
 				getEntityWorld().spawnEntity(worm);
