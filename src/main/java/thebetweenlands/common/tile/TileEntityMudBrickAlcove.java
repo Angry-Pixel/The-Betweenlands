@@ -8,8 +8,8 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 
 public class TileEntityMudBrickAlcove extends TileEntityLootInventory {
-	public boolean has_urn, greebled, top_web, bottom_web, small_candle, big_candle, out_crop;
-	public int urn_type = 0, rotationOffset = 0, dungeon_level = 0;
+	public boolean hasUrn, topWeb, bottomWeb, smallCandle, bigCandle, outcrop;
+	public int urnType = 0, rotationOffset = 0, dungeonLevel = 0;
 	public int facing = 0;
 
 	public TileEntityMudBrickAlcove() {
@@ -18,61 +18,49 @@ public class TileEntityMudBrickAlcove extends TileEntityLootInventory {
 
 	public void setUpGreeble() {
 		Random rand = getWorld().rand;
-		if(!greebled) {
-			if(rand.nextInt(3) == 0)
-				has_urn = true;
-			if(has_urn) {
-				urn_type = rand.nextInt(3);
-				rotationOffset = rand.nextInt(41) - 20;
-			}
-			top_web = rand.nextBoolean();
-			bottom_web = rand.nextBoolean();
-			small_candle = rand.nextBoolean();
-			big_candle = rand.nextBoolean();
-			out_crop = rand.nextBoolean();
-			greebled = true;
+		if(rand.nextInt(3) == 0)
+			hasUrn = true;
+		if(hasUrn) {
+			urnType = rand.nextInt(3);
+			rotationOffset = rand.nextInt(41) - 20;
 		}
+		topWeb = rand.nextBoolean();
+		bottomWeb = rand.nextBoolean();
+		smallCandle = rand.nextBoolean();
+		bigCandle = rand.nextBoolean();
+		outcrop = rand.nextBoolean();
 	}
 
 	public void setDungeonLevel(int level) {
-		dungeon_level = level;
-	}
-
-	public void setFacing(int index) {
-		/** Ordering index for D-U-N-S-W-E */
-		facing = index;
+		dungeonLevel = level;
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		greebled = nbt.getBoolean("greebled");
-		has_urn = nbt.getBoolean("has_urn");
-		urn_type = nbt.getInteger("urn_type");
+		hasUrn = nbt.getBoolean("has_urn");
+		urnType = nbt.getInteger("urn_type");
 		rotationOffset = nbt.getInteger("rotationOffset");
-		top_web = nbt.getBoolean("top_web");
-		bottom_web = nbt.getBoolean("bottom_web");
-		small_candle = nbt.getBoolean("small_candle");
-		big_candle = nbt.getBoolean("big_candle");
-		out_crop = nbt.getBoolean("out_crop");
-		dungeon_level = nbt.getInteger("dungeon_level");
-		facing = nbt.getInteger("facing");
+		topWeb = nbt.getBoolean("top_web");
+		bottomWeb = nbt.getBoolean("bottom_web");
+		smallCandle = nbt.getBoolean("small_candle");
+		bigCandle = nbt.getBoolean("big_candle");
+		outcrop = nbt.getBoolean("out_crop");
+		dungeonLevel = nbt.getInteger("dungeon_level");
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setBoolean("greebled", greebled);
-		nbt.setBoolean("has_urn", has_urn);
-		nbt.setInteger("urn_type", urn_type);
+		nbt.setBoolean("has_urn", hasUrn);
+		nbt.setInteger("urn_type", urnType);
 		nbt.setInteger("rotationOffset", this.rotationOffset);
-		nbt.setBoolean("top_web", top_web);
-		nbt.setBoolean("bottom_web", bottom_web);
-		nbt.setBoolean("small_candle", small_candle);
-		nbt.setBoolean("big_candle", big_candle );
-		nbt.setBoolean("out_crop", out_crop);
-		nbt.setInteger("dungeon_level", dungeon_level);
-		nbt.setInteger("facing", facing);
+		nbt.setBoolean("top_web", topWeb);
+		nbt.setBoolean("bottom_web", bottomWeb);
+		nbt.setBoolean("small_candle", smallCandle);
+		nbt.setBoolean("big_candle", bigCandle );
+		nbt.setBoolean("out_crop", outcrop);
+		nbt.setInteger("dungeon_level", dungeonLevel);
 		return nbt;
 	}
 

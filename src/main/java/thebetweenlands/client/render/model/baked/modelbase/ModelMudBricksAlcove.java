@@ -130,15 +130,15 @@ public class ModelMudBricksAlcove extends ModelBase {
 
 	public void render(TileEntityMudBrickAlcove tile, float scale) {
 		backwall.render(scale);
-		if (tile.out_crop)
+		if (tile.outcrop)
 			outcrop_a.render(scale);
-		if (tile.top_web)
+		if (tile.topWeb)
 			cobweb2.render(scale);
-		if (tile.bottom_web)
+		if (tile.bottomWeb)
 			cobweb1.render(scale);
-		if (tile.small_candle)
+		if (tile.smallCandle)
 			candle2.render(scale);
-		if (tile.big_candle)
+		if (tile.bigCandle)
 			candle1.render(scale);
 	}
 

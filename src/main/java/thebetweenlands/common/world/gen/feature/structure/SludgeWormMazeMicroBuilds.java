@@ -636,17 +636,13 @@ public class SludgeWormMazeMicroBuilds {
 		blockHelper.setGreatSword(world, rand, pos.add(6, 1, 15));
 	}
 
-	@SuppressWarnings("incomplete-switch")
 	public void rotatedCubeVolume(World world, Random rand, BlockPos pos, int offsetA, int offsetB, int offsetC, IBlockState state, int sizeWidth, int sizeHeight, int sizeDepth, EnumFacing facing) {
-
 		switch (facing) {
 		case SOUTH:
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int xx = offsetA; xx < offsetA + sizeWidth; xx++)
 					for (int zz = offsetC; zz < offsetC + sizeDepth; zz++) {
 						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
-						 if (state.getBlock() instanceof BlockLootUrn)
-							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
 			break;
 		case EAST:
@@ -654,8 +650,6 @@ public class SludgeWormMazeMicroBuilds {
 				for (int zz = -offsetA; zz > -offsetA - sizeWidth; zz--)
 					for (int xx = offsetC; xx < offsetC + sizeDepth; xx++) {
 						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
-						 if (state.getBlock() instanceof BlockLootUrn)
-							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
 			break;
 		case NORTH:
@@ -663,8 +657,6 @@ public class SludgeWormMazeMicroBuilds {
 				for (int xx = -offsetA; xx > -offsetA - sizeWidth; xx--)
 					for (int zz = -offsetC; zz > -offsetC - sizeDepth; zz--) {
 						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
-						 if (state.getBlock() instanceof BlockLootUrn)
-							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
 			break;
 		case WEST:
@@ -672,11 +664,8 @@ public class SludgeWormMazeMicroBuilds {
 				for (int zz = offsetA; zz < offsetA + sizeWidth; zz++)
 					for (int xx = -offsetC; xx > -offsetC - sizeDepth; xx--) {
 						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
-						 if (state.getBlock() instanceof BlockLootUrn)
-							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
 			break;
 		}
 	}
-
 }

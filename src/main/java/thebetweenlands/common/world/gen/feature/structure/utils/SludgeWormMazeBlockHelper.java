@@ -704,15 +704,6 @@ public class SludgeWormMazeBlockHelper {
 		return LOOT_URN_1.withProperty(BlockLootUrn.FACING, facing);
 	}
 
-	public void setLootUrnTileProperties(World world, Random rand, BlockPos pos) {
-		TileEntityLootUrn lootUrn = BlockLootUrn.getTileEntity(world, pos);
-		if (lootUrn != null) {
-			// TODO Make proper shared loot tables
-			lootUrn.setLootTable(LootTableRegistry.DUNGEON_POT_LOOT, rand.nextLong());
-			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
-		}
-	}
-
 	public void setGreatSword(World world, Random rand, BlockPos pos) {
 		TileEntityGroundItem groundItem = (TileEntityGroundItem) world.getTileEntity(pos);
 		if (groundItem != null) {

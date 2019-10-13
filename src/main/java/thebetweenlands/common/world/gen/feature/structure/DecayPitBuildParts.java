@@ -284,8 +284,6 @@ public class DecayPitBuildParts {
 				for (int xx = offsetA; xx < offsetA + sizeWidth; xx++)
 					for (int zz = offsetC; zz < offsetC + sizeDepth; zz++) {
 						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
-						 if (state.getBlock() instanceof BlockLootUrn)
-							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
 			break;
 		case EAST:
@@ -293,8 +291,6 @@ public class DecayPitBuildParts {
 				for (int zz = -offsetA; zz > -offsetA - sizeWidth; zz--)
 					for (int xx = offsetC; xx < offsetC + sizeDepth; xx++) {
 						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
-						 if (state.getBlock() instanceof BlockLootUrn)
-							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
 			break;
 		case NORTH:
@@ -302,8 +298,6 @@ public class DecayPitBuildParts {
 				for (int xx = -offsetA; xx > -offsetA - sizeWidth; xx--)
 					for (int zz = -offsetC; zz > -offsetC - sizeDepth; zz--) {
 						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
-						 if (state.getBlock() instanceof BlockLootUrn)
-							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
 			break;
 		case WEST:
@@ -311,8 +305,6 @@ public class DecayPitBuildParts {
 				for (int zz = offsetA; zz < offsetA + sizeWidth; zz++)
 					for (int xx = -offsetC; xx > -offsetC - sizeDepth; xx--) {
 						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
-						 if (state.getBlock() instanceof BlockLootUrn)
-							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 					}
 			break;
 		}

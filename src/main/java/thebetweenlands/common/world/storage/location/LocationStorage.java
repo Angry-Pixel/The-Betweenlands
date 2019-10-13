@@ -699,15 +699,16 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 
 	}
 
-	public int getLootInventories(ResourceLocation lootTable) {
+	public int getSharedLootInventories(ResourceLocation lootTable) {
 		return this.lootInventories.get(lootTable);
 	}
 
-	public void registerLootInventory(ResourceLocation lootTable) {
+	public void registerSharedLootInventory(ResourceLocation lootTable) {
 		this.lootInventories.increment(lootTable);
+		this.markDirty();
 	}
 	
-	public void setLootInventories(ResourceLocation lootTable, int inventories) {
+	public void setSharedLootInventories(ResourceLocation lootTable, int inventories) {
 		this.lootInventories.put(lootTable, inventories);
 		this.markDirty();
 	}

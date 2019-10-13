@@ -388,7 +388,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		BlockPos offsetPos = pos;
 		TileEntityMudBrickAlcove tile = getTileEntity(world, pos);
 		if (tile instanceof TileEntityMudBrickAlcove) {
-			if (tile.has_urn) {
+			if (tile.hasUrn) {
 				IInventory tileInv = (IInventory) tile;
 				if (tileInv != null) {
 					EnumFacing facing = state.getValue(BlockMudBrickAlcove.FACING);
@@ -397,7 +397,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 				}
 				spawnAshSpriteMinion(getEntityWorld(), pos, state);
 				world.playEvent(null, 2001, pos, Block.getIdFromBlock(state.getBlock()));
-				tile.has_urn = false;
+				tile.hasUrn = false;
 				world.notifyBlockUpdate(pos, state, state, 2);
 			}
 		}

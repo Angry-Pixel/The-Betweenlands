@@ -51,17 +51,27 @@ import thebetweenlands.util.FakeClientWorld;
 
 public class LootTableRegistry {
 
-    //LOOT
-    public static final ResourceLocation COMMON_POT_LOOT = register("loot/common_pot_loot");
-    public static final ResourceLocation DUNGEON_CHEST_LOOT = register("loot/dungeon_chest_loot");
-    public static final ResourceLocation COMMON_CHEST_LOOT = register("loot/common_chest_loot");
-    public static final ResourceLocation DUNGEON_POT_LOOT = register("loot/dungeon_pot_loot");
+    //MISC
     public static final ResourceLocation MUSIC_DISC = register("loot/music_disc");
     public static final ResourceLocation ANIMATOR_SCROLL = register("animator/scroll");
     public static final ResourceLocation PRESENT = register("loot/present_loot");
     public static final ResourceLocation PUFFSHROOM = register("loot/puffshroom");
     
     public static final ResourceLocation SHARED_LOOT_POOL_TEST = register("loot/shared_loot_pool_test");
+    
+    //LOOT INVENTORIES
+    //Wight fortress, Patchy Islands heads, cave pots, etc.
+    //TODO These loot tables should be separated. May need to keep old loot tables for backwards comp.
+    public static final ResourceLocation COMMON_POT_LOOT = register("loot/common_pot_loot");
+    public static final ResourceLocation DUNGEON_CHEST_LOOT = register("loot/dungeon_chest_loot");
+    public static final ResourceLocation COMMON_CHEST_LOOT = register("loot/common_chest_loot");
+    public static final ResourceLocation DUNGEON_POT_LOOT = register("loot/dungeon_pot_loot");
+    //Sludge worm dungeon
+    public static final ResourceLocation SLUDGE_WORM_DUNGEON_CHEST = register("loot/sludge_worm_dungeon_chest");
+    public static final ResourceLocation SLUDGE_WORM_DUNGEON_URN = register("loot/sludge_worm_dungeon_urn");
+    public static final ResourceLocation SLUDGE_WORM_DUNGEON_BARRISHEE_CHEST = register("loot/sludge_worm_dungeon_barrishee_chest");
+    public static final ResourceLocation SLUDGE_WORM_DUNGEON_CRYPT_URN = register("loot/sludge_worm_dungeon_crypt_urn");
+    public static final ResourceLocation SLUDGE_WORM_DUNGEON_ITEM_SHELF = register("loot/sludge_worm_dungeon_item_shelf");
     
     //MOBS
     public static final ResourceLocation ANGLER = register("entities/angler");

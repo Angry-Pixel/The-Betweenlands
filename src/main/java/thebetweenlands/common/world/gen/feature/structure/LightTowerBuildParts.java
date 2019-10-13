@@ -649,8 +649,6 @@ public class LightTowerBuildParts {
 				for (int xx = offsetA; xx < offsetA + sizeWidth; xx++)
 					for (int zz = offsetC; zz < offsetC + sizeDepth; zz++) {
 						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
-						 if (state.getBlock() instanceof BlockLootUrn)
-							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 						 if (state == blockHelper.ROTTEN_PLANK_SLAB_LOWER)
 							 if(rand.nextInt(10) == 0)
 								 addTriggeredFallingBlockEntity(world, pos.add(xx, yy, zz));
@@ -661,8 +659,6 @@ public class LightTowerBuildParts {
 				for (int zz = -offsetA; zz > -offsetA - sizeWidth; zz--)
 					for (int xx = offsetC; xx < offsetC + sizeDepth; xx++) {
 						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
-						 if (state.getBlock() instanceof BlockLootUrn)
-							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 						 if (state == blockHelper.ROTTEN_PLANK_SLAB_LOWER)
 							 if(rand.nextInt(10) == 0)
 								 addTriggeredFallingBlockEntity(world, pos.add(xx, yy, zz));
@@ -673,8 +669,6 @@ public class LightTowerBuildParts {
 				for (int xx = -offsetA; xx > -offsetA - sizeWidth; xx--)
 					for (int zz = -offsetC; zz > -offsetC - sizeDepth; zz--) {
 						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
-						 if (state.getBlock() instanceof BlockLootUrn)
-							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 						 if (state == blockHelper.ROTTEN_PLANK_SLAB_LOWER)
 							 if(rand.nextInt(10) == 0)
 								 addTriggeredFallingBlockEntity(world, pos.add(xx, yy, zz));
@@ -685,8 +679,6 @@ public class LightTowerBuildParts {
 				for (int zz = offsetA; zz < offsetA + sizeWidth; zz++)
 					for (int xx = -offsetC; xx > -offsetC - sizeDepth; xx--) {
 						this.dungeon.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), state);
-						 if (state.getBlock() instanceof BlockLootUrn)
-							 blockHelper.setLootUrnTileProperties(world, rand, pos.add(xx, yy, zz));
 						 if (state == blockHelper.ROTTEN_PLANK_SLAB_LOWER)
 							 if(rand.nextInt(10) == 0)
 								 addTriggeredFallingBlockEntity(world, pos.add(xx, yy, zz));

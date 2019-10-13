@@ -9,8 +9,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -32,8 +34,11 @@ import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
+import thebetweenlands.common.tile.TileEntityLootInventory;
 import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
@@ -44,7 +49,6 @@ import thebetweenlands.common.world.storage.location.LocationAmbience;
 import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.common.world.storage.location.LocationStorage;
-import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 import thebetweenlands.util.TimeMeasurement;
 
 public class WorldGenSludgeWormDungeon extends WorldGenerator {
@@ -53,10 +57,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private LightTowerBuildParts lightTowerBuild;
 	private DecayPitBuildParts decayPitBuild;
 
-	private ILocationGuard guard;
-	
+	private LocationSludgeWormDungeon location;
+	private LocationStorage locationBarrisheeLair;
+	private LocationStorage locationCrypt;
+	private Random lootRng;
+
 	TimeMeasurement timer = new TimeMeasurement();
-	
+
 	public WorldGenSludgeWormDungeon() {
 		super(false);
 		this.blockHelper = new SludgeWormMazeBlockHelper(this);
@@ -80,6 +87,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				}
 			}
 		}
+		
+		this.lootRng = new Random(rand.nextLong());
 
 		//conditions blah, blah...
 		timer.start("Full_Mudgeon");
@@ -88,7 +97,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		timer.start("World_Locations");
 		this.generateLocations(world, rand, pos);
 		timer.finish("World_Locations");
-		
+
 		timer.start("Maze");
 		makeMaze(world, rand, pos);
 		timer.finish("Maze");
@@ -115,10 +124,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	public void generateLocations(World world, Random rand, BlockPos pos) {
 		//Main location for spawning, fog, loot etc.
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		
+
 		//TODO implement mob spawning in different regions (maze, tunnels)
-		LocationSludgeWormDungeon location = new LocationSludgeWormDungeon(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos));
-		this.guard = location.getGuard();
+		location = new LocationSludgeWormDungeon(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos));
 		location.addBounds(new AxisAlignedBB(pos.getX() - 3, pos.getY() + 30, pos.getZ() - 3, pos.getX() + 29, pos.getY() - 58, pos.getZ() + 29));
 		location.linkChunks();
 		location.setLayer(0);
@@ -129,7 +137,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 
 		//Locations below are just for segmentation and location titles
-		
+
 		//Maze
 		LocationStorage locationMaze = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_maze", EnumLocationType.SLUDGE_WORM_DUNGEON);
 		locationMaze.addBounds(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 29, pos.getY() - 8 * 5 - 3, pos.getZ() + 29));
@@ -141,14 +149,14 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		worldStorage.getLocalStorageHandler().addLocalStorage(locationMaze);
 
 		//Barrishee Lair
-		LocationStorage locationBarrishee = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_barrishee_lair", EnumLocationType.SLUDGE_WORM_DUNGEON);
-		locationBarrishee.addBounds(new AxisAlignedBB(pos.getX() + 20, pos.getY() - 24, pos.getZ() - 3, pos.getX() + 29, pos.getY() - 19, pos.getZ()));
-		locationBarrishee.linkChunks();
-		locationBarrishee.setLayer(1);
-		locationBarrishee.setSeed(rand.nextLong());
-		locationBarrishee.setVisible(true);
-		locationBarrishee.setDirty(true);
-		worldStorage.getLocalStorageHandler().addLocalStorage(locationBarrishee);
+		locationBarrisheeLair = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_barrishee_lair", EnumLocationType.SLUDGE_WORM_DUNGEON);
+		locationBarrisheeLair.addBounds(new AxisAlignedBB(pos.getX() + 20, pos.getY() - 24, pos.getZ() - 3, pos.getX() + 29, pos.getY() - 19, pos.getZ()));
+		locationBarrisheeLair.linkChunks();
+		locationBarrisheeLair.setLayer(1);
+		locationBarrisheeLair.setSeed(rand.nextLong());
+		locationBarrisheeLair.setVisible(true);
+		locationBarrisheeLair.setDirty(true);
+		worldStorage.getLocalStorageHandler().addLocalStorage(locationBarrisheeLair);
 
 		//Crypt Walkways
 		LocationStorage locationWalkays = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_winding_walkways", EnumLocationType.SLUDGE_WORM_DUNGEON);
@@ -193,7 +201,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		worldStorage.getLocalStorageHandler().addLocalStorage(locationCryptTunnels);
 
 		//Crypt
-		LocationStorage locationCrypt = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_crypt", EnumLocationType.SLUDGE_WORM_DUNGEON);
+		locationCrypt = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_crypt", EnumLocationType.SLUDGE_WORM_DUNGEON);
 		locationCrypt.addBounds(new AxisAlignedBB(pos.getX() - 3, pos.getY() - 57, pos.getZ() + 22, pos.getX() + 7, pos.getY() - 54, pos.getZ() + 12));
 		locationCrypt.linkChunks();
 		locationCrypt.setLayer(1);
@@ -201,7 +209,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		locationCrypt.setVisible(true);
 		locationCrypt.setDirty(true);
 		worldStorage.getLocalStorageHandler().addLocalStorage(locationCrypt);
-		
+
 		//Pit
 		LocationStorage locationPit = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_pit", EnumLocationType.SLUDGE_WORM_DUNGEON);
 		locationPit.addBounds(
@@ -1177,18 +1185,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 	// Roof
 	private void buildRoof(World world, BlockPos pos, Random rand, int w, int h, int level) {
-		for (int i = 0; i <= h * 4; i++)
-			for (int j = 0; j <= w * 4; j++)
+		for (int i = 0; i <= h * 4; i++) {
+			for (int j = 0; j <= w * 4; j++) {
 				//if (world.isAirBlock(pos.add(j, 0, i)))
 				this.setBlockAndNotifyAdequately(world, pos.add(j, 0, i), blockHelper.COMPACTED_MUD);
-	}
-
-	// Places chests
-	private void placeChest(World world, BlockPos pos, IBlockState state, Random rand) {
-		this.setBlockAndNotifyAdequately(world, pos, state);
-		TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
-		if (chest != null) {
-			// TODO add loot here
+			}
 		}
 	}
 
@@ -1247,7 +1248,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	public boolean isSolidStructureBlock(IBlockState state) {
 		return blockHelper.STRUCTURE_BLOCKS.get(state) != null;
 	}
-	
+
 	protected boolean isProtectedBlock(IBlockState state) {
 		Block block = state.getBlock();
 		if(block != Blocks.AIR && block != BlockRegistry.MOB_SPAWNER && block != BlockRegistry.LOOT_POT
@@ -1266,10 +1267,53 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	@Override
 	public void setBlockAndNotifyAdequately(World worldIn, BlockPos pos, IBlockState state) {
 		if(this.isProtectedBlock(state)) {
-			this.guard.setGuarded(worldIn, pos, true);
+			this.location.getGuard().setGuarded(worldIn, pos, true);
 		} else {
-			this.guard.setGuarded(worldIn, pos, false);
+			this.location.getGuard().setGuarded(worldIn, pos, false);
 		}
+
 		super.setBlockAndNotifyAdequately(worldIn, pos, state);
+		
+		TileEntity tile = worldIn.getTileEntity(pos);
+		
+		TileEntityLootInventory lootInv = tile instanceof TileEntityLootInventory ? (TileEntityLootInventory) tile : null;
+		TileEntityChestBetweenlands lootChest = tile instanceof TileEntityChestBetweenlands ? (TileEntityChestBetweenlands) tile : null;
+		
+		if(lootInv != null || lootChest != null) {
+			ResourceLocation lootTable = this.getLootTableForBlock(worldIn, pos, state);
+			
+			if(lootTable != null) {
+				if(lootInv != null) {
+					lootInv.setSharedLootTable(lootTable, this.lootRng.nextLong());
+				}
+				
+				if(lootChest != null) {
+					lootChest.setSharedLootTable(lootTable, this.lootRng.nextLong());
+				}
+			
+				this.location.registerSharedLootInventory(lootTable);
+			}
+		}
+	}
+	
+	@Nullable
+	protected ResourceLocation getLootTableForBlock(World world, BlockPos pos, IBlockState state) {
+		Block block = state.getBlock();
+		
+		if(block == BlockRegistry.LOOT_URN || block == BlockRegistry.MUD_BRICK_ALCOVE) {
+			if(this.locationCrypt.isInside(pos)) {
+				return LootTableRegistry.SLUDGE_WORM_DUNGEON_CRYPT_URN;
+			} else {
+				return LootTableRegistry.SLUDGE_WORM_DUNGEON_URN;
+			}
+		} else if(block == BlockRegistry.WEEDWOOD_CHEST) {
+			if(this.locationBarrisheeLair.isInside(pos)) {
+				return LootTableRegistry.SLUDGE_WORM_DUNGEON_BARRISHEE_CHEST;
+			} else {
+				return LootTableRegistry.SLUDGE_WORM_DUNGEON_CHEST;
+			}
+		}
+		
+		return null;
 	}
 }
