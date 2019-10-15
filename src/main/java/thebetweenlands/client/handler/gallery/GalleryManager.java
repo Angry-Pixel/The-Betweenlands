@@ -261,7 +261,7 @@ public final class GalleryManager {
 		for(GalleryEntry entry : this.entries.values()) {
 			Minecraft.getMinecraft().getTextureManager().loadTexture(entry.getLocation(), new TextureGalleryEntry(entry));
 			if(BetweenlandsConfig.DEBUG.debug) {
-				TheBetweenlands.logger.error("Loaded gallery picture '" + entry.getSha256() + "'/'" + entry.getUrl() + "'/'" + entry.getLocation() + "'");
+				TheBetweenlands.logger.info("Loaded gallery picture '" + entry.getSha256() + "'/'" + entry.getUrl() + "'/'" + entry.getLocation() + "'");
 			}
 		}
 	}
