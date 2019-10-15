@@ -1027,7 +1027,7 @@ tooltip.recipes.censer_primary=Censer
 tooltip.recipes.censer_secondary=Censer (secondary)
 tooltip.recipes.purifier=Purifier
 
-tooltip.gallery.not_found=Online picture gallery\nis currently disabled.\nThis feature can be\nenabled in the config\nunder 'General' and\n'Online picture gallery'
+tooltip.gallery.not_found=Online picture gallery\nis currently disabled.\nThis feature can be\nenabled in the config\nunder 'General' and\n'Online picture gallery'.\nThen restart the game\nto download the\npictures.
 tooltip.gallery.author=§n§oAuthor:§r        
 tooltip.gallery.description=§n§oDescription:§r   
 tooltip.gallery.source_url=§n§oSource:§r        

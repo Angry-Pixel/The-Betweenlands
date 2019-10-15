@@ -84,7 +84,7 @@ public class RenderGalleryFrame extends Render<EntityGalleryFrame> {
 		if(entry == null && !BetweenlandsConfig.GENERAL.onlineGallery) {
 			GlStateManager.pushMatrix();
 
-			GlStateManager.translate(0.4D, 0, -0.03F);
+			GlStateManager.translate(0.435D, 0, -0.03F);
 
 			GlStateManager.scale(-1 / 128.0f, -1 / 128.0f, 1 / 128.0f);
 			GlStateManager.disableLighting();
