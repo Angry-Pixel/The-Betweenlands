@@ -1027,6 +1027,13 @@ tooltip.recipes.censer_primary=Censer
 tooltip.recipes.censer_secondary=Censer (secondary)
 tooltip.recipes.purifier=Purifier
 
+tooltip.gallery.not_found=Online picture gallery\nis currently disabled.\nThis feature can be\nenabled in the config\nunder 'General' and\n'Online picture gallery'
+tooltip.gallery.author=§n§oAuthor:§r        
+tooltip.gallery.description=§n§oDescription:§r   
+tooltip.gallery.source_url=§n§oSource:§r        
+tooltip.gallery.info_not_found=Could not find any information about this picture
+
+
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
 chat.foodSickness.fine.1=Finally, something different to eat
@@ -1746,6 +1753,7 @@ config.thebetweenlands.decay_percentage=Use percentual decay
 config.thebetweenlands.decay_min_health=Minimum decay health
 config.thebetweenlands.decay_min_health_percent=Minimum percentual decay health
 config.thebetweenlands.item_usage_tooltip=Item usage tooltip
+config.thebetweenlands.online_gallery=Online picture gallery
 
 config.thebetweenlands.mob_spawning=Mob Spawning
 config.thebetweenlands.max_entities_per_loaded_area=Max. entities per loaded area

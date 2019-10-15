@@ -1,5 +1,6 @@
 package thebetweenlands.client.proxy;
 
+import java.io.File;
 import java.io.InputStreamReader;
 import java.net.Proxy;
 import java.util.ArrayList;
@@ -81,6 +82,7 @@ import thebetweenlands.client.handler.ThemHandler;
 import thebetweenlands.client.handler.WeedwoodRowboatHandler;
 import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
+import thebetweenlands.client.handler.gallery.GalleryManager;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderAngryPebble;
 import thebetweenlands.client.render.entity.RenderAshSprite;
@@ -109,6 +111,7 @@ import thebetweenlands.client.render.entity.RenderFortressBossSpawner;
 import thebetweenlands.client.render.entity.RenderFortressBossTeleporter;
 import thebetweenlands.client.render.entity.RenderFortressBossTurret;
 import thebetweenlands.client.render.entity.RenderFrog;
+import thebetweenlands.client.render.entity.RenderGalleryFrame;
 import thebetweenlands.client.render.entity.RenderGasCloud;
 import thebetweenlands.client.render.entity.RenderGecko;
 import thebetweenlands.client.render.entity.RenderGiantToad;
@@ -217,6 +220,7 @@ import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.entity.EntityAngryPebble;
 import thebetweenlands.common.entity.EntityCCGroundSpawner;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.EntityGrapplingHookNode;
 import thebetweenlands.common.entity.EntityLurkerSkinRaft;
 import thebetweenlands.common.entity.EntityMovingWall;
@@ -621,6 +625,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlameJet.class, RenderFlameJet::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMovingWall.class, RenderMovingWall::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberlingWild.class, RenderEmberlingWild::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGalleryFrame.class, RenderGalleryFrame::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
@@ -691,6 +696,10 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 	@SuppressWarnings("deprecation")
 	@Override
 	public void postInit() {
+		File galleryFolder = new File(new File(Minecraft.getMinecraft().gameDir, "betweenlands_gallery"), "gallery_" + ModInfo.GALLERY_VERSION);
+		galleryFolder.mkdirs();
+		GalleryManager.INSTANCE.checkAndUpdate(galleryFolder);
+		
 	    RenderManager mgr = Minecraft.getMinecraft().getRenderManager();
 		dragonFlyRenderer = mgr.getEntityClassRenderObject(EntityDragonFly.class);
         MinecraftForge.EVENT_BUS.register(mgr.getEntityClassRenderObject(EntityWeedwoodRowboat.class));
@@ -814,6 +823,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(RenderGrapplingHookNode.class);
         MinecraftForge.EVENT_BUS.register(ExtendedReachHandler.class);
         MinecraftForge.EVENT_BUS.register(RenderVolarkite.class);
+        MinecraftForge.EVENT_BUS.register(GalleryManager.class);
 	}
 
 	private static FontRenderer pixelLove;

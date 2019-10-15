@@ -445,6 +445,11 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "item_usage_tooltip")
 		@Comment("Whether the item usage tooltip (\"Used In: Infuser, Compost Bin\" etc.) should be shown")
 		public boolean itemUsageTooltip = true;
+		
+		@Name("online_gallery")
+		@LangKey(LANG_PREFIX + "online_gallery")
+		@Comment("Whether the online fan art gallery picture frame should be enabled and be allowed to download fan art that has been manually picked by the developers to be shown in the gallery picture frame")
+		public boolean onlineGallery = false;
 	}
 
 	@Name("mob_spawning")

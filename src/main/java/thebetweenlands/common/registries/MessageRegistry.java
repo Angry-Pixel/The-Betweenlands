@@ -45,6 +45,7 @@ import thebetweenlands.common.network.serverbound.MessageFlightState;
 import thebetweenlands.common.network.serverbound.MessageItemNaming;
 import thebetweenlands.common.network.serverbound.MessageOpenPouch;
 import thebetweenlands.common.network.serverbound.MessageRow;
+import thebetweenlands.common.network.serverbound.MessageSetGalleryUrl;
 import thebetweenlands.common.network.serverbound.MessageUpdatePuppeteerState;
 import thebetweenlands.common.network.serverbound.MessageUpdateSummoningState;
 
@@ -92,6 +93,7 @@ public class MessageRegistry {
 		registerMessage(MessageRow.class, Side.SERVER);
 		registerMessage(MessageConnectCavingRope.class, Side.SERVER);
 		registerMessage(MessageExtendedReach.class, Side.SERVER);
+		registerMessage(MessageSetGalleryUrl.class, Side.SERVER);
 	}
 
 	private static void registerMessage(Class<? extends MessageBase> messageType, Side toSide) {
