@@ -5,6 +5,8 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -31,6 +33,9 @@ public class RenderGalleryFrame extends Render<EntityGalleryFrame> {
 		GlStateManager.translate(x, y, z);
 		GlStateManager.rotate(180 - entityYaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.enableRescaleNormal();
+
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
 		GalleryEntry entry = GalleryManager.INSTANCE.getEntries().get(entity.getUrl());
 
@@ -101,6 +106,9 @@ public class RenderGalleryFrame extends Render<EntityGalleryFrame> {
 			GlStateManager.disableOutlineMode();
 			GlStateManager.disableColorMaterial();
 		}
+
+		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.disableBlend();
 
 		GlStateManager.disableRescaleNormal();
 		GlStateManager.popMatrix();

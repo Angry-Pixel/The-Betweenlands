@@ -123,12 +123,13 @@ public final class GalleryManager {
 				@Override
 				public void run() {
 					try {
-						//TODO
-						//URL url = new URL("https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/environment_event_overrides/overrides.json");
-						URL url = new URL("http://localhost:8000/index.json");
+						URL url = new URL("https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/index.json");
 						HttpURLConnection request = null;
 						try {
 							request = GalleryManager.this.createHttpConnection(url, proxy);
+							request.setRequestProperty("Content-Type", "application/json; charset=utf-8");
+							request.connect();
+
 							if (request.getResponseCode() == HttpURLConnection.HTTP_OK) {
 								JsonParser parser = new JsonParser();
 								final JsonElement jsonElement = parser.parse(new InputStreamReader(request.getInputStream(), StandardCharsets.UTF_8));
@@ -160,7 +161,6 @@ public final class GalleryManager {
 		}
 		request.setDoInput(true);
 		request.setDoOutput(false);
-		request.connect();
 		return request;
 	}
 
@@ -229,6 +229,7 @@ public final class GalleryManager {
 		HttpURLConnection request = null;
 		try {
 			request = GalleryManager.this.createHttpConnection(url, proxy);
+			request.connect();
 
 			if (request.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				Files.copy(request.getInputStream(), this.getPictureFile(folder, entry).toPath(), StandardCopyOption.REPLACE_EXISTING);

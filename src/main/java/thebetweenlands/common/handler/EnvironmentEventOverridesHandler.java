@@ -146,6 +146,7 @@ public class EnvironmentEventOverridesHandler {
 							}
 							request.setDoInput(true);
 							request.setDoOutput(false);
+							request.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 							request.connect();
 
 							if (request.getResponseCode() == HttpURLConnection.HTTP_OK) {
