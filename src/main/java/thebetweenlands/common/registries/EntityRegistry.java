@@ -34,6 +34,7 @@ import thebetweenlands.common.entity.mobs.EntityDarkDruid;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
+import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityFlameJet;
 import thebetweenlands.common.entity.mobs.EntityFortressBoss;
@@ -183,6 +184,7 @@ public class EntityRegistry {
 		registerEntity(EntityEmberling.class, "emberling", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityFlameJet.class, "flame_jet", 64, 1, true);
 		registerEntity(EntityMovingWall.class, "moving_wall", 64, 1, true);
+		registerEntity(EntityEmberlingWild.class, "emberling_wild", 0x0B3B0B, 0xDBA901);
 	}
 
 	private static int id = 0;
