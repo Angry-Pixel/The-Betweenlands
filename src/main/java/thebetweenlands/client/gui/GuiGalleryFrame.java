@@ -58,6 +58,8 @@ public class GuiGalleryFrame extends GuiScreen {
 
 		this.buttonList.add(new GuiButton(2, this.xStart + (int)WIDTH + 30, this.yStart + 26 + 14, I18n.format("gui.done")));
 
+		this.buttonList.add(new GuiButton(4, this.xStart + (int)WIDTH + 30, this.yStart + (int)HEIGHT - 40, I18n.format("gui.gallery.random")));
+
 		this.searchField = new GuiTextField(3, this.mc.fontRenderer, this.xStart + (int)WIDTH + 32, this.yStart + 14, 196, 20);
 		this.searchField.setMaxStringLength(128);
 
@@ -107,6 +109,12 @@ public class GuiGalleryFrame extends GuiScreen {
 			this.switchPicture(button.id == 0, button.id == 1);
 		} else if(button.id == 2) {
 			this.mc.displayGuiScreen(null);
+		} else if(button.id == 4) {
+			Map<String, GalleryEntry> available = GalleryManager.INSTANCE.getEntries();
+
+			if(!available.isEmpty()) {
+				TheBetweenlands.networkWrapper.sendToServer(new MessageSetGalleryUrl(this.frame, available.values().stream().skip(this.frame.world.rand.nextInt(available.values().size())).findFirst().get().getUrl()));
+			}
 		}
 	}
 

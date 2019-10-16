@@ -1521,6 +1521,7 @@ gui.gallery.source_url=§n§oSource:§r
 gui.gallery.source_url_click=§9§o§nOpen URL§r
 gui.gallery.info_not_found=Could not find any information about this picture
 gui.gallery.search=Search:
+gui.gallery.random=Randomize!
 
 
 # Advancements
