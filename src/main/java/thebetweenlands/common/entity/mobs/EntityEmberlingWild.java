@@ -4,22 +4,31 @@ import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIFollowOwner;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
+import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
+import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityGhast;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.AbstractHorse;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -27,20 +36,24 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO Loot tables
-public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, IEntityBL {
+public class EntityEmberlingWild extends EntityTameable implements IEntityMultiPart, IMob, IEntityBL {
 
 	public MultiPartEntityPart[] tailPart;
 	private static final DataParameter<Boolean> IS_FLAME_ATTACKING = EntityDataManager.<Boolean>createKey(EntityEmberlingWild.class, DataSerializers.BOOLEAN);
@@ -51,6 +64,8 @@ public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, 
 
     private PathNavigateGround pathNavigatorGround;
     private PathNavigateSwimmer pathNavigatorWater;
+
+    private EntityAINearestAttackableTarget aiNearestAttackableTarget;
 
 	public EntityEmberlingWild(World world) {
 		super(world);
@@ -89,12 +104,18 @@ public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, 
 	@Override
 	protected void initEntityAI() {
 		//tasks.addTask(3, new EntityEmberlingWild.EntityAIFireballColumn(this));
+		aiSit = new EntityAISit(this);
+		aiNearestAttackableTarget = new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 0, false, true, null);//
+		tasks.addTask(1, this.aiSit);
 		tasks.addTask(2, new EntityEmberlingWild.AIEmberlingAttack(this));
-		tasks.addTask(3, new EntityAIWander(this, 0.6D));
-		tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		tasks.addTask(3, new EntityAIFollowOwner(this, 0.6D, 10.0F, 2.0F));
+		tasks.addTask(4, new EntityAIWander(this, 0.6D));
+		tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		tasks.addTask(5, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityZombie.class, 0, false, true, null));
-		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[0]));
+		targetTasks.addTask(0, aiNearestAttackableTarget);
+        targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
+        targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
+		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
 	}
 
 	@Override
@@ -102,7 +123,7 @@ public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, 
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.25D);
 	}
@@ -128,14 +149,33 @@ public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, 
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	public boolean canAttackClass(Class entity) {
-		return EntityEmberlingWild.class != entity;
+	public boolean shouldAttackEntity(EntityLivingBase target, EntityLivingBase owner) {
+		if (!(target instanceof EntityCreeper) && !(target instanceof EntityGhast)) {
+			if (target instanceof EntityEmberlingWild) {
+				EntityEmberlingWild emberling = (EntityEmberlingWild) target;
+
+				if (emberling.isTamed() && emberling.getOwner() == owner)
+					return false;
+			}
+			if (target instanceof EntityPlayer && owner instanceof EntityPlayer && !((EntityPlayer) owner).canAttackPlayer((EntityPlayer) target))
+				return false;
+			else
+				return !(target instanceof AbstractHorse) || !((AbstractHorse) target).isTame();
+		} else
+			return false;
 	}
+	
+	@Override
+    public boolean attackEntityAsMob(Entity entity) {
+        boolean hitTarget = entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float)((int)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
+        if (hitTarget)
+            this.applyEnchantments(this, entity);
+        return hitTarget;
+    }
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere();
+		return super.getCanSpawnHere() && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL;
 	}
 
     @Override
@@ -153,6 +193,16 @@ public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, 
 		return 3;
 	}
 
+	@Override
+	protected boolean canDespawn() {
+		return !isTamed();
+	}
+
+	@Override
+    public boolean canBeLeashedTo(EntityPlayer player) {
+        return !canDespawn() && super.canBeLeashedTo(player);
+    }
+
     @SideOnly(Side.CLIENT)
     public float smoothedAngle(float partialTicks) {
         return prevAnimationTicks + (animationTicks - prevAnimationTicks) * partialTicks;
@@ -160,12 +210,15 @@ public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, 
 
 	@Override
     public void onUpdate() {
+		super.onUpdate();
+		updateMovementAndPathfinding();
+		if (getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL)
+			if (!getEntityWorld().isRemote)
+				if(!isTamed())
+					setDead();
 		if (getEntityWorld().getTotalWorldTime()%5 == 0)
 			if (getEntityWorld().isRemote)
 				flameParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
-		
-		updateMovementAndPathfinding();
-    	super.onUpdate();
     }
 
 	protected void updateMovementAndPathfinding() {
@@ -174,7 +227,7 @@ public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, 
 		else
 			moveHelper = moveHelperLand;
 
-		if (isInWater() && !world .isAirBlock(new BlockPos(posX, getEntityBoundingBox().maxY + 0.25D, posZ)))
+		if (isInWater() && !world.isAirBlock(new BlockPos(posX, getEntityBoundingBox().maxY + 0.25D, posZ)))
 			navigator = pathNavigatorWater;
 		else
 			navigator = pathNavigatorGround;
@@ -184,6 +237,60 @@ public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, 
 		double offSetX = -Math.sin(a) * 1.5D;
 		double offSetZ = Math.cos(a) * 1.5D;
 		tailPart[0].setLocationAndAngles(posX - offSetX, posY, posZ - offSetZ, 0.0F, 0.0F);
+	}
+
+	@Override
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
+		float healingBuff = 0.0F;
+		if (!stack.isEmpty()) {
+			if (EnumItemMisc.UNDYING_EMBER.isItemOf(stack) && !isTamed()) {
+				if (!this.world.isRemote) {
+					healingBuff = 20F;
+					setTamedBy(player);
+					navigator.clearPath();
+					setAttackTarget((EntityLivingBase) null);
+					setHealth(60.0F);
+					playTameEffect(true);
+					if (!player.capabilities.isCreativeMode) {
+						stack.shrink(1);
+						if (stack.getCount() <= 0)
+							player.setHeldItem(hand, ItemStack.EMPTY);
+					}
+					getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40D);
+					heal(healingBuff);
+				}
+				return true;
+			}
+			if (isTamed()) {
+				if (EnumItemMisc.OCTINE_NUGGET.isItemOf(stack) && isTamed()) {
+					healingBuff = 5F;
+					if (!getEntityWorld().isRemote) {
+						if (getHealth() < getMaxHealth()) {
+							heal(healingBuff);
+							playTameEffect(true);
+							if (!player.capabilities.isCreativeMode) {
+								stack.shrink(1);
+								if (stack.getCount() <= 0)
+									player.setHeldItem(hand, ItemStack.EMPTY);
+							}
+							if (getHealth() == getMaxHealth())
+								getEntityWorld().playSound(null, getPosition(), SoundRegistry.EMBERLING_LIVING, SoundCategory.NEUTRAL, 1.0F, 0.75F);
+						}
+					}
+					return true;
+				}
+			}
+		
+
+		if (isOwner(player) && !getEntityWorld().isRemote) {
+			aiSit.setSitting(!isSitting());
+			isJumping = false;
+			navigator.clearPath();
+			setAttackTarget((EntityLivingBase) null);
+		}
+}
+		return super.processInteract(player, hand);
 	}
 
     @Override
@@ -247,7 +354,7 @@ public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, 
 	static class AIEmberlingAttack extends EntityAIAttackMelee {
 
 		public AIEmberlingAttack(EntityEmberlingWild emberling) {
-			super(emberling, 0.6D, false);
+			super(emberling, 0.65D, false);
 		}
 
 		@Override
@@ -379,9 +486,14 @@ public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, 
 		}
 	}
 	    
-	    @Override
-	    public float getBlockPathWeight(BlockPos pos) {
-	        return 0.5F;
-	    }
+	@Override
+	public float getBlockPathWeight(BlockPos pos) {
+		return 0.5F;
+	}
+
+	@Override
+	public EntityAgeable createChild(EntityAgeable ageable) {
+		return null;
+	}
 
 }

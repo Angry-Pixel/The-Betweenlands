@@ -223,7 +223,7 @@ public class ModelEmberlingWild extends ModelBase {
 
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
-        body3.render(scale);
+    	body3.render(scale);
     }
     
 	@Override
@@ -242,23 +242,6 @@ public class ModelEmberlingWild extends ModelBase {
 		EntityEmberlingWild emberling = (EntityEmberlingWild) entity;
 		float animation = MathHelper.sin(limbSwing * 0.5F) * limbSwingAngle * 0.4F;
 		float flap = MathHelper.sin((emberling.ticksExisted + partialRenderTicks) * 0.2F) * 0.8F;
-
-		hindleg_left1.rotateAngleX = -0.2617993877991494F + animation * 2F;
-		hindleg_right1.rotateAngleX = -0.2617993877991494F - animation * 2F;
-
-		hindleg_left2.rotateAngleX = 0.7740535232594852F;
-		hindleg_right2.rotateAngleX = 0.7740535232594852F;
-
-		arm_right1.rotateAngleX = 0.22759093446006054F + animation * 2F;
-		arm_right1.rotateAngleY = 0.091106186954104F + animation;
-		arm_right1.rotateAngleZ = 0.18203784098300857F + emberling.smoothedAngle(partialRenderTicks);
-
-		arm_left1.rotateAngleX = 0.22759093446006054F - animation * 2F;
-		arm_left1.rotateAngleY = -0.091106186954104F + animation;
-		arm_left1.rotateAngleZ = -0.18203784098300857F - emberling.smoothedAngle(partialRenderTicks);
-
-		jaw_lower.rotateAngleX = 0.40980330836826856F + flap * 0.5F;
-		
 		gillthingy_left_upper1.rotateAngleY = 0.5918411493512771F - flap * 0.125F;
 		gillthingy_left_upper2.rotateAngleY = 0.22759093446006054F - flap * 0.25F;
 
@@ -271,16 +254,61 @@ public class ModelEmberlingWild extends ModelBase {
 		gillthingy_right_lower1.rotateAngleY = -0.8651597102135892F + flap * 0.125F;
 		gillthingy_right_lower2.rotateAngleY = -0.31869712141416456F + flap * 0.25F;
 
-		body2.rotateAngleY = 0F - animation * 0.8F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
-		body4.rotateAngleY = 0F + animation * 0.8F + emberling.smoothedAngle(partialRenderTicks) * 0.125F;
-
-	    tail1.rotateAngleY = 0F + animation * 0.5F - flap * 0.25F + emberling.smoothedAngle(partialRenderTicks) * 0.125F;
-	    tail2.rotateAngleY = 0F + animation * 0.5F - flap * 0.25F + emberling.smoothedAngle(partialRenderTicks) * 0.125F;
-	    tail3.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
-	    tail4.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
-	    tail5.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
-	    tail6.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
-	    tail7.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+		jaw_lower.rotateAngleX = 0.40980330836826856F + flap * 0.5F;
+		
+        if (emberling.isSitting()) {
+			hindleg_left1.rotateAngleX = -0.2617993877991494F;
+			hindleg_right1.rotateAngleX = -0.2617993877991494F;
+	
+			hindleg_left2.rotateAngleX = 0.7740535232594852F;
+			hindleg_right2.rotateAngleX = 0.7740535232594852F;
+	
+			arm_right1.rotateAngleX = 0.22759093446006054F;
+			arm_right1.rotateAngleY = 0.091106186954104F;
+			arm_right1.rotateAngleZ = 0.18203784098300857F;
+	
+			arm_left1.rotateAngleX = 0.22759093446006054F;
+			arm_left1.rotateAngleY = -0.091106186954104F;
+			arm_left1.rotateAngleZ = -0.18203784098300857F;
+	
+			body2.rotateAngleY = 0F;
+			body4.rotateAngleY = 0F ;
+	
+		    tail1.rotateAngleY = 0F;
+		    tail2.rotateAngleY = 0F;
+		    tail3.rotateAngleY = 0F;
+		    tail4.rotateAngleY = 0F;
+		    tail5.rotateAngleY = 0F;
+		    tail6.rotateAngleY = 0F;
+		    tail7.rotateAngleY = 0F;
+        }
+        else
+        {
+			hindleg_left1.rotateAngleX = -0.2617993877991494F + animation * 2F;
+			hindleg_right1.rotateAngleX = -0.2617993877991494F - animation * 2F;
+	
+			hindleg_left2.rotateAngleX = 0.7740535232594852F;
+			hindleg_right2.rotateAngleX = 0.7740535232594852F;
+	
+			arm_right1.rotateAngleX = 0.22759093446006054F + animation * 2F;
+			arm_right1.rotateAngleY = 0.091106186954104F + animation;
+			arm_right1.rotateAngleZ = 0.18203784098300857F + emberling.smoothedAngle(partialRenderTicks);
+	
+			arm_left1.rotateAngleX = 0.22759093446006054F - animation * 2F;
+			arm_left1.rotateAngleY = -0.091106186954104F + animation;
+			arm_left1.rotateAngleZ = -0.18203784098300857F - emberling.smoothedAngle(partialRenderTicks);
+	
+			body2.rotateAngleY = 0F - animation * 0.8F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+			body4.rotateAngleY = 0F + animation * 0.8F + emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+	
+		    tail1.rotateAngleY = 0F + animation * 0.5F - flap * 0.25F + emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+		    tail2.rotateAngleY = 0F + animation * 0.5F - flap * 0.25F + emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+		    tail3.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+		    tail4.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+		    tail5.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+		    tail6.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+		    tail7.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+        }
 	}
 
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
