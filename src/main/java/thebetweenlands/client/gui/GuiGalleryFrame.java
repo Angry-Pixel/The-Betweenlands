@@ -56,16 +56,20 @@ public class GuiGalleryFrame extends GuiScreen {
 		this.buttonList.add(new GuiButton(0, this.xStart - 60, this.yStart + (int)HEIGHT / 2, 30, 20, "<-"));
 		this.buttonList.add(new GuiButton(1, this.xStart + (int)WIDTH + 30, this.yStart + (int)HEIGHT / 2, 30, 20, "->"));
 
-		this.buttonList.add(new GuiButton(2, this.xStart + (int)WIDTH + 30, this.yStart + 26 + 14, I18n.format("gui.done")));
+		this.buttonList.add(new GuiButton(2, this.xStart + (int)WIDTH + 30, this.yStart + (int)HEIGHT - 40, I18n.format("gui.done")));
 
-		this.buttonList.add(new GuiButton(4, this.xStart + (int)WIDTH + 30, this.yStart + (int)HEIGHT - 40, I18n.format("gui.gallery.random")));
+		GuiButton randomizeButton = new GuiButton(4, this.xStart + (int)WIDTH + 30, this.yStart + 26 + 14, I18n.format("gui.gallery.random"));
+		this.buttonList.add(randomizeButton);
 
 		this.searchField = new GuiTextField(3, this.mc.fontRenderer, this.xStart + (int)WIDTH + 32, this.yStart + 14, 196, 20);
 		this.searchField.setMaxStringLength(128);
 
-		//Set to first available picture
+		//Set to random available picture
 		if(this.frame.getUrl().length() == 0) {
-			this.switchPicture(false, false);
+			try {
+				this.actionPerformed(randomizeButton);
+			} catch (IOException e) {
+			}
 		}
 	}
 
