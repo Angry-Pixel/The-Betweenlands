@@ -55,29 +55,18 @@ public class RenderGalleryFrame extends Render<EntityGalleryFrame> {
 			relHeight = (1.0F - (maxDim - entry.getHeight()) / (float)maxDim);
 		}
 
+		float width = relWidth * entity.getWidthPixels() / 16.0f / 2.0f;
+		float height = relHeight * entity.getHeightPixels() / 16.0f / 2.0f;
+
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL);
 
-		switch(entity.getType()) {
-		case SMALL:
-
-			buffer.pos(0.5D * relWidth, -0.5D * relHeight, 0).tex(0, 1).normal(0, 0, 1).endVertex();
-			buffer.pos(-0.5D * relWidth, -0.5D * relHeight, 0).tex(1, 1).normal(0, 0, 1).endVertex();
-			buffer.pos(-0.5D * relWidth, 0.5D * relHeight, 0).tex(1, 0).normal(0, 0, 1).endVertex();
-			buffer.pos(0.5D * relWidth, 0.5D * relHeight, 0).tex(0, 0).normal(0, 0, 1).endVertex();
-
-			break;
-		case LARGE:
-
-			buffer.pos(1.0D * relWidth, -1.0D * relHeight, 0).tex(0, 1).normal(0, 0, 1).endVertex();
-			buffer.pos(-1.0D * relWidth, -1.0D * relHeight, 0).tex(1, 1).normal(0, 0, 1).endVertex();
-			buffer.pos(-1.0D * relWidth, 1.0D * relHeight, 0).tex(1, 0).normal(0, 0, 1).endVertex();
-			buffer.pos(1.0D * relWidth, 1.0D * relHeight, 0).tex(0, 0).normal(0, 0, 1).endVertex();
-
-			break;
-		}
+		buffer.pos(width, -height, 0).tex(0, 1).normal(0, 0, 1).endVertex();
+		buffer.pos(-width, -height, 0).tex(1, 1).normal(0, 0, 1).endVertex();
+		buffer.pos(-width, height, 0).tex(1, 0).normal(0, 0, 1).endVertex();
+		buffer.pos(width, height, 0).tex(0, 0).normal(0, 0, 1).endVertex();
 
 		tessellator.draw();
 
@@ -89,7 +78,7 @@ public class RenderGalleryFrame extends Render<EntityGalleryFrame> {
 			GlStateManager.scale(-1 / 128.0f, -1 / 128.0f, 1 / 128.0f);
 			GlStateManager.disableLighting();
 
-			String[] notFoundLines = I18n.format("tooltip.gallery.not_found").split("\\\\n");
+			String[] notFoundLines = I18n.format("gui.gallery.not_found").split("\\\\n");
 
 			int yOff = -6 * notFoundLines.length;
 

@@ -259,6 +259,7 @@ public class ItemRegistry {
     public static final Item SPIRIT_TREE_FACE_SMALL_MASK_ANIMATED = new ItemSpiritTreeFaceMaskSmallAnimated();
     public static final Item GALLERY_FRAME_SMALL = new ItemGalleryFrame(EntityGalleryFrame.Type.SMALL);
     public static final Item GALLERY_FRAME_LARGE = new ItemGalleryFrame(EntityGalleryFrame.Type.LARGE);
+    public static final Item GALLERY_FRAME_VERY_LARGE = new ItemGalleryFrame(EntityGalleryFrame.Type.VERY_LARGE);
     //TOOLS
     public static final Item WEEDWOOD_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item WEEDWOOD_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);

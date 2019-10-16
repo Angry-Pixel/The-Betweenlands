@@ -28,7 +28,7 @@ public class EntityGalleryFrame extends EntityHanging implements IEntityAddition
 	protected static final DataParameter<String> URL = EntityDataManager.createKey(EntityGalleryFrame.class, DataSerializers.STRING);
 
 	public static enum Type {
-		LARGE, SMALL;
+		VERY_LARGE, LARGE, SMALL;
 	}
 
 	private Type type;
@@ -77,12 +77,28 @@ public class EntityGalleryFrame extends EntityHanging implements IEntityAddition
 
 	@Override
 	public int getWidthPixels() {
-		return this.type == Type.LARGE ? 32 : 16;
+		switch(this.type) {
+		default:
+		case SMALL:
+			return 16;
+		case LARGE:
+			return 32;
+		case VERY_LARGE:
+			return 64;
+		}
 	}
 
 	@Override
 	public int getHeightPixels() {
-		return this.type == Type.LARGE ? 32 : 16;
+		switch(this.type) {
+		default:
+		case SMALL:
+			return 16;
+		case LARGE:
+			return 32;
+		case VERY_LARGE:
+			return 64;
+		}
 	}
 
 	@Override
@@ -98,7 +114,7 @@ public class EntityGalleryFrame extends EntityHanging implements IEntityAddition
 				}
 			}
 
-			this.entityDropItem(new ItemStack(this.type == Type.LARGE ? ItemRegistry.GALLERY_FRAME_LARGE : ItemRegistry.GALLERY_FRAME_SMALL), 0.0F);
+			this.entityDropItem(new ItemStack(this.type == Type.VERY_LARGE ? ItemRegistry.GALLERY_FRAME_VERY_LARGE : this.type == Type.LARGE ? ItemRegistry.GALLERY_FRAME_LARGE : ItemRegistry.GALLERY_FRAME_SMALL), 0.0F);
 		}
 	}
 
