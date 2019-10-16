@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -36,12 +37,14 @@ public class GuiGalleryFrame extends GuiScreen {
 
 	protected EntityGalleryFrame frame;
 
+	protected GuiTextField searchField;
+
 	public GuiGalleryFrame(EntityGalleryFrame frame) {
 		this.frame = frame;
 
 		//Set to first available picture
 		if(this.frame.getUrl().length() == 0) {
-			this.switchPicture(false);
+			this.switchPicture(false, false);
 		}
 	}
 
@@ -52,6 +55,35 @@ public class GuiGalleryFrame extends GuiScreen {
 
 		this.buttonList.add(new GuiButton(0, this.xStart - 60, this.yStart + (int)HEIGHT / 2, 30, 20, "<-"));
 		this.buttonList.add(new GuiButton(1, this.xStart + (int)WIDTH + 30, this.yStart + (int)HEIGHT / 2, 30, 20, "->"));
+
+		this.buttonList.add(new GuiButton(2, this.xStart + (int)WIDTH + 30, this.yStart + 26 + 14, I18n.format("gui.done")));
+
+		this.searchField = new GuiTextField(3, this.mc.fontRenderer, this.xStart + (int)WIDTH + 32, this.yStart + 14, 196, 20);
+		this.searchField.setMaxStringLength(128);
+	}
+
+	@Override
+	public void updateScreen() {
+		super.updateScreen();
+
+		this.searchField.updateCursorCounter();
+	}
+
+	@Override
+	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+		super.keyTyped(typedChar, keyCode);
+
+		this.searchField.textboxKeyTyped(typedChar, keyCode);
+		if(this.searchField.isFocused()) {
+			this.switchPicture(false, false);
+		}
+	}
+
+	@Override
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+		super.mouseClicked(mouseX, mouseY, mouseButton);
+
+		this.searchField.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 
 	@Override
@@ -59,11 +91,13 @@ public class GuiGalleryFrame extends GuiScreen {
 		super.actionPerformed(button);
 
 		if(button.id == 0 || button.id == 1) {
-			this.switchPicture(button.id == 1);
+			this.switchPicture(button.id == 0, button.id == 1);
+		} else if(button.id == 2) {
+			this.mc.displayGuiScreen(null);
 		}
 	}
 
-	private void switchPicture(boolean next) {
+	private void switchPicture(boolean prev, boolean next) {
 		Map<String, GalleryEntry> available = GalleryManager.INSTANCE.getEntries();
 
 		if(!available.isEmpty()) {
@@ -73,15 +107,21 @@ public class GuiGalleryFrame extends GuiScreen {
 
 			List<GalleryEntry> availableList = new ArrayList<>(available.values());
 
-			Collections.sort(availableList, (e1, e2) -> e1.getTitle().compareTo(e2.getTitle()));
+			final String searchText = this.searchField.getText().toLowerCase();
 
-			if(entry == null) {
+			Collections.sort(availableList, (e1, e2) -> {
+				boolean search1 = searchText.length() > 0 && (e1.getTitle().toLowerCase().contains(searchText) || e1.getAuthor().toLowerCase().contains(searchText) || e1.getDescription().replaceAll("\n", " ").toLowerCase().contains(searchText) || e1.getSourceUrl().toLowerCase().contains(searchText) || e1.getSha256().toLowerCase().contains(searchText));
+				boolean search2 = searchText.length() > 0 && (e2.getTitle().toLowerCase().contains(searchText) || e2.getAuthor().toLowerCase().contains(searchText) || e2.getDescription().replaceAll("\n", " ").toLowerCase().contains(searchText) || e2.getSourceUrl().toLowerCase().contains(searchText) || e2.getSha256().toLowerCase().contains(searchText));
+				return e1.getTitle().compareTo(e2.getTitle()) + (search1 ? -10 : 0) + (search2 ? 10 : 0);
+			});
+
+			if(entry == null || (!prev && !next)) {
 				selectedEntry = availableList.get(0);
 			} else {
 				int currentIndex = availableList.indexOf(entry);
 
 				if(currentIndex >= 0) {
-					int newIndex = next ? currentIndex + 1 : currentIndex -1;
+					int newIndex = next ? currentIndex + 1 : prev ? currentIndex -1 : currentIndex;
 					if(newIndex < 0) {
 						newIndex = availableList.size() + newIndex;
 					}
@@ -105,7 +145,12 @@ public class GuiGalleryFrame extends GuiScreen {
 		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, renderPartials);
 
+		this.searchField.drawTextBox();
+
 		GlStateManager.color(1F, 1F, 1F, 1F);
+
+		String searchStr = I18n.format("gui.gallery.search");
+		this.fontRenderer.drawString(searchStr, this.xStart + (int)WIDTH + 30 + 100 - this.fontRenderer.getStringWidth(searchStr) / 2, this.yStart, 0xFFFFFFFF);
 
 		GalleryEntry entry = GalleryManager.INSTANCE.getEntries().get(this.frame.getUrl());
 
@@ -129,12 +174,12 @@ public class GuiGalleryFrame extends GuiScreen {
 
 			int maxLineWidth = 0;
 
-			String authorLine = I18n.format("tooltip.gallery.author");
+			String authorLine = I18n.format("gui.gallery.author");
 			String authorText = authorLine + TextFormatting.RESET.toString() + entry.getAuthor();
 			maxLineWidth = Math.max(maxLineWidth, this.fontRenderer.getStringWidth(authorText));
 
 
-			String descName = I18n.format("tooltip.gallery.description");
+			String descName = I18n.format("gui.gallery.description");
 			int descNameWidth = this.fontRenderer.getStringWidth(descName);
 			String[] descLines = entry.getDescription().split("\\n");
 			for(int i = 0; i < descLines.length; i++) {
@@ -145,7 +190,7 @@ public class GuiGalleryFrame extends GuiScreen {
 				}
 			}
 
-			String sourceLine = I18n.format("tooltip.gallery.source_url");
+			String sourceLine = I18n.format("gui.gallery.source_url");
 			String sourceText = null;
 			if(entry.getSourceUrl() != null) {
 				sourceText = sourceLine + TextFormatting.RESET.toString() + entry.getSourceUrl();
@@ -169,7 +214,7 @@ public class GuiGalleryFrame extends GuiScreen {
 				this.fontRenderer.drawString(sourceText, this.xStart + (int)WIDTH / 2 - maxLineWidth / 2, this.yStart + (int)HEIGHT + 26 + yOff, 0xFFFFFFFF);
 			}
 		} else {
-			String notFoundText = I18n.format("tooltip.gallery.info_not_found");
+			String notFoundText = I18n.format("gui.gallery.info_not_found");
 			this.fontRenderer.drawString(notFoundText, this.xStart + (int)WIDTH / 2 - this.fontRenderer.getStringWidth(notFoundText) / 2, this.yStart + (int)HEIGHT + 12, 0xFFFFFFFF);
 		}
 	}

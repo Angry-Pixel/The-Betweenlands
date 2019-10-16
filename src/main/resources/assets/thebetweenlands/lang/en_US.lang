@@ -1027,12 +1027,6 @@ tooltip.recipes.censer_primary=Censer
 tooltip.recipes.censer_secondary=Censer (secondary)
 tooltip.recipes.purifier=Purifier
 
-tooltip.gallery.not_found=Online picture gallery\nis currently disabled.\nThis feature can be\nenabled in the config\nunder 'General' and\n'Online picture gallery'.\nThen restart the game\nto download the\npictures.
-tooltip.gallery.author=§n§oAuthor:§r        
-tooltip.gallery.description=§n§oDescription:§r   
-tooltip.gallery.source_url=§n§oSource:§r        
-tooltip.gallery.info_not_found=Could not find any information about this picture
-
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
@@ -1518,6 +1512,15 @@ manual.item.thebetweenlands.bl.elixir.ripening.description=<scale:0.75>The Elixi
 manual.item.thebetweenlands.bl.elixir.healing.description=<scale:0.85>The Elixir of Healing accelerates natural regeneration, healing one's wounds over time. <nl>A combination of Yeowynn and Ordaniis aspects is required to make this elixir. <nl>The more Yeowynn is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Elixir of Draining, which drains one's health over time.</scale>
 manual.item.thebetweenlands.bl.elixir.nimblefeet.description=<scale:0.85>The Nimblefeet Elixir enhances muscle swiftness and nimbleness, increasing one's movement speed. <nl>A combination of Azuwynn, Ordaniis, and Yunugaz aspects is required to make this elixir. <nl>The more Yunugaz is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Lumbering Elixir, which slows one's movement.</scale>
 manual.item.thebetweenlands.bl.elixir.strength.description=<scale:0.8>The Elixir of Strength increases raw physical strength, causing one to deal more damage when they attack. <nl>A combination of Azuwynn and Ordaniis aspects is required to make this elixir. <nl>The more Azuwynn is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Elixir of Weakness, which reduces one's damage output.</scale>
+
+# GUIs
+gui.gallery.not_found=Online picture gallery\nis currently disabled.\nThis feature can be\nenabled in the config\nunder 'General' and\n'Online picture gallery'.\nThen restart the game\nto download the\npictures.
+gui.gallery.author=§n§oAuthor:§r        
+gui.gallery.description=§n§oDescription:§r   
+gui.gallery.source_url=§n§oSource:§r        
+gui.gallery.info_not_found=Could not find any information about this picture
+gui.gallery.search=Search:
+
 
 # Advancements
 
