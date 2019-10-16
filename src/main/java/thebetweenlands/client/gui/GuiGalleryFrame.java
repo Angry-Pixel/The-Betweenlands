@@ -97,6 +97,12 @@ public class GuiGalleryFrame extends GuiScreen {
 		}
 	}
 
+	private boolean searchEntryText(GalleryEntry entry, String searchText) {
+		return entry.getTitle().toLowerCase().contains(searchText) || entry.getAuthor().toLowerCase().contains(searchText) ||
+				(entry.getDescription() != null && entry.getDescription().replaceAll("\n", " ").toLowerCase().contains(searchText)) ||
+				entry.getSourceUrl().toLowerCase().contains(searchText) || entry.getSha256().toLowerCase().contains(searchText);
+	}
+
 	private void switchPicture(boolean prev, boolean next) {
 		Map<String, GalleryEntry> available = GalleryManager.INSTANCE.getEntries();
 
@@ -110,8 +116,8 @@ public class GuiGalleryFrame extends GuiScreen {
 			final String searchText = this.searchField.getText().toLowerCase();
 
 			Collections.sort(availableList, (e1, e2) -> {
-				boolean search1 = searchText.length() > 0 && (e1.getTitle().toLowerCase().contains(searchText) || e1.getAuthor().toLowerCase().contains(searchText) || e1.getDescription().replaceAll("\n", " ").toLowerCase().contains(searchText) || e1.getSourceUrl().toLowerCase().contains(searchText) || e1.getSha256().toLowerCase().contains(searchText));
-				boolean search2 = searchText.length() > 0 && (e2.getTitle().toLowerCase().contains(searchText) || e2.getAuthor().toLowerCase().contains(searchText) || e2.getDescription().replaceAll("\n", " ").toLowerCase().contains(searchText) || e2.getSourceUrl().toLowerCase().contains(searchText) || e2.getSha256().toLowerCase().contains(searchText));
+				boolean search1 = searchText.length() > 0 && searchEntryText(e1, searchText);
+				boolean search2 = searchText.length() > 0 && searchEntryText(e2, searchText);
 				return e1.getTitle().compareTo(e2.getTitle()) + (search1 ? -10 : 0) + (search2 ? 10 : 0);
 			});
 
@@ -181,12 +187,16 @@ public class GuiGalleryFrame extends GuiScreen {
 
 			String descName = I18n.format("gui.gallery.description");
 			int descNameWidth = this.fontRenderer.getStringWidth(descName);
-			String[] descLines = entry.getDescription().split("\\n");
-			for(int i = 0; i < descLines.length; i++) {
-				if(i == 0) {
-					maxLineWidth = Math.max(maxLineWidth, this.fontRenderer.getStringWidth(descName + descLines[0]));
-				} else {
-					maxLineWidth = Math.max(maxLineWidth, this.fontRenderer.getStringWidth(descLines[i]) + descNameWidth);
+			String desc = entry.getDescription();
+			String[] descLines = null;
+			if(desc != null) {
+				descLines = desc.split("\\n");
+				for(int i = 0; i < descLines.length; i++) {
+					if(i == 0) {
+						maxLineWidth = Math.max(maxLineWidth, this.fontRenderer.getStringWidth(descName + descLines[0]));
+					} else {
+						maxLineWidth = Math.max(maxLineWidth, this.fontRenderer.getStringWidth(descLines[i]) + descNameWidth);
+					}
 				}
 			}
 
@@ -201,13 +211,15 @@ public class GuiGalleryFrame extends GuiScreen {
 
 			int yOff = 0;
 
-			for(int i = 0; i < descLines.length; i++) {
-				if(i == 0) {
-					this.fontRenderer.drawString(descName + TextFormatting.RESET.toString() + descLines[0], this.xStart + (int)WIDTH / 2 - maxLineWidth / 2, this.yStart + (int)HEIGHT + 23 + yOff, 0xFFFFFFFF);
-				} else {
-					this.fontRenderer.drawString(descLines[i], this.xStart + descNameWidth + (int)WIDTH / 2 - maxLineWidth / 2, this.yStart + (int)HEIGHT + 23 + yOff, 0xFFFFFFFF);
+			if(descLines != null) {
+				for(int i = 0; i < descLines.length; i++) {
+					if(i == 0) {
+						this.fontRenderer.drawString(descName + TextFormatting.RESET.toString() + descLines[0], this.xStart + (int)WIDTH / 2 - maxLineWidth / 2, this.yStart + (int)HEIGHT + 23 + yOff, 0xFFFFFFFF);
+					} else {
+						this.fontRenderer.drawString(descLines[i], this.xStart + descNameWidth + (int)WIDTH / 2 - maxLineWidth / 2, this.yStart + (int)HEIGHT + 23 + yOff, 0xFFFFFFFF);
+					}
+					yOff += 12;
 				}
-				yOff += 12;
 			}
 
 			if(sourceText != null) {

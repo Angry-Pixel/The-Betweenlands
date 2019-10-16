@@ -339,7 +339,9 @@ public final class GalleryManager {
 		json.add("url", new JsonPrimitive(entry.getUrl()));
 		json.add("title", new JsonPrimitive(entry.getTitle()));
 		json.add("author", new JsonPrimitive(entry.getAuthor()));
-		json.add("description", new JsonPrimitive(entry.getDescription()));
+		if(entry.getDescription() != null) {
+			json.add("description", new JsonPrimitive(entry.getDescription()));
+		}
 		if(entry.getSourceUrl() != null) {
 			json.add("source_url", new JsonPrimitive(entry.getSourceUrl()));
 		}
@@ -351,7 +353,7 @@ public final class GalleryManager {
 		String url = JsonUtils.getString(json, "url");
 		String title = JsonUtils.getString(json, "title");
 		String author = JsonUtils.getString(json, "author");
-		String description = JsonUtils.getString(json, "description");
+		String description = json.has("description") ? JsonUtils.getString(json, "description") : null;
 		String sourceUrl = json.has("source_url") ? JsonUtils.getString(json, "source_url") : null;
 		return new GalleryEntry(sha256, url, title, author, description, sourceUrl, this.getPictureFile(folder, sha256));
 	}

@@ -13,7 +13,10 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 
 public class GalleryEntry {
-	private String sha256, url, title, author, description;
+	private String sha256, url, title, author;
+
+	@Nullable
+	private String description;
 
 	@Nullable
 	private String localSha256;
@@ -22,11 +25,11 @@ public class GalleryEntry {
 	private String sourceUrl;
 
 	private File pictureFile;
-	
+
 	private volatile int width = 1, height = 1;
 	private volatile boolean isUploaded;
 
-	public GalleryEntry(String sha256, String url, String title, String author, String description, String sourceUrl, File pictureFile) {
+	public GalleryEntry(String sha256, String url, String title, String author, @Nullable String description, @Nullable String sourceUrl, File pictureFile) {
 		this.sha256 = sha256.toLowerCase();
 		this.url = url;
 		this.title = title;
@@ -35,13 +38,13 @@ public class GalleryEntry {
 		this.sourceUrl = sourceUrl;
 		this.pictureFile = pictureFile;
 	}
-	
+
 	public void setUploaded(int width, int height) {
 		this.isUploaded = true;
 		this.width = width;
 		this.height = height;
 	}
-	
+
 	/**
 	 * Returns whether the pictures has been uploaded to the GPU
 	 * @return
@@ -49,11 +52,11 @@ public class GalleryEntry {
 	public boolean isUploaded() {
 		return this.isUploaded;
 	}
-	
+
 	public int getWidth() {
 		return this.width;
 	}
-	
+
 	public int getHeight() {
 		return this.height;
 	}
@@ -116,6 +119,12 @@ public class GalleryEntry {
 		return this.author;
 	}
 
+	/**
+	 * Description for the picture.
+	 * Optional, may be null.
+	 * @return
+	 */
+	@Nullable
 	public String getDescription() {
 		return this.description;
 	}
