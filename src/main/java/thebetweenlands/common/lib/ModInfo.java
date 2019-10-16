@@ -15,6 +15,7 @@ public class ModInfo {
 	public static final String VERSION = "3.4.12";
 	public static final String API_VERSION = "1.12.4";
 	public static final String CONFIG_VERSION = "1.0.0"; //Increment and add updater if properties are moved/renamed or removed
+	public static final String GALLERY_VERSION = "1.0.0"; //Protocol version of the online gallery. Change this when a breaking change is introduced to the gallery protocol or format. For backwards compatibility.
 	
 	//Values are replaced by build script
 	public static final boolean IDE = /*!ide*/true/*ide!*/;

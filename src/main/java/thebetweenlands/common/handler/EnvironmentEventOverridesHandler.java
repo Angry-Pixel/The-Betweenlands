@@ -146,28 +146,26 @@ public class EnvironmentEventOverridesHandler {
 							}
 							request.setDoInput(true);
 							request.setDoOutput(false);
+							request.setRequestProperty("Content-Type", "application/json; charset=utf-8");
 							request.connect();
 
-							if (request.getResponseCode() / 100 == 2) {
-								Object content = request.getContent();
-								if(content instanceof InputStream) {
-									JsonParser parser = new JsonParser();
-									final JsonElement jsonElement = parser.parse(new InputStreamReader((InputStream) content));
-									failedDownloadAttempts = 0;
-									IThreadListener scheduler = schedulerRef.get();
-									if(scheduler != null) {
-										List<OverrideState> states = parseStates(jsonElement);
-										scheduler.addScheduledTask(() -> {
-											overrideStates = states;
-											for(WeakReference<World> worldRef : worldRefs) {
-												final World world = worldRef.get();
-												if(world != null) {
-													updateWorldEventOverrideStates(world);
-												}
+							if (request.getResponseCode() == HttpURLConnection.HTTP_OK) {
+								JsonParser parser = new JsonParser();
+								final JsonElement jsonElement = parser.parse(new InputStreamReader(request.getInputStream()));
+								failedDownloadAttempts = 0;
+								IThreadListener scheduler = schedulerRef.get();
+								if(scheduler != null) {
+									List<OverrideState> states = parseStates(jsonElement);
+									scheduler.addScheduledTask(() -> {
+										overrideStates = states;
+										for(WeakReference<World> worldRef : worldRefs) {
+											final World world = worldRef.get();
+											if(world != null) {
+												updateWorldEventOverrideStates(world);
 											}
-											overrideStatesDownloaded = true;
-										});
-									}
+										}
+										overrideStatesDownloaded = true;
+									});
 								}
 							}
 						} finally {

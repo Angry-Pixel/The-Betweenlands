@@ -28,6 +28,7 @@ import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
@@ -103,6 +104,7 @@ import thebetweenlands.common.item.misc.ItemCavingRope;
 import thebetweenlands.common.item.misc.ItemDentrothystShard;
 import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
 import thebetweenlands.common.item.misc.ItemEmptyAmateMap;
+import thebetweenlands.common.item.misc.ItemGalleryFrame;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemGemSinger;
 import thebetweenlands.common.item.misc.ItemGlue;
@@ -255,6 +257,9 @@ public class ItemRegistry {
     public static final Item SPIRIT_TREE_FACE_LARGE_MASK = new ItemSpiritTreeFaceMaskLarge();
     public static final Item SPIRIT_TREE_FACE_SMALL_MASK = new ItemSpiritTreeFaceMaskSmall();
     public static final Item SPIRIT_TREE_FACE_SMALL_MASK_ANIMATED = new ItemSpiritTreeFaceMaskSmallAnimated();
+    public static final Item GALLERY_FRAME_SMALL = new ItemGalleryFrame(EntityGalleryFrame.Type.SMALL);
+    public static final Item GALLERY_FRAME_LARGE = new ItemGalleryFrame(EntityGalleryFrame.Type.LARGE);
+    public static final Item GALLERY_FRAME_VERY_LARGE = new ItemGalleryFrame(EntityGalleryFrame.Type.VERY_LARGE);
     //TOOLS
     public static final Item WEEDWOOD_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item WEEDWOOD_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);

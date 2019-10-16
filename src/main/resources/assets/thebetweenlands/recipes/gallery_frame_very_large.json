@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FF",
+    "FF"
+  ],
+  "key": {
+    "F": {
+      "item": "thebetweenlands:gallery_frame_large"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:gallery_frame_very_large",
+    "count": 1
+  }
+}

@@ -53,6 +53,16 @@ public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairab
 				return !itemStack.isEmpty() && itemStack == stack ? (float)(stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
 			}
 		});
+		
+		this.addPropertyOverride(new ResourceLocation("arrow_type"), (stack, worldIn, entityIn) -> {
+			if (entityIn instanceof EntityPlayer) {
+				ItemStack arrow = this.findArrows((EntityPlayer) entityIn);
+				if(arrow.getItem() instanceof ItemBLArrow) {
+					return ((ItemBLArrow) arrow.getItem()).getType().getId();
+				}
+			}
+			return 0.0f;
+		});
 	}
 
 	protected ItemStack findArrows(EntityPlayer player) {

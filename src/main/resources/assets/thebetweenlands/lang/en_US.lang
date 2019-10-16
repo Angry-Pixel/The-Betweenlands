@@ -770,6 +770,7 @@ item.thebetweenlands.angler_tooth_arrow.name=Angler Tooth Arrow
 item.thebetweenlands.poisoned_angler_tooth_arrow.name=Poisoned Angler Tooth Arrow
 item.thebetweenlands.octine_arrow.name=Octine Arrow
 item.thebetweenlands.basilisk_arrow.name=Basilisk Arrow
+item.thebetweenlands.sludge_worm_arrow.name=Sludge Worm Arrow
 item.thebetweenlands.weedwood_bow.name=Weedwood Bow
 item.thebetweenlands.predator_bow.name=Predator Bow
 item.thebetweenlands.wights_bane.name=Wight's Bane
@@ -823,6 +824,9 @@ item.thebetweenlands.cremains.name=Cremains
 item.thebetweenlands.undying_ember.name=Undying Embers
 item.thebetweenlands.sushi.name=Sushi
 item.thebetweenlands.volarkite.name=Volarkite
+item.thebetweenlands.gallery_frame_small.name=Small Gallery Frame
+item.thebetweenlands.gallery_frame_large.name=Large Gallery Frame
+item.thebetweenlands.gallery_frame_very_large.name=Very Large Gallery Frame
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1026,6 +1030,7 @@ tooltip.recipes.animator=Animator
 tooltip.recipes.censer_primary=Censer
 tooltip.recipes.censer_secondary=Censer (secondary)
 tooltip.recipes.purifier=Purifier
+
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
@@ -1512,6 +1517,17 @@ manual.item.thebetweenlands.bl.elixir.healing.description=<scale:0.85>The Elixir
 manual.item.thebetweenlands.bl.elixir.nimblefeet.description=<scale:0.85>The Nimblefeet Elixir enhances muscle swiftness and nimbleness, increasing one's movement speed. <nl>A combination of Azuwynn, Ordaniis, and Yunugaz aspects is required to make this elixir. <nl>The more Yunugaz is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Lumbering Elixir, which slows one's movement.</scale>
 manual.item.thebetweenlands.bl.elixir.strength.description=<scale:0.8>The Elixir of Strength increases raw physical strength, causing one to deal more damage when they attack. <nl>A combination of Azuwynn and Ordaniis aspects is required to make this elixir. <nl>The more Azuwynn is used, the stronger are the elixir’s effects. The more Ordaniis is used, the longer the elixir lasts. <nl>Adding Byariis will corrupt the nature of the elixir, turning it into the Elixir of Weakness, which reduces one's damage output.</scale>
 
+# GUIs
+gui.gallery.not_found=Online picture gallery\nis currently disabled.\nThis feature can be\nenabled in the config\nunder 'General' and\n'Online picture gallery'.\nThen restart the game\nto download the\npictures.
+gui.gallery.author=§n§oAuthor:§r        
+gui.gallery.description=§n§oDescription:§r   
+gui.gallery.source_url=§n§oSource:§r        
+gui.gallery.source_url_click=§9§o§nOpen URL§r
+gui.gallery.info_not_found=Could not find any information about this picture
+gui.gallery.search=Search:
+gui.gallery.random=Randomize!
+
+
 # Advancements
 
 # Adventures
@@ -1746,6 +1762,7 @@ config.thebetweenlands.decay_percentage=Use percentual decay
 config.thebetweenlands.decay_min_health=Minimum decay health
 config.thebetweenlands.decay_min_health_percent=Minimum percentual decay health
 config.thebetweenlands.item_usage_tooltip=Item usage tooltip
+config.thebetweenlands.online_gallery=Online picture gallery
 
 config.thebetweenlands.mob_spawning=Mob Spawning
 config.thebetweenlands.max_entities_per_loaded_area=Max. entities per loaded area
