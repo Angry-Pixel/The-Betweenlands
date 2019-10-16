@@ -10,7 +10,7 @@ This branch hosts all #the-gallery entries and the index file.
 * ```title```: Title of the picture
 * ```author```: Author of the picture
 * ```source_url```: Optional source URL
-* ```description```: Description of the picture
+* ```description```: Optional description for the picture
 
 #### Example
 ```Json
