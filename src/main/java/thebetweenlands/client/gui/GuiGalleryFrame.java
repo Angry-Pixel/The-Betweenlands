@@ -19,7 +19,10 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.gallery.GalleryEntry;
@@ -39,13 +42,10 @@ public class GuiGalleryFrame extends GuiScreen {
 
 	protected GuiTextField searchField;
 
+	protected int urlClickX, urlClickWidth, urlClickY, urlClickHeight;
+
 	public GuiGalleryFrame(EntityGalleryFrame frame) {
 		this.frame = frame;
-
-		//Set to first available picture
-		if(this.frame.getUrl().length() == 0) {
-			this.switchPicture(false, false);
-		}
 	}
 
 	@Override
@@ -60,6 +60,11 @@ public class GuiGalleryFrame extends GuiScreen {
 
 		this.searchField = new GuiTextField(3, this.mc.fontRenderer, this.xStart + (int)WIDTH + 32, this.yStart + 14, 196, 20);
 		this.searchField.setMaxStringLength(128);
+
+		//Set to first available picture
+		if(this.frame.getUrl().length() == 0) {
+			this.switchPicture(false, false);
+		}
 	}
 
 	@Override
@@ -84,6 +89,14 @@ public class GuiGalleryFrame extends GuiScreen {
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 
 		this.searchField.mouseClicked(mouseX, mouseY, mouseButton);
+
+		if(mouseButton == 0 && mouseX >= this.urlClickX && mouseX < this.urlClickX + this.urlClickWidth && mouseY >= this.urlClickY && mouseY < this.urlClickY + this.urlClickHeight) {
+			GalleryEntry entry = GalleryManager.INSTANCE.getEntries().get(this.frame.getUrl());
+
+			if(entry != null && entry.getSourceUrl() != null) {
+				this.handleComponentClick(new TextComponentString("").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, entry.getSourceUrl()))));
+			}
+		}
 	}
 
 	@Override
@@ -118,7 +131,7 @@ public class GuiGalleryFrame extends GuiScreen {
 			Collections.sort(availableList, (e1, e2) -> {
 				boolean search1 = searchText.length() > 0 && searchEntryText(e1, searchText);
 				boolean search2 = searchText.length() > 0 && searchEntryText(e2, searchText);
-				return e1.getTitle().compareTo(e2.getTitle()) + (search1 ? -10 : 0) + (search2 ? 10 : 0);
+				return e1.getTitle().compareTo(e2.getTitle()) + (search1 ? -1000 : 0) + (search2 ? 1000 : 0);
 			});
 
 			if(entry == null || (!prev && !next)) {
@@ -200,11 +213,10 @@ public class GuiGalleryFrame extends GuiScreen {
 				}
 			}
 
-			String sourceLine = I18n.format("gui.gallery.source_url");
-			String sourceText = null;
+			String sourceLine = null;
 			if(entry.getSourceUrl() != null) {
-				sourceText = sourceLine + TextFormatting.RESET.toString() + entry.getSourceUrl();
-				maxLineWidth = Math.max(maxLineWidth, this.fontRenderer.getStringWidth(sourceText));
+				sourceLine = I18n.format("gui.gallery.source_url") + TextFormatting.RESET.toString() + I18n.format("gui.gallery.source_url_click");
+				maxLineWidth = Math.max(maxLineWidth, this.fontRenderer.getStringWidth(sourceLine));
 			}
 
 			this.fontRenderer.drawString(authorText, this.xStart + (int)WIDTH / 2 - maxLineWidth / 2, this.yStart + (int)HEIGHT + 8, 0xFFFFFFFF);
@@ -222,8 +234,12 @@ public class GuiGalleryFrame extends GuiScreen {
 				}
 			}
 
-			if(sourceText != null) {
-				this.fontRenderer.drawString(sourceText, this.xStart + (int)WIDTH / 2 - maxLineWidth / 2, this.yStart + (int)HEIGHT + 26 + yOff, 0xFFFFFFFF);
+			if(sourceLine != null) {
+				this.fontRenderer.drawString(sourceLine, this.xStart + (int)WIDTH / 2 - maxLineWidth / 2, this.yStart + (int)HEIGHT + 26 + yOff, 0xFFFFFFFF);
+				this.urlClickX = this.xStart + (int)WIDTH / 2 - maxLineWidth / 2 + this.fontRenderer.getStringWidth(I18n.format("gui.gallery.source_url"));
+				this.urlClickY = this.yStart + (int)HEIGHT + 26 + yOff;
+				this.urlClickWidth = this.fontRenderer.getStringWidth(I18n.format("gui.gallery.source_url_click"));
+				this.urlClickHeight = 10;
 			}
 		} else {
 			String notFoundText = I18n.format("gui.gallery.info_not_found");
