@@ -824,6 +824,8 @@ item.thebetweenlands.cremains.name=Cremains
 item.thebetweenlands.undying_ember.name=Undying Embers
 item.thebetweenlands.sushi.name=Sushi
 item.thebetweenlands.volarkite.name=Volarkite
+item.thebetweenlands.gallery_frame_small.name=Small Gallery Frame
+item.thebetweenlands.gallery_frame_large.name=Large Gallery Frame
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
