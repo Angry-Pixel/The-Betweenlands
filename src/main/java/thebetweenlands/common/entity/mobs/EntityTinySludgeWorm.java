@@ -50,10 +50,9 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 	
 	@Override
 	protected void initEntityAI() {
-		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4F));
-		tasks.addTask(2, new EntityAIAttackMelee(this, 0.5D, false));
-		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
+		tasks.addTask(2, new EntityAIAttackMelee(this, 1, false));
+		tasks.addTask(3, new EntityAIWander(this, 0.8D, 1));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
 		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
@@ -64,8 +63,8 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.1D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.21D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D);
 	}
 
 	// stuns the mob - dunno if we want this

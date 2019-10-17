@@ -21,10 +21,9 @@ public class EntityTinySludgeWormHelper extends EntityTinySludgeWorm {
 
 	@Override
 	protected void initEntityAI() {
-		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4F));
-		tasks.addTask(2, new EntityAIAttackMelee(this, 0.5D, false));
-		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
+		tasks.addTask(2, new EntityAIAttackMelee(this, 1, false));
+		tasks.addTask(3, new EntityAIWander(this, 0.8D, 1));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, 2, true, true, entity -> entity instanceof IMob));
 	}
@@ -34,7 +33,7 @@ public class EntityTinySludgeWormHelper extends EntityTinySludgeWorm {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(25.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
 	}
 

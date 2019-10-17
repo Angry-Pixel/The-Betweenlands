@@ -142,7 +142,6 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 		super(world);
 		setSize(0.8F, 0.8F);
 		isImmuneToFire = true;
-		maxHurtResistantTime = 40;
 
 		this.parts = new MultiPartEntityPart[] {
 				new MultiPartEntityPart(this, "part1", 0.8F, 0.8F),
@@ -165,9 +164,8 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 
 	@Override
 	protected void initEntityAI() {
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
-		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
+		tasks.addTask(1, new EntityAIAttackMelee(this, 1, false));
+		tasks.addTask(3, new EntityAIWander(this, 0.8D, 1));
 		tasks.addTask(4, new AILayEggSac(this));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
@@ -179,8 +177,8 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5.0D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.19D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
 	}
 
 	@Override
@@ -228,7 +226,7 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 				if(this.eggSacMovementCooldown > 0) {
 					this.eggSacMovementCooldown--;
 				} else if(this.getEggSacPercentage() >= 0) {
-					float percentage = Math.max(this.getEggSacPercentage(), 0) + 0.001F;
+					float percentage = Math.max(this.getEggSacPercentage(), 0) + 0.005F;
 
 					if(percentage >= 1.0F) {
 						MultiPartEntityPart tailPart = this.parts[this.parts.length - 1];
@@ -260,7 +258,7 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 
 	@Override
 	protected boolean damageWorm(DamageSource source, float amount) {
-		this.eggSacMovementCooldown = 120;
+		this.eggSacMovementCooldown = 50;
 
 		if(!this.world.isRemote && source instanceof EntityDamageSource && this.world.rand.nextInt(6) == 0 && amount > 0.5F) {
 			MultiPartEntityPart spawnPart = this.parts[this.rand.nextInt(this.parts.length)];
@@ -401,10 +399,10 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 					List<EntityTinySludgeWorm> nearbyTinyWorms = this.entity.world.getEntitiesWithinAABB(EntityTinySludgeWorm.class, this.entity.getEntityBoundingBox().grow(16.0D));
 
 					if(nearbyEggSacs.size() < 5 && nearbyTinyWorms.size() < 8) {
-						this.cooldown = 133 + this.entity.rand.nextInt(80);
+						this.cooldown = 30 + this.entity.rand.nextInt(30);
 						return true;
 					} else {
-						this.cooldown = 40 + this.entity.rand.nextInt(30);
+						this.cooldown = 10 + this.entity.rand.nextInt(20);
 					}
 				}
 			}

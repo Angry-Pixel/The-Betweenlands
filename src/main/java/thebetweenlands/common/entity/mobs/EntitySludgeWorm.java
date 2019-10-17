@@ -17,6 +17,7 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -49,6 +50,7 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	public EntitySludgeWorm(World world) {
 		super(world);
 		setSize(0.4375F, 0.3125F);
+		setPathPriority(PathNodeType.WATER, -10.0F);
 		isImmuneToFire = true;
 		parts = new MultiPartEntityPart[] {
 				new MultiPartEntityPart(this, "part1", 0.4375F, 0.3125F),
@@ -65,9 +67,8 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 
 	@Override
 	protected void initEntityAI() {
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
-		tasks.addTask(3, new EntityAIWander(this, 0.5D, 1));
+		tasks.addTask(1, new EntityAIAttackMelee(this, 1, false));
+		tasks.addTask(3, new EntityAIWander(this, 0.8D, 1));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
 		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
@@ -79,8 +80,8 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.21D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.25D);
 	}
 
 	// stuns the mob - dunno if we want this
@@ -130,7 +131,7 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 
 	@SideOnly(Side.CLIENT)
 	public void spawnParticles(World world, double x, double y, double z, Random rand) {
-		for (int count = 0; count < 10; ++count) {
+		for (int count = 0; count < 1 + world.rand.nextInt(4); ++count) {
 			double a = Math.toRadians(renderYawOffset);
 			double offSetX = -Math.sin(a) * 0D + rand.nextDouble() * 0.3D - rand.nextDouble() * 0.3D;
 			double offSetZ = Math.cos(a) * 0D + rand.nextDouble() * 0.3D - rand.nextDouble() * 0.3D;
