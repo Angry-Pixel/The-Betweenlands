@@ -21,6 +21,7 @@ import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.api.item.IFoodSicknessItem;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
+import thebetweenlands.client.render.model.tile.ModelPestleAndMortar;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
@@ -30,6 +31,7 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
+import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
@@ -83,6 +85,10 @@ public class ItemTooltipHandler {
 				if(!ItemAspectContainer.fromItem(stack, aspectManager).isEmpty()) {
 					usedInMachines.add(I18n.format("tooltip.recipes.aspects"));
 				}
+			}
+			
+			if(!PestleAndMortarRecipe.getResult(stack).isEmpty()) {
+				usedInMachines.add(I18n.format("tooltip.recipes.mortar"));
 			}
 
 			if(AnimatorRecipe.getRecipe(stack) != null) {
