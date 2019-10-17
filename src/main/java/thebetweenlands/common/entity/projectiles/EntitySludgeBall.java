@@ -180,7 +180,7 @@ public class EntitySludgeBall extends EntityThrowable {
 		} else {
 			attacked = entity.attackEntityFrom(new EntityDamageSource("entity", this).setProjectile(), 8);
 		}
-		if(!this.world.isRemote && attacked) {
+		if(!this.world.isRemote && attacked && entity instanceof EntityLivingBase) {
 			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 80, 3));
 		}
 		return attacked;
