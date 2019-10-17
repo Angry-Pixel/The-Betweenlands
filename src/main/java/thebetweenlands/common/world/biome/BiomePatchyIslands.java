@@ -12,6 +12,7 @@ import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
+import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityFrog;
 import thebetweenlands.common.entity.mobs.EntityGecko;
@@ -31,7 +32,6 @@ import thebetweenlands.common.world.biome.spawning.spawners.GreeblingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SporelingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SwampHagCaveSpawnEntry;
-import thebetweenlands.common.world.biome.spawning.spawners.TreeSpawnEntry;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorPatchyIslands;
 import thebetweenlands.common.world.gen.biome.feature.AlgaeFeature;
 import thebetweenlands.common.world.gen.biome.feature.SiltBeachFeature;
@@ -73,6 +73,7 @@ public class BiomePatchyIslands extends BiomeBetweenlands {
 		entries.add(new SporelingSpawnEntry(6, EntitySporeling.class, EntitySporeling::new, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
 		entries.add(new GreeblingSpawnEntry(20, (short) 20).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setGroupSpawnRadius(4).setSpawningInterval(24000));
 		
+		entries.add(new SurfaceSpawnEntry(21, EntityEmberlingWild.class, EntityEmberlingWild::new, (short) 20).setSurfacePredicate(state -> state.getBlock() == BlockRegistry.LOG_HEARTHGROVE).setHostile(true).setGroupSize(1, 1).setSpawnCheckRadius(32));
 		entries.add(new SurfaceSpawnEntry(7, EntityLurker.class, EntityLurker::new, (short) 35).setCanSpawnInWater(true).setHostile(true).setSpawnCheckRadius(16.0D));
 		entries.add(new SurfaceSpawnEntry(8, EntityAngler.class, EntityAngler::new, (short) 45).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
 		entries.add(new CaveSpawnEntry(9, EntityAngler.class, EntityAngler::new, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));

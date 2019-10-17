@@ -47,7 +47,7 @@ public class EntityEmberling extends EntityMob implements IEntityMultiPart, IEnt
 
 	public EntityEmberling(World world) {
 		super(world);
-		setSize(1F, 1F);
+		setSize(0.9F, 1F);
 		stepHeight = 1F;
 		isImmuneToFire = true;
 		tailPart = new MultiPartEntityPart[] { new MultiPartEntityPart(this, "tail", 0.5F, 0.5F) }; // may use more parts?

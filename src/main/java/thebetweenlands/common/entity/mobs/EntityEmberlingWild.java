@@ -3,6 +3,7 @@ package thebetweenlands.common.entity.mobs;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
@@ -67,7 +68,7 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 
 	public EntityEmberlingWild(World world) {
 		super(world);
-		setSize(1F, 1F);
+		setSize(0.9F, 1F);
 		stepHeight = 1F;
 		isImmuneToFire = true;
 		tailPart = new MultiPartEntityPart[] { new MultiPartEntityPart(this, "tail", 0.5F, 0.5F) };
@@ -172,7 +173,8 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere() && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL;
+		IBlockState iblockstate = this.world.getBlockState((new BlockPos(this)).down());
+		return iblockstate.canEntitySpawn(this) && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL;
 	}
 
 	@Override
@@ -182,7 +184,7 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 
 	@Override
 	public boolean isInWater() {
-		return getEntityWorld().handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this);
+		return this.inWater = getEntityWorld().handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this);
 	}
 
 	@Override
@@ -216,8 +218,9 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 				if(!isTamed())
 					setDead();
 
-		if (getEntityWorld().isRemote && getEntityWorld().getTotalWorldTime()%5 == 0)
+		if (getEntityWorld().isRemote && this.ticksExisted % 5 == 0) {
 			flameParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
+		}
 	}
 
 	protected void updateMovementAndPathfinding() {
@@ -335,7 +338,12 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 			velY = rand.nextFloat() * 0.05D;
 			velZ = rand.nextFloat() * 0.025D * motionZ;
 			velX = rand.nextFloat() * 0.025D * motionX;
-			world.spawnParticle(EnumParticleTypes.FLAME,  x, y, z, velX, velY, velZ);
+			if(this.inWater) {
+				world.spawnParticle(EnumParticleTypes.WATER_BUBBLE,  x, y, z, velX, velY, velZ);
+				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,  x, y, z, velX, velY, velZ);
+			} else {
+				world.spawnParticle(EnumParticleTypes.FLAME,  x, y, z, velX, velY, velZ);
+			}
 		}
 	}
 
