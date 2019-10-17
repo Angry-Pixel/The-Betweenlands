@@ -1,10 +1,5 @@
 package thebetweenlands.common.entity.mobs;
 
-import javax.annotation.Nullable;
-
-import com.google.common.base.Predicate;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -19,7 +14,6 @@ import net.minecraft.world.World;
 import thebetweenlands.common.registries.LootTableRegistry;
 
 public class EntityTinySludgeWormHelper extends EntityTinySludgeWorm {
-
 	public EntityTinySludgeWormHelper(World world) {
 		super(world);
 		experienceValue = 0;
@@ -38,10 +32,10 @@ public class EntityTinySludgeWormHelper extends EntityTinySludgeWorm {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(25.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
 	}
 
 	@Override
@@ -49,4 +43,13 @@ public class EntityTinySludgeWormHelper extends EntityTinySludgeWorm {
 		return LootTableRegistry.TINY_SLUDGE_WORM_HELPER;
 	}
 
+	@Override
+	protected float getHeadMotionYMultiplier() {
+		return 1;
+	}
+
+	@Override
+	protected float getTailMotionYMultiplier() {
+		return 1;
+	}
 }
