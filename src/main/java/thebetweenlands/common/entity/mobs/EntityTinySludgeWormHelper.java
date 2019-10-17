@@ -6,7 +6,6 @@ import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.ResourceLocation;
@@ -31,7 +30,7 @@ public class EntityTinySludgeWormHelper extends EntityTinySludgeWorm {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(25.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(15.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
@@ -50,5 +49,10 @@ public class EntityTinySludgeWormHelper extends EntityTinySludgeWorm {
 	@Override
 	protected float getTailMotionYMultiplier() {
 		return 1;
+	}
+
+	@Override
+	public boolean canAttackClass(Class<? extends EntityLivingBase> entity) {
+		return !EntityTinySludgeWormHelper.class.isAssignableFrom(entity);
 	}
 }
