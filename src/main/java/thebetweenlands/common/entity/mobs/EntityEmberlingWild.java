@@ -43,6 +43,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -68,7 +69,7 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 
 	public EntityEmberlingWild(World world) {
 		super(world);
-		setSize(0.9F, 1F);
+		setSize(0.9F, 0.85F);
 		stepHeight = 1F;
 		isImmuneToFire = true;
 		tailPart = new MultiPartEntityPart[] { new MultiPartEntityPart(this, "tail", 0.5F, 0.5F) };
@@ -220,6 +221,7 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 
 		if (getEntityWorld().isRemote && this.ticksExisted % 5 == 0) {
 			flameParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
+			spawnFlameBreathParticles();
 		}
 	}
 
@@ -344,6 +346,25 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 			} else {
 				world.spawnParticle(EnumParticleTypes.FLAME,  x, y, z, velX, velY, velZ);
 			}
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	protected void spawnFlameBreathParticles() {
+		for (int count = 0; count < 5; ++count) {
+		Vec3d look = getLook(1.0F).normalize();
+		double a = Math.toRadians(renderYawOffset);
+		double offSetX = -Math.sin(a) * 1D;
+		double offSetZ = Math.cos(a) * 1D;
+		int motionX = rand.nextBoolean() ? 1 : - 1;
+		int motionY = rand.nextBoolean() ? 1 : - 1;
+		int motionZ = rand.nextBoolean() ? 1 : - 1;
+		double velX = rand.nextFloat() * 0.1D * motionX;
+		double velY = rand.nextFloat() * 0.1D * motionY;
+		double velZ = rand.nextFloat() * 0.1D * motionZ;
+		
+		float speed = 0.05F;
+		world.spawnParticle(EnumParticleTypes.FLAME, posX + offSetX + velX, posY + getEyeHeight() * 0.5D + velY, posZ + offSetZ + velZ, look.x * speed, look.y * speed, look.z * speed);
 		}
 	}
 
