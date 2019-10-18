@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     "STS",
-    "PBP",
+    "IBI",
     "PPP"
   ],
   "key": {
@@ -19,6 +19,10 @@
     "T": {
       "item": "thebetweenlands:items_misc",
       "data": 26
+    },
+    "I": {
+      "item": "thebetweenlands:items_misc",
+      "data": 11
     }
   },
   "result": {

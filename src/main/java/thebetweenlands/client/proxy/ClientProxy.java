@@ -204,7 +204,7 @@ import thebetweenlands.client.render.tile.RenderPurifier;
 import thebetweenlands.client.render.tile.RenderRepeller;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderSpikeTrap;
-import thebetweenlands.client.render.tile.RenderTarBarrel;
+import thebetweenlands.client.render.tile.RenderBarrel;
 import thebetweenlands.client.render.tile.RenderTarLootPot1;
 import thebetweenlands.client.render.tile.RenderTarLootPot2;
 import thebetweenlands.client.render.tile.RenderTarLootPot3;
@@ -663,7 +663,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecayPitControl.class, new RenderDecayPitControl());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecayPitHangingChain.class, new RenderDecayPitHangingChain());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCenser.class, new RenderCenser());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new RenderTarBarrel());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBarrel.class, new RenderBarrel());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDecayPitGroundChain.class, new RenderDecayPitGroundChain());
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());

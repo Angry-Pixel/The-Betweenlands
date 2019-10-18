@@ -8,12 +8,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.animation.FastTESR;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.tile.TileEntityBarrel;
 
-public class RenderTarBarrel extends FastTESR<TileEntityBarrel> {
+public class RenderBarrel extends FastTESR<TileEntityBarrel> {
 	public static final ResourceLocation WHITE_SPRITE_PATH = new ResourceLocation(ModInfo.ID, "tiles/white");
 
 	@Override
@@ -41,7 +42,7 @@ public class RenderTarBarrel extends FastTESR<TileEntityBarrel> {
 			int skyLight = packedLightmap >> 16 & 65535;
 			int blockLight = packedLightmap & 65535;
 
-			float height = fluid.amount / (float)maxAmount * 0.78f;
+			float height = fluid.amount / (float)maxAmount * 0.8f + 0.13f;
 
 			int color = fluid.getFluid().getColor(fluid);
 
@@ -55,8 +56,8 @@ public class RenderTarBarrel extends FastTESR<TileEntityBarrel> {
 			float maxU = sprite.getMaxU();
 			float maxV = sprite.getMaxV();
 
-			float width = 0.56F;
-			float depth = 0.56F;
+			float width = 0.5F;
+			float depth = 0.5F;
 
 			float offX = (1 - width) / 2.0f;
 			float offZ = (1 - depth) / 2.0f;

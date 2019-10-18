@@ -1020,7 +1020,7 @@ tooltip.bl.censer.effect.stagnant_water=Causes decay to be accelerated\nin a sma
 tooltip.bl.censer.effect.dungeon_fog=Increases crop growth and\nallows sludge dungeon plants\nto grow in a small area.
 tooltip.bl.censer.effect.aspect=Infuses Aspectrus crops with\nthe aspect and enables the crops\nto grow in a small area.
 tooltip.bl.censer.effect.cremains=Incinerates any living creature\nin a small area and turns them\ninto cremains.
-tooltip.bl.censer.effect.swamp_water=Spreads steam in a large area\nthat carries the effect of the item it\nwas imbued with.\nCan be imbued with a Bark Amulet.
+tooltip.bl.censer.effect.swamp_water=Spreads steam in a large area\nthat carries the effect of the item it\nis imbued with.\nCan be imbued with a Bark Amulet.
 
 tooltip.recipes.used_in=§5Used in: §7%s
 tooltip.recipes.compost_bin=Compost Bin

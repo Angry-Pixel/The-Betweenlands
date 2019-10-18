@@ -194,8 +194,8 @@ public class ModelRegistry {
 	public static final ModelFromModelBase LOOT_POT_1 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootPot1(), new ResourceLocation("thebetweenlands:blocks/loot_pot_1"), new ResourceLocation("thebetweenlands:particle/block/loot_pot_1_particle"), 64, 32);
 	public static final ModelFromModelBase LOOT_POT_2 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootPot2(), new ResourceLocation("thebetweenlands:blocks/loot_pot_2"), new ResourceLocation("thebetweenlands:particle/block/loot_pot_2_particle"), 64, 32);
 	public static final ModelFromModelBase LOOT_POT_3 = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelLootPot3(), new ResourceLocation("thebetweenlands:blocks/loot_pot_3"), new ResourceLocation("thebetweenlands:particle/block/loot_pot_3_particle"), 64, 32);
-	public static final ModelFromModelBase WEEDWOOD_BARREL = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelBarrel(), new ResourceLocation("thebetweenlands:blocks/weedwood_barrel"), new ResourceLocation("thebetweenlands:blocks/weedwood"), 64, 32);
-	public static final ModelFromModelBase SYRMORITE_BARREL = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelBarrel(), new ResourceLocation("thebetweenlands:blocks/syrmorite_barrel"), new ResourceLocation("thebetweenlands:blocks/syrmorite_block"), 64, 32);
+	public static final ModelFromModelBase WEEDWOOD_BARREL = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelBarrel(), new ResourceLocation("thebetweenlands:blocks/weedwood_barrel"), new ResourceLocation("thebetweenlands:blocks/weedwood"), 128, 128);
+	public static final ModelFromModelBase SYRMORITE_BARREL = new ModelFromModelBase(MODEL_TEXTURE_PACKER, new ModelBarrel(), new ResourceLocation("thebetweenlands:blocks/syrmorite_barrel"), new ResourceLocation("thebetweenlands:blocks/syrmorite_block"), 128, 128);
 	
 	
 	

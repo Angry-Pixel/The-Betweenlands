@@ -5,10 +5,10 @@
   },
   "variants": {
     "facing": {
-      "north": {},
-      "south": {},
-      "east": {},
-      "west": {}
+      "north": {  },
+      "south": { "y": 180 },
+      "east": { "y": 90 },
+      "west": { "y": 270 }
     },
     "inventory": {
       "model": "thebetweenlands:internal/syrmorite_barrel",

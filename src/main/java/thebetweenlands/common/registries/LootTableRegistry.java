@@ -62,10 +62,10 @@ public class LootTableRegistry {
     //LOOT INVENTORIES
     //Wight fortress, Patchy Islands heads, cave pots, etc.
     //TODO These loot tables should be separated. May need to keep old loot tables for backwards comp.
-    public static final ResourceLocation COMMON_POT_LOOT = register("loot/common_pot_loot");
-    public static final ResourceLocation DUNGEON_CHEST_LOOT = register("loot/dungeon_chest_loot");
-    public static final ResourceLocation COMMON_CHEST_LOOT = register("loot/common_chest_loot");
-    public static final ResourceLocation DUNGEON_POT_LOOT = register("loot/dungeon_pot_loot");
+    @Deprecated public static final ResourceLocation COMMON_POT_LOOT = register("loot/common_pot_loot");
+    @Deprecated public static final ResourceLocation DUNGEON_CHEST_LOOT = register("loot/dungeon_chest_loot");
+    @Deprecated public static final ResourceLocation COMMON_CHEST_LOOT = register("loot/common_chest_loot");
+    @Deprecated public static final ResourceLocation DUNGEON_POT_LOOT = register("loot/dungeon_pot_loot");
     //Sludge worm dungeon
     public static final ResourceLocation SLUDGE_WORM_DUNGEON_CHEST = register("loot/sludge_worm_dungeon_chest");
     public static final ResourceLocation SLUDGE_WORM_DUNGEON_URN = register("loot/sludge_worm_dungeon_urn");
