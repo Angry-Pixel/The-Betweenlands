@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.material.Material;
@@ -12,6 +13,7 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
@@ -41,6 +43,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -103,7 +106,7 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 
 	@Override
 	protected void initEntityAI() {
-		//tasks.addTask(3, new EntityEmberlingWild.EntityAIFireballColumn(this));
+		tasks.addTask(0, new EntityEmberlingWild.EntityAIFlameBreath(this));
 		aiSit = new EntityAISit(this);
 		tasks.addTask(1, this.aiSit);
 		tasks.addTask(2, new EntityEmberlingWild.AIEmberlingAttack(this));
@@ -189,6 +192,11 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 	}
 
 	@Override
+	public boolean isPushedByWater() {
+		return false;
+	}
+
+	@Override
 	public int getMaxSpawnedInChunk() {
 		return 3;
 	}
@@ -216,29 +224,29 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 
 		if (getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL)
 			if (!getEntityWorld().isRemote)
-				if(!isTamed())
+				if (!isTamed())
 					setDead();
 
-		if (getEntityWorld().isRemote && this.ticksExisted % 5 == 0) {
-			flameParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
-			spawnFlameBreathParticles();
+		if (getEntityWorld().isRemote) {
+			if (!getIsFlameAttacking())
+				if (ticksExisted % 5 == 0)
+					flameParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
+
+			if (getIsFlameAttacking())
+				spawnFlameBreathParticles();
 		}
 	}
 
 	protected void updateMovementAndPathfinding() {
-		if (isInWater()) {
+		if (isInWater())
 			moveHelper = moveHelperWater;
-		} else {
+		else
 			moveHelper = moveHelperLand;
-		}
 
-
-		if (isInWater() && !world.isAirBlock(new BlockPos(posX, getEntityBoundingBox().maxY + 0.25D, posZ))) {
+		if (isInWater() && !world.isAirBlock(new BlockPos(posX, getEntityBoundingBox().maxY + 0.25D, posZ)))
 			navigator = pathNavigatorWater;
-		} else {
+		else
 			navigator = pathNavigatorGround;
-		}
-
 
 		//renderYawOffset = rotationYaw;
 		double a = Math.toRadians(renderYawOffset);
@@ -293,7 +301,6 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 
 						return true;
 					}
-
 				}
 			}
 		}
@@ -348,23 +355,23 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 			}
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	protected void spawnFlameBreathParticles() {
 		for (int count = 0; count < 5; ++count) {
-		Vec3d look = getLook(1.0F).normalize();
-		double a = Math.toRadians(renderYawOffset);
-		double offSetX = -Math.sin(a) * 1D;
-		double offSetZ = Math.cos(a) * 1D;
-		int motionX = rand.nextBoolean() ? 1 : - 1;
-		int motionY = rand.nextBoolean() ? 1 : - 1;
-		int motionZ = rand.nextBoolean() ? 1 : - 1;
-		double velX = rand.nextFloat() * 0.1D * motionX;
-		double velY = rand.nextFloat() * 0.1D * motionY;
-		double velZ = rand.nextFloat() * 0.1D * motionZ;
-		
-		float speed = 0.05F;
-		world.spawnParticle(EnumParticleTypes.FLAME, posX + offSetX + velX, posY + getEyeHeight() * 0.5D + velY, posZ + offSetZ + velZ, look.x * speed, look.y * speed, look.z * speed);
+			Vec3d look = getLook(1.0F).normalize();
+			double a = Math.toRadians(renderYawOffset);
+			double offSetX = -Math.sin(a) * 1D;
+			double offSetZ = Math.cos(a) * 1D;
+			int motionX = rand.nextBoolean() ? 1 : - 1;
+			int motionY = rand.nextBoolean() ? 1 : - 1;
+			int motionZ = rand.nextBoolean() ? 1 : - 1;
+			double velX = rand.nextFloat() * 0.1D * motionX;
+			double velY = rand.nextFloat() * 0.1D * motionY;
+			double velZ = rand.nextFloat() * 0.1D * motionZ;
+
+			float speed = 0.15F;
+			world.spawnParticle(EnumParticleTypes.FLAME, posX + offSetX + velX, posY + getEyeHeight() * 0.75D + velY, posZ + offSetZ + velZ, look.x * speed, look.y * speed, look.z * speed);
 		}
 	}
 
@@ -411,14 +418,14 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 			return (double) (4.0F + attackTarget.width);
 		}
 	}
-	/*
-	static class EntityAIFireballColumn extends EntityAIBase {
+
+	static class EntityAIFlameBreath extends EntityAIBase {
 		EntityEmberlingWild emberling;
 		EntityLivingBase target;
 		int missileCount;
 		int shootCount;
 
-		public EntityAIFireballColumn(EntityEmberlingWild emberling) {
+		public EntityAIFlameBreath(EntityEmberlingWild emberling) {
 			this.emberling = emberling;
 			setMutexBits(5);
 		}
@@ -427,11 +434,11 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 		public boolean shouldExecute() {
 			target = emberling.getAttackTarget();
 
-			if (target == null)
+			if (target == null || emberling.isInWater())
 				return false;
 			else {
 				double distance = emberling.getDistanceSq(target);
-				if (distance >= 36.0D && distance <= 144.0D) {
+				if (distance >= 4.0D && distance <= 25.0D) {
 					if (!emberling.onGround)
 						return false;
 					else
@@ -454,9 +461,17 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 		}
 
 		@Override
+		public void resetTask() {
+			shootCount = -1;
+			missileCount = -1;
+			if(emberling.getIsFlameAttacking())
+				emberling.setIsFlameAttacking(false);
+		}
+
+		@Override
 		public void updateTask() {
-			if(!emberling.getIsCastingSpell())
-				emberling.setIsCastingSpell(true);
+			if(!emberling.getIsFlameAttacking())
+				emberling.setIsFlameAttacking(true);
 			emberling.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
 			float f = (float) MathHelper.atan2(target.posZ - emberling.posZ, target.posX - emberling.posX);
 			int distance = MathHelper.floor(emberling.getDistance(target));
@@ -464,23 +479,20 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 			if (missileCount %5 == 0) {
 				shootCount++;
 				double d2 = 1D * (double) (shootCount);
-				EntityFlameJet flame_jet = new EntityFlameJet(emberling.getEntityWorld(), emberling);
-				flame_jet.setPosition(emberling.posX + (double) MathHelper.cos(f) * d2, emberling.posY, emberling.posZ + (double) MathHelper.sin(f) * d2);
-				emberling.getEntityWorld().spawnEntity(flame_jet);
-				emberling.getEntityWorld().playSound(null, emberling.getPosition(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.HOSTILE, 0.5F, 1F + (emberling.getEntityWorld().rand.nextFloat() - emberling.getEntityWorld().rand.nextFloat()) * 0.8F);
+				AxisAlignedBB flameBox = new AxisAlignedBB(new BlockPos(emberling.posX + (double) MathHelper.cos(f) * d2, emberling.posY, emberling.posZ + (double) MathHelper.sin(f) * d2));
+				List<EntityLivingBase> list = emberling.getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, flameBox);
+				for (int entityCount = 0; entityCount < list.size(); entityCount++) {
+					Entity entity = list.get(entityCount);
+					if (entity != null && entity == target)
+						if (entity instanceof EntityLivingBase)
+							if(!entity.isBurning())
+								entity.setFire(5); // seems ok for time
+				}
 			}
-			if (shootCount >= distance || shootCount >= 12) {
-				shootCount = -1;
-				missileCount = -1;
-				if(emberling.getIsCastingSpell())
-					emberling.setIsCastingSpell(false);
-			}
+			if (shootCount >= distance || shootCount >= 3)
+				resetTask();
 		}
 	}
-	  public boolean isPushedByWater() {
-	        return false;
-	    }
-	 */
 
 	static class EmberlingMoveHelper extends EntityMoveHelper {
 		private final EntityEmberlingWild emberling;
