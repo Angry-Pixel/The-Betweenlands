@@ -60,18 +60,31 @@ public class LootTableRegistry {
     public static final ResourceLocation SHARED_LOOT_POOL_TEST = register("loot/shared_loot_pool_test");
     
     //LOOT INVENTORIES
-    //Wight fortress, Patchy Islands heads, cave pots, etc.
-    //TODO These loot tables should be separated. May need to keep old loot tables for backwards comp.
+    //Don't use these anymore. Use the ones below or make new ones. These are only here for backwards compatibility.
     @Deprecated public static final ResourceLocation COMMON_POT_LOOT = register("loot/common_pot_loot");
     @Deprecated public static final ResourceLocation DUNGEON_CHEST_LOOT = register("loot/dungeon_chest_loot");
     @Deprecated public static final ResourceLocation COMMON_CHEST_LOOT = register("loot/common_chest_loot");
     @Deprecated public static final ResourceLocation DUNGEON_POT_LOOT = register("loot/dungeon_pot_loot");
+    //Misc
+    public static final ResourceLocation CAVE_POT = register("loot/cave_pot");
+    public static final ResourceLocation SLUDGE_PLAINS_RUINS_POT = register("loot/sludge_plains_ruins_pot");
+    public static final ResourceLocation MARSH_RUINS_POT = register("loot/marsh_ruins_pot");
+    public static final ResourceLocation SPAWNER_CHEST = register("loot/spawner_chest");
+    public static final ResourceLocation IDOL_HEADS_CHEST = register("loot/idol_heads_chest");
+    public static final ResourceLocation TAR_POOL_POT = register("loot/tar_pool_pot");
+    public static final ResourceLocation UNDERGROUND_RUINS_POT = register("loot/underground_ruins_pot");
     //Sludge worm dungeon
     public static final ResourceLocation SLUDGE_WORM_DUNGEON_CHEST = register("loot/sludge_worm_dungeon_chest");
     public static final ResourceLocation SLUDGE_WORM_DUNGEON_URN = register("loot/sludge_worm_dungeon_urn");
     public static final ResourceLocation SLUDGE_WORM_DUNGEON_BARRISHEE_CHEST = register("loot/sludge_worm_dungeon_barrishee_chest");
     public static final ResourceLocation SLUDGE_WORM_DUNGEON_CRYPT_URN = register("loot/sludge_worm_dungeon_crypt_urn");
     public static final ResourceLocation SLUDGE_WORM_DUNGEON_ITEM_SHELF = register("loot/sludge_worm_dungeon_item_shelf");
+    //Cragrock tower
+    public static final ResourceLocation CRAGROCK_TOWER_CHEST = register("loot/cragrock_tower_chest");
+    public static final ResourceLocation CRAGROCK_TOWER_POT = register("loot/cragrock_tower_pot");
+    //Wight fortress
+    public static final ResourceLocation WIGHT_FORTRESS_CHEST = register("loot/wight_fortress_chest");
+    public static final ResourceLocation WIGHT_FORTRESS_POT = register("loot/wight_fortress_pot");
     
     //MOBS
     public static final ResourceLocation ANGLER = register("entities/angler");

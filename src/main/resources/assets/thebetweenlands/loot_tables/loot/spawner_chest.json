@@ -1,0 +1,404 @@
+{
+    "pools": [
+        {
+            "name": "dungeon_chest",
+            "conditions": [],
+            "entries": [
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:sap_ball",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 4,
+                                "max": 12
+                            }
+                        }
+                    ],
+                    "weight": 28,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:marshmallow_pink",
+                    "functions": [],
+                    "weight": 26,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "syrmorite_nugget",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 4,
+                                "max": 16
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 41
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "octine_nugget",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 4,
+                                "max": 16
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 42
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:marshmallow",
+                    "functions": [],
+                    "weight": 26,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:reed_donut",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:jam_donut",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "scroll",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 40
+                        }
+                    ],
+                    "weight": 18,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "lurker_skin",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 4
+                        }
+                    ],
+                    "weight": 12,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "sulfur",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 7
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 18
+                        }
+                    ],
+                    "weight": 12,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "swamp_reed_rope",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 6
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 7
+                        }
+                    ],
+                    "weight": 12,
+                    "quality": 0
+                },
+				{
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:octine_ingot",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ],
+                    "weight": 15,
+                    "quality": 0
+                },
+				{
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "syrmorite_ingot",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 11
+                        }
+                    ],
+                    "weight": 15,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "amulet_socket",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 38
+                        }
+                    ],
+                    "weight": 6,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:lore_scrap",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": {
+                                "min": 0,
+                                "max": 9
+                            }
+                        }
+                    ],
+                    "weight": 8,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "loot_table",
+                    "name": "thebetweenlands:loot/music_disc",
+                    "functions": [],
+                    "weight": 5,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:bone_wayfinder",
+                    "weight": 5,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:gem_singer",
+                    "functions": [],
+                    "weight": 3,
+                    "quality": 0
+                }
+            ],
+            "rolls": {
+                "min": 4,
+                "max": 8
+            },
+            "bonus_rolls": {
+                "min": 1,
+                "max": 2
+            }
+        },
+        {
+            "name": "dungeon_chest_valuables",
+            "conditions": [],
+            "entries": [
+                {
+                    "conditions": [],
+                    "type": "empty",
+                    "name": "nothing",
+                    "functions": [],
+                    "weight": 200,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:ring_of_flight",
+                    "functions": [],
+                    "weight": 4,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:forbidden_fig",
+                    "functions": [],
+                    "weight": 5,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:explorers_hat",
+                    "functions": [],
+                    "weight": 4,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:swift_pick",
+                    "functions": [],
+                    "weight": 6,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:wights_bane",
+                    "functions": [],
+                    "weight": 8,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:critter_cruncher",
+                    "functions": [],
+                    "weight": 10,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:hag_hacker",
+                    "functions": [],
+                    "weight": 10,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:sludge_slicer",
+                    "functions": [],
+                    "weight": 8,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:gem_singer",
+                    "functions": [],
+                    "weight": 10,
+                    "quality": 0
+                }
+            ],
+            "rolls": {
+                "min": 1,
+                "max": 2
+            },
+            "bonus_rolls": {
+                "min": 1,
+                "max": 2
+            }
+        }
+    ]
+}

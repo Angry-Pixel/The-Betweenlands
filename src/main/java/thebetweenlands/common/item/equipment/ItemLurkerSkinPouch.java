@@ -61,6 +61,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
         this.setMaxStackSize(1);
         this.setCreativeTab(BLCreativeTabs.GEARS);
         this.setMaxDamage(3);
+        this.setNoRepair();
 
         this.addPropertyOverride(new ResourceLocation("pouch_size"), (stack, worldIn, entityIn) -> stack.getItemDamage());
         IEquippable.addEquippedPropertyOverrides(this);
@@ -104,6 +105,16 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
     @Override
     public boolean showDurabilityBar(ItemStack stack) {
         return false;
+    }
+    
+    @Override
+    public boolean isRepairable() {
+    	return false;
+    }
+    
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    	return false;
     }
 
     @SideOnly(Side.CLIENT)

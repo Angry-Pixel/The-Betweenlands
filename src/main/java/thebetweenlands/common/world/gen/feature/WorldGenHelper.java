@@ -1,7 +1,6 @@
 package thebetweenlands.common.world.gen.feature;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
@@ -449,7 +448,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param max     The maximum amount of items
 	 * @param chance  The chance of it actually generating
 	 */
-	public void rotatedLootPot(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance, ResourceLocation lootTable) {
+	public void rotatedLootPot(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance, @Nullable ResourceLocation lootTable) {
 		x -= width / 2;
 		z -= depth / 2;
 		if (rand.nextInt(chance) == 0)
@@ -485,7 +484,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param max     The maximum amount of items
 	 * @param chance  The chance of it actually generating
 	 */
-	public void rotatedLootChest(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance, int sequenceStart, ResourceLocation lootTable) {
+	public void rotatedLootChest(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance, int sequenceStart, @Nullable ResourceLocation lootTable) {
 		x -= width / 2;
 		z -= depth / 2;
 		if (rand.nextInt(chance) == 0)
@@ -612,11 +611,13 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param min    The minimum amount of items
 	 * @param max    The maximum amount of items
 	 */
-	public void generateLootPot(World world, Random random, BlockPos pos, int min, int max, ResourceLocation list) {
+	public void generateLootPot(World world, Random random, BlockPos pos, int min, int max, @Nullable ResourceLocation lootTable) {
 		this.setBlockAndNotifyAdequately(world, pos, getRandomLootPot(random));
-		TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, pos);
-		if(lootPot != null) {
-			lootPot.setLootTable(list, random.nextLong());
+		if(lootTable != null) {
+			TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, pos);
+			if(lootPot != null) {
+				lootPot.setLootTable(lootTable, random.nextLong());
+			}
 		}
 	}
 
@@ -629,12 +630,13 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param min    The minimum amount of items
 	 * @param max    The maximum amount of items
 	 */
-	public void generateLootChest(World world, Random random, BlockPos pos, int min, int max, IBlockState state, ResourceLocation lootTable) {
+	public void generateLootChest(World world, Random random, BlockPos pos, int min, int max, IBlockState state, @Nullable ResourceLocation lootTable) {
 		this.setBlockAndNotifyAdequately(world, pos, state);
-		TileEntity chest = world.getTileEntity(pos);
-
-		if (chest instanceof TileEntityChest) {
-			((TileEntityChest)chest).setLootTable(lootTable, random.nextLong());
+		if(lootTable != null) {
+			TileEntity chest = world.getTileEntity(pos);
+			if (chest instanceof TileEntityChest) {
+				((TileEntityChest)chest).setLootTable(lootTable, random.nextLong());
+			}
 		}
 	}
 

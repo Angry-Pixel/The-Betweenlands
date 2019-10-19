@@ -6,16 +6,21 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.api.loot.ISharedLootContainer;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
@@ -27,6 +32,7 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.SharedLootPoolStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
@@ -51,6 +57,8 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 	private static IBlockState INACTIVE_GLOWING_SMOOTH_CRAGROCK;
 	private static IBlockState AIR;
 
+	private Random lootRng;
+	private SharedLootPoolStorage lootStorage;
 	private ILocationGuard guard;
 	private LocationCragrockTower towerLocation;
 	private BetweenlandsWorldStorage worldStorage;
@@ -75,7 +83,31 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		} else {
 			this.guard.setGuarded(worldIn, pos, false);
 		}
+		
 		super.setBlockAndNotifyAdequately(worldIn, pos, state);
+		
+		TileEntity tile = worldIn.getTileEntity(pos);
+		
+		if(tile instanceof ISharedLootContainer) {
+			ResourceLocation lootTable = this.getLootTableForBlock(worldIn, pos, state);
+			
+			if(lootTable != null) {
+				((ISharedLootContainer) tile).setSharedLootTable(this.lootStorage, lootTable, this.lootRng.nextLong());
+			}
+		}
+	}
+	
+	@Nullable
+	protected ResourceLocation getLootTableForBlock(World world, BlockPos pos, IBlockState state) {
+		Block block = state.getBlock();
+		
+		if(block == BlockRegistry.LOOT_POT) {
+			return LootTableRegistry.CRAGROCK_TOWER_POT;
+		} else if(block == BlockRegistry.WEEDWOOD_CHEST) {
+			return LootTableRegistry.CRAGROCK_TOWER_CHEST;
+		}
+		
+		return null;
 	}
 	
 	@Override
@@ -108,6 +140,11 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		this.towerLocation = new LocationCragrockTower(this.worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos));
 		this.guard = this.towerLocation.getGuard();
 
+		//Shared loot storage
+		this.lootRng = new Random(rand.nextLong());
+		this.lootStorage = new SharedLootPoolStorage(this.worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), rand.nextLong());
+		this.worldStorage.getLocalStorageHandler().addLocalStorage(this.lootStorage);
+		
 		return tower(worldIn, rand, pos.getX(), pos.getY(), pos.getZ());
 	}
 
@@ -310,10 +347,10 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 9, 1, 11, ROOT, 1, 2 + random.nextInt(2), 1, direction);
 		rotatedCubeVolume(world, x, y, z, 4, 1, 10, ROOT, 1, 2 + random.nextInt(2), 1, direction);
 		rotatedCubeVolume(world, x, y, z, 7, 1, 14, ROOT, 1, 1 + random.nextInt(2), 1, direction);
-		rotatedLootPot(world, random, x, y, z, 9, 1, 14, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 12, 1, 9, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 12, 1, 10, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 12, 1, 11, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootPot(world, random, x, y, z, 9, 1, 14, direction, 1, 2, 3, null);
+		rotatedLootPot(world, random, x, y, z, 12, 1, 9, direction, 1, 2, 3, null);
+		rotatedLootPot(world, random, x, y, z, 12, 1, 10, direction, 1, 2, 3, null);
+		rotatedLootPot(world, random, x, y, z, 12, 1, 11, direction, 1, 2, 3, null);
 
 		//FLOOR 1
 		//WALLS
@@ -404,7 +441,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 9, 5, 6, ROOT, 1, 2 + random.nextInt(2), 1, direction);
 		rotatedCubeVolume(world, x, y, z, 7, 5, 14, ROOT, 1, 2 + random.nextInt(2), 1, direction);
 		rotatedCubeVolume(world, x, y, z, 12, 5, 10, ROOT, 1, 2 + random.nextInt(2), 1, direction);
-		rotatedLootPot(world, random, x, y, z, 8, 5, 6, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootPot(world, random, x, y, z, 8, 5, 6, direction, 1, 2, 3, null);
 
 		//FLOOR 2
 		//CEILING/WALLS
@@ -485,12 +522,12 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 7, 10, 9, ROOT, 1, 1 + random.nextInt(2), 1, direction);
 		rotatedCubeVolume(world, x, y, z, 4, 10, 11, ROOT, 1, 1 + random.nextInt(2), 1, direction);
 		rotatedCubeVolume(world, x, y, z, 9, 10, 13, ROOT, 1, 1 + random.nextInt(2), 1, direction);
-		rotatedLootPot(world, random, x, y, z, 7, 10, 14, direction, 1, 2, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 8, 10, 14, direction, 1, 2, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 9, 10, 14, direction, 1, 2, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 12, 10, 9, direction, 1, 2, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 12, 10, 10, direction, 1, 2, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 12, 10, 11, direction, 1, 2, 4, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootPot(world, random, x, y, z, 7, 10, 14, direction, 1, 2, 4, null);
+		rotatedLootPot(world, random, x, y, z, 8, 10, 14, direction, 1, 2, 4, null);
+		rotatedLootPot(world, random, x, y, z, 9, 10, 14, direction, 1, 2, 4, null);
+		rotatedLootPot(world, random, x, y, z, 12, 10, 9, direction, 1, 2, 4, null);
+		rotatedLootPot(world, random, x, y, z, 12, 10, 10, direction, 1, 2, 4, null);
+		rotatedLootPot(world, random, x, y, z, 12, 10, 11, direction, 1, 2, 4, null);
 
 		//FLOOR 3
 		//WALLS
@@ -571,8 +608,8 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 6, 23, 8, SMOOTH_CRAGROCK_SLAB, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 7, 22, 8, getStateFromRotation(1, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 4, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 10, 22, 9, getStateFromRotation(0, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 4, direction);
-		rotatedLootPot(world, random, x, y, z, 10, 15, 8, direction, 2, 3, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 9, 15, 8, direction, 2, 3, 3, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootPot(world, random, x, y, z, 10, 15, 8, direction, 2, 3, 3, null);
+		rotatedLootPot(world, random, x, y, z, 9, 15, 8, direction, 2, 3, 3, null);
 
 		//CEILING
 		rotatedCubeVolume(world, x, y, z, 7, 23, 7, SMOOTH_CRAGROCK, 4, 1, 7, direction);
@@ -693,11 +730,11 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 11, 31, 10, SMOOTH_CRAGROCK, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 11, 30, 10, INACTIVE_GLOWING_SMOOTH_CRAGROCK, 1, 1, 1, direction, pos -> inactiveGlowingCragrockBlocks.add(pos));
 		rotatedCubeVolume(world, x, y, z, 11, 29, 10, getStateFromRotation(0, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
-		rotatedLootPot(world, random, x, y, z, 8, 24, 13, direction, 2, 3, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 7, 24, 13, direction, 2, 3, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 9, 24, 13, direction, 2, 3, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 10, 24, 12, direction, 2, 3, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 10, 24, 11, direction, 2, 3, 4, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootPot(world, random, x, y, z, 8, 24, 13, direction, 2, 3, 4, null);
+		rotatedLootPot(world, random, x, y, z, 7, 24, 13, direction, 2, 3, 4, null);
+		rotatedLootPot(world, random, x, y, z, 9, 24, 13, direction, 2, 3, 4, null);
+		rotatedLootPot(world, random, x, y, z, 10, 24, 12, direction, 2, 3, 4, null);
+		rotatedLootPot(world, random, x, y, z, 10, 24, 11, direction, 2, 3, 4, null);
 
 		//CEILING
 		rotatedCubeVolume(world, x, y, z, 5, 32, 9, SMOOTH_CRAGROCK, 7, 1, 4, direction);
@@ -767,11 +804,11 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 8, 40, 13, SMOOTH_CRAGROCK, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 39, 13, INACTIVE_GLOWING_SMOOTH_CRAGROCK, 1, 1, 1, direction, pos -> inactiveGlowingCragrockBlocks.add(pos));
 		rotatedCubeVolume(world, x, y, z, 8, 38, 13, getStateFromRotation(3, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
-		rotatedLootPot(world, random, x, y, z, 7, 33, 12, direction, 2, 5, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 6, 33, 12, direction, 2, 5, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 5, 33, 11, direction, 2, 5, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 5, 33, 10, direction, 2, 5, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 5, 33, 9, direction, 2, 5, 3, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootPot(world, random, x, y, z, 7, 33, 12, direction, 2, 5, 3, null);
+		rotatedLootPot(world, random, x, y, z, 6, 33, 12, direction, 2, 5, 3, null);
+		rotatedLootPot(world, random, x, y, z, 5, 33, 11, direction, 2, 5, 3, null);
+		rotatedLootPot(world, random, x, y, z, 5, 33, 10, direction, 2, 5, 3, null);
+		rotatedLootPot(world, random, x, y, z, 5, 33, 9, direction, 2, 5, 3, null);
 
 		//CEILING
 		rotatedCubeVolume(world, x, y, z, 6, 41, 7, SMOOTH_CRAGROCK, 4, 1, 7, direction);
@@ -828,11 +865,11 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 5, 49, 10, SMOOTH_CRAGROCK, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 5, 48, 10, INACTIVE_GLOWING_SMOOTH_CRAGROCK, 1, 1, 1, direction, pos -> inactiveGlowingCragrockBlocks.add(pos));
 		rotatedCubeVolume(world, x, y, z, 5, 47, 10, getStateFromRotation(2, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
-		rotatedLootPot(world, random, x, y, z, 8, 42, 7, direction, 3, 7, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 7, 42, 7, direction, 3, 7, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 9, 42, 7, direction, 3, 7, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 6, 42, 8, direction, 3, 7, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 6, 42, 9, direction, 3, 7, 4, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootPot(world, random, x, y, z, 8, 42, 7, direction, 3, 7, 4, null);
+		rotatedLootPot(world, random, x, y, z, 7, 42, 7, direction, 3, 7, 4, null);
+		rotatedLootPot(world, random, x, y, z, 9, 42, 7, direction, 3, 7, 4, null);
+		rotatedLootPot(world, random, x, y, z, 6, 42, 8, direction, 3, 7, 4, null);
+		rotatedLootPot(world, random, x, y, z, 6, 42, 9, direction, 3, 7, 4, null);
 
 		//CEILING
 		rotatedCubeVolume(world, x, y, z, 5, 50, 8, SMOOTH_CRAGROCK, 7, 1, 4, direction);
@@ -976,17 +1013,17 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 8, 52, 15, CRAGROCK_BRICK_WALL, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 53, 15, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
 		rotatedSpawner(world, x, y, z, 8, 54, 15, direction, "thebetweenlands:wight").setMaxEntities(2).setCheckRange(24.0D).setDelayRange(300, 600).setSpawnInAir(false);
-		rotatedLootChest(world, random, x, y, z, 7, 52, 5, direction, 5, 8, 2, 1, LootTableRegistry.DUNGEON_CHEST_LOOT);
-		rotatedLootChest(world, random, x, y, z, 9, 52, 5, direction, 5, 8, 2, 1, LootTableRegistry.DUNGEON_CHEST_LOOT);
-		rotatedLootChest(world, random, x, y, z, 7, 52, 15, direction, 5, 8, 2, 3, LootTableRegistry.DUNGEON_CHEST_LOOT);
-		rotatedLootPot(world, random, x, y, z, 10, 52, 6, direction, 3, 4, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 11, 52, 6, direction, 3, 4, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 6, 52, 6, direction, 3, 4, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 5, 52, 6, direction, 3, 4, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 12, 52, 8, direction, 3, 4, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 12, 52, 12, direction, 3, 4, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 12, 52, 13, direction, 3, 4, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 3, 52, 10, direction, 3, 4, 3, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootChest(world, random, x, y, z, 7, 52, 5, direction, 5, 8, 2, 1, null);
+		rotatedLootChest(world, random, x, y, z, 9, 52, 5, direction, 5, 8, 2, 1, null);
+		rotatedLootChest(world, random, x, y, z, 7, 52, 15, direction, 5, 8, 2, 3, null);
+		rotatedLootPot(world, random, x, y, z, 10, 52, 6, direction, 3, 4, 3, null);
+		rotatedLootPot(world, random, x, y, z, 11, 52, 6, direction, 3, 4, 3, null);
+		rotatedLootPot(world, random, x, y, z, 6, 52, 6, direction, 3, 4, 3, null);
+		rotatedLootPot(world, random, x, y, z, 5, 52, 6, direction, 3, 4, 3, null);
+		rotatedLootPot(world, random, x, y, z, 12, 52, 8, direction, 3, 4, 3, null);
+		rotatedLootPot(world, random, x, y, z, 12, 52, 12, direction, 3, 4, 3, null);
+		rotatedLootPot(world, random, x, y, z, 12, 52, 13, direction, 3, 4, 3, null);
+		rotatedLootPot(world, random, x, y, z, 3, 52, 10, direction, 3, 4, 3, null);
 		rotatedCubeVolume(world, x, y, z, 7, 51, 7, ROOT, 1, 2 + random.nextInt(5), 1, direction);
 		rotatedCubeVolume(world, x, y, z, 10, 51, 11, ROOT, 1, 1 + random.nextInt(2), 1, direction);
 		rotatedCubeVolume(world, x, y, z, 3, 52, 9, ROOT, 1, 2 + random.nextInt(3), 1, direction);

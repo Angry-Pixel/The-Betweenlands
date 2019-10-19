@@ -35,7 +35,6 @@ public class WorldGenCavePots extends WorldGenerator {
 	public boolean generate(World world, Random random, BlockPos pos) {
 		if (pos.getY() > 70)
 			return false;
-		int randDirection = random.nextInt(4) + 2;
 		for (int xx = -2; xx <= 2; xx++) {
 			for (int zz = -2; zz <= 2; zz++) {
 				for(int yy = -1; yy <= 1; yy++) {
@@ -48,7 +47,7 @@ public class WorldGenCavePots extends WorldGenerator {
 								this.setBlockAndNotifyAdequately(world, offsetPos, this.getRandomPot(random));
 								TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, offsetPos);
 								if(lootPot != null) {
-									lootPot.setLootTable(LootTableRegistry.COMMON_POT_LOOT, random.nextLong());
+									lootPot.setLootTable(LootTableRegistry.CAVE_POT, random.nextLong());
 								}
 							}
 						}

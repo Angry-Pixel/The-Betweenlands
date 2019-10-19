@@ -99,28 +99,28 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 					world.setBlockState(new BlockPos(x + 1, yy + 1, z + 1), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
 					tile = world.getTileEntity(new BlockPos(x + 1, yy + 1, z + 1));
 					if (tile instanceof TileEntityChest) {
-						((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+						((TileEntityChest) tile).setLootTable(LootTableRegistry.SPAWNER_CHEST, random.nextLong());
 					}
 					break;
 				case 1:
 					world.setBlockState(new BlockPos(x + 1, yy + 1, z + 3), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
 					tile = world.getTileEntity(new BlockPos(x + 1, yy + 1, z + 3));
 					if (tile instanceof TileEntityChest) {
-						((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+						((TileEntityChest) tile).setLootTable(LootTableRegistry.SPAWNER_CHEST, random.nextLong());
 					}
 					break;
 				case 2:
 					world.setBlockState(new BlockPos(x + 3, yy + 1, z + 1), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
 					tile = world.getTileEntity(new BlockPos(x + 3, yy + 1, z + 1));
 					if (tile instanceof TileEntityChest) {
-						((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+						((TileEntityChest) tile).setLootTable(LootTableRegistry.SPAWNER_CHEST, random.nextLong());
 					}
 					break;
 				case 3:
 					world.setBlockState(new BlockPos(x + 3, yy + 1, z + 3), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
 					tile = world.getTileEntity(new BlockPos(x + 3, yy + 1, z + 3));
 					if (tile instanceof TileEntityChest) {
-						((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+						((TileEntityChest) tile).setLootTable(LootTableRegistry.SPAWNER_CHEST, random.nextLong());
 					}
 					break;
 				}

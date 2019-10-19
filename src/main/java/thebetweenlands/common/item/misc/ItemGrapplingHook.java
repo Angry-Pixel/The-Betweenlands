@@ -35,7 +35,8 @@ public class ItemGrapplingHook extends Item {
 
 		this.setMaxStackSize(1);
 		this.setMaxDamage(MAX_GRAPPLING_HOOK_LENGTH - MIN_GRAPPLING_HOOK_LENGTH);
-
+		this.setNoRepair();
+		
 		this.addPropertyOverride(new ResourceLocation("grappling_hook_length"), (stack, worldIn, entityIn) -> MIN_GRAPPLING_HOOK_LENGTH + stack.getItemDamage());
 		this.addPropertyOverride(new ResourceLocation("extended"), (stack, worldIn, entityIn) -> {
 			if(entityIn != null && entityIn.getRidingEntity() instanceof EntityGrapplingHookNode) {
@@ -129,6 +130,16 @@ public class ItemGrapplingHook extends Item {
 	public boolean showDurabilityBar(ItemStack stack) {
 		return false;
 	}
+	
+    @Override
+    public boolean isRepairable() {
+    	return false;
+    }
+    
+    @Override
+    public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
+    	return false;
+    }
 	
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
