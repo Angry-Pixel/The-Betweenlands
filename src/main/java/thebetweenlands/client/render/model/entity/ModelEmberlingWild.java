@@ -232,16 +232,22 @@ public class ModelEmberlingWild extends ModelBase {
 		EntityEmberlingWild emberling = (EntityEmberlingWild) entity;
 		float heady = MathHelper.sin((rotationYaw / (180F / (float) Math.PI)) * 0.5F);
 		float headx = MathHelper.sin((rotationPitch / (180F / (float) Math.PI)) * 0.5F);
-
-		head_main.rotateAngleY = heady;
-		head_main.rotateAngleX = 0.045553093477052F + headx + emberling.animationTicks;
+		if(emberling.isSitting()) {
+			head_main.rotateAngleY =  0F;
+			head_main.rotateAngleX = 0F;
+		}
+		else {
+			head_main.rotateAngleY = heady;
+			head_main.rotateAngleX = 0.045553093477052F + headx + emberling.animationTicks;
+		}
 	}
-	
+
 	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float limbSwing, float limbSwingAngle, float partialRenderTicks) {
 		EntityEmberlingWild emberling = (EntityEmberlingWild) entity;
-		float animation = MathHelper.sin(limbSwing * 0.5F) * limbSwingAngle * 0.4F;
+		float animation = MathHelper.sin(limbSwing * 0.6F) * limbSwingAngle * 0.4F;
 		float flap = MathHelper.sin((emberling.ticksExisted + partialRenderTicks) * 0.2F) * 0.8F;
+		float headFlap = MathHelper.sin((emberling.ticksExisted + partialRenderTicks) * 0.6F) * 0.7F;
 		gillthingy_left_upper1.rotateAngleY = 0.5918411493512771F - flap * 0.125F;
 		gillthingy_left_upper2.rotateAngleY = 0.22759093446006054F - flap * 0.25F;
 
@@ -253,37 +259,50 @@ public class ModelEmberlingWild extends ModelBase {
 
 		gillthingy_right_lower1.rotateAngleY = -0.8651597102135892F + flap * 0.125F;
 		gillthingy_right_lower2.rotateAngleY = -0.31869712141416456F + flap * 0.25F;
-
-		jaw_lower.rotateAngleX = 0.40980330836826856F + flap * 0.5F;
 		
+		if(emberling.getIsFlameAttacking()) {
+			jaw_lower.rotateAngleX = 1F;
+			head_main.rotateAngleZ = 0F + headFlap;
+		}
+		else {
+			jaw_lower.rotateAngleX = (!emberling.isSitting() ? 0.40980330836826856F : 0.2F ) + flap * (!emberling.isSitting() ? 0.5F : 0.125F);
+			head_main.rotateAngleZ = 0F;
+		}
+			
         if (emberling.isSitting()) {
-			hindleg_left1.rotateAngleX = -0.2617993877991494F;
-			hindleg_right1.rotateAngleX = -0.2617993877991494F;
+        	body3.rotationPointY= 20.5F;
+			hindleg_left1.rotateAngleX = -1.4F;
+			hindleg_right1.rotateAngleX = -1.4F;
 	
 			hindleg_left2.rotateAngleX = 0.7740535232594852F;
 			hindleg_right2.rotateAngleX = 0.7740535232594852F;
 	
-			arm_right1.rotateAngleX = 0.22759093446006054F;
+			arm_right1.rotateAngleX = -1.1F;
 			arm_right1.rotateAngleY = 0.091106186954104F;
 			arm_right1.rotateAngleZ = 0.18203784098300857F;
 	
-			arm_left1.rotateAngleX = 0.22759093446006054F;
+			arm_left1.rotateAngleX = -1.1F;
 			arm_left1.rotateAngleY = -0.091106186954104F;
 			arm_left1.rotateAngleZ = -0.18203784098300857F;
 	
 			body2.rotateAngleY = 0F;
 			body4.rotateAngleY = 0F ;
 	
-		    tail1.rotateAngleY = 0F;
-		    tail2.rotateAngleY = 0F;
-		    tail3.rotateAngleY = 0F;
-		    tail4.rotateAngleY = 0F;
-		    tail5.rotateAngleY = 0F;
-		    tail6.rotateAngleY = 0F;
-		    tail7.rotateAngleY = 0F;
+		    tail1.rotateAngleY = 0.4F;
+		    tail2.rotateAngleY = 0.4F;
+		    tail3.rotateAngleY = 0.4F;
+		    tail4.rotateAngleY = 0.6F;
+		    tail5.rotateAngleY = 0.8F;
+		    tail6.rotateAngleY = 0.4F;
+		    tail7.rotateAngleY = 0.2F;
+		    
+		    tail2.rotateAngleZ = 0.3F;
+		    tail3.rotateAngleZ = 0.3F;
+		    tail4.rotateAngleZ = 0.3F;
         }
         else
         {
+        	body3.rotationPointY= 15.5F;
 			hindleg_left1.rotateAngleX = -0.2617993877991494F + animation * 2F;
 			hindleg_right1.rotateAngleX = -0.2617993877991494F - animation * 2F;
 	
@@ -308,6 +327,10 @@ public class ModelEmberlingWild extends ModelBase {
 		    tail5.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
 		    tail6.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
 		    tail7.rotateAngleY = 0F - animation * 0.5F + flap * 0.25F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+		    
+		    tail2.rotateAngleZ = 0F;
+		    tail3.rotateAngleZ = 0F;
+		    tail4.rotateAngleZ = 0F;
         }
 	}
 

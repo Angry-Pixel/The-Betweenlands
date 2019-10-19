@@ -105,10 +105,10 @@ public class EntityAIFollowOwnerBL extends EntityAIBase
 	@Override
 	public void updateTask()
 	{
-		this.tameable.getLookHelper().setLookPositionWithEntity(this.owner, 10.0F, (float)this.tameable.getVerticalFaceSpeed());
-
 		if (!this.tameable.isSitting())
 		{
+			this.tameable.getLookHelper().setLookPositionWithEntity(this.owner, 10.0F, (float)this.tameable.getVerticalFaceSpeed());
+
 			if (--this.timeToRecalcPath <= 0)
 			{
 				this.timeToRecalcPath = 10;

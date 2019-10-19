@@ -19,7 +19,6 @@ import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
 import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
-import net.minecraft.entity.ai.EntityAISit;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityLookHelper;
@@ -53,6 +52,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIFollowOwnerBL;
+import thebetweenlands.common.entity.ai.EntityAISitBL;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -107,7 +107,7 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityEmberlingWild.EntityAIFlameBreath(this));
-		aiSit = new EntityAISit(this);
+		this.aiSit = new EntityAISitBL(this);
 		tasks.addTask(1, this.aiSit);
 		tasks.addTask(2, new EntityEmberlingWild.AIEmberlingAttack(this));
 		tasks.addTask(3, new EntityAIFollowOwnerBL(this, 0.6D, 10.0F, 2.0F));
@@ -230,7 +230,11 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 		if (getEntityWorld().isRemote) {
 			if (!getIsFlameAttacking())
 				if (ticksExisted % 5 == 0)
-					flameParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
+					if(!isSitting())
+						flameParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
+					else {
+						sleepingParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
+					}
 
 			if (getIsFlameAttacking())
 				spawnFlameBreathParticles();
@@ -250,8 +254,8 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 
 		//renderYawOffset = rotationYaw;
 		double a = Math.toRadians(renderYawOffset);
-		double offSetX = -Math.sin(a) * 1.85D;
-		double offSetZ = Math.cos(a) * 1.85D;
+		double offSetX = -Math.sin(a) * (isSitting() ? -0.2D : 1.85D);
+		double offSetZ = Math.cos(a) * (isSitting() ? -0.2D : 1.85D);
 		tailPart[0].setLocationAndAngles(posX - offSetX, posY + 0.2D, posZ - offSetZ, 0.0F, 0.0F);
 	}
 
@@ -348,10 +352,10 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 			velZ = rand.nextFloat() * 0.025D * motionZ;
 			velX = rand.nextFloat() * 0.025D * motionX;
 			if(this.inWater) {
-				world.spawnParticle(EnumParticleTypes.WATER_BUBBLE,  x, y, z, velX, velY, velZ);
-				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL,  x, y, z, velX, velY, velZ);
+				world.spawnAlwaysVisibleParticle(EnumParticleTypes.WATER_BUBBLE.getParticleID(),  x, y, z, velX, velY, velZ);
+				world.spawnAlwaysVisibleParticle(EnumParticleTypes.SMOKE_NORMAL.getParticleID(),  x, y, z, velX, velY, velZ);
 			} else {
-				world.spawnParticle(EnumParticleTypes.FLAME,  x, y, z, velX, velY, velZ);
+				world.spawnAlwaysVisibleParticle(EnumParticleTypes.FLAME.getParticleID(),  x, y, z, velX, velY, velZ);
 			}
 		}
 	}
@@ -371,8 +375,18 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 			double velZ = rand.nextFloat() * 0.1D * motionZ;
 
 			float speed = 0.15F;
-			world.spawnParticle(EnumParticleTypes.FLAME, posX + offSetX + velX, posY + getEyeHeight() * 0.75D + velY, posZ + offSetZ + velZ, look.x * speed, look.y * speed, look.z * speed);
+			world.spawnAlwaysVisibleParticle(EnumParticleTypes.FLAME.getParticleID(), posX + offSetX + velX, posY + getEyeHeight() * 0.75D + velY, posZ + offSetZ + velZ, look.x * speed, look.y * speed, look.z * speed);
 		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void sleepingParticles(World world, double x, double y, double z, Random rand) {
+		int motionX = rand.nextBoolean() ? 1 : -1;
+		int motionZ = rand.nextBoolean() ? 1 : -1;
+		double velY = rand.nextFloat() * 0.05D;
+		double velZ = rand.nextFloat() * 0.025D * motionZ;
+		double velX = rand.nextFloat() * 0.025D * motionX;
+		world.spawnAlwaysVisibleParticle(EnumParticleTypes.SMOKE_NORMAL.getParticleID(), x, y, z, velX, velY, velZ);
 	}
 
 	@Override
@@ -434,7 +448,7 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 		public boolean shouldExecute() {
 			target = emberling.getAttackTarget();
 
-			if (target == null || emberling.isInWater())
+			if (target == null || emberling.isInWater() || emberling.isSitting())
 				return false;
 			else {
 				double distance = emberling.getDistanceSq(target);
@@ -489,7 +503,7 @@ public class EntityEmberlingWild extends EntityTameable implements IEntityMultiP
 								entity.setFire(5); // seems ok for time
 				}
 			}
-			if (shootCount >= distance || shootCount >= 3)
+			if (shootCount >= distance || shootCount >= 4)
 				resetTask();
 		}
 	}
