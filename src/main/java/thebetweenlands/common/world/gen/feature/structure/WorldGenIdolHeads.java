@@ -225,7 +225,7 @@ public class WorldGenIdolHeads extends WorldGenHelper {
 		world.setBlockState(new BlockPos(x, y - 1, z), BlockRegistry.WEEDWOOD_CHEST.getDefaultState());
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y - 1, z));
 		if (tile instanceof TileEntityChest) {
-			((TileEntityChest) tile).setLootTable(LootTableRegistry.COMMON_CHEST_LOOT, rand.nextLong());
+			((TileEntityChest) tile).setLootTable(LootTableRegistry.IDOL_HEADS_CHEST, rand.nextLong());
 		}
 		
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);

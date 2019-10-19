@@ -3,6 +3,8 @@ package thebetweenlands.common.world.gen.feature.structure;
 import java.util.Random;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
@@ -10,8 +12,8 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +23,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.api.loot.ISharedLootContainer;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
@@ -40,16 +43,16 @@ import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
-import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.SharedLootPoolStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationAmbience;
+import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationStorage;
-import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
 public class WorldGenWightFortress extends WorldGenerator {
@@ -106,6 +109,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private IBlockState energyBarrier = BlockRegistry.ENERGY_BARRIER.getDefaultState();
 
 	private ILocationGuard guard;
+	private Random lootRng;
+	private SharedLootPoolStorage lootStorage;
 
 	public WorldGenWightFortress() {
 		//these sizes are subject to change
@@ -133,7 +138,31 @@ public class WorldGenWightFortress extends WorldGenerator {
 		} else {
 			this.guard.setGuarded(worldIn, pos, false);
 		}
+		
 		super.setBlockAndNotifyAdequately(worldIn, pos, state);
+		
+		TileEntity tile = worldIn.getTileEntity(pos);
+		
+		if(tile instanceof ISharedLootContainer) {
+			ResourceLocation lootTable = this.getLootTableForBlock(worldIn, pos, state);
+			
+			if(lootTable != null) {
+				((ISharedLootContainer) tile).setSharedLootTable(this.lootStorage, lootTable, this.lootRng.nextLong());
+			}
+		}
+	}
+	
+	@Nullable
+	protected ResourceLocation getLootTableForBlock(World world, BlockPos pos, IBlockState state) {
+		Block block = state.getBlock();
+		
+		if(block == BlockRegistry.LOOT_POT) {
+			return LootTableRegistry.WIGHT_FORTRESS_POT;
+		} else if(block == BlockRegistry.WEEDWOOD_CHEST) {
+			return LootTableRegistry.WIGHT_FORTRESS_CHEST;
+		}
+		
+		return null;
 	}
 
 	protected boolean canGenerateAt(World world, Random rand, BlockPos pos) {
@@ -189,6 +218,11 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 		LocalRegion region = LocalRegion.getFromBlockPos(pos);
 
+		//Shared loot storage
+		this.lootRng = new Random(rand.nextLong());
+		this.lootStorage = new SharedLootPoolStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, rand.nextLong());
+		worldStorage.getLocalStorageHandler().addLocalStorage(this.lootStorage);
+		
 		LocationGuarded fortressLocation = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower", EnumLocationType.WIGHT_TOWER);
 		this.guard = fortressLocation.getGuard();
 		fortressLocation.addBounds(new AxisAlignedBB(pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10, pos.getX() + 42, pos.getY() + 80, pos.getZ() + 42));
@@ -1143,24 +1177,16 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 	private void placeChest(World world, Random rand, BlockPos pos, int blockMeta) {
 		this.setBlockAndNotifyAdequately(world, pos, getWeedWoodChestRotations(chest, blockMeta));
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileEntityChestBetweenlands) {
-			//TODO Make proper shared loot tables
-			//TODO Also keep track of inventories -> LocationStorage.setLootInventories(...)
-			//((TileEntityChestBetweenlands) tile).setSharedLootTable(LootTableRegistry.SHARED_LOOT_POOL_TEST, rand.nextLong());
-			((TileEntityChestBetweenlands) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, rand.nextLong());
-		}
 	}
 
 	private void placeRandomisedLootPot(World world, Random rand, BlockPos pos, IBlockState blockType, int blockMeta) {
-		if(rand.nextInt(5) != 0 || world.isAirBlock(pos.down()))
+		if(rand.nextInt(5) != 0 || world.isAirBlock(pos.down())) {
 			return;
-		else {
+		} else {
 			this.setBlockAndNotifyAdequately(world, pos, getLootPotRotations(blockType, blockMeta));
 			TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, pos);
 			if (lootPot != null) {
 				//TODO Make proper shared loot tables
-				lootPot.setLootTable(LootTableRegistry.DUNGEON_POT_LOOT, rand.nextLong());
 				lootPot.setModelRotationOffset(world.rand.nextInt(41) - 20);
 				world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 			}

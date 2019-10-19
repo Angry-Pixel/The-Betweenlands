@@ -143,7 +143,6 @@ public class BlockLootUrn extends BasicBlock implements ITileEntityProvider, ICu
 		worldIn.setBlockState(pos, state, 3);
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile instanceof TileEntityLootUrn) {
-			((TileEntityLootUrn) tile).setLootTable(LootTableRegistry.COMMON_POT_LOOT, worldIn.rand.nextLong());
 			tile.markDirty();
 		}
 	}

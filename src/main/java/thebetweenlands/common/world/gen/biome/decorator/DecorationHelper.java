@@ -100,7 +100,6 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_ROOTS = new WorldGenRootsCluster();
 	public static final WorldGenerator GEN_WATER_WEEDS = new WorldGenPlantCluster(BlockRegistry.WATER_WEEDS.getDefaultState()).setUnderwater(true);
 	public static final WorldGenerator GEN_UNDERGROUND_RUINS = new WorldGenUndergroundRuins();
-	public static final WorldGenerator GEN_CRAGROCK_TOWER = new WorldGenCragrockTower();
 	public static final WorldGenerator GEN_WEEDWOOD_BUSH = new WorldGenWeedwoodBush();
 	public static final WorldGenerator GEN_SAP_TREE = new WorldGenSapTree();
 	public static final WorldGenerator GEN_RUBBER_TREE = new WorldGenRubberTree();
@@ -117,7 +116,6 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_HEARTHGROVE_TREE = new WorldGenHearthgroveTree();
 	public static final WorldGenerator GEN_BULB_CAPPED_MUSHROOMS = new WorldGenPlantCluster(BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState(), 5, 40);
 	public static final WorldGenerator GEN_SPAWNER = new WorldGenSpawner();
-	public static final WorldGenWightFortress GEN_WIGHT_FORTRESS = new WorldGenWightFortress();
 	public static final WorldGenerator GEN_DEAD_TRUNK = new WorldGenGiantTreeDead();
 	public static final WorldGenerator GEN_MUD_STRUCTURES = new WorldGenMudStructures();
 	public static final WorldGenerator GEN_TAR_POOL_DUNGEON = new WorldGenTarPoolDungeon();
@@ -688,7 +686,7 @@ public class DecorationHelper {
 	public static boolean generateCragrockTower(DecoratorPositionProvider decorator) {
 		BlockPos pos = decorator.getRandomPosSeaGround(10);
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
-			return GEN_CRAGROCK_TOWER.generate(decorator.getWorld(), decorator.getRand(), pos);
+			return new WorldGenCragrockTower().generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
 	}
@@ -834,8 +832,9 @@ public class DecorationHelper {
 		BlockPos pos = decorator.getRandomPos(1);
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
 			Biome biome = decorator.getWorld().getBiome(pos);
-			if(GEN_WIGHT_FORTRESS.isBiomeValid(biome)) {
-				return GEN_WIGHT_FORTRESS.generate(decorator.getWorld(), decorator.getRand(), pos);
+			WorldGenWightFortress fortress = new WorldGenWightFortress();
+			if(fortress.isBiomeValid(biome)) {
+				return fortress.generate(decorator.getWorld(), decorator.getRand(), pos);
 			}
 		}
 		return false;

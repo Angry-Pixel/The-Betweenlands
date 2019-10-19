@@ -10,7 +10,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawner;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawnerStructure;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 
 
 //MINE!!
@@ -40,10 +44,10 @@ public class TestItem extends Item {
             WorldGenIdolHeads head = new WorldGenIdolHeads();
             head.generate(worldIn, itemRand, pos.up());
        */ 
-		/*
+		
             WorldGenSpawnerStructure smallRuins = new WorldGenSpawnerStructure();
             smallRuins.generate(worldIn, itemRand, pos.up());
-		*/
+		
 		/*
 			WorldGenWightFortress fortress = new WorldGenWightFortress();
 			fortress.generate(worldIn, itemRand, pos.up());
@@ -84,21 +88,19 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
-		
-		/*	WorldGenCragrockTower tower = new WorldGenCragrockTower();
-
 		/*
 			WorldGenCragrockTower tower = new WorldGenCragrockTower();
 
 			if(tower.generate(worldIn, itemRand, pos.up(8).add(8, 0, 0))) {
 				//playerIn.setHeldItem(hand, null);
 			}
-		*/
+		 */
+		/*
 			WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 			//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
 			//dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
 			dungeon.generate(worldIn, itemRand, pos.up().add(1, 0, 1));
-
+		*/
 
 			//BlockGroundItem.create(worldIn, pos.up(), new ItemStack(ItemRegistry.ANCIENT_GREATSWORD));
 

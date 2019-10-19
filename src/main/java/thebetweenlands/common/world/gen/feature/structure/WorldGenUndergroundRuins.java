@@ -72,10 +72,10 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 
 		rotatedCubeVolume(world, x, y, z, 0, 3, 4, PITSTONE_BRICKS, 1, 1, 2, direction);
 
-		rotatedLootPot(world, random, x, y, z, 1, 0, 1, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 5, 0, 1, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 1, 0, 4, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 5, 0, 4, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootPot(world, random, x, y, z, 1, 0, 1, direction, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 5, 0, 1, direction, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 1, 0, 4, direction, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 5, 0, 4, direction, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
 		return true;
 	}
 
@@ -152,10 +152,10 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 			rotatedCubeVolume(world, x, y, z, 8, height, 10, PITSTONE_CHISELED, 1, 1, 1, direction);
 
 
-		rotatedLootPot(world, random, x, y, z, 7, height - 1, 9, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 5, height - 1, 4, direction, 1, 2, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 1, 0, 7, direction, 1, 2, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 7, 0, 9, direction, 1, 2, 4, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootPot(world, random, x, y, z, 7, height - 1, 9, direction, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 5, height - 1, 4, direction, 1, 2, 4, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 1, 0, 7, direction, 1, 2, 4, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 7, 0, 9, direction, 1, 2, 4, LootTableRegistry.UNDERGROUND_RUINS_POT);
 		return true;
 	}
 
@@ -202,10 +202,10 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 1, 6, 5, PITSTONE_BRICK_SLAB, 4, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 5, 6, 1, PITSTONE_BRICK_SLAB, 1, 1, 4, direction);
 
-		rotatedLootPot(world, random, x, y, z, 1, 1, 1, 0, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 4, 1, 1, 0, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 1, 1, 4, 0, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 4, 1, 4, 0, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootPot(world, random, x, y, z, 1, 1, 1, 0, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 4, 1, 1, 0, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 1, 1, 4, 0, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 4, 1, 4, 0, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
 		return true;
 	}
 
@@ -250,8 +250,8 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 3, 3, 4, PITSTONE_BRICKS, 1, 1, 6, direction);
 
 		for (int i = 0; i <= 4; i++) {
-			rotatedLootPot(world, random, x, y, z, 1, 0, 5 + i, direction, 1, 2, 4, LootTableRegistry.DUNGEON_POT_LOOT);
-			rotatedLootPot(world, random, x, y, z, 3, 0, 5 + i, direction, 1, 2, 4, LootTableRegistry.DUNGEON_POT_LOOT);
+			rotatedLootPot(world, random, x, y, z, 1, 0, 5 + i, direction, 1, 2, 4, LootTableRegistry.UNDERGROUND_RUINS_POT);
+			rotatedLootPot(world, random, x, y, z, 3, 0, 5 + i, direction, 1, 2, 4, LootTableRegistry.UNDERGROUND_RUINS_POT);
 		}
 		return true;
 	}
@@ -307,10 +307,10 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 
 		rotatedCubeVolume(world, x, y, z, 2, 4, 1, PITSTONE_BRICK_SLAB, 5, 1, 5, direction);
 
-		rotatedLootPot(world, random, x, y, z, 2, 1, 1, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 2, 1, 5, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 6, 1, 1, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 6, 1, 5, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootPot(world, random, x, y, z, 2, 1, 1, direction, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 2, 1, 5, direction, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 6, 1, 1, direction, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 6, 1, 5, direction, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
 		return true;
 	}
 
@@ -344,8 +344,8 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 
 		rotatedCubeVolume(world, x, y, z, 5, 2, 6, PITSTONE_BRICKS, 2, 1, 1, direction);
 
-		rotatedLootPot(world, random, x, y, z, 5, 0, 5, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
-		rotatedLootPot(world, random, x, y, z, 1, 0, 1, direction, 1, 2, 3, LootTableRegistry.DUNGEON_POT_LOOT);
+		rotatedLootPot(world, random, x, y, z, 5, 0, 5, direction, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
+		rotatedLootPot(world, random, x, y, z, 1, 0, 1, direction, 1, 2, 3, LootTableRegistry.UNDERGROUND_RUINS_POT);
 		return true;
 	}
 

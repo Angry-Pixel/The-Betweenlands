@@ -137,7 +137,6 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile instanceof TileEntityLootPot) {
 			((TileEntityLootPot) tile).setModelRotationOffset(worldIn.rand.nextInt(41) - 20);
-			((TileEntityLootPot) tile).setLootTable(LootTableRegistry.COMMON_POT_LOOT, worldIn.rand.nextLong());
 			tile.markDirty();
 		}
 	}

@@ -25,8 +25,6 @@ import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class WorldGenTarPoolDungeon extends WorldGenHelper {
-	public static final ResourceLocation loot = LootTableRegistry.DUNGEON_POT_LOOT;
-
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
 		byte height = 10;
@@ -81,7 +79,7 @@ public class WorldGenTarPoolDungeon extends WorldGenHelper {
 							world.setBlockState(new BlockPos(x + xx, yy, z + zz), getRandomTarLootPot(rand).withProperty(BlockLootPot.FACING, EnumFacing.HORIZONTALS[rand.nextInt(4)]));
 							TileEntity te = world.getTileEntity(this.getCheckPos(x + xx, yy, z + zz));
 							if(te instanceof TileEntityLootPot) {
-								((TileEntityLootPot)te).setLootTable(loot, rand.nextLong());
+								((TileEntityLootPot)te).setLootTable(LootTableRegistry.TAR_POOL_POT, rand.nextLong());
 							}
 						}
 					}
