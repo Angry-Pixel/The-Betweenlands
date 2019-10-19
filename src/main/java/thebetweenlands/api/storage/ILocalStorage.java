@@ -108,6 +108,13 @@ public interface ILocalStorage extends ICapabilityProvider {
 	public void setLinkedChunks(List<ChunkPos> linkedChunks);
 
 	/**
+	 * Called once when the local storage is initially added to the world
+	 */
+	public default void onAdded() {
+		
+	}
+	
+	/**
 	 * Called when the local storage is loaded
 	 */
 	public void onLoaded();

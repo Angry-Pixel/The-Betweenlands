@@ -61,14 +61,18 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 	@Override
 	public boolean addLocalStorage(ILocalStorage storage) {
-		if(!this.localStorage.containsKey(storage.getID()) && !storage.getLinkedChunks().isEmpty()) {
+		return this.addLocalStorageInternal(storage, true);
+	}
+
+	protected boolean addLocalStorageInternal(ILocalStorage storage, boolean isInitialAdd) {
+		if(!this.localStorage.containsKey(storage.getID())) {
 			this.localStorage.put(storage.getID(), storage);
 
 			if(storage instanceof ITickable) {
 				this.tickableLocalStorage.add(storage);
 			}
 
-			//Add already loaded references and watchers
+			//Add already loaded references
 			for(ChunkPos referenceChunk : storage.getLinkedChunks()) {
 				Chunk chunk = this.world.getChunkProvider().getLoadedChunk(referenceChunk.x, referenceChunk.z);
 				if(chunk != null) {
@@ -78,14 +82,13 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 						if(reference != null && !storage.getLoadedReferences().contains(reference)) {
 							//Add reference
 							storage.loadReference(reference);
-
-							//Add watchers
-							for(EntityPlayerMP watcher : chunkStorage.getWatchers()) {
-								storage.addWatcher(chunkStorage, watcher);
-							}
 						}
 					}
 				}
+			}
+
+			if(isInitialAdd) {
+				storage.onAdded();
 			}
 
 			storage.onLoaded();
@@ -211,14 +214,13 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		try {
 			ILocalStorage storage = this.createLocalStorageFromFile(reference);
 			if(storage != null) {
-				this.addLocalStorage(storage);
-				storage.onLoaded();
-	
+				this.addLocalStorageInternal(storage, false);
+
 				if(storage.getRegion() != null) {
 					LocalRegionData data = this.regionCache.getOrCreateRegion(reference.getRegion());
 					data.incrRefCounter();
 				}
-	
+
 				return storage;
 			}
 		} catch(Exception ex) {

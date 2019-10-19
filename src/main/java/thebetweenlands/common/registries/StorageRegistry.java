@@ -14,6 +14,7 @@ import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.world.storage.SharedLootPoolStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationPortal;
@@ -30,6 +31,7 @@ public class StorageRegistry {
 	}
 
 	public static void preInit() {
+		register(new ResourceLocation(ModInfo.ID, "shared_loot_pool_storage"), SharedLootPoolStorage.class, SharedLootPoolStorage::new);
 		register(new ResourceLocation(ModInfo.ID, "location_storage"), LocationStorage.class, LocationStorage::new);
 		register(new ResourceLocation(ModInfo.ID, "cragrock_tower"), LocationCragrockTower.class, LocationCragrockTower::new);
 		register(new ResourceLocation(ModInfo.ID, "location_guarded"), LocationGuarded.class, LocationGuarded::new);

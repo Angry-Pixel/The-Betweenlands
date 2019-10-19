@@ -148,7 +148,6 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 		LocationStorage location = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(x, z), "small_dungeon", EnumLocationType.DUNGEON);
 		location.addBounds(new AxisAlignedBB(x, y, z, x + 5, y + 5, z + 5).grow(2, 2, 2));
-		location.linkChunks();
 		location.setLayer(0);
 		location.setSeed(random.nextLong());
 		location.setDirty(true);

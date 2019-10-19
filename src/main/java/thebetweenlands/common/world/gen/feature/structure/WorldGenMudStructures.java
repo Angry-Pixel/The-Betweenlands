@@ -67,7 +67,6 @@ public class WorldGenMudStructures extends WorldGenHelper {
 			for(AxisAlignedBB aabb : this.bounds) {
 				locationStorage.addBounds(aabb.grow(2, 1, 2));
 			}
-			locationStorage.linkChunks();
 			locationStorage.setDirty(true);
 			worldStorage.getLocalStorageHandler().addLocalStorage(locationStorage);
 		}

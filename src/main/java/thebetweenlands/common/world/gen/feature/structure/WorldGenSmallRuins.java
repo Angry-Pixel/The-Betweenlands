@@ -130,7 +130,6 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			}
 
 			locationStorage.setSeed(random.nextLong());
-			locationStorage.linkChunks();
 			locationStorage.setDirty(true);
 			worldStorage.getLocalStorageHandler().addLocalStorage(locationStorage);
 

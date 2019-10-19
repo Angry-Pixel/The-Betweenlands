@@ -10,9 +10,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.loot.ISharedLootContainer;
+import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.world.storage.SharedLootPoolStorage;
 
 public class TileEntityChestBetweenlands extends TileEntityChest implements ISharedLootContainer {
+	protected StorageID storageId;
 	protected boolean isSharedLootTable;
 
 	@Override
@@ -42,6 +46,11 @@ public class TileEntityChestBetweenlands extends TileEntityChest implements ISha
 
 		if(super.checkLootAndRead(compound)) {
 			this.isSharedLootTable = compound.getBoolean("SharedLootTable");
+
+			if(compound.hasKey("StorageID", Constants.NBT.TAG_COMPOUND)) {
+				this.storageId = StorageID.readFromNBT(compound.getCompoundTag("StorageID"));
+			}
+
 			return true;
 		}
 
@@ -52,6 +61,11 @@ public class TileEntityChestBetweenlands extends TileEntityChest implements ISha
 	protected boolean checkLootAndWrite(NBTTagCompound compound) {
 		if(super.checkLootAndWrite(compound)) {
 			compound.setBoolean("SharedLootTable", this.isSharedLootTable);
+
+			if(this.storageId != null) {
+				compound.setTag("StorageID", this.storageId.writeToNBT(new NBTTagCompound()));
+			}
+
 			return true;
 		}
 
@@ -70,7 +84,7 @@ public class TileEntityChestBetweenlands extends TileEntityChest implements ISha
 
 	@Override
 	public boolean fillInventoryWithLoot(@Nullable EntityPlayer player) {
-		return TileEntityLootInventory.fillInventoryWithLoot(this, player, this.lootTableSeed);
+		return TileEntityLootInventory.fillInventoryWithLoot(this.world, this, player, this.lootTableSeed);
 	}
 
 	@Override
@@ -88,10 +102,20 @@ public class TileEntityChestBetweenlands extends TileEntityChest implements ISha
 		this.markDirty();
 	}
 
-	public void setSharedLootTable(ResourceLocation lootTable, long lootTableSeed) {
+	@Override
+	public void setSharedLootTable(SharedLootPoolStorage storage, ResourceLocation lootTable, long lootTableSeed) {
+		if(!lootTable.equals(this.lootTable)) {
+			storage.registerSharedLootInventory(this.pos, lootTable);
+		}
+		this.storageId = storage.getID();
 		this.lootTable = lootTable;
 		this.lootTableSeed = lootTableSeed;
 		this.isSharedLootTable = true;
 		this.markDirty();
+	}
+
+	@Override
+	public StorageID getSharedLootPoolStorageID() {
+		return this.storageId;
 	}
 }

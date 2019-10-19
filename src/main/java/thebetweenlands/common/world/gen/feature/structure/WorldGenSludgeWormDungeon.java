@@ -10,7 +10,6 @@ import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -18,6 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.api.loot.ISharedLootContainer;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.SoilHelper;
@@ -35,15 +35,14 @@ import thebetweenlands.common.entity.EntityMovingWall;
 import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
-import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
-import thebetweenlands.common.tile.TileEntityLootInventory;
 import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.SharedLootPoolStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationAmbience;
 import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
@@ -57,6 +56,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private LightTowerBuildParts lightTowerBuild;
 	private DecayPitBuildParts decayPitBuild;
 
+	private SharedLootPoolStorage lootStorage;
 	private LocationSludgeWormDungeon location;
 	private LocationStorage locationBarrisheeLair;
 	private LocationStorage locationCrypt;
@@ -125,10 +125,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		//Main location for spawning, fog, loot etc.
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 
-		//TODO implement mob spawning in different regions (maze, tunnels)
+		//Shared loot storage
+		lootStorage = new SharedLootPoolStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), rand.nextLong());
+		worldStorage.getLocalStorageHandler().addLocalStorage(lootStorage);
+		
+		//Main location
 		location = new LocationSludgeWormDungeon(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos));
 		location.addBounds(new AxisAlignedBB(pos.getX() - 3, pos.getY() + 30, pos.getZ() - 3, pos.getX() + 29, pos.getY() - 58, pos.getZ() + 29));
-		location.linkChunks();
 		location.setLayer(0);
 		location.setSeed(rand.nextLong());
 		location.setStructurePos(pos);
@@ -141,7 +144,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		//Maze
 		LocationStorage locationMaze = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_maze", EnumLocationType.SLUDGE_WORM_DUNGEON);
 		locationMaze.addBounds(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 29, pos.getY() - 8 * 5 - 3, pos.getZ() + 29));
-		locationMaze.linkChunks();
 		locationMaze.setLayer(1);
 		locationMaze.setSeed(rand.nextLong());
 		locationMaze.setVisible(true);
@@ -151,7 +153,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		//Barrishee Lair
 		locationBarrisheeLair = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_barrishee_lair", EnumLocationType.SLUDGE_WORM_DUNGEON);
 		locationBarrisheeLair.addBounds(new AxisAlignedBB(pos.getX() + 20, pos.getY() - 24, pos.getZ() - 3, pos.getX() + 29, pos.getY() - 19, pos.getZ()));
-		locationBarrisheeLair.linkChunks();
 		locationBarrisheeLair.setLayer(1);
 		locationBarrisheeLair.setSeed(rand.nextLong());
 		locationBarrisheeLair.setVisible(true);
@@ -164,7 +165,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				new AxisAlignedBB(pos.getX() - 3, pos.getY() - 43, pos.getZ() - 3, pos.getX(), pos.getY() - 24, pos.getZ() + 29),
 				new AxisAlignedBB(pos.getX(), pos.getY() - 43, pos.getZ() - 3, pos.getX() + 29 , pos.getY() - 24, pos.getZ())
 				);
-		locationWalkays.linkChunks();
 		locationWalkays.setLayer(1);
 		locationWalkays.setSeed(rand.nextLong());
 		locationWalkays.setVisible(true);
@@ -193,7 +193,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				new AxisAlignedBB(pos.getX() + 23, pos.getY() - 57, pos.getZ() + 28, pos.getX() + 3 , pos.getY() - 54, pos.getZ() + 25),
 				new AxisAlignedBB(pos.getX() + 4 , pos.getY() - 57, pos.getZ() + 27, pos.getX() - 2 , pos.getY() - 51, pos.getZ() + 22)
 				);
-		locationCryptTunnels.linkChunks();
 		locationCryptTunnels.setLayer(1);
 		locationCryptTunnels.setSeed(rand.nextLong());
 		locationCryptTunnels.setVisible(true);
@@ -203,7 +202,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		//Crypt
 		locationCrypt = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_crypt", EnumLocationType.SLUDGE_WORM_DUNGEON);
 		locationCrypt.addBounds(new AxisAlignedBB(pos.getX() - 3, pos.getY() - 57, pos.getZ() + 22, pos.getX() + 7, pos.getY() - 54, pos.getZ() + 12));
-		locationCrypt.linkChunks();
 		locationCrypt.setLayer(1);
 		locationCrypt.setSeed(rand.nextLong());
 		locationCrypt.setVisible(true);
@@ -226,7 +224,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				new AxisAlignedBB(pos.getX() + 22, pos.getY() - 49, pos.getZ() + 22, pos.getX() + 23, pos.getY() - 51, pos.getZ() + 23),
 				new AxisAlignedBB(pos.getX() + 21, pos.getY() - 54, pos.getZ() + 8 , pos.getX() + 8 , pos.getY() - 58, pos.getZ() + 21)
 				);
-		locationPit.linkChunks();
 		locationPit.setLayer(1);
 		locationPit.setAmbience(new LocationAmbience(EnumLocationAmbience.SLUDGE_WORM_DUNGEON));
 		locationPit.setSeed(rand.nextLong());
@@ -1276,22 +1273,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		
 		TileEntity tile = worldIn.getTileEntity(pos);
 		
-		TileEntityLootInventory lootInv = tile instanceof TileEntityLootInventory ? (TileEntityLootInventory) tile : null;
-		TileEntityChestBetweenlands lootChest = tile instanceof TileEntityChestBetweenlands ? (TileEntityChestBetweenlands) tile : null;
-		
-		if(lootInv != null || lootChest != null) {
+		if(tile instanceof ISharedLootContainer) {
 			ResourceLocation lootTable = this.getLootTableForBlock(worldIn, pos, state);
 			
 			if(lootTable != null) {
-				if(lootInv != null) {
-					lootInv.setSharedLootTable(lootTable, this.lootRng.nextLong());
-				}
-				
-				if(lootChest != null) {
-					lootChest.setSharedLootTable(lootTable, this.lootRng.nextLong());
-				}
-			
-				this.location.registerSharedLootInventory(lootTable);
+				((ISharedLootContainer) tile).setSharedLootTable(this.lootStorage, lootTable, this.lootRng.nextLong());
 			}
 		}
 	}
