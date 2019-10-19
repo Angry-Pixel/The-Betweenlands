@@ -287,6 +287,9 @@ public class ModelEmberlingWild extends ModelBase {
 	
 			body2.rotateAngleY = 0F;
 			body4.rotateAngleY = 0F ;
+			
+			body2.rotateAngleX = 0F + flap * 0.0125F;
+			body4.rotateAngleX = -0.18203784098300857F - flap * 0.025F;
 	
 		    tail1.rotateAngleY = 0.4F;
 		    tail2.rotateAngleY = 0.4F;
