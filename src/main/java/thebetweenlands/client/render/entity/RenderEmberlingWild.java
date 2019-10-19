@@ -5,7 +5,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.entity.layer.LayerOverlay;
 import thebetweenlands.client.render.model.entity.ModelEmberlingWild;
 import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
 
