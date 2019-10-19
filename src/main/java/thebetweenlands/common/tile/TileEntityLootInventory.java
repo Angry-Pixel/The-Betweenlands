@@ -15,17 +15,23 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.loot.ISharedLootContainer;
 import thebetweenlands.api.loot.ISharedLootPool;
+import thebetweenlands.api.storage.ILocalStorage;
+import thebetweenlands.api.storage.ILocalStorageHandler;
+import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.world.storage.location.LocationStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.SharedLootPoolStorage;
 
 public abstract class TileEntityLootInventory extends TileEntityBasicInventory implements ISharedLootContainer {
+	protected StorageID storageId;
 	protected ResourceLocation lootTable;
 	protected long lootTableSeed;
 	protected long sharedLootTableSeed;
@@ -37,55 +43,68 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 
 	@Override
 	public boolean fillInventoryWithLoot(@Nullable EntityPlayer player) {
-		return fillInventoryWithLoot(this, player, this.lootTableSeed);
+		return fillInventoryWithLoot(this.world, this, player, this.lootTableSeed);
 	}
 
-	public static boolean fillInventoryWithLoot(ISharedLootContainer inventory, @Nullable EntityPlayer player, long seed) {
+	public static boolean fillInventoryWithLoot(World world, ISharedLootContainer inventory, @Nullable EntityPlayer player, long seed) {
 		ResourceLocation lootTableLocation = inventory.getLootTable();
 
-		if(lootTableLocation != null && inventory instanceof TileEntity) {
-			TileEntity tile = (TileEntity) inventory;
+		if(lootTableLocation != null && world instanceof WorldServer) {
+			LootTable lootTable = null;
 
-			if(tile.getWorld() instanceof WorldServer) {
-				LootTable lootTable = null;
+			if(inventory.isSharedLootTable()) {
+				StorageID storageId = inventory.getSharedLootPoolStorageID();
 
-				if(inventory.isSharedLootTable()) {
-					List<LocationStorage> locations = LocationStorage.getLocations(tile.getWorld(), new AxisAlignedBB(tile.getPos()));
+				if(storageId != null) {
+					ILocalStorageHandler handler = BetweenlandsWorldStorage.forWorld(world).getLocalStorageHandler();
 
-					for(LocationStorage location : locations) {
-						ISharedLootPool sharedLootPool = location.getOrCreateSharedLootPool(lootTableLocation);
+					ILocalStorage storage = handler.getLocalStorage(storageId);
+
+					boolean foundLootTable = false;
+
+					if(storage instanceof SharedLootPoolStorage) {
+						SharedLootPoolStorage sharedStorage = (SharedLootPoolStorage) storage;
+
+						ISharedLootPool sharedLootPool = sharedStorage.getOrCreateSharedLootPool(lootTableLocation);
+
 						if(sharedLootPool != null) {
 							lootTable = sharedLootPool.getLootTableView();
-							break;
+							foundLootTable = true;
 						}
 					}
+
+					if(!foundLootTable) {
+						TheBetweenlands.logger.info("Shared loot inventory could not find shared loot pool storage. Storage ID: " + storageId + "." + (inventory instanceof TileEntity ? " " + ((TileEntity) inventory).getPos() : ""));
+					}
 				} else {
-					lootTable = tile.getWorld().getLootTableManager().getLootTableFromLocation(lootTableLocation);
+					TheBetweenlands.logger.info("Shared loot inventory has null storage ID.");
+				}
+			} else {
+				lootTable = world.getLootTableManager().getLootTableFromLocation(lootTableLocation);
+			}
+
+			if(lootTable != null) {
+				inventory.removeLootTable();
+
+				Random random;
+
+				if(seed == 0L) {
+					random = new Random();
+				} else {
+					random = new Random(seed);
 				}
 
-				if(lootTable != null) {
-					inventory.removeLootTable();
+				LootContext.Builder lootBuilder = new LootContext.Builder((WorldServer) world);
 
-					Random random;
-
-					if(seed == 0L) {
-						random = new Random();
-					} else {
-						random = new Random(seed);
-					}
-
-					LootContext.Builder lootBuilder = new LootContext.Builder((WorldServer) tile.getWorld());
-
-					if(player != null) {
-						lootBuilder.withLuck(player.getLuck());
-					}
-
-					List<ItemStack> loot = lootTable.generateLootForPools(random, lootBuilder.build());
-
-					fillInventoryRandomly(random, loot, inventory);
-
-					return true;
+				if(player != null) {
+					lootBuilder.withLuck(player.getLuck());
 				}
+
+				List<ItemStack> loot = lootTable.generateLootForPools(random, lootBuilder.build());
+
+				fillInventoryRandomly(random, loot, inventory);
+
+				return true;
 			}
 		}
 
@@ -167,7 +186,12 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 		this.markDirty();
 	}
 
-	public void setSharedLootTable(ResourceLocation lootTable, long lootTableSeed) {
+	@Override
+	public void setSharedLootTable(SharedLootPoolStorage storage, ResourceLocation lootTable, long lootTableSeed) {
+		if(!lootTable.equals(this.lootTable)) {
+			storage.registerSharedLootInventory(this.pos, lootTable);
+		}
+		this.storageId = storage.getID();
 		this.lootTable = lootTable;
 		this.lootTableSeed = lootTableSeed;
 		this.isSharedLootTable = true;
@@ -211,6 +235,11 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 			this.lootTable = new ResourceLocation(compound.getString("LootTable"));
 			this.lootTableSeed = compound.getLong("LootTableSeed");
 			this.isSharedLootTable = compound.getBoolean("SharedLootTable");
+
+			if(compound.hasKey("StorageID", Constants.NBT.TAG_COMPOUND)) {
+				this.storageId = StorageID.readFromNBT(compound.getCompoundTag("StorageID"));
+			}
+
 			return true;
 		} else {
 			return false;
@@ -232,6 +261,10 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 
 			compound.setBoolean("SharedLootTable", this.isSharedLootTable);
 
+			if(this.storageId != null) {
+				compound.setTag("StorageID", this.storageId.writeToNBT(new NBTTagCompound()));
+			}
+
 			return true;
 		} else {
 			return false;
@@ -240,14 +273,14 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 
 	@Override
 	protected void accessSlot(int slot) {
-		if(fillInventoryWithLoot(this, null, this.lootTableSeed)) {
+		if(fillInventoryWithLoot(this.world, this, null, this.lootTableSeed)) {
 			this.markDirty();
 		}
 	}
 
 	@Override
 	public void clear() {
-		if(fillInventoryWithLoot(this, null, this.lootTableSeed)) {
+		if(fillInventoryWithLoot(this.world, this, null, this.lootTableSeed)) {
 			this.markDirty();
 		}
 		super.clear();
@@ -256,5 +289,10 @@ public abstract class TileEntityLootInventory extends TileEntityBasicInventory i
 	@Override
 	public boolean isSharedLootTable() {
 		return this.isSharedLootTable;
+	}
+
+	@Override
+	public StorageID getSharedLootPoolStorageID() {
+		return this.storageId;
 	}
 }

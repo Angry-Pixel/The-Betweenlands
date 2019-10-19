@@ -43,7 +43,6 @@ public class WorldGenSmallPortal extends WorldGenerator {
 		location.setSeed(rand.nextLong());
 		location.setDirty(true);
 		location.setVisible(false);
-		location.linkChunks();
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 
 		return true;

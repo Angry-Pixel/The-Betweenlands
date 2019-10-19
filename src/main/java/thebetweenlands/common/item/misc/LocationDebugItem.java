@@ -42,7 +42,6 @@ public class LocationDebugItem extends Item {
 					LocationStorage location = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "Test Location ID: " + rndID, EnumLocationType.NONE);
 					location.addBounds(new AxisAlignedBB(pos).grow(16, 16, 16));
 					location.setSeed(world.rand.nextLong());
-					location.linkChunks();
 					location.setDirty(true);
 					worldStorage.getLocalStorageHandler().addLocalStorage(location);
 					playerIn.sendMessage(new TextComponentString(String.format("Added new location: %s", location.getName())));

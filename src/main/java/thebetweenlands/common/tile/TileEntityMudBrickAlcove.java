@@ -13,7 +13,7 @@ public class TileEntityMudBrickAlcove extends TileEntityLootInventory {
 	public int facing = 0;
 
 	public TileEntityMudBrickAlcove() {
-		super(1, "container.bl.mud_bricks_alcove");
+		super(3, "container.bl.mud_bricks_alcove");
 	}
 
 	public void setUpGreeble() {

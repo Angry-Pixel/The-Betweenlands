@@ -9,10 +9,7 @@
                     "name": "thebetweenlands:gem_singer"
                 }
             ],
-            "rolls": {
-            	"min": 0,
-            	"max": 1
-            }
+            "rolls": 1
         },
         {
             "name": "some_shared_pool_2",
@@ -56,29 +53,6 @@
                     "conditions": [{ "condition": "thebetweenlands:from_shared_pool" }],
                     "type": "item",
                     "name": "thebetweenlands:valonite_block"
-                }
-            ],
-            "rolls": {
-            	"min": 0,
-            	"max": 1
-            }
-        },
-        {
-        	"name": "random_filler_crap_not_from_shared_pool",
-        	"entries": [
-                {
-                    "type": "item",
-                    "name": "thebetweenlands:betweenstone",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                            	"min": 1,
-                            	"max": 8
-                            }
-                        }
-                    ]
                 }
             ],
             "rolls": 1

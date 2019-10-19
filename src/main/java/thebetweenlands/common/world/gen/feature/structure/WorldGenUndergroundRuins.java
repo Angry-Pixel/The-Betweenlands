@@ -569,7 +569,6 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 		
 		if(generated) {
 			locationStorage.setSeed(random.nextLong());
-			locationStorage.linkChunks();
 			locationStorage.setDirty(true);
 			worldStorage.getLocalStorageHandler().addLocalStorage(locationStorage);
 			return true;

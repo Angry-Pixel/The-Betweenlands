@@ -89,7 +89,6 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 				this.trySpawnFace(world, rand, new EntitySpiritTreeFaceSmall(world), location.getSmallFacePositions());
 			}
 
-			location.linkChunks();
 			location.setDirty(true);
 			worldStorage.getLocalStorageHandler().addLocalStorage(location);
 

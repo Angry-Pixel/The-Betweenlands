@@ -1514,7 +1514,6 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		}
 
 		this.towerLocation.addBounds(locationBounds, locationBounds.grow(-12, -10, -12), stairsAABB);
-		this.towerLocation.linkChunks();
 		this.towerLocation.setLayer(0);
 		this.towerLocation.setSeed(random.nextLong());
 		this.towerLocation.setStructurePos(entrance);

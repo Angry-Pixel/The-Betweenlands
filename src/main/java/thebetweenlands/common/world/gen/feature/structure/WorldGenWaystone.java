@@ -45,7 +45,6 @@ public class WorldGenWaystone extends WorldGenerator implements IWorldGenerator 
 				locationStorage.setSeed(rand.nextLong());
 				locationStorage.addBounds(locationAABB);
 				locationStorage.setVisible(false);
-				locationStorage.linkChunks();
 				locationStorage.setDirty(true);
 				worldStorage.getLocalStorageHandler().addLocalStorage(locationStorage);
 			}
