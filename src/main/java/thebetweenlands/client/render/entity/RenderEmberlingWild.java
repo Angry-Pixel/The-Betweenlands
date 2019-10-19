@@ -12,14 +12,17 @@ import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
 @SideOnly(Side.CLIENT)
 public class RenderEmberlingWild extends RenderLiving<EntityEmberlingWild> {
 	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/emberling.png");
+	public static final ResourceLocation TEXTURE_SLEEPING = new ResourceLocation("thebetweenlands:textures/entity/emberling_sleeping.png");
 
 	public RenderEmberlingWild(RenderManager renderManagerIn) {
         super(renderManagerIn, new ModelEmberlingWild(), 0.5F);
-        addLayer(new LayerOverlay<EntityEmberlingWild>(this, new ResourceLocation("thebetweenlands:textures/entity/emberling_glow.png")).setGlow(true));
+        //addLayer(new LayerOverlay<EntityEmberlingWild>(this, new ResourceLocation("thebetweenlands:textures/entity/emberling_glow.png")).setGlow(true));
     }
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityEmberlingWild entity) {
+		if(entity.isSitting())
+			return TEXTURE_SLEEPING;
 		return TEXTURE;
 	}
 }
