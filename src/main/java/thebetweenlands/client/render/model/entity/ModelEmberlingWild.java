@@ -320,8 +320,8 @@ public class ModelEmberlingWild extends ModelBase {
 			arm_left1.rotateAngleY = -0.091106186954104F + animation;
 			arm_left1.rotateAngleZ = -0.18203784098300857F - emberling.smoothedAngle(partialRenderTicks);
 	
-			body2.rotateAngleY = 0F - animation * 0.8F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
-			body4.rotateAngleY = 0F + animation * 0.8F + emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+			body2.rotateAngleY = 0F + animation * 0.8F + emberling.smoothedAngle(partialRenderTicks) * 0.125F;
+			body4.rotateAngleY = 0F - animation * 0.8F - emberling.smoothedAngle(partialRenderTicks) * 0.125F;
 	
 		    tail1.rotateAngleY = 0F + animation * 0.5F - flap * 0.25F + emberling.smoothedAngle(partialRenderTicks) * 0.125F;
 		    tail2.rotateAngleY = 0F + animation * 0.5F - flap * 0.25F + emberling.smoothedAngle(partialRenderTicks) * 0.125F;
