@@ -76,6 +76,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	public boolean playGearSound = true;
 	public boolean SPAWN_DROPS = false;
 	public int DEATH_TICKS = 0;
+	public int TENTACLE_COUNTDOWN = 300;
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper(null);
 	protected final Map<Block, Boolean> invisibleBlocks = new HashMap<Block, Boolean>(); // dont need states so blocks will do
 
@@ -261,6 +262,35 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 					playGearSound = false;
 				}
 		}
+
+		//TODO Place holder method for tentacle spawn stuffs
+		if(isPlugged() && !getShowFloor() && getTentacleSpawnCountDown() >= 0) {
+			if (!getWorld().isRemote) {
+				setTentacleSpawnCountDown(getTentacleSpawnCountDown() - 1);
+				
+				//TODO ADD SHAKE AT COUNT OF 100
+				
+				// temp sounds
+				if(getTentacleSpawnCountDown() == 60 || getTentacleSpawnCountDown() == 30)
+					getWorld().playSound(null, getPos(), SoundEvents.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, SoundCategory.HOSTILE, 1F, 1F);
+				
+				if(getTentacleSpawnCountDown() == 0) {
+					// temp whizz-bang
+					getWorld().createExplosion(null, getPos().getX() + 0.5D, getPos().getY() + 3.0D, getPos().getZ() + 0.5D, 0F, false);
+					getWorld().setBlockState(getPos(), BlockRegistry.COMPACTED_MUD.getDefaultState(), 3);
+					
+					// TODO SPAWN BOSS HERE
+				}
+			}
+		}
+	}
+
+	private void setTentacleSpawnCountDown(int tentacle_countdown) {
+		TENTACLE_COUNTDOWN = tentacle_countdown;
+	}
+
+	private int getTentacleSpawnCountDown() {
+		return TENTACLE_COUNTDOWN ;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -496,6 +526,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		nbt.setBoolean("showFloor", getShowFloor());
 		nbt.setBoolean("spawnDrops", getSpawnXPAndDrops());
 		nbt.setInteger("deathTicks", getDeathTicks());
+		nbt.setInteger("tentacleCountdown", getTentacleSpawnCountDown());
 		return nbt;
 	}
 
@@ -509,6 +540,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		setShowFloor(nbt.getBoolean("showFloor"));
 		setSpawnXPAndDrops(nbt.getBoolean("spawnDrops"));
 		setDeathTicks(nbt.getInteger("deathTicks"));
+		setTentacleSpawnCountDown(nbt.getInteger("tentacleCountdown"));
 	}
 
 	@Override
