@@ -51,9 +51,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.block.misc.BlockOctine;
 import thebetweenlands.common.entity.ai.EntityAIFollowOwnerBL;
 import thebetweenlands.common.entity.ai.EntityAISitBL;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -227,8 +229,18 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 				if (!isTamed())
 					setDead();
 
+		if (!getEntityWorld().isRemote && isSitting()) {
+			if (getHealth() < getMaxHealth())
+				if (ticksExisted % 1200 == 0)
+					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine) {
+						heal(1); // passive heal, 1 health a minute whilst sleeping on an octine block.
+						playTameEffect(true);
+						world.setEntityState(this, (byte)7);
+					}
+		}
+
 		if (getEntityWorld().isRemote) {
-			if (!getIsFlameAttacking())
+			if (!getIsFlameAttacking()) 
 				if (ticksExisted % 5 == 0)
 					if(!isSitting())
 						flameParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
@@ -285,10 +297,10 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 				return true;
 			}
 			if (isTamed()) {
-				if (EnumItemMisc.OCTINE_NUGGET.isItemOf(stack) && isTamed()) {
+				if ((EnumItemMisc.OCTINE_NUGGET.isItemOf(stack) || stack.getItem() == ItemRegistry.OCTINE_INGOT)) {
 					if (getHealth() < getMaxHealth()) {
 						if (!getEntityWorld().isRemote) {
-							heal(5.0f);
+							heal(EnumItemMisc.OCTINE_NUGGET.isItemOf(stack) ? 5.0F : getMaxHealth() - getHealth());
 
 							if (!player.capabilities.isCreativeMode) {
 								stack.shrink(1);
