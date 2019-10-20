@@ -1396,5 +1396,10 @@
     "sounds": [
       "thebetweenlands:wall_slam"
     ]
+  },
+  "poop_jet": {
+    "sounds": [
+      "thebetweenlands:poop_jet"
+    ]
   }
 }
