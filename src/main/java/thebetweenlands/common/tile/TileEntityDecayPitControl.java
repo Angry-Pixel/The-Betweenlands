@@ -380,7 +380,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		EntitySludgeJet jet = new EntitySludgeJet(getWorld());
 		jet.setPosition(posX, posY, posZ);
 		getWorld().spawnEntity(jet);
-		getWorld().playSound(null, jet.getPosition(), SoundRegistry.POOP_JET, SoundCategory.HOSTILE, 1F, 1F);
+		getWorld().playSound(null, jet.getPosition(), SoundRegistry.POOP_JET, SoundCategory.HOSTILE, 1F, 0.8F + getWorld().rand.nextFloat() * 0.5F);
 	}
 	
 	public void setSpawnType(int spawn_type) {
