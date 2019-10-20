@@ -28,7 +28,7 @@ import thebetweenlands.common.block.structure.BlockBeamRelay;
 import thebetweenlands.common.block.structure.BlockBeamTube;
 import thebetweenlands.common.block.structure.BlockDiagonalEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockEnergyBarrierMud;
-import thebetweenlands.common.entity.mobs.EntityEmberling;
+import thebetweenlands.common.entity.mobs.EntityEmberlingShaman;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -158,7 +158,7 @@ public class TileEntityBeamOrigin extends TileEntity implements ITickable {
 	}
 
 	private void spawnEmberling(World world, BlockPos pos) {
-		EntityEmberling entity = new EntityEmberling (world);
+		EntityEmberlingShaman entity = new EntityEmberlingShaman (world);
 		entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
 		//entity.setBoundOrigin(pos); // may use this dunno yet...
 		entity.onInitialSpawn(world.getDifficultyForLocation(pos), null);

@@ -100,8 +100,8 @@ import thebetweenlands.client.render.entity.RenderDecayPitTarget;
 import thebetweenlands.client.render.entity.RenderDragonFly;
 import thebetweenlands.client.render.entity.RenderDreadfulMummy;
 import thebetweenlands.client.render.entity.RenderElixir;
+import thebetweenlands.client.render.entity.RenderEmberlingShaman;
 import thebetweenlands.client.render.entity.RenderEmberling;
-import thebetweenlands.client.render.entity.RenderEmberlingWild;
 import thebetweenlands.client.render.entity.RenderFirefly;
 import thebetweenlands.client.render.entity.RenderFlameJet;
 import thebetweenlands.client.render.entity.RenderFortressBoss;
@@ -248,8 +248,8 @@ import thebetweenlands.common.entity.mobs.EntityDarkDruid;
 import thebetweenlands.common.entity.mobs.EntityDarkLight;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
+import thebetweenlands.common.entity.mobs.EntityEmberlingShaman;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
-import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityFlameJet;
 import thebetweenlands.common.entity.mobs.EntityFortressBoss;
@@ -621,10 +621,10 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntitySplodeshroom.class, RenderSplodeshroom::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityPredatorArrowGuide.class, RenderPredatorArrowGuide::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCCGroundSpawner.class, RenderCCGroundSpawner::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityEmberling.class, RenderEmberling::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityEmberlingShaman.class, RenderEmberlingShaman::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlameJet.class, RenderFlameJet::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMovingWall.class, RenderMovingWall::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityEmberlingWild.class, RenderEmberlingWild::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityEmberling.class, RenderEmberling::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGalleryFrame.class, RenderGalleryFrame::new);
 
 		//Tile entities
