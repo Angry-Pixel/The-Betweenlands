@@ -214,32 +214,6 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			if (shaking)
 				shake(60);
 
-			if (!getWorld().isRemote && getSpawnXPAndDrops()) {
-				setDeathTicks(getDeathTicks() + 1);
-				if (getDeathTicks() > 40 && getDeathTicks() % 5 == 0) {
-					int xp = 100;
-					while (xp > 0) {
-						int dropXP = EntityXPOrb.getXPSplit(xp);
-						xp -= dropXP;
-						getWorld().spawnEntity(new EntityXPOrb(getWorld(), getPos().getX() + 0.5D, getPos().getY() + 3.0D, getPos().getZ() + 0.5D, dropXP));
-					}
-				}
-
-				if (getDeathTicks() == 80) {
-					int xp = 1200;
-					while (xp > 0) {
-						int dropXP = EntityXPOrb.getXPSplit(xp);
-						xp -= dropXP;
-						getWorld().spawnEntity(new EntityXPOrb(getWorld(), getPos().getX() + 0.5D, getPos().getY() + 3.0D, getPos().getZ() + 0.5D, dropXP));
-					}
-
-					//TODO - DROP LOOT OR SOMETHING?
-				}
-
-				if (getDeathTicks() > 120)
-					setSpawnXPAndDrops(false);
-			}
-
 			//Remove dungeon locations
 			ILocalStorageHandler storageHandler = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler();
 			storageHandler.getLocalStorages(LocationSludgeWormDungeon.class, new AxisAlignedBB(this.getPos()), l -> true).forEach(location -> location.removeLocations());
@@ -250,6 +224,34 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			// animate floor so it fades away *DONE
 			// whatever whizz bangs we add with shaders and particles
 			// spawn loots and stuff
+		}
+
+		if (!getWorld().isRemote && getSpawnXPAndDrops()) {
+			setDeathTicks(getDeathTicks() + 1);
+			if (getDeathTicks() > 40 && getDeathTicks() % 5 == 0) {
+				int xp = 100;
+				while (xp > 0) {
+					int dropXP = EntityXPOrb.getXPSplit(xp);
+					xp -= dropXP;
+					getWorld().spawnEntity(new EntityXPOrb(getWorld(), getPos().getX() + 0.5D, getPos().getY() + 3.0D, getPos().getZ() + 0.5D, dropXP));
+				}
+			}
+
+			if (getDeathTicks() == 80) {
+				int xp = 1200;
+				while (xp > 0) {
+					int dropXP = EntityXPOrb.getXPSplit(xp);
+					xp -= dropXP;
+					getWorld().spawnEntity(new EntityXPOrb(getWorld(), getPos().getX() + 0.5D, getPos().getY() + 3.0D, getPos().getZ() + 0.5D, dropXP));
+				}
+
+				//TODO - DROP LOOT OR SOMETHING?
+			}
+
+			if (getDeathTicks() > 120) {
+				setSpawnXPAndDrops(false);
+				updateBlock();
+			}
 		}
 
 		if (getWorld().isRemote) {
