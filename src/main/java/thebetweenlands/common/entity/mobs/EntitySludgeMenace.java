@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MultiPartEntityPart;
@@ -22,14 +24,15 @@ import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 
 //TODO Loot tables
 public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityScreenShake {
-	protected static final byte EVENT_SLAM_HIT = 90;
+	protected static final byte EVENT_START_ACTION = 90;
+	protected static final byte EVENT_SLAM_HIT = 91;
 
 	public int renderedFrame = -1;
 
 	protected static final DataParameter<Integer> ACTION_STATE = EntityDataManager.createKey(EntitySludgeMenace.class, DataSerializers.VARINT);
 
 	public static enum ActionState {
-		IDLE, SLAM, POKE, SWING;
+		IDLE, SLAM, POKE, SWING, SPIT_BALL;
 	}
 
 	private EntityMultipartDummy[] dummies;
@@ -97,11 +100,9 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 		if(!this.world.isRemote) {
 			if(this.actionState == ActionState.IDLE) {
 				//TODO Do this from AIs
-				//this.startAction(ActionState.values()[this.world.rand.nextInt(ActionState.values().length)]);
-				this.startAction(ActionState.SLAM);
+				this.startAction(ActionState.values()[this.world.rand.nextInt(ActionState.values().length)]);
+				//this.startAction(ActionState.SPIT_BALL);
 			}
-
-			this.dataManager.set(ACTION_STATE, this.actionState.ordinal());
 		} else {
 			this.actionState = ActionState.values()[this.dataManager.get(ACTION_STATE)];
 		}
@@ -175,7 +176,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 			Entity lastPart = parts[parts.length - 1];
 			Entity secondLastPart = parts[parts.length - 2];
 
-			Vec3d dir = lastPart.getPositionVector().subtract(secondLastPart.getPositionVector()).normalize().add(this.rand.nextFloat() - 0.5f, 0, this.rand.nextFloat() - 0.5f).scale(0.1D);
+			Vec3d dir = lastPart.getPositionVector().subtract(secondLastPart.getPositionVector()).normalize().add((this.rand.nextFloat() - 0.5f) * 0.5f, 0, (this.rand.nextFloat() - 0.5f) * 0.5f).scale(0.1D);
 
 			double x = lastPart.posX;
 			double y = lastPart.posY + lastPart.height / 2;
@@ -192,7 +193,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 							.withData(null)
 							.withMotion(mx, my, mz)
 							.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
-							.withScale(8f));
+							.withScale(3.5f));
 
 			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE, hazeParticle);
 
@@ -201,7 +202,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 							.withData(null)
 							.withMotion(mx, my, mz)
 							.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F)
-							.withScale(4f));
+							.withScale(2.5f));
 
 			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.GAS_CLOUDS_TEXTURED, particle);
 		}
@@ -219,12 +220,44 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 			return this.updatePokeTargetTipPos(armStartWorld, maxArmLength, dirFwd, dirUp);
 		case SWING:
 			return this.updateSwingTargetTipPos(armStartWorld, maxArmLength, dirFwd, dirUp);
+		case SPIT_BALL:
+			return this.updateSpitBallTipPos(armStartWorld, maxArmLength, dirFwd, dirUp);
 		}
 	}
 
 	protected void startAction(ActionState action) {
 		this.actionState = action;
 		this.actionTimer = 0;
+
+		if(!this.world.isRemote) {
+			this.world.setEntityState(this, EVENT_START_ACTION);
+			this.dataManager.set(ACTION_STATE, this.actionState.ordinal());
+		}
+	}
+
+	protected Vec3d updateSpitBallTipPos(Vec3d armStartWorld, float maxArmLength, Vec3d dirFwd, Vec3d dirUp) {
+		if(this.actionTimer >= 100) {
+			this.actionState = ActionState.IDLE;
+		}
+
+		this.armMovementTicks++;
+
+		float idleX = MathHelper.cos(this.armMovementTicks / 9.0f) * 0.75F;
+		float idleY = MathHelper.sin(this.armMovementTicks / 7.0f) * 0.75F;
+		float idleZ = (MathHelper.cos(this.armMovementTicks / 15.0f) + 1) * 0.25f;
+
+		Vec3d targetTipPos = armStartWorld.add(dirFwd.scale(maxArmLength + 1.0f));
+
+		float forwardPos = (float) dirFwd.dotProduct(targetTipPos.subtract(armStartWorld));
+		float offsetZ = 0.0f;
+		if(forwardPos < 1.0F) {
+			offsetZ = 1.0F - forwardPos;
+		}
+
+		//Idle movement
+		targetTipPos = targetTipPos.add(dirUp.scale(idleY)).add(dirFwd.crossProduct(dirUp).scale(idleX)).add(dirFwd.scale(offsetZ - idleZ));
+
+		return targetTipPos;
 	}
 
 	protected Vec3d updateSwingTargetTipPos(Vec3d armStartWorld, float maxArmLength, Vec3d dirFwd, Vec3d dirUp) {
@@ -378,12 +411,22 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	public void handleStatusUpdate(byte id) {
 		super.handleStatusUpdate(id);
 
-		if(id == EVENT_SLAM_HIT) {
+		if(id == EVENT_START_ACTION) {
+			this.startAction(ActionState.values()[this.dataManager.get(ACTION_STATE)]);
+		} else if(id == EVENT_SLAM_HIT) {
 			this.startSlamScreenShake();
 		}
 	}
 
 	protected void startSlamScreenShake() {
 		this.screenShakeTimer = 10;
+	}
+
+	@Nullable
+	public float[] getBulges(float partialTicks) {
+		if(this.actionState == ActionState.SPIT_BALL) {
+			return new float[] {(this.actionTimer + partialTicks) / 100.0f};
+		}
+		return null;
 	}
 }
