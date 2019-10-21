@@ -28,6 +28,10 @@ public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 	public RenderWallLivingRoot(RenderManager renderManager) {
 		super(renderManager, BLANK_MODEL, ROOT_TEXTURE);
 	}
+	
+	protected RenderWallLivingRoot(RenderManager renderManager, ResourceLocation armTexture) {
+		super(renderManager, BLANK_MODEL, armTexture);
+	}
 
 	@Override
 	protected void preRenderCallback(EntityWallLivingRoot entity, float partialTickTime) {
@@ -62,6 +66,14 @@ public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 
 		GlStateManager.popMatrix();
 	}
+	
+	protected float getUvScale(EntityWallLivingRoot entity, float partialTicks) {
+		return 2.0f;
+	}
+	
+	protected float calculateHullContraction(EntityWallLivingRoot entity, int i, float armSize, float partialTicks) {
+		return (1 - i / (float)(entity.armSegments.size() - 1)) * (armSize -  0.2f) + 0.2f;
+	}
 
 	protected void renderBodyHull(EntityWallLivingRoot entity, float partialTicks) {
 		Tessellator tessellator = Tessellator.getInstance();
@@ -75,7 +87,7 @@ public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 
 		float armSize = entity.getArmSize(partialTicks);
 
-		float uvScale = 2.0f / Math.max(0.001f, armSize);
+		float uvScale = this.getUvScale(entity, partialTicks) / Math.max(0.001f, armSize);
 
 		double pos1X = 0, pos1Y = 0, pos1Z = 0;
 		ArmSegment segment1 = null;
@@ -95,8 +107,8 @@ public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 				for(int vertIndex = 0; vertIndex < hullVerts; vertIndex++) {
 					int nextVertIndex = (vertIndex + 1) % hullVerts;
 
-					float contraction1 = (1 - (i - 1) / (float)(entity.armSegments.size() - 1)) * armSize;
-					float contraction2 = (1 - (i) / (float)(entity.armSegments.size() - 1)) * armSize;
+					float contraction1 = this.calculateHullContraction(entity, i - 1, armSize, partialTicks);
+					float contraction2 = this.calculateHullContraction(entity, i, armSize, partialTicks);
 
 					double v11x = pos1X + segment1.offsetX[vertIndex] * contraction1;
 					double v11y = pos1Y + segment1.offsetY[vertIndex] * contraction1;

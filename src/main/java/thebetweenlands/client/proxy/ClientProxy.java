@@ -125,6 +125,7 @@ import thebetweenlands.client.render.entity.RenderMireSnail;
 import thebetweenlands.client.render.entity.RenderMireSnailEgg;
 import thebetweenlands.client.render.entity.RenderMovingSpawnerHole;
 import thebetweenlands.client.render.entity.RenderMovingWall;
+import thebetweenlands.client.render.entity.RenderMultipartDummy;
 import thebetweenlands.client.render.entity.RenderMummyArm;
 import thebetweenlands.client.render.entity.RenderPeatMummy;
 import thebetweenlands.client.render.entity.RenderPredatorArrowGuide;
@@ -141,6 +142,7 @@ import thebetweenlands.client.render.entity.RenderSiltCrab;
 import thebetweenlands.client.render.entity.RenderSludge;
 import thebetweenlands.client.render.entity.RenderSludgeBall;
 import thebetweenlands.client.render.entity.RenderSludgeJet;
+import thebetweenlands.client.render.entity.RenderSludgeMenace;
 import thebetweenlands.client.render.entity.RenderSludgeWallJet;
 import thebetweenlands.client.render.entity.RenderSludgeWorm;
 import thebetweenlands.client.render.entity.RenderSmollSludge;
@@ -178,6 +180,7 @@ import thebetweenlands.client.render.tile.RenderAlembic;
 import thebetweenlands.client.render.tile.RenderAnimator;
 import thebetweenlands.client.render.tile.RenderAspectVial;
 import thebetweenlands.client.render.tile.RenderAspectrusCrop;
+import thebetweenlands.client.render.tile.RenderBarrel;
 import thebetweenlands.client.render.tile.RenderBeamOrigin;
 import thebetweenlands.client.render.tile.RenderCenser;
 import thebetweenlands.client.render.tile.RenderChestBetweenlands;
@@ -204,7 +207,6 @@ import thebetweenlands.client.render.tile.RenderPurifier;
 import thebetweenlands.client.render.tile.RenderRepeller;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderSpikeTrap;
-import thebetweenlands.client.render.tile.RenderBarrel;
 import thebetweenlands.client.render.tile.RenderTarLootPot1;
 import thebetweenlands.client.render.tile.RenderTarLootPot2;
 import thebetweenlands.client.render.tile.RenderTarLootPot3;
@@ -269,6 +271,7 @@ import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
 import thebetweenlands.common.entity.mobs.EntityMovingSpawnerHole;
+import thebetweenlands.common.entity.mobs.EntityMultipartDummy;
 import thebetweenlands.common.entity.mobs.EntityMummyArm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
@@ -278,6 +281,7 @@ import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
+import thebetweenlands.common.entity.mobs.EntitySludgeMenace;
 import thebetweenlands.common.entity.mobs.EntitySludgeWorm;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
@@ -361,6 +365,7 @@ import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.world.event.EventSpoopy;
 import thebetweenlands.common.world.event.EventWinter;
 import thebetweenlands.util.GLUProjection;
+import thebetweenlands.util.RenderUtils;
 
 public class ClientProxy extends CommonProxy implements IResourceManagerReloadListener {
 	public static Render<EntityDragonFly> dragonFlyRenderer;
@@ -609,6 +614,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityShambler.class, RenderShambler::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityWallLamprey.class, RenderWallLamprey::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityWallLivingRoot.class, RenderWallLivingRoot::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySludgeMenace.class, RenderSludgeMenace::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMovingSpawnerHole.class, RenderMovingSpawnerHole::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityCryptCrawler.class, RenderCryptCrawler::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBarrishee.class, RenderBarrishee::new);
@@ -626,7 +632,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityMovingWall.class, RenderMovingWall::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberlingWild.class, RenderEmberlingWild::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGalleryFrame.class, RenderGalleryFrame::new);
-
+		RenderingRegistry.registerEntityRenderingHandler(EntityMultipartDummy.class, RenderMultipartDummy::new);
+		
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new RenderDruidAltar());
@@ -824,6 +831,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(ExtendedReachHandler.class);
         MinecraftForge.EVENT_BUS.register(RenderVolarkite.class);
         MinecraftForge.EVENT_BUS.register(GalleryManager.class);
+        MinecraftForge.EVENT_BUS.register(RenderUtils.class);
 	}
 
 	private static FontRenderer pixelLove;

@@ -55,6 +55,7 @@ import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
 import thebetweenlands.common.entity.mobs.EntityMovingSpawnerHole;
+import thebetweenlands.common.entity.mobs.EntityMultipartDummy;
 import thebetweenlands.common.entity.mobs.EntityMummyArm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
@@ -64,6 +65,7 @@ import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
+import thebetweenlands.common.entity.mobs.EntitySludgeMenace;
 import thebetweenlands.common.entity.mobs.EntitySludgeWorm;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
@@ -187,6 +189,9 @@ public class EntityRegistry {
 		registerEntity(EntityMovingWall.class, "moving_wall", 64, 1, true);
 		registerEntity(EntityEmberlingWild.class, "emberling_wild", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityGalleryFrame.class, "gallery_frame");
+		registerEntity(EntitySludgeMenace.class, "sludge_menace", 0x0B3B0B, 0xDBA901);
+		
+		registerEntity(EntityMultipartDummy.class, "multipart_dummy", 64, 20, false);
 	}
 
 	private static int id = 0;

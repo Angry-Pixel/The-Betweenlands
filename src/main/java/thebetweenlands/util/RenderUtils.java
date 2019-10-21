@@ -9,17 +9,26 @@ import java.util.List;
 import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.ARBFramebufferObject;
-import org.lwjgl.opengl.EXTFramebufferObject;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL30;
 
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class RenderUtils {
+	private static int frameCounter = 0;
+
+	public static int getFrameCounter() {
+		return frameCounter;
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onClientTick(RenderWorldLastEvent event) {
+		frameCounter = (frameCounter + 1) % Integer.MAX_VALUE;
+	}
 
 	@SuppressWarnings("unchecked")
 	public static <T extends LayerRenderer<?>> T getRenderLayer(RenderLivingBase<?> renderer, Class<T> cls, boolean subclasses) {
@@ -39,7 +48,7 @@ public class RenderUtils {
 	public static boolean doesRendererHaveLayer(RenderLivingBase<?> renderer, Class<? extends LayerRenderer<?>> cls, boolean subclasses) {
 		return getRenderLayer(renderer, cls, subclasses) != null;
 	}
-	
+
 	/**
 	 * Saves the texture of an FBO to the specified PNG file.
 	 * 
@@ -49,17 +58,17 @@ public class RenderUtils {
 	public static void saveFboToFile(File file, Framebuffer fbo) {
 		try(FramebufferStack.State state = FramebufferStack.push()) {
 			fbo.bindFramebuffer(false);
-	
+
 			GL11.glReadBuffer(GL11.GL_FRONT);
 			int width = fbo.framebufferWidth;
 			int height= fbo.framebufferHeight;
 			int bpp = 4;
 			ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * bpp);
 			GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
-	
+
 			String format = "PNG";
 			BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-	
+
 			for(int x = 0; x < width; x++) {
 				for(int y = 0; y < height; y++) {
 					int i = (x + (width * y)) * bpp;
@@ -70,7 +79,7 @@ public class RenderUtils {
 					image.setRGB(x, height - (y + 1), (a << 24) | (r << 16) | (g << 8) | b);
 				}
 			}
-	
+
 			try {
 				ImageIO.write(image, format, file);
 			} catch (IOException e) { 

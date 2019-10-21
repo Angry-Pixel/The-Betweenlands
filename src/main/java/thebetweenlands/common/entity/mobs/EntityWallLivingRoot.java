@@ -52,23 +52,20 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 
 	public static final IAttribute MAX_ARM_LENGTH = (new RangedAttribute(null, "bl.maxRootArmLength", 2.5D, 0.0D, 16.0D)).setDescription("Maximum length of root arm").setShouldWatch(true);
 
-	protected static final float ARM_FULL_WIDTH = 0.2F;
-	protected static final float[][] ARM_CROSS_SECTION = new float[][] {
-		{-ARM_FULL_WIDTH, ARM_FULL_WIDTH},
-		{-ARM_FULL_WIDTH, -ARM_FULL_WIDTH},
-		{ARM_FULL_WIDTH, -ARM_FULL_WIDTH},
-		{ARM_FULL_WIDTH, ARM_FULL_WIDTH},
-	};
-
 	public static class ArmSegment {
+		public Vec3d motion = Vec3d.ZERO;
+
 		public Vec3d prevPos, pos;
 
 		public final float[] offsetX, offsetY, offsetZ;
 
-		public ArmSegment() {
-			this.offsetX = new float[ARM_CROSS_SECTION.length];
-			this.offsetY = new float[ARM_CROSS_SECTION.length];
-			this.offsetZ = new float[ARM_CROSS_SECTION.length];
+		private final float[][] armCrossSection;
+
+		public ArmSegment(EntityWallLivingRoot root) {
+			this.armCrossSection = root.getArmCrossSection();
+			this.offsetX = new float[this.armCrossSection.length];
+			this.offsetY = new float[this.armCrossSection.length];
+			this.offsetZ = new float[this.armCrossSection.length];
 		}
 
 		public void updatePrev() {
@@ -86,7 +83,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 			Vec3d up = right.crossProduct(dir).normalize();
 
 			int i = 0;
-			for(float[] hullCrossSection : ARM_CROSS_SECTION) {
+			for(float[] hullCrossSection : this.armCrossSection) {
 				float hullX = hullCrossSection[0];
 				float hullY = hullCrossSection[1];
 
@@ -98,8 +95,6 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 			}
 		}
 	}
-
-	protected static final int NUM_SEGMENTS = 8;
 
 	private static final DataParameter<Integer> REL_TIP_X = EntityDataManager.createKey(EntityWallLivingRoot.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> REL_TIP_Y = EntityDataManager.createKey(EntityWallLivingRoot.class, DataSerializers.VARINT);
@@ -117,7 +112,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	@SideOnly(Side.CLIENT)
 	private TextureAtlasSprite wallSprite;
 
-	private int armMovementTicks;
+	protected int armMovementTicks;
 
 	public EntityWallLivingRoot(World world) {
 		super(world);
@@ -125,11 +120,33 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		this.lookMoveSpeedMultiplier = 8.0F;
 		this.experienceValue = 5;
 
-		this.parts = new MultiPartEntityPart[NUM_SEGMENTS + 1];
-		this.parts[0] = this.rootTip = new MultiPartEntityPart(this, "rootTip", 0.3F, 0.3F);
-		for(int i = 0; i < NUM_SEGMENTS; i++) {
-			this.parts[i + 1] = new MultiPartEntityPart(this, "rootNode" + i, 0.3F, 0.3F);
+		this.parts = new MultiPartEntityPart[this.getNumSegments() + 1];
+		this.parts[0] = this.rootTip = new MultiPartEntityPart(this, "rootTip", this.getNodeSize(0), this.getNodeSize(0));
+		for(int i = 0; i < this.getNumSegments(); i++) {
+			this.parts[i + 1] = new MultiPartEntityPart(this, "rootNode" + i, this.getNodeSize(this.getNumSegments() - i + 1), this.getNodeSize(this.getNumSegments() - i + 1));
 		}
+	}
+
+	protected float getNodeSize(int node) {
+		return 0.3F;
+	}
+
+	protected float[][] getArmCrossSection() {
+		float width = this.getFullArmWidth();
+		return new float[][] {
+			{-width, width},
+			{-width, -width},
+			{width, -width},
+			{width, width},
+		};
+	}
+
+	protected int getNumSegments() {
+		return 8;
+	}
+
+	protected float getFullArmWidth() {
+		return 0.2F;
 	}
 
 	@Override
@@ -185,17 +202,46 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		this.dataManager.set(REL_TIP_Z, (int)((pos.z - this.posZ) * 512));
 	}
 
-	@Override
-	public void onUpdate() {
-		super.onUpdate();
-
+	protected Vec3d updateTargetTipPos(Vec3d armStartWorld, float maxArmLength, Vec3d dirFwd, Vec3d dirUp) {
 		float flailingStrength = this.isSwingInProgress ? (1 - this.swingProgress) : this.hurtTime > 0 ? (this.hurtTime / (float)this.maxHurtTime) * 0.5F : 0.0f;
 
 		this.armMovementTicks += 1 + (int)(flailingStrength * 10);
 
+		float idleX = MathHelper.cos(this.armMovementTicks / 9.0f) * 0.75F;
+		float idleY = MathHelper.sin(this.armMovementTicks / 7.0f) * 0.75F;
+		float idleZ = (MathHelper.cos(this.armMovementTicks / 15.0f) + 1) * 0.25f;
+
+		Vec3d targetTipPos = armStartWorld.add(dirFwd.scale(maxArmLength));
+
+		EntityLivingBase target = this.getAttackTarget();
+		if(target != null) {
+			targetTipPos = target.getPositionVector().add(0, target.height / 2, 0);
+		}
+
+		float forwardPos = (float) dirFwd.dotProduct(targetTipPos.subtract(armStartWorld));
+		float offsetZ = 0.0f;
+		if(forwardPos < 1.0F) {
+			offsetZ = 1.0F - forwardPos;
+		}
+
+		//Idle movement
+		targetTipPos = targetTipPos.add(dirUp.scale(idleY)).add(dirFwd.crossProduct(dirUp).scale(idleX)).add(dirFwd.scale(offsetZ - idleZ));
+
+		Vec3d tipPos = this.rootTip.getPositionVector();
+
+		Vec3d tipDiff = targetTipPos.subtract(tipPos);
+		targetTipPos = tipPos.add(tipDiff.normalize().scale(Math.min(tipDiff.length(), 0.1D + flailingStrength * 0.9D)));
+
+		return targetTipPos;
+	}
+
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+
 		float maxArmLength = (float)this.getEntityAttribute(MAX_ARM_LENGTH).getAttributeValue() * this.getArmSize(1);
 
-		float segmentLength = maxArmLength / (float)(NUM_SEGMENTS - 2);
+		float segmentLength = maxArmLength / (float)(this.getNumSegments() - 2);
 
 		Vec3d dirFwd = new Vec3d(this.getFacing().getXOffset(), this.getFacing().getYOffset(), this.getFacing().getZOffset());;
 		Vec3d dirUp = new Vec3d(this.getFacingUp().getXOffset(), this.getFacingUp().getYOffset(), this.getFacingUp().getZOffset());
@@ -217,35 +263,12 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		Vec3d armEnd = this.rootTip.getPositionVector().add(0, this.rootTip.height / 2, 0).subtract(this.getPositionVector());
 
 		if(!this.world.isRemote) {
-			float idleX = MathHelper.cos(this.armMovementTicks / 9.0f) * 0.75F;
-			float idleY = MathHelper.sin(this.armMovementTicks / 7.0f) * 0.75F;
-			float idleZ = (MathHelper.cos(this.armMovementTicks / 15.0f) + 1) * 0.25f;
-
 			Vec3d armStartWorld = this.getPositionVector().add(ikArmStart);
 
-			Vec3d tipPos = this.rootTip.getPositionVector();
-
-			Vec3d targetTipPos = armStartWorld.add(dirFwd.scale(maxArmLength));
-
-			EntityLivingBase target = this.getAttackTarget();
-			if(target != null) {
-				targetTipPos = target.getPositionVector().add(0, target.height / 2, 0);
-			}
-
-			float forwardPos = (float) dirFwd.dotProduct(targetTipPos.subtract(armStartWorld));
-			float offsetZ = 0.0f;
-			if(forwardPos < 1.0F) {
-				offsetZ = 1.0F - forwardPos;
-			}
-
-			//Idle movement
-			targetTipPos = targetTipPos.add(dirUp.scale(idleY)).add(dirFwd.crossProduct(dirUp).scale(idleX)).add(dirFwd.scale(offsetZ - idleZ));
-
-			Vec3d tipDiff = targetTipPos.subtract(tipPos);
-			tipPos = tipPos.add(tipDiff.normalize().scale(Math.min(tipDiff.length(), 0.1D + flailingStrength * 0.9D)));
+			Vec3d tipPos = this.updateTargetTipPos(armStartWorld, maxArmLength, dirFwd, dirUp);
 
 			//Clamp to max reach sphere
-			tipPos = armStartWorld.add(tipPos.subtract(armStartWorld).normalize().scale(Math.min(tipPos.subtract(armStartWorld).length(), maxArmLength)));
+			tipPos = armStartWorld.add(tipPos.subtract(armStartWorld).normalize().scale(Math.min(tipPos.subtract(armStartWorld).length(), maxArmLength + 1)));
 
 			this.setTipPos(tipPos);
 			this.rootTip.setPosition(tipPos.x, tipPos.y, tipPos.z);
@@ -256,12 +279,12 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 			this.updateWallSprite();
 		}
 
-		if(this.armSegments.size() != NUM_SEGMENTS || this.getFacing() != this.segmentsFacing) {
+		if(this.armSegments.size() != this.getNumSegments() || this.getFacing() != this.segmentsFacing) {
 			this.armSegments.clear();
 
-			for(int i = 0; i < NUM_SEGMENTS; i++) {
-				ArmSegment segment = new ArmSegment();
-				float dist = maxArmLength / (float)(NUM_SEGMENTS - 1) * i;
+			for(int i = 0; i < this.getNumSegments(); i++) {
+				ArmSegment segment = new ArmSegment(this);
+				float dist = maxArmLength / (float)(this.getNumSegments() - 1) * i;
 				segment.update(dirUp, ikArmStart.add(dirFwd.x * dist, dirFwd.y * dist, dirFwd.z * dist), dirFwd);
 				this.armSegments.add(segment);
 			}
@@ -271,13 +294,15 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 
 		for(ArmSegment segment : this.armSegments) {
 			segment.updatePrev();
+
+			segment.pos = segment.pos.add(segment.motion);
 		}
 
-		for(int i = NUM_SEGMENTS - 2; i >= 2; i--) {
+		for(int i = this.getNumSegments() - 2; i >= 2; i--) {
 			ArmSegment segment = this.armSegments.get(i);
 
 			Vec3d target;
-			if(i == NUM_SEGMENTS - 2) {
+			if(i == this.getNumSegments() - 2) {
 				target = armEnd;
 			} else {
 				target = this.armSegments.get(i + 1).pos;
@@ -288,7 +313,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 			segment.update(dirUp, target.add(dir.scale(segmentLength)), dir.scale(-1));
 		}
 
-		for(int i = 2; i < NUM_SEGMENTS - 1; i++) {
+		for(int i = 2; i < this.getNumSegments() - 1; i++) {
 			ArmSegment segment = this.armSegments.get(i);
 
 			Vec3d target;
@@ -312,7 +337,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		ArmSegment endSegment = this.armSegments.get(this.armSegments.size() - 1);
 		endSegment.update(dirUp, armEnd, armEnd.subtract(this.armSegments.get(this.armSegments.size() - 2).pos).normalize());
 
-		for(int i = 0; i < NUM_SEGMENTS; i++) {
+		for(int i = 0; i < this.getNumSegments(); i++) {
 			ArmSegment segment = this.armSegments.get(i);
 			Vec3d pos = segment.pos;
 			this.parts[i + 1].setPosition(this.posX + pos.x, this.posY + pos.y - this.parts[i + 1].height / 2.0f, this.posZ + pos.z);
