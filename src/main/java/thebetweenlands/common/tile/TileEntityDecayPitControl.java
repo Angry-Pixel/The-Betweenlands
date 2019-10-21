@@ -16,6 +16,7 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -67,8 +68,8 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	public float floorFadeTicks = 0;
 	public float floorFadeTicksPrev = 0;
 	public int spawnType = 0;
-	public boolean IS_PLUGGED = false;
-	public boolean SHOW_FLOOR = true;
+	public boolean IS_PLUGGED = false; // set to true if boss spawn needed
+	public boolean SHOW_FLOOR = true; // set to false if boss spawn needed
 	private int prev_shake_timer;
 	private int shake_timer;
 	private boolean shaking = false;
@@ -209,6 +210,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			if (floorFadeTicks >= 1)
 				if (!getWorld().isRemote) {
 					setShowFloor(false);
+					shake_timer = 0;
 					updateBlock();
 				}
 			
@@ -223,7 +225,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			// render plug as animation falling in to place in the hole *DONE
 			// remove invisible blocks from edges of pit *DONE
 			// animate floor so it fades away *DONE
-			// whatever whizz bangs we add with shaders and particles
+			// whatever whizz bangs we add with shaders and particles *DONE (ish)
 			// spawn loots and stuff
 		}
 
@@ -265,21 +267,42 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 
 		//TODO Place holder method for tentacle spawn stuffs
 		if(isPlugged() && !getShowFloor() && getTentacleSpawnCountDown() >= 0) {
+
 			if (!getWorld().isRemote) {
 				setTentacleSpawnCountDown(getTentacleSpawnCountDown() - 1);
-				
-				//TODO ADD SHAKE AT COUNT OF 100
-				
-				// temp sounds
-				if(getTentacleSpawnCountDown() == 60 || getTentacleSpawnCountDown() == 30)
-					getWorld().playSound(null, getPos(), SoundEvents.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, SoundCategory.HOSTILE, 1F, 1F);
-				
+
+				// Syncs to add shake and final particles
+				if(getTentacleSpawnCountDown() == 100 || getTentacleSpawnCountDown() == 1)
+					updateBlock();
+
+				// sounds
+				if(getTentacleSpawnCountDown() == 60 || getTentacleSpawnCountDown() == 30) {
+					getWorld().playSound(null, getPos(), SoundRegistry.PLUG_LOCK, SoundCategory.HOSTILE, 0.5F, 1F);
+					getWorld().playSound(null, getPos(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 0.75F);
+				}
+
 				if(getTentacleSpawnCountDown() == 0) {
-					// temp whizz-bang
-					getWorld().createExplosion(null, getPos().getX() + 0.5D, getPos().getY() + 3.0D, getPos().getZ() + 0.5D, 0F, false);
+					// whizz-bang
+					getWorld().playSound(null, getPos(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 0.75F);
+					getWorld().playSound(null, getPos(), SoundEvents.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, SoundCategory.HOSTILE, 0.25F, 0.5F);
 					getWorld().setBlockState(getPos(), BlockRegistry.COMPACTED_MUD.getDefaultState(), 3);
-					
+
 					// TODO SPAWN BOSS HERE
+				}
+			}
+
+			if (getTentacleSpawnCountDown() == 100) {
+				shaking = true;
+				shake_timer = 0;
+			}
+
+			if (getTentacleSpawnCountDown() == 1) {
+				if (getWorld().isRemote) {
+					plugBreakParticles(getWorld(), getPos().add(0, 1, -1));
+					plugBreakParticles(getWorld(), getPos().add(1, 1, 0));
+					plugBreakParticles(getWorld(), getPos().add(-1, 1, 0));
+					plugBreakParticles(getWorld(), getPos().add(0, 1, 1));
+					plugBreakParticles(getWorld(), getPos().add(0, 0, -0));
 				}
 			}
 		}
@@ -310,7 +333,22 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			double motionX = getWorld().rand.nextDouble() * 0.4F - 0.2F;
 			double motionY = getWorld().rand.nextDouble() * 0.3F + 0.075F;
 			double motionZ = getWorld().rand.nextDouble() * 0.4F - 0.2F;
-			world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(BlockRegistry.DECAY_PIT_HANGING_CHAIN.getDefaultState()));
+			world.spawnAlwaysVisibleParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(BlockRegistry.DECAY_PIT_HANGING_CHAIN.getDefaultState()));
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void plugBreakParticles(World world, BlockPos pos) {
+		double px = pos.getX() + 0.5D;
+		double py = pos.getY() + 0.5D;
+		double pz = pos.getZ() + 0.5D;
+		for (int i = 0, amount = 40; i < amount; i++) {
+			double ox = getWorld().rand.nextDouble() * 0.6F - 0.3F;
+			double oz = getWorld().rand.nextDouble() * 0.6F - 0.3F;
+			double motionX = getWorld().rand.nextDouble() * 0.6F - 0.3F;
+			double motionY = getWorld().rand.nextDouble() * 0.3F + 0.075F;
+			double motionZ = getWorld().rand.nextDouble() * 0.6F - 0.3F;
+			world.spawnAlwaysVisibleParticle(EnumParticleTypes.ITEM_CRACK.getParticleID(), px + ox, py, pz + oz, motionX, motionY, motionZ, Item.getIdFromItem(Item.getItemFromBlock((BlockRegistry.DUNGEON_DOOR_RUNES.getDefaultState().getBlock()))));
 		}
 	}
 
