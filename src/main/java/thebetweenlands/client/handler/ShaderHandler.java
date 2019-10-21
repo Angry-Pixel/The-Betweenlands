@@ -102,12 +102,11 @@ public class ShaderHandler {
 			this.cancelTransparentOverlays = true;
 			Minecraft.getMinecraft().entityRenderer.renderHand(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
 			Minecraft.getMinecraft().entityRenderer.setupCameraTransform(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
+			this.cancelTransparentOverlays = false;
+			GlStateManager.colorMask(true, true, true, true);
 			
 			//Initialize and update shaders and textures
 			ShaderHelper.INSTANCE.updateShaders(event.getPartialTicks());
-			
-			this.cancelTransparentOverlays = false;
-			GlStateManager.colorMask(true, true, true, true);
 			
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GlStateManager.popMatrix();
