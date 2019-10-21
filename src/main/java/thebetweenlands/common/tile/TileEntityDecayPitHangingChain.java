@@ -51,7 +51,7 @@ public class TileEntityDecayPitHangingChain extends TileEntity implements ITicka
 		
 		if (isBroken() && getProgress() <= -512)
 			if(!getWorld().isRemote)
-				getWorld().setBlockState(getPos(), BlockRegistry.STAGNANT_WATER.getDefaultState(), 3);
+				getWorld().setBlockState(getPos(), BlockRegistry.COMPACTED_MUD.getDefaultState(), 3);
 
 		if (getEntityCollidedWithChains(getHangingLengthCollision(1, 0, 2F + getProgress() * MOVE_UNIT)) != null)
 			checkCollisions(getEntityCollidedWithChains(getHangingLengthCollision(1, 0, 2F + getProgress() * MOVE_UNIT)));

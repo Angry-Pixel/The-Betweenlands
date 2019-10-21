@@ -11,6 +11,7 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -73,6 +74,9 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	private boolean shaking = false;
 	private int shakingTimerMax = 60;
 	public boolean playGearSound = true;
+	public boolean SPAWN_DROPS = false;
+	public int DEATH_TICKS = 0;
+	public int TENTACLE_COUNTDOWN = 300;
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper(null);
 	protected final Map<Block, Boolean> invisibleBlocks = new HashMap<Block, Boolean>(); // dont need states so blocks will do
 
@@ -156,12 +160,15 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 				}
 				if (getSpawnType() == 5) {
 					setPlugged(true);
+					setSpawnXPAndDrops(true);
 					removeInvisiBlocks(getWorld(), getPos());
 					updateBlock();
 					getWorld().playSound(null, getPos().add(1, 6, 0), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 					getWorld().playSound(null, getPos().add(-1, 6, 0), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 					getWorld().playSound(null, getPos().add(0, 6, 1), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 					getWorld().playSound(null, getPos().add(0, 6, -1), SoundEvents.BLOCK_ANVIL_BREAK, SoundCategory.HOSTILE, 0.5F, 1F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
+					
+					
 				}
 			} else {
 				this.spawnAmbientParticles();
@@ -183,12 +190,15 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 
 			if (plugDropTicks <= 1.6F)
 				plugDropTicks += 0.2F;
+			
+
 
 			if (plugDropTicks == 0.6F) {
 				shaking = true;
 				if (!getWorld().isRemote)
 					getWorld().playSound(null, getPos(), SoundRegistry.PLUG_LOCK, SoundCategory.HOSTILE, 1F, 1F);
 			}
+
 			if (plugDropTicks > 1.6F && plugDropTicks <= 2)
 				plugDropTicks += 0.1F;
 
@@ -201,9 +211,10 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 					setShowFloor(false);
 					updateBlock();
 				}
+			
 			if (shaking)
 				shake(60);
-			
+
 			//Remove dungeon locations
 			ILocalStorageHandler storageHandler = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler();
 			storageHandler.getLocalStorages(LocationSludgeWormDungeon.class, new AxisAlignedBB(this.getPos()), l -> true).forEach(location -> location.removeLocations());
@@ -216,6 +227,34 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			// spawn loots and stuff
 		}
 
+		if (!getWorld().isRemote && getSpawnXPAndDrops()) {
+			setDeathTicks(getDeathTicks() + 1);
+			if (getDeathTicks() > 40 && getDeathTicks() % 5 == 0) {
+				int xp = 100;
+				while (xp > 0) {
+					int dropXP = EntityXPOrb.getXPSplit(xp);
+					xp -= dropXP;
+					getWorld().spawnEntity(new EntityXPOrb(getWorld(), getPos().getX() + 0.5D, getPos().getY() + 3.0D, getPos().getZ() + 0.5D, dropXP));
+				}
+			}
+
+			if (getDeathTicks() == 80) {
+				int xp = 1200;
+				while (xp > 0) {
+					int dropXP = EntityXPOrb.getXPSplit(xp);
+					xp -= dropXP;
+					getWorld().spawnEntity(new EntityXPOrb(getWorld(), getPos().getX() + 0.5D, getPos().getY() + 3.0D, getPos().getZ() + 0.5D, dropXP));
+				}
+
+				//TODO - DROP LOOT OR SOMETHING?
+			}
+
+			if (getDeathTicks() > 120) {
+				setSpawnXPAndDrops(false);
+				updateBlock();
+			}
+		}
+
 		if (getWorld().isRemote) {
 			if (!isPlugged())
 				if (playGearSound) {
@@ -223,6 +262,35 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 					playGearSound = false;
 				}
 		}
+
+		//TODO Place holder method for tentacle spawn stuffs
+		if(isPlugged() && !getShowFloor() && getTentacleSpawnCountDown() >= 0) {
+			if (!getWorld().isRemote) {
+				setTentacleSpawnCountDown(getTentacleSpawnCountDown() - 1);
+				
+				//TODO ADD SHAKE AT COUNT OF 100
+				
+				// temp sounds
+				if(getTentacleSpawnCountDown() == 60 || getTentacleSpawnCountDown() == 30)
+					getWorld().playSound(null, getPos(), SoundEvents.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, SoundCategory.HOSTILE, 1F, 1F);
+				
+				if(getTentacleSpawnCountDown() == 0) {
+					// temp whizz-bang
+					getWorld().createExplosion(null, getPos().getX() + 0.5D, getPos().getY() + 3.0D, getPos().getZ() + 0.5D, 0F, false);
+					getWorld().setBlockState(getPos(), BlockRegistry.COMPACTED_MUD.getDefaultState(), 3);
+					
+					// TODO SPAWN BOSS HERE
+				}
+			}
+		}
+	}
+
+	private void setTentacleSpawnCountDown(int tentacle_countdown) {
+		TENTACLE_COUNTDOWN = tentacle_countdown;
+	}
+
+	private int getTentacleSpawnCountDown() {
+		return TENTACLE_COUNTDOWN ;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -380,6 +448,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		EntitySludgeJet jet = new EntitySludgeJet(getWorld());
 		jet.setPosition(posX, posY, posZ);
 		getWorld().spawnEntity(jet);
+		getWorld().playSound(null, jet.getPosition(), SoundRegistry.POOP_JET, SoundCategory.HOSTILE, 1F, 0.8F + getWorld().rand.nextFloat() * 0.5F);
 	}
 	
 	public void setSpawnType(int spawn_type) {
@@ -430,6 +499,22 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	public boolean getShowFloor() {
 		return SHOW_FLOOR;
 	}
+	
+	private void setSpawnXPAndDrops(boolean spawn_drops) {
+		SPAWN_DROPS = spawn_drops;
+	}
+
+	private boolean getSpawnXPAndDrops() {
+		return SPAWN_DROPS ;
+	}
+
+	private void setDeathTicks(int death_ticks) {
+		DEATH_TICKS = death_ticks;
+	}
+
+	private int getDeathTicks() {
+		return DEATH_TICKS ;
+	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
@@ -439,6 +524,9 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		nbt.setFloat("plugDropTicks", plugDropTicks);
 		nbt.setBoolean("plugged", isPlugged());
 		nbt.setBoolean("showFloor", getShowFloor());
+		nbt.setBoolean("spawnDrops", getSpawnXPAndDrops());
+		nbt.setInteger("deathTicks", getDeathTicks());
+		nbt.setInteger("tentacleCountdown", getTentacleSpawnCountDown());
 		return nbt;
 	}
 
@@ -450,6 +538,9 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		plugDropTicks = nbt.getFloat("plugDropTicks");
 		setPlugged(nbt.getBoolean("plugged"));
 		setShowFloor(nbt.getBoolean("showFloor"));
+		setSpawnXPAndDrops(nbt.getBoolean("spawnDrops"));
+		setDeathTicks(nbt.getInteger("deathTicks"));
+		setTentacleSpawnCountDown(nbt.getInteger("tentacleCountdown"));
 	}
 
 	@Override

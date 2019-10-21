@@ -47,17 +47,21 @@ public class EntitySludgeJet extends Entity {
 
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
-		if (!getEntityWorld().isRemote) {
-			if (player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY)
-				if (player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX)
-					if (player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
+
+		if (player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY)
+			if (player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX)
+				if (player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
+					if (!getEntityWorld().isRemote) {
 						if (player.isPotionActive(ElixirEffectRegistry.EFFECT_DECAY.getPotionEffect()))
 							player.addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(60, 3));
 						IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 						if (cap != null)
 							cap.getDecayStats().addDecayAcceleration(0.1F);
+
 					}
-		}
+					if (getEntityWorld().isRemote)
+						player.addVelocity(0, 0.2D, 0);
+				}
 	}
 
 	@Override
