@@ -22,6 +22,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -48,6 +49,7 @@ import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
 import thebetweenlands.common.entity.mobs.EntityShambler;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySludgeJet;
+import thebetweenlands.common.entity.mobs.EntitySludgeMenace;
 import thebetweenlands.common.entity.mobs.EntitySludgeWorm;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
@@ -68,16 +70,16 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	public float floorFadeTicks = 0;
 	public float floorFadeTicksPrev = 0;
 	public int spawnType = 0;
-	public boolean IS_PLUGGED = false; // set to true if boss spawn needed
-	public boolean SHOW_FLOOR = true; // set to false if boss spawn needed
-	private int prev_shake_timer;
-	private int shake_timer;
+	public boolean isPlugged = false; // set to true if boss spawn needed
+	public boolean showFloor = true; // set to false if boss spawn needed
+	private int prevShakeTimer;
+	private int shakeTimer;
 	private boolean shaking = false;
 	private int shakingTimerMax = 60;
 	public boolean playGearSound = true;
-	public boolean SPAWN_DROPS = false;
-	public int DEATH_TICKS = 0;
-	public int TENTACLE_COUNTDOWN = 300;
+	public boolean spawnDrops = false;
+	public int deathTicks = 0;
+	public int tentacleCooldown = 300;
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper(null);
 	protected final Map<Block, Boolean> invisibleBlocks = new HashMap<Block, Boolean>(); // dont need states so blocks will do
 
@@ -210,7 +212,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			if (floorFadeTicks >= 1)
 				if (!getWorld().isRemote) {
 					setShowFloor(false);
-					shake_timer = 0;
+					shakeTimer = 0;
 					updateBlock();
 				}
 			
@@ -265,7 +267,6 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 				}
 		}
 
-		//TODO Place holder method for tentacle spawn stuffs
 		if(isPlugged() && !getShowFloor() && getTentacleSpawnCountDown() >= 0) {
 
 			if (!getWorld().isRemote) {
@@ -287,13 +288,17 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 					getWorld().playSound(null, getPos(), SoundEvents.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, SoundCategory.HOSTILE, 0.25F, 0.5F);
 					getWorld().setBlockState(getPos(), BlockRegistry.COMPACTED_MUD.getDefaultState(), 3);
 
-					// TODO SPAWN BOSS HERE
+					EntitySludgeMenace menace = new EntitySludgeMenace(this.world);
+					menace.setPositionToAnchor(this.getPos(), EnumFacing.UP, EnumFacing.NORTH);
+					this.world.spawnEntity(menace);
 				}
 			}
 
-			if (getTentacleSpawnCountDown() == 100) {
+			if (getTentacleSpawnCountDown() <= 100) {
 				shaking = true;
-				shake_timer = 0;
+				shakeTimer = 0;
+				
+				this.spawnAmbientParticles();
 			}
 
 			if (getTentacleSpawnCountDown() == 1) {
@@ -307,13 +312,14 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			}
 		}
 	}
-
+	
 	private void setTentacleSpawnCountDown(int tentacle_countdown) {
-		TENTACLE_COUNTDOWN = tentacle_countdown;
+		tentacleCooldown = tentacle_countdown;
+		this.markDirty();
 	}
 
 	private int getTentacleSpawnCountDown() {
-		return TENTACLE_COUNTDOWN ;
+		return tentacleCooldown ;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -491,6 +497,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	
 	public void setSpawnType(int spawn_type) {
 		spawnType = spawn_type;
+		this.markDirty();
 	}
 
 	public int getSpawnType() {
@@ -519,39 +526,43 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	}
 
 	public void setPlugged(boolean plugged) {
-		IS_PLUGGED = plugged;
+		isPlugged = plugged;
+		this.markDirty();
 	}
 
 	public boolean isPlugged() {
-		return IS_PLUGGED;
+		return isPlugged;
 	}
 
 	public boolean isUnPlugged() {
-		return !IS_PLUGGED;
+		return !isPlugged;
 	}
 
 	public void setShowFloor(boolean show_floor) {
-		SHOW_FLOOR = show_floor;
+		showFloor = show_floor;
+		this.markDirty();
 	}
 
 	public boolean getShowFloor() {
-		return SHOW_FLOOR;
+		return showFloor;
 	}
 	
 	private void setSpawnXPAndDrops(boolean spawn_drops) {
-		SPAWN_DROPS = spawn_drops;
+		spawnDrops = spawn_drops;
+		this.markDirty();
 	}
 
 	private boolean getSpawnXPAndDrops() {
-		return SPAWN_DROPS ;
+		return spawnDrops ;
 	}
 
 	private void setDeathTicks(int death_ticks) {
-		DEATH_TICKS = death_ticks;
+		deathTicks = death_ticks;
+		this.markDirty();
 	}
 
 	private int getDeathTicks() {
-		return DEATH_TICKS ;
+		return deathTicks ;
 	}
 
 	@Override
@@ -606,15 +617,15 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 
 	public void shake(int shakeTimerMax) {
 		shakingTimerMax = shakeTimerMax;
-		prev_shake_timer = shake_timer;
-		if(shake_timer == 0) {
+		prevShakeTimer = shakeTimer;
+		if(shakeTimer == 0) {
 			shaking = true;
-			shake_timer = 1;
+			shakeTimer = 1;
 		}
-		if(shake_timer > 0)
-			shake_timer++;
+		if(shakeTimer > 0)
+			shakeTimer++;
 
-		if(shake_timer >= shakingTimerMax)
+		if(shakeTimer >= shakingTimerMax)
 			shaking = false;
 		else
 			shaking = true;
@@ -646,6 +657,6 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	}
 
 	public float getShakingProgress(float delta) {
-		return 1.0F / shakingTimerMax * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
+		return 1.0F / shakingTimerMax * (prevShakeTimer + (shakeTimer - prevShakeTimer) * delta);
 	}
 }

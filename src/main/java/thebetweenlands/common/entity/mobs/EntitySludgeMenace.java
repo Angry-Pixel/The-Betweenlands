@@ -44,8 +44,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IBLBoss;
+import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.api.entity.spawning.IWeightProvider;
+import thebetweenlands.client.audio.EntityMusicLayers;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -55,10 +57,11 @@ import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.sound.BLSoundEvent;
 import thebetweenlands.util.WeightedList;
 
 //TODO Loot tables
-public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityScreenShake, IBLBoss {
+public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityScreenShake, IBLBoss, IEntityMusic {
 	protected static final byte EVENT_START_ACTION = 90;
 	protected static final byte EVENT_SLAM_HIT = 91;
 
@@ -1056,11 +1059,11 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 		public void startExecuting() {
 			int nr = this.menace.rand.nextInt(100);
 
-			if(nr <= 15) {
+			if(nr <= 17) {
 				this.menace.startAction(ActionState.SPIT_MOBS);
-			} else if(nr <= 30) {
+			} else if(nr <= 34) {
 				this.menace.startAction(ActionState.SWING);
-			} else if(nr <= 65) {
+			} else if(nr <= 67) {
 				this.menace.startAction(ActionState.POKE);
 			} else {
 				this.menace.startAction(ActionState.SLAM);
@@ -1076,5 +1079,25 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	@Override
 	public UUID getBossInfoUuid() {
 		return this.dataManager.get(BOSSINFO_ID).or(new UUID(0, 0));
+	}
+
+	@Override
+	public BLSoundEvent getMusicFile(EntityPlayer listener) {
+		return SoundRegistry.PIT_OF_DECAY_LOOP;
+	}
+
+	@Override
+	public double getMusicRange(EntityPlayer listener) {
+		return 32.0D;
+	}
+
+	@Override
+	public boolean isMusicActive(EntityPlayer listener) {
+		return this.isEntityAlive();
+	}
+
+	@Override
+	public int getMusicLayer(EntityPlayer listener) {
+		return EntityMusicLayers.BOSS;
 	}
 }
