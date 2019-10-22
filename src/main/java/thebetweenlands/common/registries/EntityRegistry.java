@@ -190,6 +190,7 @@ public class EntityRegistry {
 		registerEntity(EntityEmberling.class, "emberling", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityGalleryFrame.class, "gallery_frame");
 		registerEntity(EntitySludgeMenace.class, "sludge_menace", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntitySludgeMenace.DummyPart.class, "sludge_menace_multipart_dummy", 64, 20, false);
 		
 		registerEntity(EntityMultipartDummy.class, "multipart_dummy", 64, 20, false);
 	}

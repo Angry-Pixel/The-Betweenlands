@@ -28,7 +28,7 @@ public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 	public RenderWallLivingRoot(RenderManager renderManager) {
 		super(renderManager, BLANK_MODEL, ROOT_TEXTURE);
 	}
-	
+
 	protected RenderWallLivingRoot(RenderManager renderManager, ResourceLocation armTexture) {
 		super(renderManager, BLANK_MODEL, armTexture);
 	}
@@ -66,13 +66,13 @@ public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 
 		GlStateManager.popMatrix();
 	}
-	
+
 	protected float getUvScale(EntityWallLivingRoot entity, float partialTicks) {
 		return 2.0f;
 	}
-	
+
 	protected float calculateHullContraction(EntityWallLivingRoot entity, int i, float armSize, float partialTicks) {
-		return (1 - i / (float)(entity.armSegments.size() - 1)) * (armSize -  0.2f) + 0.2f;
+		return (1 - i / (float)(entity.armSegments.size() - 1)) * armSize;
 	}
 
 	protected void renderBodyHull(EntityWallLivingRoot entity, float partialTicks) {

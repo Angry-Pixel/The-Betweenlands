@@ -3,6 +3,7 @@ package thebetweenlands.common.entity.ai;
 import java.util.List;
 
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITarget;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -21,7 +22,8 @@ public class EntityAIHurtByTargetImproved extends EntityAITarget {
     @Override
 	public boolean shouldExecute() {
         int i = this.taskOwner.getRevengeTimer();
-        return i != this.revengeTimer && this.isSuitableTarget(this.taskOwner.getAttackTarget(), false);
+        EntityLivingBase entitylivingbase = this.taskOwner.getRevengeTarget();
+        return i != this.revengeTimer && entitylivingbase != null && this.isSuitableTarget(entitylivingbase, false);
     }
 
     /**
@@ -45,5 +47,10 @@ public class EntityAIHurtByTargetImproved extends EntityAITarget {
         }
         
         super.startExecuting();
+    }
+    
+    @Override
+    public void resetTask() {
+    	this.target = null;
     }
 }

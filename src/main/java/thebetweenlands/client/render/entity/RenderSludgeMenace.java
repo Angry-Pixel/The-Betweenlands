@@ -1,5 +1,7 @@
 package thebetweenlands.client.render.entity;
 
+import java.util.List;
+
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -9,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityMultipartDummy;
 import thebetweenlands.common.entity.mobs.EntitySludgeMenace;
+import thebetweenlands.common.entity.mobs.EntitySludgeMenace.Bulge;
 import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.util.RenderUtils;
 
@@ -40,21 +43,21 @@ public class RenderSludgeMenace extends RenderWallLivingRoot implements IMultipa
 
 	@Override
 	protected float calculateHullContraction(EntityWallLivingRoot entity, int i, float armSize, float partialTicks) {
-		float[] bulges = ((EntitySludgeMenace) entity).getBulges(partialTicks);
+		List<Bulge> bulges = ((EntitySludgeMenace) entity).getBulges(partialTicks);
 
 		float bulgeSize = 0.0f;
 
-		float bulgeScale = 1.1f;
-		float bulgeLengthScale = 0.65f;
-
 		if(bulges != null) {
-			for(float bulge : bulges) {
-				float bulgePos = bulge * entity.armSegments.size();
-				bulgeSize += (float) Math.cos(Math.min(Math.abs(bulgePos - i) * bulgeLengthScale, Math.PI / 2)) * bulgeScale;
+			for(Bulge bulge : bulges) {
+				float bulgePos = bulge.renderPosition * entity.armSegments.size();
+				bulgeSize += (float) Math.cos(Math.min(Math.abs(bulgePos - i) / bulge.type.length, Math.PI / 2)) * bulge.renderSize;
 			}
 		}
 
-		return Math.max(bulgeSize, super.calculateHullContraction(entity, i, armSize, partialTicks) * (((float)Math.sin(-(entity.ticksExisted + partialTicks) * 0.2f + i) + 0.5f) * 0.5f * 0.2f + 0.8f));
+		float baseSize = (1 - i / (float)(entity.armSegments.size() - 1)) * (armSize -  0.2f) + 0.2f;
+		float animation = ((float)Math.sin(-(entity.ticksExisted + partialTicks) * 0.2f + i) + 0.5f) * 0.5f * 0.2f + 0.8f;
+
+		return Math.max(Math.min(bulgeSize, 1.2f), baseSize * animation);
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package thebetweenlands.common.entity.mobs;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,7 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityMultipartDummy extends EntityLiving {
+public class EntityMultipartDummy extends Entity {
 	protected float sizePadding = 0.01F;
 
 	//For sync with client.
@@ -31,7 +30,6 @@ public class EntityMultipartDummy extends EntityLiving {
 	public EntityMultipartDummy(World world) {
 		super(world);
 		this.setSize(0, 0);
-		this.experienceValue = 0;
 	}
 
 	public EntityMultipartDummy(World world, MultiPartEntityPart parent) {
@@ -79,7 +77,6 @@ public class EntityMultipartDummy extends EntityLiving {
 
 	@Override
 	protected void entityInit() {
-		super.entityInit();
 		this.dataManager.register(PARENT_PART_NAME, "");
 		this.dataManager.register(PARENT_OWNER_ID, -1);
 	}
@@ -109,16 +106,12 @@ public class EntityMultipartDummy extends EntityLiving {
 		this.setDead();
 	}
 
+
 	@Override
-	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
 		if(this.parent != null) {
 			return this.parent.processInitialInteract(player, hand);
 		}
-		return false;
-	}
-
-	@Override
-	public boolean canBeLeashedTo(EntityPlayer player) {
 		return false;
 	}
 
@@ -143,11 +136,6 @@ public class EntityMultipartDummy extends EntityLiving {
 	@Override
 	public boolean isInvisible() {
 		return true;
-	}
-
-	@Override
-	protected boolean canDespawn() {
-		return false;
 	}
 
 	@Override
@@ -204,5 +192,15 @@ public class EntityMultipartDummy extends EntityLiving {
 	@Override
 	protected boolean canBeRidden(Entity entityIn) {
 		return false;
+	}
+
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound compound) {
+
+	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound compound) {
+
 	}
 }

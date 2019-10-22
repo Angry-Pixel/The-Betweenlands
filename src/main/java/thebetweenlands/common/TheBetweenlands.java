@@ -33,6 +33,7 @@ import thebetweenlands.common.command.CommandReloadRecipes;
 import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.config.ConfigHelper;
+import thebetweenlands.common.entity.mobs.EntitySludgeMenace;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.handler.AdvancementHandler;
 import thebetweenlands.common.handler.AnvilEventHandler;
@@ -253,5 +254,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(RingOfDispersionEntityCapability.class);
 		MinecraftForge.EVENT_BUS.register(ItemGreatsword.class);
 		MinecraftForge.EVENT_BUS.register(CenserRecipeCremains.class);
+		MinecraftForge.EVENT_BUS.register(EntitySludgeMenace.class);
 	}
 }

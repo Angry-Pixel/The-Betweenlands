@@ -313,7 +313,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 			segment.update(dirUp, target.add(dir.scale(segmentLength)), dir.scale(-1));
 		}
 
-		for(int i = 2; i < this.getNumSegments() - 1; i++) {
+		for(int i = 2; i < this.getNumSegments(); i++) {
 			ArmSegment segment = this.armSegments.get(i);
 
 			Vec3d target;
@@ -335,7 +335,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		startSegment2.update(dirUp, ikArmStart, new Vec3d(-dirFwd.x, -dirFwd.y, -dirFwd.z));
 
 		ArmSegment endSegment = this.armSegments.get(this.armSegments.size() - 1);
-		endSegment.update(dirUp, armEnd, armEnd.subtract(this.armSegments.get(this.armSegments.size() - 2).pos).normalize());
+		endSegment.update(dirUp, armEnd, this.armSegments.get(this.armSegments.size() - 2).pos.subtract(armEnd).normalize());
 
 		for(int i = 0; i < this.getNumSegments(); i++) {
 			ArmSegment segment = this.armSegments.get(i);
@@ -493,7 +493,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 			if(this.attackTicks > 0) {
 				this.attackTicks--;
 			} else if(target != null && target.getEntityBoundingBox().intersects(this.entity.rootTip.getEntityBoundingBox())) {
-				EntityAIAttackOnCollide.useStandardAttack(this.entity, target);
+				this.entity.attackEntityAsMob(target);
 				this.entity.swingArm(EnumHand.MAIN_HAND);
 				this.attackTicks = 20;
 			}

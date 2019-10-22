@@ -35,7 +35,11 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 	protected boolean isSquashed = false;
 	
 	public EntityTinySludgeWorm(World world) {
-		super(world);
+		this(world, true);
+	}
+	
+	public EntityTinySludgeWorm(World world, boolean doSpawningAnimation) {
+		super(world, doSpawningAnimation);
 		setSize(0.3125F, 0.3125F);
 		isImmuneToFire = true;
 		this.parts = new MultiPartEntityPart[] {

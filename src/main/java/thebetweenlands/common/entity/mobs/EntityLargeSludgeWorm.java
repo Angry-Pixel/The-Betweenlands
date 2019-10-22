@@ -10,8 +10,8 @@ import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -139,7 +139,7 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 	}
 
 	public EntityLargeSludgeWorm(World world) {
-		super(world);
+		super(world, false);
 		setSize(0.8F, 0.8F);
 		isImmuneToFire = true;
 
@@ -169,7 +169,7 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 		tasks.addTask(4, new AILayEggSac(this));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
-		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
+		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, 10, true, false, entity -> entity instanceof IMob == false));
 	}
 
 	@Override
@@ -190,7 +190,7 @@ public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 	protected float getSoundPitch() {
 		return super.getSoundPitch() * 0.5F;
 	}
-	
+
 	@Override
 	protected double getMaxPieceDistance() {
 		return 0.95D;

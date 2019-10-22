@@ -14,7 +14,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 
 public class EntityTinySludgeWormHelper extends EntityTinySludgeWorm {
 	public EntityTinySludgeWormHelper(World world) {
-		super(world);
+		super(world, false);
 		experienceValue = 0;
 	}
 
@@ -39,16 +39,6 @@ public class EntityTinySludgeWormHelper extends EntityTinySludgeWorm {
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.TINY_SLUDGE_WORM_HELPER;
-	}
-
-	@Override
-	protected float getHeadMotionYMultiplier() {
-		return 1;
-	}
-
-	@Override
-	protected float getTailMotionYMultiplier() {
-		return 1;
 	}
 
 	@Override

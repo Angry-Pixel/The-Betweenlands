@@ -12,7 +12,6 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
@@ -47,6 +46,8 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	
 	private int wallInvulnerabilityTicks = 40;
 
+	private boolean doSpawningAnimation = true;
+	
 	public EntitySludgeWorm(World world) {
 		super(world);
 		setSize(0.4375F, 0.3125F);
@@ -64,6 +65,11 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 				new MultiPartEntityPart(this, "part9", 0.3125F, 0.3125F) };
 		this.renderBoundingBox = this.getEntityBoundingBox();
 	}
+	
+	public EntitySludgeWorm(World world, boolean doSpawningAnimation) {
+		this(world);
+		this.doSpawningAnimation = doSpawningAnimation;
+	}
 
 	@Override
 	protected void initEntityAI() {
@@ -71,7 +77,7 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 		tasks.addTask(3, new EntityAIWander(this, 0.8D, 1));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
-		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, true));
+		targetTasks.addTask(2, new EntityAINearestAttackableTarget<>(this, EntityLivingBase.class, 10, true, false, entity -> entity instanceof IMob == false));
 	}
 
 	@Override
@@ -102,11 +108,11 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	}
 
 	protected float getHeadMotionYMultiplier() {
-		return this.ticksExisted < 20 ? 0.65F : 1.0F;
+		return this.doSpawningAnimation && this.ticksExisted < 20 ? 0.65F : 1.0F;
 	}
 
 	protected float getTailMotionYMultiplier() {
-		return this.ticksExisted < 20 ? 0.0F : 1.0F;
+		return this.doSpawningAnimation && this.ticksExisted < 20 ? 0.0F : 1.0F;
 	}
 
 	@Override

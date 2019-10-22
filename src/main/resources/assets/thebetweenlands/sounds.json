@@ -222,7 +222,39 @@
   "snail_living": {
     "sounds": [
       "thebetweenlands:snail_living_1",
-      "thebetweenlands:snail_living_1"
+      "thebetweenlands:snail_living_2"
+    ]
+  },
+  "leech_death": {
+    "sounds": [
+      "thebetweenlands:snail_death"
+    ]
+  },
+  "leech_hurt": {
+    "sounds": [
+      "thebetweenlands:snail_hurt"
+    ]
+  },
+  "leech_living": {
+    "sounds": [
+      "thebetweenlands:snail_living_1",
+      "thebetweenlands:snail_living_2"
+    ]
+  },
+  "sludge_menace_death": {
+    "sounds": [
+      "thebetweenlands:snail_death"
+    ]
+  },
+  "sludge_menace_hurt": {
+    "sounds": [
+      "thebetweenlands:snail_hurt"
+    ]
+  },
+  "sludge_menace_living": {
+    "sounds": [
+      "thebetweenlands:snail_living_1",
+      "thebetweenlands:snail_living_2"
     ]
   },
   "dragonfly": {

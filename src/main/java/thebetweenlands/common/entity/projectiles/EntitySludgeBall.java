@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -19,11 +20,11 @@ import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
+import thebetweenlands.common.entity.mobs.EntityMultipartDummy;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 
 public class EntitySludgeBall extends EntityThrowable {
@@ -39,6 +40,7 @@ public class EntitySludgeBall extends EntityThrowable {
 	public EntitySludgeBall(World world, EntityLivingBase owner) {
 		this(world);
 		this.ownerUUID = owner.getUniqueID().toString();
+		this.thrower = owner;
 	}
 
 	public Entity getOwner() {
@@ -67,11 +69,6 @@ public class EntitySludgeBall extends EntityThrowable {
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
-		this.posX = this.lastTickPosX;
-		this.posY = this.lastTickPosY;
-		this.posZ = this.lastTickPosZ;
-		this.setPosition(this.posX, this.posY, this.posZ);
 		double prevMotionX = this.motionX;
 		double prevMotionY = this.motionY;
 		double prevMotionZ = this.motionZ;
@@ -79,12 +76,29 @@ public class EntitySludgeBall extends EntityThrowable {
 		double prevY = this.posY;
 		double prevZ = this.posZ;
 		move(MoverType.SELF,this.motionX, this.motionY, this.motionZ);
-		if(!this.getEntityWorld().isRemote && prevX == this.posX && prevY == this.posY && prevZ == this.posZ) {
+		if(!this.getEntityWorld().isRemote && new Vec3d(prevX - this.posX, prevY - this.posY, prevZ - this.posZ).lengthSquared() < 0.01D && this.ticksExisted > 10) {
 			this.explode();
 		}
 		this.motionX = prevMotionX;
 		this.motionY = prevMotionY;
 		this.motionZ = prevMotionZ;
+		this.setPosition(prevX, prevY, prevZ);
+		
+		super.onUpdate();
+	}
+	
+	@Override
+	public void move(MoverType type, double x, double y, double z) {
+		if(this.ticksExisted < 2) {
+			//Stupid EntityTrackerEntry is broken and desyncs server position.
+			//Tracker updates server side position but *does not* send the change to the client
+			//when tracker.updateCounter == 0, causing a desync until the next force teleport
+			//packet.......
+			//By not moving the entity until then it works.
+			return;
+		}
+		
+		super.move(type, x, y, z);
 	}
 
 	@Override
@@ -138,8 +152,9 @@ public class EntitySludgeBall extends EntityThrowable {
 				}
 			}
 		}
+		
 		if (collision.typeOfHit == RayTraceResult.Type.ENTITY) {
-			if(!(collision.entityHit instanceof EntityPeatMummy) && !(collision.entityHit instanceof EntityDreadfulMummy)) {
+			if(collision.entityHit != this.thrower && !(collision.entityHit instanceof MultiPartEntityPart) &&  !(collision.entityHit instanceof EntityMultipartDummy) && !(collision.entityHit instanceof EntityPeatMummy) && !(collision.entityHit instanceof EntityDreadfulMummy)) {
 				if(this.attackEntity(collision.entityHit)) {
 					explode();
 				} else {
