@@ -38,6 +38,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -318,6 +319,10 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 
 	@Override
 	public void onUpdate() {
+		if (getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL)
+			if (!getEntityWorld().isRemote)
+					setDead();
+		
 		if(this.world.isRemote) {
 			this.actionState = ActionState.values()[this.dataManager.get(ACTION_STATE)];
 		}
