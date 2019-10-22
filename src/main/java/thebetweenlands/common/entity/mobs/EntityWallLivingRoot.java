@@ -37,6 +37,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -235,9 +236,17 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		return targetTipPos;
 	}
 
+	protected float getArmLengthSlack() {
+		return 0.0f;
+	}
+	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		
+		if(!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+            this.setDead();
+        }
 
 		float maxArmLength = (float)this.getEntityAttribute(MAX_ARM_LENGTH).getAttributeValue() * this.getArmSize(1);
 
@@ -268,7 +277,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 			Vec3d tipPos = this.updateTargetTipPos(armStartWorld, maxArmLength, dirFwd, dirUp);
 
 			//Clamp to max reach sphere
-			tipPos = armStartWorld.add(tipPos.subtract(armStartWorld).normalize().scale(Math.min(tipPos.subtract(armStartWorld).length(), maxArmLength + 1)));
+			tipPos = armStartWorld.add(tipPos.subtract(armStartWorld).normalize().scale(Math.min(tipPos.subtract(armStartWorld).length(), maxArmLength + this.getArmLengthSlack())));
 
 			this.setTipPos(tipPos);
 			this.rootTip.setPosition(tipPos.x, tipPos.y, tipPos.z);
