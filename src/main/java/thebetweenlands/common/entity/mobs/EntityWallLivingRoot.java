@@ -235,6 +235,10 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		return targetTipPos;
 	}
 
+	protected float getArmLengthSlack() {
+		return 0.0f;
+	}
+	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -268,7 +272,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 			Vec3d tipPos = this.updateTargetTipPos(armStartWorld, maxArmLength, dirFwd, dirUp);
 
 			//Clamp to max reach sphere
-			tipPos = armStartWorld.add(tipPos.subtract(armStartWorld).normalize().scale(Math.min(tipPos.subtract(armStartWorld).length(), maxArmLength + 1)));
+			tipPos = armStartWorld.add(tipPos.subtract(armStartWorld).normalize().scale(Math.min(tipPos.subtract(armStartWorld).length(), maxArmLength + this.getArmLengthSlack())));
 
 			this.setTipPos(tipPos);
 			this.rootTip.setPosition(tipPos.x, tipPos.y, tipPos.z);

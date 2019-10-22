@@ -276,6 +276,11 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	}
 
 	@Override
+	protected float getArmLengthSlack() {
+		return 0.25f;
+	}
+	
+	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundRegistry.SLUDGE_MENACE_LIVING;
 	}
