@@ -509,7 +509,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 				}
 
 				if(damaged) {
-					this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue() * 1.75f);
+					this.heal((float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getBaseValue() * 1.5f);
 				}
 			}
 		} else if(this.actionState == ActionState.SWING) {
@@ -533,6 +533,10 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source.getTrueSource() != null && source.getImmediateSource() != source.getTrueSource()) {
+			return false;
+		}
+
 		if(super.attackEntityFrom(source, amount)) {
 			if(!this.world.isRemote && this.actionState == ActionState.POKE) {
 				this.damageCounter += amount;
