@@ -129,7 +129,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 				experienceValue = 20;
 				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.28D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100D);
-				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
+				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.25D);
 				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
 				getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.75D);
 			}
@@ -138,7 +138,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 				experienceValue = 10;
 				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.29D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30D);
-				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.5D);
 				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
 				getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.5D);
 			}
@@ -147,7 +147,7 @@ public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 				experienceValue = 5;
 				getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.31D);
 				getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20D);
-				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
+				getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.75D);
 				getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
 				getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.25D);
 			}

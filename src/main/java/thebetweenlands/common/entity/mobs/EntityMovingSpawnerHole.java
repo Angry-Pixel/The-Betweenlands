@@ -65,7 +65,7 @@ public class EntityMovingSpawnerHole extends EntityMovingWallFace implements IMo
 				return true;
 			}
 		});
-		this.tasks.addTask(1, new AISpawnMob(this, 20, 60));
+		this.tasks.addTask(1, new AISpawnMob(this, 7, 18));
 	}
 
 	@Override

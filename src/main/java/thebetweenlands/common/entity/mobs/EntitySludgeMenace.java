@@ -587,7 +587,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 		boolean damaged = super.attackEntityAsMob(target);
 
 		if(this.actionState == ActionState.POKE) {
-			if(target == this.getAttackTarget()) {
+			if(target == this.getAttackTarget() && this.actionTimer >= 40) {
 				DummyPart endDummy = this.dummies[this.dummies.length - 1];
 
 				if(endDummy != null && endDummy.isEntityAlive()) {

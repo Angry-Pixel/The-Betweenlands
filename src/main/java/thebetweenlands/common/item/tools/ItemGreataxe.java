@@ -135,7 +135,7 @@ public class ItemGreataxe extends ItemGreatsword {
 
 		if(equipmentSlot == EntityEquipmentSlot.MAINHAND) {
 			multimap.removeAll(SharedMonsterAttributes.ATTACK_SPEED.getName());
-			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -3.45D, 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -3.3D, 0));
 		}
 
 		return multimap;
