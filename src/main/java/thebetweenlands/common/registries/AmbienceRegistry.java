@@ -1,5 +1,7 @@
 package thebetweenlands.common.registries;
 
+import java.util.List;
+
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -15,6 +17,7 @@ import thebetweenlands.client.audio.ambience.list.SpiritTreeAmbienceType;
 import thebetweenlands.client.audio.ambience.list.SurfaceAmbienceType;
 import thebetweenlands.client.audio.ambience.list.WaterAmbienceType;
 import thebetweenlands.client.audio.ambience.list.WindAmbienceType;
+import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.world.event.EventBloodSky;
 import thebetweenlands.common.world.event.EventSpoopy;
 import thebetweenlands.common.world.storage.location.LocationAmbience;
@@ -26,7 +29,7 @@ import thebetweenlands.common.world.storage.location.LocationStorage;
 public class AmbienceRegistry {
 	public static final AmbienceLayer BASE_LAYER = new AmbienceLayer(new ResourceLocation("base_layer"));
 	public static final AmbienceLayer DETAIL_LAYER = new AmbienceLayer(new ResourceLocation("detail_layer"));
-	
+
 	public static void preInit() {
 		//Base ambience
 		AmbienceManager.INSTANCE.registerAmbience(new SurfaceAmbienceType());
@@ -93,7 +96,21 @@ public class AmbienceRegistry {
 		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.SLUDGE_WORM_DUNGEON, SoundRegistry.PIT_OF_DECAY_LOOP) {
 			@Override
 			public boolean isActive() {
-				return super.isActive() && this.getAmbience().getLocation().getName().equals("sludge_worm_dungeon_pit");
+				if(super.isActive() && this.getAmbience() != null) {
+					LocationStorage location = this.getAmbience().getLocation();
+
+					if(location.getName().equals("sludge_worm_dungeon_pit")) {
+						List<EntityDecayPitTarget> targets = this.getPlayer().world.getEntitiesWithinAABB(EntityDecayPitTarget.class, location.getEnclosingBounds());
+
+						for(EntityDecayPitTarget target : targets) {
+							if(location.isInside(target)) {
+								return true;
+							}
+						}
+					}
+				}
+
+				return false;
 			}
 		});
 		AmbienceManager.INSTANCE.registerAmbience(new SpiritTreeAmbienceType());

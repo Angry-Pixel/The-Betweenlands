@@ -93,6 +93,10 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 			}
 		}
 		
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1, 1, 1, 1);
+		
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y + 4.5F, z);
 		GlStateManager.scale(-1F, -1F, 1F);

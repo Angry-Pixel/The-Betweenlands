@@ -21,6 +21,7 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -30,6 +31,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -38,7 +40,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -57,8 +58,12 @@ import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.sound.BLSoundEvent;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.WeightedList;
 
 //TODO Loot tables
@@ -79,7 +84,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	protected static final DataParameter<Integer> ACTION_STATE = EntityDataManager.createKey(EntitySludgeMenace.class, DataSerializers.VARINT);
 
 	public static enum ActionState {
-		IDLE, SLAM, POKE, SWING, SPIT_MOBS, STUNNED;
+		IDLE, SLAM, POKE, SWING, SPIT_MOBS, STUNNED, DEATH;
 	}
 
 	private DummyPart[] dummies;
@@ -176,6 +181,9 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 
 	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
 
+	private int deathTicks = 0;
+	private Vec3d deathSpazzMotion = Vec3d.ZERO;
+
 	public EntitySludgeMenace(World world) {
 		super(world);
 		this.dummies = new DummyPart[this.getParts().length];
@@ -224,6 +232,15 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 		if(this.hasCustomName()) {
 			this.bossInfo.setName(this.getDisplayName());
 		}
+
+		this.deathTicks = nbt.getInteger("deathTicks");
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+
+		nbt.setInteger("deathTicks", this.deathTicks);
 	}
 
 	@Override
@@ -280,7 +297,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	protected float getArmLengthSlack() {
 		return 0.25f;
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundRegistry.SLUDGE_MENACE_LIVING;
@@ -308,8 +325,23 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	}
 
 	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.SLUDGE_MENACE;
+	}
+
+	@Override
 	protected boolean isValidBlockForMovement(BlockPos pos, IBlockState state) {
 		return state.isOpaqueCube() && state.isNormalCube() && state.isFullCube() && state.getBlockHardness(this.world, pos) > 0;
+	}
+
+	@Override
+	public float getArmSize(float partialTicks) {
+		if(this.ticksExisted < 10) {
+			return (float) Math.pow((this.ticksExisted + partialTicks) / 10.0f, 6.0f);
+		} else if(!this.isEntityAlive()) {
+			return (float) Math.max(0, 1 - Math.pow(this.deathTicks / 130.0f, 8.0f));
+		}
+		return super.getArmSize(partialTicks);
 	}
 
 	@Override
@@ -321,13 +353,8 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 		}
 	}
 
-
 	@Override
 	public void onUpdate() {
-		if (getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL)
-			if (!getEntityWorld().isRemote)
-					setDead();
-		
 		if(this.world.isRemote) {
 			this.actionState = ActionState.values()[this.dataManager.get(ACTION_STATE)];
 		}
@@ -357,6 +384,12 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 
 		if(this.screenShakeTimer > 0) {
 			this.screenShakeTimer--;
+		}
+
+		//Spawn animation
+		if(this.ticksExisted < 10) {
+			Vec3d straightPos = this.getPositionVector().add(this.getForward().scale(this.getArmSize(1) * (this.getEntityAttribute(MAX_ARM_LENGTH).getAttributeValue() + 1)));
+			this.rootTip.setPosition(straightPos.x, straightPos.y, straightPos.z);
 		}
 
 		super.onUpdate();
@@ -456,6 +489,55 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 				} else {
 					dummy.updatePositioning();
 				}
+			}
+		}
+	}
+
+	@Override
+	protected void onDeathUpdate() {
+		this.bossInfo.setPercent(0);
+
+		++this.deathTicks;
+
+		if(!this.world.isRemote) {
+			if(this.actionState != ActionState.DEATH) {
+				this.startAction(ActionState.DEATH);
+			}
+
+			if (this.deathTicks > 100 && this.deathTicks % 5 == 0) {
+				int xp = 800;
+				while (xp > 0) {
+					int dropXP = EntityXPOrb.getXPSplit(xp);
+					xp -= dropXP;
+					this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + this.height / 2.0D, this.posZ, dropXP));
+				}
+			}
+
+			if(this.deathTicks > 130) {
+				int xp = 3000;
+				while (xp > 0) {
+					int dropXP = EntityXPOrb.getXPSplit(xp);
+					xp -= dropXP;
+					this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + this.height / 2.0D, this.posZ, dropXP));
+				}
+
+				List<LocationStorage> locations = LocationStorage.getLocations(this.world, this.getPositionVector().add(0, 2, 0));
+				for(LocationStorage location : locations) {
+					if(location.getType() == EnumLocationType.SLUDGE_WORM_DUNGEON) {
+						//Remove block guard
+						if(location.getGuard() != null) {
+							location.getGuard().clear(this.world);
+							location.setDirty(true);
+						}
+
+						//Set location to defeated to remove ground fog and mob spawns
+						if(location instanceof LocationSludgeWormDungeon) {
+							((LocationSludgeWormDungeon) location).setDefeated(true);
+						}
+					}
+				}
+
+				this.setDead();
 			}
 		}
 	}
@@ -575,6 +657,8 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	protected Vec3d updateTargetTipPos(Vec3d armStartWorld, float maxArmLength, Vec3d dirFwd, Vec3d dirUp) {
 		switch(this.actionState) {
 		default:
+		case DEATH:
+			return this.updateDeathTipPos(armStartWorld, maxArmLength, dirFwd, dirUp);
 		case IDLE:
 			return this.updateIdleTargetTipPos(armStartWorld, maxArmLength, dirFwd, dirUp);
 		case SLAM:
@@ -588,6 +672,15 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 		case STUNNED:
 			return this.updateStunnedTipPos(armStartWorld, maxArmLength, dirFwd, dirUp);
 		}
+	}
+
+	protected Vec3d updateDeathTipPos(Vec3d armStartWorld, float maxArmLength, Vec3d dirFwd, Vec3d dirUp) {
+		if(this.world.rand.nextInt(2) == 0) {
+			float vel = 2.0f + this.world.rand.nextFloat() * 4.0f;
+			this.deathSpazzMotion = new Vec3d((this.world.rand.nextFloat() - 0.5f) * vel, (this.world.rand.nextFloat() - 0.5f) * vel + 1.25f, (this.world.rand.nextFloat() - 0.5f) * vel);
+		}
+
+		return this.rootTip.getPositionVector().add(this.deathSpazzMotion);
 	}
 
 	protected Vec3d updateStunnedTipPos(Vec3d armStartWorld, float maxArmLength, Vec3d dirFwd, Vec3d dirUp) {
@@ -943,7 +1036,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	protected void startSlamHit() {
 		this.screenShakeTimer = 10;
 
-		this.playSound(SoundRegistry.WALL_SLAM, 1, 1);
+		this.playSound(SoundRegistry.WALL_SLAM, 2, 1);
 
 		if(!this.world.isRemote) {
 			this.world.setEntityState(this, EVENT_SLAM_HIT);
@@ -1016,7 +1109,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 
 			if(this.attackTicks > 0) {
 				this.attackTicks--;
-			} else if(target != null) {
+			} else if(target != null && this.menace.isEntityAlive()) {
 				AxisAlignedBB targetAabb = target.getEntityBoundingBox();
 
 				boolean attacked = false;
@@ -1054,7 +1147,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 
 		@Override
 		public boolean shouldExecute() {
-			if(this.menace.actionState == ActionState.IDLE && this.menace.getAttackTarget() != null) {
+			if(this.menace.actionState == ActionState.IDLE && this.menace.getAttackTarget() != null && this.menace.isEntityAlive()) {
 				return this.cooldown-- <= 0;
 			}
 			return false;

@@ -246,10 +246,14 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 * @param ambience
 	 * @return
 	 */
-	public LocationStorage setAmbience(LocationAmbience ambience) {
-		this.inheritAmbience = false;
-		this.ambience = ambience;
-		ambience.setLocation(this);
+	public LocationStorage setAmbience(@Nullable LocationAmbience ambience) {
+		if(ambience != null) {
+			this.inheritAmbience = false;
+			this.ambience = ambience;
+			ambience.setLocation(this);
+		} else {
+			this.ambience = null;
+		}
 		this.markDirty();
 		return this;
 	}

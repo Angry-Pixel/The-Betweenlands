@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -22,17 +21,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import thebetweenlands.api.entity.IEntityMusic;
-import thebetweenlands.client.audio.EntityMusicLayers;
 import thebetweenlands.common.entity.mobs.EntityFortressBoss;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.sound.BLSoundEvent;
 import thebetweenlands.common.tile.TileEntityDecayPitControl;
 import thebetweenlands.common.tile.TileEntityDecayPitGroundChain;
 import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
 import thebetweenlands.util.RotationMatrix;
 
-public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitTarget, IEntityMusic {
+public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitTarget {
 	private static final byte EVENT_ATTACK_BLOCKED = 80;
 	private static final byte EVENT_ATTACK_DAMAGE = 81;
 
@@ -358,6 +354,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		return false;
 	}
 
+	@Override
 	@Nullable
 	public Entity[] getParts() {
 		return parts;
@@ -653,26 +650,6 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	@Override
 	public World getWorld() {
 		return getEntityWorld();
-	}
-
-	@Override
-	public BLSoundEvent getMusicFile(EntityPlayer listener) {
-		return SoundRegistry.PIT_OF_DECAY_LOOP;
-	}
-
-	@Override
-	public double getMusicRange(EntityPlayer listener) {
-		return 16D;
-	}
-
-	@Override
-	public boolean isMusicActive(EntityPlayer listener) {
-		return isEntityAlive() && canEntityBeSeen(listener);
-	}
-
-	@Override
-	public int getMusicLayer(EntityPlayer listener) {
-		return EntityMusicLayers.BOSS;
 	}
 
     public boolean canEntityBeSeen(Entity entity) {

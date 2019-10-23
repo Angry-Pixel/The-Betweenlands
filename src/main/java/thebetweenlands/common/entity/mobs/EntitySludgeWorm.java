@@ -148,7 +148,7 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 	// can be set to any part(s) - dunno if we want this either
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float dmg) {
-		damageWorm(source, dmg);
+		damageWorm(source, dmg * 0.75F);
 		return true;
 	}
 
@@ -159,7 +159,6 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 		} else if(source == DamageSource.IN_WALL && this.wallInvulnerabilityTicks > 0) {
 			return false;
 		} else {
-			amount *= 0.5F;
 			damageWorm(source, amount);
 		}
 		return true;

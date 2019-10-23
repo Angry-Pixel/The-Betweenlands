@@ -35,7 +35,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityScreenShake;
-import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.client.audio.DecayPitGearsSound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
@@ -58,8 +57,6 @@ import thebetweenlands.common.entity.mobs.EntityTinySludgeWorm;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 
 public class TileEntityDecayPitControl extends TileEntity implements ITickable, IEntityScreenShake {
 
@@ -219,10 +216,6 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			if (shaking)
 				shake(60);
 
-			//Remove dungeon locations
-			ILocalStorageHandler storageHandler = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler();
-			storageHandler.getLocalStorages(LocationSludgeWormDungeon.class, new AxisAlignedBB(this.getPos()), l -> true).forEach(location -> location.removeLocations());
-			
 			// TODO;
 			// render plug as animation falling in to place in the hole *DONE
 			// remove invisible blocks from edges of pit *DONE

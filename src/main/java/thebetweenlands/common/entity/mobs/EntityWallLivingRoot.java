@@ -41,7 +41,6 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -239,14 +238,14 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 	protected float getArmLengthSlack() {
 		return 0.0f;
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		
+
 		if(!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-            this.setDead();
-        }
+			this.setDead();
+		}
 
 		float maxArmLength = (float)this.getEntityAttribute(MAX_ARM_LENGTH).getAttributeValue() * this.getArmSize(1);
 

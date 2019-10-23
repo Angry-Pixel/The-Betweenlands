@@ -23,7 +23,7 @@ import thebetweenlands.common.lib.ModInfo;
 public class RenderWallLivingRoot extends RenderWallHole<EntityWallLivingRoot> {
 	private static final ResourceLocation ROOT_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/blocks/root_middle.png");
 
-	private static final ModelBase BLANK_MODEL = new ModelBlank();
+	protected static final ModelBase BLANK_MODEL = new ModelBlank();
 
 	public RenderWallLivingRoot(RenderManager renderManager) {
 		super(renderManager, BLANK_MODEL, ROOT_TEXTURE);

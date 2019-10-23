@@ -131,6 +131,7 @@ public class LootTableRegistry {
     //BOSSES
     public static final ResourceLocation FORTRESS_BOSS = register("entities/fortress_boss");
     public static final ResourceLocation DREADFUL_PEAT_MUMMY = register("entities/dreadful_peat_mummy");
+    public static final ResourceLocation SLUDGE_MENACE = register("entities/sludge_menace");
     
     //LOOT ENTITY PROPERTIES
     public static final ResourceLocation ENTITY_PROPERTY_FROG_TYPE = register(new EntityPropertyFrogType.Serializer());

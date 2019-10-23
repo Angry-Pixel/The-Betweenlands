@@ -43,6 +43,8 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	private final BoxMobSpawner mazeMobSpawner;
 	private final BoxMobSpawner walkwaysMobSpawner;
 
+	private boolean defeated = false;
+
 	public LocationSludgeWormDungeon(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		super(worldStorage, id, region, "sludge_worm_dungeon", EnumLocationType.SLUDGE_WORM_DUNGEON);
 
@@ -117,12 +119,18 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 		return mazeAabb.intersects(new AxisAlignedBB(pos)) && this.dataManager.get(GROUND_FOG_STRENGTH) > 0.01F;
 	}
 
+	public void setDefeated(boolean defeated) {
+		this.defeated = defeated;
+		this.setDirty(true);
+	}
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 
 		nbt.setFloat("groundFogStrength", this.dataManager.get(GROUND_FOG_STRENGTH));
 		nbt.setLong("structurePos", this.structurePos.toLong());
+		nbt.setBoolean("defeated", this.defeated);
 
 		return nbt;
 	}
@@ -133,6 +141,7 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 
 		this.dataManager.set(GROUND_FOG_STRENGTH, nbt.getFloat("groundFogStrength"));
 		this.structurePos = BlockPos.fromLong(nbt.getLong("structurePos"));
+		this.defeated = nbt.getBoolean("defeated");
 	}
 
 	@Override
@@ -153,7 +162,21 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 
 		World world = this.getWorldStorage().getWorld();
 
-		if(world instanceof WorldServer && world.provider instanceof WorldProviderBetweenlands && world.getGameRules().getBoolean("doMobSpawning") && world.getTotalWorldTime() % 4 == 0) {
+		if(!world.isRemote) {
+			float fogStrength = this.dataManager.get(GROUND_FOG_STRENGTH);
+
+			if(this.defeated && fogStrength > 0.0f) {
+				this.dataManager.set(GROUND_FOG_STRENGTH, Math.max(0, fogStrength - 0.01f));
+				this.setDirty(true);
+			} else if(!this.defeated && fogStrength < 1.0f) {
+				this.dataManager.set(GROUND_FOG_STRENGTH, Math.min(1, fogStrength + 0.01f));
+				this.setDirty(true);
+			}
+		}
+
+		//TODO Only spawn when player is nearby? (maybe even per floor, for performance reasons)
+
+		if(!this.defeated && world instanceof WorldServer && world.provider instanceof WorldProviderBetweenlands && world.getGameRules().getBoolean("doMobSpawning") && world.getTotalWorldTime() % 4 == 0) {
 			boolean spawnHostiles = ((WorldProviderBetweenlands)world.provider).getCanSpawnHostiles();
 			boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
 
