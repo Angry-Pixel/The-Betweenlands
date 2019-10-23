@@ -162,17 +162,18 @@ public class RenderDecayPitControl extends TileEntitySpecialRenderer<TileEntityD
 		
 		if(tile.isPlugged()) {
 			float fall = tile.plugDropTicksPrev + (tile.plugDropTicks - tile.plugDropTicksPrev) * partialTicks;
+			float jumpUP = tile.plugJumpPrev * 0.05F + (tile.plugJump * 0.05F - tile.plugJumpPrev * 0.05F) * partialTicks;
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.color(1, 1, 1, 1);
 
 			GlStateManager.disableCull();
-
 			bindTexture(TEXTURE);
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x + 0.5D, y + 4F - fall, z + 0.5D);
+			GlStateManager.translate(x + 0.5D, y + 4F - fall + jumpUP, z + 0.5D);
 			GlStateManager.scale(-1F, -1F, 1F);
+			GlStateManager.rotate(0F + tile.plugRotation, 0F, 1F, 0F);
 			PLUG_MODEL.renderJustPlug(0.0625F);
 			GlStateManager.popMatrix();
 

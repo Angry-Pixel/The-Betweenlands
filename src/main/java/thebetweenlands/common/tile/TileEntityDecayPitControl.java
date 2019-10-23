@@ -77,6 +77,9 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	public boolean spawnDrops = false;
 	public int deathTicks = 0;
 	public int tentacleCooldown = 300;
+	public int plugJump = 0;
+	public int plugJumpPrev = 0;
+	public float plugRotation = 0F;
 	private SludgeWormMazeBlockHelper blockHelper = new SludgeWormMazeBlockHelper(null);
 	protected final Map<Block, Boolean> invisibleBlocks = new HashMap<Block, Boolean>(); // dont need states so blocks will do
 
@@ -273,6 +276,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 				if(getTentacleSpawnCountDown() == 60 || getTentacleSpawnCountDown() == 30) {
 					getWorld().playSound(null, getPos(), SoundRegistry.PLUG_LOCK, SoundCategory.HOSTILE, 0.5F, 1F);
 					getWorld().playSound(null, getPos(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 0.75F);
+					updateBlock();
 				}
 
 				if(getTentacleSpawnCountDown() == 0) {
@@ -293,6 +297,20 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 				
 				this.spawnAmbientParticles();
 			}
+			
+
+			if (getWorld().isRemote) {
+				plugJumpPrev = plugJump;
+				if (plugJump > 0)
+					plugJump--;
+			}
+
+			if (getTentacleSpawnCountDown() == 60 || getTentacleSpawnCountDown() == 30 || getTentacleSpawnCountDown() == 1) {
+				if (getWorld().isRemote) {
+						plugJump = 1 + getWorld().rand.nextInt(5);
+						plugRotation = (getWorld().rand.nextFloat() - getWorld().rand.nextFloat()) * 5F;
+					}
+				}
 
 			if (getTentacleSpawnCountDown() == 1) {
 				if (getWorld().isRemote) {
@@ -345,7 +363,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			double ox = getWorld().rand.nextDouble() * 0.6F - 0.3F;
 			double oz = getWorld().rand.nextDouble() * 0.6F - 0.3F;
 			double motionX = getWorld().rand.nextDouble() * 0.6F - 0.3F;
-			double motionY = getWorld().rand.nextDouble() * 0.3F + 0.075F;
+			double motionY = getWorld().rand.nextDouble() * 0.6F;
 			double motionZ = getWorld().rand.nextDouble() * 0.6F - 0.3F;
 			world.spawnAlwaysVisibleParticle(EnumParticleTypes.ITEM_CRACK.getParticleID(), px + ox, py, pz + oz, motionX, motionY, motionZ, Item.getIdFromItem(Item.getItemFromBlock((BlockRegistry.DUNGEON_DOOR_RUNES.getDefaultState().getBlock()))));
 		}
