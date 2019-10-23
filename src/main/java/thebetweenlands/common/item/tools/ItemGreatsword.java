@@ -78,29 +78,42 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 			List<EntityLivingBase> others = entityLiving.world.getEntitiesWithinAABB(EntityLivingBase.class, entityLiving.getEntityBoundingBox().grow(aoeReach));
 			for(EntityLivingBase target : others) {
 				if(target != entityLiving) {
-					double dist = target.getDistance(entityLiving);
+					Entity[] parts = target.getParts();
 
-					if(dist < aoeReach) {
-						double angle = Math.min(
-								Math.toDegrees(Math.acos(target.getPositionVector().subtract(entityLiving.getPositionVector()).normalize().dotProduct(entityLiving.getLookVec()))),
-								Math.min(
-										Math.toDegrees(Math.acos(target.getPositionVector().subtract(entityLiving.getPositionEyes(1)).normalize().dotProduct(entityLiving.getLookVec()))),
-										Math.toDegrees(Math.acos(target.getPositionVector().add(0, target.height / 2, 0).subtract(entityLiving.getPositionEyes(1)).normalize().dotProduct(entityLiving.getLookVec())))
-										)
-								);
+					for(int i = 0; i < 1 + (parts != null ? parts.length : 0); i++) {
+						Entity part;
+						if(i == 0) {
+							part = target;
+						} else {
+							part = parts[i - 1];
+						}
 
-						if(angle < aoeHalfAngle) {
-							double distXZ = Math.sqrt((target.posX - entityLiving.posX)*(target.posX - entityLiving.posX) + (target.posZ - entityLiving.posZ)*(target.posZ - entityLiving.posZ));
+						double dist = part.getDistance(entityLiving);
 
-							double hitY = entityLiving.posY + entityLiving.getEyeHeight() + entityLiving.getLookVec().y / Math.sqrt(Math.pow(entityLiving.getLookVec().x, 2) + Math.pow(entityLiving.getLookVec().z, 2) + 0.1D) * distXZ;
+						if(dist < aoeReach) {
+							double angle = Math.min(
+									Math.toDegrees(Math.acos(part.getPositionVector().subtract(entityLiving.getPositionVector()).normalize().dotProduct(entityLiving.getLookVec()))),
+									Math.min(
+											Math.toDegrees(Math.acos(part.getPositionVector().subtract(entityLiving.getPositionEyes(1)).normalize().dotProduct(entityLiving.getLookVec()))),
+											Math.toDegrees(Math.acos(part.getPositionVector().add(0, part.height / 2, 0).subtract(entityLiving.getPositionEyes(1)).normalize().dotProduct(entityLiving.getLookVec())))
+											)
+									);
 
-							if(hitY > target.getEntityBoundingBox().minY - 0.25D && hitY < target.getEntityBoundingBox().maxY + 0.25D) {
-								if(player.world.rayTraceBlocks(player.getPositionVector().add(0, player.getEyeHeight(), 0), target.getPositionVector().add(0, target.height / 2, 0), false, true, false) == null) {
-									if(!entityLiving.world.isRemote) {
-										player.attackTargetEntityWithCurrentItem(target);
+							if(angle < aoeHalfAngle) {
+								double distXZ = Math.sqrt((part.posX - entityLiving.posX)*(part.posX - entityLiving.posX) + (part.posZ - entityLiving.posZ)*(part.posZ - entityLiving.posZ));
+
+								double hitY = entityLiving.posY + entityLiving.getEyeHeight() + entityLiving.getLookVec().y / Math.sqrt(Math.pow(entityLiving.getLookVec().x, 2) + Math.pow(entityLiving.getLookVec().z, 2) + 0.1D) * distXZ;
+
+								if(hitY > part.getEntityBoundingBox().minY - 0.25D && hitY < part.getEntityBoundingBox().maxY + 0.25D) {
+									if(player.world.rayTraceBlocks(player.getPositionVector().add(0, player.getEyeHeight(), 0), part.getPositionVector().add(0, part.height / 2, 0), false, true, false) == null) {
+										if(!entityLiving.world.isRemote) {
+											player.attackTargetEntityWithCurrentItem(target);
+										}
+
+										enemiesInReach = true;
+
+										break;
 									}
-
-									enemiesInReach = true;
 								}
 							}
 						}
@@ -186,7 +199,7 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
 		if (slot == EntityEquipmentSlot.MAINHAND) {
 			modifiers.removeAll(SharedMonsterAttributes.ATTACK_SPEED.getName());
-			modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -3.0D, 0));
+			modifiers.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", -2.5D, 0));
 		}
 		return modifiers;
 	}

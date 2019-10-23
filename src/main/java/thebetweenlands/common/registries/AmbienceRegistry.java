@@ -3,6 +3,7 @@ package thebetweenlands.common.registries;
 import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.audio.ambience.AmbienceLayer;
@@ -111,6 +112,11 @@ public class AmbienceRegistry {
 				}
 
 				return false;
+			}
+			
+			@Override
+			public SoundCategory getCategory() {
+				return SoundCategory.MUSIC;
 			}
 		});
 		AmbienceManager.INSTANCE.registerAmbience(new SpiritTreeAmbienceType());

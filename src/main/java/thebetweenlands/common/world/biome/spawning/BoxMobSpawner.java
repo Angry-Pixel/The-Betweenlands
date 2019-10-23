@@ -105,7 +105,7 @@ public class BoxMobSpawner extends AreaMobSpawner {
 
 	@Override
 	public boolean isInsideSpawningArea(World world, BlockPos pos, boolean entityCount) {
-		return this.isInsideAnyArea(pos) && (entityCount || world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 12.0D, false) == null);
+		return this.isInsideAnyArea(pos) && (entityCount || world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 10.0D, false) == null);
 	}
 
 	private boolean isInsideAnyArea(BlockPos pos) {

@@ -53,6 +53,8 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 
 	public ControlledAnimation scale = new ControlledAnimation(5);
 
+	protected int attackCooldown = 0;
+	
 	public EntitySludge(World worldIn) {
 		super(worldIn);
 		this.moveHelper = new EntitySludge.SludgeMoveHelper(this);
@@ -113,6 +115,10 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 			this.isDead = true;
 		}
 
+		if(this.attackCooldown > 0) {
+			this.attackCooldown--;
+		}
+		
 		this.squishFactor += (this.squishAmount - this.squishFactor) * 0.5F;
 		this.prevSquishFactor = this.squishFactor;
 
@@ -214,7 +220,10 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 
 	@Override
 	public void onCollideWithPlayer(EntityPlayer entityIn) {
-		this.dealDamage(entityIn);
+		if(this.attackCooldown <= 0) {
+			this.attackCooldown = 20;
+			this.dealDamage(entityIn);
+		}
 	}
 
 	protected void dealDamage(EntityLivingBase entityIn) {

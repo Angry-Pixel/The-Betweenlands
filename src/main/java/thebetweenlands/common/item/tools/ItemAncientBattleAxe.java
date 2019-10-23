@@ -67,7 +67,7 @@ public class ItemAncientBattleAxe extends ItemGreataxe {
 
 		if(equipmentSlot == EntityEquipmentSlot.MAINHAND) {
 			multimap.removeAll(SharedMonsterAttributes.ATTACK_SPEED.getName());
-			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -3.2D, 0));
+			multimap.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Tool modifier", -3.0D, 0));
 		}
 
 		return multimap;

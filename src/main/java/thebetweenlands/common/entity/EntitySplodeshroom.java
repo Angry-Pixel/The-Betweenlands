@@ -237,7 +237,15 @@ public class EntitySplodeshroom extends EntityProximitySpawner {
 	}
 
 	@Override
+	public void onKillCommand() {
+		this.setDead();
+	}
+	
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if(source == DamageSource.OUT_OF_WORLD) {
+			return true;
+		}
 		if (source instanceof EntityDamageSource) {
 			Entity sourceEntity = ((EntityDamageSource) source).getTrueSource();
 			if (sourceEntity instanceof EntityPlayer) {

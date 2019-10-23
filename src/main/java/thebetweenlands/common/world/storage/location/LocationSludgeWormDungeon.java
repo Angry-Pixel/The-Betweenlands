@@ -1,12 +1,16 @@
 package thebetweenlands.common.world.storage.location;
 
+import java.util.Set;
+
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -45,6 +49,8 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 
 	private boolean defeated = false;
 
+	protected static final int MAX_FLOORS = 7;
+
 	public LocationSludgeWormDungeon(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		super(worldStorage, id, region, "sludge_worm_dungeon", EnumLocationType.SLUDGE_WORM_DUNGEON);
 
@@ -54,7 +60,35 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 				.setFogColor(new int[] {120, 120, 120}).setFogRange(4.0f, 45.0f)
 				.setCaveFog(false));
 
-		this.mazeMobSpawner = new BoxMobSpawner();
+		this.mazeMobSpawner = new BoxMobSpawner() {
+			private boolean[] playerOccupancy = new boolean[MAX_FLOORS];
+
+			@Override
+			protected void updateSpawnerChunks(WorldServer world, Set<ChunkPos> spawnerChunks) {
+				super.updateSpawnerChunks(world, spawnerChunks);
+
+				for(int i = 0; i < this.playerOccupancy.length; i++) {
+					this.playerOccupancy[i] = false;
+				}
+
+				for(EntityPlayer player : world.playerEntities) {
+					int floor = LocationSludgeWormDungeon.this.getFloor(player.getPosition());
+
+					if(floor >= 0 && floor < this.playerOccupancy.length && LocationSludgeWormDungeon.this.isInside(player)) {
+						this.playerOccupancy[floor] = true;
+					}
+				}
+			}
+
+			@Override
+			public boolean isInsideSpawningArea(World world, BlockPos pos, boolean entityCount) {
+				if(super.isInsideSpawningArea(world, pos, entityCount)) {
+					int floor = LocationSludgeWormDungeon.this.getFloor(pos);
+					return floor >= 0 && floor < this.playerOccupancy.length && this.playerOccupancy[floor];
+				}
+				return false;
+			}
+		};
 		this.mazeMobSpawner.setMaxAreaEntities(80);
 		this.mazeMobSpawner.setEntityCountFilter(entity -> entity instanceof EntityTriggeredFallingBlock == false); //Ignore falling blocks
 
@@ -198,8 +232,8 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 		float globalStrength = this.dataManager.get(GROUND_FOG_STRENGTH);
 
 		if(globalStrength > 0) {
-			for(int floor = 0; floor < 7; floor++) {
-				float floorStrength = globalStrength / 7.0f * (floor + 1);
+			for(int floor = 0; floor < MAX_FLOORS; floor++) {
+				float floorStrength = globalStrength / (float) MAX_FLOORS * (floor + 1);
 
 				float fogBrightness = 0.25F;
 				float inScattering = 0.035F - 0.015F * floorStrength;
@@ -217,7 +251,7 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 	}
 
 	public int getFloor(BlockPos pos) {
-		return (this.structurePos.getY() - 1 - pos.getY()) / 6;
+		return (this.structurePos.getY() - 1 - pos.getY()) / (MAX_FLOORS - 1);
 	}
 
 	public void removeLocations() {
