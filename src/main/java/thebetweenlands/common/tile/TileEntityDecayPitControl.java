@@ -67,8 +67,8 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	public float floorFadeTicks = 0;
 	public float floorFadeTicksPrev = 0;
 	public int spawnType = 0;
-	public boolean isPlugged = true; // set to true if boss spawn needed
-	public boolean showFloor = false; // set to false if boss spawn needed
+	public boolean isPlugged = false; // set to true if boss spawn needed
+	public boolean showFloor = true; // set to false if boss spawn needed
 	private int prevShakeTimer;
 	private int shakeTimer;
 	private boolean shaking = false;
