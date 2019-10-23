@@ -67,8 +67,8 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	public float floorFadeTicks = 0;
 	public float floorFadeTicksPrev = 0;
 	public int spawnType = 0;
-	public boolean isPlugged = false; // set to true if boss spawn needed
-	public boolean showFloor = true; // set to false if boss spawn needed
+	public boolean isPlugged = true; // set to true if boss spawn needed
+	public boolean showFloor = false; // set to false if boss spawn needed
 	private int prevShakeTimer;
 	private int shakeTimer;
 	private boolean shaking = false;
@@ -269,7 +269,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 				setTentacleSpawnCountDown(getTentacleSpawnCountDown() - 1);
 
 				// Syncs to add shake and final particles
-				if(getTentacleSpawnCountDown() == 100 || getTentacleSpawnCountDown() == 1)
+				if(getTentacleSpawnCountDown() == 100 || getTentacleSpawnCountDown() == 59 || getTentacleSpawnCountDown() == 29 || getTentacleSpawnCountDown() == 1)
 					updateBlock();
 
 				// sounds
@@ -297,7 +297,6 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 				
 				this.spawnAmbientParticles();
 			}
-			
 
 			if (getWorld().isRemote) {
 				plugJumpPrev = plugJump;
@@ -307,7 +306,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 
 			if (getTentacleSpawnCountDown() == 60 || getTentacleSpawnCountDown() == 30 || getTentacleSpawnCountDown() == 1) {
 				if (getWorld().isRemote) {
-						plugJump = 1 + getWorld().rand.nextInt(5);
+						plugJump = 2 + getWorld().rand.nextInt(5);
 						plugRotation = (getWorld().rand.nextFloat() - getWorld().rand.nextFloat()) * 5F;
 					}
 				}
@@ -366,6 +365,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			double motionY = getWorld().rand.nextDouble() * 0.6F;
 			double motionZ = getWorld().rand.nextDouble() * 0.6F - 0.3F;
 			world.spawnAlwaysVisibleParticle(EnumParticleTypes.ITEM_CRACK.getParticleID(), px + ox, py, pz + oz, motionX, motionY, motionZ, Item.getIdFromItem(Item.getItemFromBlock((BlockRegistry.DUNGEON_DOOR_RUNES.getDefaultState().getBlock()))));
+			world.spawnAlwaysVisibleParticle(EnumParticleTypes.BLOCK_DUST.getParticleID(), px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(BlockRegistry.MUD_BRICK_STAIRS_DECAY_4.getDefaultState()));
 		}
 	}
 
