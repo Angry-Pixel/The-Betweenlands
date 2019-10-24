@@ -390,7 +390,7 @@ public class ItemRegistry {
     public static final Item PYRAD_FLAME = new ItemPyradFlame();
     public static final Item GECKO = new ItemMob("gecko");
     public static final Item FIREFLY = new ItemMob("firefly");
-    public static final Item SLUDGE_WORM_EGG_SAC = new ItemMob("sludge_worm_egg_sac");
+    public static final Item SLUDGE_WORM_EGG_SAC = new ItemMob("sludge_worm_egg_sac").setMaxStackSize(16);
     public static final Item SHIMMER_STONE = new ItemShimmerStone();
     public static final Item TARMINION = new ItemTarminion();
     public static final Item MOSS_BED_ITEM = new ItemMossBed();
