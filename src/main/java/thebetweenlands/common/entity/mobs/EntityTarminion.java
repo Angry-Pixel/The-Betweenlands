@@ -247,7 +247,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL, IRingO
 			
 			entity.attackEntityFrom(damageSource, (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 			
-			if(entity instanceof EntityLivingBase) {
+			if(entity instanceof EntityLivingBase && this.world.rand.nextInt(4) == 0) {
 				//Set revenge target to tarminion so it can be attacked by the mob
 				((EntityLivingBase) entity).setRevengeTarget(this);
 			}
