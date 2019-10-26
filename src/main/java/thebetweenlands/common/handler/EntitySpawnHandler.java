@@ -13,6 +13,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.common.capability.circlegem.CircleGem.CombatType;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
+import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
@@ -32,6 +33,7 @@ public class EntitySpawnHandler {
 		AMULET_SPAWNS.add(EntityPeatMummy.class);
 		AMULET_SPAWNS.add(EntityTarBeast.class);
 		AMULET_SPAWNS.add(EntityWight.class);
+		AMULET_SPAWNS.add(EntityCryptCrawler.class);
 	}
 
 	@SubscribeEvent

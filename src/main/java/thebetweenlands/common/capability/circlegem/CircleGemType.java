@@ -89,23 +89,8 @@ public enum CircleGemType {
 		case CRIMSON:
 			if(isAttacker) {
 				if(defender instanceof EntityLivingBase) {
-					double knockbackStrength = Math.min(2.2D / 10.0D * strength, 2.2D);
-					double mx = attacker.posX - defender.posX;
-					double mz;
-					for(mz = attacker.posZ - defender.posZ; mx * mx + mz * mz < 1.0E-4D; mz = (Math.random() - Math.random()) * 0.01D) {
-						mx = (Math.random() - Math.random()) * 0.01D;
-					}
-					double len = Math.sqrt(mx*mx+mz*mz);
-					((EntityLivingBase)defender).knockBack(attacker, strength, mx * 6.0F, mz * 6.0F);
-					defender.motionX /= 2.0D;
-					defender.motionY /= 2.0D;
-					defender.motionZ /= 2.0D;
-					defender.motionX -= mx / len * knockbackStrength;
-					defender.motionY += 0.4D;
-					defender.motionZ -= mz / len * knockbackStrength;
-					if (defender.motionY > 0.4D) {
-						defender.motionY = 0.4D;
-					}
+					float knockbackStrength = Math.min(2.5F / 10.0F * (float)strength, 2.5F);
+					((EntityLivingBase)defender).knockBack(attacker, knockbackStrength, attacker.posX - defender.posX, attacker.posZ - defender.posZ);
 					if(attacker instanceof EntityLivingBase) {
 						((EntityLivingBase)attacker).addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 110, Math.min(MathHelper.floor(strength * 0.2F), 2)));
 					}

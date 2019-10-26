@@ -80,7 +80,8 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 
 	public EntityBarrishee(World world) {
 		super(world);
-		setSize(2.25F, 1.8F);
+		this.setSize(2.25F, 1.8F);
+		this.experienceValue = 150;
 	}
 
 	@Override
