@@ -230,7 +230,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 		if (!getWorld().isRemote && getSpawnXPAndDrops()) {
 			setDeathTicks(getDeathTicks() + 1);
 			if (getDeathTicks() > 40 && getDeathTicks() % 5 == 0) {
-				int xp = 100;
+				int xp = 10;
 				while (xp > 0) {
 					int dropXP = EntityXPOrb.getXPSplit(xp);
 					xp -= dropXP;
@@ -239,14 +239,12 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			}
 
 			if (getDeathTicks() == 80) {
-				int xp = 1200;
+				int xp = 120;
 				while (xp > 0) {
 					int dropXP = EntityXPOrb.getXPSplit(xp);
 					xp -= dropXP;
 					getWorld().spawnEntity(new EntityXPOrb(getWorld(), getPos().getX() + 0.5D, getPos().getY() + 3.0D, getPos().getZ() + 0.5D, dropXP));
 				}
-
-				//TODO - DROP LOOT OR SOMETHING?
 			}
 
 			if (getDeathTicks() > 120) {
