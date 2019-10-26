@@ -2,6 +2,7 @@ package thebetweenlands.common.entity.projectiles;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -22,10 +23,6 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 
 	public EntityBLArrow(World worldIn) {
 		super(worldIn);
-	}
-
-	public EntityBLArrow(World worldIn, double x, double y, double z) {
-		super(worldIn, x, y, z);
 	}
 
 	public EntityBLArrow(World worldIn, EntityLivingBase shooter) {
@@ -84,6 +81,9 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 				EntityTinySludgeWormHelper worm = new EntityTinySludgeWormHelper(getEntityWorld());
 				worm.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
 				worm.setAttackTarget(living);
+				if(this.shootingEntity instanceof EntityPlayer) {
+					worm.setOwnerId(this.shootingEntity.getUniqueID());
+				}
 				getEntityWorld().spawnEntity(worm);
 				this.setDead();
 			}

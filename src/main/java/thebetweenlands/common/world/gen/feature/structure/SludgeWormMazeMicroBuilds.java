@@ -243,12 +243,16 @@ public class SludgeWormMazeMicroBuilds {
 		this.dungeon.setBlockAndNotifyAdequately(world, pos.add(5, 1, 1), blockHelper.getRandomLootUrn(rand, facing.getOpposite()));
 		this.dungeon.setBlockAndNotifyAdequately(world, pos.add(1, 1, 1), blockHelper.CHEST.withProperty(BlockChestBetweenlands.FACING, facing.rotateYCCW()));
 		this.dungeon.setBlockAndNotifyAdequately(world, pos.add(1, 1, 2), blockHelper.CHEST.withProperty(BlockChestBetweenlands.FACING, facing.rotateYCCW()));
+		
 		this.dungeon.setBlockAndNotifyAdequately(world, pos.add(1, 3, 1), blockHelper.getMudBricksForLevel(rand, level, 0));
 		this.dungeon.setBlockAndNotifyAdequately(world, pos.add(1, 3, 2), blockHelper.getMudBricksForLevel(rand, level, 0));
 		this.dungeon.setBlockAndNotifyAdequately(world, pos.add(1, 2, 1), blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP));
 		this.dungeon.setBlockAndNotifyAdequately(world, pos.add(1, 2, 2), blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP));
 		this.dungeon.setBlockAndNotifyAdequately(world, pos.add(2, 3, 1), blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP));
 		this.dungeon.setBlockAndNotifyAdequately(world, pos.add(2, 3, 2), blockHelper.getStairsForLevel(rand, level, facing.rotateY(), EnumHalf.TOP));
+		
+		this.dungeon.setBlockAndNotifyAdequately(world, pos.add(2, 1, 2), blockHelper.GROUND_ITEM);
+		this.blockHelper.setBattleAxe(world, rand, pos.add(2, 1, 2));
 	}
 
 	public void buildCryptCrawlerWalkways(World world, BlockPos pos, EnumFacing facing, Random rand) {
@@ -632,6 +636,7 @@ public class SludgeWormMazeMicroBuilds {
 		rotatedCubeVolume(world, rand, pos, 8, 2, 22, blockHelper.COMPACTED_MUD, 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 7, 3, 22, blockHelper.COMPACTED_MUD_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, facing);
 		rotatedCubeVolume(world, rand, pos, 4, 2, 20, blockHelper.DUNGEON_WALL_CANDLE_SOUTH, 1, 1, 1, facing);
+		
 		rotatedCubeVolume(world, rand, pos, 6, 1, 15, blockHelper.GROUND_ITEM, 1, 1, 1, facing);
 		blockHelper.setGreatSword(world, rand, pos.add(6, 1, 15));
 	}

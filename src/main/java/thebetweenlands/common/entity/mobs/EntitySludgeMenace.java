@@ -22,6 +22,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -628,7 +629,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(source.getTrueSource() != null && source.getImmediateSource() != source.getTrueSource()) {
+		if(source.isProjectile()) {
 			return false;
 		}
 
@@ -1114,12 +1115,24 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 
 				boolean attacked = false;
 
+				Set<Entity> attackedSet = new HashSet<>();
+
 				for(Entity part : this.menace.getParts()) {
-					if(targetAabb.intersects(part.getEntityBoundingBox())) {
+					if(!attackedSet.contains(target) && targetAabb.intersects(part.getEntityBoundingBox())) {
 						attacked = true;
 
 						if(this.entity.attackEntityAsMob(target)) {
-							break;
+							attackedSet.add(target);
+						}
+					}
+
+					List<EntityLivingBase> collidingList = this.menace.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, part.getEntityBoundingBox(), e -> e instanceof IMob == false && e != target && !attackedSet.contains(e));
+
+					for(EntityLivingBase colliding : collidingList) {
+						attacked = true;
+
+						if(this.entity.attackEntityAsMob(colliding)) {
+							attackedSet.add(colliding);
 						}
 					}
 				}

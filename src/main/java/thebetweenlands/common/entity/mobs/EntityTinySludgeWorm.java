@@ -31,6 +31,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 //TODO Loot tables
 public class EntityTinySludgeWorm extends EntitySludgeWorm {
 	public static final byte EVENT_SQUASHED = 80;
+	public static final byte EVENT_LEAP = 81;
 
 	protected boolean isSquashed = false;
 	
@@ -42,6 +43,7 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 		super(world, doSpawningAnimation);
 		setSize(0.3125F, 0.3125F);
 		isImmuneToFire = true;
+		experienceValue = 1;
 		this.parts = new MultiPartEntityPart[] {
 				new MultiPartEntityPart(this, "part1", 0.1875F, 0.1875F),
 				new MultiPartEntityPart(this, "part2", 0.1875F, 0.1875F),
@@ -54,7 +56,13 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 	
 	@Override
 	protected void initEntityAI() {
-		tasks.addTask(1, new EntityAILeapAtTarget(this, 0.4F));
+		tasks.addTask(1, new EntityAILeapAtTarget(this, 0.3F) {
+			@Override
+			public void startExecuting() {
+				super.startExecuting();
+				EntityTinySludgeWorm.this.getWorld().setEntityState(EntityTinySludgeWorm.this, EVENT_LEAP);
+			}
+		});
 		tasks.addTask(2, new EntityAIAttackMelee(this, 1, false));
 		tasks.addTask(3, new EntityAIWander(this, 0.8D, 1));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
@@ -155,6 +163,10 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 				Vec3d vec = new Vec3d(rx, ry, rz);
 				vec = vec.normalize();
 				BLParticles.SPLASH_TAR.spawn(getEntityWorld(), this.posX + rx + 0.1F, this.posY + ry + 0.1F, this.posZ + rz + 0.1F, ParticleArgs.get().withMotion(vec.x * 0.4F, vec.y * 0.4F, vec.z * 0.4F)).setRBGColorF(0.4118F, 0.2745F, 0.1568F);
+			}
+		} else if(id == EVENT_LEAP) {
+			for(Entity part : this.getParts()) {
+				part.motionY += 0.3F;
 			}
 		}
 	}

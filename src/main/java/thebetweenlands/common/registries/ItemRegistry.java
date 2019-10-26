@@ -119,6 +119,7 @@ import thebetweenlands.common.item.misc.ItemMossBed;
 import thebetweenlands.common.item.misc.ItemMummyBait;
 import thebetweenlands.common.item.misc.ItemOctineIngot;
 import thebetweenlands.common.item.misc.ItemPyradFlame;
+import thebetweenlands.common.item.misc.ItemRingOfGathering;
 import thebetweenlands.common.item.misc.ItemRope;
 import thebetweenlands.common.item.misc.ItemRuneDoorKey;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
@@ -390,7 +391,7 @@ public class ItemRegistry {
     public static final Item PYRAD_FLAME = new ItemPyradFlame();
     public static final Item GECKO = new ItemMob("gecko");
     public static final Item FIREFLY = new ItemMob("firefly");
-    public static final Item SLUDGE_WORM_EGG_SAC = new ItemMob("sludge_worm_egg_sac");
+    public static final Item SLUDGE_WORM_EGG_SAC = new ItemMob("sludge_worm_egg_sac").setMaxStackSize(16);
     public static final Item SHIMMER_STONE = new ItemShimmerStone();
     public static final Item TARMINION = new ItemTarminion();
     public static final Item MOSS_BED_ITEM = new ItemMossBed();
@@ -408,6 +409,7 @@ public class ItemRegistry {
     public static final Item RING_OF_RECRUITMENT = new ItemRingOfRecruitment();
     public static final Item RING_OF_SUMMONING = new ItemRingOfSummoning();
     public static final Item RING_OF_DISPERSION = new ItemRingOfDispersion();
+    public static final ItemRingOfGathering RING_OF_GATHERING = new ItemRingOfGathering();
     public static final Item ANGRY_PEBBLE = new ItemAngryPebble();
     public static final Item LORE_SCRAP = new ItemLoreScrap();
     public static final ItemTaintedPotion TAINTED_POTION = new ItemTaintedPotion();
@@ -422,7 +424,7 @@ public class ItemRegistry {
     public static final Item GEM_SINGER = new ItemGemSinger();
     public static final Item SHAMBLER_TONGUE = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final Item RUNE_DOOR_KEY = new ItemRuneDoorKey();
-
+    
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
     private static final List<ItemStack> NUGGETS = new ArrayList<ItemStack>();
