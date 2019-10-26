@@ -37,7 +37,7 @@ public class AspectManager {
 	}
 
 	public static enum AspectGroup {
-		HERB(0), GEM_BYRGINAZ(1), GEM_FIRNALAZ(2), GEM_FERGALAZ(3), SAP_SPIT(4);
+		HERB(0), GEM_BYRGINAZ(1), GEM_FIRNALAZ(2), GEM_FERGALAZ(3), SAP_SPIT(4), SLUDGE_WORM_DUNGEON(5);
 
 		public final int id;
 
@@ -63,6 +63,11 @@ public class AspectManager {
 			this.group = group;
 			this.baseAmount = baseAmount;
 			this.aspectName = this.aspect.getName();
+		}
+
+		@Override
+		public String toString() {
+			return "AspectEntry[Aspect=" + this.aspectName + ", Tier=" + this.tier + ", Group=" + this.group + ", BaseAmount=" + this.baseAmount + "]";
 		}
 	}
 
@@ -195,25 +200,29 @@ public class AspectManager {
 		AspectItem itemEntry = entry.item;
 
 		//Check if aspect item already exists, if so use that
-		for(Entry<AspectItem, List<AspectItemEntry>> e : REGISTERED_ITEMS.entrySet()) {
-			if(e.getKey().equals(itemEntry)) {
-				itemEntry = e.getKey();
-				break;
+		List<AspectItem> aspectItems = ITEM_TO_ASPECT_ITEMS.get(item.getItem());
+		if(aspectItems != null) {
+			for(AspectItem aspectItem : aspectItems) {
+				if(aspectItem.matches(item)) {
+					itemEntry = aspectItem;
+					break;
+				}
 			}
 		}
 
 		//Register item and possible aspects
 		List<AspectItemEntry> entryList = REGISTERED_ITEMS.get(itemEntry);
-		if(entryList == null)
-			REGISTERED_ITEMS.put(entry.item, entryList = new ArrayList<AspectItemEntry>());
+		if(entryList == null) {
+			REGISTERED_ITEMS.put(itemEntry, entryList = new ArrayList<AspectItemEntry>());
+		}
 		for(int i = 0; i < aspectCount; i++) {
 			entryList.add(entry);
 		}
 
 		//Register aspect item and matcher
-		List<AspectItem> aspectItems = ITEM_TO_ASPECT_ITEMS.get(entry.item.getOriginal().getItem());
-		if(aspectItems == null)
-			ITEM_TO_ASPECT_ITEMS.put(entry.item.getOriginal().getItem(), aspectItems = new ArrayList<AspectItem>());
+		if(aspectItems == null) {
+			ITEM_TO_ASPECT_ITEMS.put(item.getItem(), aspectItems = new ArrayList<AspectItem>());
+		}
 		aspectItems.add(entry.item);
 	}
 
@@ -342,7 +351,7 @@ public class AspectManager {
 			return null;
 		return AspectManager.getAspectItem(item);
 	}
-	
+
 	/**
 	 * Resets all static aspects and generates a new distribution with the specified seed
 	 * @param aspectSeed
@@ -367,34 +376,58 @@ public class AspectManager {
 
 		for(Entry<AspectItem, List<AspectItemEntry>> item : REGISTERED_ITEMS.entrySet()) {
 			AspectItem itemStack = item.getKey();
+
 			if(this.matchedAspects.containsKey(itemStack)) {
 				continue;
 			}
-			List<AspectItemEntry> itemEntries = item.getValue();
-			List<Aspect> itemAspects = new ArrayList<Aspect>(itemEntries.size());
-			if(!this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, availableAspects, rnd)) {
-				this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, REGISTERED_ASPECTS, rnd);
+
+			//AspectItemEntry's must be grouped by group ID so that each group's
+			//aspect requirements are fulfilled individually
+			Map<Integer, List<AspectItemEntry>> itemEntriesByGroup = new LinkedHashMap<>();
+
+			for(AspectItemEntry itemEntry : item.getValue()) {
+				List<AspectItemEntry> groupItemEntries = itemEntriesByGroup.get(itemEntry.group);
+
+				if(groupItemEntries == null) {
+					itemEntriesByGroup.put(itemEntry.group, groupItemEntries = new ArrayList<>());
+				}
+
+				groupItemEntries.add(itemEntry);
 			}
-			for(Aspect itemAspect : itemAspects) {
-				this.removeAvailableAspect(itemAspect, availableAspects);
-			}
-			List<Aspect> mergedAspects = new ArrayList<Aspect>(itemAspects.size());
-			for(Aspect aspect : itemAspects) {
-				Aspect mergedAspect = null;
-				for(Aspect ma : mergedAspects) {
-					if(ma.type == aspect.type) {
-						mergedAspect = ma;
-						break;
+
+			for(List<AspectItemEntry> itemEntries : itemEntriesByGroup.values()) {
+				List<Aspect> itemAspects = new ArrayList<Aspect>(itemEntries.size());
+				if(!this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, availableAspects, rnd)) {
+					this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, REGISTERED_ASPECTS, rnd);
+				}
+
+				for(Aspect itemAspect : itemAspects) {
+					this.removeAvailableAspect(itemAspect, availableAspects);
+				}
+
+				List<Aspect> mergedAspects = this.matchedAspects.get(itemStack);
+				if(mergedAspects == null) {
+					mergedAspects = new ArrayList<Aspect>(itemAspects.size());
+				}
+
+				for(Aspect aspect : itemAspects) {
+					Aspect mergedAspect = null;
+					for(Aspect ma : mergedAspects) {
+						if(ma.type == aspect.type) {
+							mergedAspect = ma;
+							break;
+						}
+					}
+					if(mergedAspect == null) {
+						mergedAspects.add(aspect);
+					} else {
+						mergedAspects.remove(mergedAspect);
+						mergedAspects.add(new Aspect(mergedAspect.type, mergedAspect.amount + aspect.amount));
 					}
 				}
-				if(mergedAspect == null) {
-					mergedAspects.add(aspect);
-				} else {
-					mergedAspects.remove(mergedAspect);
-					mergedAspects.add(new Aspect(mergedAspect.type, mergedAspect.amount + aspect.amount));
-				}
+
+				this.updateMatchedAspects(itemStack, mergedAspects);
 			}
-			this.updateMatchedAspects(itemStack, mergedAspects);
 		}
 	}
 

@@ -128,7 +128,14 @@ public class ItemCrushed extends Item implements ItemRegistry.IMultipleItemModel
 		GROUND_THORNS(50),
 		GROUND_POISON_IVY(51),
 		GROUND_BLADDERWORT_FLOWER(52),
-		GROUND_BLADDERWORT_STALK(53);
+		GROUND_BLADDERWORT_STALK(53),
+		GROUND_EDGE_SHROOM(54),
+		GROUND_EDGE_MOSS(55),
+		GROUND_EDGE_LEAF(56),
+		GROUND_ROTBULB(57),
+		GROUND_PALE_GRASS(58),
+		GROUND_STRING_ROOTS(59),
+		GROUND_CRYPTWEED(60);
 
 		private final int id;
 		private final String unlocalizedName;
