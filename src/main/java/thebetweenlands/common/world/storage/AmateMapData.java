@@ -219,6 +219,7 @@ public class AmateMapData extends MapData {
             BURIAL_MOUND(9, 0, 16, 16, 16),
             SPIRIT_TREE(10, 16, 16, 16, 16),
             FORTRESS(11, 0, 104, 22, 24),
+            SLUDGE_WORM_DUNGEON(13, 48, 16, 16, 16),
 
             CHECK(127, 0, 32, 16, 16);
 
@@ -272,6 +273,8 @@ public class AmateMapData extends MapData {
                         return FORTRESS;
                     case "spirit_tree":
                         return SPIRIT_TREE;
+                    case "sludge_worm_dungeon":
+                    	return SLUDGE_WORM_DUNGEON;
                 }
                 return NONE;
             }
