@@ -38,6 +38,8 @@ public class BlockHangingPlant extends BlockBush implements ISickleHarvestable, 
 	public static final PropertyBool IS_BOTTOM = PropertyBool.create("is_bottom");
 	public static final AxisAlignedBB AABB = new AxisAlignedBB(0.25F, 0, 0.25F, 0.75F, 1, 0.75F);
 
+	protected ItemStack sickleHarvestableDrop;
+
 	public BlockHangingPlant(Material material) {
 		super(material);
 		setTickRandomly(true);
@@ -49,6 +51,11 @@ public class BlockHangingPlant extends BlockBush implements ISickleHarvestable, 
 
 	public BlockHangingPlant() {
 		this(Material.PLANTS);
+	}
+
+	public BlockHangingPlant setSickleDrop(ItemStack drop) {
+		this.sickleHarvestableDrop = drop;
+		return this;
 	}
 
 	@Override
@@ -136,7 +143,7 @@ public class BlockHangingPlant extends BlockBush implements ISickleHarvestable, 
 
 	@Override
 	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		return ImmutableList.of();
+		return this.sickleHarvestableDrop != null ? ImmutableList.of(this.sickleHarvestableDrop.copy()) : ImmutableList.of();
 	}
 
 	@Override
@@ -165,7 +172,7 @@ public class BlockHangingPlant extends BlockBush implements ISickleHarvestable, 
 			worldIn.setBlockState(pos.down(), this.getDefaultState());
 		}
 	}
-	
+
 	protected boolean canGrowAt(World world, BlockPos pos, IBlockState state) {
 		return state.getValue(CAN_GROW);
 	}
