@@ -8,6 +8,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
@@ -19,13 +20,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.tile.TileEntityDecayPitGroundChain;
 
-public class BlockDecayPitGroundChain extends BlockHorizontal implements ITileEntityProvider {
+public class BlockDecayPitGroundChain extends BlockHorizontal implements ITileEntityProvider, ICustomItemBlock {
 
 	public BlockDecayPitGroundChain() {
 		super(Material.ROCK);
-		setHardness(10.0F);
+		this.setBlockUnbreakable();
 		setResistance(2000.0F);
 		setSoundType(SoundType.STONE);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
@@ -85,5 +87,10 @@ public class BlockDecayPitGroundChain extends BlockHorizontal implements ITileEn
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityDecayPitGroundChain();
+	}
+	
+	@Override
+	public ItemBlock getItemBlock() {
+		return null;
 	}
 }
