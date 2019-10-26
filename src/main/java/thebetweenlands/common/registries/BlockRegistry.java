@@ -576,8 +576,8 @@ public class BlockRegistry {
     public static final Block MUD_BRICK_SLAB_DECAY_2 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_2).getBlock());
     public static final Block MUD_BRICK_SLAB_DECAY_3 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3).getBlock());
     public static final Block MUD_BRICK_SLAB_DECAY_4 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_4).getBlock());
-    public static final Block EDGE_SHROOM = new BlockEdgePlant().setSickleDrop(EnumItemPlantDrop.EDGE_SHROOM_ITEM.create(1));
-    public static final Block EDGE_MOSS = new BlockEdgeMoss().setSickleDrop(EnumItemPlantDrop.EDGE_MOSS_ITEM.create(1));
+    public static final Block EDGE_SHROOM = new BlockEdgePlant().setSickleDrop(EnumItemPlantDrop.EDGE_SHROOM_GILLS.create(1));
+    public static final Block EDGE_MOSS = new BlockEdgeMoss().setSickleDrop(EnumItemPlantDrop.EDGE_MOSS_CLUMP.create(1));
     public static final Block EDGE_LEAF = new BlockEdgePlant().setSickleDrop(EnumItemPlantDrop.EDGE_LEAF_ITEM.create(1));
     public static final Block MUD_TOWER_BEAM_ORIGIN = new BlockBeamOrigin();
     public static final Block MUD_TOWER_BEAM_RELAY = new BlockBeamRelay();
@@ -707,7 +707,7 @@ public class BlockRegistry {
     public static final Block HOLLOW_LOG = new BlockHollowLog();
     public static final Block CAVE_MOSS = new BlockCaveMoss();
     public static final Block CRYPTWEED = new BlockSludgeDungeonHangingPlant().setSickleDrop(EnumItemPlantDrop.CRYPTWEED_BLADES.create(1));
-    public static final Block STRING_ROOTS = new BlockSludgeDungeonHangingPlant().setSickleDrop(EnumItemPlantDrop.STRING_ROOTS_ITEM.create(1));
+    public static final Block STRING_ROOTS = new BlockSludgeDungeonHangingPlant().setSickleDrop(EnumItemPlantDrop.STRING_ROOT_FIBERS.create(1));
     public static final Block PALE_GRASS = new BlockSludgeDungeonPlant() {
     	@Override
         @SideOnly(Side.CLIENT)
@@ -715,7 +715,7 @@ public class BlockRegistry {
             return BlockRenderLayer.TRANSLUCENT;
         }
     }.setSickleDrop(EnumItemPlantDrop.PALE_GRASS_BLADES.create(1)).setReplaceable(true);
-    public static final Block ROTBULB = new BlockSludgeDungeonPlant().setSickleDrop(EnumItemPlantDrop.ROTBULB_ITEM.create(1)).setReplaceable(true);
+    public static final Block ROTBULB = new BlockSludgeDungeonPlant().setSickleDrop(EnumItemPlantDrop.ROTBULB_STALK.create(1)).setReplaceable(true);
     public static final Block MOSS = new BlockMoss(true).setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
     public static final Block DEAD_MOSS = new BlockMoss(false).setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
     public static final Block LICHEN = new BlockLichen(true).setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);

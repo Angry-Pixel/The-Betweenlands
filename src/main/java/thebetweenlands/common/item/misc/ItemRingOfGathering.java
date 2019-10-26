@@ -175,7 +175,11 @@ public class ItemRingOfGathering extends ItemRing {
 
 	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
-		return true;
+		NBTTagCompound nbt = stack.getTagCompound();
+		if(nbt != null && nbt.hasKey(NBT_SYNC_COUNT_KEY, Constants.NBT.TAG_BYTE)) {
+			return nbt.getByte(NBT_SYNC_COUNT_KEY) > 0;
+		}
+		return false;
 	}
 
 	@Override
