@@ -222,14 +222,16 @@ public class ItemRingOfGathering extends ItemRing {
 
 	@Override
 	public void onUnequip(ItemStack stack, Entity entity, IInventory inventory) {
-		if(entity instanceof EntityPlayer && entity.ticksExisted % 5 == 0) {
+		if(entity instanceof EntityPlayer) {
 			this.setRingEquipped(entity.getUniqueID(), false);
 		}
 	}
 
 	@Override
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
-		this.updateStackEntryCount(entity.world, stack, entity);
+		if(entity.ticksExisted % 5 == 0) {
+			this.updateStackEntryCount(entity.world, stack, entity);
+		}
 	}
 
 	@Override

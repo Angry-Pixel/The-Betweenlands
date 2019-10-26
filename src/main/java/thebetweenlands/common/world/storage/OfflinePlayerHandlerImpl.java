@@ -166,7 +166,9 @@ public class OfflinePlayerHandlerImpl implements IOfflinePlayerDataHandler {
 			currentFile.delete();
 		}
 
-		tempFile.renameTo(currentFile);
+		if(!tempFile.renameTo(currentFile)) {
+			throw new IOException(String.format("Failed renaming %s to %s", tempFile, currentFile));
+		}
 	}
 
 	@Override
