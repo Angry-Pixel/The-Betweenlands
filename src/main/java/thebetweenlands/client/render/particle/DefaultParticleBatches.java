@@ -28,6 +28,22 @@ public class DefaultParticleBatches {
 	private static final ResourceLocation GAS_CLOUD_TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/gas_cloud.png");
 	
 	//Generic batches
+	public static final ParticleBatch TRANSLUCENT = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass()
+			.lit(true)
+			.blend(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA)
+			.depthMask(false)
+			.texture(BLOCK_ATLAS)
+			.blur(true)
+			.end().build());
+	
+	public static final ParticleBatch TRANSLUCENT_NEAREST_NEIGHBOR = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass()
+			.lit(true)
+			.blend(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA)
+			.blur(false)
+			.depthMask(false)
+			.texture(BLOCK_ATLAS)
+			.end().build());
+	
 	public static final ParticleBatch TRANSLUCENT_GLOWING = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass()
 			.blend(SourceFactor.SRC_ALPHA, DestFactor.ONE)
 			.depthMask(false)

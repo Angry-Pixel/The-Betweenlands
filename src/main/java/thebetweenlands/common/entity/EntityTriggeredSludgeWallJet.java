@@ -14,6 +14,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 
@@ -62,8 +64,8 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 			if(this.rand.nextInt(4) == 0) {
 				ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
 					args.withColor(1F, 0.65F, 0.25F, 0.75F);
-					args.withScale(0.5F + rand.nextFloat());
-				BLParticles.SLUDGE_SWIRL.spawn(this.world, this.posX, this.posY, this.posZ, args);
+					args.withScale(1.5F + rand.nextFloat() * 6);
+				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.SLUDGE_SWIRL.create(this.world, this.posX, this.posY, this.posZ, args));
 			}
 		}
 	}

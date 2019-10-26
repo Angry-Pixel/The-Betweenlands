@@ -41,7 +41,7 @@ public class BlockDecayPitGroundChain extends BlockHorizontal implements ITileEn
 
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.INVISIBLE;
+		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
 
 	@Override

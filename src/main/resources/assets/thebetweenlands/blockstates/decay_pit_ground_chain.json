@@ -1,8 +1,17 @@
 {
+	"forge_marker": 1,
+	"defaults": {
+		"model": "thebetweenlands:internal/blank",
+		"custom": {
+			"particle_texture": "thebetweenlands:blocks/chain_particles"
+		}
+	},
     "variants": {
-        "facing=north": { "model": "thebetweenlands:ook", "y": 180 },
-        "facing=south": { "model": "thebetweenlands:ook" },
-        "facing=west":  { "model": "thebetweenlands:ook", "y": 90 },
-        "facing=east":  { "model": "thebetweenlands:ook", "y": 270 }
+        "facing": {
+        	"north": {},
+        	"east": {},
+        	"south": {},
+        	"west": {}
+        }
     }
 }
