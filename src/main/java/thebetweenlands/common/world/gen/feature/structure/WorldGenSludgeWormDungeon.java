@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -9,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -16,7 +18,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import thebetweenlands.api.loot.ISharedLootContainer;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
@@ -37,6 +42,8 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
 import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
+import thebetweenlands.common.tile.TileEntityItemShelf;
+import thebetweenlands.common.tile.TileEntityLootInventory;
 import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
@@ -1279,6 +1286,18 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			if(lootTable != null) {
 				((ISharedLootContainer) tile).setSharedLootTable(this.lootStorage, lootTable, this.lootRng.nextLong());
 			}
+		}
+		
+		if(worldIn instanceof WorldServer && tile instanceof TileEntityItemShelf) {
+			LootTable lootTable = worldIn.getLootTableManager().getLootTableFromLocation(LootTableRegistry.SLUDGE_WORM_DUNGEON_ITEM_SHELF);
+			
+			Random random = new Random(this.lootRng.nextLong());
+
+			LootContext.Builder lootBuilder = new LootContext.Builder((WorldServer) worldIn);
+
+			List<ItemStack> loot = lootTable.generateLootForPools(random, lootBuilder.build());
+
+			TileEntityLootInventory.fillInventoryRandomly(random, loot, (TileEntityItemShelf) tile);
 		}
 	}
 	
