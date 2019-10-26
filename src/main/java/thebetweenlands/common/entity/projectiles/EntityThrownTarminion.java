@@ -89,6 +89,7 @@ public class EntityThrownTarminion extends EntityThrowable {
 		if (!this.world.isRemote) {
 			this.setDead();
 			EntityTarminion tarminion = new EntityTarminion(this.world);
+			tarminion.setTamed(true);
 			if(this.ownerUUID != null) {
 				tarminion.setOwnerId(this.ownerUUID);
 			}

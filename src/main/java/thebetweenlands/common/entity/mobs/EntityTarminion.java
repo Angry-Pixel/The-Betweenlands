@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import com.google.common.base.Predicate;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
@@ -20,7 +24,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -55,6 +59,10 @@ public class EntityTarminion extends EntityTameable implements IEntityBL, IRingO
 
 	protected boolean dropContentsWhenDead = true;
 
+	protected final Predicate<Entity> targetPredicate = entity -> {
+		return entity instanceof IMob && (entity instanceof IEntityOwnable == false || ((IEntityOwnable) entity).getOwner() != EntityTarminion.this.getOwner());
+	};
+
 	public EntityTarminion(World world) {
 		super(world);
 		this.setSize(0.3F, 0.5F);
@@ -79,7 +87,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL, IRingO
 				}
 			}
 		});
-		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityMob>(this, EntityMob.class, true));
+		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityLiving>(this, EntityLiving.class, 10, false, false, this.targetPredicate));
 	}
 
 	@Override
@@ -99,6 +107,16 @@ public class EntityTarminion extends EntityTameable implements IEntityBL, IRingO
 		return false;
 	}
 
+	@Override
+	public boolean isBreedingItem(ItemStack stack) {
+		return false;
+	}
+	
+	@Override
+	public boolean isTamed() {
+		return true;
+	}
+	
 	@Override
 	protected void playStepSound(BlockPos pos, Block state) {
 		if(this.rand.nextInt(10) == 0) {
@@ -217,16 +235,27 @@ public class EntityTarminion extends EntityTameable implements IEntityBL, IRingO
 				this.motionZ = dz / dist * 0.2D + this.motionZ * 0.2D;
 				this.motionY = 0.3D;
 			}
+			
 			DamageSource damageSource;
+			
 			EntityLivingBase owner = this.getOwner();
 			if(owner != null) {
 				damageSource = new EntityDamageSourceIndirect("mob", this, owner);
 			} else {
 				damageSource = DamageSource.causeMobDamage(this);
 			}
+			
 			entity.attackEntityFrom(damageSource, (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+			
+			if(entity instanceof EntityLivingBase) {
+				//Set revenge target to tarminion so it can be attacked by the mob
+				((EntityLivingBase) entity).setRevengeTarget(this);
+			}
+			
 			this.playSound(SoundRegistry.TAR_BEAST_STEP, 1.0F, 2.0F);
+			
 			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, world.getDifficulty().getId() * 50, 0));
+			
 			return true;
 		}
 		return true;
