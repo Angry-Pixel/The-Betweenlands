@@ -13,6 +13,7 @@ import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -47,9 +48,7 @@ import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityGroundItem;
-import thebetweenlands.common.tile.TileEntityLootUrn;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
 
 public class SludgeWormMazeBlockHelper {
@@ -705,9 +704,17 @@ public class SludgeWormMazeBlockHelper {
 	}
 
 	public void setGreatSword(World world, Random rand, BlockPos pos) {
-		TileEntityGroundItem groundItem = (TileEntityGroundItem) world.getTileEntity(pos);
-		if (groundItem != null) {
-			groundItem.setStack(new ItemStack(ItemRegistry.ANCIENT_GREATSWORD));
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof TileEntityGroundItem) {
+			((TileEntityGroundItem) tile).setStack(new ItemStack(ItemRegistry.ANCIENT_GREATSWORD));
+			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+		}
+	}
+	
+	public void setBattleAxe(World world, Random rand, BlockPos pos) {
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof TileEntityGroundItem) {
+			((TileEntityGroundItem) tile).setStack(new ItemStack(ItemRegistry.ANCIENT_BATTLE_AXE));
 			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 		}
 	}
