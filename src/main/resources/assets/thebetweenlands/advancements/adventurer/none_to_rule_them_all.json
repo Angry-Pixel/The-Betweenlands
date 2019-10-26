@@ -52,6 +52,26 @@
           }
         ]
       }
+    },
+    "ring_5": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:ring_of_dispersion"
+          }
+        ]
+      }
+    },
+    "ring_6": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:ring_of_gathering"
+          }
+        ]
+      }
     }
   }
 }
