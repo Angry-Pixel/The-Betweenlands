@@ -109,10 +109,6 @@ public class BlockBrazier extends Block {
                 }
             }
         }
-        else if (world.getBlockState(pos.up()).getBlock() == this) {
-            world.setBlockState(pos.up(), Blocks.AIR.getDefaultState(), 2);
-            dropBlockAsItem(world, pos, state.withProperty(HALF, EnumBrazierHalf.LOWER), 0);
-        }
         super.onBlockHarvested(world, pos, state, player);
     }
 
