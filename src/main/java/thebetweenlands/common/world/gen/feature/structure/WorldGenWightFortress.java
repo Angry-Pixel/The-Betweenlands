@@ -742,9 +742,17 @@ public class WorldGenWightFortress extends WorldGenerator {
 					//	tower chests
 					rotatedCubeVolume(world, rand, pos.add(x, y, z), 4, 12, 4, chest,direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
 					if (tower == 0 && direction == 0 || tower == 0 && direction == 1 || tower == 1 && direction == 0 || tower == 1 && direction == 3|| tower == 2 && direction == 2 || tower == 2 && direction == 3|| tower == 3 && direction == 1 || tower == 3 && direction == 2) {
-						rotatedCubeVolume(world, rand, pos.add(x, y, z), 5, 17, 3, chest, direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
+						// should stop triple chests
+						int chest_randomiser = rand.nextInt(7);
+
+						if(chest_randomiser == 1 || chest_randomiser == 4 || chest_randomiser == 6)
+							rotatedCubeVolume(world, rand, pos.add(x, y, z), 5, 17, 3, chest, direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
+
+						if(chest_randomiser == 2 || chest_randomiser == 4 || chest_randomiser == 5)
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 6, 17, 3, chest, direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
-						rotatedCubeVolume(world, rand, pos.add(x, y, z), 7, 17, 3, chest, direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
+
+						if(chest_randomiser == 3 || chest_randomiser == 5 || chest_randomiser == 6)
+							rotatedCubeVolume(world, rand, pos.add(x, y, z), 7, 17, 3, chest, direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
 					}
 				}
 			}
