@@ -345,7 +345,7 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 				motionZ *= 0.8999999761581421D;
 
 				if (getAttackTarget() == null) {
-					motionY += 0.003D;
+					motionY += Math.sin(this.ticksExisted * 0.05D) * 0.0035D - 0.0002D;
 				}
 			} else {
 				super.travel(strafe, up, forward);
