@@ -2,6 +2,7 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -21,7 +22,9 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -32,22 +35,26 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.entity.IRingOfGatheringMinion;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityTarminion extends EntityTameable implements IEntityBL {
+public class EntityTarminion extends EntityTameable implements IEntityBL, IRingOfGatheringMinion {
 	public static final IAttribute MAX_TICKS_ATTRIB = (new RangedAttribute(null, "bl.maxAliveTicks", 7200.0D, 0, Integer.MAX_VALUE)).setDescription("Maximum ticks until the Tar Minion despawns");
 
 	private int despawnTicks = 0;
 
 	protected boolean dropContentsWhenDead = true;
-	
+
 	public EntityTarminion(World world) {
 		super(world);
 		this.setSize(0.3F, 0.5F);
@@ -179,7 +186,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 				}
 			}
 		}
-		
+
 		super.setDead();
 	}
 
@@ -249,7 +256,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	protected boolean canDropLoot() {
 		return false; //Loot dropping is handled in death update
 	}
-	
+
 	@Override
 	public void setDropItemsWhenDead(boolean dropWhenDead) {
 		this.dropContentsWhenDead = dropWhenDead;
@@ -259,5 +266,37 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	public Entity changeDimension(int dimensionIn) {
 		this.dropContentsWhenDead = false;
 		return super.changeDimension(dimensionIn);
+	}
+
+	@Override
+	public boolean returnFromRing(Entity user, NBTTagCompound nbt) {
+		if(this.world instanceof WorldServer) {
+			WorldServer worldServer = (WorldServer) this.world;
+
+			LootTable lootTable = worldServer.getLootTableManager().getLootTableFromLocation(LootTableRegistry.TARMINION);
+			LootContext.Builder contextBuilder = (new LootContext.Builder(worldServer)).withLootedEntity(this);
+
+			for(ItemStack loot : lootTable.generateLootForPools(this.world.rand, contextBuilder.build())) {
+				if(user instanceof EntityPlayer) {
+					if(!((EntityPlayer) user).inventory.addItemStackToInventory(loot)) {
+						((EntityPlayer) user).dropItem(loot, false);
+					}
+				} else {
+					user.entityDropItem(loot, 0);
+				}
+			}
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean shouldReturnOnDeath(boolean isOwnerLoggedIn) {
+		return true;
+	}
+
+	@Override
+	public UUID getRingOwnerId() {
+		return this.getOwnerId();
 	}
 }

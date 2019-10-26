@@ -62,6 +62,7 @@ import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.PotionRootBound;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
+import thebetweenlands.common.item.misc.ItemRingOfGathering;
 import thebetweenlands.common.item.shields.ItemDentrothystShield;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.item.tools.ItemGreatsword;
@@ -82,6 +83,7 @@ import thebetweenlands.common.world.biome.spawning.WorldMobSpawner;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWaystone;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
+import thebetweenlands.common.world.storage.OfflinePlayerHandlerImpl;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
 import thebetweenlands.compat.tmg.TMGEquipmentInventory;
 import thebetweenlands.core.TheBetweenlandsPreconditions;
@@ -255,5 +257,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(ItemGreatsword.class);
 		MinecraftForge.EVENT_BUS.register(CenserRecipeCremains.class);
 		MinecraftForge.EVENT_BUS.register(EntitySludgeMenace.class);
+		MinecraftForge.EVENT_BUS.register(OfflinePlayerHandlerImpl.class);
+		MinecraftForge.EVENT_BUS.register(ItemRingOfGathering.class);
 	}
 }

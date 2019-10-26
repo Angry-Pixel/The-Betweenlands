@@ -2,6 +2,7 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -30,6 +31,7 @@ import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -51,6 +53,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.entity.IRingOfGatheringMinion;
 import thebetweenlands.common.block.misc.BlockOctine;
 import thebetweenlands.common.entity.ai.EntityAIFollowOwnerBL;
 import thebetweenlands.common.entity.ai.EntityAISitBL;
@@ -60,7 +63,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 //TODO Loot tables
-public class EntityEmberling extends EntityTameable implements IEntityMultiPart, IMob, IEntityBL {
+public class EntityEmberling extends EntityTameable implements IEntityMultiPart, IMob, IEntityBL, IRingOfGatheringMinion {
 
 	public MultiPartEntityPart[] tailPart;
 	private static final DataParameter<Boolean> IS_FLAME_ATTACKING = EntityDataManager.<Boolean>createKey(EntityEmberling.class, DataSerializers.BOOLEAN);
@@ -390,7 +393,7 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 			world.spawnAlwaysVisibleParticle(EnumParticleTypes.FLAME.getParticleID(), posX + offSetX + velX, posY + getEyeHeight() * 0.75D + velY, posZ + offSetZ + velZ, look.x * speed, look.y * speed, look.z * speed);
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public void sleepingParticles(World world, double x, double y, double z, Random rand) {
 		int motionX = rand.nextBoolean() ? 1 : -1;
@@ -571,5 +574,28 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 				emberling.setAIMoveSpeed(0.0F);
 			}
 		}
+	}
+
+	@Override
+	public NBTTagCompound returnToRing(UUID userId) {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public boolean returnFromRing(Entity user, NBTTagCompound nbt) {
+		this.readFromNBT(nbt);
+		this.setLocationAndAngles(user.posX, user.posY, user.posZ, this.world.rand.nextFloat() * 360, 0);
+		this.world.spawnEntity(this);
+		return true;
+	}
+
+	@Override
+	public boolean shouldReturnOnUnload(boolean isOwnerLoggedIn) {
+		return IRingOfGatheringMinion.super.shouldReturnOnUnload(isOwnerLoggedIn) && !this.isSitting();
+	}
+
+	@Override
+	public UUID getRingOwnerId() {
+		return this.getOwnerId();
 	}
 }
