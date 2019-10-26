@@ -28,7 +28,6 @@ import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-//TODO Loot tables
 public class EntityTinySludgeWorm extends EntitySludgeWorm {
 	public static final byte EVENT_SQUASHED = 80;
 	public static final byte EVENT_LEAP = 81;

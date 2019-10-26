@@ -29,7 +29,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.LootTableRegistry;
 
-//TODO Loot tables
 public class EntityMovingSpawnerHole extends EntityMovingWallFace implements IMob {
 	@SideOnly(Side.CLIENT)
 	private TextureAtlasSprite wallSprite;

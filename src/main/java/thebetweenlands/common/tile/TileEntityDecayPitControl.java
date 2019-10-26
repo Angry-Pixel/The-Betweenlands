@@ -218,13 +218,6 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 			
 			if (shaking)
 				shake(60);
-
-			// TODO;
-			// render plug as animation falling in to place in the hole *DONE
-			// remove invisible blocks from edges of pit *DONE
-			// animate floor so it fades away *DONE
-			// whatever whizz bangs we add with shaders and particles *DONE (ish)
-			// spawn loots and stuff
 		}
 
 		if (!getWorld().isRemote && getSpawnXPAndDrops()) {

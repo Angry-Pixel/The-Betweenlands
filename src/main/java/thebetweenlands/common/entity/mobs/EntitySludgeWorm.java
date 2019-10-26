@@ -33,7 +33,6 @@ import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-//TODO Loot tables
 public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMob, IEntityBL {
 
 	public MultiPartEntityPart[] parts;

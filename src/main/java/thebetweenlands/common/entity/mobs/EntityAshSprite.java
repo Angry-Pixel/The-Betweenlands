@@ -33,7 +33,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.LootTableRegistry;
 
-//TODO Loot tables
 public class EntityAshSprite extends EntityMob implements IEntityBL {
 	protected static final DataParameter<Byte> ASH_SPRITE_FLAGS = EntityDataManager.<Byte>createKey(EntityAshSprite.class, DataSerializers.BYTE);
 	@Nullable
@@ -169,13 +168,7 @@ public class EntityAshSprite extends EntityMob implements IEntityBL {
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return null;
 	}
-/*
-	@Override
-	@Nullable
-	protected ResourceLocation getLootTable() {
-		return LootTableList.ASH_SPRITE_LOOT;
-	}
-*/
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int getBrightnessForRender() {

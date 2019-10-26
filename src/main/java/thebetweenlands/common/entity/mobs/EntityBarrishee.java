@@ -58,7 +58,6 @@ import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 
-//TODO Loot tables
 public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IEntityBL {
 	private static final DataParameter<Boolean> AMBUSH_SPAWNED = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> SCREAM = EntityDataManager.createKey(EntityBarrishee.class, DataSerializers.BOOLEAN);
@@ -114,7 +113,7 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.24D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(200D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(7.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.75D);
 	}
@@ -612,9 +611,8 @@ public class EntityBarrishee extends EntityMob implements IEntityScreenShake, IE
 			List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, hitBox);
 
 			for (EntityLivingBase entity : list) {
-				if(barrishee.attackEntityAsMob(entity)) {
-					//TODO Should probably use .knockBack
-					entity.addVelocity(-MathHelper.sin(barrishee.rotationYaw * 3.141593F / 180.0F) * 0.25D, 0D, MathHelper.cos(barrishee.rotationYaw * 3.141593F / 180.0F) * 0.25D);
+				if(this.barrishee.attackEntityAsMob(entity)) {
+					entity.knockBack(this.barrishee, 0.75F, MathHelper.sin(barrishee.rotationYaw * 3.141593F / 180.0F), -MathHelper.cos(barrishee.rotationYaw * 3.141593F / 180.0F));
 				}
 			}
 		}

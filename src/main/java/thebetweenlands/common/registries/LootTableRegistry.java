@@ -128,6 +128,7 @@ public class LootTableRegistry {
     public static final ResourceLocation BARRISHEE = register("entities/barrishee");
     public static final ResourceLocation CRYPT_CRAWLER = register("entities/crypt_crawler");
     public static final ResourceLocation EMBERLING = register("entities/emberling");
+    public static final ResourceLocation EMBERLING_SHAMAN = register("entities/emberling_shaman");
     //BOSSES
     public static final ResourceLocation FORTRESS_BOSS = register("entities/fortress_boss");
     public static final ResourceLocation DREADFUL_PEAT_MUMMY = register("entities/dreadful_peat_mummy");

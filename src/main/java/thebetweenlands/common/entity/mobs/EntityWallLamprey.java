@@ -42,7 +42,6 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-//TODO Loot tables
 public class EntityWallLamprey extends EntityMovingWallFace implements IMob {
 	public static final byte EVENT_START_THE_SUCC = 80;
 

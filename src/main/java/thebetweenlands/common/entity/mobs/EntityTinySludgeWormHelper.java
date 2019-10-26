@@ -75,8 +75,7 @@ public class EntityTinySludgeWormHelper extends EntityTinySludgeWorm implements 
 
 	@Override
 	@Nullable
-	public UUID getOwnerId()
-	{
+	public UUID getOwnerId() {
 		return this.dataManager.get(OWNER_UNIQUE_ID).orNull();
 	}
 

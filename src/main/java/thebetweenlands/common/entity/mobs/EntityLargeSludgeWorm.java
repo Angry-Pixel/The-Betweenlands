@@ -29,7 +29,6 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.util.CatmullRomSpline;
 import thebetweenlands.util.ReparameterizedSpline;
 
-//TODO Loot tables
 public class EntityLargeSludgeWorm extends EntitySludgeWorm {
 	private static final DataParameter<Float> EGG_SAC_PERCENTAGE = EntityDataManager.<Float>createKey(EntityLargeSludgeWorm.class, DataSerializers.FLOAT);
 

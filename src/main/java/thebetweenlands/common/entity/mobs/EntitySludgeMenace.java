@@ -67,7 +67,6 @@ import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.WeightedList;
 
-//TODO Loot tables
 public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityScreenShake, IBLBoss, IEntityMusic {
 	protected static final byte EVENT_START_ACTION = 90;
 	protected static final byte EVENT_SLAM_HIT = 91;

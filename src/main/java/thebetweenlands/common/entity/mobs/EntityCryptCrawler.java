@@ -39,7 +39,6 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-//TODO Loot tables
 public class EntityCryptCrawler extends EntityMob implements IEntityBL {
 	protected static final int MUTEX_BLOCKING  = 0b01000;
 	protected static final int MUTEX_ATTACKING = 0b10000;

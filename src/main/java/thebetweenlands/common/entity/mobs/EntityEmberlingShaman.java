@@ -38,7 +38,6 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-//TODO Loot tables
 public class EntityEmberlingShaman extends EntityMob implements IEntityMultiPart, IEntityBL {
 
 	public MultiPartEntityPart[] tailPart;
@@ -107,7 +106,7 @@ public class EntityEmberlingShaman extends EntityMob implements IEntityMultiPart
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return LootTableRegistry.EMBERLING;
+		return LootTableRegistry.EMBERLING_SHAMAN;
 	}
 
 	@Override

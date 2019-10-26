@@ -62,7 +62,6 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-//TODO Loot tables
 public class EntityEmberling extends EntityTameable implements IEntityMultiPart, IMob, IEntityBL, IRingOfGatheringMinion {
 
 	public MultiPartEntityPart[] tailPart;

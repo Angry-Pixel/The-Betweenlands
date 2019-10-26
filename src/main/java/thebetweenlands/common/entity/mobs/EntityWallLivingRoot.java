@@ -45,7 +45,6 @@ import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-//TODO Loot tables
 public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, IEntityMultiPart {
 	public static final byte EVENT_DEATH = 3;
 	public static final byte EVENT_HURT_SOUND = 82;
