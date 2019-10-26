@@ -13,6 +13,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
@@ -61,12 +63,17 @@ public class EntityTriggeredSludgeWallJet extends EntityProximitySpawner {
 			animationTicks = animationTicksPrev = 0;
 
 		if (getEntityWorld().isRemote) {
-			if(this.rand.nextInt(4) == 0) {
-				ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
-					args.withColor(1F, 0.65F, 0.25F, 0.75F);
-					args.withScale(1.5F + rand.nextFloat() * 6);
-				BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.SLUDGE_SWIRL.create(this.world, this.posX, this.posY, this.posZ, args));
-			}
+			this.spawnCloudParticles();
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	protected void spawnCloudParticles() {
+		if(this.rand.nextInt(4) == 0) {
+			ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
+				args.withColor(1F, 0.65F, 0.25F, 0.75F);
+				args.withScale(1.5F + rand.nextFloat() * 6);
+			BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_NEAREST_NEIGHBOR, BLParticles.SLUDGE_SWIRL.create(this.world, this.posX, this.posY, this.posZ, args));
 		}
 	}
 
