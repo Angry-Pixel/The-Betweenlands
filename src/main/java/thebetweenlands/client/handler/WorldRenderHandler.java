@@ -185,9 +185,11 @@ public class WorldRenderHandler {
 		if(MC.getRenderViewEntity() != null) {
 			RenderHelper.disableStandardItemLighting();
 			Minecraft.getMinecraft().entityRenderer.enableLightmap();
+			GlStateManager.enableFog();
 			
 			BatchedParticleRenderer.INSTANCE.renderAll(MC.getRenderViewEntity(), event.getPartialTicks());
 			
+			GlStateManager.disableFog();
 			RenderHelper.disableStandardItemLighting();
 			Minecraft.getMinecraft().entityRenderer.disableLightmap();
 		}
@@ -206,6 +208,7 @@ public class WorldRenderHandler {
 
 					RenderHelper.disableStandardItemLighting();
 					Minecraft.getMinecraft().entityRenderer.enableLightmap();
+					GlStateManager.enableFog();
 					
 					if(!DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE.isEmpty()) {
 						MC.getTextureManager().bindTexture(RenderGasCloud.TEXTURE);
@@ -221,6 +224,7 @@ public class WorldRenderHandler {
 						BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS, MC.getRenderViewEntity(), event.getPartialTicks());
 					}
 
+					GlStateManager.disableFog();
 					RenderHelper.disableStandardItemLighting();
 					Minecraft.getMinecraft().entityRenderer.disableLightmap();
 					

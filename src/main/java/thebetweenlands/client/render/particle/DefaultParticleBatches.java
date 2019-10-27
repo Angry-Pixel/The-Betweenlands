@@ -39,9 +39,9 @@ public class DefaultParticleBatches {
 	public static final ParticleBatch TRANSLUCENT_NEAREST_NEIGHBOR = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass()
 			.lit(true)
 			.blend(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA)
-			.blur(false)
 			.depthMask(false)
 			.texture(BLOCK_ATLAS)
+			.blur(false)
 			.end().build());
 	
 	public static final ParticleBatch TRANSLUCENT_GLOWING = BatchedParticleRenderer.INSTANCE.registerBatchType(new ParticleBatchTypeBuilder().pass()
