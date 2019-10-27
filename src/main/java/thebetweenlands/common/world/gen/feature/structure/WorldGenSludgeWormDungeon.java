@@ -232,7 +232,11 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				new AxisAlignedBB(pos.getX() + 21, pos.getY() - 54, pos.getZ() + 8 , pos.getX() + 8 , pos.getY() - 58, pos.getZ() + 21)
 				);
 		locationPit.setLayer(1);
-		locationPit.setAmbience(new LocationAmbience(EnumLocationAmbience.SLUDGE_WORM_DUNGEON));
+		locationPit.setAmbience(
+				new LocationAmbience(EnumLocationAmbience.SLUDGE_WORM_DUNGEON)
+				.setFogColor(new int[] {120, 120, 120}).setFogRange(4.0f, 45.0f)
+				.setCaveFog(false)
+				);
 		locationPit.setSeed(rand.nextLong());
 		locationPit.setVisible(true);
 		locationPit.setDirty(true);

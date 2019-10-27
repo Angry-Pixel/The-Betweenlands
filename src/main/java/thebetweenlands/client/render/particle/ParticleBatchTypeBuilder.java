@@ -34,6 +34,7 @@ public class ParticleBatchTypeBuilder {
 
 		private int maxParticles = 8192;
 		private int batchSize = 8192;
+		private boolean fog = true;
 		private boolean cull = true;
 		private boolean depthTest = true;
 		private boolean depthMask = true;
@@ -99,6 +100,11 @@ public class ParticleBatchTypeBuilder {
 			return this;
 		}
 
+		public Pass fog(boolean fog) {
+			this.fog = fog;
+			return this;
+		}
+
 		public Pass format(VertexFormat format) {
 			this.format = format;
 			return this;
@@ -124,7 +130,7 @@ public class ParticleBatchTypeBuilder {
 			this.texture = texture != null ? (() -> texture) : null;
 			return this;
 		}
-		
+
 		public Pass texture(@Nullable Supplier<ResourceLocation> texture) {
 			this.texture = texture;
 			return this;
@@ -172,7 +178,7 @@ public class ParticleBatchTypeBuilder {
 
 		final BatchedParticleRenderer.ParticleBatchType type = new BatchedParticleRenderer.ParticleBatchType() {
 			private ResourceLocation boundTexture = null;
-			
+
 			@Override
 			public boolean filter(Particle particle) {
 				if(filter != null) {
@@ -208,6 +214,12 @@ public class ParticleBatchTypeBuilder {
 					Minecraft.getMinecraft().entityRenderer.disableLightmap();
 				}
 
+				if(pass.fog) {
+					GlStateManager.enableFog();
+				} else {
+					GlStateManager.disableFog();
+				}
+
 				if(pass.blend) {
 					GlStateManager.enableBlend();
 				} else {
@@ -225,7 +237,7 @@ public class ParticleBatchTypeBuilder {
 					}
 					return texLoc;
 				}
-				
+
 				return null;
 			}
 
