@@ -264,6 +264,12 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 					updateBlock();
 
 				// sounds
+				if(getTentacleSpawnCountDown()%30 == 0 && getTentacleSpawnCountDown() <= 270 && getTentacleSpawnCountDown() > 150 || getTentacleSpawnCountDown()%33 == 0 && getTentacleSpawnCountDown() <= 270 && getTentacleSpawnCountDown() > 150)
+					getWorld().playSound(null, getPos(), SoundRegistry.PIT_FALL, SoundCategory.HOSTILE, (getTentacleSpawnCountDown() * 0.004F) * 0.25F, 0.5F + (getTentacleSpawnCountDown() * 0.004F) * 0.5F);
+				// sounds
+				if(getTentacleSpawnCountDown() == 150)
+					getWorld().playSound(null, getPos(), SoundRegistry.WORM_SPLAT, SoundCategory.HOSTILE, 0.125F, 0.3F);
+
 				if(getTentacleSpawnCountDown() == 60 || getTentacleSpawnCountDown() == 30) {
 					getWorld().playSound(null, getPos(), SoundRegistry.PLUG_LOCK, SoundCategory.HOSTILE, 0.5F, 1F);
 					getWorld().playSound(null, getPos(), SoundRegistry.WALL_SLAM, SoundCategory.HOSTILE, 1F, 0.75F);

@@ -67,6 +67,7 @@ public class SoundRegistry {
     public static final BLSoundEvent WALL_SLIDE = reg("wall_slide");
     public static final BLSoundEvent WALL_SLAM = reg("wall_slam");
     public static final BLSoundEvent POOP_JET = reg("poop_jet");
+    public static final BLSoundEvent PIT_FALL = reg("pit_fall");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
