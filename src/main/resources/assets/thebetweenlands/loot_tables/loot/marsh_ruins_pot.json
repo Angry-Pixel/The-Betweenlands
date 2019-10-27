@@ -1,7 +1,7 @@
 {
     "pools": [
         {
-            "name": "common_pot",
+            "name": "marsh_ruins_pot",
             "conditions": [],
             "entries": [
                 {
@@ -24,7 +24,7 @@
                             "data": 7
                         }
                     ],
-                    "weight": 45,
+                    "weight": 40,
                     "quality": 0
                 },
                 {
@@ -47,7 +47,7 @@
                             "data": 18
                         }
                     ],
-                    "weight": 40,
+                    "weight": 35,
                     "quality": 0
                 },
                 {
@@ -59,8 +59,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 1,
-                                "max": 4
+                                "min": 2,
+                                "max": 6
                             }
                         }
                     ],
@@ -81,7 +81,7 @@
                             }
                         }
                     ],
-                    "weight": 10,
+                    "weight": 16,
                     "quality": 0
                 },
                 {
@@ -98,7 +98,7 @@
                             }
                         }
                     ],
-                    "weight": 4,
+                    "weight": 10,
                     "quality": 0
                 },
                 {
@@ -111,8 +111,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 1,
-                                "max": 2
+                                "min": 2,
+                                "max": 3
                             }
                         },
                         {
@@ -133,12 +133,12 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 4,
-                                "max": 12
+                                "min": 2,
+                                "max": 8
                             }
                         }
                     ],
-                    "weight": 12,
+                    "weight": 16,
                     "quality": 0
                 },
                 {
@@ -161,7 +161,7 @@
                             "data": 41
                         }
                     ],
-                    "weight": 11,
+                    "weight": 12,
                     "quality": 0
                 },
                 {
@@ -184,7 +184,7 @@
                             "data": 42
                         }
                     ],
-                    "weight": 11,
+                    "weight": 12,
                     "quality": 0
                 },
                 {
@@ -199,7 +199,7 @@
                             "data": 40
                         }
                     ],
-                    "weight": 8,
+                    "weight": 10,
                     "quality": 0
                 },
                 {
@@ -211,12 +211,12 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 4,
-                                "max": 10
+                                "min": 2,
+                                "max": 8
                             }
                         }
                     ],
-                    "weight": 7,
+                    "weight": 11,
                     "quality": 0
                 },
                 {
@@ -228,12 +228,12 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 4,
-                                "max": 10
+                                "min": 2,
+                                "max": 8
                             }
                         }
                     ],
-                    "weight": 7,
+                    "weight": 11,
                     "quality": 0
                 },
                 {
@@ -257,14 +257,14 @@
                             }
                         }
                     ],
-                    "weight": 6,
+                    "weight": 10,
                     "quality": 0
                 },
                 {
                     "conditions": [],
                     "type": "item",
                     "name": "thebetweenlands:weeping_blue_petal",
-                    "weight": 6,
+                    "weight": 15,
                     "quality": 0
                 },
                 {
@@ -287,7 +287,7 @@
                             "data": 43
                         }
                     ],
-                    "weight": 3,
+                    "weight": 5,
                     "quality": 0
                 },
                 {
@@ -302,12 +302,13 @@
                             "data": 38
                         }
                     ],
-                    "weight": 2,
+                    "weight": 3,
                     "quality": 0
                 },
                 {
                     "conditions": [],
                     "type": "item",
+                    "entryName": "lore_scrap",
                     "name": "thebetweenlands:lore_scrap",
                     "functions": [
                         {
@@ -315,11 +316,26 @@
                             "function": "set_data",
                             "data": {
                                 "min": 0,
-                                "max": 9
+                                "max": 2
                             }
                         }
                     ],
-                    "weight": 5,
+                    "weight": 7,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "lore_scrap_location",
+                    "name": "thebetweenlands:lore_scrap",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 3
+                        }
+                    ],
+                    "weight": 8,
                     "quality": 0
                 },
                 {
