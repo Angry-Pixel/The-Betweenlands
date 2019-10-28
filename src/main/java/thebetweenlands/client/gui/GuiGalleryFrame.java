@@ -8,6 +8,8 @@ import java.util.Map;
 
 import org.lwjgl.opengl.GL11;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -42,7 +44,14 @@ public class GuiGalleryFrame extends GuiScreen {
 
 	protected GuiTextField searchField;
 
-	protected int urlClickX, urlClickWidth, urlClickY, urlClickHeight;
+	protected int sourceUrlClickX, sourceUrlClickWidth, sourceUrlClickY, sourceUrlClickHeight;
+	protected int twitterUrlClickX, twitterUrlClickWidth, twitterUrlClickY, twitterUrlClickHeight;
+	protected int discordUrlClickX, discordUrlClickWidth, discordUrlClickY, discordUrlClickHeight;
+
+	protected String discordName = "Discord";
+	protected String twitterName = "@BetweenlandsDev";
+	protected String discordUrl = "https://discord.gg/D6Eezzw";
+	protected String twitterUrl = "https://twitter.com/BetweenlandsDev";
 
 	public GuiGalleryFrame(EntityGalleryFrame frame) {
 		this.frame = frame;
@@ -50,7 +59,7 @@ public class GuiGalleryFrame extends GuiScreen {
 
 	@Override
 	public void initGui() {
-		this.xStart = (this.width - (int) WIDTH) / 2;
+		this.xStart = (this.width - (int) WIDTH) / 2 - 100;
 		this.yStart = (this.height - (int) HEIGHT) / 2;
 
 		this.buttonList.add(new GuiButton(0, this.xStart - 60, this.yStart + (int)HEIGHT / 2, 30, 20, "<-"));
@@ -96,11 +105,17 @@ public class GuiGalleryFrame extends GuiScreen {
 
 		this.searchField.mouseClicked(mouseX, mouseY, mouseButton);
 
-		if(mouseButton == 0 && mouseX >= this.urlClickX && mouseX < this.urlClickX + this.urlClickWidth && mouseY >= this.urlClickY && mouseY < this.urlClickY + this.urlClickHeight) {
-			GalleryEntry entry = GalleryManager.INSTANCE.getEntries().get(this.frame.getUrl());
+		if(mouseButton == 0) {
+			if(mouseX >= this.sourceUrlClickX && mouseX < this.sourceUrlClickX + this.sourceUrlClickWidth && mouseY >= this.sourceUrlClickY && mouseY < this.sourceUrlClickY + this.sourceUrlClickHeight) {
+				GalleryEntry entry = GalleryManager.INSTANCE.getEntries().get(this.frame.getUrl());
 
-			if(entry != null && entry.getSourceUrl() != null) {
-				this.handleComponentClick(new TextComponentString("").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, entry.getSourceUrl()))));
+				if(entry != null && entry.getSourceUrl() != null) {
+					this.handleComponentClick(new TextComponentString("").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, entry.getSourceUrl()))));
+				}
+			} else if(mouseX >= this.discordUrlClickX && mouseX < this.discordUrlClickX + this.discordUrlClickWidth && mouseY >= this.discordUrlClickY && mouseY < this.discordUrlClickY + this.discordUrlClickHeight) {
+				this.handleComponentClick(new TextComponentString("").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, this.discordUrl))));
+			} else if(mouseX >= this.twitterUrlClickX && mouseX < this.twitterUrlClickX + this.twitterUrlClickWidth && mouseY >= this.twitterUrlClickY && mouseY < this.twitterUrlClickY + this.twitterUrlClickHeight) {
+				this.handleComponentClick(new TextComponentString("").setStyle(new Style().setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, this.twitterUrl))));
 			}
 		}
 	}
@@ -248,10 +263,57 @@ public class GuiGalleryFrame extends GuiScreen {
 
 			if(sourceLine != null) {
 				this.fontRenderer.drawString(sourceLine, this.xStart + (int)WIDTH / 2 - maxLineWidth / 2, this.yStart + (int)HEIGHT + 26 + yOff, 0xFFFFFFFF);
-				this.urlClickX = this.xStart + (int)WIDTH / 2 - maxLineWidth / 2 + this.fontRenderer.getStringWidth(I18n.format("gui.gallery.source_url"));
-				this.urlClickY = this.yStart + (int)HEIGHT + 26 + yOff;
-				this.urlClickWidth = this.fontRenderer.getStringWidth(I18n.format("gui.gallery.source_url_click"));
-				this.urlClickHeight = 10;
+				this.sourceUrlClickX = this.xStart + (int)WIDTH / 2 - maxLineWidth / 2 + this.fontRenderer.getStringWidth(I18n.format("gui.gallery.source_url"));
+				this.sourceUrlClickY = this.yStart + (int)HEIGHT + 26 + yOff;
+				this.sourceUrlClickWidth = this.fontRenderer.getStringWidth(I18n.format("gui.gallery.source_url_click"));
+				this.sourceUrlClickHeight = 10;
+			}
+
+			yOff = 0;
+
+			String submissionText = I18n.format("gui.gallery.submission");
+			if(submissionText.contains("{twitter}") && submissionText.contains("{discord}")) {
+				String[] lines = submissionText.split("\\\\n");
+
+				for(String line : lines) {
+					List<String> segments = new ArrayList<>();
+
+					String[] sp1 = line.split("((?<=\\{twitter\\})|(?=\\{twitter\\}))");
+					for(String s1 : sp1) {
+						String[] sp2 = s1.split("((?<=\\{discord\\})|(?=\\{discord\\}))");
+						for(String s2 : sp2) {
+							segments.add(s2);
+						}
+					}
+
+					int xOff = 0;
+
+					for(String segment : segments) {
+						String segmentTxt = segment;
+
+						int sx = this.xStart + 100 + xOff;
+						int sy = this.yStart - 90 + yOff;
+
+						if(segmentTxt.equals("{twitter}")) {
+							segmentTxt = ChatFormatting.BLUE.toString() + ChatFormatting.UNDERLINE.toString() + ChatFormatting.ITALIC.toString() + this.twitterName;
+							this.twitterUrlClickX = sx;
+							this.twitterUrlClickY = sy;
+							this.twitterUrlClickWidth = this.fontRenderer.getStringWidth(segmentTxt);
+							this.twitterUrlClickHeight = 10;
+						} else if(segmentTxt.equals("{discord}")) {
+							segmentTxt = ChatFormatting.BLUE.toString() + ChatFormatting.UNDERLINE.toString() + ChatFormatting.ITALIC.toString() + this.discordName;
+							this.discordUrlClickX = sx;
+							this.discordUrlClickY = sy;
+							this.discordUrlClickWidth = this.fontRenderer.getStringWidth(segmentTxt);
+							this.discordUrlClickHeight = 10;
+						}
+
+						this.fontRenderer.drawString(segmentTxt, sx, sy, 0xFFFFFFFF);
+						xOff += this.fontRenderer.getStringWidth(segmentTxt);
+					}
+
+					yOff += 12;
+				}
 			}
 		} else {
 			String notFoundText = I18n.format("gui.gallery.info_not_found");

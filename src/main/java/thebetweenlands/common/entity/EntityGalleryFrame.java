@@ -77,6 +77,11 @@ public class EntityGalleryFrame extends EntityHanging implements IEntityAddition
 
 	@Override
 	public int getWidthPixels() {
+		//Can be null during loading
+		if(this.type == null) {
+			return 16;
+		}
+
 		switch(this.type) {
 		default:
 		case SMALL:
@@ -90,6 +95,11 @@ public class EntityGalleryFrame extends EntityHanging implements IEntityAddition
 
 	@Override
 	public int getHeightPixels() {
+		//Can be null during loading
+		if(this.type == null) {
+			return 16;
+		}
+
 		switch(this.type) {
 		default:
 		case SMALL:
