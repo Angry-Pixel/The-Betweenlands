@@ -816,7 +816,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		MinecraftForge.EVENT_BUS.register(DebugHandlerClient.class);
 		MinecraftForge.EVENT_BUS.register(ItemTooltipHandler.class);
 		MinecraftForge.EVENT_BUS.register(GuiBLMainMenu.class);
-  //      MinecraftForge.EVENT_BUS.register(WeedwoodRowboatHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(WeedwoodRowboatHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(OverlayHandler.class);
         MinecraftForge.EVENT_BUS.register(ElixirClientHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GuiDownloadTerrainBetweenlands.class);

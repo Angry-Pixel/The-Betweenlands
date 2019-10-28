@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 @SideOnly(Side.CLIENT)
 public class ModelCryptCrawler extends ModelBase {
-    ModelRenderer[] body_main = new ModelRenderer[2];
+    public ModelRenderer[] body_main = new ModelRenderer[2];
     ModelRenderer[] neck = new ModelRenderer[2];
     ModelRenderer[] body_lower = new ModelRenderer[2];
     ModelRenderer[] leg_front_left1 = new ModelRenderer[2];
@@ -374,12 +374,13 @@ public class ModelCryptCrawler extends ModelBase {
     @Override
     public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float scale) {
     	EntityCryptCrawler cryptCrawler = (EntityCryptCrawler) entity;
-    	
-    	if(!cryptCrawler.isBiped())
-    		body_main[0].render(scale);
-    	else
-    		body_main[1].render(scale);
-    }
+
+		if (cryptCrawler.isBiped()) {
+			body_main[1].render(scale);
+		} else {
+			body_main[0].render(scale);
+		}
+	}
 
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {

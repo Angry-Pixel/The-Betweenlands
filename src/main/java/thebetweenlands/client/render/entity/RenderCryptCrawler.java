@@ -21,11 +21,11 @@ public class RenderCryptCrawler extends RenderLiving<EntityCryptCrawler> {
         ModelCryptCrawler model = (ModelCryptCrawler) this.getMainModel();
         
         this.addLayer(new LayerAttachedItems<EntityCryptCrawler>(model)
-        		.attach(model.leg_front_left3[1], crawler -> crawler.getHeldItemOffhand(), EnumHandSide.LEFT, 0.75F, attachment -> {
+        		.attach(model.body_main[1], model.leg_front_left3[1], crawler -> crawler.getHeldItemOffhand(), EnumHandSide.LEFT, 0.75F, attachment -> {
         			attachment.rotationPointY = -2F;
         			attachment.rotationPointZ = -3F;
         		})
-        		.attach(model.leg_front_right3[1], crawler -> crawler.getHeldItemMainhand(), EnumHandSide.RIGHT, 0.75F, attachment -> {
+        		.attach(model.body_main[1], model.leg_front_right3[1], crawler -> crawler.getHeldItemMainhand(), EnumHandSide.RIGHT, 0.75F, attachment -> {
         			attachment.rotationPointY = -2F;
         			attachment.rotationPointZ = -3F;
         		})

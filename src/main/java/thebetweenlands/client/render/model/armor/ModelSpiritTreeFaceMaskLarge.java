@@ -126,7 +126,7 @@ public class ModelSpiritTreeFaceMaskLarge extends ModelBodyAttachment {
 		this.headbase.addChild(this.cheekthingy_leftupper);
 		this.headbase.addChild(this.head_lower);
 
-		this.addAttachment(this.bipedHead, this.headbase);
+		this.bipedHead.addChild(this.headbase);
 	}
 
 	@Override
