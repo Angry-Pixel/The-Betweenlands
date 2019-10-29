@@ -31,9 +31,9 @@ public abstract class GenLayerBetweenlands extends GenLayer {
 		genLayer = GenLayerZoomIncrement.magnify(cache, 2345L, genLayer, false, 1);
 		swamplandsClearingLayer = GenLayerZoomIncrement.magnify(cache, 2345L, swamplandsClearingLayer, true, 1);
 		
-		GenLayer sludgePlainsClearingLayer = new GenLayerSurrounded(cache, 102L, genLayer, BiomeRegistry.SLUDGE_PLAINS, BiomeRegistry.SLUDGE_PLAINS_CLEARING, 1, 1);
+		GenLayer sludgePlainsClearingLayer = new GenLayerSurrounded(cache, 351L, genLayer, BiomeRegistry.SLUDGE_PLAINS, BiomeRegistry.SLUDGE_PLAINS_CLEARING, 2, 1);
 		sludgePlainsClearingLayer = new GenLayerMask(cache, sludgePlainsClearingLayer, Biome.getIdForBiome(BiomeRegistry.SLUDGE_PLAINS_CLEARING), Biome.getIdForBiome(BiomeRegistry.SLUDGE_PLAINS_CLEARING));
-		sludgePlainsClearingLayer = GenLayerThinMask.thin(cache, 105L, sludgePlainsClearingLayer, Biome.getIdForBiome(BiomeRegistry.SLUDGE_PLAINS_CLEARING), 3, 0.25f, 10);
+		sludgePlainsClearingLayer = GenLayerThinMask.thin(cache, 214L, sludgePlainsClearingLayer, Biome.getIdForBiome(BiomeRegistry.SLUDGE_PLAINS_CLEARING), 4, 0.15f, 20);
 		
 		genLayer = GenLayerZoomIncrement.magnify(cache, 2345L, genLayer, false, biomeSize - 1);
 		swamplandsClearingLayer = GenLayerZoomIncrement.magnify(cache, 2345L, swamplandsClearingLayer, true, biomeSize - 1);

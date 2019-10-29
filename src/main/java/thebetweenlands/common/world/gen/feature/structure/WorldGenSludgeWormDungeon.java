@@ -16,9 +16,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
@@ -45,6 +45,7 @@ import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 import thebetweenlands.common.tile.TileEntityItemShelf;
 import thebetweenlands.common.tile.TileEntityLootInventory;
 import thebetweenlands.common.tile.TileEntityMudBrickAlcove;
+import thebetweenlands.common.world.biome.BiomeSludgePlainsClearing;
 import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.SludgeWormMazeBlockHelper;
@@ -69,8 +70,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private LocationStorage locationCrypt;
 	private Random lootRng;
 
-	TimeMeasurement timer = new TimeMeasurement();
-
+	private static final ThreadLocal<Boolean> CASCADING_GEN_MUTEX = new ThreadLocal<Boolean>() {
+		@Override
+		protected Boolean initialValue() {
+			return false;
+		}
+	};
+	
 	public WorldGenSludgeWormDungeon() {
 		super(false);
 		this.blockHelper = new SludgeWormMazeBlockHelper(this);
@@ -81,51 +87,59 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
-		//Check for other sludge dungeons' towers but ignore small stuff below +10
-		int checkRange = 30;
-		MutableBlockPos checkPos = new MutableBlockPos();
-		for(int zo = -checkRange / 2; zo <= checkRange / 2; zo++) {
-			for(int yo = 0; yo <= 8; yo += 3) {
-				for(int xo = -checkRange / 2; xo <= checkRange / 2; xo++) {
-					checkPos.setPos(pos.getX() + 16 + xo, pos.getY() + 10 + yo, pos.getZ() + 16 + zo);
-					if(!world.isBlockLoaded(checkPos) || !world.getBlockState(checkPos).getBlock().isReplaceable(world, checkPos)) {
-						return false;
-					}
-				}
-			}
+		if(CASCADING_GEN_MUTEX.get()) {
+			return false;
 		}
 		
-		this.lootRng = new Random(rand.nextLong());
+		CASCADING_GEN_MUTEX.set(true);
+		
+		try {
+			//If in sludge plains clearinig use biome base height as gen Y pos
+			Biome biome = world.getBiome(pos);
+			if(biome instanceof BiomeSludgePlainsClearing) {
+				pos = new BlockPos(pos.getX(), (int)biome.getBaseHeight() + 1, pos.getZ());
+			}
+			
+			//Check for other sludge worm dungeons
+			List<LocationSludgeWormDungeon> dungeonLocations = BetweenlandsWorldStorage.forWorld(world).getLocalStorageHandler().getLocalStorages(LocationSludgeWormDungeon.class, new AxisAlignedBB(pos.getX() - 3, pos.getY() + 30, pos.getZ() - 3, pos.getX() + 29, pos.getY() - 58, pos.getZ() + 29), l -> true);
+			if(!dungeonLocations.isEmpty()) {
+				return false;
+			}
+			
+			this.lootRng = new Random(rand.nextLong());
+	
+			//conditions blah, blah...
+			//TimeMeasurement.start("Full_Mudgeon");
+	
+			//Locations must be generated first such that location guard can be used
+			//TimeMeasurement.start("World_Locations");
+			this.generateLocations(world, rand, pos);
+			//TimeMeasurement.finish("World_Locations");
+	
+			//TimeMeasurement.start("Maze");
+			makeMaze(world, rand, pos);
+			//TimeMeasurement.finish("Maze");
+	
+			//TimeMeasurement.start("Tower");
+			generateTower(world, rand, pos.down().add(12, 0, 12));
+			//TimeMeasurement.finish("Tower");
+	
+			//TimeMeasurement.start("Crypt");
+			generateCryptCrawlerDungeon(world, rand, pos.down(25).add(-3, 0, -3));
+			//TimeMeasurement.finish("Crypt");
+	
+			//TimeMeasurement.start("Pit");
+			generateDecayPit(world, rand, pos.down(44).add(14, 0, 14));
+			//TimeMeasurement.finish("Pit");
+	
+			generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
+			
+			//TimeMeasurement.finish("Full_Mudgeon");
 
-		//conditions blah, blah...
-		timer.start("Full_Mudgeon");
-
-		//Locations must be generated first such that location guard can be used
-		timer.start("World_Locations");
-		this.generateLocations(world, rand, pos);
-		timer.finish("World_Locations");
-
-		timer.start("Maze");
-		makeMaze(world, rand, pos);
-		timer.finish("Maze");
-
-		timer.start("Tower");
-		generateTower(world, rand, pos.down().add(12, 0, 12));
-		timer.finish("Tower");
-
-		timer.start("Crypt");
-		generateCryptCrawlerDungeon(world, rand, pos.down(25).add(-3, 0, -3));
-		timer.finish("Crypt");
-
-		timer.start("Pit");
-		generateDecayPit(world, rand, pos.down(44).add(14, 0, 14));
-		timer.finish("Pit");
-
-		generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
-
-
-		timer.finish("Full_Mudgeon");
-		return true;
+			return true;
+		} finally {
+			CASCADING_GEN_MUTEX.set(false);
+		}
 	}
 
 	public void generateLocations(World world, Random rand, BlockPos pos) {

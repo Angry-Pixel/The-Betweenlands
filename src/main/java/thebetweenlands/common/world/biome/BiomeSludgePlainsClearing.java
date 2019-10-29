@@ -33,7 +33,7 @@ public class BiomeSludgePlainsClearing extends BiomeBetweenlands {
 		super(new ResourceLocation(ModInfo.ID, "sludge_plains_clearing"), 
 				new BiomeProperties("Sludge Plains Clearing")
 				.setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT + 4)
-				.setHeightVariation(0F)
+				.setHeightVariation(0.5F)
 				.setWaterColor(0x3A2F0B)
 				.setTemperature(0.8F)
 				.setRainfall(0.9F));

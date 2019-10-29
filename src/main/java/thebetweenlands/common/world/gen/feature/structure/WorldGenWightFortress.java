@@ -112,6 +112,13 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private Random lootRng;
 	private SharedLootPoolStorage lootStorage;
 
+	private static final ThreadLocal<Boolean> CASCADING_GEN_MUTEX = new ThreadLocal<Boolean>() {
+		@Override
+		protected Boolean initialValue() {
+			return false;
+		}
+	};
+	
 	public WorldGenWightFortress() {
 		//these sizes are subject to change
 		length = 13;
@@ -207,58 +214,68 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
-		if(!this.canGenerateAt(world, rand, pos)) {
+		if(CASCADING_GEN_MUTEX.get()) {
 			return false;
 		}
-
 		
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-
-		long locationSeed = rand.nextLong();
-
-		LocalRegion region = LocalRegion.getFromBlockPos(pos);
-
-		//Shared loot storage
-		this.lootRng = new Random(rand.nextLong());
-		this.lootStorage = new SharedLootPoolStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, rand.nextLong());
-		worldStorage.getLocalStorageHandler().addLocalStorage(this.lootStorage);
+		CASCADING_GEN_MUTEX.set(true);
 		
-		LocationGuarded fortressLocation = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower", EnumLocationType.WIGHT_TOWER);
-		this.guard = fortressLocation.getGuard();
-		fortressLocation.addBounds(new AxisAlignedBB(pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10, pos.getX() + 42, pos.getY() + 80, pos.getZ() + 42));
-		fortressLocation.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRangeMultiplier(0.2F).setFogBrightness(80));
-		fortressLocation.setLayer(0);
-		fortressLocation.setDirty(true);
-		fortressLocation.setSeed(locationSeed);
+		try {
+			if(!this.canGenerateAt(world, rand, pos)) {
+				return false;
+			}
+	
+			
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+	
+			long locationSeed = rand.nextLong();
+	
+			LocalRegion region = LocalRegion.getFromBlockPos(pos);
+	
+			//Shared loot storage
+			this.lootRng = new Random(rand.nextLong());
+			this.lootStorage = new SharedLootPoolStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, rand.nextLong());
+			worldStorage.getLocalStorageHandler().addLocalStorage(this.lootStorage);
+			
+			LocationGuarded fortressLocation = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower", EnumLocationType.WIGHT_TOWER);
+			this.guard = fortressLocation.getGuard();
+			fortressLocation.addBounds(new AxisAlignedBB(pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10, pos.getX() + 42, pos.getY() + 80, pos.getZ() + 42));
+			fortressLocation.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRangeMultiplier(0.2F).setFogBrightness(80));
+			fortressLocation.setLayer(0);
+			fortressLocation.setDirty(true);
+			fortressLocation.setSeed(locationSeed);
+	
+			LocationStorage puzzleLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_puzzle", EnumLocationType.WIGHT_TOWER);
+			puzzleLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 20, pos.getY() + 17, pos.getZ() - 10 + 20, pos.getX() + 42 - 20, pos.getY() + 17 + 6, pos.getZ() + 42 - 20));
+			puzzleLocation.setLayer(1);
+			puzzleLocation.setDirty(true);
+			puzzleLocation.setSeed(locationSeed);
+	
+			LocationStorage teleporterLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_teleporter", EnumLocationType.WIGHT_TOWER);
+			teleporterLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 23, pos.getY() + 17 + 12, pos.getZ() - 10 + 23, pos.getX() + 42 - 23, pos.getY() + 17 + 6 + 11, pos.getZ() + 42 - 23));
+			teleporterLocation.setLayer(2);
+			teleporterLocation.setDirty(true);
+			teleporterLocation.setSeed(locationSeed);
+	
+			LocationStorage bossLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_boss", EnumLocationType.WIGHT_TOWER);
+			bossLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 17, pos.getY() + 17 + 19, pos.getZ() - 10 + 17, pos.getX() + 42 - 17, pos.getY() + 17 + 12 + 32, pos.getZ() + 42 - 17));
+			bossLocation.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F));
+			bossLocation.setLayer(3);
+			bossLocation.setDirty(true);
+			bossLocation.setSeed(locationSeed);
+	
+			if(generateStructure(world, rand, pos)) {
+				worldStorage.getLocalStorageHandler().addLocalStorage(fortressLocation);
+				worldStorage.getLocalStorageHandler().addLocalStorage(puzzleLocation);
+				worldStorage.getLocalStorageHandler().addLocalStorage(teleporterLocation);
+				worldStorage.getLocalStorageHandler().addLocalStorage(bossLocation);
+				return true;
+			}
 
-		LocationStorage puzzleLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_puzzle", EnumLocationType.WIGHT_TOWER);
-		puzzleLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 20, pos.getY() + 17, pos.getZ() - 10 + 20, pos.getX() + 42 - 20, pos.getY() + 17 + 6, pos.getZ() + 42 - 20));
-		puzzleLocation.setLayer(1);
-		puzzleLocation.setDirty(true);
-		puzzleLocation.setSeed(locationSeed);
-
-		LocationStorage teleporterLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_teleporter", EnumLocationType.WIGHT_TOWER);
-		teleporterLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 23, pos.getY() + 17 + 12, pos.getZ() - 10 + 23, pos.getX() + 42 - 23, pos.getY() + 17 + 6 + 11, pos.getZ() + 42 - 23));
-		teleporterLocation.setLayer(2);
-		teleporterLocation.setDirty(true);
-		teleporterLocation.setSeed(locationSeed);
-
-		LocationStorage bossLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_boss", EnumLocationType.WIGHT_TOWER);
-		bossLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 17, pos.getY() + 17 + 19, pos.getZ() - 10 + 17, pos.getX() + 42 - 17, pos.getY() + 17 + 12 + 32, pos.getZ() + 42 - 17));
-		bossLocation.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F));
-		bossLocation.setLayer(3);
-		bossLocation.setDirty(true);
-		bossLocation.setSeed(locationSeed);
-
-		if(generateStructure(world, rand, pos)) {
-			worldStorage.getLocalStorageHandler().addLocalStorage(fortressLocation);
-			worldStorage.getLocalStorageHandler().addLocalStorage(puzzleLocation);
-			worldStorage.getLocalStorageHandler().addLocalStorage(teleporterLocation);
-			worldStorage.getLocalStorageHandler().addLocalStorage(bossLocation);
-			return true;
+			return false;
+		} finally {
+			CASCADING_GEN_MUTEX.set(false);
 		}
-
-		return false;
 	}
 
 	public IBlockState getRandomWall(Random rand) {

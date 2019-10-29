@@ -32,70 +32,87 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 	public static final int RADIUS_INNER_CIRLCE = 6;
 	public static final int RADIUS_OUTER_CIRCLE = 14;
 	
+	private static final ThreadLocal<Boolean> CASCADING_GEN_MUTEX = new ThreadLocal<Boolean>() {
+		@Override
+		protected Boolean initialValue() {
+			return false;
+		}
+	};
+	
 	public WorldGenSpiritTreeStructure() {
 		super(true);
 	}
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos position) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		LocationSpiritTree location = new LocationSpiritTree(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position));
-		location.addBounds(new AxisAlignedBB(new BlockPos(position)).grow(14 + 18, 16, 14 + 18).offset(0, 6, 0));
-		location.setLayer(0);
-		location.setSeed(rand.nextLong());
-		location.setVisible(true);
-
-		WorldGenSpiritTree genSpiritTree = new WorldGenSpiritTree(location.getGuard(), location);
-		if(genSpiritTree.generate(world, rand, position)) {
-			this.generateWispCircle(world, rand, position, RADIUS_INNER_CIRLCE, 1, 2, location);
-			this.generateWispCircle(world, rand, position, RADIUS_OUTER_CIRCLE, 1, 1, location);
-
-			int rootsGenerated = 0;
-			for(int i = 0; i < 80; i++) {
-				double dir = rand.nextDouble() * Math.PI * 2;
-				double dx = Math.cos(dir);
-				double dz = Math.sin(dir);
-				double bx = dx * 16 + dx * rand.nextDouble() * 16;
-				double bz = dz * 16 + dz * rand.nextDouble() * 16;
-				BlockPos root = position.add(bx, 0, bz);
-				root = this.findGroundPosition(world, root);
-				if(root != null && world.isAirBlock(root) && world.isAirBlock(root.up())) {
-					this.generateRoot(world, rand, root, genSpiritTree, location);
-					if(rootsGenerated++ > 12) {
-						break;
-					}
-				}
-			}
-
-			for(int i = 0; i < 120; i++) {
-				double dir = rand.nextDouble() * Math.PI * 2;
-				double dx = Math.cos(dir);
-				double dz = Math.sin(dir);
-				double bx = dx * 16 + dx * rand.nextDouble() * 16;
-				double bz = dz * 16 + dz * rand.nextDouble() * 16;
-				BlockPos root = position.add(bx, 0, bz);
-				root = this.findGroundPosition(world, root);
-				if(root != null && world.isAirBlock(root) && world.isAirBlock(root.up())) {
-					int height = 2 + rand.nextInt(4);
-					for(int yo = 0; yo < height; yo++) {
-						this.setBlock(world, root.up(yo), BlockRegistry.ROOT.getDefaultState(), location);
-					}
-				}
-			}
-
-			this.trySpawnFace(world, rand, new EntitySpiritTreeFaceLarge(world), location.getLargeFacePositions());
-
-			for(int i = 0; i < 8; i++) {
-				this.trySpawnFace(world, rand, new EntitySpiritTreeFaceSmall(world), location.getSmallFacePositions());
-			}
-
-			location.setDirty(true);
-			worldStorage.getLocalStorageHandler().addLocalStorage(location);
-
-			return true;
+		if(CASCADING_GEN_MUTEX.get()) {
+			return false;
 		}
-
-		return false;
+		
+		CASCADING_GEN_MUTEX.set(true);
+		
+		try {
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+			LocationSpiritTree location = new LocationSpiritTree(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position));
+			location.addBounds(new AxisAlignedBB(new BlockPos(position)).grow(14 + 18, 16, 14 + 18).offset(0, 6, 0));
+			location.setLayer(0);
+			location.setSeed(rand.nextLong());
+			location.setVisible(true);
+	
+			WorldGenSpiritTree genSpiritTree = new WorldGenSpiritTree(location.getGuard(), location);
+			if(genSpiritTree.generate(world, rand, position)) {
+				this.generateWispCircle(world, rand, position, RADIUS_INNER_CIRLCE, 1, 2, location);
+				this.generateWispCircle(world, rand, position, RADIUS_OUTER_CIRCLE, 1, 1, location);
+	
+				int rootsGenerated = 0;
+				for(int i = 0; i < 80; i++) {
+					double dir = rand.nextDouble() * Math.PI * 2;
+					double dx = Math.cos(dir);
+					double dz = Math.sin(dir);
+					double bx = dx * 16 + dx * rand.nextDouble() * 16;
+					double bz = dz * 16 + dz * rand.nextDouble() * 16;
+					BlockPos root = position.add(bx, 0, bz);
+					root = this.findGroundPosition(world, root);
+					if(root != null && world.isAirBlock(root) && world.isAirBlock(root.up())) {
+						this.generateRoot(world, rand, root, genSpiritTree, location);
+						if(rootsGenerated++ > 12) {
+							break;
+						}
+					}
+				}
+	
+				for(int i = 0; i < 120; i++) {
+					double dir = rand.nextDouble() * Math.PI * 2;
+					double dx = Math.cos(dir);
+					double dz = Math.sin(dir);
+					double bx = dx * 16 + dx * rand.nextDouble() * 16;
+					double bz = dz * 16 + dz * rand.nextDouble() * 16;
+					BlockPos root = position.add(bx, 0, bz);
+					root = this.findGroundPosition(world, root);
+					if(root != null && world.isAirBlock(root) && world.isAirBlock(root.up())) {
+						int height = 2 + rand.nextInt(4);
+						for(int yo = 0; yo < height; yo++) {
+							this.setBlock(world, root.up(yo), BlockRegistry.ROOT.getDefaultState(), location);
+						}
+					}
+				}
+	
+				this.trySpawnFace(world, rand, new EntitySpiritTreeFaceLarge(world), location.getLargeFacePositions());
+	
+				for(int i = 0; i < 8; i++) {
+					this.trySpawnFace(world, rand, new EntitySpiritTreeFaceSmall(world), location.getSmallFacePositions());
+				}
+	
+				location.setDirty(true);
+				worldStorage.getLocalStorageHandler().addLocalStorage(location);
+	
+				return true;
+			}
+	
+			return false;
+		} finally {
+			CASCADING_GEN_MUTEX.set(false);
+		}
 	}
 
 	private void trySpawnFace(World world, Random rand, EntitySpiritTreeFace face, List<BlockPos> locations) {
