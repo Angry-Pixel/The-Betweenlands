@@ -11,7 +11,7 @@ public class BiomeDecoratorSludgePlainsClearing extends BiomeDecoratorBetweenlan
 	public void decorate() {
 		super.decorate();
 
-		this.startProfilerSection("swamplandsClearingSpiritTree");
+		this.startProfilerSection("sludgePlainsClearingDungeon");
 		this.generate(1, DecorationHelper::generateSludgePlainsClearingDungeon);
 		this.endProfilerSection();
 		

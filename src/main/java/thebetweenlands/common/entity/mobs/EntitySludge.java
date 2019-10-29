@@ -131,7 +131,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 			}
 
 			if(this.isActive()) {
-				if(this.getEntityAttribute(SLUDGE_TRAIL).getAttributeValue() == 1) {
+				if(this.getEntityAttribute(SLUDGE_TRAIL).getAttributeValue() == 1 && this.world.getClosestPlayer(this.posX, this.posY, this.posZ, 16, false) != null) {
 					BlockPos position = new BlockPos(this.posX, this.posY, this.posZ);;
 					if (this.world.isAirBlock(position)) {
 						this.createTrail(position);
