@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "thebetweenlands:blocks/ook"
+    "layer0": "thebetweenlands:items/strictly_herblore/plant_drops/cryptweed_blades"
   }
 }
