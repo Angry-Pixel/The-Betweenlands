@@ -1030,9 +1030,9 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 8, 52, 15, CRAGROCK_BRICK_WALL, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 53, 15, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
 		rotatedSpawner(world, x, y, z, 8, 54, 15, direction, "thebetweenlands:wight").setMaxEntities(2).setCheckRange(24.0D).setDelayRange(300, 600).setSpawnInAir(false);
-		rotatedLootChest(world, random, x, y, z, 7, 52, 5, direction, 5, 8, 2, 1, null);
-		rotatedLootChest(world, random, x, y, z, 9, 52, 5, direction, 5, 8, 2, 1, null);
-		rotatedLootChest(world, random, x, y, z, 7, 52, 15, direction, 5, 8, 2, 3, null);
+		rotatedLootChest(world, random, x, y, z, 7, 52, 5, direction, 5, 8, 2, 0, null);
+		rotatedLootChest(world, random, x, y, z, 9, 52, 5, direction, 5, 8, 2, 0, null);
+		rotatedLootChest(world, random, x, y, z, 7, 52, 15, direction, 5, 8, 2, 2, null);
 		rotatedLootPot(world, random, x, y, z, 10, 52, 6, direction, 3, 4, 3, null);
 		rotatedLootPot(world, random, x, y, z, 11, 52, 6, direction, 3, 4, 3, null);
 		rotatedLootPot(world, random, x, y, z, 6, 52, 6, direction, 3, 4, 3, null);

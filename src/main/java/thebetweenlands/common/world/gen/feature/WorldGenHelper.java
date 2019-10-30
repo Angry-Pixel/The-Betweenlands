@@ -37,7 +37,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 
 		STAIR(0, 3, 1, 2),
 		UPSIDE_DOWN_STAIR(4, 7, 5, 6),
-		CHEST(2, 5, 3, 4),
+		CHEST(3, 5, 2, 4),
 		LOG_SIDEWAYS(4, 8),
 		PILLAR_SIDEWAYS(8, 7);
 

@@ -147,16 +147,6 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 		TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this, 0), new NetworkRegistry.TargetPoint(dim, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 64D));
 		// Does the metadata stuff for the circle animated textures
 		checkDruidCircleBlocks(world);
-
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		List<LocationGuarded> locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationGuarded.class, this.pos.getX(), this.pos.getZ(), (location) -> {
-			return location.isInside(this.pos);
-		});
-		for(LocationGuarded location : locations) {
-			if("druid_altar".equals(location.getName())) {
-				worldStorage.getLocalStorageHandler().removeLocalStorage(location);
-			}
-		}
 	}
 
 	public void sendCraftingProgressPacket() {

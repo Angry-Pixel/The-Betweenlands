@@ -110,11 +110,11 @@
                 {
                     "conditions": [],
                     "type": "item",
-                    "name": "thebetweenlands:herblore_book",
+                    "name": "thebetweenlands:manual_hl",
                     "functions": [],
                     "weight": 8,
                     "quality": 0
-                },
+                }
             ],
             "rolls": {
                 "min": 1,
