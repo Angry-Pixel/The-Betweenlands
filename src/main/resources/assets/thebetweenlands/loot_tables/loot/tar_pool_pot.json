@@ -1,13 +1,13 @@
 {
     "pools": [
         {
-            "name": "dungeon_pot",
+            "name": "tar_pool_pot",
             "conditions": [],
             "entries": [
                 {
                     "conditions": [],
                     "type": "item",
-                    "entryName": "swamp_reed_rope",
+                    "entryName": "tar_drip",
                     "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
@@ -15,56 +15,16 @@
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 5
+                                "max": 3
                             }
                         },
                         {
                             "conditions": [],
                             "function": "set_data",
-                            "data": 7
+                            "data": 26
                         }
                     ],
-                    "weight": 15,
-                    "quality": 0
-                },
-                {
-                    "conditions": [],
-                    "type": "item",
-                    "entryName": "sulfur",
-                    "name": "thebetweenlands:items_misc",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                                "min": 2,
-                                "max": 6
-                            }
-                        },
-                        {
-                            "conditions": [],
-                            "function": "set_data",
-                            "data": 18
-                        }
-                    ],
-                    "weight": 15,
-                    "quality": 0
-                },
-                {
-                    "conditions": [],
-                    "type": "item",
-                    "name": "thebetweenlands:sap_ball",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                                "min": 3,
-                                "max": 9
-                            }
-                        }
-                    ],
-                    "weight": 15,
+                    "weight": 28,
                     "quality": 0
                 },
                 {
@@ -76,12 +36,12 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 1,
-                                "max": 3
+                                "min": 3,
+                                "max": 6
                             }
                         }
                     ],
-                    "weight": 6,
+                    "weight": 15,
                     "quality": 0
                 },
                 {
@@ -93,12 +53,12 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 1,
-                                "max": 3
+                                "min": 3,
+                                "max": 6
                             }
                         }
                     ],
-                    "weight": 5,
+                    "weight": 10,
                     "quality": 0
                 },
                 {
@@ -197,7 +157,7 @@
                             "data": 38
                         }
                     ],
-                    "weight": 6,
+                    "weight": 12,
                     "quality": 0
                 },
                 {
@@ -210,11 +170,26 @@
                             "function": "set_data",
                             "data": {
                                 "min": 0,
-                                "max": 9
+                                "max": 2
                             }
                         }
                     ],
-                    "weight": 8,
+                    "weight": 10,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "lore_scrap_location",
+                    "name": "thebetweenlands:lore_scrap",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 5
+                        }
+                    ],
+                    "weight": 12,
                     "quality": 0
                 },
                 {
@@ -266,8 +241,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 1,
-                                "max": 4
+                                "min": 2,
+                                "max": 6
                             }
                         }
                     ],

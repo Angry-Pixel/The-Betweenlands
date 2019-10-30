@@ -1,7 +1,7 @@
 {
     "pools": [
         {
-            "name": "common_chest",
+            "name": "idol_heads_chest",
             "conditions": [],
             "entries": [
                 {
@@ -90,8 +90,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 8,
-                                "max": 12
+                                "min": 4,
+                                "max": 8
                             }
                         }
                     ],
@@ -405,11 +405,26 @@
                             "function": "set_data",
                             "data": {
                                 "min": 0,
-                                "max": 9
+                                "max": 2
                             }
                         }
                     ],
                     "weight": 8,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "lore_scrap_location",
+                    "name": "thebetweenlands:lore_scrap",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 4
+                        }
+                    ],
+                    "weight": 10,
                     "quality": 0
                 },
 				{
@@ -425,6 +440,14 @@
                         }
                     ],
                     "weight": 6,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:explorers_hat",
+                    "functions": [],
+                    "weight": 4,
                     "quality": 0
                 }
             ],
