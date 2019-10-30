@@ -61,6 +61,16 @@
           }
         }
       }
+    },
+    "killed_a_mob_ancient": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:ancient_greatsword\"}}"
+          }
+        }
+      }
     }
   },
   "requirements": [
@@ -69,7 +79,8 @@
       "killed_a_mob_bone",
       "killed_a_mob_octine",
       "killed_a_mob_valonite",
-      "killed_a_mob_shockwave"
+      "killed_a_mob_shockwave",
+      "killed_a_mob_ancient"
     ]
   ]
 }
