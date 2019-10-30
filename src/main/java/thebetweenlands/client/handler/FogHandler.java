@@ -1,5 +1,6 @@
 package thebetweenlands.client.handler;
 
+import net.minecraft.world.WorldProvider;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
@@ -172,7 +173,7 @@ public class FogHandler {
 					event.setBlue((float)(colorMultiplier & 255) / 255.0F);
 				}
 			} else if(renderView.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
-				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) renderView.getEntityWorld().provider;
+				WorldProvider provider = renderView.getEntityWorld().provider;
 				Vec3d fogColor = provider.getFogColor(renderView.getEntityWorld().getCelestialAngle((float)event.getRenderPartialTicks()), (float)event.getRenderPartialTicks());
 				event.setRed((float)fogColor.x);
 				event.setGreen((float)fogColor.y);
