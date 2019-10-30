@@ -109,7 +109,7 @@ public class WorldMobSpawner extends AreaMobSpawner {
 			if(world == null || world.playerEntities.isEmpty())
 				return;
 
-			if(world.getGameRules().getBoolean("doMobSpawning") && world.getTotalWorldTime() % 4 == 0) {
+			if(world.provider instanceof WorldProviderBetweenlands && world.getGameRules().getBoolean("doMobSpawning") && world.getTotalWorldTime() % 4 == 0) {
 				boolean spawnHostiles = ((WorldProviderBetweenlands)world.provider).getCanSpawnHostiles();
 				boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
 
@@ -124,7 +124,7 @@ public class WorldMobSpawner extends AreaMobSpawner {
 		if(world == null || world.provider.getDimension() != BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)
 			return;
 
-		if(world.getGameRules().getBoolean("doMobSpawning")) {
+		if(world.provider instanceof WorldProviderBetweenlands && world.getGameRules().getBoolean("doMobSpawning")) {
 			boolean spawnHostiles = ((WorldProviderBetweenlands)world.provider).getCanSpawnHostiles();
 			boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
 
