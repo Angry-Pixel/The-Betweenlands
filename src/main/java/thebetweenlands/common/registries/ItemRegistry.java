@@ -199,6 +199,7 @@ public class ItemRegistry {
     public static final Item JAM_DONUT = new ItemBLFood(10, 0.6F, false);
     public static final Item GERTS_DONUT = new ItemGertsDonut();
     public static final Item ASPECTRUS_FRUIT = new ItemAspectrusFruit();
+    public static final Item PUFFSHROOM_TENDRIL = new ItemBLFood(8, 0.9F, false);
     public static final Item KRAKEN_TENTACLE = new ItemBLFood(8, 0.9F, false);
     public static final Item KRAKEN_CALAMARI = new ItemBLFood(14, 1.2F, false);
     public static final Item MIDDLE_FRUIT = new ItemBLFood(6, 0.6F, false);
