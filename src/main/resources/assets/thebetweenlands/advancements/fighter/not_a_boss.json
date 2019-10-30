@@ -4,10 +4,10 @@
       "item": "thebetweenlands:sludge_worm_egg_sac"
     },
     "title": {
-      "translate": "advancements.thebetweenlands.fighter.not_not_a_boss.title"
+      "translate": "advancements.thebetweenlands.fighter.not_a_boss.title"
     },
     "description": {
-      "translate": "advancements.thebetweenlands.fighter.not_not_a_boss.description"
+      "translate": "advancements.thebetweenlands.fighter.not_a_boss.description"
     },
     "frame": "challenge"
   },
