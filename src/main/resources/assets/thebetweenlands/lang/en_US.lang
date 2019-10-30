@@ -1293,6 +1293,7 @@ entity.thebetweenlands.crypt_crawler.name=Crypt Crawler
 entity.thebetweenlands.large_sludge_worm.name=Large Sludge Worm
 entity.thebetweenlands.small_sludge_worm.name=Small Sludge Worm
 entity.thebetweenlands.tiny_sludge_worm.name=Tiny Sludge Worm
+entity.thebetweenlands.tiny_sludge_worm_helper.name=Tiny Sludge Worm Helper
 entity.thebetweenlands.tiny_worm_egg_sac.name=Sludge Worm Egg Sac
 entity.thebetweenlands.moving_spawner_hole.name=Moving Spawner Hole
 entity.thebetweenlands.wall_lamprey.name=Lamprey
