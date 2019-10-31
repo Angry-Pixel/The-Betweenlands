@@ -1319,6 +1319,7 @@ entity.thebetweenlands.cc_ground_spawner.name=Crypt Crawler Tunnel Entrance
 entity.thebetweenlands.spore_jet.name=Spore Jet
 entity.thebetweenlands.decay_pit_target.name=Not A Boss
 entity.thebetweenlands.sludge_menace.name=Sludge Menace
+entity.thebetweenlands.sludge_menace_multipart_dummy.name=Sludge Menace
 
 # Equipment
 equipment.menu.equip=Equip %s
