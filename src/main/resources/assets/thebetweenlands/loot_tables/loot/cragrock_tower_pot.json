@@ -29,7 +29,7 @@
                     "conditions": [
                         {
                             "condition": "thebetweenlands:from_shared_pool",
-                            "guaranteed_after_percentage": 50
+                            "guaranteed_after_percentage": 0.5
                         }
                     ],
                     "type": "item",
@@ -62,7 +62,7 @@
                             "data": 38
                         }
                     ],
-                    "weight": 22
+                    "weight": 10
                 },
                 {
                     "type": "item",
@@ -89,7 +89,7 @@
                             }
                         }
                     ],
-                    "weight": 22
+                    "weight": 15
                 },
                 {
                     "type": "item",
@@ -99,8 +99,8 @@
                         {
                             "function": "set_count",
                             "count": {
-                                "min": 4,
-                                "max": 8
+                                "min": 2,
+                                "max": 4
                             }
                         }
                     ],
@@ -201,18 +201,48 @@
                 },
                 {
                     "type": "item",
-                    "entryName": "arrow",
+                    "entryName": "angler_tooth_arrow",
                     "name": "thebetweenlands:angler_tooth_arrow",
                     "functions": [
                         {
                             "function": "set_count",
                             "count": {
-                                "min": 12,
-                                "max": 16
+                                "min": 10,
+                                "max": 14
                             }
                         }
                     ],
                     "weight": 20
+                },
+                {
+                    "type": "item",
+                    "entryName": "basilisk_arrow",
+                    "name": "thebetweenlands:basilisk_arrow",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 4,
+                                "max": 8
+                            }
+                        }
+                    ],
+                    "weight": 15
+                },
+                {
+                    "type": "item",
+                    "entryName": "octine_arrow",
+                    "name": "thebetweenlands:octine_arrow",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 4,
+                                "max": 8
+                            }
+                        }
+                    ],
+                    "weight": 15
                 },
                 {
                     "type": "item",
