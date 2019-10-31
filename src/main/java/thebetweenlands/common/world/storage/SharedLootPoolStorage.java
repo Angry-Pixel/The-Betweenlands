@@ -105,7 +105,7 @@ public class SharedLootPoolStorage extends LocalStorageImpl {
 	}
 
 	public void registerSharedLootInventory(BlockPos pos, ResourceLocation lootTable) {
-		this.lootInventories.increment(lootTable);
+		this.lootInventories.adjustOrPutValue(lootTable, 1, 1);
 
 		//Make sure this storage is linked to the chunk the loot inventory is in
 		this.linkChunk(this.getWorldStorage().getWorld().getChunk(pos));

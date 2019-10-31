@@ -17,12 +17,24 @@
             }
         },
         {
-            "name": "shared_ring_pool",
+            "name": "shared_flight_ring_pool",
             "conditions": [{"condition": "thebetweenlands:shared_pool"}],
             "entries": [
                 {
                     "type": "item",
                     "name": "thebetweenlands:ring_of_flight",
+                    "weight": 1
+                }
+            ],
+            "rolls": 1
+        },
+        {
+            "name": "shared_power_ring_pool",
+            "conditions": [{"condition": "thebetweenlands:shared_pool"}],
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "thebetweenlands:ring_of_power",
                     "weight": 1
                 }
             ],
@@ -141,60 +153,82 @@
                 {
                     "conditions": [{"condition": "thebetweenlands:from_shared_pool"}],
                     "type": "item",
+                    "entryName": "ring_of_flight",
                     "name": "thebetweenlands:ring_of_flight",
                     "weight": 4
                 },
                 {
                     "conditions": [{"condition": "thebetweenlands:from_shared_pool"}],
                     "type": "item",
+                    "entryName": "ring_of_power",
+                    "name": "thebetweenlands:ring_of_power",
+                    "weight": 4
+                },
+                {
+                    "conditions": [{"condition": "thebetweenlands:from_shared_pool"}],
+                    "type": "item",
+                    "entryName": "forbidden_fig",
                     "name": "thebetweenlands:forbidden_fig",
                     "weight": 5
                 },
                 {
                     "conditions": [{"condition": "thebetweenlands:from_shared_pool"}],
                     "type": "item",
+                    "entryName": "explorers_hat",
                     "name": "thebetweenlands:explorers_hat",
                     "weight": 4
                 },
                 {
                     "conditions": [{"condition": "thebetweenlands:from_shared_pool"}],
                     "type": "item",
+                    "entryName": "swift_pick",
                     "name": "thebetweenlands:swift_pick",
                     "weight": 6
                 },
                 {
                     "conditions": [{"condition": "thebetweenlands:from_shared_pool"}],
                     "type": "item",
+                    "entryName": "wights_bane",
                     "name": "thebetweenlands:wights_bane",
                     "weight": 8
                 },
                 {
                     "conditions": [{"condition": "thebetweenlands:from_shared_pool"}],
                     "type": "item",
+                    "entryName": "critter_cruncher",
                     "name": "thebetweenlands:critter_cruncher",
                     "weight": 10
                 },
                 {
                     "conditions": [{"condition": "thebetweenlands:from_shared_pool"}],
                     "type": "item",
+                    "entryName": "hag_hacker",
                     "name": "thebetweenlands:hag_hacker",
                     "weight": 10
                 },
                 {
                     "conditions": [{"condition": "thebetweenlands:from_shared_pool"}],
                     "type": "item",
+                    "entryName": "sludge_slicer",
                     "name": "thebetweenlands:sludge_slicer",
                     "weight": 8
                 },
                 {
                     "type": "item",
+                    "entryName": "aspectrus_seeds",
                     "name": "thebetweenlands:aspectrus_seeds",
                     "weight": 10
                 },
                 {
                     "type": "item",
+                    "entryName": "life_crystal",
                     "name": "thebetweenlands:life_crystal",
                     "weight": 8
+                },
+                {
+                    "type": "loot_table",
+                    "name": "thebetweenlands:loot/music_disc",
+                    "weight": 5
                 }
             ],
             "rolls": {
@@ -250,7 +284,7 @@
                             }
                         }
                     ],
-                    "weight": 22
+                    "weight": 20
                 },
                 {
                     "type": "item",
@@ -260,12 +294,12 @@
                         {
                             "function": "set_count",
                             "count": {
-                                "min": 4,
-                                "max": 8
+                                "min": 2,
+                                "max": 4
                             }
                         }
                     ],
-                    "weight": 24
+                    "weight": 20
                 },
                 {
                     "type": "item",
