@@ -7,7 +7,8 @@
   ],
   "key": {
     "S": {
-      "item": "thebetweenlands:scabyst_brick_slab"
+      "item": "thebetweenlands:items_misc",
+      "data": 47
     },
     "C": {
       "item": "thebetweenlands:items_misc",
