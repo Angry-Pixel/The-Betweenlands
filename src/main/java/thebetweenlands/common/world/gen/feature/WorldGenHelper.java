@@ -19,9 +19,11 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.container.BlockLootPot;
+import thebetweenlands.common.block.container.BlockLootUrn;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
+import thebetweenlands.common.tile.TileEntityLootUrn;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
@@ -470,6 +472,42 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	}
 
 	/**
+	 * Generates a loot urn taking the rotation of a structure into a count
+	 *
+	 * @param world   The world
+	 * @param rand    a random
+	 * @param x       x to generate relative from
+	 * @param y       y to generate relative from
+	 * @param z       z to generate relative from
+	 * @param offsetX Where to generate relative from the x
+	 * @param offsetY Where to generate relative from the y
+	 * @param offsetZ Where to generate relative from the z
+	 * @param min     The minimum amount of items
+	 * @param max     The maximum amount of items
+	 * @param chance  The chance of it actually generating
+	 */
+	public void rotatedLootUrn(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance, @Nullable ResourceLocation lootTable) {
+		x -= width / 2;
+		z -= depth / 2;
+		if (rand.nextInt(chance) == 0)
+			return;
+		switch (rotation) {
+		case 0:
+			generateLootUrn(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max, lootTable);
+			break;
+		case 1:
+			generateLootUrn(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max, lootTable);
+			break;
+		case 2:
+			generateLootUrn(world, rand, new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1), min, max, lootTable);
+			break;
+		case 3:
+			generateLootUrn(world, rand, new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX), min, max, lootTable);
+			break;
+		}
+	}
+	
+	/**
 	 * Generates a loot pot taking the rotation of a structure into a count
 	 *
 	 * @param world   The workd
@@ -620,6 +658,25 @@ public abstract class WorldGenHelper extends WorldGenerator {
 			}
 		}
 	}
+	
+	/**
+	 * Generates a loot urn at a location
+	 *
+	 * @param world  The world
+	 * @param random A Random
+	 * @param pos    The pos to generate at
+	 * @param min    The minimum amount of items
+	 * @param max    The maximum amount of items
+	 */
+	public void generateLootUrn(World world, Random random, BlockPos pos, int min, int max, @Nullable ResourceLocation lootTable) {
+		this.setBlockAndNotifyAdequately(world, pos, getRandomLootUrn(random));
+		if(lootTable != null) {
+			TileEntityLootUrn lootPot = BlockLootUrn.getTileEntity(world, pos);
+			if(lootPot != null) {
+				lootPot.setLootTable(lootTable, random.nextLong());
+			}
+		}
+	}
 
 	/**
 	 * Generates a loot chest at a location
@@ -674,6 +731,25 @@ public abstract class WorldGenHelper extends WorldGenerator {
 		}
 	}
 
+	/**
+	 * Gives one of 3 different styles of loot urns with a random rotation
+	 *
+	 * @param random a random
+	 * @return the blockstate of one of the loot urns
+	 */
+	public IBlockState getRandomLootUrn(Random random) {
+		int randDirection = random.nextInt(4) + 2;
+
+		switch (random.nextInt(3)) {
+		case 0:
+			return BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, BlockLootUrn.EnumLootUrn.URN_1).withProperty(BlockLootUrn.FACING, EnumFacing.byIndex(randDirection));
+		case 1:
+			return BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, BlockLootUrn.EnumLootUrn.URN_2).withProperty(BlockLootUrn.FACING, EnumFacing.byIndex(randDirection));
+		default:
+			return BlockRegistry.LOOT_URN.getDefaultState().withProperty(BlockLootUrn.VARIANT, BlockLootUrn.EnumLootUrn.URN_3).withProperty(BlockLootUrn.FACING, EnumFacing.byIndex(randDirection));
+		}
+	}
+	
 	@Override
 	protected void setBlockAndNotifyAdequately(World worldIn, BlockPos pos, IBlockState state) {
 		if (this.doBlockNotify) {

@@ -67,7 +67,7 @@ public class LootTableRegistry {
     @Deprecated public static final ResourceLocation DUNGEON_POT_LOOT = register("loot/dungeon_pot_loot");
     //Misc
     public static final ResourceLocation CAVE_POT = register("loot/cave_pot");
-    public static final ResourceLocation SLUDGE_PLAINS_RUINS_POT = register("loot/sludge_plains_ruins_pot");
+    public static final ResourceLocation SLUDGE_PLAINS_RUINS_URN = register("loot/sludge_plains_ruins_urn");
     public static final ResourceLocation MARSH_RUINS_POT = register("loot/marsh_ruins_pot");
     public static final ResourceLocation SPAWNER_CHEST = register("loot/spawner_chest");
     public static final ResourceLocation IDOL_HEADS_CHEST = register("loot/idol_heads_chest");
