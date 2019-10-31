@@ -24,11 +24,13 @@ import thebetweenlands.client.render.model.entity.ModelDecayPitTargetShield;
 import thebetweenlands.client.render.particle.entity.ParticleBeam;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
 import thebetweenlands.common.entity.EntityDecayPitTargetPart;
+import thebetweenlands.common.entity.mobs.EntityMultipartDummy;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.LightingUtil;
+import thebetweenlands.util.RenderUtils;
 
 @SideOnly(Side.CLIENT)
-public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
+public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> implements IMultipartDummyRendererDelegate<EntityDecayPitTarget> {
 	private static final ResourceLocation BEAM_TEXTURE = new ResourceLocation("thebetweenlands:textures/particle/chain_beam.png");
 	
 	public static final ResourceLocation PLUG_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/decay_pit_plug.png");
@@ -48,72 +50,85 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 
 	@Override
     public void doRender(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		this.renderBeams(entity, x, y, z, entityYaw, partialTicks, true);
-		
-		double smoothedMainX = entity.prevPosX + (entity.posX - entity.prevPosX ) * partialTicks;
-		double smoothedMainY = entity.prevPosY + (entity.posY - entity.prevPosY ) * partialTicks;
-		double smoothedMainZ = entity.prevPosZ + (entity.posZ - entity.prevPosZ ) * partialTicks;
+		int frameCounter = RenderUtils.getFrameCounter();
 
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1, 1, 1, 1);
+		if(entity.renderedFrame != frameCounter) {
+			entity.renderedFrame = frameCounter;
+			
 		
-		GlStateManager.disableCull();
-		
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + 1.5F, z);
-		GlStateManager.scale(-1F, -1F, 1F);
-		
-		bindTexture(PLUG_TEXTURE);
-		PLUG_MODEL.render(0.0625F);
-		
-		renderPlugGlowLayer(entity, 0.0625F);
-		
-		GlStateManager.popMatrix();	
-		
-		EntityDecayPitTargetPart hitPart = null;
-		
-		if(this.getRenderManager().isDebugBoundingBox()) {
-			hitPart = entity.rayTraceShields(Minecraft.getMinecraft().player.getPositionEyes(partialTicks), Minecraft.getMinecraft().player.getLook(partialTicks));
-		}
-		
-		for (EntityDecayPitTargetPart part : entity.parts) {
-			float floatate = part.prevRotationYaw + (part.rotationYaw - part.prevRotationYaw) * partialTicks;
-			double smoothedX = part.prevPosX  + (part.posX - part.prevPosX ) * partialTicks;
-			double smoothedY = part.prevPosY  + (part.posY - part.prevPosY ) * partialTicks;
-			double smoothedZ = part.prevPosZ  + (part.posZ - part.prevPosZ ) * partialTicks;
-			if (part != entity.target_north  && part != entity.target_east && part != entity.target_south && part != entity.target_west && part != entity.bottom) {
-				if(hitPart == part) {
-					GlStateManager.color(1, 0, 0, 1);
-				}
-				
-				renderCogShield(part, x + smoothedX - smoothedMainX, y + smoothedY - smoothedMainY, z + smoothedZ - smoothedMainZ, floatate);
-				
-				GlStateManager.color(1, 1, 1, 1);
+			this.renderBeams(entity, x, y, z, entityYaw, partialTicks, true);
+			
+			double smoothedMainX = entity.prevPosX + (entity.posX - entity.prevPosX ) * partialTicks;
+			double smoothedMainY = entity.prevPosY + (entity.posY - entity.prevPosY ) * partialTicks;
+			double smoothedMainZ = entity.prevPosZ + (entity.posZ - entity.prevPosZ ) * partialTicks;
+	
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1, 1, 1, 1);
+			
+			GlStateManager.disableCull();
+			
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x, y + 1.5F, z);
+			GlStateManager.scale(-1F, -1F, 1F);
+			
+			bindTexture(PLUG_TEXTURE);
+			PLUG_MODEL.render(0.0625F);
+			
+			renderPlugGlowLayer(entity, 0.0625F);
+			
+			GlStateManager.popMatrix();	
+			
+			EntityDecayPitTargetPart hitPart = null;
+			
+			if(this.getRenderManager().isDebugBoundingBox()) {
+				hitPart = entity.rayTraceShields(Minecraft.getMinecraft().player.getPositionEyes(partialTicks), Minecraft.getMinecraft().player.getLook(partialTicks));
 			}
+			
+			for (EntityDecayPitTargetPart part : entity.parts) {
+				float floatate = part.prevRotationYaw + (part.rotationYaw - part.prevRotationYaw) * partialTicks;
+				double smoothedX = part.prevPosX  + (part.posX - part.prevPosX ) * partialTicks;
+				double smoothedY = part.prevPosY  + (part.posY - part.prevPosY ) * partialTicks;
+				double smoothedZ = part.prevPosZ  + (part.posZ - part.prevPosZ ) * partialTicks;
+				if (part != entity.target_north  && part != entity.target_east && part != entity.target_south && part != entity.target_west && part != entity.bottom) {
+					if(hitPart == part) {
+						GlStateManager.color(1, 0, 0, 1);
+					}
+					
+					renderCogShield(part, x + smoothedX - smoothedMainX, y + smoothedY - smoothedMainY, z + smoothedZ - smoothedMainZ, floatate);
+					
+					GlStateManager.color(1, 1, 1, 1);
+				}
+			}
+			
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1, 1, 1, 1);
+			
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x, y + 4.5F, z);
+			GlStateManager.scale(-1F, -1F, 1F);
+			
+			bindTexture(TARGET_TEXTURE);
+			TARGET_MODEL.render(0.0625F);
+			
+			renderTargetGlowLayer(entity, 0.0625F);
+			
+			GlStateManager.popMatrix();	
+			
+			GlStateManager.disableBlend();
 		}
-		
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1, 1, 1, 1);
-		
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(x, y + 4.5F, z);
-		GlStateManager.scale(-1F, -1F, 1F);
-		
-		bindTexture(TARGET_TEXTURE);
-		TARGET_MODEL.render(0.0625F);
-		
-		renderTargetGlowLayer(entity, 0.0625F);
-		
-		GlStateManager.popMatrix();	
-		
-		GlStateManager.disableBlend();
 	}
 	
 	@Override
 	public void renderMultipass(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		this.renderBeams(entity, x, y, z, entityYaw, partialTicks, false);
+		int frameCounter = RenderUtils.getFrameCounter();
+		
+		if(entity.renderedFrameMultipass != frameCounter) {
+			entity.renderedFrameMultipass = frameCounter;
+			
+			this.renderBeams(entity, x, y, z, entityYaw, partialTicks, false);
+		}
 	}
 	
 	private void renderBeams(EntityDecayPitTarget entity, double x, double y, double z, float entityYaw, float partialTicks, boolean innerBeams) {
@@ -244,5 +259,10 @@ public class RenderDecayPitTarget extends Render<EntityDecayPitTarget> {
 	@Override
 	public boolean isMultipass() {
 		return true;
+	}
+
+	@Override
+	public void setRenderFromMultipart(EntityMultipartDummy dummy) {
+		
 	}
 }

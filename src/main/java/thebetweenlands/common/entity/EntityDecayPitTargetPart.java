@@ -1,22 +1,20 @@
 package thebetweenlands.common.entity;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityMultiPart;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityDecayPitTargetPart extends Entity {
-	public IEntityMultiPartPitTarget parent;
-	public String partName;
+public class EntityDecayPitTargetPart extends MultiPartEntityPart {
 	public final boolean isShield;
 
-	public EntityDecayPitTargetPart(IEntityMultiPartPitTarget parent, String partName, float width, float height, boolean isShield) {
-		super(parent.getWorld());
+	public EntityDecayPitTargetPart(IEntityMultiPart parent, String partName, float width, float height, boolean isShield) {
+		super(parent, partName, width, height);
 		setSize(width, height);
-		this.parent = parent;
-		this.partName = partName;
 		this.isShield = isShield;
 	}
 

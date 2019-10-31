@@ -7,7 +7,9 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -21,14 +23,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityFortressBoss;
+import thebetweenlands.common.entity.mobs.EntitySludgeMenace.DummyPart;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityDecayPitControl;
 import thebetweenlands.common.tile.TileEntityDecayPitGroundChain;
 import thebetweenlands.common.tile.TileEntityDecayPitHangingChain;
 import thebetweenlands.util.RotationMatrix;
 
-public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitTarget {
+public class EntityDecayPitTarget extends Entity implements IEntityMultiPart {
 	private static final byte EVENT_ATTACK_BLOCKED = 80;
 	private static final byte EVENT_ATTACK_DAMAGE = 81;
 
@@ -76,6 +81,11 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	public int attackDamageTicks = 0;
 	public int[] beamTransparencyTicks = new int[4];
 
+	public int renderedFrame = -1;
+	public int renderedFrameMultipass = -1;
+	
+	private DummyPart[] dummies;
+	
 	public EntityDecayPitTarget(World world) {
 		super(world);
 		setSize(5F, 5F);
@@ -102,6 +112,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				target_west = new EntityDecayPitTargetPart(this, "target_west", 2F, 2F, false),
 				bottom = new EntityDecayPitTargetPart(this, "bottom", 3F, 1F, false),
 				};
+		this.dummies = new DummyPart[parts.length];
 	}
 
 	@Override
@@ -301,6 +312,23 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 				setDead(); // TODO some particles to show the bobbing shields break
 			}
 		}
+		
+		if(!this.world.isRemote && this.isEntityAlive()) {
+			for(int i = 0; i < this.dummies.length; i++) {
+				DummyPart dummy = this.dummies[i];
+
+				if(dummy == null || !dummy.isEntityAlive()) {
+					Entity multipart = parts[i];
+
+					if(multipart instanceof MultiPartEntityPart) {
+						this.dummies[i] = dummy = new DummyPart(this.world, (MultiPartEntityPart) multipart);
+						this.world.spawnEntity(dummy);
+					}
+				} else {
+					dummy.updatePositioning();
+				}
+			}
+		}
 	}
 
 	protected void setHangingLength(EntityDecayPitTargetPart chain, float extended) {
@@ -378,7 +406,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 	}
 
 	@Override
-	public boolean attackEntityFromPart(EntityDecayPitTargetPart part, DamageSource source, float damage) {
+	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
 		boolean wasBlocked = false;
 		
 		if(source instanceof EntityDamageSource) {
@@ -672,5 +700,11 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPartPitT
 		nbt.setBoolean("target_east", getTargetEActive());
 		nbt.setBoolean("target_west", getTargetWActive());
 		nbt.setBoolean("target_south", getTargetSActive());
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return this.getEntityBoundingBox().grow(2);
 	}
 }

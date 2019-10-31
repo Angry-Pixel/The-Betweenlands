@@ -37,7 +37,7 @@ public class RenderMultipartDummy extends Render<EntityMultipartDummy> {
 
 				Render<Entity> mainEntityRenderer = this.renderManager.getEntityRenderObject(mainEntity);
 
-				if(mainEntityRenderer instanceof IMultipartDummyRendererDelegate && mainEntityRenderer.isMultipass() == isMultipass) {
+				if(mainEntityRenderer instanceof IMultipartDummyRendererDelegate && (!isMultipass || mainEntityRenderer.isMultipass())) {
 					Entity renderViewEntity = Minecraft.getMinecraft().getRenderViewEntity();
 
 					double rx = renderViewEntity.prevPosX + (renderViewEntity.posX - renderViewEntity.prevPosX) * (double)partialTicks;
