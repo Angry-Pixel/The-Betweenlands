@@ -107,7 +107,7 @@ public class WorldGenMudStructures extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 5, 1, 4, getStateFromRotation(1, direction, MUD_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 6, 1, 4, getStateFromRotation(2, direction, MUD_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 6, 0, 3, MUD_BRICKS, 1, 1, 1, direction);
-		rotatedLootPot(world, random, x, y, z, 5, 0, 3, direction, 1, 3, 2, LootTableRegistry.SLUDGE_PLAINS_RUINS_POT);
+		rotatedLootUrn(world, random, x, y, z, 5, 0, 3, direction, 1, 3, 2, LootTableRegistry.SLUDGE_PLAINS_RUINS_URN);
 
 		return true;
 	}
@@ -147,12 +147,12 @@ public class WorldGenMudStructures extends WorldGenHelper {
 
 		rotatedCubeVolume(world, x, y, z, 1, 1, 2, getStateFromRotation(2, direction, MUD_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 3, direction);
 		rotatedCubeVolume(world, x, y, z, 4, 1, 2, getStateFromRotation(0, direction, MUD_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 3, direction);
-		rotatedLootPot(world, random, x, y, z, 1, 0, 2, direction, 1, 2, 3, LootTableRegistry.SLUDGE_PLAINS_RUINS_POT);
-		rotatedLootPot(world, random, x, y, z, 1, 0, 3, direction, 1, 2, 3, LootTableRegistry.SLUDGE_PLAINS_RUINS_POT);
-		rotatedLootPot(world, random, x, y, z, 1, 0, 4, direction, 1, 2, 3, LootTableRegistry.SLUDGE_PLAINS_RUINS_POT);
-		rotatedLootPot(world, random, x, y, z, 4, 0, 2, direction, 1, 2, 3, LootTableRegistry.SLUDGE_PLAINS_RUINS_POT);
-		rotatedLootPot(world, random, x, y, z, 4, 0, 3, direction, 1, 2, 3, LootTableRegistry.SLUDGE_PLAINS_RUINS_POT);
-		rotatedLootPot(world, random, x, y, z, 4, 0, 4, direction, 1, 2, 3, LootTableRegistry.SLUDGE_PLAINS_RUINS_POT);
+		rotatedLootUrn(world, random, x, y, z, 1, 0, 2, direction, 1, 2, 3, LootTableRegistry.SLUDGE_PLAINS_RUINS_URN);
+		rotatedLootUrn(world, random, x, y, z, 1, 0, 3, direction, 1, 2, 3, LootTableRegistry.SLUDGE_PLAINS_RUINS_URN);
+		rotatedLootUrn(world, random, x, y, z, 1, 0, 4, direction, 1, 2, 3, LootTableRegistry.SLUDGE_PLAINS_RUINS_URN);
+		rotatedLootUrn(world, random, x, y, z, 4, 0, 2, direction, 1, 2, 3, LootTableRegistry.SLUDGE_PLAINS_RUINS_URN);
+		rotatedLootUrn(world, random, x, y, z, 4, 0, 3, direction, 1, 2, 3, LootTableRegistry.SLUDGE_PLAINS_RUINS_URN);
+		rotatedLootUrn(world, random, x, y, z, 4, 0, 4, direction, 1, 2, 3, LootTableRegistry.SLUDGE_PLAINS_RUINS_URN);
 
 		return true;
 	}
@@ -209,7 +209,7 @@ public class WorldGenMudStructures extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 5, 0, 6, MUD_BRICKS, 2, 2, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 6, 2, 6, getStateFromRotation(2, direction, MUD_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 7, 1, 6, MUD_BRICK_SLAB, 1, 1, 1, direction);
-		rotatedLootPot(world, random, x, y, z, 1, 0, 3, direction, 1, 4, 2, LootTableRegistry.SLUDGE_PLAINS_RUINS_POT);
+		rotatedLootUrn(world, random, x, y, z, 1, 0, 3, direction, 1, 4, 2, LootTableRegistry.SLUDGE_PLAINS_RUINS_URN);
 
 		return true;
 	}
