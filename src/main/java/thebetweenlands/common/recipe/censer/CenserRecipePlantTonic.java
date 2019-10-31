@@ -45,7 +45,7 @@ public class CenserRecipePlantTonic extends AbstractCenserRecipe<Void> {
 
 	@Override
 	public int update(Void context, ICenser censer) {
-		World world = censer.getWorld();
+		World world = censer.getCenserWorld();
 
 		if(!world.isRemote && world.getTotalWorldTime() % 100 == 0) {
 			BlockPos pos = censer.getPos();

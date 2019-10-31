@@ -52,7 +52,7 @@ public class CenserRecipeElixir extends AbstractCenserRecipe<CenserRecipeElixirC
 
 	@Override
 	public int update(CenserRecipeElixirContext context, ICenser censer) {
-		World world = censer.getWorld();
+		World world = censer.getCenserWorld();
 
 		if(world.getTotalWorldTime() % 100 == 0) {
 			Potion potion = ItemRegistry.ELIXIR.getElixirFromItem(context.elixir).getPotionEffect();

@@ -444,8 +444,8 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 			if(this.internalSlotChanged) {
 				this.internalSlotChanged = false;
 				BlockPos pos = this.getPos();
-				IBlockState stat = this.getWorld().getBlockState(pos);
-				this.getWorld().notifyBlockUpdate(pos, stat, stat, 2);
+				IBlockState stat = this.getCenserWorld().getBlockState(pos);
+				this.getCenserWorld().notifyBlockUpdate(pos, stat, stat, 2);
 			}
 		}
 
@@ -653,5 +653,10 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 	@Override
 	public ItemStack getInputStack() {
 		return this.getStackInSlot(ContainerCenser.SLOT_INPUT);
+	}
+
+	@Override
+	public World getCenserWorld() {
+		return this.getWorld();
 	}
 }
