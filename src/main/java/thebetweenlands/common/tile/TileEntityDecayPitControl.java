@@ -293,7 +293,9 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 				shaking = true;
 				shakeTimer = 0;
 				
-				this.spawnAmbientParticles();
+				if(this.world.isRemote) {
+					this.spawnAmbientParticles();
+				}
 			}
 
 			if (getWorld().isRemote) {
