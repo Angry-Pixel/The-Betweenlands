@@ -12,7 +12,7 @@
   },
   "parent": "thebetweenlands:adventurer/dank_world",
   "criteria": {
-    "stronghold": {
+    "sludgeon": {
       "trigger": "thebetweenlands:location",
       "conditions": {
         "name": "sludge_worm_dungeon"
