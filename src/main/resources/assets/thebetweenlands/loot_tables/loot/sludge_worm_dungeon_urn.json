@@ -1,12 +1,8 @@
 {
     "pools": [
         {
-            "name": "uncommon_loot",
+            "name": "urn_loot",
             "entries": [
-                {
-                    "type": "empty",
-                    "weight": 20
-                },
                 {
                     "type": "item",
                     "entryName": "amulet_socket",
@@ -17,7 +13,7 @@
                             "data": 38
                         }
                     ],
-                    "weight": 10
+                    "weight": 15
                 },
                 {
                     "type": "item",
@@ -29,7 +25,7 @@
                             "data": 40
                         }
                     ],
-                    "weight": 24
+                    "weight": 29
                 },
                 {
                     "type": "item",
@@ -40,11 +36,11 @@
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 2
+                                "max": 3
                             }
                         }
                     ],
-                    "weight": 10
+                    "weight": 15
                 },
                 {
                     "type": "item",
@@ -59,7 +55,7 @@
                             }
                         }
                     ],
-                    "weight": 12
+                    "weight": 17
                 },
                 {
                     "type": "item",
@@ -70,7 +66,7 @@
                             "function": "set_count",
                             "count": {
                                 "min": 2,
-                                "max": 4
+                                "max": 5
                             }
                         },
                         {
@@ -78,7 +74,7 @@
                             "data": 43
                         }
                     ],
-                    "weight": 15
+                    "weight": 20
                 },
                 {
                     "type": "item",
@@ -89,7 +85,7 @@
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 2
+                                "max": 3
                             }
                         },
                         {
@@ -97,7 +93,7 @@
                             "data": 19
                         }
                     ],
-                    "weight": 10
+                    "weight": 15
                 },
                 {
                     "type": "item",
@@ -108,32 +104,45 @@
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 2
+                                "max": 3
                             }
                         }
                     ],
-                    "weight": 10
-                }
-            ],
-            "rolls": {
-                "min": 1,
-                "max": 2
-            }
-        },
-        {
-            "name": "common_loot",
-            "entries": [
+                    "weight": 15
+                },
+            
+
+
+
                 {
                     "type": "item",
                     "entryName": "green_marshmallow",
                     "name": "thebetweenlands:marshmallow",
-                    "weight": 26
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "weight": 31
                 },
                 {
                     "type": "item",
                     "entryName": "pink_marshmallow",
                     "name": "thebetweenlands:marshmallow_pink",
-                    "weight": 26
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "weight": 31
                 },
                 {
                     "type": "item",
@@ -152,7 +161,7 @@
                             "data": 32
                         }
                     ],
-                    "weight": 20
+                    "weight": 25
                 },
                 {
                     "type": "item",
@@ -167,7 +176,7 @@
                             }
                         }
                     ],
-                    "weight": 20
+                    "weight": 25
                 },
                 {
                     "type": "item",
@@ -182,7 +191,7 @@
                             }
                         }
                     ],
-                    "weight": 15
+                    "weight": 20
                 },
                 {
                     "type": "item",
@@ -197,7 +206,7 @@
                             }
                         }
                     ],
-                    "weight": 15
+                    "weight": 20
                 },
                 {
                     "type": "item",
@@ -216,7 +225,7 @@
                             "data": 41
                         }
                     ],
-                    "weight": 15
+                    "weight": 20
                 },
                 {
                     "type": "item",
@@ -235,7 +244,7 @@
                             "data": 42
                         }
                     ],
-                    "weight": 15
+                    "weight": 20
                 },
                 {
                     "type": "item",
@@ -250,7 +259,7 @@
                             }
                         }
                     ],
-                    "weight": 26
+                    "weight": 31
                 },
                 {
                     "type": "item",
@@ -265,7 +274,7 @@
                             }
                         }
                     ],
-                    "weight": 25
+                    "weight": 30
                 },
                 {
                     "type": "item",
@@ -280,7 +289,7 @@
                             }
                         }
                     ],
-                    "weight": 28
+                    "weight": 33
                 },
                 {
                     "type": "item",
@@ -295,7 +304,7 @@
                             }
                         }
                     ],
-                    "weight": 15
+                    "weight": 20
                 },
                 {
                     "type": "item",
@@ -310,17 +319,13 @@
                             }
                         }
                     ],
-                    "weight": 15
-                }
-            ],
-            "rolls": {
-                "min": 1,
-                "max": 3
-            }
-        },
-        {
-            "name": "filler_loot",
-            "entries": [
+                    "weight": 20
+                },
+            
+            
+            
+            
+            
                 {
                     "type": "item",
                     "entryName": "sulfur",
@@ -338,7 +343,7 @@
                             "data": 18
                         }
                     ],
-                    "weight": 10
+                    "weight": 35
                 },
                 {
                     "type": "item",
@@ -353,7 +358,7 @@
                             }
                         }
                     ],
-                    "weight": 10
+                    "weight": 35
                 },
                 {
                     "type": "item",
@@ -372,7 +377,7 @@
                             "data": 10
                         }
                     ],
-                    "weight": 10
+                    "weight": 35
                 }
             ],
             "rolls": {
