@@ -39,8 +39,8 @@ public class CenserRecipeAspect extends AbstractCenserRecipe<CenserRecipeAspectC
 
 	@Override
 	public int getConsumptionDuration(CenserRecipeAspectContext context, ICenser censer) {
-		//15 min. / 1000 aspect
-		return 18 * 5;
+		//20 min. / 1000 aspect
+		return 24 * 5;
 	}
 
 	@SideOnly(Side.CLIENT)
