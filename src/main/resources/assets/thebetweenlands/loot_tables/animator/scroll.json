@@ -13,8 +13,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 2,
-                                "max": 6
+                                "min": 5,
+                                "max": 12
                             }
                         }
                     ],
@@ -31,8 +31,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 2,
-                                "max": 6
+                                "min": 5,
+                                "max": 12
                             }
                         },
                         {
@@ -42,23 +42,6 @@
                         }
                     ],
                     "weight": 20,
-                    "quality": 0
-                },
-                {
-                    "conditions": [],
-                    "type": "item",
-                    "name": "thebetweenlands:angry_pebble",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                                "min": 2,
-                                "max": 6
-                            }
-                        }
-                    ],
-                    "weight": 16,
                     "quality": 0
                 },
                 {
@@ -89,6 +72,30 @@
                     "conditions": [],
                     "type": "item",
                     "name": "thebetweenlands:wights_bane",
+                    "functions": [],
+                    "weight": 12,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:hag_hacker",
+                    "functions": [],
+                    "weight": 12,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:critter_cruncher",
+                    "functions": [],
+                    "weight": 12,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:sludge_slicer",
                     "functions": [],
                     "weight": 12,
                     "quality": 0
