@@ -64,9 +64,22 @@
             "rolls": 1
         },
         {
+            "name": "shared_ring_of_gathering_pool",
+            "conditions": [{"condition": "thebetweenlands:shared_pool"}],
+            "entries": [
+                {
+                    "type": "item",
+                    "name": "thebetweenlands:ring_of_gathering",
+                    "weight": 1
+                }
+            ],
+            "rolls": 1
+        },
+        {
             "name": "ring_loot",
             "entries": [
                 {
+                    "conditions": [{"condition": "thebetweenlands:from_shared_pool"}],
                     "type": "item",
                     "entryName": "ring_of_gathering",
                     "name": "thebetweenlands:ring_of_gathering",
