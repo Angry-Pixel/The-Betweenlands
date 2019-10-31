@@ -63,8 +63,6 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
 
     private float bodyRotateAngleY;
 
-    private boolean isRenderingWorld;
-
     public RenderWeedwoodRowboat(RenderManager mgr) {
         super(mgr);
         rowerDefaultRender = new RenderPlayerRower(mgr, false);
@@ -96,93 +94,6 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         roll(rowboat, yaw, delta);
         renderWaterMask();
         GlStateManager.popMatrix();
-
-        /* proof of concept
-        double bpx = rowboat.prevPosX + (rowboat.posX - rowboat.prevPosX) * delta;
-        double bpy = rowboat.prevPosY + (rowboat.posY - rowboat.prevPosY) * delta;
-        double bpz = rowboat.prevPosZ + (rowboat.posZ - rowboat.prevPosZ) * delta;
-        int bx = MathHelper.floor_double(bpx);
-        int by = MathHelper.floor_double(bpy);
-        int bz = MathHelper.floor_double(bpz);
-        OpenSimplexNoise waveRng = new OpenSimplexNoise(6354);
-        TextureMap texturemap = Minecraft.getMinecraft().getTextureMapBlocks();
-        TextureAtlasSprite sprite = texturemap.getAtlasSprite("minecraft:blocks/water_still");
-        bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        GlStateManager.pushMatrix();
-        float fracX = MathHelper.positiveModulo((float) bpx, 1);
-        float fracZ = MathHelper.positiveModulo((float) bpz, 1);
-        GlStateManager.translate(x - fracX, y - MathHelper.positiveModulo((float) bpy, 1) + 14.22 / 16, z - fracZ);
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.glBegin(GL11.GL_TRIANGLES);
-        float roughness = 0.15F, scale = 0.5F;
-        double t = (rowboat.worldObj.getTotalWorldTime() + delta) * 0.03;
-        int range = 4;
-        // scale up waves to normal level from number of ticks the rowboat has existed
-        for (int dx = -range; dx <= range; dx++) {
-            for (int dz = -range; dz <= range; dz++) {
-                float d0 = scale(dx, dz, fracX, fracZ, range);
-                float d1 = scale(dx, dz + 1, fracX, fracZ, range);
-                float d2 = scale(dx + 1, dz, fracX, fracZ, range);
-                float d3 = scale(dx + 1, dz + 1, fracX, fracZ, range);
-                float sy0 = (float) waveRng.eval((bx + dx) * scale, t, (bz + dz) * scale) * roughness * d0;
-                float sy1 = (float) waveRng.eval((bx + dx) * scale, t, (bz + dz + 1) * scale) * roughness * d1;
-                float sy2 = (float) waveRng.eval((bx + dx + 1) * scale, t, (bz + dz) * scale) * roughness * d2;
-                float sy3 = (float) waveRng.eval((bx + dx + 1) * scale, t, (bz + dz + 1) * scale) * roughness * d3;
-                float b0 = MathUtils.linearTransformf(sy0, -roughness, roughness, 0, 1);
-                float b1 = MathUtils.linearTransformf(sy1, -roughness, roughness, 0, 1);
-                float b2 = MathUtils.linearTransformf(sy2, -roughness, roughness, 0, 1);
-                float b3 = MathUtils.linearTransformf(sy3, -roughness, roughness, 0, 1);
-                float u0 = sprite.getInterpolatedU(0);
-                float u1 = sprite.getInterpolatedU(16);
-                float v0 = sprite.getInterpolatedV(0);
-                float v1 = sprite.getInterpolatedV(16);
-                Vec3d s0 = new Vec3d(0, sy0, 0);
-                Vec3d s1 = new Vec3d(0, sy1, 1);
-                Vec3d s2 = new Vec3d(1, sy2, 0);
-                Vec3d s3 = new Vec3d(1, sy3, 1);
-                Vec3d normal0 = s3.subtract(s1).crossProduct(s0.subtract(s1)).normalize();
-                GlStateManager.glNormal3f((float) normal0.xCoord, (float) normal0.yCoord, (float) normal0.zCoord);
-                GlStateManager.glTexCoord2f(u0, v0);
-                GlStateManager.glVertex3f(dx, sy0, dz);
-                GlStateManager.glTexCoord2f(u0, v1);
-                GlStateManager.glVertex3f(dx, sy1, dz + 1);
-                GlStateManager.glTexCoord2f(u1, v1);
-                GlStateManager.glVertex3f(dx + 1, sy3, dz + 1);
-                Vec3d normal1 = s3.subtract(s1).crossProduct(s0.subtract(s1)).normalize();
-                GlStateManager.glNormal3f((float) normal1.xCoord, (float) normal1.yCoord, (float) normal1.zCoord);
-                GlStateManager.glTexCoord2f(u0, v0);
-                GlStateManager.glVertex3f(dx, sy0, dz);
-                GlStateManager.glTexCoord2f(u1, v1);
-                GlStateManager.glVertex3f(dx + 1, sy3, dz + 1);
-                GlStateManager.glTexCoord2f(u1, v0);
-                GlStateManager.glVertex3f(dx + 1, sy2, dz);
-            }
-        }
-        GlStateManager.glEnd();
-        GlStateManager.disableAlpha();
-        GlStateManager.disableBlend();
-        GlStateManager.colorMask(false, false, false, false);
-        GlStateManager.glBegin(GL11.GL_QUADS);
-        GlStateManager.glVertex3f(-range, 0, -range);
-        GlStateManager.glVertex3f(-range, 0, range + 1);
-        GlStateManager.glVertex3f(range + 1, 0, range + 1);
-        GlStateManager.glVertex3f(range + 1, 0, -range);
-        GlStateManager.glEnd();
-        GlStateManager.colorMask(true, true, true, true);
-        GlStateManager.popMatrix();//*/
-    }
-
-    private static float scale(int x, int z, float originX, float originZ, int range) {
-        float dx = x - originX;
-        float dz = z - originZ;
-        float dist = MathHelper.sqrt(dx * dx + dz * dz);
-        if (dist > range) {
-            return 0;
-        }
-        dist /= range;
-        return MathHelper.sqrt(1 - dist * dist);
     }
 
     private void roll(EntityWeedwoodRowboat rowboat, float yaw, float delta) {
@@ -204,23 +115,13 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     }
 
     @SubscribeEvent
-    public void onFogColors(EntityViewRenderEvent.FogColors event) {
-        isRenderingWorld = true;
-    }
-
-    @SubscribeEvent
-    public void onRenderWorldLast(RenderWorldLastEvent event) {
-        isRenderingWorld = false;
-    }
-
-    @SubscribeEvent
     public void onLivingRender(RenderPlayerEvent.Pre event) {
         EntityPlayer e = event.getEntityPlayer();
         Entity riding = e.getRidingEntity();
         if (riding instanceof EntityWeedwoodRowboat && riding.getControllingPassenger() == e) {
             event.setCanceled(true);
             EntityWeedwoodRowboat rowboat = (EntityWeedwoodRowboat) riding;
-            float delta = isRenderingWorld ? Minecraft.getMinecraft().getRenderPartialTicks() : 1;
+            float delta = event.getPartialRenderTick();
             model.animateOar(rowboat, ShipSide.STARBOARD, delta);
             model.animateOar(rowboat, ShipSide.PORT, delta);
             calculateGrip(rowboat, ShipSide.STARBOARD, delta);
