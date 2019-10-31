@@ -9,7 +9,7 @@
                     "type": "empty",
                     "name": "nothing",
                     "functions": [],
-                    "weight": 100,
+                    "weight": 120,
                     "quality": 0
                 },
                 {
@@ -21,7 +21,10 @@
                         {
                             "conditions": [],
                             "function": "set_data",
-                            "data": 0
+                            "data": {
+                                "min": 0,
+                                "max": 1
+                            }
                         }
                     ],
                     "weight": 25,
@@ -36,7 +39,7 @@
                         {
                             "conditions": [],
                             "function": "set_data",
-                            "data": 1
+                            "data": 2
                         }
                     ],
                     "weight": 20,
