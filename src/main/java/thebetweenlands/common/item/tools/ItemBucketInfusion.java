@@ -220,6 +220,6 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 	}
 	
 	public static ItemStack getEmptyBucket(ItemStack stack) {
-		return new ItemStack(ItemRegistry.BL_BUCKET, 1, stack.getMetadata());
+		return ItemRegistry.BL_BUCKET.getEmpty(new ItemStack(ItemRegistry.BL_BUCKET, 1, stack.getMetadata()));
 	}
 }
