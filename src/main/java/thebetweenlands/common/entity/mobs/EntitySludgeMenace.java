@@ -388,7 +388,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 
 		//Spawn animation
 		if(this.ticksExisted < 10) {
-			Vec3d straightPos = this.getPositionVector().add(this.getForward().scale(this.getArmSize(1) * (this.getEntityAttribute(MAX_ARM_LENGTH).getAttributeValue() + 1)));
+			Vec3d straightPos = this.getPositionVector().add(new Vec3d(this.getFacing().getXOffset(), this.getFacing().getYOffset(), this.getFacing().getZOffset()).scale(this.getArmSize(1) * (this.getEntityAttribute(MAX_ARM_LENGTH).getAttributeValue() + 1)));
 			this.rootTip.setPosition(straightPos.x, straightPos.y, straightPos.z);
 		}
 
