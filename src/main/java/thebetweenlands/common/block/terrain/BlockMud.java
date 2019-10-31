@@ -1,8 +1,12 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,10 +27,6 @@ import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import javax.annotation.Nullable;
-import java.util.List;
-import java.util.Random;
 
 
 public class BlockMud extends Block {
@@ -113,8 +113,8 @@ public class BlockMud extends Block {
 		double d2 = (double) pos.getZ();
 
 		if (rand.nextInt(10) == 0) {
-			Material material = world.getBlockState(pos.down()).getMaterial();
-			if (!material.blocksMovement() && !material.isLiquid()) {
+			boolean stateBelow = world.isAirBlock(pos.down());
+			if (stateBelow) {
 				double d3 = d0 + (double) rand.nextFloat();
 				double d5 = d1 - 0.05D;
 				double d7 = d2 + (double) rand.nextFloat();

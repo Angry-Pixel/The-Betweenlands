@@ -15,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -115,12 +116,13 @@ public class LocationHandler {
 
 	@SubscribeEvent
 	public static void onBlockRightClick(RightClickBlock event) {
+		EnumFacing facing = event.getFace();
 		EntityPlayer player = event.getEntityPlayer();
-		if(!player.isCreative() && !event.getItemStack().isEmpty() && Block.getBlockFromItem(event.getItemStack().getItem()) != Blocks.AIR) {
+		if(facing != null && !player.isCreative() && !event.getItemStack().isEmpty() && Block.getBlockFromItem(event.getItemStack().getItem()) != Blocks.AIR) {
 			BlockPos resultingPos = event.getPos();
 			IBlockState blockState = player.world.getBlockState(resultingPos);
 			if(!blockState.getBlock().isReplaceable(player.world, resultingPos)) {
-				resultingPos = resultingPos.offset(event.getFace());
+				resultingPos = resultingPos.offset(facing);
 			}
 			List<LocationStorage> locations = LocationStorage.getLocations(player.world, new Vec3d(resultingPos));
 			for(LocationStorage location : locations) {
@@ -128,7 +130,7 @@ public class LocationHandler {
 					event.setUseItem(Result.DENY);
 					if(event.getWorld().isRemote) {
 						Vec3d hitVec = event.getHitVec();
-						BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + event.getFace().getXOffset() * 0.025F, hitVec.y + event.getFace().getYOffset() * 0.025F, hitVec.z + event.getFace().getZOffset() * 0.025F, ParticleArgs.get().withData(event.getFace()));
+						BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + facing.getXOffset() * 0.025F, hitVec.y + facing.getYOffset() * 0.025F, hitVec.z + facing.getZOffset() * 0.025F, ParticleArgs.get().withData(facing));
 					}
 					return;
 				}
@@ -200,12 +202,13 @@ public class LocationHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onLeftClickBlock(LeftClickBlock event) {
-		if(!event.getEntityPlayer().isCreative()) {
+		EnumFacing facing = event.getFace();
+		if(!event.getEntityPlayer().isCreative() && facing != null) {
 			List<LocationStorage> locations = LocationStorage.getLocations(event.getWorld(), new Vec3d(event.getPos()));
 			for(LocationStorage location : locations) {
 				if(location != null && location.getGuard() != null && location.getGuard().isGuarded(event.getWorld(), event.getEntityPlayer(), event.getPos())) {
 					Vec3d hitVec = event.getHitVec();
-					BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + event.getFace().getXOffset() * 0.025F, hitVec.y + event.getFace().getYOffset() * 0.025F, hitVec.z + event.getFace().getZOffset() * 0.025F, ParticleArgs.get().withData(event.getFace()));
+					BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + facing.getXOffset() * 0.025F, hitVec.y + facing.getYOffset() * 0.025F, hitVec.z + facing.getZOffset() * 0.025F, ParticleArgs.get().withData(facing));
 					break;
 				}
 			}

@@ -194,6 +194,12 @@ public final class GalleryManager {
 			if(!newLocalEntries.containsKey(onlineEntry.getUrl())) {
 				try {
 					if(this.downloadPicture(folder, onlineEntry, proxy)) {
+						String localSha256 = onlineEntry.getLocalSha256();
+						
+						if(localSha256 != null && !onlineEntry.getSha256().equals(localSha256)) {
+							TheBetweenlands.logger.info("Downloaded gallery picture '" + onlineEntry.getUrl() + "' SHA256 hash does not match (Expected: " + onlineEntry.getSha256() + " Got: " + localSha256 + ")! Please report this to the mod authors.");
+						}
+						
 						newLocalEntries.put(onlineEntry.getUrl(), onlineEntry);
 						changed = true;
 					} else {
