@@ -44,10 +44,10 @@ public class TestItem extends Item {
             WorldGenIdolHeads head = new WorldGenIdolHeads();
             head.generate(worldIn, itemRand, pos.up());
        */ 
-		
+		/*
             WorldGenSpawnerStructure smallRuins = new WorldGenSpawnerStructure();
             smallRuins.generate(worldIn, itemRand, pos.up());
-		
+		*/
 		/*
 			WorldGenWightFortress fortress = new WorldGenWightFortress();
 			fortress.generate(worldIn, itemRand, pos.up());
@@ -88,13 +88,13 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
-		/*
+
 			WorldGenCragrockTower tower = new WorldGenCragrockTower();
 
 			if(tower.generate(worldIn, itemRand, pos.up(8).add(8, 0, 0))) {
 				//playerIn.setHeldItem(hand, null);
 			}
-		 */
+
 		/*
 			WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 			//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
