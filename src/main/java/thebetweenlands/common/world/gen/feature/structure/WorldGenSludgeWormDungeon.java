@@ -166,7 +166,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 		//Maze
 		LocationStorage locationMaze = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "sludge_worm_dungeon_maze", EnumLocationType.SLUDGE_WORM_DUNGEON);
-		locationMaze.addBounds(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 29, pos.getY() - 8 * 5 - 3, pos.getZ() + 29));
+		locationMaze.addBounds(new AxisAlignedBB(pos.getX(), pos.getY() - 1, pos.getZ(), pos.getX() + 29, pos.getY() - 8 * 5 - 3, pos.getZ() + 29));
 		locationMaze.setLayer(1);
 		locationMaze.setSeed(rand.nextLong());
 		locationMaze.setVisible(true);
