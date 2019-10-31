@@ -1,7 +1,7 @@
 {
   "display": {
     "icon": {
-      "item": "thebetweenlands:brazier"
+      "item": "thebetweenlands:mud_tower_brazier"
     },
     "title": {
       "translate": "advancements.thebetweenlands.adventurer.light_the_braziers.title"
@@ -12,7 +12,7 @@
   },
   "parent": "thebetweenlands:adventurer/dank_world",
   "criteria": {
-    "stronghold": {
+    "sludgeon": {
       "trigger": "thebetweenlands:location",
       "conditions": {
         "name": "sludge_worm_dungeon"

@@ -9,7 +9,7 @@
                     "type": "empty",
                     "name": "nothing",
                     "functions": [],
-                    "weight": 150,
+                    "weight": 100,
                     "quality": 0
                 },
                 {
@@ -99,8 +99,8 @@
                             "conditions": [],
                             "function": "set_data",
                             "data": {
-                                "min": 54,
-                                "max": 60
+                                "min": 41,
+                                "max": 47
                             }
                         }
                     ],

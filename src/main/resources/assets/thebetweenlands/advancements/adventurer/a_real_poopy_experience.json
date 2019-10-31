@@ -12,7 +12,7 @@
   },
   "parent": "thebetweenlands:adventurer/light_the_braziers",
   "criteria": {
-    "stronghold": {
+    "sludge_maze": {
       "trigger": "thebetweenlands:location",
       "conditions": {
         "name": "sludge_worm_dungeon_maze"
