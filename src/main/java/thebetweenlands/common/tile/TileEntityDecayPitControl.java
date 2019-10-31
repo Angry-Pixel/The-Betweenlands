@@ -42,6 +42,7 @@ import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.EntityRootGrabber;
+import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityLargeSludgeWorm;
@@ -427,7 +428,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 	private Entity checkSurfaceCollisions() {
 		boolean reverse = false;
 		for (Entity entity : getEntityAbove()) {
-			if (entity != null && !(entity instanceof EntitySludgeJet) && !(entity instanceof EntityRootGrabber)&& !(entity instanceof IEntityBL)) {
+			if (entity != null && !(entity instanceof EntitySludgeJet) && !(entity instanceof EntityRootGrabber) && !(entity instanceof IEntityBL) && !(entity instanceof EntityShockwaveBlock)) {
 				if(entity instanceof EntityArrow)
 					entity.setDead();
 				if (getDistance(entity) >= 4.25F - entity.width * 0.5F && getDistance(entity) <= 7F + entity.width * 0.5F) {
