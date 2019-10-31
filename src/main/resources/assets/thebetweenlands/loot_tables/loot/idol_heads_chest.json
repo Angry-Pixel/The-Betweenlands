@@ -358,11 +358,11 @@
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 4
+                                "max": 3
                             }
                         }
                     ],
-                    "weight": 12,
+                    "weight": 10,
                     "quality": 0
                 },
 				{
