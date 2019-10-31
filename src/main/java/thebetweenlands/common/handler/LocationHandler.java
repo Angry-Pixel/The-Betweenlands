@@ -117,8 +117,9 @@ public class LocationHandler {
 	@SubscribeEvent
 	public static void onBlockRightClick(RightClickBlock event) {
 		EnumFacing facing = event.getFace();
+		Vec3d hitVec = event.getHitVec();
 		EntityPlayer player = event.getEntityPlayer();
-		if(facing != null && !player.isCreative() && !event.getItemStack().isEmpty() && Block.getBlockFromItem(event.getItemStack().getItem()) != Blocks.AIR) {
+		if(facing != null && hitVec != null && !player.isCreative() && !event.getItemStack().isEmpty() && Block.getBlockFromItem(event.getItemStack().getItem()) != Blocks.AIR) {
 			BlockPos resultingPos = event.getPos();
 			IBlockState blockState = player.world.getBlockState(resultingPos);
 			if(!blockState.getBlock().isReplaceable(player.world, resultingPos)) {
@@ -129,7 +130,6 @@ public class LocationHandler {
 				if(location != null && location.getGuard() != null && location.getGuard().isGuarded(player.world, player, resultingPos)) {
 					event.setUseItem(Result.DENY);
 					if(event.getWorld().isRemote) {
-						Vec3d hitVec = event.getHitVec();
 						BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + facing.getXOffset() * 0.025F, hitVec.y + facing.getYOffset() * 0.025F, hitVec.z + facing.getZOffset() * 0.025F, ParticleArgs.get().withData(facing));
 					}
 					return;
@@ -203,11 +203,11 @@ public class LocationHandler {
 	@SubscribeEvent
 	public static void onLeftClickBlock(LeftClickBlock event) {
 		EnumFacing facing = event.getFace();
-		if(!event.getEntityPlayer().isCreative() && facing != null) {
+		Vec3d hitVec = event.getHitVec();
+		if(hitVec != null && !event.getEntityPlayer().isCreative() && facing != null) {
 			List<LocationStorage> locations = LocationStorage.getLocations(event.getWorld(), new Vec3d(event.getPos()));
 			for(LocationStorage location : locations) {
 				if(location != null && location.getGuard() != null && location.getGuard().isGuarded(event.getWorld(), event.getEntityPlayer(), event.getPos())) {
-					Vec3d hitVec = event.getHitVec();
 					BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.x + facing.getXOffset() * 0.025F, hitVec.y + facing.getYOffset() * 0.025F, hitVec.z + facing.getZOffset() * 0.025F, ParticleArgs.get().withData(facing));
 					break;
 				}
