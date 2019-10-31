@@ -1312,6 +1312,7 @@ entity.thebetweenlands.sludge_jet.name=Sludge Jet
 entity.thebetweenlands.triggered_falling_block.name=Falling Block
 entity.thebetweenlands.triggered_sludge_wall_jet.name=Sludge Jet Turret
 entity.thebetweenlands.sludge_wall_jet.name=Sludge Jet
+entity.thebetweenlands.moving_wall.name=Moving Wall
 entity.thebetweenlands.splodeshroom.name=Splodeshroom
 entity.thebetweenlands.cc_ground_spawner.name=Crypt Crawler Tunnel Entrance
 entity.thebetweenlands.spore_jet.name=Spore Jet
