@@ -50,7 +50,7 @@
                     "type": "item",
                     "entryName": "aqua_middle_gem",
                     "name": "thebetweenlands:aqua_middle_gem",
-                    "weight": 15,
+                    "weight": 10,
                     "quality": 0
                 },
                 {
@@ -58,7 +58,7 @@
                     "type": "item",
                     "entryName": "crimson_middle_gem",
                     "name": "thebetweenlands:crimson_middle_gem",
-                    "weight": 15,
+                    "weight": 10,
                     "quality": 0
                 },
                 {
@@ -66,7 +66,7 @@
                     "type": "item",
                     "entryName": "green_middle_gem",
                     "name": "thebetweenlands:green_middle_gem",
-                    "weight": 15,
+                    "weight": 10,
                     "quality": 0
                 },
                 {
