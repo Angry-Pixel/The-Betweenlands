@@ -85,13 +85,15 @@ public class TileEntityBarrel extends TileEntity implements IFluidHandler {
 			boolean isFluidHot = resource.getFluid().getTemperature(resource) > 473.15F /*200°C*/ || resource.getFluid() == FluidRegistry.LAVA;
 
 			if(!isFluidHot || (state.getBlock() instanceof BlockBarrel && ((BlockBarrel) state.getBlock()).isHeatResistant(this.world, this.pos, state))) {
-				if (doFill) {
+				int filled = this.fluidTank.fill(resource, doFill);
+				
+				if(filled != 0 && doFill) {
 					this.markDirty();
 					IBlockState stat = this.world.getBlockState(this.pos);
 					this.world.notifyBlockUpdate(this.pos, stat, stat, 2);
 				}
-
-				return this.fluidTank.fill(resource, doFill);
+				
+				return filled;
 			}
 		}
 

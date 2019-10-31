@@ -91,7 +91,7 @@ public class ItemAmateMap extends ItemMap implements ICustomMeshCallback {
 
     @Override
     public void updateMapData(World world, Entity viewer, MapData data) {
-        if (world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.provider.getDimension() == data.dimension && viewer instanceof EntityPlayer && viewer.ticksExisted % 3 == 0) {
+        if (world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.provider.getDimension() == data.dimension && viewer instanceof EntityPlayer && viewer.ticksExisted % 20 == 0) {
             int blocksPerPixel = 16;
             int centerX = data.xCenter;
             int centerZ = data.zCenter;

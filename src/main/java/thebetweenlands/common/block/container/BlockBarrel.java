@@ -26,7 +26,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -37,10 +39,13 @@ import net.minecraftforge.items.IItemHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.item.misc.ItemBarrel;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.tile.TileEntityBarrel;
+import thebetweenlands.common.tile.TileEntityPurifier;
 
 public class BlockBarrel extends BasicBlock implements ITileEntityProvider, ICustomItemBlock {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
@@ -200,5 +205,13 @@ public class BlockBarrel extends BasicBlock implements ITileEntityProvider, ICus
 	@Override
 	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
+	}
+	
+	@Override
+	public void fillWithRain(World world, BlockPos pos) {
+		if (world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.getTileEntity(pos) instanceof TileEntityBarrel) {
+			TileEntityBarrel tile = (TileEntityBarrel) world.getTileEntity(pos);
+			tile.fill(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME / 2), true);
+		}
 	}
 }
