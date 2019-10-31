@@ -137,7 +137,7 @@
                 },
                 {
                     "type": "item",
-                    "entryName": "lurker_skin",
+                    "entryName": "amate_paper",
                     "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
@@ -149,7 +149,7 @@
                         },
                         {
                             "function": "set_data",
-                            "data": 4
+                            "data": 32
                         }
                     ],
                     "weight": 20
@@ -351,6 +351,25 @@
                                 "min": 4,
                                 "max": 8
                             }
+                        }
+                    ],
+                    "weight": 10
+                },
+                {
+                    "type": "item",
+                    "entryName": "mud_brick",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 4
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 10
                         }
                     ],
                     "weight": 10

@@ -915,9 +915,9 @@ location.sludge_worm_dungeon_winding_walkways.name=80:Winding Walkways
 location.sludge_worm_dungeon_barrishee_lair.name=80:Barrishee Lair
 location.sludge_worm_dungeon_crypt_tunnels.name=80:Crypt Tunnels
 location.sludge_worm_dungeon_crypt.name=80:Crypt
-location.sludge_worm_dungeon_maze.name=80:Sludge Maze
-location.sludge_worm_dungeon.name=80:Sludgeon
-location.sludge_worm_dungeon_pit.name=80:The Pit
+location.sludge_worm_dungeon_maze.name=80:Labyrinthine Vaults
+location.sludge_worm_dungeon.name=80:Sludgeon Tower
+location.sludge_worm_dungeon_pit.name=80:Pit of Decay
 
 
 
@@ -1484,7 +1484,7 @@ manual.item.thebetweenlands.ground_nettle.description=Nettles can be found in Co
 manual.item.thebetweenlands.ground_phragmites.description=Phragmites are tall plants that grow everywhere in Marsh biomes.
 manual.item.thebetweenlands.ground_pickerel_weed.description=Pickerel Weed is a flower that can be found in Marsh biomes.
 manual.item.thebetweenlands.ground_shoots.description=Shoots are small young plants found growing in the Patchy Islands biome.
-manual.item.thebetweenlands.ground_sludgecreep.description=Sludgecreep is a slime-feeding plant found in the Sludge Plains biome, including in the Sludge Maze.
+manual.item.thebetweenlands.ground_sludgecreep.description=Sludgecreep is a slime-feeding plant found in the Sludge Plains biome, including in the Sludgeon vaults.
 manual.item.thebetweenlands.ground_soft_rush.description=Soft Rush is a small plant that grows in the Marsh biome.
 manual.item.thebetweenlands.ground_swamp_kelp.description=Swamp Kelp is an aquatic plant that grows commonly in Deep Waters and Coarse Islands biomes.
 manual.item.thebetweenlands.ground_swamp_grass_tall.description=Swamp Tallgrass is a common plant found in Swamplands, Patchy Islands, Coarse Islands, and Marsh biomes, and in Underground Oases.
@@ -1515,13 +1515,13 @@ manual.item.thebetweenlands.ground_aqua_middle_gem.description=Aqua Middle Gems 
 manual.item.thebetweenlands.ground_bladderwort_flower.description=Bladderworts are tall underwater plants that grow in Deep Waters biomes and more rarely in Coarse Islands biomes.
 manual.item.thebetweenlands.ground_bladderwort_stalk.description=The stalk of the Bladderwort plant that grows in Deep Waters and Coarse Islands biomes.
 manual.item.thebetweenlands.sap_spit.description=Sap Spit is a tacky secretion produced by Spirit Trees. It seems to have regenerative properties.
-manual.item.thebetweenlands.ground_edge_leaf.description=Edge Leaves are small plants that grow on edges in the Sludge Maze. They contain strange properties.
-manual.item.thebetweenlands.ground_edge_moss.description=Edge Moss is a plant that grows on edges in the Sludge Maze. It contains strange properties.
-manual.item.thebetweenlands.ground_edge_shroom.description=Edge Shrooms are fungi that grow on edges in the Sludge Maze. They contain strange properties.
-manual.item.thebetweenlands.ground_rotbulb.description=Rotbulbs are disgusting growths found in the Sludge Maze. They contain strange properties.
-manual.item.thebetweenlands.ground_pale_grass.description=Pale Grass is a transparent, ghostly grass found in the Sludge Maze. It contains strange properties.
-manual.item.thebetweenlands.ground_string_roots.description=String Roots hang from the ceiling of the Sludge Maze. They contain strange properties.
-manual.item.thebetweenlands.ground_cryptweed.description=Cryptweed is a mysterious hanging plant that grows in the Sludge Maze. It contains strange properties.
+manual.item.thebetweenlands.ground_edge_leaf.description=Edge Leaves are small plants that grow on edges in the Sludgeon vaults. They contain strange properties.
+manual.item.thebetweenlands.ground_edge_moss.description=Edge Moss is a plant that grows on edges in the Sludgeon vaults. It contains strange properties.
+manual.item.thebetweenlands.ground_edge_shroom.description=Edge Shrooms are fungi that grow on edges in the Sludgeon vaults. They contain strange properties.
+manual.item.thebetweenlands.ground_rotbulb.description=Rotbulbs are disgusting growths found in the Sludgeon vaults. They contain strange properties.
+manual.item.thebetweenlands.ground_pale_grass.description=Pale Grass is a transparent, ghostly grass found in the Sludgeon vaults. It contains strange properties.
+manual.item.thebetweenlands.ground_string_roots.description=String Roots hang from the ceiling of the Sludgeon vaults. They contain strange properties.
+manual.item.thebetweenlands.ground_cryptweed.description=Cryptweed is a mysterious hanging plant that grows in the Sludgeon vaults. It contains strange properties.
 
 manual.item.thebetweenlands.bl.elixir.foggedMind.description=<scale:0.75>The Draught of the Fogged Mind clouds the mind with worrisome thoughts, causing one to see the illusion of a thick fog surrounding them. <nl>A combination of Dayuniis, Freiwynn, Geoliirgaz, Ordaniis, Yunugaz, and Byariis aspects is required to make this draught. <nl>The more Geoliirgaz is used, the stronger are the draught's effects. The more Dayuniis is used, the longer the draught lasts. <nl>Leaving out Byariis will reveal the true nature of the draught, turning it into the Draught of the Unclouded, which causes any fog to be cleared from one's vision.</scale>
 manual.item.thebetweenlands.bl.elixir.heavyweight.description=<scale:0.75>The Heavyweight Draught gives a strange sense of heaviness, causing one to find swimming more difficult and causing them to sink in Mud despite whatever they may be wearing to protect them from it. <nl>A combination of Azuwynn, Byrginaz, Yunugaz, Yihinren, Geoliirgaz, and Byariis aspects is required to make this draught. <nl>The more Yunugaz is used, the stronger are the draught’s effects. The more Yihinren is used, the longer the draught lasts. <nl>Leaving out Byariis will reveal the true nature of the draught, turning it into the Lightweight Draught, which allows one to walk over water.</scale>
@@ -1600,9 +1600,9 @@ advancements.thebetweenlands.adventurer.santa_wight.description=Break a present
 advancements.thebetweenlands.adventurer.bouldery_bois.title=Bouldery Bois
 advancements.thebetweenlands.adventurer.bouldery_bois.description=Get rolled over by a Boulder Sprite
 advancements.thebetweenlands.adventurer.light_the_braziers.title=Light The Braziers
-advancements.thebetweenlands.adventurer.light_the_braziers.description=Find the Sludgeon
+advancements.thebetweenlands.adventurer.light_the_braziers.description=Find the Sludgeon Tower
 advancements.thebetweenlands.adventurer.a_real_poopy_experience.title=A Real Poopy Experience
-advancements.thebetweenlands.adventurer.a_real_poopy_experience.description=Enter the Sludge Maze
+advancements.thebetweenlands.adventurer.a_real_poopy_experience.description=Enter the Labyrinthine Vaults
 
 # Fighter
 advancements.thebetweenlands.fighter.root.title=Fighter
@@ -1644,7 +1644,7 @@ advancements.thebetweenlands.fighter.illegal_logging.description=Defeat a Spirit
 advancements.thebetweenlands.fighter.secret_of_the_crypt.title=Secret of the Crypt
 advancements.thebetweenlands.fighter.secret_of_the_crypt.description=Obtain the Ancient Greatsword
 advancements.thebetweenlands.fighter.not_a_boss.title=Not A Boss...?
-advancements.thebetweenlands.fighter.not_a_boss.description=Seal the Pit and defeat the Sludge Menace
+advancements.thebetweenlands.fighter.not_a_boss.description=Seal the Pit of Decay and defeat the Sludge Menace
 
 # Farmer
 advancements.thebetweenlands.farmer.root.title=Farmer
