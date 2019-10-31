@@ -134,6 +134,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	
 			generateDecayPitEntrance(world, rand, pos.down(59).add(-3, 0, -3));
 			
+			protectTowerInside(world, rand, pos.down().add(12, 0, 12));
+			
 			//TimeMeasurement.finish("Full_Mudgeon");
 
 			return true;
@@ -257,6 +259,27 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		worldStorage.getLocalStorageHandler().addLocalStorage(locationPit);
 	}
 
+	private void protectTowerInside(World world, Random rand, BlockPos pos) {
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+
+		int height = 16;
+		int radius = 9;
+
+		for (int yy = y; y + height >= yy; yy++) {
+			for (int i = radius * -1; i <= radius; ++i) {
+				for (int j = radius * -1; j <= radius; ++j) {
+					double dSq = i * i + j * j;
+
+					if (Math.round(Math.sqrt(dSq)) <= radius) {
+						this.location.getGuard().setGuarded(world, new BlockPos(x + i, yy, z + j), true);
+					}
+				}
+			}
+		}
+	}
+	
 	private void generateCryptCrawlerDungeon(World world, Random rand, BlockPos pos) {
 		for (int x = 0; x < 32; x ++)
 			for (int z = 0; z < 3; z ++)
