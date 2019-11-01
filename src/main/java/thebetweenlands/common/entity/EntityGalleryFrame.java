@@ -16,6 +16,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
@@ -47,6 +48,27 @@ public class EntityGalleryFrame extends EntityHanging implements IEntityAddition
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(URL, "");
+	}
+
+	@Override
+	public String getName() {
+		String s;
+		if(this.type == null) {
+			s = "small";
+		} else {
+			switch (this.type) {
+				default:
+				case SMALL:
+					s = "small";
+					break;
+				case LARGE:
+					s = "large";
+					break;
+				case VERY_LARGE:
+					s = "very_large";
+			}
+		}
+		return I18n.translateToLocal("entity.thebetweenlands.gallery_frame_" + s + ".name");
 	}
 
 	public void setUrl(String url) {
