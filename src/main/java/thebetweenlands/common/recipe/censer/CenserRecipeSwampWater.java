@@ -59,7 +59,7 @@ public class CenserRecipeSwampWater extends AbstractCenserRecipe<CenserRecipeSwa
 			World world = censer.getCenserWorld();
 
 			if(world.getTotalWorldTime() % 100 == 0) {
-				BlockPos pos = censer.getPos();
+				BlockPos pos = censer.getCenserPos();
 
 				List<EntityPlayer> affected = this.getAffectedEntities(world, pos);
 

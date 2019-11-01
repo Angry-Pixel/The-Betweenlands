@@ -43,7 +43,7 @@ public class CenserRecipeStagnantWater extends AbstractCenserRecipe<Void> {
 			float inScattering = 0.04F * effectStrength;
 			float extinction = 3F;
 
-			AxisAlignedBB fogArea = new AxisAlignedBB(censer.getPos()).grow(6, 0.1D, 6).expand(0, 12, 0);
+			AxisAlignedBB fogArea = new AxisAlignedBB(censer.getCenserPos()).grow(6, 0.1D, 6).expand(0, 12, 0);
 
 			ShaderHelper.INSTANCE.getWorldShader().addGroundFogVolume(new GroundFogVolume(new Vec3d(fogArea.minX, fogArea.minY, fogArea.minZ), new Vec3d(fogArea.maxX - fogArea.minX, fogArea.maxY - fogArea.minY, fogArea.maxZ - fogArea.minZ), inScattering, extinction, fogBrightness * 0.7F, fogBrightness * 0.7F, fogBrightness * 0.5F));
 		}
@@ -64,7 +64,7 @@ public class CenserRecipeStagnantWater extends AbstractCenserRecipe<Void> {
 		World world = censer.getCenserWorld();
 
 		if(!world.isRemote && world.getTotalWorldTime() % 100 == 0) {
-			BlockPos pos = censer.getPos();
+			BlockPos pos = censer.getCenserPos();
 
 			List<EntityLivingBase> affected = this.getAffectedEntities(world, pos);
 			for(EntityLivingBase living : affected) {

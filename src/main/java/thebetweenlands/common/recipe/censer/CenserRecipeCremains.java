@@ -54,7 +54,7 @@ public class CenserRecipeCremains extends AbstractCenserRecipe<Void> {
 			float inScattering = 0.004F * effectStrength;
 			float extinction = 0.15F;
 
-			AxisAlignedBB fogArea = new AxisAlignedBB(censer.getPos()).grow(6, 0.1D, 6).expand(0, 32, 0);
+			AxisAlignedBB fogArea = new AxisAlignedBB(censer.getCenserPos()).grow(6, 0.1D, 6).expand(0, 32, 0);
 
 			ShaderHelper.INSTANCE.getWorldShader().addGroundFogVolume(new GroundFogVolume(new Vec3d(fogArea.minX, fogArea.minY, fogArea.minZ), new Vec3d(fogArea.maxX - fogArea.minX, fogArea.maxY - fogArea.minY, fogArea.maxZ - fogArea.minZ), inScattering, extinction, fogBrightness * 0.7F, fogBrightness * 0.2F, fogBrightness * 0.1F));
 		}
@@ -69,7 +69,7 @@ public class CenserRecipeCremains extends AbstractCenserRecipe<Void> {
 		World world = censer.getCenserWorld();
 
 		if(!world.isRemote && world.getTotalWorldTime() % 10 == 0) {
-			BlockPos pos = censer.getPos();
+			BlockPos pos = censer.getCenserPos();
 
 			List<EntityLivingBase> affected = this.getAffectedEntities(world, pos);
 			for(EntityLivingBase living : affected) {

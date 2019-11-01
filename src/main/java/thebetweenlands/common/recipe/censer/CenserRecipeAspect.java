@@ -55,7 +55,7 @@ public class CenserRecipeAspect extends AbstractCenserRecipe<CenserRecipeAspectC
 			float inScattering = 0.018F * effectStrength;
 			float extinction = 2.5F;
 
-			AxisAlignedBB fogArea = new AxisAlignedBB(censer.getPos()).grow(6, 0.1D, 6).expand(0, 12, 0);
+			AxisAlignedBB fogArea = new AxisAlignedBB(censer.getCenserPos()).grow(6, 0.1D, 6).expand(0, 12, 0);
 
 			int fogColor = this.getEffectColor(context, censer, EffectColorType.FOG);
 

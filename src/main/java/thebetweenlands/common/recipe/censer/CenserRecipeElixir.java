@@ -59,7 +59,7 @@ public class CenserRecipeElixir extends AbstractCenserRecipe<CenserRecipeElixirC
 
 			int maxDuration = ItemRegistry.ELIXIR.createPotionEffect(context.elixir, 0.25D).getDuration();
 
-			BlockPos pos = censer.getPos();
+			BlockPos pos = censer.getCenserPos();
 
 			List<EntityLivingBase> affected = this.getAffectedEntities(world, pos, context);
 

@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 public interface ICenser {
 	public World getCenserWorld();
 
-	public BlockPos getPos();
+	public BlockPos getCenserPos();
 
 	public int getCurrentMaxInputAmount();
 

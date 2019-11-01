@@ -48,7 +48,7 @@ public class CenserRecipePlantTonic extends AbstractCenserRecipe<Void> {
 		World world = censer.getCenserWorld();
 
 		if(!world.isRemote && world.getTotalWorldTime() % 100 == 0) {
-			BlockPos pos = censer.getPos();
+			BlockPos pos = censer.getCenserPos();
 
 			final int verticalRange = 4;
 			final int range = 16;

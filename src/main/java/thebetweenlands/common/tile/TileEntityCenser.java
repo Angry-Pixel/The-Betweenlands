@@ -443,7 +443,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 			//for rendering stuff
 			if(this.internalSlotChanged) {
 				this.internalSlotChanged = false;
-				BlockPos pos = this.getPos();
+				BlockPos pos = this.getCenserPos();
 				IBlockState stat = this.getCenserWorld().getBlockState(pos);
 				this.getCenserWorld().notifyBlockUpdate(pos, stat, stat, 2);
 			}
@@ -646,7 +646,7 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 	public AxisAlignedBB getFogRenderArea() {
 		float width = 13.0F;
 		float height = 12.0F;
-		BlockPos pos = this.getPos();
+		BlockPos pos = this.getCenserPos();
 		return new AxisAlignedBB(pos.getX() + 0.5D - width / 2, pos.getY() - 0.1D, pos.getZ() + 0.5D - width / 2, pos.getX() + 0.5D + width / 2, pos.getY() - 0.1D + height, pos.getZ() + 0.5D + width / 2);
 	}
 
@@ -658,5 +658,10 @@ public class TileEntityCenser extends TileEntityBasicInventory implements IFluid
 	@Override
 	public World getCenserWorld() {
 		return this.getWorld();
+	}
+
+	@Override
+	public BlockPos getCenserPos() {
+		return this.getPos();
 	}
 }

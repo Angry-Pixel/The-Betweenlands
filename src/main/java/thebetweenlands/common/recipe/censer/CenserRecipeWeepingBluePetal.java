@@ -41,7 +41,7 @@ public class CenserRecipeWeepingBluePetal extends AbstractCenserRecipe<Void> {
 		if(!world.isRemote && world.getTotalWorldTime() % 100 == 0) {
 			boolean applied = false;
 
-			BlockPos pos = censer.getPos();
+			BlockPos pos = censer.getCenserPos();
 
 			List<EntityLivingBase> affected = this.getAffectedEntities(world, pos);
 			for(EntityLivingBase living : affected) {
