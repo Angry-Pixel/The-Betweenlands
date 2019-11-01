@@ -138,8 +138,7 @@ public class TileEntityDecayPitControl extends TileEntity implements ITickable, 
 				if (getWorld().getTotalWorldTime() % 20 == 0)
 					updateBlock();
 
-				if (getWorld().getTotalWorldTime() % 1200 == 0) { // once a
-																	// minute
+				if (getWorld().getTotalWorldTime() % 2400 == 0) { // once every 2 minutes 
 					// S
 					checkTurretSpawn(4, 12, 11);
 					checkTurretSpawn(-4, 12, 11);

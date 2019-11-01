@@ -135,38 +135,38 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPart {
 		if(this.attackDamageTicks > 0) {
 			this.attackDamageTicks--;
 		}
-		
+
 		boolean isMovingDown = this.isMoving() && !this.isSlow();
-		
+
 		if(this.getTargetEActive() && !isMovingDown) {
 			this.beamTransparencyTicks[0] = Math.min(15, this.beamTransparencyTicks[0] + 1);
 		} else {
 			this.beamTransparencyTicks[0] = Math.max(0, this.beamTransparencyTicks[0] - 1);
 		}
-		
+
 		if(this.getTargetWActive() && !isMovingDown) {
 			this.beamTransparencyTicks[1] = Math.min(15, this.beamTransparencyTicks[1] + 1);
 		} else {
 			this.beamTransparencyTicks[1] = Math.max(0, this.beamTransparencyTicks[1] - 1);
 		}
-		
+
 		if(this.getTargetSActive() && !isMovingDown) {
 			this.beamTransparencyTicks[2] = Math.min(15, this.beamTransparencyTicks[2] + 1);
 		} else {
 			this.beamTransparencyTicks[2] = Math.max(0, this.beamTransparencyTicks[2] - 1);
 		}
-		
+
 		if(this.getTargetNActive() && !isMovingDown) {
 			this.beamTransparencyTicks[3] = Math.min(15, this.beamTransparencyTicks[3] + 1);
 		} else {
 			this.beamTransparencyTicks[3] = Math.max(0, this.beamTransparencyTicks[3] - 1);
 		}
-		
+
 		float animationTicks = this.dataManager.get(ANIMATION_TICKS);
-		
+
 		animationTicksPrev = animationTicks;
 		animationTicksChainPrev = animationTicksChain;
-		
+
 		if(!this.world.isRemote) {
 			if (animationTicks + 1 >= 360F) {
 				this.dataManager.set(ANIMATION_TICKS, 0.0F);
@@ -181,12 +181,12 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPart {
         while(animationTicks - this.animationTicksPrev >= 180.0F) {
         	this.animationTicksPrev += 360.0F;
         }
-		
+
         //Set prev pos, rotation, etc.
         for(Entity entity : parts) {
         	entity.onUpdate();
         }
-        
+
 		setNewShieldHitboxPos(animationTicks, shield_1);
 		setNewShieldHitboxPos(-animationTicks + 22.5F, shield_2);
 		setNewShieldHitboxPos(animationTicks + 45F, shield_3);
@@ -204,7 +204,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPart {
 		setNewShieldHitboxPos(-animationTicks + 292.5F, shield_14);
 		setNewShieldHitboxPos(animationTicks + 315F, shield_15);
 		setNewShieldHitboxPos(-animationTicks + 337.5F, shield_16);
-		
+
 		target_north.setPosition(posX, posY + 3D, posZ - 0.75D);
 		target_east.setPosition(posX + 0.75D, posY + 3D, posZ);
 		target_south.setPosition(posX, posY + 3D, posZ + 0.75D);
@@ -264,7 +264,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPart {
 
 		if (getProgress() > MAX_PROGRESS)
 			setProgress(MAX_PROGRESS);
-		
+
 		if (getProgress() < MIN_PROGRESS)
 			setProgress(MIN_PROGRESS);
 
@@ -273,7 +273,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPart {
 				moveUp();
 
 			TileEntityDecayPitControl control = this.getControl();
-			
+
 			if (control != null && getEntityWorld().getTotalWorldTime() % 10 == 0) {
 				if (getProgress() < 128)
 					control.setSpawnType(0);
@@ -287,12 +287,11 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPart {
 					control.setSpawnType(4);
 				if (getProgress() >= 640)
 					control.setSpawnType(5);
-	
 			}
-			
+
 			if (control != null && control.getSpawnType() == 5) {
 				TileEntityDecayPitHangingChain hangingChains = this.getHangingChains();
-				
+
 				if (hangingChains != null) {
 					hangingChains.setBroken(true);
 					hangingChains.setMoving(true);
@@ -312,7 +311,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPart {
 				setDead(); // TODO some particles to show the bobbing shields break
 			}
 		}
-		
+
 		if(!this.world.isRemote && this.isEntityAlive()) {
 			for(int i = 0; i < this.dummies.length; i++) {
 				DummyPart dummy = this.dummies[i];
@@ -352,7 +351,7 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPart {
 			wobble = 0F;
 		shield.setPosition(posX + offSetX, target_north.posY + target_north.height / 2.0D - shield.height + wobble, posZ + offSetZ);
 		shield.rotationYaw = animationTicks + 180F;
-		
+
 		while(shield.rotationYaw - shield.prevRotationYaw < -180.0F) {
 			shield.prevRotationYaw -= 360.0F;
         }
@@ -408,6 +407,9 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPart {
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
 		boolean wasBlocked = false;
+		
+		if(source.isExplosion())
+			return false;
 		
 		if(source instanceof EntityDamageSource) {
 			EntityDamageSource entityDamage = (EntityDamageSource) source;
@@ -701,10 +703,21 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPart {
 		nbt.setBoolean("target_west", getTargetWActive());
 		nbt.setBoolean("target_south", getTargetSActive());
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return this.getEntityBoundingBox().grow(2);
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public int getBrightnessForRender() {
+		return 15728880;
+	}
+
+	@Override
+	public float getBrightness() {
+		return 1.0F;
 	}
 }
