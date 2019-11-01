@@ -56,7 +56,7 @@ public class CenserRecipeSwampWater extends AbstractCenserRecipe<CenserRecipeSwa
 		ItemStack inputStack = censer.getInputStack();
 
 		if(!inputStack.isEmpty() && inputStack.getItem() == ItemRegistry.BARK_AMULET) {
-			World world = censer.getWorld();
+			World world = censer.getCenserWorld();
 
 			if(world.getTotalWorldTime() % 100 == 0) {
 				BlockPos pos = censer.getPos();

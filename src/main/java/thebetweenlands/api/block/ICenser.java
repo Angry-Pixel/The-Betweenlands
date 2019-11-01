@@ -5,7 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface ICenser {
-	public World getWorld();
+	public World getCenserWorld();
 
 	public BlockPos getPos();
 
