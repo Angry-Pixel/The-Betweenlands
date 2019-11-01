@@ -1,5 +1,36 @@
 {
     "pools": [
+    	{
+    		"name": "shared_predator_bow_pool",
+    		"conditions": [{"condition": "thebetweenlands:shared_pool"}],
+    		"entries": [
+                {
+                    "type": "item",
+                    "name": "thebetweenlands:predator_bow",
+                    "weight": 1
+                }
+            ],
+            "rolls": {
+            	"min": 2,
+            	"max": 3
+            }
+    	},
+    	{
+    		"name": "predator_bow",
+    		"entries": [
+    			{
+    				"type": "empty",
+    				"weight": 15
+    			},
+                {
+                	"conditions": [{"condition": "thebetweenlands:from_shared_pool"}],
+                    "type": "item",
+                    "name": "thebetweenlands:predator_bow",
+                    "weight": 1
+                }
+            ],
+            "rolls": 1
+        },
         {
             "name": "urn_loot",
             "entries": [
