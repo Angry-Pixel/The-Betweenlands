@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -20,9 +19,12 @@ import thebetweenlands.client.handler.gallery.GalleryEntry;
 import thebetweenlands.client.handler.gallery.GalleryManager;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.EntityGalleryFrame;
+import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)
 public class RenderGalleryFrame extends Render<EntityGalleryFrame> {
+	protected static final ResourceLocation GALLERY_FRAME_EMPTY_BACKGROUND = new ResourceLocation(ModInfo.ID, "textures/entity/gallery_frame_empty_background.png");
+
 	public RenderGalleryFrame(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -108,6 +110,6 @@ public class RenderGalleryFrame extends Render<EntityGalleryFrame> {
 	@Override
 	protected ResourceLocation getEntityTexture(EntityGalleryFrame entity) {
 		GalleryEntry entry = GalleryManager.INSTANCE.getEntries().get(entity.getUrl());
-		return entry != null && entry.isUploaded() ? entry.getLocation() : TextureManager.RESOURCE_LOCATION_EMPTY;
+		return entry != null && entry.isUploaded() ? entry.getLocation() : GALLERY_FRAME_EMPTY_BACKGROUND;
 	}
 }
