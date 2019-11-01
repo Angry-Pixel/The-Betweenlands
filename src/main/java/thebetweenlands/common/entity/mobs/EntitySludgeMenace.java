@@ -628,7 +628,7 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(source.isProjectile()) {
+		if(source.isProjectile() || source.isExplosion() || source.isFireDamage()) {
 			return false;
 		}
 
