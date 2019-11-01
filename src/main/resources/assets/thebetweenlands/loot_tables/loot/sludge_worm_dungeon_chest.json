@@ -27,6 +27,68 @@
                 "max": 2
             }
         },
+    	{
+    		"name": "shared_predator_bow_pool",
+    		"conditions": [{"condition": "thebetweenlands:shared_pool"}],
+    		"entries": [
+                {
+                    "type": "item",
+                    "name": "thebetweenlands:predator_bow",
+                    "weight": 1
+                }
+            ],
+            "rolls": {
+            	"min": 1,
+            	"max": 2
+            }
+    	},
+    	{
+    		"name": "predator_bow",
+    		"entries": [
+    			{
+    				"type": "empty",
+    				"weight": 2
+    			},
+                {
+                	"conditions": [{"condition": "thebetweenlands:from_shared_pool", "guaranteed_after": 3}],
+                    "type": "item",
+                    "name": "thebetweenlands:predator_bow",
+                    "weight": 1
+                }
+            ],
+            "rolls": 1
+        },
+    	{
+    		"name": "shared_weedwood_bow_pool",
+    		"conditions": [{"condition": "thebetweenlands:shared_pool"}],
+    		"entries": [
+                {
+                    "type": "item",
+                    "name": "thebetweenlands:weedwood_bow",
+                    "weight": 1
+                }
+            ],
+            "rolls": {
+            	"min": 2,
+            	"max": 3
+            }
+    	},
+    	{
+    		"name": "weedwood_bow",
+    		"entries": [
+    			{
+    				"type": "empty",
+    				"weight": 1
+    			},
+                {
+                	"conditions": [{"condition": "thebetweenlands:from_shared_pool"}],
+                    "type": "item",
+                    "name": "thebetweenlands:weedwood_bow",
+                    "weight": 1
+                }
+            ],
+            "rolls": 1
+        },
         {
             "name": "shared_fig_pool",
             "conditions": [{"condition": "thebetweenlands:shared_pool"}],
@@ -217,6 +279,40 @@
                         }
                     ],
                     "weight": 15
+                },
+                {
+                    "type": "item",
+                    "entryName": "octine_ingot",
+                    "name": "thebetweenlands:octine_ingot",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ],
+                    "weight": 10
+                },
+                {
+                    "type": "item",
+                    "entryName": "syrmorite_ingot",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 11
+                        }
+                    ],
+                    "weight": 10
                 },
                 {
                     "type": "item",

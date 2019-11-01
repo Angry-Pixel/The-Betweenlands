@@ -317,6 +317,40 @@
                 },
                 {
                     "type": "item",
+                    "entryName": "octine_ingot",
+                    "name": "thebetweenlands:octine_ingot",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        }
+                    ],
+                    "weight": 10
+                },
+                {
+                    "type": "item",
+                    "entryName": "syrmorite_ingot",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 2
+                            }
+                        },
+                        {
+                            "function": "set_data",
+                            "data": 11
+                        }
+                    ],
+                    "weight": 10
+                },
+                {
+                    "type": "item",
                     "entryName": "valonite_shard",
                     "name": "thebetweenlands:items_misc",
                     "functions": [
