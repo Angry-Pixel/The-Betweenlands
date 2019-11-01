@@ -1320,6 +1320,9 @@ entity.thebetweenlands.spore_jet.name=Spore Jet
 entity.thebetweenlands.decay_pit_target.name=Not A Boss
 entity.thebetweenlands.sludge_menace.name=Sludge Menace
 entity.thebetweenlands.sludge_menace_multipart_dummy.name=Sludge Menace
+entity.thebetweenlands.gallery_frame_small.name=Small Gallery Frame
+entity.thebetweenlands.gallery_frame_large.name=Large Gallery Frame
+entity.thebetweenlands.gallery_frame_very_large.name=Very Large Gallery Frame
 
 # Equipment
 equipment.menu.equip=Equip %s
