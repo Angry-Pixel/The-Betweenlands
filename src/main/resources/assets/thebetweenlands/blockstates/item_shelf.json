@@ -1,17 +1,14 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thebetweenlands:internal/blank",
-    "custom": {
-      "particle_texture": "thebetweenlands:blocks/log_weedwood"
-    }
+    "model": "thebetweenlands:item_shelf"
   },
   "variants": {
     "facing": {
       "north": { },
-      "south": { },
-      "east": { },
-      "west": { }
+      "south": { "y": 180 },
+      "east": { "y": 90 },
+      "west": { "y": 270 }
     }
   }
 }

@@ -19,6 +19,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -79,6 +80,9 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		UNBREAKABLE_BLOCKS.add(BlockRegistry.DUNGEON_DOOR_RUNES_CRAWLER);
 		UNBREAKABLE_BLOCKS.add(BlockRegistry.MUD_BRICK_WALL);
 	}
+	
+	protected float speed = 0.05F;
+	protected boolean isBlockAligned = true;
 
 	public EntityMovingWall(World world) {
 		super(world);
@@ -99,6 +103,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		
 		if (!getEntityWorld().isRemote) {
 			if(ticksExisted == 1 && isNewSpawn())
 				checkSpawnArea();
@@ -137,6 +142,21 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		}
 
 		if(!isHoldingStill()) {
+			EnumFacing heading = EnumFacing.getFacingFromVector((float)motionX, 0, (float)motionZ);
+			
+			if(this.isBlockAligned && !this.world.isRemote) {
+				if(heading.getAxis() != Axis.Z) {
+					this.posZ = MathHelper.floor(this.posZ) + 0.5D;
+				}
+				if(heading.getAxis() != Axis.X) {
+					this.posX = MathHelper.floor(this.posX) + 0.5D;
+				}
+			}
+			
+			motionY = 0;
+			motionX = heading.getXOffset() * speed;
+			motionZ = heading.getZOffset() * speed;
+			
 			posX += motionX;
 			posY += motionY;
 			posZ += motionZ;
@@ -144,6 +164,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 			this.pushEntitiesAway();
 		}
 
+		rotationPitch = 0;
 		rotationYaw = (float) (MathHelper.atan2(-motionX, motionZ) * (180D / Math.PI));
 		setPosition(posX, posY, posZ);
 		setEntityBoundingBox(getCollisionBoundingBox());
@@ -250,11 +271,13 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 			}
 		}
 		if(isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(2, 0, 0)).getBlock()) && isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(-2, 0, 0)).getBlock())) {
-			motionZ = 0.05F;
+			motionZ = this.speed;
+			motionX = motionY = 0;
 			setIsNewSpawn(false);
 		}
 		else if(isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(0, 0, 2)).getBlock()) && isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(0, 0, -2)).getBlock())) {
-			motionX = 0.05F;
+			motionX = this.speed;
+			motionY = motionZ = 0;
 			setIsNewSpawn(false);
 		}	
 		else {
@@ -450,13 +473,19 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
-		if(nbt.hasKey("new_spawn", Constants.NBT.TAG_BYTE))
+		if(nbt.hasKey("new_spawn", Constants.NBT.TAG_BYTE)) {
 			setIsNewSpawn(nbt.getBoolean("new_spawn"));
+		}
+		
+		if(nbt.hasKey("isBlockAligned", Constants.NBT.TAG_BYTE)) {
+			this.isBlockAligned = nbt.getBoolean("isBlockAligned");
+		}
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setBoolean("new_spawn", isNewSpawn());
+		nbt.setBoolean("isBlockAligned", this.isBlockAligned);
 	}
 
 	public void shake(int shakeTimerMax) {
@@ -504,4 +533,8 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		return 1.0F / shakingTimerMax * (prev_shake_timer + (shake_timer - prev_shake_timer) * delta);
 	}
 
+	@Override
+	public boolean isImmuneToExplosions() {
+		return true;
+	}
 }
