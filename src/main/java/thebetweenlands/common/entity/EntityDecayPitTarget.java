@@ -122,10 +122,10 @@ public class EntityDecayPitTarget extends Entity implements IEntityMultiPart {
 		dataManager.register(IS_SLOW, true);
 		dataManager.register(PROGRESS, 0);
 		dataManager.register(ANIMATION_TICKS, 0.0F);
-		dataManager.register(TARGET_N_ACTIVE, false);
-		dataManager.register(TARGET_E_ACTIVE, false);
-		dataManager.register(TARGET_W_ACTIVE, false);
-		dataManager.register(TARGET_S_ACTIVE, false);
+		dataManager.register(TARGET_N_ACTIVE, true);
+		dataManager.register(TARGET_E_ACTIVE, true);
+		dataManager.register(TARGET_W_ACTIVE, true);
+		dataManager.register(TARGET_S_ACTIVE, true);
 	}
 
 	@Override

@@ -941,7 +941,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	}
 
 	private void spawnMovingWall(World world, BlockPos pos) {
-		EntityMovingWall wall = new EntityMovingWall(world);
+		EntityMovingWall wall = new EntityMovingWall(world, true);
 		wall.setPosition(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F);
 		world.spawnEntity(wall);
 	}

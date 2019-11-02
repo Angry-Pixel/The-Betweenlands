@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -11,15 +12,14 @@ import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.EnumFacing.Axis;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -27,14 +27,17 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.client.audio.MovingWallSound;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 
-public class EntityMovingWall extends Entity implements IEntityScreenShake {
+public class EntityMovingWall extends Entity implements IEntityScreenShake, IEntityAdditionalSpawnData {
 	private static final DataParameter<Boolean> IS_NEW_SPAWN = EntityDataManager.createKey(EntityMovingWall.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> HOLD_STILL = EntityDataManager.createKey(EntityMovingWall.class, DataSerializers.BOOLEAN);
 
@@ -79,10 +82,20 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 	
 	protected float speed = 0.05F;
 	protected boolean isBlockAligned = true;
+	protected boolean isDungeonWall = false;
 
 	public EntityMovingWall(World world) {
 		super(world);
 		setSize(1F, 1F);
+	}
+	
+	/**
+	 * @param world
+	 * @param isDungeonWall Whether this wall is from the sludge worm dungeon. If true the wall despawns once the dungeon is defeated.
+	 */
+	public EntityMovingWall(World world, boolean isDungeonWall) {
+		this(world);
+		this.isDungeonWall = isDungeonWall;
 	}
 
 	@Override
@@ -127,8 +140,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 			calculateAllCollisions(posX + 1D, posY + 0.5D, posZ);
 			calculateAllCollisions(posX + 1D, posY - 0.5D, posZ);
 			calculateAllCollisions(posX + 1D, posY + 1.5D, posZ);
-		}
-		else {
+		} else {
 			calculateAllCollisions(posX, posY + 0.5D, posZ - 1D);
 			calculateAllCollisions(posX, posY - 0.5D, posZ - 1D);
 			calculateAllCollisions(posX, posY + 1.5D, posZ - 1D);
@@ -137,18 +149,18 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 			calculateAllCollisions(posX, posY + 1.5D, posZ + 1D);
 		}
 
-		if(!isHoldingStill()) {
-			EnumFacing heading = EnumFacing.getFacingFromVector((float)motionX, 0, (float)motionZ);
-			
-			if(this.isBlockAligned && !this.world.isRemote) {
-				if(heading.getAxis() != Axis.Z) {
-					this.posZ = MathHelper.floor(this.posZ) + 0.5D;
-				}
-				if(heading.getAxis() != Axis.X) {
-					this.posX = MathHelper.floor(this.posX) + 0.5D;
-				}
+		EnumFacing heading = EnumFacing.getFacingFromVector((float)motionX, 0, (float)motionZ);
+		
+		if(this.isBlockAligned) {
+			if(heading.getAxis() != Axis.Z) {
+				this.posZ = MathHelper.floor(this.posZ) + 0.5D;
 			}
-			
+			if(heading.getAxis() != Axis.X) {
+				this.posX = MathHelper.floor(this.posX) + 0.5D;
+			}
+		}
+		
+		if(!isHoldingStill()) {
 			motionY = 0;
 			motionX = heading.getXOffset() * speed;
 			motionZ = heading.getZOffset() * speed;
@@ -178,6 +190,22 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 					playSlidingSound(getEntityWorld(), getPosition());
 					playSlideSound = false;
 				}
+		}
+		
+		//Remove wall if it is a dungeon wall and the dungeon is defeated
+		if(!this.world.isRemote && this.isDungeonWall) {
+			List<LocationSludgeWormDungeon> dungeons = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSludgeWormDungeon.class, this.getEntityBoundingBox(), l -> true);
+			
+			if(dungeons.isEmpty()) {
+				this.setDead();
+			} else {
+				for(LocationSludgeWormDungeon dungeon : dungeons) {
+					if(dungeon.isDefeated()) {
+						this.setDead();
+						break;
+					}
+				}
+			}
 		}
 	}
 
@@ -464,12 +492,17 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 		if(nbt.hasKey("isBlockAligned", Constants.NBT.TAG_BYTE)) {
 			this.isBlockAligned = nbt.getBoolean("isBlockAligned");
 		}
+		
+		if(nbt.hasKey("isDungeonWall", Constants.NBT.TAG_BYTE)) {
+			this.isDungeonWall = nbt.getBoolean("isDungeonWall");
+		}
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setBoolean("new_spawn", isNewSpawn());
 		nbt.setBoolean("isBlockAligned", this.isBlockAligned);
+		nbt.setBoolean("isDungeonWall", this.isDungeonWall);
 	}
 
 	public void shake(int shakeTimerMax) {
@@ -520,5 +553,17 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 	@Override
 	public boolean isImmuneToExplosions() {
 		return true;
+	}
+
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		buffer.writeBoolean(this.isBlockAligned);
+		buffer.writeBoolean(this.isDungeonWall);
+	}
+
+	@Override
+	public void readSpawnData(ByteBuf buffer) {
+		this.isBlockAligned = buffer.readBoolean();
+		this.isDungeonWall = buffer.readBoolean();
 	}
 }

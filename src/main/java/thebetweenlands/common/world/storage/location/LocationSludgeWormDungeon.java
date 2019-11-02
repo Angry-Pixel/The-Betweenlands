@@ -157,6 +157,10 @@ public class LocationSludgeWormDungeon extends LocationGuarded {
 		this.defeated = defeated;
 		this.setDirty(true);
 	}
+	
+	public boolean isDefeated() {
+		return this.defeated;
+	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
