@@ -44,6 +44,7 @@ import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
+import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.common.lib.ModInfo;
@@ -501,19 +502,48 @@ public class RecipeRegistry {
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_PALE_GRASS.create(1)), (ItemPlantDrop.EnumItemPlantDrop.PALE_GRASS_BLADES.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_STRING_ROOTS.create(1)), (ItemPlantDrop.EnumItemPlantDrop.STRING_ROOT_FIBERS.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_CRYPTWEED.create(1)), (ItemPlantDrop.EnumItemPlantDrop.CRYPTWEED_BLADES.create(1)));
+		
+		//Loot scraps
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.SKULL_MASK));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.WIGHTS_BANE));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.SLUDGE_SLICER));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.CRITTER_CRUNCHER));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.HAG_HACKER));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.VOODOO_DOLL));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.SWIFT_PICK));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.MAGIC_ITEM_MAGNET));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_DISPERSION));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_FLIGHT));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_POWER));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_RECRUITMENT));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_SUMMONING));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_GATHERING));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.GEM_SINGER));
 	}
 
 	private static void registerAnimatorRecipes() {
-		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.SCROLL.create(1), 16, 16, LootTableRegistry.ANIMATOR_SCROLL) {
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.SCROLL.create(1), 16, 16, LootTableRegistry.SCROLL) {
 			@Override
 			public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack) {
-				LootTable lootTable = world.getLootTableManager().getLootTableFromLocation(LootTableRegistry.ANIMATOR_SCROLL);
+				LootTable lootTable = world.getLootTableManager().getLootTableFromLocation(LootTableRegistry.SCROLL);
 				LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) world));
 				List<ItemStack> loot = lootTable.generateLootForPools(world.rand, lootBuilder.build());
 				if(!loot.isEmpty()) {
 					return loot.get(world.rand.nextInt(loot.size()));
 				}
-				return null;
+				return ItemStack.EMPTY;
+			}
+		});
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.FABRICATED_SCROLL.create(1), 16, 16, LootTableRegistry.FABRICATED_SCROLL) {
+			@Override
+			public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack) {
+				LootTable lootTable = world.getLootTableManager().getLootTableFromLocation(LootTableRegistry.FABRICATED_SCROLL);
+				LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) world));
+				List<ItemStack> loot = lootTable.generateLootForPools(world.rand, lootBuilder.build());
+				if(!loot.isEmpty()) {
+					return loot.get(world.rand.nextInt(loot.size()));
+				}
+				return ItemStack.EMPTY;
 			}
 		});
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.TAR_BEAST_HEART.create(1), 32, 32, EnumItemMisc.TAR_BEAST_HEART_ANIMATED.create(1)));

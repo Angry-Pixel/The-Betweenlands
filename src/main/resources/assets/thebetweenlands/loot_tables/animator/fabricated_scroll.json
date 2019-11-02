@@ -1,0 +1,21 @@
+{
+    "pools": [
+        {
+            "name": "scroll",
+            "conditions": [],
+            "entries": [
+                {
+                    "conditions": [],
+                    "type": "empty",
+                    "weight": 1
+                },
+                {
+                    "type": "loot_table",
+                    "name": "thebetweenlands:animator/scroll",
+                    "weight": 3
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}

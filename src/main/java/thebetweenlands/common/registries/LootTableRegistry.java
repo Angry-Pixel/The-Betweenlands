@@ -53,7 +53,8 @@ public class LootTableRegistry {
 
     //MISC
     public static final ResourceLocation MUSIC_DISC = register("loot/music_disc");
-    public static final ResourceLocation ANIMATOR_SCROLL = register("animator/scroll");
+    public static final ResourceLocation SCROLL = register("animator/scroll");
+    public static final ResourceLocation FABRICATED_SCROLL = register("animator/fabricated_scroll");
     public static final ResourceLocation PRESENT = register("loot/present_loot");
     public static final ResourceLocation PUFFSHROOM = register("loot/puffshroom");
     

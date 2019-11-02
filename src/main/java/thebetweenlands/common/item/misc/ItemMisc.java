@@ -55,7 +55,7 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		if(EnumItemMisc.SCROLL.isItemOf(stack) || EnumItemMisc.TAR_BEAST_HEART.isItemOf(stack) || EnumItemMisc.TAR_BEAST_HEART_ANIMATED.isItemOf(stack)
 				|| EnumItemMisc.INANIMATE_TARMINION.isItemOf(stack)) {
 			return EnumRarity.UNCOMMON;
-		} else if(EnumItemMisc.AMULET_SOCKET.isItemOf(stack)) {
+		} else if(EnumItemMisc.AMULET_SOCKET.isItemOf(stack) || EnumItemMisc.LOOT_SCRAPS.isItemOf(stack) || EnumItemMisc.FABRICATED_SCROLL.isItemOf(stack)) {
 			return EnumRarity.RARE;
 		}
 		return super.getRarity(stack);
@@ -101,7 +101,9 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		CREMAINS(44),
 		UNDYING_EMBER(45),
 		INANIMATE_ANGRY_PEBBLE(46),
-		ANCIENT_REMNANT(47);
+		ANCIENT_REMNANT(47),
+		LOOT_SCRAPS(48),
+		FABRICATED_SCROLL(49);
 
 		private final int id;
 		private final String unlocalizedName;
