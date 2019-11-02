@@ -422,8 +422,8 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 			this.shaderProgramID = OpenGlHelper.glCreateProgram();
 			int vertexShaderID = -1;
 			int fragmentShaderID = -1;
+			ResourceLocation[] shaderLocations = this.getShaders();
 			try {
-				ResourceLocation[] shaderLocations = this.getShaders();
 				String[] shaders = new String[2];
 				for(int i = 0; i < 2; i++) {
 					StringWriter strBuf = new StringWriter();
@@ -437,7 +437,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 				vertexShaderID = -1;
 				fragmentShaderID = -1;
 
-				throw new RuntimeException("Error creating shader", ex);
+				throw new RuntimeException(String.format("Error creating shaders %s and %s", shaderLocations[0], shaderLocations[1]), ex);
 			}
 			if(this.shaderProgramID != -1 && vertexShaderID != -1 && fragmentShaderID != -1) {
 				//Attach and link vertex and fragment shader to shader program
@@ -447,12 +447,12 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 
 				//Check for errors
 				if (OpenGlHelper.glGetProgrami(this.shaderProgramID, ARBShaderObjects.GL_OBJECT_LINK_STATUS_ARB) == GL11.GL_FALSE) {
-					throw new RuntimeException("Error creating shader: " + getLogInfoProgram(this.shaderProgramID));
+					throw new RuntimeException(String.format("Error creating shaders %s and %s: %s", shaderLocations[0], shaderLocations[1], getLogInfoProgram(this.shaderProgramID)));
 				}
 				GL20.glValidateProgram(this.shaderProgramID);
 				//ARBShaderObjects.glValidateProgramARB(this.shaderProgramID);
 				if (OpenGlHelper.glGetProgrami(this.shaderProgramID, ARBShaderObjects.GL_OBJECT_VALIDATE_STATUS_ARB) == GL11.GL_FALSE) {
-					throw new RuntimeException("Error creating shader: " + getLogInfoProgram(this.shaderProgramID));
+					throw new RuntimeException(String.format("Error creating shaders %s and %s: %s", shaderLocations[0], shaderLocations[1], getLogInfoProgram(this.shaderProgramID)));
 				}
 
 				//Delete vertex and fragment shader
