@@ -300,8 +300,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 4,
-                                "max": 8
+                                "min": 1,
+                                "max": 3
                             }
                         }
                     ],
@@ -452,8 +452,8 @@
                 }
             ],
             "rolls": {
-                "min": 4,
-                "max": 6
+                "min": 6,
+                "max": 8
             },
             "bonus_rolls": {
                 "min": 1,

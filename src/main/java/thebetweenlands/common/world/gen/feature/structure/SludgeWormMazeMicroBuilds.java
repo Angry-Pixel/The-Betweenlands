@@ -30,38 +30,41 @@ public class SludgeWormMazeMicroBuilds {
 	
 	public void selectFeature(World world, BlockPos pos, EnumFacing facing, Random rand, int level, int layer) {
 		// add random selection for builds here
-		int type = rand.nextInt(10);
-		switch (type) {
-		case 0:
-			buildCryptBench1(world, pos, facing, rand, level, layer);
-			break;
-		case 1:
-			buildWallPillarRoom(world, pos, facing, rand, level, layer);
-			break;
-		case 2:
-			buildBigPillarCandle(world, pos, facing, rand, level, layer);
-			break;
-		case 3:
-			buildWallPillarShelfRoom(world, pos, facing, rand, level, layer);
-			break;
-		case 4:
+		
+		if(rand.nextInt(20) < 5) {
+			//Higher chance for chest room
 			buildWallPillarCentral(world, pos, facing, rand, level, layer);
-			break;
-		case 5:
-			buildBigPillarTableRoom(world, pos, facing, rand, level, layer);
-			break;
-		case 6:
-			buildWallPillarRoomLowJamb(world, pos, facing, rand, level, layer);
-			break;
-		case 7:
-			buildOpenShrineRoom(world, pos, facing, rand, level, layer);
-			break;
-		case 8:
-			buildMudWallJamb(world, pos, facing, rand, level, layer);
-			break;
-		case 9:
-			buildCubbyHole(world, pos, facing, rand, level, layer);
-			break;
+		} else {
+			int type = rand.nextInt(9);
+			switch (type) {
+			case 0:
+				buildCryptBench1(world, pos, facing, rand, level, layer);
+				break;
+			case 1:
+				buildWallPillarRoom(world, pos, facing, rand, level, layer);
+				break;
+			case 2:
+				buildBigPillarCandle(world, pos, facing, rand, level, layer);
+				break;
+			case 3:
+				buildWallPillarShelfRoom(world, pos, facing, rand, level, layer);
+				break;
+			case 4:
+				buildBigPillarTableRoom(world, pos, facing, rand, level, layer);
+				break;
+			case 5:
+				buildWallPillarRoomLowJamb(world, pos, facing, rand, level, layer);
+				break;
+			case 6:
+				buildOpenShrineRoom(world, pos, facing, rand, level, layer);
+				break;
+			case 7:
+				buildMudWallJamb(world, pos, facing, rand, level, layer);
+				break;
+			case 8:
+				buildCubbyHole(world, pos, facing, rand, level, layer);
+				break;
+			}
 		}
 	}
 

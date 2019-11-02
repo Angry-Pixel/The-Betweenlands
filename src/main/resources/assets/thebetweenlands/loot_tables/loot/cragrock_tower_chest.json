@@ -443,8 +443,8 @@
                 }
             ],
             "rolls": {
-                "min": 2,
-                "max": 4
+                "min": 4,
+                "max": 6
             },
             "bonus_rolls": {
                 "min": 1,
@@ -474,8 +474,8 @@
                         {
                             "function": "set_count",
                             "count": {
-                                "min": 2,
-                                "max": 3
+                                "min": 1,
+                                "max": 2
                             }
                         },
                         {
@@ -615,8 +615,8 @@
                 }
             ],
             "rolls": {
-                "min": 4,
-                "max": 8
+                "min": 6,
+                "max": 10
             },
             "bonus_rolls": {
                 "min": 1,
@@ -666,8 +666,8 @@
                 }
             ],
             "rolls": {
-                "min": 2,
-                "max": 3
+                "min": 5,
+                "max": 6
             },
             "bonus_rolls": {
                 "min": 1,

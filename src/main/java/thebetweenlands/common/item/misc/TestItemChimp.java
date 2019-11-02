@@ -11,7 +11,11 @@ import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.EntityDecayPitTarget;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenIdolHeads;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawnerStructure;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 
 
 //MINE!!
@@ -40,13 +44,13 @@ public class TestItemChimp extends Item {
 		/*
             WorldGenIdolHeads head = new WorldGenIdolHeads();
             head.generate(worldIn, itemRand, pos.up());
-       */ 
+        */
 		/*
             WorldGenSpawnerStructure smallRuins = new WorldGenSpawnerStructure();
             smallRuins.generate(worldIn, itemRand, pos.up());
 		*/
-		/*
-			WorldGenWightFortress fortress = new WorldGenWightFortress();
+		
+		/*	WorldGenWightFortress fortress = new WorldGenWightFortress();
 			fortress.generate(worldIn, itemRand, pos.up());
 		*/
 		/*
@@ -88,20 +92,21 @@ public class TestItemChimp extends Item {
 		
 		/*	WorldGenCragrockTower tower = new WorldGenCragrockTower();
 
-		/*
-			WorldGenCragrockTower tower = new WorldGenCragrockTower();
+		*/
+		/*	WorldGenCragrockTower tower = new WorldGenCragrockTower();
 
 			if(tower.generate(worldIn, itemRand, pos.up(8).add(8, 0, 0))) {
 				//playerIn.setHeldItem(hand, null);
 			}
+		 	
+		*/
 
-
-		
+		/*
 			WorldGenNibbletwigTree tree = new WorldGenNibbletwigTree();
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
 				//playerIn.setHeldItem(hand, null);
 			}
-		*/
+		
 		/*
 			WorldGenHearthgroveTree tree = new WorldGenHearthgroveTree();
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
@@ -154,8 +159,8 @@ public class TestItemChimp extends Item {
 	*/
 			WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
 			//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
-			dungeon.generate(worldIn, itemRand, pos.up(59).add(3, 0, 3)); //generates up
-			//dungeon.generate(worldIn, itemRand, pos.up(1).add(3, 0, 3)); //generates down
+			//dungeon.generate(worldIn, itemRand, pos.up(59).add(3, 0, 3)); //generates up
+			dungeon.generate(worldIn, itemRand, pos.up(1).add(3, 0, 3)); //generates down
 			//dungeon.generateTower(worldIn, itemRand, pos.add(15, 0, 15));
 			//dungeon.generateDecayPit(worldIn, itemRand, pos.up(14));
 	
