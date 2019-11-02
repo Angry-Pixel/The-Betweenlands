@@ -136,7 +136,7 @@ void intersect(FogVolume volume, vec3 origin, vec3 invRayDir, out float entry, o
     exit = min(f.x, min(f.y, f.z));
 }
 
-float modf(float x, float y) {
+float mod_float(float x, float y) {
     return x - y * floor(x / y);
 }
 
@@ -149,7 +149,7 @@ void main() {
     vec3 invRayDir = vec3(1.0F / rayDir.x, 1.0F / rayDir.y, 1.0F / rayDir.z);
     float dst = length(fragPos - u_viewPos);
     
-    vec2 heightMapUv = vec2(modf((fragPos.x + u_renderPos.x + u_worldTime * 0.03F), 100.0F) / 25.0F, modf((fragPos.z + u_renderPos.z + u_worldTime * 0.05F), 100.0F) / 25.0F);
+    vec2 heightMapUv = vec2(mod_float((fragPos.x + u_renderPos.x + u_worldTime * 0.03F), 100.0F) / 25.0F, mod_float((fragPos.z + u_renderPos.z + u_worldTime * 0.05F), 100.0F) / 25.0F);
     float yo = (texture2D(s_height_map, heightMapUv).r - 0.5F) * 1.5F;
     vec3 f = vec3(fragPos.x, fragPos.y + yo, fragPos.z);
     vec3 ray = f - u_viewPos;
