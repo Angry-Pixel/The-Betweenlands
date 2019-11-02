@@ -16,7 +16,7 @@ public class ModelWalkway extends ModelFromModelBase {
 	public static final ModelWalkwayBlock MODEL = new ModelWalkwayBlock();
 
 	public ModelWalkway(TexturePacker packer, boolean hasStands) {
-		super(packer, MODEL, TEXTURE, PARTICLE_TEXTURE, 128, 128, new IVertexProcessor() {
+		super(new ModelFromModelBase.Builder(MODEL, TEXTURE, 128, 128).particleTexture(PARTICLE_TEXTURE).packer(packer).processor(new IVertexProcessor() {
 			@Override
 			public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {
 				if(!hasStands && (box.getModelRenderer() == MODEL.standright || box.getModelRenderer() == MODEL.standleft)) {
@@ -24,6 +24,6 @@ public class ModelWalkway extends ModelFromModelBase {
 				}
 				return vertexIn;
 			}
-		});
+		}));
 	}
 }

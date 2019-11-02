@@ -19,8 +19,8 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
+import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
@@ -95,12 +95,12 @@ public class ModelAlcove implements IModel {
 		this.bigCandleModel = new ModelFromModelBase[baseTextures.length];
 
 		for(int i = 0; i < baseTextures.length; i++) {
-			this.baseModel[i] = new ModelFromModelBase(packer, ALCOVE_MODEL_BASE, baseTextures[i], particleTexture, width, height, new PredicateVertexProcessor(BASE_PREDICATE));
+			ModelFromModelBase baseModel = this.baseModel[i] = new ModelFromModelBase.Builder(ALCOVE_MODEL_BASE, baseTextures[i], width, height).packer(packer).particleTexture(particleTexture).processor(new PredicateVertexProcessor(BASE_PREDICATE)).doubleFace(false).build();
 
-			this.topCobwebModel[i] = new ModelFromModelBase(this.baseModel[i], particleTexture, width, height, new PredicateVertexProcessor(TOP_COBWEB_PREDICATE));
-			this.bottomCobwebModel[i] = new ModelFromModelBase(this.baseModel[i], particleTexture, width, height, new PredicateVertexProcessor(BOTTOM_COBWEB_PREDICATE));
-			this.smallCandleModel[i] = new ModelFromModelBase(this.baseModel[i], particleTexture, width, height, new PredicateVertexProcessor(SMALL_CANDLE_PREDICATE));
-			this.bigCandleModel[i] = new ModelFromModelBase(this.baseModel[i], particleTexture, width, height, new PredicateVertexProcessor(BIG_CANDLE_PREDICATE));
+			this.topCobwebModel[i] = new ModelFromModelBase(baseModel, particleTexture, width, height, new PredicateVertexProcessor(TOP_COBWEB_PREDICATE), baseModel.doubleFace, baseModel.ambientOcclusion);
+			this.bottomCobwebModel[i] = new ModelFromModelBase(baseModel, particleTexture, width, height, new PredicateVertexProcessor(BOTTOM_COBWEB_PREDICATE), baseModel.doubleFace, baseModel.ambientOcclusion);
+			this.smallCandleModel[i] = new ModelFromModelBase(baseModel, particleTexture, width, height, new PredicateVertexProcessor(SMALL_CANDLE_PREDICATE), baseModel.doubleFace, baseModel.ambientOcclusion);
+			this.bigCandleModel[i] = new ModelFromModelBase(baseModel, particleTexture, width, height, new PredicateVertexProcessor(BIG_CANDLE_PREDICATE), baseModel.doubleFace, baseModel.ambientOcclusion);
 		}
 
 		this.particleTexture = particleTexture;

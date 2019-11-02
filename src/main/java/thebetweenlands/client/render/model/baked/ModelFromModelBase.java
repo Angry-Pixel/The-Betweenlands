@@ -15,6 +15,7 @@ import javax.vecmath.Matrix4f;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonParser;
@@ -56,8 +57,9 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 	public final int width;
 	public final int height;
 	public final IVertexProcessor vertexProcessor;
-	private boolean ambientOcclusion = true;
-
+	public final boolean ambientOcclusion;
+	public final boolean doubleFace;
+	
 	public final ModelBase model;
 	
 	public final Model convertedModel;
@@ -118,37 +120,85 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 	
 	protected final Map<ModelCacheKey, Model> derivativeModelCache;
 	
-	public ModelFromModelBase(TexturePacker packer, ModelBase model, ResourceLocation texture, int width, int height) {
-		this(packer, model, texture, texture, width, height, null);
-	}
-
-	public ModelFromModelBase(TexturePacker packer, ModelBase model, ResourceLocation texture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
-		this(packer, model, texture, texture, width, height, vertexProcessor);
-	}
-
-	public ModelFromModelBase(TexturePacker packer, ModelBase model, ResourceLocation texture, ResourceLocation particleTexture, int width, int height) {
-		this(packer, model, texture, particleTexture, width, height, null);
-	}
-
-	public ModelFromModelBase(TexturePacker packer, ModelBase model, ResourceLocation texture, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
-		this(new HashMap<>(), packer, model, texture, particleTexture, width, height, vertexProcessor);
-	}
-	
-	/**
-	 * Constructor to create derived models with changing the main texture.
-	 */
-	public ModelFromModelBase(ModelFromModelBase parent, ResourceLocation texture, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
-		this(parent.derivativeModelCache, parent.packer, parent.model, texture, particleTexture, width, height, vertexProcessor);
+	public static class Builder {
+		private ModelBase model;
+		private ResourceLocation texture, particleTexture;
+		private int width, height;
+		@Nullable private IVertexProcessor vertexProcessor;
+		private boolean doubleFace = true;
+		@Nullable private TexturePacker packer;
+		private boolean ambientOcclusion = true;
+		
+		public Builder(ModelBase model, ResourceLocation texture, int width, int height) {
+			this.model = model;
+			this.texture = this.particleTexture = texture;
+			this.width = width;
+			this.height = height;
+		}
+		
+		public Builder packer(@Nullable TexturePacker packer) {
+			this.packer = packer;
+			return this;
+		}
+		
+		public Builder processor(@Nullable IVertexProcessor vertexProcessor) {
+			this.vertexProcessor = vertexProcessor;
+			return this;
+		}
+		
+		public Builder texture(ResourceLocation texture, int width, int height) {
+			this.texture = texture;
+			this.width = width;
+			this.height = height;
+			return this;
+		}
+		
+		public Builder particleTexture(ResourceLocation particleTexture) {
+			this.particleTexture = particleTexture;
+			return this;
+		}
+		
+		public Builder doubleFace(boolean doubleFace) {
+			this.doubleFace = doubleFace;
+			return this;
+		}
+		
+		public Builder ambientOcclusion(boolean ao) {
+			this.ambientOcclusion = ao;
+			return this;
+		}
+		
+		public ModelFromModelBase build() {
+			return new ModelFromModelBase(this);
+		}
 	}
 	
 	/**
 	 * Constructor used to create derived models without changing the main texture (i.e. reusing the already converted model).
 	 */
-	public ModelFromModelBase(ModelFromModelBase parent, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
-		this(parent.derivativeModelCache, parent.model, parent.convertedModel, parent.texture, particleTexture, width, height, vertexProcessor);
+	public ModelFromModelBase(ModelFromModelBase parent, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor, boolean doubleFace, boolean ambientOcclusion) {
+		this.derivativeModelCache = parent.derivativeModelCache;
+		this.packer = null;
+		this.model = parent.model;
+		this.texture = parent.texture;
+		this.width = width;
+		this.height = height;
+		this.vertexProcessor = vertexProcessor;
+		this.particleTexture = particleTexture;
+		this.convertedModel = parent.convertedModel;
+		this.doubleFace = doubleFace;
+		this.ambientOcclusion = ambientOcclusion;
+		
+		if(this.particleTexture != null) {
+			this.usedTextures.add(this.particleTexture);
+		}
 	}
 	
-	private ModelFromModelBase(Map<ModelCacheKey, Model> modelCache, TexturePacker packer, ModelBase model, ResourceLocation texture, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
+	protected ModelFromModelBase(Builder builder) {
+		this(new HashMap<>(), builder.packer, builder.model, builder.texture, builder.particleTexture, builder.width, builder.height, builder.vertexProcessor, builder.doubleFace, builder.ambientOcclusion);
+	}
+	
+	private ModelFromModelBase(Map<ModelCacheKey, Model> modelCache, TexturePacker packer, ModelBase model, ResourceLocation texture, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor, boolean doubleFace, boolean ambientOcclusion) {
 		Preconditions.checkNotNull(packer, "Texture packer must not be null for non-derived models");
 		
 		this.derivativeModelCache = modelCache;
@@ -159,13 +209,15 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 		this.height = height;
 		this.vertexProcessor = vertexProcessor;
 		this.particleTexture = particleTexture;
+		this.doubleFace = doubleFace;
+		this.ambientOcclusion = ambientOcclusion;
 		
 		//Converted models are cached such that their textures are not
 		//packed onto the atlas multiple times.
 		ModelCacheKey key = new ModelCacheKey(model, texture, vertexProcessor);
 		Model cachedConvertedModel = this.derivativeModelCache.get(key);
 		if(cachedConvertedModel == null) {
-			ModelConverter converter = new ModelConverter(new Packing(texture, packer, this), model, 0.0625D, true);
+			ModelConverter converter = new ModelConverter(new Packing(texture, packer, this), model, 0.0625D, this.doubleFace);
 			this.derivativeModelCache.put(key, cachedConvertedModel = converter.getModel());
 		}
 		this.convertedModel = cachedConvertedModel;
@@ -179,7 +231,7 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 		}
 	}
 	
-	private ModelFromModelBase(Map<ModelCacheKey, Model> modelCache, ModelBase model, Model convertedModel, ResourceLocation texture, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
+	private ModelFromModelBase(Map<ModelCacheKey, Model> modelCache, ModelBase model, Model convertedModel, ResourceLocation texture, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor, boolean doubleFace, boolean ambientOcclusion) {
 		this.derivativeModelCache = modelCache;
 		this.packer = null;
 		this.model = model;
@@ -189,28 +241,12 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 		this.vertexProcessor = vertexProcessor;
 		this.particleTexture = particleTexture;
 		this.convertedModel = convertedModel;
+		this.doubleFace = doubleFace;
+		this.ambientOcclusion = ambientOcclusion;
 		
 		if(this.particleTexture != null) {
 			this.usedTextures.add(this.particleTexture);
 		}
-	}
-	
-	/**
-	 * Sets whether ambient occlusion should be used
-	 * @param ao
-	 * @return
-	 */
-	public ModelFromModelBase setAmbientOcclusion(boolean ao) {
-		this.ambientOcclusion = ao;
-		return this;
-	}
-
-	/**
-	 * Returns whether ambient occlusion should be used
-	 * @return
-	 */
-	public boolean isAmbientOcclusion() {
-		return this.ambientOcclusion;
 	}
 	
 	@Override
@@ -342,14 +378,17 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 			particleTexture = TextureMap.LOCATION_MISSING_TEXTURE;
 		}
 
-		boolean ambientOcclusion = this.isAmbientOcclusion();
-		
+		boolean ambientOcclusion = this.ambientOcclusion;
 		if(customData.containsKey("ambient_occlusion")) {
 			ambientOcclusion = JsonUtils.getBoolean(parser.parse(customData.get("ambient_occlusion")), "ambient_occlusion");
 		}
+
+		boolean doubleFace = this.doubleFace;
+		if(customData.containsKey("double_face")) {
+			doubleFace = JsonUtils.getBoolean(parser.parse(customData.get("double_face")), "double_face");
+		}
 		
 		ResourceLocation texture = this.texture;
-		
 		if(customData.containsKey("texture")) {
 			texture = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("texture")), "texture"));
 		}
@@ -358,10 +397,10 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 			texture = TextureMap.LOCATION_MISSING_TEXTURE;
 		}
 
-		if(texture == this.texture) {
-			return new ModelFromModelBase(this.derivativeModelCache, this.model, this.convertedModel, texture, particleTexture, this.width, this.height, this.vertexProcessor).setAmbientOcclusion(ambientOcclusion);
+		if(Objects.equal(texture, this.texture)) {
+			return new ModelFromModelBase(this.derivativeModelCache, this.model, this.convertedModel, texture, particleTexture, this.width, this.height, this.vertexProcessor, doubleFace, ambientOcclusion);
 		} else {
-			return new ModelFromModelBase(this.derivativeModelCache, this.packer, this.model, texture, particleTexture, this.width, this.height, this.vertexProcessor).setAmbientOcclusion(ambientOcclusion);
+			return new ModelFromModelBase(this.derivativeModelCache, this.packer, this.model, texture, particleTexture, this.width, this.height, this.vertexProcessor, doubleFace, ambientOcclusion);
 		}
 	}
 }
