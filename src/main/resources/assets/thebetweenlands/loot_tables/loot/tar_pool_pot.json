@@ -248,10 +248,16 @@
                     ],
                     "weight": 12,
                     "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:ring_of_gathering",
+                    "weight": 8
                 }
             ],
             "rolls": {
-                "min": 1,
+                "min": 2,
                 "max": 3
             }
         }
