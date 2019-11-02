@@ -47,10 +47,6 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 	private boolean shaking = false;
 	private int shakingTimerMax = 20;
 
-	private final ItemStack renderStack1 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 8);
-	private final ItemStack renderStack2 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 2);
-	private final ItemStack renderStack3 = new ItemStack(BlockRegistry.MUD_BRICKS_CARVED.getDefaultState().getBlock(), 1, 12);
-
 	public static final Set<Block> UNBREAKABLE_BLOCKS = new HashSet<Block>();
 
 	static {
@@ -453,18 +449,6 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake {
 
 	public boolean isMoving() {
 		return !isHoldingStill();
-	}
-
-	public ItemStack cachedStackTop() {
-		return renderStack1;
-	}
-
-	public ItemStack cachedStackMid() {
-		return renderStack2;
-	}
-
-	public ItemStack cachedStackBot() {
-		return renderStack3;
 	}
 
 	public boolean isUnbreakableBlock(Block block) {
