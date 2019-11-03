@@ -17,10 +17,10 @@ public final class PlayerUtil {
 	private static final Method m_NetHandlerPlayServer_captureCurrentPosition;
 
 	static {
-		f_NetHandlerPlayServer_floating = ReflectionHelper.findField(NetHandlerPlayServer.class, "floating", "field_184344_b", "b");
-		f_NetHandlerPlayServer_floatingTickCount = ReflectionHelper.findField(NetHandlerPlayServer.class, "floatingTickCount", "field_147365_f", "c");
-		f_NetHandlerPlayServer_vehicleFloating = ReflectionHelper.findField(NetHandlerPlayServer.class, "vehicleFloating", "field_184345_d", "d");
-		f_NetHandlerPlayServer_vehicleFloatingTickCount = ReflectionHelper.findField(NetHandlerPlayServer.class, "vehicleFloatingTickCount", "field_184346_e", "e");
+		f_NetHandlerPlayServer_floating = ReflectionHelper.findField(NetHandlerPlayServer.class, "floating", "field_184344_B", "B");
+		f_NetHandlerPlayServer_floatingTickCount = ReflectionHelper.findField(NetHandlerPlayServer.class, "floatingTickCount", "field_147365_f", "C");
+		f_NetHandlerPlayServer_vehicleFloating = ReflectionHelper.findField(NetHandlerPlayServer.class, "vehicleFloating", "field_184345_D", "D");
+		f_NetHandlerPlayServer_vehicleFloatingTickCount = ReflectionHelper.findField(NetHandlerPlayServer.class, "vehicleFloatingTickCount", "field_184346_E", "E");
 		m_NetHandlerPlayServer_captureCurrentPosition = ReflectionHelper.findMethod(NetHandlerPlayServer.class, "captureCurrentPosition", "func_184342_d");
 	}
 
