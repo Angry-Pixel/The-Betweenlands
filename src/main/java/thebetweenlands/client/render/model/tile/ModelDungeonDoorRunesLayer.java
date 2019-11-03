@@ -79,7 +79,7 @@ public class ModelDungeonDoorRunesLayer extends ModelBase {
 	
 	private void renderRune(ModelRenderer box, ResourceLocation glow, int ticks, float scale, float partialTicks) {
 		GlStateManager.enablePolygonOffset();
-		GlStateManager.doPolygonOffset(-0.001F, -3F);
+		GlStateManager.doPolygonOffset(-0.01F, -3F);
 
 		Framebuffer fbo = Minecraft.getMinecraft().getFramebuffer();
 
