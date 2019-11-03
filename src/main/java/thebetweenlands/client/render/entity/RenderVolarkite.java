@@ -76,15 +76,20 @@ public class RenderVolarkite extends Render<EntityVolarkite> {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public static void onPlayerRenderPre(RenderPlayerEvent.Pre event) {
-		if(event.getEntityPlayer() instanceof AbstractClientPlayer) {
+		if(event.getEntityPlayer() instanceof AbstractClientPlayer && event.getRenderer() instanceof RenderPlayerVolarkite == false) {
 			AbstractClientPlayer player = (AbstractClientPlayer) event.getEntityPlayer();
 
-			Entity ridingEntity = player.getRidingEntity();
+			Entity mount = player.getRidingEntity();
 
-			if(ridingEntity instanceof EntityVolarkite && event.getRenderer() instanceof RenderPlayerVolarkite == false) {
+			EntityVolarkite kite = null;
+			if(mount instanceof EntityVolarkite) {
+				kite = (EntityVolarkite) mount;
+			} else {
+				kite = (EntityVolarkite) player.getPassengers().stream().filter(e -> e instanceof EntityVolarkite).findAny().orElse(null);
+			}
+
+			if(kite != null) {
 				event.setCanceled(true);
-
-				EntityVolarkite kite = (EntityVolarkite) ridingEntity;
 
 				GlStateManager.pushMatrix();
 

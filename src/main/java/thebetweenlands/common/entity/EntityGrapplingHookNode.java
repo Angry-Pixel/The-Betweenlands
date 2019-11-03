@@ -31,6 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.misc.ItemGrapplingHook;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.util.FlightHelper;
 
 public class EntityGrapplingHookNode extends Entity implements IEntityAdditionalSpawnData {
 	private static final DataParameter<Integer> DW_PREV_NODE = EntityDataManager.createKey(EntityGrapplingHookNode.class, DataSerializers.VARINT);
@@ -409,6 +410,13 @@ public class EntityGrapplingHookNode extends Entity implements IEntityAdditional
 		return !this.isMountNode() || this.getCurrentRopeLength() < this.getDefaultRopeLength() - 0.05D;
 	}
 
+	@Override
+	public void updatePassenger(Entity passenger) {
+		super.updatePassenger(passenger);
+		
+		FlightHelper.resetFloating(passenger);
+	}
+	
 	protected void handleControllerMovement(EntityLivingBase controller) {
 		this.isExtending = false;
 

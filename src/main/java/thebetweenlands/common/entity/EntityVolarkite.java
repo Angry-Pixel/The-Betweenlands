@@ -13,18 +13,22 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.EntityMountEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.misc.ItemVolarkite;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.util.FlightHelper;
 
 public class EntityVolarkite extends Entity {
 	public float prevRotationRoll;
@@ -33,6 +37,8 @@ public class EntityVolarkite extends Entity {
 	protected int updraftTicks = 0;
 	protected int downdraftTicks = 0;
 	protected int draftSourcePos = 0;
+
+	protected int userInAirTicks = 20;
 
 	public EntityVolarkite(World world) {
 		super(world);
@@ -57,6 +63,33 @@ public class EntityVolarkite extends Entity {
 	}
 
 	@Override
+	public double getYOffset() {
+		return this.getRidingEntity() != null ? -this.getRidingEntity().getMountedYOffset() : 0;
+	}
+
+	public void handleRiderDismount(EntityLivingBase rider) {
+		float yaw = rider.rotationYaw;
+		float pitch = rider.rotationPitch;
+
+		rider.dismountRidingEntity();
+
+		//Set rider's position to volarkite position
+		rider.setLocationAndAngles(this.posX, this.posY, this.posZ, yaw, pitch);
+		rider.motionX = this.motionX;
+		rider.motionY = this.motionY;
+		rider.motionZ = this.motionZ;
+		rider.onGround = this.onGround;
+	}
+
+	@Override
+	public void updatePassenger(Entity passenger) {
+		super.updatePassenger(passenger);
+
+		FlightHelper.resetFloating(passenger);
+		FlightHelper.resetVehicleFloating(passenger);
+	}
+
+	@Override
 	public void onEntityUpdate() {
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
@@ -64,6 +97,52 @@ public class EntityVolarkite extends Entity {
 		this.prevRotationPitch = this.rotationPitch;
 		this.prevRotationYaw = this.rotationYaw;
 		this.prevRotationRoll = this.rotationRoll;
+
+		Entity passenger = this.getControllingPassenger();
+		Entity riding = this.getRidingEntity();
+
+		if(!this.world.isRemote) {
+			//Allow player to "dismount" when the volarkite is just riding the player while walking
+			if(riding != null && riding.isSneaking()) {
+				this.dismountRidingEntity();
+			}
+
+			boolean hasUpdraft = this.updraftTicks > 0;
+
+			if(this.onGround && !hasUpdraft) {
+				this.userInAirTicks = 0;
+
+				if(passenger != null) {
+					this.removePassengers();
+					this.startRiding(passenger, true);
+				}
+			} else {
+				if(riding != null && (hasUpdraft || (riding.motionY < 0 && this.userInAirTicks++ > 3 && riding.fallDistance > 0.55f))) {
+					double mx = riding.motionX;
+					double my = riding.motionY;
+					double mz = riding.motionZ;
+
+					this.dismountRidingEntity();
+
+					riding.startRiding(this);
+
+					this.motionX = mx;
+					this.motionY = my;
+					this.motionZ = mz;
+					this.velocityChanged = true;
+
+					this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(riding));
+				}
+			}
+
+			if(this.getServer() != null && this.getRidingEntity() != null) {
+				this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(this.getRidingEntity()));
+			}
+		}
+
+		if(riding != null) {
+			this.rotationYaw = riding.rotationYaw;
+		}
 
 		double targetMotionY = -0.04D;
 
@@ -88,7 +167,7 @@ public class EntityVolarkite extends Entity {
 		this.motionY *= invFriction;
 		this.motionZ *= invFriction;
 
-		Entity controller = this.getControllingPassenger();
+		Entity controller = passenger != null ? passenger : riding;
 
 		Vec3d kiteDir = new Vec3d(Math.cos(Math.toRadians(this.rotationYaw + 90)), 0, Math.sin(Math.toRadians(this.rotationYaw + 90)));
 
@@ -165,7 +244,7 @@ public class EntityVolarkite extends Entity {
 		}
 
 		if(!this.world.isRemote && !hasValidUser) {
-			this.onKillCommand();
+			this.setDead();
 		}
 
 		this.firstUpdate = false;
@@ -183,7 +262,7 @@ public class EntityVolarkite extends Entity {
 			Block block = state.getBlock();
 
 			boolean hasSource = false;
-			
+
 			if(block instanceof IFluidBlock) {
 				Fluid fluid = ((IFluidBlock) block).getFluid();
 				if(fluid.getTemperature() > 373 /*roughly 100°C*/) {
@@ -227,7 +306,7 @@ public class EntityVolarkite extends Entity {
 
 					offsetX /= len;
 					offsetZ /= len;
-					
+
 					this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + offsetX, this.draftSourcePos + (this.posY + (this.downdraftTicks > 0 ? 2.4D : 1) - this.draftSourcePos) * this.world.rand.nextFloat(), this.posZ + offsetZ, this.motionX, this.motionY + (this.downdraftTicks > 0 ? -0.15D : 0.25D), this.motionZ);
 				}
 			}
@@ -291,5 +370,28 @@ public class EntityVolarkite extends Entity {
 	@Override
 	public boolean isInRangeToRenderDist(double distance) {
 		return super.isInRangeToRenderDist(distance) || (this.getControllingPassenger() != null && this.getControllingPassenger().isInRangeToRenderDist(distance));
+	}
+
+	private static boolean isMountingEvent = false;
+
+	@SubscribeEvent
+	public static void onMountEvent(EntityMountEvent event) {
+		if(!isMountingEvent) {
+			isMountingEvent = true;
+
+			try {
+				if(event.isDismounting()) {
+					Entity mount = event.getEntityBeingMounted();
+					Entity rider = event.getEntityMounting();
+
+					if(mount instanceof EntityVolarkite && rider instanceof EntityLivingBase) {
+						event.setCanceled(true);
+						((EntityVolarkite) mount).handleRiderDismount((EntityLivingBase) rider);
+					}
+				}
+			} finally {
+				isMountingEvent = false;
+			}
+		}
 	}
 }
