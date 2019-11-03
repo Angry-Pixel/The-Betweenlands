@@ -14,7 +14,7 @@ public class ElixirStarvation extends ElixirEffect {
 		if(!entity.world.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			if(player.getFoodStats().getFoodLevel() > 0) {
-				player.getFoodStats().addStats(-1, 5.0F);
+				player.getFoodStats().addExhaustion(4);
 			} else {
 				player.getFoodStats().setFoodLevel(0);
 			}
