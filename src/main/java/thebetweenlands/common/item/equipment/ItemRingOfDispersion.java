@@ -23,6 +23,7 @@ import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
+import thebetweenlands.util.PlayerUtil;
 
 public class ItemRingOfDispersion extends ItemRing {
 	public static final String NBT_ACTIVE = "ring_of_dispersion.active";
@@ -79,7 +80,7 @@ public class ItemRingOfDispersion extends ItemRing {
 			if(this.isActive(stack) && entity.ticksExisted % 20 == 0) {
 				this.drainPower(stack, entity);
 			}
-			
+
 			BlockPos currentPos = new BlockPos(entity);
 			BlockPos storedPos = this.getLastValidPos(stack);
 
@@ -115,11 +116,7 @@ public class ItemRingOfDispersion extends ItemRing {
 			}
 
 			if(requiresTeleport && storedPos != null) {
-				if(entity.isRiding()) {
-					entity.dismountRidingEntity();
-				}
-				entity.setPositionAndUpdate(storedPos.getX() + 0.5D, storedPos.getY(), storedPos.getZ() + 0.5D);
-				entity.fallDistance = 0.0F;
+				PlayerUtil.teleport(entity, storedPos.getX() + 0.5D, storedPos.getY(), storedPos.getZ() + 0.5D);
 
 				this.setLastValidPos(stack, null);
 				this.setTimer(stack, 0);

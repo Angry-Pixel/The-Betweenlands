@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.misc.ItemVolarkite;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.util.FlightHelper;
+import thebetweenlands.util.PlayerUtil;
 
 public class EntityVolarkite extends Entity {
 	public float prevRotationRoll;
@@ -85,8 +85,8 @@ public class EntityVolarkite extends Entity {
 	public void updatePassenger(Entity passenger) {
 		super.updatePassenger(passenger);
 
-		FlightHelper.resetFloating(passenger);
-		FlightHelper.resetVehicleFloating(passenger);
+		PlayerUtil.resetFloating(passenger);
+		PlayerUtil.resetVehicleFloating(passenger);
 	}
 
 	@Override

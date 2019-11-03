@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -51,6 +50,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
+import thebetweenlands.util.PlayerUtil;
 
 public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimatorRepairable {
 	public ItemBoneWayfinder() {
@@ -114,12 +114,8 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 						this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
 					}
 
-					if(entity.isRiding()) {
-						entity.dismountRidingEntity();
-	                }
-					entity.setPositionAndUpdate(spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
-					entity.fallDistance = 0.0F;
-					
+					PlayerUtil.teleport(entity, spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
+
 					this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
 
 					entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 1));

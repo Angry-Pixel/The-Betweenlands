@@ -30,7 +30,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.util.FlightHelper;
+import thebetweenlands.util.PlayerUtil;
 
 public class EntityShambler extends EntityMob implements IEntityMultiPart, IEntityBL {
 
@@ -273,7 +273,7 @@ public class EntityShambler extends EntityMob implements IEntityMultiPart, IEnti
 	
 	@Override
 	public void updatePassenger(Entity entity) {
-		FlightHelper.resetFloating(entity);
+		PlayerUtil.resetFloating(entity);
 		
 		if (entity instanceof EntityLivingBase) {
 			double a = Math.toRadians(rotationYaw);
