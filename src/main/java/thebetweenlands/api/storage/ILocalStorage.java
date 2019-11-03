@@ -125,9 +125,16 @@ public interface ILocalStorage extends ICapabilityProvider {
 	public void onUnloaded();
 
 	/**
-	 * Called when the local storage is removed
+	 * Called when the local storage has been removed
 	 */
 	public void onRemoved();
+	
+	/**
+	 * Called before the local storage is being removed
+	 */
+	public default void onRemoving() {
+		
+	}
 
 	/**
 	 * Returns a list of all currently loaded references

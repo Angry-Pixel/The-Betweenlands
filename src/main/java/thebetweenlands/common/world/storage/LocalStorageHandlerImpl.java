@@ -101,6 +101,8 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	@Override
 	public boolean removeLocalStorage(ILocalStorage storage) {
 		if(this.localStorage.containsKey(storage.getID())) {
+			storage.onRemoving();
+			
 			if(!this.world.isRemote) {
 				storage.unlinkAllChunks();
 			}
