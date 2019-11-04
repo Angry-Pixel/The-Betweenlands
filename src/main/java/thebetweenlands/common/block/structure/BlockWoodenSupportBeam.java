@@ -107,18 +107,20 @@ public class BlockWoodenSupportBeam extends BlockHorizontal {
 
 	@Override
 	 public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		IBlockState state = getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-		if (canPlaceAt(world, pos, facing))
-			 return facing != EnumFacing.DOWN && (facing == EnumFacing.UP || (double)hitY <= 0.5D) ? state.withProperty(TOP, false) : state.withProperty(TOP, true);
+		IBlockState state = getDefaultState().withProperty(FACING, facing);
+		if (this.canPlaceAt(world, pos, facing)) {
+			return facing != EnumFacing.DOWN && (facing == EnumFacing.UP || (double)hitY <= 0.5D) ? state.withProperty(TOP, false) : state.withProperty(TOP, true);
+		}
 		return this.getDefaultState();
 	}
 
 	@Override
+	public boolean canPlaceBlockOnSide(World worldIn, BlockPos pos, EnumFacing side) {
+		return worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) && this.canPlaceAt(worldIn, pos, side);
+	}
+	
+	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos) {
-		for (EnumFacing enumfacing : FACING.getAllowedValues()) {
-			if (canPlaceAt(world, pos, enumfacing))
-				return true;
-		}
 		return false;
 	}
 
