@@ -23,7 +23,7 @@ import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)
 public class RenderGalleryFrame extends Render<EntityGalleryFrame> {
-	protected static final ResourceLocation GALLERY_FRAME_EMPTY_BACKGROUND = new ResourceLocation(ModInfo.ID, "textures/entity/gallery_frame_empty_background.png");
+	public static final ResourceLocation GALLERY_FRAME_EMPTY_BACKGROUND = new ResourceLocation(ModInfo.ID, "textures/entity/gallery_frame_empty_background.png");
 
 	public RenderGalleryFrame(RenderManager renderManager) {
 		super(renderManager);
