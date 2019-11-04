@@ -1,0 +1,6 @@
+{
+    "parent": "thebetweenlands:item/ancient_greatsword_base",
+    "textures": {
+        "layer1": "thebetweenlands:items/ancient_greatsword_corrosion_1"
+    }
+}

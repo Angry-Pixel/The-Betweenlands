@@ -25,21 +25,24 @@ import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.common.inventory.container.ContainerBLFurnace;
+import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
+import thebetweenlands.common.inventory.container.ContainerBarrel;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
+import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
-import thebetweenlands.common.tile.TileEntityWisp;
 
 public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRUID_ALTAR = 1;
@@ -55,7 +58,9 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_LURKER_POUCH = 11;
 	public static final int GUI_ITEM_RENAMING = 13;
 	public static final int GUI_LURKER_POUCH_KEYBIND = 14;
-
+	public static final int GUI_CENSER = 15;
+	public static final int GUI_BARREL = 16;
+	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
@@ -108,7 +113,7 @@ public class CommonProxy implements IGuiHandler {
 				item = player.getHeldItemOffhand();
 			}
 			if(!item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
-				String name = item.hasDisplayName() ? item.getDisplayName() : "container.lurker_skin_pouch";
+				String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.lurker_skin_pouch";
 				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
 			}
 			break;
@@ -117,7 +122,7 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_LURKER_POUCH_KEYBIND: {
 			ItemStack item = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(item != null) {
-				String name = item.hasDisplayName() ? item.getDisplayName() : "container.lurker_skin_pouch";
+				String name = item.hasDisplayName() ? item.getDisplayName() : "container.bl.lurker_skin_pouch";
 				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
 			}
 		}
@@ -125,6 +130,17 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_ITEM_RENAMING:
 			return new ContainerItemNaming();
 
+		case GUI_CENSER:
+			if (tile instanceof TileEntityCenser) {
+				return new ContainerCenser(player.inventory, (TileEntityCenser) tile);
+			}
+			break;
+			
+		case GUI_BARREL:
+			if (tile instanceof TileEntityBarrel) {
+				return new ContainerBarrel(player.inventory, (TileEntityBarrel) tile);
+			}
+			break;
 		}
 		return null;
 	}
@@ -193,6 +209,10 @@ public class CommonProxy implements IGuiHandler {
     public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
 
     }
+
+	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
+		
+	}
     
     public boolean isSingleplayer() {
     	return false;

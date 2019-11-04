@@ -9,7 +9,6 @@ import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -45,11 +44,22 @@ import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
+import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
+import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
+import thebetweenlands.common.recipe.censer.CenserRecipeAspect;
+import thebetweenlands.common.recipe.censer.CenserRecipeCremains;
+import thebetweenlands.common.recipe.censer.CenserRecipeDungeonFog;
+import thebetweenlands.common.recipe.censer.CenserRecipeElixir;
+import thebetweenlands.common.recipe.censer.CenserRecipePlantTonic;
+import thebetweenlands.common.recipe.censer.CenserRecipeSapBall;
+import thebetweenlands.common.recipe.censer.CenserRecipeStagnantWater;
+import thebetweenlands.common.recipe.censer.CenserRecipeSwampWater;
+import thebetweenlands.common.recipe.censer.CenserRecipeWeepingBluePetal;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.BookMergeRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
@@ -57,6 +67,7 @@ import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.recipe.misc.HearthgroveTarringRecipe;
 import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.misc.RecipeClearBoneWayfinder;
+import thebetweenlands.common.recipe.misc.RecipeGrapplingHookUpgrades;
 import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
 import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
 import thebetweenlands.common.recipe.misc.RecipeMummyBait;
@@ -85,6 +96,7 @@ public class RecipeRegistry {
 	public static final ResourceLocation HEARTHGROVE_LOG_TARRING = new ResourceLocation(ModInfo.ID, "hearthgrove_log_tarring");
 	public static final ResourceLocation CLEAR_BONE_WAYFINDER = new ResourceLocation(ModInfo.ID, "clear_bone_wayfinder");
 	public static final ResourceLocation SAP_SPIT_CLEAN_TOOL = new ResourceLocation(ModInfo.ID, "sap_spit_clean_tool");
+	public static final ResourceLocation GRAPPLING_HOOK_UPGRADE = new ResourceLocation(ModInfo.ID, "grappling_hook_upgrade");
 	
 	private RecipeRegistry() { }
 
@@ -99,6 +111,7 @@ public class RecipeRegistry {
 		registerCompostRecipes();
 		registerDruidAltarRecipes();
 		registerAnimatorRecipes();
+		registerCenserRecipes();
 
 		ElixirRecipes.init();
 
@@ -210,6 +223,7 @@ public class RecipeRegistry {
 		registry.register(new HearthgroveTarringRecipe().setRegistryName(HEARTHGROVE_LOG_TARRING));
 		registry.register(new RecipeClearBoneWayfinder().setRegistryName(CLEAR_BONE_WAYFINDER));
 		registry.register(new RecipeSapSpitCleanTool().setRegistryName(SAP_SPIT_CLEAN_TOOL));
+		registry.register(new RecipeGrapplingHookUpgrades().setRegistryName(GRAPPLING_HOOK_UPGRADE));
 	}
 
 	private static void registerSmelting() {
@@ -237,6 +251,26 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.BL_BUCKET_RUBBER, 1, 0), EnumItemMisc.RUBBER_BALL.create(3), 0.5F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.BL_BUCKET_RUBBER, 1, 1), new ItemStack(ItemRegistry.SYRMORITE_BUCKET_SOLID_RUBBER), 0.5F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.MIRE_SNAIL_EGG), new ItemStack(ItemRegistry.MIRE_SNAIL_EGG_COOKED), 0.4F);
+		GameRegistry.addSmelting(BlockRegistry.MOSS, new ItemStack(BlockRegistry.DEAD_MOSS), 0.1F);
+		GameRegistry.addSmelting(BlockRegistry.LICHEN, new ItemStack(BlockRegistry.DEAD_LICHEN), 0.1F);
+		GameRegistry.addSmelting(BlockRegistry.WEEDWOOD_BUSH, new ItemStack(BlockRegistry.DEAD_WEEDWOOD_BUSH), 0.1F);
+		//smelt to nuggets
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_AXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_PICKAXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_SHOVEL, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_SWORD, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_HELMET, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_CHESTPLATE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_LEGGINGS, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.VALONITE_BOOTS, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.VALONITE_SPLINTER.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.OCTINE_AXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.OCTINE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.OCTINE_PICKAXE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.OCTINE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.OCTINE_SHOVEL, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.OCTINE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.OCTINE_SWORD, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.OCTINE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.SYRMORITE_HELMET, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.SYRMORITE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.SYRMORITE_CHESTPLATE, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.SYRMORITE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.SYRMORITE_LEGGINGS, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.SYRMORITE_NUGGET.getID()), 0.1F);
+		GameRegistry.addSmelting(ItemRegistry.SYRMORITE_BOOTS, new ItemStack(ItemRegistry.ITEMS_MISC, 1, EnumItemMisc.SYRMORITE_NUGGET.getID()), 0.1F);
 	}
 
 	private static void registerDruidAltarRecipes() {
@@ -321,6 +355,9 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.BLACK_HAT_MUSHROOM));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.FLAT_HEAD_MUSHROOM));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.BULB_CAPPED_MUSHROOM));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.EDGE_LEAF));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.EDGE_MOSS));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.EDGE_SHROOM));
 		CompostRecipe.addRecipe(4, 6000, Item.getItemFromBlock(BlockRegistry.SWAMP_PLANT));
 		CompostRecipe.addRecipe(12, 10000, Item.getItemFromBlock(BlockRegistry.VENUS_FLY_TRAP));
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.VOLARPAD));
@@ -328,7 +365,9 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.THORNS));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.POISON_IVY));
 		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BlockRegistry.MOSS));
+		CompostRecipe.addRecipe(6, 3000, Item.getItemFromBlock(BlockRegistry.DEAD_MOSS));
 		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BlockRegistry.LICHEN));
+		CompostRecipe.addRecipe(6, 3000, Item.getItemFromBlock(BlockRegistry.DEAD_LICHEN));
 		CompostRecipe.addRecipe(6, 9000, Item.getItemFromBlock(BlockRegistry.CAVE_MOSS));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.CAVE_GRASS));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.CATTAIL));
@@ -349,6 +388,11 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.BONESET));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.BOTTLE_BRUSH_GRASS));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.SLUDGECREEP));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.TALL_SLUDGECREEP));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.ROTBULB));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.PALE_GRASS));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.STRING_ROOTS));
+		CompostRecipe.addRecipe(8, 6000, Item.getItemFromBlock(BlockRegistry.CRYPTWEED));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.DEAD_WEEDWOOD_BUSH));
 		CompostRecipe.addRecipe(3, 5000, Item.getItemFromBlock(BlockRegistry.HANGER));
 		CompostRecipe.addRecipe(3, 5000, Item.getItemFromBlock(BlockRegistry.ALGAE));
@@ -360,11 +404,15 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD));
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_HEARTHGROVE));
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_NIBBLETWIG));
+		CompostRecipe.addRecipe(25, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_SPIRIT_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_RUBBER_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_SAP_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_WEEDWOOD_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_HEARTHGROVE_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_NIBBLETWIG_TREE));
+		CompostRecipe.addRecipe(6, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_SPIRIT_TREE_BOTTOM));
+		CompostRecipe.addRecipe(6, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_SPIRIT_TREE_MIDDLE));
+		CompostRecipe.addRecipe(6, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_SPIRIT_TREE_TOP));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.FALLEN_LEAVES));
 		CompostRecipe.addRecipe(3, 5000, ItemRegistry.SWAMP_REED_ITEM);
 		CompostRecipe.addRecipe(3, 5000, EnumItemMisc.DRIED_SWAMP_REED.create(1));
@@ -375,6 +423,9 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(5, 8000, ItemRegistry.BLACK_HAT_MUSHROOM_ITEM);
 		CompostRecipe.addRecipe(5, 8000, ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM);
 		CompostRecipe.addRecipe(12, 10000, ItemRegistry.YELLOW_DOTTED_FUNGUS);
+		CompostRecipe.addRecipe(10, 6000, ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS);
+		CompostRecipe.addRecipe(10, 6000, ItemRegistry.SPORES);
+		CompostRecipe.addRecipe(10, 6000, ItemRegistry.ASPECTRUS_SEEDS);
 
 		for (ItemCrushed.EnumItemCrushed type : ItemCrushed.EnumItemCrushed.values()) {
 			CompostRecipe.addRecipe(3, 4000, new ItemStack(ItemRegistry.ITEMS_CRUSHED, 1, type.getID()));
@@ -444,19 +495,55 @@ public class RecipeRegistry {
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_GENERIC_LEAF.create(1)), (ItemPlantDrop.EnumItemPlantDrop.GENERIC_LEAF.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_BLADDERWORT_FLOWER.create(1)), (ItemPlantDrop.EnumItemPlantDrop.BLADDERWORT_FLOWER_ITEM.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_BLADDERWORT_STALK.create(1)), (ItemPlantDrop.EnumItemPlantDrop.BLADDERWORT_STALK_ITEM.create(1)));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_EDGE_SHROOM.create(1)), (ItemPlantDrop.EnumItemPlantDrop.EDGE_SHROOM_GILLS.create(1)));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_EDGE_MOSS.create(1)), (ItemPlantDrop.EnumItemPlantDrop.EDGE_MOSS_CLUMP.create(1)));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_EDGE_LEAF.create(1)), (ItemPlantDrop.EnumItemPlantDrop.EDGE_LEAF_ITEM.create(1)));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_ROTBULB.create(1)), (ItemPlantDrop.EnumItemPlantDrop.ROTBULB_STALK.create(1)));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_PALE_GRASS.create(1)), (ItemPlantDrop.EnumItemPlantDrop.PALE_GRASS_BLADES.create(1)));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_STRING_ROOTS.create(1)), (ItemPlantDrop.EnumItemPlantDrop.STRING_ROOT_FIBERS.create(1)));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_CRYPTWEED.create(1)), (ItemPlantDrop.EnumItemPlantDrop.CRYPTWEED_BLADES.create(1)));
+		
+		//Loot scraps
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.SKULL_MASK));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.WIGHTS_BANE));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.SLUDGE_SLICER));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.CRITTER_CRUNCHER));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.HAG_HACKER));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.VOODOO_DOLL));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.SWIFT_PICK));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.MAGIC_ITEM_MAGNET));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_DISPERSION));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_FLIGHT));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_POWER));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_RECRUITMENT));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_SUMMONING));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.RING_OF_GATHERING));
+		PestleAndMortarRecipe.addRecipe(ItemMisc.EnumItemMisc.LOOT_SCRAPS.create(1), new ItemStack(ItemRegistry.GEM_SINGER));
 	}
 
 	private static void registerAnimatorRecipes() {
-		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.SCROLL.create(1), 16, 16, LootTableRegistry.ANIMATOR_SCROLL) {
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.SCROLL.create(1), 16, 16, LootTableRegistry.SCROLL) {
 			@Override
 			public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack) {
-				LootTable lootTable = world.getLootTableManager().getLootTableFromLocation(LootTableRegistry.ANIMATOR_SCROLL);
+				LootTable lootTable = world.getLootTableManager().getLootTableFromLocation(LootTableRegistry.SCROLL);
 				LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) world));
 				List<ItemStack> loot = lootTable.generateLootForPools(world.rand, lootBuilder.build());
 				if(!loot.isEmpty()) {
 					return loot.get(world.rand.nextInt(loot.size()));
 				}
-				return null;
+				return ItemStack.EMPTY;
+			}
+		});
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.FABRICATED_SCROLL.create(1), 16, 16, LootTableRegistry.FABRICATED_SCROLL) {
+			@Override
+			public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack) {
+				LootTable lootTable = world.getLootTableManager().getLootTableFromLocation(LootTableRegistry.FABRICATED_SCROLL);
+				LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) world));
+				List<ItemStack> loot = lootTable.generateLootForPools(world.rand, lootBuilder.build());
+				if(!loot.isEmpty()) {
+					return loot.get(world.rand.nextInt(loot.size()));
+				}
+				return ItemStack.EMPTY;
 			}
 		});
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.TAR_BEAST_HEART.create(1), 32, 32, EnumItemMisc.TAR_BEAST_HEART_ANIMATED.create(1)));
@@ -483,6 +570,8 @@ public class RecipeRegistry {
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPORES), 8, 4, EntitySporeling.class).setRenderEntity(new ResourceLocation("thebetweenlands:sporeling")));
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(BlockRegistry.ROOT_POD), 10, 6, EntityRootSprite.class).setRenderEntity(new ResourceLocation("thebetweenlands:root_sprite")));
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPIRIT_TREE_FACE_SMALL_MASK), 24, 24, new ItemStack(ItemRegistry.SPIRIT_TREE_FACE_SMALL_MASK_ANIMATED)));
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.INANIMATE_ANGRY_PEBBLE.create(1), 1, 1, new ItemStack(ItemRegistry.ANGRY_PEBBLE)));
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SLUDGE_WORM_EGG_SAC), 6, 3, new ItemStack(ItemRegistry.SLUDGE_WORM_ARROW)));
 		
 		for(Item item : ItemRegistry.ITEMS) {
 			if(item instanceof IAnimatorRepairable) {
@@ -520,5 +609,17 @@ public class RecipeRegistry {
 				return output;
 			}
 		});
+	}
+	
+	private static void registerCenserRecipes() {
+		AbstractCenserRecipe.addRecipe(new CenserRecipeDungeonFog());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeSapBall());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeWeepingBluePetal());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeStagnantWater());
+		AbstractCenserRecipe.addRecipe(new CenserRecipePlantTonic());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeElixir());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeAspect());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeCremains());
+		AbstractCenserRecipe.addRecipe(new CenserRecipeSwampWater());
 	}
 }

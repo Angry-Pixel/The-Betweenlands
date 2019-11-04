@@ -14,12 +14,13 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.loot.ISharedLootPool;
 import thebetweenlands.api.loot.LootTableView;
+import thebetweenlands.common.world.storage.SharedLootPoolStorage;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class SharedLootPool implements ISharedLootPool {
 	protected ResourceLocation lootTableLocation;
 
-	protected LocationStorage location;
+	protected SharedLootPoolStorage storage;
 
 	protected LootTable view;
 
@@ -36,14 +37,14 @@ public class SharedLootPool implements ISharedLootPool {
 		this.sharedLootSeed = seed;
 	}
 
-	public SharedLootPool(ResourceLocation lootTableLocation, long seed, @Nullable LocationStorage location) {
+	public SharedLootPool(ResourceLocation lootTableLocation, long seed, @Nullable SharedLootPoolStorage storage) {
 		this(lootTableLocation, seed);
-		this.location = location;
+		this.storage = storage;
 	}
 
-	public SharedLootPool(NBTTagCompound nbt, @Nullable LocationStorage location) {
+	public SharedLootPool(NBTTagCompound nbt, @Nullable SharedLootPoolStorage storage) {
 		this(null, 0);
-		this.location = location;
+		this.storage = storage;
 		this.readFromNBT(nbt);
 	}
 
@@ -127,13 +128,13 @@ public class SharedLootPool implements ISharedLootPool {
 
 	@Override
 	public float getGuaranteePercentage() {
-		int lootInventories = this.location != null ? this.location.getLootInventories() : 0;
+		int lootInventories = this.storage != null ? this.storage.getSharedLootInventories(this.lootTableLocation) : 0;
 		return lootInventories <= 0 ? 1.0F : Math.min((float)this.getGuaranteeCounter() / (float)lootInventories, 1.0F);
 	}
 
 	protected void setLocationDirty() {
-		if(this.location != null) {
-			this.location.markDirty();
+		if(this.storage != null) {
+			this.storage.markDirty();
 		}
 	}
 

@@ -239,8 +239,8 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
     public void getSubItems(@Nullable final CreativeTabs tab, final NonNullList<ItemStack> subItems) {
         if (!this.isInCreativeTab(tab)) return;
 
-        subItems.add(emptyWeedwood);
-        subItems.add(emptySyrmorite);
+        subItems.add(emptyWeedwood.copy());
+        subItems.add(emptySyrmorite.copy());
 
         for (int i = 0; i < 2; i++) {
             for (final Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
@@ -301,7 +301,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
     }
 
     public ItemStack getEmpty(ItemStack stack) {
-        return stack.getMetadata() == 1 ? emptySyrmorite: emptyWeedwood;
+        return stack.getMetadata() == 1 ? emptySyrmorite.copy() : emptyWeedwood.copy();
     }
 
     public ItemStack withFluid(int meta, Fluid fluid) {

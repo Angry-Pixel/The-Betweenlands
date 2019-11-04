@@ -1,0 +1,12 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "thebetweenlands:items/grappling_hook"
+  },
+  "overrides": [
+    {
+      "predicate": { "extended": 1.0 },
+      "model": "thebetweenlands:item/grappling_hook_handle"
+    }
+  ]
+}

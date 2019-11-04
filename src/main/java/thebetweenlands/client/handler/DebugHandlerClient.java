@@ -46,7 +46,7 @@ public class DebugHandlerClient {
 	@SubscribeEvent
 	public static void renderWorld(RenderWorldLastEvent event) {
 		if (StreamSupport.stream(Minecraft.getMinecraft().player.getHeldEquipment().spliterator(), false)
-				.anyMatch(stack -> !stack.isEmpty() && stack.getItem() == ItemRegistry.LOCATION_DEBUG)) {
+				.anyMatch(stack -> !stack.isEmpty() && (stack.getItem() == ItemRegistry.LOCATION_DEBUG || stack.getItem() == ItemRegistry.TEST_ITEM_CHIMP_RULER))) {
 			World world = Minecraft.getMinecraft().world;
 			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 
@@ -315,7 +315,7 @@ public class DebugHandlerClient {
 
 	@SubscribeEvent
 	public static void onGuiDrawPost(GuiContainerEvent.DrawForeground event) {
-		if (BetweenlandsConfig.DEBUG.debug) {
+		if (BetweenlandsConfig.DEBUG.debug && Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
 			Container container = event.getGuiContainer().inventorySlots;
 			List<Slot> slots = container.inventorySlots;
 			FontRenderer renderer = Minecraft.getMinecraft().fontRenderer;
@@ -323,11 +323,11 @@ public class DebugHandlerClient {
 			GlStateManager.enableBlend();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-			RenderHelper.disableStandardItemLighting();
+			GlStateManager.disableLighting();
 			for (Slot slot : slots) {
 				renderer.drawString(String.valueOf(slot.slotNumber), slot.xPos, slot.yPos, 0xDDADADAD, false);
 			}
-			RenderHelper.enableStandardItemLighting();
+			GlStateManager.enableLighting();
 			GlStateManager.disableBlend();
 			GlStateManager.popMatrix();
 		}

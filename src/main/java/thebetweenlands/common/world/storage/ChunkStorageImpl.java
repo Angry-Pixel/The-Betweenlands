@@ -244,6 +244,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 		StorageID id = storage.getID();
 		List<LocalStorageReference> unlinkedReferences = new ArrayList<>();
 		Iterator<LocalStorageReference> referenceIT = this.localStorageReferences.iterator();
+
 		while(referenceIT.hasNext()) {
 			LocalStorageReference ref = referenceIT.next();
 			if(id.equals(ref.getID())) {
@@ -251,6 +252,7 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 				referenceIT.remove();
 			}
 		}
+
 		if(!unlinkedReferences.isEmpty()) {
 			//Make sure the local storage is also unlinked from this chunk
 			for(LocalStorageReference ref : unlinkedReferences) {
@@ -258,7 +260,14 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 					storage.unlinkChunk(this.chunk);
 				}
 			}
+
 			this.markDirty();
+
+			//Remove watchers
+			for(EntityPlayerMP watcher : this.getWatchers()) {
+				storage.removeWatcher(this, watcher);
+			}
+
 			this.syncStorageLinks = true;
 			return true;
 		}
@@ -272,12 +281,21 @@ public abstract class ChunkStorageImpl implements IChunkStorage, ITickable {
 			if(id.equals(ref.getID()))
 				return false;
 		}
+
 		LocalStorageReference ref = new LocalStorageReference(this.chunk.getPos(), id, storage.getRegion());
+
 		if(this.localStorageReferences.add(ref)) {
 			this.markDirty();
+
+			//Add watchers
+			for(EntityPlayerMP watcher : this.getWatchers()) {
+				storage.addWatcher(this, watcher);
+			}
+
 			this.syncStorageLinks = true;
 			return true;
 		}
+
 		return false;
 	}
 

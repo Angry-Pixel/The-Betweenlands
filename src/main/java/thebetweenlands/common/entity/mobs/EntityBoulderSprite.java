@@ -60,14 +60,14 @@ import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.IEntityCustomCollisionsCapability.BlockCollisionPredicate;
+import thebetweenlands.api.capability.IEntityCustomCollisionsCapability.EntityCollisionPredicate;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityCustomBlockCollisions;
 import thebetweenlands.api.entity.IEntityWithLootModifier;
 import thebetweenlands.client.render.model.SpikeRenderer;
 import thebetweenlands.client.render.model.entity.ModelBoulderSprite;
-import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler;
-import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler.BlockCollisionPredicate;
-import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler.EntityCollisionPredicate;
+import thebetweenlands.common.handler.CustomEntityCollisionsHandler;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -399,9 +399,9 @@ public class EntityBoulderSprite extends EntityMob implements IEntityCustomBlock
 	public void getCustomCollisionBoxes(AxisAlignedBB aabb, List<AxisAlignedBB> collisionBoxes) {
 		collisionBoxes.clear();
 		final int floor = MathHelper.floor(aabb.minY) + 1;
-		CustomEntityBlockCollisionsHandler.getCollisionBoxes(this, aabb, EntityCollisionPredicate.ALL, new BlockCollisionPredicate() {
+		CustomEntityCollisionsHandler.HELPER.getCollisionBoxes(this, aabb, EntityCollisionPredicate.ALL, new BlockCollisionPredicate() {
 			@Override
-			public boolean isColliding(Entity entity, AxisAlignedBB aabb, MutableBlockPos pos, IBlockState state) {
+			public boolean isColliding(Entity entity, AxisAlignedBB aabb, MutableBlockPos pos, IBlockState state, @Nullable AxisAlignedBB blockAabb) {
 				return !EntityBoulderSprite.this.isHiddenOrInWall() || pos.getY() < floor || !EntityBoulderSprite.this.isValidHideoutBlock(pos);
 			}
 		}, collisionBoxes);

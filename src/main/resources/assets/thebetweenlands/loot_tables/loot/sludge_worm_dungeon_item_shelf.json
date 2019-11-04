@@ -1,0 +1,111 @@
+{
+    "pools": [
+        {
+            "name": "sludge_worm_dungeon_item_shelf",
+            "conditions": [],
+            "entries": [
+                {
+                    "conditions": [],
+                    "type": "empty",
+                    "name": "nothing",
+                    "functions": [],
+                    "weight": 120,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "green_dentrothyst_vial",
+                    "name": "thebetweenlands:dentrothyst_vial",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": {
+                                "min": 0,
+                                "max": 1
+                            }
+                        }
+                    ],
+                    "weight": 25,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "orange_dentrothyst_vial",
+                    "name": "thebetweenlands:dentrothyst_vial",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 2
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "aqua_middle_gem",
+                    "name": "thebetweenlands:aqua_middle_gem",
+                    "weight": 10,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "crimson_middle_gem",
+                    "name": "thebetweenlands:crimson_middle_gem",
+                    "weight": 10,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "green_middle_gem",
+                    "name": "thebetweenlands:green_middle_gem",
+                    "weight": 10,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:reed_donut",
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:items_plant_drop",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": {
+                                "min": 41,
+                                "max": 47
+                            }
+                        }
+                    ],
+                    "weight": 30,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:manual_hl",
+                    "functions": [],
+                    "weight": 8,
+                    "quality": 0
+                }
+            ],
+            "rolls": {
+                "min": 1,
+                "max": 3
+            }
+        }
+    ]
+}

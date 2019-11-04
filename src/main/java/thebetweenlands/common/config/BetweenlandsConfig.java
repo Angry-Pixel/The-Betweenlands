@@ -440,6 +440,16 @@ public class BetweenlandsConfig {
 		@Comment("Minimum player health percentage when percentual decay is applied")
 		@RangeDouble(min = 0, max = Float.MAX_VALUE)
 		public float decayMinHealthPercentage = 0.15f;
+		
+		@Name("item_usage_tooltip")
+		@LangKey(LANG_PREFIX + "item_usage_tooltip")
+		@Comment("Whether the item usage tooltip (\"Used In: Infuser, Compost Bin\" etc.) should be shown")
+		public boolean itemUsageTooltip = true;
+		
+		@Name("online_gallery")
+		@LangKey(LANG_PREFIX + "online_gallery")
+		@Comment("Whether the online fan art gallery picture frame should be enabled and be allowed to download fan art that has been manually picked by the developers to be shown in the gallery picture frame")
+		public boolean onlineGallery = true;
 	}
 
 	@Name("mob_spawning")

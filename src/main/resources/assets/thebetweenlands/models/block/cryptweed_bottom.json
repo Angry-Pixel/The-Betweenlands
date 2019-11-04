@@ -1,0 +1,6 @@
+{
+  "parent": "thebetweenlands:block/cryptweed",
+  "textures": {
+    "block": "thebetweenlands:blocks/cryptweed_bottom"
+  }
+}

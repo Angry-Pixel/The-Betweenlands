@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xsx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:mud_bricks_carved",
+      "data": 11
+    },
+    "s": {
+      "item": "thebetweenlands:items_misc",
+      "data": 10
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:worm_dungeon_pillar",
+    "data": 8,
+    "count": 4
+  }
+}

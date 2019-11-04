@@ -1,0 +1,88 @@
+{
+	"pools": [
+		{
+			"name": "ring",
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "item",
+					"name": "thebetweenlands:ring_of_dispersion",
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "amulet_slot",
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "item",
+					"name": "thebetweenlands:amulet_slot",
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "spook_candy",
+			"rolls": 8,
+			"conditions": [
+				{
+					"condition": "killed_by_player"
+				},
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:is_event_active": {
+							"event": "thebetweenlands:spook",
+							"active": "true"
+						}
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_blue",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_red",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_yellow",
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "winter_mince_pie",
+			"rolls": 6,
+			"conditions": [
+				{
+					"condition": "killed_by_player"
+				},
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:is_event_active": {
+							"event": "thebetweenlands:winter",
+							"active": "true"
+						}
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "item",
+					"name": "thebetweenlands:mince_pie",
+					"weight": 1
+				}
+			]
+		}
+	]
+}

@@ -1,15 +1,17 @@
 package thebetweenlands.common.tile;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-
-import javax.annotation.Nonnull;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityItemShelf extends TileEntityBasicInventory {
     public TileEntityItemShelf() {
-        super(4, "container.itemShelf");
+        super(4, "container.bl.item_shelf");
     }
 
     @Override
@@ -56,4 +58,10 @@ public class TileEntityItemShelf extends TileEntityBasicInventory {
         super.setInventorySlotContents(index, stack);
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public double getMaxRenderDistanceSquared() {
+    	//24 block render range for items
+    	return 576;
+    }
 }

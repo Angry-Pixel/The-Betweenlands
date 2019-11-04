@@ -28,14 +28,14 @@ public class ModelRubberTapCombined implements IModel {
 	}
 
 	public ModelRubberTapCombined(TexturePacker packer, ResourceLocation texture, ResourceLocation particleTexture, ResourceLocation fluidTexture, int height) {
-		this.combinedTapModel = new ModelCombined(this.tapModel = new ModelFromModelBase(packer, new ModelRubberTap(), texture, particleTexture, 128, 128), new ModelRubberTapLiquid(fluidTexture, height));
+		this.combinedTapModel = new ModelCombined(this.tapModel = new ModelFromModelBase.Builder(new ModelRubberTap(), texture, 128, 128).particleTexture(particleTexture).packer(packer).doubleFace(false).build(), new ModelRubberTapLiquid(fluidTexture, height));
 		this.particleTexture = particleTexture;
 		this.height = height;
 		this.fluidTexture = fluidTexture;
 	}
 
 	protected ModelRubberTapCombined(ModelFromModelBase parent, ResourceLocation particleTexture, ResourceLocation fluidTexture, int height) {
-		this.combinedTapModel = new ModelCombined(this.tapModel = new ModelFromModelBase(parent, particleTexture, 128, 128, null), new ModelRubberTapLiquid(fluidTexture, height));
+		this.combinedTapModel = new ModelCombined(this.tapModel = new ModelFromModelBase(parent, particleTexture, 128, 128, null, parent.doubleFace, parent.ambientOcclusion), new ModelRubberTapLiquid(fluidTexture, height));
 		this.particleTexture = particleTexture;
 		this.height = height;
 		this.fluidTexture = fluidTexture;

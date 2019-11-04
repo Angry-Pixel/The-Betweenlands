@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import thebetweenlands.client.render.model.baked.BakedModelItemWrapper;
+import thebetweenlands.client.render.model.loader.extension.AdvancedItemLoaderExtension.ModelContext;
 
 /**
  * Allows json item models to load non-json models
@@ -34,14 +35,7 @@ public class SimpleItemLoaderExtension extends LoaderExtension {
 	public IBakedModel getModelReplacement(ModelResourceLocation location, IBakedModel original) {
 		ResourceLocation replacementModelLocation = this.dummyReplacementMap.get(location);
 		if(replacementModelLocation != null) {
-			//Retrieve replacement model
-			IModel replacementModel;
-			try {
-				//Makes sure that the model is loaded through the model loader and that the textures are registered properly
-				replacementModel = ModelLoaderRegistry.getModel(replacementModelLocation);
-			} catch (Exception ex) {
-				throw new RuntimeException("Failed to load model " + replacementModelLocation + " for child model " + location, ex);
-			}
+			IModel replacementModel = this.findReplacementModelAndRegister(location, replacementModelLocation);
 
 			//Bake replacement model
 			IBakedModel bakedModel = replacementModel.bake(replacementModel.getDefaultState(), DefaultVertexFormats.ITEM, 
@@ -52,5 +46,15 @@ public class SimpleItemLoaderExtension extends LoaderExtension {
 		}
 		//Nothing to replace
 		return null;
+	}
+	
+	private IModel findReplacementModelAndRegister(ResourceLocation location, ResourceLocation replacementModelLocation) {
+		//Retrieve replacement model
+		try {
+			//Makes sure that the model is loaded through the model loader and that the textures are registered properly
+			return ModelLoaderRegistry.getModel(replacementModelLocation);
+		} catch (Exception ex) {
+			throw new RuntimeException("Failed to load model " + replacementModelLocation + " for child model " + location, ex);
+		}
 	}
 }

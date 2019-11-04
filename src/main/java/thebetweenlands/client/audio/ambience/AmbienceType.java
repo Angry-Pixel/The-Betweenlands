@@ -3,8 +3,10 @@ package thebetweenlands.client.audio.ambience;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 @SideOnly(Side.CLIENT)
 public abstract class AmbienceType {
@@ -19,6 +21,15 @@ public abstract class AmbienceType {
 	AmbienceType setPlayer(EntityPlayer player) {
 		this.player = player;
 		return this;
+	}
+	
+	/**
+	 * Returns whether this ambience type is active in the specified world.
+	 * @param world
+	 * @return
+	 */
+	public boolean isActiveInWorld(World world) {
+		return world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
 	}
 
 	/**

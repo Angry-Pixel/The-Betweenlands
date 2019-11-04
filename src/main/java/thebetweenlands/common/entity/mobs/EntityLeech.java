@@ -99,17 +99,17 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundRegistry.SNAIL_LIVING;
+		return SoundRegistry.LEECH_LIVING;
 	}
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSource) {
-		return SoundRegistry.SNAIL_HURT;
+		return SoundRegistry.LEECH_HURT;
 	}
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundRegistry.SNAIL_DEATH;
+		return SoundRegistry.LEECH_DEATH;
 	}
 
 	public void onCollideWithEntity(EntityLivingBase entity) {

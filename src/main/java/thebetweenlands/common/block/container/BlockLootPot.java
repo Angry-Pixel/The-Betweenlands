@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.Block.EnumOffsetType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
@@ -72,11 +73,21 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
+		return EnumBlockRenderType.MODEL;
+	}
+	
+	@Override
+	public BlockRenderLayer getRenderLayer() {
+		return BlockRenderLayer.CUTOUT;
 	}
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isBlockNormalCube(IBlockState state) {
 		return false;
 	}
 
@@ -126,7 +137,6 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile instanceof TileEntityLootPot) {
 			((TileEntityLootPot) tile).setModelRotationOffset(worldIn.rand.nextInt(41) - 20);
-			((TileEntityLootPot) tile).setLootTable(LootTableRegistry.COMMON_POT_LOOT, worldIn.rand.nextLong());
 			tile.markDirty();
 		}
 	}
@@ -267,4 +277,9 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return false;
+	}
 }

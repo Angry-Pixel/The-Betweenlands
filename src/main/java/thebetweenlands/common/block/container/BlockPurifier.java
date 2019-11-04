@@ -62,9 +62,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (world.isRemote) {
-			return true;
-		}
+
 		if (world.getTileEntity(pos) instanceof TileEntityPurifier) {
 			TileEntityPurifier tile = (TileEntityPurifier) world.getTileEntity(pos);
 
@@ -81,17 +79,20 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 					if (bucketFluid != null) {
 						IItemHandler playerInventory = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 						if (playerInventory != null) {
-							FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainerAndStow(heldItem, tile, playerInventory, Integer.MAX_VALUE, player);
+							FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainerAndStow(heldItem, tile, playerInventory, Integer.MAX_VALUE, player, !world.isRemote);
 
 							if (fluidActionResult.isSuccess()) {
-								player.setHeldItem(hand, fluidActionResult.getResult());
+								if (!world.isRemote) {
+									player.setHeldItem(hand, fluidActionResult.getResult());
+								}
 								return true;
 							}
 						}
 					}
 				}
 			}
-			if (tile != null) {
+			
+			if (!world.isRemote && tile != null) {
 				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_PURIFIER, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 		}

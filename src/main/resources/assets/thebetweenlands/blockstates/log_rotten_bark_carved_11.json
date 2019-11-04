@@ -1,0 +1,19 @@
+{
+  "forge_marker":1,
+  "defaults": {
+    "textures":{
+    "up": "thebetweenlands:blocks/rotten_bark_rotated",
+    "down": "thebetweenlands:blocks/rotten_bark_rotated",
+    "north": "thebetweenlands:blocks/rotten_bark_carved_11",
+    "east": "thebetweenlands:blocks/rotten_bark_carved_11",
+    "south": "thebetweenlands:blocks/rotten_bark_carved_11",
+    "west": "thebetweenlands:blocks/rotten_bark_carved_11"
+    }
+  },
+    "variants": { 
+        "facing=north": { "model": "thebetweenlands:log_rotten_bark_carved", "y": 180 },
+        "facing=south": { "model": "thebetweenlands:log_rotten_bark_carved" },
+        "facing=west":  { "model": "thebetweenlands:log_rotten_bark_carved", "y": 90 },
+        "facing=east":  { "model": "thebetweenlands:log_rotten_bark_carved", "y": 270 }
+    }
+  }

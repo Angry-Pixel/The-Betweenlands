@@ -11,6 +11,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.util.TranslationHelper;
@@ -42,6 +43,9 @@ public class ItemMob extends Item {
                 entity = new EntityGecko(world);
                 entity.setHealth(stack.hasTagCompound() && stack.getTagCompound().hasKey("Health") ? stack.getTagCompound().getFloat("Health"): (float) entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue());
                 break;
+            case "sludge_worm_egg_sac":
+                entity = new EntityTinyWormEggSac(world);
+                break;
         }
         if (entity != null) {
             BlockPos offset = pos.offset(facing);
@@ -50,7 +54,7 @@ public class ItemMob extends Item {
                 entity.setCustomNameTag(stack.getDisplayName());
             world.spawnEntity(entity);
             entity.playLivingSound();
-            player.setHeldItem(hand, ItemStack.EMPTY);
+            stack.shrink(1);
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.FAIL;

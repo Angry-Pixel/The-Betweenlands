@@ -12,9 +12,14 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.block.misc.BlockSludge;
+import thebetweenlands.common.block.structure.BlockSpikeTrap;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class TileEntitySpikeTrap extends TileEntity implements ITickable {
@@ -26,32 +31,35 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (!world.isRemote) {
-			IBlockState stateUp = world.getBlockState(pos.up());
-			if (stateUp.getBlock() != Blocks.AIR && stateUp.getBlockHardness(world, pos.up()) >= 0.0F) {
+		if (!getWorld().isRemote) {
+			IBlockState state = getWorld().getBlockState(getPos());
+			EnumFacing facing = state.getValue(BlockSpikeTrap.FACING);
+
+			IBlockState stateFacing = getWorld().getBlockState(getPos().offset(facing, 1));
+			if (stateFacing.getBlock() != Blocks.AIR && stateFacing.getBlockHardness(getWorld(), getPos().offset(facing, 1)) >= 0.0F && !(stateFacing.getBlock() instanceof BlockSludge)) {
 				setType((byte) 1);
 				setActive(true);
-				Block block = stateUp.getBlock();
-				world.playEvent(null, 2001, pos.up(), Block.getIdFromBlock(block));
-				block.dropBlockAsItem(world, pos.up(), world.getBlockState(pos.up()), 0);
-				world.setBlockToAir(pos.up());
+				Block block = stateFacing.getBlock();
+				getWorld().playEvent(null, 2001, getPos().offset(facing, 1), Block.getIdFromBlock(block));
+				block.dropBlockAsItem(getWorld(), getPos().offset(facing, 1), getWorld().getBlockState(getPos().offset(facing, 1)), 0);
+				getWorld().setBlockToAir(getPos().offset(facing, 1));
 			}
-			IBlockState stateUp2 = world.getBlockState(pos.up(2));
-			if (stateUp2.getBlock() != Blocks.AIR && stateUp2.getBlockHardness(world, pos.up(2)) >= 0.0F) {
+			IBlockState stateFacing2 = getWorld().getBlockState(getPos().offset(facing, 2));
+			if (stateFacing2.getBlock() != Blocks.AIR && stateFacing2.getBlockHardness(getWorld(), getPos().offset(facing, 2)) >= 0.0F && !(stateFacing.getBlock() instanceof BlockSludge)) {
 				setType((byte) 1);
 				setActive(true);
-				Block block = stateUp2.getBlock();
-				world.playEvent(null, 2001, pos.up(2), Block.getIdFromBlock(block));
-				block.dropBlockAsItem(world, pos.up(2), world.getBlockState(pos.up(2)), 0);
-				world.setBlockToAir(pos.up(2));
+				Block block = stateFacing2.getBlock();
+				getWorld().playEvent(null, 2001, getPos().offset(facing, 2), Block.getIdFromBlock(block));
+				block.dropBlockAsItem(getWorld(), getPos().offset(facing, 2), getWorld().getBlockState(getPos().offset(facing, 2)), 0);
+				getWorld().setBlockToAir(getPos().offset(facing, 2));
 			}
-			if (world.rand.nextInt(500) == 0) {
+			if (getWorld().rand.nextInt(500) == 0) {
 				if (type != 0 && !active && animationTicks == 0)
 					setType((byte) 0);
 				else if (isBlockOccupied() == null)
 					setType((byte) 1);
 			}
-			
+
 			if (isBlockOccupied() != null && type != 0)
 				if(!active && animationTicks == 0)
 					setActive(true);
@@ -61,10 +69,10 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 		if (active) {
 			activateBlock();
 			if (animationTicks == 0)
-				world.playSound(null, (double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.SPIKE, SoundCategory.BLOCKS, 1.25F, 1.0F);
+				getWorld().playSound(null, (double) getPos().getX(), (double)getPos().getY(), (double)getPos().getZ(), SoundRegistry.SPIKE, SoundCategory.BLOCKS, 1.25F, 1.0F);
 			if (animationTicks <= 20)
 				animationTicks += 4;
-			if (animationTicks == 20 && !this.world.isRemote)
+			if (animationTicks == 20 && !this.getWorld().isRemote)
 				setActive(false);
 		}
 		if (!active)
@@ -74,33 +82,38 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 
 	public void setActive(boolean isActive) {
 		active = isActive;
-		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 2);
 	}
 
 	public void setType(byte blockType) {
 		type = blockType;
-		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
+		getWorld().notifyBlockUpdate(getPos(), getWorld().getBlockState(getPos()), getWorld().getBlockState(getPos()), 2);
 	}
 
 	protected Entity activateBlock() {
-		float y = 1F / 16 * animationTicks;
-		List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1D, pos.getY() + 1D + y, pos.getZ() + 1D));
+		IBlockState state = getWorld().getBlockState(getPos());
+		EnumFacing facing = state.getValue(BlockSpikeTrap.FACING);
+		BlockPos hitArea = getPos().offset(facing, 1);
+		List<EntityLivingBase> list = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(hitArea));
 		if (animationTicks >= 1)
 			for (int i = 0; i < list.size(); i++) {
 				Entity entity = list.get(i);
 				if (entity != null)
-					//if (entity instanceof EntityPlayer)
+					if (!(entity instanceof IEntityBL))
 						((EntityLivingBase) entity).attackEntityFrom(DamageSource.GENERIC, 2);
 			}
 		return null;
 	}
 
 	protected Entity isBlockOccupied() {
-		List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() + 0.25D, pos.getY(), pos.getZ() + 0.25D, pos.getX() + 0.75D, pos.getY() + 2D, pos.getZ() + 0.75D));
+		IBlockState state = getWorld().getBlockState(getPos());
+		EnumFacing facing = state.getValue(BlockSpikeTrap.FACING);
+		BlockPos hitArea = getPos().offset(facing , 1);
+		List<EntityLivingBase> list = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(hitArea).shrink(0.25D));
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity = list.get(i);
 			if (entity != null)
-				//if (entity instanceof EntityPlayer)
+				if (!(entity instanceof IEntityBL))
 					return entity;
 		}
 		return null;
@@ -133,7 +146,7 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		writeToNBT(nbt);
-		return new SPacketUpdateTileEntity(pos, 1, nbt);
+		return new SPacketUpdateTileEntity(getPos(), 1, nbt);
 	}
 
 	@Override
@@ -141,4 +154,8 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 		readFromNBT(packet.getNbtCompound());
 	}
 
+	@Override
+	public boolean hasFastRenderer() {
+		return true;
+	}
 }

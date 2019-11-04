@@ -196,21 +196,6 @@ public class BlockInfuser extends BlockContainer {
 				for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS + 1; i++) {
 					ItemStack stack = tileInventory.getStackInSlot(i);
 					if (!stack.isEmpty()) {
-						if (world.getGameRules().getBoolean("doTileDrops")) {
-							float f = 0.7F;
-							double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-							double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-							double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-							EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, stack);
-							entityitem.setDefaultPickupDelay();
-							world.spawnEntity(entityitem);
-						}
-					}
-				}
-			} else if (tileInventory != null && tile.hasInfusion()) {
-				ItemStack stack = tileInventory.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1);
-				if (!stack.isEmpty()) {
-					if (world.getGameRules().getBoolean("doTileDrops")) {
 						float f = 0.7F;
 						double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
 						double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
@@ -219,6 +204,17 @@ public class BlockInfuser extends BlockContainer {
 						entityitem.setDefaultPickupDelay();
 						world.spawnEntity(entityitem);
 					}
+				}
+			} else if (tileInventory != null && tile.hasInfusion()) {
+				ItemStack stack = tileInventory.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1);
+				if (!stack.isEmpty()) {
+					float f = 0.7F;
+					double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+					double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+					double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+					EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, stack);
+					entityitem.setDefaultPickupDelay();
+					world.spawnEntity(entityitem);
 				}
 			}
 		}

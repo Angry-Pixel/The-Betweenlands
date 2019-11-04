@@ -2,14 +2,11 @@ package thebetweenlands.common.entity.rowboat;
 
 import java.util.EnumMap;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
@@ -90,25 +87,20 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     private static final EnumMap<ShipSide, SoundEvent> SOUND_ROW_START = ShipSide.newEnumMap(SoundEvent.class, SoundRegistry.ROWBOAT_ROW_START_STARBOARD, SoundRegistry.ROWBOAT_ROW_START_PORT);
 
-    private EnumMap<ShipSide, Float> rowForce = ShipSide.newEnumMap(float.class);
+    private EnumMap<ShipSide, OarState> oars = ShipSide.newEnumMap(OarState.class, new OarState(), new OarState());
 
-    private EnumMap<ShipSide, Integer> rowTime = ShipSide.newEnumMap(int.class, FORCE_SETTLE_DURATION, FORCE_SETTLE_DURATION);
-
-    private EnumMap<ShipSide, Float> prevRowProgress = ShipSide.newEnumMap(float.class, RESTING_ROW_PROGRESS, RESTING_ROW_PROGRESS);
-
-    private EnumMap<ShipSide, Float> rowProgress = ShipSide.newEnumMap(float.class, RESTING_ROW_PROGRESS, RESTING_ROW_PROGRESS);
-
-    private EnumMap<ShipSide, Boolean> oarState = ShipSide.newEnumMap(boolean.class);
-
-    private EnumMap<ShipSide, Boolean> oarInAir = ShipSide.newEnumMap(boolean.class);
-
-    private EnumMap<ShipSide, Float> prevOarXWavePull = ShipSide.newEnumMap(float.class);
-
-    private EnumMap<ShipSide, Float> prevOarZWavePull = ShipSide.newEnumMap(float.class);
-
-    private EnumMap<ShipSide, Float> oarXWavePull = ShipSide.newEnumMap(float.class);
-
-    private EnumMap<ShipSide, Float> oarZWavePull = ShipSide.newEnumMap(float.class);
+    public class OarState {
+        float rowForce = 0.0F;
+        int rowTime = FORCE_SETTLE_DURATION;
+        float prevRowProgress = RESTING_ROW_PROGRESS;
+        float rowProgress = RESTING_ROW_PROGRESS;
+        boolean oarState = false;
+        boolean oarInAir = false;
+        float prevOarXWavePull;
+        float prevOarZWavePull;
+        float oarXWavePull;
+        float oarZWavePull;
+    }
 
     private float drag;
 
@@ -201,8 +193,8 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     @SideOnly(Side.CLIENT)
     @Override
     public void updateInputs(boolean starboard, boolean port, boolean forward, boolean backward) {
-        oarState.put(ShipSide.STARBOARD, starboard);
-        oarState.put(ShipSide.PORT, port);
+        oars.get(ShipSide.STARBOARD).oarState = starboard;
+        oars.get(ShipSide.PORT).oarState = port;
     }
 
     @Override
@@ -353,10 +345,12 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         prevOarStrokeRight = right;
         prevRotation = new Quat(rotation);
         prevWaveHeight = waveHeight;
-        prevOarXWavePull.put(ShipSide.STARBOARD, oarXWavePull.get(ShipSide.STARBOARD));
-        prevOarXWavePull.put(ShipSide.PORT, oarXWavePull.get(ShipSide.PORT));
-        prevOarZWavePull.put(ShipSide.STARBOARD, oarZWavePull.get(ShipSide.STARBOARD));
-        prevOarZWavePull.put(ShipSide.PORT, oarZWavePull.get(ShipSide.PORT));
+        OarState oarStarboard = oars.get(ShipSide.STARBOARD);
+        OarState oarPort = oars.get(ShipSide.PORT);
+        oarStarboard.prevOarXWavePull = oarStarboard.oarXWavePull;
+        oarPort.prevOarXWavePull = oarPort.oarXWavePull;
+        oarStarboard.prevOarZWavePull = oarStarboard.oarZWavePull;
+        oarPort.prevOarZWavePull = oarPort.oarZWavePull;
         if (inWater) {
             hitWaves(pow);
             inWaterTicks++;
@@ -378,7 +372,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                 if (motion != null) {
                     updateMotion(motion);
                 }
-                TheBetweenlands.networkWrapper.sendToServer(new MessageRow(oarState.get(ShipSide.STARBOARD), oarState.get(ShipSide.PORT), rowProgress.get(ShipSide.STARBOARD), rowProgress.get(ShipSide.PORT)));
+                TheBetweenlands.networkWrapper.sendToServer(new MessageRow(oarStarboard.oarState, oarPort.oarState, oarStarboard.rowProgress, oarPort.rowProgress));
             }
             float rotationLeft = getAppropriateRowProgress(ShipSide.STARBOARD);
             float rotationRight = getAppropriateRowProgress(ShipSide.PORT);
@@ -454,8 +448,10 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     private void updatePilotPull() {
         prevPilotPower = pilotPower;
-        int timeStarboard = rowTime.get(ShipSide.STARBOARD);
-        int timePort = rowTime.get(ShipSide.PORT);
+        OarState oarStarboard = oars.get(ShipSide.STARBOARD);
+        OarState oarPort = oars.get(ShipSide.PORT);
+        int timeStarboard = oarStarboard.rowTime;
+        int timePort = oarPort.rowTime;
         if (timeStarboard > 20 && timePort > 20 && getAppropriateOarState(ShipSide.STARBOARD) && getAppropriateOarState(ShipSide.PORT) && getAppropriateRowProgress(ShipSide.STARBOARD) == getAppropriateRowProgress(ShipSide.PORT)) {
             if (pilotPower < 1) {
                 pilotPower += 0.2F;
@@ -479,16 +475,18 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         float align = MathUtils.linearTransformf(angle, 0, MathUtils.PI, 1, 0);
         float yaw = (float) Math.atan2(-normal.z, -normal.x) - (rotationYaw - 90) * MathUtils.DEG_TO_RAD;
         float pitch = (float) Math.acos(Math.max(Math.min(normal.dotProduct(of), 1), -1));
-        float x = oarXWavePull.get(side);
-        oarXWavePull.put(side, x + (MathHelper.clamp(yaw * align * (float) nf.length() * 2, -0.3F, 0.3F) - x) * 0.7F * (float) nf.length());
-        float z = oarZWavePull.get(side);
-        oarZWavePull.put(side, z + ((pitch - MathUtils.PI / 2) * (1 - align) * (getOarElevation(side) + 1) / 2 - z) * 0.4F);
+        OarState oarSide = oars.get(side);
+        float x = oarSide.oarXWavePull;
+        oarSide.oarXWavePull = x + (MathHelper.clamp(yaw * align * (float) nf.length() * 2, -0.3F, 0.3F) - x) * 0.7F * (float) nf.length();
+        float z = oarSide.oarZWavePull;
+        oarSide.oarZWavePull = z + ((pitch - MathUtils.PI / 2) * (1 - align) * (getOarElevation(side) + 1) / 2 - z) * 0.4F;
     }
 
     private void updateClientOarProgress(ShipSide side) {
-        prevRowProgress.put(side, rowProgress.get(side));
+        OarState oarSide = oars.get(side);
+        oarSide.prevRowProgress = oarSide.rowProgress;
         if (!isUserSteering()) {
-            rowProgress.put(side, getServerRowProgress(side));
+            oarSide.rowProgress = getServerRowProgress(side);
         }
     }
 
@@ -592,7 +590,6 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     private void applyForces() {
-        float bobBase = 0.1F;
         float buoyancy = 0;
         BlockPos pos = new BlockPos(this);
         IBlockState blockAt = world.getBlockState(pos);
@@ -674,7 +671,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         motionX += motion.x;
         motionY += motion.y;
         motionZ += motion.z;
-        setPaddleState(oarState.get(ShipSide.STARBOARD), oarState.get(ShipSide.PORT));
+        setPaddleState(oars.get(ShipSide.STARBOARD).oarState, oars.get(ShipSide.PORT).oarState);
     }
 
     private float getOarPeriodicForceApplyment(ShipSide side) {
@@ -701,7 +698,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     public float getRowForce(ShipSide side) {
-        return 0.017F * rowForce.get(side);
+        return 0.017F * oars.get(side).rowForce;
     }
 
     public void updateRowProgress(ShipSide side, float value) {
@@ -713,8 +710,9 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     public void updateRowForce(ShipSide side, boolean oarStroke, boolean prevOarStroke) {
-        float force = rowForce.get(side);
-        int time = rowTime.get(side) + 1;
+        OarState oarSide = oars.get(side);
+        float force = oarSide.rowForce;
+        int time = oarSide.rowTime + 1;
         if (oarStroke || time < FORCE_SETTLE_DURATION) {
             if (!prevOarStroke && oarStroke && time >= FORCE_SETTLE_DURATION) {
                 force = 1;
@@ -725,8 +723,8 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         } else {
             force = Math.max(force - 0.1F, 0);
         }
-        rowTime.put(side, time);
-        rowForce.put(side, force);
+        oarSide.rowTime = time;
+        oarSide.rowForce = force;
     }
 
     private void animateHullWaterInteraction() {
@@ -824,7 +822,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     private void createOarSoundFX(ShipSide side) {
-        double velocity = Math.sqrt(motionX * motionX + motionZ * motionZ);
+        OarState oarSide = oars.get(side);
         Vec3d oarlock = getOarlockPosition(side);
         Vec3d oarVector = getOarVector(side);
         Vec3d blade = oarlock.add(oarVector.x * OAR_LENGTH, oarVector.y * OAR_LENGTH, oarVector.z * OAR_LENGTH);
@@ -834,16 +832,16 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             float amountInAir = (float) oarlock.distanceTo(raytrace.hitVec);
             if (amountInAir < LOOM_LENGTH) {
                 bladeInAir = false;
-                float force = rowForce.get(side);
+                float force = oarSide.rowForce;
                 boolean start = force == 1;
-                if (oarInAir.get(side) || start) {
+                if (oarSide.oarInAir || start) {
                     float volume = force * 0.8F + 0.2F;
                     SoundEvent sound = (start ? SOUND_ROW_START : SOUND_ROW).get(side);
                     world.playSound(null, raytrace.hitVec.x, raytrace.hitVec.y, raytrace.hitVec.z, sound, SoundCategory.NEUTRAL, volume, 0.8F + rand.nextFloat() * 0.3F);
                 }
             }
         }
-        oarInAir.put(side, bladeInAir);
+        oarSide.oarInAir = bladeInAir;
     }
 
     @Override
@@ -898,15 +896,16 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             progress += ROW_PROGRESS_PERIOD;
         }
         if (isUserSteering()) {
-            rowProgress.put(side, progress);
+             oars.get(side).rowProgress = progress;
         } else {
             dataManager.set(ROW_PROGRESS.get(side), progress);
         }
     }
 
     public float getRowProgress(ShipSide side, float delta) {
-        float prevProgress = prevRowProgress.get(side);
-        float progress = rowProgress.get(side);
+        OarState oarSide = oars.get(side);
+        float prevProgress = oarSide.prevRowProgress;
+        float progress = oarSide.rowProgress;
         return delta * (MathUtils.mod(progress - prevProgress + ROW_PROGRESS_PERIOD / 2, ROW_PROGRESS_PERIOD) - ROW_PROGRESS_PERIOD / 2) + prevProgress;
     }
 
@@ -915,11 +914,11 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     public float getAppropriateRowProgress(ShipSide side) {
-        return isUserSteering() ? rowProgress.get(side) : getServerRowProgress(side);
+        return isUserSteering() ? oars.get(side).rowProgress : getServerRowProgress(side);
     }
 
     public boolean getAppropriateOarState(ShipSide side) {
-        return isUserSteering() ? oarState.get(side) : getPaddleState(side.ordinal());
+        return isUserSteering() ? oars.get(side).oarState : getPaddleState(side.ordinal());
     }
 
     private boolean isUserSteering() {
@@ -928,7 +927,8 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     public float getOarRotationX(ShipSide side, float theta, float delta) {
-        return MathHelper.sin(theta * EntityWeedwoodRowboat.OAR_ROTATION_SCALE) * 0.6F + prevOarXWavePull.get(side) + (oarXWavePull.get(side) - prevOarXWavePull.get(side)) * delta;
+        OarState oarSide = oars.get(side);
+        return MathHelper.sin(theta * EntityWeedwoodRowboat.OAR_ROTATION_SCALE) * 0.6F + oarSide.prevOarXWavePull + (oarSide.oarXWavePull - oarSide.prevOarXWavePull) * delta;
     }
 
     public float getOarRotationY(ShipSide side, float theta) {
@@ -940,7 +940,8 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     public float getOarRotationZ(ShipSide side, float theta, float delta) {
-        float angle = MathHelper.cos(theta * EntityWeedwoodRowboat.OAR_ROTATION_SCALE) * 0.45F - MathUtils.PI / 2.5F + prevOarZWavePull.get(side) + (oarZWavePull.get(side) - prevOarZWavePull.get(side)) * delta;
+        OarState oarSide = oars.get(side);
+        float angle = MathHelper.cos(theta * EntityWeedwoodRowboat.OAR_ROTATION_SCALE) * 0.45F - MathUtils.PI / 2.5F + oarSide.prevOarZWavePull + (oarSide.oarZWavePull - oarSide.prevOarZWavePull) * delta;
         if (side == ShipSide.PORT) {
             angle = -angle;
         }
@@ -978,7 +979,11 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     public static boolean isTarred(ItemStack stack) {
-        return stack.hasTagCompound() && stack.getTagCompound().getCompoundTag("attributes").getBoolean("isTarred");
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag != null) {
+            return tag.getCompoundTag("attributes").getBoolean("isTarred");
+        }
+        return false;
     }
 
     private static <T> DataParameter<T> defineId(DataSerializer<T> serializer) {
@@ -1000,27 +1005,32 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         return 1;
     }
 
-    // Inheried methods not needed
+    // Inherited methods not needed
 
     @Override
-    public float getWaterLevelAbove() { throw ohnoes(); }
-
-    @Override
-    public float getBoatGlide() { throw ohnoes(); }
-
-    @Override
-    public void setBoatType(Type boatType) { throw ohnoes(); }
-
-    @Override
-    public Type getBoatType() { throw ohnoes(); }
-
-    @Override
-    public float getRowingTime(int oar, float limbSwing) { throw ohnoes(); }
-
-    private RuntimeException ohnoes() {
-        return new UnsupportedOperationException("OH NOES!");
+    public float getWaterLevelAbove() {
+        return 0.0F;
     }
-    
+
+    @Override
+    public float getBoatGlide() {
+        return 0.0F;
+    }
+
+    @Override
+    public void setBoatType(Type boatType) {
+    }
+
+    @Override
+    public Type getBoatType() {
+        return Type.OAK;
+    }
+
+    @Override
+    public float getRowingTime(int oar, float limbSwing) {
+        return 0.0F;
+    }
+
     @SubscribeEvent
     public static void onLivingAttacked(LivingAttackEvent event) {
         Entity ridingEntity = event.getEntityLiving().getRidingEntity();

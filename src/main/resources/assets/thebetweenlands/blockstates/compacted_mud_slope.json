@@ -1,0 +1,65 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/compacted_mud_slope"
+  },
+  "variants": { 
+    "half": {
+      "top": { },
+      "bottom": { }
+    },
+    "shape": {
+      "straight": { },
+      "inner_left": { },
+      "inner_right": { },
+      "outer_left": { },
+      "outer_right": { }
+    },
+    "facing": {
+      "north": { },
+      "south": { },
+      "east": { },
+      "west": { }
+    },
+    "inventory": { 
+      "model": "thebetweenlands:internal/compacted_mud_slope",
+      "transform": {
+                "gui": {
+                    "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale":[0.6, 0.6, 0.6]
+                },
+                "ground": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, -0.15, 0],
+                    "scale":[0.25, 0.25, 0.25]
+                },
+                "fixed": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale":[0.5, 0.5, 0.5]
+                },
+                "thirdperson_righthand": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0.15, 0.15],
+                    "scale": [0.5, 0.5, 0.5]
+                },
+                "thirdperson_lefthand": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0.15, 0.15],
+                    "scale": [0.5, 0.5, 0.5]
+                },
+                "firstperson_righthand": {
+                    "rotation": [{"x": 0}, {"y": 45}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale": [0.5, 0.5, 0.5]
+                },
+                "firstperson_lefthand": {
+                    "rotation": [{"x": 0}, {"y": -315}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale": [0.5, 0.5, 0.5]
+                }
+            }
+    }
+  } 
+}

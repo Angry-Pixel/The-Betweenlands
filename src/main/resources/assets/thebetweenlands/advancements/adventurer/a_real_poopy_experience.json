@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:dungeon_door_runes"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.a_real_poopy_experience.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.a_real_poopy_experience.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/light_the_braziers",
+  "criteria": {
+    "sludge_maze": {
+      "trigger": "thebetweenlands:location",
+      "conditions": {
+        "name": "sludge_worm_dungeon_maze"
+      }
+    }
+  }
+}

@@ -25,7 +25,7 @@ public class ItemVolarkite extends Item {
 		this.setMaxDamage(300);
 
 		this.addPropertyOverride(new ResourceLocation("using"), (stack, worldIn, entityIn) -> {
-			if(entityIn != null && entityIn.getRidingEntity() instanceof EntityVolarkite) {
+			if(entityIn != null && (entityIn.getRidingEntity() instanceof EntityVolarkite || entityIn.getPassengers().stream().filter(e -> e instanceof EntityVolarkite).findAny().isPresent())) {
 				return stack.getTagCompound() != null && stack.getTagCompound().getBoolean("using_kite") ? 1 : 0;
 			}
 			return 0;
@@ -35,7 +35,7 @@ public class ItemVolarkite extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if(!world.isRemote) {
-			if(!player.isRiding()) {
+			if(!player.isRiding() && player.getRecursivePassengersByType(EntityVolarkite.class).isEmpty()) {
 				EntityVolarkite entity = new EntityVolarkite(world);
 				entity.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, 0);
 				entity.motionX = player.motionX;
@@ -46,7 +46,7 @@ public class ItemVolarkite extends Item {
 				world.spawnEntity(entity);
 
 				player.startRiding(entity);
-				
+
 				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, SoundCategory.PLAYERS, 1, 1);
 			}
 		}
@@ -62,14 +62,16 @@ public class ItemVolarkite extends Item {
 
 		boolean usingKite = false;
 
-		if(entity instanceof EntityLivingBase && entity.getRidingEntity() instanceof EntityVolarkite) {
+		boolean isRidingKite = entity.getRidingEntity() instanceof EntityVolarkite;
+
+		if(entity instanceof EntityLivingBase && (isRidingKite || entity.getPassengers().stream().filter(e -> e instanceof EntityVolarkite).findAny().isPresent())) {
 			EntityLivingBase living = (EntityLivingBase) entity;
 
 			boolean isMainHand = stack == living.getHeldItem(EnumHand.MAIN_HAND);
 			boolean isOffHand = stack == living.getHeldItem(EnumHand.OFF_HAND);
 			boolean hasOffHand = !living.getHeldItem(EnumHand.OFF_HAND).isEmpty() && living.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemVolarkite;
 			if((isMainHand || isOffHand) && ((isMainHand && !hasOffHand) || isOffHand)) {
-				if(!world.isRemote && entity.ticksExisted % 20 == 0) {
+				if(!world.isRemote && isRidingKite && entity.ticksExisted % 20 == 0) {
 					stack.damageItem(1, (EntityLivingBase) entity);
 				}
 
@@ -93,7 +95,7 @@ public class ItemVolarkite extends Item {
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
 		return oldStack.getItem() != newStack.getItem() || slotChanged;
 	}
-	
+
 	public boolean canRideKite(ItemStack stack, Entity entity) {
 		return true;
 	}

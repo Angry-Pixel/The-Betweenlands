@@ -1,13 +1,14 @@
 package thebetweenlands.common.herblore.elixir;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.common.herblore.elixir.effects.ElixirDecay;
 import thebetweenlands.common.herblore.elixir.effects.ElixirDraining;
@@ -19,7 +20,6 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirPetrify;
 import thebetweenlands.common.herblore.elixir.effects.ElixirRipening;
 import thebetweenlands.common.herblore.elixir.effects.ElixirStarvation;
 import thebetweenlands.common.herblore.elixir.effects.ElixirSwiftarm;
-import thebetweenlands.common.lib.ModInfo;
 
 public class ElixirEffectRegistry {
 	//Elixirs
@@ -64,6 +64,7 @@ public class ElixirEffectRegistry {
 
 	//Potions
 	public static final Potion ROOT_BOUND = new PotionRootBound();
+	public static final Potion ENLIGHTENED = new PotionEnlightened();
 	
 	static {
 		//Add elixirs to list
@@ -86,6 +87,7 @@ public class ElixirEffectRegistry {
 		}
 		
 		event.getRegistry().register(ROOT_BOUND);
+		event.getRegistry().register(ENLIGHTENED);
 	}
 
 	private static void register(ElixirEffect effect, String fieldName) {

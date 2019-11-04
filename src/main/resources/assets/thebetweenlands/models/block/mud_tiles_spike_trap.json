@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "thebetweenlands:blocks/mud_tiles",
+    "down": "thebetweenlands:blocks/mud_tiles",
+    "up": "thebetweenlands:blocks/mud_tiles_spike_block_inactive_top",
+    "north": "thebetweenlands:blocks/mud_tiles",
+    "east": "thebetweenlands:blocks/mud_tiles",
+    "south": "thebetweenlands:blocks/mud_tiles",
+    "west": "thebetweenlands:blocks/mud_tiles"
+  }
+}

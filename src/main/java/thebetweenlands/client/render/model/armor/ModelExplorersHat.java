@@ -38,7 +38,7 @@ public class ModelExplorersHat extends ModelBodyAttachment {
 		hatrim.addChild(rimjobleft);
 		hatrim.addChild(rimjobright);
 
-		this.addAttachment(this.bipedHead, this.hatrim);
+		bipedHead.addChild(hatrim);
 	}
 
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {

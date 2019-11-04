@@ -96,7 +96,7 @@ public class AmbienceManager {
 					int lowestPlayedAmbience = Integer.MAX_VALUE;
 					for(int typeIndex = 0, i = 0; i < sorted.size() && typeIndex < maxTracks; i++) {
 						AmbienceType type = sorted.get(i);
-						if(type.isActive()) {
+						if(type.isActive() && type.isActiveInWorld(player.world)) {
 							typeIndex++;
 							if(type.getLowerPriorityVolume() <= 0.0F) {
 								lowestPlayedAmbience = typeIndex;
@@ -108,7 +108,7 @@ public class AmbienceManager {
 					//Add ambient tracks that should be playing
 					for(int typeIndex = 0, i = 0; i < sorted.size() && typeIndex < maxTracks; i++) {
 						AmbienceType type = sorted.get(i);
-						if(type.isActive()) {
+						if(type.isActive() && type.isActiveInWorld(player.world)) {
 							typeIndex++;
 							boolean isPlaying = false;
 							for(AmbienceSound sound : this.playingAmbiences) {
@@ -136,7 +136,7 @@ public class AmbienceManager {
 						int typeIndex = 0;
 						for(int i = 0; i < sorted.size() && typeIndex < maxTracks; i++) {
 							AmbienceType otherType = sorted.get(i);
-							if(otherType.isActive()) {
+							if(otherType.isActive() && otherType.isActiveInWorld(player.world)) {
 								typeIndex++;
 
 								if(sound.type == otherType)

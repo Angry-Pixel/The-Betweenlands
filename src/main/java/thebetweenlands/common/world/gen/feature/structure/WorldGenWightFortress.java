@@ -3,6 +3,8 @@ package thebetweenlands.common.world.gen.feature.structure;
 import java.util.Random;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
@@ -10,8 +12,8 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +23,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.api.loot.ISharedLootContainer;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
@@ -40,16 +43,16 @@ import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
-import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.SharedLootPoolStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationAmbience;
+import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationStorage;
-import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
 public class WorldGenWightFortress extends WorldGenerator {
@@ -106,7 +109,16 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private IBlockState energyBarrier = BlockRegistry.ENERGY_BARRIER.getDefaultState();
 
 	private ILocationGuard guard;
+	private Random lootRng;
+	private SharedLootPoolStorage lootStorage;
 
+	private static final ThreadLocal<Boolean> CASCADING_GEN_MUTEX = new ThreadLocal<Boolean>() {
+		@Override
+		protected Boolean initialValue() {
+			return false;
+		}
+	};
+	
 	public WorldGenWightFortress() {
 		//these sizes are subject to change
 		length = 13;
@@ -133,7 +145,31 @@ public class WorldGenWightFortress extends WorldGenerator {
 		} else {
 			this.guard.setGuarded(worldIn, pos, false);
 		}
+		
 		super.setBlockAndNotifyAdequately(worldIn, pos, state);
+		
+		TileEntity tile = worldIn.getTileEntity(pos);
+		
+		if(tile instanceof ISharedLootContainer) {
+			ResourceLocation lootTable = this.getLootTableForBlock(worldIn, pos, state);
+			
+			if(lootTable != null) {
+				((ISharedLootContainer) tile).setSharedLootTable(this.lootStorage, lootTable, this.lootRng.nextLong());
+			}
+		}
+	}
+	
+	@Nullable
+	protected ResourceLocation getLootTableForBlock(World world, BlockPos pos, IBlockState state) {
+		Block block = state.getBlock();
+		
+		if(block == BlockRegistry.LOOT_POT) {
+			return LootTableRegistry.WIGHT_FORTRESS_POT;
+		} else if(block == BlockRegistry.WEEDWOOD_CHEST) {
+			return LootTableRegistry.WIGHT_FORTRESS_CHEST;
+		}
+		
+		return null;
 	}
 
 	protected boolean canGenerateAt(World world, Random rand, BlockPos pos) {
@@ -178,60 +214,68 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
-		if(!this.canGenerateAt(world, rand, pos)) {
+		if(CASCADING_GEN_MUTEX.get()) {
 			return false;
 		}
-
 		
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		CASCADING_GEN_MUTEX.set(true);
+		
+		try {
+			if(!this.canGenerateAt(world, rand, pos)) {
+				return false;
+			}
+	
+			
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+	
+			long locationSeed = rand.nextLong();
+	
+			LocalRegion region = LocalRegion.getFromBlockPos(pos);
+	
+			//Shared loot storage
+			this.lootRng = new Random(rand.nextLong());
+			this.lootStorage = new SharedLootPoolStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, rand.nextLong());
+			worldStorage.getLocalStorageHandler().addLocalStorage(this.lootStorage);
+			
+			LocationGuarded fortressLocation = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower", EnumLocationType.WIGHT_TOWER);
+			this.guard = fortressLocation.getGuard();
+			fortressLocation.addBounds(new AxisAlignedBB(pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10, pos.getX() + 42, pos.getY() + 80, pos.getZ() + 42));
+			fortressLocation.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRangeMultiplier(0.2F).setFogBrightness(80));
+			fortressLocation.setLayer(0);
+			fortressLocation.setDirty(true);
+			fortressLocation.setSeed(locationSeed);
+	
+			LocationStorage puzzleLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_puzzle", EnumLocationType.WIGHT_TOWER);
+			puzzleLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 20, pos.getY() + 17, pos.getZ() - 10 + 20, pos.getX() + 42 - 20, pos.getY() + 17 + 6, pos.getZ() + 42 - 20));
+			puzzleLocation.setLayer(1);
+			puzzleLocation.setDirty(true);
+			puzzleLocation.setSeed(locationSeed);
+	
+			LocationStorage teleporterLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_teleporter", EnumLocationType.WIGHT_TOWER);
+			teleporterLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 23, pos.getY() + 17 + 12, pos.getZ() - 10 + 23, pos.getX() + 42 - 23, pos.getY() + 17 + 6 + 11, pos.getZ() + 42 - 23));
+			teleporterLocation.setLayer(2);
+			teleporterLocation.setDirty(true);
+			teleporterLocation.setSeed(locationSeed);
+	
+			LocationStorage bossLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_boss", EnumLocationType.WIGHT_TOWER);
+			bossLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 17, pos.getY() + 17 + 19, pos.getZ() - 10 + 17, pos.getX() + 42 - 17, pos.getY() + 17 + 12 + 32, pos.getZ() + 42 - 17));
+			bossLocation.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F));
+			bossLocation.setLayer(3);
+			bossLocation.setDirty(true);
+			bossLocation.setSeed(locationSeed);
+	
+			if(generateStructure(world, rand, pos)) {
+				worldStorage.getLocalStorageHandler().addLocalStorage(fortressLocation);
+				worldStorage.getLocalStorageHandler().addLocalStorage(puzzleLocation);
+				worldStorage.getLocalStorageHandler().addLocalStorage(teleporterLocation);
+				worldStorage.getLocalStorageHandler().addLocalStorage(bossLocation);
+				return true;
+			}
 
-		long locationSeed = rand.nextLong();
-
-		LocalRegion region = LocalRegion.getFromBlockPos(pos);
-
-		LocationGuarded fortressLocation = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower", EnumLocationType.WIGHT_TOWER);
-		this.guard = fortressLocation.getGuard();
-		fortressLocation.addBounds(new AxisAlignedBB(pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10, pos.getX() + 42, pos.getY() + 80, pos.getZ() + 42));
-		fortressLocation.linkChunks();
-		fortressLocation.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRangeMultiplier(0.2F).setFogBrightness(80));
-		fortressLocation.setLayer(0);
-		fortressLocation.setDirty(true);
-		fortressLocation.setSeed(locationSeed);
-
-		LocationStorage puzzleLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_puzzle", EnumLocationType.WIGHT_TOWER);
-		puzzleLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 20, pos.getY() + 17, pos.getZ() - 10 + 20, pos.getX() + 42 - 20, pos.getY() + 17 + 6, pos.getZ() + 42 - 20));
-		puzzleLocation.linkChunks();
-		puzzleLocation.setLayer(1);
-		puzzleLocation.setHasSharedLootPools(false);
-		puzzleLocation.setDirty(true);
-		puzzleLocation.setSeed(locationSeed);
-
-		LocationStorage teleporterLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_teleporter", EnumLocationType.WIGHT_TOWER);
-		teleporterLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 23, pos.getY() + 17 + 12, pos.getZ() - 10 + 23, pos.getX() + 42 - 23, pos.getY() + 17 + 6 + 11, pos.getZ() + 42 - 23));
-		teleporterLocation.linkChunks();
-		teleporterLocation.setLayer(2);
-		teleporterLocation.setHasSharedLootPools(false);
-		teleporterLocation.setDirty(true);
-		teleporterLocation.setSeed(locationSeed);
-
-		LocationStorage bossLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_boss", EnumLocationType.WIGHT_TOWER);
-		bossLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 17, pos.getY() + 17 + 19, pos.getZ() - 10 + 17, pos.getX() + 42 - 17, pos.getY() + 17 + 12 + 32, pos.getZ() + 42 - 17));
-		bossLocation.linkChunks();
-		bossLocation.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F));
-		bossLocation.setLayer(3);
-		bossLocation.setHasSharedLootPools(false);
-		bossLocation.setDirty(true);
-		bossLocation.setSeed(locationSeed);
-
-		if(generateStructure(world, rand, pos)) {
-			worldStorage.getLocalStorageHandler().addLocalStorage(fortressLocation);
-			worldStorage.getLocalStorageHandler().addLocalStorage(puzzleLocation);
-			worldStorage.getLocalStorageHandler().addLocalStorage(teleporterLocation);
-			worldStorage.getLocalStorageHandler().addLocalStorage(bossLocation);
-			return true;
+			return false;
+		} finally {
+			CASCADING_GEN_MUTEX.set(false);
 		}
-
-		return false;
 	}
 
 	public IBlockState getRandomWall(Random rand) {
@@ -715,9 +759,17 @@ public class WorldGenWightFortress extends WorldGenerator {
 					//	tower chests
 					rotatedCubeVolume(world, rand, pos.add(x, y, z), 4, 12, 4, chest,direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
 					if (tower == 0 && direction == 0 || tower == 0 && direction == 1 || tower == 1 && direction == 0 || tower == 1 && direction == 3|| tower == 2 && direction == 2 || tower == 2 && direction == 3|| tower == 3 && direction == 1 || tower == 3 && direction == 2) {
-						rotatedCubeVolume(world, rand, pos.add(x, y, z), 5, 17, 3, chest, direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
+						// should stop triple chests
+						int chest_randomiser = rand.nextInt(7);
+
+						if(chest_randomiser == 1 || chest_randomiser == 4 || chest_randomiser == 6)
+							rotatedCubeVolume(world, rand, pos.add(x, y, z), 5, 17, 3, chest, direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
+
+						if(chest_randomiser == 2 || chest_randomiser == 4 || chest_randomiser == 5)
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 6, 17, 3, chest, direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
-						rotatedCubeVolume(world, rand, pos.add(x, y, z), 7, 17, 3, chest, direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
+
+						if(chest_randomiser == 3 || chest_randomiser == 5 || chest_randomiser == 6)
+							rotatedCubeVolume(world, rand, pos.add(x, y, z), 7, 17, 3, chest, direction == 0 ? 3 : direction== 1 ? 5 : direction == 2 ? 2 : 4, 1, 1, 1, direction);
 					}
 				}
 			}
@@ -1150,24 +1202,16 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 	private void placeChest(World world, Random rand, BlockPos pos, int blockMeta) {
 		this.setBlockAndNotifyAdequately(world, pos, getWeedWoodChestRotations(chest, blockMeta));
-		TileEntity tile = world.getTileEntity(pos);
-		if (tile instanceof TileEntityChestBetweenlands) {
-			//TODO Make proper shared loot tables
-			//TODO Also keep track of inventories -> LocationStorage.setLootInventories(...)
-			//((TileEntityChestBetweenlands) tile).setSharedLootTable(LootTableRegistry.SHARED_LOOT_POOL_TEST, rand.nextLong());
-			((TileEntityChestBetweenlands) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, rand.nextLong());
-		}
 	}
 
 	private void placeRandomisedLootPot(World world, Random rand, BlockPos pos, IBlockState blockType, int blockMeta) {
-		if(rand.nextInt(5) != 0 || world.isAirBlock(pos.down()))
+		if(rand.nextInt(5) != 0 || world.isAirBlock(pos.down())) {
 			return;
-		else {
+		} else {
 			this.setBlockAndNotifyAdequately(world, pos, getLootPotRotations(blockType, blockMeta));
 			TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, pos);
 			if (lootPot != null) {
 				//TODO Make proper shared loot tables
-				lootPot.setLootTable(LootTableRegistry.DUNGEON_POT_LOOT, rand.nextLong());
 				lootPot.setModelRotationOffset(world.rand.nextInt(41) - 20);
 				world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 			}

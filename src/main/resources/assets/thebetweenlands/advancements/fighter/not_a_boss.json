@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:sludge_worm_egg_sac"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.not_a_boss.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.not_a_boss.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "thebetweenlands:fighter/secret_of_the_crypt",
+  "criteria": {
+    "primordial_malevolence": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:sludge_menace"
+        }
+      }
+    }
+  }
+}

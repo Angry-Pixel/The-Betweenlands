@@ -262,7 +262,12 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 
 	@Override
 	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
-		return rand.nextFloat() <= 0.35F && world.isAirBlock(targetPos) && this.canPlaceBlockAt(world, targetPos);
+		return world.isAirBlock(targetPos) && this.canPlaceBlockAt(world, targetPos);
+	}
+	
+	@Override
+	public float getSpreadChance(World world, BlockPos pos, IBlockState state, BlockPos taretPos, Random rand) {
+		return 0.35F;
 	}
 
 	@Override

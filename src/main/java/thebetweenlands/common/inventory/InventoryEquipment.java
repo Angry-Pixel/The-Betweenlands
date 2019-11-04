@@ -37,7 +37,7 @@ public class InventoryEquipment implements IInventory, ITickable {
 
     @Override
     public String getName() {
-        return "container.betweenlands.equipment";
+        return "container.bl.equipment";
     }
 
     @Override

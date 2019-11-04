@@ -3,11 +3,8 @@ package thebetweenlands.common.world.storage.location;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -19,7 +16,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -32,12 +28,10 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.loot.ISharedLootPool;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
-import thebetweenlands.common.loot.shared.SharedLootPool;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.LocalStorageImpl;
@@ -51,10 +45,6 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	private LocationAmbience ambience = null;
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
-
-	private Map<ResourceLocation, SharedLootPool> sharedLootPools = new HashMap<>();
-	private int lootInventories = 0;
-	private boolean hasSharedLootPools = true;
 
 	protected GenericDataManager dataManager;
 
@@ -151,8 +141,17 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		return this.enclosingBoundingBox;
 	}
 
+	@Override
+	public void onAdded() {
+		if(!this.getWorldStorage().getWorld().isRemote) {
+			this.linkChunks();
+		}
+	}
+
 	/**
-	 * Links all chunks of this location
+	 * Links all chunks of this location.
+	 * Called when the location is initially added to the world.
+	 * If the location bounds are changed this needs to be called again manually.
 	 * @return
 	 */
 	public LocationStorage linkChunks() {
@@ -247,10 +246,14 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 * @param ambience
 	 * @return
 	 */
-	public LocationStorage setAmbience(LocationAmbience ambience) {
-		this.inheritAmbience = false;
-		this.ambience = ambience;
-		ambience.setLocation(this);
+	public LocationStorage setAmbience(@Nullable LocationAmbience ambience) {
+		if(ambience != null) {
+			this.inheritAmbience = false;
+			this.ambience = ambience;
+			ambience.setLocation(this);
+		} else {
+			this.ambience = null;
+		}
 		this.markDirty();
 		return this;
 	}
@@ -280,19 +283,6 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		super.readFromNBT(nbt);
 
 		this.readSharedNbt(nbt);
-
-		this.hasSharedLootPools = nbt.getBoolean("hasSharedLootPools");
-
-		this.sharedLootPools.clear();
-		NBTTagList sharedLootPoolsNbt = nbt.getTagList("sharedLootPools", Constants.NBT.TAG_COMPOUND);
-
-		for(int i = 0; i < sharedLootPoolsNbt.tagCount(); i++) {
-			SharedLootPool sharedLootPool = new SharedLootPool(sharedLootPoolsNbt.getCompoundTagAt(i), this);
-			ResourceLocation lootTable = sharedLootPool.getLootTable();
-			if(lootTable != null) {
-				this.sharedLootPools.put(lootTable, sharedLootPool);
-			}
-		}
 	}
 
 	protected void readSharedNbt(NBTTagCompound nbt) {
@@ -305,13 +295,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		NBTTagList boundingBoxes = nbt.getTagList("bounds", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < boundingBoxes.tagCount(); i++) {
 			NBTTagCompound boxNbt = boundingBoxes.getCompoundTagAt(i);
-			double minX = boxNbt.getDouble("minX");
-			double minY = boxNbt.getDouble("minY");
-			double minZ = boxNbt.getDouble("minZ");
-			double maxX = boxNbt.getDouble("maxX");
-			double maxY = boxNbt.getDouble("maxY");
-			double maxZ = boxNbt.getDouble("maxZ");
-			this.boundingBoxes.add(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
+			this.boundingBoxes.add(this.readAabb(boxNbt));
 		}
 		this.updateEnclosingBounds();
 		this.type = EnumLocationType.fromName(nbt.getString("type"));
@@ -322,6 +306,27 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		}
 		this.dataManager.set(VISIBLE, nbt.getBoolean("visible"));
 		this.locationSeed = nbt.getLong("seed");
+	}
+
+	protected NBTTagCompound writeAabb(AxisAlignedBB aabb) {
+		NBTTagCompound boxNbt = new NBTTagCompound();
+		boxNbt.setDouble("minX", aabb.minX);
+		boxNbt.setDouble("minY", aabb.minY);
+		boxNbt.setDouble("minZ", aabb.minZ);
+		boxNbt.setDouble("maxX", aabb.maxX);
+		boxNbt.setDouble("maxY", aabb.maxY);
+		boxNbt.setDouble("maxZ", aabb.maxZ);
+		return boxNbt;
+	}
+
+	protected AxisAlignedBB readAabb(NBTTagCompound nbt) {
+		double minX = nbt.getDouble("minX");
+		double minY = nbt.getDouble("minY");
+		double minZ = nbt.getDouble("minZ");
+		double maxX = nbt.getDouble("maxX");
+		double maxY = nbt.getDouble("maxY");
+		double maxZ = nbt.getDouble("maxZ");
+		return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
 	}
 
 	/**
@@ -340,18 +345,6 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 
 		this.writeSharedNbt(nbt);
 
-		nbt.setBoolean("hasSharedLootPools", this.hasSharedLootPools);
-
-		if(!this.sharedLootPools.isEmpty()) {
-			NBTTagList sharedLootPoolsNbt = new NBTTagList();
-
-			for(SharedLootPool sharedLootPool : this.sharedLootPools.values()) {
-				sharedLootPoolsNbt.appendTag(sharedLootPool.writeToNBT(new NBTTagCompound()));
-			}
-
-			nbt.setTag("sharedLootPools", sharedLootPoolsNbt);
-		}
-
 		return nbt;
 	}
 
@@ -359,14 +352,7 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 		nbt.setString("name", this.dataManager.get(NAME));
 		NBTTagList boundingBoxes = new NBTTagList();
 		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
-			NBTTagCompound boxNbt = new NBTTagCompound();
-			boxNbt.setDouble("minX", boundingBox.minX);
-			boxNbt.setDouble("minY", boundingBox.minY);
-			boxNbt.setDouble("minZ", boundingBox.minZ);
-			boxNbt.setDouble("maxX", boundingBox.maxX);
-			boxNbt.setDouble("maxY", boundingBox.maxY);
-			boxNbt.setDouble("maxZ", boundingBox.maxZ);
-			boundingBoxes.appendTag(boxNbt);
+			boundingBoxes.appendTag(this.writeAabb(boundingBox));
 		}
 		nbt.setTag("bounds", boundingBoxes);
 		nbt.setString("type", this.type.name);
@@ -670,67 +656,5 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public void onBreakBlock(BreakEvent event) {
 
-	}
-
-	public int getLootInventories() {
-		return this.lootInventories;
-	}
-
-	public void setLootInventories(int inventories) {
-		this.lootInventories = inventories;
-		this.markDirty();
-	}
-
-	@Nullable
-	public ISharedLootPool getSharedLootPool(ResourceLocation lootTable) {
-		if(!this.hasSharedLootPools) {
-			return null;
-		}
-
-		return this.sharedLootPools.get(lootTable);
-	}
-
-	@Nullable
-	public ISharedLootPool getOrCreateSharedLootPool(ResourceLocation lootTable) {
-		if(!this.hasSharedLootPools) {
-			return null;
-		}
-
-		ISharedLootPool pool = this.getSharedLootPool(lootTable);
-
-		if(pool != null) {
-			return pool;
-		}
-
-		SharedLootPool newPool = new SharedLootPool(lootTable, this.locationSeed, this);
-		this.sharedLootPools.put(lootTable, newPool);
-		this.markDirty();
-
-		return newPool;
-	}
-
-	@Nullable
-	public ISharedLootPool removeSharedLootPool(ResourceLocation lootTable) {
-		if(!this.hasSharedLootPools) {
-			return null;
-		}
-
-		ISharedLootPool pool = this.sharedLootPools.remove(lootTable);
-		if(pool != null)
-			this.markDirty();
-
-		return pool;
-	}
-
-	public Set<ResourceLocation> getSharedLootPoolKeys() {
-		return this.sharedLootPools.keySet();
-	}
-
-	public void setHasSharedLootPools(boolean hasSharedLootPools) {
-		this.hasSharedLootPools = hasSharedLootPools;
-		if(!hasSharedLootPools) {
-			this.sharedLootPools.clear();
-		}
-		this.markDirty();
 	}
 }

@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.equipment;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -11,6 +15,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +24,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -46,13 +56,10 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
 public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamableItem {
     public ItemLurkerSkinPouch() {
         this.setMaxStackSize(1);
-        this.setCreativeTab(BLCreativeTabs.ITEMS);
+        this.setCreativeTab(BLCreativeTabs.GEARS);
         this.setMaxDamage(3);
         this.setNoRepair();
 
@@ -162,6 +169,15 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 
+    @Override
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		if(this.isInCreativeTab(tab)) {
+			ItemStack basePouch = new ItemStack(this);
+            items.add(basePouch);
+            items.add(new ItemStack(this, 1, basePouch.getMaxDamage()));
+        }
+	}
+    
     private static boolean isRenderingWorld;
     
     @SideOnly(Side.CLIENT)

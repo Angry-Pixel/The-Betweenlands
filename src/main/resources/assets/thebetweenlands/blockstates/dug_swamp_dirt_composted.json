@@ -1,8 +1,7 @@
 {
   "forge_marker": 1,
-  "variants": { 
-    "normal": {
-      "model": "thebetweenlands:internal/model_combined",
+  "defaults": {
+     "model": "thebetweenlands:internal/model_combined",
       "custom": {
         "model_base": "thebetweenlands:block/dug_swamp_dirt_base",
         "model_additional": "thebetweenlands:block/internal/connected_texture",
@@ -35,6 +34,11 @@
           ]
         }
       }
+  },
+  "variants": { 
+    "fogged": {
+      "true": {},
+      "false": {}
     },
     "inventory": {
       "model": "thebetweenlands:dug_dirt_inventory",

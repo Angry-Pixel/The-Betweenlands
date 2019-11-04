@@ -152,7 +152,6 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 		}
 		location.setDirty(true);
 		location.setVisible(false);
-		location.linkChunks();
 		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 
 		return true;

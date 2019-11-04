@@ -1,0 +1,37 @@
+{
+    "pools": [
+        {
+            "name": "scroll",
+            "conditions": [],
+            "entries": [
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 48
+                        }
+                    ],
+                    "weight": 2
+                },
+                {
+                    "type": "loot_table",
+                    "name": "thebetweenlands:animator/scroll",
+                    "weight": 3
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}

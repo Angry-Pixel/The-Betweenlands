@@ -87,7 +87,6 @@ public class ContainerPurifier extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return true;
+		return this.purifier.isUsableByPlayer(player);
 	}
-
 }

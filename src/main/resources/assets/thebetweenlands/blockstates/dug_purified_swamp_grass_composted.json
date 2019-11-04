@@ -1,7 +1,6 @@
 {
   "forge_marker": 1,
-  "variants": { 
-    "normal": {
+  "defaults": {
       "model": "thebetweenlands:internal/model_combined",
       "custom": {
         "model_base": "thebetweenlands:block/dug_purified_swamp_grass_base",
@@ -58,6 +57,11 @@
           ]
         }
       }
+  },
+  "variants": { 
+    "fogged": {
+      "true": {},
+      "false": {}
     },
     "inventory": {
       "model": "thebetweenlands:dug_grass_inventory",

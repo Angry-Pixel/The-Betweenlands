@@ -95,7 +95,7 @@ public class BlockMortar extends BlockContainer {
 			for (int i = 0; i < tile.getSizeInventory(); i++) {
 				ItemStack stack = tile.getStackInSlot(i);
 				if (!stack.isEmpty()) {
-					if (!world.isRemote && world.getGameRules().getBoolean("doTileDrops")) {
+					if (!world.isRemote) {
 						float f = 0.7F;
 						double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
 						double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;

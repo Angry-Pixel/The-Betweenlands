@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:mud_tower_brazier"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.light_the_braziers.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.light_the_braziers.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "sludgeon": {
+      "trigger": "thebetweenlands:location",
+      "conditions": {
+        "name": "sludge_worm_dungeon"
+      }
+    }
+  }
+}

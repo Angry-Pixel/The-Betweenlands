@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:mud_bricks_carved",
+      "data": 4
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:mud_bricks_carved",
+    "data": 9
+  }
+}

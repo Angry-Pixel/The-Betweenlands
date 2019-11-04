@@ -112,6 +112,8 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
 
         if (!BetweenlandsConfig.DEBUG.debug) {
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TEST_ITEM));
+            blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TEST_ITEM_CHIMP));
+            blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TEST_ITEM_CHIMP_RULER));
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.LOCATION_DEBUG));
         }
     }
@@ -145,15 +147,28 @@ public class BetweenlandsJEIPlugin implements IModPlugin {
         }).apply(new ItemStack(ItemRegistry.BONE_WAYFINDER, 1, 0))).setRegistryName(RecipeRegistry.CLEAR_BONE_WAYFINDER));
 
         //Lurker skin
-        ItemStack output = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
-        ItemStack input = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
-        ItemStack skin = ItemMisc.EnumItemMisc.LURKER_SKIN.create(1);
-        for (int i = 0; i < 3; i++) {
-            input.setItemDamage(i);
-            output.setItemDamage(i+1);
-            recipes.add(new ShapedOreRecipe(null, output.copy(), "LLL", "LPL", "LLL", 'L', skin, 'P', input.copy()).setRegistryName(ModInfo.ID, RecipeRegistry.LURKER_POUCH.getPath() + "_" + i));
+        {
+	        ItemStack output = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
+	        ItemStack input = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
+	        ItemStack skin = ItemMisc.EnumItemMisc.LURKER_SKIN.create(1);
+	        for (int i = 0; i < 3; i++) {
+	            input.setItemDamage(i);
+	            output.setItemDamage(i+1);
+	            recipes.add(new ShapedOreRecipe(null, output.copy(), "LLL", "LPL", "LLL", 'L', skin, 'P', input.copy()).setRegistryName(ModInfo.ID, RecipeRegistry.LURKER_POUCH.getPath() + "_" + i));
+	        }
         }
 
+        //Grappling hook upgrade
+        {
+	        ItemStack output = new ItemStack(ItemRegistry.GRAPPLING_HOOK);
+	        ItemStack input = new ItemStack(ItemRegistry.GRAPPLING_HOOK);
+	        ItemStack tooth = ItemMisc.EnumItemMisc.ANGLER_TOOTH.create(1);
+	        ItemStack tongue = new ItemStack(ItemRegistry.SHAMBLER_TONGUE);
+            input.setItemDamage(0);
+            output.setItemDamage(3);
+            recipes.add(new ShapelessOreRecipe(null, output, tooth, tooth.copy(), tongue, input).setRegistryName(ModInfo.ID, RecipeRegistry.GRAPPLING_HOOK_UPGRADE.getPath() + "_0"));
+        }
+        
         //Reset the active container
         loader.setActiveModContainer(activeModContainer);
 

@@ -30,7 +30,7 @@ import thebetweenlands.common.registries.KeyBindRegistry;
 
 public class ItemCavingRope extends Item {
 	public ItemCavingRope() {
-		this.setCreativeTab(BLCreativeTabs.ITEMS);
+		this.setCreativeTab(BLCreativeTabs.GEARS);
 	}
 
 	@Override

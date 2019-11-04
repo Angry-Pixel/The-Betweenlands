@@ -118,7 +118,7 @@ public class TileEntityDugSoil extends TileEntity {
 			decay = 0;
 		}
 		boolean wasDecayed = this.isFullyDecayed();
-		this.decay = decay;
+		this.decay = Math.min(20, decay);
 		if(wasDecayed != this.isFullyDecayed()) {
 			IBlockState blockState = this.world.getBlockState(this.pos);
 			if(this.isFullyDecayed()) {

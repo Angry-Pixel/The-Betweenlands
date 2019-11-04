@@ -124,6 +124,7 @@ public class ShaderHandler {
 	public void onPostRender(TickEvent.RenderTickEvent event) {
 		if(event.phase == Phase.START && ShaderHelper.INSTANCE.getWorldShader() != null) {
 			ShaderHelper.INSTANCE.getWorldShader().clearLights();
+			ShaderHelper.INSTANCE.getWorldShader().clearGroundFogVolumes();
 		}
 	}
 }

@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.client.audio.AnimatorSound;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
@@ -34,7 +36,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     private boolean soundPlaying = false;
 
     public TileEntityAnimator() {
-        super(3, "animator");
+        super(3, "container.bl.animator");
     }
 
     @Override
@@ -125,11 +127,6 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
         super.markDirty();
         if (world != null)
             world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
-    }
-
-    @Override
-    public boolean isUsableByPlayer(EntityPlayer player) {
-        return false;
     }
 
     public boolean isCrystalInslot() {

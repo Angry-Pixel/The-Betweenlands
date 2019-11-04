@@ -14,8 +14,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 2,
-                                "max": 6
+                                "min": 1,
+                                "max": 3
                             }
                         },
                         {
@@ -37,8 +37,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 8,
-                                "max": 16
+                                "min": 2,
+                                "max": 4
                             }
                         },
                         {
@@ -59,8 +59,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 2,
-                                "max": 6
+                                "min": 1,
+                                "max": 4
                             }
                         }
                     ],
@@ -112,7 +112,7 @@
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 4
+                                "max": 2
                             }
                         },
                         {
@@ -133,8 +133,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 6,
-                                "max": 16
+                                "min": 4,
+                                "max": 12
                             }
                         }
                     ],
@@ -144,7 +144,7 @@
                 {
                     "conditions": [],
                     "type": "item",
-                    "entryName": "syrmorite_ingot",
+                    "entryName": "syrmorite_nugget",
                     "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
@@ -158,16 +158,17 @@
                         {
                             "conditions": [],
                             "function": "set_data",
-                            "data": 11
+                            "data": 41
                         }
                     ],
-                    "weight": 1,
+                    "weight": 11,
                     "quality": 0
                 },
                 {
                     "conditions": [],
                     "type": "item",
-                    "name": "thebetweenlands:octine_ingot",
+                    "entryName": "octine_nugget",
+                    "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
                             "conditions": [],
@@ -176,6 +177,11 @@
                                 "min": 2,
                                 "max": 8
                             }
+                        },
+						{
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 42
                         }
                     ],
                     "weight": 11,
@@ -205,8 +211,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 6,
-                                "max": 14
+                                "min": 4,
+                                "max": 10
                             }
                         }
                     ],
@@ -222,8 +228,8 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 6,
-                                "max": 16
+                                "min": 4,
+                                "max": 10
                             }
                         }
                     ],
@@ -234,16 +240,6 @@
                     "conditions": [],
                     "type": "item",
                     "name": "thebetweenlands:wight_heart",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                                "min": 1,
-                                "max": 3
-                            }
-                        }
-                    ],
                     "weight": 6,
                     "quality": 0
                 },
@@ -256,7 +252,7 @@
                             "conditions": [],
                             "function": "set_count",
                             "count": {
-                                "min": 4,
+                                "min": 2,
                                 "max": 8
                             }
                         }
@@ -268,23 +264,13 @@
                     "conditions": [],
                     "type": "item",
                     "name": "thebetweenlands:weeping_blue_petal",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                                "min": 1,
-                                "max": 3
-                            }
-                        }
-                    ],
                     "weight": 6,
                     "quality": 0
                 },
                 {
                     "conditions": [],
                     "type": "item",
-                    "entryName": "valonite_shard",
+                    "entryName": "valonite_splinter",
                     "name": "thebetweenlands:items_misc",
                     "functions": [
                         {
@@ -298,7 +284,7 @@
                         {
                             "conditions": [],
                             "function": "set_data",
-                            "data": 19
+                            "data": 43
                         }
                     ],
                     "weight": 3,
@@ -333,7 +319,7 @@
                             }
                         }
                     ],
-                    "weight": 4,
+                    "weight": 5,
                     "quality": 0
                 },
                 {
@@ -346,7 +332,7 @@
                             "function": "set_count",
                             "count": {
                                 "min": 1,
-                                "max": 4
+                                "max": 2
                             }
                         }
                     ],
@@ -357,7 +343,7 @@
                     "conditions": [],
                     "type": "item",
                     "name": "thebetweenlands:bone_wayfinder",
-                    "weight": 5,
+                    "weight": 6,
                     "quality": 0
                 }
             ],

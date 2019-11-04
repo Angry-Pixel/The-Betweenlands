@@ -6,9 +6,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -25,19 +22,6 @@ import thebetweenlands.common.tile.TileEntityAnimator;
 public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator> {
 	private static final ModelAnimator model = new ModelAnimator();
 	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/animator.png");
-	public static RenderAnimator instance;
-	private RenderManager renderManager;
-	private final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-
-	public RenderAnimator() {
-		renderManager = Minecraft.getMinecraft().getRenderManager();
-	}
-
-	@Override
-	public void setRendererDispatcher(TileEntityRendererDispatcher rendererDispatcherIn) {
-		super.setRendererDispatcher(rendererDispatcherIn);
-		instance = this;
-	}
 
 	public void renderTileAsItem(double x, double y, double z) {
 		bindTexture(TEXTURE);
@@ -62,6 +46,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 		if(te != null) {
 			meta = te.getBlockMetadata();
 		}
+		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -95,7 +80,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 					GlStateManager.rotate(90, 1, 0, 0);
 					GlStateManager.rotate((float)rand.nextDouble() * 360.0F, 0, 0, 1);
 					ItemStack stack = ItemMisc.EnumItemMisc.SULFUR.create(1);
-					this.renderItem.renderItem(stack, TransformType.FIXED);
+					renderItem.renderItem(stack, TransformType.FIXED);
 					GlStateManager.popMatrix();
 				}
 				GlStateManager.popMatrix();
@@ -108,7 +93,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 				GlStateManager.scale(0.18D, 0.18D, 0.18D);
 				GlStateManager.rotate((float) viewRot + 180, 0, 1, 0);
 				ItemStack stack = new ItemStack(ItemRegistry.LIFE_CRYSTAL);
-				this.renderItem.renderItem(stack, TransformType.FIXED);
+				renderItem.renderItem(stack, TransformType.FIXED);
 				GlStateManager.popMatrix();
 			}
 
@@ -125,7 +110,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 						GlStateManager.scale(0.3D, 0.3D, 0.3D);
 						GlStateManager.rotate((float) viewRot + 180, 0, 1, 0);
 						ItemStack stack = te.getStackInSlot(0);
-						this.renderItem.renderItem(stack, TransformType.FIXED);
+						renderItem.renderItem(stack, TransformType.FIXED);
 					} else {
 						GlStateManager.enableBlend();
 						GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -144,7 +129,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 							entity.setRotationYawHead(0F);
 							entity.rotationPitch = 0F;
 							entity.ticksExisted = (int) this.getWorld().getTotalWorldTime();
-							renderManager.renderEntity(entity, 0D, 0D, 0D, 0F, 0F, true);
+							Minecraft.getMinecraft().getRenderManager().renderEntity(entity, 0D, 0D, 0D, 0F, 0F, true);
 						}
 						GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 					}

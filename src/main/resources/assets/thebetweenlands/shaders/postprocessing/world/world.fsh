@@ -32,8 +32,12 @@ uniform int u_lightSourcesAmount;
 //Fog mode
 uniform int u_fogMode;
 
-//Cam pos
-uniform vec3 u_camPos;
+//View pos (i.e. the "eye"), relative to the render position
+uniform vec3 u_viewPos;
+
+//Render pos (i.e. the coordinate of the player)
+//Everything is rendered relative to this position
+uniform vec3 u_renderPos;
 
 //World time in ticks
 uniform float u_worldTime;
@@ -75,44 +79,6 @@ float getFogMultiplier(vec3 fragPos) {
 vec4 applyFog(vec3 fragPos, vec4 color) {
     return mix(color, vec4(0.0F, 0.0F, 0.0F, 0.0F), getFogMultiplier(fragPos));
 }
-
-//http://iquilezles.org/www/articles/spheredensity/spheredensity.htm
-/*float computeFog(vec3  ro, vec3  rd,   // ray origin, ray direction
-                 vec3  sc, float sr,   // sphere center, sphere radius
-                 float dbuffer) {
-    // normalize the problem to the canonical sphere
-    float ndbuffer = dbuffer / sr;
-    vec3  rc = (ro - sc) / sr;
-	
-    // find intersection with sphere
-    float b = dot(rd, rc);
-    float c = dot(rc, rc) - 1.0f;
-    float h = b*b - c;
-
-    // not intersecting
-    if(h<0.0f) {
-    	return 0.0f;
-	}
-	
-    h = sqrt( h );
-    float t1 = -b - h;
-    float t2 = -b + h;
-
-    // not visible (behind camera or behind ndbuffer)
-    if(t2<0.0f || t1>ndbuffer) {
-    	return 0.0f;
-	}
-
-    // clip integration segment from camera to ndbuffer
-    t1 = max(t1, 0.0f);
-    t2 = min(t2, ndbuffer);
-
-    // analytical integration of an inverse squared density
-    float i1 = -(c*t1 + b*t1*t1 + t1*t1*t1/3.0f);
-    float i2 = -(c*t2 + b*t2*t2 + t2*t2*t2/3.0f);
-    
-    return (i2 - i1) * (3.0f / 4.0f);
-}*/
 
 void main() {
     //Get fragment world position
@@ -162,11 +128,14 @@ void main() {
 		
         //Get depth (distance to camera) and distance between fragments
         float dist = distance(shieldFragPos, fragPos);
-        float fragCamDist = length(fragPos);
-        float shieldFragCamDist = length(shieldFragPos);
+        float fragCamDist = length(fragPos - u_viewPos);
+        float shieldFragCamDist = length(shieldFragPos - u_viewPos);
         
         //Check if repeller shield is behind or in front of the diffuse fragment
         bool inBack = fragCamDist <= shieldFragCamDist;
+        if(repellerShieldBuffCol.a < 0.99F) {
+        	inBack = fragCamDist > shieldFragCamDist;
+        }
         if(!inBack) {
             //Calculate distortion and color multiplier
             //distortionMultiplier += 1.5F / (pow(shieldFragCamDist - fragCamDist, 2) / 100.0F + 1.0F);
@@ -175,7 +144,7 @@ void main() {
             colorMultiplier *= 1.0F - mix(0.1F, 0.0F, getFogMultiplier(shieldFragPos));
             
             //Calculate color distortion
-            float fragDistortion = (shieldFragPos.y + u_camPos.y + (cos(shieldFragPos.x + u_camPos.x) * sin(shieldFragPos.z + u_camPos.z)) * 2.0F) * 8.0F;
+            float fragDistortion = (shieldFragPos.y + u_renderPos.y + (cos(shieldFragPos.x + u_renderPos.x) * sin(shieldFragPos.z + u_renderPos.z)) * 2.0F) * 8.0F;
             float colorDistortion = ((sin(fragDistortion + u_worldTime * 50.0F / 300.0F) + 1.0F) / 200.0F);
             shieldFragColor += vec4(repellerShieldBuffCol.rgb * colorDistortion * 10.0F, 0.0F);
         }
@@ -213,7 +182,6 @@ void main() {
         bool inBack = fragCamDist <= gasFragCamDist;
         if(!inBack) {
 			distortionMultiplier += 20.0F * applyFog(gasFragPos, gasParticlesBuffCol).a;
-			colorMultiplier += applyFog(gasFragPos, gasParticlesBuffCol).a;
 		}
 	}
 	
@@ -225,7 +193,7 @@ void main() {
         sourceColor = vec4(texture2D(s_diffuse, v_texCoord));
         color += sourceColor;
     } else {
-        float fragDistortion = (fragPos.y + u_camPos.y + (cos(fragPos.x + u_camPos.x) * sin(fragPos.z + u_camPos.z))) * 5.0F;
+        float fragDistortion = (fragPos.y + u_renderPos.y + (cos(fragPos.x + u_renderPos.x) * sin(fragPos.z + u_renderPos.z))) * 5.0F;
         sourceColor = vec4(texture2D(s_diffuse, v_texCoord + vec2(sin(fragDistortion + u_worldTime * 50.0F / 300.0F) / 800.0F, 0.0F) * distortionMultiplier));
         color += sourceColor;
     }
@@ -254,3 +222,5 @@ void main() {
 	
     gl_FragColor = color * colorMultiplier;
 }
+
+

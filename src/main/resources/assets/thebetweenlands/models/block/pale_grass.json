@@ -1,0 +1,6 @@
+{
+	"parent": "block/cross",
+	"textures": {
+		"cross": "thebetweenlands:blocks/pale_grass"
+	}
+}

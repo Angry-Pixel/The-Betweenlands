@@ -1,0 +1,18 @@
+{
+    "variants": {
+        "variant=mud_bricks_carved": { "model": "thebetweenlands:mud_bricks_carved" },
+        "variant=mud_bricks_carved_decay_1": { "model": "thebetweenlands:mud_bricks_carved_decay_1" },
+        "variant=mud_bricks_carved_decay_2": { "model": "thebetweenlands:mud_bricks_carved_decay_2" },
+        "variant=mud_bricks_carved_decay_3": { "model": "thebetweenlands:mud_bricks_carved_decay_3" },
+        "variant=mud_bricks_carved_decay_4": { "model": "thebetweenlands:mud_bricks_carved_decay_4" },
+        "variant=mud_bricks_carved_edge": { "model": "thebetweenlands:mud_bricks_carved_edge" },
+        "variant=mud_bricks_carved_edge_decay_1": { "model": "thebetweenlands:mud_bricks_carved_edge_decay_1" },
+        "variant=mud_bricks_carved_edge_decay_2": { "model": "thebetweenlands:mud_bricks_carved_edge_decay_2" },
+        "variant=mud_bricks_carved_edge_decay_3": { "model": "thebetweenlands:mud_bricks_carved_edge_decay_3" },
+        "variant=mud_bricks_carved_edge_decay_4": { "model": "thebetweenlands:mud_bricks_carved_edge_decay_4" },
+        "variant=mud_bricks_decay_1": { "model": "thebetweenlands:mud_bricks_decay_1" },
+        "variant=mud_bricks_decay_2": { "model": "thebetweenlands:mud_bricks_decay_2" },
+        "variant=mud_bricks_decay_3": { "model": "thebetweenlands:mud_bricks_decay_3" },
+        "variant=mud_bricks_decay_4": { "model": "thebetweenlands:mud_bricks_decay_4" }
+    }
+}

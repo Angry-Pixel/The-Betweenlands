@@ -16,7 +16,7 @@ import thebetweenlands.util.MathUtils;
 public class ModelBipedRower extends ModelBiped {
     private EnumMap<ShipSide, ModelBipedLimb> arms;
 
-    private ModelRenderer leftForearm, rightForearm;
+    public ModelRenderer leftForearm, rightForearm;
 
     public ModelBipedRower(float expand) {
         this(expand, false);
@@ -61,6 +61,7 @@ public class ModelBipedRower extends ModelBiped {
             bipedRightArm.rotationPointX++;
         }
         bipedLeftLeg = new ModelRenderer(this, uvs.legLeftU, uvs.legLeftV);
+        bipedLeftLeg.mirror = true;
         bipedLeftLeg.addBox(-2, 0, -2, 4, 12, 4, expand);
         bipedLeftLeg.setRotationPoint(1.9F, 12, 0);
         bipedLeftLeg.rotateAngleX = -1.25F;
@@ -73,11 +74,8 @@ public class ModelBipedRower extends ModelBiped {
     }
 
     private void removeCuboids(ModelRenderer renderer) {
-        Iterator<ModelBox> cuboids = renderer.cubeList.iterator();
-        while (cuboids.hasNext()) {
-            boxList.remove(cuboids.next());
-            cuboids.remove();
-        }
+        renderer.cubeList.clear();
+        boxList.remove(renderer);
     }
 
     private ModelBipedLimb createReplacementArm(ModelRenderer oldLimb, int textureOffsetX, int textureOffsetY, boolean slimArms, float expand) {

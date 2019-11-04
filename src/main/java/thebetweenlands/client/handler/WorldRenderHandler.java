@@ -9,25 +9,36 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Sphere;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
+import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
+import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.client.render.entity.RenderGasCloud;
+import thebetweenlands.client.render.entity.RenderPlayerColored;
 import thebetweenlands.client.render.particle.BatchedParticleRenderer;
 import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
 import thebetweenlands.util.FramebufferStack;
 
 
@@ -39,6 +50,9 @@ public class WorldRenderHandler {
 	private static float partialTicks;
 
 	private static int sphereDispList = -2;
+
+	private static RenderPlayerColored renderPlayerSmallArmsColored;
+	private static RenderPlayerColored renderPlayerNormalArmsColored;
 
 	@SubscribeEvent
 	public static void onRenderTick(RenderTickEvent event) {
@@ -77,38 +91,69 @@ public class WorldRenderHandler {
 		if(ShaderHelper.INSTANCE.isWorldShaderActive() && sphereDispList >= 0) {
 			WorldShader shader = ShaderHelper.INSTANCE.getWorldShader();
 			if(shader != null) {
-				try(FramebufferStack.State state = FramebufferStack.push()) {
-					GeometryBuffer gBuffer = shader.getRepellerShieldBuffer();
-					gBuffer.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
-					if(gBuffer != null && gBuffer.isInitialized()) {
-						gBuffer.bind();
-						gBuffer.clear(1.0F, 0.0F, 0.0F, 1.0F);
+				GeometryBuffer gBuffer = shader.getRepellerShieldBuffer();
+				if(gBuffer != null) {
+					try(FramebufferStack.State state = FramebufferStack.push()) {
+						gBuffer.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
 
-						if(!REPELLER_SHIELDS.isEmpty()) {
-							GlStateManager.depthMask(true);
-							GlStateManager.disableTexture2D();
-							GlStateManager.disableBlend();
+						if(gBuffer.isInitialized()) {
+							gBuffer.bind();
+							gBuffer.clear(0.0F, 0.0F, 0.0F, 1.0F);
+
 							GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-							GlStateManager.color(0.0F, 0.4F + (float)(Math.sin(System.nanoTime() / 500000000.0F) + 1.0F) * 0.2F, 0.8F - (float)(Math.cos(System.nanoTime() / 400000000.0F) + 1.0F) * 0.2F, 1.0F);
-							GlStateManager.disableCull();
 
-							//Render to G-Buffer 1
-							for(Entry<Vec3d, Float> e : REPELLER_SHIELDS) {
-								Vec3d pos = e.getKey();
-								GlStateManager.pushMatrix();
-								GlStateManager.translate(pos.x, pos.y, pos.z);
-								GlStateManager.scale(e.getValue(), e.getValue(), e.getValue());
-								GL11.glCallList(sphereDispList);
-								GlStateManager.popMatrix();
+							if(!REPELLER_SHIELDS.isEmpty()) {
+								GlStateManager.depthMask(true);
+								GlStateManager.disableTexture2D();
+								GlStateManager.disableBlend();
+								GlStateManager.color(0.0F, 0.4F + (float)(Math.sin(System.nanoTime() / 500000000.0F) + 1.0F) * 0.2F, 0.8F - (float)(Math.cos(System.nanoTime() / 400000000.0F) + 1.0F) * 0.2F, 1.0F);
+								GlStateManager.disableCull();
+
+								//Render to G-Buffer 1
+								for(Entry<Vec3d, Float> e : REPELLER_SHIELDS) {
+									Vec3d pos = e.getKey();
+									GlStateManager.pushMatrix();
+									GlStateManager.translate(pos.x, pos.y, pos.z);
+									GlStateManager.scale(e.getValue(), e.getValue(), e.getValue());
+									GL11.glCallList(sphereDispList);
+									GlStateManager.popMatrix();
+								}
+
+								GlStateManager.enableTexture2D();
+								GlStateManager.enableCull();
+								GlStateManager.color(1, 1, 1, 1);
 							}
 
-							GlStateManager.enableTexture2D();
-							GlStateManager.enableCull();
-							GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-							GlStateManager.color(1, 1, 1, 1);
-						}
+							World world = MC.world;
 
-						gBuffer.updateDepthBuffer();
+							if(world != null) {
+								for(EntityPlayer player : MC.world.playerEntities) {
+									if(player instanceof AbstractClientPlayer && (player != TheBetweenlands.proxy.getClientPlayer() || Minecraft.getMinecraft().gameSettings.thirdPersonView != 0)) {
+										AbstractClientPlayer clientPlayer = (AbstractClientPlayer) player;
+
+										IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
+
+										if(cap != null) {
+											double obstructionDistance = cap.getObstructionDistance();
+
+											if(obstructionDistance < 0) {
+												ShaderHelper.INSTANCE.require();
+
+												float strength = Math.min((float)-obstructionDistance * 2, 1);
+
+												GlStateManager.disableLighting();
+												renderPlayerGlow(clientPlayer, strength, 0.98F, event.getPartialTicks());
+												GlStateManager.disableLighting();
+											}
+										}
+									}
+								}
+							}
+
+							GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+
+							gBuffer.updateDepthBuffer();
+						}
 					}
 				}
 			}
@@ -138,7 +183,15 @@ public class WorldRenderHandler {
 		REPELLER_SHIELDS.clear();
 
 		if(MC.getRenderViewEntity() != null) {
+			RenderHelper.disableStandardItemLighting();
+			Minecraft.getMinecraft().entityRenderer.enableLightmap();
+			GlStateManager.enableFog();
+			
 			BatchedParticleRenderer.INSTANCE.renderAll(MC.getRenderViewEntity(), event.getPartialTicks());
+			
+			GlStateManager.disableFog();
+			RenderHelper.disableStandardItemLighting();
+			Minecraft.getMinecraft().entityRenderer.disableLightmap();
 		}
 
 		if(ShaderHelper.INSTANCE.isWorldShaderActive() && (!DefaultParticleBatches.HEAT_HAZE_PARTICLE_ATLAS.isEmpty() || !DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS.isEmpty())) {
@@ -153,10 +206,14 @@ public class WorldRenderHandler {
 					fbo.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
 					fbo.clear(0, 0, 0, 0, 1);
 
-					if(!DefaultParticleBatches.GAS_CLOUDS.isEmpty()) {
+					RenderHelper.disableStandardItemLighting();
+					Minecraft.getMinecraft().entityRenderer.enableLightmap();
+					GlStateManager.enableFog();
+					
+					if(!DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE.isEmpty()) {
 						MC.getTextureManager().bindTexture(RenderGasCloud.TEXTURE);
 
-						BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.GAS_CLOUDS, MC.getRenderViewEntity(), event.getPartialTicks());
+						BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.GAS_CLOUDS_HEAT_HAZE, MC.getRenderViewEntity(), event.getPartialTicks());
 					}
 
 					if(!DefaultParticleBatches.HEAT_HAZE_PARTICLE_ATLAS.isEmpty()) {
@@ -167,6 +224,10 @@ public class WorldRenderHandler {
 						BatchedParticleRenderer.INSTANCE.renderBatch(DefaultParticleBatches.HEAT_HAZE_BLOCK_ATLAS, MC.getRenderViewEntity(), event.getPartialTicks());
 					}
 
+					GlStateManager.disableFog();
+					RenderHelper.disableStandardItemLighting();
+					Minecraft.getMinecraft().entityRenderer.disableLightmap();
+					
 					//Update gas particles depth buffer
 					fbo.updateDepthBuffer();
 				}
@@ -174,5 +235,68 @@ public class WorldRenderHandler {
 		}
 
 		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
+		//Sludge worm dungeon ground fog
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			WorldShader shader = ShaderHelper.INSTANCE.getWorldShader();
+			if(shader != null) {
+				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(Minecraft.getMinecraft().world);
+
+				for (ILocalStorage sharedStorage : worldStorage.getLocalStorageHandler().getLoadedStorages()) {
+					if (sharedStorage instanceof LocationSludgeWormDungeon) {
+						if(((LocationSludgeWormDungeon) sharedStorage).addGroundFogVolumesToShader(shader)) {
+							ShaderHelper.INSTANCE.require();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public static void renderPlayerGlow(AbstractClientPlayer player, float strength, float alpha, float partialTicks) {
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+
+		//From MC.getRenderManager().renderEntityStatic(player, partialTicks, false);
+
+		if (player.ticksExisted == 0)
+		{
+			player.lastTickPosX = player.posX;
+			player.lastTickPosY = player.posY;
+			player.lastTickPosZ = player.posZ;
+		}
+
+		double d0 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
+		double d1 = player.lastTickPosY + (player.posY - player.lastTickPosY) * (double)partialTicks;
+		double d2 = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * (double)partialTicks;
+		float f = player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * partialTicks;
+
+		GlStateManager.color(1, 1, 1, 1);
+
+		boolean isSmallArms = "slim".equals(player.getSkinType());
+
+		RenderPlayerColored playerRenderer;
+
+		if(isSmallArms) {
+			if(renderPlayerSmallArmsColored == null) {
+				renderPlayerSmallArmsColored = new RenderPlayerColored(MC.getRenderManager(), true);
+			}
+			playerRenderer = renderPlayerSmallArmsColored;
+		} else {
+			if(renderPlayerNormalArmsColored == null) {
+				renderPlayerNormalArmsColored = new RenderPlayerColored(MC.getRenderManager(), false);
+			}
+			playerRenderer = renderPlayerNormalArmsColored;
+		}
+
+		//Set alpha < 0.99 so that shader inverts inBack check
+		playerRenderer.setColor(strength, strength, strength, alpha);
+
+		//Polygon offset is necessary for inBack check in shader
+		GlStateManager.enablePolygonOffset();
+		GlStateManager.doPolygonOffset(0, -5);
+
+		playerRenderer.doRender(player, d0 - MC.getRenderManager().renderPosX, d1 - MC.getRenderManager().renderPosY, d2 - MC.getRenderManager().renderPosZ, f, partialTicks);
+
+		GlStateManager.disablePolygonOffset();
 	}
 }

@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "TA ",
+    "ATA",
+    " AB"
+  ],
+  "key": {
+    "T": {
+      "item": "thebetweenlands:shambler_tongue"
+    },
+    "A": {
+      "item": "thebetweenlands:items_misc",
+      "data": 21
+    },
+    "B": {
+      "item": "thebetweenlands:items_misc",
+      "data": 14
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:grappling_hook"
+  }
+}

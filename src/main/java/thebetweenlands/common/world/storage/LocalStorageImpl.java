@@ -108,12 +108,12 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 
 		return nbt;
 	}
-	
+
 	@Override
 	public void readInitialPacket(NBTTagCompound nbt) {
 		this.readReferenceChunks(nbt);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeInitialPacket(NBTTagCompound nbt) {
 		this.writeReferenceChunks(nbt);
@@ -184,7 +184,13 @@ public abstract class LocalStorageImpl implements ILocalStorage {
 
 	@Override
 	public void onRemoved() {
-		//Notify clients if shared storage is removed
+
+	}
+
+	@Override
+	public void onRemoving() {
+		//Notify clients when shared storage is removed.
+		//This is done before onRemoved so that the list of watchers is not yet empty.
 		if(!this.getWorldStorage().getWorld().isRemote) {
 			if (!this.getWatchers().isEmpty()) {
 				this.sendMessageToAllWatchers(new MessageRemoveLocalStorage(this.getID()));

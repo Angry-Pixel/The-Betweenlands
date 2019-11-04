@@ -44,6 +44,14 @@
       }
     ]
   },
+  "ambient_sludge_worm_dungeon": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/sludge_worm_dungeon_ambience",
+        "stream": true
+      }
+    ]
+  },
   "ambient_water": {
     "sounds": [
       {
@@ -214,7 +222,39 @@
   "snail_living": {
     "sounds": [
       "thebetweenlands:snail_living_1",
-      "thebetweenlands:snail_living_1"
+      "thebetweenlands:snail_living_2"
+    ]
+  },
+  "leech_death": {
+    "sounds": [
+      "thebetweenlands:snail_death"
+    ]
+  },
+  "leech_hurt": {
+    "sounds": [
+      "thebetweenlands:snail_hurt"
+    ]
+  },
+  "leech_living": {
+    "sounds": [
+      "thebetweenlands:snail_living_1",
+      "thebetweenlands:snail_living_2"
+    ]
+  },
+  "sludge_menace_death": {
+    "sounds": [
+      "thebetweenlands:snail_death"
+    ]
+  },
+  "sludge_menace_hurt": {
+    "sounds": [
+      "thebetweenlands:snail_hurt"
+    ]
+  },
+  "sludge_menace_living": {
+    "sounds": [
+      "thebetweenlands:snail_living_1",
+      "thebetweenlands:snail_living_2"
     ]
   },
   "dragonfly": {
@@ -671,9 +711,212 @@
       "thebetweenlands:root_sprite_living_3"
     ]
   },
+    "shambler_living": {
+    "sounds": [
+      "thebetweenlands:shambler_living_1",
+      "thebetweenlands:shambler_living_2",
+      "thebetweenlands:shambler_living_3",
+      "thebetweenlands:shambler_living_4"
+    ]
+  },
+  "shambler_hurt": {
+    "sounds": [
+      "thebetweenlands:shambler_hurt_1",
+      "thebetweenlands:shambler_hurt_2"
+    ]
+  },
+  "shambler_death": {
+    "sounds": [
+      "thebetweenlands:shambler_death"
+    ]
+  },
+  "shambler_lick": {
+    "sounds": [
+      "thebetweenlands:shambler_lick"
+    ]
+  },
+    "crypt_crawler_living": {
+    "sounds": [
+      "thebetweenlands:crypt_crawler_living_1",
+      "thebetweenlands:crypt_crawler_living_2",
+      "thebetweenlands:crypt_crawler_living_3"
+    ]
+  },
+  "crypt_crawler_hurt": {
+    "sounds": [
+      "thebetweenlands:crypt_crawler_hurt_1",
+      "thebetweenlands:crypt_crawler_hurt_2"
+    ]
+  },
+  "crypt_crawler_death": {
+    "sounds": [
+      "thebetweenlands:crypt_crawler_death"
+    ]
+  },
+  "crypt_crawler_dig": {
+    "sounds": [
+      "thebetweenlands:crypt_crawler_dig"
+    ]
+  },
+  "wall_lamprey_suck": {
+    "sounds": [
+      "thebetweenlands:wall_lamprey_suck"
+    ]
+  },
+  "wall_lamprey_attack": {
+    "sounds": [
+      "thebetweenlands:wall_lamprey_attack_1",
+      "thebetweenlands:wall_lamprey_attack_2",
+      "thebetweenlands:wall_lamprey_attack_3"
+    ]
+  },
+  "wall_living_root_emerge": {
+    "sounds": [
+      "thebetweenlands:wall_living_root_emerge"
+    ]
+  },
+  "worm_emerge": {
+    "sounds": [
+      "thebetweenlands:worm_emerge"
+    ]
+  },
+  "worm_plop": {
+    "sounds": [
+      "thebetweenlands:worm_plop"
+    ]
+  },
+    "worm_hurt": {
+    "sounds": [
+      "thebetweenlands:worm_hurt_1",
+      "thebetweenlands:worm_hurt_2"
+    ]
+  },
+  "worm_death": {
+    "sounds": [
+      "thebetweenlands:worm_death"
+    ]
+  },
+  "worm_living": {
+    "sounds": [
+      "thebetweenlands:worm_living_1",
+      "thebetweenlands:worm_living_2",
+      "thebetweenlands:worm_living_3"
+    ]
+  },
+  "worm_splat": {
+    "sounds": [
+      "thebetweenlands:worm_splat"
+    ]
+  },
+    "worm_egg_sac_living": {
+    "sounds": [
+      "thebetweenlands:worm_egg_sac_living_1",
+      "thebetweenlands:worm_egg_sac_living_2",
+      "thebetweenlands:worm_egg_sac_living_3"
+    ]
+  },
+  "worm_egg_sac_squish": {
+    "sounds": [
+      "thebetweenlands:worm_egg_sac_squish"
+    ]
+  },
+  "splodeshroom_winddown": {
+    "sounds": [
+      "thebetweenlands:splodeshroom_winddown"
+    ]
+  },
+  "splodeshroom_windup": {
+    "sounds": [
+      "thebetweenlands:splodeshroom_windup"
+    ]
+  },
+  "splodeshroom_pop": {
+    "sounds": [
+      "thebetweenlands:splodeshroom_pop"
+    ]
+  },
+    "emberling_flames": {
+    "sounds": [
+      "thebetweenlands:emberling_flames"
+    ]
+  },
+  "emberling_jump": {
+    "sounds": [
+      "thebetweenlands:emberling_jump"
+    ]
+  },
+    "emberling_hurt": {
+    "sounds": [
+      "thebetweenlands:emberling_hurt_1",
+      "thebetweenlands:emberling_hurt_2"
+    ]
+  },
+  "emberling_death": {
+    "sounds": [
+      "thebetweenlands:emberling_death"
+    ]
+  },
+  "emberling_living": {
+    "sounds": [
+      "thebetweenlands:emberling_living_1",
+      "thebetweenlands:emberling_living_2",
+      "thebetweenlands:emberling_living_3",
+      "thebetweenlands:emberling_living_4",
+      "thebetweenlands:emberling_living_5"
+    ]
+  },
+    "barrishee_hurt": {
+    "sounds": [
+      "thebetweenlands:barrishee_hurt_1",
+      "thebetweenlands:barrishee_hurt_2"
+    ]
+  },
+  "barrishee_death": {
+    "sounds": [
+      "thebetweenlands:barrishee_death"
+    ]
+  },
+  "barrishee_living": {
+    "sounds": [
+      "thebetweenlands:barrishee_living"
+    ]
+  },
+  "barrishee_scream": {
+    "sounds": [
+      "thebetweenlands:barrishee_scream"
+    ]
+  },
+  "barrishee_step": {
+    "sounds": [
+      "thebetweenlands:barrishee_step_1",
+      "thebetweenlands:barrishee_step_2",
+      "thebetweenlands:barrishee_step_3",
+      "thebetweenlands:barrishee_step_4"
+    ]
+  },
   "greebling_vanish": {
     "sounds": [
       "thebetweenlands:greebling_vanish"
+    ]
+  },
+  "roof_collapse": {
+    "sounds": [
+      "thebetweenlands:roof_collapse"
+    ]
+  },
+  "beam_switch": {
+    "sounds": [
+      "thebetweenlands:beam_switch"
+    ]
+  },
+  "beam_activate": {
+    "sounds": [
+      "thebetweenlands:beam_activate"
+    ]
+  },
+  "brazier_light": {
+    "sounds": [
+      "thebetweenlands:brazier_light"
     ]
   },
   "sorry": {
@@ -789,6 +1032,26 @@
       "thebetweenlands:gem_singer_echo"
     ]
   },
+  "rope_throw": {
+    "sounds": [
+      "thebetweenlands:rope_throw"
+    ]
+  },
+  "rope_pull": {
+    "sounds": [
+      "thebetweenlands:rope_pull"
+    ]
+  },
+  "rope_swing": {
+    "sounds": [
+      "thebetweenlands:rope_swing"
+    ]
+  },
+  "rope_grab": {
+    "sounds": [
+      "thebetweenlands:rope_grab"
+    ]
+  },
   "rejected": {
     "sounds": [
       "thebetweenlands:rejected"
@@ -828,6 +1091,14 @@
     "sounds": [
       {
         "name": "thebetweenlands:boss/dreadful_peat_mummy_loop",
+        "stream": true
+      }
+    ]
+  },
+  "pit_of_decay_loop": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:boss/pit_of_decay_loop",
         "stream": true
       }
     ]
@@ -1077,6 +1348,95 @@
   "damage_reduction": {
     "sounds": [
       "thebetweenlands:damage_reduction"
+    ]
+  },
+  "puff_shroom": {
+    "sounds": [
+      "thebetweenlands:puff_shroom"
+    ]
+  },
+  "mud_door_1": {
+    "sounds": [
+      "thebetweenlands:mud_door_1"
+    ]
+  },
+  "mud_door_2": {
+    "sounds": [
+      "thebetweenlands:mud_door_2"
+    ]
+  },
+  "mud_door_lock": {
+    "sounds": [
+      "thebetweenlands:mud_door_lock"
+    ]
+  },
+  "mud_door_trap": {
+    "sounds": [
+      "thebetweenlands:mud_door_trap"
+    ]
+  },
+  "ring_of_dispersion_teleport": {
+    "sounds": [
+      "thebetweenlands:fortress_boss_teleport"
+    ]
+  },
+  "long_swing": {
+    "sounds": [
+      "thebetweenlands:long_swing_1",
+      "thebetweenlands:long_swing_2",
+      "thebetweenlands:long_swing_3"
+    ]
+  },
+  "long_slice": {
+    "sounds": [
+      "thebetweenlands:long_slice_1",
+      "thebetweenlands:long_slice_2",
+      "thebetweenlands:long_slice_3"
+    ]
+  },
+  "plug_hit": {
+    "sounds": [
+      "thebetweenlands:plug_hit"
+    ]
+  },
+  "plug_lock": {
+    "sounds": [
+      "thebetweenlands:plug_lock"
+    ]
+  },
+  "chain": {
+    "sounds": [
+      "thebetweenlands:chain"
+    ]
+  },
+  "chain_long": {
+    "sounds": [
+      "thebetweenlands:chain_long"
+    ]
+  },
+  "gears": {
+    "sounds": [
+      "thebetweenlands:gears"
+    ]
+  },
+  "wall_slide": {
+    "sounds": [
+      "thebetweenlands:wall_slide"
+    ]
+  },
+  "wall_slam": {
+    "sounds": [
+      "thebetweenlands:wall_slam"
+    ]
+  },
+  "poop_jet": {
+    "sounds": [
+      "thebetweenlands:poop_jet"
+    ]
+  },
+  "pit_fall": {
+    "sounds": [
+      "thebetweenlands:pit_fall"
     ]
   }
 }

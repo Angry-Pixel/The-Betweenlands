@@ -9,6 +9,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -16,6 +18,9 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
+
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 
@@ -39,6 +44,12 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 				}
 			}
 		};
+		this.name = name;
+	}
+	
+	public TileEntityBasicInventory(String name, NonNullList<ItemStack> inventory, BiFunction<TileEntityBasicInventory, NonNullList<ItemStack>, ItemStackHandler> handler) {
+		this.inventoryHandler = handler.apply(this, inventory);
+		this.inventory = inventory;
 		this.name = name;
 	}
 
@@ -99,7 +110,11 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) {
-		return false;
+		if(this.world.getTileEntity(this.pos) != this) {
+			return false;
+		} else {
+			return player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
+		}
 	}
 
 	@Override
@@ -111,11 +126,11 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	public boolean hasCustomName() {
 		return false;
 	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return null;
-	}
+    
+    @Override
+    public ITextComponent getDisplayName() {
+        return (ITextComponent)(this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]));
+    }
 
 	@Override
 	public int[] getSlotsForFace(EnumFacing side) {

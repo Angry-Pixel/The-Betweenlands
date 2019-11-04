@@ -7,10 +7,10 @@ import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,7 +26,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 
 public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpawnData {
@@ -96,7 +95,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			} else {
 				this.motionY -= 0.05D;
 
-				if(!this.world.isRemote && (this.posY <= this.origin.getY() || this.onGround)) {
+				if(!this.world.isRemote && (this.posY <= this.origin.getY() || this.onGround || this.ticksExisted >= this.jumpDelay + 20)) {
 					this.setDead();
 				}
 			}
@@ -118,15 +117,19 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 		if(this.motionY > 0.1D && !this.world.isRemote) {
 			DamageSource damageSource;
 			Entity owner = getOwner();
-			if(owner != null) {
-				damageSource = new EntityDamageSourceIndirect("player", this, owner);
+			if(owner instanceof EntityLivingBase) {
+				if(owner instanceof EntityPlayer) {
+					damageSource = new EntityDamageSourceIndirect("player", this, owner);
+				} else {
+					damageSource = DamageSource.causeIndirectDamage(this, (EntityLivingBase) owner);
+				}
 			} else {
 				damageSource = new EntityDamageSource("bl.shockwave", this);
 			}
 			List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(0.1D, 0.1D, 0.1D));
 			for(EntityLivingBase entity : entities) {      
 				if (entity != null) {                      
-					if (entity instanceof EntityLivingBase) {
+					if (entity instanceof EntityLivingBase && entity != getOwner()) { // needs null check on owner?
 						if(entity.attackEntityFrom(damageSource, 10F)) {
 							float knockback = 1.5F;
 							Vec3d dir = new Vec3d(this.posX - this.waveStartX, 0, this.posZ - this.waveStartZ);

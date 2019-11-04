@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "powered=false": { "model": "thebetweenlands:internal/blank" },
+        "powered=true": { "model": "thebetweenlands:internal/blank" }
+    }
+}

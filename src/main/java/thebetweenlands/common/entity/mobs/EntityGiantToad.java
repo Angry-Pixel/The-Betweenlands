@@ -1,11 +1,12 @@
 package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -13,6 +14,7 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -36,6 +38,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.entity.IRingOfGatheringMinion;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -43,7 +46,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityGiantToad extends EntityCreature implements IEntityBL {
+public class EntityGiantToad extends EntityTameable implements IEntityBL, IRingOfGatheringMinion {
 	private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityGiantToad.class, DataSerializers.BYTE);
 	private static final DataParameter<Boolean> DW_TAMED = EntityDataManager.createKey(EntityGiantToad.class, DataSerializers.BOOLEAN);
 
@@ -91,28 +94,18 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setBoolean("Tamed", this.isTamed());
 		nbt.setInteger("Temper", this.temper);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		this.setTamed(nbt.getBoolean("Tamed"));
 		this.temper = nbt.getInteger("Temper");
 	}
 
 	@Override
 	protected boolean canDespawn() {
 		return false;
-	}
-
-	public boolean isTamed() {
-		return this.dataManager.get(DW_TAMED);
-	}
-
-	public void setTamed(boolean tamed) {
-		this.dataManager.set(DW_TAMED, tamed);
 	}
 
 	@Override
@@ -303,7 +296,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		boolean holdsEquipment = hand == EnumHand.MAIN_HAND && !player.getHeldItem(hand).isEmpty() && (player.getHeldItem(hand).getItem() instanceof IEquippable || player.getHeldItem(hand).getItem() == ItemRegistry.AMULET_SLOT);
 		if (holdsEquipment)
 			return true;
@@ -315,9 +308,9 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 			if (!this.isTamed()) {
 				if (!this.world.isRemote) {
 					this.temper += this.rand.nextInt(4) + 1;
-					if (this.temper >= 30) {
+					if (this.temper >= 30 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
 						this.world.setEntityState(this, (byte) 7);
-						this.setTamed(true);
+						this.setTamedBy(player);
 						this.temper = 0;
 					} else {
 						this.world.setEntityState(this, (byte) 6);
@@ -478,6 +471,34 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.TOAD;
+	}
+
+	@Override
+	public EntityAgeable createChild(EntityAgeable ageable) {
+		return null;
+	}
+	
+	@Override
+	public NBTTagCompound returnToRing(UUID userId) {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public boolean returnFromRing(Entity user, NBTTagCompound nbt) {
+		this.readFromNBT(nbt);
+		this.setLocationAndAngles(user.posX, user.posY, user.posZ, this.world.rand.nextFloat() * 360, 0);
+		this.world.spawnEntity(this);
+		return true;
+	}
+
+	@Override
+	public boolean shouldReturnOnUnload(boolean isOwnerLoggedIn) {
+		return IRingOfGatheringMinion.super.shouldReturnOnUnload(isOwnerLoggedIn) && !this.isSitting();
+	}
+
+	@Override
+	public UUID getRingOwnerId() {
+		return this.getOwnerId();
 	}
 }
 

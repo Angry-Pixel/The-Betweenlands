@@ -63,6 +63,10 @@ public class ModelConnectedTexture implements IModel {
 		protected Vertex scale(float scale) {
 			return new Vertex(this.pos.x * scale, this.pos.y * scale, this.pos.z * scale, this.uv.x * scale, this.uv.y * scale);
 		}
+
+		protected Vertex scaleUVs(float u, float v) {
+			return new Vertex(this.pos.x, this.pos.y, this.pos.z, this.uv.x * u, this.uv.y * v);
+		}
 	}
 
 	protected static class ConnectedTextureQuad {
@@ -71,16 +75,22 @@ public class ModelConnectedTexture implements IModel {
 		protected final Vertex[] verts;
 		protected final EnumFacing cullFace;
 		protected final int tintIndex;
+		protected final float minU, minV, maxU, maxV;
 
 		protected final BakedQuad[][] quads;
 
-		protected ConnectedTextureQuad(ResourceLocation[] textures, String[] indices, Vertex[] verts, EnumFacing cullFace, int tintIndex) {
+		protected ConnectedTextureQuad(ResourceLocation[] textures, String[] indices, Vertex[] verts, EnumFacing cullFace, int tintIndex,
+				float minU, float minV, float maxU, float maxV) {
 			this.textures = textures;
 			this.indices = indices;
 			this.verts = verts;
 			this.cullFace = cullFace;
 			this.tintIndex = tintIndex;
 			this.quads = new BakedQuad[4][this.textures.length];
+			this.minU = minU;
+			this.minV = minV;
+			this.maxU = maxU;
+			this.maxV = maxV;
 		}
 
 		public BakedQuad[][] getQuads() {
@@ -90,24 +100,30 @@ public class ModelConnectedTexture implements IModel {
 		public void bake(Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter,
 				Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms,
 				VertexFormat format) {
-			Vertex d01 = this.verts[1].subtract(this.verts[0]);
-			Vertex d12 = this.verts[2].subtract(this.verts[1]);
-			Vertex d23 = this.verts[3].subtract(this.verts[2]);
-			Vertex d30 = this.verts[0].subtract(this.verts[3]);
+			Vertex uvOffset = new Vertex(0, 0, 0, this.minU, this.minV);
+			Vertex v0 = this.verts[0].scaleUVs(this.maxU - this.minU, this.maxV - this.minV).add(uvOffset);
+			Vertex v1 = this.verts[1].scaleUVs(this.maxU - this.minU, this.maxV - this.minV).add(uvOffset);
+			Vertex v2 = this.verts[2].scaleUVs(this.maxU - this.minU, this.maxV - this.minV).add(uvOffset);
+			Vertex v3 = this.verts[3].scaleUVs(this.maxU - this.minU, this.maxV - this.minV).add(uvOffset);
 
-			float e01 = this.extrapolateClamp(this.verts[0].uv.y, this.verts[1].uv.y, 0.5F);
-			float e12 = this.extrapolateClamp(this.verts[1].uv.x, this.verts[2].uv.x, 0.5F);
-			float e23 = this.extrapolateClamp(this.verts[2].uv.y, this.verts[3].uv.y, 0.5F);
-			float e30 = this.extrapolateClamp(this.verts[3].uv.x, this.verts[0].uv.x, 0.5F);
+			Vertex d01 = v1.subtract(v0);
+			Vertex d12 = v2.subtract(v1);
+			Vertex d23 = v3.subtract(v2);
+			Vertex d30 = v0.subtract(v3);
 
-			Vertex p01 = this.verts[0].add(d01.scale(e01));
-			Vertex p12 = this.verts[1].add(d12.scale(e12));
-			Vertex p23 = this.verts[2].add(d23.scale(e23));
-			Vertex p30 = this.verts[3].add(d30.scale(e30));
+			float e01 = this.extrapolateClamp(v0.uv.y, v1.uv.y, (this.maxV + this.minV) / 2.0F);
+			float e12 = this.extrapolateClamp(v1.uv.x, v2.uv.x, (this.maxU + this.minU) / 2.0F);
+			float e23 = this.extrapolateClamp(v2.uv.y, v3.uv.y, (this.maxV + this.minV) / 2.0F);
+			float e30 = this.extrapolateClamp(v3.uv.x, v0.uv.x, (this.maxU + this.minU) / 2.0F);
+
+			Vertex p01 = v0.add(d01.scale(e01));
+			Vertex p12 = v1.add(d12.scale(e12));
+			Vertex p23 = v2.add(d23.scale(e23));
+			Vertex p30 = v3.add(d30.scale(e30));
 
 			Vertex d0123 = p23.subtract(p01);
 
-			float ecp = this.extrapolateClamp(this.verts[0].uv.x + (this.verts[1].uv.x - this.verts[0].uv.x) * e01, this.verts[2].uv.x + (this.verts[3].uv.x - this.verts[2].uv.x) * e23, 0.5F);
+			float ecp = this.extrapolateClamp(v0.uv.x + (v1.uv.x - v0.uv.x) * e01, v2.uv.x + (v3.uv.x - v2.uv.x) * e23, (this.maxU + this.minU) / 2.0F);
 
 			Vertex cp = p01.add(d0123.scale(ecp));
 
@@ -116,10 +132,10 @@ public class ModelConnectedTexture implements IModel {
 				sprites[i] = bakedTextureGetter.apply(this.textures[i]);
 			}
 
-			this.quads[0] = this.bakeTextureVariants(format, transformation, sprites, new Vertex[] {this.verts[0], p01, cp, p30});
-			this.quads[1] = this.bakeTextureVariants(format, transformation, sprites, new Vertex[] {p01, this.verts[1], p12, cp});
-			this.quads[2] = this.bakeTextureVariants(format, transformation, sprites, new Vertex[] {cp, p12, this.verts[2], p23});
-			this.quads[3] = this.bakeTextureVariants(format, transformation, sprites, new Vertex[] {p30, cp, p23, this.verts[3]});
+			this.quads[0] = this.bakeTextureVariants(format, transformation, sprites, new Vertex[] {v0, p01, cp, p30});
+			this.quads[1] = this.bakeTextureVariants(format, transformation, sprites, new Vertex[] {p01, v1, p12, cp});
+			this.quads[2] = this.bakeTextureVariants(format, transformation, sprites, new Vertex[] {cp, p12, v2, p23});
+			this.quads[3] = this.bakeTextureVariants(format, transformation, sprites, new Vertex[] {p30, cp, p23, v3});
 		}
 
 		protected float extrapolateClamp(float v1, float v2, float v) {
@@ -346,7 +362,22 @@ public class ModelConnectedTexture implements IModel {
 					cullFace = EnumFacing.byName(ctJson.get("cullface").getAsString());
 				}
 
-				connectedTextures.add(new ConnectedTextureQuad(textures, indices, vertices, cullFace, tintIndex));
+				float minU = 0, minV = 0, maxU = 1, maxV = 1;
+				if(ctJson.has("minU")) {
+					minU = ctJson.get("minU").getAsFloat();
+				}
+				if(ctJson.has("minV")) {
+					minV = ctJson.get("minV").getAsFloat();
+				}
+				if(ctJson.has("maxU")) {
+					maxU = ctJson.get("maxU").getAsFloat();
+				}
+				if(ctJson.has("maxV")) {
+					maxV = ctJson.get("maxV").getAsFloat();
+				}
+
+				connectedTextures.add(new ConnectedTextureQuad(textures, indices, vertices, cullFace, tintIndex,
+						minU, minV, maxU, maxV));
 			}
 		}
 

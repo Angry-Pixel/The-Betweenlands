@@ -99,28 +99,28 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 					world.setBlockState(new BlockPos(x + 1, yy + 1, z + 1), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
 					tile = world.getTileEntity(new BlockPos(x + 1, yy + 1, z + 1));
 					if (tile instanceof TileEntityChest) {
-						((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+						((TileEntityChest) tile).setLootTable(LootTableRegistry.SPAWNER_CHEST, random.nextLong());
 					}
 					break;
 				case 1:
 					world.setBlockState(new BlockPos(x + 1, yy + 1, z + 3), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
 					tile = world.getTileEntity(new BlockPos(x + 1, yy + 1, z + 3));
 					if (tile instanceof TileEntityChest) {
-						((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+						((TileEntityChest) tile).setLootTable(LootTableRegistry.SPAWNER_CHEST, random.nextLong());
 					}
 					break;
 				case 2:
 					world.setBlockState(new BlockPos(x + 3, yy + 1, z + 1), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
 					tile = world.getTileEntity(new BlockPos(x + 3, yy + 1, z + 1));
 					if (tile instanceof TileEntityChest) {
-						((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+						((TileEntityChest) tile).setLootTable(LootTableRegistry.SPAWNER_CHEST, random.nextLong());
 					}
 					break;
 				case 3:
 					world.setBlockState(new BlockPos(x + 3, yy + 1, z + 3), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
 					tile = world.getTileEntity(new BlockPos(x + 3, yy + 1, z + 3));
 					if (tile instanceof TileEntityChest) {
-						((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+						((TileEntityChest) tile).setLootTable(LootTableRegistry.SPAWNER_CHEST, random.nextLong());
 					}
 					break;
 				}
@@ -148,7 +148,6 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 		LocationStorage location = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(x, z), "small_dungeon", EnumLocationType.DUNGEON);
 		location.addBounds(new AxisAlignedBB(x, y, z, x + 5, y + 5, z + 5).grow(2, 2, 2));
-		location.linkChunks();
 		location.setLayer(0);
 		location.setSeed(random.nextLong());
 		location.setDirty(true);

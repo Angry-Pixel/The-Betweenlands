@@ -3,6 +3,7 @@ package thebetweenlands.client.handler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -33,6 +34,13 @@ public class CameraPositionHandler {
 			for(Entity entity : (List<Entity>) world.loadedEntityList) {
 				if(entity instanceof IEntityScreenShake) {
 					IEntityScreenShake shake = (IEntityScreenShake) entity;
+					screenShake += shake.getShakeIntensity(renderViewEntity, delta);
+				}
+			}
+
+			for(TileEntity tile : (List<TileEntity>) world.loadedTileEntityList) {
+				if(tile instanceof IEntityScreenShake) {
+					IEntityScreenShake shake = (IEntityScreenShake) tile;
 					screenShake += shake.getShakeIntensity(renderViewEntity, delta);
 				}
 			}

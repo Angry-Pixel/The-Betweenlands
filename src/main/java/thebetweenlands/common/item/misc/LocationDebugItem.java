@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
@@ -18,8 +19,11 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
+import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class LocationDebugItem extends Item {
@@ -35,10 +39,9 @@ public class LocationDebugItem extends Item {
 				List<LocationStorage> locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, pos.getX(), pos.getZ(), location -> location.isInside(new Vec3d(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ)));
 				if(locations.isEmpty()) {
 					int rndID = world.rand.nextInt();
-					LocationStorage location = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "Test Location ID: " + rndID, EnumLocationType.NONE);
+					LocationStorage location = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "Test Location ID: " + rndID, EnumLocationType.NONE);
 					location.addBounds(new AxisAlignedBB(pos).grow(16, 16, 16));
 					location.setSeed(world.rand.nextLong());
-					location.linkChunks();
 					location.setDirty(true);
 					worldStorage.getLocalStorageHandler().addLocalStorage(location);
 					playerIn.sendMessage(new TextComponentString(String.format("Added new location: %s", location.getName())));
@@ -90,5 +93,10 @@ public class LocationDebugItem extends Item {
 		}
 
 		return EnumActionResult.SUCCESS;
+	}
+	
+	@Override
+	public CreativeTabs getCreativeTab() {
+		return BetweenlandsConfig.DEBUG.debug ? BLCreativeTabs.SPECIALS : null;
 	}
 }

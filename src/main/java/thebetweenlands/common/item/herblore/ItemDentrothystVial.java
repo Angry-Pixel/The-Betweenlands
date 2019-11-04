@@ -1,24 +1,77 @@
 package thebetweenlands.common.item.herblore;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
-import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ItemDentrothystVial extends Item implements ItemRegistry.IBlockStateItemModelDefinition {
+import javax.annotation.Nullable;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStackSimple;
+import net.minecraftforge.items.ItemHandlerHelper;
+import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.world.storage.location.LocationSludgeWormDungeon;
+import thebetweenlands.common.world.storage.location.LocationStorage;
+
+public class ItemDentrothystVial extends Item implements ItemRegistry.IBlockStateItemModelDefinition {
+	private static final class DentrothystVialFluidHandler extends FluidHandlerItemStackSimple {
+		public DentrothystVialFluidHandler(final ItemStack container, final int capacity) {
+			super(container, capacity);
+		}
+
+		@Override
+		public boolean canFillFluidType(FluidStack fluid) {
+			return ItemRegistry.DENTROTHYST_FLUID_VIAL.canFillWith(container, fluid);
+		}
+
+		@Nullable
+		@Override
+		public FluidStack getFluid() {
+			return null;
+		}
+
+		@Override
+		protected void setContainerToEmpty() {
+			
+		}
+
+		@Override
+		public int fill(FluidStack resource, boolean doFill) {
+			if(this.container.getItemDamage() == 1) {
+				//Dirty vial can't be filled
+				return 0;
+			}
+			ItemStack fluidVial = new ItemStack(ItemRegistry.DENTROTHYST_FLUID_VIAL, 1, this.container.getItemDamage() == 2 ? 1 : 0);
+			IFluidHandlerItem handler = FluidUtil.getFluidHandler(fluidVial);
+			int filled = handler.fill(resource, doFill);
+			if(filled > 0 && doFill) {
+				this.container = fluidVial;
+			}
+			return filled;
+		}
+	}
+	
     public ItemDentrothystVial() {
         this.setCreativeTab(BLCreativeTabs.HERBLORE);
         this.setHasSubtypes(true);
@@ -96,7 +149,36 @@ public class ItemDentrothystVial extends Item implements ItemRegistry.IBlockStat
                 }
                 return EnumActionResult.SUCCESS;
             }
+        } else if(!player.isSneaking() && stack.getItemDamage() != 1) {
+        	List<LocationStorage> locations = LocationStorage.getLocations(world, new AxisAlignedBB(pos));
+        	
+        	for(LocationStorage location : locations) {
+        		if(location instanceof LocationSludgeWormDungeon) {
+        			LocationSludgeWormDungeon dungeon = (LocationSludgeWormDungeon) location;
+        			
+        			if(dungeon.hasGroundFog(pos)) {
+	        			int floor = dungeon.getFloor(pos);
+	        			
+	        			if(floor == 5 || floor == 6) {
+	        				if(!world.isRemote) {
+	        					stack.shrink(1);
+	        					world.playSound(null, pos, FluidRegistry.FOG.getFillSound(new FluidStack(FluidRegistry.FOG, 1000)), SoundCategory.BLOCKS, 1.0F, 1.0F);
+	        					ItemHandlerHelper.giveItemToPlayer(player, ItemRegistry.DENTROTHYST_FLUID_VIAL.withFluid(stack.getItemDamage() == 2 ? 1 : 0, FluidRegistry.FOG));
+	        				}
+	        				
+	        				return EnumActionResult.SUCCESS;
+	        			} else if(!world.isRemote) {
+	        				player.sendStatusMessage(new TextComponentTranslation("chat.not_enough_fog_for_vial"), true);
+	        			}
+        			}
+        		}
+        	}
         }
         return EnumActionResult.FAIL;
     }
+    
+    @Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		return new DentrothystVialFluidHandler(stack, ItemRegistry.DENTROTHYST_FLUID_VIAL.getCapacity());
+	}
 }

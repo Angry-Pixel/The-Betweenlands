@@ -1,0 +1,6 @@
+{
+    "parent": "thebetweenlands:item/valonite_greataxe_base",
+    "textures": {
+        "layer1": "thebetweenlands:items/valonite_greataxe_corrosion_5"
+    }
+}

@@ -1,5 +1,12 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -18,7 +25,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -50,14 +56,21 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	private static final DataParameter<EnumFacing> MOVE_FACING = EntityDataManager.createKey(EntityWallFace.class, DataSerializers.FACING);
 	private static final DataParameter<EnumFacing> MOVE_FACING_UP = EntityDataManager.createKey(EntityWallFace.class, DataSerializers.FACING);
 	private static final DataParameter<BlockPos> MOVE_ANCHOR = EntityDataManager.createKey(EntityWallFace.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<Byte> MOVE_REASON = EntityDataManager.createKey(EntityWallFace.class, DataSerializers.BYTE);
 	private static final DataParameter<Boolean> ANCHORED = EntityDataManager.createKey(EntityWallFace.class, DataSerializers.BOOLEAN);
-	
+
 	protected final LookHelper lookHelper;
+
+	protected float lookMoveSpeedMultiplier = 1.0F;
 
 	private float lastMoveProgress = 0;
 	private float moveProgress = 0;
 
 	protected float peek = 0.25F;
+
+	public static enum MoveReason {
+		POSITION, LOOK, POSITION_AND_LOOK
+	}
 
 	public EntityWallFace(World world) {
 		super(world);
@@ -79,16 +92,33 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		this.dataManager.register(MOVE_FACING, EnumFacing.NORTH);
 		this.dataManager.register(MOVE_FACING_UP, EnumFacing.UP);
 		this.dataManager.register(MOVE_ANCHOR, BlockPos.ORIGIN);
-		
+		this.dataManager.register(MOVE_REASON, (byte) 0);
+
 		this.dataManager.register(ANCHORED, true);
 	}
 
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		this.dataManager.set(ANCHOR, new BlockPos(this));
+		BlockPos anchor = new BlockPos(this);
+		EnumFacing[] randomFacing = this.findRandomValidFacingAt(anchor);
+		if(randomFacing == null) {
+			randomFacing = new EnumFacing[] {EnumFacing.NORTH, EnumFacing.UP};
+		}
+		this.setPositionToAnchor(anchor, randomFacing[0], randomFacing[1]);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 
+	@Override
+	public boolean getCanSpawnHere() {
+		IBlockState surfaceState = this.world.getBlockState((new BlockPos(this)).down());
+		return surfaceState.canEntitySpawn(this) && this.findRandomValidFacingAt(new BlockPos(this)) != null;
+	}
+	
+	@Override
+	public boolean isNotColliding() {
+		return true;
+	}
+	
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
@@ -171,6 +201,9 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 
 	@Override
 	public float getAIMoveSpeed() {
+		if(this.isMoving() && this.getMoveReason() == MoveReason.LOOK) {
+			return this.dataManager.get(MOVE_SPEED) * this.lookMoveSpeedMultiplier;
+		}
 		return this.dataManager.get(MOVE_SPEED);
 	}
 
@@ -180,7 +213,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		if(!this.isAnchored()) {
 			return super.getBrightnessForRender();
 		}
-		
+
 		EnumFacing facing = this.getFacing();
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(MathHelper.floor(this.posX) + facing.getXOffset(), 0, MathHelper.floor(this.posZ) + facing.getZOffset());
 
@@ -225,7 +258,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		super.writeEntityToNBT(nbt);
 
 		nbt.setInteger("facing", this.getFacing().getIndex());
-		nbt.setInteger("facingUp", this.getFacing().getIndex());
+		nbt.setInteger("facingUp", this.getFacingUp().getIndex());
 		nbt.setLong("anchor", this.getAnchor().toLong());
 		nbt.setBoolean("anchored", this.isAnchored());
 	}
@@ -234,9 +267,15 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 
-		this.dataManager.set(FACING, EnumFacing.byIndex(nbt.getInteger("facing")));
-		this.dataManager.set(FACING_UP, EnumFacing.byIndex(nbt.getInteger("facingUp")));
-		this.dataManager.set(ANCHOR, BlockPos.fromLong(nbt.getLong("anchor")));
+		if(nbt.hasKey("facing", Constants.NBT.TAG_INT)) {
+			this.dataManager.set(FACING, EnumFacing.byIndex(nbt.getInteger("facing")));
+		}
+		if(nbt.hasKey("facingUp", Constants.NBT.TAG_INT)) {
+			this.dataManager.set(FACING_UP, EnumFacing.byIndex(nbt.getInteger("facingUp")));
+		}
+		if(nbt.hasKey("anchor", Constants.NBT.TAG_LONG)) {
+			this.dataManager.set(ANCHOR, BlockPos.fromLong(nbt.getLong("anchor")));
+		}
 		if(!nbt.hasKey("anchored", Constants.NBT.TAG_BYTE)) {
 			this.setAnchored(true);
 		} else {
@@ -247,24 +286,24 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	@Override
 	public void onUpdate() {
 		boolean isAnchored = this.dataManager.get(ANCHORED);
-		
+
 		if(isAnchored) {
 			this.fallDistance = 0;
 			this.onGround = true;
 			this.setNoGravity(true);
-	
+
 			double px = this.posX, py = this.posY, pz = this.posZ;
-	
+
 			super.onUpdate();
-	
+
 			this.posX = this.prevPosX = this.lastTickPosX = px;
 			this.posY = this.prevPosY = this.lastTickPosY = py;
 			this.posZ = this.prevPosZ = this.lastTickPosZ = pz;
-	
+
 			this.motionX = this.motionY = this.motionZ = 0;
 		} else {
 			this.setNoGravity(false);
-			
+
 			super.onUpdate();
 		}
 
@@ -310,7 +349,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 	public boolean canTrample(World world, Block block, BlockPos pos, float fallDistance) {
 		return false;
 	}
-	
+
 	protected void updatePositioning(boolean isAnchored) {
 		EnumFacing facing = this.getFacing();
 		EnumFacing facingUp = this.getFacingUp();
@@ -318,7 +357,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		if(isAnchored) {
 			if(facing == EnumFacing.UP || facing == EnumFacing.DOWN) {
 				this.prevRotationPitch = this.rotationPitch = facing == EnumFacing.UP ? -90.0F : 90.0F;
-				this.prevRenderYawOffset = this.renderYawOffset = facingUp.getHorizontalAngle();
+				this.prevRenderYawOffset = this.renderYawOffset = facingUp.getHorizontalAngle() + (facing == EnumFacing.DOWN ? 0.0F : 180.0F);
 			} else {
 				this.prevRotationPitch = this.rotationPitch = 0;
 				this.prevRenderYawOffset = this.renderYawOffset = facing.getHorizontalAngle();
@@ -347,24 +386,36 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 					this.targetFacingUp = null;
 					this.targetFacing = null;
 				}
-	
+
 				if(this.targetAnchorTimeout > 0) {
 					this.targetAnchorTimeout--;
 				} else {
 					this.targetAnchor = null;
 				}
-	
-				if(!this.isMovementBlocked() && !this.isMoving() && (this.targetFacing != null || this.targetAnchor != null)) {
+
+				if(!this.isTravelBlocked() && !this.isMoving() && (this.targetFacing != null || this.targetAnchor != null)) {
 					EnumFacing targetFacing = this.targetFacing != null ? this.targetFacing : facing;
 					EnumFacing targetFacingUp = this.targetFacingUp != null ? this.targetFacingUp : facingUp;
 					BlockPos targetAnchor = this.targetAnchor != null ? this.targetAnchor : this.getAnchor();
-	
-					if(facing != targetFacing || facingUp != targetFacingUp || !this.getAnchor().equals(targetAnchor)) {
+
+					boolean isLookDifferent = facing != targetFacing || facingUp != targetFacingUp;
+					boolean isPositionDifferent = !this.getAnchor().equals(targetAnchor);
+
+					if(isLookDifferent || isPositionDifferent) {
 						if(this.checkAnchorAt(targetAnchor, targetFacing, targetFacingUp, AnchorChecks.ALL) == 0) {
 							this.dataManager.set(MOVING, true);
 							this.dataManager.set(MOVE_FACING, targetFacing);
 							this.dataManager.set(MOVE_FACING_UP, targetFacingUp);
 							this.dataManager.set(MOVE_ANCHOR, targetAnchor);
+
+							if(isPositionDifferent && isLookDifferent) {
+								this.setMoveReason(MoveReason.POSITION_AND_LOOK);
+							} else if(isPositionDifferent) {
+								this.setMoveReason(MoveReason.POSITION);
+							} else if(isLookDifferent) {
+								this.setMoveReason(MoveReason.LOOK);
+							}
+
 							this.targetFacing = null;
 							this.targetFacingUp = null;
 							this.targetAnchor = null;
@@ -384,6 +435,10 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 			Vec3d position = this.getCenter().add(offset);
 			this.setPosition(position.x, position.y - this.height / 2.0D, position.z);
 		}
+	}
+	
+	protected boolean isTravelBlocked() {
+		return this.isMovementBlocked();
 	}
 
 	protected void updateMovement() {
@@ -425,8 +480,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		return this.peek;
 	}
 
-	public float getHalfMovementProgress(float partialTicks) {
-		float movementProgress = this.getMovementProgress(partialTicks);
+	private float getHalfMovementProgressFromRegular(float movementProgress) {
 		float halfProgress;
 		if(movementProgress < 0.5F) {
 			halfProgress = (0.5F - movementProgress) / 0.5F;
@@ -436,12 +490,16 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		return halfProgress;
 	}
 
+	public float getHalfMovementProgress(float partialTicks) {
+		return this.getHalfMovementProgressFromRegular(this.getMovementProgress(partialTicks));
+	}
+
 	public float getMovementProgress(float partialTicks) {
 		return MathHelper.clamp(this.lastMoveProgress + (this.moveProgress - this.lastMoveProgress) * partialTicks, 0, 1);
 	}
 
 	public Vec3d getOffset(float movementProgress) {
-		float offsetLength = this.getHalfMovementProgress(1);
+		float offsetLength = this.getHalfMovementProgressFromRegular(movementProgress);
 		return new Vec3d(this.getFacing().getDirectionVec()).scale(this.getPeek() + (this.getFacing().getAxis().isHorizontal() ? (this.getBlockWidth() - this.width) : (this.getBlockHeight() - this.height)) / 2.0D).scale(offsetLength);
 	}
 
@@ -478,25 +536,29 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		Vec3d center = this.getCenter();
 		return center.add(this.getOffset(this.getMovementProgress(1))).add(facing.getXOffset() * this.width / 2.0F, facing.getYOffset() * this.height / 2.0F, facing.getZOffset() * this.width / 2.0F);
 	}
-	
+
 	public boolean isAnchored() {
 		return this.dataManager.get(ANCHORED);
 	}
-	
+
 	public void setAnchored(boolean anchored) {
 		this.dataManager.set(ANCHORED, anchored);
-		if(anchored) {
-			this.dataManager.set(MOVING, false);
-			this.lastMoveProgress = this.moveProgress = 0;
-		}
 	}
-	
+
+	public void stopMovement() {
+		this.dataManager.set(MOVING, false);
+		this.lastMoveProgress = this.moveProgress = 0;
+	}
+
 	public EnumFacing[] getFacingForLookDir(Vec3d lookDir) {
 		EnumFacing[] facing = new EnumFacing[2];
 		EnumFacing dir = EnumFacing.getFacingFromVector((float)lookDir.x, (float)lookDir.y, (float)lookDir.z);
 		facing[0] = dir;
 		if(dir == EnumFacing.DOWN || dir == EnumFacing.UP) {
 			facing[1] = EnumFacing.getFacingFromVector((float)lookDir.x, 0, (float)lookDir.z);
+			if(dir == EnumFacing.UP) {
+				facing[1] = facing[1].getOpposite();
+			}
 		} else {
 			facing[1] = EnumFacing.UP;
 		}
@@ -512,8 +574,36 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		this.lastMoveProgress = this.moveProgress = 0;
 
 		this.setAnchored(true);
-		
+		this.stopMovement();
+
 		this.updatePositioning(true);
+	}
+
+	public MoveReason getMoveReason() {
+		switch(this.dataManager.get(MOVE_REASON)) {
+		default:
+		case 0:
+			return MoveReason.POSITION;
+		case 1:
+			return MoveReason.LOOK;
+		case 2:
+			return MoveReason.POSITION_AND_LOOK;
+		}
+	}
+
+	private void setMoveReason(MoveReason type) {
+		switch(type) {
+		default:
+		case POSITION:
+			this.dataManager.set(MOVE_REASON, (byte) 0);
+			break;
+		case LOOK:
+			this.dataManager.set(MOVE_REASON, (byte) 1);
+			break;
+		case POSITION_AND_LOOK:
+			this.dataManager.set(MOVE_REASON, (byte) 2);
+			break;
+		}
 	}
 
 	public static class AnchorChecks {
@@ -536,6 +626,33 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		public static final int ALL = BLOCKS | ENTITIES;
 	}
 
+	@Nullable
+	protected EnumFacing[] findRandomValidFacingAt(BlockPos anchor) {
+		List<EnumFacing> forwardFacings = new ArrayList<>();
+		forwardFacings.addAll(Arrays.asList(EnumFacing.VALUES));
+		Collections.shuffle(forwardFacings, this.rand);
+		
+		List<EnumFacing> horizontalFacings = new ArrayList<>();
+		horizontalFacings.addAll(Arrays.asList(EnumFacing.HORIZONTALS));
+		Collections.shuffle(horizontalFacings, this.rand);
+		
+		for(EnumFacing forwardFacing : forwardFacings) {
+			if(forwardFacing.getAxis() == EnumFacing.Axis.Y) {
+				for(EnumFacing horizontalFacing : horizontalFacings) {
+					if(this.checkAnchorAt(anchor, forwardFacing, horizontalFacing, AnchorChecks.ALL) == 0) {
+						return new EnumFacing[] {forwardFacing, horizontalFacing};
+					}
+				}
+			} else {
+				if(this.checkAnchorAt(anchor, forwardFacing, EnumFacing.UP, AnchorChecks.ALL) == 0) {
+					return new EnumFacing[] {forwardFacing, EnumFacing.UP};
+				}
+			}
+		}
+		
+		return null;
+	}
+	
 	public int checkAnchorAt(Vec3d pos, Vec3d lookDir, int checks) {
 		EnumFacing[] facing = this.getFacingForLookDir(lookDir);
 		BlockPos anchor = new BlockPos(pos.x - (this.getBlockWidth() / 2), pos.y - (this.getBlockHeight() / 2), pos.z - (this.getBlockWidth() / 2));
@@ -544,7 +661,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 
 	public int checkAnchorAt(BlockPos anchor, EnumFacing facing, EnumFacing facingUp, int checks) {
 		int violations = 0;
-		
+
 		if((checks & AnchorChecks.ENTITIES) != 0) {
 			if(!this.world.getEntitiesWithinAABB(EntityWallFace.class, this.getEntityBoundingBox().offset(anchor.subtract(this.getAnchor())).expand(facing.getXOffset() * this.getPeek(), facing.getYOffset() * this.getPeek(), facing.getZOffset() * this.getPeek()), e -> e != this).isEmpty()) {
 				violations |= AnchorChecks.ENTITIES;
@@ -558,7 +675,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 				for(int yo = 0; yo < this.getBlockHeight(); yo++) {
 					for(int zo = 0; zo < this.getBlockWidth(); zo++) {
 						pos.setPos(anchor.getX() + xo, anchor.getY() + yo, anchor.getZ() + zo);
-						if(!this.canResideInBlock(pos)) {
+						if(!this.canResideInBlock(pos, facing, facingUp)) {
 							violations |= AnchorChecks.ANCHOR_BLOCKS;
 							break outer;
 						}
@@ -574,7 +691,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 					for(int zo = 0; zo < this.getBlockWidth(); zo++) {
 						for(int yo = 0; yo < MathHelper.ceil(this.getPeek()); yo++) {
 							pos.setPos(anchor.getX() + xo, anchor.getY() + y + facing.getYOffset() * yo, anchor.getZ() + zo);
-							if(!this.canMoveFaceInto(pos)) {
+							if(!this.canMoveFaceInto(pos, facing, facingUp)) {
 								violations |= AnchorChecks.FACE_BLOCKS;
 								break outer;
 							}
@@ -587,7 +704,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 					for(int yo = 0; yo < this.getBlockHeight(); yo++) {
 						for(int zo = 0; zo < MathHelper.ceil(this.getPeek()); zo++) {
 							pos.setPos(anchor.getX() + xo, anchor.getY() + yo, anchor.getZ() + z + facing.getZOffset() * zo);
-							if(!this.canMoveFaceInto(pos)) {
+							if(!this.canMoveFaceInto(pos, facing, facingUp)) {
 								violations |= AnchorChecks.FACE_BLOCKS;
 								break outer;
 							}
@@ -600,7 +717,7 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 					for(int yo = 0; yo < this.getBlockHeight(); yo++) {
 						for(int xo = 0; xo < MathHelper.ceil(this.getPeek()); xo++) {
 							pos.setPos(anchor.getX() + x + facing.getXOffset() * xo, anchor.getY() + yo, anchor.getZ() + zo);
-							if(!this.canMoveFaceInto(pos)) {
+							if(!this.canMoveFaceInto(pos, facing, facingUp)) {
 								violations |= AnchorChecks.FACE_BLOCKS;
 								break outer;
 							}
@@ -617,9 +734,9 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 		return this.checkAnchorAt(this.getAnchor(), this.getFacing(), this.getFacingUp(), checks);
 	}
 
-	public abstract boolean canResideInBlock(BlockPos pos);
+	public abstract boolean canResideInBlock(BlockPos pos, EnumFacing facing, EnumFacing facingUp);
 
-	public abstract boolean canMoveFaceInto(BlockPos pos);
+	public abstract boolean canMoveFaceInto(BlockPos pos, EnumFacing facing, EnumFacing facingUp);
 
 	protected void fixUnsuitablePosition(int violatedChecks) {
 
@@ -694,17 +811,21 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 				this.face.targetFacingTimeout = 30 + this.face.world.rand.nextInt(30);
 				this.face.targetFacing = facing[0];
 				this.face.targetFacingUp = facing[1];
+				this.setSpeed(1);
 			} else if(this.lookingMode == 2) {
 				EnumFacing[] facing = this.face.getFacingForLookDir(new Vec3d(this.x, this.y, this.z));
 				this.face.targetFacingTimeout = 30 + this.face.world.rand.nextInt(30);
 				this.face.targetFacing = facing[0];
 				this.face.targetFacingUp = facing[1];
+				this.setSpeed(1);
 			}
 			this.lookingMode = 0;
 		}
 
 		public void setSpeed(double speed) {
-			this.face.setAIMoveSpeed((float) speed);
+			if(!this.face.isMoving() && this.face.targetAnchor == null) {
+				this.face.setAIMoveSpeed((float)(speed * this.face.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+			}
 		}
 	}
 
@@ -723,17 +844,17 @@ public abstract class EntityWallFace extends EntityCreature implements  IEntityB
 				int strafeDir = -(int)Math.signum(this.moveStrafe);
 				this.face.targetAnchorTimeout = 30 + this.entity.world.rand.nextInt(30);
 				this.face.targetAnchor = this.face.getAnchor().add(horDir.getX() * strafeDir, horDir.getY() * strafeDir, horDir.getZ() * strafeDir);
-				this.setSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+				this.setSpeed(this.speed);
 			} else if(this.action == EntityMoveHelper.Action.MOVE_TO) {
 				this.face.targetAnchorTimeout = 30 + this.entity.world.rand.nextInt(30);
 				this.face.targetAnchor = new BlockPos(this.posX - this.face.getBlockWidth() / 2.0D, this.posY - this.face.getBlockHeight() / 2.0D, this.posZ - this.face.getBlockWidth() / 2.0D);
-				this.setSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
+				this.setSpeed(this.speed);
 			}
 			this.action = EntityMoveHelper.Action.WAIT;
 		}
 
 		public void setSpeed(double speed) {
-			this.face.setAIMoveSpeed((float) speed);
+			this.face.setAIMoveSpeed((float)(speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
 		}
 	}
 }

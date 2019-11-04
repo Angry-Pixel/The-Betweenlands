@@ -17,7 +17,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
@@ -67,6 +66,11 @@ public class BlockPlant extends BlockBush implements IShearable, ISickleHarvesta
 	@Override
 	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
 		return this.isReplaceable;
+	}
+
+	@Override
+	public boolean isPassable(IBlockAccess worldIn, BlockPos pos) {
+		return true;
 	}
 
 	@Override
@@ -121,7 +125,12 @@ public class BlockPlant extends BlockBush implements IShearable, ISickleHarvesta
 
 	@Override
 	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
-		return rand.nextFloat() <= 0.25F && world.isAirBlock(targetPos) && this.canPlaceBlockAt(world, targetPos);
+		return world.isAirBlock(targetPos) && this.canPlaceBlockAt(world, targetPos);
+	}
+	
+	@Override
+	public float getSpreadChance(World world, BlockPos pos, IBlockState state, BlockPos taretPos, Random rand) {
+		return 0.25F;
 	}
 
 	@Override

@@ -1,0 +1,126 @@
+{
+	"pools": [
+		{
+			"name": "large_sludge_worm",
+			"rolls": {
+				"min": 1,
+				"max": 3
+			},
+			"conditions": [],
+			"entries": [
+				{
+					"type": "item",
+					"name": "thebetweenlands:sludge_jello",
+					"weight": 2
+				},
+				{
+					"type": "item",
+					"entryName": "slimy_bone",
+					"name": "thebetweenlands:items_misc",
+					"functions": [
+						{
+							"function": "set_data",
+							"data": 14
+						},
+						{
+							"function": "set_count",
+							"count": {
+								"min": 1,
+								"max": 2
+							}
+						}
+					],
+					"weight": 6
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:sludge_ball",
+					"functions": [
+						{
+							"function": "set_count",
+							"count": {
+								"min": 1,
+								"max": 3
+							}
+						}
+					],
+					"weight": 8
+				}
+			]
+		},
+		{
+			"name": "spook_candy",
+			"rolls": 2,
+			"conditions": [
+				{
+					"condition": "killed_by_player"
+				},
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:is_event_active": {
+							"event": "thebetweenlands:spook",
+							"active": "true"
+						}
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "empty",
+					"name": "nothing",
+					"functions": [],
+					"weight": 6
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_blue",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_red",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_yellow",
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "winter_mince_pie",
+			"rolls": 1,
+			"conditions": [
+				{
+					"condition": "killed_by_player"
+				},
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:is_event_active": {
+							"event": "thebetweenlands:winter",
+							"active": "true"
+						}
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "empty",
+					"name": "nothing",
+					"functions": [],
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:mince_pie",
+					"weight": 1
+				}
+			]
+		}
+	]
+}

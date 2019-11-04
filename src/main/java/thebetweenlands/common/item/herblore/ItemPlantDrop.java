@@ -94,7 +94,14 @@ public class ItemPlantDrop extends Item implements ItemRegistry.IMultipleItemMod
 		THORNS_ITEM(37),
 		POISON_IVY_ITEM(38),
 		BLADDERWORT_STALK_ITEM(39),
-		BLADDERWORT_FLOWER_ITEM(40);
+		BLADDERWORT_FLOWER_ITEM(40),
+		EDGE_SHROOM_GILLS(41),
+		EDGE_MOSS_CLUMP(42),
+		EDGE_LEAF_ITEM(43),
+		ROTBULB_STALK(44),
+		PALE_GRASS_BLADES(45),
+		STRING_ROOT_FIBERS(46),
+		CRYPTWEED_BLADES(47);
 
 		private final int id;
 		private final String unlocalizedName;

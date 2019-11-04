@@ -79,7 +79,7 @@ public class BlockGeckoCage extends BlockContainer {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		int rotation = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		state = state.withProperty(FACING, EnumFacing.byHorizontalIndex(rotation));
+		state = state.withProperty(FACING, EnumFacing.byHorizontalIndex(rotation).getOpposite());
 		worldIn.setBlockState(pos, state, 3);
 	}
 
@@ -159,7 +159,7 @@ public class BlockGeckoCage extends BlockContainer {
 								AspectItem aspectItem = AspectManager.getAspectItem(heldItemStack);
 								List<Aspect> aspects = manager.getStaticAspects(aspectItem);
 								if(aspects.size() > 0) {
-									DiscoveryContainer mergedKnowledge = DiscoveryContainer.getMergedDiscoveryContainer(player);
+									DiscoveryContainer<?> mergedKnowledge = DiscoveryContainer.getMergedDiscoveryContainer(player);
 									AspectDiscovery discovery = mergedKnowledge.discover(manager, aspectItem);
 									switch(discovery.result) {
 									case NEW:

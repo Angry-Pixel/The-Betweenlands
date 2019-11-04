@@ -3,6 +3,7 @@ package thebetweenlands.client.gui.inventory;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -32,7 +33,7 @@ public class GuiBLFurnace extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1, 1, 1, 1);
 		this.mc.getTextureManager().bindTexture(furnaceGuiTextures);
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;

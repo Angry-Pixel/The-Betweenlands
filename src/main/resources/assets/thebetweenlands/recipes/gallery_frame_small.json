@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SLS",
+    "SSS"
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "L": {
+      "item": "thebetweenlands:items_misc",
+      "data": 4
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:gallery_frame_small",
+    "count": 1
+  }
+}

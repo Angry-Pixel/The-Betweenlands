@@ -164,6 +164,8 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 			if(ForgeHooks.onCropsGrowPre(worldIn, pos, state, rand.nextFloat() <= this.getGrowthChance(worldIn, pos, state, rand))) {
 				int currentAge = ((Integer)state.getValue(AGE)).intValue();
 
+				worldIn.setBlockState(pos, state.withProperty(AGE, Math.min(currentAge + this.getGrowthSpeed(worldIn, pos, state, rand), 15)));
+				
 				if (currentAge >= 15) {
 					int height;
 					for (height = 1; this.isSamePlant(worldIn.getBlockState(pos.down(height))); ++height);
@@ -173,13 +175,23 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 					}
 
 					worldIn.setBlockState(pos, state.withProperty(AGE, this.resetAge ? 0 : 15));
-				} else {
-					worldIn.setBlockState(pos, state.withProperty(AGE, currentAge + 1));
 				}
 
 				ForgeHooks.onCropsGrowPost(worldIn, pos, state, worldIn.getBlockState(pos));
 			}
 		}
+	}
+	
+	/**
+	 * Returns by how many steps it should age per growth chance
+	 * @param world
+	 * @param pos
+	 * @param state
+	 * @param rand
+	 * @return
+	 */
+	protected int getGrowthSpeed(World world, BlockPos pos, IBlockState state, Random rand) {
+		return 1;
 	}
 
 	/**

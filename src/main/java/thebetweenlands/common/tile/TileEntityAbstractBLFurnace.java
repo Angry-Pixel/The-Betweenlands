@@ -59,7 +59,7 @@ public abstract class TileEntityAbstractBLFurnace extends TileEntityBasicInvento
 
     @Override
     public String getName() {
-        return hasCustomName() ? customName : "container." + super.getName();
+        return hasCustomName() ? customName : super.getName();
     }
 
     @Override

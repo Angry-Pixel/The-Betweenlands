@@ -9,26 +9,43 @@ import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleS
 
 public class ParticleSimple extends Particle implements IParticleSpriteReceiver {
 	private float startAlpha = 1.0F;
+	private boolean fade = false;
 
-	public ParticleSimple(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, int maxAge, float scale, boolean fade, float gravity) {
+	public ParticleSimple(World worldIn, double xCoordIn, double yCoordIn, double zCoordIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, int maxAge, float scale, boolean fade, float gravity, boolean exactMotion) {
 		super(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
 		this.particleMaxAge = maxAge;
 		this.particleScale = scale;
 		this.particleGravity = gravity;
+		this.fade = fade;
+		if(exactMotion) {
+			this.motionX = xSpeedIn;
+			this.motionY = ySpeedIn;
+			this.motionZ = zSpeedIn;
+		}
+		if(fade) {
+			this.particleAlpha = 0;
+		}
 	}
 
 	@Override
 	public void setAlphaF(float alpha) {
 		super.setAlphaF(alpha);
 		this.startAlpha = alpha;
+		if(this.fade) {
+			this.particleAlpha = 0;
+		}
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
 
-		if(this.particleAge > this.particleMaxAge - 40) {
-			this.particleAlpha = (this.startAlpha * (this.particleMaxAge - this.particleAge) / 40.0F);
+		if(this.fade) {
+			if(this.particleAge > this.particleMaxAge - 40) {
+				this.particleAlpha = (this.startAlpha * (this.particleMaxAge - this.particleAge) / 40.0F);
+			} else if(this.particleAge <= 10) {
+				this.particleAlpha = this.startAlpha * this.particleAge / 10.0f;
+			}
 		}
 	}
 
@@ -44,12 +61,12 @@ public class ParticleSimple extends Particle implements IParticleSpriteReceiver 
 
 		@Override
 		public ParticleSimple createParticle(ImmutableParticleArgs args) {
-			return new ParticleSimple(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.scale, args.data.getBool(1), args.data.getFloat(2));
+			return new ParticleSimple(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.scale, args.data.getBool(1), args.data.getFloat(2), args.data.getBool(3));
 		}
 
 		@Override
 		protected void setBaseArguments(ParticleArgs<?> args) {
-			args.withData(80, false, 0.0F);
+			args.withData(80, true, 0.0F, false);
 		}
 	}
 }

@@ -1,0 +1,33 @@
+{
+	"textures": {
+		"0": "thebetweenlands:blocks/moss_transparent"
+	},
+	"elements": [
+		{
+			"name": "bottom_back",
+			"from": [2, 0, 0.01],
+			"to": [15, 2, 0.01],
+			"faces": {
+				"south": {"uv": [1, 1, 14, 3], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "floor",
+			"from": [2, 0.01, 0.01],
+			"to": [15, 0.01, 4.01],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 13]},
+			"faces": {
+				"up": {"uv": [1, 2, 14, 6], "texture": "#0", "tintindex": 0}
+			}
+		},
+		{
+			"name": "top_back",
+			"from": [4, 2, 0.01],
+			"to": [13, 5, 0.01],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 11, 8]},
+			"faces": {
+				"south": {"uv": [1, 11, 12, 14], "texture": "#0", "tintindex": 0}
+			}
+		}
+	]
+}

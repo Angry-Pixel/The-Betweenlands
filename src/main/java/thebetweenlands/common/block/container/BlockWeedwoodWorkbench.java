@@ -48,16 +48,14 @@ public class BlockWeedwoodWorkbench extends BlockContainer {
             return;
         TileEntityWeedwoodWorkbench tile = (TileEntityWeedwoodWorkbench) world.getTileEntity(pos);
         for (ItemStack stack : tile.craftingSlots) {
-            if (stack != null) {
-                if (world.getGameRules().getBoolean("doTileDrops")) {
-                    float offset = 0.7F;
-                    double offsetX = world.rand.nextFloat() * offset + (1.0F - offset) * 0.5D;
-                    double offsetY = world.rand.nextFloat() * offset + (1.0F - offset) * 0.5D;
-                    double offsetZ = world.rand.nextFloat() * offset + (1.0F - offset) * 0.5D;
-                    EntityItem item = new EntityItem(world, pos.getX() + offsetX, pos.getY() + offsetY, pos.getZ() + offsetZ, stack);
-                    item.setDefaultPickupDelay();
-                    world.spawnEntity(item);
-                }
+            if (!stack.isEmpty()) {
+                float offset = 0.7F;
+                double offsetX = world.rand.nextFloat() * offset + (1.0F - offset) * 0.5D;
+                double offsetY = world.rand.nextFloat() * offset + (1.0F - offset) * 0.5D;
+                double offsetZ = world.rand.nextFloat() * offset + (1.0F - offset) * 0.5D;
+                EntityItem item = new EntityItem(world, pos.getX() + offsetX, pos.getY() + offsetY, pos.getZ() + offsetZ, stack);
+                item.setDefaultPickupDelay();
+                world.spawnEntity(item);
             }
         }
         super.breakBlock(world, pos, state);

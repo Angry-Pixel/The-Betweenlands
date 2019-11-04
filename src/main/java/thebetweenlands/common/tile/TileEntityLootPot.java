@@ -10,7 +10,7 @@ public class TileEntityLootPot extends TileEntityLootInventory {
 	private int rotationOffset;
 
 	public TileEntityLootPot() {
-		super(3, "container.lootPot");
+		super(3, "container.bl.loot_pot");
 	}
 
 	public void setModelRotationOffset(int rotation) {

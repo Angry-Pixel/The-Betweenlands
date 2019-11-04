@@ -154,11 +154,7 @@ public class AmateMapData extends MapData {
             GlStateManager.pushMatrix();
             GlStateManager.translate(0.0F + getX() / 2.0F + 64.0F, 0.0F + getY() / 2.0F + 64.0F, -0.02F);
             GlStateManager.rotate((float) (getRotation() * 360) / 16.0F, 0.0F, 0.0F, 1.0F);
-            if (location == Location.FORTRESS) {
-                GlStateManager.scale(5.0F, 5.0F, 1.0F);
-            } else {
-            	GlStateManager.scale(4.0F, 4.0F, 1.0F);
-            }
+            GlStateManager.scale(location.scale, location.scale, 1.0F);
 
             //We don't care about depth, just the rendering order which is already sorted out
             GlStateManager.depthMask(false);
@@ -206,37 +202,40 @@ public class AmateMapData extends MapData {
         }
 
         public enum Location {
-            NONE(0, 0, 0, 0, 0),
-            SMALL_MARKER(12, 32, 16, 16, 16),
-            PORTAL(1, 0, 0, 16, 16),
-            SPAWN(2, 16, 0, 16, 16),
-            SHRINE(3, 32, 0, 16, 16),
-            GIANT_TREE(4, 48, 0, 16, 16),
-            RUINS(5, 64, 0, 16, 16),
-            TOWER(6, 80, 0, 16, 16),
-            IDOL(7, 96, 0, 16, 16),
-            WAYSTONE(8, 112, 0, 16, 16),
-            BURIAL_MOUND(9, 0, 16, 16, 16),
-            SPIRIT_TREE(10, 16, 16, 16, 16),
-            FORTRESS(11, 0, 104, 22, 24),
+            NONE(0, 0, 0, 0, 0, 4.0f),
+            SMALL_MARKER(12, 32, 16, 16, 16, 4.0f),
+            PORTAL(1, 0, 0, 16, 16, 4.0f),
+            SPAWN(2, 16, 0, 16, 16, 4.0f),
+            SHRINE(3, 32, 0, 16, 16, 4.0f),
+            GIANT_TREE(4, 48, 0, 16, 16, 4.0f),
+            RUINS(5, 64, 0, 16, 16, 4.0f),
+            TOWER(6, 80, 0, 16, 16, 4.0f),
+            IDOL(7, 96, 0, 16, 16, 4.0f),
+            WAYSTONE(8, 112, 0, 16, 16, 4.0f),
+            BURIAL_MOUND(9, 0, 16, 16, 16, 4.0f),
+            SPIRIT_TREE(10, 16, 16, 16, 16, 4.0f),
+            FORTRESS(11, 0, 104, 24, 24, 6.0f),
+            SLUDGE_WORM_DUNGEON(13, 24, 96, 32, 32, 8.0f),
 
-            CHECK(127, 0, 32, 16, 16);
+            CHECK(127, 0, 32, 16, 16, 4.0f);
 
             private float x;
             private float y;
             private float x2;
             private float y2;
+            private float scale;
             
             private final byte id;
 
             public static final ImmutableList<Location> VALUES = ImmutableList.copyOf(values());
 
-            Location(int id, int x, int y, int width, int height) {
+            Location(int id, int x, int y, int width, int height, float scale) {
             	this.id = (byte) id;
                 this.x = MathUtils.linearTransformf(x, 0, 128, 0, 1);
                 this.y = MathUtils.linearTransformf(y, 0, 128, 0, 1);
                 this.x2 = MathUtils.linearTransformf(width + x, 0, 128, 0, 1);
                 this.y2 = MathUtils.linearTransformf(height + y, 0, 128, 0, 1);
+                this.scale = scale;
             }
             
             public static Location byId(int id) {
@@ -272,6 +271,8 @@ public class AmateMapData extends MapData {
                         return FORTRESS;
                     case "spirit_tree":
                         return SPIRIT_TREE;
+                    case "sludge_worm_dungeon":
+                    	return SLUDGE_WORM_DUNGEON;
                 }
                 return NONE;
             }

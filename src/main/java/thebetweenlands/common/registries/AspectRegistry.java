@@ -22,6 +22,8 @@ import thebetweenlands.common.herblore.aspect.type.AspectFirnalaz;
 import thebetweenlands.common.herblore.aspect.type.AspectFreiwynn;
 import thebetweenlands.common.herblore.aspect.type.AspectGeoliirgaz;
 import thebetweenlands.common.herblore.aspect.type.AspectOrdaniis;
+import thebetweenlands.common.herblore.aspect.type.AspectUduriis;
+import thebetweenlands.common.herblore.aspect.type.AspectWodren;
 import thebetweenlands.common.herblore.aspect.type.AspectYeowynn;
 import thebetweenlands.common.herblore.aspect.type.AspectYihinren;
 import thebetweenlands.common.herblore.aspect.type.AspectYunugaz;
@@ -46,7 +48,9 @@ public class AspectRegistry {
 	public static final IAspectType YEOWYNN = new AspectYeowynn();
 	public static final IAspectType YUNUGAZ = new AspectYunugaz();
 	public static final IAspectType YIHINREN = new AspectYihinren();
-
+	public static final IAspectType WODREN = new AspectWodren();
+	public static final IAspectType UDURIIS = new AspectUduriis();
+	
 	static {
 		try {
 			for(Field f : AspectRegistry.class.getDeclaredFields()) {
@@ -103,7 +107,7 @@ public class AspectRegistry {
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_SOFT_RUSH.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_SWAMP_KELP.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_SWAMP_GRASS_TALL.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 		AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
-		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_ROOTS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_ROOTS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 					AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_WATER_WEEDS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_VOLARPAD.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 2);
@@ -127,6 +131,22 @@ public class AspectRegistry {
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_PITCHER_PLANT.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.RARE, AspectGroup.HERB, 1.25F, 0.5F);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_VENUS_FLY_TRAP.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 		AspectTier.RARE, AspectGroup.HERB, 1.25F, 0.5F);
 
+		//Sludge worm dungeon plants
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_EDGE_SHROOM.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.SLUDGE_WORM_DUNGEON, 0.425F, 0.35F);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_EDGE_SHROOM.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 1);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_EDGE_MOSS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.SLUDGE_WORM_DUNGEON, 0.425F, 0.35F);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_EDGE_MOSS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 2);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_EDGE_LEAF.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.SLUDGE_WORM_DUNGEON, 0.425F, 0.35F);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_EDGE_LEAF.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.HERB, 0.15F, 0.2F, 3);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_ROTBULB.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.SLUDGE_WORM_DUNGEON, 0.425F, 0.35F);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_ROTBULB.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 2);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_PALE_GRASS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.SLUDGE_WORM_DUNGEON, 0.85F, 0.45F, 2);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_PALE_GRASS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.UNCOMMON, AspectGroup.HERB, 0.425F, 0.35F, 1);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_STRING_ROOTS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.SLUDGE_WORM_DUNGEON, 0.425F, 0.35F);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_STRING_ROOTS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 2);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_CRYPTWEED.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.SLUDGE_WORM_DUNGEON, 0.425F, 0.35F);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_CRYPTWEED.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 2);
+		
 		//Gems
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_GREEN_MIDDLE_GEM.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 		AspectTier.UNCOMMON, AspectGroup.GEM_FERGALAZ, 1.75F, 0.25F);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_CRIMSON_MIDDLE_GEM.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 	AspectTier.UNCOMMON, AspectGroup.GEM_FIRNALAZ, 1.75F, 0.25F);
@@ -160,5 +180,9 @@ public class AspectRegistry {
 		//Sap spit
 		AspectManager.registerAspect(AspectRegistry.YEOWYNN, 	AspectTier.UNCOMMON, 	AspectGroup.SAP_SPIT, Amounts.HIGH);
 		AspectManager.registerAspect(AspectRegistry.ORDANIIS, 	AspectTier.UNCOMMON, 	AspectGroup.SAP_SPIT, Amounts.HIGH);
+		
+		//Sludge worm dungeon aspects
+		AspectManager.registerAspect(AspectRegistry.WODREN, 	AspectTier.COMMON, 		AspectGroup.SLUDGE_WORM_DUNGEON, Amounts.MEDIUM);
+		AspectManager.registerAspect(AspectRegistry.UDURIIS, 	AspectTier.COMMON, 		AspectGroup.SLUDGE_WORM_DUNGEON, Amounts.MEDIUM);
 	}
 }

@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "STS",
+    "IBI",
+    "PPP"
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:weedwood_plank_slab"
+    },
+    "P": {
+      "item": "thebetweenlands:weedwood_planks"
+    },
+    "B": {
+      "item": "thebetweenlands:bl_bucket",
+      "data": 0
+    },
+    "T": {
+      "item": "thebetweenlands:items_misc",
+      "data": 26
+    },
+    "I": {
+      "item": "thebetweenlands:items_misc",
+      "data": 11
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:weedwood_barrel",
+    "count": 1
+  }
+}

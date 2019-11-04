@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SCS",
+    "MMM"
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 47
+    },
+    "C": {
+      "item": "thebetweenlands:items_misc",
+      "data": 44
+    },
+    "M": {
+      "item": "thebetweenlands:mud_bricks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:censer",
+    "count": 1
+  }
+}

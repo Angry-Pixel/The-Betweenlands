@@ -2,20 +2,19 @@ package thebetweenlands.common.item.farming;
 
 import java.util.List;
 
-import net.minecraft.block.BlockBush;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
-import thebetweenlands.api.aspect.Aspect;
-import thebetweenlands.api.aspect.ItemAspectContainer;
-import thebetweenlands.client.handler.ScreenRenderHandler;
-import thebetweenlands.common.block.farming.BlockAspectrusCrop;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class ItemAspectrusSeeds extends ItemPlantableSeeds {
@@ -40,23 +39,10 @@ public class ItemAspectrusSeeds extends ItemPlantableSeeds {
 			return EnumActionResult.FAIL;
 		}
 	}
-
+	
+	@SideOnly(Side.CLIENT)
 	@Override
-	protected void onPlant(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ, IBlockState state) {
-		ItemStack stack = player.getHeldItem(hand);
-		List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
-		if(!itemAspects.isEmpty()) {
-			((BlockAspectrusCrop)state.getBlock()).setAspect(world, pos, itemAspects.get(0));
-		}
-	}
-
-	@Override
-	public String getItemStackDisplayName(ItemStack stack) {
-		List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
-		if(!itemAspects.isEmpty()) {
-			Aspect aspect = itemAspects.get(0);
-			return I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".filled.name", aspect.type.getName(), aspect.getRoundedDisplayAmount()).trim();
-		}
-		return super.getItemStackDisplayName(stack);
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.aspectrus_seeds.mist"), 0));
 	}
 }

@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "normal": [
+            { "model": "thebetweenlands:compacted_mud" },
+            { "model": "thebetweenlands:compacted_mud", "y": 90 },
+            { "model": "thebetweenlands:compacted_mud", "y": 180 },
+            { "model": "thebetweenlands:compacted_mud", "y": 270 }
+        ]
+    }
+}

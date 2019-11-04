@@ -1,0 +1,196 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "facing=north,urn=false": { "model": "thebetweenlands:internal/mud_brick_alcove" },
+    "facing=south,urn=false": { "model": "thebetweenlands:internal/mud_brick_alcove", "y": 180 },
+    "facing=west,urn=false": { "model": "thebetweenlands:internal/mud_brick_alcove", "y": 270 },
+    "facing=east,urn=false": { "model": "thebetweenlands:internal/mud_brick_alcove", "y": 90 },
+    "facing=north,urn=true": [
+	    {
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
+	    	"submodel": {
+	    		"urn_north": {
+	    			"model": "thebetweenlands:internal/model_transform",
+		    		"custom": {
+		    			"transformed_model": "thebetweenlands:block/internal/loot_urn_1",
+		    			"trsr_transformation": {
+		    				"translation": [0, -0.18, -0.225],
+		    				"rotation": [0, 15, 0],
+		    				"scale": [0.65, 0.65, 0.65]
+		    			}
+		    		}
+	    		}
+	    	}
+		},
+		{
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
+	    	"submodel": {
+	    		"urn_north": {
+	    			"model": "thebetweenlands:internal/model_transform",
+		    		"custom": {
+		    			"transformed_model": "thebetweenlands:block/internal/loot_urn_2",
+		    			"trsr_transformation": {
+		    				"translation": [0, -0.18, -0.225],
+		    				"rotation": [0, 30, 0],
+		    				"scale": [0.65, 0.65, 0.65]
+		    			}
+		    		}
+	    		}
+	    	}
+		}
+	],
+    "facing=south,urn=true": [
+    	{
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
+	    	"y": 180,
+	    	"submodel": {
+	    		"urn_north": {
+	    			"model": "thebetweenlands:internal/model_transform",
+		    		"custom": {
+		    			"transformed_model": "thebetweenlands:block/internal/loot_urn_1",
+		    			"trsr_transformation": {
+		    				"translation": [0, -0.18, -0.225],
+		    				"rotation": [0, -8, 0],
+		    				"scale": [0.65, 0.65, 0.65]
+		    			}
+		    		}
+	    		}
+	    	}
+		},
+		{
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
+	    	"y": 180,
+	    	"submodel": {
+	    		"urn_north": {
+	    			"model": "thebetweenlands:internal/model_transform",
+		    		"custom": {
+		    			"transformed_model": "thebetweenlands:block/internal/loot_urn_3",
+		    			"trsr_transformation": {
+		    				"translation": [0, -0.18, -0.225],
+		    				"rotation": [0, -35, 0],
+		    				"scale": [0.65, 0.65, 0.65]
+		    			}
+		    		}
+	    		}
+	    	}
+		}
+    ],
+    "facing=west,urn=true": [
+    	{
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
+	    	"y": 270,
+	    	"submodel": {
+	    		"urn_north": {
+	    			"model": "thebetweenlands:internal/model_transform",
+		    		"custom": {
+		    			"transformed_model": "thebetweenlands:block/internal/loot_urn_2",
+		    			"trsr_transformation": {
+		    				"translation": [0, -0.18, -0.225],
+		    				"rotation": [0, 45, 0],
+		    				"scale": [0.65, 0.65, 0.65]
+		    			}
+		    		}
+	    		}
+	    	}
+		},
+		{
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
+	    	"y": 270,
+	    	"submodel": {
+	    		"urn_north": {
+	    			"model": "thebetweenlands:internal/model_transform",
+		    		"custom": {
+		    			"transformed_model": "thebetweenlands:block/internal/loot_urn_3",
+		    			"trsr_transformation": {
+		    				"translation": [0, -0.18, -0.225],
+		    				"rotation": [0, -55, 0],
+		    				"scale": [0.65, 0.65, 0.65]
+		    			}
+		    		}
+	    		}
+	    	}
+		}
+    ],
+    "facing=east,urn=true": [
+    	{
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
+	    	"y": 90,
+	    	"submodel": {
+	    		"urn_north": {
+	    			"model": "thebetweenlands:internal/model_transform",
+		    		"custom": {
+		    			"transformed_model": "thebetweenlands:block/internal/loot_urn_1",
+		    			"trsr_transformation": {
+		    				"translation": [0, -0.18, -0.225],
+		    				"rotation": [0, 55, 0],
+		    				"scale": [0.65, 0.65, 0.65]
+		    			}
+		    		}
+	    		}
+	    	}
+		},
+		{
+	    	"model": "thebetweenlands:internal/mud_brick_alcove",
+	    	"y": 90,
+	    	"submodel": {
+	    		"urn_north": {
+	    			"model": "thebetweenlands:internal/model_transform",
+		    		"custom": {
+		    			"transformed_model": "thebetweenlands:block/internal/loot_urn_2",
+		    			"trsr_transformation": {
+		    				"translation": [0, -0.18, -0.225],
+		    				"rotation": [0, -22, 0],
+		    				"scale": [0.65, 0.65, 0.65]
+		    			}
+		    		}
+	    		}
+	    	}
+		}
+    ],
+	"inventory": {
+		"model": "thebetweenlands:internal/mud_brick_alcove",
+		"transform": {
+			"gui": {
+	            "rotation": [ 30, 225, 0 ],
+	            "translation": [ 0, 0, 0],
+	            "scale":[ 0.625, 0.625, 0.625 ]
+	        },
+	        "ground": {
+	            "rotation": [ 0, 90, 0 ],
+	            "translation": [ 0, 0, 0],
+	            "scale":[ 0.25, 0.25, 0.25 ]
+	        },
+	        "head": {
+	            "rotation": [ 0, 270, 0 ],
+	            "translation": [ 0, 0, 0],
+	            "scale":[ 1, 1, 1 ]
+	        },
+	        "fixed": {
+	            "rotation": [ 0, 0, 0 ],
+	            "translation": [ 0, 0, -0.05 ],
+	            "scale":[ 0.5, 0.5, 0.5 ]
+	        },
+	        "thirdperson_righthand": {
+	            "rotation": [ 75, 45, 0 ],
+	            "translation": [ 0, 0, 0],
+	            "scale": [ 0.375, 0.375, 0.375 ]
+	        },
+	        "firstperson_righthand": {
+	            "rotation": [ 0, 45, 0 ],
+	            "translation": [ 0, 0, 0],
+	            "scale": [ 0.4, 0.4, 0.4 ]
+	        },
+	        "thirdperson_lefthand": {
+	            "rotation": [ 75, 45, 0 ],
+	            "translation": [ 0, 0, 0],
+	            "scale": [ 0.375, 0.375, 0.375 ]
+	        },
+	        "firstperson_lefthand": {
+	            "rotation": [ 0, 45, 0 ],
+	            "translation": [ 0, 0, 0],
+	            "scale": [ 0.4, 0.4, 0.4 ]
+	        }
+		}
+	}
+  }
+}

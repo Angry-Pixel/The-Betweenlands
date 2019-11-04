@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -33,6 +34,7 @@ public class ParticleBatchTypeBuilder {
 
 		private int maxParticles = 8192;
 		private int batchSize = 8192;
+		private boolean fog = true;
 		private boolean cull = true;
 		private boolean depthTest = true;
 		private boolean depthMask = true;
@@ -47,7 +49,7 @@ public class ParticleBatchTypeBuilder {
 		private boolean blend = true;
 		private GlStateManager.SourceFactor glBlendSrc = GlStateManager.SourceFactor.SRC_ALPHA;
 		private GlStateManager.DestFactor glBlendDst = GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA;
-		private ResourceLocation texture = TextureMap.LOCATION_BLOCKS_TEXTURE;
+		private Supplier<ResourceLocation> texture = () -> TextureMap.LOCATION_BLOCKS_TEXTURE;
 		private boolean blur = false;
 		private boolean mipmap = false;
 
@@ -98,6 +100,11 @@ public class ParticleBatchTypeBuilder {
 			return this;
 		}
 
+		public Pass fog(boolean fog) {
+			this.fog = fog;
+			return this;
+		}
+
 		public Pass format(VertexFormat format) {
 			this.format = format;
 			return this;
@@ -120,6 +127,11 @@ public class ParticleBatchTypeBuilder {
 		}
 
 		public Pass texture(@Nullable ResourceLocation texture) {
+			this.texture = texture != null ? (() -> texture) : null;
+			return this;
+		}
+
+		public Pass texture(@Nullable Supplier<ResourceLocation> texture) {
 			this.texture = texture;
 			return this;
 		}
@@ -165,6 +177,8 @@ public class ParticleBatchTypeBuilder {
 		Preconditions.checkNotNull(this.mainPass, "Particle batch type requires at least one pass");
 
 		final BatchedParticleRenderer.ParticleBatchType type = new BatchedParticleRenderer.ParticleBatchType() {
+			private ResourceLocation boundTexture = null;
+
 			@Override
 			public boolean filter(Particle particle) {
 				if(filter != null) {
@@ -173,7 +187,7 @@ public class ParticleBatchTypeBuilder {
 				return true;
 			}
 
-			protected void preSetup(Pass pass) {
+			protected ResourceLocation preSetup(Pass pass) {
 				if(pass.cull) {
 					GlStateManager.enableCull();
 				} else {
@@ -195,9 +209,15 @@ public class ParticleBatchTypeBuilder {
 				GlStateManager.colorMask(pass.colorMaskR, pass.colorMaskG, pass.colorMaskB, pass.colormaskA);
 
 				if(pass.lit) {
-					GlStateManager.enableLighting();
+					Minecraft.getMinecraft().entityRenderer.enableLightmap();
 				} else {
-					GlStateManager.disableLighting();
+					Minecraft.getMinecraft().entityRenderer.disableLightmap();
+				}
+
+				if(pass.fog) {
+					GlStateManager.enableFog();
+				} else {
+					GlStateManager.disableFog();
 				}
 
 				if(pass.blend) {
@@ -209,18 +229,22 @@ public class ParticleBatchTypeBuilder {
 				GlStateManager.blendFunc(pass.glBlendSrc, pass.glBlendDst);
 
 				if(pass.texture != null) {
-					Minecraft.getMinecraft().getTextureManager().bindTexture(pass.texture);
-					ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(pass.texture);
+					ResourceLocation texLoc = pass.texture.get();
+					Minecraft.getMinecraft().getTextureManager().bindTexture(texLoc);
+					ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(texLoc);
 					if(tex != null) {
 						tex.setBlurMipmap(pass.blur, pass.mipmap);
 					}
+					return texLoc;
 				}
+
+				return null;
 			}
 
-			protected void postSetup(Pass pass) {
-				if(pass.texture != null) {
-					Minecraft.getMinecraft().getTextureManager().bindTexture(pass.texture);
-					ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(pass.texture);
+			protected void postSetup(Pass pass, @Nullable ResourceLocation texLoc) {
+				if(texLoc != null) {
+					Minecraft.getMinecraft().getTextureManager().bindTexture(texLoc);
+					ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(texLoc);
 					if(tex != null) {
 						tex.restoreLastBlurMipmap();
 					}
@@ -229,14 +253,14 @@ public class ParticleBatchTypeBuilder {
 
 			@Override
 			protected void preRender(Tessellator tessellator, Entity entity, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-				this.preSetup(mainPass);
+				this.boundTexture = this.preSetup(mainPass);
 
 				tessellator.getBuffer().begin(mainPass.glPrimitive, mainPass.format);
 			}
 
 			@Override
 			protected void postRender(Tessellator tessellator, Entity entity, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-				this.postSetup(mainPass);
+				this.postSetup(mainPass, this.boundTexture);
 
 				boolean firstPass = true;
 
@@ -248,7 +272,7 @@ public class ParticleBatchTypeBuilder {
 				final int vertexCount = buffer.getVertexCount();
 
 				for(Pass pass : passes) {
-					this.preSetup(pass);
+					ResourceLocation localBoundTex = this.preSetup(pass);
 
 					if(pass.depthMask && pass.depthMaskPass) {
 						//Render in two passes by rerendering the byte buffer directly
@@ -272,7 +296,7 @@ public class ParticleBatchTypeBuilder {
 						}
 					}
 
-					this.postSetup(pass);
+					this.postSetup(pass, localBoundTex);
 
 					firstPass = false;
 				}

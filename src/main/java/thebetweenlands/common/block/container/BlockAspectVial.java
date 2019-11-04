@@ -258,7 +258,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
 
         player.addStat(StatList.getBlockStats(this), 1);
         player.addExhaustion(0.025F);
-        if (!world.isRemote && !world.restoringBlockSnapshots && world.getGameRules().getBoolean("doTileDrops") && !player.capabilities.isCreativeMode) {
+        if (!world.isRemote && !world.restoringBlockSnapshots && !player.capabilities.isCreativeMode) {
             NonNullList<ItemStack> drops = NonNullList.create();
             getDrops(drops, world, pos, state, 0);
             float chance = ForgeEventFactory.fireBlockHarvesting(drops, world, pos, world.getBlockState(pos), 0, 1, false, harvesters.get());

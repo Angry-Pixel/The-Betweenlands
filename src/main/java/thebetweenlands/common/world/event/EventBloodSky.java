@@ -12,7 +12,6 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class EventBloodSky extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "blood_sky");
-	
 	private boolean soundPlayed = true;
 	private float skyTransparency = 0.0F;
 	private float lastSkyTransparency = 0.0F;
@@ -48,6 +47,7 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 	@Override
 	public void update(World world) {
 		super.update(world);
+		
 		if(world.isRemote) {
 			if(this.isActive()) {
 				if(this.skyTransparency < 1.0F) {

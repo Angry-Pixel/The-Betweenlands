@@ -108,6 +108,13 @@ public interface ILocalStorage extends ICapabilityProvider {
 	public void setLinkedChunks(List<ChunkPos> linkedChunks);
 
 	/**
+	 * Called once when the local storage is initially added to the world
+	 */
+	public default void onAdded() {
+		
+	}
+	
+	/**
 	 * Called when the local storage is loaded
 	 */
 	public void onLoaded();
@@ -118,9 +125,16 @@ public interface ILocalStorage extends ICapabilityProvider {
 	public void onUnloaded();
 
 	/**
-	 * Called when the local storage is removed
+	 * Called when the local storage has been removed
 	 */
 	public void onRemoved();
+	
+	/**
+	 * Called before the local storage is being removed
+	 */
+	public default void onRemoving() {
+		
+	}
 
 	/**
 	 * Returns a list of all currently loaded references

@@ -78,7 +78,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	}
 
 	/**
-	 * Returns twhether the soil is composted
+	 * Returns whether the soil is composted
 	 * @param world
 	 * @param pos
 	 * @return
@@ -93,7 +93,34 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 		}
 		return false;
 	}
+	
+	/**
+	 * Returns whether the soil is fogged
+	 * @param world
+	 * @param pos
+	 * @return
+	 */
+	public boolean isFogged(IBlockAccess world, BlockPos pos) {
+		for(int i = 0; i < this.maxHeight + 1; i++) {
+			IBlockState blockState = world.getBlockState(pos);
+			if(blockState.getBlock() instanceof BlockGenericDugSoil) {
+				return blockState.getValue(BlockGenericDugSoil.FOGGED);
+			}
+			pos = pos.down();
+		}
+		return false;
+	}
 
+	@Override
+	protected float getGrowthChance(World world, BlockPos pos, IBlockState state, Random rand) {
+		return this.isFogged(world, pos) ? 1 : super.getGrowthChance(world, pos, state, rand);
+	}
+	
+	@Override
+	protected int getGrowthSpeed(World world, BlockPos pos, IBlockState state, Random rand) {
+		return super.getGrowthSpeed(world, pos, state, rand) + (this.isFogged(world, pos) ? rand.nextInt(3) + 2 : 0);
+	}
+	
 	@Override
 	public EnumPlantType getPlantType(net.minecraft.world.IBlockAccess world, BlockPos pos) {
 		return EnumPlantType.Crop;

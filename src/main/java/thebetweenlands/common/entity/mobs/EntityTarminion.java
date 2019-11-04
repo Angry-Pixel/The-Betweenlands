@@ -2,12 +2,15 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIFollowOwner;
@@ -19,9 +22,11 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -32,22 +37,26 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.entity.IRingOfGatheringMinion;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityTarminion extends EntityTameable implements IEntityBL {
+public class EntityTarminion extends EntityTameable implements IEntityBL, IRingOfGatheringMinion {
 	public static final IAttribute MAX_TICKS_ATTRIB = (new RangedAttribute(null, "bl.maxAliveTicks", 7200.0D, 0, Integer.MAX_VALUE)).setDescription("Maximum ticks until the Tar Minion despawns");
 
 	private int despawnTicks = 0;
 
 	protected boolean dropContentsWhenDead = true;
-	
+
 	public EntityTarminion(World world) {
 		super(world);
 		this.setSize(0.3F, 0.5F);
@@ -72,7 +81,9 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 				}
 			}
 		});
-		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityMob>(this, EntityMob.class, true));
+		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityLiving>(this, EntityLiving.class, 10, false, false, entity -> {
+			return entity instanceof IMob && (entity instanceof IEntityOwnable == false || ((IEntityOwnable) entity).getOwner() != EntityTarminion.this.getOwner());
+		}));
 	}
 
 	@Override
@@ -90,6 +101,16 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	@Override
 	public boolean canDespawn() {
 		return false;
+	}
+
+	@Override
+	public boolean isBreedingItem(ItemStack stack) {
+		return false;
+	}
+
+	@Override
+	public boolean isTamed() {
+		return true;
 	}
 
 	@Override
@@ -179,7 +200,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 				}
 			}
 		}
-		
+
 		super.setDead();
 	}
 
@@ -210,16 +231,27 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 				this.motionZ = dz / dist * 0.2D + this.motionZ * 0.2D;
 				this.motionY = 0.3D;
 			}
+
 			DamageSource damageSource;
+
 			EntityLivingBase owner = this.getOwner();
 			if(owner != null) {
 				damageSource = new EntityDamageSourceIndirect("mob", this, owner);
 			} else {
 				damageSource = DamageSource.causeMobDamage(this);
 			}
+
 			entity.attackEntityFrom(damageSource, (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
+
+			if(entity instanceof EntityLivingBase && this.world.rand.nextInt(4) == 0) {
+				//Set revenge target to tarminion so it can be attacked by the mob
+				((EntityLivingBase) entity).setRevengeTarget(this);
+			}
+
 			this.playSound(SoundRegistry.TAR_BEAST_STEP, 1.0F, 2.0F);
+
 			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, world.getDifficulty().getId() * 50, 0));
+
 			return true;
 		}
 		return true;
@@ -249,7 +281,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	protected boolean canDropLoot() {
 		return false; //Loot dropping is handled in death update
 	}
-	
+
 	@Override
 	public void setDropItemsWhenDead(boolean dropWhenDead) {
 		this.dropContentsWhenDead = dropWhenDead;
@@ -259,5 +291,37 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	public Entity changeDimension(int dimensionIn) {
 		this.dropContentsWhenDead = false;
 		return super.changeDimension(dimensionIn);
+	}
+
+	@Override
+	public boolean returnFromRing(Entity user, NBTTagCompound nbt) {
+		if(this.world instanceof WorldServer) {
+			WorldServer worldServer = (WorldServer) this.world;
+
+			LootTable lootTable = worldServer.getLootTableManager().getLootTableFromLocation(LootTableRegistry.TARMINION);
+			LootContext.Builder contextBuilder = (new LootContext.Builder(worldServer)).withLootedEntity(this);
+
+			for(ItemStack loot : lootTable.generateLootForPools(this.world.rand, contextBuilder.build())) {
+				if(user instanceof EntityPlayer) {
+					if(!((EntityPlayer) user).inventory.addItemStackToInventory(loot)) {
+						((EntityPlayer) user).dropItem(loot, false);
+					}
+				} else {
+					user.entityDropItem(loot, 0);
+				}
+			}
+		}
+
+		return true;
+	}
+
+	@Override
+	public boolean shouldReturnOnDeath(boolean isOwnerLoggedIn) {
+		return true;
+	}
+
+	@Override
+	public UUID getRingOwnerId() {
+		return this.getOwnerId();
 	}
 }

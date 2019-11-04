@@ -237,7 +237,12 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 
 	@Override
 	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
-		return rand.nextFloat() <= 0.25F && world.isAirBlock(targetPos) && world.isAirBlock(targetPos.up()) && this.canPlaceBlockAt(world, targetPos);
+		return world.isAirBlock(targetPos) && world.isAirBlock(targetPos.up()) && this.canPlaceBlockAt(world, targetPos);
+	}
+	
+	@Override
+	public float getSpreadChance(World world, BlockPos pos, IBlockState state, BlockPos taretPos, Random rand) {
+		return 0.25F;
 	}
 
 	@Override

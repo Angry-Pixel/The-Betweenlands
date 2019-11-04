@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -40,8 +41,12 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.block.IDungeonFogBlock;
 import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.IConnectedTextureBlock;
 import thebetweenlands.common.item.ItemBlockMeta;
@@ -55,7 +60,8 @@ import thebetweenlands.util.AdvancedStateMap;
 public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEntityProvider, ISubtypeItemBlockModelDefinition, IStateMappedBlock, ICustomItemBlock, IConnectedTextureBlock {
     public static final PropertyBool COMPOSTED = PropertyBool.create("composted");
     public static final PropertyBool DECAYED = PropertyBool.create("decayed");
-
+    public static final PropertyBool FOGGED = PropertyBool.create("fogged");
+    
     private final boolean purified;
 
     public BlockGenericDugSoil(Material material) {
@@ -68,7 +74,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
         this.setSoundType(SoundType.GROUND);
         this.setHardness(0.5F);
         this.setHarvestLevel("shovel", 0);
-        this.setDefaultState(this.getBlockState().getBaseState().withProperty(COMPOSTED, false).withProperty(DECAYED, false));
+        this.setDefaultState(this.getBlockState().getBaseState().withProperty(COMPOSTED, false).withProperty(DECAYED, false).withProperty(FOGGED, false));
         this.purified = purified;
     }
 
@@ -144,27 +150,35 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return this.getConnectedTextureBlockStateContainer(new ExtendedBlockState(this, new IProperty[]{COMPOSTED, DECAYED}, new IUnlistedProperty[0]));
+        return this.getConnectedTextureBlockStateContainer(new ExtendedBlockState(this, new IProperty[]{COMPOSTED, DECAYED, FOGGED}, new IUnlistedProperty[0]));
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return !this.purified && state.getValue(DECAYED) ? 2 : state.getValue(COMPOSTED) ? 1 : 0;
+    	int meta = 0;
+    	if(!this.purified && state.getValue(DECAYED)) {
+    		meta |= 0b010;
+    	} else if(state.getValue(COMPOSTED)) {
+    		meta |= 0b001;
+    	}
+    	if(state.getValue(FOGGED)) {
+    		meta |= 0b100;
+    	}
+        return meta;
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        switch (meta) {
-            default:
-            case 0:
-                return this.getDefaultState();
-            case 1:
-                return this.getDefaultState().withProperty(COMPOSTED, true);
-            case 2:
-                if (this.purified)
-                    return this.getDefaultState();
-                return this.getDefaultState().withProperty(DECAYED, true);
-        }
+    	IBlockState state = this.getDefaultState();
+    	if(!this.purified && (meta & 0b010) != 0) {
+    		state = state.withProperty(DECAYED, true);
+    	} else if((meta & 0b001) != 0) {
+    		state = state.withProperty(COMPOSTED, true);
+    	}
+    	if((meta & 0b100) != 0) {
+    		state = state.withProperty(FOGGED, true);
+    	}
+    	return state;
     }
 
     @Override
@@ -253,6 +267,8 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     @Override
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
         if (!world.isRemote) {
+        	state = this.updateFoggedState(world, pos, state);
+        	
             TileEntityDugSoil te = getTile(world, pos);
 
             if (te != null) {
@@ -262,10 +278,13 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 
                 if (te.isComposted()) {
                     IBlockState stateUp = world.getBlockState(pos.up());
+                    
                     if (stateUp.getBlock() instanceof IFarmablePlant) {
                         IFarmablePlant plant = (IFarmablePlant) stateUp.getBlock();
+                        
                         if (plant.isFarmable(world, pos.up(), stateUp)) {
                             BlockPos offsetPos = pos.up();
+                            
                             switch (rand.nextInt(4)) {
                                 case 0:
                                     offsetPos = offsetPos.north();
@@ -280,7 +299,14 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
                                     offsetPos = offsetPos.west();
                                     break;
                             }
-                            if (plant.canSpreadTo(world, pos.up(), stateUp, offsetPos, rand)) {
+                            
+                            float spreadChance = plant.getSpreadChance(world, pos.up(), stateUp, offsetPos, rand);
+                            
+                            if(state.getValue(FOGGED)) {
+                            	spreadChance *= 2;
+                            }
+                            
+                            if (rand.nextFloat() <= spreadChance && plant.canSpreadTo(world, pos.up(), stateUp, offsetPos, rand)) {
                                 plant.spreadTo(world, pos.up(), stateUp, offsetPos, rand);
                                 te.setCompost(Math.max(te.getCompost() - plant.getCompostCost(world, pos.up(), stateUp, rand), 0));
                             }
@@ -314,22 +340,20 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
                         }
                     }
 
-                    if (rand.nextInt(20) == 0) {
-                        //Spread decay
-                        for (int xo = -1; xo <= 1; xo++) {
-                            for (int zo = -1; zo <= 1; zo++) {
-                                if ((xo == 0 && zo == 0) || (zo != 0 && xo != 0) || rand.nextInt(3) != 0) {
-                                    continue;
-                                }
-                                BlockPos offset = pos.add(xo, 0, zo);
-                                IBlockState offsetState = world.getBlockState(offset);
-                                if (offsetState.getBlock() instanceof BlockGenericDugSoil) {
-                                    BlockGenericDugSoil dugDirt = (BlockGenericDugSoil) offsetState.getBlock();
-                                    if (!dugDirt.purified) {
-                                        TileEntityDugSoil offsetTe = getTile(world, offset);
-                                        if (offsetTe != null && !offsetTe.isFullyDecayed() && offsetTe.isComposted()) {
-                                            offsetTe.setDecay(offsetTe.getDecay() + 1);
-                                        }
+                    //Spread decay
+                    for (int xo = -1; xo <= 1; xo++) {
+                        for (int zo = -1; zo <= 1; zo++) {
+                            if ((xo == 0 && zo == 0) || (zo != 0 && xo != 0) || rand.nextInt(3) != 0) {
+                                continue;
+                            }
+                            BlockPos offset = pos.add(xo, 0, zo);
+                            IBlockState offsetState = world.getBlockState(offset);
+                            if (offsetState.getBlock() instanceof BlockGenericDugSoil) {
+                                BlockGenericDugSoil dugDirt = (BlockGenericDugSoil) offsetState.getBlock();
+                                if (!dugDirt.purified) {
+                                    TileEntityDugSoil offsetTe = getTile(world, offset);
+                                    if (offsetTe != null && !offsetTe.isFullyDecayed() && offsetTe.isComposted()) {
+                                        offsetTe.setDecay(offsetTe.getDecay() + 5);
                                     }
                                 }
                             }
@@ -340,6 +364,36 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
         }
     }
 
+    /**
+	 * Updates the fogged state, i.e. whether a nearby censer is producing fog or not. Pretty much
+	 * like farmland and water.
+	 * @param world
+	 * @param pos
+	 * @param state
+	 * @return
+	 */
+	protected IBlockState updateFoggedState(World world, BlockPos pos, IBlockState state) {
+		boolean shouldBeFogged = false;
+
+		for(BlockPos.MutableBlockPos checkPos : BlockPos.getAllInBoxMutable(pos.add(-6, 0, -6), pos.add(6, 1, 6))) {
+			if(world.isBlockLoaded(checkPos)) {
+				IBlockState offsetState = world.getBlockState(checkPos);
+				Block offsetBlock = offsetState.getBlock();
+				if(offsetBlock instanceof IDungeonFogBlock && ((IDungeonFogBlock) offsetBlock).isCreatingDungeonFog(world, checkPos, offsetState)) {
+					shouldBeFogged = true;
+					break;
+				}
+			}
+		}
+
+		if(shouldBeFogged != state.getValue(FOGGED)) {
+			state = state.withProperty(FOGGED, shouldBeFogged);
+			world.setBlockState(pos, state, 3);
+		}
+
+		return state;
+	}
+    
     /**
      * Returns the decay chance
      *
@@ -373,6 +427,15 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     @Override
     @SideOnly(Side.CLIENT)
     public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+    	if(stateIn.getValue(FOGGED)) {
+    		BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, BLParticles.SMOOTH_SMOKE.create(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1, pos.getZ() + rand.nextFloat(), 
+    				ParticleArgs.get()
+    				.withMotion((rand.nextFloat() - 0.5f) * 0.05f, rand.nextFloat() * 0.02F + 0.005F, (rand.nextFloat() - 0.5f) * 0.05f)
+    				.withScale(5.0f)
+    				.withColor(1, 1, 1, 0.1f)
+    				.withData(80, true, 0.0F, true)));
+    	}
+    	
         if (stateIn.getValue(DECAYED)) {
             BLParticles.DIRT_DECAY.spawn(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + rand.nextFloat());
 

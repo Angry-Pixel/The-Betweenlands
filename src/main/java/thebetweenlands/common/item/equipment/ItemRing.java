@@ -59,7 +59,7 @@ public class ItemRing extends Item implements IEquippable {
 
 	public static int removeXp(EntityPlayer player, int amount) {
 		int change = amount;
-
+		
 		float playerXp = player.experience * (float)player.xpBarCap();
 		player.experience -= (float) amount / (float) player.xpBarCap();
 		player.experienceTotal = MathHelper.clamp(player.experienceTotal - amount, 0, Integer.MAX_VALUE);

@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "custom": {
+      "particle_texture": "thebetweenlands:blocks/mud_tiles"
+    }
+  },
+  "variants": {
+    "lit": {
+      "true": { "model": "thebetweenlands:internal/dungeon_wall_candle" },
+      "false": {
+        "model": "thebetweenlands:internal/dungeon_wall_candle",
+        "custom": {
+          "texture": "thebetweenlands:blocks/dungeon_wall_candle_unlit"
+        }
+      }
+    },
+    "facing": {
+      "north": {},
+      "east": { "y": 90 },
+      "south": { "y": 180 },
+      "west": { "y": 270 }
+    }
+  }
+}

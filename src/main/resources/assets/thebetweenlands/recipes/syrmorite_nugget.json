@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:items_misc",
+      "data": 11
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:items_misc",
+    "data": 41,
+    "count": 9
+  }
+}

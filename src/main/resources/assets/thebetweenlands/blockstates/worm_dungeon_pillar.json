@@ -1,0 +1,16 @@
+{
+    "variants": {
+        "variant=worm_pillar_vertical": { "model": "thebetweenlands:worm_pillar_vertical" },
+        "variant=worm_pillar_vertical_decay_1": { "model": "thebetweenlands:worm_pillar_vertical_decay_1" },
+        "variant=worm_pillar_vertical_decay_2": { "model": "thebetweenlands:worm_pillar_vertical_decay_2" },
+        "variant=worm_pillar_vertical_decay_3": { "model": "thebetweenlands:worm_pillar_vertical_decay_3" },
+        "variant=worm_pillar_vertical_decay_4": { "model": "thebetweenlands:worm_pillar_vertical_decay_4" },
+        "variant=worm_pillar_vertical_decay_full": { "model": "thebetweenlands:worm_pillar_vertical_decay_full" },
+        "variant=worm_pillar_top": { "model": "thebetweenlands:worm_pillar_top" },
+        "variant=worm_pillar_top_decay_1": { "model": "thebetweenlands:worm_pillar_top_decay_1" },
+        "variant=worm_pillar_top_decay_2": { "model": "thebetweenlands:worm_pillar_top_decay_2" },
+        "variant=worm_pillar_top_decay_3": { "model": "thebetweenlands:worm_pillar_top_decay_3" },
+        "variant=worm_pillar_top_decay_4": { "model": "thebetweenlands:worm_pillar_top_decay_4" },
+        "variant=worm_pillar_top_decay_full": { "model": "thebetweenlands:worm_pillar_top_decay_full" }
+    }
+}

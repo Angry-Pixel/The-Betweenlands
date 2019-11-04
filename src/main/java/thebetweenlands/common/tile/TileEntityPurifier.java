@@ -15,6 +15,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.FluidTankPropertiesWrapper;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
@@ -26,39 +27,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class TileEntityPurifier extends TileEntityBasicInventory implements IFluidHandler, ITickable {
     private static final int MAX_TIME = 432;
     public final FluidTank waterTank;
-    private final IFluidTankProperties[] properties = new IFluidTankProperties[]{
-            new IFluidTankProperties() {
-                @Override
-                public FluidStack getContents() {
-                    return TileEntityPurifier.this.waterTank.getFluid();
-                }
-
-                @Override
-                public int getCapacity() {
-                    return TileEntityPurifier.this.waterTank.getCapacity();
-                }
-
-                @Override
-                public boolean canFill() {
-                    return TileEntityPurifier.this.waterTank.canFill();
-                }
-
-                @Override
-                public boolean canDrain() {
-                    return TileEntityPurifier.this.waterTank.canDrain();
-                }
-
-                @Override
-                public boolean canFillFluidType(FluidStack fluidStack) {
-                    return TileEntityPurifier.this.waterTank.canFillFluidType(fluidStack);
-                }
-
-                @Override
-                public boolean canDrainFluidType(FluidStack fluidStack) {
-                    return TileEntityPurifier.this.waterTank.canDrainFluidType(fluidStack);
-                }
-            }
-    };
+    private final IFluidTankProperties[] properties = new IFluidTankProperties[1];
     public int time = 0;
     public boolean lightOn = false;
     private int prevStackSize = 0;
@@ -66,9 +35,10 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
     private boolean isPurifyingClient = false;
 
     public TileEntityPurifier() {
-        super(3, "container.purifier");
+        super(3, "container.bl.purifier");
         this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 4);
         this.waterTank.setTileEntity(this);
+        this.properties[0] = new FluidTankPropertiesWrapper(this.waterTank);
     }
 
     @Override

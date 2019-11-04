@@ -20,6 +20,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.FluidTankPropertiesWrapper;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import thebetweenlands.api.aspect.Aspect;
@@ -40,39 +41,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 
 	public final FluidTank waterTank;
 
-	private final IFluidTankProperties[] properties = new IFluidTankProperties[]{
-			new IFluidTankProperties() {
-				@Override
-				public FluidStack getContents() {
-					return TileEntityInfuser.this.waterTank.getFluid();
-				}
-
-				@Override
-				public int getCapacity() {
-					return TileEntityInfuser.this.waterTank.getCapacity();
-				}
-
-				@Override
-				public boolean canFill() {
-					return TileEntityInfuser.this.waterTank.canFill();
-				}
-
-				@Override
-				public boolean canDrain() {
-					return TileEntityInfuser.this.waterTank.canDrain();
-				}
-
-				@Override
-				public boolean canFillFluidType(FluidStack fluidStack) {
-					return TileEntityInfuser.this.waterTank.canFillFluidType(fluidStack);
-				}
-
-				@Override
-				public boolean canDrainFluidType(FluidStack fluidStack) {
-					return TileEntityInfuser.this.waterTank.canDrainFluidType(fluidStack);
-				}
-			}
-	};
+	private final IFluidTankProperties[] properties = new IFluidTankProperties[1];
 
 	private int infusionTime = 0;
 	private int stirProgress = 90;
@@ -98,9 +67,10 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	public float[] currentInfusionColor = new float[4];
 
 	public TileEntityInfuser() {
-		super(MAX_INGREDIENTS + 2, "infuser");
+		super(MAX_INGREDIENTS + 2, "container.bl.infuser");
 		this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 3);
 		this.waterTank.setTileEntity(this);
+		this.properties[0] = new FluidTankPropertiesWrapper(this.waterTank);
 	}
 
 	@Override

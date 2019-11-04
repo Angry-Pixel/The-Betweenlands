@@ -1,0 +1,39 @@
+{
+  "pools": [
+    {
+      "name": "ash_sprite",
+      "rolls": {
+        "min": 1,
+        "max": 2
+      },
+      "conditions": [],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:items_misc",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "set_data",
+              "data": 44
+            },
+            {
+              "function": "looting_enchant",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

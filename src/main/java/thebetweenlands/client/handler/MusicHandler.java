@@ -38,6 +38,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import thebetweenlands.api.audio.IEntitySound;
 import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.client.audio.SoundSystemOpenALAccess;
+import thebetweenlands.client.audio.ambience.AmbienceManager;
 import thebetweenlands.client.gui.menu.GuiBLMainMenu;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -150,7 +151,7 @@ public class MusicHandler {
 					}
 				}
 
-				if(!this.entityMusicMap.isEmpty()) {
+				if(!this.entityMusicMap.isEmpty() || AmbienceManager.INSTANCE.shouldStopMusic()) {
 					if(this.mc.getSoundHandler().isSoundPlaying(this.currentSound)) {
 						this.mc.getSoundHandler().stopSound(this.currentSound);
 						this.currentSound = null;
@@ -205,6 +206,8 @@ public class MusicHandler {
 		if (SoundRegistry.FORTRESS_BOSS_LOOP.getSoundName().equals(sound.getSoundLocation()))
 			return true;
 		if (SoundRegistry.DREADFUL_PEAT_MUMMY_LOOP.getSoundName().equals(sound.getSoundLocation()))
+			return true;
+		if (SoundRegistry.PIT_OF_DECAY_LOOP.getSoundName().equals(sound.getSoundLocation()))
 			return true;
 		List<Sound> betweenlandsSoundTracks = new ArrayList<>(this.getBetweenlandsMusicTracks());
 		betweenlandsSoundTracks.addAll(getBetweenlandsMenuMusicTracks());

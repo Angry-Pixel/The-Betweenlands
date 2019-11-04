@@ -17,7 +17,8 @@ import thebetweenlands.api.aspect.Aspect;
 
 public class TileEntityAspectrusCrop extends TileEntity implements ITickable {
 	protected Aspect seedAspect = null;
-
+	protected boolean hasSource = false;
+	
 	public int glowTicks = 0;
 
 	public void setAspect(@Nullable Aspect aspect) {
@@ -27,11 +28,21 @@ public class TileEntityAspectrusCrop extends TileEntity implements ITickable {
 		this.markDirty();
 	}
 
+	
 	@Nullable
 	public Aspect getAspect() {
 		return this.seedAspect;
 	}
-
+	
+	public void setHasSource(boolean source) {
+		this.hasSource = source;
+		this.markDirty();
+	}
+	
+	public boolean hasSource() {
+		return this.hasSource;
+	}
+	
 	@Override
 	public void setWorld(World worldIn) {
 		super.setWorld(worldIn);
@@ -56,6 +67,7 @@ public class TileEntityAspectrusCrop extends TileEntity implements ITickable {
 		if(this.seedAspect != null) {
 			this.seedAspect.writeToNBT(nbt);
 		}
+		nbt.setBoolean("hasSource", this.hasSource);
 		return nbt;
 	}
 
@@ -63,6 +75,7 @@ public class TileEntityAspectrusCrop extends TileEntity implements ITickable {
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.seedAspect = Aspect.readFromNBT(nbt);
+		this.hasSource = nbt.getBoolean("hasSource");
 	}
 
 	@Override

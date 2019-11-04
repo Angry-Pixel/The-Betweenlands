@@ -1,0 +1,46 @@
+{
+    "parent": "block/block",
+    "textures": {
+        "horizontal_plank": "thebetweenlands:blocks/item_shelf_horizontal_plank",
+        "vertical_plank": "thebetweenlands:blocks/item_shelf_vertical_plank",
+        "particle": "thebetweenlands:blocks/item_shelf_horizontal_plank"
+    },
+    "elements": [
+        {   
+            "from": [ 0, 0, 0 ],
+            "to": [ 16, 1, 8 ],
+            "faces": {
+                "down":  { "uv": [0, 0, 16, 8],  "texture": "#horizontal_plank" },
+                "up":    { "uv": [0, 0, 16, 8],  "texture": "#horizontal_plank" },
+                "north": { "uv": [16, 0, 0, 1],  "texture": "#horizontal_plank" },
+                "south": { "uv": [0, 7, 16, 8],  "texture": "#horizontal_plank" },
+                "west":  { "rotation": 90, "uv": [0, 8, 1, 0],   "texture": "#horizontal_plank" },
+                "east":  { "rotation": 90, "uv": [15, 0, 16, 8], "texture": "#horizontal_plank" }
+            }
+        },
+        {   
+            "from": [ 0, 8, 0 ],
+            "to": [ 16, 9, 8 ],
+            "faces": {
+                "down":  { "uv": [0, 0, 16, 8],  "texture": "#horizontal_plank" },
+                "up":    { "uv": [0, 0, 16, 8],  "texture": "#horizontal_plank" },
+                "north": { "uv": [16, 0, 0, 1],  "texture": "#horizontal_plank" },
+                "south": { "uv": [0, 7, 16, 8],  "texture": "#horizontal_plank" },
+                "west":  { "rotation": 90, "uv": [0, 8, 1, 0],   "texture": "#horizontal_plank" },
+                "east":  { "rotation": 90, "uv": [15, 0, 16, 8], "texture": "#horizontal_plank" }
+            }
+        },
+        {   
+            "from": [ 7.5, 0, 0 ],
+            "to": [ 8.5, 16, 7 ],
+            "faces": {
+                "east":  { "uv": [0, 0, 7, 16],  "texture": "#vertical_plank" },
+                "west":  { "uv": [0, 0, 7, 16],  "texture": "#vertical_plank" },
+                "north": { "uv": [0, 16, 1, 0],  "texture": "#vertical_plank" },
+                "south": { "uv": [6, 0, 7, 16],  "texture": "#vertical_plank" },
+                "up":    { "rotation": 90, "uv": [7, 0, 0, 1],   "texture": "#vertical_plank" },
+                "down":  { "rotation": 90, "uv": [0, 15, 7, 16], "texture": "#vertical_plank" }
+            }
+        }
+    ]
+}

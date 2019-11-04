@@ -40,6 +40,7 @@ import thebetweenlands.common.loot.EntityPropertyIsBossPeatMummy;
 import thebetweenlands.common.loot.EntityPropertyLootModifier;
 import thebetweenlands.common.loot.EntityPropertyPeatMummyShimmerstone;
 import thebetweenlands.common.loot.EntityPropertyPyradCharging;
+import thebetweenlands.common.loot.EntityPropertySludgeWormSquashed;
 import thebetweenlands.common.loot.LootConditionEventActive;
 import thebetweenlands.common.loot.LootConditionFromSharedPool;
 import thebetweenlands.common.loot.LootConditionKilledLootModifier;
@@ -50,16 +51,41 @@ import thebetweenlands.util.FakeClientWorld;
 
 public class LootTableRegistry {
 
-    //LOOT
-    public static final ResourceLocation COMMON_POT_LOOT = register("loot/common_pot_loot");
-    public static final ResourceLocation DUNGEON_CHEST_LOOT = register("loot/dungeon_chest_loot");
-    public static final ResourceLocation COMMON_CHEST_LOOT = register("loot/common_chest_loot");
-    public static final ResourceLocation DUNGEON_POT_LOOT = register("loot/dungeon_pot_loot");
+    //MISC
     public static final ResourceLocation MUSIC_DISC = register("loot/music_disc");
-    public static final ResourceLocation ANIMATOR_SCROLL = register("animator/scroll");
+    public static final ResourceLocation SCROLL = register("animator/scroll");
+    public static final ResourceLocation FABRICATED_SCROLL = register("animator/fabricated_scroll");
     public static final ResourceLocation PRESENT = register("loot/present_loot");
+    public static final ResourceLocation PUFFSHROOM = register("loot/puffshroom");
     
     public static final ResourceLocation SHARED_LOOT_POOL_TEST = register("loot/shared_loot_pool_test");
+    
+    //LOOT INVENTORIES
+    //Don't use these anymore. Use the ones below or make new ones. These are only here for backwards compatibility.
+    @Deprecated public static final ResourceLocation COMMON_POT_LOOT = register("loot/common_pot_loot");
+    @Deprecated public static final ResourceLocation DUNGEON_CHEST_LOOT = register("loot/dungeon_chest_loot");
+    @Deprecated public static final ResourceLocation COMMON_CHEST_LOOT = register("loot/common_chest_loot");
+    @Deprecated public static final ResourceLocation DUNGEON_POT_LOOT = register("loot/dungeon_pot_loot");
+    //Misc
+    public static final ResourceLocation CAVE_POT = register("loot/cave_pot");
+    public static final ResourceLocation SLUDGE_PLAINS_RUINS_URN = register("loot/sludge_plains_ruins_urn");
+    public static final ResourceLocation MARSH_RUINS_POT = register("loot/marsh_ruins_pot");
+    public static final ResourceLocation SPAWNER_CHEST = register("loot/spawner_chest");
+    public static final ResourceLocation IDOL_HEADS_CHEST = register("loot/idol_heads_chest");
+    public static final ResourceLocation TAR_POOL_POT = register("loot/tar_pool_pot");
+    public static final ResourceLocation UNDERGROUND_RUINS_POT = register("loot/underground_ruins_pot");
+    //Sludge worm dungeon
+    public static final ResourceLocation SLUDGE_WORM_DUNGEON_CHEST = register("loot/sludge_worm_dungeon_chest");
+    public static final ResourceLocation SLUDGE_WORM_DUNGEON_URN = register("loot/sludge_worm_dungeon_urn");
+    public static final ResourceLocation SLUDGE_WORM_DUNGEON_BARRISHEE_CHEST = register("loot/sludge_worm_dungeon_barrishee_chest");
+    public static final ResourceLocation SLUDGE_WORM_DUNGEON_CRYPT_URN = register("loot/sludge_worm_dungeon_crypt_urn");
+    public static final ResourceLocation SLUDGE_WORM_DUNGEON_ITEM_SHELF = register("loot/sludge_worm_dungeon_item_shelf");
+    //Cragrock tower
+    public static final ResourceLocation CRAGROCK_TOWER_CHEST = register("loot/cragrock_tower_chest");
+    public static final ResourceLocation CRAGROCK_TOWER_POT = register("loot/cragrock_tower_pot");
+    //Wight fortress
+    public static final ResourceLocation WIGHT_FORTRESS_CHEST = register("loot/wight_fortress_chest");
+    public static final ResourceLocation WIGHT_FORTRESS_POT = register("loot/wight_fortress_pot");
     
     //MOBS
     public static final ResourceLocation ANGLER = register("entities/angler");
@@ -91,10 +117,23 @@ public class LootTableRegistry {
     public static final ResourceLocation SPIRIT_TREE_FACE_LARGE = register("entities/spirit_tree_face_large");
     public static final ResourceLocation BOULDER_SPRITE = register("entities/boulder_sprite");
     public static final ResourceLocation ROOT_SPRITE = register("entities/root_sprite");
-    
+    public static final ResourceLocation WALL_LAMPREY = register("entities/wall_lamprey");
+    public static final ResourceLocation WALL_LIVING_ROOT = register("entities/wall_living_root");
+    public static final ResourceLocation MOVING_SPAWNER_HOLE = register("entities/moving_spawner_hole");
+    public static final ResourceLocation TINY_SLUDGE_WORM_HELPER = register("entities/tiny_sludge_worm_helper");
+    public static final ResourceLocation TINY_SLUDGE_WORM = register("entities/tiny_sludge_worm");
+    public static final ResourceLocation SMALL_SLUDGE_WORM = register("entities/small_sludge_worm");
+    public static final ResourceLocation LARGE_SLUDGE_WORM = register("entities/large_sludge_worm");
+    public static final ResourceLocation SHAMBLER = register("entities/shambler");
+    public static final ResourceLocation ASH_SPRITE = register("entities/ash_sprite");
+    public static final ResourceLocation BARRISHEE = register("entities/barrishee");
+    public static final ResourceLocation CRYPT_CRAWLER = register("entities/crypt_crawler");
+    public static final ResourceLocation EMBERLING = register("entities/emberling");
+    public static final ResourceLocation EMBERLING_SHAMAN = register("entities/emberling_shaman");
     //BOSSES
     public static final ResourceLocation FORTRESS_BOSS = register("entities/fortress_boss");
     public static final ResourceLocation DREADFUL_PEAT_MUMMY = register("entities/dreadful_peat_mummy");
+    public static final ResourceLocation SLUDGE_MENACE = register("entities/sludge_menace");
     
     //LOOT ENTITY PROPERTIES
     public static final ResourceLocation ENTITY_PROPERTY_FROG_TYPE = register(new EntityPropertyFrogType.Serializer());
@@ -104,6 +143,7 @@ public class LootTableRegistry {
     public static final ResourceLocation ENTITY_PROPERTY_IS_BOSS_MUMMY = register(new EntityPropertyIsBossPeatMummy.Serializer());
     public static final ResourceLocation ENTITY_PROPERTY_IS_EVENT_ACTIVE = register(new EntityPropertyEventActive.Serializer());
     public static final ResourceLocation ENTITY_PROPERTY_LOOT_MODIFIER = register(new EntityPropertyLootModifier.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_SLUDGE_WORM_SQUASHED = register(new EntityPropertySludgeWormSquashed.Serializer());
     
     //LOOT CONDITIONS
     public static final ResourceLocation LOOT_CONDITION_OR = register(new LootConditionOr.Serializer());

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:sludge_ball"
+    },
+    {
+      "item": "thebetweenlands:mud_bricks"
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:mud_bricks_carved",
+    "data": 10
+  }
+}

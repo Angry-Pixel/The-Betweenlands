@@ -90,8 +90,7 @@ public class EntitySpiritTreeFaceMask extends EntityHanging implements IEntityAd
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
-		BlockPos blockpos = this.hangingPosition.add(x - this.posX, y - this.posY, z - this.posZ);
-		this.setPosition((double)blockpos.getX(), (double)blockpos.getY(), (double)blockpos.getZ());
+		this.setPosition((double)this.hangingPosition.getX(), (double)this.hangingPosition.getY(), (double)this.hangingPosition.getZ());
 	}
 
 	@Override

@@ -1,0 +1,51 @@
+{
+  "forge_marker": 1,
+  "defaults":{
+    "model": "thebetweenlands:internal/blank",
+    "custom": {
+      "particle_texture": "thebetweenlands:blocks/mud_brick_roof"
+    },
+    "textures": {
+      "wall": "thebetweenlands:blocks/mud_brick_roof"
+    }
+  },
+  "variants": {
+    "up": {
+      "true": {
+        "submodel": "wall_post"
+      },
+      "false": {}
+    },
+    "north": {
+      "true": {
+        "submodel": "wall_side",
+        "uvlock": true
+      },
+      "false": {}
+    },
+    "east": {
+      "true": {
+        "submodel": "wall_side",
+        "y": 90,
+        "uvlock": true
+      },
+      "false": {}
+    },
+    "south": {
+      "true": {
+        "submodel": "wall_side",
+        "y": 180,
+        "uvlock": true
+      },
+      "false": {}
+    },
+    "west": {
+      "true": {
+        "submodel": "wall_side",
+        "y": 270,
+        "uvlock": true
+      },
+      "false": {}
+    }
+  }
+}

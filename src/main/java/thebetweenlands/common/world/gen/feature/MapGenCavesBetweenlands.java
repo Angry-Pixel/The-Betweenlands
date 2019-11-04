@@ -71,7 +71,8 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 				BiomeRegistry.MARSH_1, 
 				BiomeRegistry.PATCHY_ISLANDS, 
 				BiomeRegistry.SLUDGE_PLAINS,
-				BiomeRegistry.SWAMPLANDS_CLEARING);
+				BiomeRegistry.SWAMPLANDS_CLEARING,
+				BiomeRegistry.SLUDGE_PLAINS_CLEARING);
 	}
 
 	public void setBiomeTerrainWeights(BiomeWeights biomeWeights) {

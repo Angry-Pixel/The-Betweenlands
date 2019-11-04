@@ -11,10 +11,12 @@ import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 
 public class ContainerDruidAltar extends Container {
-
+	private final TileEntityDruidAltar altar;
+	
     public ContainerDruidAltar(InventoryPlayer playerInventory, TileEntityDruidAltar tile) {
-        super();
-        int numRows = 2;
+    	this.altar = tile;
+    	
+    	int numRows = 2;
         int i = (numRows - 4) * 18;
 
         addSlotToContainer(new SlotOutput(tile, 0, 81, 35, this));
@@ -74,7 +76,6 @@ public class ContainerDruidAltar extends Container {
 
     @Override
     public boolean canInteractWith(EntityPlayer player) {
-        return true;
+        return this.altar.isUsableByPlayer(player);
     }
-
 }

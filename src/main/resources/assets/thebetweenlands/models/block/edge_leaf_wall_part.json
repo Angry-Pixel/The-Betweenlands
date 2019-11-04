@@ -1,0 +1,25 @@
+{
+	"textures": {
+		"0": "thebetweenlands:blocks/edge_leaf"
+	},
+	"elements": [
+		{
+			"name": "floor",
+			"from": [2, 0.01, 0.01],
+			"to": [14, 0.01, 7.01],
+			"rotation": {"angle": 0, "axis": "y", "origin": [10, 8, 8]},
+			"faces": {
+				"up": {"uv": [0, 9, 12, 16], "texture": "#0", "tintindex": 0}
+				}
+		},
+		{
+			"name": "wall",
+			"from": [2, 0.01, 0.01],
+			"to": [14, 7.01, 0.01],
+			"rotation": {"angle": 0, "axis": "y", "origin": [10, 8, 8]},
+			"faces": {
+				"south": {"uv": [0, 7, 12, 14], "rotation": 180, "texture": "#0", "tintindex": 0}
+			}
+		}
+	]
+}

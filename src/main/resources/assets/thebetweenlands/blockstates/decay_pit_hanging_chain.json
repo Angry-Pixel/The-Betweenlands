@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "thebetweenlands:decay_pit_hanging_chain", "y": 180 },
+        "facing=south": { "model": "thebetweenlands:decay_pit_hanging_chain" },
+        "facing=west":  { "model": "thebetweenlands:decay_pit_hanging_chain", "y": 90 },
+        "facing=east":  { "model": "thebetweenlands:decay_pit_hanging_chain", "y": 270 }
+    }
+}

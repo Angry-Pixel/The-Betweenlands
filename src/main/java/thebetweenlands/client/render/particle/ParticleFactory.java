@@ -312,7 +312,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			}
 		}
 
-		private static final ParticleArgs<?> BUILDER = ParticleArgs.create();
+		private static final ThreadLocal<ParticleArgs<?>> BUILDERS = ThreadLocal.withInitial(() -> ParticleArgs.create());
 
 		private static final Object[] NO_DATA = new Object[0];
 
@@ -594,8 +594,9 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @return
 		 */
 		public static ParticleArgs<?> get() {
-			BUILDER.reset();
-			return BUILDER;
+			ParticleArgs<?> args = BUILDERS.get();
+			args.reset();
+			return args;
 		}
 
 		/**

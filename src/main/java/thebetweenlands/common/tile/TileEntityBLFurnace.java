@@ -5,7 +5,7 @@ import thebetweenlands.common.block.container.BlockBLFurnace;
 public class TileEntityBLFurnace extends TileEntityAbstractBLFurnace {
 
     public TileEntityBLFurnace() {
-        super("furnace_bl", 1);
+        super("container.bl.sulfur_furnace", 1);
     }
 
     @Override

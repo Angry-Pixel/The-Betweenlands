@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "thebetweenlands:blocks/mud_tiles_cracked_decay_island"
+    }
+}

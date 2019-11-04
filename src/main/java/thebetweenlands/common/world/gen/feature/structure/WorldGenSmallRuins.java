@@ -130,7 +130,6 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			}
 
 			locationStorage.setSeed(random.nextLong());
-			locationStorage.linkChunks();
 			locationStorage.setDirty(true);
 			worldStorage.getLocalStorageHandler().addLocalStorage(locationStorage);
 
@@ -174,7 +173,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 
 			rotatedCubeVolume(world, x, y, z, 6, height - 1, 0, getStateFromRotation(0, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 7, height - 1, 0, getStateFromRotation(2, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
-			rotatedLootPot(world, random, x, y, z, 4, height - 2, 0, direction, 1, 2, 5, LootTableRegistry.COMMON_POT_LOOT);
+			rotatedLootPot(world, random, x, y, z, 4, height - 2, 0, direction, 1, 2, 5, LootTableRegistry.MARSH_RUINS_POT);
 		}
 		return true;
 	}
@@ -222,7 +221,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 
 			if (random.nextInt(5) == 0) {
 				rotatedCubeVolume(world, x, y, z, 0, height - 1, 0, BETWEENSTONE_BRICKS, 1, 1, 1, direction);
-				rotatedLootPot(world, random, x, y, z, 0, height, 0, direction, 1, 2, 1, LootTableRegistry.COMMON_POT_LOOT);
+				rotatedLootPot(world, random, x, y, z, 0, height, 0, direction, 1, 2, 1, LootTableRegistry.MARSH_RUINS_POT);
 			}
 		}
 		return true;
@@ -271,10 +270,10 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			rotatedCubeVolume(world, x, y, z, 3, 6, 4, BETWEENSTONE_BRICK_SLAB, 3, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 2, 6, 1, BETWEENSTONE_BRICK_SLAB, 1, 1, 3, direction);
 			rotatedCubeVolume(world, x, y, z, 6, 6, 1, BETWEENSTONE_BRICK_SLAB, 1, 1, 3, direction);
-			rotatedLootPot(world, random, x, y, z, 2, 6, 0, direction, 1, 2, 5, LootTableRegistry.COMMON_POT_LOOT);
-			rotatedLootPot(world, random, x, y, z, 6, 6, 0, direction, 1, 2, 5, LootTableRegistry.COMMON_POT_LOOT);
-			rotatedLootPot(world, random, x, y, z, 2, 6, 4, direction, 1, 2, 5, LootTableRegistry.COMMON_POT_LOOT);
-			rotatedLootPot(world, random, x, y, z, 6, 6, 4, direction, 1, 2, 5, LootTableRegistry.COMMON_POT_LOOT);
+			rotatedLootPot(world, random, x, y, z, 2, 6, 0, direction, 1, 2, 5, LootTableRegistry.MARSH_RUINS_POT);
+			rotatedLootPot(world, random, x, y, z, 6, 6, 0, direction, 1, 2, 5, LootTableRegistry.MARSH_RUINS_POT);
+			rotatedLootPot(world, random, x, y, z, 2, 6, 4, direction, 1, 2, 5, LootTableRegistry.MARSH_RUINS_POT);
+			rotatedLootPot(world, random, x, y, z, 6, 6, 4, direction, 1, 2, 5, LootTableRegistry.MARSH_RUINS_POT);
 		}
 		return true;
 	}
@@ -401,7 +400,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			rotatedCubeVolume(world, x, y, z, 0, 0, 0, CHISELED_BETWEENSTONE, 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 0, 1, 0, BETWEENSTONE_PILLAR, 1, height - 2, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 0, height - 1, 0, CHISELED_BETWEENSTONE, 1, 1, 1, direction);
-			rotatedLootPot(world, random, x, y, z, 0, height, 0, direction, 1, 2, 5, LootTableRegistry.COMMON_POT_LOOT);
+			rotatedLootPot(world, random, x, y, z, 0, height, 0, direction, 1, 2, 5, LootTableRegistry.MARSH_RUINS_POT);
 		}
 		return true;
 	}
@@ -425,8 +424,8 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			rotatedCubeVolume(world, x, y, z, 0, 0, 0, CHISELED_BETWEENSTONE, 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 1, 0, 0, getStateFromRotation(7, direction, BETWEENSTONE_PILLAR, EnumRotationSequence.PILLAR_SIDEWAYS), width - 2, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, width - 1, 0, 0, CHISELED_BETWEENSTONE, 1, 1, 1, direction);
-			rotatedLootPot(world, random, x, y, z, 0, 1, 0, direction, 1, 2, 5, LootTableRegistry.COMMON_POT_LOOT);
-			rotatedLootPot(world, random, x, y, z, width - 1, 1, 0, direction, 1, 2, 5, LootTableRegistry.COMMON_POT_LOOT);
+			rotatedLootPot(world, random, x, y, z, 0, 1, 0, direction, 1, 2, 5, LootTableRegistry.MARSH_RUINS_POT);
+			rotatedLootPot(world, random, x, y, z, width - 1, 1, 0, direction, 1, 2, 5, LootTableRegistry.MARSH_RUINS_POT);
 
 		}
 		return true;
@@ -514,7 +513,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			rotatedCubeVolume(world, x, y, z, 6, 10, 6, getStateFromRotation(1, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 7, 5, 6, WEEDWOOD_PLANK_SLAB_UPSIDE_DOWN, 3, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 9, 0, 6, BETWEENSTONE_BRICKS, 1, 1, 1, direction);
-			rotatedLootPot(world, random, x, y, z, 9, 1, 6, direction, 1, 2, 1, LootTableRegistry.COMMON_POT_LOOT);
+			rotatedLootPot(world, random, x, y, z, 9, 1, 6, direction, 1, 2, 1, LootTableRegistry.MARSH_RUINS_POT);
 			rotatedCubeVolume(world, x, y, z, 10, 0, 6, BETWEENSTONE_TILES, 1, 4, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 10, 4, 6, BETWEENSTONE_BRICKS, 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 10, 5, 6, getStateFromRotation(1, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
@@ -543,7 +542,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			rotatedCubeVolume(world, x, y, z, 6, 9, 9, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 7, 0, 9, ANGRY_BETWEENSTONE, 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 8, 0, 9, BETWEENSTONE_BRICKS, 2, 1, 1, direction);
-			rotatedLootPot(world, random, x, y, z, 9, 1, 9, direction, 1, 2, 1, LootTableRegistry.COMMON_POT_LOOT);
+			rotatedLootPot(world, random, x, y, z, 9, 1, 9, direction, 1, 2, 1, LootTableRegistry.MARSH_RUINS_POT);
 			rotatedCubeVolume(world, x, y, z, 10, 0, 9, BETWEENSTONE_BRICKS, 1, 5, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 10, 5, 9, getStateFromRotation(3, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 10, 6, 9, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
@@ -592,7 +591,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		world.setBlockState(new BlockPos(x, y, z), getRandomBlock(random, EnumFacing.byHorizontalIndex(random.nextInt(4))), 2);
 		TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, new BlockPos(x, y, z));
 		if (lootPot != null) {
-			lootPot.setLootTable(LootTableRegistry.COMMON_POT_LOOT, random.nextLong());
+			lootPot.setLootTable(LootTableRegistry.MARSH_RUINS_POT, random.nextLong());
 		}
 	}
 

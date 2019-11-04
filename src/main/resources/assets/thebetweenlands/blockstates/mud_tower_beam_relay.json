@@ -1,0 +1,35 @@
+{
+   "forge_marker": 1,
+   "defaults": {
+      "model": "forge:multi-layer",
+      "custom": {
+         "base": "thebetweenlands:mud_tower_beam_relay#base",
+         "Solid": "thebetweenlands:mud_tower_beam_relay#base",
+         "Translucent": "thebetweenlands:mud_tower_beam_relay#trans"
+      },
+      "transform": "forge:default-block"
+   },
+   "variants": {
+      "normal": [{}],
+      "inventory": [{}],
+      "facing": {
+        "down": { "x": 270 },
+        "up": { "x": 90 },
+        "north": { "y": 180 },
+        "south": { },
+        "west": { "y": 90 },
+        "east": { "y": 270 }
+        },
+      "base": { "model": "thebetweenlands:lens_case_model" },
+      "trans": { "model": "thebetweenlands:lens_crystal_centre", 
+        "submodel": {
+            "down_side": { "model": "thebetweenlands:lens_crystal_subpart", "x": 270 },
+            "up_side": { "model": "thebetweenlands:lens_crystal_subpart", "x": 90 },
+            "north_side": { "model": "thebetweenlands:lens_crystal_subpart", "y": 180 },
+            "south_side": { "model": "thebetweenlands:lens_crystal_subpart" },
+            "west_side": { "model": "thebetweenlands:lens_crystal_subpart", "y": 90 },
+            "east_side": { "model": "thebetweenlands:lens_crystal_subpart", "y": 270 }
+        }
+      }
+   }
+}

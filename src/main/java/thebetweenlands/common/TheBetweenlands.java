@@ -1,14 +1,11 @@
 package thebetweenlands.common;
 
-import java.io.File;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -23,10 +20,12 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
+import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapability;
 import thebetweenlands.common.command.CommandAspectDiscovery;
 import thebetweenlands.common.command.CommandBLEvent;
 import thebetweenlands.common.command.CommandDecay;
@@ -34,6 +33,8 @@ import thebetweenlands.common.command.CommandReloadRecipes;
 import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.config.ConfigHelper;
+import thebetweenlands.common.entity.EntityVolarkite;
+import thebetweenlands.common.entity.mobs.EntitySludgeMenace;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.handler.AdvancementHandler;
 import thebetweenlands.common.handler.AnvilEventHandler;
@@ -42,7 +43,7 @@ import thebetweenlands.common.handler.AspectSyncHandler;
 import thebetweenlands.common.handler.AttackDamageHandler;
 import thebetweenlands.common.handler.BlockBreakHandler;
 import thebetweenlands.common.handler.BossHandler;
-import thebetweenlands.common.handler.CustomEntityBlockCollisionsHandler;
+import thebetweenlands.common.handler.CustomEntityCollisionsHandler;
 import thebetweenlands.common.handler.ElixirCommonHandler;
 import thebetweenlands.common.handler.EntitySpawnHandler;
 import thebetweenlands.common.handler.EnvironmentEventHandler;
@@ -62,10 +63,14 @@ import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.PotionRootBound;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
+import thebetweenlands.common.item.misc.ItemRingOfGathering;
 import thebetweenlands.common.item.shields.ItemDentrothystShield;
 import thebetweenlands.common.item.tools.ItemBLShield;
+import thebetweenlands.common.item.tools.ItemGreatsword;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.network.clientbound.PacketParticle;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.recipe.censer.CenserRecipeCremains;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.GameruleRegistry;
@@ -75,10 +80,11 @@ import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
+import thebetweenlands.common.world.biome.spawning.WorldMobSpawner;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWaystone;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
+import thebetweenlands.common.world.storage.OfflinePlayerHandlerImpl;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
 import thebetweenlands.compat.tmg.TMGEquipmentInventory;
 import thebetweenlands.core.TheBetweenlandsPreconditions;
@@ -132,6 +138,8 @@ public class TheBetweenlands {
 
 		MessageRegistry.preInit();
 
+		// Temp packet
+		networkWrapper.registerMessage(PacketParticle.class, PacketParticle.class, 100, Side.CLIENT); //ID 100 until added
 		//Renderers
 		proxy.registerItemAndBlockRenderers();
 		proxy.preInit();
@@ -219,7 +227,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(ItemCapabilityHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerDecayHandler.class);
 		MinecraftForge.EVENT_BUS.register(AspectSyncHandler.class);
-		MinecraftForge.EVENT_BUS.register(MobSpawnHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(WorldMobSpawner.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BlockBreakHandler.class);
 		MinecraftForge.EVENT_BUS.register(LocationHandler.class);
 		MinecraftForge.EVENT_BUS.register(AttackDamageHandler.class);
@@ -240,11 +248,18 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(FuelHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerJoinWorldHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerRespawnHandler.class);
-		MinecraftForge.EVENT_BUS.register(CustomEntityBlockCollisionsHandler.class);
+		MinecraftForge.EVENT_BUS.register(CustomEntityCollisionsHandler.class);
 		MinecraftForge.EVENT_BUS.register(PotionRootBound.class);
 		MinecraftForge.EVENT_BUS.register(BossHandler.class);
 		MinecraftForge.EVENT_BUS.register(ItemMagicItemMagnet.class);
 		MinecraftForge.EVENT_BUS.register(EntityWeedwoodRowboat.class);
 		MinecraftForge.EVENT_BUS.register(GameruleRegistry.class);
+		MinecraftForge.EVENT_BUS.register(RingOfDispersionEntityCapability.class);
+		MinecraftForge.EVENT_BUS.register(ItemGreatsword.class);
+		MinecraftForge.EVENT_BUS.register(CenserRecipeCremains.class);
+		MinecraftForge.EVENT_BUS.register(EntitySludgeMenace.class);
+		MinecraftForge.EVENT_BUS.register(OfflinePlayerHandlerImpl.class);
+		MinecraftForge.EVENT_BUS.register(ItemRingOfGathering.class);
+		MinecraftForge.EVENT_BUS.register(EntityVolarkite.class);
 	}
 }

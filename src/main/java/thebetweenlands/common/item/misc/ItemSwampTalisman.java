@@ -128,7 +128,6 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 									location.setSeed(worldIn.rand.nextLong());
 									location.setDirty(true);
 									location.setVisible(false);
-									location.linkChunks();
 									worldStorage.getLocalStorageHandler().addLocalStorage(location);
 								}
 

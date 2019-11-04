@@ -4,14 +4,17 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.client.render.model.tile.ModelGeckoCage;
 import thebetweenlands.client.render.model.tile.ModelGeckoCorrupted;
 import thebetweenlands.client.render.model.tile.ModelGeckoGreen;
 import thebetweenlands.client.render.model.tile.ModelGeckoNormal;
+import thebetweenlands.common.block.container.BlockGeckoCage;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
+import thebetweenlands.util.StatePropertyHelper;
 
 public class RenderGeckoCage extends TileEntitySpecialRenderer<TileEntityGeckoCage> {
 	private static final ModelGeckoCage MODEL = new ModelGeckoCage();
@@ -29,35 +32,23 @@ public class RenderGeckoCage extends TileEntitySpecialRenderer<TileEntityGeckoCa
 
 	@Override
 	public void render(TileEntityGeckoCage cage, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		int meta = cage != null ? cage.getBlockMetadata() : 0;
-
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		
+
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);
-		switch (meta) {
-		case 2:
-			GlStateManager.rotate(180F, 0.0F, 1F, 0F);
-			break;
-		case 3:
-			GlStateManager.rotate(0F, 0.0F, 1F, 0F);
-			break;
-		case 4:
-			GlStateManager.rotate(90F, 0.0F, 1F, 0F);
-			break;
-		case 5:
-			GlStateManager.rotate(-90F, 0.0F, 1F, 0F);
-			break;
-		}
+
+		EnumFacing facing = StatePropertyHelper.getStatePropertySafely(cage, BlockGeckoCage.class, BlockGeckoCage.FACING, EnumFacing.NORTH);
+
+		GlStateManager.rotate(facing.getHorizontalAngle(), 0.0F, 1F, 0F);
 
 		bindTexture(TEXTURE);
-		
+
 		GlStateManager.disableCull();
 		MODEL.render();
 		GlStateManager.enableCull();
-		
+
 		/*GL11.glPushMatrix();
 		GL11.glTranslatef(-1.0F, 0.5F, -0.5F);
 		ItemRenderHelper.renderItem(new ItemStack(BLBlockRegistry.weedwoodBush), 0);

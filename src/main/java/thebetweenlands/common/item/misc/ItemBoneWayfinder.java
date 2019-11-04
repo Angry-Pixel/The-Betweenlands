@@ -50,6 +50,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
+import thebetweenlands.util.PlayerUtil;
 
 public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimatorRepairable {
 	public ItemBoneWayfinder() {
@@ -113,11 +114,7 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 						this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
 					}
 
-					entity.setLocationAndAngles(spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
-
-					if(entity instanceof EntityPlayerMP) {
-						((EntityPlayerMP) entity).connection.setPlayerLocation(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
-					}
+					PlayerUtil.teleport(entity, spawnPoint.getX() + 0.5D, spawnPoint.getY(), spawnPoint.getZ() + 0.5D);
 
 					this.playThunderSounds(worldIn, entity.posX, entity.posY, entity.posZ);
 

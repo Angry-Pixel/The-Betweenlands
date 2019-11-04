@@ -1,0 +1,30 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "facing": {
+      "up": {
+        "model": "thebetweenlands:lichen_north",
+        "x": 90
+      },
+      "down": {
+        "model": "thebetweenlands:lichen_north",
+        "x": -90
+      },
+      "south": {
+        "model": "thebetweenlands:lichen_north"
+      },
+      "west": {
+        "model": "thebetweenlands:lichen_north",
+        "y": 90
+      },
+      "north": {
+        "model": "thebetweenlands:lichen_north",
+        "y": 180
+      },
+      "east": {
+        "model": "thebetweenlands:lichen_north",
+        "y": 270
+      }
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/blank",
+    "custom": {
+      "particle_texture": "thebetweenlands:particle/block/druid_altar_particle"
+    }
+  },
+  "variants": {
+    "flipped": {
+      "true": { },
+      "false": { }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/moss_north",
+				"model_active": "thebetweenlands:block/moss_north_spook"
+			},
+			"model_active": "thebetweenlands:block/moss_north_frosty"
+		}
+	},
+	"variants": {
+		"facing": {
+			"up": {
+				"x": 90
+			},
+			"down": {
+				"x": -90
+			},
+			"south": {
+				
+			},
+			"west": {
+				"y": 90
+			},
+			"north": {
+				"y": 180
+			},
+			"east": {
+				"y": 270
+			}
+		}
+	}
+}

@@ -29,7 +29,7 @@ public class ModelWeedwoodShieldBurning extends ModelFromModelBase {
 	public static final ResourceLocation FIRE_TEXTURE_LOCATION = new ResourceLocation("minecraft:blocks/fire_layer_0");
 
 	public ModelWeedwoodShieldBurning(TexturePacker packer) {
-		super(packer, new ModelWeedwoodShield(), new ResourceLocation("thebetweenlands:items/shields/weedwood_shield"), new ResourceLocation("thebetweenlands:particle/item/weedwood_shield_particle"), 64, 64, ModelRegistry.SHIELD_VERTEX_PROCESSOR);
+		super(new ModelFromModelBase.Builder(new ModelWeedwoodShield(), new ResourceLocation("thebetweenlands:items/shields/weedwood_shield"), 64, 64).particleTexture(new ResourceLocation("thebetweenlands:particle/item/weedwood_shield_particle")).packer(packer).processor(ModelRegistry.SHIELD_VERTEX_PROCESSOR));
 		this.usedTextures.add(FIRE_TEXTURE_LOCATION);
 	}
 

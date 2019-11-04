@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.biome.spawning.spawners;
 
+import java.util.function.Function;
+
 import com.google.common.base.Predicate;
 
 import net.minecraft.block.state.IBlockState;
@@ -8,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.AreaMobSpawner.BLSpawnEntry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
 /**
@@ -24,12 +26,12 @@ public class SurfaceSpawnEntry extends BLSpawnEntry {
 		}
 	};
 
-	public SurfaceSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
-		super(id, entityType);
+	public SurfaceSpawnEntry(int id, Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor) {
+		super(id, entityType, entityCtor);
 	}
 
-	public SurfaceSpawnEntry(int id, Class<? extends EntityLiving> entityType, short weight) {
-		super(id, entityType, weight);
+	public SurfaceSpawnEntry(int id, Class<? extends EntityLiving> entityType, Function<World, ? extends EntityLiving> entityCtor, short weight) {
+		super(id, entityType, entityCtor, weight);
 	}
 
 	public SurfaceSpawnEntry setSurfacePredicate(Predicate<IBlockState> surfacePredicate) {
@@ -59,8 +61,9 @@ public class SurfaceSpawnEntry extends BLSpawnEntry {
 
 	@Override
 	public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState spawnBlockState, IBlockState surfaceBlockState) {
-		return (this.surfaceBlockPredicate.apply(surfaceBlockState) && !spawnBlockState.getMaterial().isLiquid()) ||
+		return !spawnBlockState.isNormalCube() &&
+				((this.surfaceBlockPredicate.apply(surfaceBlockState) && !spawnBlockState.getMaterial().isLiquid()) ||
 				(this.canSpawnInWater && spawnBlockState.getMaterial().isLiquid()) || 
-				(this.canSpawnOnWater && surfaceBlockState.getMaterial().isLiquid() && !spawnBlockState.getMaterial().isLiquid());
+				(this.canSpawnOnWater && surfaceBlockState.getMaterial().isLiquid() && !spawnBlockState.getMaterial().isLiquid()));
 	}
 }

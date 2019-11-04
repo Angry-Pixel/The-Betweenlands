@@ -39,8 +39,8 @@ public class ModelSpiritTreeFaceMaskSmall extends ModelBodyAttachment {
 		this.nose1.addChild(this.nose2);
 		this.head_base.addChild(this.head2);
 
-		this.addAttachment(this.bipedHead, this.head_base);
-	}
+        this.bipedHead.addChild(this.head_base);
+    }
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {

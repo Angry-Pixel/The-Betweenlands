@@ -21,7 +21,8 @@ public interface ILocalStorageHandler {
 	public IWorldStorage getWorldStorage();
 
 	/**
-	 * Adds a local storage to the world
+	 * Adds a local storage to the world.
+	 * The storage may have no linked chunks when initially added
 	 * @param storage
 	 * @return
 	 */

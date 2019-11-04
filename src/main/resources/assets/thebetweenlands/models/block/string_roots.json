@@ -1,0 +1,41 @@
+{
+    "ambientocclusion": false,
+    "textures": {
+        "block": "thebetweenlands:blocks/string_roots",
+        "particle": "thebetweenlands:blocks/string_roots"
+    },
+    "elements": [
+        {   "from": [ 4, 0, 0 ],
+            "to": [ 4, 16, 16 ],
+            "shade": false,
+            "faces": {
+                "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#block" },
+                "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#block" }
+            }
+        },
+        {   "from": [ 12, 0, 0 ],
+            "to": [ 12, 16, 16 ],
+            "shade": false,
+            "faces": {
+                "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#block" },
+                "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#block" }
+            }
+        },
+        {   "from": [ 0, 0, 4 ],
+            "to": [ 16, 16, 4 ],
+            "shade": false,
+            "faces": {
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#block" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#block" }
+            }
+        },
+        {   "from": [ 0, 0, 12 ],
+            "to": [ 16, 16, 12 ],
+            "shade": false,
+            "faces": {
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#block" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#block" }
+            }
+        }
+    ]
+}
