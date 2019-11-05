@@ -140,7 +140,8 @@ public class GuiGalleryFrame extends GuiScreen {
 	private boolean searchEntryText(GalleryEntry entry, String searchText) {
 		return entry.getTitle().toLowerCase().contains(searchText) || entry.getAuthor().toLowerCase().contains(searchText) ||
 				(entry.getDescription() != null && entry.getDescription().replaceAll("\n", " ").toLowerCase().contains(searchText)) ||
-				entry.getSourceUrl().toLowerCase().contains(searchText) || entry.getSha256().toLowerCase().contains(searchText);
+				(entry.getSourceUrl() != null && entry.getSourceUrl().toLowerCase().contains(searchText)) ||
+				entry.getSha256().toLowerCase().contains(searchText);
 	}
 
 	private void switchPicture(boolean prev, boolean next) {
@@ -200,7 +201,7 @@ public class GuiGalleryFrame extends GuiScreen {
 
 		GalleryEntry entry = GalleryManager.INSTANCE.getEntries().get(this.frame.getUrl());
 
-		ResourceLocation pictureLocation = entry != null && entry.isUploaded() ? entry.getLocation() : RenderGalleryFrame.GALLERY_FRAME_EMPTY_BACKGROUND;
+		ResourceLocation pictureLocation = entry != null ? entry.loadTextureAndGetLocation(RenderGalleryFrame.GALLERY_FRAME_EMPTY_BACKGROUND) : RenderGalleryFrame.GALLERY_FRAME_EMPTY_BACKGROUND;
 
 		Minecraft.getMinecraft().getTextureManager().bindTexture(pictureLocation);
 

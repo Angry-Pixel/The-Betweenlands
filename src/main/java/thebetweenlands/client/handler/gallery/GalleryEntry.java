@@ -7,7 +7,11 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.client.render.sprite.TextureGalleryEntry;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
@@ -63,6 +67,26 @@ public class GalleryEntry {
 
 	public ResourceLocation getLocation() {
 		return new ResourceLocation(ModInfo.ID, "online_gallery_" + this.sha256);
+	}
+
+	public boolean loadTexture() {
+		TextureManager manager = Minecraft.getMinecraft().getTextureManager();
+
+		ITextureObject texture = manager.getTexture(this.getLocation());
+
+		if(texture == null) {
+			TheBetweenlands.logger.info("Loading gallery picture '" + this.getSha256() + "'/'" + this.getUrl() + "'/'" + this.getLocation() + "'");
+			return manager.loadTexture(this.getLocation(), new TextureGalleryEntry(this));
+		}
+
+		return texture instanceof TextureGalleryEntry;
+	}
+
+	public ResourceLocation loadTextureAndGetLocation(ResourceLocation fallback) {
+		if(this.loadTexture()) {
+			return this.getLocation();
+		}
+		return fallback;
 	}
 
 	public File getPictureFile() {

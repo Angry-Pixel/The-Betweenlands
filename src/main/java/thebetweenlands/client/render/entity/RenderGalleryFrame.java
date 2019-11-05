@@ -110,6 +110,7 @@ public class RenderGalleryFrame extends Render<EntityGalleryFrame> {
 	@Override
 	protected ResourceLocation getEntityTexture(EntityGalleryFrame entity) {
 		GalleryEntry entry = GalleryManager.INSTANCE.getEntries().get(entity.getUrl());
-		return entry != null && entry.isUploaded() ? entry.getLocation() : GALLERY_FRAME_EMPTY_BACKGROUND;
+		ResourceLocation pictureLocation = entry != null ? entry.loadTextureAndGetLocation(RenderGalleryFrame.GALLERY_FRAME_EMPTY_BACKGROUND) : RenderGalleryFrame.GALLERY_FRAME_EMPTY_BACKGROUND;
+		return pictureLocation;
 	}
 }
