@@ -119,8 +119,8 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 			this.attackCooldown--;
 		}
 		
-		this.squishFactor += (this.squishAmount - this.squishFactor) * 0.5F;
 		this.prevSquishFactor = this.squishFactor;
+		this.squishFactor += (this.squishAmount - this.squishFactor) * 0.5F;
 
 		if (!this.world.isRemote) {
 			if (getIsPlayerNearby(7, 3, 7, 7) || getAttackTarget() != null || this.world.rand.nextInt(2200) == 0) {
