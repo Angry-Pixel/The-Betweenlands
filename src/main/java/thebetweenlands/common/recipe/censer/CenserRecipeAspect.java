@@ -24,7 +24,7 @@ public class CenserRecipeAspect extends AbstractCenserRecipe<CenserRecipeAspectC
 
 	@Override
 	public boolean matchesInput(ItemStack stack) {
-		return stack.getItem() == ItemRegistry.ASPECT_VIAL;
+		return stack.getItem() == ItemRegistry.ASPECT_VIAL && !ItemAspectContainer.fromItem(stack).getAspects().isEmpty();
 	}
 
 	@Override
