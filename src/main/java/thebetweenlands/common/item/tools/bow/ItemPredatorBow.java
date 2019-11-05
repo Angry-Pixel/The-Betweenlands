@@ -16,6 +16,7 @@ public class ItemPredatorBow extends ItemBLBow {
 	protected void fireArrow(EntityPlayer player, ItemStack stack, EntityArrow arrow, float strength) {
 		arrow.motionX = arrow.motionY = arrow.motionZ = 0;
 		arrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, strength * 1.85F, 1.0F);
+		arrow.setDamage(arrow.getDamage() + 1.05f); //Compensation for lower speed
 		player.world.spawnEntity(arrow);
 		
 		EntityPredatorArrowGuide guide = new EntityPredatorArrowGuide(player.world);
