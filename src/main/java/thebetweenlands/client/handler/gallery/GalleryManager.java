@@ -29,11 +29,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.reflect.TypeToken;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.util.JsonUtils;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import thebetweenlands.client.render.sprite.TextureGalleryEntry;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
@@ -58,18 +54,8 @@ public final class GalleryManager {
 
 	private Map<String, GalleryEntry> entries = new HashMap<>();
 
-	private volatile boolean registerNewTextures = false;
-
 	private GalleryManager() {
 
-	}
-
-	@SubscribeEvent
-	public static void onClientTickEvent(ClientTickEvent event) {
-		if(GalleryManager.INSTANCE.registerNewTextures) {
-			GalleryManager.INSTANCE.registerNewTextures = false;
-			GalleryManager.INSTANCE.registerGlTextures();
-		}
 	}
 
 	public Map<String, GalleryEntry> getEntries() {
@@ -89,7 +75,7 @@ public final class GalleryManager {
 					this.entries = this.parseLocalIndex(folder, json);
 				}
 			} catch(Exception ex) {
-				if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.info("Failed loading local gallery index", ex);
+				TheBetweenlands.logger.error("Failed loading local gallery index", ex);
 			}
 		}
 	}
@@ -110,7 +96,7 @@ public final class GalleryManager {
 
 			GSON.toJson(indexArr, fileWriter);
 		} catch (IOException e) {
-			if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.info("Failed saving local gallery index", e);
+			TheBetweenlands.logger.error("Failed saving local gallery index", e);
 		}
 	}
 
@@ -123,6 +109,8 @@ public final class GalleryManager {
 				@Override
 				public void run() {
 					try {
+						TheBetweenlands.logger.info("Updating gallery");
+
 						URL url = new URL("https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/index.json");
 						HttpURLConnection request = null;
 						try {
@@ -141,14 +129,10 @@ public final class GalleryManager {
 							}
 						}
 					} catch(Exception ex) {
-						if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.info("Failed downloading online gallery data", ex);
+						TheBetweenlands.logger.error("Failed downloading gallery data", ex);
 					}
-
-					GalleryManager.this.registerNewTextures = true;
 				}
 			});
-		} else {
-			GalleryManager.this.registerNewTextures = true;
 		}
 	}
 
@@ -181,8 +165,11 @@ public final class GalleryManager {
 
 			String localSha256 = localEntry.getLocalSha256();
 
-			if(onlineEntry == null || localSha256 == null || !localSha256.equals(onlineEntry.getSha256())) {
-				if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.info("Removing gallery entry '" + localEntry.getSha256() + "'/'" + localEntry.getUrl() + "' because it is no longer used or the local hash (" + localSha256 + ") does not match");
+			if(onlineEntry == null) {
+				//Doesn't exist anymore online, just keep it
+				newLocalEntries.put(localEntry.getUrl(), localEntry);
+			} else if(localSha256 == null || !localSha256.equals(onlineEntry.getSha256())) {
+				TheBetweenlands.logger.info("Removing gallery entry '" + localEntry.getSha256() + "'/'" + localEntry.getUrl() + "' because the local hash (" + localSha256 + ") does not match");
 				this.deleteLocalPicture(folder, localEntry);
 				changed = true;
 			} else {
@@ -195,18 +182,18 @@ public final class GalleryManager {
 				try {
 					if(this.downloadPicture(folder, onlineEntry, proxy)) {
 						String localSha256 = onlineEntry.getLocalSha256();
-						
+
 						if(localSha256 != null && !onlineEntry.getSha256().equals(localSha256)) {
 							TheBetweenlands.logger.info("Downloaded gallery picture '" + onlineEntry.getUrl() + "' SHA256 hash does not match (Expected: " + onlineEntry.getSha256() + " Got: " + localSha256 + ")! Please report this to the mod authors.");
 						}
-						
+
 						newLocalEntries.put(onlineEntry.getUrl(), onlineEntry);
 						changed = true;
 					} else {
-						if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.info("Failed downloading gallery picture '" + onlineEntry.getUrl() + "'");
+						TheBetweenlands.logger.error("Failed downloading gallery picture '" + onlineEntry.getUrl() + "'");
 					}
 				} catch(Exception ex) {
-					if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.info("Failed downloading gallery picture '" + onlineEntry.getUrl() + "'", ex);
+					TheBetweenlands.logger.error("Failed downloading gallery picture '" + onlineEntry.getUrl() + "'", ex);
 				}
 			}
 		}
@@ -225,11 +212,11 @@ public final class GalleryManager {
 	}
 
 	private File getPictureFile(File folder, String sha256) {
-		return new File(folder, sha256 + ".png");
+		return new File(folder, sha256.toLowerCase() + ".png");
 	}
 
 	private boolean downloadPicture(File folder, GalleryEntry entry, @Nullable Proxy proxy) throws IOException {
-		if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.info("Downloading gallery picture '" + entry.getSha256() + "'/'" + entry.getUrl() + "'");
+		TheBetweenlands.logger.info("Downloading gallery picture '" + entry.getSha256() + "'/'" + entry.getUrl() + "'");
 
 		URL url = new URL(entry.getUrl());
 		HttpURLConnection request = null;
@@ -257,18 +244,7 @@ public final class GalleryManager {
 				file.delete();
 			}
 		} catch(Exception ex) {
-			if(BetweenlandsConfig.DEBUG.debug) {
-				TheBetweenlands.logger.error("Failed deleting gallery picture", ex);
-			}
-		}
-	}
-
-	private void registerGlTextures() {
-		for(GalleryEntry entry : this.entries.values()) {
-			Minecraft.getMinecraft().getTextureManager().loadTexture(entry.getLocation(), new TextureGalleryEntry(entry));
-			if(BetweenlandsConfig.DEBUG.debug) {
-				TheBetweenlands.logger.info("Loaded gallery picture '" + entry.getSha256() + "'/'" + entry.getUrl() + "'/'" + entry.getLocation() + "'");
-			}
+			TheBetweenlands.logger.error("Failed deleting gallery picture", ex);
 		}
 	}
 
@@ -323,7 +299,7 @@ public final class GalleryManager {
 								entries.put(entry.getUrl(), entry);
 							} catch(Exception ex) {
 								if(BetweenlandsConfig.DEBUG.debug) {
-									TheBetweenlands.logger.error("Failed parsing online gallery index entry: " + j, ex);
+									TheBetweenlands.logger.error("Failed parsing gallery index entry: " + j, ex);
 								}
 							}
 						}

@@ -17,7 +17,6 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -29,6 +28,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.gallery.GalleryEntry;
 import thebetweenlands.client.handler.gallery.GalleryManager;
+import thebetweenlands.client.render.entity.RenderGalleryFrame;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityGalleryFrame;
 import thebetweenlands.common.network.serverbound.MessageSetGalleryUrl;
@@ -140,7 +140,8 @@ public class GuiGalleryFrame extends GuiScreen {
 	private boolean searchEntryText(GalleryEntry entry, String searchText) {
 		return entry.getTitle().toLowerCase().contains(searchText) || entry.getAuthor().toLowerCase().contains(searchText) ||
 				(entry.getDescription() != null && entry.getDescription().replaceAll("\n", " ").toLowerCase().contains(searchText)) ||
-				entry.getSourceUrl().toLowerCase().contains(searchText) || entry.getSha256().toLowerCase().contains(searchText);
+				(entry.getSourceUrl() != null && entry.getSourceUrl().toLowerCase().contains(searchText)) ||
+				entry.getSha256().toLowerCase().contains(searchText);
 	}
 
 	private void switchPicture(boolean prev, boolean next) {
@@ -200,7 +201,7 @@ public class GuiGalleryFrame extends GuiScreen {
 
 		GalleryEntry entry = GalleryManager.INSTANCE.getEntries().get(this.frame.getUrl());
 
-		ResourceLocation pictureLocation = entry != null && entry.isUploaded() ? entry.getLocation() : TextureManager.RESOURCE_LOCATION_EMPTY;
+		ResourceLocation pictureLocation = entry != null ? entry.loadTextureAndGetLocation(RenderGalleryFrame.GALLERY_FRAME_EMPTY_BACKGROUND) : RenderGalleryFrame.GALLERY_FRAME_EMPTY_BACKGROUND;
 
 		Minecraft.getMinecraft().getTextureManager().bindTexture(pictureLocation);
 

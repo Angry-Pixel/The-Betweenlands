@@ -34,23 +34,33 @@ public class ParticleBatchTypeBuilder {
 
 		private int maxParticles = 8192;
 		private int batchSize = 8192;
+		private boolean setFog = true;
 		private boolean fog = true;
+		private boolean setCull = true;
 		private boolean cull = true;
+		private boolean setDepthTest = true;
 		private boolean depthTest = true;
+		private boolean setDepthMask = true;
 		private boolean depthMask = true;
+		private boolean setColorMask = true;
 		private boolean colorMaskR = true;
 		private boolean colorMaskG = true;
 		private boolean colorMaskB = true;
 		private boolean colormaskA = true;
 		private boolean depthMaskPass = false;
+		private boolean setLit = true;
 		private boolean lit = false;
 		private VertexFormat format = DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP;
 		private int glPrimitive = GL11.GL_QUADS;
+		private boolean setBlend = true;
 		private boolean blend = true;
 		private GlStateManager.SourceFactor glBlendSrc = GlStateManager.SourceFactor.SRC_ALPHA;
 		private GlStateManager.DestFactor glBlendDst = GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA;
+		private boolean setTexture = true;
 		private Supplier<ResourceLocation> texture = () -> TextureMap.LOCATION_BLOCKS_TEXTURE;
+		private boolean setBlur = true;
 		private boolean blur = false;
+		private boolean setMipmap = true;
 		private boolean mipmap = false;
 
 		private Pass(ParticleBatchTypeBuilder builder) {
@@ -67,8 +77,18 @@ public class ParticleBatchTypeBuilder {
 			return this;
 		}
 
+		public Pass setCull(boolean set) {
+			this.setCull = set;
+			return this;
+		}
+
 		public Pass cull(boolean cull) {
 			this.cull = cull;
+			return this;
+		}
+
+		public Pass setDepthTest(boolean set) {
+			this.setDepthTest = set;
 			return this;
 		}
 
@@ -77,8 +97,18 @@ public class ParticleBatchTypeBuilder {
 			return this;
 		}
 
+		public Pass setDepthMask(boolean set) {
+			this.setDepthMask = set;
+			return this;
+		}
+
 		public Pass depthMask(boolean mask) {
 			this.depthMask = mask;
+			return this;
+		}
+
+		public Pass setColorMask(boolean set) {
+			this.setColorMask = set;
 			return this;
 		}
 
@@ -95,8 +125,18 @@ public class ParticleBatchTypeBuilder {
 			return this;
 		}
 
+		public Pass setLit(boolean set) {
+			this.setLit = set;
+			return this;
+		}
+
 		public Pass lit(boolean lit) {
 			this.lit = lit;
+			return this;
+		}
+
+		public Pass setFog(boolean set) {
+			this.setFog = set;
 			return this;
 		}
 
@@ -115,6 +155,11 @@ public class ParticleBatchTypeBuilder {
 			return this;
 		}
 
+		public Pass setBlend(boolean set) {
+			this.setBlend = set;
+			return this;
+		}
+
 		public Pass blend(boolean blend) {
 			this.blend = blend;
 			return this;
@@ -123,6 +168,11 @@ public class ParticleBatchTypeBuilder {
 		public Pass blend(GlStateManager.SourceFactor src, GlStateManager.DestFactor dst) {
 			this.glBlendSrc = src;
 			this.glBlendDst = dst;
+			return this;
+		}
+
+		public Pass setTexture(boolean set) {
+			this.setTexture = set;
 			return this;
 		}
 
@@ -136,8 +186,18 @@ public class ParticleBatchTypeBuilder {
 			return this;
 		}
 
+		public Pass setBlur(boolean set) {
+			this.setBlur = set;
+			return this;
+		}
+
 		public Pass blur(boolean blur) {
 			this.blur = blur;
+			return this;
+		}
+
+		public Pass setMipmap(boolean set) {
+			this.setMipmap = set;
 			return this;
 		}
 
@@ -188,53 +248,74 @@ public class ParticleBatchTypeBuilder {
 			}
 
 			protected ResourceLocation preSetup(Pass pass) {
-				if(pass.cull) {
-					GlStateManager.enableCull();
-				} else {
-					GlStateManager.disableCull();
+				if(pass.setCull) { 
+					if(pass.cull) {
+						GlStateManager.enableCull();
+					} else {
+						GlStateManager.disableCull();
+					}
 				}
 
-				if(pass.depthTest) {
-					GlStateManager.enableDepth();
-				} else {
-					GlStateManager.disableDepth();
+				if(pass.setDepthTest) {
+					if(pass.depthTest) {
+						GlStateManager.enableDepth();
+					} else {
+						GlStateManager.disableDepth();
+					}
 				}
 
-				if(pass.depthMask) {
-					GlStateManager.depthMask(true);
-				} else {
-					GlStateManager.depthMask(false);
+				if(pass.setDepthMask) {
+					if(pass.depthMask) {
+						GlStateManager.depthMask(true);
+					} else {
+						GlStateManager.depthMask(false);
+					}
 				}
 
-				GlStateManager.colorMask(pass.colorMaskR, pass.colorMaskG, pass.colorMaskB, pass.colormaskA);
-
-				if(pass.lit) {
-					Minecraft.getMinecraft().entityRenderer.enableLightmap();
-				} else {
-					Minecraft.getMinecraft().entityRenderer.disableLightmap();
+				if(pass.setColorMask) {
+					GlStateManager.colorMask(pass.colorMaskR, pass.colorMaskG, pass.colorMaskB, pass.colormaskA);
 				}
 
-				if(pass.fog) {
-					GlStateManager.enableFog();
-				} else {
-					GlStateManager.disableFog();
+				if(pass.setLit) { 
+					if(pass.lit) {
+						Minecraft.getMinecraft().entityRenderer.enableLightmap();
+					} else {
+						Minecraft.getMinecraft().entityRenderer.disableLightmap();
+					}
 				}
 
-				if(pass.blend) {
-					GlStateManager.enableBlend();
-				} else {
-					GlStateManager.disableBlend();
+				if(pass.setFog) { 
+					if(pass.fog) {
+						GlStateManager.enableFog();
+					} else {
+						GlStateManager.disableFog();
+					}
 				}
 
-				GlStateManager.blendFunc(pass.glBlendSrc, pass.glBlendDst);
+				if(pass.setBlend) {
+					if(pass.blend) {
+						GlStateManager.enableBlend();
+					} else {
+						GlStateManager.disableBlend();
+					}
+
+					GlStateManager.blendFunc(pass.glBlendSrc, pass.glBlendDst);
+				}
 
 				if(pass.texture != null) {
 					ResourceLocation texLoc = pass.texture.get();
-					Minecraft.getMinecraft().getTextureManager().bindTexture(texLoc);
-					ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(texLoc);
-					if(tex != null) {
-						tex.setBlurMipmap(pass.blur, pass.mipmap);
+
+					if(pass.setTexture) {
+						Minecraft.getMinecraft().getTextureManager().bindTexture(texLoc);
 					}
+
+					if(pass.setBlur) {
+						ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(texLoc);
+						if(tex != null) {
+							tex.setBlurMipmap(pass.blur, pass.mipmap);
+						}
+					}
+
 					return texLoc;
 				}
 
@@ -243,10 +324,15 @@ public class ParticleBatchTypeBuilder {
 
 			protected void postSetup(Pass pass, @Nullable ResourceLocation texLoc) {
 				if(texLoc != null) {
-					Minecraft.getMinecraft().getTextureManager().bindTexture(texLoc);
-					ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(texLoc);
-					if(tex != null) {
-						tex.restoreLastBlurMipmap();
+					if(pass.setTexture) {
+						Minecraft.getMinecraft().getTextureManager().bindTexture(texLoc);
+					}
+
+					if(pass.setBlur) {
+						ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(texLoc);
+						if(tex != null) {
+							tex.restoreLastBlurMipmap();
+						}
 					}
 				}
 			}

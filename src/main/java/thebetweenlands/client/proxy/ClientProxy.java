@@ -830,7 +830,6 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
         MinecraftForge.EVENT_BUS.register(RenderGrapplingHookNode.class);
         MinecraftForge.EVENT_BUS.register(ExtendedReachHandler.class);
         MinecraftForge.EVENT_BUS.register(RenderVolarkite.class);
-        MinecraftForge.EVENT_BUS.register(GalleryManager.class);
         MinecraftForge.EVENT_BUS.register(RenderUtils.class);
 	}
 
