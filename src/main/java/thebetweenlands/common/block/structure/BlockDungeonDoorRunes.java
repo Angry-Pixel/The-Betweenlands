@@ -86,13 +86,13 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta & 0b111)).withProperty(INVISIBLE, Boolean.valueOf((meta & 8) > 0));
+		return getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta & 0b111)).withProperty(INVISIBLE, Boolean.valueOf((meta & 8) > 0));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
-		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();
+		meta = meta | ((EnumFacing) state.getValue(FACING)).getHorizontalIndex();
 		if (((Boolean) state.getValue(INVISIBLE)).booleanValue())
 			meta |= 8;
 		return meta;

@@ -70,13 +70,13 @@ public class BlockDungeonDoorCombination extends BasicBlock implements ITileEnti
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
+		return getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
-		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();
+		meta = meta | ((EnumFacing) state.getValue(FACING)).getHorizontalIndex();
 		return meta;
 	}
 

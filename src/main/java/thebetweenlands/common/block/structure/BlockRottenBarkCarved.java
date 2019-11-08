@@ -46,13 +46,13 @@ public class BlockRottenBarkCarved extends BasicBlock {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
+		return getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
-		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();
+		meta = meta | state.getValue(FACING).getHorizontalIndex();
 		return meta;
 	}
 
@@ -63,17 +63,17 @@ public class BlockRottenBarkCarved extends BasicBlock {
 
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
-		return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
+		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
 	}
 
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-		return state.withRotation(mirrorIn.toRotation((EnumFacing) state.getValue(FACING)));
+		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {FACING});
+		return new BlockStateContainer(this, FACING);
 	}
 
 }
