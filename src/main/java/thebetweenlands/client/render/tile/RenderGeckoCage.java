@@ -32,8 +32,10 @@ public class RenderGeckoCage extends TileEntitySpecialRenderer<TileEntityGeckoCa
 
 	@Override
 	public void render(TileEntityGeckoCage cage, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		if (destroyStage < 0) {
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		}
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
@@ -43,11 +45,29 @@ public class RenderGeckoCage extends TileEntitySpecialRenderer<TileEntityGeckoCa
 
 		GlStateManager.rotate(facing.getHorizontalAngle(), 0.0F, 1F, 0F);
 
-		bindTexture(TEXTURE);
+		if (destroyStage >= 0) {
+			this.bindTexture(DESTROY_STAGES[destroyStage]);
+			GlStateManager.matrixMode(5890);
+			GlStateManager.pushMatrix();
+			GlStateManager.scale(4.0F, 4.0F, 1.0F);
+			GlStateManager.translate(0.0625F, 0.0625F, 0.0625F);
+			GlStateManager.matrixMode(5888);
+		} else {
+			bindTexture(TEXTURE);
+		}
 
 		GlStateManager.disableCull();
 		MODEL.render();
 		GlStateManager.enableCull();
+
+		if (destroyStage >= 0)
+		{
+			GlStateManager.matrixMode(5890);
+			GlStateManager.popMatrix();
+			GlStateManager.matrixMode(5888);
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		}
 
 		/*GL11.glPushMatrix();
 		GL11.glTranslatef(-1.0F, 0.5F, -0.5F);

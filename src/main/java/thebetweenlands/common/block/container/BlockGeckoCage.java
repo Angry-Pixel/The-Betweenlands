@@ -52,6 +52,11 @@ public class BlockGeckoCage extends BlockContainer {
 	}
 
 	@Override
+	public boolean hasCustomBreakingProgress(IBlockState state) {
+		return true;
+	}
+
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
