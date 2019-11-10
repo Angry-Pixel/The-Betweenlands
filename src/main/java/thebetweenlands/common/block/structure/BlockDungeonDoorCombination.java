@@ -27,7 +27,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.tile.TileEntityDungeonDoorCombination;
-import thebetweenlands.common.tile.TileEntityDungeonDoorRunes;
 
 public class BlockDungeonDoorCombination extends BasicBlock implements ITileEntityProvider {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -70,13 +69,14 @@ public class BlockDungeonDoorCombination extends BasicBlock implements ITileEnti
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+		EnumFacing facing = EnumFacing.byIndex(meta); // Using this instead of 'byHorizontalIndex' because the ids don't match and previous was release
+		return getDefaultState().withProperty(FACING, facing.getAxis().isHorizontal() ? facing: EnumFacing.NORTH);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
-		meta = meta | ((EnumFacing) state.getValue(FACING)).getHorizontalIndex();
+		meta = meta | state.getValue(FACING).getIndex();
 		return meta;
 	}
 
@@ -107,9 +107,6 @@ public class BlockDungeonDoorCombination extends BasicBlock implements ITileEnti
 
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
-		TileEntityDungeonDoorCombination tile = getTileEntity(world, pos);
-		if (tile instanceof TileEntityDungeonDoorCombination) {
-		}
 		world.notifyBlockUpdate(pos, state, state, 3);
 	}
 

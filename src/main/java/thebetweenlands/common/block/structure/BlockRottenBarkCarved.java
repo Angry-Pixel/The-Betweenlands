@@ -2,7 +2,6 @@ package thebetweenlands.common.block.structure;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -46,13 +45,14 @@ public class BlockRottenBarkCarved extends BasicBlock {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+		EnumFacing facing = EnumFacing.byIndex(meta); // Using this instead of 'byHorizontalIndex' because the ids don't match and previous was release
+		return getDefaultState().withProperty(FACING,facing.getAxis().isHorizontal() ? facing: EnumFacing.NORTH);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
-		meta = meta | state.getValue(FACING).getHorizontalIndex();
+		meta = meta | state.getValue(FACING).getIndex();
 		return meta;
 	}
 
