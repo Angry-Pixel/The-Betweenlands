@@ -16,8 +16,10 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColorHelper;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 
@@ -121,7 +123,12 @@ public class BlockEdgePlant extends BlockSludgeDungeonPlant implements ICustomIt
 	public void spreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
 		world.setBlockState(targetPos, this.getDefaultState().withProperty(FACING, state.getValue(FACING)));
 	}
-	
+
+	@Override
+	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerFoliage.getFoliageColorBasic();
+	}
+
 	@Override
 	public EnumOffsetType getOffsetType() {
 		return EnumOffsetType.NONE;
