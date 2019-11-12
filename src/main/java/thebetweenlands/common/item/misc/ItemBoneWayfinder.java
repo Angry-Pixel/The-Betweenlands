@@ -150,9 +150,9 @@ public class ItemBoneWayfinder extends Item implements IRenamableItem, IAnimator
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("link", Constants.NBT.TAG_LONG)) {
 			BlockPos waystone = BlockPos.fromLong(stack.getTagCompound().getLong("link"));
-			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bone_wayfinder_linked", waystone.getX(), waystone.getY(), waystone.getZ()), 0));
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bl.bone_wayfinder_linked", waystone.getX(), waystone.getY(), waystone.getZ()), 0));
 		} else {
-			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bone_wayfinder"), 0));
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bl.bone_wayfinder"), 0));
 		}
 	}
 

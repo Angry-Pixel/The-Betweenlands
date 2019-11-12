@@ -56,8 +56,8 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 		if (hasTag(stack)) {
 			if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("infused") && stack.getTagCompound().hasKey("ingredients") && stack.getTagCompound().hasKey("infusionTime")) {
 				int infusionTime = stack.getTagCompound().getInteger("infusionTime");
-				list.add(I18n.format("tooltip.infusion.time", StringUtils.ticksToElapsedTime(infusionTime), infusionTime));
-				list.add(I18n.format("tooltip.infusion.ingredients"));
+				list.add(I18n.format("tooltip.bl.infusion.time", StringUtils.ticksToElapsedTime(infusionTime), infusionTime));
+				list.add(I18n.format("tooltip.bl.infusion.ingredients"));
 				// The properties will be retrieved in the Alembic's TE logic
 				NBTTagList nbtList = (NBTTagList) stack.getTagCompound().getTag("ingredients");
 				Map<ItemStack, Integer> stackMap = new LinkedHashMap<ItemStack, Integer>();
@@ -90,7 +90,7 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 					}
 				}
 			} else {
-				list.add(I18n.format("tooltip.infusion.empty"));
+				list.add(I18n.format("tooltip.bl.infusion.empty"));
 			}
 		}
 	}

@@ -85,7 +85,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if(EnumTalisman.SWAMP_TALISMAN_5.isItemOf(stack) && stack.hasTagCompound() && stack.getTagCompound().hasKey("link", Constants.NBT.TAG_LONG)) {
 			BlockPos otherPortalPos = BlockPos.fromLong(stack.getTagCompound().getLong("link"));
-			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.swamp_talisman_linked", otherPortalPos.getX(), otherPortalPos.getY(), otherPortalPos.getZ()), 0));
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bl.swamp_talisman_linked", otherPortalPos.getX(), otherPortalPos.getY(), otherPortalPos.getZ()), 0));
 		}
 	}
 

@@ -44,7 +44,7 @@ public class ItemOctineIngot extends Item {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(I18n.format("tooltip.octine.fire"));
+		tooltip.add(I18n.format("tooltip.bl.octine.fire"));
 	}
 
 	@Override

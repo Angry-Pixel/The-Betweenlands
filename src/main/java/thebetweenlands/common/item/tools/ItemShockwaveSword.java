@@ -50,9 +50,9 @@ public class ItemShockwaveSword extends ItemBLSword {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		if(stack.getItemDamage() == stack.getMaxDamage()) {
-			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.tool.broken", stack.getDisplayName()), 0));
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.tool.broken", stack.getDisplayName()), 0));
 		} else {
-			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.shockwave_sword.usage"), 0));
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.shockwave_sword.usage"), 0));
 		}
 	}
 

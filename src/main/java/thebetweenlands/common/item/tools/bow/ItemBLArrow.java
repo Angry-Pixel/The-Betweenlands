@@ -36,11 +36,11 @@ public class ItemBLArrow extends ItemArrow {
 		ItemBLArrow item = (ItemBLArrow) stack.getItem();
 
 		if (item == ItemRegistry.OCTINE_ARROW) {
-			tooltip.add(TranslationHelper.translateToLocal("tooltip.arrow.octine"));
+			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.arrow.octine"));
 		}
 
 		if (item == ItemRegistry.BASILISK_ARROW) {
-			tooltip.add(TranslationHelper.translateToLocal("tooltip.arrow.basilisk"));
+			tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.arrow.basilisk"));
 		}
 	}
 

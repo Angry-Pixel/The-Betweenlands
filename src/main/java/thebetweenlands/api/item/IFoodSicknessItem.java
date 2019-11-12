@@ -35,6 +35,6 @@ public interface IFoodSicknessItem {
 		if(advancedTooltips) {
 			debug = " (" + hatred + "/" + sickness.maxHatred + ")";
 		}
-		toolTip.add(I18n.format("tooltip.food_sickness.state." + sickness.name().toLowerCase()) + debug);
+		toolTip.add(I18n.format("tooltip.bl.food_sickness.state." + sickness.name().toLowerCase()) + debug);
 	}
 }

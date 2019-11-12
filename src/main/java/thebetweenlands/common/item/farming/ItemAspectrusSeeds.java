@@ -43,6 +43,6 @@ public class ItemAspectrusSeeds extends ItemPlantableSeeds {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.aspectrus_seeds.mist"), 0));
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.aspectrus_seeds.mist"), 0));
 	}
 }

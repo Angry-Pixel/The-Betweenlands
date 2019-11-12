@@ -50,7 +50,7 @@ public class ItemTooltipHandler {
 
 		CircleGemType circleGem = CircleGemHelper.getGem(stack);
 		if(circleGem != CircleGemType.NONE) {
-			toolTip.add(I18n.format("tooltip.circlegem." + circleGem.name));
+			toolTip.add(I18n.format("tooltip.bl.circlegem." + circleGem.name));
 		}
 
 		if(stack.getItem() instanceof IDecayFood) {
@@ -68,7 +68,7 @@ public class ItemTooltipHandler {
 			}
 
 			if(stack.getItem() instanceof IEquippable && ((IEquippable)stack.getItem()).canEquip(stack, player, player)) {
-				toolTip.add(I18n.format("tooltip.item.equippable"));
+				toolTip.add(I18n.format("tooltip.bl.item.equippable"));
 			}
 		}
 
@@ -79,32 +79,32 @@ public class ItemTooltipHandler {
 				AspectManager aspectManager = AspectManager.get(player.world);
 
 				if(!aspectManager.getStaticAspects(stack).isEmpty()) {
-					usedInMachines.add(I18n.format("tooltip.recipes.static_aspects"));
+					usedInMachines.add(I18n.format("tooltip.bl.recipes.static_aspects"));
 				}
 
 				if(!ItemAspectContainer.fromItem(stack, aspectManager).isEmpty()) {
-					usedInMachines.add(I18n.format("tooltip.recipes.aspects"));
+					usedInMachines.add(I18n.format("tooltip.bl.recipes.aspects"));
 				}
 			}
 			
 			if(!PestleAndMortarRecipe.getResult(stack).isEmpty()) {
-				usedInMachines.add(I18n.format("tooltip.recipes.mortar"));
+				usedInMachines.add(I18n.format("tooltip.bl.recipes.mortar"));
 			}
 
 			if(AnimatorRecipe.getRecipe(stack) != null) {
-				usedInMachines.add(I18n.format("tooltip.recipes.animator"));
+				usedInMachines.add(I18n.format("tooltip.bl.recipes.animator"));
 			}
 
 			IFluidHandler fluidHandler = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 			if(AbstractCenserRecipe.getRecipe(stack) != null || (fluidHandler != null && AbstractCenserRecipe.getRecipe(fluidHandler.drain(Integer.MAX_VALUE, false)) != null)) {
-				usedInMachines.add(I18n.format("tooltip.recipes.censer_primary"));
+				usedInMachines.add(I18n.format("tooltip.bl.recipes.censer_primary"));
 			}
 			if(AbstractCenserRecipe.getRecipeWithSecondaryInput(stack) != null) {
-				usedInMachines.add(I18n.format("tooltip.recipes.censer_secondary"));
+				usedInMachines.add(I18n.format("tooltip.bl.recipes.censer_secondary"));
 			}
 
 			if(!PurifierRecipe.getRecipeOutput(stack).isEmpty()) {
-				usedInMachines.add(I18n.format("tooltip.recipes.purifier"));
+				usedInMachines.add(I18n.format("tooltip.bl.recipes.purifier"));
 			}
 
 			ICompostBinRecipe compostRecipe = CompostRecipe.getCompostRecipe(stack);
@@ -113,11 +113,11 @@ public class ItemTooltipHandler {
 				if(event.getFlags().isAdvanced()) {
 					debug = " (T: " + COMPOST_AMOUNT_FORMAT.format(compostRecipe.getCompostingTime(stack) / 20.0F) + "s A: " + compostRecipe.getCompostAmount(stack) + ")";
 				}
-				usedInMachines.add(I18n.format("tooltip.recipes.compost_bin") + debug);
+				usedInMachines.add(I18n.format("tooltip.bl.recipes.compost_bin") + debug);
 			}
 
 			if(!usedInMachines.isEmpty()) {
-				toolTip.add(I18n.format("tooltip.recipes.used_in", usedInMachines.stream().collect(Collectors.joining(", "))));
+				toolTip.add(I18n.format("tooltip.bl.recipes.used_in", usedInMachines.stream().collect(Collectors.joining(", "))));
 			}
 		}
 	}
