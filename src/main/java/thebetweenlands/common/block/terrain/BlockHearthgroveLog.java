@@ -40,7 +40,7 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		List<String> strings = ItemTooltipHandler.splitTooltip(I18n.format("tooltip.hearthgrove_log"), 0);
+		List<String> strings = ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.hearthgrove_log"), 0);
 		if (stack.getMetadata() == 5 || stack.getMetadata() == 7)
 			strings.remove(strings.size() - 1);
 		tooltip.addAll(strings);

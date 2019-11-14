@@ -11,6 +11,7 @@ import net.minecraftforge.common.config.Config.RangeDouble;
 import net.minecraftforge.common.config.Config.RangeInt;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import thebetweenlands.common.config.properties.IntSetProperty;
+import thebetweenlands.common.config.properties.ItemDecayFoodProperty;
 import thebetweenlands.common.config.properties.ItemListProperty;
 import thebetweenlands.common.config.properties.PortalDimensionWhitelist;
 import thebetweenlands.common.config.properties.PortalTargetList;
@@ -106,13 +107,13 @@ public class BetweenlandsConfig {
 		};
 		@Ignore
 		public final StringSetProperty portalUnsafeBiomesSet = new StringSetProperty(() -> this.portalUnsafeBiomes);
-		
+
 		@Name("portal_biome_search_range")
 		@LangKey(LANG_PREFIX + "portal_biome_search_range")
 		@Comment("The biome search range used to find a suitable biome when a portal is generated. If you find that a suitable biome isn't found reliably enough this can be increased at the cost of taking more time to generate portals")
 		@RangeInt(min = 16, max = Integer.MAX_VALUE)
 		public int portalBiomeSearchRange = 256;
-		
+
 		@Name("generate_portal_in_end")
 		@LangKey(LANG_PREFIX + "generate_portal_in_end")
 		@Comment("Whether custom portals that teleport to the End should create a Portal Tree in the End")
@@ -142,7 +143,7 @@ public class BetweenlandsConfig {
 				+ "2: Early")
 		@RangeInt(min = 0, max = 2)
 		public int shaderPriority = 0;
-		
+
 		@Name("dimension_shader_only")
 		@LangKey(LANG_PREFIX + "dimension_shader_only")
 		@Comment("Whether the shaders should only be active in the Betweenlands dimension (if they are enabled)")
@@ -191,7 +192,7 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "use_food_sickness_outside_betweenlands")
 		@Comment("If true the food sickness system will be enabled outside the Betweenlands")
 		public boolean useFoodSicknessOutsideBetweenlands = false;
-		
+
 		@Name("reverse_rotten_food")
 		@LangKey(LANG_PREFIX + "reverse_rotten_food")
 		@Comment("Whether rotten food should turn back into normal food when leaving the dimension")
@@ -206,37 +207,51 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "use_decay")
 		@Comment("Whether the player decay mechanics should be active in the dimension")
 		public boolean useDecay = true;
-		
+
+		@Name("decay_dimension_list")
+		@LangKey(LANG_PREFIX + "decay_dimension_list")
+		@Comment("List of dimension IDs where decay should also be enabled if decay is enabled")
+		public int[] decayDimensionList = {};
+		@Ignore
+		public final IntSetProperty decayDimensionListSet = new IntSetProperty(() -> GENERAL.decayDimensionList);
+
+		@Name("decay_food_list")
+		@LangKey(LANG_PREFIX + "decay_food_list")
+		@Comment("A list of items that can heal decay. Syntax is \"modid:itemname:meta/decay/saturation\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] decayFoodListUnparsed = {};
+		@Ignore
+		public final ItemDecayFoodProperty decayFoodList = new ItemDecayFoodProperty(() -> GENERAL.decayFoodListUnparsed);
+
 		@Name("use_corrosion")
 		@LangKey(LANG_PREFIX + "use_corrosion")
 		@Comment("Whether the tool corrosion mechanics should be active in the dimension")
 		public boolean useCorrosion = true;
-		
+
 		@Name("use_tool_weakness")
 		@LangKey(LANG_PREFIX + "use_tool_weakness")
 		@Comment("Whether overworld tools should be weakened in the dimension")
 		public boolean useToolWeakness = true;
-		
+
 		@Name("use_torch_blacklist")
 		@LangKey(LANG_PREFIX + "use_torch_blacklist")
 		@Comment("Whether torches should turn into damp torches in the dimension")
 		public boolean useTorchBlacklist = true;
-		
+
 		@Name("use_fire_tool_blacklist")
 		@LangKey(LANG_PREFIX + "use_fire_tool_blacklist")
 		@Comment("Whether fire tools (e.g. Flint and Steel) should be blacklisted from working in the dimension")
 		public boolean useFireToolBlacklist = true;
-		
+
 		@Name("use_potion_blacklist")
 		@LangKey(LANG_PREFIX + "use_potion_blacklist")
 		@Comment("Whether potions should turn into tainted potions in the dimension")
 		public boolean usePotionBlacklist = true;
-		
+
 		@Name("use_fertilizer_blacklist")
 		@LangKey(LANG_PREFIX + "use_fertilizer_blacklist")
 		@Comment("Whether fertilizers (e.g. Bonemeal) should be blacklisted from working in the dimension")
 		public boolean useFertilizerBlacklist = true;
-		
+
 		@Name("caving_rope_indicator")
 		@LangKey(LANG_PREFIX + "caving_rope_indicator")
 		@Comment("Adds an indicator next to the crosshair that shows whether the player is connected to the caving rope and how much rope is left")
@@ -350,30 +365,30 @@ public class BetweenlandsConfig {
 		@Comment("After how many seconds caving rope should despawn after the player is no longer connected")
 		@RangeInt(min = 0, max = Integer.MAX_VALUE / 20)
 		public int cavingRopeDespawnTime = 1200;
-		
+
 		@Name("equipment_hotbar_side")
 		@LangKey(LANG_PREFIX + "equipment_hotbar_side")
 		@Comment("Change this to 1 or 0 to change on which side of the hotbar the equipment is shown")
 		@RangeInt(min = 0, max = 1)
 		public int equipmentHotbarSide = 0;
-		
+
 		@Name("equipment_visible")
 		@LangKey(LANG_PREFIX + "equipment_visible")
 		@Comment("Whether equipment should be shown on the HUD")
 		public boolean equipmentVisible = true;
-		
+
 		@Name("equipment_horziontal_spacing")
 		@LangKey(LANG_PREFIX + "equipment_horziontal_spacing")
 		@Comment("Horizontal spacing between equipment items")
 		@RangeInt(min = -32, max = 32)
 		public int equipmentHorizontalSpacing = 8;
-		
+
 		@Name("equipment_vertical_spacing")
 		@LangKey(LANG_PREFIX + "equipment_vertical_spacing")
 		@Comment("Vertical spacing between equipment items")
 		@RangeInt(min = -32, max = 32)
 		public int equipmentVerticalSpacing = -13;
-		
+
 		@Name("equipment_zone")
 		@LangKey(LANG_PREFIX + "equipment_zone")
 		@Comment("Zone in which the equipment items are shown on the HUD.\n"
@@ -388,17 +403,17 @@ public class BetweenlandsConfig {
 				+ "8: Center bottom")
 		@RangeInt(min = 0, max = 8)
 		public int equipmentZone = 0;
-		
+
 		@Name("equipment_zone_offset_x")
 		@LangKey(LANG_PREFIX + "equipment_zone_offset_x")
 		@Comment("X offset of the equipment items relative to the equipment zone")
 		public int equipmentOffsetX = 0;
-		
+
 		@Name("equipment_zone_offset_y")
 		@LangKey(LANG_PREFIX + "equipment_zone_offset_y")
 		@Comment("Y offset of the equipment items relative to the equipment zone")
 		public int equipmentOffsetY = 0;
-		
+
 		@Name("decay_bar_zone")
 		@LangKey(LANG_PREFIX + "decay_bar_zone")
 		@Comment("Zone in which the decay bar is shown on the HUD.\n"
@@ -413,39 +428,39 @@ public class BetweenlandsConfig {
 				+ "8: Center bottom")
 		@RangeInt(min = 0, max = 8)
 		public int decayBarZone = 0;
-		
+
 		@Name("decay_bar_zone_offset_x")
 		@LangKey(LANG_PREFIX + "decay_bar_zone_offset_x")
 		@Comment("X offset of the decay bar relative to the decay zone")
 		public int decayBarOffsetX = 0;
-		
+
 		@Name("decay_bar_zone_offset_y")
 		@LangKey(LANG_PREFIX + "decay_bar_zone_offset_y")
 		@Comment("Y offset of the decay bar relative to the decay zone")
 		public int decayBarOffsetY = 0;
-		
+
 		@Name("decay_percentage")
 		@LangKey(LANG_PREFIX + "decay_percentage")
 		@Comment("Whether the decay health reduction should be percentual")
 		public boolean decayPercentual = false;
-		
+
 		@Name("decay_min_health")
 		@LangKey(LANG_PREFIX + "decay_min_health")
 		@Comment("Minimum player health when absolute decay is applied")
 		@RangeDouble(min = 0, max = Float.MAX_VALUE)
 		public float decayMinHealth = 6.0f;
-		
+
 		@Name("decay_min_health_percent")
 		@LangKey(LANG_PREFIX + "decay_min_health_percent")
 		@Comment("Minimum player health percentage when percentual decay is applied")
 		@RangeDouble(min = 0, max = Float.MAX_VALUE)
 		public float decayMinHealthPercentage = 0.15f;
-		
+
 		@Name("item_usage_tooltip")
 		@LangKey(LANG_PREFIX + "item_usage_tooltip")
 		@Comment("Whether the item usage tooltip (\"Used In: Infuser, Compost Bin\" etc.) should be shown")
 		public boolean itemUsageTooltip = true;
-		
+
 		@Name("online_gallery")
 		@LangKey(LANG_PREFIX + "online_gallery")
 		@Comment("Whether the online fan art gallery picture frame should be enabled and be allowed to download fan art that has been manually picked by the developers to be shown in the gallery picture frame")
@@ -540,7 +555,7 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "debug_recipe_overrides")
 		@Comment("If true, enables the recipe overrides debug logger")
 		public boolean debugRecipeOverrides = false;
-		
+
 		@Name("dump_packed_textures")
 		@LangKey(LANG_PREFIX + "dump_packed_textures")
 		@Comment("If true, mod will dump the packed model textures on startup")

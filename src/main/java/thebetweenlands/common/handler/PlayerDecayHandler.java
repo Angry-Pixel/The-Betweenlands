@@ -22,20 +22,15 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import thebetweenlands.api.capability.IDecayCapability;
-import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.common.capability.decay.DecayStats;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.config.properties.ItemDecayFoodProperty.DecayFoodStats;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.common.registries.GameruleRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.MathUtils;
 
 public class PlayerDecayHandler {
 	public static final UUID DECAY_HEALTH_MODIFIER_ATTRIBUTE_UUID = UUID.fromString("033f5f10-67b3-42f3-8511-67a575fbb099");
-
-	public static boolean isDecayEnabled() {
-		return GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_DECAY) && BetweenlandsConfig.GENERAL.useDecay;
-	}
 
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
@@ -135,9 +130,7 @@ public class PlayerDecayHandler {
 							stats.addDecayAcceleration(decaySpeed);
 						}
 					}
-				}
-
-				if(isDecayEnabled()) {
+					
 					stats.onUpdate(player);
 				} else {
 					stats.setDecayLevel(0);
@@ -192,12 +185,14 @@ public class PlayerDecayHandler {
 	public static void onUseItemTick(LivingEntityUseItemEvent.Tick event) {
 		//Check if item will be consumed this tick
 		if(!event.getEntityLiving().getEntityWorld().isRemote && event.getDuration() <= 1) {
-			if (!event.getItem().isEmpty() && event.getItem().getItem() instanceof IDecayFood && event.getEntityLiving() instanceof EntityPlayer) {
-				EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-				IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-				if(cap != null) {
-					IDecayFood food = (IDecayFood) event.getItem().getItem();
-					cap.getDecayStats().addStats(-food.getDecayHealAmount(event.getItem()), food.getDecayHealSaturation(event.getItem()));
+			if (!event.getItem().isEmpty() && event.getEntityLiving() instanceof EntityPlayer) {
+				DecayFoodStats decayFoodStats = OverworldItemHandler.getDecayFoodStats(event.getItem());
+				if(decayFoodStats != null) {
+					EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+					IDecayCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+					if(cap != null) {
+						cap.getDecayStats().addStats(-decayFoodStats.decay, decayFoodStats.saturation);
+					}
 				}
 			}
 		}
@@ -207,7 +202,7 @@ public class PlayerDecayHandler {
 	public static void onStartUsingItem(LivingEntityUseItemEvent.Start event) {
 		if(!event.getItem().isEmpty() && event.getEntityLiving() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-			boolean isDecayFood = event.getItem().getItem() instanceof IDecayFood;
+			boolean isDecayFood = OverworldItemHandler.getDecayFoodStats(event.getItem()) != null;
 			if(isDecayFood) {
 				boolean canEatFood = player.getFoodStats().needFood() && event.getItem().getItem() instanceof ItemFood && ((ItemFood)event.getItem().getItem()).getHealAmount(event.getItem()) > 0;
 				boolean canEatDecayFood = false;

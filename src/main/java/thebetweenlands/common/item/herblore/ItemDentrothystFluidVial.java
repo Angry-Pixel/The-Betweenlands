@@ -40,7 +40,7 @@ public class ItemDentrothystFluidVial extends UniversalBucket implements ItemReg
 		@Nullable
 		@Override
 		public FluidStack getFluid() {
-			return ((ItemDentrothystFluidVial) container.getItem()).getFluid(container);
+			return container.getItem() != ItemRegistry.DENTROTHYST_VIAL ? ((ItemDentrothystFluidVial) container.getItem()).getFluid(container): null;
 		}
 
 		@Override

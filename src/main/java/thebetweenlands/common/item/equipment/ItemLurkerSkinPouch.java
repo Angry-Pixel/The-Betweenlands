@@ -121,10 +121,10 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable, IRenamable
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
         int slots = 9 + (stack.getItemDamage() * 9);
-        list.add(TextFormatting.GRAY + I18n.format("tooltip.lurker_skin_pouch.size", slots));
-        list.add(I18n.format("tooltip.lurker_skin_pouch.usage", KeyBindRegistry.OPEN_POUCH.getDisplayName()));
+        list.add(TextFormatting.GRAY + I18n.format("tooltip.bl.lurker_skin_pouch.size", slots));
+        list.add(I18n.format("tooltip.bl.lurker_skin_pouch.usage", KeyBindRegistry.OPEN_POUCH.getDisplayName()));
         if (stack.getItemDamage() < stack.getMaxDamage()) {
-            list.add(I18n.format("tooltip.lurker_skin_pouch.upgrade"));
+            list.add(I18n.format("tooltip.bl.lurker_skin_pouch.upgrade"));
         }
     }
 

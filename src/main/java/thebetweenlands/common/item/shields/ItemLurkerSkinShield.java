@@ -33,7 +33,7 @@ public class ItemLurkerSkinShield extends ItemBLShield {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.lurker_skin_shield"), 0));
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.lurker_skin_shield"), 0));
 	}
 
 	@Override

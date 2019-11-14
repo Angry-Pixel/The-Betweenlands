@@ -14,11 +14,11 @@ public class EntityAIHurtByTargetDruid extends EntityAIHurtByTarget {
 
 	@Override
 	protected boolean isSuitableTarget(EntityLivingBase target, boolean ignoreDisabledDamage) {
-		return super.isSuitableTarget(target, ignoreDisabledDamage) && target.onGround && druid.getAttackCounter() == 0;
+		return super.isSuitableTarget(target, ignoreDisabledDamage) && (target.onGround || target.isRiding()) && druid.getAttackCounter() == 0;
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && (druid.getAttackCounter() != 0 || (druid.getAttackTarget() != null && druid.getAttackTarget().onGround));
+		return super.shouldContinueExecuting() && (druid.getAttackCounter() != 0 || (druid.getAttackTarget() != null && (druid.getAttackTarget().onGround || druid.getAttackTarget().isRiding())));
 	}
 }

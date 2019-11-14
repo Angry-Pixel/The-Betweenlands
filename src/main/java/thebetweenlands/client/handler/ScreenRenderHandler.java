@@ -462,114 +462,112 @@ public class ScreenRenderHandler extends Gui {
 					}
 				}
 
-				if (PlayerDecayHandler.isDecayEnabled()) {
-					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
-					if(capability != null && capability.isDecayEnabled()) {
-						int startX = 0;
-						int startY = 0;
+				if(capability != null && capability.isDecayEnabled()) {
+					int startX = 0;
+					int startY = 0;
 
-						switch(BetweenlandsConfig.GENERAL.decayBarZone) {
-						default:
-						case 0:
-							startX = (width / 2) - (27 / 2) + 23;
-							startY = height - 49;
+					switch(BetweenlandsConfig.GENERAL.decayBarZone) {
+					default:
+					case 0:
+						startX = (width / 2) - (27 / 2) + 23;
+						startY = height - 49;
 
-							//Erebus compatibility
-							if (player.getEntityData().hasKey("antivenomDuration")) {
-								int duration = player.getEntityData().getInteger("antivenomDuration");
-								if (duration > 0) {
-									startY -= 12;
-								}
+						//Erebus compatibility
+						if (player.getEntityData().hasKey("antivenomDuration")) {
+							int duration = player.getEntityData().getInteger("antivenomDuration");
+							if (duration > 0) {
+								startY -= 12;
 							}
-
-							//TaN compatibility
-							if(TheBetweenlands.isToughAsNailsModInstalled) {
-								startY -= 10;
-							}
-
-							//Ridden entity hearts offset
-							Entity ridingEntity = player.getRidingEntity();
-							if(ridingEntity != null && ridingEntity instanceof EntityLivingBase) {
-								EntityLivingBase riddenEntity = (EntityLivingBase)ridingEntity;
-								float maxEntityHealth = riddenEntity.getMaxHealth();
-								int maxHealthHearts = (int)(maxEntityHealth + 0.5F) / 2;
-								if (maxHealthHearts > 30) {
-									maxHealthHearts = 30;
-								}
-								int guiOffsetY = 0;
-								while(maxHealthHearts > 0) {
-									int renderedHearts = Math.min(maxHealthHearts, 10);
-									maxHealthHearts -= renderedHearts;
-									guiOffsetY -= 10;
-								}
-								startY += guiOffsetY;
-							}
-
-							//Air bar offset
-							if(player.isInsideOfMaterial(Material.WATER)) {
-								startY -= 10;
-							}
-
-							break;
-						case 1:
-							startX = 0;
-							startY = 0;
-							break;
-						case 2:
-							startX = width;
-							startY = 0;
-							break;
-						case 3:
-							startX = width;
-							startY = height;
-							break;
-						case 4:
-							startX = 0;
-							startY = height;
-							break;
-						case 5:
-							startX = 0;
-							startY = height / 2;
-							break;
-						case 6:
-							startX = width / 2;
-							startY = 0;
-							break;
-						case 7:
-							startX = width;
-							startY = height / 2;
-							break;
-						case 8:
-							startX = width / 2;
-							startY = height;
-							break;
 						}
 
-						startX += BetweenlandsConfig.GENERAL.decayBarOffsetX;
-						startY += BetweenlandsConfig.GENERAL.decayBarOffsetY;
-
-						int decay = 20 - capability.getDecayStats().getDecayLevel();
-
-						Minecraft.getMinecraft().getTextureManager().bindTexture(DECAY_BAR_TEXTURE);
-
-						for (int i = 0; i < 10; i++) {
-							int offsetY = 0;
-
-							if (this.updateCounter % (decay * 3 + 1) == 0) 
-								offsetY += this.random.nextInt(3) - 1;
-
-							GlStateManager.enableBlend();
-							GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-							GlStateManager.color(1, 1, 1, 1);
-
-							drawTexturedModalRect(startX + 71 - i * 8, startY + offsetY, 18, 0, 9, 9);
-							if (i * 2 + 1 < decay) 
-								drawTexturedModalRect(startX + 71 - i * 8, startY + offsetY, 0, 0, 9, 9);
-
-							if (i * 2 + 1 == decay) 
-								drawTexturedModalRect(startX + 72 - i * 8, startY + offsetY, 9, 0, 9, 9);
+						//TaN compatibility
+						if(TheBetweenlands.isToughAsNailsModInstalled) {
+							startY -= 10;
 						}
+
+						//Ridden entity hearts offset
+						Entity ridingEntity = player.getRidingEntity();
+						if(ridingEntity != null && ridingEntity instanceof EntityLivingBase) {
+							EntityLivingBase riddenEntity = (EntityLivingBase)ridingEntity;
+							float maxEntityHealth = riddenEntity.getMaxHealth();
+							int maxHealthHearts = (int)(maxEntityHealth + 0.5F) / 2;
+							if (maxHealthHearts > 30) {
+								maxHealthHearts = 30;
+							}
+							int guiOffsetY = 0;
+							while(maxHealthHearts > 0) {
+								int renderedHearts = Math.min(maxHealthHearts, 10);
+								maxHealthHearts -= renderedHearts;
+								guiOffsetY -= 10;
+							}
+							startY += guiOffsetY;
+						}
+
+						//Air bar offset
+						if(player.isInsideOfMaterial(Material.WATER)) {
+							startY -= 10;
+						}
+
+						break;
+					case 1:
+						startX = 0;
+						startY = 0;
+						break;
+					case 2:
+						startX = width;
+						startY = 0;
+						break;
+					case 3:
+						startX = width;
+						startY = height;
+						break;
+					case 4:
+						startX = 0;
+						startY = height;
+						break;
+					case 5:
+						startX = 0;
+						startY = height / 2;
+						break;
+					case 6:
+						startX = width / 2;
+						startY = 0;
+						break;
+					case 7:
+						startX = width;
+						startY = height / 2;
+						break;
+					case 8:
+						startX = width / 2;
+						startY = height;
+						break;
+					}
+
+					startX += BetweenlandsConfig.GENERAL.decayBarOffsetX;
+					startY += BetweenlandsConfig.GENERAL.decayBarOffsetY;
+
+					int decay = 20 - capability.getDecayStats().getDecayLevel();
+
+					Minecraft.getMinecraft().getTextureManager().bindTexture(DECAY_BAR_TEXTURE);
+
+					for (int i = 0; i < 10; i++) {
+						int offsetY = 0;
+
+						if (this.updateCounter % (decay * 3 + 1) == 0) 
+							offsetY += this.random.nextInt(3) - 1;
+
+						GlStateManager.enableBlend();
+						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+						GlStateManager.color(1, 1, 1, 1);
+
+						drawTexturedModalRect(startX + 71 - i * 8, startY + offsetY, 18, 0, 9, 9);
+						if (i * 2 + 1 < decay) 
+							drawTexturedModalRect(startX + 71 - i * 8, startY + offsetY, 0, 0, 9, 9);
+
+						if (i * 2 + 1 == decay) 
+							drawTexturedModalRect(startX + 72 - i * 8, startY + offsetY, 9, 0, 9, 9);
 					}
 				}
 			}
@@ -633,7 +631,7 @@ public class ScreenRenderHandler extends Gui {
 			EntityPlayer player = mc.player;
 
 			if(player != null) {
-				this.renderDispersionRingOverlay(mc, player, false, event.getPartialTicks());
+				this.renderDispersionRingOverlay(mc, player, true, event.getPartialTicks());
 			}
 		}
 	}
@@ -652,9 +650,16 @@ public class ScreenRenderHandler extends Gui {
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 			GlStateManager.pushMatrix();
 
-			mc.entityRenderer.setupOverlayRendering();
+			//Same as mc.entityRenderer.setupOverlayRendering(); but without clearing depth
+			ScaledResolution scaledresolution = new ScaledResolution(mc);
+	        GlStateManager.matrixMode(GL11.GL_PROJECTION);
+	        GlStateManager.loadIdentity();
+	        GlStateManager.ortho(0.0D, scaledresolution.getScaledWidth_double(), scaledresolution.getScaledHeight_double(), 0.0D, 1000.0D, 3000.0D);
+	        GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+	        GlStateManager.loadIdentity();
+	        GlStateManager.translate(0.0F, 0.0F, -2000.0F);
 
-			this.renderDispersionRingOverlay(mc, player, true, event.getPartialTicks());
+			this.renderDispersionRingOverlay(mc, player, false, event.getPartialTicks());
 
 			GlStateManager.disableBlend();
 
@@ -666,7 +671,7 @@ public class ScreenRenderHandler extends Gui {
 		}
 	}
 
-	private void renderDispersionRingOverlay(Minecraft mc, EntityPlayer player, boolean untexturedQuadOnly, float partialTicks) {
+	private void renderDispersionRingOverlay(Minecraft mc, EntityPlayer player, boolean guiOverlay, float partialTicks) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		ScaledResolution res = new ScaledResolution(mc);
@@ -674,6 +679,7 @@ public class ScreenRenderHandler extends Gui {
 		GlStateManager.disableAlpha();
 		GlStateManager.disableTexture2D();
 		GlStateManager.depthMask(false);
+		GlStateManager.disableDepth();
 
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
@@ -689,7 +695,7 @@ public class ScreenRenderHandler extends Gui {
 
 				GlStateManager.color(0, 0, 0, alpha);
 
-				if(untexturedQuadOnly) {
+				if(!guiOverlay) {
 					bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 					bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), 0.0D).endVertex();
 					bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), 0.0D).endVertex();
@@ -736,6 +742,7 @@ public class ScreenRenderHandler extends Gui {
 					mainFbo.bindFramebuffer(true);
 
 					GlStateManager.disableDepth();
+					GlStateManager.depthMask(false);
 
 					GlStateManager.matrixMode(GL11.GL_PROJECTION);
 					GlStateManager.popMatrix();
@@ -835,28 +842,31 @@ public class ScreenRenderHandler extends Gui {
 			}
 		}
 
+		GlStateManager.depthMask(false);
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableAlpha();
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
-		float indicatorAlpha = (float)(this.prevDispersionIndicatorPercentage + (this.dispersionIndicatorPercentage - this.prevDispersionIndicatorPercentage) * partialTicks);
-
-		if(indicatorAlpha > 0.01F) {
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
-
-			GlStateManager.color(indicatorAlpha, indicatorAlpha, indicatorAlpha, indicatorAlpha);
-
-			//Indicator overlay
-			mc.getTextureManager().bindTexture(RING_OF_DISPERSION_INDICATOR_OVERLAY_TEXTURE);
-			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-			bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 1.0D).endVertex();
-			bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 1.0D).endVertex();
-			bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
-			bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
-			tessellator.draw();
-
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+		if(guiOverlay) {
+			float indicatorAlpha = (float)(this.prevDispersionIndicatorPercentage + (this.dispersionIndicatorPercentage - this.prevDispersionIndicatorPercentage) * partialTicks);
+	
+			if(indicatorAlpha > 0.01F) {
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.01F);
+	
+				GlStateManager.color(indicatorAlpha, indicatorAlpha, indicatorAlpha, indicatorAlpha);
+	
+				//Indicator overlay
+				mc.getTextureManager().bindTexture(RING_OF_DISPERSION_INDICATOR_OVERLAY_TEXTURE);
+				bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+				bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 1.0D).endVertex();
+				bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 1.0D).endVertex();
+				bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
+				bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
+				tessellator.draw();
+	
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			}
 		}
 
 		GlStateManager.color(1, 1, 1, 1);
@@ -864,6 +874,7 @@ public class ScreenRenderHandler extends Gui {
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableAlpha();
 		GlStateManager.depthMask(true);
+		GlStateManager.enableDepth();
 	}
 
 	protected void renderPortal(Minecraft mc, float timeInPortal, ScaledResolution scaledRes)

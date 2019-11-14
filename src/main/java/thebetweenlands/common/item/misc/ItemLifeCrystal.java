@@ -36,7 +36,7 @@ public class ItemLifeCrystal extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        tooltip.add(TranslationHelper.translateToLocal("tooltip.life_crystal.remaining", Math.round(100F - 100F / getMaxDamage() * getDamage(stack)) + "%"));
+        tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.life_crystal.remaining", Math.round(100F - 100F / getMaxDamage() * getDamage(stack)) + "%"));
     }
 
     @Override

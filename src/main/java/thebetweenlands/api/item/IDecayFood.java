@@ -37,6 +37,6 @@ public interface IDecayFood {
 	 */
 	@SideOnly(Side.CLIENT)
 	default void getDecayFoodTooltip(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flag) {
-		list.add(I18n.format("tooltip.decay_food", stack.getDisplayName()));
+		list.add(I18n.format("tooltip.bl.decay_food", stack.getDisplayName()));
 	}
 }

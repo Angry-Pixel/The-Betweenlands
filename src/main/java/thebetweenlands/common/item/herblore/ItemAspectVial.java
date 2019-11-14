@@ -148,7 +148,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IM
         if (world != null) {
             List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
             if (!itemAspects.isEmpty() && itemAspects.get(0).type == AspectRegistry.BYARIIS) {
-                tooltip.add(TranslationHelper.translateToLocal("tooltip.aspectvial.byariis.fuel"));
+                tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.aspectvial.byariis.fuel"));
             }
         }
     }

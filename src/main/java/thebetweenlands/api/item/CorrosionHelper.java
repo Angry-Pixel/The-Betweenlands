@@ -188,7 +188,7 @@ public class CorrosionHelper {
 			ICorrodible corrodible = (ICorrodible) stack.getItem();
 			
 			if(isCorrosionEnabled()) {
-				StringBuilder corrosionInfo = new StringBuilder("tooltip.corrosion.");
+				StringBuilder corrosionInfo = new StringBuilder("tooltip.bl.corrosion.");
 				corrosionInfo.append(getCorrosionStage(stack));
 				corrosionInfo.replace(0, corrosionInfo.length(), I18n.format(corrosionInfo.toString()));
 				if (advancedItemTooltips) {
@@ -201,7 +201,7 @@ public class CorrosionHelper {
 
 			int coating = corrodible.getCoating(stack);
 			if(coating > 0 || advancedItemTooltips) {
-				StringBuilder coatingInfo = new StringBuilder("tooltip.coated.");
+				StringBuilder coatingInfo = new StringBuilder("tooltip.bl.coated.");
 				coatingInfo.append(getCoatingStage(stack));
 				coatingInfo.replace(0, coatingInfo.length(), I18n.format(coatingInfo.toString()));
 				if (advancedItemTooltips) {

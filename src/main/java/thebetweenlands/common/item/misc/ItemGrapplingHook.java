@@ -109,12 +109,12 @@ public class ItemGrapplingHook extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		int maxNodes = MIN_GRAPPLING_HOOK_LENGTH + stack.getItemDamage();
-		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.grappling_hook", maxNodes, maxNodes * 2, maxNodes / 2, maxNodes), 0));
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.grappling_hook", maxNodes, maxNodes * 2, maxNodes / 2, maxNodes), 0));
 		if (stack.getItemDamage() < stack.getMaxDamage()) {
-			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.grappling_hook.upgrade"), 0));
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.grappling_hook.upgrade"), 0));
 		}
 		if (GuiScreen.isShiftKeyDown()) {
-			String toolTip = I18n.format("tooltip.grappling_hook.more_info", 
+			String toolTip = I18n.format("tooltip.bl.grappling_hook.more_info",
 					Minecraft.getMinecraft().gameSettings.keyBindJump.getDisplayName(),
 					Minecraft.getMinecraft().gameSettings.keyBindForward.getDisplayName(),
 					Minecraft.getMinecraft().gameSettings.keyBindBack.getDisplayName(),
@@ -122,7 +122,7 @@ public class ItemGrapplingHook extends Item {
 					Minecraft.getMinecraft().gameSettings.keyBindRight.getDisplayName());
 			tooltip.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
 		} else {
-			tooltip.add(I18n.format("tooltip.press.shift"));
+			tooltip.add(I18n.format("tooltip.bl.press.shift"));
 		}
 	}
 
