@@ -21,12 +21,12 @@ import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.api.item.IFoodSicknessItem;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
-import thebetweenlands.client.render.model.tile.ModelPestleAndMortar;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.handler.FoodSicknessHandler;
+import thebetweenlands.common.handler.OverworldItemHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.recipe.censer.AbstractCenserRecipe;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
@@ -55,6 +55,8 @@ public class ItemTooltipHandler {
 
 		if(stack.getItem() instanceof IDecayFood) {
 			((IDecayFood)stack.getItem()).getDecayFoodTooltip(stack, player != null ? player.world : null, toolTip, event.getFlags());
+		} else if(OverworldItemHandler.getDecayFoodStats(stack) != null) {
+			toolTip.add(I18n.format("tooltip.bl.decay_food", stack.getDisplayName()));
 		}
 
 		if(player != null) {

@@ -12,6 +12,7 @@ import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.GameruleRegistry;
 
 public class DecayEntityCapability extends EntityCapability<DecayEntityCapability, IDecayCapability, EntityPlayer> implements IDecayCapability, ISerializableCapability {
 	@Override
@@ -74,8 +75,10 @@ public class DecayEntityCapability extends EntityCapability<DecayEntityCapabilit
 	
 	@Override
 	public boolean isDecayEnabled() {
-		return this.getEntity().getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL && 
-				this.getEntity().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && 
+		return this.getEntity().getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL &&
+				GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_DECAY) &&
+				BetweenlandsConfig.GENERAL.useDecay &&
+				(this.getEntity().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId || BetweenlandsConfig.GENERAL.decayDimensionListSet.contains(this.getEntity().dimension)) && 
 				!this.getEntity().capabilities.isCreativeMode && 
 				!this.getEntity().capabilities.disableDamage;
 	}

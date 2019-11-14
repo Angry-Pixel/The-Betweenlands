@@ -45,7 +45,7 @@ public class ConfigHelper {
 
 			loadedConfig = newConfig;
 
-			initProperties();
+			initProperties(false);
 		}
 	}
 
@@ -100,7 +100,7 @@ public class ConfigHelper {
 
 		loadedConfig = newConfig;
 
-		initProperties();
+		initProperties(false);
 
 		try {
 			FileUtils.writeStringToFile(versionFile, ModInfo.CONFIG_VERSION, (Charset) null, false);
@@ -125,11 +125,15 @@ public class ConfigHelper {
 		}
 	}
 
-	private static void initProperties() {
-		initProperties(BetweenlandsConfig.class, null);
+	public static void postInit() {
+		initProperties(true);
+	}
+	
+	private static void initProperties(boolean post) {
+		initProperties(BetweenlandsConfig.class, null, post);
 	}
 
-	private static void initProperties(Class<?> cls, @Nullable Object inst) {
+	private static void initProperties(Class<?> cls, @Nullable Object inst, boolean post) {
 		for(Field f : cls.getDeclaredFields()) {
 			if(!Modifier.isPublic(f.getModifiers())) {
 				continue;
@@ -143,7 +147,11 @@ public class ConfigHelper {
 					ConfigProperty property = (ConfigProperty) f.get(inst);
 
 					if(property != null) {
-						property.init();
+						if(!post) {
+							property.init();
+						} else {
+							property.postInitGame();
+						}
 					}
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					throw new RuntimeException(e);
@@ -156,7 +164,7 @@ public class ConfigHelper {
 				try {
 					Object obj = f.get(inst);
 					if(obj != null) {
-						initProperties(obj.getClass(), obj);
+						initProperties(obj.getClass(), obj, post);
 					}
 				} catch (IllegalArgumentException | IllegalAccessException e) {
 					throw new RuntimeException(e);
