@@ -633,7 +633,7 @@ public class ScreenRenderHandler extends Gui {
 			EntityPlayer player = mc.player;
 
 			if(player != null) {
-				this.renderDispersionRingOverlay(mc, player, false, event.getPartialTicks());
+				this.renderDispersionRingOverlay(mc, player, true, event.getPartialTicks());
 			}
 		}
 	}
@@ -652,9 +652,16 @@ public class ScreenRenderHandler extends Gui {
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 			GlStateManager.pushMatrix();
 
-			mc.entityRenderer.setupOverlayRendering();
+			//Same as mc.entityRenderer.setupOverlayRendering(); but without clearing depth
+			ScaledResolution scaledresolution = new ScaledResolution(mc);
+	        GlStateManager.matrixMode(GL11.GL_PROJECTION);
+	        GlStateManager.loadIdentity();
+	        GlStateManager.ortho(0.0D, scaledresolution.getScaledWidth_double(), scaledresolution.getScaledHeight_double(), 0.0D, 1000.0D, 3000.0D);
+	        GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+	        GlStateManager.loadIdentity();
+	        GlStateManager.translate(0.0F, 0.0F, -2000.0F);
 
-			this.renderDispersionRingOverlay(mc, player, true, event.getPartialTicks());
+			this.renderDispersionRingOverlay(mc, player, false, event.getPartialTicks());
 
 			GlStateManager.disableBlend();
 
@@ -666,7 +673,7 @@ public class ScreenRenderHandler extends Gui {
 		}
 	}
 
-	private void renderDispersionRingOverlay(Minecraft mc, EntityPlayer player, boolean untexturedQuadOnly, float partialTicks) {
+	private void renderDispersionRingOverlay(Minecraft mc, EntityPlayer player, boolean guiOverlay, float partialTicks) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		ScaledResolution res = new ScaledResolution(mc);
@@ -674,6 +681,7 @@ public class ScreenRenderHandler extends Gui {
 		GlStateManager.disableAlpha();
 		GlStateManager.disableTexture2D();
 		GlStateManager.depthMask(false);
+		GlStateManager.disableDepth();
 
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
@@ -689,7 +697,7 @@ public class ScreenRenderHandler extends Gui {
 
 				GlStateManager.color(0, 0, 0, alpha);
 
-				if(untexturedQuadOnly) {
+				if(!guiOverlay) {
 					bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 					bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), 0.0D).endVertex();
 					bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), 0.0D).endVertex();
@@ -736,6 +744,7 @@ public class ScreenRenderHandler extends Gui {
 					mainFbo.bindFramebuffer(true);
 
 					GlStateManager.disableDepth();
+					GlStateManager.depthMask(false);
 
 					GlStateManager.matrixMode(GL11.GL_PROJECTION);
 					GlStateManager.popMatrix();
@@ -835,28 +844,31 @@ public class ScreenRenderHandler extends Gui {
 			}
 		}
 
+		GlStateManager.depthMask(false);
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableAlpha();
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 
-		float indicatorAlpha = (float)(this.prevDispersionIndicatorPercentage + (this.dispersionIndicatorPercentage - this.prevDispersionIndicatorPercentage) * partialTicks);
-
-		if(indicatorAlpha > 0.01F) {
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
-
-			GlStateManager.color(indicatorAlpha, indicatorAlpha, indicatorAlpha, indicatorAlpha);
-
-			//Indicator overlay
-			mc.getTextureManager().bindTexture(RING_OF_DISPERSION_INDICATOR_OVERLAY_TEXTURE);
-			bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-			bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 1.0D).endVertex();
-			bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 1.0D).endVertex();
-			bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
-			bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
-			tessellator.draw();
-
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+		if(guiOverlay) {
+			float indicatorAlpha = (float)(this.prevDispersionIndicatorPercentage + (this.dispersionIndicatorPercentage - this.prevDispersionIndicatorPercentage) * partialTicks);
+	
+			if(indicatorAlpha > 0.01F) {
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.01F);
+	
+				GlStateManager.color(indicatorAlpha, indicatorAlpha, indicatorAlpha, indicatorAlpha);
+	
+				//Indicator overlay
+				mc.getTextureManager().bindTexture(RING_OF_DISPERSION_INDICATOR_OVERLAY_TEXTURE);
+				bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+				bufferbuilder.pos(0.0D, (double)res.getScaledHeight_double(), -90.0D).tex(0.0D, 1.0D).endVertex();
+				bufferbuilder.pos((double)res.getScaledWidth_double(), (double)res.getScaledHeight_double(), -90.0D).tex(1.0D, 1.0D).endVertex();
+				bufferbuilder.pos((double)res.getScaledWidth_double(), 0.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
+				bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
+				tessellator.draw();
+	
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			}
 		}
 
 		GlStateManager.color(1, 1, 1, 1);
@@ -864,6 +876,7 @@ public class ScreenRenderHandler extends Gui {
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableAlpha();
 		GlStateManager.depthMask(true);
+		GlStateManager.enableDepth();
 	}
 
 	protected void renderPortal(Minecraft mc, float timeInPortal, ScaledResolution scaledRes)
