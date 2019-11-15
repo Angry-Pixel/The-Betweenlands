@@ -102,7 +102,7 @@ public class EntityDarkDruid extends EntityMob {
                 if (this.attackDelayCounter <= 0 || this.attackCounter > 0) {
                     if (getEntitySenses().canSee(getAttackTarget())) {
                         if (attackCounter == 0) {
-                            if (getAttackTarget().onGround) {
+                            if (getAttackTarget().onGround && !getAttackTarget().isRiding()) {
                                 attackCounter++;
                                 if (!world.isRemote) {
                                     tasks.removeTask(meleeAI);
@@ -119,7 +119,9 @@ public class EntityDarkDruid extends EntityMob {
                             attackCounter = 0;
                             stopCasting();
                             if (!world.isRemote) {
-                                castSpell(getAttackTarget());
+                                if (!getAttackTarget().isRiding()) {
+                                    castSpell(getAttackTarget());
+                                }
                                 tasks.addTask(2, meleeAI);
                             }
                         }

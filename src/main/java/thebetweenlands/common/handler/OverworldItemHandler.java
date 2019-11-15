@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
@@ -41,8 +43,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.ArmSwingSpeedEvent;
+import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.common.block.misc.BlockDampTorch;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.config.properties.ItemDecayFoodProperty.DecayFoodStats;
 import thebetweenlands.common.item.tools.ItemBLAxe;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShovel;
@@ -471,5 +475,13 @@ public class OverworldItemHandler {
 			}
 		}
 		return false;
+	}
+	
+	@Nullable
+	public static DecayFoodStats getDecayFoodStats(ItemStack stack) {
+		if(stack.getItem() instanceof IDecayFood) {
+			return new DecayFoodStats(((IDecayFood) stack.getItem()).getDecayHealAmount(stack), ((IDecayFood) stack.getItem()).getDecayHealSaturation(stack));
+		}
+		return BetweenlandsConfig.GENERAL.decayFoodList.getStats(stack);
 	}
 }

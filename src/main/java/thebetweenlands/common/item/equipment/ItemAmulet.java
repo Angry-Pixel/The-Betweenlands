@@ -282,12 +282,12 @@ public class ItemAmulet extends Item implements IEquippable {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
-		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.amulet." + CircleGemHelper.getGem(stack).name), 0));
+		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.amulet." + CircleGemHelper.getGem(stack).name), 0));
 		if(CircleGemHelper.getGem(stack) != CircleGemType.NONE) {
 			if (GuiScreen.isShiftKeyDown()) {
-				list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.amulet.usage", KeyBindRegistry.RADIAL_MENU.getDisplayName(), Minecraft.getMinecraft().gameSettings.keyBindUseItem.getDisplayName()), 1));
+				list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.amulet.usage", KeyBindRegistry.RADIAL_MENU.getDisplayName(), Minecraft.getMinecraft().gameSettings.keyBindUseItem.getDisplayName()), 1));
 			} else {
-				list.add(I18n.format("tooltip.press.shift"));
+				list.add(I18n.format("tooltip.bl.press.shift"));
 			}
 		}
 	}

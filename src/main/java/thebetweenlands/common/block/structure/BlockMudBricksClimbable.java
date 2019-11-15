@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -47,7 +46,7 @@ public class BlockMudBricksClimbable extends BasicBlock {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		switch ((EnumFacing) state.getValue(FACING)) {
+		switch (state.getValue(FACING)) {
 		case NORTH:
 			return LADDER_NORTH_AABB;
 		case SOUTH:
@@ -63,20 +62,20 @@ public class BlockMudBricksClimbable extends BasicBlock {
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean whatIsThis) {
 		state = state.getActualState(worldIn, pos);
-		switch ((EnumFacing) state.getValue(FACING)) {
-		default:
-		case EAST:
-			addCollisionBoxToList(pos, entityBox, collidingBoxes, LADDER_EAST_AABB);
-			break;
-		case WEST:
-			addCollisionBoxToList(pos, entityBox, collidingBoxes, LADDER_WEST_AABB);
-			break;
-		case SOUTH:
-			addCollisionBoxToList(pos, entityBox, collidingBoxes, LADDER_SOUTH_AABB);
-			break;
-		case NORTH:
-			addCollisionBoxToList(pos, entityBox, collidingBoxes, LADDER_NORTH_AABB);
-			break;
+		switch (state.getValue(FACING)) {
+			default:
+			case EAST:
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, LADDER_EAST_AABB);
+				break;
+			case WEST:
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, LADDER_WEST_AABB);
+				break;
+			case SOUTH:
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, LADDER_SOUTH_AABB);
+				break;
+			case NORTH:
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, LADDER_NORTH_AABB);
+				break;
 		}
 	}
 
@@ -108,13 +107,14 @@ public class BlockMudBricksClimbable extends BasicBlock {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta));
+		EnumFacing facing = EnumFacing.byIndex(meta); // Using this instead of 'byHorizontalIndex' because the ids don't match and previous was release
+		return getDefaultState().withProperty(FACING, facing.getAxis().isHorizontal() ? facing: EnumFacing.NORTH);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
-		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();
+		meta = meta | state.getValue(FACING).getIndex();
 		return meta;
 	}
 
@@ -125,17 +125,17 @@ public class BlockMudBricksClimbable extends BasicBlock {
 
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
-		return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
+		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
 	}
 
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-		return state.withRotation(mirrorIn.toRotation((EnumFacing) state.getValue(FACING)));
+		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { FACING });
+		return new BlockStateContainer(this, FACING);
 	}
 
 	@Override

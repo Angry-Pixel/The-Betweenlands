@@ -28,7 +28,7 @@ public class ItemSyrmoriteBucketSolidRubber extends Item {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(TranslationHelper.translateToLocal("tooltip.rubber_bucket"));
+		tooltip.add(TranslationHelper.translateToLocal("tooltip.bl.rubber_bucket"));
 	}
 
 	@Override

@@ -17,12 +17,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
-import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.api.item.IFoodSicknessItem;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.decay.DecayStats;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.config.properties.ItemDecayFoodProperty.DecayFoodStats;
 import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.GameruleRegistry;
@@ -124,10 +124,11 @@ public class FoodSicknessHandler {
 							}
 						}
 
-						if(itemStack.getItem() instanceof IDecayFood) {
+						DecayFoodStats decayFoodStats = OverworldItemHandler.getDecayFoodStats(itemStack);
+						if(decayFoodStats != null) {
 							IDecayCapability decayCap = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 							if(decayCap != null) {
-								int decayLevel = ((IDecayFood) itemStack.getItem()).getDecayHealAmount(itemStack);
+								int decayLevel = decayFoodStats.decay;
 								DecayStats decayStats = decayCap.getDecayStats();
 								double decayLoss = 1.0D / 3.0D * 2.0;
 

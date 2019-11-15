@@ -26,7 +26,7 @@ public class ItemDentrothystShield extends ItemBLShield {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.dentrothyst_shield"), 0));
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.dentrothyst_shield"), 0));
 	}
 
 	@SubscribeEvent

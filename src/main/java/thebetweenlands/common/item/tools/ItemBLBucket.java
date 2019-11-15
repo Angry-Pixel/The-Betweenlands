@@ -297,7 +297,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         final FluidStack fluidStack = getFluid(stack);
         if (fluidStack == null)
-            tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bl_bucket"), 0));
+            tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bl.bl_bucket"), 0));
     }
 
     public ItemStack getEmpty(ItemStack stack) {

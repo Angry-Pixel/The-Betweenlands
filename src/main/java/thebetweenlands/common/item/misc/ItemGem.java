@@ -30,6 +30,6 @@ public class ItemGem extends Item {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
-		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.gem." + this.type.name), 0));
+		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.gem." + this.type.name), 0));
 	}
 }

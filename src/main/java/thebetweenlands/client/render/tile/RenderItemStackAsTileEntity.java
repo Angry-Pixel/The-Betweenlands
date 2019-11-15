@@ -54,11 +54,11 @@ public class RenderItemStackAsTileEntity extends TileEntityItemStackRenderer {
 	@Override
 	public void renderByItem(ItemStack stack, float partialTicks) {
 		if(this.renderer != null) {
-			this.renderer.render(null, 0, 0, 0, partialTicks, 0, 1);
+			this.renderer.render(null, 0, 0, 0, partialTicks, -1, 1);
 		} else if(this.map != null) {
 			TileEntitySpecialRenderer<?> renderer = this.map.get(stack.getMetadata());
 			if(renderer != null) {
-				renderer.render(null, 0, 0, 0, partialTicks, 0, 1);
+				renderer.render(null, 0, 0, 0, partialTicks, -1, 1);
 			}
 		}
 		

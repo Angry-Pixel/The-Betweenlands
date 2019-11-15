@@ -129,7 +129,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
     
     @Override
     public ITextComponent getDisplayName() {
-        return (ITextComponent)(this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName(), new Object[0]));
+        return this.hasCustomName() ? new TextComponentString(this.getName()) : new TextComponentTranslation(this.getName());
     }
 
 	@Override
@@ -153,9 +153,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	}
 
 	@Override
-	public void setField(int id, int value) {
-
-	}
+	public void setField(int id, int value) {}
 
 	@Override
 	public int getFieldCount() {
@@ -175,12 +173,10 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
-	}
+	public void openInventory(EntityPlayer player) {}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
-	}
+	public void closeInventory(EntityPlayer player) {}
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {

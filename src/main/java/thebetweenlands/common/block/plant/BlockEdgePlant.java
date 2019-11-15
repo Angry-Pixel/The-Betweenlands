@@ -1,24 +1,12 @@
 package thebetweenlands.common.block.plant;
 
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import com.google.common.collect.ImmutableList;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
@@ -28,13 +16,14 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.IShearable;
+import net.minecraft.world.biome.BiomeColorHelper;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.block.SoilHelper;
-import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+
+import java.util.Random;
 
 public class BlockEdgePlant extends BlockSludgeDungeonPlant implements ICustomItemBlock {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
@@ -54,18 +43,14 @@ public class BlockEdgePlant extends BlockSludgeDungeonPlant implements ICustomIt
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		switch (state.getValue(FACING)) {
-		case DOWN:
-		case UP:
-		case NORTH:
-			return PLANT_AABB_NORTH;
-		case SOUTH:
-			return PLANT_AABB_SOUTH;
-		case EAST:
-			return PLANT_AABB_EAST;
-		case WEST:
-			return PLANT_AABB_WEST;
-		default:
-			return PLANT_AABB_NORTH;
+			case SOUTH:
+				return PLANT_AABB_SOUTH;
+			case EAST:
+				return PLANT_AABB_EAST;
+			case WEST:
+				return PLANT_AABB_WEST;
+			default:
+				return PLANT_AABB_NORTH;
 		}
 	}
 
@@ -138,7 +123,12 @@ public class BlockEdgePlant extends BlockSludgeDungeonPlant implements ICustomIt
 	public void spreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
 		world.setBlockState(targetPos, this.getDefaultState().withProperty(FACING, state.getValue(FACING)));
 	}
-	
+
+	@Override
+	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerFoliage.getFoliageColorBasic();
+	}
+
 	@Override
 	public EnumOffsetType getOffsetType() {
 		return EnumOffsetType.NONE;

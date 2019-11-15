@@ -75,6 +75,6 @@ public class ItemCavingRope extends Item {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.caving_rope", KeyBindRegistry.CONNECT_CAVING_ROPE.getDisplayName(), StringUtils.ticksToElapsedTime(BetweenlandsConfig.GENERAL.cavingRopeDespawnTime * 20)), 0));
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.caving_rope", KeyBindRegistry.CONNECT_CAVING_ROPE.getDisplayName(), StringUtils.ticksToElapsedTime(BetweenlandsConfig.GENERAL.cavingRopeDespawnTime * 20)), 0));
 	}
 }

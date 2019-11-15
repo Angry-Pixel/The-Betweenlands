@@ -193,6 +193,8 @@ public class TheBetweenlands {
 			}
 			System.out.println("==================================================");
 		}*/
+		
+		ConfigHelper.postInit();
 	}
 
 	@EventHandler

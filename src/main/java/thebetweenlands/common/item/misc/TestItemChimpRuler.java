@@ -43,9 +43,9 @@ public class TestItemChimpRuler extends Item {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flag) {
 		if (hasTag(stack) && stack.getTagCompound().hasKey("homeX")) {
-			list.add(TextFormatting.YELLOW + new TextComponentTranslation("tooltip.chimp_ruler.homex", stack.getTagCompound().getInteger("homeX")).getFormattedText());
-			list.add(TextFormatting.YELLOW + new TextComponentTranslation("tooltip.chimp_ruler.homey", stack.getTagCompound().getInteger("homeY")).getFormattedText());
-			list.add(TextFormatting.YELLOW + new TextComponentTranslation("tooltip.chimp_ruler.homez", stack.getTagCompound().getInteger("homeZ")).getFormattedText());
+			list.add(TextFormatting.YELLOW + new TextComponentTranslation("tooltip.bl.chimp_ruler.homex", stack.getTagCompound().getInteger("homeX")).getFormattedText());
+			list.add(TextFormatting.YELLOW + new TextComponentTranslation("tooltip.bl.chimp_ruler.homey", stack.getTagCompound().getInteger("homeY")).getFormattedText());
+			list.add(TextFormatting.YELLOW + new TextComponentTranslation("tooltip.bl.chimp_ruler.homez", stack.getTagCompound().getInteger("homeZ")).getFormattedText());
 		}
 	}
 

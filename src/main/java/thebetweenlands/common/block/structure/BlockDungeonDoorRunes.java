@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockFaceShape;
@@ -86,14 +85,15 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return getDefaultState().withProperty(FACING, EnumFacing.byIndex(meta & 0b111)).withProperty(INVISIBLE, Boolean.valueOf((meta & 8) > 0));
+		EnumFacing facing = EnumFacing.byIndex(meta & 0b111); // Using this instead of 'byHorizontalIndex' because the ids don't match and previous was release
+		return getDefaultState().withProperty(FACING, facing.getAxis().isHorizontal() ? facing: EnumFacing.NORTH).withProperty(INVISIBLE, (meta & 8) > 0);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int meta = 0;
-		meta = meta | ((EnumFacing) state.getValue(FACING)).getIndex();
-		if (((Boolean) state.getValue(INVISIBLE)).booleanValue())
+		meta = meta | state.getValue(FACING).getIndex();
+		if (state.getValue(INVISIBLE))
 			meta |= 8;
 		return meta;
 	}
@@ -105,24 +105,24 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
-		return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
+		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
 	}
 
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-		return state.withRotation(mirrorIn.toRotation((EnumFacing) state.getValue(FACING)));
+		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {FACING, INVISIBLE});
+		return new BlockStateContainer(this, FACING, INVISIBLE);
 	}
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		if (!state.getValue(INVISIBLE)) {
 			TileEntityDungeonDoorRunes tile = getTileEntity(world, pos);
-			if (tile instanceof TileEntityDungeonDoorRunes) {
+			if (tile != null) {
 				tile.breakAllDoorBlocks(state, state.getValue(FACING), false, true);
 			}
 		}
@@ -218,6 +218,6 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 
 	@Override
 	public void setStateMapper(Builder builder) {
-		builder.ignore(new IProperty[] {INVISIBLE}).build();
+		builder.ignore(INVISIBLE).build();
 	}
 }

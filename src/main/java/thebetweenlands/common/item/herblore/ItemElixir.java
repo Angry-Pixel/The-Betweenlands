@@ -299,7 +299,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 
 
 
-		boolean hasEffectDescription = I18n.canTranslate("tooltip." + elixirEffect.getEffectName() + ".effect");
+		boolean hasEffectDescription = I18n.canTranslate("tooltip.bl." + elixirEffect.getEffectName() + ".effect");
 
 		if (!modifiers.isEmpty() || hasEffectDescription) {
 			tooltip.add("");

@@ -1057,7 +1057,6 @@ tooltip.bl.recipes.censer_secondary=香炉(セカンダリ)
 tooltip.bl.recipes.purifier=浄化槽
 tooltip.bl.recipes.mortar=乳鉢
 
-
 # Chat
 chat.foodSickness.fine.0=ああ、爽快だった
 chat.foodSickness.fine.1=ごちそうさま, 何か違う食べ物だ
@@ -1543,8 +1542,7 @@ manual.item.thebetweenlands.bl.elixir.decay.description=<scale:0.75>腐敗のエ
 manual.item.thebetweenlands.bl.elixir.draining.description=<scale:0.85>衰弱のエリクサーは 飲むと体を喰らいつくし, 時間経過と共に体力を消耗します。<nl>このエリクサーを作成するには, Yeowynn, Ordaniis, そしてByariisのアスペクトを 組み合わせる必要があります。<nl>Yeowynnを使うほど, エリクサーの効果は強くなります。 Ordaniisを使うほど, 効果が長く続くようになります。<nl>Byariisを除外すると, エリクサーの真の性質が表れ, 時間経過とともに体力が回復する, 癒しのエリクサーに反転します。</scale>
 manual.item.thebetweenlands.bl.elixir.lumbering.description=<scale:0.85>重々しいエリクサーは 筋肉を無気力にし, 飲んだ者の運動速度を低下させます。<nl>このエリクサーを作成するには, Azuwynn, Ordaniis, Yunugaz, そしてByariisのアスペクトを 組み合わせる必要があります。<nl>Yunugazを使うほど, エリクサーの効果は強くなります。 Ordaniisを使うほど, 効果が長く続くようになります。<nl>Byariisを除外すると, エリクサーの真の性質が表れ, 飲んだ者の移動速度が向上する 俊足のエリクサーに反転します。</scale>
 manual.item.thebetweenlands.bl.elixir.weakness.description=<scale:0.8>弱体化のエリクサーは 筋肉を弱体化させ, 攻撃時のダメージ量を低下させます。<nl>このエリクサーを作成するには Azuwynn, Ordaniis, そしてByariisのアスペクトを組み合わせる必要があります。<nl>Azuwynnを使うほど, エリクサーの効果は強くなります。Ordaniisを使うほど, 効果が長く続くようになります。<nl>Byariisを除外すると, エリクサーの真の性質が表れ ダメージ量を増加させる 力のエリクサーに反転します。</scale>
-manual.item.thebetweenlands.bl.elixir.unclouded.description=<scale:0.75>曇りないドラフトは 霧に包まれた心を晴れさせ, 目の前の霧が消えたかのように, 濃い霧の中を見ることが できるようにします。<nl>このドラフトを作成するには, Dayuniis, Freiwynn, Geoliirgaz, Ordaniis, そしてYunugazのアスペクトを 組み合わせる必要があります。<nl>Geoliirgazを使うほど, ドラフトの効果は強くなります。Dayuniisを使うほど, 効果が長く続くようになります。<nl>Byariisを追加すると, 周囲に非常に濃い霧の幻覚を 生させる,
-霧に包まれた心のドラフトに反転します。</scale>
+manual.item.thebetweenlands.bl.elixir.unclouded.description=<scale:0.75>曇りないドラフトは 霧に包まれた心を晴れさせ, 目の前の霧が消えたかのように, 濃い霧の中を見ることが できるようにします。<nl>このドラフトを作成するには, Dayuniis, Freiwynn, Geoliirgaz, Ordaniis, そしてYunugazのアスペクトを 組み合わせる必要があります。<nl>Geoliirgazを使うほど, ドラフトの効果は強くなります。Dayuniisを使うほど, 効果が長く続くようになります。<nl>Byariisを追加すると, 周囲に非常に濃い霧の幻覚を 生させる,霧に包まれた心のドラフトに反転します。</scale>
 manual.item.thebetweenlands.bl.elixir.lightweight.description=<scale:0.75>軽量のドラフトは 奇妙な無重力感をもたらし, まるで硬い地面の様に水の上を ゆっくり歩けるようにします。<nl>このドラフトを作成するには, Azuwynn, Byrginaz, Yunugaz, Yihinren, そしてGeoliirgazのアスペクトを 組み合わせる必要があります。<nl>Yunugazを使うほど, ドラフトの効果は強くなります。 Yihinrenを使うほど, 効果が長く続くようになります。<nl>Byariisを追加すると, ドラフトの性質が損なわれ, 飲むと泳ぐ能力が妨げられ, 着ているものに関係なく 泥に沈むようになる 重量のドラフトに反転します。</scale>
 manual.item.thebetweenlands.bl.elixir.spiderbreed.description=<scale:0.75>蜘蛛の血統のドラフトは 皮膚と筋肉の働きを変え, 障害物を虫のように 上り下りできるようにします。<nl>このドラフトを作成するには, Azuwynn, Fergalaz, Dayuniis, Yihinren, そしてYunugazのアスペクトを 組み合わせる必要があります。 <nl>Azuwynnを使うほど, ドラフトの効果は強くなります。 Yihinrenを使うほど, 効果が長く続くようになります。<nl>Byariisを追加すると, ドラフトの性質が損なわれ, 飲むと麻痺が生じる バジリスクのドラフトに反転します。</scale>
 manual.item.thebetweenlands.bl.elixir.sagittarius.description=<scale:0.75>射手座のドラフトには 射手座の力が含まれており, 飲むと弓から発射された矢が どのような軌跡を描くかを はっきりと見ることを可能にします。<nl>このドラフトを作成するにはFreiwynn, Dayuniis, Byariis, Ordaniis, そしてArmaniisのアスペクトを 組み合わせる必要があります。<nl>Freiwynnを使うほど, ドラフトの効果が強くなります。Dayuniisを使うほど, <nl>Byariisを除外すると, ドラフトの真の性質が表れ, 弓の射程が縮小する 弱々しい弓のドラフトに反転します。</scale>
