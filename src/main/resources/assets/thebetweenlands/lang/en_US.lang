@@ -850,6 +850,18 @@ item.thebetweenlands.gallery_frame_small.name=Small Gallery Frame
 item.thebetweenlands.gallery_frame_large.name=Large Gallery Frame
 item.thebetweenlands.gallery_frame_very_large.name=Very Large Gallery Frame
 
+item.thebetweenlands.rune_chain.name=Rune Chain
+item.thebetweenlands.test_rune_destroy_block.name=Rune: Destroy Block
+item.thebetweenlands.test_rune_destroy_blocks.name=Rune: Destroy Blocks
+item.thebetweenlands.test_rune_mark_area.name=Rune: Mark Area
+item.thebetweenlands.test_rune_select_grass.name=Rune: Select Grass
+item.thebetweenlands.test_rune_fire.name=Rune: Fire
+item.thebetweenlands.test_rune_projectile.name=Rune: Projectile
+item.thebetweenlands.test_rune_self.name=Rune: Self
+item.thebetweenlands.test_rune_pinpoint.name=Rune: Pinpoint
+item.thebetweenlands.test_rune_mark_nearby.name=Rune: Mark Nearby
+item.thebetweenlands.test_rune_branching.name=Rune: Branch
+
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
 item.thebetweenlands.elixir.dentrothyst_vial.orange.name=Orange Dentrothyst Vial
@@ -1571,6 +1583,86 @@ gui.gallery.search=Search:
 gui.gallery.random=Randomize!
 gui.gallery.submission=Want to see your own fan art featured?\nSubmit it to {twitter} on Twitter\nor on our {discord} server using\nthe #BetweenlandsGallery hashtag!
 
+# Runes
+rune.mark.unknown=Rune Mark
+
+rune.mark.thebetweenlands.any=Any Mark
+rune.mark.thebetweenlands.block=Block Mark
+rune.mark.thebetweenlands.entity=Entity Mark
+rune.mark.thebetweenlands.position=Position Mark
+rune.mark.thebetweenlands.ray=Ray Mark
+
+rune.input=Input
+rune.output=Output
+
+rune.gui.inputs=Consumes:
+rune.gui.outputs=Produces:
+
+rune.item.thebetweenlands.test_rune_fire.configuration.0.title=<underline>Block Fire</underline>
+rune.item.thebetweenlands.test_rune_fire.configuration.0.description=Sets the marked block on fire
+rune.item.thebetweenlands.test_rune_fire.configuration.0.input.0.description=Block to set on fire
+
+rune.item.thebetweenlands.test_rune_fire.configuration.1.title=<underline>Mob Fire</underline>
+rune.item.thebetweenlands.test_rune_fire.configuration.1.description=Sets the marked mob on fire
+rune.item.thebetweenlands.test_rune_fire.configuration.1.input.0.description=Mob to set on fire
+
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.title=<underline>Destroy Block</underline>
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.description=Destroys the marked block
+rune.item.thebetweenlands.test_rune_destroy_block.configuration.0.input.0.description=Block to destroy
+
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.title=<underline>Mark Area</underline>
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.description=Marks block area around the rune chain user
+rune.item.thebetweenlands.test_rune_mark_area.configuration.0.output.0.description=Block in area around rune chain user
+
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.title=<underline>Mark Area</underline>
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.description=Marks block area around a marked center block
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.input.0.description=Center block
+rune.item.thebetweenlands.test_rune_mark_area.configuration.1.output.0.description=Block in area around center block
+
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.title=<underline>Select Grass</underline>
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.description=Only allows the block mark if the block is grass. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+rune.item.thebetweenlands.test_rune_select_grass.configuration.0.input.0.description=Block to filter
+
+rune.item.thebetweenlands.test_rune_projectile.configuration.0.title=<underline>Projectile</underline>
+rune.item.thebetweenlands.test_rune_projectile.configuration.0.description=Shoots a projectile from a marked entity in the direction it is looking
+rune.item.thebetweenlands.test_rune_projectile.configuration.0.input.0.description=Entity to shoot the projectile from
+rune.item.thebetweenlands.test_rune_projectile.configuration.0.output.0.description=Block that is hit by the projectile
+
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.title=<underline>Projectile</underline>
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.description=Shoots a projectile from a marked entity in the direction of a marked ray
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.input.0.description=Entity to shoot the projectile from
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.input.1.description=Direction of the projectile
+rune.item.thebetweenlands.test_rune_projectile.configuration.1.output.0.description=Block that is hit by the projectile
+
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.title=<underline>Projectile</underline>
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.description=Shoots a projectile from a marked position in the direction of a marked ray
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.input.0.description=Position to shoot the projectile from
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.input.1.description=Direction of the projectile
+rune.item.thebetweenlands.test_rune_projectile.configuration.2.output.0.description=Block that is hit by the projectile
+
+rune.item.thebetweenlands.test_rune_self.configuration.0.title=<underline>Self</underline>
+rune.item.thebetweenlands.test_rune_self.configuration.0.description=Marks the rune chain user
+rune.item.thebetweenlands.test_rune_self.configuration.0.output.0.description=Rune chain user
+
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.title=<underline>Pinpoint</underline>
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.description=Pinpoints a marked entity
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.input.0.description=Entity to pinpoint
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.0.description=Position of the entity
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.1.description=Eye position of the entity
+rune.item.thebetweenlands.test_rune_pinpoint.configuration.0.output.2.description=Look ray of the entity
+
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.title=<underline>Mark Nearby</underline>
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.description=Marks nearby entities
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.0.output.0.description=Entity that is near the rune chain user
+
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.title=<underline>Mark Nearby</underline>
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.description=Marks entities that are near a marked block
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.input.0.description=Center block
+rune.item.thebetweenlands.test_rune_mark_nearby.configuration.1.output.0.description=Entity that is near the marked block
+
+rune.item.thebetweenlands.test_rune_branching.configuration.0.title=<underline>Branch</underline>
+rune.item.thebetweenlands.test_rune_branching.configuration.0.description=Branches the rune chain flow for the linked input marks
+rune.item.thebetweenlands.test_rune_branching.configuration.0.input.0.description=Input mark to branch on
 
 # Advancements
 

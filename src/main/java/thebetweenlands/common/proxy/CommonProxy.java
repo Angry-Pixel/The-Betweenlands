@@ -14,10 +14,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
@@ -25,23 +27,25 @@ import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.common.inventory.container.ContainerBLFurnace;
+import thebetweenlands.common.inventory.container.ContainerBarrel;
 import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
-import thebetweenlands.common.inventory.container.ContainerBarrel;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
+import thebetweenlands.common.inventory.container.runechainaltar.ContainerRuneChainAltar;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
+import thebetweenlands.common.tile.TileEntityBarrel;
 import thebetweenlands.common.tile.TileEntityCenser;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
-import thebetweenlands.common.tile.TileEntityBarrel;
+import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class CommonProxy implements IGuiHandler {
@@ -60,6 +64,7 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_LURKER_POUCH_KEYBIND = 14;
 	public static final int GUI_CENSER = 15;
 	public static final int GUI_BARREL = 16;
+	public static final int GUI_RUNE_CHAIN_ALTAR = 17;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -141,6 +146,13 @@ public class CommonProxy implements IGuiHandler {
 				return new ContainerBarrel(player.inventory, (TileEntityBarrel) tile);
 			}
 			break;
+
+		case GUI_RUNE_CHAIN_ALTAR:
+			if (tile instanceof TileEntityRuneChainAltar) {
+				return new ContainerRuneChainAltar(player, (TileEntityRuneChainAltar) tile);
+			}
+			break;
+			
 		}
 		return null;
 	}
@@ -220,6 +232,10 @@ public class CommonProxy implements IGuiHandler {
     
     @Nullable
     public Proxy getNetProxy() {
+    	MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+    	if(server != null) {
+    		return server.getServerProxy();
+    	}
     	return null;
     }
     

@@ -1437,6 +1437,16 @@
   "pit_fall": {
     "sounds": [
       "thebetweenlands:pit_fall"
+      ]
+  },
+  "rune_slate_move": {
+    "sounds": [
+      "thebetweenlands:rune_slate_move"
+    ]
+  },
+  "rune_slot_shift": {
+    "sounds": [
+      "thebetweenlands:rune_slot_shift"
     ]
   }
 }

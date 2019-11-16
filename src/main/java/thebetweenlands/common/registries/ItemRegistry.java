@@ -40,6 +40,15 @@ import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.herblore.rune.RuneBranching;
+import thebetweenlands.common.herblore.rune.RuneDestroyBlock;
+import thebetweenlands.common.herblore.rune.RuneFire;
+import thebetweenlands.common.herblore.rune.RuneMarkArea;
+import thebetweenlands.common.herblore.rune.RuneMarkNearby;
+import thebetweenlands.common.herblore.rune.RunePinpoint;
+import thebetweenlands.common.herblore.rune.RuneProjectile;
+import thebetweenlands.common.herblore.rune.RuneSelectGrass;
+import thebetweenlands.common.herblore.rune.RuneSelf;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemBoneArmor;
 import thebetweenlands.common.item.armor.ItemExplorersHat;
@@ -94,6 +103,8 @@ import thebetweenlands.common.item.herblore.ItemDentrothystVial;
 import thebetweenlands.common.item.herblore.ItemElixir;
 import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
+import thebetweenlands.common.item.herblore.ItemRune;
+import thebetweenlands.common.item.herblore.ItemRuneChain;
 import thebetweenlands.common.item.misc.ItemAmateMap;
 import thebetweenlands.common.item.misc.ItemAmuletSlot;
 import thebetweenlands.common.item.misc.ItemAngryPebble;
@@ -426,10 +437,22 @@ public class ItemRegistry {
     public static final Item SHAMBLER_TONGUE = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final Item RUNE_DOOR_KEY = new ItemRuneDoorKey();
     
+    public static final Item RUNE_CHAIN = new ItemRuneChain();
+    public static final Item TEST_RUNE_DESTROY_BLOCK = new ItemRune(new RuneDestroyBlock.Blueprint());
+    public static final Item TEST_RUNE_MARK_AREA = new ItemRune(new RuneMarkArea.Blueprint());
+    public static final Item TEST_RUNE_SELECT_GRASS = new ItemRune(new RuneSelectGrass.Blueprint());
+    public static final Item TEST_RUNE_FIRE = new ItemRune(new RuneFire.Blueprint());
+    public static final Item TEST_RUNE_PROJECTILE = new ItemRune(new RuneProjectile.Blueprint());
+    public static final Item TEST_RUNE_SELF = new ItemRune(new RuneSelf.Blueprint());
+    public static final Item TEST_RUNE_PINPOINT = new ItemRune(new RunePinpoint.Blueprint());
+    public static final Item TEST_RUNE_MARK_NEARBY = new ItemRune(new RuneMarkNearby.Blueprint());
+    public static final Item TEST_RUNE_BRANCHING = new ItemRune(new RuneBranching.Blueprint());
+    
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
     private static final List<ItemStack> NUGGETS = new ArrayList<ItemStack>();
- 
+    
+
     private ItemRegistry() {
 
     }

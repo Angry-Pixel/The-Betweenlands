@@ -57,6 +57,7 @@ import thebetweenlands.common.handler.PlayerDecayHandler;
 import thebetweenlands.common.handler.PlayerJoinWorldHandler;
 import thebetweenlands.common.handler.PlayerPortalHandler;
 import thebetweenlands.common.handler.PlayerRespawnHandler;
+import thebetweenlands.common.handler.PlayerRuneChainHandler;
 import thebetweenlands.common.handler.PuppetHandler;
 import thebetweenlands.common.handler.WorldEventHandler;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
@@ -263,5 +264,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(OfflinePlayerHandlerImpl.class);
 		MinecraftForge.EVENT_BUS.register(ItemRingOfGathering.class);
 		MinecraftForge.EVENT_BUS.register(EntityVolarkite.class);
+		MinecraftForge.EVENT_BUS.register(PlayerRuneChainHandler.class);
 	}
 }

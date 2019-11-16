@@ -60,6 +60,7 @@ import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiTarBarrel;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
+import thebetweenlands.client.gui.inventory.runechainaltar.GuiRuneChainAltar;
 import thebetweenlands.client.gui.menu.GuiBLMainMenu;
 import thebetweenlands.client.gui.menu.GuiDownloadTerrainBetweenlands;
 import thebetweenlands.client.handler.AmbienceSoundPlayHandler;
@@ -100,8 +101,8 @@ import thebetweenlands.client.render.entity.RenderDecayPitTarget;
 import thebetweenlands.client.render.entity.RenderDragonFly;
 import thebetweenlands.client.render.entity.RenderDreadfulMummy;
 import thebetweenlands.client.render.entity.RenderElixir;
-import thebetweenlands.client.render.entity.RenderEmberlingShaman;
 import thebetweenlands.client.render.entity.RenderEmberling;
+import thebetweenlands.client.render.entity.RenderEmberlingShaman;
 import thebetweenlands.client.render.entity.RenderFirefly;
 import thebetweenlands.client.render.entity.RenderFlameJet;
 import thebetweenlands.client.render.entity.RenderFortressBoss;
@@ -250,8 +251,8 @@ import thebetweenlands.common.entity.mobs.EntityDarkDruid;
 import thebetweenlands.common.entity.mobs.EntityDarkLight;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
-import thebetweenlands.common.entity.mobs.EntityEmberlingShaman;
 import thebetweenlands.common.entity.mobs.EntityEmberling;
+import thebetweenlands.common.entity.mobs.EntityEmberlingShaman;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityFlameJet;
 import thebetweenlands.common.entity.mobs.EntityFortressBoss;
@@ -353,6 +354,7 @@ import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPuffshroom;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
+import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
@@ -466,8 +468,14 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				return new GuiTarBarrel(player.inventory, (TileEntityBarrel) tile);
 			}
 			break;
+			
+		case GUI_RUNE_CHAIN_ALTAR:
+			if (tile instanceof TileEntityRuneChainAltar) {
+				return new GuiRuneChainAltar(player, (TileEntityRuneChainAltar) tile);
+			}
+			break;
 		}
-
+		
 		return null;
 	}
 
