@@ -24,6 +24,7 @@ import thebetweenlands.common.item.BLMaterialRegistry;
 public class ItemAncientBattleAxe extends ItemGreataxe {
 	public ItemAncientBattleAxe(ToolMaterial material) {
 		super(material);
+		this.setMaxDamage(material.getMaxUses());
 	}
 
 	public ItemAncientBattleAxe() {
@@ -32,12 +33,12 @@ public class ItemAncientBattleAxe extends ItemGreataxe {
 
 	@Override
 	protected double getBlockBreakReach(EntityLivingBase entity, ItemStack stack) {
-		return 3.0D;
+		return stack.getItemDamage() == stack.getMaxDamage() ? 0.0D : 3.0D;
 	}
 
 	@Override
 	protected double getBlockBreakHalfAngle(EntityLivingBase entity, ItemStack stack) {
-		return 55.0D;
+		return stack.getItemDamage() == stack.getMaxDamage() ? 0.0D : 55.0D;
 	}
 
 	@Override

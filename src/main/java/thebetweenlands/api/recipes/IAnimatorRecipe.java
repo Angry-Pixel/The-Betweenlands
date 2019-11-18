@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -69,14 +70,22 @@ public interface IAnimatorRecipe {
 	public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack);
 
 	/**
+	 * Use {@link #onRetrieved(EntityPlayer, BlockPos, ItemStack)} instead
+	 */
+	@Deprecated
+	public boolean onRetrieved(World world, BlockPos pos, ItemStack stack);
+
+	/**
 	 * Called when the animator has finished animating and is right clicked.
 	 * Return true if GUI should be opened on first click
 	 * @param world
 	 * @param pos
 	 * @param stack
 	 */
-	public boolean onRetrieved(World world, BlockPos pos, ItemStack stack);
-
+	public default boolean onRetrieved(EntityPlayer player, BlockPos pos, ItemStack stack) {
+		return this.onRetrieved(player.world, pos, stack);
+	}
+	
 	/**
 	 * Returns whether the GUI should close when the animator has finished
 	 * @param stack
