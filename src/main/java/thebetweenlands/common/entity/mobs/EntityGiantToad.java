@@ -485,8 +485,17 @@ public class EntityGiantToad extends EntityTameable implements IEntityBL, IRingO
 
 	@Override
 	public boolean returnFromRing(Entity user, NBTTagCompound nbt) {
+		double prevX = this.posX;
+		double prevY = this.posY;
+		double prevZ = this.posZ;
+		float prevYaw = this.rotationYaw;
+		float prevPitch = this.rotationPitch;
 		this.readFromNBT(nbt);
-		this.setLocationAndAngles(user.posX, user.posY, user.posZ, this.world.rand.nextFloat() * 360, 0);
+		this.setLocationAndAngles(prevX, prevY, prevZ, prevYaw, prevPitch);
+		if(!this.isEntityAlive()) {
+			//Revivd by animator
+			this.setHealth(this.getMaxHealth());
+		}
 		this.world.spawnEntity(this);
 		return true;
 	}

@@ -33,11 +33,28 @@ public interface IRingOfGatheringMinion {
 	public UUID getRingOwnerId();
 
 	public default boolean shouldReturnOnDeath(boolean isOwnerLoggedIn) {
-		return false;
+		return true;
 	}
 
 	public default boolean shouldReturnOnUnload(boolean isOwnerLoggedIn) {
 		//Don't kill if player has logged out, causing the chunks to unload
 		return isOwnerLoggedIn;
+	}
+
+	/**
+	 * Whether this entity can only be returned by an animator.
+	 * Default is true if entity is dead.
+	 * @return
+	 */
+	public default boolean isRespawnedByAnimator() {
+		return !((Entity) this).isEntityAlive();
+	}
+
+	public default int getAnimatorLifeCrystalCost() {
+		return 24;
+	}
+
+	public default int getAnimatorSulfurCost() {
+		return 16;
 	}
 }
