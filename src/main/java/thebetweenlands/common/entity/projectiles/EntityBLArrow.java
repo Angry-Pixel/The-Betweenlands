@@ -1,9 +1,11 @@
 package thebetweenlands.common.entity.projectiles;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,6 +13,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import thebetweenlands.common.entity.mobs.EntityTinySludgeWormHelper;
@@ -92,6 +96,20 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 		}
 	}
 
+	@Override
+	protected void onHit(RayTraceResult raytrace) {
+		super.onHit(raytrace);
+		
+		if(raytrace.entityHit == null && raytrace.getBlockPos() != null && raytrace.sideHit != null && this.getArrowType() == EnumArrowType.OCTINE) {
+			BlockPos pos = raytrace.getBlockPos().offset(raytrace.sideHit);
+			IBlockState state = this.world.getBlockState(pos);
+			
+			if(ItemRegistry.OCTINE_INGOT.isTinder(new ItemStack(ItemRegistry.OCTINE_INGOT), ItemStack.EMPTY, state)) {
+				this.world.setBlockState(pos, Blocks.FIRE.getDefaultState());
+			}
+		}
+	}
+	
 	/**
 	 * Sets the arrow type
 	 * @param type
