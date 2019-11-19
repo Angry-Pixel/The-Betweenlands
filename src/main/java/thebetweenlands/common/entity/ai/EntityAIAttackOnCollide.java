@@ -144,9 +144,9 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 			if (target instanceof EntityPlayer) {
 				EntityPlayer entityplayer = (EntityPlayer)target;
 				ItemStack attackerItem = attacker.getHeldItemMainhand();
-				ItemStack defenderItem = entityplayer.isHandActive() ? entityplayer.getActiveItemStack() : null;
+				ItemStack defenderItem = entityplayer.isHandActive() ? entityplayer.getActiveItemStack() : ItemStack.EMPTY;
 
-				if (attackerItem != null && defenderItem != null && attackerItem.getItem() instanceof ItemAxe && defenderItem.getItem() == Items.SHIELD) {
+				if (!attackerItem.isEmpty() && !defenderItem.isEmpty() && attackerItem.getItem().canDisableShield(attackerItem, defenderItem, entityplayer, attacker) && defenderItem.getItem().isShield(defenderItem, entityplayer)) {
 					float efficiencyModifier = 0.25F + (float)EnchantmentHelper.getEfficiencyModifier(attacker) * 0.05F;
 
 					if (attacker.world.rand.nextFloat() < efficiencyModifier) {

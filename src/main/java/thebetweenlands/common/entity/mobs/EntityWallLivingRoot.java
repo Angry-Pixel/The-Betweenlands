@@ -22,7 +22,6 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -468,7 +467,7 @@ public class EntityWallLivingRoot extends EntityMovingWallFace implements IMob, 
 		EntityLivingBase attacker = source.getImmediateSource() instanceof EntityLivingBase ? (EntityLivingBase)source.getImmediateSource() : null;
 		if(attacker != null && attacker.getActiveHand() != null) {
 			ItemStack item = attacker.getHeldItem(attacker.getActiveHand());
-			if(!item.isEmpty() && item.getItem() instanceof ItemAxe) {
+			if(!item.isEmpty() && item.getItem().getToolClasses(item).contains("axe")) {
 				amount *= 2.0F;
 			}
 		}
