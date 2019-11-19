@@ -75,10 +75,11 @@ public class EntityBLArrow extends EntityArrow implements IThrowableEntity /*for
 			}
 			break;
 		case BASILISK:
-			if(!living.isNonBoss()) {
-				
+			if(living.isNonBoss()) {
+				living.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(100, 1));
+			} else {
+				living.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(40, 1));
 			}
-			living.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(100, 1));
 			break;
 		case WORM:
 			if (!getEntityWorld().isRemote) {
