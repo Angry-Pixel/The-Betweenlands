@@ -44,6 +44,15 @@
         ],
         "items": [
           {
+            "item": "thebetweenlands:edge_shroom"
+          },
+          {
+            "item": "thebetweenlands:edge_moss"
+          },
+          {
+            "item": "thebetweenlands:edge_leaf"
+          },
+          {
             "item": "thebetweenlands:pitcher_plant"
           },
           {
@@ -132,6 +141,15 @@
           },
           {
             "item": "thebetweenlands:swamp_tallgrass"
+          },
+          {
+            "item": "thebetweenlands:tall_sludgecreep"
+          },
+          {
+            "item": "thebetweenlands:pale_grass"
+          },
+          {
+            "item": "thebetweenlands:rotbulb"
           }
         ]
       }
