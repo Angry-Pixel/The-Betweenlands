@@ -270,6 +270,10 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             if (creative || getDamageTaken() > 20) {
                 if (!creative && world.getGameRules().getBoolean("doEntityDrops")) {
                     entityDropItem(getItem(), 0);
+                    
+                    if(this.hasLantern()) {
+                    	this.entityDropItem(new ItemStack(ItemRegistry.WEEDWOOD_ROWBOAT_UPGRADE_LANTERN), 0);
+                    }
                 }
                 setDead();
             }
@@ -279,7 +283,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     @Override
     public void notifyDataManagerChange(DataParameter<?> key) {
-        if (key == HAS_LANTERN) {
+        if (HAS_LANTERN.equals(key)) {
             lantern = hasLantern() ? new Lantern(1.2F, 0.2F) : null;
         }
         super.notifyDataManagerChange(key);
@@ -294,11 +298,13 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                 stack.shrink(1);
                 playSound(SoundRegistry.TAR_BEAST_STEP, 0.9F + rand.nextFloat() * 0.1F, 0.6F + rand.nextFloat() * 0.15F);
             }
-        } else if (false) {
+            player.swingArm(hand);
+        } else if (!stack.isEmpty() && stack.getItem() == ItemRegistry.WEEDWOOD_ROWBOAT_UPGRADE_LANTERN) {
             if (!world.isRemote) {
                 stack.shrink(1);
                 setHasLantern(true);
             }
+            player.swingArm(hand);
         } else if (!world.isRemote && !player.isSneaking()) {
             player.startRiding(this);
         }

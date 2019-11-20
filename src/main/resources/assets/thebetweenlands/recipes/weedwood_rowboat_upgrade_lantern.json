@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "RFR",
+    "PPP"
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:weedwood_plank_slab"
+    },
+    "R": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    },
+    "F": {
+      "type": "thebetweenlands:mob_item",
+      "entity": "thebetweenlands:firefly"
+    },
+    "P": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:weedwood_rowboat_upgrade_lantern",
+    "count": 1
+  }
+}

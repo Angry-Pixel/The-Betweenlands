@@ -75,6 +75,7 @@ import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeAnchor;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeCrafting;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeFurnace;
 import thebetweenlands.client.render.model.entity.ModelMireSnailEgg;
+import thebetweenlands.client.render.model.entity.rowboat.ModelLantern;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.client.render.model.tile.ModelBarrel;
 import thebetweenlands.client.render.model.tile.ModelLootPot1;
@@ -200,6 +201,8 @@ public class ModelRegistry {
 	public static final IModel WEEDWOOD_ROWBOAT = new ModelFromModelBase.Builder(new ModelWeedwoodRowboatItem(), new ResourceLocation("thebetweenlands:entity/weedwood_rowboat"), 256, 128)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/weedwood_planks")).packer(MODEL_TEXTURE_PACKER).build();
 	public static final IModel WEEDWOOD_ROWBOAT_TARRED = new ModelFromModelBase.Builder(new ModelWeedwoodRowboatItem(), new ResourceLocation("thebetweenlands:entity/weedwood_rowboat_tarred"), 256, 128)
+			.particleTexture(new ResourceLocation("thebetweenlands:blocks/weedwood_planks")).packer(MODEL_TEXTURE_PACKER).build();
+	public static final IModel WEEDWOOD_ROWBOAT_UPGRADE_LANTERN = new ModelFromModelBase.Builder(new ModelLantern(), new ResourceLocation("thebetweenlands:entity/weedwood_rowboat"), 256, 128)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/weedwood_planks")).packer(MODEL_TEXTURE_PACKER).build();
 	public static final IModel DRAETON_UPGRADE_FURNACE = new ModelFromModelBase.Builder(new ModelDraetonUpgradeFurnace(), new ResourceLocation("thebetweenlands:entity/draeton_upgrade_furnace"), 64, 32)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/betweenstone")).packer(MODEL_TEXTURE_PACKER).build();
