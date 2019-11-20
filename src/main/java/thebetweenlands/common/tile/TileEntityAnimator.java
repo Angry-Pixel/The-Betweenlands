@@ -43,10 +43,12 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     public void update() {
         if (isSlotInUse(0) && isValidFocalItem()) {
             this.itemToAnimate = this.inventory.get(0);
-            IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(this.itemToAnimate);
-            if (recipe != null) {
-                this.requiredFuelCount = recipe.getRequiredFuel(this.itemToAnimate);
-                this.requiredLifeCount = recipe.getRequiredLife(this.itemToAnimate);
+            if(!this.world.isRemote) {
+	            IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(this.itemToAnimate);
+	            if (recipe != null) {
+	                this.requiredFuelCount = recipe.getRequiredFuel(this.itemToAnimate);
+	                this.requiredLifeCount = recipe.getRequiredLife(this.itemToAnimate);
+	            }
             }
         } else {
             this.itemToAnimate = ItemStack.EMPTY;
@@ -81,10 +83,12 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 
             if (fuelConsumed >= requiredFuelCount && isSlotInUse(0) && isSlotInUse(1) && !this.itemAnimated) {
                 IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(inventory.get(0));
-                ItemStack result = recipe.onAnimated(this.world, getPos(), inventory.get(0));
-                if (result.isEmpty()) result = recipe.getResult(inventory.get(0));
-                if (!result.isEmpty()) {
-                    setInventorySlotContents(0, result.copy());
+                if(recipe != null) {
+	                ItemStack result = recipe.onAnimated(this.world, getPos(), inventory.get(0));
+	                if (result.isEmpty()) result = recipe.getResult(inventory.get(0));
+	                if (!result.isEmpty()) {
+	                    setInventorySlotContents(0, result.copy());
+	                }
                 }
                 inventory.get(1).setItemDamage(inventory.get(1).getItemDamage() + this.requiredLifeCount);
                 markDirty();
@@ -156,6 +160,8 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
         listener.sendWindowProperty(animator, 1, lifeCrystalLife);
         listener.sendWindowProperty(animator, 2, itemAnimated ? 1 : 0);
         listener.sendWindowProperty(animator, 3, fuelConsumed);
+        listener.sendWindowProperty(animator, 4, requiredFuelCount);
+        listener.sendWindowProperty(animator, 5, requiredLifeCount);
     }
 
     public void getGUIData(int id, int value) {
@@ -171,6 +177,13 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
                 break;
             case 3:
                 fuelConsumed = value;
+                break;
+            case 4:
+            	requiredFuelCount = value;
+            	break;
+            case 5:
+            	requiredLifeCount = value;
+            	break;
         }
     }
 

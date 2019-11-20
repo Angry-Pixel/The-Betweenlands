@@ -294,20 +294,39 @@ public class EntityTarminion extends EntityTameable implements IEntityBL, IRingO
 	}
 
 	@Override
+	public NBTTagCompound returnToRing(UUID userId) {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+	
+	@Override
 	public boolean returnFromRing(Entity user, NBTTagCompound nbt) {
-		if(this.world instanceof WorldServer) {
-			WorldServer worldServer = (WorldServer) this.world;
+		double prevX = this.posX;
+		double prevY = this.posY;
+		double prevZ = this.posZ;
+		float prevYaw = this.rotationYaw;
+		float prevPitch = this.rotationPitch;
+		this.readFromNBT(nbt);
+		this.setLocationAndAngles(prevX, prevY, prevZ, prevYaw, prevPitch);
+		
+		if(this.isEntityAlive()) {
+			//Still alive, just spawn in world
+			this.world.spawnEntity(this);
+		} else {
+			//Tarminion has died, spawn loot table
+			if(this.world instanceof WorldServer) {
+				WorldServer worldServer = (WorldServer) this.world;
 
-			LootTable lootTable = worldServer.getLootTableManager().getLootTableFromLocation(LootTableRegistry.TARMINION);
-			LootContext.Builder contextBuilder = (new LootContext.Builder(worldServer)).withLootedEntity(this);
+				LootTable lootTable = worldServer.getLootTableManager().getLootTableFromLocation(LootTableRegistry.TARMINION);
+				LootContext.Builder contextBuilder = (new LootContext.Builder(worldServer)).withLootedEntity(this);
 
-			for(ItemStack loot : lootTable.generateLootForPools(this.world.rand, contextBuilder.build())) {
-				if(user instanceof EntityPlayer) {
-					if(!((EntityPlayer) user).inventory.addItemStackToInventory(loot)) {
-						((EntityPlayer) user).dropItem(loot, false);
+				for(ItemStack loot : lootTable.generateLootForPools(this.world.rand, contextBuilder.build())) {
+					if(user instanceof EntityPlayer) {
+						if(!((EntityPlayer) user).inventory.addItemStackToInventory(loot)) {
+							((EntityPlayer) user).dropItem(loot, false);
+						}
+					} else {
+						user.entityDropItem(loot, 0);
 					}
-				} else {
-					user.entityDropItem(loot, 0);
 				}
 			}
 		}
@@ -316,8 +335,9 @@ public class EntityTarminion extends EntityTameable implements IEntityBL, IRingO
 	}
 
 	@Override
-	public boolean shouldReturnOnDeath(boolean isOwnerLoggedIn) {
-		return true;
+	public boolean isRespawnedByAnimator() {
+		//Instead spawns the inanimate tarminion item which then needs to be reanimated
+		return false;
 	}
 
 	@Override

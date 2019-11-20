@@ -3,6 +3,7 @@ package thebetweenlands.common.item.misc;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
@@ -21,6 +22,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
@@ -42,6 +44,16 @@ public class ItemRingOfGathering extends ItemRing {
 	public static final String NBT_OFFLINE_PLAYER_DATA_LIST_KEY = "GatheringRingList";
 
 	public static final String NBT_SYNC_COUNT_KEY = "GatheringRingCountSync";
+	public static final String NBT_LAST_USER_UUID_KEY = "LastUserUuid";
+
+	@Nullable
+	public UUID getLastUserUuid(ItemStack stack) {
+		NBTTagCompound nbt = stack.getTagCompound();
+		if(nbt != null && nbt.hasUniqueId(NBT_LAST_USER_UUID_KEY)) {
+			return nbt.getUniqueId(NBT_LAST_USER_UUID_KEY);
+		}
+		return null;
+	}
 
 	public boolean isRingEquipped(UUID playerUuid) {
 		IOfflinePlayerDataHandler handler = OfflinePlayerHandlerImpl.getHandler();
@@ -87,7 +99,31 @@ public class ItemRingOfGathering extends ItemRing {
 		return 0;
 	}
 
-	public boolean addEntry(UUID playerUuid, ResourceLocation entityRegName, NBTTagCompound entityNbt) {
+	public static class RingEntityEntry {
+		public final ResourceLocation id;
+		public final NBTTagCompound nbt;
+		public final boolean respawnByAnimator;
+		public final int animatorLifeCrystalCost;
+		public final int animatorSulfurCost;
+
+		public RingEntityEntry(ResourceLocation id, NBTTagCompound nbt) {
+			this.id = id;
+			this.nbt = nbt;
+			this.respawnByAnimator = false;
+			this.animatorLifeCrystalCost = 0;
+			this.animatorSulfurCost = 0;
+		}
+
+		public RingEntityEntry(ResourceLocation id, NBTTagCompound nbt, int animatorLifeCrystalCost, int animatorSulfurCost) {
+			this.id = id;
+			this.nbt = nbt;
+			this.respawnByAnimator = true;
+			this.animatorLifeCrystalCost = animatorLifeCrystalCost;
+			this.animatorSulfurCost = animatorSulfurCost;
+		}
+	}
+
+	public boolean addEntry(UUID playerUuid, RingEntityEntry entry) {
 		IOfflinePlayerDataHandler handler = OfflinePlayerHandlerImpl.getHandler();
 		if(handler != null) {
 			NBTTagCompound nbt = handler.getOfflinePlayerData(playerUuid);
@@ -98,8 +134,14 @@ public class ItemRingOfGathering extends ItemRing {
 			NBTTagList list = nbt.getTagList(NBT_OFFLINE_PLAYER_DATA_LIST_KEY, Constants.NBT.TAG_COMPOUND);
 
 			NBTTagCompound entryNbt = new NBTTagCompound();
-			entryNbt.setString("id", entityRegName.toString());
-			entryNbt.setTag("data", entityNbt);
+			entryNbt.setString("id", entry.id.toString());
+			entryNbt.setTag("data", entry.nbt);
+
+			entryNbt.setBoolean("respawnByAnimator", entry.respawnByAnimator);
+			if(entry.respawnByAnimator) {
+				entryNbt.setInteger("animatorLifeCrystalCost", entry.animatorLifeCrystalCost);
+				entryNbt.setInteger("animatorSulfurCost", entry.animatorSulfurCost);
+			}
 
 			list.appendTag(entryNbt);
 
@@ -113,7 +155,8 @@ public class ItemRingOfGathering extends ItemRing {
 		return false;
 	}
 
-	public boolean returnEntityFromRing(Entity user, UUID playerUuid) {
+	@Nullable
+	public RingEntityEntry getEntry(UUID playerUuid, boolean fromAnimator, Predicate<RingEntityEntry> predicate, boolean remove) {
 		IOfflinePlayerDataHandler handler = OfflinePlayerHandlerImpl.getHandler();
 		if(handler != null) {
 			NBTTagCompound nbt = handler.getOfflinePlayerData(playerUuid);
@@ -122,39 +165,56 @@ public class ItemRingOfGathering extends ItemRing {
 				NBTTagList list = nbt.getTagList(NBT_OFFLINE_PLAYER_DATA_LIST_KEY, Constants.NBT.TAG_COMPOUND);
 
 				if(list.tagCount() > 0) {
-					int removedTag = -1;
-
 					for(int i = 0; i < list.tagCount(); i++) {
 						NBTTagCompound entryNbt = list.getCompoundTagAt(i);
 
-						if(entryNbt.hasKey("id", Constants.NBT.TAG_STRING)) {
-							ResourceLocation entityRegName = new ResourceLocation(entryNbt.getString("id"));
+						if(entryNbt.hasKey("id", Constants.NBT.TAG_STRING) && entryNbt.getBoolean("respawnByAnimator") == fromAnimator) {
+							RingEntityEntry entry;
 
-							Entity entity = EntityList.createEntityByIDFromName(entityRegName, user.world);
+							if(fromAnimator) {
+								entry = new RingEntityEntry(new ResourceLocation(entryNbt.getString("id")), entryNbt.getCompoundTag("data"), entryNbt.getInteger("animatorLifeCrystalCost"), entryNbt.getInteger("animatorSulfurCost"));
+							} else {
+								entry = new RingEntityEntry(new ResourceLocation(entryNbt.getString("id")), entryNbt.getCompoundTag("data"));
+							}
 
-							entity.setLocationAndAngles(user.posX, user.posY, user.posZ, user.world.rand.nextFloat() * 360, 0);
+							if(predicate.test(entry)) {
+								if(remove) {
+									list.removeTag(i);
 
-							if(entity instanceof IRingOfGatheringMinion && ((IRingOfGatheringMinion) entity).returnFromRing(user, entryNbt.getCompoundTag("data"))) {
-								removedTag = i;
-								break;
+									nbt.setTag(NBT_OFFLINE_PLAYER_DATA_LIST_KEY, list);
+
+									handler.setOfflinePlayerData(playerUuid, nbt);
+								}
+
+								return entry;
 							}
 						}
-					}
-
-					if(removedTag >= 0) {
-						list.removeTag(removedTag);
-
-						nbt.setTag(NBT_OFFLINE_PLAYER_DATA_LIST_KEY, list);
-
-						handler.setOfflinePlayerData(playerUuid, nbt);
-
-						return true;
 					}
 				}
 			}
 		}
 
-		return false;
+		return null;
+	}
+
+	@Nullable
+	public Entity returnEntityFromRing(double x, double y, double z, Entity user, UUID playerUuid, boolean fromAnimator) {
+		List<Entity> returnedEntity = new ArrayList<>();
+
+		this.getEntry(playerUuid, fromAnimator, entry -> {
+			Entity entity = EntityList.createEntityByIDFromName(entry.id, user.world);
+
+			entity.setLocationAndAngles(x, y, z, user.world.rand.nextFloat() * 360, 0);
+
+			if(entity instanceof IRingOfGatheringMinion && ((IRingOfGatheringMinion) entity).returnFromRing(user, entry.nbt)) {
+				returnedEntity.add(entity);
+				return true;
+			}
+
+			return false;
+		}, true);
+
+		return returnedEntity.isEmpty() ? null : returnedEntity.get(0);
 	}
 
 	public int getCapacity() {
@@ -236,14 +296,28 @@ public class ItemRingOfGathering extends ItemRing {
 		if(entity.ticksExisted % 5 == 0) {
 			this.updateStackEntryCount(entity.world, stack, entity);
 		}
+
+		this.updateLastUserUuid(entity.world, stack, entity);
 	}
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+
 		if(entityIn.ticksExisted % 5 == 0) {
 			this.updateStackEntryCount(worldIn, stack, entityIn);
 		}
+
+		this.updateLastUserUuid(worldIn, stack, entityIn);
+	}
+
+	protected void updateLastUserUuid(World world, ItemStack stack, Entity entity) {
+		NBTTagCompound nbt = stack.getTagCompound();
+		if(nbt == null) {
+			stack.setTagCompound(nbt = new NBTTagCompound());
+		}
+		nbt.setUniqueId(NBT_LAST_USER_UUID_KEY, entity.getUniqueID());
+		stack.setTagCompound(nbt);
 	}
 
 	protected void updateStackEntryCount(World worldIn, ItemStack stack, Entity entityIn) {
@@ -269,9 +343,19 @@ public class ItemRingOfGathering extends ItemRing {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		NBTTagCompound nbt = stack.getTagCompound();
 
-		if(nbt != null && nbt.getByte(NBT_SYNC_COUNT_KEY) > 0 && removeXp(playerIn, 15) >= 15) {
-			if(!worldIn.isRemote) {
-				this.returnEntityFromRing(playerIn, playerIn.getUniqueID());
+		if(nbt != null && nbt.getByte(NBT_SYNC_COUNT_KEY) > 0) {
+			if(this.getEntry(playerIn.getUniqueID(), false, e -> true, false) != null) {
+				if(!worldIn.isRemote) {
+					if(removeXp(playerIn, 15) >= 15) {
+						this.returnEntityFromRing(playerIn.posX, playerIn.posY, playerIn.posZ, playerIn, playerIn.getUniqueID(), false);
+					} else {
+						playerIn.sendStatusMessage(new TextComponentTranslation("chat.ring_of_gathering.not_enough_xp"), true);
+					}
+				}
+			} else if(this.getEntryCount(playerIn.getUniqueID()) > 0) {
+				if(!worldIn.isRemote) {
+					playerIn.sendStatusMessage(new TextComponentTranslation("chat.ring_of_gathering.animator"), true);
+				}
 			}
 
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
@@ -288,8 +372,9 @@ public class ItemRingOfGathering extends ItemRing {
 
 			UUID playerUuid = minion.getRingOwnerId();
 
-			if(playerUuid != null && minion.shouldReturnOnDeath(entity.world.getPlayerEntityByUUID(playerUuid) != null)) {
-				returnMinionToRing(minion);
+			if(playerUuid != null && minion.shouldReturnOnDeath(entity.world.getPlayerEntityByUUID(playerUuid) != null) && returnMinionToRing(minion)) {
+				//Don't spawn loot etc.
+				event.setCanceled(true);
 			}
 		}
 	}
@@ -332,7 +417,15 @@ public class ItemRingOfGathering extends ItemRing {
 				if(playerUuid != null && ItemRegistry.RING_OF_GATHERING.isRingEquipped(playerUuid) && ItemRegistry.RING_OF_GATHERING.hasSpace(playerUuid)) {
 					NBTTagCompound entityNbt = minion.returnToRing(playerUuid);
 
-					if(ItemRegistry.RING_OF_GATHERING.addEntry(playerUuid, id, entityNbt)) {
+					RingEntityEntry entry;
+
+					if(minion.isRespawnedByAnimator()) {
+						entry = new RingEntityEntry(id, entityNbt, minion.getAnimatorLifeCrystalCost(), minion.getAnimatorSulfurCost());
+					} else {
+						entry = new RingEntityEntry(id, entityNbt);
+					}
+
+					if(ItemRegistry.RING_OF_GATHERING.addEntry(playerUuid, entry)) {
 						//Minion was successfully returned to ring and can be removed without dropping anything
 						entity.removePassengers();
 						entity.setDropItemsWhenDead(false);
