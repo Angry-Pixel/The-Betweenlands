@@ -100,7 +100,7 @@ public class BlockAnimator extends BlockContainer {
 	@Override
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		TileEntityAnimator te = (TileEntityAnimator) worldIn.getTileEntity(pos);
-		if (te != null && te.isSlotInUse(0) && te.isCrystalInslot() && te.isSulfurInSlot() && te.fuelConsumed < te.requiredFuelCount && te.isValidFocalItem()) {
+		if (te != null && te.isRunning()) {
 			int meta = te.getBlockMetadata();
 
 			double xOff = 0;
