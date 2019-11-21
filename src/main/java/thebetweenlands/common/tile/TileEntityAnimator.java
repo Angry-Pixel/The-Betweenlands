@@ -33,6 +33,8 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     private int prevStackSize = 0;
     private ItemStack prevItem = ItemStack.EMPTY;
 
+    private boolean running = false;
+    
     private boolean soundPlaying = false;
 
     public TileEntityAnimator() {
@@ -100,6 +102,13 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
                 markDirty();
             prevItem = isSlotInUse(0) ? inventory.get(0) : ItemStack.EMPTY;
             prevStackSize = isSlotInUse(0) ? inventory.get(0).getCount() : 0;
+            
+            boolean shouldBeRunning = this.isSlotInUse(0) && this.isCrystalInslot() && this.isSulfurInSlot() && this.fuelConsumed < this.requiredFuelCount && lifeCrystalLife >= this.requiredLifeCount && this.isValidFocalItem();
+            if(this.running != shouldBeRunning) {
+            	this.running = shouldBeRunning;
+            	this.markDirty();
+            }
+            
             updateContainingBlockInfo();
         } else {
             if (this.isRunning() && !this.soundPlaying) {
@@ -188,7 +197,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     }
 
     public boolean isRunning() {
-        return this.isSlotInUse(0) && this.isCrystalInslot() && this.isSulfurInSlot() && this.fuelConsumed < this.requiredFuelCount && lifeCrystalLife >= this.requiredLifeCount && this.isValidFocalItem();
+        return this.running;
     }
 
     @Override
@@ -208,6 +217,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
             this.itemToAnimate.writeToNBT(toAnimateCompound);
         }
         nbt.setTag("toAnimate", toAnimateCompound);
+        nbt.setBoolean("running", running);
     }
 
     @Override
@@ -226,6 +236,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
             this.itemToAnimate = new ItemStack(toAnimateStackCompound);
         else
             this.itemToAnimate = ItemStack.EMPTY;
+        running = nbt.getBoolean("running");
     }
 
     @Nullable
