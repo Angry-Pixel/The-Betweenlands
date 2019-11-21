@@ -2,6 +2,8 @@ package thebetweenlands.common.capability.recruitment;
 
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
@@ -43,6 +45,11 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 	private Entity puppeteer;
 	private UUID puppeteerUUID;
 	private int remainingTicks;
+	private boolean stay;
+
+	@Nullable
+	private UUID ringUUID;
+	private int recruitmentCost;
 
 	@Override
 	public void setPuppeteer(Entity puppeteer) {
@@ -83,11 +90,48 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 	}
 
 	@Override
+	public void setStay(boolean stay) {
+		this.stay = stay;
+		this.markDirty();
+	}
+
+	@Override
+	public boolean getStay() {
+		return this.stay;
+	}
+
+	@Override
+	public void setRingUuid(@Nullable UUID uuid) {
+		this.ringUUID = uuid;
+	}
+
+	@Override
+	@Nullable
+	public UUID getRingUuid() {
+		return this.ringUUID;
+	}
+
+	@Override
+	public void setRecruitmentCost(int cost) {
+		this.recruitmentCost = cost;
+	}
+
+	@Override
+	public int getRecruitmentCost() {
+		return this.recruitmentCost;
+	}
+
+	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("ticks", this.remainingTicks);
 		if(this.puppeteerUUID != null) {
 			nbt.setUniqueId("puppeteer", this.puppeteerUUID);
 		}
+		nbt.setBoolean("stay", this.stay);
+		if(this.ringUUID != null) {
+			nbt.setUniqueId("ring", this.ringUUID);
+		}
+		nbt.setInteger("recruitmentCost", this.recruitmentCost);
 	}
 
 	@Override
@@ -98,6 +142,13 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 		} else {
 			this.puppeteerUUID = null;
 		}
+		this.stay = nbt.getBoolean("stay");
+		if(nbt.hasUniqueId("ring")) {
+			this.ringUUID = nbt.getUniqueId("ring");
+		} else {
+			this.ringUUID = null;
+		}
+		this.recruitmentCost = nbt.getInteger("recruitmentCost");
 	}
 
 	@Override
@@ -105,6 +156,7 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 		if(this.puppeteerUUID != null) {
 			nbt.setUniqueId("puppeteer", this.puppeteerUUID);
 		}
+		nbt.setBoolean("stay", this.stay);
 	}
 
 	@Override
@@ -115,6 +167,7 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 			this.puppeteerUUID = null;
 			this.puppeteer = null;
 		}
+		this.stay = nbt.getBoolean("stay");
 	}
 
 	@Override

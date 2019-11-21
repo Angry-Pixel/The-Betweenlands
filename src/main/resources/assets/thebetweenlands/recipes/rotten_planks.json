@@ -7,7 +7,7 @@
     "#": [
       {
         "item": "thebetweenlands:log_rotten_bark",
-        "data": 0
+        "data": 32767
       }
     ]
   },

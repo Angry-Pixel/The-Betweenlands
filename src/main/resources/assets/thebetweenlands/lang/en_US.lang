@@ -942,11 +942,11 @@ tooltip.bl.coated.3=Moderately coated
 tooltip.bl.coated.4=Well coated
 tooltip.bl.coated.5=Well coated
 tooltip.bl.ring.power.bonus=Grants a bonus to attack damage at the cost of XP
-tooltip.bl.ring.recruitment.bonus=Grants the power to recruit enemies at the cost of XP
+tooltip.bl.ring.recruitment.bonus=Grants the power to recruit and control entities at the cost of XP
 tooltip.bl.ring.flight.bonus=Grants the gift of levitation at the cost of XP
 tooltip.bl.ring.summoning.bonus=Grants the ability to summon allies from the depths at the cost of XP
 tooltip.bl.ring.dispersion.bonus=Grants the ability to move through walls at the cost of XP
-tooltip.bl.ring.gathering.bonus=Grants the ability to summon minions\nor pets lost while wearing this ring\nat the cost of XP
+tooltip.bl.ring.gathering.bonus=Grants the ability to summon minions\nor pets lost while wearing this ring\nat the cost of XP.\nDead minions or pets need to be\nrevived by animating the ring in\nan Animator.
 tooltip.bl.item.equippable=Equippable
 tooltip.bl.ring.summoning=Equip using the radial \nmenu [press '%s'], \nscream using '%s'
 tooltip.bl.ring.flight=Equip using the radial \nmenu [press '%s'], \ndouble tap '%s' to activate
@@ -1174,6 +1174,11 @@ chat.grappling_hook.max_length=Maximum rope length reached!
 chat.grappling_hook.disconnected=The grappling hook was ripped!
 
 chat.not_enough_fog_for_vial=There is not enough fog on this floor to fill the vial
+
+chat.ring_of_gathering.not_enough_xp=Not enough XP to use the ring
+chat.ring_of_gathering.animator=Dead minions or pets need to be revived in an animator
+
+chat.ring_of_recruitment.not_enough_power=The ring does not have enough power left to recruit this entity
 
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
@@ -1611,6 +1616,8 @@ advancements.thebetweenlands.adventurer.light_the_braziers.title=Light The Brazi
 advancements.thebetweenlands.adventurer.light_the_braziers.description=Find a Sludgeon Tower
 advancements.thebetweenlands.adventurer.a_real_poopy_experience.title=A Real Poopy Experience
 advancements.thebetweenlands.adventurer.a_real_poopy_experience.description=Enter the Labyrinthine Vaults
+advancements.thebetweenlands.adventurer.disgracing_the_dead.title=Disgracing The Dead
+advancements.thebetweenlands.adventurer.disgracing_the_dead.description=Loot 20 Urns of Chance
 
 # Fighter
 advancements.thebetweenlands.fighter.root.title=Fighter

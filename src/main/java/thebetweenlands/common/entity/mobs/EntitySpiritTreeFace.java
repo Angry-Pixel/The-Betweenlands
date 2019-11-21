@@ -147,7 +147,7 @@ public abstract class EntitySpiritTreeFace extends EntityMovingWallFace implemen
 		EntityLivingBase attacker = source.getImmediateSource() instanceof EntityLivingBase ? (EntityLivingBase)source.getImmediateSource() : null;
 		if(attacker != null && attacker.getActiveHand() != null) {
 			ItemStack item = attacker.getHeldItem(attacker.getActiveHand());
-			if(!item.isEmpty() && item.getItem() instanceof ItemAxe) {
+			if(!item.isEmpty() && item.getItem().getToolClasses(item).contains("axe")) {
 				amount *= 2.0F;
 			}
 		}

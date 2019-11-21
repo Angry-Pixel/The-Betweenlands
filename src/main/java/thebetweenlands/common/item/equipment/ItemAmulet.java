@@ -1,5 +1,12 @@
 package thebetweenlands.common.item.equipment;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
@@ -30,6 +37,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.ICircleGemCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
+import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.handler.WorldRenderHandler;
@@ -49,12 +57,6 @@ import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.LightingUtil;
 import thebetweenlands.util.NBTHelper;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 public class ItemAmulet extends Item implements IEquippable {
 	public static final Set<Class<? extends EntityLivingBase>> SUPPORTED_ENTITIES = new HashSet<>();
 
@@ -70,6 +72,11 @@ public class ItemAmulet extends Item implements IEquippable {
 
 		CircleGemHelper.addGemPropertyOverrides(this);
 		IEquippable.addEquippedPropertyOverrides(this);
+	}
+
+	public static boolean canPlayerAddAmulet(EntityPlayer player, Entity target) {
+		IPuppetCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+		return SUPPORTED_ENTITIES.contains(target.getClass()) || (cap != null && cap.hasPuppeteer() && cap.getPuppeteer() == player);
 	}
 
 	/**
@@ -133,26 +140,26 @@ public class ItemAmulet extends Item implements IEquippable {
 			}
 
 			int amulets = items.size();
-			
+
 			if(amulets > 0) {
 				float degOffset = 360.0F / amulets;
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x, y, z);
-	
+
 				TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
 				RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
-	
+
 				textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				ITextureObject texture = textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				texture.setBlurMipmap(false, false);
-	
+
 				int i = 0;
 				for (ItemStack stack : items) {
 					GlStateManager.rotate(degOffset, 0, 1, 0);
-	
+
 					CircleGemType gem = CircleGemHelper.getGem(stack);
 					ItemStack gemItem = null;
-	
+
 					switch (gem) {
 					case CRIMSON:
 						gemItem = new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM);
@@ -165,10 +172,10 @@ public class ItemAmulet extends Item implements IEquippable {
 						break;
 					default:
 					}
-	
+
 					if (gemItem != null) {
 						IBakedModel model = renderItem.getItemModelMesher().getItemModel(gemItem);
-	
+
 						GlStateManager.pushMatrix();
 						GlStateManager.rotate((entity.ticksExisted + partialTicks) * 1.5F, 0, 1, 0);
 						double eyeHeight = entity.getEyeHeight();
@@ -177,34 +184,34 @@ public class ItemAmulet extends Item implements IEquippable {
 						GlStateManager.enableBlend();
 						GlStateManager.color(1, 1, 1, 0.8F);
 						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-	
+
 						LightingUtil.INSTANCE.setLighting(255);
-	
+
 						renderItem.renderItem(stack, model);
-	
+
 						LightingUtil.INSTANCE.revert();
-	
+
 						GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
 						float scale = ((float) Math.cos(entity.ticksExisted / 5.0F) + 1.0F) / 15.0F + 1.05F;
 						GlStateManager.scale(scale, scale, scale);
 						GlStateManager.colorMask(false, false, false, false);
-	
+
 						renderItem.renderItem(stack, model);
-	
+
 						GlStateManager.colorMask(true, true, true, true);
-	
+
 						renderItem.renderItem(stack, model);
-	
+
 						GlStateManager.popMatrix();
-	
+
 						i++;
 					}
 				}
-	
+
 				GlStateManager.popMatrix();
 				GlStateManager.color(1, 1, 1, 1);
 				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-	
+
 				textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				texture.restoreLastBlurMipmap();
 			}
@@ -234,7 +241,11 @@ public class ItemAmulet extends Item implements IEquippable {
 
 	@Override
 	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
-		if (CircleGemHelper.getGem(stack) == CircleGemType.NONE || (target instanceof EntityPlayer == false && !SUPPORTED_ENTITIES.contains(target.getClass()) && player != null)) {
+		if (CircleGemHelper.getGem(stack) == CircleGemType.NONE) {
+			return false;
+		}
+
+		if(target instanceof EntityPlayer == false && player != null && !canPlayerAddAmulet(player, target)) {
 			return false;
 		}
 
@@ -291,7 +302,7 @@ public class ItemAmulet extends Item implements IEquippable {
 			}
 		}
 	}
-	
+
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
 		return EnumRarity.RARE;

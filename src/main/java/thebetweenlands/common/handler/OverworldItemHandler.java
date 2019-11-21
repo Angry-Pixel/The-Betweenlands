@@ -245,7 +245,7 @@ public class OverworldItemHandler {
 	@SubscribeEvent
 	public static void onBonemeal(BonemealEvent event) {
 		if(event.getEntityPlayer().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
-			ItemStack stack = event.getEntityPlayer().getHeldItem(event.getHand());
+			ItemStack stack = event.getStack();
 			if(!stack.isEmpty() && isFertilizerBlocked(stack)) {
 				event.setResult(Result.DENY);
 				event.setCanceled(true);

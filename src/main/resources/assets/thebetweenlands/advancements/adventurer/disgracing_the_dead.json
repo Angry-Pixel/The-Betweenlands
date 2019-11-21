@@ -1,0 +1,219 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:loot_urn"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.disgracing_the_dead.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.disgracing_the_dead.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/pothead",
+  "criteria": {
+    "urn1": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn2": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn3": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn4": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn5": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn6": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn7": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn8": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn9": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn10": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn11": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_pot"
+          },
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn12": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn13": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn14": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn15": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn16": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn17": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn18": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn19": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    },
+    "urn20": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_urn"
+          }
+        ]
+      }
+    }
+  }
+}
