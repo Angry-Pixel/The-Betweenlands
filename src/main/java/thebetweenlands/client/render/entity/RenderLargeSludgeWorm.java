@@ -40,7 +40,11 @@ public class RenderLargeSludgeWorm extends RenderLiving<EntityLargeSludgeWorm> {
 
 	@Override
 	public void doRender(EntityLargeSludgeWorm entity, double x, double y, double z, float yaw, float partialTicks) {
+		if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Pre<EntityLargeSludgeWorm>(entity, this, partialTicks, x, y, z))) return;
+
 		this.renderPass(entity, x, y, z, yaw, partialTicks, false);
+
+		net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(new net.minecraftforge.client.event.RenderLivingEvent.Post<EntityLargeSludgeWorm>(entity, this, partialTicks, x, y, z));
 	}
 
 	@Override

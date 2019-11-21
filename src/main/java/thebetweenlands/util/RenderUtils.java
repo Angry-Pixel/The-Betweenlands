@@ -18,6 +18,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 public class RenderUtils {
 	private static int frameCounter = 0;
@@ -33,12 +34,14 @@ public class RenderUtils {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRenderTick(RenderWorldLastEvent event) {
-		frameCounter = (frameCounter + 1) % Integer.MAX_VALUE;
+		frameCounter++;
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onClientTick(ClientTickEvent event) {
-		renderTickCounter = (renderTickCounter + 1) % Integer.MAX_VALUE;
+		if(event.phase == Phase.END) {
+			renderTickCounter++;
+		}
 	}
 
 	@SuppressWarnings("unchecked")
