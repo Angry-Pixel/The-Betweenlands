@@ -12,7 +12,7 @@ public class ModInfo {
 
 	public static final String DEPENDENCIES = "required-after:forge@[14.23.4.2767,);after:tombmanygraves2api@[1.12-4.1.0,);after:tombmanygraves@[1.12-4.1.0,);after:jei@[4.12.0,)";
 	public static final String MC_VERSIONS = "[1.12.2]";
-	public static final String VERSION = "3.5.2";
+	public static final String VERSION = "3.5.3";
 	public static final String API_VERSION = "1.12.6";
 	public static final String CONFIG_VERSION = "1.0.0"; //Increment and add updater if properties are moved/renamed or removed
 	public static final String GALLERY_VERSION = "1.0.0"; //Protocol version of the online gallery. Change this when a breaking change is introduced to the gallery protocol or format. For backwards compatibility.
