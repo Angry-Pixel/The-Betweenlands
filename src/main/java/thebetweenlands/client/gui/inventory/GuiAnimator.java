@@ -67,7 +67,7 @@ public class GuiAnimator extends GuiContainer {
 			}
 		}
 
-		if (tile.isSlotInUse(0) && tile.isCrystalInslot() && tile.isSulfurInSlot() && tile.fuelConsumed < tile.requiredFuelCount && tile.lifeCrystalLife >= tile.requiredLifeCount && tile.isValidFocalItem()) {
+		if (tile.isRunning()) {
 			//Fuel bar
 			int fuelBurnProgress = tile.fuelBurnProgress;
 			drawTexturedModalRect(k + 129, l + 8 + fuelBurnProgress, 175, 2 + fuelBurnProgress, 6, 42);
@@ -84,9 +84,9 @@ public class GuiAnimator extends GuiContainer {
 				drawTexturedModalRect(k + 51, l + 65 - barHeight, 182, 18 - barHeight, 72, 2 + barHeight);
 			}
 		}
-		if (tile.getStackInSlot(1) == null)
+		if (tile.getStackInSlot(1).isEmpty())
 			renderSlot(new ItemStack(ItemRegistry.LIFE_CRYSTAL, 1, 0), k + 34, l + 57);
-		if (tile.getStackInSlot(2) == null)
+		if (tile.getStackInSlot(2).isEmpty())
 			renderSlot(ItemMisc.EnumItemMisc.SULFUR.create(1), k + 124, l + 57);
 	}
 
