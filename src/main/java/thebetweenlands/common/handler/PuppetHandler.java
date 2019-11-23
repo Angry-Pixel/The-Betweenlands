@@ -19,6 +19,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import net.minecraft.entity.player.EntityPlayer;
@@ -244,6 +245,8 @@ public class PuppetHandler {
 						EntityAIPuppet puppetAI = EntityAIPuppet.getPuppetAI(living.tasks);
 
 						if(puppetAI == null) {
+							EntityAISwimming aiSwim = new EntityAISwimming(living);
+							
 							EntityAIStay aiStay = new EntityAIStay(living);
 							aiStay.setMutexBits(3); //11
 
@@ -260,7 +263,7 @@ public class PuppetHandler {
 							aiFollow.setMutexBits(1);
 
 							EntityAIPuppet.addPuppetAI(() -> cap.getPuppeteer(), living, living.tasks,
-									ImmutableList.of(aiStay, aiFollow, aiGoTo));
+									ImmutableList.of(aiSwim, aiStay, aiFollow, aiGoTo));
 						} else {
 							EntityAIStay aiStay = getAI(EntityAIStay.class, puppetAI.getSubTasks());
 							if (aiStay != null) {
