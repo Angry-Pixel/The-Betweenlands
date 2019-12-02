@@ -10,6 +10,7 @@ import net.minecraftforge.common.config.Config.Name;
 import net.minecraftforge.common.config.Config.RangeDouble;
 import net.minecraftforge.common.config.Config.RangeInt;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
+import thebetweenlands.common.config.properties.BlockListProperty;
 import thebetweenlands.common.config.properties.IntSetProperty;
 import thebetweenlands.common.config.properties.ItemDecayFoodProperty;
 import thebetweenlands.common.config.properties.ItemListProperty;
@@ -359,6 +360,13 @@ public class BetweenlandsConfig {
 		public String[] pouchBlackListUnparsed = {};
 		@Ignore
 		public final ItemListProperty pouchBlacklist = new ItemListProperty(() -> GENERAL.pouchBlackListUnparsed);
+
+		@Name("moving_wall_blacklist")
+		@LangKey(LANG_PREFIX +  "moving_wall_blacklist")
+		@Comment("A list of blocks that should not be broken by the moving walls. Syntax is \"modid:blockname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] movingWallBlacklistUnparsed = { "tombmanygraves:grave_block" };
+		@Ignore
+		public final BlockListProperty movingWallBlacklist = new BlockListProperty(() -> GENERAL.movingWallBlacklistUnparsed);
 
 		@Name("caving_rope_despawn_time")
 		@LangKey(LANG_PREFIX + "caving_rope_despawn_time")
