@@ -2,11 +2,10 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MoverType;
@@ -17,20 +16,12 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAIOwnerHurtByTarget;
-import net.minecraft.entity.ai.EntityAIOwnerHurtTarget;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -38,7 +29,6 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -52,19 +42,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.api.entity.IRingOfGatheringMinion;
-import thebetweenlands.common.block.misc.BlockOctine;
-import thebetweenlands.common.entity.ai.EntityAIFollowOwnerBL;
-import thebetweenlands.common.entity.ai.EntityAISitBL;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityEmberling extends EntityTameable implements IEntityMultiPart, IEntityBL, IRingOfGatheringMinion {
+public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, IEntityBL{
 
 	public MultiPartEntityPart[] tailPart;
-	private static final DataParameter<Boolean> IS_FLAME_ATTACKING = EntityDataManager.<Boolean>createKey(EntityEmberling.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_FLAME_ATTACKING = EntityDataManager.<Boolean>createKey(EntityEmberlingWild.class, DataSerializers.BOOLEAN);
 	public float animationTicks, prevAnimationTicks;
 
 	private EntityMoveHelper moveHelperWater;
@@ -73,7 +57,7 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 	private PathNavigateGround pathNavigatorGround;
 	private PathNavigateSwimmer pathNavigatorWater;
 
-	public EntityEmberling(World world) {
+	public EntityEmberlingWild(World world) {
 		super(world);
 		setSize(0.9F, 0.85F);
 		stepHeight = 1F;
@@ -82,7 +66,7 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 
 		setPathPriority(PathNodeType.WATER, 100);
 
-		moveHelperWater = new EntityEmberling.EmberlingMoveHelper(this);
+		moveHelperWater = new EntityEmberlingWild.EmberlingMoveHelper(this);
 		moveHelperLand = new EntityMoveHelper(this);
 
 		pathNavigatorGround = new PathNavigateGround(this, world);
@@ -109,25 +93,20 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 
 	@Override
 	protected void initEntityAI() {
-		tasks.addTask(0, new EntityEmberling.EntityAIFlameBreath(this));
-		this.aiSit = new EntityAISitBL(this);
-		tasks.addTask(1, this.aiSit);
-		tasks.addTask(2, new EntityEmberling.AIEmberlingAttack(this));
-		tasks.addTask(3, new EntityAIFollowOwnerBL(this, 0.6D, 10.0F, 2.0F));
-		tasks.addTask(4, new EntityAIWander(this, 0.6D));
-		tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		tasks.addTask(5, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityMob.class, 0, false, true, null));
-		targetTasks.addTask(1, new EntityAIOwnerHurtByTarget(this));
-		targetTasks.addTask(2, new EntityAIOwnerHurtTarget(this));
-		targetTasks.addTask(3, new EntityAIHurtByTarget(this, true, new Class[0]));
+		tasks.addTask(0, new EntityEmberlingWild.EntityAIFlameBreath(this));
+		tasks.addTask(1, new EntityEmberlingWild.AIEmberlingAttack(this));
+		tasks.addTask(2, new EntityAIWander(this, 0.6D));
+		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		tasks.addTask(4, new EntityAILookIdle(this));
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, 0, false, true, null));
+		targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[0]));
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(40D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30D);
 		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.25D);
@@ -154,28 +133,17 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 	}
 
 	@Override
-	public boolean shouldAttackEntity(EntityLivingBase target, EntityLivingBase owner) {
-		if (!(target instanceof EntityCreeper) && !(target instanceof EntityGhast)) {
-			if (target instanceof EntityEmberling) {
-				EntityEmberling emberling = (EntityEmberling) target;
-
-				if (emberling.isTamed() && emberling.getOwner() == owner)
-					return false;
-			}
-			if (target instanceof EntityPlayer && owner instanceof EntityPlayer && !((EntityPlayer) owner).canAttackPlayer((EntityPlayer) target))
-				return false;
-			else
-				return !(target instanceof AbstractHorse) || !((AbstractHorse) target).isTame();
-		} else
-			return false;
-	}
-
-	@Override
 	public boolean attackEntityAsMob(Entity entity) {
 		boolean hitTarget = entity.attackEntityFrom(DamageSource.causeMobDamage(this), (float)((int)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue()));
 		if (hitTarget)
 			this.applyEnchantments(this, entity);
 		return hitTarget;
+	}
+
+	@Override
+	public boolean getCanSpawnHere() {
+		IBlockState iblockstate = this.world.getBlockState((new BlockPos(this)).down());
+		return iblockstate.canEntitySpawn(this) && getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL;
 	}
 
 	@Override
@@ -194,13 +162,8 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 	}
 
 	@Override
-	protected boolean canDespawn() {
-		return !isTamed();
-	}
-
-	@Override
-	public boolean canBeLeashedTo(EntityPlayer player) {
-		return !canDespawn() && super.canBeLeashedTo(player);
+	public int getMaxSpawnedInChunk() {
+		return 3;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -214,34 +177,29 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 
 		updateMovementAndPathfinding();
 
-		if (getEntityWorld().getDifficulty() == EnumDifficulty.PEACEFUL)
-			if (!getEntityWorld().isRemote)
-				if (!isTamed())
-					setDead();
-
-		if (!getEntityWorld().isRemote && isSitting()) {
-			if (getHealth() < getMaxHealth())
-				if (ticksExisted % 1200 == 0)
-					if (getEntityWorld().getBlockState(getPosition().down()).getBlock() instanceof BlockOctine) {
-						heal(1); // passive heal, 1 health a minute whilst sleeping on an octine block.
-						playTameEffect(true);
-						world.setEntityState(this, (byte)7);
-					}
-		}
-
 		if (getEntityWorld().isRemote) {
 			if (!getIsFlameAttacking()) 
 				if (ticksExisted % 5 == 0)
-					if(!isSitting())
-						flameParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
-					else {
-						sleepingParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
-					}
+					flameParticles(getEntityWorld(), tailPart[0].posX, tailPart[0].posY + 0.25, tailPart[0].posZ, rand);
 
 			if (getIsFlameAttacking())
 				spawnFlameBreathParticles();
 		}
 	}
+
+    protected void playTameEffect(boolean play) {
+        EnumParticleTypes enumparticletypes = EnumParticleTypes.HEART;
+
+        if (!play)
+            enumparticletypes = EnumParticleTypes.SMOKE_NORMAL;
+
+        for (int i = 0; i < 7; ++i) {
+            double d0 = this.rand.nextGaussian() * 0.02D;
+            double d1 = this.rand.nextGaussian() * 0.02D;
+            double d2 = this.rand.nextGaussian() * 0.02D;
+            this.world.spawnParticle(enumparticletypes, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+        }
+    }
 
 	protected void updateMovementAndPathfinding() {
 		if (isInWater())
@@ -256,48 +214,9 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 
 		//renderYawOffset = rotationYaw;
 		double a = Math.toRadians(renderYawOffset);
-		double offSetX = -Math.sin(a) * (isSitting() ? -0.2D : 1.85D);
-		double offSetZ = Math.cos(a) * (isSitting() ? -0.2D : 1.85D);
+		double offSetX = -Math.sin(a) * 1.85D;
+		double offSetZ = Math.cos(a) * 1.85D;
 		tailPart[0].setLocationAndAngles(posX - offSetX, posY + 0.2D, posZ - offSetZ, 0.0F, 0.0F);
-	}
-
-	@Override
-	public boolean processInteract(EntityPlayer player, EnumHand hand) {
-		ItemStack stack = player.getHeldItem(hand);
-		if (!stack.isEmpty()) {
-			if (isTamed()) {
-				if ((EnumItemMisc.OCTINE_NUGGET.isItemOf(stack) || stack.getItem() == ItemRegistry.OCTINE_INGOT)) {
-					if (getHealth() < getMaxHealth()) {
-						if (!getEntityWorld().isRemote) {
-							heal(EnumItemMisc.OCTINE_NUGGET.isItemOf(stack) ? 5.0F : getMaxHealth() - getHealth());
-
-							if (!player.capabilities.isCreativeMode) {
-								stack.shrink(1);
-								if (stack.getCount() <= 0)
-									player.setHeldItem(hand, ItemStack.EMPTY);
-							}
-
-							if (getHealth() == getMaxHealth()) {
-								getEntityWorld().playSound(null, getPosition(), SoundRegistry.EMBERLING_LIVING, SoundCategory.NEUTRAL, 1.0F, 0.75F);
-							}
-						} else {
-							playTameEffect(true);
-						}
-
-						return true;
-					}
-				}
-			}
-		}
-
-		if (isOwner(player) && !world.isRemote) {
-			aiSit.setSitting(!isSitting());
-			isJumping = false;
-			navigator.clearPath();
-			setAttackTarget((EntityLivingBase) null);
-		}
-
-		return super.processInteract(player, hand);
 	}
 
 	@Override
@@ -360,16 +279,6 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
-	public void sleepingParticles(World world, double x, double y, double z, Random rand) {
-		int motionX = rand.nextBoolean() ? 1 : -1;
-		int motionZ = rand.nextBoolean() ? 1 : -1;
-		double velY = rand.nextFloat() * 0.05D;
-		double velZ = rand.nextFloat() * 0.025D * motionZ;
-		double velX = rand.nextFloat() * 0.025D * motionX;
-		world.spawnAlwaysVisibleParticle(EnumParticleTypes.SMOKE_NORMAL.getParticleID(), x, y, z, velX, velY, velZ);
-	}
-
 	@Override
 	public World getWorld() {
 		return getEntityWorld();
@@ -397,14 +306,9 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 		return 0.5F;
 	}
 
-	@Override
-	public EntityAgeable createChild(EntityAgeable ageable) {
-		return null;
-	}
-
 	static class AIEmberlingAttack extends EntityAIAttackMelee {
 
-		public AIEmberlingAttack(EntityEmberling emberling) {
+		public AIEmberlingAttack(EntityEmberlingWild emberling) {
 			super(emberling, 0.65D, false);
 		}
 
@@ -415,12 +319,12 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 	}
 
 	static class EntityAIFlameBreath extends EntityAIBase {
-		EntityEmberling emberling;
+		EntityEmberlingWild emberling;
 		EntityLivingBase target;
 		int missileCount;
 		int shootCount;
 
-		public EntityAIFlameBreath(EntityEmberling emberling) {
+		public EntityAIFlameBreath(EntityEmberlingWild emberling) {
 			this.emberling = emberling;
 			setMutexBits(5);
 		}
@@ -429,7 +333,7 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 		public boolean shouldExecute() {
 			target = emberling.getAttackTarget();
 
-			if (target == null || emberling.isInWater() || emberling.isSitting())
+			if (target == null || emberling.isInWater())
 				return false;
 			else {
 				double distance = emberling.getDistanceSq(target);
@@ -490,9 +394,9 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 	}
 
 	static class EmberlingMoveHelper extends EntityMoveHelper {
-		private final EntityEmberling emberling;
+		private final EntityEmberlingWild emberling;
 
-		public EmberlingMoveHelper(EntityEmberling emberling) {
+		public EmberlingMoveHelper(EntityEmberlingWild emberling) {
 			super(emberling);
 			this.emberling = emberling;
 		}
@@ -540,37 +444,5 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 				emberling.setAIMoveSpeed(0.0F);
 			}
 		}
-	}
-
-	@Override
-	public NBTTagCompound returnToRing(UUID userId) {
-		return this.writeToNBT(new NBTTagCompound());
-	}
-
-	@Override
-	public boolean returnFromRing(Entity user, NBTTagCompound nbt) {
-		double prevX = this.posX;
-		double prevY = this.posY;
-		double prevZ = this.posZ;
-		float prevYaw = this.rotationYaw;
-		float prevPitch = this.rotationPitch;
-		this.readFromNBT(nbt);
-		this.setLocationAndAngles(prevX, prevY, prevZ, prevYaw, prevPitch);
-		if(!this.isEntityAlive()) {
-			//Revivd by animator
-			this.setHealth(this.getMaxHealth());
-		}
-		this.world.spawnEntity(this);
-		return true;
-	}
-
-	@Override
-	public boolean shouldReturnOnUnload(boolean isOwnerLoggedIn) {
-		return IRingOfGatheringMinion.super.shouldReturnOnUnload(isOwnerLoggedIn) && !this.isSitting();
-	}
-
-	@Override
-	public UUID getRingOwnerId() {
-		return this.getOwnerId();
 	}
 }
