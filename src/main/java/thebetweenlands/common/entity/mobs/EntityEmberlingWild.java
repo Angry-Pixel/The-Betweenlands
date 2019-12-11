@@ -107,7 +107,7 @@ public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, 
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30D);
-		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.25D);
 	}
@@ -187,7 +187,7 @@ public class EntityEmberlingWild extends EntityMob implements IEntityMultiPart, 
 		}
 	}
 
-    protected void playTameEffect(boolean play) {
+    public void playTameEffect(boolean play) {
         EnumParticleTypes enumparticletypes = EnumParticleTypes.HEART;
 
         if (!play)

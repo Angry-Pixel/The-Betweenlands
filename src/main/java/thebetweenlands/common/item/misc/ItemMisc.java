@@ -140,10 +140,10 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
 		if (target instanceof EntityEmberlingWild && EnumItemMisc.UNDYING_EMBER.isItemOf(stack)) {
-			
+			EntityEmberlingWild oldEmberling = (EntityEmberlingWild) target;
+			EntityEmberling newEmberling = new EntityEmberling(player.getEntityWorld());
 			if (!player.getEntityWorld().isRemote) {
-				EntityEmberlingWild oldEmberling = (EntityEmberlingWild) target;
-				EntityEmberling newEmberling = new EntityEmberling(player.getEntityWorld());
+				
 				newEmberling.copyLocationAndAnglesFrom(oldEmberling);
 				newEmberling.setTamedBy(player);
 				player.getEntityWorld().removeEntity(oldEmberling);
@@ -156,7 +156,7 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 				}
 				return true;
 			} else {
-				//playTameEffect(true);
+				oldEmberling.playTameEffect(true);
 				return true;
 			}
 		} else {
