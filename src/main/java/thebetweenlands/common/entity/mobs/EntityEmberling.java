@@ -53,6 +53,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IRingOfGatheringMinion;
+import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.block.misc.BlockOctine;
 import thebetweenlands.common.entity.ai.EntityAIFollowOwnerBL;
 import thebetweenlands.common.entity.ai.EntityAISitBL;
@@ -264,6 +265,9 @@ public class EntityEmberling extends EntityTameable implements IEntityMultiPart,
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
+		boolean holdsEquipment = hand == EnumHand.MAIN_HAND && !stack.isEmpty() && (stack.getItem() instanceof IEquippable || stack.getItem() == ItemRegistry.AMULET_SLOT);
+		if (holdsEquipment)
+			return true;
 		if (!stack.isEmpty()) {
 			if (isTamed()) {
 				if ((EnumItemMisc.OCTINE_NUGGET.isItemOf(stack) || stack.getItem() == ItemRegistry.OCTINE_INGOT)) {
