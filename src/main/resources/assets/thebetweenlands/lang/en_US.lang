@@ -1314,6 +1314,7 @@ entity.thebetweenlands.wall_living_root.name=Living Root
 entity.thebetweenlands.ash_sprite.name=Ash Sprite
 entity.thebetweenlands.emberling_shaman.name=Emberling Shaman
 entity.thebetweenlands.emberling.name=Emberling
+entity.thebetweenlands.wild_emberling.name=Emberling
 entity.thebetweenlands.shambler.name=Shambler
 entity.thebetweenlands.barrishee.name=Barrishee
 entity.thebetweenlands.sludge_jet.name=Sludge Jet
