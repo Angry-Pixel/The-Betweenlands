@@ -8,7 +8,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.capability.ISerializableCapability;
 import thebetweenlands.common.capability.base.EntityCapability;
@@ -46,6 +48,8 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 	private UUID puppeteerUUID;
 	private int remainingTicks;
 	private boolean stay;
+	private boolean guard;
+	private BlockPos guardHome;
 
 	@Nullable
 	private UUID ringUUID;
@@ -101,6 +105,23 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 	}
 
 	@Override
+	public void setGuard(boolean guard, @Nullable BlockPos pos) {
+		this.guard = guard;
+		this.guardHome = pos;
+		this.markDirty();
+	}
+
+	@Override
+	public boolean getGuard() {
+		return this.guard;
+	}
+
+	@Override
+	public BlockPos getGuardHome() {
+		return this.guardHome;
+	}
+
+	@Override
 	public void setRingUuid(@Nullable UUID uuid) {
 		this.ringUUID = uuid;
 	}
@@ -132,6 +153,10 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 			nbt.setUniqueId("ring", this.ringUUID);
 		}
 		nbt.setInteger("recruitmentCost", this.recruitmentCost);
+		nbt.setBoolean("guard", this.guard);
+		if(this.guardHome != null) {
+			nbt.setLong("guardHome", this.guardHome.toLong());
+		}
 	}
 
 	@Override
@@ -149,6 +174,12 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 			this.ringUUID = null;
 		}
 		this.recruitmentCost = nbt.getInteger("recruitmentCost");
+		this.guard = nbt.getBoolean("guard");
+		if(nbt.hasKey("guardHome", Constants.NBT.TAG_LONG)) {
+			this.guardHome = BlockPos.fromLong(nbt.getLong("guardHome"));
+		} else {
+			this.guardHome = null;
+		}
 	}
 
 	@Override
@@ -157,6 +188,7 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 			nbt.setUniqueId("puppeteer", this.puppeteerUUID);
 		}
 		nbt.setBoolean("stay", this.stay);
+		nbt.setBoolean("guard", this.guard);
 	}
 
 	@Override
@@ -168,6 +200,7 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 			this.puppeteer = null;
 		}
 		this.stay = nbt.getBoolean("stay");
+		this.guard = nbt.getBoolean("guard");
 	}
 
 	@Override
