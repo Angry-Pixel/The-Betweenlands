@@ -89,20 +89,24 @@ public class SoundSystemOpenALAccess {
 
 		if(fieldSoundLibrary != null && fieldSourceMap != null && fieldChannelOpenAL != null) {
 			try {
-				Library library = (Library) fieldSoundLibrary.get(((SoundSystem)soundManager.sndSystem));
-				if(library instanceof LibraryLWJGLOpenAL) {
-					this.library = (LibraryLWJGLOpenAL) library;
-					this.soundManager = soundManager;
-					this.service = Executors.newFixedThreadPool(1, (Runnable task) -> {
-						Thread thread = new Thread(task);
-						thread.setDaemon(true);
-						thread.setName("Betweenlands Sound System Access #" + ACCESS_THREAD_ID.getAndIncrement());
-						return thread;
-					});
-					this.errored = false;
-					this.initialized = true;
+				if(soundManager.sndSystem instanceof SoundSystem) {
+					Library library = (Library) fieldSoundLibrary.get((SoundSystem)soundManager.sndSystem);
+					if(library instanceof LibraryLWJGLOpenAL) {
+						this.library = (LibraryLWJGLOpenAL) library;
+						this.soundManager = soundManager;
+						this.service = Executors.newFixedThreadPool(1, (Runnable task) -> {
+							Thread thread = new Thread(task);
+							thread.setDaemon(true);
+							thread.setName("Betweenlands Sound System Access #" + ACCESS_THREAD_ID.getAndIncrement());
+							return thread;
+						});
+						this.errored = false;
+						this.initialized = true;
+					} else {
+						LOGGER.error("Sound library is not OpenAL library");
+					}
 				} else {
-					LOGGER.info("Sound library is not OpenAL library");
+					LOGGER.error("Field 'sndSystem' of SoundManager is not SoundSystem");
 				}
 			} catch (IllegalArgumentException | IllegalAccessException ex) {
 				LOGGER.error("Failed accessing 'soundLibrary' field of SoundSystem", ex);
