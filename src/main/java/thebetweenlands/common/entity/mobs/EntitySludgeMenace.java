@@ -345,6 +345,16 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 	}
 
 	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
+	
+	@Override
+	public boolean isNonBoss() {
+		return false;
+	}
+	
+	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 
@@ -396,6 +406,58 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 
 		Entity[] parts = this.getParts();
 
+		this.updateBulges(parts);
+
+		if(this.world.isRemote) {
+			for(int i = 0; i < parts.length; i++) {
+				if(i == 0) {
+					this.renderBoundingBox = parts[i].getEntityBoundingBox();
+				} else {
+					this.renderBoundingBox = this.renderBoundingBox.union(parts[i].getEntityBoundingBox());
+				}
+			}
+
+			this.spawnTipParticles();
+		}
+
+		if(!this.world.isRemote && this.isEntityAlive()) {
+			//Heal when no player is nearby
+			if(this.ticksExisted % 12 == 0 && this.getHealth() < this.getMaxHealth()) {
+				final double rangeXZ = 14;
+				final double rangeY = 13;
+				
+				List<EntityLivingBase> nearbyPlayers = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(rangeXZ, rangeXZ, rangeXZ));
+				
+				Iterator<EntityLivingBase> it = nearbyPlayers.iterator();
+				while(it.hasNext()) {
+					EntityLivingBase living = it.next();
+					if(living.getDistance(this.posX, living.posY, this.posZ) > rangeXZ || Math.abs(living.posY - this.posY) > rangeY)
+						it.remove();
+				}
+				
+				if(nearbyPlayers.isEmpty()) {
+					this.heal(1);
+				}
+			}
+			
+			for(int i = 0; i < this.dummies.length; i++) {
+				DummyPart dummy = this.dummies[i];
+
+				if(dummy == null || !dummy.isEntityAlive()) {
+					Entity multipart = parts[i];
+
+					if(multipart instanceof MultiPartEntityPart) {
+						this.dummies[i] = dummy = new DummyPart(this.world, (MultiPartEntityPart) multipart);
+						this.world.spawnEntity(dummy);
+					}
+				} else {
+					dummy.updatePositioning();
+				}
+			}
+		}
+	}
+
+	protected void updateBulges(Entity[] parts) {
 		Iterator<Bulge> it = this.bulges.iterator();
 		while(it.hasNext()) {
 			Bulge bulge = it.next();
@@ -462,37 +524,8 @@ public class EntitySludgeMenace extends EntityWallLivingRoot implements IEntityS
 				}
 			}
 		}
-
-		if(this.world.isRemote) {
-			for(int i = 0; i < parts.length; i++) {
-				if(i == 0) {
-					this.renderBoundingBox = parts[i].getEntityBoundingBox();
-				} else {
-					this.renderBoundingBox = this.renderBoundingBox.union(parts[i].getEntityBoundingBox());
-				}
-			}
-
-			this.spawnTipParticles();
-		}
-
-		if(!this.world.isRemote && this.isEntityAlive()) {
-			for(int i = 0; i < this.dummies.length; i++) {
-				DummyPart dummy = this.dummies[i];
-
-				if(dummy == null || !dummy.isEntityAlive()) {
-					Entity multipart = parts[i];
-
-					if(multipart instanceof MultiPartEntityPart) {
-						this.dummies[i] = dummy = new DummyPart(this.world, (MultiPartEntityPart) multipart);
-						this.world.spawnEntity(dummy);
-					}
-				} else {
-					dummy.updatePositioning();
-				}
-			}
-		}
 	}
-
+	
 	@Override
 	protected void onDeathUpdate() {
 		this.bossInfo.setPercent(0);

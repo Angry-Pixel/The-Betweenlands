@@ -1179,6 +1179,9 @@ chat.ring_of_gathering.not_enough_xp=Not enough XP to use the ring
 chat.ring_of_gathering.animator=Dead minions or pets need to be revived in an animator
 
 chat.ring_of_recruitment.not_enough_power=The ring does not have enough power left to recruit this entity
+chat.ring_of_recruitment.state.stay=Your %s is now staying
+chat.ring_of_recruitment.state.guard=Your %s is now guarding
+chat.ring_of_recruitment.state.follow=Your %s is now following
 
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath

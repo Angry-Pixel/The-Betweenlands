@@ -620,8 +620,15 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			for (int zz = - 14; zz <= 14; zz++) {
 				for (int yy = 0; yy > -16; yy--) {
 					double dSqDome = Math.pow(xx, 2.0D) + Math.pow(zz, 2.0D) + Math.pow(yy, 2.0D);
-					if (Math.round(Math.sqrt(dSqDome)) < 15)
-						this.setBlockAndNotifyAdequately(world, pos.add(xx, yy, zz), Blocks.AIR.getDefaultState());
+					
+					if (Math.round(Math.sqrt(dSqDome)) < 15) {
+						BlockPos offsetPos = pos.add(xx, yy, zz);
+						
+						this.setBlockAndNotifyAdequately(world, offsetPos, Blocks.AIR.getDefaultState());
+					
+						//Prevent block placing in boss room
+						this.location.getGuard().setGuarded(world, offsetPos, true);
+					}
 				}
 			}
 		}
