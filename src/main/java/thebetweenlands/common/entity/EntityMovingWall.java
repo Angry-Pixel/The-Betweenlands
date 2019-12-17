@@ -32,6 +32,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.client.audio.MovingWallSound;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -290,16 +291,16 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake, IEnt
 		BlockPos posEntity = getPosition();
 		Iterable<BlockPos> blocks = BlockPos.getAllInBox(posEntity.add(-1F, -1F, -1F), posEntity.add(1F, 1F, 1F));
 		for (BlockPos pos : blocks) {
-			if (isUnbreakableBlock(getEntityWorld().getBlockState(pos).getBlock())) {
+			if (isUnbreakableBlock(getEntityWorld().getBlockState(pos))) {
 				setDead();
 			}
 		}
-		if(isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(2, 0, 0)).getBlock()) && isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(-2, 0, 0)).getBlock())) {
+		if(isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(2, 0, 0))) && isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(-2, 0, 0)))) {
 			motionZ = this.speed;
 			motionX = motionY = 0;
 			setIsNewSpawn(false);
 		}
-		else if(isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(0, 0, 2)).getBlock()) && isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(0, 0, -2)).getBlock())) {
+		else if(isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(0, 0, 2))) && isUnbreakableBlock(getEntityWorld().getBlockState(posEntity.add(0, 0, -2)))) {
 			motionX = this.speed;
 			motionY = motionZ = 0;
 			setIsNewSpawn(false);
@@ -385,7 +386,7 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake, IEnt
 	protected void onImpact(RayTraceResult result) {
 		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
 			IBlockState state = getEntityWorld().getBlockState(result.getBlockPos());
-			if (isUnbreakableBlock(state.getBlock())) { // not sure of all the different states so default will do
+			if (isUnbreakableBlock(state)) { // not sure of all the different states so default will do
 				if (result.sideHit.getIndex() == 2 || result.sideHit.getIndex() == 3) {
 					shaking = true;
 					shake_timer = 0;
@@ -479,8 +480,8 @@ public class EntityMovingWall extends Entity implements IEntityScreenShake, IEnt
 		return !isHoldingStill();
 	}
 
-	public boolean isUnbreakableBlock(Block block) {
-		return UNBREAKABLE_BLOCKS.contains(block);
+	public boolean isUnbreakableBlock(IBlockState state) {
+		return UNBREAKABLE_BLOCKS.contains(state.getBlock()) || BetweenlandsConfig.GENERAL.movingWallBlacklist.isListed(state);
 	}
 
 	@Override
