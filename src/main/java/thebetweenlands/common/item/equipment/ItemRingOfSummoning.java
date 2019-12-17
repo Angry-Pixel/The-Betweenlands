@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.equipment;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -13,6 +17,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -26,10 +31,8 @@ import thebetweenlands.common.entity.mobs.EntityMummyArm;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemRingOfSummoning extends ItemRing {
 	public static final int MAX_USE_TIME = 100;
@@ -45,7 +48,7 @@ public class ItemRingOfSummoning extends ItemRing {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.ring.summoning.bonus"), 0));
 		if (GuiScreen.isShiftKeyDown()) {
-			String toolTip = I18n.format("tooltip.bl.ring.summoning", KeyBindRegistry.RADIAL_MENU.getDisplayName(), KeyBindRegistry.USE_RING.getDisplayName());
+			String toolTip = I18n.format("tooltip.bl.ring.summoning", KeyBindRegistry.RADIAL_MENU.getDisplayName(), KeyBindRegistry.USE_RING.getDisplayName(), KeyBindRegistry.USE_SECONDARY_RING.getDisplayName());
 			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
 		} else {
 			list.add(I18n.format("tooltip.bl.press.shift"));
@@ -144,5 +147,21 @@ public class ItemRingOfSummoning extends ItemRing {
 			return hasRing;
 		}
 		return false;
+	}
+
+	@Override
+	public void onKeybindState(EntityPlayer player, ItemStack stack, IInventory inventory, boolean active) {
+		ISummoningCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SUMMON, null);
+
+		if (cap != null) {
+			if(!active && cap.isActive()) {
+				cap.setActive(false);
+				cap.setCooldownTicks(ItemRingOfSummoning.USE_COOLDOWN);
+			} else if(active && !cap.isActive() && cap.getCooldownTicks() <= 0 && ItemRingOfSummoning.isRingActive(player)) {
+				cap.setActive(true);
+				cap.setActiveTicks(0);
+				player.world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.PEAT_MUMMY_CHARGE, SoundCategory.PLAYERS, 0.4F, (player.world.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
+			}
+		}
 	}
 }

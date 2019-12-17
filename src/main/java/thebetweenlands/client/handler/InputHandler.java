@@ -8,7 +8,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.serverbound.MessageConnectCavingRope;
 import thebetweenlands.common.network.serverbound.MessageOpenPouch;
 import thebetweenlands.common.network.serverbound.MessageUpdatePuppeteerState;
-import thebetweenlands.common.network.serverbound.MessageUpdateSummoningState;
+import thebetweenlands.common.network.serverbound.MessageUpdateRingKeybindState;
 import thebetweenlands.common.registries.KeyBindRegistry;
 
 public class InputHandler {
@@ -18,6 +18,7 @@ public class InputHandler {
 	private static boolean wasDisconnectRopeButtonPressed = false;
 	private static boolean wasUseButtonPressed = false;
 	private static boolean wasRingUseButtonPressed = false;
+	private static boolean wasSecondaryRingUseButtonPressed = false;
 	private static boolean wasPouchButtonPressed = false;
 
 	@SubscribeEvent
@@ -63,10 +64,18 @@ public class InputHandler {
 	private static void updateRingUseButtonState() {
 		if(!wasRingUseButtonPressed && KeyBindRegistry.USE_RING.isKeyDown()) {
 			wasRingUseButtonPressed = true;
-			TheBetweenlands.networkWrapper.sendToServer(new MessageUpdateSummoningState(true));
+			TheBetweenlands.networkWrapper.sendToServer(new MessageUpdateRingKeybindState(true, 0));
 		} else if(wasRingUseButtonPressed && !KeyBindRegistry.USE_RING.isKeyDown()) {
 			wasRingUseButtonPressed = false;
-			TheBetweenlands.networkWrapper.sendToServer(new MessageUpdateSummoningState(false));
+			TheBetweenlands.networkWrapper.sendToServer(new MessageUpdateRingKeybindState(false, 0));
+		}
+		
+		if(!wasSecondaryRingUseButtonPressed && KeyBindRegistry.USE_SECONDARY_RING.isKeyDown()) {
+			wasSecondaryRingUseButtonPressed = true;
+			TheBetweenlands.networkWrapper.sendToServer(new MessageUpdateRingKeybindState(true, 1));
+		} else if(wasSecondaryRingUseButtonPressed && !KeyBindRegistry.USE_SECONDARY_RING.isKeyDown()) {
+			wasSecondaryRingUseButtonPressed = false;
+			TheBetweenlands.networkWrapper.sendToServer(new MessageUpdateRingKeybindState(false, 1));
 		}
 	}
 }
