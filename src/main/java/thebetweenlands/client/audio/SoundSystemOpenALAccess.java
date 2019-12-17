@@ -138,7 +138,7 @@ public class SoundSystemOpenALAccess {
 	 */
 	@Nullable
 	public synchronized <T> Future<T> submitToSoundSystem(Callable<T> task) {
-		return this.service != null ? this.service.submit(() -> {
+		return !this.errored && this.initialized && this.service != null ? this.service.submit(() -> {
 			synchronized(this) {
 				synchronized(SoundSystemConfig.THREAD_SYNC) {
 					return task.call();
