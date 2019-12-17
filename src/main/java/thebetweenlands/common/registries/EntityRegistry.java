@@ -188,7 +188,7 @@ public class EntityRegistry {
 		registerEntity(EntityEmberlingShaman.class, "emberling_shaman", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityFlameJet.class, "flame_jet", 64, 1, true);
 		registerEntity(EntityMovingWall.class, "moving_wall", 64, 1, true);
-		registerEntity(EntityEmberling.class, "emberling", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityEmberling.class, "emberling");
 		registerEntity(EntityEmberlingWild.class, "wild_emberling", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityGalleryFrame.class, "gallery_frame");
 		registerEntity(EntitySludgeMenace.class, "sludge_menace", 0x0B3B0B, 0xDBA901);
