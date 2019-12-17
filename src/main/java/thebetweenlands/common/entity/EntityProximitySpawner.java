@@ -148,4 +148,9 @@ public abstract class EntityProximitySpawner extends EntityCreature implements I
 		}
 		return null;
 	}
+
+	@Override
+    protected boolean canDespawn() {
+        return false;
+    }
 }
