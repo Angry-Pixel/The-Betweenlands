@@ -137,4 +137,9 @@ public class BlockAmatePaperPane extends BlockPaneBetweenlands implements IConne
 
 		return i;
 	}
+
+	@Override
+	public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return true;
+    }
 }
