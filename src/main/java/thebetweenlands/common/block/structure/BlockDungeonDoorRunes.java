@@ -43,6 +43,7 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 	public BlockDungeonDoorRunes(Material material, boolean mimic, boolean barrishee) {
 		super(material);
 		setBlockUnbreakable();
+		setResistance(2000.0F);
 		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(INVISIBLE, false));
