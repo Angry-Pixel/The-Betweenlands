@@ -212,7 +212,7 @@ public class EntityTriggeredFallingBlock extends EntityProximitySpawner {
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		setWalkway(nbt.getBoolean("walk_way"));
-		setWalkway(nbt.getBoolean("hanging"));
+		setHanging(nbt.getBoolean("hanging"));
 	}
 
 	@Override

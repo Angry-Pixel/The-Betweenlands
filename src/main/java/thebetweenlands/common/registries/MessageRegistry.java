@@ -52,7 +52,7 @@ import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarPage;
 import thebetweenlands.common.network.serverbound.MessageShiftRuneChainAltarSlot;
 import thebetweenlands.common.network.serverbound.MessageUnlinkRuneChainAltarRune;
 import thebetweenlands.common.network.serverbound.MessageUpdatePuppeteerState;
-import thebetweenlands.common.network.serverbound.MessageUpdateSummoningState;
+import thebetweenlands.common.network.serverbound.MessageUpdateRingKeybindState;
 
 public class MessageRegistry {
 	private MessageRegistry() { }
@@ -94,7 +94,7 @@ public class MessageRegistry {
 		registerMessage(MessageItemNaming.class, Side.SERVER);
 		registerMessage(MessageFlightState.class, Side.SERVER);
 		registerMessage(MessageUpdatePuppeteerState.class, Side.SERVER);
-		registerMessage(MessageUpdateSummoningState.class, Side.SERVER);
+		registerMessage(MessageUpdateRingKeybindState.class, Side.SERVER);
 		registerMessage(MessageRow.class, Side.SERVER);
 		registerMessage(MessageConnectCavingRope.class, Side.SERVER);
 		registerMessage(MessageExtendedReach.class, Side.SERVER);

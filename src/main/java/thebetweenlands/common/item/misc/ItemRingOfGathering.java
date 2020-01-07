@@ -46,6 +46,8 @@ public class ItemRingOfGathering extends ItemRing {
 	public static final String NBT_SYNC_COUNT_KEY = "GatheringRingCountSync";
 	public static final String NBT_LAST_USER_UUID_KEY = "LastUserUuid";
 
+	public static final String NBT_LAST_TELEPORT_TICKS = "LastTeleportTicks";
+
 	@Nullable
 	public UUID getLastUserUuid(ItemStack stack) {
 		NBTTagCompound nbt = stack.getTagCompound();
@@ -226,7 +228,7 @@ public class ItemRingOfGathering extends ItemRing {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.ring.gathering.bonus"), 0));
 		if (GuiScreen.isShiftKeyDown()) {
-			String toolTip = I18n.format("tooltip.bl.ring.gathering", KeyBindRegistry.RADIAL_MENU.getDisplayName());
+			String toolTip = I18n.format("tooltip.bl.ring.gathering", KeyBindRegistry.RADIAL_MENU.getDisplayName(), KeyBindRegistry.USE_RING.getDisplayName(), KeyBindRegistry.USE_SECONDARY_RING.getDisplayName());
 			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
 		} else {
 			list.add(I18n.format("tooltip.bl.press.shift"));
@@ -341,26 +343,83 @@ public class ItemRingOfGathering extends ItemRing {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
+
+		if(this.activateEffect(playerIn, stack)) {
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		}
+
+		return new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
+	}
+
+	@Override
+	public void onKeybindState(EntityPlayer player, ItemStack stack, IInventory inventory, boolean active) {
+		if(active) {
+			this.activateEffect(player, stack);
+		}
+	}
+
+	protected boolean activateEffect(EntityPlayer player, ItemStack stack) {
 		NBTTagCompound nbt = stack.getTagCompound();
 
-		if(nbt != null && nbt.getByte(NBT_SYNC_COUNT_KEY) > 0) {
-			if(this.getEntry(playerIn.getUniqueID(), false, e -> true, false) != null) {
-				if(!worldIn.isRemote) {
-					if(removeXp(playerIn, 15) >= 15) {
-						this.returnEntityFromRing(playerIn.posX, playerIn.posY, playerIn.posZ, playerIn, playerIn.getUniqueID(), false);
-					} else {
-						playerIn.sendStatusMessage(new TextComponentTranslation("chat.ring_of_gathering.not_enough_xp"), true);
+		if(nbt != null) {
+			if(nbt.getByte(NBT_SYNC_COUNT_KEY) > 0) {
+				if(this.getEntry(player.getUniqueID(), false, e -> true, false) != null) {
+					if(!player.world.isRemote) {
+						if(removeXp(player, 15) >= 15) {
+							if(this.returnEntityFromRing(player.posX, player.posY, player.posZ, player, player.getUniqueID(), false) != null) {
+								return true;
+							}
+						} else {
+							player.sendStatusMessage(new TextComponentTranslation("chat.ring_of_gathering.not_enough_xp"), true);
+						}
 					}
-				}
-			} else if(this.getEntryCount(playerIn.getUniqueID()) > 0) {
-				if(!worldIn.isRemote) {
-					playerIn.sendStatusMessage(new TextComponentTranslation("chat.ring_of_gathering.animator"), true);
+				} else {
+					if(!player.world.isRemote && this.getEntryCount(player.getUniqueID()) > 0) {
+						player.sendStatusMessage(new TextComponentTranslation("chat.ring_of_gathering.animator"), true);
+					}
 				}
 			}
 
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+			boolean teleported = false;
+
+			boolean missingTeleportXp = false;
+
+			//Teleport loaded pets back to player
+			long lastTeleportTicks = nbt.getLong(NBT_LAST_TELEPORT_TICKS);
+			if(Math.abs(player.world.getTotalWorldTime() - lastTeleportTicks) > 20) {
+				nbt.setLong(NBT_LAST_TELEPORT_TICKS, player.world.getTotalWorldTime());
+
+				UUID thisPlayerUuid = player.getUniqueID();
+
+				List<Entity> ownedEntities = player.world.getEntitiesWithinAABB(Entity.class, player.getEntityBoundingBox().grow(256), e -> e instanceof IRingOfGatheringMinion);
+				for(Entity ownedEntity : ownedEntities) {
+					IRingOfGatheringMinion minion = (IRingOfGatheringMinion) ownedEntity;
+
+					UUID playerUuid = minion.getRingOwnerId();
+
+					if(playerUuid != null && playerUuid.equals(thisPlayerUuid)) {
+						if(minion.shouldReturnOnCall()) {
+							if(removeXp(player, 5) >= 5) {
+								minion.returnToCall(player);
+								teleported = true;
+							} else {
+								missingTeleportXp = true;
+							}
+						}
+					}
+				}
+			}
+
+			if(missingTeleportXp) {
+				player.sendStatusMessage(new TextComponentTranslation("chat.ring_of_gathering.not_enough_xp"), true);
+			}
+
+			if(teleported) {
+				return true;
+			}
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.PASS, playerIn.getHeldItem(handIn));
+
+		return false;
 	}
 
 	@SubscribeEvent

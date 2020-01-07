@@ -59,7 +59,7 @@ public class ItemRing extends Item implements IEquippable {
 
 	public static int removeXp(EntityPlayer player, int amount) {
 		int change = amount;
-		
+
 		float playerXp = player.experience * (float)player.xpBarCap();
 		player.experience -= (float) amount / (float) player.xpBarCap();
 		player.experienceTotal = MathHelper.clamp(player.experienceTotal - amount, 0, Integer.MAX_VALUE);
@@ -118,9 +118,20 @@ public class ItemRing extends Item implements IEquippable {
 			this.drainPower(stack, entity);
 		}
 	}
-	
+
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
 		return EnumRarity.EPIC;
+	}
+
+	/**
+	 * Called when the ring use keybind is pressed
+	 * @param player
+	 * @param stack
+	 * @param inventory
+	 * @param active Whether the key is pressed or not
+	 */
+	public void onKeybindState(EntityPlayer player, ItemStack stack, IInventory inventory, boolean active) {
+
 	}
 }

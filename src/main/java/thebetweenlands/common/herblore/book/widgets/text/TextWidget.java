@@ -103,11 +103,11 @@ public class TextWidget extends ManualWidgetBase {
 
     @SideOnly(Side.CLIENT)
     public void init() {
-        this.textContainer.setCurrentScale(scale).setCurrentColor(0x808080);
+        this.textContainer.setCurrentScale(scale).setCurrentColor(0x606060);
         this.textContainer.registerTag(new TagNewLine());
         this.textContainer.registerTag(new TagNewPage());
         this.textContainer.registerTag(new TagScale(1.0F));
-        this.textContainer.registerTag(new TagColor(0x808080));
+        this.textContainer.registerTag(new TagColor(0x606060));
         this.textContainer.registerTag(new TagTooltip("N/A"));
         this.textContainer.registerTag(new TagSimple("bold", TextFormatting.BOLD));
         this.textContainer.registerTag(new TagSimple("obfuscated", TextFormatting.OBFUSCATED));

@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -77,7 +78,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));
 		tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
 		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 16.0F));
-		tasks.addTask(4, new EntityAIWander(this, 0.25D));
+		tasks.addTask(4, new EntityAIWander(this, 1.0D));
 		tasks.addTask(5, new EntityAILookIdle(this));
 		targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, true));
@@ -190,7 +191,44 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 			dataManager.set(SPAWNING_STATE_DW, spawningState + 1);
 		}
 	}
+	
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
 
+	@Override
+	public boolean isPushedByWater() {
+		return false;
+	}
+	
+	@Override
+	public void moveRelative(float strafe, float up, float forward, float friction) {
+		//Can't use the SWIM_SPEED attribute for this because it also causes the mob to jump
+		//way too high out of the water
+		final float swimSpeedBoost = 10.0f;
+		
+		float f = strafe * strafe + up * up + forward * forward;
+        if (f >= 1.0E-4F) {
+            f = MathHelper.sqrt(f);
+            if (f < 1.0F) f = 1.0F;
+            f = friction / f;
+            strafe = strafe * f;
+            up = up * f;
+            forward = forward * f;
+            if(this.isInWater() || this.isInLava()) {
+                strafe = strafe * (float)this.getEntityAttribute(SWIM_SPEED).getAttributeValue() * swimSpeedBoost;
+                up = up * (float)this.getEntityAttribute(SWIM_SPEED).getAttributeValue();
+                forward = forward * (float)this.getEntityAttribute(SWIM_SPEED).getAttributeValue() * swimSpeedBoost;
+            }
+            float f1 = MathHelper.sin(this.rotationYaw * 0.017453292F);
+            float f2 = MathHelper.cos(this.rotationYaw * 0.017453292F);
+            this.motionX += (double)(strafe * f2 - forward * f1);
+            this.motionY += (double)up;
+            this.motionZ += (double)(forward * f2 + strafe * f1);
+        }
+	}
+	
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
@@ -296,6 +334,11 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		}
 
 		if(!getEntityWorld().isRemote && isEntityAlive() && this.getSpawningProgress() >= 1) {
+			//Heal when no player is nearby
+			if(this.ticksExisted % 12 == 0 && this.getHealth() < this.getMaxHealth() && this.world.getClosestPlayerToEntity(this, 32) == null) {
+				this.heal(1);
+			}
+			
 			if (getAttackTarget() != null) {
 				AxisAlignedBB checkAABB = getEntityBoundingBox().expand(64, 64, 64);
 				List<EntityPeatMummy> peatMummies = getEntityWorld().getEntitiesWithinAABB(EntityPeatMummy.class, checkAABB);

@@ -1,5 +1,11 @@
 package thebetweenlands.common.entity.ai.puppet;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,33 +15,23 @@ import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
 import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
-
 public class EntityAIPuppet extends EntityAIBase {
 	protected final EntityLivingBase taskOwner;
 	protected final Supplier<Entity> puppeteer;
 	protected final EntityAITasks tasks;
 
+	private int tickCount;
+    private int tickRate = 3;
+	
 	/**
 	 * Creates a puppet AI that takes over the entities AI. A list of additional tasks to run can be specified
 	 * @param taskOwner
 	 * @param puppeteer
-	 * @param tasks
 	 */
-	public EntityAIPuppet(EntityLivingBase taskOwner, Supplier<Entity> puppeteer, @Nullable List<EntityAIBase> tasks) {
+	public EntityAIPuppet(EntityLivingBase taskOwner, Supplier<Entity> puppeteer) {
 		this.taskOwner = taskOwner;
 		this.puppeteer = puppeteer;
-		if(tasks != null && !tasks.isEmpty()) {
-			this.tasks = new EntityAITasks(taskOwner.world.profiler);
-			for(int i = 0; i < tasks.size(); i++) {
-				this.tasks.addTask(i, tasks.get(i));
-			}
-		} else {
-			this.tasks = null;
-		}
+		this.tasks = new EntityAITasks(taskOwner.world.profiler);
 		this.setMutexBits(0);
 	}
 
@@ -87,9 +83,9 @@ public class EntityAIPuppet extends EntityAIBase {
 			this.tasks.onUpdateTasks();
 
 			for(EntityAITasks.EntityAITaskEntry task : this.tasks.taskEntries) {
-				if(task.using) {
-					mutexBits |= task.action.getMutexBits();
-				}
+				//if(task.using) {
+				mutexBits |= task.action.getMutexBits();
+				//}
 			}
 
 			this.setMutexBits(mutexBits);
@@ -101,12 +97,27 @@ public class EntityAIPuppet extends EntityAIBase {
 	 * @param entity
 	 * @param tasks
 	 */
-	public static void addPuppetAI(Supplier<Entity> puppeteer, EntityLivingBase entity, EntityAITasks creatureTasks, @Nullable List<EntityAIBase> tasks) {
+	public static EntityAITasks addPuppetAI(Supplier<Entity> puppeteer, EntityLivingBase entity, EntityAITasks creatureTasks) {
 		interruptAI(creatureTasks);
 
-		if(getPuppetAI(creatureTasks) == null) {
-			creatureTasks.addTask(Integer.MAX_VALUE, new EntityAIPuppet(entity, puppeteer, tasks));
+		EntityAIPuppet ai = getPuppetAI(creatureTasks);
+		if(ai == null) {
+			List<EntityAITasks.EntityAITaskEntry> tasks = new ArrayList<>(creatureTasks.taskEntries);
+			
+			//Temporarily remove all AIs to stop them
+			for(EntityAITasks.EntityAITaskEntry task : tasks) {
+				creatureTasks.removeTask(task.action);
+			}
+			
+			creatureTasks.addTask(Integer.MIN_VALUE, ai = new EntityAIPuppet(entity, puppeteer));
+			
+			//Re-add AIs
+			for(EntityAITasks.EntityAITaskEntry task : tasks) {
+				creatureTasks.addTask(task.priority, task.action);
+			}
 		}
+		
+		return ai.getSubTasks();
 	}
 
 	/**
