@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.nbt.NBTTagCompound;
 
 public interface IRingOfGatheringMinion {
@@ -17,6 +18,15 @@ public interface IRingOfGatheringMinion {
 	 * @return
 	 */
 	public boolean returnFromRing(Entity user, NBTTagCompound nbt);
+
+	/**
+	 * Called when the entity should be teleported back to the user
+	 * @param user
+	 * @return
+	 */
+	public default void returnToCall(Entity user) {
+		((Entity) this).setPosition(user.posX, user.posY, user.posZ);
+	}
 
 	/**
 	 * Called when the entity is returned to the ring.
@@ -39,6 +49,13 @@ public interface IRingOfGatheringMinion {
 	public default boolean shouldReturnOnUnload(boolean isOwnerLoggedIn) {
 		//Don't kill if player has logged out, causing the chunks to unload
 		return isOwnerLoggedIn;
+	}
+
+	public default boolean shouldReturnOnCall() {
+		if(this instanceof EntityTameable && ((EntityTameable)this).isSitting()) {
+			return false;
+		}
+		return true;
 	}
 
 	/**

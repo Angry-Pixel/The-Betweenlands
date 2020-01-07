@@ -7,9 +7,8 @@ import java.util.UUID;
 
 import org.lwjgl.opengl.GL11;
 
-import com.google.common.collect.ImmutableList;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -17,11 +16,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAITasks.EntityAITaskEntry;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -51,10 +54,13 @@ import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.render.entity.RenderSwordEnergy;
 import thebetweenlands.client.render.entity.layer.LayerPuppetOverlay;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.BatchedParticleRenderer;
+import thebetweenlands.client.render.particle.DefaultParticleBatches;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
 import thebetweenlands.common.entity.ai.puppet.EntityAIGoTo;
+import thebetweenlands.common.entity.ai.puppet.EntityAIGuardHome;
 import thebetweenlands.common.entity.ai.puppet.EntityAIPuppet;
 import thebetweenlands.common.entity.ai.puppet.EntityAIStay;
 import thebetweenlands.common.item.equipment.ItemRing;
@@ -149,6 +155,28 @@ public class PuppetHandler {
 			}
 		}
 	}
+	
+	private static void cycleAiState(EntityLiving entity, IPuppetCapability cap, EntityPlayer player, BlockPos pos) {
+		if(!cap.getStay() && !cap.getGuard()) {
+			//From follow state to guard state
+			cap.setStay(false);
+			cap.setGuard(true, pos);
+			
+			player.sendStatusMessage(new TextComponentTranslation("chat.ring_of_recruitment.state.guard", entity.getDisplayName()), true);
+		} else if(cap.getGuard()) {
+			//From guard state to stay state
+			cap.setStay(true);
+			cap.setGuard(false, null);
+			
+			player.sendStatusMessage(new TextComponentTranslation("chat.ring_of_recruitment.state.stay", entity.getDisplayName()), true);
+		} else {
+			//From stay state to follow state
+			cap.setStay(false);
+			cap.setGuard(false, null);
+			
+			player.sendStatusMessage(new TextComponentTranslation("chat.ring_of_recruitment.state.follow", entity.getDisplayName()), true);
+		}
+	}
 
 	@SubscribeEvent
 	public static void onUpdateLiving(LivingUpdateEvent event) {
@@ -188,31 +216,68 @@ public class PuppetHandler {
 						living.enablePersistence();
 
 						if(controller instanceof EntityPlayer && living.getHealth() < living.getMaxHealth() - 2 && living.ticksExisted % 40 == 0 &&
-								(!cap.getStay() || controller.getDistance(entity) < 6) &&
+								((!cap.getStay() && !cap.getGuard()) || controller.getDistance(entity) < 6) &&
 								ItemRing.removeXp((EntityPlayer) controller, 3) >= 3) {
 
-							living.heal(1.0f);
+							living.heal(2.0f);
 
 							if(living.world instanceof WorldServer) {
 								((WorldServer) living.world).spawnParticle(EnumParticleTypes.HEART, living.posX, living.posY + living.getEyeHeight() + 0.25f, living.posZ, 1, 0.0f, 0.0f, 0.0f, 0.0f);
 							}
 						}
 
-						if(EntityAIPuppet.getPuppetAI(living.targetTasks) == null) {
-							/*EntityAINearestAttackableTarget<EntityLiving> aiTarget = new EntityAINearestAttackableTarget<EntityLiving>(creature, EntityLiving.class, 0, true, true, living -> {
-								if(living.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
-									IPuppetCapability targetCap = living.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
-									if(targetCap.getPuppeteer() == cap.getPuppeteer()) {
-										//Don't attack puppets from same owner
-										return false;
-									}
+						if(EntityAIPuppet.getPuppetAI(living.targetTasks) == null && living instanceof EntityCreature) {
+							EntityAINearestAttackableTarget<EntityLiving> aiTarget = new EntityAINearestAttackableTarget<EntityLiving>((EntityCreature) living, EntityLiving.class, 0, true, true, target -> {
+								IPuppetCapability targetCap = target.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+								if(targetCap != null && targetCap.hasPuppeteer()) {
+									return false;
 								}
-								return living instanceof EntityMob || living instanceof IMob;
-							});
-							aiTarget.setMutexBits(1); //01*/
+								if(target instanceof IEntityOwnable && ((IEntityOwnable) target).getOwnerId() != null) {
+									return false;
+								}
+								return target instanceof IMob;
+							}) {
+								@Override
+								protected double getTargetDistance() {
+									return 16;
+								}
+								
+								@Override
+								public boolean shouldExecute() {
+									if(super.shouldExecute()) {
+										IPuppetCapability thisCap = this.taskOwner.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+										if(thisCap != null && thisCap.getGuard()) {
+											return true;
+										}
+									}
+									return false;
+								}
+							};
+							aiTarget.setMutexBits(1); //01
 
+							EntityAITasks tasks = EntityAIPuppet.addPuppetAI(() -> cap.getPuppeteer(), living, living.targetTasks);
+							tasks.addTask(0, aiTarget);
+						}
+
+						EntityAIPuppet puppetAI = EntityAIPuppet.getPuppetAI(living.tasks);
+
+						if(puppetAI == null) {
+							EntityAISwimming aiSwim = new EntityAISwimming(living);
+							
+							EntityAIStay aiStay = new EntityAIStay(living);
+							aiStay.setMutexBits(3); //11
+
+							EntityAIGuardHome aiGuardHome = null;
+							EntityAIWander aiWander = null;
+							
+							EntityAIBase aiAttack = null;
+							
 							if(living instanceof EntityCreature) {
-								EntityAIAttackMelee aiMelee = new EntityAIAttackMelee((EntityCreature) living, 1.2D, true) {
+								aiGuardHome = new EntityAIGuardHome((EntityCreature) living, 1.0D, 24);
+								
+								aiWander = new EntityAIWander((EntityCreature) living, 1.0D);
+								
+								aiAttack = new EntityAIAttackMelee((EntityCreature) living, 1.2D, true) {
 									@Override
 									protected void checkAndPerformAttack(EntityLivingBase enemy, double distToEnemySqr) {
 										double d0 = this.getAttackReachSqr(enemy);
@@ -229,28 +294,24 @@ public class PuppetHandler {
 										}
 									}
 								};
-								aiMelee.setMutexBits(2); //10
-
-								EntityAIPuppet.addPuppetAI(() -> cap.getPuppeteer(), living, living.targetTasks,
-										ImmutableList.of(aiMelee));
-							} else {
-								EntityAIAttackOnCollide aiAttack = new EntityAIAttackOnCollide(living, true);
 								aiAttack.setMutexBits(2); //10
-
-								EntityAIPuppet.addPuppetAI(() -> cap.getPuppeteer(), living, living.targetTasks,
-										ImmutableList.of(aiAttack));
+							} else {
+								aiAttack = new EntityAIAttackOnCollide(living, true);
+								aiAttack.setMutexBits(2); //10
 							}
-						}
-
-						EntityAIPuppet puppetAI = EntityAIPuppet.getPuppetAI(living.tasks);
-
-						if(puppetAI == null) {
-							EntityAISwimming aiSwim = new EntityAISwimming(living);
 							
-							EntityAIStay aiStay = new EntityAIStay(living);
-							aiStay.setMutexBits(3); //11
-
-							EntityAIGoTo aiGoTo = new EntityAIGoTo(living, 1.2D);
+							EntityAIGoTo aiGoTo = new EntityAIGoTo(living, 1.2D) {
+								@Override
+								public boolean shouldExecute() {
+									if(super.shouldExecute()) {
+										IPuppetCapability thisCap = this.taskOwner.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+										if(thisCap != null && !thisCap.getGuard()) {
+											return true;
+										}
+									}
+									return false;
+								}
+							};
 							aiGoTo.setMutexBits(3);
 
 							EntityAIFollowTarget aiFollow = new EntityAIFollowTarget(living, () -> {
@@ -259,11 +320,37 @@ public class PuppetHandler {
 									return (EntityLivingBase) puppeteer;
 								}
 								return null;
-							}, 1.2D, 10.0F, 2.0F, true);
+							}, 1.2D, 10.0F, 2.0F, true) {
+								@Override
+								public boolean shouldExecute() {
+									if(super.shouldExecute()) {
+										IPuppetCapability thisCap = this.taskOwner.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+										if(thisCap != null && !thisCap.getGuard()) {
+											return true;
+										}
+									}
+									return false;
+								}
+							};
 							aiFollow.setMutexBits(1);
 
-							EntityAIPuppet.addPuppetAI(() -> cap.getPuppeteer(), living, living.tasks,
-									ImmutableList.of(aiSwim, aiStay, aiFollow, aiGoTo));
+							if(aiGuardHome != null && aiWander != null) {
+								EntityAITasks tasks = EntityAIPuppet.addPuppetAI(() -> cap.getPuppeteer(), living, living.tasks);
+								tasks.addTask(0, aiSwim);
+								tasks.addTask(1, aiStay);
+								tasks.addTask(2, aiGuardHome);
+								tasks.addTask(3, aiFollow);
+								tasks.addTask(4, aiGoTo);
+								tasks.addTask(5, aiAttack);
+								tasks.addTask(6, aiWander);
+							} else {
+								EntityAITasks tasks = EntityAIPuppet.addPuppetAI(() -> cap.getPuppeteer(), living, living.tasks);
+								tasks.addTask(0, aiSwim);
+								tasks.addTask(1, aiStay);
+								tasks.addTask(3, aiFollow);
+								tasks.addTask(4, aiGoTo);
+								tasks.addTask(5, aiAttack);
+							}
 						} else {
 							EntityAIStay aiStay = getAI(EntityAIStay.class, puppetAI.getSubTasks());
 							if (aiStay != null) {
@@ -284,6 +371,21 @@ public class PuppetHandler {
 										(living.world.rand.nextFloat() - 0.5F) / 8.0F * entity.height,
 										living.motionZ + (living.world.rand.nextFloat() - 0.5F) / 8.0F * entity.width
 										).withData(40).withColor(0.2F, 0.8F, 0.4F, 1));
+					}
+					
+					if(living.ticksExisted % 50 == 0) {
+						ParticleArgs<?> args = ParticleArgs.get().withScale(1.5f).withColor(1, 1, 1, 0.3f).withData(living);
+						Particle particle;
+						
+						if(!cap.getStay() && !cap.getGuard()) {
+							particle = BLParticles.RING_OF_RECRUITMENT_FOLLOW.create(living.world, 0, living.height + 0.25f, 0, args);
+						} else if(cap.getStay()) {
+							particle = BLParticles.RING_OF_RECRUITMENT_STAY.create(living.world, 0, living.height + 0.25f, 0, args);
+						} else {
+							particle = BLParticles.RING_OF_RECRUITMENT_GUARD.create(living.world, 0, living.height + 0.25f, 0, args);
+						}
+						
+						BatchedParticleRenderer.INSTANCE.addParticle(DefaultParticleBatches.TRANSLUCENT_GLOWING_NEAREST_NEIGHBOR, particle);
 					}
 				}
 			}
@@ -316,7 +418,7 @@ public class PuppetHandler {
 	@SuppressWarnings("unchecked")
 	private static <T extends EntityAIBase> T getAI(Class<T> cls, EntityAITasks tasks) {
 		for(EntityAITaskEntry entry : tasks.taskEntries) {
-			if(cls == entry.action.getClass()) {
+			if(cls.isAssignableFrom(entry.action.getClass())) {
 				return (T) entry.action;
 			}
 		}
@@ -348,7 +450,7 @@ public class PuppetHandler {
 								player.swingArm(EnumHand.MAIN_HAND);
 							} else {
 								if (!player.world.isRemote) {
-									cap.setStay(!cap.getStay());
+									cycleAiState(living, cap, player, target.getPosition());
 								}
 								player.swingArm(EnumHand.MAIN_HAND);
 							}
@@ -512,11 +614,11 @@ public class PuppetHandler {
 		if (cap != null && cap.hasPuppeteer()) {
 			Entity puppeteer = cap.getPuppeteer();
 
-			if (puppeteer != null && (!cap.getStay() || puppeteer.getDistance(living) < 6)) {
+			if (puppeteer != null && ((!cap.getStay() && !cap.getGuard()) || puppeteer.getDistance(living) < 6)) {
 				event.getRenderer().bindTexture(LayerPuppetOverlay.OVERLAY_TEXTURE);
 
 				float alpha = 0.25f;
-				if(cap.getStay()) {
+				if(cap.getStay() || cap.getGuard()) {
 					alpha *= 1.0f - Math.max(0, (puppeteer.getDistance(living) - 3)) / 3.0f;
 				}
 

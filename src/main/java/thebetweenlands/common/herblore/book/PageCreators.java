@@ -246,10 +246,10 @@ public class PageCreators {
      * ed text container
      */
     private static TextContainer parseTextContainer(TextContainer textContainer) {
-        textContainer.setCurrentScale(1.0f).setCurrentColor(0x808080);
+        textContainer.setCurrentScale(1.0f).setCurrentColor(0x606060);
         textContainer.registerTag(new FormatTags.TagNewLine());
         textContainer.registerTag(new FormatTags.TagScale(1.0F));
-        textContainer.registerTag(new FormatTags.TagColor(0x808080));
+        textContainer.registerTag(new FormatTags.TagColor(0x606060));
         textContainer.registerTag(new FormatTags.TagTooltip("N/A"));
         textContainer.registerTag(new FormatTags.TagSimple("bold", TextFormatting.BOLD));
         textContainer.registerTag(new FormatTags.TagSimple("obfuscated", TextFormatting.OBFUSCATED));

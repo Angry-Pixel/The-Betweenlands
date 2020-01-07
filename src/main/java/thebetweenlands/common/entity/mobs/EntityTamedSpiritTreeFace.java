@@ -5,10 +5,17 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import thebetweenlands.api.item.IEquippable;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 	public EntityTamedSpiritTreeFace(World world) {
@@ -70,6 +77,53 @@ public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
 		if(source.getImmediateSource() instanceof EntityPlayer) {
 			return super.attackEntityFrom(source, amount);
 		}
+		return false;
+	}
+	
+	@Override
+	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
+		
+		boolean holdsEquipment = hand == EnumHand.MAIN_HAND && !stack.isEmpty() && (stack.getItem() instanceof IEquippable || stack.getItem() == ItemRegistry.AMULET_SLOT);
+		if(holdsEquipment) {
+			return true;
+		}
+			
+		if(!stack.isEmpty() && EnumItemMisc.COMPOST.isItemOf(stack)) {
+			if(this.getHealth() < this.getMaxHealth()) {
+				if(!this.world.isRemote) {
+					this.heal(4);
+				} else {
+					for (int i = 0; i < 7; ++i) {
+			            double d0 = this.rand.nextGaussian() * 0.02D;
+			            double d1 = this.rand.nextGaussian() * 0.02D;
+			            double d2 = this.rand.nextGaussian() * 0.02D;
+			            this.world.spawnParticle(EnumParticleTypes.HEART, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+			        }
+				}
+			}
+			
+			if(!this.world.isRemote) {
+				if(this.rand.nextBoolean()) {
+					this.entityDropItem(new ItemStack(ItemRegistry.SAP_SPIT, 1 + this.rand.nextInt(3)), this.height / 2);
+					
+					this.playSpitSound();
+				}
+			
+				stack.shrink(1);
+			} else {
+				for (int i = 0; i < 4; ++i) {
+		            double d0 = this.rand.nextGaussian() * 0.02D;
+		            double d1 = this.rand.nextGaussian() * 0.02D;
+		            double d2 = this.rand.nextGaussian() * 0.02D;
+		            this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
+		        }
+				
+			}
+			
+			return true;
+		}
+		
 		return false;
 	}
 

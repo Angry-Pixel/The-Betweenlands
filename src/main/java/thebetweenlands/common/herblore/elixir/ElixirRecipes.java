@@ -175,7 +175,7 @@ public class ElixirRecipes {
 				200, 1200,
 				ElixirEffectRegistry.EFFECT_LIGHTWEIGHT, ElixirEffectRegistry.EFFECT_HEAVYWEIGHT,
 				AspectRegistry.YUNUGAZ, AspectRegistry.YIHINREN,
-				new IAspectType[]{AspectRegistry.AZUWYNN, AspectRegistry.BYRGINAZ, AspectRegistry.YUNUGAZ, AspectRegistry.GEOLIIRGAZ}));
+				new IAspectType[]{AspectRegistry.AZUWYNN, AspectRegistry.BYRGINAZ, AspectRegistry.YUNUGAZ, AspectRegistry.GEOLIIRGAZ, AspectRegistry.YIHINREN}));
 
 		registerRecipe(new ElixirRecipe("Draught of the Unclouded", 0xFF0000FF, 0xFF0d9ddf, 0xFF332902, 
 				2000, 200, 

@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.BlockPos;
 
 public interface IPuppetCapability {
 	/**
@@ -51,6 +52,34 @@ public interface IPuppetCapability {
 	 */
 	public default boolean getStay() {
 		return false;
+	}
+	
+	/**
+	 * Returns whether this entity should guard the nearby area and
+	 * attack any hostile mob
+	 * @param guard
+	 * @param pos Home position. Entity will return to this position if it gets too far away
+	 */
+	public default void setGuard(boolean guard, @Nullable BlockPos pos) {
+		
+	}
+	
+	/**
+	 * Returns whether this entity should guard the nearby area and
+	 * attack any hostile mob
+	 * @return
+	 */
+	public default boolean getGuard() {
+		return false;
+	}
+	
+	/**
+	 * Returns the guard home position
+	 * @return
+	 */
+	@Nullable
+	public default BlockPos getGuardHome() {
+		return null;
 	}
 
 	/**

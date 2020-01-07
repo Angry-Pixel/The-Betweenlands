@@ -89,16 +89,6 @@ public class EntitySludgeWorm extends EntityMob implements IEntityMultiPart, IMo
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.25D);
 	}
 
-	// stuns the mob - dunno if we want this
-	@Override
-	public boolean isMovementBlocked() {
-		// if (hurtResistantTime > 0){
-		// return true;
-		// } else {
-		return false;
-		// }
-	}
-
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();

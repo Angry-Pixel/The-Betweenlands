@@ -1,23 +1,24 @@
 package thebetweenlands.common.item.misc;
 
-import com.google.common.base.CaseFormat;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.item.IGenericItem;
-import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.registries.ItemRegistry;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import thebetweenlands.common.entity.mobs.EntityEmberling;
+import thebetweenlands.common.entity.mobs.EntityEmberlingWild;
+import thebetweenlands.common.item.IGenericItem;
+import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDefinition {
 	public ItemMisc() {
@@ -133,6 +134,33 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		@Override
 		public Item getItem() {
 			return ItemRegistry.ITEMS_MISC;
+		}
+	}
+	
+	@Override
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
+		if (target instanceof EntityEmberlingWild && EnumItemMisc.UNDYING_EMBER.isItemOf(stack)) {
+			EntityEmberlingWild oldEmberling = (EntityEmberlingWild) target;
+			EntityEmberling newEmberling = new EntityEmberling(player.getEntityWorld());
+			if (!player.getEntityWorld().isRemote) {
+				
+				newEmberling.copyLocationAndAnglesFrom(oldEmberling);
+				newEmberling.setTamedBy(player);
+				player.getEntityWorld().removeEntity(oldEmberling);
+				player.getEntityWorld().spawnEntity(newEmberling);
+
+				if (!player.capabilities.isCreativeMode) {
+					stack.shrink(1);
+					if (stack.getCount() <= 0)
+						player.setHeldItem(hand, ItemStack.EMPTY);
+				}
+				return true;
+			} else {
+				oldEmberling.playTameEffect(true);
+				return true;
+			}
+		} else {
+			return false;
 		}
 	}
 }

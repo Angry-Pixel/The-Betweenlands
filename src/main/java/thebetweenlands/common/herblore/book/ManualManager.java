@@ -118,8 +118,8 @@ public class ManualManager {
         ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
         if (!stack.isEmpty() && stack.getItem() == ItemRegistry.MANUAL_HL) {
             IDiscoveryProvider<ItemStack> provider = (IDiscoveryProvider<ItemStack>) stack.getItem();
-            DiscoveryContainer container = provider.getContainer(stack);
-            ItemStack ingredient = null;
+            DiscoveryContainer<?> container = provider.getContainer(stack);
+            ItemStack ingredient = ItemStack.EMPTY;
             Map<AspectItem, List<AspectManager.AspectItemEntry>> matchedAspects = AspectManager.getRegisteredItems();
             for (Map.Entry<AspectItem, List<AspectManager.AspectItemEntry>> e : matchedAspects.entrySet()) {
                 if (e.getKey() != null) {
@@ -130,12 +130,42 @@ public class ManualManager {
                     }
                 }
             }
-            ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(ingredient, AspectManager.get(Minecraft.getMinecraft().world));
-            return ingredient != null && aspectContainer.getAspects(container).size() > 0;
+            if(!ingredient.isEmpty()) {
+            	ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(ingredient, AspectManager.get(Minecraft.getMinecraft().world));
+                return aspectContainer.getAspects(container).size() > 0;
+            }
+            return false;
         }
 
 
         return player != null && page != null && getFoundPages(player, itemManual) != null && getFoundPages(player, itemManual).contains(page);
+    }
+    
+    public static boolean isFullyDiscovered(EntityPlayer player, String page) {
+        ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
+        
+        if (!stack.isEmpty() && stack.getItem() == ItemRegistry.MANUAL_HL) {
+            IDiscoveryProvider<ItemStack> provider = (IDiscoveryProvider<ItemStack>) stack.getItem();
+            DiscoveryContainer<?> container = provider.getContainer(stack);
+            ItemStack ingredient = ItemStack.EMPTY;
+            Map<AspectItem, List<AspectManager.AspectItemEntry>> matchedAspects = AspectManager.getRegisteredItems();
+            for (Map.Entry<AspectItem, List<AspectManager.AspectItemEntry>> e : matchedAspects.entrySet()) {
+                if (e.getKey() != null) {
+                    ItemStack itemStack = new ItemStack(e.getKey().getOriginal().getItem(), 1, e.getKey().getOriginal().getItemDamage());
+                    if (itemStack.getTranslationKey().toLowerCase().replace(" ", "").equals(page)) {
+                        ingredient = new ItemStack(e.getKey().getOriginal().getItem(), 1, e.getKey().getOriginal().getItemDamage());
+                        break;
+                    }
+                }
+            }
+            if(!ingredient.isEmpty()) {
+            	AspectItem aspectItem = AspectManager.getAspectItem(ingredient);
+                return container.getDiscoveredStaticAspects(AspectManager.get(Minecraft.getMinecraft().world), aspectItem).size() == AspectManager.get(Minecraft.getMinecraft().world).getStaticAspects(aspectItem).size();
+            }
+            return false;
+        }
+
+        return false;
     }
 
     /**

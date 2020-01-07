@@ -946,14 +946,14 @@ tooltip.bl.ring.recruitment.bonus=Grants the power to recruit and control entiti
 tooltip.bl.ring.flight.bonus=Grants the gift of levitation at the cost of XP
 tooltip.bl.ring.summoning.bonus=Grants the ability to summon allies from the depths at the cost of XP
 tooltip.bl.ring.dispersion.bonus=Grants the ability to move through walls at the cost of XP
-tooltip.bl.ring.gathering.bonus=Grants the ability to summon minions\nor pets lost while wearing this ring\nat the cost of XP.\nDead minions or pets need to be\nrevived by animating the ring in\nan Animator.
+tooltip.bl.ring.gathering.bonus=Grants the ability to summon Betweenlands\nminions or pets lost while wearing this ring\nat the cost of XP.\nDead minions or pets need to be\nrevived by animating the ring in\nan Animator.
 tooltip.bl.item.equippable=Equippable
-tooltip.bl.ring.summoning=Equip using the radial \nmenu [press '%s'], \nscream using '%s'
+tooltip.bl.ring.summoning=Equip using the radial \nmenu [press '%s'], \nscream by pressing '%s' when in primary slot,\nand '%s' when in secondary slot
 tooltip.bl.ring.flight=Equip using the radial \nmenu [press '%s'], \ndouble tap '%s' to activate
 tooltip.bl.ring.power=Equip using the radial \nmenu [press '%s']
 tooltip.bl.ring.recruitment=Equip using the radial \nmenu [press '%s'], \nhold '%s' \non mobs to take control\nover them
 tooltip.bl.ring.dispersion=Equip using the radial \nmenu [press '%s'], \nSneak [press '%s'] to activate
-tooltip.bl.ring.gathering=Equip using the radial \nmenu [press '%s'], \nRight-click to summon lost minions\nor pets
+tooltip.bl.ring.gathering=Equip using the radial \nmenu [press '%s'], \nRight-click to summon lost minions or pets\nor press '%s' when in primary slot,\nand '%s' when in secondary slot
 tooltip.bl.press.shift=Hold 'shift' to view more
 tooltip.bl.life_crystal.remaining=%d remaining
 tooltip.bl.shockwave_sword.usage=Right-click on the ground\nto create a shockwave
@@ -1175,10 +1175,13 @@ chat.grappling_hook.disconnected=The grappling hook was ripped!
 
 chat.not_enough_fog_for_vial=There is not enough fog on this floor to fill the vial
 
-chat.ring_of_gathering.not_enough_xp=Not enough XP to use the ring
+chat.ring_of_gathering.not_enough_xp=Not enough XP to use the Ring of Gathering
 chat.ring_of_gathering.animator=Dead minions or pets need to be revived in an animator
 
 chat.ring_of_recruitment.not_enough_power=The ring does not have enough power left to recruit this entity
+chat.ring_of_recruitment.state.stay=Your %s is now staying
+chat.ring_of_recruitment.state.guard=Your %s is now guarding
+chat.ring_of_recruitment.state.follow=Your %s is now following
 
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath
@@ -1314,6 +1317,7 @@ entity.thebetweenlands.wall_living_root.name=Living Root
 entity.thebetweenlands.ash_sprite.name=Ash Sprite
 entity.thebetweenlands.emberling_shaman.name=Emberling Shaman
 entity.thebetweenlands.emberling.name=Emberling
+entity.thebetweenlands.wild_emberling.name=Emberling
 entity.thebetweenlands.shambler.name=Shambler
 entity.thebetweenlands.barrishee.name=Barrishee
 entity.thebetweenlands.sludge_jet.name=Sludge Jet
@@ -1426,7 +1430,8 @@ key.open_pouch=Open Lurker Skin Pouch
 key.radial_menu=Open Equipment Menu
 key.return_scout=Return Scout (NYI)
 key.send_scout=Send Scout (NYI)
-key.use_ring=Use Ring
+key.use_ring=Use Primary Ring
+key.use_secondary_ring=Use Secondary Ring
 key.connect_caving_rope=Connect/Disconnect Caving Rope
 
 #Manual

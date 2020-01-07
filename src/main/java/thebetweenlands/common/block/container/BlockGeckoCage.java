@@ -179,8 +179,10 @@ public class BlockGeckoCage extends BlockContainer {
 										player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName().toLowerCase()), false);
 										if(discovery.result == EnumDiscoveryResult.LAST) {
                                             player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.last"), true);
+                                            player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.last"), false);
                                         } else {
                                             player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.more"), true);
+                                            player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.more"), false);
                                         }
 										if(!player.capabilities.isCreativeMode)
                                             heldItemStack.shrink(1);

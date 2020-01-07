@@ -29,6 +29,7 @@ import thebetweenlands.client.render.particle.entity.ParticleLifeEssence;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
 import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam;
 import thebetweenlands.client.render.particle.entity.ParticlePuzzleBeam2;
+import thebetweenlands.client.render.particle.entity.ParticleRingOfRecruitmentState;
 import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
 import thebetweenlands.client.render.particle.entity.ParticleSimple;
 import thebetweenlands.client.render.particle.entity.ParticleSonicScream;
@@ -132,7 +133,10 @@ public enum BLParticles {
 	SMOOTH_SMOKE(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/smooth_smoke"))),
 	SONIC_SCREAM(new ParticleSonicScream.Factory()),
 	EMBER_SWIRL(new ParticleLeafSwirl.FactoryEmberSwirl()),
-	SLUDGE_SWIRL(new ParticleLeafSwirl.FactorySludgeSwirl());
+	SLUDGE_SWIRL(new ParticleLeafSwirl.FactorySludgeSwirl()),
+	RING_OF_RECRUITMENT_STAY(new ParticleRingOfRecruitmentState.FactoryStay()),
+	RING_OF_RECRUITMENT_FOLLOW(new ParticleRingOfRecruitmentState.FactoryFollow()),
+	RING_OF_RECRUITMENT_GUARD(new ParticleRingOfRecruitmentState.FactoryGuard());
 
 	private ParticleFactory<?, ?> factory;
 
