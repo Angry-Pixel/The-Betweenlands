@@ -78,16 +78,6 @@ public class EntityTinySludgeWorm extends EntitySludgeWorm {
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(0.5D);
 	}
 
-	// stuns the mob - dunno if we want this
-	@Override
-	public boolean isMovementBlocked() {
-		// if (hurtResistantTime > 0){
-		// return true;
-		// } else {
-		return false;
-		// }
-	}
-
 	@Override
 	protected double getMaxPieceDistance() {
 		return 0.2D;
