@@ -14,11 +14,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.entity.layer.LayerOverlay;
 import thebetweenlands.client.render.model.entity.ModelSpiritTreeFaceSmall1;
 import thebetweenlands.client.render.model.entity.ModelSpiritTreeFaceSmall2;
-import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmallBase;
 import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)
-public class RenderSpiritTreeFaceSmall extends RenderWallFace<EntitySpiritTreeFaceSmall> {
+public class RenderSpiritTreeFaceSmall extends RenderWallFace<EntitySpiritTreeFaceSmallBase> {
 	protected static final ResourceLocation[] DESTROY_STAGES = new ResourceLocation[] {new ResourceLocation("textures/blocks/destroy_stage_0.png"), new ResourceLocation("textures/blocks/destroy_stage_1.png"), new ResourceLocation("textures/blocks/destroy_stage_2.png"), new ResourceLocation("textures/blocks/destroy_stage_3.png"), new ResourceLocation("textures/blocks/destroy_stage_4.png"), new ResourceLocation("textures/blocks/destroy_stage_5.png"), new ResourceLocation("textures/blocks/destroy_stage_6.png"), new ResourceLocation("textures/blocks/destroy_stage_7.png"), new ResourceLocation("textures/blocks/destroy_stage_8.png"), new ResourceLocation("textures/blocks/destroy_stage_9.png")};
 
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/spirit_tree_face_small.png");
@@ -26,13 +26,13 @@ public class RenderSpiritTreeFaceSmall extends RenderWallFace<EntitySpiritTreeFa
 	private final ModelSpiritTreeFaceSmall1 model1 = new ModelSpiritTreeFaceSmall1();
 	private final ModelSpiritTreeFaceSmall2 model2 = new ModelSpiritTreeFaceSmall2();
 
-	protected final LayerOverlay<EntitySpiritTreeFaceSmall> glow;
+	protected final LayerOverlay<EntitySpiritTreeFaceSmallBase> glow;
 
 	public RenderSpiritTreeFaceSmall(RenderManager renderManager) {
 		super(renderManager, new ModelSpiritTreeFaceSmall1(), 0);
-		this.addLayer(new LayerOverlay<EntitySpiritTreeFaceSmall>(this) {
+		this.addLayer(new LayerOverlay<EntitySpiritTreeFaceSmallBase>(this) {
 			@Override
-			protected ResourceLocation getTexture(EntitySpiritTreeFaceSmall entity, int index) {
+			protected ResourceLocation getTexture(EntitySpiritTreeFaceSmallBase entity, int index) {
 				int damage = MathHelper.ceil((1.0F - entity.getHealth() / entity.getMaxHealth()) * 10.0F);
 				if(damage > 0 && damage <= 10) {
 					return DESTROY_STAGES[damage - 1];
@@ -41,7 +41,7 @@ public class RenderSpiritTreeFaceSmall extends RenderWallFace<EntitySpiritTreeFa
 			}
 
 			@Override
-			protected void renderOverlay(EntitySpiritTreeFaceSmall entity, ModelBase model, float limbSwing,
+			protected void renderOverlay(EntitySpiritTreeFaceSmallBase entity, ModelBase model, float limbSwing,
 					float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch,
 					float scale) {
 				this.preRenderDamagedBlocks();
@@ -79,7 +79,7 @@ public class RenderSpiritTreeFaceSmall extends RenderWallFace<EntitySpiritTreeFa
 	}
 
 	@Override
-	protected void preRenderCallback(EntitySpiritTreeFaceSmall entity, float partialTicks) {
+	protected void preRenderCallback(EntitySpiritTreeFaceSmallBase entity, float partialTicks) {
 		super.preRenderCallback(entity, partialTicks);
 
 		this.glow.setAlpha(entity.getGlow(partialTicks));
@@ -104,7 +104,7 @@ public class RenderSpiritTreeFaceSmall extends RenderWallFace<EntitySpiritTreeFa
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntitySpiritTreeFaceSmall entity) {
+	protected ResourceLocation getEntityTexture(EntitySpiritTreeFaceSmallBase entity) {
 		return TEXTURE;
 	}
 }

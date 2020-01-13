@@ -287,7 +287,7 @@ import thebetweenlands.common.entity.mobs.EntitySludgeMenace;
 import thebetweenlands.common.entity.mobs.EntitySludgeWorm;
 import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
-import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmallBase;
 import thebetweenlands.common.entity.mobs.EntitySporeJet;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
@@ -600,7 +600,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreebling.class, RenderGreebling::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityVolarkite.class, RenderVolarkite::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBoulderSprite.class, RenderBoulderSprite::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceSmall.class, RenderSpiritTreeFaceSmall::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceSmallBase.class, RenderSpiritTreeFaceSmall::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySpiritTreeFaceLarge.class, RenderSpiritTreeFaceLarge::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityTamedSpiritTreeFace.class, RenderSpiritTreeFaceSmall::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySapSpit.class, RenderSapSpit::new);
