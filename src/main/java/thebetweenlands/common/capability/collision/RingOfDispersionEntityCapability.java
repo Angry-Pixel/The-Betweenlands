@@ -18,6 +18,7 @@ import net.minecraftforge.client.event.PlayerSPPushOutOfBlocksEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import thebetweenlands.api.capability.IEntityCustomCollisionsCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
@@ -226,15 +227,17 @@ public class RingOfDispersionEntityCapability extends EntityCapability<RingOfDis
 
 	@SubscribeEvent
 	public static void onPlayerUpdate(PlayerTickEvent event) {
-		EntityPlayer player = event.player;
-
-		if(player != TheBetweenlands.proxy.getClientPlayer()) {
-			IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
-
-			if(cap != null) {
-				//For other players than the client player the collision logic isn't run
-				//so we need to force it to be run to do the obstruction distance calculations
-				player.world.getCollisionBoxes(player, player.getEntityBoundingBox());
+		if(event.phase == TickEvent.Phase.END) {
+			EntityPlayer player = event.player;
+	
+			if(player != TheBetweenlands.proxy.getClientPlayer()) {
+				IEntityCustomCollisionsCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CUSTOM_BLOCK_COLLISIONS, null);
+	
+				if(cap != null) {
+					//For other players than the client player the collision logic isn't run
+					//so we need to force it to be run to do the obstruction distance calculations
+					player.world.getCollisionBoxes(player, player.getEntityBoundingBox());
+				}
 			}
 		}
 	}

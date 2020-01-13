@@ -3,7 +3,6 @@ package thebetweenlands.common.herblore.elixir;
 import java.util.Collections;
 import java.util.List;
 
-import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,8 +15,11 @@ import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 
 public class PotionRootBound extends Potion {
@@ -61,29 +63,33 @@ public class PotionRootBound extends Potion {
 	public static void onEntityLivingUpdate(LivingUpdateEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 
-		if(entity.world.isRemote) {
-			updateClientEntity(entity);
-		}
-
 		if(entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null) {
 			entity.setInWeb();
 			entity.motionX = entity.motionZ = 0;
 		}
 	}
+	
+	@SubscribeEvent
+	public static void onClientTick(ClientTickEvent event) {
+		if(event.phase == TickEvent.Phase.END) {
+			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
+			if(player != null) {
+				updatePlayerRootboundTicks(player);
+			}
+		}
+	}
 
 	@SideOnly(Side.CLIENT)
-	private static void updateClientEntity(EntityLivingBase entity) {
-		if(entity instanceof AbstractClientPlayer) {
-			NBTTagCompound nbt = entity.getEntityData();
-			if(entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null) {
-				nbt.setInteger("thebetweenlands.rootBoundTicks", 5);
+	private static void updatePlayerRootboundTicks(EntityLivingBase entity) {
+		NBTTagCompound nbt = entity.getEntityData();
+		if(entity.getActivePotionEffect(ElixirEffectRegistry.ROOT_BOUND) != null) {
+			nbt.setInteger("thebetweenlands.rootBoundTicks", 5);
+		} else {
+			int rootBoundTicks = nbt.getInteger("thebetweenlands.rootBoundTicks");
+			if(rootBoundTicks > 1) {
+				nbt.setInteger("thebetweenlands.rootBoundTicks", rootBoundTicks - 1);
 			} else {
-				int rootBoundTicks = nbt.getInteger("thebetweenlands.rootBoundTicks");
-				if(rootBoundTicks > 1) {
-					nbt.setInteger("thebetweenlands.rootBoundTicks", rootBoundTicks - 1);
-				} else {
-					nbt.removeTag("thebetweenlands.rootBoundTicks");
-				}
+				nbt.removeTag("thebetweenlands.rootBoundTicks");
 			}
 		}
 	}
