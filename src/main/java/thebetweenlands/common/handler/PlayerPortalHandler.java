@@ -1,18 +1,20 @@
 package thebetweenlands.common.handler;
 
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IPortalCapability;
@@ -27,25 +29,20 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.teleporter.TeleporterHandler;
 
-import java.util.List;
-
 public class PlayerPortalHandler {
 	public static final int MAX_PORTAL_TIME = 120;
 
 	@SubscribeEvent
-	public static void teleportCheck(LivingEvent.LivingUpdateEvent event) {
-		Entity entity = event.getEntity();
-
-		if(entity instanceof EntityPlayer){
-			EntityPlayer player = (EntityPlayer) entity;
-
+	public static void teleportCheck(PlayerTickEvent event) {
+		if(event.phase == TickEvent.Phase.END) {
+			EntityPlayer player = event.player;
+	
 			IPortalCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
 			if (cap != null) {
-				
 				if(cap.isInPortal()){
 					BlockPos pos = new BlockPos(player.posX, player.posY + 0.5D, player.posZ);
 					IBlockState state = player.world.getBlockState(pos);
-
+	
 					boolean inPortalBlock = false;
 					if(state.getBlock() instanceof BlockTreePortal) {
 						AxisAlignedBB aabb = state.getBoundingBox(player.world, pos);
@@ -53,7 +50,7 @@ public class PlayerPortalHandler {
 							inPortalBlock = true;
 						}
 					}
-
+	
 					if(inPortalBlock) {
 						if(!cap.wasTeleported()) {
 							if (cap.getTicksUntilTeleport() <= 0 || player.capabilities.isCreativeMode) {

@@ -25,7 +25,7 @@ import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 
-public abstract class EntitySpiritTreeFace extends EntityMovingWallFace implements IMob {
+public abstract class EntitySpiritTreeFace extends EntityMovingWallFace {
 	public static final byte EVENT_ATTACKED = 2;
 	public static final byte EVENT_DEATH = 3;
 	public static final byte EVENT_EMERGE_SOUND = 81;
@@ -110,7 +110,7 @@ public abstract class EntitySpiritTreeFace extends EntityMovingWallFace implemen
 	}
 
 	public boolean isActive() {
-		return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+		return true;
 	}
 
 	@Override

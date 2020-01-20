@@ -175,7 +175,7 @@ public class ModelRegistry {
 	public static final IModel WEEDWOOD_SHIELD = new ModelFromModelBase.Builder(new ModelWeedwoodShield(), new ResourceLocation("thebetweenlands:items/shields/weedwood_shield"), 64, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/item/weedwood_shield_particle")).packer(MODEL_TEXTURE_PACKER).processor(SHIELD_VERTEX_PROCESSOR).build();
 	public static final IModel WEEDWOOD_SHIELD_BURNING = new ModelWeedwoodShieldBurning(MODEL_TEXTURE_PACKER);
-	public static final IModel DENTROTHYST_SHIELD_GREEN = new ModelFromModelBase.Builder(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_green"), 64, 6)
+	public static final IModel DENTROTHYST_SHIELD_GREEN = new ModelFromModelBase.Builder(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_green"), 64, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/item/dentrothyst_shield_green_particle")).packer(MODEL_TEXTURE_PACKER).processor(SHIELD_VERTEX_PROCESSOR).build();
 	public static final IModel DENTROTHYST_SHIELD_GREEN_POLISHED = new ModelFromModelBase.Builder(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_green_polished"), 64, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/item/dentrothyst_shield_green_polished_particle")).packer(MODEL_TEXTURE_PACKER).processor(SHIELD_VERTEX_PROCESSOR).build();
@@ -242,15 +242,15 @@ public class ModelRegistry {
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/loot_urn_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 	public static final ModelFromModelBase LOOT_URN_3 = new ModelFromModelBase.Builder(new ModelLootUrn3(), new ResourceLocation("thebetweenlands:blocks/loot_urn_3"), 64, 32)
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/loot_urn_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
-	public static final ModelFromModelBase LOOT_POT_1 = new ModelFromModelBase.Builder(new ModelLootPot1(), new ResourceLocation("thebetweenlands:blocks/loot_pot_1"), 64, 32)
+	public static final ModelFromModelBase LOOT_POT_1 = new ModelFromModelBase.Builder(new ModelLootPot1(), new ResourceLocation("thebetweenlands:blocks/loot_pot_1"), 128, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/loot_pot_1_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
-	public static final ModelFromModelBase LOOT_POT_2 = new ModelFromModelBase.Builder(new ModelLootPot2(), new ResourceLocation("thebetweenlands:blocks/loot_pot_2"), 64, 32)
+	public static final ModelFromModelBase LOOT_POT_2 = new ModelFromModelBase.Builder(new ModelLootPot2(), new ResourceLocation("thebetweenlands:blocks/loot_pot_2"), 128, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/loot_pot_2_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
-	public static final ModelFromModelBase LOOT_POT_3 = new ModelFromModelBase.Builder(new ModelLootPot3(), new ResourceLocation("thebetweenlands:blocks/loot_pot_3"), 64, 32)
+	public static final ModelFromModelBase LOOT_POT_3 = new ModelFromModelBase.Builder(new ModelLootPot3(), new ResourceLocation("thebetweenlands:blocks/loot_pot_3"), 128, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:particle/block/loot_pot_3_particle")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
-	public static final ModelFromModelBase WEEDWOOD_BARREL = new ModelFromModelBase.Builder(new ModelBarrel(), new ResourceLocation("thebetweenlands:blocks/weedwood_barrel"), 128, 128)
+	public static final ModelFromModelBase WEEDWOOD_BARREL = new ModelFromModelBase.Builder(new ModelBarrel(), new ResourceLocation("thebetweenlands:blocks/weedwood_barrel"), 128, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/weedwood")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
-	public static final ModelFromModelBase SYRMORITE_BARREL = new ModelFromModelBase.Builder(new ModelBarrel(), new ResourceLocation("thebetweenlands:blocks/syrmorite_barrel"), 128, 128)
+	public static final ModelFromModelBase SYRMORITE_BARREL = new ModelFromModelBase.Builder(new ModelBarrel(), new ResourceLocation("thebetweenlands:blocks/syrmorite_barrel"), 128, 64)
 			.particleTexture(new ResourceLocation("thebetweenlands:blocks/syrmorite_block")).packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
 
 

@@ -21,6 +21,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -39,6 +40,7 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -63,7 +65,7 @@ import thebetweenlands.common.world.storage.SpiritTreeKillToken;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.util.BlockShapeUtils;
 
-public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements IEntityWithLootModifier, IBLBoss {
+public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements IEntityWithLootModifier, IBLBoss, IMob {
 	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
 
 	public static final byte EVENT_BLOW_ATTACK = 40;
@@ -354,6 +356,11 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		this.world.playSound(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.DAMAGE_REDUCTION, SoundCategory.HOSTILE, 0.65F, 0.5F, false);
 	}
 
+	@Override
+	public boolean isActive() {
+		return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+	}
+	
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();

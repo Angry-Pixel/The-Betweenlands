@@ -17,7 +17,7 @@ import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmall {
+public class EntityTamedSpiritTreeFace extends EntitySpiritTreeFaceSmallBase {
 	public EntityTamedSpiritTreeFace(World world) {
 		super(world);
 	}

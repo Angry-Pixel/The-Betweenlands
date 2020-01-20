@@ -18,6 +18,13 @@ import javax.annotation.Nullable;
 
 public class EquipmentHelper {
 	/**
+	 * NBT containing whether the entity does *not* have any equipment.
+	 * Using the inverse because old entities may not have this tag yet and so we can still do a quick check
+	 * instead of having to do hasKey.
+	 */
+	public static final String NBT_HAS_NO_EQUIPMENT = "thebetweenlands.has_no_equipment";
+	
+	/**
 	 * Returns the first item stack of the specified item, or empty if none is found
 	 * @param entity
 	 * @param item
@@ -70,7 +77,10 @@ public class EquipmentHelper {
 					}
 
 					if(result.isEmpty() || result.getCount() != stack.getCount()) {
+						target.getEntityData().setBoolean(NBT_HAS_NO_EQUIPMENT, false);
+						
 						equippable.onEquip(stack, target, inv);
+						
 						return ItemHandlerHelper.insertItem(wrapper, stack, false);
 					}
 				}
@@ -115,7 +125,10 @@ public class EquipmentHelper {
 						}
 
 						if(result.isEmpty() || result.getCount() != stack.getCount()) {
+							target.getEntityData().setBoolean(NBT_HAS_NO_EQUIPMENT, false);
+							
 							equippable.onEquip(stack, target, inv);
+							
 							return ItemHandlerHelper.insertItem(wrapper, stack, false);
 						}
 					}

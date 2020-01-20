@@ -2,7 +2,6 @@ package thebetweenlands.util;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,8 +26,13 @@ public class TexturePacker {
 	public static class TextureQuadMap {
 		private final List<TextureQuad> quads;
 		private final ITexturePackable owner;
+		private final ResourceLocation texture;
+		private final int width, height;
 
-		public TextureQuadMap(List<TextureQuad> quads, @Nullable ITexturePackable owner) {
+		public TextureQuadMap(ResourceLocation texture, int width, int height, List<TextureQuad> quads, @Nullable ITexturePackable owner) {
+			this.texture = texture;
+			this.width = width;
+			this.height = height;
 			this.quads = quads;
 			this.owner = owner;
 		}
@@ -44,17 +48,16 @@ public class TexturePacker {
 	}
 
 	public static class TextureQuad {
-		private final ResourceLocation texture;
 		private final int u, v, w, h;
+		private int su, sv, sw, sh;
 		private double packedU, packedV, packedMaxU, packedMaxV;
 		private ResourceLocation packedLocation;
 
-		public TextureQuad(ResourceLocation texture, int u, int v, int width, int height) {
-			this.texture = texture;
-			this.u = u;
-			this.v = v;
-			this.w = width;
-			this.h = height;
+		public TextureQuad(int u, int v, int width, int height) {
+			this.su = this.u = u;
+			this.sv = this.v = v;
+			this.sw = this.w = width;
+			this.sh = this.h = height;
 		}
 
 		public double getPackedU() {
@@ -75,6 +78,13 @@ public class TexturePacker {
 
 		public ResourceLocation getPackedLocation() {
 			return this.packedLocation;
+		}
+
+		public void rescale(float scaleU, float scaleV) {
+			this.su = (int)Math.floor(this.u * scaleU);
+			this.sv = (int)Math.floor(this.v * scaleV);
+			this.sw = (int)Math.floor(this.w * scaleU);
+			this.sh = (int)Math.floor(this.h * scaleV);
 		}
 	}
 
@@ -162,26 +172,39 @@ public class TexturePacker {
 		this.packedFootprint = 0;
 
 		List<TextureQuad> quads = new ArrayList<>();
+		Map<TextureQuad, BufferedImage> textures = new HashMap<>();
+
 		for(TextureQuadMap map : this.textureMaps) {
+			BufferedImage sourceImage = this.getOrLoadTexture(map.texture, manager);
+
+			for(TextureQuad quad : map.getQuads()) {
+				//Rescale quad to texture size for texture pack support
+				quad.rescale((float)sourceImage.getWidth() / (float)map.width, (float)sourceImage.getHeight() / (float)map.height);
+
+				textures.put(quad, sourceImage);
+			}
+
 			quads.addAll(map.getQuads());
 		}
 
 		Collections.sort(quads, (q1, q2) -> q2.h - q1.h);
 
 		for(TextureQuad quad : quads) {
-			this.optimalFootprint += quad.w * quad.h;
+			this.optimalFootprint += quad.sw * quad.sh;
 
 			boolean packed = false;
 
+			BufferedImage sourceImage = textures.get(quad);
+
 			for(TextureBin bin : this.textureBins) {
-				if(this.packIntoBin(quad, bin, manager)) {
+				if(this.packIntoBin(quad, bin, sourceImage)) {
 					packed = true;
 					break;
 				}
 			}
 
 			if(!packed) {
-				int dimension = Math.max(16, Math.max(quad.w, quad.h));
+				int dimension = Math.max(16, Math.max(quad.sw, quad.sh));
 				int binSize = 1 << (32 - Integer.numberOfLeadingZeros(dimension - 1)); //Round to next power of 2
 
 				TextureBin bin = new TextureBin(this.generateNewTextureLocation(), binSize, binSize);
@@ -190,7 +213,7 @@ public class TexturePacker {
 
 				this.packedFootprint += binSize * binSize;
 
-				if(!this.packIntoBin(quad, bin, manager)) {
+				if(!this.packIntoBin(quad, bin, sourceImage)) {
 					throw new RuntimeException("Was unable to pack texture quad into new bin. This should not happen!");
 				}
 			}
@@ -210,61 +233,53 @@ public class TexturePacker {
 	}
 
 	protected static void copySubImage(BufferedImage source, int x, int y, int w, int h, BufferedImage dest, int x2, int y2) {
+		int sourceWidth = source.getWidth();
+		int sourceHeight = source.getHeight();
+
 		for(int py = 0; py < h; py++) {
 			for(int px = 0; px < w; px++) {
-				int sx = x + px;
-				if(sx < 0) {
-					sx = source.getWidth() + sx % source.getWidth();
-				} else {
-					sx = sx % source.getWidth();
-				}
-				
-				int sy = y + py;
-				if(sy < 0) {
-					sy = source.getHeight() + sy % source.getHeight();
-				} else {
-					sy = sy % source.getHeight();
-				}
-				
+				//Model's UVs can be out of range, assuming texture wrapping is used
+				int sx = ((x + px) % sourceWidth + sourceWidth) % sourceWidth;
+				int sy = ((y + py) % sourceHeight + sourceHeight) % sourceHeight;
+
 				dest.setRGB(x2 + px, y2 + py, source.getRGB(sx, sy));
 			}
 		}
 	}
 
-	protected boolean packIntoBin(TextureQuad quad, TextureBin bin, IResourceManager manager) {
+	protected boolean packIntoBin(TextureQuad quad, TextureBin bin, BufferedImage sourceImage) {
 		List<TextureBin.Space> spaces = bin.spaces;
 
 		for(int i = spaces.size() - 1; i >= 0; i--) {
 			TextureBin.Space space = spaces.get(i);
 
-			if(quad.w > space.w || quad.h > space.h) {
+			if(quad.sw > space.w || quad.sh > space.h) {
 				continue;
 			}
 
 			int packedU = space.x;
 			int packedV = space.y;
 
-			BufferedImage sourceImage = this.getOrLoadTexture(quad.texture, manager);
-			copySubImage(sourceImage, quad.u, quad.v, quad.w, quad.h, bin.image, packedU, packedV);
+			copySubImage(sourceImage, quad.su, quad.sv, quad.sw, quad.sh, bin.image, packedU, packedV);
 
 			quad.packedU = packedU / (double) bin.width;
 			quad.packedV = packedV / (double) bin.height;
-			quad.packedMaxU = (packedU + quad.w) / (double) bin.width;
-			quad.packedMaxV = (packedV + quad.h) / (double) bin.height;
+			quad.packedMaxU = (packedU + quad.sw) / (double) bin.width;
+			quad.packedMaxV = (packedV + quad.sh) / (double) bin.height;
 			quad.packedLocation = bin.location;
 
-			if(quad.w == space.w && quad.h == space.h) {
+			if(quad.sw == space.w && quad.sh == space.h) {
 				spaces.remove(i);
-			} else if(quad.h == space.h) {
-				space.x += quad.w;
-				space.w -= quad.w;
-			} else if(quad.w == space.w) {
-				space.y += quad.h;
-				space.h -= quad.h;
+			} else if(quad.sh == space.h) {
+				space.x += quad.sw;
+				space.w -= quad.sw;
+			} else if(quad.sw == space.w) {
+				space.y += quad.sh;
+				space.h -= quad.sh;
 			} else {
-				spaces.add(new TextureBin.Space(space.x + quad.w, space.y, space.w - quad.w, quad.h));
-				space.y += quad.h;
-				space.h -= quad.h;
+				spaces.add(new TextureBin.Space(space.x + quad.sw, space.y, space.w - quad.sw, quad.sh));
+				space.y += quad.sh;
+				space.h -= quad.sh;
 			}
 
 			return true;
