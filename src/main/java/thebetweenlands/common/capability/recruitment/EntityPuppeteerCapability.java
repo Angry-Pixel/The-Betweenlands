@@ -42,7 +42,7 @@ public class EntityPuppeteerCapability extends EntityCapability<EntityPuppeteerC
 
 
 	private int activatingTicks;
-	private int activatingEntityId;
+	private int activatingEntityId = -1;
 	private Entity activatingEntity;
 
 	@Override

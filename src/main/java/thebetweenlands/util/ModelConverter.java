@@ -315,9 +315,12 @@ public class ModelConverter {
 		public final ResourceLocation texture;
 		public final TexturePacker packer;
 		public final ITexturePackable owner;
+		public final int width, height;
 
-		public Packing(ResourceLocation texture, TexturePacker packer, ITexturePackable owner) {
+		public Packing(ResourceLocation texture, int width, int height, TexturePacker packer, ITexturePackable owner) {
 			this.texture = texture;
+			this.width = width;
+			this.height = height;
 			this.packer = packer;
 			this.owner = owner;
 		}
@@ -639,7 +642,7 @@ public class ModelConverter {
 		this.model = new Model(this.modelBoxList, this.fwdVec, this.upVec);
 
 		if(this.packing != null) {
-			this.packing.packer.addTextureMap(new TextureQuadMap(packerQuads, this.packing.owner));
+			this.packing.packer.addTextureMap(new TextureQuadMap(this.packing.texture, this.packing.width, this.packing.height, packerQuads, this.packing.owner));
 		}
 	}
 
@@ -678,7 +681,7 @@ public class ModelConverter {
 				maxV = Math.max(maxV, (int)Math.floor(vert.texturePositionY * modelHeight));
 			}
 
-			TextureQuad packerQuad = new TextureQuad(this.packing.texture, minU, minV, maxU - minU, maxV - minV);
+			TextureQuad packerQuad = new TextureQuad(minU, minV, maxU - minU, maxV - minV);
 
 			Quad face = new Quad(
 					new Vec3UV(v1, packerQuad, maxUVertex1 == 0 || maxUVertex2 == 0, maxVVertex1 == 0 || maxVVertex2 == 0, modelWidth, modelHeight),

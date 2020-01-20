@@ -3,7 +3,6 @@ package thebetweenlands.common.world.storage.location;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -15,7 +14,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -26,8 +24,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
@@ -37,7 +33,7 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.LocalStorageImpl;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
-public class LocationStorage extends LocalStorageImpl implements ITickable {
+public class LocationStorage extends LocalStorageImpl {
 	private List<AxisAlignedBB> boundingBoxes = new ArrayList<>();
 	private AxisAlignedBB enclosingBoundingBox;
 	private EnumLocationType type;
@@ -484,35 +480,6 @@ public class LocationStorage extends LocalStorageImpl implements ITickable {
 	 */
 	public boolean isVisible(Entity entity) {
 		return this.dataManager.get(VISIBLE);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public int getTitleDisplayCooldown(Entity entity) {
-		return this.titleDisplayCooldowns.containsKey(entity) ? this.titleDisplayCooldowns.get(entity) : 0;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void setTitleDisplayCooldown(Entity entity, int cooldown) {
-		this.titleDisplayCooldowns.put(entity, cooldown);
-	}
-
-	@Override
-	public void update() {
-		if(this.getWorldStorage().getWorld().isRemote) {
-			Iterator<Entity> it = this.titleDisplayCooldowns.keySet().iterator();
-			while(it.hasNext()) {
-				Entity entity = it.next();
-				if(this.isVisible(entity)) {
-					if(this.titleDisplayCooldowns.adjustValue(entity, -1)) {
-						if(this.titleDisplayCooldowns.get(entity) <= 0) {
-							it.remove();
-						}
-					}
-				} else {
-					it.remove();
-				}
-			}
-		}
 	}
 
 	private static final Comparator<LocationStorage> LAYER_SORTER = new Comparator<LocationStorage>() {

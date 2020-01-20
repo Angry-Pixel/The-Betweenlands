@@ -1,6 +1,13 @@
 package thebetweenlands.common.block.plant;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -10,7 +17,6 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -33,8 +39,6 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.IFarmablePlant;
@@ -51,11 +55,6 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-
-import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarvestable, ITintedBlock, IFarmablePlant {
 	public static final PropertyBool NORTH = PropertyBool.create("north");
@@ -187,6 +186,26 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 			entity.motionX *= 0.06D;
 			entity.motionZ *= 0.06D;
 		}
+		
+		if(entity.world.isRemote) {
+			ICustomStepSoundCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_CUSTOM_STEP_SOUND, null);
+			if(cap != null) {
+				if(entity.distanceWalkedOnStepModified > cap.getNextWeedwoodBushStep()) {
+					AxisAlignedBB aabb = entity.getEntityBoundingBox();
+					Iterator<MutableBlockPos> it = BlockPos.getAllInBoxMutable(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ)).iterator();
+					while(it.hasNext()) {
+						MutableBlockPos checkPos = it.next();
+						if(entity.world.getBlockState(checkPos).getBlock() == BlockRegistry.WEEDWOOD_BUSH) {
+							spawnLeafParticles(entity.world, checkPos, Math.min((entity.distanceWalkedOnStepModified - cap.getNextWeedwoodBushStep()) * 40, 1));
+						}
+					}
+					
+					entity.world.playSound(entity.posX, entity.posY, entity.posZ, SoundRegistry.GECKO_HIDE, SoundCategory.BLOCKS, 0.4F, entity.world.rand.nextFloat() * 0.3F + 0.7F, false);
+					
+					cap.setNextWeeedwoodBushStep(entity.distanceWalkedOnStepModified + 0.8F);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -212,32 +231,6 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	@Override
 	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
 		return worldIn != null && pos != null ? BiomeColorHelper.getFoliageColorAtPos(worldIn, pos) : ColorizerFoliage.getFoliageColorBasic();
-	}
-
-	@SubscribeEvent
-	public static void onLivingUpdate(LivingUpdateEvent event) {
-		EntityLivingBase entity = event.getEntityLiving();
-		ICustomStepSoundCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_CUSTOM_STEP_SOUND, null);
-		if(cap != null) {
-			if(entity.distanceWalkedOnStepModified > cap.getNextWeedwoodBushStep()) {
-				boolean inBush = false;
-				AxisAlignedBB aabb = entity.getEntityBoundingBox();
-				Iterator<MutableBlockPos> it = BlockPos.getAllInBoxMutable(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ)).iterator();
-				while(it.hasNext()) {
-					MutableBlockPos pos = it.next();
-					if(entity.world.isBlockLoaded(pos) && entity.world.getBlockState(pos).getBlock() == BlockRegistry.WEEDWOOD_BUSH) {
-						inBush = true;
-						if(entity.world.isRemote) {
-							spawnLeafParticles(entity.world, pos, Math.min((entity.distanceWalkedOnStepModified - cap.getNextWeedwoodBushStep()) * 40, 1));
-						}
-					}
-				}
-				if(inBush) {
-					entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundRegistry.GECKO_HIDE, SoundCategory.BLOCKS, 0.4F, entity.world.rand.nextFloat() * 0.3F + 0.7F);
-				}
-				cap.setNextWeeedwoodBushStep(entity.distanceWalkedOnStepModified + 0.8F);
-			}
-		}
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -27,14 +27,41 @@ public class ItemEquipmentHandler {
 
 	@SubscribeEvent
 	public static void onLivingUpdated(LivingEvent.LivingUpdateEvent event) {
-		IEquipmentCapability cap = event.getEntity().getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-		if (cap != null) {
-			for (EnumEquipmentInventory invType : EnumEquipmentInventory.VALUES) {
-				IInventory inventory = cap.getInventory(invType);
+		Entity entity = event.getEntity();
+		
+		if(!entity.getEntityData().getBoolean(EquipmentHelper.NBT_HAS_NO_EQUIPMENT)) {
+			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+			
+			if (cap != null) {
+				for (EnumEquipmentInventory invType : EnumEquipmentInventory.VALUES) {
+					IInventory inventory = cap.getInventory(invType);
 
-				if (inventory instanceof ITickable) {
-					((ITickable) inventory).update();
+					if (inventory instanceof ITickable) {
+						((ITickable) inventory).update();
+					}
 				}
+				
+				if((entity.ticksExisted + entity.getEntityId()) % 100 == 0) {
+					boolean hasEquipment = false;
+					
+					loop: for(EnumEquipmentInventory invType : EnumEquipmentInventory.VALUES) {
+						IInventory inventory = cap.getInventory(invType);
+						
+						for(int i = 0; i < inventory.getSizeInventory(); i++) {
+							if(!inventory.getStackInSlot(i).isEmpty()) {
+								hasEquipment = true;
+								break loop;
+							}
+						}
+					}
+					
+					//Put equipment ticking back to sleep until items are added again
+					if(!hasEquipment) {
+						entity.getEntityData().setBoolean(EquipmentHelper.NBT_HAS_NO_EQUIPMENT, true);
+					}
+				}
+			} else {
+				entity.getEntityData().setBoolean(EquipmentHelper.NBT_HAS_NO_EQUIPMENT, true);
 			}
 		}
 	}

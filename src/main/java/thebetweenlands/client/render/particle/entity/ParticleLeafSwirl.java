@@ -27,8 +27,6 @@ public class ParticleLeafSwirl extends ParticleSwirl implements IParticleSpriteR
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
-
 		if(!this.target.isEntityAlive()) {
 			this.setExpired();
 		}
@@ -38,6 +36,8 @@ public class ParticleLeafSwirl extends ParticleSwirl implements IParticleSpriteR
 
 		this.animation.update();
 		this.setParticleTexture(this.animation.getCurrentSprite());
+		
+		super.onUpdate();
 	}
 
 	@Override

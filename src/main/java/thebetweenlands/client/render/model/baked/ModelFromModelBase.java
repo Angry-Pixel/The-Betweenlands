@@ -217,7 +217,7 @@ public class ModelFromModelBase implements IModel, ITexturePackable {
 		ModelCacheKey key = new ModelCacheKey(model, texture, vertexProcessor);
 		Model cachedConvertedModel = this.derivativeModelCache.get(key);
 		if(cachedConvertedModel == null) {
-			ModelConverter converter = new ModelConverter(new Packing(texture, packer, this), model, 0.0625D, this.doubleFace);
+			ModelConverter converter = new ModelConverter(new Packing(texture, width, height, packer, this), model, 0.0625D, this.doubleFace);
 			this.derivativeModelCache.put(key, cachedConvertedModel = converter.getModel());
 		}
 		this.convertedModel = cachedConvertedModel;

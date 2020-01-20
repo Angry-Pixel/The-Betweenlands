@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.storage.IWorldStorage;
@@ -19,7 +20,7 @@ import thebetweenlands.common.network.clientbound.MessageClearBlockGuard;
 import thebetweenlands.common.world.storage.location.guard.BlockLocationGuard;
 import thebetweenlands.common.world.storage.location.guard.BlockLocationGuard.GuardChunkSection;
 
-public class LocationGuarded extends LocationStorage {
+public class LocationGuarded extends LocationStorage implements ITickable {
 	private BlockLocationGuard guard = new BlockLocationGuard() {
 		@Override
 		public boolean setGuarded(World world, BlockPos pos, boolean guarded) {
@@ -82,8 +83,6 @@ public class LocationGuarded extends LocationStorage {
 
 	@Override
 	public void update() {
-		super.update();
-
 		if(this.queuedClear) {
 			MessageClearBlockGuard message = new MessageClearBlockGuard(this); 
 			for(EntityPlayerMP watcher : this.getWatchers()) {

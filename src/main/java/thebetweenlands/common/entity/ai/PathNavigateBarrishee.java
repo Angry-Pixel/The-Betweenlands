@@ -4,6 +4,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -59,9 +60,13 @@ public class PathNavigateBarrishee extends PathNavigateGround {
 
 					PathNodeType nodeType = state.getBlock().isPassable(this.barrishee.world, pos) ? PathNodeType.OPEN : PathNodeType.BLOCKED;
 
-					if(nodeType == PathNodeType.BLOCKED && state.getCollisionBoundingBox(this.barrishee.world, pos).offset(pos).intersects(this.barrishee.getEntityBoundingBox().expand(Math.signum(diff.x) * 0.2D, 0, Math.signum(diff.z) * 0.2D))) {
-						blocked = true;
-						break loop;
+					if(nodeType == PathNodeType.BLOCKED) {
+						AxisAlignedBB collisionBox = state.getCollisionBoundingBox(this.barrishee.world, pos);
+
+						if(collisionBox != null && collisionBox.offset(pos).intersects(this.barrishee.getEntityBoundingBox().expand(Math.signum(diff.x) * 0.2D, 0, Math.signum(diff.z) * 0.2D))) {
+							blocked = true;
+							break loop;
+						}
 					}
 				}
 			}

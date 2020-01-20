@@ -20,6 +20,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent.StopTracking;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -189,7 +190,7 @@ public class EntityCapabilityHandler {
 
 	@SubscribeEvent
 	public static void onEntityUpdate(PlayerTickEvent event) {
-		if(!event.player.getEntityWorld().isRemote && event.side == Side.SERVER)  {
+		if(event.phase == TickEvent.Phase.END && !event.player.getEntityWorld().isRemote && event.side == Side.SERVER)  {
 			EntityPlayerMP player = (EntityPlayerMP) event.player;
 			List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(player);
 			if(trackers != null) {

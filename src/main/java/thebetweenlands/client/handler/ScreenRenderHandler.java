@@ -6,6 +6,9 @@ import java.util.Random;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
+import gnu.trove.iterator.TObjectIntIterator;
+import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -57,7 +60,6 @@ import thebetweenlands.common.capability.collision.RingOfDispersionEntityCapabil
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.EntityRopeNode;
-import thebetweenlands.common.handler.PlayerDecayHandler;
 import thebetweenlands.common.handler.PlayerPortalHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
@@ -107,6 +109,8 @@ public class ScreenRenderHandler extends Gui {
 	private int cavingRopeConnectTicks = 0;
 	private int cavingRopeCount = 0;
 
+	private final TObjectIntMap<LocationStorage> titleDisplayCooldowns = new TObjectIntHashMap<>();
+	
 	public static final ResourceLocation TITLE_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/location_title.png");
 
 	public static final ResourceLocation CAVING_ROPE_CONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_connected.png");
@@ -181,6 +185,18 @@ public class ScreenRenderHandler extends Gui {
 					}
 				}
 
+				TObjectIntIterator<LocationStorage> titleDisplayCooldownsIT = this.titleDisplayCooldowns.iterator();
+				while(titleDisplayCooldownsIT.hasNext()) {
+					titleDisplayCooldownsIT.advance();
+					
+					int cooldown = titleDisplayCooldownsIT.value();
+					if(cooldown > 1) {
+						this.titleDisplayCooldowns.put(titleDisplayCooldownsIT.key(), cooldown - 1);
+					} else {
+						titleDisplayCooldownsIT.remove();
+					}
+				}
+				
 				if(player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 					String prevLocation = this.currentLocation;
 
@@ -207,16 +223,21 @@ public class ScreenRenderHandler extends Gui {
 							if(highestLocation == null || storage.getLayer() > highestLocation.getLayer())
 								highestLocation = storage;
 						}
+						
 						int displayCooldown = 60*20; //1 minute cooldown for title
-						if(highestLocation.getTitleDisplayCooldown(player) == 0) {
-							highestLocation.setTitleDisplayCooldown(player, displayCooldown);
+						
+						int currentCooldown = this.titleDisplayCooldowns.get(highestLocation);
+						
+						if(currentCooldown == 0) {
+							this.titleDisplayCooldowns.put(highestLocation, displayCooldown);
+
 							if(highestLocation.hasLocalizedName()) {
 								this.currentLocation = highestLocation.getLocalizedName();
 							} else {
 								this.currentLocation = highestLocation.getName();
 							}
-						} else if(highestLocation.getTitleDisplayCooldown(player) > 0) {
-							highestLocation.setTitleDisplayCooldown(player, displayCooldown); //Keep cooldown up until player leaves location
+						} else if(currentCooldown > 0) {
+							this.titleDisplayCooldowns.put(highestLocation, displayCooldown); //Keep cooldown up until player leaves location
 						}
 					}
 

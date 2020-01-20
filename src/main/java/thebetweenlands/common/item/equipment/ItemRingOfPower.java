@@ -50,7 +50,7 @@ public class ItemRingOfPower extends ItemRing {
 		if(entity instanceof EntityLivingBase) {
 			IAttributeInstance speedAttrib = ((EntityLivingBase) entity).getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
 
-			if(speedAttrib != null) {
+			if(speedAttrib != null && speedAttrib.getModifier(POWER_SPEED_MODIFIER_ATTRIBUTE_UUID) == null) {
 				speedAttrib.applyModifier(new AttributeModifier(POWER_SPEED_MODIFIER_ATTRIBUTE_UUID, "Ring of power speed modifier", 0.2D, 2));
 			}
 		}
@@ -60,12 +60,23 @@ public class ItemRingOfPower extends ItemRing {
 	public void onUnequip(ItemStack stack, Entity entity, IInventory inventory) { 
 		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 		nbt.setBoolean("ringActive", false);
-
+		
 		if(entity instanceof EntityLivingBase) {
-			IAttributeInstance speedAttrib = ((EntityLivingBase) entity).getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
-
-			if(speedAttrib != null) {
-				speedAttrib.removeModifier(POWER_SPEED_MODIFIER_ATTRIBUTE_UUID);
+			boolean hasOtherRing = false;
+			for(int i = 0; i < inventory.getSizeInventory(); i++) {
+				ItemStack invStack = inventory.getStackInSlot(i);
+				if(!invStack.isEmpty() && invStack.getItem() instanceof ItemRingOfPower && invStack != stack) {
+					hasOtherRing = true;
+					break;
+				}
+			}
+			
+			if(!hasOtherRing) {
+				IAttributeInstance speedAttrib = ((EntityLivingBase) entity).getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);
+	
+				if(speedAttrib != null) {
+					speedAttrib.removeModifier(POWER_SPEED_MODIFIER_ATTRIBUTE_UUID);
+				}
 			}
 		}
 	}
