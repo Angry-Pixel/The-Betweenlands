@@ -78,11 +78,14 @@ public class PuppetHandler {
 		if(entity instanceof EntityLiving) {
 			IPuppetCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
 
-			if(cap != null && cap.hasPuppeteer()) {
-				//Refund recruitment cost
-				ItemStack ring = ItemRingOfRecruitment.getActiveRing(cap.getPuppeteer(), null);
-				if(!ring.isEmpty()) {
-					ring.setItemDamage(ring.getItemDamage() - cap.getRecruitmentCost());
+			if(cap != null) {
+				Entity owner = cap.getPuppeteer();
+				if(owner != null) {
+					//Refund recruitment cost
+					ItemStack ring = ItemRingOfRecruitment.getActiveRing(owner, null);
+					if(!ring.isEmpty()) {
+						ring.setItemDamage(ring.getItemDamage() - cap.getRecruitmentCost());
+					}
 				}
 			}
 		}
