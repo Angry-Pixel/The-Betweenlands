@@ -196,7 +196,7 @@ public class ModelRegistry {
 	public static final IModel ROOT_SPOOK = new ModelRoot(new ResourceLocation(ModInfo.ID, "blocks/root_top_spook"), new ResourceLocation(ModInfo.ID, "blocks/root_middle_spook"), new ResourceLocation(ModInfo.ID, "blocks/root_bottom_spook"));
 	public static final IModel RUBBER_TAP_LIQUID = new ModelRubberTapLiquid(null, 0);
 	public static final IModel RUBBER_TAP_POURING = new ModelFromModelBase.Builder(new ModelRubberTapPouring(), new ResourceLocation(ModInfo.ID, "fluids/rubber_flowing"), 64, 64)
-			.packer(MODEL_TEXTURE_PACKER).doubleFace(false).build();
+			.packer(null).doubleFace(false).build();
 	public static final IModel WEEDWOOD_RUBBER_TAP = new ModelRubberTapCombined(MODEL_TEXTURE_PACKER, new ResourceLocation("thebetweenlands:blocks/weedwood_rubber_tap"), new ResourceLocation("thebetweenlands:particle/block/weedwood_rubber_tap_particle"));
 	public static final IModel SYRMORITE_RUBBER_TAP = new ModelRubberTapCombined(MODEL_TEXTURE_PACKER, new ResourceLocation("thebetweenlands:blocks/syrmorite_rubber_tap"), new ResourceLocation("thebetweenlands:particle/block/syrmorite_rubber_tap_particle"));
 	public static final IModel MUD_FLOWER_POT_BASE = new ModelFromModelBase.Builder(new ModelMudFlowerPot(), new ResourceLocation("thebetweenlands:blocks/mud_flower_pot"), 32, 32)

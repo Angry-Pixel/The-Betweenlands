@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.google.common.collect.Multimap;
@@ -10,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
@@ -26,6 +28,7 @@ import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -36,9 +39,11 @@ import thebetweenlands.api.item.IExtendedReach;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.util.NBTHelper;
 
 public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 	protected static final String NBT_SWING_START_COOLDOWN = "swingStartCooldownState";
+	protected static final String NBT_HIT_COOLDOWN = "hitCooldownState";
 	protected static final String NBT_SWING_START_TICKS = "swingStartTicks";
 	protected static final String NBT_LONG_SWING_STATE = "longSwingState";
 
@@ -75,6 +80,17 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 			double aoeReach = this.getAoEReach(entityLiving, stack);
 			double aoeHalfAngle = this.getAoEHalfAngle(entityLiving, stack);
 
+			//oof
+			IAttributeInstance attackSpeed = player.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED);
+			double baseAttackSpeed = attackSpeed.getBaseValue();
+			
+			Collection<AttributeModifier> attackSpeedModifiers = attackSpeed.getModifiers();
+			for(AttributeModifier modifier : attackSpeedModifiers) {
+				attackSpeed.removeModifier(modifier);
+			}
+
+			float initialAttackStrength = Math.max(player.getCooledAttackStrength(0.5F), NBTHelper.getStackNBTSafe(stack).getFloat(NBT_HIT_COOLDOWN));
+
 			List<EntityLivingBase> others = entityLiving.world.getEntitiesWithinAABB(EntityLivingBase.class, entityLiving.getEntityBoundingBox().grow(aoeReach));
 			for(EntityLivingBase target : others) {
 				if(target != entityLiving) {
@@ -107,6 +123,11 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 								if(hitY > part.getEntityBoundingBox().minY - 0.25D && hitY < part.getEntityBoundingBox().maxY + 0.25D) {
 									if(player.world.rayTraceBlocks(player.getPositionVector().add(0, player.getEyeHeight(), 0), part.getPositionVector().add(0, part.height / 2, 0), false, true, false) == null) {
 										if(!entityLiving.world.isRemote) {
+											//yikes
+											//Adjust attack speed such that the current attack strength becomes the same as the initial attack strength
+											player.resetCooldown();
+											attackSpeed.setBaseValue(20 * initialAttackStrength / 0.5f);
+
 											player.attackTargetEntityWithCurrentItem(target);
 										}
 
@@ -121,6 +142,14 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 				}
 			}
 
+			//oof
+			attackSpeed.setBaseValue(baseAttackSpeed);
+			for(AttributeModifier modifier : attackSpeedModifiers) {
+				if(!attackSpeed.hasModifier(modifier)) {
+					attackSpeed.applyModifier(modifier);
+				}
+			}
+
 			if(entityLiving.world.isRemote && (!entityLiving.isSwingInProgress || entityLiving.swingProgressInt >= entityLiving.getArmSwingAnimationEnd() / 2 || entityLiving.swingProgressInt < 0)) {
 				this.playSwingSound(player, stack);
 
@@ -129,6 +158,8 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 				}
 			}
 		}
+		
+		stack.setTagInfo(NBT_HIT_COOLDOWN, new NBTTagFloat(0));
 
 		return super.onEntitySwing(entityLiving, stack);
 	}
@@ -242,6 +273,16 @@ public class ItemGreatsword extends ItemBLSword implements IExtendedReach {
 		return EnumRarity.RARE;
 	}
 
+	@SubscribeEvent
+	public static void onAttack(AttackEntityEvent event) {
+		EntityPlayer player = event.getEntityPlayer();
+		ItemStack stack = player.getHeldItemMainhand();
+		
+		if(!stack.isEmpty() && stack.getItem() instanceof ItemGreatsword) {
+			stack.setTagInfo(NBT_HIT_COOLDOWN, new NBTTagFloat(Math.max(NBTHelper.getStackNBTSafe(stack).getFloat(NBT_HIT_COOLDOWN), player.getCooledAttackStrength(0.5f))));
+		}
+	}
+	
 	private static boolean renderingHand = false;
 
 	@SubscribeEvent

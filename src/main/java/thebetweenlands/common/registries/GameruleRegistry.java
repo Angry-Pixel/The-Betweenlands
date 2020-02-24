@@ -34,6 +34,7 @@ public final class GameruleRegistry {
 	public static final String BL_FIRE_TOOL_BLACKLIST = "blFireToolBlacklist";
 	public static final String BL_POTION_BLACKLIST = "blPotionBlacklist";
 	public static final String BL_FERTILIZER_BLACKLIST = "blFertilizerBlacklist";
+	public static final String BL_TIMED_EVENTS = "blTimedEvents";
 
 	public void onServerStarting(FMLServerStartingEvent event) {
 		this.createGamerule(BL_FOOD_SICKNESS, "true", GameRules.ValueType.BOOLEAN_VALUE);
@@ -45,6 +46,7 @@ public final class GameruleRegistry {
 		this.createGamerule(BL_FIRE_TOOL_BLACKLIST, "true", GameRules.ValueType.BOOLEAN_VALUE);
 		this.createGamerule(BL_POTION_BLACKLIST, "true", GameRules.ValueType.BOOLEAN_VALUE);
 		this.createGamerule(BL_FERTILIZER_BLACKLIST, "true", GameRules.ValueType.BOOLEAN_VALUE);
+		this.createGamerule(BL_TIMED_EVENTS, "true", GameRules.ValueType.BOOLEAN_VALUE);
 	}
 
 	private void createGamerule(String name, String value, GameRules.ValueType type) {

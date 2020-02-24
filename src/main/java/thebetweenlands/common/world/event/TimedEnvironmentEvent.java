@@ -6,6 +6,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
+import thebetweenlands.common.registries.GameruleRegistry;
 
 public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	public TimedEnvironmentEvent(BLEnvironmentEventRegistry registry) {
@@ -26,7 +27,7 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	public void update(World world) {
 		super.update(world);
 
-		if(!this.getRegistry().isDisabled() && !this.isCurrentStateFromRemote()) {
+		if(!this.getRegistry().isDisabled() && !this.isCurrentStateFromRemote() && GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_TIMED_EVENTS)) {
 			if(this.isActive() || this.canActivate()) {
 				this.dataManager.set(TICKS, this.getTicks() - 1);
 			}
