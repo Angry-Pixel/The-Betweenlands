@@ -1,11 +1,13 @@
 package thebetweenlands.util;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import javax.annotation.Nullable;
+
 import thebetweenlands.util.TexturePacker.TextureQuad;
 
 public class Vec3UV {
 	public double x, y, z, u, v, uw, vw;
 	public boolean maxU, maxV;
+	@Nullable
 	public TextureQuad packedQuad;
 	
 	public Vec3UV(double x, double y, double z) {
