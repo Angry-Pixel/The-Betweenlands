@@ -152,6 +152,8 @@ tile.thebetweenlands.mud_brick_stairs.name=泥砖楼梯
 tile.thebetweenlands.mud_brick_wall.name=泥砖墙
 tile.thebetweenlands.mud_brick_shingles.name=泥瓦
 tile.thebetweenlands.mud_brick_shingle_slab.name=泥瓦台阶
+tile.thebetweenlands.mud_brick_shingle_stairs.name=泥瓦楼梯
+tile.thebetweenlands.mud_brick_shingle_wall.name=泥瓦墙
 tile.thebetweenlands.octine_block.name=炽炎铁块
 tile.thebetweenlands.octine_ore.name=炽炎铁矿石
 tile.thebetweenlands.peat.name=泥炭
@@ -421,7 +423,6 @@ tile.thebetweenlands.mud_tower_beam_origin.name=光源
 tile.thebetweenlands.mud_tower_beam_relay.name=光束透镜
 tile.thebetweenlands.mud_tower_beam_tube.name=光束通道
 tile.thebetweenlands.mud_tower_beam_lens_supports.name=透镜支架
-tile.thebetweenlands.mud_brick_spawner_hole.name=烂泥蠕虫刷怪箱
 tile.thebetweenlands.mud_brick_alcove.name=地牢壁龛
 tile.thebetweenlands.loot_urn.1.name=战利品罐
 tile.thebetweenlands.loot_urn.2.name=战利品罐
@@ -449,20 +450,26 @@ tile.thebetweenlands.log_rotten_bark_carved_14.name=雕刻的烂树皮
 tile.thebetweenlands.log_rotten_bark_carved_15.name=雕刻的烂树皮
 tile.thebetweenlands.log_rotten_bark_carved_16.name=雕刻的烂树皮
 tile.thebetweenlands.energy_barrier_mud.name=能量屏障
+tile.thebetweenlands.diagonal_energy_barrier.name=能量屏障
 tile.thebetweenlands.compacted_mud_slope.name=紧实泥巴斜坡
 tile.thebetweenlands.compacted_mud_slab.name=紧实泥巴台阶
 tile.thebetweenlands.compacted_mud_mirage.name=幻象紧实泥巴
 tile.thebetweenlands.mud_tower_brazier.name=火盆
 tile.thebetweenlands.dungeon_door_runes.name=地牢门
 tile.thebetweenlands.dungeon_door_runes_mimic.name=地牢门模仿者
+tile.thebetweenlands.dungeon_door_runes_crawler.name=地牢门地穴
 tile.thebetweenlands.dungeon_door_combination.name=地牢门密码
-
 tile.thebetweenlands.decay_pit_control.name=残蚀之池
 tile.thebetweenlands.decay_pit_hanging_chain.name=残蚀池之链
+tile.thebetweenlands.decay_pit_ground_chain.name=残蚀池之链
 tile.thebetweenlands.rotten_planks.name=腐朽木板
 tile.thebetweenlands.rotten_plank_slab.name=腐朽木板台阶
+tile.thebetweenlands.rotten_plank_stairs.name=腐朽木板楼梯
+tile.thebetweenlands.rotten_plank_fence.name=腐朽木板栅栏
+tile.thebetweenlands.rotten_plank_fence_gate.name=腐朽木板栅栏门
 tile.thebetweenlands.censer.name=香炉
-tile.thebetweenlands.tar_barrel.name=焦油桶
+tile.thebetweenlands.weedwood_barrel.name=杂草木储液桶
+tile.thebetweenlands.syrmorite_barrel.name=赛摩铜储液桶
 
 # Items
 
