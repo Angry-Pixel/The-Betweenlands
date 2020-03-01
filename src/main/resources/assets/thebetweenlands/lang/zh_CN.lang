@@ -1157,8 +1157,8 @@ chat.event.winter=雪橇和铃铛的声音从远处飘来…
 chat.repeller.shimmerstone_missing=这个驱魔器还需要一块闪光石才能使用。
 chat.amate_map.invalid=你不能在交错次元之外制作树皮地图。
 
-chat.equipment.equipped=穿上了 %s
-chat.equipment.unequipped=卸下了 %s
+chat.equipment.equipped=装备了%s
+chat.equipment.unequipped=卸下了%s
 
 chat.waystone.obstructed=你与巨石柱的链接被阻断了。
 
@@ -1568,7 +1568,7 @@ gui.gallery.source_url_click=§9§o§n打开 URL§r
 gui.gallery.info_not_found=找不到有关此图片的任何信息
 gui.gallery.search=搜索
 gui.gallery.random=随机！
-gui.gallery.submission=想看看你自己的粉丝艺术特色吗？\n在 Twitter 提交给 {twitter}\n或在我们的 {discord} 服务器上使用\n#BetweenlandsGallery 标签！
+gui.gallery.submission=想看看你自己的同人艺术特色吗？\n在 Twitter 提交给 {twitter}\n或在我们的 {discord} 服务器上使用\n#BetweenlandsGallery 标签！
 
 # Advancements
 
