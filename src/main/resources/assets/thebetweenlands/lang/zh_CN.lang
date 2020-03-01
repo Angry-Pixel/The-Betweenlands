@@ -880,7 +880,6 @@ itemGroup.thebetweenlands.special=交错次元 - 特殊物品
 itemGroup.thebetweenlands.plants=交错次元 - 植物
 itemGroup.thebetweenlands.herblore=交错次元 - 药学
 
-
 # Container
 container.bl.syrmorite_hopper=赛摩铜漏斗
 container.bl.animator=活化器
@@ -898,7 +897,6 @@ container.bl.loot_urn=战利品罐
 container.bl.mud_bricks_alcove=地牢壁龛
 container.bl.present=礼物盒
 container.bl.censer=香炉
-
 
 # Locations
 location.wilderness.name=80:<scale:1.75>荒野</scale>
@@ -921,8 +919,6 @@ location.sludge_worm_dungeon_crypt.name=80:地穴
 location.sludge_worm_dungeon_maze.name=80:泥沼迷宫
 location.sludge_worm_dungeon.name=80:泥沼谜塔
 location.sludge_worm_dungeon_pit.name=80:残蚀陷洞
-
-
 
 # Tooltips
 tooltip.bl.arrow.octine=小心走火！
@@ -1004,7 +1000,6 @@ tooltip.bl.grappling_hook.upgrade=与两个鮟鱇牙齿和\n一个蹒跚者舌�
 tooltip.bl.aspectrus_seeds.mist=这种植物只能在要素灌注的雾中生长。
 tooltip.bl.sludge_dungeon_plant.mist=这种植物只能在泥沼地牢的雾中生长。
 
-
 tooltip.bl.elixir.potency=§9效果：%s
 tooltip.bl.elixir.duration=§9时长：%s（%s）
 tooltip.bl.elixir.when_applied=§5生效时：
@@ -1058,7 +1053,6 @@ tooltip.bl.recipes.censer_primary=香炉
 tooltip.bl.recipes.censer_secondary=香炉
 tooltip.bl.recipes.purifier=净化器
 tooltip.bl.recipes.mortar=研磨器
-
 
 # Chat
 chat.foodSickness.fine.0=啊，新鲜的食物！
@@ -1339,7 +1333,6 @@ equipment.menu.equip=佩戴%s
 equipment.menu.unequip=取下%s
 equipment.menu.page=第 %d 页
 
-
 # Music Discs
 item.thebetweenlands.record.astatos.desc=Voog2 - Astatos
 item.thebetweenlands.record.between_you_and_me.desc=Voog2 - Between You And Me
@@ -1356,13 +1349,11 @@ item.thebetweenlands.record.waterlogged.desc=Voog2 - Waterlogged
 item.thebetweenlands.record.wandering_wisps.desc=Voog2 - Wandering Wisps
 item.thebetweenlands.record.ancient.desc=Voog2 - Ancient
 
-
 # Signs
 sign.fortress.line1=唯有那
 sign.fortress.line2=手持神剑的勇者
 sign.fortress.line3=才能够通过
 sign.fortress.line4=这个地方
-
 
 # JEI
 jei.thebetweenlands.animator.entity_spawn=这个配方会生成一只 %s
@@ -1458,7 +1449,6 @@ manual.wind=风元素
 manual.soul=灵魂
 manual.chaos=混沌
 
-
 manual.azuwynn.description=这种要素作用于肌肉。<nl>一阶要素。
 manual.armaniis.description=这种要素影响一种<nl>存在或意识的渴望。<nl>二阶要素。
 manual.byariis.description=这种要素反转<nl>一切事物的自然属性。<nl>一阶要素。
@@ -1473,8 +1463,8 @@ manual.ordaniis.description=这种要素强化其他要素<nl>和任何形式的
 manual.yeowynn.description=这种要素影响身体<nl>恢复健康的能力。<nl>一阶要素。
 manual.yunugaz.description=这种要素与风元素有关。<nl>二阶要素。
 manual.yihinren.description=这种要素影响身体<nl>和精神的结构形式。<nl>三阶要素。
-manual.wodren.description=影响一个人的精神状态和生命力的要素，<nl>三阶要素。
-manual.uduriis.description=与宇宙的自然无秩序状态相关的要素，<nl>三阶要素。
+manual.wodren.description=影响一个人的精神状态<nl>和生命力的要素，<nl>三阶要素。
+manual.uduriis.description=与宇宙的自然无秩序<nl>状态相关的要素，<nl>三阶要素。
 
 #ground items
 manual.item.thebetweenlands.ground_algae.description=你可以很容易地在<nl>任何群系的水面上<nl>发现成片的水藻。
@@ -1579,7 +1569,6 @@ gui.gallery.info_not_found=找不到有关此图片的任何信息
 gui.gallery.search=搜索
 gui.gallery.random=随机！
 gui.gallery.submission=想看看你自己的粉丝艺术特色吗？\n在 Twitter 提交给 {twitter}\n或在我们的 {discord} 服务器上使用\n#BetweenlandsGallery 标签！
-
 
 # Advancements
 
