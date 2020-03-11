@@ -117,17 +117,21 @@ public class BlockDungeonDoorCombination extends BasicBlock implements ITileEnti
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!world.isRemote && player.capabilities.isCreativeMode) {
-			TileEntityDungeonDoorCombination tile = getTileEntity(world, pos);
-			if (tile != null && facing == state.getValue(FACING)) {
-				if(hitY >= 0.0625F && hitY < 0.375F)
-					tile.cycleBottomState();
-				if(hitY >= 0.375F && hitY < 0.625F)
-					tile.cycleMidState();
-				if(hitY >= 0.625F && hitY <= 0.9375F)
-					tile.cycleTopState();
-				world.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 1F, 1.0F);
-				world.notifyBlockUpdate(pos, state, state, 3);
+		if (player.capabilities.isCreativeMode && hand == EnumHand.MAIN_HAND) {
+			if(!world.isRemote) {
+				TileEntityDungeonDoorCombination tile = getTileEntity(world, pos);
+				if (tile != null && facing == state.getValue(FACING)) {
+					if(hitY >= 0.0625F && hitY < 0.375F)
+						tile.cycleBottomState();
+					if(hitY >= 0.375F && hitY < 0.625F)
+						tile.cycleMidState();
+					if(hitY >= 0.625F && hitY <= 0.9375F)
+						tile.cycleTopState();
+					world.playSound(null, pos, SoundEvents.UI_BUTTON_CLICK, SoundCategory.BLOCKS, 1F, 1.0F);
+					world.notifyBlockUpdate(pos, state, state, 3);
+					return true;
+				}
+			} else {
 				return true;
 			}
 		}

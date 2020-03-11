@@ -136,8 +136,15 @@ public abstract class TileEntityAbstractBLFurnace extends TileEntityBasicInvento
     public void update() {
         boolean isDirty = false;
 
-        for (FurnaceData data: furnaceData) {
-            boolean isBurning = isBurning(data.index);
+        boolean wasBurning = false;
+        
+        for (FurnaceData data : furnaceData) {
+            wasBurning |= isBurning(data.index);
+        }
+        
+        boolean isBurning = false;
+        
+        for (FurnaceData data : furnaceData) {
             if (data.furnaceBurnTime > 0)
                 data.furnaceBurnTime = Math.max(0, data.furnaceBurnTime - 1);
             else if (data.furnaceBurnTime < 0)
@@ -176,13 +183,17 @@ public abstract class TileEntityAbstractBLFurnace extends TileEntityBasicInvento
                     }
                 }
 
-                if (isBurning != data.furnaceBurnTime > 0) {
-                    isDirty = true;
-                    updateState(data.furnaceBurnTime > 0);
+                if(data.furnaceBurnTime > 0) {
+                	isBurning = true;
                 }
             }
         }
 
+        if(wasBurning != isBurning) {
+        	updateState(isBurning);
+        	isDirty = true;
+        }
+        
         if (isDirty) {
             markDirty();
         }
