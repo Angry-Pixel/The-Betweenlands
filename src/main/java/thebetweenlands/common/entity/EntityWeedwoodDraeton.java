@@ -58,47 +58,14 @@ public class EntityWeedwoodDraeton extends Entity {
 			this.id = id;
 		}
 
-		public boolean isRelativePosition() {
-			Entity entity = this.carriage.getControllingPassenger();
-
-			if (entity instanceof EntityPlayer) {
-				return !((EntityPlayer)entity).isUser();
-			}
-
-			return true;
-		}
-
-		public Vec3d getAbsolutePosition() {
-			if(this.isRelativePosition()) {
-				return new Vec3d(this.x + this.carriage.posX, this.y + this.carriage.posY, this.z + this.carriage.posZ);
-			} else {
-				return new Vec3d(this.x, this.y, this.z);
-			}
-		}
-
-		public Vec3d getRelativePosition() {
-			if(this.isRelativePosition()) {
-				return new Vec3d(this.x, this.y, this.z);
-			} else {
-				return new Vec3d(this.x - this.carriage.posX, this.y - this.carriage.posY, this.z - this.carriage.posZ);
-			}
-		}
-
 		private AxisAlignedBB getAabb() {
-			Vec3d pos = this.getAbsolutePosition();
-			return new AxisAlignedBB(pos.x - this.width / 2, pos.y, pos.z - this.width / 2, pos.x + this.width / 2, pos.y + this.height, pos.z + this.width / 2);
+			return new AxisAlignedBB(this.x - this.width / 2, this.y, this.z - this.width / 2, this.x + this.width / 2, this.y + this.height, this.z + this.width / 2);
 		}
 
 		private void setPosToAabb(AxisAlignedBB aabb) {
-			if(this.isRelativePosition()) {
-				this.x = aabb.minX + this.width / 2 - this.carriage.posX;
-				this.y = aabb.minY - this.carriage.posY;
-				this.z = aabb.minZ + this.width / 2 - this.carriage.posZ;
-			} else {
-				this.x = aabb.minX + this.width / 2;
-				this.y = aabb.minY;
-				this.z = aabb.minZ + this.width / 2;
-			}
+			this.x = aabb.minX + this.width / 2;
+			this.y = aabb.minY;
+			this.z = aabb.minZ + this.width / 2;
 		}
 
 		public void move(double x, double y, double z) {
@@ -207,9 +174,7 @@ public class EntityWeedwoodDraeton extends Entity {
 					}
 				}
 			} else {
-				Vec3d pullerPos = this.puller.getAbsolutePosition();
-
-				this.setPositionAndRotation(pullerPos.x, pullerPos.y, pullerPos.z, 0, 0);
+				this.setPositionAndRotation(this.puller.x, this.puller.y, this.puller.z, 0, 0);
 				this.rotationYaw = this.rotationYawHead = this.renderYawOffset = (float)Math.toDegrees(Math.atan2(this.puller.motionZ, this.puller.motionX)) - 90;
 				this.rotationPitch = (float)Math.toDegrees(-Math.atan2(this.puller.motionY, Math.sqrt(this.puller.motionX * this.puller.motionX + this.puller.motionZ * this.puller.motionZ)));
 			}
@@ -261,15 +226,15 @@ public class EntityWeedwoodDraeton extends Entity {
 	public Puller addPuller(MessageUpdateCarriagePuller.Position pos) {
 		Puller puller = new Puller(this, pos.id);
 
-		if(puller.isRelativePosition()) {
+		/*if(puller.isRelativePosition()) {
 			puller.lerpX = puller.x = pos.x;
 			puller.lerpY = puller.y = pos.y;
 			puller.lerpZ = puller.z = pos.z;
-		} else {
-			puller.lerpX = puller.x = pos.x + this.posX;
-			puller.lerpY = puller.y = pos.y + this.posY;
-			puller.lerpZ = puller.z = pos.z + this.posZ;
-		}
+		} else {*/
+		puller.lerpX = puller.x = pos.x + this.posX;
+		puller.lerpY = puller.y = pos.y + this.posY;
+		puller.lerpZ = puller.z = pos.z + this.posZ;
+		//}
 
 		puller.motionX = pos.mx;
 		puller.motionY = pos.my;
@@ -410,33 +375,37 @@ public class EntityWeedwoodDraeton extends Entity {
 		if(this.canPassengerSteer()) {
 			Entity controller = this.getControllingPassenger();
 
-			if(controller instanceof EntityLivingBase) {
+			if(this.world.isRemote && controller instanceof EntityLivingBase) {
 				controller.fallDistance = 0;
 
 				this.handleControllerMovement((EntityLivingBase) controller);
-
-				this.updateCarriage();
 			}
 
-			this.lerpX = this.posX;
-			this.lerpY = this.posY;
-			this.lerpZ = this.posZ;
-			this.lerpYaw = this.rotationYaw;
-			this.lerpPitch = this.rotationPitch;
+			this.updateCarriage();
 
-			for(Puller puller : this.pullers) {
-				puller.lerpX = puller.x;
-				puller.lerpY = puller.y;
-				puller.lerpZ = puller.z;
-			}
-		} else {
-			this.motionX = this.motionY = this.motionZ = 0;
+			if(!this.world.isRemote) {
+				this.lerpX = this.posX;
+				this.lerpY = this.posY;
+				this.lerpZ = this.posZ;
+				this.lerpYaw = this.rotationYaw;
+				this.lerpPitch = this.rotationPitch;
 
-			if(this.world.isRemote) {
 				for(Puller puller : this.pullers) {
-					puller.tickLerp();
+					puller.lerpX = puller.x;
+					puller.lerpY = puller.y;
+					puller.lerpZ = puller.z;
 				}
 			}
+		} else if(this.world.isRemote) {
+			this.motionX = this.motionY = this.motionZ = 0;
+
+			for(Puller puller : this.pullers) {
+				puller.tickLerp();
+			}
+		}
+
+		if(!this.world.isRemote && this.getPassengers().isEmpty()) {
+			this.motionY -= 0.005f;
 		}
 
 		if(this.world instanceof WorldServer) {
@@ -471,10 +440,30 @@ public class EntityWeedwoodDraeton extends Entity {
 			double x = this.posX + (this.lerpX - this.posX) / this.lerpSteps;
 			double y = this.posY + (this.lerpY - this.posY) / this.lerpSteps;
 			double z = this.posZ + (this.lerpZ - this.posZ) / this.lerpSteps;
+
+			//If the carriage is player controlled pull the pullers along
+			//so they don't lag behind
+			if(this.getControllingPassenger() != null) {
+				double dx = x - this.posX;
+				double dy = y - this.posY;
+				double dz = z - this.posZ;
+
+				for(Puller puller : this.pullers) {
+					puller.x += dx;
+					puller.y += dy;
+					puller.z += dz;
+					puller.lerpX += dx;
+					puller.lerpY += dy;
+					puller.lerpZ += dz;
+				}
+			}
+
 			double yaw = MathHelper.wrapDegrees(this.lerpYaw - this.rotationYaw);
 			this.rotationYaw = (float)(this.rotationYaw + yaw / this.lerpSteps);
 			this.rotationPitch = (float)(this.rotationPitch + (this.lerpPitch - this.rotationPitch) / this.lerpSteps);
+
 			--this.lerpSteps;
+
 			this.setPosition(x, y, z);
 			this.setRotation(this.rotationYaw, this.rotationPitch);
 		}
@@ -504,17 +493,20 @@ public class EntityWeedwoodDraeton extends Entity {
 	}
 
 	public void setPacketRelativePullerPosition(Puller puller, float x, float y, float z, float mx, float my, float mz) {
-		if(puller.isRelativePosition()) {
+		Entity entity = this.getControllingPassenger();
+
+		//Only set position for non-controlling watching players
+		if (entity instanceof EntityPlayer == false || !((EntityPlayer)entity).isUser()) {
 			if(this.world.isRemote) {
 				//interpolate on client side
-				puller.lerpX = x;
-				puller.lerpY = y;
-				puller.lerpZ = z;
+				puller.lerpX = this.lerpX + x;
+				puller.lerpY = this.lerpY + y;
+				puller.lerpZ = this.lerpZ + z;
 				puller.lerpSteps = 10;
 			} else {
-				puller.x = x;
-				puller.y = y;
-				puller.z = z;
+				puller.x = this.posX + x;
+				puller.y = this.posY + y;
+				puller.z = this.posZ + z;
 			}
 
 			puller.motionX = mx;
@@ -574,17 +566,19 @@ public class EntityWeedwoodDraeton extends Entity {
 			if(puller.dragonfly != null && puller.dragonfly.getRidingEntity() != null) {
 				puller.motionX = puller.motionY = puller.motionZ = 0;
 
-				if(puller.isRelativePosition()) {
-					puller.x = puller.dragonfly.posX - this.posX;
-					puller.y = puller.dragonfly.posY - this.posY;
-					puller.z = puller.dragonfly.posZ - this.posZ;
-				} else {
-					puller.x = puller.dragonfly.posX;
-					puller.y = puller.dragonfly.posY;
-					puller.z = puller.dragonfly.posZ;
-				}
+				puller.x = puller.dragonfly.posX;
+				puller.y = puller.dragonfly.posY;
+				puller.z = puller.dragonfly.posZ;
 
 			} else {
+				float speed = (float) Math.sqrt(puller.motionX * puller.motionX + puller.motionY * puller.motionY + puller.motionZ * puller.motionZ);
+				float maxSpeed = this.getMaxPullerSpeed();
+				if(speed > maxSpeed) {
+					puller.motionX *= 1.0f / speed * maxSpeed;
+					puller.motionY *= 1.0f / speed * maxSpeed;
+					puller.motionZ *= 1.0f / speed * maxSpeed;
+				}
+
 				puller.move(puller.motionX, puller.motionY, puller.motionZ);
 			}
 
@@ -621,15 +615,9 @@ public class EntityWeedwoodDraeton extends Entity {
 			//Teleport puller to carriage if it gets too far away
 			//somehow
 			if(dist > tetherLength + 3) {
-				if(puller.isRelativePosition()) {
-					puller.lerpX = puller.x = 0;
-					puller.lerpY = puller.y = 0;
-					puller.lerpZ = puller.z = 0;
-				} else {
-					puller.lerpX = puller.x = this.posX;
-					puller.lerpY = puller.y = this.posY;
-					puller.lerpZ = puller.z = this.posZ;
-				}
+				puller.lerpX = puller.x = this.posX;
+				puller.lerpY = puller.y = this.posY;
+				puller.lerpZ = puller.z = this.posZ;
 				dist = 0;
 			}
 
@@ -652,7 +640,7 @@ public class EntityWeedwoodDraeton extends Entity {
 		}
 
 		//Send client state of pullers to server
-		if(this.ticksExisted % 10 == 0) {
+		if(this.world.isRemote && this.canPassengerSteer() && this.ticksExisted % 10 == 0) {
 			for(Puller puller : this.pullers) {
 				TheBetweenlands.networkWrapper.sendToServer(new MessageUpdateCarriagePuller(this, puller, MessageUpdateCarriagePuller.Action.UPDATE));
 			}
@@ -661,6 +649,10 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	public float getMaxTetherLength() {
 		return 6.0f;
+	}
+
+	public float getMaxPullerSpeed() {
+		return 3.0f;
 	}
 
 	@Override
@@ -697,73 +689,28 @@ public class EntityWeedwoodDraeton extends Entity {
 	}
 
 	@Override
-	protected void removePassenger(Entity passenger) {
-		boolean wasClientController = this.canPassengerSteer();
-
-		super.removePassenger(passenger);
-
-		if(wasClientController && !this.canPassengerSteer()) {
-			for(Puller puller : this.pullers) {
-				//Convert absolute positions to relative
-				puller.x -= this.posX;
-				puller.y -= this.posY;
-				puller.z -= this.posZ;
-				puller.lerpX = puller.x;
-				puller.lerpY = puller.y;
-				puller.lerpZ = puller.z;
-			}
-		}
-	}
-
-	@Override
-	protected void addPassenger(Entity passenger) {
-		boolean wasClientController = this.canPassengerSteer();
-
-		super.addPassenger(passenger);
-
-		if(!wasClientController && this.canPassengerSteer()) {
-			for(Puller puller : this.pullers) {
-				//Convert relative positions to absolute
-				puller.x += this.posX;
-				puller.y += this.posY;
-				puller.z += this.posZ;
-				puller.lerpX = puller.x;
-				puller.lerpY = puller.y;
-				puller.lerpZ = puller.z;
-			}
-		}
-	}
-
-	@Override
 	public void fall(float distance, float damageMultiplier) {
 		//No fall damage to node or rider
 	}
 
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote && hand == EnumHand.MAIN_HAND) {
 			if(!player.isSneaking()) {
 				player.startRiding(this);
 			} else {
 				//Debug
-				for(Puller puller : this.pullers) {
-					puller.isActive = false;
-				}
-				this.pullers.clear();
-				for(int i = 0; i < 3; i++) {
-					Puller puller = new Puller(this, this.nextPullerId++);
-					if(!puller.isRelativePosition()) {
-						puller.lerpX = puller.x = this.posX;
-						puller.lerpY = puller.y = this.posY;
-						puller.lerpZ = puller.z = this.posZ;
-					}
-					this.pullers.add(puller);
 
-					//Spawn puller dragonfly
-					EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
-					dragonfly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
-					this.world.spawnEntity(dragonfly);
-				}
+				Puller puller = new Puller(this, this.nextPullerId++);
+				puller.lerpX = puller.x = this.posX;
+				puller.lerpY = puller.y = this.posY;
+				puller.lerpZ = puller.z = this.posZ;
+				this.pullers.add(puller);
+
+				//Spawn puller dragonfly
+				EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
+				dragonfly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
+				this.world.spawnEntity(dragonfly);
 			}
 			return true;
 		}

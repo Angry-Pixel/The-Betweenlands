@@ -1,8 +1,5 @@
 package thebetweenlands.common.network.bidirectional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
@@ -16,15 +13,14 @@ import thebetweenlands.common.network.MessageEntity;
 
 public class MessageUpdateCarriagePuller extends MessageEntity {
 	public static class Position {
-		public final int id;
-		public final float x, y, z, mx, my, mz;
+		public int id;
+		public float x, y, z, mx, my, mz;
 
 		private Position(Puller puller) {
 			this.id = puller.id;
-			Vec3d pos = puller.getRelativePosition();
-			this.x = (float) pos.x;
-			this.y = (float) pos.y;
-			this.z = (float) pos.z;
+			this.x = (float) (puller.x - puller.carriage.posX);
+			this.y = (float) (puller.y - puller.carriage.posY);
+			this.z = (float) (puller.z - puller.carriage.posZ);
 			this.mx = (float) puller.motionX;
 			this.my = (float) puller.motionY;
 			this.mz = (float) puller.motionZ;
@@ -43,7 +39,7 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 
 	private Position position;
 	private Action action;
-	
+
 	public static enum Action {
 		ADD, REMOVE, UPDATE
 	}
@@ -63,7 +59,7 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 		super.serialize(buf);
 
 		buf.writeVarInt(this.action.ordinal());
-		
+
 		buf.writeVarInt(this.position.id);
 		buf.writeFloat(this.position.x);
 		buf.writeFloat(this.position.y);
@@ -78,7 +74,7 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 		super.deserialize(buf);
 
 		this.action = Action.values()[buf.readVarInt()];
-		
+
 		this.position = new Position(buf.readVarInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
 	}
 
@@ -89,22 +85,31 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 		if(ctx.side == Side.SERVER) {
 			if(this.action == Action.UPDATE) {
 				EntityPlayer player = ctx.getServerHandler().player;
-	
+
 				Entity entity = this.getEntity(0);
 				if(entity instanceof EntityWeedwoodDraeton) {
 					EntityWeedwoodDraeton carriage = (EntityWeedwoodDraeton) entity;
-	
+
 					if(carriage.getControllingPassenger() == player) {
 						Puller puller = carriage.getPullerById(this.position.id);
-	
+
 						if(puller != null) {
 							Vec3d pos = new Vec3d(this.position.x, this.position.y, this.position.z);
-							
+
 							//Make sure position is in valid range since it is client controlled
 							if(pos.length() > carriage.getMaxTetherLength()) {
 								pos = pos.normalize().scale(carriage.getMaxTetherLength());
 							}
-							
+
+							//Make sure motion is in valid range
+							float speed = (float) Math.sqrt(this.position.mx * this.position.mx + this.position.my * this.position.my + this.position.mz * this.position.mz);
+							float maxSpeed = carriage.getMaxPullerSpeed();
+							if(speed > maxSpeed) {
+								this.position.mx *= 1.0f / speed * maxSpeed;
+								this.position.my *= 1.0f / speed * maxSpeed;
+								this.position.mz *= 1.0f / speed * maxSpeed;
+							}
+
 							carriage.setPacketRelativePullerPosition(puller, this.position.x, this.position.y, this.position.z, this.position.mx, this.position.my, this.position.mz);
 						}
 					}
@@ -123,7 +128,7 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 					puller = null;
 				} else {
 					puller = carriage.getPullerById(this.position.id);
-					
+
 					//fallback if adding failed somehow
 					if(puller == null) {
 						puller = carriage.addPuller(this.position);
