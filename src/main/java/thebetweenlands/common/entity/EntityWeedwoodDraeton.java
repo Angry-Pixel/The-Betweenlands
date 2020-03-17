@@ -206,6 +206,8 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	private int nextPullerId = 0;
 
+	public float prevRotationRoll, rotationRoll;
+
 	public EntityWeedwoodDraeton(World world) {
 		super(world);
 		this.setSize(0.75F, 0.75F);
@@ -226,15 +228,9 @@ public class EntityWeedwoodDraeton extends Entity {
 	public Puller addPuller(MessageUpdateCarriagePuller.Position pos) {
 		Puller puller = new Puller(this, pos.id);
 
-		/*if(puller.isRelativePosition()) {
-			puller.lerpX = puller.x = pos.x;
-			puller.lerpY = puller.y = pos.y;
-			puller.lerpZ = puller.z = pos.z;
-		} else {*/
 		puller.lerpX = puller.x = pos.x + this.posX;
 		puller.lerpY = puller.y = pos.y + this.posY;
 		puller.lerpZ = puller.z = pos.z + this.posZ;
-		//}
 
 		puller.motionX = pos.mx;
 		puller.motionY = pos.my;
@@ -319,7 +315,7 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	@Override
 	public double getMountedYOffset() {
-		return 0.01D + (this.getControllingPassenger() != null ? -this.getControllingPassenger().getYOffset() : 0);
+		return 0;
 	}
 
 	@Override
@@ -430,7 +426,19 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	@Override
 	public void onUpdate() {
+		this.prevRotationRoll = this.rotationRoll;
+
 		super.onUpdate();
+
+		double dx = this.motionX;
+		double dz = this.motionZ;
+		float targetYaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90;
+		float yawOffset = (float) MathHelper.wrapDegrees(targetYaw - this.rotationYaw);
+		this.rotationYaw = this.rotationYaw + yawOffset * 0.98f;
+
+		float targetRoll = this.rotationRoll = MathHelper.clamp(yawOffset * 10.0f, -20, 20);
+		float rollOffset = (float) MathHelper.wrapDegrees(targetRoll - this.rotationRoll);
+		this.rotationRoll = this.rotationRoll + rollOffset * 0.75f;
 
 		this.tickLerp();
 	}
@@ -685,7 +693,7 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	@Override
 	public boolean shouldRiderSit() {
-		return false;
+		return true;
 	}
 
 	@Override

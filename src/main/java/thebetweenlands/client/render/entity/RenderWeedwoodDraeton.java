@@ -11,14 +11,19 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.entity.rowboat.ModelWeedwoodRowboat;
 import thebetweenlands.common.entity.EntityWeedwoodDraeton;
 import thebetweenlands.common.entity.EntityWeedwoodDraeton.Puller;
+import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)
 public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/weedwood_rowboat.png");
+
+	private ModelWeedwoodRowboat model = new ModelWeedwoodRowboat();
+
 	public RenderWeedwoodDraeton(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -37,14 +42,16 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
 		}
 
-		double interpX = entity.prevPosX + (entity.posX - entity.prevPosX) * partialTicks;
-		double interpY = entity.prevPosY + (entity.posY - entity.prevPosY) * partialTicks;
-		double interpZ = entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialTicks;
-
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 
-		GlStateManager.translate(0, 1, 0);
+		float frontOffset = 1.4f;
+		float frontX = (float) Math.sin(Math.toRadians(-entityYaw)) * frontOffset;
+		float frontY = 1.2f;
+		float frontZ = (float) Math.cos(Math.toRadians(-entityYaw)) * frontOffset;
+		
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(frontX, frontY, frontZ);
 
 		for(Puller puller : entity.pullers) {
 			if(puller.dragonfly != null) {
@@ -52,17 +59,21 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 				double dinterpY = puller.dragonfly.lastTickPosY + (puller.dragonfly.posY - puller.dragonfly.lastTickPosY) * partialTicks - this.renderManager.renderPosY;
 				double dinterpZ = puller.dragonfly.lastTickPosZ + (puller.dragonfly.posZ - puller.dragonfly.lastTickPosZ) * partialTicks - this.renderManager.renderPosZ;
 
-				this.renderConnection(tessellator, buffer, 0, 0, 0, dinterpX - x, dinterpY - y - 0.75f, dinterpZ - z);
-				
-				//renderOffsetAABB(new AxisAlignedBB(-0.05, 0, -0.05, 0.05, 0.1, 0.05), dinterpX - x, dinterpY - y, dinterpZ - z);
+				this.renderConnection(tessellator, buffer, 0, 0, 0, dinterpX - x - frontX, dinterpY - y - frontY + 0.25f, dinterpZ - z - frontZ);
 			}
-			
-			/*double pinterpX = puller.prevX + (puller.x - puller.prevX) * partialTicks;
-			double pinterpY = puller.prevY + (puller.y - puller.prevY) * partialTicks;
-			double pinterpZ = puller.prevZ + (puller.z - puller.prevZ) * partialTicks;
-
-			renderOffsetAABB(new AxisAlignedBB(-0.05, 0, -0.05, 0.05, 0.1, 0.05), pinterpX - entity.prevPosX + (entity.posX - interpX), pinterpY - entity.prevPosY + (entity.posY - interpY) - 0.75f, pinterpZ - entity.prevPosZ + (entity.posZ - interpZ));*/
 		}
+
+		GlStateManager.popMatrix();
+
+		GlStateManager.translate(0, 1.5F, 0);
+		GlStateManager.scale(-1, -1, 1);
+		
+		GlStateManager.rotate(entityYaw, 0, 1, 0);
+		GlStateManager.rotate(entity.prevRotationRoll + (entity.rotationRoll - entity.prevRotationRoll) * partialTicks, 0, 0, 1);
+
+		this.bindEntityTexture(entity);
+
+		this.model.renderCarriageBase(0.0625F);
 
 		if (this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
@@ -153,6 +164,6 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityWeedwoodDraeton entity) {
-		return null;
+		return TEXTURE;
 	}
 }
