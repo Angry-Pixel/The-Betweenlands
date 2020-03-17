@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.MessageBase;
+import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller;
 import thebetweenlands.common.network.clientbound.MessageAddLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageAmateMap;
 import thebetweenlands.common.network.clientbound.MessageBlockGuardData;
@@ -83,6 +84,7 @@ public class MessageRegistry {
 		registerMessage(MessageSoundRipple.class, Side.CLIENT);
 		registerMessage(MessageSyncGameRules.class, Side.CLIENT);
 		registerMessage(MessageCureDecayParticles.class, Side.CLIENT);
+		registerMessage(MessageUpdateCarriagePuller.class, Side.CLIENT);
 		
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);
@@ -94,6 +96,7 @@ public class MessageRegistry {
 		registerMessage(MessageConnectCavingRope.class, Side.SERVER);
 		registerMessage(MessageExtendedReach.class, Side.SERVER);
 		registerMessage(MessageSetGalleryUrl.class, Side.SERVER);
+		registerMessage(MessageUpdateCarriagePuller.class, Side.SERVER);
 	}
 
 	private static void registerMessage(Class<? extends MessageBase> messageType, Side toSide) {

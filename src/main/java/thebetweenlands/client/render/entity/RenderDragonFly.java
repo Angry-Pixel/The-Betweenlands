@@ -20,6 +20,8 @@ public class RenderDragonFly extends RenderLiving<EntityDragonFly> {
     @Override
     protected void preRenderCallback(EntityDragonFly entitylivingbaseIn, float partialTickTime) {
         scaleDragonFly(entitylivingbaseIn, partialTickTime);
+        
+        GlStateManager.rotate(entitylivingbaseIn.rotationPitch, 1, 0, 0);
     }
 
     protected void scaleDragonFly(EntityDragonFly dragonFly, float partialTickTime) {

@@ -169,6 +169,7 @@ import thebetweenlands.client.render.entity.RenderVolarkite;
 import thebetweenlands.client.render.entity.RenderVolatileSoul;
 import thebetweenlands.client.render.entity.RenderWallLamprey;
 import thebetweenlands.client.render.entity.RenderWallLivingRoot;
+import thebetweenlands.client.render.entity.RenderWeedwoodDraeton;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
 import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
@@ -239,6 +240,7 @@ import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
 import thebetweenlands.common.entity.EntityVolarkite;
+import thebetweenlands.common.entity.EntityWeedwoodDraeton;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
@@ -636,6 +638,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityGalleryFrame.class, RenderGalleryFrame::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMultipartDummy.class, RenderMultipartDummy::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberlingWild.class, RenderEmberlingWild::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityWeedwoodDraeton.class, RenderWeedwoodDraeton::new);
 		
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
