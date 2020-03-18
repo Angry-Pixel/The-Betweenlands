@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.draeton;
 
+import java.util.UUID;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,17 +38,31 @@ public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity,
 	public float getPull(float pull) {
 		return pull * 0.25f;
 	}
-	
+
 	@Override
 	public float getCarriageDrag(float drag) {
 		return 1 - (1 - drag) * 0.5f;
 	}
-	
+
 	@Override
 	public float getDrag(float drag) {
 		return drag;
 	}
-	
+
+	@Override
+	public void releaseEntity() {
+		if(!this.world.isRemote) {
+			EntityFirefly entity = new EntityFirefly(this.world);
+			entity.readFromNBT(this.writeToNBT(new NBTTagCompound()));
+			entity.setNoAI(false);
+			entity.setUniqueId(UUID.randomUUID());
+			entity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+			this.world.spawnEntity(entity);
+
+			this.setDead();
+		}
+	}
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if(source == DamageSource.IN_WALL) {
@@ -58,6 +74,11 @@ public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity,
 	@Override
 	public boolean writeToNBTOptional(NBTTagCompound compound) {
 		//Entity is saved and handled by carriage
+		return false;
+	}
+	
+	@Override
+	protected boolean canDespawn() {
 		return false;
 	}
 

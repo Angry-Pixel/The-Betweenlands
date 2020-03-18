@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.draeton;
 
+import java.util.UUID;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,17 +38,31 @@ public class EntityPullerDragonfly extends EntityDragonFly implements IPullerEnt
 	public float getPull(float pull) {
 		return pull;
 	}
-	
+
 	@Override
 	public float getCarriageDrag(float drag) {
 		return drag;
 	}
-	
+
 	@Override
 	public float getDrag(float drag) {
 		return drag;
 	}
-	
+
+	@Override
+	public void releaseEntity() {
+		if(!this.world.isRemote) {
+			EntityDragonFly entity = new EntityDragonFly(this.world);
+			entity.readFromNBT(this.writeToNBT(new NBTTagCompound()));
+			entity.setNoAI(false);
+			entity.setUniqueId(UUID.randomUUID());
+			entity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+			this.world.spawnEntity(entity);
+			
+			this.setDead();
+		}
+	}
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if(source == DamageSource.IN_WALL) {
@@ -61,6 +77,11 @@ public class EntityPullerDragonfly extends EntityDragonFly implements IPullerEnt
 		return false;
 	}
 
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
+	
 	@Override
 	public boolean isAIDisabled() {
 		return true;

@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -97,6 +98,17 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 
 		GlStateManager.rotate(entityYaw, 0, 1, 0);
 		GlStateManager.rotate(entity.prevRotationRoll + (entity.rotationRoll - entity.prevRotationRoll) * partialTicks, 0, 0, 1);
+
+		float timeSinceHit = entity.getTimeSinceHit() - partialTicks;
+		float damageTaken = entity.getDamageTaken() - partialTicks;
+
+		if (damageTaken < 0.0F) {
+			damageTaken = 0.0F;
+		}
+
+		if (timeSinceHit > 0.0F) {
+			GlStateManager.rotate(MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10.0F, 0, 0, 1);
+		}
 
 		this.bindEntityTexture(entity);
 

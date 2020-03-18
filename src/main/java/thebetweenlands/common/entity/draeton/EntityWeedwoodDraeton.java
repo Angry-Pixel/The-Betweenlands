@@ -15,6 +15,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -133,7 +138,12 @@ public class EntityWeedwoodDraeton extends Entity {
 		public float getCarriageDrag(float drag);
 
 		public float getDrag(float drag);
+
+		public void releaseEntity();
 	}
+
+	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.<Integer>createKey(EntityWeedwoodDraeton.class, DataSerializers.VARINT);
+	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.<Float>createKey(EntityWeedwoodDraeton.class, DataSerializers.FLOAT);
 
 	public List<Puller> pullers = new ArrayList<>();
 
@@ -203,6 +213,8 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	@Override
 	protected void entityInit() {
+		this.dataManager.register(TIME_SINCE_HIT, 0);
+		this.dataManager.register(DAMAGE_TAKEN, 0.0f);
 	}
 
 	@Override
@@ -421,6 +433,14 @@ public class EntityWeedwoodDraeton extends Entity {
 
 		if(this.getControllingPassenger() == null) {
 			this.descend = false;
+		}
+
+		if (this.getTimeSinceHit() > 0) {
+			this.setTimeSinceHit(this.getTimeSinceHit() - 1);
+		}
+
+		if (this.getDamageTaken() > 0.0F) {
+			this.setDamageTaken(this.getDamageTaken() - 1.0F);
 		}
 
 		super.onUpdate();
@@ -715,6 +735,40 @@ public class EntityWeedwoodDraeton extends Entity {
 	}
 
 	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if (this.isEntityInvulnerable(source)) {
+			return false;
+		} else if (!this.world.isRemote && !this.isDead) {
+			if (source instanceof EntityDamageSourceIndirect && source.getTrueSource() != null && this.isPassenger(source.getTrueSource())) {
+				return false;
+			} else {
+				this.setTimeSinceHit(10);
+				this.setDamageTaken(this.getDamageTaken() + amount * 10.0F);
+
+				boolean isCreative = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).capabilities.isCreativeMode;
+
+				if (isCreative || this.getDamageTaken() > 40.0F) {
+					if (!isCreative && this.world.getGameRules().getBoolean("doEntityDrops")) {
+						//TODO Drop item
+					}
+
+					for(Puller puller : this.pullers) {
+						if(puller.getEntity() != null) {
+							puller.getEntity().releaseEntity();
+						}
+					}
+
+					this.setDead();
+				}
+
+				return true;
+			}
+		} else {
+			return true;
+		}
+	}
+
+	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
 		if(!this.world.isRemote && hand == EnumHand.MAIN_HAND) {
 			if(!player.isSneaking()) {
@@ -744,5 +798,21 @@ public class EntityWeedwoodDraeton extends Entity {
 			return true;
 		}
 		return false;
+	}
+
+	public void setDamageTaken(float damageTaken) {
+		this.dataManager.set(DAMAGE_TAKEN, damageTaken);
+	}
+
+	public float getDamageTaken() {
+		return this.dataManager.get(DAMAGE_TAKEN);
+	}
+
+	public void setTimeSinceHit(int timeSinceHit) {
+		this.dataManager.set(TIME_SINCE_HIT, timeSinceHit);
+	}
+
+	public int getTimeSinceHit() {
+		return this.dataManager.get(TIME_SINCE_HIT);
 	}
 }
