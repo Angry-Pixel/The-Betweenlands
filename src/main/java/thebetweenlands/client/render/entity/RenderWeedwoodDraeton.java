@@ -6,16 +6,20 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.rowboat.ModelWeedwoodRowboat;
-import thebetweenlands.common.entity.EntityWeedwoodDraeton;
-import thebetweenlands.common.entity.EntityWeedwoodDraeton.Puller;
+import thebetweenlands.common.entity.draeton.EntityWeedwoodDraeton;
+import thebetweenlands.common.entity.draeton.EntityWeedwoodDraeton.Puller;
 import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)
@@ -45,21 +49,44 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 
-		float frontOffset = 1.4f;
-		float frontX = (float) Math.sin(Math.toRadians(-entityYaw)) * frontOffset;
-		float frontY = 1.2f;
-		float frontZ = (float) Math.cos(Math.toRadians(-entityYaw)) * frontOffset;
-		
+		Vec3d pullPoint = entity.getPullPoint(partialTicks);
+
+		if(this.renderManager.isDebugBoundingBox()) {
+			GlStateManager.depthMask(false);
+			GlStateManager.disableTexture2D();
+			GlStateManager.disableLighting();
+			GlStateManager.disableCull();
+			GlStateManager.disableBlend();
+
+			for(Puller puller : entity.pullers) {
+				double pinterpX = puller.prevX + (puller.x - puller.prevX) * partialTicks - this.renderManager.renderPosX;
+				double pinterpY = puller.prevY + (puller.y - puller.prevY) * partialTicks - this.renderManager.renderPosY;
+				double pinterpZ = puller.prevZ + (puller.z - puller.prevZ) * partialTicks - this.renderManager.renderPosZ;
+
+				AxisAlignedBB aabb = puller.getAabb().offset(pinterpX - x - puller.x, pinterpY - y - puller.y, pinterpZ - z - puller.z);
+
+				RenderGlobal.drawBoundingBox(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ, 0, 1, 0, 1);
+			}
+
+			GlStateManager.enableTexture2D();
+			GlStateManager.enableLighting();
+			GlStateManager.enableCull();
+			GlStateManager.disableBlend();
+			GlStateManager.depthMask(true);
+		}
+
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(frontX, frontY, frontZ);
+		GlStateManager.translate(pullPoint.x, pullPoint.y, pullPoint.z);
 
 		for(Puller puller : entity.pullers) {
-			if(puller.dragonfly != null) {
-				double dinterpX = puller.dragonfly.lastTickPosX + (puller.dragonfly.posX - puller.dragonfly.lastTickPosX) * partialTicks - this.renderManager.renderPosX;
-				double dinterpY = puller.dragonfly.lastTickPosY + (puller.dragonfly.posY - puller.dragonfly.lastTickPosY) * partialTicks - this.renderManager.renderPosY;
-				double dinterpZ = puller.dragonfly.lastTickPosZ + (puller.dragonfly.posZ - puller.dragonfly.lastTickPosZ) * partialTicks - this.renderManager.renderPosZ;
+			Entity pullerEntity = puller.getEntity();
 
-				this.renderConnection(tessellator, buffer, 0, 0, 0, dinterpX - x - frontX, dinterpY - y - frontY + 0.25f, dinterpZ - z - frontZ);
+			if(pullerEntity != null) {
+				double dinterpX = pullerEntity.lastTickPosX + (pullerEntity.posX - pullerEntity.lastTickPosX) * partialTicks - this.renderManager.renderPosX;
+				double dinterpY = pullerEntity.lastTickPosY + (pullerEntity.posY - pullerEntity.lastTickPosY) * partialTicks - this.renderManager.renderPosY;
+				double dinterpZ = pullerEntity.lastTickPosZ + (pullerEntity.posZ - pullerEntity.lastTickPosZ) * partialTicks - this.renderManager.renderPosZ;
+
+				this.renderConnection(tessellator, buffer, 0, 0, 0, dinterpX - x - pullPoint.x, dinterpY - y - pullPoint.y + 0.25f, dinterpZ - z - pullPoint.z);
 			}
 		}
 
@@ -67,7 +94,7 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 
 		GlStateManager.translate(0, 1.5F, 0);
 		GlStateManager.scale(-1, -1, 1);
-		
+
 		GlStateManager.rotate(entityYaw, 0, 1, 0);
 		GlStateManager.rotate(entity.prevRotationRoll + (entity.rotationRoll - entity.prevRotationRoll) * partialTicks, 0, 0, 1);
 

@@ -23,8 +23,9 @@ import thebetweenlands.common.entity.EntityTinyWormEggSac;
 import thebetweenlands.common.entity.EntityTriggeredFallingBlock;
 import thebetweenlands.common.entity.EntityTriggeredSludgeWallJet;
 import thebetweenlands.common.entity.EntityVolarkite;
-import thebetweenlands.common.entity.EntityWeedwoodDraeton;
-import thebetweenlands.common.entity.EntityWeedwoodDraeton.EntityPullerDragonfly;
+import thebetweenlands.common.entity.draeton.EntityPullerDragonfly;
+import thebetweenlands.common.entity.draeton.EntityPullerFirefly;
+import thebetweenlands.common.entity.draeton.EntityWeedwoodDraeton;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
@@ -200,6 +201,7 @@ public class EntityRegistry {
 		
 		registerEntity(EntityWeedwoodDraeton.class, "weedwood_draeton", 80, 3, true);
 		registerEntity(EntityPullerDragonfly.class, "weedwood_draeton_dragonfly", 80, 3, true);
+		registerEntity(EntityPullerFirefly.class, "weedwood_draeton_firefly", 80, 3, true);
 	}
 
 	private static int id = 0;

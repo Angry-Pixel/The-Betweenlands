@@ -7,8 +7,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
-import thebetweenlands.common.entity.EntityWeedwoodDraeton;
-import thebetweenlands.common.entity.EntityWeedwoodDraeton.Puller;
+import thebetweenlands.common.entity.draeton.EntityWeedwoodDraeton;
+import thebetweenlands.common.entity.draeton.EntityWeedwoodDraeton.Puller;
 import thebetweenlands.common.network.MessageEntity;
 
 public class MessageUpdateCarriagePuller extends MessageEntity {
@@ -69,18 +69,34 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 		buf.writeFloat(this.position.mz);
 	}
 
+	private float getFloatOrDefault(float x, float def) {
+		if(Float.isFinite(x)) {
+			return x;
+		}
+		return def;
+	}
+
 	@Override
 	public void deserialize(PacketBuffer buf) {
 		super.deserialize(buf);
 
 		this.action = Action.values()[buf.readVarInt()];
 
-		this.position = new Position(buf.readVarInt(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat(), buf.readFloat());
+		this.position = new Position(
+				buf.readVarInt(),
+				this.getFloatOrDefault(buf.readFloat(), 0), this.getFloatOrDefault(buf.readFloat(), 0), this.getFloatOrDefault(buf.readFloat(), 0),
+				this.getFloatOrDefault(buf.readFloat(), 0), this.getFloatOrDefault(buf.readFloat(), 0), this.getFloatOrDefault(buf.readFloat(), 0)
+				);
 	}
 
 	@Override
 	public IMessage process(MessageContext ctx) {
 		super.process(ctx);
+
+		//Check for invalid ID
+		if(this.position.id < 0) {
+			return null;
+		}
 
 		if(ctx.side == Side.SERVER) {
 			if(this.action == Action.UPDATE) {
@@ -120,23 +136,19 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 			if(entity instanceof EntityWeedwoodDraeton) {
 				EntityWeedwoodDraeton carriage = (EntityWeedwoodDraeton) entity;
 
-				Puller puller;
 				if(this.action == Action.ADD) {
-					puller = carriage.addPuller(this.position);
+					carriage.addPuller(this.position);
 				} else if(this.action == Action.REMOVE) {
 					carriage.removePullerById(this.position.id);
-					puller = null;
 				} else {
-					puller = carriage.getPullerById(this.position.id);
+					Puller puller = carriage.getPullerById(this.position.id);
 
 					//fallback if adding failed somehow
 					if(puller == null) {
 						puller = carriage.addPuller(this.position);
+					} else {
+						carriage.setPacketRelativePullerPosition(puller, this.position.x, this.position.y, this.position.z, this.position.mx, this.position.my, this.position.mz);
 					}
-				}
-
-				if(puller != null) {
-					carriage.setPacketRelativePullerPosition(puller, this.position.x, this.position.y, this.position.z, this.position.mx, this.position.my, this.position.mz);
 				}
 			}
 		}

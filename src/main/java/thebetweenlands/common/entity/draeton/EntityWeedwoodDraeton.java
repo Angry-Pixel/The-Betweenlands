@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity;
+package thebetweenlands.common.entity.draeton;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,27 +7,25 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller;
 import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller.Action;
 import thebetweenlands.util.PlayerUtil;
@@ -35,7 +33,7 @@ import thebetweenlands.util.PlayerUtil;
 public class EntityWeedwoodDraeton extends Entity {
 	public static class Puller {
 		public final EntityWeedwoodDraeton carriage;
-		public EntityPullerDragonfly dragonfly;
+		private Entity entity;
 
 		public final int id; //network ID of the puller, used for sync
 
@@ -58,7 +56,18 @@ public class EntityWeedwoodDraeton extends Entity {
 			this.id = id;
 		}
 
-		private AxisAlignedBB getAabb() {
+		public void setEntity(IPullerEntity entity) {
+			if(entity instanceof Entity) {
+				this.entity = (Entity) entity;
+			}
+		}
+
+		@SuppressWarnings("unchecked")
+		public <T extends Entity & IPullerEntity> T getEntity() {
+			return (T) this.entity;
+		}
+
+		public AxisAlignedBB getAabb() {
 			return new AxisAlignedBB(this.x - this.width / 2, this.y, this.z - this.width / 2, this.x + this.width / 2, this.y + this.height, this.z + this.width / 2);
 		}
 
@@ -116,81 +125,14 @@ public class EntityWeedwoodDraeton extends Entity {
 		}
 	}
 
-	public static class EntityPullerDragonfly extends EntityDragonFly implements IEntityAdditionalSpawnData {
-		private int carriageId;
-		private int pullerId;
+	public static interface IPullerEntity {
+		public void setPuller(EntityWeedwoodDraeton carriage, Puller puller);
 
-		private Puller puller;
+		public float getPull(float pull);
 
-		public EntityPullerDragonfly(World world) {
-			super(world);
-		}
+		public float getCarriageDrag(float drag);
 
-		public EntityPullerDragonfly(World world, EntityWeedwoodDraeton carriage, Puller puller) {
-			super(world);
-			this.carriageId = carriage.getEntityId();
-			this.pullerId = puller.id;
-			this.puller = puller;
-			puller.dragonfly = this;
-		}
-
-		@Override
-		public boolean attackEntityFrom(DamageSource source, float amount) {
-			if(source == DamageSource.IN_WALL) {
-				return false;
-			}
-			return super.attackEntityFrom(source, amount);
-		}
-
-		@Override
-		public boolean writeToNBTOptional(NBTTagCompound compound) {
-			//Entity is saved and handled by carriage
-			return false;
-		}
-
-		@Override
-		public boolean isAIDisabled() {
-			return true;
-		}
-
-		@Override
-		public void onUpdate() {
-			super.onUpdate();
-
-			if(this.puller == null || !this.puller.isActive) {
-				if(!this.world.isRemote) {
-					//Don't remove immediately if entity is already dying
-					if(this.isEntityAlive()) {
-						this.setDead();
-					}
-				} else {
-					Entity entity = this.world.getEntityByID(this.carriageId);
-					if(entity instanceof EntityWeedwoodDraeton) {
-						Puller puller = ((EntityWeedwoodDraeton) entity).getPullerById(this.pullerId);
-						if(puller != null) {
-							this.puller = puller;
-							puller.dragonfly = this;
-						}
-					}
-				}
-			} else {
-				this.setPositionAndRotation(this.puller.x, this.puller.y, this.puller.z, 0, 0);
-				this.rotationYaw = this.rotationYawHead = this.renderYawOffset = (float)Math.toDegrees(Math.atan2(this.puller.motionZ, this.puller.motionX)) - 90;
-				this.rotationPitch = (float)Math.toDegrees(-Math.atan2(this.puller.motionY, Math.sqrt(this.puller.motionX * this.puller.motionX + this.puller.motionZ * this.puller.motionZ)));
-			}
-		}
-
-		@Override
-		public void writeSpawnData(ByteBuf buffer) {
-			buffer.writeInt(this.carriageId);
-			buffer.writeInt(this.pullerId);
-		}
-
-		@Override
-		public void readSpawnData(ByteBuf buffer) {
-			this.carriageId = buffer.readInt();
-			this.pullerId = buffer.readInt();
-		}
+		public float getDrag(float drag);
 	}
 
 	public List<Puller> pullers = new ArrayList<>();
@@ -202,11 +144,13 @@ public class EntityWeedwoodDraeton extends Entity {
 	private double lerpYaw;
 	private double lerpPitch;
 
-	private List<EntityPullerDragonfly> loadedDragonflies = new ArrayList<>();
+	private List<Entity> loadedPullerEntities = new ArrayList<>();
 
 	private int nextPullerId = 0;
 
 	public float prevRotationRoll, rotationRoll;
+
+	private boolean descend = false;
 
 	public EntityWeedwoodDraeton(World world) {
 		super(world);
@@ -263,9 +207,18 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
-		this.loadedDragonflies.clear();
+		//Initialise lerp to real position
+		this.lerpX = this.posX;
+		this.lerpY = this.posY;
+		this.lerpZ = this.posZ;
+		this.lerpYaw = this.rotationYaw;
+		this.lerpPitch = this.rotationPitch;
+
+		this.loadedPullerEntities.clear();
 
 		this.pullers.clear();
+
+		final Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ).add(this.getPullPoint(1));
 
 		NBTTagList list = nbt.getTagList("Pullers", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < list.tagCount(); i++) {
@@ -273,17 +226,33 @@ public class EntityWeedwoodDraeton extends Entity {
 
 			Puller puller = new Puller(this, this.nextPullerId++);
 
-			puller.x = tag.getDouble("x");
-			puller.y = tag.getDouble("y");
-			puller.z = tag.getDouble("z");
+			Vec3d pullerPos = new Vec3d(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"));
 
-			if(tag.hasKey("Dragonfly", Constants.NBT.TAG_COMPOUND)) {
-				NBTTagCompound dragonflyNbt = tag.getCompoundTag("Dragonfly");
+			//Ensure that the puller is within valid range, otherwise puller entities may become immediately unloaded after spawning
+			Vec3d diff = pullerPos.subtract(pos);
+			if(diff.length() > this.getMaxTetherLength()) {
+				pullerPos = pos.add(diff.normalize().scale(this.getMaxTetherLength()));
+			}
 
-				EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
-				dragonfly.readFromNBT(dragonflyNbt);
+			puller.x = pullerPos.x;
+			puller.y = pullerPos.y;
+			puller.z = pullerPos.z;
 
-				this.loadedDragonflies.add(dragonfly);
+			if(tag.hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+				NBTTagCompound entityNbt = tag.getCompoundTag("Entity");
+
+				Entity entity = EntityList.createEntityFromNBT(entityNbt, this.world);
+
+				if(entity instanceof IPullerEntity) {
+					((IPullerEntity) entity).setPuller(this, puller);
+					puller.setEntity((IPullerEntity) entity);
+
+					entity.setPosition(puller.x, puller.y, puller.z);
+
+					this.loadedPullerEntities.add(entity);
+				} else {
+					entity.setDead();
+				}
 			}
 
 			this.pullers.add(puller);
@@ -300,12 +269,18 @@ public class EntityWeedwoodDraeton extends Entity {
 			tag.setDouble("y", puller.y);
 			tag.setDouble("z", puller.z);
 
-			if(puller.dragonfly != null && puller.dragonfly.isEntityAlive()) {
-				NBTTagCompound dragonflyNbt = new NBTTagCompound();
+			if(puller.entity != null && puller.entity.isEntityAlive()) {
+				ResourceLocation id = EntityList.getKey(puller.entity);
 
-				puller.dragonfly.writeToNBT(dragonflyNbt);
+				if(id != null) {
+					NBTTagCompound entityNbt = new NBTTagCompound();
 
-				tag.setTag("Dragonfly", dragonflyNbt);
+					puller.entity.writeToNBT(entityNbt);
+
+					entityNbt.setString("id", id.toString());
+
+					tag.setTag("Entity", entityNbt);
+				}
 			}
 
 			list.appendTag(tag);
@@ -322,23 +297,34 @@ public class EntityWeedwoodDraeton extends Entity {
 	public void onAddedToWorld() {
 		super.onAddedToWorld();
 
-		//Spawn dragonflies that were loaded from nbt
-		if(!this.world.isRemote) {
-			for(EntityPullerDragonfly dragonfly : this.loadedDragonflies) {
-				this.world.spawnEntity(dragonfly);
-			}
-
-			this.loadedDragonflies.clear();
-		}
+		//Initialise lerp to real position
+		this.lerpX = this.posX;
+		this.lerpY = this.posY;
+		this.lerpZ = this.posZ;
+		this.lerpYaw = this.rotationYaw;
+		this.lerpPitch = this.rotationPitch;
 	}
 
 	@Override
 	public void onEntityUpdate() {
 		if(!this.world.isRemote) {
+			//Spawn puller entities that were loaded from nbt
+			Iterator<Entity> entityIt = this.loadedPullerEntities.iterator();
+			while(entityIt.hasNext()) {
+				Entity entity = entityIt.next();
+
+				//Spawning can fail if a chunk isn't loaded yet so keep trying until it works
+				if(this.world.spawnEntity(entity)) {
+					entityIt.remove();
+				}
+			}
+
+			//Remove dead pullers
 			Iterator<Puller> it = this.pullers.iterator();
 			while(it.hasNext()) {
 				Puller puller = it.next();
-				if(puller.dragonfly == null || !puller.dragonfly.isEntityAlive()) {
+
+				if(puller.entity == null || !puller.entity.isEntityAlive()) {
 					puller.isActive = false;
 					it.remove();
 
@@ -358,11 +344,16 @@ public class EntityWeedwoodDraeton extends Entity {
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 
-		float friction = 0.98f;
+		float drag = 0.98f;
+		for(Puller puller : this.pullers) {
+			if(puller.getEntity() != null) {
+				drag = puller.getEntity().getCarriageDrag(drag);
+			}
+		}
 
-		this.motionY *= friction;
-		this.motionX *= friction;
-		this.motionZ *= friction;
+		this.motionY *= drag;
+		this.motionX *= drag;
+		this.motionZ *= drag;
 
 		this.handleWaterMovement();
 		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
@@ -400,7 +391,7 @@ public class EntityWeedwoodDraeton extends Entity {
 			}
 		}
 
-		if(!this.world.isRemote && this.getPassengers().isEmpty()) {
+		if(!this.world.isRemote && (this.getPassengers().isEmpty() || this.pullers.isEmpty())) {
 			this.motionY -= 0.005f;
 		}
 
@@ -427,6 +418,10 @@ public class EntityWeedwoodDraeton extends Entity {
 	@Override
 	public void onUpdate() {
 		this.prevRotationRoll = this.rotationRoll;
+
+		if(this.getControllingPassenger() == null) {
+			this.descend = false;
+		}
 
 		super.onUpdate();
 
@@ -481,6 +476,11 @@ public class EntityWeedwoodDraeton extends Entity {
 	public void updatePassenger(Entity passenger) {
 		super.updatePassenger(passenger);
 
+		if(passenger == this.getControllingPassenger()) {
+			this.descend = passenger.isSprinting();
+		}
+		passenger.setSprinting(false);
+
 		PlayerUtil.resetFloating(passenger);
 		PlayerUtil.resetVehicleFloating(passenger);
 	}
@@ -493,9 +493,9 @@ public class EntityWeedwoodDraeton extends Entity {
 
 		super.move(type, x, y, z);
 
-		float drag = 0.25f;
-
 		for(Puller puller : this.pullers) {
+			float drag = puller.getEntity() != null ? puller.getEntity().getDrag(0.25f) : 0.25f;
+
 			puller.move((this.posX - startX) * drag, (this.posY - startY) * drag, (this.posZ - startZ) * drag);
 		}
 	}
@@ -512,9 +512,9 @@ public class EntityWeedwoodDraeton extends Entity {
 				puller.lerpZ = this.lerpZ + z;
 				puller.lerpSteps = 10;
 			} else {
-				puller.x = this.posX + x;
-				puller.y = this.posY + y;
-				puller.z = this.posZ + z;
+				puller.lerpX = puller.x = this.posX + x;
+				puller.lerpY = puller.y = this.posY + y;
+				puller.lerpZ = puller.z = this.posZ + z;
 			}
 
 			puller.motionX = mx;
@@ -551,7 +551,7 @@ public class EntityWeedwoodDraeton extends Entity {
 		}
 
 		if(input) {
-			Vec3d dir = new Vec3d(dx, Math.sin(Math.toRadians(-controller.rotationPitch)), dz).normalize();
+			Vec3d dir = new Vec3d(dx, Math.sin(Math.toRadians(MathHelper.clamp(/*-controller.rotationPitch + */(controller.isJumping ? 45 : 0) + (this.descend ? -45 : 0), -90, 90))), dz).normalize();
 
 			double moveStrength = 0.1D;
 
@@ -564,20 +564,19 @@ public class EntityWeedwoodDraeton extends Entity {
 	}
 
 	protected void updateCarriage() {
-		float pullerFriction = 0.9f;
-
 		for(Puller puller : this.pullers) {
-			puller.motionX *= pullerFriction;
-			puller.motionY *= pullerFriction;
-			puller.motionZ *= pullerFriction;
+			float pullerDrag = puller.getEntity() != null ? puller.getEntity().getDrag(0.9f) : 0.9f;
 
-			if(puller.dragonfly != null && puller.dragonfly.getRidingEntity() != null) {
+			puller.motionX *= pullerDrag;
+			puller.motionY *= pullerDrag;
+			puller.motionZ *= pullerDrag;
+
+			if(puller.entity != null && puller.entity.getRidingEntity() != null) {
 				puller.motionX = puller.motionY = puller.motionZ = 0;
 
-				puller.x = puller.dragonfly.posX;
-				puller.y = puller.dragonfly.posY;
-				puller.z = puller.dragonfly.posZ;
-
+				puller.x = puller.entity.posX;
+				puller.y = puller.entity.posY;
+				puller.z = puller.entity.posZ;
 			} else {
 				float speed = (float) Math.sqrt(puller.motionX * puller.motionX + puller.motionY * puller.motionY + puller.motionZ * puller.motionZ);
 				float maxSpeed = this.getMaxPullerSpeed();
@@ -612,7 +611,7 @@ public class EntityWeedwoodDraeton extends Entity {
 
 			Vec3d tether = new Vec3d(puller.x, puller.y, puller.z);
 
-			Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ);
+			Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ).add(this.getPullPoint(1));
 
 			Vec3d diff = tether.subtract(pos);
 
@@ -630,20 +629,24 @@ public class EntityWeedwoodDraeton extends Entity {
 			}
 
 			if(dist > tetherLength) {
-				float pullStrength = 0.01f;
+				if(puller.getEntity() != null) {
+					float pullStrength = puller.getEntity().getPull(0.01f);
 
-				Vec3d motion = diff.normalize().scale((dist - tetherLength) * pullStrength);
-				this.motionX += motion.x;
-				this.motionY += motion.y;
-				this.motionZ += motion.z;
+					Vec3d motion = diff.normalize().scale((dist - tetherLength) * pullStrength);
+					this.motionX += motion.x;
+					this.motionY += motion.y;
+					this.motionZ += motion.z;
+				}
 
 				Vec3d constrainedTetherPos = pos.add(diff.normalize().scale(tetherLength));
 
 				puller.move(constrainedTetherPos.x - puller.x, constrainedTetherPos.y - puller.y, constrainedTetherPos.z - puller.z);
 
-				puller.motionX -= motion.x;
-				puller.motionY -= motion.y;
-				puller.motionZ -= motion.z;
+				Vec3d correction = diff.normalize().scale((dist - tetherLength) * 0.01f);
+
+				puller.motionX -= correction.x;
+				puller.motionY -= correction.y;
+				puller.motionZ -= correction.z;
 			}
 		}
 
@@ -661,6 +664,16 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	public float getMaxPullerSpeed() {
 		return 3.0f;
+	}
+
+	public Vec3d getPullPoint(float partialTicks) {
+		float yaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * partialTicks;
+		float frontOffset = 1.4f;
+		return new Vec3d(
+				(float) Math.sin(Math.toRadians(-yaw)) * frontOffset,
+				1.2f,
+				(float) Math.cos(Math.toRadians(-yaw)) * frontOffset
+				);
 	}
 
 	@Override
@@ -715,10 +728,18 @@ public class EntityWeedwoodDraeton extends Entity {
 				puller.lerpZ = puller.z = this.posZ;
 				this.pullers.add(puller);
 
-				//Spawn puller dragonfly
-				EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
-				dragonfly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
-				this.world.spawnEntity(dragonfly);
+				//Spawn puller entity
+				if(this.world.rand.nextBoolean()) {
+					EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
+					puller.setEntity(dragonfly);
+					dragonfly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
+					this.world.spawnEntity(dragonfly);
+				} else {
+					EntityPullerFirefly firefly = new EntityPullerFirefly(this.world, this, puller);
+					puller.setEntity(firefly);
+					firefly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
+					this.world.spawnEntity(firefly);
+				}
 			}
 			return true;
 		}
