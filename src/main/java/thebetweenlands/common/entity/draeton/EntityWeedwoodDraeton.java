@@ -33,9 +33,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller;
 import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller.Action;
+import thebetweenlands.util.Matrix;
 import thebetweenlands.util.PlayerUtil;
 
 public class EntityWeedwoodDraeton extends Entity {
+	private Vec3d prevBalloonPos = Vec3d.ZERO;
+	private Vec3d balloonPos = Vec3d.ZERO;
+	private Vec3d balloonMotion = Vec3d.ZERO;
+	
 	public static class Puller {
 		public final EntityWeedwoodDraeton carriage;
 		private Entity entity;
@@ -315,8 +320,34 @@ public class EntityWeedwoodDraeton extends Entity {
 		this.lerpZ = this.posZ;
 		this.lerpYaw = this.rotationYaw;
 		this.lerpPitch = this.rotationPitch;
+		
+		this.prevBalloonPos = this.balloonPos = this.getPositionVector().add(0, 2, 0);
+	}
+	
+	public Vec3d getBalloonPos(float partialTicks) {
+		return this.prevBalloonPos.add(this.balloonPos.subtract(this.prevBalloonPos).scale(partialTicks));
 	}
 
+	public Vec3d getBalloonConnection(int i, float partialTicks) {
+		Vec3d connectionPoint;
+		switch(i) {
+		default:
+		case 0:
+			 connectionPoint = this.getRotatedPoint(new Vec3d(0.4f, 0.9f, 1.0f), partialTicks);
+			 break;
+		case 1:
+			 connectionPoint = this.getRotatedPoint(new Vec3d(-0.4f, 0.9f, 1.0f), partialTicks);
+			 break;
+		case 2:
+			 connectionPoint = this.getRotatedPoint(new Vec3d(0.4f, 0.9f, -1.0f), partialTicks);
+			 break;
+		case 3:
+			 connectionPoint = this.getRotatedPoint(new Vec3d(-0.4f, 0.9f, -1.0f), partialTicks);
+			 break;
+		}
+		return connectionPoint;
+	}
+	
 	@Override
 	public void onEntityUpdate() {
 		if(!this.world.isRemote) {
@@ -405,6 +436,28 @@ public class EntityWeedwoodDraeton extends Entity {
 
 		if(!this.world.isRemote && (this.getPassengers().isEmpty() || this.pullers.isEmpty())) {
 			this.motionY -= 0.005f;
+		}
+		
+		if(this.world.isRemote) {
+			this.balloonMotion = this.balloonMotion.add(0, 0.15f, 0).scale(0.9f);
+			
+			this.prevBalloonPos = this.balloonPos;
+			this.balloonPos = this.balloonPos.add(this.balloonMotion);
+			
+			for(int i = 0; i < 4; i++) {
+				Vec3d tetherPos = this.getPositionVector().add(this.getBalloonConnection(i, 1));
+				
+				Vec3d diff = this.balloonPos.subtract(tetherPos);
+				
+				float tetherLength = 2.0f + (float)Math.sin(this.ticksExisted * 0.1f) * 0.05f;
+				
+				if(diff.length() > 6.0f) {
+					this.balloonPos = this.getPositionVector().add(0, 2, 0);
+				} else if(diff.length() > tetherLength) {
+					Vec3d correction = diff.normalize().scale(-0.15f * (diff.length() - tetherLength));
+					this.balloonMotion = this.balloonMotion.add(correction);
+				}
+			}
 		}
 
 		if(this.world instanceof WorldServer) {
@@ -687,13 +740,16 @@ public class EntityWeedwoodDraeton extends Entity {
 	}
 
 	public Vec3d getPullPoint(float partialTicks) {
-		float yaw = this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * partialTicks;
-		float frontOffset = 1.4f;
-		return new Vec3d(
-				(float) Math.sin(Math.toRadians(-yaw)) * frontOffset,
-				1.2f,
-				(float) Math.cos(Math.toRadians(-yaw)) * frontOffset
-				);
+		return this.getRotatedPoint(new Vec3d(0, 1.2f, 1.4f), partialTicks);
+	}
+
+	public Vec3d getRotatedPoint(Vec3d pos, float partialTicks) {
+		Matrix mat = new Matrix();
+		mat.translate(0, 1.2f, 0);
+		mat.rotate((float)-Math.toRadians(this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * partialTicks), 0, 1, 0);
+		mat.rotate((float)Math.toRadians(this.prevRotationRoll + (this.rotationRoll - this.prevRotationRoll) * partialTicks), 0, 0, 1);
+		mat.translate(0, -1.2f, 0);
+		return mat.transform(pos);
 	}
 
 	@Override

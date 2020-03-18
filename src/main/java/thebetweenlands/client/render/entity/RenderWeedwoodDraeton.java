@@ -50,8 +50,6 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 
-		Vec3d pullPoint = entity.getPullPoint(partialTicks);
-
 		if(this.renderManager.isDebugBoundingBox()) {
 			GlStateManager.depthMask(false);
 			GlStateManager.disableTexture2D();
@@ -68,7 +66,16 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 
 				RenderGlobal.drawBoundingBox(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ, 0, 1, 0, 1);
 			}
+			
+			Vec3d balloonPos = entity.getBalloonPos(partialTicks);
 
+			double binterpX = balloonPos.x - this.renderManager.renderPosX;
+			double binterpY = balloonPos.y - this.renderManager.renderPosY;
+			double binterpZ = balloonPos.z - this.renderManager.renderPosZ;
+			
+			AxisAlignedBB balloonAabb = new AxisAlignedBB(-0.3f, -0.3f, -0.3f, 0.3f, 0.3f, 0.3f).offset(binterpX - x, binterpY - y, binterpZ - z);
+			RenderGlobal.drawBoundingBox(balloonAabb.minX, balloonAabb.minY, balloonAabb.minZ, balloonAabb.maxX, balloonAabb.maxY, balloonAabb.maxZ, 0, 0, 1, 1);
+			
 			GlStateManager.enableTexture2D();
 			GlStateManager.enableLighting();
 			GlStateManager.enableCull();
@@ -76,7 +83,29 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 			GlStateManager.depthMask(true);
 		}
 
+		
+		Vec3d balloonPos = entity.getBalloonPos(partialTicks);
+
+		double binterpX = balloonPos.x - this.renderManager.renderPosX;
+		double binterpY = balloonPos.y - this.renderManager.renderPosY;
+		double binterpZ = balloonPos.z - this.renderManager.renderPosZ;
+		
+		for(int i = 0; i < 4; i++) {
+			GlStateManager.pushMatrix();
+			
+			Vec3d connectionPoint = entity.getBalloonConnection(i, partialTicks);
+			
+			GlStateManager.translate(connectionPoint.x, connectionPoint.y, connectionPoint.z);
+			
+			this.renderConnection(tessellator, buffer, 0, 0, 0, binterpX - x - connectionPoint.x, binterpY - y - connectionPoint.y + 0.25f, binterpZ - z - connectionPoint.z);
+			
+			GlStateManager.popMatrix();
+		}
+		
+		
 		GlStateManager.pushMatrix();
+		
+		Vec3d pullPoint = entity.getPullPoint(partialTicks);
 		GlStateManager.translate(pullPoint.x, pullPoint.y, pullPoint.z);
 
 		for(Puller puller : entity.pullers) {

@@ -3,7 +3,6 @@ package thebetweenlands.common.network.bidirectional;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -110,11 +109,13 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 						Puller puller = carriage.getPullerById(this.position.id);
 
 						if(puller != null) {
-							Vec3d pos = new Vec3d(this.position.x, this.position.y, this.position.z);
-
 							//Make sure position is in valid range since it is client controlled
-							if(pos.length() > carriage.getMaxTetherLength()) {
-								pos = pos.normalize().scale(carriage.getMaxTetherLength());
+							float dist = (float) Math.sqrt(this.position.x * this.position.x + this.position.y * this.position.y + this.position.z * this.position.z);
+							float maxDist = carriage.getMaxTetherLength();
+							if(dist > maxDist) {
+								this.position.x *= 1.0f / dist * maxDist;
+								this.position.y *= 1.0f / dist * maxDist;
+								this.position.z *= 1.0f / dist * maxDist;
 							}
 
 							//Make sure motion is in valid range
