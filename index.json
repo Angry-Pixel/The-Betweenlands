@@ -86,6 +86,21 @@
 			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/sir_terravolt_eccentric_ecology.png",
 			"title": "Eccentric Ecology",
 			"author": "Sir Terravolt"
+		},
+		{
+			"sha256": "A31E01D48A72542FB4307DCBC0B77A8A72D106E91558FD3E8B639944B8F76E48",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/ambargem_little_nap.png",
+			"title": "Little Nap",
+			"author": "Ambargem",
+			"description": "Two friends sleeping together in a beautiful night",
+			"source_url": "https://twitter.com/DiosesVivos/status/1231213971967004672"
+		},
+		{
+			"sha256": "569BE77AFC3E2545D9A2781818376CD1254F4A03F0031F347E419E1B48E43A7F",
+			"url": "https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/online_picture_gallery/gallery/haselberry12_inauspicious_darkness.png",
+			"title": "Inauspicious Darkness",
+			"author": "Haselberry12",
+			"source_url": "https://twitter.com/haselberry12/status/1208707954024824832"
 		}
 	]
 }]
