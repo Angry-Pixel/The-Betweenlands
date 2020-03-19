@@ -40,7 +40,7 @@ public class EntityWeedwoodDraeton extends Entity {
 	private Vec3d prevBalloonPos = Vec3d.ZERO;
 	private Vec3d balloonPos = Vec3d.ZERO;
 	private Vec3d balloonMotion = Vec3d.ZERO;
-	
+
 	public static class Puller {
 		public final EntityWeedwoodDraeton carriage;
 		private Entity entity;
@@ -169,7 +169,7 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	public EntityWeedwoodDraeton(World world) {
 		super(world);
-		this.setSize(0.75F, 0.75F);
+		this.setSize(1.25F, 0.75F);
 	}
 
 	public Puller getPullerById(int id) {
@@ -320,10 +320,10 @@ public class EntityWeedwoodDraeton extends Entity {
 		this.lerpZ = this.posZ;
 		this.lerpYaw = this.rotationYaw;
 		this.lerpPitch = this.rotationPitch;
-		
+
 		this.prevBalloonPos = this.balloonPos = this.getPositionVector().add(0, 2, 0);
 	}
-	
+
 	public Vec3d getBalloonPos(float partialTicks) {
 		return this.prevBalloonPos.add(this.balloonPos.subtract(this.prevBalloonPos).scale(partialTicks));
 	}
@@ -333,21 +333,21 @@ public class EntityWeedwoodDraeton extends Entity {
 		switch(i) {
 		default:
 		case 0:
-			 connectionPoint = this.getRotatedPoint(new Vec3d(0.4f, 0.9f, 1.0f), partialTicks);
-			 break;
+			connectionPoint = this.getRotatedPoint(new Vec3d(0.4f, 0.9f, 1.0f), partialTicks);
+			break;
 		case 1:
-			 connectionPoint = this.getRotatedPoint(new Vec3d(-0.4f, 0.9f, 1.0f), partialTicks);
-			 break;
+			connectionPoint = this.getRotatedPoint(new Vec3d(-0.4f, 0.9f, 1.0f), partialTicks);
+			break;
 		case 2:
-			 connectionPoint = this.getRotatedPoint(new Vec3d(0.4f, 0.9f, -1.0f), partialTicks);
-			 break;
+			connectionPoint = this.getRotatedPoint(new Vec3d(0.4f, 0.9f, -1.0f), partialTicks);
+			break;
 		case 3:
-			 connectionPoint = this.getRotatedPoint(new Vec3d(-0.4f, 0.9f, -1.0f), partialTicks);
-			 break;
+			connectionPoint = this.getRotatedPoint(new Vec3d(-0.4f, 0.9f, -1.0f), partialTicks);
+			break;
 		}
 		return connectionPoint;
 	}
-	
+
 	@Override
 	public void onEntityUpdate() {
 		if(!this.world.isRemote) {
@@ -437,20 +437,20 @@ public class EntityWeedwoodDraeton extends Entity {
 		if(!this.world.isRemote && (this.getPassengers().isEmpty() || this.pullers.isEmpty())) {
 			this.motionY -= 0.005f;
 		}
-		
+
 		if(this.world.isRemote) {
 			this.balloonMotion = this.balloonMotion.add(0, 0.15f, 0).scale(0.9f);
-			
+
 			this.prevBalloonPos = this.balloonPos;
 			this.balloonPos = this.balloonPos.add(this.balloonMotion);
-			
+
 			for(int i = 0; i < 4; i++) {
 				Vec3d tetherPos = this.getPositionVector().add(this.getBalloonConnection(i, 1));
-				
+
 				Vec3d diff = this.balloonPos.subtract(tetherPos);
-				
+
 				float tetherLength = 2.0f + (float)Math.sin(this.ticksExisted * 0.1f) * 0.05f;
-				
+
 				if(diff.length() > 6.0f) {
 					this.balloonPos = this.getPositionVector().add(0, 2, 0);
 				} else if(diff.length() > tetherLength) {
@@ -500,13 +500,35 @@ public class EntityWeedwoodDraeton extends Entity {
 
 		double dx = this.motionX;
 		double dz = this.motionZ;
-		float targetYaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90;
-		float yawOffset = (float) MathHelper.wrapDegrees(targetYaw - this.rotationYaw);
-		this.rotationYaw = this.rotationYaw + yawOffset * 0.98f;
+		double dy = this.motionY;
 
-		float targetRoll = this.rotationRoll = MathHelper.clamp(yawOffset * 10.0f, -20, 20);
+		float targetYaw;
+		float targetPitch;
+		float targetRoll;
+
+		float adjustStrength = 0.1f;
+
+		float speed = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
+
+		if(speed > 0.2f) {
+			targetYaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90;
+			targetPitch = MathHelper.clamp((float) -Math.toDegrees(Math.atan2(Math.sqrt(dx * dx + dz * dz), dy)) + 90, -30, 30);
+			targetRoll = MathHelper.clamp(MathHelper.wrapDegrees(targetYaw - this.rotationYaw) * 10.0f, -20, 20);
+			adjustStrength = MathHelper.clamp(speed * 0.5f, 0.05f, 0.5f);
+		} else {
+			targetYaw = this.rotationYaw;
+			targetPitch = 0.0f;
+			targetRoll = 0.0f;
+		}
+
+		float yawOffset = (float) MathHelper.wrapDegrees(targetYaw - this.rotationYaw);
+		this.rotationYaw = this.rotationYaw + yawOffset * adjustStrength;
+
+		float pitchOffset = (float) MathHelper.wrapDegrees(targetPitch - this.rotationPitch);
+		this.rotationPitch = this.rotationPitch + pitchOffset * adjustStrength * 0.5f;
+
 		float rollOffset = (float) MathHelper.wrapDegrees(targetRoll - this.rotationRoll);
-		this.rotationRoll = this.rotationRoll + rollOffset * 0.75f;
+		this.rotationRoll = this.rotationRoll + rollOffset * adjustStrength * 0.5f;
 
 		this.tickLerp();
 	}
@@ -547,7 +569,12 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		super.updatePassenger(passenger);
+		if(this.isPassenger(passenger)) {
+			float yOff = 0.5f;
+			Vec3d mountOffset = this.getRotatedPoint(new Vec3d(0, yOff, 0), 1);
+
+			passenger.setPosition(this.posX + mountOffset.x, this.posY + mountOffset.y - yOff + this.getMountedYOffset() + passenger.getYOffset(), this.posZ + mountOffset.z);
+		}
 
 		if(passenger == this.getControllingPassenger()) {
 			this.descend = passenger.isSprinting();
@@ -745,10 +772,11 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	public Vec3d getRotatedPoint(Vec3d pos, float partialTicks) {
 		Matrix mat = new Matrix();
-		mat.translate(0, 1.2f, 0);
+		mat.translate(0, 1.5f, 0);
 		mat.rotate((float)-Math.toRadians(this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * partialTicks), 0, 1, 0);
+		mat.rotate((float)-Math.toRadians(this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * partialTicks), 1, 0, 0);
 		mat.rotate((float)Math.toRadians(this.prevRotationRoll + (this.rotationRoll - this.prevRotationRoll) * partialTicks), 0, 0, 1);
-		mat.translate(0, -1.2f, 0);
+		mat.translate(0, -1.5f, 0);
 		return mat.transform(pos);
 	}
 

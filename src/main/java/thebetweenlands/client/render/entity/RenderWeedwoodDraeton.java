@@ -126,6 +126,7 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 		GlStateManager.scale(-1, -1, 1);
 
 		GlStateManager.rotate(entityYaw, 0, 1, 0);
+		GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 1, 0, 0);
 		GlStateManager.rotate(entity.prevRotationRoll + (entity.rotationRoll - entity.prevRotationRoll) * partialTicks, 0, 0, 1);
 
 		float timeSinceHit = entity.getTimeSinceHit() - partialTicks;
