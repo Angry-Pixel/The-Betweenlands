@@ -510,7 +510,7 @@ public class EntityWeedwoodDraeton extends Entity {
 
 		float speed = (float) Math.sqrt(dx*dx + dy*dy + dz*dz);
 
-		if(speed > 0.2f) {
+		if(speed > 0.1f) {
 			targetYaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90;
 			targetPitch = MathHelper.clamp((float) -Math.toDegrees(Math.atan2(Math.sqrt(dx * dx + dz * dz), dy)) + 90, -30, 30);
 			targetRoll = MathHelper.clamp(MathHelper.wrapDegrees(targetYaw - this.rotationYaw) * 10.0f, -20, 20);
@@ -867,16 +867,25 @@ public class EntityWeedwoodDraeton extends Entity {
 				this.pullers.add(puller);
 
 				//Spawn puller entity
-				if(this.world.rand.nextBoolean()) {
+				switch(this.world.rand.nextInt(3)) {
+				case 0:
 					EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
 					puller.setEntity(dragonfly);
 					dragonfly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 					this.world.spawnEntity(dragonfly);
-				} else {
+					break;
+				case 1:
 					EntityPullerFirefly firefly = new EntityPullerFirefly(this.world, this, puller);
 					puller.setEntity(firefly);
 					firefly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 					this.world.spawnEntity(firefly);
+					break;
+				case 2:
+					EntityPullerChiromaw chiromaw = new EntityPullerChiromaw(this.world, this, puller);
+					puller.setEntity(chiromaw);
+					chiromaw.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
+					this.world.spawnEntity(chiromaw);
+					break;
 				}
 			}
 			return true;
