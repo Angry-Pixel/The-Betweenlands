@@ -26,7 +26,7 @@ import thebetweenlands.common.entity.EntityVolarkite;
 import thebetweenlands.common.entity.draeton.EntityPullerChiromaw;
 import thebetweenlands.common.entity.draeton.EntityPullerDragonfly;
 import thebetweenlands.common.entity.draeton.EntityPullerFirefly;
-import thebetweenlands.common.entity.draeton.EntityWeedwoodDraeton;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityAshSprite;
 import thebetweenlands.common.entity.mobs.EntityBarrishee;
@@ -200,10 +200,10 @@ public class EntityRegistry {
 		
 		registerEntity(EntityMultipartDummy.class, "multipart_dummy", 64, 20, false);
 		
-		registerEntity(EntityWeedwoodDraeton.class, "weedwood_draeton", 80, 3, true);
-		registerEntity(EntityPullerDragonfly.class, "weedwood_draeton_dragonfly", 80, 3, true);
-		registerEntity(EntityPullerFirefly.class, "weedwood_draeton_firefly", 80, 3, true);
-		registerEntity(EntityPullerChiromaw.class, "weedwood_draeton_chiromaw", 80, 3, true);
+		registerEntity(EntityDraeton.class, "draeton", 80, 3, true);
+		registerEntity(EntityPullerDragonfly.class, "draeton_dragonfly", 80, 3, true);
+		registerEntity(EntityPullerFirefly.class, "draeton_firefly", 80, 3, true);
+		registerEntity(EntityPullerChiromaw.class, "draeton_chiromaw", 80, 3, true);
 	}
 
 	private static int id = 0;

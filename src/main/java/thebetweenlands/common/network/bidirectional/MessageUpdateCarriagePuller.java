@@ -6,8 +6,8 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
-import thebetweenlands.common.entity.draeton.EntityWeedwoodDraeton;
-import thebetweenlands.common.entity.draeton.EntityWeedwoodDraeton.Puller;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
+import thebetweenlands.common.entity.draeton.EntityDraeton.Puller;
 import thebetweenlands.common.network.MessageEntity;
 
 public class MessageUpdateCarriagePuller extends MessageEntity {
@@ -47,7 +47,7 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 
 	}
 
-	public MessageUpdateCarriagePuller(EntityWeedwoodDraeton carriage, Puller puller, Action action) {
+	public MessageUpdateCarriagePuller(EntityDraeton carriage, Puller puller, Action action) {
 		this.addEntity(carriage);
 		this.position = new Position(puller);
 		this.action = action;
@@ -102,8 +102,8 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 				EntityPlayer player = ctx.getServerHandler().player;
 
 				Entity entity = this.getEntity(0);
-				if(entity instanceof EntityWeedwoodDraeton) {
-					EntityWeedwoodDraeton carriage = (EntityWeedwoodDraeton) entity;
+				if(entity instanceof EntityDraeton) {
+					EntityDraeton carriage = (EntityDraeton) entity;
 
 					if(carriage.getControllingPassenger() == player) {
 						Puller puller = carriage.getPullerById(this.position.id);
@@ -134,8 +134,8 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 			}
 		} else {
 			Entity entity = this.getEntity(0);
-			if(entity instanceof EntityWeedwoodDraeton) {
-				EntityWeedwoodDraeton carriage = (EntityWeedwoodDraeton) entity;
+			if(entity instanceof EntityDraeton) {
+				EntityDraeton carriage = (EntityDraeton) entity;
 
 				if(this.action == Action.ADD) {
 					carriage.addPuller(this.position);

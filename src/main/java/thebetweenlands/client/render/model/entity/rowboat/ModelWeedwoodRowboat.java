@@ -255,15 +255,6 @@ public class ModelWeedwoodRowboat extends ModelBase {
         hullGunwaleLeft.render(scale);
         hullGunwaleRight.render(scale);
     }
-    
-    public void renderCarriageBase(float scale) {
-    	keel.render(scale);
-        hullBottom.render(scale);
-        hullBottomLeft.render(scale);
-        hullBottomRight.render(scale);
-        hullBow.render(scale);
-        hullStern.render(scale);
-    }
 
     public ModelRenderer getOar(ShipSide side) {
         return oars.get(side);

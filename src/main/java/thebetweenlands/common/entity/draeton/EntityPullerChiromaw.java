@@ -8,8 +8,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import thebetweenlands.common.entity.draeton.EntityWeedwoodDraeton.IPullerEntity;
-import thebetweenlands.common.entity.draeton.EntityWeedwoodDraeton.Puller;
+import thebetweenlands.common.entity.draeton.EntityDraeton.IPullerEntity;
+import thebetweenlands.common.entity.draeton.EntityDraeton.Puller;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
 
 public class EntityPullerChiromaw extends EntityChiromaw implements IPullerEntity, IEntityAdditionalSpawnData {
@@ -22,13 +22,13 @@ public class EntityPullerChiromaw extends EntityChiromaw implements IPullerEntit
 		super(world);
 	}
 
-	public EntityPullerChiromaw(World world, EntityWeedwoodDraeton carriage, Puller puller) {
+	public EntityPullerChiromaw(World world, EntityDraeton carriage, Puller puller) {
 		super(world);
 		this.setPuller(carriage, puller);
 	}
 
 	@Override
-	public void setPuller(EntityWeedwoodDraeton carriage, Puller puller) {
+	public void setPuller(EntityDraeton carriage, Puller puller) {
 		this.puller = puller;
 		this.pullerId = puller.id;
 		this.carriageId = carriage.getEntityId();
@@ -99,8 +99,8 @@ public class EntityPullerChiromaw extends EntityChiromaw implements IPullerEntit
 				}
 			} else {
 				Entity entity = this.world.getEntityByID(this.carriageId);
-				if(entity instanceof EntityWeedwoodDraeton) {
-					Puller puller = ((EntityWeedwoodDraeton) entity).getPullerById(this.pullerId);
+				if(entity instanceof EntityDraeton) {
+					Puller puller = ((EntityDraeton) entity).getPullerById(this.pullerId);
 					if(puller != null) {
 						this.puller = puller;
 						puller.setEntity(this);

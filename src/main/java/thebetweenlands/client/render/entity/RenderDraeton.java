@@ -18,23 +18,23 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.model.entity.rowboat.ModelWeedwoodRowboat;
-import thebetweenlands.common.entity.draeton.EntityWeedwoodDraeton;
-import thebetweenlands.common.entity.draeton.EntityWeedwoodDraeton.Puller;
+import thebetweenlands.client.render.model.entity.ModelDraetonCarriage;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
+import thebetweenlands.common.entity.draeton.EntityDraeton.Puller;
 import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)
-public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/weedwood_rowboat.png");
+public class RenderDraeton extends Render<EntityDraeton> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_carriage.png");
 
-	private ModelWeedwoodRowboat model = new ModelWeedwoodRowboat();
+	private ModelDraetonCarriage model = new ModelDraetonCarriage();
 
-	public RenderWeedwoodDraeton(RenderManager renderManager) {
+	public RenderDraeton(RenderManager renderManager) {
 		super(renderManager);
 	}
 
 	@Override
-	public void doRender(EntityWeedwoodDraeton entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(EntityDraeton entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
 		GlStateManager.enableRescaleNormal();
@@ -66,16 +66,16 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 
 				RenderGlobal.drawBoundingBox(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ, 0, 1, 0, 1);
 			}
-			
+
 			Vec3d balloonPos = entity.getBalloonPos(partialTicks);
 
 			double binterpX = balloonPos.x - this.renderManager.renderPosX;
 			double binterpY = balloonPos.y - this.renderManager.renderPosY;
 			double binterpZ = balloonPos.z - this.renderManager.renderPosZ;
-			
+
 			AxisAlignedBB balloonAabb = new AxisAlignedBB(-0.3f, -0.3f, -0.3f, 0.3f, 0.3f, 0.3f).offset(binterpX - x, binterpY - y, binterpZ - z);
 			RenderGlobal.drawBoundingBox(balloonAabb.minX, balloonAabb.minY, balloonAabb.minZ, balloonAabb.maxX, balloonAabb.maxY, balloonAabb.maxZ, 0, 0, 1, 1);
-			
+
 			GlStateManager.enableTexture2D();
 			GlStateManager.enableLighting();
 			GlStateManager.enableCull();
@@ -83,32 +83,32 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 			GlStateManager.depthMask(true);
 		}
 
-		
-		Vec3d balloonPos = entity.getBalloonPos(partialTicks);
 
-		double binterpX = balloonPos.x - this.renderManager.renderPosX;
-		double binterpY = balloonPos.y - this.renderManager.renderPosY;
-		double binterpZ = balloonPos.z - this.renderManager.renderPosZ;
-		
 		for(int i = 0; i < 4; i++) {
 			GlStateManager.pushMatrix();
+
+			Vec3d balloonPos = entity.getBalloonRopeConnection(i, partialTicks);
+
+			double binterpX = balloonPos.x - this.renderManager.renderPosX;
+			double binterpY = balloonPos.y - this.renderManager.renderPosY;
+			double binterpZ = balloonPos.z - this.renderManager.renderPosZ;
 			
-			Vec3d connectionPoint = entity.getBalloonConnection(i, partialTicks);
-			
+			Vec3d connectionPoint = entity.getCarriageRopeConnection(i, partialTicks);
+
 			GlStateManager.translate(connectionPoint.x, connectionPoint.y, connectionPoint.z);
-			
-			this.renderConnection(tessellator, buffer, 0, 0, 0, binterpX - x - connectionPoint.x, binterpY - y - connectionPoint.y + 0.25f, binterpZ - z - connectionPoint.z);
-			
+
+			this.renderConnection(tessellator, buffer, 0, 0, 0, binterpX - x - connectionPoint.x, binterpY - y - connectionPoint.y, binterpZ - z - connectionPoint.z);
+
 			GlStateManager.popMatrix();
 		}
-		
-		
-		GlStateManager.pushMatrix();
-		
-		Vec3d pullPoint = entity.getPullPoint(partialTicks);
-		GlStateManager.translate(pullPoint.x, pullPoint.y, pullPoint.z);
 
+		int pullerIndex = 0;
 		for(Puller puller : entity.pullers) {
+			GlStateManager.pushMatrix();
+
+			Vec3d pullPoint = entity.getPullPoint(pullerIndex, partialTicks);
+			GlStateManager.translate(pullPoint.x, pullPoint.y, pullPoint.z);
+			
 			Entity pullerEntity = puller.getEntity();
 
 			if(pullerEntity != null) {
@@ -118,9 +118,11 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 
 				this.renderConnection(tessellator, buffer, 0, 0, 0, dinterpX - x - pullPoint.x, dinterpY - y - pullPoint.y + 0.25f, dinterpZ - z - pullPoint.z);
 			}
+			
+			GlStateManager.popMatrix();
+			
+			pullerIndex++;
 		}
-
-		GlStateManager.popMatrix();
 
 		GlStateManager.translate(0, 1.5F, 0);
 		GlStateManager.scale(-1, -1, 1);
@@ -142,7 +144,8 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 
 		this.bindEntityTexture(entity);
 
-		this.model.renderCarriageBase(0.0625F);
+		GlStateManager.rotate(180, 0, 1, 0);
+		this.model.renderCarriage(0.0625F);
 
 		if (this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
@@ -232,7 +235,7 @@ public class RenderWeedwoodDraeton extends Render<EntityWeedwoodDraeton> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityWeedwoodDraeton entity) {
+	protected ResourceLocation getEntityTexture(EntityDraeton entity) {
 		return TEXTURE;
 	}
 }

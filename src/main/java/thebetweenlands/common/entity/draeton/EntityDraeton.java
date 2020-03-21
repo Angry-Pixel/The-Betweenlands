@@ -36,13 +36,13 @@ import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller.
 import thebetweenlands.util.Matrix;
 import thebetweenlands.util.PlayerUtil;
 
-public class EntityWeedwoodDraeton extends Entity {
+public class EntityDraeton extends Entity {
 	private Vec3d prevBalloonPos = Vec3d.ZERO;
 	private Vec3d balloonPos = Vec3d.ZERO;
 	private Vec3d balloonMotion = Vec3d.ZERO;
 
 	public static class Puller {
-		public final EntityWeedwoodDraeton carriage;
+		public final EntityDraeton carriage;
 		private Entity entity;
 
 		public final int id; //network ID of the puller, used for sync
@@ -61,7 +61,7 @@ public class EntityWeedwoodDraeton extends Entity {
 
 		public boolean isActive = true;
 
-		public Puller(EntityWeedwoodDraeton carriage, int id) {
+		public Puller(EntityDraeton carriage, int id) {
 			this.carriage = carriage;
 			this.id = id;
 		}
@@ -136,7 +136,7 @@ public class EntityWeedwoodDraeton extends Entity {
 	}
 
 	public static interface IPullerEntity {
-		public void setPuller(EntityWeedwoodDraeton carriage, Puller puller);
+		public void setPuller(EntityDraeton carriage, Puller puller);
 
 		public float getPull(float pull);
 
@@ -147,8 +147,8 @@ public class EntityWeedwoodDraeton extends Entity {
 		public void releaseEntity();
 	}
 
-	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.<Integer>createKey(EntityWeedwoodDraeton.class, DataSerializers.VARINT);
-	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.<Float>createKey(EntityWeedwoodDraeton.class, DataSerializers.FLOAT);
+	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.<Integer>createKey(EntityDraeton.class, DataSerializers.VARINT);
+	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.<Float>createKey(EntityDraeton.class, DataSerializers.FLOAT);
 
 	public List<Puller> pullers = new ArrayList<>();
 
@@ -167,7 +167,7 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	private boolean descend = false;
 
-	public EntityWeedwoodDraeton(World world) {
+	public EntityDraeton(World world) {
 		super(world);
 		this.setSize(1.25F, 0.75F);
 	}
@@ -235,8 +235,6 @@ public class EntityWeedwoodDraeton extends Entity {
 
 		this.pullers.clear();
 
-		final Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ).add(this.getPullPoint(1));
-
 		NBTTagList list = nbt.getTagList("Pullers", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound tag = list.getCompoundTagAt(i);
@@ -244,6 +242,8 @@ public class EntityWeedwoodDraeton extends Entity {
 			Puller puller = new Puller(this, this.nextPullerId++);
 
 			Vec3d pullerPos = new Vec3d(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"));
+
+			final Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ).add(this.getPullPoint(i, 1));
 
 			//Ensure that the puller is within valid range, otherwise puller entities may become immediately unloaded after spawning
 			Vec3d diff = pullerPos.subtract(pos);
@@ -307,7 +307,12 @@ public class EntityWeedwoodDraeton extends Entity {
 
 	@Override
 	public double getMountedYOffset() {
-		return 0;
+		return 0.3D;
+	}
+
+	@Override
+	protected boolean canFitPassenger(Entity passenger) {
+		return this.getPassengers().size() < 2;
 	}
 
 	@Override
@@ -328,24 +333,47 @@ public class EntityWeedwoodDraeton extends Entity {
 		return this.prevBalloonPos.add(this.balloonPos.subtract(this.prevBalloonPos).scale(partialTicks));
 	}
 
-	public Vec3d getBalloonConnection(int i, float partialTicks) {
+	public Vec3d getCarriageRopeConnection(int i, float partialTicks) {
 		Vec3d connectionPoint;
 		switch(i) {
 		default:
 		case 0:
-			connectionPoint = this.getRotatedPoint(new Vec3d(0.4f, 0.9f, 1.0f), partialTicks);
+			connectionPoint = this.getRotatedPoint(new Vec3d(0.6f, 1.05f, 0.65f), partialTicks);
 			break;
 		case 1:
-			connectionPoint = this.getRotatedPoint(new Vec3d(-0.4f, 0.9f, 1.0f), partialTicks);
+			connectionPoint = this.getRotatedPoint(new Vec3d(-0.6f, 1.05f, 0.65f), partialTicks);
 			break;
 		case 2:
-			connectionPoint = this.getRotatedPoint(new Vec3d(0.4f, 0.9f, -1.0f), partialTicks);
+			connectionPoint = this.getRotatedPoint(new Vec3d(0.6f, 1.05f, -0.65f), partialTicks);
 			break;
 		case 3:
-			connectionPoint = this.getRotatedPoint(new Vec3d(-0.4f, 0.9f, -1.0f), partialTicks);
+			connectionPoint = this.getRotatedPoint(new Vec3d(-0.6f, 1.05f, -0.65f), partialTicks);
 			break;
 		}
 		return connectionPoint;
+	}
+
+	public Vec3d getBalloonRopeConnection(int i, float partialTicks) {
+		Matrix mat = new Matrix();
+		mat.rotate((float)-Math.toRadians(this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * partialTicks), 0, 1, 0);
+		
+		Vec3d balloonPos = this.getBalloonPos(partialTicks);
+		switch(i) {
+		default:
+		case 0:
+			balloonPos = balloonPos.add(mat.transform(new Vec3d(0.8f, 0, 1.5f)));
+			break;
+		case 1:
+			balloonPos = balloonPos.add(mat.transform(new Vec3d(-0.8f, 0, 1.5f)));
+			break;
+		case 2:
+			balloonPos = balloonPos.add(mat.transform(new Vec3d(0.8f, 0, -1.5f)));
+			break;
+		case 3:
+			balloonPos = balloonPos.add(mat.transform(new Vec3d(-0.8f, 0, -1.5f)));
+			break;
+		}
+		return balloonPos;
 	}
 
 	@Override
@@ -439,20 +467,21 @@ public class EntityWeedwoodDraeton extends Entity {
 		}
 
 		if(this.world.isRemote) {
-			this.balloonMotion = this.balloonMotion.add(0, 0.15f, 0).scale(0.9f);
+			this.balloonMotion = this.balloonMotion.add(0, 0.25f, 0).scale(0.9f);
 
 			this.prevBalloonPos = this.balloonPos;
 			this.balloonPos = this.balloonPos.add(this.balloonMotion);
 
 			for(int i = 0; i < 4; i++) {
-				Vec3d tetherPos = this.getPositionVector().add(this.getBalloonConnection(i, 1));
+				Vec3d balloonConnection = this.getBalloonRopeConnection(i, 1);
+				Vec3d tetherPos = this.getPositionVector().add(this.getCarriageRopeConnection(i, 1));
 
-				Vec3d diff = this.balloonPos.subtract(tetherPos);
+				Vec3d diff = balloonConnection.subtract(tetherPos);
 
-				float tetherLength = 2.0f + (float)Math.sin(this.ticksExisted * 0.1f) * 0.05f;
+				float tetherLength = 1.5f + (float)Math.sin(this.ticksExisted * 0.1f) * 0.05f;
 
 				if(diff.length() > 6.0f) {
-					this.balloonPos = this.getPositionVector().add(0, 2, 0);
+					this.balloonPos = this.getPositionVector().add(0, 1, 0);
 				} else if(diff.length() > tetherLength) {
 					Vec3d correction = diff.normalize().scale(-0.15f * (diff.length() - tetherLength));
 					this.balloonMotion = this.balloonMotion.add(correction);
@@ -534,7 +563,7 @@ public class EntityWeedwoodDraeton extends Entity {
 	}
 
 	private void tickLerp() {
-		if (this.lerpSteps > 0 && !this.canPassengerSteer()) {
+		if (this.lerpSteps > 0 && this.world.isRemote && !this.canPassengerSteer()) {
 			double x = this.posX + (this.lerpX - this.posX) / this.lerpSteps;
 			double y = this.posY + (this.lerpY - this.posY) / this.lerpSteps;
 			double z = this.posZ + (this.lerpZ - this.posZ) / this.lerpSteps;
@@ -570,8 +599,16 @@ public class EntityWeedwoodDraeton extends Entity {
 	@Override
 	public void updatePassenger(Entity passenger) {
 		if(this.isPassenger(passenger)) {
+			int index = this.getPassengers().indexOf(passenger);
+
 			float yOff = 0.5f;
-			Vec3d mountOffset = this.getRotatedPoint(new Vec3d(0, yOff, 0), 1);
+			Vec3d mountOffset;
+
+			if(index <= 1) {
+				mountOffset = this.getRotatedPoint(new Vec3d(0, yOff, 0.25f - index * 0.75f), 1);
+			} else {
+				mountOffset = this.getRotatedPoint(new Vec3d(0, yOff, 0), 1);
+			}
 
 			passenger.setPosition(this.posX + mountOffset.x, this.posY + mountOffset.y - yOff + this.getMountedYOffset() + passenger.getYOffset(), this.posZ + mountOffset.z);
 		}
@@ -664,6 +701,7 @@ public class EntityWeedwoodDraeton extends Entity {
 	}
 
 	protected void updateCarriage() {
+		int pullerIndex = 0;
 		for(Puller puller : this.pullers) {
 			float pullerDrag = puller.getEntity() != null ? puller.getEntity().getDrag(0.9f) : 0.9f;
 
@@ -711,7 +749,7 @@ public class EntityWeedwoodDraeton extends Entity {
 
 			Vec3d tether = new Vec3d(puller.x, puller.y, puller.z);
 
-			Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ).add(this.getPullPoint(1));
+			Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ).add(this.getPullPoint(pullerIndex, 1));
 
 			Vec3d diff = tether.subtract(pos);
 
@@ -748,6 +786,8 @@ public class EntityWeedwoodDraeton extends Entity {
 				puller.motionY -= correction.y;
 				puller.motionZ -= correction.z;
 			}
+
+			pullerIndex++;
 		}
 
 		//Send client state of pullers to server
@@ -766,8 +806,24 @@ public class EntityWeedwoodDraeton extends Entity {
 		return 3.0f;
 	}
 
-	public Vec3d getPullPoint(float partialTicks) {
-		return this.getRotatedPoint(new Vec3d(0, 1.2f, 1.4f), partialTicks);
+	public Vec3d getPullPoint(int index, float partialTicks) {
+		Vec3d basePoint;
+		switch(index % 3) {
+		default:
+		case 0:
+			//middle
+			basePoint = new Vec3d(0, 0.875f, 1.75f);
+			break;
+		case 1:
+			//right
+			basePoint = new Vec3d(0.6f, 0.75f, 1.55f);
+			break;
+		case 2:
+			//left
+			basePoint = new Vec3d(-0.6f, 0.75f, 1.55f);
+			break;
+		}
+		return this.getRotatedPoint(basePoint, partialTicks);
 	}
 
 	public Vec3d getRotatedPoint(Vec3d pos, float partialTicks) {
@@ -868,13 +924,14 @@ public class EntityWeedwoodDraeton extends Entity {
 
 				//Spawn puller entity
 				switch(this.world.rand.nextInt(3)) {
+				default:
 				case 0:
 					EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
 					puller.setEntity(dragonfly);
 					dragonfly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 					this.world.spawnEntity(dragonfly);
 					break;
-				case 1:
+				/*case 1:
 					EntityPullerFirefly firefly = new EntityPullerFirefly(this.world, this, puller);
 					puller.setEntity(firefly);
 					firefly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
@@ -885,7 +942,7 @@ public class EntityWeedwoodDraeton extends Entity {
 					puller.setEntity(chiromaw);
 					chiromaw.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 					this.world.spawnEntity(chiromaw);
-					break;
+					break;*/
 				}
 			}
 			return true;
