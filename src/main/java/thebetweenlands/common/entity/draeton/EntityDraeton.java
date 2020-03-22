@@ -42,12 +42,6 @@ import thebetweenlands.util.Matrix;
 import thebetweenlands.util.PlayerUtil;
 
 public class EntityDraeton extends Entity implements IInventory {
-	private Vec3d prevBalloonPos = Vec3d.ZERO;
-	private Vec3d balloonPos = Vec3d.ZERO;
-	private Vec3d balloonMotion = Vec3d.ZERO;
-	
-	public NonNullList<ItemStack> inventory;
-
 	public static class Puller {
 		public final EntityDraeton carriage;
 		private Entity entity;
@@ -157,6 +151,12 @@ public class EntityDraeton extends Entity implements IInventory {
 	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.<Integer>createKey(EntityDraeton.class, DataSerializers.VARINT);
 	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.<Float>createKey(EntityDraeton.class, DataSerializers.FLOAT);
 
+	private Vec3d prevBalloonPos = Vec3d.ZERO;
+	private Vec3d balloonPos = Vec3d.ZERO;
+	private Vec3d balloonMotion = Vec3d.ZERO;
+	
+	private NonNullList<ItemStack> inventory;
+	
 	public List<Puller> pullers = new ArrayList<>();
 
 	private int lerpSteps;
@@ -1065,8 +1065,7 @@ public class EntityDraeton extends Entity implements IInventory {
 
 	@Override
 	public void markDirty() {
-		// TODO Auto-generated method stub
-		
+		//not needed
 	}
 
 	@Override
@@ -1084,8 +1083,7 @@ public class EntityDraeton extends Entity implements IInventory {
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override

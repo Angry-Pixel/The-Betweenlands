@@ -39,6 +39,7 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		GlStateManager.translate(x, y, z);
 		GlStateManager.enableRescaleNormal();
 
+		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
@@ -144,6 +145,8 @@ public class RenderDraeton extends Render<EntityDraeton> {
 
 		this.bindEntityTexture(entity);
 
+
+		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.rotate(180, 0, 1, 0);
 		this.model.renderCarriage(0.0625F);
 
@@ -152,7 +155,6 @@ public class RenderDraeton extends Render<EntityDraeton> {
 			GlStateManager.disableColorMaterial();
 		}
 
-		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.disableBlend();
 
 		GlStateManager.disableRescaleNormal();
