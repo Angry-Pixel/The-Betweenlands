@@ -923,12 +923,23 @@ public class EntityDraeton extends Entity implements IInventory {
 	}
 
 	@Override
+    public boolean canRiderInteract() {
+        return true;
+    }
+
+	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.inventory.getCurrentItem();
 		if(!this.world.isRemote && hand == EnumHand.MAIN_HAND) {
-			if(!player.isSneaking()) {
-				player.startRiding(this);
-			} else {
+			if (!player.isSneaking()) {
+				if (!player.isRidingSameEntity(this)) {
+					player.startRiding(this);
+				} else {
+					if (stack.isEmpty())
+						openGUI(player);
+				}
+			}
+			else {
 				//Debug
 
 				Puller puller = new Puller(this, this.nextPullerId++);
@@ -936,11 +947,7 @@ public class EntityDraeton extends Entity implements IInventory {
 				puller.lerpY = puller.y = this.posY;
 				puller.lerpZ = puller.z = this.posZ;
 				this.pullers.add(puller);
-
-				//Spawn puller entity
-				//switch(this.world.rand.nextInt(3)) {
-				//default:
-				//case 0:
+				
 				if (!stack.isEmpty()) {
 					if (EnumItemMisc.DRAGONFLY_WING.isItemOf(stack)) {
 						EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
@@ -949,8 +956,16 @@ public class EntityDraeton extends Entity implements IInventory {
 						this.world.spawnEntity(dragonfly);
 					}
 
-				//	break;
-				/*case 1:
+				/*Spawn puller entity
+				switch(this.world.rand.nextInt(3)) {
+				default:
+				case 0:
+					EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
+					puller.setEntity(dragonfly);
+					dragonfly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
+					this.world.spawnEntity(dragonfly);
+					break;
+				case 1:
 					EntityPullerFirefly firefly = new EntityPullerFirefly(this.world, this, puller);
 					puller.setEntity(firefly);
 					firefly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
@@ -961,7 +976,8 @@ public class EntityDraeton extends Entity implements IInventory {
 					puller.setEntity(chiromaw);
 					chiromaw.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 					this.world.spawnEntity(chiromaw);
-					break;*/
+					break;
+				*/
 				}
 				if (stack.isEmpty()) {
 					openGUI(player);
