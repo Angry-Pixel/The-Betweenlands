@@ -19,13 +19,13 @@ public class GuiDraetonInventory extends GuiContainer {
 
 	public GuiDraetonInventory(InventoryPlayer inventory, Entity entityInventory) {
 		super(new ContainerDraetonInventory(inventory, (IInventory) entityInventory));
-		xSize = 174;
-		ySize = 164;
+		xSize = 176;
+		ySize = 168;
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		fontRenderer.drawString(I18n.format(new TextComponentTranslation("container.draeton_inventory").getFormattedText()), xSize / 2 - fontRenderer.getStringWidth(I18n.format(new TextComponentTranslation("container.draeton_inventory").getFormattedText())) / 2, 6, 4210752);
+		fontRenderer.drawString(I18n.format(new TextComponentTranslation("container.bl.draeton_inventory").getFormattedText()), xSize / 2 - fontRenderer.getStringWidth(I18n.format(new TextComponentTranslation("container.bl.draeton_inventory").getFormattedText())) / 2, 6, 4210752);
 		fontRenderer.drawString(I18n.format(new TextComponentTranslation("container.inventory").getFormattedText()), xSize - 170, ySize - 93, 4210752);
 	}
 

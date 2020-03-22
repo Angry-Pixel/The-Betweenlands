@@ -898,7 +898,7 @@ container.bl.loot_urn=Loot Urn
 container.bl.mud_bricks_alcove=Mud Brick Alcove
 container.bl.present=Present
 container.bl.censer=Censer
-
+container.bl.draeton_inventory=Draeton
 
 # Locations
 location.wilderness.name=80:<scale:1.75>Wilderness</scale>
