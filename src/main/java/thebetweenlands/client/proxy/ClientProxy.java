@@ -54,6 +54,7 @@ import thebetweenlands.client.gui.inventory.GuiAnimator;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
 import thebetweenlands.client.gui.inventory.GuiCenser;
+import thebetweenlands.client.gui.inventory.GuiDraetonInventory;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
@@ -97,6 +98,7 @@ import thebetweenlands.client.render.entity.RenderCryptCrawler;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderDarkLight;
 import thebetweenlands.client.render.entity.RenderDecayPitTarget;
+import thebetweenlands.client.render.entity.RenderDraeton;
 import thebetweenlands.client.render.entity.RenderDragonFly;
 import thebetweenlands.client.render.entity.RenderDreadfulMummy;
 import thebetweenlands.client.render.entity.RenderElixir;
@@ -169,7 +171,6 @@ import thebetweenlands.client.render.entity.RenderVolarkite;
 import thebetweenlands.client.render.entity.RenderVolatileSoul;
 import thebetweenlands.client.render.entity.RenderWallLamprey;
 import thebetweenlands.client.render.entity.RenderWallLivingRoot;
-import thebetweenlands.client.render.entity.RenderDraeton;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
 import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
@@ -464,12 +465,18 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				return new GuiCenser(player.inventory, (TileEntityCenser) tile);
 			}
 			break;
-			
+
 		case GUI_BARREL:
 			if (tile instanceof TileEntityBarrel) {
 				return new GuiTarBarrel(player.inventory, (TileEntityBarrel) tile);
 			}
 			break;
+
+		case GUI_DRAETON_STORAGE:
+				Entity entity = world.getEntityByID(x);
+				if (entity instanceof EntityDraeton)
+					return new GuiDraetonInventory(player.inventory, entity);
+				break;
 		}
 
 		return null;

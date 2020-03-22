@@ -13,6 +13,9 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.datasync.DataParameter;
@@ -21,6 +24,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -31,15 +35,18 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller;
 import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller.Action;
 import thebetweenlands.util.Matrix;
 import thebetweenlands.util.PlayerUtil;
 
-public class EntityDraeton extends Entity {
+public class EntityDraeton extends Entity implements IInventory {
 	private Vec3d prevBalloonPos = Vec3d.ZERO;
 	private Vec3d balloonPos = Vec3d.ZERO;
 	private Vec3d balloonMotion = Vec3d.ZERO;
+	
+	public NonNullList<ItemStack> inventory;
 
 	public static class Puller {
 		public final EntityDraeton carriage;
@@ -170,6 +177,7 @@ public class EntityDraeton extends Entity {
 	public EntityDraeton(World world) {
 		super(world);
 		this.setSize(1.25F, 0.75F);
+		inventory = NonNullList.<ItemStack>withSize(27, ItemStack.EMPTY);
 	}
 
 	public Puller getPullerById(int id) {
@@ -274,6 +282,10 @@ public class EntityDraeton extends Entity {
 
 			this.pullers.add(puller);
 		}
+
+		inventory = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
+		if (nbt.hasKey("Items", 9))
+			ItemStackHelper.loadAllItems(nbt, inventory);
 	}
 
 	@Override
@@ -303,6 +315,8 @@ public class EntityDraeton extends Entity {
 			list.appendTag(tag);
 		}
 		nbt.setTag("Pullers", list);
+		
+		ItemStackHelper.saveAllItems(nbt, inventory, false);
 	}
 
 	@Override
@@ -910,6 +924,7 @@ public class EntityDraeton extends Entity {
 
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.inventory.getCurrentItem();
 		if(!this.world.isRemote && hand == EnumHand.MAIN_HAND) {
 			if(!player.isSneaking()) {
 				player.startRiding(this);
@@ -923,14 +938,18 @@ public class EntityDraeton extends Entity {
 				this.pullers.add(puller);
 
 				//Spawn puller entity
-				switch(this.world.rand.nextInt(3)) {
-				default:
-				case 0:
-					EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
-					puller.setEntity(dragonfly);
-					dragonfly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
-					this.world.spawnEntity(dragonfly);
-					break;
+				//switch(this.world.rand.nextInt(3)) {
+				//default:
+				//case 0:
+				if (!stack.isEmpty()) {
+					if (EnumItemMisc.DRAGONFLY_WING.isItemOf(stack)) {
+						EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
+						puller.setEntity(dragonfly);
+						dragonfly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
+						this.world.spawnEntity(dragonfly);
+					}
+
+				//	break;
 				/*case 1:
 					EntityPullerFirefly firefly = new EntityPullerFirefly(this.world, this, puller);
 					puller.setEntity(firefly);
@@ -943,6 +962,9 @@ public class EntityDraeton extends Entity {
 					chiromaw.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 					this.world.spawnEntity(chiromaw);
 					break;*/
+				}
+				if (stack.isEmpty()) {
+					openGUI(player);
 				}
 			}
 			return true;
@@ -964,5 +986,107 @@ public class EntityDraeton extends Entity {
 
 	public int getTimeSinceHit() {
 		return this.dataManager.get(TIME_SINCE_HIT);
+	}
+
+	// Basic inventory stuff WIP
+	public void openGUI(EntityPlayer player) {
+		if (!getEntityWorld().isRemote)
+			player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_STORAGE, player.getEntityWorld(), getEntityId(), 0, 0);
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return inventory.size();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack itemstack : inventory)
+			if (!itemstack.isEmpty())
+				return false;
+		return true;
+	}
+
+	@Override
+	public ItemStack getStackInSlot(int slot) {
+		return inventory.get(slot);
+	}
+
+	@Override
+	public ItemStack decrStackSize(int slot, int size) {
+		if (!inventory.get(slot).isEmpty()) {
+			ItemStack itemstack;
+			if (inventory.get(slot).getCount() <= size) {
+				itemstack = inventory.get(slot);
+				inventory.set(slot, ItemStack.EMPTY);
+				return itemstack;
+			} else {
+				itemstack = inventory.get(slot).splitStack(size);
+				if (inventory.get(slot).getCount() == 0)
+					inventory.set(slot, ItemStack.EMPTY);
+				return itemstack;
+			}
+		} else
+			return ItemStack.EMPTY;
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+		return ItemStack.EMPTY;
+	}
+
+	@Override
+	public void setInventorySlotContents(int slot, ItemStack stack) {
+		inventory.set(slot, stack);
+		if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit())
+			stack.setCount(getInventoryStackLimit());
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return 64;
+	}
+
+	@Override
+	public void markDirty() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		return true;
+	}
+
+	@Override
+	public void openInventory(EntityPlayer player) {
+	}
+
+	@Override
+	public void closeInventory(EntityPlayer player) {
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int index, ItemStack stack) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
 	}
 }
