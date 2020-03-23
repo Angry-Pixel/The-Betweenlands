@@ -31,6 +31,8 @@ public class GuiDraetonInventory extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
+		this.drawDefaultBackground();
+		
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(DRAETON_INVENTORY);
 		int k = (width - xSize) / 2;
