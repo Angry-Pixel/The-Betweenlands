@@ -351,15 +351,19 @@ public class EntityDraeton extends Entity implements IInventory {
 		Vec3d connectionPoint;
 		switch(i) {
 		default:
+		case 4:
 		case 0:
 			connectionPoint = this.getRotatedPoint(new Vec3d(0.6f, 1.05f, 0.65f), partialTicks);
 			break;
+		case 5:
 		case 1:
 			connectionPoint = this.getRotatedPoint(new Vec3d(-0.6f, 1.05f, 0.65f), partialTicks);
 			break;
+		case 6:
 		case 2:
 			connectionPoint = this.getRotatedPoint(new Vec3d(0.6f, 1.05f, -0.65f), partialTicks);
 			break;
+		case 7:
 		case 3:
 			connectionPoint = this.getRotatedPoint(new Vec3d(-0.6f, 1.05f, -0.65f), partialTicks);
 			break;
@@ -370,21 +374,35 @@ public class EntityDraeton extends Entity implements IInventory {
 	public Vec3d getBalloonRopeConnection(int i, float partialTicks) {
 		Matrix mat = new Matrix();
 		mat.rotate((float)-Math.toRadians(this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * partialTicks), 0, 1, 0);
+		mat.rotate((float)-Math.toRadians(this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * partialTicks), 1, 0, 0);
+		mat.rotate((float)Math.toRadians(this.prevRotationRoll + (this.rotationRoll - this.prevRotationRoll) * partialTicks), 0, 0, 1);
 		
 		Vec3d balloonPos = this.getBalloonPos(partialTicks);
 		switch(i) {
 		default:
 		case 0:
-			balloonPos = balloonPos.add(mat.transform(new Vec3d(0.8f, 0, 1.5f)));
+			balloonPos = balloonPos.add(mat.transform(new Vec3d(1.0f, -0.425f, 1.5f)));
 			break;
 		case 1:
-			balloonPos = balloonPos.add(mat.transform(new Vec3d(-0.8f, 0, 1.5f)));
+			balloonPos = balloonPos.add(mat.transform(new Vec3d(-1.0f, -0.425f, 1.5f)));
 			break;
 		case 2:
-			balloonPos = balloonPos.add(mat.transform(new Vec3d(0.8f, 0, -1.5f)));
+			balloonPos = balloonPos.add(mat.transform(new Vec3d(1.0f, -0.425f, -1.5f)));
 			break;
 		case 3:
-			balloonPos = balloonPos.add(mat.transform(new Vec3d(-0.8f, 0, -1.5f)));
+			balloonPos = balloonPos.add(mat.transform(new Vec3d(-1.0f, -0.425f, -1.5f)));
+			break;
+		case 4:
+			balloonPos = balloonPos.add(mat.transform(new Vec3d(1.0f, -0.35f, 0.7f)));
+			break;
+		case 5:
+			balloonPos = balloonPos.add(mat.transform(new Vec3d(-1.0f, -0.35f, 0.7f)));
+			break;
+		case 6:
+			balloonPos = balloonPos.add(mat.transform(new Vec3d(1.0f, -0.35f, -0.7f)));
+			break;
+		case 7:
+			balloonPos = balloonPos.add(mat.transform(new Vec3d(-1.0f, -0.35f, -0.7f)));
 			break;
 		}
 		return balloonPos;
@@ -481,24 +499,26 @@ public class EntityDraeton extends Entity implements IInventory {
 		}
 
 		if(this.world.isRemote) {
-			this.balloonMotion = this.balloonMotion.add(0, 0.25f, 0).scale(0.9f);
+			this.balloonMotion = this.balloonMotion.add(0, 0.125f, 0).scale(0.9f);
 
 			this.prevBalloonPos = this.balloonPos;
 			this.balloonPos = this.balloonPos.add(this.balloonMotion);
 
-			for(int i = 0; i < 4; i++) {
+			for(int i = 0; i < 8; i++) {
 				Vec3d balloonConnection = this.getBalloonRopeConnection(i, 1);
 				Vec3d tetherPos = this.getPositionVector().add(this.getCarriageRopeConnection(i, 1));
 
 				Vec3d diff = balloonConnection.subtract(tetherPos);
 
-				float tetherLength = 1.5f + (float)Math.sin(this.ticksExisted * 0.1f) * 0.05f;
+				float tetherLength = 2.0f + (float)Math.sin(this.ticksExisted * 0.1f) * 0.05f;
 
 				if(diff.length() > 6.0f) {
 					this.balloonPos = this.getPositionVector().add(0, 1, 0);
 				} else if(diff.length() > tetherLength) {
-					Vec3d correction = diff.normalize().scale(-0.15f * (diff.length() - tetherLength));
-					this.balloonMotion = this.balloonMotion.add(correction);
+					Vec3d correction = diff.normalize().scale(-(diff.length() - tetherLength));
+					this.balloonPos = this.balloonPos.add(correction.scale(0.75f));
+					
+					this.balloonMotion = this.balloonMotion.add(correction.scale(1.25f));
 				}
 			}
 		}

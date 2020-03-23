@@ -18,6 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.entity.ModelDraetonBalloon;
 import thebetweenlands.client.render.model.entity.ModelDraetonCarriage;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.entity.draeton.EntityDraeton.Puller;
@@ -26,8 +27,10 @@ import thebetweenlands.common.lib.ModInfo;
 @SideOnly(Side.CLIENT)
 public class RenderDraeton extends Render<EntityDraeton> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_carriage.png");
+	private static final ResourceLocation TEXTURE_BALLOON = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_balloon.png");
 
-	private ModelDraetonCarriage model = new ModelDraetonCarriage();
+	private ModelDraetonCarriage modelCarriage = new ModelDraetonCarriage();
+	private ModelDraetonBalloon modelBalloon = new ModelDraetonBalloon();
 
 	public RenderDraeton(RenderManager renderManager) {
 		super(renderManager);
@@ -85,7 +88,7 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		}
 
 
-		for(int i = 0; i < 4; i++) {
+		for(int i = 0; i < 8; i++) {
 			GlStateManager.pushMatrix();
 
 			Vec3d balloonPos = entity.getBalloonRopeConnection(i, partialTicks);
@@ -93,12 +96,12 @@ public class RenderDraeton extends Render<EntityDraeton> {
 			double binterpX = balloonPos.x - this.renderManager.renderPosX;
 			double binterpY = balloonPos.y - this.renderManager.renderPosY;
 			double binterpZ = balloonPos.z - this.renderManager.renderPosZ;
-			
+
 			Vec3d connectionPoint = entity.getCarriageRopeConnection(i, partialTicks);
 
 			GlStateManager.translate(connectionPoint.x, connectionPoint.y, connectionPoint.z);
 
-			this.renderConnection(tessellator, buffer, 0, 0, 0, binterpX - x - connectionPoint.x, binterpY - y - connectionPoint.y, binterpZ - z - connectionPoint.z);
+			this.renderConnection(tessellator, buffer, 0, 0, 0, binterpX - x - connectionPoint.x, binterpY - y - connectionPoint.y + 0.05f, binterpZ - z - connectionPoint.z);
 
 			GlStateManager.popMatrix();
 		}
@@ -109,7 +112,7 @@ public class RenderDraeton extends Render<EntityDraeton> {
 
 			Vec3d pullPoint = entity.getPullPoint(pullerIndex, partialTicks);
 			GlStateManager.translate(pullPoint.x, pullPoint.y, pullPoint.z);
-			
+
 			Entity pullerEntity = puller.getEntity();
 
 			if(pullerEntity != null) {
@@ -119,15 +122,36 @@ public class RenderDraeton extends Render<EntityDraeton> {
 
 				this.renderConnection(tessellator, buffer, 0, 0, 0, dinterpX - x - pullPoint.x, dinterpY - y - pullPoint.y + 0.25f, dinterpZ - z - pullPoint.z);
 			}
-			
+
 			GlStateManager.popMatrix();
-			
+
 			pullerIndex++;
 		}
 
+		Vec3d balloonPos = entity.getBalloonPos(partialTicks);
+
+		double binterpX = balloonPos.x - this.renderManager.renderPosX;
+		double binterpY = balloonPos.y - this.renderManager.renderPosY;
+		double binterpZ = balloonPos.z - this.renderManager.renderPosZ;
+
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(binterpX - x, binterpY - y, binterpZ - z);
+		GlStateManager.scale(-1, -1, 1);
+		
+		GlStateManager.rotate(entityYaw, 0, 1, 0);
+		GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 1, 0, 0);
+		GlStateManager.rotate(entity.prevRotationRoll + (entity.rotationRoll - entity.prevRotationRoll) * partialTicks, 0, 0, 1);
+		
+		GlStateManager.translate(0, 22.0f / 16.0f, 0);
+		
+		this.bindTexture(TEXTURE_BALLOON);
+		this.modelBalloon.render(0.0625f);
+		
+		GlStateManager.popMatrix();
+
 		GlStateManager.translate(0, 1.5F, 0);
 		GlStateManager.scale(-1, -1, 1);
-
+		
 		GlStateManager.rotate(entityYaw, 0, 1, 0);
 		GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 1, 0, 0);
 		GlStateManager.rotate(entity.prevRotationRoll + (entity.rotationRoll - entity.prevRotationRoll) * partialTicks, 0, 0, 1);
@@ -143,12 +167,12 @@ public class RenderDraeton extends Render<EntityDraeton> {
 			GlStateManager.rotate(MathHelper.sin(timeSinceHit) * timeSinceHit * damageTaken / 10.0F, 0, 0, 1);
 		}
 
-		this.bindEntityTexture(entity);
-
 
 		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.rotate(180, 0, 1, 0);
-		this.model.renderCarriage(0.0625F);
+		
+		this.bindEntityTexture(entity);
+		this.modelCarriage.renderCarriage(0.0625F);
 
 		if (this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
