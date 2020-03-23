@@ -598,7 +598,8 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 
 		if(speed > 0.1f) {
 			targetYaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90;
-			targetPitch = MathHelper.clamp((float) -Math.toDegrees(Math.atan2(Math.sqrt(dx * dx + dz * dz), dy)) + 90, -30, 30);
+			float horizontal = (float)Math.sqrt(dx * dx + dz * dz);
+			targetPitch = MathHelper.clamp(((float) -Math.toDegrees(Math.atan2(horizontal, dy)) + 90) * MathHelper.clamp(horizontal * 2.0f, 0, 1.0f), -30, 30);
 			targetRoll = MathHelper.clamp(MathHelper.wrapDegrees(targetYaw - this.rotationYaw) * 10.0f, -20, 20);
 			adjustStrength = MathHelper.clamp(speed * 0.5f, 0.05f, 0.5f);
 		} else {
