@@ -31,7 +31,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL {
 	private BlockPos currentFlightTarget;
 	private boolean entityFlying;
-	private BlockPos spawnPos;
+	protected BlockPos spawnPos;
 	
 	public EntityDragonFly(World world) {
 		super(world);

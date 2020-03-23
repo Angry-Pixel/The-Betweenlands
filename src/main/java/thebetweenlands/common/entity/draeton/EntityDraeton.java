@@ -136,6 +136,18 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 				--this.lerpSteps;
 			}
 		}
+
+		public boolean isControlling() {
+			if(this.entity != null) {
+				Vec3d tether = new Vec3d(this.entity.posX, this.entity.posY, this.entity.posZ);
+				Vec3d pos = this.carriage.getPositionVector().add(this.carriage.getPullPoint(this.carriage.pullers.indexOf(this), 1));
+				Vec3d diff = tether.subtract(pos);
+				if(diff.length() > this.carriage.getMaxTetherLength()) {
+					return true;
+				}
+			}
+			return this.carriage.getControllingPassenger() != null && (this.entity == null || this.entity.getRidingEntity() == null);
+		}
 	}
 
 	private static class InteractionPart extends MultiPartEntityPart {
@@ -767,7 +779,7 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 			puller.motionY *= pullerDrag;
 			puller.motionZ *= pullerDrag;
 
-			if(puller.entity != null && puller.entity.getRidingEntity() != null) {
+			if(!puller.isControlling()) {
 				puller.motionX = puller.motionY = puller.motionZ = 0;
 
 				puller.x = puller.entity.posX;
