@@ -58,7 +58,7 @@ public class EntityPullerDragonfly extends EntityDragonFly implements IPullerEnt
 			entity.setUniqueId(UUID.randomUUID());
 			entity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
 			this.world.spawnEntity(entity);
-			
+
 			this.setDead();
 		}
 	}
@@ -81,7 +81,7 @@ public class EntityPullerDragonfly extends EntityDragonFly implements IPullerEnt
 	protected boolean canDespawn() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isAIDisabled() {
 		if(this.puller != null) {

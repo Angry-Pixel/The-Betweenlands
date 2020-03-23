@@ -40,6 +40,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller;
 import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller.Action;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.Matrix;
 import thebetweenlands.util.PlayerUtil;
 
@@ -928,6 +929,14 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 	}
 
 	@Override
+	public void applyEntityCollision(Entity entityIn) {
+		//don't get pushed by puller entities
+		if(entityIn instanceof IPullerEntity == false) {
+			super.applyEntityCollision(entityIn);
+		}
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean isInRangeToRenderDist(double distance) {
 		return distance < 4096.0D;
@@ -1010,30 +1019,12 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 						puller.setEntity(dragonfly);
 						dragonfly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 						this.world.spawnEntity(dragonfly);
+					} else if(stack.getItem() == ItemRegistry.FIREFLY) {
+						EntityPullerFirefly firefly = new EntityPullerFirefly(this.world, this, puller);
+						puller.setEntity(firefly);
+						firefly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
+						this.world.spawnEntity(firefly);
 					}
-
-					/*Spawn puller entity
-				switch(this.world.rand.nextInt(3)) {
-				default:
-				case 0:
-					EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
-					puller.setEntity(dragonfly);
-					dragonfly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
-					this.world.spawnEntity(dragonfly);
-					break;
-				case 1:
-					EntityPullerFirefly firefly = new EntityPullerFirefly(this.world, this, puller);
-					puller.setEntity(firefly);
-					firefly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
-					this.world.spawnEntity(firefly);
-					break;
-				case 2:
-					EntityPullerChiromaw chiromaw = new EntityPullerChiromaw(this.world, this, puller);
-					puller.setEntity(chiromaw);
-					chiromaw.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
-					this.world.spawnEntity(chiromaw);
-					break;
-					 */
 				}
 			}
 			return true;

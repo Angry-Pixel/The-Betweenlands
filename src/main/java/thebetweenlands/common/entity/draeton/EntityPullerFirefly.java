@@ -76,7 +76,7 @@ public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity,
 		//Entity is saved and handled by carriage
 		return false;
 	}
-	
+
 	@Override
 	protected boolean canDespawn() {
 		return false;
@@ -84,6 +84,9 @@ public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity,
 
 	@Override
 	public boolean isAIDisabled() {
+		if(this.puller != null) {
+			return this.puller.isControlling();
+		}
 		return true;
 	}
 
@@ -108,9 +111,16 @@ public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity,
 				}
 			}
 		} else {
-			this.setPositionAndRotation(this.puller.x, this.puller.y, this.puller.z, 0, 0);
-			this.rotationYaw = this.rotationYawHead = this.renderYawOffset = (float)Math.toDegrees(Math.atan2(this.puller.motionZ, this.puller.motionX)) - 90;
-			this.rotationPitch = (float)Math.toDegrees(-Math.atan2(this.puller.motionY, Math.sqrt(this.puller.motionX * this.puller.motionX + this.puller.motionZ * this.puller.motionZ)));
+			if(this.puller.isControlling()) {
+				this.setPositionAndRotation(this.puller.x, this.puller.y, this.puller.z, 0, 0);
+				this.rotationYaw = this.rotationYawHead = this.renderYawOffset = (float)Math.toDegrees(Math.atan2(this.puller.motionZ, this.puller.motionX)) - 90;
+				this.rotationPitch = (float)Math.toDegrees(-Math.atan2(this.puller.motionY, Math.sqrt(this.puller.motionX * this.puller.motionX + this.puller.motionZ * this.puller.motionZ)));
+				this.onGround = false;
+			} else {
+				this.puller.x = this.posX;
+				this.puller.y = this.posY;
+				this.puller.z = this.posZ;
+			}
 		}
 	}
 
