@@ -16,7 +16,7 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
+import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -26,7 +26,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -42,9 +41,10 @@ import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller;
 import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller.Action;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.Matrix;
+import thebetweenlands.util.NBTHelper;
 import thebetweenlands.util.PlayerUtil;
 
-public class EntityDraeton extends Entity implements IInventory, IEntityMultiPart {
+public class EntityDraeton extends Entity implements IEntityMultiPart {
 	public static class Puller {
 		public final EntityDraeton carriage;
 		private Entity entity;
@@ -153,15 +153,41 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 
 	private static class InteractionPart extends MultiPartEntityPart {
 		private final EntityDraeton draeton;
+		private final boolean isCarriage;
 
-		private InteractionPart(EntityDraeton draeton) {
-			super(draeton, "inventory", 0.6f, 0.5f);
+		private InteractionPart(EntityDraeton draeton, String name, float width, float height, boolean isCarriage) {
+			super(draeton, name, width, height);
 			this.draeton = draeton;
+			this.isCarriage = isCarriage;
 		}
 
 		@Override
 		public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
 			return this.draeton.interactFromMultipart(this, player, hand);
+		}
+
+		@Override
+		public boolean canBeCollidedWith() {
+			if(this.isCarriage) {
+				return this.draeton.canBeCollidedWith();
+			}
+			return true;
+		}
+
+		@Override
+		public boolean canRiderInteract() {
+			if(this.isCarriage) {
+				return this.draeton.canRiderInteract();
+			}
+			return super.canRiderInteract();
+		}
+
+		@Override
+		public Entity getLowestRidingEntity() {
+			if(this.isCarriage) {
+				return this.draeton;
+			}
+			return super.getLowestRidingEntity();
 		}
 	}
 
@@ -184,7 +210,8 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 	private Vec3d balloonPos = Vec3d.ZERO;
 	private Vec3d balloonMotion = Vec3d.ZERO;
 
-	private NonNullList<ItemStack> inventory;
+	private InventoryBasic inventory = new InventoryBasic("container.bl.draeton_inventory", false, 27);
+	private InventoryBasic burnerInventory = new InventoryBasic("container.bl.draeton_burner", false, 1);
 
 	public List<Puller> pullers = new ArrayList<>();
 
@@ -204,12 +231,19 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 	private boolean descend = false;
 
 	private final InteractionPart[] parts;
+	private final InteractionPart inventoryPart;
+	private final InteractionPart burnerPart;
+	private final InteractionPart balloonFront;
+	private final InteractionPart balloonMiddle;
+	private final InteractionPart balloonBack;
 
 	public EntityDraeton(World world) {
 		super(world);
-		this.setSize(1.5F, 1.0F);
-		this.inventory = NonNullList.<ItemStack>withSize(27, ItemStack.EMPTY);
-		this.parts = new InteractionPart[]{ new InteractionPart(this) };
+		this.setSize(1.5F, 1.5f);
+		this.parts = new InteractionPart[]{ 
+				this.inventoryPart = new InteractionPart(this, "inventory", 0.6f, 0.5f, false), this.burnerPart = new InteractionPart(this, "burner", 0.6f, 0.5f, false),
+						this.balloonFront = new InteractionPart(this, "balloon_front", 1.5f, 1.25f, true), this.balloonMiddle = new InteractionPart(this, "balloon_middle", 1.5f, 1.25f, true), this.balloonBack = new InteractionPart(this, "balloon_back", 1.5f, 1.25f, true)
+		};
 	}
 
 	public Puller getPullerById(int id) {
@@ -315,9 +349,15 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 			this.pullers.add(puller);
 		}
 
-		inventory = NonNullList.<ItemStack>withSize(this.getSizeInventory(), ItemStack.EMPTY);
-		if (nbt.hasKey("Items", 9))
-			ItemStackHelper.loadAllItems(nbt, inventory);
+		this.inventory.clear();
+		if (nbt.hasKey("Inventory", Constants.NBT.TAG_COMPOUND)) {
+			NBTHelper.loadAllItems(nbt.getCompoundTag("Inventory"), this.inventory);
+		}
+
+		this.burnerInventory.clear();
+		if (nbt.hasKey("BurnerInventory", Constants.NBT.TAG_COMPOUND)) {
+			NBTHelper.loadAllItems(nbt.getCompoundTag("BurnerInventory"), this.burnerInventory);
+		}
 	}
 
 	@Override
@@ -348,7 +388,8 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 		}
 		nbt.setTag("Pullers", list);
 
-		ItemStackHelper.saveAllItems(nbt, inventory, false);
+		nbt.setTag("Inventory", NBTHelper.saveAllItems(new NBTTagCompound(), this.inventory, false));
+		nbt.setTag("BurnerInventory", NBTHelper.saveAllItems(new NBTTagCompound(), this.burnerInventory, false));
 	}
 
 	@Override
@@ -385,56 +426,51 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 		default:
 		case 4:
 		case 0:
-			connectionPoint = this.getRotatedPoint(new Vec3d(0.6f, 1.05f, 0.65f), partialTicks);
+			connectionPoint = this.getRotatedCarriagePoint(new Vec3d(0.6f, 1.05f, 0.61f), partialTicks);
 			break;
 		case 5:
 		case 1:
-			connectionPoint = this.getRotatedPoint(new Vec3d(-0.6f, 1.05f, 0.65f), partialTicks);
+			connectionPoint = this.getRotatedCarriagePoint(new Vec3d(-0.6f, 1.05f, 0.61f), partialTicks);
 			break;
 		case 6:
 		case 2:
-			connectionPoint = this.getRotatedPoint(new Vec3d(0.6f, 1.05f, -0.65f), partialTicks);
+			connectionPoint = this.getRotatedCarriagePoint(new Vec3d(0.6f, 1.05f, -0.63f), partialTicks);
 			break;
 		case 7:
 		case 3:
-			connectionPoint = this.getRotatedPoint(new Vec3d(-0.6f, 1.05f, -0.65f), partialTicks);
+			connectionPoint = this.getRotatedCarriagePoint(new Vec3d(-0.6f, 1.05f, -0.63f), partialTicks);
 			break;
 		}
 		return connectionPoint;
 	}
 
 	public Vec3d getBalloonRopeConnection(int i, float partialTicks) {
-		Matrix mat = new Matrix();
-		mat.rotate((float)-Math.toRadians(this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * partialTicks), 0, 1, 0);
-		mat.rotate((float)-Math.toRadians(this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * partialTicks), 1, 0, 0);
-		mat.rotate((float)Math.toRadians(this.prevRotationRoll + (this.rotationRoll - this.prevRotationRoll) * partialTicks), 0, 0, 1);
-
 		Vec3d balloonPos = this.getBalloonPos(partialTicks);
 		switch(i) {
 		default:
 		case 0:
-			balloonPos = balloonPos.add(mat.transform(new Vec3d(1.0f, -0.425f, 1.5f)));
+			balloonPos = balloonPos.add(this.getRotatedBalloonPoint(new Vec3d(1.0f, -0.425f, 1.5f), partialTicks));
 			break;
 		case 1:
-			balloonPos = balloonPos.add(mat.transform(new Vec3d(-1.0f, -0.425f, 1.5f)));
+			balloonPos = balloonPos.add(this.getRotatedBalloonPoint(new Vec3d(-1.0f, -0.425f, 1.5f), partialTicks));
 			break;
 		case 2:
-			balloonPos = balloonPos.add(mat.transform(new Vec3d(1.0f, -0.425f, -1.5f)));
+			balloonPos = balloonPos.add(this.getRotatedBalloonPoint(new Vec3d(1.0f, -0.425f, -1.5f), partialTicks));
 			break;
 		case 3:
-			balloonPos = balloonPos.add(mat.transform(new Vec3d(-1.0f, -0.425f, -1.5f)));
+			balloonPos = balloonPos.add(this.getRotatedBalloonPoint(new Vec3d(-1.0f, -0.425f, -1.5f), partialTicks));
 			break;
 		case 4:
-			balloonPos = balloonPos.add(mat.transform(new Vec3d(1.0f, -0.35f, 0.7f)));
+			balloonPos = balloonPos.add(this.getRotatedBalloonPoint(new Vec3d(1.0f, -0.35f, 0.7f), partialTicks));
 			break;
 		case 5:
-			balloonPos = balloonPos.add(mat.transform(new Vec3d(-1.0f, -0.35f, 0.7f)));
+			balloonPos = balloonPos.add(this.getRotatedBalloonPoint(new Vec3d(-1.0f, -0.35f, 0.7f), partialTicks));
 			break;
 		case 6:
-			balloonPos = balloonPos.add(mat.transform(new Vec3d(1.0f, -0.35f, -0.7f)));
+			balloonPos = balloonPos.add(this.getRotatedBalloonPoint(new Vec3d(1.0f, -0.35f, -0.7f), partialTicks));
 			break;
 		case 7:
-			balloonPos = balloonPos.add(mat.transform(new Vec3d(-1.0f, -0.35f, -0.7f)));
+			balloonPos = balloonPos.add(this.getRotatedBalloonPoint(new Vec3d(-1.0f, -0.35f, -0.7f), partialTicks));
 			break;
 		}
 		return balloonPos;
@@ -493,10 +529,6 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 		this.handleWaterMovement();
 		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 		this.pushOutOfBlocks(this.posX, this.posY, this.posZ);
-
-		Vec3d partPos = this.getRotatedPoint(new Vec3d(0.7f, 0.8f, 0), 1).add(this.posX, this.posY, this.posZ);
-		this.parts[0].onUpdate();
-		this.parts[0].setPosition(partPos.x, partPos.y - this.parts[0].height / 2, partPos.z);
 
 		if(this.canPassengerSteer()) {
 			Entity controller = this.getControllingPassenger();
@@ -557,6 +589,9 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 					this.balloonMotion = this.balloonMotion.add(correction.scale(1.25f));
 				}
 			}
+		} else {
+			this.balloonMotion = Vec3d.ZERO;
+			this.prevBalloonPos = this.balloonPos = this.getPositionVector().add(0, 2.5f, 0);
 		}
 
 		if(this.world instanceof WorldServer) {
@@ -576,7 +611,33 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 			}
 		}
 
+		this.updateParts();
+
 		this.firstUpdate = false;
+	}
+
+	protected void updateParts() {
+		for(Entity entity : this.parts) {
+			entity.onUpdate();
+		}
+
+		Vec3d invPos = this.getRotatedCarriagePoint(new Vec3d(0.7f, 0.8f, 0), 1).add(this.posX, this.posY, this.posZ);
+		this.inventoryPart.setPosition(invPos.x, invPos.y - this.inventoryPart.height / 2, invPos.z);
+
+		Vec3d burnerPos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(new Vec3d(0, -0.5f, 0), 1));
+		this.burnerPart.setPosition(burnerPos.x, burnerPos.y - this.burnerPart.height / 2, burnerPos.z);
+
+		Matrix balloonRot = new Matrix();
+		balloonRot.rotate((float)-Math.toRadians(this.rotationYaw), 0, 1, 0);
+
+		Vec3d balloonFrontPos = balloonRot.transform(new Vec3d(0, 3, 1.5f)).add(this.posX, this.posY, this.posZ);
+		this.balloonFront.setPosition(balloonFrontPos.x, balloonFrontPos.y, balloonFrontPos.z);
+
+		Vec3d balloonMiddlePos = balloonRot.transform(new Vec3d(0, 3, 0)).add(this.posX, this.posY, this.posZ);
+		this.balloonMiddle.setPosition(balloonMiddlePos.x, balloonMiddlePos.y, balloonMiddlePos.z);
+
+		Vec3d balloonBackPos = balloonRot.transform(new Vec3d(0, 3, -1.5f)).add(this.posX, this.posY, this.posZ);
+		this.balloonBack.setPosition(balloonBackPos.x, balloonBackPos.y, balloonBackPos.z);
 	}
 
 	@Override
@@ -676,9 +737,9 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 			Vec3d mountOffset;
 
 			if(index <= 1) {
-				mountOffset = this.getRotatedPoint(new Vec3d(0, yOff, 0.25f - index * 0.75f), 1);
+				mountOffset = this.getRotatedCarriagePoint(new Vec3d(0, yOff, 0.25f - index * 0.75f), 1);
 			} else {
-				mountOffset = this.getRotatedPoint(new Vec3d(0, yOff, 0), 1);
+				mountOffset = this.getRotatedCarriagePoint(new Vec3d(0, yOff, 0), 1);
 			}
 
 			passenger.setPosition(this.posX + mountOffset.x, this.posY + mountOffset.y - yOff + this.getMountedYOffset() + passenger.getYOffset(), this.posZ + mountOffset.z);
@@ -894,16 +955,24 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 			basePoint = new Vec3d(-0.6f, 0.75f, 1.55f);
 			break;
 		}
-		return this.getRotatedPoint(basePoint, partialTicks);
+		return this.getRotatedCarriagePoint(basePoint, partialTicks);
 	}
 
-	public Vec3d getRotatedPoint(Vec3d pos, float partialTicks) {
+	public Vec3d getRotatedCarriagePoint(Vec3d pos, float partialTicks) {
 		Matrix mat = new Matrix();
 		mat.translate(0, 1.5f, 0);
 		mat.rotate((float)-Math.toRadians(this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * partialTicks), 0, 1, 0);
 		mat.rotate((float)-Math.toRadians(this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * partialTicks), 1, 0, 0);
 		mat.rotate((float)Math.toRadians(this.prevRotationRoll + (this.rotationRoll - this.prevRotationRoll) * partialTicks), 0, 0, 1);
 		mat.translate(0, -1.5f, 0);
+		return mat.transform(pos);
+	}
+
+	public Vec3d getRotatedBalloonPoint(Vec3d pos, float partialTicks) {
+		Matrix mat = new Matrix();
+		mat.rotate((float)-Math.toRadians(this.prevRotationYaw + (this.rotationYaw - this.prevRotationYaw) * partialTicks), 0, 1, 0);
+		mat.rotate((float)-Math.toRadians(this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * partialTicks), 1, 0, 0);
+		mat.rotate((float)Math.toRadians(this.prevRotationRoll + (this.rotationRoll - this.prevRotationRoll) * partialTicks), 0, 0, 1);
 		return mat.transform(pos);
 	}
 
@@ -994,7 +1063,6 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 
 	@Override
 	public boolean canRiderInteract() {
-		//TODO Handle with multipart
 		return false;
 	}
 
@@ -1048,104 +1116,12 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 		return this.dataManager.get(TIME_SINCE_HIT);
 	}
 
-	// Basic inventory stuff WIP
-	public void openGUI(EntityPlayer player) {
-		if (!getEntityWorld().isRemote)
-			player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_STORAGE, player.getEntityWorld(), getEntityId(), 0, 0);
+	public IInventory getInventory() {
+		return this.inventory;
 	}
 
-	@Override
-	public int getSizeInventory() {
-		return inventory.size();
-	}
-
-	@Override
-	public boolean isEmpty() {
-		for (ItemStack itemstack : inventory)
-			if (!itemstack.isEmpty())
-				return false;
-		return true;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int slot) {
-		return inventory.get(slot);
-	}
-
-	@Override
-	public ItemStack decrStackSize(int slot, int size) {
-		if (!inventory.get(slot).isEmpty()) {
-			ItemStack itemstack;
-			if (inventory.get(slot).getCount() <= size) {
-				itemstack = inventory.get(slot);
-				inventory.set(slot, ItemStack.EMPTY);
-				return itemstack;
-			} else {
-				itemstack = inventory.get(slot).splitStack(size);
-				if (inventory.get(slot).getCount() == 0)
-					inventory.set(slot, ItemStack.EMPTY);
-				return itemstack;
-			}
-		} else
-			return ItemStack.EMPTY;
-	}
-
-	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public void setInventorySlotContents(int slot, ItemStack stack) {
-		inventory.set(slot, stack);
-		if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit())
-			stack.setCount(getInventoryStackLimit());
-	}
-
-	@Override
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-
-	@Override
-	public void markDirty() {
-		//not needed
-	}
-
-	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
-		return true;
-	}
-
-	@Override
-	public void openInventory(EntityPlayer player) {
-	}
-
-	@Override
-	public void closeInventory(EntityPlayer player) {
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		return true;
-	}
-
-	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
-
-	@Override
-	public void clear() {
+	public IInventory getBurnerInventory() {
+		return this.burnerInventory;
 	}
 
 	@Override
@@ -1160,11 +1136,22 @@ public class EntityDraeton extends Entity implements IInventory, IEntityMultiPar
 
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
+		if(part == this.balloonFront || part == this.balloonBack) {
+			this.attackEntityFrom(source, damage);
+		}
 		return false;
 	}
 
 	protected boolean interactFromMultipart(InteractionPart part, EntityPlayer player, EnumHand hand) {
-		openGUI(player);
+		if(part == this.inventoryPart) {
+			if(!this.world.isRemote) {
+				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_STORAGE, player.getEntityWorld(), getEntityId(), 0, 0);
+			}
+		} else if(part == this.burnerPart) {
+			if(!this.world.isRemote) {
+				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_BURNER, player.getEntityWorld(), getEntityId(), 0, 0);
+			}
+		}
 		return true;
 	}
 }

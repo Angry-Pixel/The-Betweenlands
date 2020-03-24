@@ -7,25 +7,19 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
-public class ContainerDraetonInventory extends Container {
+public class ContainerDraetonBurner extends Container {
 
-	public int numRows = 3;
+	public ContainerDraetonBurner(InventoryPlayer playerInventory, IInventory entityInventory) {
+		addSlotToContainer(new Slot(entityInventory, 0, 8 + 4 * 18, 36));
 
-	public ContainerDraetonInventory(InventoryPlayer playerInventory, IInventory entityInventory) {
-		int i = (numRows - 4) * 18;
-		int j;
-		int k;
+		int i = -18;
+		
+		for (int y = 0; y < 3; ++y)
+			for (int x = 0; x < 9; ++x)
+				addSlotToContainer(new Slot(playerInventory, x + y * 9 + 9, 8 + x * 18, 104 + y * 18 + i));
 
-		for (j = 0; j < numRows; ++j)
-			for (k = 0; k < 9; ++k)
-				addSlotToContainer(new Slot(entityInventory, k + j * 9, 8 + k * 18, 18 + j * 18));
-
-		for (j = 0; j < 3; ++j)
-			for (k = 0; k < 9; ++k)
-				addSlotToContainer(new Slot(playerInventory, k + j * 9 + 9, 8 + k * 18, 104 + j * 18 + i));
-
-		for (j = 0; j < 9; ++j)
-			addSlotToContainer(new Slot(playerInventory, j, 8 + j * 18, 162 + i));
+		for (int x = 0; x < 9; ++x)
+			addSlotToContainer(new Slot(playerInventory, x, 8 + x * 18, 162 + i));
 	}
 
 	@Override
@@ -41,11 +35,11 @@ public class ContainerDraetonInventory extends Container {
 		if (slot != null && slot.getHasStack()) {
 			ItemStack is1 = slot.getStack();
 			is = is1.copy();
-
-			if (slotIndex < numRows * 9) {
-				if (!mergeItemStack(is1, numRows * 9, inventorySlots.size(), false))
+			
+			if (slotIndex > 0) {
+				if (!mergeItemStack(is1, 0, 1, true))
 					return ItemStack.EMPTY;
-			} else if (!mergeItemStack(is1, 0, numRows * 9, false))
+			} else if (!mergeItemStack(is1, 0, 3 * 9 + 9, false))
 				return ItemStack.EMPTY;
 
 			if (is1.getCount() == 0)

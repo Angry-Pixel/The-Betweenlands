@@ -54,6 +54,7 @@ import thebetweenlands.client.gui.inventory.GuiAnimator;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
 import thebetweenlands.client.gui.inventory.GuiCenser;
+import thebetweenlands.client.gui.inventory.GuiDraetonBurner;
 import thebetweenlands.client.gui.inventory.GuiDraetonInventory;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiMortar;
@@ -380,6 +381,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+		Entity entity = null;
+		
 		switch (id) {
 		case GUI_DRUID_ALTAR:
 			if (tile instanceof TileEntityDruidAltar) {
@@ -473,10 +476,16 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			break;
 
 		case GUI_DRAETON_STORAGE:
-				Entity entity = world.getEntityByID(x);
-				if (entity instanceof EntityDraeton)
-					return new GuiDraetonInventory(player.inventory, entity);
-				break;
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton)
+				return new GuiDraetonInventory(player.inventory, ((EntityDraeton)entity).getInventory());
+			break;
+			
+		case GUI_DRAETON_BURNER:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton)
+				return new GuiDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory());
+			break;
 		}
 
 		return null;

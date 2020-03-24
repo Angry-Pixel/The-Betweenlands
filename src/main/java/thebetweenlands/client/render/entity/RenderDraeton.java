@@ -43,8 +43,8 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		GlStateManager.enableRescaleNormal();
 
 		GlStateManager.color(1, 1, 1, 1);
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.disableBlend();
+		GlStateManager.depthMask(true);
 
 		if (this.renderOutlines) {
 			GlStateManager.enableColorMaterial();
@@ -134,6 +134,10 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		double binterpY = balloonPos.y - this.renderManager.renderPosY;
 		double binterpZ = balloonPos.z - this.renderManager.renderPosZ;
 
+		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(binterpX - x, binterpY - y, binterpZ - z);
 		GlStateManager.scale(-1, -1, 1);
@@ -168,7 +172,6 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		}
 
 
-		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.rotate(180, 0, 1, 0);
 		
 		this.bindEntityTexture(entity);
@@ -214,13 +217,13 @@ public class RenderDraeton extends Render<EntityDraeton> {
 			float b;
 
 			if (i % 2 == 0) {
-				r = 0.0F;
-				g = 0.4F;
-				b = 0.0F;
+				r = 29.0f / 255.0f;
+				g = 72.0f / 255.0f;
+				b = 29.0f / 255.0f;
 			} else {
-				r = 0.0F;
-				g = 0.28F;
-				b = 0.0F;
+				r = 21.0f / 255.0f;
+				g = 52.0f / 255.0f;
+				b = 21.0f / 255.0f;
 			}
 
 			float percentage = (float)i / 24.0F;
@@ -238,13 +241,13 @@ public class RenderDraeton extends Render<EntityDraeton> {
 			float b;
 
 			if (i % 2 == 0) {
-				r = 0.0F;
-				g = 0.4F;
-				b = 0.0F;
+				r = 29.0f / 255.0f;
+				g = 72.0f / 255.0f;
+				b = 29.0f / 255.0f;
 			} else {
-				r = 0.0F;
-				g = 0.28F;
-				b = 0.0F;
+				r = 21.0f / 255.0f;
+				g = 52.0f / 255.0f;
+				b = 21.0f / 255.0f;
 			}
 
 			float percentage = (float)i / 24.0F;

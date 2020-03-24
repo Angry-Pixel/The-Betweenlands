@@ -28,6 +28,7 @@ import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.common.inventory.container.ContainerBLFurnace;
 import thebetweenlands.common.inventory.container.ContainerBarrel;
 import thebetweenlands.common.inventory.container.ContainerCenser;
+import thebetweenlands.common.inventory.container.ContainerDraetonBurner;
 import thebetweenlands.common.inventory.container.ContainerDraetonInventory;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerItemNaming;
@@ -63,10 +64,13 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_CENSER = 15;
 	public static final int GUI_BARREL = 16;
 	public static final int GUI_DRAETON_STORAGE = 17;
+	public static final int GUI_DRAETON_BURNER = 18;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+		Entity entity = null;
+		
 		switch (id) {
 		case GUI_DRUID_ALTAR:
 			if (tile instanceof TileEntityDruidAltar) {
@@ -146,9 +150,15 @@ public class CommonProxy implements IGuiHandler {
 			break;
 
 		case GUI_DRAETON_STORAGE:
-				Entity entity = world.getEntityByID(x);
-				if (entity instanceof EntityDraeton)
-					return new ContainerDraetonInventory(player.inventory, (EntityDraeton) entity);
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton)
+				return new ContainerDraetonInventory(player.inventory, ((EntityDraeton)entity).getInventory());
+			break;
+			
+		case GUI_DRAETON_BURNER:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton)
+				return new ContainerDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory());
 			break;
 		}
 		return null;

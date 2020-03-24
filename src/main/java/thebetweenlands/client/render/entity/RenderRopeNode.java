@@ -145,13 +145,13 @@ public class RenderRopeNode extends Render<EntityRopeNode> {
 				float b;
 
 				if (i % 2 == 0) {
-					r = 0.0F;
-					g = 0.4F;
-					b = 0.0F;
+					r = 29.0f / 255.0f;
+					g = 72.0f / 255.0f;
+					b = 29.0f / 255.0f;
 				} else {
-					r = 0.0F;
-					g = 0.28F;
-					b = 0.0F;
+					r = 21.0f / 255.0f;
+					g = 52.0f / 255.0f;
+					b = 21.0f / 255.0f;
 				}
 
 				float percentage = (float)i / 24.0F;
@@ -169,13 +169,13 @@ public class RenderRopeNode extends Render<EntityRopeNode> {
 				float b;
 
 				if (i % 2 == 0) {
-					r = 0.0F;
-					g = 0.4F;
-					b = 0.0F;
+					r = 29.0f / 255.0f;
+					g = 72.0f / 255.0f;
+					b = 29.0f / 255.0f;
 				} else {
-					r = 0.0F;
-					g = 0.28F;
-					b = 0.0F;
+					r = 21.0f / 255.0f;
+					g = 52.0f / 255.0f;
+					b = 21.0f / 255.0f;
 				}
 
 				float percentage = (float)i / 24.0F;
