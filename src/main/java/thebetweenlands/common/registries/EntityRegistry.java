@@ -33,6 +33,7 @@ import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityBoulderSprite;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.entity.mobs.EntityCryptCrawler;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
@@ -202,6 +203,8 @@ public class EntityRegistry {
 		registerEntity(EntityDraeton.class, "draeton", 80, 3, true);
 		registerEntity(EntityPullerDragonfly.class, "draeton_dragonfly", 80, 3, true);
 		registerEntity(EntityPullerFirefly.class, "draeton_firefly", 80, 3, true);
+		
+		registerEntity(EntityChiromawGreeblingRider.class, "chiromaw_greebling_rider", 0x3F5A69, 0xA16A77);
 	}
 
 	private static int id = 0;
