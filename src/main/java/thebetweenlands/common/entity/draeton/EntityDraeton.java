@@ -20,6 +20,7 @@ import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -27,7 +28,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -35,176 +36,23 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.IPullerEntity;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller;
-import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller.Action;
+import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart;
+import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart.Action;
+import thebetweenlands.common.network.serverbound.MessageSetDraetonAnchorPos;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.Matrix;
 import thebetweenlands.util.NBTHelper;
 import thebetweenlands.util.PlayerUtil;
 
 public class EntityDraeton extends Entity implements IEntityMultiPart {
-	public static class Puller {
-		public final EntityDraeton carriage;
-		private Entity entity;
-
-		public final int id; //network ID of the puller, used for sync
-
-		public double prevX, prevY, prevZ;
-		public double x, y, z;
-		public double motionX, motionY, motionZ;
-
-		private int lerpSteps;
-		private double lerpX;
-		private double lerpY;
-		private double lerpZ;
-
-		public final float width = 0.5f;
-		public final float height = 0.5f;
-
-		public boolean isActive = true;
-
-		public Puller(EntityDraeton carriage, int id) {
-			this.carriage = carriage;
-			this.id = id;
-		}
-
-		public void setEntity(IPullerEntity entity) {
-			if(entity instanceof Entity) {
-				this.entity = (Entity) entity;
-			}
-		}
-
-		@SuppressWarnings("unchecked")
-		public <T extends Entity & IPullerEntity> T getEntity() {
-			return (T) this.entity;
-		}
-
-		public AxisAlignedBB getAabb() {
-			return new AxisAlignedBB(this.x - this.width / 2, this.y, this.z - this.width / 2, this.x + this.width / 2, this.y + this.height, this.z + this.width / 2);
-		}
-
-		private void setPosToAabb(AxisAlignedBB aabb) {
-			this.x = aabb.minX + this.width / 2;
-			this.y = aabb.minY;
-			this.z = aabb.minZ + this.width / 2;
-		}
-
-		public void move(double x, double y, double z) {
-			List<AxisAlignedBB> collisionBoxes = this.carriage.world.getCollisionBoxes(null, this.getAabb().expand(x, y, z));
-
-			if (y != 0.0D) {
-				int k = 0;
-
-				for (int l = collisionBoxes.size(); k < l; ++k) {
-					y = ((AxisAlignedBB)collisionBoxes.get(k)).calculateYOffset(this.getAabb(), y);
-				}
-
-				this.setPosToAabb(this.getAabb().offset(0.0D, y, 0.0D));
-			}
-
-			if (x != 0.0D) {
-				int j5 = 0;
-
-				for (int l5 = collisionBoxes.size(); j5 < l5; ++j5) {
-					x = ((AxisAlignedBB)collisionBoxes.get(j5)).calculateXOffset(this.getAabb(), x);
-				}
-
-				if (x != 0.0D) {
-					this.setPosToAabb(this.getAabb().offset(x, 0.0D, 0.0D));
-				}
-			}
-
-			if (z != 0.0D) {
-				int k5 = 0;
-
-				for (int i6 = collisionBoxes.size(); k5 < i6; ++k5) {
-					z = ((AxisAlignedBB)collisionBoxes.get(k5)).calculateZOffset(this.getAabb(), z);
-				}
-
-				if (z != 0.0D) {
-					this.setPosToAabb(this.getAabb().offset(0.0D, 0.0D, z));
-				}
-			}
-		}
-
-		public void tickLerp() {
-			if (this.lerpSteps > 0) {
-				this.x = this.x + (this.lerpX - this.x) / (double)this.lerpSteps;
-				this.y = this.y + (this.lerpY - this.y) / (double)this.lerpSteps;
-				this.z = this.z + (this.lerpZ - this.z) / (double)this.lerpSteps;
-				--this.lerpSteps;
-			}
-		}
-
-		public boolean isControlling() {
-			if(this.entity != null) {
-				Vec3d tether = new Vec3d(this.entity.posX, this.entity.posY, this.entity.posZ);
-				Vec3d pos = this.carriage.getPositionVector().add(this.carriage.getPullPoint(this.carriage.pullers.indexOf(this), 1));
-				Vec3d diff = tether.subtract(pos);
-				if(diff.length() > this.carriage.getMaxTetherLength()) {
-					return true;
-				}
-			}
-			return this.carriage.getControllingPassenger() != null && (this.entity == null || this.entity.getRidingEntity() == null);
-		}
-	}
-
-	private static class InteractionPart extends MultiPartEntityPart {
-		private final EntityDraeton draeton;
-		private final boolean isCarriage;
-
-		private InteractionPart(EntityDraeton draeton, String name, float width, float height, boolean isCarriage) {
-			super(draeton, name, width, height);
-			this.draeton = draeton;
-			this.isCarriage = isCarriage;
-		}
-
-		@Override
-		public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-			return this.draeton.interactFromMultipart(this, player, hand);
-		}
-
-		@Override
-		public boolean canBeCollidedWith() {
-			if(this.isCarriage) {
-				return this.draeton.canBeCollidedWith();
-			}
-			return true;
-		}
-
-		@Override
-		public boolean canRiderInteract() {
-			if(this.isCarriage) {
-				return this.draeton.canRiderInteract();
-			}
-			return super.canRiderInteract();
-		}
-
-		@Override
-		public Entity getLowestRidingEntity() {
-			if(this.isCarriage) {
-				return this.draeton;
-			}
-			return super.getLowestRidingEntity();
-		}
-	}
-
-	public static interface IPullerEntity {
-		public void setPuller(EntityDraeton carriage, Puller puller);
-
-		public float getPull(float pull);
-
-		public float getCarriageDrag(float drag);
-
-		public float getDrag(float drag);
-
-		public void releaseEntity();
-	}
-
-	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.<Integer>createKey(EntityDraeton.class, DataSerializers.VARINT);
-	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.<Float>createKey(EntityDraeton.class, DataSerializers.FLOAT);
+	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.VARINT);
+	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.FLOAT);
+	private static final DataParameter<Boolean> ANCHOR_DEPLOYED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> ANCHOR_FIXATED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<BlockPos> ANCHOR_POS = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BLOCK_POS);
 
 	private Vec3d prevBalloonPos = Vec3d.ZERO;
 	private Vec3d balloonPos = Vec3d.ZERO;
@@ -213,7 +61,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	private InventoryBasic inventory = new InventoryBasic("container.bl.draeton_inventory", false, 27);
 	private InventoryBasic burnerInventory = new InventoryBasic("container.bl.draeton_burner", false, 1);
 
-	public List<Puller> pullers = new ArrayList<>();
+	public List<DraetonPhysicsPart> physicsParts = new ArrayList<>();
 
 	private int lerpSteps;
 	private double lerpX;
@@ -224,65 +72,79 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	private List<Entity> loadedPullerEntities = new ArrayList<>();
 
-	private int nextPullerId = 0;
+	private int nextPhysicsPartId = 0;
 
 	public float prevRotationRoll, rotationRoll;
 
 	private boolean descend = false;
 
-	private final InteractionPart[] parts;
-	private final InteractionPart inventoryPart;
-	private final InteractionPart burnerPart;
-	private final InteractionPart balloonFront;
-	private final InteractionPart balloonMiddle;
-	private final InteractionPart balloonBack;
+	private final EntityDraetonInteractionPart[] parts;
+	private final EntityDraetonInteractionPart inventoryPart;
+	private final EntityDraetonInteractionPart burnerPart;
+	private final EntityDraetonInteractionPart balloonFront;
+	private final EntityDraetonInteractionPart balloonMiddle;
+	private final EntityDraetonInteractionPart balloonBack;
+	private final EntityDraetonInteractionPart anchorPart;
+
+	private DraetonPhysicsPart anchorPhysicsPart;
 
 	public EntityDraeton(World world) {
 		super(world);
 		this.setSize(1.5F, 1.5f);
-		this.parts = new InteractionPart[]{ 
-				this.inventoryPart = new InteractionPart(this, "inventory", 0.6f, 0.5f, false), this.burnerPart = new InteractionPart(this, "burner", 0.6f, 0.5f, false),
-						this.balloonFront = new InteractionPart(this, "balloon_front", 1.5f, 1.25f, true), this.balloonMiddle = new InteractionPart(this, "balloon_middle", 1.5f, 1.25f, true), this.balloonBack = new InteractionPart(this, "balloon_back", 1.5f, 1.25f, true)
+
+		this.parts = new EntityDraetonInteractionPart[]{ 
+				this.inventoryPart = new EntityDraetonInteractionPart(this, "inventory", 0.6f, 0.5f, false), this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.6f, 0.5f, false),
+						this.anchorPart = new EntityDraetonInteractionPart(this, "anchor", 0.5f, 0.5f, false),
+						this.balloonFront = new EntityDraetonInteractionPart(this, "balloon_front", 1.5f, 1.25f, true), this.balloonMiddle = new EntityDraetonInteractionPart(this, "balloon_middle", 1.5f, 1.25f, true), this.balloonBack = new EntityDraetonInteractionPart(this, "balloon_back", 1.5f, 1.25f, true)
 		};
 	}
 
-	public Puller getPullerById(int id) {
-		for(Puller puller : this.pullers) {
-			if(puller.id == id) {
-				return puller;
+	@Nullable
+	public DraetonPhysicsPart getAnchorPhysicsPart() {
+		return this.anchorPhysicsPart;
+	}
+
+	public DraetonPhysicsPart getPhysicsPartById(int id) {
+		for(DraetonPhysicsPart part : this.physicsParts) {
+			if(part.id == id) {
+				return part;
 			}
 		}
 		return null;
 	}
 
 	/**
-	 * Add puller on client side
+	 * Add physics part on client side
 	 */
-	public Puller addPuller(MessageUpdateCarriagePuller.Position pos) {
-		Puller puller = new Puller(this, pos.id);
+	public DraetonPhysicsPart addPhysicsPart(MessageUpdateDraetonPhysicsPart.Position pos) {
+		DraetonPhysicsPart part = new DraetonPhysicsPart(pos.type, this, pos.id);
 
-		puller.lerpX = puller.x = pos.x + this.posX;
-		puller.lerpY = puller.y = pos.y + this.posY;
-		puller.lerpZ = puller.z = pos.z + this.posZ;
+		part.lerpX = part.x = pos.x + this.posX;
+		part.lerpY = part.y = pos.y + this.posY;
+		part.lerpZ = part.z = pos.z + this.posZ;
 
-		puller.motionX = pos.mx;
-		puller.motionY = pos.my;
-		puller.motionZ = pos.mz;
+		part.motionX = pos.mx;
+		part.motionY = pos.my;
+		part.motionZ = pos.mz;
 
-		this.pullers.add(puller);
+		this.physicsParts.add(part);
 
-		return puller;
+		if(part.type == DraetonPhysicsPart.Type.ANCHOR) {
+			this.anchorPhysicsPart = part;
+		}
+
+		return part;
 	}
 
 	/**
-	 * Remove puller on client side
+	 * Remove physics part on client side
 	 */
-	public boolean removePullerById(int id) {
-		Iterator<Puller> it = this.pullers.iterator();
+	public boolean removePhysicsPartById(int id) {
+		Iterator<DraetonPhysicsPart> it = this.physicsParts.iterator();
 		while(it.hasNext()) {
-			Puller puller = it.next();
-			if(puller.id == id) {
-				puller.isActive = false;
+			DraetonPhysicsPart part = it.next();
+			if(part.id == id) {
+				part.isActive = false;
 				it.remove();
 				return true;
 			}
@@ -294,6 +156,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	protected void entityInit() {
 		this.dataManager.register(TIME_SINCE_HIT, 0);
 		this.dataManager.register(DAMAGE_TAKEN, 0.0f);
+		this.dataManager.register(ANCHOR_DEPLOYED, false);
+		this.dataManager.register(ANCHOR_FIXATED, false);
+		this.dataManager.register(ANCHOR_POS, BlockPos.ORIGIN);
 	}
 
 	@Override
@@ -307,27 +172,31 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 		this.loadedPullerEntities.clear();
 
-		this.pullers.clear();
+		this.physicsParts.clear();
 
-		NBTTagList list = nbt.getTagList("Pullers", Constants.NBT.TAG_COMPOUND);
+		NBTTagList list = nbt.getTagList("PhysicsParts", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < list.tagCount(); i++) {
 			NBTTagCompound tag = list.getCompoundTagAt(i);
 
-			Puller puller = new Puller(this, this.nextPullerId++);
+			DraetonPhysicsPart part = new DraetonPhysicsPart(DraetonPhysicsPart.Type.PULLER, this, this.nextPhysicsPartId++);
 
-			Vec3d pullerPos = new Vec3d(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"));
+			Vec3d partPos = new Vec3d(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"));
 
-			final Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ).add(this.getPullPoint(i, 1));
+			part.x = partPos.x;
+			part.y = partPos.y;
+			part.z = partPos.z;
 
-			//Ensure that the puller is within valid range, otherwise puller entities may become immediately unloaded after spawning
-			Vec3d diff = pullerPos.subtract(pos);
-			if(diff.length() > this.getMaxTetherLength()) {
-				pullerPos = pos.add(diff.normalize().scale(this.getMaxTetherLength()));
+			final Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ).add(this.getPullPoint(part, 1));
+
+			//Ensure that the part is within valid range, otherwise puller entities may become immediately unloaded after spawning
+			Vec3d diff = partPos.subtract(pos);
+			if(diff.length() > this.getMaxTetherLength(part)) {
+				partPos = pos.add(diff.normalize().scale(this.getMaxTetherLength(part)));
 			}
 
-			puller.x = pullerPos.x;
-			puller.y = pullerPos.y;
-			puller.z = pullerPos.z;
+			part.x = partPos.x;
+			part.y = partPos.y;
+			part.z = partPos.z;
 
 			if(tag.hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 				NBTTagCompound entityNbt = tag.getCompoundTag("Entity");
@@ -335,10 +204,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 				Entity entity = EntityList.createEntityFromNBT(entityNbt, this.world);
 
 				if(entity instanceof IPullerEntity) {
-					((IPullerEntity) entity).setPuller(this, puller);
-					puller.setEntity((IPullerEntity) entity);
+					((IPullerEntity) entity).setPuller(this, part);
+					part.setEntity((IPullerEntity) entity);
 
-					entity.setPosition(puller.x, puller.y, puller.z);
+					entity.setPosition(part.x, part.y, part.z);
 
 					this.loadedPullerEntities.add(entity);
 				} else {
@@ -346,8 +215,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 				}
 			}
 
-			this.pullers.add(puller);
+			this.physicsParts.add(part);
 		}
+
+		this.dataManager.set(ANCHOR_DEPLOYED, nbt.getBoolean("AnchorDeployed"));
+		this.setAnchorPos(NBTUtil.getPosFromTag(nbt.getCompoundTag("AnchorPos")), nbt.getBoolean("AnchorFixated"));
 
 		this.inventory.clear();
 		if (nbt.hasKey("Inventory", Constants.NBT.TAG_COMPOUND)) {
@@ -363,30 +235,37 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		NBTTagList list = new NBTTagList();
-		for(Puller puller : this.pullers) {
-			NBTTagCompound tag = new NBTTagCompound();
+		for(DraetonPhysicsPart part : this.physicsParts) {
+			if(part.type == DraetonPhysicsPart.Type.PULLER) {
+				NBTTagCompound tag = new NBTTagCompound();
 
-			tag.setDouble("x", puller.x);
-			tag.setDouble("y", puller.y);
-			tag.setDouble("z", puller.z);
+				tag.setDouble("x", part.x);
+				tag.setDouble("y", part.y);
+				tag.setDouble("z", part.z);
 
-			if(puller.entity != null && puller.entity.isEntityAlive()) {
-				ResourceLocation id = EntityList.getKey(puller.entity);
+				Entity entity = part.getEntity();
+				if(entity != null && entity.isEntityAlive()) {
+					ResourceLocation id = EntityList.getKey(entity);
 
-				if(id != null) {
-					NBTTagCompound entityNbt = new NBTTagCompound();
+					if(id != null) {
+						NBTTagCompound entityNbt = new NBTTagCompound();
 
-					puller.entity.writeToNBT(entityNbt);
+						entity.writeToNBT(entityNbt);
 
-					entityNbt.setString("id", id.toString());
+						entityNbt.setString("id", id.toString());
 
-					tag.setTag("Entity", entityNbt);
+						tag.setTag("Entity", entityNbt);
+					}
 				}
-			}
 
-			list.appendTag(tag);
+				list.appendTag(tag);
+			}
 		}
-		nbt.setTag("Pullers", list);
+		nbt.setTag("PhysicsParts", list);
+
+		nbt.setBoolean("AnchorDeployed", this.dataManager.get(ANCHOR_DEPLOYED));
+		nbt.setBoolean("AnchorFixated", this.dataManager.get(ANCHOR_FIXATED));
+		nbt.setTag("AnchorPos", NBTUtil.createPosTag(this.dataManager.get(ANCHOR_POS)));
 
 		nbt.setTag("Inventory", NBTHelper.saveAllItems(new NBTTagCompound(), this.inventory, false));
 		nbt.setTag("BurnerInventory", NBTHelper.saveAllItems(new NBTTagCompound(), this.burnerInventory, false));
@@ -414,6 +293,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.lerpPitch = this.rotationPitch;
 
 		this.prevBalloonPos = this.balloonPos = this.getPositionVector().add(0, 2, 0);
+
+		if(!world.isRemote) {
+			this.anchorPhysicsPart = new DraetonPhysicsPart(DraetonPhysicsPart.Type.ANCHOR, this, this.nextPhysicsPartId++);
+			this.physicsParts.add(this.anchorPhysicsPart);
+		}
 	}
 
 	public Vec3d getBalloonPos(float partialTicks) {
@@ -491,24 +375,26 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			}
 
 			//Remove dead pullers
-			Iterator<Puller> it = this.pullers.iterator();
+			Iterator<DraetonPhysicsPart> it = this.physicsParts.iterator();
 			while(it.hasNext()) {
-				Puller puller = it.next();
+				DraetonPhysicsPart part = it.next();
 
-				if(puller.entity == null || !puller.entity.isEntityAlive()) {
-					puller.isActive = false;
-					it.remove();
+				if(part.type == DraetonPhysicsPart.Type.PULLER) {
+					Entity entity = part.getEntity();
+					if(entity == null || !entity.isEntityAlive()) {
+						part.isActive = false;
+						it.remove();
 
-					TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateCarriagePuller(this, puller, Action.REMOVE), this);
+						TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, part, Action.REMOVE), this);
+					}
 				}
 			}
 		}
 
-		for(int i = 0; i < this.pullers.size(); i++) {
-			Puller puller = this.pullers.get(i);
-			puller.prevX = puller.x;
-			puller.prevY = puller.y;
-			puller.prevZ = puller.z;
+		for(DraetonPhysicsPart part : this.physicsParts) {
+			part.prevX = part.x;
+			part.prevY = part.y;
+			part.prevZ = part.z;
 		}
 
 		this.prevPosX = this.posX;
@@ -516,10 +402,14 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.prevPosZ = this.posZ;
 
 		float drag = 0.98f;
-		for(Puller puller : this.pullers) {
-			if(puller.getEntity() != null) {
-				drag = puller.getEntity().getCarriageDrag(drag);
+		for(DraetonPhysicsPart part : this.physicsParts) {
+			if(part.getEntity() != null) {
+				drag = part.getEntity().getCarriageDrag(drag);
 			}
+		}
+
+		if(this.onGround) {
+			drag *= 0.8f;
 		}
 
 		this.motionY *= drag;
@@ -548,21 +438,21 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 				this.lerpYaw = this.rotationYaw;
 				this.lerpPitch = this.rotationPitch;
 
-				for(Puller puller : this.pullers) {
-					puller.lerpX = puller.x;
-					puller.lerpY = puller.y;
-					puller.lerpZ = puller.z;
+				for(DraetonPhysicsPart part : this.physicsParts) {
+					part.lerpX = part.x;
+					part.lerpY = part.y;
+					part.lerpZ = part.z;
 				}
 			}
 		} else if(this.world.isRemote) {
 			this.motionX = this.motionY = this.motionZ = 0;
 
-			for(Puller puller : this.pullers) {
-				puller.tickLerp();
+			for(DraetonPhysicsPart part : this.physicsParts) {
+				part.tickLerp();
 			}
 		}
 
-		if(!this.world.isRemote && (this.getPassengers().isEmpty() || this.pullers.isEmpty())) {
+		if(!this.world.isRemote && (this.getPassengers().isEmpty() || this.physicsParts.isEmpty())) {
 			this.motionY -= 0.005f;
 		}
 
@@ -595,10 +485,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		}
 
 		if(this.world instanceof WorldServer) {
-			//Send server state of pullers to non-controller players
+			//Send server state of parts to non-controller players
 			if(this.ticksExisted % 10 == 0) {
-				for(Puller puller : this.pullers) {
-					MessageUpdateCarriagePuller msg = new MessageUpdateCarriagePuller(this, puller, MessageUpdateCarriagePuller.Action.UPDATE);
+				for(DraetonPhysicsPart part : this.physicsParts) {
+					MessageUpdateDraetonPhysicsPart msg = new MessageUpdateDraetonPhysicsPart(this, part, MessageUpdateDraetonPhysicsPart.Action.UPDATE);
 
 					Set<? extends EntityPlayer> tracking = ((WorldServer) this.world).getEntityTracker().getTrackingPlayers(this);
 					for(EntityPlayer player : tracking) {
@@ -623,6 +513,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 		Vec3d invPos = this.getRotatedCarriagePoint(new Vec3d(0.7f, 0.8f, 0), 1).add(this.posX, this.posY, this.posZ);
 		this.inventoryPart.setPosition(invPos.x, invPos.y - this.inventoryPart.height / 2, invPos.z);
+
+		Vec3d anchorPos = this.getRotatedCarriagePoint(new Vec3d(-0.7f, 0.8f, 0.4f), 1).add(this.posX, this.posY, this.posZ);
+		this.anchorPart.setPosition(anchorPos.x, anchorPos.y - this.anchorPart.height / 2, anchorPos.z);
 
 		Vec3d burnerPos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(new Vec3d(0, -0.5f, 0), 1));
 		this.burnerPart.setPosition(burnerPos.x, burnerPos.y - this.burnerPart.height / 2, burnerPos.z);
@@ -654,6 +547,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 		if (this.getDamageTaken() > 0.0F) {
 			this.setDamageTaken(this.getDamageTaken() - 1.0F);
+		}
+
+		//Un-fixate anchor if no longer deployed
+		if(!this.world.isRemote && !this.dataManager.get(ANCHOR_DEPLOYED)) {
+			this.setAnchorPos(BlockPos.ORIGIN, false);
 		}
 
 		super.onUpdate();
@@ -692,6 +590,18 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.rotationRoll = this.rotationRoll + rollOffset * adjustStrength * 0.5f;
 
 		this.tickLerp();
+
+		if(this.dataManager.get(ANCHOR_FIXATED) && this.anchorPhysicsPart != null) {
+			BlockPos anchorPos = this.getAnchorPos();
+			this.anchorPhysicsPart.prevX = this.anchorPhysicsPart.x = anchorPos.getX() + 0.5f;
+			this.anchorPhysicsPart.prevY = this.anchorPhysicsPart.y = anchorPos.getY();
+			this.anchorPhysicsPart.prevZ = this.anchorPhysicsPart.z = anchorPos.getZ() + 0.5f;
+		}
+
+		//Send anchor pos to server when fixated
+		if(this.world.isRemote && this.canPassengerSteer() && this.anchorPhysicsPart != null && this.dataManager.get(ANCHOR_DEPLOYED) && this.isFixated(this.anchorPhysicsPart) && this.ticksExisted % 5 == 0) {
+			TheBetweenlands.networkWrapper.sendToServer(new MessageSetDraetonAnchorPos(this));
+		}
 	}
 
 	private void tickLerp() {
@@ -700,20 +610,20 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			double y = this.posY + (this.lerpY - this.posY) / this.lerpSteps;
 			double z = this.posZ + (this.lerpZ - this.posZ) / this.lerpSteps;
 
-			//If the carriage is player controlled pull the pullers along
+			//If the carriage is player controlled pull the parts along
 			//so they don't lag behind
 			if(this.getControllingPassenger() != null) {
 				double dx = x - this.posX;
 				double dy = y - this.posY;
 				double dz = z - this.posZ;
 
-				for(Puller puller : this.pullers) {
-					puller.x += dx;
-					puller.y += dy;
-					puller.z += dz;
-					puller.lerpX += dx;
-					puller.lerpY += dy;
-					puller.lerpZ += dz;
+				for(DraetonPhysicsPart part : this.physicsParts) {
+					part.x += dx;
+					part.y += dy;
+					part.z += dz;
+					part.lerpX += dx;
+					part.lerpY += dy;
+					part.lerpZ += dz;
 				}
 			}
 
@@ -762,33 +672,35 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 		super.move(type, x, y, z);
 
-		for(Puller puller : this.pullers) {
-			float drag = puller.getEntity() != null ? puller.getEntity().getDrag(0.25f) : 0.25f;
+		for(DraetonPhysicsPart part : this.physicsParts) {
+			if(part.type == DraetonPhysicsPart.Type.PULLER) {
+				float drag = part.getEntity() != null ? part.getEntity().getDrag(0.25f) : 0.25f;
 
-			puller.move((this.posX - startX) * drag, (this.posY - startY) * drag, (this.posZ - startZ) * drag);
+				part.move((this.posX - startX) * drag, (this.posY - startY) * drag, (this.posZ - startZ) * drag);
+			}
 		}
 	}
 
-	public void setPacketRelativePullerPosition(Puller puller, float x, float y, float z, float mx, float my, float mz) {
+	public void setPacketRelativePartPosition(DraetonPhysicsPart part, float x, float y, float z, float mx, float my, float mz) {
 		Entity entity = this.getControllingPassenger();
 
 		//Only set position for non-controlling watching players
 		if (entity instanceof EntityPlayer == false || !((EntityPlayer)entity).isUser()) {
 			if(this.world.isRemote) {
 				//interpolate on client side
-				puller.lerpX = this.lerpX + x;
-				puller.lerpY = this.lerpY + y;
-				puller.lerpZ = this.lerpZ + z;
-				puller.lerpSteps = 10;
+				part.lerpX = this.lerpX + x;
+				part.lerpY = this.lerpY + y;
+				part.lerpZ = this.lerpZ + z;
+				part.lerpSteps = 10;
 			} else {
-				puller.lerpX = puller.x = this.posX + x;
-				puller.lerpY = puller.y = this.posY + y;
-				puller.lerpZ = puller.z = this.posZ + z;
+				part.lerpX = part.x = this.posX + x;
+				part.lerpY = part.y = this.posY + y;
+				part.lerpZ = part.z = this.posZ + z;
 			}
 
-			puller.motionX = mx;
-			puller.motionY = my;
-			puller.motionZ = mz;
+			part.motionX = mx;
+			part.motionY = my;
+			part.motionZ = mz;
 		}
 	}
 
@@ -824,83 +736,110 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 			double moveStrength = 0.1D;
 
-			for(Puller puller : this.pullers) {
-				puller.motionX += dir.x * moveStrength * (this.rand.nextFloat() * 0.6f + 0.7f);
-				puller.motionZ += dir.z * moveStrength * (this.rand.nextFloat() * 0.6f + 0.7f);
-				puller.motionY += dir.y * moveStrength * (this.rand.nextFloat() * 0.6f + 0.7f);
+			for(DraetonPhysicsPart part : this.physicsParts) {
+				if(part.type == DraetonPhysicsPart.Type.PULLER) {
+					part.motionX += dir.x * moveStrength * (this.rand.nextFloat() * 0.6f + 0.7f);
+					part.motionZ += dir.z * moveStrength * (this.rand.nextFloat() * 0.6f + 0.7f);
+					part.motionY += dir.y * moveStrength * (this.rand.nextFloat() * 0.6f + 0.7f);
+				}
 			}
 		}
 	}
 
 	protected void updateCarriage() {
-		int pullerIndex = 0;
-		for(Puller puller : this.pullers) {
-			float pullerDrag = puller.getEntity() != null ? puller.getEntity().getDrag(0.9f) : 0.9f;
+		for(DraetonPhysicsPart part : this.physicsParts) {
+			Entity entity = part.getEntity();
 
-			puller.motionX *= pullerDrag;
-			puller.motionY *= pullerDrag;
-			puller.motionZ *= pullerDrag;
+			if(part.type == DraetonPhysicsPart.Type.PULLER) {
+				float pullerDrag = entity != null ? part.getEntity().getDrag(0.9f) : 0.9f;
 
-			if(!puller.isControlling()) {
-				puller.motionX = puller.motionY = puller.motionZ = 0;
+				part.motionX *= pullerDrag;
+				part.motionY *= pullerDrag;
+				part.motionZ *= pullerDrag;
 
-				puller.x = puller.entity.posX;
-				puller.y = puller.entity.posY;
-				puller.z = puller.entity.posZ;
+				if(!this.isControlling(part)) {
+					part.motionX = part.motionY = part.motionZ = 0;
+
+					part.x = entity.posX;
+					part.y = entity.posY;
+					part.z = entity.posZ;
+				} else {
+					float speed = (float) Math.sqrt(part.motionX * part.motionX + part.motionY * part.motionY + part.motionZ * part.motionZ);
+					float maxSpeed = this.getMaxPullerSpeed();
+					if(speed > maxSpeed) {
+						part.motionX *= 1.0f / speed * maxSpeed;
+						part.motionY *= 1.0f / speed * maxSpeed;
+						part.motionZ *= 1.0f / speed * maxSpeed;
+					}
+
+					part.move(part.motionX, part.motionY, part.motionZ);
+				}
+
+				Vec3d pullerPos = new Vec3d(part.x, part.y, part.z);
+
+				for(DraetonPhysicsPart otherPart : this.physicsParts) {
+					if(otherPart.type == DraetonPhysicsPart.Type.PULLER) {
+						Vec3d otherPullerPos = new Vec3d(otherPart.x, otherPart.y, otherPart.z);
+
+						Vec3d diff = pullerPos.subtract(otherPullerPos);
+
+						double dist = diff.length();
+
+						float minDist = 1.5f;
+
+						if(dist < minDist) {
+							float pushStr = 0.75f;
+
+							part.motionX += diff.x * (minDist - dist) / minDist * pushStr;
+							part.motionY += diff.y * (minDist - dist) / minDist * pushStr;
+							part.motionZ += diff.z * (minDist - dist) / minDist * pushStr;
+						}
+					}
+				}
 			} else {
-				float speed = (float) Math.sqrt(puller.motionX * puller.motionX + puller.motionY * puller.motionY + puller.motionZ * puller.motionZ);
-				float maxSpeed = this.getMaxPullerSpeed();
-				if(speed > maxSpeed) {
-					puller.motionX *= 1.0f / speed * maxSpeed;
-					puller.motionY *= 1.0f / speed * maxSpeed;
-					puller.motionZ *= 1.0f / speed * maxSpeed;
+				if(part.grounded) {
+					part.motionX *= 0.8f;
+					part.motionZ *= 0.8f;
+					part.motionY = 0;
+				} else {
+					part.motionX *= 0.98f;
+					part.motionY *= 0.98f;
+					part.motionZ *= 0.98f;
 				}
 
-				puller.move(puller.motionX, puller.motionY, puller.motionZ);
-			}
-
-			Vec3d pullerPos = new Vec3d(puller.x, puller.y, puller.z);
-
-			for(Puller otherPuller : this.pullers) {
-				Vec3d otherPullerPos = new Vec3d(otherPuller.x, otherPuller.y, otherPuller.z);
-
-				Vec3d diff = pullerPos.subtract(otherPullerPos);
-
-				double dist = diff.length();
-
-				float minDist = 1.5f;
-
-				if(dist < minDist) {
-					float pushStr = 0.75f;
-
-					puller.motionX += diff.x * (minDist - dist) / minDist * pushStr;
-					puller.motionY += diff.y * (minDist - dist) / minDist * pushStr;
-					puller.motionZ += diff.z * (minDist - dist) / minDist * pushStr;
+				if(this.isFixated(part)) {
+					part.motionX = 0;
+					part.motionY = 0;
+					part.motionZ = 0;
 				}
+
+				part.motionY -= 0.1f;
+
+				part.move(part.motionX, part.motionY, part.motionZ);
 			}
 
-			Vec3d tether = new Vec3d(puller.x, puller.y, puller.z);
+			Vec3d tether = new Vec3d(part.x, part.y, part.z);
 
-			Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ).add(this.getPullPoint(pullerIndex, 1));
+			Vec3d pos = new Vec3d(this.posX, this.posY, this.posZ).add(this.getPullPoint(part, 1));
 
 			Vec3d diff = tether.subtract(pos);
 
 			double dist = diff.length();
 
-			float tetherLength = this.getMaxTetherLength();
+			float tetherLength = this.getMaxTetherLength(part);
 
-			//Teleport puller to carriage if it gets too far away
+			//Teleport part to carriage if it gets too far away
 			//somehow
-			if(dist > tetherLength + 3) {
-				puller.lerpX = puller.x = this.posX;
-				puller.lerpY = puller.y = this.posY;
-				puller.lerpZ = puller.z = this.posZ;
+			if(dist > tetherLength + 6) {
+				part.lerpX = part.x = this.posX;
+				part.lerpY = part.y = this.posY;
+				part.lerpZ = part.z = this.posZ;
 				dist = 0;
 			}
 
 			if(dist > tetherLength) {
-				if(puller.getEntity() != null) {
-					float pullStrength = puller.getEntity().getPull(0.01f);
+				if(part.type == DraetonPhysicsPart.Type.PULLER || this.isFixated(part)) {
+					float pullStrength = entity != null ? part.getEntity().getPull(0.01f) : 0.05f;
 
 					Vec3d motion = diff.normalize().scale((dist - tetherLength) * pullStrength);
 					this.motionX += motion.x;
@@ -908,49 +847,92 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 					this.motionZ += motion.z;
 				}
 
-				Vec3d constrainedTetherPos = pos.add(diff.normalize().scale(tetherLength));
+				if(!this.isFixated(part)) {
+					if(part.type == DraetonPhysicsPart.Type.PULLER) {
+						Vec3d constrainedTetherPos = pos.add(diff.normalize().scale(tetherLength));
 
-				puller.move(constrainedTetherPos.x - puller.x, constrainedTetherPos.y - puller.y, constrainedTetherPos.z - puller.z);
+						part.move(constrainedTetherPos.x - part.x, constrainedTetherPos.y - part.y, constrainedTetherPos.z - part.z);
 
-				Vec3d correction = diff.normalize().scale((dist - tetherLength) * 0.01f);
+						Vec3d correction = diff.normalize().scale((dist - tetherLength) * 0.01f);
 
-				puller.motionX -= correction.x;
-				puller.motionY -= correction.y;
-				puller.motionZ -= correction.z;
+						part.motionX -= correction.x;
+						part.motionY -= correction.y;
+						part.motionZ -= correction.z;
+					} else {
+						Vec3d constrainedTetherPos = pos.add(diff.normalize().scale(tetherLength));
+
+						part.move(constrainedTetherPos.x - part.x, constrainedTetherPos.y - part.y, constrainedTetherPos.z - part.z);
+
+						Vec3d motion = new Vec3d(part.motionX, part.motionY, part.motionZ);
+
+						motion = motion.subtract(diff.normalize().scale(motion.dotProduct(diff.normalize())));
+
+						part.motionX = motion.x;
+						part.motionY = motion.y;
+						part.motionZ = motion.z;
+					}
+				}
 			}
-
-			pullerIndex++;
 		}
 
-		//Send client state of pullers to server
+		//Send client state of parts to server
 		if(this.world.isRemote && this.canPassengerSteer() && this.ticksExisted % 10 == 0) {
-			for(Puller puller : this.pullers) {
-				TheBetweenlands.networkWrapper.sendToServer(new MessageUpdateCarriagePuller(this, puller, MessageUpdateCarriagePuller.Action.UPDATE));
+			for(DraetonPhysicsPart part : this.physicsParts) {
+				TheBetweenlands.networkWrapper.sendToServer(new MessageUpdateDraetonPhysicsPart(this, part, MessageUpdateDraetonPhysicsPart.Action.UPDATE));
 			}
 		}
 	}
 
-	public float getMaxTetherLength() {
+	public float getMaxTetherLength(DraetonPhysicsPart part) {
+		if(part.type == DraetonPhysicsPart.Type.ANCHOR) {
+			return this.dataManager.get(ANCHOR_DEPLOYED) ? 8.0f : 0.25f;
+		}
 		return 6.0f;
+	}
+
+	public boolean isFixated(DraetonPhysicsPart part) {
+		if(part.type == DraetonPhysicsPart.Type.ANCHOR) {
+			return this.dataManager.get(ANCHOR_DEPLOYED) && part.grounded;
+		}
+		return false;
+	}
+
+	public boolean isControlling(DraetonPhysicsPart part) {
+		Entity entity = part.getEntity();
+		if(entity != null) {
+			Vec3d tether = new Vec3d(entity.posX, entity.posY, entity.posZ);
+			Vec3d pos = this.getPositionVector().add(this.getPullPoint(part, 1));
+			Vec3d diff = tether.subtract(pos);
+			if(diff.length() > this.getMaxTetherLength(part)) {
+				return true;
+			}
+		}
+		return this.getControllingPassenger() != null && (entity == null || entity.getRidingEntity() == null);
 	}
 
 	public float getMaxPullerSpeed() {
 		return 3.0f;
 	}
 
-	public Vec3d getPullPoint(int index, float partialTicks) {
+	public Vec3d getPullPoint(DraetonPhysicsPart part, float partialTicks) {
+		if(part.type == DraetonPhysicsPart.Type.ANCHOR) {
+			return this.getRotatedCarriagePoint(new Vec3d(-0.6f, 0.5f, 0.4f), partialTicks);
+		}
+
+		int index = this.physicsParts.indexOf(part);
+
 		Vec3d basePoint;
 		switch(index % 3) {
 		default:
-		case 0:
+		case 1:
 			//middle
 			basePoint = new Vec3d(0, 0.875f, 1.75f);
 			break;
-		case 1:
+		case 2:
 			//right
 			basePoint = new Vec3d(0.6f, 0.75f, 1.55f);
 			break;
-		case 2:
+		case 0:
 			//left
 			basePoint = new Vec3d(-0.6f, 0.75f, 1.55f);
 			break;
@@ -974,6 +956,15 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		mat.rotate((float)-Math.toRadians(this.prevRotationPitch + (this.rotationPitch - this.prevRotationPitch) * partialTicks), 1, 0, 0);
 		mat.rotate((float)Math.toRadians(this.prevRotationRoll + (this.rotationRoll - this.prevRotationRoll) * partialTicks), 0, 0, 1);
 		return mat.transform(pos);
+	}
+
+	public void setAnchorPos(BlockPos pos, boolean fixated) {
+		this.dataManager.set(ANCHOR_POS, pos);
+		this.dataManager.set(ANCHOR_FIXATED, fixated);
+	}
+
+	public BlockPos getAnchorPos() {
+		return this.dataManager.get(ANCHOR_POS);
 	}
 
 	@Override
@@ -1045,7 +1036,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 						//TODO Drop item
 					}
 
-					for(Puller puller : this.pullers) {
+					for(DraetonPhysicsPart puller : this.physicsParts) {
 						if(puller.getEntity() != null) {
 							puller.getEntity().releaseEntity();
 						}
@@ -1075,13 +1066,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			} else {
 				//Debug
 
-				Puller puller = new Puller(this, this.nextPullerId++);
-				puller.lerpX = puller.x = this.posX;
-				puller.lerpY = puller.y = this.posY;
-				puller.lerpZ = puller.z = this.posZ;
-				this.pullers.add(puller);
-
 				if (!stack.isEmpty()) {
+					DraetonPhysicsPart puller = new DraetonPhysicsPart(DraetonPhysicsPart.Type.PULLER, this, this.nextPhysicsPartId++);
+					puller.lerpX = puller.x = this.posX;
+					puller.lerpY = puller.y = this.posY;
+					puller.lerpZ = puller.z = this.posZ;
+					this.physicsParts.add(puller);
+
 					if (EnumItemMisc.DRAGONFLY_WING.isItemOf(stack)) {
 						EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
 						puller.setEntity(dragonfly);
@@ -1142,7 +1133,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		return false;
 	}
 
-	protected boolean interactFromMultipart(InteractionPart part, EntityPlayer player, EnumHand hand) {
+	protected boolean interactFromMultipart(EntityDraetonInteractionPart part, EntityPlayer player, EnumHand hand) {
 		if(part == this.inventoryPart) {
 			if(!this.world.isRemote) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_STORAGE, player.getEntityWorld(), getEntityId(), 0, 0);
@@ -1150,6 +1141,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		} else if(part == this.burnerPart) {
 			if(!this.world.isRemote) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_BURNER, player.getEntityWorld(), getEntityId(), 0, 0);
+			}
+		} else if(part == this.anchorPart) {
+			if(!this.world.isRemote && hand == EnumHand.MAIN_HAND) {
+				this.dataManager.set(ANCHOR_DEPLOYED, !this.dataManager.get(ANCHOR_DEPLOYED));
 			}
 		}
 		return true;

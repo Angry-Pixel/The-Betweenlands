@@ -7,26 +7,29 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
-import thebetweenlands.common.entity.draeton.EntityDraeton.Puller;
+import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
 import thebetweenlands.common.network.MessageEntity;
 
-public class MessageUpdateCarriagePuller extends MessageEntity {
+public class MessageUpdateDraetonPhysicsPart extends MessageEntity {
 	public static class Position {
 		public int id;
+		public DraetonPhysicsPart.Type type;
 		public float x, y, z, mx, my, mz;
 
-		private Position(Puller puller) {
-			this.id = puller.id;
-			this.x = (float) (puller.x - puller.carriage.posX);
-			this.y = (float) (puller.y - puller.carriage.posY);
-			this.z = (float) (puller.z - puller.carriage.posZ);
-			this.mx = (float) puller.motionX;
-			this.my = (float) puller.motionY;
-			this.mz = (float) puller.motionZ;
+		private Position(DraetonPhysicsPart part) {
+			this.id = part.id;
+			this.type = part.type;
+			this.x = (float) (part.x - part.carriage.posX);
+			this.y = (float) (part.y - part.carriage.posY);
+			this.z = (float) (part.z - part.carriage.posZ);
+			this.mx = (float) part.motionX;
+			this.my = (float) part.motionY;
+			this.mz = (float) part.motionZ;
 		}
 
-		private Position(int id, float x, float y, float z, float mx, float my, float mz) {
+		private Position(int id, DraetonPhysicsPart.Type type, float x, float y, float z, float mx, float my, float mz) {
 			this.id = id;
+			this.type = type;
 			this.x = x;
 			this.y = y;
 			this.z = z;
@@ -43,13 +46,13 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 		ADD, REMOVE, UPDATE
 	}
 
-	public MessageUpdateCarriagePuller() {
+	public MessageUpdateDraetonPhysicsPart() {
 
 	}
 
-	public MessageUpdateCarriagePuller(EntityDraeton carriage, Puller puller, Action action) {
+	public MessageUpdateDraetonPhysicsPart(EntityDraeton carriage, DraetonPhysicsPart part, Action action) {
 		this.addEntity(carriage);
-		this.position = new Position(puller);
+		this.position = new Position(part);
 		this.action = action;
 	}
 
@@ -60,6 +63,7 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 		buf.writeVarInt(this.action.ordinal());
 
 		buf.writeVarInt(this.position.id);
+		buf.writeVarInt(this.position.type.ordinal());
 		buf.writeFloat(this.position.x);
 		buf.writeFloat(this.position.y);
 		buf.writeFloat(this.position.z);
@@ -83,6 +87,7 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 
 		this.position = new Position(
 				buf.readVarInt(),
+				DraetonPhysicsPart.Type.values()[buf.readVarInt()],
 				this.getFloatOrDefault(buf.readFloat(), 0), this.getFloatOrDefault(buf.readFloat(), 0), this.getFloatOrDefault(buf.readFloat(), 0),
 				this.getFloatOrDefault(buf.readFloat(), 0), this.getFloatOrDefault(buf.readFloat(), 0), this.getFloatOrDefault(buf.readFloat(), 0)
 				);
@@ -106,12 +111,12 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 					EntityDraeton carriage = (EntityDraeton) entity;
 
 					if(carriage.getControllingPassenger() == player) {
-						Puller puller = carriage.getPullerById(this.position.id);
+						DraetonPhysicsPart part = carriage.getPhysicsPartById(this.position.id);
 
-						if(puller != null) {
+						if(part != null) {
 							//Make sure position is in valid range since it is client controlled
 							float dist = (float) Math.sqrt(this.position.x * this.position.x + this.position.y * this.position.y + this.position.z * this.position.z);
-							float maxDist = carriage.getMaxTetherLength();
+							float maxDist = carriage.getMaxTetherLength(part);
 							if(dist > maxDist) {
 								this.position.x *= 1.0f / dist * maxDist;
 								this.position.y *= 1.0f / dist * maxDist;
@@ -127,7 +132,7 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 								this.position.mz *= 1.0f / speed * maxSpeed;
 							}
 
-							carriage.setPacketRelativePullerPosition(puller, this.position.x, this.position.y, this.position.z, this.position.mx, this.position.my, this.position.mz);
+							carriage.setPacketRelativePartPosition(part, this.position.x, this.position.y, this.position.z, this.position.mx, this.position.my, this.position.mz);
 						}
 					}
 				}
@@ -138,17 +143,17 @@ public class MessageUpdateCarriagePuller extends MessageEntity {
 				EntityDraeton carriage = (EntityDraeton) entity;
 
 				if(this.action == Action.ADD) {
-					carriage.addPuller(this.position);
+					carriage.addPhysicsPart(this.position);
 				} else if(this.action == Action.REMOVE) {
-					carriage.removePullerById(this.position.id);
+					carriage.removePhysicsPartById(this.position.id);
 				} else {
-					Puller puller = carriage.getPullerById(this.position.id);
+					DraetonPhysicsPart part = carriage.getPhysicsPartById(this.position.id);
 
 					//fallback if adding failed somehow
-					if(puller == null) {
-						puller = carriage.addPuller(this.position);
+					if(part == null) {
+						part = carriage.addPhysicsPart(this.position);
 					} else {
-						carriage.setPacketRelativePullerPosition(puller, this.position.x, this.position.y, this.position.z, this.position.mx, this.position.my, this.position.mz);
+						carriage.setPacketRelativePartPosition(part, this.position.x, this.position.y, this.position.z, this.position.mx, this.position.my, this.position.mz);
 					}
 				}
 			}

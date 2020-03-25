@@ -20,18 +20,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelDraetonBalloon;
 import thebetweenlands.client.render.model.entity.ModelDraetonCarriage;
+import thebetweenlands.client.render.model.entity.ModelShambler;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
-import thebetweenlands.common.entity.draeton.EntityDraeton.Puller;
+import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
 import thebetweenlands.common.lib.ModInfo;
 
 @SideOnly(Side.CLIENT)
 public class RenderDraeton extends Render<EntityDraeton> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_carriage.png");
 	private static final ResourceLocation TEXTURE_BALLOON = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_balloon.png");
-
-	private ModelDraetonCarriage modelCarriage = new ModelDraetonCarriage();
-	private ModelDraetonBalloon modelBalloon = new ModelDraetonBalloon();
-
+	private static final ResourceLocation TEXTURE_SHAMBLER = new ResourceLocation("thebetweenlands:textures/entity/shambler.png");
+	
+	private final ModelDraetonCarriage modelCarriage = new ModelDraetonCarriage();
+	private final ModelDraetonBalloon modelBalloon = new ModelDraetonBalloon();
+	private final ModelShambler modelShambler = new ModelShambler();
+	
 	public RenderDraeton(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -61,12 +64,12 @@ public class RenderDraeton extends Render<EntityDraeton> {
 			GlStateManager.disableCull();
 			GlStateManager.disableBlend();
 
-			for(Puller puller : entity.pullers) {
-				double pinterpX = puller.prevX + (puller.x - puller.prevX) * partialTicks - this.renderManager.renderPosX;
-				double pinterpY = puller.prevY + (puller.y - puller.prevY) * partialTicks - this.renderManager.renderPosY;
-				double pinterpZ = puller.prevZ + (puller.z - puller.prevZ) * partialTicks - this.renderManager.renderPosZ;
+			for(DraetonPhysicsPart part : entity.physicsParts) {
+				double pinterpX = part.prevX + (part.x - part.prevX) * partialTicks - this.renderManager.renderPosX;
+				double pinterpY = part.prevY + (part.y - part.prevY) * partialTicks - this.renderManager.renderPosY;
+				double pinterpZ = part.prevZ + (part.z - part.prevZ) * partialTicks - this.renderManager.renderPosZ;
 
-				AxisAlignedBB aabb = puller.getAabb().offset(pinterpX - x - puller.x, pinterpY - y - puller.y, pinterpZ - z - puller.z);
+				AxisAlignedBB aabb = part.getAabb().offset(pinterpX - x - part.x, pinterpY - y - part.y, pinterpZ - z - part.z);
 
 				RenderGlobal.drawBoundingBox(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ, 0, 1, 0, 1);
 			}
@@ -106,26 +109,40 @@ public class RenderDraeton extends Render<EntityDraeton> {
 			GlStateManager.popMatrix();
 		}
 
-		int pullerIndex = 0;
-		for(Puller puller : entity.pullers) {
+		for(DraetonPhysicsPart part : entity.physicsParts) {
 			GlStateManager.pushMatrix();
 
-			Vec3d pullPoint = entity.getPullPoint(pullerIndex, partialTicks);
+			Vec3d pullPoint = entity.getPullPoint(part, partialTicks);
 			GlStateManager.translate(pullPoint.x, pullPoint.y, pullPoint.z);
 
-			Entity pullerEntity = puller.getEntity();
-
-			if(pullerEntity != null) {
-				double dinterpX = pullerEntity.lastTickPosX + (pullerEntity.posX - pullerEntity.lastTickPosX) * partialTicks - this.renderManager.renderPosX;
-				double dinterpY = pullerEntity.lastTickPosY + (pullerEntity.posY - pullerEntity.lastTickPosY) * partialTicks - this.renderManager.renderPosY;
-				double dinterpZ = pullerEntity.lastTickPosZ + (pullerEntity.posZ - pullerEntity.lastTickPosZ) * partialTicks - this.renderManager.renderPosZ;
+			if(part.type == DraetonPhysicsPart.Type.PULLER) {
+				Entity pullerEntity = part.getEntity();
+				if(pullerEntity != null) {
+					double dinterpX = pullerEntity.lastTickPosX + (pullerEntity.posX - pullerEntity.lastTickPosX) * partialTicks - this.renderManager.renderPosX;
+					double dinterpY = pullerEntity.lastTickPosY + (pullerEntity.posY - pullerEntity.lastTickPosY) * partialTicks - this.renderManager.renderPosY;
+					double dinterpZ = pullerEntity.lastTickPosZ + (pullerEntity.posZ - pullerEntity.lastTickPosZ) * partialTicks - this.renderManager.renderPosZ;
+	
+					this.renderConnection(tessellator, buffer, 0, 0, 0, dinterpX - x - pullPoint.x, dinterpY - y - pullPoint.y + 0.25f, dinterpZ - z - pullPoint.z);
+				}
+			} else {
+				double dinterpX = part.prevX + (part.x - part.prevX) * partialTicks - this.renderManager.renderPosX;
+				double dinterpY = part.prevY + (part.y - part.prevY) * partialTicks - this.renderManager.renderPosY;
+				double dinterpZ = part.prevZ + (part.z - part.prevZ) * partialTicks - this.renderManager.renderPosZ;
 
 				this.renderConnection(tessellator, buffer, 0, 0, 0, dinterpX - x - pullPoint.x, dinterpY - y - pullPoint.y + 0.25f, dinterpZ - z - pullPoint.z);
+			
+				GlStateManager.translate(dinterpX - x - pullPoint.x, dinterpY - y - pullPoint.y, dinterpZ - z - pullPoint.z);
+				GlStateManager.rotate(90, 1, 0, 0);
+				GlStateManager.translate(0, -1f, -0.135f);
+				GlStateManager.disableCull();
+				
+				this.bindTexture(TEXTURE_SHAMBLER);
+				this.modelShambler.renderTongueEnd(0.0625F);
+				
+				GlStateManager.enableCull();
 			}
 
 			GlStateManager.popMatrix();
-
-			pullerIndex++;
 		}
 
 		Vec3d balloonPos = entity.getBalloonPos(partialTicks);

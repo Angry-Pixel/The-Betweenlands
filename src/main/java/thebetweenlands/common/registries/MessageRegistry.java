@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.MessageBase;
-import thebetweenlands.common.network.bidirectional.MessageUpdateCarriagePuller;
+import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart;
 import thebetweenlands.common.network.clientbound.MessageAddLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageAmateMap;
 import thebetweenlands.common.network.clientbound.MessageBlockGuardData;
@@ -46,6 +46,7 @@ import thebetweenlands.common.network.serverbound.MessageFlightState;
 import thebetweenlands.common.network.serverbound.MessageItemNaming;
 import thebetweenlands.common.network.serverbound.MessageOpenPouch;
 import thebetweenlands.common.network.serverbound.MessageRow;
+import thebetweenlands.common.network.serverbound.MessageSetDraetonAnchorPos;
 import thebetweenlands.common.network.serverbound.MessageSetGalleryUrl;
 import thebetweenlands.common.network.serverbound.MessageUpdatePuppeteerState;
 import thebetweenlands.common.network.serverbound.MessageUpdateRingKeybindState;
@@ -84,7 +85,7 @@ public class MessageRegistry {
 		registerMessage(MessageSoundRipple.class, Side.CLIENT);
 		registerMessage(MessageSyncGameRules.class, Side.CLIENT);
 		registerMessage(MessageCureDecayParticles.class, Side.CLIENT);
-		registerMessage(MessageUpdateCarriagePuller.class, Side.CLIENT);
+		registerMessage(MessageUpdateDraetonPhysicsPart.class, Side.CLIENT);
 		
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);
@@ -96,7 +97,8 @@ public class MessageRegistry {
 		registerMessage(MessageConnectCavingRope.class, Side.SERVER);
 		registerMessage(MessageExtendedReach.class, Side.SERVER);
 		registerMessage(MessageSetGalleryUrl.class, Side.SERVER);
-		registerMessage(MessageUpdateCarriagePuller.class, Side.SERVER);
+		registerMessage(MessageUpdateDraetonPhysicsPart.class, Side.SERVER);
+		registerMessage(MessageSetDraetonAnchorPos.class, Side.SERVER);
 	}
 
 	private static void registerMessage(Class<? extends MessageBase> messageType, Side toSide) {

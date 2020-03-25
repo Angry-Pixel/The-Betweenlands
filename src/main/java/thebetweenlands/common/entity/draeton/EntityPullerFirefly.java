@@ -8,27 +8,26 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import thebetweenlands.common.entity.draeton.EntityDraeton.IPullerEntity;
-import thebetweenlands.common.entity.draeton.EntityDraeton.Puller;
+import thebetweenlands.api.entity.IPullerEntity;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 
 public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity, IEntityAdditionalSpawnData {
 	private int carriageId;
 	private int pullerId;
 
-	private Puller puller;
+	private DraetonPhysicsPart puller;
 
 	public EntityPullerFirefly(World world) {
 		super(world);
 	}
 
-	public EntityPullerFirefly(World world, EntityDraeton carriage, Puller puller) {
+	public EntityPullerFirefly(World world, EntityDraeton carriage, DraetonPhysicsPart puller) {
 		super(world);
 		this.setPuller(carriage, puller);
 	}
 
 	@Override
-	public void setPuller(EntityDraeton carriage, Puller puller) {
+	public void setPuller(EntityDraeton carriage, DraetonPhysicsPart puller) {
 		this.puller = puller;
 		this.pullerId = puller.id;
 		this.carriageId = carriage.getEntityId();
@@ -85,7 +84,7 @@ public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity,
 	@Override
 	public boolean isAIDisabled() {
 		if(this.puller != null) {
-			return this.puller.isControlling();
+			return this.puller.carriage.isControlling(this.puller);
 		}
 		return true;
 	}
@@ -103,7 +102,7 @@ public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity,
 			} else {
 				Entity entity = this.world.getEntityByID(this.carriageId);
 				if(entity instanceof EntityDraeton) {
-					Puller puller = ((EntityDraeton) entity).getPullerById(this.pullerId);
+					DraetonPhysicsPart puller = ((EntityDraeton) entity).getPhysicsPartById(this.pullerId);
 					if(puller != null) {
 						this.puller = puller;
 						puller.setEntity(this);
@@ -111,7 +110,7 @@ public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity,
 				}
 			}
 		} else {
-			if(this.puller.isControlling()) {
+			if(this.puller.carriage.isControlling(this.puller)) {
 				this.setPositionAndRotation(this.puller.x, this.puller.y, this.puller.z, 0, 0);
 				this.rotationYaw = this.rotationYawHead = this.renderYawOffset = (float)Math.toDegrees(Math.atan2(this.puller.motionZ, this.puller.motionX)) - 90;
 				this.rotationPitch = (float)Math.toDegrees(-Math.atan2(this.puller.motionY, Math.sqrt(this.puller.motionX * this.puller.motionX + this.puller.motionZ * this.puller.motionZ)));
