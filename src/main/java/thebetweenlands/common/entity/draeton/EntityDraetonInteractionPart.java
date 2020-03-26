@@ -5,16 +5,26 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 
-class EntityDraetonInteractionPart extends MultiPartEntityPart {
+public class EntityDraetonInteractionPart extends MultiPartEntityPart {
 	private final EntityDraeton draeton;
 	private final boolean isCarriage;
 
+	private boolean enabled = true;
+	
 	EntityDraetonInteractionPart(EntityDraeton draeton, String name, float width, float height, boolean isCarriage) {
 		super(draeton, name, width, height);
 		this.draeton = draeton;
 		this.isCarriage = isCarriage;
 	}
+	
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
 
+	public boolean isEnabled() {
+		return this.enabled;
+	}
+	
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
 		return this.draeton.interactFromMultipart(this, player, hand);
@@ -22,6 +32,9 @@ class EntityDraetonInteractionPart extends MultiPartEntityPart {
 
 	@Override
 	public boolean canBeCollidedWith() {
+		if(!this.enabled) {
+			return false;
+		}
 		if(this.isCarriage) {
 			return this.draeton.canBeCollidedWith();
 		}

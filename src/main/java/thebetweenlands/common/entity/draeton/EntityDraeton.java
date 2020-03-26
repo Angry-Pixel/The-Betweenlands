@@ -53,12 +53,17 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	private static final DataParameter<Boolean> ANCHOR_DEPLOYED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> ANCHOR_FIXATED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<BlockPos> ANCHOR_POS = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BLOCK_POS);
+	private static final DataParameter<Boolean> UPGRADE_1_ENABLED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> UPGRADE_2_ENABLED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> UPGRADE_3_ENABLED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> UPGRADE_4_ENABLED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> UPGRADE_ANCHOR_ENABLED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
 
 	private Vec3d prevBalloonPos = Vec3d.ZERO;
 	private Vec3d balloonPos = Vec3d.ZERO;
 	private Vec3d balloonMotion = Vec3d.ZERO;
 
-	private InventoryBasic inventory = new InventoryBasic("container.bl.draeton_inventory", false, 27);
+	private InventoryBasic upgradesInventory = new InventoryBasic("container.bl.draeton_upgrades", false, 6);
 	private InventoryBasic burnerInventory = new InventoryBasic("container.bl.draeton_burner", false, 1);
 
 	public List<DraetonPhysicsPart> physicsParts = new ArrayList<>();
@@ -79,12 +84,16 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	private boolean descend = false;
 
 	private final EntityDraetonInteractionPart[] parts;
-	private final EntityDraetonInteractionPart inventoryPart;
-	private final EntityDraetonInteractionPart burnerPart;
-	private final EntityDraetonInteractionPart balloonFront;
-	private final EntityDraetonInteractionPart balloonMiddle;
-	private final EntityDraetonInteractionPart balloonBack;
-	private final EntityDraetonInteractionPart anchorPart;
+	public final EntityDraetonInteractionPart upgradePart1;
+	public final EntityDraetonInteractionPart upgradePart2;
+	public final EntityDraetonInteractionPart upgradePart3;
+	public final EntityDraetonInteractionPart upgradePart4;
+	public final EntityDraetonInteractionPart upgradeAnchorPart;
+	public final EntityDraetonInteractionPart upgradeFramePart;
+	public final EntityDraetonInteractionPart burnerPart;
+	public final EntityDraetonInteractionPart balloonFront;
+	public final EntityDraetonInteractionPart balloonMiddle;
+	public final EntityDraetonInteractionPart balloonBack;
 
 	private DraetonPhysicsPart anchorPhysicsPart;
 
@@ -93,8 +102,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.setSize(1.5F, 1.5f);
 
 		this.parts = new EntityDraetonInteractionPart[]{ 
-				this.inventoryPart = new EntityDraetonInteractionPart(this, "inventory", 0.6f, 0.5f, false), this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.6f, 0.5f, false),
-						this.anchorPart = new EntityDraetonInteractionPart(this, "anchor", 0.5f, 0.5f, false),
+				this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.6f, 0.5f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.6f, 0.5f, false),
+						this.upgradePart3 = new EntityDraetonInteractionPart(this, "upgrade_3", 0.6f, 0.5f, false), this.upgradePart4 = new EntityDraetonInteractionPart(this, "upgrade_4", 0.6f, 0.5f, false),
+						this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.6f, 0.5f, false),
+						this.upgradeAnchorPart = new EntityDraetonInteractionPart(this, "upgrade_anchor", 0.5f, 0.5f, false),
+						this.upgradeFramePart = new EntityDraetonInteractionPart(this, "upgrade_frame", 0.5f, 0.5f, false),
 						this.balloonFront = new EntityDraetonInteractionPart(this, "balloon_front", 1.5f, 1.25f, true), this.balloonMiddle = new EntityDraetonInteractionPart(this, "balloon_middle", 1.5f, 1.25f, true), this.balloonBack = new EntityDraetonInteractionPart(this, "balloon_back", 1.5f, 1.25f, true)
 		};
 	}
@@ -159,6 +171,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.dataManager.register(ANCHOR_DEPLOYED, false);
 		this.dataManager.register(ANCHOR_FIXATED, false);
 		this.dataManager.register(ANCHOR_POS, BlockPos.ORIGIN);
+		this.dataManager.register(UPGRADE_1_ENABLED, false);
+		this.dataManager.register(UPGRADE_2_ENABLED, false);
+		this.dataManager.register(UPGRADE_3_ENABLED, false);
+		this.dataManager.register(UPGRADE_4_ENABLED, false);
+		this.dataManager.register(UPGRADE_ANCHOR_ENABLED, false);
 	}
 
 	@Override
@@ -221,9 +238,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.dataManager.set(ANCHOR_DEPLOYED, nbt.getBoolean("AnchorDeployed"));
 		this.setAnchorPos(NBTUtil.getPosFromTag(nbt.getCompoundTag("AnchorPos")), nbt.getBoolean("AnchorFixated"));
 
-		this.inventory.clear();
-		if (nbt.hasKey("Inventory", Constants.NBT.TAG_COMPOUND)) {
-			NBTHelper.loadAllItems(nbt.getCompoundTag("Inventory"), this.inventory);
+		this.upgradesInventory.clear();
+		if (nbt.hasKey("Upgrades", Constants.NBT.TAG_COMPOUND)) {
+			NBTHelper.loadAllItems(nbt.getCompoundTag("Upgrades"), this.upgradesInventory);
 		}
 
 		this.burnerInventory.clear();
@@ -267,7 +284,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		nbt.setBoolean("AnchorFixated", this.dataManager.get(ANCHOR_FIXATED));
 		nbt.setTag("AnchorPos", NBTUtil.createPosTag(this.dataManager.get(ANCHOR_POS)));
 
-		nbt.setTag("Inventory", NBTHelper.saveAllItems(new NBTTagCompound(), this.inventory, false));
+		nbt.setTag("Upgrades", NBTHelper.saveAllItems(new NBTTagCompound(), this.upgradesInventory, false));
 		nbt.setTag("BurnerInventory", NBTHelper.saveAllItems(new NBTTagCompound(), this.burnerInventory, false));
 	}
 
@@ -507,15 +524,38 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	}
 
 	protected void updateParts() {
+		if(!this.world.isRemote) {
+			this.dataManager.set(UPGRADE_1_ENABLED, !this.getUpgradesInventory().getStackInSlot(0).isEmpty());
+			this.dataManager.set(UPGRADE_2_ENABLED, !this.getUpgradesInventory().getStackInSlot(1).isEmpty());
+			this.dataManager.set(UPGRADE_3_ENABLED, !this.getUpgradesInventory().getStackInSlot(2).isEmpty());
+			this.dataManager.set(UPGRADE_4_ENABLED, !this.getUpgradesInventory().getStackInSlot(3).isEmpty());
+			this.dataManager.set(UPGRADE_ANCHOR_ENABLED, !this.getUpgradesInventory().getStackInSlot(4).isEmpty());
+		}
+
+		this.upgradePart1.setEnabled(this.dataManager.get(UPGRADE_1_ENABLED));
+		this.upgradePart2.setEnabled(this.dataManager.get(UPGRADE_2_ENABLED));
+		this.upgradePart3.setEnabled(this.dataManager.get(UPGRADE_3_ENABLED));
+		this.upgradePart4.setEnabled(this.dataManager.get(UPGRADE_4_ENABLED));
+		this.upgradeAnchorPart.setEnabled(this.dataManager.get(UPGRADE_ANCHOR_ENABLED));
+
 		for(Entity entity : this.parts) {
 			entity.onUpdate();
 		}
 
-		Vec3d invPos = this.getRotatedCarriagePoint(new Vec3d(0.7f, 0.8f, 0), 1).add(this.posX, this.posY, this.posZ);
-		this.inventoryPart.setPosition(invPos.x, invPos.y - this.inventoryPart.height / 2, invPos.z);
+		Vec3d upgradePos1 = this.getRotatedCarriagePoint(new Vec3d(0.7f, 0.8f, 0.6f), 1).add(this.posX, this.posY, this.posZ);
+		this.upgradePart1.setPosition(upgradePos1.x, upgradePos1.y - this.upgradePart1.height / 2, upgradePos1.z);
 
-		Vec3d anchorPos = this.getRotatedCarriagePoint(new Vec3d(-0.7f, 0.8f, 0.4f), 1).add(this.posX, this.posY, this.posZ);
-		this.anchorPart.setPosition(anchorPos.x, anchorPos.y - this.anchorPart.height / 2, anchorPos.z);
+		Vec3d upgradePos2 = this.getRotatedCarriagePoint(new Vec3d(-0.7f, 0.8f, 0.6f), 1).add(this.posX, this.posY, this.posZ);
+		this.upgradePart2.setPosition(upgradePos2.x, upgradePos2.y - this.upgradePart2.height / 2, upgradePos2.z);
+
+		Vec3d upgradePos3 = this.getRotatedCarriagePoint(new Vec3d(0.7f, 0.8f, -0.6f), 1).add(this.posX, this.posY, this.posZ);
+		this.upgradePart3.setPosition(upgradePos3.x, upgradePos3.y - this.upgradePart3.height / 2, upgradePos3.z);
+
+		Vec3d upgradePos4 = this.getRotatedCarriagePoint(new Vec3d(-0.7f, 0.8f, -0.6f), 1).add(this.posX, this.posY, this.posZ);
+		this.upgradePart4.setPosition(upgradePos4.x, upgradePos4.y - this.upgradePart4.height / 2, upgradePos4.z);
+
+		Vec3d anchorPos = this.getRotatedCarriagePoint(new Vec3d(0.0f, 0.4f, 0.4f), 1).add(this.posX, this.posY, this.posZ);
+		this.upgradeAnchorPart.setPosition(anchorPos.x, anchorPos.y - this.upgradeAnchorPart.height / 2, anchorPos.z);
 
 		Vec3d burnerPos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(new Vec3d(0, -0.5f, 0), 1));
 		this.burnerPart.setPosition(burnerPos.x, burnerPos.y - this.burnerPart.height / 2, burnerPos.z);
@@ -549,10 +589,27 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			this.setDamageTaken(this.getDamageTaken() - 1.0F);
 		}
 
-		//Un-fixate anchor if no longer deployed
-		if(!this.world.isRemote && !this.dataManager.get(ANCHOR_DEPLOYED)) {
-			this.setAnchorPos(BlockPos.ORIGIN, false);
+		if(!this.world.isRemote) {
+			//Un-deploy anchor if anchor upgrade is not present
+			if(!this.upgradeAnchorPart.isEnabled()) {
+				this.dataManager.set(ANCHOR_DEPLOYED, false);
+			}
+
+			//Un-fixate anchor if no longer deployed
+			if(!this.dataManager.get(ANCHOR_DEPLOYED)) {
+				this.setAnchorPos(BlockPos.ORIGIN, false);
+			}
 		}
+
+		//TODO Temp for testing
+		for(int i = 0; i < 3; i++) {
+			if(this.getUpgradesInventory().getStackInSlot(i).isEmpty()) {
+				this.getUpgradesInventory().setInventorySlotContents(i, new ItemStack(ItemRegistry.LURKER_SKIN_POUCH));
+			}
+		}
+		/*for(int i = 0; i < 6; i++) {
+			this.getUpgradesInventory().setInventorySlotContents(i, ItemStack.EMPTY);
+		}*/
 
 		super.onUpdate();
 
@@ -916,7 +973,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	public Vec3d getPullPoint(DraetonPhysicsPart part, float partialTicks) {
 		if(part.type == DraetonPhysicsPart.Type.ANCHOR) {
-			return this.getRotatedCarriagePoint(new Vec3d(-0.6f, 0.5f, 0.4f), partialTicks);
+			return this.getRotatedCarriagePoint(new Vec3d(0.0f, -0.1f, 0.4f), partialTicks);
 		}
 
 		int index = this.physicsParts.indexOf(part);
@@ -1107,8 +1164,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		return this.dataManager.get(TIME_SINCE_HIT);
 	}
 
-	public IInventory getInventory() {
-		return this.inventory;
+	public IInventory getUpgradesInventory() {
+		return this.upgradesInventory;
 	}
 
 	public IInventory getBurnerInventory() {
@@ -1134,17 +1191,21 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	}
 
 	protected boolean interactFromMultipart(EntityDraetonInteractionPart part, EntityPlayer player, EnumHand hand) {
-		if(part == this.inventoryPart) {
-			if(!this.world.isRemote) {
+		if(!this.world.isRemote) {
+			if(part == this.upgradePart1) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_STORAGE, player.getEntityWorld(), getEntityId(), 0, 0);
-			}
-		} else if(part == this.burnerPart) {
-			if(!this.world.isRemote) {
+			} else if(part == this.upgradePart2) {
+				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_STORAGE, player.getEntityWorld(), getEntityId(), 1, 0);
+			} else if(part == this.upgradePart3) {
+				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_STORAGE, player.getEntityWorld(), getEntityId(), 2, 0);
+			} else if(part == this.upgradePart4) {
+				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_STORAGE, player.getEntityWorld(), getEntityId(), 3, 0);
+			} else if(part == this.burnerPart) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_BURNER, player.getEntityWorld(), getEntityId(), 0, 0);
-			}
-		} else if(part == this.anchorPart) {
-			if(!this.world.isRemote && hand == EnumHand.MAIN_HAND) {
-				this.dataManager.set(ANCHOR_DEPLOYED, !this.dataManager.get(ANCHOR_DEPLOYED));
+			} else if(part == this.upgradeAnchorPart) {
+				if(hand == EnumHand.MAIN_HAND) {
+					this.dataManager.set(ANCHOR_DEPLOYED, !this.dataManager.get(ANCHOR_DEPLOYED));
+				}
 			}
 		}
 		return true;

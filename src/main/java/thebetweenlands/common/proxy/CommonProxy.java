@@ -10,8 +10,10 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -29,7 +31,6 @@ import thebetweenlands.common.inventory.container.ContainerBLFurnace;
 import thebetweenlands.common.inventory.container.ContainerBarrel;
 import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.inventory.container.ContainerDraetonBurner;
-import thebetweenlands.common.inventory.container.ContainerDraetonInventory;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
@@ -37,6 +38,7 @@ import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
@@ -151,8 +153,16 @@ public class CommonProxy implements IGuiHandler {
 
 		case GUI_DRAETON_STORAGE:
 			entity = world.getEntityByID(x);
-			if (entity instanceof EntityDraeton)
-				return new ContainerDraetonInventory(player.inventory, ((EntityDraeton)entity).getInventory());
+			if (entity instanceof EntityDraeton) {
+				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
+				if(y >= 0 && y < upgrades.getSizeInventory()) {
+					ItemStack stack = upgrades.getStackInSlot(y);
+					if(!stack.isEmpty() && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+						String name = stack.hasDisplayName() ? stack.getDisplayName(): I18n.format("container.bl.lurker_skin_pouch");
+						return new ContainerPouch(player, player.inventory, new InventoryItem(stack, 9 + (stack.getItemDamage() * 9), name));
+					}
+				}
+			}
 			break;
 			
 		case GUI_DRAETON_BURNER:

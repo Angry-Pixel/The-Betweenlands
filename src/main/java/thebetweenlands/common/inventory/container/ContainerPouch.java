@@ -1,5 +1,9 @@
 package thebetweenlands.common.inventory.container;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -8,17 +12,16 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.slot.SlotPouch;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
-import javax.annotation.Nullable;
-
 public class ContainerPouch extends Container {
 	@Nullable
 	private final InventoryItem inventory;
-	
+
 	private int numRows = 3;
 
 	/**
@@ -53,7 +56,7 @@ public class ContainerPouch extends Container {
 			this.addSlotToContainer(new Slot(playerInventory, column, 8 + column * 18, 161 + yOffset));
 		}
 	}
-	
+
 	public InventoryItem getItemInventory() {
 		return this.inventory;
 	}
@@ -71,19 +74,30 @@ public class ContainerPouch extends Container {
 		//Check if pouch is in equipment
 		IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 		if (cap != null) {
-            IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
+			IInventory inv = cap.getInventory(EnumEquipmentInventory.MISC);
 
-            for (int i = 0; i < inv.getSizeInventory(); i++) {
-                if (inv.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {
-                    return true;
-                }
-            }
-        }
+			for (int i = 0; i < inv.getSizeInventory(); i++) {
+				if (inv.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {
+					return true;
+				}
+			}
+		}
 
 		//Check if pouch is in main inventory
 		for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
 			if(player.inventory.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {
 				return true;
+			}
+		}
+
+		//Check if pouch is in draeton
+		List<EntityDraeton> draetons = player.world.getEntitiesWithinAABB(EntityDraeton.class, player.getEntityBoundingBox().grow(6));
+		for(EntityDraeton dreaton : draetons) {
+			IInventory inv = dreaton.getUpgradesInventory();
+			for(int i = 0; i < inv.getSizeInventory(); i++) {
+				if(inv.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {
+					return true;
+				}
 			}
 		}
 

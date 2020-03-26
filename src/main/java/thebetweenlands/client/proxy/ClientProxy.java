@@ -33,6 +33,7 @@ import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -55,7 +56,6 @@ import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
 import thebetweenlands.client.gui.inventory.GuiCenser;
 import thebetweenlands.client.gui.inventory.GuiDraetonBurner;
-import thebetweenlands.client.gui.inventory.GuiDraetonInventory;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
@@ -478,8 +478,16 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 
 		case GUI_DRAETON_STORAGE:
 			entity = world.getEntityByID(x);
-			if (entity instanceof EntityDraeton)
-				return new GuiDraetonInventory(player.inventory, ((EntityDraeton)entity).getInventory());
+			if (entity instanceof EntityDraeton) {
+				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
+				if(y >= 0 && y < upgrades.getSizeInventory()) {
+					ItemStack stack = upgrades.getStackInSlot(y);
+					if(!stack.isEmpty() && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+						String name = stack.hasDisplayName() ? stack.getDisplayName(): I18n.format("container.bl.lurker_skin_pouch");
+						return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(stack, 9 + (stack.getItemDamage() * 9), name)));
+					}
+				}
+			}
 			break;
 			
 		case GUI_DRAETON_BURNER:
