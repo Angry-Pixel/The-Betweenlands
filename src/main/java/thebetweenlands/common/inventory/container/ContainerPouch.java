@@ -93,10 +93,12 @@ public class ContainerPouch extends Container {
 		//Check if pouch is in draeton
 		List<EntityDraeton> draetons = player.world.getEntitiesWithinAABB(EntityDraeton.class, player.getEntityBoundingBox().grow(6));
 		for(EntityDraeton dreaton : draetons) {
-			IInventory inv = dreaton.getUpgradesInventory();
-			for(int i = 0; i < inv.getSizeInventory(); i++) {
-				if(inv.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {
-					return true;
+			if(player.getDistanceSq(dreaton) <= 64.0D) {
+				IInventory inv = dreaton.getUpgradesInventory();
+				for(int i = 0; i < inv.getSizeInventory(); i++) {
+					if(inv.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {
+						return true;
+					}
 				}
 			}
 		}

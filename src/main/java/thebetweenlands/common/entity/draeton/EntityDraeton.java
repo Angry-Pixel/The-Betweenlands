@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -42,6 +43,7 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart.Action;
 import thebetweenlands.common.network.serverbound.MessageSetDraetonAnchorPos;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.Matrix;
 import thebetweenlands.util.NBTHelper;
@@ -602,11 +604,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		}
 
 		//TODO Temp for testing
-		for(int i = 0; i < 3; i++) {
-			if(this.getUpgradesInventory().getStackInSlot(i).isEmpty()) {
-				this.getUpgradesInventory().setInventorySlotContents(i, new ItemStack(ItemRegistry.LURKER_SKIN_POUCH));
-			}
-		}
+		if(this.getUpgradesInventory().getStackInSlot(0).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(0, new ItemStack(ItemRegistry.LURKER_SKIN_POUCH));
+		if(this.getUpgradesInventory().getStackInSlot(1).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(1, new ItemStack(ItemRegistry.LURKER_SKIN_POUCH));
+		if(this.getUpgradesInventory().getStackInSlot(2).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(2, new ItemStack(BlockRegistry.WEEDWOOD_WORKBENCH));
 		/*for(int i = 0; i < 6; i++) {
 			this.getUpgradesInventory().setInventorySlotContents(i, ItemStack.EMPTY);
 		}*/
@@ -1193,13 +1193,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	protected boolean interactFromMultipart(EntityDraetonInteractionPart part, EntityPlayer player, EnumHand hand) {
 		if(!this.world.isRemote) {
 			if(part == this.upgradePart1) {
-				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_STORAGE, player.getEntityWorld(), getEntityId(), 0, 0);
+				this.interactWithUpgrade(part, player, hand, 0);
 			} else if(part == this.upgradePart2) {
-				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_STORAGE, player.getEntityWorld(), getEntityId(), 1, 0);
+				this.interactWithUpgrade(part, player, hand, 1);
 			} else if(part == this.upgradePart3) {
-				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_STORAGE, player.getEntityWorld(), getEntityId(), 2, 0);
+				this.interactWithUpgrade(part, player, hand, 2);
 			} else if(part == this.upgradePart4) {
-				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_STORAGE, player.getEntityWorld(), getEntityId(), 3, 0);
+				this.interactWithUpgrade(part, player, hand, 3);
 			} else if(part == this.burnerPart) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_BURNER, player.getEntityWorld(), getEntityId(), 0, 0);
 			} else if(part == this.upgradeAnchorPart) {
@@ -1209,5 +1209,20 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			}
 		}
 		return true;
+	}
+
+	protected void interactWithUpgrade(EntityDraetonInteractionPart part, EntityPlayer player, EnumHand hand, int index) {
+		ItemStack stack = this.getUpgradesInventory().getStackInSlot(index);
+		if(!stack.isEmpty()) {
+			if(stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_POUCH, player.getEntityWorld(), this.getEntityId(), index, 0);
+			} else if(this.isCraftingUpgrade(stack)) {
+				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_CRAFTING, player.getEntityWorld(), this.getEntityId(), index, 0);
+			}
+		}
+	}
+
+	public boolean isCraftingUpgrade(ItemStack stack) {
+		return stack.getItem() == Item.getItemFromBlock(BlockRegistry.WEEDWOOD_WORKBENCH);
 	}
 }

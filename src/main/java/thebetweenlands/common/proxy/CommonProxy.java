@@ -31,6 +31,7 @@ import thebetweenlands.common.inventory.container.ContainerBLFurnace;
 import thebetweenlands.common.inventory.container.ContainerBarrel;
 import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.inventory.container.ContainerDraetonBurner;
+import thebetweenlands.common.inventory.container.ContainerDraetonWorkbench;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerItemNaming;
 import thebetweenlands.common.inventory.container.ContainerMortar;
@@ -38,6 +39,7 @@ import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
@@ -65,8 +67,9 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_LURKER_POUCH_KEYBIND = 14;
 	public static final int GUI_CENSER = 15;
 	public static final int GUI_BARREL = 16;
-	public static final int GUI_DRAETON_STORAGE = 17;
+	public static final int GUI_DRAETON_POUCH = 17;
 	public static final int GUI_DRAETON_BURNER = 18;
+	public static final int GUI_DRAETON_CRAFTING = 19;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -151,7 +154,7 @@ public class CommonProxy implements IGuiHandler {
 			}
 			break;
 
-		case GUI_DRAETON_STORAGE:
+		case GUI_DRAETON_POUCH:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
 				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
@@ -160,6 +163,19 @@ public class CommonProxy implements IGuiHandler {
 					if(!stack.isEmpty() && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
 						String name = stack.hasDisplayName() ? stack.getDisplayName(): I18n.format("container.bl.lurker_skin_pouch");
 						return new ContainerPouch(player, player.inventory, new InventoryItem(stack, 9 + (stack.getItemDamage() * 9), name));
+					}
+				}
+			}
+			break;
+			
+		case GUI_DRAETON_CRAFTING:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton) {
+				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
+				if(y >= 0 && y < upgrades.getSizeInventory()) {
+					ItemStack stack = upgrades.getStackInSlot(y);
+					if(!stack.isEmpty() && ((EntityDraeton) entity).isCraftingUpgrade(stack)) {
+						return new ContainerDraetonWorkbench(player.inventory, (EntityDraeton) entity, y);
 					}
 				}
 			}

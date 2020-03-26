@@ -56,6 +56,7 @@ import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
 import thebetweenlands.client.gui.inventory.GuiCenser;
 import thebetweenlands.client.gui.inventory.GuiDraetonBurner;
+import thebetweenlands.client.gui.inventory.GuiDraetonCrafting;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
@@ -476,7 +477,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			}
 			break;
 
-		case GUI_DRAETON_STORAGE:
+		case GUI_DRAETON_POUCH:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
 				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
@@ -485,6 +486,19 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 					if(!stack.isEmpty() && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
 						String name = stack.hasDisplayName() ? stack.getDisplayName(): I18n.format("container.bl.lurker_skin_pouch");
 						return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(stack, 9 + (stack.getItemDamage() * 9), name)));
+					}
+				}
+			}
+			break;
+			
+		case GUI_DRAETON_CRAFTING:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton) {
+				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
+				if(y >= 0 && y < upgrades.getSizeInventory()) {
+					ItemStack stack = upgrades.getStackInSlot(y);
+					if(!stack.isEmpty() && ((EntityDraeton) entity).isCraftingUpgrade(stack)) {
+						return new GuiDraetonCrafting(player.inventory, (EntityDraeton) entity, y);
 					}
 				}
 			}
