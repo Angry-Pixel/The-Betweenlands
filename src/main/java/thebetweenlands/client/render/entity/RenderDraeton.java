@@ -2,20 +2,31 @@ package thebetweenlands.client.render.entity;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.RenderGlobal;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ModelManager;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
+import net.minecraft.world.storage.MapData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelDraetonBalloon;
@@ -31,10 +42,16 @@ public class RenderDraeton extends Render<EntityDraeton> {
 	private static final ResourceLocation TEXTURE_BALLOON = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_balloon.png");
 	private static final ResourceLocation TEXTURE_SHAMBLER = new ResourceLocation("thebetweenlands:textures/entity/shambler.png");
 
+	private static final ResourceLocation MAP_BACKGROUND_TEXTURES = new ResourceLocation("textures/map/map_background.png");
+
 	private final ModelDraetonCarriage modelCarriage = new ModelDraetonCarriage();
 	private final ModelDraetonBalloon modelBalloon = new ModelDraetonBalloon();
 	private final ModelShambler modelShambler = new ModelShambler();
 
+	private final Minecraft mc = Minecraft.getMinecraft();
+	private final ModelResourceLocation itemFrameModel = new ModelResourceLocation("item_frame", "normal");
+	private final ModelResourceLocation mapModel = new ModelResourceLocation("item_frame", "map");
+	
 	public RenderDraeton(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -194,17 +211,95 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		this.bindEntityTexture(entity);
 		this.modelCarriage.renderCarriage(0.0625F);
 
+		
+		GlStateManager.disableBlend();
+		GlStateManager.color(1, 1, 1, 1);
+		
+		
+		GlStateManager.scale(-1, -1, 1);
+		GlStateManager.translate(0, -0.74f, -0.84f);
+		GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+		GlStateManager.scale(0.5f, 0.5f, 0.5f);
+		this.renderFrame(entity.world, entity.getUpgradesInventory().getStackInSlot(5));
+		
+		GlStateManager.popMatrix();
+		
 		if (this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
 			GlStateManager.disableColorMaterial();
 		}
 
-		GlStateManager.disableBlend();
-
 		GlStateManager.disableRescaleNormal();
-		GlStateManager.popMatrix();
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+	}
+
+	protected void renderFrame(World world, ItemStack stack) {
+		this.renderManager.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        BlockRendererDispatcher blockrendererdispatcher = this.mc.getBlockRendererDispatcher();
+        ModelManager modelmanager = blockrendererdispatcher.getBlockModelShapes().getModelManager();
+        IBakedModel model;
+        
+        GlStateManager.pushMatrix();
+        
+        if (stack.getItem() instanceof net.minecraft.item.ItemMap) {
+            model = modelmanager.getModel(this.mapModel);
+        } else {
+            model = modelmanager.getModel(this.itemFrameModel);
+            
+            GlStateManager.scale(1.3f, 1.3f, 1.3f);
+            GlStateManager.translate(0, 0, -0.115f);
+        }
+        
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+        blockrendererdispatcher.getBlockModelRenderer().renderModelBrightnessColor(model, 1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.popMatrix();
+        
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0.0F, 0.0F, 0.4375F);
+        this.renderItem(world, stack);
+        GlStateManager.popMatrix();
+        
+        GlStateManager.popMatrix();
+	}
+	
+	//Adjusted from RenderItemFrame
+	protected void renderItem(World world, ItemStack itemstack)
+	{
+		if (!itemstack.isEmpty())
+		{
+			GlStateManager.pushMatrix();
+			GlStateManager.disableLighting();
+			boolean isMap = itemstack.getItem() instanceof net.minecraft.item.ItemMap;
+
+			if (isMap)
+			{
+				this.renderManager.renderEngine.bindTexture(MAP_BACKGROUND_TEXTURES);
+				GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+				GlStateManager.scale(0.0078125F, 0.0078125F, 0.0078125F);
+				GlStateManager.translate(-64.0F, -64.0F, 0.0F);
+				MapData mapdata = ((net.minecraft.item.ItemMap) itemstack.getItem()).getMapData(itemstack, world);
+				GlStateManager.translate(0.0F, 0.0F, -1.0F);
+
+				if (mapdata != null)
+				{
+					this.mc.entityRenderer.getMapItemRenderer().renderMap(mapdata, false);
+				}
+			}
+			else
+			{
+				GlStateManager.scale(0.5F, 0.5F, 0.5F);
+				GlStateManager.pushAttrib();
+				RenderHelper.enableStandardItemLighting();
+				this.mc.getRenderItem().renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED);
+				RenderHelper.disableStandardItemLighting();
+				GlStateManager.popAttrib();
+			}
+
+			GlStateManager.enableLighting();
+			GlStateManager.popMatrix();
+		}
 	}
 
 	protected void renderConnection(Tessellator tessellator, BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {

@@ -84,10 +84,10 @@ public class AmateMapData extends MapData {
         int r = (rgb >> 16) & 0xFF;
         int g = (rgb >> 8) & 0xFF;
         int b = rgb & 0xFF;
-        int rs = MathHelper.clamp((int) ((0.293 * r + 0.269 * g + 0.089 * b) * 0.8D), 0, 255);
-        int rg = MathHelper.clamp((int) ((0.049 * r + 0.386 * g + 0.128 * b) * 0.8D), 0, 255);
-        int rb = MathHelper.clamp((int) ((0.072 * r + 0.034 * g + 0.111 * b) * 0.8D), 0, 255);
-        return rs << 16 | rg << 8 | rb;
+        int rs = MathHelper.clamp((int) ((0.293 * r + 0.269 * g + 0.089 * b) * 5), 0, 255);
+        int rg = MathHelper.clamp((int) ((0.049 * r + 0.386 * g + 0.128 * b) * 5), 0, 255);
+        int rb = MathHelper.clamp((int) ((0.072 * r + 0.034 * g + 0.111 * b) * 5), 0, 255);
+        return rs << 16 | rg << 8 | rb | ((rgb >> 24) & 0xFF << 24);
     }
 
     @Override
