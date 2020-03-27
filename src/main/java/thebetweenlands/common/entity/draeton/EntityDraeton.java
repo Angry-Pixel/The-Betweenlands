@@ -127,12 +127,14 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	protected boolean dropContentsWhenDead = true;
 
+	public float upgradeCounterRoll = 0.0f;
+	
 	public EntityDraeton(World world) {
 		super(world);
 		this.setSize(1.5F, 1.5f);
 
 		this.parts = new EntityDraetonInteractionPart[]{ 
-				this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.5f, 0.57f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.5f, 0.75f, false),
+				this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.5f, 0.75f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.5f, 0.75f, false),
 						this.upgradePart3 = new EntityDraetonInteractionPart(this, "upgrade_3", 0.5f, 0.75f, false), this.upgradePart4 = new EntityDraetonInteractionPart(this, "upgrade_4", 0.5f, 0.75f, false),
 						this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.7f, 0.5f, false),
 						this.upgradeAnchorPart = new EntityDraetonInteractionPart(this, "upgrade_anchor", 0.5f, 0.5f, false),
@@ -482,13 +484,24 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		switch(i) {
 		default:
 		case 0:
-			return 0.0f;
-		case 1:
-			return 180.0f;
 		case 2:
 			return 0.0f;
+		case 1:
 		case 3:
 			return 180.0f;
+		}
+	}
+	
+	public float getUpgradeCounterRoll(int i, float partialTicks) {
+		float roll = this.prevRotationRoll + (this.rotationRoll - this.prevRotationRoll) * partialTicks;
+		switch(i) {
+		default:
+		case 0:
+		case 2:
+			return -roll;
+		case 1:
+		case 3:
+			return roll;
 		}
 	}
 

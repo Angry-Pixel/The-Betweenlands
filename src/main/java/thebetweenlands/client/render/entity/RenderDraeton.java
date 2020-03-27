@@ -241,6 +241,8 @@ public class RenderDraeton extends Render<EntityDraeton> {
 				}
 
 				if(upgradeModel != null) {
+					entity.upgradeCounterRoll = entity.getUpgradeCounterRoll(i, partialTicks);
+					
 					Vec3d upgradePos = entity.getUpgradePoint(i, 0);
 
 					GlStateManager.pushMatrix();

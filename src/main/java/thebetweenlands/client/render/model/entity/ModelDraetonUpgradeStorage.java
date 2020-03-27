@@ -3,6 +3,7 @@ package thebetweenlands.client.render.model.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
 
 /**
  * BLDraetonAddonStorage - TripleHeadedSheep
@@ -49,10 +50,17 @@ public class ModelDraetonUpgradeStorage extends ModelBase {
         this.storage_main.addChild(this.rope_top1);
         this.storage_main.addChild(this.rope_top2);
     }
-
+    
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.storage_main.render(f5);
+    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    	if(entityIn instanceof EntityDraeton) {
+    		float roll = (float)Math.toRadians(((EntityDraeton) entityIn).upgradeCounterRoll);
+    		
+    		this.storage_main.rotateAngleZ = 0.18203784098300857F - roll;
+    	} else {
+    		this.storage_main.rotateAngleZ = 0.18203784098300857F;
+    	}
+    	this.storage_main.render(scale);
     }
 
     /**

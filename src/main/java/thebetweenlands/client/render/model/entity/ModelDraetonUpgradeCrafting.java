@@ -110,16 +110,12 @@ public class ModelDraetonUpgradeCrafting extends ModelBase {
 
     @Override
     public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-    	float partialTicks = ageInTicks - entityIn.ticksExisted;
-    	
     	if(entityIn instanceof EntityDraeton) {
-    		EntityDraeton draeton = (EntityDraeton) entityIn;
+    		float roll = (float)Math.toRadians(((EntityDraeton) entityIn).upgradeCounterRoll);
     		
-    		float roll = (float)Math.toRadians(draeton.prevRotationRoll + (draeton.rotationRoll - draeton.prevRotationRoll) * partialTicks);
-    		
-    		this.hammerhandle.rotateAngleZ = -0.136659280431156F + roll;
-    		this.thonghandle1.rotateAngleZ = -0.27314402793711257F + roll;
-    		this.sawhandle.rotateAngleZ = -0.136659280431156F + roll;
+    		this.hammerhandle.rotateAngleZ = -0.136659280431156F - roll;
+    		this.thonghandle1.rotateAngleZ = -0.27314402793711257F - roll;
+    		this.sawhandle.rotateAngleZ = -0.136659280431156F - roll;
     	} else {
     		this.hammerhandle.rotateAngleZ = -0.136659280431156F;
     		this.thonghandle1.rotateAngleZ = -0.27314402793711257F;
