@@ -1,8 +1,12 @@
 package thebetweenlands.client.render.entity;
 
+import java.util.Collection;
+
 import javax.annotation.Nullable;
 
 import org.lwjgl.opengl.GL11;
+
+import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -39,6 +43,7 @@ import thebetweenlands.client.render.model.entity.ModelDraetonCarriage;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeCrafting;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeStorage;
 import thebetweenlands.client.render.model.entity.ModelShambler;
+import thebetweenlands.client.render.model.loader.IFastTESRBakedModels;
 import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.lib.ModInfo;
@@ -60,9 +65,10 @@ public class RenderDraeton extends Render<EntityDraeton> {
 	private final ModelDraetonUpgradeStorage modelStorage = new ModelDraetonUpgradeStorage();
 
 	private final Minecraft mc = Minecraft.getMinecraft();
-	private final ModelResourceLocation itemFrameModel = new ModelResourceLocation("item_frame", "normal");
-	private final ModelResourceLocation mapModel = new ModelResourceLocation("item_frame", "map");
-
+	
+	public static final ModelResourceLocation FRAME_MODEL = new ModelResourceLocation(new ResourceLocation(ModInfo.ID, "draeton_item_frame"), "normal");
+	public static final ModelResourceLocation FRAME_MAP_MODEL = new ModelResourceLocation(new ResourceLocation(ModInfo.ID, "draeton_item_frame"), "map");
+	
 	public RenderDraeton(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -242,7 +248,7 @@ public class RenderDraeton extends Render<EntityDraeton> {
 
 				if(upgradeModel != null) {
 					entity.upgradeCounterRoll = entity.getUpgradeCounterRoll(i, partialTicks);
-					
+
 					Vec3d upgradePos = entity.getUpgradePoint(i, 0);
 
 					GlStateManager.pushMatrix();
@@ -256,14 +262,17 @@ public class RenderDraeton extends Render<EntityDraeton> {
 			}
 		}
 
-		GlStateManager.scale(-1, -1, 1);
-		GlStateManager.translate(0, -0.74f, -0.84f);
-		GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
-		GlStateManager.scale(0.5f, 0.5f, 0.5f);
+		ItemStack displayStack = entity.getUpgradesInventory().getStackInSlot(5);
+		if(!displayStack.isEmpty()) {
+			GlStateManager.scale(-1, -1, 1);
+			GlStateManager.translate(0, -0.4f, -0.84f);
+			GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
+			GlStateManager.scale(0.5f, 0.5f, 0.5f);
 
-		Entity controller = entity.getControllingPassenger();
+			Entity controller = entity.getControllingPassenger();
 
-		this.renderFrame(entity.world, entity.getUpgradesInventory().getStackInSlot(5), controller instanceof EntityLivingBase ? (EntityLivingBase)controller : null);
+			this.renderFrame(entity.world, displayStack, controller instanceof EntityLivingBase ? (EntityLivingBase)controller : null);
+		}
 
 		GlStateManager.popMatrix();
 
@@ -286,9 +295,9 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		GlStateManager.pushMatrix();
 
 		if (stack.getItem() instanceof net.minecraft.item.ItemMap) {
-			model = modelmanager.getModel(this.mapModel);
+			model = modelmanager.getModel(FRAME_MAP_MODEL);
 		} else {
-			model = modelmanager.getModel(this.itemFrameModel);
+			model = modelmanager.getModel(FRAME_MODEL);
 
 			GlStateManager.scale(1.3f, 1.3f, 1.3f);
 			GlStateManager.translate(0, 0, -0.115f);
