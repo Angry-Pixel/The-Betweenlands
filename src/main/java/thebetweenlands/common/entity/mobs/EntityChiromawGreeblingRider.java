@@ -4,10 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -18,14 +15,13 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
-import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityChiromawGreeblingRider extends EntityChiromaw {
-	private static final DataParameter<Boolean> IS_HANGING = EntityDataManager.createKey(EntityChiromawGreeblingRider.class, DataSerializers.BOOLEAN);
-
+	private static final DataParameter<Boolean> IS_SHOOTING = EntityDataManager.createKey(EntityChiromawGreeblingRider.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> RELOAD_TIMER = EntityDataManager.createKey(EntityChiromawGreeblingRider.class, DataSerializers.VARINT);
 	public EntityChiromawGreeblingRider(World world) {
 		super(world);
 		setSize(0.7F, 0.9F);
@@ -41,21 +37,35 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
-		this.tasks.addTask(2, new EntityAIFlyingWander(this, 0.5D));
-		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true).setUnseenMemoryTicks(160));
+		//this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
+		//this.tasks.addTask(2, new EntityAIFlyingWander(this, 0.5D));
+		//this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true).setUnseenMemoryTicks(160));
 	}
 
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 
-		this.dataManager.register(IS_HANGING, false);
+		this.dataManager.register(IS_SHOOTING, false);
+		this.dataManager.register(RELOAD_TIMER, 0);
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		//WIP Temp 
+		if (getReloadTimer() <= 100 && !getIsShooting())
+			setReloadTimer(getReloadTimer() +1);
+		if(getReloadTimer() >= 100 && !getIsShooting()) {
+			setIsShooting(true);
+			setReloadTimer(0);
+		}
+
+		if(getIsShooting())
+			System.out.println("Shooting: " + getIsShooting());
+
+		if(getIsShooting() && getReloadTimer() < 100)
+			setIsShooting(false);
 	}
 
 	@Override
@@ -63,12 +73,20 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 		super.updateAITasks();
 	}
 
-	public boolean getIsHanging() {
-		return dataManager.get(IS_HANGING);
+	public boolean getIsShooting() {
+		return dataManager.get(IS_SHOOTING);
 	}
 
-	public void setIsHanging(boolean hanging) {
-		dataManager.set(IS_HANGING, hanging);
+	public void setIsShooting(boolean shooting) {
+		dataManager.set(IS_SHOOTING, shooting);
+	}
+	
+	public int getReloadTimer() {
+		return dataManager.get(RELOAD_TIMER);
+	}
+
+	public void setReloadTimer(int timer) {
+		dataManager.set(RELOAD_TIMER, timer);
 	}
 
 	@Override

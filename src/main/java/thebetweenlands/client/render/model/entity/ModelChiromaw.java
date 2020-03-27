@@ -391,7 +391,7 @@ public class ModelChiromaw extends MowzieModelBase {
 		leg_left_lower.showModel = showRider;
 		leg_right_lower.showModel = showRider;
 		body.rotationPointY = 15.5F;
-		body.rotationPointZ = -1.5F;
+		body.rotationPointZ = -2F;
 		body.render(unitPixel);
     }
 
@@ -465,6 +465,22 @@ public class ModelChiromaw extends MowzieModelBase {
 
             head_jaw1.rotateAngleX = 0.9560913642424937F - flap * 0.5F;
             head_base.rotateAngleX = -0.698132F;
+            
+            // WIP shooting animation
+            
+            if(chiromaw instanceof EntityChiromawGreeblingRider) {
+            	chest.rotateAngleY = 0F + ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F);
+            	head_main.rotateAngleY = 0F - ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F);
+            	head_main.rotateAngleX = -0.5918411493512771F + ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F) / (float)Math.PI;
+
+            	jaw_main.rotateAngleX = 0.5009094953223726F - ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F) / (float)Math.PI;
+            	arm_left_upper.rotateAngleY = 0.045553093477052F - ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F);
+            	arm_left_lower.rotateAngleX = -0.6829473363053812F + ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F) / (float)Math.PI;
+            	
+            	arm_right_upper.rotateAngleX = 0.9105382707654417F - ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F);
+            	arm_right_upper.rotateAngleZ = 0.18203784098300857F + ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F) / (float)Math.PI;
+            	arm_right_lower.rotateAngleX = -2.5497515042385164F + ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F);
+            }
         }
     }
 }
