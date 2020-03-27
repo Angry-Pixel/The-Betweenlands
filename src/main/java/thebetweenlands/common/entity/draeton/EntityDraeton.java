@@ -687,7 +687,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		Vec3d upgradePos4 = this.getRotatedCarriagePoint(this.getUpgradePoint(3, 0.25f), 1).add(this.posX, this.posY - this.upgradePart4.height + 0.05f, this.posZ);
 		this.upgradePart4.setPosition(upgradePos4.x, upgradePos4.y, upgradePos4.z);
 
-		Vec3d anchorPos = this.getRotatedCarriagePoint(new Vec3d(0.0f, 0.4f, 0.4f), 1).add(this.posX, this.posY, this.posZ);
+		Vec3d anchorPos = this.getRotatedCarriagePoint(new Vec3d(0.0f, 0.4f, 0.975f), 1).add(this.posX, this.posY, this.posZ);
 		this.upgradeAnchorPart.setPosition(anchorPos.x, anchorPos.y - this.upgradeAnchorPart.height / 2, anchorPos.z);
 
 		Vec3d burnerPos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(new Vec3d(0, -0.5f, 0), 1));
@@ -1167,7 +1167,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	public Vec3d getPullPoint(DraetonPhysicsPart part, float partialTicks) {
 		if(part.type == DraetonPhysicsPart.Type.ANCHOR) {
-			return this.getRotatedCarriagePoint(new Vec3d(0.0f, -0.1f, 0.4f), partialTicks);
+			return this.getRotatedCarriagePoint(new Vec3d(0.0f, 0.025f, 1.25f), partialTicks);
 		}
 
 		int index = this.physicsParts.indexOf(part);
