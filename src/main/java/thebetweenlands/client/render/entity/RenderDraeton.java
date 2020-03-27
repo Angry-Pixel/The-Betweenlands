@@ -1,8 +1,11 @@
 package thebetweenlands.client.render.entity;
 
+import javax.annotation.Nullable;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -20,6 +23,8 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -31,6 +36,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelDraetonBalloon;
 import thebetweenlands.client.render.model.entity.ModelDraetonCarriage;
+import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeCrafting;
+import thebetweenlands.client.render.model.entity.ModelDreatonUpgradeStorage;
 import thebetweenlands.client.render.model.entity.ModelShambler;
 import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
@@ -40,6 +47,8 @@ import thebetweenlands.common.lib.ModInfo;
 public class RenderDraeton extends Render<EntityDraeton> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_carriage.png");
 	private static final ResourceLocation TEXTURE_BALLOON = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_balloon.png");
+	private static final ResourceLocation TEXTURE_CRAFTING = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_crafting.png");
+	private static final ResourceLocation TEXTURE_STORAGE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_storage.png");
 	private static final ResourceLocation TEXTURE_SHAMBLER = new ResourceLocation("thebetweenlands:textures/entity/shambler.png");
 
 	private static final ResourceLocation MAP_BACKGROUND_TEXTURES = new ResourceLocation("textures/map/map_background.png");
@@ -47,11 +56,13 @@ public class RenderDraeton extends Render<EntityDraeton> {
 	private final ModelDraetonCarriage modelCarriage = new ModelDraetonCarriage();
 	private final ModelDraetonBalloon modelBalloon = new ModelDraetonBalloon();
 	private final ModelShambler modelShambler = new ModelShambler();
+	private final ModelDraetonUpgradeCrafting modelCrafting = new ModelDraetonUpgradeCrafting();
+	private final ModelDreatonUpgradeStorage modelStorage = new ModelDreatonUpgradeStorage();
 
 	private final Minecraft mc = Minecraft.getMinecraft();
 	private final ModelResourceLocation itemFrameModel = new ModelResourceLocation("item_frame", "normal");
 	private final ModelResourceLocation mapModel = new ModelResourceLocation("item_frame", "map");
-	
+
 	public RenderDraeton(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -211,19 +222,47 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		this.bindEntityTexture(entity);
 		this.modelCarriage.renderCarriage(0.0625F);
 
-		
+
 		GlStateManager.disableBlend();
 		GlStateManager.color(1, 1, 1, 1);
-		
-		
+
+		IInventory upgrades = entity.getUpgradesInventory();
+		for(int i = 0; i < 4; i++) {
+			ItemStack upgrade = upgrades.getStackInSlot(i);
+			if(!upgrade.isEmpty()) {
+				ModelBase upgradeModel = null;
+
+				if(entity.isStorageUpgrade(upgrade)) {
+					upgradeModel = this.modelStorage;
+					this.bindTexture(TEXTURE_STORAGE);
+				} else if(entity.isCraftingUpgrade(upgrade)) {
+					upgradeModel = this.modelCrafting;
+					this.bindTexture(TEXTURE_CRAFTING);
+				}
+
+				Vec3d upgradePos = entity.getUpgradePoint(i, 0);
+
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(upgradePos.x, upgradePos.y, -upgradePos.z);
+				GlStateManager.rotate(entity.getUpgradeRotY(i), 0, 1, 0);
+
+				upgradeModel.render(entity, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0625f);
+
+				GlStateManager.popMatrix();
+			}
+		}
+
 		GlStateManager.scale(-1, -1, 1);
 		GlStateManager.translate(0, -0.74f, -0.84f);
 		GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
 		GlStateManager.scale(0.5f, 0.5f, 0.5f);
-		this.renderFrame(entity.world, entity.getUpgradesInventory().getStackInSlot(5));
-		
+
+		Entity controller = entity.getControllingPassenger();
+
+		this.renderFrame(entity.world, entity.getUpgradesInventory().getStackInSlot(5), controller instanceof EntityLivingBase ? (EntityLivingBase)controller : null);
+
 		GlStateManager.popMatrix();
-		
+
 		if (this.renderOutlines) {
 			GlStateManager.disableOutlineMode();
 			GlStateManager.disableColorMaterial();
@@ -234,38 +273,38 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
-	protected void renderFrame(World world, ItemStack stack) {
+	protected void renderFrame(World world, ItemStack stack, @Nullable EntityLivingBase entity) {
 		this.renderManager.renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-        BlockRendererDispatcher blockrendererdispatcher = this.mc.getBlockRendererDispatcher();
-        ModelManager modelmanager = blockrendererdispatcher.getBlockModelShapes().getModelManager();
-        IBakedModel model;
-        
-        GlStateManager.pushMatrix();
-        
-        if (stack.getItem() instanceof net.minecraft.item.ItemMap) {
-            model = modelmanager.getModel(this.mapModel);
-        } else {
-            model = modelmanager.getModel(this.itemFrameModel);
-            
-            GlStateManager.scale(1.3f, 1.3f, 1.3f);
-            GlStateManager.translate(0, 0, -0.115f);
-        }
-        
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(-0.5F, -0.5F, -0.5F);
-        blockrendererdispatcher.getBlockModelRenderer().renderModelBrightnessColor(model, 1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.popMatrix();
-        
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(0.0F, 0.0F, 0.4375F);
-        this.renderItem(world, stack);
-        GlStateManager.popMatrix();
-        
-        GlStateManager.popMatrix();
+		BlockRendererDispatcher blockrendererdispatcher = this.mc.getBlockRendererDispatcher();
+		ModelManager modelmanager = blockrendererdispatcher.getBlockModelShapes().getModelManager();
+		IBakedModel model;
+
+		GlStateManager.pushMatrix();
+
+		if (stack.getItem() instanceof net.minecraft.item.ItemMap) {
+			model = modelmanager.getModel(this.mapModel);
+		} else {
+			model = modelmanager.getModel(this.itemFrameModel);
+
+			GlStateManager.scale(1.3f, 1.3f, 1.3f);
+			GlStateManager.translate(0, 0, -0.115f);
+		}
+
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(-0.5F, -0.5F, -0.5F);
+		blockrendererdispatcher.getBlockModelRenderer().renderModelBrightnessColor(model, 1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.popMatrix();
+
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(0.0F, 0.0F, 0.4375F);
+		this.renderItem(world, stack, entity);
+		GlStateManager.popMatrix();
+
+		GlStateManager.popMatrix();
 	}
-	
+
 	//Adjusted from RenderItemFrame
-	protected void renderItem(World world, ItemStack itemstack)
+	protected void renderItem(World world, ItemStack itemstack, @Nullable EntityLivingBase entity)
 	{
 		if (!itemstack.isEmpty())
 		{
@@ -292,7 +331,13 @@ public class RenderDraeton extends Render<EntityDraeton> {
 				GlStateManager.scale(0.5F, 0.5F, 0.5F);
 				GlStateManager.pushAttrib();
 				RenderHelper.enableStandardItemLighting();
-				this.mc.getRenderItem().renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED);
+
+				if(entity != null) {
+					this.mc.getRenderItem().renderItem(itemstack, entity, ItemCameraTransforms.TransformType.FIXED, false);
+				} else {
+					this.mc.getRenderItem().renderItem(itemstack, ItemCameraTransforms.TransformType.FIXED);
+				}
+
 				RenderHelper.disableStandardItemLighting();
 				GlStateManager.popAttrib();
 			}

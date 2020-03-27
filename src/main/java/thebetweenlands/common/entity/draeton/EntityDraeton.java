@@ -113,8 +113,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.setSize(1.5F, 1.5f);
 
 		this.parts = new EntityDraetonInteractionPart[]{ 
-				this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.6f, 0.5f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.6f, 0.5f, false),
-						this.upgradePart3 = new EntityDraetonInteractionPart(this, "upgrade_3", 0.6f, 0.5f, false), this.upgradePart4 = new EntityDraetonInteractionPart(this, "upgrade_4", 0.6f, 0.5f, false),
+				this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.5f, 0.57f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.5f, 0.75f, false),
+						this.upgradePart3 = new EntityDraetonInteractionPart(this, "upgrade_3", 0.5f, 0.75f, false), this.upgradePart4 = new EntityDraetonInteractionPart(this, "upgrade_4", 0.5f, 0.75f, false),
 						this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.6f, 0.5f, false),
 						this.upgradeAnchorPart = new EntityDraetonInteractionPart(this, "upgrade_anchor", 0.5f, 0.5f, false),
 						this.upgradeFramePart = new EntityDraetonInteractionPart(this, "upgrade_frame", 0.5f, 0.5f, false),
@@ -416,6 +416,41 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		return balloonPos;
 	}
 
+	public Vec3d getUpgradePoint(int i, float offset) {
+		Vec3d offsetVec = new Vec3d(offset, 0, 0);
+		
+		Matrix mat = new Matrix();
+		mat.rotate(Math.toRadians(this.getUpgradeRotY(i)), 0, 1, 0);
+	
+		offsetVec = mat.transform(offsetVec);
+		
+		switch(i) {
+		default:
+		case 0:
+			return new Vec3d(10 / 16.0f, 14 / 16.0f, 8 / 16.0f).add(offsetVec);
+		case 1:
+			return new Vec3d(-10 / 16.0f, 14 / 16.0f, 8 / 16.0f).add(offsetVec);
+		case 2:
+			return new Vec3d(10 / 16.0f, 14 / 16.0f, -8 / 16.0f).add(offsetVec);
+		case 3:
+			return new Vec3d(-10 / 16.0f, 14 / 16.0f, -8 / 16.0f).add(offsetVec);
+		}
+	}
+	
+	public float getUpgradeRotY(int i) {
+		switch(i) {
+		default:
+		case 0:
+			return 0.0f;
+		case 1:
+			return 180.0f;
+		case 2:
+			return 0.0f;
+		case 3:
+			return 180.0f;
+		}
+	}
+	
 	@Override
 	public void onEntityUpdate() {
 		if(!this.world.isRemote) {
@@ -586,17 +621,17 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			entity.onUpdate();
 		}
 
-		Vec3d upgradePos1 = this.getRotatedCarriagePoint(new Vec3d(0.7f, 0.8f, 0.6f), 1).add(this.posX, this.posY, this.posZ);
-		this.upgradePart1.setPosition(upgradePos1.x, upgradePos1.y - this.upgradePart1.height / 2, upgradePos1.z);
+		Vec3d upgradePos1 = this.getRotatedCarriagePoint(this.getUpgradePoint(0, 0.25f), 1).add(this.posX, this.posY - this.upgradePart1.height + 0.05f, this.posZ);
+		this.upgradePart1.setPosition(upgradePos1.x, upgradePos1.y, upgradePos1.z);
 
-		Vec3d upgradePos2 = this.getRotatedCarriagePoint(new Vec3d(-0.7f, 0.8f, 0.6f), 1).add(this.posX, this.posY, this.posZ);
-		this.upgradePart2.setPosition(upgradePos2.x, upgradePos2.y - this.upgradePart2.height / 2, upgradePos2.z);
+		Vec3d upgradePos2 = this.getRotatedCarriagePoint(this.getUpgradePoint(1, 0.25f), 1).add(this.posX, this.posY - this.upgradePart2.height + 0.05f, this.posZ);
+		this.upgradePart2.setPosition(upgradePos2.x, upgradePos2.y, upgradePos2.z);
 
-		Vec3d upgradePos3 = this.getRotatedCarriagePoint(new Vec3d(0.7f, 0.8f, -0.6f), 1).add(this.posX, this.posY, this.posZ);
-		this.upgradePart3.setPosition(upgradePos3.x, upgradePos3.y - this.upgradePart3.height / 2, upgradePos3.z);
+		Vec3d upgradePos3 = this.getRotatedCarriagePoint(this.getUpgradePoint(2, 0.25f), 1).add(this.posX, this.posY - this.upgradePart3.height + 0.05f, this.posZ);
+		this.upgradePart3.setPosition(upgradePos3.x, upgradePos3.y, upgradePos3.z);
 
-		Vec3d upgradePos4 = this.getRotatedCarriagePoint(new Vec3d(-0.7f, 0.8f, -0.6f), 1).add(this.posX, this.posY, this.posZ);
-		this.upgradePart4.setPosition(upgradePos4.x, upgradePos4.y - this.upgradePart4.height / 2, upgradePos4.z);
+		Vec3d upgradePos4 = this.getRotatedCarriagePoint(this.getUpgradePoint(3, 0.25f), 1).add(this.posX, this.posY - this.upgradePart4.height + 0.05f, this.posZ);
+		this.upgradePart4.setPosition(upgradePos4.x, upgradePos4.y, upgradePos4.z);
 
 		Vec3d anchorPos = this.getRotatedCarriagePoint(new Vec3d(0.0f, 0.4f, 0.4f), 1).add(this.posX, this.posY, this.posZ);
 		this.upgradeAnchorPart.setPosition(anchorPos.x, anchorPos.y - this.upgradeAnchorPart.height / 2, anchorPos.z);
@@ -1323,7 +1358,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	protected void interactWithUpgrade(EntityDraetonInteractionPart part, EntityPlayer player, EnumHand hand, int index) {
 		ItemStack stack = this.getUpgradesInventory().getStackInSlot(index);
 		if(!stack.isEmpty()) {
-			if(stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+			if(this.isStorageUpgrade(stack)) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_POUCH, player.getEntityWorld(), this.getEntityId(), index, 0);
 			} else if(this.isCraftingUpgrade(stack)) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_CRAFTING, player.getEntityWorld(), this.getEntityId(), index, 0);
@@ -1331,6 +1366,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		}
 	}
 
+	public boolean isStorageUpgrade(ItemStack stack) {
+		return stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH;
+	}
+	
 	public boolean isCraftingUpgrade(ItemStack stack) {
 		return stack.getItem() == Item.getItemFromBlock(BlockRegistry.WEEDWOOD_WORKBENCH);
 	}

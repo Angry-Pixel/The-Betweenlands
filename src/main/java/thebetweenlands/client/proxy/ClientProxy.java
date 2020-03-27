@@ -483,8 +483,8 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
 				if(y >= 0 && y < upgrades.getSizeInventory()) {
 					ItemStack stack = upgrades.getStackInSlot(y);
-					if(!stack.isEmpty() && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
-						String name = stack.hasDisplayName() ? stack.getDisplayName(): I18n.format("container.bl.lurker_skin_pouch");
+					if(!stack.isEmpty() && ((EntityDraeton) entity).isStorageUpgrade(stack)) {
+						String name = stack.hasDisplayName() ? stack.getDisplayName(): I18n.format("container.bl.draeton_storage");
 						return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(stack, 9 + (stack.getItemDamage() * 9), name)));
 					}
 				}
