@@ -37,7 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelDraetonBalloon;
 import thebetweenlands.client.render.model.entity.ModelDraetonCarriage;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeCrafting;
-import thebetweenlands.client.render.model.entity.ModelDreatonUpgradeStorage;
+import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeStorage;
 import thebetweenlands.client.render.model.entity.ModelShambler;
 import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
@@ -57,7 +57,7 @@ public class RenderDraeton extends Render<EntityDraeton> {
 	private final ModelDraetonBalloon modelBalloon = new ModelDraetonBalloon();
 	private final ModelShambler modelShambler = new ModelShambler();
 	private final ModelDraetonUpgradeCrafting modelCrafting = new ModelDraetonUpgradeCrafting();
-	private final ModelDreatonUpgradeStorage modelStorage = new ModelDreatonUpgradeStorage();
+	private final ModelDraetonUpgradeStorage modelStorage = new ModelDraetonUpgradeStorage();
 
 	private final Minecraft mc = Minecraft.getMinecraft();
 	private final ModelResourceLocation itemFrameModel = new ModelResourceLocation("item_frame", "normal");
@@ -240,15 +240,17 @@ public class RenderDraeton extends Render<EntityDraeton> {
 					this.bindTexture(TEXTURE_CRAFTING);
 				}
 
-				Vec3d upgradePos = entity.getUpgradePoint(i, 0);
+				if(upgradeModel != null) {
+					Vec3d upgradePos = entity.getUpgradePoint(i, 0);
 
-				GlStateManager.pushMatrix();
-				GlStateManager.translate(upgradePos.x, upgradePos.y, -upgradePos.z);
-				GlStateManager.rotate(entity.getUpgradeRotY(i), 0, 1, 0);
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(upgradePos.x, upgradePos.y, -upgradePos.z);
+					GlStateManager.rotate(entity.getUpgradeRotY(i), 0, 1, 0);
 
-				upgradeModel.render(entity, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0625f);
+					upgradeModel.render(entity, 0.0f, 0.0f, entity.ticksExisted + partialTicks, 0.0f, 0.0f, 0.0625f);
 
-				GlStateManager.popMatrix();
+					GlStateManager.popMatrix();
+				}
 			}
 		}
 

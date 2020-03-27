@@ -18,6 +18,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
@@ -32,6 +34,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -50,6 +53,7 @@ import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsP
 import thebetweenlands.common.network.serverbound.MessageSetDraetonAnchorPos;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.tile.TileEntityDraetonFurnace;
 import thebetweenlands.util.Matrix;
 import thebetweenlands.util.NBTHelper;
 import thebetweenlands.util.PlayerUtil;
@@ -72,10 +76,23 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	private Vec3d balloonPos = Vec3d.ZERO;
 	private Vec3d balloonMotion = Vec3d.ZERO;
 
-	private InventoryBasic upgradesInventory = new InventoryBasic("container.bl.draeton_upgrades", false, 6);
-	private InventoryBasic burnerInventory = new InventoryBasic("container.bl.draeton_burner", false, 1);
+	private final InventoryBasic upgradesInventory = new InventoryBasic("container.bl.draeton_upgrades", false, 6) {
+		@Override
+		public void setInventorySlotContents(int index, ItemStack stack) {
+			//Drop furnace content if furnace upgrade is being removed
+			if(!EntityDraeton.this.world.isRemote && index >= 0 && index < 4 && EntityDraeton.this.isFurnaceUpgrade(this.getStackInSlot(index)) && !EntityDraeton.this.isFurnaceUpgrade(stack)) {
+				EntityDraeton.this.dropFurnaceContent(index);
+			}
 
-	public List<DraetonPhysicsPart> physicsParts = new ArrayList<>();
+			super.setInventorySlotContents(index, stack);
+		}
+	};
+	private final InventoryBasic burnerInventory = new InventoryBasic("container.bl.draeton_burner", false, 1);
+
+	private final NonNullList<ItemStack> furnacesInventory = NonNullList.withSize(16, ItemStack.EMPTY);
+	private final TileEntityDraetonFurnace[] furnaces = new TileEntityDraetonFurnace[4];
+
+	public final List<DraetonPhysicsPart> physicsParts = new ArrayList<>();
 
 	private int lerpSteps;
 	private double lerpX;
@@ -108,6 +125,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	private final EntityItemFrame dummyFrame;
 
+	protected boolean dropContentsWhenDead = true;
+
 	public EntityDraeton(World world) {
 		super(world);
 		this.setSize(1.5F, 1.5f);
@@ -115,7 +134,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.parts = new EntityDraetonInteractionPart[]{ 
 				this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.5f, 0.57f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.5f, 0.75f, false),
 						this.upgradePart3 = new EntityDraetonInteractionPart(this, "upgrade_3", 0.5f, 0.75f, false), this.upgradePart4 = new EntityDraetonInteractionPart(this, "upgrade_4", 0.5f, 0.75f, false),
-						this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.6f, 0.5f, false),
+						this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.7f, 0.5f, false),
 						this.upgradeAnchorPart = new EntityDraetonInteractionPart(this, "upgrade_anchor", 0.5f, 0.5f, false),
 						this.upgradeFramePart = new EntityDraetonInteractionPart(this, "upgrade_frame", 0.5f, 0.5f, false),
 						this.balloonFront = new EntityDraetonInteractionPart(this, "balloon_front", 1.5f, 1.25f, true), this.balloonMiddle = new EntityDraetonInteractionPart(this, "balloon_middle", 1.5f, 1.25f, true), this.balloonBack = new EntityDraetonInteractionPart(this, "balloon_back", 1.5f, 1.25f, true)
@@ -128,6 +147,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			}
 		};
 		this.dummyFrame.facingDirection = EnumFacing.NORTH;
+
+		for(int i = 0; i < 4; i++) {
+			this.furnaces[i] = TileEntityDraetonFurnace.create(this.furnacesInventory, i);
+			this.furnaces[i].setWorld(world);
+		}
 	}
 
 	@Nullable
@@ -282,9 +306,19 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			NBTHelper.loadAllItems(nbt.getCompoundTag("Upgrades"), this.upgradesInventory);
 		}
 
+		this.furnacesInventory.clear();
+		if (nbt.hasKey("FurnacesInventory", Constants.NBT.TAG_COMPOUND)) {
+			ItemStackHelper.loadAllItems(nbt.getCompoundTag("FurnacesInventory"), this.furnacesInventory);
+		}
+
 		this.burnerInventory.clear();
 		if (nbt.hasKey("BurnerInventory", Constants.NBT.TAG_COMPOUND)) {
 			NBTHelper.loadAllItems(nbt.getCompoundTag("BurnerInventory"), this.burnerInventory);
+		}
+
+		NBTTagCompound furnacesNbt = nbt.getCompoundTag("Furnaces");
+		for(int i = 0; i < 4; i++) {
+			this.getFurnace(i).readDreatonFurnaceData(furnacesNbt.getCompoundTag("Furnace" + i));
 		}
 	}
 
@@ -324,7 +358,14 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		nbt.setTag("AnchorPos", NBTUtil.createPosTag(this.dataManager.get(ANCHOR_POS)));
 
 		nbt.setTag("Upgrades", NBTHelper.saveAllItems(new NBTTagCompound(), this.upgradesInventory, false));
+		nbt.setTag("FurnacesInventory", ItemStackHelper.saveAllItems(new NBTTagCompound(), this.furnacesInventory, false));
 		nbt.setTag("BurnerInventory", NBTHelper.saveAllItems(new NBTTagCompound(), this.burnerInventory, false));
+
+		NBTTagCompound furnacesNbt = new NBTTagCompound();
+		for(int i = 0; i < 4; i++) {
+			furnacesNbt.setTag("Furnace" + i, this.getFurnace(i).writeDreatonFurnaceData(new NBTTagCompound()));
+		}
+		nbt.setTag("Furnaces", furnacesNbt);
 	}
 
 	@Override
@@ -418,12 +459,12 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	public Vec3d getUpgradePoint(int i, float offset) {
 		Vec3d offsetVec = new Vec3d(offset, 0, 0);
-		
+
 		Matrix mat = new Matrix();
 		mat.rotate(Math.toRadians(this.getUpgradeRotY(i)), 0, 1, 0);
-	
+
 		offsetVec = mat.transform(offsetVec);
-		
+
 		switch(i) {
 		default:
 		case 0:
@@ -436,7 +477,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			return new Vec3d(-10 / 16.0f, 14 / 16.0f, -8 / 16.0f).add(offsetVec);
 		}
 	}
-	
+
 	public float getUpgradeRotY(int i) {
 		switch(i) {
 		default:
@@ -450,7 +491,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			return 180.0f;
 		}
 	}
-	
+
 	@Override
 	public void onEntityUpdate() {
 		if(!this.world.isRemote) {
@@ -720,16 +761,25 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		}
 
 		//TODO Temp for testing
-		if(this.getUpgradesInventory().getStackInSlot(0).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(0, new ItemStack(ItemRegistry.LURKER_SKIN_POUCH));
-		if(this.getUpgradesInventory().getStackInSlot(1).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(1, new ItemStack(ItemRegistry.LURKER_SKIN_POUCH));
-		if(this.getUpgradesInventory().getStackInSlot(2).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(2, new ItemStack(BlockRegistry.WEEDWOOD_WORKBENCH));
-		if(this.getUpgradesInventory().getStackInSlot(4).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(4, new ItemStack(ItemRegistry.GRAPPLING_HOOK));
-		if(this.getControllingPassenger() instanceof EntityPlayer && !((EntityPlayer) this.getControllingPassenger()).getHeldItemMainhand().isEmpty()) {
-			this.getUpgradesInventory().setInventorySlotContents(5, ((EntityPlayer) this.getControllingPassenger()).getHeldItemMainhand().copy());
+		if(!this.world.isRemote) {
+			if(this.getUpgradesInventory().getStackInSlot(0).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(0, new ItemStack(ItemRegistry.LURKER_SKIN_POUCH));
+			if(this.getUpgradesInventory().getStackInSlot(1).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(1, new ItemStack(ItemRegistry.LURKER_SKIN_POUCH));
+			if(this.getUpgradesInventory().getStackInSlot(2).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(2, new ItemStack(BlockRegistry.WEEDWOOD_WORKBENCH));
+			if(this.getUpgradesInventory().getStackInSlot(3).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(3, new ItemStack(BlockRegistry.SULFUR_FURNACE));
+			if(this.getUpgradesInventory().getStackInSlot(4).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(4, new ItemStack(ItemRegistry.GRAPPLING_HOOK));
+			if(this.getControllingPassenger() instanceof EntityPlayer && !((EntityPlayer) this.getControllingPassenger()).getHeldItemMainhand().isEmpty()) {
+				this.getUpgradesInventory().setInventorySlotContents(5, ((EntityPlayer) this.getControllingPassenger()).getHeldItemMainhand().copy());
+			}
+			/*for(int i = 0; i < 6; i++) {
+				this.getUpgradesInventory().setInventorySlotContents(i, ItemStack.EMPTY);
+			}*/
 		}
-		/*for(int i = 0; i < 6; i++) {
-			this.getUpgradesInventory().setInventorySlotContents(i, ItemStack.EMPTY);
-		}*/
+
+		//Update furnaces
+		for(int i = 0; i < 4; i++) {
+			this.furnaces[i].setPos(this.getPosition());
+			this.furnaces[i].update();
+		}
 
 		super.onUpdate();
 
@@ -813,6 +863,17 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			this.setPosition(x, y, z);
 			this.setRotation(this.rotationYaw, this.rotationPitch);
 		}
+	}
+
+	@Override
+	public void setDropItemsWhenDead(boolean dropWhenDead) {
+		this.dropContentsWhenDead = dropWhenDead;
+	}
+
+	@Override
+	public Entity changeDimension(int dimensionIn) {
+		this.dropContentsWhenDead = false;
+		return super.changeDimension(dimensionIn);
 	}
 
 	@Override
@@ -1237,12 +1298,6 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 						//TODO Drop item
 					}
 
-					for(DraetonPhysicsPart puller : this.physicsParts) {
-						if(puller.getEntity() != null) {
-							puller.getEntity().releaseEntity();
-						}
-					}
-
 					this.setDead();
 				}
 
@@ -1250,6 +1305,30 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			}
 		} else {
 			return true;
+		}
+	}
+
+	@Override
+	public void setDead() {
+		super.setDead();
+
+		//Release all puller entities
+		Iterator<DraetonPhysicsPart> partsIt = this.physicsParts.iterator();
+		while(partsIt.hasNext()) {
+			DraetonPhysicsPart part = partsIt.next();
+			if(part.getEntity() != null) {
+				part.getEntity().releaseEntity();
+				partsIt.remove();
+			}
+		}
+
+		//Drop inventory items
+		if(!this.world.isRemote && this.dropContentsWhenDead) {
+			for(int i = 0; i < 4; i++) {
+				this.dropFurnaceContent(i);
+			}
+			InventoryHelper.dropInventoryItems(this.world, this, this.upgradesInventory);
+			InventoryHelper.dropInventoryItems(this.world, this, this.burnerInventory);
 		}
 	}
 
@@ -1316,6 +1395,23 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		return this.burnerInventory;
 	}
 
+	public TileEntityDraetonFurnace getFurnace(int index) {
+		return this.furnaces[index];
+	}
+
+	protected void dropFurnaceContent(int index) {
+		Vec3d dropPos = this.getRotatedCarriagePoint(this.getUpgradePoint(index, 0.25f), 1).add(this.posX, this.posY, this.posZ);
+
+		IInventory furnaceInv = this.getFurnace(index);
+		for(int i = 0; i < furnaceInv.getSizeInventory(); i++) {
+			ItemStack stack = furnaceInv.getStackInSlot(i);
+			if(!stack.isEmpty()) {
+				InventoryHelper.spawnItemStack(this.world, dropPos.x, dropPos.y, dropPos.z, stack);
+			}
+			furnaceInv.setInventorySlotContents(index, ItemStack.EMPTY);
+		}
+	}
+
 	@Override
 	public Entity[] getParts() {
 		return this.parts;
@@ -1328,7 +1424,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource source, float damage) {
-		if(part == this.balloonFront || part == this.balloonBack) {
+		if(part == this.balloonFront || part == this.balloonMiddle || part == this.balloonBack) {
 			this.attackEntityFrom(source, damage);
 		}
 		return false;
@@ -1358,7 +1454,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	protected void interactWithUpgrade(EntityDraetonInteractionPart part, EntityPlayer player, EnumHand hand, int index) {
 		ItemStack stack = this.getUpgradesInventory().getStackInSlot(index);
 		if(!stack.isEmpty()) {
-			if(this.isStorageUpgrade(stack)) {
+			if(this.isFurnaceUpgrade(stack)) {
+				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_FURNACE, player.getEntityWorld(), this.getEntityId(), index, 0);
+			} else if(this.isStorageUpgrade(stack)) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_POUCH, player.getEntityWorld(), this.getEntityId(), index, 0);
 			} else if(this.isCraftingUpgrade(stack)) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_CRAFTING, player.getEntityWorld(), this.getEntityId(), index, 0);
@@ -1366,10 +1464,14 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		}
 	}
 
+	public boolean isFurnaceUpgrade(ItemStack stack) {
+		return stack.getItem() == Item.getItemFromBlock(BlockRegistry.SULFUR_FURNACE);
+	}
+
 	public boolean isStorageUpgrade(ItemStack stack) {
 		return stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH;
 	}
-	
+
 	public boolean isCraftingUpgrade(ItemStack stack) {
 		return stack.getItem() == Item.getItemFromBlock(BlockRegistry.WEEDWOOD_WORKBENCH);
 	}

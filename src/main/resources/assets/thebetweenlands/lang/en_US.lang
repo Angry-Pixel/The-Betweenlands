@@ -900,6 +900,7 @@ container.bl.present=Present
 container.bl.censer=Censer
 container.bl.draeton_inventory=Draeton
 container.bl.draeton_storage=Draeton Storage
+container.bl.draeton_furnace=Draeton Furnace
 container.bl.draeton_burner=Draeton Burner
 
 # Locations

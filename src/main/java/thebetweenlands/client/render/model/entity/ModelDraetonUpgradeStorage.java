@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
  * BLDraetonAddonStorage - TripleHeadedSheep
  * Created using Tabula 7.0.1
  */
-public class ModelDreatonUpgradeStorage extends ModelBase {
+public class ModelDraetonUpgradeStorage extends ModelBase {
     public ModelRenderer storage_main;
     public ModelRenderer storage_bottom;
     public ModelRenderer rope_top1;
@@ -16,7 +16,7 @@ public class ModelDreatonUpgradeStorage extends ModelBase {
     public ModelRenderer pouch1;
     public ModelRenderer pouch2;
 
-    public ModelDreatonUpgradeStorage() {
+    public ModelDraetonUpgradeStorage() {
         this.textureWidth = 32;
         this.textureHeight = 32;
         this.storage_main = new ModelRenderer(this, 0, 0);

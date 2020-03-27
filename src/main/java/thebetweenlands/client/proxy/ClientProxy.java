@@ -481,7 +481,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
 				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
-				if(y >= 0 && y < upgrades.getSizeInventory()) {
+				if(y >= 0 && y < 4) {
 					ItemStack stack = upgrades.getStackInSlot(y);
 					if(!stack.isEmpty() && ((EntityDraeton) entity).isStorageUpgrade(stack)) {
 						String name = stack.hasDisplayName() ? stack.getDisplayName(): I18n.format("container.bl.draeton_storage");
@@ -495,10 +495,23 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
 				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
-				if(y >= 0 && y < upgrades.getSizeInventory()) {
+				if(y >= 0 && y < 4) {
 					ItemStack stack = upgrades.getStackInSlot(y);
 					if(!stack.isEmpty() && ((EntityDraeton) entity).isCraftingUpgrade(stack)) {
 						return new GuiDraetonCrafting(player.inventory, (EntityDraeton) entity, y);
+					}
+				}
+			}
+			break;
+			
+		case GUI_DRAETON_FURNACE:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton) {
+				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
+				if(y >= 0 && y < 4) {
+					ItemStack stack = upgrades.getStackInSlot(y);
+					if(!stack.isEmpty() && ((EntityDraeton) entity).isFurnaceUpgrade(stack)) {
+						return new GuiBLFurnace(player.inventory, ((EntityDraeton) entity).getFurnace(y));
 					}
 				}
 			}

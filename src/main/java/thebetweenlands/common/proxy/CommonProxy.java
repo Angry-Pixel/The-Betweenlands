@@ -70,6 +70,7 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRAETON_POUCH = 17;
 	public static final int GUI_DRAETON_BURNER = 18;
 	public static final int GUI_DRAETON_CRAFTING = 19;
+	public static final int GUI_DRAETON_FURNACE = 20;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -158,7 +159,7 @@ public class CommonProxy implements IGuiHandler {
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
 				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
-				if(y >= 0 && y < upgrades.getSizeInventory()) {
+				if(y >= 0 && y < 4) {
 					ItemStack stack = upgrades.getStackInSlot(y);
 					if(!stack.isEmpty() && ((EntityDraeton) entity).isStorageUpgrade(stack)) {
 						String name = stack.hasDisplayName() ? stack.getDisplayName(): I18n.format("container.bl.draeton_storage");
@@ -172,10 +173,23 @@ public class CommonProxy implements IGuiHandler {
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton) {
 				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
-				if(y >= 0 && y < upgrades.getSizeInventory()) {
+				if(y >= 0 && y < 4) {
 					ItemStack stack = upgrades.getStackInSlot(y);
 					if(!stack.isEmpty() && ((EntityDraeton) entity).isCraftingUpgrade(stack)) {
 						return new ContainerDraetonWorkbench(player.inventory, (EntityDraeton) entity, y);
+					}
+				}
+			}
+			break;
+			
+		case GUI_DRAETON_FURNACE:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton) {
+				IInventory upgrades = ((EntityDraeton) entity).getUpgradesInventory();
+				if(y >= 0 && y < 4) {
+					ItemStack stack = upgrades.getStackInSlot(y);
+					if(!stack.isEmpty() && ((EntityDraeton) entity).isFurnaceUpgrade(stack)) {
+						return new ContainerBLFurnace(player.inventory, ((EntityDraeton) entity).getFurnace(y));
 					}
 				}
 			}

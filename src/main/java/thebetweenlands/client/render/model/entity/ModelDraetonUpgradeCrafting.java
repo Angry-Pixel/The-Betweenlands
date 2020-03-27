@@ -3,6 +3,7 @@ package thebetweenlands.client.render.model.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
 
 /**
  * BLDraetonAddonCrafting - Undefined
@@ -108,8 +109,23 @@ public class ModelDraetonUpgradeCrafting extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.crafting_mainrotation.render(f5);
+    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    	float partialTicks = ageInTicks - entityIn.ticksExisted;
+    	
+    	if(entityIn instanceof EntityDraeton) {
+    		EntityDraeton draeton = (EntityDraeton) entityIn;
+    		
+    		float roll = (float)Math.toRadians(draeton.prevRotationRoll + (draeton.rotationRoll - draeton.prevRotationRoll) * partialTicks);
+    		
+    		this.hammerhandle.rotateAngleZ = -0.136659280431156F + roll;
+    		this.thonghandle1.rotateAngleZ = -0.27314402793711257F + roll;
+    		this.sawhandle.rotateAngleZ = -0.136659280431156F + roll;
+    	} else {
+    		this.hammerhandle.rotateAngleZ = -0.136659280431156F;
+    		this.thonghandle1.rotateAngleZ = -0.27314402793711257F;
+    		this.sawhandle.rotateAngleZ = -0.136659280431156F;
+    	}
+        this.crafting_mainrotation.render(scale);
     }
 
     /**
