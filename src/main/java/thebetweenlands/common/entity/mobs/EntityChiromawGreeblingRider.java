@@ -54,15 +54,17 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 	public void onUpdate() {
 		super.onUpdate();
 		//WIP Temp 
-		if (getReloadTimer() <= 100 && !getIsShooting())
-			setReloadTimer(getReloadTimer() +1);
+		if (getReloadTimer() < 90 && !getIsShooting())
+			setReloadTimer(getReloadTimer() + 2);
+		if (getReloadTimer() >= 90 && !getIsShooting())
+			setReloadTimer(getReloadTimer() + 4);
 		if(getReloadTimer() >= 100 && !getIsShooting()) {
 			setIsShooting(true);
 			setReloadTimer(0);
 		}
 
-		if(getIsShooting())
-			System.out.println("Shooting: " + getIsShooting());
+		//if(getIsShooting())
+			//System.out.println("Shooting: " + getIsShooting());
 
 		if(getIsShooting() && getReloadTimer() < 100)
 			setIsShooting(false);

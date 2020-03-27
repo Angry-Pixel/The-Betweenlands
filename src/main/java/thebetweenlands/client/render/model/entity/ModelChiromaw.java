@@ -469,18 +469,45 @@ public class ModelChiromaw extends MowzieModelBase {
             // WIP shooting animation
             
             if(chiromaw instanceof EntityChiromawGreeblingRider) {
-            	chest.rotateAngleY = 0F + ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F);
-            	head_main.rotateAngleY = 0F - ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F);
-            	head_main.rotateAngleX = -0.5918411493512771F + ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F) / (float)Math.PI;
+            	EntityChiromawGreeblingRider mountedChiromaw = (EntityChiromawGreeblingRider) chiromaw;
+            	float animationShootingTick = mountedChiromaw.getReloadTimer();
+            	float animationShooting = animationShootingTick + partialRenderTicks;
+            	if (mountedChiromaw.getReloadTimer() < 90) {
+            	chest.rotateAngleY = 0F + convertDegtoRad(animationShooting);
+            	head_main.rotateAngleY = 0F - convertDegtoRad(animationShooting);
+            	head_main.rotateAngleX = -0.5918411493512771F + convertDegtoRad(animationShooting) / (float)Math.PI;
 
-            	jaw_main.rotateAngleX = 0.5009094953223726F - ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F) / (float)Math.PI;
-            	arm_left_upper.rotateAngleY = 0.045553093477052F - ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F);
-            	arm_left_lower.rotateAngleX = -0.6829473363053812F + ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F) / (float)Math.PI;
+            	jaw_main.rotateAngleX = 0.5009094953223726F - convertDegtoRad(animationShooting) / (float)Math.PI;
+            	arm_left_upper.rotateAngleY = 0.045553093477052F - convertDegtoRad(animationShooting);
+            	arm_left_lower.rotateAngleX = -0.6829473363053812F + convertDegtoRad(animationShooting) / (float)Math.PI;
             	
-            	arm_right_upper.rotateAngleX = 0.9105382707654417F - ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F);
-            	arm_right_upper.rotateAngleZ = 0.18203784098300857F + ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F) / (float)Math.PI;
-            	arm_right_lower.rotateAngleX = -2.5497515042385164F + ((EntityChiromawGreeblingRider) chiromaw).getReloadTimer() * ((float) Math.PI / 180F);
+            	arm_right_upper.rotateAngleX = 0.9105382707654417F - convertDegtoRad(animationShooting);
+            	arm_right_upper.rotateAngleZ = 0.18203784098300857F + convertDegtoRad(animationShooting) / (float)Math.PI;
+            	arm_right_lower.rotateAngleX = -2.5497515042385164F + convertDegtoRad(animationShooting);
+            	}
+
+            	if (mountedChiromaw.getReloadTimer() >= 90) {
+                	chest.rotateAngleY = 0F + convertDegtoRad(90F) - convertDegtoRad(animationShooting -90) * 9;
+                	head_main.rotateAngleY = 0F - convertDegtoRad(90F) + convertDegtoRad(animationShooting -90) * 9;
+                	head_main.rotateAngleX = -0.5918411493512771F + convertDegtoRad(90F) / (float)Math.PI - (convertDegtoRad(animationShooting -90) / (float)Math.PI) * 9;
+
+                	jaw_main.rotateAngleX = 0.5009094953223726F - convertDegtoRad(90F) / (float)Math.PI + (convertDegtoRad(animationShooting -90) / (float)Math.PI) * 9;
+                	arm_left_upper.rotateAngleY = 0.045553093477052F - convertDegtoRad(90F) + convertDegtoRad(animationShooting -90)* 9;
+                	arm_left_lower.rotateAngleX = -0.6829473363053812F + convertDegtoRad(90F) / (float)Math.PI - (convertDegtoRad(animationShooting -90) / (float)Math.PI) * 9;
+                	
+                	arm_right_upper.rotateAngleX = 0.9105382707654417F - convertDegtoRad(90F) + convertDegtoRad(animationShooting -90) * 9;
+                	arm_right_upper.rotateAngleZ = 0.18203784098300857F + convertDegtoRad(90F) / (float)Math.PI - (convertDegtoRad(animationShooting -90) / (float)Math.PI) * 9;
+                	arm_right_lower.rotateAngleX = -2.5497515042385164F + convertDegtoRad(90F) - convertDegtoRad(animationShooting -90) * 9;
+            	}
             }
         }
     }
+
+	public float convertDegtoRad(float angleIn) {
+		return angleIn * ((float) Math.PI / 180F);
+	}
+
+	public float convertRadtoDeg(float radIn) {
+		return radIn * 180F / ((float) Math.PI);
+	}
 }
