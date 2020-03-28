@@ -57,6 +57,7 @@ import thebetweenlands.client.gui.inventory.GuiBLFurnace;
 import thebetweenlands.client.gui.inventory.GuiCenser;
 import thebetweenlands.client.gui.inventory.GuiDraetonBurner;
 import thebetweenlands.client.gui.inventory.GuiDraetonCrafting;
+import thebetweenlands.client.gui.inventory.GuiDraetonUpgrades;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
@@ -522,6 +523,12 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
 				return new GuiDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory());
+			break;
+			
+		case GUI_DRAETON_UPGRADES:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton)
+				return new GuiDraetonUpgrades(player.inventory, (EntityDraeton)entity);
 			break;
 		}
 
