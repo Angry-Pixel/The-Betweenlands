@@ -52,6 +52,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IPullerEntity;
 import thebetweenlands.client.audio.DraetonBurnerSound;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart;
@@ -634,7 +636,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 				this.motionY -= 0.005f;
 			}
 			if(!this.isBurnerRunning()) {
-				this.motionY -= 0.025f;
+				this.motionY -= 0.0175f;
 			}
 		}
 
@@ -712,7 +714,16 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			}
 
 			this.wasBurnerRunning = this.isBurnerRunning();
+
+			if(this.isBurnerRunning()) {
+				this.spawnBurnerFlame();
+			}
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected void spawnBurnerFlame() {
+		BLParticles.DRAETON_BURNER_FLAME.spawn(this.world, 0, 0, 0, ParticleArgs.get().withMotion(0, 0.1D, 0).withData(this));
 	}
 
 	@SideOnly(Side.CLIENT)
