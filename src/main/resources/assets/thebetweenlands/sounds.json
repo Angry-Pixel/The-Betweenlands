@@ -1335,6 +1335,28 @@
       "thebetweenlands:boat_row_start_2"
     ]
   },
+  "draeton_turn": {
+    "sounds": [
+      "thebetweenlands:draeton_turn_1",
+      "thebetweenlands:draeton_turn_2",
+      "thebetweenlands:draeton_turn_3",
+      "thebetweenlands:draeton_turn_4",
+      "thebetweenlands:draeton_turn_5"
+    ]
+  },
+  "draeton_damage": {
+    "sounds": [
+      "thebetweenlands:draeton_damage_1",
+      "thebetweenlands:draeton_damage_2",
+      "thebetweenlands:draeton_damage_3",
+      "thebetweenlands:draeton_damage_4"
+    ]
+  },
+  "draeton_burner": {
+    "sounds": [
+      "thebetweenlands:draeton_burner"
+    ]
+  },
   "possessed_scream": {
     "sounds": [
       "thebetweenlands:possessed_scream"

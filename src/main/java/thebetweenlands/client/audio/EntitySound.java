@@ -38,11 +38,11 @@ public class EntitySound<T extends Entity> extends SafeStreamSound implements IE
 		
 		if(this.fadeOut || this.entity == null || !this.entity.isEntityAlive() || this.entity.isDead || !this.entity.world.isBlockLoaded(this.entity.getPosition())
 				|| !this.isPlaying.test(this.entity)) {
-			this.repeat = false;
 			this.fadeOut = true;
 
 			this.volume -= 0.05F;
 			if(this.volume <= 0.0F) {
+				this.repeat = false;
 				this.donePlaying = true;
 				this.volume = 0;
 			}

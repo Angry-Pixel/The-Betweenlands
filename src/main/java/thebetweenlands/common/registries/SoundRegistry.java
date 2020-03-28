@@ -223,6 +223,9 @@ public class SoundRegistry {
     public static final BLSoundEvent ROWBOAT_ROW_PORT = reg("rowboat_row_port");
     public static final BLSoundEvent ROWBOAT_ROW_START_STARBOARD = reg("rowboat_row_start_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_START_PORT = reg("rowboat_row_start_port");
+    public static final BLSoundEvent DRAETON_TURN = reg("draeton_turn");
+    public static final BLSoundEvent DRAETON_DAMAGE = reg("draeton_damage");
+    public static final BLSoundEvent DRAETON_BURNER = reg("draeton_burner");
     public static final BLSoundEvent VOODOO_DOLL = reg("voodoo_doll");
     public static final BLSoundEvent GEM_SINGER = reg("gem_singer");
     public static final BLSoundEvent GEM_SINGER_ECHO = reg("gem_singer_echo");

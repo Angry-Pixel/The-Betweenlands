@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -50,6 +51,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IPullerEntity;
+import thebetweenlands.client.audio.DraetonBurnerSound;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart;
@@ -57,6 +59,7 @@ import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsP
 import thebetweenlands.common.network.serverbound.MessageSetDraetonAnchorPos;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityDraetonFurnace;
 import thebetweenlands.util.Matrix;
 import thebetweenlands.util.NBTHelper;
@@ -82,6 +85,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	private static final DataParameter<Boolean> STORAGE_3_OPEN = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> STORAGE_4_OPEN = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
 	private static final ImmutableList<DataParameter<Boolean>> STORAGE_OPEN = ImmutableList.of(STORAGE_1_OPEN, STORAGE_2_OPEN, STORAGE_3_OPEN, STORAGE_4_OPEN);
+
+	private static final DataParameter<Integer> BURNER_FUEL = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.VARINT);
 
 	private Vec3d prevBalloonPos = Vec3d.ZERO;
 	private Vec3d balloonPos = Vec3d.ZERO;
@@ -144,6 +149,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	private final int[] storageUsers = new int[4];
 	private final int[] prevStorageOpenTicks = new int[4];
 	private final int[] storageOpenTicks = new int[4];
+
+	private boolean turnSoundRoll = false;
+	private boolean turnSoundPitch = false;
+
+	protected int maxFuel = 1000;
+
+	private boolean wasBurnerRunning = false;
 
 	public EntityDraeton(World world) {
 		super(world);
@@ -238,6 +250,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		for(DataParameter<Boolean> param : STORAGE_OPEN) {
 			this.dataManager.register(param, false);
 		}
+		this.dataManager.register(BURNER_FUEL, 0);
 	}
 
 	@Override
@@ -333,6 +346,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		for(int i = 0; i < 4; i++) {
 			this.getFurnace(i).readDreatonFurnaceData(furnacesNbt.getCompoundTag("Furnace" + i));
 		}
+
+		this.setBurnerFuel(nbt.getInteger("BurnerFuel"));
 	}
 
 	@Override
@@ -379,6 +394,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			furnacesNbt.setTag("Furnace" + i, this.getFurnace(i).writeDreatonFurnaceData(new NBTTagCompound()));
 		}
 		nbt.setTag("Furnaces", furnacesNbt);
+
+		nbt.setInteger("BurnerFuel", this.getBurnerFuel());
 	}
 
 	@Override
@@ -577,7 +594,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.motionZ *= drag;
 
 		this.handleWaterMovement();
-		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+		this.move(MoverType.SELF, this.motionX, this.motionY - 0.0000001f, this.motionZ);
 		this.pushOutOfBlocks(this.posX, this.posY, this.posZ);
 
 		if(this.canPassengerSteer()) {
@@ -612,9 +629,16 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			}
 		}
 
-		if(!this.world.isRemote && (this.getPassengers().isEmpty() || this.physicsParts.isEmpty())) {
-			this.motionY -= 0.005f;
+		if(this.canPassengerSteer()) {
+			if(this.getPassengers().isEmpty() || this.physicsParts.isEmpty()) {
+				this.motionY -= 0.005f;
+			}
+			if(!this.isBurnerRunning()) {
+				this.motionY -= 0.025f;
+			}
 		}
+
+		this.updateBurner();
 
 		if(this.world.isRemote) {
 			this.balloonMotion = this.balloonMotion.add(0, 0.125f, 0).scale(0.9f);
@@ -666,6 +690,36 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.firstUpdate = false;
 	}
 
+	protected void updateBurner() {
+		if(!this.world.isRemote) {
+			if(this.isBurnerRunning()) {
+				this.setBurnerFuel(Math.max(0, this.getBurnerFuel() - 1));
+			}
+
+			if(this.maxFuel - this.getBurnerFuel() > 100) {
+				ItemStack burnerStack = this.burnerInventory.getStackInSlot(0);
+
+				//TODO Fuel item
+				if(!burnerStack.isEmpty() && EnumItemMisc.SULFUR.isItemOf(burnerStack)) {
+					burnerStack.shrink(1);
+
+					this.setBurnerFuel(this.getBurnerFuel() + 100);
+				}
+			}
+		} else {
+			if(!this.wasBurnerRunning && this.isBurnerRunning()) {
+				this.playBurnerSound();
+			}
+
+			this.wasBurnerRunning = this.isBurnerRunning();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected void playBurnerSound() {
+		Minecraft.getMinecraft().getSoundHandler().playSound(new DraetonBurnerSound(this));
+	}
+
 	protected void updateParts() {
 		IInventory inventory = this.getUpgradesInventory();
 
@@ -673,7 +727,6 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		if(!this.world.isRemote) {
 			for(int i = 0; i < 6; i++) {
 				this.dataManager.set(UPGRADE_CONTENT.get(i), inventory.getStackInSlot(i));
-				this.dataManager.setDirty(UPGRADE_CONTENT.get(i));
 			}
 		}
 
@@ -851,6 +904,20 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 		float rollOffset = (float) MathHelper.wrapDegrees(targetRoll - this.rotationRoll);
 		this.rotationRoll = this.rotationRoll + rollOffset * adjustStrength * 0.5f;
+
+		//Play heavy turn sound
+		if(Math.abs(this.rotationRoll) + Math.abs(rollOffset) > 14.0f && !this.turnSoundRoll) {
+			this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.DRAETON_TURN, SoundCategory.NEUTRAL, 1, 1 - Math.min(Math.abs(rollOffset), 15.0f) / 15.0f * 0.2f, false);
+			this.turnSoundRoll = true;
+		} else if(Math.abs(this.rotationRoll) < 3.0f) {
+			this.turnSoundRoll = false;
+		}
+		if(Math.abs(this.rotationPitch) + Math.abs(pitchOffset) > 6.0f && !this.turnSoundPitch) {
+			this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.DRAETON_TURN, SoundCategory.NEUTRAL, 1, 1, false);
+			this.turnSoundPitch = true;
+		} else if(Math.abs(this.rotationPitch) < 1.5f) {
+			this.turnSoundPitch = false;
+		}
 
 		this.tickLerp();
 
@@ -1241,6 +1308,18 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		return this.dataManager.get(ANCHOR_POS);
 	}
 
+	public boolean isBurnerRunning() {
+		return this.dataManager.get(BURNER_FUEL) > 0 && (!this.onGround || (this.getControllingPassenger() instanceof EntityLivingBase && ((EntityLivingBase)this.getControllingPassenger()).isJumping));
+	}
+
+	public int getBurnerFuel() {
+		return this.dataManager.get(BURNER_FUEL);
+	}
+
+	public void setBurnerFuel(int fuel) {
+		this.dataManager.set(BURNER_FUEL, fuel);
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
@@ -1336,6 +1415,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 					this.setDead();
 				}
+
+				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.DRAETON_DAMAGE, SoundCategory.NEUTRAL, 1, 1);
 
 				return true;
 			}
