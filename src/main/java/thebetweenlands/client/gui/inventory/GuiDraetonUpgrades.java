@@ -3,29 +3,26 @@ package thebetweenlands.client.gui.inventory;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.inventory.container.ContainerDraetonInventory;
+import thebetweenlands.common.entity.draeton.EntityDraeton;
+import thebetweenlands.common.inventory.container.ContainerDraetonUpgrades;
 
 @SideOnly(Side.CLIENT)
-public class GuiDraetonInventory extends GuiContainer {
-	
-	private static final ResourceLocation DRAETON_INVENTORY = new ResourceLocation("thebetweenlands:textures/gui/draeton_inventory.png");
+public class GuiDraetonUpgrades extends GuiContainer {
+	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/draeton_upgrades.png");
 
-	public GuiDraetonInventory(InventoryPlayer playerInventory, IInventory inventory) {
-		super(new ContainerDraetonInventory(playerInventory, inventory));
-		xSize = 176;
-		ySize = 168;
+	public GuiDraetonUpgrades(InventoryPlayer playerInventory, EntityDraeton draeton) {
+		super(new ContainerDraetonUpgrades(playerInventory, draeton));
+		xSize = 182;
+		ySize = 256;
 	}
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-		fontRenderer.drawString(I18n.format(new TextComponentTranslation("container.bl.draeton_inventory").getFormattedText()), xSize / 2 - fontRenderer.getStringWidth(I18n.format(new TextComponentTranslation("container.bl.draeton_inventory").getFormattedText())) / 2, 6, 4210752);
 		fontRenderer.drawString(I18n.format(new TextComponentTranslation("container.inventory").getFormattedText()), xSize - 170, ySize - 93, 4210752);
 	}
 
@@ -34,7 +31,7 @@ public class GuiDraetonInventory extends GuiContainer {
 		this.drawDefaultBackground();
 		
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		mc.getTextureManager().bindTexture(DRAETON_INVENTORY);
+		mc.getTextureManager().bindTexture(TEXTURE);
 		int k = (width - xSize) / 2;
 		int l = (height - ySize) / 2;
 		drawTexturedModalRect(k, l, 0, 0, xSize, ySize);

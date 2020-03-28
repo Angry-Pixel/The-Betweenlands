@@ -32,6 +32,7 @@ import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.inventory.container.ContainerDraetonBurner;
 import thebetweenlands.common.inventory.container.ContainerDraetonFurnace;
 import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
+import thebetweenlands.common.inventory.container.ContainerDraetonUpgrades;
 import thebetweenlands.common.inventory.container.ContainerDraetonWorkbench;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerItemNaming;
@@ -70,6 +71,7 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_DRAETON_BURNER = 18;
 	public static final int GUI_DRAETON_CRAFTING = 19;
 	public static final int GUI_DRAETON_FURNACE = 20;
+	public static final int GUI_DRAETON_UPGRADES = 21;
 	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -198,6 +200,12 @@ public class CommonProxy implements IGuiHandler {
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
 				return new ContainerDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory());
+			break;
+			
+		case GUI_DRAETON_UPGRADES:
+			entity = world.getEntityByID(x);
+			if (entity instanceof EntityDraeton)
+				return new ContainerDraetonUpgrades(player.inventory, (EntityDraeton)entity);
 			break;
 		}
 		return null;

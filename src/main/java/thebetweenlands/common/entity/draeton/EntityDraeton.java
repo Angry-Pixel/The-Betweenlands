@@ -860,21 +860,6 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			}
 		}
 
-		//TODO Temp for testing
-		if(!this.world.isRemote) {
-			if(this.getUpgradesInventory().getStackInSlot(0).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(0, new ItemStack(ItemRegistry.LURKER_SKIN_POUCH));
-			if(this.getUpgradesInventory().getStackInSlot(1).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(1, new ItemStack(ItemRegistry.LURKER_SKIN_POUCH));
-			if(this.getUpgradesInventory().getStackInSlot(2).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(2, new ItemStack(BlockRegistry.WEEDWOOD_WORKBENCH));
-			if(this.getUpgradesInventory().getStackInSlot(3).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(3, new ItemStack(BlockRegistry.SULFUR_FURNACE));
-			if(this.getUpgradesInventory().getStackInSlot(4).isEmpty()) this.getUpgradesInventory().setInventorySlotContents(4, new ItemStack(ItemRegistry.GRAPPLING_HOOK));
-			if(this.getControllingPassenger() instanceof EntityPlayer && !((EntityPlayer) this.getControllingPassenger()).getHeldItemMainhand().isEmpty()) {
-				this.getUpgradesInventory().setInventorySlotContents(5, ((EntityPlayer) this.getControllingPassenger()).getHeldItemMainhand().copy());
-			}
-			/*for(int i = 0; i < 6; i++) {
-				this.getUpgradesInventory().setInventorySlotContents(i, ItemStack.EMPTY);
-			}*/
-		}
-
 		//Update furnaces
 		for(int i = 0; i < 4; i++) {
 			this.furnaces[i].setPos(this.getPosition());
@@ -1473,7 +1458,6 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 				player.startRiding(this);
 			} else {
 				//Debug
-
 				if (!stack.isEmpty()) {
 					DraetonPhysicsPart puller = new DraetonPhysicsPart(DraetonPhysicsPart.Type.PULLER, this, this.nextPhysicsPartId++);
 					puller.lerpX = puller.x = this.posX;
@@ -1492,6 +1476,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 						firefly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 						this.world.spawnEntity(firefly);
 					}
+				} else {
+					player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_UPGRADES, player.getEntityWorld(), this.getEntityId(), 0, 0);
 				}
 			}
 			return true;
