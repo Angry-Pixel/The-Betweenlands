@@ -1625,4 +1625,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	public boolean isCraftingUpgrade(ItemStack stack) {
 		return stack.getItem() == Item.getItemFromBlock(BlockRegistry.WEEDWOOD_WORKBENCH);
 	}
+	
+	public boolean isAnchorUpgrade(ItemStack stack) {
+		return stack.getItem() == ItemRegistry.GRAPPLING_HOOK;
+	}
 }
