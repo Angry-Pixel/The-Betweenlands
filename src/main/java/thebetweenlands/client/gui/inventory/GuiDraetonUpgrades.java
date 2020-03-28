@@ -22,14 +22,19 @@ public class GuiDraetonUpgrades extends GuiContainer {
 	}
 
 	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		this.drawDefaultBackground();
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+	}
+	
+	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
 		fontRenderer.drawString(I18n.format(new TextComponentTranslation("container.inventory").getFormattedText()), xSize - 170, ySize - 93, 4210752);
 	}
-
+	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTickTime, int x, int y) {
-		this.drawDefaultBackground();
-		
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		mc.getTextureManager().bindTexture(TEXTURE);
 		int k = (width - xSize) / 2;

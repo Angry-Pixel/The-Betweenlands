@@ -1425,23 +1425,28 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	public void setDead() {
 		super.setDead();
 
-		//Release all puller entities
-		Iterator<DraetonPhysicsPart> partsIt = this.physicsParts.iterator();
-		while(partsIt.hasNext()) {
-			DraetonPhysicsPart part = partsIt.next();
-			if(part.getEntity() != null) {
-				part.getEntity().releaseEntity();
-				partsIt.remove();
+		//Check if contents should be dropped.
+		//This is false when entity is being recreated while teleporting to another dim
+		//or if entity is being ridden by player.
+		if(this.dropContentsWhenDead) {
+			//Release all puller entities
+			Iterator<DraetonPhysicsPart> partsIt = this.physicsParts.iterator();
+			while(partsIt.hasNext()) {
+				DraetonPhysicsPart part = partsIt.next();
+				if(part.getEntity() != null) {
+					part.getEntity().releaseEntity();
+					partsIt.remove();
+				}
 			}
-		}
 
-		//Drop inventory items
-		if(!this.world.isRemote && this.dropContentsWhenDead) {
-			for(int i = 0; i < 4; i++) {
-				this.dropFurnaceContent(i);
+			//Drop inventory items
+			if(!this.world.isRemote) {
+				for(int i = 0; i < 4; i++) {
+					this.dropFurnaceContent(i);
+				}
+				InventoryHelper.dropInventoryItems(this.world, this, this.upgradesInventory);
+				InventoryHelper.dropInventoryItems(this.world, this, this.burnerInventory);
 			}
-			InventoryHelper.dropInventoryItems(this.world, this, this.upgradesInventory);
-			InventoryHelper.dropInventoryItems(this.world, this, this.burnerInventory);
 		}
 	}
 
