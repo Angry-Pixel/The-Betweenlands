@@ -59,10 +59,10 @@ public class ModelDraetonUpgradeStorage extends ModelBase {
 	@Override
 	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if(entityIn instanceof EntityDraeton) {
-			float lidAngle = ((EntityDraeton)entityIn).upgradeOpenTicks / 5.0f * 0.8f;
+			float lidAngle = ((EntityDraeton)entityIn).upgradeOpenTicks / 5.0f;
 			lidAngle = 1.0F - lidAngle;
 			lidAngle = 1.0F - lidAngle * lidAngle * lidAngle;
-			this.storage_lid.rotateAngleZ = -lidAngle;
+			this.storage_lid.rotateAngleZ = -lidAngle * 0.9f;
 
 			float roll = (float)Math.toRadians(((EntityDraeton) entityIn).upgradeCounterRoll);
 

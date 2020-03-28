@@ -1450,7 +1450,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	public void openStorage(EntityPlayer player, int index) {
 		if(!this.world.isRemote) {
-			if(this.storageUsers[index] == 0) {
+			if(this.storageUsers[index] == 0 && this.isStorageUpgrade(this.getUpgradesInventory().getStackInSlot(index))) {
 				Vec3d upgradePos = this.getUpgradePoint(index, 0.25f).add(this.getPositionVector());
 				this.world.playSound(null, upgradePos.x, upgradePos.y, upgradePos.z, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.NEUTRAL, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
 			}
@@ -1466,8 +1466,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			this.storageUsers[index] = Math.max(0, this.storageUsers[index] - 1);
 
 			if(this.storageUsers[index] == 0) {
-				Vec3d upgradePos = this.getUpgradePoint(index, 0.25f).add(this.getPositionVector());
-				this.world.playSound(null, upgradePos.x, upgradePos.y, upgradePos.z, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.NEUTRAL, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+				if(this.isStorageUpgrade(this.getUpgradesInventory().getStackInSlot(index))) {
+					Vec3d upgradePos = this.getUpgradePoint(index, 0.25f).add(this.getPositionVector());
+					this.world.playSound(null, upgradePos.x, upgradePos.y, upgradePos.z, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.NEUTRAL, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+				}
 
 				this.dataManager.set(STORAGE_OPEN.get(index), false);
 			}
@@ -1493,7 +1495,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	}
 
 	protected boolean interactFromMultipart(EntityDraetonInteractionPart part, EntityPlayer player, EnumHand hand) {
-		if(!this.world.isRemote) {
+		if(!this.world.isRemote && hand == EnumHand.MAIN_HAND) {
 			if(part == this.upgradePart1) {
 				this.interactWithUpgrade(part, player, hand, 0);
 			} else if(part == this.upgradePart2) {
@@ -1504,10 +1506,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 				this.interactWithUpgrade(part, player, hand, 3);
 			} else if(part == this.burnerPart) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_BURNER, player.getEntityWorld(), getEntityId(), 0, 0);
+				player.swingArm(hand);
 			} else if(part == this.upgradeAnchorPart) {
-				if(hand == EnumHand.MAIN_HAND) {
-					this.dataManager.set(ANCHOR_DEPLOYED, !this.dataManager.get(ANCHOR_DEPLOYED));
-				}
+				this.dataManager.set(ANCHOR_DEPLOYED, !this.dataManager.get(ANCHOR_DEPLOYED));
+				player.swingArm(hand);
 			}
 		}
 		return true;
@@ -1518,10 +1520,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		if(!stack.isEmpty()) {
 			if(this.isFurnaceUpgrade(stack)) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_FURNACE, player.getEntityWorld(), this.getEntityId(), index, 0);
+				player.swingArm(hand);
 			} else if(this.isStorageUpgrade(stack)) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_POUCH, player.getEntityWorld(), this.getEntityId(), index, 0);
+				player.swingArm(hand);
 			} else if(this.isCraftingUpgrade(stack)) {
 				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_CRAFTING, player.getEntityWorld(), this.getEntityId(), index, 0);
+				player.swingArm(hand);
 			}
 		}
 	}

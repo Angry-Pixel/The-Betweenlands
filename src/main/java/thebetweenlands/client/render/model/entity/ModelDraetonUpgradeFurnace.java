@@ -115,6 +115,11 @@ public class ModelDraetonUpgradeFurnace extends ModelBase {
     @Override
     public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) { 
     	if(entityIn instanceof EntityDraeton) {
+    		float lidAngle = ((EntityDraeton)entityIn).upgradeOpenTicks / 5.0f;
+			lidAngle = 1.0F - lidAngle;
+			lidAngle = 1.0F - lidAngle * lidAngle * lidAngle;
+			this.burnhatch.rotateAngleZ = 0.091106186954104F + lidAngle * 1.2f;
+    		
     		float roll = (float)Math.toRadians(((EntityDraeton) entityIn).upgradeCounterRoll);
     		
     		this.poker1.rotateAngleZ = -roll;

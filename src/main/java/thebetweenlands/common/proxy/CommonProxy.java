@@ -30,6 +30,7 @@ import thebetweenlands.common.inventory.container.ContainerBLFurnace;
 import thebetweenlands.common.inventory.container.ContainerBarrel;
 import thebetweenlands.common.inventory.container.ContainerCenser;
 import thebetweenlands.common.inventory.container.ContainerDraetonBurner;
+import thebetweenlands.common.inventory.container.ContainerDraetonFurnace;
 import thebetweenlands.common.inventory.container.ContainerDraetonPouch;
 import thebetweenlands.common.inventory.container.ContainerDraetonWorkbench;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
@@ -187,7 +188,7 @@ public class CommonProxy implements IGuiHandler {
 				if(y >= 0 && y < 4) {
 					ItemStack stack = upgrades.getStackInSlot(y);
 					if(!stack.isEmpty() && ((EntityDraeton) entity).isFurnaceUpgrade(stack)) {
-						return new ContainerBLFurnace(player.inventory, ((EntityDraeton) entity).getFurnace(y));
+						return new ContainerDraetonFurnace(player, player.inventory, ((EntityDraeton) entity).getFurnace(y), (EntityDraeton)entity, y);
 					}
 				}
 			}
