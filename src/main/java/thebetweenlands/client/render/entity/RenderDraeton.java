@@ -1,12 +1,8 @@
 package thebetweenlands.client.render.entity;
 
-import java.util.Collection;
-
 import javax.annotation.Nullable;
 
 import org.lwjgl.opengl.GL11;
-
-import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -41,9 +37,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelDraetonBalloon;
 import thebetweenlands.client.render.model.entity.ModelDraetonCarriage;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeCrafting;
+import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeFurnace;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeStorage;
 import thebetweenlands.client.render.model.entity.ModelShambler;
-import thebetweenlands.client.render.model.loader.IFastTESRBakedModels;
 import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.lib.ModInfo;
@@ -54,6 +50,7 @@ public class RenderDraeton extends Render<EntityDraeton> {
 	private static final ResourceLocation TEXTURE_BALLOON = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_balloon.png");
 	private static final ResourceLocation TEXTURE_CRAFTING = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_crafting.png");
 	private static final ResourceLocation TEXTURE_STORAGE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_storage.png");
+	private static final ResourceLocation TEXTURE_FURNACE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_furnace.png");
 	private static final ResourceLocation TEXTURE_SHAMBLER = new ResourceLocation("thebetweenlands:textures/entity/shambler.png");
 
 	private static final ResourceLocation MAP_BACKGROUND_TEXTURES = new ResourceLocation("textures/map/map_background.png");
@@ -63,12 +60,13 @@ public class RenderDraeton extends Render<EntityDraeton> {
 	private final ModelShambler modelShambler = new ModelShambler();
 	private final ModelDraetonUpgradeCrafting modelCrafting = new ModelDraetonUpgradeCrafting();
 	private final ModelDraetonUpgradeStorage modelStorage = new ModelDraetonUpgradeStorage();
+	private final ModelDraetonUpgradeFurnace modelFurnace = new ModelDraetonUpgradeFurnace();
 
 	private final Minecraft mc = Minecraft.getMinecraft();
-	
+
 	public static final ModelResourceLocation FRAME_MODEL = new ModelResourceLocation(new ResourceLocation(ModInfo.ID, "draeton_item_frame"), "normal");
 	public static final ModelResourceLocation FRAME_MAP_MODEL = new ModelResourceLocation(new ResourceLocation(ModInfo.ID, "draeton_item_frame"), "map");
-	
+
 	public RenderDraeton(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -238,7 +236,10 @@ public class RenderDraeton extends Render<EntityDraeton> {
 			if(!upgrade.isEmpty()) {
 				ModelBase upgradeModel = null;
 
-				if(entity.isStorageUpgrade(upgrade)) {
+				if(entity.isFurnaceUpgrade(upgrade)) {
+					upgradeModel = this.modelFurnace;
+					this.bindTexture(TEXTURE_FURNACE);
+				} else if(entity.isStorageUpgrade(upgrade)) {
 					upgradeModel = this.modelStorage;
 					this.bindTexture(TEXTURE_STORAGE);
 				} else if(entity.isCraftingUpgrade(upgrade)) {
@@ -248,6 +249,7 @@ public class RenderDraeton extends Render<EntityDraeton> {
 
 				if(upgradeModel != null) {
 					entity.upgradeCounterRoll = entity.getUpgradeCounterRoll(i, partialTicks);
+					entity.upgradeOpenTicks = entity.getUpgradeOpenTicks(i, partialTicks);
 
 					Vec3d upgradePos = entity.getUpgradePoint(i, 0);
 

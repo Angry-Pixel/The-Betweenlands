@@ -7,6 +7,8 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,6 +18,7 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.inventory.InventoryHelper;
@@ -36,6 +39,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -64,13 +68,20 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	private static final DataParameter<Boolean> ANCHOR_DEPLOYED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> ANCHOR_FIXATED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<BlockPos> ANCHOR_POS = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BLOCK_POS);
+
 	private static final DataParameter<ItemStack> UPGRADE_1_CONTENT = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<ItemStack> UPGRADE_2_CONTENT = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<ItemStack> UPGRADE_3_CONTENT = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<ItemStack> UPGRADE_4_CONTENT = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<ItemStack> UPGRADE_5_CONTENT = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.ITEM_STACK);
 	private static final DataParameter<ItemStack> UPGRADE_6_CONTENT = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.ITEM_STACK);
+	private static final ImmutableList<DataParameter<ItemStack>> UPGRADE_CONTENT = ImmutableList.of(UPGRADE_1_CONTENT, UPGRADE_2_CONTENT, UPGRADE_3_CONTENT, UPGRADE_4_CONTENT, UPGRADE_5_CONTENT, UPGRADE_6_CONTENT);
 
+	private static final DataParameter<Boolean> STORAGE_1_OPEN = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> STORAGE_2_OPEN = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> STORAGE_3_OPEN = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> STORAGE_4_OPEN = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
+	private static final ImmutableList<DataParameter<Boolean>> STORAGE_OPEN = ImmutableList.of(STORAGE_1_OPEN, STORAGE_2_OPEN, STORAGE_3_OPEN, STORAGE_4_OPEN);
 
 	private Vec3d prevBalloonPos = Vec3d.ZERO;
 	private Vec3d balloonPos = Vec3d.ZERO;
@@ -128,7 +139,12 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	protected boolean dropContentsWhenDead = true;
 
 	public float upgradeCounterRoll = 0.0f;
-	
+	public float upgradeOpenTicks = 0.0f;
+
+	private final int[] storageUsers = new int[4];
+	private final int[] prevStorageOpenTicks = new int[4];
+	private final int[] storageOpenTicks = new int[4];
+
 	public EntityDraeton(World world) {
 		super(world);
 		this.setSize(1.5F, 1.5f);
@@ -216,30 +232,25 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.dataManager.register(ANCHOR_DEPLOYED, false);
 		this.dataManager.register(ANCHOR_FIXATED, false);
 		this.dataManager.register(ANCHOR_POS, BlockPos.ORIGIN);
-		this.dataManager.register(UPGRADE_1_CONTENT, ItemStack.EMPTY);
-		this.dataManager.register(UPGRADE_2_CONTENT, ItemStack.EMPTY);
-		this.dataManager.register(UPGRADE_3_CONTENT, ItemStack.EMPTY);
-		this.dataManager.register(UPGRADE_4_CONTENT, ItemStack.EMPTY);
-		this.dataManager.register(UPGRADE_5_CONTENT, ItemStack.EMPTY);
-		this.dataManager.register(UPGRADE_6_CONTENT, ItemStack.EMPTY);
+		for(DataParameter<ItemStack> param : UPGRADE_CONTENT) {
+			this.dataManager.register(param, ItemStack.EMPTY);
+		}
+		for(DataParameter<Boolean> param : STORAGE_OPEN) {
+			this.dataManager.register(param, false);
+		}
 	}
 
 	@Override
 	public void notifyDataManagerChange(DataParameter<?> key) {
 		super.notifyDataManagerChange(key);
 
-		if(key == UPGRADE_1_CONTENT) {
-			this.getUpgradesInventory().setInventorySlotContents(0, this.dataManager.get(UPGRADE_1_CONTENT));
-		} else if(key == UPGRADE_2_CONTENT) {
-			this.getUpgradesInventory().setInventorySlotContents(1, this.dataManager.get(UPGRADE_2_CONTENT));
-		} else if(key == UPGRADE_3_CONTENT) {
-			this.getUpgradesInventory().setInventorySlotContents(2, this.dataManager.get(UPGRADE_3_CONTENT));
-		} else if(key == UPGRADE_4_CONTENT) {
-			this.getUpgradesInventory().setInventorySlotContents(3, this.dataManager.get(UPGRADE_4_CONTENT));
-		} else if(key == UPGRADE_5_CONTENT) {
-			this.getUpgradesInventory().setInventorySlotContents(4, this.dataManager.get(UPGRADE_5_CONTENT));
-		} else if(key == UPGRADE_6_CONTENT) {
-			this.getUpgradesInventory().setInventorySlotContents(5, this.dataManager.get(UPGRADE_6_CONTENT));
+		if(this.world.isRemote) {
+			for(int i = 0; i < 6; i++) {
+				DataParameter<ItemStack> param = UPGRADE_CONTENT.get(i);
+				if(param.equals(key)) {
+					this.getUpgradesInventory().setInventorySlotContents(i, this.dataManager.get(param));
+				}
+			}
 		}
 	}
 
@@ -491,7 +502,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			return 180.0f;
 		}
 	}
-	
+
 	public float getUpgradeCounterRoll(int i, float partialTicks) {
 		float roll = this.prevRotationRoll + (this.rotationRoll - this.prevRotationRoll) * partialTicks;
 		switch(i) {
@@ -503,6 +514,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		case 3:
 			return roll;
 		}
+	}
+
+	public float getUpgradeOpenTicks(int i, float partialTicks) {
+		return this.prevStorageOpenTicks[i] + (this.storageOpenTicks[i] - this.prevStorageOpenTicks[i]) * partialTicks;
 	}
 
 	@Override
@@ -656,12 +671,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 		//Sync upgrades to client
 		if(!this.world.isRemote) {
-			this.dataManager.set(UPGRADE_1_CONTENT, inventory.getStackInSlot(0));
-			this.dataManager.set(UPGRADE_2_CONTENT, inventory.getStackInSlot(1));
-			this.dataManager.set(UPGRADE_3_CONTENT, inventory.getStackInSlot(2));
-			this.dataManager.set(UPGRADE_4_CONTENT, inventory.getStackInSlot(3));
-			this.dataManager.set(UPGRADE_5_CONTENT, inventory.getStackInSlot(4));
-			this.dataManager.set(UPGRADE_6_CONTENT, inventory.getStackInSlot(5));
+			for(int i = 0; i < 6; i++) {
+				this.dataManager.set(UPGRADE_CONTENT.get(i), inventory.getStackInSlot(i));
+				this.dataManager.setDirty(UPGRADE_CONTENT.get(i));
+			}
 		}
 
 		//Disable upgrade parts if they're not used so they can't be interacted with
@@ -670,6 +683,16 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.upgradePart3.setEnabled(!inventory.getStackInSlot(2).isEmpty());
 		this.upgradePart4.setEnabled(!inventory.getStackInSlot(3).isEmpty());
 		this.upgradeAnchorPart.setEnabled(!inventory.getStackInSlot(4).isEmpty());
+
+		for(int i = 0; i < 4; i++) {
+			this.prevStorageOpenTicks[i] = this.storageOpenTicks[i];
+
+			if(this.dataManager.get(STORAGE_OPEN.get(i))) {
+				this.storageOpenTicks[i] = Math.min(5, this.storageOpenTicks[i] + 1);
+			} else {
+				this.storageOpenTicks[i] = Math.max(0, this.storageOpenTicks[i] - 1);
+			}
+		}
 
 		for(Entity entity : this.parts) {
 			entity.onUpdate();
@@ -1422,6 +1445,32 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 				InventoryHelper.spawnItemStack(this.world, dropPos.x, dropPos.y, dropPos.z, stack);
 			}
 			furnaceInv.setInventorySlotContents(index, ItemStack.EMPTY);
+		}
+	}
+
+	public void openStorage(EntityPlayer player, int index) {
+		if(!this.world.isRemote) {
+			if(this.storageUsers[index] == 0) {
+				Vec3d upgradePos = this.getUpgradePoint(index, 0.25f).add(this.getPositionVector());
+				this.world.playSound(null, upgradePos.x, upgradePos.y, upgradePos.z, SoundEvents.BLOCK_CHEST_OPEN, SoundCategory.NEUTRAL, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+			}
+
+			this.storageUsers[index]++;
+
+			this.dataManager.set(STORAGE_OPEN.get(index), true);
+		}
+	}
+
+	public void closeStorage(EntityPlayer player, int index) {
+		if(!this.world.isRemote) {
+			this.storageUsers[index] = Math.max(0, this.storageUsers[index] - 1);
+
+			if(this.storageUsers[index] == 0) {
+				Vec3d upgradePos = this.getUpgradePoint(index, 0.25f).add(this.getPositionVector());
+				this.world.playSound(null, upgradePos.x, upgradePos.y, upgradePos.z, SoundEvents.BLOCK_CHEST_CLOSE, SoundCategory.NEUTRAL, 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
+
+				this.dataManager.set(STORAGE_OPEN.get(index), false);
+			}
 		}
 	}
 
