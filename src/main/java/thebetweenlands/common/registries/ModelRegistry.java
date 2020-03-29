@@ -18,6 +18,7 @@ import thebetweenlands.client.render.model.baked.ModelFromModelBase;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProcessor;
 import thebetweenlands.client.render.model.baked.ModelLayerSelection;
 import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
+import thebetweenlands.client.render.model.baked.ModelMobItem;
 import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
 import thebetweenlands.client.render.model.baked.ModelRubberTapLiquid;
@@ -97,6 +98,7 @@ public class ModelRegistry {
 	public static final IModel LAYER_SELECTION = new ModelLayerSelection();
 	public static final ModelEventSelection SPOOK_EVENT = new ModelEventSelection();
 	public static final ModelEventSelection WINTER_EVENT = new ModelEventSelection();
+	public static final IModel MOB = new ModelMobItem();
 
 	//Plant models
 	public static final IModel PITCHER_PLANT = new ModelFromModelBase.Builder(new ModelPitcherPlant(), new ResourceLocation("thebetweenlands:blocks/pitcher_plant"), 128, 128)

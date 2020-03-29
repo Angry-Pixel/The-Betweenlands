@@ -1,0 +1,9 @@
+{
+  "source": "thebetweenlands:sludge_worm_egg_sac",
+  "inherit_overrides": false,
+  "custom": {
+    "map": {
+      "thebetweenlands:tiny_worm_egg_sac": "thebetweenlands:item/sludge_worm_egg_sac_item"
+    }
+  }
+}

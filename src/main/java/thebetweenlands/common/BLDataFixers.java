@@ -4,20 +4,65 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.datafix.FixTypes;
 import net.minecraft.util.datafix.IFixableData;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ModFixs;
+import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.event.RegistryEvent.MissingMappings.Mapping;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class BLDataFixers {
 	private BLDataFixers() { }
 
 	public static void register() {
-		ModFixs fixes = FMLCommonHandler.instance().getDataFixer().init(ModInfo.ID, 1);
+		ModFixs fixes = FMLCommonHandler.instance().getDataFixer().init(ModInfo.ID, 2);
 
 		fixes.registerFix(FixTypes.BLOCK_ENTITY, new TileEntityNameFixer());
+		fixes.registerFix(FixTypes.ITEM_INSTANCE, new ItemMobFixer());
+	}
+
+	@SubscribeEvent
+	public static void onMissingMappings(RegistryEvent.MissingMappings<Item> event) {
+		for(Mapping<Item> mapping : event.getMappings()) {
+			if(new ResourceLocation("thebetweenlands:gecko").equals(mapping.key)) {
+				mapping.remap(ItemRegistry.CRITTER);
+			} else if(new ResourceLocation("thebetweenlands:firefly").equals(mapping.key)) {
+				mapping.remap(ItemRegistry.CRITTER);
+			}
+		}
+	}
+	
+	private static class ItemMobFixer implements IFixableData {
+		@Override
+		public int getFixVersion() {
+			return 2;
+		}
+
+		@Override
+		public NBTTagCompound fixTagCompound(NBTTagCompound nbt) {
+			if(nbt.hasKey("id", Constants.NBT.TAG_STRING)) {
+				String id = nbt.getString("id");
+
+				if("thebetweenlands:gecko".equals(id)) {
+					return ItemRegistry.CRITTER.capture(EntityGecko.class).writeToNBT(new NBTTagCompound());
+				} else if("thebetweenlands:firefly".equals(id)) {
+					return ItemRegistry.CRITTER.capture(EntityFirefly.class).writeToNBT(new NBTTagCompound());
+				}
+			}
+
+			//sludge worm egg sac can be left as is because it still has the same reg name
+
+			return nbt;
+		}
 	}
 
 	private static class TileEntityNameFixer implements IFixableData {

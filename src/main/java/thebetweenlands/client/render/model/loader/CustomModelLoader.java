@@ -286,6 +286,31 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		this.bakeLocation(modelRegistry, RenderDraeton.FRAME_MAP_MODEL);
 		this.bakeLocation(modelRegistry, RenderDraeton.FRAME_MODEL);
 		
+		//Replace loader extensions models
+		Set<ModelResourceLocation> keys = modelRegistry.getKeys();
+		Map<ModelResourceLocation, IBakedModel> replacementMap = new HashMap<>();
+
+		//Get model replacements from extensions
+		for(LoaderExtension extension : this.loaderExtensions) {
+			for(ModelResourceLocation loc : keys) {
+				try {
+					IBakedModel replacement = extension.getModelReplacement(loc, modelRegistry.getObject(loc));
+					if(replacement != null) {
+						replacementMap.put(loc, replacement);
+					}
+				} catch(Exception ex) {
+					if(ex instanceof LoaderExtensionException == false) {
+						this.throwLoaderException(extension, ex);
+					} else {
+						throw ex;
+					}
+				}
+			}
+		}
+
+		this.replaceRegistryObjects(modelRegistry, replacementMap);
+		
+		//Register baked model dependencies
 		for(ModelResourceLocation modelLocation : modelRegistry.getKeys()) {
 			IBakedModel model = modelRegistry.getObject(modelLocation);
 
@@ -323,30 +348,6 @@ public final class CustomModelLoader implements ICustomModelLoader {
 				if(BetweenlandsConfig.DEBUG.debugModelLoader) TheBetweenlands.logger.warn(String.format("Additional baked model %s is null!", loadedModel.getKey()));
 			}
 		}
-
-		//Replace loader extensions models
-		Set<ModelResourceLocation> keys = modelRegistry.getKeys();
-		Map<ModelResourceLocation, IBakedModel> replacementMap = new HashMap<>();
-
-		//Get model replacements from extensions
-		for(LoaderExtension extension : this.loaderExtensions) {
-			for(ModelResourceLocation loc : keys) {
-				try {
-					IBakedModel replacement = extension.getModelReplacement(loc, modelRegistry.getObject(loc));
-					if(replacement != null) {
-						replacementMap.put(loc, replacement);
-					}
-				} catch(Exception ex) {
-					if(ex instanceof LoaderExtensionException == false) {
-						this.throwLoaderException(extension, ex);
-					} else {
-						throw ex;
-					}
-				}
-			}
-		}
-
-		this.replaceRegistryObjects(modelRegistry, replacementMap);
 	}
 
 	/**

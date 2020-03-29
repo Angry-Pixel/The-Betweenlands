@@ -263,5 +263,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(OfflinePlayerHandlerImpl.class);
 		MinecraftForge.EVENT_BUS.register(ItemRingOfGathering.class);
 		MinecraftForge.EVENT_BUS.register(EntityVolarkite.class);
+		MinecraftForge.EVENT_BUS.register(BLDataFixers.class);
 	}
 }

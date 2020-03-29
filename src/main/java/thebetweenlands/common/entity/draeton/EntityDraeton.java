@@ -55,6 +55,7 @@ import thebetweenlands.client.audio.DraetonBurnerSound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart.Action;
@@ -103,6 +104,12 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			}
 
 			super.setInventorySlotContents(index, stack);
+		}
+	};
+	private final InventoryBasic pullersInventory = new InventoryBasic("container.bl.dreaton_pullers", false, 6) {
+		@Override
+		public void setInventorySlotContents(int index, ItemStack stack) {
+			
 		}
 	};
 	private final InventoryBasic burnerInventory = new InventoryBasic("container.bl.draeton_burner", false, 1);
@@ -1475,7 +1482,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 						puller.setEntity(dragonfly);
 						dragonfly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 						this.world.spawnEntity(dragonfly);
-					} else if(stack.getItem() == ItemRegistry.FIREFLY) {
+					} else if(ItemRegistry.CRITTER.isCapturedEntity(stack, EntityFirefly.class)) {
 						EntityPullerFirefly firefly = new EntityPullerFirefly(this.world, this, puller);
 						puller.setEntity(firefly);
 						firefly.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
