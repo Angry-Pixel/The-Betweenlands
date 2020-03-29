@@ -1,9 +1,12 @@
 package thebetweenlands.client.render.model.entity;
 
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -14,7 +17,7 @@ import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 
 @SideOnly(Side.CLIENT)
 public class ModelChiromaw extends MowzieModelBase {
-    MowzieModelRenderer body_base;
+	MowzieModelRenderer body_base;
     MowzieModelRenderer body_buttpart;
     MowzieModelRenderer neck;
     MowzieModelRenderer arm_left1;
@@ -45,7 +48,7 @@ public class ModelChiromaw extends MowzieModelBase {
     MowzieModelRenderer wing_right2;
     
 
-    MowzieModelRenderer body;
+    public MowzieModelRenderer body;
     MowzieModelRenderer chest;
     MowzieModelRenderer legleft1;
     MowzieModelRenderer legright1;
@@ -57,8 +60,8 @@ public class ModelChiromaw extends MowzieModelBase {
     MowzieModelRenderer ear_right;
     MowzieModelRenderer ear_left;
     MowzieModelRenderer jaw_main;
-    MowzieModelRenderer arm_left_lower;
-    MowzieModelRenderer arm_right_lower;
+    public MowzieModelRenderer arm_left_lower;
+    public MowzieModelRenderer arm_right_lower;
     MowzieModelRenderer leg_left_lower;
     MowzieModelRenderer leg_right_lower;
   
@@ -509,5 +512,22 @@ public class ModelChiromaw extends MowzieModelBase {
 
 	public float convertRadtoDeg(float radIn) {
 		return radIn * 180F / ((float) Math.PI);
+	}
+	
+	public void postRenderArm(float scale, EnumHandSide side) {
+		getArmForSide(side).postRender(scale);
+	}
+
+	protected ModelRenderer getArmForSide(EnumHandSide side) {
+		return side == EnumHandSide.LEFT ? arm_left_lower : arm_right_lower;
+	}
+
+	protected EnumHandSide getMainHand(Entity entityIn) {
+		if (entityIn instanceof EntityLivingBase) {
+			EntityLivingBase entitylivingbase = (EntityLivingBase) entityIn;
+			EnumHandSide enumhandside = entitylivingbase.getPrimaryHand();
+			return entitylivingbase.swingingHand == EnumHand.MAIN_HAND ? enumhandside : enumhandside.opposite();
+		} else
+			return EnumHandSide.RIGHT;
 	}
 }

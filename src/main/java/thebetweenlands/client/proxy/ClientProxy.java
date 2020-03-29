@@ -97,6 +97,7 @@ import thebetweenlands.client.render.entity.RenderBloodSnail;
 import thebetweenlands.client.render.entity.RenderBoulderSprite;
 import thebetweenlands.client.render.entity.RenderCCGroundSpawner;
 import thebetweenlands.client.render.entity.RenderChiromaw;
+import thebetweenlands.client.render.entity.RenderChiromawGreeblingRider;
 import thebetweenlands.client.render.entity.RenderCryptCrawler;
 import thebetweenlands.client.render.entity.RenderDarkDruid;
 import thebetweenlands.client.render.entity.RenderDarkLight;
@@ -699,7 +700,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityMultipartDummy.class, RenderMultipartDummy::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberlingWild.class, RenderEmberlingWild::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityDraeton.class, RenderDraeton::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawGreeblingRider.class, RenderChiromaw::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawGreeblingRider.class, RenderChiromawGreeblingRider::new);
 		
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
