@@ -117,7 +117,6 @@ import thebetweenlands.common.item.misc.ItemMagicItemMagnet;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
-import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMossBed;
 import thebetweenlands.common.item.misc.ItemMummyBait;
 import thebetweenlands.common.item.misc.ItemOctineIngot;
@@ -163,6 +162,7 @@ import thebetweenlands.common.item.tools.ItemOctineSword;
 import thebetweenlands.common.item.tools.ItemPestle;
 import thebetweenlands.common.item.tools.ItemShockwaveSword;
 import thebetweenlands.common.item.tools.ItemSickle;
+import thebetweenlands.common.item.tools.ItemSimpleSlingshot;
 import thebetweenlands.common.item.tools.ItemSpecificBucket;
 import thebetweenlands.common.item.tools.ItemSwiftPick;
 import thebetweenlands.common.item.tools.ItemSyrmoriteBucketSolidRubber;
@@ -319,6 +319,7 @@ public class ItemRegistry {
     public static final Item CAVING_ROPE = new ItemCavingRope();
     public static final Item GRAPPLING_HOOK = new ItemGrapplingHook();
     public static final Item VOLARKITE = new ItemVolarkite();
+    public static final Item SIMPLE_SLINGSHOT = new ItemSimpleSlingshot();
     //BUCKETS
     public static final ItemBLBucket BL_BUCKET = new ItemBLBucket();
     public static final Item BL_BUCKET_RUBBER = new ItemSpecificBucket(FluidRegistry.RUBBER);
