@@ -24,9 +24,9 @@ public class RenderChiromawGreeblingRider extends RenderLiving<EntityChiromawGre
 
 		this.addLayer(new LayerAttachedItems<EntityChiromawGreeblingRider>(model)
 				.attach(model.body, model.arm_left_lower, chiromawRider -> chiromawRider.getHeldItemOffhand(), EnumHandSide.LEFT, 0.75F, attachment -> {
-					attachment.rotationPointX = -3;
-					attachment.rotationPointY = 5.5f;
-					attachment.rotationPointZ = -5;
+					attachment.rotationPointX = -0.5f;
+					attachment.rotationPointY = 6.5f;
+					attachment.rotationPointZ = -4.75f;
 					attachment.rotateAngleX = 1.5f;
 				})
 				.attach(model.body, model.arm_right_lower, chiromawRider -> chiromawRider.getHeldItemMainhand(), EnumHandSide.RIGHT, 0.75F, attachment -> {
