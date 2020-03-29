@@ -1,62 +1,202 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.EntityTinyWormEggSac;
-import thebetweenlands.common.entity.mobs.EntityFirefly;
-import thebetweenlands.common.entity.mobs.EntityGecko;
-import thebetweenlands.util.TranslationHelper;
 
 public class ItemMob extends Item {
-    private final String name;
+	private final Class<? extends Entity> defaultMob;
 
-    public ItemMob(String name) {
-        this.name = name;
-        this.maxStackSize = 1;
-        this.setCreativeTab(BLCreativeTabs.ITEMS);
-    }
+	/**
+	 * @param maxStackSize Max stack size of the item. If this is > 1 then only the entity's ID and no additional NBT is stored.
+	 * @param defaultMob Default mob of this item
+	 */
+	public ItemMob(int maxStackSize, @Nullable Class<? extends Entity> defaultMob) {
+		this.maxStackSize = maxStackSize;
+		this.defaultMob = defaultMob;
+		this.setCreativeTab(BLCreativeTabs.ITEMS);
+	}
 
-    @Override
-    public boolean showDurabilityBar(ItemStack stack) {
-        return false;
-    }
+	public ItemStack capture(Class<? extends Entity> cls) {
+		ResourceLocation id = EntityList.getKey(cls);
+		if(id != null) {
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setString("id", id.toString());
 
-    @Override
-    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-        ItemStack stack = player.getHeldItem(hand);
-        if (world.isRemote) return EnumActionResult.FAIL;
-        EntityLiving entity = null;
-        switch (name) {
-            case "firefly":
-                entity = new EntityFirefly(world);
-                break;
-            case "gecko":
-                entity = new EntityGecko(world);
-                entity.setHealth(stack.hasTagCompound() && stack.getTagCompound().hasKey("Health") ? stack.getTagCompound().getFloat("Health"): (float) entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue());
-                break;
-            case "sludge_worm_egg_sac":
-                entity = new EntityTinyWormEggSac(world);
-                break;
-        }
-        if (entity != null) {
-            BlockPos offset = pos.offset(facing);
-            entity.setLocationAndAngles(offset.getX() + 0.5F, offset.getY(), offset.getZ() + 0.5F, 0.0F, 0.0F);
-            if (!(stack.getDisplayName().equals(TranslationHelper.translateToLocal(stack.getTranslationKey()))) && stack.hasDisplayName())
-                entity.setCustomNameTag(stack.getDisplayName());
-            world.spawnEntity(entity);
-            entity.playLivingSound();
-            stack.shrink(1);
-            return EnumActionResult.SUCCESS;
-        }
-        return EnumActionResult.FAIL;
-    }
+			ItemStack stack = new ItemStack(this);
+
+			stack.setTagInfo("Entity", nbt);
+
+			return stack;
+		}
+
+		return ItemStack.EMPTY;
+	}
+
+	public ItemStack capture(Entity entity) {
+		NBTTagCompound nbt = new NBTTagCompound();
+
+		if(this.maxStackSize == 1) {
+			entity.writeToNBTOptional(nbt);
+		} else {
+			NBTTagCompound entityNbt = new NBTTagCompound();
+			if(entity.writeToNBTOptional(entityNbt) && entityNbt.hasKey("id", Constants.NBT.TAG_STRING)) {
+				nbt.setString("id", entityNbt.getString("id"));
+			}
+		}
+
+		if(!nbt.isEmpty()) {
+			ItemStack stack = new ItemStack(this);
+
+			stack.setTagInfo("Entity", nbt);
+
+			if(entity.hasCustomName()) {
+				stack.setStackDisplayName(entity.getCustomNameTag());
+			}
+
+			return stack;
+		}
+
+		return ItemStack.EMPTY;
+	}
+
+	public boolean isCapturedEntity(ItemStack stack, Class<? extends Entity> cls) {
+		if(stack.getItem() != this) {
+			return false;
+		}
+		
+		NBTTagCompound nbt = stack.getTagCompound();
+
+		if(nbt != null && nbt.hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+			NBTTagCompound entityNbt = nbt.getCompoundTag("Entity");
+
+			if(entityNbt.hasKey("id", Constants.NBT.TAG_STRING)) {
+				Class<? extends Entity> entityCls = EntityList.getClassFromName(entityNbt.getString("id"));
+				return entityCls != null && cls.isAssignableFrom(entityCls);
+			}
+		}
+
+		return this.defaultMob != null && cls.isAssignableFrom(this.defaultMob);
+	}
+
+	@Nullable
+	public ResourceLocation getCapturedEntityId(ItemStack stack) {
+		if(stack.getItem() != this) {
+			return null;
+		}
+		
+		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+			NBTTagCompound entityNbt = stack.getTagCompound().getCompoundTag("Entity");
+
+			if(entityNbt.hasKey("id", Constants.NBT.TAG_STRING)) {
+				return new ResourceLocation(entityNbt.getString("id"));
+			}
+		}
+
+		if(this.defaultMob != null) {
+			return EntityList.getKey(this.defaultMob);
+		}
+
+		return null;
+	}
+	
+	@Nullable
+	public Entity createCapturedEntity(World world, double x, double y, double z, ItemStack stack) {
+		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
+			return this.createCapturedEntityFromNBT(world, x, y, z, stack.getTagCompound().getCompoundTag("Entity"));
+		}
+
+		if(this.defaultMob != null) {
+			ResourceLocation id = EntityList.getKey(this.defaultMob);
+			if(id != null) {
+				NBTTagCompound nbt = new NBTTagCompound();
+				nbt.setString("id", id.toString());
+				return this.createCapturedEntityFromNBT(world, x, y, z, nbt);
+			}
+		}
+
+		return null;
+	}
+
+	@Nullable
+	protected Entity createCapturedEntityFromNBT(World world, double x, double y, double z, NBTTagCompound nbt) {
+		Entity entity = EntityList.createEntityFromNBT(nbt, world);
+
+		if(entity != null) {
+			entity.setUniqueId(UUID.randomUUID());
+			entity.setLocationAndAngles(x, y, z, world.rand.nextFloat() * 360.0f, 0);
+			entity.motionX = entity.motionY = entity.motionZ = 0;
+			return entity;
+		}
+
+		return null;
+	}
+
+	@Override
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		if(this.defaultMob != null && this.isInCreativeTab(tab)) {
+			items.add(this.capture(this.defaultMob));
+		}
+	}
+
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = player.getHeldItem(hand);
+		if(!world.isRemote) {
+			Entity entity = this.createCapturedEntity(world, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, stack);
+			if(entity != null) {
+				if(facing.getXOffset() != 0) {
+					entity.setPosition(entity.posX + facing.getXOffset() * entity.width * 0.5f, entity.posY, entity.posZ);
+				}
+				if(facing.getYOffset() < 0) {
+					entity.setPosition(entity.posX, entity.posY - entity.height, entity.posZ);
+				}
+				if(facing.getZOffset() != 0) {
+					entity.setPosition(entity.posX, entity.posY, entity.posZ + facing.getZOffset() * entity.width * 0.5f);
+				}
+
+				if(world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty()) {
+					world.spawnEntity(entity);
+					if(entity instanceof EntityLiving) {
+						((EntityLiving) entity).playLivingSound();
+					}
+					stack.shrink(1);
+					return EnumActionResult.SUCCESS;
+				}
+			}
+		}
+		return EnumActionResult.SUCCESS;
+	}
+	
+	@Override
+	public String getTranslationKey(ItemStack stack) {
+		ResourceLocation id = this.getCapturedEntityId(stack);
+		if(id != null) {
+			return "entity." + id.getNamespace() + "." + id.getPath();
+		}
+		return super.getTranslationKey(stack);
+	}
+	
+	@Override
+	public boolean hasCustomProperties() {
+		return true;
+	}
 }

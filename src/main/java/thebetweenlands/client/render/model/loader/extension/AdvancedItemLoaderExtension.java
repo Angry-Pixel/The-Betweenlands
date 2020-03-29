@@ -123,7 +123,7 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 					(loc) -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(loc.toString()));
 
 			//Return wrapped model
-			return new BakedModelItemWrapper(original, bakedModel).setInheritOverrides(context.inheritOverrides).setCacheOverrideModels(context.cacheOverrides);
+			return new BakedModelItemWrapper(original, bakedModel, replacementModel.getDependencies()).setInheritOverrides(context.inheritOverrides).setCacheOverrideModels(context.cacheOverrides);
 		}
 		//Nothing to replace
 		return null;

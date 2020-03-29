@@ -1,0 +1,10 @@
+{
+  "source": "thebetweenlands:critter",
+  "inherit_overrides": false,
+  "custom": {
+    "map": {
+      "thebetweenlands:gecko": "thebetweenlands:item/gecko",
+      "thebetweenlands:firefly": "thebetweenlands:item/firefly"
+    }
+  }
+}
