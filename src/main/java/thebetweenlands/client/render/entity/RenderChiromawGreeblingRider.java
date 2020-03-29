@@ -21,17 +21,21 @@ public class RenderChiromawGreeblingRider extends RenderLiving<EntityChiromawGre
 		super(rendermanagerIn, new ModelChiromaw(), 0.5F);
 		this.addLayer(new LayerOverlay<>(this, new ResourceLocation("thebetweenlands:textures/entity/chiromaw_glow.png")).setGlow(true));
 		ModelChiromaw model = (ModelChiromaw) this.getMainModel();
-		
+
 		this.addLayer(new LayerAttachedItems<EntityChiromawGreeblingRider>(model)
-        		.attach(model.body, model.arm_left_lower, chiromawRider -> chiromawRider.getHeldItemOffhand(), EnumHandSide.LEFT, 0.75F, attachment -> {
-        			attachment.rotationPointY = 18.5F;
-        			attachment.rotationPointZ = -2F;
-        		})
-        		.attach(model.body, model.arm_right_lower, chiromawRider -> chiromawRider.getHeldItemMainhand(), EnumHandSide.RIGHT, 0.75F, attachment -> {
-        			attachment.rotationPointY =  18.5F;
-        			attachment.rotationPointZ = -2F;
-        		})
-        		);
+				.attach(model.body, model.arm_left_lower, chiromawRider -> chiromawRider.getHeldItemOffhand(), EnumHandSide.LEFT, 0.75F, attachment -> {
+					attachment.rotationPointX = -3;
+					attachment.rotationPointY = 5.5f;
+					attachment.rotationPointZ = -5;
+					attachment.rotateAngleX = 1.5f;
+				})
+				.attach(model.body, model.arm_right_lower, chiromawRider -> chiromawRider.getHeldItemMainhand(), EnumHandSide.RIGHT, 0.75F, attachment -> {
+					attachment.rotationPointX = -1;
+					attachment.rotationPointY = 6;
+					attachment.rotationPointZ = -6;
+					attachment.rotateAngleX = 1.5f;
+				})
+				);
 	}
 
 	@Override
