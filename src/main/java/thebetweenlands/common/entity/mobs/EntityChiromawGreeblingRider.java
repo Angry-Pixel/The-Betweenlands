@@ -162,8 +162,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 	@Override
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		setLeftHanded(true);
-		setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemRegistry.GEM_SINGER));
+		setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ItemRegistry.GEM_SINGER));
 		return livingdata;
 	}
 
