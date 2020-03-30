@@ -11,7 +11,6 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -30,6 +29,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.entity.projectiles.EntityInanimateAngryPebble;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -162,7 +162,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 	@Override
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ItemRegistry.GEM_SINGER));
+		setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ItemRegistry.SIMPLE_SLINGSHOT));
 		return livingdata;
 	}
 
@@ -208,18 +208,16 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 			chiromawRider.getLookHelper().setLookPositionWithEntity(target, 30.0F, 30.0F);
 			float f = (float) MathHelper.atan2(target.posZ - chiromawRider.posZ, target.posX - chiromawRider.posX);
 			int distance = MathHelper.floor(chiromawRider.getDistance(target));
-			if(chiromawRider.getReloadTimer() == 90) {
-				double radialDistance = 1D;
-				
+			if (chiromawRider.getReloadTimer() == 90) {
 				double targetX = entitylivingbase.posX - chiromawRider.posX;
 				double targetY = entitylivingbase.getEntityBoundingBox().minY + (double) (entitylivingbase.height / 2.0F) - (chiromawRider.posY + (double) (chiromawRider.height / 2.0F));
 				double targetZ = entitylivingbase.posZ - chiromawRider.posZ;
-				
-				EntitySmallFireball entitysmallfireball = new EntitySmallFireball(chiromawRider.getEntityWorld(), chiromawRider, targetX,  targetY, targetZ);
-				entitysmallfireball.setPosition(chiromawRider.posX + (double) MathHelper.cos(f) * radialDistance, chiromawRider.posY + (double) (chiromawRider.height / 2.0F) + 0.5D, chiromawRider.posZ + (double) MathHelper.sin(f) * radialDistance);
-				chiromawRider.getEntityWorld().spawnEntity(entitysmallfireball);
-				chiromawRider.getEntityWorld().playSound(null, chiromawRider.getPosition(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.HOSTILE, 0.5F, 1F + (chiromawRider.getEntityWorld().rand.nextFloat() - chiromawRider.getEntityWorld().rand.nextFloat()) * 0.8F);
-				}
+				double targetDistance = (double) MathHelper.sqrt(targetX * targetX + targetZ * targetZ);
+				EntityInanimateAngryPebble pebble = new EntityInanimateAngryPebble(chiromawRider.getEntityWorld(), chiromawRider);
+				pebble.shoot(targetX, targetY + targetDistance * 0.20000000298023224D, targetZ, 1.6F, 0F);
+				chiromawRider.getEntityWorld().spawnEntity(pebble);
+				chiromawRider.getEntityWorld().playSound(null, chiromawRider.getPosition(), SoundEvents.ENTITY_SKELETON_SHOOT, SoundCategory.HOSTILE, 0.5F, 1F + (chiromawRider.getEntityWorld().rand.nextFloat() - chiromawRider.getEntityWorld().rand.nextFloat()) * 0.8F);
+			}
 			if (chiromawRider.getReloadTimer() == 102) {
 				if (chiromawRider.getIsShooting()) {
 					chiromawRider.setIsShooting(false);
