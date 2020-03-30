@@ -9,21 +9,21 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.entity.projectiles.EntityInanimateAngryPebble;
+import thebetweenlands.common.entity.projectiles.EntityUnjustPebble;
 
 @SideOnly(Side.CLIENT)
-public class RenderInanimateAngryPebbleProjectile extends Render<EntityInanimateAngryPebble> {
-	public final static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/items/inanimate_angry_pebble.png");
+public class RenderUnjustPebbleProjectile extends Render<EntityUnjustPebble> {
+	public final static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/items/unjust_pebble.png");
 
 	private final float scale;
 
-	public RenderInanimateAngryPebbleProjectile(RenderManager renderManager) {
+	public RenderUnjustPebbleProjectile(RenderManager renderManager) {
 		super(renderManager);
 		this.scale = 1.0F;
 	}
 
 	@Override
-	public void doRender(EntityInanimateAngryPebble entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(EntityUnjustPebble entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 		this.bindEntityTexture(entity);
 		GlStateManager.translate((float)x, (float)y, (float)z);
@@ -61,7 +61,7 @@ public class RenderInanimateAngryPebbleProjectile extends Render<EntityInanimate
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityInanimateAngryPebble entity) {
+	protected ResourceLocation getEntityTexture(EntityUnjustPebble entity) {
 		return TEXTURE;
 	}
 }

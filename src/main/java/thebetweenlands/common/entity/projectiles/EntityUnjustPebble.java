@@ -33,31 +33,31 @@ import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityInanimateAngryPebble extends Entity implements IProjectile, IThrowableEntity {
+public class EntityUnjustPebble extends Entity implements IProjectile, IThrowableEntity {
 	private static final Predicate<Entity> ARROW_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>() {
 				public boolean apply(@Nullable Entity p_apply_1_) {
 					return p_apply_1_.canBeCollidedWith();
 				}
 			});
 
-	private static final DataParameter<Byte> CRITICAL = EntityDataManager .<Byte>createKey(EntityInanimateAngryPebble.class, DataSerializers.BYTE);
+	private static final DataParameter<Byte> CRITICAL = EntityDataManager .<Byte>createKey(EntityUnjustPebble.class, DataSerializers.BYTE);
 	public Entity shootingEntity;
 	private double damage;
 	private int knockbackStrength;
 	private int ticksInAir;
 
-	public EntityInanimateAngryPebble(World world) {
+	public EntityUnjustPebble(World world) {
 		super(world);
 		damage = 2.0D;
 		setSize(0.5F, 0.5F);
 	}
 
-	public EntityInanimateAngryPebble(World world, double x, double y, double z) {
+	public EntityUnjustPebble(World world, double x, double y, double z) {
 		this(world);
 		setPosition(x, y, z);
 	}
 
-	public EntityInanimateAngryPebble(World world, EntityLivingBase shooter) {
+	public EntityUnjustPebble(World world, EntityLivingBase shooter) {
 		this(world, shooter.posX, shooter.posY + (double) shooter.getEyeHeight() - 0.10000000149011612D, shooter.posZ);
 		shootingEntity = shooter;
 	}

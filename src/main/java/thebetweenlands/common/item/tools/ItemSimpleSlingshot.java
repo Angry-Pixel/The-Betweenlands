@@ -30,7 +30,7 @@ import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.projectiles.EntityInanimateAngryPebble;
+import thebetweenlands.common.entity.projectiles.EntityUnjustPebble;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -71,7 +71,7 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 	}
 
 	protected boolean isSlingShotAmmo(ItemStack stack) {
-		return !stack.isEmpty() && EnumItemMisc.INANIMATE_ANGRY_PEBBLE.isItemOf(stack);
+		return !stack.isEmpty() && EnumItemMisc.UNJUST_PEBBLE.isItemOf(stack);
 	}
 
 	@Override
@@ -89,7 +89,7 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 
 			if (!ammo.isEmpty() || infinite)
 				if (ammo.isEmpty())
-					ammo = new ItemStack(EnumItemMisc.INANIMATE_ANGRY_PEBBLE.getItem());
+					ammo = new ItemStack(EnumItemMisc.UNJUST_PEBBLE.getItem());
 
 			float strength = getAmmoVelocity(usedTicks);
 
@@ -98,7 +98,7 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 			if (strength >= 0.1F) {
 				if (!world.isRemote) {
 					ItemMisc itemAmmo = (ItemMisc) ammo.getItem();
-					EntityInanimateAngryPebble pebble = createAmmo(world, ammo, player);
+					EntityUnjustPebble pebble = createAmmo(world, ammo, player);
 					pebble.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, strength * 3.0F, 1.0F);
 
 					if (strength == 1.0F)
@@ -133,12 +133,12 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 		}
 	}
 
-	public EntityInanimateAngryPebble createAmmo(World world, ItemStack stack, EntityLivingBase shooter) {
-		EntityInanimateAngryPebble pebble = new EntityInanimateAngryPebble(world, shooter);
+	public EntityUnjustPebble createAmmo(World world, ItemStack stack, EntityLivingBase shooter) {
+		EntityUnjustPebble pebble = new EntityUnjustPebble(world, shooter);
 		return pebble;
 	}
 
-	protected void fireAmmo(EntityPlayer player, ItemStack stack, EntityInanimateAngryPebble ammo, float strength) {
+	protected void fireAmmo(EntityPlayer player, ItemStack stack, EntityUnjustPebble ammo, float strength) {
 		player.world.spawnEntity(ammo);
 	}
 

@@ -29,7 +29,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
-import thebetweenlands.common.entity.projectiles.EntityInanimateAngryPebble;
+import thebetweenlands.common.entity.projectiles.EntityUnjustPebble;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -213,7 +213,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 				double targetY = entitylivingbase.getEntityBoundingBox().minY + (double) (entitylivingbase.height / 2.0F) - (chiromawRider.posY + (double) (chiromawRider.height / 2.0F));
 				double targetZ = entitylivingbase.posZ - chiromawRider.posZ;
 				double targetDistance = (double) MathHelper.sqrt(targetX * targetX + targetZ * targetZ);
-				EntityInanimateAngryPebble pebble = new EntityInanimateAngryPebble(chiromawRider.getEntityWorld(), chiromawRider);
+				EntityUnjustPebble pebble = new EntityUnjustPebble(chiromawRider.getEntityWorld(), chiromawRider);
 				pebble.shoot(targetX, targetY + targetDistance * 0.20000000298023224D, targetZ, 1.6F, 0F);
 				chiromawRider.getEntityWorld().spawnEntity(pebble);
 				chiromawRider.getEntityWorld().playSound(null, chiromawRider.getPosition(), SoundEvents.ENTITY_SKELETON_SHOOT, SoundCategory.HOSTILE, 0.5F, 1F + (chiromawRider.getEntityWorld().rand.nextFloat() - chiromawRider.getEntityWorld().rand.nextFloat()) * 0.8F);

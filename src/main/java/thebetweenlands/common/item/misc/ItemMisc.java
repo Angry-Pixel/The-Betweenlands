@@ -104,7 +104,8 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 		INANIMATE_ANGRY_PEBBLE(46),
 		ANCIENT_REMNANT(47),
 		LOOT_SCRAPS(48),
-		FABRICATED_SCROLL(49);
+		FABRICATED_SCROLL(49),
+		UNJUST_PEBBLE(50);
 
 		private final int id;
 		private final String unlocalizedName;

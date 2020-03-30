@@ -124,7 +124,7 @@ import thebetweenlands.client.render.entity.RenderGecko;
 import thebetweenlands.client.render.entity.RenderGiantToad;
 import thebetweenlands.client.render.entity.RenderGrapplingHookNode;
 import thebetweenlands.client.render.entity.RenderGreebling;
-import thebetweenlands.client.render.entity.RenderInanimateAngryPebbleProjectile;
+import thebetweenlands.client.render.entity.RenderUnjustPebbleProjectile;
 import thebetweenlands.client.render.entity.RenderLargeSludgeWorm;
 import thebetweenlands.client.render.entity.RenderLeech;
 import thebetweenlands.client.render.entity.RenderLurker;
@@ -310,7 +310,7 @@ import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
-import thebetweenlands.common.entity.projectiles.EntityInanimateAngryPebble;
+import thebetweenlands.common.entity.projectiles.EntityUnjustPebble;
 import thebetweenlands.common.entity.projectiles.EntityPredatorArrowGuide;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
@@ -703,7 +703,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityEmberlingWild.class, RenderEmberlingWild::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityDraeton.class, RenderDraeton::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawGreeblingRider.class, RenderChiromawGreeblingRider::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityInanimateAngryPebble.class, RenderInanimateAngryPebbleProjectile::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityUnjustPebble.class, RenderUnjustPebbleProjectile::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

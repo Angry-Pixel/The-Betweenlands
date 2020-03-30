@@ -89,7 +89,7 @@ import thebetweenlands.common.entity.mobs.EntityWallLivingRoot;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
-import thebetweenlands.common.entity.projectiles.EntityInanimateAngryPebble;
+import thebetweenlands.common.entity.projectiles.EntityUnjustPebble;
 import thebetweenlands.common.entity.projectiles.EntityPredatorArrowGuide;
 import thebetweenlands.common.entity.projectiles.EntityPyradFlame;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
@@ -206,7 +206,7 @@ public class EntityRegistry {
 		registerEntity(EntityPullerFirefly.class, "draeton_firefly", 80, 3, true);
 		
 		registerEntity(EntityChiromawGreeblingRider.class, "chiromaw_greebling_rider", 0x3F5A69, 0xA16A77);
-		registerEntity(EntityInanimateAngryPebble.class, "inanimate_angry_pebble", 64, 20, true);
+		registerEntity(EntityUnjustPebble.class, "unjust_pebble", 64, 20, true);
 	}
 
 	private static int id = 0;
