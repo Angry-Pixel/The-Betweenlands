@@ -235,7 +235,7 @@ public class EntityUnjustPebble extends Entity implements IProjectile, IThrowabl
 					}
 				}
 
-				playSound(SoundEvents.ENTITY_ARROW_HIT, 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
+				playSound(SoundEvents.ENTITY_GENERIC_SMALL_FALL, 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
 
 				if (!(entity instanceof EntityEnderman))
 					setDead();
