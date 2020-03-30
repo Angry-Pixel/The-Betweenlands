@@ -12,12 +12,13 @@ import thebetweenlands.common.network.MessageEntity;
 
 public class MessageUpdateDraetonPhysicsPart extends MessageEntity {
 	public static class Position {
-		public int id;
+		public int id, slot;
 		public DraetonPhysicsPart.Type type;
 		public float x, y, z, mx, my, mz;
 
 		private Position(DraetonPhysicsPart part) {
 			this.id = part.id;
+			this.slot = part.slot;
 			this.type = part.type;
 			this.x = (float) (part.x - part.carriage.posX);
 			this.y = (float) (part.y - part.carriage.posY);
@@ -27,8 +28,9 @@ public class MessageUpdateDraetonPhysicsPart extends MessageEntity {
 			this.mz = (float) part.motionZ;
 		}
 
-		private Position(int id, DraetonPhysicsPart.Type type, float x, float y, float z, float mx, float my, float mz) {
+		private Position(int id, int slot, DraetonPhysicsPart.Type type, float x, float y, float z, float mx, float my, float mz) {
 			this.id = id;
+			this.slot = slot;
 			this.type = type;
 			this.x = x;
 			this.y = y;
@@ -63,6 +65,7 @@ public class MessageUpdateDraetonPhysicsPart extends MessageEntity {
 		buf.writeVarInt(this.action.ordinal());
 
 		buf.writeVarInt(this.position.id);
+		buf.writeVarInt(this.position.slot);
 		buf.writeVarInt(this.position.type.ordinal());
 		buf.writeFloat(this.position.x);
 		buf.writeFloat(this.position.y);
@@ -86,7 +89,7 @@ public class MessageUpdateDraetonPhysicsPart extends MessageEntity {
 		this.action = Action.values()[buf.readVarInt()];
 
 		this.position = new Position(
-				buf.readVarInt(),
+				buf.readVarInt(), buf.readVarInt(),
 				DraetonPhysicsPart.Type.values()[buf.readVarInt()],
 				this.getFloatOrDefault(buf.readFloat(), 0), this.getFloatOrDefault(buf.readFloat(), 0), this.getFloatOrDefault(buf.readFloat(), 0),
 				this.getFloatOrDefault(buf.readFloat(), 0), this.getFloatOrDefault(buf.readFloat(), 0), this.getFloatOrDefault(buf.readFloat(), 0)

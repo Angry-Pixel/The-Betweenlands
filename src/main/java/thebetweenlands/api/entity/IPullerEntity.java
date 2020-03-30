@@ -1,5 +1,6 @@
 package thebetweenlands.api.entity;
 
+import net.minecraft.entity.Entity;
 import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 
@@ -12,5 +13,7 @@ public interface IPullerEntity {
 
 	public float getDrag(float drag);
 
-	public void releaseEntity();
+	public Entity createReleasedEntity();
+	
+	public void spawnReleasedEntity();
 }

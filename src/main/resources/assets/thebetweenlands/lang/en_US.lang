@@ -1006,6 +1006,7 @@ tooltip.bl.grappling_hook.more_info=Use '%1$s + %2$s' and '%1$s + %3$s'\nto retr
 tooltip.bl.grappling_hook.upgrade=Craft with two Angler Teeth and a\nShambler Tongue to upgrade.
 tooltip.bl.aspectrus_seeds.mist=This plant can only flourish in\naspect infused mist.
 tooltip.bl.sludge_dungeon_plant.mist=This plant can only grow in\nSludgeon mist.
+tooltip.bl.item_mob.health=Health: %s / %s
 
 
 tooltip.bl.elixir.potency=§9Potency: %s

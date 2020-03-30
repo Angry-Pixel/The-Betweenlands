@@ -49,14 +49,19 @@ public class EntityPullerFirefly extends EntityFirefly implements IPullerEntity,
 	}
 
 	@Override
-	public void releaseEntity() {
+	public Entity createReleasedEntity() {
+		EntityFirefly entity = new EntityFirefly(this.world);
+		entity.readFromNBT(this.writeToNBT(new NBTTagCompound()));
+		entity.setNoAI(false);
+		entity.setUniqueId(UUID.randomUUID());
+		entity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
+		return entity;
+	}
+	
+	@Override
+	public void spawnReleasedEntity() {
 		if(!this.world.isRemote) {
-			EntityFirefly entity = new EntityFirefly(this.world);
-			entity.readFromNBT(this.writeToNBT(new NBTTagCompound()));
-			entity.setNoAI(false);
-			entity.setUniqueId(UUID.randomUUID());
-			entity.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, this.rotationPitch);
-			this.world.spawnEntity(entity);
+			this.world.spawnEntity(this.createReleasedEntity());
 
 			this.setDead();
 		}
