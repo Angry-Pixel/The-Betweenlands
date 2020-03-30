@@ -4,7 +4,8 @@
   "custom": {
     "map": {
       "thebetweenlands:gecko": "thebetweenlands:item/gecko",
-      "thebetweenlands:firefly": "thebetweenlands:item/firefly"
+      "thebetweenlands:firefly": "thebetweenlands:item/firefly",
+      "thebetweenlands:dragonfly": "thebetweenlands:item/dragonfly"
     }
   }
 }

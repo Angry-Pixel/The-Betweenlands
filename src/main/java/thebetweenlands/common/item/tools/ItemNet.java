@@ -14,6 +14,7 @@ import net.minecraft.util.EnumHand;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.EntityTinyWormEggSac;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.item.misc.ItemMob;
@@ -25,6 +26,7 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 	static {
 		CATCHABLE_ENTITIES.put(EntityFirefly.class, () -> ItemRegistry.CRITTER);
 		CATCHABLE_ENTITIES.put(EntityGecko.class, () -> ItemRegistry.CRITTER);
+		CATCHABLE_ENTITIES.put(EntityDragonFly.class, () -> ItemRegistry.CRITTER);
 		CATCHABLE_ENTITIES.put(EntityTinyWormEggSac.class, () -> ItemRegistry.SLUDGE_WORM_EGG_SAC);
 	}
 

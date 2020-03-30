@@ -18,8 +18,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -28,6 +30,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
+import thebetweenlands.client.render.model.loader.IBakedModelDependant;
 import thebetweenlands.client.render.model.loader.extension.LoaderExtension;
 import thebetweenlands.common.item.misc.ItemMob;
 
@@ -72,7 +75,7 @@ public class ModelMobItem implements IModel {
 		return this;
 	}
 
-	private static class ModelBakedMobItem implements IBakedModel {
+	private static class ModelBakedMobItem implements IBakedModel, IBakedModelDependant {
 		private final Map<ResourceLocation, ResourceLocation> modelMap;
 		private final TextureAtlasSprite missingTexture;
 
@@ -124,6 +127,21 @@ public class ModelMobItem implements IModel {
 		@Override
 		public ItemOverrideList getOverrides() {
 			return this.overrides;
+		}
+
+		@Override
+		public Collection<ModelResourceLocation> getDependencies(ResourceLocation modelLocation) {
+			return Collections.emptyList();
+		}
+
+		@Override
+		public void setDependencies(ResourceLocation modelLocation, Map<ModelResourceLocation, IBakedModel> dependencies) {
+			//no-iop
+		}
+
+		@Override
+		public VertexFormat getVertexFormat(IModel dependencyModel) {
+			return DefaultVertexFormats.ITEM;
 		}
 	}
 }

@@ -2,7 +2,6 @@ package thebetweenlands.client.render.model.baked;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +11,7 @@ import javax.vecmath.Matrix4f;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.state.IBlockState;
@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -31,6 +32,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
+import net.minecraftforge.common.model.IModelState;
 import thebetweenlands.client.render.model.loader.IBakedModelDependant;
 
 public class BakedModelItemWrapper implements IBakedModel, IBakedModelDependant {
@@ -92,6 +94,30 @@ public class BakedModelItemWrapper implements IBakedModel, IBakedModelDependant 
 		if(this.bakedQuadModel instanceof IBakedModelDependant) {
 			((IBakedModelDependant) this.bakedQuadModel).setDependencies(modelLocation, dependencies);
 		}
+	}
+
+	@Override
+	public IModelState getModelState(IModel dependecyModel) {
+		if(this.bakedQuadModel instanceof IBakedModelDependant) {
+			return ((IBakedModelDependant) this.bakedQuadModel).getModelState(dependecyModel);
+		}
+		return IBakedModelDependant.super.getModelState(dependecyModel);
+	}
+
+	@Override
+	public VertexFormat getVertexFormat(IModel dependencyModel) {
+		if(this.bakedQuadModel instanceof IBakedModelDependant) {
+			return ((IBakedModelDependant) this.bakedQuadModel).getVertexFormat(dependencyModel);
+		}
+		return IBakedModelDependant.super.getVertexFormat(dependencyModel);
+	}
+
+	@Override
+	public Function<ResourceLocation, TextureAtlasSprite> getTextureGetter(IModel dependencyModel) {
+		if(this.bakedQuadModel instanceof IBakedModelDependant) {
+			return ((IBakedModelDependant) this.bakedQuadModel).getTextureGetter(dependencyModel);
+		}
+		return IBakedModelDependant.super.getTextureGetter(dependencyModel);
 	}
 
 	@Override
