@@ -137,6 +137,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	private boolean descend = false;
 
 	private final EntityDraetonInteractionPart[] parts;
+	public final EntityDraetonInteractionPart guiPart;
 	public final EntityDraetonInteractionPart upgradePart1;
 	public final EntityDraetonInteractionPart upgradePart2;
 	public final EntityDraetonInteractionPart upgradePart3;
@@ -173,7 +174,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.setSize(1.5F, 1.5f);
 
 		this.parts = new EntityDraetonInteractionPart[]{ 
-				this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.5f, 0.75f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.5f, 0.75f, false),
+				this.guiPart = new EntityDraetonInteractionPart(this, "gui", 0.5f, 0.5f, false),
+						this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.5f, 0.75f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.5f, 0.75f, false),
 						this.upgradePart3 = new EntityDraetonInteractionPart(this, "upgrade_3", 0.5f, 0.75f, false), this.upgradePart4 = new EntityDraetonInteractionPart(this, "upgrade_4", 0.5f, 0.75f, false),
 						this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.7f, 0.5f, false),
 						this.upgradeAnchorPart = new EntityDraetonInteractionPart(this, "upgrade_anchor", 0.5f, 0.5f, false),
@@ -814,6 +816,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		for(Entity entity : this.parts) {
 			entity.onUpdate();
 		}
+
+		Vec3d guiPos = this.getRotatedCarriagePoint(new Vec3d(0, 0.05D, 0.25D), 1).add(this.posX, this.posY, this.posZ);
+		this.guiPart.setPosition(guiPos.x, guiPos.y, guiPos.z);
 
 		Vec3d upgradePos1 = this.getRotatedCarriagePoint(this.getUpgradePoint(0, 0.25f), 1).add(this.posX, this.posY - this.upgradePart1.height + 0.05f, this.posZ);
 		this.upgradePart1.setPosition(upgradePos1.x, upgradePos1.y, upgradePos1.z);
@@ -1614,7 +1619,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	protected boolean interactFromMultipart(EntityDraetonInteractionPart part, EntityPlayer player, EnumHand hand) {
 		if(!this.world.isRemote && hand == EnumHand.MAIN_HAND) {
-			if(part == this.upgradePart1) {
+			if(part == this.guiPart) {
+				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_UPGRADES, player.getEntityWorld(), this.getEntityId(), 0, 0);
+			} else if(part == this.upgradePart1) {
 				this.interactWithUpgrade(part, player, hand, 0);
 			} else if(part == this.upgradePart2) {
 				this.interactWithUpgrade(part, player, hand, 1);
