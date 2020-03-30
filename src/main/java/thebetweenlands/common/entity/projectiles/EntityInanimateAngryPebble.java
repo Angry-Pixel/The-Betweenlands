@@ -29,10 +29,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityInanimateAngryPebble extends Entity implements IProjectile {
+public class EntityInanimateAngryPebble extends Entity implements IProjectile, IThrowableEntity {
 	private static final Predicate<Entity> ARROW_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>() {
 				public boolean apply(@Nullable Entity p_apply_1_) {
 					return p_apply_1_.canBeCollidedWith();
@@ -43,6 +44,7 @@ public class EntityInanimateAngryPebble extends Entity implements IProjectile {
 	public Entity shootingEntity;
 	private double damage;
 	private int knockbackStrength;
+	private int ticksInAir;
 
 	public EntityInanimateAngryPebble(World world) {
 		super(world);
@@ -94,7 +96,7 @@ public class EntityInanimateAngryPebble extends Entity implements IProjectile {
 		prevRotationPitch = rotationPitch;
 	}
 
-	public void shoot(Entity shooter, float pitch, float yaw, float p_184547_4_, float velocity, float inaccuracy) {
+	public void shoot(Entity shooter, float pitch, float yaw, float pitchOffset, float velocity, float inaccuracy) {
 		float f = -MathHelper.sin(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
 		float f1 = -MathHelper.sin(pitch * 0.017453292F);
 		float f2 = MathHelper.cos(yaw * 0.017453292F) * MathHelper.cos(pitch * 0.017453292F);
@@ -135,7 +137,7 @@ public class EntityInanimateAngryPebble extends Entity implements IProjectile {
 		if (!world.isRemote)
 			if (ticksExisted >= 1200)
 				setDead();
-
+		++this.ticksInAir;
 		Vec3d vec3d1 = new Vec3d(posX, posY, posZ);
 		Vec3d vec3d = new Vec3d(posX + motionX, posY + motionY, posZ + motionZ);
 		RayTraceResult raytraceresult = world.rayTraceBlocks(vec3d1, vec3d, false, true, false);
@@ -242,6 +244,7 @@ public class EntityInanimateAngryPebble extends Entity implements IProjectile {
 				motionX *= -0.10000000149011612D;
 				motionY *= -0.10000000149011612D;
 				motionZ *= -0.10000000149011612D;
+				this.ticksInAir = 0;
 
 				if (!world.isRemote && motionX * motionX + motionY * motionY + motionZ * motionZ < 0.0010000000474974513D)
 					setDead();
@@ -261,7 +264,7 @@ public class EntityInanimateAngryPebble extends Entity implements IProjectile {
 		double d0 = 0.0D;
 		for (int i = 0; i < list.size(); ++i) {
 			Entity entity1 = list.get(i);
-			if (entity1 != shootingEntity) {
+			if (entity1 != shootingEntity || this.ticksInAir >= 5) {
 				AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow(0.30000001192092896D);
 				RayTraceResult raytraceresult = axisalignedbb.calculateIntercept(start, end);
 				if (raytraceresult != null) {
@@ -315,5 +318,15 @@ public class EntityInanimateAngryPebble extends Entity implements IProjectile {
 	protected void writeEntityToNBT(NBTTagCompound compound) {
 		compound.setDouble("damage", damage);
 		compound.setBoolean("crit", getIsCritical());
+	}
+
+	@Override
+	public Entity getThrower() {
+		return shootingEntity;
+	}
+
+	@Override
+	public void setThrower(Entity entity) {
+		shootingEntity = entity;
 	}
 }

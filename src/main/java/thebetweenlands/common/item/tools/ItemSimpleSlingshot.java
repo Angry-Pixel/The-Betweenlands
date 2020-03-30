@@ -19,7 +19,6 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
@@ -122,7 +121,9 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 					fireAmmo(player, stack, pebble, strength);
 				}
 				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + strength * 0.5F);
-				ammo.shrink(1);
+
+				if (!infinite)
+					ammo.shrink(1);
 
 				if (ammo.getCount() == 0)
 					player.inventory.deleteStack(ammo);
