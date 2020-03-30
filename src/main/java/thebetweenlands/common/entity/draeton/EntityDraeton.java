@@ -100,7 +100,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		@Override
 		public void setInventorySlotContents(int index, ItemStack stack) {
 			//Drop furnace content if furnace upgrade is being removed
-			if(!EntityDraeton.this.world.isRemote && index >= 0 && index < 4 && EntityDraeton.this.isFurnaceUpgrade(this.getStackInSlot(index)) && !EntityDraeton.this.isFurnaceUpgrade(stack)) {
+			if(!EntityDraeton.this.world.isRemote && index >= 0 && index < 4 && (stack.isEmpty() || !EntityDraeton.this.isFurnaceUpgrade(stack))) {
 				EntityDraeton.this.dropFurnaceContent(index);
 			}
 
@@ -1567,7 +1567,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			if(!stack.isEmpty()) {
 				InventoryHelper.spawnItemStack(this.world, dropPos.x, dropPos.y, dropPos.z, stack);
 			}
-			furnaceInv.setInventorySlotContents(index, ItemStack.EMPTY);
+			furnaceInv.setInventorySlotContents(i, ItemStack.EMPTY);
 		}
 	}
 
