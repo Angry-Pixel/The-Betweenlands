@@ -1,13 +1,17 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -18,8 +22,11 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class ItemMob extends Item {
@@ -82,7 +89,7 @@ public class ItemMob extends Item {
 		if(stack.getItem() != this) {
 			return false;
 		}
-		
+
 		NBTTagCompound nbt = stack.getTagCompound();
 
 		if(nbt != null && nbt.hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
@@ -102,7 +109,7 @@ public class ItemMob extends Item {
 		if(stack.getItem() != this) {
 			return null;
 		}
-		
+
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound entityNbt = stack.getTagCompound().getCompoundTag("Entity");
 
@@ -117,7 +124,7 @@ public class ItemMob extends Item {
 
 		return null;
 	}
-	
+
 	@Nullable
 	public Entity createCapturedEntity(World world, double x, double y, double z, ItemStack stack) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("Entity", Constants.NBT.TAG_COMPOUND)) {
@@ -185,7 +192,7 @@ public class ItemMob extends Item {
 		}
 		return EnumActionResult.SUCCESS;
 	}
-	
+
 	@Override
 	public String getTranslationKey(ItemStack stack) {
 		ResourceLocation id = this.getCapturedEntityId(stack);
@@ -194,9 +201,21 @@ public class ItemMob extends Item {
 		}
 		return super.getTranslationKey(stack);
 	}
-	
+
 	@Override
 	public boolean hasCustomProperties() {
 		return true;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		if(worldIn != null) {
+			Entity entity = this.createCapturedEntity(worldIn, 0, 0, 0, stack);
+			if(entity instanceof EntityLivingBase) {
+				EntityLivingBase living = (EntityLivingBase) entity;
+				tooltip.add(I18n.format("tooltip.bl.item_mob.health", MathHelper.ceil(living.getHealth() / 2), MathHelper.ceil(living.getMaxHealth() / 2)));
+			}
+		}
 	}
 }

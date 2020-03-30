@@ -18,6 +18,8 @@ public class DraetonPhysicsPart {
 	
 	public final EntityDraeton carriage;
 	private Entity entity;
+	
+	public final int slot; //slot that this puller belongs to
 
 	public final int id; //network ID of the puller, used for sync
 
@@ -37,10 +39,11 @@ public class DraetonPhysicsPart {
 	
 	public boolean grounded = false;
 
-	public DraetonPhysicsPart(Type type, EntityDraeton carriage, int id) {
+	public DraetonPhysicsPart(Type type, EntityDraeton carriage, int id, int slot) {
 		this.type = type;
 		this.carriage = carriage;
 		this.id = id;
+		this.slot = slot;
 	}
 
 	public void setEntity(IPullerEntity entity) {

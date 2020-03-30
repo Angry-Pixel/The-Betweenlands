@@ -7,6 +7,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class ContainerDraetonUpgrades extends Container {
 	private static class MainUpgradeSlot extends Slot {
@@ -37,10 +40,28 @@ public class ContainerDraetonUpgrades extends Container {
 		}
 	}
 
+	private static class PullerSlot extends Slot {
+		public PullerSlot(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+			super(inventoryIn, index, xPosition, yPosition);
+		}
+
+		@Override
+		public boolean isItemValid(ItemStack stack) {
+			return ItemRegistry.CRITTER.isCapturedEntity(stack, EntityDragonFly.class) || ItemRegistry.CRITTER.isCapturedEntity(stack, EntityFirefly.class);
+		}
+	}
+
 	private final EntityDraeton draeton;
 
 	public ContainerDraetonUpgrades(InventoryPlayer playerInventory, EntityDraeton draeton) {
 		this.draeton = draeton;
+
+		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 0, 8, 23));
+		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 1, 30, 16));
+		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 2, 52, 12));
+		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 3, 114, 12));
+		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 4, 136, 16));
+		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 5, 158, 23));
 
 		addSlotToContainer(new MainUpgradeSlot(draeton.getUpgradesInventory(), 0, 52, 53, draeton));
 		addSlotToContainer(new MainUpgradeSlot(draeton.getUpgradesInventory(), 1, 114, 53, draeton));
@@ -71,10 +92,10 @@ public class ContainerDraetonUpgrades extends Container {
 			ItemStack is1 = slot.getStack();
 			is = is1.copy();
 
-			if (slotIndex < 6) {
-				if (!mergeItemStack(is1, 6, this.inventorySlots.size(), false))
+			if (slotIndex < 12) {
+				if (!mergeItemStack(is1, 12, this.inventorySlots.size(), false))
 					return ItemStack.EMPTY;
-			} else if (!mergeItemStack(is1, 0, 6, false))
+			} else if (!mergeItemStack(is1, 0, 12, false))
 				return ItemStack.EMPTY;
 
 			if (is1.getCount() == 0)
