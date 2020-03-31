@@ -41,8 +41,17 @@ public class ContainerDraetonUpgrades extends Container {
 	}
 
 	private static class PullerSlot extends Slot {
-		public PullerSlot(IInventory inventoryIn, int index, int xPosition, int yPosition) {
+		private final EntityDraeton draeton;
+
+		public PullerSlot(IInventory inventoryIn, int index, int xPosition, int yPosition, EntityDraeton draeton) {
 			super(inventoryIn, index, xPosition, yPosition);
+			this.draeton = draeton;
+		}
+
+		@Override
+		public void onSlotChanged() {
+			super.onSlotChanged();
+			this.draeton.onPullerSlotChanged(this.slotNumber);
 		}
 
 		@Override
@@ -56,12 +65,12 @@ public class ContainerDraetonUpgrades extends Container {
 	public ContainerDraetonUpgrades(InventoryPlayer playerInventory, EntityDraeton draeton) {
 		this.draeton = draeton;
 
-		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 0, 8, 23));
-		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 1, 30, 16));
-		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 2, 52, 12));
-		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 3, 114, 12));
-		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 4, 136, 16));
-		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 5, 158, 23));
+		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 0, 8, 23, draeton));
+		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 1, 30, 16, draeton));
+		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 2, 52, 12, draeton));
+		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 3, 114, 12, draeton));
+		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 4, 136, 16, draeton));
+		addSlotToContainer(new PullerSlot(draeton.getPullersInventory(), 5, 158, 23, draeton));
 
 		addSlotToContainer(new MainUpgradeSlot(draeton.getUpgradesInventory(), 0, 52, 53, draeton));
 		addSlotToContainer(new MainUpgradeSlot(draeton.getUpgradesInventory(), 1, 114, 53, draeton));

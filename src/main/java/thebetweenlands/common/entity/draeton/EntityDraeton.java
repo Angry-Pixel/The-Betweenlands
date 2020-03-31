@@ -107,13 +107,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 			super.setInventorySlotContents(index, stack);
 		}
 	};
-	private final InventoryBasic pullersInventory = new InventoryBasic("container.bl.dreaton_pullers", false, 6) {
-		@Override
-		public void setInventorySlotContents(int index, ItemStack stack) {
-			super.setInventorySlotContents(index, stack);
-			EntityDraeton.this.onPullerSlotChanged(index);
-		}
-	};
+	private final InventoryBasic pullersInventory = new InventoryBasic("container.bl.dreaton_pullers", false, 6);
 	private final InventoryBasic burnerInventory = new InventoryBasic("container.bl.draeton_burner", false, 1);
 
 	private final NonNullList<ItemStack> furnacesInventory = NonNullList.withSize(16, ItemStack.EMPTY);
@@ -1656,70 +1650,70 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		}
 	}
 
-	protected void onPullerSlotChanged(int index) {
+	/**
+	 * Called from the draeton container when the slot content changes.
+	 * @param index
+	 */
+	public void onPullerSlotChanged(int index) {
 		if(!this.world.isRemote) {
+			//Remove puller part and entity
+			DraetonPhysicsPart puller = this.getPhysicsPartBySlot(index, DraetonPhysicsPart.Type.PULLER);
+			if(puller != null) {
+				Entity entity = puller.getEntity();
+				if(entity != null) {
+					entity.setDropItemsWhenDead(false);
+					entity.setDead();
+				}
+
+				this.physicsParts.remove(puller);
+
+				TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, puller, MessageUpdateDraetonPhysicsPart.Action.REMOVE), this);
+			}
+
+			//Add new puller part and entity
 			ItemStack stack = this.getPullersInventory().getStackInSlot(index);
-
 			if(!stack.isEmpty() && stack.getItem() == ItemRegistry.CRITTER) {
-				if(this.getPhysicsPartBySlot(index, DraetonPhysicsPart.Type.PULLER) == null) {
+				Entity capturedEntity = ItemRegistry.CRITTER.createCapturedEntity(this.world, this.posX, this.posY, this.posZ, stack);
 
-					Entity capturedEntity = ItemRegistry.CRITTER.createCapturedEntity(this.world, this.posX, this.posY, this.posZ, stack);
+				if(capturedEntity instanceof EntityDragonFly) {
+					puller = new DraetonPhysicsPart(DraetonPhysicsPart.Type.PULLER, this, this.nextPhysicsPartId++, index);
 
-					if(capturedEntity instanceof EntityDragonFly) {
-						DraetonPhysicsPart puller = new DraetonPhysicsPart(DraetonPhysicsPart.Type.PULLER, this, this.nextPhysicsPartId++, index);
+					Vec3d pos = this.getPullPoint(puller, 1).add(this.getPositionVector());
 
-						Vec3d pos = this.getPullPoint(puller, 1).add(this.getPositionVector());
+					puller.lerpX = puller.x = pos.x;
+					puller.lerpY = puller.y = pos.y;
+					puller.lerpZ = puller.z = pos.z;
+					this.physicsParts.add(puller);
 
-						puller.lerpX = puller.x = pos.x;
-						puller.lerpY = puller.y = pos.y;
-						puller.lerpZ = puller.z = pos.z;
-						this.physicsParts.add(puller);
+					EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
+					dragonfly.readFromNBT(capturedEntity.writeToNBT(new NBTTagCompound()));
+					dragonfly.setLocationAndAngles(pos.x, pos.y, pos.z, 0, 0);
 
-						EntityPullerDragonfly dragonfly = new EntityPullerDragonfly(this.world, this, puller);
-						dragonfly.readFromNBT(capturedEntity.writeToNBT(new NBTTagCompound()));
-						dragonfly.setLocationAndAngles(pos.x, pos.y, pos.z, 0, 0);
+					puller.setEntity(dragonfly);
 
-						puller.setEntity(dragonfly);
+					this.world.spawnEntity(dragonfly);
 
-						this.world.spawnEntity(dragonfly);
+					TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, puller, MessageUpdateDraetonPhysicsPart.Action.ADD), this);
+				} else if(capturedEntity instanceof EntityFirefly) {
+					puller = new DraetonPhysicsPart(DraetonPhysicsPart.Type.PULLER, this, this.nextPhysicsPartId++, index);
 
-						TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, puller, MessageUpdateDraetonPhysicsPart.Action.ADD), this);
-					} else if(capturedEntity instanceof EntityFirefly) {
-						DraetonPhysicsPart puller = new DraetonPhysicsPart(DraetonPhysicsPart.Type.PULLER, this, this.nextPhysicsPartId++, index);
+					Vec3d pos = this.getPullPoint(puller, 1).add(this.getPositionVector());
 
-						Vec3d pos = this.getPullPoint(puller, 1).add(this.getPositionVector());
+					puller.lerpX = puller.x = pos.x;
+					puller.lerpY = puller.y = pos.y;
+					puller.lerpZ = puller.z = pos.z;
+					this.physicsParts.add(puller);
 
-						puller.lerpX = puller.x = pos.x;
-						puller.lerpY = puller.y = pos.y;
-						puller.lerpZ = puller.z = pos.z;
-						this.physicsParts.add(puller);
+					EntityPullerFirefly firefly = new EntityPullerFirefly(this.world, this, puller);
+					firefly.readFromNBT(capturedEntity.writeToNBT(new NBTTagCompound()));
+					firefly.setLocationAndAngles(pos.x, pos.y, pos.z, 0, 0);
 
-						EntityPullerFirefly firefly = new EntityPullerFirefly(this.world, this, puller);
-						firefly.readFromNBT(capturedEntity.writeToNBT(new NBTTagCompound()));
-						firefly.setLocationAndAngles(pos.x, pos.y, pos.z, 0, 0);
+					puller.setEntity(firefly);
 
-						puller.setEntity(firefly);
+					this.world.spawnEntity(firefly);
 
-						this.world.spawnEntity(firefly);
-
-						TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, puller, MessageUpdateDraetonPhysicsPart.Action.ADD), this);
-					}
+					TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, puller, MessageUpdateDraetonPhysicsPart.Action.ADD), this);
 				}
-			} else {
-
-				DraetonPhysicsPart puller = this.getPhysicsPartBySlot(index, DraetonPhysicsPart.Type.PULLER);
-				if(puller != null) {
-					Entity entity = puller.getEntity();
-					if(entity != null) {
-						entity.setDropItemsWhenDead(false);
-						entity.setDead();
-					}
-
-					this.physicsParts.remove(puller);
-
-					TheBetweenlands.networkWrapper.sendToAllTracking(new MessageUpdateDraetonPhysicsPart(this, puller, MessageUpdateDraetonPhysicsPart.Action.REMOVE), this);
-				}
-
 			}
 		}
 	}
