@@ -56,7 +56,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityChiromawGreeblingRider.EntityAISlingshotAttack(this));
-		tasks.addTask(2, new EntityChiromawGreeblingRider.EntityAIMoveTowardsTargetWithDistance(this, 1.25D, 8, 32));
+		tasks.addTask(2, new EntityChiromawGreeblingRider.EntityAIMoveTowardsTargetWithDistance(this, 1.25D, 8, 128));
 		//this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
 		//this.tasks.addTask(2, new EntityAIFlyingWander(this, 0.5D));
 		targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, true, false, e -> e instanceof IPullerEntity).setUnseenMemoryTicks(160));
@@ -140,7 +140,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(128.0D);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.095D);
 	}
