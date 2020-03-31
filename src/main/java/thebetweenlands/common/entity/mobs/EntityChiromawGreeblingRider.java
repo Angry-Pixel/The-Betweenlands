@@ -2,6 +2,8 @@ package thebetweenlands.common.entity.mobs;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Predicate;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -11,7 +13,6 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -59,7 +60,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 		tasks.addTask(2, new EntityChiromawGreeblingRider.EntityAIMoveTowardsTargetWithDistance(this, 1.25D, 8, 128));
 		//this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
 		//this.tasks.addTask(2, new EntityAIFlyingWander(this, 0.5D));
-		targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, true, false, e -> e instanceof IPullerEntity).setUnseenMemoryTicks(160));
+		targetTasks.addTask(1, new EntityAIFindNearestTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, true, false, e -> e instanceof IPullerEntity).setUnseenMemoryTicks(160));
 		//targetTasks.addTask(1, new EntityChiromawGreeblingRider.EntityAIFindNearestTarget<EntityPullerDragonfly>(this, EntityPullerDragonfly.class, true).setUnseenMemoryTicks(160));
 		//targetTasks.addTask(2, new EntityChiromawGreeblingRider.EntityAIFindNearestTarget<EntityPullerFirefly>(this, EntityPullerFirefly.class, true).setUnseenMemoryTicks(160));
 	}
@@ -140,7 +141,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(128.0D);
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(30.0D);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.095D);
 	}
@@ -171,6 +172,28 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 		setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ItemRegistry.SIMPLE_SLINGSHOT));
 		return livingdata;
 	}
+
+	static class EntityAIFindNearestTarget<T extends EntityLivingBase> extends EntityAINearestAttackableTarget {
+
+		public EntityAIFindNearestTarget(EntityCreature creature, Class classTarget, boolean checkSight) {
+			super(creature, classTarget, checkSight);
+		}
+
+		public EntityAIFindNearestTarget(EntityCreature creature, Class<T> classTarget, int chance, boolean checkSight, boolean onlyNearby, @Nullable final Predicate <? super T > targetSelector) {
+			super(creature, classTarget, chance, checkSight, onlyNearby, targetSelector);
+		}
+
+		@Override
+	    protected AxisAlignedBB getTargetableArea(double targetDistance) {
+	        return this.taskOwner.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
+	    }
+
+		@Override
+	    protected double getTargetDistance() {
+	        return 128D; //because softcoding is for wimps :P
+	    }
+
+    }
 
     static class EntityAISlingshotAttack extends EntityAIBase {
     	EntityChiromawGreeblingRider chiromawRider;
