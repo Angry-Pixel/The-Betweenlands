@@ -3,6 +3,7 @@ package thebetweenlands.common.network.serverbound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -10,6 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.network.MessageEntity;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class MessageSetDraetonAnchorPos extends MessageEntity {
 	private BlockPos pos;
@@ -63,6 +65,10 @@ public class MessageSetDraetonAnchorPos extends MessageEntity {
 	
 					BlockPos newPos = new BlockPos(carriage.getPositionVector().add(diff));
 	
+					if(!newPos.equals(carriage.getAnchorPos())) {
+						carriage.world.playSound(null, newPos.getX() + 0.5D, newPos.getY() + 0.5D, newPos.getZ() + 0.5D, SoundRegistry.DRAETON_ANCHOR, SoundCategory.NEUTRAL, 1, 1);
+					}
+					
 					carriage.setAnchorPos(newPos, true);
 				}
 			}

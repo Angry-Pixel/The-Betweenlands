@@ -52,6 +52,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IPullerEntity;
 import thebetweenlands.client.audio.DraetonBurnerSound;
+import thebetweenlands.client.audio.DraetonPulleySound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
@@ -74,6 +75,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.FLOAT);
 	private static final DataParameter<Boolean> ANCHOR_DEPLOYED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> ANCHOR_FIXATED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Float> ANCHOR_LENGTH = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.FLOAT);
 	private static final DataParameter<BlockPos> ANCHOR_POS = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BLOCK_POS);
 
 	private static final DataParameter<ItemStack> UPGRADE_1_CONTENT = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.ITEM_STACK);
@@ -259,6 +261,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.dataManager.register(DAMAGE_TAKEN, 0.0f);
 		this.dataManager.register(ANCHOR_DEPLOYED, false);
 		this.dataManager.register(ANCHOR_FIXATED, false);
+		this.dataManager.register(ANCHOR_LENGTH, 0.0f);
 		this.dataManager.register(ANCHOR_POS, BlockPos.ORIGIN);
 		for(DataParameter<ItemStack> param : UPGRADE_CONTENT) {
 			this.dataManager.register(param, ItemStack.EMPTY);
@@ -279,6 +282,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 				if(param.equals(key)) {
 					this.getUpgradesInventory().setInventorySlotContents(i, this.dataManager.get(param));
 				}
+			}
+
+			if(ANCHOR_DEPLOYED.equals(key) && !this.dataManager.get(ANCHOR_DEPLOYED)) {
+				this.playPulleySound();
 			}
 		}
 	}
@@ -756,6 +763,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		Minecraft.getMinecraft().getSoundHandler().playSound(new DraetonBurnerSound(this));
 	}
 
+	@SideOnly(Side.CLIENT)
+	protected void playPulleySound() {
+		Minecraft.getMinecraft().getSoundHandler().playSound(new DraetonPulleySound(this));
+	}
+
 	protected void updatePullerSlots() {
 		if(!this.world.isRemote) {
 			for(int i = 0; i < 6; i++) {
@@ -804,6 +816,14 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 				this.storageOpenTicks[i] = Math.min(5, this.storageOpenTicks[i] + 1);
 			} else {
 				this.storageOpenTicks[i] = Math.max(0, this.storageOpenTicks[i] - 1);
+			}
+		}
+
+		if(!this.world.isRemote) {
+			if(this.dataManager.get(ANCHOR_DEPLOYED)) {
+				this.dataManager.set(ANCHOR_LENGTH, 8.0f);
+			} else {
+				this.dataManager.set(ANCHOR_LENGTH, Math.max(0.25f, this.dataManager.get(ANCHOR_LENGTH) - 0.1f));
 			}
 		}
 
@@ -1274,7 +1294,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	public float getMaxTetherLength(DraetonPhysicsPart part) {
 		if(part.type == DraetonPhysicsPart.Type.ANCHOR) {
-			return this.dataManager.get(ANCHOR_DEPLOYED) ? 8.0f : 0.25f;
+			return this.dataManager.get(ANCHOR_LENGTH);
 		}
 		return 6.0f;
 	}
@@ -1354,6 +1374,10 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	public BlockPos getAnchorPos() {
 		return this.dataManager.get(ANCHOR_POS);
+	}
+
+	public boolean isReelingInAnchor() {
+		return !this.dataManager.get(ANCHOR_DEPLOYED) && this.dataManager.get(ANCHOR_LENGTH) > 0.3f;
 	}
 
 	public boolean isBurnerRunning() {
