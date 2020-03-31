@@ -94,6 +94,15 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 		}
 		//motionY *= 1D;
 	}
+	
+	@Override
+	public void setDead() {
+		super.setDead();
+		if (!getEntityWorld().isRemote) {
+			EntityGreeblingVolarpadFloater floater = new EntityGreeblingVolarpadFloater(getEntityWorld(), posX, posY, posZ);
+			getEntityWorld().spawnEntity(floater);
+		}
+	}
 
 	@Override
 	protected void updateAITasks() {
