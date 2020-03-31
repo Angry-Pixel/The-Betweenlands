@@ -1357,6 +1357,16 @@
       "thebetweenlands:draeton_burner"
     ]
   },
+  "draeton_anchor": {
+    "sounds": [
+      "thebetweenlands:draeton_anchor"
+    ]
+  },
+  "draeton_pulley": {
+    "sounds": [
+      "thebetweenlands:draeton_pulley"
+    ]
+  },
   "possessed_scream": {
     "sounds": [
       "thebetweenlands:possessed_scream"

@@ -11,7 +11,7 @@ public class DraetonBurnerSound extends EntitySound<EntityDraeton> {
 	public DraetonBurnerSound(EntityDraeton draeton) {
 		super(SoundRegistry.DRAETON_BURNER, SoundCategory.NEUTRAL, draeton, EntityDraeton::isBurnerRunning);
 		this.repeat = true;
-		this.targetVolume = 0.8f;
+		this.targetVolume = 0.6f;
 		this.volume = 0.01f;
 	}
 	
