@@ -275,9 +275,9 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 
 			if (target == null) {
 				return false;
-			} else if (target.getDistanceSq(chiromawRider) > (double) (maxTargetDistance * maxTargetDistance)) {
+			} else if (chiromawRider.getDistanceSq(target) > (double) (maxTargetDistance * maxTargetDistance)) {
 				return false;
-			} else if (target.getDistanceSq(chiromawRider) > (double) (minTargetDistance * minTargetDistance) && target.getDistanceSq(chiromawRider) < (double) (maxTargetDistance * maxTargetDistance)) {
+			} else if (chiromawRider.getDistanceSq(target) > (double) (minTargetDistance * minTargetDistance) && chiromawRider.getDistanceSq(target) < (double) (maxTargetDistance * maxTargetDistance)) {
 				Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockTowards(chiromawRider, 16, 0, new Vec3d(target.posX, target.posY, target.posZ));
 				if (vec3d == null) {
 					return false;
@@ -285,7 +285,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 					flyToLocation(vec3d);
 					return true;
 				}
-			} else if (target.getDistanceSq(chiromawRider) <= (double) (minTargetDistance * minTargetDistance)) {
+			} else if (chiromawRider.getDistanceSq(target) <= (double) (minTargetDistance * minTargetDistance)) {
 				 Vec3d vec3d = RandomPositionGenerator.findRandomTargetBlockAwayFrom((EntityCreature) target, 16, 0, new Vec3d(target.posX, target.posY, target.posZ));
 				if (vec3d == null) {
 					return false;
