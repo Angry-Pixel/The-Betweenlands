@@ -9,9 +9,7 @@ import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITempt;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -23,12 +21,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.entity.EntityAnimalBL;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityMireSnail extends EntityAnimal implements IEntityBL {
+public class EntityMireSnail extends EntityAnimalBL {
 	private static final DataParameter<Boolean> HAS_MATED = EntityDataManager.createKey(EntityMireSnail.class, DataSerializers.BOOLEAN);
 	int shagCount = 0;
 
@@ -63,11 +61,6 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.18D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
-	}
-
-	@Override
-	public boolean getCanSpawnHere() {
-		return world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox());
 	}
 
 	@Override
