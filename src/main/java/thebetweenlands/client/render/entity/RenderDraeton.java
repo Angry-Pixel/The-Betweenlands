@@ -40,6 +40,7 @@ import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeCrafting;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeFurnace;
 import thebetweenlands.client.render.model.entity.ModelDraetonUpgradeStorage;
 import thebetweenlands.client.render.model.entity.ModelShambler;
+import thebetweenlands.common.entity.draeton.DraetonLeakage;
 import thebetweenlands.common.entity.draeton.DraetonPhysicsPart;
 import thebetweenlands.common.entity.draeton.EntityDraeton;
 import thebetweenlands.common.lib.ModInfo;
@@ -52,6 +53,7 @@ public class RenderDraeton extends Render<EntityDraeton> {
 	private static final ResourceLocation TEXTURE_STORAGE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_storage.png");
 	private static final ResourceLocation TEXTURE_FURNACE = new ResourceLocation(ModInfo.ID, "textures/entity/draeton_upgrade_furnace.png");
 	private static final ResourceLocation TEXTURE_SHAMBLER = new ResourceLocation("thebetweenlands:textures/entity/shambler.png");
+	private static final ResourceLocation TEXTURE_LEAKAGE_HOLE = new ResourceLocation("thebetweenlands:textures/entity/leakage_hole.png");
 
 	private static final ResourceLocation MAP_BACKGROUND_TEXTURES = new ResourceLocation("textures/map/map_background.png");
 
@@ -195,10 +197,50 @@ public class RenderDraeton extends Render<EntityDraeton> {
 		GlStateManager.rotate(entity.prevRotationPitch + (entity.rotationPitch - entity.prevRotationPitch) * partialTicks, 1, 0, 0);
 		GlStateManager.rotate(entity.prevRotationRoll + (entity.rotationRoll - entity.prevRotationRoll) * partialTicks, 0, 0, 1);
 
+
+		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, 22.0f / 16.0f, 0);
 
 		this.bindTexture(TEXTURE_BALLOON);
 		this.modelBalloon.render(0.0625f);
+
+		GlStateManager.popMatrix();
+
+
+
+		GlStateManager.depthMask(false);
+
+		this.bindTexture(TEXTURE_LEAKAGE_HOLE);
+
+		for(DraetonLeakage leakage : entity.getLeakages()) {
+			GlStateManager.pushMatrix();
+
+			GlStateManager.translate(-leakage.pos.x, -leakage.pos.y, leakage.pos.z);
+
+			Vec3d up = new Vec3d(0, 0.7071f, 0.7071f);
+
+			Vec3d normal = new Vec3d(-leakage.dir.x, -leakage.dir.y, leakage.dir.z);
+
+			Vec3d side = normal.crossProduct(up).normalize();
+			Vec3d side2 = side.crossProduct(normal).normalize();
+
+			side = side.scale(0.5f);
+			side2 = side2.scale(0.5f);
+
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_NORMAL);
+
+			buffer.pos(-side.x - side2.x, -side.y - side2.y, -side.z - side2.z).tex(0, 0).normal((float)-normal.x, (float)-normal.y, (float)normal.z).endVertex();
+			buffer.pos(-side.x + side2.x, -side.y + side2.y, -side.z + side2.z).tex(0, 1).normal((float)-normal.x, (float)-normal.y, (float)normal.z).endVertex();
+			buffer.pos(side.x+- side2.x, side.y + side2.y, side.z + side2.z).tex(1, 1).normal((float)-normal.x, (float)-normal.y, (float)normal.z).endVertex();
+			buffer.pos(side.x - side2.x, side.y - side2.y, side.z - side2.z).tex(1, 0).normal((float)-normal.x, (float)-normal.y, (float)normal.z).endVertex();
+
+			tessellator.draw();
+
+			GlStateManager.popMatrix();
+		}
+
+		GlStateManager.depthMask(true);
+
 
 		GlStateManager.popMatrix();
 

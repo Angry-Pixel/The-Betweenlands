@@ -68,6 +68,13 @@ public class SoundRegistry {
     public static final BLSoundEvent WALL_SLAM = reg("wall_slam");
     public static final BLSoundEvent POOP_JET = reg("poop_jet");
     public static final BLSoundEvent PIT_FALL = reg("pit_fall");
+    public static final BLSoundEvent DRAETON_TURN = reg("draeton_turn");
+    public static final BLSoundEvent DRAETON_DAMAGE = reg("draeton_damage");
+    public static final BLSoundEvent DRAETON_BURNER = reg("draeton_burner");
+    public static final BLSoundEvent DRAETON_PULLEY = reg("draeton_pulley");
+    public static final BLSoundEvent DRAETON_ANCHOR = reg("draeton_anchor");
+    public static final BLSoundEvent DRAETON_LEAK_START = reg("draeton_leak_start");
+    public static final BLSoundEvent DRAETON_LEAK_LOOP = reg("draeton_leak_loop");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
@@ -223,11 +230,6 @@ public class SoundRegistry {
     public static final BLSoundEvent ROWBOAT_ROW_PORT = reg("rowboat_row_port");
     public static final BLSoundEvent ROWBOAT_ROW_START_STARBOARD = reg("rowboat_row_start_starboard");
     public static final BLSoundEvent ROWBOAT_ROW_START_PORT = reg("rowboat_row_start_port");
-    public static final BLSoundEvent DRAETON_TURN = reg("draeton_turn");
-    public static final BLSoundEvent DRAETON_DAMAGE = reg("draeton_damage");
-    public static final BLSoundEvent DRAETON_BURNER = reg("draeton_burner");
-    public static final BLSoundEvent DRAETON_PULLEY = reg("draeton_pulley");
-    public static final BLSoundEvent DRAETON_ANCHOR = reg("draeton_anchor");
     public static final BLSoundEvent VOODOO_DOLL = reg("voodoo_doll");
     public static final BLSoundEvent GEM_SINGER = reg("gem_singer");
     public static final BLSoundEvent GEM_SINGER_ECHO = reg("gem_singer_echo");

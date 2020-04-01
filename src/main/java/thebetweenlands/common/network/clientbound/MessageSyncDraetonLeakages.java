@@ -37,6 +37,7 @@ public class MessageSyncDraetonLeakages extends MessageEntity {
 
 	@Override
 	public void serialize(PacketBuffer buf) {
+		super.serialize(buf);
 		serialize(this.leakages, buf);
 	}
 
@@ -49,11 +50,14 @@ public class MessageSyncDraetonLeakages extends MessageEntity {
 
 	@Override
 	public void deserialize(PacketBuffer buf) {
+		super.deserialize(buf);
 		deserialize(this.leakages, buf);
 	}
 
 	@Override
 	public IMessage process(MessageContext ctx) {
+		super.process(ctx);
+		
 		if(ctx.side == Side.CLIENT) {
 			Entity entity = this.getEntity(0);
 

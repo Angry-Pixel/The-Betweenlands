@@ -40,9 +40,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -55,6 +57,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IPullerEntity;
 import thebetweenlands.client.audio.DraetonBurnerSound;
+import thebetweenlands.client.audio.DraetonLeakSound;
 import thebetweenlands.client.audio.DraetonPulleySound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -171,6 +174,9 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 	private boolean wasBurnerRunning = false;
 
+	private boolean playLeakSound = false;
+	private int prevLeakCount = 0;
+
 	private List<DraetonLeakage> leakages = new ArrayList<>();
 
 	public EntityDraeton(World world) {
@@ -189,7 +195,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 
 		this.leakageParts = new EntityDraetonInteractionPart[16];
 		for(int i = 0; i < 16; i++) {
-			this.leakageParts[i] = new EntityDraetonInteractionPart(this, "leakage_" + i, 0.5f, 0.5f, true);
+			this.leakageParts[i] = new EntityDraetonInteractionPart(this, "leakage_" + i, 0.5f, 0.5f, false);
 		}
 
 		this.parts = new EntityDraetonInteractionPart[mainParts.length + 16];
@@ -211,13 +217,6 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		for(int i = 0; i < 4; i++) {
 			this.furnaces[i] = TileEntityDraetonFurnace.create(this.furnacesInventory, i);
 			this.furnaces[i].setWorld(world);
-		}
-		
-		//TODO Debug
-		if(!this.world.isRemote) {
-			this.leakages.add(new DraetonLeakage(new Vec3d(1, 0, 0), new Vec3d(0, 0, 0)));
-			this.leakages.add(new DraetonLeakage(new Vec3d(-1, 0, 0), new Vec3d(0, 0, 0)));
-			this.leakages.add(new DraetonLeakage(new Vec3d(0, 2, 0), new Vec3d(0, 0, 0)));
 		}
 	}
 
@@ -405,6 +404,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		}
 
 		this.setBurnerFuel(nbt.getInteger("BurnerFuel"));
+
+		this.leakages.clear();
+		NBTTagList leakagesNbt = nbt.getTagList("Leakages", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < leakagesNbt.tagCount(); i++) {
+			NBTTagCompound leakageNbt = leakagesNbt.getCompoundTagAt(i);
+			this.leakages.add(new DraetonLeakage(new Vec3d(leakageNbt.getFloat("x"), leakageNbt.getFloat("y"), leakageNbt.getFloat("z")), new Vec3d(leakageNbt.getFloat("dx"), leakageNbt.getFloat("dy"), leakageNbt.getFloat("dz"))));
+		}
 	}
 
 	@Override
@@ -456,6 +462,19 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		nbt.setTag("Furnaces", furnacesNbt);
 
 		nbt.setInteger("BurnerFuel", this.getBurnerFuel());
+
+		NBTTagList leakagesNbt = new NBTTagList();
+		for(DraetonLeakage leakage : this.leakages) {
+			NBTTagCompound leakageNbt = new NBTTagCompound();
+			leakageNbt.setFloat("x", (float)leakage.pos.x);
+			leakageNbt.setFloat("y", (float)leakage.pos.y);
+			leakageNbt.setFloat("z", (float)leakage.pos.z);
+			leakageNbt.setFloat("dx", (float)leakage.dir.x);
+			leakageNbt.setFloat("dy", (float)leakage.dir.y);
+			leakageNbt.setFloat("dz", (float)leakage.dir.z);
+			leakagesNbt.appendTag(leakageNbt);
+		}
+		nbt.setTag("Leakages", leakagesNbt);
 	}
 
 	@Override
@@ -781,6 +800,11 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		}
 	}
 
+	@SideOnly(Side.CLIENT) 
+	protected void playLeakSound() {
+		Minecraft.getMinecraft().getSoundHandler().playSound(new DraetonLeakSound(this));
+	}
+
 	@SideOnly(Side.CLIENT)
 	protected void spawnBurnerFlame() {
 		BLParticles.DRAETON_BURNER_FLAME.spawn(this.world, 0, 0, 0, ParticleArgs.get().withMotion(0, 0.1D, 0).withData(this));
@@ -858,16 +882,25 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		for(Entity entity : this.parts) {
 			entity.onUpdate();
 		}
-		
+
 		//Set leakage part positions
 		for(int i = 0; i < this.leakageParts.length; i++) {
 			Vec3d leakagePos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(new Vec3d(0, 0, 0), 1));
 			this.leakageParts[i].setPosition(leakagePos.x, leakagePos.y, leakagePos.z);
 		}
-		for(int i = 0; i < this.leakages.size(); i++) {
+		for(int i = 0; i < Math.min(this.leakages.size(), this.leakageParts.length); i++) {
 			DraetonLeakage leakage = this.leakages.get(i);
 			Vec3d leakagePos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(leakage.pos, 1));
-			this.leakageParts[i].setPosition(leakagePos.x, leakagePos.y, leakagePos.z);
+			this.leakageParts[i].setPosition(leakagePos.x, leakagePos.y - this.leakageParts[i].height / 2.0f, leakagePos.z);
+		}
+
+		//Leakage particles
+		if(this.world.isRemote && this.isLeaking()) {
+			for(DraetonLeakage leakage : this.leakages) {
+				Vec3d leakagePos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(leakage.pos, 1));
+				Vec3d leakageDir = this.getRotatedBalloonPoint(leakage.dir, 1);
+				this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, leakagePos.x, leakagePos.y, leakagePos.z, this.motionX + leakageDir.x * 0.1f, this.motionY + leakageDir.y * 0.1f, this.motionZ + leakageDir.z * 0.1f);
+			}
 		}
 
 		Vec3d guiPos = this.getRotatedCarriagePoint(new Vec3d(0, 0.05D, 0.25D), 1).add(this.posX, this.posY, this.posZ);
@@ -1038,6 +1071,21 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		//Send anchor pos to server when fixated
 		if(this.world.isRemote && this.canPassengerSteer() && this.anchorPhysicsPart != null && this.dataManager.get(ANCHOR_DEPLOYED) && this.isFixated(this.anchorPhysicsPart) && this.ticksExisted % 5 == 0) {
 			TheBetweenlands.networkWrapper.sendToServer(new MessageSetDraetonAnchorPos(this));
+		}
+
+		if(this.world.isRemote) {
+			if(this.prevLeakCount < this.leakages.size()) {
+				Vec3d pos = this.getBalloonPos(1);
+				this.world.playSound(pos.x, pos.y, pos.z, SoundRegistry.DRAETON_LEAK_START, SoundCategory.NEUTRAL, 1, 0.85f + this.world.rand.nextFloat() * 0.35f, false);
+			}
+			this.prevLeakCount = this.leakages.size();
+
+			if(this.isLeaking() && !this.playLeakSound) {
+				this.playLeakSound();
+				this.playLeakSound = true;
+			} else if(!this.isLeaking()) {
+				this.playLeakSound = false;
+			}
 		}
 	}
 
@@ -1435,8 +1483,67 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		return this.leakages;
 	}
 
+	public boolean isLeaking() {
+		return this.isBurnerRunning() && !this.leakages.isEmpty();
+	}
+
+	/**
+	 * Set leakages on client side from packet
+	 * @param leakages
+	 */
 	public void setLeakages(List<DraetonLeakage> leakages) {
 		this.leakages = leakages;
+	}
+
+	public void addLeakage(DraetonLeakage leakage) {
+		this.leakages.add(leakage);
+		TheBetweenlands.networkWrapper.sendToAllTracking(new MessageSyncDraetonLeakages(this), this);
+	}
+
+	public void removeLeakage(DraetonLeakage leakage) {
+		this.leakages.remove(leakage);
+		TheBetweenlands.networkWrapper.sendToAllTracking(new MessageSyncDraetonLeakages(this), this);
+	}
+
+	protected DraetonLeakage generateRandomLeakage() {
+		Vec3d pos;
+		Vec3d dir;
+
+		float radius = 9.5f;
+		float y;
+
+		switch(this.world.rand.nextInt(6)) {
+		default:
+		case 0:
+			pos = new Vec3d(1.185f, this.world.rand.nextFloat() * 0.5f + 0.1f, (this.world.rand.nextFloat() - 0.5f) * 3);
+			dir = new Vec3d(1, 0, 0);
+			break;
+		case 1:
+			pos = new Vec3d(-1.185f, this.world.rand.nextFloat() * 0.5f + 0.1f, (this.world.rand.nextFloat() - 0.5f) * 3);
+			dir = new Vec3d(-1, 0, 0);
+			break;
+		case 2:
+			dir = new Vec3d((this.world.rand.nextFloat() - 0.5f) * 1.5f, 0, (this.world.rand.nextFloat() - 0.5f) * 4).subtract(0, -radius, 0).normalize();
+			pos = dir.scale(radius).add(0, 1.06f - radius, 0);
+			break;
+		case 3:
+			dir = new Vec3d((this.world.rand.nextFloat() - 0.5f) * 1.5f, 0, (this.world.rand.nextFloat() - 0.5f) * 2.5f).subtract(0, -radius, 0).normalize();
+			pos = dir.scale(radius).add(0, -0.05f - radius, 0);
+			dir = new Vec3d(-dir.x, -dir.y, -dir.z);
+			break;
+		case 4:
+			y = this.world.rand.nextFloat() * 0.6f - 0.1f;
+			pos = new Vec3d((this.world.rand.nextFloat() - 0.5f) * 0.95f, y, 2.25f + y * 0.35f);
+			dir = new Vec3d(0, -0.35f, 1.0f).normalize();
+			break;
+		case 5:
+			y = this.world.rand.nextFloat() * 0.6f - 0.1f;
+			pos = new Vec3d((this.world.rand.nextFloat() - 0.5f) * 0.95f, y, -2.25f - y * 0.35f);
+			dir = new Vec3d(0, -0.35f, -1.0f).normalize();
+			break;
+		}
+
+		return new DraetonLeakage(pos, dir);
 	}
 
 	@Override
@@ -1518,24 +1625,45 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (this.isEntityInvulnerable(source)) {
 			return false;
-		} else if (!this.world.isRemote && !this.isDead) {
+		} else if (!this.isDead) {
 			if (source instanceof EntityDamageSourceIndirect && source.getTrueSource() != null && this.isPassenger(source.getTrueSource())) {
 				return false;
 			} else {
-				this.setTimeSinceHit(10);
-				this.setDamageTaken(this.getDamageTaken() + amount * 10.0F);
+				boolean isPlayerHit = source.getImmediateSource() instanceof EntityPlayer;
 
-				boolean isCreative = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).capabilities.isCreativeMode;
+				if(!this.world.isRemote) {
+					this.setTimeSinceHit(10);
+					this.setDamageTaken(Math.min(this.getDamageTaken() + amount * 10.0F, 30.0f));
 
-				if (isCreative || this.getDamageTaken() > 40.0F) {
-					if (!isCreative && this.world.getGameRules().getBoolean("doEntityDrops")) {
-						//TODO Drop item
+					if(isPlayerHit) {
+						boolean isCreative = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer)source.getTrueSource()).capabilities.isCreativeMode;
+
+						if (isCreative || this.getDamageTaken() > 40.0F) {
+							if (!isCreative && this.world.getGameRules().getBoolean("doEntityDrops")) {
+								//TODO Drop item
+							}
+
+							this.setDead();
+						}
+					} else {
+						if(this.leakages.size() < 16) {
+							this.addLeakage(this.generateRandomLeakage());
+						}
 					}
 
-					this.setDead();
+					this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.DRAETON_DAMAGE, SoundCategory.NEUTRAL, 1, 1);
 				}
 
-				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.DRAETON_DAMAGE, SoundCategory.NEUTRAL, 1, 1);
+				if(!isPlayerHit) {
+					Vec3d bounce = source.getDamageLocation();
+					if(bounce != null) {
+						bounce = this.getBalloonPos(1).subtract(bounce);
+						bounce = new Vec3d(bounce.x, 0, bounce.z).normalize().scale(0.5f);
+					} else {
+						bounce = new Vec3d(this.world.rand.nextFloat() - 0.5f, 0, this.world.rand.nextFloat() - 0.5f).scale(0.5f);
+					}
+					this.balloonMotion = this.balloonMotion.add(bounce);
+				}
 
 				return true;
 			}
@@ -1664,6 +1792,12 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		return this.getEntityBoundingBox().grow(8);
+	}
+
 	@Override
 	public Entity[] getParts() {
 		return this.parts;
@@ -1683,9 +1817,25 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	}
 
 	protected boolean interactFromMultipart(EntityDraetonInteractionPart part, EntityPlayer player, EnumHand hand) {
-		if(!this.world.isRemote && hand == EnumHand.MAIN_HAND) {
+		ItemStack held = player.getHeldItem(hand);
+
+		if(!held.isEmpty() && EnumItemMisc.TAR_DRIP.isItemOf(held)) {
+			for(int i = 0; i < Math.min(this.leakages.size(), this.leakageParts.length); i++) {
+				if(this.leakageParts[i] == part) {
+					held.shrink(1);
+					player.swingArm(hand);
+					this.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM, SoundCategory.NEUTRAL, 1, 1);
+					if(!this.world.isRemote) this.removeLeakage(this.leakages.get(i));
+					return true;
+				}
+			}
+		}
+
+		if(hand == EnumHand.MAIN_HAND) {
 			if(part == this.guiPart) {
-				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_UPGRADES, player.getEntityWorld(), this.getEntityId(), 0, 0);
+				if(!this.world.isRemote) player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_UPGRADES, player.getEntityWorld(), this.getEntityId(), 0, 0);
+				player.swingArm(hand);
+				return true;
 			} else if(part == this.upgradePart1) {
 				this.interactWithUpgrade(part, player, hand, 0);
 			} else if(part == this.upgradePart2) {
@@ -1695,27 +1845,30 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 			} else if(part == this.upgradePart4) {
 				this.interactWithUpgrade(part, player, hand, 3);
 			} else if(part == this.burnerPart) {
-				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_BURNER, player.getEntityWorld(), getEntityId(), 0, 0);
+				if(!this.world.isRemote) player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_BURNER, player.getEntityWorld(), getEntityId(), 0, 0);
 				player.swingArm(hand);
+				return true;
 			} else if(part == this.upgradeAnchorPart) {
-				this.dataManager.set(ANCHOR_DEPLOYED, !this.dataManager.get(ANCHOR_DEPLOYED));
+				if(!this.world.isRemote) this.dataManager.set(ANCHOR_DEPLOYED, !this.dataManager.get(ANCHOR_DEPLOYED));
 				player.swingArm(hand);
+				return true;
 			}
 		}
-		return true;
+
+		return false;
 	}
 
 	protected void interactWithUpgrade(EntityDraetonInteractionPart part, EntityPlayer player, EnumHand hand, int index) {
 		ItemStack stack = this.getUpgradesInventory().getStackInSlot(index);
 		if(!stack.isEmpty()) {
 			if(this.isFurnaceUpgrade(stack)) {
-				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_FURNACE, player.getEntityWorld(), this.getEntityId(), index, 0);
+				if(!this.world.isRemote) player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_FURNACE, player.getEntityWorld(), this.getEntityId(), index, 0);
 				player.swingArm(hand);
 			} else if(this.isStorageUpgrade(stack)) {
-				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_POUCH, player.getEntityWorld(), this.getEntityId(), index, 0);
+				if(!this.world.isRemote) player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_POUCH, player.getEntityWorld(), this.getEntityId(), index, 0);
 				player.swingArm(hand);
 			} else if(this.isCraftingUpgrade(stack)) {
-				player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_CRAFTING, player.getEntityWorld(), this.getEntityId(), index, 0);
+				if(!this.world.isRemote) player.openGui(TheBetweenlands.instance, thebetweenlands.common.proxy.CommonProxy.GUI_DRAETON_CRAFTING, player.getEntityWorld(), this.getEntityId(), index, 0);
 				player.swingArm(hand);
 			}
 		}

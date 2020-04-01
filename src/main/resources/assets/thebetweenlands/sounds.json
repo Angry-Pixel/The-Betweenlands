@@ -1367,6 +1367,16 @@
       "thebetweenlands:draeton_pulley"
     ]
   },
+  "draeton_leak_start": {
+    "sounds": [
+      "thebetweenlands:draeton_leak_1"
+    ]
+  },
+  "draeton_leak_loop": {
+    "sounds": [
+      "thebetweenlands:draeton_leak_2"
+    ]
+  },
   "possessed_scream": {
     "sounds": [
       "thebetweenlands:possessed_scream"
