@@ -14,7 +14,10 @@ public class FuelHandler {
 	@SubscribeEvent
 	public static void onFuelEvent(FurnaceFuelBurnTimeEvent event) {
 		ItemStack stack = event.getItemStack();
-		if(stack.getItem() instanceof ItemMisc && stack.getItemDamage() == EnumItemMisc.SULFUR.getID()) {
+		if(stack.getItem() instanceof ItemMisc && stack.getItemDamage() == EnumItemMisc.WEEDWOOD_STICK.getID()) {
+			event.setBurnTime(100);
+		}
+		else if(stack.getItem() instanceof ItemMisc && stack.getItemDamage() == EnumItemMisc.SULFUR.getID()) {
 			event.setBurnTime(1600);
 		}
 		else if(stack.getItem() instanceof ItemMisc && stack.getItemDamage() == EnumItemMisc.UNDYING_EMBER.getID()) {

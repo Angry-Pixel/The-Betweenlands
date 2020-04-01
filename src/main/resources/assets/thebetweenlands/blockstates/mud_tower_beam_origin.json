@@ -1,6 +1,15 @@
 {
-    "variants": {
-        "powered=false": { "model": "thebetweenlands:internal/blank" },
-        "powered=true": { "model": "thebetweenlands:internal/blank" }
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/blank",
+    "custom": {
+      "particle_texture": "thebetweenlands:particle/block/mud_tower_beam_origin_particle"
     }
+  },
+  "variants": {
+    "powered": {
+      "true": { },
+      "false": { }
+    }
+  }
 }
