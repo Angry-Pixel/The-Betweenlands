@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -31,6 +32,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -48,6 +50,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.MapData;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IPullerEntity;
@@ -61,6 +64,7 @@ import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart;
 import thebetweenlands.common.network.bidirectional.MessageUpdateDraetonPhysicsPart.Action;
+import thebetweenlands.common.network.clientbound.MessageSyncDraetonLeakages;
 import thebetweenlands.common.network.serverbound.MessageSetDraetonAnchorPos;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -70,7 +74,7 @@ import thebetweenlands.util.Matrix;
 import thebetweenlands.util.NBTHelper;
 import thebetweenlands.util.PlayerUtil;
 
-public class EntityDraeton extends Entity implements IEntityMultiPart {
+public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAdditionalSpawnData {
 	private static final DataParameter<Integer> TIME_SINCE_HIT = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.VARINT);
 	private static final DataParameter<Float> DAMAGE_TAKEN = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.FLOAT);
 	private static final DataParameter<Boolean> ANCHOR_DEPLOYED = EntityDataManager.createKey(EntityDraeton.class, DataSerializers.BOOLEAN);
@@ -145,6 +149,8 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 	public final EntityDraetonInteractionPart balloonMiddle;
 	public final EntityDraetonInteractionPart balloonBack;
 
+	private final EntityDraetonInteractionPart[] leakageParts;
+
 	private DraetonPhysicsPart anchorPhysicsPart;
 
 	private final EntityItemFrame dummyFrame;
@@ -165,11 +171,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	private boolean wasBurnerRunning = false;
 
+	private List<DraetonLeakage> leakages = new ArrayList<>();
+
 	public EntityDraeton(World world) {
 		super(world);
 		this.setSize(1.5F, 1.5f);
 
-		this.parts = new EntityDraetonInteractionPart[]{ 
+		EntityDraetonInteractionPart[] mainParts = new EntityDraetonInteractionPart[]{ 
 				this.guiPart = new EntityDraetonInteractionPart(this, "gui", 0.5f, 0.5f, false),
 						this.upgradePart1 = new EntityDraetonInteractionPart(this, "upgrade_1", 0.5f, 0.75f, false), this.upgradePart2 = new EntityDraetonInteractionPart(this, "upgrade_2", 0.5f, 0.75f, false),
 						this.upgradePart3 = new EntityDraetonInteractionPart(this, "upgrade_3", 0.5f, 0.75f, false), this.upgradePart4 = new EntityDraetonInteractionPart(this, "upgrade_4", 0.5f, 0.75f, false),
@@ -178,6 +186,19 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 						this.upgradeFramePart = new EntityDraetonInteractionPart(this, "upgrade_frame", 0.5f, 0.5f, false),
 						this.balloonFront = new EntityDraetonInteractionPart(this, "balloon_front", 1.5f, 1.25f, true), this.balloonMiddle = new EntityDraetonInteractionPart(this, "balloon_middle", 1.5f, 1.25f, true), this.balloonBack = new EntityDraetonInteractionPart(this, "balloon_back", 1.5f, 1.25f, true)
 		};
+
+		this.leakageParts = new EntityDraetonInteractionPart[16];
+		for(int i = 0; i < 16; i++) {
+			this.leakageParts[i] = new EntityDraetonInteractionPart(this, "leakage_" + i, 0.5f, 0.5f, true);
+		}
+
+		this.parts = new EntityDraetonInteractionPart[mainParts.length + 16];
+		for(int i = 0; i < mainParts.length; i++) {
+			this.parts[i] = mainParts[i];
+		}
+		for(int i = 0; i < this.leakageParts.length; i++) {
+			this.parts[mainParts.length + i] = this.leakageParts[i];
+		}
 
 		this.dummyFrame = new EntityItemFrame(this.world) {
 			@Override
@@ -190,6 +211,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		for(int i = 0; i < 4; i++) {
 			this.furnaces[i] = TileEntityDraetonFurnace.create(this.furnacesInventory, i);
 			this.furnaces[i].setWorld(world);
+		}
+		
+		//TODO Debug
+		if(!this.world.isRemote) {
+			this.leakages.add(new DraetonLeakage(new Vec3d(1, 0, 0), new Vec3d(0, 0, 0)));
+			this.leakages.add(new DraetonLeakage(new Vec3d(-1, 0, 0), new Vec3d(0, 0, 0)));
+			this.leakages.add(new DraetonLeakage(new Vec3d(0, 2, 0), new Vec3d(0, 0, 0)));
 		}
 	}
 
@@ -830,6 +858,17 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		for(Entity entity : this.parts) {
 			entity.onUpdate();
 		}
+		
+		//Set leakage part positions
+		for(int i = 0; i < this.leakageParts.length; i++) {
+			Vec3d leakagePos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(new Vec3d(0, 0, 0), 1));
+			this.leakageParts[i].setPosition(leakagePos.x, leakagePos.y, leakagePos.z);
+		}
+		for(int i = 0; i < this.leakages.size(); i++) {
+			DraetonLeakage leakage = this.leakages.get(i);
+			Vec3d leakagePos = this.getBalloonPos(1).add(this.getRotatedBalloonPoint(leakage.pos, 1));
+			this.leakageParts[i].setPosition(leakagePos.x, leakagePos.y, leakagePos.z);
+		}
 
 		Vec3d guiPos = this.getRotatedCarriagePoint(new Vec3d(0, 0.05D, 0.25D), 1).add(this.posX, this.posY, this.posZ);
 		this.guiPart.setPosition(guiPos.x, guiPos.y, guiPos.z);
@@ -1392,6 +1431,14 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 		this.dataManager.set(BURNER_FUEL, fuel);
 	}
 
+	public List<DraetonLeakage> getLeakages() {
+		return this.leakages;
+	}
+
+	public void setLeakages(List<DraetonLeakage> leakages) {
+		this.leakages = leakages;
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int posRotationIncrements, boolean teleport) {
@@ -1756,5 +1803,16 @@ public class EntityDraeton extends Entity implements IEntityMultiPart {
 
 	public boolean isAnchorUpgrade(ItemStack stack) {
 		return stack.getItem() == ItemRegistry.GRAPPLING_HOOK;
+	}
+
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		MessageSyncDraetonLeakages.serialize(this.leakages, new PacketBuffer(buffer));
+	}
+
+	@Override
+	public void readSpawnData(ByteBuf buffer) {
+		this.leakages.clear();
+		MessageSyncDraetonLeakages.deserialize(this.leakages, new PacketBuffer(buffer));
 	}
 }
