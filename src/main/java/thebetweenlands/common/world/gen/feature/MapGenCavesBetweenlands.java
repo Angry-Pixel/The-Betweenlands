@@ -1,8 +1,8 @@
 package thebetweenlands.common.world.gen.feature;
 
-import java.util.List;
+import java.util.Set;
 
-import com.google.common.collect.Lists;
+import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -47,32 +47,32 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 
 	private static final double RIDGE_EXTENTS = 0.5;
 
-	private OpenSimplexNoise cave;
+	private final OpenSimplexNoise cave;
 
-	private OpenSimplexNoise seaLevelBreak;
+	private final OpenSimplexNoise seaLevelBreak;
 
-	private FractalOpenSimplexNoise form;
+	private final FractalOpenSimplexNoise form;
 
-	private List<BiomeBetweenlands> noBreakBiomes;
+	private static final Set<BiomeBetweenlands> noBreakBiomes
+			= ImmutableSet.of(
+				BiomeRegistry.DEEP_WATERS,
+				BiomeRegistry.COARSE_ISLANDS,
+				BiomeRegistry.MARSH_0,
+				BiomeRegistry.MARSH_1,
+				BiomeRegistry.PATCHY_ISLANDS,
+				BiomeRegistry.SLUDGE_PLAINS,
+				BiomeRegistry.SWAMPLANDS_CLEARING,
+				BiomeRegistry.SLUDGE_PLAINS_CLEARING);
 
 	private BiomeWeights biomeWeights;
 
-	private double[] noiseField = new double[9 * 9 * 129];
-	private double[] seaBreakNoiseField = new double[16 * 16];
+	private final double[] noiseField = new double[9 * 9 * 129];
+	private final double[] seaBreakNoiseField = new double[16 * 16];
 
 	public MapGenCavesBetweenlands(long seed) {
 		cave = new OpenSimplexNoise(seed);
 		seaLevelBreak = new OpenSimplexNoise(seed + 1);
 		form = new FractalOpenSimplexNoise(seed + 2, 4, 0.1);
-		noBreakBiomes = Lists.newArrayList(
-				BiomeRegistry.DEEP_WATERS, 
-				BiomeRegistry.COARSE_ISLANDS, 
-				BiomeRegistry.MARSH_0, 
-				BiomeRegistry.MARSH_1, 
-				BiomeRegistry.PATCHY_ISLANDS, 
-				BiomeRegistry.SLUDGE_PLAINS,
-				BiomeRegistry.SWAMPLANDS_CLEARING,
-				BiomeRegistry.SLUDGE_PLAINS_CLEARING);
 	}
 
 	public void setBiomeTerrainWeights(BiomeWeights biomeWeights) {
