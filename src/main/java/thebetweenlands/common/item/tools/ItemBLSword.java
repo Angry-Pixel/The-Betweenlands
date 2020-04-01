@@ -55,7 +55,7 @@ public class ItemBLSword extends ItemSword implements ICorrodible, IAnimatorRepa
 
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-		return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, 3.0F + this.getAttackDamage());
+		return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ATTACK_DAMAGE_MODIFIER, 3.0F + this.getAttackDamage());
 	}
 
 	@SideOnly(Side.CLIENT)
