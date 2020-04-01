@@ -34,11 +34,11 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class EntitySplodeshroom extends EntityProximitySpawner {
 	public int MAX_SWELL = 40;
 	public int MIN_SWELL = 0;
-	private static final DataParameter<Boolean> IS_SWELLING = EntityDataManager.createKey(EntityProximitySpawner.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Integer> SWELL_COUNT = EntityDataManager.createKey(EntityProximitySpawner.class, DataSerializers.VARINT);
-	private static final DataParameter<Boolean> HAS_EXPLODED = EntityDataManager.createKey(EntityProximitySpawner.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Float> AOE_SIZE_XZ = EntityDataManager.createKey(EntityProximitySpawner.class, DataSerializers.FLOAT);
-	private static final DataParameter<Float> AOE_SIZE_Y = EntityDataManager.createKey(EntityProximitySpawner.class, DataSerializers.FLOAT);
+	private static final DataParameter<Boolean> IS_SWELLING = EntityDataManager.createKey(EntitySplodeshroom.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> SWELL_COUNT = EntityDataManager.createKey(EntitySplodeshroom.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> HAS_EXPLODED = EntityDataManager.createKey(EntitySplodeshroom.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Float> AOE_SIZE_XZ = EntityDataManager.createKey(EntitySplodeshroom.class, DataSerializers.FLOAT);
+	private static final DataParameter<Float> AOE_SIZE_Y = EntityDataManager.createKey(EntitySplodeshroom.class, DataSerializers.FLOAT);
 
 	public EntitySplodeshroom(World world) {
 		super(world);

@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.plant;
 
+import java.util.Random;
+
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyDirection;
@@ -22,8 +24,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
-
-import java.util.Random;
 
 public class BlockEdgePlant extends BlockSludgeDungeonPlant implements ICustomItemBlock {
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
@@ -98,7 +98,7 @@ public class BlockEdgePlant extends BlockSludgeDungeonPlant implements ICustomIt
 	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
 		boolean hasSupportBlock;
 		
-		if(state.getBlock().isAir(state, worldIn, pos)) {
+		if(state.getBlock() instanceof BlockEdgePlant == false) {
 			//Block is air during placement
 			hasSupportBlock = true;
 		} else {

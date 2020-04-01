@@ -193,36 +193,38 @@ public class BlockDungeonDoorRunes extends BasicBlock implements ITileEntityProv
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
-		if (!world.isRemote && !state.getValue(INVISIBLE)) {
-			TileEntityDungeonDoorRunes tile = getTileEntity(world, pos);
-			if (tile != null && facing == state.getValue(FACING) && !tile.is_gate_entrance) {
-
-				if (stack.getItem() instanceof ItemRuneDoorKey) {
-					tile.top_state = tile.top_code;
-					tile.mid_state = tile.mid_code;
-					tile.bottom_state = tile.bottom_code;
-					if(!player.capabilities.isCreativeMode)
-						stack.shrink(1);
+		if (!state.getValue(INVISIBLE) && hand == EnumHand.MAIN_HAND) {
+			if(!world.isRemote) {
+				TileEntityDungeonDoorRunes tile = getTileEntity(world, pos);
+				if (tile != null && facing == state.getValue(FACING) && !tile.is_gate_entrance) {
+					if (stack.getItem() instanceof ItemRuneDoorKey) {
+						tile.top_state = tile.top_code;
+						tile.mid_state = tile.mid_code;
+						tile.bottom_state = tile.bottom_code;
+						if(!player.capabilities.isCreativeMode)
+							stack.shrink(1);
+						world.notifyBlockUpdate(pos, state, state, 3);
+						return true;
+					}
+	
+					if(player.capabilities.isCreativeMode && player.isSneaking()) {
+						tile.enterLockCode();
+						player.sendStatusMessage(new TextComponentTranslation("chat.dungeon_door_runes.locked"), true);
+					} else {
+						if(hitY >= 0.0625F && hitY < 0.375F && tile.bottom_rotate == 0)
+							tile.cycleBottomState();
+						if(hitY >= 0.375F && hitY < 0.625F && tile.mid_rotate == 0)
+							tile.cycleMidState();
+						if(hitY >= 0.625F && hitY <= 0.9375F &&  tile.top_rotate == 0)
+							tile.cycleTopState();
+					}
 					world.notifyBlockUpdate(pos, state, state, 3);
 					return true;
 				}
-
-				if(player.capabilities.isCreativeMode && player.isSneaking()) {
-					tile.enterLockCode();
-					player.sendStatusMessage(new TextComponentTranslation("chat.dungeon_door_runes.locked"), true);
-				} else {
-					if(hitY >= 0.0625F && hitY < 0.375F && tile.bottom_rotate == 0)
-						tile.cycleBottomState();
-					if(hitY >= 0.375F && hitY < 0.625F && tile.mid_rotate == 0)
-						tile.cycleMidState();
-					if(hitY >= 0.625F && hitY <= 0.9375F &&  tile.top_rotate == 0)
-						tile.cycleTopState();
-				}
-				world.notifyBlockUpdate(pos, state, state, 3);
+			} else {
 				return true;
 			}
-		} else 
-			return true;
+		}
 		return false;
 	}
 
