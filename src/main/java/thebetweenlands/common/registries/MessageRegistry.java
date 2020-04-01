@@ -46,6 +46,7 @@ import thebetweenlands.common.network.serverbound.MessageExtendedReach;
 import thebetweenlands.common.network.serverbound.MessageFlightState;
 import thebetweenlands.common.network.serverbound.MessageItemNaming;
 import thebetweenlands.common.network.serverbound.MessageOpenPouch;
+import thebetweenlands.common.network.serverbound.MessagePurgeDraetonBurner;
 import thebetweenlands.common.network.serverbound.MessageRow;
 import thebetweenlands.common.network.serverbound.MessageSetDraetonAnchorPos;
 import thebetweenlands.common.network.serverbound.MessageSetGalleryUrl;
@@ -101,6 +102,7 @@ public class MessageRegistry {
 		registerMessage(MessageSetGalleryUrl.class, Side.SERVER);
 		registerMessage(MessageUpdateDraetonPhysicsPart.class, Side.SERVER);
 		registerMessage(MessageSetDraetonAnchorPos.class, Side.SERVER);
+		registerMessage(MessagePurgeDraetonBurner.class, Side.SERVER);
 	}
 
 	private static void registerMessage(Class<? extends MessageBase> messageType, Side toSide) {

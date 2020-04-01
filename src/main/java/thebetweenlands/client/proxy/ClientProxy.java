@@ -527,7 +527,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		case GUI_DRAETON_BURNER:
 			entity = world.getEntityByID(x);
 			if (entity instanceof EntityDraeton)
-				return new GuiDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory());
+				return new GuiDraetonBurner(player.inventory, ((EntityDraeton)entity).getBurnerInventory(), (EntityDraeton)entity);
 			break;
 			
 		case GUI_DRAETON_UPGRADES:

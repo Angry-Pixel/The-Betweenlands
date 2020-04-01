@@ -713,7 +713,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 				this.motionY -= 0.005f;
 			}
 			if(!this.isBurnerRunning()) {
-				this.motionY -= 0.0175f;
+				this.motionY -= 0.06f;
 			}
 		}
 
@@ -774,7 +774,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	protected void updateBurner() {
 		if(!this.world.isRemote) {
 			if(this.isBurnerRunning()) {
-				this.setBurnerFuel(Math.max(0, this.getBurnerFuel() - 1));
+				this.setBurnerFuel(Math.max(0, this.getBurnerFuel() - 1 - this.leakages.size()));
 			}
 
 			if(this.maxFuel - this.getBurnerFuel() > 100) {
@@ -1243,6 +1243,17 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	}
 
 	protected void updateCarriage() {
+		if(!this.onGround) {
+			for(DraetonLeakage leakage : this.leakages) {
+				float leakageStrength = 0.005f + this.world.rand.nextFloat() * 0.0075f;
+				
+				Vec3d dir = this.getRotatedBalloonPoint(new Vec3d(leakage.dir.x, leakage.dir.y, leakage.dir.z * 0.1f), 1);
+				this.motionX -= dir.x * leakageStrength;
+				this.motionY -= dir.y * leakageStrength * 0.5f;
+				this.motionZ -= dir.z * leakageStrength;
+			}
+		}
+		
 		for(DraetonPhysicsPart part : this.physicsParts) {
 			Entity entity = part.getEntity();
 
