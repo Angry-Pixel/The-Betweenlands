@@ -58,11 +58,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityChiromawGreeblingRider.EntityAISlingshotAttack(this));
 		tasks.addTask(2, new EntityChiromawGreeblingRider.EntityAIMoveTowardsTargetWithDistance(this, 1.25D, 8, 128));
-		//this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
-		//this.tasks.addTask(2, new EntityAIFlyingWander(this, 0.5D));
 		targetTasks.addTask(1, new EntityAIFindNearestTarget<EntityLivingBase>(this, EntityLivingBase.class, 10, true, false, e -> e instanceof IPullerEntity).setUnseenMemoryTicks(160));
-		//targetTasks.addTask(1, new EntityChiromawGreeblingRider.EntityAIFindNearestTarget<EntityPullerDragonfly>(this, EntityPullerDragonfly.class, true).setUnseenMemoryTicks(160));
-		//targetTasks.addTask(2, new EntityChiromawGreeblingRider.EntityAIFindNearestTarget<EntityPullerFirefly>(this, EntityPullerFirefly.class, true).setUnseenMemoryTicks(160));
 	}
 
 	@Override
@@ -88,11 +84,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 			if (getReloadTimer() > 0 && !getIsShooting())
 				setReloadTimer(getReloadTimer() - 2);
 			}
-			// if(getIsShooting())
-			//System.out.println("Timer: " + getReloadTimer());
-			//System.out.println("Shooting: " + getIsShooting());
 		}
-		//motionY *= 1D;
 	}
 	
 	@Override
