@@ -236,7 +236,7 @@ public class EntityUnjustPebble extends Entity implements IProjectile, IThrowabl
 					}
 				}
 
-				getEntityWorld().playSound(null, getPosition(), SoundRegistry.SLINGSHOT_HIT, SoundCategory.HOSTILE, 1F, 1F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F);
+				
 				if (!(entity instanceof EntityEnderman))
 					setDead();
 				
@@ -251,6 +251,8 @@ public class EntityUnjustPebble extends Entity implements IProjectile, IThrowabl
 			}
 		} else
 			setDead();
+	
+		getEntityWorld().playSound(null, getPosition(), SoundRegistry.SLINGSHOT_HIT, SoundCategory.HOSTILE, 1F, 1F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F);
 	}
 
 	public void move(MoverType type, double x, double y, double z) {
