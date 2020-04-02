@@ -27,21 +27,21 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.ProtectionShield;
 import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityMusic;
@@ -55,8 +55,6 @@ import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.RotationMatrix;
 
 public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss, IEntityMusic {
-	private final RotationMatrix rotationMatrix = new RotationMatrix();
-
 	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
 	protected static final DataParameter<Integer> SHIELD_STATE = EntityDataManager.<Integer>createKey(EntityFortressBoss.class, DataSerializers.VARINT);
 	protected static final DataParameter<Float> SHIELD_ROTATION = EntityDataManager.<Float>createKey(EntityFortressBoss.class, DataSerializers.FLOAT);
@@ -83,9 +81,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 		{6,1,10}, {9,0,11}, {9,11,2}, {9,2,5}, {7,2,11}
 	};
 
-	private boolean[] activeShields = new boolean[20];
-
-	public int[] shieldAnimationTicks = new int[20];
+	public final ProtectionShield shield = new ProtectionShield();
 
 	public final AxisAlignedBB coreBoundingBox;
 
@@ -124,7 +120,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 		float coreHeight = 1.0F;
 		this.coreBoundingBox = new AxisAlignedBB(-coreWidth/2.0F, 0F + height / 4.0F, -coreWidth/2.0F, coreWidth/2.0F, coreHeight + height / 4.0F, coreWidth/2.0F);
 		for(int i = 0; i < 20; i++) {
-			this.activeShields[i] = true;
+			this.shield.setActive(i, true);
 		}
 	}
 
@@ -164,36 +160,6 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 		return this.anchorRadius;
 	}
 
-	private int packShieldData() {
-		int packedData = 0;
-		for(int i = 0; i <= 19; i++) {
-			packedData |= (this.activeShields[i] ? 1 : 0) << i;
-		}
-		return packedData;
-	}
-
-	private void unpackShieldData(int packedData) {
-		for(int i = 0; i <= 19; i++) {
-			this.activeShields[i] = ((packedData >> i) & 1) == 1 ? true : false;
-		}
-	}
-
-	public boolean hasShield() {
-		for(int i = 0; i <= 19; i++) {
-			if(this.activeShields[i])
-				return true;
-		}
-		return false;
-	}
-
-	public boolean isShieldActive(int shield) {
-		return this.activeShields[shield];
-	}
-
-	public void setShieldActive(int shield, boolean active) {
-		this.activeShields[shield] = active;
-	}
-
 	public int getGroundAttackTicks() {
 		return this.groundAttackTicks;
 	}
@@ -213,22 +179,21 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 		return this.lastShieldRotationRoll + (this.shieldRotationRoll - this.lastShieldRotationRoll) * partialTicks;
 	}
 
-	public int rayTraceShield(Vec3d pos, Vec3d ray, boolean back) {
-		int shield = -1;
+	public static int rayTraceShield(ProtectionShield shield, Vec3d centerPos, float shieldRotationYaw, float shieldRotationPitch, float shieldRotationRoll, float shieldExplosion, Vec3d pos, Vec3d ray, boolean back) {
+		int shieldIndex = -1;
 		double centroidX = 0;
 		double centroidY = 0;
 		double centroidZ = 0;
 
-		this.rotationMatrix.setRotations((float)Math.toRadians(-this.shieldRotationPitch), (float)Math.toRadians(-this.shieldRotationYaw), (float)Math.toRadians(-this.shieldRotationRoll));
-
-		Vec3d centerPos = new Vec3d(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
+		RotationMatrix rotationMatrix = new RotationMatrix();
+		rotationMatrix.setRotations((float)Math.toRadians(-shieldRotationPitch), (float)Math.toRadians(-shieldRotationYaw), (float)Math.toRadians(-shieldRotationRoll));
 
 		//Transform position and ray to local space
-		pos = this.rotationMatrix.transformVec(pos, centerPos);
-		ray = this.rotationMatrix.transformVec(ray, new Vec3d(0, 0, 0));
+		pos = rotationMatrix.transformVec(pos, centerPos);
+		ray = rotationMatrix.transformVec(ray, new Vec3d(0, 0, 0));
 
 		for(int i = 0; i <= 19; i++) {
-			if(!this.isShieldActive(i)) {
+			if(!shield.isActive(i)) {
 				continue;
 			}
 			double v3[] = ICOSAHEDRON_VERTICES[ICOSAHEDRON_INDICES[i][0]];
@@ -238,11 +203,11 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 			double centerY = (v1[1]+v2[1]+v3[1])/3;
 			double centerZ = (v1[2]+v2[2]+v3[2])/3;
 			double len = Math.sqrt(centerX*centerX + centerY*centerY + centerZ*centerZ);
-			double a = len + this.getShieldExplosion(1.0F);
+			double a = len + shieldExplosion;
 			Vec3d center = new Vec3d(centerX, centerY, centerZ);
-			centerX += this.posX + SHIELD_OFFSET_X;
-			centerY += this.posY + SHIELD_OFFSET_Y;
-			centerZ += this.posZ + SHIELD_OFFSET_Z;
+			centerX += centerPos.x;
+			centerY += centerPos.y;
+			centerZ += centerPos.z;
 			Vec3d vert1Exploded = new Vec3d(v1[0], v1[1], v1[2]);
 			double b = vert1Exploded.dotProduct(center);
 			double d = a * Math.tan(b);
@@ -253,9 +218,9 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 			Vec3d vert1 = new Vec3d(v1[0]+v1Normalized.x*vertexExplode, v1[1]+v1Normalized.y*vertexExplode, v1[2]+v1Normalized.z*vertexExplode);
 			Vec3d vert2 = new Vec3d(v2[0]+v2Normalized.x*vertexExplode, v2[1]+v2Normalized.y*vertexExplode, v2[2]+v2Normalized.z*vertexExplode);
 			Vec3d vert3 = new Vec3d(v3[0]+v3Normalized.x*vertexExplode, v3[1]+v3Normalized.y*vertexExplode, v3[2]+v3Normalized.z*vertexExplode);
-			vert1 = vert1.add(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
-			vert2 = vert2.add(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
-			vert3 = vert3.add(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z);
+			vert1 = vert1.add(centerPos);
+			vert2 = vert2.add(centerPos);
+			vert3 = vert3.add(centerPos);
 			Vec3d normal = vert2.subtract(vert1).crossProduct(vert3.subtract(vert1));
 
 			if(rayTraceTriangle(pos, ray, vert1, vert2, vert3) && (back || normal.normalize().dotProduct(ray.normalize()) < Math.cos(Math.toRadians(90)))) {
@@ -265,8 +230,8 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 				double pdx = centroidX - pos.x;
 				double pdy = centroidY - pos.y;
 				double pdz = centroidZ - pos.z;
-				if(shield == -1 || (Math.sqrt(dx*dx+dy*dy+dz*dz) < Math.sqrt(pdx*pdx+pdy*pdy+pdz*pdz))) {
-					shield = i;
+				if(shieldIndex == -1 || (Math.sqrt(dx*dx+dy*dy+dz*dz) < Math.sqrt(pdx*pdx+pdy*pdy+pdz*pdz))) {
+					shieldIndex = i;
 					centroidX = centerX;
 					centroidY = centerY;
 					centroidZ = centerZ;
@@ -274,7 +239,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 			}
 		}
 
-		return shield;
+		return shieldIndex;
 	}
 
 	public static boolean rayTraceTriangle(Vec3d pos, Vec3d ray, Vec3d v0, Vec3d v1, Vec3d v2) {
@@ -311,13 +276,22 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 	public void setFloating(boolean floating) {
 		this.getDataManager().set(FLOATING_STATE, floating);;
 	}
-
-	@Override
-	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if(!this.isEntityAlive()) {
-			return false;
-		}
+	
+	public static class AttackShieldResult {
+		public final boolean deflected;
+		public final int shieldHit;
+		@Nullable public final Vec3d pos;
+		@Nullable public final Vec3d ray;
 		
+		public AttackShieldResult(boolean deflected, int shieldHit, Vec3d pos, Vec3d ray) {
+			this.deflected = deflected;
+			this.shieldHit = shieldHit;
+			this.pos = pos;
+			this.ray = ray;
+		}
+	}
+	
+	public static AttackShieldResult attackShield(World world, ProtectionShield shield, Vec3d centerPos, float shieldRotationYaw, float shieldRotationPitch, float shieldRotationRoll, float shieldExplosion, Object2IntMap<Entity> deflectionDamageCooldowns, DamageSource source, boolean checkOnly) {
 		if(source instanceof EntityDamageSource) {
 			EntityDamageSource entityDamage = (EntityDamageSource) source;
 			
@@ -326,6 +300,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 
 			Entity attackingEntity = immediateEntity != null ? immediateEntity : sourceEntity;
 			
+			int shieldHit = -1;
 			boolean isDeflected = false;
 			
 			Vec3d ray = null;
@@ -343,16 +318,18 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 				
 				pos = new Vec3d(attackingEntity.posX, attackingEntity.posY + attackingEntity.getEyeHeight(), attackingEntity.posZ);
 				
-				if(this.hasShield() && (attackingEntity instanceof EntityPlayer == false || !((EntityPlayer)attackingEntity).capabilities.isCreativeMode) || attackingEntity.isSneaking()) {
-					int shieldHit = this.rayTraceShield(pos, ray, false);
+				if(shield.hasShield() && (attackingEntity instanceof EntityPlayer == false || !((EntityPlayer)attackingEntity).capabilities.isCreativeMode) || attackingEntity.isSneaking()) {
+					shieldHit = rayTraceShield(shield, centerPos, shieldRotationYaw, shieldRotationPitch, shieldRotationRoll, shieldExplosion, pos, ray, false);
 					
 					if(shieldHit >= 0) {
-						if(!this.world.isRemote && attackingEntity.isSneaking() && ((EntityPlayer)attackingEntity).capabilities.isCreativeMode) {
-							this.setShieldActive(shieldHit, false);
-						}
-						
-						if(this.world.isRemote) {
-							this.shieldAnimationTicks[shieldHit] = 20;
+						if(!checkOnly) {
+							if(!world.isRemote && attackingEntity.isSneaking() && ((EntityPlayer)attackingEntity).capabilities.isCreativeMode) {
+								shield.setActive(shieldHit, false);
+							}
+							
+							if(world.isRemote) {
+								shield.setAnimationTicks(shieldHit, 20);
+							}
 						}
 						
 						isDeflected = true;
@@ -361,13 +338,13 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 			}
 			
 			if(isDeflected) {
-				if(!this.world.isRemote) {
+				if(!checkOnly && !world.isRemote) {
 					boolean damaged = false;
 					
-					if(sourceEntity != null && !this.deflectionDamageCooldowns.containsKey(sourceEntity)) {
-						double dx = sourceEntity.posX - this.posX;
-						double dy = sourceEntity.posY - this.posY;
-						double dz = sourceEntity.posZ - this.posZ;
+					if(sourceEntity != null && !deflectionDamageCooldowns.containsKey(sourceEntity)) {
+						double dx = sourceEntity.posX - centerPos.x;
+						double dy = sourceEntity.posY - centerPos.y;
+						double dz = sourceEntity.posZ - centerPos.z;
 						double len = Math.sqrt(dx*dx+dy*dy+dz*dz);
 						sourceEntity.motionX = dx / len * 0.8F;
 						sourceEntity.motionY = dy / len * 0.8F;
@@ -375,14 +352,14 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 						sourceEntity.velocityChanged = sourceEntity.isAirBorne = true;
 						sourceEntity.attackEntityFrom(DamageSource.MAGIC, 2);
 						
-						this.deflectionDamageCooldowns.put(sourceEntity, 10);
+						deflectionDamageCooldowns.put(sourceEntity, 10);
 						damaged = true;
 					}
 					
-					if(immediateEntity != null && !this.deflectionDamageCooldowns.containsKey(immediateEntity)) {
-						double dx = immediateEntity.posX - this.posX;
-						double dy = immediateEntity.posY - this.posY;
-						double dz = immediateEntity.posZ - this.posZ;
+					if(immediateEntity != null && !deflectionDamageCooldowns.containsKey(immediateEntity)) {
+						double dx = immediateEntity.posX - centerPos.x;
+						double dy = immediateEntity.posY - centerPos.y;
+						double dz = immediateEntity.posZ - centerPos.z;
 						double len = Math.sqrt(dx*dx+dy*dy+dz*dz);
 						immediateEntity.motionX = dx / len * 0.8F;
 						immediateEntity.motionY = dy / len * 0.8F;
@@ -390,18 +367,34 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 						immediateEntity.velocityChanged = immediateEntity.isAirBorne = true;
 						immediateEntity.attackEntityFrom(DamageSource.MAGIC, 2);
 						
-						this.deflectionDamageCooldowns.put(immediateEntity, 10);
+						deflectionDamageCooldowns.put(immediateEntity, 10);
 						damaged = true;
 					}
 					
 					if(damaged) {
-						this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_NOPE, SoundCategory.HOSTILE, 1, 1);
+						world.playSound(null, centerPos.x, centerPos.y, centerPos.z, SoundRegistry.FORTRESS_BOSS_NOPE, SoundCategory.HOSTILE, 1, 1);
 					}
 				}
 				
-				return false;
+				return new AttackShieldResult(true, shieldHit, pos, ray);
 			} else {
-				if(pos != null && ray != null && this.coreBoundingBox.offset(this.posX, this.posY, this.posZ).calculateIntercept(pos, ray.add(pos.x, pos.y, pos.z)) != null) {
+				return new AttackShieldResult(false, shieldHit, pos, ray);
+			}
+		}
+		
+		return new AttackShieldResult(true, -1, null, null);
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if(!this.isEntityAlive()) {
+			return false;
+		}
+		
+		if(source instanceof EntityDamageSource) {
+			AttackShieldResult result = attackShield(this.world, this.shield, new Vec3d(this.posX + SHIELD_OFFSET_X, this.posY + SHIELD_OFFSET_Y, this.posZ + SHIELD_OFFSET_Z), this.getShieldRotationYaw(1), this.getShieldRotationPitch(1), this.getShieldRotationRoll(1), this.getShieldExplosion(1), this.deflectionDamageCooldowns, source, false);
+			if(!result.deflected) {
+				if(result.pos != null && result.ray != null && this.coreBoundingBox.offset(this.posX, this.posY, this.posZ).calculateIntercept(result.pos, result.ray.add(result.pos.x, result.pos.y, result.pos.z)) != null) {
 					return super.attackEntityFrom(source, damage);
 				} else {
 					return false;
@@ -429,7 +422,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
-		nbt.setInteger("shields", this.packShieldData());
+		nbt.setInteger("shields", this.shield.packActiveData());
 		nbt.setDouble("anchorX", this.anchor.getX());
 		nbt.setDouble("anchorY", this.anchor.getY());
 		nbt.setDouble("anchorZ", this.anchor.getZ());
@@ -449,7 +442,9 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		this.unpackShieldData(nbt.getInteger("shields"));
+		if(nbt.hasKey("shields", Constants.NBT.TAG_INT)) {
+			this.shield.unpackActiveData(nbt.getInteger("shields"));
+		}
 		this.anchor = new BlockPos(nbt.getDouble("anchorX"), nbt.getDouble("anchorY"), nbt.getDouble("anchorZ"));
 		this.anchorRadius = nbt.getDouble("anchorRadius");
 		this.setFloating(nbt.getBoolean("floating"));
@@ -572,7 +567,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 			shieldRotation = this.getDataManager().get(SHIELD_ROTATION);
 			this.anchor = this.getDataManager().get(ANCHOR);
 			this.anchorRadius = this.getDataManager().get(ANCHOR_RADIUS);
-			this.unpackShieldData(this.getDataManager().get(SHIELD_STATE));
+			this.shield.unpackActiveData(this.getDataManager().get(SHIELD_STATE));
 		} else {
 			if(this.isEntityAlive()) {
 				shieldRotation = this.ticksExisted;
@@ -583,7 +578,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 		}
 		int activeShields = 0;
 		for(int i = 0; i <= 19; i++) {
-			if(this.isShieldActive(i))
+			if(this.shield.isActive(i))
 				activeShields++;
 		}
 		if(this.isEntityAlive()) {
@@ -635,7 +630,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 			List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, checkArea);
 			if(!players.isEmpty()) {
 				if(!this.world.isRemote) {
-					this.getDataManager().set(SHIELD_STATE, this.packShieldData());
+					this.getDataManager().set(SHIELD_STATE, this.shield.packActiveData());
 
 					if(this.isFloating() && this.posY >= anchorCenter.y) {
 						AxisAlignedBB checkAABB = this.getEntityBoundingBox().grow(16, 16, 16);
@@ -775,12 +770,12 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 					}
 				} else {
 					for(int i = 0; i <= 19; i++) {
-						if(this.shieldAnimationTicks[i] == 0 && this.world.rand.nextInt(50) == 0)
-							this.shieldAnimationTicks[i] = 40;
-						if(this.shieldAnimationTicks[i] > 0) {
-							this.shieldAnimationTicks[i]--;
-							if(this.shieldAnimationTicks[i] == 20)
-								this.shieldAnimationTicks[i] = 0;
+						if(this.shield.getAnimationTicks(i) == 0 && this.world.rand.nextInt(50) == 0)
+							this.shield.setAnimationTicks(i, 40);
+						if(this.shield.getAnimationTicks(i) > 0) {
+							this.shield.setAnimationTicks(i, this.shield.getAnimationTicks(i) - 1);
+							if(this.shield.getAnimationTicks(i) == 20)
+								this.shield.setAnimationTicks(i, 0);
 						}
 					}
 					if(this.getDataManager().get(GROUND_ATTACK_STATE)) {
@@ -871,9 +866,9 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 
 		this.getDataManager().set(SHIELD_ROTATION, (float)((this.deathTicks/3.0F) * (this.deathTicks/3.0F)));
 		for(int i = 0; i <= 19; i++) {
-			this.activeShields[i] = i * (130.0F / 19.0F) > this.deathTicks;
+			this.shield.setActive(i, i * (130.0F / 19.0F) > this.deathTicks);
 		}
-		this.getDataManager().set(SHIELD_STATE, this.packShieldData());
+		this.getDataManager().set(SHIELD_STATE, this.shield.packActiveData());
 		if(!this.world.isRemote) {
 			if (this.deathTicks > 100 && this.deathTicks % 5 == 0) {
 				int xp = 800;
