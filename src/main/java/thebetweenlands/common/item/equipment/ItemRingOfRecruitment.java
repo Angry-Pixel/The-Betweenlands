@@ -1,6 +1,8 @@
 package thebetweenlands.common.item.equipment;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -26,6 +28,7 @@ import thebetweenlands.api.capability.IPuppeteerCapability;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
+import thebetweenlands.common.entity.mobs.EntityFortressBossBlockade;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
@@ -43,7 +46,7 @@ public class ItemRingOfRecruitment extends ItemRing {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.bl.ring.recruitment.bonus"), 0));
 		if (GuiScreen.isShiftKeyDown()) {
-			String toolTip = I18n.format("tooltip.bl.ring.recruitment", KeyBindRegistry.RADIAL_MENU.getDisplayName(), Minecraft.getMinecraft().gameSettings.keyBindUseItem.getDisplayName());
+			String toolTip = I18n.format("tooltip.bl.ring.recruitment", KeyBindRegistry.RADIAL_MENU.getDisplayName(), Minecraft.getMinecraft().gameSettings.keyBindUseItem.getDisplayName(), KeyBindRegistry.USE_RING.getDisplayName(), KeyBindRegistry.USE_SECONDARY_RING.getDisplayName());
 			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
 		} else {
 			list.add(I18n.format("tooltip.bl.press.shift"));
@@ -87,6 +90,40 @@ public class ItemRingOfRecruitment extends ItemRing {
 	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack stack) {
 		return stack.hasTagCompound() && stack.getTagCompound().getBoolean("ringActive");
+	}
+	
+	@Override
+	public void onKeybindState(EntityPlayer player, ItemStack stack, IInventory inventory, boolean active) {
+		if(!player.world.isRemote && active) {
+			IPuppeteerCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
+			
+			if(cap != null && cap.getShield() != null) {
+				List<Entity> targets = cap.getPuppets();
+				
+				Set<Entity> spawned = new HashSet<>();
+				
+				for(Entity target : targets) {
+					IPuppetCapability targetCap = target.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+					if(targetCap != null && target.onGround && ((!targetCap.getStay() && !targetCap.getGuard()) || target.getDistance(player) < 6)) {
+						List<EntityFortressBossBlockade> collidingEntities = target.world.getEntitiesWithinAABB(EntityFortressBossBlockade.class, target.getEntityBoundingBox().grow(0.5D));
+						for(EntityFortressBossBlockade collidingEntity : collidingEntities) {
+							if(!spawned.contains(collidingEntity)) {
+								collidingEntity.setDead();
+							}
+						}
+						
+						EntityFortressBossBlockade blockade = new EntityFortressBossBlockade(target.world, player);
+						blockade.setLocationAndAngles(target.posX, target.posY - 0.15f, target.posZ, target.world.rand.nextFloat() * 360.0f, 0);
+						blockade.setMaxDespawnTicks(30 + target.world.rand.nextInt(20));
+						blockade.setTriangleSize(0.75f + target.width * 0.5f);
+						
+						spawned.add(blockade);
+						
+						target.world.spawnEntity(blockade);
+					}
+				}
+			}
+		}
 	}
 
 	@Nullable
