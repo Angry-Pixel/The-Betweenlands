@@ -14,7 +14,6 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -41,12 +40,13 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IRingOfGatheringMinion;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.client.render.model.ControlledAnimation;
+import thebetweenlands.common.entity.EntityTameableBL;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityGiantToad extends EntityTameable implements IEntityBL, IRingOfGatheringMinion {
+public class EntityGiantToad extends EntityTameableBL implements IEntityBL, IRingOfGatheringMinion {
 	private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityGiantToad.class, DataSerializers.BYTE);
 	private static final DataParameter<Boolean> DW_TAMED = EntityDataManager.createKey(EntityGiantToad.class, DataSerializers.BOOLEAN);
 

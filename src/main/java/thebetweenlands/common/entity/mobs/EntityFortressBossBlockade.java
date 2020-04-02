@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -7,6 +9,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -24,10 +27,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import thebetweenlands.api.capability.IPuppeteerCapability;
+import thebetweenlands.api.capability.ProtectionShield;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
+import thebetweenlands.common.registries.CapabilityRegistry;
 
-public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
+public class EntityFortressBossBlockade extends EntityMob implements IEntityBL, IEntityAdditionalSpawnData {
 	protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.<Optional<UUID>>createKey(EntityFortressBossBlockade.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 	protected static final DataParameter<Float> SIZE = EntityDataManager.<Float>createKey(EntityFortressBossBlockade.class, DataSerializers.FLOAT);
 	protected static final DataParameter<Float> ROTATION = EntityDataManager.<Float>createKey(EntityFortressBossBlockade.class, DataSerializers.FLOAT);
@@ -42,12 +49,14 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 	public EntityFortressBossBlockade(World world) {
 		super(world);
 		this.setSize(1.0F, 0.2F);
+		this.prevRotation = this.rotation = world.rand.nextFloat() * 360.0f;
 	}
 
 	public EntityFortressBossBlockade(World world, Entity source) {
 		super(world);
 		this.setSize(1.0F, 0.2F);
 		this.setOwner(source);
+		this.prevRotation = this.rotation = world.rand.nextFloat() * 360.0f;
 	}
 
 	@Override
@@ -152,6 +161,10 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			this.getDataManager().set(OWNER, Optional.absent());
 		}
 	}
+	
+	protected boolean isPlayerControlled() {
+		return this.getOwner() instanceof EntityPlayer;
+	}
 
 	@Override
 	public void onUpdate() {
@@ -177,16 +190,59 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			this.rotation += 1.0F;
 			this.getDataManager().set(ROTATION, this.rotation);
 
-			List<EntityPlayer> targets = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(this.getTriangleSize()*2, 0, this.getTriangleSize()*2));
-			for(EntityPlayer target : targets) {
-				Vec3d[] vertices = this.getTriangleVertices(1);
-				if(EntityFortressBoss.rayTraceTriangle(new Vec3d(target.posX - this.posX, 1, target.posZ - this.posZ), new Vec3d(0, -2, 0), vertices[0], vertices[1], vertices[2])) {
-					float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
-					if(target.attackEntityFrom(DamageSource.MAGIC, damage) && this.getOwner() != null && this.getOwner() instanceof EntityLivingBase) {
-						EntityLivingBase owner = (EntityLivingBase) this.getOwner();
-						if(owner.getHealth() < owner.getMaxHealth() - damage) {
-							owner.heal(damage * 3.0F);
+			List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(this.getTriangleSize()*2, 0, this.getTriangleSize()*2));
+			for(EntityLivingBase target : targets) {
+				if(target != this.getOwner()) {
+					Vec3d[] vertices = this.getTriangleVertices(1);
+					
+					if(EntityFortressBoss.rayTraceTriangle(new Vec3d(target.posX - this.posX, 1, target.posZ - this.posZ), new Vec3d(0, -2, 0), vertices[0], vertices[1], vertices[2])) {
+						
+						if(this.isPlayerControlled()) {
+							Entity owner = this.getOwner();
+							if(owner instanceof EntityPlayer) {
+								EntityPlayer player = (EntityPlayer) owner;
+								
+								IPuppeteerCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
+								if(cap != null) {
+									ProtectionShield shield = cap.getShield();
+									
+									if(shield != null) {
+										float healthPercent = 0.3f;
+										
+										if(target.getHealth() * (1 - healthPercent) > 5.0f) {
+											float healthCost = target.getHealth() * healthPercent;
+											float prevHealth = target.getHealth();
+											
+											if(target.attackEntityFrom(DamageSource.MAGIC, healthCost) && (prevHealth - target.getHealth()) >= healthCost * 0.5f) {
+												List<Integer> indices = new ArrayList<>();
+												for(int i = 0; i < 20; i++) {
+													indices.add(i);
+												}
+												Collections.shuffle(indices, this.rand);
+												
+												for(int index : indices) {
+													if(!shield.isActive(index)) {
+														shield.setActive(index, true);
+														break;
+													}
+												}
+												
+												this.maxDespawnTicks = this.despawnTicks + 8;
+											}
+										}
+									}
+								}
+							}
+						} else if(target instanceof EntityPlayer)  {
+							float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+							if(target.attackEntityFrom(DamageSource.MAGIC, damage) && this.getOwner() != null && this.getOwner() instanceof EntityLivingBase) {
+								EntityLivingBase owner = (EntityLivingBase) this.getOwner();
+								if(owner.getHealth() < owner.getMaxHealth() - damage) {
+									owner.heal(damage * 3.0F);
+								}
+							}
 						}
+						
 					}
 				}
 			}
@@ -234,7 +290,9 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 					sz = this.getOwner().posZ;
 				}
 
-				this.world.spawnParticle(EnumParticleTypes.PORTAL, sx, sy, sz, ex - sx, ey - sy, ez - sz);
+				if(!this.isPlayerControlled()) {
+					this.world.spawnParticle(EnumParticleTypes.PORTAL, sx, sy, sz, ex - sx, ey - sy, ez - sz);
+				}
 			}
 		}
 	}
@@ -309,5 +367,16 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 	@Override
     public boolean getIsInvulnerable() {
 		return true;
+	}
+
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		buffer.writeFloat(this.rotation);
+	}
+
+	@Override
+	public void readSpawnData(ByteBuf buffer) {
+		this.prevRotation = this.rotation = buffer.readFloat();
+		this.dataManager.set(ROTATION, this.rotation);
 	}
 }

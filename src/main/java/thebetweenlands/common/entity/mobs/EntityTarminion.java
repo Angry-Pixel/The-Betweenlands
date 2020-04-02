@@ -23,7 +23,6 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -46,11 +45,12 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IRingOfGatheringMinion;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.entity.EntityTameableBL;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityTarminion extends EntityTameable implements IEntityBL, IRingOfGatheringMinion {
+public class EntityTarminion extends EntityTameableBL implements IEntityBL, IRingOfGatheringMinion {
 	public static final IAttribute MAX_TICKS_ATTRIB = (new RangedAttribute(null, "bl.maxAliveTicks", 7200.0D, 0, Integer.MAX_VALUE)).setDescription("Maximum ticks until the Tar Minion despawns");
 
 	private int despawnTicks = 0;

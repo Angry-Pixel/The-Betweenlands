@@ -127,10 +127,10 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 					EntityFortressBoss boss = (EntityFortressBoss) target.entityHit;
 					Vec3d ray = new Vec3d(this.motionX, this.motionY, this.motionZ);
 					ray = ray.normalize().scale(64.0D);
-					int shieldHit = boss.rayTraceShield(new Vec3d(this.posX, this.posY, this.posZ), ray, false);
+					int shieldHit = EntityFortressBoss.rayTraceShield(boss.shield, new Vec3d(boss.posX + EntityFortressBoss.SHIELD_OFFSET_X, boss.posY + EntityFortressBoss.SHIELD_OFFSET_Y, boss.posZ + EntityFortressBoss.SHIELD_OFFSET_Z), boss.getShieldRotationYaw(1), boss.getShieldRotationPitch(1), boss.getShieldRotationYaw(1), boss.getShieldExplosion(1), new Vec3d(this.posX, this.posY, this.posZ), ray, false);
 					if(shieldHit >= 0) {
 						if(!this.world.isRemote) {
-							boss.setShieldActive(shieldHit, false);
+							boss.shield.setActive(shieldHit, false);
 
 							this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SHIELD_DOWN, SoundCategory.HOSTILE, 1.0F, 1.0F);
 
