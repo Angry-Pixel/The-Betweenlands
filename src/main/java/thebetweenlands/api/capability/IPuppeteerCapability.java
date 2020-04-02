@@ -2,6 +2,8 @@ package thebetweenlands.api.capability;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 
 public interface IPuppeteerCapability {
@@ -34,4 +36,36 @@ public interface IPuppeteerCapability {
 	 * @param ticks
 	 */
 	public void setActivatingTicks(int ticks);
+	
+	/**
+	 * PM protection shield
+	 * @return
+	 */
+	@Nullable
+	public default ProtectionShield getShield() {
+		return null;
+	}
+	
+	/**
+	 * Updates the shield rotation ticks
+	 */
+	public default void updateShield() {
+		
+	}
+	
+	/**
+	 * Shield rotation ticks
+	 * @return
+	 */
+	public default int getShieldRotationTicks() {
+		return 0;
+	}
+	
+	/**
+	 * Previous tick shield rotation ticks
+	 * @return
+	 */
+	public default int getPrevShieldRotationTicks() {
+		return 0;
+	}
 }
