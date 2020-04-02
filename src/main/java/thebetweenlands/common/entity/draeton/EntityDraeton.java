@@ -190,7 +190,7 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 						this.burnerPart = new EntityDraetonInteractionPart(this, "burner", 0.7f, 0.5f, false),
 						this.upgradeAnchorPart = new EntityDraetonInteractionPart(this, "upgrade_anchor", 0.5f, 0.5f, false),
 						this.upgradeFramePart = new EntityDraetonInteractionPart(this, "upgrade_frame", 0.5f, 0.5f, false),
-						this.balloonFront = new EntityDraetonInteractionPart(this, "balloon_front", 1.5f, 1.25f, true), this.balloonMiddle = new EntityDraetonInteractionPart(this, "balloon_middle", 1.5f, 1.25f, true), this.balloonBack = new EntityDraetonInteractionPart(this, "balloon_back", 1.5f, 1.25f, true)
+						this.balloonFront = new EntityDraetonInteractionPart(this, "balloon_front", 1.5f, 1.0f, true), this.balloonMiddle = new EntityDraetonInteractionPart(this, "balloon_middle", 1.5f, 1.0f, true), this.balloonBack = new EntityDraetonInteractionPart(this, "balloon_back", 1.5f, 1.0f, true)
 		};
 
 		this.leakageParts = new EntityDraetonInteractionPart[16];
@@ -927,13 +927,13 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		Matrix balloonRot = new Matrix();
 		balloonRot.rotate((float)-Math.toRadians(this.rotationYaw), 0, 1, 0);
 
-		Vec3d balloonFrontPos = balloonRot.transform(new Vec3d(0, 3, 1.5f)).add(this.posX, this.posY, this.posZ);
+		Vec3d balloonFrontPos = balloonRot.transform(new Vec3d(0, 3.15f, 1.5f)).add(this.posX, this.posY, this.posZ);
 		this.balloonFront.setPosition(balloonFrontPos.x, balloonFrontPos.y, balloonFrontPos.z);
 
-		Vec3d balloonMiddlePos = balloonRot.transform(new Vec3d(0, 3, 0)).add(this.posX, this.posY, this.posZ);
+		Vec3d balloonMiddlePos = balloonRot.transform(new Vec3d(0, 3.15f, 0)).add(this.posX, this.posY, this.posZ);
 		this.balloonMiddle.setPosition(balloonMiddlePos.x, balloonMiddlePos.y, balloonMiddlePos.z);
 
-		Vec3d balloonBackPos = balloonRot.transform(new Vec3d(0, 3, -1.5f)).add(this.posX, this.posY, this.posZ);
+		Vec3d balloonBackPos = balloonRot.transform(new Vec3d(0, 3.15f, -1.5f)).add(this.posX, this.posY, this.posZ);
 		this.balloonBack.setPosition(balloonBackPos.x, balloonBackPos.y, balloonBackPos.z);
 	}
 
@@ -1246,14 +1246,14 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 		if(!this.onGround) {
 			for(DraetonLeakage leakage : this.leakages) {
 				float leakageStrength = 0.005f + this.world.rand.nextFloat() * 0.0075f;
-				
+
 				Vec3d dir = this.getRotatedBalloonPoint(new Vec3d(leakage.dir.x, leakage.dir.y, leakage.dir.z * 0.1f), 1);
 				this.motionX -= dir.x * leakageStrength;
 				this.motionY -= dir.y * leakageStrength * 0.5f;
 				this.motionZ -= dir.z * leakageStrength;
 			}
 		}
-		
+
 		for(DraetonPhysicsPart part : this.physicsParts) {
 			Entity entity = part.getEntity();
 
@@ -1830,12 +1830,12 @@ public class EntityDraeton extends Entity implements IEntityMultiPart, IEntityAd
 	protected boolean interactFromMultipart(EntityDraetonInteractionPart part, EntityPlayer player, EnumHand hand) {
 		ItemStack held = player.getHeldItem(hand);
 
-		if(!held.isEmpty() && EnumItemMisc.TAR_DRIP.isItemOf(held)) {
+		if(!held.isEmpty() && held.getItem() == ItemRegistry.LURKER_SKIN_PATCH) {
 			for(int i = 0; i < Math.min(this.leakages.size(), this.leakageParts.length); i++) {
 				if(this.leakageParts[i] == part) {
 					held.shrink(1);
 					player.swingArm(hand);
-					this.world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEMFRAME_REMOVE_ITEM, SoundCategory.NEUTRAL, 1, 1);
+					this.world.playSound(null, this.leakageParts[i].posX, this.leakageParts[i].posY, this.leakageParts[i].posZ, SoundRegistry.DRAETON_PLUG, SoundCategory.NEUTRAL, 1.2f, 1);
 					if(!this.world.isRemote) this.removeLeakage(this.leakages.get(i));
 					return true;
 				}

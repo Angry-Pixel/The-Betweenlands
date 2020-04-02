@@ -428,6 +428,7 @@ public class ItemRegistry {
     public static final Item GEM_SINGER = new ItemGemSinger();
     public static final Item SHAMBLER_TONGUE = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final Item RUNE_DOOR_KEY = new ItemRuneDoorKey();
+    public static final Item LURKER_SKIN_PATCH = new Item().setCreativeTab(BLCreativeTabs.ITEMS).setMaxStackSize(16);
     
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:items_misc",
+      "data": 26
+    },
+    {
+      "item": "thebetweenlands:items_misc",
+      "data": 4
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:lurker_skin_patch"
+  }
+}
