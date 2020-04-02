@@ -32,33 +32,34 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.mobs.EntityChiromawGreeblingRider;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityUnjustPebble extends Entity implements IProjectile, IThrowableEntity {
+public class EntityBetweenstonePebble extends Entity implements IProjectile, IThrowableEntity {
 	private static final Predicate<Entity> ARROW_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>() {
 				public boolean apply(@Nullable Entity p_apply_1_) {
 					return p_apply_1_.canBeCollidedWith();
 				}
 			});
 
-	private static final DataParameter<Byte> CRITICAL = EntityDataManager .<Byte>createKey(EntityUnjustPebble.class, DataSerializers.BYTE);
+	private static final DataParameter<Byte> CRITICAL = EntityDataManager .<Byte>createKey(EntityBetweenstonePebble.class, DataSerializers.BYTE);
 	public Entity shootingEntity;
 	private double damage;
 	private int knockbackStrength;
 	private int ticksInAir;
 
-	public EntityUnjustPebble(World world) {
+	public EntityBetweenstonePebble(World world) {
 		super(world);
 		damage = 2.0D;
 		setSize(0.5F, 0.5F);
 	}
 
-	public EntityUnjustPebble(World world, double x, double y, double z) {
+	public EntityBetweenstonePebble(World world, double x, double y, double z) {
 		this(world);
 		setPosition(x, y, z);
 	}
 
-	public EntityUnjustPebble(World world, EntityLivingBase shooter) {
+	public EntityBetweenstonePebble(World world, EntityLivingBase shooter) {
 		this(world, shooter.posX, shooter.posY + (double) shooter.getEyeHeight() - 0.10000000149011612D, shooter.posZ);
 		shootingEntity = shooter;
 	}
@@ -229,6 +230,9 @@ public class EntityUnjustPebble extends Entity implements IProjectile, IThrowabl
 					if (shootingEntity instanceof EntityLivingBase) {
 						EnchantmentHelper.applyThornEnchantments(entitylivingbase, shootingEntity);
 						EnchantmentHelper.applyArthropodEnchantments((EntityLivingBase) shootingEntity, entitylivingbase);
+						if (shootingEntity instanceof EntityChiromawGreeblingRider) {
+							getEntityWorld().playSound(null, shootingEntity.getPosition(), SoundRegistry.GREEBLING_GIGGLE, SoundCategory.HOSTILE, 1F, 1F);
+						}
 					}
 
 					if (shootingEntity != null && entitylivingbase != shootingEntity && entitylivingbase instanceof EntityPlayer && shootingEntity instanceof EntityPlayerMP) {

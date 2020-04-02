@@ -700,6 +700,7 @@ item.thebetweenlands.test_item_chimp.name=Test Banana
 item.thebetweenlands.location_debug.name=Location Debug
 item.thebetweenlands.the_explorer.name=Explorer's Disc
 item.thebetweenlands.thorns_item.name=Thorn Branch
+item.thebetweenlands.betweenstone_pebble.name=Betweenstone Pebble
 item.thebetweenlands.valonite_axe.name=Valonite Axe
 item.thebetweenlands.valonite_greataxe.name=Valonite Greataxe
 item.thebetweenlands.valonite_boots.name=Valonite Boots
@@ -849,6 +850,7 @@ item.thebetweenlands.volarkite.name=Volarkite
 item.thebetweenlands.gallery_frame_small.name=Small Gallery Frame
 item.thebetweenlands.gallery_frame_large.name=Large Gallery Frame
 item.thebetweenlands.gallery_frame_very_large.name=Very Large Gallery Frame
+item.thebetweenlands.simple_slingshot.name=Simple Slingshot
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1007,6 +1009,7 @@ tooltip.bl.grappling_hook.upgrade=Craft with two Angler Teeth and a\nShambler To
 tooltip.bl.aspectrus_seeds.mist=This plant can only flourish in\naspect infused mist.
 tooltip.bl.sludge_dungeon_plant.mist=This plant can only grow in\nSludgeon mist.
 tooltip.bl.item_mob.health=Health: %s / %s
+tooltip.bl.simple_slingshot=Shoots Betweenstone Pebbles
 
 
 tooltip.bl.elixir.potency=§9Potency: %s
@@ -1338,6 +1341,9 @@ entity.thebetweenlands.sludge_menace_multipart_dummy.name=Sludge Menace
 entity.thebetweenlands.gallery_frame_small.name=Small Gallery Frame
 entity.thebetweenlands.gallery_frame_large.name=Large Gallery Frame
 entity.thebetweenlands.gallery_frame_very_large.name=Very Large Gallery Frame
+entity.thebetweenlands.chiromaw_greebling_rider.name=Chiromaw Greebling Rider
+entity.thebetweenlands.greebling_volarpad_floater.name=Greebling Volarpad Floater
+entity.thebetweenlands.betweenstone_pebble.name=Betweenstone Pebble
 
 # Equipment
 equipment.menu.equip=Equip %s

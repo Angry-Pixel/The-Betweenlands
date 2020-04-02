@@ -894,6 +894,25 @@
       "thebetweenlands:barrishee_step_4"
     ]
   },
+  "chirowmaw_greebling_rider_living": {
+    "sounds": [
+      "thebetweenlands:flying_fiend_living_1",
+      "thebetweenlands:flying_fiend_living_2",
+      "thebetweenlands:flying_fiend_living_3",
+      "thebetweenlands:flying_fiend_living_4"
+    ]
+  },
+  "greebling_giggle": {
+    "sounds": [
+      "thebetweenlands:greebling_giggle",
+      "thebetweenlands:greebling_laugh"
+    ]
+  },
+  "greebling_hey": {
+    "sounds": [
+      "thebetweenlands:greebling_hey"
+    ]
+  },
   "greebling_fall": {
     "sounds": [
       "thebetweenlands:greebling_fall"

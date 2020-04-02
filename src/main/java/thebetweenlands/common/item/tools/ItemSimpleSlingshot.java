@@ -11,7 +11,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Enchantments;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,6 +19,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -30,7 +31,7 @@ import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.projectiles.EntityUnjustPebble;
+import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -39,7 +40,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorRepairable {
 	public ItemSimpleSlingshot() {
 		maxStackSize = 1;
-		setMaxDamage(300);
+		setMaxDamage(64);
 		setCreativeTab(BLCreativeTabs.GEARS);
 		CorrosionHelper.addCorrosionPropertyOverrides(this);
 
@@ -72,7 +73,7 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 	}
 
 	protected boolean isSlingShotAmmo(ItemStack stack) {
-		return !stack.isEmpty() && EnumItemMisc.UNJUST_PEBBLE.isItemOf(stack);
+		return !stack.isEmpty() && EnumItemMisc.BETWEENSTONE_PEBBLE.isItemOf(stack);
 	}
 
 	@Override
@@ -90,7 +91,7 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 
 			if (!ammo.isEmpty() || infinite)
 				if (ammo.isEmpty())
-					ammo = new ItemStack(EnumItemMisc.UNJUST_PEBBLE.getItem());
+					ammo = new ItemStack(EnumItemMisc.BETWEENSTONE_PEBBLE.getItem());
 
 			float strength = getAmmoVelocity(usedTicks);
 
@@ -99,7 +100,7 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 			if (strength >= 0.1F) {
 				if (!world.isRemote) {
 					ItemMisc itemAmmo = (ItemMisc) ammo.getItem();
-					EntityUnjustPebble pebble = createAmmo(world, ammo, player);
+					EntityBetweenstonePebble pebble = createAmmo(world, ammo, player);
 					pebble.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, strength * 3.0F, 1.0F);
 
 					if (strength == 1.0F)
@@ -135,12 +136,12 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 		}
 	}
 
-	public EntityUnjustPebble createAmmo(World world, ItemStack stack, EntityLivingBase shooter) {
-		EntityUnjustPebble pebble = new EntityUnjustPebble(world, shooter);
+	public EntityBetweenstonePebble createAmmo(World world, ItemStack stack, EntityLivingBase shooter) {
+		EntityBetweenstonePebble pebble = new EntityBetweenstonePebble(world, shooter);
 		return pebble;
 	}
 
-	protected void fireAmmo(EntityPlayer player, ItemStack stack, EntityUnjustPebble ammo, float strength) {
+	protected void fireAmmo(EntityPlayer player, ItemStack stack, EntityBetweenstonePebble ammo, float strength) {
 		player.world.spawnEntity(ammo);
 	}
 
@@ -200,6 +201,7 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(TextFormatting.YELLOW + new TextComponentTranslation("tooltip.bl.simple_slingshot").getFormattedText());
 		CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());
 	}
 

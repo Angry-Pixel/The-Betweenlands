@@ -33,7 +33,7 @@ import net.minecraft.world.World;
 import thebetweenlands.api.entity.IPullerEntity;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
-import thebetweenlands.common.entity.projectiles.EntityUnjustPebble;
+import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -92,7 +92,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 
 			if (isPulling())
 				if (playPullSound) {
-					getEntityWorld().playSound(null, getPosition(), SoundRegistry.SLINGSHOT_CHARGE, SoundCategory.HOSTILE, 1F, 0.5F);
+					getEntityWorld().playSound(null, getPosition(), SoundRegistry.SLINGSHOT_CHARGE, SoundCategory.HOSTILE, 1F, 1F);
 					playPullSound = false;
 				}
 		}
@@ -139,7 +139,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundRegistry.FLYING_FIEND_LIVING;
+		return SoundRegistry.CHIROMAW_GREEBLING_RIDER_LIVING;
 	}
 
 	@Nullable
@@ -200,6 +200,15 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 		}
 
 		@Override
+		public boolean shouldExecute() {
+			if (super.shouldExecute()) {
+				taskOwner.getEntityWorld().playSound(null, taskOwner.getPosition(), SoundRegistry.GREEBLING_HEY, SoundCategory.HOSTILE, 0.5F, 1F);
+				return true;
+			}
+			return false;
+		}
+
+		@Override
 	    protected AxisAlignedBB getTargetableArea(double targetDistance) {
 	        return this.taskOwner.getEntityBoundingBox().grow(targetDistance, targetDistance, targetDistance);
 	    }
@@ -242,7 +251,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 
 		@Override
 		public void startExecuting() {
-			//chiromawRider.getEntityWorld().playSound(null, chiromawRider.getPosition(), SoundRegistry.SOMETHING, SoundCategory.HOSTILE, 1F, 1F);
+			//chiromawRider.getEntityWorld().playSound(null, chiromawRider.getPosition(), SoundRegistry.GREEBLING_HEY, SoundCategory.HOSTILE, 1F, 1F);
 		}
 
 		@Override
@@ -259,7 +268,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 				double targetY = entitylivingbase.getEntityBoundingBox().minY + (double) (entitylivingbase.height / 2.0F) - (chiromawRider.posY + (double) (chiromawRider.height / 2.0F));
 				double targetZ = entitylivingbase.posZ - chiromawRider.posZ;
 				double targetDistance = (double) MathHelper.sqrt(targetX * targetX + targetZ * targetZ);
-				EntityUnjustPebble pebble = new EntityUnjustPebble(chiromawRider.getEntityWorld(), chiromawRider);
+				EntityBetweenstonePebble pebble = new EntityBetweenstonePebble(chiromawRider.getEntityWorld(), chiromawRider);
 				pebble.shoot(targetX, targetY + targetDistance * 0.10000000298023224D, targetZ, 1.6F, 0F);
 				chiromawRider.getEntityWorld().spawnEntity(pebble);
 				chiromawRider.getEntityWorld().playSound(null, chiromawRider.getPosition(), SoundRegistry.SLINGSHOT_SHOOT, SoundCategory.HOSTILE, 1F, 1F + (chiromawRider.getEntityWorld().rand.nextFloat() - chiromawRider.getEntityWorld().rand.nextFloat()) * 0.8F);
@@ -279,7 +288,7 @@ public class EntityChiromawGreeblingRider extends EntityChiromaw {
 	        target = null;
 	    }
 	}
-    
+
     static class EntityAIMoveTowardsTargetWithDistance extends EntityAIBase {
     	EntityChiromawGreeblingRider chiromawRider;
 		EntityLivingBase target;

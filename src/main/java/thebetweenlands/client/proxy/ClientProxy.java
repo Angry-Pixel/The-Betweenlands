@@ -172,7 +172,7 @@ import thebetweenlands.client.render.entity.RenderTinySludgeWorm;
 import thebetweenlands.client.render.entity.RenderTinyWormEggSac;
 import thebetweenlands.client.render.entity.RenderTriggeredFallingBlock;
 import thebetweenlands.client.render.entity.RenderTriggeredSludgeWallJet;
-import thebetweenlands.client.render.entity.RenderUnjustPebbleProjectile;
+import thebetweenlands.client.render.entity.RenderBetweenstonePebbleProjectile;
 import thebetweenlands.client.render.entity.RenderVolarkite;
 import thebetweenlands.client.render.entity.RenderVolatileSoul;
 import thebetweenlands.client.render.entity.RenderWallLamprey;
@@ -319,7 +319,7 @@ import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
-import thebetweenlands.common.entity.projectiles.EntityUnjustPebble;
+import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.handler.ExtendedReachHandler;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
@@ -706,7 +706,7 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 		RenderingRegistry.registerEntityRenderingHandler(EntityDraeton.class, RenderDraeton::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityChiromawGreeblingRider.class, RenderChiromawGreeblingRider::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGreeblingVolarpadFloater.class, RenderGreeblingVolarpadFloater::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityUnjustPebble.class, RenderUnjustPebbleProjectile::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBetweenstonePebble.class, RenderBetweenstonePebbleProjectile::new);
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());

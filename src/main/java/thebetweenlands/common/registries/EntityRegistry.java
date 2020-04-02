@@ -97,7 +97,7 @@ import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.entity.projectiles.EntitySludgeWallJet;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
-import thebetweenlands.common.entity.projectiles.EntityUnjustPebble;
+import thebetweenlands.common.entity.projectiles.EntityBetweenstonePebble;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -208,7 +208,7 @@ public class EntityRegistry {
 		
 		registerEntity(EntityChiromawGreeblingRider.class, "chiromaw_greebling_rider", 0x3F5A69, 0xA16A77);
 		registerEntity(EntityGreeblingVolarpadFloater.class, "greebling_volarpad_floater", 64, 20, true);
-		registerEntity(EntityUnjustPebble.class, "unjust_pebble", 64, 20, true);
+		registerEntity(EntityBetweenstonePebble.class, "betweenstone_pebble", 64, 20, true);
 	}
 
 	private static int id = 0;
