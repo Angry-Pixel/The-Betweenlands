@@ -15,7 +15,6 @@ import net.minecraft.entity.MoverType;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -24,6 +23,7 @@ import net.minecraft.network.play.server.SPacketChangeGameState;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -32,6 +32,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IThrowableEntity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityUnjustPebble extends Entity implements IProjectile, IThrowableEntity {
 	private static final Predicate<Entity> ARROW_TARGETS = Predicates.and(EntitySelectors.NOT_SPECTATING, EntitySelectors.IS_ALIVE, new Predicate<Entity>() {
@@ -235,8 +236,7 @@ public class EntityUnjustPebble extends Entity implements IProjectile, IThrowabl
 					}
 				}
 
-				playSound(SoundEvents.ENTITY_GENERIC_SMALL_FALL, 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
-
+				
 				if (!(entity instanceof EntityEnderman))
 					setDead();
 				
@@ -251,6 +251,8 @@ public class EntityUnjustPebble extends Entity implements IProjectile, IThrowabl
 			}
 		} else
 			setDead();
+	
+		getEntityWorld().playSound(null, getPosition(), SoundRegistry.SLINGSHOT_HIT, SoundCategory.HOSTILE, 1F, 1F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F);
 	}
 
 	public void move(MoverType type, double x, double y, double z) {

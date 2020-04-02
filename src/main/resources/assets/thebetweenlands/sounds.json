@@ -894,6 +894,11 @@
       "thebetweenlands:barrishee_step_4"
     ]
   },
+  "greebling_fall": {
+    "sounds": [
+      "thebetweenlands:greebling_fall"
+    ]
+  },
   "greebling_vanish": {
     "sounds": [
       "thebetweenlands:greebling_vanish"
@@ -1375,6 +1380,33 @@
   "draeton_leak_loop": {
     "sounds": [
       "thebetweenlands:draeton_leak_2"
+    ]
+  },
+  "draeton_plug": {
+    "sounds": [
+      "thebetweenlands:draeton_plug"
+    ]
+  },
+  "draeton_pop": {
+    "sounds": [
+      "thebetweenlands:draeton_pop"
+    ]
+  },
+  "slingshot_charge": {
+    "sounds": [
+      "thebetweenlands:slingshot_charge"
+    ]
+  },
+  "slingshot_shoot": {
+    "sounds": [
+      "thebetweenlands:slingshot_shoot"
+    ]
+  },
+  "slingshot_hit": {
+    "sounds": [
+      "thebetweenlands:slingshot_hit_1",
+      "thebetweenlands:slingshot_hit_2",
+      "thebetweenlands:slingshot_hit_3"
     ]
   },
   "possessed_scream": {

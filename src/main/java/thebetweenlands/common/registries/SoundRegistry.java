@@ -75,6 +75,12 @@ public class SoundRegistry {
     public static final BLSoundEvent DRAETON_ANCHOR = reg("draeton_anchor");
     public static final BLSoundEvent DRAETON_LEAK_START = reg("draeton_leak_start");
     public static final BLSoundEvent DRAETON_LEAK_LOOP = reg("draeton_leak_loop");
+    public static final BLSoundEvent DRAETON_PLUG = reg("draeton_plug");
+    public static final BLSoundEvent DRAETON_POP = reg("draeton_pop");
+    public static final BLSoundEvent GREEBLING_FALL = reg("greebling_fall");
+    public static final BLSoundEvent SLINGSHOT_CHARGE = reg("slingshot_charge");
+    public static final BLSoundEvent SLINGSHOT_HIT = reg("slingshot_hit");
+    public static final BLSoundEvent SLINGSHOT_SHOOT = reg("slingshot_shoot");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");

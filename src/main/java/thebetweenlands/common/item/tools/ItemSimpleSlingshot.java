@@ -34,6 +34,7 @@ import thebetweenlands.common.entity.projectiles.EntityUnjustPebble;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorRepairable {
 	public ItemSimpleSlingshot() {
@@ -120,7 +121,8 @@ public class ItemSimpleSlingshot extends Item implements ICorrodible, IAnimatorR
 					stack.damageItem(1, player);
 					fireAmmo(player, stack, pebble, strength);
 				}
-				world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + strength * 0.5F);
+
+				world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.SLINGSHOT_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + strength * 0.5F);
 
 				if (!infinite)
 					ammo.shrink(1);

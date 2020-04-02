@@ -2,15 +2,19 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.audio.GreeblingFallSound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -41,6 +45,10 @@ public class EntityGreeblingVolarpadFloater extends EntityThrowable {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		if(ticksExisted == 1)
+			if (getEntityWorld().isRemote)
+				playFallingSound(getEntityWorld(), getPosition());
+
 		if (motionY < 0.0D)
 			motionY *= 0.5D;
 
@@ -62,6 +70,16 @@ public class EntityGreeblingVolarpadFloater extends EntityThrowable {
 			if (disappearTimer == 0 && (!nearPlayers.isEmpty() || ticksExisted > 80))
 				startVanishEvent();
 		}
+	}
+
+	public boolean isFloating() {
+		return motionY < 0D;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void playFallingSound(World world, BlockPos pos) {
+		ISound fall_sound = new GreeblingFallSound(this);
+		Minecraft.getMinecraft().getSoundHandler().playSound(fall_sound);
 	}
 
 	public void startVanishEvent() {
